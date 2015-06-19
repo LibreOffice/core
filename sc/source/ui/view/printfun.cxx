@@ -549,8 +549,9 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
         pDev->SetMapMode(aMode);
 
     aOutputData.DrawBackground(*pDev);
+
     aOutputData.DrawShadow();
-    aOutputData.DrawFrame();
+    aOutputData.DrawFrame(*pDev);
     aOutputData.DrawStrings();
 
     if (!bMetaFile && pViewData)
@@ -1349,7 +1350,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
         aOutputData.SetUseStyleColor( bUseStyleColor );
 
         if (pBorderData)
-            aOutputData.DrawFrame();
+            aOutputData.DrawFrame(*pDev);
     }
 }
 
@@ -1613,7 +1614,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     if( aTableParam.bCellContent )
     {
         aOutputData.DrawExtraShadow( bShLeft, bShTop, bShRight, bShBottom );
-        aOutputData.DrawFrame();
+        aOutputData.DrawFrame(*pDev);
         aOutputData.DrawStrings();
         aOutputData.DrawEdit(false);
     }
