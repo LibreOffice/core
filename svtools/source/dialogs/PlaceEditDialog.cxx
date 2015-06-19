@@ -150,7 +150,7 @@ void PlaceEditDialog::InitDetails( )
              !( sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL ) && bSkipAlfresco ) &&
              !( sUrl == ONEDRIVE_BASE_URL && bSkipOneDrive ) )
         {
-            m_pLBServerType->InsertEntry( aTypesNamesList[i], i );
+            nPos = m_pLBServerType->InsertEntry( aTypesNamesList[i], nPos );
 
             std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this, sUrl));
             xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
