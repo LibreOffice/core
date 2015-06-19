@@ -126,8 +126,7 @@ SCQAHELPER_DLLPUBLIC std::vector<OUString> getChartRangeRepresentations(const Sd
 
 SCQAHELPER_DLLPUBLIC ScRangeList getChartRanges(ScDocument& rDoc, const SdrOle2Obj& rChartObj);
 
-SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected, const char * pFailMessage, bool& rPass);
-SCQAHELPER_DLLPUBLIC void checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected, const char * pFailMessage);
+SCQAHELPER_DLLPUBLIC bool checkFormula(ScDocument& rDoc, const ScAddress& rPos, const char* pExpected);
 
 SCQAHELPER_DLLPUBLIC bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos);
 SCQAHELPER_DLLPUBLIC bool checkFormulaPositions(

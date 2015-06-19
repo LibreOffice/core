@@ -1010,7 +1010,8 @@ void ScExportTest::testFormulaRefSheetNameODS()
         sc::AutoCalcSwitch aACSwitch(rDoc, true); // turn on auto calc.
         rDoc.SetString(ScAddress(1,1,0), "='90''s Data'.B2");
         CPPUNIT_ASSERT_EQUAL(1.1, rDoc.GetValue(ScAddress(1,1,0)));
-        checkFormula(rDoc, ScAddress(1,1,0), "'90''s Data'.B2", "Wrong formula");
+        if (!checkFormula(rDoc, ScAddress(1,1,0), "'90''s Data'.B2"))
+            CPPUNIT_FAIL("Wrong formula");
     }
     // Now, save and reload this document.
     ScDocShellRef xNewDocSh = saveAndReload(xDocSh, ODS);
@@ -1019,7 +1020,8 @@ void ScExportTest::testFormulaRefSheetNameODS()
     ScDocument& rDoc = xNewDocSh->GetDocument();
     rDoc.CalcAll();
     CPPUNIT_ASSERT_EQUAL(1.1, rDoc.GetValue(ScAddress(1,1,0)));
-    checkFormula(rDoc, ScAddress(1,1,0), "'90''s Data'.B2", "Wrong formula");
+    if (!checkFormula(rDoc, ScAddress(1,1,0), "'90''s Data'.B2"))
+        CPPUNIT_FAIL("Wrong formula");
 
     xNewDocSh->DoClose();
 }
@@ -1069,8 +1071,10 @@ void ScExportTest::testCellValuesExportODS()
     CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(5,0,0));
 
     // check formula
-    checkFormula(rDoc, ScAddress(4,0,0), "10*C1/4", "Wrong formula =10*C1/4");
-    checkFormula(rDoc, ScAddress(7,0,0), "SUM(C1:F1)", "Wrong formula =SUM(C1:F1)");
+    if (!checkFormula(rDoc, ScAddress(4,0,0), "10*C1/4"))
+        CPPUNIT_FAIL("Wrong formula =10*C1/4");
+    if (!checkFormula(rDoc, ScAddress(7,0,0), "SUM(C1:F1)"))
+        CPPUNIT_FAIL("Wrong formula =SUM(C1:F1)");
     CPPUNIT_ASSERT_EQUAL(16.5, rDoc.GetValue(7,0,0));
 
     // check string
@@ -1089,7 +1093,8 @@ void ScExportTest::testCellValuesExportODS()
     //check contiguous values
     CPPUNIT_ASSERT_EQUAL( 12.0, rDoc.GetValue(0,5,0) );
     CPPUNIT_ASSERT_EQUAL( OUString("a string"), rDoc.GetString(0,6,0) );
-    checkFormula(rDoc, ScAddress(0,7,0), "$A$6", "Wrong formula =$A$6");
+    if (!checkFormula(rDoc, ScAddress(0,7,0), "$A$6"))
+        CPPUNIT_FAIL("Wrong formula =$A$6");
     CPPUNIT_ASSERT_EQUAL( rDoc.GetValue(0,5,0), rDoc.GetValue(0,7,0) );
 
     xNewDocSh->DoClose();
@@ -1257,21 +1262,29 @@ void ScExportTest::testFormulaReferenceXLS()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    checkFormula(rDoc, ScAddress(3,1,0), "$A$2+$B$2+$C$2", "Wrong formula in D2");
+    if (!checkFormula(rDoc, ScAddress(3,1,0), "$A$2+$B$2+$C$2"))
+        CPPUNIT_FAIL("Wrong formula in D2");
 
-    checkFormula(rDoc, ScAddress(3,2,0), "A3+B3+C3", "Wrong formula in D3");
+    if (!checkFormula(rDoc, ScAddress(3,2,0), "A3+B3+C3"))
+        CPPUNIT_FAIL("Wrong formula in D3");
 
-    checkFormula(rDoc, ScAddress(3,5,0), "SUM($A$6:$C$6)", "Wrong formula in D6");
+    if (!checkFormula(rDoc, ScAddress(3,5,0), "SUM($A$6:$C$6)"))
+        CPPUNIT_FAIL("Wrong formula in D6");
 
-    checkFormula(rDoc, ScAddress(3,6,0), "SUM(A7:C7)", "Wrong formula in D7");
+    if (!checkFormula(rDoc, ScAddress(3,6,0), "SUM(A7:C7)"))
+        CPPUNIT_FAIL("Wrong formula in D7");
 
-    checkFormula(rDoc, ScAddress(3,9,0), "$Two.$A$2+$Two.$B$2+$Two.$C$2", "Wrong formula in D10");
+    if (!checkFormula(rDoc, ScAddress(3,9,0), "$Two.$A$2+$Two.$B$2+$Two.$C$2"))
+        CPPUNIT_FAIL("Wrong formula in D10");
 
-    checkFormula(rDoc, ScAddress(3,10,0), "$Two.A3+$Two.B3+$Two.C3", "Wrong formula in D11");
+    if (!checkFormula(rDoc, ScAddress(3,10,0), "$Two.A3+$Two.B3+$Two.C3"))
+        CPPUNIT_FAIL("Wrong formula in D11");
 
-    checkFormula(rDoc, ScAddress(3,13,0), "MIN($Two.$A$2:$C$2)", "Wrong formula in D14");
+    if (!checkFormula(rDoc, ScAddress(3,13,0), "MIN($Two.$A$2:$C$2)"))
+        CPPUNIT_FAIL("Wrong formula in D14");
 
-    checkFormula(rDoc, ScAddress(3,14,0), "MAX($Two.A3:C3)", "Wrong formula in D15");
+    if (!checkFormula(rDoc, ScAddress(3,14,0), "MAX($Two.A3:C3)"))
+        CPPUNIT_FAIL("Wrong formula in D15");
 
     xDocSh->DoClose();
 }
@@ -2428,7 +2441,8 @@ void ScExportTest::testSupBookVirtualPath()
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    checkFormula(rDoc, ScAddress(0,0,0), "'file:///home/timar/Documents/external.xls'#$Sheet1.A1", "Wrong SupBook VirtualPath URL");
+    if (!checkFormula(rDoc, ScAddress(0,0,0), "'file:///home/timar/Documents/external.xls'#$Sheet1.A1"))
+        CPPUNIT_FAIL("Wrong SupBook VirtualPath URL");
 
     xDocSh->DoClose();
 }
