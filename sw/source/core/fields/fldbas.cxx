@@ -435,12 +435,6 @@ OUString SwField::ExpandField(bool const bCached, ToxAuthorityField eField) cons
     return Expand();
 }
 
-OUString SwField::ExpandCitation(ToxAuthorityField eField) const
-{
-    const SwAuthorityField* pAuthorityField = static_cast<const SwAuthorityField*>(this);
-        return (pAuthorityField ? pAuthorityField->ExpandCitation(eField) : OUString());
-}
-
 SwField * SwField::CopyField() const
 {
     SwField *const pNew = Copy();
