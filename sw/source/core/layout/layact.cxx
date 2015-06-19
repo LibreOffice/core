@@ -2103,7 +2103,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
     {
         m_bIndicator = true;
         vcl::Window *pWin = pImp->GetShell()->GetWin();
-        if ( pWin )
+        if (pWin && !pWin->SupportsDoubleBuffering()) // FIXME make this work with double-buffering
         {
             Rectangle aRect( 0, 0, 5, 5 );
             aRect = pWin->PixelToLogic( aRect );
