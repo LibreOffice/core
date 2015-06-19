@@ -5045,4 +5045,98 @@ void Test::testMatrixOp()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFuncRangeOp()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
+    m_pDoc->InsertTab(2, "Sheet3");
+
+    // Sheet1.B1:B3
+    m_pDoc->SetValue(1,0,0, 1.0);
+    m_pDoc->SetValue(1,1,0, 2.0);
+    m_pDoc->SetValue(1,2,0, 4.0);
+    // Sheet2.B1:B3
+    m_pDoc->SetValue(1,0,1, 8.0);
+    m_pDoc->SetValue(1,1,1, 16.0);
+    m_pDoc->SetValue(1,2,1, 32.0);
+    // Sheet3.B1:B3
+    m_pDoc->SetValue(1,0,2, 64.0);
+    m_pDoc->SetValue(1,1,2, 128.0);
+    m_pDoc->SetValue(1,2,2, 256.0);
+
+    // Range operator should extend concatenated literal references during
+    // parse time already, so with this we can test ScComplexRefData::Extend()
+
+    // Current sheet is Sheet1, so B1:B2 implies relative Sheet1.B1:B2
+
+    ScAddress aPos(0,0,0);
+    m_pDoc->SetString( aPos, "=SUM(B1:B2:B3)");
+    if (!checkFormula( *m_pDoc, aPos, "SUM(B1:B3)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL( 7.0, m_pDoc->GetValue(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString( aPos, "=SUM(B1:B3:B2)");
+    if (!checkFormula( *m_pDoc, aPos, "SUM(B1:B3)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL( 7.0, m_pDoc->GetValue(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString( aPos, "=SUM(B2:B3:B1)");
+    if (!checkFormula( *m_pDoc, aPos, "SUM(B1:B3)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL( 7.0, m_pDoc->GetValue(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString( aPos, "=SUM(Sheet2.B1:B2:B3)");
+    if (!checkFormula( *m_pDoc, aPos, "SUM(Sheet2.B1:B3)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL( 56.0, m_pDoc->GetValue(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString( aPos, "=SUM(B2:B2:Sheet1.B2)");
+    if (!checkFormula( *m_pDoc, aPos, "SUM(Sheet1.B2:B2)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString( aPos, "=SUM(B2:B3:Sheet2.B1)");
+    if (!checkFormula( *m_pDoc, aPos, "SUM(Sheet1.B1:Sheet2.B3)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL( 63.0, m_pDoc->GetValue(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString( aPos, "=SUM(Sheet1.B1:Sheet2.B2:Sheet3.B3)");
+    if (!checkFormula( *m_pDoc, aPos, "SUM(Sheet1.B1:Sheet3.B3)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL( 511.0, m_pDoc->GetValue(aPos));
+
+    // B1:Sheet2.B2 would be ambiguous, Sheet1.B1:Sheet2.B2 or Sheet2.B1:B2
+    // The actual representation of the error case may change, so this test may
+    // have to be adapted.
+    aPos.IncRow();
+    m_pDoc->SetString( aPos, "=SUM(B1:Sheet2.B2:Sheet3.B3)");
+    if (!checkFormula( *m_pDoc, aPos, "SUM(#REF!.B2:#REF!.B3)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL( OUString("#REF!"), m_pDoc->GetString(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString( aPos, "=SUM(Sheet1.B1:Sheet3.B2:Sheet2.B3)");
+    if (!checkFormula( *m_pDoc, aPos, "SUM(Sheet1.B1:Sheet3.B3)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL( 511.0, m_pDoc->GetValue(aPos));
+
+    aPos.IncRow();
+    m_pDoc->SetString( aPos, "=SUM(B$2:B$2:B2)");
+    if (!checkFormula( *m_pDoc, aPos, "SUM(B$2:B2)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(2);
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
