@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+#include <utility>
+
 #include <WPFTEncodingDialog.hxx>
 
 namespace writerperfect
@@ -25,97 +30,97 @@ namespace writerperfect
 namespace
 {
 
-struct EncodingImplementation
-{
-
-    static OUString const(s_encodings[]);
-
-    static inline int numEncodings();
-    static void insertEncodings(ListBox *box);
-    static void selectEncoding(ListBox *box, const OUString &encoding);
-    static OUString getEncoding(ListBox *box);
+std::pair<OUStringLiteral, OUStringLiteral> const s_encodings[] = {
+    {OUStringLiteral("MacArabic"), OUStringLiteral("Arabic (Apple Macintosh)")},
+    {OUStringLiteral("CP864"), OUStringLiteral("Arabic (DOS/OS2-864)")},
+    {OUStringLiteral("CP1006"), OUStringLiteral("Arabic (IBM-1006)")},
+    {OUStringLiteral("CP1256"), OUStringLiteral("Arabic (Windows-1256)")},
+    {OUStringLiteral("CP775"), OUStringLiteral("Baltic (DOS/OS2-775)")},
+    {OUStringLiteral("CP1257"), OUStringLiteral("Baltic (Windows-1257)")},
+    {OUStringLiteral("MacCeltic"), OUStringLiteral("Celtic (Apple Macintosh)")},
+    {OUStringLiteral("MacCyrillic"),
+     OUStringLiteral("Cyrillic (Apple Macintosh)")},
+    {OUStringLiteral("CP855"), OUStringLiteral("Cyrillic (DOS/OS2-855)")},
+    {OUStringLiteral("CP866"),
+     OUStringLiteral("Cyrillic (DOS/OS2-866/Russian)")},
+    {OUStringLiteral("CP1251"), OUStringLiteral("Cyrillic (Windows-1251)")},
+    {OUStringLiteral("MacCEurope"),
+     OUStringLiteral("Eastern Europe (Apple Macintosh)")},
+    {OUStringLiteral("MacCroatian"),
+     OUStringLiteral("Eastern Europe (Apple Macintosh/Croatian)")},
+    {OUStringLiteral("MacRomanian"),
+     OUStringLiteral("Eastern Europe (Apple Macintosh/Romanian)")},
+    {OUStringLiteral("CP852"), OUStringLiteral("Eastern Europe (DOS/OS2-852)")},
+    {OUStringLiteral("CP1250"),
+     OUStringLiteral("Eastern Europe (Windows-1250/WinLatin 2)")},
+    {OUStringLiteral("MacGreek"), OUStringLiteral("Greek (Apple Macintosh)")},
+    {OUStringLiteral("CP737"), OUStringLiteral("Greek (DOS/OS2-737)")},
+    {OUStringLiteral("CP869"), OUStringLiteral("Greek (DOS/OS2-869/Greek-2)")},
+    {OUStringLiteral("CP875"), OUStringLiteral("Greek (DOS/OS2-875)")},
+    {OUStringLiteral("CP1253"), OUStringLiteral("Greek (Windows-1253)")},
+    {OUStringLiteral("MacHebrew"), OUStringLiteral("Hebrew (Apple Macintosh)")},
+    {OUStringLiteral("CP424"), OUStringLiteral("Hebrew (DOS/OS2-424)")},
+    {OUStringLiteral("CP856"), OUStringLiteral("Hebrew (DOS/OS2-856)")},
+    {OUStringLiteral("CP862"), OUStringLiteral("Hebrew (DOS/OS2-862)")},
+    {OUStringLiteral("CP1255"), OUStringLiteral("Hebrew (Windows-1255)")},
+    {OUStringLiteral("CP500"), OUStringLiteral("International (DOS/OS2-500)")},
+    {OUStringLiteral("MacThai"), OUStringLiteral("Thai (Apple Macintosh)")},
+    {OUStringLiteral("CP874"), OUStringLiteral("Thai (DOS/OS2-874)")},
+    {OUStringLiteral("MacTurkish"),
+     OUStringLiteral("Turkish (Apple Macintosh)")},
+    {OUStringLiteral("CP857"), OUStringLiteral("Turkish (DOS/OS2-857)")},
+    {OUStringLiteral("CP1026"), OUStringLiteral("Turkish (DOS/OS2-1026)")},
+    {OUStringLiteral("CP1254"), OUStringLiteral("Turkish (Windows-1254)")},
+    {OUStringLiteral("CP1258"), OUStringLiteral("Vietnamese (Windows-1258)")},
+    {OUStringLiteral("MacRoman"),
+     OUStringLiteral("Western Europe (Apple Macintosh)")},
+    {OUStringLiteral("MacIceland"),
+     OUStringLiteral("Western Europe (Apple Macintosh/Icelandic)")},
+    {OUStringLiteral("CP037"),
+     OUStringLiteral("Western Europe (DOS/OS2-037/US-Canada)")},
+    {OUStringLiteral("CP437"),
+     OUStringLiteral("Western Europe (DOS/OS2-437/US)")},
+    {OUStringLiteral("CP850"), OUStringLiteral("Western Europe (DOS/OS2-850)")},
+    {OUStringLiteral("CP860"),
+     OUStringLiteral("Western Europe (DOS/OS2-860/Portuguese)")},
+    {OUStringLiteral("CP861"),
+     OUStringLiteral("Western Europe (DOS/OS2-861/Icelandic)")},
+    {OUStringLiteral("CP863"),
+     OUStringLiteral("Western Europe (DOS/OS2-863/French)")},
+    {OUStringLiteral("CP865"),
+     OUStringLiteral("Western Europe (DOS/OS2-865/Nordic)")},
+    {OUStringLiteral("CP1252"),
+     OUStringLiteral("Western Europe (Windows-1252/WinLatin 1)")}
 };
 
-OUString const(EncodingImplementation::s_encodings[])=
-{
-    OUString("MacArabic"), OUString("Arabic (Apple Macintosh)"),
-    OUString("CP864"), OUString("Arabic (DOS/OS2-864)"),
-    OUString("CP1006"), OUString("Arabic (IBM-1006)"),
-    OUString("CP1256"), OUString("Arabic (Windows-1256)"),
-    OUString("CP775"), OUString("Baltic (DOS/OS2-775)"),
-    OUString("CP1257"), OUString("Baltic (Windows-1257)"),
-    OUString("MacCeltic"), OUString("Celtic (Apple Macintosh)"),
-    OUString("MacCyrillic"), OUString("Cyrillic (Apple Macintosh)"),
-    OUString("CP855"), OUString("Cyrillic (DOS/OS2-855)"),
-    OUString("CP866"), OUString("Cyrillic (DOS/OS2-866/Russian)"),
-    OUString("CP1251"), OUString("Cyrillic (Windows-1251)"),
-    OUString("MacCEurope"), OUString("Eastern Europe (Apple Macintosh)"),
-    OUString("MacCroatian"), OUString("Eastern Europe (Apple Macintosh/Croatian)"),
-    OUString("MacRomanian"), OUString("Eastern Europe (Apple Macintosh/Romanian)"),
-    OUString("CP852"), OUString("Eastern Europe (DOS/OS2-852)"),
-    OUString("CP1250"), OUString("Eastern Europe (Windows-1250/WinLatin 2)"),
-    OUString("MacGreek"), OUString("Greek (Apple Macintosh)"),
-    OUString("CP737"), OUString("Greek (DOS/OS2-737)"),
-    OUString("CP869"), OUString("Greek (DOS/OS2-869/Greek-2)"),
-    OUString("CP875"), OUString("Greek (DOS/OS2-875)"),
-    OUString("CP1253"), OUString("Greek (Windows-1253)"),
-    OUString("MacHebrew"), OUString("Hebrew (Apple Macintosh)"),
-    OUString("CP424"), OUString("Hebrew (DOS/OS2-424)"),
-    OUString("CP856"), OUString("Hebrew (DOS/OS2-856)"),
-    OUString("CP862"), OUString("Hebrew (DOS/OS2-862)"),
-    OUString("CP1255"), OUString("Hebrew (Windows-1255)"),
-    OUString("CP500"), OUString("International (DOS/OS2-500)"),
-    OUString("MacThai"), OUString("Thai (Apple Macintosh)"),
-    OUString("CP874"), OUString("Thai (DOS/OS2-874)"),
-    OUString("MacTurkish"), OUString("Turkish (Apple Macintosh)"),
-    OUString("CP857"), OUString("Turkish (DOS/OS2-857)"),
-    OUString("CP1026"), OUString("Turkish (DOS/OS2-1026)"),
-    OUString("CP1254"), OUString("Turkish (Windows-1254)"),
-    OUString("CP1258"), OUString("Vietnamese (Windows-1258)"),
-    OUString("MacRoman"), OUString("Western Europe (Apple Macintosh)"),
-    OUString("MacIceland"), OUString("Western Europe (Apple Macintosh/Icelandic)"),
-    OUString("CP037"), OUString("Western Europe (DOS/OS2-037/US-Canada)"),
-    OUString("CP437"), OUString("Western Europe (DOS/OS2-437/US)"),
-    OUString("CP850"), OUString("Western Europe (DOS/OS2-850)"),
-    OUString("CP860"), OUString("Western Europe (DOS/OS2-860/Portuguese)"),
-    OUString("CP861"), OUString("Western Europe (DOS/OS2-861/Icelandic)"),
-    OUString("CP863"), OUString("Western Europe (DOS/OS2-863/French)"),
-    OUString("CP865"), OUString("Western Europe (DOS/OS2-865/Nordic)"),
-    OUString("CP1252"), OUString("Western Europe (Windows-1252/WinLatin 1)")
-};
+std::size_t const numEncodings = SAL_N_ELEMENTS(s_encodings);
 
-inline int EncodingImplementation::numEncodings()
+void insertEncodings(ListBox *box)
 {
-    return int(sizeof(s_encodings)/(2*sizeof(const OUString *)));
-}
-
-void EncodingImplementation::insertEncodings(ListBox *box)
-{
-    sal_IntPtr num=sal_IntPtr(numEncodings());
-    for (sal_IntPtr i=0; i<num; ++i)
+    for (std::size_t i=0; i<numEncodings; ++i)
     {
-        sal_IntPtr nAt=box->InsertEntry(s_encodings[2*i+1]);
-        box->SetEntryData(nAt, reinterpret_cast<void *>(i));
+        sal_IntPtr nAt=box->InsertEntry(s_encodings[i].second);
+        box->SetEntryData(
+            nAt, reinterpret_cast<void *>(static_cast<sal_uIntPtr>(i)));
     }
 }
 
-void EncodingImplementation::selectEncoding(ListBox *box, const OUString &encoding)
+void selectEncoding(ListBox *box, const OUString &encoding)
 {
-    sal_IntPtr num=sal_IntPtr(numEncodings());
-    for (sal_IntPtr i=0; i<num; ++i)
+    for (std::size_t i=0; i<numEncodings; ++i)
     {
-        if (encoding!=s_encodings[2*i]) continue;
+        if (encoding!=s_encodings[i].first) continue;
         box->SelectEntryPos(i);
         return;
     }
 }
 
-OUString EncodingImplementation::getEncoding(ListBox *box)
+OUString getEncoding(ListBox *box)
 {
-    sal_IntPtr pos = reinterpret_cast<sal_IntPtr>(box->GetSelectEntryData());
-    if (pos<0||pos>=numEncodings())
+    sal_uIntPtr pos = reinterpret_cast<sal_uIntPtr>(box->GetSelectEntryData());
+    if (pos>=numEncodings)
         return OUString();
-    return s_encodings[2*pos];
+    return s_encodings[pos].first;
 }
 
 }
@@ -131,11 +136,11 @@ WPFTEncodingDialog::WPFTEncodingDialog(
 
     m_pBtnCancel->SetClickHdl(LINK(this, WPFTEncodingDialog, CancelHdl));
 
-    EncodingImplementation::insertEncodings(m_pLbCharset);
+    insertEncodings(m_pLbCharset);
     m_pLbCharset->SetStyle(m_pLbCharset->GetStyle() | WB_SORT);
     // m_pLbCharset->set_height_request(6 * m_pLbCharset->GetTextHeight());
     m_pLbCharset->SetDoubleClickHdl(LINK(this, WPFTEncodingDialog, DoubleClickHdl));
-    EncodingImplementation::selectEncoding(m_pLbCharset, encoding);
+    selectEncoding(m_pLbCharset, encoding);
     m_pLbCharset->Show();
 
     SetText(title);
@@ -148,7 +153,7 @@ WPFTEncodingDialog::~WPFTEncodingDialog()
 
 OUString WPFTEncodingDialog::GetEncoding() const
 {
-    return EncodingImplementation::getEncoding(m_pLbCharset);
+    return getEncoding(m_pLbCharset);
 }
 
 IMPL_LINK_NOARG(WPFTEncodingDialog, CancelHdl)
