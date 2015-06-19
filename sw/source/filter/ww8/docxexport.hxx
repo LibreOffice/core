@@ -116,9 +116,6 @@ public:
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const SAL_OVERRIDE;
 
-    /// Determines if the format is expected to support unicode.
-    virtual bool SupportsUnicode() const SAL_OVERRIDE { return true; }
-
     virtual bool SupportsOneColumnBreak() const SAL_OVERRIDE { return true; }
 
     virtual bool FieldsQuoted() const SAL_OVERRIDE { return true; }

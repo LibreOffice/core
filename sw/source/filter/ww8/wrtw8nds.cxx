@@ -179,7 +179,7 @@ void SwWW8AttrIter::IterToCurrent()
 SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     MSWordAttrIter(rWr),
     rNd(rTextNd),
-    maCharRuns(GetPseudoCharRuns(rTextNd, 0, !rWr.SupportsUnicode())),
+    maCharRuns(GetPseudoCharRuns(rTextNd, 0, false)),
     pCurRedline(0),
     nAktSwPos(0),
     nCurRedlinePos(USHRT_MAX),
@@ -208,7 +208,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
      only be supported by word anchored inline ("as character"), so force
      this in the supportable case.
     */
-    if (rWr.SupportsUnicode() && rWr.m_bInWriteEscher)
+    if (rWr.m_bInWriteEscher)
     {
         std::for_each(maFlyFrms.begin(), maFlyFrms.end(),
             std::mem_fun_ref(&sw::Frame::ForceTreatAsInline));
@@ -498,19 +498,6 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
     if ( pFont )
     {
         SvxFontItem aFont( *pFont );
-
-        /*
-         If we are a nonunicode aware format then we set the charset we want to
-         use for export of this range. If necessary this will generate a pseudo
-         font to use for this range.
-
-         So now we are guaranteed to have a font with the correct charset set
-         for WW6/95 which will match the script we have exported this range in,
-         this makes older nonunicode aware versions of word display the correct
-         characters.
-        */
-        if ( !m_rExport.SupportsUnicode() )
-            aFont.SetCharSet( GetCharSet() );
 
         if ( rParentFont != aFont )
             m_rExport.AttrOutput().OutputItem( aFont );

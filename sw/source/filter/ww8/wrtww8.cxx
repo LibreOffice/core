@@ -3084,7 +3084,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     // fix the SwPositions in m_aFrames after SetRedlineMode
     UpdateFramePositions(m_aFrames);
 
-    m_aFontHelper.InitFontTable( SupportsUnicode(), *m_pDoc );
+    m_aFontHelper.InitFontTable( true, *m_pDoc );
     GatherChapterFields();
 
     CollectOutlineBookmarks(*m_pDoc);

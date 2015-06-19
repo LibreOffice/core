@@ -60,12 +60,6 @@ public:
     /// Access to the Rtf Sdr exporter.
     RtfSdrExport& SdrExporter() const;
 
-    /// Determines if the format is expected to support unicode.
-    virtual bool SupportsUnicode() const SAL_OVERRIDE
-    {
-        return true;
-    }
-
     virtual bool SupportsOneColumnBreak() const SAL_OVERRIDE
     {
         return false;

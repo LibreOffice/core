@@ -506,7 +506,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                         sFontName = pBulletFont->GetName();
 
                     pPseudoFont = new wwFont( sFontName, pBulletFont->GetPitch(),
-                        eFamily, eChrSet, SupportsUnicode() );
+                        eFamily, eChrSet, true );
                 }
                 else
                     pOutSet = &rFormat.GetCharFormat()->GetAttrSet();
@@ -748,7 +748,8 @@ void MSWordExportBase::SubstituteBullet( OUString& rNumStr,
     // If Bullet char is "", don't change
     if (rNumStr[0] != sal_Unicode(0x0))
     {
-        rNumStr = rNumStr.replaceAt(0, 1, OUString( msfilter::util::bestFitOpenSymbolToMSFont(rNumStr[0], rChrSet, sFontName, !SupportsUnicode()) ));
+        rNumStr = rNumStr.replaceAt(0, 1, OUString(
+            msfilter::util::bestFitOpenSymbolToMSFont(rNumStr[0], rChrSet, sFontName, false)));
     }
 
     rFontName = sFontName;

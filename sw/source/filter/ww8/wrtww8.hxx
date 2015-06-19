@@ -641,9 +641,6 @@ public:
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const = 0;
 
-    /// Determines if the format is expected to support unicode.
-    virtual bool SupportsUnicode() const = 0;
-
     /// Determines if column break with one column should be exported or not.
     virtual bool SupportsOneColumnBreak() const = 0;
 
@@ -969,9 +966,6 @@ public:
 
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const SAL_OVERRIDE;
-
-    /// False for WW6, true for WW8.
-    virtual bool SupportsUnicode() const SAL_OVERRIDE { return bWrtWW8; }
 
     virtual bool PreferPageBreakBefore() const SAL_OVERRIDE { return true; }
 
