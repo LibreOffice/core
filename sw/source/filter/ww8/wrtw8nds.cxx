@@ -179,7 +179,7 @@ void SwWW8AttrIter::IterToCurrent()
 SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     MSWordAttrIter(rWr),
     rNd(rTextNd),
-    maCharRuns(GetPseudoCharRuns(rTextNd, 0, false)),
+    maCharRuns(GetPseudoCharRuns(rTextNd, 0)),
     pCurRedline(0),
     nAktSwPos(0),
     nCurRedlinePos(USHRT_MAX),

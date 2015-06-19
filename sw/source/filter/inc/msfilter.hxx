@@ -445,11 +445,6 @@ namespace sw
             @param nStart
                 The position in the TextNode to start processing from
 
-            @param bSplitOnCharSet
-                Set to true is we want to split on ranges of characters that
-                share a plausible charset for export to e.g. WW7- or perhaps
-                RTF format, not necessary for a unicode aware format like WW8+
-
             @return STL container of CharRuns which describe the shared
             direction, script and optionally script of the contiguous sequences
             of characters
@@ -460,7 +455,7 @@ namespace sw
             @see #i22537# for example
         */
         CharRuns GetPseudoCharRuns(const SwTextNode& rTextNd,
-            sal_Int32 nStart = 0, bool bSplitOnCharSet = false);
+            sal_Int32 nStart = 0);
     }
 }
 

@@ -518,7 +518,7 @@ namespace sw
         }
 
         CharRuns GetPseudoCharRuns(const SwTextNode& rTextNd,
-            sal_Int32 nTextStart, bool bSplitOnCharSet)
+            sal_Int32 nTextStart)
         {
             const OUString &rText = rTextNd.GetText();
 
@@ -556,16 +556,11 @@ namespace sw
             typedef std::vector<DirEntry> DirChanges;
             typedef DirChanges::const_iterator cDirIter;
 
-            typedef std::pair<sal_Int32, sal_Int16> CharSetEntry;
-            typedef std::vector<CharSetEntry> CharSetChanges;
-            typedef CharSetChanges::const_iterator cCharSetIter;
-
             typedef std::pair<sal_Int32, sal_uInt16> ScriptEntry;
             typedef std::vector<ScriptEntry> ScriptChanges;
             typedef ScriptChanges::const_iterator cScriptIter;
 
             DirChanges aDirChanges;
-            CharSetChanges aCharSets;
             ScriptChanges aScripts;
 
             UBiDiDirection eDefaultDir = bParaIsRTL ? UBIDI_RTL : UBIDI_LTR;
@@ -599,28 +594,6 @@ namespace sw
             }
             ubidi_close(pBidi);
 
-            if (bSplitOnCharSet)
-            {
-                //Split unicode text into plausible 8bit ranges for export to
-                //older non unicode aware format
-                sal_Int32 nLen = rText.getLength();
-                sal_Int32 nPos = 0;
-                while (nPos != nLen)
-                {
-                    rtl_TextEncoding ScriptType =
-                        getBestMSEncodingByChar(rText[nPos++]);
-                    while (
-                            (nPos != nLen) &&
-                            (ScriptType == getBestMSEncodingByChar(rText[nPos]))
-                          )
-                    {
-                        ++nPos;
-                    }
-
-                    aCharSets.push_back(CharSetEntry(nPos, ScriptType));
-                }
-            }
-
             using sw::types::writer_cast;
 
             if (g_pBreakIt && g_pBreakIt->GetBreakIter().is())
@@ -640,18 +613,15 @@ namespace sw
             }
 
             cDirIter aBiDiEnd = aDirChanges.end();
-            cCharSetIter aCharSetEnd = aCharSets.end();
             cScriptIter aScriptEnd = aScripts.end();
 
             cDirIter aBiDiIter = aDirChanges.begin();
-            cCharSetIter aCharSetIter = aCharSets.begin();
             cScriptIter aScriptIter = aScripts.begin();
 
             bool bCharIsRTL = bParaIsRTL;
 
             while (
                     aBiDiIter != aBiDiEnd ||
-                    aCharSetIter != aCharSetEnd ||
                     aScriptIter != aScriptEnd
                   )
             {
@@ -662,13 +632,6 @@ namespace sw
                     if (aBiDiIter->first < nMinPos)
                         nMinPos = aBiDiIter->first;
                     bCharIsRTL = aBiDiIter->second;
-                }
-
-                if (aCharSetIter != aCharSetEnd)
-                {
-                    if (aCharSetIter->first < nMinPos)
-                        nMinPos = aCharSetIter->first;
-                    eChrSet = aCharSetIter->second;
                 }
 
                 if (aScriptIter != aScriptEnd)
@@ -685,12 +648,6 @@ namespace sw
                 {
                     if (aBiDiIter->first == nMinPos)
                         ++aBiDiIter;
-                }
-
-                if (aCharSetIter != aCharSetEnd)
-                {
-                    if (aCharSetIter->first == nMinPos)
-                        ++aCharSetIter;
                 }
 
                 if (aScriptIter != aScriptEnd)
