@@ -221,6 +221,9 @@ void SwTiledRenderingTest::testGetTextSelection()
     comphelper::LibreOfficeKit::setActive();
 
     SwXTextDocument* pXTextDocument = createDoc("shape-with-text.fodt");
+    // No crash, just empty output for unexpected mime type.
+    CPPUNIT_ASSERT_EQUAL(OString(), pXTextDocument->getTextSelection("foo/bar"));
+
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     // Move the cursor into the first word.
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 2, /*bBasicCall=*/false);
