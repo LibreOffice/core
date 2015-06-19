@@ -406,7 +406,7 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
         {
             SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, false );
             if ( pItem )
-                m_pDelimEdt->SetText( OUString(pItem->GetValue()) );
+                m_pDelimEdt->SetText( OUString(sal_Unicode(pItem->GetValue())) );
         }
     }
     return 0;

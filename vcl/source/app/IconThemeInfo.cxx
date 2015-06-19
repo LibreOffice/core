@@ -132,7 +132,7 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
     OUString r;
     sal_Unicode firstLetter = themeId[0];
     if (rtl::isAsciiLowerCase(firstLetter)) {
-        r = OUString(rtl::toAsciiUpperCase(firstLetter));
+        r = OUString(sal_Unicode(rtl::toAsciiUpperCase(firstLetter)));
         r += themeId.copy(1);
     }
     else {

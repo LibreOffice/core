@@ -392,7 +392,7 @@ static void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeader
     for(sal_uInt32 i = 0; i < rHeaders.Count(); ++i)
     {
         OUString sHeader = "<" + rHeaders.GetString( i ) + ">";
-        OUString sReplace = "<" + OUString('0' + i) + ">";
+        OUString sReplace = "<" + OUString(sal_Unicode('0' + i)) + ">";
         sBlock = sBlock.replaceAll(sHeader, sReplace);
     }
     rBlock = sBlock;
