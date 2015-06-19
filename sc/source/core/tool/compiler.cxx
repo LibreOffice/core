@@ -3450,10 +3450,14 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
             OUString aStr = aIter.getString();
             if (ScGlobal::GetpTransliteration()->isEqual( aStr, aName))
             {
+                /* XXX NOTE: we could init the column as relative so copying a
+                 * formula across columns would point to the relative column,
+                 * but do it absolute because:
+                 * a) it makes the reference work in named expressions without
+                 * having to distinguish
+                 * b) Excel does it the same. */
                 ScSingleRefData aRef;
-                aRef.InitFlags();
-                aRef.SetColRel( true );
-                aRef.SetAddress( aIter.GetPos(), aPos);
+                aRef.InitAddress( aIter.GetPos());
                 maRawToken.SetSingleReference( aRef );
                 return true;
             }
