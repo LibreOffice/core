@@ -743,7 +743,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     }
 
     aOutputData.DrawShadow();
-    aOutputData.DrawFrame();
+    aOutputData.DrawFrame(*pContentDev);
 
     // Show Note Mark
     if ( rOpts.GetOption( VOPT_NOTES ) )

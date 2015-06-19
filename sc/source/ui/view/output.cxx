@@ -1286,9 +1286,9 @@ size_t lclGetArrayColFromCellInfoX( sal_uInt16 nCellInfoX, sal_uInt16 nCellInfoF
     return static_cast< size_t >( bRTL ? (nCellInfoLastX + 2 - nCellInfoX) : (nCellInfoX - nCellInfoFirstX) );
 }
 
-void ScOutputData::DrawFrame()
+void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
 {
-    DrawModeFlags nOldDrawMode = mpDev->GetDrawMode();
+    DrawModeFlags nOldDrawMode = rRenderContext.GetDrawMode();
 
     Color aSingleColor;
     bool bUseSingleColor = false;
@@ -1302,13 +1302,13 @@ void ScOutputData::DrawFrame()
 
     if ( ( nOldDrawMode & DrawModeFlags::WhiteFill ) && ( nOldDrawMode & DrawModeFlags::BlackLine ) )
     {
-        mpDev->SetDrawMode( nOldDrawMode & (~DrawModeFlags::WhiteFill) );
+        rRenderContext.SetDrawMode( nOldDrawMode & (~DrawModeFlags::WhiteFill) );
         aSingleColor.SetColor( COL_BLACK );
         bUseSingleColor = true;
     }
     else if ( ( nOldDrawMode & DrawModeFlags::SettingsFill ) && ( nOldDrawMode & DrawModeFlags::SettingsLine ) )
     {
-        mpDev->SetDrawMode( nOldDrawMode & (~DrawModeFlags::SettingsFill) );
+        rRenderContext.SetDrawMode( nOldDrawMode & (~DrawModeFlags::SettingsFill) );
         aSingleColor = rStyleSettings.GetWindowTextColor();     // same as used in VCL for DrawModeFlags::SettingsLine
         bUseSingleColor = true;
     }
@@ -1321,12 +1321,12 @@ void ScOutputData::DrawFrame()
     const Color* pForceColor = bUseSingleColor ? &aSingleColor : 0;
 
     if (bAnyRotated)
-        DrawRotatedFrame( pForceColor );        // removes the lines that must not be painted here
+        DrawRotatedFrame(rRenderContext, pForceColor);        // removes the lines that must not be painted here
 
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
     {
-        Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
+        Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
         long nOneX = aOnePixel.Width();
         nInitPosX += nMirrorW - nOneX;
     }
@@ -1343,12 +1343,12 @@ void ScOutputData::DrawFrame()
     // row 0 is not visible (dummy for borders from top) - subtract its height from initial position
     // subtract 1 unit more, because position 0 is first *in* cell, grid line is one unit before
     long nOldPosY = nScrY - 1 - pRowInfo[ 0 ].nHeight;
-    long nOldSnapY = lclGetSnappedY( *mpDev, nOldPosY, bSnapPixel );
+    long nOldSnapY = lclGetSnappedY( rRenderContext, nOldPosY, bSnapPixel );
     rArray.SetYOffset( nOldSnapY );
     for( size_t nRow = 0; nRow < nRowCount; ++nRow )
     {
         long nNewPosY = nOldPosY + pRowInfo[ nRow ].nHeight;
-        long nNewSnapY = lclGetSnappedY( *mpDev, nNewPosY, bSnapPixel );
+        long nNewSnapY = lclGetSnappedY( rRenderContext, nNewPosY, bSnapPixel );
         rArray.SetRowHeight( nRow, nNewSnapY - nOldSnapY );
         nOldPosY = nNewPosY;
         nOldSnapY = nNewSnapY;
@@ -1359,7 +1359,7 @@ void ScOutputData::DrawFrame()
     // column nX1 is not visible (dummy for borders from left) - subtract its width from initial position
     // subtract 1 unit more, because position 0 is first *in* cell, grid line is one unit above
     long nOldPosX = nInitPosX - nLayoutSign * (1 + pRowInfo[ 0 ].pCellInfo[ nX1 ].nWidth);
-    long nOldSnapX = lclGetSnappedX( *mpDev, nOldPosX, bSnapPixel );
+    long nOldSnapX = lclGetSnappedX( rRenderContext, nOldPosX, bSnapPixel );
     // set X offset for left-to-right sheets; for right-to-left sheets this is done after for() loop
     if( !bLayoutRTL )
         rArray.SetXOffset( nOldSnapX );
@@ -1367,7 +1367,7 @@ void ScOutputData::DrawFrame()
     {
         size_t nCol = lclGetArrayColFromCellInfoX( nInfoIdx, nX1, nX2, bLayoutRTL );
         long nNewPosX = nOldPosX + pRowInfo[ 0 ].pCellInfo[ nInfoIdx ].nWidth * nLayoutSign;
-        long nNewSnapX = lclGetSnappedX( *mpDev, nNewPosX, bSnapPixel );
+        long nNewSnapX = lclGetSnappedX( rRenderContext, nNewPosX, bSnapPixel );
         rArray.SetColWidth( nCol, std::abs( nNewSnapX - nOldSnapX ) );
         nOldPosX = nNewPosX;
         nOldSnapX = nNewSnapX;
@@ -1404,7 +1404,7 @@ void ScOutputData::DrawFrame()
     }
     pProcessor.reset();
 
-    mpDev->SetDrawMode(nOldDrawMode);
+    rRenderContext.SetDrawMode(nOldDrawMode);
 }
 
 // Line below the cell
@@ -1474,7 +1474,7 @@ static long lcl_getRotate( ScDocument* pDoc, SCTAB nTab, SCCOL nX, SCROW nY )
     return nRotate;
 }
 
-void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
+void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Color* pForceColor)
 {
     //! save nRotMax
     SCCOL nRotMax = nX2;
@@ -1493,7 +1493,7 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
     {
-        Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
+        Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
         long nOneX = aOnePixel.Width();
         nInitPosX += nMirrorW - nOneX;
     }
@@ -1502,11 +1502,11 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
     Rectangle aClipRect( Point(nScrX, nScrY), Size(nScrW, nScrH) );
     if (bMetaFile)
     {
-        mpDev->Push();
-        mpDev->IntersectClipRegion( aClipRect );
+        rRenderContext.Push();
+        rRenderContext.IntersectClipRegion( aClipRect );
     }
     else
-        mpDev->SetClipRegion( vcl::Region( aClipRect ) );
+        rRenderContext.SetClipRegion( vcl::Region( aClipRect ) );
 
     svx::frame::Array& rArray = mrTabInfo.maArray;
     boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(CreateProcessor2D( ));
@@ -1643,11 +1643,11 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                                     //  ohne Pen wird bei DrawPolygon rechts und unten
                                     //  ein Pixel weggelassen...
                                     if ( rColor.GetTransparency() == 0 )
-                                        mpDev->SetLineColor(rColor);
+                                        rRenderContext.SetLineColor(rColor);
                                     else
-                                        mpDev->SetLineColor();
-                                    mpDev->SetFillColor(rColor);
-                                    mpDev->DrawPolygon( aPoly );
+                                        rRenderContext.SetLineColor();
+                                    rRenderContext.SetFillColor(rColor);
+                                    rRenderContext.DrawPolygon( aPoly );
                                 }
                             }
                         }
@@ -1659,11 +1659,11 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                             //  ohne Pen wird bei DrawPolygon rechts und unten
                             //  ein Pixel weggelassen...
                             if ( pColor->GetTransparency() == 0 )
-                                mpDev->SetLineColor(*pColor);
+                                rRenderContext.SetLineColor(*pColor);
                             else
-                                mpDev->SetLineColor();
-                            mpDev->SetFillColor(*pColor);
-                            mpDev->DrawPolygon( aPoly );
+                                rRenderContext.SetLineColor();
+                            rRenderContext.SetFillColor(*pColor);
+                            rRenderContext.DrawPolygon( aPoly );
 
                         }
 
@@ -1813,9 +1813,9 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
     pProcessor.reset();
 
     if (bMetaFile)
-        mpDev->Pop();
+        rRenderContext.Pop();
     else
-        mpDev->SetClipRegion();
+        rRenderContext.SetClipRegion();
 }
 
 drawinglayer::processor2d::BaseProcessor2D* ScOutputData::CreateProcessor2D( )

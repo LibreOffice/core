@@ -239,7 +239,7 @@ private:
 
     double          GetStretch();
 
-    void            DrawRotatedFrame( const Color* pForceColor );       // pixel
+    void            DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Color* pForceColor);       // pixel
 
     drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
 
@@ -307,7 +307,7 @@ public:
     void    DrawBackground(vcl::RenderContext& rRenderContext);
     void    DrawShadow();
     void    DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom);
-    void    DrawFrame();
+    void    DrawFrame(vcl::RenderContext& rRenderContext);
 
                     // with logic MapMode set!
     void    DrawEdit(bool bPixelToLogic);
