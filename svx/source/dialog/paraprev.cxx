@@ -204,7 +204,7 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext, bool b
                 rRenderContext.DrawRect(Lines[i]);
                 rRenderContext.SetFillColor(aFillCol);
             }
-            DrawRect( aRect );
+            rRenderContext.DrawRect( aRect );
             Lines[i] = aRect;
         }
 
