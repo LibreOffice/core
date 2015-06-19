@@ -148,7 +148,8 @@ struct _LibreOfficeKitDocumentClass
 
     /// @see lok::Document::getTextSelection
     char* (*getTextSelection) (LibreOfficeKitDocument* pThis,
-                               const char* pMimeType);
+                               const char* pMimeType,
+                               char** pUsedMimeType);
 
     /// @see lok::Document::setGraphicSelection
     void (*setGraphicSelection) (LibreOfficeKitDocument* pThis,

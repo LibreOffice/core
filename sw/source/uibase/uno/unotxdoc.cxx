@@ -3255,7 +3255,7 @@ void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
     }
 }
 
-OString SwXTextDocument::getTextSelection(const char* pMimeType)
+OString SwXTextDocument::getTextSelection(const char* pMimeType, OString& rUsedMimeType)
 {
     SolarMutexGuard aGuard;
 
@@ -3317,6 +3317,7 @@ OString SwXTextDocument::getTextSelection(const char* pMimeType)
         aRet = OString(reinterpret_cast<sal_Char*>(aSequence.getArray()), aSequence.getLength());
     }
 
+    rUsedMimeType = pMimeType;
     return aRet;
 }
 

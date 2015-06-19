@@ -452,7 +452,7 @@ public:
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     void SetCursorMm100Position(const Point& rPosition, bool bPoint, bool bClearMark);
     /// Gets the currently selected text.
-    OString GetTextSelection(const OString& aMimeType);
+    OString GetTextSelection(const OString& aMimeType, OString& rUsedMimeType);
     /// Allows starting or ending a graphic move or resize action.
     void SetGraphicMm100Position(bool bStart, const Point& rPosition);
 

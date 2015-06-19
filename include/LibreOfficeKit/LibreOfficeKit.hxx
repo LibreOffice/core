@@ -219,11 +219,12 @@ public:
     /**
      * Gets the currently selected text.
      *
-     * @param pMimeType determines the return format, for example text/plain;charset=utf-8.
+     * @param pMimeType suggests the return format, for example text/plain;charset=utf-8.
+     * @param pUsedMimeType output parameter to inform about the determined format (suggested one or plain text).
      */
-    inline char* getTextSelection(const char* pMimeType)
+    inline char* getTextSelection(const char* pMimeType, char** pUsedMimeType = 0)
     {
-        return mpDoc->pClass->getTextSelection(mpDoc, pMimeType);
+        return mpDoc->pClass->getTextSelection(mpDoc, pMimeType, pUsedMimeType);
     }
 
     /**

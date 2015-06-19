@@ -2446,7 +2446,7 @@ void SdXImpressDocument::setTextSelection(int nType, int nX, int nY)
     }
 }
 
-OString SdXImpressDocument::getTextSelection(const char* pMimeType)
+OString SdXImpressDocument::getTextSelection(const char* pMimeType, OString& rUsedMimeType)
 {
     SolarMutexGuard aGuard;
 
@@ -2454,7 +2454,7 @@ OString SdXImpressDocument::getTextSelection(const char* pMimeType)
     if (!pViewShell)
         return OString();
 
-    return pViewShell->GetTextSelection(pMimeType);
+    return pViewShell->GetTextSelection(pMimeType, rUsedMimeType);
 }
 
 void SdXImpressDocument::setGraphicSelection(int nType, int nX, int nY)
