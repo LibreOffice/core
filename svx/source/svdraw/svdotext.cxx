@@ -2021,8 +2021,12 @@ void SdrTextObj::onUnderflowStatusEvent( )
     // XXX: For now it's not merging anything just adding the while thing as a separate para
     OutlinerParaObject *pNextLinkWholeText = pNextLink->GetOutlinerParaObject();
     if (pNextLinkWholeText) {
-
-        OutlinerParaObject *pCurText = GetOutlinerParaObject();
+        OutlinerParaObject *pCurText;
+        if (pEdtOutl) {
+            pCurText = pEdtOutl->CreateParaObject();
+        } else {
+            pCurText = GetOutlinerParaObject();
+        }
         // NewTextForCurBox = Txt(CurBox) ++ Txt(NextBox)
         aDrawOutliner.SetText(*pCurText);
         aDrawOutliner.AddText(*pNextLinkWholeText);
