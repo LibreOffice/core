@@ -425,7 +425,11 @@ dialog_remove_buttons( GtkDialog *pDialog )
     GtkWidget *pActionArea;
 
 #if GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3,12,0)
     pActionArea = gtk_dialog_get_header_bar(pDialog);
+#else
+    pActionArea = gtk_dialog_get_action_area(pDialog);
+#endif
 #else
     pActionArea = pDialog->action_area;
 #endif
