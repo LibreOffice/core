@@ -840,7 +840,7 @@ void SfxObjectShell::InitBasicManager_Impl()
 */
 
 {
-    /*  #163556# (DR) - Handling of recursive calls while creating the Bacic
+    /*  #163556# (DR) - Handling of recursive calls while creating the Basic
         manager.
 
         It is possible that (while creating the Basic manager) the code that

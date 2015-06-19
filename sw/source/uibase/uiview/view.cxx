@@ -550,7 +550,7 @@ void SwView::_CheckReadonlyState()
     SfxItemState eStateRO, eStateProtAll;
     const SfxPoolItem *pItem;
     // Query the status from a slot which is only known to us.
-    // Otherwise the slot is known from other; like the BasidIde
+    // Otherwise the slot is known from other; like the BasicIde
     eStateRO = rDis.QueryState( FN_INSERT_BOOKMARK, pItem );
     eStateProtAll = rDis.QueryState( FN_EDIT_REGION, pItem );
     bool bChgd = false;

@@ -56,7 +56,7 @@ WCHAR * filename(WCHAR * path);
     @param frontBegin, frontEnd
         Forms a valid range [frontBegin .. frontEnd) of less than MAX_PATH size.
     @param backBegin, backLength
-        Forms a valid range [backBeghin .. backBegin + backLength) of less than
+        Forms a valid range [backBegin .. backBegin + backLength) of less than
         MAX_PATH size.
     @return
         A pointer to the terminating null character of the concatenation, or NULL

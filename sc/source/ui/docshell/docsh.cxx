@@ -2974,7 +2974,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     vector<const awt::KeyEvent*> aKeys;
     aKeys.reserve(4);
 
-    // Backsapce key
+    // Backspace key
     awt::KeyEvent aBackspace;
     aBackspace.KeyCode = awt::Key::BACKSPACE;
     aBackspace.Modifiers = 0;

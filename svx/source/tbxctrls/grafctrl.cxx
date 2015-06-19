@@ -270,7 +270,7 @@ ImplGrafControl::ImplGrafControl(
 
     maImage->SetImage( aImage );
     maImage->SetSizePixel( aImgSize );
-    // we want to see the backbround of the toolbox, not of the FixedImage or Control
+    // we want to see the background of the toolbox, not of the FixedImage or Control
     maImage->SetBackground( Wallpaper( COL_TRANSPARENT ) );
     SetBackground( Wallpaper( COL_TRANSPARENT ) );
 
