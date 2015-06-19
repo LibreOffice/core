@@ -749,7 +749,7 @@ void MSWordExportBase::SubstituteBullet( OUString& rNumStr,
     if (rNumStr[0] != sal_Unicode(0x0))
     {
         rNumStr = rNumStr.replaceAt(0, 1, OUString(
-            msfilter::util::bestFitOpenSymbolToMSFont(rNumStr[0], rChrSet, sFontName, false)));
+            msfilter::util::bestFitOpenSymbolToMSFont(rNumStr[0], rChrSet, sFontName)));
     }
 
     rFontName = sFontName;

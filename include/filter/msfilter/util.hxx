@@ -48,11 +48,9 @@ to find it, unfortunately :-(
 /// best-fit replacement in terms of default available MSOffice symbol
 /// fonts.
 ///
-/// Set bDisableUnicodeSupport when exporting to 8bit encodings
-///
 /// Used to map from [Open|Star]Symbol to some Windows font or other.
 MSFILTER_DLLPUBLIC sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cBullet,
-    rtl_TextEncoding& r_ioChrSet, OUString& r_ioFontName, bool bDisableUnicodeSupport = false);
+    rtl_TextEncoding& r_ioChrSet, OUString& r_ioFontName);
 
 
 enum TextCategory

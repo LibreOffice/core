@@ -87,7 +87,7 @@ DateTime DTTM2DateTime( long lDTTM )
 }
 
 sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
-    rtl_TextEncoding& rChrSet, OUString& rFontName, bool bDisableUnicodeSupport)
+    rtl_TextEncoding& rChrSet, OUString& rFontName)
 {
     boost::scoped_ptr<StarSymbolToMSMultiFont> pConvert(CreateStarSymbolToMSMultiFont());
     OUString sFont = pConvert->ConvertChar(cChar);
@@ -98,7 +98,7 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
         rFontName = sFont;
         rChrSet = RTL_TEXTENCODING_SYMBOL;
     }
-    else if (!bDisableUnicodeSupport && (cChar < 0xE000 || cChar > 0xF8FF))
+    else if (cChar < 0xE000 || cChar > 0xF8FF)
     {
         /*
           Ok we can't fit into a known windows unicode font, but
