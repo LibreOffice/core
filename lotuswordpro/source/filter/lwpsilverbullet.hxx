@@ -107,7 +107,7 @@ public:
 
     inline OUString GetBulletStyleName() const;
 
-    UChar32 GetBulletChar();
+    OUString GetBulletChar();
 
     static OUString GetPrefix() { return OUString(); }
 

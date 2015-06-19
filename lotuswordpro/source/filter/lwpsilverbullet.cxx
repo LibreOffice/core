@@ -174,7 +174,7 @@ void LwpSilverBullet::RegisterStyle()
                         aSuffix = aParaNumbering.pSuffix->GetText();
                     }
 
-                    pListStyle->SetListBullet(nPos, GetNumCharByStyleID(pParaNumber).toChar(),
+                    pListStyle->SetListBullet(nPos, GetNumCharByStyleID(pParaNumber),
                         "Times New Roman", aPrefix, aSuffix);
                 }
 
@@ -224,11 +224,9 @@ OUString LwpSilverBullet::GetBulletFontName()
  * @descr:
  * @return:  An UChar32 bulle character.
  */
-UChar32 LwpSilverBullet::GetBulletChar()
+OUString LwpSilverBullet::GetBulletChar()
 {
-    OUString aBulletChar = m_pBulletPara->GetBulletChar();
-
-    return aBulletChar.toChar();
+    return m_pBulletPara->GetBulletChar();
 }
 
 /**
