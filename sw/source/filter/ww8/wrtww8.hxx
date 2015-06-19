@@ -948,7 +948,6 @@ public:
     WW8_WrPlcFootnoteEdn *pEdn;              ///< Endnotes - structure to remember them, and output
     WW8_WrPlcSepx* pSepx;               ///< Sections/headers/footers
 
-    bool bWrtWW8 : 1;                   ///< Write WW95 (false) or WW97 (true) file format
     bool m_bDot; ///< Template or document.
 
 protected:
@@ -1128,7 +1127,7 @@ public:
     /// Setup the exporter.
     WW8Export( SwWW8Writer *pWriter,
             SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam,
-            bool bIsWW8, bool bDot );
+            bool bDot );
     virtual ~WW8Export();
 
     virtual void DoComboBox(const OUString &rName,

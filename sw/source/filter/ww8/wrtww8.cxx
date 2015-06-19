@@ -136,7 +136,7 @@ class WW8_WrFkp
 
     sal_uInt8 SearchSameSprm( sal_uInt16 nVarLen, const sal_uInt8* pSprms );
 public:
-    WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc, bool bWrtWW8);
+    WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc);
     ~WW8_WrFkp();
     bool Append( WW8_FC nEndFc, sal_uInt16 nVarLen = 0, const sal_uInt8* pSprms = 0 );
     bool Combine();
@@ -271,7 +271,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt)
 
     aTempStrm2.Seek(0L);
     rWrt.WriteAsStringTable(aNames, rWrt.pFib->fcSttbfbkmk,rWrt.pFib->lcbSttbfbkmk);
-    SvStream& rStrm = rWrt.bWrtWW8 ? *rWrt.pTableStrm : rWrt.Strm();
+    SvStream& rStrm = *rWrt.pTableStrm;
     rWrt.pFib->fcPlcfbkf = rStrm.Tell();
     rStrm.WriteStream( aTempStrm1 );
     SwWW8Writer::WriteLong(rStrm, rWrt.pFib->ccpText + rWrt.pFib->ccpTxbx);
@@ -860,7 +860,7 @@ WW8_WrPlcPn::WW8_WrPlcPn(WW8Export& rWr, ePLCFT ePl, WW8_FC nStartFc)
     , nFkpStartPage(0)
     , ePlc(ePl)
 {
-    WW8_WrFkp* pF = new WW8_WrFkp( ePlc, nStartFc, rWrt.bWrtWW8 );
+    WW8_WrFkp* pF = new WW8_WrFkp(ePlc, nStartFc);
     aFkps.push_back( pF );
 }
 
@@ -871,7 +871,7 @@ WW8_WrPlcPn::~WW8_WrPlcPn()
 sal_uInt8 *WW8_WrPlcPn::CopyLastSprms(sal_uInt8 &rLen)
 {
     WW8_WrFkp& rF = aFkps.back();
-    return rF.CopyLastSprms(rLen, rWrt.bWrtWW8);
+    return rF.CopyLastSprms(rLen, true/*TODO*/);
 }
 
 void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pSprms)
@@ -881,7 +881,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
     // big sprm? build the sprmPHugePapx
     sal_uInt8* pNewSprms = const_cast<sal_uInt8*>(pSprms);
     sal_uInt8 aHugePapx[ 8 ];
-    if( rWrt.bWrtWW8 && PAP == ePlc && 488 < nVarLen )
+    if (PAP == ePlc && 488 < nVarLen)
     {
         sal_uInt8* p = aHugePapx;
         *p++ = *pSprms++;           // set style Id
@@ -913,7 +913,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
     if( !bOk )
     {
         pF->Combine();
-        pF = new WW8_WrFkp( ePlc, pF->GetEndFc(), rWrt.bWrtWW8 ); // Start new Fkp == end of old Fkp
+        pF = new WW8_WrFkp(ePlc, pF->GetEndFc()); // Start new Fkp == end of old Fkp
 
         aFkps.push_back( pF );
         if( !pF->Append( nEndFc, nVarLen, pNewSprms ) )
@@ -957,12 +957,8 @@ void WW8_WrPlcPn::WritePlc()
                                 aFkps[ i - 1 ].GetEndFc() );
 
     // fuer jedes FKP die Page ausgeben
-    if( rWrt.bWrtWW8)                   // for WW97 Long output
-        for ( i = 0; i < aFkps.size(); i++)
-            SwWW8Writer::WriteLong( *rWrt.pTableStrm, i + nFkpStartPage );
-    else                            // for WW95 Short output
-        for ( i = 0; i < aFkps.size(); i++)
-            SwWW8Writer::WriteShort( *rWrt.pTableStrm, i + nFkpStartPage );
+    for ( i = 0; i < aFkps.size(); i++)
+        SwWW8Writer::WriteLong( *rWrt.pTableStrm, i + nFkpStartPage );
 
     if( CHP == ePlc )
     {
@@ -976,9 +972,9 @@ void WW8_WrPlcPn::WritePlc()
     }
 }
 
-WW8_WrFkp::WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc, bool bWrtWW8)
+WW8_WrFkp::WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc)
     : ePlc(ePl), nStartGrp(511), nOldStartGrp(511),
-    nItemSize( ( CHP == ePl ) ? 1 : ( bWrtWW8 ? 13 : 7 )),
+    nItemSize( ( CHP == ePl ) ? 1 : 13 ),
     nIMax(0), nOldVarLen(0), bCombined(false)
 {
     pFkp = reinterpret_cast<sal_uInt8*>(new sal_Int32[128]);           // 512 Byte
@@ -1481,23 +1477,14 @@ void WW8Export::OutGrfBullets(const sw::Frame & rFrame)
     sal_uInt8* pArr = aArr;
 
     // sprmCFSpec
-    if( bWrtWW8 )
-        Set_UInt16( pArr, 0x855 );
-    else
-        Set_UInt8( pArr, 117 );
+    Set_UInt16( pArr, 0x855 );
     Set_UInt8( pArr, 1 );
 
     Set_UInt16( pArr, 0x083c );
     Set_UInt8( pArr, 0x81 );
 
     // sprmCPicLocation
-    if( bWrtWW8 )
-        Set_UInt16( pArr, 0x6a03 );
-    else
-    {
-        Set_UInt8( pArr, 68 );
-        Set_UInt8( pArr, 4 );
-    }
+    Set_UInt16( pArr, 0x6a03 );
     Set_UInt32( pArr, GRF_MAGIC_321 );
 
     //extern  nAttrMagicIdx;
@@ -1535,7 +1522,7 @@ void WW8_WrtRedlineAuthor::Write( Writer& rWrt )
 {
     WW8Export & rWW8Wrt = *(static_cast<SwWW8Writer&>(rWrt).m_pExport);
     rWW8Wrt.WriteAsStringTable(maAuthors, rWW8Wrt.pFib->fcSttbfRMark,
-        rWW8Wrt.pFib->lcbSttbfRMark, rWW8Wrt.bWrtWW8 ? 0 : 2);
+        rWW8Wrt.pFib->lcbSttbfRMark, 0);
 }
 
 sal_uInt16 WW8Export::AddRedlineAuthor( sal_uInt16 nId )
@@ -1556,38 +1543,19 @@ void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
     {
         // we have some Redlines found in the document -> the
         // Author Name Stringtable
-        SvStream& rStrm = bWrtWW8 ? *pTableStrm : Strm();
+        SvStream& rStrm = *pTableStrm;
         rfcSttbf = rStrm.Tell();
-        if( bWrtWW8 )
+        SwWW8Writer::WriteShort( rStrm, -1 );
+        SwWW8Writer::WriteLong( rStrm, nCount );
+        for( n = 0; n < nCount; ++n )
         {
-            SwWW8Writer::WriteShort( rStrm, -1 );
-            SwWW8Writer::WriteLong( rStrm, nCount );
-            for( n = 0; n < nCount; ++n )
-            {
-                const OUString& rNm = rStrings[n];
-                SwWW8Writer::WriteShort( rStrm, rNm.getLength() );
-                SwWW8Writer::WriteString16(rStrm, rNm, false);
-                if( nExtraLen )
-                    SwWW8Writer::FillCount(rStrm, nExtraLen);
-            }
-        }
-        else
-        {
-            SwWW8Writer::WriteShort( rStrm, 0 );
-            for( n = 0; n < nCount; ++n )
-            {
-                const OUString &rString = rStrings[n];
-                const OUString aNm(rString.copy(0, std::min<sal_Int32>(rString.getLength(), 255)));
-                rStrm.WriteUChar( aNm.getLength() );
-                SwWW8Writer::WriteString8(rStrm, aNm, false,
-                    RTL_TEXTENCODING_MS_1252);
-                if (nExtraLen)
-                    SwWW8Writer::FillCount(rStrm, nExtraLen);
-            }
+            const OUString& rNm = rStrings[n];
+            SwWW8Writer::WriteShort( rStrm, rNm.getLength() );
+            SwWW8Writer::WriteString16(rStrm, rNm, false);
+            if( nExtraLen )
+                SwWW8Writer::FillCount(rStrm, nExtraLen);
         }
         rlcbSttbf = rStrm.Tell() - rfcSttbf;
-        if( !bWrtWW8 )
-            SwWW8Writer::WriteShort( rStrm, rfcSttbf, (sal_uInt16)rlcbSttbf );
     }
 }
 
@@ -1692,10 +1660,7 @@ void WW8Export::WriteStringAsPara( const OUString& rText, sal_uInt16 nStyleId )
     if( m_bOutTable )
     {                                               // Tab-Attr
         // sprmPFInTable
-        if( bWrtWW8 )
-            SwWW8Writer::InsUInt16( aArr, NS_sprm::LN_PFInTable );
-        else
-            aArr.push_back( 24 );
+        SwWW8Writer::InsUInt16( aArr, NS_sprm::LN_PFInTable );
         aArr.push_back( 1 );
     }
 
@@ -2028,16 +1993,9 @@ void WW8AttributeOutput::TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
     const SwFormatRowSplit& rSplittable = pLineFormat->GetRowSplit();
     sal_uInt8 nCantSplit = (!rSplittable.GetValue()) ? 1 : 0;
-    if ( m_rWW8Export.bWrtWW8 )
-    {
-        m_rWW8Export.InsUInt16( NS_sprm::LN_TFCantSplit );
-        m_rWW8Export.pO->push_back( nCantSplit );
-        m_rWW8Export.InsUInt16( NS_sprm::LN_TFCantSplit90 ); // also write fCantSplit90
-    }
-    else
-    {
-        m_rWW8Export.pO->push_back( 185 );
-    }
+    m_rWW8Export.InsUInt16( NS_sprm::LN_TFCantSplit );
+    m_rWW8Export.pO->push_back( nCantSplit );
+    m_rWW8Export.InsUInt16( NS_sprm::LN_TFCantSplit90 ); // also write fCantSplit90
     m_rWW8Export.pO->push_back( nCantSplit );
 }
 
@@ -2046,13 +2004,10 @@ void WW8AttributeOutput::TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTable
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
     const SwFrameFormat * pFrameFormat = pTable->GetFrameFormat();
 
-    if ( m_rWW8Export.bWrtWW8 )
+    if ( m_rWW8Export.TrueFrameDirection(*pFrameFormat) == FRMDIR_HORI_RIGHT_TOP )
     {
-        if ( m_rWW8Export.TrueFrameDirection(*pFrameFormat) == FRMDIR_HORI_RIGHT_TOP )
-        {
-            m_rWW8Export.InsUInt16( NS_sprm::LN_TFBiDi );
-            m_rWW8Export.InsUInt16( 1 );
-        }
+        m_rWW8Export.InsUInt16( NS_sprm::LN_TFBiDi );
+        m_rWW8Export.InsUInt16( 1 );
     }
 }
 
@@ -2083,10 +2038,7 @@ void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTab
 
     if ( nHeight )
     {
-        if ( m_rWW8Export.bWrtWW8 )
-            m_rWW8Export.InsUInt16( NS_sprm::LN_TDyaRowHeight );
-        else
-            m_rWW8Export.pO->push_back( 189 );
+        m_rWW8Export.InsUInt16( NS_sprm::LN_TDyaRowHeight );
         m_rWW8Export.InsUInt16( (sal_uInt16)nHeight );
     }
 
@@ -2117,10 +2069,7 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
         {
             case text::HoriOrientation::CENTER:
             case text::HoriOrientation::RIGHT:
-                if ( m_rWW8Export.bWrtWW8 )
-                    m_rWW8Export.InsUInt16( NS_sprm::LN_TJc90 );
-                else
-                    m_rWW8Export.pO->push_back( 182 );
+                m_rWW8Export.InsUInt16( NS_sprm::LN_TJc90 );
                 m_rWW8Export.InsUInt16( text::HoriOrientation::RIGHT == eHOri ? 2 : 1 );
                 break;
             default:
@@ -2173,10 +2122,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
 
     if ( pTable->GetRowsToRepeat() > pTableTextNodeInfoInner->getRow() )
     {
-        if( m_rWW8Export.bWrtWW8 )
-            m_rWW8Export.InsUInt16( NS_sprm::LN_TTableHeader );
-        else
-            m_rWW8Export.pO->push_back( 186 );
+        m_rWW8Export.InsUInt16( NS_sprm::LN_TTableHeader );
         m_rWW8Export.pO->push_back( 1 );
     }
 
@@ -2259,12 +2205,9 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         if (pTabBox1 != NULL)
             pBoxFormat = pTabBox1->GetFrameFormat();
 
-        if ( m_rWW8Export.bWrtWW8 )
-        {
-            sal_uInt16 nFlags =
-                lcl_TCFlags(*m_rWW8Export.m_pDoc, pTabBox1, *aItRowSpans);
-             m_rWW8Export.InsUInt16( nFlags );
-        }
+        sal_uInt16 nFlags =
+            lcl_TCFlags(*m_rWW8Export.m_pDoc, pTabBox1, *aItRowSpans);
+        m_rWW8Export.InsUInt16( nFlags );
 
         static sal_uInt8 aNullBytes[] = { 0x0, 0x0 };
 
@@ -2396,9 +2339,6 @@ void WW8AttributeOutput::TableDefaultBorders( ww8::WW8TableNodeInfoInner::Pointe
 void WW8AttributeOutput::TableCellBorders(
     ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
-    if (!m_rWW8Export.bWrtWW8)
-        return;
-
     const SwTableBox * pTabBox = pTableTextNodeInfoInner->getTableBox();
     const SwTableLine * pTabLine = pTabBox->GetUpper();
     const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
@@ -2432,10 +2372,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
 
     sal_uInt8 nBoxes = rTabBoxes.size();
-    if ( m_rWW8Export.bWrtWW8 )
-        m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTableShd80 );
-    else
-        m_rWW8Export.pO->push_back( (sal_uInt8)191 );
+    m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTableShd80 );
     m_rWW8Export.pO->push_back( (sal_uInt8)(nBoxes * 2) );  // Len
 
     for ( sal_uInt8 n = 0; n < nBoxes; n++ )
@@ -2457,18 +2394,16 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
         m_rWW8Export.InsUInt16( aShd.GetValue() );
     }
 
-    if ( m_rWW8Export.bWrtWW8 )
-    {
-        sal_uInt32 aSprmIds[] = { NS_sprm::LN_TDefTableShd,
-                                  NS_sprm::LN_TDefTableShdRaw };
-        sal_uInt8 nBoxes0 = rTabBoxes.size();
-        if (nBoxes0 > 21)
-            nBoxes0 = 21;
+    sal_uInt32 aSprmIds[] = { NS_sprm::LN_TDefTableShd,
+                              NS_sprm::LN_TDefTableShdRaw };
+    sal_uInt8 nBoxes0 = rTabBoxes.size();
+    if (nBoxes0 > 21)
+        nBoxes0 = 21;
 
-        for (sal_uInt32 m = 0; m < 2; m++)
-        {
-            m_rWW8Export.InsUInt16( aSprmIds[m] );
-            m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(nBoxes0 * 10) );
+    for (sal_uInt32 m = 0; m < 2; m++)
+    {
+        m_rWW8Export.InsUInt16( aSprmIds[m] );
+        m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(nBoxes0 * 10) );
 
         for ( sal_uInt8 n = 0; n < nBoxes0; n++ )
         {
@@ -2497,7 +2432,6 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
 
             aSHD.Write( m_rWW8Export );
         }
-        }
     }
 }
 
@@ -2505,10 +2439,6 @@ void WW8Export::SectionBreaksAndFrames( const SwTextNode& rNode )
 {
     // output page/section breaks
     OutputSectionBreaks( rNode.GetpSwAttrSet(), rNode );
-
-    // all textframes anchored as character for the winword 7- format
-    if ( !bWrtWW8 && !IsInTable() )
-        OutWW6FlyFrmsInContent( rNode );
 }
 
 class TrackContentToExport
@@ -2733,129 +2663,92 @@ typedef ww8::WW8Sttb< ww8::WW8Struct >  WW8SttbAssoc;
 
 void WW8Export::WriteFkpPlcUsw()
 {
-    if( !bWrtWW8 )
+    // Graphics in the data stream
+    m_pGrf->Write();                          // Graphics
+
+    // Ausgabe in WordDocument-Stream
+    m_pChpPlc->WriteFkps();                   // Fkp.Chpx
+    m_pPapPlc->WriteFkps();                   // Fkp.Papx
+    pSepx->WriteSepx( Strm() );             // Sepx
+
+    // Ausagbe in Table-Stream
+    m_pStyles->OutputStylesTable();           // for WW8 StyleTab
+    pFootnote->WritePlc( *this );                // Footnote-Ref & Text Plc
+    pEdn->WritePlc( *this );                // Endnote-Ref & Text Plc
+    m_pTextBxs->WritePlc( *this );             // Textbox Text Plc
+    m_pHFTextBxs->WritePlc( *this );           // Head/Foot-Textbox Text Plc
+    m_pAtn->WritePlc( *this );                // Annotation-Ref & Text Plc
+
+    pSepx->WritePlcSed( *this );            // Slcx.PlcSed
+    pSepx->WritePlcHdd( *this );            // Slcx.PlcHdd
+
+    m_pChpPlc->WritePlc();                    // Plcx.Chpx
+    m_pPapPlc->WritePlc();                    // Plcx.Papx
+
+    if( m_pRedlAuthors )
+        m_pRedlAuthors->Write( GetWriter() );       // sttbfRMark (RedlineAuthors)
+    m_pFieldMain->Write( *this );               // Fields ( Main Text )
+    m_pFieldHdFt->Write( *this );               // Fields ( Header/Footer )
+    m_pFieldFootnote->Write( *this );                // Fields ( FootNotes )
+    m_pFieldEdn->Write( *this );                // Fields ( EndNotes )
+    m_pFieldAtn->Write( *this );                // Fields ( Annotations )
+    m_pFieldTextBxs->Write( *this );             // Fields ( Textboxes )
+    m_pFieldHFTextBxs->Write( *this );           // Fields ( Head/Foot-Textboxes )
+
+    if (m_pEscher || m_pDoc->ContainsMSVBasic())
     {
-        static const sal_uInt8 aSpec[2] =
-        {
-            117, 1
-        };
-
-        m_pChpPlc->AppendFkpEntry( Strm().Tell() );   // Sepx with fSpecial
-        pSepx->WriteSepx( Strm() );                 // Slcx.Sepx
-        m_pGrf->Write();                              // Graphics
-        m_pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec ), aSpec );
-
-        m_pChpPlc->WriteFkps();                   // Fkp.Chpx
-        m_pPapPlc->WriteFkps();                   // Fkp.Papx
-        m_pStyles->OutputStylesTable();           // Styles
-        pFootnote->WritePlc( *this );                // Footnote-Ref & Text Plc
-        pEdn->WritePlc( *this );                // Endnote-Ref & Text Plc
-        m_pAtn->WritePlc( *this );                // Annotation-Ref & Text Plc
-        pSepx->WritePlcSed( *this );            // Slcx.PlcSed
-        pSepx->WritePlcHdd( *this );            // Slcx.PlcHdd
-        m_pChpPlc->WritePlc();                    // Plcx.Chpx
-        m_pPapPlc->WritePlc();                    // Plcx.Papx
-        m_aFontHelper.WriteFontTable(pTableStrm, *pFib); // FFNs
-        if( m_pRedlAuthors )
-            m_pRedlAuthors->Write( GetWriter() );       // sttbfRMark (RedlineAuthors)
-        m_pFieldMain->Write( *this );               // Fields ( Main Text )
-        m_pFieldHdFt->Write( *this );               // Fields ( Header/Footer )
-        m_pFieldFootnote->Write( *this );                // Fields ( FootNotes )
-        m_pFieldEdn->Write( *this );                // Fields ( EndNotes )
-        m_pFieldAtn->Write( *this );                // Fields ( Annotations )
-        m_pBkmks->Write( *this );                 // Bookmarks - sttbfBkmk/
-                                                // plcfBkmkf/plcfBkmkl
-        WriteDop( *this );                      // Document-Properties
-
+        /*
+         Every time MS 2000 creates an escher stream there is always
+         an ObjectPool dir (even if empty). It turns out that if a copy of
+         MS 2000 is used to open a document that contains escher graphics
+         exported from StarOffice without this empty dir then *if* that
+         copy of MS Office has never been used to open a MSOffice document
+         that has escher graphics (and an ObjectPool dir of course) and
+         that copy of office has not been used to draw escher graphics then
+         our exported graphics do not appear. Once you do open a ms
+         document with escher graphics or draw an escher graphic with that
+         copy of word, then all documents from staroffice that contain
+         escher work from then on. Tricky to track down, some sort of late
+         binding trickery in MS where solely for first time initialization
+         the existence of an ObjectPool dir is necessary for triggering
+         some magic. cmc
+        */
+        // avoid memory leak #i120098#, the unnamed obj will be released in destructor.
+        xEscherStg = GetWriter().GetStorage().OpenSotStorage(OUString(SL::aObjectPool),
+            STREAM_READWRITE | StreamMode::SHARE_DENYALL);
     }
-    else
+
+    // dggInfo - escher stream
+    WriteEscher();
+
+    m_pSdrObjs->WritePlc( *this );
+    m_pHFSdrObjs->WritePlc( *this );
+    // spamom - office drawing table
+    // spahdr - header office drawing table
+
+    m_pBkmks->Write( *this );                 // Bookmarks - sttbfBkmk/
+                                            // plcfBkmkf/plcfBkmkl
+
+    WriteNumbering();
+
+    RestoreMacroCmds();
+
+    m_pMagicTable->Write( *this );
+
+    m_pPiece->WritePc( *this );               // Piece-Table
+    m_aFontHelper.WriteFontTable(pTableStrm, *pFib); // FFNs
+
+    //Convert OOo asian typography into MS typography structure
+    ExportDopTypography(pDop->doptypography);
+
+    WriteDop( *this );                      // Document-Properties
+
+    // Write SttbfAssoc
+    WW8SttbAssoc * pSttbfAssoc = dynamic_cast<WW8SttbAssoc *>
+        (m_pDoc->getIDocumentExternalData().getExternalData(::sw::tExternalDataType::STTBF_ASSOC).get());
+
+    if ( pSttbfAssoc )                      // #i106057#
     {
-        // Graphics in the data stream
-        m_pGrf->Write();                          // Graphics
-
-        // Ausgabe in WordDocument-Stream
-        m_pChpPlc->WriteFkps();                   // Fkp.Chpx
-        m_pPapPlc->WriteFkps();                   // Fkp.Papx
-        pSepx->WriteSepx( Strm() );             // Sepx
-
-        // Ausagbe in Table-Stream
-        m_pStyles->OutputStylesTable();           // for WW8 StyleTab
-        pFootnote->WritePlc( *this );                // Footnote-Ref & Text Plc
-        pEdn->WritePlc( *this );                // Endnote-Ref & Text Plc
-        m_pTextBxs->WritePlc( *this );             // Textbox Text Plc
-        m_pHFTextBxs->WritePlc( *this );           // Head/Foot-Textbox Text Plc
-        m_pAtn->WritePlc( *this );                // Annotation-Ref & Text Plc
-
-        pSepx->WritePlcSed( *this );            // Slcx.PlcSed
-        pSepx->WritePlcHdd( *this );            // Slcx.PlcHdd
-
-        m_pChpPlc->WritePlc();                    // Plcx.Chpx
-        m_pPapPlc->WritePlc();                    // Plcx.Papx
-
-        if( m_pRedlAuthors )
-            m_pRedlAuthors->Write( GetWriter() );       // sttbfRMark (RedlineAuthors)
-        m_pFieldMain->Write( *this );               // Fields ( Main Text )
-        m_pFieldHdFt->Write( *this );               // Fields ( Header/Footer )
-        m_pFieldFootnote->Write( *this );                // Fields ( FootNotes )
-        m_pFieldEdn->Write( *this );                // Fields ( EndNotes )
-        m_pFieldAtn->Write( *this );                // Fields ( Annotations )
-        m_pFieldTextBxs->Write( *this );             // Fields ( Textboxes )
-        m_pFieldHFTextBxs->Write( *this );           // Fields ( Head/Foot-Textboxes )
-
-        if (m_pEscher || m_pDoc->ContainsMSVBasic())
-        {
-            /*
-             Every time MS 2000 creates an escher stream there is always
-             an ObjectPool dir (even if empty). It turns out that if a copy of
-             MS 2000 is used to open a document that contains escher graphics
-             exported from StarOffice without this empty dir then *if* that
-             copy of MS Office has never been used to open a MSOffice document
-             that has escher graphics (and an ObjectPool dir of course) and
-             that copy of office has not been used to draw escher graphics then
-             our exported graphics do not appear. Once you do open a ms
-             document with escher graphics or draw an escher graphic with that
-             copy of word, then all documents from staroffice that contain
-             escher work from then on. Tricky to track down, some sort of late
-             binding trickery in MS where solely for first time initialization
-             the existence of an ObjectPool dir is necessary for triggering
-             some magic. cmc
-            */
-            // avoid memory leak #i120098#, the unnamed obj will be released in destructor.
-            xEscherStg = GetWriter().GetStorage().OpenSotStorage(OUString(SL::aObjectPool),
-                STREAM_READWRITE | StreamMode::SHARE_DENYALL);
-        }
-
-        // dggInfo - escher stream
-        WriteEscher();
-
-        m_pSdrObjs->WritePlc( *this );
-        m_pHFSdrObjs->WritePlc( *this );
-        // spamom - office drawing table
-        // spahdr - header office drawing table
-
-        m_pBkmks->Write( *this );                 // Bookmarks - sttbfBkmk/
-                                                // plcfBkmkf/plcfBkmkl
-
-        WriteNumbering();
-
-        RestoreMacroCmds();
-
-        m_pMagicTable->Write( *this );
-
-        m_pPiece->WritePc( *this );               // Piece-Table
-        m_aFontHelper.WriteFontTable(pTableStrm, *pFib); // FFNs
-
-        //Convert OOo asian typography into MS typography structure
-        ExportDopTypography(pDop->doptypography);
-
-        WriteDop( *this );                      // Document-Properties
-
-        // Write SttbfAssoc
-        WW8SttbAssoc * pSttbfAssoc = dynamic_cast<WW8SttbAssoc *>
-            (m_pDoc->getIDocumentExternalData().getExternalData(::sw::tExternalDataType::STTBF_ASSOC).get());
-
-        if ( pSttbfAssoc )                      // #i106057#
-        {
         ::std::vector<OUString> aStrings;
 
         ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
@@ -2868,8 +2761,8 @@ void WW8Export::WriteFkpPlcUsw()
 
         WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
                            pFib->lcbSttbfAssoc);
-        }
     }
+
     Strm().Seek( 0 );
 
     // Reclaim stored FIB data from document.
@@ -2903,8 +2796,7 @@ void WW8Export::StoreDoc1()
     bNeedsFinalPara |= pEdn->WriteText( *this );         // EndNote-Text
 
     // create the escher streams
-    if( bWrtWW8 )
-        CreateEscher();
+    CreateEscher();
 
     bNeedsFinalPara |= m_pTextBxs->WriteText( *this );  //Textbox Text Plc
     bNeedsFinalPara |= m_pHFTextBxs->WriteText( *this );//Head/Foot-Textbox Text Plc
@@ -3152,26 +3044,23 @@ void WW8Export::ExportDocument_Impl()
 {
     PrepareStorage();
 
-    pFib = new WW8Fib( bWrtWW8 ? 8 : 6, m_bDot );
+    pFib = new WW8Fib(8, m_bDot);
 
     tools::SvRef<SotStorageStream> xWwStrm( GetWriter().GetStorage().OpenSotStream( m_aMainStg ) );
     tools::SvRef<SotStorageStream> xTableStrm( xWwStrm ), xDataStrm( xWwStrm );
     xWwStrm->SetBufferSize( 32768 );
 
-    if( bWrtWW8 )
-    {
-        pFib->fWhichTableStm = true;
-        xTableStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::a1Table),
-            STREAM_STD_WRITE );
-        xDataStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::aData),
-            STREAM_STD_WRITE );
+    pFib->fWhichTableStm = true;
+    xTableStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::a1Table),
+        STREAM_STD_WRITE );
+    xDataStrm = GetWriter().GetStorage().OpenSotStream(OUString(SL::aData),
+        STREAM_STD_WRITE );
 
-        xDataStrm->SetBufferSize( 32768 );  // for graphics
-        xTableStrm->SetBufferSize( 16384 ); // for the Font-/Style-Table, etc.
+    xDataStrm->SetBufferSize( 32768 );  // for graphics
+    xTableStrm->SetBufferSize( 16384 ); // for the Font-/Style-Table, etc.
 
-        xTableStrm->SetEndian( SvStreamEndian::LITTLE );
-        xDataStrm->SetEndian( SvStreamEndian::LITTLE );
-    }
+    xTableStrm->SetEndian( SvStreamEndian::LITTLE );
+    xDataStrm->SetEndian( SvStreamEndian::LITTLE );
 
     GetWriter().SetStream( & *xWwStrm );
     pTableStrm = &xTableStrm;
@@ -3330,16 +3219,13 @@ void WW8Export::ExportDocument_Impl()
     GetWriter().SetStream( 0 );
 
     xWwStrm->SetBufferSize( 0 );
-    if( bWrtWW8 )
+    xTableStrm->SetBufferSize( 0 );
+    xDataStrm->SetBufferSize( 0 );
+    if( 0 == pDataStrm->Seek( STREAM_SEEK_TO_END ))
     {
-        xTableStrm->SetBufferSize( 0 );
-        xDataStrm->SetBufferSize( 0 );
-        if( 0 == pDataStrm->Seek( STREAM_SEEK_TO_END ))
-        {
-            xDataStrm.Clear();
-            pDataStrm = 0;
-            GetWriter().GetStorage().Remove(OUString(SL::aData));
-        }
+        xDataStrm.Clear();
+        pDataStrm = 0;
+        GetWriter().GetStorage().Remove(OUString(SL::aData));
     }
 }
 
@@ -3350,57 +3236,29 @@ void WW8Export::PrepareStorage()
     const char* pName;
     sal_uInt32 nId1;
 
-    if (bWrtWW8)
+    static const char aUserName[] = "Microsoft Word-Document";
+    static const sal_uInt8 aCompObj[] =
     {
-        static const char aUserName[] = "Microsoft Word-Document";
-        static const sal_uInt8 aCompObj[] =
-        {
-            0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
-            0xFF, 0xFF, 0xFF, 0xFF, 0x06, 0x09, 0x02, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x46, 0x18, 0x00, 0x00, 0x00,
-            0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
-            0x74, 0x20, 0x57, 0x6F, 0x72, 0x64, 0x2D, 0x44,
-            0x6F, 0x6B, 0x75, 0x6D, 0x65, 0x6E, 0x74, 0x00,
-            0x0A, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x57, 0x6F,
-            0x72, 0x64, 0x44, 0x6F, 0x63, 0x00, 0x10, 0x00,
-            0x00, 0x00, 0x57, 0x6F, 0x72, 0x64, 0x2E, 0x44,
-            0x6F, 0x63, 0x75, 0x6D, 0x65, 0x6E, 0x74, 0x2E,
-            0x38, 0x00, 0xF4, 0x39, 0xB2, 0x71, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00
-        };
+        0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0x06, 0x09, 0x02, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x46, 0x18, 0x00, 0x00, 0x00,
+        0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
+        0x74, 0x20, 0x57, 0x6F, 0x72, 0x64, 0x2D, 0x44,
+        0x6F, 0x6B, 0x75, 0x6D, 0x65, 0x6E, 0x74, 0x00,
+        0x0A, 0x00, 0x00, 0x00, 0x4D, 0x53, 0x57, 0x6F,
+        0x72, 0x64, 0x44, 0x6F, 0x63, 0x00, 0x10, 0x00,
+        0x00, 0x00, 0x57, 0x6F, 0x72, 0x64, 0x2E, 0x44,
+        0x6F, 0x63, 0x75, 0x6D, 0x65, 0x6E, 0x74, 0x2E,
+        0x38, 0x00, 0xF4, 0x39, 0xB2, 0x71, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00
+    };
 
-        pName = aUserName;
-        pData = aCompObj;
-        nLen = sizeof( aCompObj );
-        nId1 = 0x00020906L;
-    }
-    else
-    {
-        static const char aUserName[] = "Microsoft Word 6.0 Document";
-        static const sal_uInt8 aCompObj[] =
-        {
-            0x01, 0x00, 0xFE, 0xFF, 0x03, 0x0A, 0x00, 0x00,
-            0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x09, 0x02, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0xC0, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x46, 0x1C, 0x00, 0x00, 0x00,
-            0x4D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x6F, 0x66,
-            0x74, 0x20, 0x57, 0x6F, 0x72, 0x64, 0x20, 0x36,
-            0x2E, 0x30, 0x2D, 0x44, 0x6F, 0x6B, 0x75, 0x6D,
-            0x65, 0x6E, 0x74, 0x00, 0x0A, 0x00, 0x00, 0x00,
-            0x4D, 0x53, 0x57, 0x6F, 0x72, 0x64, 0x44, 0x6F,
-            0x63, 0x00, 0x10, 0x00, 0x00, 0x00, 0x57, 0x6F,
-            0x72, 0x64, 0x2E, 0x44, 0x6F, 0x63, 0x75, 0x6D,
-            0x65, 0x6E, 0x74, 0x2E, 0x36, 0x00, 0x00, 0x00,
-            0x00, 0x00
-        };
-
-        pName = aUserName;
-        pData = aCompObj;
-        nLen = sizeof( aCompObj );
-        nId1 = 0x00020900L;
-    }
+    pName = aUserName;
+    pData = aCompObj;
+    nLen = sizeof( aCompObj );
+    nId1 = 0x00020906L;
 
     SvGlobalName aGName( nId1, 0x0000, 0x0000, 0xc0, 0x00, 0x00, 0x00,
                          0x00, 0x00, 0x00, 0x46 );
@@ -3455,7 +3313,7 @@ sal_uLong SwWW8Writer::WriteStorage()
     // Do the actual export
     {
         bool bDot = mpMedium->GetFilter()->GetName().endsWith("Vorlage");
-        WW8Export aExport( this, pDoc, pCurPam, pOrigPam, m_bWrtWW8, bDot );
+        WW8Export aExport(this, pDoc, pCurPam, pOrigPam, bDot);
         m_pExport = &aExport;
         aExport.ExportDocument( bWriteAll );
         m_pExport = NULL;
@@ -3562,7 +3420,7 @@ MSWordExportBase::~MSWordExportBase()
 
 WW8Export::WW8Export( SwWW8Writer *pWriter,
         SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam,
-        bool bIsWW8, bool bDot )
+        bool bDot )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam )
     , pO(NULL)
     , pTableStrm(NULL)
@@ -3572,7 +3430,6 @@ WW8Export::WW8Export( SwWW8Writer *pWriter,
     , pFootnote(NULL)
     , pEdn(NULL)
     , pSepx(NULL)
-    , bWrtWW8(bIsWW8)
     , m_bDot(bDot)
     , m_pWriter(pWriter)
     , m_pAttrOutput(new WW8AttributeOutput(*this))
@@ -3734,10 +3591,6 @@ void WW8SHDLong::Write( WW8Export& rExport )
 
 void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 {
-    OSL_ENSURE( bWrtWW8, "No 95 export yet" );
-    if ( !bWrtWW8 )
-        return;
-
     const ::sw::mark::IFieldmark* pFieldmark = &rFieldmark;
     const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
 
