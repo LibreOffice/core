@@ -111,6 +111,7 @@ struct SvGlobalHashNames
     SvStringHashEntryRef MM_Hidden;
     SvStringHashEntryRef MM_Description;
     SvStringHashEntryRef MM_UnoName;
+    SvStringHashEntryRef MM_Alias;
 
     SvGlobalHashNames();
 };
@@ -221,6 +222,7 @@ HASH_INLINE(DisableFlags)
 HASH_INLINE(Hidden)
 HASH_INLINE(Description)
 HASH_INLINE(UnoName)
+HASH_INLINE(Alias)
 
 
 #endif // INCLUDED_IDL_INC_GLOBALS_HXX

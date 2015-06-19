@@ -137,6 +137,7 @@ SvGlobalHashNames::SvGlobalHashNames()
     A_ENTRY(Hidden)
     A_ENTRY(Description)
     A_ENTRY(UnoName)
+    A_ENTRY(Alias)
 {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

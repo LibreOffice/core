@@ -360,7 +360,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
                 // is exactly this type
                 return pType;
 
-            DBG_ASSERT( aTmpTypeList.front(), "mindestens ein Element" );
+            DBG_ASSERT( aTmpTypeList.front(), "at least one lement" );
             SvMetaTypeRef xType = new SvMetaType( pType->GetName().getString(), 'h', "dummy" );
             xType->SetRef( pType );
             xType->SetIn( bIn );
@@ -405,7 +405,7 @@ SvMetaAttribute * SvIdlDataBase::ReadKnownAttr
                 }
             }
 
-            OStringBuffer aStr("Nicht gefunden : ");
+            OStringBuffer aStr("The following attribute is unknown : ");
             aStr.append(pTok->GetString());
             OSL_FAIL(aStr.getStr());
         }
