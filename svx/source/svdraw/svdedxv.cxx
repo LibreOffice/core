@@ -489,6 +489,19 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerStatusEventHdl,EditStatus*,pEditStat)
     return 0;
 }
 
+IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
+{
+    if(pTextEditOutliner )
+    {
+        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( mxTextEditObj.get() );
+        if( pTextObj )
+        {
+            pTextObj->onChainingEvent();
+        }
+    }
+    return 0;
+}
+
 IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,void)
 {
     bool bOk=false;
@@ -728,8 +741,8 @@ bool SdrObjEditView::SdrBeginTextEdit(
 
             pTextEditOutlinerView->ShowCursor();
             pTextEditOutliner->SetStatusEventHdl(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
-            // FIXME(matteocam) // For chaining
-            //pTextEditOutliner->SetStatusEventHdl1(LINK(this,SdrObjEditView,ImpOutlinerStatusEventHdl));
+            pTextEditOutliner->SetChainingEventHdl(LINK(this,SdrObjEditView,ImpChainingEventHdl) );
+
 #ifdef DBG_UTIL
             if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif

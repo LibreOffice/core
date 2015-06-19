@@ -126,10 +126,6 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     rOutl.UpdateFields();
     rOutl.ClearModifyFlag();
 
-    // FIXME(matteocam)
-    // XXX: Possibly move this (and respective setting line in BegTextEdit) in SdrObjEditView::SdrEnd(Begin)TextEdit?
-    rOutl.SetChainingEventHdl(LINK(this,SdrTextObj,ImpDecomposeChainedText) );
-
     return true;
 }
 
@@ -289,9 +285,6 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 
     // we do not need the bookmark at the overflowing check anymore.
     rOutl.ClearOverflowingParaNum();
-
-    // FIXME(matteocam)
-    rOutl.SetChainingEventHdl(Link());
 
     pEdtOutl = NULL;
     rOutl.Clear();

@@ -329,6 +329,10 @@ protected:
 
     virtual ~SdrTextObj();
 
+    virtual void onOverflowStatusEvent( );
+    virtual void onUnderflowStatusEvent( );
+
+
 public:
     TYPEINFO_OVERRIDE();
 
@@ -556,9 +560,8 @@ public:
 
     /** called from the SdrObjEditView during text edit when the status of the edit outliner changes */
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );
-
-    virtual void onOverflowStatusEvent( );
-    virtual void onUnderflowStatusEvent( );
+     /** called from the SdrObjEditView during text edit when a chain of boxes is to be updated */
+    virtual void onChainingEvent();
 
 
 
@@ -628,9 +631,6 @@ public:
     OutlinerParaObject *impGetOverflowingParaObject(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const;
     void impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const;
     OutlinerParaObject *impGetNonOverflowingParaObject(SdrOutliner *pOutliner) const;
-
-    // Handler for Chained Text
-    DECL_LINK(ImpDecomposeChainedText,void*);
 
     // timing generators
     void impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;
