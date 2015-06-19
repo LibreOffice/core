@@ -349,7 +349,9 @@ namespace {
         {
             nContStart += sPartId.getLength();
             sal_Int32 nContEnd = _rRawString.indexOf( ',', nContStart );
-            sPart = _rRawString.copy( nContStart, nContEnd - nContStart );
+            sPart = nContEnd != -1 ?
+                _rRawString.copy(nContStart, nContEnd - nContStart) :
+                _rRawString.copy(nContStart);
         }
         return sPart;
     }
