@@ -546,7 +546,7 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
         long nWidth = rRenderContext.GetTextWidth(aText);
         rRenderContext.Push(PushFlags::FONT);
         vcl::Font aFont(rRenderContext.GetFont());
-        aFont.SetOrientation(00);
+        aFont.SetOrientation(900);
         SetFont(aFont);
         Point aStartPt(aOutSize.Width() / 2, aOutSize.Height() - 1);
         if (nWinStyle & WB_VCENTER)
