@@ -753,7 +753,7 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, s
         if ((aCtrlType == CTRL_SPINBOX) && !pCtrl->IsNativeControlSupported(CTRL_SPINBOX, PART_BUTTON_UP))
         {
             Edit* pEdit = static_cast<Edit*>(pCtrl)->GetSubEdit();
-            if (pEdit)
+            if (pEdit && !pEdit->SupportsDoubleBuffering())
                 pCtrl->Paint(*pCtrl, Rectangle());  // make sure the buttons are also drawn as they might overwrite the border
         }
     }
