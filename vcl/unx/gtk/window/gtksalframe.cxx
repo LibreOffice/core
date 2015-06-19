@@ -2825,6 +2825,10 @@ void GtkSalFrame::grabPointer( bool bGrab, bool bOwnerEvents )
 
 void GtkSalFrame::grabKeyboard( bool bGrab )
 {
+    static const char* pEnv = getenv("SAL_NO_MOUSEGRABS"); // let's not introduce a special var for this
+    if (pEnv && *pEnv)
+        return;
+
     if (!m_pWindow)
         return;
 
