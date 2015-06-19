@@ -2245,7 +2245,7 @@ OUString OSelectionBrowseBox::GetCellContents(sal_Int32 nCellIndex, sal_uInt16 n
             sal_Int32 nIdx = m_pOrderCell->GetSelectEntryPos();
             if (nIdx == LISTBOX_ENTRY_NOTFOUND)
                 nIdx = 0;
-            return OUString(nIdx);
+            return OUString::number(nIdx);
         }
         default:
             return GetCellText(nCellIndex, nColId);
