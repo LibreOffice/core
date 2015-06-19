@@ -25,6 +25,12 @@
 int countPixel( const basebmp::BitmapDeviceSharedPtr& rDevice,
                 basebmp::Color                        checkColor );
 
+// define to do pixel dumping in tests
+// #define BASEBMP_DEBUG 1
+
+void dumpPixels( const basebmp::BitmapDeviceSharedPtr& rDevice,
+                 const char *pCaption );
+
 #endif // INCLUDED_BASEBMP_TEST_TOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
