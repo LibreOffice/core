@@ -2042,7 +2042,7 @@ void SdrTextObj::onUnderflowStatusEvent( )
         if (pEdtOutl != NULL)
             pEdtOutl->SetText(*pNewText);
 
-        //const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
+        const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
     }
 }
 
