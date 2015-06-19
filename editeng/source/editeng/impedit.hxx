@@ -74,7 +74,7 @@
 #define GETCRSR_ENDOFLINE           0x0004
 #define GETCRSR_PREFERPORTIONSTART  0x0008
 
-#define LINE_SEP    0x0A
+#define LINE_SEP    '\x0A'
 
 class EditView;
 class EditEngine;
