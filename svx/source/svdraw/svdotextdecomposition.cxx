@@ -794,16 +794,20 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
         GetTextChain()->SetOverwriteOnOverflow(pNextTextObj, false);
 
         if (mpOverflowingText->HasOtherParas()) {
-            // Make first paragraph
+            // Make Para Object from the ending lines (to be appended later)
             impSetOutlinerToEmptyTxt(pOutliner);
             Paragraph *pFstPara = pOutliner->GetParagraph(0);
+            pOutliner->SetText(mpOverflowingText->GetEndingLines(), pFstPara);
+            OutlinerParaObject *pLastPara = pOutliner->CreateParaObject();
+
+            // Set heading lines as first paragraph
             pOutliner->SetText(mpOverflowingText->GetHeadingLines(), pFstPara);
 
             // Add middle paragraphs
             if (mpOverflowingText->mpMidParas)
                 pOutliner->AddText(*mpOverflowingText->mpMidParas);
 
-            pOutliner->Insert(mpOverflowingText->GetEndingLines());
+            pOutliner->AddText(*pLastPara);
         } else {
             impSetOutlinerToEmptyTxt(pOutliner);
             Paragraph *pFstPara = pOutliner->GetParagraph(0);
