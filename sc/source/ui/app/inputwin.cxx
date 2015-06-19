@@ -2504,6 +2504,10 @@ bool ScPosWnd::Notify( NotifyEvent& rNEvt )
                         ReleaseFocus_Impl();
                     }
                     break;
+
+                default:
+                    bHandled = false;
+                    break;
             }
         }
         break;
