@@ -2039,6 +2039,9 @@ void SdrTextObj::onUnderflowStatusEvent( )
         // We make sure we don't handle underflow while handling underflow
         GetTextChain()->SetLinkHandlingUnderflow(this, true);
 
+        // Set the other box empty so if overflow does not occur we are fine
+        pNextLink->NbcSetOutlinerParaObject(aDrawOutliner.GetEmptyParaObject());
+
         if (pEdtOutl != NULL)
             pEdtOutl->SetText(*pNewText);
 
