@@ -1714,7 +1714,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
         }
         else
         {
-            ApplySettings(*this);
+            ApplySettings(rRenderContext);
             if (!IsEnabled())
                 rRenderContext.SetTextColor(rStyleSettings.GetDisableColor());
             rRenderContext.SetTextFillColor();
