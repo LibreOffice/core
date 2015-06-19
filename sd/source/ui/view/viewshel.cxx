@@ -553,7 +553,7 @@ void ViewShell::SetCursorMm100Position(const Point& rPosition, bool bPoint, bool
     }
 }
 
-OString ViewShell::GetTextSelection(OString aMimeType)
+OString ViewShell::GetTextSelection(const OString& _aMimeType)
 {
     SdrView* pSdrView = GetView();
     if (!pSdrView)
@@ -568,6 +568,7 @@ OString ViewShell::GetTextSelection(OString aMimeType)
     // Take care of UTF-8 text here.
     bool bConvert = false;
     sal_Int32 nIndex = 0;
+    OString aMimeType = _aMimeType;
     if (aMimeType.getToken(0, ';', nIndex) == "text/plain")
     {
         if (aMimeType.getToken(0, ';', nIndex) == "charset=utf-8")
