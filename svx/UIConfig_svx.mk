@@ -59,6 +59,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/redlineviewpage \
 	svx/uiconfig/ui/savemodifieddialog \
 	svx/uiconfig/ui/sidebararea \
+    svx/uiconfig/ui/sidebarshadow \
 	svx/uiconfig/ui/sidebargraphic \
 	svx/uiconfig/ui/sidebarinsert \
 	svx/uiconfig/ui/sidebarline \
