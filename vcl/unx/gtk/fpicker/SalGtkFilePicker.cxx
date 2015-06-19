@@ -206,8 +206,8 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference< uno::XComponentContext
 
         gtk_container_add( GTK_CONTAINER( m_pAligns[i]), m_pLists[i] );
         gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pAligns[i], false, false, 0 );
-
         gtk_box_pack_end( GTK_BOX( m_pHBoxs[i] ), m_pListLabels[i], false, false, 0 );
+        gtk_box_set_spacing( GTK_BOX( m_pHBoxs[i] ), 12 );
 
         gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pHBoxs[i], false, false, 0 );
     }
