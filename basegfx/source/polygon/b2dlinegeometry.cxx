@@ -140,7 +140,7 @@ namespace basegfx
 
             if(aEdge.equalZero())
             {
-                // start and end point the same, but control vectors used -> baloon curve loop
+                // start and end point the same, but control vectors used -> balloon curve loop
                 // is not a simple edge
                 return false;
             }

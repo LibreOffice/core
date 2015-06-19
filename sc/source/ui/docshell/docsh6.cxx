@@ -452,7 +452,7 @@ void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoadi
     // This is nasty because it resets module globals from within a docshell!
     // For actual damage caused see fdo#82183 where an unconditional
     // ScGlobal::ResetFunctionList() (without checking GetUseEnglishFuncName())
-    // lead to a crash becasuse the function list was still used by the Formula
+    // lead to a crash because the function list was still used by the Formula
     // Wizard when loading the second document.
     // Do the stupid stuff only when we're not called while loading a document.
 

@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
 * @file
-* Backgound object of Wordpro.
+* Background object of Wordpro.
 ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBACKGROUNDSTUFF_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBACKGROUNDSTUFF_HXX

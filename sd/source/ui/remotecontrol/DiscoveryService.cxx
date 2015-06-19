@@ -155,7 +155,7 @@ void SAL_CALL DiscoveryService::run()
 
     setupSockets();
 
-    // Kept for backwrad compatibility
+    // Kept for backward compatibility
     char aBuffer[BUFFER_SIZE];
     while ( true )
     {

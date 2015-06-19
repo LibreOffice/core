@@ -266,12 +266,9 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl)
     return 0L;
 }
 
-/*************************************************************************
-|************************************************************************/
-
 void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
 {
-    //if rScheme is empty or unknown the default beaviour is like it where HTTP
+    //if rScheme is empty or unknown the default behaviour is like it where HTTP
     bool bFTP = rScheme.startsWith(sFTPScheme);
     bool bInternet = !(bFTP);
 

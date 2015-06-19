@@ -830,7 +830,7 @@ static IsoLangEngEntry const aImplIsoLangEngEntries[] =
     { LANGUAGE_ENGLISH_CARRIBEAN,           "AI" },         // Anguilla
     { LANGUAGE_ENGLISH_CARRIBEAN,           "AG" },         // Antigua and Barbuda
     { LANGUAGE_ENGLISH_CARRIBEAN,           "BS" },         // Bahamas
-    { LANGUAGE_ENGLISH_CARRIBEAN,           "BB" },         // Barbedos
+    { LANGUAGE_ENGLISH_CARRIBEAN,           "BB" },         // Barbados
     { LANGUAGE_ENGLISH_CARRIBEAN,           "BM" },         // Bermuda
     { LANGUAGE_ENGLISH_CARRIBEAN,           "KY" },         // Cayman Islands
     { LANGUAGE_ENGLISH_CARRIBEAN,           "GD" },         // Grenada
