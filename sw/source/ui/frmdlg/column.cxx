@@ -1352,7 +1352,7 @@ void SwColumnPage::SetInSection(bool bSet)
 
 void ColumnValueSet::UserDraw(const UserDrawEvent& rUDEvt)
 {
-    OutputDevice* pDev = rUDEvt.GetDevice();
+    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
     Rectangle aRect = rUDEvt.GetRect();

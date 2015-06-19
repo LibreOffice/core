@@ -503,10 +503,10 @@ void IndexBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
         // indent sub entries
         Point aPos( rUDEvt.GetRect().TopLeft() );
         aPos.X() += 8;
-        aPos.Y() += ( rUDEvt.GetRect().GetHeight() - rUDEvt.GetDevice()->GetTextHeight() ) / 2;
+        aPos.Y() += (rUDEvt.GetRect().GetHeight() - rUDEvt.GetRenderContext()->GetTextHeight()) / 2;
         OUString aEntry( GetEntry( rUDEvt.GetItemId() ) );
         sal_Int32 nPos = aEntry.indexOf( ';' );
-        rUDEvt.GetDevice()->DrawText( aPos, ( nPos !=-1 ) ? aEntry.copy( nPos + 1 ) : aEntry );
+        rUDEvt.GetRenderContext()->DrawText(aPos, (nPos !=-1) ? aEntry.copy(nPos + 1) : aEntry);
     }
     else
         DrawEntry( rUDEvt, false, true, true );

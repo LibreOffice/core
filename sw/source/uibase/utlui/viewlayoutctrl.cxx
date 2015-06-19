@@ -111,8 +111,8 @@ void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
 
 void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
 {
-    OutputDevice*       pDev =  rUsrEvt.GetDevice();
-    Rectangle           aRect = rUsrEvt.GetRect();
+    vcl::RenderContext* pDev = rUsrEvt.GetRenderContext();
+    Rectangle aRect(rUsrEvt.GetRect());
 
     const Rectangle aControlRect = getControlRect();
 

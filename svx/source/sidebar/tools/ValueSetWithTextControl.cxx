@@ -146,7 +146,7 @@ void ValueSetWithTextControl::ReplaceItemImages(
 void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
     const Rectangle aRect = rUDEvt.GetRect();
-    OutputDevice* pDev = rUDEvt.GetDevice();
+    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     pDev->Push( PushFlags::ALL );
     const sal_uInt16 nItemId = rUDEvt.GetItemId();
 

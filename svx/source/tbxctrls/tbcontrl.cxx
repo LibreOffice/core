@@ -161,7 +161,7 @@ private:
     void            ReleaseFocus();
     static Color    TestColorsVisible(const Color &FontCol, const Color &BackCol);
     static void     UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName);
-    void            SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, OutputDevice *pDevice, const OUString &rStyleName, bool bIsNotSelected);
+    void            SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_uInt16 nItem, const Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected);
     static bool     AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle& rTextRect, long nHeight);
     DECL_LINK( MenuSelectHdl, Menu * );
 };
@@ -585,7 +585,7 @@ bool SvxStyleBox_Impl::AdjustFontForItemHeight(OutputDevice* pDevice, Rectangle&
 
 void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString &rStyleName)
 {
-    OutputDevice *pDevice = rUDEvt.GetDevice();
+    vcl::RenderContext *pDevice = rUDEvt.GetRenderContext();
 
     // IMG_TXT_DISTANCE in ilstbox.hxx is 6, then 1 is added as
     // nBorder, and we are adding 1 in order to look better when
@@ -604,7 +604,7 @@ void SvxStyleBox_Impl::UserDrawEntry(const UserDrawEvent& rUDEvt, const OUString
     pDevice->DrawText(aPos, rStyleName);
 }
 
-void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, OutputDevice* pDevice, const OUString& rStyleName, bool bIsNotSelected)
+void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Window* pParent, sal_uInt16 nItem, const Rectangle& rRect, const OUString& rStyleName, bool bIsNotSelected)
 {
     unsigned int nId = rRect.GetHeight() != 0 ? (rRect.getY() / rRect.GetHeight()) : MAX_STYLES_ENTRIES;
     if (nItem == 0 || nItem == GetEntryCount() - 1)
@@ -637,7 +637,7 @@ void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, Outp
             if ( pFontItem && pFontHeightItem )
             {
                 Size aFontSize( 0, pFontHeightItem->GetHeight() );
-                Size aPixelSize( pDevice->LogicToPixel( aFontSize, pShell->GetMapUnit() ) );
+                Size aPixelSize(rRenderContext.LogicToPixel(aFontSize, pShell->GetMapUnit()));
 
                 // setup the font properties
                 SvxFont aFont;
@@ -686,11 +686,11 @@ void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, Outp
                     aFont.SetEmphasisMark( static_cast< const SvxEmphasisMarkItem* >( pItem )->GetEmphasisMark() );
 
                 // setup the device & draw
-                vcl::Font aOldFont( pDevice->GetFont() );
+                vcl::Font aOldFont(rRenderContext.GetFont());
 
                 Color aFontCol = COL_AUTO, aBackCol = COL_AUTO;
 
-                pDevice->SetFont( aFont );
+                rRenderContext.SetFont(aFont);
 
                 pItem = aItemSet.GetItem( SID_ATTR_CHAR_COLOR );
                 // text color, when nothing is selected
@@ -715,8 +715,8 @@ void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, Outp
 
                         if ( aBackCol != COL_AUTO )
                         {
-                            pDevice->SetFillColor( aBackCol );
-                            pDevice->DrawRect(rRect);
+                            rRenderContext.SetFillColor(aBackCol);
+                            rRenderContext.DrawRect(rRect);
                         }
                     }
                     break;
@@ -726,11 +726,11 @@ void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, Outp
 
                 // when the font and background color are too similar, adjust the Font-Color
                 if( (aFontCol != COL_AUTO) || (aBackCol != COL_AUTO) )
-                    aFontCol = TestColorsVisible(aFontCol, (aBackCol != COL_AUTO) ? aBackCol : pDevice->GetBackground().GetColor());
+                    aFontCol = TestColorsVisible(aFontCol, (aBackCol != COL_AUTO) ? aBackCol : rRenderContext.GetBackground().GetColor());
 
                 // set text color
                 if ( aFontCol != COL_AUTO )
-                    pDevice->SetTextColor( aFontCol );
+                    rRenderContext.SetTextColor(aFontCol);
 
                 // handle the push-button
                 if (bIsNotSelected)
@@ -742,9 +742,9 @@ void SvxStyleBox_Impl::SetupEntry(sal_uInt16 nItem, const Rectangle& rRect, Outp
                 {
                     if (nId < MAX_STYLES_ENTRIES)
                     {
-                        if(m_pButtons[nId] == nullptr)
+                        if (!m_pButtons[nId] && pParent)
                         {
-                            m_pButtons[nId] = VclPtr<MenuButton>::Create(static_cast<vcl::Window*>(pDevice), WB_FLATBUTTON | WB_NOPOINTERFOCUS);
+                            m_pButtons[nId] = VclPtr<MenuButton>::Create(pParent, WB_FLATBUTTON | WB_NOPOINTERFOCUS);
                             m_pButtons[nId]->SetSizePixel(Size(BUTTON_WIDTH, rRect.GetHeight()));
                             m_pButtons[nId]->SetPopupMenu(&m_aMenu);
                         }
@@ -762,13 +762,13 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     sal_uInt16 nItem = rUDEvt.GetItemId();
     OUString aStyleName( GetEntry( nItem ) );
 
-    OutputDevice *pDevice = rUDEvt.GetDevice();
+    vcl::RenderContext *pDevice = rUDEvt.GetRenderContext();
     pDevice->Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
 
     const Rectangle& rRect(rUDEvt.GetRect());
     bool bIsNotSelected = rUDEvt.GetItemId() != GetSelectEntryPos();
 
-    SetupEntry(nItem, rRect, pDevice, aStyleName, bIsNotSelected);
+    SetupEntry(*pDevice, rUDEvt.GetWindow(), nItem, rRect, aStyleName, bIsNotSelected);
 
     UserDrawEntry(rUDEvt, aStyleName);
 
@@ -798,7 +798,7 @@ void SvxStyleBox_Impl::CalcOptimalExtraUserWidth()
         OUString sStyleName(GetEntry(i));
 
         Push(PushFlags::FILLCOLOR | PushFlags::FONT | PushFlags::TEXTCOLOR);
-        SetupEntry(i, Rectangle(0, 0, RECT_MAX, ITEM_HEIGHT), this, sStyleName, true);
+        SetupEntry(*this /*FIXME rendercontext*/, this, i, Rectangle(0, 0, RECT_MAX, ITEM_HEIGHT), sStyleName, true);
         Rectangle aTextRectForActualFont;
         GetTextBoundRect(aTextRectForActualFont, sStyleName);
         if (AdjustFontForItemHeight(this, aTextRectForActualFont, ITEM_HEIGHT))

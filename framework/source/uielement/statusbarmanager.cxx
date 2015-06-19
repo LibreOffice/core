@@ -576,10 +576,9 @@ void StatusBarManager::UserDraw( const UserDrawEvent& rUDEvt )
     if (( nId > 0 ) && ( it != m_aControllerMap.end() ))
     {
         uno::Reference< frame::XStatusbarController > xController( it->second );
-        if ( xController.is() && rUDEvt.GetDevice() )
+        if (xController.is() && rUDEvt.GetRenderContext())
         {
-            uno::Reference< awt::XGraphics > xGraphics =
-                rUDEvt.GetDevice()->CreateUnoGraphics();
+            uno::Reference< awt::XGraphics > xGraphics = rUDEvt.GetRenderContext()->CreateUnoGraphics();
 
             awt::Rectangle aRect( rUDEvt.GetRect().Left(),
                                   rUDEvt.GetRect().Top(),

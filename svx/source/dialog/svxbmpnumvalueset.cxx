@@ -134,7 +134,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         25, 50,
         30, 70,
         35, 90, // up to here line positions
-        05, 10, // character positions
+         5, 10, // character positions
         10, 30,
         15, 50,
         20, 70,
@@ -145,9 +145,10 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     const Color aBackColor = rStyleSettings.GetFieldColor();
     const Color aTextColor = rStyleSettings.GetFieldTextColor();
 
-    OutputDevice*  pDev = rUDEvt.GetDevice();
+    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     Rectangle aRect = rUDEvt.GetRect();
-    sal_uInt16  nItemId = rUDEvt.GetItemId();
+    sal_uInt16 nItemId = rUDEvt.GetItemId();
+
     long nRectWidth = aRect.GetWidth();
     long nRectHeight = aRect.GetHeight();
     Size aRectSize(nRectWidth, aRect.GetHeight());
@@ -503,7 +504,7 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     SvxNumValueSet::UserDraw(rUDEvt);
 
     Rectangle aRect = rUDEvt.GetRect();
-    OutputDevice*  pDev = rUDEvt.GetDevice();
+    vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
     sal_uInt16  nItemId = rUDEvt.GetItemId();
     Point aBLPos = aRect.TopLeft();
 
