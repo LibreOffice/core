@@ -74,8 +74,8 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
         if ( m_nBitCount == 1 )
         {
             std::vector< basebmp::Color > aDevPal(2);
-            aDevPal.push_back( basebmp::Color( 0, 0, 0 ) );
-            aDevPal.push_back( basebmp::Color( 0xff, 0xff, 0xff ) );
+            aDevPal[0] = basebmp::Color( 0, 0, 0 );
+            aDevPal[1] = basebmp::Color( 0xff, 0xff, 0xff );
             m_aDevice = createBitmapDevice( aDevSize, bTopDown, nFormat, nStride,
                                             PaletteMemorySharedVector( new std::vector< basebmp::Color >(aDevPal) ) );
         }
