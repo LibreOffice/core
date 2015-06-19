@@ -577,26 +577,52 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
         return NULL;
     }
 
-    SdrObject* pObj=maList[nOldObjNum];
-    if (nOldObjNum==nNewObjNum) return pObj;
-    DBG_ASSERT(pObj!=NULL,"SdrObjList::SetObjectOrdNum: Object not found.");
-    if (pObj!=NULL) {
-        DBG_ASSERT(pObj->IsInserted(),"SdrObjList::SetObjectOrdNum: ZObjekt does not have status Inserted.");
-        RemoveObjectFromContainer(nOldObjNum);
-        InsertObjectIntoContainer(*pObj,nNewObjNum);
+    SdrObject* pObj = maList[nOldObjNum];
+    assert(pObj!=NULL && "SdrObjList::SetObjectOrdNum: Object not found.");
+    if (nOldObjNum == nNewObjNum)
+        return pObj;
+    SdrObject* pOtherObj = maList[nNewObjNum];
+    assert(pOtherObj!=NULL && "SdrObjList::SetObjectOrdNum: other Object not found.");
 
-        // No need to delete visualisation data since same object
-        // gets inserted again. Also a single ActionChanged is enough
-        pObj->ActionChanged();
+    assert(pObj->IsInserted() && "SdrObjList::SetObjectOrdNum: ZObjekt does not have status Inserted.");
 
-        pObj->SetOrdNum(nNewObjNum);
-        bObjOrdNumsDirty=true;
-        if (pModel!=NULL)
-        {
-            // TODO: We need a different broadcast here.
-            if (pObj->GetPage()!=NULL) pModel->Broadcast(SdrHint(*pObj));
-            pModel->SetChanged();
-        }
+    // Update the navigation positions.
+    if (HasObjectNavigationOrder())
+    {
+        SdrObjectWeakRef aReference (pOtherObj);
+        WeakSdrObjectContainerType::iterator iObject (::std::find(
+            mxNavigationOrder->begin(),
+            mxNavigationOrder->end(),
+            aReference));
+        if (iObject != mxNavigationOrder->end())
+            mxNavigationOrder->erase(iObject);
+        mbIsNavigationOrderDirty = true;
+        // The new object does not have a user defined position so append it
+        // to the list.
+        pObj->SetNavigationPosition(mxNavigationOrder->size());
+        mxNavigationOrder->push_back(pObj);
+    }
+
+    maList.erase(maList.begin()+nOldObjNum);
+    if (nNewObjNum >= maList.size())
+        maList.push_back(pObj);
+    else
+        maList.insert(maList.begin()+nNewObjNum, pObj);
+
+    const size_t nCount = maList.size();
+    for (size_t no=nOldObjNum; no<nCount; ++no) {
+        maList[no]->SetOrdNum(no);
+    }
+
+    // No need to delete visualisation data since same object
+    // gets inserted again. Also a single ActionChanged is enough
+    pObj->ActionChanged();
+
+    if (pModel!=NULL)
+    {
+        // TODO: We need a different broadcast here.
+        if (pObj->GetPage()!=NULL) pModel->Broadcast(SdrHint(*pObj));
+        pModel->SetChanged();
     }
     return pObj;
 }
