@@ -269,7 +269,7 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
         rBuf = GetSelText();
         if( GETSELTXT_PARABRK_TO_BLANK == nHndlParaBrk )
         {
-            rBuf = rBuf.replaceAll(OUString(0x0a), " ");
+            rBuf = rBuf.replaceAll("\x0a", " ");
         }
         else if( IsSelFullPara() &&
             GETSELTXT_PARABRK_TO_ONLYCR != nHndlParaBrk )
