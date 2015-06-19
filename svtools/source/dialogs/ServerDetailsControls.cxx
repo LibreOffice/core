@@ -360,6 +360,17 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl  )
 {
     OUString sBindingUrl = m_pEDBinding->GetText().trim( );
 
+    OUString sEncodedUsername = "";
+
+    if ( !m_sUsername.isEmpty( ) )
+    {
+        sEncodedUsername = rtl::Uri::encode(m_sUsername,
+                                            rtl_UriCharClassUserinfo,
+                                            rtl_UriEncodeKeepEscapes,
+                                            RTL_TEXTENCODING_UTF8 );
+        sEncodedUsername += "@";
+    }
+
     // Clean the listbox
     m_pLBRepository->Clear( );
     m_aRepoIds.clear( );
@@ -373,7 +384,7 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl  )
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
-        sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
+        sUrl = "vnd.libreoffice.cmis://" + sEncodedUsername + sEncodedBinding;
     }
 
     // Get the Content
