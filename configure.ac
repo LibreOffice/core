@@ -12764,6 +12764,27 @@ if test "$build_os" = "cygwin"; then
     AC_SUBST(ILIB)
 fi
 
+AC_MSG_CHECKING(
+    [whether C++11 use of const_iterator in standard containers is broken])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+    #include <list>
+    ]],[[
+        std::list<int> l;
+        l.erase(l.cbegin());
+    ]])],
+    [broken=no], [broken=yes])
+AC_LANG_POP([C++])
+LIBS=$save_LIBS
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([$broken])
+if test "$broken" = yes; then
+    AC_DEFINE([HAVE_BROKEN_CONST_ITERATORS])
+fi
+
+
 AC_MSG_CHECKING([whether $CXX has broken static initializer_list support])
 if test "$CROSS_COMPILING" = "TRUE"; then
     broken='assuming not (cross-compiling)'
