@@ -2027,6 +2027,8 @@ void SdrTextObj::onUnderflowStatusEvent( )
             GetTextChain()->SetNilChainingEvent(this, true);
             OutlinerParaObject *pPObj = GetOutlinerParaObject();
             pEdtOutl->SetText(*pPObj);
+            OutlinerParaObject *pNewPObj = pEdtOutl->CreateParaObject();
+            SetOutlinerParaObject(pNewPObj);
         }
 
         return;
@@ -2167,6 +2169,7 @@ void SdrTextObj::onChainingEvent()
 
     if (!pEdtOutl)
         return;
+
 
     if (GetTextChain()->GetNilChainingEvent(this)) {
         GetTextChain()->SetNilChainingEvent(this, false);
