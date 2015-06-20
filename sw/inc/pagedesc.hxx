@@ -378,40 +378,44 @@ namespace sw {
     class PageFootnoteHint final : public SfxHint {};
 }
 
-namespace bmi = boost::multi_index;
-
 typedef boost::multi_index_container<
         SwPageDesc*,
-        bmi::indexed_by<
-            bmi::random_access<>,
-            bmi::ordered_unique< bmi::identity<SwPageDesc*> >
+        boost::multi_index::indexed_by<
+            boost::multi_index::random_access<>,
+            boost::multi_index::ordered_unique<
+                boost::multi_index::identity<SwPageDesc*> >
         >
     >
     SwPageDescsBase;
 
-class SwPageDescs : private SwPageDescsBase
+class SwPageDescs
 {
     // function updating ByName index via modify
     friend bool SwPageDesc::SetName( const OUString& rNewName );
 
-    typedef nth_index<0>::type ByPos;
-    typedef nth_index<1>::type ByName;
+    typedef SwPageDescsBase::nth_index<0>::type ByPos;
+    typedef SwPageDescsBase::nth_index<1>::type ByName;
     typedef ByPos::iterator iterator;
 
-    using ByPos::modify;
     iterator find_( const OUString &name ) const;
+
+    SwPageDescsBase   m_Array;
+    ByPos            &m_PosIndex;
+    ByName           &m_NameIndex;
 
 public:
     typedef ByPos::const_iterator const_iterator;
     typedef SwPageDescsBase::size_type size_type;
     typedef SwPageDescsBase::value_type value_type;
 
+    SwPageDescs();
+
     // frees all SwPageDesc!
     virtual ~SwPageDescs();
 
-    using SwPageDescsBase::clear;
-    using SwPageDescsBase::empty;
-    using SwPageDescsBase::size;
+    void clear()        { return m_Array.clear(); }
+    bool empty()  const { return m_Array.empty(); }
+    size_t size() const { return m_Array.size(); }
 
     std::pair<const_iterator,bool> push_back( const value_type& x );
     void erase( const value_type& x );
@@ -421,11 +425,11 @@ public:
     const_iterator find( const OUString &name ) const
         { return find_( name ); }
     const value_type& operator[]( size_t index_ ) const
-        { return ByPos::operator[]( index_ ); }
-    const value_type& front() const { return ByPos::front(); }
-    const value_type& back() const { return ByPos::back(); }
-    const_iterator begin() const { return ByPos::begin(); }
-    const_iterator end() const { return ByPos::end(); }
+        { return m_PosIndex.operator[]( index_ ); }
+    const value_type& front() const { return m_PosIndex.front(); }
+    const value_type& back() const { return m_PosIndex.back(); }
+    const_iterator begin() const { return m_PosIndex.begin(); }
+    const_iterator end() const { return m_PosIndex.end(); }
 
     bool contains( const value_type& x ) const
         { return x->m_pdList == this; }
