@@ -1099,8 +1099,6 @@ public:
     void InsUInt32( sal_uInt32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
     void InsAsString16( const OUString& rStr )
                         { SwWW8Writer::InsAsString16( *pO, rStr ); }
-    void InsAsString8( const OUString& rStr, rtl_TextEncoding eCodeSet )
-                        { SwWW8Writer::InsAsString8( *pO, rStr, eCodeSet ); }
     void WriteStringAsPara( const OUString& rText, sal_uInt16 nStyleId = 0 );
 
     /// Setup the exporter.
