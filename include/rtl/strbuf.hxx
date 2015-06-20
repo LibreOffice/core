@@ -211,7 +211,7 @@ public:
         pData = rtl_string_alloc( nCapacity );
         char* end = c.addData( pData->buffer );
         *end = '\0';
-        pData->length = end - pData->buffer;
+        pData->length = static_cast<sal_Int32>(end - pData->buffer);
     }
 #endif
 
@@ -492,7 +492,7 @@ public:
         rtl_stringbuffer_ensureCapacity( &pData, &nCapacity, pData->length + l );
         char* end = c.addData( pData->buffer + pData->length );
         *end = '\0';
-        pData->length = end - pData->buffer;
+        pData->length = static_cast<sal_Int32>(end - pData->buffer);
         return *this;
     }
 #endif

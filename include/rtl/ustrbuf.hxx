@@ -181,7 +181,7 @@ public:
         pData = rtl_uString_alloc( nCapacity );
         sal_Unicode* end = c.addData( pData->buffer );
         *end = '\0';
-        pData->length = end - pData->buffer;
+        pData->length = static_cast<sal_Int32>(end - pData->buffer);
         // TODO realloc in case pData->>length is noticeably smaller than l ?
     }
 #endif
@@ -490,7 +490,7 @@ public:
         rtl_uStringbuffer_ensureCapacity( &pData, &nCapacity, pData->length + l );
         sal_Unicode* end = c.addData( pData->buffer + pData->length );
         *end = '\0';
-        pData->length = end - pData->buffer;
+        pData->length = static_cast<sal_Int32>(end - pData->buffer);
         return *this;
     }
 #endif
