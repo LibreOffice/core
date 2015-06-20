@@ -243,6 +243,8 @@ SwSrcView::~SwSrcView()
                             (delay != 0) || !url.isEmpty());
     EndListening(*pDocShell);
     delete pSearchItem;
+
+    aEditWin.disposeAndClear();
 }
 
 void SwSrcView::SaveContentTo(SfxMedium& rMed)
