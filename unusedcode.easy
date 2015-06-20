@@ -1,6 +1,7 @@
 BigInt::BigInt(unsigned int)
 BitmapFilterStackBlur::filter(BitmapEx&)
 FontCharMap::GetDefaultMap(bool)
+GenericSalLayout::GetTextRect() const
 NotifyEvent::NotifyEvent()
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
 OpenGLContext::renderToFile()
@@ -47,7 +48,8 @@ SvpSalFrame::enableDamageTracker(bool)
 SvpSalInstance::PostedEventsInQueue()
 SvtAccessibilityOptions::IsModified() const
 SvtListener::IsListening(SvtBroadcaster&) const
-SvxColorTabPage::GetPropertyList(XPropertyListType)
+SwUnoTableCrsr::Clone() const
+SwXParaFrameEnumerationImpl::PurgeFrameClients()::{lambda(std::shared_ptr<sw::FrameClient>&)#1}::_FUN(std::shared_ptr<sw::FrameClient>&)
 Test::testCopyPasteSkipEmptyConditionalFormatting()
 Test::testPerf()
 Test::testSharedFormulaMoveBlock()
@@ -100,6 +102,7 @@ vcl::IsWindowSystemAvailable()
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)
 vcl::Region::IsInside(Rectangle const&) const
 vcl::RenderSettings::PushAndApply(OutputDevice&)
+vcl::Window::DrawGradientWallpaper(OutputDevice&, long, long, long, long, Wallpaper const&)
 vcl::Window::DrawSelectionBackground(Rectangle const&, unsigned short, bool, bool, bool, Color*)
 vcl::Window::GetRenderSettings()
 vcl::Window::SetDoubleBuffering(bool)
@@ -108,3 +111,4 @@ vclcanvas::CanvasBitmapHelper::setPixel(com::sun::star::uno::Sequence<signed cha
 vclcanvas::CanvasHelper::drawPoint(com::sun::star::rendering::XCanvas const*, com::sun::star::geometry::RealPoint2D const&, com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&)
 vclcanvas::CanvasHelper::setData(com::sun::star::uno::Sequence<signed char> const&, com::sun::star::rendering::IntegerBitmapLayout const&, com::sun::star::geometry::IntegerRectangle2D const&)
 vclcanvas::CanvasHelper::setPixel(com::sun::star::uno::Sequence<signed char> const&, com::sun::star::rendering::IntegerBitmapLayout const&, com::sun::star::geometry::IntegerPoint2D const&)
+ww8::WW8TableNodeInfo::isEndOfLine() const

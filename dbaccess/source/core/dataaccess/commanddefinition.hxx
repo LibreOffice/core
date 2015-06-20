@@ -124,19 +124,6 @@ public:
      virtual void SAL_CALL removeEventListener(const com::sun::star::uno::Reference<com::sun::star::lang::XEventListener>& p1) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { OComponentDefinition::removeEventListener(p1); }
 
-    // XQueryDefinition properties
-    OUString getName() throw( ::com::sun::star::uno::RuntimeException );
-    OUString getCommand() throw( ::com::sun::star::uno::RuntimeException );
-    void setCommand(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
-    bool getEscapeProcessing() throw( ::com::sun::star::uno::RuntimeException );
-    void setEscapeProcessing(bool) throw( ::com::sun::star::uno::RuntimeException );
-    OUString getUpdateTableName() throw( ::com::sun::star::uno::RuntimeException );
-    void setUpdateTableName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
-    OUString getUpdateCatalogName() throw( ::com::sun::star::uno::RuntimeException );
-    void setUpdateCatalogName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
-    OUString getUpdateSchemaName() throw( ::com::sun::star::uno::RuntimeException );
-    void setUpdateSchemaName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
-
     // OPropertySetHelper
     DECLARE_PROPERTYCONTAINER_DEFAULTS( );
 

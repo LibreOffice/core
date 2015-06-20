@@ -68,61 +68,6 @@ void OCommandDefinition::registerProperties()
                     &rCommandDefinition.m_aLayoutInformation, cppu::UnoType<decltype(rCommandDefinition.m_aLayoutInformation)>::get());
 }
 
-OUString OCommandDefinition::getName() throw( ::com::sun::star::uno::RuntimeException )
-{
-    return getDefinition().m_aProps.aTitle;
-}
-
-OUString OCommandDefinition::getCommand() throw( ::com::sun::star::uno::RuntimeException )
-{
-    return getCommandDefinition().m_sCommand;
-}
-
-void OCommandDefinition::setCommand(const OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
-{
-    setPropertyValue(PROPERTY_COMMAND, Any(p1) );
-}
-
-bool OCommandDefinition::getEscapeProcessing() throw( ::com::sun::star::uno::RuntimeException )
-{
-    return getCommandDefinition().m_bEscapeProcessing;
-}
-
-void OCommandDefinition::setEscapeProcessing(bool p1) throw( ::com::sun::star::uno::RuntimeException )
-{
-    setPropertyValue(PROPERTY_ESCAPE_PROCESSING, Any(p1) );
-}
-
-OUString OCommandDefinition::getUpdateTableName() throw( ::com::sun::star::uno::RuntimeException )
-{
-    return getCommandDefinition().m_sUpdateTableName;
-}
-
-void OCommandDefinition::setUpdateTableName(const OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
-{
-    setPropertyValue(PROPERTY_UPDATE_TABLENAME, Any(p1) );
-}
-
-OUString OCommandDefinition::getUpdateCatalogName() throw( ::com::sun::star::uno::RuntimeException )
-{
-    return getCommandDefinition().m_sUpdateCatalogName;
-}
-
-void OCommandDefinition::setUpdateCatalogName(const OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
-{
-    setPropertyValue(PROPERTY_UPDATE_CATALOGNAME, Any(p1) );
-}
-
-OUString OCommandDefinition::getUpdateSchemaName() throw( ::com::sun::star::uno::RuntimeException )
-{
-    return getCommandDefinition().m_sUpdateSchemaName;
-}
-
-void OCommandDefinition::setUpdateSchemaName(const OUString& p1) throw( ::com::sun::star::uno::RuntimeException )
-{
-    setPropertyValue(PROPERTY_UPDATE_SCHEMANAME, Any(p1) );
-}
-
 OCommandDefinition::OCommandDefinition(const Reference< XComponentContext >& _xORB
                                        ,const Reference< XInterface >& _rxContainer
                                        ,const TContentPtr& _pImpl)

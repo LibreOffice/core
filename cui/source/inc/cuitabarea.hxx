@@ -750,7 +750,6 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual sfxpg DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    XPropertyListRef GetPropertyList( XPropertyListType t );
     void             SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
 
     void    SetColorList( XColorListRef pColList );

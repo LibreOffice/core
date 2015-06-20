@@ -138,18 +138,6 @@ namespace dbaui
             m_pTablesList->notifyHiContrastChanged();
         }
     }
-    void OTableSubscriptionPage::resizeControls(const Size& _rDiff)
-    {
-        if ( _rDiff.Height() )
-        {
-            Size aOldSize = m_pTablesList->GetSizePixel();
-            aOldSize.Height() -= _rDiff.Height();
-            m_pTablesList->SetPosSizePixel(
-                    m_pTablesList->GetPosPixel()+Point(0,_rDiff.Height()),
-                    aOldSize
-                    );
-        }
-    }
     void OTableSubscriptionPage::implCheckTables(const Sequence< OUString >& _rTables)
     {
         // the meta data for the current connection, used for splitting up table names

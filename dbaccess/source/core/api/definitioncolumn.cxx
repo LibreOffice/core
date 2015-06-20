@@ -396,14 +396,6 @@ void OColumnWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
     }
 }
 
-sal_Int64 SAL_CALL OColumnWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
-{
-    Reference< XUnoTunnel > xTunnel( m_xAggregate, UNO_QUERY);
-    if ( xTunnel.is() )
-        return xTunnel->getSomething( aIdentifier );
-    return 0;
-}
-
 // OTableColumnDescriptorWrapper
 OTableColumnDescriptorWrapper::OTableColumnDescriptorWrapper( const Reference< XPropertySet >& _rCol, const bool _bPureWrap, const bool _bIsDescriptor )
     :OColumnWrapper( _rCol, !_bIsDescriptor )

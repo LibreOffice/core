@@ -179,8 +179,6 @@ public:
 
     DATASOURCE_TYPE determineType(const OUString& _rDsn) const;
 
-    bool needsJVM(const OUString& _rDsn) const;
-
     sal_Int32 getIndexOf(const OUString& _sURL) const;
     sal_Int32 size() const;
     OUString getType(const OUString& _sURL) const;

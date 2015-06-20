@@ -56,10 +56,6 @@ namespace dbaui
         virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
         virtual void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-        /** will be called when the controls need to be resized.
-        */
-        void            resizeControls(const Size& _rDiff);
-
         OTableSubscriptionPage( vcl::Window* pParent, const SfxItemSet& _rCoreAttrs ,OTableSubscriptionDialog* _pTablesDlg);
         virtual ~OTableSubscriptionPage();
         virtual void dispose() SAL_OVERRIDE;

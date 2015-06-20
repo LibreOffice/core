@@ -279,12 +279,6 @@ bool ODsnTypeCollection::supportsDBCreation(const OUString& _sURL) const
     return aFeatures.getOrDefault("SupportsDBCreation",sal_False);
 }
 
-bool ODsnTypeCollection::needsJVM(const OUString& _sURL) const
-{
-    const ::comphelper::NamedValueCollection& aFeatures = m_aDriverConfig.getMetaData(_sURL);
-    return aFeatures.getOrDefault("UseJava",sal_False);
-}
-
 Sequence<PropertyValue> ODsnTypeCollection::getDefaultDBSettings( const OUString& _sURL ) const
 {
     const ::comphelper::NamedValueCollection& aProperties = m_aDriverConfig.getProperties(_sURL);
