@@ -27,8 +27,15 @@
  <toolbar:toolbaritem xlink:href=".uno:Bold" toolbar:helpid="10009"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic" toolbar:helpid="10008"/>
  <toolbar:toolbaritem xlink:href=".uno:Underline" toolbar:helpid="10014"/>
+ <toolbar:toolbaritem xlink:href=".uno:UnderlineDouble" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Strikeout"/>
+ <toolbar:toolbaritem xlink:href=".uno:Overline" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Shadowed" toolbar:helpid="10010"/>
- <toolbar:toolbaritem xlink:href=".uno:OutlineFont" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineFont"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:helpid="27019"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Color" toolbar:helpid="10017"/>
  <toolbar:toolbaritem xlink:href=".uno:CharBackColor" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
@@ -37,30 +44,31 @@
  <toolbar:toolbaritem xlink:href=".uno:RightPara" toolbar:helpid="10029"/>
  <toolbar:toolbaritem xlink:href=".uno:JustifyPara" toolbar:helpid="10031"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:helpid="10950"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:helpid="10951"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease" toolbar:helpid="27346"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease" toolbar:helpid="27347"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertTop"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertCenter"/>
+ <toolbar:toolbaritem xlink:href=".uno:CellVertBottom"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara1" toolbar:visible="false" toolbar:helpid="10034"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara15" toolbar:visible="false" toolbar:helpid="10035"/>
  <toolbar:toolbaritem xlink:href=".uno:SpacePara2" toolbar:visible="false" toolbar:helpid="10036"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease" toolbar:helpid="27346"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease" toolbar:helpid="27347"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultBullet" toolbar:helpid="20138"/>
  <toolbar:toolbaritem xlink:href=".uno:DefaultNumbering"/>
- <toolbar:toolbaritem xlink:href=".uno:OutlineLeft" toolbar:helpid="10152"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineRight" toolbar:helpid="10153"/>
- <toolbar:toolbaritem xlink:href=".uno:OutlineUp" toolbar:helpid="10150"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineLeft" toolbar:helpid="10152"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineDown" toolbar:helpid="10151"/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineUp" toolbar:helpid="10150"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:helpid="10950"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:helpid="10951"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionLeftToRight" toolbar:helpid="10907"/>
  <toolbar:toolbaritem xlink:href=".uno:TextdirectionTopToBottom" toolbar:helpid="10908"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:helpid="10296"/>
- <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:helpid="10297"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontDialog" toolbar:visible="false" toolbar:helpid="10296"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParagraphDialog" toolbar:visible="false" toolbar:helpid="10297"/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineBullet" toolbar:visible="false" toolbar:helpid="10156"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertSymbol" toolbar:helpid="27019"/>
 </toolbar:toolbar>
