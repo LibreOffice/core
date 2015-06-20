@@ -1,0 +1,142 @@
+All of the icons in this icon package are Copyright 2005-2007 Novell, Inc., with exception of the following:
+
+Copyright 2006 Jakub Steiner, Novell Inc. Available under the terms of MIT License (license at http://www.opensource.org/licenses/mit-license.php)
+(source at http://jimmac.musichall.cz/themes.php?skin=7)
+/cmd/lc_drawselect.png
+
+Copyright 2006 Jakub Steiner. Available under the terms of the GPL. (source: http://tango.freedesktop.org/ArtLibreSet)
+/cmd/lc_toggleobjectrotatemode.png
+/cmd/sc_toggleobjectrotatemode.png
+/cmd/lc_advancedmode.png
+/cmd/sc_advancedmode.png
+/cmd/lc_bmpmask.png
+
+Copyright 2006-2007 Andreas Nilsson. Available under the terms of the GPL (source: http://tango.freedesktop.org/ArtLibreSet)
+/cmd/lc_aligncenter.png
+/cmd/lc_aligndown.png
+/cmd/lc_alignmiddle.png
+/cmd/lc_alignup.png
+/cmd/lc_objectalign.png
+/cmd/lc_objectalignleft.png
+/cmd/lc_objectalignright.png
+/cmd/sc_aligncenter.png
+/cmd/sc_aligndown.png
+/cmd/sc_alignmiddle.png
+/cmd/sc_alignup.png
+/cmd/sc_objectalign.png
+/cmd/sc_objectalignleft.png
+/cmd/sc_objectalignright.png
+
+
+Copyright 2006 Jakub Steiner & Andreas Nilsson Available under the terms of the GPL
+/cmd/lc_basicstop.png
+/cmd/sc_basicstop.png
+
+
+2006-2007 by Gabriel Hurley. Available under the terms of the LGPL
+/cmd/sc_spacepara1.png
+/cmd/sc_spacepara15.png
+/cmd/sc_spacepara2.png
+/cmd/lc_spacepara1.png
+/cmd/lc_spacepara15.png
+/cmd/lc_spacepara2.png
+/cmd/lc_removebullets.png
+/cmd/lc_insertreferencefield
+/cmd/lc_helplinesuse.png
+/cmd/lc_splitcell.png
+/cmd/lc_insertsection.png
+/cmd/lc_insertobjectfloatingframe.png
+
+Copyright 2005-2006 by Jakub Steiner and Novell Inc., Modifications Copyright 2006-2007 by Gabriel Hurley. Available under the terms of the LGPL (Original Source: http://jimmac.musichall.cz/i.php?i=Tango-OOo)
+/cmd/sc_convertinto3dlathefast.png
+/cmd/lc_choosepolygon.png
+/cmd/lc_showmultiplepages.png
+/cmd/lc_dbnewquery.png
+/cmd/lc_dbreportedit.png
+/cmd/lc_dbnewform.png
+/cmd/lc_dbtableedit.png
+/cmd/lc_dbqueryedit.png
+/cmd/lc_flipvertical.png
+/cmd/lc_fliphorizontal.png
+/cmd/lc_showbookview.png
+/cmd/lc_showtwopages.png
+/cmd/lc_showfmexplorer.png
+/cmd/lc_snapborder.png
+/cmd/lc_dbtableedit.png
+/cmd/lc_dbtabledelete.png
+/cmd/lc_defaultbullet.png
+/cmd/lc_formproperties.png
+
+Copyright 2002-2004 by Novell Inc., Modifications Copyright 2006-2007 by Gabriel Hurley. Available under the terms of the LGPL
+/cmd/lc_dbformedit.png
+/cmd/lc_definename.png
+/cmd/lc_deletecolumns.png
+/cmd/lc_deleterows.png
+/cmd/lc_dbformrename.png
+/cmd/lc_dbtableedit.png
+/cmd/lc_dbtablerename.png
+/cmd/lc_dbtabledelete.png
+/cmd/lc_dsbinsertcolumns.png
+/cmd/lc_entirecolumn.png
+/cmd/lc_entirerow.png
+/cmd/lc_sbabrwinsert.png
+/cmd/lc_paraspaceincrease.png
+/cmd/lc_paraspacedecrease.png
+/cmd/lc_sendtoback.png
+/cmd/lc_bringtofront.png
+/cmd/sc_sendtoback.png
+/cmd/sc_bringtofront.png
+/cmd/lc_bulletsandnumberingdialog.png
+/cmd/lc_numberingstart.png
+/cmd/lc_beforeobject.png
+/cmd/lc_backward.png
+/cmd/lc_forward.png
+/cmd/lc_insertfootnote.png
+/cmd/lc_insertfield.png
+/cmd/lc_insertcolumns.png
+/cmd/lc_insertneutralparagraph.png
+/cmd/lc_insertobjectstarmath.png
+/cmd/lc_insertmath.png
+/cmd/lc_insertcolumns.png
+/cmd/lc_setobjecttoforeground.png
+/cmd/lc_setobjecttobackground.png
+/cmd/lc_reverseorder.png
+
+Copyright 2002-2004 by Novell Inc., Modifications Copyright 2008 by Gabriel Hurley. Available under the terms of the LGPL
+/cmd/lc_flowchartshapes.flowchart-alternate-process.png
+/cmd/lc_flowchartshapes.flowchart-collate.png
+/cmd/lc_flowchartshapes.flowchart-connector.png
+/cmd/lc_flowchartshapes.flowchart-data.png
+/cmd/lc_flowchartshapes.flowchart-decision.png
+/cmd/lc_flowchartshapes.flowchart-delay.png
+/cmd/lc_flowchartshapes.flowchart-direct-access-storage.png
+/cmd/lc_flowchartshapes.flowchart-document.png
+/cmd/lc_flowchartshapes.flowchart-extract.png
+/cmd/lc_flowchartshapes.flowchart-internal-storage.png
+/cmd/lc_flowchartshapes.flowchart-predefined-process.png
+/cmd/lc_flowchartshapes.flowchart-process.png
+/cmd/lc_flowchartshapes.flowchart-sort.png
+/cmd/lc_flowchartshapes.png
+
+Copyright 2002-2004 by Novell Inc., Modifications Copyright 2009 by Gabriel Hurley. Available under the terms of the LGPL
+/cmd/lc_starshapes.png
+/cmd/lc_starshapes.star5.png
+/cmd/lc_symbolshapes.png
+/cmd/lc_symbolshapes.smiley.png
+
+Copyright 2009 by Jesús David. Available under the terms of the GPL
+/cmd/lc_freeline_unfilled.png
+/cmd/lc_drawtext.png
+/cmd/lc_text.png
+/cmd/lc_texttoolbox.png
+/cmd/ko/lc_drawtext.png
+/cmd/ko/lc_text.png
+/cmd/ko/lc_texttoolbox.png
+
+
+Copyright 2009 by Jesús David & Gabriel Hurley. Available under the terms of the GPL
+/cmd/lc_freeline.png
+
+
+All icons under the /cmd/ directory, with filenames beginning with "lc_arrowshapes", "lc_calloutshapes", or "lc_basicshapes" are:
+Copyright 2002-2004 by Novell Inc., Modifications Copyright 2006-2007 by Gabriel Hurley. Available under the terms of the LGPL
