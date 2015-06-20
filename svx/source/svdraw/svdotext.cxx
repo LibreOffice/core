@@ -1989,14 +1989,19 @@ void SdrTextObj::onOverflowStatusEvent( )
     // Pushes text in next link on the fly
     if ( mbToBeChained ) {
         SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
-        if (pEdtOutl != NULL)
-            mpOverflowingText = pEdtOutl->GetOverflowingText();
-        else if(GetTextChain()->GetLinkHandlingUnderflow(this)) {
+
+    // If this is the a post-underflow-type of overflow then we cannot
+    //    trust the editing outl on the text since it has still the old one
+    if(GetTextChain()->GetLinkHandlingUnderflow(this)) {
             OutlinerParaObject *pPObj = GetOutlinerParaObject();
+            aDrawOutliner.SetUpdateMode(true);
+            aDrawOutliner.SetMaxAutoPaperSize(pEdtOutl->GetMaxAutoPaperSize());
             aDrawOutliner.SetText(*pPObj);
             aDrawOutliner.IsPageOverflow(); // Check for overflow to set flags
             mpOverflowingText = aDrawOutliner.GetOverflowingText();
-        } else {
+        } else  if (pEdtOutl != NULL)
+            mpOverflowingText = pEdtOutl->GetOverflowingText();
+        else {
             assert(0); // Should never happen. FIXME(matteocam)
         }
 
@@ -2033,11 +2038,9 @@ void SdrTextObj::onUnderflowStatusEvent( )
     OutlinerParaObject *pNextLinkWholeText = pNextLink->GetOutlinerParaObject();
     if (pNextLinkWholeText) {
         OutlinerParaObject *pCurText;
-        if (pEdtOutl) {
-            pCurText = pEdtOutl->CreateParaObject();
-        } else {
-            pCurText = GetOutlinerParaObject();
-        }
+
+        pCurText = pEdtOutl->CreateParaObject();
+
         // NewTextForCurBox = Txt(CurBox) ++ Txt(NextBox)
         aDrawOutliner.SetText(*pCurText);
         aDrawOutliner.AddText(*pNextLinkWholeText);
@@ -2169,6 +2172,8 @@ void SdrTextObj::onChainingEvent()
     {
         // If handling underflow we check for overflow in the object
         Outliner &aDrawOutliner = ImpGetDrawOutliner();
+        aDrawOutliner.SetUpdateMode(true);
+        aDrawOutliner.SetMaxAutoPaperSize(pEdtOutl->GetMaxAutoPaperSize());
         OutlinerParaObject *pPObj = GetOutlinerParaObject();
         aDrawOutliner.SetText(*pPObj);
         bIsPageOverflow = aDrawOutliner.IsPageOverflow();
