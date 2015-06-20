@@ -26,6 +26,7 @@ ImpChainLinkProperties::ImpChainLinkProperties()
     // give defaults
     bOverwriteOnOverflow = false;
     bHandlingUnderflow = false;
+    bNilChainingEvent = false;
 }
 
 // XXX: All getters in the class assume that the guy is in the chain
@@ -70,6 +71,18 @@ void TextChain::SetLinkHandlingUnderflow(SdrTextObj *pTarget, bool bHandlingUnde
 {
     ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
     pLinkProperties->bHandlingUnderflow = bHandlingUnderflow;
+}
+
+bool TextChain::GetNilChainingEvent(SdrTextObj *pTarget)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    return pLinkProperties->bNilChainingEvent;
+}
+
+void TextChain::SetNilChainingEvent(SdrTextObj *pTarget, bool bNilChainingEvent)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    pLinkProperties->bNilChainingEvent = bNilChainingEvent;
 }
 
 void TextChain::SetOverwriteOnOverflow(SdrTextObj *pTarget, bool bOverwrite)
