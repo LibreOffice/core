@@ -580,12 +580,6 @@ void SmXMLImport::endDocument(void)
                 // Get text from imported formula
                 pTree->CreateTextFromNode(aText);
                 aText.EraseTrailingChars();
-                if ((aText.GetChar(0) == '{') &&
-                    (aText.GetChar(aText.Len()-1) == '}'))
-                {
-                    aText.Erase(0,1);
-                    aText.Erase(aText.Len()-1,1);
-                }
             }
 
             // Convert symbol names
