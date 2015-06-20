@@ -973,11 +973,6 @@ private:
     void WriteFkpPlcUsw();
     void WriteMainText();
     void StoreDoc1();
-    void Out_WwNumLvl( sal_uInt8 nWwLevel );
-    void BuildAnlvBulletBase( WW8_ANLV& rAnlv, sal_uInt8*& rpCh, sal_uInt16& rCharLen,
-                              const SwNumFormat& rFormat );
-    static void BuildAnlvBase( WW8_ANLV& rAnlv, sal_uInt8*& rpCh, sal_uInt16& rCharLen,
-                   const SwNumRule& rRul, const SwNumFormat& rFormat, sal_uInt8 nSwLevel );
 
     /// Output the numbering table.
     virtual void WriteNumbering() SAL_OVERRIDE;
@@ -996,10 +991,6 @@ public:
 
     /// Setup the pA's info.
     virtual void SetupSectionPositions( WW8_PdAttrDesc* pA ) SAL_OVERRIDE;
-
-    void Out_SwNumLvl( sal_uInt8 nSwLevel );
-    void Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFormat& rFormat,
-                          sal_uInt8 nSwLevel );
 
     bool MiserableFormFieldExportHack(const SwFrameFormat& rFrameFormat);
 
@@ -1022,8 +1013,6 @@ public:
     sal_uInt32 GetSdrOrdNum( const SwFrameFormat& rFormat ) const;
     void CreateEscher();
     void WriteEscher();
-
-    bool Out_SwNum(const SwTextNode* pNd);
 
     /// Write the field
     virtual void OutputField( const SwField* pField, ww::eField eFieldType,
