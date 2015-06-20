@@ -2965,25 +2965,26 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
     if ( pRedline->Next() )
         Redline( pRedline->Next() );
 
-    static const sal_uInt16 aSprmIds[ 2 * 2 * 3 ] =
+    static const sal_uInt16 insSprmIds[ 3 ] =
     {
-        // Ids for insert
-            NS_sprm::LN_CFRMark, NS_sprm::LN_CIbstRMark, NS_sprm::LN_CDttmRMark,         // for WW8
-            0x0042, 0x0045, 0x0046,         // for WW6
-        // Ids for delete
-            NS_sprm::LN_CFRMarkDel, NS_sprm::LN_CIbstRMarkDel, NS_sprm::LN_CDttmRMarkDel,         // for WW8
-            0x0041, 0x0045, 0x0046          // for WW6
+        // Ids for insert // for WW8
+        NS_sprm::LN_CFRMark, NS_sprm::LN_CIbstRMark, NS_sprm::LN_CDttmRMark,
+    };
+    static const sal_uInt16 delSprmIds[ 3 ] =
+    {
+        // Ids for delete // for WW8
+        NS_sprm::LN_CFRMarkDel, NS_sprm::LN_CIbstRMarkDel, NS_sprm::LN_CDttmRMarkDel,
     };
 
     const sal_uInt16* pSprmIds = 0;
     switch( pRedline->GetType() )
     {
     case nsRedlineType_t::REDLINE_INSERT:
-        pSprmIds = aSprmIds;
+        pSprmIds = insSprmIds;
         break;
 
     case nsRedlineType_t::REDLINE_DELETE:
-        pSprmIds = aSprmIds + (2 * 3);
+        pSprmIds = delSprmIds;
         break;
 
     case nsRedlineType_t::REDLINE_FORMAT:
