@@ -61,7 +61,7 @@ private:
             mpMaskBmp1bpp,
             aSourceRect,
             aDestAll,
-            DrawMode_PAINT );
+            DrawMode::DrawMode_PAINT );
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 30",
                                countPixel( rDevice, aCol ) == 30);
     }
@@ -165,7 +165,7 @@ public:
 
             basebmp::Format nFormat;
 
-            nFormat = Format::OneBitMsbPal;
+            nFormat = FORMAT_ONE_BIT_MSB_PAL;
 //            nFormat = Format::OneBitMsbGrey; // FIXME - un-comment me to crash hard.
             xMask = createBitmapDevice( aSize, false /* bTopDown */,
                                         nFormat,
@@ -180,20 +180,20 @@ public:
             basegfx::tools::importFromSvgD( aPoly, "m 2 2 h4 v8 h-4z",
                                             false, NULL );
             xMask->fillPolyPolygon( aPoly, basebmp::Color( 0xff, 0xff, 0xff ),
-                                    DrawMode::Paint );
+                                    DrawMode::DrawMode_PAINT );
 
             xBitmap = createBitmapDevice( aSize, false,
-                                          Format::ThirtyTwoBitTcMaskBGRX,
+                                          FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX,
                                           basebmp::getBitmapDeviceStrideForWidth(
-                                                Format::ThirtyTwoBitTcMaskBGRX, aSize.getX()) );
+                                                FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX, aSize.getX() ) );
             xBitmap->clear(Color(0x80808080));
         }
         { // mpOutput & mpBitmap
             const basegfx::B2ISize aSize(9, 9);
             xOutput = createBitmapDevice( aSize, false,
-                                          Format::ThirtyTwoBitTcMaskBGRX,
+                                          FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX,
                                           basebmp::getBitmapDeviceStrideForWidth(
-                                                Format::ThirtyTwoBitTcMaskBGRX, aSize.getX()) );
+                                                FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX, aSize.getX()) );
             xOutput->clear(Color(0xffffffff));
         }
 
@@ -203,7 +203,7 @@ public:
         xOutput->drawMaskedBitmap(
             xBitmap, xMask,
             aSourceRect, aDestAll,
-            DrawMode::Paint );
+            DrawMode::DrawMode_PAINT );
 
         CPPUNIT_ASSERT_MESSAGE( "output not cleared to white",
                                 xOutput->getPixelData( basegfx::B2IPoint( 0, 0 ) ) == 0xffffff );
