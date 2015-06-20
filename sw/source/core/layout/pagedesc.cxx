@@ -111,7 +111,8 @@ bool SwPageDesc::SetName( const OUString& rNewName )
             SAL_WARN( "sw", "SwPageDesc not found in expected m_pdList" );
             return false;
         }
-        renamed = m_pdList->modify( it, change_name( rNewName ), change_name( m_StyleName ) );
+        renamed = m_pdList->m_PosIndex.modify( it,
+            change_name( rNewName ), change_name( m_StyleName ) );
     }
     else
         m_StyleName = rNewName;
@@ -480,6 +481,12 @@ SwPageDescExt::operator SwPageDesc() const
     return aResult;
 }
 
+SwPageDescs::SwPageDescs()
+    : m_PosIndex( m_Array.get<0>() )
+    , m_NameIndex( m_Array.get<1>() )
+{
+}
+
 SwPageDescs::~SwPageDescs()
 {
     for(const_iterator it = begin(); it != end(); ++it)
@@ -488,9 +495,8 @@ SwPageDescs::~SwPageDescs()
 
 SwPageDescs::iterator SwPageDescs::find_(const OUString &name) const
 {
-    const ByName &pd_named = get<1>();
-    ByName::iterator it = pd_named.find( name );
-    return iterator_to( *it );
+    ByName::iterator it = m_NameIndex.find( name );
+    return m_Array.iterator_to( *it );
 }
 
 std::pair<SwPageDescs::const_iterator,bool> SwPageDescs::push_back( const value_type& x )
@@ -498,7 +504,7 @@ std::pair<SwPageDescs::const_iterator,bool> SwPageDescs::push_back( const value_
     // SwPageDesc is not already in a SwPageDescs list!
     assert( x->m_pdList == nullptr );
 
-    std::pair<iterator,bool> res = ByPos::push_back( x );
+    std::pair<iterator,bool> res = m_PosIndex.push_back( x );
     if( res.second )
         x->m_pdList = this;
     return res;
@@ -511,7 +517,7 @@ void SwPageDescs::erase( const value_type& x )
 
     iterator const ret = find_( x->GetName() );
     if (ret != end())
-        ByPos::erase( ret );
+        m_PosIndex.erase( ret );
     else
         SAL_WARN( "sw", "SwPageDesc is not in SwPageDescs m_pdList!" );
     x->m_pdList = nullptr;
@@ -523,7 +529,7 @@ void SwPageDescs::erase( const_iterator const& position )
     assert( (*position)->m_pdList == this );
 
     (*position)->m_pdList = nullptr;
-    ByPos::erase( position );
+    m_PosIndex.erase( position );
 }
 
 void SwPageDescs::erase( size_type index_ )

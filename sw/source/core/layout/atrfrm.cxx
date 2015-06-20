@@ -2541,7 +2541,8 @@ void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )
 #if OSL_DEBUG_LEVEL > 0
         bool renamed =
 #endif
-            m_ffList->modify( it, change_name( rNewName ), change_name( m_aFormatName ) );
+            m_ffList->m_PosIndex.modify( it,
+                change_name( rNewName ), change_name( m_aFormatName ) );
         assert(renamed);
         if (bBroadcast) {
             SwStringMsgPoolItem aNew( RES_NAME_CHANGED, rNewName );
@@ -2852,7 +2853,7 @@ void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
 void SwFrameFormats::dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
-    for (const SwFrameFormat *pFormat : SwFrameFormatsBase::get<0>())
+    for (const SwFrameFormat *pFormat : m_PosIndex)
         pFormat->dumpAsXml(pWriter);
     xmlTextWriterEndElement(pWriter);
 }

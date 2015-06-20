@@ -2031,6 +2031,12 @@ namespace docfunc
     }
 }
 
+SwFrameFormats::SwFrameFormats()
+    : m_PosIndex( m_Array.get<0>() )
+    , m_TypeAndNameIndex( m_Array.get<1>() )
+{
+}
+
 SwFrameFormats::~SwFrameFormats()
 {
     DeleteAndDestroyAll( false );
@@ -2038,16 +2044,15 @@ SwFrameFormats::~SwFrameFormats()
 
 SwFrameFormats::iterator SwFrameFormats::find( const value_type& x ) const
 {
-    const ByTypeAndName &pd_named = SwFrameFormatsBase::get<1>();
-    ByTypeAndName::iterator it = pd_named.find( boost::make_tuple(x->Which(), x->GetName(), x) );
-    return project<0>( it );
+    ByTypeAndName::iterator it = m_TypeAndNameIndex.find(
+        boost::make_tuple(x->Which(), x->GetName(), x) );
+    return m_Array.project<0>( it );
 }
 
 std::pair<SwFrameFormats::const_range_iterator,SwFrameFormats::const_range_iterator>
 SwFrameFormats::rangeFind( sal_uInt16 type, const OUString& name ) const
 {
-    const ByTypeAndName &pd_named = SwFrameFormatsBase::get<1>();
-    return pd_named.equal_range( boost::make_tuple(type, name) );
+    return m_TypeAndNameIndex.equal_range( boost::make_tuple(type, name) );
 }
 
 std::pair<SwFrameFormats::const_range_iterator,SwFrameFormats::const_range_iterator>
@@ -2063,7 +2068,7 @@ void SwFrameFormats::DeleteAndDestroy(int aStartIdx, int aEndIdx)
     for (const_iterator it = begin() + aStartIdx;
                         it != begin() + aEndIdx; ++it)
         delete *it;
-    ByPos::erase( begin() + aStartIdx, begin() + aEndIdx);
+    m_PosIndex.erase( begin() + aStartIdx, begin() + aEndIdx);
 }
 
 void SwFrameFormats::DeleteAndDestroyAll( bool keepDefault )
@@ -2074,7 +2079,7 @@ void SwFrameFormats::DeleteAndDestroyAll( bool keepDefault )
     for( const_iterator it = begin() + _offset; it != end(); ++it )
         delete *it;
     if ( _offset )
-        SwFrameFormatsBase::erase( begin() + _offset, end() );
+        m_PosIndex.erase( begin() + _offset, end() );
     else
         clear();
 }
@@ -2090,7 +2095,7 @@ std::pair<SwFrameFormats::const_iterator,bool> SwFrameFormats::push_back( const 
     SAL_WARN_IF(x->m_ffList != nullptr, "sw", "Inserting already assigned item");
     assert(x->m_ffList == nullptr);
     x->m_ffList = this;
-    return ByPos::push_back( x );
+    return m_PosIndex.push_back( x );
 }
 
 bool SwFrameFormats::erase( const value_type& x )
@@ -2099,7 +2104,7 @@ bool SwFrameFormats::erase( const value_type& x )
     SAL_WARN_IF(x->m_ffList != this, "sw", "Removing invalid / unassigned item");
     if (ret != end()) {
         assert( x == *ret );
-        ByPos::erase( ret );
+        m_PosIndex.erase( ret );
         x->m_ffList = nullptr;
         return true;
     }
@@ -2114,7 +2119,7 @@ void SwFrameFormats::erase( size_type index_ )
 void SwFrameFormats::erase( const_iterator const& position )
 {
     (*position)->m_ffList = nullptr;
-    ByPos::erase( begin() + (position - begin()) );
+    m_PosIndex.erase( begin() + (position - begin()) );
 }
 
 bool SwFrameFormats::Contains( const SwFrameFormats::value_type& x ) const
@@ -2124,7 +2129,7 @@ bool SwFrameFormats::Contains( const SwFrameFormats::value_type& x ) const
 
 bool SwFrameFormats::newDefault( const value_type& x )
 {
-    std::pair<iterator,bool> res = ByPos::push_front( x );
+    std::pair<iterator,bool> res = m_PosIndex.push_front( x );
     if( ! res.second )
         newDefault( res.first );
     return res.second;
@@ -2134,7 +2139,7 @@ void SwFrameFormats::newDefault( const_iterator const& position )
 {
     if (position == begin())
         return;
-    ByPos::relocate( begin(), position );
+    m_PosIndex.relocate( begin(), position );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
