@@ -688,16 +688,18 @@ void DocxAttributeOutput::EndSdtBlock()
     m_pSerializer->endElementNS( XML_w, XML_sdt );
 }
 
+#define MAX_CELL_IN_WORD 62
+
 void DocxAttributeOutput::SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_t pInner, sal_Int32 nCell, sal_uInt32 nRow)
 {
     sal_Int32 nOpenCell = lastOpenCell.back();
-    if (nOpenCell != -1 && nOpenCell != nCell)
+    if (nOpenCell != -1 && nOpenCell != nCell && nOpenCell < MAX_CELL_IN_WORD)
         EndTableCell(pInner, nOpenCell, nRow);
 
     sal_Int32 nClosedCell = lastClosedCell.back();
     for (sal_Int32 i = nClosedCell+1; i < nCell; ++i)
     {
-        if (i >= 62)    //words limit
+        if (i >= MAX_CELL_IN_WORD)
             break;
 
         if (i == 0)
@@ -725,11 +727,11 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
         // so simply if there are more columns, don't close the last one msoffice will handle
         // and merge the contents of the remaining ones into it (since we don't close the cell
         // here, following ones will not be opened)
-        const bool limitWorkaround = (nCell >= 62 && !pInner->isEndOfLine());
+        const bool limitWorkaround = (nCell >= MAX_CELL_IN_WORD && !pInner->isEndOfLine());
         const bool bEndCell = pInner->isEndOfCell() && !limitWorkaround;
         const bool bEndRow = pInner->isEndOfLine();
 
-        if ( bEndCell )
+        if (bEndCell)
         {
             while (pInner->getDepth() < m_tableReference->m_nTableDepth)
             {
