@@ -1180,7 +1180,7 @@ void WW8AttributeOutput::CharHidden( const SvxCharHiddenItem& rHidden )
 
 void WW8AttributeOutput::CharBorder( const SvxBorderLine* pAllBorder, const sal_uInt16 /*nDist*/, const bool bShadow )
 {
-    m_rWW8Export.Out_BorderLine( *m_rWW8Export.pO, pAllBorder, 0, NS_sprm::LN_CBrc80, NS_sprm::LN_CBrc, bShadow );
+    WW8Export::Out_BorderLine( *m_rWW8Export.pO, pAllBorder, 0, NS_sprm::LN_CBrc80, NS_sprm::LN_CBrc, bShadow );
 }
 
 void WW8AttributeOutput::CharHighlight( const SvxBrushItem& rBrush )
@@ -1511,7 +1511,7 @@ void WW8AttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 {
     WW8_SHD aSHD;
 
-    m_rWW8Export.TransBrush( rBrush.GetColor(), aSHD );
+    WW8Export::TransBrush( rBrush.GetColor(), aSHD );
     // sprmCShd80
     m_rWW8Export.InsUInt16( NS_sprm::LN_CShd80 );
     m_rWW8Export.InsUInt16( aSHD.GetValue() );
@@ -3845,7 +3845,7 @@ void WW8AttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     {
         WW8_SHD aSHD;
 
-        m_rWW8Export.TransBrush( rBrush.GetColor(), aSHD );
+        WW8Export::TransBrush( rBrush.GetColor(), aSHD );
         // sprmPShd
         m_rWW8Export.InsUInt16( NS_sprm::LN_PShd );
         m_rWW8Export.InsUInt16( aSHD.GetValue() );

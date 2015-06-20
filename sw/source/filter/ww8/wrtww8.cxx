@@ -2216,10 +2216,10 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
         {
             const SvxBoxItem & rBoxItem = pBoxFormat->GetBox();
 
-            m_rWW8Export.Out_SwFormatTableBox( *m_rWW8Export.pO, &rBoxItem ); // 8/16 Byte
+            WW8Export::Out_SwFormatTableBox( *m_rWW8Export.pO, &rBoxItem ); // 8/16 Byte
         }
         else
-            m_rWW8Export.Out_SwFormatTableBox( *m_rWW8Export.pO, NULL); // 8/16 Byte
+            WW8Export::Out_SwFormatTableBox( *m_rWW8Export.pO, NULL); // 8/16 Byte
 
         SAL_INFO( "sw.ww8.level2", "<tclength>" << ( m_rWW8Export.pO->size() - npOCount ) << "</tclength>" );
     }
@@ -2390,7 +2390,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
             aColor = COL_AUTO;
 
         WW8_SHD aShd;
-        m_rWW8Export.TransBrush( aColor, aShd );
+        WW8Export::TransBrush( aColor, aShd );
         m_rWW8Export.InsUInt16( aShd.GetValue() );
     }
 

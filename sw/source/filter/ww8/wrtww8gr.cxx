@@ -550,7 +550,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
                 WW8_BRC aBrc;
                 if (pLn)
                 {
-                    WW8_BRCVer9 aBrc90 = rWrt.TranslateBorderLine( *pLn,
+                    WW8_BRCVer9 aBrc90 = WW8Export::TranslateBorderLine( *pLn,
                         pBox->GetDistance( i ), bShadow );
                     sal_uInt8 ico = msfilter::util::TransColToIco(msfilter::util::BGRToRGB(
                         aBrc90.cv()));

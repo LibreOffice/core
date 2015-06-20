@@ -1060,16 +1060,16 @@ public:
                                      const SwFormatPageDesc* pNewPgDescFormat = 0,
                                      const SwPageDesc* pNewPgDesc = 0 ) SAL_OVERRIDE;
 
-    void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,
+    static void Out_BorderLine(ww::bytes& rO, const ::editeng::SvxBorderLine* pLine,
         sal_uInt16 nDist, sal_uInt16 nSprmNo, sal_uInt16 nSprmNoVer9,
         bool bShadow);
 
     void Out_SwFormatBox(const SvxBoxItem& rBox, bool bShadow);
-    void Out_SwFormatTableBox( ww::bytes& rO, const SvxBoxItem * rBox );
+    static void Out_SwFormatTableBox( ww::bytes& rO, const SvxBoxItem * rBox );
     void Out_CellRangeBorders(const SvxBoxItem * pBox, sal_uInt8 nStart,
         sal_uInt8 nLimit);
-    bool TransBrush(const Color& rCol, WW8_SHD& rShd);
-    WW8_BRCVer9 TranslateBorderLine(const ::editeng::SvxBorderLine& pLine,
+    static bool TransBrush(const Color& rCol, WW8_SHD& rShd);
+    static WW8_BRCVer9 TranslateBorderLine(const ::editeng::SvxBorderLine& pLine,
         sal_uInt16 nDist, bool bShadow);
 
     // #i77805# - new return value indicates, if an inherited outline numbering is suppressed
@@ -1355,14 +1355,14 @@ private:
     typedef std::vector<GraphicDetails>::iterator myiter;
     sal_uInt16 mnIdx;       // Index in File-Positionen
 
-    void WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
+    static void WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
             sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight,
             const SwAttrSet* pAttrSet = 0);
     void WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem);
     void WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rNd,
         const sw::Frame &rFly, sal_uInt16 nWidth, sal_uInt16 nHeight);
 
-    void WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf, sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight);
+    static void WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf, sal_uInt16 mm, sal_uInt16 nWidth, sal_uInt16 nHeight);
     void WriteGrfForBullet(SvStream& rStrm,  const Graphic &rGrf, sal_uInt16 nWidth, sal_uInt16 nHeight);
 
     SwWW8WrGrf(const SwWW8WrGrf&) SAL_DELETED_FUNCTION;
