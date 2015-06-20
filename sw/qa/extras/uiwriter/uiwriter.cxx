@@ -95,6 +95,7 @@ public:
     void testdelofTableRedlines();
     void testExportToPicture();
     void testSearchWithTransliterate();
+    void testTdf75137();
     void testTableBackgroundColor();
     void testTdf90362();
     void testUndoCharAttribute();
@@ -137,6 +138,7 @@ public:
     CPPUNIT_TEST(testdelofTableRedlines);
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testTdf75137);
     CPPUNIT_TEST(testTableBackgroundColor);
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
@@ -955,6 +957,23 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testTdf75137()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(true);
+    pWrtShell->InsertFootnote(OUString("This is first footnote"));
+    sal_uLong firstIndex = pShellCrsr->GetNode().GetIndex();
+    pShellCrsr->GotoFootnoteAnchor();
+    pWrtShell->InsertFootnote(OUString("This is second footnote"));
+    pWrtShell->Up(false, 1, false);
+    sal_uLong secondIndex = pShellCrsr->GetNode().GetIndex();
+    pWrtShell->Down(false, 1, false);
+    sal_uLong thirdIndex = pShellCrsr->GetNode().GetIndex();
+    CPPUNIT_ASSERT_EQUAL(firstIndex, thirdIndex);
+    CPPUNIT_ASSERT(firstIndex != secondIndex);
 }
 
 void SwUiWriterTest::testTableBackgroundColor()
