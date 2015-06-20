@@ -119,6 +119,9 @@ ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_add_cxxflags,tk,\
 	$(gb_OBJCXXFLAGS) \
 ))
+$(eval $(call gb_Library_add_libs,tk,\
+	-lobjc \
+))
 endif
 
 ifeq ($(OS),IOS)
