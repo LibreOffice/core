@@ -3457,6 +3457,7 @@ SwWW8Writer::SwWW8Writer(const OUString& rFltName, const OUString& rBaseURL)
       mpMedium( 0 )
 {
     assert(rFltName == FILTER_WW8); // WW6/7 export was removed
+    (void)rFltName;
     SetBaseURL( rBaseURL );
 }
 
