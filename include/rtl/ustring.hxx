@@ -349,7 +349,7 @@ public:
         if (l != 0)
         {
             sal_Unicode* end = c.addData( pData->buffer );
-            pData->length = end - pData->buffer;
+            pData->length = l;
             *end = '\0';
             // TODO realloc in case pData->length is noticeably smaller than l?
         }
@@ -445,13 +445,14 @@ public:
     template< typename T1, typename T2 >
     OUString& operator+=( const OUStringConcat< T1, T2 >& c )
     {
-        const int l = c.length();
+        sal_Int32 l = c.length();
         if( l == 0 )
             return *this;
-        rtl_uString_ensureCapacity( &pData, pData->length + l );
+        l += pData->length;
+        rtl_uString_ensureCapacity( &pData, l );
         sal_Unicode* end = c.addData( pData->buffer + pData->length );
         *end = '\0';
-        pData->length = end - pData->buffer;
+        pData->length = l;
         return *this;
     }
 #endif

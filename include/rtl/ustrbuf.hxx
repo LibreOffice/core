@@ -181,7 +181,7 @@ public:
         pData = rtl_uString_alloc( nCapacity );
         sal_Unicode* end = c.addData( pData->buffer );
         *end = '\0';
-        pData->length = end - pData->buffer;
+        pData->length = l;
         // TODO realloc in case pData->>length is noticeably smaller than l ?
     }
 #endif
@@ -484,13 +484,14 @@ public:
     template< typename T1, typename T2 >
     OUStringBuffer& append( const OUStringConcat< T1, T2 >& c )
     {
-        const int l = c.length();
+        sal_Int32 l = c.length();
         if( l == 0 )
             return *this;
-        rtl_uStringbuffer_ensureCapacity( &pData, &nCapacity, pData->length + l );
+        l += pData->length;
+        rtl_uStringbuffer_ensureCapacity( &pData, &nCapacity, l );
         sal_Unicode* end = c.addData( pData->buffer + pData->length );
         *end = '\0';
-        pData->length = end - pData->buffer;
+        pData->length = l;
         return *this;
     }
 #endif

@@ -244,7 +244,7 @@ public:
         if (l != 0)
         {
             char* end = c.addData( pData->buffer );
-            pData->length = end - pData->buffer;
+            pData->length = l;
             *end = '\0';
         }
     }
@@ -305,13 +305,14 @@ public:
     template< typename T1, typename T2 >
     OString& operator+=( const OStringConcat< T1, T2 >& c )
     {
-        const int l = c.length();
+        sal_Int32 l = c.length();
         if( l == 0 )
             return *this;
-        rtl_string_ensureCapacity( &pData, pData->length + l );
+        l += pData->length;
+        rtl_string_ensureCapacity( &pData, l );
         char* end = c.addData( pData->buffer + pData->length );
         *end = '\0';
-        pData->length = end - pData->buffer;
+        pData->length = l;
         return *this;
     }
 #endif

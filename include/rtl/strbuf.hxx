@@ -211,7 +211,7 @@ public:
         pData = rtl_string_alloc( nCapacity );
         char* end = c.addData( pData->buffer );
         *end = '\0';
-        pData->length = end - pData->buffer;
+        pData->length = l;
     }
 #endif
 
@@ -486,13 +486,14 @@ public:
     template< typename T1, typename T2 >
     OStringBuffer& append( const OStringConcat< T1, T2 >& c )
     {
-        const int l = c.length();
+        sal_Int32 l = c.length();
         if( l == 0 )
             return *this;
-        rtl_stringbuffer_ensureCapacity( &pData, &nCapacity, pData->length + l );
+        l += pData->length;
+        rtl_stringbuffer_ensureCapacity( &pData, &nCapacity, l );
         char* end = c.addData( pData->buffer + pData->length );
         *end = '\0';
-        pData->length = end - pData->buffer;
+        pData->length = l;
         return *this;
     }
 #endif
