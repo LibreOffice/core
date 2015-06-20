@@ -771,8 +771,10 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOut
 void SdrTextObj::impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const
 {
     OutlinerParaObject *pNewText = impGetNonOverflowingParaObject(pOutliner);
-    // we need this when we are in editing mode
-    if (pEdtOutl != NULL)
+
+    bool bInUnderflow =  GetTextChain()->GetLinkHandlingUnderflow(const_cast<SdrTextObj*>(this));
+    // we need this when we are in editing mode (AND this is not an underflow-caused overflow)
+    if (pEdtOutl != NULL && !bInUnderflow)
         pEdtOutl->SetText(*pNewText);
     // adds it to current outliner anyway (useful in static decomposition)
     pOutliner->SetText(*pNewText);
