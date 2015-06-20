@@ -283,13 +283,18 @@ void SwSrcEditWindow::dispose()
         n->removePropertiesChangeListener(listener_.get());
     }
     aSyntaxIdle.Stop();
+    if ( pOutWin )
+        pOutWin->SetTextView( NULL );
+
     if ( pTextEngine )
     {
         EndListening( *pTextEngine );
         pTextEngine->RemoveView( pTextView );
 
         delete pTextView;
+        pTextView = NULL;
         delete pTextEngine;
+        pTextEngine = NULL;
     }
     pHScrollbar.disposeAndClear();
     pVScrollbar.disposeAndClear();
@@ -399,10 +404,14 @@ void  TextViewOutWin::MouseButtonUp( const MouseEvent &rEvt )
     if ( pTextView )
     {
         pTextView->MouseButtonUp( rEvt );
-        SfxBindings& rBindings = static_cast<SwSrcEditWindow*>(GetParent())->GetSrcView()->GetViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_TABLE_CELL );
-        rBindings.Invalidate( SID_CUT );
-        rBindings.Invalidate( SID_COPY );
+        SfxViewFrame *pFrame = static_cast<SwSrcEditWindow*>(GetParent())->GetSrcView()->GetViewFrame();
+        if ( pFrame )
+        {
+            SfxBindings& rBindings = pFrame->GetBindings();
+            rBindings.Invalidate( SID_TABLE_CELL );
+            rBindings.Invalidate( SID_CUT );
+            rBindings.Invalidate( SID_COPY );
+        }
     }
 }
 
