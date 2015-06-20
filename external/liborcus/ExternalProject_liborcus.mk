@@ -103,10 +103,8 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(SYSTEM_BOOST),,\
 				--with-boost=$(WORKDIR)/UnpackedTarball/boost \
-				BOOST_IOSTREAMS_LDFLAGS=' ' \
-				BOOST_IOSTREAMS_LIBS=' ' \
-				BOOST_SYSTEM_LDFLAGS=' ' \
-				BOOST_SYSTEM_LIBS=' ' \
+				boost_cv_lib_iostreams=yes \
+				boost_cv_lib_system=yes \
 			) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 		&& $(if $(VERBOSE)$(verbose),V=1) \
