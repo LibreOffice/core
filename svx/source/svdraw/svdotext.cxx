@@ -1991,8 +1991,14 @@ void SdrTextObj::onOverflowStatusEvent( )
         SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
         if (pEdtOutl != NULL)
             mpOverflowingText = pEdtOutl->GetOverflowingText();
-        else
+        else if(GetTextChain()->GetLinkHandlingUnderflow(this)) {
+            OutlinerParaObject *pPObj = GetOutlinerParaObject();
+            aDrawOutliner.SetText(*pPObj);
+            aDrawOutliner.IsPageOverflow(); // Check for overflow to set flags
             mpOverflowingText = aDrawOutliner.GetOverflowingText();
+        } else {
+            assert(0); // Should never happen. FIXME(matteocam)
+        }
 
         SdrTextObj *pNextTextObj = GetNextLinkInChain();
 
@@ -2010,6 +2016,11 @@ void SdrTextObj::onUnderflowStatusEvent( )
 
     if (GetTextChain()->GetLinkHandlingUnderflow(this))
     {
+        // possibly coming from an overflow
+        if (pEdtOutl) {
+            OutlinerParaObject *pPObj = GetOutlinerParaObject();
+            pEdtOutl->SetText(*pPObj);
+        }
         GetTextChain()->SetLinkHandlingUnderflow(this, false);
         return;
     }
@@ -2047,7 +2058,7 @@ void SdrTextObj::onUnderflowStatusEvent( )
             pEdtOutl->SetText(*pNewText);
         */
 
-        const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
+        const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
     }
 }
 
@@ -2152,7 +2163,18 @@ void SdrTextObj::onChainingEvent()
     if (!pEdtOutl)
         return;
 
-    bool bIsPageOverflow = pEdtOutl->IsPageOverflow();
+    bool bIsPageOverflow;
+
+    if (GetTextChain()->GetLinkHandlingUnderflow(this))
+    {
+        // If handling underflow we check for overflow in the object
+        Outliner &aDrawOutliner = ImpGetDrawOutliner();
+        OutlinerParaObject *pPObj = GetOutlinerParaObject();
+        aDrawOutliner.SetText(*pPObj);
+        bIsPageOverflow = aDrawOutliner.IsPageOverflow();
+    } else {
+        bIsPageOverflow = pEdtOutl->IsPageOverflow();
+    }
 
     // Propagates the need for change
     SetToBeChained( bIsPageOverflow );
