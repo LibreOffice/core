@@ -2042,8 +2042,10 @@ void SdrTextObj::onUnderflowStatusEvent( )
         // Set the other box empty so if overflow does not occur we are fine
         pNextLink->NbcSetOutlinerParaObject(aDrawOutliner.GetEmptyParaObject());
 
+        /*
         if (pEdtOutl != NULL)
             pEdtOutl->SetText(*pNewText);
+        */
 
         const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
     }
