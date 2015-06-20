@@ -2432,7 +2432,7 @@
       </node>
       <node oor:name=".uno:OutlineFormat" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Formatting On/Off</value>
+          <value xml:lang="en-US">Show Formatting</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2440,7 +2440,7 @@
       </node>
       <node oor:name=".uno:OutlineCollapseAll" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">First Level</value>
+          <value xml:lang="en-US">Show Only First Level</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3041,7 +3041,7 @@
       </node>
       <node oor:name=".uno:OutlineExpandAll" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">All Levels</value>
+          <value xml:lang="en-US">Show All Levels</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
