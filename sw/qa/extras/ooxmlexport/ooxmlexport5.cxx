@@ -858,6 +858,14 @@ DECLARE_OOXMLEXPORT_TEST(fdo60957, "fdo60957-2.docx")
         assertXPath(pXmlDoc, "//w:tbl", 2);
 }
 
+//This has more cells than msword supports, we must balance the
+//number of cell start and ends
+DECLARE_OOXMLEXPORT_TEST(testOO106020, "ooo106020-1.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+        assertXPath(pXmlDoc, "//w:tbl", 1);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
