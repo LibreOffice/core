@@ -115,11 +115,8 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
     }
 
     const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-    sal_uInt16 nBoxes = rBoxes.size();
-
-    for( sal_uInt16 nBox=0; nBox<nBoxes; nBox++ )
+    for( auto pBox : rBoxes )
     {
-        const SwTableBox* pBox = rBoxes[nBox];
         if( pBox->GetSttNd() )
         {
             if( nHeight < ROW_DFLT_HEIGHT )
@@ -203,7 +200,7 @@ void SwWriteTable::MergeBorders( const SvxBorderLine* pBorderLine,
     if( !bCollectBorderWidth )
         return;
 
-    sal_uInt16 nOutWidth = pBorderLine->GetOutWidth();
+    const sal_uInt16 nOutWidth = pBorderLine->GetOutWidth();
     if( bTable )
     {
         if( nOutWidth && (!nBorder || nOutWidth < nBorder) )
@@ -215,7 +212,7 @@ void SwWriteTable::MergeBorders( const SvxBorderLine* pBorderLine,
             nInnerBorder = nOutWidth;
     }
 
-    sal_uInt16 nDist = pBorderLine->GetInWidth() ? pBorderLine->GetDistance()
+    const sal_uInt16 nDist = pBorderLine->GetInWidth() ? pBorderLine->GetDistance()
                                                 : 0;
     if( nDist && (!nCellSpacing || nDist < nCellSpacing) )
         nCellSpacing = nDist;
@@ -405,14 +402,14 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
                                            sal_uInt16 nDepth )
 {
     bool bSubExpanded = false;
-    sal_uInt16 nLines = rLines.size();
+    const SwTableLines::size_type nLines = rLines.size();
 
 #if OSL_DEBUG_LEVEL > 0
     sal_uInt32 nEndCPos = 0;
 #endif
 
     long nRPos = nStartRPos;
-    for( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
+    for( SwTableLines::size_type nLine = 0; nLine < nLines; ++nLine )
     {
         /*const*/ SwTableLine *pLine = rLines[nLine];
 
@@ -457,10 +454,10 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
 
         // If necessary insert a column for all boxes of the row
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
-        sal_uInt16 nBoxes = rBoxes.size();
+        const SwTableBoxes::size_type nBoxes = rBoxes.size();
 
         sal_uInt32 nCPos = nStartCPos;
-        for( sal_uInt16 nBox=0; nBox<nBoxes; nBox++ )
+        for( SwTableBoxes::size_type nBox=0; nBox<nBoxes; ++nBox )
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
@@ -530,14 +527,14 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
                                         sal_uInt16 nDepth,
                                         sal_uInt16 nNumOfHeaderRows )
 {
-    sal_uInt16 nLines = rLines.size();
+    const SwTableLines::size_type nLines = rLines.size();
     bool bSubExpanded = false;
 
     // Specifying the border
     long nRPos = nStartRPos;
     sal_uInt16 nRow = nStartRow;
 
-    for( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
+    for( SwTableLines::size_type nLine = 0; nLine < nLines; ++nLine )
     {
         const SwTableLine *pLine = rLines[nLine];
 
@@ -621,11 +618,11 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
             pBrushItem = 0;
         }
 
-        sal_uInt16 nBoxes = rBoxes.size();
+        const SwTableBoxes::size_type nBoxes = rBoxes.size();
         sal_uInt32 nCPos = nStartCPos;
         sal_uInt16 nCol = nStartCol;
 
-        for( sal_uInt16 nBox=0; nBox<nBoxes; nBox++ )
+        for( SwTableBoxes::size_type nBox=0; nBox<nBoxes; ++nBox )
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
@@ -779,12 +776,11 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
         nCellSpacing = pLayoutInfo->GetCellSpacing();
     }
 
-    sal_uInt16 nRow, nCol;
-    sal_uInt16 nCols = pLayoutInfo->GetColCount();
-    sal_uInt16 nRows = pLayoutInfo->GetRowCount();
+    const sal_uInt16 nCols = pLayoutInfo->GetColCount();
+    const sal_uInt16 nRows = pLayoutInfo->GetRowCount();
 
     // First set the table structure.
-    for( nCol=0; nCol<nCols; nCol++ )
+    for( sal_uInt16 nCol=0; nCol<nCols; ++nCol )
     {
         SwWriteTableCol *pCol =
             new SwWriteTableCol( (nCol+1)*COL_DFLT_WIDTH );
@@ -800,7 +796,7 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
         aCols.insert( pCol );
     }
 
-    for( nRow=0; nRow<nRows; nRow++ )
+    for( sal_uInt16 nRow=0; nRow<nRows; ++nRow )
     {
         SwWriteTableRow *pRow =
             new SwWriteTableRow( (nRow+1)*ROW_DFLT_HEIGHT, bUseLayoutHeights );
@@ -810,12 +806,12 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
     }
 
     // And now fill with life
-    for( nRow=0; nRow<nRows; nRow++ )
+    for( sal_uInt16 nRow=0; nRow<nRows; ++nRow )
     {
         SwWriteTableRow *pRow = aRows[nRow];
 
         bool bHeightExported = false;
-        for( nCol=0; nCol<nCols; nCol++ )
+        for( sal_uInt16 nCol=0; nCol<nCols; nCol++ )
         {
             const SwHTMLTableLayoutCell *pLayoutCell =
                 pLayoutInfo->GetCell( nRow, nCol );
@@ -832,8 +828,8 @@ SwWriteTable::SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayo
                 continue;
             }
 
-            sal_uInt16 nRowSpan = pLayoutCell->GetRowSpan();
-            sal_uInt16 nColSpan = pLayoutCell->GetColSpan();
+            const sal_uInt16 nRowSpan = pLayoutCell->GetRowSpan();
+            const sal_uInt16 nColSpan = pLayoutCell->GetColSpan();
             const SwTableBox *pBox = pLayoutCnts->GetTableBox();
             OSL_ENSURE( pBox,
                     "Table in Table can not be exported over layout" );
