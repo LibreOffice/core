@@ -1704,6 +1704,11 @@ void Test::testFormulaRefUpdateInsertColumns()
 
     m_pDoc->InsertTab(0, "Formula");
 
+    // Set named range for B2 with absolute column and relative same row.
+    const ScAddress aNamePos(0,1,0);
+    bool bInserted = m_pDoc->InsertNewRangeName("RowRelativeRange", aNamePos, "$Formula.$B2");
+    CPPUNIT_ASSERT(bInserted);
+
     // Set values in B1:B3.
     m_pDoc->SetValue(ScAddress(1,0,0), 1.0);
     m_pDoc->SetValue(ScAddress(1,1,0), 2.0);
@@ -1712,6 +1717,10 @@ void Test::testFormulaRefUpdateInsertColumns()
     // Reference them in B4.
     m_pDoc->SetString(ScAddress(1,3,0), "=SUM(B1:B3)");
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(1,3,0)));
+
+    // Use named range in C2 to reference B2.
+    m_pDoc->SetString(ScAddress(2,1,0), "=RowRelativeRange");
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,1,0)));
 
     // Inert columns over A:B.
     ScMarkData aMark;
@@ -1724,6 +1733,18 @@ void Test::testFormulaRefUpdateInsertColumns()
         CPPUNIT_FAIL("Wrong formula in D4 after column insertion.");
 
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(3,3,0)));
+
+    // Check that the named reference points to the moved cell, now D2.
+    ScRangeData* pName = m_pDoc->GetRangeName()->findByUpperName("ROWRELATIVERANGE");
+    CPPUNIT_ASSERT(pName);
+    OUString aSymbol;
+    pName->GetSymbol(aSymbol, aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(OUString("$Formula.$D2"), aSymbol);
+
+    // Check that the formula using the name, now in E2, still has the same result.
+    if (!checkFormula(*m_pDoc, ScAddress(4,1,0), "RowRelativeRange"))
+        CPPUNIT_FAIL("Wrong formula in E2 after column insertion.");
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4,1,0)));
 
     m_pDoc->DeleteTab(0);
 }
