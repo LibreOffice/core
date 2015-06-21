@@ -204,18 +204,15 @@ void RtfExport::BuildNumbering()
 {
     const SwNumRuleTable& rListTable = m_pDoc->GetNumRuleTable();
 
-    for (sal_uInt16 n = rListTable.size()+1; n;)
+    SwNumRule* pOutlineRule = m_pDoc->GetOutlineNumRule();
+    if (IsExportNumRule(*pOutlineRule))
+        GetId(*pOutlineRule);
+
+    for (auto n = rListTable.size(); n;)
     {
-        SwNumRule* pRule;
-        --n;
-        if (n == rListTable.size())
-            pRule = m_pDoc->GetOutlineNumRule();
-        else
-        {
-            pRule = rListTable[ n ];
-            if (!SwDoc::IsUsed(*pRule))
-                continue;
-        }
+        SwNumRule* pRule = rListTable[ --n ];
+        if (!SwDoc::IsUsed(*pRule))
+            continue;
 
         if (IsExportNumRule(*pRule))
             GetId(*pRule);
