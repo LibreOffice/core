@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_9734f44a",
+        "filename": "icon-themes/breeze/COPYING",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-06-21T16:37:22Z",
+      "side": 1,
+      "message": "You have a typo. Please use “git diff” before submitting!\n\nI will amend this for you.",
+      "revId": "00b93e8d4790f483ebd0d9e9183be45b79c72ea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
