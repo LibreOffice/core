@@ -1356,9 +1356,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
 
         if( color == COL_AUTO )  // nCharColor depends to the background color
         {
-            bool bIsDark = false;
-            GET( bIsDark, IsBackgroundDark );
-            color = bIsDark ? 0xffffff : 0x000000;
+            color = mbIsBackgroundDark ? 0xffffff : 0x000000;
         }
         color &= 0xffffff;
 
@@ -1648,7 +1646,8 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
     OUString aGraphicURL;
     sal_Int16 nBulletRelSize = 0;
     sal_Int16 nStartWith = 1;
-    sal_Int32 nBulletColor = 0;
+    sal_uInt32 nBulletColor = 0;
+    bool bHasBulletColor = false;
 
     for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
     {
@@ -1675,7 +1674,8 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
             }
             else if(aPropName == "BulletColor")
             {
-                nBulletColor = *static_cast<sal_Int32 const *>(pValue);
+                nBulletColor = *static_cast<sal_uInt32 const *>(pValue);
+                bHasBulletColor = true;
             }
             else if ( aPropName == "BulletChar" )
             {
@@ -1735,8 +1735,12 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
     }
     else
     {
-        if(nBulletColor)
+        if(bHasBulletColor)
         {
+               if (nBulletColor == COL_AUTO )
+               {
+                   nBulletColor = mbIsBackgroundDark ? 0xffffff : 0x000000;
+               }
                mpFS->startElementNS( XML_a, XML_buClr, FSEND );
                WriteColor( nBulletColor );
                mpFS->endElementNS( XML_a, XML_buClr );
@@ -1746,10 +1750,14 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
             mpFS->singleElementNS( XML_a, XML_buSzPct,
                                    XML_val, IS( std::max( (sal_Int32)25000, std::min( (sal_Int32)400000, 1000*( (sal_Int32)nBulletRelSize ) ) ) ), FSEND );
         if( bHasFontDesc )
+        {
+            if ( SVX_NUM_CHAR_SPECIAL == nNumberingType )
+                aBulletChar = SubstituteBullet( aBulletChar, aFontDesc );
             mpFS->singleElementNS( XML_a, XML_buFont,
                                    XML_typeface, aFontDesc.Name.toUtf8().getStr(),
                                    XML_charset, (aFontDesc.CharSet == awt::CharSet::SYMBOL) ? "2" : NULL,
                                    FSEND );
+        }
 
         OUString pAutoNumType = GetAutoNumType( nNumberingType, bSDot, bPBehind, bPBoth );
 
@@ -1762,7 +1770,6 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
         }
         else
         {
-            aBulletChar = SubstituteBullet( aBulletChar, aFontDesc );
             mpFS->singleElementNS(XML_a, XML_buChar, XML_char, USS( OUString( aBulletChar ) ), FSEND);
         }
     }
