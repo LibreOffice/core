@@ -147,7 +147,8 @@ bool FormulaToken::IsRef() const
         case svExternalDoubleRef:
             return true;
         default:
-            ;
+            if (eOp == ocTableRef)
+                return true;
     }
 
     return false;
@@ -631,6 +632,12 @@ bool FormulaTokenArray::HasReferences() const
     for (sal_uInt16 i = 0; i < nLen; ++i)
     {
         if (pCode[i]->IsRef())
+            return true;
+    }
+
+    for (sal_uInt16 i = 0; i < nRPN; ++i)
+    {
+        if (pRPN[i]->IsRef())
             return true;
     }
 
