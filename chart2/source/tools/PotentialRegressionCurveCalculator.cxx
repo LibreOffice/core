@@ -51,14 +51,6 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
             aXValues, aYValues,
             RegressionCalculationHelper::isValidAndBothPositive()));
 
-    // We try to get y =C * D^x
-    // switching to neperian logs:
-    // ln(y) = ln(C) + x ln(D)
-    // So we make a linear regression and get
-    // slope = ln(D) => D = exp(slope)
-    // intercept = ln(C) => C = exp(intercept)
-    // Warning: the linear regression is between
-    // ln(y) and x. Not between ln(y) and ln(x)
     const size_t nMax = aValues.first.size();
     if( nMax == 0 )
     {
@@ -72,7 +64,7 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
     size_t i = 0;
     for( i = 0; i < nMax; ++i )
     {
-        fAverageX += aValues.first[i] ;
+        fAverageX += log( aValues.first[i] );
         fAverageY += log( aValues.second[i] );
     }
 
@@ -83,7 +75,7 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
     double fQx = 0.0, fQy = 0.0, fQxy = 0.0;
     for( i = 0; i < nMax; ++i )
     {
-        double fDeltaX = aValues.first[i] - fAverageX;
+        double fDeltaX = log( aValues.first[i] ) - fAverageX;
         double fDeltaY = log( aValues.second[i] ) - fAverageY;
 
         fQx  += fDeltaX * fDeltaX;
@@ -95,7 +87,6 @@ void SAL_CALL PotentialRegressionCurveCalculator::recalculateRegression(
     m_fIntercept = fAverageY - m_fSlope * fAverageX;
     m_fCorrelationCoeffitient = fQxy / sqrt( fQx * fQy );
 
-    m_fSlope = exp( m_fSlope );
     m_fIntercept = exp( m_fIntercept );
 }
 
@@ -109,7 +100,7 @@ double SAL_CALL PotentialRegressionCurveCalculator::getCurveValue( double x )
     if( ! ( ::rtl::math::isNan( m_fSlope ) ||
             ::rtl::math::isNan( m_fIntercept )))
     {
-        fResult = m_fIntercept * pow( m_fSlope, x );
+        fResult = m_fIntercept * pow( x, m_fSlope );
     }
 
     return fResult;
