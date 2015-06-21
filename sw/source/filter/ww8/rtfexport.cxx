@@ -835,8 +835,8 @@ SvStream& RtfExport::Strm()
 {
     if (m_pStream)
         return *m_pStream;
-    else
-        return m_pWriter->Strm();
+
+    return m_pWriter->Strm();
 }
 
 void RtfExport::setStream()
@@ -911,10 +911,12 @@ void RtfExport::InsColor(const Color& rCol)
     sal_uInt16 n;
     bool bAutoColorInTable = false;
     for (RtfColorTable::iterator it=m_aColTable.begin() ; it != m_aColTable.end(); ++it)
+    {
         if ((*it).second == rCol)
             return; // Already in the table
-        else if ((*it).second == COL_AUTO)
+        if ((*it).second == COL_AUTO)
             bAutoColorInTable = true;
+    }
     if (rCol.GetColor() == COL_AUTO)
         // COL_AUTO gets value 0
         n = 0;
@@ -1110,12 +1112,10 @@ sal_uInt16 RtfExport::GetRedline(const OUString& rAuthor)
     std::map<OUString,sal_uInt16>::iterator i = m_aRedlineTable.find(rAuthor);
     if (i != m_aRedlineTable.end())
         return i->second;
-    else
-    {
-        int nId = m_aRedlineTable.size();
-        m_aRedlineTable.insert(std::pair<OUString,sal_uInt16>(rAuthor,nId));
-        return nId;
-    }
+
+    int nId = m_aRedlineTable.size();
+    m_aRedlineTable.insert(std::pair<OUString,sal_uInt16>(rAuthor,nId));
+    return nId;
 }
 
 const OUString* RtfExport::GetRedline(sal_uInt16 nId)
