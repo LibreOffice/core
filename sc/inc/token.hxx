@@ -237,7 +237,7 @@ public:
             Item                GetItem() const;
             void                AddItem( Item );
             void                SetAreaRefRPN( formula::FormulaToken* pToken );
-            const formula::FormulaToken*    GetAreaRefRPN() const;
+            formula::FormulaToken*  GetAreaRefRPN() const;
 
 private:
 
