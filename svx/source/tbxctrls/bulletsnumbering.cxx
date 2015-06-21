@@ -31,9 +31,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 
-#define NUM_PAGETYPE_BULLET         0
-#define NUM_PAGETYPE_SINGLENUM      1
-
 class NumberingToolBoxControl;
 
 class NumberingPopup : public svtools::ToolbarMenu
@@ -90,7 +87,7 @@ NumberingPopup::NumberingPopup( NumberingToolBoxControl& rController,
 {
     WinBits nBits = WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NO_DIRECTSELECT;
     mpValueSet = VclPtr<SvxNumValueSet>::Create( this, nBits );
-    mpValueSet->init( mbBulletItem ? NUM_PAGETYPE_BULLET : NUM_PAGETYPE_SINGLENUM );
+    mpValueSet->init( mbBulletItem ? NumberingPageType::BULLET : NumberingPageType::SINGLENUM );
 
     if ( !mbBulletItem )
     {

@@ -91,10 +91,6 @@ using namespace css::text;
 using namespace css::container;
 using namespace css::style;
 
-#define NUM_PAGETYPE_BULLET         0
-#define NUM_PAGETYPE_SINGLENUM      1
-#define NUM_PAGETYPE_NUM            2
-
 #define SHOW_NUMBERING              0
 #define SHOW_BULLET                 1
 #define SHOW_BITMAP                 2
@@ -197,7 +193,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(vcl::Window* pParent,
 {
     SetExchangeSupport();
     get(m_pExamplesVS, "valueset");
-    m_pExamplesVS->init(NUM_PAGETYPE_SINGLENUM);
+    m_pExamplesVS->init(NumberingPageType::SINGLENUM);
     m_pExamplesVS->SetSelectHdl(LINK(this, SvxSingleNumPickTabPage, NumSelectHdl_Impl));
     m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxSingleNumPickTabPage, DoubleClickHdl_Impl));
 
@@ -394,7 +390,7 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(vcl::Window* pParent,
 {
     SetExchangeSupport();
     get(m_pExamplesVS, "valueset");
-    m_pExamplesVS->init(NUM_PAGETYPE_BULLET),
+    m_pExamplesVS->init(NumberingPageType::BULLET),
     m_pExamplesVS->SetSelectHdl(LINK(this, SvxBulletPickTabPage, NumSelectHdl_Impl));
     m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxBulletPickTabPage, DoubleClickHdl_Impl));
 }
@@ -567,7 +563,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(vcl::Window* pParent,
     SetExchangeSupport();
 
     get(m_pExamplesVS, "valueset");
-    m_pExamplesVS->init(NUM_PAGETYPE_NUM);
+    m_pExamplesVS->init(NumberingPageType::OUTLINE);
     m_pExamplesVS->SetSelectHdl(LINK(this, SvxNumPickTabPage, NumSelectHdl_Impl));
     m_pExamplesVS->SetDoubleClickHdl(LINK(this, SvxNumPickTabPage, DoubleClickHdl_Impl));
 

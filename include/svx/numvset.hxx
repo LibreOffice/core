@@ -47,10 +47,18 @@ struct SvxBmpItemInfo
     sal_uInt16          nItemId;
 };
 
+enum class NumberingPageType
+{
+    BULLET,
+    SINGLENUM,
+    OUTLINE,
+    BITMAP
+};
+
 class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 {
     Color           aLineColor;
-    sal_uInt16      nPageType;
+    NumberingPageType ePageType;
     bool            bHTMLMode;
     Rectangle       aOrgRect;
     VclPtr<VirtualDevice> pVDev;
@@ -68,7 +76,7 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 
 public:
     SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);
-    void init(sal_uInt16 nType);
+    void init(NumberingPageType eType);
     virtual ~SvxNumValueSet();
     virtual void dispose() SAL_OVERRIDE;
 

@@ -64,11 +64,6 @@ using namespace com::sun::star::text;
 using namespace com::sun::star::container;
 using namespace com::sun::star::style;
 
-#define NUM_PAGETYPE_BULLET         0
-#define NUM_PAGETYPE_SINGLENUM      1
-#define NUM_PAGETYPE_NUM            2
-#define NUM_PAGETYPE_BMP            3
-
 static const sal_Char cNumberingType[] = "NumberingType";
 static const sal_Char cValue[] = "Value";
 static const sal_Char cParentNumbering[] = "ParentNumbering";
@@ -166,9 +161,9 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     aRuleFont.SetSize(aSize);
     aRuleFont.SetColor(aTextColor);
     aRuleFont.SetFillColor(aBackColor);
-    if(nPageType == NUM_PAGETYPE_BULLET)
+    if(ePageType == NumberingPageType::BULLET)
         aFont = aRuleFont;
-    else if(nPageType == NUM_PAGETYPE_NUM)
+    else if(ePageType == NumberingPageType::OUTLINE)
     {
         aSize.Height() = nRectHeight/8;
     }
@@ -192,7 +187,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             aLineColor.Invert();
         pVDev->SetLineColor(aLineColor);
         // Draw line only once
-        if(nPageType != NUM_PAGETYPE_NUM)
+        if(ePageType != NumberingPageType::OUTLINE)
         {
             Point aStart(aBLPos.X() + nRectWidth *25 / 100,0);
             Point aEnd(aBLPos.X() + nRectWidth * 9 / 10,0);
@@ -210,8 +205,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         *pVDev );
     // Now comes the text
     const OUString sValue(cValue);
-    if( NUM_PAGETYPE_SINGLENUM == nPageType ||
-            NUM_PAGETYPE_BULLET == nPageType )
+    if( NumberingPageType::SINGLENUM == ePageType ||
+           NumberingPageType::BULLET == ePageType )
     {
         Point aStart(aBLPos.X() + nRectWidth / 9,0);
         for( sal_uInt16 i = 0; i < 3; i++ )
@@ -219,7 +214,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             sal_uInt16 nY = 11 + i * 33;
             aStart.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
             OUString sText;
-            if(nPageType == NUM_PAGETYPE_BULLET)
+            if(ePageType == NumberingPageType::BULLET)
             {
                 sText = OUString( aBulletTypes[nItemId - 1] );
                 aStart.Y() -= pDev->GetTextHeight()/2;
@@ -250,7 +245,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
             pDev->DrawText(aStart, sText);
         }
     }
-    else if(NUM_PAGETYPE_NUM == nPageType )
+    else if(NumberingPageType::OUTLINE == ePageType )
     {
         // Outline numbering has to be painted into the virtual device
         // to get correct lines
@@ -392,7 +387,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 SvxNumValueSet::SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits)
     : ValueSet(pParent, nWinBits)
-    , nPageType(0)
+    , ePageType(NumberingPageType::BULLET)
     , bHTMLMode(false)
     , pVDev(NULL)
 {
@@ -400,17 +395,17 @@ SvxNumValueSet::SvxNumValueSet(vcl::Window* pParent, WinBits nWinBits)
 
 VCL_BUILDER_FACTORY_ARGS(SvxNumValueSet, WB_TABSTOP)
 
-void SvxNumValueSet::init(sal_uInt16 nType)
+void SvxNumValueSet::init(NumberingPageType eType)
 {
     aLineColor = COL_LIGHTGRAY;
-    nPageType = nType;
+    ePageType = eType;
     bHTMLMode = false;
     pVDev = NULL;
 
     SetColCount( 4 );
     SetLineCount( 2 );
     SetStyle( GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
-    if(NUM_PAGETYPE_BULLET == nType)
+    if(NumberingPageType::BULLET == eType)
     {
         for ( sal_uInt16 i = 0; i < 8; i++ )
         {
@@ -477,7 +472,7 @@ VCL_BUILDER_FACTORY_ARGS(SvxBmpNumValueSet, WB_TABSTOP)
 
 void SvxBmpNumValueSet::init()
 {
-    SvxNumValueSet::init(NUM_PAGETYPE_BMP);
+    SvxNumValueSet::init(NumberingPageType::BITMAP);
     bGrfNotFound = false;
     GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
     SetStyle( GetStyle() | WB_VSCROLL );
