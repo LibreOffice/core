@@ -320,7 +320,6 @@ public:
     wwFontHelper() : bLoadAllFonts(false) {}
     /// rDoc used only to get the initial standard font(s) in use.
     void InitFontTable(const SwDoc& rDoc);
-    sal_uInt16 GetId(const vcl::Font& rFont);
     sal_uInt16 GetId(const SvxFontItem& rFont);
     sal_uInt16 GetId(const wwFont& rFont);
     void WriteFontTable( SvStream *pTableStream, WW8Fib& pFib );

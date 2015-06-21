@@ -1267,24 +1267,6 @@ WW8_BRC::WW8_BRC(const WW8_BRCVer6& brcVer6)
         brcVer6.fShadow(), false);
 }
 
-// Convert BRC from WW8 to WW6 format
-WW8_BRCVer6::WW8_BRCVer6(const WW8_BRC& brcVer8)
-{
-    sal_uInt8 _brcType = brcVer8.brcType();
-    sal_uInt8 _dxpLineWidth = std::max(brcVer8.dptLineWidth() / 6, 7);
-    if (_brcType == 5 || _brcType == 6 )
-    {
-        _dxpLineWidth = _brcType;
-        _brcType = 1;
-    }
-    else if (_brcType > 3)
-    {
-        _brcType = 1;
-    }
-    *this = WW8_BRCVer6(_dxpLineWidth, _brcType, brcVer8.ico(),
-        brcVer8.dptSpace(), brcVer8.fShadow());
-}
-
 // Convert BRC from WW8 to WW9 format
 WW8_BRCVer9::WW8_BRCVer9(const WW8_BRC& brcVer8)
 {

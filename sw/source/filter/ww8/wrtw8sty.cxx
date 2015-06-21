@@ -874,13 +874,6 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
     }
 }
 
-sal_uInt16 wwFontHelper::GetId(const vcl::Font& rFont)
-{
-    wwFont aFont(rFont.GetName(), rFont.GetPitch(), rFont.GetFamily(),
-        rFont.GetCharSet());
-    return GetId(aFont);
-}
-
 sal_uInt16 wwFontHelper::GetId(const SvxFontItem& rFont)
 {
     wwFont aFont(rFont.GetFamilyName(), rFont.GetPitch(), rFont.GetFamily(),
