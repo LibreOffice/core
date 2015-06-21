@@ -5072,7 +5072,12 @@ bool ScCompiler::HandleTableRef()
                         aRange.aEnd.SetRow( aPos.Row());
                     }
                     else
-                        nError = errNoRef;
+                    {
+                        nError = errNoValue;
+                        // For *some* relative row reference in named
+                        // expressions' thisrow special handling below.
+                        aRange.aEnd.SetRow( aRange.aStart.Row());
+                    }
                     bForwardToClose = true;
                 }
                 break;
@@ -5153,8 +5158,10 @@ bool ScCompiler::HandleTableRef()
             } while (eState != sStop);
         }
         ScTokenArray* pNew = new ScTokenArray();
-        if (!nError)
+        if (!nError || nError == errNoValue)
         {
+            // The errNoValue case generates a thisrow reference that can be
+            // used to save named expressions in A1 syntax notation.
             if (bColumnRange)
             {
                 // Limit range to specified columns.
@@ -5203,8 +5210,17 @@ bool ScCompiler::HandleTableRef()
                         aRefData.SetRowRel( true);
                     }
                     aRefData.SetFlag3D( true);
-                    aRefData.SetAddress( aRange.aStart, aPos);
-                    pTR->SetAreaRefRPN( pNew->AddSingleReference( aRefData ));
+                    if (nError)
+                    {
+                        aRefData.SetAddress( aRange.aStart, aRange.aStart);
+                        pTR->SetAreaRefRPN( new ScSingleRefToken( aRefData));   // set reference at TableRef
+                        pNew->Add( new FormulaErrorToken( nError));             // set error in RPN
+                    }
+                    else
+                    {
+                        aRefData.SetAddress( aRange.aStart, aPos);
+                        pTR->SetAreaRefRPN( pNew->AddSingleReference( aRefData));
+                    }
                 }
                 else
                 {
@@ -5218,8 +5234,17 @@ bool ScCompiler::HandleTableRef()
                         aRefData.Ref2.SetRowRel( true);
                     }
                     aRefData.Ref1.SetFlag3D( true);
-                    aRefData.SetRange( aRange, aPos);
-                    pTR->SetAreaRefRPN( pNew->AddDoubleReference( aRefData ));
+                    if (nError)
+                    {
+                        aRefData.SetRange( aRange, aRange.aStart);
+                        pTR->SetAreaRefRPN( new ScDoubleRefToken( aRefData));   // set reference at TableRef
+                        pNew->Add( new FormulaErrorToken( nError));             // set error in RPN
+                    }
+                    else
+                    {
+                        aRefData.SetRange( aRange, aPos);
+                        pTR->SetAreaRefRPN( pNew->AddDoubleReference( aRefData));
+                    }
                 }
             }
             else
