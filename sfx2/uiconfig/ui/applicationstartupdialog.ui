@@ -133,7 +133,9 @@
                     <property name="margin_bottom">3</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Collabora provides and maintains LibreOffice products on iTunes. Collabora's enterprise-grade productivity suite LibreOffice-from-Collabora for Mac delivers long term stability and support for demanding environments. Deployment and administration utilities together with fast-response bug-fix support are available for enterprise customers. App Store purchases of LibreOffice-from-Collabora support ongoing development and enhancement of LibreOffice for Mac. Get extended features and stability while funding LibreOffice for Mac development by buying LibreOffice-from-Collabora today.</property>
+                    <property name="label" translatable="yes">Collabora provides and maintains LibreOffice products on iTunes. Collabora's enterprise-grade productivity suite LibreOffice-from-Collabora for Mac delivers long term stability and support for demanding environments. Deployment and administration utilities together with fast-response bug-fix support are available for enterprise customers.
+
+App Store purchases of LibreOffice-from-Collabora support ongoing development and enhancement of LibreOffice for Mac. Get extended features and stability while funding LibreOffice for Mac development by buying LibreOffice-from-Collabora today.</property>
                     <property name="justify">fill</property>
                     <property name="wrap">True</property>
                     <property name="max_width_chars">70</property>
@@ -173,7 +175,7 @@
                     <property name="hexpand">True</property>
                     <property name="relief">none</property>
                     <property name="xalign">0</property>
-                    <property name="uri">https://libreoffice-from-collabora.com/lofc-mac-app-store/</property>
+                    <property name="uri">https://itunes.apple.com/us/app/libreoffice-from-collabora/id918120011</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
