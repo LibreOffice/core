@@ -2894,8 +2894,7 @@ bool ScFormulaCell::UpdateReferenceOnShift(
     bCellStateChanged = UpdatePosOnShift(rCxt);
 
     // Check presence of any references or column row names.
-    pCode->Reset();
-    bool bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
+    bool bHasRefs = pCode->HasReferences();
     bool bHasColRowNames = false;
     if (!bHasRefs)
     {
@@ -3016,8 +3015,7 @@ bool ScFormulaCell::UpdateReferenceOnMove(
     }
 
     // Check presence of any references or column row names.
-    pCode->Reset();
-    bool bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
+    bool bHasRefs = pCode->HasReferences();
     bool bHasColRowNames = false;
     if (!bHasRefs)
     {
@@ -3145,8 +3143,7 @@ bool ScFormulaCell::UpdateReferenceOnCopy(
     }
 
     // Check presence of any references or column row names.
-    pCode->Reset();
-    bool bHasRefs = (pCode->GetNextReferenceRPN() != NULL);
+    bool bHasRefs = pCode->HasReferences();
     pCode->Reset();
     bool bHasColRowNames = (pCode->GetNextColRowName() != NULL);
     bHasRefs = bHasRefs || bHasColRowNames;
@@ -3226,8 +3223,7 @@ void ScFormulaCell::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
     // Adjust tokens only when it's not grouped or grouped top cell.
     bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
     bool bPosChanged = (rCxt.mnInsertPos <= aPos.Tab());
-    pCode->Reset();
-    if (pDocument->IsClipOrUndo() || !pCode->GetNextReferenceRPN())
+    if (pDocument->IsClipOrUndo() || !pCode->HasReferences())
     {
         if (bPosChanged)
             aPos.IncTab(rCxt.mnSheets);
@@ -3257,8 +3253,7 @@ bool ScFormulaCell::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
     // Adjust tokens only when it's not grouped or grouped top cell.
     bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
     bool bPosChanged = (aPos.Tab() >= rCxt.mnDeletePos + rCxt.mnSheets);
-    pCode->Reset();
-    if (pDocument->IsClipOrUndo() || !pCode->GetNextReferenceRPN())
+    if (pDocument->IsClipOrUndo() || !pCode->HasReferences())
     {
         if (bPosChanged)
             aPos.IncTab(-1*rCxt.mnSheets);
@@ -3287,8 +3282,7 @@ void ScFormulaCell::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTab
     // Adjust tokens only when it's not grouped or grouped top cell.
     bool bAdjustCode = !mxGroup || mxGroup->mpTopCell == this;
 
-    pCode->Reset();
-    if (!pCode->GetNextReferenceRPN() || pDocument->IsClipOrUndo())
+    if (!pCode->HasReferences() || pDocument->IsClipOrUndo())
     {
         aPos.SetTab(nTabNo);
         return;
