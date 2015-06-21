@@ -3227,18 +3227,12 @@ bool adjustSingleRefInName(
         return false;
     }
 
-    if (rRef.IsColRel() || rRef.IsRowRel())
-    {
-        // Adjust references only when both column and row are absolute.
-        return false;
-    }
-
     if (!rCxt.maRange.In(rRef.toAbs(rPos)))
         return false;
 
     bool bChanged = false;
 
-    if (rCxt.mnColDelta)
+    if (rCxt.mnColDelta && !rRef.IsColRel())
     {
         // Adjust absolute column reference.
         if (rCxt.maRange.aStart.Col() <= rRef.Col() && rRef.Col() <= rCxt.maRange.aEnd.Col())
@@ -3248,7 +3242,7 @@ bool adjustSingleRefInName(
         }
     }
 
-    if (rCxt.mnRowDelta)
+    if (rCxt.mnRowDelta && !rRef.IsRowRel())
     {
         // Adjust absolute row reference.
         if (rCxt.maRange.aStart.Row() <= rRef.Row() && rRef.Row() <= rCxt.maRange.aEnd.Row())
