@@ -59,7 +59,7 @@
     <key>CFBundleIconFile</key>
     <string></string>
     <key>CFBundleIdentifier</key>
-    <string>org.libreoffice.mdimporter</string>
+    <string>com.collaboraoffice.mdimporter</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleVersion</key>
@@ -82,6 +82,6 @@
     </dict>
     <key>CFPlugInUnloadFunction</key>
     <string></string>
-        
+
 </dict>
 </plist>
