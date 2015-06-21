@@ -59,7 +59,7 @@
     <key>CFBundleIconFile</key>
     <string></string>
     <key>CFBundleIdentifier</key>
-    <string>org.openoffice.mdimporter</string>
+    <string>org.libreoffice.mdimporter</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleVersion</key>
