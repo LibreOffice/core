@@ -1113,7 +1113,7 @@ sal_uInt16 RtfExport::GetRedline(const OUString& rAuthor)
     if (i != m_aRedlineTable.end())
         return i->second;
 
-    int nId = m_aRedlineTable.size();
+    const sal_uInt16 nId = static_cast<sal_uInt16>(m_aRedlineTable.size());
     m_aRedlineTable.insert(std::pair<OUString,sal_uInt16>(rAuthor,nId));
     return nId;
 }
