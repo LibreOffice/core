@@ -343,7 +343,7 @@ bool SotExchange::GetFormatDataFlavor( SotClipboardFormatId nFormat, DataFlavor&
     {
         tDataFlavorList& rL = InitFormats_Impl();
 
-        unsigned i = static_cast<int>(nFormat) - static_cast<int>(SotClipboardFormatId::USER_END) + 1;
+        unsigned i = static_cast<int>(nFormat) - static_cast<int>(SotClipboardFormatId::USER_END) - 1;
 
         if( rL.size() > i )
         {
@@ -377,7 +377,7 @@ OUString SotExchange::GetFormatMimeType( SotClipboardFormatId nFormat )
     {
         tDataFlavorList& rL = InitFormats_Impl();
 
-        unsigned i = static_cast<int>(nFormat) - static_cast<int>(SotClipboardFormatId::USER_END) + 1;
+        unsigned i = static_cast<int>(nFormat) - static_cast<int>(SotClipboardFormatId::USER_END) - 1;
 
         if( rL.size() > i )
             sMimeType = rL[ i ]->MimeType;
