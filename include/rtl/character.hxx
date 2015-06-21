@@ -261,7 +261,7 @@ inline bool isLowSurrogate(sal_uInt32 code) {
 inline sal_Unicode getHighSurrogate(sal_uInt32 code) {
     assert(code <= 0x10FFFF);
     assert(code >= 0x10000);
-    return ((code - 0x10000) >> 10) | detail::surrogatesHighFirst;
+    return static_cast<sal_Unicode>(((code - 0x10000) >> 10) | detail::surrogatesHighFirst);
 }
 
 /** Get low surrogate half of a non-BMP Unicode code point.
@@ -275,7 +275,7 @@ inline sal_Unicode getHighSurrogate(sal_uInt32 code) {
 inline sal_Unicode getLowSurrogate(sal_uInt32 code) {
     assert(code <= 0x10FFFF);
     assert(code >= 0x10000);
-    return ((code - 0x10000) & 0x3FF) | detail::surrogatesLowFirst;
+    return static_cast<sal_Unicode>(((code - 0x10000) & 0x3FF) | detail::surrogatesLowFirst);
 }
 
 /** Combine surrogates to form a code point.
