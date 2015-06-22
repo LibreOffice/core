@@ -63,10 +63,10 @@ bool FieldCode::Read(HWPFile & hwpf)
 {
     uint size;
     hchar dummy;
-    uint len1;       /* hchar타입의 문자열 테이터 #1의 길이 */
-    uint len2;       /* hchar타입의 문자열 테이터 #2의 길이 */
-    uint len3;       /* hchar타입의 문자열 테이터 #3의 길이 */
-    uint binlen;     /* 임의 형식의 바이너리 데이타 길이 */
+    uint len1;       /* Length of hchar type string DATA #1 */
+    uint len2;       /* Length of hchar type string DATA #2 */
+    uint len3;       /* Length of hchar type string DATA #3 */
+    uint binlen;     /* Length of any binary data format */
 
     hwpf.Read4b(&size, 1);
     hwpf.Read2b(&dummy, 1);
@@ -100,7 +100,7 @@ bool FieldCode::Read(HWPFile & hwpf)
 
     hwpf.ReadBlock(bin, binlen);
 
-     if( type[0] == 3 && type[1] == 2 ){ /* 만든날짜로서 포맷을 생성해야 한다. */
+     if( type[0] == 3 && type[1] == 2 ){ /* It must create a format as created date. */
           DateCode *pDate = new DateCode;
           for (int i = 0 ; i < static_cast<int>(len3_); i++) {
                 if(str3[i] == 0 ) break;
@@ -377,55 +377,55 @@ bool Picture::Read(HWPFile & hwpf)
     hwpf.AddBox(this);
 
     hwpf.Read4b(&follow_block_size, 1);
-    hwpf.Read2b(&dummy1, 1);                      /* 예약 4바이트 */
+    hwpf.Read2b(&dummy1, 1);                      /* Reserved 4 bytes */
     hwpf.Read2b(&dummy2, 1);
 
     style.boxnum = fboxnum++;
      zorder = zindex++;
-    hwpf.Read1b(&style.anchor_type, 1);           /* 기준위치 */
-    hwpf.Read1b(&style.txtflow, 1);               /* 그림피함. 0-2(자리차지,투명,어울림) */
-    hwpf.Read2b(&style.xpos, 1);                  /* 가로위치 : 1 왼쪽, 2오른쪽, 3 가운데, 이외 = 임의 */
-    hwpf.Read2b(&style.ypos, 1);                  /* 세로위치 : 1 위, 2 아래, 3 가운데, 이외 임의 */
-    hwpf.Read2b(&option, 1);                      /* 기타옵션 : 테두리,그림반전,등. bit로 저장. */
-    hwpf.Read2b(&ctrl_ch, 1);                     /* 항상 11 */
-    hwpf.Read2b(style.margin, 12);                /* 여백 : [0-2][] out/in/셀,[][0-3] 왼/오른/위/아래 여백 */
-    hwpf.Read2b(&box_xs, 1);                      /* 박스크기 가로 */
-    hwpf.Read2b(&box_ys, 1);                      /* 세로 */
-    hwpf.Read2b(&cap_xs, 1);                      /* 캡션 크기 가로 */
-    hwpf.Read2b(&cap_ys, 1);                      /* 세로 */
-    hwpf.Read2b(&style.cap_len, 1);               /* 길이 */
-    hwpf.Read2b(&xs, 1);                          /* 전체 크기(박스 크기 + 캡션 + 여백) 가로 */
-    hwpf.Read2b(&ys, 1);                          /* 세로 */
-    hwpf.Read2b(&cap_margin, 1);                  /* 캡션 여백 */
+    hwpf.Read1b(&style.anchor_type, 1);           /* Reference position */
+    hwpf.Read1b(&style.txtflow, 1);               /* Avoid painting. 0-2 (seat occupied, transparency, harmony) */
+    hwpf.Read2b(&style.xpos, 1);                  /* Horizontal position: 1=left, 2=right, 3=center, and others=any */
+    hwpf.Read2b(&style.ypos, 1);                  /* Vertical position: 1=top, 2=down, 3=middle, and others=any */
+    hwpf.Read2b(&option, 1);                      /* Other options: Borders, reverse picture, and so on. Save as bit. */
+    hwpf.Read2b(&ctrl_ch, 1);                     /* Always 11 */
+    hwpf.Read2b(style.margin, 12);                /* Margin: [0-2] [] out / in / cell, [], [0-3] left / right / top / bottom margins */
+    hwpf.Read2b(&box_xs, 1);                      /* Box Size Width */
+    hwpf.Read2b(&box_ys, 1);                      /* Vertical */
+    hwpf.Read2b(&cap_xs, 1);                      /* Caption Size Width */
+    hwpf.Read2b(&cap_ys, 1);                      /* Vertical */
+    hwpf.Read2b(&style.cap_len, 1);               /* Length */
+    hwpf.Read2b(&xs, 1);                          /* The total size (box size + caption + margin) Horizontal */
+    hwpf.Read2b(&ys, 1);                          /* Vertical */
+    hwpf.Read2b(&cap_margin, 1);                  /* Caption margins */
     hwpf.Read1b(&xpos_type, 1);
     hwpf.Read1b(&ypos_type, 1);
-    hwpf.Read1b(&smart_linesp, 1);                /* 줄간격 보호 : 0 미보호, 1 보호 */
+    hwpf.Read1b(&smart_linesp, 1);                /* Line Spacing protection: 0 unprotected 1 protected */
     hwpf.Read1b(&reserved1, 1);
-    hwpf.Read2b(&pgx, 1);                         /* 실제 계산된 박스 가로 */
-    hwpf.Read2b(&pgy, 1);                         /* 세로 */
-    hwpf.Read2b(&pgno, 1);                        /* 페이지 숫자 : 0부터 시작 */
-    hwpf.Read2b(&showpg, 1);                      /* 박스보여줌 */
-    hwpf.Read2b(&cap_pos, 1);                     /* 캡션위치 0 - 7 메뉴순서. */
-    hwpf.Read2b(&num, 1);                         /* 박스번호 0부터 시작해서 매긴일련번호 */
+    hwpf.Read2b(&pgx, 1);                         /* Real Calculated box width */
+    hwpf.Read2b(&pgy, 1);                         /* Height */
+    hwpf.Read2b(&pgno, 1);                        /* Page number: starts from 0 */
+    hwpf.Read2b(&showpg, 1);                      /* Show the Box */
+    hwpf.Read2b(&cap_pos, 1);                     /* Caption positions 0-7 Menu Order. */
+    hwpf.Read2b(&num, 1);                         /* Box number, serial number which starts from 0 */
 
-    hwpf.Read1b(&pictype, 1);                     /* 그림종류 */
+    hwpf.Read1b(&pictype, 1);                     /* Picture type */
 
     unsigned short tmp16;
-    if (!hwpf.Read2b(tmp16))                      /* 그림에서 실제 표시를 시작할 위치 가로 */
+    if (!hwpf.Read2b(tmp16))                      /* the real horizontal starting point where shows the picture */
         return false;
     skip[0] = tmp16;
-    if (!hwpf.Read2b(tmp16))                      /* 세로 */
+    if (!hwpf.Read2b(tmp16))                      /* Vertical */
         return false;
     skip[1] = tmp16;
-    if (!hwpf.Read2b(tmp16))                      /* 확대비율 : 0 고정, 이외 퍼센트 단위 가로 */
+    if (!hwpf.Read2b(tmp16))                      /* Zoom Ratio: 0:fixed, others are percentage for horizontal */
         return false;
     scale[0] = tmp16;
-    if (!hwpf.Read2b(tmp16))                      /* 세로 */
+    if (!hwpf.Read2b(tmp16))                      /* Vertical */
         return false;
     scale[1] = tmp16;
 
-    hwpf.Read1b(picinfo.picun.path, 256);         /* 그림파일 이름 : 종류가 Drawing이 아닐때. */
-    hwpf.Read1b(reserved3, 9);                    /* 밝기/명암/그림효과 등 */
+    hwpf.Read1b(picinfo.picun.path, 256);         /* Picture File Name: when type is not a Drawing. */
+    hwpf.Read1b(reserved3, 9);                    /* Brightness / Contrast / Picture Effect, etc. */
 
     UpdateBBox(this);
     if( pictype != PICTYPE_DRAW )
@@ -460,7 +460,7 @@ bool Picture::Read(HWPFile & hwpf)
         style.boxtype = 'D';
     hwpf.AddFBoxStyle(&style);
 
-// cation
+// caption
     hwpf.ReadParaList(caption);
 
     return !hwpf.State();
@@ -834,7 +834,7 @@ bool Outline::Read(HWPFile & hwpf)
 }
 
 
-/* 묶음 빈칸(30) */
+/* Bundle of spaces (30)*/
 KeepSpace::KeepSpace()
     : HBox(CH_KEEP_SPACE)
     , dummy(0)
@@ -853,7 +853,7 @@ bool KeepSpace::Read(HWPFile & hwpf)
 }
 
 
-/* 고정폭 빈칸(31) */
+/* Fixed-width spaces (31) */
 FixedSpace::FixedSpace()
     : HBox(CH_FIXED_SPACE)
     , dummy(0)

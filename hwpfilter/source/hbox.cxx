@@ -451,7 +451,7 @@ Footnote::~Footnote()
 // auto number(18)
 // new number(19)
 // show page number (20)
-// 홀수쪽시작/감추기 (21)
+// Start/Hide odd-numbered side (21)
 
 // mail merge(22)
 hchar_string MailMerge::GetString()
@@ -597,9 +597,9 @@ static void getOutlineNumStr(int style, int level, int num, hchar * hstr)
 enum
 { OUTLINE_ON, OUTLINE_NUM };
 
-/*  level 은 0부터 시작. 즉 1.1.1. 의 레벨은 2이다.
-    number는 값이 그대로 들어가 있다. 즉, 1.2.1에는 1,2,1이 들어가 있다.
-    style 은 1부터 값이 들어가 있다. hbox.h에 정의된 데로..
+/* level starts from zero. ex) '1.1.1.' is the level 2.
+   number has the value. ex) '1.2.1' has '1,2,1'
+   style has the value which starts from 1 according to the definition in hbox.h
  */
 hchar_string Outline::GetUnicode() const
 {
@@ -658,17 +658,17 @@ hchar_string Outline::GetUnicode() const
                     if( deco[i][0] ){
                         buffer[l++] = deco[i][0];
                     }
-/*  level 은 0부터 시작. 즉 1.1.1. 의 레벨은 2이다.
-    number는 값이 그대로 들어가 있다. 즉, 1.2.1에는 1,2,1이 들어가 있다.
-    style 은 1부터 값이 들어가 있다. hbox.h에 정의된 데로..
+/* level starts from zero. ex) '1.1.1.' is the level 2.
+   number has the value. ex) '1.2.1' has '1,2,1'
+   style has the value which starts from 1 according to the definition in hbox.h
  */
                     switch( user_shape[i] )
                     {
                         case 0:
                             buffer[l++] = '1' + number[i] - 1;
                             break;
-                        case 1: /* 대문자로마 */
-                        case 2: /* 소문자로마 */
+                        case 1: /* Uppercase Roman */
+                        case 2: /* Lowercase Roman */
                             num2roman(number[i], dest);
                             if( user_shape[i] == 1 ){
                                 char *ptr = dest;
@@ -693,22 +693,22 @@ hchar_string Outline::GetUnicode() const
                         case 6:
                             buffer[l++] = olHanglJaso(number[i] -1, OL_HANGL_JASO);
                             break;
-                        case 7: /* 한자 숫자 : 일반 숫자로 표현 */
+                        case 7: /* Chinese numbers: the number represented by the general */
                             buffer[l++] = '1' + number[i] -1;
                             break;
-                        case 8: /* 원숫자 */
+                        case 8: /* Circled numbers */
                             buffer[l++] = 0x2e00 + number[i];
                             break;
-                        case 9: /* 원 알파벳 소문자 */
+                        case 9: /* Circled lowercase alphabet */
                             buffer[l++] = 0x2c20 + number[i];
                             break;
-                        case 10: /* 원 가나다 */
+                        case 10: /* Circled Korean Alphabet */
                             buffer[l++] = 0x2c50 + number[i] -1;
                             break;
-                        case 11: /* 원 ㄱ ㄴ */
+                        case 11: /* Circled Korean Characters */
                             buffer[l++] = 0x2c40 + number[i] -1;
                             break;
-                        case 12: /* 이어진 숫자. */
+                        case 12: /* Sequenced numbers. */
                         {
                              char cur_num_str[10],buf[80];
                              int j;
@@ -742,7 +742,7 @@ hchar_string Outline::GetUnicode() const
 }
 
 
-/* 묶음 빈칸(30) */
-/* 고정폭 빈칸(31) */
+/* Bundle of spaces (30) */
+/* Fixed-width spaces (31) */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

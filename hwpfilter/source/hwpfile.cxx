@@ -389,7 +389,7 @@ ColumnDef *HWPFile::GetColumnDef(int num)
     else
         return 0;
 }
-/* @return 인덱스는 1부터 시작한다. */
+/* Index of @return starts from 1 */
 int HWPFile::GetPageMasterNum(int page)
 {
     std::list<ColumnInfo*>::iterator it = columnlist.begin();

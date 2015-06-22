@@ -383,7 +383,7 @@ void Formula::makeDecoration(Node *res)
      else
           fprintf(stderr,"<math:munder>\n");
 #else
-     /* accent는 언제 true이고, 언제, false인지 모르겠다. */
+     /* FIXME: no idea when 'accent' is true or false. */
      if( isover ){
           padd("accent","CDATA","true");
           rstartEl("math:mover", rList);
