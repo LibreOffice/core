@@ -633,7 +633,7 @@ IMPL_LINK( OFieldDescControl, ChangeHdl, ListBox *, pListBox )
     if ( pListBox->IsValueChangedFromSaved() )
         SetModified(true);
 
-    // Special treatment for Boold fields
+    // Special treatment for Bool fields
     if(pListBox == pRequired && pBoolDefault )
     {
         // If pRequired = sal_True then the sal_Bool field must NOT contain <<none>>

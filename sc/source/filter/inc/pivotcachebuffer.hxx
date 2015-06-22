@@ -140,7 +140,7 @@ private:
 struct PCFieldModel
 {
     OUString     maName;             /// Fixed name of the cache field.
-    OUString     maCaption;          /// Caption of the ccahe field.
+    OUString     maCaption;          /// Caption of the cache field.
     OUString     maPropertyName;     /// OLAP property name.
     OUString     maFormula;          /// Formula of a calculated field.
     sal_Int32           mnNumFmtId;         /// Number format for all items.

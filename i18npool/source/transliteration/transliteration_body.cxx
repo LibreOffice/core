@@ -281,7 +281,7 @@ static OUString transliterate_titlecase_Impl(
         // toUpper can be used to properly resolve ligatures and characters like Beta
         aResolvedLigature = aCharClassImpl.toUpper( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
         // since toTitle will leave all-uppercase text unchanged we first need to
-        // use toLower to bring possible 2nd and following charas in lowercase
+        // use toLower to bring possible 2nd and following chars in lowercase
         aResolvedLigature = aCharClassImpl.toLower( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
         sal_Int32 nResolvedLen = aResolvedLigature.getLength();
 

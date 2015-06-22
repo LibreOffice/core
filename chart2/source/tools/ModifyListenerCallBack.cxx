@@ -49,7 +49,7 @@ public:
     using ::cppu::WeakComponentImplHelperBase::disposing;
 
 private:
-    Link<> m_aLink;//will be callef on modify
+    Link<> m_aLink;//will be called on modify
     Reference< util::XModifyBroadcaster > m_xBroadcaster;//broadcaster to listen at
 };
 

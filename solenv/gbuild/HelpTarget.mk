@@ -281,7 +281,7 @@ gb_HelpLinkTarget_DEPS := \
 	$(gb_HelpLinkTarget_IDXCONTENTTARGET)
 
 # delete index files here too just to be on the safe side...
-# the index files in the .idxl dir are ceated by HelpIndexer,
+# the index files in the .idxl dir are created by HelpIndexer,
 # the ones outside the dir by HelpLinker
 define gb_HelpLinkTarget__command
 $(call gb_Output_announce,$(2),$(true),HLK,3)

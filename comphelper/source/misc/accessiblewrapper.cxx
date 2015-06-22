@@ -128,7 +128,7 @@ namespace comphelper
             return xValue;
         }
 
-        // do we have this child in the cahce?
+        // do we have this child in the cache?
         AccessibleMap::const_iterator aPos = m_aChildrenMap.find( _rxKey );
         if ( m_aChildrenMap.end() != aPos )
         {

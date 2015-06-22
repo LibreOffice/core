@@ -314,7 +314,7 @@ OUString EditorWindow::GetWordAtCursor()
             if ( aWord.isEmpty() )
                 aWord = pTextEngine->GetWord( rSelEnd );
 
-            // Can be empty when full word selected, as Cursor behing it
+            // Can be empty when full word selected, as Cursor behind it
             if ( aWord.isEmpty() && pEditView->HasSelection() )
                 aWord = pTextEngine->GetWord( rSelStart );
         }

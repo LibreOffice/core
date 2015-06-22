@@ -127,7 +127,7 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const OUString& url, con
     if (m_pCreationFunc)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        //We must make sure we create an com.sun.star.mozilla.MozillaBootstrap brfore call any mozilla codes
+        //We must make sure we create an com.sun.star.mozilla.MozillaBootstrap before call any mozilla codes
         Reference<XInterface> xInstance = m_xMSFactory->createInstance("com.sun.star.mozilla.MozillaBootstrap");
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
 

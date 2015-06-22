@@ -71,7 +71,7 @@ public class _XMutableTreeNode extends MultiMethodTest {
         try {
             oObj.appendChild(myNode);
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("ERROR: could not appedn a valid node: " + ex.toString());
+            log.println("ERROR: could not append a valid node: " + ex.toString());
             bOK = false;
         }
 

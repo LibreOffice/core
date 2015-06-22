@@ -1034,7 +1034,7 @@ bool OutputDevice::RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, 
                     }
                     else
                     {
-                        // #107169# Fixes abnove now ensure that _no_
+                        // #107169# Fixes above now ensure that _no_
                         // object in the list is fully transparent. Thus,
                         // if the component list is not empty above, we
                         // must assume that we have to treat this

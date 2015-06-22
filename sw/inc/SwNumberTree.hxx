@@ -494,7 +494,7 @@ protected:
     /**
        Set this node as last valid child of its parent.
 
-       @param bValidation    see aboce
+       @param bValidation    see above
      */
     void SetLastValid(bool bValidating) const;
 

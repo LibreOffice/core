@@ -95,7 +95,7 @@ namespace svt
                 break;
 
             default:
-                // it's a known scheme, but no file-URL -> assume that bothe the URL representation and the
+                // it's a known scheme, but no file-URL -> assume that both the URL representation and the
                 // system representation are the URL itself
                 m_sSystem = m_sFileURL = _rUrlOrPath;
                 bSuccess = true;

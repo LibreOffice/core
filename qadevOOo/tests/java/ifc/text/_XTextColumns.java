@@ -89,7 +89,7 @@ public class _XTextColumns extends MultiMethodTest {
      * Sets columns to some array
      * then checks it by <code>getColumns</code> method. <p>
      *
-     * Has <b>OK</b> status if set and get arays are equal.
+     * Has <b>OK</b> status if set and get arrays are equal.
      */
     public void _setColumns(){
 

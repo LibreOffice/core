@@ -321,7 +321,7 @@ Reference< XHyphenatedWord > SAL_CALL
         if (xEntry.is())
         {
             //! because queryDictionaryEntry (in the end DictionaryNeo::getEntry)
-            //! does not distinguish betwee "XYZ" and "XYZ." in order to avoid
+            //! does not distinguish between "XYZ" and "XYZ." in order to avoid
             //! to require them as different entry we have to supply the
             //! original word here as well so it can be used in th result
             //! otherwise a strange effect may occur (see #i22591#)

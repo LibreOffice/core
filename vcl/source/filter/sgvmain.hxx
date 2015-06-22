@@ -232,7 +232,7 @@ public:
     sal_uInt8       Flags;     // (cheat due to alignment in NT)
     sal_uInt8       LEnden;    // only arcs (circle & ellips)
     ObjLineType     L;
-    ObjAreaType     F;         // not for arcs (circly & ellips)
+    ObjAreaType     F;         // not for arcs (circle & ellips)
     PointType       Center;    // center
     PointType       Radius;    // radius
     sal_uInt16      RotationAngle;  // only ellipses

@@ -58,7 +58,7 @@ public class _XPrintJobBroadcaster extends MultiMethodTest {
     }
 
     /**
-     * remove the listener, see if it's still caleed.
+     * remove the listener, see if it's still called.
      */
     public void _removePrintJobListener() {
         requiredMethod("addPrintJobListener");

@@ -49,8 +49,8 @@ import com.sun.star.uno.UnoRuntime;
 * Other <b> prerequicity </b> is the object must have
 * <code>TargetURL</code> property. <p>
 *
-* Short description : test adds two listeners, call
-* <code> submit </code> method and cecks if both listeners
+* Short description: test adds two listeners, call
+* <code> submit </code> method and checks if both listeners
 * were called. Then one listener is removed and after
 * <code> submit </code> method call it must not be called. <p>
 *

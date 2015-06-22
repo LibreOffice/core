@@ -61,7 +61,7 @@ namespace sdr
             friend class                                    OverlayManager;
 
             // pointer to OverlayManager, if object is added. Changed by
-            // OverlayManager, do not chnge Yourself.
+            // OverlayManager, do not change Yourself.
             OverlayManager*                                 mpOverlayManager;
 
             // Primitive2DSequence of the OverlayObject

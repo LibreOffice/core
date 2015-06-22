@@ -214,7 +214,7 @@
         <xsl:param name="number-format"/>
         <xsl:choose>
             <xsl:when test="$number-format = 'a'">
-                <!-- nfcLCLetter: Lowercase alpah -->
+                <!-- nfcLCLetter: Lowercase alpha -->
                 <w:nfc w:val="4"/>
             </xsl:when>
             <xsl:when test="$number-format = 'A'">

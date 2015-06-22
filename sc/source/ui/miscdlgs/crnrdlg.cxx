@@ -788,7 +788,7 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, ColClickHdl)
     return 0;
 }
 
-// handler for the radio buttom for columns, adjust range
+// handler for the radio button for columns, adjust range
 IMPL_LINK_NOARG(ScColRowNameRangesDlg, RowClickHdl)
 {
     if ( !pBtnRowHead->GetSavedValue() )

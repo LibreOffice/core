@@ -228,7 +228,7 @@ public class EventTest {
     }
 
     /**
-     * This is the central test method. It is called by ceck[DOCTYPE]Document. It
+     * This is the central test method. It is called by check[DOCTYPE]Document. It
      * creates the <CODE>XUserInputInterception</CODE> from the document and call the
      * <CODE>checkMouseListener</CODE> test and the <CODE>checkKeyListener</CODE> test
      * @param xDoc the document to test

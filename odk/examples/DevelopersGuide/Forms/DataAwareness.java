@@ -591,7 +591,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
        ================================================================== */
 
     /* ------------------------------------------------------------------ */
-    /** creates the button used for demonstrating (amonst others) event handling
+    /** creates the button used for demonstrating (amongst others) event handling
         @param nXPos
             x-position of the to be inserted shape
         @param nYPos

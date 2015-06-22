@@ -40,7 +40,7 @@ public interface OfficeConnection
         throws java.net.MalformedURLException;
 
     /**
-     * Sets an AWT container catory.
+     * Sets an AWT container factory.
      *
      * @param containerFactory This is a application provided AWT container
      *  factory.

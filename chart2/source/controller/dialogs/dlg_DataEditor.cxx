@@ -131,7 +131,7 @@ IMPL_LINK_NOARG_TYPED(DataEditor, ToolboxHdl, ToolBox *, void)
         m_xBrwData->SwapRow();
 }
 
-// refresh toolbar icons according to currently selected cell in brwose box
+// refresh toolbar icons according to currently selected cell in browse box
 IMPL_LINK_NOARG(DataEditor, BrowserCursorMovedHdl)
 {
     if( m_bReadOnly )

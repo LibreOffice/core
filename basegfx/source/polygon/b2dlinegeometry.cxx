@@ -520,7 +520,7 @@ namespace basegfx
                     // is created; one cut point is known, but there is a 2nd one in the caps geometry.
                     // Solve by using tooling.
                     // Remark: This nearly never happens due to curve preparations to extreme points
-                    // and maximum angle turning, but I constructed a test case and checkd that it is
+                    // and maximum angle turning, but I constructed a test case and checked that it is
                     // working propery.
                     const B2DPolyPolygon aTemp(tools::solveCrossovers(aBezierPolygon));
                     const sal_uInt32 nTempCount(aTemp.count());

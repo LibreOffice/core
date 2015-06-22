@@ -464,7 +464,7 @@ public class PathSettingsTest
                     bResult = false;
                 }
 
-                // Property_internal can't change we will not arrive bejond this line
+                // Property_internal can't change we will not arrive beyond this line
 
                 // check the change
                 Object oObj = xFPS.getFastPropertyValue(handle);

@@ -1487,7 +1487,7 @@ bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 
     if (!bTextEdit)
     {
-        // no TextEdit activw -> all Items to drawing object
+        // no TextEdit active -> all Items to drawing object
         if( mxSelectionController.is() )
             bRet=mxSelectionController->SetAttributes(*pSet,bReplaceAll );
 

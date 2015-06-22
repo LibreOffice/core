@@ -167,7 +167,7 @@ namespace svgio
             OSL_ENSURE(!mbCssStyleVectorBuilt, "OOps, fillCssStyleVector called double ?!?");
             mbCssStyleVectorBuilt = true;
 
-            // #i125293# If we have CssStyles we need to buuild a linked list of SvgStyleAttributes
+            // #i125293# If we have CssStyles we need to build a linked list of SvgStyleAttributes
             // which represent this for the current object. There are various methods to
             // specify CssStyles which need to be taken into account in a given order:
             // - local CssStyle (independent from global CssStyles at SvgDocument)

@@ -1492,7 +1492,7 @@ short ScTable::CompareCell(
             if (eType2 == CELLTYPE_FORMULA && rCell2.mpFormula->IsValue())
                 bStr2 = false;
 
-            if ( bStr1 && bStr2 )           // nur Strings untereinander als String vergleichen!
+            if ( bStr1 && bStr2 )           // only compare strings as strings!
             {
                 OUString aStr1;
                 OUString aStr2;
@@ -1962,7 +1962,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     bool bIgnoreCase = !rParam.bCaseSens;
 
-    OUString *pCompString[MAXSUBTOTAL];               // Pointer due to compiler problemens
+    OUString *pCompString[MAXSUBTOTAL];               // Pointer due to compiler problems
     for (i=0; i<MAXSUBTOTAL; i++)
         pCompString[i] = new OUString;
 
@@ -1971,7 +1971,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
     ScStyleSheet* pStyle = static_cast<ScStyleSheet*>(pDocument->GetStyleSheetPool()->Find(
                                 ScGlobal::GetRscString(STR_STYLENAME_RESULT), SFX_STYLE_FAMILY_PARA ));
 
-    bool bSpaceLeft = true;                                         // Succsess when inserting?
+    bool bSpaceLeft = true;                                         // Success when inserting?
 
     // For performance reasons collect formula entries so their
     // references don't have to be tested for updates each time a new row is
@@ -2018,8 +2018,8 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             GetString( nGroupCol[i], nRow, aString );
                             if (bIgnoreCase)
                                 aString = ScGlobal::pCharClass->uppercase(aString);
-                            //  when sorting, blanks are seperate group
-                            //  otherwise blak cells are allowed below
+                            //  when sorting, blanks are separate group
+                            //  otherwise blank cells are allowed below
                             bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
                                             aString != *pCompString[i] );
                         }

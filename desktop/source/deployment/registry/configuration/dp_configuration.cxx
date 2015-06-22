@@ -749,7 +749,7 @@ void BackendImpl::PackageImpl::processPackage_(
             for (t_string2string_map::iterator i(entries.begin());
                  i != entries.end(); ++i)
             {
-                //If the xcu file was installed before the configmgr was chaned
+                //If the xcu file was installed before the configmgr was changed
                 //to use the configmgr.ini, one needed to rebuild to whole directory
                 //structure containing the xcu, xcs files from all extensions. Now,
                 //we just add all other xcu/xcs files to the configmgr.ini instead of
