@@ -1743,14 +1743,16 @@ bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) co
 ScTokenArray::ScTokenArray() :
     FormulaTokenArray(),
     mnHashValue(0),
-    meVectorState(FormulaVectorEnabled)
+    meVectorState(FormulaVectorEnabled),
+    mbFromRangeName(false)
 {
 }
 
 ScTokenArray::ScTokenArray( const ScTokenArray& rArr ) :
     FormulaTokenArray(rArr),
     mnHashValue(rArr.mnHashValue),
-    meVectorState(rArr.meVectorState)
+    meVectorState(rArr.meVectorState),
+    mbFromRangeName(rArr.mbFromRangeName)
 {
 }
 
@@ -1762,6 +1764,7 @@ ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
 {
     Clear();
     Assign( rArr );
+    mbFromRangeName = rArr.mbFromRangeName;
     return *this;
 }
 
@@ -1769,6 +1772,7 @@ void ScTokenArray::ClearScTokenArray()
 {
     Clear();
     meVectorState = FormulaVectorEnabled;
+    mbFromRangeName = false;
 }
 
 ScTokenArray* ScTokenArray::Clone() const
@@ -1781,6 +1785,7 @@ ScTokenArray* ScTokenArray::Clone() const
     p->bHyperLink = bHyperLink;
     p->mnHashValue = mnHashValue;
     p->meVectorState = meVectorState;
+    p->mbFromRangeName = mbFromRangeName;
 
     FormulaToken** pp;
     if( nLen )
