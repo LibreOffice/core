@@ -227,6 +227,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,impress, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,onlineupdate, \
 	$(if $(ENABLE_ONLINE_UPDATE), \
+		mar \
 		updatecheckui \
 		updchk \
 	) \
