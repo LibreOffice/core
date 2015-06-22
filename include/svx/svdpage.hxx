@@ -83,8 +83,7 @@ class SVX_DLLPUBLIC SdrObjList
     SdrObjList &operator=(const SdrObjList& rSrcList) SAL_DELETED_FUNCTION;
 
 private:
-    typedef ::std::vector<SdrObject*> SdrObjectContainerType;
-    SdrObjectContainerType maList;
+    ::std::vector<SdrObject*> maList;
 
 protected:
 friend class SdrObjListIter;
@@ -96,8 +95,8 @@ friend class SdrEditView;
     Rectangle   aOutRect;
     Rectangle   aSnapRect;
     SdrObjListKind eListKind;
-    bool    bObjOrdNumsDirty;
-    bool    bRectsDirty;
+    bool        bObjOrdNumsDirty;
+    bool        bRectsDirty;
 protected:
     void RecalcRects();
 
@@ -127,19 +126,17 @@ public:
     void           SetUpList(SdrObjList* pNewUpList)    { pUpList=pNewUpList; }
     SdrObject*     GetOwnerObj() const                  { return pOwnerObj; }
     void           SetOwnerObj(SdrObject* pNewOwner)    { pOwnerObj=pNewOwner; }
-    SdrPage* GetPage() const;
-    void     SetPage(SdrPage* pNewPage);
-    SdrModel* GetModel() const;
-    virtual void      SetModel(SdrModel* pNewModel);
+    SdrPage*       GetPage() const;
+    void           SetPage(SdrPage* pNewPage);
+    SdrModel*      GetModel() const;
+    virtual void   SetModel(SdrModel* pNewModel);
     /// recalculate order numbers / ZIndex
-    void     RecalcObjOrdNums();
-    bool IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
-    virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE
-                                 , const SdrInsertReason* pReason=NULL
-                                                                      );
-    virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE
-                              , const SdrInsertReason* pReason=NULL
-                                                                     );
+    void           RecalcObjOrdNums();
+    bool           IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
+    virtual void   NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE,
+                                   const SdrInsertReason* pReason=NULL);
+    virtual void   InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE,
+                                const SdrInsertReason* pReason=NULL);
     /// remove from list without delete
     virtual SdrObject* NbcRemoveObject(size_t nObjNum);
     virtual SdrObject* RemoveObject(size_t nObjNum);
@@ -248,8 +245,8 @@ public:
             Otherwise this list is expected to contain all the shapes in the
             called SdrObjList.
     */
-    void SetNavigationOrder (const ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XIndexAccess>& rxOrder);
+    void SetNavigationOrder (const css::uno::Reference<
+                             css::container::XIndexAccess>& rxOrder);
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
@@ -333,7 +330,7 @@ public:
     SdrPageGridFrameList(): aList()                                    {}
     ~SdrPageGridFrameList()                                            { Clear(); }
     void           Clear();
-    sal_uInt16         GetCount() const                                    { return sal_uInt16(aList.size()); }
+    sal_uInt16     GetCount() const                                    { return sal_uInt16(aList.size()); }
     void           Insert(const SdrPageGridFrame& rGF) { aList.push_back(new SdrPageGridFrame(rGF)); }
     void           Insert(const SdrPageGridFrame& rGF, sal_uInt16 nPos)
     {
@@ -453,7 +450,7 @@ protected:
     SdrLayerAdmin*      pLayerAdmin;
 private:
     SdrPageProperties*  mpSdrPageProperties;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoPage;
+    css::uno::Reference< css::uno::XInterface > mxUnoPage;
 
 public:
     SdrPageProperties& getSdrPageProperties() { return *mpSdrPageProperties; }
@@ -464,8 +461,8 @@ protected:
     // new MasterPageDescriptorVector
     sdr::MasterPageDescriptor*                    mpMasterPageDescriptor;
 
-    SetOfByte  aPrefVisiLayers;
-    sal_uInt16     nPageNum;
+    SetOfByte           aPrefVisiLayers;
+    sal_uInt16          nPageNum;
 
     // bitfield
     bool                mbMaster : 1;               // flag if this is a MasterPage
@@ -475,9 +472,9 @@ protected:
     // #i93597#
     bool                mbPageBorderOnlyLeftRight : 1;
 
-    void SetUnoPage(::com::sun::star::uno::Reference<
-                        ::com::sun::star::drawing::XDrawPage> const&);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
+    void                SetUnoPage(css::uno::Reference<
+                                   css::drawing::XDrawPage> const&);
+    virtual css::uno::Reference< css::uno::XInterface > createUnoPage();
 
     // Copying of pages is split into two parts: construction and copying of page objects,
     // because the copying might need access to fully initialized page. Clone() is responsible
@@ -493,10 +490,10 @@ public:
     virtual ~SdrPage();
     virtual SdrPage* Clone() const SAL_OVERRIDE;
     virtual SdrPage* Clone(SdrModel* pNewModel) const;
-    bool IsMasterPage() const       { return mbMaster; }
-    void SetInserted(bool bNew = true);
-    bool IsInserted() const         { return mbInserted; }
-    void SetChanged();
+    bool             IsMasterPage() const       { return mbMaster; }
+    void             SetInserted(bool bNew = true);
+    bool             IsInserted() const         { return mbInserted; }
+    void             SetChanged();
 
     // #i68775# React on PageNum changes (from Model in most cases)
     void SetPageNum(sal_uInt16 nNew);
@@ -551,7 +548,7 @@ public:
     bool IsObjectsNotPersistent() const          { return mbObjectsNotPersistent; }
     void SetObjectsNotPersistent(bool b)     { mbObjectsNotPersistent = b; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoPage();
+    css::uno::Reference< css::uno::XInterface > getUnoPage();
 
     virtual SfxStyleSheet* GetTextStyleSheetForObject( SdrObject* pObj ) const;
 
