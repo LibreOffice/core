@@ -332,6 +332,7 @@ extern "C" typelib_TypeClass cpp_vtable_call(
                             pInterface->release();
                             TYPELIB_DANGER_RELEASE( pTD );
 
+                            pStack[0] = pStack[3];
                             eRet = typelib_TypeClass_ANY;
                             break;
                         }
