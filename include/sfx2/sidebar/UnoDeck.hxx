@@ -67,7 +67,6 @@ private:
     sfx2::sidebar::SidebarController* getSidebarController();
 
     const OUString mDeckId;
-    const OUString mTitle;
 
     sal_Int32 GetMaxOrderIndex(sfx2::sidebar::ResourceManager::DeckContextDescriptorContainer aDecks);
     sal_Int32 GetMinOrderIndex(sfx2::sidebar::ResourceManager::DeckContextDescriptorContainer aDecks);

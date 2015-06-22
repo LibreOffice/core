@@ -24,8 +24,7 @@ using namespace ::sfx2::sidebar;
 
 SfxUnoDeck::SfxUnoDeck(const uno::Reference<frame::XFrame>& rFrame, const OUString& deckId):
 xFrame(rFrame),
-mDeckId(deckId),
-mTitle(deckId)
+mDeckId(deckId)
 {
 
 }
