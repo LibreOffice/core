@@ -125,16 +125,49 @@ static void toggleFindbar(GtkWidget* /*pButton*/, gpointer /*pItem*/)
     }
 }
 
+/// Our GtkClipboardGetFunc implementation for HTML.
+static void htmlGetFunc(GtkClipboard* /*pClipboard*/, GtkSelectionData* pSelectionData, guint /*info*/, gpointer pUserData)
+{
+    GdkAtom aAtom(gdk_atom_intern("text/html", false));
+    const gchar* pSelection = static_cast<const gchar*>(pUserData);
+    gtk_selection_data_set(pSelectionData, aAtom, 8, reinterpret_cast<const guchar *>(pSelection), strlen(pSelection));
+}
+
+/// Our GtkClipboardClearFunc implementation for HTML.
+static void htmlClearFunc(GtkClipboard* /*pClipboard*/, gpointer pData)
+{
+    g_free(pData);
+}
+
+/// Same as gtk_clipboard_set_text(), but sets HTML.
+static void clipboardSetHtml(GtkClipboard* pClipboard, const char* pSelection)
+{
+    GtkTargetList* pList = gtk_target_list_new(0, 0);
+    GdkAtom aAtom(gdk_atom_intern("text/html", false));
+    gtk_target_list_add(pList, aAtom, 0, 0);
+    gint nTargets = 0;
+    GtkTargetEntry* pTargets = gtk_target_table_new_from_list(pList, &nTargets);
+
+    gtk_clipboard_set_with_data(pClipboard, pTargets, nTargets, htmlGetFunc, htmlClearFunc, g_strdup(pSelection));
+
+    gtk_target_table_free(pTargets, nTargets);
+    gtk_target_list_unref(pList);
+}
+
 /// Handler for the copy button: write clipboard.
 static void doCopy(GtkWidget* /*pButton*/, gpointer /*pItem*/)
 {
     LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pLOKDocView);
     char* pUsedFormat = 0;
-    char* pSelection = pDocument->pClass->getTextSelection(pDocument, "text/plain;charset=utf-8", &pUsedFormat);
+    char* pSelection = pDocument->pClass->getTextSelection(pDocument, "text/html", &pUsedFormat);
 
     GtkClipboard* pClipboard = gtk_clipboard_get_for_display(gtk_widget_get_display(pDocView), GDK_SELECTION_CLIPBOARD);
-    gtk_clipboard_set_text(pClipboard, pSelection, -1);
+    std::string aUsedFormat(pUsedFormat);
+    if (aUsedFormat == "text/plain;charset=utf-8")
+        gtk_clipboard_set_text(pClipboard, pSelection, -1);
+    else
+        clipboardSetHtml(pClipboard, pSelection);
 
     free(pSelection);
     free(pUsedFormat);
