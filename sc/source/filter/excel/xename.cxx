@@ -548,7 +548,8 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         xName->SetTokenArray( xTokArr );
 
         OUString sSymbol;
-        rRangeData.GetSymbol( sSymbol, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 );
+        rRangeData.GetSymbol( sSymbol, ((GetOutput() == EXC_OUTPUT_BINARY) ?
+                    formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 : formula::FormulaGrammar::GRAM_OOXML));
         xName->SetSymbol( sSymbol );
 
         /*  Try to replace by existing built-in name - complete token array is
