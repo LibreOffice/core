@@ -60,7 +60,7 @@ endif
 	$(foreach lib,$(gb_SdkLinkLibrary_MODULE_$*),\
 		echo 'SDK_LIBRARY_LINK(auto_$*_link_$(lib),$(notdir $(call gb_Library_get_sdk_link_lib,$(lib))),../../program/$(call gb_Library_get_runtime_filename,$(lib)))' >> $@;)
 	$(foreach exe,$(gb_Executable_MODULE_$*),\
-		echo "$(SCP2EXETEMPLATE)(auto_$*_exe_$(subst .,_,$(subst -,_,$(exe))),$(call gb_Executable_get_filename,$(exe)))" >> $@;)
+		echo "$(SCP2EXETEMPLATE)(auto_$*_exe_$(subst .,_,$(subst -,_,$(exe))),$(call gb_Executable_get_filename,$(exe))$(if $(SCP2COMPONENTCONDITION),$(COMMA)$(SCP2COMPONENTCONDITION)))" >> $@;)
 	$(foreach jar,$(gb_Jar_MODULE_$*),\
 		echo '$(SCP2JARTEMPLATE)(auto_$*_jar_$(subst .,_,$(subst -,_,$(jar))),$(jar).jar)' >> $@;)
 	$(foreach pkg,$(gb_Package_MODULE_$*),\

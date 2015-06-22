@@ -538,6 +538,15 @@ End
         Styles = (PACKED); \
     End
 
+#define LIBO_EXECUTABLE_COMPONENTCONDITION(id,name,cond) \
+    File id \
+        BIN_FILE_BODY; \
+        Dir = gid_Brand_Dir_Program; \
+        Name = name; \
+        Styles = (PACKED); \
+        ComponentCondition = cond; \
+    End
+
 #define SDK_EXECUTABLE(id,name) \
     File id \
         BIN_FILE_BODY; \
