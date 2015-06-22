@@ -17,6 +17,7 @@
 
 #include "scdll.hxx"
 #include "formulacell.hxx"
+#include "simpleformulacalc.hxx"
 #include "stringutil.hxx"
 #include "scmatrix.hxx"
 #include "drwlayer.hxx"
@@ -6466,6 +6467,21 @@ void Test::testMixData()
 
     CPPUNIT_ASSERT_EQUAL( -3.0, m_pDoc->GetValue(ScAddress(1,0,0))); // 12 - 15
     CPPUNIT_ASSERT_EQUAL(-16.0, m_pDoc->GetValue(ScAddress(1,1,0))); //  0 - 16
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testFormulaWizardSubformula()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(ScAddress(0,0,0), "=B0:B2");
+    m_pDoc->SetString(ScAddress(0,1,0), "=1");          // B0
+    m_pDoc->SetString(ScAddress(1,1,0), "=1/0");        // B1
+    m_pDoc->SetString(ScAddress(2,1,0), "=gibberish");  // B2
+    ScSimpleFormulaCalculator pFCell( m_pDoc, ScAddress(0,0,0), "" );
+    if ( pFCell.GetErrCode() == 0 )
+        CPPUNIT_ASSERT_EQUAL( OUString("{1, #DIV/0!, #NAME!}"), pFCell.GetString().getString() );
 
     m_pDoc->DeleteTab(0);
 }

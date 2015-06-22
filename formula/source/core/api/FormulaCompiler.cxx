@@ -1862,6 +1862,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                 CreateStringFromDoubleRef( rBuffer, t);
                 break;
             case svMatrix:
+            case svMatrixCell:
                 CreateStringFromMatrix( rBuffer, t );
                 break;
 

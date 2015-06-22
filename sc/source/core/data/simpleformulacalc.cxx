@@ -20,9 +20,12 @@ ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const Sc
     , mbCalculated(false)
     , maAddr(rAddr)
     , mpDoc(pDoc)
+    , maFormula(rFormula)
+    , maGram(eGram)
+    , bIsMatrix(false)
 {
     // compile already here
-    ScCompiler aComp(pDoc, rAddr);
+    ScCompiler aComp(mpDoc, maAddr);
     aComp.SetGrammar(eGram);
     mpCode.reset(aComp.CompileString(rFormula));
     if(!mpCode->GetCodeError() && mpCode->GetLen())
@@ -40,8 +43,21 @@ void ScSimpleFormulaCalculator::Calculate()
 
     mbCalculated = true;
     ScInterpreter aInt(NULL, mpDoc, maAddr, *mpCode.get());
-    aInt.Interpret();
+    aInt.AssertFormulaMatrix();
 
+    formula::StackVar aIntType = aInt.Interpret();
+    if ( aIntType == formula::svMatrixCell )
+    {
+        OUStringBuffer aStr;
+        ScCompiler aComp(mpDoc, maAddr);
+        aComp.SetGrammar(maGram);
+        mpCode.reset(aComp.CompileString(maFormula));
+        if(!mpCode->GetCodeError() && mpCode->GetLen())
+            aComp.CompileTokenArray();
+        aComp.CreateStringFromToken( aStr, aInt.GetResultToken().get(), true );
+        bIsMatrix = true;
+        maMatrixFormulaResult = aStr.toString();
+    }
     mnFormatType = aInt.GetRetFormatType();
     mnFormatIndex = aInt.GetRetFormatIndex();
     maResult.SetToken(aInt.GetResultToken().get());
@@ -51,6 +67,8 @@ bool ScSimpleFormulaCalculator::IsValue()
 {
     Calculate();
 
+    if (bIsMatrix)
+        return false;
     return maResult.IsValue();
 }
 
@@ -78,6 +96,9 @@ double ScSimpleFormulaCalculator::GetValue()
 svl::SharedString ScSimpleFormulaCalculator::GetString()
 {
     Calculate();
+
+    if (bIsMatrix)
+        return maMatrixFormulaResult;
 
     if ((!mpCode->GetCodeError() || mpCode->GetCodeError() == errDoubleRef) &&
             !maResult.GetResultError())
