@@ -54,8 +54,8 @@ private:
 
     void loadCalculatorFromSheet(sal_Int32 nSheet);
     void checkCalculator(
-        Sequence< double > xValues, Sequence< double > yValues,
-        OUString sExpectedFormula );
+        const Sequence< double >& xValues, const Sequence< double >& yValues,
+        const OUString& sExpectedFormula );
 
 };
 
@@ -95,8 +95,8 @@ void Chart2TrendCalculators::loadCalculatorFromSheet(sal_Int32 nSheet)
 }
 
 void Chart2TrendCalculators::checkCalculator(
-    Sequence< double > xValues, Sequence< double > yValues,
-    OUString sExpectedFormula )
+    const Sequence< double >& xValues, const Sequence< double >& yValues,
+    const OUString& sExpectedFormula )
 {
     m_xRegressionCurveCalculator->recalculateRegression( xValues, yValues );
     OUString aRepresentation = m_xRegressionCurveCalculator->getRepresentation ();
