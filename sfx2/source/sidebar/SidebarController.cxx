@@ -107,7 +107,6 @@ SidebarController::SidebarController (
       maRequestedContext(),
       mnRequestedForceFlags(SwitchFlag_NoForce),
       msCurrentDeckId(gsDefaultDeckId),
-      msCurrentDeckTitle(),
       maPropertyChangeForwarder(::boost::bind(&SidebarController::BroadcastPropertyChange, this)),
       maContextChangeUpdate(::boost::bind(&SidebarController::UpdateConfigurations, this)),
       maAsynchronousDeckSwitch(),

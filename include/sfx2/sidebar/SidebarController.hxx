@@ -170,7 +170,6 @@ private:
     /// Use a combination of SwitchFlag_* as value.
     sal_Int32 mnRequestedForceFlags;
     ::rtl::OUString msCurrentDeckId;
-    ::rtl::OUString msCurrentDeckTitle;
     AsynchronousCall maPropertyChangeForwarder;
     AsynchronousCall maContextChangeUpdate;
     AsynchronousCall maAsynchronousDeckSwitch;
