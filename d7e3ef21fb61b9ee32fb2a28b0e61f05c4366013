@@ -16,6 +16,24 @@
       "revId": "d7e3ef21fb61b9ee32fb2a28b0e61f05c4366013",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_97e714ac",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000543
+      },
+      "writtenOn": "2015-06-22T06:54:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a54edaf_2c4b77b2",
+      "revId": "d7e3ef21fb61b9ee32fb2a28b0e61f05c4366013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
