@@ -39,7 +39,7 @@ namespace dbaccess
         ORowSetOldRowHelper(const ORowSetOldRowHelper& _rRh) SAL_DELETED_FUNCTION;
     public:
         ORowSetOldRowHelper(){}
-        ORowSetOldRowHelper(const ORowSetRow& _rRow)
+        explicit ORowSetOldRowHelper(const ORowSetRow& _rRow)
             : m_aRow(_rRow)
         {}
 
@@ -54,7 +54,7 @@ namespace dbaccess
     {
         const ::com::sun::star::uno::Any& m_rAny;
     public:
-        ORowSetValueCompare(const ::com::sun::star::uno::Any& _rAny) : m_rAny(_rAny){}
+        explicit ORowSetValueCompare(const ::com::sun::star::uno::Any& _rAny) : m_rAny(_rAny){}
 
         bool operator ()(const ORowSetRow& _rRH)
         {

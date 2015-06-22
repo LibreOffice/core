@@ -126,7 +126,7 @@ protected:
     virtual ~OQueryDescriptor();
 public:
     OQueryDescriptor();
-    OQueryDescriptor(const OQueryDescriptor_Base& _rSource);
+    explicit OQueryDescriptor(const OQueryDescriptor_Base& _rSource);
 
     virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

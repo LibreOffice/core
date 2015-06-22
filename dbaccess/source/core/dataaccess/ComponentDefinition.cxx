@@ -60,7 +60,7 @@ class OColumnPropertyListener:
 protected:
     virtual ~OColumnPropertyListener(){}
 public:
-    OColumnPropertyListener(OComponentDefinition* _pComponent) : m_pComponent(_pComponent){}
+    explicit OColumnPropertyListener(OComponentDefinition* _pComponent) : m_pComponent(_pComponent){}
     // XPropertyChangeListener
     virtual void SAL_CALL propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {

@@ -79,7 +79,7 @@ protected:
     {
         OQuery*             m_pActor;
     public:
-        OAutoActionReset(OQuery* _pActor) : m_pActor(_pActor) { }
+        explicit OAutoActionReset(OQuery* _pActor) : m_pActor(_pActor) { }
         ~OAutoActionReset() { m_pActor->m_eDoingCurrently = NONE; }
     };
 

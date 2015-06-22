@@ -121,7 +121,7 @@ class DocumentStorageAccess : public ::cppu::WeakImplHelper2<   XDocumentSubStor
     bool                m_bDisposingSubStorages;
 
 public:
-    DocumentStorageAccess( ODatabaseModelImpl& _rModelImplementation )
+    explicit DocumentStorageAccess( ODatabaseModelImpl& _rModelImplementation )
         :m_pModelImplementation( &_rModelImplementation )
         ,m_bPropagateCommitToRoot( true )
         ,m_bDisposingSubStorages( false )

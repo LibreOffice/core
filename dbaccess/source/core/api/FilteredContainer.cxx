@@ -103,8 +103,8 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         OptionalString  sSchema;
         OptionalString  sName;
 
-        TableInfo( const OUString& _composedName )
-            :sComposedName( _composedName )
+        explicit TableInfo( const OUString& _composedName )
+            : sComposedName( _composedName )
         {
         }
 

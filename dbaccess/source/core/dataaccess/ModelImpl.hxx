@@ -128,7 +128,7 @@ public:
     /** beware of life time: the mutex you pass here must live as least as long
         as the VosMutexFacade instance lives.
     */
-    VosMutexFacade( ::osl::Mutex& _rMutex );
+    explicit VosMutexFacade( ::osl::Mutex& _rMutex );
 
     virtual void acquire() SAL_OVERRIDE;
     virtual void release() SAL_OVERRIDE;
@@ -509,7 +509,7 @@ protected:
     mutable ::comphelper::SharedMutex       m_aMutex;
 
 protected:
-    ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model );
+    explicit ModelDependentComponent( const ::rtl::Reference< ODatabaseModelImpl >& _model );
     virtual ~ModelDependentComponent();
 
     /** returns the component itself
@@ -560,7 +560,7 @@ public:
 class ModifyLock
 {
 public:
-    ModifyLock( ModelDependentComponent& _component )
+    explicit ModifyLock( ModelDependentComponent& _component )
         :m_rComponent( _component )
     {
         m_rComponent.lockModify();
@@ -594,7 +594,7 @@ public:
         @throws ::com::sun::star::lang::DisposedException
             If the given component is already disposed
     */
-    ModelMethodGuard( const ModelDependentComponent& _component )
+    explicit ModelMethodGuard( const ModelDependentComponent& _component )
         :BaseMutexGuard( _component.getMutex( ModelDependentComponent::GuardAccess() ) )
     {
         _component.checkDisposed();

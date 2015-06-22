@@ -483,7 +483,7 @@ namespace
     struct PositionFunctor : ::std::unary_function<SelectColumnsMetaData::value_type,bool>
     {
         sal_Int32 m_nPos;
-        PositionFunctor(sal_Int32 i_nPos)
+        explicit PositionFunctor(sal_Int32 i_nPos)
             : m_nPos(i_nPos)
         {
         }
@@ -496,7 +496,7 @@ namespace
     struct TableNameFunctor : ::std::unary_function<SelectColumnsMetaData::value_type,bool>
     {
         OUString m_sTableName;
-        TableNameFunctor(const OUString& i_sTableName)
+        explicit TableNameFunctor(const OUString& i_sTableName)
             : m_sTableName(i_sTableName)
         {
         }

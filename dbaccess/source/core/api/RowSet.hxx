@@ -244,7 +244,7 @@ namespace dbaccess
         virtual ~ORowSet();
 
     public:
-        ORowSet(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+        explicit ORowSet(const css::uno::Reference<css::uno::XComponentContext>&);
 
         // com::sun::star::lang::XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -55,7 +55,7 @@ namespace dbaccess
         bool                                    m_bDeleted;
         OUString                                    m_sRowSetFilter;
 
-        OCacheSet(sal_Int32 i_nMaxRows);
+        explicit OCacheSet(sal_Int32 i_nMaxRows);
         virtual ~OCacheSet();
 
         static void setParameter(sal_Int32 nPos

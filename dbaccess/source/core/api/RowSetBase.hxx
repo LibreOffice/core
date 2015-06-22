@@ -374,7 +374,7 @@ namespace dbaccess
 
             @see ORowSetBase::doCancelModification
         */
-        ORowSetNotifier( ORowSetBase* m_pRowSet );
+        explicit ORowSetNotifier( ORowSetBase* m_pRowSet );
 
         /** use this one to consturct an vector for change value notification
         */
