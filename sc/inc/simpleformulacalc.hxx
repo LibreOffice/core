@@ -15,6 +15,7 @@
 
 #include "address.hxx"
 #include "formularesult.hxx"
+#include "compiler.hxx"
 
 class ScDocument;
 class ScTokenArray;
@@ -29,7 +30,10 @@ private:
     boost::scoped_ptr<ScTokenArray> mpCode;
     ScAddress maAddr;
     ScDocument* mpDoc;
+    ScCompiler aComp;
     ScFormulaResult maResult;
+    bool bIsMatrix;
+    OUString mMatrixFormulaResult;
 
 public:
     ScSimpleFormulaCalculator(ScDocument* pDoc, const ScAddress& rAddr,

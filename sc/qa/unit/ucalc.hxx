@@ -338,6 +338,7 @@ public:
     void testSharedFormulaAbsCellListener();
     void testSharedFormulaUnshareAreaListeners();
     void testFormulaPosition();
+    void testFormulaWizardSubformula();
 
     void testMixData();
 
@@ -588,6 +589,7 @@ public:
     CPPUNIT_TEST(testSharedFormulaAbsCellListener);
     CPPUNIT_TEST(testSharedFormulaUnshareAreaListeners);
     CPPUNIT_TEST(testFormulaPosition);
+    CPPUNIT_TEST(testFormulaWizardSubformula);
     CPPUNIT_TEST(testMixData);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
     CPPUNIT_TEST(testSetBackgroundColor);

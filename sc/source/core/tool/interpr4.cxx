@@ -4420,7 +4420,7 @@ StackVar ScInterpreter::Interpret()
                 break;
                 case svDoubleRef :
                 {
-                    if ( bMatrixFormula )
+                    if ( true )
                     {   // create matrix for {=A1:A5}
                         PopDoubleRefPushMatrix();
                         ScMatrixRef xMat = PopMatrix();

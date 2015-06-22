@@ -11,7 +11,6 @@
 #include "document.hxx"
 #include "tokenarray.hxx"
 #include "interpre.hxx"
-#include "compiler.hxx"
 
 ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const ScAddress& rAddr,
         const OUString& rFormula, formula::FormulaGrammar::Grammar eGram )
@@ -20,9 +19,10 @@ ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const Sc
     , mbCalculated(false)
     , maAddr(rAddr)
     , mpDoc(pDoc)
+    , aComp(pDoc, rAddr)
+    , bIsMatrix(false)
 {
     // compile already here
-    ScCompiler aComp(pDoc, rAddr);
     aComp.SetGrammar(eGram);
     mpCode.reset(aComp.CompileString(rFormula));
     if(!mpCode->GetCodeError() && mpCode->GetLen())
@@ -40,8 +40,13 @@ void ScSimpleFormulaCalculator::Calculate()
 
     mbCalculated = true;
     ScInterpreter aInt(NULL, mpDoc, maAddr, *mpCode.get());
-    aInt.Interpret();
-
+    if ( aInt.Interpret() == formula::svMatrixCell )
+    {
+        OUStringBuffer aStr;
+        aComp.CreateStringFromToken( aStr, aInt.GetResultToken().get(), true );
+        bIsMatrix = true;
+        mMatrixFormulaResult = aStr.toString();
+    }
     mnFormatType = aInt.GetRetFormatType();
     mnFormatIndex = aInt.GetRetFormatIndex();
     maResult.SetToken(aInt.GetResultToken().get());
@@ -51,6 +56,7 @@ bool ScSimpleFormulaCalculator::IsValue()
 {
     Calculate();
 
+    if (bIsMatrix) return false;
     return maResult.IsValue();
 }
 
@@ -78,6 +84,8 @@ double ScSimpleFormulaCalculator::GetValue()
 svl::SharedString ScSimpleFormulaCalculator::GetString()
 {
     Calculate();
+
+    if (bIsMatrix) return mMatrixFormulaResult;
 
     if ((!mpCode->GetCodeError() || mpCode->GetCodeError() == errDoubleRef) &&
             !maResult.GetResultError())
