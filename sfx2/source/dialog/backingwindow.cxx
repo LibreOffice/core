@@ -338,8 +338,18 @@ void BackingWindow::initControls()
 
     Resize();
 
+    // compute the menubar height
+    sal_Int32 nMenuHeight = 0;
+    SystemWindow* pSystemWindow = GetSystemWindow();
+    if (pSystemWindow)
+    {
+        MenuBar* pMenuBar = pSystemWindow->GetMenuBar();
+        if (pMenuBar)
+            nMenuHeight = pMenuBar->ImplGetWindow()->GetOutputSizePixel().Height();
+    }
+
     set_width_request(mpAllRecentThumbnails->get_width_request() + mpAllButtonsBox->GetOptimalSize().Width());
-    set_height_request(mpAllButtonsBox->GetOptimalSize().Height());
+    set_height_request(nMenuHeight + mpAllButtonsBox->GetOptimalSize().Height());
 }
 
 void BackingWindow::initializeLocalView()
