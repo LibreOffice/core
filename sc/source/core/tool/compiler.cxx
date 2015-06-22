@@ -4300,6 +4300,7 @@ bool ScCompiler::HandleRange()
                 pNew->Reset();
             }
             pNew = pRangeData->GetCode()->Clone();
+            pNew->SetFromRangeName( true );
             PushTokenArray( pNew, true );
             if( pRangeData->HasReferences() )
             {
@@ -5085,6 +5086,8 @@ bool ScCompiler::HandleTableRef()
         bool bColumnRange = false;
         bool bCol1Rel = false;
         bool bCol2Rel = false;
+        bool bCol1RelName = false;
+        bool bCol2RelName = false;
         int nLevel = 0;
         if (bForwardToClose && GetTokenIfOpCode( ocTableRefOpen))
         {
@@ -5135,6 +5138,7 @@ bool ScCompiler::HandleTableRef()
                             {
                                 bColumnRange = true;
                                 bCol1Rel = p->GetSingleRef()->IsColRel();
+                                bCol1RelName = p->GetSingleRef()->IsRelName();
                                 eState = sLast;
                             }
                             else
@@ -5183,6 +5187,7 @@ bool ScCompiler::HandleTableRef()
                                     aColRange.aEnd = mpToken->GetSingleRef()->toAbs( aPos);
                                     aColRange.Justify();
                                     bCol2Rel = mpToken->GetSingleRef()->IsColRel();
+                                    bCol2RelName = mpToken->GetSingleRef()->IsRelName();
                                 }
                             }
                         }
@@ -5208,7 +5213,10 @@ bool ScCompiler::HandleTableRef()
                     if (eItem == ScTableRefToken::THIS_ROW)
                     {
                         aRefData.SetRowRel( true);
+                        if (!bCol1RelName)
+                            bCol1RelName = static_cast<ScTokenArray*>(pArr)->IsFromRangeName();
                     }
+                    aRefData.SetRelName( bCol1RelName);
                     aRefData.SetFlag3D( true);
                     if (nError)
                     {
@@ -5228,11 +5236,16 @@ bool ScCompiler::HandleTableRef()
                     aRefData.InitFlags();
                     aRefData.Ref1.SetColRel( bCol1Rel);
                     aRefData.Ref2.SetColRel( bCol2Rel);
+                    bool bRelName = bCol1RelName || bCol2RelName;
                     if (eItem == ScTableRefToken::THIS_ROW)
                     {
                         aRefData.Ref1.SetRowRel( true);
                         aRefData.Ref2.SetRowRel( true);
+                        if (!bRelName)
+                            bRelName = static_cast<ScTokenArray*>(pArr)->IsFromRangeName();
                     }
+                    aRefData.Ref1.SetRelName( bRelName);
+                    aRefData.Ref2.SetRelName( bRelName);
                     aRefData.Ref1.SetFlag3D( true);
                     if (nError)
                     {
