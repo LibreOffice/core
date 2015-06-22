@@ -61,12 +61,12 @@ struct UserData
     OUString sPropertyPath;
     Reference<XNameAccess> aXNameAccess;
 
-    UserData( OUString rPropertyPath )
+    UserData( OUString const & rPropertyPath )
         : bIsPropertyPath( true )
         , sPropertyPath(rPropertyPath)
     {}
 
-    UserData( Reference<XNameAccess> rXNameAccess )
+    UserData( Reference<XNameAccess> const & rXNameAccess )
         : bIsPropertyPath( false )
         , aXNameAccess( rXNameAccess )
     {}
