@@ -226,24 +226,21 @@ isEmptyRectangle(const GdkRectangle& rRectangle)
     return rRectangle.x == 0 && rRectangle.y == 0 && rRectangle.width == 0 && rRectangle.height == 0;
 }
 
-static void
-signalKey (LOKDocView* pDocView, const GdkEvent* pEvent)
+static gboolean
+signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
 {
+    LOKDocView* pDocView = LOK_DOC_VIEW(pWidget);
     LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
     int nCharCode = 0;
     int nKeyCode = 0;
-    guint keyval;
-    GdkModifierType state;
-    gdk_event_get_keyval (pEvent, &keyval);
-    gdk_event_get_state (pEvent, &state);
 
     if (!priv->m_bEdit)
     {
         g_info("signalKey: not in edit mode, ignore");
-        return;
+        return FALSE;
     }
 
-    switch (keyval)
+    switch (pEvent->keyval)
     {
     case GDK_KEY_BackSpace:
         nKeyCode = com::sun::star::awt::Key::BACKSPACE;
@@ -270,22 +267,24 @@ signalKey (LOKDocView* pDocView, const GdkEvent* pEvent)
         nKeyCode = com::sun::star::awt::Key::RIGHT;
         break;
     default:
-        if (keyval >= GDK_KEY_F1 && keyval <= GDK_KEY_F26)
-            nKeyCode = com::sun::star::awt::Key::F1 + (keyval - GDK_KEY_F1);
+        if (pEvent->keyval >= GDK_KEY_F1 && pEvent->keyval <= GDK_KEY_F26)
+            nKeyCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_KEY_F1);
         else
-            nCharCode = gdk_keyval_to_unicode(keyval);
+            nCharCode = gdk_keyval_to_unicode(pEvent->keyval);
     }
 
     // rsc is not public API, but should be good enough for debugging purposes.
     // If this is needed for real, then probably a new param of type
     // css::awt::KeyModifier is needed in postKeyEvent().
-    if (state & GDK_SHIFT_MASK)
+    if (pEvent->state & GDK_SHIFT_MASK)
         nKeyCode |= KEY_SHIFT;
 
     if (pEvent->type == GDK_KEY_RELEASE)
         priv->m_pDocument->pClass->postKeyEvent(priv->m_pDocument, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
     else
         priv->m_pDocument->pClass->postKeyEvent(priv->m_pDocument, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
+
+    return FALSE;
 }
 
 static gboolean
@@ -1151,6 +1150,8 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
     pWidgetClass->draw = lok_doc_view_draw;
     pWidgetClass->button_press_event = lok_doc_view_signal_button;
     pWidgetClass->button_release_event = lok_doc_view_signal_button;
+    pWidgetClass->key_press_event = signalKey;
+    pWidgetClass->key_release_event = signalKey;
     pWidgetClass->motion_notify_event = lok_doc_view_signal_motion;
 
     /**
@@ -1431,6 +1432,8 @@ lok_doc_view_open_document (LOKDocView* pDocView, const gchar* pPath)
         gtk_widget_set_size_request(GTK_WIDGET(pDocView),
                                     nDocumentWidthPixels,
                                     nDocumentHeightPixels);
+        gtk_widget_set_can_focus(GTK_WIDGET(pDocView), TRUE);
+        gtk_widget_grab_focus(GTK_WIDGET(pDocView));
     }
     return TRUE;
 }
@@ -1576,19 +1579,6 @@ lok_doc_view_post_command (LOKDocView* pDocView,
 {
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
     priv->m_pDocument->pClass->postUnoCommand(priv->m_pDocument, pCommand, pArguments);
-}
-
-/**
- * lok_doc_view_post_key:
- * @pDocView: the #LOKDocView instance
- * @pEvent: the #GdkEventKey containing information about the event
- *
- * This methods forwards your key events to the LO core.
-*/
-SAL_DLLPUBLIC_EXPORT void
-lok_doc_view_post_key (LOKDocView* pDocView, GdkEvent* pEvent)
-{
-    signalKey(pDocView, pEvent);
 }
 
 /**

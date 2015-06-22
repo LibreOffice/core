@@ -191,19 +191,6 @@ static void getVisibleAreaTwips(GdkRectangle* pArea)
 #endif
 }
 
-
-/// Handles the key-press-event of the window.
-static gboolean signalKey(GtkWidget* /*pWidget*/, GdkEvent* pEvent, gpointer/* pData*/)
-{
-    LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
-    if (!gtk_widget_get_visible(pFindbar) && bool(lok_doc_view_get_edit(pLOKDocView)))
-        {
-            lok_doc_view_post_key(pLOKDocView, pEvent);
-            return TRUE;
-        }
-    return FALSE;
-}
-
 /// Searches for the next or previous text of pFindbarEntry.
 static void doSearch(bool bBackwards)
 {
@@ -541,10 +528,6 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
     g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), NULL);
 
-    // Input handling.
-    g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), pDocView);
-    g_signal_connect(pWindow, "key-release-event", G_CALLBACK(signalKey), pDocView);
-
     // Scrolled window for DocView
     pScrolledWindow = gtk_scrolled_window_new(0, 0);
     gtk_widget_set_hexpand (pScrolledWindow, TRUE);
@@ -567,6 +550,11 @@ int main( int argc, char* argv[] )
     // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
     g_signal_connect(G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
     g_signal_connect(G_OBJECT(pPartSelector), "changed", G_CALLBACK(changePart), 0);
+
+    // Make only LOKDocView widget as focussable
+    GList *focusChain = NULL;
+    focusChain = g_list_append( focusChain, pDocView );
+    gtk_container_set_focus_chain ( GTK_CONTAINER (pVBox), focusChain );
 
     gtk_main();
 
