@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_f799a820",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-06-22T07:55:29Z",
+      "side": 1,
+      "message": "I meant the check itself, not the TODO note.",
+      "revId": "6f2160f0738b9352d149e9a61163b6263f03a831",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
