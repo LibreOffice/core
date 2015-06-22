@@ -53,7 +53,7 @@ class HWPPara;
 
 struct LineInfo
 {
-/* 시작하는 글자의 위치 : 콘트롤은 여러 길이를 가진다 */
+/* Of the letters to the starting position: the control has a different length  */
 /**
  * Starting character position
  */
@@ -84,7 +84,7 @@ class DLLEXPORT HWPPara
 /**
  * Zero is for the new paragraph style.
  */
-        unsigned char     reuse_shape;            /* 0이면 새모양 */
+        unsigned char     reuse_shape;            /* 0 If the new shape */
         unsigned short    nch;
         unsigned short    nline;
 
@@ -95,16 +95,16 @@ class DLLEXPORT HWPPara
 /**
  * If the value is 0, all character of paragraph have same style given cshape
  */
-        unsigned char     contain_cshape;         /* 0이면 모든 글자가 대표 글자 모양 */
+        unsigned char     contain_cshape;         /* 0, all the characters are letters representing the shape */
         unsigned char     etcflag;
 /**
  * Checks the special characters in the paragraph
  */
         unsigned long     ctrlflag;
         unsigned char     pstyno;
-        CharShape     cshape;                     /* 글자가 모두 같은 모양일때  */
-        ParaShape     pshape;                     /* reuse flag가 0이면     */
-        int           pno;                        /* run-time only      */
+        CharShape     cshape;                     /* Characters are all the same shape when */
+        ParaShape     pshape;                     /* Reuse flag is 0 */
+        int           pno;                        /* run-time only */
 
         LineInfo      *linfo;
         CharShape     *cshapep;
@@ -122,7 +122,7 @@ class DLLEXPORT HWPPara
 
         void  SetNext(HWPPara *n) { _next = n; };
 
-/* layout을 위한 함수 */
+/* Functions for layout */
 /**
  * Returns the character style of paragraph.
  */

@@ -119,9 +119,9 @@ struct RotationProperty
  */
 struct HWPDOProperty
 {
-    int line_pstyle; /* 선 중간 모양 */
-    int line_hstyle; /* 끝 화살표 모양 */
-    int line_tstyle; /* 시작 모양 */
+    int line_pstyle; /* Look good middle */
+    int line_hstyle; /* End arrow  */
+    int line_tstyle; /* Look Start */
     unsigned int line_color;
     hunit line_width;
     unsigned int fill_color;
