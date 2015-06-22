@@ -778,18 +778,18 @@ public:
     vector<ZOrderHint>              maZOrderList;
     vector<ZOrderHint>              maUnsortedList;
 
-    sal_Int32                     mnCurrentZ;
-    ShapeSortContext*             mpParentContext;
-    const OUString                msZOrder;
+    sal_Int32                       mnCurrentZ;
+    ShapeSortContext*               mpParentContext;
 
     ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext = NULL );
 
+    void popGroupAndSort();
+private:
     void moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos );
 };
 
 ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes, ShapeSortContext* pParentContext )
-:   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext ),
-    msZOrder("ZOrder")
+:   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext )
 {
 }
 
@@ -799,37 +799,93 @@ void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
     uno::Reference< beans::XPropertySet > xPropSet;
     aAny >>= xPropSet;
 
-    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( msZOrder ) )
+    if( xPropSet.is() && xPropSet->getPropertySetInfo()->hasPropertyByName( OUString("ZOrder") ) )
     {
         aAny <<= nDestPos;
-        xPropSet->setPropertyValue( msZOrder, aAny );
+        xPropSet->setPropertyValue( OUString("ZOrder"), aAny );
 
-        vector<ZOrderHint>::iterator aIter = maZOrderList.begin();
-        vector<ZOrderHint>::iterator aEnd = maZOrderList.end();
-
-        while( aIter != aEnd )
+        for( ZOrderHint& rHint : maZOrderList )
         {
-            if( (*aIter).nIs < nSourcePos )
+            if( rHint.nIs < nSourcePos )
             {
-                DBG_ASSERT( (*aIter).nIs >= nDestPos, "Shape sorting failed" );
-                (*aIter).nIs++;
+                DBG_ASSERT(rHint.nIs >= nDestPos, "Shape sorting failed" );
+                rHint.nIs++;
             }
-            ++aIter;
         }
 
-        aIter = maUnsortedList.begin();
-        aEnd = maUnsortedList.end();
-
-        while( aIter != aEnd )
+        for( ZOrderHint& rHint : maUnsortedList )
         {
-            if( (*aIter).nIs < nSourcePos )
+            if( rHint.nIs < nSourcePos )
             {
-                DBG_ASSERT( (*aIter).nIs >= nDestPos, "shape sorting failed" );
-                (*aIter).nIs++;
+                DBG_ASSERT( rHint.nIs >= nDestPos, "shape sorting failed" );
+                rHint.nIs++;
             }
-            ++aIter;
         }
     }
+}
+
+// sort shapes
+void ShapeSortContext::popGroupAndSort()
+{
+    // only do something if we have shapes to sort
+    if( maZOrderList.empty() )
+        return;
+
+    // check if there are more shapes than inserted with ::shapeWithZIndexAdded()
+    // This can happen if there where already shapes on the page before import
+    // Since the writer may delete some of this shapes during import, we need
+    // to do this here and not in our c'tor anymore
+
+    // check if we have more shapes than we know of
+    sal_Int32 nCount = mxShapes->getCount();
+
+    nCount -= maZOrderList.size();
+    nCount -= maUnsortedList.size();
+
+    if( nCount > 0 )
+    {
+        // first update offsets of added shapes
+        for (ZOrderHint& rHint : maZOrderList)
+            rHint.nIs += nCount;
+        for (ZOrderHint& rHint : maUnsortedList)
+            rHint.nIs += nCount;
+
+        // second add the already existing shapes in the unsorted list
+        ZOrderHint aNewHint;
+        do
+        {
+            nCount--;
+
+            aNewHint.nIs = nCount;
+            aNewHint.nShould = -1;
+
+            maUnsortedList.insert(maUnsortedList.begin(), aNewHint);
+        }
+        while( nCount );
+    }
+
+    // sort z-ordered shapes by nShould field
+    std::sort(maZOrderList.begin(), maZOrderList.end());
+
+    // this is the current index, all shapes before that
+    // index are finished
+    sal_Int32 nIndex = 0;
+    for (ZOrderHint& rHint : maZOrderList)
+    {
+        while( nIndex < rHint.nShould && !maUnsortedList.empty() )
+        {
+            ZOrderHint aGapHint( *maUnsortedList.begin() );
+            maUnsortedList.erase(maUnsortedList.begin());
+
+            moveShape( aGapHint.nIs, nIndex++ );
+        }
+
+        if(rHint.nIs != nIndex )
+            moveShape( rHint.nIs, nIndex );
+
+        nIndex++;
+    }
+    maZOrderList.clear();
 }
 
 void XMLShapeImportHelper::pushGroupForSorting( uno::Reference< drawing::XShapes >& rShapes )
@@ -845,81 +901,14 @@ void XMLShapeImportHelper::popGroupAndSort()
 
     try
     {
-        vector<ZOrderHint>& rZList = mpImpl->mpSortContext->maZOrderList;
-        vector<ZOrderHint>& rUnsortedList = mpImpl->mpSortContext->maUnsortedList;
-
-        // sort shapes
-        if( !rZList.empty() )
-        {
-            // only do something if we have shapes to sort
-
-            // check if there are more shapes than inserted with ::shapeWithZIndexAdded()
-            // This can happen if there where already shapes on the page before import
-            // Since the writer may delete some of this shapes during import, we need
-            // to do this here and not in our c'tor anymore
-
-            // check if we have more shapes than we know of
-            sal_Int32 nCount = mpImpl->mpSortContext->mxShapes->getCount();
-
-            nCount -= rZList.size();
-            nCount -= rUnsortedList.size();
-
-            if( nCount > 0 )
-            {
-                // first update offsets of added shapes
-                vector<ZOrderHint>::iterator aIter( rZList.begin() );
-                while( aIter != rZList.end() )
-                    (*aIter++).nIs += nCount;
-
-                aIter = rUnsortedList.begin();
-                while( aIter != rUnsortedList.end() )
-                    (*aIter++).nIs += nCount;
-
-                // second add the already existing shapes in the unsorted list
-                ZOrderHint aNewHint;
-
-                do
-                {
-                    nCount--;
-
-                    aNewHint.nIs = nCount;
-                    aNewHint.nShould = -1;
-
-                    rUnsortedList.insert(rUnsortedList.begin(), aNewHint);
-                }
-                while( nCount );
-            }
-
-            // sort z ordered shapes
-            std::sort(rZList.begin(), rZList.end());
-
-            // this is the current index, all shapes before that
-            // index are finished
-            sal_Int32 nIndex = 0;
-            while( !rZList.empty() )
-            {
-                while( nIndex < (*rZList.begin()).nShould && !rUnsortedList.empty() )
-                {
-                    ZOrderHint aGapHint( *rUnsortedList.begin() );
-                    rUnsortedList.erase(rUnsortedList.begin());
-
-                    mpImpl->mpSortContext->moveShape( aGapHint.nIs, nIndex++ );
-                }
-
-                if( (*rZList.begin()).nIs != nIndex )
-                    mpImpl->mpSortContext->moveShape( (*rZList.begin()).nIs, nIndex );
-
-                rZList.erase(rZList.begin());
-                nIndex++;
-            }
-        }
+        mpImpl->mpSortContext->popGroupAndSort();
     }
     catch( uno::Exception& )
     {
         OSL_FAIL("exception while sorting shapes, sorting failed!");
     }
 
-    // put parent on top and delete current context, were done
+    // put parent on top and delete current context, we are done
     ShapeSortContext* pContext = mpImpl->mpSortContext;
     mpImpl->mpSortContext = pContext->mpParentContext;
     delete pContext;
