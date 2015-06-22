@@ -17,9 +17,12 @@ class FileViewContainer : public vcl::Window
     VclPtr<SvTreeListBox> m_pTreeView;
     VclPtr<Splitter> m_pSplitter;
 
+    int m_nCurrentFocus;
+    vcl::Window* m_pFocusWidgets[4];
+
     public:
     FileViewContainer(vcl::Window *pParent)
-        : Window(pParent)
+        : Window(pParent, WB_TABSTOP)
         , m_pFileView(NULL)
         , m_pTreeView(NULL)
         , m_pSplitter(NULL)
@@ -40,11 +43,17 @@ class FileViewContainer : public vcl::Window
 
     void init(SvtFileView* pFileView,
               Splitter* pSplitter,
-              SvTreeListBox* pTreeView)
+              SvTreeListBox* pTreeView,
+              vcl::Window* pPrevSibling,
+              vcl::Window* pNextSibling)
     {
         m_pFileView = pFileView;
         m_pTreeView = pTreeView;
         m_pSplitter = pSplitter;
+        m_pFocusWidgets[0] = pPrevSibling;
+        m_pFocusWidgets[1] = pTreeView;
+        m_pFocusWidgets[2] = pFileView;
+        m_pFocusWidgets[3] = pNextSibling;
     }
 
     virtual void Resize() SAL_OVERRIDE
@@ -72,6 +81,43 @@ class FileViewContainer : public vcl::Window
         Size placesNewSize(m_pTreeView->GetSizePixel());
         placesNewSize.Height() = aSize.Height();
         m_pTreeView->SetSizePixel( placesNewSize );
+    }
+
+    void changeFocus(bool bReverse)
+    {
+        if(!bReverse && m_nCurrentFocus <= 4)
+        {
+            m_pFocusWidgets[++m_nCurrentFocus]->SetFakeFocus(true);
+            m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
+        }
+        else if(m_nCurrentFocus > 0)
+        {
+            m_pFocusWidgets[--m_nCurrentFocus]->SetFakeFocus(true);
+            m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
+        }
+    }
+
+    virtual void GetFocus() SAL_OVERRIDE
+    {
+        m_nCurrentFocus = 1;
+        m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus(true);
+        m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
+    }
+
+    virtual bool Notify(NotifyEvent& rNEvt)
+    {
+        if(rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+        {
+            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
+            bool bShift = rCode.IsShift();
+            if(rCode.GetCode() == KEY_TAB)
+            {
+                changeFocus(bShift);
+                return true;
+            }
+        }
+        return Window::Notify(rNEvt);
     }
 };
 
@@ -128,7 +174,7 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_pContainer->set_hexpand(true);
     m_pContainer->set_vexpand(true);
 
-    m_pFileView = VclPtr<SvtFileView>::Create( m_pContainer, WB_BORDER,
+    m_pFileView = VclPtr<SvtFileView>::Create( m_pContainer, WB_BORDER | WB_TABSTOP,
                                        REMOTEDLG_TYPE_PATHDLG == m_eType,
                                        m_bMultiselection );
 
@@ -142,7 +188,7 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_pSplitter->SetSplitHdl( LINK( this, RemoteFilesDialog, SplitHdl ) );
     m_pSplitter->Show();
 
-    m_pTreeView = VclPtr<SvTreeListBox>::Create( m_pContainer, WB_BORDER | WB_SORT );
+    m_pTreeView = VclPtr<SvTreeListBox>::Create( m_pContainer, WB_BORDER | WB_SORT | WB_TABSTOP );
     Size aSize(100, 200);
     m_pTreeView->set_height_request(aSize.Height());
     m_pTreeView->set_width_request(aSize.Width());
@@ -159,11 +205,11 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     nPosX += m_pSplitter->GetSizePixel().Width();
     m_pFileView->SetPosPixel(Point(nPosX, 0));
 
-    m_pContainer->init(m_pFileView, m_pSplitter, m_pTreeView);
+    m_pContainer->init( m_pFileView, m_pSplitter, m_pTreeView, m_pAddService_btn, m_pFilter_lb );
     m_pContainer->Show();
     m_pContainer->Enable( false );
 
-    m_pAddService_btn->SetMenuMode(MENUBUTTON_MENUMODE_TIMED);
+    m_pAddService_btn->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
     m_pAddService_btn->SetClickHdl( LINK( this, RemoteFilesDialog, AddServiceHdl ) );
     m_pAddService_btn->SetSelectHdl( LINK( this, RemoteFilesDialog, EditServiceMenuHdl ) );
 
