@@ -976,7 +976,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     SCROW nStartRow = 0, nEndRow = 0;
 
     // size of the document including drawings, charts, etc.
-    pDoc->GetPrintArea(nTab, nEndCol, nEndRow, false);
+    pDoc->GetTiledRenderingArea(nTab, nEndCol, nEndRow);
 
     double fPPTX = pViewData->GetPPTX();
     double fPPTY = pViewData->GetPPTY();
