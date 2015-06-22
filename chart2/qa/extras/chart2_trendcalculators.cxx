@@ -28,8 +28,8 @@
 class Chart2TrendCalculators : public ChartTest
 {
 public:
-    void setUp();
-    void tearDown();
+    void setUp() SAL_OVERRIDE;
+    void tearDown() SAL_OVERRIDE;
 
     void testPotentialRegression1();
     void testPotentialRegression2();
