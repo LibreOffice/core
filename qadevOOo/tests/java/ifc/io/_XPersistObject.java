@@ -133,7 +133,7 @@ public class _XPersistObject extends MultiMethodTest {
                     boolean locRes = ( (ValueComparer.equalValue(cps,ops)) ||
                                     (utils.isVoid(cps) && utils.isVoid(ops)) );
 
-                    //transient properties aran't stored
+                    //transient properties aren't stored
                     if (isTransient(objprops[i])) locRes = true;
 
                     Object pseudo = tEnv.getObjRelation("PSEUDOPERSISTENT");

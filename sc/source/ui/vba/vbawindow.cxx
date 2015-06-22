@@ -317,7 +317,7 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException, std::exception)
             sTitle = sTitle.copy( 0, nCrudIndex );
             ScVbaWorkbook workbook( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
             OUString sName = workbook.getName();
-            // rather bizare hack to make sure the name behavior
+            // rather bizarre hack to make sure the name behavior
             // is like XL
             // if the adjusted title == workbook name, use name
             // if the adjusted title != workbook name but ...

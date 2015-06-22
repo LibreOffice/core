@@ -131,7 +131,7 @@ void XMLIndexChapterInfoEntryContext::StartElement(
         nValues++;
     }
 
-    // if we have chaper info, set it!
+    // if we have chapter info, set it!
     if (bChapterInfoOK)
     {
         nValues++;

@@ -381,7 +381,7 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , sal_uInt16 /*nItemVersion*/ ) co
     rStrm.WriteUniOrByteString(aStoreFamilyName, rStrm.GetStreamCharSet());
     rStrm.WriteUniOrByteString(GetStyleName(), rStrm.GetStreamCharSet());
 
-    // cach for EditEngine, only set while creating clipboard stream.
+    // catch for EditEngine, only set while creating clipboard stream.
     if ( bEnableStoreUnicodeNames )
     {
         sal_uInt32 nMagic = STORE_UNICODE_MAGIC_MARKER;

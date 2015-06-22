@@ -81,7 +81,7 @@ public class _XItemListener extends MultiMethodTest {
     * First a <code>ItemEvent</code> object created and
     * it is passed to <code>itemStateChanged</code> method
     * call. Then a short wait follows for listener already
-    * registered at the object to be caled. <p>
+    * registered at the object to be called. <p>
     * Has <b> OK </b> status if the listener was called with
     * the same <code>ItemEvent</code> object as was created
     * before.
