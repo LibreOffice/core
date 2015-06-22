@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_b771f0e2",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 954,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-22T10:39:13Z",
+      "side": 1,
+      "message": "better use \"bool\" instead of \"sal_Bool\", except when comparing UNO properties/return values (those use sal_Bool for compatibility reasons)",
+      "revId": "e99ef87b87f01c643ad9f1aeb11cb8dcd751e1c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_57775cd4",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 955,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-22T10:39:13Z",
+      "side": 1,
+      "message": "actually it\u0027s not necessary to use a variable here, just put the compare as parameter.\n\n(looks like there\u0027s no CPPUNIT_ASSERT_NOT_EQUAL macro)",
+      "revId": "e99ef87b87f01c643ad9f1aeb11cb8dcd751e1c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
