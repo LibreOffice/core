@@ -386,38 +386,7 @@ bool CairoTextRender::AddTempDevFont( PhysicalFontCollection* pFontCollection,
                                      const OUString& rFileURL,
                                      const OUString& rFontName )
 {
-    // inform PSP font manager
-    OUString aUSystemPath;
-    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFileURL, aUSystemPath ) );
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    OString aOFileName( OUStringToOString( aUSystemPath, aEncoding ) );
-    psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    std::vector<psp::fontID> aFontIds = rMgr.addFontFile( aOFileName );
-    if( aFontIds.empty() )
-        return false;
-
-    GlyphCache& rGC = getPlatformGlyphCache();
-
-    for (std::vector<psp::fontID>::iterator aI = aFontIds.begin(), aEnd = aFontIds.end(); aI != aEnd; ++aI)
-    {
-        // prepare font data
-        psp::FastPrintFontInfo aInfo;
-        rMgr.getFontFastInfo( *aI, aInfo );
-        aInfo.m_aFamilyName = rFontName;
-
-        // inform glyph cache of new font
-        ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
-        aDFA.mnQuality += 5800;
-
-        int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
-
-        const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
-        rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA );
-    }
-
-    // announce new font to device's font list
-    rGC.AnnounceFonts( pFontCollection );
-    return true;
+    return GenPspGraphics::AddTempDevFontHelper( pFontCollection, rFileURL, rFontName, getPlatformGlyphCache() );
 }
 
 void CairoTextRender::ClearDevFontCache()
