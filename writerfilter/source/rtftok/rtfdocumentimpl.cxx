@@ -1682,11 +1682,13 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                 // Check if this is an endnote.
                 OStringBuffer aBuf;
                 char ch;
+                sal_Size nCurrent = Strm().Tell();
                 for (int i = 0; i < 7; ++i)
                 {
                     Strm().ReadChar(ch);
                     aBuf.append(ch);
                 }
+                Strm().Seek(nCurrent);
                 OString aKeyword = aBuf.makeStringAndClear();
                 if (aKeyword.equals("\\ftnalt"))
                     nId = NS_ooxml::LN_endnote;
