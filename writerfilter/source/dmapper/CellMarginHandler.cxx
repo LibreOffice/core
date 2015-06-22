@@ -21,7 +21,6 @@
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
 #include <comphelper/sequence.hxx>
-#include <osl/diagnose.h>
 
 namespace writerfilter {
 namespace dmapper {
@@ -61,11 +60,11 @@ void CellMarginHandler::lcl_attribute(Id rName, Value & rVal)
             m_nValue = ConversionHelper::convertTwipToMM100Unsigned( nIntValue );
         break;
         case NS_ooxml::LN_CT_TblWidth_type:
-            OSL_ENSURE( NS_ooxml::LN_Value_ST_TblWidth_dxa == sal::static_int_cast<Id>(nIntValue), "cell margins work for absolute values, only");
+            SAL_WARN_IF(NS_ooxml::LN_Value_ST_TblWidth_dxa != sal::static_int_cast<Id>(nIntValue), "writerfilter", "CellMarginHandler: cell margins work for absolute values only");
             m_nType = nIntValue;
         break;
         default:
-            OSL_FAIL( "unknown attribute");
+            SAL_WARN("writerfilter", "CellMarginHandler::lcl_attribute: unknown attribute");
     }
 }
 
@@ -153,7 +152,7 @@ void CellMarginHandler::lcl_sprm(Sprm & rSprm)
                 createGrabBag("right");
             break;
             default:
-                OSL_FAIL( "unknown sprm");
+                SAL_WARN("writerfilter", "CellMarginHandler::lcl_sprm: unknown sprm");
         }
     }
     m_nValue = 0;
