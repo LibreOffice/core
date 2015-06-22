@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_b73fb0d5",
+        "filename": "external/np_sdk/npsdk/jri_md.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-22T11:20:42Z",
+      "side": 1,
+      "message": "these are macros, which are case sensitive and shouldn\u0027t be changed (it\u0027s not a platform we support, but still...)",
+      "revId": "4e41cba05556148110df02cf1539dbb2aa148293",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_57251cc0",
+        "filename": "xmloff/source/text/XMLIndexChapterInfoEntryContext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-22T11:20:42Z",
+      "side": 1,
+      "message": "it;s probably \"chapter\" info that is meant here",
+      "revId": "4e41cba05556148110df02cf1539dbb2aa148293",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
