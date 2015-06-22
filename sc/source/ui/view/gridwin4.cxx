@@ -739,7 +739,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     pContentDev->SetMapMode(MAP_PIXEL);
 
-    aOutputData.DrawShadow();
+    aOutputData.DrawShadow(*pContentDev);
     aOutputData.DrawFrame(*pContentDev);
 
     // Show Note Mark

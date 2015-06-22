@@ -550,7 +550,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     aOutputData.DrawBackground(*pDev);
 
-    aOutputData.DrawShadow();
+    aOutputData.DrawShadow(*pDev);
     aOutputData.DrawFrame(*pDev);
     aOutputData.DrawStrings();
 
@@ -1613,7 +1613,7 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
     if( aTableParam.bCellContent )
     {
-        aOutputData.DrawExtraShadow( bShLeft, bShTop, bShRight, bShBottom );
+        aOutputData.DrawExtraShadow(*pDev, bShLeft, bShTop, bShRight, bShBottom);
         aOutputData.DrawFrame(*pDev);
         aOutputData.DrawStrings();
         aOutputData.DrawEdit(false);
