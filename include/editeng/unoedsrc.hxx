@@ -525,7 +525,7 @@ public:
 
     /** Cut current selection to clipboard.
 
-        @eturn false if no selection or no view (the empty selection _is_ a selection)
+        @return false if no selection or no view (the empty selection _is_ a selection)
      */
     virtual bool Cut() = 0;
 
