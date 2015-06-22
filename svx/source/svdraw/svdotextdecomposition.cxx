@@ -1653,7 +1653,44 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     // Sets original text
     rOutliner.SetText(*pOutlinerParaObject);
 
-    /* Begin overflow handling */
+    /* Begin underflow handling */
+
+    bool bIsPageUnderflow = rOutliner.IsPageOverflow() && !IsInEditMode();
+    if (bIsPageUnderflow) {
+
+        SdrTextObj *pNextLink = GetNextLinkInChain();
+        if (pNextLink && pNextLink->HasText()) {
+            OutlinerParaObject *pNextLinkWholeText = pNextLink->GetOutlinerParaObject();
+
+            // making whole text
+
+            OutlinerParaObject *pCurText;
+            pCurText = rOutliner.CreateParaObject(); // XXX: this is editing outliner in editing version
+
+            // NewTextForCurBox = Txt(CurBox) ++ Txt(NextBox)
+            rOutliner.SetText(*pCurText);
+            rOutliner.AddText(*pNextLinkWholeText);
+            OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
+
+            // 2) Set the text of the next guy to what is left
+            // (since this happens automatically by overflow we just "order to" reset the destination box's text)
+            GetTextChain()->SetOverwriteOnOverflow(pNextLink, true);
+
+            // We make sure we don't handle underflow while handling underflow
+            //GetTextChain()->SetLinkHandlingUnderflow(this, true); // we don't need this in static decomp.
+
+            // Set the other box empty so if overflow does not occur we are fine
+            if (!GetPreventChainable())
+                pNextLink->NbcSetOutlinerParaObject(rOutliner.GetEmptyParaObject());
+
+            const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
+        }
+    } // You might be done at this point, unless there is an overflow and that's handled in std way.
+
+    /* End underflow handling */
+
+
+    /* Begin overflow handling */ // might be caused from underflow handling above
 
     // If overflow occurs we have to cut the text at the right point
     // If in edit mode ImpEditEngine should have taken care of this
