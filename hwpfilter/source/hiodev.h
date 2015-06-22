@@ -67,7 +67,7 @@ class DLLEXPORT HIODev
 
 struct gz_stream;
 
-/* 파일 입출력 장치 */
+/* File input and output devices */
 
 /**
  * This controls the HStream given by constructor
@@ -134,7 +134,7 @@ class HStreamIODev : public HIODev
         virtual void init() SAL_OVERRIDE;
 };
 
-/* 메모리 입출력 장치 */
+/* Memory, input and output devices */
 /**
  * The HMemIODev class controls the Input/Output device.
  * @short Memory IO device
