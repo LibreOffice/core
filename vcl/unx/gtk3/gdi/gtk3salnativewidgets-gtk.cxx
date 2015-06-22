@@ -57,7 +57,9 @@ static void NWConvertVCLStateToGTKState( ControlState nVCLState,
     *nGTKState = GTK_STATE_FLAG_NORMAL;
 
     if (!( nVCLState & ControlState::ENABLED ))
+    {
         *nGTKState = GTK_STATE_FLAG_INSENSITIVE;
+    }
 
     if ( nVCLState & ControlState::PRESSED )
     {
@@ -66,7 +68,9 @@ static void NWConvertVCLStateToGTKState( ControlState nVCLState,
     }
 
     if ( nVCLState & ControlState::ROLLOVER )
+    {
         *nGTKState = (GtkStateFlags) (*nGTKState | GTK_STATE_FLAG_PRELIGHT);
+    }
 
     if ( nVCLState & ControlState::SELECTED )
         *nGTKState = (GtkStateFlags) (*nGTKState | GTK_STATE_FLAG_SELECTED);
@@ -105,40 +109,40 @@ static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
         ) );
 }
 
-#define MIN_SPIN_ARROW_WIDTH 6
-
 Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect)
 {
-    gint            buttonSize;
-    Rectangle        buttonRect;
-    const PangoFontDescription *fontDesc;
-    GtkBorder padding;
-
     gtk_style_context_save(mpSpinStyle);
     gtk_style_context_add_class(mpSpinStyle, GTK_STYLE_CLASS_BUTTON);
 
-    fontDesc = gtk_style_context_get_font( mpSpinStyle, GTK_STATE_FLAG_NORMAL);
-    gtk_style_context_get_padding(mpSpinStyle, GTK_STATE_FLAG_NORMAL, &padding);
+    gint w, h;
+    gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &w, &h);
+    gint icon_size = std::max(w, h);
 
-    buttonSize = MAX( PANGO_PIXELS(pango_font_description_get_size(fontDesc) ),
-                      MIN_SPIN_ARROW_WIDTH );
-    buttonSize -= buttonSize % 2 - 1; /* force odd */
-    buttonRect.SetSize( Size( buttonSize + padding.left + padding.right,
-                              buttonRect.GetHeight() ) );
-    buttonRect.setX( aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()) );
+    GtkBorder padding, border;
+    gtk_style_context_get_padding(mpSpinStyle, GTK_STATE_FLAG_NORMAL, &padding);
+    gtk_style_context_get_border(mpSpinStyle, GTK_STATE_FLAG_NORMAL, &border);
+
+    gint buttonWidth = icon_size + padding.left + padding.right +
+        border.left + border.right;
+
+    gint buttonHeight = icon_size + padding.top + padding.bottom +
+        border.top + border.bottom;
+
+    Rectangle buttonRect;
+    buttonRect.SetSize(Size(buttonWidth, buttonHeight));
+    buttonRect.setY(aAreaRect.Top());
+    buttonRect.Bottom() = buttonRect.Top() + aAreaRect.GetHeight();
     if ( nPart == PART_BUTTON_UP )
     {
-        buttonRect.setY( aAreaRect.Top() );
-        buttonRect.Bottom() = buttonRect.Top() + (aAreaRect.GetHeight() / 2);
+        buttonRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - 2*buttonRect.GetWidth()));
     }
     else if( nPart == PART_BUTTON_DOWN )
     {
-        buttonRect.setY( aAreaRect.Top() + (aAreaRect.GetHeight() / 2) );
-        buttonRect.Bottom() = aAreaRect.Bottom(); // cover area completely
+        buttonRect.setX(aAreaRect.Left() + (aAreaRect.GetWidth() - buttonRect.GetWidth()));
     }
     else
     {
-        buttonRect.Right()  = buttonRect.Left()-1;
+        buttonRect.Right() = (aAreaRect.Left() + (aAreaRect.GetWidth() - 2*buttonRect.GetWidth()))-1;
         buttonRect.Left()   = aAreaRect.Left();
         buttonRect.Top()    = aAreaRect.Top();
         buttonRect.Bottom() = aAreaRect.Bottom();
@@ -549,9 +553,7 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     Rectangle            buttonRect;
     GtkStateFlags        stateFlags;
     GtkShadowType        shadowType;
-    Rectangle            arrowRect;
-    gint                 arrowSize;
-    GtkBorder            padding;
+    GtkBorder            padding, border;
 
     NWConvertVCLStateToGTKState( nState, &stateFlags,  &shadowType );
     buttonRect = NWGetSpinButtonRect( nPart, aAreaRect );
@@ -561,27 +563,39 @@ void GtkSalGraphics::PaintOneSpinButton( GtkStyleContext *context,
     gtk_style_context_add_class(context, GTK_STYLE_CLASS_BUTTON);
 
     gtk_style_context_get_padding(context, GTK_STATE_FLAG_NORMAL, &padding);
+    gtk_style_context_get_border(context, GTK_STATE_FLAG_NORMAL, &border);
 
     gtk_render_background(context, cr,
-                          (buttonRect.Left() - aAreaRect.Left()), (buttonRect.Top() - aAreaRect.Top()),
+                          buttonRect.Left(), buttonRect.Top(),
                           buttonRect.GetWidth(), buttonRect.GetHeight() );
     gtk_render_frame(context, cr,
-                     (buttonRect.Left() - aAreaRect.Left()), (buttonRect.Top() - aAreaRect.Top()),
+                     buttonRect.Left(), buttonRect.Top(),
                      buttonRect.GetWidth(), buttonRect.GetHeight() );
 
-    arrowSize = (gint) floor((buttonRect.GetWidth() - padding.left - padding.right) * 0.45);
-    arrowSize -= arrowSize % 2 - 1; /* force odd */
-    arrowRect.SetSize( Size( arrowSize, arrowSize ) );
-    arrowRect.setX( buttonRect.Left() + (buttonRect.GetWidth() - arrowRect.GetWidth()) / 2 );
-    if ( nPart == PART_BUTTON_UP )
-        arrowRect.setY( buttonRect.Top() + (buttonRect.GetHeight() - arrowRect.GetHeight()) / 2 + 1);
-    else
-        arrowRect.setY( buttonRect.Top() + (buttonRect.GetHeight() - arrowRect.GetHeight()) / 2 - 1);
+    gint iconWidth = (buttonRect.GetWidth() - padding.left - padding.right - border.left - border.right);
+    gint iconHeight = (buttonRect.GetHeight() - padding.top - padding.bottom - border.top - border.bottom);
 
-    gtk_render_arrow(context, cr,
-                     (nPart == PART_BUTTON_UP) ? 0 : G_PI,
-                     (arrowRect.Left() - aAreaRect.Left()), (arrowRect.Top() - aAreaRect.Top()),
-                     arrowSize);
+    const char* icon = (nPart == PART_BUTTON_UP) ? "list-add-symbolic" : "list-remove-symbolic";
+    GtkIconTheme *pIconTheme = gtk_icon_theme_get_for_screen(gtk_widget_get_screen(mpWindow));
+
+    GtkIconInfo *info = gtk_icon_theme_lookup_icon(pIconTheme, icon, std::min(iconWidth, iconHeight),
+                                                   static_cast<GtkIconLookupFlags>(0));
+
+    GdkPixbuf *pixbuf = gtk_icon_info_load_symbolic_for_context
+                                                        (info,
+                                                         context,
+                                                         NULL,
+                                                         NULL);
+    iconWidth = gdk_pixbuf_get_width(pixbuf);
+    iconHeight = gdk_pixbuf_get_height(pixbuf);
+    Rectangle arrowRect;
+    arrowRect.SetSize(Size(iconWidth, iconHeight));
+    arrowRect.setX( buttonRect.Left() + (buttonRect.GetWidth() - arrowRect.GetWidth()) / 2 );
+    arrowRect.setY( buttonRect.Top() + (buttonRect.GetHeight() - arrowRect.GetHeight()) / 2 );
+
+    gtk_render_icon(context, cr, pixbuf, arrowRect.Left(), arrowRect.Top());
+    g_object_unref(pixbuf);
+    gtk_icon_info_free(info);
 
     gtk_style_context_restore(context);
 }
@@ -590,17 +604,15 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
                                      cairo_t *cr,
                                      const Rectangle& rControlRectangle,
                                      ControlType nType,
-                                     ControlPart nPart,
+                                     ControlPart /*nPart*/,
                                      const ImplControlValue& rValue )
 {
-    (void)nPart;
     Rectangle            areaRect;
-    GtkShadowType        shadowType;
-    const SpinbuttonValue *    pSpinVal = (rValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&rValue) : NULL;
-    ControlPart        upBtnPart = PART_BUTTON_UP;
-    ControlState        upBtnState = ControlState::ENABLED;
-    ControlPart        downBtnPart = PART_BUTTON_DOWN;
-    ControlState        downBtnState = ControlState::ENABLED;
+    const SpinbuttonValue *pSpinVal = (rValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&rValue) : NULL;
+    ControlPart upBtnPart = PART_BUTTON_UP;
+    ControlState upBtnState = ControlState::NONE;
+    ControlPart downBtnPart = PART_BUTTON_DOWN;
+    ControlState downBtnState = ControlState::NONE;
 
     if ( pSpinVal )
     {
@@ -611,33 +623,21 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
         downBtnState = pSpinVal->mnLowerState;
     }
 
+    areaRect = rControlRectangle;
+
+    gtk_render_background(context, cr,
+                          0, 0,
+                          areaRect.GetWidth(), areaRect.GetHeight() );
+    gtk_render_frame(context, cr,
+                     0, 0,
+                     areaRect.GetWidth(), areaRect.GetHeight() );
+
     // CTRL_SPINBUTTONS pass their area in pSpinVal, not in rControlRectangle
-    if ( nType == CTRL_SPINBUTTONS )
+    if (pSpinVal)
     {
-        if ( !pSpinVal )
-        {
-            SAL_WARN( "vcl.gtk", "Tried to draw CTRL_SPINBUTTONS, but the SpinButtons data structure didn't exist!" );
-            return;
-        }
         areaRect = pSpinVal->maUpperRect;
         areaRect.Union( pSpinVal->maLowerRect );
     }
-    else
-        areaRect = rControlRectangle;
-
-    gtk_style_context_get_style( context,
-                                 "shadow-type", &shadowType,
-                                 NULL );
-
-    if ( shadowType != GTK_SHADOW_NONE )
-    {
-        gtk_render_background(context, cr,
-                              0, 0,
-                              areaRect.GetWidth(), areaRect.GetHeight() );
-        gtk_render_frame(context, cr,
-                         0, 0,
-                         areaRect.GetWidth(), areaRect.GetHeight() );
-   }
 
     PaintOneSpinButton(context, cr, nType, upBtnPart, areaRect, upBtnState );
     PaintOneSpinButton(context, cr, nType, downBtnPart, areaRect, downBtnState );
@@ -849,13 +849,9 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     switch(nType)
     {
     case CTRL_SPINBOX:
-        switch (nPart)
-        {
-        case PART_ENTIRE_CONTROL:
-            context = mpSpinStyle;
-            renderType = RENDER_SPINBUTTON;
-            break;
-        }
+    case CTRL_SPINBUTTONS:
+        context = mpSpinStyle;
+        renderType = RENDER_SPINBUTTON;
         break;
     case CTRL_EDITBOX:
         context = mpEntryStyle;
@@ -1821,14 +1817,14 @@ bool GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             break;
 
         case CTRL_SPINBOX:
-            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_ALL_BUTTONS || nPart==HAS_BACKGROUND_TEXTURE)
+            if (nPart==PART_ENTIRE_CONTROL || nPart==HAS_BACKGROUND_TEXTURE || nPart == PART_ALL_BUTTONS || nPart == PART_BUTTON_UP || nPart == PART_BUTTON_DOWN)
                 return true;
             break;
 
-//        case CTRL_SPINBUTTONS:
-//            if(nPart==PART_ENTIRE_CONTROL || nPart==PART_ALL_BUTTONS)
-//                return true;
-//            break;
+        case CTRL_SPINBUTTONS:
+            if (nPart==PART_ENTIRE_CONTROL || nPart==PART_ALL_BUTTONS)
+                return true;
+            break;
 
         case CTRL_FRAME:
         case CTRL_WINDOW_BACKGROUND:
