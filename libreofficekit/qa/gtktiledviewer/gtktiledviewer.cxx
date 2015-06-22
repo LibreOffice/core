@@ -312,6 +312,17 @@ static void signalPart(LOKDocView* /*pLOKDocView*/, int nPart, gpointer /*pData*
 }
 
 /// User clicked on a command button -> inform LOKDocView.
+static void signalHyperlink(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer /*pData*/)
+{
+    GError* pError = NULL;
+    gtk_show_uri(NULL, pPayload, GDK_CURRENT_TIME, &pError);
+    if (pError != NULL)
+    {
+        g_warning("Unable to show URI %s : %s", pPayload, pError->message);
+        g_error_free(pError);
+    }
+}
+
 static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 {
     if (g_bToolItemBroadcast)
@@ -528,6 +539,7 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
+    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), NULL);
 
     // Input handling.
     g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), pDocView);

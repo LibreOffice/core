@@ -324,6 +324,12 @@ setPart(LOKDocView* pDocView, const std::string& rString)
     g_signal_emit(pDocView, doc_view_signals[PART_CHANGED], 0, std::stoi(rString));
 }
 
+static void
+hyperlinkClicked(LOKDocView* pDocView, const std::string& rString)
+{
+    g_signal_emit(pDocView, doc_view_signals[HYPERLINK_CLICKED], 0, rString.c_str());
+}
+
 /// Implementation of the global callback handler, invoked by globalCallback();
 static gboolean
 globalCallback (gpointer pData)
@@ -507,8 +513,7 @@ callback (gpointer pData)
     break;
     case LOK_CALLBACK_HYPERLINK_CLICKED:
     {
-        GError* pError = NULL;
-        gtk_show_uri(NULL, pCallback->m_aPayload.c_str(), GDK_CURRENT_TIME, &pError);
+        hyperlinkClicked(pDocView, pCallback->m_aPayload);
     }
     break;
     case LOK_CALLBACK_STATE_CHANGED:
@@ -1353,7 +1358,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * @aHyperlink: the URI which the application should handle
      */
     doc_view_signals[HYPERLINK_CLICKED] =
-        g_signal_new("hyperlinked-clicked",
+        g_signal_new("hyperlink-clicked",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
                      0,
