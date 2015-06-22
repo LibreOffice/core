@@ -72,61 +72,61 @@ HWPInfo::~HWPInfo()
 
 
 /**
- * 문서정보를 읽어들이는 함수 ( 128 bytes )
- * 문서정보는 파일인식정보( 30 bytes ) 다음에 위치한 정보이다.
+ * Function for reading document information (128 bytes)
+ * Document information is the information after the file identification information (30 bytes).
  */
 bool HWPInfo::Read(HWPFile & hwpf)
 {
-    hwpf.Read2b(&cur_col, 1);                     /* 문서를 저장할 당시의 커서가 위치한 문단번호 */
-    hwpf.Read2b(&cur_row, 1);                     /* 문단 칸 */
+    hwpf.Read2b(&cur_col, 1);                     /* When a document is saving, the paragraph number where the coursor is */
+    hwpf.Read2b(&cur_row, 1);                     /* Paragraphs rows */
 
-    hwpf.Read1b(&paper.paper_kind, 1);            /* 용지 종류 */
-    hwpf.Read1b(&paper.paper_direction, 1);       /* 용지 방향 */
+    hwpf.Read1b(&paper.paper_kind, 1);            /* Paper Type */
+    hwpf.Read1b(&paper.paper_direction, 1);       /* Paper orientation */
 
 // paper geometry information
     unsigned short tmp16;
     if (!hwpf.Read2b(tmp16))
         return false;
-    paper.paper_height = tmp16;                   /* 용지 길이 */
+    paper.paper_height = tmp16;                   /* Paper length */
     if (!hwpf.Read2b(tmp16))
         return false;
-    paper.paper_width = tmp16;                    /* 용지 너비 */
+    paper.paper_width = tmp16;                    /* Sheet width */
     if (!hwpf.Read2b(tmp16))
         return false;
-    paper.top_margin = tmp16;                     /* 위쪽 여백 */
+    paper.top_margin = tmp16;                     /* Top margin */
     if (!hwpf.Read2b(tmp16))
         return false;
-    paper.bottom_margin = tmp16;                  /* 아래쪽 여백 */
+    paper.bottom_margin = tmp16;                  /* The bottom margin */
     if (!hwpf.Read2b(tmp16))
         return false;
-    paper.left_margin = tmp16;                    /* 왼쪽 여백 */
+    paper.left_margin = tmp16;                    /* Left Margin */
     if (!hwpf.Read2b(tmp16))
         return false;
-    paper.right_margin = tmp16;                   /* 오른쪽 여백 */
+    paper.right_margin = tmp16;                   /* Right margins */
     if (!hwpf.Read2b(tmp16))
         return false;
-    paper.header_length = tmp16;                  /* 머리말 길이 */
+    paper.header_length = tmp16;                  /* Header length */
     if (!hwpf.Read2b(tmp16))
         return false;
-    paper.footer_length = tmp16;                  /* 꼬리말 길이 */
+    paper.footer_length = tmp16;                  /* Footer length */
     if (!hwpf.Read2b(tmp16))
         return false;
-    paper.gutter_length = tmp16;                  /* 제본여백 */
-    hwpf.Read2b(&readonly, 1);                    /* 예약 */
-    hwpf.Read1b(reserved1, 4);                    /* 예약 */
-    hwpf.Read1b(&chain_info.chain_page_no, 1);    /* 쪽 번호 연결 1-연결, 0-새로시작 (연결인쇄에서 사용) */
-    hwpf.Read1b(&chain_info.chain_footnote_no, 1);/* 각주번호 연결 1-연결 0-새로시작 */
-                                                  /* 연결인쇄할 파일의 이름 */
+    paper.gutter_length = tmp16;                  /* The binding margin */
+    hwpf.Read2b(&readonly, 1);                    /* Reserve */
+    hwpf.Read1b(reserved1, 4);                    /* Reserve */
+    hwpf.Read1b(&chain_info.chain_page_no, 1);    /* Connect page number: 1-Connect, 0-newly started (used in connection printing) */
+    hwpf.Read1b(&chain_info.chain_footnote_no, 1);/* Connect footnote number: 1-connect, 0-newly started*/
+                                                  /* the file name to be printed with connection */
     hwpf.Read1b(chain_info.chain_filename, CHAIN_MAX_PATH);
 
-    hwpf.Read1b(annotation, ANNOTATION_LEN);      /* 덧붙이는 말 ( 파일 저장할 때 덧붙이는 말에 지정한 내용 ) */
-    hwpf.Read2b(&encrypted, 1);                   /* 암호 여부 0-보통파일, 그외-암호걸린 파일 */
-//hwpf.Read1b(reserved2, 6);                      /* 아래 3개의값으로 바뀌었다. */
-    hwpf.Read2b(&beginpagenum,1);                 /* 페이지시작번호 */
+    hwpf.Read1b(annotation, ANNOTATION_LEN);      /* Annotation (additional information when a file is saving.) */
+    hwpf.Read2b(&encrypted, 1);                   /* encrypt: 0-normal file(without password), 1-protected by password */
+//hwpf.Read1b(reserved2, 6);                      /* it turned into below three values. */
+    hwpf.Read2b(&beginpagenum,1);                 /* Page starting number */
 
 // footnote
-    hwpf.Read2b(&beginfnnum,1);                   /* 각주 시작번호 */
-    hwpf.Read2b(&countfn,1);                      /* 각주 갯수 */
+    hwpf.Read2b(&beginfnnum,1);                   /* Footnote start number */
+    hwpf.Read2b(&countfn,1);                      /* Number of footnote */
 
     if (!hwpf.Read2b(tmp16))
         return false;
@@ -158,7 +158,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
     if (hwpf.State())
         return false;
 
-/* 문서 요약을 읽는다. */
+/* Read the article summary. */
     if (!summary.Read(hwpf))
         return false;
     if (info_block_len > 0)
@@ -169,7 +169,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
             return false;
     }
 
-/* hwpf의 값을 재설정 한다. */
+/* reset the value of hwpf. */
     hwpf.compressed = compressed != 0;
     hwpf.encrypted = encrypted != 0;
     hwpf.info_block_len = info_block_len;

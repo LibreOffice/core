@@ -555,8 +555,8 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 pList->clear();
                 rendEl( "draw:fill-image");
             }
-/* 그라데이션이 존재해도, 비트맵파일이 존재하면, 이것이 우선이다. */
-            else if( prop->flag >> 16  & 0x01 )   /* 그라데이션 존재여부 */
+/*  If there is a gradient, when a bitmap file is present, this is the first. */
+            else if( prop->flag >> 16  & 0x01 )   /* existence gradient */
             {
                 padd( "draw:name", sXML_CDATA, ascii(Int2Str(hdo->index, "Grad%d", buf)));
                 switch( prop->gstyle )
@@ -802,8 +802,8 @@ void HwpReader::makeStyles()
 
 /**
  * parse automatic styles from hwpfile
- * 자동적으로 반영이 되는 스타일을 정의한다. 예를들어 각각의 문단이나, 테이블, 헤더 등등의 스타일을 이곳에서 정의하고, Body에서는 이곳에 정의된 스타일을 이용한다.
- * 1. paragraph, text, fbox, page스타일에 대해 지원한다.
+ * Define a style that is automatically reflected. For example, defining styles of each paragraph, tables, header, and etc,. at here. In Body, use the defined style.
+ * 1. supports for the styles of paragraph, text, fbox, and page.
  */
 void HwpReader::makeAutoStyles()
 {
@@ -1032,7 +1032,7 @@ void HwpReader::makeMasterStyles()
         rstartEl("style:master-page", rList);
         pList->clear();
 
-        if( pSet[i].bIsSet )                      /* 현재 설정이 바뀌었으면 */
+        if( pSet[i].bIsSet )                      /* If you've changed the current setting */
         {
               if( !pSet[i].pagenumber ){
                     if( pPrevSet && pPrevSet->pagenumber )
@@ -1074,11 +1074,11 @@ void HwpReader::makeMasterStyles()
             pPage = &pSet[i];
             pPrevSet = &pSet[i];
         }
-        else if( pPrevSet )                       /* 이전의 설정된 것이 있으면. */
+        else if( pPrevSet )                       /* If the previous setting exists */
         {
             pPage = pPrevSet;
         }
-        else                                      /* 아직 설정이 없다면 기본설정으로 */
+        else                                      /* If the previous settings doesn't exist, set to the default settings */
         {
             rstartEl("style:header", rList);
             padd("text:style-name", sXML_CDATA, "Standard");
@@ -1098,7 +1098,7 @@ void HwpReader::makeMasterStyles()
 
             continue;
         }
-// ------------- header -------------
+// header
         if( pPage->header )
         {
             rstartEl("style:header", rList);
@@ -1128,7 +1128,7 @@ void HwpReader::makeMasterStyles()
             d->nPnPos = 0;
             rendEl("style:header");
         }
-                                                  /* 기본으로 한다. */
+                                                  /* Will be the default. */
         else if( pPage->header_odd && !pPage->header_even )
         {
             rstartEl("style:header", rList);
@@ -1163,7 +1163,7 @@ void HwpReader::makeMasterStyles()
             d->nPnPos = 0;
             rendEl("style:header-left");
         }
-                                                  /* 기본으로 한다. */
+                                                  /* Will be the default.  */
         else if( pPage->header_even && !pPage->header_odd )
         {
             rstartEl("style:header-left", rList);
@@ -1198,7 +1198,7 @@ void HwpReader::makeMasterStyles()
             rendEl("text:p");
             rendEl("style:header");
         }
-// ------------- footer -------------
+// footer
         if( pPage->footer )
         {
             rstartEl("style:footer", rList);
@@ -1229,7 +1229,7 @@ void HwpReader::makeMasterStyles()
             d->nPnPos = 0;
             rendEl("style:footer");
         }
-                                                  /* 기본으로 한다. */
+                                                  /* Will be the default. */
         else if( pPage->footer_odd && !pPage->footer_even )
         {
             rstartEl("style:footer", rList);
@@ -1264,7 +1264,7 @@ void HwpReader::makeMasterStyles()
             d->nPnPos = 0;
             rendEl("style:footer-left");
         }
-                                                  /* 기본으로 한다. */
+                                                  /* Will be the default. */
         else if( pPage->footer_even && !pPage->footer_odd )
         {
             rstartEl("style:footer-left", rList);
@@ -1307,11 +1307,11 @@ void HwpReader::makeMasterStyles()
 
 
 /**
- * 텍스트 스타일을 위한 프로퍼티들을 만든다.
+ * Create the properties for text styles.
  * 1. fo:font-size, fo:font-family, fo:letter-spacing, fo:color,
  *    style:text-background-color, fo:font-style, fo:font-weight,
  *    style:text-underline,style:text-outline,fo:text-shadow,style:text-position
- *    을 지원한다.
+ *    Support them.
  */
 void HwpReader::parseCharShape(CharShape * cshape)
 {
@@ -1381,11 +1381,11 @@ void HwpReader::parseCharShape(CharShape * cshape)
 
 
 /**
- * 실제 Paragraph에 해당하는 properties들을 만든다.
+ * Create the properties that correspond to the real Paragraph.
  * 1. fo:margin-left,fo:margin-right,fo:margin-top, fo:margin-bottom,
  *    fo:text-indent, fo:line-height, fo:text-align, fo:border
- *    가 구현됨.
- * TODO : 탭설정 => 기본값이 아닌것들만 선택적으로 설정해야 한다.
+ *    are implemented.
+ * TODO: Tab Settings => set values of properties only which doesn't have the default value
  */
 void HwpReader::parseParaShape(ParaShape * pshape)
 {
@@ -1453,7 +1453,7 @@ void HwpReader::parseParaShape(ParaShape * pshape)
 
 
 /**
- * Paragraph에 대한 스타일을 만든다.
+ * Make the style of the Paragraph.
  */
 void HwpReader::makePStyle(ParaShape * pshape)
 {
@@ -1523,8 +1523,8 @@ void HwpReader::makePStyle(ParaShape * pshape)
 
 
 /**
- * 페이지의 스타일을 만든다. 여기에는 header/footer, footnote등이 포함된다.
- * TODO : , fo:background-color(정보가 없다)
+ * Create a style for the page. This includes the header/footer, footnote and more.
+ * TODO: fo: background-color (no information)
  */
 void HwpReader::makePageStyle()
 {
@@ -1757,7 +1757,7 @@ void HwpReader::makePageStyle()
          rendEl("style:properties");
          rendEl("style:footer-style");
 
-    /* footnote style 이건 dtd에서는 빠졌으나, 스펙에는 정의되어 있다. REALKING */
+    /* Footnote style, but it fell in the dtd, the specification has been defined. REALKING */
          rstartEl("style:footnote-layout", rList);
 
          padd("style:distance-before-sep", sXML_CDATA,
@@ -1796,18 +1796,18 @@ void HwpReader::makeColumns(ColumnDef *coldef)
   {
         switch( coldef->separator )
         {
-             case 1:                           /* 얇은선 */
+             case 1:                           /* thin line */
                   padd("style:width", sXML_CDATA, "0.02mm");
                   //fall-through
-             case 3:                           /* 점선 */
+             case 3:                           /* dotted line */
                   padd("style:style", sXML_CDATA, "dotted");
                   padd("style:width", sXML_CDATA, "0.02mm");
                   break;
-             case 2:                           /* 두꺼운선 */
-             case 4:                           /* 2중선 */
+             case 2:                           /* thick line */
+             case 4:                           /* double line */
                   padd("style:width", sXML_CDATA, "0.35mm");
                   break;
-             case 0:                           /* 없음 */
+             case 0:                           /* None */
              default:
                   padd("style:style", sXML_CDATA, "none");
                   break;
@@ -1853,7 +1853,7 @@ void HwpReader::makeTStyle(CharShape * cshape)
 
 void HwpReader::makeTableStyle(Table *tbl)
 {
-// --------------- table ----------------
+// table
     TxtBox *hbox = tbl->box;
 
     padd("style:name", sXML_CDATA,
@@ -1870,7 +1870,7 @@ void HwpReader::makeTableStyle(Table *tbl)
     rendEl("style:properties");
     rendEl("style:style");
 
-// --------------- column ----------------
+// column
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
@@ -1886,7 +1886,7 @@ void HwpReader::makeTableStyle(Table *tbl)
         rendEl("style:style");
     }
 
-// --------------- row ----------------
+// row
     for (size_t i = 0 ; i < tbl->rows.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.row%" SAL_PRI_SIZET "u",hbox->style.boxnum, i + 1);
@@ -1902,7 +1902,7 @@ void HwpReader::makeTableStyle(Table *tbl)
         rendEl("style:style");
     }
 
-// --------------- cell ---------------------
+// cell
     for (std::list<TCell*>::iterator it = tbl->cells.begin(), aEnd = tbl->cells.end(); it != aEnd; ++it)
     {
         TCell *tcell = *it;
@@ -1920,14 +1920,14 @@ void HwpReader::makeTableStyle(Table *tbl)
         {
             switch( cl->linetype[2] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border", sXML_CDATA,"0.039cm double #000000");
                     break;
@@ -1937,56 +1937,56 @@ void HwpReader::makeTableStyle(Table *tbl)
         {
             switch( cl->linetype[0] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-left", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-left", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-left", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-left", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cl->linetype[1] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-right", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-right", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-right", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-right", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cl->linetype[2] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-top", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-top", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-top", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-top", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cl->linetype[3] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-bottom", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-bottom", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-bottom", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-bottom", sXML_CDATA,"0.039cm double #000000");
                     break;
@@ -2323,14 +2323,14 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
                 case 0:
                     padd("fo:padding", sXML_CDATA,"0mm");
                     break;
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border", sXML_CDATA,"0.039cm double #000000");
                     break;
@@ -2340,56 +2340,56 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
         {
             switch( cell->linetype[0] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-left", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-left", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-left", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-left", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[1] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-right", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-right", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-right", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-right", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[2] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-top", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-top", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-top", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-top", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[3] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-bottom", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-bottom", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-bottom", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-bottom", sXML_CDATA,"0.039cm double #000000");
                     break;
@@ -2408,7 +2408,7 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
 
 
 /**
- * Floating 객체에 대한 스타일을 만든다.
+ * Create a style for the Floating objects.
  */
 void HwpReader::makeFStyle(FBoxStyle * fstyle)
 {
@@ -2534,14 +2534,14 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
                 case 0:
                           padd("fo:border", sXML_CDATA, "none");
                     break;
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border", sXML_CDATA,"0.039cm double #000000");
                     break;
@@ -2551,56 +2551,56 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
         {
             switch( cell->linetype[0] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-left", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-left", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-left", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-left", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[1] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-right", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-right", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-right", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-right", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[2] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-top", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-top", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-top", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-top", sXML_CDATA,"0.039cm double #000000");
                     break;
             }
             switch( cell->linetype[3] )
             {
-                case 1:                           /* 가는실선 */
-                case 3:                           /* 점선 -> 스타오피스에는 점선이 없다. */
+                case 1:                           /* A thin solid line */
+                case 3:                           /* Dotted line -> LibreOffice, there is no dotted line */
                     padd("fo:border-bottom", sXML_CDATA,"0.002cm solid #000000");
                     break;
-                case 2:                           /* 굵은실선 */
+                case 2:                           /* Bold lines */
                     padd("fo:border-bottom", sXML_CDATA,"0.035cm solid #000000");
                     break;
-                case 4:                           /* 2중선 */
+                case 4:                           /* Double line */
                     padd("style:border-line-width-bottom", sXML_CDATA,"0.002cm 0.035cm 0.002cm");
                     padd("fo:border-bottom", sXML_CDATA,"0.039cm double #000000");
                     break;
@@ -2688,7 +2688,7 @@ void HwpReader::makeChars(hchar_string & rStr)
 
 
 /**
- * 문단내에 특수문자가 없고 모든 문자가 동일한 CharShape를 사용하는 경우
+ * If no special characters in the paragraph and all characters use the same CharShape
  */
 void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
 {
@@ -2755,8 +2755,8 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
 }
 
 
-/**
- * 문단내에 특수문자가 없으나 문자들이 다른 CharShape를 사용하는 경우
+/*
+ * There is no special characters in the paragraph, but characters use different CharShapes
  */
 void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
 {
@@ -2839,7 +2839,7 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
 
 
 /**
- * 문단 내의 특수문자가 있으며 문자들이 다른 CharShape를 갖는 경우에 대해 처리
+ * Special characters are in the paragraph and characters use different CharShapes
  */
 void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
 {
@@ -2974,9 +2974,9 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     }
                     makeTab(static_cast<Tab *>(para->hhstr[n]));
                     break;
-                case CH_TEXT_BOX:                 /* 10 - 표/텍스트박스/수식/버튼/하이퍼텍스트 순 */
+                case CH_TEXT_BOX:                 /* 10 - ordered by Table/text box/formula/button/hypertext */
                 {
-/* 일단은 표만 처리하고, 수식은 text:p안에 들어가는 것으로 처리. */
+/* produce tables first, and treat formula as being in text:p. */
                     TxtBox *hbox = static_cast<TxtBox *>(para->hhstr[n]);
 
                     if( hbox->style.anchor_type == 0 )
@@ -3074,11 +3074,11 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     makeChars(str);
                     makeMailMerge(static_cast<MailMerge *>(para->hhstr[n]));
                     break;
-                case CH_COMPOSE:                  /* 23 - 글자겹침 */
+                case CH_COMPOSE:                  /* 23 - overlapping letters */
                     break;
                 case CH_HYPHEN:                   // 24
                     break;
-                case CH_TOC_MARK:                 /* 25 아래의 3개는 작업해야 한다. */
+                case CH_TOC_MARK:                 /* 25 Need to fix below 3 */
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
@@ -3106,7 +3106,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
 
 void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
 {
-/* 누름틀 */
+/* Push frame */
     if( hbox->type[0] == 4 && hbox->type[1] == 0 )
     {
         padd("text:placeholder-type", sXML_CDATA, "text");
@@ -3117,7 +3117,7 @@ void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
         rchars( OUString(rStr.c_str()));
         rendEl( "text:placeholder" );
     }
-/* 문서요약 */
+/* Document Summary */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
     {
         if (hconv(hbox->str3) == "title")
@@ -3145,7 +3145,7 @@ void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
             rendEl( "text:keywords" );
         }
     }
-/* 개인정보 */
+/* Personal Information */
     else if( hbox->type[0] == 3 && hbox->type[1] == 1 )
     {
         if (hconv(hbox->str3) == "User")
@@ -3225,7 +3225,7 @@ void HwpReader::makeFieldCode(hchar_string & rStr, FieldCode *hbox)
 
 /**
  * Completed
- * 스타오피스에서는 북마크를 Reference로 참조하나 hwp에는 그 기능이 없다.
+ * In LibreOffice, refer bookmarks as reference, but hwp doesn't have the sort of feature.
  */
 void HwpReader::makeBookmark(Bookmark * hbox)
 {
@@ -3236,7 +3236,7 @@ void HwpReader::makeBookmark(Bookmark * hbox)
         pList->clear();
         rendEl("text:bookmark");
     }
-    else if (hbox->type == 1)                     /* 블록 북마크일 경우 시작과 끝이 있다 */
+    else if (hbox->type == 1)                     /* Block bookmarks days begin and end there if */
     {
         padd("text:name", sXML_CDATA, (hconv(hbox->id)));
         rstartEl("text:bookmark-start", rList);
@@ -3433,7 +3433,7 @@ void HwpReader::makeTable(TxtBox * hbox)
     pList->clear();
 
     Table *tbl = hbox->m_pTable;
-// ----------- column ----------------
+// column
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
@@ -3443,7 +3443,7 @@ void HwpReader::makeTable(TxtBox * hbox)
         rendEl("table:table-column");
     }
 
-// ----------- cell ----------------
+// cell
     int j = -1, k = -1;
     for (std::list<TCell*>::iterator it = tbl->cells.begin(), aEnd = tbl->cells.end(); it != aEnd; ++it)
     {
@@ -3455,7 +3455,7 @@ void HwpReader::makeTable(TxtBox * hbox)
                 rendEl("table:table-row");
                 k = j;
             }
-// --------------- row ----------------
+// row
             sprintf(buf,"Table%d.row%d",hbox->style.boxnum, tcell->nRowIndex + 1);
             padd("table:style-name", sXML_CDATA, ascii( buf ));
             rstartEl("table:table-row", rList);
@@ -3485,10 +3485,10 @@ void HwpReader::makeTable(TxtBox * hbox)
 
 
 /**
- * 텍스트박스와 테이블을 파싱한다.
- * 1. draw:style-name, draw:name, text:anchor-type, svg:width,
- *    fo:min-height, svg:x, svg:y
- * TODO : fo:background-color로 셀의 칼라 설정=>스타일에 들어가는 지 아직 모르겠다.
+ * Parses the text boxes and tables.
+ * 1. draw: style-name, draw: name, text: anchor-type, svg: width,
+ * Fo: min-height, svg: x, svg: y
+ * TODO: fo:background-color <= no idea whether the value of color setting->style is in it or not
  */
 void HwpReader::makeTextBox(TxtBox * hbox)
 {
@@ -3530,7 +3530,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             Double2Str(WTMM(( hbox->box_ys + hbox->cap_ys) )) + "mm");
         rstartEl("draw:text-box", rList);
         pList->clear();
-        if( hbox->cap_pos % 2 )                   /* 캡션이 위쪽에 위치한다 */
+        if( hbox->cap_pos % 2 )                   /* The caption is on the top */
         {
             parsePara(hbox->caption.front());
         }
@@ -3597,7 +3597,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
     {
         rstartEl("draw:text-box", rList);
         pList->clear();
-/* 캡션이 존재하고, 위쪽에 있으면 */
+/* If captions are present and it is on the top */
         if( hbox->style.cap_len > 0 && (hbox->cap_pos % 2) && hbox->type == TBL_TYPE )
         {
             parsePara(hbox->caption.front());
@@ -3610,7 +3610,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         {
             parsePara(hbox->plists[0].front());
         }
-/* 캡션이 존재하고, 아래쪽에 있으면 */
+/* If captions are present and it is on the bottom */
         if( hbox->style.cap_len > 0 && !(hbox->cap_pos % 2) && hbox->type == TBL_TYPE)
         {
             parsePara(hbox->caption.front());
@@ -3638,7 +3638,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
 
 
 /**
- * MathML로 변환해야 한다.
+ * It must be converted into MathML.
  *
  */
 void HwpReader::makeFormula(TxtBox * hbox)
@@ -3690,12 +3690,11 @@ void HwpReader::makeFormula(TxtBox * hbox)
     delete form;
 }
 
-
 /**
- * platform정보를 읽어들여서 href가 C:\나 D:\로 시작할 경우 리눅스나 솔라리스이면
- * C:\ => 홈으로, D:\ => 루트(/)로 바꾸어주는 작업이 필요하다. 이것은
- * 한컴이 도스에뮬레이터를 쓰기 때문이다.
+ * Read the platform information. if the platform is Linux or Solaris, it needs to change
+ * C: \ => Home, D: \ => changed to root (/). Because HWP uses DOS emulator.
  */
+
 void HwpReader::makeHyperText(TxtBox * hbox)
 {
     HyperText *hypert = hwpfile.GetHyperText();
@@ -3740,10 +3739,10 @@ void HwpReader::makeHyperText(TxtBox * hbox)
 
 
 /**
- * platform정보를 읽어들여서 href가 C:\나 D:\로 시작할 경우 리눅스나 솔라리스이면
- * C:\ => 홈으로, D:\ => 루트(/)로 바꾸었다. 이것은
- * 한컴이 도스에뮬레이터를 쓰기 때문이다.
+ * Read the platform information. if the platform is Linux or Solaris, it needs to change¶
+ * C: \ => Home, D: \ => changed to root (/). Because HWP uses DOS emulator.
  */
+
 void HwpReader::makePicture(Picture * hbox)
 {
     switch (hbox->pictype)
@@ -3790,7 +3789,7 @@ void HwpReader::makePicture(Picture * hbox)
                     Double2Str(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3] + hbox->cap_ys )) + "mm");
                 rstartEl("draw:text-box", rList);
                 pList->clear();
-                if( hbox->cap_pos % 2 )           /* 캡션이 위쪽에 위치한다 */
+                if( hbox->cap_pos % 2 )           /* Caption is on the top */
                 {
                     parsePara(hbox->caption.front());
                 }
@@ -3935,7 +3934,7 @@ void HwpReader::makePicture(Picture * hbox)
             if( hbox->style.cap_len > 0 )
             {
                 rendEl( "text:p");
-                if( !(hbox->cap_pos % 2))         /* 캡션이 아래쪽에 위치하면, */
+                if( !(hbox->cap_pos % 2))         /* Caption is at the bottom, */
                 {
                     parsePara(hbox->caption.front());
                 }
@@ -4013,13 +4012,13 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                      ZZPoint pt[3], r_pt[3];
                      for(i = 0 ; i < 3 ; i++ ){
                          pt[i].x = pal->pt[i].x - drawobj->property.rot_originx;
-                         /* 물리좌표계로 변환 */
+                         /* Convert to a physical coordinate */
                          pt[i].y = -(pal->pt[i].y - drawobj->property.rot_originy);
                      }
 
                 double rotate, skewX ;
 
-                     /* 2 - 회전각 계산 */
+                     /* 2 - rotation angle calculation */
                      if( pt[1].x == pt[0].x ){
                          if( pt[1].y > pt[0].y )
                              rotate = PI/2;
@@ -4036,7 +4035,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                          r_pt[i].y = (int)(pt[i].y * cos(-(rotate)) + pt[i].x * sin(-(rotate)));
                      }
 
-                     /* 4 - 휜각 계산 */
+                     /* 4 - Calculation of reflex angle */
                      if( r_pt[2].y == r_pt[1].y )
                          skewX = 0;
                      else
@@ -4074,7 +4073,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
             }
             switch (drawobj->type)
             {
-                case HWPDO_LINE:                  /* 선 - 시작좌표, 끝좌표. */
+                case HWPDO_LINE:                  /* Line-starting coordinates, ending coordinates. */
                     if( drawobj->u.line_arc.flip & 0x01 )
                     {
                         padd("svg:x1", sXML_CDATA,
@@ -4108,7 +4107,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     pList->clear();
                     rendEl("draw:line");
                     break;
-                case HWPDO_RECT:                  /* 사각형 - 시작위치, 가로/세로 */
+                case HWPDO_RECT:                  /* rectangle - the starting position, vertical/horizontal  */
                     if( !bIsRotate )
                     {
                         padd("svg:x", sXML_CDATA,
@@ -4150,8 +4149,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     }
                     rendEl("draw:rect");
                     break;
-                case HWPDO_ELLIPSE:               /* 타원 - 시작위치, 가로/세로 */
-                case HWPDO_ADVANCED_ELLIPSE:      /* 변형된 타원 */
+                case HWPDO_ELLIPSE:               /* Ellipse - the starting position, vertical/horizontal */
+                case HWPDO_ADVANCED_ELLIPSE:      /* modified ellipse */
                 {
                     if( !bIsRotate )
                     {
@@ -4200,10 +4199,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     break;
 
                 }
-                case HWPDO_ARC:                   /* 호 */
+                case HWPDO_ARC:                   /* Arc */
                 case HWPDO_ADVANCED_ARC:
                 {
-                    /* 호일경우에, 스타오피스는 전체 타원의 크기를 사이즈로 한다. */
+                    /*  If it is the arc, LibreOffice assumes the size as the entire ellipse size */
                          uint flip = drawobj->u.line_arc.flip;
                     if( !bIsRotate )
                     {
@@ -4310,7 +4309,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     break;
 
                 }
-                     case HWPDO_CURVE: /* 곡선 : 다각형으로 변환. */
+                     case HWPDO_CURVE: /* Curve: converts to polygons. */
                 {
                     bool bIsNatural = true;
                     if( drawobj->property.flag >> 5 & 0x01){
@@ -4426,7 +4425,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     break;
                 }
                 case HWPDO_CLOSED_FREEFORM:
-                case HWPDO_FREEFORM:              /* 다각형 */
+                case HWPDO_FREEFORM:              /* polygon */
                 {
                     bool bIsPolygon = false;
 
@@ -4569,8 +4568,8 @@ void HwpReader::makeLine(Line *   )
 
 
 /**
- * 입력-주석-숨은설명 : 사용자에게 숨은 설명을 보여준다.
- * 문단이 포함될 수 있으나, 단지 문자열만 뽑아내어 파싱한다.
+ * Input-comment-hidden description: shows a hidden explanation to the users.
+ * Parse out only strings, but it may contain paragraphs.
  */
 void HwpReader::makeHidden(Hidden * hbox)
 {
@@ -4603,7 +4602,7 @@ void HwpReader::makeHidden(Hidden * hbox)
 
 
 /**
- * 각주는 text:footnote, 미주는 text:endnote로 변환
+ * Converts footnote to text:footnote, endnote to text:endnote
  */
 void HwpReader::makeFootnote(Footnote * hbox)
 {
@@ -4693,7 +4692,7 @@ void HwpReader::makeShowPageNum()
         nPos = 2;
     else if( hbox->where == 3 || hbox->where == 6 )
         nPos = 3;
-    else                                          /* 이 경우가 존재하면 안된다. */
+    else                                          /* should not exist in this case. */
     {
         if( d->nPnPos == 1 )
             nPos = 1;

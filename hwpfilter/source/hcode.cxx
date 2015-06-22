@@ -522,7 +522,7 @@ static hchar cdkssm2ks_han(hchar kssm)
     unsigned int index;
     unsigned char lo, hi;
 
-/* "한" */
+/* "One" */
     if (kssm == 0xd3c5)
         return 0xc7d1;
 
@@ -584,7 +584,7 @@ static const hchar choseong_to_unicode[] =
     0x110e, 0x110f, 0x1110, 0x1111, 0x1112, 0x1120, 0x1121, 0x1127,
     0x112b, 0x112d, 0x112f, 0x1132, 0x1136, 0x1140, 0x114c, 0x1158
 };
-/* 중성이 0과 1인 곳에는 다른 코드들이 들어가 있다. 이부분에 대한 법칙을 뽑아라. */
+/* There are some other codes where the medial sound is 0 or 1. It needs to extract the rules in those area */
 static const hchar joongseong_to_unicode[] =
 {
     0,      0,  0, 0x1161, 0x1162, 0x1163, 0x1164, 0x1165,
@@ -601,12 +601,12 @@ static const hchar jongseong_to_unicode[] =
     0x11bd, 0x11be, 0x11bf, 0x11c0, 0x11c1, 0x11c2, 0x11eb, 0x11f0
 };
 
-/* 중성이 0과 1인곳 */
-/* 처음 32개는 자모, 나머지 32개는 조합으로 구성.
- * 0x8000 ~ 0xa413까지 32개 나오고, 0x0400더한 0x8400에서 다시 32개 나오는 식으로 진행된다.
- * 자모영역은 일반 테이블로 나머지는 구조체 매핑테이블로 만든다.
- */
-/* 308개.. 1152개에서 308개를 제외한 나머지 844개는 자모조합이다. */
+/* The medial sound is 0 or 1
+ * first 32 are consonants and vowels and the other 32 is combinations of alphabets
+ * (0x8000 ~ 0xa413) are the first 32. the other 32 start from 0x8400
+ * consonants and vowels area is made as a general table and the rest are made of a sructure mapping table
+ *
+ * 844, except for the remaining 1152-308 is a combination of consonants and vowels. */
 static const hchar jamo_to_unicode[] =
 {
     0x3131, 0x3132, 0x3133, 0x3134, 0x3135, 0x3136, 0x3137, 0x3138,
@@ -665,7 +665,7 @@ struct JamoComp{
     hchar v2;
     hchar v3;
 };
-/* 704 + 12 = 706 개  */
+/* 704 + 12 = 706 */
 static const JamoComp jamocomp1_to_unicode[] =
 {
     {3, 0x1100, 0x1161, 0x11e7}, {3, 0x1100, 0x1161, 0x3167},
@@ -788,7 +788,7 @@ static const JamoComp jamocomp1_to_unicode[] =
     {3, 0x1105, 0x119e, 0x11d7}, {3, 0x1105, 0x119e, 0x11dc},
     {3, 0x1105, 0x119e, 0x11dd}, {2, 0x1105, 0x1176, 0x0000},
 
-/* -- 여기부터 숫자 안바꿈 즉, 3을 2로 바꾸어 주어야 함. */
+/* From here, numbers are not changed. So must change 3 to 2 manually. */
     {2, 0x1105, 0x1178, 0x0000}, {2, 0x1105, 0x117a, 0x0000},
     {2, 0x1105, 0x117b, 0x0000}, {2, 0x1105, 0x1186, 0x0000},
     {2, 0x1105, 0x1187, 0x0000}, {2, 0x1105, 0x118c, 0x0000},
@@ -913,13 +913,13 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
           dest[0] = ch;
         return 1;
     }
-      /* 한자는 0x4000부터 4888가지의 값을 가진다. */
+      /* Chinese characters have a value of 4888 kinds from 0x4000. */
     else if (IsHanja(ch))
     {
         unsigned int index;
         unsigned char hi;
-        /*  4888이외의 수는 아래한글에서 정의한 확장한자이다. 이것에 대해서는
-            유니코드나 완성형코드로의 변환을 위한 매핑테이블어 없는 실정이다.
+        /*Out of 4888 kinds are Chinese characters which are defined by Hangul Word Processor. For this
+          there is no mapping table to convert to Unicode or completion code(KSC5601-87, EUC-KR)
          */
         if ((index = ch - 0x4000) >= 4888)
         {
@@ -931,8 +931,8 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
         }
         if (codeType == KS)
         {
-            /*  한자코드는 상위코드와 하위코드로 나누어지며 하위코드는 0xA1 - 0xFE 까지의 값을 가진다.
-                즉 하위코드에 올수있는 가지수는 0xFE - 0xA1 +1 가지수이다.
+            /* Chinese code is divided into the upper cord and lower cord. Lower code has the value from 0xA1 up to 0xFE.
+               In other words, the number of lower code is the number of (0xFE - 0xA1) +1
              */
             hi = sal::static_int_cast<unsigned char>(index / (0xFE - 0xA1 + 1) + 0xCA);
             lo = sal::static_int_cast<unsigned char>(index % (0xFE - 0xA1 + 1) + 0xA1);
@@ -995,9 +995,9 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
           dest[0] = ch;
         return 1 ;
     }
-/**
- * 특수문자 코드
- * 아래한글에서는 0x3400부터 특수문자가 시작된다. 조합형은 0xA1A0
+/*
+ * Special characters code
+ * In Hangul Word Processor, special characters begins from 0x3400. Combinations are from 0xA1A0
  */
     else
     {
@@ -1012,7 +1012,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
                          dest[0] = ch;
                           return 1;
                      }
-                     /* 한글과컴퓨터 : 0x37c0 ~ 0x37c5 */
+                     /* Hangul and Computer: 0x37c0 ~ 0x37c5 */
                      if( ch2 >= 0x37c0 && ch2 <= 0x37c5 ){
                          if( ch2 == 0x37c0 ) dest[0] = 0xd55c;
                          else if( ch2 == 0x37c1 ) dest[0] = 0xae00;
@@ -1058,7 +1058,7 @@ int hcharconv(hchar ch, hchar *dest, int codeType)
     }
 }
 
-/* 한글일 경우. */
+/* If it's Korean(Hangul). */
 int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
 {
     hchar choseong, joongseong, jongseong;
@@ -1069,13 +1069,13 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
 
      //printf("kssm_hangul_to_ucs2 : [%d,%d,%d]\n", choseong,joongseong,jongseong);
 
-     if( joongseong < 2 ){ /* 조합되지 않은 영역 중성=0,1 */
-         if( joongseong == 0 && ch < 0xa414 ){ /* 고어포함 자모 */
+     if( joongseong < 2 ){ /* Not combined area, medial sound = 0,1 */
+         if( joongseong == 0 && ch < 0xa414 ){ /* consonants and vowels includes old characters */
              int index = choseong * 32 + jongseong;
              dest[0] = jamo_to_unicode[index];
              return 1;
          }
-         else{ /* 고어포함 자모조합 : 테이블 미완성 */
+         else{ /* combination of consonants and vowels includes old characters: an unfinished table */
              unsigned int index = choseong * 32 + jongseong - 308;
              if( index < SAL_N_ELEMENTS(jamocomp1_to_unicode) ){
                  dest[0] = jamocomp1_to_unicode[index].v1;
@@ -1087,11 +1087,11 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
              return 1;
          }
      }
-     else if ( choseong == 1 && jongseong == 1 ){ /* 모음 */
+     else if ( choseong == 1 && jongseong == 1 ){ /* Vowel */
          dest[0] = joongseong_to_unicode[joongseong];
          return 1;
      }
-     else if ( joongseong == 2 && jongseong == 1 ){  /* 자음 */
+     else if ( joongseong == 2 && jongseong == 1 ){  /* Consonant */
          dest[0] = choseong_to_unicode[choseong];
        return 1;
     }
@@ -1100,8 +1100,8 @@ int kssm_hangul_to_ucs2(hchar ch, hchar *dest)
              joongseong == 25 || joongseong > 29 ||
              jongseong == 0 || jongseong == 18 ||
              jongseong > 29 ||
-             choseong == 1 || joongseong == 2  /* 완성되지 않은 한글 */
-             ) { /* 고어 */
+             choseong == 1 || joongseong == 2  /* Incomplete Hangul */
+             ) { /* Gore */
          int count = 0;
          if( choseong != 1 ){
              dest[count] = choseong_to_unicode[choseong];
@@ -1181,7 +1181,7 @@ hchar_string hstr2ucsstr(hchar const* hstr)
 }
 
 /**
- * 한컴스트링을 완성형스트링으로 변환한다
+ * Convert 'Hangul and Computer' strings to the completion code(KSC5601-87)
  */
 ::std::string hstr2ksstr(hchar const* hstr)
 {
@@ -1211,8 +1211,8 @@ hchar_string hstr2ucsstr(hchar const* hstr)
 
 
 /*
- * 한글에서 영문외의 문자까지 포함할 수 있는 kchar타입의 문자열을
- * 한글에서 사용하는 hchar타입의 문자열로 변환한다.
+ * Convert strings of kchar type, which can contain Korean, English and others
+ * to strings of hchar type of Hangul Word Processor
  */
 hchar_string kstr2hstr(unsigned char const* src)
 {
@@ -1243,7 +1243,7 @@ char* Int2Str(int value, const char *format, char *buf)
 }
 
 
-/* color인덱스 값과 음영값을 조합하여 스타오피스의 color로 변환 */
+/* Convert a combination of a color index value and a shade value to the color value of LibreOffice */
 char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 {
     unsigned short red,green,blue;
@@ -1451,11 +1451,11 @@ double calcAngle(int x1, int y1, int x2, int y2)
      }
      double angle;
      angle = (180 / PI) * atan( ( y2 - y1 ) * 1.0 / ( x2 - x1 ));
-     if( y2 >= y1 ){ /* 1,2사분면 */
+     if( y2 >= y1 ){ /* 1, 2 quadrant */
           if( angle < 0. )
                 angle += 180.;
      }
-     else{ /* 3, 4 사분면 */
+     else{ /* 3, 4 quadrants */
           if( angle > 0 )
                 angle += 180.;
           else

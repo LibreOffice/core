@@ -118,12 +118,12 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     hwpf.Read1b(&pstyno, 1);
 
 
-/* Paragraph 대표 글자 */
+/* Paragraph representative character */
     cshape.Read(hwpf);
     if (nch > 0)
         hwpf.AddCharShape(&cshape);
 
-/* Paragraph 문단 모양 */
+/* Paragraph paragraphs shape  */
     if (nch && !reuse_shape)
     {
         pshape.Read(hwpf);
