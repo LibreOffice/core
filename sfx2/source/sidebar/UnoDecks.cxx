@@ -94,7 +94,7 @@ sal_Bool SAL_CALL SfxUnoDecks::hasByName( const OUString& aName )
 
     SidebarController* pSidebarController = getSidebarController();
 
-    sal_Bool bFound = false;
+    bool bFound = false;
 
     if (pSidebarController)
     {
