@@ -20,6 +20,7 @@
 #include <PropertyMap.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
+#include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 
 namespace writerfilter {
@@ -167,13 +168,7 @@ beans::PropertyValue CellMarginHandler::getInteropGrabBag()
 {
     beans::PropertyValue aRet;
     aRet.Name = m_aInteropGrabBagName;
-
-    uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
-    beans::PropertyValue* pSeq = aSeq.getArray();
-    for (std::vector<beans::PropertyValue>::iterator i = m_aInteropGrabBag.begin(); i != m_aInteropGrabBag.end(); ++i)
-        *pSeq++ = *i;
-
-    aRet.Value = uno::makeAny(aSeq);
+    aRet.Value = uno::makeAny(comphelper::containerToSequence(m_aInteropGrabBag));
     return aRet;
 }
 

@@ -68,13 +68,9 @@ void LatentStyleHandler::lcl_sprm(Sprm& /*rSprm*/)
 {
 }
 
-uno::Sequence<beans::PropertyValue> LatentStyleHandler::getAttributes() const
+std::vector<beans::PropertyValue> LatentStyleHandler::getAttributes() const
 {
-    uno::Sequence<beans::PropertyValue> aAttributes(m_aAttributes.size());
-    beans::PropertyValue* pAttributes = aAttributes.getArray();
-    for (std::vector<beans::PropertyValue>::const_iterator i = m_aAttributes.begin(); i != m_aAttributes.end(); ++i)
-        *pAttributes++ = *i;
-    return aAttributes;
+    return m_aAttributes;
 }
 
 } // namespace dmapper

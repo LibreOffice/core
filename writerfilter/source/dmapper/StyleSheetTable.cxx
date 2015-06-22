@@ -737,7 +737,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 pProperties->resolve(*pLatentStyleHandler);
                 beans::PropertyValue aValue;
                 aValue.Name = "lsdException";
-                aValue.Value = uno::makeAny(pLatentStyleHandler->getAttributes());
+                aValue.Value = uno::makeAny(comphelper::containerToSequence(pLatentStyleHandler->getAttributes()));
                 m_pImpl->m_pCurrentEntry->aLsdExceptions.push_back(aValue);
             }
         }
