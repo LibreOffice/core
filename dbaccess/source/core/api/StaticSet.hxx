@@ -34,7 +34,7 @@ namespace dbaccess
         bool fetchRow();
         void fillAllRows();
     public:
-        OStaticSet(sal_Int32 i_nMaxRows) : OCacheSet(i_nMaxRows)
+        explicit OStaticSet(sal_Int32 i_nMaxRows) : OCacheSet(i_nMaxRows)
             , m_aSetIter(m_aSet.end())
             , m_bEnd(false)
         {

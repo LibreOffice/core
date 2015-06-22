@@ -35,7 +35,7 @@ namespace dbaccess
 
         void updateColumn(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate > _xParameter,const connectivity::ORowSetValue& _rValue);
     public:
-        WrappedResultSet(sal_Int32 i_nMaxRows) : OCacheSet(i_nMaxRows)
+        explicit WrappedResultSet(sal_Int32 i_nMaxRows) : OCacheSet(i_nMaxRows)
         {}
         virtual ~WrappedResultSet()
         {
