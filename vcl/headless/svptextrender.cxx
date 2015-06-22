@@ -291,10 +291,11 @@ void SvpTextRender::ClearDevFontCache()
     rGC.ClearFontCache();
 }
 
-bool SvpTextRender::AddTempDevFont( PhysicalFontCollection*,
-    const OUString&, const OUString& )
+bool SvpTextRender::AddTempDevFont( PhysicalFontCollection* pFontCollection,
+                                     const OUString& rFileURL,
+                                     const OUString& rFontName )
 {
-    return false;
+    return GenPspGraphics::AddTempDevFontHelper( pFontCollection, rFileURL, rFontName, SvpGlyphCache::GetInstance() );
 }
 
 bool SvpTextRender::CreateFontSubset(
