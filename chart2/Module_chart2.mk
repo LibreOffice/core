@@ -24,6 +24,7 @@ $(eval $(call gb_Module_add_l10n_targets,chart2,\
 $(eval $(call gb_Module_add_slowcheck_targets,chart2,\
     CppunitTest_chart2_export \
     CppunitTest_chart2_import \
+    CppunitTest_chart2_trendcalculators \
 ))
 
 ifeq ($(ENABLE_CHART_TESTS),TRUE)
