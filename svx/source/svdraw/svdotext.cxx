@@ -1993,12 +1993,16 @@ void SdrTextObj::onOverflowStatusEvent( )
     // If this is the a post-underflow-type of overflow then we cannot
     //    trust the editing outl on the text since it has still the old one
     if(GetTextChain()->GetLinkHandlingUnderflow(this)) {
+            // XXX: Maybe you can get this info directly from editing outl?
             OutlinerParaObject *pPObj = GetOutlinerParaObject();
             aDrawOutliner.SetUpdateMode(true);
             aDrawOutliner.SetMaxAutoPaperSize(pEdtOutl->GetMaxAutoPaperSize());
             aDrawOutliner.SetText(*pPObj);
             aDrawOutliner.IsPageOverflow(); // Check for overflow to set flags
             mpOverflowingText = aDrawOutliner.GetOverflowingText();
+
+            // reset underflow handling
+            GetTextChain()->SetLinkHandlingUnderflow(this, false);
         } else  if (pEdtOutl != NULL)
             mpOverflowingText = pEdtOutl->GetOverflowingText();
         else {
