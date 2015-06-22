@@ -48,6 +48,11 @@ namespace cppu {
     com::sun::star::uno::XInterface, com::sun::star::lang::XTypeProvider, and
     com::sun::star::lang::XComponent.
 
+    Like WeakComponentImplHelper, but does not define
+    XComponent::add/removeEventListener.  Use for classes deriving from multiple
+    UNO interfaces with competing add/removeEventListener methods, to avoid
+    warnings about hiding of overloaded virtual functions.
+
     Upon disposing objects of this class, sub-classes receive a disposing()
     call.
 
@@ -56,17 +61,18 @@ namespace cppu {
     instance.
 */
 template<typename... Ifc>
-class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakComponentImplHelper:
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE PartialWeakComponentImplHelper:
     public WeakComponentImplHelperBase, public css::lang::XTypeProvider,
     public Ifc...
 {
     struct cd:
         rtl::StaticAggregate<
-            class_data, detail::ImplClassData<WeakComponentImplHelper, Ifc...>>
+            class_data,
+            detail::ImplClassData<PartialWeakComponentImplHelper, Ifc...>>
     {};
 
 public:
-    WeakComponentImplHelper(osl::Mutex & mutex) throw ():
+    PartialWeakComponentImplHelper(osl::Mutex & mutex) throw ():
         WeakComponentImplHelperBase(mutex) {}
 
     css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType)
@@ -83,6 +89,34 @@ public:
         SAL_OVERRIDE
     { WeakComponentImplHelperBase::dispose(); }
 
+    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return WeakComponentImplHelper_getTypes(cd::get()); }
+
+    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    { return css::uno::Sequence<sal_Int8>(); }
+};
+
+/** Implementation helper implementing interfaces
+    com::sun::star::uno::XInterface, com::sun::star::lang::XTypeProvider, and
+    com::sun::star::lang::XComponent.
+
+    Upon disposing objects of this class, sub-classes receive a disposing()
+    call.
+
+    @attention
+    The mutex reference passed to the constructor has to outlive the constructed
+    instance.
+*/
+template<typename... Ifc>
+class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakComponentImplHelper:
+    public PartialWeakComponentImplHelper<Ifc...>
+{
+public:
+    WeakComponentImplHelper(osl::Mutex & mutex) throw ():
+        PartialWeakComponentImplHelper<Ifc...>(mutex) {}
+
     void SAL_CALL addEventListener(
         css::uno::Reference<css::lang::XEventListener> const & xListener)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
@@ -92,14 +126,6 @@ public:
         css::uno::Reference<css::lang::XEventListener> const & aListener)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     { WeakComponentImplHelperBase::removeEventListener(aListener); }
-
-    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-    { return WeakComponentImplHelper_getTypes(cd::get()); }
-
-    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
-    { return css::uno::Sequence<sal_Int8>(); }
 };
 
 }

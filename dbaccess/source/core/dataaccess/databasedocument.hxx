@@ -55,13 +55,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 17
-#include <comphelper/implbase_var.hxx>
-#endif
-
-#include <cppuhelper/compbase10.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <rtl/ref.hxx>
 
@@ -134,7 +128,7 @@ private:
 };
 
 // ODatabaseDocument
-typedef ::comphelper::PartialWeakComponentImplHelper17 <   ::com::sun::star::frame::XModel2
+typedef cppu::PartialWeakComponentImplHelper<   ::com::sun::star::frame::XModel2
                                                 ,   ::com::sun::star::util::XModifiable
                                                 ,   ::com::sun::star::frame::XStorable
                                                 ,   ::com::sun::star::document::XEventBroadcaster

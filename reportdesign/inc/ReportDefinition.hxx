@@ -41,14 +41,9 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/propertysetmixin.hxx>
 #include <svx/unomod.hxx>
-
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_13
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 13
-#include <comphelper/implbase_var.hxx>
-#endif
 
 #include <boost/shared_ptr.hpp>
 
@@ -64,7 +59,7 @@ namespace utl
 namespace reportdesign
 {
     class OReportComponentProperties;
-    typedef ::comphelper::PartialWeakComponentImplHelper13 <   ::com::sun::star::report::XReportDefinition
+    typedef cppu::PartialWeakComponentImplHelper<   ::com::sun::star::report::XReportDefinition
                                                     ,   ::com::sun::star::document::XEventBroadcaster
                                                     ,   ::com::sun::star::lang::XServiceInfo
                                                     ,   ::com::sun::star::frame::XModule
