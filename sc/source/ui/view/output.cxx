@@ -1131,11 +1131,17 @@ void ScOutputData::DrawExtraShadow(vcl::RenderContext& rRenderContext, bool bLef
     if ( bCellContrast )
         aAutoTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
 
+    bool bWorksInPixels = eType == OUTTYPE_WINDOW;
+
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
     {
-        Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
-        long nOneX = aOnePixel.Width();
+        long nOneX = 1;
+        if(!bWorksInPixels)
+        {
+            Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
+            nOneX = aOnePixel.Width();
+        }
         nInitPosX += nMirrorW - nOneX;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
@@ -1250,6 +1256,8 @@ void ScOutputData::DrawExtraShadow(vcl::RenderContext& rRenderContext, bool bLef
 
                             //! merge rectangles?
                             rRenderContext.SetFillColor( bCellContrast ? aAutoTextColor : pAttr->GetColor() );
+                            if(bWorksInPixels)
+                                aRect = rRenderContext.PixelToLogic(aRect);
                             rRenderContext.DrawRect( aRect );
                         }
                     }
