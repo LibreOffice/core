@@ -1,3 +1,4 @@
+import math
 import unittest
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.uno import RuntimeException
@@ -342,6 +343,66 @@ class CheckTable(unittest.TestCase):
         xTable.ChartColumnAsLabel = False
         xTable.ChartRowAsLabel = False
         self.assertEqual( xTable.Data, ((1,2,3), (4,55,66), (7,88,99), (10,1111,1212)))
+        xDoc.dispose()
+
+    def test_remove_colrow(self):
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(4, 3)
+        xCursor = xDoc.Text.createTextCursor()
+        xDoc.Text.insertTextContent(xCursor, xTable, False)
+        xTable.ChartColumnAsLabel = False
+        xTable.ChartRowAsLabel = False
+        xTable.Data = ((1,2,3), (4,5,6), (7,8,9), (10,11,12))
+        xRows = xTable.Rows
+        xRows.removeByIndex(1, 2)
+        self.assertEqual( xTable.Data, ((1,2,3), (10,11,12)))
+        xCols = xTable.Columns
+        xCols.removeByIndex(1, 1)
+        self.assertEqual( xTable.Data, ((1,3), (10,12)))
+        xDoc.dispose()
+
+    def test_insert_colrow(self):
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(4, 3)
+        xCursor = xDoc.Text.createTextCursor()
+        xDoc.Text.insertTextContent(xCursor, xTable, False)
+        xTable.ChartColumnAsLabel = False
+        xTable.ChartRowAsLabel = False
+        xTable.Data = ((1,2,3), (4,5,6), (7,8,9), (10,11,12))
+        xRows = xTable.Rows
+        xRows.insertByIndex(1, 2)
+        nan = float('nan')
+        print(xTable.Data)
+        self.assertEqual(xTable.Data[0], (1,2,3))
+        self.assertEqual(xTable.Data[3], (4,5,6))
+        self.assertEqual(xTable.Data[4], (7,8,9))
+        self.assertEqual(xTable.Data[5], (10,11,12))
+        for x in range(3):
+            self.assertTrue(math.isnan(xTable.Data[1][x]))
+            self.assertTrue(math.isnan(xTable.Data[2][x]))
+        xCols = xTable.Columns
+        xCols.insertByIndex(1, 1)
+        self.assertEqual(xTable.Data[0][0], 1)
+        self.assertTrue(math.isnan(xTable.Data[0][1]))
+        self.assertEqual(xTable.Data[0][2], 2)
+        self.assertEqual(xTable.Data[0][3], 3)
+        self.assertEqual(xTable.Data[3][0], 4)
+        self.assertTrue(math.isnan(xTable.Data[3][1]))
+        self.assertEqual(xTable.Data[3][2], 5)
+        self.assertEqual(xTable.Data[3][3], 6)
+        self.assertEqual(xTable.Data[4][0], 7)
+        self.assertTrue(math.isnan(xTable.Data[4][1]))
+        self.assertEqual(xTable.Data[4][2], 8)
+        self.assertEqual(xTable.Data[4][3], 9)
+        self.assertEqual(xTable.Data[5][0], 10)
+        self.assertTrue(math.isnan(xTable.Data[5][1]))
+        self.assertEqual(xTable.Data[5][2], 11)
+        self.assertEqual(xTable.Data[5][3], 12)
+        for x in range(4):
+            self.assertTrue(math.isnan(xTable.Data[1][x]))
+            self.assertTrue(math.isnan(xTable.Data[2][x]))
         xDoc.dispose()
 
 if __name__ == '__main__':
