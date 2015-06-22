@@ -1116,14 +1116,14 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
     }
 }
 
-void ScOutputData::DrawShadow()
+void ScOutputData::DrawShadow(vcl::RenderContext& rRenderContext)
 {
-    DrawExtraShadow( false, false, false, false );
+    DrawExtraShadow(rRenderContext, false, false, false, false);
 }
 
-void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom)
+void ScOutputData::DrawExtraShadow(vcl::RenderContext& rRenderContext, bool bLeft, bool bTop, bool bRight, bool bBottom)
 {
-    mpDev->SetLineColor();
+    rRenderContext.SetLineColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     bool bCellContrast = mbUseStyleColor && rStyleSettings.GetHighContrastMode();
@@ -1134,7 +1134,7 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
     {
-        Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
+        Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
         long nOneX = aOnePixel.Width();
         nInitPosX += nMirrorW - nOneX;
     }
@@ -1249,8 +1249,8 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                             }
 
                             //! merge rectangles?
-                            mpDev->SetFillColor( bCellContrast ? aAutoTextColor : pAttr->GetColor() );
-                            mpDev->DrawRect( aRect );
+                            rRenderContext.SetFillColor( bCellContrast ? aAutoTextColor : pAttr->GetColor() );
+                            rRenderContext.DrawRect( aRect );
                         }
                     }
                 }

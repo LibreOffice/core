@@ -305,8 +305,8 @@ public:
 
     void    DrawDocumentBackground();
     void    DrawBackground(vcl::RenderContext& rRenderContext);
-    void    DrawShadow();
-    void    DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom);
+    void    DrawShadow(vcl::RenderContext& rRenderContext);
+    void    DrawExtraShadow(vcl::RenderContext& rRenderContext, bool bLeft, bool bTop, bool bRight, bool bBottom);
     void    DrawFrame(vcl::RenderContext& rRenderContext);
 
                     // with logic MapMode set!
