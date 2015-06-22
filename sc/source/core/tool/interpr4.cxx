@@ -4522,6 +4522,11 @@ StackVar ScInterpreter::Interpret()
     return eType;
 }
 
+void ScInterpreter::AssertFormulaMatrix()
+{
+    bMatrixFormula = true;
+}
+
 svl::SharedString ScInterpreter::GetStringResult() const
 {
     return xResult->GetString();
