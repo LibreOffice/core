@@ -74,8 +74,8 @@ private:
     const OUString mPanelId;
     const OUString mDeckId;
 
-    sfx2::sidebar::Deck* mpDeck;
-    sfx2::sidebar::Panel* mpPanel;
+    VclPtr<sfx2::sidebar::Deck> mpDeck;
+    VclPtr<sfx2::sidebar::Panel> mpPanel;
 
     sal_Int32 GetMaxOrderIndex(sfx2::sidebar::ResourceManager::PanelContextDescriptorContainer aPanels);
     sal_Int32 GetMinOrderIndex(sfx2::sidebar::ResourceManager::PanelContextDescriptorContainer aPanels);
