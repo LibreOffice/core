@@ -480,8 +480,8 @@ void ImpEditEngine::FormatDoc()
     CallStatusHdl();    // If Modified...
 
     //FIXME(matteocam)
-    if (IsModified())
-        CallChainingEventHdl(); // For chaining
+
+    CallChainingEventHdl(); // For chaining
 
     LeaveBlockNotifications();
 }
