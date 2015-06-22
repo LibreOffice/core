@@ -107,6 +107,7 @@
                           <object class="GtkEntry" id="nameedit">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
                             <property name="shadow_type">out</property>
                           </object>
                           <packing>
@@ -119,10 +120,10 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Name:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">nameedit</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -133,10 +134,10 @@
                           <object class="GtkLabel" id="3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">_Columns:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">colspin</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">0</property>
@@ -162,10 +163,10 @@
                           <object class="GtkLabel" id="4">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">1</property>
                             <property name="label" translatable="yes">_Rows:</property>
                             <property name="use_underline">True</property>
                             <property name="mnemonic_widget">rowspin</property>
+                            <property name="xalign">1</property>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
