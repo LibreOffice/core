@@ -1352,7 +1352,7 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      * @pDocView: the #LOKDocView on which the signal is emitted
      * @aHyperlink: the URI which the application should handle
      */
-    doc_view_signals[PART_CHANGED] =
+    doc_view_signals[HYPERLINK_CLICKED] =
         g_signal_new("hyperlinked-clicked",
                      G_TYPE_FROM_CLASS(pGObjectClass),
                      G_SIGNAL_RUN_FIRST,
