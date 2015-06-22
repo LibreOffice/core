@@ -778,10 +778,10 @@ void SdrTextObj::impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const
         pEdtOutl->SetText(*pNewText);
     // adds it to current outliner anyway (useful in static decomposition)
     pOutliner->SetText(*pNewText);
-    if (bInUnderflow) // must make a broadcast to reset underflow (XXX: can I reset it from here?)
+    /*if (bInUnderflow) // must make a broadcast to reset underflow (XXX: can I reset it from here?)
         const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
-    else
-        const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
+    else*/
+    const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
 }
 
 OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const
