@@ -114,7 +114,15 @@ sal_Int64 SAL_CALL java_sql_Blob::position( const ::com::sun::star::uno::Sequenc
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         // convert Parameter
         jbyteArray pByteArray = t.pEnv->NewByteArray(pattern.getLength());
-        t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),pattern.getConstArray());
+        jbyte * patternData = reinterpret_cast<jbyte *>(
+            const_cast<sal_Int8 *>(pattern.getConstArray()));
+            // 4th param of Set*ArrayRegion changed from pointer to non-const to
+            // pointer to const between <http://docs.oracle.com/javase/6/docs/
+            // technotes/guides/jni/spec/functions.html#wp22933> and
+            // <http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/
+            // functions.html#wp22933>; work around that difference in a way
+            // that doesn't trigger loplugin:redundantcast
+        t.pEnv->SetByteArrayRegion(pByteArray,0,pattern.getLength(),patternData);
         out = t.pEnv->CallLongMethod( object, mID, pByteArray,start );
         t.pEnv->DeleteLocalRef(pByteArray);
         ThrowSQLException(t.pEnv,*this);
