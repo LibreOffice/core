@@ -35,6 +35,7 @@ namespace psp { struct JobData; class PrinterGfx; }
 class ServerFont;
 class ImplDevFontAttributes;
 class SalInfoPrinter;
+class GlyphCache;
 
 class VCL_DLLPUBLIC GenPspGraphics : public SalGraphics
 {
@@ -99,6 +100,10 @@ public:
     virtual bool            AddTempDevFont( PhysicalFontCollection*,
                                             const OUString& rFileURL,
                                             const OUString& rFontName ) SAL_OVERRIDE;
+    static bool             AddTempDevFontHelper( PhysicalFontCollection* pFontCollection,
+                                                  const OUString& rFileURL,
+                                                  const OUString& rFontName,
+                                                  GlyphCache &rGC );
 
     virtual bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
