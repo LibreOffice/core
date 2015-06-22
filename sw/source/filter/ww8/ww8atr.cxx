@@ -1481,7 +1481,7 @@ bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
     {
         rShd.SetFore( 0);
         rShd.SetBack( msfilter::util::TransColToIco( rCol ) );
-        rShd.SetStyle( true, 0 ); // TODO FIXME???
+        rShd.SetStyle( 0 );
     }
     return !rCol.GetTransparency();
 }

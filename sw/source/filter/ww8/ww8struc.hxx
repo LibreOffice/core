@@ -613,18 +613,10 @@ public:
         maBits &= 0xfc1f;
         maBits |= (nVal & 0x1f) << 5;
     }
-    void SetStyle(bool bVer67, sal_uInt8 nVal)
+    void SetStyle(sal_uInt8 nVal)
     {
-        if (bVer67)
-        {
-            maBits &= 0x83ff;
-            maBits |= (nVal & 0x1f) << 10;
-        }
-        else
-        {
-            maBits &= 0x03ff;
-            maBits |= (nVal & 0x2f) << 10;
-        }
+        maBits &= 0x03ff;
+        maBits |= (nVal & 0x3f) << 10;
     }
 };
 
