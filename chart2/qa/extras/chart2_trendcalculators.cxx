@@ -24,7 +24,6 @@
 
 #define SHEET_EXPONENTIAL1        ( SHEET_POLYNOMIAL_LAST + 1 )
 #define SHEET_EXPONENTIAL2        ( SHEET_EXPONENTIAL1 + 1 )
-#define SHEET_EXPONENTIAL_LAST    ( SHEET_EXPONENTIAL2 )
 
 class Chart2TrendCalculators : public ChartTest
 {
