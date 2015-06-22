@@ -101,13 +101,13 @@ private:
                         ControlType nType,
                         ControlPart nPart,
                         const ImplControlValue& aValue );
-    static void PaintOneSpinButton( GtkStyleContext *context,
+           void PaintOneSpinButton( GtkStyleContext *context,
                              cairo_t *cr,
                              ControlType nType,
                              ControlPart nPart,
                              Rectangle aAreaRect,
                              ControlState nState );
-    static void PaintSpinButton(GtkStyleContext *context,
+           void PaintSpinButton(GtkStyleContext *context,
                          cairo_t *cr,
                          const Rectangle& rControlRectangle,
                          ControlType nType,
