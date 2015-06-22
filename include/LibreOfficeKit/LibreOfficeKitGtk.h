@@ -74,10 +74,6 @@ void                           lok_doc_view_post_command           (LOKDocView* 
                                                                     const char* pCommand,
                                                                     const char* pArguments);
 
-/// Posts a keyboard event to LibreOfficeKit.
-void                           lok_doc_view_post_key               (LOKDocView* pDocView,
-                                                                    GdkEvent* pEvent);
-
 float                          lok_doc_view_pixel_to_twip          (LOKDocView* pDocView,
                                                                     float fInput);
 
