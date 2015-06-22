@@ -518,7 +518,7 @@ Size ScModelObj::getDocumentSize()
     SCROW nEndRow = 0;
     const ScDocument& rDoc = pDocShell->GetDocument();
 
-    if (!rDoc.GetPrintArea( nTab, nEndCol, nEndRow, false ))
+    if (!rDoc.GetTiledRenderingArea(nTab, nEndCol, nEndRow))
         return aSize;
 
     // convert to twips
