@@ -276,6 +276,30 @@ void RemoteFilesDialog::Resize()
     }
 }
 
+OUString lcl_GetServiceType(ServicePtr pService)
+{
+    INetProtocol aProtocol = pService->GetUrlObject().GetProtocol();
+    switch(aProtocol)
+    {
+        case INetProtocol::Ftp:
+            return OUString("FTP");
+        case INetProtocol::Cmis:
+            return OUString("CMIS");
+        case INetProtocol::Smb:
+            return OUString("Windows Share");
+        case INetProtocol::File:
+            return OUString("SSH");
+        case INetProtocol::Http:
+            return OUString("WebDAV");
+        case INetProtocol::Https:
+            return OUString("WebDAV");
+        case INetProtocol::Generic:
+            return OUString("SSH");
+        default:
+            return OUString("");
+    }
+}
+
 void RemoteFilesDialog::FillServicesListbox()
 {
     m_pServices_lb->Clear();
@@ -293,7 +317,12 @@ void RemoteFilesDialog::FillServicesListbox()
         // Add to the listbox only remote services, not local bookmarks
         if(!pService->IsLocal())
         {
-            m_pServices_lb->InsertEntry(placesNamesList[nPlace]);
+            OUString sPrefix = lcl_GetServiceType(pService);
+
+            if(!sPrefix.isEmpty())
+                 sPrefix += ": ";
+
+            m_pServices_lb->InsertEntry(sPrefix + placesNamesList[nPlace]);
         }
     }
 
@@ -441,7 +470,13 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
             ServicePtr newService = aDlg->GetPlace();
             m_aServices.push_back(newService);
             m_pServices_lb->Enable(true);
-            m_pServices_lb->InsertEntry(newService->GetName());
+
+            OUString sPrefix = lcl_GetServiceType(newService);
+
+            if(!sPrefix.isEmpty())
+                 sPrefix += ": ";
+
+            m_pServices_lb->InsertEntry(sPrefix + newService->GetName());
             m_pServices_lb->SelectEntryPos(m_pServices_lb->GetEntryCount() - 1);
 
             m_bIsUpdated = true;
