@@ -92,7 +92,7 @@ bool Plugin::isInUnoIncludeFile(SourceLocation spellingLocation) const {
            || name.startswith(SRCDIR "/include/systools/")
            || name.startswith(SRCDIR "/include/typelib/")
            || name.startswith(SRCDIR "/include/uno/")
-           || name.startswith(SRCDIR "/workdir/")
+           || name.startswith(WORKDIR "/")
            || name == SRCDIR "/include/comphelper/implbase_var.hxx");
 }
 
