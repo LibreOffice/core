@@ -610,7 +610,7 @@ namespace basegfx
                 // Ystart again. Some cases lead to a restart of the process, some allow consuming the
                 // edges and create the intended trapezoid.
 
-                // Be careful when doing chages here: It is essential to keep all possible paths
+                // Be careful when doing changes here: it is essential to keep all possible paths
                 // in valid states and to be numerically correct. This is especially needed e.g.
                 // by using fTools::equal(..) in the more robust small-value incarnation.
                 B1DRange aLeftRange;

@@ -543,12 +543,12 @@ class FilterCache : public BaseLock
 
             @throw      [css::uno::Exception]
                         if an internal error occurred.
-                        Note: If the item is missing inside the underlying configuration
+                        Note: if the item is missing inside the underlying configuration
                         no exception will be thrown. In such case the item is marked as
                         finalized/mandatory automatically
-                        Reason: May be the item cames from the old configuration package and
+                        Reason: maybe the item comes from the old configuration package and
                         was not migrated to the new one. So we can't provide write access
-                        to such items ...
+                        to such items...
          */
         void addStatePropsToItem(      EItemType        eType,
                                          const OUString& sItem,
@@ -808,7 +808,7 @@ class FilterCache : public BaseLock
                     layer.
 
             @descr  The outside code has to be sure, that the item does not already exists
-                    inside this cachse. Otherwise it will be loaded twice. This method
+                    inside this cache. Otherwise it will be loaded twice. This method
                     doesn't check such constellations!
 
             @param  eType

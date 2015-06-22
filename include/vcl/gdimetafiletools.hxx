@@ -29,7 +29,7 @@
 // included clip regions so that it is safe to ignore clip actions there. This
 // is not done completely, but implemented and extended as needed (on demand)
 // since all this is a workarund; the better and long term solution will be to
-// reimplement these im/exports to use primitives and not metafiles as bese
+// reimplement these im/exports to use primitives and not metafiles as base
 // information.
 
 void VCL_DLLPUBLIC clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource);

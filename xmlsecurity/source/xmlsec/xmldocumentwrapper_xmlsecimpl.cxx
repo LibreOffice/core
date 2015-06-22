@@ -487,7 +487,7 @@ sal_Int32 XMLDocumentWrapper_XmlSecImpl::recursiveDelete(
  *
  *   FUNCTION
  *  Deletes a particular node with its branch, while reserving the nodes
- *  (and their brance) listed in the m_aReservedNodes.
+ *  (and their branches) listed in the m_aReservedNodes.
  *  The deletion process is preformed in the tree order, that is, a node
  *  is deleted after its previous sibling node is deleted, a parent node
  *  is deleted after its branch is deleted.

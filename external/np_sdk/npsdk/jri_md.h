@@ -136,7 +136,7 @@ extern "C" {
 #       define JRI_NATIVE_STUB(ResultType)  JRI_PUBLIC_API(ResultType)
 #   elif defined(__SC__)                /* Symantec */
 #       error What are the Symantec defines? (warren@netscape.com)
-#   elif macintosh && applec            /* MPW */
+#   elif Macintosh && Apple             /* MPW */
 #       error Please upgrade to the latest MPW compiler (SC).
 #   else
 #       error Unsupported Mac development environment.

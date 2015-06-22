@@ -107,7 +107,7 @@ public class MessageBox  {
     }
 
     // helper method to get the window peer of a document or if no
-    // document is specified it tries to get the avtive frame
+    // document is specified it tries to get the active frame
     // which is potentially dangerous
     public XWindowPeer getWindowPeerOfFrame(XComponent xComp) {
         try {

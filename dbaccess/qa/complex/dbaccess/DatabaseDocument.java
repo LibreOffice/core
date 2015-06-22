@@ -584,7 +584,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
         // The basic library should have survived
         final XEmbeddedScripts embeddedScripts = UnoRuntime.queryInterface(XEmbeddedScripts.class, databaseDoc);
         final XStorageBasedLibraryContainer basicLibs = embeddedScripts.getBasicLibraries();
-        assertTrue( "Baisc lib did not survive reloading a closed document", basicLibs.hasByName( "Lib" ) );
+        assertTrue( "Basic lib did not survive reloading a closed document", basicLibs.hasByName( "Lib" ) );
         final XNameContainer lib = UnoRuntime.queryInterface(XNameContainer.class, basicLibs.getByName("Lib"));
         assertTrue( "Basic module did not survive reloading a closed document", lib.hasByName( "Module" ) );
 

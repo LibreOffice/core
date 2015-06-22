@@ -2007,7 +2007,7 @@ bool ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             if (bIgnoreCase)
                                 aString = ScGlobal::pCharClass->uppercase(aString);
                             //  when sorting, blanks are separate group
-                            //  otherwise blak cells are allowed below
+                            //  otherwise blank cells are allowed below
                             bChanged = ( ( !aString.isEmpty() || rParam.bDoSort ) &&
                                             aString != *pCompString[i] );
                         }
