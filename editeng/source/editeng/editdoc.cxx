@@ -1311,7 +1311,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
             {
                 // Do not check Index, a empty one could only be there
                 // When later checking it anyhow:
-                //   Special caase: Start == 0; AbsLen == 1, nNew = 1
+                //   Special case: Start == 0; AbsLen == 1, nNew = 1
                 // => Expand, because of paragraph break!
                 // Start <= nIndex, End >= nIndex => Start=End=nIndex!
 //              if ( pAttrib->GetStart() == nIndex )
@@ -2693,9 +2693,9 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
                 // item represents its presence by absence!
                 // If (...)
                 // It needs to be examined on exactly the same attribute at the
-                // breaki point, which is quite expensive.
+                // break point, which is quite expensive.
                 // Since optimazation is done when inserting the  attributes
-                // this case does not appear so fast ...
+                // this case does not appear so fast...
                 // So based on the need for speed:
                 rCurSet.InvalidateItem( pAttr->GetItem()->Which() );
 

@@ -790,7 +790,7 @@ class Topics(object):
     This is used in order to refresh the topic/responsible/duration data
     in the preview document, in response to a change in the gui (by the user)
     Since the structure of the topics table is flexible,
-    The Topics object, which analyzed the structure of the topics table appon
+    The Topics object, which analyzed the structure of the topics table upon
     initialization, refreshes the approperiate cell.
     '''
     def writeCell(self, row, column, data):

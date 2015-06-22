@@ -2140,7 +2140,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     // number of boxes
     m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(nBoxes) );
 
-    /* cellxs */
+    /* cells */
     /*
      ALWAYS relative when text::HoriOrientation::NONE (nPageSize + ( nPageSize / 10 )) < nTableSz,
      in that case the cell width's and table width's are not real. The table

@@ -155,7 +155,7 @@ public:
         getGridProperties( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XCoordinateSystem >& xCooSys
                 , sal_Int32 nDimensionIndex
-                , sal_Int32 nAxisIndex //0: Primary axies, 1: secondary axis
+                , sal_Int32 nAxisIndex //0: Primary axis, 1: secondary axis
                 , sal_Int32 nSubGridIndex = -1 //-1: Main Grid; 0: First SubGrid etc
                 );
 

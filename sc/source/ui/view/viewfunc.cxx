@@ -466,7 +466,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         // via ScFormulaCell copy-ctor because of RangeNames,
         // the same code-array for all cells is not possible.
         // If the array has an error, (it) must be RPN-erased in the newly generated
-        // cellst and the error be set explicitly, so that
+        // cells and the error be set explicitly, so that
         // via FormulaCell copy-ctor and Interpreter it will be, when possible,
         // ironed out again, too intelligent.. e.g.: =1))
         sal_uInt16 nError = pArr->GetCodeError();
