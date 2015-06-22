@@ -284,7 +284,18 @@ OUString lcl_GetServiceType(ServicePtr pService)
         case INetProtocol::Ftp:
             return OUString("FTP");
         case INetProtocol::Cmis:
+        {
+            OUString sHost = pService->GetUrlObject().GetHost( INetURLObject::DECODE_WITH_CHARSET );
+
+            if(sHost.startsWith(GDRIVE_BASE_URL))
+                return OUString("Google Drive");
+            else if(sHost.startsWith(ALFRESCO_CLOUD_BASE_URL))
+                return OUString("Alfresco Cloud");
+            else if(sHost.startsWith(ONEDRIVE_BASE_URL))
+                return OUString("OneDrive");
+
             return OUString("CMIS");
+        }
         case INetProtocol::Smb:
             return OUString("Windows Share");
         case INetProtocol::File:
