@@ -916,7 +916,7 @@ ScTableRefToken::ScTableRefToken( sal_uInt16 nIndex, ScTableRefToken::Item eItem
 
 ScTableRefToken::ScTableRefToken( const ScTableRefToken& r ) :
     FormulaToken(r),
-    mxAreaRefRPN(r.mxAreaRefRPN->Clone()),
+    mxAreaRefRPN( r.mxAreaRefRPN ?  r.mxAreaRefRPN->Clone() : nullptr),
     mnIndex(r.mnIndex),
     meItem(r.meItem)
 {
