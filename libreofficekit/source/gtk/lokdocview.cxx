@@ -245,6 +245,9 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     case GDK_KEY_BackSpace:
         nKeyCode = com::sun::star::awt::Key::BACKSPACE;
         break;
+    case GDK_KEY_Delete:
+        nKeyCode = com::sun::star::awt::Key::DELETE;
+        break;
     case GDK_KEY_Return:
         nKeyCode = com::sun::star::awt::Key::RETURN;
         break;
