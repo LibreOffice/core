@@ -137,8 +137,8 @@ void PaintHelper::SetupBuffer()
     // vcl::Window setting affects this
     if (m_pWindow->IsBackground())
         m_pBuffer->SetBackground(m_pWindow->GetBackground());
-    else
-        SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
+    //else
+        //SAL_WARN("vcl.doublebuffering", "the root of the double-buffering hierarchy should not have a transparent background");
 
     m_pBuffer->SetClipRegion(m_pWindow->GetClipRegion());
     m_pBuffer->SetFillColor(m_pWindow->GetFillColor());
