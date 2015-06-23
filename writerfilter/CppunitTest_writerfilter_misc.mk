@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_set_include,writerfilter_misc,\
     $$(INCLUDE) \
     -I$(SRCDIR)/writerfilter/inc \
     -I$(SRCDIR)/writerfilter/source \
+    -I$(SRCDIR)/writerfilter/source/dmapper \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,writerfilter_misc,boost_headers))
