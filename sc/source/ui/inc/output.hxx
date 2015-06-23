@@ -340,7 +340,7 @@ public:
     void    DrawChangeTrack();
     void    DrawClipMarks();
 
-    void    DrawNoteMarks();
+    void    DrawNoteMarks(vcl::RenderContext& rRenderContext);
     void    AddPDFNotes();
 };
 

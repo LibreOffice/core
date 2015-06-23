@@ -2291,7 +2291,7 @@ void ScOutputData::DrawChangeTrack()
 }
 
 //TODO: moggi Need to check if this can't be written simpler
-void ScOutputData::DrawNoteMarks()
+void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
 {
 
     bool bFirst = true;
@@ -2329,13 +2329,13 @@ void ScOutputData::DrawNoteMarks()
                 {
                     if (bFirst)
                     {
-                        mpDev->SetLineColor(COL_WHITE);
+                        rRenderContext.SetLineColor(COL_WHITE);
 
                         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                         if ( mbUseStyleColor && rStyleSettings.GetHighContrastMode() )
-                            mpDev->SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
+                            rRenderContext.SetFillColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
                         else
-                            mpDev->SetFillColor(COL_LIGHTRED);
+                            rRenderContext.SetFillColor(COL_LIGHTRED);
 
                         bFirst = false;
                     }
@@ -2352,7 +2352,7 @@ void ScOutputData::DrawNoteMarks()
                         }
                     }
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
-                        mpDev->DrawRect( Rectangle( nMarkX-5*nLayoutSign,nPosY,nMarkX+1*nLayoutSign,nPosY+6 ) );
+                        rRenderContext.DrawRect( Rectangle( nMarkX-5*nLayoutSign,nPosY,nMarkX+1*nLayoutSign,nPosY+6 ) );
                 }
 
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
