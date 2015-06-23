@@ -52,7 +52,6 @@ class SC_DLLPUBLIC ScTokenArray : public formula::FormulaTokenArray
 
     size_t mnHashValue;
     ScFormulaVectorState meVectorState;
-    bool mbFromRangeName;
 
 public:
     ScTokenArray();
@@ -69,9 +68,6 @@ public:
     size_t GetHash() const { return mnHashValue;}
 
     ScFormulaVectorState GetVectorState() const { return meVectorState;}
-
-    void SetFromRangeName( bool b ) { mbFromRangeName = b; }
-    bool IsFromRangeName() const { return mbFromRangeName; }
 
     /**
      * If the array contains at least one relative row reference or named

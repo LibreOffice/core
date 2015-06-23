@@ -218,7 +218,7 @@ public:
             formula::FormulaGrammar::Grammar eGram,
             const ScAddress& rPos,
             const OUString& rErrRef, const std::vector<OUString>& rTabNames,
-            const ScComplexRefData& rRef, bool bSingleRef ) const = 0;
+            const ScComplexRefData& rRef, bool bSingleRef, bool bFromRangeName ) const = 0;
 
         virtual ::com::sun::star::i18n::ParseResult
                     parseAnyToken( const OUString& rFormula,
