@@ -2066,6 +2066,8 @@ void SdrTextObj::onUnderflowStatusEvent( )
     // prepare for checking overflow
     aDrawOutliner.SetUpdateMode(true);
     aDrawOutliner.SetMaxAutoPaperSize(pEdtOutl->GetMaxAutoPaperSize());
+    aDrawOutliner.SetMinAutoPaperSize(pEdtOutl->GetMinAutoPaperSize());
+    aDrawOutliner.SetPaperSize(pEdtOutl->GetPaperSize());
     aDrawOutliner.SetText(*pCurText);
     aDrawOutliner.AddText(*pNextLinkWholeText);
 
