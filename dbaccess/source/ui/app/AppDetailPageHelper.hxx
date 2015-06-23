@@ -52,7 +52,7 @@ namespace dbaui
         GraphicObject       m_aGraphicObj;
         Rectangle           m_aPreviewRect;
 
-        /** gets the graphic cnter rect
+        /** gets the graphic center rect
             @param  rGraphic
                 the graphic
             @param  rResultRect

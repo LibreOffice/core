@@ -266,7 +266,7 @@ namespace basegfx
             // it is not sufficient to use findCuts() recursively. This will indeed find the cuts between the
             // segments of the two temporarily adaptive subdivided bezier segments, but not the touches or
             // equal points of them.
-            // It would be possible to find the toches using findTouches(), but at last with commpn points
+            // It would be possible to find the touches using findTouches(), but at last with common points
             // the adding of cut points (temporary points) would fail. But for these temporarily adaptive
             // subdivided bezier segments, common points may be not very likely, but the bug shows that it
             // happens.

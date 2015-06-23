@@ -60,7 +60,7 @@ namespace svt { namespace table
 
     //= ITableDataSort
 
-    /** provides sorting functionality for the datta underlying an ITableModel
+    /** provides sorting functionality for the data underlying an ITableModel
     */
     class SAL_NO_VTABLE ITableDataSort
     {

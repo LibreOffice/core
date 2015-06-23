@@ -520,7 +520,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
         {
         }
 
-        SAL_WARN_IF( aTempFileURL.isEmpty(), "embeddedobj.common", "Coudn't retrieve temporary file URL!" );
+        SAL_WARN_IF( aTempFileURL.isEmpty(), "embeddedobj.common", "Couldn't retrieve temporary file URL!" );
 
         aLoadArgs.put( "URL", aTempFileURL );
         aLoadArgs.put( "InputStream", xTempInpStream );

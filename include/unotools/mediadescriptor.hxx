@@ -105,7 +105,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         /** @short  these ctors do nothing - excepting that they forward
                     the given parameters to the base class ctors.
 
-            @descr  The ctros must be overwritten to resolve conflicts with
+            @descr  The ctors must be overwritten to resolve conflicts with
                     the default ctors of the compiler :-(.
          */
         MediaDescriptor();

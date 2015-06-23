@@ -1502,7 +1502,7 @@ sub remove_Helppacklibraries_from_Installset
 }
 
 ############################################################################
-# Some files cotain a $ in their name. epm conflicts with such files.
+# Some files contain a $ in their name. epm conflicts with such files.
 # Solution: Renaming this files, converting "$" to "$$"
 ############################################################################
 

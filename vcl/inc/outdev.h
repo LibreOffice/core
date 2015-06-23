@@ -83,7 +83,7 @@ protected:
 };
 
 // ImplDirectFontSubstitution is for Tools->Options->FontReplacement and PsPrinter substitutions
-// The clss is just a simple port of the unmaintainable manual-linked-list based mechanism
+// The class is just a simple port of the unmaintainable manual-linked-list based mechanism
 // TODO: get rid of this class when the Tools->Options->FontReplacement tabpage is gone for good
 
 struct ImplFontSubstEntry

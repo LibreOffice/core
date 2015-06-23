@@ -202,8 +202,8 @@ class WWD_Events(WWD_Startup):
     '''
     when the user clicks another document
     in the listbox, this method is called,
-    and couses the display in
-    the textboxes title,description, author and export format
+    and causes the display in
+    the textboxes title, description, author and export format
     to change
     '''
 

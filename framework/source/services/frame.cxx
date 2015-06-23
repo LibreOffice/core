@@ -2284,7 +2284,7 @@ void SAL_CALL Frame::releaseDispatchProviderInterceptor( const css::uno::Referen
 
 /*-****************************************************************************************************
     @short      provides information about all possible dispatch functions
-                inside the currnt frame environment
+                inside the current frame environment
 *//*-*****************************************************************************************************/
 css::uno::Sequence< sal_Int16 > SAL_CALL Frame::getSupportedCommandGroups()
     throw(css::uno::RuntimeException, std::exception)

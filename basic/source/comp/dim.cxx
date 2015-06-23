@@ -396,7 +396,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             aGen.Gen( eOp2, pDef->GetId(), nOpnd2 );
         }
 
-        // Initialising for self-defined daty types
+        // Initialising for self-defined data types
         // and per NEW created variable
         if( pDef->GetType() == SbxOBJECT
          && pDef->GetTypeId() )

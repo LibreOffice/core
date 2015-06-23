@@ -322,7 +322,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
 
     /**
-    * The cluase which was setted by <code>setHavingClause</code> must be returned
+    * The clause which was setted by <code>setHavingClause</code> must be returned
     * while calling from object relation <code>XQueryAna</code>
     * method <code>getHavingClause</code>
     */
