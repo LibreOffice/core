@@ -1095,45 +1095,45 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
-    boost::unordered_set< OUString, OUStringHash > aSet;
-    aSet.insert(OUString("ForbiddenCharacters"));
-    aSet.insert(OUString("IsKernAsianPunctuation"));
-    aSet.insert(OUString("CharacterCompressionType"));
-    aSet.insert(OUString("LinkUpdateMode"));
-    aSet.insert(OUString("FieldAutoUpdate"));
-    aSet.insert(OUString("ChartAutoUpdate"));
-    aSet.insert(OUString("AddParaTableSpacing"));
-    aSet.insert(OUString("AddParaTableSpacingAtStart"));
-    aSet.insert(OUString("PrintAnnotationMode"));
-    aSet.insert(OUString("PrintBlackFonts"));
-    aSet.insert(OUString("PrintControls"));
-    aSet.insert(OUString("PrintDrawings"));
-    aSet.insert(OUString("PrintGraphics"));
-    aSet.insert(OUString("PrintLeftPages"));
-    aSet.insert(OUString("PrintPageBackground"));
-    aSet.insert(OUString("PrintProspect"));
-    aSet.insert(OUString("PrintReversed"));
-    aSet.insert(OUString("PrintRightPages"));
-    aSet.insert(OUString("PrintFaxName"));
-    aSet.insert(OUString("PrintPaperFromSetup"));
-    aSet.insert(OUString("PrintTables"));
-    aSet.insert(OUString("PrintSingleJobs"));
-    aSet.insert(OUString("UpdateFromTemplate"));
-    aSet.insert(OUString("PrinterIndependentLayout"));
-    aSet.insert(OUString("PrintEmptyPages"));
-    aSet.insert(OUString("SmallCapsPercentage66"));
-    aSet.insert(OUString("TabOverflow"));
-    aSet.insert(OUString("UnbreakableNumberings"));
-    aSet.insert(OUString("ClippedPictures"));
-    aSet.insert(OUString("BackgroundParaOverDrawings"));
-    aSet.insert(OUString("TabOverMargin"));
+    boost::unordered_set< OUString, OUStringHash > aExcludeAlways;
+    aExcludeAlways.insert("LinkUpdateMode");
+    boost::unordered_set< OUString, OUStringHash > aExcludeWhenNotLoadingUserSettings;
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("ForbiddenCharacters"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("IsKernAsianPunctuation"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("CharacterCompressionType"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("FieldAutoUpdate"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("ChartAutoUpdate"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("AddParaTableSpacing"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("AddParaTableSpacingAtStart"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintAnnotationMode"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintBlackFonts"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintControls"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintDrawings"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintGraphics"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintLeftPages"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintPageBackground"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintProspect"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintReversed"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintRightPages"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintFaxName"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintPaperFromSetup"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintTables"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintSingleJobs"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("UpdateFromTemplate"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrinterIndependentLayout"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("PrintEmptyPages"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("SmallCapsPercentage66"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("TabOverflow"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("UnbreakableNumberings"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("ClippedPictures"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("BackgroundParaOverDrawings"));
+    aExcludeWhenNotLoadingUserSettings.insert(OUString("TabOverMargin"));
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
 
     SvtSaveOptions aSaveOpt;
-    sal_Bool bIsUserSetting = aSaveOpt.IsLoadUserSettings(),
-         bSet = bIsUserSetting;
+    sal_Bool bIsUserSetting = aSaveOpt.IsLoadUserSettings();
 
     // for some properties we don't want to use the application
     // default if they're missing. So we watch for them in the loop
@@ -1173,12 +1173,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     while( nCount-- )
     {
-        if( !bIsUserSetting )
+        bool bSet = aExcludeAlways.find(pValues->Name) == aExcludeAlways.end();
+        if( bSet && !bIsUserSetting
+            && (aExcludeWhenNotLoadingUserSettings.find(pValues->Name)
+                != aExcludeWhenNotLoadingUserSettings.end()) )
         {
-            // test over the hash value if the entry is in the table.
-            OUString aStr(pValues->Name);
-
-            bSet = aSet.find(aStr) == aSet.end();
+            bSet = false;
         }
 
         if( bSet )
