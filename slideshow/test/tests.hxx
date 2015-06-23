@@ -29,11 +29,11 @@ namespace basegfx{ class B1DRange; class B2DRange; class B2DVector; }
 class TestView : public slideshow::internal::UnoView
 {
 public:
-    /// true if clear() has been called
+    /// true iff clear() has been called
     virtual bool isClearCalled() const = 0;
     virtual std::vector<std::pair<basegfx::B2DVector,double> > getCreatedSprites() const = 0;
     virtual basegfx::B1DRange getPriority() const = 0;
-    /// true if setClip was called (on and off)
+    /// true iff setClip was called (on and off)
     virtual bool wasClipSet() const = 0;
     virtual basegfx::B2DRange getBounds() const = 0;
 

@@ -252,7 +252,7 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
 }
 
 /* Examine the argument and return set number of register required in each
-   class.  Return 0 if parameter should be passed in memory.  */
+   class.  Return 0 iff parameter should be passed in memory.  */
 bool x86_64::examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool bInReturn, int &nUsedGPR, int &nUsedSSE ) throw ()
 {
     enum x86_64_reg_class classes[MAX_CLASSES];
