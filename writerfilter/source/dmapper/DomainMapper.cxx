@@ -253,37 +253,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
 
         case NS_ooxml::LN_CT_Sym_char:
-        if( m_pImpl->GetTopContext() && m_pImpl->GetTopContext()->GetFootnote().is())
-        {
-            m_pImpl->GetTopContext()->GetFootnote()->setLabel(OUString( sal_Unicode(nIntValue)));
-            break;
-        }
-        else //it's a _real_ symbol
-        {
-            m_pImpl->SetSymbolData(nIntValue);
-        }
+            m_pImpl->SetSymbolChar(nIntValue);
         break;
         case NS_ooxml::LN_CT_Sym_font:
-            //the footnote symbol and font are provided after the footnote is already inserted
-        if( m_pImpl->GetTopContext() && m_pImpl->GetTopContext()->GetFootnote().is())
-        {
-            uno::Reference< beans::XPropertySet > xAnchorProps( m_pImpl->GetTopContext()->GetFootnote()->getAnchor(), uno::UNO_QUERY );
-            xAnchorProps->setPropertyValue(
-                getPropertyName( PROP_CHAR_FONT_NAME),
-                uno::makeAny( sStringValue ));
-        }
-        else //a real symbol
-            if (m_pImpl->GetTopContext())
-            {
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( sStringValue ));
-                /*
-                 * In case of symbol, symbol character get imported first and then font of symbols.
-                 * So we are storing symbol character and when we parse symbol font then create UNO object for text.
-                 */
-                sal_Int32 symboldata = m_pImpl->GetSymbolData();
-                utext( reinterpret_cast < const sal_uInt8 * >( &(symboldata) ), 1 );
-            }
-
+            m_pImpl->SetSymbolFont(sStringValue);
         break;
         case NS_ooxml::LN_CT_Underline_val:
             handleUnderlineType(nIntValue, m_pImpl->GetTopContext());
@@ -2549,6 +2522,26 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         resolveSprmProps(*this, rSprm);
         rContext->Insert(PROP_PARA_CNF_STYLE, uno::makeAny(comphelper::containerToSequence(m_pImpl->m_aInteropGrabBag)), true, PARA_GRAB_BAG);
         m_pImpl->disableInteropGrabBag();
+    }
+    break;
+    case NS_ooxml::LN_EG_RunInnerContent_sym:
+    {
+        resolveSprmProps(*this, rSprm);
+        SymbolData  aSymbolData = m_pImpl->GetSymbolData();
+        uno::Any    aVal = uno::makeAny( aSymbolData.sFont );
+        if( rContext->GetFootnote().is())
+        {
+            uno::Reference< beans::XPropertySet > xAnchorProps( rContext->GetFootnote()->getAnchor(), uno::UNO_QUERY );
+            xAnchorProps->setPropertyValue( getPropertyName( PROP_CHAR_FONT_NAME), aVal);
+            rContext->GetFootnote()->setLabel(OUString( aSymbolData.cSymbol ));
+        }
+        else //it's a _real_ symbol
+        {
+            rContext->Insert(PROP_CHAR_FONT_NAME, aVal);
+            rContext->Insert(PROP_CHAR_FONT_NAME_ASIAN, aVal);
+            rContext->Insert(PROP_CHAR_FONT_NAME_COMPLEX, aVal);
+            utext( reinterpret_cast < const sal_uInt8 * >( &(aSymbolData.cSymbol) ), 1 );
+        }
     }
     break;
     default:
