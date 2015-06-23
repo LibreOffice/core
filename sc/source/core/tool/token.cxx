@@ -1743,16 +1743,14 @@ bool ScTokenArray::IsValidReference( ScRange& rRange, const ScAddress& rPos ) co
 ScTokenArray::ScTokenArray() :
     FormulaTokenArray(),
     mnHashValue(0),
-    meVectorState(FormulaVectorEnabled),
-    mbFromRangeName(false)
+    meVectorState(FormulaVectorEnabled)
 {
 }
 
 ScTokenArray::ScTokenArray( const ScTokenArray& rArr ) :
     FormulaTokenArray(rArr),
     mnHashValue(rArr.mnHashValue),
-    meVectorState(rArr.meVectorState),
-    mbFromRangeName(rArr.mbFromRangeName)
+    meVectorState(rArr.meVectorState)
 {
 }
 
@@ -1764,7 +1762,6 @@ ScTokenArray& ScTokenArray::operator=( const ScTokenArray& rArr )
 {
     Clear();
     Assign( rArr );
-    mbFromRangeName = rArr.mbFromRangeName;
     return *this;
 }
 
@@ -1772,7 +1769,6 @@ void ScTokenArray::ClearScTokenArray()
 {
     Clear();
     meVectorState = FormulaVectorEnabled;
-    mbFromRangeName = false;
 }
 
 ScTokenArray* ScTokenArray::Clone() const
@@ -4207,7 +4203,8 @@ void appendString( OUStringBuffer& rBuf, const OUString& rStr )
     rBuf.append('"');
 }
 
-void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, const FormulaToken& rToken, const ScAddress& rPos )
+void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, const FormulaToken& rToken,\
+        const ScAddress& rPos, bool bFromRangeName )
 {
     if (rToken.IsExternalRef())
     {
@@ -4275,7 +4272,8 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                 ScComplexRefData aRef;
                 aRef.Ref1 = rRef;
                 aRef.Ref2 = rRef;
-                rCxt.mpRefConv->makeRefStr(rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, aRef, true);
+                rCxt.mpRefConv->makeRefStr(rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, aRef, true,
+                        bFromRangeName);
             }
             else
                 rBuf.append(rCxt.maErrRef);
@@ -4286,7 +4284,8 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
             if (rCxt.mpRefConv)
             {
                 const ScComplexRefData& rRef = *rToken.GetDoubleRef();
-                rCxt.mpRefConv->makeRefStr(rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, rRef, false);
+                rCxt.mpRefConv->makeRefStr(rBuf, rCxt.meGram, rPos, rCxt.maErrRef, rCxt.maTabNames, rRef, false,
+                        bFromRangeName);
             }
             else
                 rBuf.append(rCxt.maErrRef);
@@ -4490,7 +4489,7 @@ OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddre
             aBuf.append(rCxt.mxOpCodeMap->getSymbol(eOp));
 
         if (bCheckType)
-            appendTokenByType(rCxt, aBuf, *pToken, rPos);
+            appendTokenByType(rCxt, aBuf, *pToken, rPos, IsFromRangeName());
     }
 
     return aBuf.makeStringAndClear();

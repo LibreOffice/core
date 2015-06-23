@@ -706,7 +706,8 @@ FormulaTokenArray::FormulaTokenArray() :
     nIndex(0),
     nError(0),
     nMode(ScRecalcMode::NORMAL),
-    bHyperLink(false)
+    bHyperLink(false),
+    mbFromRangeName(false)
 {
 }
 
@@ -728,6 +729,7 @@ void FormulaTokenArray::Assign( const FormulaTokenArray& r )
     nError = r.nError;
     nMode  = r.nMode;
     bHyperLink = r.bHyperLink;
+    mbFromRangeName = r.mbFromRangeName;
     pCode  = NULL;
     pRPN   = NULL;
     FormulaToken** pp;
@@ -780,6 +782,7 @@ FormulaTokenArray* FormulaTokenArray::Clone() const
     p->nMode = nMode;
     p->nError = nError;
     p->bHyperLink = bHyperLink;
+    p->mbFromRangeName = mbFromRangeName;
     FormulaToken** pp;
     if( nLen )
     {
@@ -837,6 +840,7 @@ void FormulaTokenArray::Clear()
     pCode = NULL; pRPN = NULL;
     nError = nLen = nIndex = nRPN = 0;
     bHyperLink = false;
+    mbFromRangeName = false;
     ClearRecalcMode();
 }
 

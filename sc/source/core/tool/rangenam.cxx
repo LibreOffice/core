@@ -73,6 +73,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
         // to ensure same behavior if unnecessary copying is left out.
 
         pCode = new ScTokenArray();
+        pCode->SetFromRangeName(true);
     }
 }
 
@@ -93,6 +94,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                 mnMaxRow    (-1),
                 mnMaxCol    (-1)
 {
+    pCode->SetFromRangeName(true);
     InitCode();
 }
 
@@ -115,6 +117,7 @@ ScRangeData::ScRangeData( ScDocument* pDok,
     aRefData.InitAddress( rTarget );
     aRefData.SetFlag3D( true );
     pCode->AddSingleReference( aRefData );
+    pCode->SetFromRangeName(true);
     ScCompiler aComp( pDoc, aPos, *pCode );
     aComp.SetGrammar(pDoc->GetGrammar());
     aComp.CompileTokenArray();
@@ -134,7 +137,9 @@ ScRangeData::ScRangeData(const ScRangeData& rScRangeData, ScDocument* pDocument)
     bModified   (rScRangeData.bModified),
     mnMaxRow    (rScRangeData.mnMaxRow),
     mnMaxCol    (rScRangeData.mnMaxCol)
-{}
+{
+    pCode->SetFromRangeName(true);
+}
 
 ScRangeData::~ScRangeData()
 {
@@ -158,6 +163,7 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
     ScTokenArray* pNewCode = aComp.CompileString( rSymbol );
     boost::scoped_ptr<ScTokenArray> pOldCode( pCode);     // old pCode will be deleted
     pCode = pNewCode;
+    pCode->SetFromRangeName(true);
     if( !pCode->GetCodeError() )
     {
         pCode->Reset();
@@ -618,6 +624,7 @@ void ScRangeData::SetCode( ScTokenArray& rArr )
 {
     boost::scoped_ptr<ScTokenArray> pOldCode( pCode); // old pCode will be deleted
     pCode = new ScTokenArray( rArr );
+    pCode->SetFromRangeName(true);
     InitCode();
 }
 
