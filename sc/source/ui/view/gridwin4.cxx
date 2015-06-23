@@ -745,7 +745,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     // Show Note Mark
     if ( rOpts.GetOption( VOPT_NOTES ) )
-        aOutputData.DrawNoteMarks();
+        aOutputData.DrawNoteMarks(*pContentDev);
 
     if ( !bLogicText )
         aOutputData.DrawStrings(false);     // in pixel MapMode
