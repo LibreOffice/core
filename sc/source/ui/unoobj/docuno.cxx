@@ -37,6 +37,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/charclass.hxx>
@@ -107,6 +108,10 @@
 #include "unonames.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
 #include "viewuno.hxx"
+#include "editsh.hxx"
+#include "drawsh.hxx"
+#include "drtxtob.hxx"
+#include "transobj.hxx"
 
 #include "sc.hrc"
 
@@ -677,6 +682,83 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
         // move the cell selection handles
         pGridWindow->SetCellSelectionPixel(nType, nX * pViewData->GetPPTX(), nY * pViewData->GetPPTY());
     }
+}
+
+OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeType)
+{
+    SolarMutexGuard aGuard;
+
+    ScEditShell* pShell;
+    ScDrawShell* pDrawShell;
+    ScDrawTextObjectBar* pTextShell;
+    TransferableDataHelper aDataHelper;
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    uno::Reference<datatransfer::XTransferable> xTransferable;
+
+    if (( pShell = PTR_CAST( ScEditShell, pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )))
+        xTransferable = pShell->GetEditView()->GetTransferable();
+    else if (( pTextShell = PTR_CAST( ScDrawTextObjectBar, pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )))
+    {
+        ScDrawView* pView = pViewData->GetScDrawView();
+        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+        if (pOutView)
+            xTransferable = pOutView->GetEditView().GetTransferable();
+    }
+    else if (( pDrawShell = PTR_CAST( ScDrawShell, pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) )))
+        xTransferable = pDrawShell->GetDrawView()->CopyToTransferable();
+    else
+    {
+        ScTransferObj* pObj = pViewData->GetViewShell()->CopyToTransferable();
+        xTransferable.set( pObj );
+    }
+
+    if (!xTransferable.is())
+        xTransferable.set( aDataHelper.GetTransferable() );
+
+    // Take care of UTF-8 text here.
+    OString aMimeType(pMimeType);
+    bool bConvert = false;
+    sal_Int32 nIndex = 0;
+    if (aMimeType.getToken(0, ';', nIndex) == "text/plain")
+    {
+        if (aMimeType.getToken(0, ';', nIndex) == "charset=utf-8")
+        {
+            aMimeType = "text/plain;charset=utf-16";
+            bConvert = true;
+        }
+    }
+
+    datatransfer::DataFlavor aFlavor;
+    aFlavor.MimeType = OUString::fromUtf8(aMimeType.getStr());
+    if (aMimeType == "text/plain;charset=utf-16")
+        aFlavor.DataType = cppu::UnoType<OUString>::get();
+    else
+        aFlavor.DataType = cppu::UnoType< uno::Sequence<sal_Int8> >::get();
+
+    if (!xTransferable->isDataFlavorSupported(aFlavor))
+        return OString();
+
+    uno::Any aAny(xTransferable->getTransferData(aFlavor));
+
+    OString aRet;
+    if (aFlavor.DataType == cppu::UnoType<OUString>::get())
+    {
+        OUString aString;
+        aAny >>= aString;
+        if (bConvert)
+            aRet = OUStringToOString(aString, RTL_TEXTENCODING_UTF8);
+        else
+            aRet = OString(reinterpret_cast<const sal_Char *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode));
+    }
+    else
+    {
+        uno::Sequence<sal_Int8> aSequence;
+        aAny >>= aSequence;
+        aRet = OString(reinterpret_cast<sal_Char*>(aSequence.getArray()), aSequence.getLength());
+    }
+
+    rUsedMimeType = pMimeType;
+    return aRet;
 }
 
 void ScModelObj::setGraphicSelection(int nType, int nX, int nY)
