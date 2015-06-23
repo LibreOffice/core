@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_f27d36e8",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 6505,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-06-23T22:53:20Z",
+      "side": 1,
+      "message": "p is the prefix for a pointer. Use aCalculator or something like that.",
+      "revId": "66e9f9156131017c1a99bca925bcfb69b4bbe288",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_52268a17",
+        "filename": "sc/source/core/data/simpleformulacalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-06-23T22:53:20Z",
+      "side": 1,
+      "message": "Why do we compile the formula string again?",
+      "revId": "66e9f9156131017c1a99bca925bcfb69b4bbe288",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_72238606",
+        "filename": "sc/source/core/data/simpleformulacalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-06-23T22:53:20Z",
+      "side": 1,
+      "message": "As far as I can see we only need the CreateStringFromToken call here.",
+      "revId": "66e9f9156131017c1a99bca925bcfb69b4bbe288",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_122012f7",
+        "filename": "sc/source/core/data/simpleformulacalc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-06-23T22:53:20Z",
+      "side": 1,
+      "message": "better call is OUStringBuffer::makeStringAndClear",
+      "revId": "66e9f9156131017c1a99bca925bcfb69b4bbe288",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_9282c2c7",
+        "filename": "sc/source/core/inc/interpre.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 890,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-06-23T22:53:20Z",
+      "side": 1,
+      "message": "Better SetMatrixMode or something like this. This method does not assert anything. It is basically a setter.",
+      "revId": "66e9f9156131017c1a99bca925bcfb69b4bbe288",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
