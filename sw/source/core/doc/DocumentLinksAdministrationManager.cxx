@@ -44,6 +44,7 @@
 #include <ndtxt.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/securityoptions.hxx>
 
 using namespace ::com::sun::star;
 
@@ -220,6 +221,15 @@ void DocumentLinksAdministrationManager::UpdateLinks( bool bUI )
                 case document::UpdateDocMode::NO_UPDATE:   bUpdate = false;break;
                 case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = false; break;
                 case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = true; break;
+            }
+            if (nLinkMode == AUTOMATIC && !bAskUpdate)
+            {
+                SfxMedium * medium = m_rDoc.GetDocShell()->GetMedium();
+                if (!SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
+                        medium == nullptr ? OUString() : medium->GetName()))
+                {
+                    bAskUpdate = true;
+                }
             }
             if( bUpdate && (bUI || !bAskUpdate) )
             {

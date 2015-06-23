@@ -186,6 +186,8 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtSecurityOptions : public utl::detail
         */
         bool isTrustedLocationUri(OUString const & uri) const;
 
+        bool isTrustedLocationUriForUpdatingLinks(OUString const & uri) const;
+
         ::com::sun::star::uno::Sequence< Certificate >  GetTrustedAuthors       (                                                                   ) const;
         void                                            SetTrustedAuthors       ( const ::com::sun::star::uno::Sequence< Certificate >& rAuthors    );
 
