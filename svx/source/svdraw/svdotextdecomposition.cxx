@@ -773,9 +773,7 @@ void SdrTextObj::impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const
 {
     OutlinerParaObject *pNewText = impGetNonOverflowingParaObject(pOutliner);
 
-    //bool bInUnderflow =  GetTextChain()->GetLinkHandlingUnderflow(const_cast<SdrTextObj*>(this));
-    // we need this when we are in editing mode (AND this is not an underflow-caused overflow)
-    if (pEdtOutl != NULL /* && !bInUnderflow */) {
+    if (pEdtOutl != NULL) {
         pEdtOutl->SetText(*pNewText);
     }
     // adds it to current outliner anyway (useful in static decomposition)
@@ -791,38 +789,6 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
 
     if (mpOverflowingText == NULL)
         return NULL;
-
-    // XXX: Put following code in a separate method (possibly in another class)
-    if ( GetTextChain()->GetOverwriteOnOverflow(pNextTextObj) )
-    {
-        // We only make three blocks of paragraphs and ignore the rest
-
-        // reset behavior
-        GetTextChain()->SetOverwriteOnOverflow(pNextTextObj, false);
-
-        if (mpOverflowingText->HasOtherParas()) {
-            // Make Para Object from the ending lines (to be appended later)
-            impSetOutlinerToEmptyTxt(pOutliner);
-            Paragraph *pFstPara = pOutliner->GetParagraph(0);
-            pOutliner->SetText(mpOverflowingText->GetEndingLines(), pFstPara);
-            OutlinerParaObject *pLastPara = pOutliner->CreateParaObject();
-
-            // Set heading lines as first paragraph
-            pOutliner->SetText(mpOverflowingText->GetHeadingLines(), pFstPara);
-
-            // Add middle paragraphs
-            if (mpOverflowingText->mpMidParas)
-                pOutliner->AddText(*mpOverflowingText->mpMidParas);
-
-            pOutliner->AddText(*pLastPara);
-        } else {
-            impSetOutlinerToEmptyTxt(pOutliner);
-            Paragraph *pFstPara = pOutliner->GetParagraph(0);
-            pOutliner->SetText(mpOverflowingText->GetEndingLines(), pFstPara);
-        }
-
-        return pOutliner->CreateParaObject();
-    }
 
     OutlinerParaObject *pCurTxt = pNextTextObj->GetOutlinerParaObject();
     pOutliner->SetText(*pCurTxt);
@@ -1674,13 +1640,6 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
             rOutliner.AddText(*pNextLinkWholeText);
             OutlinerParaObject *pNewText = rOutliner.CreateParaObject();
 
-            // 2) Set the text of the next guy to what is left
-            // (since this happens automatically by overflow we just "order to" reset the destination box's text)
-            GetTextChain()->SetOverwriteOnOverflow(pNextLink, true);
-
-            // We make sure we don't handle underflow while handling underflow
-            //GetTextChain()->SetLinkHandlingUnderflow(this, true); // we don't need this in static decomp.
-
             // Set the other box empty so if overflow does not occur we are fine
             if (!GetPreventChainable())
                 pNextLink->NbcSetOutlinerParaObject(rOutliner.GetEmptyParaObject());
@@ -1703,17 +1662,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
         /* Leave only non overflowing text */
         impLeaveOnlyNonOverflowingText(&rOutliner);
 
-        /*OutlinerParaObject *pNewTextCurBox = impGetNonOverflowingParaObject(&rOutliner);
-        // we need this when we are in editing mode
-        // XXX: we use next line just to be sure for now
-        if (pEdtOutl != NULL)
-            pEdtOutl->SetText(*pNewTextCurBox);
-        // adds it to current outliner anyway (useful in static decomposition)
-        rOutliner.SetText(*pNewTextCurBox);
-        NbcSetOutlinerParaObject(pNewTextCurBox);*/
-
-        /* Get chaining outliner  here */
-        // Code adapted from ImpGetDrawOutliner
+        // Initialize Chaining Outliner
         SdrOutliner &rChainingOutl = pModel->GetChainingOutliner(this);
         ImpInitDrawOutliner( rChainingOutl );
         rChainingOutl.SetUpdateMode(true);

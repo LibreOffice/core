@@ -24,7 +24,6 @@
 ImpChainLinkProperties::ImpChainLinkProperties()
 {
     // give defaults
-    bOverwriteOnOverflow = false;
     bNilChainingEvent = false;
 }
 
@@ -72,12 +71,6 @@ void TextChain::SetNilChainingEvent(SdrTextObj *pTarget, bool bNilChainingEvent)
     pLinkProperties->bNilChainingEvent = bNilChainingEvent;
 }
 
-void TextChain::SetOverwriteOnOverflow(SdrTextObj *pTarget, bool bOverwrite)
-{
-    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
-    pLinkProperties->bOverwriteOnOverflow = bOverwrite;
-}
-
 ImpChainLinkProperties *TextChain::GetLinkProperties(SdrTextObj *pLink)
 {
     // if the guy does not already have properties in the map make them
@@ -87,12 +80,6 @@ ImpChainLinkProperties *TextChain::GetLinkProperties(SdrTextObj *pLink)
     }
 
     return maLinkPropertiesMap[aLinkId];
-}
-
-bool TextChain::GetOverwriteOnOverflow(SdrTextObj *pTarget)
-{
-    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
-    return pLinkProperties->bOverwriteOnOverflow;
 }
 
 ChainLinkId TextChain::GetId(SdrTextObj *pLink) const

@@ -40,7 +40,6 @@ class ImpChainLinkProperties
 
     ImpChainLinkProperties();
 
-    bool bOverwriteOnOverflow;
     bool bNilChainingEvent;
 };
 
@@ -60,9 +59,6 @@ class TextChain {
 
     // return whether a paragraph is split between the two links in the argument
     bool GetLinksHaveMergeableFirstPara(SdrTextObj *, SdrTextObj *);
-
-    void SetOverwriteOnOverflow(SdrTextObj *, bool );
-    bool GetOverwriteOnOverflow(SdrTextObj *pTarget);
 
     bool GetNilChainingEvent(SdrTextObj *pTarget);
     void SetNilChainingEvent(SdrTextObj *, bool);

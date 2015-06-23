@@ -2013,7 +2013,7 @@ void SdrTextObj::onUnderflowStatusEvent( )
     if (!pNextLink->HasText())
         return;
 
-    //  1) get the text of the other guy and add it to the last paragraph
+    //  Get the text of the other guy and add it to the last paragraph
     // XXX: For now it's not merging anything just adding the while thing as a separate para
     OutlinerParaObject *pNextLinkWholeText = pNextLink->GetOutlinerParaObject();
     if (!pNextLinkWholeText)
@@ -2033,24 +2033,17 @@ void SdrTextObj::onUnderflowStatusEvent( )
     aDrawOutliner.AddText(*pNextLinkWholeText);
 
     bool bIsOverflowFromUnderflow = aDrawOutliner.IsPageOverflow();
+    // Save mpOverflowingText (important for overflow handlers below) // XXX: Change the wayt this is done?
     if (bIsOverflowFromUnderflow)
         mpOverflowingText = aDrawOutliner.GetOverflowingText();
 
     OutlinerParaObject *pNewText = aDrawOutliner.CreateParaObject();
-
-    // 2) Set the text of the next guy to what is left
-    // (since this happens automatically by overflow we just "order to" reset the destination box's text)
-    GetTextChain()->SetOverwriteOnOverflow(pNextLink, true);
-
-    // We make sure we don't handle underflow while handling underflow
-    //GetTextChain()->SetLinkHandlingUnderflow(this, true);
 
     // Set the other box empty so if overflow does not occur we are fine
     pNextLink->NbcSetOutlinerParaObject(aDrawOutliner.GetEmptyParaObject());
 
     // handle overflow
     if (bIsOverflowFromUnderflow) {
-
         // prevents infinite loops when setting text for editing outliner
         GetTextChain()->SetNilChainingEvent(const_cast<SdrTextObj*>(this), true);
         impLeaveOnlyNonOverflowingText(&aDrawOutliner);
