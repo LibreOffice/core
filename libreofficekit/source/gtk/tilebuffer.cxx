@@ -91,13 +91,16 @@ Tile& TileBuffer::getTile(int x, int y, float aZoom)
         aTileRectangle.x = pixelToTwip(nTileSizePixels, aZoom) * y;
         aTileRectangle.y = pixelToTwip(nTileSizePixels, aZoom) * x;
 
-        g_info ("Rendering (%d, %d)", x, y);
+        g_test_timer_start();
         m_pLOKDocument->pClass->paintTile(m_pLOKDocument,
                                           pBuffer,
                                           nTileSizePixels, nTileSizePixels,
                                           aTileRectangle.x, aTileRectangle.y,
                                           pixelToTwip(nTileSizePixels, aZoom),
                                           pixelToTwip(nTileSizePixels, aZoom));
+
+        double elapsedTime = g_test_timer_elapsed();
+        g_info ("Rendered (%d, %d) in %f seconds", x, y, elapsedTime);
 
         //create a mapping for it
         m_mTiles[index].setPixbuf(pPixBuf);
