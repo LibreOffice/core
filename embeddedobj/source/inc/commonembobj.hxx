@@ -171,7 +171,6 @@ private:
                 const OUString& aNewName );
 
     OUString GetDocumentServiceName() const { return m_aDocServiceName; }
-    bool IsChartComponent() const { return m_aDocServiceName == "com.sun.star.chart2.ChartDocument"; }
     OUString GetPresetFilterName() const { return m_aPresetFilterName; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
