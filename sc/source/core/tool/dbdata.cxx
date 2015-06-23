@@ -102,7 +102,8 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bDBSelection        (rData.bDBSelection),
     nIndex              (rData.nIndex),
     bAutoFilter         (rData.bAutoFilter),
-    bModified           (rData.bModified)
+    bModified           (rData.bModified),
+    maTableColumnNames  (rData.maTableColumnNames)
 {
 }
 
@@ -130,7 +131,8 @@ ScDBData::ScDBData( const OUString& rName, const ScDBData& rData ) :
     bDBSelection        (rData.bDBSelection),
     nIndex              (rData.nIndex),
     bAutoFilter         (rData.bAutoFilter),
-    bModified           (rData.bModified)
+    bModified           (rData.bModified),
+    maTableColumnNames  (rData.maTableColumnNames)
 {
     aUpper = ScGlobal::pCharClass->uppercase(aUpper);
 }
@@ -160,6 +162,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     bDBSelection        = rData.bDBSelection;
     nIndex              = rData.nIndex;
     bAutoFilter         = rData.bAutoFilter;
+    maTableColumnNames  = rData.maTableColumnNames;
 
     return *this;
 }
