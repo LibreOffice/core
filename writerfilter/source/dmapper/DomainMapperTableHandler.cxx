@@ -55,7 +55,8 @@ DomainMapperTableHandler::DomainMapperTableHandler(TextReference_t const& xText,
     : m_xText(xText),
         m_rDMapper_Impl( rDMapper_Impl ),
         m_nCellIndex(0),
-        m_nRowIndex(0)
+        m_nRowIndex(0),
+        m_bHadFootOrEndnote(false)
 {
 }
 
@@ -1078,7 +1079,8 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
         }
 
         // If we have a table with a start and an end position, we should make it a floating one.
-        if (xTable.is() && xStart.is() && xEnd.is())
+        // Unless the table had a foot or endnote, as Writer doesn't support those in TextFrames.
+        if (xTable.is() && xStart.is() && xEnd.is() && !m_bHadFootOrEndnote)
         {
             uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
             bool bIsRelative = false;
@@ -1123,6 +1125,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
     m_aTableProperties.reset();
     m_aCellProperties.clear();
     m_aRowProperties.clear();
+    m_bHadFootOrEndnote = false;
 
 #ifdef DEBUG_WRITERFILTER
     dmapper_logger->endElement();
@@ -1201,6 +1204,11 @@ void DomainMapperTableHandler::endCell(const Handle_t & end)
     (*m_pCellSeq)[1] = end->getEnd();
     (*m_pRowSeq)[m_nCellIndex] = *m_pCellSeq;
     ++m_nCellIndex;
+}
+
+void DomainMapperTableHandler::setHadFootOrEndnote(bool bHadFootOrEndnote)
+{
+    m_bHadFootOrEndnote = bHadFootOrEndnote;
 }
 
 }}
