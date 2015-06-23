@@ -377,10 +377,9 @@ Reference< XAccessible > VCLXAccessibleTabControl::getAccessibleChild( sal_Int32
     Reference< XAccessible > xChild = m_aAccessibleChildren[i];
     if ( !xChild.is() )
     {
-        if ( m_pTabControl )
+        sal_uInt16 nPageId = m_pTabControl ? m_pTabControl->GetPageId((sal_uInt16)i) : 0;
+        if (nPageId)
         {
-            sal_uInt16 nPageId = m_pTabControl->GetPageId( (sal_uInt16)i );
-
             xChild = new VCLXAccessibleTabPage( m_pTabControl, nPageId );
 
             // insert into tab page list
