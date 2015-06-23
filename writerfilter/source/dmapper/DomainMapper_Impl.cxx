@@ -199,6 +199,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bStartGenericField(false),
         m_bTextInserted(false),
         m_nSymboldata(-1),
+        m_bSymbolFontReady(false),
         m_pLastSectionContext( ),
         m_pLastCharacterContext(),
         m_nCurrentTabStopIndex( 0 ),
@@ -425,9 +426,23 @@ void DomainMapper_Impl::RemoveLastParagraph( )
     }
 }
 
-void DomainMapper_Impl::SetSymbolData( sal_Int32 nSymbolData )
+bool DomainMapper_Impl::SetSymbolFont( OUString &rName )
+{
+    PropertyMapPtr pTopContext = GetTopContext();
+    if (!pTopContext) return false;
+    pTopContext->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( rName));
+    pTopContext->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( rName));
+    pTopContext->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( rName ));
+    m_bSymbolFontReady = true;
+    return m_nSymboldata != -1;
+}
+
+bool DomainMapper_Impl::SetSymbolData( sal_Int32 nSymbolData )
 {
     m_nSymboldata = nSymbolData;
+    if (nSymbolData == -1)
+        m_bSymbolFontReady = false;
+    return m_bSymbolFontReady;
 }
 
 
