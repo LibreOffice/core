@@ -55,8 +55,9 @@ $(packimages_DIR)/%.zip : \
 $(packimages_DIR)/commandimagelist.ilst :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,1)
 	$(call gb_Helper_abbreviate_dirs, \
-		find $(SRCDIR)/icon-themes/galaxy/cmd -name "*.png" -o -name "*.svg" | \
-			sed "s#$(SRCDIR)/icon-themes/galaxy#%MODULE%#" | \
+		find $(SRCDIR)/icon-themes -name "*.png" -o -name "*.svg" | \
+			grep -e '/cmd/' | sed 's#^.*/icon-themes/[^/]*##' | sort | uniq | \
+			sed "s#^#%MODULE%#" | \
 			LC_ALL=C sort > $@.tmp && \
 		$(PERL) $(SRCDIR)/solenv/bin/diffmv.pl $@.tmp $@ \
 			$(if $(findstring s,$(MAKEFLAGS)),2> /dev/null))
