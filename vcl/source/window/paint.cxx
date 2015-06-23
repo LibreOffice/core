@@ -48,6 +48,7 @@ private:
     vcl::Region* m_pChildRegion;
     Rectangle m_aSelectionRect;
     Rectangle m_aPaintRect;
+    MapMode m_aPaintRectMapMode;
     vcl::Region m_aPaintRegion;
     sal_uInt16 m_nPaintFlags;
     bool m_bPop : 1;
@@ -117,6 +118,9 @@ void PaintHelper::CreateBuffer()
 
     SetupBuffer();
 
+    // Remember what was the map mode of m_aPaintRect.
+    m_aPaintRectMapMode = m_pWindow->GetMapMode();
+
     // update the output size now, after all the settings were copied
     m_pBuffer->SetOutputSize(m_pWindow->GetOutputSize());
 
@@ -171,7 +175,15 @@ void PaintHelper::PaintBuffer()
     // [ie. everything you can see was painted directly to the
     // window either above or in eg. an event handler]
     if (!getenv("VCL_DOUBLEBUFFERING_AVOID_PAINT"))
+    {
+        // The map mode of m_pWindow and/or m_pBuffer may have changed since
+        // CreateBuffer(), set it back to what it was, otherwise unwanted
+        // scaling or translating may happen.
+        m_pWindow->SetMapMode(m_aPaintRectMapMode);
+        m_pBuffer->SetMapMode(m_aPaintRectMapMode);
+
         m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), *m_pBuffer.get());
+    }
 }
 
 void PaintHelper::DoPaint(const vcl::Region* pRegion)
