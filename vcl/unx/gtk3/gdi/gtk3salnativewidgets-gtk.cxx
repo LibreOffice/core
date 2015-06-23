@@ -1724,19 +1724,19 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         aStyleSet.SetCursorBlinkTime( STYLE_CURSOR_NOBLINKTIME );
 
     MouseSettings aMouseSettings = rSettings.GetMouseSettings();
-    int iDoubleClickTime, iDoubleClickDistance, iDragThreshold, iMenuPopupDelay;
+    int iDoubleClickTime, iDoubleClickDistance, iDragThreshold;
+    static const int MENU_POPUP_DELAY = 225;
     g_object_get( pSettings,
                   "gtk-double-click-time", &iDoubleClickTime,
                   "gtk-double-click-distance", &iDoubleClickDistance,
                   "gtk-dnd-drag-threshold", &iDragThreshold,
-                  "gtk-menu-popup-delay", &iMenuPopupDelay,
                   nullptr );
     aMouseSettings.SetDoubleClickTime( iDoubleClickTime );
     aMouseSettings.SetDoubleClickWidth( iDoubleClickDistance );
     aMouseSettings.SetDoubleClickHeight( iDoubleClickDistance );
     aMouseSettings.SetStartDragWidth( iDragThreshold );
     aMouseSettings.SetStartDragHeight( iDragThreshold );
-    aMouseSettings.SetMenuDelay( iMenuPopupDelay );
+    aMouseSettings.SetMenuDelay( MENU_POPUP_DELAY );
     rSettings.SetMouseSettings( aMouseSettings );
 
     gboolean showmenuicons = true, primarybuttonwarps = false;
