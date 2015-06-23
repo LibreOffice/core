@@ -1990,16 +1990,7 @@ void SdrTextObj::onOverflowStatusEvent( )
     if ( mbToBeChained ) {
         SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
 
-    // If this is the a post-underflow-type of overflow then we cannot
-    //    trust the editing outl on the text since it has still the old one
-    if(GetTextChain()->GetLinkHandlingUnderflow(this)) {
-            OutlinerParaObject *pPObj = GetOutlinerParaObject();
-            aDrawOutliner.SetUpdateMode(true);
-            aDrawOutliner.SetMaxAutoPaperSize(pEdtOutl->GetMaxAutoPaperSize());
-            aDrawOutliner.SetText(*pPObj);
-            aDrawOutliner.IsPageOverflow(); // Check for overflow to set flags
-            mpOverflowingText = aDrawOutliner.GetOverflowingText();
-        } else  if (pEdtOutl != NULL)
+       if (pEdtOutl != NULL)
             mpOverflowingText = pEdtOutl->GetOverflowingText();
         else {
             assert(0); // Should never happen. FIXME(matteocam)
@@ -2008,21 +1999,6 @@ void SdrTextObj::onOverflowStatusEvent( )
         SdrTextObj *pNextTextObj = GetNextLinkInChain();
 
         impLeaveOnlyNonOverflowingText(&aDrawOutliner);
-        if (GetTextChain()->GetLinkHandlingUnderflow(this))
-        {
-            // reset underflow handling
-            GetTextChain()->SetLinkHandlingUnderflow(this, false);
-            /* We are about to call set text on underflowing text,
-             * since there is nothing more to be handled this should be nil
-            */
-            GetTextChain()->SetNilChainingEvent(this, true);
-            // Set text for editing outliner; will trigger onChainingEvent (which will return immediately)
-            OutlinerParaObject *pPObj = GetOutlinerParaObject();
-            pEdtOutl->SetText(*pPObj);
-            // XXX: not sure if next lines necessary
-            OutlinerParaObject *pNewPObj = pEdtOutl->CreateParaObject();
-            NbcSetOutlinerParaObject(pNewPObj);
-        }
 
         // Transfer overflowing text
         impMoveChainedTextToNextLink(&aDrawOutliner, pNextTextObj);
@@ -2033,21 +2009,6 @@ void SdrTextObj::onUnderflowStatusEvent( )
 {
     SdrTextObj *pNextLink = GetNextLinkInChain();
     SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
-
-    if (GetTextChain()->GetLinkHandlingUnderflow(this))
-    {
-        // possibly coming from an overflow
-        if (pEdtOutl) {
-            GetTextChain()->SetLinkHandlingUnderflow(this, false);
-            GetTextChain()->SetNilChainingEvent(this, true);
-            OutlinerParaObject *pPObj = GetOutlinerParaObject();
-            pEdtOutl->SetText(*pPObj);
-            OutlinerParaObject *pNewPObj = pEdtOutl->CreateParaObject();
-            SetOutlinerParaObject(pNewPObj);
-        }
-
-        return;
-    }
 
     if (!pNextLink->HasText())
         return;
@@ -2125,18 +2086,7 @@ void SdrTextObj::onChainingEvent()
 
     bool bIsPageOverflow;
 
-    if (GetTextChain()->GetLinkHandlingUnderflow(this))
-    {
-        // If handling underflow we check for overflow in the object
-        Outliner &aDrawOutliner = ImpGetDrawOutliner();
-        aDrawOutliner.SetUpdateMode(true);
-        aDrawOutliner.SetMaxAutoPaperSize(pEdtOutl->GetMaxAutoPaperSize());
-        OutlinerParaObject *pPObj = GetOutlinerParaObject();
-        aDrawOutliner.SetText(*pPObj);
-        bIsPageOverflow = aDrawOutliner.IsPageOverflow();
-    } else {
-        bIsPageOverflow = pEdtOutl->IsPageOverflow();
-    }
+    bIsPageOverflow = pEdtOutl->IsPageOverflow();
 
     // Propagates the need for change
     SetToBeChained( bIsPageOverflow );

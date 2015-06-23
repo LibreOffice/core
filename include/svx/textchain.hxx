@@ -41,7 +41,6 @@ class ImpChainLinkProperties
     ImpChainLinkProperties();
 
     bool bOverwriteOnOverflow;
-    bool bHandlingUnderflow;
     bool bNilChainingEvent;
 };
 
@@ -64,9 +63,6 @@ class TextChain {
 
     void SetOverwriteOnOverflow(SdrTextObj *, bool );
     bool GetOverwriteOnOverflow(SdrTextObj *pTarget);
-
-    bool GetLinkHandlingUnderflow(SdrTextObj *pTarget);
-    void SetLinkHandlingUnderflow(SdrTextObj *, bool);
 
     bool GetNilChainingEvent(SdrTextObj *pTarget);
     void SetNilChainingEvent(SdrTextObj *, bool);

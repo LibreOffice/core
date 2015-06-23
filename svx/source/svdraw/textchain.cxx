@@ -25,7 +25,6 @@ ImpChainLinkProperties::ImpChainLinkProperties()
 {
     // give defaults
     bOverwriteOnOverflow = false;
-    bHandlingUnderflow = false;
     bNilChainingEvent = false;
 }
 
@@ -59,18 +58,6 @@ bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj* /* pPrevLink */, SdrT
 {
     // XXX
     return false;
-}
-
-bool TextChain::GetLinkHandlingUnderflow(SdrTextObj *pTarget)
-{
-    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
-    return pLinkProperties->bHandlingUnderflow;
-}
-
-void TextChain::SetLinkHandlingUnderflow(SdrTextObj *pTarget, bool bHandlingUnderflow)
-{
-    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
-    pLinkProperties->bHandlingUnderflow = bHandlingUnderflow;
 }
 
 bool TextChain::GetNilChainingEvent(SdrTextObj *pTarget)
