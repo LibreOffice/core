@@ -876,8 +876,8 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
                 {
                     if ( supportsPrimaryKey() )
                     {
-                        ODatabaseExport::TColumns::iterator aFind = ::std::find_if(m_vDestColumns.begin(),m_vDestColumns.end()
-                            ,::o3tl::compose1(::std::mem_fun(&OFieldDescription::IsPrimaryKey),::o3tl::select2nd<ODatabaseExport::TColumns::value_type>()));
+                        ODatabaseExport::TColumns::iterator aFind = ::std::find_if(m_vDestColumns.begin(),m_vDestColumns.end(),
+                            [] (ODatabaseExport::TColumns::value_type tCol) { return tCol.second->IsPrimaryKey(); });
                         if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
                         {
 
@@ -1294,9 +1294,9 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                     ODatabaseExport::TPositions::iterator aPosFind = ::std::find_if(
                         m_vColumnPos.begin(),
                         m_vColumnPos.end(),
-                        ::o3tl::compose1(    ::std::bind2nd( ::std::equal_to< sal_Int32 >(), nPos ),
-                                            ::o3tl::select1st< ODatabaseExport::TPositions::value_type >()
-                        )
+                        [nPos] (ODatabaseExport::TPositions::value_type tPos) {
+                            return tPos.first == nPos;
+                        }
                     );
 
                     if ( m_vColumnPos.end() != aPosFind )
