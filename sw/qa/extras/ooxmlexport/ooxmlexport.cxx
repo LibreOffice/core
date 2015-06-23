@@ -606,6 +606,22 @@ DECLARE_OOXMLEXPORT_TEST(testNumOverrideStart, "num-override-start.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(3), comphelper::SequenceAsHashMap(xRules->getByIndex(1))["StartWith"].get<sal_Int16>());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf91594, "tdf91594.docx")
+{
+    uno::Reference<text::XTextRange> xPara1(getParagraph(1));
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0fb), xPara1->getString()[0] );
+    uno::Reference<text::XTextRange> xPara2(getParagraph(2));
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0fc), xPara2->getString()[0] );
+    uno::Reference<text::XTextRange> xPara3(getParagraph(3));
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0fd), xPara3->getString()[0] );
+    uno::Reference<text::XTextRange> xPara4(getParagraph(4));
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0fe), xPara4->getString()[0] );
+
+    uno::Reference<beans::XPropertySet> xRun(getRun(xPara1,1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameAsian"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameComplex"));
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
