@@ -509,6 +509,7 @@ Do you want to delete password list and reset master password?</property>
       <widget name="masterpassword"/>
       <widget name="macro"/>
       <widget name="cert"/>
+      <widget name="tsas"/>
     </widgets>
   </object>
 </interface>
