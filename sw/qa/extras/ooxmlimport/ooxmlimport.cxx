@@ -2716,6 +2716,15 @@ DECLARE_OOXMLIMPORT_TEST(testTdf8255, "tdf8255.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xDrawPage->getCount());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf87460, "tdf87460.docx")
+{
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XEndnotesSupplier> xEndnotesSupplier(xTextDocument, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xEndnotes = xEndnotesSupplier->getEndnotes();
+    // This was 0: endnote was lost on import.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xEndnotes->getCount());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
