@@ -68,6 +68,8 @@ private:
     bool            bAutoFilter;        ///< AutoFilter? (not saved)
     bool            bModified;          ///< is set/cleared for/by(?) UpdateReference
 
+    ::std::vector< OUString > maTableColumnNames;   ///< names of table columns
+
     using ScRefreshTimer::operator==;
 
 public:
@@ -108,6 +110,8 @@ public:
     void        SetKeepFmt(bool bSet)           { bKeepFmt = bSet; }
     bool        IsStripData() const             { return bStripData; }
     void        SetStripData(bool bSet)         { bStripData = bSet; }
+    const ::std::vector< OUString >& GetTableColumnNames() { return maTableColumnNames; }
+    void        SetTableColumnNames( const ::std::vector< OUString >& rNames ) { maTableColumnNames = rNames; }
 
     OUString GetSourceString() const;
     OUString GetOperations() const;
