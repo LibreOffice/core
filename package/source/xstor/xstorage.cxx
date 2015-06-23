@@ -964,7 +964,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 AddLog( THROW_WHERE "Handled exception" );
 
                 // If the common storage password does not allow to open the stream
-                // it could be copyed in raw way, the problem is that the StartKey should be the same
+                // it could be copied in raw way, the problem is that the StartKey should be the same
                 // in the ODF1.2 package, so an invalid package could be produced if the stream
                 // is copied from ODF1.1 package, where it is allowed to have different StartKeys
                 uno::Reference< embed::XStorageRawAccess > xRawDest( xDest, uno::UNO_QUERY_THROW );

@@ -3854,7 +3854,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
     }
 
-    // new part to comute the user's drag activities
+    // new part to commute the user's drag activities
     // get the original objects transformation
     basegfx::B2DHomMatrix aOriginalMatrix;
     basegfx::B2DPolyPolygon aPolyPolygon;
@@ -3980,7 +3980,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 
     // as it was done before because the top-left of that new rect *will* have an offset
     // caused by the evtl. existing shear and/or rotation, so calculate a unrotated
-    // rectangle how it would be as a result when applying the unit coordinate change
+    // rectangle how it would be as a result when  the unit coordinate change
     // to the unrotated original transformation.
     basegfx::B2DTuple aScale;
     basegfx::B2DTuple aTranslate;

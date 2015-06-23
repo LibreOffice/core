@@ -157,7 +157,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     SQLExceptionInfo aInfo;
     if ( !_xDataSource.is() )
     {
-        SAL_WARN("dbaccess.ui", "createConnection: coult not retrieve the data source!");
+        SAL_WARN("dbaccess.ui", "createConnection: could not retrieve the data source!");
         return aInfo;
     }
 

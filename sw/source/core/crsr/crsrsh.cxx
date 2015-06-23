@@ -1697,7 +1697,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
                         bChgState = false;
                     else
                     {
-                        m_eMvState = MV_NONE;     // state for crusor travelling
+                        m_eMvState = MV_NONE;     // state for cursor travelling
                         m_bAllProtect = true;
                         if( GetDoc()->GetDocShell() )
                         {

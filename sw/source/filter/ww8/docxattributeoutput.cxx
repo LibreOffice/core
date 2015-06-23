@@ -526,7 +526,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
     --m_nTextFrameLevel;
 
-    /* If m_nHyperLinkCount > 0 that means hyperlink tag is not yet colsed.
+    /* If m_nHyperLinkCount > 0 that means hyperlink tag is not yet closed.
      * This is due to nested hyperlink tags. So close it before end of paragraph.
      */
     if(m_nHyperLinkCount > 0)

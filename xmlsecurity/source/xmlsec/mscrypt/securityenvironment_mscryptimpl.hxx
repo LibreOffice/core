@@ -56,7 +56,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper3<
     ::com::sun::star::lang::XUnoTunnel >
 {
     private :
-        //cyrpto provider and key container
+        //crypto provider and key container
         HCRYPTPROV                          m_hProv ;
         LPCTSTR                             m_pszContainer ;
 

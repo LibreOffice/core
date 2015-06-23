@@ -311,7 +311,7 @@ static void signalPart(LOKDocView* /*pLOKDocView*/, int nPart, gpointer /*pData*
     g_bPartSelectorBroadcast = true;
 }
 
-/// User clicked on a cmmand button -> inform LOKDocView.
+/// User clicked on a command button -> inform LOKDocView.
 static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 {
     if (g_bToolItemBroadcast)
