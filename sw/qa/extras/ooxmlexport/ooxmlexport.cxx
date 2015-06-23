@@ -703,6 +703,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79639, "tdf79639.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf91594, "tdf91594.docx")
+{
+    uno::Reference<text::XTextRange> xPara1(getParagraph(1));
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0fb), xPara1->getString()[0] );
+    uno::Reference<text::XTextRange> xPara2(getParagraph(2));
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0fc), xPara2->getString()[0] );
+    uno::Reference<text::XTextRange> xPara3(getParagraph(3));
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0fd), xPara3->getString()[0] );
+    uno::Reference<text::XTextRange> xPara4(getParagraph(4));
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xf0fe), xPara4->getString()[0] );
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

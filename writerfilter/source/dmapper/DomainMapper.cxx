@@ -262,7 +262,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         }
         else //it's a _real_ symbol
         {
-            m_pImpl->SetSymbolData(nIntValue);
+            if (m_pImpl->SetSymbolData(nIntValue))
+                utext( reinterpret_cast < const sal_uInt8 * >( &(nIntValue) ), 1 );
         }
         break;
         case NS_ooxml::LN_CT_Sym_font:
@@ -275,17 +276,13 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 uno::makeAny( sStringValue ));
         }
         else //a real symbol
-            if (m_pImpl->GetTopContext())
+        {
+            if (m_pImpl->SetSymbolFont( sStringValue ))
             {
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( sStringValue ));
-                /*
-                 * In case of symbol, symbol character get imported first and then font of symbols.
-                 * So we are storing symbol character and when we parse symbol font then create UNO object for text.
-                 */
                 sal_Int32 symboldata = m_pImpl->GetSymbolData();
                 utext( reinterpret_cast < const sal_uInt8 * >( &(symboldata) ), 1 );
             }
-
+        }
         break;
         case NS_ooxml::LN_CT_Underline_val:
             handleUnderlineType(nIntValue, m_pImpl->GetTopContext());
@@ -2553,6 +2550,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         resolveSprmProps(*this, rSprm);
         rContext->Insert(PROP_PARA_CNF_STYLE, uno::makeAny(comphelper::containerToSequence(m_pImpl->m_aInteropGrabBag)), true, PARA_GRAB_BAG);
         m_pImpl->disableInteropGrabBag();
+    }
+    break;
+    case NS_ooxml::LN_EG_RunInnerContent_sym:
+    {
+            m_pImpl->SetSymbolData(-1);
     }
     break;
     default:
