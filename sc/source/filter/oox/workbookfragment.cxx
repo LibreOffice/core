@@ -459,9 +459,9 @@ void WorkbookFragment::finalizeImport()
     // setup structure sizes for the number of sheets
     getFormulaBuffer().SetSheetCount( aSheetFragments.size() );
 
-    // create all defined names and database ranges
-    getDefinedNames().finalizeImport();
+    // create all database ranges and defined names, in that order
     getTables().finalizeImport();
+    getDefinedNames().finalizeImport();
     // open the VBA project storage
     OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATION_TYPE( "vbaProject" ) );
     if( !aVbaFragmentPath.isEmpty() )
