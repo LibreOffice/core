@@ -997,7 +997,7 @@ IMPL_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         &&  _pImp->_pCbAutoExtension                 // auto extension is enabled in general
         &&  _pImp->_pCbAutoExtension->IsChecked()    // auto extension is really to be used
         &&  !GetDefaultExt().isEmpty()               // there is a default extension
-        &&  !comphelper::string::equals(GetDefaultExt(), '*') // the default extension is not "all"
+        &&  GetDefaultExt() != "*" // the default extension is not "all"
         && !(   FILEDLG_MODE_SAVE == _pImp->_eMode       // we're saving a file
             &&  _pFileView->GetSelectionCount()          // there is a selected file in the file view -> it will later on
             )                                                   //    (in SvtFileDialog::GetPathList) be taken as file to save to

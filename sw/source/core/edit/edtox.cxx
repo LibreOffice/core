@@ -303,7 +303,6 @@ void SwEditShell::ApplyAutoMark()
         //2.
         SfxMedium aMedium( sAutoMarkURL, STREAM_STD_READ );
         SvStream& rStrm = *aMedium.GetInStream();
-        const sal_Unicode cZero('0');
         Push();
         rtl_TextEncoding eChrSet = ::osl_getThreadTextEncoding();
 
@@ -347,8 +346,8 @@ void SwEditShell::ApplyAutoMark()
                     OUString sWordOnly    = sLine.getToken(0, ';', nTokenPos);
 
                     //3.
-                    bool bCaseSensitive = !sCase.isEmpty() && !comphelper::string::equals(sCase, cZero);
-                    bool bWordOnly = !sWordOnly.isEmpty() && !comphelper::string::equals(sWordOnly, cZero);
+                    bool bCaseSensitive = !sCase.isEmpty() && sCase != "0";
+                    bool bWordOnly = !sWordOnly.isEmpty() && sWordOnly != "0";
 
                     if (!bCaseSensitive)
                     {

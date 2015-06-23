@@ -1476,7 +1476,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     }
                     break;
                 case NF_SYMBOLTYPE_DEL:
-                    if ( pElemStr && comphelper::string::equals(*pElemStr, '@') )
+                    if ( pElemStr && *pElemStr == "@" )
                     {
                         WriteTextContentElement_Impl();
                         bAnyContent = true;

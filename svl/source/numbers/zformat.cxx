@@ -3254,7 +3254,7 @@ bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor )
                 break;
             case NF_SYMBOLTYPE_STRING:
             case NF_SYMBOLTYPE_DATESEP:
-                if (comphelper::string::equals(rNumFor.Info().sStrArray[i], '-'))
+                if (rNumFor.Info().sStrArray[i] == "-")
                 {
                     if (eState == eAtYear)
                     {
@@ -4550,8 +4550,7 @@ bool SvNumberformat::IsNegativeInBracket() const
         return false;
     }
     OUString *tmpStr = NumFor[1].Info().sStrArray;
-    using comphelper::string::equals;
-    return (equals(tmpStr[0], '(') && equals(tmpStr[nAnz-1], ')'));
+    return tmpStr[0] == "(" && tmpStr[nAnz-1] == ")";
 }
 
 bool SvNumberformat::HasPositiveBracketPlaceholder() const

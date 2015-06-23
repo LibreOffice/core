@@ -2775,7 +2775,7 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
 
     // Is there a pure file name left? Otherwise the path is
     // invalid anyway because it was not accepted by OSL before
-    if (!string::equals(aPureFileName, '*'))
+    if (aPureFileName != "*")
     {
         pRTLData->pWildCard = new WildCard( aPureFileName );
     }

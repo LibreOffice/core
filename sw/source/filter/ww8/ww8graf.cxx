@@ -907,7 +907,7 @@ OutlinerParaObject* SwWW8ImplReader::ImportAsOutliner(OUString &rString, WW8_CP 
         if ((eType == MAN_AND) && m_pDrawEditEngine->GetTextLen())
         {
             ESelection aFirstChar(0, 0, 0, 1);
-            if (comphelper::string::equals(m_pDrawEditEngine->GetText( aFirstChar ), 0x5))
+            if (m_pDrawEditEngine->GetText( aFirstChar ) == "\x05")
                 m_pDrawEditEngine->QuickDelete(aFirstChar);
         }
 

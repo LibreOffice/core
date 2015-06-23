@@ -28,9 +28,6 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/escapementitem.hxx>
 
-const sal_Unicode CH_BLANK = ' ';  // ' ' Space character
-
-
 SvxFont::SvxFont()
 {
     nKern = nEsc = 0;
@@ -262,7 +259,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
             sal_uInt32  nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
             if ( ( nCharacterType & ::com::sun::star::i18n::KCharacterType::UPPER ) )
                 break;
-            if ( comphelper::string::equals(aCharString, CH_BLANK) )
+            if ( aCharString == " " )
                 break;
             if( ++nPos < nTxtLen )
                 aCharString = rTxt.copy( nPos + nIdx, 1 );
@@ -287,7 +284,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
             nOldPos = nPos;
         }
         // Now the blanks are<processed
-        while( nPos < nTxtLen && comphelper::string::equals(aCharString, CH_BLANK) && ++nPos < nTxtLen )
+        while( nPos < nTxtLen && aCharString == " " && ++nPos < nTxtLen )
             aCharString = rTxt.copy( nPos + nIdx, 1 );
 
         if( nOldPos != nPos )

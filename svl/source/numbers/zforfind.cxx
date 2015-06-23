@@ -1053,9 +1053,9 @@ bool ImpSvNumberInputScan::MayBeIso8601()
         {
             sal_Int32 n;
             if (nAnzNums >= 3 && nNums[2] < nAnzStrings &&
-                comphelper::string::equals(sStrArray[nNums[0]+1], '-') && // separator year-month
+                sStrArray[nNums[0]+1] == "-" && // separator year-month
                 (n = sStrArray[nNums[1]].toInt32()) >= 1 && n <= 12 &&  // month
-                comphelper::string::equals(sStrArray[nNums[1]+1], '-') && // separator month-day
+                sStrArray[nNums[1]+1] == "-" && // separator month-day
                 (n = sStrArray[nNums[2]].toInt32()) >= 1 && n <= 31)    // day
             {
                 // Year (nNums[0]) value not checked, may be anything, but

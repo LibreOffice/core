@@ -1778,7 +1778,7 @@ void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         {
             sal_uInt16 nLevel = static_cast< sal_uInt16 >(GetModel()->GetAbsPos(pEntry));
             OUString sEntry = pParent->GetLevelHelp(++nLevel);
-            if (comphelper::string::equals(sEntry, '*'))
+            if (sEntry == "*")
                 sEntry = GetEntryText(pEntry);
             if(!sEntry.isEmpty())
             {
@@ -4109,10 +4109,10 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
                 pToInsert->sSecKey      = sLine.getToken(0, ';', nSttPos );
 
                 OUString sStr = sLine.getToken(0, ';', nSttPos );
-                pToInsert->bCase = !sStr.isEmpty() && !comphelper::string::equals(sStr, '0');
+                pToInsert->bCase = !sStr.isEmpty() && sStr != "0";
 
                 sStr = sLine.getToken(0, ';', nSttPos );
-                pToInsert->bWord = !sStr.isEmpty() && !comphelper::string::equals(sStr, '0');
+                pToInsert->bWord = !sStr.isEmpty() && sStr != "0";
 
                 aEntryArr.push_back( pToInsert );
                 pToInsert = 0;

@@ -228,9 +228,9 @@ OUString OFieldDescControl::BoolStringUI(const OUString& rPersistentString) cons
     if (rPersistentString == aYes || rPersistentString == aNo)
         return rPersistentString;
 
-    if (comphelper::string::equals(rPersistentString, '0'))
+    if (rPersistentString == "0")
         return aNo;
-    if (comphelper::string::equals(rPersistentString, '1'))
+    if (rPersistentString == "1")
         return aYes;
 
     return ModuleRes(STR_VALUE_NONE).toString();

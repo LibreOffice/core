@@ -413,7 +413,7 @@ namespace dbaui
         else
         {
             sExtension = m_pOwnExtension->GetText();
-            if ( comphelper::string::equals(sExtension.getToken(0,'.'), '*') )
+            if ( sExtension.getToken(0,'.') == "*" )
                 sExtension = sExtension.copy(2);
         }
         return sExtension;
