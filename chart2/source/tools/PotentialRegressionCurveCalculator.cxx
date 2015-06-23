@@ -29,9 +29,10 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-PotentialRegressionCurveCalculator::PotentialRegressionCurveCalculator() :
-        m_fSlope( 0.0 ),
-        m_fIntercept( 0.0 )
+PotentialRegressionCurveCalculator::PotentialRegressionCurveCalculator()
+    : m_fSlope(0.0)
+    , m_fIntercept(0.0)
+    , m_fSign(1.0)
 {
     ::rtl::math::setNan( & m_fSlope );
     ::rtl::math::setNan( & m_fIntercept );
