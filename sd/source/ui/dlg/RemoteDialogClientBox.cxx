@@ -492,7 +492,7 @@ void ClientBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/*rPa
         RecalcAll();
 
     Point aStart(0, -m_nTopIndex);
-    Size aSize(rRenderContext.GetOutputSizePixel());
+    Size aSize(GetOutputSizePixel());
 
     if (m_bHasScrollBar)
         aSize.Width() -= m_aScrollBar->GetSizePixel().Width();

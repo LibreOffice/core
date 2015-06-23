@@ -305,7 +305,7 @@ void BackgroundPreviewImpl::Paint(vcl::RenderContext& rRenderContext, const Rect
             rRenderContext.DrawBitmap(aDrawPos, aDrawSize, *pBitmap);
         else
         {
-            Size aSize = rRenderContext.GetOutputSizePixel();
+            Size aSize(GetOutputSizePixel());
             rRenderContext.DrawLine(Point(0, 0), Point(aSize.Width(), aSize.Height()));
             rRenderContext.DrawLine(Point(0, aSize.Height()), Point(aSize.Width(), 0));
         }

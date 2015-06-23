@@ -634,12 +634,15 @@ void BrowseBox::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
     if (nTitleLines)
     {
         if (!bHeaderBar)
+        {
             rRenderContext.DrawLine(Point(0, GetTitleHeight() - 1),
-                                    Point(rRenderContext.GetOutputSizePixel().Width(),
-                                          GetTitleHeight() - 1));
+                                    Point(GetOutputSizePixel().Width(), GetTitleHeight() - 1));
+        }
         else if (bHandleCol)
+        {
             rRenderContext.DrawLine(Point(0, GetTitleHeight() - 1),
                                     Point(pFirstCol->Width(), GetTitleHeight() - 1));
+        }
     }
 
     // Title Bar

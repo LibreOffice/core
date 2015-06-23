@@ -741,7 +741,7 @@ SmViewShell * SmCmdBoxWindow::GetView()
 
 void SmCmdBoxWindow::Resize()
 {
-     Rectangle aRect = Rectangle(Point(0, 0), GetOutputSizePixel());
+     Rectangle aRect(Point(0, 0), GetOutputSizePixel());
      aRect.Left()   += CMD_BOX_PADDING;
      aRect.Top()    += CMD_BOX_PADDING_TOP;
      aRect.Right()  -= CMD_BOX_PADDING;
@@ -757,7 +757,7 @@ void SmCmdBoxWindow::Resize()
 
 void SmCmdBoxWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    Rectangle aRect = Rectangle(Point(0, 0), rRenderContext.GetOutputSizePixel());
+    Rectangle aRect(Point(0, 0), GetOutputSizePixel());
     aRect.Left()   += CMD_BOX_PADDING;
     aRect.Top()    += CMD_BOX_PADDING_TOP;
     aRect.Right()  -= CMD_BOX_PADDING;

@@ -759,7 +759,7 @@ void ExtensionBox_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         RecalcAll();
 
     Point aStart( 0, -m_nTopIndex );
-    Size aSize(rRenderContext.GetOutputSizePixel());
+    Size aSize(GetOutputSizePixel());
 
     if ( m_bHasScrollBar )
         aSize.Width() -= m_pScrollBar->GetSizePixel().Width();

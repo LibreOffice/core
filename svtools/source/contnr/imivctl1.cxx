@@ -599,7 +599,7 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const Rec
     Color aColor(COL_BLACK);
     rRenderContext.SetLineColor( aColor );
     Point aOffs(rRenderContext.GetMapMode().GetOrigin());
-    Size aXSize(rRenderContext.GetOutputSizePixel());
+    Size aXSize(GetOutputSizePixel());
     {
         Point aStart(LROFFS_WINBORDER, 0);
         Point aEnd(LROFFS_WINBORDER, aXSize.Height());

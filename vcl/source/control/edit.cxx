@@ -1062,7 +1062,7 @@ void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, lon
 
                     // mirror
                     Rectangle aBounds(aClipRgn.GetBoundRect());
-                    int xNew = rRenderContext.GetOutputSizePixel().Width() - aBounds.GetWidth() - aBounds.Left();
+                    int xNew = GetOutputSizePixel().Width() - aBounds.GetWidth() - aBounds.Left();
                     aClipRgn.Move(xNew - aBounds.Left(), 0);
 
                     // move offset of border window
@@ -1081,13 +1081,13 @@ void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, lon
                 vcl::Region oldRgn(pBorder->GetClipRegion());
                 pBorder->SetClipRegion(aClipRgn);
 
-                pBorder->Paint(*pBorder, Rectangle()); // FIXME
+                pBorder->Paint(*pBorder, Rectangle());
 
                 pBorder->SetClipRegion(oldRgn);
             }
             else
             {
-                pBorder->Paint(*pBorder, Rectangle()); // FIXME
+                pBorder->Paint(*pBorder, Rectangle());
             }
         }
     }

@@ -335,7 +335,7 @@ void PrintDialog::ShowNupOrderWindow::Paint(vcl::RenderContext& rRenderContext, 
     aFont.SetSize(Size(0, 24));
     rRenderContext.SetFont(aFont);
     Size aSampleTextSize(rRenderContext.GetTextWidth(OUString::number(nPages + 1)), rRenderContext.GetTextHeight());
-    Size aOutSize(rRenderContext.GetOutputSizePixel());
+    Size aOutSize(GetOutputSizePixel());
     Size aSubSize(aOutSize.Width() / mnColumns, aOutSize.Height() / mnRows);
     // calculate font size: shrink the sample text so it fits
     double fX = double(aSubSize.Width()) / double(aSampleTextSize.Width());

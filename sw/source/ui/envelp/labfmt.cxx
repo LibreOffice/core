@@ -147,7 +147,7 @@ VCL_BUILDER_FACTORY(SwLabPreview)
 
 void SwLabPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    const Size aSz(rRenderContext.GetOutputSizePixel());
+    const Size aSz(GetOutputSizePixel());
 
     const long lOutWPix = aSz.Width ();
     const long lOutHPix = aSz.Height();

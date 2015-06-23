@@ -124,7 +124,7 @@ void lcl_DrawIDEWindowFrame(DockingWindow* pWin, vcl::RenderContext& rRenderCont
     if (pWin->IsFloatingMode())
         return;
 
-    Size aSz = rRenderContext.GetOutputSizePixel();
+    Size aSz(pWin->GetOutputSizePixel());
     const Color aOldLineColor(rRenderContext.GetLineColor());
     rRenderContext.SetLineColor(Color(COL_WHITE));
     // White line on top

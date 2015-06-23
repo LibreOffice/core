@@ -373,7 +373,7 @@ void Slider::ImplDraw(vcl::RenderContext& rRenderContext, sal_uInt16 nDrawFlags)
             sldValue.mnThumbState |= ControlState::ROLLOVER;
     }
 
-    const Rectangle aCtrlRegion(Point(0,0), rRenderContext.GetOutputSizePixel());
+    const Rectangle aCtrlRegion(Point(0,0), GetOutputSizePixel());
     bool bNativeOK = rRenderContext.DrawNativeControl(CTRL_SLIDER, nPart, aCtrlRegion, nState, sldValue, OUString());
     if (bNativeOK)
         return;

@@ -123,7 +123,7 @@ void ProgressBar::ImplDrawProgress(vcl::RenderContext& rRenderContext, sal_uInt1
     {
         mbCalcNew = false;
 
-        Size aSize = rRenderContext.GetOutputSizePixel();
+        Size aSize(GetOutputSizePixel());
         mnPrgsHeight = aSize.Height() - (PROGRESSBAR_WIN_OFFSET * 2);
         mnPrgsWidth = (mnPrgsHeight * 2) / 3;
         maPos.Y() = PROGRESSBAR_WIN_OFFSET;

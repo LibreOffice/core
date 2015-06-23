@@ -377,7 +377,7 @@ void CustomAnimationTriggerEntryItem::InitViewData( SvTreeListBox* pView, SvTree
 void CustomAnimationTriggerEntryItem::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,
                                             const SvViewDataEntry* /*pView*/, const SvTreeListEntry& /*rEntry*/)
 {
-    Size aSize(rRenderContext.GetOutputSizePixel().Width(), static_cast<SvTreeListBox*>(&rDev)->GetEntryHeight());
+    Size aSize(rDev.GetOutputSizePixel().Width(), rDev.GetEntryHeight());
 
     Point aPos(0, rPos.Y());
 
@@ -943,7 +943,7 @@ void CustomAnimationList::Paint(vcl::RenderContext& rRenderContext, const Rectan
         rRenderContext.SetTextColor(rRenderContext.GetSettings().GetStyleSettings().GetDisableColor());
         ::Point aOffset(rRenderContext.LogicToPixel(Point(6, 6), MAP_APPFONT));
 
-        Rectangle aRect(Point(0,0), rRenderContext.GetOutputSizePixel());
+        Rectangle aRect(Point(0,0), GetOutputSizePixel());
 
         aRect.Left() += aOffset.X();
         aRect.Top() += aOffset.Y();

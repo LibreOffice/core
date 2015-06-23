@@ -398,7 +398,7 @@ void ScZoomSliderWnd::DoPaint(vcl::RenderContext& rRenderContext, const Rectangl
     if (mpImpl->mbOmitPaint)
         return;
 
-    Size aSliderWindowSize = rRenderContext.GetOutputSizePixel();
+    Size aSliderWindowSize(GetOutputSizePixel());
     Rectangle aRect(Point(0, 0), aSliderWindowSize);
 
     ScopedVclPtrInstance< VirtualDevice > pVDev(rRenderContext);

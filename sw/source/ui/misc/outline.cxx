@@ -920,7 +920,7 @@ VCL_BUILDER_FACTORY(NumberingPreview)
 // paint numbering's preview
 void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    const Size aSize(rRenderContext.PixelToLogic(rRenderContext.GetOutputSizePixel()));
+    const Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
 
     ScopedVclPtrInstance<VirtualDevice> pVDev(rRenderContext);
     pVDev->SetMapMode(rRenderContext.GetMapMode());

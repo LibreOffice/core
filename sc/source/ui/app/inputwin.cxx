@@ -1517,7 +1517,7 @@ void ScTextWnd::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
 {
     if (pEditView)
     {
-        Size aSize = rRenderContext.GetOutputSizePixel();
+        Size aSize(GetOutputSizePixel());
         long nDiff = aSize.Height() - rRenderContext.LogicToPixel(Size(0, rRenderContext.GetTextHeight())).Height();
         pEditView->SetOutputArea(rRenderContext.PixelToLogic(Rectangle(Point(0, (nDiff > 0) ? nDiff / 2 : 1), aSize)));
 

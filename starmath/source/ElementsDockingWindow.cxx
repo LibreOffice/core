@@ -261,8 +261,8 @@ void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 
     sal_Int32 nScrollbarWidth = bOldVisibleState ? GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
 
-    sal_Int32 nControlWidth = rRenderContext.GetOutputSizePixel().Width() - nScrollbarWidth;
-    sal_Int32 nControlHeight = rRenderContext.GetOutputSizePixel().Height();
+    sal_Int32 nControlWidth = GetOutputSizePixel().Width() - nScrollbarWidth;
+    sal_Int32 nControlHeight = GetOutputSizePixel().Height();
 
     sal_Int32 boxX = maMaxElementDimensions.Width()  + 10;
     sal_Int32 boxY = maMaxElementDimensions.Height() + 10;

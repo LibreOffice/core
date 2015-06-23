@@ -785,7 +785,7 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext, bool bPaint)
     ImplFormat();
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-    Size aOutSize = rRenderContext.GetOutputSizePixel();
+    Size aOutSize(GetOutputSizePixel());
     long i;
     long j;
     long nY;

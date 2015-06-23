@@ -669,7 +669,7 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const Rectang
         _vdev->SetTextColor(pSpl->_cProgressTextColor);
         _vdev->DrawText(Point(pSpl->_tlx, pSpl->_textBaseline), pSpl->_sProgressText);
     }
-    rRenderContext.DrawOutDev(Point(), rRenderContext.GetOutputSizePixel(), Point(), _vdev->GetOutputSizePixel(), *_vdev.get());
+    rRenderContext.DrawOutDev(Point(), GetOutputSizePixel(), Point(), _vdev->GetOutputSizePixel(), *_vdev.get());
 }
 
 
