@@ -346,7 +346,7 @@ void SwColumnOnlyExample::Paint(vcl::RenderContext& rRenderContext, const Rectan
     if (rFieldColor == aGrayColor)
         aGrayColor.Invert();
 
-    Size aLogSize(rRenderContext.PixelToLogic(rRenderContext.GetOutputSizePixel()));
+    Size aLogSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
     Rectangle aCompleteRect(Point(0,0), aLogSize);
     rRenderContext.SetLineColor(rDlgColor);
     rRenderContext.SetFillColor(rDlgColor);

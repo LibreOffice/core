@@ -59,7 +59,7 @@ void SvxParaPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 
 void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext, bool bAll)
 {
-    Size aWinSize = rRenderContext.GetOutputSizePixel();
+    Size aWinSize(GetOutputSizePixel());
     aWinSize = rRenderContext.PixelToLogic(aWinSize);
     Size aTmp(1, 1);
     aTmp = PixelToLogic(aTmp);

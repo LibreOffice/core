@@ -162,7 +162,6 @@ void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 
 void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-
     const StyleSettings rSetting = rRenderContext.GetSettings().GetStyleSettings();
 
     EnableNativeWidget(true); // only required because the toolkit currently switches this flag off
@@ -217,7 +216,7 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         else
         {
             // create map to find toolbar lines
-            Size aOutSz = rRenderContext.GetOutputSizePixel();
+            Size aOutSz(GetOutputSizePixel());
             std::map<int, int> ranges;
             sal_uInt16 nChildren = GetChildCount();
             for (sal_uInt16 n = 0; n < nChildren; n++)

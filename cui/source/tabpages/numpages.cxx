@@ -2479,7 +2479,7 @@ VCL_BUILDER_FACTORY_ARGS(SvxNumberingPreview, WB_BORDER)
 // paint preview of numeration
 void SvxNumberingPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    Size aSize(rRenderContext.PixelToLogic(rRenderContext.GetOutputSizePixel()));
+    Size aSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     const Color aBackColor = rStyleSettings.GetFieldColor();
