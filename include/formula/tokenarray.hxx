@@ -115,6 +115,7 @@ protected:
     sal_uInt16          nError;                 // Error code
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
     bool            bHyperLink;             // If HYPERLINK() occurs in the formula.
+    bool            mbFromRangeName;        // If this array originates from a named expression
 
 protected:
     void                    Assign( const FormulaTokenArray& );
@@ -163,6 +164,9 @@ public:
     FormulaTokenArray( const FormulaTokenArray& );
     virtual ~FormulaTokenArray();
     FormulaTokenArray* Clone() const;    /// True copy!
+
+    void SetFromRangeName( bool b ) { mbFromRangeName = b; }
+    bool IsFromRangeName() const { return mbFromRangeName; }
 
     void Clear();
     void DelRPN();

@@ -800,12 +800,13 @@ struct ConventionOOO_A1 : public Convention_A1
             MakeRowStr(rBuffer, rAbsRef.Row());
     }
 
-    void makeRefStr( OUStringBuffer&   rBuffer,
+    virtual void makeRefStr( OUStringBuffer&   rBuffer,
                      formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
                      const OUString& rErrRef, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
-                     bool bSingleRef ) const SAL_OVERRIDE
+                     bool bSingleRef,
+                     bool /*bFromRangeName*/ ) const SAL_OVERRIDE
     {
         ScComplexRefData aRef( rRef );
         // In case absolute/relative positions weren't separately available:
@@ -952,12 +953,14 @@ struct ConventionOOO_A1 : public Convention_A1
 struct ConventionOOO_A1_ODF : public ConventionOOO_A1
 {
     ConventionOOO_A1_ODF() : ConventionOOO_A1 (FormulaGrammar::CONV_ODF) { }
-    void makeRefStr( OUStringBuffer&   rBuffer,
+
+    virtual void makeRefStr( OUStringBuffer&   rBuffer,
                      formula::FormulaGrammar::Grammar eGram,
                      const ScAddress& rPos,
                      const OUString& rErrRef, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
-                     bool bSingleRef ) const SAL_OVERRIDE
+                     bool bSingleRef,
+                     bool /*bFromRangeName*/ ) const SAL_OVERRIDE
     {
         rBuffer.append('[');
         ScComplexRefData aRef( rRef );
@@ -1197,12 +1200,13 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
         MakeRowStr(rBuf, rAbs.Row());
     }
 
-    void makeRefStr( OUStringBuffer&   rBuf,
+    virtual void makeRefStr( OUStringBuffer&   rBuf,
                      formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
                      const OUString& /*rErrRef*/, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
-                     bool bSingleRef ) const SAL_OVERRIDE
+                     bool bSingleRef,
+                     bool /*bFromRangeName*/ ) const SAL_OVERRIDE
     {
         ScComplexRefData aRef( rRef );
 
@@ -1338,6 +1342,32 @@ struct ConventionXL_OOX : public ConventionXL_A1
 {
     ConventionXL_OOX() : ConventionXL_A1( FormulaGrammar::CONV_XL_OOX ) { }
 
+    virtual void makeRefStr( OUStringBuffer&   rBuf,
+                     formula::FormulaGrammar::Grammar eGram,
+                     const ScAddress& rPos,
+                     const OUString& rErrRef, const std::vector<OUString>& rTabNames,
+                     const ScComplexRefData& rRef,
+                     bool bSingleRef,
+                     bool bFromRangeName ) const SAL_OVERRIDE
+    {
+        // In OOXML relative references in named expressions are relative to
+        // column 0 and row 0. Relative sheet references don't exist.
+        ScAddress aPos( rPos );
+        if (bFromRangeName)
+        {
+            // XXX NOTE: by decrementing the reference position we may end up
+            // with resolved references with negative values. There's no proper
+            // way to solve that or wrap them around without sheet dimensions
+            // that are stored along. That, or blindly assume fixed dimensions
+            // here and in import.
+            /* TODO: maybe do that blind fixed dimensions wrap? */
+            aPos.SetCol(0);
+            aPos.SetRow(0);
+        }
+
+        ConventionXL_A1::makeRefStr( rBuf, eGram, aPos, rErrRef, rTabNames, rRef, bSingleRef, bFromRangeName);
+    }
+
     virtual OUString makeExternalNameStr( sal_uInt16 nFileId, const OUString& /*rFile*/,
             const OUString& rName ) const SAL_OVERRIDE
     {
@@ -1442,12 +1472,14 @@ r1c1_add_row( OUStringBuffer &rBuf, const ScSingleRefData& rRef, const ScAddress
 struct ConventionXL_R1C1 : public ScCompiler::Convention, public ConventionXL
 {
     ConventionXL_R1C1() : ScCompiler::Convention( FormulaGrammar::CONV_XL_R1C1 ) { }
-    void makeRefStr( OUStringBuffer&   rBuf,
+
+    virtual void makeRefStr( OUStringBuffer&   rBuf,
                      formula::FormulaGrammar::Grammar /*eGram*/,
                      const ScAddress& rPos,
                      const OUString& /*rErrRef*/, const std::vector<OUString>& rTabNames,
                      const ScComplexRefData& rRef,
-                     bool bSingleRef ) const SAL_OVERRIDE
+                     bool bSingleRef,
+                     bool /*bFromRangeName*/ ) const SAL_OVERRIDE
     {
         ScRange aAbsRef = rRef.toAbs(rPos);
         ScComplexRefData aRef( rRef );
@@ -4575,7 +4607,7 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
         {
             rBuffer.append(ScGlobal::GetRscString(STR_NO_NAME_REF));
             pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef,
-                              GetSetupTabNames(), aRef, true);
+                              GetSetupTabNames(), aRef, true, (pArr && pArr->IsFromRangeName()));
         }
     }
     else if (pArr && (p = pArr->PeekPrevNoSpaces()) && p->GetOpCode() == ocTableRefOpen)
@@ -4587,14 +4619,14 @@ void ScCompiler::CreateStringFromSingleRef( OUStringBuffer& rBuffer, const Formu
     }
     else
         pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef,
-                          GetSetupTabNames(), aRef, true);
+                          GetSetupTabNames(), aRef, true, (pArr && pArr->IsFromRangeName()));
 }
 
 void ScCompiler::CreateStringFromDoubleRef( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
 {
     OUString aErrRef = GetCurrentOpCodeMap()->getSymbol(ocErrRef);
     pConv->makeRefStr(rBuffer, meGrammar, aPos, aErrRef, GetSetupTabNames(),
-                      *_pTokenP->GetDoubleRef(), false);
+                      *_pTokenP->GetDoubleRef(), false, (pArr && pArr->IsFromRangeName()));
 }
 
 void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaToken* _pTokenP ) const
@@ -5214,7 +5246,7 @@ bool ScCompiler::HandleTableRef()
                     {
                         aRefData.SetRowRel( true);
                         if (!bCol1RelName)
-                            bCol1RelName = static_cast<ScTokenArray*>(pArr)->IsFromRangeName();
+                            bCol1RelName = pArr->IsFromRangeName();
                     }
                     aRefData.SetRelName( bCol1RelName);
                     aRefData.SetFlag3D( true);
@@ -5242,7 +5274,7 @@ bool ScCompiler::HandleTableRef()
                         aRefData.Ref1.SetRowRel( true);
                         aRefData.Ref2.SetRowRel( true);
                         if (!bRelName)
-                            bRelName = static_cast<ScTokenArray*>(pArr)->IsFromRangeName();
+                            bRelName = pArr->IsFromRangeName();
                     }
                     aRefData.Ref1.SetRelName( bRelName);
                     aRefData.Ref2.SetRelName( bRelName);
