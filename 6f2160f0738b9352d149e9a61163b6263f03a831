@@ -16,6 +16,24 @@
       "revId": "6f2160f0738b9352d149e9a61163b6263f03a831",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_7248662e",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 660,
+      "author": {
+        "id": 1000543
+      },
+      "writtenOn": "2015-06-23T06:27:58Z",
+      "side": 1,
+      "message": "As there is no support for image hyperlink for PPTX as well as DOCX, if we remove the check of Documenttype and exported the code for PPTX as well, impress import UT get failed.\nReason is UnknownPropertyException. As this property is unknown for PPTX. \nSo, need this check.",
+      "parentUuid": "1a54edaf_f799a820",
+      "revId": "6f2160f0738b9352d149e9a61163b6263f03a831",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
