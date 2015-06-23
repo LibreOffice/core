@@ -38,6 +38,7 @@
 
 #include <DomainMapper.hxx>
 #include "DomainMapperTableManager.hxx"
+#include "DomainMapperTableHandler.hxx"
 #include "PropertyMap.hxx"
 #include "FontTable.hxx"
 #include "NumberingManager.hxx"
@@ -366,7 +367,7 @@ private:
 
     // TableManagers are stacked: one for each stream to avoid any confusion
     std::stack< std::shared_ptr< DomainMapperTableManager > > m_aTableManagers;
-    TableDataHandler::Pointer_t m_pTableHandler;
+    std::shared_ptr<DomainMapperTableHandler> m_pTableHandler;
 
     //each context needs a stack of currently used attributes
     PropertyStack           m_aPropertyStacks[NUMBER_OF_CONTEXTS];
