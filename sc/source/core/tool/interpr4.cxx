@@ -74,7 +74,6 @@
 #include <basic/basmgr.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <memory>
-#include <memory>
 
 using namespace com::sun::star;
 using namespace formula;

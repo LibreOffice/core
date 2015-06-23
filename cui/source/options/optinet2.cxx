@@ -98,8 +98,6 @@ using namespace ::sfx2;
 
 // static ----------------------------------------------------------------
 
-#include <sal/config.h>
-
 VCL_BUILDER_FACTORY_ARGS(SvxNoSpaceEdit, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK)
 
 void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
