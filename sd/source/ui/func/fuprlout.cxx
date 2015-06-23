@@ -42,6 +42,7 @@
 #include "strmname.h"
 #include "app.hrc"
 #include "DrawDocShell.hxx"
+#include "SlideSorterViewShell.hxx"
 #include "unprlout.hxx"
 #include "unchss.hxx"
 #include "unmovss.hxx"
@@ -89,24 +90,6 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
     bool bError = false;
 
-    // determine the active page
-    sal_uInt16 nSelectedPage = SDRPAGE_NOTFOUND;
-    for (sal_uInt16 nPage = 0; nPage < mpDoc->GetSdPageCount(PK_STANDARD); nPage++)
-    {
-        if (mpDoc->GetSdPage(nPage, PK_STANDARD)->IsSelected())
-        {
-            nSelectedPage = nPage;
-            break;
-        }
-    }
-
-    DBG_ASSERT(nSelectedPage != SDRPAGE_NOTFOUND, "no selected page");
-    SdPage* pSelectedPage = mpDoc->GetSdPage(nSelectedPage, PK_STANDARD);
-    OUString aOldLayoutName(pSelectedPage->GetLayoutName());
-    sal_Int32 nPos = aOldLayoutName.indexOf(SD_LT_SEPARATOR);
-    if (nPos != -1)
-        aOldLayoutName = aOldLayoutName.copy(0, nPos);
-
     /* if we are on a master page, the changes apply for all pages and notes-
        pages who are using the relevant layout */
     bool bOnMaster = false;
@@ -117,6 +100,51 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         if (eEditMode == EM_MASTERPAGE)
             bOnMaster = true;
     }
+
+    std::vector<SdPage*> aUnselect;
+    if (!bOnMaster)
+    {
+        //We later rely on IsSelected, so transfer the selection here
+        //into the document
+        slidesorter::SlideSorterViewShell* pSlideSorterViewShell
+            = slidesorter::SlideSorterViewShell::GetSlideSorter(mpViewShell->GetViewShellBase());
+        if (pSlideSorterViewShell)
+        {
+            boost::shared_ptr<slidesorter::SlideSorterViewShell::PageSelection> xSelection(
+                pSlideSorterViewShell->GetPageSelection());
+            if (xSelection)
+            {
+                for (auto it = xSelection->begin(); it != xSelection->end(); ++it)
+                {
+                    SdPage *pPage = *it;
+                    if (pPage->IsSelected() || pPage->GetPageKind() != PK_STANDARD)
+                        continue;
+                    mpDoc->SetSelected(pPage, true);
+                    aUnselect.push_back(pPage);
+                }
+            }
+        }
+    }
+
+    std::vector<SdPage*> aSelectedPages;
+    std::vector<sal_uInt16> aSelectedPageNums;
+    // determine the active pages
+    for (sal_uInt16 nPage = 0; nPage < mpDoc->GetSdPageCount(PK_STANDARD); nPage++)
+    {
+        SdPage* pPage = mpDoc->GetSdPage(nPage, PK_STANDARD);
+        if (pPage->IsSelected())
+        {
+            aSelectedPages.push_back(pPage);
+            aSelectedPageNums.push_back(nPage);
+        }
+    }
+
+    assert(!aSelectedPages.empty() && "no selected page");
+    OUString aOldLayoutName(aSelectedPages.back()->GetLayoutName());
+    sal_Int32 nPos = aOldLayoutName.indexOf(SD_LT_SEPARATOR);
+    if (nPos != -1)
+        aOldLayoutName = aOldLayoutName.copy(0, nPos);
+
     bool bMasterPage = bOnMaster;
     bool bCheckMasters = false;
 
@@ -196,14 +224,15 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             OUString aLayoutName;
             if( pTempDoc )
                 aLayoutName = aFile.getToken(1, DOCUMENT_TOKEN);
-
-            mpDoc->SetMasterPage(nSelectedPage, aLayoutName, pTempDoc, bMasterPage, bCheckMasters);
+            for (auto nSelectedPage : aSelectedPageNums)
+                mpDoc->SetMasterPage(nSelectedPage, aLayoutName, pTempDoc, bMasterPage, bCheckMasters);
             mpDoc->CloseBookmarkDoc();
         }
         else
         {
             // use master page with the layout name aFile from current Doc
-            mpDoc->SetMasterPage(nSelectedPage, aFile, mpDoc, bMasterPage, bCheckMasters);
+            for (auto nSelectedPage : aSelectedPageNums)
+                mpDoc->SetMasterPage(nSelectedPage, aFile, mpDoc, bMasterPage, bCheckMasters);
         }
 
         // remove blocking
@@ -211,7 +240,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(false);
 
         // if the master page was visible, show it again
-        if (!bError && nSelectedPage != SDRPAGE_NOTFOUND)
+        if (!bError)
         {
             if (bOnMaster)
             {
@@ -219,13 +248,16 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
                 {
                     ::sd::View* pView =
                           static_cast<DrawViewShell*>(mpViewShell)->GetView();
-                    sal_uInt16 nPgNum = pSelectedPage->TRG_GetMasterPage().GetPageNum();
+                    for (auto pSelectedPage : aSelectedPages)
+                    {
+                        sal_uInt16 nPgNum = pSelectedPage->TRG_GetMasterPage().GetPageNum();
 
-                    if (static_cast<DrawViewShell*>(mpViewShell)->GetPageKind() == PK_NOTES)
-                        nPgNum++;
+                        if (static_cast<DrawViewShell*>(mpViewShell)->GetPageKind() == PK_NOTES)
+                            nPgNum++;
 
-                    pView->HideSdrPage();
-                    pView->ShowSdrPage(pView->GetModel()->GetMasterPage(nPgNum));
+                        pView->HideSdrPage();
+                        pView->ShowSdrPage(pView->GetModel()->GetMasterPage(nPgNum));
+                    }
                 }
 
                 // force update of TabBar
@@ -233,9 +265,15 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             }
             else
             {
-                pSelectedPage->SetAutoLayout(pSelectedPage->GetAutoLayout());
+                for (auto pSelectedPage : aSelectedPages)
+                    pSelectedPage->SetAutoLayout(pSelectedPage->GetAutoLayout());
             }
         }
+
+        //Undo transfer to document selection
+        for (auto pPage : aUnselect)
+            mpDoc->SetSelected(pPage, false);
+
 
         // fake a mode change to repaint the page tab bar
         if( mpViewShell && mpViewShell->ISA( DrawViewShell ) )
