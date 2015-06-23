@@ -36,6 +36,7 @@
 
 class GlyphCache;
 class ServerFont;
+typedef struct _cairo cairo_t;
 
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 {
@@ -209,6 +210,8 @@ public:
     virtual css::uno::Any   GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const SAL_OVERRIDE;
 
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
+
+    static cairo_t*         createCairoContext(const basebmp::BitmapDeviceSharedPtr& rBuffer);
 
 #endif // ENABLE_CAIRO_CANVAS
 

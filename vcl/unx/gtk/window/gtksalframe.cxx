@@ -3465,17 +3465,8 @@ gboolean GtkSalFrame::signalCrossing( GtkWidget*, GdkEventCrossing* pEvent, gpoi
 
 cairo_t* GtkSalFrame::getCairoContext() const
 {
-    basebmp::RawMemorySharedArray data = m_aFrame->getBuffer();
-    basegfx::B2IVector size = m_aFrame->getSize();
-    sal_Int32 nStride = m_aFrame->getScanlineStride();
-    assert(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, size.getX()) == nStride);
-    cairo_surface_t *target =
-        cairo_image_surface_create_for_data(data.get(),
-                                        CAIRO_FORMAT_RGB24,
-                                        size.getX(), size.getY(),
-                                        nStride);
-    cairo_t* cr = cairo_create(target);
-    cairo_surface_destroy(target);
+    cairo_t* cr = SvpSalGraphics::createCairoContext(m_aFrame);
+    assert(cr);
     return cr;
 }
 
