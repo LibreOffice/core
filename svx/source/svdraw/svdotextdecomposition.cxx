@@ -728,7 +728,8 @@ OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOut
 {
     NonOverflowingText *pNonOverflowingTxt;
     // We have to get text from the editing outliner if this is set
-    if (pEdtOutl != NULL)
+    if (pEdtOutl != NULL
+        && !GetTextChain()->GetNilChainingEvent(const_cast<SdrTextObj*>(this))) // this is equivalent to checking for not(underflow-caused overflow)
         pNonOverflowingTxt =
                 pEdtOutl->GetNonOverflowingText();
     else

@@ -2070,6 +2070,8 @@ void SdrTextObj::onUnderflowStatusEvent( )
     aDrawOutliner.AddText(*pNextLinkWholeText);
 
     bool bIsOverflowFromUnderflow = aDrawOutliner.IsPageOverflow();
+    if (bIsOverflowFromUnderflow)
+        mpOverflowingText = aDrawOutliner.GetOverflowingText();
 
     OutlinerParaObject *pNewText = aDrawOutliner.CreateParaObject();
 
@@ -2085,6 +2087,7 @@ void SdrTextObj::onUnderflowStatusEvent( )
 
     // handle overflow
     if (bIsOverflowFromUnderflow) {
+
         // prevents infinite loops when setting text for editing outliner
         GetTextChain()->SetNilChainingEvent(const_cast<SdrTextObj*>(this), true);
         impLeaveOnlyNonOverflowingText(&aDrawOutliner);
