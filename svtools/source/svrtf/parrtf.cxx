@@ -17,20 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <rtl/character.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
+#include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <svtools/rtftoken.h>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/parrtf.hxx>
-#include <comphelper/string.hxx>
 
 const int MAX_STRING_LEN = 1024;
 const int MAX_TOKEN_LEN = 128;
 
-#define RTF_ISDIGIT( c ) comphelper::string::isdigitAscii(c)
-#define RTF_ISALPHA( c ) comphelper::string::isalphaAscii(c)
+#define RTF_ISDIGIT( c ) rtl::isAsciiDigit(c)
+#define RTF_ISALPHA( c ) rtl::isAsciiAlpha(c)
 
 SvRTFParser::SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize )
     : SvParser( rIn, nStackSize )

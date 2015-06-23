@@ -2766,7 +2766,7 @@ bool ScCompiler::IsPredetectedReference(const OUString& rName)
                     return false;   // :#REF!.AB42 or :#REF!42 or :#REF!#REF!
                 break;
             default:
-                if (comphelper::string::isalphaAscii(c) &&
+                if (rtl::isAsciiAlpha(c) &&
                         ((mnPredetectedReference > 1 && ':' == c2) || 0 == c2))
                     return false;   // AB#REF!: or AB#REF!
         }

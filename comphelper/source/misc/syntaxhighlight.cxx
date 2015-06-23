@@ -21,9 +21,9 @@
 
 #include <cassert>
 
+#include <rtl/character.hxx>
 #include <unicode/uchar.h>
 #include <comphelper/syntaxhighlight.hxx>
-#include <comphelper/string.hxx>
 
 // Flags for character properties
 #define CHAR_START_IDENTIFIER   0x0001
@@ -249,7 +249,7 @@ namespace
 {
     bool isAlpha(sal_Unicode c)
     {
-        if (comphelper::string::isalphaAscii(c))
+        if (rtl::isAsciiAlpha(c))
             return true;
         return u_isalpha(c);
     }

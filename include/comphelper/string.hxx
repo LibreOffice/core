@@ -401,36 +401,6 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OString &rString);
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OUString &rString);
 
-inline bool isdigitAscii(sal_Unicode c)
-{
-    return ((c >= '0') && (c <= '9'));
-}
-
-inline bool isxdigitAscii(sal_Unicode c)
-{
-    return isdigitAscii(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
-}
-
-inline bool islowerAscii(sal_Unicode c)
-{
-    return ((c >= 'a') && (c <= 'z'));
-}
-
-inline bool isupperAscii(sal_Unicode c)
-{
-    return ((c >= 'A') && (c <= 'Z'));
-}
-
-inline bool isalphaAscii(sal_Unicode c)
-{
-    return islowerAscii(c) || isupperAscii(c);
-}
-
-inline bool isalnumAscii(sal_Unicode c)
-{
-    return isalphaAscii(c) || isdigitAscii(c);
-}
-
 /** Compare two strings containing software version numbers
 
     Inspired by the GNU strverscmp(), but there is no guarantee that the exact

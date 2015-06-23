@@ -23,9 +23,9 @@
 
 #include "osl/diagnose.h"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <comphelper/string.hxx>
 
 namespace unnamed_ucb_regexp {} using namespace unnamed_ucb_regexp;
     // unnamed namespaces don't work well yet...
@@ -178,19 +178,17 @@ namespace unnamed_ucb_regexp {
 
 bool isScheme(OUString const & rString, bool bColon)
 {
-    using comphelper::string::isalphaAscii;
-    using comphelper::string::isdigitAscii;
     // Return true if rString matches <scheme> (plus a trailing ":" if bColon
     // is true) from RFC 2396:
     sal_Unicode const * p = rString.getStr();
     sal_Unicode const * pEnd = p + rString.getLength();
-    if (p != pEnd && isalphaAscii(*p))
+    if (p != pEnd && rtl::isAsciiAlpha(*p))
         for (++p;;)
         {
             if (p == pEnd)
                 return !bColon;
             sal_Unicode c = *p++;
-            if (!(isalphaAscii(c) || isdigitAscii(c)
+            if (!(rtl::isAsciiAlpha(c) || rtl::isAsciiDigit(c)
                   || c == '+' || c == '-' || c == '.'))
                 return bColon && c == ':' && p == pEnd;
         }

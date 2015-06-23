@@ -36,7 +36,7 @@ static OUString lcl_CheckGroupName( const OUString& rGroupName )
     for( sal_Int32 i = 0; i < rGroupName.getLength(); i++ )
     {
         sal_Unicode cChar = rGroupName[i];
-        if (comphelper::string::isalnumAscii(cChar) ||
+        if (rtl::isAsciiAlphanumeric(cChar) ||
             cChar == '_' || cChar == 0x20)
         {
             sRet += OUString(cChar);

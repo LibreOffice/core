@@ -52,7 +52,6 @@
 #include <svl/macitem.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/string.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <boost/scoped_ptr.hpp>
@@ -161,7 +160,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     for(sal_Int32 nPos = 0; nPos < aGroupName.getLength(); nPos++)
     {
         sal_Unicode cChar = aGroupName[nPos];
-        if (comphelper::string::isalnumAscii(cChar) ||
+        if (rtl::isAsciiAlphanumeric(cChar) ||
             (cChar == '_') ||
             (cChar == 0x20) ||
             (cChar == GLOS_DELIM) )

@@ -31,7 +31,6 @@
 #include <svl/fstathelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
-#include <comphelper/string.hxx>
 #include <swtypes.hxx>
 #include <uitool.hxx>
 #include <glosdoc.hxx>
@@ -64,7 +63,7 @@ OUString lcl_CheckFileName( const OUString& rNewFilePath,
     for( sal_Int32 i=0; i < nLen; ++i )
     {
         const sal_Unicode cChar = rNewGroupName[i];
-        if (comphelper::string::isalnumAscii(cChar) ||
+        if (rtl::isAsciiAlphanumeric(cChar) ||
             cChar == '_' || cChar == 0x20)
         {
             aBuf.append(cChar);

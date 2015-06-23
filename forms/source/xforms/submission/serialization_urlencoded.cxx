@@ -24,11 +24,10 @@
 #include <com/sun/star/xml/dom/XText.hpp>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/NodeType.hpp>
-
+#include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 
 #include <stdio.h>
 
@@ -54,7 +53,7 @@ CSerializationURLEncoded::CSerializationURLEncoded()
 */
 bool CSerializationURLEncoded::is_unreserved(sal_Char c)
 {
-    if (comphelper::string::isalnumAscii(c))
+    if (rtl::isAsciiAlphanumeric(static_cast<unsigned char>(c)))
         return true;
     switch (c) {
         case '-':

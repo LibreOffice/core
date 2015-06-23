@@ -18,6 +18,7 @@
  */
 
 #include <string.h>
+#include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include "tvread.hxx"
@@ -35,7 +36,6 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <i18nlangtag/languagetag.hxx>
-#include <comphelper/string.hxx>
 #include <unotools/pathoptions.hxx>
 
 namespace treeview {
@@ -1038,7 +1038,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
 
 inline bool isLetter( sal_Unicode c )
 {
-    return comphelper::string::isalphaAscii(c);
+    return rtl::isAsciiAlpha(c);
 }
 
 void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,

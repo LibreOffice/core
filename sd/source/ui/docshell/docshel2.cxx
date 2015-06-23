@@ -39,7 +39,6 @@
 #include "fupoor.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
-#include <comphelper/string.hxx>
 
 namespace sd {
 
@@ -348,13 +347,13 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
             }
         }
         else if (sRemainder.getLength() == 1 &&
-                 comphelper::string::islowerAscii(sRemainder[0]))
+                 rtl::isAsciiLowerCase(sRemainder[0]))
         {
             // lower case, single character: reserved
             bIsStandardName = true;
         }
         else if (sRemainder.getLength() == 1 &&
-                 comphelper::string::isupperAscii(sRemainder[0]))
+                 rtl::isAsciiUpperCase(sRemainder[0]))
         {
             // upper case, single character: reserved
             bIsStandardName = true;

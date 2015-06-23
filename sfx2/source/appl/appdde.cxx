@@ -18,7 +18,7 @@
  */
 
 #include <config_features.h>
-
+#include <rtl/character.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/rectitem.hxx>
 #include <svl/eitem.hxx>
@@ -43,7 +43,6 @@
 #include "helper.hxx"
 #include <sfx2/docfile.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 
 #if defined WNT
@@ -55,7 +54,7 @@ OUString SfxDdeServiceName_Impl( const OUString& sIn )
     for ( sal_uInt16 n = sIn.getLength(); n; --n )
     {
         sal_Unicode cChar = sIn[n-1];
-        if (comphelper::string::isalnumAscii(cChar))
+        if (rtl::isAsciiAlphanumeric(cChar))
             sReturn.append(cChar);
     }
 

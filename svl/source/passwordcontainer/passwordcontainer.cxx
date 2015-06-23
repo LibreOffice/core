@@ -24,7 +24,6 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
@@ -32,6 +31,7 @@
 #include <com/sun/star/task/NoMasterException.hpp>
 
 #include <osl/diagnose.h>
+#include <rtl/character.hxx>
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
 #include <rtl/byteseq.hxx>
@@ -60,7 +60,7 @@ static OUString createIndex(const vector< OUString >& lines)
 
         while( *pLine )
         {
-            if (comphelper::string::isalnumAscii(*pLine))
+            if (rtl::isAsciiAlphanumeric(static_cast<unsigned char>(*pLine)))
             {
                 aResult += OString( *pLine );
             }

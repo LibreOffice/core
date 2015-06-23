@@ -141,14 +141,14 @@ CSS1Token CSS1Parser::GetNextToken()
         case '@': // '@import' | '@XXX'
             {
                 cNextCh = GetNextChar();
-                if (comphelper::string::isalphaAscii(cNextCh))
+                if (rtl::isAsciiAlpha(cNextCh))
                 {
                     // den naechsten Identifer scannen
                     OUStringBuffer sTmpBuffer(32);
                     do {
                         sTmpBuffer.append( cNextCh );
                         cNextCh = GetNextChar();
-                    } while( (comphelper::string::isalnumAscii(cNextCh) ||
+                    } while( (rtl::isAsciiAlphanumeric(cNextCh) ||
                              '-' == cNextCh) && !IsEOF() );
 
                     aToken += sTmpBuffer.makeStringAndClear();
@@ -244,7 +244,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     do {
                         sTmpBuffer.append( cNextCh );
                         cNextCh = GetNextChar();
-                    } while( (comphelper::string::isalnumAscii(cNextCh) ||
+                    } while( (rtl::isAsciiAlphanumeric(cNextCh) ||
                              '-' == cNextCh) && !IsEOF() );
 
                     aToken += sTmpBuffer.makeStringAndClear();
@@ -388,7 +388,7 @@ CSS1Token CSS1Parser::GetNextToken()
                         do {
                             sTmpBuffer2.append( cNextCh );
                             cNextCh = GetNextChar();
-                        } while( (comphelper::string::isalnumAscii(cNextCh) ||
+                        } while( (rtl::isAsciiAlphanumeric(cNextCh) ||
                                  '-' == cNextCh) && !IsEOF() );
 
                         aIdent += sTmpBuffer2.makeStringAndClear();
@@ -583,7 +583,7 @@ CSS1Token CSS1Parser::GetNextToken()
             // no break
 
         default: // IDENT | syntax error
-            if (comphelper::string::isalphaAscii(cNextCh))
+            if (rtl::isAsciiAlpha(cNextCh))
             {
                 // IDENT
 
@@ -601,7 +601,7 @@ CSS1Token CSS1Parser::GetNextToken()
                                        ('a'<=cNextCh && 'f'>=cNextCh) );
                     }
                     cNextCh = GetNextChar();
-                } while( (comphelper::string::isalnumAscii(cNextCh) ||
+                } while( (rtl::isAsciiAlphanumeric(cNextCh) ||
                            '-' == cNextCh) && !IsEOF() );
 
                 aToken += sTmpBuffer.makeStringAndClear();

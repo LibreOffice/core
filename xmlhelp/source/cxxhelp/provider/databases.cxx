@@ -59,7 +59,6 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/string.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -1456,7 +1455,7 @@ OUString ExtensionIteratorBase::implGetFileFromPackage(
 
 inline bool isLetter( sal_Unicode c )
 {
-    return comphelper::string::isalphaAscii(c);
+    return rtl::isAsciiAlpha(c);
 }
 
 void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUString > &rv,
