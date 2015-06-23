@@ -1090,13 +1090,13 @@ void Edit::ImplPaintBorder(vcl::RenderContext& rRenderContext, long nXStart, lon
                 vcl::Region oldRgn(pBorder->GetClipRegion());
                 pBorder->SetClipRegion(aClipRgn);
 
-                pBorder->Paint(*pBorder, Rectangle()); // FIXME
+                pBorder->Paint(*pBorder, Rectangle());
 
                 pBorder->SetClipRegion(oldRgn);
             }
             else
             {
-                pBorder->Paint(*pBorder, Rectangle()); // FIXME
+                pBorder->Paint(*pBorder, Rectangle());
             }
         }
     }
