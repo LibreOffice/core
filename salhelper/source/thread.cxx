@@ -20,7 +20,7 @@ salhelper::Thread::Thread(char const * name): name_(name) {}
 void salhelper::Thread::launch() {
     SAL_INFO("salhelper.thread", "launch " << name_);
     // Assumption is that osl::Thread::create returns normally with a true
-    // return value if it causes osl::Thread::run to start executing:
+    // return value iff it causes osl::Thread::run to start executing:
     acquire();
     try {
         if (!create()) {

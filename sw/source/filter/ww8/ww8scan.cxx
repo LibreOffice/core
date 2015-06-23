@@ -550,7 +550,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x480B, { 0, L_FIX} }, // "sprmCIdCharType" obsolete: not applicable in
                             // Word97 and later versions;;;
         {0x2A0C, { 1, L_FIX} }, // "sprmCHighlight" chp.fHighlight,
-                            // chp.icoHighlight;ico (fHighlight is set to 1 if
+                            // chp.icoHighlight;ico (fHighlight is set to 1 iff
                             // ico is not 0)
         {0x680E, { 4, L_FIX} }, // "sprmCObjLocation" chp.fcObj;FC;long;
         {0x2A10, { 0, L_FIX} }, // "sprmCFFtcAsciSymb" ;;;

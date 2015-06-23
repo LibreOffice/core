@@ -195,7 +195,7 @@ SvpSalGraphics::ClipUndoHandle::~ClipUndoHandle()
         m_rGfx.m_aDevice = m_aDevice;
 }
 
-// setup a clip rectangle -only- if we have to; if aRange
+// setup a clip rectangle -only- iff we have to; if aRange
 // is entirely contained inside an existing clip frame, we
 // will avoid setting up the clip bitmap. Similarly if the
 // range doesn't appear at all we return true to avoid

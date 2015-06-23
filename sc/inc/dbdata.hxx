@@ -180,7 +180,7 @@ public:
         const_iterator end() const;
         ScDBData* findByIndex(sal_uInt16 nIndex);
         ScDBData* findByUpperName(const OUString& rName);
-        // Takes ownership of p if it returns true:
+        // Takes ownership of p iff it returns true:
         SAL_WARN_UNUSED_RESULT bool insert(ScDBData* p);
         void erase(iterator itr);
         void erase(const ScDBData& r);

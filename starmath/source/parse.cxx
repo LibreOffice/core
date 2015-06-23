@@ -320,7 +320,7 @@ static const sal_Unicode aDelimiterTable[] =
 };
 
 bool SmParser::IsDelimiter( const OUString &rTxt, sal_Int32 nPos )
-    // returns 'true' if cChar is '\0' or a delimiter
+    // returns 'true' iff cChar is '\0' or a delimiter
 {
     assert(nPos <= rTxt.getLength()); //index out of range
 

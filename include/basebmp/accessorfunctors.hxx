@@ -80,7 +80,7 @@ template< typename T,
     {
         typedef typename make_unsigned<T>::type unsigned_T;
 
-        // mask will be 0, if m == 0, and 1 otherwise
+        // mask will be 0, iff m == 0, and 1 otherwise
         const T mask( unsigned_cast<T>(m | -m) >> (sizeof(unsigned_T)*8 - 1) );
         return v1*static_cast<M>(1-mask) + v2*mask;
     }
@@ -96,7 +96,7 @@ template< typename T,
     {
         typedef typename make_unsigned<T>::type unsigned_T;
 
-        // mask will be 0, if m == 0, and 1 otherwise
+        // mask will be 0, iff m == 0, and 1 otherwise
         const T mask( unsigned_cast<T>(m | -m) >> (sizeof(unsigned_T)*8 - 1) );
         return v1*mask + v2*static_cast<M>(1-mask);
     }
