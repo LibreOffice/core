@@ -2046,20 +2046,13 @@ void SdrTextObj::onUnderflowStatusEvent( )
     if (bIsOverflowFromUnderflow) {
         // prevents infinite loops when setting text for editing outliner
         GetTextChain()->SetNilChainingEvent(const_cast<SdrTextObj*>(this), true);
+
         impLeaveOnlyNonOverflowingText(&aDrawOutliner);
         impMoveChainedTextToNextLink(&aDrawOutliner, pNextLink);
     } else {
+        // No overflow: set the whole thing
         const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
     }
-
-    /*
-    if (pEdtOutl != NULL)
-        pEdtOutl->SetText(*pNewText);
-    */
-
-    // Don't need this if handling everything here
-    //const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
-
 }
 
 
@@ -2071,7 +2064,7 @@ void SdrTextObj::onChainingEvent()
     if (!pEdtOutl)
         return;
 
-
+    // This is true during an underflow-caused overflow (with pEdtOutl->SetText())
     if (GetTextChain()->GetNilChainingEvent(this)) {
         GetTextChain()->SetNilChainingEvent(this, false);
         return;
@@ -2091,7 +2084,6 @@ void SdrTextObj::onChainingEvent()
     } else {
         onUnderflowStatusEvent();
     }
-    return;
 }
 
 

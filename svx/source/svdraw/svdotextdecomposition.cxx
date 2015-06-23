@@ -727,9 +727,10 @@ void SdrTextObj::impDecomposeContourTextPrimitive(
 OutlinerParaObject *SdrTextObj::impGetNonOverflowingParaObject(SdrOutliner *pOutliner) const
 {
     NonOverflowingText *pNonOverflowingTxt;
-    // We have to get text from the editing outliner if this is set
+    // We have to get text from the editing outliner if this is set (but not if this is part of an underflow process since pEdtOutl does not know much in that case)
+    bool bThereIsUnderflowGoingOn = GetTextChain()->GetNilChainingEvent(const_cast<SdrTextObj*>(this));
     if (pEdtOutl != NULL
-        && !GetTextChain()->GetNilChainingEvent(const_cast<SdrTextObj*>(this))) // this is equivalent to checking for not(underflow-caused overflow)
+        && !bThereIsUnderflowGoingOn) // this is equivalent to checking for not(underflow-caused overflow)
         pNonOverflowingTxt =
                 pEdtOutl->GetNonOverflowingText();
     else
