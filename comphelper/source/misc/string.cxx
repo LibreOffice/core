@@ -24,6 +24,7 @@
 #include <vector>
 #include <algorithm>
 
+#include <rtl/character.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.hxx>
@@ -342,30 +343,18 @@ NaturalStringSorter::NaturalStringSorter(
     m_xBI = i18n::BreakIterator::create( rContext );
 }
 
-namespace
-{
-    //do OPER on each element of the string, return false
-    //if any OPER is false, true otherwise
-    template <bool (*OPER)(sal_Unicode), typename T>
-    bool tmpl_is_OPER_AsciiString(const T &rString)
-    {
-        for (sal_Int32 i = 0; i < rString.getLength(); ++i)
-        {
-            if (!OPER(rString[i]))
-                return false;
-        }
-        return true;
-    }
-}
-
 bool isdigitAsciiString(const OString &rString)
 {
-    return tmpl_is_OPER_AsciiString<isdigitAscii>(rString);
+    return std::all_of(
+        rString.getStr(), rString.getStr() + rString.getLength(),
+        [](unsigned char c){ return rtl::isAsciiDigit(c); });
 }
 
 bool isdigitAsciiString(const OUString &rString)
 {
-    return tmpl_is_OPER_AsciiString<isdigitAscii>(rString);
+    return std::all_of(
+        rString.getStr(), rString.getStr() + rString.getLength(),
+        rtl::isAsciiDigit);
 }
 
 namespace
