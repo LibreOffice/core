@@ -271,7 +271,7 @@ void OViewsWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rR
     rRenderContext.SetFillColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
     rRenderContext.SetTextFillColor(Application::GetSettings().GetStyleSettings().GetDialogColor());
 
-    Size aOut = rRenderContext.GetOutputSizePixel();
+    Size aOut(GetOutputSizePixel());
     Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= rRenderContext.GetMapMode().GetScaleX();
 

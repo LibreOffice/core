@@ -562,7 +562,7 @@ static int ImplGetTopDockingAreaHeight( vcl::Window *pWindow )
     return 0;
 }
 
-static void ImplAddNWFSeparator( vcl::RenderContext& rRenderContext, const MenubarValue& rMenubarValue )
+static void ImplAddNWFSeparator(vcl::RenderContext& rRenderContext, const Size& rSize, const MenubarValue& rMenubarValue)
 {
     // add a separator if
     // - we have an adjacent docking area
@@ -575,7 +575,7 @@ static void ImplAddNWFSeparator( vcl::RenderContext& rRenderContext, const Menub
 
         rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetSeparatorColor());
         Point aPt;
-        Rectangle aRect(aPt, rRenderContext.GetOutputSizePixel());
+        Rectangle aRect(aPt, rSize);
         rRenderContext.DrawLine(aRect.BottomLeft(), aRect.BottomRight());
     }
 }
@@ -612,12 +612,12 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                             Erase(rRenderContext);
                         else
                         {
-                            Rectangle aBgRegion(Point(), rRenderContext.GetOutputSizePixel());
+                            Rectangle aBgRegion(Point(), GetOutputSizePixel());
                             rRenderContext.DrawNativeControl(CTRL_MENUBAR, PART_ENTIRE_CONTROL, aBgRegion,
                                                              ControlState::ENABLED, aControlValue, OUString());
                         }
 
-                        ImplAddNWFSeparator(rRenderContext, aControlValue);
+                        ImplAddNWFSeparator(rRenderContext, GetOutputSizePixel(), aControlValue);
 
                         // draw selected item
                         ControlState nState = ControlState::ENABLED;
@@ -652,13 +652,13 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
                             // use full window size to get proper gradient
                             // but clip accordingly
                             Point aPt;
-                            Rectangle aCtrlRect(aPt, rRenderContext.GetOutputSizePixel());
+                            Rectangle aCtrlRect(aPt, GetOutputSizePixel());
 
                             rRenderContext.DrawNativeControl(CTRL_MENUBAR, PART_ENTIRE_CONTROL,
                                                              aCtrlRect, ControlState::ENABLED, aMenubarValue, OUString());
                         }
 
-                        ImplAddNWFSeparator(rRenderContext, aMenubarValue);
+                        ImplAddNWFSeparator(rRenderContext, GetOutputSizePixel(), aMenubarValue);
                     }
                     else
                         rRenderContext.Erase(aRect);
@@ -895,7 +895,7 @@ void MenuBarWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
                                              ControlState::ENABLED, aMenubarValue, OUString());
         }
 
-        ImplAddNWFSeparator(rRenderContext, aMenubarValue);
+        ImplAddNWFSeparator(rRenderContext, GetOutputSizePixel(), aMenubarValue);
     }
     rRenderContext.SetFillColor(rStyleSettings.GetMenuColor());
 

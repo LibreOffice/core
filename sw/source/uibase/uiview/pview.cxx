@@ -219,7 +219,7 @@ void  SwPagePreviewWin::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     {
         // This is the size to which I always relate.
         if (!maPxWinSize.Height() || !maPxWinSize.Width())
-            maPxWinSize = rRenderContext.GetOutputSizePixel();
+            maPxWinSize = GetOutputSizePixel();
 
         Rectangle aRect(rRenderContext.LogicToPixel(rRect));
         mpPgPreviewLayout->Prepare(1, Point(0,0), maPxWinSize,

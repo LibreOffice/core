@@ -1457,7 +1457,7 @@ void Window::Erase(vcl::RenderContext& rRenderContext)
     ControlPart aCtrlPart = ImplGetWindowImpl()->mnNativeBackground;
     if (aCtrlPart != 0 && ! IsControlBackground())
     {
-        Rectangle aCtrlRegion(Point(), rRenderContext.GetOutputSizePixel());
+        Rectangle aCtrlRegion(Point(), GetOutputSizePixel());
         ControlState nState = ControlState::NONE;
 
         if (IsEnabled())

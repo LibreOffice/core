@@ -83,7 +83,7 @@ void TabWin_Impl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     // Paint tabulators
     Point aPoint;
-    Size aSize = rRenderContext.GetOutputSizePixel();
+    Size aSize(GetOutputSizePixel());
     aPoint.X() = aSize.Width() / 2;
     aPoint.Y() = aSize.Height() / 2;
     Ruler::DrawTab(rRenderContext, rRenderContext.GetSettings().GetStyleSettings().GetFontColor(), aPoint, nTabStyle);

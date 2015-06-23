@@ -800,7 +800,7 @@ VCL_BUILDER_DECL_FACTORY(SvxCropExample)
 
 void SvxCropExample::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
-    Size aWinSize(rRenderContext.PixelToLogic(rRenderContext.GetOutputSizePixel()));
+    Size aWinSize(rRenderContext.PixelToLogic(GetOutputSizePixel()));
     rRenderContext.SetLineColor();
     rRenderContext.SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
     rRenderContext.SetRasterOp(ROP_OVERPAINT);

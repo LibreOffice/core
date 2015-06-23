@@ -769,7 +769,7 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
     if (!pMenu)
         return;
 
-    Size aSz = rRenderContext.GetOutputSizePixel();
+    Size aSz(GetOutputSizePixel());
 
     long nX = 0;
     long nStartY;
@@ -802,7 +802,7 @@ void MenuFloatingWindow::RenderHighlightItem(vcl::RenderContext& rRenderContext,
 
                 if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
                 {
-                    Size aPxSize(rRenderContext.GetOutputSizePixel());
+                    Size aPxSize(GetOutputSizePixel());
                     rRenderContext.Push(PushFlags::CLIPREGION);
                     rRenderContext.IntersectClipRegion(Rectangle(Point(nX, nY), Size(aSz.Width(), pData->aSz.Height())));
                     Rectangle aCtrlRect(Point(nX, 0), Size(aPxSize.Width()-nX, aPxSize.Height()));
@@ -1146,7 +1146,7 @@ void MenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectang
     {
         rRenderContext.SetClipRegion();
         long nX = pMenu->pLogo ? pMenu->pLogo->aBitmap.GetSizePixel().Width() : 0;
-        Size aPxSize(rRenderContext.GetOutputSizePixel());
+        Size aPxSize(GetOutputSizePixel());
         aPxSize.Width() -= nX;
         ImplControlValue aVal(pMenu->nTextPos - GUTTERBORDER);
         rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
@@ -1174,7 +1174,7 @@ void MenuFloatingWindow::ImplDrawScroller(vcl::RenderContext& rRenderContext, bo
 
     rRenderContext.SetClipRegion();
 
-    Size aOutSz = rRenderContext.GetOutputSizePixel();
+    Size aOutSz(GetOutputSizePixel());
     long nY = bUp ? 0 : (aOutSz.Height() - nScrollerHeight);
     long nX = pMenu->pLogo ? pMenu->pLogo->aBitmap.GetSizePixel().Width() : 0;
     Rectangle aRect(Point(nX, nY), Size(aOutSz.Width() - nX, nScrollerHeight));
