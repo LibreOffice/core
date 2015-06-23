@@ -24,7 +24,7 @@ OUString s_bar("bar");
 OUString s_bars("bars");
 OUString s_foo("foo");
 OUString s_other("other");
-OUString s_xx("xa");
+OUString s_xa("xa");
 OUString s_xx("xx");
 
 class Test: public CppUnit::TestFixture {
