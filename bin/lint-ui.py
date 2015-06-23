@@ -23,6 +23,8 @@ ALIGNMENT_TOP_PADDING = '6'
 MESSAGE_BOX_SPACING = '24'
 MESSAGE_BORDER_WIDTH = '12'
 
+IGNORED_WORDS = ['the', 'of', 'to', 'for', 'a', 'and', 'as', 'from', 'on', 'into', 'by', 'at', 'or', 'do', 'in', 'when']
+
 def lint_assert(predicate, warning=DEFAULT_WARNING_STR):
     if not predicate:
         print("    * " + warning)
@@ -76,6 +78,18 @@ def check_alignment_top_padding(alignment):
         top_padding = top_padding_properties[0]
         lint_assert(top_padding.text == ALIGNMENT_TOP_PADDING,
                     "GtkAlignment 'top_padding' should be " + ALIGNMENT_TOP_PADDING)
+	
+def check_titlewords_case(root):
+    labels = [element for element in root.findall(".//child[@type='label']")]# if element.attrib['type'] and element.attrib['type'] == 'label']
+    titles = [label.find(".//property[@name='label']") for label in labels]
+    for title in titles:
+	words = title.text.split(" ")
+	first = True
+	for word in words:
+	    if(word[0].islower()):
+		if(word not in IGNORED_WORDS or first):
+		    lint_assert(False, "The word '" + word + "' should be capitalized")
+	    first = False
 
 def main():
     print(" == " + sys.argv[1] + " ==")
@@ -101,6 +115,8 @@ def main():
         check_message_box_spacing(element)
 
     check_frames(root)
+    
+    check_titlewords_case(root)
 
 if __name__ == "__main__":
     main()
