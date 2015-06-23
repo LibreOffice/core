@@ -182,7 +182,7 @@ void Breadcrumb::SetMode( SvtBreadcrumbMode eMode )
 
 void Breadcrumb::appendField()
 {
-    m_aLinks.push_back( VclPtr< FixedHyperlink >::Create( this ) );
+    m_aLinks.push_back( VclPtr< FixedHyperlink >::Create( this, WB_TABSTOP ) );
     m_aLinks[m_aLinks.size() - 1]->Hide();
     m_aLinks[m_aLinks.size() - 1]->SetClickHdl( LINK( this, Breadcrumb, ClickLinkHdl ) );
 
