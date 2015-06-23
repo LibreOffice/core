@@ -33,7 +33,7 @@ namespace cppu {
 
     @param name the service name to test
 
-    @return true iff the sequence returned by the given implementation's
+    @return true if the sequence returned by the given implementation's
     getSupportedServices method contains the given name
 
     @since LibreOffice 4.0

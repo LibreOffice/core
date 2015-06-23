@@ -299,7 +299,7 @@ sal_uInt16 Application::Exception( sal_uInt16 nError )
 
 void Application::Abort( const OUString& rErrorText )
 {
-    //HACK: Dump core iff --norestore command line argument is given (assuming
+    //HACK: Dump core if --norestore command line argument is given (assuming
     // this process is run by developers who are interested in cores, vs. end
     // users who are not):
     bool dumpCore = false;

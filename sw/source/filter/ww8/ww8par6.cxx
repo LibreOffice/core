@@ -5758,7 +5758,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x2A0C, &SwWW8ImplReader::Read_CharHighlight},//"sprmCHighlight"
                                                      //chp.fHighlight,
                                                      //chp.icoHighlight;ico
-                                                     //(fHighlight is set to 1 iff
+                                                     //(fHighlight is set to 1 if
                                                      //ico is not 0);byte;
         {0x680E, &SwWW8ImplReader::Read_PicLoc},     //"sprmCObjLocation" chp.fcObj;
                                                      //FC;long;
