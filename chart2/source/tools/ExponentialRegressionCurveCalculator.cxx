@@ -29,9 +29,10 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-ExponentialRegressionCurveCalculator::ExponentialRegressionCurveCalculator() :
-        m_fLogSlope( 0.0 ),
-        m_fLogIntercept( 0.0 )
+ExponentialRegressionCurveCalculator::ExponentialRegressionCurveCalculator()
+    : m_fLogSlope(0.0)
+    , m_fLogIntercept(0.0)
+    , m_fSign(1.0)
 {
     ::rtl::math::setNan( & m_fLogSlope );
     ::rtl::math::setNan( & m_fLogIntercept );
