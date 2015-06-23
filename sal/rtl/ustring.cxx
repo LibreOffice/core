@@ -1173,6 +1173,49 @@ void rtl_uString_newReplaceFirstAsciiL(
     *index = i;
 }
 
+void rtl_uString_newReplaceFirstToAsciiL(
+    rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,
+    char const * to, sal_Int32 toLength, sal_Int32 * index)
+    SAL_THROW_EXTERN_C()
+{
+    assert(str != 0);
+    assert(index != 0);
+    assert(*index >= 0 && *index <= str->length);
+    assert(from != 0);
+    assert(toLength >= 0);
+    sal_Int32 i = rtl_ustr_indexOfStr_WithLength(
+        str->buffer + *index, str->length - *index, from->buffer, from->length);
+    if (i == -1) {
+        rtl_uString_assign(newStr, str);
+    } else {
+        assert(i <= str->length - *index);
+        i += *index;
+        assert(from->length <= str->length);
+        if (str->length - from->length > SAL_MAX_INT32 - toLength) {
+            std::abort();
+        }
+        sal_Int32 n = str->length - from->length + toLength;
+        rtl_uString_acquire(str); // in case *newStr == str
+        if (n != 0) {
+            rtl_uString_new_WithLength(newStr, n);
+            (*newStr)->length = n;
+            assert(i >= 0 && i < str->length);
+            memcpy(
+                (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
+            for (sal_Int32 j = 0; j != toLength; ++j) {
+                assert(static_cast< unsigned char >(to[j]) <= 0x7F);
+                (*newStr)->buffer[i + j] = to[j];
+            }
+            memcpy(
+                (*newStr)->buffer + i + toLength,
+                str->buffer + i + from->length,
+                (str->length - i - from->length) * sizeof (sal_Unicode));
+        }
+        rtl_uString_release(str);
+    }
+    *index = i;
+}
+
 void rtl_uString_newReplaceFirstAsciiLAsciiL(
     rtl_uString ** newStr, rtl_uString * str, char const * from,
     sal_Int32 fromLength, char const * to, sal_Int32 toLength,
@@ -1248,6 +1291,21 @@ void rtl_uString_newReplaceAllAsciiL(
     for (sal_Int32 i = 0;; i += to->length) {
         rtl_uString_newReplaceFirstAsciiL(
             newStr, *newStr, from, fromLength, to, &i);
+        if (i == -1) {
+            break;
+        }
+    }
+}
+
+void rtl_uString_newReplaceAllToAsciiL(
+    rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,
+    char const * to, sal_Int32 toLength) SAL_THROW_EXTERN_C()
+{
+    assert(from != 0);
+    rtl_uString_assign(newStr, str);
+    for (sal_Int32 i = 0;; i += toLength) {
+        rtl_uString_newReplaceFirstToAsciiL(
+            newStr, *newStr, from, to, toLength, &i);
         if (i == -1) {
             break;
         }

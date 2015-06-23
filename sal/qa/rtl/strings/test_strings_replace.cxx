@@ -37,11 +37,15 @@ private:
 
     void ustringReplaceFirstAsciiL();
 
+    void ustringReplaceFirstToAsciiL();
+
     void ustringReplaceFirstAsciiLAsciiL();
 
     void ustringReplaceAll();
 
     void ustringReplaceAllAsciiL();
+
+    void ustringReplaceAllToAsciiL();
 
     void ustringReplaceAllAsciiLAsciiL();
 
@@ -50,9 +54,11 @@ private:
     CPPUNIT_TEST(stringReplaceAll);
     CPPUNIT_TEST(ustringReplaceFirst);
     CPPUNIT_TEST(ustringReplaceFirstAsciiL);
+    CPPUNIT_TEST(ustringReplaceFirstToAsciiL);
     CPPUNIT_TEST(ustringReplaceFirstAsciiLAsciiL);
     CPPUNIT_TEST(ustringReplaceAll);
     CPPUNIT_TEST(ustringReplaceAllAsciiL);
+    CPPUNIT_TEST(ustringReplaceAllToAsciiL);
     CPPUNIT_TEST(ustringReplaceAllAsciiLAsciiL);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -172,6 +178,40 @@ void Test::ustringReplaceFirstAsciiL() {
     }
 }
 
+void Test::ustringReplaceFirstToAsciiL() {
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("otherbarfoo"),
+        rtl::OUString("foobarfoo").replaceFirst(s_foo, "other"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("foobarfoo"),
+        rtl::OUString("foobarfoo").replaceFirst(s_bars, "other"));
+
+    {
+        sal_Int32 n = 0;
+        CPPUNIT_ASSERT_EQUAL(
+            rtl::OUString("otherbarfoo"),
+            rtl::OUString("foobarfoo").replaceFirst(s_foo, "other", &n));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), n);
+    }
+
+    {
+        sal_Int32 n = 1;
+        CPPUNIT_ASSERT_EQUAL(
+            rtl::OUString("foobarother"),
+            rtl::OUString("foobarfoo").replaceFirst(s_foo, "other", &n));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6), n);
+    }
+
+    {
+        sal_Int32 n = 4;
+        CPPUNIT_ASSERT_EQUAL(
+            rtl::OUString("foobarfoo"),
+            rtl::OUString("foobarfoo").replaceFirst(s_bar, "other", &n));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
+    }
+}
+
 void Test::ustringReplaceFirstAsciiLAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
         rtl::OUString("otherbarfoo"),
@@ -237,6 +277,20 @@ void Test::ustringReplaceAllAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
         rtl::OUString("xxa"),
         rtl::OUString("xaa").replaceAll("xa", s_xx));
+}
+
+void Test::ustringReplaceAllToAsciiL() {
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("otherbarother"),
+        rtl::OUString("foobarfoo").replaceAll(s_foo, "other"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("foobarfoo"),
+        rtl::OUString("foobarfoo").replaceAll(s_bars, "other"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString("xxa"),
+        rtl::OUString("xaa").replaceAll(s_xa, "xx"));
 }
 
 void Test::ustringReplaceAllAsciiLAsciiL() {

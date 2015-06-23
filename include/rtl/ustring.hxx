@@ -1780,6 +1780,36 @@ public:
       Returns a new string resulting from replacing the first occurrence of a
       given substring with another substring.
 
+      @param from  the substring to be replaced
+
+      @param to  ASCII string literal, the replacing substring
+
+      @param[in,out] index  pointer to a start index; if the pointer is
+      non-null: upon entry to the function, its value is the index into the this
+      string at which to start searching for the \p from substring, the value
+      must be non-negative and not greater than this string's length; upon exiting
+      the function its value is the index into this string at which the
+      replacement took place or -1 if no replacement took place; if the pointer
+      is null, searching always starts at index 0
+
+      @since LibreOffice 5.1
+    */
+    template< typename T >
+    SAL_WARN_UNUSED_RESULT typename libreoffice_internal::ConstCharArrayDetector< T, OUString >::Type replaceFirst( OUString const & from, T& to,
+                                                                                                        sal_Int32 * index = 0) const
+    {
+        rtl_uString * s = 0;
+        sal_Int32 i = 0;
+        assert( strlen( to ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        rtl_uString_newReplaceFirstToAsciiL(
+            &s, pData, from.pData, to, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1, index == 0 ? &i : index);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing the first occurrence of a
+      given substring with another substring.
+
       @param from  ASCII string literal, the substring to be replaced
 
       @param to  ASCII string literal, the substring to be replaced
@@ -1850,6 +1880,28 @@ public:
         rtl_uString * s = 0;
         assert( strlen( from ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
         rtl_uString_newReplaceAllAsciiL(&s, pData, from, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1, to.pData);
+        return OUString(s, SAL_NO_ACQUIRE);
+    }
+
+    /**
+      Returns a new string resulting from replacing all occurrences of a given
+      substring with another substring.
+
+      Replacing subsequent occurrences picks up only after a given replacement.
+      That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+      @param from  the substring to be replaced
+
+      @param to  ASCII string literal, the replacing substring
+
+      @since LibreOffice 5.1
+    */
+    template< typename T >
+    SAL_WARN_UNUSED_RESULT typename libreoffice_internal::ConstCharArrayDetector< T, OUString >::Type replaceAll( OUString const & from, T& to) const
+    {
+        rtl_uString * s = 0;
+        assert( strlen( to ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        rtl_uString_newReplaceAllToAsciiL(&s, pData, from.pData, to, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1);
         return OUString(s, SAL_NO_ACQUIRE);
     }
 

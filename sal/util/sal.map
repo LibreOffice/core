@@ -683,6 +683,12 @@ LIBO_UDK_5.0 { # symbols available in >= LibO 5.0
         rtl_secureZeroMemory;
 } LIBO_UDK_4.3;
 
+LIBO_UDK_5.1 { # symbols available in >= LibO 5.1
+    global:
+        rtl_uString_newReplaceAllToAsciiL;
+        rtl_uString_newReplaceFirstToAsciiL;
+} LIBO_UDK_5.0;
+
 PRIVATE_1.0 {
     global:
         osl_detail_ObjectRegistry_storeAddresses;
