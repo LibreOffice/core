@@ -313,6 +313,16 @@ struct FloatingTableInfo
     css::uno::Any getPropertyValue(const OUString &propertyName);
 };
 
+struct SymbolData
+{
+    sal_Unicode cSymbol;
+    OUString    sFont;
+    SymbolData():
+        cSymbol(),
+        sFont()
+    { }
+};
+
 class DomainMapper;
 class DomainMapper_Impl
 {
@@ -362,8 +372,7 @@ private:
     OUString                                                                        m_sCurrentBkmkName;
 
     _PageMar                                                                        m_aPageMargins;
-    sal_Int32                                                                       m_nSymboldata;
-
+    SymbolData                                                                      m_aSymbolData;
 
     // TableManagers are stacked: one for each stream to avoid any confusion
     std::stack< std::shared_ptr< DomainMapperTableManager > > m_aTableManagers;
@@ -500,8 +509,10 @@ public:
     void SetParaSectpr(bool bParaSectpr);
     bool GetParaSectpr() { return m_bParaSectpr;}
 
-    void SetSymbolData( sal_Int32 nSymbolData );
-    sal_Int32 GetSymbolData() { return m_nSymboldata;}
+    void SetSymbolChar( sal_Int32 nSymbol) { m_aSymbolData.cSymbol = sal_Unicode(nSymbol); }
+    void SetSymbolFont( OUString &rName ) { m_aSymbolData.sFont = rName; }
+    const SymbolData & GetSymbolData() { return m_aSymbolData;}
+
     /// Setter method for m_bSdt.
     void SetSdt(bool bSdt);
     /// Getter method for m_bSdt.
