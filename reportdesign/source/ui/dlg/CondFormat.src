@@ -21,7 +21,6 @@
 #include "helpids.hrc"
 #include <svx/globlmn.hrc>
 #include "rptui_slotid.hrc"
-#include "rptui_slotid.hrc"
 
 String STR_NUMBERED_CONDITION
 {

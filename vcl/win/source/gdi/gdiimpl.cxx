@@ -65,8 +65,6 @@
 #pragma warning(pop)
 #endif
 
-#include <basegfx/polygon/b2dpolygon.hxx>
-
 #define SAL_POLYPOLYCOUNT_STACKBUF          8
 #define SAL_POLYPOLYPOINTS_STACKBUF         64
 

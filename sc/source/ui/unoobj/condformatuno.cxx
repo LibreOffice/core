@@ -25,7 +25,6 @@
 
 #include <com/sun/star/sheet/DataBarAxis.hpp>
 #include <com/sun/star/sheet/IconSetType.hpp>
-#include <com/sun/star/sheet/DataBarAxis.hpp>
 #include <com/sun/star/sheet/ConditionFormatOperator.hpp>
 #include <com/sun/star/sheet/DataBarEntryType.hpp>
 #include <com/sun/star/sheet/ColorScaleEntryType.hpp>

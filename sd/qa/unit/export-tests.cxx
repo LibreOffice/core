@@ -65,8 +65,6 @@
 #include <com/sun/star/table/XMergeableCell.hpp>
 
 #include <svx/svdotable.hxx>
-#include <com/sun/star/table/XTable.hpp>
-#include <com/sun/star/table/XMergeableCell.hpp>
 
 #include <config_features.h>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

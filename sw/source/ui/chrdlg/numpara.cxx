@@ -32,7 +32,6 @@
 #include <numpara.hxx>
 
 #include <app.hrc>
-#include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxhelp.hxx>

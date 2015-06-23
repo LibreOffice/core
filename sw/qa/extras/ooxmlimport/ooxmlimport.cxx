@@ -64,7 +64,6 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <vcl/bmpacc.hxx>
 #include <vcl/svapp.hxx>
