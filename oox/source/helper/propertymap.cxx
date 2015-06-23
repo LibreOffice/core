@@ -70,7 +70,6 @@ using ::com::sun::star::container::XIndexReplace;
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
-#include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

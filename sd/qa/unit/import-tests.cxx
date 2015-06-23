@@ -26,7 +26,6 @@
 #include <rsc/rscsfx.hxx>
 
 #include <sfx2/sfxsids.hrc>
-#include <svl/stritem.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdograf.hxx>

@@ -36,7 +36,6 @@
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
 
-#include <vcl/window.hxx>
     // complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
 
 class AllSettings;

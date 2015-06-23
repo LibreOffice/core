@@ -82,7 +82,6 @@
 #include <vbahelper/vbaaccesshelper.hxx>
 #include <basic/basmgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase.hxx>
 
 using namespace ::com::sun::star;

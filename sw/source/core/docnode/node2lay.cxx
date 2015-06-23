@@ -18,7 +18,6 @@
  */
 
 #include <calbck.hxx>
-#include <calbck.hxx>
 #include <node.hxx>
 #include <ndindex.hxx>
 #include <swtable.hxx>
