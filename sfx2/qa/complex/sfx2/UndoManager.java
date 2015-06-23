@@ -847,7 +847,7 @@ public class UndoManager
         assertFalse( m_undoListener.wasHiddenContextLeft() );
         assertFalse( m_undoListener.hasContextBeenCancelled() );
         assertEquals( "unexpected undo context depth leaving a non-empty context", 0, m_undoListener.getCurrentUndoContextDepth() );
-        // leaving a non-empty context should have cleare the redo stack
+        // leaving a non-empty context should have cleared the redo stack
         assertArrayEquals( new String[0], i_undoManager.getAllRedoActionTitles() );
         assertTrue( m_undoListener.wasRedoStackCleared() );
 

@@ -160,7 +160,7 @@ void SfxDispatcher::Flush()
 
 /** With this method, a <SfxShell> pushed on to the SfxDispatcher.
     The SfxShell is first marked for push and a timer is set up.
-    First when the timer has couted down to zero the push
+    First when the timer has counted down to zero the push
     ( <SfxDispatcher::Flush()> ) is actually performed and the
     <SfxBindings> is invalidated. While the timer is counting down
     the opposing push and pop commands on the same SfxShell are
