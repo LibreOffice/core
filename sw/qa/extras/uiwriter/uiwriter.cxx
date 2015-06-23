@@ -92,6 +92,7 @@ public:
     void testTdf68183();
     void testCp1000115();
     void testTdf90003();
+    void testTdf51741();
     void testdelofTableRedlines();
     void testExportToPicture();
     void testSearchWithTransliterate();
@@ -135,6 +136,7 @@ public:
     CPPUNIT_TEST(testTdf68183);
     CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST(testTdf90003);
+    CPPUNIT_TEST(testTdf51741);
     CPPUNIT_TEST(testdelofTableRedlines);
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testSearchWithTransliterate);
@@ -878,6 +880,65 @@ void SwUiWriterTest::testTdf90003()
     // This was 1: an unexpected fly portion was created, resulting in too
     // large x position for the empty paragraph marker.
     assertXPath(pXmlDoc, "//Special[@nType='POR_FLY']", 0);
+}
+
+void SwUiWriterTest::testTdf51741()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
+    //Modification 1
+    pMarkAccess->makeMark(aPaM, OUString("Mark"), IDocumentMarkAccess::MarkType::BOOKMARK);
+    CPPUNIT_ASSERT(pWrtShell->IsModified());
+    pWrtShell->ResetModified();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    //Modification 2
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT(pWrtShell->IsModified());
+    pWrtShell->ResetModified();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+    //Modification 3
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT(pWrtShell->IsModified());
+    pWrtShell->ResetModified();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark("Mark");
+    CPPUNIT_ASSERT(ppBkmk != pMarkAccess->getAllMarksEnd());
+    //Modification 4
+    pMarkAccess->renameMark(ppBkmk->get(), "Mark_");
+    CPPUNIT_ASSERT(pWrtShell->IsModified());
+    pWrtShell->ResetModified();
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
+    //Modification 5
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT(pWrtShell->IsModified());
+    pWrtShell->ResetModified();
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") != pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") == pMarkAccess->getAllMarksEnd());
+    //Modification 6
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT(pWrtShell->IsModified());
+    pWrtShell->ResetModified();
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
+    //Modification 7
+    pMarkAccess->deleteMark( pMarkAccess->findMark("Mark_") );
+    CPPUNIT_ASSERT(pWrtShell->IsModified());
+    pWrtShell->ResetModified();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+    //Modification 8
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT(pWrtShell->IsModified());
+    pWrtShell->ResetModified();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    //Modification 9
+    rUndoManager.Redo();
+    CPPUNIT_ASSERT(pWrtShell->IsModified());
+    pWrtShell->ResetModified();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
 }
 
 void SwUiWriterTest::testdelofTableRedlines()
