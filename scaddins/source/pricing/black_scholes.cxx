@@ -888,7 +888,7 @@ double prob_hit(double S, double vol, double mu,
 }
 
 // probability of being in-the-money, ie payoff is greater zero,
-// assuming payoff(S_T) > 0 iff S_T in [B1, B2]
+// assuming payoff(S_T) > 0 if S_T in [B1, B2]
 // this the same as the price of a cash or nothing option
 // with no discounting
 double prob_in_money(double S, double vol, double mu,

@@ -64,7 +64,7 @@ namespace desktop {
         typedef bool (* fpExecWarning)( Lockfile * that );
 
         // checks the lockfile, asks user when lockfile is
-        // found (iff gui) and returns false when we may not continue
+        // found (if gui) and returns false when we may not continue
         bool check( fpExecWarning execWarning );
 
         // removes the lockfile

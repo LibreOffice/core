@@ -116,7 +116,7 @@ public:
     /**
        Returns whether this type reader is valid.
 
-       @return true iff this type reader is valid
+       @return true if this type reader is valid
      */
     bool isValid() const {
         return m_handle != 0;

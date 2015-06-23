@@ -1653,7 +1653,7 @@ uno::Sequence< lang::Locale > SAL_CALL
 static bool IsEqSvcList( const uno::Sequence< OUString > &rList1,
                         const uno::Sequence< OUString > &rList2 )
 {
-    // returns sal_True iff both sequences are equal
+    // returns sal_True if both sequences are equal
 
     bool bRes = false;
     sal_Int32 nLen = rList1.getLength();

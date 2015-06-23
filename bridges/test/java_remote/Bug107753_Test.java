@@ -31,7 +31,7 @@ import test.lib.TestBed;
  * Test case for bug #107753#.
  *
  * <p>Bug #107753# "Java UNO: Proxies should implement intuitive semantics of
- * equals and hashCode" requests that two proxies are equal iff they represent
+ * equals and hashCode" requests that two proxies are equal if they represent
  * the same UNO object.  This implies that if two proxies repsent the same UNO
  * object, they must have the same hash code.</p>
  */
