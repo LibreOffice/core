@@ -193,10 +193,10 @@ void SvxShowText::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     rRenderContext.SetTextColor(aWindowTextColor);
 
     const OUString aText = GetText();
-    const Size aSize = rRenderContext.GetOutputSizePixel();
+    const Size aSize(GetOutputSizePixel());
 
     long nAvailWidth = aSize.Width();
-    long nWinHeight = rRenderContext.GetOutputSizePixel().Height();
+    long nWinHeight = GetOutputSizePixel().Height();
 
     bool bGotBoundary = true;
     bool bShrankFont = false;

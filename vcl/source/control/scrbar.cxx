@@ -509,7 +509,7 @@ bool ScrollBar::ImplDrawNative(vcl::RenderContext& rRenderContext, sal_uInt16 nD
         aCtrlRegion.Union(maPage2Rect);
         aCtrlRegion.Union(maThumbRect);
 
-        Rectangle aRequestedRegion(Point(0,0), rRenderContext.GetOutputSizePixel());
+        Rectangle aRequestedRegion(Point(0,0), GetOutputSizePixel());
         // if the actual native control region is smaller then the region that
         // we requested the control to draw in, then draw a background rectangle
         // to avoid drawing artifacts in the uncovered region

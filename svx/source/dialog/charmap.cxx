@@ -372,7 +372,7 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
     if (n1 > LastInView() || n2 < FirstInView())
         return;
 
-    Size aOutputSize = rRenderContext.GetOutputSizePixel();
+    Size aOutputSize(GetOutputSizePixel());
     if (aVscrollSB->IsVisible())
         aOutputSize.Width() -= aVscrollSB->GetOptimalSize().Width();
 
@@ -528,7 +528,7 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     if (nSelectedIndex >= 0)
         getSelectedChar() = mpFontCharMap->GetCharFromIndex(nSelectedIndex);
 
-    Size aSize = rRenderContext.GetOutputSizePixel();
+    Size aSize(GetOutputSizePixel());
     long nSBWidth = aVscrollSB->GetOptimalSize().Width();
     aSize.Width() -= nSBWidth;
 

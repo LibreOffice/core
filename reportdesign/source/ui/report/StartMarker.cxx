@@ -106,7 +106,7 @@ sal_Int32 OStartMarker::getMinHeight() const
 
 void OStartMarker::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*rRect*/)
 {
-    Size aSize = rRenderContext.GetOutputSizePixel();
+    Size aSize(GetOutputSizePixel());
     long nSize = aSize.Width();
     const long nCornerWidth = long(CORNER_SPACE * double(GetMapMode().GetScaleX()));
 

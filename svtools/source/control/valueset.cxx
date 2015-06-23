@@ -350,7 +350,7 @@ Reference<XAccessible> ValueSet::CreateAccessible()
 
 void ValueSet::Format(vcl::RenderContext& rRenderContext)
 {
-    Size aWinSize = rRenderContext.GetOutputSizePixel();
+    Size aWinSize(GetOutputSizePixel());
     size_t nItemCount = mItemList.size();
     WinBits nStyle = GetStyle();
     long nTxtHeight = rRenderContext.GetTextHeight();
@@ -694,7 +694,7 @@ void ValueSet::ImplDrawItemText(vcl::RenderContext& rRenderContext, const OUStri
     if (!(GetStyle() & WB_NAMEFIELD))
         return;
 
-    Size aWinSize = rRenderContext.GetOutputSizePixel();
+    Size aWinSize(GetOutputSizePixel());
     long nTxtWidth = rRenderContext.GetTextWidth(rText);
     long nTxtOffset = mnTextOffset;
 
@@ -977,7 +977,7 @@ void ValueSet::ImplDraw(vcl::RenderContext& rRenderContext)
         if (!(GetStyle() & WB_FLATVALUESET))
         {
             const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-            Size aWinSize = rRenderContext.GetOutputSizePixel();
+            Size aWinSize(GetOutputSizePixel());
             Point aPos1(NAME_LINE_OFF_X, mnTextOffset + NAME_LINE_OFF_Y);
             Point aPos2(aWinSize.Width() - (NAME_LINE_OFF_X * 2), mnTextOffset + NAME_LINE_OFF_Y);
             if (!(rStyleSettings.GetOptions() & StyleSettingsOptions::Mono))
@@ -1435,7 +1435,7 @@ void ValueSet::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         rRenderContext.SetLineColor();
         rRenderContext.SetFillColor(rStyleSettings.GetFaceColor());
         long nOffY = maVirDev->GetOutputSizePixel().Height();
-        Size aWinSize = rRenderContext.GetOutputSizePixel();
+        Size aWinSize(GetOutputSizePixel());
         rRenderContext.DrawRect(Rectangle(Point(0, nOffY ), Point( aWinSize.Width(), aWinSize.Height())));
     }
 

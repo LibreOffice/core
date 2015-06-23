@@ -227,7 +227,7 @@ void AboutDialog::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRe
 {
     rRenderContext.SetClipRegion(vcl::Region(rRect));
 
-    Size aSize(rRenderContext.GetOutputSizePixel());
+    Size aSize(GetOutputSizePixel());
     Point aPos(aSize.Width() - aBackgroundBitmap.GetSizePixel().Width(),
                aSize.Height() - aBackgroundBitmap.GetSizePixel().Height());
 

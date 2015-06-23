@@ -245,7 +245,7 @@ void ScMenuFloatingWindow::Paint(vcl::RenderContext& rRenderContext, const Recta
     Color aBackColor = rStyle.GetMenuColor();
     Color aBorderColor = rStyle.GetShadowColor();
 
-    Rectangle aCtrlRect(Point(0, 0), rRenderContext.GetOutputSizePixel());
+    Rectangle aCtrlRect(Point(0, 0), GetOutputSizePixel());
 
     // Window background
     bool bNativeDrawn = true;

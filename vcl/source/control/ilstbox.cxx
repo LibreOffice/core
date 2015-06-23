@@ -1699,7 +1699,7 @@ void ImplListBoxWindow::ImplPaint(vcl::RenderContext& rRenderContext, sal_Int32 
     if (!pEntry)
         return;
 
-    long nWidth = rRenderContext.GetOutputSizePixel().Width();
+    long nWidth = GetOutputSizePixel().Width();
     long nY = mpEntryList->GetAddedHeight(nPos, mnTop);
     Rectangle aRect(Point(0, nY), Size(nWidth, pEntry->mnHeight));
 
@@ -1809,10 +1809,10 @@ void ImplListBoxWindow::DrawEntry(vcl::RenderContext& rRenderContext, sal_Int32 
         OUString aStr(mpEntryList->GetEntryText(nPos));
         if (!aStr.isEmpty())
         {
-            long nMaxWidth = std::max(static_cast< long >(mnMaxWidth), rRenderContext.GetOutputSizePixel().Width() - 2 * mnBorder);
+            long nMaxWidth = std::max(static_cast< long >(mnMaxWidth), GetOutputSizePixel().Width() - 2 * mnBorder);
             // a multiline entry should only be as wide a the window
             if ((pEntry->mnFlags & ListBoxEntryFlags::MultiLine))
-                nMaxWidth = rRenderContext.GetOutputSizePixel().Width() - 2 * mnBorder;
+                nMaxWidth = GetOutputSizePixel().Width() - 2 * mnBorder;
 
             Rectangle aTextRect(Point(mnBorder - mnLeft, nY),
                                 Size(nMaxWidth, pEntry->mnHeight));
@@ -2785,7 +2785,7 @@ void ImplWin::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 void ImplWin::DrawEntry(vcl::RenderContext& rRenderContext, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos, bool bLayout)
 {
     long nBorder = 1;
-    Size aOutSz = rRenderContext.GetOutputSizePixel();
+    Size aOutSz(GetOutputSizePixel());
 
     bool bImage = !!maImage;
     if (bDrawImage && bImage && !bLayout)

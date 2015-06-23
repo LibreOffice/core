@@ -321,14 +321,14 @@ void SwAddressPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
     rRenderContext.SetFillColor(rSettings.GetWindowColor());
     rRenderContext.SetLineColor(Color(COL_TRANSPARENT));
-    rRenderContext.DrawRect(Rectangle(Point(0, 0), rRenderContext.GetOutputSizePixel()));
+    rRenderContext.DrawRect(Rectangle(Point(0, 0), GetOutputSizePixel()));
     Color aPaintColor(IsEnabled() ? rSettings.GetWindowTextColor() : rSettings.GetDisableColor());
     rRenderContext.SetLineColor(aPaintColor);
     vcl::Font aFont(rRenderContext.GetFont());
     aFont.SetColor(aPaintColor);
     rRenderContext.SetFont(aFont);
 
-    Size aSize = rRenderContext.GetOutputSizePixel();
+    Size aSize(GetOutputSizePixel());
     sal_uInt16 nStartRow = 0;
     if(aVScrollBar->IsVisible())
     {

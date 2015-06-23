@@ -849,7 +849,7 @@ ToolbarMenuEntry* ToolbarMenu::implSearchEntry( int nEntryId ) const
 
 void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHighlightEntry, bool bHighlight)
 {
-    Size aSz(rRenderContext.GetOutputSizePixel());
+    Size aSz(GetOutputSizePixel());
     long nX = 0;
     long nY = 0;
 
@@ -887,7 +887,7 @@ void ToolbarMenu::implHighlightEntry(vcl::RenderContext& rRenderContext, int nHi
 
             if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
             {
-                Size aPxSize(rRenderContext.GetOutputSizePixel());
+                Size aPxSize(GetOutputSizePixel());
                 rRenderContext.Push(PushFlags::CLIPREGION);
                 rRenderContext.IntersectClipRegion(Rectangle(Point(nX, nY), Size(aSz.Width(), pEntry->maSize.Height())));
                 Rectangle aCtrlRect(Point(nX, 0), Size(aPxSize.Width() - nX, aPxSize.Height()));
@@ -1295,7 +1295,7 @@ void ToolbarMenu::implPaint(vcl::RenderContext& rRenderContext, ToolbarMenuEntry
     int nOuterSpace = 0; // ImplGetSVData()->maNWFData.mnMenuFormatExtraBorder;
     Point aTopLeft(nOuterSpace, nOuterSpace), aTmpPos;
 
-    Size aOutSz(rRenderContext.GetOutputSizePixel());
+    Size aOutSz(GetOutputSizePixel());
     const int nEntryCount = mpImpl->maEntryVector.size();
     int nEntry;
     for (nEntry = 0; nEntry < nEntryCount; nEntry++)

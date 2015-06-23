@@ -1830,12 +1830,12 @@ void SvxPreviewBase::dispose()
 void SvxPreviewBase::LocalPrePaint(vcl::RenderContext& rRenderContext)
 {
     // init BufferDevice
-    if(mpBufferDevice->GetOutputSizePixel() != rRenderContext.GetOutputSizePixel())
+    if (mpBufferDevice->GetOutputSizePixel() != GetOutputSizePixel())
     {
         mpBufferDevice->SetDrawMode(rRenderContext.GetDrawMode());
         mpBufferDevice->SetSettings(rRenderContext.GetSettings());
         mpBufferDevice->SetAntialiasing(rRenderContext.GetAntialiasing());
-        mpBufferDevice->SetOutputSizePixel(rRenderContext.GetOutputSizePixel());
+        mpBufferDevice->SetOutputSizePixel(GetOutputSizePixel());
         mpBufferDevice->SetMapMode(rRenderContext.GetMapMode());
     }
 
@@ -1869,8 +1869,8 @@ void SvxPreviewBase::LocalPostPaint(vcl::RenderContext& rRenderContext)
     mpBufferDevice->EnableMapMode(false);
     rRenderContext.EnableMapMode(false);
 
-    rRenderContext.DrawOutDev(aEmptyPoint, rRenderContext.GetOutputSizePixel(),
-                              aEmptyPoint, rRenderContext.GetOutputSizePixel(),
+    rRenderContext.DrawOutDev(aEmptyPoint, GetOutputSizePixel(),
+                              aEmptyPoint, GetOutputSizePixel(),
                               *mpBufferDevice);
 
     mpBufferDevice->EnableMapMode(bWasEnabledSrc);

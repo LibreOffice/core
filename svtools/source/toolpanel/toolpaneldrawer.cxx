@@ -108,7 +108,7 @@ namespace svt
     void ToolPanelDrawer::Paint(vcl::RenderContext& rRenderContext)
     {
         m_pPaintDevice->SetMapMode(rRenderContext.GetMapMode());
-        m_pPaintDevice->SetOutputSize(rRenderContext.GetOutputSizePixel());
+        m_pPaintDevice->SetOutputSize(GetOutputSizePixel());
         m_pPaintDevice->SetSettings(rRenderContext.GetSettings());
         m_pPaintDevice->SetDrawMode(rRenderContext.GetDrawMode());
 

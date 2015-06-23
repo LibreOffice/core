@@ -50,7 +50,7 @@ class TabDrawer
 private:
     TabBar& mrParent;
     vcl::RenderContext& mrRenderContext;
-    const StyleSettings&  mrStyleSettings;
+    const StyleSettings& mrStyleSettings;
 
     Rectangle maRect;
 
@@ -82,7 +82,7 @@ public:
         // draw extra line if above and below border
         if ((nWinStyle & WB_BORDER) || (nWinStyle & WB_TOPBORDER))
         {
-            Size aOutputSize = mrRenderContext.GetOutputSizePixel();
+            Size aOutputSize(mrParent.GetOutputSizePixel());
             Rectangle aOutRect = mrParent.GetPageArea();
 
             // also draw border in 3D for 3D-tabs
@@ -384,7 +384,7 @@ void ImplTabSizer::Tracking( const TrackingEvent& rTEvt )
 void ImplTabSizer::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
     DecorationView aDecoView(&rRenderContext);
-    Rectangle aOutputRect(Point(0, 0), rRenderContext.GetOutputSizePixel());
+    Rectangle aOutputRect(Point(0, 0), GetOutputSizePixel());
     aDecoView.DrawHandle(aOutputRect, true);
 }
 

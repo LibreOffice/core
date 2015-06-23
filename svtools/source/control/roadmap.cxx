@@ -569,7 +569,7 @@ void ORoadmap::Paint(vcl::RenderContext& rRenderContext, const Rectangle& _rRect
     if (!!m_pImpl->getPicture())
     {
         Size aBitmapSize = m_pImpl->getPicture().GetSizePixel();
-        Size aMySize = rRenderContext.GetOutputSizePixel();
+        Size aMySize(GetOutputSizePixel());
 
         Point aBitmapPos(aMySize.Width() - aBitmapSize.Width(),  aMySize.Height() - aBitmapSize.Height());
 
@@ -585,7 +585,7 @@ void ORoadmap::DrawHeadline(vcl::RenderContext& rRenderContext)
 {
     Point aTextPos = LogicToPixel(Point(ROADMAP_INDENT_X, 8), MAP_APPFONT);
 
-    Size aOutputSize(rRenderContext.GetOutputSizePixel());
+    Size aOutputSize(GetOutputSizePixel());
 
     // draw it
     rRenderContext.DrawText(Rectangle(aTextPos, aOutputSize), GetText(),

@@ -100,7 +100,7 @@ void SvxSwFrameExample::DataChanged(const DataChangedEvent& rDCEvt)
 
 void SvxSwFrameExample::InitAllRects_Impl(vcl::RenderContext& rRenderContext)
 {
-    aPage.SetSize(rRenderContext.GetOutputSizePixel());
+    aPage.SetSize(GetOutputSizePixel());
 
     sal_uIntPtr nOutWPix = aPage.GetWidth();
     sal_uIntPtr nOutHPix = aPage.GetHeight();

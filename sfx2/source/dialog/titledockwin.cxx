@@ -172,7 +172,7 @@ namespace sfx2
         rRenderContext.SetFont(aFont);
 
         // Set border values.
-        Size aWindowSize(rRenderContext.GetOutputSizePixel());
+        Size aWindowSize(GetOutputSizePixel());
         int nOuterLeft = 0;
         int nInnerLeft = nOuterLeft + m_aBorder.Left() - 1;
         int nOuterRight = aWindowSize.Width() - 1;

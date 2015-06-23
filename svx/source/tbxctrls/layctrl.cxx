@@ -640,7 +640,7 @@ void ColumnsWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     long i;
     long nLineWidth;
-    Size aSize = rRenderContext.GetOutputSizePixel();
+    Size aSize(GetOutputSizePixel());
 
     for (i = 0; i < nWidth; i++)
     {

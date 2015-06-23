@@ -927,7 +927,7 @@ void ColorSliderControl::Paint(vcl::RenderContext& rRenderContext, const Rectang
     if (!mpBitmap)
         UpdateBitmap();
 
-    const Size aSize(rRenderContext.GetOutputSizePixel());
+    const Size aSize(GetOutputSizePixel());
 
     Bitmap aOutputBitmap(*mpBitmap);
 

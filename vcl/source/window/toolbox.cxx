@@ -268,11 +268,12 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
         bool bNativeOk = false;
         if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, mbHorz ? PART_THUMB_HORZ : PART_THUMB_VERT))
         {
-            ToolbarValue        aToolbarValue;
+            ToolbarValue aToolbarValue;
             aToolbarValue.maGripRect = pWrapper->GetDragArea();
+
             Point aPt;
-            Rectangle           aCtrlRegion( aPt, rRenderContext.GetOutputSizePixel() );
-            ControlState        nState = ControlState::ENABLED;
+            Rectangle aCtrlRegion(aPt, GetOutputSizePixel());
+            ControlState nState = ControlState::ENABLED;
 
             bNativeOk = rRenderContext.DrawNativeControl( CTRL_TOOLBAR, mbHorz ? PART_THUMB_VERT : PART_THUMB_HORZ,
                                             aCtrlRegion, nState, aToolbarValue, OUString() );
@@ -284,7 +285,7 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
         const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
         rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
 
-        Size aSz (rRenderContext.GetOutputSizePixel());
+        Size aSz(GetOutputSizePixel());
 
         if (meAlign == WINDOWALIGN_TOP || meAlign == WINDOWALIGN_BOTTOM)
         {
@@ -355,7 +356,7 @@ void ToolBox::ImplDrawGradientBackground(vcl::RenderContext& rRenderContext, Imp
     Color aOldCol = rRenderContext.GetLineColor();
     rRenderContext.SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetShadowColor());
 
-    Size aFullSz(rRenderContext.GetOutputSizePixel());
+    Size aFullSz(GetOutputSizePixel());
     Size aLineSz(aFullSz);
 
     // use the linesize only when floating
@@ -460,7 +461,7 @@ bool ToolBox::ImplDrawNativeBackground(vcl::RenderContext& rRenderContext, const
 {
     // use NWF
     Point aPt;
-    Rectangle aCtrlRegion(aPt, rRenderContext.GetOutputSizePixel());
+    Rectangle aCtrlRegion(aPt, GetOutputSizePixel());
     ControlState  nState = ControlState::ENABLED;
 
     return rRenderContext.DrawNativeControl( CTRL_TOOLBAR, mbHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT,

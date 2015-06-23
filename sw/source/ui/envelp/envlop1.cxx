@@ -77,8 +77,8 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &)
     const long nPageH = std::min(rItem.lWidth, rItem.lHeight);
 
     const double f = 0.8 * std::min(
-        double(rRenderContext.GetOutputSizePixel().Width()) / double(nPageW),
-        double(rRenderContext.GetOutputSizePixel().Height()) / double(nPageH));
+        double(GetOutputSizePixel().Width()) / double(nPageW),
+        double(GetOutputSizePixel().Height()) / double(nPageH));
 
     Color aBack = rSettings.GetWindowColor();
     Color aFront = SwViewOption::GetFontColor();
@@ -91,8 +91,8 @@ void SwEnvPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &)
     // Envelope
     const long nW = static_cast<long>(f * nPageW);
     const long nH = static_cast<long>(f * nPageH);
-    const long nX = (rRenderContext.GetOutputSizePixel().Width () - nW) / 2;
-    const long nY = (rRenderContext.GetOutputSizePixel().Height() - nH) / 2;
+    const long nX = (GetOutputSizePixel().Width () - nW) / 2;
+    const long nY = (GetOutputSizePixel().Height() - nH) / 2;
     rRenderContext.SetFillColor(aBack);
     rRenderContext.DrawRect(Rectangle(Point(nX, nY), Size(nW, nH)));
 

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/eitem.hxx>
 #include <vcl/decoview.hxx>
 
@@ -1673,7 +1672,7 @@ void SfxDockingWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangle
     if (pImp->bSplitable || IsFloatingMode())
         return;
 
-    Rectangle aRect = Rectangle(Point(0, 0), rRenderContext.GetOutputSizePixel());
+    Rectangle aRect(Point(0, 0), GetOutputSizePixel());
     switch (GetAlignment())
     {
         case SfxChildAlignment::TOP:

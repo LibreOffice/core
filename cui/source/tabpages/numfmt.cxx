@@ -148,7 +148,7 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
 void SvxNumberPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 {
     vcl::Font aDrawFont = rRenderContext.GetFont();
-    Size aSzWnd = rRenderContext.GetOutputSizePixel();
+    Size aSzWnd(GetOutputSizePixel());
     OUString aTmpStr( aPrevStr );
     long nLeadSpace = (aSzWnd.Width() - rRenderContext.GetTextWidth(aTmpStr)) / 2;
 

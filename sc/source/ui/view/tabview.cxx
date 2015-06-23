@@ -83,10 +83,9 @@ void ScCornerButton::Paint(vcl::RenderContext& rRenderContext, const Rectangle& 
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
     SetBackground(rStyleSettings.GetFaceColor());
 
-    Size aSize = rRenderContext.GetOutputSizePixel();
+    Size aSize(GetOutputSizePixel());
     long nPosX = aSize.Width() - 1;
     long nPosY = aSize.Height() - 1;
-
 
     Window::Paint(rRenderContext, rRect);
 

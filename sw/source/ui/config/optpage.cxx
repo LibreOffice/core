@@ -1653,7 +1653,7 @@ void SwMarkPreview::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SwMarkPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle &/*rRect*/)
 {
-    const Size aSz(rRenderContext.GetOutputSizePixel());
+    const Size aSz(GetOutputSizePixel());
 
     // Page
     aPage.SetSize(Size(aSz.Width() - 3, aSz.Height() - 3));

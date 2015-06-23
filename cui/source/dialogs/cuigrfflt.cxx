@@ -57,7 +57,7 @@ void GraphicPreviewWindow::Paint(vcl::RenderContext& rRenderContext, const Recta
 {
     Control::Paint(rRenderContext, rRect);
 
-    const Size  aOutputSize(rRenderContext.GetOutputSizePixel());
+    const Size aOutputSize(GetOutputSizePixel());
 
     if (maPreview.IsAnimated())
     {
