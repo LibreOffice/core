@@ -363,7 +363,7 @@ private:
 
     _PageMar                                                                        m_aPageMargins;
     sal_Int32                                                                       m_nSymboldata;
-
+    bool                                                                            m_bSymbolFontReady;
 
     // TableManagers are stacked: one for each stream to avoid any confusion
     std::stack< std::shared_ptr< DomainMapperTableManager > > m_aTableManagers;
@@ -502,7 +502,8 @@ public:
     void SetParaSectpr(bool bParaSectpr);
     bool GetParaSectpr() { return m_bParaSectpr;}
 
-    void SetSymbolData( sal_Int32 nSymbolData );
+    bool SetSymbolData( sal_Int32 nSymbolData );
+    bool SetSymbolFont( OUString &rName );
     sal_Int32 GetSymbolData() { return m_nSymboldata;}
     /// Setter method for m_bSdt.
     void SetSdt(bool bSdt);
