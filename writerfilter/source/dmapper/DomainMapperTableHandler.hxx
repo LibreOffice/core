@@ -83,6 +83,9 @@ class DomainMapperTableHandler : public TableDataHandler
     sal_Int32 m_nCellIndex;
     sal_Int32 m_nRowIndex;
 
+    /// Did we have a foot or endnote in this table?
+    bool m_bHadFootOrEndnote;
+
     TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo, std::vector<css::beans::PropertyValue>& rFrameProperties);
     CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo, std::vector<HorizontallyMergedCell>& rMerges);
     RowPropertyValuesSeq_t endTableGetRowProperties();
@@ -103,6 +106,7 @@ public:
     virtual void endCell(const Handle_t & end) SAL_OVERRIDE;
 
     Handle_t& getTable() { return m_xTableRange; };
+    void setHadFootOrEndnote(bool bHadFootOrEndnote);
 };
 
 }}

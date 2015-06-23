@@ -5205,6 +5205,14 @@ void DomainMapper_Impl::substream(Id rName,
     getTableManager().endLevel();
     popTableManager();
 
+    switch(rName)
+    {
+    case NS_ooxml::LN_footnote:
+    case NS_ooxml::LN_endnote:
+        m_pTableHandler->setHadFootOrEndnote(true);
+        break;
+    }
+
     // check that stacks are the same as before substream
     assert(m_aContextStack.size() == contextSize);
     for (int i = 0; i < NUMBER_OF_CONTEXTS; ++i) {
