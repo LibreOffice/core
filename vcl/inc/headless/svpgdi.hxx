@@ -24,6 +24,7 @@
 #include <basebmp/color.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/metric.hxx>
+#include <config_cairo_canvas.h>
 
 #include "salgdi.hxx"
 #include "sallayout.hxx"
@@ -35,6 +36,7 @@
 
 class GlyphCache;
 class ServerFont;
+typedef struct _cairo cairo_t;
 
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 {
@@ -206,6 +208,12 @@ public:
     virtual css::uno::Any   GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const SAL_OVERRIDE;
 
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
+
+#if ENABLE_CAIRO_CANVAS
+
+    static cairo_t*         createCairoContext(const basebmp::BitmapDeviceSharedPtr& rBuffer);
+
+#endif // ENABLE_CAIRO_CANVAS
 
     virtual void            BeginPaint() SAL_OVERRIDE { };
     virtual void            EndPaint() SAL_OVERRIDE { };

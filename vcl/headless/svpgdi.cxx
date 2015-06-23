@@ -32,6 +32,10 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basebmp/scanlineformats.hxx>
 
+#if ENABLE_CAIRO_CANVAS
+#include <cairo.h>
+#endif
+
 #if OSL_DEBUG_LEVEL > 2
 #include <basebmp/debug.hxx>
 #include <fstream>
@@ -733,6 +737,35 @@ SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
 bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
 {
     return false;
+}
+
+#endif
+
+#if ENABLE_CAIRO_CANVAS
+
+cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr &rBuffer)
+{
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+    if (rBuffer->getScanlineFormat() != basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX)
+        return NULL;
+
+    basegfx::B2IVector size = rBuffer->getSize();
+    sal_Int32 nStride = rBuffer->getScanlineStride();
+    if (cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, size.getX()) != nStride)
+        return NULL;
+
+    basebmp::RawMemorySharedArray data = rBuffer->getBuffer();
+    cairo_surface_t *target =
+        cairo_image_surface_create_for_data(data.get(),
+                                        CAIRO_FORMAT_RGB24,
+                                        size.getX(), size.getY(),
+                                        nStride);
+    cairo_t* cr = cairo_create(target);
+    cairo_surface_destroy(target);
+    return cr;
+#else
+    return NULL;
+#endif
 }
 
 #endif
