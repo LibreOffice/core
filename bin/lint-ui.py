@@ -11,6 +11,7 @@
 
 import sys
 import xml.etree.ElementTree as ET
+import re
 
 DEFAULT_WARNING_STR = 'Lint assertion failed'
 
@@ -22,6 +23,8 @@ ALIGNMENT_TOP_PADDING = '6'
 #https://developer.gnome.org/hig-book/3.0/windows-alert.html.en#alert-spacing
 MESSAGE_BOX_SPACING = '24'
 MESSAGE_BORDER_WIDTH = '12'
+
+IGNORED_WORDS = ['the', 'of', 'to', 'for', 'a', 'and', 'as', 'from', 'on', 'into', 'by', 'at', 'or', 'do', 'in', 'when']
 
 def lint_assert(predicate, warning=DEFAULT_WARNING_STR):
     if not predicate:
@@ -77,6 +80,19 @@ def check_alignment_top_padding(alignment):
         lint_assert(top_padding.text == ALIGNMENT_TOP_PADDING,
                     "GtkAlignment 'top_padding' should be " + ALIGNMENT_TOP_PADDING)
 
+def check_title_labels(root):
+    labels = root.findall(".//child[@type='label']")
+    titles = [label.find(".//property[@name='label']") for label in labels]
+    for title in titles:
+        if title is None:
+            continue
+        words = re.split(r'[^a-zA-Z0-9_-]', title.text)
+        first = True
+        for word in words:
+            if word[0].islower() and (word not in IGNORED_WORDS or first):
+                lint_assert(False, "The word '" + word + "' should be capitalized")
+            first = False
+
 def main():
     print(" == " + sys.argv[1] + " ==")
     tree = ET.parse(sys.argv[1])
@@ -101,6 +117,8 @@ def main():
         check_message_box_spacing(element)
 
     check_frames(root)
+
+    check_title_labels(root)
 
 if __name__ == "__main__":
     main()
