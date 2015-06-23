@@ -177,7 +177,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
     else
     {
         aPos = Point( 0, 0 );
-        aSize = Size( mnOutWidth, mnOutHeight );
+        aSize = Size( nWidth, nHeight );
     }
 
     mpMetaFile = NULL;
