@@ -1067,6 +1067,14 @@ bool SvtSecurityOptions::isTrustedLocationUri(OUString const & uri) const {
     return false;
 }
 
+bool SvtSecurityOptions::isTrustedLocationUriForUpdatingLinks(
+    OUString const & uri) const
+{
+    return GetMacroSecurityLevel() == 0 || uri.isEmpty()
+        || uri.startsWithIgnoreAsciiCase("private:")
+        || isTrustedLocationUri(uri);
+}
+
 sal_Int32 SvtSecurityOptions::GetMacroSecurityLevel() const
 {
     MutexGuard aGuard( GetInitMutex() );

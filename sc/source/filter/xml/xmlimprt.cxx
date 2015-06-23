@@ -2586,6 +2586,9 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
             OUString sCTName("TrackedChangesProtectionKey");
             OUString sVBName("VBACompatibilityMode");
             OUString sSCName("ScriptConfiguration");
+            css::uno::Sequence<css::beans::PropertyValue> aFilteredProps(
+                aConfigProps.getLength());
+            sal_Int32 nFilteredPropsLen = 0;
             for (sal_Int32 i = nCount - 1; i >= 0; --i)
             {
                 if (aConfigProps[i].Name == sCTName)
@@ -2620,11 +2623,16 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                             xImportInfo->setPropertyValue( aConfigProps[i].Name, aConfigProps[i].Value );
                     }
                 }
+                if (aConfigProps[i].Name != "LinkUpdateMode")
+                {
+                    aFilteredProps[nFilteredPropsLen++] = aConfigProps[i];
+                }
             }
+            aFilteredProps.realloc(nFilteredPropsLen);
             uno::Reference <uno::XInterface> xInterface = xMultiServiceFactory->createInstance(OUString("com.sun.star.comp.SpreadsheetSettings"));
             uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
             if (xProperties.is())
-                SvXMLUnitConverter::convertPropertySet(xProperties, aConfigProps);
+                SvXMLUnitConverter::convertPropertySet(xProperties, aFilteredProps);
         }
     }
 }

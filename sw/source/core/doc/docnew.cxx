@@ -43,6 +43,7 @@
 #include <svl/zforlist.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/lingucfg.hxx>
+#include <unotools/securityoptions.hxx>
 #include <svx/svdpage.hxx>
 #include <paratr.hxx>
 #include <fchrfmt.hxx>
@@ -979,6 +980,15 @@ void SwDoc::UpdateLinks( bool bUI )
                 case document::UpdateDocMode::NO_UPDATE:   bUpdate = false;break;
                 case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = false; break;
                 case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = true; break;
+            }
+            if (nLinkMode == AUTOMATIC && !bAskUpdate)
+            {
+                SfxMedium * medium = GetDocShell()->GetMedium();
+                if (!SvtSecurityOptions().isTrustedLocationUriForUpdatingLinks(
+                        medium == nullptr ? OUString() : medium->GetName()))
+                {
+                    bAskUpdate = true;
+                }
             }
             if( bUpdate && (bUI || !bAskUpdate) )
             {

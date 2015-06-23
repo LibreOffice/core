@@ -1096,45 +1096,46 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
-    boost::unordered_set< String, StringHashRef, StringEqRef > aSet;
-    aSet.insert(String("ForbiddenCharacters", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("IsKernAsianPunctuation", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("CharacterCompressionType", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("LinkUpdateMode", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("FieldAutoUpdate", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("ChartAutoUpdate", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("AddParaTableSpacing", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("AddParaTableSpacingAtStart", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintAnnotationMode", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintBlackFonts", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintControls", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintDrawings", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintGraphics", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintLeftPages", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintPageBackground", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintProspect", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintReversed", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintRightPages", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintFaxName", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintPaperFromSetup", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintTables", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintSingleJobs", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("UpdateFromTemplate", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrinterIndependentLayout", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("PrintEmptyPages", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("SmallCapsPercentage66", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("TabOverflow", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("UnbreakableNumberings", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("ClippedPictures", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("BackgroundParaOverDrawings", RTL_TEXTENCODING_ASCII_US));
-    aSet.insert(String("TabOverMargin", RTL_TEXTENCODING_ASCII_US));
+    boost::unordered_set< String, StringHashRef, StringEqRef > aExcludeAlways;
+    aExcludeAlways.insert(String("LinkUpdateMode"));
+    boost::unordered_set< String, StringHashRef, StringEqRef > aExcludeWhenNotLoadingUserSettings;
+    aExcludeWhenNotLoadingUserSettings.insert(String("ForbiddenCharacters", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("IsKernAsianPunctuation", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("CharacterCompressionType", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("LinkUpdateMode", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("FieldAutoUpdate", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("ChartAutoUpdate", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("AddParaTableSpacing", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("AddParaTableSpacingAtStart", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintAnnotationMode", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintBlackFonts", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintControls", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintDrawings", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintGraphics", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintLeftPages", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintPageBackground", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintProspect", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintReversed", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintRightPages", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintFaxName", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintPaperFromSetup", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintTables", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintSingleJobs", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("UpdateFromTemplate", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrinterIndependentLayout", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("PrintEmptyPages", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("SmallCapsPercentage66", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("TabOverflow", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("UnbreakableNumberings", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("ClippedPictures", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("BackgroundParaOverDrawings", RTL_TEXTENCODING_ASCII_US));
+    aExcludeWhenNotLoadingUserSettings.insert(String("TabOverMargin", RTL_TEXTENCODING_ASCII_US));
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
 
     SvtSaveOptions aSaveOpt;
-    sal_Bool bIsUserSetting = aSaveOpt.IsLoadUserSettings(),
-         bSet = bIsUserSetting;
+    bool bIsUserSetting = aSaveOpt.IsLoadUserSettings();
 
     // for some properties we don't want to use the application
     // default if they're missing. So we watch for them in the loop
@@ -1174,12 +1175,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     while( nCount-- )
     {
-        if( !bIsUserSetting )
+        bool bSet = aExcludeAlways.find(pValues->Name) == aExcludeAlways.end();
+        if( bSet && !bIsUserSetting
+            && (aExcludeWhenNotLoadingUserSettings.find(pValues->Name)
+                != aExcludeWhenNotLoadingUserSettings.end()) )
         {
-            // test over the hash value if the entry is in the table.
-            String aStr(pValues->Name);
-
-            bSet = aSet.find(aStr) == aSet.end();
+            bSet = false;
         }
 
         if( bSet )
