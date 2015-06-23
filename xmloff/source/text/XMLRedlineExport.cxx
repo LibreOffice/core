@@ -107,7 +107,7 @@ void XMLRedlineExport::ExportChange(
     if (bAutoStyle)
     {
         // For the headers/footers, we have to collect the autostyles
-        // here.  For the general case, however, it's better to collet
+        // here.  For the general case, however, it's better to collect
         // the autostyles by iterating over the global redline
         // list. So that's what we do: Here, we collect autostyles
         // only if we have no current list of changes. For the

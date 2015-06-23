@@ -1492,7 +1492,7 @@ public class TextDocuments {
                     }
                 }
             }
-            // Get the XParagraphCursor interface of our text cursro
+            // Get the XParagraphCursor interface of our text cursor
             XParagraphCursor xParaCursor = UnoRuntime.queryInterface( XParagraphCursor.class, mxDocCursor );
             // Go to the end of the document, then select the preceding paragraphs
             mxDocCursor.gotoEnd ( false );

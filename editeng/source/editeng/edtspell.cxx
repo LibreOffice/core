@@ -496,7 +496,7 @@ WrongList* WrongList::Clone() const
 // #i102062#
 bool WrongList::operator==(const WrongList& rCompare) const
 {
-    // cleck direct members
+    // check direct members
     if(GetInvalidStart() != rCompare.GetInvalidStart()
         || GetInvalidEnd() != rCompare.GetInvalidEnd()
         || maRanges.size() != rCompare.maRanges.size())

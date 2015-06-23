@@ -117,7 +117,7 @@ class SD_DLLPUBLIC SdOptionsLayout : public SdOptionsGeneric
 private:
 
     bool    bRuler; // Layout/Display/Ruler
-    bool    bMoveOutline;   // Layout/Display/Contur
+    bool    bMoveOutline;   // Layout/Display/Contour
     bool    bDragStripes;   // Layout/Display/Guide
     bool    bHandlesBezier; // Layout/Display/Bezier
     bool    bHelplines; // Layout/Display/Helpline

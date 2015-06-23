@@ -50,7 +50,7 @@ import share.DescGetter;
  * lists all known module tests<br>
  * <br>
  * -sce SCENARIO_FILE<br>
- * A scenario file is a property file which could cotain <B>-o</B> and <B>-p</B> properties<br>
+ * A scenario file is a property file which could contain <B>-o</B> and <B>-p</B> properties<br>
  * <br>
  * -sce sw.SwXBodyText,sw.SwXBookmark<br>
  * runs the module test of <B>Sw.SwXBodyText</B> and <B>sw.SwXBookmark</B><br>

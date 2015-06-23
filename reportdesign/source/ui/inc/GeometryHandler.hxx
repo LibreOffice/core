@@ -121,7 +121,7 @@ namespace rptui
         */
         void impl_createFunction(const OUString& _sFunctionName,const OUString& _sDataField,const DefaultFunction& _aFunction);
 
-        /** check whether the given function name is a countr function.
+        /** check whether the given function name is a counter function.
         *
         * \param _sQuotedFunctionName the quoted function name to check
         * \param _Out_sScope the scope of the function
