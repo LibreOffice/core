@@ -340,10 +340,9 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
     {
         // find the new column in the dest name mapping to obtain the old column
         OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                                                                ::o3tl::compose1(
-                                                                    ::std::bind2nd(_aCase, _sColumnName),
-                                                                    ::o3tl::select2nd<OCopyTableWizard::TNameMapping::value_type>())
-                                                                    );
+            [&_aCase, &_sColumnName] (OCopyTableWizard::TNameMapping::value_type nameMap) {
+                return _aCase(nameMap.second, _sColumnName);
+            });
 
         OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
         if ( aIter == m_pParent->m_mNameMapping.end() )
@@ -390,10 +389,9 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
         {
             // find the new column in the dest name mapping to obtain the old column
             OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                                                                    ::o3tl::compose1(
-                                                                    ::std::bind2nd(_aCase, sColumnString),
-                                                                    ::o3tl::select2nd<OCopyTableWizard::TNameMapping::value_type>())
-                                                                    );
+                [&_aCase, &sColumnString] (OCopyTableWizard::TNameMapping::value_type nameMap) {
+                    return _aCase(nameMap.second, sColumnString);
+                });
 
             OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
             const ODatabaseExport::TColumns& rSrcColumns = m_pParent->getSourceColumns();

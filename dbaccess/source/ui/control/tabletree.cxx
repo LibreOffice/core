@@ -262,10 +262,10 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
         {
             OUString sRootEntryText;
             if ( ::std::none_of(_rTables.begin(),_rTables.end(),
-                                ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_False),::o3tl::select2nd<TNames::value_type>())) )
+                                [&_rTables] (TNames::value_type name) { return name.second == sal_False; }) )
                 sRootEntryText  = ModuleRes(STR_ALL_TABLES);
             else if ( ::std::none_of(_rTables.begin(),_rTables.end(),
-                                     ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_True),::o3tl::select2nd<TNames::value_type>())) )
+                                     [&_rTables] (TNames::value_type name) { return name.second == sal_True; }) )
                 sRootEntryText  = ModuleRes(STR_ALL_VIEWS);
             else
                 sRootEntryText  = ModuleRes(STR_ALL_TABLES_AND_VIEWS);
