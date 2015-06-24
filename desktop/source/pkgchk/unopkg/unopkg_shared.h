@@ -49,7 +49,7 @@ struct OptionInfo
 
 struct LockFileException : public css::uno::Exception
 {
-    LockFileException(OUString const & sMessage) :
+    explicit LockFileException(OUString const & sMessage) :
         css::uno::Exception(sMessage, css::uno::Reference< css::uno::XInterface > ()) {}
 };
 

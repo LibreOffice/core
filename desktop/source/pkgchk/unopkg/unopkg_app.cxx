@@ -54,7 +54,7 @@ namespace {
 struct ExtensionName
 {
     OUString m_str;
-    ExtensionName( OUString const & str ) : m_str( str ) {}
+    explicit ExtensionName( OUString const & str ) : m_str( str ) {}
     bool operator () ( Reference<deployment::XPackage> const & e ) const
     {
         if (m_str.equals(dp_misc::getIdentifier(e))
@@ -125,7 +125,7 @@ class DialogClosedListenerImpl :
     osl::Condition & m_rDialogClosedCondition;
 
 public:
-    DialogClosedListenerImpl( osl::Condition & rDialogClosedCondition )
+    explicit DialogClosedListenerImpl( osl::Condition & rDialogClosedCondition )
         : m_rDialogClosedCondition( rDialogClosedCondition ) {}
 
     // XEventListener (base of XDialogClosedListener)

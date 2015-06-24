@@ -63,7 +63,7 @@ class PackageInformationProvider :
 
 {
     public:
-                 PackageInformationProvider( uno::Reference< uno::XComponentContext >const& xContext);
+    explicit PackageInformationProvider( uno::Reference< uno::XComponentContext >const& xContext);
     virtual     ~PackageInformationProvider();
 
     // XPackageInformationProvider

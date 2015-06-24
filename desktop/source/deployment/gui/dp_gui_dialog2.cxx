@@ -136,8 +136,8 @@ class ExtBoxWithBtns_Impl : public ExtensionBox_Impl
     DECL_DLLPRIVATE_LINK( HandleRemoveBtn, void * );
 
 public:
-                    ExtBoxWithBtns_Impl(vcl::Window* pParent);
-                   virtual ~ExtBoxWithBtns_Impl();
+    explicit ExtBoxWithBtns_Impl(vcl::Window* pParent);
+    virtual ~ExtBoxWithBtns_Impl();
     virtual void dispose() SAL_OVERRIDE;
 
     void InitFromDialog(ExtMgrDialog *pParentDialog);

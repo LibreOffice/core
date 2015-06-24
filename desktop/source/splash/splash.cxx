@@ -54,7 +54,7 @@ class SplashScreenWindow : public IntroWindow
 public:
     SplashScreen *pSpl;
     ScopedVclPtr<VirtualDevice> _vdev;
-            SplashScreenWindow(SplashScreen *);
+    explicit SplashScreenWindow(SplashScreen *);
     virtual ~SplashScreenWindow() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE;
     // workwindow

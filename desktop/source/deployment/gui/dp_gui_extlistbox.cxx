@@ -46,7 +46,7 @@ struct FindWeakRef
 {
     const uno::Reference<deployment::XPackage> m_extension;
 
-    FindWeakRef( uno::Reference<deployment::XPackage> const & ext): m_extension(ext) {}
+    explicit FindWeakRef( uno::Reference<deployment::XPackage> const & ext): m_extension(ext) {}
     bool operator () (uno::WeakReference< deployment::XPackage >  const & ref);
 };
 

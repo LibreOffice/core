@@ -56,7 +56,7 @@ protected:
 
 public:
     virtual ~PackageManagerFactoryImpl();
-    PackageManagerFactoryImpl(
+    explicit PackageManagerFactoryImpl(
         Reference<XComponentContext> const & xComponentContext );
 
     // XPackageManagerFactory

@@ -77,7 +77,7 @@ namespace dp_manager {
 struct MatchTempDir
 {
     OUString m_str;
-    MatchTempDir( OUString const & str ) : m_str( str ) {}
+    explicit MatchTempDir( OUString const & str ) : m_str( str ) {}
     bool operator () ( ActivePackages::Entries::value_type const & v ) const {
         return v.second.temporaryName.equalsIgnoreAsciiCase( m_str );
     }

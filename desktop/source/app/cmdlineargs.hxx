@@ -51,7 +51,7 @@ class CommandLineArgs: private boost::noncopyable
         };
 
         CommandLineArgs();
-        CommandLineArgs( Supplier& supplier );
+        explicit CommandLineArgs( Supplier& supplier );
 
         boost::optional< OUString > getCwdUrl() const { return m_cwdUrl; }
 

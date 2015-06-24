@@ -44,7 +44,7 @@ protected:
 public:
     virtual ~BaseCommandEnv();
     BaseCommandEnv();
-    BaseCommandEnv(
+    explicit BaseCommandEnv(
         css::uno::Reference< css::task::XInteractionHandler> const & handler);
 
     // XCommandEnvironment
@@ -70,7 +70,7 @@ class TmpRepositoryCommandEnv : public BaseCommandEnv
 {
 public:
     TmpRepositoryCommandEnv();
-    TmpRepositoryCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
+    explicit TmpRepositoryCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
 
 // XInteractionHandler
     virtual void SAL_CALL handle(
@@ -111,7 +111,7 @@ class NoLicenseCommandEnv : public BaseCommandEnv
 
 public:
     NoLicenseCommandEnv(){};
-    NoLicenseCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
+    explicit NoLicenseCommandEnv(css::uno::Reference< css::task::XInteractionHandler> const & handler);
 
 // XInteractionHandler
     virtual void SAL_CALL handle(

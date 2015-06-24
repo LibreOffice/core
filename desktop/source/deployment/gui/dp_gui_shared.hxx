@@ -36,7 +36,7 @@ struct DeploymentGuiResMgr :
 class DpGuiResId : public ResId
 {
 public:
-    DpGuiResId( sal_uInt16 nId ):ResId( nId, *DeploymentGuiResMgr::get() ) {}
+    explicit DpGuiResId( sal_uInt16 nId ):ResId( nId, *DeploymentGuiResMgr::get() ) {}
 };
 
 #define DPGUI_RESSTR(i)   DpGuiResId(i).toString()

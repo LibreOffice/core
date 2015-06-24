@@ -96,8 +96,8 @@ class ExtensionRemovedListener : public ::cppu::WeakImplHelper1<css::lang::XEven
 
 public:
 
-    ExtensionRemovedListener( ExtensionBox_Impl *pParent ) { m_pParent = pParent; }
-   virtual ~ExtensionRemovedListener();
+    explicit ExtensionRemovedListener( ExtensionBox_Impl *pParent ) { m_pParent = pParent; }
+    virtual ~ExtensionRemovedListener();
 
 
     // XEventListener
@@ -173,7 +173,7 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
 
     void Init();
 public:
-    ExtensionBox_Impl(vcl::Window* pParent);
+    explicit ExtensionBox_Impl(vcl::Window* pParent);
     virtual ~ExtensionBox_Impl();
     virtual void dispose() SAL_OVERRIDE;
 
