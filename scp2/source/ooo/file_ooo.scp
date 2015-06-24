@@ -59,7 +59,7 @@ End
 
 #endif
 
-#if defined UNX && ! defined MACOSX
+#if defined UNX && ! defined MACOSX && ! defined LIBO_HEADLESS
 
 File gid_File_Bin_Gnome_Open_Url
     BIN_FILE_BODY;
