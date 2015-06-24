@@ -90,6 +90,7 @@ public:
     void testFdo87448();
     void testTdf68183();
     void testCp1000115();
+    void testTdf63214();
     void testTdf90003();
     void testExportToPicture();
     void testSearchWithTransliterate();
@@ -131,6 +132,7 @@ public:
     CPPUNIT_TEST(testFdo87448);
     CPPUNIT_TEST(testTdf68183);
     CPPUNIT_TEST(testCp1000115);
+    CPPUNIT_TEST(testTdf63214);
     CPPUNIT_TEST(testTdf90003);
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testSearchWithTransliterate);
@@ -863,6 +865,29 @@ void SwUiWriterTest::testCp1000115()
     // second page.
     CPPUNIT_ASSERT_EQUAL(2, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlXPathFreeObject(pXmlObj);
+}
+
+void SwUiWriterTest::testTdf63214()
+{
+    //This is a crash test
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    pWrtShell->Insert("Adding Text...");
+    {   //limiting the lifetime of SwPaM with a nested scope
+        //the shell cursor are automatically adjusted when nodes are deleted, but the shell doesn't know about an SwPaM on the stack
+        IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+        SwPaM aPaM( SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1) );
+        //Inserting a crossRefBookmark
+        pMarkAccess->makeMark(aPaM, OUString("Bookmark"), IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
+    }
+    //moving cursor to the end of paragraph
+    pWrtShell->EndPara();
+    //inserting paragraph break
+    pWrtShell->SplitNode();
+    rUndoManager.Undo();
+    rUndoManager.Redo();
 }
 
 void SwUiWriterTest::testTdf90003()
