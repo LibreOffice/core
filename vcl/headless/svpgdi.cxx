@@ -95,10 +95,86 @@ bool SvpSalGraphics::drawTransformedBitmap(
     return false;
 }
 
-bool SvpSalGraphics::drawAlphaRect( long /*nX*/, long /*nY*/, long /*nWidth*/, long /*nHeight*/, sal_uInt8 /*nTransparency*/ )
+#if ENABLE_CAIRO_CANVAS
+
+namespace
 {
-    // TODO(P3) implement alpha blending
+    bool isCairoCompatible(const basebmp::BitmapDeviceSharedPtr &rBuffer)
+    {
+        if (!rBuffer)
+            return false;
+
+        if (rBuffer->getScanlineFormat() != basebmp::Format::ThirtyTwoBitTcMaskBGRX)
+            return false;
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+        basegfx::B2IVector size = rBuffer->getSize();
+        sal_Int32 nStride = rBuffer->getScanlineStride();
+        return (cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, size.getX()) == nStride);
+#else
+        return false;
+#endif
+    }
+}
+
+#endif
+
+bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
+{
+#if ENABLE_CAIRO_CANVAS
+    if (m_bUseLineColor || !m_bUseFillColor)
+        return false;
+
+    cairo_t* cr = createCairoContext(m_aDevice);
+    if (!cr)
+        return false;
+
+    if (!m_aDevice->isTopDown())
+    {
+        cairo_scale(cr, 1, -1.0);
+        cairo_translate(cr, 0.0, -m_aDevice->getSize().getY());
+    }
+
+    const double fTransparency = (100 - nTransparency) * (1.0/100);
+    cairo_set_source_rgba(cr, m_aFillColor.getRed()/255.0,
+                              m_aFillColor.getGreen()/255.0,
+                              m_aFillColor.getBlue()/255.0,
+                              fTransparency);
+    cairo_rectangle(cr, nX, nY, nWidth, nHeight);
+
+
+    cairo_rectangle_int_t extents;
+    basebmp::IBitmapDeviceDamageTrackerSharedPtr xDamageTracker(m_aDevice->getDamageTracker());
+    if (xDamageTracker)
+    {
+        double x1, y1, x2, y2;
+
+        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        cairo_region_t *region = cairo_region_create_rectangle(&extents);
+
+        cairo_fill_extents(cr, &x1, &y1, &x2, &y2);
+        extents.x = x1, extents.y = x2, extents.width = x2-x1, extents.height = y2-y1;
+        cairo_region_intersect_rectangle(region, &extents);
+
+        cairo_region_get_extents(region, &extents);
+        cairo_region_destroy(region);
+    }
+
+    cairo_fill(cr);
+
+    cairo_surface_flush(cairo_get_target(cr));
+    cairo_destroy(cr); // unref
+
+    if (xDamageTracker)
+    {
+        xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
+                                                extents.y + extents.height));
+    }
+    return true;
+#else
     return false;
+#endif
 }
 
 SvpSalGraphics::SvpSalGraphics() :
@@ -726,32 +802,15 @@ bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
     return false;
 }
 
-#ifndef IOS
-
-SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
-{
-    return SystemGraphicsData();
-}
-
-bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
-{
-    return false;
-}
-
-#endif
-
 #if ENABLE_CAIRO_CANVAS
 
 cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr &rBuffer)
 {
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
-    if (rBuffer->getScanlineFormat() != basebmp::Format::ThirtyTwoBitTcMaskBGRX)
+    if (!isCairoCompatible(rBuffer))
         return NULL;
 
     basegfx::B2IVector size = rBuffer->getSize();
     sal_Int32 nStride = rBuffer->getScanlineStride();
-    if (cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, size.getX()) != nStride)
-        return NULL;
 
     basebmp::RawMemorySharedArray data = rBuffer->getBuffer();
     cairo_surface_t *target =
@@ -762,9 +821,6 @@ cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr
     cairo_t* cr = cairo_create(target);
     cairo_surface_destroy(target);
     return cr;
-#else
-    return NULL;
-#endif
 }
 
 bool SvpSalGraphics::SupportsCairo() const
@@ -793,5 +849,26 @@ css::uno::Any SvpSalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& /*
 }
 
 #endif // ENABLE_CAIRO_CANVAS
+
+#ifndef IOS
+
+SystemGraphicsData SvpSalGraphics::GetGraphicsData() const
+{
+    return SystemGraphicsData();
+}
+
+bool SvpSalGraphics::supportsOperation(OutDevSupportType eType) const
+{
+#if ENABLE_CAIRO_CANVAS
+    return m_aDrawMode != basebmp::DrawMode::XOR &&
+           OutDevSupport_TransparentRect == eType &&
+           isCairoCompatible(m_aDevice);
+#else
+    (void)eType;
+    return false;
+#endif
+}
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
