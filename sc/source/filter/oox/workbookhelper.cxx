@@ -167,6 +167,8 @@ public:
     Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr );
     /** Creates and returns an unnamed database range on-the-fly in the Calc document. */
     Reference< XDatabaseRange > createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr );
+    /** Finds the (already existing) database range of the given formula token index. */
+    ScDBData* findDatabaseRangeByIndex( sal_uInt16 nIndex );
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
     Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle );
     /** Helper to switch chart data table - specifically for xlsx imports */
@@ -493,6 +495,14 @@ Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( c
     }
     OSL_ENSURE( xDatabaseRange.is(), "WorkbookData::createDatabaseRangeObject - cannot create database range" );
     return xDatabaseRange;
+}
+
+ScDBData* WorkbookGlobals::findDatabaseRangeByIndex( sal_uInt16 nIndex )
+{
+    ScDBCollection* pDBCollection = getScDocument().GetDBCollection();
+    if (!pDBCollection)
+        return nullptr;
+    return pDBCollection->getNamedDBs().findByIndex( nIndex );
 }
 
 Reference< XStyle > WorkbookGlobals::createStyleObject( OUString& orStyleName, bool bPageStyle )
@@ -899,6 +909,11 @@ Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString&
 Reference< XDatabaseRange > WorkbookHelper::createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr ) const
 {
     return mrBookGlob.createUnnamedDatabaseRangeObject( rRangeAddr );
+}
+
+ScDBData* WorkbookHelper::findDatabaseRangeByIndex( sal_uInt16 nIndex ) const
+{
+    return mrBookGlob.findDatabaseRangeByIndex( nIndex );
 }
 
 Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle ) const

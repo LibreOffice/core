@@ -60,6 +60,7 @@ class ScDocument;
 class ScDocShell;
 class ScDocumentImport;
 class ScEditEngineDefaulter;
+class ScDBData;
 
 namespace oox {
 namespace xls {
@@ -206,6 +207,9 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDatabaseRange >
                         createUnnamedDatabaseRangeObject(
                             const ::com::sun::star::table::CellRangeAddress& rRangeAddr ) const;
+
+    /** Finds the (already existing) database range of the given formula token index. */
+    ScDBData* findDatabaseRangeByIndex( sal_uInt16 nIndex ) const;
 
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
     ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
