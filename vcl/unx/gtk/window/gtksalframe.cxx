@@ -3574,8 +3574,8 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
-    X11SalInstance *pSalInstance =
-        static_cast< X11SalInstance* >(GetSalData()->m_pInstance);
+    SalGenericInstance *pSalInstance =
+        static_cast< SalGenericInstance* >(GetSalData()->m_pInstance);
 
     // check if printers have changed (analogous to salframe focus handler)
     pSalInstance->updatePrinterUpdate();
