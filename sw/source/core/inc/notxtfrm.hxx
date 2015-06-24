@@ -46,7 +46,7 @@ protected:
 public:
     SwNoTextFrm( SwNoTextNode * const, SwFrm* );
 
-    virtual void Paint( SwRect const&,
+    virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
     virtual bool GetCharRect( SwRect &, const SwPosition&,
                               SwCrsrMoveState* = 0) const SAL_OVERRIDE;

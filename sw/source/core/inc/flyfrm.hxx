@@ -162,7 +162,7 @@ public:
 
     // get client information
     virtual bool GetInfo( SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual void Paint( SwRect const&,
+    virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
     virtual Size ChgSize( const Size& aNewSize ) SAL_OVERRIDE;
     virtual bool GetCrsrOfst( SwPosition *, Point&,

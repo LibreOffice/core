@@ -287,7 +287,7 @@ public:
 
     void   PaintExtraData( const SwRect & rRect ) const; /// Page number etc.
     SwRect Paint();
-    virtual void Paint( SwRect const&,
+    virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
     virtual bool GetInfo( SfxPoolItem & ) const SAL_OVERRIDE;
 

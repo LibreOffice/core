@@ -533,7 +533,7 @@ bool SwViewShell::PrintOrPDFExport(
 
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
-        pStPage->GetUpper()->Paint( pStPage->Frm(), &rPrintData );
+        pStPage->GetUpper()->Paint( *pOutDev, pStPage->Frm(), &rPrintData );
 
         SwPaintQueue::Repaint();
 
@@ -616,7 +616,7 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
 
         rRenderContext.Push( PushFlags::CLIPREGION );
         rRenderContext.IntersectClipRegion( aSwRect.SVRect() );
-        pSh->GetLayout()->Paint( aSwRect );
+        pSh->GetLayout()->Paint( rRenderContext, aSwRect );
 
         rRenderContext.Pop();
         // first the CurrShell object needs to be destroyed!

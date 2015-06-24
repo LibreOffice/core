@@ -104,7 +104,7 @@ public:
 
     SwLayoutFrm( SwFrameFormat*, SwFrm* );
 
-    virtual void Paint( SwRect const&,
+    virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
     const SwFrm *Lower() const { return m_pLower; }
           SwFrm *Lower()       { return m_pLower; }

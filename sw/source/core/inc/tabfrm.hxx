@@ -126,7 +126,7 @@ public:
     SwTabFrm* FindMaster( bool bFirstMaster = false ) const;
 
     virtual bool GetInfo( SfxPoolItem &rHint ) const SAL_OVERRIDE;
-    virtual void Paint( SwRect const&,
+    virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
     virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
 

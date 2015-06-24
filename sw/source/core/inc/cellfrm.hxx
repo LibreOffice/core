@@ -43,7 +43,7 @@ public:
     SwCellFrm( const SwTableBox &, SwFrm*, bool bInsertContent = true );
 
     virtual bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
-    virtual void Paint( SwRect const&,
+    virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
     virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
 
