@@ -1045,7 +1045,7 @@ namespace
         else if (sType == "popup-menu")
             nBits |= WB_SYSTEMWINDOW | WB_DIALOGCONTROL | WB_POPUP;
         else if (sType == "dock")
-            nBits |= WB_DOCKABLE;
+            nBits |= WB_DOCKABLE | WB_MOVEABLE;
         else
             nBits |= WB_MOVEABLE;
         return nBits;
