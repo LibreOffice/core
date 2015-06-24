@@ -675,7 +675,7 @@ sub create_transforms
         $infoline = "ERROR: We cannot create transformations yet (we cannot use cscript.exe when cross-compiling)\n";
         push( @installer::globals::logfileinfo, $infoline);
     }
-    my $wilangid = $ENV{WINDOWS_SDK_HOME} . "/Samples/SysMgmt/Msi/scripts/WiLangId.vbs";
+    my $wilangid = $ENV{WINDOWS_SDK_HOME} . "/bin/x86/WiLangId.vbs";
 
     my $from = cwd();
 
