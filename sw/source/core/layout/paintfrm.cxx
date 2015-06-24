@@ -3173,7 +3173,7 @@ namespace
  * 3. Paint the document content (text)
  * 4. Paint the draw layer that is above the document
 |*/
-void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
+void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const pPrintData) const
 {
     OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Lower of root is no page." );
 
@@ -3389,7 +3389,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                     gProp.pSSpecSubsLines->PaintSubsidiary( pSh->GetOut(), NULL, gProp );
                 }
 
-                pPage->Paint( aPaintRect );
+                pPage->Paint( rRenderContext, aPaintRect );
 
                 // no paint of page border and shadow, if writer is in place mode.
                 if( pSh->GetWin() && pSh->GetDoc()->GetDocShell() &&
@@ -3586,7 +3586,7 @@ SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
     }
 }
 
-void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
+void SwLayoutFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
 
@@ -3670,7 +3670,7 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             pFrm->ResetCompletePaint();
             aPaintRect._Intersection( rRect );
 
-            pFrm->Paint( aPaintRect );
+            pFrm->Paint( rRenderContext, aPaintRect );
 
             if ( Lower() && Lower()->IsColumnFrm() )
             {
@@ -4092,10 +4092,10 @@ bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
     return bPaint;
 }
 
-void SwCellFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
+void SwCellFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     if ( GetLayoutRowSpan() >= 1 )
-        SwLayoutFrm::Paint( rRect );
+        SwLayoutFrm::Paint( rRenderContext, rRect );
 }
 
 struct BorderLinesGuard
@@ -4113,7 +4113,7 @@ private:
     BorderLines *const m_pBorderLines;
 };
 
-void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
+void SwFlyFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     //optimize thumbnail generation and store procedure to improve odt saving performance, #i120030#
     SwViewShell *pShell = getRootFrm()->GetCurrShell();
@@ -4352,7 +4352,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         }
     }
 
-    SwLayoutFrm::Paint( aRect );
+    SwLayoutFrm::Paint( rRenderContext, aRect );
 
     Validate();
 
@@ -4369,7 +4369,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         gProp.pSProgress->Reschedule();
 }
 
-void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
+void SwTabFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     const SwViewOption* pViewOption = gProp.pSGlobalShell->GetViewOptions();
     if (pViewOption->IsTable())
@@ -4392,7 +4392,7 @@ void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             aHelper.PaintLines(*gProp.pSGlobalShell->GetOut(), rRect);
         }
 
-        SwLayoutFrm::Paint( rRect );
+        SwLayoutFrm::Paint( rRenderContext, rRect );
     }
     // OD 10.01.2003 #i6467# - no light grey rectangle for page preview
     else if ( gProp.pSGlobalShell->GetWin() && !gProp.pSGlobalShell->IsPreview() )
@@ -7713,7 +7713,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
                           &aSwRedirector );
         gProp.pSLines->PaintLines( pDev, gProp );
         if ( pFly->IsFlyInCntFrm() )
-            pFly->Paint( aOut );
+            pFly->Paint( *pDev, aOut );
         gProp.pSLines->PaintLines( pDev, gProp );
         // OD 30.08.2002 #102450# - add 3rd parameter
         pImp->PaintLayer( pIDDMA->GetHeavenId(), 0, aOut, &aPageBackgrdColor,

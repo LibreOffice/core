@@ -573,7 +573,7 @@ bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
     return false;
 }
 
-void SwTextFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
+void SwTextFrm::Paint(vcl::RenderContext& /*rRenderContext*/, SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 

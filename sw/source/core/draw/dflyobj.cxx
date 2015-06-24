@@ -483,7 +483,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject(
                 RestoreMapMode aRestoreMapModeIfNeeded( pShell );
 
                 // paint the FlyFrame (use standard VCL-Paint)
-                pFlyFrm->Paint( GetFlyFrm()->Frm() );
+                pFlyFrm->Paint( *pShell->GetOut(), GetFlyFrm()->Frm() );
             }
         }
     }

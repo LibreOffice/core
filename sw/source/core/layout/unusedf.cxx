@@ -26,7 +26,7 @@ void SwFrm::Format( const SwBorderAttrs * )
     OSL_FAIL( "Format() of the base class called." );
 }
 
-void SwFrm::Paint(SwRect const&, SwPrintData const*const) const
+void SwFrm::Paint(vcl::RenderContext&, SwRect const&, SwPrintData const*const) const
 {
     OSL_FAIL( "Paint() of the base class called." );
 }

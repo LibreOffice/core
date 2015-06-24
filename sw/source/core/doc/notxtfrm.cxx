@@ -215,7 +215,7 @@ static void lcl_ClearArea( const SwFrm &rFrm,
     }
 }
 
-void SwNoTextFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
+void SwNoTextFrm::Paint(vcl::RenderContext& /*rRenderContext*/, SwRect const& rRect, SwPrintData const*const) const
 {
     if ( Frm().IsEmpty() )
         return;
