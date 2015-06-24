@@ -133,7 +133,7 @@ public:
   virtual NSDragOperation draggingUpdated(id sender);
   virtual void draggingExited(id sender);
   virtual BOOL prepareForDragOperation(id sender);
-  virtual BOOL performDragOperation(id sender);
+  virtual BOOL performDragOperation();
   virtual void concludeDragOperation(id sender);
 
   /* If multiple actions are supported by the drag source and
