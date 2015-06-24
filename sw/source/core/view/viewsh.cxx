@@ -1777,11 +1777,11 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRe
             const vcl::Region aDLRegion(rRect);
             DLPrePaint2(aDLRegion);
 
-            mpOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
-            mpOut->SetFillColor( Imp()->GetRetoucheColor() );
-            mpOut->SetLineColor();
-            mpOut->DrawRect( rRect );
-            mpOut->Pop();
+            rRenderContext.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+            rRenderContext.SetFillColor( Imp()->GetRetoucheColor() );
+            rRenderContext.SetLineColor();
+            rRenderContext.DrawRect( rRect );
+            rRenderContext.Pop();
             // #i68597#
             DLPostPaint2(true);
         }
