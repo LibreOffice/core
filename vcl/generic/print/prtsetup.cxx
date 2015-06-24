@@ -281,6 +281,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
     }
     if( pKey )
     {
+        m_pParent->SetDataModified( true );
         PPDValue* pValue = static_cast<PPDValue*>(pBox->GetSelectEntryData());
         m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
         update();
@@ -461,6 +462,7 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
             FillValueBox( pKey );
         }
     }
+    m_pParent->SetDataModified( true );
     return 0;
 }
 
@@ -504,10 +506,12 @@ int SetupPrinterDriver(::psp::PrinterInfo& rJobData)
     int nRet = 0;
     ScopedVclPtrInstance< RTSDialog > aDialog(  rJobData, nullptr  );
 
+    // return 0 if cancel was pressed or if the data
+    // weren't modified, 1 otherwise
     if( aDialog->Execute() )
     {
         rJobData = aDialog->getSetup();
-        nRet = 1;
+        nRet = aDialog->GetDataModified() ? 1 : 0;
     }
 
     return nRet;
