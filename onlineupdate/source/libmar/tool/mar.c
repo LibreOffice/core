@@ -18,6 +18,11 @@
 #include <unistd.h>
 #endif
 
+#define MOZ_APP_VERSION "5" /* Dummy value; replace or remove in the
+                               future */
+#define MAR_CHANNEL_ID "LOOnlineUpdater" /* Dummy value; replace or
+                                            remove in the future */
+
 #if !defined(NO_SIGN_VERIFY) && (!defined(XP_WIN) || defined(MAR_NSS))
 #include "cert.h"
 #include "pk11pub.h"

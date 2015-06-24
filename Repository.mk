@@ -179,6 +179,12 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,pdfimport, \
 ))
 endif
 
+$(eval $(call gb_Helper_register_executables_for_install,OOO,onlineupdate, \
+	$(if $(ENABLE_ONLINE_UPDATE), \
+		mar \
+	) \
+))
+
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(and $(ENABLE_JAVA),$(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
 	regmerge \
@@ -227,7 +233,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,impress, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,onlineupdate, \
 	$(if $(ENABLE_ONLINE_UPDATE), \
-		mar \
 		updatecheckui \
 		updchk \
 	) \

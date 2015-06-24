@@ -212,7 +212,7 @@ SECU_GetModulePassword(PK11SlotInfo *slot, PRBool retry, void *arg)
    */
   pw = SECU_FilePasswd(slot, retry, pwdata->data);
   pwdata->source = PW_PLAINTEXT;
-  pwdata->data = PL_strdup(pw);
+  pwdata->data = strdup(pw);
   /* it's already been dup'ed */
   return pw;
     case PW_EXTERNAL:
@@ -226,7 +226,7 @@ SECU_GetModulePassword(PK11SlotInfo *slot, PRBool retry, void *arg)
   }
       /* Fall Through */
     case PW_PLAINTEXT:
-  return PL_strdup(pwdata->data);
+  return strdup(pwdata->data);
     default:
   break;
     }
