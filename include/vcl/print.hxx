@@ -310,6 +310,7 @@ public:
     const OUString&             GetName() const             { return maPrinterName; }
     const OUString&             GetDriverName() const       { return maDriver; }
     bool                        IsDefPrinter() const        { return mbDefPrinter; }
+    void                        SetDefPrinter(bool bDef)    {  mbDefPrinter = bDef; }
     bool                        IsDisplayPrinter() const    { return mpDisplayDev != nullptr; }
     bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
