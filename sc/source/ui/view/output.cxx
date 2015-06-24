@@ -2337,6 +2337,7 @@ void ScOutputData::DrawChangeTrack()
 //TODO: moggi Need to check if this can't be written simpler
 void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
 {
+    bool bWorksInPixels = eType == OUTTYPE_WINDOW;
 
     bool bFirst = true;
 
@@ -2396,7 +2397,12 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                         }
                     }
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
-                        rRenderContext.DrawRect( Rectangle( nMarkX-5*nLayoutSign,nPosY,nMarkX+1*nLayoutSign,nPosY+6 ) );
+                    {
+                        Rectangle aRect( nMarkX-5*nLayoutSign,nPosY,nMarkX+1*nLayoutSign,nPosY+6 );
+                        if(bWorksInPixels)
+                            aRect = rRenderContext.PixelToLogic(aRect);
+                        rRenderContext.DrawRect(aRect);
+                    }
                 }
 
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
