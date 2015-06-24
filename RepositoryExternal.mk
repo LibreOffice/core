@@ -132,7 +132,7 @@ endef
 else # !SYSTEM_MDDS
 
 define gb_ExternalProject__use_mdds_headers
-$(call gb_ExternalProject_use_external_project,$(1),mdds)
+$(call gb_ExternalProject_use_unpacked,$(1),mdds)
 
 endef
 
