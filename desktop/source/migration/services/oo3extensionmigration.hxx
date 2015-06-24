@@ -87,7 +87,7 @@ namespace migration
         void                    migrateExtension( const OUString& sSourceDir );
 
     public:
-        OO3ExtensionMigration(::com::sun::star::uno::Reference<
+        explicit OO3ExtensionMigration(::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & ctx);
         virtual ~OO3ExtensionMigration();
 

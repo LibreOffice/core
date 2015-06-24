@@ -44,7 +44,7 @@ class ExtensionManager : private ::dp_misc::MutexHolder,
         public ::cppu::WeakComponentImplHelper1< css::deployment::XExtensionManager >
 {
 public:
-    ExtensionManager( css::uno::Reference< css::uno::XComponentContext >const& xContext);
+    explicit ExtensionManager( css::uno::Reference< css::uno::XComponentContext >const& xContext);
     virtual     ~ExtensionManager();
 
     static css::uno::Sequence< OUString > getServiceNames();

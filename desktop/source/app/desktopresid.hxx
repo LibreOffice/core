@@ -28,7 +28,7 @@ namespace desktop
 class DesktopResId : public ResId
 {
     public:
-        DesktopResId( sal_uInt16 nId );
+        explicit DesktopResId( sal_uInt16 nId );
 };
 
 }

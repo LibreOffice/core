@@ -148,7 +148,7 @@ class FileDoesNotExistFilter
 
 public:
     virtual ~FileDoesNotExistFilter();
-    FileDoesNotExistFilter(
+    explicit FileDoesNotExistFilter(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
 
     bool exist() { return m_bExist;}

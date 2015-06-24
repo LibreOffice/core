@@ -115,7 +115,7 @@ private:
         sal_uInt16 getItemCount() const;
 
     private:
-        CheckListBox(UpdateDialog::CheckListBox &) SAL_DELETED_FUNCTION;
+        explicit CheckListBox(UpdateDialog::CheckListBox &) SAL_DELETED_FUNCTION;
         void operator =(UpdateDialog::CheckListBox &) SAL_DELETED_FUNCTION;
 
         virtual void MouseButtonDown(MouseEvent const & event) SAL_OVERRIDE;

@@ -229,7 +229,7 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
     uno::Reference<css::lang::XComponent> mxComponent;
     shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
 
-    LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
+    explicit LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
         mxComponent( xComponent )
     {
         if (!(m_pDocumentClass = gDocumentClass.lock()))

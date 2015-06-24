@@ -71,7 +71,7 @@ public:
     static_getSupportedServiceNames();
 
 private:
-    Provider(
+    explicit Provider(
         css::uno::Reference< css::uno::XComponentContext > const & context):
         context_(context) { assert(context.is()); }
 
@@ -163,7 +163,7 @@ public:
     { return css::uno::Sequence< rtl::OUString >(); }
 
 private:
-    Dispatch(
+    explicit Dispatch(
         css::uno::Reference< css::uno::XComponentContext > const & context):
         context_(context) { assert(context.is()); }
 

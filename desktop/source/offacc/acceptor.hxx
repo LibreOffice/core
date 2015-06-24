@@ -71,7 +71,7 @@ private:
     bool m_bDying;
 
 public:
-    Acceptor( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+    explicit Acceptor( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~Acceptor();
 
     void run();

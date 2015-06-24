@@ -48,7 +48,7 @@ private:
     FILE *m_pOutFd;
 
 public:
-    UnxSplashScreen( const css::uno::Reference< css::uno::XComponentContext >& xCtx );
+    explicit UnxSplashScreen( const css::uno::Reference< css::uno::XComponentContext >& xCtx );
 
     // XStatusIndicator
     virtual void SAL_CALL start( const OUString& aText, sal_Int32 nRange ) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
