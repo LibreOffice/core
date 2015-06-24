@@ -573,7 +573,7 @@ bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
     return false;
 }
 
-void SwTextFrm::Paint(vcl::RenderContext& /*rRenderContext*/, SwRect const& rRect, SwPrintData const*const) const
+void SwTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     ResetRepaint();
 
@@ -581,10 +581,10 @@ void SwTextFrm::Paint(vcl::RenderContext& /*rRenderContext*/, SwRect const& rRec
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
 
     Num_Info aNumInfo( *this );
-    SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, 0, 0, *pSh->GetOut() );
+    SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, 0, 0, rRenderContext );
 
     Frm_Info aFrmInfo( *this );
-    SwTaggedPDFHelper aTaggedPDFHelperParagraph( 0, &aFrmInfo, 0, *pSh->GetOut() );
+    SwTaggedPDFHelper aTaggedPDFHelperParagraph( 0, &aFrmInfo, 0, rRenderContext );
 
     if( !IsEmpty() || !PaintEmpty( rRect, true ) )
     {
