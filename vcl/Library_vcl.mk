@@ -604,6 +604,12 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/ppdparser \
     vcl/null/printerinfomanager \
     vcl/headless/headlessinst \
+    $(vcl_headless_code) \
+    $(vcl_headless_freetype_code) \
+))
+
+$(eval $(call gb_Library_use_libraries,vcl,\
+	basebmp \
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
