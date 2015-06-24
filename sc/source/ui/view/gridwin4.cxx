@@ -735,14 +735,19 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
+    MapMode aPrevMapMode = pContentDev->GetMapMode();
     pContentDev->SetMapMode(MAP_PIXEL);
 
     aOutputData.DrawShadow();
     aOutputData.DrawFrame(*pContentDev);
 
+    pContentDev->SetMapMode(aPrevMapMode);
+
     // Show Note Mark
     if ( rOpts.GetOption( VOPT_NOTES ) )
         aOutputData.DrawNoteMarks(*pContentDev);
+
+    pContentDev->SetMapMode(MAP_PIXEL);
 
     if ( !bLogicText )
         aOutputData.DrawStrings();     // in pixel MapMode
