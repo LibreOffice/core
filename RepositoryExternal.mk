@@ -164,7 +164,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 endef
 
 define gb_ExternalProject__use_glm_headers
-$(call gb_ExternalProject_get_preparation_target,$(1)) :| $(call gb_UnpackedTarball_get_final_target,glm)
+$(call gb_ExternalProject_use_unpacked,$(1),glm)
 
 endef
 
@@ -766,7 +766,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 endef
 
 define gb_ExternalProject__use_boost_headers
-$(call gb_ExternalProject_get_preparation_target,$(1)) :| $(call gb_UnpackedTarball_get_final_target,boost)
+$(call gb_ExternalProject_use_unpacked,$(1),boost)
 
 endef
 endif # SYSTEM_BOOST
