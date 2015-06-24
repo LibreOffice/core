@@ -453,6 +453,7 @@ void DocxExport::ExportDocument_Impl()
 
     WriteEmbeddings();
 
+    m_aLinkedTextboxesHelper.clear();   //final cleanup
     delete m_pStyles, m_pStyles = NULL;
     delete m_pSections, m_pSections = NULL;
 }
@@ -1314,6 +1315,10 @@ void DocxExport::WriteMainText()
     // setup the namespaces
     m_pDocumentFS->startElementNS( XML_w, XML_document, MainXmlNamespaces());
 
+    // reset the incrementing linked-textboxes chain ID before re-saving.
+    m_nLinkedTextboxesChainId=0;
+    m_aLinkedTextboxesHelper.clear();
+
     // Write background page color
     if (boost::optional<SvxBrushItem> oBrush = getBackground())
     {
@@ -1330,6 +1335,9 @@ void DocxExport::WriteMainText()
 
     // the text
     WriteText();
+
+    // clear linked textboxes since old ones can't be linked to frames in a different section (correct?)
+    m_aLinkedTextboxesHelper.clear();
 
     // the last section info
     m_pAttrOutput->EndParaSdtBlock();
