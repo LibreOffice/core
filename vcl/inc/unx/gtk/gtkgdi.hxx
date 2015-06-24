@@ -61,8 +61,6 @@ public:
 
     cairo_t* getCairoContext() const;
 
-    void clipRegion(cairo_t* cr);
-
 private:
     GtkWidget       *mpWindow;
     static GtkStyleContext *mpButtonStyle;
