@@ -76,6 +76,8 @@ public:
 
     void AddFilter( OUString sName, OUString sType );
 
+    OUString GetPath() const;
+
 private:
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;
 
@@ -84,6 +86,8 @@ private:
     bool m_bMultiselection;
     bool m_bIsUpdated;
     Image m_aFolderImage;
+
+    OUString m_sPath;
 
     Reference< XCommandEnvironment > m_xEnv;
     ::osl::Mutex m_aMutex;

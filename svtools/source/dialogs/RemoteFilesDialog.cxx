@@ -374,6 +374,11 @@ void RemoteFilesDialog::AddFilter( OUString sName, OUString sType )
         m_pFilter_lb->SelectEntryPos( 0 );
 }
 
+OUString RemoteFilesDialog::GetPath() const
+{
+    return m_sPath;
+}
+
 OUString RemoteFilesDialog::getCurrentFilter()
 {
     OUString sFilter;
@@ -642,10 +647,13 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
        || ( !pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_FILEDLG ) ) )
     {
         INetURLObject aURL( pData->maURL );
+        m_sPath = pData->maURL;
+
         m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DECODE_WITH_CHARSET ) );
     }
     else
     {
+        m_sPath = "";
         m_pName_ed->SetText( "" );
     }
 
