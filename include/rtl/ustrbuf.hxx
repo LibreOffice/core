@@ -132,14 +132,10 @@ public:
     template< typename T >
     OUStringBuffer( T& literal, typename libreoffice_internal::ConstCharArrayDetector< T, libreoffice_internal::Dummy >::Type = libreoffice_internal::Dummy() )
         : pData(NULL)
-        , nCapacity( libreoffice_internal::ConstCharArrayDetector<T>::length + 16 )
+        , nCapacity( libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 + 16 )
     {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        rtl_uString_newFromLiteral(
-            &pData,
-            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
-            libreoffice_internal::ConstCharArrayDetector<T>::length, 16);
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        rtl_uString_newFromLiteral( &pData, literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1, 16 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
@@ -474,12 +470,9 @@ public:
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type append( T& literal )
     {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        rtl_uStringbuffer_insert_ascii(
-            &pData, &nCapacity, getLength(),
-            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
-            libreoffice_internal::ConstCharArrayDetector<T>::length);
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), literal,
+            libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
 
@@ -820,12 +813,9 @@ public:
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
     {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        rtl_uStringbuffer_insert_ascii(
-            &pData, &nCapacity, offset,
-            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
-            libreoffice_internal::ConstCharArrayDetector<T>::length);
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, offset, literal,
+            libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
 
@@ -1209,13 +1199,11 @@ public:
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const
     {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
-        sal_Int32 n = rtl_ustr_indexOfAscii_WithLength(
-            pData->buffer + fromIndex, pData->length - fromIndex,
-            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
-            libreoffice_internal::ConstCharArrayDetector<T>::length);
-        return n < 0 ? n : n + fromIndex;
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
+        sal_Int32 ret = rtl_ustr_indexOfAscii_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex, literal,
+            libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1);
+        return ret < 0 ? ret : ret + fromIndex;
     }
 
     /**
@@ -1275,12 +1263,9 @@ public:
     template< typename T >
     typename libreoffice_internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const
     {
-        assert(
-            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
         return rtl_ustr_lastIndexOfAscii_WithLength(
-            pData->buffer, pData->length,
-            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
-            libreoffice_internal::ConstCharArrayDetector<T>::length);
+            pData->buffer, pData->length, literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1);
     }
 
     /**
