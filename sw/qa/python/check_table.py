@@ -384,7 +384,6 @@ class CheckTable(unittest.TestCase):
         xRows = xTable.Rows
         xRows.insertByIndex(1, 2)
         nan = float('nan')
-        print(xTable.Data)
         self.assertEqual(xTable.Data[0], (1,2,3))
         self.assertEqual(xTable.Data[3], (4,5,6))
         self.assertEqual(xTable.Data[4], (7,8,9))
