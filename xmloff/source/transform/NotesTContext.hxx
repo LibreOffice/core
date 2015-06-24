@@ -29,8 +29,6 @@ class XMLNotesTransformerContext : public XMLPersElemContentTContext
     ::xmloff::token::XMLTokenEnum m_eTypeToken;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLNotesTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               ::xmloff::token::XMLTokenEnum m_eToken,

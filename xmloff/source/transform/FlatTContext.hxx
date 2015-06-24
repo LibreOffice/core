@@ -28,8 +28,6 @@ class XMLPersTextContentTContext : public XMLPersAttrListTContext
     OUString m_aCharacters;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use

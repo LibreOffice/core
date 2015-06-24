@@ -32,8 +32,6 @@ class XMLAxisContextVector :
 class XMLChartPlotAreaOOoTContext  : public XMLProcAttrTransformerContext
 {
 public:
-    TYPEINFO_OVERRIDE();
-
     explicit XMLChartPlotAreaOOoTContext(
         XMLTransformerBase & rTransformer, const OUString & rQName );
     virtual ~XMLChartPlotAreaOOoTContext();

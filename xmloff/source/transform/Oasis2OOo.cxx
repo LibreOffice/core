@@ -1147,8 +1147,6 @@ class XMLTableTransformerContext_Impl : public XMLTransformerContext
     OUString m_aElemQName;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLTableTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
@@ -1157,8 +1155,6 @@ public:
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
 };
-
-TYPEINIT1( XMLTableTransformerContext_Impl, XMLTransformerContext );
 
 XMLTableTransformerContext_Impl::XMLTableTransformerContext_Impl(
         XMLTransformerBase& rImp,
@@ -1249,8 +1245,6 @@ class XMLBodyOASISTransformerContext_Impl : public XMLTransformerContext
     bool m_bFirstChild;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLBodyOASISTransformerContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
@@ -1264,8 +1258,6 @@ public:
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
 };
-
-TYPEINIT1( XMLBodyOASISTransformerContext_Impl, XMLTransformerContext );
 
 XMLBodyOASISTransformerContext_Impl::XMLBodyOASISTransformerContext_Impl(
         XMLTransformerBase& rImp,
@@ -1309,8 +1301,6 @@ void XMLBodyOASISTransformerContext_Impl::EndElement()
 class XMLTabStopOASISTContext_Impl : public XMLPersElemContentTContext
 {
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLTabStopOASISTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
@@ -1318,8 +1308,6 @@ public:
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 };
-
-TYPEINIT1( XMLTabStopOASISTContext_Impl, XMLPersElemContentTContext );
 
 XMLTabStopOASISTContext_Impl::XMLTabStopOASISTContext_Impl(
         XMLTransformerBase& rImp,
@@ -1443,9 +1431,6 @@ class XMLConfigItemTContext_Impl : public XMLTransformerContext
     bool m_bIsCursorY;
 
 public:
-
-    TYPEINFO_OVERRIDE();
-
     XMLConfigItemTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
@@ -1456,8 +1441,6 @@ public:
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 };
-
-TYPEINIT1( XMLConfigItemTContext_Impl, XMLTransformerContext );
 
 XMLConfigItemTContext_Impl::XMLConfigItemTContext_Impl(
         XMLTransformerBase& rImp,
@@ -1556,8 +1539,6 @@ class XMLTrackedChangesOASISTContext_Impl : public XMLTransformerContext
 
 public:
 
-    TYPEINFO_OVERRIDE();
-
     XMLTrackedChangesOASISTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                                sal_uInt16 nPrefix,
@@ -1567,8 +1548,6 @@ public:
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 };
-
-TYPEINIT1( XMLTrackedChangesOASISTContext_Impl, XMLTransformerContext );
 
 XMLTrackedChangesOASISTContext_Impl::XMLTrackedChangesOASISTContext_Impl(
         XMLTransformerBase& rImp,

@@ -30,8 +30,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-TYPEINIT1( XMLChartOOoTransformerContext, XMLTransformerContext );
-
 XMLChartOOoTransformerContext::XMLChartOOoTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :

@@ -34,8 +34,6 @@ using namespace ::xmloff::token;
 class XMLParagraphTransformerContext : public XMLTransformerContext
 {
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLParagraphTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
@@ -62,8 +60,6 @@ public:
     // current element. The default is to ignore them.
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 };
-
-TYPEINIT1( XMLParagraphTransformerContext, XMLTransformerContext );
 
 XMLParagraphTransformerContext::XMLParagraphTransformerContext(
         XMLTransformerBase& rImp,
@@ -108,8 +104,6 @@ void XMLParagraphTransformerContext::Characters( const OUString& rChars )
 class XMLPersTextContentRNGTransformTContext : public XMLPersTextContentTContext
 {
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLPersTextContentRNGTransformTContext(
         XMLTransformerBase& rTransformer,
         const OUString& rQName,
@@ -119,8 +113,6 @@ public:
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
 };
-
-TYPEINIT1( XMLPersTextContentRNGTransformTContext, XMLPersAttrListTContext );
 
 XMLPersTextContentRNGTransformTContext::XMLPersTextContentRNGTransformTContext(
     XMLTransformerBase& rTransformer,
@@ -141,8 +133,6 @@ void XMLPersTextContentRNGTransformTContext::Characters( const OUString& rChars 
     XMLPersTextContentTContext::Characters( aConvChars );
 }
 
-
-TYPEINIT1( XMLMergeElemTransformerContext, XMLTransformerContext );
 
 void XMLMergeElemTransformerContext::ExportStartElement()
 {

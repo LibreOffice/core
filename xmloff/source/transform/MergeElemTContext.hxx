@@ -38,8 +38,6 @@ class XMLMergeElemTransformerContext : public XMLTransformerContext
     void ExportStartElement();
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLMergeElemTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               sal_uInt16 nActionMap );

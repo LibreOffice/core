@@ -28,8 +28,6 @@ class XMLProcAddAttrTransformerContext : public XMLProcAttrTransformerContext
     OUString m_aAttrValue;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLProcAddAttrTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               sal_uInt16 nPrefix,

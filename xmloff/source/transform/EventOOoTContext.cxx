@@ -84,8 +84,6 @@ XMLTransformerOOoEventMap_Impl::~XMLTransformerOOoEventMap_Impl()
 {
 }
 
-TYPEINIT1( XMLEventOOoTransformerContext, XMLPersElemContentTContext );
-
 XMLEventOOoTransformerContext::XMLEventOOoTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName,

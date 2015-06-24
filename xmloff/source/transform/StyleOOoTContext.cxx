@@ -148,9 +148,6 @@ class XMLTypedPropertiesOOoTContext_Impl : public XMLPersElemContentTContext
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
 
 public:
-
-    TYPEINFO_OVERRIDE();
-
     XMLTypedPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
@@ -166,8 +163,6 @@ public:
 
     virtual void Export() SAL_OVERRIDE;
 };
-
-TYPEINIT1( XMLTypedPropertiesOOoTContext_Impl, XMLPersElemContentTContext );
 
 XMLTypedPropertiesOOoTContext_Impl::XMLTypedPropertiesOOoTContext_Impl(
     XMLTransformerBase& rImp,
@@ -236,9 +231,6 @@ class XMLPropertiesOOoTContext_Impl : public XMLTransformerContext
             XMLPropType eType );
 
 public:
-
-    TYPEINFO_OVERRIDE();
-
     XMLPropertiesOOoTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                                const XMLPropTypes& rTypes,
@@ -262,8 +254,6 @@ public:
 
     virtual bool IsPersistent() const SAL_OVERRIDE;
 };
-
-TYPEINIT1( XMLPropertiesOOoTContext_Impl, XMLTransformerContext );
 
 XMLTypedPropertiesOOoTContext_Impl
     *XMLPropertiesOOoTContext_Impl::GetPropContext(
@@ -1050,8 +1040,6 @@ bool XMLPropertiesOOoTContext_Impl::IsPersistent() const
 {
     return m_bPersistent;
 }
-
-TYPEINIT1( XMLStyleOOoTContext, XMLPersElemContentTContext );
 
 XMLStyleOOoTContext::XMLStyleOOoTContext( XMLTransformerBase& rImp,
                                             const OUString& rQName,

@@ -32,8 +32,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-TYPEINIT0( XMLTransformerContext );
-
 bool XMLTransformerContext::HasQName( sal_uInt16 nPrefix,
                        ::xmloff::token::XMLTokenEnum eToken ) const
 {

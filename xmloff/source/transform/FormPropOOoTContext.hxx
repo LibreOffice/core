@@ -42,8 +42,6 @@ class XMLFormPropOOoTransformerContext : public XMLTransformerContext
     bool m_bIsList;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLFormPropOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 

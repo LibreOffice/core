@@ -37,8 +37,6 @@ class XMLFrameOASISTransformerContext : public XMLTransformerContext
             ::com::sun::star::xml::sax::XAttributeList >& rAttrList );
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLFrameOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 

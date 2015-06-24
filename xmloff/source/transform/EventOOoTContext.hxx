@@ -29,8 +29,6 @@ class XMLEventOOoTransformerContext : public XMLPersElemContentTContext
     bool m_bPersistent;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLEventOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               bool bPersistent = false  );

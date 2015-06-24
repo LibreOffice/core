@@ -31,8 +31,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
-TYPEINIT1( XMLControlOOoTransformerContext, XMLTransformerContext );
-
 XMLControlOOoTransformerContext::XMLControlOOoTransformerContext(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :

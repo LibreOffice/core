@@ -35,8 +35,6 @@ class XMLStyleOASISTContext : public XMLPersElemContentTContext
 
     OUString m_aStyleFamily;
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLStyleOASISTContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               bool bPersistent=false );

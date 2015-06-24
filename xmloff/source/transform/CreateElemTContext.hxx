@@ -32,8 +32,6 @@ protected:
     sal_uInt16 GetActionMap() const { return m_nActionMap; }
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLCreateElemTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               sal_uInt16 nActionMap );

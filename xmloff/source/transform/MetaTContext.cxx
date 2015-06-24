@@ -57,8 +57,6 @@ XMLTokenEnum aMetaTokens[] =
     XML_TOKEN_END
 };
 
-TYPEINIT1( XMLMetaTransformerContext, XMLTransformerContext );
-
 XMLMetaTransformerContext::XMLMetaTransformerContext( XMLTransformerBase& rImp,
                                                 const OUString& rQName ) :
     XMLTransformerContext( rImp, rQName )

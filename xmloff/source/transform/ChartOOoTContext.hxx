@@ -25,8 +25,6 @@
 class XMLChartOOoTransformerContext : public XMLTransformerContext
 {
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLChartOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName    );
     virtual ~XMLChartOOoTransformerContext();

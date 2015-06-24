@@ -31,8 +31,6 @@ class XMLFormPropOASISTransformerContext :
     static ::xmloff::token::XMLTokenEnum GetValueType( const OUString& rValue );
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLFormPropOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               ::xmloff::token::XMLTokenEnum eLocalName );

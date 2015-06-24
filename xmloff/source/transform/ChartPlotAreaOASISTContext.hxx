@@ -26,8 +26,6 @@
 class XMLChartPlotAreaOASISTContext  : public XMLProcAttrTransformerContext
 {
 public:
-    TYPEINFO_OVERRIDE();
-
     explicit XMLChartPlotAreaOASISTContext(
         XMLTransformerBase & rTransformer, const OUString & rQName );
     virtual ~XMLChartPlotAreaOASISTContext();

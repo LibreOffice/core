@@ -28,8 +28,6 @@ class XMLControlOASISTransformerContext : public XMLTransformerContext
     bool m_bCreateControl;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLControlOASISTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                               bool bCreateControl );

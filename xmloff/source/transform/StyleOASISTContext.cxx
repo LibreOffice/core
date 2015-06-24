@@ -78,8 +78,6 @@ public:
         XMLTransformerContext::SetQName( rQName );
     };
 
-    TYPEINFO_OVERRIDE();
-
     XMLPropertiesTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
                            XMLPropType eP,
@@ -100,8 +98,6 @@ public:
                                         bool bBold, bool bDouble,
                                            sal_Unicode c );
 };
-
-TYPEINIT1( XMLPropertiesTContext_Impl, XMLPersElemContentTContext );
 
 XMLPropertiesTContext_Impl::XMLPropertiesTContext_Impl(
     XMLTransformerBase& rImp, const OUString& rQName, XMLPropType eP,
@@ -741,8 +737,6 @@ OUString XMLPropertiesTContext_Impl::MergeLineThrough(
 
     return GetXMLToken( eLineThrough );
 }
-
-TYPEINIT1( XMLStyleOASISTContext, XMLPersElemContentTContext );
 
 XMLStyleOASISTContext::XMLStyleOASISTContext(XMLTransformerBase& rImp,
     const OUString& rQName, bool bPersistent)

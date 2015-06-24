@@ -50,8 +50,6 @@ protected:
     void SetQName( const OUString& rQName ) { m_aQName = rQName; }
 
 public:
-    TYPEINFO();
-
     const OUString& GetQName() const { return m_aQName; }
     bool HasQName( sal_uInt16 nPrefix,
                        ::xmloff::token::XMLTokenEnum eToken ) const;

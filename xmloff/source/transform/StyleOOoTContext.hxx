@@ -29,13 +29,11 @@ class XMLTransformerActions;
 
 class XMLStyleOOoTContext : public XMLPersElemContentTContext
 {
-       XMLFamilyType m_eFamily;
+    XMLFamilyType m_eFamily;
 
     bool m_bPersistent;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLStyleOOoTContext( XMLTransformerBase& rTransformer,
                         const OUString& rQName,
                            XMLFamilyType eType,

@@ -29,8 +29,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::xml::sax;
 
-TYPEINIT1( XMLPersAttrListTContext, XMLTransformerContext );
-
 void XMLPersAttrListTContext::AddAttribute(
         sal_uInt16 nAPrefix,
            ::xmloff::token::XMLTokenEnum eAToken,

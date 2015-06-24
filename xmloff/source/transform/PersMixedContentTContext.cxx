@@ -30,8 +30,6 @@ class XMLPersTextTContext_Impl : public XMLTransformerContext
     OUString m_aCharacters;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLPersTextTContext_Impl( XMLTransformerBase& rTransformer,
                            const OUString& rChars );
     virtual ~XMLPersTextTContext_Impl();
@@ -47,8 +45,6 @@ public:
     virtual bool IsPersistent() const SAL_OVERRIDE;
     virtual void Export() SAL_OVERRIDE;
 };
-
-TYPEINIT1( XMLPersTextTContext_Impl, XMLTransformerContext );
 
 XMLPersTextTContext_Impl::XMLPersTextTContext_Impl(
         XMLTransformerBase& rImp,
@@ -97,8 +93,6 @@ void XMLPersTextTContext_Impl::Export()
 {
     GetTransformer().GetDocHandler()->characters( m_aCharacters );
 }
-
-TYPEINIT1( XMLPersMixedContentTContext, XMLPersElemContentTContext );
 
 XMLPersMixedContentTContext::XMLPersMixedContentTContext(
         XMLTransformerBase& rImp,

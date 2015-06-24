@@ -35,8 +35,6 @@ using ::com::sun::star::uno::Reference;
 class XMLAxisOOoContext : public XMLPersElemContentTContext
 {
 public:
-    TYPEINFO_OVERRIDE();
-
     XMLAxisOOoContext( XMLTransformerBase& rTransformer,
                        const OUString& rQName );
     virtual ~XMLAxisOOoContext();
@@ -48,8 +46,6 @@ public:
 private:
     bool m_bIsCategoryAxis;
 };
-
-TYPEINIT1( XMLAxisOOoContext, XMLPersElemContentTContext );
 
 XMLAxisOOoContext::XMLAxisOOoContext(
     XMLTransformerBase& rTransformer,
@@ -120,8 +116,6 @@ void XMLAxisOOoContext::StartElement(
 }
 
 
-
-TYPEINIT1( XMLChartPlotAreaOOoTContext, XMLProcAttrTransformerContext )
 
 XMLChartPlotAreaOOoTContext::XMLChartPlotAreaOOoTContext(
     XMLTransformerBase & rTransformer, const OUString & rQName ) :
