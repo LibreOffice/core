@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_fd3bc79a",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-24T19:18:48Z",
+      "side": 1,
+      "message": "please *indent* what\u0027s in that scope",
+      "revId": "f98ba83d5d0bf65f22ef95efcf0f86887c74016c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
