@@ -869,6 +869,8 @@ SvtOptionsDrawinglayer::~SvtOptionsDrawinglayer()
     // we must destroy our static data container!
     if( m_nRefCount <= 0 )
     {
+        if (m_pDataContainer->IsModified())
+            m_pDataContainer->Commit();
         delete m_pDataContainer;
         m_pDataContainer = NULL;
     }
