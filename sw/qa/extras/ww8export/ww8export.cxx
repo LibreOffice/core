@@ -529,6 +529,11 @@ DECLARE_WW8EXPORT_TEST(testCommentExport, "comment-export.odt")
     }
 }
 
+DECLARE_WW8EXPORT_TEST(testMoveRange, "fdo66304-1.odt")
+{
+    //the save must survive without asserting
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
