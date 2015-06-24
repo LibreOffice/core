@@ -118,9 +118,9 @@ public:
     virtual void SAL_CALL elementRemoved( const container::ContainerEvent& Event ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         OUString sModuleName;
-        if( mpShell  && ( Event.Accessor >>= sModuleName ) )
+        if( mpShell && ( Event.Accessor >>= sModuleName ) )
         {
-            ModulWindow* pWin = mpShell->FindBasWin(mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, false, true);
+            VclPtr<ModulWindow> pWin = mpShell->FindBasWin(mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, false, true);
             if( pWin )
                 mpShell->RemoveWindow( pWin, true, true );
         }
@@ -798,6 +798,8 @@ void Shell::UpdateWindows()
 
 void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChangeCurWindow )
 {
+    VclPtr<BaseWindow> pWindowTmp( pWindow_ );
+
     DBG_ASSERT( pWindow_, "Kann keinen NULL-Pointer loeschen!" );
     sal_uLong nKey = GetWindowId( pWindow_ );
     pTabBar->RemovePage( (sal_uInt16)nKey );
@@ -817,7 +819,7 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
     {
         if ( !( pWindow_->GetStatus() & BASWIN_INRESCHEDULE ) )
         {
-            pWindow_->disposeOnce();
+            pWindowTmp.disposeAndClear();
         }
         else
         {
