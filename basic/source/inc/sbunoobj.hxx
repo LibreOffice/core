@@ -97,7 +97,7 @@ public:
 
     // give out value
     ::com::sun::star::uno::Any getUnoAny();
-    void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
+    void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 class SbUnoObject: public SbxObject
@@ -139,7 +139,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > getIntrospectionAccess()    { return mxUnoAccess; }
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > getInvocation()         { return mxInvocation; }
 
-    void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
+    void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
 
     bool isNativeCOMObject()
         { return bNativeCOMObject; }
@@ -265,7 +265,7 @@ public:
 
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
-    void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
+    void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 SbUnoService* findUnoService( const OUString& rName );
@@ -304,7 +304,7 @@ public:
     SbUnoSingleton( const OUString& aName_,
         const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >& xSingletonTypeDesc );
 
-    void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
+    void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 SbUnoSingleton* findUnoSingleton( const OUString& rName );
@@ -374,8 +374,7 @@ class BasicCollection : public SbxObject
 
     void Initialize();
     virtual ~BasicCollection();
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     sal_Int32 implGetIndex( SbxVariable* pIndexVar );
     sal_Int32 implGetIndexForName( const OUString& rName );
     void CollAdd( SbxArray* pPar_ );

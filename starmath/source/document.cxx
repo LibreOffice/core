@@ -117,8 +117,7 @@ void SmDocShell::InitInterface_Impl()
 
 SFX_IMPL_OBJECTFACTORY(SmDocShell, SvGlobalName(SO3_SM_CLASSID), SfxObjectShellFlags::STD_NORMAL, "smath" )
 
-void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
-                    const SfxHint& rHint, const TypeId&)
+void SmDocShell::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     switch (static_cast<const SfxSimpleHint&>(rHint).GetId())
     {

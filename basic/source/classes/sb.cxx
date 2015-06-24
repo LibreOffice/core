@@ -789,8 +789,7 @@ SbClassModuleObject::~SbClassModuleObject()
     pBreaks = NULL;
 }
 
-void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                           const SfxHint& rHint, const TypeId& rHintType )
+void SbClassModuleObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     handleProcedureProperties( rBC, rHint );
 }
@@ -2120,8 +2119,7 @@ SbxVariable* BasicCollection::Find( const OUString& rName, SbxClassType t )
     return pFind;
 }
 
-void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
-                                const SfxHint& rHint, const TypeId& rId2 )
+void BasicCollection::Notify( SfxBroadcaster& rCst, const SfxHint& rHint )
 {
     const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
     if( p )
@@ -2157,7 +2155,7 @@ void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
             }
             else
             {
-                SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
+                SbxObject::Notify( rCst, rHint );
             }
             return;
         }
@@ -2175,7 +2173,7 @@ void BasicCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
             }
         }
     }
-    SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
+    SbxObject::Notify( rCst, rHint );
 }
 
 sal_Int32 BasicCollection::implGetIndex( SbxVariable* pIndexVar )

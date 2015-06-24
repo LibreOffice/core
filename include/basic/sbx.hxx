@@ -104,8 +104,7 @@ class BASIC_DLLPUBLIC SbxAlias : public SbxVariable, public SfxListener
     SbxVariableRef xAlias;
     virtual ~SbxAlias();
     virtual void Broadcast( sal_uIntPtr ) SAL_OVERRIDE;
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 public:
     SbxAlias( const SbxAlias& );
     SbxAlias& operator=( const SbxAlias& );
@@ -221,8 +220,7 @@ class BASIC_DLLPUBLIC SbxCollection : public SbxObject
 protected:
     virtual ~SbxCollection();
     virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     // Overridable methods (why not pure virtual?):
     virtual void CollAdd( SbxArray* pPar );
     void CollItem( SbxArray* pPar );

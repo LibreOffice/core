@@ -135,8 +135,7 @@ void SbxObject::Clear()
     SetModified( false );
 }
 
-void SbxObject::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
-                            const SfxHint& rHint, const TypeId& )
+void SbxObject::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
     if( p )

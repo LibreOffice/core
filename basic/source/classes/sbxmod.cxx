@@ -741,8 +741,7 @@ void SbModule::SetParent( SbxObject* p )
     pParent = p;
 }
 
-void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                           const SfxHint& rHint, const TypeId& rHintType )
+void SbModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
     if( pHint )
@@ -861,7 +860,7 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             }
             if( bForwardToSbxObject )
             {
-                SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+                SbxObject::Notify( rBC, rHint );
             }
         }
     }
@@ -2230,8 +2229,7 @@ SbObjModule::Find( const OUString& rName, SbxClassType t )
     return pVar;
 }
 
-void SbObjModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType )
+void SbObjModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     SbModule::handleProcedureProperties( rBC, rHint );
 }

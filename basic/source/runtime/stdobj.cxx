@@ -816,8 +816,7 @@ void SbiStdObject::SetModified( bool )
 }
 
 
-void SbiStdObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType )
+void SbiStdObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 {
     const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
@@ -850,7 +849,7 @@ void SbiStdObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                 }
             }
         }
-        SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+        SbxObject::Notify( rBC, rHint );
     }
 }
 

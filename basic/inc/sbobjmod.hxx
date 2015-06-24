@@ -41,8 +41,7 @@ public:
     SbObjModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
     virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) SAL_OVERRIDE;
 
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     using SbxValue::GetObject;
     SbxVariable* GetObject();

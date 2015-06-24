@@ -688,8 +688,7 @@ void SbxAlias::Broadcast( sal_uIntPtr nHt )
     }
 }
 
-void SbxAlias::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
-                           const SfxHint& rHint, const TypeId& )
+void SbxAlias::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
     if( p && p->GetId() == SBX_HINT_DYING )

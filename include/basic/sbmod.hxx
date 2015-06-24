@@ -90,8 +90,7 @@ protected:
     virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
     virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
     virtual bool LoadCompleted() SAL_OVERRIDE;
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual ~SbModule();
 public:
@@ -156,7 +155,7 @@ public:
     // Overridden to support NameAccess etc.
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
-    virtual void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
 
     SbModule* getClassModule()
         { return mpClassModule; }

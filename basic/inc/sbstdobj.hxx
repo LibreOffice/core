@@ -41,8 +41,7 @@ protected:
     Graphic     aGraphic;
 
    virtual ~SbStdPicture();
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     void    PropType( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
     void    PropWidth( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
@@ -70,8 +69,7 @@ protected:
     OUString  aName;
 
    virtual ~SbStdFont();
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     void    PropBold( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
     void    PropItalic( SbxVariable* pVar, SbxArray* pPar, bool bWrite );
@@ -87,13 +85,13 @@ public:
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
     void     SetBold( bool bB ) { bBold = bB; }
-    bool IsBold() const { return bBold; }
+    bool     IsBold() const { return bBold; }
     void     SetItalic( bool bI ) { bItalic = bI; }
-    bool IsItalic() const { return bItalic; }
+    bool     IsItalic() const { return bItalic; }
     void     SetStrikeThrough( bool bS ) { bStrikeThrough = bS; }
-    bool IsStrikeThrough() const { return bStrikeThrough; }
+    bool     IsStrikeThrough() const { return bStrikeThrough; }
     void     SetUnderline( bool bU ) { bUnderline = bU; }
-    bool IsUnderline() const { return bUnderline; }
+    bool     IsUnderline() const { return bUnderline; }
     void     SetSize( sal_uInt16 nS ) { nSize = nS; }
     sal_uInt16 GetSize() const { return nSize; }
     void     SetFontName( const OUString& rName ) { aName = rName; }
@@ -105,9 +103,8 @@ class BASIC_DLLPUBLIC SbStdClipboard : public SbxObject
 {
 protected:
 
-   virtual ~SbStdClipboard();
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
+    virtual ~SbStdClipboard();
+    virtual void   Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     static void    MethClear( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );
     static void    MethGetData( SbxVariable* pVar, SbxArray* pPar_, bool bWrite );

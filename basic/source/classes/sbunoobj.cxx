@@ -2026,8 +2026,7 @@ OUString Impl_DumpMethods( SbUnoObject* pUnoObj )
 TYPEINIT1(AutomationNamedArgsSbxArray,SbxArray)
 
 // Implementation SbUnoObject
-void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                           const SfxHint& rHint, const TypeId& rHintType )
+void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if( bNeedIntrospection )
         doIntrospection();
@@ -2326,7 +2325,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             }
         }
         else
-            SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+            SbxObject::Notify( rBC, rHint );
     }
 }
 
@@ -3612,8 +3611,7 @@ SbxVariable* SbUnoService::Find( const OUString& rName, SbxClassType )
     return pRes;
 }
 
-void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                           const SfxHint& rHint, const TypeId& rHintType )
+void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
     if( pHint )
@@ -3762,7 +3760,7 @@ void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             }
         }
         else
-            SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+            SbxObject::Notify( rBC, rHint );
     }
 }
 
@@ -3833,8 +3831,7 @@ SbUnoSingleton::SbUnoSingleton( const OUString& aName_,
     QuickInsert( static_cast<SbxVariable*>(xGetMethodRef) );
 }
 
-void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                           const SfxHint& rHint, const TypeId& rHintType )
+void SbUnoSingleton::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
     if( pHint )
@@ -3879,7 +3876,7 @@ void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     }
     else
     {
-        SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+        SbxObject::Notify( rBC, rHint );
     }
 }
 
@@ -5005,8 +5002,7 @@ OUString SbUnoStructRefObject::Impl_DumpProperties()
     return aRet.makeStringAndClear();
 }
 
-void SbUnoStructRefObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                           const SfxHint& rHint, const TypeId& rHintType )
+void SbUnoStructRefObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if ( !mbMemberCacheInit )
         initMemberCache();
@@ -5077,7 +5073,7 @@ void SbUnoStructRefObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCTyp
             }
         }
         else
-           SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+           SbxObject::Notify( rBC, rHint );
     }
 }
 

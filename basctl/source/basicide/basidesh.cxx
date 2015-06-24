@@ -523,8 +523,7 @@ void Shell::ArrangeTabBar()
 
 
 
-void Shell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
-                                        const SfxHint& rHint, const TypeId& )
+void Shell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (GetShell())
     {

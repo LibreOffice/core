@@ -40,8 +40,7 @@ protected:
     virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
     virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
     virtual ~SbxObject();
-    virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                             const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_OBJECT,1);
     TYPEINFO_OVERRIDE();

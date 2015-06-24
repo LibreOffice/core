@@ -140,8 +140,7 @@ SbxVariable* SbStdPicture::Find( const OUString& rName, SbxClassType t )
 
 
 
-void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                               const SfxHint& rHint, const TypeId& rHintType )
+void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 {
     const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
@@ -150,7 +149,7 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     {
         if( pHint->GetId() == SBX_HINT_INFOWANTED )
         {
-            SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+            SbxObject::Notify( rBC, rHint );
             return;
         }
 
@@ -167,7 +166,7 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             case ATTR_IMP_HEIGHT:   PropHeight( pVar, pPar_, bWrite ); return;
         }
 
-        SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+        SbxObject::Notify( rBC, rHint );
     }
 }
 
@@ -267,8 +266,7 @@ SbxVariable* SbStdFont::Find( const OUString& rName, SbxClassType t )
     return SbxObject::Find( rName, t );
 }
 
-void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                            const SfxHint& rHint, const TypeId& rHintType )
+void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
 
@@ -276,7 +274,7 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     {
         if( pHint->GetId() == SBX_HINT_INFOWANTED )
         {
-            SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+            SbxObject::Notify( rBC, rHint );
             return;
         }
 
@@ -296,7 +294,7 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             case ATTR_IMP_NAME:         PropName( pVar, pPar_, bWrite ); return;
         }
 
-        SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+        SbxObject::Notify( rBC, rHint );
     }
 }
 
@@ -436,8 +434,7 @@ SbxVariable* SbStdClipboard::Find( const OUString& rName, SbxClassType t )
 
 
 
-void SbStdClipboard::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                 const SfxHint& rHint, const TypeId& rHintType )
+void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
 
@@ -445,7 +442,7 @@ void SbStdClipboard::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     {
         if( pHint->GetId() == SBX_HINT_INFOWANTED )
         {
-            SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+            SbxObject::Notify( rBC, rHint );
             return;
         }
 
@@ -465,7 +462,7 @@ void SbStdClipboard::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             case METH_SETTEXT:          MethSetText( pVar, pPar_, bWrite ); return;
         }
 
-        SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+        SbxObject::Notify( rBC, rHint );
     }
 }
 

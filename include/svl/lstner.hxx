@@ -25,9 +25,6 @@
 class SfxBroadcaster;
 class SfxHint;
 
-#define SFX_NOTIFY( rBC, rBCT, rHint, rHintT ) \
-        Notify( rBC, rHint )
-
 class SVL_DLLPUBLIC SfxListener
 {
     struct Impl;
@@ -48,12 +45,12 @@ public:
     void                EndListeningAll();
     bool                IsListening( SfxBroadcaster& rBroadcaster ) const;
 
-    sal_uInt16 GetBroadcasterCount() const;
-    SfxBroadcaster* GetBroadcasterJOE( sal_uInt16 nNo ) const;
+    sal_uInt16          GetBroadcasterCount() const;
+    SfxBroadcaster*     GetBroadcasterJOE( sal_uInt16 nNo ) const;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    void RemoveBroadcaster_Impl( SfxBroadcaster& rBC );
+    void                RemoveBroadcaster_Impl( SfxBroadcaster& rBC );
 };
 
 #endif

@@ -114,8 +114,7 @@ SbxVariable* SbxCollection::Find( const OUString& rName, SbxClassType t )
     }
 }
 
-void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
-                                const SfxHint& rHint, const TypeId& rId2 )
+void SbxCollection::Notify( SfxBroadcaster& rCst, const SfxHint& rHint )
 {
     const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
     if( p )
@@ -154,12 +153,12 @@ void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
             }
             else
             {
-                SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
+                SbxObject::Notify( rCst, rHint );
             }
             return;
         }
     }
-    SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
+    SbxObject::Notify( rCst, rHint );
 }
 
 // Default: argument is object
