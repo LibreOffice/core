@@ -120,10 +120,13 @@ namespace
 
 void SvpSalGraphics::clipRegion(cairo_t* cr)
 {
+    RectangleVector aRectangles;
     if (!m_aClipRegion.IsEmpty())
     {
-        RectangleVector aRectangles;
         m_aClipRegion.GetRegionRectangles(aRectangles);
+    }
+    if (!aRectangles.empty())
+    {
         for (RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
         {
             cairo_rectangle(cr, aRectIter->Left(), aRectIter->Top(), aRectIter->GetWidth(), aRectIter->GetHeight());
@@ -152,6 +155,8 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
         cairo_scale(cr, 1, -1.0);
         cairo_translate(cr, 0.0, -m_aDevice->getSize().getY());
     }
+
+    clipRegion(cr);
 
     const double fTransparency = (100 - nTransparency) * (1.0/100);
     cairo_set_source_rgba(cr, m_aFillColor.getRed()/255.0,
@@ -330,7 +335,7 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
 
     if( nHit == 0 ) // rendering outside any clipping region
     {
-//        fprintf (stderr, "denegerate case detected ...\n");
+        SAL_INFO("vcl.headless", "SvpSalGraphics::isClippedSetup: degenerate case detected ...");
         return true;
     }
     else if( nHit == 1 ) // common path: rendering against just one clipping region
@@ -339,10 +344,10 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
         {
             //The region to be painted (aRect) is equal to or inside the
             //current clipping region
-//        fprintf (stderr, " is inside ! avoid deeper clip ...\n");
+            SAL_INFO("vcl.headless", "SvpSalGraphics::isClippedSetup: is inside ! avoid deeper clip ...");
             return false;
         }
-//    fprintf (stderr, " operation only overlaps with a single clip zone\n" );
+        SAL_INFO("vcl.headless", "SvpSalGraphics::isClippedSetup: operation only overlaps with a single clip zone");
         rUndo.m_aDevice = m_aDevice;
         m_aDevice = basebmp::subsetBitmapDevice( m_aOrigDevice,
                                                  basegfx::B2IBox (aHitRect.Left(),
