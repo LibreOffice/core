@@ -86,9 +86,15 @@ $(call gb_Helper_make_userfriendly_targets,$(1),ExternalProject)
 
 endef
 
-# replaced by second parameter to ctor
+# Depend on an unpacked tarball
+#
+# This is needed to express dependencies on header-only projects, which
+# do not have any ExternalProject.
+#
+# gb_ExternalProject_use_unpacked project unpacked
 define gb_ExternalProject_use_unpacked
-$(call gb_Output_error,gb_ExternalProject_use_unpacked was removed)
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_UnpackedTarball_get_target,$(2))
+
 endef
 
 # Register a target in state directory
