@@ -3588,11 +3588,9 @@ SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
 
 void SwLayoutFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
-    SwViewShell *pSh = getRootFrm()->GetCurrShell();
-
     // #i16816# tagged pdf support
     Frm_Info aFrmInfo( *this );
-    SwTaggedPDFHelper aTaggedPDFHelper( 0, &aFrmInfo, 0, *pSh->GetOut() );
+    SwTaggedPDFHelper aTaggedPDFHelper( 0, &aFrmInfo, 0, rRenderContext );
 
     const SwFrm *pFrm = Lower();
     if ( !pFrm )
