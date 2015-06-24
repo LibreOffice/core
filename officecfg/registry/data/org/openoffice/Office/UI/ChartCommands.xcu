@@ -8,6 +8,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Titles...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:InsertMenuLegend" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -76,6 +79,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Chart ~Wall...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:DiagramFloor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -85,6 +91,9 @@
       <node oor:name=".uno:DiagramArea" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Chart ~Area...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DiagramType" oor:op="replace">
@@ -179,15 +188,24 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~X Axis...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:DiagramAxisY" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Y Axis...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:DiagramAxisZ" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Z Axis...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:DiagramAxisA" oor:op="replace">
