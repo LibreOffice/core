@@ -1379,8 +1379,8 @@ DECLARE_OOXMLIMPORT_TEST(testConditionalstylesTablelook, "conditionalstyles-tbll
 
 DECLARE_OOXMLIMPORT_TEST(testFdo63685, "fdo63685.docx")
 {
-    // Was 85697, i.e. original 114120 was converted to mm100 from twips, not from EMUs.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(318), getProperty<sal_Int32>(getShape(1), "TopMargin"));
+    // An inline image's wrapping should be always zero, even if the doc model has a non-zero value.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShape(1), "TopMargin"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testN592908_Frame, "n592908-frame.docx")
