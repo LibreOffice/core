@@ -199,7 +199,7 @@ public:
     virtual bool  GetCrsrOfst( SwPosition *, Point&,
                                SwCrsrMoveState* = 0, bool bTestBackground = false ) const SAL_OVERRIDE;
 
-    virtual void Paint( SwRect const&,
+    virtual void Paint( vcl::RenderContext& rRenderContext, SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const SAL_OVERRIDE;
     virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;

@@ -379,7 +379,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                             mpOut = pVout.get();
                             if ( bPaintsFromSystem )
                                 PaintDesktop(*mpOut, aRect);
-                            pCurrentLayout->Paint( aRect );
+                            pCurrentLayout->Paint( *mpOut, aRect );
                             pOld->DrawOutDev( aRect.Pos(), aRect.SSize(),
                                               aRect.Pos(), aRect.SSize(), *pVout );
                             mpOut = pOld;
@@ -401,7 +401,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                         if ( bPaintsFromSystem )
                             PaintDesktop(*GetOut(), aRect);
                         if (!isTiledRendering())
-                            pCurrentLayout->Paint( aRect );
+                            pCurrentLayout->Paint( *mpOut, aRect );
                         else
                             pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
 
@@ -1275,7 +1275,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                 // SW paint stuff
                 PaintDesktop(*GetOut(), aRect);
                 SwViewShell::mbLstAct = true;
-                GetLayout()->Paint( aRect );
+                GetLayout()->Paint( *GetOut(), aRect );
                 SwViewShell::mbLstAct = false;
 
                 // end paint and destroy ObjectContact again
@@ -1712,7 +1712,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRe
                 if ( aRect.IsInside( maInvalidRect ) )
                     ResetInvalidRect();
                 SwViewShell::mbLstAct = true;
-                GetLayout()->Paint( aRect );
+                GetLayout()->Paint( rRenderContext, aRect );
                 SwViewShell::mbLstAct = false;
             }
             else
@@ -1733,7 +1733,7 @@ void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRe
                     if ( aRect.IsInside( maInvalidRect ) )
                         ResetInvalidRect();
                     SwViewShell::mbLstAct = true;
-                    GetLayout()->Paint( aRect );
+                    GetLayout()->Paint( rRenderContext, aRect );
                     SwViewShell::mbLstAct = false;
                     // --> OD 2009-08-12 #i101192#
                     // end Pre/PostPaint encapsulation
