@@ -638,8 +638,16 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
     SvTreeListEntry* pEntry = m_pFileView->FirstSelected();
     SvtContentEntry* pData = static_cast< SvtContentEntry* >( pEntry->GetUserData() );
 
-    INetURLObject aURL( pData->maURL );
-    m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DECODE_WITH_CHARSET ) );
+    if( ( pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_PATHDLG ) )
+       || ( !pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_FILEDLG ) ) )
+    {
+        INetURLObject aURL( pData->maURL );
+        m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DECODE_WITH_CHARSET ) );
+    }
+    else
+    {
+        m_pName_ed->SetText( "" );
+    }
 
     return 1;
 }
