@@ -490,6 +490,18 @@ public:
     WW8_WrPlcAnnotations* m_pAtn;
     WW8_WrPlcTextBoxes *m_pTextBxs, *m_pHFTextBxs;
 
+    struct LinkedTextboxInfo        //help analyze textbox flow links
+    {
+        sal_Int32 nId;
+        sal_Int32 nSeq;
+        OUString sNextChain;
+        OUString sPrevChain;
+        LinkedTextboxInfo(): nId(0), nSeq(0) {}
+    };
+    std::map<OUString,LinkedTextboxInfo> m_aLinkedTextboxesHelper;
+    bool m_bLinkedTextboxesHelperInitialized = false;
+    sal_Int32 m_nLinkedTextboxesChainId=0;
+
     const sw::Frame *m_pParentFrame; // If set we are exporting content inside
                                     // a frame, e.g. a graphic node
 

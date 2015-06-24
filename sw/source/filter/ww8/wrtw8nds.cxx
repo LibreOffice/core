@@ -549,6 +549,69 @@ bool SwWW8AttrIter::IsAnchorLinkedToThisNode( sal_uLong nNodePos )
 
 FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 {
+    // collection point to first gather info about all of the potentially linked textboxes: to be analyzed later.
+    OUString sLinkChainName;
+    sw::FrameIter linkedTextboxesIter = maFlyIter;
+    while ( linkedTextboxesIter != maFlyFrms.end() )
+    {
+        uno::Reference< drawing::XShape > xShape;
+        sw::Frame xFrame = *linkedTextboxesIter;
+        const SdrObject* pSdrObj = xFrame.GetFrameFormat().FindRealSdrObject();
+        if( pSdrObj )
+            xShape = uno::Reference< drawing::XShape >(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo;
+        if( xPropertySet.is() )
+            xPropertySetInfo = xPropertySet->getPropertySetInfo();
+        if( xPropertySetInfo.is() )
+        {
+            MSWordExportBase::LinkedTextboxInfo aLinkedTextboxInfo = MSWordExportBase::LinkedTextboxInfo();
+
+            if( xPropertySetInfo->hasPropertyByName("LinkDisplayName") )
+                xPropertySet->getPropertyValue("LinkDisplayName") >>= sLinkChainName;
+            else if( xPropertySetInfo->hasPropertyByName("ChainName") )
+                xPropertySet->getPropertyValue("ChainName") >>= sLinkChainName;
+
+            if( xPropertySetInfo->hasPropertyByName("ChainNextName") )
+                xPropertySet->getPropertyValue("ChainNextName") >>= aLinkedTextboxInfo.sNextChain;
+            if( xPropertySetInfo->hasPropertyByName("ChainPrevName") )
+                xPropertySet->getPropertyValue("ChainPrevName") >>= aLinkedTextboxInfo.sPrevChain;
+
+            //collect a list of linked textboxes: those with a NEXT or PREVIOUS link
+            if( !aLinkedTextboxInfo.sNextChain.isEmpty() || !aLinkedTextboxInfo.sPrevChain.isEmpty() )
+            {
+                assert( !sLinkChainName.isEmpty() );
+
+                //there are many discarded duplicates in documents - no duplicates allowed in the list, so try to find the real one.
+                //if this LinkDisplayName/ChainName already exists on a different shape...
+                //  the earlier processed duplicates are thrown out unless this one can be proved as bad. (last processed duplicate usually is stored)
+                std::map<OUString,MSWordExportBase::LinkedTextboxInfo>::iterator linkFinder;
+                linkFinder = m_rExport.m_aLinkedTextboxesHelper.find(sLinkChainName);
+                if( linkFinder != m_rExport.m_aLinkedTextboxesHelper.end() )
+                {
+                    //If my NEXT/PREV targets have already been discovered, but don't match me, then assume I'm an abandoned remnant
+                    //    (this logic fails if both me and one of my links are duplicated, and the remnants were added first.)
+                    linkFinder = m_rExport.m_aLinkedTextboxesHelper.find(aLinkedTextboxInfo.sNextChain);
+                    if( (linkFinder != m_rExport.m_aLinkedTextboxesHelper.end()) && (linkFinder->second.sPrevChain != sLinkChainName) )
+                    {
+                        ++linkedTextboxesIter;
+                        break;
+                    }
+
+                    linkFinder = m_rExport.m_aLinkedTextboxesHelper.find(aLinkedTextboxInfo.sPrevChain);
+                    if( (linkFinder != m_rExport.m_aLinkedTextboxesHelper.end()) && (linkFinder->second.sNextChain != sLinkChainName) )
+                    {
+                        ++linkedTextboxesIter;
+                        break;
+                    }
+                }
+                m_rExport.m_bLinkedTextboxesHelperInitialized = false;
+                m_rExport.m_aLinkedTextboxesHelper[sLinkChainName] = aLinkedTextboxInfo;
+            }
+        }
+        ++linkedTextboxesIter;
+    }
+
     /*
      #i2916#
      May have an anchored graphic to be placed, loop through sorted array

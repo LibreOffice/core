@@ -999,6 +999,70 @@ DECLARE_OOXMLEXPORT_TEST(testExportAdjustmentValue, "tdf91429.docx")
 
     assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom/a:avLst/a:gd", "fmla", "val 50000");
 }
+
+DECLARE_OOXMLEXPORT_TEST(testTDF87348, "tdf87348_linkedTextboxes.docx")
+{
+int followCount=0;
+int precedeCount=0;
+if( !parseDump("/root/page/body/txt/anchored/fly[1]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[1]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[2]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[2]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[3]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[3]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[4]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[4]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[5]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[5]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[6]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[6]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[7]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[7]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[8]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[8]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[9]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[9]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[10]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[10]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[11]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[11]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[12]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[12]/txt","precede").isEmpty() )
+    precedeCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[13]/txt","follow").isEmpty() )
+  followCount++;
+if( !parseDump("/root/page/body/txt/anchored/fly[13]/txt","precede").isEmpty() )
+    precedeCount++;
+    //there should be 4 chains/13 linked textboxes (set of 5, set of 3, set of 3, set of 2)
+    //that means 9 NEXT links and 9 PREV links.
+    //however, the current implementation adds leftover shapes, so can't go on exact numbers
+    //  (unknown number of flys, unknown order of leftovers)
+    CPPUNIT_ASSERT ( (followCount >= 6) && (precedeCount >= 6) );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
