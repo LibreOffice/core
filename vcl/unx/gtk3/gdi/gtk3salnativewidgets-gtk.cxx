@@ -1740,12 +1740,11 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aMouseSettings.SetMenuDelay( MENU_POPUP_DELAY );
     rSettings.SetMouseSettings( aMouseSettings );
 
-    gboolean showmenuicons = true, primarybuttonwarps = false;
+    gboolean primarybuttonwarps = false;
     g_object_get( pSettings,
-        "gtk-menu-images", &showmenuicons,
         "gtk-primary-button-warps-slider", &primarybuttonwarps,
         nullptr );
-    aStyleSet.SetPreferredUseImagesInMenus(showmenuicons);
+    aStyleSet.SetPreferredUseImagesInMenus(false);
     aStyleSet.SetPrimaryButtonWarpsSlider(primarybuttonwarps);
 
     // set scrollbar settings
