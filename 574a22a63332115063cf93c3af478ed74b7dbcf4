@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_fd51870f",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-24T14:43:16Z",
+      "side": 1,
+      "message": "unfortunately this local SwPaM causes a problem because SwPaM is not automatically moved on SplitNode; ensure that the local variable is deleted before SplitNode by moving it and the call that uses it into a nested scope so it is destroyed earlier.",
+      "revId": "574a22a63332115063cf93c3af478ed74b7dbcf4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
