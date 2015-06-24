@@ -393,42 +393,39 @@ static void GetFormatAndCreateCursorFromRangeRep(
 
         *ppTblFmt = pTableFormat;
 
-        if (rpUnoCrsr)
-        {
-            rpUnoCrsr.reset();  // default result in case of failure
+        rpUnoCrsr.reset();  // default result in case of failure
 
-            SwTable *pTable = pTableFormat ? SwTable::FindTable( pTableFormat ) : 0;
-            // create new SwUnoCrsr spanning the specified range
-            //! see also SwXTextTable::GetRangeByName
+        SwTable *pTable = pTableFormat ? SwTable::FindTable( pTableFormat ) : 0;
+        // create new SwUnoCrsr spanning the specified range
+        //! see also SwXTextTable::GetRangeByName
+        // #i80314#
+        // perform validation check. Thus, pass <true> as 2nd parameter to <SwTable::GetTableBox(..)>
+        const SwTableBox* pTLBox =
+                        pTable ? pTable->GetTableBox( aStartCell, true ) : 0;
+        if(pTLBox)
+        {
+            // The Actions need to be removed here
+            UnoActionRemoveContext aRemoveContext(pTableFormat->GetDoc());
+            const SwStartNode* pSttNd = pTLBox->GetSttNd();
+            SwPosition aPos(*pSttNd);
+
+            // set cursor to top left box of range
+            auto pUnoCrsr = pTableFormat->GetDoc()->CreateUnoCrsr(aPos, true);
+            pUnoCrsr->Move( fnMoveForward, fnGoNode );
+            pUnoCrsr->SetRemainInSection( false );
+
             // #i80314#
             // perform validation check. Thus, pass <true> as 2nd parameter to <SwTable::GetTableBox(..)>
-            const SwTableBox* pTLBox =
-                            pTable ? pTable->GetTableBox( aStartCell, true ) : 0;
-            if(pTLBox)
+            const SwTableBox* pBRBox = pTable->GetTableBox( aEndCell, true );
+            if(pBRBox)
             {
-                // The Actions need to be removed here
-                UnoActionRemoveContext aRemoveContext(pTableFormat->GetDoc());
-                const SwStartNode* pSttNd = pTLBox->GetSttNd();
-                SwPosition aPos(*pSttNd);
-
-                // set cursor to top left box of range
-                auto pUnoCrsr = pTableFormat->GetDoc()->CreateUnoCrsr(aPos, true);
+                pUnoCrsr->SetMark();
+                pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                pUnoCrsr->SetRemainInSection( false );
-
-                // #i80314#
-                // perform validation check. Thus, pass <true> as 2nd parameter to <SwTable::GetTableBox(..)>
-                const SwTableBox* pBRBox = pTable->GetTableBox( aEndCell, true );
-                if(pBRBox)
-                {
-                    pUnoCrsr->SetMark();
-                    pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
-                    pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    SwUnoTableCrsr* pCrsr =
-                        dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
-                    pCrsr->MakeBoxSels();
-                    rpUnoCrsr = pUnoCrsr;
-                }
+                SwUnoTableCrsr* pCrsr =
+                    dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+                pCrsr->MakeBoxSels();
+                rpUnoCrsr = pUnoCrsr;
             }
         }
     }
