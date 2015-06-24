@@ -212,6 +212,7 @@ public:
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
 
     static cairo_t*         createCairoContext(const basebmp::BitmapDeviceSharedPtr& rBuffer);
+    void                    clipRegion(cairo_t* cr);
 
 #endif // ENABLE_CAIRO_CANVAS
 

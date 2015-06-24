@@ -117,6 +117,20 @@ namespace
     }
 }
 
+void SvpSalGraphics::clipRegion(cairo_t* cr)
+{
+    if (!m_aClipRegion.IsEmpty())
+    {
+        RectangleVector aRectangles;
+        m_aClipRegion.GetRegionRectangles(aRectangles);
+        for (RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+        {
+            cairo_rectangle(cr, aRectIter->Left(), aRectIter->Top(), aRectIter->GetWidth(), aRectIter->GetHeight());
+        }
+        cairo_clip(cr);
+    }
+}
+
 #endif
 
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
