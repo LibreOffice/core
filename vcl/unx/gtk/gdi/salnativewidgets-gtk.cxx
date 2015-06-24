@@ -4174,10 +4174,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aMouseSettings.SetMenuDelay( MENU_POPUP_DELAY );
     rSettings.SetMouseSettings( aMouseSettings );
 
-    gboolean showmenuicons = true, primarybuttonwarps = false;
-    g_object_get( pSettings,
-        "gtk-menu-images", &showmenuicons,
-        nullptr );
+    gboolean primarybuttonwarps = false;
     if( g_object_class_find_property(
             G_OBJECT_GET_CLASS(pSettings), "gtk-primary-button-warps-slider") )
     {
@@ -4185,7 +4182,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
             "gtk-primary-button-warps-slider", &primarybuttonwarps,
             nullptr );
     }
-    aStyleSet.SetPreferredUseImagesInMenus(showmenuicons);
+    aStyleSet.SetPreferredUseImagesInMenus(true);
     aStyleSet.SetPrimaryButtonWarpsSlider(primarybuttonwarps);
 
     // set scrollbar settings
