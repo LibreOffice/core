@@ -985,7 +985,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
  * Fix for #i79009
  * we need to return a property that has the same value as the property
  * 'CellRangeRepresentation' but for all rows which are increased by one.
- * E.g. Table1:A1:D5 -> Table1:A2:D6
+ * E.g. Table1.A1:D5 -> Table1,A2:D6
  * Since the problem is only for old charts which did not support multiple
  * we do not need to provide that property/string if the 'CellRangeRepresentation'
  * contains multiple ranges.
