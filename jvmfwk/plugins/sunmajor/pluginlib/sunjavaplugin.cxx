@@ -67,7 +67,7 @@
 #endif
 #endif
 
-#if defined LINUX && defined X86
+#if defined LINUX && (defined X86 || defined X86_64)
 #include <sys/resource.h>
 #endif
 
@@ -755,7 +755,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         options.push_back(Option("-Xint", nullptr));
     }
     if (!hasStackSize) {
-#if defined LINUX && defined X86
+#if defined LINUX && (defined X86 || defined X86_64)
         // At least OpenJDK 1.8.0's os::workaround_expand_exec_shield_cs_limit
         // (hotspot/src/os_cpu/linux_x86/vm/os_linux_x86.cpp) can mmap an rwx
         // page into the area that the main stack can grow down to according to
