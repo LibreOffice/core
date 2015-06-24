@@ -21,6 +21,8 @@
 
 #include "autofilterbuffer.hxx"
 #include "autofiltercontext.hxx"
+#include "tablecolumnsbuffer.hxx"
+#include "tablecolumnscontext.hxx"
 #include "tablebuffer.hxx"
 
 namespace oox {
@@ -46,8 +48,13 @@ ContextHandlerRef TableFragment::onCreateContext( sal_Int32 nElement, const Attr
             }
         break;
         case XLS_TOKEN( table ):
-            if( nElement == XLS_TOKEN( autoFilter ) )
-                return new AutoFilterContext( *this, mrTable.createAutoFilter() );
+            switch (nElement)
+            {
+                case XLS_TOKEN( autoFilter ):
+                    return new AutoFilterContext( *this, mrTable.createAutoFilter() );
+                case XLS_TOKEN( tableColumns ):
+                    return new TableColumnsContext( *this, mrTable.createTableColumns() );
+            }
         break;
     }
     return 0;

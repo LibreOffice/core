@@ -1,0 +1,133 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "tablecolumnsbuffer.hxx"
+
+#include <com/sun/star/sheet/XDatabaseRange.hpp>
+#include <rtl/ustrbuf.hxx>
+#include <osl/diagnose.h>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/propertyset.hxx>
+#include <oox/token/properties.hxx>
+#include "addressconverter.hxx"
+#include "biffinputstream.hxx"
+#include "defnamesbuffer.hxx"
+
+namespace oox {
+namespace xls {
+
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+TableColumn::TableColumn( const WorkbookHelper& rHelper ) :
+    WorkbookHelper( rHelper ),
+    mnId( -1 ),
+    mnDataDxfId( -1 )
+{
+}
+
+void TableColumn::importTableColumn( const AttributeList& rAttribs )
+{
+    mnId = rAttribs.getInteger( XML_id, -1 );
+    maName = rAttribs.getString( XML_name, OUString() );
+    mnDataDxfId = rAttribs.getInteger( XML_dataDxfId, -1 );
+}
+
+void TableColumn::importTableColumn( SequenceInputStream& /*rStrm*/ )
+{
+    /* XXX not implemented */
+}
+
+TableColumns::TableColumns( const WorkbookHelper& rHelper ) :
+    WorkbookHelper( rHelper ),
+    mnCount(0)
+{
+}
+
+void TableColumns::importTableColumns( const AttributeList& rAttribs )
+{
+    mnCount = rAttribs.getInteger( XML_count, 0 );
+}
+
+void TableColumns::importTableColumns( SequenceInputStream& /*rStrm*/ )
+{
+    /* XXX not implemented */
+}
+
+TableColumn& TableColumns::createTableColumn()
+{
+    TableColumnVector::value_type xTableColumn( new TableColumn( *this ) );
+    maTableColumnVector.push_back( xTableColumn );
+    return *xTableColumn;
+}
+
+bool TableColumns::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRange )
+{
+    SAL_WARN_IF( static_cast<size_t>(mnCount) != maTableColumnVector.size(), "sc.filter",
+            "TableColumns::finalizeImport - count attribute doesn't match number of tableColumn elements");
+    if( rxDatabaseRange.is() )
+    {
+        /* TODO: implementation */
+        return true;
+    }
+    return false;
+}
+
+TableColumnsBuffer::TableColumnsBuffer( const WorkbookHelper& rHelper ) :
+    WorkbookHelper( rHelper )
+{
+}
+
+TableColumns& TableColumnsBuffer::createTableColumns()
+{
+    TableColumnsVector::value_type xTableColumns( new TableColumns( *this ) );
+    maTableColumnsVector.push_back( xTableColumns );
+    return *xTableColumns;
+}
+
+bool TableColumnsBuffer::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRange )
+{
+    TableColumns* pTableColumns = getActiveTableColumns();
+    if( pTableColumns && rxDatabaseRange.is() ) try
+    {
+        pTableColumns->finalizeImport( rxDatabaseRange );
+        // return true to indicate available table columns
+        return true;
+    }
+    catch( Exception& )
+    {
+    }
+    return false;
+}
+
+TableColumns* TableColumnsBuffer::getActiveTableColumns()
+{
+    // not more than one table columns descriptor per table
+    SAL_WARN_IF( maTableColumnsVector.size() > 1, "sc.filter",
+            "TableColumnsBuffer::getActiveTableColumns - too many table columns" );
+    // stick to the last imported table columns
+    return maTableColumnsVector.empty() ? 0 : maTableColumnsVector.back().get();
+}
+
+} // namespace xls
+} // namespace oox
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

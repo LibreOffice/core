@@ -46,6 +46,7 @@ TableModel::TableModel() :
 Table::Table( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     maAutoFilters( rHelper ),
+    maTableColumns( rHelper ),
     mnTokenIndex( -1 )
 {
 }
