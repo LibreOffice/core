@@ -355,9 +355,19 @@ class CheckTable(unittest.TestCase):
         xTable.ChartRowAsLabel = False
         xTable.Data = ((1,2,3), (4,5,6), (7,8,9), (10,11,12))
         xRows = xTable.Rows
+        self.assertIs(type(xRows.ImplementationName), type('SwXTableRows')) # not testing value, just type and coverage
+        self.assertTrue(xRows.supportsService('com.sun.star.text.TableRows'))
+        self.assertFalse(xRows.supportsService('foo'))
+        self.assertIn('com.sun.star.text.TableRows', xRows.SupportedServiceNames)
+        self.assertNotIn('foo', xRows.SupportedServiceNames)
         xRows.removeByIndex(1, 2)
         self.assertEqual( xTable.Data, ((1,2,3), (10,11,12)))
         xCols = xTable.Columns
+        self.assertIs(type(xCols.ImplementationName), type('SwXTableColumns')) # not testing value, just type and coverage
+        self.assertTrue(xCols.supportsService('com.sun.star.text.TableColumns'))
+        self.assertFalse(xCols.supportsService('foo'))
+        self.assertIn('com.sun.star.text.TableColumns', xCols.SupportedServiceNames)
+        self.assertNotIn('foo', xCols.SupportedServiceNames)
         xCols.removeByIndex(1, 1)
         self.assertEqual( xTable.Data, ((1,3), (10,12)))
         xDoc.dispose()
