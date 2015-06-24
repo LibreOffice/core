@@ -1961,7 +1961,32 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         const std::shared_ptr<sw::mark::ContentIdxStore> pContentStore(sw::mark::ContentIdxStore::Create());
         pContentStore->Save( &m_rDoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
 
+        SwTextNode * pOrigNode = pTNd;
+        assert(*aSavePam.GetPoint() == *aSavePam.GetMark() &&
+               *aSavePam.GetPoint() == rPos);
+        assert(aSavePam.GetPoint()->nContent.GetIdxReg() == pOrigNode);
+        assert(aSavePam.GetPoint()->nNode == rPos.nNode.GetIndex());
+        assert(rPos.nNode.GetIndex() == pOrigNode->GetIndex());
+
         pTNd = pTNd->SplitContentNode( rPos )->GetTextNode();
+
+        //A new node was inserted before the orig pTNd and the content up to
+        //rPos moved into it. The old node is returned with the remainder
+        //of the content in it.
+        //
+        //aSavePam was created with rPos, it continues to point to the
+        //old node, but with the *original* content index into the node.
+        //Seeing as all the orignode content before that index has
+        //been removed, the new index into the original node should now be set
+        //to 0 and the content index of rPos should also be adapted to the
+        //truncated node
+        assert(*aSavePam.GetPoint() == *aSavePam.GetMark() &&
+               *aSavePam.GetPoint() == rPos);
+        assert(aSavePam.GetPoint()->nContent.GetIdxReg() == pOrigNode);
+        assert(aSavePam.GetPoint()->nNode == rPos.nNode.GetIndex());
+        assert(rPos.nNode.GetIndex() == pOrigNode->GetIndex());
+        aSavePam.GetPoint()->nContent.Assign(pOrigNode, 0);
+        rPos = *aSavePam.GetMark() = *aSavePam.GetPoint();
 
         if( !pContentStore->Empty() )
             pContentStore->Restore( &m_rDoc, rPos.nNode.GetIndex()-1, 0, true );
