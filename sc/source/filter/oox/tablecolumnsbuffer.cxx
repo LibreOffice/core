@@ -29,6 +29,7 @@
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
 #include "defnamesbuffer.hxx"
+#include "dbdata.hxx"
 
 namespace oox {
 namespace xls {
@@ -56,6 +57,11 @@ void TableColumn::importTableColumn( SequenceInputStream& /*rStrm*/ )
     /* XXX not implemented */
 }
 
+const OUString& TableColumn::getName() const
+{
+    return maName;
+}
+
 TableColumns::TableColumns( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     mnCount(0)
@@ -79,13 +85,21 @@ TableColumn& TableColumns::createTableColumn()
     return *xTableColumn;
 }
 
-bool TableColumns::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRange )
+bool TableColumns::finalizeImport( ScDBData* pDBData )
 {
     SAL_WARN_IF( static_cast<size_t>(mnCount) != maTableColumnVector.size(), "sc.filter",
             "TableColumns::finalizeImport - count attribute doesn't match number of tableColumn elements");
-    if( rxDatabaseRange.is() )
+    if ( pDBData )
     {
-        /* TODO: implementation */
+        /* TODO: use svl::SharedString for names */
+        ::std::vector< OUString > aNames( maTableColumnVector.size());
+        size_t i = 0;
+        for (TableColumnVector::const_iterator aIt = maTableColumnVector.begin(), aEnd = maTableColumnVector.end();
+                aIt != aEnd; ++aIt, ++i)
+        {
+            aNames[i] = (*aIt)->getName();
+        }
+        pDBData->SetTableColumnNames( aNames);
         return true;
     }
     return false;
@@ -103,18 +117,11 @@ TableColumns& TableColumnsBuffer::createTableColumns()
     return *xTableColumns;
 }
 
-bool TableColumnsBuffer::finalizeImport( const Reference< XDatabaseRange >& rxDatabaseRange )
+bool TableColumnsBuffer::finalizeImport( ScDBData* pDBData )
 {
     TableColumns* pTableColumns = getActiveTableColumns();
-    if( pTableColumns && rxDatabaseRange.is() ) try
-    {
-        pTableColumns->finalizeImport( rxDatabaseRange );
-        // return true to indicate available table columns
-        return true;
-    }
-    catch( Exception& )
-    {
-    }
+    if ( pTableColumns )
+        return pTableColumns->finalizeImport( pDBData );
     return false;
 }
 
