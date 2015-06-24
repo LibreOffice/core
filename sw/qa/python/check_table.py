@@ -1,6 +1,7 @@
 import math
 import unittest
 from org.libreoffice.unotest import UnoInProcess
+from com.sun.star.beans import PropertyValue
 from com.sun.star.uno import RuntimeException
 from com.sun.star.table import BorderLine
 from com.sun.star.table import BorderLine2
@@ -413,6 +414,42 @@ class CheckTable(unittest.TestCase):
             self.assertTrue(math.isnan(xTable.Data[1][x]))
             self.assertTrue(math.isnan(xTable.Data[2][x]))
         xDoc.dispose()
+
+    def test_chartdataprovider(self):
+        xDoc = CheckTable._uno.openEmptyWriterDoc()
+        xTable = xDoc.createInstance("com.sun.star.text.TextTable")
+        xTable.initialize(4, 3)
+        xCursor = xDoc.Text.createTextCursor()
+        xDoc.Text.insertTextContent(xCursor, xTable, False)
+        xTable.ChartColumnAsLabel = False
+        xTable.ChartRowAsLabel = False
+        xTable.Data = ((1,2,3), (4,5,6), (7,8,9), (10,11,12))
+        self.assertTrue(xTable.Name == 'Table1')
+        self.assertIn('com.sun.star.text.GenericTextDocument', xDoc.SupportedServiceNames)
+        xChartdataprovider = xDoc.createInstance('com.sun.star.chart2.data.DataProvider')
+        self.assertIs(type(xChartdataprovider.ImplementationName), type('SwChartDataProvider')) # not testing value, just type and coverage
+        self.assertTrue(xChartdataprovider.supportsService('com.sun.star.chart2.data.DataProvider'))
+        self.assertFalse(xChartdataprovider.supportsService('foo'))
+        self.assertIn('com.sun.star.chart2.data.DataProvider', xChartdataprovider.SupportedServiceNames)
+        pv = PropertyValue()
+        pv.Name = 'CellRangeRepresentation'
+        pv.Value = 'Table1.A1:C2'
+        xDataSource = xChartdataprovider.createDataSource((pv,))
+        self.assertEqual(len(xDataSource.DataSequences), 3)
+        expectedValues = ((1,4), (2,5), (3,6))
+        expectedCellrange = ('A1:A2', 'B1:B2', 'C1:C2')
+        for col in range(3):
+            xSeq = xDataSource.DataSequences[col].Values
+            self.assertIs(type(xSeq.ImplementationName), type('SwChartDataSequence')) # not testing value, just type and coverage
+            self.assertTrue(xSeq.supportsService('com.sun.star.chart2.data.DataSequence'))
+            self.assertFalse(xSeq.supportsService('foo'))
+            self.assertIn('com.sun.star.chart2.data.DataSequence', xSeq.SupportedServiceNames)
+            self.assertEqual(xSeq.SourceRangeRepresentation, 'Table1.%s' % expectedCellrange[col])
+            self.assertEqual(xSeq.Data, expectedValues[col])
+            self.assertEqual(xSeq.NumericalData, expectedValues[col])
+            self.assertEqual(
+                    [int(txtval) for txtval in xSeq.TextualData],
+                    [val         for    val in expectedValues[col]])
 
 if __name__ == '__main__':
     unittest.main()
