@@ -22,6 +22,7 @@
 
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include "autofilterbuffer.hxx"
+#include "tablecolumnsbuffer.hxx"
 #include "workbookhelper.hxx"
 
 namespace oox {
@@ -52,10 +53,13 @@ public:
     void                importTable( SequenceInputStream& rStrm, sal_Int16 nSheet );
     /** Creates a new auto filter and stores it internally. */
     inline AutoFilter&  createAutoFilter() { return maAutoFilters.createAutoFilter(); }
+    /** Creates a new tableColumns handler and stores it internally. */
+    inline TableColumns&  createTableColumns() { return maTableColumns.createTableColumns(); }
 
     /** Creates a database range from this tables. */
     void                finalizeImport();
     void                applyAutoFilters();
+    void                applyTableColumns();
 
     /** Returns the unique table identifier. */
     inline sal_Int32    getTableId() const { return maModel.mnId; }
@@ -80,6 +84,7 @@ public:
 private:
     TableModel          maModel;
     AutoFilterBuffer    maAutoFilters;      /// Filter settings for this table.
+    TableColumnsBuffer  maTableColumns;     /// Column names of this table.
     OUString     maDBRangeName;      /// Name of the databae range in the Calc document.
     ::com::sun::star::table::CellRangeAddress
                         maDestRange;        /// Validated range of the table in the worksheet.
@@ -100,6 +105,8 @@ public:
     void                finalizeImport();
     /** Applies autofilters from created database range ( requires finalizeImport to have run before being called */
     void                applyAutoFilters();
+    /** Applies columns names from created database range ( requires finalizeImport to have run before being called */
+    void                applyTableColumns();
     /** Returns a table by its identifier. */
     TableRef            getTable( sal_Int32 nTableId ) const;
     /** Returns a table by its display name. */

@@ -207,6 +207,8 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/stylesbuffer \
 	sc/source/filter/oox/stylesfragment \
 	sc/source/filter/oox/tablebuffer \
+	sc/source/filter/oox/tablecolumnsbuffer \
+	sc/source/filter/oox/tablecolumnscontext \
 	sc/source/filter/oox/tablefragment \
 	sc/source/filter/oox/themebuffer \
 	sc/source/filter/oox/unitconverter \
