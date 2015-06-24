@@ -235,7 +235,7 @@ Menu RID_POPUP_TAB
         MenuItem
         {
             Identifier = FID_TAB_TOGGLE_GRID ;
-            Text [ en-US ] = "Sheet ~Gridlines..." ;
+            Text [ en-US ] = "Sheet ~Gridlines" ;
         };
         MenuItem
         {
