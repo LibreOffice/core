@@ -935,7 +935,7 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
                         pVout = 0;
 
                     OSL_ENSURE( OUTDEV_VIRDEV != pOut->GetOutDevType() ||
-                            pShell->GetViewOptions()->IsPDFExport(),
+                            pShell->GetViewOptions()->IsPDFExport() || pShell->isOutputToWindow(),
                             "pOut should not be a virtual device" );
 
                     pGrfNd->StartGraphicAnimation(pOut, aAlignedGrfArea.Pos(),

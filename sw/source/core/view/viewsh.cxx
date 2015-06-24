@@ -139,6 +139,16 @@ bool SwViewShell::isTiledRendering() const
     return getIDocumentDrawModelAccess()->GetDrawModel()->isTiledRendering();
 }
 
+void SwViewShell::setOutputToWindow(bool bOutputToWindow)
+{
+    mbOutputToWindow = bOutputToWindow;
+}
+
+bool SwViewShell::isOutputToWindow() const
+{
+    return mbOutputToWindow;
+}
+
 static void
 lcl_PaintTransparentFormControls(SwViewShell & rShell, SwRect const& rRect)
 {

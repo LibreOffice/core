@@ -192,6 +192,9 @@ protected:
 
     bool mbInLibreOfficeKitCallback;
 
+    /// The virtual device we paint to will end up on the screen.
+    bool mbOutputToWindow;
+
 public:
     TYPEINFO();
 
@@ -579,6 +582,9 @@ public:
     void setTiledRendering(bool bTiledRendering);
     /// Are we doing tiled rendering?
     bool isTiledRendering() const;
+
+    void setOutputToWindow(bool bOutputToWindow);
+    bool isOutputToWindow() const;
 
 };
 

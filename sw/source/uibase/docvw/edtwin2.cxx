@@ -467,7 +467,11 @@ void SwEditWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
               GetView().GetVisArea().GetHeight() <= 0 )
         Invalidate( rRect );
     else
+    {
+        pWrtShell->setOutputToWindow(true);
         pWrtShell->Paint(rRenderContext, rRect);
+        pWrtShell->setOutputToWindow(false);
+    }
 
     if( bPaintShadowCrsr )
         m_pShadCrsr->Paint();
