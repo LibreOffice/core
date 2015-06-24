@@ -170,6 +170,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     mnLockPaint( 0 ),
     mbSelectAll(false),
     mbInLibreOfficeKitCallback(false),
+    mbOutputToWindow(false),
     mpPrePostOutDev(0), // #i72754#
     maPrePostMapMode()
 {
@@ -246,6 +247,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     mnLockPaint( 0 ),
     mbSelectAll(false),
     mbInLibreOfficeKitCallback(false),
+    mbOutputToWindow(false),
     mpPrePostOutDev(0), // #i72754#
     maPrePostMapMode()
 {
