@@ -2149,5 +2149,4 @@ void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
     else
         rDPIX = rDPIY = 96;
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
