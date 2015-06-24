@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// Gross inclusion hacks for now ...
+#include <sal/config.h>
 
-#include "../../../headless/svpgdi.cxx"
+#include <basegfx/range/b2ibox.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
