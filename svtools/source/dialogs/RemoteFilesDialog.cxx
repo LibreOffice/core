@@ -163,6 +163,8 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
         m_pOpen_btn->Hide();
     }
 
+    m_pOpen_btn->SetClickHdl( LINK( this, RemoteFilesDialog, OkHdl ) );
+
     m_pPath = VclPtr<Breadcrumb>::Create( get<vcl::Window>("breadcrumb_container") );
     m_pPath->set_hexpand(true);
     m_pPath->SetClickHdl( LINK( this, RemoteFilesDialog, SelectBreadcrumbHdl ) );
@@ -650,9 +652,12 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
         m_sPath = pData->maURL;
 
         m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DECODE_WITH_CHARSET ) );
+
+        m_pOpen_btn->Enable( true );
     }
     else
     {
+        m_pOpen_btn->Enable( false );
         m_sPath = "";
         m_pName_ed->SetText( "" );
     }
@@ -718,6 +723,12 @@ IMPL_LINK ( RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr )
         OpenURL( pPtr->GetHdlURL() );
     }
 
+    return 1;
+}
+
+IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
+{
+    EndDialog( RET_OK );
     return 1;
 }
 

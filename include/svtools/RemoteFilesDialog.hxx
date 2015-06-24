@@ -135,6 +135,8 @@ private:
     DECL_LINK( TreeExpandHdl, SvTreeListBox * );
 
     DECL_LINK( SelectBreadcrumbHdl, Breadcrumb * );
+
+    DECL_LINK( OkHdl, void * );
 };
 
 #endif // INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
