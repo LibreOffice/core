@@ -943,6 +943,7 @@ void WorksheetGlobals::finalizeWorksheetImport()
     // assumes getTables().finalizeImport ( which creates the DatabaseRanges )
     // has been called already
     getTables().applyAutoFilters();
+    getTables().applyTableColumns();
 
     getCondFormats().finalizeImport();
     lclUpdateProgressBar( mxFinalProgress, 0.25 );

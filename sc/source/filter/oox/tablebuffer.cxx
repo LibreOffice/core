@@ -130,6 +130,11 @@ void Table::applyAutoFilters()
     }
 }
 
+void Table::applyTableColumns()
+{
+    maTableColumns.finalizeImport( findDatabaseRangeByIndex( mnTokenIndex ));
+}
+
 TableBuffer::TableBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
@@ -154,6 +159,11 @@ void TableBuffer::finalizeImport()
 void TableBuffer::applyAutoFilters()
 {
     maIdTables.forEachMem( &Table::applyAutoFilters );
+}
+
+void TableBuffer::applyTableColumns()
+{
+    maIdTables.forEachMem( &Table::applyTableColumns );
 }
 
 TableRef TableBuffer::getTable( sal_Int32 nTableId ) const

@@ -23,6 +23,8 @@
 #include <oox/helper/refvector.hxx>
 #include "workbookhelper.hxx"
 
+class ScDBData;
+
 namespace oox {
 namespace xls {
 
@@ -37,6 +39,8 @@ public:
     void                importTableColumn( const AttributeList& rAttribs );
     /** Imports table column settings from the TABLECOLUMN (?) record. */
     void                importTableColumn( SequenceInputStream& rStrm );
+    /** Gets the name of this column. */
+    const OUString&     getName() const;
 
 private:
     OUString            maName;
@@ -57,8 +61,8 @@ public:
     /** Creates a new table column and stores it internally. */
     TableColumn&        createTableColumn();
 
-    /** Applies the columns to the passed database range descriptor. */
-    bool                finalizeImport( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDatabaseRange >& rxDatabaseRange );
+    /** Applies the columns to the passed database range. */
+    bool                finalizeImport( ScDBData* pDBData );
 
 private:
     typedef RefVector< TableColumn > TableColumnVector;
@@ -75,9 +79,9 @@ public:
     /** Creates a new table columns object and stores it internally. */
     TableColumns&       createTableColumns();
 
-    /** Applies the table columns to the passed database range object.
+    /** Applies the table columns to the passed database range.
         @return  True = this buffer contains valid table column settings. */
-    bool                finalizeImport( const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDatabaseRange >& rxDatabaseRange );
+    bool                finalizeImport( ScDBData* pDBData );
 
 private:
     /** Returns the table columns object used. */
