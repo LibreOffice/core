@@ -311,6 +311,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
     }
     if( pKey )
     {
+        m_pParent->SetDataModified( true );
         PPDValue* pValue =
             (PPDValue*)pBox->GetEntryData( pBox->GetSelectEntryPos() );
         m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
@@ -480,6 +481,7 @@ IMPL_LINK( RTSDevicePage, SelectHdl, ListBox*, pBox )
             FillValueBox( pKey );
         }
     }
+    m_pParent->SetDataModified( true );
     return 0;
 }
 
@@ -815,10 +817,12 @@ extern "C" {
         int nRet = 0;
         RTSDialog aDialog( rJobData, rJobData.m_aPrinterName, false );
 
+        // return 0 if cancel was pressed or if the data
+        // weren't modified, 1 otherwise
         if( aDialog.Execute() )
         {
             rJobData = aDialog.getSetup();
-            nRet = 1;
+            nRet = aDialog.GetDataModified() ? 1 : 0;
         }
 
         return nRet;

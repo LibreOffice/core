@@ -69,6 +69,8 @@ class RTSDialog : public TabDialog
     // some resources
     OUString                m_aInvalidString;
 
+    bool mbDataModified;
+
     DECL_LINK( ActivatePage, TabControl* );
     DECL_LINK( ClickButton, Button* );
 
@@ -79,6 +81,9 @@ public:
     ~RTSDialog();
 
     const ::psp::PrinterInfo& getSetup() const { return m_aJobData; }
+
+    void SetDataModified( bool bModified ) { mbDataModified = bModified; }
+    bool GetDataModified() const { return mbDataModified; }
 };
 
 class RTSPaperPage : public TabPage

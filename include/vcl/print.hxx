@@ -288,11 +288,12 @@ public:
 
     virtual void                Error();
 
-    const OUString&            GetName() const             { return maPrinterName; }
-    const OUString&            GetDriverName() const       { return maDriver; }
-    sal_Bool                        IsDefPrinter() const        { return mbDefPrinter; }
-    sal_Bool                        IsDisplayPrinter() const    { return mpDisplayDev != NULL; }
-    sal_Bool                        IsValid() const             { return !IsDisplayPrinter(); }
+    const OUString&             GetName() const             { return maPrinterName; }
+    const OUString&             GetDriverName() const       { return maDriver; }
+    bool                        IsDefPrinter() const        { return mbDefPrinter; }
+    void                        SetDefPrinter(bool bDef)    {  mbDefPrinter = bDef; }
+    bool                        IsDisplayPrinter() const    { return mpDisplayDev != nullptr; }
+    bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
     sal_uLong                       GetCapabilities( sal_uInt16 nType ) const;
     sal_Bool                        HasSupport( PrinterSupport eFeature ) const;

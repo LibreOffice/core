@@ -816,7 +816,12 @@ bool PrinterController::setupPrinter( Window* i_pParent )
 
         // reset paper size back to last configured size, not
         // whatever happens to be the current page
-        resetPaperToLastConfigured();
+        // (but only if the printer config has changed, otherwise
+        // don't override printer page auto-detection - tdf#91362)
+        if (!mpImplData->mpPrinter->IsDefPrinter())
+        {
+            resetPaperToLastConfigured();
+        }
 
         // call driver setup
         bRet = mpImplData->mpPrinter->Setup( i_pParent );
@@ -845,6 +850,8 @@ bool PrinterController::setupPrinter( Window* i_pParent )
             {
                 mpImplData->maPageCache.invalidate();
             }
+            // Settings have been modified (i.e. this printer is no longer default )
+            mpImplData->mpPrinter->SetDefPrinter( false );
         }
         else
         {
