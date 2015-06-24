@@ -215,7 +215,7 @@ static void lcl_ClearArea( const SwFrm &rFrm,
     }
 }
 
-void SwNoTextFrm::Paint(vcl::RenderContext& /*rRenderContext*/, SwRect const& rRect, SwPrintData const*const) const
+void SwNoTextFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, SwPrintData const*const) const
 {
     if ( Frm().IsEmpty() )
         return;
@@ -245,8 +245,7 @@ void SwNoTextFrm::Paint(vcl::RenderContext& /*rRenderContext*/, SwRect const& rR
 
     SfxProgress::EnterLock(); // No progress reschedules in paint (SwapIn)
 
-    OutputDevice *pOut = pSh->GetOut();
-    pOut->Push();
+    rRenderContext.Push();
     bool bClip = true;
     tools::PolyPolygon aPoly;
 
@@ -258,12 +257,12 @@ void SwNoTextFrm::Paint(vcl::RenderContext& /*rRenderContext*/, SwRect const& rR
     // #i13147# - add 2nd parameter with value <true> to
     // method call <FindFlyFrm().GetContour(..)> to indicate that it is called
     // for paint in order to avoid load of the intrinsic graphic.
-    if ( ( !pOut->GetConnectMetaFile() ||
+    if ( ( !rRenderContext.GetConnectMetaFile() ||
            !pSh->GetWin() ) &&
          FindFlyFrm()->GetContour( aPoly, true )
        )
     {
-        pOut->SetClipRegion(vcl::Region(aPoly));
+        rRenderContext.SetClipRegion(vcl::Region(aPoly));
         bClip = false;
     }
 
@@ -294,23 +293,23 @@ void SwNoTextFrm::Paint(vcl::RenderContext& /*rRenderContext*/, SwRect const& rR
     {
         // Calculate the four to-be-deleted rectangles
         if( pSh->GetWin() )
-            ::lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, aNormal );
+            ::lcl_ClearArea( *this, rRenderContext, aPaintArea, aNormal );
 
         // The intersection of the PaintArea and the Bitmap contains the absolutely visible area of the Frame
         aPaintArea._Intersection( aNormal );
 
         if ( bClip )
-            pOut->IntersectClipRegion( aPaintArea.SVRect() );
+            rRenderContext.IntersectClipRegion( aPaintArea.SVRect() );
         /// delete unused 3rd parameter
-        PaintPicture( pOut, aGrfArea );
+        PaintPicture( &rRenderContext, aGrfArea );
     }
     else
         // If it's not visible, simply delete the given Area
-        lcl_ClearArea( *this, *pSh->GetOut(), aPaintArea, SwRect() );
+        lcl_ClearArea( *this, rRenderContext, aPaintArea, SwRect() );
     if( pGrfNd )
         pGrfNd->SetFrameInPaint( false );
 
-    pOut->Pop();
+    rRenderContext.Pop();
     SfxProgress::LeaveLock();
 }
 
