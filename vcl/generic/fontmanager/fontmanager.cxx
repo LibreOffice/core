@@ -1089,7 +1089,7 @@ OUString PrintFontManager::convertTrueTypeName( void* pRecord )
                 eEncoding = RTL_TEXTENCODING_UTF8;
                 break;
             default:
-                SAL_WARN("vcl", "Unimplmented mac encoding " << pNameRecord->encodingID << " to unicode conversion");
+                SAL_WARN("vcl", "Unimplemented mac encoding " << pNameRecord->encodingID << " to unicode conversion");
                 break;
         }
         if (eEncoding != RTL_TEXTENCODING_DONTKNOW)
