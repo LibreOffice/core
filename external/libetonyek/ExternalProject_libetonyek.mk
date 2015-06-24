@@ -19,6 +19,7 @@ $(eval $(call gb_ExternalProject_use_externals,libetonyek,\
 	boost_headers \
 	glm_headers \
 	libxml2 \
+	mdds_headers \
 	revenge \
 	zlib \
 ))
