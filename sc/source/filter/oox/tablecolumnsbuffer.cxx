@@ -55,6 +55,7 @@ void TableColumn::importTableColumn( const AttributeList& rAttribs )
 void TableColumn::importTableColumn( SequenceInputStream& /*rStrm*/ )
 {
     /* XXX not implemented */
+    (void) mnId;
 }
 
 const OUString& TableColumn::getName() const
@@ -76,6 +77,7 @@ void TableColumns::importTableColumns( const AttributeList& rAttribs )
 void TableColumns::importTableColumns( SequenceInputStream& /*rStrm*/ )
 {
     /* XXX not implemented */
+    (void) mnCount;
 }
 
 TableColumn& TableColumns::createTableColumn()
