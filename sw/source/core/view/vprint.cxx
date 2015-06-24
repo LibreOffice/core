@@ -583,15 +583,15 @@ bool SwViewShell::PrintOrPDFExport(
 }
 
 void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
-                         OutputDevice* pOleOut, const Rectangle& rRect )
+                           vcl::RenderContext& rRenderContext, const Rectangle& rRect )
 {
     // For printing a shell is needed. Either the Doc already has one, than we
     // create a new view, or it has none, than we create the first view.
     SwViewShell *pSh;
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
-        pSh = new SwViewShell( *pDoc->getIDocumentLayoutAccess().GetCurrentViewShell(), 0, pOleOut,VSHELLFLAG_SHARELAYOUT );
+        pSh = new SwViewShell( *pDoc->getIDocumentLayoutAccess().GetCurrentViewShell(), 0, &rRenderContext,VSHELLFLAG_SHARELAYOUT );
     else
-        pSh = new SwViewShell( *pDoc, 0, pOpt, pOleOut);
+        pSh = new SwViewShell( *pDoc, 0, pOpt, &rRenderContext);
 
     {
         SET_CURR_SHELL( pSh );
@@ -614,11 +614,11 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
         // document because the thumbnail creation will not trigger a complete
         // formatting of the document.
 
-        pOleOut->Push( PushFlags::CLIPREGION );
-        pOleOut->IntersectClipRegion( aSwRect.SVRect() );
+        rRenderContext.Push( PushFlags::CLIPREGION );
+        rRenderContext.IntersectClipRegion( aSwRect.SVRect() );
         pSh->GetLayout()->Paint( aSwRect );
 
-        pOleOut->Pop();
+        rRenderContext.Pop();
         // first the CurrShell object needs to be destroyed!
     }
     delete pSh;
