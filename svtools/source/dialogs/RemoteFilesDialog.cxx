@@ -85,7 +85,7 @@ class FileViewContainer : public vcl::Window
 
     void changeFocus(bool bReverse)
     {
-        if(!bReverse && m_nCurrentFocus <= 4)
+        if(!bReverse && m_nCurrentFocus < 4)
         {
             m_pFocusWidgets[++m_nCurrentFocus]->SetFakeFocus(true);
             m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
