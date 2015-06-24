@@ -212,6 +212,7 @@ public:
 #if ENABLE_CAIRO_CANVAS
 
     static cairo_t*         createCairoContext(const basebmp::BitmapDeviceSharedPtr& rBuffer);
+    void                    clipRegion(cairo_t* cr);
 
 #endif // ENABLE_CAIRO_CANVAS
 
