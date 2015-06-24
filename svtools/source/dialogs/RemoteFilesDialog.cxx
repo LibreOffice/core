@@ -198,7 +198,7 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_pTreeView->SetDefaultExpandedEntryBmp(m_aFolderImage);
 
     m_pTreeView->SetSelectHdl( LINK( this, RemoteFilesDialog, TreeSelectHdl ) );
-    m_pTreeView->SetExpandedHdl( LINK( this, RemoteFilesDialog, TreeExpandHdl ) );
+    m_pTreeView->SetExpandingHdl( LINK( this, RemoteFilesDialog, TreeExpandHdl ) );
 
     sal_Int32 nPosX = m_pTreeView->GetSizePixel().Width();
     m_pSplitter->SetPosPixel(Point(nPosX, 0));
@@ -403,6 +403,7 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
         if( eResult == eSuccess )
         {
             m_pPath->SetURL( sURL );
+            setTreePath( sURL );
             m_pFilter_lb->Enable( true );
             m_pName_ed->Enable( true );
             m_pContainer->Enable( true );
@@ -414,58 +415,93 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
 
 void RemoteFilesDialog::fillTreeEntry( SvTreeListEntry* pParent )
 {
-    if( pParent && m_pTreeView->IsExpanded( pParent ) )
+    if( pParent && !m_pTreeView->IsExpanded( pParent ) )
     {
-        // remove childs
-
-        SvTreeList* pModel = m_pTreeView->GetModel();
-
-        if( pModel->HasChildren( pParent ) )
+        // fill only empty entries - containing only dummy entry
+        if( m_pTreeView->GetChildCount( pParent ) == 1 && pParent->GetUserData() )
         {
-            SvTreeListEntries& rEntries = pModel->GetChildList( pParent );
-            rEntries.clear();
-        }
+            ::std::vector< SortingData_Impl* > aContent;
 
-        // fill with new ones
+            FileViewContentEnumerator* pContentEnumerator = new FileViewContentEnumerator(
+                m_xEnv, aContent, m_aMutex, NULL );
 
-        ::std::vector< SortingData_Impl* > aContent;
+            OUString* pURL = static_cast< OUString* >( pParent->GetUserData() );
 
-        FileViewContentEnumerator* pContentEnumerator = new FileViewContentEnumerator(
-            m_xEnv, aContent, m_aMutex, NULL );
-
-        OUString* pURL = static_cast< OUString* >( pParent->GetUserData() );
-
-        if( pURL )
-        {
-            FolderDescriptor aFolder( *pURL );
-            Sequence< OUString > aBlackList;
-
-            EnumerationResult eResult =
-                pContentEnumerator->enumerateFolderContentSync( aFolder, aBlackList );
-
-            if ( SUCCESS == eResult )
+            if( pURL )
             {
-                unsigned int nChilds = 0;
+                FolderDescriptor aFolder( *pURL );
+                Sequence< OUString > aBlackList;
 
-                for( unsigned int i = 0; i < aContent.size(); i++ )
+                EnumerationResult eResult =
+                    pContentEnumerator->enumerateFolderContentSync( aFolder, aBlackList );
+
+                if ( SUCCESS == eResult )
                 {
-                    if( aContent[i]->mbIsFolder )
+                    unsigned int nChilds = 0;
+
+                    for( unsigned int i = 0; i < aContent.size(); i++ )
                     {
-                        SvTreeListEntry* pEntry = m_pTreeView->InsertEntry( aContent[i]->GetTitle(), pParent, true );
+                        if( aContent[i]->mbIsFolder )
+                        {
+                            SvTreeListEntry* pEntry = m_pTreeView->InsertEntry( aContent[i]->GetTitle(), pParent, true );
 
-                        OUString* sData = new OUString( aContent[i]->maTargetURL );
-                        pEntry->SetUserData( static_cast< void* >( sData ) );
+                            OUString* sData = new OUString( aContent[i]->maTargetURL );
+                            pEntry->SetUserData( static_cast< void* >( sData ) );
 
-                        nChilds++;
+                            nChilds++;
+                        }
                     }
-                }
-
-                if( nChilds == 0 )
-                {
-                    m_pTreeView->Collapse( pParent );
                 }
             }
         }
+    }
+}
+
+void RemoteFilesDialog::setTreePath( OUString sUrl )
+{
+    INetURLObject aURL( sUrl );
+    aURL.setFinalSlash();
+
+    OUString sPath = aURL.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+
+    SvTreeListEntry* pEntry = m_pTreeView->First();
+    bool end = false;
+
+    while( pEntry && !end )
+    {
+        if( pEntry->GetUserData() )
+        {
+            OUString sNodeUrl = *static_cast< OUString* >( pEntry->GetUserData() );
+
+            INetURLObject aUrlObj( sNodeUrl );
+            aUrlObj.setFinalSlash();
+
+            sNodeUrl = aUrlObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+
+            if( sPath == sNodeUrl)
+            {
+                m_pTreeView->Select( pEntry );
+
+                if( !m_pTreeView->IsExpanded( pEntry ) )
+                    m_pTreeView->Expand( pEntry );
+
+                end = true;
+            }
+            else if( sPath.startsWith( sNodeUrl ) )
+            {
+                if( !m_pTreeView->IsExpanded( pEntry ) )
+                    m_pTreeView->Expand( pEntry );
+
+                pEntry = m_pTreeView->FirstChild( pEntry );
+                pEntry = m_pTreeView->NextSibling( pEntry );
+            }
+            else
+            {
+                pEntry = m_pTreeView->NextSibling( pEntry );
+            }
+        }
+        else
+            break;
     }
 }
 

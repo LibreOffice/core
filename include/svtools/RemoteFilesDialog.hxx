@@ -114,6 +114,7 @@ private:
     FileViewResult OpenURL( OUString sURL );
 
     void fillTreeEntry( SvTreeListEntry* pParent );
+    void setTreePath( OUString sPath );
 
     DECL_LINK ( AddServiceHdl, void * );
     DECL_LINK ( SelectServiceHdl, void * );
