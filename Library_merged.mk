@@ -36,6 +36,8 @@ $(eval $(call gb_Library_add_ldflags,merged,\
 	/ignore:4049 \
 	/ignore:4217 \
 ))
+# cursors
+$(eval $(call gb_Library_add_nativeres,merged,vcl/salsrc))
 endif
 
 ifeq ($(OS),MACOSX)
