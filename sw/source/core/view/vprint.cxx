@@ -312,7 +312,7 @@ void SwViewShell::CalcPagesForPrint( sal_uInt16 nMax )
         aAction.SetWaitAllowed( false );
         aAction.SetReschedule( true );
 
-        aAction.Action();
+        aAction.Action(GetOut());
 
         maVisArea = aOldVis; //reset due to the paints
         Imp()->SetFirstVisPageInvalid();
