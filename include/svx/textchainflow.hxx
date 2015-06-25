@@ -20,22 +20,55 @@
 #ifndef INCLUDED_SVX_TEXTCHAINFLOW_HXX
 #define INCLUDED_SVX_TEXTCHAINFLOW_HXX
 
-#include <map>
-
-
 class SdrTextObj;
+class SdrOutliner;
+class NonOverflowingText;
+class OverflowingText;
+class TextChain;
 
-namespace rtl {
-    class OUString;
-}
+// XXX: Specialize class for Editing mode and non editing mode?
+// XXX: const qualifiers?
 
 class TextChainFlow {
 
     public:
-    TextChainFlow() {}
-    ~TextChainFlow() {}
+    TextChainFlow(SdrTextObj *pChainTarget);
+    ~TextChainFlow();
+
+    void CheckForFlowEvents(SdrOutliner *, SdrOutliner *);
+
+    bool IsOverflow();
+    bool IsUnderflow();
+
+    void ExecuteUnderflow(SdrOutliner *);
+    void ExecuteOverflow(SdrOutliner *, SdrOutliner *);
 
     protected:
+    TextChain *GetTextChain();
+
+    void impLeaveOnlyNonOverflowingText(SdrOutliner *);
+    void impMoveChainedTextToNextLink(SdrOutliner *);
+
+    OutlinerParaObject *impGetNonOverflowingParaObject(SdrOutliner *pOutliner);
+    OutlinerParaObject *impGetOverflowingParaObject(SdrOutliner *pOutliner);
+
+    private:
+
+    void impSetOutlinerToEmptyTxt(SdrOutliner *pOutliner);
+
+    SdrTextObj *mpTargetLink;
+    SdrTextObj *mpNextLink;
+
+    TextChain *mpTextChain;
+
+    bool bCheckedFlowEvents;
+
+    bool bUnderflow;
+    bool bOverflow;
+
+    OverflowingText *mpOverflowingTxt;
+    NonOverflowingText *mpNonOverflowingTxt;
+
 };
 
 #endif // INCLUDED_SVX_TEXTCHAINFLOW_HXX

@@ -24,6 +24,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/textchain.hxx>
+#include <svx/textchainflow.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
@@ -850,7 +851,7 @@ OutlinerParaObject *SdrTextObj::impGetOverflowingParaObject(SdrOutliner *pOutlin
     // Draw everything
     OutlinerParaObject *pNewText = pOutliner->CreateParaObject();
     return pNewText;
- }
+}
 
 void SdrTextObj::impMoveChainedTextToNextLink(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const
 {
@@ -1624,6 +1625,36 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
 
     /* Begin underflow handling */
 
+     // any parameter in the constructor?
+     // We need the outliner we get the overflow info from as well as
+     //  the outliner for "drawing" (e.g. a drawing or chaining outliner)
+     // maybe the latter ones can be passed at the time of overflow and such
+    TextChainFlow aTxtChainFlow(const_cast<SdrTextObj*>(this));
+    bool bIsOverflow;
+
+    aTxtChainFlow.CheckForFlowEvents(&rOutliner, NULL); // seconod parameter is to check whether you have to "prepare" the outliner's parameters
+
+    if (aTxtChainFlow.IsUnderflow() && !IsInEditMode())
+    {
+        // underflow-induced overflow
+        aTxtChainFlow.ExecuteUnderflow(&rOutliner);
+        bIsOverflow = aTxtChainFlow.IsOverflow();
+    } else {
+        bIsOverflow = aTxtChainFlow.IsOverflow();
+    }
+
+    if (bIsOverflow && !IsInEditMode()) {
+        // Initialize Chaining Outliner
+        SdrOutliner &rChainingOutl = pModel->GetChainingOutliner(this);
+        ImpInitDrawOutliner( rChainingOutl );
+        rChainingOutl.SetUpdateMode(true);
+
+        aTxtChainFlow.ExecuteOverflow(&rOutliner, &rChainingOutl);
+    }
+
+    /*
+
+    // Begin old code
     bool bIsPageUnderflow = !rOutliner.IsPageOverflow() && !IsInEditMode();
     if (bIsPageUnderflow) {
 
@@ -1632,7 +1663,6 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
             OutlinerParaObject *pNextLinkWholeText = pNextLink->GetOutlinerParaObject();
 
             // making whole text
-
             OutlinerParaObject *pCurText;
             pCurText = rOutliner.CreateParaObject(); // XXX: this is editing outliner in editing version
 
@@ -1648,19 +1678,19 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
             const_cast<SdrTextObj*>(this)->NbcSetOutlinerParaObject(pNewText);
         }
     } // You might be done at this point, unless there is an overflow and that's handled in std way.
-
+    */
     /* End underflow handling */
 
 
     /* Begin overflow handling */ // might be caused from underflow handling above
-
+    /*
     // If overflow occurs we have to cut the text at the right point
     // If in edit mode ImpEditEngine should have taken care of this
     if ( rOutliner.IsPageOverflow() && !IsInEditMode()) {
         // Save the overflowing text before changing the outliner's state
         const_cast<SdrTextObj*>(this)->mpOverflowingText = rOutliner.GetOverflowingText();
 
-        /* Leave only non overflowing text */
+        // Leave only non overflowing text
         impLeaveOnlyNonOverflowingText(&rOutliner);
 
         // Initialize Chaining Outliner
@@ -1668,7 +1698,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
         ImpInitDrawOutliner( rChainingOutl );
         rChainingOutl.SetUpdateMode(true);
 
-        /* Transfer of text to next link */
+        // Transfer of text to next link
         if (GetNextLinkInChain()
             && !GetPreventChainable() ) // we don't transfer text while dragging because of resizing
         {
@@ -1676,6 +1706,8 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
         }
 
     }
+
+    */
     /* End overflow handling */
 
     // set visualizing page at Outliner; needed e.g. for PageNumberField decomposition
