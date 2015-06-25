@@ -624,6 +624,9 @@ private:
 
 sal_Int32 ScDBData::GetColumnNameOffset( const OUString& rName ) const
 {
+    if (maTableColumnNames.empty())
+        return -1;
+
     ::std::vector<OUString>::const_iterator it(
             ::std::find_if( maTableColumnNames.begin(), maTableColumnNames.end(), TableColumnNameSearch( rName)));
     if (it != maTableColumnNames.end())
