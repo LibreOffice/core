@@ -169,7 +169,7 @@ bool SwViewShellImp::IsUpdateExpFields()
     return false;
 }
 
-void SwViewShellImp::SetFirstVisPage()
+void SwViewShellImp::SetFirstVisPage(OutputDevice* pRenderContext)
 {
     if ( pSh->mbDocSizeChgd && pSh->VisArea().Top() > pSh->GetLayout()->Frm().Height() )
     {
@@ -186,18 +186,18 @@ void SwViewShellImp::SetFirstVisPage()
         const bool bBookMode = pSwViewOption->IsViewLayoutBookMode();
 
         SwPageFrm *pPage = static_cast<SwPageFrm*>(pSh->GetLayout()->Lower());
-        SwRect aPageRect = pPage->GetBoundRect(pSh->GetOut());
+        SwRect aPageRect = pPage->GetBoundRect(pRenderContext);
         float fAmount = pSh->VisArea().Height() * 0.43;
         while ( pPage && aPageRect.Bottom() < pSh->VisArea().Top() + fAmount )
         {
             pPage = static_cast<SwPageFrm*>(pPage->GetNext());
             if ( pPage )
             {
-                aPageRect = pPage->GetBoundRect(pSh->GetOut());
+                aPageRect = pPage->GetBoundRect(pRenderContext);
                 if ( bBookMode && pPage->IsEmptyPage() )
                 {
                     const SwPageFrm& rFormatPage = pPage->GetFormatPage();
-                    aPageRect.SSize() = rFormatPage.GetBoundRect(pSh->GetOut()).SSize();
+                    aPageRect.SSize() = rFormatPage.GetBoundRect(pRenderContext).SSize();
                 }
             }
         }
@@ -273,14 +273,14 @@ Color SwViewShellImp::GetRetoucheColor() const
 SwPageFrm *SwViewShellImp::GetFirstVisPage()
 {
     if ( bFirstPageInvalid )
-        SetFirstVisPage();
+        SetFirstVisPage(pSh->GetOut());
     return pFirstVisPage;
 }
 
 const SwPageFrm *SwViewShellImp::GetFirstVisPage() const
 {
     if ( bFirstPageInvalid )
-        const_cast<SwViewShellImp*>(this)->SetFirstVisPage();
+        const_cast<SwViewShellImp*>(this)->SetFirstVisPage(pSh->GetOut());
     return pFirstVisPage;
 }
 
