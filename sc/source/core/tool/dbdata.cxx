@@ -276,6 +276,8 @@ void ScDBData::GetArea(ScRange& rRange) const
 
 void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
+    ::std::vector<OUString>().swap( maTableColumnNames);    // invalidate column names/offsets
+
     nTable  = nTab;
     nStartCol = nCol1;
     nStartRow = nRow1;
@@ -488,8 +490,13 @@ void ScDBData::UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos)
 
         bool bChanged = ( nTab != aRange.aStart.Tab() );
         if (bChanged)
+        {
+            // Save and restore column names, as SetArea() invalidates them.
+            ::std::vector<OUString> aNames( maTableColumnNames);
             SetArea( nTab, aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(),aRange.aEnd .Row() );
+            maTableColumnNames = aNames;
+        }
 
         //  MoveTo ist nicht noetig, wenn nur die Tabelle geaendert ist
 
@@ -510,12 +517,20 @@ void ScDBData::UpdateReference(ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
     SCTAB theTab2;
     GetArea( theTab1, theCol1, theRow1, theCol2, theRow2 );
     theTab2 = theTab1;
+    SCCOL nOldCol1 = theCol1, nOldCol2 = theCol2;
 
     bool bDoUpdate = ScRefUpdate::Update( pDoc, eUpdateRefMode,
                                             nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
                                             theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) != UR_NOTHING;
     if (bDoUpdate)
+    {
+        // MoveTo() invalidates column names via SetArea(); adjust, remember
+        // and set new column offsets for names.
+        AdjustTableColumnNames( eUpdateRefMode, nDx, nCol1, nOldCol1, nOldCol2, theCol1, theCol2);
+        ::std::vector<OUString> aNames( maTableColumnNames);
         MoveTo( theTab1, theCol1, theRow1, theCol2, theRow2 );
+        maTableColumnNames = aNames;
+    }
 
     ScRange aRangeAdvSource;
     if ( GetAdvancedQuerySource(aRangeAdvSource) )
@@ -542,7 +557,50 @@ void ScDBData::ExtendDataArea(ScDocument* pDoc)
 {
     // Extend the DB area to include data rows immediately below.
     // or shrink it if all cells are empty
+    SCCOL nOldCol1 = nStartCol, nOldCol2 = nEndCol;
     pDoc->GetDataArea(nTable, nStartCol, nStartRow, nEndCol, nEndRow, false, true);
+    if (nStartCol != nOldCol1 || nEndCol != nOldCol2)
+        ::std::vector<OUString>().swap( maTableColumnNames);    // invalidate column names/offsets
+}
+
+void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
+        SCCOL nOldCol1, SCCOL nOldCol2, SCCOL nNewCol1, SCCOL nNewCol2 )
+{
+    if (maTableColumnNames.empty())
+        return;
+
+    SCCOL nDiff1 = nNewCol1 - nOldCol1;
+    SCCOL nDiff2 = nNewCol2 - nOldCol2;
+    if (nDiff1 == nDiff2)
+        return;     // not moved or entirely moved, nothing to do
+
+    ::std::vector<OUString> aNewNames;
+    if (eUpdateRefMode == URM_INSDEL)
+    {
+        // nCol1 is the first column of the block that gets shifted, determine
+        // the head and tail elements that are to be copied for deletion or
+        // insertion.
+        size_t nHead = static_cast<size_t>(::std::max( nCol1 + (nDx < 0 ? nDx : 0) - nOldCol1, 0));
+        size_t nTail = static_cast<size_t>(::std::max( nOldCol2 - nCol1 + 1, 0));
+        size_t n = nHead + nTail;
+        if (0 < n && n <= maTableColumnNames.size())
+        {
+            if (nDx > 0)
+                n += nDx;
+            aNewNames.resize(n);
+            // Copy head.
+            for (size_t i = 0; i < nHead; ++i)
+            {
+                aNewNames[i] = maTableColumnNames[i];
+            }
+            // Copy tail, inserted middle range, if any, stays empty.
+            for (size_t i = n - nTail, j = maTableColumnNames.size() - nTail; i < n; ++i, ++j)
+            {
+                aNewNames[i] = maTableColumnNames[j];
+            }
+        }
+    } // else   empty aNewNames invalidates names/offsets
+    aNewNames.swap( maTableColumnNames);
 }
 
 namespace {

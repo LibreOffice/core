@@ -110,7 +110,6 @@ public:
     void        SetKeepFmt(bool bSet)           { bKeepFmt = bSet; }
     bool        IsStripData() const             { return bStripData; }
     void        SetStripData(bool bSet)         { bStripData = bSet; }
-    const ::std::vector< OUString >& GetTableColumnNames() { return maTableColumnNames; }
     void        SetTableColumnNames( const ::std::vector< OUString >& rNames ) { maTableColumnNames = rNames; }
 
     OUString GetSourceString() const;
@@ -154,6 +153,11 @@ public:
                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
 
     void ExtendDataArea(ScDocument* pDoc);
+
+private:
+
+    void AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, SCCOL nCol1,
+            SCCOL nOldCol1, SCCOL nOldCol2, SCCOL nNewCol1, SCCOL nNewCol2 );
 };
 
 class SC_DLLPUBLIC ScDBCollection
