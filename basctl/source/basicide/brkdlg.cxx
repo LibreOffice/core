@@ -43,7 +43,7 @@ bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
     // number n.  (Maybe it would be better to ignore all whitespace instead
     // of just spaces.)
     OUString aText(
-        rText.replaceAll(" ", OUString()));
+        rText.replaceAll(" ", ""));
     if (aText.isEmpty())
         return false;
     sal_Unicode cFirst = aText[0];
