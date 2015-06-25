@@ -1609,7 +1609,7 @@ void SwTextFrm::FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
             // If something went wrong, we need to reformat again
             if( !bGoOn )
             {
-                rInf.CtorInitTextFormatInfo( this );
+                rInf.CtorInitTextFormatInfo( getRootFrm()->GetCurrShell()->GetOut(), this );
                 rLine.CtorInitTextFormatter( this, &rInf );
                 rLine.SetDropLines( 1 );
                 rLine.CalcDropHeight( 1 );

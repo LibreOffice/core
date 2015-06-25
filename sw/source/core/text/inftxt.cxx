@@ -1351,10 +1351,10 @@ bool SwTextFormatInfo::InitHyph( const bool bAutoHyphen )
     return bAuto;
 }
 
-void SwTextFormatInfo::CtorInitTextFormatInfo( SwTextFrm *pNewFrm, const bool bNewInterHyph,
+void SwTextFormatInfo::CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwTextFrm *pNewFrm, const bool bNewInterHyph,
                                 const bool bNewQuick, const bool bTst )
 {
-    CtorInitTextPaintInfo( pNewFrm->getRootFrm()->GetCurrShell()->GetOut(), pNewFrm, SwRect() );
+    CtorInitTextPaintInfo( pRenderContext, pNewFrm, SwRect() );
 
     bQuick = bNewQuick;
     bInterHyph = bNewInterHyph;
@@ -1470,7 +1470,7 @@ void SwTextFormatInfo::Init()
 SwTextFormatInfo::SwTextFormatInfo(SwTextFrm *pFrame, const bool bInterHyphL,
                                    const bool bQuickL, const bool bTst)
 {
-    CtorInitTextFormatInfo(pFrame, bInterHyphL, bQuickL, bTst);
+    CtorInitTextFormatInfo(pFrame->getRootFrm()->GetCurrShell()->GetOut(), pFrame, bInterHyphL, bQuickL, bTst);
 }
 
 /**
