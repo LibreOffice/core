@@ -131,10 +131,6 @@ public:
     SwIndexReg();
     virtual ~SwIndexReg();
 
-    /// rtti, derived classes might do the same. If so, one can cast typesavely
-    /// via SwIndexReg.
-    TYPEINFO();
-
     void MoveTo( SwIndexReg& rArr );
     const SwIndex* GetFirstIndex() const { return m_pFirst; }
 };

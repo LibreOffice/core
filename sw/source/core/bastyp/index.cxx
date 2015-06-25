@@ -24,8 +24,6 @@
 
 #include <crossrefbookmark.hxx>
 
-TYPEINIT0(SwIndexReg);
-
 SwIndex::SwIndex(SwIndexReg *const pReg, sal_Int32 const nIdx)
     : m_nIndex( nIdx )
     , m_pIndexReg( pReg )
