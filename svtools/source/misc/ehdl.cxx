@@ -190,8 +190,7 @@ bool SfxErrorHandler::CreateString(
         const StringErrorInfo *pStringInfo = PTR_CAST(StringErrorInfo,pErr);
         if(pStringInfo)
         {
-            rStr = rStr.replaceAll(OUString("$(ARG1)"),
-                                      pStringInfo->GetErrorString());
+            rStr = rStr.replaceAll("$(ARG1)", pStringInfo->GetErrorString());
         }
         else
         {
@@ -347,7 +346,7 @@ bool SfxErrorHandler::GetErrorString(
             sal_uInt16 nResFlags = aErrorString.GetFlags();
             if ( nResFlags )
                 nFlags = nResFlags;
-            rStr = rStr.replaceAll(OUString("$(ERROR)"), aErrorString.GetString());
+            rStr = rStr.replaceAll("$(ERROR)", aErrorString.GetString());
             bRet = true;
         }
         else
@@ -415,7 +414,7 @@ bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
         if ( aTestEr )
         {
             rStr = static_cast<ResString>(aTestEr).GetString();
-            rStr = rStr.replaceAll(OUString("$(ARG1)"), aArg1 );
+            rStr = rStr.replaceAll("$(ARG1)", aArg1);
             bRet = true;
         }
         else
@@ -429,7 +428,7 @@ bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
             sal_uInt16 nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
             ResId aSfxResId( RID_ERRCTX, *pMgr );
             ErrorResource_Impl aEr( aSfxResId, nId );
-            rStr = rStr.replaceAll( OUString("$(ERR)"), static_cast<ResString>(aEr).GetString() );
+            rStr = rStr.replaceAll("$(ERR)", static_cast<ResString>(aEr).GetString());
         }
     }
 
