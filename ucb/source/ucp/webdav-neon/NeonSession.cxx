@@ -720,8 +720,7 @@ void NeonSession::Init()
         // Register the session with the lock store
         m_aNeonLockStore.registerSession( m_pHttpSession );
 
-        if ( m_aScheme.equalsIgnoreAsciiCase(
-            OUString(  "https"  ) ) )
+        if ( m_aScheme.equalsIgnoreAsciiCase("https") )
         {
             // Set a failure callback for certificate check
             ne_ssl_set_verify(

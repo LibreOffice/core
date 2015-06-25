@@ -376,8 +376,7 @@ bool UCBDeadPropertyValue::createFromXML( const OString & rInData,
                 }
                 else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeBoolean ) )
                 {
-                    if ( aStringValue.equalsIgnoreAsciiCase(
-                            OUString("true") ) )
+                    if ( aStringValue.equalsIgnoreAsciiCase("true") )
                         rOutData <<= true;
                     else
                         rOutData <<= false;

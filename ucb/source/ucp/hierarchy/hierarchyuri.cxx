@@ -123,9 +123,7 @@ void HierarchyUri::init() const
                 }
 
                 // Empty path segments?
-                if ( m_aUri.indexOf(
-                        OUString("//"),
-                        nStart ) != -1 )
+                if ( m_aUri.indexOf("//", nStart) != -1 )
                 {
                     // error, but remember that we did a init().
                     m_aPath = "/";
