@@ -265,7 +265,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                                 [&_rTables] (TNames::value_type name) { return !name.second; }) )
                 sRootEntryText  = ModuleRes(STR_ALL_TABLES);
             else if ( ::std::none_of(_rTables.begin(),_rTables.end(),
-                                     [&_rTables] (TNames::value_type name) { return !name.second; }) )
+                                     [&_rTables] (TNames::value_type name) { return name.second; }) )
                 sRootEntryText  = ModuleRes(STR_ALL_VIEWS);
             else
                 sRootEntryText  = ModuleRes(STR_ALL_TABLES_AND_VIEWS);
