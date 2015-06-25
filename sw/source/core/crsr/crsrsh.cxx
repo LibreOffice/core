@@ -1144,7 +1144,7 @@ void SwCrsrShell::GetPageNum( sal_uInt16 &rnPhyNum, sal_uInt16 &rnVirtNum,
     if( !bAtCrsrPos || 0 == (pCFrm = GetCurrFrm( bCalcFrm )) ||
                        0 == (pPg   = pCFrm->FindPageFrm()) )
     {
-        pPg = Imp()->GetFirstVisPage();
+        pPg = Imp()->GetFirstVisPage(GetOut());
         while( pPg && pPg->IsEmptyPage() )
             pPg = static_cast<const SwPageFrm *>(pPg->GetNext());
     }
@@ -1157,7 +1157,7 @@ sal_uInt16 SwCrsrShell::GetNextPrevPageNum( bool bNext )
 {
     SET_CURR_SHELL( this );
     // page number: first visible page or the one at the cursor
-    const SwPageFrm *pPg = Imp()->GetFirstVisPage();
+    const SwPageFrm *pPg = Imp()->GetFirstVisPage(GetOut());
     if( pPg )
     {
         const SwTwips nPageTop = pPg->Frm().Top();

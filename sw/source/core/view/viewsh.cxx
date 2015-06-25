@@ -1031,7 +1031,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
 
     //First get the old visible page, so we don't have to look
     //for it afterwards.
-    const SwFrm *pOldPage = Imp()->GetFirstVisPage();
+    const SwFrm *pOldPage = Imp()->GetFirstVisPage(GetWin());
 
     const SwRect aPrevArea( VisArea() );
     const bool bFull = aPrevArea.IsEmpty();
@@ -1478,7 +1478,7 @@ void SwViewShell::PaintDesktop(vcl::RenderContext& rRenderContext, const SwRect 
     }
     else
     {
-        const SwFrm *pPage = Imp()->GetFirstVisPage();
+        const SwFrm *pPage = Imp()->GetFirstVisPage(&rRenderContext);
         //Here we have to get the previous page since
         //GetFirstVisPage return the current one but
         //there is a portion of the previous page
@@ -1568,7 +1568,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
     if ( !GetWin() )
         return false;
 
-    const SwPageFrm *pPage = Imp()->GetFirstVisPage();
+    const SwPageFrm *pPage = Imp()->GetFirstVisPage(GetOut());
     const SwTwips nBottom = VisArea().Bottom();
     const SwTwips nRight  = VisArea().Right();
     bool bRet = false;

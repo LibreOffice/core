@@ -454,7 +454,7 @@ void SwLayAction::InternalAction()
     // number 1.  If we're doing a fake formatting, the number of the first
     // page is the number of the first visible page.
     SwPageFrm *pPage = IsComplete() ? static_cast<SwPageFrm*>(pRoot->Lower()) :
-                pImp->GetFirstVisPage();
+                pImp->GetFirstVisPage(pImp->GetShell()->GetOut());
     if ( !pPage )
         pPage = static_cast<SwPageFrm*>(pRoot->Lower());
 
@@ -621,7 +621,7 @@ void SwLayAction::InternalAction()
                     if( !IsComplete() && nPreInvaPage + 2 < nFirstPageNum )
                     {
                         pImp->SetFirstVisPageInvalid();
-                        SwPageFrm *pTmpPage = pImp->GetFirstVisPage();
+                        SwPageFrm *pTmpPage = pImp->GetFirstVisPage(pImp->GetShell()->GetOut());
                         nFirstPageNum = pTmpPage->GetPhyPageNum();
                         if( nPreInvaPage < nFirstPageNum )
                         {
@@ -2038,7 +2038,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
 
     SwPageFrm *pPage;
     if ( bVisAreaOnly )
-        pPage = pImp->GetFirstVisPage();
+        pPage = pImp->GetFirstVisPage(pViewShell->GetOut());
     else
         pPage = static_cast<SwPageFrm*>(pRoot->Lower());
 
