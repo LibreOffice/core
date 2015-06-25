@@ -346,6 +346,9 @@
           <menu:menuitem menu:id=".uno:Merge"/>
           <menu:menuitem menu:id=".uno:Substract"/>
           <menu:menuitem menu:id=".uno:Intersect"/>
+          <menu:menuseparator/>
+          <menu:menuitem menu:id=".uno:EqualizeWidth"/>
+          <menu:menuitem menu:id=".uno:EqualizeHeight"/>
         </menu:menupopup>
       </menu:menu>
       <menu:menuseparator/>

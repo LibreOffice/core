@@ -823,6 +823,14 @@ String STR_DistributeMarkedObjects
 {
     Text [ en-US ] = "Distribute selected objects";
 };
+String STR_EqualizeWidthMarkedObjects
+{
+    Text [ en-US ] = "Equalize Width %1";
+};
+String STR_EqualizeHeightMarkedObjects
+{
+    Text [ en-US ] = "Equalize Height %1";
+};
 String STR_EditCombine_OnePoly
 {
     Text [ en-US ] = "Combine %1" ;

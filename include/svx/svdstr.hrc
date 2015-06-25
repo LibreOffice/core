@@ -241,7 +241,9 @@
 #define STR_EditMergeSubstractPoly   (STR_EditBegin  + 55)
 #define STR_EditMergeIntersectPoly   (STR_EditBegin  + 56)
 #define STR_DistributeMarkedObjects  (STR_EditBegin  + 57)
-#define STR_EditEnd                  (STR_DistributeMarkedObjects)
+#define STR_EqualizeWidthMarkedObjects  (STR_EditBegin  + 58)
+#define STR_EqualizeHeightMarkedObjects (STR_EditBegin  + 59)
+#define STR_EditEnd                  (STR_EqualizeHeightMarkedObjects)
 
 #define STR_ExchangeBegin            (STR_EditEnd+1)
 #define STR_ExchangePaste            (STR_ExchangeBegin +0)

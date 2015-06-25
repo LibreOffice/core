@@ -507,6 +507,16 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_EQUALIZEWIDTH // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_EQUALIZEHEIGHT // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_CONNECT // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;

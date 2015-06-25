@@ -113,6 +113,8 @@
 #define SID_POLY_INTERSECT                  (SID_SFX_START + 681)
 #define SID_POLY_FORMEN                     (SID_SFX_START + 682)
 #define SID_DISTRIBUTE_DLG                  (SID_SFX_START + 683)
+#define SID_EQUALIZEWIDTH                   (SID_SFX_START + 684)
+#define SID_EQUALIZEHEIGHT                  (SID_SFX_START + 685)
 
 // Basic IDE-Id's
 

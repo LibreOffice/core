@@ -1173,6 +1173,44 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
     }
 }
 
+void SdrEditView::EqualizeMarkedObjects(bool bWidth)
+{
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    size_t nMarked = rMarkList.GetMarkCount();
+
+    if (nMarked < 2)
+        return;
+
+    SdrObject* pLastSelectedObj = rMarkList.GetMark(nMarked-1)->GetMarkedSdrObj();
+    Size aLastRectSize(pLastSelectedObj->GetLogicRect().GetSize());
+
+    const bool bUndo = IsUndoEnabled();
+
+    if (bUndo)
+        BegUndo();
+
+    for (size_t a = 0; a < nMarked-1; ++a)
+    {
+        SdrMark* pM = rMarkList.GetMark(a);
+        SdrObject* pObj = pM->GetMarkedSdrObj();
+        Rectangle aLogicRect(pObj->GetLogicRect());
+        Size aLogicRectSize(aLogicRect.GetSize());
+        if (bWidth)
+            aLogicRectSize.Width() = aLastRectSize.Width();
+        else
+            aLogicRectSize.Height() = aLastRectSize.Height();
+        aLogicRect.SetSize(aLogicRectSize);
+        pObj->SetLogicRect(aLogicRect);
+    }
+
+    SetUndoComment(
+        ImpGetResStr(bWidth ? STR_EqualizeWidthMarkedObjects : STR_EqualizeHeightMarkedObjects),
+        rMarkList.GetMarkDescription());
+
+    if (bUndo)
+        EndUndo();
+}
+
 void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
 {
     // #105899# Start of Combine-Undo put to front, else ConvertMarkedToPolyObj would

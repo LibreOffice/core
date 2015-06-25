@@ -284,13 +284,15 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             rSet.Put(SfxBoolItem(SID_OUTLINE_TEXT_AUTOFIT, bSet));
         }
 
-        rSet.DisableItem( SID_GROUP );
-        rSet.DisableItem( SID_COMBINE );
+        rSet.DisableItem(SID_GROUP);
+        rSet.DisableItem(SID_COMBINE);
         rSet.DisableItem(SID_DISTRIBUTE_DLG);
         rSet.DisableItem(SID_POLY_MERGE);
         rSet.DisableItem(SID_POLY_SUBSTRACT);
         rSet.DisableItem(SID_POLY_INTERSECT);
-        rSet.DisableItem( SID_CONNECT );
+        rSet.DisableItem(SID_EQUALIZEWIDTH);
+        rSet.DisableItem(SID_EQUALIZEHEIGHT);
+        rSet.DisableItem(SID_CONNECT);
     }
     // multi-selection
     else if( nMarkCount > 1 )
@@ -377,6 +379,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem(SID_POLY_MERGE);
                 rSet.DisableItem(SID_POLY_SUBSTRACT);
                 rSet.DisableItem(SID_POLY_INTERSECT);
+                rSet.DisableItem(SID_EQUALIZEWIDTH);
+                rSet.DisableItem(SID_EQUALIZEHEIGHT);
             }
 
             if (b3dObj                                        ||
@@ -438,10 +442,12 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         }
         if ( !mpDrawView->IsCombinePossible(false) )
         {
-            rSet.DisableItem( SID_COMBINE );
+            rSet.DisableItem(SID_COMBINE);
             rSet.DisableItem(SID_POLY_MERGE);
             rSet.DisableItem(SID_POLY_SUBSTRACT);
             rSet.DisableItem(SID_POLY_INTERSECT);
+            rSet.DisableItem(SID_EQUALIZEWIDTH);
+            rSet.DisableItem(SID_EQUALIZEHEIGHT);
         }
         if ( !mpDrawView->IsCombinePossible(true) )
         {
@@ -501,6 +507,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem(SID_POLY_MERGE);
         rSet.DisableItem(SID_POLY_SUBSTRACT);
         rSet.DisableItem(SID_POLY_INTERSECT);
+        rSet.DisableItem(SID_EQUALIZEWIDTH);
+        rSet.DisableItem(SID_EQUALIZEHEIGHT);
         rSet.DisableItem( SID_CONNECT );
         rSet.DisableItem( SID_ANIMATION_EFFECTS );
         rSet.DisableItem( SID_MODIFY_FIELD );

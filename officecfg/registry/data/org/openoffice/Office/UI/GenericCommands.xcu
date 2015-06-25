@@ -3472,6 +3472,16 @@
           <value xml:lang="en-US">~Subtract</value>
         </prop>
       </node>
+      <node oor:name=".uno:EqualizeWidth" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Equalize ~Width</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:EqualizeHeight" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Equalize ~Height</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SuperScript" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Superscript</value>

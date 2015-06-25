@@ -306,6 +306,20 @@
         Command = ".uno:Intersect" ; \
         Text [ en-US ] = "I~ntersect" ; \
             };
+#define ITEM_EQUALIZEWIDTH \
+    MenuItem\
+    {\
+        Identifier = SID_EQUALIZEWIDTH ; \
+        Command = ".uno:EqualizeWidth" ; \
+        Text [ en-US ] = "Equalize ~Width" ; \
+            };
+#define ITEM_EQUALIZEHEIGHT \
+    MenuItem\
+    {\
+        Identifier = SID_EQUALIZEHEIGHT ; \
+        Command = ".uno:EqualizeHeight" ; \
+        Text [ en-US ] = "Equalize ~Height" ; \
+            };
 
 #define MNSUB_FORMEN \
     MenuItem \
@@ -320,6 +334,12 @@
                 ITEM_POLY_MERGE \
                 ITEM_POLY_SUBSTRACT \
                 ITEM_POLY_INTERSECT \
+                MenuItem \
+                { \
+                    Separator = TRUE; \
+                }; \
+                ITEM_EQUALIZEWIDTH \
+                ITEM_EQUALIZEHEIGHT \
             };\
         };\
     };

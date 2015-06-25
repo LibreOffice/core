@@ -272,6 +272,11 @@ public:
     // for distribution dialog function
     void DistributeMarkedObjects();
 
+    // for setting either the width or height of all selected
+    // objects to the width/height of the last selected object
+    // of the selection
+    void EqualizeMarkedObjects(bool bWidth);
+
     // Decompose marked polypolygon objects into polygons.
     // Grouped objects are searched and decomposed, if all member objects are PathObjs.
     // bMakeLines=TRUE:  all polygones are decomposed into single lines resp. bezier segments

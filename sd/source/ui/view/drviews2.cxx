@@ -2272,6 +2272,19 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_EQUALIZEWIDTH:
+        case SID_EQUALIZEHEIGHT:
+        {
+            // End text edit to avoid conflicts
+            if(mpDrawView->IsTextEdit())
+                mpDrawView->SdrEndTextEdit();
+
+            mpDrawView->EqualizeMarkedObjects(nSId == SID_EQUALIZEWIDTH);
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
         case SID_DISMANTLE:  // BASIC
         {
             if ( mpDrawView->IsDismantlePossible(false) )
