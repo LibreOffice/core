@@ -2722,6 +2722,21 @@ bool CompareSwFrmFmts::operator()(SwFrmFmtSearch const& lhs, SwFrmFmt* const& rh
     return (lhs.name.compareTo( rhs->GetName() ) < 0);
 }
 
+
+#if (defined(DBG_UTIL) || defined(_DEBUG)) && (defined(WNT) || defined(_WIN32))
+// this only need when compile under windows-debug
+//  compiler want see this, but not needed
+bool PrefixCompareSwFrmFmts::operator()(SwFrmFmt* const& lhs, SwFrmFmt* const& rhs) const
+{
+    if (lhs->Which() < rhs->Which())
+        return true;
+    if (lhs->Which() > rhs->Which())
+        return false;
+    return (lhs->GetName().CompareTo( rhs->GetName() ) < 0);
+}
+#endif
+
+
 bool PrefixCompareSwFrmFmts::operator()(SwFrmFmt* const& lhs, SwFrmFmtSearch const& rhs) const
 {
     if (lhs->Which() < rhs.type)

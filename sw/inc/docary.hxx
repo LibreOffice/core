@@ -119,6 +119,9 @@ struct CompareSwFrmFmts
 
 struct PrefixCompareSwFrmFmts
 {
+#if (defined(DBG_UTIL) || defined(_DEBUG)) && (defined(WNT) || defined(_WIN32))
+    bool operator()(SwFrmFmt* const& lhs, SwFrmFmt* const& rhs) const;
+#endif
     bool operator()(SwFrmFmt* const& lhs, SwFrmFmtSearch const& rhs) const;
     bool operator()(SwFrmFmtSearch const& lhs, SwFrmFmt* const& rhs) const;
 };
