@@ -4385,7 +4385,7 @@ void SwTabFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, Sw
             }
 
             SwTabFrmPainter aHelper(*this);
-            aHelper.PaintLines(*gProp.pSGlobalShell->GetOut(), rRect);
+            aHelper.PaintLines(rRenderContext, rRect);
         }
 
         SwLayoutFrm::Paint( rRenderContext, rRect );
@@ -4398,7 +4398,7 @@ void SwTabFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, Sw
         aTabRect.Pos() += Frm().Pos();
         SwRect aTabOutRect( rRect );
         aTabOutRect.Intersection( aTabRect );
-        SwViewOption::DrawRect( gProp.pSGlobalShell->GetOut(), aTabOutRect, COL_LIGHTGRAY );
+        SwViewOption::DrawRect( &rRenderContext, aTabOutRect, COL_LIGHTGRAY );
     }
     const_cast<SwTabFrm*>(this)->ResetComplete();
 }
