@@ -83,7 +83,7 @@ inline OString remove(const OString &rIn,
  */
 inline OUString remove(const OUString &rIn,
     sal_Unicode c)
-{ return rIn.replaceAll(OUString(c), OUString()); }
+{ return rIn.replaceAll(OUString(c), ""); }
 
 /** Removes all occurrences of a character from within the source string
 
