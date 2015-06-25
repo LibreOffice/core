@@ -366,12 +366,12 @@ void SwLayAction::Action()
     if ( IsCalcLayout() )
         SetCheckPages( false );
 
-    InternalAction();
+    InternalAction(pImp->GetShell()->GetOut());
     bAgain |= RemoveEmptyBrowserPages();
     while ( IsAgain() )
     {
         bAgain = bNextCycle = false;
-        InternalAction();
+        InternalAction(pImp->GetShell()->GetOut());
         bAgain |= RemoveEmptyBrowserPages();
     }
     pRoot->DeleteEmptySct();
@@ -442,7 +442,7 @@ static void unlockPositionOfObjects( SwPageFrm *pPageFrm )
     }
 }
 
-void SwLayAction::InternalAction()
+void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 {
     OSL_ENSURE( pRoot->Lower()->IsPageFrm(), ":-( No page below the root.");
 
@@ -454,7 +454,7 @@ void SwLayAction::InternalAction()
     // number 1.  If we're doing a fake formatting, the number of the first
     // page is the number of the first visible page.
     SwPageFrm *pPage = IsComplete() ? static_cast<SwPageFrm*>(pRoot->Lower()) :
-                pImp->GetFirstVisPage(pImp->GetShell()->GetOut());
+                pImp->GetFirstVisPage(pRenderContext);
     if ( !pPage )
         pPage = static_cast<SwPageFrm*>(pRoot->Lower());
 
@@ -621,7 +621,7 @@ void SwLayAction::InternalAction()
                     if( !IsComplete() && nPreInvaPage + 2 < nFirstPageNum )
                     {
                         pImp->SetFirstVisPageInvalid();
-                        SwPageFrm *pTmpPage = pImp->GetFirstVisPage(pImp->GetShell()->GetOut());
+                        SwPageFrm *pTmpPage = pImp->GetFirstVisPage(pRenderContext);
                         nFirstPageNum = pTmpPage->GetPhyPageNum();
                         if( nPreInvaPage < nFirstPageNum )
                         {

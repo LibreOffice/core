@@ -109,7 +109,7 @@ class SwLayAction
 
     bool TurboAction();
     bool _TurboAction( const SwContentFrm * );
-    void InternalAction();
+    void InternalAction(OutputDevice* pRenderContext);
 
     static SwPageFrm *CheckFirstVisPage( SwPageFrm *pPage );
 
