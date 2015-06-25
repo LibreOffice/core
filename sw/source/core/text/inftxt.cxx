@@ -188,6 +188,35 @@ inline sal_Int32 GetMinLen( const SwTextSizeInfo &rInf )
     return std::min(nTextLen, nInfLen);
 }
 
+SwTextSizeInfo::SwTextSizeInfo()
+: m_pKanaComp(0)
+, m_pVsh(0)
+, m_pOut(0)
+, m_pRef(0)
+, m_pFnt(0)
+, m_pUnderFnt(0)
+, m_pFrm(0)
+, m_pOpt(0)
+, m_pText(0)
+, m_nIdx(0)
+, m_nLen(0)
+, m_nKanaIdx(0)
+, m_bOnWin    (false)
+, m_bNotEOL   (false)
+, m_bURLNotify(false)
+, m_bStopUnderflow(false)
+, m_bFootnoteInside(false)
+, m_bOtherThanFootnoteInside(false)
+, m_bMulti(false)
+, m_bFirstMulti(false)
+, m_bRuby(false)
+, m_bHanging(false)
+, m_bScriptSpace(false)
+, m_bForbiddenChars(false)
+, m_bSnapToGrid(false)
+, m_nDirection(0)
+{}
+
 SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
     : SwTextInfo( rNew ),
       m_pKanaComp(rNew.GetpKanaComp()),
@@ -332,6 +361,14 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew, const OUString* pTex
     ChkOutDev( *this );
 #endif
     SetLen( GetMinLen( *this ) );
+}
+
+SwTextSizeInfo::SwTextSizeInfo( SwTextFrm *pTextFrm, SwFont *pTextFnt,
+               const sal_Int32 nIndex,
+               const sal_Int32 nLength )
+    : m_bOnWin(false)
+{
+    CtorInitTextSizeInfo( pTextFrm, pTextFnt, nIndex, nLength );
 }
 
 void SwTextSizeInfo::SelectFont()

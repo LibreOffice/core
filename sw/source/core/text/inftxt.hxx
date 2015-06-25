@@ -194,34 +194,7 @@ protected:
     void CtorInitTextSizeInfo( SwTextFrm *pFrm, SwFont *pFnt = 0,
                    const sal_Int32 nIdx = 0,
                    const sal_Int32 nLen = COMPLETE_STRING );
-    SwTextSizeInfo()
-        : m_pKanaComp(0)
-        , m_pVsh(0)
-        , m_pOut(0)
-        , m_pRef(0)
-        , m_pFnt(0)
-        , m_pUnderFnt(0)
-        , m_pFrm(0)
-        , m_pOpt(0)
-        , m_pText(0)
-        , m_nIdx(0)
-        , m_nLen(0)
-        , m_nKanaIdx(0)
-        , m_bOnWin    (false)
-        , m_bNotEOL   (false)
-        , m_bURLNotify(false)
-        , m_bStopUnderflow(false)
-        , m_bFootnoteInside(false)
-        , m_bOtherThanFootnoteInside(false)
-        , m_bMulti(false)
-        , m_bFirstMulti(false)
-        , m_bRuby(false)
-        , m_bHanging(false)
-        , m_bScriptSpace(false)
-        , m_bForbiddenChars(false)
-        , m_bSnapToGrid(false)
-        , m_nDirection(0)
-        {}
+    SwTextSizeInfo();
 public:
     SwTextSizeInfo( const SwTextSizeInfo &rInf );
     SwTextSizeInfo( const SwTextSizeInfo &rInf, const OUString* pText,
@@ -230,11 +203,7 @@ public:
 
     SwTextSizeInfo( SwTextFrm *pTextFrm, SwFont *pTextFnt = 0,
                    const sal_Int32 nIndex = 0,
-                   const sal_Int32 nLength = COMPLETE_STRING )
-        : m_bOnWin(false)
-    {
-        CtorInitTextSizeInfo( pTextFrm, pTextFnt, nIndex, nLength );
-    }
+                   const sal_Int32 nLength = COMPLETE_STRING );
 
     // GetMultiAttr returns the text attribute of the multiportion,
     // if rPos is inside any multi-line part.
