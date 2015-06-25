@@ -1467,6 +1467,12 @@ void SwTextFormatInfo::Init()
     SetPaintOfst(0);
 }
 
+SwTextFormatInfo::SwTextFormatInfo(SwTextFrm *pFrame, const bool bInterHyphL,
+                                   const bool bQuickL, const bool bTst)
+{
+    CtorInitTextFormatInfo(pFrame, bInterHyphL, bQuickL, bTst);
+}
+
 /**
  * There are a few differences between a copy constructor
  * and the following constructor for multi-line formatting.
