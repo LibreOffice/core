@@ -144,7 +144,7 @@ bool SwTextFrm::CalcPrepFootnoteAdjust()
             bReArrange = false;
         if( !pCont || !pFootnote || bReArrange != (pFootnote->FindFootnoteBossFrm() == pBoss) )
         {
-            SwTextFormatInfo aInf( this );
+            SwTextFormatInfo aInf( getRootFrm()->GetCurrShell()->GetOut(), this );
             SwTextFormatter aLine( this, &aInf );
             aLine.TruncLines();
             SetPara( 0 ); // May be deleted!
