@@ -4135,9 +4135,8 @@ void SwFlyFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, Sw
     SwRect aRect( rRect );
     aRect._Intersection( Frm() );
 
-    OutputDevice* pOut = gProp.pSGlobalShell->GetOut();
-    pOut->Push( PushFlags::CLIPREGION );
-    pOut->SetClipRegion();
+    rRenderContext.Push( PushFlags::CLIPREGION );
+    rRenderContext.SetClipRegion();
     const SwPageFrm* pPage = FindPageFrm();
 
     const SwNoTextFrm *pNoText = Lower() && Lower()->IsNoTextFrm()
@@ -4240,8 +4239,8 @@ void SwFlyFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, Sw
             //one.
 
             // OD 2004-04-23 #116347#
-            pOut->Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
-            pOut->SetLineColor();
+            rRenderContext.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
+            rRenderContext.SetLineColor();
 
             pPage = FindPageFrm();
 
@@ -4264,20 +4263,20 @@ void SwFlyFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, Sw
                 }
                 if ( bContour )
                 {
-                    pOut->Push();
+                    rRenderContext.Push();
                     // #i80822#
                     // apply clip region under the same conditions, which are
                     // used in <SwNoTextFrm::Paint(..)> to set the clip region
                     // for painting the graphic/OLE. Thus, the clip region is
                     // also applied for the PDF export.
                     SwViewShell *pSh = getRootFrm()->GetCurrShell();
-                    if ( !pOut->GetConnectMetaFile() || !pSh || !pSh->GetWin() )
+                    if ( !rRenderContext.GetConnectMetaFile() || !pSh || !pSh->GetWin() )
                     {
-                        pOut->SetClipRegion(vcl::Region(aPoly));
+                        rRenderContext.SetClipRegion(vcl::Region(aPoly));
                     }
                     for ( size_t i = 0; i < aRegion.size(); ++i )
                         PaintBackground( aRegion[i], pPage, rAttrs, false, true );
-                    pOut->Pop();
+                    rRenderContext.Pop();
                 }
                 else
                     for ( size_t i = 0; i < aRegion.size(); ++i )
@@ -4291,7 +4290,7 @@ void SwFlyFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, Sw
                 PaintBorder( aTmp, pPage, rAttrs );
             }
 
-            pOut->Pop();
+            rRenderContext.Pop();
         }
     }
 
@@ -4331,8 +4330,8 @@ void SwFlyFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, Sw
         // Add subsidiary lines of fly frame and its lowers
         RefreshLaySubsidiary( pPage, aRect );
         // paint subsidiary lines of fly frame and its lowers
-        gProp.pSSpecSubsLines->PaintSubsidiary( pOut, NULL, gProp );
-        gProp.pSSubsLines->PaintSubsidiary( pOut, gProp.pSLines, gProp );
+        gProp.pSSpecSubsLines->PaintSubsidiary( &rRenderContext, NULL, gProp );
+        gProp.pSSubsLines->PaintSubsidiary( &rRenderContext, gProp.pSLines, gProp );
         if ( !bSubsLineRectsCreated )
             // unlock subsidiary lines
             gProp.pSSubsLines->LockLines( false );
@@ -4356,12 +4355,12 @@ void SwFlyFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, Sw
 
     // OD 19.12.2002 #106318# - first paint lines added by fly frame paint
     // and then unlock other lines.
-    gProp.pSLines->PaintLines( pOut, gProp );
+    gProp.pSLines->PaintLines( &rRenderContext, gProp );
     gProp.pSLines->LockLines( false );
     // have to paint frame borders added in heaven layer here...
     ProcessPrimitives(gProp.pBLines->GetBorderLines_Clear());
 
-    pOut->Pop();
+    rRenderContext.Pop();
 
     if ( gProp.pSProgress && pNoText )
         gProp.pSProgress->Reschedule();
