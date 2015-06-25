@@ -487,9 +487,9 @@ bool SwTextSizeInfo::_HasHint( const SwTextNode* pTextNode, sal_Int32 nPos )
     return pTextNode->GetTextAttrForCharAt(nPos);
 }
 
-void SwTextPaintInfo::CtorInitTextPaintInfo( SwTextFrm *pFrame, const SwRect &rPaint )
+void SwTextPaintInfo::CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrm *pFrame, const SwRect &rPaint )
 {
-    CtorInitTextSizeInfo( pFrame->getRootFrm()->GetCurrShell()->GetOut(), pFrame );
+    CtorInitTextSizeInfo( pRenderContext, pFrame );
     aTextFly.CtorInitTextFly( pFrame ),
     aPaintRect = rPaint;
     nSpaceIdx = 0;
@@ -533,7 +533,7 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
 
 SwTextPaintInfo::SwTextPaintInfo( SwTextFrm *pFrame, const SwRect &rPaint )
 {
-    CtorInitTextPaintInfo( pFrame, rPaint );
+    CtorInitTextPaintInfo( pFrame->getRootFrm()->GetCurrShell()->GetOut(), pFrame, rPaint );
 }
 
 extern Color aGlobalRetoucheColor;
@@ -1354,7 +1354,7 @@ bool SwTextFormatInfo::InitHyph( const bool bAutoHyphen )
 void SwTextFormatInfo::CtorInitTextFormatInfo( SwTextFrm *pNewFrm, const bool bNewInterHyph,
                                 const bool bNewQuick, const bool bTst )
 {
-    CtorInitTextPaintInfo( pNewFrm, SwRect() );
+    CtorInitTextPaintInfo( pNewFrm->getRootFrm()->GetCurrShell()->GetOut(), pNewFrm, SwRect() );
 
     bQuick = bNewQuick;
     bInterHyph = bNewInterHyph;
