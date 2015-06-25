@@ -804,8 +804,7 @@ void ScInputHandler::HideTipBelow()
     aManualTip.clear();
 }
 
-void ScInputHandler::ShowArgumentsTip( const OUString& rParagraph, OUString& rSelText, const ESelection& rSel,
-        bool bTryFirstSel )
+void ScInputHandler::ShowArgumentsTip( OUString& rSelText )
 {
     ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
     const sal_Unicode cSep = ScCompiler::GetNativeSymbolChar(ocSep);
@@ -932,34 +931,6 @@ void ScInputHandler::ShowArgumentsTip( const OUString& rParagraph, OUString& rSe
                 }
             }
         }
-        else if (bTryFirstSel)
-        {
-            sal_Int32 nPosition = 0;
-            OUString aText = pEngine->GetWord( 0, rSel.nEndPos-1 );
-            /* XXX: dubious, what is this condition supposed to exactly match? */
-            if (rSel.nEndPos <= aText.getLength() && aText[ rSel.nEndPos-1 ] == '=')
-            {
-                break;
-            }
-            OUString aNew;
-            nPosition = aText.getLength()+1;
-            ScTypedCaseStrSet::const_iterator it =
-                findText(*pFormulaDataPara, pFormulaDataPara->end(), aText, aNew, false);
-            if (it != pFormulaDataPara->end())
-            {
-                if( nPosition < rParagraph.getLength() && rParagraph[ nPosition ] =='(' )
-                {
-                    ShowTipBelow( aNew );
-                    bFound = true;
-                }
-                else
-                    break;
-            }
-            else
-            {
-                break;
-            }
-        }
         else
         {
             break;
@@ -986,7 +957,7 @@ void ScInputHandler::ShowTipCursor()
         {
             OUString aSelText( aParagraph.copy( 0, aSel.nEndPos ));
 
-            ShowArgumentsTip( aParagraph, aSelText, aSel, true);
+            ShowArgumentsTip( aSelText );
         }
     }
 }
@@ -1087,6 +1058,10 @@ void ScInputHandler::UseFormulaData()
         if ( aSel.nEndPos > aParagraph.getLength() )
             return;
 
+        if ( aParagraph.getLength() > aSel.nEndPos + 1 &&
+             rtl::isAsciiAlphanumeric( aParagraph[ aSel.nEndPos ] ) )
+            return;
+
         //  Is the cursor at the end of a word?
         if ( aSel.nEndPos > 0 )
         {
@@ -1112,7 +1087,7 @@ void ScInputHandler::UseFormulaData()
 
             // function name is complete:
             // show tip below the cell with function name and arguments of function
-            ShowArgumentsTip( aParagraph, aSelText, aSel, false);
+            ShowArgumentsTip( aSelText );
         }
     }
 }
