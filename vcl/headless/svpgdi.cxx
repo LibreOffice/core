@@ -192,6 +192,11 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
     }
     return true;
 #else
+    (void)nX;
+    (void)nY;
+    (void)nWidth;
+    (void)nHeight;
+    (void)nTransparency;
     return false;
 #endif
 }
