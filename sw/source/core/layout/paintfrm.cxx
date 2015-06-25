@@ -6394,7 +6394,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     _orBorderAndShadowBoundRect = pRenderContext->PixelToLogic( aPagePxRect.SVRect() );
 }
 
-SwRect SwPageFrm::GetBoundRect() const
+SwRect SwPageFrm::GetBoundRect(OutputDevice* pOutputDevice) const
 {
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
     SwRect aPageRect( Frm() );
@@ -6404,7 +6404,7 @@ SwRect SwPageFrm::GetBoundRect() const
         return SwRect( Point(0, 0), Size(0, 0) );
     }
 
-    SwPageFrm::GetBorderAndShadowBoundRect( aPageRect, pSh, pSh->GetOut(), aResult,
+    SwPageFrm::GetBorderAndShadowBoundRect( aPageRect, pSh, pOutputDevice, aResult,
         IsLeftShadowNeeded(), IsRightShadowNeeded(), SidebarPosition() ==  sw::sidebarwindows::SidebarPosition::RIGHT );
     return aResult;
 }

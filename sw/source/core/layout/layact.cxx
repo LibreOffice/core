@@ -1236,7 +1236,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
         SwRect aOldRect( aOldFrame );
         if( pLay->IsPageFrm() )
         {
-            aOldRect = static_cast<SwPageFrm*>(pLay)->GetBoundRect();
+            aOldRect = static_cast<SwPageFrm*>(pLay)->GetBoundRect(pLay->getRootFrm()->GetCurrShell()->GetOut());
         }
 
         pLay->Calc();
@@ -1264,7 +1264,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
             if ( pLay->IsPageFrm() )
             {
                 SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(pLay);
-                aPaint = pPageFrm->GetBoundRect();
+                aPaint = pPageFrm->GetBoundRect(pPageFrm->getRootFrm()->GetCurrShell()->GetOut());
             }
 
             bool bPageInBrowseMode = pLay->IsPageFrm();
@@ -1414,7 +1414,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
     // OD 11.11.2002 #104414# - add complete frame area as paint area, if frame
     // area has been already added and after formatting its lowers the frame area
     // is enlarged.
-    SwRect aBoundRect(pLay->IsPageFrm() ? static_cast<SwPageFrm*>(pLay)->GetBoundRect() : pLay->Frm() );
+    SwRect aBoundRect(pLay->IsPageFrm() ? static_cast<SwPageFrm*>(pLay)->GetBoundRect(pLay->getRootFrm()->GetCurrShell()->GetOut()) : pLay->Frm() );
 
     if ( bAlreadyPainted &&
          ( aBoundRect.Width() > aFrmAtCompletePaint.Width() ||
