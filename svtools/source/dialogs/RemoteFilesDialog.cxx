@@ -641,9 +641,19 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
 {
-    OUString sURL = m_pFileView->GetCurrentURL();
+    SvTreeListEntry* pEntry = m_pFileView->FirstSelected();
+    SvtContentEntry* pData = static_cast< SvtContentEntry* >( pEntry->GetUserData() );
 
-    OpenURL( sURL );
+    if( pData->mbIsFolder )
+    {
+        OUString sURL = m_pFileView->GetCurrentURL();
+
+        OpenURL( sURL );
+    }
+    else
+    {
+        EndDialog( RET_OK );
+    }
 
     return 1;
 }
