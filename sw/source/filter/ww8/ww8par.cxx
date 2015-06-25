@@ -4835,7 +4835,11 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     //For i120928,achieve the graphics from the special bookmark with is for graphic bullet
     {
         std::vector<const SwGrfNode*> vecBulletGrf;
+#if (defined(DBG_UTIL) || defined(_DEBUG)) && (defined(WNT) || defined(_WIN32))
+        std::list<SwFrmFmt*> vecFrmFmt;
+#else
         std::vector<SwFrmFmt*> vecFrmFmt;
+#endif
 
         IDocumentMarkAccess* const pMarkAccess =
                                                 rDoc.getIDocumentMarkAccess();
@@ -4903,11 +4907,21 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                             }
                         }
                     }
+#if (defined(DBG_UTIL) || defined(_DEBUG)) && (defined(WNT) || defined(_WIN32))
+                    // Remove additional pictures
+                    for (std::list<SwFrmFmt*>::iterator i = vecFrmFmt.begin(); i != vecFrmFmt.end(); ++i)
+                    {
+                        rDoc.DelLayoutFmt(*i);
+                    }
+#else
+// linker says "vector::size" is more then one defined ??? in windows-debug
+//   solved with using std::list
                     // Remove additional pictures
                     for (sal_uInt16 i = 0; i < vecFrmFmt.size(); ++i)
                     {
                         rDoc.DelLayoutFmt(vecFrmFmt[i]);
                     }
+#endif
                 }
             }
         }
