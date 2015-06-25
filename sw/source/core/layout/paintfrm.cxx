@@ -3295,7 +3295,7 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
         if ( !pPage->IsEmptyPage() )
         {
             SwRect aPaintRect;
-            SwPageFrm::GetBorderAndShadowBoundRect( pPage->Frm(), pSh, aPaintRect,
+            SwPageFrm::GetBorderAndShadowBoundRect( pPage->Frm(), pSh, &rRenderContext, aPaintRect,
                 bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
 
             if ( aRect.IsOver( aPaintRect ) )
@@ -3459,7 +3459,7 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
             const SwPageFrm& rFormatPage = pPage->GetFormatPage();
             aEmptyPageRect.SSize() = rFormatPage.Frm().SSize();
 
-            SwPageFrm::GetBorderAndShadowBoundRect( aEmptyPageRect, pSh, aPaintRect,
+            SwPageFrm::GetBorderAndShadowBoundRect( aEmptyPageRect, pSh, &rRenderContext, aPaintRect,
                 bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
             aPaintRect._Intersection( aRect );
 
@@ -6369,6 +6369,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
  */
 /*static*/ void SwPageFrm::GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
                                                         const SwViewShell*    _pViewShell,
+                                                        OutputDevice* pRenderContext,
                                                         SwRect& _orBorderAndShadowBoundRect,
                                                         bool bLeftShadow,
                                                         bool bRightShadow,
@@ -6376,9 +6377,8 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
                                                       )
 {
     SwRect aAlignedPageRect( _rPageRect );
-    ::SwAlignRect( aAlignedPageRect, _pViewShell, _pViewShell->GetOut() );
-    SwRect aPagePxRect =
-            _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
+    ::SwAlignRect( aAlignedPageRect, _pViewShell, pRenderContext );
+    SwRect aPagePxRect = pRenderContext->LogicToPixel( aAlignedPageRect.SVRect() );
     aPagePxRect.Bottom( aPagePxRect.Bottom() + mnShadowPxWidth + 1 );
     aPagePxRect.Top( aPagePxRect.Top() - mnShadowPxWidth - 1 );
 
@@ -6391,7 +6391,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     if(bLeftShadow) aPagePxRect.Left( aTmpRect.Left() - mnShadowPxWidth - 1);
     if(bRightShadow) aPagePxRect.Right( aTmpRect.Right() + mnShadowPxWidth + 1);
 
-    _orBorderAndShadowBoundRect = _pViewShell->GetOut()->PixelToLogic( aPagePxRect.SVRect() );
+    _orBorderAndShadowBoundRect = pRenderContext->PixelToLogic( aPagePxRect.SVRect() );
 }
 
 SwRect SwPageFrm::GetBoundRect() const
@@ -6404,7 +6404,7 @@ SwRect SwPageFrm::GetBoundRect() const
         return SwRect( Point(0, 0), Size(0, 0) );
     }
 
-    SwPageFrm::GetBorderAndShadowBoundRect( aPageRect, pSh, aResult,
+    SwPageFrm::GetBorderAndShadowBoundRect( aPageRect, pSh, pSh->GetOut(), aResult,
         IsLeftShadowNeeded(), IsRightShadowNeeded(), SidebarPosition() ==  sw::sidebarwindows::SidebarPosition::RIGHT );
     return aResult;
 }
