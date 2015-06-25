@@ -461,6 +461,9 @@ public:
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
 
     virtual Window              GetX11Window() SAL_OVERRIDE;
+
+    static void                 KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,
+        guint* pGdkKeyCode, GdkModifierType *pGdkModifiers);
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()

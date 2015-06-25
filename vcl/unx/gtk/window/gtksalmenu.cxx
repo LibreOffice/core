@@ -72,88 +72,6 @@ static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCo
     return aCommand;
 }
 
-static void KeyCodeToGdkKey ( const vcl::KeyCode& rKeyCode, guint* pGdkKeyCode, GdkModifierType *pGdkModifiers )
-{
-    if ( pGdkKeyCode == NULL || pGdkModifiers == NULL )
-        return;
-
-    // Get GDK key modifiers
-    GdkModifierType nModifiers = (GdkModifierType) 0;
-
-    if ( rKeyCode.IsShift() )
-        nModifiers = (GdkModifierType) ( nModifiers | GDK_SHIFT_MASK );
-
-    if ( rKeyCode.IsMod1() )
-        nModifiers = (GdkModifierType) ( nModifiers | GDK_CONTROL_MASK );
-
-    if ( rKeyCode.IsMod2() )
-        nModifiers = (GdkModifierType) ( nModifiers | GDK_MOD1_MASK );
-
-    *pGdkModifiers = nModifiers;
-
-    // Get GDK keycode.
-    guint nKeyCode = 0;
-
-    guint nCode = rKeyCode.GetCode();
-
-    if ( nCode >= KEY_0 && nCode <= KEY_9 )
-        nKeyCode = ( nCode - KEY_0 ) + GDK_0;
-    else if ( nCode >= KEY_A && nCode <= KEY_Z )
-        nKeyCode = ( nCode - KEY_A ) + GDK_A;
-    else if ( nCode >= KEY_F1 && nCode <= KEY_F26 )
-        nKeyCode = ( nCode - KEY_F1 ) + GDK_F1;
-    else
-    {
-        switch( nCode )
-        {
-        case KEY_DOWN:          nKeyCode = GDK_Down;            break;
-        case KEY_UP:            nKeyCode = GDK_Up;              break;
-        case KEY_LEFT:          nKeyCode = GDK_Left;            break;
-        case KEY_RIGHT:         nKeyCode = GDK_Right;           break;
-        case KEY_HOME:          nKeyCode = GDK_Home;            break;
-        case KEY_END:           nKeyCode = GDK_End;             break;
-        case KEY_PAGEUP:        nKeyCode = GDK_Page_Up;         break;
-        case KEY_PAGEDOWN:      nKeyCode = GDK_Page_Down;       break;
-        case KEY_RETURN:        nKeyCode = GDK_Return;          break;
-        case KEY_ESCAPE:        nKeyCode = GDK_Escape;          break;
-        case KEY_TAB:           nKeyCode = GDK_Tab;             break;
-        case KEY_BACKSPACE:     nKeyCode = GDK_BackSpace;       break;
-        case KEY_SPACE:         nKeyCode = GDK_space;           break;
-        case KEY_INSERT:        nKeyCode = GDK_Insert;          break;
-        case KEY_DELETE:        nKeyCode = GDK_Delete;          break;
-        case KEY_ADD:           nKeyCode = GDK_plus;            break;
-        case KEY_SUBTRACT:      nKeyCode = GDK_minus;           break;
-        case KEY_MULTIPLY:      nKeyCode = GDK_asterisk;        break;
-        case KEY_DIVIDE:        nKeyCode = GDK_slash;           break;
-        case KEY_POINT:         nKeyCode = GDK_period;          break;
-        case KEY_COMMA:         nKeyCode = GDK_comma;           break;
-        case KEY_LESS:          nKeyCode = GDK_less;            break;
-        case KEY_GREATER:       nKeyCode = GDK_greater;         break;
-        case KEY_EQUAL:         nKeyCode = GDK_equal;           break;
-        case KEY_FIND:          nKeyCode = GDK_Find;            break;
-        case KEY_CONTEXTMENU:   nKeyCode = GDK_Menu;            break;
-        case KEY_HELP:          nKeyCode = GDK_Help;            break;
-        case KEY_UNDO:          nKeyCode = GDK_Undo;            break;
-        case KEY_REPEAT:        nKeyCode = GDK_Redo;            break;
-        case KEY_DECIMAL:       nKeyCode = GDK_KP_Decimal;      break;
-        case KEY_TILDE:         nKeyCode = GDK_asciitilde;      break;
-        case KEY_QUOTELEFT:     nKeyCode = GDK_quoteleft;       break;
-        case KEY_BRACKETLEFT:   nKeyCode = GDK_bracketleft;     break;
-        case KEY_BRACKETRIGHT:  nKeyCode = GDK_bracketright;    break;
-        case KEY_SEMICOLON:     nKeyCode = GDK_semicolon;       break;
-        case KEY_QUOTERIGHT:    nKeyCode = GDK_quoteright;      break;
-
-        // Special cases
-        case KEY_COPY:          nKeyCode = GDK_Copy;            break;
-        case KEY_CUT:           nKeyCode = GDK_Cut;             break;
-        case KEY_PASTE:         nKeyCode = GDK_Paste;           break;
-        case KEY_OPEN:          nKeyCode = GDK_Open;            break;
-        }
-    }
-
-    *pGdkKeyCode = nKeyCode;
-}
-
 bool GtkSalMenu::PrepUpdate()
 {
     const GtkSalFrame* pFrame = GetFrame();
@@ -628,8 +546,7 @@ void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, con
 
     guint nKeyCode;
     GdkModifierType nModifiers;
-
-    KeyCodeToGdkKey( rKeyCode, &nKeyCode, &nModifiers );
+    GtkSalFrame::KeyCodeToGdkKey(rKeyCode, &nKeyCode, &nModifiers);
 
     gchar* aAccelerator = gtk_accelerator_name( nKeyCode, nModifiers );
 
