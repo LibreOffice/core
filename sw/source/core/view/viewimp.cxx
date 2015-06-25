@@ -270,6 +270,20 @@ Color SwViewShellImp::GetRetoucheColor() const
     return aRet;
 }
 
+SwPageFrm *SwViewShellImp::GetFirstVisPage()
+{
+    if ( bFirstPageInvalid )
+        SetFirstVisPage();
+    return pFirstVisPage;
+}
+
+const SwPageFrm *SwViewShellImp::GetFirstVisPage() const
+{
+    if ( bFirstPageInvalid )
+        const_cast<SwViewShellImp*>(this)->SetFirstVisPage();
+    return pFirstVisPage;
+}
+
 // create page preview layout
 void SwViewShellImp::InitPagePreviewLayout()
 {
