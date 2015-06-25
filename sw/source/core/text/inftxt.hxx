@@ -191,7 +191,7 @@ protected:
     sal_uInt8 m_nDirection : 2; // writing direction: 0/90/180/270 degree
 
 protected:
-    void CtorInitTextSizeInfo( SwTextFrm *pFrm, SwFont *pFnt = 0,
+    void CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrm *pFrm, SwFont *pFnt = 0,
                    const sal_Int32 nIdx = 0,
                    const sal_Int32 nLen = COMPLETE_STRING );
     SwTextSizeInfo();

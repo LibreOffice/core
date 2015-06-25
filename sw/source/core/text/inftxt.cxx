@@ -251,7 +251,7 @@ SwTextSizeInfo::SwTextSizeInfo( const SwTextSizeInfo &rNew )
 #endif
 }
 
-void SwTextSizeInfo::CtorInitTextSizeInfo( SwTextFrm *pFrame, SwFont *pNewFnt,
+void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextFrm *pFrame, SwFont *pNewFnt,
                    const sal_Int32 nNewIdx, const sal_Int32 nNewLen )
 {
     m_pKanaComp = NULL;
@@ -264,9 +264,9 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( SwTextFrm *pFrame, SwFont *pNewFnt,
     // Get the output and reference device
     if ( m_pVsh )
     {
-        m_pOut = m_pVsh->GetOut();
+        m_pOut = pRenderContext;
         m_pRef = &m_pVsh->GetRefDev();
-        m_bOnWin = m_pVsh->GetWin() || OUTDEV_WINDOW == m_pOut->GetOutDevType();
+        m_bOnWin = m_pVsh->GetWin() || OUTDEV_WINDOW == m_pOut->GetOutDevType() || m_pVsh->isOutputToWindow();
     }
     else
     {
@@ -368,7 +368,7 @@ SwTextSizeInfo::SwTextSizeInfo( SwTextFrm *pTextFrm, SwFont *pTextFnt,
                const sal_Int32 nLength )
     : m_bOnWin(false)
 {
-    CtorInitTextSizeInfo( pTextFrm, pTextFnt, nIndex, nLength );
+    CtorInitTextSizeInfo( pTextFrm->getRootFrm()->GetCurrShell()->GetOut(), pTextFrm, pTextFnt, nIndex, nLength );
 }
 
 void SwTextSizeInfo::SelectFont()
@@ -489,7 +489,7 @@ bool SwTextSizeInfo::_HasHint( const SwTextNode* pTextNode, sal_Int32 nPos )
 
 void SwTextPaintInfo::CtorInitTextPaintInfo( SwTextFrm *pFrame, const SwRect &rPaint )
 {
-    CtorInitTextSizeInfo( pFrame );
+    CtorInitTextSizeInfo( pFrame->getRootFrm()->GetCurrShell()->GetOut(), pFrame );
     aTextFly.CtorInitTextFly( pFrame ),
     aPaintRect = rPaint;
     nSpaceIdx = 0;
