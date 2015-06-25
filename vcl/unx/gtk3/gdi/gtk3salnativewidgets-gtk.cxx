@@ -902,7 +902,8 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
             renderType = RENDER_MENU_SEPERATOR;
             break;
         case PART_MENU_SUBMENU_ARROW:
-            context = mpMenuStyle;
+            styleClass = GTK_STYLE_CLASS_ARROW;
+            context = mpCheckMenuItemStyle;
             renderType = RENDER_ARROW;
             break;
         case PART_ENTIRE_CONTROL:
@@ -1288,7 +1289,7 @@ bool GtkSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             gfloat arrow_scaling, arrow_size;
 
             arrow_scaling = 0;
-            gtk_style_context_get_style (mpMenuStyle,
+            gtk_style_context_get_style (mpCheckMenuItemStyle,
                                          "arrow-scaling",  &arrow_scaling,
                                          NULL);
 
