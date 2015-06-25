@@ -403,7 +403,7 @@ public:
     SwTextPaintInfo( const SwTextPaintInfo &rInf );
     SwTextPaintInfo( const SwTextPaintInfo &rInf, const OUString* pText );
 
-    void CtorInitTextPaintInfo( SwTextFrm *pFrame, const SwRect &rPaint );
+    void CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrm *pFrame, const SwRect &rPaint );
 
     void SetBack( const SvxBrushItem *pItem,
                   const SwRect &rRect ) { pBrushItem = pItem; aItemRect = rRect;}
