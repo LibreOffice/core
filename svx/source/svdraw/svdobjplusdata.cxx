@@ -14,8 +14,6 @@
 
 #include <svl/SfxBroadcaster.hxx>
 
-TYPEINIT0(SdrObjPlusData);
-
 SdrObjPlusData::SdrObjPlusData():
     pBroadcast(NULL),
     pUserDataList(NULL),

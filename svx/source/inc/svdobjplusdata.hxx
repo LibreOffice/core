@@ -10,7 +10,6 @@
 #ifndef INCLUDED_SVX_SVDOBJPLUSDATA_HXX
 #define INCLUDED_SVX_SVDOBJPLUSDATA_HXX
 
-#include <tools/rtti.hxx>
 #include <rtl/ustring.hxx>
 
 class SdrObject;
@@ -34,7 +33,6 @@ class SdrObjPlusData
     OUString aObjDescription;
 
 public:
-    TYPEINFO();
     SdrObjPlusData();
     virtual ~SdrObjPlusData();
     SdrObjPlusData* Clone(SdrObject* pObj1) const;
