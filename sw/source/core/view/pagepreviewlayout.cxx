@@ -1075,7 +1075,7 @@ bool SwPagePreviewLayout::Paint(vcl::RenderContext& rRenderContext, const Rectan
                 // OD 20.02.2003 #107369# - use aligned page rectangle
                 {
                     SwRect aTmpPageRect( aPageRect );
-                    ::SwAlignRect( aTmpPageRect, &mrParentViewShell);
+                    ::SwAlignRect( aTmpPageRect, &mrParentViewShell, &rRenderContext );
                     aPageRect = aTmpPageRect.SVRect();
                 }
                 pOutputDev->DrawRect( aPageRect );
@@ -1228,7 +1228,7 @@ void SwPagePreviewLayout::_PaintSelectMarkAtPage(
                          _aSelectedPreviewPage->aPageSize );
     // OD 19.02.2003 #107369# - use aligned page rectangle, as it is used for
     // page border and shadow paint - see <SwPageFrm::PaintBorderAndShadow(..)>
-    ::SwAlignRect( aPageRect, &mrParentViewShell);
+    ::SwAlignRect( aPageRect, &mrParentViewShell, pOutputDev );
     Rectangle aPxPageRect = pOutputDev->LogicToPixel( aPageRect.SVRect() );
 
     // draw two rectangle
@@ -1273,8 +1273,8 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
         // OD 20.02.2003 #107369# - invalidate only areas of selection mark.
         SwRect aPageRect( pOldSelectedPreviewPage->aPreviewWinPos,
                               pOldSelectedPreviewPage->aPageSize );
-        ::SwAlignRect( aPageRect, &mrParentViewShell);
         OutputDevice* pOutputDev = mrParentViewShell.GetOut();
+        ::SwAlignRect( aPageRect, &mrParentViewShell, pOutputDev );
         Rectangle aPxPageRect = pOutputDev->LogicToPixel( aPageRect.SVRect() );
         // invalidate top mark line
         Rectangle aInvalPxRect( aPxPageRect.Left(), aPxPageRect.Top(),

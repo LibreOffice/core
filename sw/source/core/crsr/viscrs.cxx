@@ -167,7 +167,7 @@ void SwVisCrsr::_SetPosAndShow()
     if( aRect.Height() )
     {
         ::SwCalcPixStatics( m_pCrsrShell->GetOut() );
-        ::SwAlignRect( aRect, static_cast<SwViewShell const *>(m_pCrsrShell) );
+        ::SwAlignRect( aRect, static_cast<SwViewShell const *>(m_pCrsrShell), m_pCrsrShell->GetOut() );
     }
     if( !m_pCrsrShell->IsOverwriteCrsr() || m_bIsDragCrsr ||
         m_pCrsrShell->IsSelection() )
