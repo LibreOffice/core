@@ -1154,8 +1154,8 @@ void rtl_uString_newReplaceFirstAsciiL(
         }
         sal_Int32 n = str->length - fromLength + to->length;
         rtl_uString_acquire(str); // in case *newStr == str
+        rtl_uString_new_WithLength(newStr, n);
         if (n != 0) {
-            rtl_uString_new_WithLength(newStr, n);
             (*newStr)->length = n;
             assert(i >= 0 && i < str->length);
             memcpy(
@@ -1196,8 +1196,8 @@ void rtl_uString_newReplaceFirstToAsciiL(
         }
         sal_Int32 n = str->length - from->length + toLength;
         rtl_uString_acquire(str); // in case *newStr == str
+        rtl_uString_new_WithLength(newStr, n);
         if (n != 0) {
-            rtl_uString_new_WithLength(newStr, n);
             (*newStr)->length = n;
             assert(i >= 0 && i < str->length);
             memcpy(
@@ -1240,8 +1240,8 @@ void rtl_uString_newReplaceFirstAsciiLAsciiL(
         }
         sal_Int32 n = str->length - fromLength + toLength;
         rtl_uString_acquire(str); // in case *newStr == str
+        rtl_uString_new_WithLength(newStr, n);
         if (n != 0) {
-            rtl_uString_new_WithLength(newStr, n);
             (*newStr)->length = n;
             assert(i >= 0 && i < str->length);
             memcpy(

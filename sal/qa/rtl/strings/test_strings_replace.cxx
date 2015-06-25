@@ -20,6 +20,7 @@
 
 namespace {
 
+OUString s_empty;
 OUString s_bar("bar");
 OUString s_bars("bars");
 OUString s_foo("foo");
@@ -176,6 +177,9 @@ void Test::ustringReplaceFirstAsciiL() {
             rtl::OUString("foobarfoo").replaceFirst("bar", s_other, &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
     }
+
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(), rtl::OUString("xa").replaceFirst("xa", s_empty));
 }
 
 void Test::ustringReplaceFirstToAsciiL() {
@@ -210,6 +214,9 @@ void Test::ustringReplaceFirstToAsciiL() {
             rtl::OUString("foobarfoo").replaceFirst(s_bar, "other", &n));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
     }
+
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(), rtl::OUString("xa").replaceFirst(s_xa, ""));
 }
 
 void Test::ustringReplaceFirstAsciiLAsciiL() {
@@ -249,6 +256,9 @@ void Test::ustringReplaceFirstAsciiLAsciiL() {
              replaceFirst("bar", "other", &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
     }
+
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(), rtl::OUString("xa").replaceFirst("xa", ""));
 }
 
 void Test::ustringReplaceAll() {
@@ -277,6 +287,9 @@ void Test::ustringReplaceAllAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
         rtl::OUString("xxa"),
         rtl::OUString("xaa").replaceAll("xa", s_xx));
+
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(), rtl::OUString("xa").replaceAll("xa", s_empty));
 }
 
 void Test::ustringReplaceAllToAsciiL() {
@@ -291,6 +304,9 @@ void Test::ustringReplaceAllToAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
         rtl::OUString("xxa"),
         rtl::OUString("xaa").replaceAll(s_xa, "xx"));
+
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(), rtl::OUString("xa").replaceAll(s_xa, ""));
 }
 
 void Test::ustringReplaceAllAsciiLAsciiL() {
@@ -308,6 +324,9 @@ void Test::ustringReplaceAllAsciiLAsciiL() {
         rtl::OUString("xxa"),
         (rtl::OUString("xaa").
          replaceAll("xa", "xx")));
+
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OUString(), rtl::OUString("xa").replaceAll("xa", ""));
 }
 
 }
