@@ -79,7 +79,8 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Pla
 
             // Fill the Username field
             if ( rUrl.HasUserData( ) )
-                m_pEDUsername->SetText( rUrl.GetUser( ) );
+                m_pEDUsername->SetText( INetURLObject::decode( rUrl.GetUser( ),
+                                                              INetURLObject::DECODE_WITH_CHARSET ) );
         }
     }
 
