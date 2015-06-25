@@ -922,7 +922,7 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
 
         tmp1 = lcl_eatWhiteSpace( tmp1 );
         tmp2 = lcl_a1_get_row( tmp1, &r.aEnd, &nFlags2 );
-        if( !tmp2 )
+        if( !tmp2 || *tmp2 != 0 )   // Must have fully parsed a singleton.
             return 0;
 
         r.aStart.SetCol( 0 ); r.aEnd.SetCol( MAXCOL );
@@ -945,7 +945,7 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
 
         tmp1 = lcl_eatWhiteSpace( tmp1 );
         tmp2 = lcl_a1_get_col( tmp1, &r.aEnd, &nFlags2 );
-        if( !tmp2 )
+        if( !tmp2 || *tmp2 != 0 )   // Must have fully parsed a singleton.
             return 0;
 
         r.aStart.SetRow( 0 ); r.aEnd.SetRow( MAXROW );
