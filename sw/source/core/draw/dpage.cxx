@@ -158,7 +158,7 @@ const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
         else
         {
             //The drawing demands all visible pages
-            const SwFrm *pPg = pSh->Imp()->GetFirstVisPage();
+            const SwFrm *pPg = pSh->Imp()->GetFirstVisPage(pSh->GetOut());
             if ( pPg )
                 do
                 {   ::InsertGridFrame( const_cast<SwDPage*>(this)->pGridLst, pPg );

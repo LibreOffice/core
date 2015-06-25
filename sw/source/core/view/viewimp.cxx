@@ -270,17 +270,17 @@ Color SwViewShellImp::GetRetoucheColor() const
     return aRet;
 }
 
-SwPageFrm *SwViewShellImp::GetFirstVisPage()
+SwPageFrm *SwViewShellImp::GetFirstVisPage(OutputDevice* pRenderContext)
 {
     if ( bFirstPageInvalid )
-        SetFirstVisPage(pSh->GetOut());
+        SetFirstVisPage(pRenderContext);
     return pFirstVisPage;
 }
 
-const SwPageFrm *SwViewShellImp::GetFirstVisPage() const
+const SwPageFrm *SwViewShellImp::GetFirstVisPage(OutputDevice* pRenderContext) const
 {
     if ( bFirstPageInvalid )
-        const_cast<SwViewShellImp*>(this)->SetFirstVisPage(pSh->GetOut());
+        const_cast<SwViewShellImp*>(this)->SetFirstVisPage(pRenderContext);
     return pFirstVisPage;
 }
 

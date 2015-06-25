@@ -391,7 +391,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
     {
         SwViewShell* pViewShell = mpDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
 
-        SwPageFrm* pCurrentPage = pViewShell ? pViewShell->Imp()->GetFirstVisPage() : 0;
+        SwPageFrm* pCurrentPage = pViewShell ? pViewShell->Imp()->GetFirstVisPage(pViewShell->GetOut()) : 0;
         SwPageFrm* pStartPage = pCurrentPage;
         SwPageFrm* pStopPage = 0;
 

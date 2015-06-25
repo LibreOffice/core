@@ -146,8 +146,8 @@ public:
     Color GetRetoucheColor() const;
 
     /// Management of the first visible Page
-    const SwPageFrm *GetFirstVisPage() const;
-          SwPageFrm *GetFirstVisPage();
+    const SwPageFrm *GetFirstVisPage(OutputDevice* pRenderContext) const;
+          SwPageFrm *GetFirstVisPage(OutputDevice* pRenderContext);
     void SetFirstVisPageInvalid() { bFirstPageInvalid = true; }
 
     bool AddPaintRect( const SwRect &rRect );

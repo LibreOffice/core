@@ -186,7 +186,7 @@ bool SwFEShell::GetPageNumber( long nYPos, bool bAtCrsrPos, sal_uInt16& rPhyNum,
     }
     else                                // first visible page
     {
-        pPage = Imp()->GetFirstVisPage();
+        pPage = Imp()->GetFirstVisPage(GetOut());
         if ( pPage && static_cast<const SwPageFrm*>(pPage)->IsEmptyPage() )
             pPage = pPage->GetNext();
     }
