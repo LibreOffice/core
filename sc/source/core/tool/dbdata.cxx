@@ -603,6 +603,16 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
     aNewNames.swap( maTableColumnNames);
 }
 
+sal_Int32 ScDBData::GetColumnNameOffset( const OUString& rName ) const
+{
+    ::std::vector<OUString>::const_iterator it(
+            ::std::find( maTableColumnNames.begin(), maTableColumnNames.end(), rName));
+    if (it != maTableColumnNames.end())
+        return it - maTableColumnNames.begin();
+
+    return -1;
+}
+
 namespace {
 
 class FindByTable : public unary_function<ScDBData, bool>

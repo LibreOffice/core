@@ -112,6 +112,16 @@ public:
     void        SetStripData(bool bSet)         { bStripData = bSet; }
     void        SetTableColumnNames( const ::std::vector< OUString >& rNames ) { maTableColumnNames = rNames; }
 
+    /** Finds the column named rName and returns the corresponding offset
+        within the table.
+        @returns -1 if not found.
+
+        XXX NOTE: there is no refresh of names or anything implemented yet, use
+        this only during document load time.
+     */
+    sal_Int32   GetColumnNameOffset( const OUString& rName ) const;
+
+
     OUString GetSourceString() const;
     OUString GetOperations() const;
 
