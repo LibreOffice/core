@@ -3237,7 +3237,7 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
         aAction.SetPaint( false );
         aAction.SetComplete( false );
         aAction.SetReschedule( gProp.pSProgress != nullptr );
-        aAction.Action();
+        aAction.Action(&rRenderContext);
         ResetTurboFlag();
         if ( !pSh->ActionPend() )
             pSh->Imp()->DelRegion();

@@ -341,7 +341,7 @@ bool SwLayAction::RemoveEmptyBrowserPages()
     return bRet;
 }
 
-void SwLayAction::Action()
+void SwLayAction::Action(OutputDevice* pRenderContext)
 {
     bActionInProgress = true;
 
@@ -366,12 +366,12 @@ void SwLayAction::Action()
     if ( IsCalcLayout() )
         SetCheckPages( false );
 
-    InternalAction(pImp->GetShell()->GetOut());
+    InternalAction(pRenderContext);
     bAgain |= RemoveEmptyBrowserPages();
     while ( IsAgain() )
     {
         bAgain = bNextCycle = false;
-        InternalAction(pImp->GetShell()->GetOut());
+        InternalAction(pRenderContext);
         bAgain |= RemoveEmptyBrowserPages();
     }
     pRoot->DeleteEmptySct();
@@ -2166,7 +2166,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
             aAction.SetInputType( VCL_INPUT_ANY );
             aAction.SetIdle( true );
             aAction.SetWaitAllowed( false );
-            aAction.Action();
+            aAction.Action(pImp->GetShell()->GetOut());
             bInterrupt = aAction.IsInterrupt();
         }
 
