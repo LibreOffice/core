@@ -561,7 +561,7 @@ class SwTextFormatInfo : public SwTextPaintInfo
     bool _CheckFootnotePortion( SwLineLayout* pCurr );
 
 public:
-    void CtorInitTextFormatInfo( SwTextFrm *pFrm, const bool bInterHyph = false,
+    void CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwTextFrm *pFrm, const bool bInterHyph = false,
         const bool bQuick = false, const bool bTst = false );
     SwTextFormatInfo(SwTextFrm *pFrame, const bool bInterHyphL = false,
             const bool bQuickL = false, const bool bTst = false);
