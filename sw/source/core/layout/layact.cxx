@@ -572,7 +572,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                             break;
                         }
 
-                        FormatLayout( pPage );
+                        FormatLayout( pRenderContext, pPage );
                         XCHECKPAGE;
                     }
                     // #i28701# - change condition
@@ -755,7 +755,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                         break;
                     }
 
-                    FormatLayout( pPg );
+                    FormatLayout( pRenderContext, pPg );
                     XCHECKPAGE;
                 }
 
@@ -1026,7 +1026,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
             }
         }
         else
-            FormatLayout( prPage );
+            FormatLayout( pSh->GetOut(), prPage );
         if ( IsAgain() )
             return false;
     }
@@ -1216,7 +1216,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 }
 
 // OD 15.11.2002 #105155# - introduce support for vertical layout
-bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
+bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay, bool bAddRect )
 {
     OSL_ENSURE( !IsAgain(), "Attention to the invalid page." );
     if ( IsAgain() )
@@ -1236,7 +1236,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
         SwRect aOldRect( aOldFrame );
         if( pLay->IsPageFrm() )
         {
-            aOldRect = static_cast<SwPageFrm*>(pLay)->GetBoundRect(pLay->getRootFrm()->GetCurrShell()->GetOut());
+            aOldRect = static_cast<SwPageFrm*>(pLay)->GetBoundRect(pRenderContext);
         }
 
         pLay->Calc();
@@ -1264,7 +1264,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
             if ( pLay->IsPageFrm() )
             {
                 SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(pLay);
-                aPaint = pPageFrm->GetBoundRect(pPageFrm->getRootFrm()->GetCurrShell()->GetOut());
+                aPaint = pPageFrm->GetBoundRect(pRenderContext);
             }
 
             bool bPageInBrowseMode = pLay->IsPageFrm();
@@ -1320,7 +1320,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
                 if(pSh)
                 {
                     SwPageFrm::GetBorderAndShadowBoundRect(aPageRect, pSh,
-                        pSh->GetOut(),
+                        pRenderContext,
                         aPageRect, pPageFrm->IsLeftShadowNeeded(), pPageFrm->IsRightShadowNeeded(),
                         pPageFrm->SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT);
                 }
@@ -1335,7 +1335,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
                         pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
 
                     if (pSh)
-                        pSh->GetOut()->DrawRect( aSpaceToPrevPage.SVRect() );
+                        pRenderContext->DrawRect( aSpaceToPrevPage.SVRect() );
 
                     // left
                     aSpaceToPrevPage = aPageRect;
@@ -1400,7 +1400,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
                 bTabChanged |= FormatLayoutTab( static_cast<SwTabFrm*>(pLow), bAddRect );
             // Skip the ones already registered for deletion
             else if( !pLow->IsSctFrm() || static_cast<SwSectionFrm*>(pLow)->GetSection() )
-                bChanged |= FormatLayout( static_cast<SwLayoutFrm*>(pLow), bAddRect );
+                bChanged |= FormatLayout( pRenderContext, static_cast<SwLayoutFrm*>(pLow), bAddRect );
         }
         else if ( pImp->GetShell()->IsPaintLocked() )
             // Shortcut to minimize the cycles. With Lock, the
@@ -1414,7 +1414,7 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
     // OD 11.11.2002 #104414# - add complete frame area as paint area, if frame
     // area has been already added and after formatting its lowers the frame area
     // is enlarged.
-    SwRect aBoundRect(pLay->IsPageFrm() ? static_cast<SwPageFrm*>(pLay)->GetBoundRect(pLay->getRootFrm()->GetCurrShell()->GetOut()) : pLay->Frm() );
+    SwRect aBoundRect(pLay->IsPageFrm() ? static_cast<SwPageFrm*>(pLay)->GetBoundRect(pRenderContext) : pLay->Frm() );
 
     if ( bAlreadyPainted &&
          ( aBoundRect.Width() > aFrmAtCompletePaint.Width() ||
@@ -1468,7 +1468,7 @@ bool SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
             if ( pLow->IsTabFrm() )
                 bTabChanged |= FormatLayoutTab( static_cast<SwTabFrm*>(pLow), bAddRect );
             else
-                bChanged |= FormatLayout( static_cast<SwLayoutFrm*>(pLow), bAddRect );
+                bChanged |= FormatLayout( pImp->GetShell()->GetOut(), static_cast<SwLayoutFrm*>(pLow), bAddRect );
         }
         pLow = pLow->GetNext();
     }
@@ -1615,7 +1615,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
         SwLayoutFrm *pLow = static_cast<SwLayoutFrm*>(pTab->Lower());
         while ( pLow )
         {
-            bChanged |= FormatLayout( pLow, bAddRect );
+            bChanged |= FormatLayout( pImp->GetShell()->GetOut(), pLow, bAddRect );
             if ( IsAgain() )
                 return false;
             pLow = static_cast<SwLayoutFrm*>(pLow->GetNext());
