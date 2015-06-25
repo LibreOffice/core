@@ -2235,7 +2235,7 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
         lcl_SetBoolInAny(aRet, bShowEmpty);
-    if ( aPropertyName == SC_UNO_DP_REPEATITEMLABELS )
+    else if ( aPropertyName == SC_UNO_DP_REPEATITEMLABELS )
         lcl_SetBoolInAny(aRet, bRepeatItemLabels);
     else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
     {
