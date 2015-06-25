@@ -1088,6 +1088,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     SfxCallMode::ASYNCHRON);
             }
 
+            InvalidateWindows();
             rReq.Done();
         }
         break;
