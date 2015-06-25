@@ -494,8 +494,7 @@ OUString StorageHolder::impl_st_normPath(const OUString& sPath)
     OUString sNormedPath = sPath;
 
     // "/bla" => "bla" && "/" => "" (!)
-    if (sNormedPath.startsWith(PATH_SEPARATOR_ASCII))
-        sNormedPath += sNormedPath.copy(1);
+    sNormedPath.startsWith(PATH_SEPARATOR_ASCII, &sNormedPath);
 
     // "/" => "" || "" => "" ?
     if (sNormedPath.isEmpty())
