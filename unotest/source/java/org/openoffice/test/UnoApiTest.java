@@ -34,7 +34,10 @@ public final class UnoApiTest {
     }
 
     @Test public void test() throws Exception {
-        assertTrue(
+        assertTrue("org.openoffice.Runner failed with params: -sce " + Argument.get("sce")
+                 + "-xcl " + Argument.get("xcl")
+                 + " -tdoc " + Argument.get("tdoc")
+                 + " -cs " + connection.getDescription(),
             Runner.run(
                 "-sce", Argument.get("sce"), "-xcl", Argument.get("xcl"), "-tdoc",
                 Argument.get("tdoc"), "-cs", connection.getDescription()));
