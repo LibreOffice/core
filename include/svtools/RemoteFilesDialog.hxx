@@ -64,6 +64,7 @@ typedef ::com::sun::star::uno::Sequence<OUString>  OUStringList;
 
 class FileViewContainer;
 class Breadcrumb;
+class FolderTree;
 
 class SVT_DLLPUBLIC RemoteFilesDialog : public ModalDialog
 {
@@ -89,9 +90,6 @@ private:
 
     OUString m_sPath;
 
-    Reference< XCommandEnvironment > m_xEnv;
-    ::osl::Mutex m_aMutex;
-
     VclPtr<PushButton> m_pOpen_btn;
     VclPtr<PushButton> m_pSave_btn;
     VclPtr<CancelButton> m_pCancel_btn;
@@ -99,7 +97,7 @@ private:
     VclPtr<ListBox> m_pServices_lb;
     VclPtr<Breadcrumb> m_pPath;
     VclPtr<Splitter> m_pSplitter;
-    VclPtr<SvTreeListBox> m_pTreeView;
+    VclPtr<FolderTree> m_pTreeView;
     VclPtr<SvtFileView> m_pFileView;
     VclPtr<FileViewContainer> m_pContainer;
     VclPtr<ListBox> m_pFilter_lb;
@@ -117,9 +115,6 @@ private:
 
     FileViewResult OpenURL( OUString sURL );
 
-    void fillTreeEntry( SvTreeListEntry* pParent );
-    void setTreePath( OUString sPath );
-
     DECL_LINK ( AddServiceHdl, void * );
     DECL_LINK ( SelectServiceHdl, void * );
     DECL_LINK_TYPED ( EditServiceMenuHdl, MenuButton *, void );
@@ -131,8 +126,7 @@ private:
 
     DECL_LINK( SelectFilterHdl, void * );
 
-    DECL_LINK( TreeSelectHdl, SvTreeListBox * );
-    DECL_LINK( TreeExpandHdl, SvTreeListBox * );
+    DECL_LINK( TreeSelectHdl, FolderTree * );
 
     DECL_LINK( SelectBreadcrumbHdl, Breadcrumb * );
 

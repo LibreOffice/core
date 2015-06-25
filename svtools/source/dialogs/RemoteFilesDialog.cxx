@@ -10,22 +10,128 @@
 #include <svtools/RemoteFilesDialog.hxx>
 #include "../contnr/contentenumeration.hxx"
 
+class FolderTree : public SvTreeListBox
+{
+private:
+    Reference< XCommandEnvironment > m_xEnv;
+    ::osl::Mutex m_aMutex;
+
+public:
+    FolderTree( vcl::Window* pParent, WinBits nBits )
+        : SvTreeListBox( pParent, nBits )
+    {
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        Reference< XInteractionHandler > xInteractionHandler(
+                    InteractionHandler::createWithParent( xContext, 0 ), UNO_QUERY_THROW );
+        m_xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
+    }
+
+    virtual void RequestingChildren( SvTreeListEntry* pEntry )
+    {
+        FillTreeEntry( pEntry );
+    }
+
+    void FillTreeEntry( SvTreeListEntry* pEntry )
+    {
+        // fill only empty entries
+        if( pEntry && GetChildCount( pEntry ) == 0 )
+        {
+            ::std::vector< SortingData_Impl* > aContent;
+
+            FileViewContentEnumerator* pContentEnumerator = new FileViewContentEnumerator(
+                m_xEnv, aContent, m_aMutex, NULL );
+
+            OUString* pURL = static_cast< OUString* >( pEntry->GetUserData() );
+
+            if( pURL )
+            {
+                FolderDescriptor aFolder( *pURL );
+                Sequence< OUString > aBlackList;
+
+                EnumerationResult eResult =
+                    pContentEnumerator->enumerateFolderContentSync( aFolder, aBlackList );
+
+                if ( SUCCESS == eResult )
+                {
+                    for( unsigned int i = 0; i < aContent.size(); i++ )
+                    {
+                        if( aContent[i]->mbIsFolder )
+                        {
+                            SvTreeListEntry* pNewEntry = InsertEntry( aContent[i]->GetTitle(), pEntry, true );
+
+                            OUString* sData = new OUString( aContent[i]->maTargetURL );
+                            pNewEntry->SetUserData( static_cast< void* >( sData ) );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void SetTreePath( OUString sUrl )
+    {
+        INetURLObject aUrl( sUrl );
+        aUrl.setFinalSlash();
+
+        OUString sPath = aUrl.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+
+        SvTreeListEntry* pEntry = First();
+        bool end = false;
+
+        while( pEntry && !end )
+        {
+            if( pEntry->GetUserData() )
+            {
+                OUString sNodeUrl = *static_cast< OUString* >( pEntry->GetUserData() );
+
+                INetURLObject aUrlObj( sNodeUrl );
+                aUrlObj.setFinalSlash();
+
+                sNodeUrl = aUrlObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+
+                if( sPath == sNodeUrl )
+                {
+                    Select( pEntry );
+
+                    if( !IsExpanded( pEntry ) )
+                        Expand( pEntry );
+
+                    end = true;
+                }
+                else if( sPath.startsWith( sNodeUrl ) )
+                {
+                    if( !IsExpanded( pEntry ) )
+                        Expand( pEntry );
+
+                    pEntry = FirstChild( pEntry );
+                }
+                else
+                {
+                    pEntry = NextSibling( pEntry );
+                }
+            }
+            else
+                break;
+        }
+    }
+};
+
 class FileViewContainer : public vcl::Window
 {
     private:
-    VclPtr<SvtFileView> m_pFileView;
-    VclPtr<SvTreeListBox> m_pTreeView;
-    VclPtr<Splitter> m_pSplitter;
+    VclPtr< SvtFileView > m_pFileView;
+    VclPtr< FolderTree > m_pTreeView;
+    VclPtr< Splitter > m_pSplitter;
 
     int m_nCurrentFocus;
     vcl::Window* m_pFocusWidgets[4];
 
     public:
-    FileViewContainer(vcl::Window *pParent)
-        : Window(pParent, WB_TABSTOP)
-        , m_pFileView(NULL)
-        , m_pTreeView(NULL)
-        , m_pSplitter(NULL)
+    FileViewContainer( vcl::Window *pParent )
+        : Window( pParent, WB_TABSTOP )
+        , m_pFileView( NULL )
+        , m_pTreeView( NULL )
+        , m_pSplitter( NULL )
     {
     }
 
@@ -41,11 +147,11 @@ class FileViewContainer : public vcl::Window
         vcl::Window::dispose();
     }
 
-    void init(SvtFileView* pFileView,
+    void init( SvtFileView* pFileView,
               Splitter* pSplitter,
-              SvTreeListBox* pTreeView,
+              FolderTree* pTreeView,
               vcl::Window* pPrevSibling,
-              vcl::Window* pNextSibling)
+              vcl::Window* pNextSibling )
     {
         m_pFileView = pFileView;
         m_pTreeView = pTreeView;
@@ -60,39 +166,39 @@ class FileViewContainer : public vcl::Window
     {
         Window::Resize();
 
-        if(!m_pFileView || !m_pTreeView)
+        if( !m_pFileView || !m_pTreeView )
             return;
 
         Size aSize = GetSizePixel();
         Point aPos( m_pFileView->GetPosPixel() );
-        Size aNewSize(aSize.Width() - aPos.X(), aSize.Height());
+        Size aNewSize( aSize.Width() - aPos.X(), aSize.Height() );
 
         m_pFileView->SetSizePixel( aNewSize );
 
         // Resize the Splitter to fit the height
-        Size splitterNewSize = m_pSplitter->GetSizePixel( );
+        Size splitterNewSize = m_pSplitter->GetSizePixel();
         splitterNewSize.Height() = aSize.Height();
         m_pSplitter->SetSizePixel( splitterNewSize );
-        sal_Int32 nMinX = m_pTreeView->GetPosPixel( ).X( );
-        sal_Int32 nMaxX = m_pFileView->GetPosPixel( ).X( ) + m_pFileView->GetSizePixel( ).Width() - nMinX;
+        sal_Int32 nMinX = m_pTreeView->GetPosPixel().X();
+        sal_Int32 nMaxX = m_pFileView->GetPosPixel().X() + m_pFileView->GetSizePixel().Width() - nMinX;
         m_pSplitter->SetDragRectPixel( Rectangle( Point( nMinX, 0 ), Size( nMaxX, aSize.Width() ) ) );
 
         // Resize the tree list box to fit the height of the FileView
-        Size placesNewSize(m_pTreeView->GetSizePixel());
+        Size placesNewSize( m_pTreeView->GetSizePixel() );
         placesNewSize.Height() = aSize.Height();
         m_pTreeView->SetSizePixel( placesNewSize );
     }
 
-    void changeFocus(bool bReverse)
+    void changeFocus( bool bReverse )
     {
-        if(!bReverse && m_nCurrentFocus < 4)
+        if( !bReverse && m_nCurrentFocus < 4 )
         {
-            m_pFocusWidgets[++m_nCurrentFocus]->SetFakeFocus(true);
+            m_pFocusWidgets[++m_nCurrentFocus]->SetFakeFocus( true );
             m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
         }
-        else if(m_nCurrentFocus > 0)
+        else if( m_nCurrentFocus > 0 )
         {
-            m_pFocusWidgets[--m_nCurrentFocus]->SetFakeFocus(true);
+            m_pFocusWidgets[--m_nCurrentFocus]->SetFakeFocus( true );
             m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
         }
     }
@@ -100,24 +206,24 @@ class FileViewContainer : public vcl::Window
     virtual void GetFocus() SAL_OVERRIDE
     {
         m_nCurrentFocus = 1;
-        m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus(true);
+        m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus( true );
         m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
     }
 
-    virtual bool Notify(NotifyEvent& rNEvt)
+    virtual bool Notify( NotifyEvent& rNEvt )
     {
-        if(rNEvt.GetType() == MouseNotifyEvent::KEYINPUT)
+        if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
             bool bShift = rCode.IsShift();
-            if(rCode.GetCode() == KEY_TAB)
+            if( rCode.GetCode() == KEY_TAB )
             {
-                changeFocus(bShift);
+                changeFocus( bShift );
                 return true;
             }
         }
-        return Window::Notify(rNEvt);
+        return Window::Notify( rNEvt );
     }
 };
 
@@ -136,11 +242,6 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     get(m_pServices_lb, "services_lb");
     get(m_pFilter_lb, "filter_lb");
     get(m_pName_ed, "name_ed");
-
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XInteractionHandler > xInteractionHandler(
-                    InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
-    m_xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
     m_eMode = (nBits & WB_SAVEAS) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
     m_eType = (nBits & WB_PATH) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
@@ -190,7 +291,7 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_pSplitter->SetSplitHdl( LINK( this, RemoteFilesDialog, SplitHdl ) );
     m_pSplitter->Show();
 
-    m_pTreeView = VclPtr<SvTreeListBox>::Create( m_pContainer, WB_BORDER | WB_SORT | WB_TABSTOP );
+    m_pTreeView = VclPtr<FolderTree>::Create( m_pContainer, WB_BORDER | WB_SORT | WB_TABSTOP );
     Size aSize(100, 200);
     m_pTreeView->set_height_request(aSize.Height());
     m_pTreeView->set_width_request(aSize.Width());
@@ -200,7 +301,6 @@ RemoteFilesDialog::RemoteFilesDialog(vcl::Window* pParent, WinBits nBits)
     m_pTreeView->SetDefaultExpandedEntryBmp(m_aFolderImage);
 
     m_pTreeView->SetSelectHdl( LINK( this, RemoteFilesDialog, TreeSelectHdl ) );
-    m_pTreeView->SetExpandingHdl( LINK( this, RemoteFilesDialog, TreeExpandHdl ) );
 
     sal_Int32 nPosX = m_pTreeView->GetSizePixel().Width();
     m_pSplitter->SetPosPixel(Point(nPosX, 0));
@@ -410,7 +510,7 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
         if( eResult == eSuccess )
         {
             m_pPath->SetURL( sURL );
-            setTreePath( sURL );
+            m_pTreeView->SetTreePath( sURL );
             m_pFilter_lb->Enable( true );
             m_pName_ed->Enable( true );
             m_pContainer->Enable( true );
@@ -418,98 +518,6 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
     }
 
     return eResult;
-}
-
-void RemoteFilesDialog::fillTreeEntry( SvTreeListEntry* pParent )
-{
-    if( pParent && !m_pTreeView->IsExpanded( pParent ) )
-    {
-        // fill only empty entries - containing only dummy entry
-        if( m_pTreeView->GetChildCount( pParent ) == 1 && pParent->GetUserData() )
-        {
-            ::std::vector< SortingData_Impl* > aContent;
-
-            FileViewContentEnumerator* pContentEnumerator = new FileViewContentEnumerator(
-                m_xEnv, aContent, m_aMutex, NULL );
-
-            OUString* pURL = static_cast< OUString* >( pParent->GetUserData() );
-
-            if( pURL )
-            {
-                FolderDescriptor aFolder( *pURL );
-                Sequence< OUString > aBlackList;
-
-                EnumerationResult eResult =
-                    pContentEnumerator->enumerateFolderContentSync( aFolder, aBlackList );
-
-                if ( SUCCESS == eResult )
-                {
-                    unsigned int nChilds = 0;
-
-                    for( unsigned int i = 0; i < aContent.size(); i++ )
-                    {
-                        if( aContent[i]->mbIsFolder )
-                        {
-                            SvTreeListEntry* pEntry = m_pTreeView->InsertEntry( aContent[i]->GetTitle(), pParent, true );
-
-                            OUString* sData = new OUString( aContent[i]->maTargetURL );
-                            pEntry->SetUserData( static_cast< void* >( sData ) );
-
-                            nChilds++;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-void RemoteFilesDialog::setTreePath( OUString sUrl )
-{
-    INetURLObject aURL( sUrl );
-    aURL.setFinalSlash();
-
-    OUString sPath = aURL.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
-
-    SvTreeListEntry* pEntry = m_pTreeView->First();
-    bool end = false;
-
-    while( pEntry && !end )
-    {
-        if( pEntry->GetUserData() )
-        {
-            OUString sNodeUrl = *static_cast< OUString* >( pEntry->GetUserData() );
-
-            INetURLObject aUrlObj( sNodeUrl );
-            aUrlObj.setFinalSlash();
-
-            sNodeUrl = aUrlObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
-
-            if( sPath == sNodeUrl)
-            {
-                m_pTreeView->Select( pEntry );
-
-                if( !m_pTreeView->IsExpanded( pEntry ) )
-                    m_pTreeView->Expand( pEntry );
-
-                end = true;
-            }
-            else if( sPath.startsWith( sNodeUrl ) )
-            {
-                if( !m_pTreeView->IsExpanded( pEntry ) )
-                    m_pTreeView->Expand( pEntry );
-
-                pEntry = m_pTreeView->FirstChild( pEntry );
-                pEntry = m_pTreeView->NextSibling( pEntry );
-            }
-            else
-            {
-                pEntry = m_pTreeView->NextSibling( pEntry );
-            }
-        }
-        else
-            break;
-    }
 }
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
@@ -549,7 +557,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
 {
     int nPos = GetSelectedServicePos();
 
-    if(nPos > 0)
+    if( nPos > 0 )
     {
         OUString sURL = m_aServices[nPos]->GetUrl();
         OUString sName = m_aServices[nPos]->GetName();
@@ -699,19 +707,12 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectFilterHdl )
     return 1;
 }
 
-IMPL_LINK ( RemoteFilesDialog, TreeSelectHdl, SvTreeListBox *, pBox )
+IMPL_LINK ( RemoteFilesDialog, TreeSelectHdl, FolderTree *, pBox )
 {
     OUString* sURL = static_cast< OUString* >( pBox->GetHdlEntry()->GetUserData() );
 
     if( sURL )
         OpenURL( *sURL );
-
-    return 1;
-}
-
-IMPL_LINK ( RemoteFilesDialog, TreeExpandHdl, SvTreeListBox *, pBox )
-{
-    fillTreeEntry( pBox->GetHdlEntry() );
 
     return 1;
 }
