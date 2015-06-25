@@ -154,7 +154,7 @@ public:
     inline void SetCheckPageNum( sal_uInt16 nNew );
     inline void SetCheckPageNumDirect( sal_uInt16 nNew ) { nCheckPageNum = nNew; }
 
-    void Action();  // here it begins
+    void Action(OutputDevice* pRenderContext); // here it begins
     void Reset();   // back to CTor-defaults
 
     bool IsAgain()      const { return bAgain; }

@@ -283,7 +283,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
         if ( mnLockPaint )
             aAction.SetPaint( false );
         aAction.SetInputType( VclInputFlags::KEYBOARD );
-        aAction.Action();
+        aAction.Action(GetWin());
     }
 
     if ( bIsShellForCheckViewLayout )
@@ -948,7 +948,7 @@ void SwViewShell::CalcLayout()
     aAction.SetCalcLayout( true );
     aAction.SetReschedule( true );
     GetDoc()->getIDocumentFieldsAccess().LockExpFields();
-    aAction.Action();
+    aAction.Action(GetOut());
     GetDoc()->getIDocumentFieldsAccess().UnlockExpFields();
 
     //the SetNewFieldLst() on the Doc was cut off and must be fetched again
@@ -964,7 +964,7 @@ void SwViewShell::CalcLayout()
         GetDoc()->getIDocumentFieldsAccess().UpdatePageFields( &aMsgHint );
         GetDoc()->getIDocumentFieldsAccess().UpdateExpFields(NULL, true);
 
-        aAction.Action();
+        aAction.Action(GetOut());
     }
 
     if ( VisArea().HasArea() )
@@ -1596,7 +1596,7 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
         // can't format frames which are locked by the outer action. This may
         // cause and endless loop.
         ++mnStartAction;
-        aAction.Action();
+        aAction.Action(GetWin());
         --mnStartAction;
 
         SwRegionRects *pRegion = Imp()->GetRegion();
