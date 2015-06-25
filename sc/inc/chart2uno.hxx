@@ -264,6 +264,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString >
         SAL_CALL generateLabel(::com::sun::star::chart2::data::LabelOrigin nOrigin)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    /** Get the number format key for the n-th data entry
+     * If nIndex == -1, then you will get the number format key for the first non-empty entry
+     */
     virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::uno::RuntimeException,
@@ -400,6 +404,9 @@ private:
 
     void RebuildDataCache();
 
+    /** Call this method to ensure that mAddressByIndex is filled */
+    void EnsureAddressByIndexIsFilled();
+
     sal_Int32 FillCacheFromExternalRef(const ScTokenRef& pToken);
 
     void UpdateTokensFromRanges(const ScRangeList& rRanges);
@@ -434,6 +441,13 @@ private:
     };
 
     ::std::list<Item>           m_aDataArray;
+
+    /** This vector contains the addresses of data elements by their index.
+     * It is used to make the lookups in getNumberFormatKeyByIndex() faster.
+     * The address at position n will either be the n-th data element, or the n-th non-hidden data element, depending
+     * on whether m_bIncludeHiddenCells is true or not.
+     */
+    std::vector<ScAddress> mAddressByIndex;
 
     /**
      * Cached data for getData.  We may also need to cache data for the
