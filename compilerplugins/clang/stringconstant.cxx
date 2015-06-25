@@ -1191,7 +1191,7 @@ void StringConstant::handleOUStringCtor(
         && e3->getArg(0)->IgnoreParenImpCasts()->isIntegerConstantExpr(
             res, compiler.getASTContext()))
     {
-        if (res > static_cast<APSInt>(0) && res <= static_cast<APSInt>(127)) {
+        if (res.getSExtValue() > 0 && res.getSExtValue() <= 127) {
             report(
                 DiagnosticsEngine::Warning,
                 ("in call of %0, replace OUString constructed from a (non-NUL)"
