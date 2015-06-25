@@ -1076,6 +1076,7 @@ bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
 
 cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr &rBuffer)
 {
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
     if (!isCairoCompatible(rBuffer))
         return NULL;
 
@@ -1091,6 +1092,9 @@ cairo_t* SvpSalGraphics::createCairoContext(const basebmp::BitmapDeviceSharedPtr
     cairo_t* cr = cairo_create(target);
     cairo_surface_destroy(target);
     return cr;
+#else
+    return NULL;
+#endif
 }
 
 #endif
