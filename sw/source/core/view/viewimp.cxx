@@ -186,18 +186,18 @@ void SwViewShellImp::SetFirstVisPage()
         const bool bBookMode = pSwViewOption->IsViewLayoutBookMode();
 
         SwPageFrm *pPage = static_cast<SwPageFrm*>(pSh->GetLayout()->Lower());
-        SwRect aPageRect = pPage->GetBoundRect();
+        SwRect aPageRect = pPage->GetBoundRect(pSh->GetOut());
         float fAmount = pSh->VisArea().Height() * 0.43;
         while ( pPage && aPageRect.Bottom() < pSh->VisArea().Top() + fAmount )
         {
             pPage = static_cast<SwPageFrm*>(pPage->GetNext());
             if ( pPage )
             {
-                aPageRect = pPage->GetBoundRect();
+                aPageRect = pPage->GetBoundRect(pSh->GetOut());
                 if ( bBookMode && pPage->IsEmptyPage() )
                 {
                     const SwPageFrm& rFormatPage = pPage->GetFormatPage();
-                    aPageRect.SSize() = rFormatPage.GetBoundRect().SSize();
+                    aPageRect.SSize() = rFormatPage.GetBoundRect(pSh->GetOut()).SSize();
                 }
             }
         }

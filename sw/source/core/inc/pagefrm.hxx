@@ -139,7 +139,7 @@ public:
     inline const SwContentFrm  *FindFirstBodyContent() const;
     inline const SwContentFrm  *FindLastBodyContent() const;
 
-    SwRect GetBoundRect() const;
+    SwRect GetBoundRect(OutputDevice* pOutputDevice) const;
 
     // Specialized GetContentPos() for Field in Frames
     void GetContentPosition( const Point &rPt, SwPosition &rPos ) const;
