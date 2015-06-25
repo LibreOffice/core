@@ -75,10 +75,10 @@ namespace pcr
         if (::comphelper::hasProperty(PROPERTY_CLASSID, m_xControlModel))
             nClassID = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID));
 
-        sDescription = sDescription.replaceAll(OUString("$controlclass$"),
+        sDescription = sDescription.replaceAll("$controlclass$",
             GetUIHeadlineName(nClassID, makeAny(m_xControlModel)));
         OUString sName = ::comphelper::getString(m_xControlModel->getPropertyValue(PROPERTY_NAME));
-        sDescription = sDescription.replaceAll(OUString("$controlname$"), sName);
+        sDescription = sDescription.replaceAll("$controlname$", sName);
         m_pMainDesc->SetText(sDescription);
 
         // search for the root of the form hierarchy
