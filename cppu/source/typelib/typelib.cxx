@@ -1974,8 +1974,7 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
         if (0 == *ppRet)
         {
             // Check for derived interface member type:
-            sal_Int32 i1 = name.lastIndexOf(
-                rtl::OUString(":@"));
+            sal_Int32 i1 = name.lastIndexOf(":@");
             if (i1 >= 0) {
                 sal_Int32 i2 = i1 + RTL_CONSTASCII_LENGTH(":@");
                 sal_Int32 i3 = name.indexOf(',', i2);
