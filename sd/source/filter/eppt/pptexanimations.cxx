@@ -920,7 +920,7 @@ sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 n
     sal_uInt32 nPresetId = 0;
     bPresetId = false;
 
-    if ( rPreset.match( OUString( "ppt_" ), 0 ) )
+    if ( rPreset.match("ppt_", 0) )
     {
     sal_Int32 nLast = rPreset.lastIndexOf( '_' );
     if ( ( nLast != -1 ) && ( ( nLast + 1 ) < rPreset.getLength() ) )

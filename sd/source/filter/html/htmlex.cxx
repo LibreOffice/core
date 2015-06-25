@@ -3255,8 +3255,8 @@ bool HtmlErrorContext::GetString( sal_uLong, OUString& rCtxStr )
 
     rCtxStr = SdResId( mnResId ).toString();
 
-    rCtxStr = rCtxStr.replaceAll( OUString("$(URL1)"), maURL1 );
-    rCtxStr = rCtxStr.replaceAll( OUString("$(URL2)"), maURL2 );
+    rCtxStr = rCtxStr.replaceAll( "$(URL1)", maURL1 );
+    rCtxStr = rCtxStr.replaceAll( "$(URL2)", maURL2 );
 
     return true;
 }
