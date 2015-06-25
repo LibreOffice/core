@@ -98,6 +98,9 @@ private:
         std::string const & qname, std::string const & replacement,
         TreatEmpty treatEmpty);
 
+    void handleOUStringCtor(
+        CallExpr const * expr, unsigned arg, std::string const & qname);
+
     std::stack<Expr const *> calls_;
 };
 
@@ -292,6 +295,68 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             TreatEmpty::Error);
         return true;
     }
+    if (qname == "rtl::OUString::reverseCompareTo"
+        && fdecl->getNumParams() == 1)
+    {
+        handleOUStringCtor(expr, 0, qname);
+        return true;
+    }
+    if (qname == "rtl::OUString::equalsIgnoreAsciiCase"
+        && fdecl->getNumParams() == 1)
+    {
+        handleOUStringCtor(expr, 0, qname);
+        return true;
+    }
+    if (qname == "rtl::OUString::match" && fdecl->getNumParams() == 2) {
+        handleOUStringCtor(expr, 0, qname);
+        return true;
+    }
+    if (qname == "rtl::OUString::matchIgnoreAsciiCase"
+        && fdecl->getNumParams() == 2)
+    {
+        handleOUStringCtor(expr, 0, qname);
+        return true;
+    }
+    if (qname == "rtl::OUString::startsWith" && fdecl->getNumParams() == 2) {
+        handleOUStringCtor(expr, 0, qname);
+        return true;
+    }
+    if (qname == "rtl::OUString::startsWithIgnoreAsciiCase"
+        && fdecl->getNumParams() == 2)
+    {
+        handleOUStringCtor(expr, 0, qname);
+        return true;
+    }
+    if (qname == "rtl::OUString::endsWith" && fdecl->getNumParams() == 2) {
+        handleOUStringCtor(expr, 0, qname);
+        return true;
+    }
+    if (qname == "rtl::OUString::endsWithIgnoreAsciiCase"
+        && fdecl->getNumParams() == 2)
+    {
+        handleOUStringCtor(expr, 0, qname);
+        return true;
+    }
+    if (qname == "rtl::OUString::indexOf" && fdecl->getNumParams() == 2) {
+        handleOUStringCtor(expr, 0, qname);
+        return true;
+    }
+    if (qname == "rtl::OUString::lastIndexOf" && fdecl->getNumParams() == 1) {
+        handleOUStringCtor(expr, 0, qname);
+        return true;
+    }
+    if (qname == "rtl::OUString::replaceFirst" && fdecl->getNumParams() == 3) {
+        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 1, qname);
+        return true;
+    }
+    if (qname == "rtl::OUString::replaceAll"
+        && (fdecl->getNumParams() == 2 || fdecl->getNumParams() == 3))
+    {
+        handleOUStringCtor(expr, 0, qname);
+        handleOUStringCtor(expr, 1, qname);
+        return true;
+    }
     if (qname == "rtl::OUString::equals" && fdecl->getNumParams() == 1) {
         unsigned n;
         bool non;
@@ -451,6 +516,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
                 << expr->getSourceRange();
             return true;
         }
+        return true;
     }
     return true;
 }
@@ -1087,6 +1153,73 @@ void StringConstant::handleCharLen(
     std::string repl(replacement);
     checkEmpty(expr, qname, treatEmpty, n, &repl);
     reportChange(expr, ChangeKind::CharLen, qname, repl, PassThrough::No);
+}
+
+void StringConstant::handleOUStringCtor(
+    CallExpr const * expr, unsigned arg, std::string const & qname)
+{
+    auto e0 = expr->getArg(arg)->IgnoreParenImpCasts();
+    auto e1 = dyn_cast<CXXFunctionalCastExpr>(e0);
+    if (e1 != nullptr) {
+        e0 = e1->getSubExpr()->IgnoreParenImpCasts();
+    }
+    auto e2 = dyn_cast<CXXBindTemporaryExpr>(e0);
+    if (e2 == nullptr) {
+        return;
+    }
+    auto e3 = dyn_cast<CXXConstructExpr>(
+        e2->getSubExpr()->IgnoreParenImpCasts());
+    if (e3 == nullptr) {
+        return;
+    }
+    if (e3->getConstructor()->getQualifiedNameAsString()
+         != "rtl::OUString::OUString")
+    {
+        return;
+    }
+    if (e3->getNumArgs() == 0) {
+        report(
+            DiagnosticsEngine::Warning,
+            ("in call of %0, replace default-constructed OUString with an empty"
+             " string literal"),
+            e3->getExprLoc())
+            << qname << expr->getSourceRange();
+        return;
+    }
+    APSInt res;
+    if (e3->getNumArgs() == 1
+        && e3->getArg(0)->IgnoreParenImpCasts()->isIntegerConstantExpr(
+            res, compiler.getASTContext()))
+    {
+        if (res > 0 && res <= 127) {
+            report(
+                DiagnosticsEngine::Warning,
+                ("in call of %0, replace OUString constructed from a (non-NUL)"
+                 " ASCII char constant with a string literal"),
+                e3->getExprLoc())
+                << qname << expr->getSourceRange();
+        }
+        return;
+    }
+    if (e3->getNumArgs() != 2) {
+        return;
+    }
+    unsigned n;
+    bool non;
+    bool emb;
+    bool trm;
+    if (!isStringConstant(
+            e3->getArg(0)->IgnoreParenImpCasts(), &n, &non, &emb, &trm))
+    {
+        return;
+    }
+    //TODO: non, emb, trm
+    report(
+        DiagnosticsEngine::Warning,
+        ("in call of %0, replace OUString constructed from a string literal"
+         " directly with the string literal"),
+        e3->getExprLoc())
+        << qname << expr->getSourceRange();
 }
 
 loplugin::Plugin::Registration< StringConstant > X("stringconstant");
