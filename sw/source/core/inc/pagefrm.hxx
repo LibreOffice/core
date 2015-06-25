@@ -96,6 +96,7 @@ class SwPageFrm: public SwFootnoteBossFrm
 
     static void GetHorizontalShadowRect( const SwRect& _rPageRect,
                                      const SwViewShell*    _pViewShell,
+                                     OutputDevice* pRenderContext,
                                      SwRect&       _orBottomShadowRect,
                                      bool bPaintLeftShadow,
                                      bool bPaintRightShadow,

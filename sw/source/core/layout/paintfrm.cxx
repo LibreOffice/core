@@ -6029,6 +6029,7 @@ bool SwPageFrm::IsLeftShadowNeeded() const
  */
 /*static*/ void SwPageFrm::GetHorizontalShadowRect( const SwRect& _rPageRect,
                                                 const SwViewShell*    _pViewShell,
+                                                OutputDevice* pRenderContext,
                                                 SwRect&       _orHorizontalShadowRect,
                                                 bool bPaintLeftShadow,
                                                 bool bPaintRightShadow,
@@ -6036,9 +6037,8 @@ bool SwPageFrm::IsLeftShadowNeeded() const
 {
     const SwPostItMgr *pMgr = _pViewShell->GetPostItMgr();
     SwRect aAlignedPageRect( _rPageRect );
-    ::SwAlignRect( aAlignedPageRect, _pViewShell, _pViewShell->GetOut() );
-    SwRect aPagePxRect =
-            _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
+    ::SwAlignRect( aAlignedPageRect, _pViewShell, pRenderContext );
+    SwRect aPagePxRect = pRenderContext->LogicToPixel( aAlignedPageRect.SVRect() );
 
     long lShadowAdjustment = mnShadowPxWidth - 1; // TODO: extract this
 
@@ -6177,7 +6177,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     SwRect aPaintRect;
     OutputDevice *pOut = _pViewShell->GetOut();
 
-    SwPageFrm::GetHorizontalShadowRect( _rPageRect, _pViewShell, aPaintRect, bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
+    SwPageFrm::GetHorizontalShadowRect( _rPageRect, _pViewShell, pOut, aPaintRect, bPaintLeftShadow, bPaintRightShadow, bRightSidebar );
 
     // Right shadow & corners
     if ( bPaintRightShadow )
@@ -6386,7 +6386,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
 
     // Always ask for full shadow since we want a bounding rect
     // including at least the page frame
-    SwPageFrm::GetHorizontalShadowRect( _rPageRect, _pViewShell, aTmpRect, false, false, bRightSidebar );
+    SwPageFrm::GetHorizontalShadowRect( _rPageRect, _pViewShell, pRenderContext, aTmpRect, false, false, bRightSidebar );
 
     if(bLeftShadow) aPagePxRect.Left( aTmpRect.Left() - mnShadowPxWidth - 1);
     if(bRightShadow) aPagePxRect.Right( aTmpRect.Right() + mnShadowPxWidth + 1);
