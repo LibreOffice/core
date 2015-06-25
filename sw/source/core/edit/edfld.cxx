@@ -367,7 +367,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 // Suche nach SwTxtFld ...
                 while(  bOkay
                      && pCurStt->nContent != pCurEnd->nContent
-                     && aPam.Find( aHint, sal_False, fnMoveForward, &aCurPam ) )
+                     && aPam.Find( aHint, sal_False, fnMoveForward, &aCurPam, sal_True ) )
                 {
                     //  wenn nur ein Pam mehr als ein Feld enthaelt ...
                     if( aPam.Start()->nContent != pCurStt->nContent )
