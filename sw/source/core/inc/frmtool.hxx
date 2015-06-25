@@ -79,7 +79,7 @@ void paintGraphicUsingPrimitivesHelper(
 
 // method to align rectangle.
 // Created declaration here to avoid <extern> declarations
-void SwAlignRect( SwRect &rRect, const SwViewShell *pSh );
+void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContext* pRenderContext );
 
 // method to align graphic rectangle
 // Created declaration here to avoid <extern> declarations

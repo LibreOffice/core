@@ -848,7 +848,7 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
     //     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
     //     the following code.
     SwRect aAlignedGrfArea = rGrfArea;
-    ::SwAlignRect( aAlignedGrfArea,  pShell );
+    ::SwAlignRect( aAlignedGrfArea,  pShell, pOut );
 
     if( !bIsChart )
     {
