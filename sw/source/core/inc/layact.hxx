@@ -100,7 +100,7 @@ class SwLayAction
     inline bool _PaintContent( const SwContentFrm *, const SwPageFrm *,
                              const SwRect & );
 
-    bool FormatLayout( SwLayoutFrm *, bool bAddRect = true );
+    bool FormatLayout( OutputDevice* pRenderContext, SwLayoutFrm *, bool bAddRect = true );
     bool FormatLayoutTab( SwTabFrm *, bool bAddRect = true );
     bool FormatContent( const SwPageFrm* pPage );
     void _FormatContent( const SwContentFrm* pContent,
