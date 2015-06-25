@@ -388,6 +388,9 @@ public:
 
     OUString GetSidebarContextName() const;
 
+    const Color& GetAppBackgroundColor() const { return mnAppBackgroundColor; }
+    void SetAppBackgroundColor( Color nNewColor )  { mnAppBackgroundColor = nNewColor; }
+
     //move this method to ViewShell.
     //void  NotifyAccUpdate();
 protected:
@@ -519,6 +522,9 @@ private:
     ::std::unique_ptr< ViewOverlayManager > mpViewOverlayManager;
 
     std::vector<std::unique_ptr<SdrExternalToolEdit>> m_ExternalEdits;
+
+    // The colour of the area behind the slide (used to be called "Wiese")
+    Color mnAppBackgroundColor;
 };
 
 } // end of namespace sd
