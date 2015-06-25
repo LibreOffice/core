@@ -138,16 +138,16 @@ void SvpSalGraphics::clipRegion(cairo_t* cr)
 
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
 {
-#if !ENABLE_CAIRO_CANVAS
+    bool bRet = false;
     (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
-    return false;
-#elif defined(CAIRO_VERSION) && defined(CAIRO_VERSION_ENCODE) && CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+#if ENABLE_CAIRO_CANVAS
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
     if (m_bUseLineColor || !m_bUseFillColor)
-        return false;
+        return bRet;
 
     cairo_t* cr = createCairoContext(m_aDevice);
     if (!cr)
-        return false;
+        return bRet;
 
     if (!m_aDevice->isTopDown())
     {
@@ -193,11 +193,10 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
         xDamageTracker->damaged(basegfx::B2IBox(extents.x, extents.y, extents.x + extents.width,
                                                 extents.y + extents.height));
     }
-    return true;
-#else
-    (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
-    return false;
+    bRet = true;
 #endif
+#endif
+    return bRet;
 }
 
 SvpSalGraphics::SvpSalGraphics() :
