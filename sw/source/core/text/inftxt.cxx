@@ -1467,10 +1467,10 @@ void SwTextFormatInfo::Init()
     SetPaintOfst(0);
 }
 
-SwTextFormatInfo::SwTextFormatInfo(SwTextFrm *pFrame, const bool bInterHyphL,
+SwTextFormatInfo::SwTextFormatInfo(OutputDevice* pRenderContext, SwTextFrm *pFrame, const bool bInterHyphL,
                                    const bool bQuickL, const bool bTst)
 {
-    CtorInitTextFormatInfo(pFrame->getRootFrm()->GetCurrShell()->GetOut(), pFrame, bInterHyphL, bQuickL, bTst);
+    CtorInitTextFormatInfo(pRenderContext, pFrame, bInterHyphL, bQuickL, bTst);
 }
 
 /**

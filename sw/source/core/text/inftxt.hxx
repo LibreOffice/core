@@ -563,7 +563,7 @@ class SwTextFormatInfo : public SwTextPaintInfo
 public:
     void CtorInitTextFormatInfo( OutputDevice* pRenderContext, SwTextFrm *pFrm, const bool bInterHyph = false,
         const bool bQuick = false, const bool bTst = false );
-    SwTextFormatInfo(SwTextFrm *pFrame, const bool bInterHyphL = false,
+    SwTextFormatInfo(OutputDevice* pRenderContext, SwTextFrm *pFrame, const bool bInterHyphL = false,
             const bool bQuickL = false, const bool bTst = false);
 
     // For the formatting inside a double line in a line (multi-line portion)

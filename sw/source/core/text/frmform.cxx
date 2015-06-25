@@ -491,7 +491,7 @@ com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > SwTextFrm::Get
     com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > tabs(1);
     ::com::sun::star::style::TabStop ts;
 
-    SwTextFormatInfo     aInf( this );
+    SwTextFormatInfo     aInf( getRootFrm()->GetCurrShell()->GetOut(), this );
     SwTextFormatter      aLine( this, &aInf );
     SwTextCursor         TextCursor( this, &aInf );
     const Point aCharPos( TextCursor.GetTopLeft() );
@@ -855,7 +855,7 @@ bool SwTextFrm::CalcPreps()
             {
                 SWAP_IF_NOT_SWAPPED swap( this );
 
-                SwTextFormatInfo aInf( this );
+                SwTextFormatInfo aInf( getRootFrm()->GetCurrShell()->GetOut(), this );
                 SwTextFormatter aLine( this, &aInf );
 
                 WidowsAndOrphans aFrmBreak( this );
@@ -1650,7 +1650,7 @@ void SwTextFrm::_Format( SwParaPortion *pPara )
     if ( IsVertical() )
         SwapWidthAndHeight();
 
-    SwTextFormatInfo aInf( this );
+    SwTextFormatInfo aInf( getRootFrm()->GetCurrShell()->GetOut(), this );
     SwTextFormatter  aLine( this, &aInf );
 
     HideAndShowObjects();
@@ -1877,7 +1877,7 @@ bool SwTextFrm::FormatQuick( bool bForceQuickFormat )
     SwFrmSwapper aSwapper( this, true );
 
     TextFrmLockGuard aLock(this);
-    SwTextFormatInfo aInf( this, false, true );
+    SwTextFormatInfo aInf( getRootFrm()->GetCurrShell()->GetOut(), this, false, true );
     if( 0 != aInf.MaxHyph() )   // Respect MaxHyphen!
         return false;
 

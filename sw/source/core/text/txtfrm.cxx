@@ -754,7 +754,7 @@ void SwTextFrm::CalcLineSpace()
 
     Size aNewSize( Prt().SSize() );
 
-    SwTextFormatInfo aInf( this );
+    SwTextFormatInfo aInf( getRootFrm()->GetCurrShell()->GetOut(), this );
     SwTextFormatter aLine( this, &aInf );
     if( aLine.GetDropLines() )
     {
@@ -1876,7 +1876,7 @@ SwTestFormat::SwTestFormat( SwTextFrm* pTextFrm, const SwFrm* pPre, SwTwips nMax
     if ( pFrm->IsVertical() )
         pFrm->SwapWidthAndHeight();
 
-    SwTextFormatInfo aInf( pFrm, false, true, true );
+    SwTextFormatInfo aInf( pFrm->getRootFrm()->GetCurrShell()->GetOut(), pFrm, false, true, true );
     SwTextFormatter  aLine( pFrm, &aInf );
 
     pFrm->_Format( aLine, aInf );
@@ -2110,7 +2110,7 @@ SwTwips SwTextFrm::CalcFitToContent()
     // #i31490#
     TextFrmLockGuard aLock( this );
 
-    SwTextFormatInfo aInf( this, false, true, true );
+    SwTextFormatInfo aInf( getRootFrm()->GetCurrShell()->GetOut(), this, false, true, true );
     aInf.SetIgnoreFly( true );
     SwTextFormatter  aLine( this, &aInf );
     SwHookOut aHook( aInf );
@@ -2170,7 +2170,7 @@ void SwTextFrm::CalcAdditionalFirstLineOffset()
             TextFrmLockGuard aLock( this );
 
             // simulate text formatting
-            SwTextFormatInfo aInf( this, false, true, true );
+            SwTextFormatInfo aInf( getRootFrm()->GetCurrShell()->GetOut(), this, false, true, true );
             aInf.SetIgnoreFly( true );
             SwTextFormatter aLine( this, &aInf );
             SwHookOut aHook( aInf );
