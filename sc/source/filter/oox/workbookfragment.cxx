@@ -461,6 +461,7 @@ void WorkbookFragment::finalizeImport()
 
     // create all database ranges and defined names, in that order
     getTables().finalizeImport();
+    getTables().applyTableColumns();
     getDefinedNames().finalizeImport();
     // open the VBA project storage
     OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATION_TYPE( "vbaProject" ) );
