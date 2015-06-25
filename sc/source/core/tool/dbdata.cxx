@@ -603,10 +603,29 @@ void ScDBData::AdjustTableColumnNames( UpdateRefMode eUpdateRefMode, SCCOL nDx, 
     aNewNames.swap( maTableColumnNames);
 }
 
+namespace {
+class TableColumnNameSearch : public unary_function<ScDBData, bool>
+{
+public:
+    explicit TableColumnNameSearch( const OUString& rSearchName ) :
+        maSearchName( rSearchName )
+    {
+    }
+
+    bool operator()( const OUString& rName ) const
+    {
+        return ScGlobal::GetpTransliteration()->isEqual( maSearchName, rName);
+    }
+
+private:
+    OUString maSearchName;
+};
+}
+
 sal_Int32 ScDBData::GetColumnNameOffset( const OUString& rName ) const
 {
     ::std::vector<OUString>::const_iterator it(
-            ::std::find( maTableColumnNames.begin(), maTableColumnNames.end(), rName));
+            ::std::find_if( maTableColumnNames.begin(), maTableColumnNames.end(), TableColumnNameSearch( rName)));
     if (it != maTableColumnNames.end())
         return it - maTableColumnNames.begin();
 
