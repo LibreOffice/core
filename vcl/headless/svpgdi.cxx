@@ -141,7 +141,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
 #if !ENABLE_CAIRO_CANVAS
     (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
     return false;
-#elif CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+#elif defined(CAIRO_VERSION) && defined(CAIRO_VERSION_ENCODE) && CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
     if (m_bUseLineColor || !m_bUseFillColor)
         return false;
 
