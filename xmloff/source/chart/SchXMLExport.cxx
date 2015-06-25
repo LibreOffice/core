@@ -627,7 +627,7 @@ uno::Sequence< OUString > lcl_DataSequenceToStringSequence(
     {
         OUString aRole;
         xProp->getPropertyValue("Role") >>= aRole;
-        if( aRole.match( OUString(  "values-x" ) ) )
+        if( aRole.match("values-x") )
         {
             //lcl_clearIfNoValuesButTextIsContained - replace by indices if the values are not appropriate
             bool bHasValue=false;
