@@ -2875,6 +2875,19 @@ void GtkSalFrame::Sync()
     gdk_display_sync( getGdkDisplay() );
 }
 
+#ifndef GDK_Open
+#define GDK_Open 0x1008ff6b
+#endif
+#ifndef GDK_Paste
+#define GDK_Paste 0x1008ff6d
+#endif
+#ifndef GDK_Copy
+#define GDK_Copy 0x1008ff57
+#endif
+#ifndef GDK_Cut
+#define GDK_Cut 0x1008ff58
+#endif
+
 void GtkSalFrame::KeyCodeToGdkKey(const vcl::KeyCode& rKeyCode,
     guint* pGdkKeyCode, GdkModifierType *pGdkModifiers)
 {
