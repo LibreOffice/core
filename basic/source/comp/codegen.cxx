@@ -194,7 +194,7 @@ void SbiCodeGen::Save()
             sal_uInt16 nPassCount = 1;
             if( nIfaceCount )
             {
-                int nPropPrefixFound = aProcName.indexOf(OUString("Property "));
+                int nPropPrefixFound = aProcName.indexOf("Property ");
                 OUString aPureProcName = aProcName;
                 OUString aPropPrefix;
                 if( nPropPrefixFound == 0 )
