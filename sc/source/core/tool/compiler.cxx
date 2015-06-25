@@ -2483,6 +2483,18 @@ Label_MaskStateMachine:
             }
             else
             {
+                // When having parsed a second reference part, ensure that the
+                // i18n parser did not mistakingly parse a number that included
+                // a separator which happened to be meant as a parameter
+                // separator instead.
+                if (mnRangeOpPosInSymbol >= 0 && (aRes.TokenType & KParseType::ASC_NUMBER))
+                {
+                    for (sal_Int32 i = nSrcPos; i < aRes.EndPos; ++i)
+                    {
+                        if (pStart[i] == cSep)
+                            aRes.EndPos = i;    // also ends for
+                    }
+                }
                 aSymbol.append( pStart + nSrcPos, aRes.EndPos - nSrcPos);
                 nSrcPos = aRes.EndPos;
                 c = pStart[nSrcPos];
