@@ -59,7 +59,7 @@ using namespace ::com::sun::star::beans;
 #define OFFSET_IMAGEIDENTIFIER                          2
 #define OFFSET_TARGETNAME                               3
 
-#define PATHPREFIX_SETUP                                OUString("m")
+#define PATHPREFIX_SETUP                                "m"
 
 /*-****************************************************************************************************************
     @descr  struct to hold information about one menu entry.

@@ -58,8 +58,8 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::lang;
 
 #define SEARCHPATH_DELIMITER  ';'
-#define SIGN_STARTVARIABLE    OUString( "$("  )
-#define SIGN_ENDVARIABLE      OUString( ")" )
+#define SIGN_STARTVARIABLE    "$("
+#define SIGN_ENDVARIABLE      ")"
 
 // Supported variables by the old SvtPathOptions implementation
 #define SUBSTITUTE_INSTPATH   "$(instpath)"

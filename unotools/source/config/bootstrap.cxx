@@ -199,7 +199,7 @@ bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
 
     // #109863# sal/osl returns final slash for file URLs contradicting
     // the URL/URI RFCs.
-    if ( !aNormalizedURL.endsWith(OUString(cURLSeparator)) )
+    if ( !aNormalizedURL.endsWith(OUStringLiteral1<cURLSeparator>()) )
         _sURL = aNormalizedURL;
     else
         _sURL = aNormalizedURL.copy( 0, aNormalizedURL.getLength()-1 );
@@ -312,7 +312,7 @@ PathStatus getDerivedPath(
     // do we have a base path ?
     if (!_aBaseURL.isEmpty())
     {
-        OSL_PRECOND(!_aBaseURL.endsWith(OUString(cURLSeparator)), "Unexpected: base URL ends in slash");
+        OSL_PRECOND(!_aBaseURL.endsWith(OUStringLiteral1<cURLSeparator>()), "Unexpected: base URL ends in slash");
 
         sDerivedURL = OUStringBuffer(_aBaseURL).append(cURLSeparator).append(_sRelativeURL).makeStringAndClear();
 
