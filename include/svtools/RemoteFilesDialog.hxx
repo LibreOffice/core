@@ -59,8 +59,8 @@ enum SvtRemoteDlgType
     REMOTEDLG_TYPE_PATHDLG = 1
 };
 
-typedef std::shared_ptr<Place> ServicePtr;
-typedef ::com::sun::star::uno::Sequence<OUString>  OUStringList;
+typedef std::shared_ptr< Place > ServicePtr;
+typedef ::com::sun::star::uno::Sequence< OUString >  OUStringList;
 
 class FileViewContainer;
 class Breadcrumb;
@@ -69,7 +69,7 @@ class FolderTree;
 class SVT_DLLPUBLIC RemoteFilesDialog : public ModalDialog
 {
 public:
-    RemoteFilesDialog(vcl::Window* pParent, WinBits nBits);
+    RemoteFilesDialog( vcl::Window* pParent, WinBits nBits );
     virtual ~RemoteFilesDialog();
 
     virtual void dispose() SAL_OVERRIDE;
@@ -90,28 +90,28 @@ private:
 
     OUString m_sPath;
 
-    VclPtr<PushButton> m_pOpen_btn;
-    VclPtr<PushButton> m_pSave_btn;
-    VclPtr<CancelButton> m_pCancel_btn;
-    VclPtr<MenuButton> m_pAddService_btn;
-    VclPtr<ListBox> m_pServices_lb;
-    VclPtr<Breadcrumb> m_pPath;
-    VclPtr<Splitter> m_pSplitter;
-    VclPtr<FolderTree> m_pTreeView;
-    VclPtr<SvtFileView> m_pFileView;
-    VclPtr<FileViewContainer> m_pContainer;
-    VclPtr<ListBox> m_pFilter_lb;
-    VclPtr<Edit> m_pName_ed;
+    VclPtr< PushButton > m_pOpen_btn;
+    VclPtr< PushButton > m_pSave_btn;
+    VclPtr< CancelButton > m_pCancel_btn;
+    VclPtr< MenuButton > m_pAddService_btn;
+    VclPtr< ListBox > m_pServices_lb;
+    VclPtr< Breadcrumb > m_pPath;
+    VclPtr< Splitter > m_pSplitter;
+    VclPtr< FolderTree > m_pTreeView;
+    VclPtr< SvtFileView > m_pFileView;
+    VclPtr< FileViewContainer > m_pContainer;
+    VclPtr< ListBox > m_pFilter_lb;
+    VclPtr< Edit > m_pName_ed;
 
-    std::vector<ServicePtr> m_aServices;
-    std::vector<OUString> m_aFilters;
+    std::vector< ServicePtr > m_aServices;
+    std::vector< OUString > m_aFilters;
 
     void FillServicesListbox();
 
     /* If failure returns < 0 */
     int GetSelectedServicePos();
 
-    OUString getCurrentFilter();
+    OUString GetCurrentFilter();
 
     FileViewResult OpenURL( OUString sURL );
 
