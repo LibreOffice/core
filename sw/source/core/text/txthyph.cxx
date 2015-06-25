@@ -28,6 +28,7 @@
 #include <itrform2.hxx>
 #include <guess.hxx>
 #include <splargs.hxx>
+#include <rootfrm.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -78,7 +79,7 @@ bool SwTextFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
         if ( IsVertical() )
             SwapWidthAndHeight();
 
-        SwTextFormatInfo aInf( this, true ); // true for interactive hyph!
+        SwTextFormatInfo aInf( getRootFrm()->GetCurrShell()->GetOut(), this, true ); // true for interactive hyph!
         SwTextFormatter aLine( this, &aInf );
         aLine.CharToLine( rHyphInf.nStart );
 
