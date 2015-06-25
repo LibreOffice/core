@@ -98,6 +98,7 @@ public:
     void testExportToPicture();
     void testSearchWithTransliterate();
     void testTdf75137();
+    void testTdf83798();
     void testTableBackgroundColor();
     void testTdf90362();
     void testUndoCharAttribute();
@@ -143,6 +144,7 @@ public:
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTdf75137);
+    CPPUNIT_TEST(testTdf83798);
     CPPUNIT_TEST(testTableBackgroundColor);
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
@@ -1062,6 +1064,43 @@ void SwUiWriterTest::testTdf75137()
     sal_uLong thirdIndex = pShellCrsr->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(firstIndex, thirdIndex);
     CPPUNIT_ASSERT(firstIndex != secondIndex);
+}
+
+void SwUiWriterTest::testTdf83798()
+{
+    SwDoc* pDoc = createDoc("tdf83798.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->GotoNextTOXBase();
+    const SwTOXBase* pTOXBase = pWrtShell->GetCurTOX();
+    pWrtShell->UpdateTableOf(*pTOXBase, nullptr);
+    SwPaM* pCrsr = pDoc->GetEditShell()->GetCrsr();
+    pCrsr->SetMark();
+    pCrsr->Move(fnMoveForward, fnGoNode);
+    CPPUNIT_ASSERT_EQUAL(OUString("Table of Contents"), pCrsr->GetText());
+    pCrsr->DeleteMark();
+    pCrsr->SetMark();
+    pCrsr->Move(fnMoveForward, fnGoContent);
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pCrsr->GetText());
+    pCrsr->DeleteMark();
+    pCrsr->Move(fnMoveForward, fnGoNode);
+    pCrsr->SetMark();
+    pCrsr->Move(fnMoveForward, fnGoContent);
+    pCrsr->Move(fnMoveForward, fnGoContent);
+    pCrsr->Move(fnMoveForward, fnGoContent);
+    CPPUNIT_ASSERT_EQUAL(OUString("1.A"), pCrsr->GetText());
+    pCrsr->DeleteMark();
+    pCrsr->Move(fnMoveForward, fnGoNode);
+    pCrsr->SetMark();
+    pCrsr->Move(fnMoveForward, fnGoContent);
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), pCrsr->GetText());
+    pCrsr->DeleteMark();
+    pCrsr->Move(fnMoveForward, fnGoNode);
+    pCrsr->SetMark();
+    pCrsr->Move(fnMoveForward, fnGoContent);
+    pCrsr->Move(fnMoveForward, fnGoContent);
+    pCrsr->Move(fnMoveForward, fnGoContent);
+    CPPUNIT_ASSERT_EQUAL(OUString("2.A"), pCrsr->GetText());
+    pCrsr->DeleteMark();
 }
 
 void SwUiWriterTest::testTableBackgroundColor()
