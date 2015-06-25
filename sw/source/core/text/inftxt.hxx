@@ -410,8 +410,7 @@ public:
     const SvxBrushItem *GetBrushItem() const { return pBrushItem; }
     const SwRect       &GetBrushRect() const { return aItemRect;  }
 
-    inline SwTextPaintInfo( SwTextFrm *pFrame, const SwRect &rPaint )
-           { CtorInitTextPaintInfo( pFrame, rPaint ); }
+    SwTextPaintInfo( SwTextFrm *pFrame, const SwRect &rPaint );
 
     inline SwTwips X() const { return aPos.X(); }
     inline void X( const long nNew ) { aPos.X() = nNew; }

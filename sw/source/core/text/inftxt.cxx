@@ -531,6 +531,11 @@ SwTextPaintInfo::SwTextPaintInfo( const SwTextPaintInfo &rInf )
       nSpaceIdx( rInf.GetSpaceIdx() )
 { }
 
+SwTextPaintInfo::SwTextPaintInfo( SwTextFrm *pFrame, const SwRect &rPaint )
+{
+    CtorInitTextPaintInfo( pFrame, rPaint );
+}
+
 extern Color aGlobalRetoucheColor;
 
 /// Returns if the current background color is dark.
