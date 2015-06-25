@@ -89,7 +89,7 @@ class SwViewShellImp
 
     SwPagePreviewLayout* mpPgPreviewLayout;
 
-    void SetFirstVisPage();     // Recalculate the first visible Page
+    void SetFirstVisPage(OutputDevice* pRenderContext); // Recalculate the first visible Page
 
     void StartAction();         // Show handle and hide
     void EndAction();           // Called by SwViewShell::ImplXXXAction
