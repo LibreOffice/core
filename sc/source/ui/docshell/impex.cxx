@@ -695,11 +695,11 @@ static void lcl_UnescapeSylk( OUString & rString, SylkVersion eVersion )
     // Older versions quoted the string and doubled embedded quotes, but not
     // the semicolons, which was plain wrong.
     if (eVersion >= SYLK_OOO32)
-        rString = rString.replaceAll( OUString(DOUBLE_SEMICOLON), OUString(';') );
+        rString = rString.replaceAll(OUString(DOUBLE_SEMICOLON), ";");
     else
-        rString = rString.replaceAll( OUString(DOUBLE_DOUBLEQUOTE), OUString('"') );
+        rString = rString.replaceAll(OUString(DOUBLE_DOUBLEQUOTE), "\"");
 
-    rString = rString.replaceAll( OUString(SYLK_LF), OUString('\n') );
+    rString = rString.replaceAll(OUString(SYLK_LF), "\n");
 }
 
 static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
@@ -1497,7 +1497,7 @@ void ScImportExport::EmbeddedNullTreatment( OUString & rStr )
     sal_Unicode cNull = 0;
     if (rStr.indexOf( cNull) >= 0)
     {
-        rStr = rStr.replaceAll( OUString( &cNull, 1), OUString());
+        rStr = rStr.replaceAll( OUString( &cNull, 1), "");
     }
 }
 
@@ -1909,7 +1909,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     // unescape doubled semicolons
                     aCode = aCode.replaceAll(";;", ";");
                     // get rid of Xcl escape characters
-                    aCode = aCode.replaceAll(OUString(static_cast<sal_Unicode>(0x1b)), OUString());
+                    aCode = aCode.replaceAll("\x1b", "");
                     sal_Int32 nCheckPos;
                     short nType;
                     sal_uInt32 nKey;
@@ -2002,7 +2002,7 @@ bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_EDIT:
                 hasstring:
                     aCellStr = pDoc->GetString(nCol, nRow, aRange.aStart.Tab());
-                    aCellStr = aCellStr.replaceAll( OUString('\n'), OUString(SYLK_LF) );
+                    aCellStr = aCellStr.replaceAll("\n", OUString(SYLK_LF));
 
                     aBufStr = "C;X";
                     aBufStr += OUString::number( c );

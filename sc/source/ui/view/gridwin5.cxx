@@ -248,8 +248,8 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     vcl::KeyCode aCode( KEY_SPACE );
     vcl::KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
     OUString aModStr( aModifiedCode.GetName() );
-    aModStr = aModStr.replaceFirst(aCode.GetName(), OUString());
-    aModStr = aModStr.replaceAll("+", OUString());
+    aModStr = aModStr.replaceFirst(aCode.GetName(), "");
+    aModStr = aModStr.replaceAll("+", "");
     OUString aCtrlClickHlinkStr = ScGlobal::GetRscString( STR_CTRLCLICKHYPERLINK );
 
     aCtrlClickHlinkStr = aCtrlClickHlinkStr.replaceAll("%s", aModStr);
