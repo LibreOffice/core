@@ -300,6 +300,7 @@ public:
     */
     static void GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
                                              const SwViewShell*    _pViewShell,
+                                             OutputDevice* pRenderContext,
                                              SwRect& _orBorderAndShadowBoundRect,
                                              const bool bLeftShadow,
                                              const bool bRightShadow,
