@@ -230,6 +230,11 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
     }
     bRet = true;
 #endif
+    (void)nX;
+    (void)nY;
+    (void)nWidth;
+    (void)nHeight;
+    (void)nTransparency;
 #endif
     return bRet;
 }
