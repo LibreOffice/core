@@ -3495,6 +3495,22 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
             }
         }
     }
+
+    // And now a fallback for named expressions during document load time when
+    // cell content isn't available yet. This could be the preferred method IF
+    // the ScDBData column names were maintained and refreshed on ALL sheet
+    // operations, including cell content changes.
+    sal_Int32 nOffset = pDBData->GetColumnNameOffset( aName);
+    if (nOffset >= 0)
+    {
+        ScSingleRefData aRef;
+        ScAddress aAdr( aRange.aStart);
+        aAdr.IncCol( nOffset);
+        aRef.InitAddress( aAdr);
+        maRawToken.SetSingleReference( aRef );
+        return true;
+    }
+
     return false;
 }
 
