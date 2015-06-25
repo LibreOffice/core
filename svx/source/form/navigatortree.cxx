@@ -438,7 +438,7 @@ namespace svxform
                         case SID_FM_NEW_FORM:
                         {
                             OUString aStr(SVX_RESSTR(RID_STR_FORM));
-                            OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll(OUString('#'), aStr);
+                            OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
 
                             pFormModel->BegUndo(aUndoStr);
                             // slot was only available, if there is only one selected entry,
@@ -450,7 +450,7 @@ namespace svxform
                         case SID_FM_NEW_HIDDEN:
                         {
                             OUString aStr(SVX_RESSTR(RID_STR_CONTROL));
-                            OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll(OUString('#'), aStr);
+                            OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
 
                             pFormModel->BegUndo(aUndoStr);
                             // slot was valid for (exactly) one selected form
@@ -969,7 +969,7 @@ namespace svxform
             if (pFormModel)
             {
                 OUString aStr(SVX_RESSTR(RID_STR_CONTROL));
-                OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll(OUString('#'), aStr);
+                OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll("#", aStr);
                 pFormModel->BegUndo(aUndoStr);
             }
 
