@@ -1234,7 +1234,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
  * that the border "leaves its original pixel", if it has to
  * No prior adjustments for odd relation between pixel and twip
  */
-void SwAlignRect( SwRect &rRect, const SwViewShell *pSh )
+void SwAlignRect( SwRect &rRect, const SwViewShell *pSh, const vcl::RenderContext* pRenderContext )
 {
     if( !rRect.HasArea() )
         return;
@@ -1248,7 +1248,7 @@ void SwAlignRect( SwRect &rRect, const SwViewShell *pSh )
     }
 
     const vcl::RenderContext *pOut = gProp.bSFlyMetafile ?
-                        gProp.pSFlyMetafileOut.get() : pSh->GetOut();
+                        gProp.pSFlyMetafileOut.get() : pRenderContext;
 
     // Hold original rectangle in pixel
     const Rectangle aOrgPxRect = pOut->LogicToPixel( rRect.SVRect() );
@@ -1509,7 +1509,7 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
         }
     }
 
-    ::SwAlignRect( rRect, properties.pSGlobalShell );
+    ::SwAlignRect( rRect, properties.pSGlobalShell, properties.pSGlobalShell->GetOut() );
 }
 
 /**
@@ -1825,7 +1825,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOu
     // Calculate align rectangle from parameter <rGrf> and use aligned
     // rectangle <aAlignedGrfRect> in the following code
     SwRect aAlignedGrfRect = rGrf;
-    ::SwAlignRect( aAlignedGrfRect, &rSh );
+    ::SwAlignRect( aAlignedGrfRect, &rSh, pOut );
 
     // Change type from <bool> to <bool>.
     const bool bNotInside = bClip && !rOut.IsInside( aAlignedGrfRect );
@@ -2076,7 +2076,7 @@ void DrawGraphic(
             GraphicObject* pGraphicObj = const_cast< GraphicObject* >(pBrush->GetGraphicObject());
             // calculate aligned paint rectangle
             SwRect aAlignedPaintRect = rOut;
-            ::SwAlignRect( aAlignedPaintRect, &rSh );
+            ::SwAlignRect( aAlignedPaintRect, &rSh, pOutDev );
             // draw background color for aligned paint rectangle
             lcl_DrawGraphicBackgrd( *pBrush, pOutDev, aAlignedPaintRect, *pGraphicObj, bGrfNum, gProp );
 
@@ -2586,7 +2586,7 @@ void SwTabFrmPainter::PaintLines(OutputDevice& rDev, const SwRect& rRect) const
     SwRect aUpper( pUpper->Prt() );
     aUpper.Pos() += pUpper->Frm().Pos();
     SwRect aUpperAligned( aUpper );
-    ::SwAlignRect( aUpperAligned, gProp.pSGlobalShell );
+    ::SwAlignRect( aUpperAligned, gProp.pSGlobalShell, &rDev );
 
     while ( true )
     {
@@ -3478,7 +3478,7 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
                 // OD 20.02.2003 #107369# - use aligned page rectangle
                 {
                     SwRect aTmpPageRect( aEmptyPageRect );
-                    ::SwAlignRect( aTmpPageRect, pSh );
+                    ::SwAlignRect( aTmpPageRect, pSh, &rRenderContext );
                     aEmptyPageRect = aTmpPageRect;
                 }
 
@@ -5072,7 +5072,7 @@ void PaintCharacterBorder(
     const bool bJoinWithNext )
 {
     SwRect aAlignedRect(rPaintArea);
-    SwAlignRect(aAlignedRect, gProp.pSGlobalShell);
+    SwAlignRect(aAlignedRect, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut());
 
     bool bTop = true;
     bool bBottom = true;
@@ -5467,7 +5467,7 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         //happen, that some parts won't be processed.
         SwRect aRect( Prt() );
         aRect += Frm().Pos();
-        ::SwAlignRect( aRect, gProp.pSGlobalShell );
+        ::SwAlignRect( aRect, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
         // OD 27.09.2002 #103636# - new local boolean variable in order to
         // suspend border paint under special cases - see below.
         // NOTE: This is a fix for the implementation of feature #99657#.
@@ -6035,7 +6035,7 @@ bool SwPageFrm::IsLeftShadowNeeded() const
 {
     const SwPostItMgr *pMgr = _pViewShell->GetPostItMgr();
     SwRect aAlignedPageRect( _rPageRect );
-    ::SwAlignRect( aAlignedPageRect, _pViewShell );
+    ::SwAlignRect( aAlignedPageRect, _pViewShell, _pViewShell->GetOut() );
     SwRect aPagePxRect =
             _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
 
@@ -6125,7 +6125,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
     static Color aShadowColor( COL_AUTO );
 
     SwRect aAlignedPageRect( _rPageRect );
-    ::SwAlignRect( aAlignedPageRect, _pViewShell );
+    ::SwAlignRect( aAlignedPageRect, _pViewShell, _pViewShell->GetOut() );
     SwRect aPagePxRect = _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
 
     if (aShadowColor != SwViewOption::GetShadowColor())
@@ -6253,7 +6253,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
         return;
 
     SwRect aPageRect( _rPageRect );
-    SwAlignRect( aPageRect, _pViewShell );
+    SwAlignRect( aPageRect, _pViewShell, _pViewShell->GetOut() );
 
     const SwPostItMgr *pMgr = _pViewShell->GetPostItMgr();
     if (pMgr && pMgr->ShowNotes() && pMgr->HasNotes())  // do not show anything in print preview
@@ -6375,7 +6375,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
                                                       )
 {
     SwRect aAlignedPageRect( _rPageRect );
-    ::SwAlignRect( aAlignedPageRect, _pViewShell );
+    ::SwAlignRect( aAlignedPageRect, _pViewShell, _pViewShell->GetOut() );
     SwRect aPagePxRect =
             _pViewShell->GetOut()->LogicToPixel( aAlignedPageRect.SVRect() );
     aPagePxRect.Bottom( aPagePxRect.Bottom() + mnShadowPxWidth + 1 );
@@ -6565,7 +6565,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                  (IsTextFrm() && Prt().SSize() == Frm().SSize()) )
             {
                 aRect = Frm();
-                ::SwAlignRect( aRect, gProp.pSGlobalShell );
+                ::SwAlignRect( aRect, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
             }
             else
             {
@@ -6641,7 +6641,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                     {
                         if (1 < aRegion.size())
                         {
-                            ::SwAlignRect( aRegion[i], gProp.pSGlobalShell );
+                            ::SwAlignRect( aRegion[i], gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
                             if( !aRegion[i].HasArea() )
                               continue;
                         }
@@ -7043,7 +7043,7 @@ void SwColumnFrm::PaintSubsidiaryLines( const SwPageFrm *,
     if ( pFootnoteCont )
         aArea.AddBottom( pFootnoteCont->Frm().Bottom() - aArea.Bottom() );
 
-    ::SwAlignRect( aArea, gProp.pSGlobalShell );
+    ::SwAlignRect( aArea, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
 
     if ( !gProp.pSGlobalShell->GetViewOptions()->IsViewMetaChars( ) )
         ProcessPrimitives( lcl_CreateColumnAreaDelimiterPrimitives( aArea ) );
@@ -7133,7 +7133,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
     if ( !bUseFrmArea )
         aOriginal.Pos() += Frm().Pos();
 
-    ::SwAlignRect( aOriginal, gProp.pSGlobalShell );
+    ::SwAlignRect( aOriginal, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
 
     if ( !aOriginal.IsOver( rRect ) )
         return;
@@ -7235,7 +7235,7 @@ void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
         || (sal_Int16)SW_MOD()->GetRedlineMarkPos() != text::HoriOrientation::NONE;
 
     SwRect aRect( rRect );
-    ::SwAlignRect( aRect, gProp.pSGlobalShell );
+    ::SwAlignRect( aRect, gProp.pSGlobalShell, gProp.pSGlobalShell->GetOut() );
     if ( aRect.HasArea() )
     {
         SwLayoutFrm::RefreshExtraData( aRect );
