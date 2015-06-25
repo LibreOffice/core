@@ -1127,23 +1127,26 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
 void SfxApplication::OpenRemoteExec_Impl( SfxRequest& rReq )
 {
-    ScopedVclPtrInstance< RemoteFilesDialog > aDlg((vcl::Window*)NULL, WB_OPEN);
+    ScopedVclPtrInstance< RemoteFilesDialog > aDlg( ( vcl::Window* )NULL, WB_OPEN );
 
     // Filters for test purposes
     aDlg->AddFilter("All files", FILTER_ALL);
     aDlg->AddFilter("ODT files", "*.odt");
     aDlg->AddFilter("ODS files", "*.ods");
 
-    aDlg->Execute();
+    short nResult = aDlg->Execute();
 
-    OUString sFileName = aDlg->GetPath();
+    if( nResult == RET_OK )
+    {
+        OUString sFileName = aDlg->GetPath();
 
-    rReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString("_default") ) );
-    rReq.AppendItem( SfxStringItem( SID_REFERER, "private:user" ) );
-    rReq.RemoveItem( SID_FILE_NAME );
-    rReq.AppendItem( SfxStringItem( SID_FILE_NAME, sFileName ) );
+        rReq.AppendItem( SfxStringItem( SID_TARGETNAME, OUString( "_default" ) ) );
+        rReq.AppendItem( SfxStringItem( SID_REFERER, "private:user" ) );
+        rReq.RemoveItem( SID_FILE_NAME );
+        rReq.AppendItem( SfxStringItem( SID_FILE_NAME, sFileName ) );
 
-    GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, *rReq.GetArgs() );
+        GetDispatcher_Impl()->Execute( SID_OPENDOC, SfxCallMode::SYNCHRON, *rReq.GetArgs() );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
