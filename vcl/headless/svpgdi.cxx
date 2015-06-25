@@ -185,10 +185,9 @@ namespace
 bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency)
 {
     bool bRet = false;
-#if !ENABLE_CAIRO_CANVAS
     (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
-    return false;
-#elif defined(CAIRO_VERSION) && defined(CAIRO_VERSION_ENCODE) && CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+#if ENABLE_CAIRO_CANVAS
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
     if (m_bUseLineColor || !m_bUseFillColor)
     {
         SAL_WARN("vcl.gdi", "unsupported SvpSalGraphics::drawAlphaRect case");
@@ -230,8 +229,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
                                                 extents.y + extents.height));
     }
     bRet = true;
-#else
-    (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
+#endif
 #endif
     return bRet;
 }
