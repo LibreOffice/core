@@ -146,8 +146,8 @@ public:
     Color GetRetoucheColor() const;
 
     /// Management of the first visible Page
-    inline const SwPageFrm *GetFirstVisPage() const;
-    inline       SwPageFrm *GetFirstVisPage();
+    const SwPageFrm *GetFirstVisPage() const;
+          SwPageFrm *GetFirstVisPage();
     void SetFirstVisPageInvalid() { bFirstPageInvalid = true; }
 
     bool AddPaintRect( const SwRect &rRect );
@@ -271,20 +271,6 @@ public:
     /// Fire all accessible events that have been collected so far
     void FireAccessibleEvents();
 };
-
-inline SwPageFrm *SwViewShellImp::GetFirstVisPage()
-{
-    if ( bFirstPageInvalid )
-        SetFirstVisPage();
-    return pFirstVisPage;
-}
-
-inline const SwPageFrm *SwViewShellImp::GetFirstVisPage() const
-{
-    if ( bFirstPageInvalid )
-        const_cast<SwViewShellImp*>(this)->SetFirstVisPage();
-    return pFirstVisPage;
-}
 
 inline SwAccessibleMap& SwViewShellImp::GetAccessibleMap()
 {
