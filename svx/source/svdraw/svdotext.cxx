@@ -47,6 +47,7 @@
 #include <svx/svdpool.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/textchain.hxx>
+#include <svx/textchainflow.hxx>
 #include <svl/style.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/overflowingtxt.hxx>

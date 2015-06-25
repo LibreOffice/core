@@ -46,6 +46,7 @@ class SvxFieldItem;
 class ImpSdrObjTextLink;
 class EditStatus;
 class TextChain;
+class TextChainFlow;
 
 namespace sdr { namespace properties {
     class TextProperties;
@@ -137,6 +138,7 @@ private:
     friend class                sdr::table::SdrTableRTFParser;
 
     friend class                TextChain;
+    friend class                TextChainFlow;
 
     // CustomShapeproperties need to access the "bTextFrame" member:
     friend class sdr::properties::CustomShapeProperties;
