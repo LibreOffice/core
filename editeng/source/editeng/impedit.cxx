@@ -1418,7 +1418,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
                         OUString aTmpText;
                         aData >>= aTmpText;
                         OUString aText(convertLineEnd(aTmpText, LINEEND_LF));
-                        aText = aText.replaceAll( OUString(LINE_SEP), " " );
+                        aText = aText.replaceAll( OUStringLiteral1<LINE_SEP>(), " " );
                         aSel = pEditEngine->InsertText(aSel, aText);
                     }
                     catch( ... )
