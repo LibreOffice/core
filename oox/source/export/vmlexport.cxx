@@ -197,7 +197,7 @@ bool VMLExport::IsWaterMarkShape(const OUString& rStr)
 {
      if (rStr.isEmpty() )  return false;
 
-     if (rStr.match(OUString("PowerPlusWaterMarkObject")) || rStr.match(OUString("WordPictureWatermark")))
+     if (rStr.match("PowerPlusWaterMarkObject") || rStr.match("WordPictureWatermark"))
         return true;
      else
         return false;

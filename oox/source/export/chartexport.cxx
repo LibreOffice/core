@@ -821,7 +821,7 @@ void ChartExport::exportExternalData( Reference< css::chart::XChartDocument > xC
         }
         FSHelperPtr pFS = GetFS();
         OUString type = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
-        if (relationPath.endsWith(OUString(".bin")))
+        if (relationPath.endsWith(".bin"))
             type = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
 
         OUString sRelId = GetFB()->addRelation(pFS->getOutputStream(),
