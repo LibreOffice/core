@@ -44,10 +44,10 @@ void GraphicExportFilter::gatherProperties( const Sequence<PropertyValue>& rProp
         if ( aProperty.Name == "FilterName" )
         {
             aProperty.Value >>= aInternalFilterName;
-            aInternalFilterName = aInternalFilterName.replaceFirst( OUString( "draw_"    ), OUString() );
-            aInternalFilterName = aInternalFilterName.replaceFirst( OUString( "impress_" ), OUString() );
-            aInternalFilterName = aInternalFilterName.replaceFirst( OUString( "calc_"    ),  OUString() );
-            aInternalFilterName = aInternalFilterName.replaceFirst( OUString( "writer_"  ),  OUString() );
+            aInternalFilterName = aInternalFilterName.replaceFirst("draw_", "");
+            aInternalFilterName = aInternalFilterName.replaceFirst("impress_", "");
+            aInternalFilterName = aInternalFilterName.replaceFirst("calc_", "");
+            aInternalFilterName = aInternalFilterName.replaceFirst("writer_", "");
         }
         else if ( aProperty.Name == "FilterData" )
         {

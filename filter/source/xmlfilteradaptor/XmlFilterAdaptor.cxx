@@ -141,7 +141,7 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star::be
             Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
 
             //Load the Styles from the Template URL Supplied in the TypeDetection file
-            if(msTemplateName.indexOf(OUString( "file:" ))==-1)
+            if(msTemplateName.indexOf("file:")==-1)
             {
                 SvtPathOptions aOptions;
                 OUString PathString = aOptions.SubstituteVariable(OUString("$(progurl)"));
