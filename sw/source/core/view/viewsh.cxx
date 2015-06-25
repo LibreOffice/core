@@ -1078,11 +1078,11 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
 
             while ( pPage && pPage->Frm().Top() <= nBottom )
             {
-                SwRect aPageRect( pPage->GetBoundRect() );
+                SwRect aPageRect( pPage->GetBoundRect(GetWin()) );
                 if ( bBookMode )
                 {
                     const SwPageFrm& rFormatPage = static_cast<const SwPageFrm*>(pPage)->GetFormatPage();
-                    aPageRect.SSize() = rFormatPage.GetBoundRect().SSize();
+                    aPageRect.SSize() = rFormatPage.GetBoundRect(GetWin()).SSize();
                 }
 
                 // OD 12.02.2003 #i9719#, #105645# - consider new border and shadow width
