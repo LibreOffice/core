@@ -1805,7 +1805,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     xProp->getPropertyValue(PROPERTY_COMMAND) >>= aName;
                     OUString sObject(aName);
 
-                    aReturn.sTitle = sTitle.replaceFirst(OUString('#'), sObject);
+                    aReturn.sTitle = sTitle.replaceFirst("#", sObject);
                     aReturn.bEnabled = true;
                 }
                 break;
@@ -2672,7 +2672,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
                                                 OUString sFilter = " WHERE ";
                                                 sFilter = sFilter + xAnalyzer->getFilter();
                                                 OUString sReplace(sSql);
-                                                sReplace = sReplace.replaceFirst(sFilter,OUString());
+                                                sReplace = sReplace.replaceFirst(sFilter, "");
                                                 xAnalyzer->setQuery(sReplace);
                                                 Reference<XSingleSelectQueryComposer> xComposer(xAnalyzer,UNO_QUERY);
                                                 xComposer->setFilter(OUString("0=1"));

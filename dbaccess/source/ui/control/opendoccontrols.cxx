@@ -171,7 +171,7 @@ namespace dbaui
 
         // our label should equal the UI text of the "Open" command
         OUString sLabel(GetCommandText(".uno:Open", m_sModule));
-        SetText(" " + sLabel.replaceAll("~", OUString()));
+        SetText(" " + sLabel.replaceAll("~", ""));
 
         // Place icon left of text and both centered in the button.
         SetModeImage( GetCommandIcon( ".uno:Open", m_sModule ) );

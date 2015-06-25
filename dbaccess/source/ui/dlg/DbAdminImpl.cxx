@@ -256,9 +256,9 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
                 sLoginRequest = sLoginRequest.replaceAll("$name$", sName);
             else
             {
-                sLoginRequest = sLoginRequest.replaceAll("\"$name$\"", OUString());
+                sLoginRequest = sLoginRequest.replaceAll("\"$name$\"", "");
                 // ensure that in other languages the string will be deleted
-                sLoginRequest = sLoginRequest.replaceAll("$name$", OUString());
+                sLoginRequest = sLoginRequest.replaceAll("$name$", "");
             }
 
             // the request

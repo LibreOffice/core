@@ -449,7 +449,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
         )
         {
             OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_UNKNOWN_PROP));
-            SQLException aErr(sError.replaceAll("%value", OUString(PROPERTY_NAME)),*this,SQLSTATE_GENERAL,1000,Any() );
+            SQLException aErr(sError.replaceAll("%value", PROPERTY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
             throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
         }
 
@@ -519,7 +519,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnName_throw(const Reference< X
         )
         {
             OUString sError(DBACORE_RESSTRING(RID_STR_COLUMN_UNKNOWN_PROP));
-            SQLException aErr(sError.replaceAll("%value", OUString(PROPERTY_NAME)),*this,SQLSTATE_GENERAL,1000,Any() );
+            SQLException aErr(sError.replaceAll("%value", PROPERTY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
             throw SQLException(DBACORE_RESSTRING(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
         }
 
