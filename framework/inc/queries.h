@@ -33,16 +33,16 @@ namespace framework{
                     They are used by our FilterFactory or our TypeDetection to return
                     subsets of our cached configuration.
 *//*-*************************************************************************************************************/
-#define BASE_QUERY_ALL                                  DECLARE_ASCII("_query_all"     )
-#define BASE_QUERY_WRITER                               DECLARE_ASCII("_query_Writer"  )
-#define BASE_QUERY_WEB                                  DECLARE_ASCII("_query_web"     )
-#define BASE_QUERY_GLOBAL                               DECLARE_ASCII("_query_global"  )
-#define BASE_QUERY_CHART                                DECLARE_ASCII("_query_chart"   )
-#define BASE_QUERY_CALC                                 DECLARE_ASCII("_query_calc"    )
-#define BASE_QUERY_IMPRESS                              DECLARE_ASCII("_query_impress" )
-#define BASE_QUERY_DRAW                                 DECLARE_ASCII("_query_draw"    )
-#define BASE_QUERY_MATH                                 DECLARE_ASCII("_query_math"    )
-#define BASE_QUERY_GRAPHICS                             DECLARE_ASCII("_query_graphics")
+#define BASE_QUERY_ALL                                  "_query_all"
+#define BASE_QUERY_WRITER                               "_query_Writer"
+#define BASE_QUERY_WEB                                  "_query_web"
+#define BASE_QUERY_GLOBAL                               "_query_global"
+#define BASE_QUERY_CHART                                "_query_chart"
+#define BASE_QUERY_CALC                                 "_query_calc"
+#define BASE_QUERY_IMPRESS                              "_query_impress"
+#define BASE_QUERY_DRAW                                 "_query_draw"
+#define BASE_QUERY_MATH                                 "_query_math"
+#define BASE_QUERY_GRAPHICS                             "_query_graphics"
 
 /*-************************************************************************************************************
     @short          These parameters can be used in combination with BASE_QUERY_... defines to
@@ -63,17 +63,17 @@ namespace framework{
 #define SEPARATOR_QUERYPARAM                            ((sal_Unicode)':')
 #define SEPARATOR_QUERYPARAMVALUE                       ((sal_Unicode)'=')
 
-#define QUERYPARAM_IFLAGS                               DECLARE_ASCII("iflags"          )
-#define QUERYPARAM_EFLAGS                               DECLARE_ASCII("eflags"          )
-#define QUERYPARAM_SORT_PROP                            DECLARE_ASCII("sort_prop"       )
+#define QUERYPARAM_IFLAGS                               "iflags"
+#define QUERYPARAM_EFLAGS                               "eflags"
+#define QUERYPARAM_SORT_PROP                            "sort_prop"
 
-#define QUERYPARAM_DESCENDING                           DECLARE_ASCII("descending"      )
-#define QUERYPARAM_USE_ORDER                            DECLARE_ASCII("use_order"       )
-#define QUERYPARAM_DEFAULT_FIRST                        DECLARE_ASCII("default_first"   )
-#define QUERYPARAM_CASE_SENSITIVE                       DECLARE_ASCII("case_sensitive"  )
+#define QUERYPARAM_DESCENDING                           "descending"
+#define QUERYPARAM_USE_ORDER                            "use_order"
+#define QUERYPARAM_DEFAULT_FIRST                        "default_first"
+#define QUERYPARAM_CASE_SENSITIVE                       "case_sensitive"
 
-#define QUERYPARAMVALUE_SORT_PROP_NAME                  DECLARE_ASCII("name"            )
-#define QUERYPARAMVALUE_SORT_PROP_UINAME                DECLARE_ASCII("uiname"          )
+#define QUERYPARAMVALUE_SORT_PROP_NAME                  "name"
+#define QUERYPARAMVALUE_SORT_PROP_UINAME                "uiname"
 
 /*-************************************************************************************************************
     @short          Helper class to support easy building of a query statements.
