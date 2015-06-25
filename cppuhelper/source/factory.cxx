@@ -782,8 +782,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
             aLocation = xLocationKey->getAsciiValue();
 
             // search protocol delimiter
-            sal_Int32 nPos = aLocation.indexOf(
-                OUString("://") );
+            sal_Int32 nPos = aLocation.indexOf("://");
             if( nPos != -1 )
             {
                 aActivatorName = aLocation.copy( 0, nPos );
