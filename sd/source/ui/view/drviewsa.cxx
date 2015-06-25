@@ -209,6 +209,9 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     mbPastePossible = false;
     mbIsLayerModeActive = false;
 
+    svtools::ColorConfig aColorConfig;
+    mnAppBackgroundColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
+
     mpFrameView->Connect();
 
     OSL_ASSERT (GetViewShell()!=NULL);
