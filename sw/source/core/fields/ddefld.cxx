@@ -385,7 +385,7 @@ SwDDEField::~SwDDEField()
 OUString SwDDEField::Expand() const
 {
     OUString aStr = static_cast<SwDDEFieldType*>(GetTyp())->GetExpansion();
-    aStr = aStr.replaceAll("\r", OUString());
+    aStr = aStr.replaceAll("\r", "");
     aStr = aStr.replaceAll("\t", " ");
     aStr = aStr.replaceAll("\n", "|");
     if (aStr.endsWith("|"))

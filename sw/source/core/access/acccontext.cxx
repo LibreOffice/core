@@ -1405,11 +1405,11 @@ OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
 
     if( pArg1 )
     {
-        sStr = sStr.replaceFirst( OUString("$(ARG1)"), *pArg1 );
+        sStr = sStr.replaceFirst( "$(ARG1)", *pArg1 );
     }
     if( pArg2 )
     {
-        sStr = sStr.replaceFirst( OUString("$(ARG2)"), *pArg2 );
+        sStr = sStr.replaceFirst( "$(ARG2)", *pArg2 );
     }
 
     return sStr;

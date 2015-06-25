@@ -218,8 +218,8 @@ ShellResource::ShellResource()
     vcl::KeyCode aCode( KEY_SPACE );
     vcl::KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
     OUString aModStr( aModifiedCode.GetName() );
-    aModStr = aModStr.replaceFirst(aCode.GetName(), OUString());
-    aModStr = aModStr.replaceAll("+", OUString());
+    aModStr = aModStr.replaceFirst(aCode.GetName(), "");
+    aModStr = aModStr.replaceAll("+", "");
     aLinkCtrlClick = aLinkCtrlClick.replaceAll("%s", aModStr);
 
     for(sal_uInt16 i = 0; i < nCount; ++i)

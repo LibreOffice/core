@@ -236,8 +236,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 vcl::KeyCode aCode( KEY_SPACE );
                 vcl::KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
                 OUString aModStr( aModifiedCode.GetName() );
-                aModStr = aModStr.replaceFirst(aCode.GetName(), OUString());
-                aModStr = aModStr.replaceAll("+", OUString());
+                aModStr = aModStr.replaceFirst(aCode.GetName(), "");
+                aModStr = aModStr.replaceAll("+", "");
                 sText = SW_RESSTR(STR_SMARTTAG_CLICK).replaceAll("%s", aModStr);
             }
             break;

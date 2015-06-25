@@ -46,7 +46,7 @@ using namespace ::com::sun::star;
 /// replace database separator by dots for display
 static OUString lcl_DBTrennConv(const OUString& aContent)
 {
-    return aContent.replaceAll(OUString(DB_DELIM), OUString('.'));
+    return aContent.replaceAll(OUString(DB_DELIM), ".");
 }
 
 // database field type

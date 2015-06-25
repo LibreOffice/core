@@ -249,8 +249,8 @@ long SwWW8ImplReader::Read_AtnBook(WW8PLCFManResult*)
 OUString SwWW8ImplReader::ConvertFFileName(const OUString& rOrg)
 {
     OUString aName = rOrg;
-    aName = aName.replaceAll("\\\\", OUString('\\'));
-    aName = aName.replaceAll("%20", OUString(' '));
+    aName = aName.replaceAll("\\\\", "\\");
+    aName = aName.replaceAll("%20", " ");
 
     // remove attached quotation marks
     if (aName.endsWith("\""))

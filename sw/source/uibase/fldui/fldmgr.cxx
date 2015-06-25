@@ -954,10 +954,10 @@ bool SwFieldMgr::InsertField(
             //JP 28.08.95: DDE-Topics/-Items can have blanks in their names!
             //              That's not yet considered here.
             sal_Int32 nIndex = 0;
-            OUString sCmd = rData.m_sPar2.replaceFirst(OUString(' '), OUString(sfx2::cTokenSeparator), &nIndex);
+            OUString sCmd = rData.m_sPar2.replaceFirst(" ", OUString(sfx2::cTokenSeparator), &nIndex);
             if (nIndex>=0 && ++nIndex<sCmd.getLength())
             {
-                sCmd = sCmd.replaceFirst(OUString(' '), OUString(sfx2::cTokenSeparator), &nIndex);
+                sCmd = sCmd.replaceFirst(" ", OUString(sfx2::cTokenSeparator), &nIndex);
             }
 
             SwDDEFieldType aType( rData.m_sPar1, sCmd, static_cast<SfxLinkUpdateMode>(nFormatId) );
@@ -1401,10 +1401,10 @@ void SwFieldMgr::UpdateCurField(sal_uLong nFormat,
             // DDE-Topics/-Items can have blanks in their names!
             //  That's not yet considered here!
             sal_Int32 nIndex = 0;
-            sPar2 = sPar2.replaceFirst(OUString(' '), OUString(sfx2::cTokenSeparator), &nIndex );
+            sPar2 = sPar2.replaceFirst(" ", OUString(sfx2::cTokenSeparator), &nIndex );
             if (nIndex>=0 && ++nIndex<sPar2.getLength())
             {
-                sPar2 = sPar2.replaceFirst(OUString(' '), OUString(sfx2::cTokenSeparator), &nIndex);
+                sPar2 = sPar2.replaceFirst(" ", OUString(sfx2::cTokenSeparator), &nIndex);
             }
             break;
         }

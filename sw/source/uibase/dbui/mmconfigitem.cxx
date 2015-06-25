@@ -388,7 +388,7 @@ static OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
 static void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeaders )
 {
     //convert the strings used for UI to numbers used for the configuration
-    OUString sBlock(rBlock.replaceAll("\n", OUString("\\n")));
+    OUString sBlock(rBlock.replaceAll("\n", "\\n"));
     for(sal_uInt32 i = 0; i < rHeaders.Count(); ++i)
     {
         OUString sHeader = "<" + rHeaders.GetString( i ) + ">";
@@ -402,7 +402,7 @@ static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHead
 {
     //convert the numbers used for the configuration to strings used for UI to numbers
     //doesn't use ReplaceAll to prevent expansion of numbers inside of the headers
-    OUString sBlock(rBlock.replaceAll("\\n", OUString('\n')));
+    OUString sBlock(rBlock.replaceAll("\\n", "\n"));
     SwAddressIterator aGreetingIter(sBlock);
     sBlock.clear();
     while(aGreetingIter.HasMore())

@@ -823,7 +823,7 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" = ")));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", " = "));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
@@ -832,7 +832,7 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" _ ")));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", " _ "));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
@@ -841,7 +841,7 @@ void SwDocTest::testSwScanner()
         aDocStat.Reset();
 
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), OUString(" -- ")));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", " -- "));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 5 &&
@@ -908,7 +908,7 @@ void SwDocTest::testSwScanner()
         const sal_Unicode aChunk[] = {' ', 0x2013, ' '};
         OUString sChunk(aChunk, SAL_N_ELEMENTS(aChunk));
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
-        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll(OUString('X'), sChunk));
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replaceAll("X", sChunk));
         pTextNode = aPaM.GetNode().GetTextNode();
         pTextNode->CountWords(aDocStat, 0, pTextNode->Len());
         CPPUNIT_ASSERT(aDocStat.nWord == 4 &&

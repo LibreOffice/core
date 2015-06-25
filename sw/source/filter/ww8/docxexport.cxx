@@ -1244,9 +1244,9 @@ void DocxExport::WriteEmbeddings()
         embeddingsList[j].Value >>= embeddingsStream;
 
         OUString contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        if (embeddingPath.endsWith(OUString(".xlsm")))
+        if (embeddingPath.endsWith(".xlsm"))
             contentType = "application/vnd.ms-excel.sheet.macroEnabled.12";
-        else if (embeddingPath.endsWith(OUString(".bin")))
+        else if (embeddingPath.endsWith(".bin"))
             contentType = "application/vnd.openxmlformats-officedocument.oleObject";
 
         if ( embeddingsStream.is() )
