@@ -316,6 +316,7 @@ bool DrawViewShell::PrepareClose( bool bUI )
     return true;
 }
 
+
 /**
  * Set status (enabled/disabled) of menu SfxSlots
  */
@@ -377,6 +378,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                 GetViewShellBase().GetToolBarManager()->ResetToolBars(ToolBarManager::TBG_COMMON_TASK);
         }
 
+        svtools::ColorConfig aColorConfig;
+        Color aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
+
         if (meEditMode == EM_PAGE)
         {
             /******************************************************************
@@ -401,6 +405,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             }
 
             maTabControl->SetCurPageId(nActualPageNum + 1);
+
+            SetAppBackgroundColor( aFillColor );
 
             SwitchPage(nActualPageNum);
         }
@@ -437,6 +443,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
                     nActualMasterPageNum = i;
                 }
             }
+
+            aFillColor.DecreaseLuminance( 64 );
+            SetAppBackgroundColor( aFillColor );
 
             maTabControl->SetCurPageId(nActualMasterPageNum + 1);
             SwitchPage(nActualMasterPageNum);
@@ -477,6 +486,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         Invalidate( SID_TITLE_MASTERPAGE );
         Invalidate( SID_NOTES_MASTERPAGE );
         Invalidate( SID_HANDOUT_MASTERPAGE );
+        InvalidateWindows();
 
         SetContextName(GetSidebarContextName());
     }

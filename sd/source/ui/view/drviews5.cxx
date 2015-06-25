@@ -406,19 +406,13 @@ void DrawViewShell::PrePaint()
  */
 void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 {
-    // Fill var FillColor here to have it available on later call
-    svtools::ColorConfig aColorConfig;
-    Color aFillColor;
-
-    aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
-
     /* This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) );
 
     // Set Application Background color for usage in SdrPaintView(s)
-    mpDrawView->SetApplicationBackgroundColor(aFillColor);
+    mpDrawView->SetApplicationBackgroundColor(GetAppBackgroundColor());
 
     /* This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
