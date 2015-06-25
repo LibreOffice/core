@@ -948,7 +948,7 @@ static sal_uInt16 ImplCutNumberFromString( OUString& rStr )
 static bool ImplCutMonthName( OUString& rStr, const OUString& _rLookupMonthName )
 {
     sal_Int32 index = 0;
-    rStr = rStr.replaceFirst(_rLookupMonthName, OUString(), &index);
+    rStr = rStr.replaceFirst(_rLookupMonthName, "", &index);
     return index >= 0;
 }
 
