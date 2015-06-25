@@ -286,7 +286,7 @@ public class ProcessHandler
      * exits.
      *
      * @return <code>true</code> if process was successfully
-     * started and correcly exits (exit code doesn't affect
+     * started and correctly exits (exit code doesn't affect
      * to this result).
      */
     public boolean executeSynchronously()
