@@ -685,6 +685,7 @@ LIBO_UDK_5.0 { # symbols available in >= LibO 5.0
 
 LIBO_UDK_5.1 { # symbols available in >= LibO 5.1
     global:
+        rtl_uString_newConcatAsciiL;
         rtl_uString_newReplaceAllToAsciiL;
         rtl_uString_newReplaceFirstToAsciiL;
 } LIBO_UDK_5.0;

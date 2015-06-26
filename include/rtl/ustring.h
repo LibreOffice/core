@@ -1434,6 +1434,30 @@ SAL_DLLPUBLIC sal_Unicode * SAL_CALL rtl_uString_getStr(
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newConcat(
         rtl_uString ** newStr, rtl_uString * left, rtl_uString * right ) SAL_THROW_EXTERN_C();
 
+/** Create a new string that is the concatenation of two other strings.
+
+    The new string does not necessarily have a reference count of 1 (in cases
+    where the ASCII string is empty), so it must not be modified without
+    checking the reference count.
+
+    @param newString
+    pointer to the new string.  The pointed-to data must be null or a valid
+    string.
+
+    @param left
+    a valid string.
+
+    @param right  must not be null and must point to memory of at least
+    \p rightLength ASCII bytes
+
+    @param rightLength  the length of the \p right string; must be non-negative
+
+    @since LibreOffice 5.1
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newConcatAsciiL(
+    rtl_uString ** newString, rtl_uString * left, char const * right,
+    sal_Int32 rightLength);
+
 /** Create a new string by replacing a substring of another string.
 
     The new string results from replacing a number of characters (count),

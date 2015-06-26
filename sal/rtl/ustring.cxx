@@ -25,6 +25,8 @@
 
 #include <cassert>
 #include <cstdlib>
+#include <limits>
+#include <stdexcept>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
@@ -593,6 +595,28 @@ void SAL_CALL rtl_uString_newFromCodePoints(
         }
     }
     RTL_LOG_STRING_NEW( *newString );
+}
+
+void rtl_uString_newConcatAsciiL(
+    rtl_uString ** newString, rtl_uString * left, char const * right,
+    sal_Int32 rightLength)
+{
+    assert(newString != nullptr);
+    assert(left != nullptr);
+    assert(right != nullptr);
+    assert(rightLength >= 0);
+    if (left->length > std::numeric_limits<sal_Int32>::max() - rightLength) {
+        throw std::length_error("rtl_uString_newConcatAsciiL");
+    }
+    sal_Int32 n = left->length + rightLength;
+    rtl_uString_assign(newString, left);
+    rtl_uString_ensureCapacity(newString, n);
+    sal_Unicode * p = (*newString)->buffer + (*newString)->length;
+    for (sal_Int32 i = 0; i != rightLength; ++i) {
+        p[i] = static_cast<unsigned char>(right[i]);
+    }
+    (*newString)->buffer[n] = 0;
+    (*newString)->length = n;
 }
 
 /* ======================================================================= */

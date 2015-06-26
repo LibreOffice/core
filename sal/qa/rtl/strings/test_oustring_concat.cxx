@@ -40,12 +40,14 @@ class StringConcat : public CppUnit::TestFixture
 {
 private:
     void checkConcat();
+    void checkConcatAsciiL();
     void checkEnsureCapacity();
     void checkAppend();
     void checkInvalid();
 
 CPPUNIT_TEST_SUITE(StringConcat);
 CPPUNIT_TEST(checkConcat);
+CPPUNIT_TEST(checkConcatAsciiL);
 CPPUNIT_TEST(checkEnsureCapacity);
 CPPUNIT_TEST(checkAppend);
 CPPUNIT_TEST(checkInvalid);
@@ -69,6 +71,12 @@ void test::oustring::StringConcat::checkConcat()
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUString, const char[ 4 ] > )), typeid( OUString( "foo" ) + d1 ));
     CPPUNIT_ASSERT_EQUAL( OUString( "foobar" ), OUString( OUStringBuffer( "foo" ) + OUString( "bar" )));
     CPPUNIT_ASSERT_EQUAL(( typeid( OUStringConcat< OUStringBuffer, OUString > )), typeid( OUStringBuffer( "foo" ) + OUString( "bar" )));
+}
+
+void test::oustring::StringConcat::checkConcatAsciiL()
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("foo"), OUString("foo") += "");
+    CPPUNIT_ASSERT_EQUAL(OUString("foobar"), OUString("foo") += "bar");
 }
 
 void test::oustring::StringConcat::checkEnsureCapacity()

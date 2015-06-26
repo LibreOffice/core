@@ -424,6 +424,24 @@ public:
         return *this;
     }
 
+    /** Append an ASCII string literal to this string.
+
+        @param literal  an 8-bit ASCII-only string literal
+
+        @since LibreOffice 5.1
+    */
+    template<typename T>
+    typename libreoffice_internal::ConstCharArrayDetector<T, OUString &>::Type
+    operator +=(T & literal) {
+        assert(
+            libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
+        rtl_uString_newConcatAsciiL(
+            &pData, pData,
+            libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
+            libreoffice_internal::ConstCharArrayDetector<T>::length);
+        return *this;
+    }
+
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
     /**
      @overload
