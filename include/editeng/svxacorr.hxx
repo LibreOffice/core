@@ -272,8 +272,6 @@ public:
 
     virtual void refreshBlockList( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg);
 
-    TYPEINFO();
-
     SvxAutoCorrect( const OUString& rShareAutocorrFile,
                     const OUString& rUserAutocorrFile );
     SvxAutoCorrect( const SvxAutoCorrect& );

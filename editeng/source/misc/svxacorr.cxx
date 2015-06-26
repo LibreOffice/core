@@ -95,8 +95,6 @@ static const sal_Char sImplWordChars[] = "-'";
 
 OUString EncryptBlockName_Imp(const OUString& rName);
 
-TYPEINIT0(SvxAutoCorrect)
-
 typedef SvxAutoCorrectLanguageLists* SvxAutoCorrectLanguageListsPtr;
 
 static inline bool IsWordDelim( const sal_Unicode c )
