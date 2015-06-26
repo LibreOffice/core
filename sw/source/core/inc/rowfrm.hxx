@@ -29,7 +29,7 @@ class SwBorderAttrs;
 /// SwRowFrm is one table row in the document layout.
 class SwRowFrm: public SwLayoutFrm
 {
-    virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     /// Only change the Frame size, not the PrtArea SSize
     virtual SwTwips ShrinkFrm( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;
     virtual SwTwips GrowFrm  ( SwTwips, bool bTst = false, bool bInfo = false ) SAL_OVERRIDE;

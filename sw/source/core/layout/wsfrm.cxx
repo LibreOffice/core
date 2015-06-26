@@ -2925,7 +2925,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
  *
  * The Fixsize is not set here.
  */
-void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
+void SwLayoutFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "LayoutFrm::Format, pAttrs ist 0." );
 
