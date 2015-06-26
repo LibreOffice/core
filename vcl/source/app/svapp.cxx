@@ -338,19 +338,23 @@ void Application::Execute()
     pSVData->maAppData.mbInAppExecute = false;
 }
 
-inline void ImplYield( bool i_bWait, bool i_bAllEvents )
+inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    //Process all Tasks
-    Scheduler::ProcessTaskScheduling(false);
+    if (nReleased == 0) // else thread doesn't have SolarMutex so avoid race
+    {   // Process all Tasks
+        Scheduler::ProcessTaskScheduling(false);
+    }
 
     pSVData->maAppData.mnDispatchLevel++;
     // do not wait for events if application was already quit; in that
     // case only dispatch events already available
     // do not wait for events either if the app decided that it is too busy for timers
     // (feature added for the slideshow)
-    pSVData->mpDefInst->Yield( i_bWait && !pSVData->maAppData.mbAppQuit && !pSVData->maAppData.mbNoYield, i_bAllEvents );
+    pSVData->mpDefInst->DoYield(
+        i_bWait && !pSVData->maAppData.mbAppQuit && !pSVData->maAppData.mbNoYield,
+        i_bAllEvents, nReleased);
     pSVData->maAppData.mnDispatchLevel--;
 
     DBG_TESTSOLARMUTEX(); // must be locked on return from Yield
@@ -374,12 +378,32 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
 
 void Application::Reschedule( bool i_bAllEvents )
 {
-    ImplYield( false, i_bAllEvents );
+    ImplYield(false, i_bAllEvents, 0);
 }
 
 void Application::Yield()
 {
-    ImplYield( true, false );
+    ImplYield(true, false, 0);
+}
+
+void Application::ReAcquireSolarMutex(sal_uLong const nReleased)
+{
+    // 0 would mean that events/timers will be handled without locking
+    // SolarMutex (racy)
+    assert(nReleased != 0);
+#ifdef WNT
+    if (ImplGetSVData()->mbDeInit) // do not Yield in DeInitVCL
+        AcquireSolarMutex(nReleased);
+    else
+        ImplYield(false, false, nReleased);
+#else
+    // a) Yield is not needed on non-WNT platforms
+    // b) some Yield implementations for X11 (e.g. kde4) make it non-obvious
+    //    how to use nReleased
+    // c) would require a review of what all Yield implementations do
+    //    currently _before_ releasing SolarMutex that would run without lock
+    AcquireSolarMutex(nReleased);
+#endif
 }
 
 IMPL_STATIC_LINK_NOARG( ImplSVAppData, ImplQuitMsg )

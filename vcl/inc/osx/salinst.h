@@ -109,7 +109,7 @@ public:
     virtual sal_uLong       ReleaseYieldMutex() SAL_OVERRIDE;
     virtual void            AcquireYieldMutex( sal_uLong nCount ) SAL_OVERRIDE;
     virtual bool            CheckYieldMutex() SAL_OVERRIDE;
-    virtual void            Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
+    virtual void            DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) SAL_OVERRIDE;
     virtual bool            AnyInput( VclInputFlags nType ) SAL_OVERRIDE;
     virtual SalMenu*        CreateMenu( bool bMenuBar, Menu* pVCLMenu ) SAL_OVERRIDE;
     virtual void            DestroyMenu( SalMenu* ) SAL_OVERRIDE;
