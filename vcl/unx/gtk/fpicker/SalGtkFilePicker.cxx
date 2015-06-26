@@ -1906,7 +1906,7 @@ void SalGtkFilePicker::SetFilters()
             for (std::set<OUString>::const_iterator aIter = aAllFormats.begin(); aIter != aEnd; ++aIter)
             {
                 if (!sAllFilter.isEmpty())
-                    sAllFilter += OUString(';');
+                    sAllFilter += ";";
                 sAllFilter += *aIter;
             }
             sPseudoFilter = getResString(FILE_PICKER_ALLFORMATS);

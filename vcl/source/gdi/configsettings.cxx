@@ -70,10 +70,7 @@ void SettingsConfigItem::ImplCommit()
         SmallOUStrMap::const_iterator it;
         for( it = group->second.begin(); it != group->second.end(); ++it )
         {
-            OUString aName( aKeyName );
-            aName +=  OUString('/');
-            aName += it->first;
-            pValues[nIndex].Name    = aName;
+            pValues[nIndex].Name    = aKeyName + "/" + it->first;
             pValues[nIndex].Handle  = 0;
             pValues[nIndex].Value <<= it->second;
             pValues[nIndex].State   = PropertyState_DIRECT_VALUE;
@@ -108,10 +105,7 @@ void SettingsConfigItem::getValues()
         OUString* pTo = aSettingsKeys.getArray();
         for( int m = 0; m < aKeys.getLength(); m++ )
         {
-            OUString aName( aKeyName );
-            aName += OUString('/');
-            aName += pFrom[m];
-            pTo[m] = aName;
+            pTo[m] = aKeyName + "/" + pFrom[m];
         }
         Sequence< Any > aValues( GetProperties( aSettingsKeys ) );
         const Any* pValue = aValues.getConstArray();
