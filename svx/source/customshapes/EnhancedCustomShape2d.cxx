@@ -114,14 +114,14 @@ OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_Int32 
                 default :
                 {
                     EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-                    aEquation += OUString( (sal_Unicode)'+' );
+                    aEquation += "+";
                     EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
                 }
                 break;
             }
             if ( b3Special || nP3 )
             {
-                aEquation += OUString( (sal_Unicode)'-' );
+                aEquation += "-";
                 EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
             }
         }
@@ -131,12 +131,12 @@ OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_Int32 
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
             if ( b2Special || ( nP2 != 1 ) )
             {
-                aEquation += OUString( (sal_Unicode)'*' );
+                aEquation += "*";
                 EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
             }
             if ( b3Special || ( ( nP3 != 1 ) && ( nP3 != 0 ) ) )
             {
-                aEquation += OUString( (sal_Unicode)'/' );
+                aEquation += "/";
                 EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
             }
         }
@@ -179,11 +179,11 @@ OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_Int32 
         {
             aEquation += "if(";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += OUString( (sal_Unicode)',' );
+            aEquation += ",";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP2, b2Special );
-            aEquation += OUString( (sal_Unicode)',' );
+            aEquation += ",";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += OUString( (sal_Unicode)')' );
+            aEquation += ")";
         }
         break;
         case 7 :
@@ -200,7 +200,7 @@ OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_Int32 
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
             aEquation += "*";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP3, b3Special );
-            aEquation += OUString( (sal_Unicode)')' );
+            aEquation += ")";
         }
         break;
         case 8 :
@@ -288,7 +288,7 @@ OUString EnhancedCustomShape2d::GetEquation( const sal_uInt16 nFlags, sal_Int32 
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
             aEquation += "*";
             EnhancedCustomShape2d::AppendEnhancedCustomShapeEquationParameter( aEquation, nP1, b1Special );
-            aEquation += OUString( (sal_Unicode)')' );
+            aEquation += ")";
         }
         break;
         case 0x81 :

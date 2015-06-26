@@ -271,7 +271,7 @@ bool SvxXMLXTableExportComponent::save(
             }
             else
             {
-                aPath += OUString( ".xml" );
+                aPath += ".xml";
                 try {
                     xStream = xStorage->openStreamElement( aPath, eCreate );
                     if( !xStream.is() )
