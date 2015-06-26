@@ -970,6 +970,17 @@ void GtkSalFrame::resizeWindow( long nWidth, long nHeight )
         window_resize(nWidth, nHeight);
 }
 
+#if GTK_CHECK_VERSION(3,2,0)
+
+static void
+ooo_fixed_class_init(GtkFixedClass *klass)
+{
+    GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
+    widget_class->get_accessible = ooo_fixed_get_accessible;
+}
+
+#endif
+
 /*
  * Always use a sub-class of GtkFixed we can tag for a11y. This allows us to
  * utilize GAIL for the toplevel window and toolkit implementation incl.
@@ -987,7 +998,11 @@ ooo_fixed_get_type()
             sizeof (GtkFixedClass),
             nullptr,      /* base init */
             nullptr,  /* base finalize */
+#if GTK_CHECK_VERSION(3,2,0)
+            reinterpret_cast<GClassInitFunc>(ooo_fixed_class_init), /* class init */
+#else
             nullptr,     /* class init */
+#endif
             nullptr, /* class finalize */
             NULL,                      /* class data */
             sizeof (GtkFixed),         /* instance size */

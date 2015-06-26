@@ -26,7 +26,6 @@
 
 bool InitAtkBridge()
 {
-#if !GTK_CHECK_VERSION(3,0,0)
     const char* pVersion = atk_get_toolkit_version();
     if( ! pVersion )
         return false;
@@ -56,16 +55,13 @@ bool InitAtkBridge()
     AtkRegistry * registry = atk_get_default_registry();
     if( registry )
         atk_registry_set_factory_type( registry, OOO_TYPE_FIXED, OOO_TYPE_WRAPPER_FACTORY );
-#endif
 
     return true;
 }
 
 void DeInitAtkBridge()
 {
-#if !GTK_CHECK_VERSION(3,0,0)
     restore_gail_window_vtable();
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
