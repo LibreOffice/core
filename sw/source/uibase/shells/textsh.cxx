@@ -435,9 +435,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 if (!GetShell().IsTableComplexForChart())
                 {
                     SwFrameFormat* pTableFormat = GetShell().GetTableFormat();
-                    aRangeString = pTableFormat->GetName();
-                    aRangeString += OUString( '.' );
-                    aRangeString += GetShell().GetBoxNms();
+                    aRangeString = pTableFormat->GetName() + "."
+                        + GetShell().GetBoxNms();
 
                     // get table data provider
                     xDataProvider.set( GetView().GetDocShell()->getIDocumentChartDataProviderAccess()->GetChartDataProvider() );

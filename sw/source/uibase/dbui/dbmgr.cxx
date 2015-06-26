@@ -630,9 +630,9 @@ void SwDBManager::ImportDBEntry(SwWrtShell* pSh)
                     SwDBFormatData aDBFormat;
                     OUString sInsert = GetDBField( xColumnProp,   aDBFormat);
                     if( DB_SEP_SPACE == nSeparator )
-                            sInsert += OUString(cSpace);
+                            sInsert += OUStringLiteral1<cSpace>();
                     else if( DB_SEP_TAB == nSeparator)
-                            sInsert += OUString(cTab);
+                            sInsert += OUStringLiteral1<cTab>();
                     pSh->Insert(sInsert);
                     if( DB_SEP_RETURN == nSeparator)
                         pSh->SplitNode();

@@ -1857,12 +1857,10 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
             }
 
             const OUString& rToken = pCnt->GetParent()->GetTypeToken();
-            sUrl += "#";
-            sUrl += sEntry;
+            sUrl += "#" + sEntry;
             if(!rToken.isEmpty())
             {
-                sUrl += OUString(cMarkSeparator);
-                sUrl += rToken;
+                sUrl += OUStringLiteral1<cMarkSeparator>() + rToken;
             }
         }
         else

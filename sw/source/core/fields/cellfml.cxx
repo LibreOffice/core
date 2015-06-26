@@ -226,7 +226,7 @@ double SwTableBox::GetValue( SwTableCalcPara& rCalcPara ) const
                 sal_uInt32 nTmpFormat = 0;
                 if( pNumFormatr->IsNumberFormat( sText, nTmpFormat, aNum ) &&
                     css::util::NumberFormat::NUMBER == pNumFormatr->GetType( nTmpFormat ))
-                    sText += OUString('%');
+                    sText += "%";
             }
 
             if( pNumFormatr->IsNumberFormat( sText, nFormatIndex, aNum ))
@@ -352,7 +352,7 @@ void SwTableFormula::_MakeFormula( const SwTable& rTable, OUString& rNewStr,
             if ( pTableBox->getRowSpan() >= 1 )
             {
                 if( bDelim )
-                    rNewStr += OUString(cListDelim);
+                    rNewStr += OUStringLiteral1<cListDelim>();
                 bDelim = true;
                 rNewStr += pCalcPara->rCalc.GetStrResult(
                             pTableBox->GetValue( *pCalcPara ), false );

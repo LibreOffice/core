@@ -382,10 +382,10 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
 
     for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
     {
-        pGroup->sLongNames  += pBlock->GetLongName(j);
-        pGroup->sLongNames  += OUString(STRING_DELIM);
-        pGroup->sShortNames += pBlock->GetShortName(j);
-        pGroup->sShortNames += OUString(STRING_DELIM);
+        pGroup->sLongNames += pBlock->GetLongName(j)
+            + OUStringLiteral1<STRING_DELIM>();
+        pGroup->sShortNames += pBlock->GetShortName(j)
+            + OUStringLiteral1<STRING_DELIM>();
     }
     delete pBlock;
 }

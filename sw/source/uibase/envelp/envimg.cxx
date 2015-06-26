@@ -66,7 +66,7 @@ OUString MakeSender()
         else if (sToken == "CR")
         {
             if(bLastLength)
-                sRet += OUString(NEXTLINE);
+                sRet += OUStringLiteral1<NEXTLINE>();
             bLastLength = true;
         }
         else if (sToken == "FIRSTNAME")

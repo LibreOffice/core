@@ -1018,7 +1018,7 @@ getRandString()
     int j = getRand(aText.getLength() - s);
     OUString aRet(aText.copy(s, j));
     if (!getRand(5))
-        aRet += OUString('\n');
+        aRet += "\n";
 //    fprintf (stderr, "rand string '%s'\n", OUStringToOString(aRet, RTL_TEXTENCODING_UTF8).getStr());
     return aRet;
 }

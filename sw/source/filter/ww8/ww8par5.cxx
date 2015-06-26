@@ -2768,7 +2768,7 @@ static void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
 
                     OUString sStyles( rBase.GetStyleNames( nLevel ) );
                     if( !sStyles.isEmpty() )
-                        sStyles += OUString(TOX_STYLE_DELIMITER);
+                        sStyles += OUStringLiteral1<TOX_STYLE_DELIMITER>();
                     sStyles += sTemplate;
                     rBase.SetStyleNames( sStyles, nLevel );
                 }

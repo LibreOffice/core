@@ -2690,7 +2690,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
     {
         if(i)
         {
-            sSetStyles += OUString(TOX_STYLE_DELIMITER);
+            sSetStyles += OUStringLiteral1<TOX_STYLE_DELIMITER>();
         }
         SwStyleNameMapper::FillUIName(pStyles[i], aString,
                 nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);

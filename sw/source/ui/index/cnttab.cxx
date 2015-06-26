@@ -743,7 +743,7 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
         if(nLevel != USHRT_MAX)
         {
             if(!pStyleArr[nLevel].isEmpty())
-                pStyleArr[nLevel] += OUString(TOX_STYLE_DELIMITER);
+                pStyleArr[nLevel] += OUStringLiteral1<TOX_STYLE_DELIMITER>();
             pStyleArr[nLevel] += SvTabListBox::GetEntryText(pEntry, 0);
         }
         pEntry = m_pHeaderTree->Next(pEntry);

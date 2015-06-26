@@ -202,7 +202,7 @@ void SwMacroField::CreateMacroString(
     // concatenate library and name; use dot only if both strings have content
     rMacro = rLibraryName;
     if ( !rLibraryName.isEmpty() && !rMacroName.isEmpty() )
-        rMacro += OUString('.');
+        rMacro += ".";
     rMacro += rMacroName;
 }
 

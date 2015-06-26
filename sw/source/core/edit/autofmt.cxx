@@ -749,16 +749,16 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTextNode& rNd, sal_Int32& rPos,
                 {
                     ++nDigitLvl;
                     if( pPostfix )
-                        *pPostfix += OUString((sal_Unicode)1);
+                        *pPostfix += "\x01";
                 }
 
                 if( pNumTypes )
-                    *pNumTypes += OUString((sal_Unicode)('0' + SVX_NUM_ARABIC));
+                    *pNumTypes += OUStringLiteral1<'0' + SVX_NUM_ARABIC>();
 
                 eScan = eScan | CHG;
             }
             else if( pNumTypes && !(eScan & DIGIT) )
-                *pNumTypes += OUString((sal_Unicode)('0' + SVX_NUM_ARABIC));
+                *pNumTypes += OUStringLiteral1<'0' + SVX_NUM_ARABIC>();
 
             eScan &= ~DELIM;        // remvoe Delim
             if( 0 != (eScan & ~CHG) && DIGIT != (eScan & ~CHG))
@@ -825,7 +825,7 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTextNode& rNd, sal_Int32& rPos,
                 {
                     ++nDigitLvl;
                     if( pPostfix )
-                        *pPostfix += OUString((sal_Unicode)1);
+                        *pPostfix += "\x01";
                 }
 
                 if( pNumTypes )
