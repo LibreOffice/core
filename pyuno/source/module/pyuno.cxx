@@ -1346,8 +1346,8 @@ int PyUNO_contains( PyObject *self, PyObject *pKey )
                 xNameAccess.set( me->members->wrappedObject, UNO_QUERY );
                 if ( xNameAccess.is() )
                 {
-                    sal_Bool hasKey = xNameAccess->hasByName( sKey );
-                    return hasKey == sal_True ? 1 : 0;
+                    bool hasKey = xNameAccess->hasByName( sKey );
+                    return hasKey ? 1 : 0;
                 }
             }
         }
