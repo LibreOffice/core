@@ -114,7 +114,6 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     _dialog = new KFileDialog(KUrl("~"), QString(""), 0, _extraControls);
     _dialog->setMode(KFile::File | KFile::LocalOnly);
 
-    _dialog->setConfirmOverwrite( true );
 
     // XExecutableDialog functions
     connect( this, SIGNAL( setTitleSignal( const OUString & ) ),
@@ -710,6 +709,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
         break;
     case KFileDialog::Saving:
         resId = STR_FPICKER_SAVE;
+        _dialog->setConfirmOverwrite( true );
         break;
     default:
         break;
