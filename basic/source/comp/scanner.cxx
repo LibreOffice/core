@@ -484,7 +484,7 @@ bool SbiScanner::NextSym()
                 pLine++; nCol++;
                 if( *pLine != cSep || cSep == ']' )
                 {
-                    // If VBA Interop then doen't eat the [] chars
+                    // If VBA Interop then doesn't eat the [] chars
                     if ( cSep == ']' && bVBASupportOn )
                         aSym = aLine.copy( n - 1, nCol - n  + 1);
                     else

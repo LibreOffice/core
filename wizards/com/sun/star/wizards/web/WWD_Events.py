@@ -53,7 +53,7 @@ class WWD_Events(WWD_Startup):
     '''
     He - my constructor !
     I add a window listener, which, when
-    the window closes, deltes the temp directory.
+    the window closes, deletes the temp directory.
     '''
 
     def __init__(self, xmsf):

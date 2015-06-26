@@ -850,7 +850,7 @@ bool DenyType(const ScriptEvent& evt, void* pPara)
 }
 
 //when mouse is moving, either the mouse button is pressed or some key is pressed can trigger the OO mouseDragged event,
-//the former should be denyed, and the latter allowed, only by doing so can the VBA MouseMove event when the "Shift" key is
+//the former should be denied, and the latter allowed, only by doing so can the VBA MouseMove event when the "Shift" key is
 //pressed can be correctly triggered
 bool DenyMouseDrag(const ScriptEvent& evt, void* )
 {

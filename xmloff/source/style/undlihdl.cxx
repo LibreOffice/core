@@ -326,7 +326,7 @@ bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any
                     eNewUnderline = awt::FontUnderline::BOLDWAVE;
                     break;
                 default:
-                    // a doube line style overwrites a bold one
+                    // a double line style overwrites a bold one
                     eNewUnderline = eUnderline;
                     break;
                 }

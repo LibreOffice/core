@@ -1752,7 +1752,7 @@ DECLARE_RTFIMPORT_TEST(testTableBorderDefaults, "fdo68779.rtf")
 
 DECLARE_RTFIMPORT_TEST(testShpzDhgt, "shpz-dhgt.rtf")
 {
-    // Test that shpz has priority over dhght and not the other way around.
+    // Test that shpz has priority over dhgt and not the other way around.
     // Drawpage is sorted by ZOrder, so first should be red (back).
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xff0000), getProperty<sal_Int32>(getShape(1), "FillColor"));
     // Second (front) should be green.

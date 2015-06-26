@@ -239,7 +239,7 @@ public:
     bool bMirror45Allowed : 1;         // if false, object cannot even be mirrored over axes in a 45 degree raster
     bool bMirror90Allowed : 1;         // if false, object cannot even be mirrored over axes in a 90 degree raster
     bool bTransparenceAllowed : 1;     // if false, object does not have an interactive transparence control
-    bool bGradientAllowed : 1;         // if false, object dooes not have an interactive gradient control
+    bool bGradientAllowed : 1;         // if false, object does not have an interactive gradient control
     bool bShearAllowed : 1;            // if false, object cannot be sheared
     bool bEdgeRadiusAllowed : 1;
     bool bNoOrthoDesired : 1;          // is true for Rect; is false for BMP, MTF

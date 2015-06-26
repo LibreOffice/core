@@ -5644,7 +5644,7 @@ void SvxMSDffManager::SetDgContainer( SvStream& rSt )
     sal_uInt32 nFilePos = rSt.Tell();
     DffRecordHeader aDgContHd;
     ReadDffRecordHeader( rSt, aDgContHd );
-    // insert this container only if there is also a DgAtom
+    // insert this container only if there is also a DggAtom
     if ( SeekToRec( rSt, DFF_msofbtDg, aDgContHd.GetRecEndFilePos() ) )
     {
         DffRecordHeader aRecHd;
