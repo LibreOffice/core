@@ -410,7 +410,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
                 CFStringRef rException = static_cast<CFStringRef>(CFArrayGetValueAtIndex(rExceptionsList, idx));
 
                 if (idx>0)
-                    aProxyBypassList += rtl::OUString(";");
+                    aProxyBypassList += ";";
 
                 aProxyBypassList += CFStringToOUString(rException);
             }
