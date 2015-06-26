@@ -1001,7 +1001,7 @@ double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int
     fRate *= fAmorCoeff;
     double      fNRate = ::rtl::math::round( GetYearFrac( nNullDate, nDate, nFirstPer, nBase ) * fRate * fCost, 0 );
     fCost -= fNRate;
-    double      fRest = fCost - fRestVal;   // Anschaffungskosten - Restwert - Summe aller Abschreibungen
+    double      fRest = fCost - fRestVal;   // aboriginal cost - residual value - sum of all write-downs
 
     for( sal_uInt32 n = 0 ; n < nPer ; n++ )
     {
@@ -2459,7 +2459,7 @@ ConvertDataList::ConvertDataList()
 
     // ENERGY: 1 Joule is...
     NEWDP( "J",     1.0000000000000000E00,  CDC_Energy ); // Joule
-    NEWDP( "e",     1.0000000000000000E07,  CDC_Energy ); // Erg  -> http://www.chemie.fu-berlin.de/chemistry/general/si.html
+    NEWDP( "e",     1.0000000000000000E07,  CDC_Energy ); // Erg  -> https://en.wikipedia.org/wiki/Erg
     NEWDP( "c",     2.3900624947346700E-01, CDC_Energy ); // Thermodynamical Calorie
     NEWDP( "cal",   2.3884619064201700E-01, CDC_Energy ); // Calorie
     NEWDP( "eV",    6.2414570000000000E18,  CDC_Energy ); // Electronvolt
@@ -2545,7 +2545,6 @@ ConvertDataList::ConvertDataList()
     NEWD( "us_acre",    2.4710439304662790E-04, CDC_Area ); // *** U.S. survey/statute acre
     NEWD( "ly2",        1.1172985860549147E-32, CDC_Area ); // *** Square Light-year
     NEWD( "ha",         1.000000E-04,           CDC_Area ); // *** Hectare
-    NEWD( "Quadratlatschen",5.6689342403628117914,CDC_Area ); // ***
 
     // SPEED: 1 Meter per Second is...
     NEWDP( "m/s",   1.0000000000000000E00,  CDC_Speed ); // *** Meters per Second
@@ -2555,9 +2554,7 @@ ConvertDataList::ConvertDataList()
     NEWD( "mph",    2.2369362920544023E00,  CDC_Speed ); // *** Britsh Miles per Hour
     NEWD( "kn",     1.9438444924406048E00,  CDC_Speed ); // *** Knot = Nautical Miles per Hour
     NEWD( "admkn",  1.9438446603753486E00,  CDC_Speed ); // *** Admiralty Knot
-    NEWD( "wahnsinnige Geschwindigkeit", 2.0494886343432328E-14, CDC_Speed ); // ***
     NEWD( "ludicrous speed", 2.0494886343432328E-14, CDC_Speed ); // ***
-    NEWD( "laecherliche Geschwindigkeit", 4.0156958471424288E-06, CDC_Speed); // ***
     NEWD( "ridiculous speed", 4.0156958471424288E-06, CDC_Speed); // ***
 
     // INFORMATION: 1 Bit is...
