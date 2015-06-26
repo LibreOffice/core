@@ -157,7 +157,7 @@ public:
     // wait next event and dispatch
     // must returned by UserEvent (SalFrame::PostEvent)
     // and timer
-    virtual void            Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
+    virtual void            DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) SAL_OVERRIDE;
     virtual bool            AnyInput( VclInputFlags nType ) SAL_OVERRIDE;
 
     // may return NULL to disable session management
