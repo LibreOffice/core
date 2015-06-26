@@ -111,22 +111,17 @@ SvStream& WriteTransferableObjectDescriptor( SvStream& rOStm, const Transferable
 
 static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObjDesc )
 {
-    const OUString   aChar( "\"" );
     const OUString   aClassName( rObjDesc.maClassName.GetHexName() );
     OUString         aParams;
 
     if( !aClassName.isEmpty() )
     {
-        aParams += OUString( ";classname=\"" );
-        aParams += aClassName;
-        aParams += aChar;
+        aParams += ";classname=\"" + aClassName + "\"";
     }
 
     if( !rObjDesc.maTypeName.isEmpty() )
     {
-        aParams += OUString( ";typename=\"" );
-        aParams += rObjDesc.maTypeName;
-        aParams += aChar;
+        aParams += ";typename=\""  + rObjDesc.maTypeName + "\"";
     }
 
     if( !rObjDesc.maDisplayName.isEmpty() )
@@ -147,30 +142,18 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
                 pToAccept[nChar] = sal_True;
         }
 
-        aParams += OUString( ";displayname=\"" );
-        aParams += ::rtl::Uri::encode( rObjDesc.maDisplayName, pToAccept, rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8 );
-        aParams += aChar;
+        aParams += ";displayname=\""
+            + rtl::Uri::encode(
+                rObjDesc.maDisplayName, pToAccept, rtl_UriEncodeIgnoreEscapes,
+                RTL_TEXTENCODING_UTF8)
+            + "\"";
     }
 
-    aParams += OUString( ";viewaspect=\"" );
-    aParams += OUString::number( rObjDesc.mnViewAspect );
-    aParams += aChar;
-
-    aParams += OUString( ";width=\"" );
-    aParams += OUString::number( rObjDesc.maSize.Width() );
-    aParams += aChar;
-
-    aParams += OUString( ";height=\"" );
-    aParams += OUString::number( rObjDesc.maSize.Height() );
-    aParams += aChar;
-
-    aParams += OUString( ";posx=\"" );
-    aParams += OUString::number( rObjDesc.maDragStartPos.X() );
-    aParams += aChar;
-
-    aParams += OUString( ";posy=\"" );
-    aParams += OUString::number( rObjDesc.maDragStartPos.X() );
-    aParams += aChar;
+    aParams += ";viewaspect=\"" + OUString::number(rObjDesc.mnViewAspect)
+        + "\";width=\"" + OUString::number(rObjDesc.maSize.Width())
+        + "\";height=\"" + OUString::number(rObjDesc.maSize.Height())
+        + "\";posx=\"" + OUString::number(rObjDesc.maDragStartPos.X())
+        + "\";posy=\"" + OUString::number(rObjDesc.maDragStartPos.X()) + "\"";
 
     return aParams;
 }
