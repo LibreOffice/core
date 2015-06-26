@@ -141,7 +141,6 @@ struct ToStringHelper< const char[ N ] >
     static const bool allowOUStringConcat = true;
     };
 
-#if defined LIBO_INTERNAL_ONLY
 template<char C> struct ToStringHelper<OUStringLiteral1_<C>> {
     static int length(OUStringLiteral1_<C>) { return 1; }
     static char * addData(char * buffer, OUStringLiteral1_<C> literal)
@@ -152,7 +151,6 @@ template<char C> struct ToStringHelper<OUStringLiteral1_<C>> {
     static bool const allowOStringConcat = false;
     static bool const allowOUStringConcat = true;
 };
-#endif
 
 /**
 @internal
