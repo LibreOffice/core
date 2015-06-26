@@ -133,18 +133,10 @@ extern "C" CPPU_CURRENT_NAMESPACE::__cxa_eh_globals *__cxa_get_globals () throw(
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-// The following are in cxxabi.h since GCC 4.7 (they are wrapped in
-// CPPU_CURRENT_NAMESPACE here as different GCC versions have slightly different
-// declarations for them, e.g., with or without throw() specification, so would
-// complain about redeclarations of these somewhat implicitly declared
-// functions):
-#if __GNUC__ == 4 && __GNUC_MINOR__ <= 6
 extern "C" void *__cxa_allocate_exception(
     std::size_t thrown_size ) throw();
 extern "C" void __cxa_throw (
     void *thrown_exception, void *tinfo, void (*dest) (void *) ) __attribute__((noreturn));
-#endif
-
 
 void raiseException(
     uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );

@@ -23,10 +23,10 @@
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <formula/token.hxx>
 #include <formula/ExternalReferenceHelper.hxx>
-#include <o3tl/underlying_type.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <limits.h>
+#include <type_traits>
 #include <unordered_set>
 
 namespace svl {
@@ -98,7 +98,7 @@ public:
     static inline bool isRewriteNeeded( OpCode eOp );
 };
 
-typedef std::unordered_set<OpCode, std::hash<o3tl::underlying_type<OpCode>::type> > unordered_opcode_set;
+typedef std::unordered_set<OpCode, std::hash<std::underlying_type<OpCode>::type> > unordered_opcode_set;
 
 class FORMULA_DLLPUBLIC FormulaTokenArray
 {

@@ -109,18 +109,12 @@ namespace sw
                 static node_ptr get_previous(const_node_ptr n) { return const_cast<node_ptr>(n)->pPrev; };
                 static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
             };
-#if !defined(__clang__) && defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)
-            // gcc 4.6 backwards compat hack, remove ASAP when we drop support
-            template<typename gcc_hack_value> friend class sw::RingContainer;
-            template<typename gcc_hack_value> friend class sw::RingIterator;
-#else
             friend ring_container;
             friend const_ring_container;
             friend typename ring_container::iterator;
             friend typename ring_container::const_iterator;
             friend typename const_ring_container::iterator;
             friend typename const_ring_container::const_iterator;
-#endif
             friend class boost::iterator_core_access;
             typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
             Ring* pNext;
