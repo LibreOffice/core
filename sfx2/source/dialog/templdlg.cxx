@@ -79,7 +79,7 @@ namespace
 class StyleLBoxString : public SvLBoxString
 {
     SfxStyleFamily meStyleFamily;
-    std::unique_ptr<sfx2::StylePreviewRenderer> mpStylePreviewRenderer;
+    SvViewDataItem* mpViewData;
 
 public:
     StyleLBoxString(SvTreeListEntry* pEntry,
@@ -115,6 +115,19 @@ void StyleLBoxString::InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry
     {
         pViewData = pView->GetViewDataItem(pEntry, this);
     }
+    mpViewData = pViewData;
+}
+
+void StyleLBoxString::Paint(
+    const Point& aPos, SvTreeListBox& rDevice, vcl::RenderContext& rRenderContext,
+    const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
+{
+    std::unique_ptr<sfx2::StylePreviewRenderer> pStylePreviewRenderer;
+
+    if (!pEntry)
+        return;
+
+    bool bResult = false;
 
     SfxObjectShell* pShell = SfxObjectShell::Current();
     if (!pShell)
@@ -122,40 +135,29 @@ void StyleLBoxString::InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry
 
     sfx2::StyleManager* pStyleManager = pShell->GetStyleManager();
 
-    if (!pStyleManager)
+    if (pStyleManager)
     {
-        return;
+        bool bInit = (!pStylePreviewRenderer);
+
+        pStylePreviewRenderer.reset(pStyleManager->CreateStylePreviewRenderer(rRenderContext, GetText(), meStyleFamily, 32 * rRenderContext.GetDPIScaleFactor()));
+
+        if (pStylePreviewRenderer)
+        {
+            if (pStylePreviewRenderer->recalculate())
+            {
+                mpViewData->maSize = pStylePreviewRenderer->getRenderSize();
+            }
+            else if (bInit)
+            {
+                SvLBoxString::InitViewData( const_cast<SvTreeListBox*>(&rDevice), const_cast<SvTreeListEntry*>(pEntry), mpViewData);
+            }
+        }
     }
-    mpStylePreviewRenderer.reset(pStyleManager->CreateStylePreviewRenderer(*pView, GetText(), meStyleFamily, 32 * pView->GetDPIScaleFactor()));
 
-    if (!mpStylePreviewRenderer)
-    {
-        return;
-    }
-
-    if (mpStylePreviewRenderer->recalculate())
-    {
-        pViewData->maSize = mpStylePreviewRenderer->getRenderSize();
-    }
-    else
-    {
-        SvLBoxString::InitViewData(pView, pEntry, pViewData);
-    }
-}
-
-void StyleLBoxString::Paint(
-    const Point& aPos, SvTreeListBox& /*rDevice*/, vcl::RenderContext& rRenderContext,
-    const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
-{
-    if (!pEntry)
-        return;
-
-    bool bResult = false;
-
-    if (mpStylePreviewRenderer)
+    if (pStylePreviewRenderer)
     {
         Rectangle aPaintRectangle = pView->GetPaintRectangle();
-        bResult = mpStylePreviewRenderer->render(aPaintRectangle);
+        bResult = pStylePreviewRenderer->render(aPaintRectangle);
     }
 
     if (!bResult)
