@@ -29,8 +29,6 @@
 #include <boost/scoped_ptr.hpp>
 
 
-TYPEINIT0_AUTOFACTORY( XFillExchangeData );
-
 /// default CTOR, for Assign()
 XFillExchangeData::XFillExchangeData() :
     pXFillAttrSetItem( NULL ),
