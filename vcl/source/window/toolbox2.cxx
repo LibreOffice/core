@@ -275,7 +275,7 @@ void ImplToolItem::DetermineButtonDrawStyle( ButtonType eButtonType, bool& rbIma
         bHasText = true;
 
     // prefer images if symbolonly buttons are drawn
-    // prefer texts if textonly buttons are dreawn
+    // prefer texts if textonly buttons are drawn
 
     if ( eButtonType == ButtonType::SYMBOLONLY )         // drawing icons only
     {

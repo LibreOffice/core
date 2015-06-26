@@ -1130,7 +1130,7 @@ namespace drawinglayer
         void VclProcessor2D::RenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate)
         {
             // #i101491# method restructured to clearly use the DrawPolyLine
-            // calls starting from a deined line width
+            // calls starting from a defined line width
             const attribute::LineAttribute& rLineAttribute = rPolygonStrokeCandidate.getLineAttribute();
             const double fLineWidth(rLineAttribute.getWidth());
             bool bDone(false);

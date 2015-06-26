@@ -389,7 +389,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     if ( aStartPaM.GetNode() != aEndPaM.GetNode() )
     {
-        // The rest dof the StartNodes...
+        // The rest of the StartNodes...
         if ( aStartPaM.GetIndex() == 0 )
             mpEditEngine->SetParaAttribsOnly(nStartNode, rSet.GetAttrSet());
         else

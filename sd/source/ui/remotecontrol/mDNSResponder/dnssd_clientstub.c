@@ -1890,7 +1890,7 @@ DNSServiceErrorType DNSSD_API DNSServiceRemoveRecord
     if (!err)
     {
         // This RecordRef could have been allocated in DNSServiceRegisterRecord or DNSServiceAddRecord.
-        // If so, delink from the list before freeing
+        // If so, unlink from the list before freeing
         DNSRecord **p = &sdRef->rec;
         while (*p && *p != RecordRef) p = &(*p)->recnext;
         if (*p) *p = RecordRef->recnext;

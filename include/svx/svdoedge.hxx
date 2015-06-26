@@ -340,7 +340,7 @@ public:
 //      Das ist der Default-Mindestabstand der bei der Berechnung der
 //      Verbindungslinie zu den angedockten Objekten in logischen Einheiten.
 //      Dieser Abstand wird innerhalb des Objektes "ueberschrieben", sobald
-//      der User an den Linien draggd. Beim Andocken an ein neues Objekt wird
+//      der User an den Linien dragged. Beim Andocken an ein neues Objekt wird
 //      dann jedoch wieder dieser Default verwendet.
 //
 //
