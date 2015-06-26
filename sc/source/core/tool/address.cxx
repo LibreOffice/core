@@ -1031,14 +1031,21 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
 
 /**
     @param p        pointer to null-terminated sal_Unicode string
+    @param rRawRes  returns SCA_... flags without the final check for full
+                    validity that is applied to the return value, with which
+                    two addresses that form a column or row singleton range,
+                    e.g. A:A or 1:1, can be detected. Used in
+                    lcl_ScRange_Parse_OOo().
     @param pRange   pointer to range where rAddr effectively is *pRange->aEnd,
                     used in conjunction with pExtInfo to determine the tab span
                     of a 3D reference.
  */
 static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAddr,
+                                           sal_uInt16& rRawRes,
                                            ScAddress::ExternalInfo* pExtInfo = NULL, ScRange* pRange = NULL )
 {
     sal_uInt16  nRes = 0;
+    rRawRes = 0;
     OUString aDocName;       // the pure Document Name
     OUString aTab;
     bool    bExtDoc = false;
@@ -1263,6 +1270,8 @@ static sal_uInt16 lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDo
         }
     }
 
+    rRawRes |= nRes;
+
     if ( !(nRes & SCA_VALID_ROW) && (nRes & SCA_VALID_COL)
             && !( (nRes & SCA_TAB_3D) && (nRes & SCA_VALID_TAB)) )
     {   // no Row, no Tab, but Col => DM (...), B (...) et al
@@ -1309,7 +1318,8 @@ static sal_uInt16 lcl_ScAddress_Parse ( const sal_Unicode* p, ScDocument* pDoc, 
         default :
         case formula::FormulaGrammar::CONV_OOO:
         {
-            return lcl_ScAddress_Parse_OOo( p, pDoc, rAddr, pExtInfo, NULL );
+            sal_uInt16 nRawRes = 0;
+            return lcl_ScAddress_Parse_OOo( p, pDoc, rAddr, nRawRes, pExtInfo, NULL );
         }
     }
 }
@@ -1460,10 +1470,35 @@ static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
         OUStringBuffer aTmp(r);
         aTmp[nPos] = 0;
         const sal_Unicode* p = aTmp.getStr();
-        if( (nRes1 = lcl_ScAddress_Parse_OOo( p, pDoc, rRange.aStart, pExtInfo, NULL ) ) != 0 )
+        sal_uInt16 nRawRes1 = 0;
+        if (((nRes1 = lcl_ScAddress_Parse_OOo( p, pDoc, rRange.aStart, nRawRes1, pExtInfo, NULL)) != 0) ||
+                ((nRawRes1 & (SCA_VALID_COL | SCA_VALID_ROW)) && (nRawRes1 & SCA_VALID_TAB)))
         {
             rRange.aEnd = rRange.aStart;  // sheet must be initialized identical to first sheet
-            if ( (nRes2 = lcl_ScAddress_Parse_OOo( p + nPos+ 1, pDoc, rRange.aEnd, pExtInfo, &rRange ) ) != 0 )
+            sal_uInt16 nRawRes2 = 0;
+            nRes2 = lcl_ScAddress_Parse_OOo( p + nPos+ 1, pDoc, rRange.aEnd, nRawRes2, pExtInfo, &rRange);
+            if (!((nRes1 & SCA_VALID) && (nRes2 & SCA_VALID)) &&
+                    // If not fully valid addresses, check if both have a valid
+                    // column or row, and both have valid (or omitted) sheet references.
+                    (nRawRes1 & (SCA_VALID_COL | SCA_VALID_ROW)) && (nRawRes1 & SCA_VALID_TAB) &&
+                    (nRawRes2 & (SCA_VALID_COL | SCA_VALID_ROW)) && (nRawRes2 & SCA_VALID_TAB) &&
+                    // Both must be column XOR row references, A:A or 1:1 but not A:1 or 1:A
+                    ((nRawRes1 & (SCA_VALID_COL | SCA_VALID_ROW)) == (nRawRes2 & (SCA_VALID_COL | SCA_VALID_ROW))))
+            {
+                nRes1 = nRawRes1 | SCA_VALID;
+                nRes2 = nRawRes2 | SCA_VALID;
+                if (nRawRes1 & SCA_VALID_COL)
+                {
+                    rRange.aStart.SetRow(0);
+                    rRange.aEnd.SetRow(MAXROW);
+                }
+                else
+                {
+                    rRange.aStart.SetCol(0);
+                    rRange.aEnd.SetCol(MAXCOL);
+                }
+            }
+            if (nRes1 && nRes2)
             {
                 // PutInOrder / Justify
                 sal_uInt16 nMask, nBits1, nBits2;
@@ -1503,7 +1538,10 @@ static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
                     nRes2 |= SCA_TAB_ABSOLUTE;
             }
             else
-                nRes1 = 0;      // keine Tokens aus halben Sachen
+            {
+                // Don't leave around valid half references.
+                nRes1 = nRes2 = 0;
+            }
         }
     }
     nRes1 = ( ( nRes1 | nRes2 ) & SCA_VALID )
