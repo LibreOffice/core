@@ -1510,7 +1510,7 @@ static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
         }
     }
 
-    ::SwAlignRect( rRect, properties.pSGlobalShell, properties.pSGlobalShell->GetOut() );
+    ::SwAlignRect( rRect, properties.pSGlobalShell, properties.pSGlobalShell ? properties.pSGlobalShell->GetOut() : 0 );
 }
 
 /**
