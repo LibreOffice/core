@@ -75,7 +75,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 
-TYPEINIT1(SfxFrame, SfxListener);
 TYPEINIT1_AUTOFACTORY(SfxFrameItem, SfxPoolItem);
 TYPEINIT1(SfxUsrAnyItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SfxUnoFrameItem, SfxPoolItem);

@@ -116,8 +116,6 @@ protected:
     SAL_DLLPRIVATE      SfxFrame( vcl::Window& i_rContainerWindow, bool bHidden );
 
 public:
-                        TYPEINFO();
-
     static SfxFrame*    Create( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
     static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                         CreateBlankFrame();
