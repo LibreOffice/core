@@ -71,7 +71,7 @@ public:
     // #i28701#
     TYPEINFO_OVERRIDE();
 
-    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
 
     // #i37068# - accessors for member <mbNoMoveOnCheckClip>
     inline void SetNoMoveOnCheckClip( const bool _bNewNoMoveOnCheckClip )
@@ -138,7 +138,7 @@ protected:
 class SwFlyAtCntFrm : public SwFlyFreeFrm
 {
 protected:
-    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
 
     // #i28701#
     virtual bool _InvalidationAllowed( const InvalidationType _nInvalid ) const SAL_OVERRIDE;
@@ -186,7 +186,7 @@ class SwFlyInCntFrm : public SwFlyFrm
 protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
                                    const SwRect& rRect, PrepareHint eHint) SAL_OVERRIDE;
-    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
     virtual void  Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
 public:

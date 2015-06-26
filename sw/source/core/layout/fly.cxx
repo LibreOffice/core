@@ -1839,7 +1839,7 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, bool bTst )
                     bFormatHeightOnly = true;
                 }
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
-                static_cast<SwFlyFreeFrm*>(this)->SwFlyFreeFrm::MakeAll();
+                static_cast<SwFlyFreeFrm*>(this)->SwFlyFreeFrm::MakeAll(getRootFrm()->GetCurrShell()->GetOut());
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( false );
                 // #i55416#
                 if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
@@ -1848,7 +1848,7 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, bool bTst )
                 }
             }
             else
-                MakeAll();
+                MakeAll(getRootFrm()->GetCurrShell()->GetOut());
             _InvalidateSize();
             InvalidatePos();
             if ( bOldLock )
@@ -1934,7 +1934,7 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, bool bTst )
                     bFormatHeightOnly = true;
                 }
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( true );
-                static_cast<SwFlyFreeFrm*>(this)->SwFlyFreeFrm::MakeAll();
+                static_cast<SwFlyFreeFrm*>(this)->SwFlyFreeFrm::MakeAll(getRootFrm()->GetCurrShell()->GetOut());
                 static_cast<SwFlyFreeFrm*>(this)->SetNoMoveOnCheckClip( false );
                 // #i55416#
                 if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
@@ -1943,7 +1943,7 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, bool bTst )
                 }
             }
             else
-                MakeAll();
+                MakeAll(getRootFrm()->GetCurrShell()->GetOut());
             _InvalidateSize();
             InvalidatePos();
             if ( bOldLocked )

@@ -274,7 +274,7 @@ void SwFrm::PrepareMake()
             const SwTextFrm* pMaster = static_cast<SwContentFrm*>(this)->FindMaster();
             if ( pMaster && pMaster->IsLocked() )
             {
-                MakeAll();
+                MakeAll(IsRootFrm() ? 0 : getRootFrm()->GetCurrShell()->GetOut());
                 return;
             }
         }
@@ -303,7 +303,7 @@ void SwFrm::PrepareMake()
                          (SwFlowFrm::CastFlowFrm(pFrm))->IsAnFollow( pThis ) )
                         break;
 
-                    pFrm->MakeAll();
+                    pFrm->MakeAll(IsRootFrm() ? 0 : getRootFrm()->GetCurrShell()->GetOut());
                     if( IsSctFrm() && !static_cast<SwSectionFrm*>(this)->GetSection() )
                         break;
                 }
@@ -337,7 +337,7 @@ void SwFrm::PrepareMake()
         if ( bTab && !bOldTabLock )
             ::PrepareUnlock( static_cast<SwTabFrm*>(this) );
     }
-    MakeAll();
+    MakeAll(IsRootFrm() ? 0 : getRootFrm()->GetCurrShell()->GetOut());
 }
 
 void SwFrm::OptPrepareMake()
@@ -358,7 +358,7 @@ void SwFrm::OptPrepareMake()
     else
     {
         StackHack aHack;
-        MakeAll();
+        MakeAll(IsRootFrm() ? 0 : getRootFrm()->GetCurrShell()->GetOut());
     }
 }
 
@@ -411,7 +411,7 @@ void SwFrm::PrepareCrsr()
                      (SwFlowFrm::CastFlowFrm(pFrm))->IsAnFollow( pThis ) )
                     break;
 
-                pFrm->MakeAll();
+                pFrm->MakeAll(getRootFrm()->GetCurrShell()->GetOut());
             }
             // With ContentFrms, the chain may be broken while walking through
             // it. Therefore we have to figure out the follower in a bit more
@@ -636,7 +636,7 @@ static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot
     rBot = std::max( rBot, nMax );
 }
 
-void SwPageFrm::MakeAll()
+void SwPageFrm::MakeAll(vcl::RenderContext* pRenderContext)
 {
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
@@ -672,7 +672,7 @@ void SwPageFrm::MakeAll()
                 SwViewShell *pSh = getRootFrm()->GetCurrShell();
                 if ( pSh && pSh->GetViewOptions()->getBrowseMode() )
                 {
-                    const Size aBorder = pSh->GetOut()->PixelToLogic( pSh->GetBrowseBorder() );
+                    const Size aBorder = pRenderContext->PixelToLogic( pSh->GetBrowseBorder() );
                     const long nTop    = pAttrs->CalcTopLine()   + aBorder.Height();
                     const long nBottom = pAttrs->CalcBottomLine()+ aBorder.Height();
 
@@ -765,7 +765,7 @@ void SwPageFrm::MakeAll()
                 {   // Set FixSize. For pages, this is not done from Upper, but from
                     // the attribute.
                     Frm().SSize( pAttrs->GetSize() );
-                    Format( getRootFrm()->GetCurrShell()->GetOut(), pAttrs );
+                    Format( pRenderContext, pAttrs );
                 }
             }
         }
@@ -779,7 +779,7 @@ void SwPageFrm::MakeAll()
         "Upper (Root) must be wide enough to contain the widest page");
 }
 
-void SwLayoutFrm::MakeAll()
+void SwLayoutFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
@@ -1026,7 +1026,7 @@ inline void ValidateSz( SwFrm *pFrm )
     }
 }
 
-void SwContentFrm::MakeAll()
+void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     OSL_ENSURE( GetUpper(), "no Upper?" );
     OSL_ENSURE( IsTextFrm(), "MakeAll(), NoText" );

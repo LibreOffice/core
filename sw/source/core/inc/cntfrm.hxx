@@ -45,7 +45,7 @@ class SwContentFrm: public SwFrm, public SwFlowFrm
                     bool bTstMove,
                     const bool bObjsInNewUpper );
 
-    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
 
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );

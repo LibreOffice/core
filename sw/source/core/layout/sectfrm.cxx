@@ -687,7 +687,7 @@ void SwSectionFrm::MoveContentAndDelete( SwSectionFrm* pDel, bool bSave )
     }
 }
 
-void SwSectionFrm::MakeAll()
+void SwSectionFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     if ( IsJoinLocked() || IsColLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
         return;
@@ -741,7 +741,7 @@ void SwSectionFrm::MakeAll()
     const SwFormatCol &rCol = GetFormat()->GetCol();
     (void)rCol;
 #endif
-    SwLayoutFrm::MakeAll();
+    SwLayoutFrm::MakeAll(getRootFrm()->GetCurrShell()->GetOut());
     UnlockJoin();
     if( pSection && IsSuperfluous() )
         DelEmpty( false );

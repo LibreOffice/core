@@ -54,7 +54,7 @@ protected:
     virtual ~SwLayoutFrm();
 
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
-    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
 
     SwFrm * m_pLower;
     std::vector<SwAnchoredObject*> m_VertPosOrientFrmsFor;

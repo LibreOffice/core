@@ -106,7 +106,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     virtual ~SwTabFrm();
 
 protected:
-    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
     // only changes the Framesize, not the PrtArea size

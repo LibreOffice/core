@@ -463,7 +463,7 @@ const Size& SwNoTextFrm::GetSize() const
     return pFly->Prt().SSize();
 }
 
-void SwNoTextFrm::MakeAll()
+void SwNoTextFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     SwContentNotify aNotify( this );
     SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
