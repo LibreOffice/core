@@ -133,11 +133,6 @@ extern "C" CPPU_CURRENT_NAMESPACE::__cxa_eh_globals *__cxa_get_globals () throw(
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-extern "C" void *__cxa_allocate_exception(
-    std::size_t thrown_size ) throw();
-extern "C" void __cxa_throw (
-    void *thrown_exception, void *tinfo, void (*dest) (void *) ) __attribute__((noreturn));
-
 void raiseException(
     uno_Any * pUnoExc, uno_Mapping * pUno2Cpp );
 
