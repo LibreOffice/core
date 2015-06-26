@@ -829,12 +829,12 @@ struct ConventionOOO_A1 : public Convention_A1
             !ValidCol(rAbs2.Col()) || rRef.Ref2.IsColDeleted() || !ValidRow(rAbs2.Row()) || rRef.Ref2.IsRowDeleted())
             return SINGLETON_NONE;
 
-        // A:A or $A:$A or A:$A or $A:A, both row anchors must be absolute.
-        if (rAbs1.Row() == 0 && rAbs2.Row() == MAXROW && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel())
+        // A:A or $A:$A or A:$A or $A:A
+        if (rRef.IsEntireCol())
             return SINGLETON_COL;
 
-        // 1:1 or $1:$1 or 1:$1 or $1:1, both column anchors must be absolute.
-        if (rAbs1.Col() == 0 && rAbs2.Col() == MAXCOL && !rRef.Ref1.IsColRel() && !rRef.Ref2.IsColRel())
+        // 1:1 or $1:$1 or 1:$1 or $1:1
+        if (rRef.IsEntireRow())
             return SINGLETON_ROW;
 
         return SINGLETON_NONE;
