@@ -1133,7 +1133,7 @@ OOle2Obj& OOle2Obj::operator=(const OOle2Obj& rObj)
 }
 
 
-// Clone() soll eine komplette Kopie des Objektes erzeugen.
+// Clone() should make a complete copy of the object.
 OOle2Obj* OOle2Obj::Clone() const
 {
     return CloneHelper< OOle2Obj >();
