@@ -24,14 +24,12 @@
 class SotObjectFactory : public SotFactory
 {
 public:
-         TYPEINFO_OVERRIDE();
         SotObjectFactory( const SvGlobalName & rName,
                           const OUString & rClassName,
                           CreateInstanceType pCreateFuncP )
             : SotFactory( rName, rClassName, pCreateFuncP )
         {}
 };
-TYPEINIT1(SotObjectFactory,SotFactory);
 
 
 SO2_IMPL_BASIC_CLASS_DLL(SotObject,SotObjectFactory,

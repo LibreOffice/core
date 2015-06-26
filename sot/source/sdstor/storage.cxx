@@ -45,14 +45,12 @@ using namespace ::com::sun::star;
 class SotStorageStreamFactory : public SotFactory
 {
 public:
-         TYPEINFO_OVERRIDE();
         SotStorageStreamFactory( const SvGlobalName & rName,
                                  const OUString & rClassName,
                                  CreateInstanceType pCreateFuncP )
             : SotFactory( rName, rClassName, pCreateFuncP )
         {}
 };
-TYPEINIT1(SotStorageStreamFactory,SotFactory);
 
 
 SO2_IMPL_BASIC_CLASS1_DLL(SotStorageStream,SotStorageStreamFactory,SotObject,
@@ -279,14 +277,12 @@ bool SotStorageStream::SetProperty( const OUString& rName, const ::com::sun::sta
 class SotStorageFactory : public SotFactory
 {
 public:
-         TYPEINFO_OVERRIDE();
         SotStorageFactory( const SvGlobalName & rName,
                            const OUString & rClassName,
                            CreateInstanceType pCreateFuncP )
             : SotFactory( rName, rClassName, pCreateFuncP )
         {}
 };
-TYPEINIT1(SotStorageFactory,SotFactory);
 
 
 SO2_IMPL_BASIC_CLASS1_DLL(SotStorage,SotStorageFactory,SotObject,

@@ -46,7 +46,6 @@ class SOT_DLLPUBLIC SotFactory : public SvGlobalName
 protected:
     virtual             ~SotFactory();
 public:
-                        TYPEINFO();
     static  void        IncSvObjectCount( SotObject * = NULL );
     static  void        DecSvObjectCount( SotObject * = NULL );
 
