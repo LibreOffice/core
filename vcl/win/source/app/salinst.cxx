@@ -628,13 +628,17 @@ void ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
+void WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
+    // NOTE: if nReleased != 0 this will be called without SolarMutex
+    //       so don't do anything dangerous before releasing it here
     SalYieldMutex*  pYieldMutex = mpSalYieldMutex;
     SalData*        pSalData = GetSalData();
     DWORD           nCurThreadId = GetCurrentThreadId();
-    sal_uLong           nCount = pYieldMutex->GetAcquireCount( nCurThreadId );
-    sal_uLong           n = nCount;
+    sal_uLong const nCount = (nReleased != 0)
+                                ? nReleased
+                                : pYieldMutex->GetAcquireCount(nCurThreadId);
+    sal_uLong       n = (nReleased != 0) ? 0 : nCount;
     while ( n )
     {
         pYieldMutex->release();

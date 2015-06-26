@@ -259,8 +259,9 @@ SalBitmap* SvpSalInstance::CreateSalBitmap()
 #endif
 }
 
-void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
+void SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
+    assert(nReleased == 0); // not implemented
     // first, check for already queued events.
 
     // release yield mutex

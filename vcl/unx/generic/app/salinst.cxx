@@ -151,8 +151,9 @@ bool X11SalInstance::AnyInput(VclInputFlags nType)
     return bRet;
 }
 
-void X11SalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
+void X11SalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
+    assert(nReleased == 0); // not implemented
     mpXLib->Yield( bWait, bHandleAllCurrentEvents );
 }
 
