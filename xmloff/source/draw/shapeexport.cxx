@@ -3866,10 +3866,8 @@ void ImpExportEquations( SvXMLExport& rExport, const uno::Sequence< OUString >& 
             nIndex = aStr.indexOf( '?', nIndex );
             if ( nIndex != -1 )
             {
-                OUString aNew( aStr.copy( 0, nIndex + 1 ) );
-                aNew += OUString('f');
-                aNew += aStr.copy( nIndex + 1, ( aStr.getLength() - nIndex ) - 1 );
-                aStr = aNew;
+                aStr = aStr.copy(0, nIndex + 1) + "f"
+                    + aStr.copy(nIndex + 1, aStr.getLength() - nIndex - 1);
                 nIndex++;
             }
         } while( nIndex != -1 );

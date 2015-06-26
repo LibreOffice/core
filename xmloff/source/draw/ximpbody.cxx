@@ -193,9 +193,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                 OUString aFileName( maHREF.copy( 0, nIndex ) );
                 OUString aBookmarkName( maHREF.copy( nIndex+1 ) );
 
-                maHREF = GetImport().GetAbsoluteReference( aFileName );
-                maHREF += OUString(static_cast<sal_Unicode>('#'));
-                maHREF += aBookmarkName;
+                maHREF = GetImport().GetAbsoluteReference( aFileName ) + "#"
+                    + aBookmarkName;
             }
 
             xProps->setPropertyValue("BookmarkURL", uno::makeAny( maHREF ) );

@@ -1639,7 +1639,7 @@ namespace xmloff
             // (somewhere else) to determine that a non-standard binding should be created.
             // This hack is acceptable for OOo 1.1.1, since the file format for value
             // bindings of form controls is to be changed afterwards, anyway.
-            sBoundCellAddress += OUString( ":index"  );
+            sBoundCellAddress += ":index";
         }
 
         OControlImport::doRegisterCellValueBinding( sBoundCellAddress );
