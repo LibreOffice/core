@@ -520,8 +520,7 @@ void CustomAnimationPane::updateControls()
 
         if( !aUIName.isEmpty() )
         {
-            aTemp += OUString( (sal_Unicode)' ' );
-            aTemp += aUIName;
+            aTemp += " " + aUIName;
             mpFTEffect->SetText( aTemp );
         }
 

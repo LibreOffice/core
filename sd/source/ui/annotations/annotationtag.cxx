@@ -517,9 +517,9 @@ BitmapEx AnnotationTag::CreateAnnotationBitmap( bool bSelected )
 {
     ScopedVclPtrInstance< VirtualDevice > pVDev;
 
-    OUString sAuthor( getInitials( mxAnnotation->getAuthor() ) );
-    sAuthor += OUString( ' ' );
-    sAuthor += OUString::number( mnIndex );
+    OUString sAuthor(
+        getInitials(mxAnnotation->getAuthor()) + " "
+        + OUString::number(mnIndex));
 
     pVDev->SetFont( mrFont );
 
