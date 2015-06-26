@@ -909,8 +909,7 @@ OUString implGenerateFieldId( std::vector< TextField* > & aFieldSet,
             break;
         }
     }
-    OUString sFieldId( sOOOElemField );
-    sFieldId += OUString( '_' );
+    OUString sFieldId(sOOOElemField + "_");
     if( !bFound )
     {
         aFieldSet.push_back( new TextFieldType( aField ) );
@@ -991,9 +990,7 @@ bool SVGFilter::implGenerateMetaData()
                 const Reference< XDrawPage > &    xDrawPage = mSelectedPages[i];
                 Reference< XMasterPageTarget >    xMasterPageTarget( xDrawPage, UNO_QUERY );
                 Reference< XDrawPage >            xMasterPage( xMasterPageTarget->getMasterPage(), UNO_QUERY );
-                OUString                          aSlideId( aId );
-                aSlideId += OUString( '_' );
-                aSlideId += OUString::number( i );
+                OUString aSlideId(aId + "_" + OUString::number( i ));
 
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", aSlideId );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, implGetValidIDFromInterface( xDrawPage ) );
