@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 #define ROOTNODE_MENUS                                  OUString("Office.Common/Menus/")
-#define PATHDELIMITER                                   OUString("/")
+#define PATHDELIMITER                                   "/"
 
 #define SETNODE_NEWMENU                                 OUString("New")
 #define SETNODE_WIZARDMENU                              OUString("Wizard")
@@ -538,7 +538,6 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
                                                                         Sequence< OUString >& lDestination ,
                                                                   const OUString&             sSetNode     )
 {
-    OUString            sFixPath;
     vector< OUString >  lTemp;
     sal_Int32           nSourceCount     = lSource.getLength();
     sal_Int32           nDestinationStep = lDestination.getLength(); // start on end of current list ...!
@@ -560,23 +559,12 @@ void SvtDynamicMenuOptions_Impl::impl_SortAndExpandPropertyNames( const Sequence
                                             pItem!=lTemp.end();
                                             ++pItem              )
     {
-        sFixPath  = sSetNode;
-        sFixPath += PATHDELIMITER;
-        sFixPath += *pItem;
-        sFixPath += PATHDELIMITER;
-
-        lDestination[nDestinationStep]  = sFixPath;
-        lDestination[nDestinationStep] += PROPERTYNAME_URL;
-        ++nDestinationStep;
-        lDestination[nDestinationStep]  = sFixPath;
-        lDestination[nDestinationStep] += PROPERTYNAME_TITLE;
-        ++nDestinationStep;
-        lDestination[nDestinationStep]  = sFixPath;
-        lDestination[nDestinationStep] += PROPERTYNAME_IMAGEIDENTIFIER;
-        ++nDestinationStep;
-        lDestination[nDestinationStep]  = sFixPath;
-        lDestination[nDestinationStep] += PROPERTYNAME_TARGETNAME;
-        ++nDestinationStep;
+        OUString sFixPath(sSetNode + PATHDELIMITER + *pItem + PATHDELIMITER);
+        lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_URL;
+        lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_TITLE;
+        lDestination[nDestinationStep++] = sFixPath
+            + PROPERTYNAME_IMAGEIDENTIFIER;
+        lDestination[nDestinationStep++] = sFixPath + PROPERTYNAME_TARGETNAME;
     }
 }
 

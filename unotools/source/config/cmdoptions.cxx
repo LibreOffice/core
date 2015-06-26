@@ -43,11 +43,11 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
 #define ROOTNODE_CMDOPTIONS                             OUString("Office.Commands/Execute")
-#define PATHDELIMITER                                   OUString("/")
+#define PATHDELIMITER                                   "/"
 
-#define SETNODE_DISABLED                                OUString("Disabled")
+#define SETNODE_DISABLED                                "Disabled"
 
-#define PROPERTYNAME_CMD                                OUString("Command")
+#define PROPERTYNAME_CMD                                "Command"
 
 /*-****************************************************************************************************************
     @descr  support simple command option structures and operations on it
@@ -276,20 +276,11 @@ Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
     // First get ALL names of current existing list items in configuration!
     Sequence< OUString > lDisabledItems      = GetNodeNames( SETNODE_DISABLED, utl::CONFIG_NAME_LOCAL_PATH );
 
-    OUString aSetNode( SETNODE_DISABLED );
-    aSetNode += PATHDELIMITER;
-
-    OUString aCommandKey( PATHDELIMITER );
-    aCommandKey += PROPERTYNAME_CMD;
-
     // Expand all keys
     for (sal_Int32 i=0; i<lDisabledItems.getLength(); ++i )
     {
-        OUStringBuffer aBuffer( 32 );
-        aBuffer.append( aSetNode );
-        aBuffer.append( lDisabledItems[i] );
-        aBuffer.append( aCommandKey );
-        lDisabledItems[i] = aBuffer.makeStringAndClear();
+        lDisabledItems[i] = SETNODE_DISABLED PATHDELIMITER + lDisabledItems[i]
+            + PATHDELIMITER PROPERTYNAME_CMD;
     }
 
     // Return result.

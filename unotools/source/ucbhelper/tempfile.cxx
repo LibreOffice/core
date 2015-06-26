@@ -427,8 +427,7 @@ OUString TempFile::SetTempNameBaseDirectory( const OUString &rBaseName )
         // append own internal directory
         bRet = true;
         OUString &rTempNameBase_Impl = TempNameBase_Impl::get();
-        rTempNameBase_Impl = rBaseName;
-        rTempNameBase_Impl += OUString('/');
+        rTempNameBase_Impl = rBaseName + "/";
 
         TempFile aBase( NULL, true );
         if ( aBase.IsValid() )
