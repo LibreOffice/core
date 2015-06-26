@@ -762,12 +762,25 @@ struct ConventionOOO_A1 : public Convention_A1
         rBuf.append('.');
     }
 
+    enum SingletonDisplay
+    {
+        SINGLETON_NONE,
+        SINGLETON_COL,
+        SINGLETON_ROW
+    };
+
     static void MakeOneRefStrImpl(
         OUStringBuffer& rBuffer,
         const OUString& rErrRef, const std::vector<OUString>& rTabNames,
         const ScSingleRefData& rRef, const ScAddress& rAbsRef,
-        bool bForceTab, bool bODF )
+        bool bForceTab, bool bODF, SingletonDisplay eSingletonDisplay )
     {
+        // For ODF override singleton so earlier releases still can read what
+        // we write now as of 2015-06-26.
+        /* TODO: we may want to change that in future in a few releases. */
+        if (bODF)
+            eSingletonDisplay = SINGLETON_NONE;
+
         if( rRef.IsFlag3D() || bForceTab )
         {
             if (!ValidTab(rAbsRef.Tab()) || rRef.IsTabDeleted())
@@ -786,18 +799,45 @@ struct ConventionOOO_A1 : public Convention_A1
         }
         else if (bODF)
             rBuffer.append('.');
-        if (!rRef.IsColRel())
-            rBuffer.append('$');
-        if (!ValidCol(rAbsRef.Col()) || rRef.IsColDeleted())
-            rBuffer.append(rErrRef);
-        else
-            MakeColStr(rBuffer, rAbsRef.Col());
-        if (!rRef.IsRowRel())
-            rBuffer.append('$');
-        if (!ValidRow(rAbsRef.Row()) || rRef.IsRowDeleted())
-            rBuffer.append(rErrRef);
-        else
-            MakeRowStr(rBuffer, rAbsRef.Row());
+
+        if (eSingletonDisplay != SINGLETON_ROW)
+        {
+            if (!rRef.IsColRel())
+                rBuffer.append('$');
+            if (!ValidCol(rAbsRef.Col()) || rRef.IsColDeleted())
+                rBuffer.append(rErrRef);
+            else
+                MakeColStr(rBuffer, rAbsRef.Col());
+        }
+
+        if (eSingletonDisplay != SINGLETON_COL)
+        {
+            if (!rRef.IsRowRel())
+                rBuffer.append('$');
+            if (!ValidRow(rAbsRef.Row()) || rRef.IsRowDeleted())
+                rBuffer.append(rErrRef);
+            else
+                MakeRowStr(rBuffer, rAbsRef.Row());
+        }
+    }
+
+    static SingletonDisplay getSingletonDisplay( const ScAddress& rAbs1, const ScAddress& rAbs2,
+            const ScComplexRefData& rRef )
+    {
+        // If any part is error, display as such.
+        if (!ValidCol(rAbs1.Col()) || rRef.Ref1.IsColDeleted() || !ValidRow(rAbs1.Row()) || rRef.Ref1.IsRowDeleted() ||
+            !ValidCol(rAbs2.Col()) || rRef.Ref2.IsColDeleted() || !ValidRow(rAbs2.Row()) || rRef.Ref2.IsRowDeleted())
+            return SINGLETON_NONE;
+
+        // A:A or $A:$A or A:$A or $A:A, both row anchors must be absolute.
+        if (rAbs1.Row() == 0 && rAbs2.Row() == MAXROW && !rRef.Ref1.IsRowRel() && !rRef.Ref2.IsRowRel())
+            return SINGLETON_COL;
+
+        // 1:1 or $1:$1 or 1:$1 or $1:1, both column anchors must be absolute.
+        if (rAbs1.Col() == 0 && rAbs2.Col() == MAXCOL && !rRef.Ref1.IsColRel() && !rRef.Ref2.IsColRel())
+            return SINGLETON_ROW;
+
+        return SINGLETON_NONE;
     }
 
     virtual void makeRefStr( OUStringBuffer&   rBuffer,
@@ -808,18 +848,19 @@ struct ConventionOOO_A1 : public Convention_A1
                      bool bSingleRef,
                      bool /*bFromRangeName*/ ) const SAL_OVERRIDE
     {
-        ScComplexRefData aRef( rRef );
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
-        ScAddress aAbs1 = aRef.Ref1.toAbs(rPos), aAbs2;
+        ScAddress aAbs1 = rRef.Ref1.toAbs(rPos), aAbs2;
         if( !bSingleRef )
-            aAbs2 = aRef.Ref2.toAbs(rPos);
+            aAbs2 = rRef.Ref2.toAbs(rPos);
 
-        MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref1, aAbs1, false, false);
+        SingletonDisplay eSingleton = bSingleRef ? SINGLETON_NONE : getSingletonDisplay( aAbs1, aAbs2, rRef);
+        MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref1, aAbs1, false, false, eSingleton);
         if (!bSingleRef)
         {
             rBuffer.append(':');
-            MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), false);
+            MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), false,
+                    eSingleton);
         }
     }
 
@@ -963,12 +1004,11 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
                      bool /*bFromRangeName*/ ) const SAL_OVERRIDE
     {
         rBuffer.append('[');
-        ScComplexRefData aRef( rRef );
         // In case absolute/relative positions weren't separately available:
         // transform relative to absolute!
-        ScAddress aAbs1 = aRef.Ref1.toAbs(rPos), aAbs2;
+        ScAddress aAbs1 = rRef.Ref1.toAbs(rPos), aAbs2;
         if( !bSingleRef )
-            aAbs2 = aRef.Ref2.toAbs(rPos);
+            aAbs2 = rRef.Ref2.toAbs(rPos);
 
         if (FormulaGrammar::isODFF(eGram) && (!ValidAddress(aAbs1) || !ValidAddress(aAbs2)))
         {
@@ -979,11 +1019,13 @@ struct ConventionOOO_A1_ODF : public ConventionOOO_A1
         }
         else
         {
-            MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref1, aAbs1, false, true);
+            SingletonDisplay eSingleton = bSingleRef ? SINGLETON_NONE : getSingletonDisplay( aAbs1, aAbs2, rRef);
+            MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref1, aAbs1, false, true, eSingleton);
             if (!bSingleRef)
             {
                 rBuffer.append(':');
-                MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, aRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), true);
+                MakeOneRefStrImpl(rBuffer, rErrRef, rTabNames, rRef.Ref2, aAbs2, aAbs1.Tab() != aAbs2.Tab(), true,
+                        eSingleton);
             }
         }
         rBuffer.append(']');
