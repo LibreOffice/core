@@ -766,7 +766,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
     {
         Py_ssize_t l = PyList_Size (o);
         Sequence<Any> s (l);
-        for (int i = 0; i < l; i++)
+        for (Py_ssize_t i = 0; i < l; i++)
         {
             s[i] = pyObject2Any (PyList_GetItem (o, i), mode );
         }
