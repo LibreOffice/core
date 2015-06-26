@@ -80,7 +80,7 @@ public:
                                                      const SystemGraphicsData* ) SAL_OVERRIDE;
     virtual SalBitmap*          CreateSalBitmap() SAL_OVERRIDE;
 
-    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
+    virtual void                DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) SAL_OVERRIDE;
     virtual bool                AnyInput( VclInputFlags nType ) SAL_OVERRIDE;
 
     virtual GenPspGraphics     *CreatePrintGraphics() SAL_OVERRIDE;
