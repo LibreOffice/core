@@ -63,7 +63,7 @@ PyObject* PyUNO_iterator_next( PyObject *self )
     PyUNO_iterator* me = reinterpret_cast<PyUNO_iterator*>(self);
 
     Runtime runtime;
-    sal_Bool hasMoreElements = sal_False;
+    bool hasMoreElements = false;
     Any aRet;
 
     try
