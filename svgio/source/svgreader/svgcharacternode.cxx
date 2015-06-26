@@ -558,7 +558,7 @@ namespace svgio
 
         void SvgCharacterNode::addGap()
         {
-            maText += OUString(' ');
+            maText += " ";
         }
 
         void SvgCharacterNode::concatenate(const OUString& rText)
