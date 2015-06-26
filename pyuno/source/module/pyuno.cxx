@@ -358,7 +358,7 @@ int lcl_PySlice_GetIndicesEx( PyObject *pObject, sal_Int32 nLen, sal_Int32 *nSta
     return 0;
 }
 
-bool lcl_hasInterfaceByName( Any &object, OUString interfaceName )
+bool lcl_hasInterfaceByName( Any const &object, OUString const & interfaceName )
 {
     Reference< XInterface > xInterface( object, UNO_QUERY );
     TypeDescription typeDesc( interfaceName );
