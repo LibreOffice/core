@@ -63,10 +63,9 @@ SvxHatchTabPage::SvxHatchTabPage
     pPos                ( 0 ),
     pbAreaTP            ( 0 ),
 
-    pXPool              ( static_cast<XOutdevItemPool*>(rInAttrs.GetPool()) ),
     aXFStyleItem        ( drawing::FillStyle_HATCH ),
     aXHatchItem         ( OUString(), XHatch() ),
-    aXFillAttr          ( pXPool ),
+    aXFillAttr          ( rInAttrs.GetPool() ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 
 {

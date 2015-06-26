@@ -67,10 +67,9 @@ SvxBitmapTabPage::SvxBitmapTabPage(  vcl::Window* pParent, const SfxItemSet& rIn
 
     bBmpChanged         ( false ),
 
-    pXPool              ( static_cast<XOutdevItemPool*>( rInAttrs.GetPool() )),
     aXFStyleItem        ( drawing::FillStyle_BITMAP ),
     aXBitmapItem        ( OUString(), Graphic() ),
-    aXFillAttr          ( pXPool ),
+    aXFillAttr          ( rInAttrs.GetPool() ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
     get(m_pBxPixelEditor,"maingrid");

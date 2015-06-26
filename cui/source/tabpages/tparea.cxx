@@ -258,8 +258,7 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(vcl::Window* pParent, const SfxIt
     nPageType           (0),
     nDlgType            (0),
     bBitmap             ( false ),
-    pXPool              ( static_cast<XOutdevItemPool*>(rInAttrs.GetPool()) ),
-    aXFillAttr          ( pXPool ),
+    aXFillAttr          ( rInAttrs.GetPool() ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
     get(m_pRbtTransOff,"RBT_TRANS_OFF");
@@ -624,8 +623,7 @@ SvxAreaTabPage::SvxAreaTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs
     // init with pointer to fixed bool
     pbAreaTP(&maFixed_sal_Bool),
 
-    pXPool              ( static_cast<XOutdevItemPool*>( rInAttrs.GetPool() ) ),
-    aXFillAttr          ( pXPool ),
+    aXFillAttr          ( rInAttrs.GetPool() ),
     rXFSet              ( aXFillAttr.GetItemSet() ),
 
     ePoolUnit(SFX_MAPUNIT_100TH_MM),

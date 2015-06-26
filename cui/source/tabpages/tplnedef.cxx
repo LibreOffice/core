@@ -62,12 +62,11 @@ SvxLineDefTabPage::SvxLineDefTabPage
     rOutAttrs       ( rInAttrs ),
     bObjSelected    ( false ),
 
-    pXPool              ( static_cast<XOutdevItemPool*>(rInAttrs.GetPool()) ),
     aXLStyle            ( drawing::LineStyle_DASH ),
     aXWidth             ( XOUT_WIDTH ),
     aXDash              ( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ),
     aXColor             ( OUString(), COL_BLACK ),
-    aXLineAttr          ( pXPool ),
+    aXLineAttr          ( rInAttrs.GetPool() ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
     pnDashListState(0),
     pPageType(0),

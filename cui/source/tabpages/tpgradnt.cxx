@@ -60,10 +60,9 @@ SvxGradientTabPage::SvxGradientTabPage
     pPos                ( 0 ),
     pbAreaTP            ( 0 ),
 
-    pXPool              ( static_cast<XOutdevItemPool*>( rInAttrs.GetPool() )),
     aXFStyleItem        ( drawing::FillStyle_GRADIENT ),
     aXGradientItem      ( OUString(), XGradient( COL_BLACK, COL_WHITE ) ),
-    aXFillAttr          ( pXPool ),
+    aXFillAttr          ( rInAttrs.GetPool() ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
     get(m_pLbGradientType, "gradienttypelb");

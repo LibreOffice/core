@@ -62,11 +62,10 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     pPolyObj            ( NULL ),
     bObjSelected        ( false ),
 
-    pXPool              ( static_cast<XOutdevItemPool*>(rInAttrs.GetPool()) ),
     aXLStyle            ( com::sun::star::drawing::LineStyle_SOLID ),
     aXWidth             ( XOUT_WIDTH ),
     aXColor             ( OUString(), COL_BLACK ),
-    aXLineAttr          ( pXPool ),
+    aXLineAttr          ( rInAttrs.GetPool() ),
     rXLSet              ( aXLineAttr.GetItemSet() ),
     pLineEndList        ( NULL ),
     pnLineEndListState  ( NULL ),

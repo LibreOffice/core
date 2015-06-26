@@ -150,7 +150,6 @@ private:
     RECT_POINT          eRP;
     bool            bObjSelected;
 
-    XOutdevItemPool*    pXPool;
     XLineStyleItem      aXLStyle;
     XLineWidthItem      aXWidth;
     XLineDashItem       aXDash;
@@ -267,7 +266,6 @@ private:
     XDash               aDash;
     bool            bObjSelected;
 
-    XOutdevItemPool*    pXPool;
     XLineStyleItem      aXLStyle;
     XLineWidthItem      aXWidth;
     XLineDashItem       aXDash;
@@ -349,7 +347,6 @@ private:
     const SdrObject*    pPolyObj;
     bool            bObjSelected;
 
-    XOutdevItemPool*    pXPool;
     XLineStyleItem      aXLStyle;
     XLineWidthItem      aXWidth;
     XLineColorItem      aXColor;

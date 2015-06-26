@@ -140,7 +140,6 @@ class SvxTransparenceTabPage : public SvxTabPage
     VclPtr<SvxXRectPreview>    m_pCtlXRectPreview;
     bool                bBitmap;
 
-    XOutdevItemPool*    pXPool;
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
@@ -253,7 +252,6 @@ private:
 
     bool*               pbAreaTP;
 
-    XOutdevItemPool*    pXPool;
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
 
@@ -348,7 +346,6 @@ private:
 
     bool                bDisable;
 
-    XOutdevItemPool*    pXPool;
     XFillAttrSetItem    aXFillAttr;
     SfxItemSet&         rXFSet;
     SfxMapUnit          ePoolUnit;
@@ -420,7 +417,6 @@ private:
     sal_Int32*          pPos;
     bool*               pbAreaTP;
 
-    XOutdevItemPool*    pXPool;
     XFillStyleItem      aXFStyleItem;
     XFillGradientItem   aXGradientItem;
     XFillAttrSetItem    aXFillAttr;
@@ -497,7 +493,6 @@ private:
     sal_Int32*          pPos;
     bool*               pbAreaTP;
 
-    XOutdevItemPool*    pXPool;
     XFillStyleItem      aXFStyleItem;
     XFillHatchItem      aXHatchItem;
     XFillAttrSetItem    aXFillAttr;
@@ -584,7 +579,6 @@ private:
 
     bool                bBmpChanged;
 
-    XOutdevItemPool*    pXPool;
     XFillStyleItem      aXFStyleItem;
     XFillBitmapItem     aXBitmapItem;
     XFillAttrSetItem    aXFillAttr;

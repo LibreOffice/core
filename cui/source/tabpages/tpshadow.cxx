@@ -58,8 +58,7 @@ SvxShadowTabPage::SvxShadowTabPage( vcl::Window* pParent, const SfxItemSet& rInA
     nDlgType            ( 0 ),
     pbAreaTP            ( 0 ),
     bDisable            ( false ),
-    pXPool              ( static_cast<XOutdevItemPool*>(rInAttrs.GetPool()) ),
-    aXFillAttr          ( pXPool ),
+    aXFillAttr          ( rInAttrs.GetPool() ),
     rXFSet              ( aXFillAttr.GetItemSet() )
 {
     get(m_pTsbShowShadow,"TSB_SHOW_SHADOW");
