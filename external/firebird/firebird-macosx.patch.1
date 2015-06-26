@@ -1,6 +1,6 @@
-# -*- Mode: Diff -*-
---- firebird.org/builds/posix/darwin.defaults
-+++ firebird/builds/posix/darwin.defaults
+diff -ur firebird.org/builds/posix/darwin.defaults firebird/builds/posix/darwin.defaults
+--- firebird.org/builds/posix/darwin.defaults	2015-03-27 15:46:38.000000000 +0200
++++ firebird/builds/posix/darwin.defaults	2015-06-05 19:09:22.000000000 +0300
 @@ -32,17 +32,17 @@
  LINK_EMPTY_SYMBOLS=$(LIB_LINK_MAPFILE)$(ROOT)/builds/posix/empty.darwin.vers
  LINK_FIREBIRD_SYMBOLS=$(LIB_LINK_MAPFILE)$(ROOT)/builds/posix/firebird.darwin.vers
@@ -63,9 +63,10 @@ diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.
  	cp -r ../gen/firebird/help $(FB_FW)/Resources/English.lproj/var/help
  	cp ../gen/firebird/security2.fdb $(FB_FW)/Resources/English.lproj/var
  	mkdir -p $(FB_FW)/Resources/doc
---- firebird.org/builds/posix/prefix.darwin_i386
-+++ firebird/builds/posix/prefix.darwin_i386
-@@ -19,7 +19,7 @@
+diff -ur firebird.org/builds/posix/prefix.darwin_i386 firebird/builds/posix/prefix.darwin_i386
+--- firebird.org/builds/posix/prefix.darwin_i386	2015-03-27 15:46:38.000000000 +0200
++++ firebird/builds/posix/prefix.darwin_i386	2015-06-05 19:09:22.000000000 +0300
+@@ -24,7 +24,7 @@
  # 4. for  CFLAGS, CXXFLAGS, LDFLAGS export '-m32 -arch i386'
  # 5. export MACOSX_DEPLOYMENT_TARGET=10.6
  
@@ -74,19 +75,22 @@ diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.
  export DYLD_LIBRARY_PATH
  
  MACOSX_DEPLOYMENT_TARGET=10.6
-@@ -32,8 +32,8 @@
+@@ -32,9 +32,9 @@
  
  OS_ServerFiles=inet_server.cpp
  
 -PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common -arch i386 -mmacosx-version-min=10.6
 -DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall -arch i386 -mmacosx-version-min=10.6
+-CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
 +PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common
 +DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall
- CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
++CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden
  EMBED_UTIL_TARGETS=gstat gds_relay gsec fbguard nbackup fb_lock_print fbsvcmgr fbtracemgr
  CLIENT_UTIL_TARGETS=gds_relay gstat gsec fbguard fbmgr_bin nbackup fb_lock_print fbsvcmgr \
---- firebird.org/builds/posix/prefix.darwin_x86_64
-+++ firebird/builds/posix/prefix.darwin_x86_64
+ 	fbtracemgr
+diff -ur firebird.org/builds/posix/prefix.darwin_x86_64 firebird/builds/posix/prefix.darwin_x86_64
+--- firebird.org/builds/posix/prefix.darwin_x86_64	2015-03-27 15:46:38.000000000 +0200
++++ firebird/builds/posix/prefix.darwin_x86_64	2015-06-05 19:09:22.000000000 +0300
 @@ -19,7 +19,7 @@
  #
  # Default build from 10.6

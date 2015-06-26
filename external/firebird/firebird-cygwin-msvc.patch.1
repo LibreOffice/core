@@ -422,9 +422,10 @@ unchanged:
  
 -case "$target" in
 +case "$host" in
-   i*86-*-darwin*)
- dnl    MAKEFILE_PREFIX=darwin_i386
+   x*64-*-darwin* | x*64_*-darwin*)
      MAKEFILE_PREFIX=darwin_x86_64
+     MAKEFILE_POSTFIX=darwin
+
 @@ -112,7 +86,7 @@
  
    amd64-*-freebsd* | x86_64*-*-freebsd* | x86_64*-*-k*bsd*-gnu)
@@ -483,8 +484,8 @@ unchanged:
  [AC_DEFINE(WORKING_SEM_INIT,1,[Define this if sem_init() works on the platform])
  AC_MSG_RESULT(yes)],
  [AC_MSG_RESULT(no)
--AC_SEARCH_LIBS(sem_open, rt)])
-+AC_SEARCH_LIBS(sem_open, rt)],
+-AC_SEARCH_LIBS(sem_open, rt pthread)])
++AC_SEARCH_LIBS(sem_open, rt pthread)]),
 +[AC_DEFINE(WORKING_SEM_INIT,1,[Define this if sem_init() works on the platform])
 +AC_MSG_RESULT(cross-compiling, assuming yes)])
  fi
@@ -659,15 +660,15 @@ unchanged:
  #include <io.h> // umask, close, lseek, read, open, _sopen
  #include <process.h>
  #include <sys/types.h>
-@@ -121,7 +123,7 @@
- 
+@@ -122,7 +124,7 @@
  #ifdef WIN_NT
  #include <shlobj.h>
+ #if _MSC_VER <= 1500
 -#include <shfolder.h>
 +//#include <shfolder.h>
+ #endif
  #define _WINSOCKAPI_
  #include <share.h>
- #include "err_proto.h"
 unchanged:
 --- firebird.org/src/jrd/isc.cpp	2013-06-26 10:05:24.922009300 +0100
 +++ firebird/src/jrd/isc.cpp	2013-06-29 10:38:56.698423800 +0100
@@ -714,14 +715,12 @@ unchanged:
 unchanged:
 --- firebird.org/src/jrd/os/win32/mod_loader.cpp	2013-06-26 10:05:25.006951300 +0100
 +++ firebird/src/jrd/os/win32/mod_loader.cpp	2013-06-27 18:30:42.642374700 +0100
-@@ -93,6 +93,10 @@
-                     "msvcr80.dll",
- #elif _MSC_VER == 1500
+@@ -95,6 +95,8 @@
                      "msvcr90.dll",
-+#elif _MSC_VER == 1600
-+					"mscvr100.dll",
+ #elif _MSC_VER == 1600
+                     "msvcr100.dll",
 +#elif _MSC_VER == 1700
-+					"mscvr110.dll",
++                    "msvcr110.dll",
  #else
                      #error Specify CRT DLL name here !
  #endif
