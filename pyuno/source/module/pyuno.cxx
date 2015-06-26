@@ -558,7 +558,7 @@ int PyUNO_bool( PyObject* self )
     {
         int nLen = lcl_detach_getLength( me );
         if (nLen >= 0)
-            return !!nLen;
+            return nLen == 0 ? 0 : 1;
 
         // Anything which doesn't have members is a scalar object and therefore true
         return 1;
