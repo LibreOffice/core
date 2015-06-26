@@ -100,8 +100,6 @@ void ImpSdrObjTextLink::Closed()
 }
 
 
-TYPEINIT1(ImpSdrObjTextLinkUserData,SdrObjUserData);
-
 ImpSdrObjTextLinkUserData::ImpSdrObjTextLinkUserData(SdrTextObj* pObj1):
     SdrObjUserData(SdrInventor,SDRUSERDATA_OBJTEXTLINK,0),
     pObj(pObj1),

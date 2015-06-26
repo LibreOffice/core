@@ -195,8 +195,6 @@ private:
     bool operator!=(const SdrObjUserData& rData) const SAL_DELETED_FUNCTION;
 
 public:
-    TYPEINFO();
-
     SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId, sal_uInt16 nVer);
     SdrObjUserData(const SdrObjUserData& rData);
     virtual ~SdrObjUserData();
