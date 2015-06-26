@@ -693,7 +693,7 @@ void XclImpUrlHelper::DecodeUrl(
                             rUrl += "\\";
                         else    // control character in raw name -> DDE link
                         {
-                            rUrl += OUString( EXC_DDE_DELIM );
+                            rUrl += OUStringLiteral1<EXC_DDE_DELIM>();
                             eState = xlUrlRaw;
                         }
                     break;

@@ -2375,8 +2375,7 @@ OUString ReadCsvLine( SvStream &rStream, bool bEmbeddedLineBreak,
                 nLastOffset = aStr.getLength();
                 OUString aNext;
                 rStream.ReadUniOrByteStringLine(aNext, rStream.GetStreamCharSet(), nArbitraryLineLengthLimit);
-                aStr += OUString('\n');
-                aStr += aNext;
+                aStr += "\n" + aNext;
             }
         }
     }

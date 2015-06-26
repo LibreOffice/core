@@ -645,10 +645,8 @@ void ScRangeStringConverter::GetStringFromRange(
         ScAddress aEndAddress( rRange.aEnd );
         OUString sStartAddress(aStartAddress.Format(nFormatFlags, pDocument, eConv));
         OUString sEndAddress(aEndAddress.Format(nFormatFlags, pDocument, eConv));
-        OUString sOUStartAddress( sStartAddress );
-        sOUStartAddress += OUString(':');
-        sOUStartAddress += OUString( sEndAddress );
-        AssignString( rString, sOUStartAddress, bAppendStr, cSeparator );
+        AssignString(
+            rString, sStartAddress + ":" + sEndAddress, bAppendStr, cSeparator);
     }
 }
 

@@ -81,12 +81,9 @@ ScUnitConverter::ScUnitConverter()
             OUString sPrefix = pNodeArray[i];
             sPrefix += sSlash;
 
-            pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString( CFGSTR_UNIT_FROM );
-            pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString( CFGSTR_UNIT_TO );
-            pValNameArray[nIndex] = sPrefix;
-            pValNameArray[nIndex++] += OUString( CFGSTR_UNIT_FACTOR );
+            pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_FROM;
+            pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_TO;
+            pValNameArray[nIndex++] = sPrefix + CFGSTR_UNIT_FACTOR;
         }
 
         Sequence<Any> aProperties = aConfigItem.GetProperties(aValNames);

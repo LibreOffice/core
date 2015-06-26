@@ -922,9 +922,9 @@ void ScPreviewShell::WriteUserData(OUString& rData, bool /* bBrowse */)
     //  nZoom
     //  nPageNo
 
-    rData =  OUString::number(pPreview->GetZoom());
-    rData += OUString(SC_USERDATA_SEP);
-    rData += OUString::number(pPreview->GetPageNo());
+    rData = OUString::number(pPreview->GetZoom())
+        + OUStringLiteral1<SC_USERDATA_SEP>()
+        + OUString::number(pPreview->GetPageNo());
 }
 
 void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)

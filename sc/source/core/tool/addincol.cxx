@@ -379,9 +379,7 @@ void ScUnoAddInCollection::ReadConfiguration()
         OUString aServiceName = aServiceNames[nService];
         ScUnoAddInHelpIdGenerator aHelpIdGenerator( aServiceName );
 
-        OUString aFunctionsPath = aServiceName;
-        aFunctionsPath += sSlash;
-        aFunctionsPath += OUString(CFGSTR_ADDINFUNCTIONS);
+        OUString aFunctionsPath(aServiceName + sSlash + CFGSTR_ADDINFUNCTIONS);
 
         uno::Sequence<OUString> aFunctionNames = rAddInConfig.GetNodeNames( aFunctionsPath );
         sal_Int32 nNewCount = aFunctionNames.getLength();
@@ -440,12 +438,12 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 uno::Sequence<OUString> aFuncPropNames(CFG_FUNCPROP_COUNT);
                 OUString* pNameArray = aFuncPropNames.getArray();
-                pNameArray[CFG_FUNCPROP_DISPLAYNAME] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_DISPLAYNAME] += OUString(CFGSTR_DISPLAYNAME);
-                pNameArray[CFG_FUNCPROP_DESCRIPTION] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_DESCRIPTION] += OUString(CFGSTR_DESCRIPTION);
-                pNameArray[CFG_FUNCPROP_CATEGORY] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_CATEGORY] += OUString(CFGSTR_CATEGORY);
+                pNameArray[CFG_FUNCPROP_DISPLAYNAME] = aFuncPropPath
+                    + CFGSTR_DISPLAYNAME;
+                pNameArray[CFG_FUNCPROP_DESCRIPTION] = aFuncPropPath
+                    + CFGSTR_DESCRIPTION;
+                pNameArray[CFG_FUNCPROP_CATEGORY] = aFuncPropPath
+                    + CFGSTR_CATEGORY;
 
                 uno::Sequence<uno::Any> aFuncProperties = rAddInConfig.GetProperties( aFuncPropNames );
                 if ( aFuncProperties.getLength() == CFG_FUNCPROP_COUNT )
@@ -462,8 +460,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 ::std::vector<ScUnoAddInFuncData::LocalizedName> aCompNames;
 
-                OUString aCompPath = aFuncPropPath;
-                aCompPath += OUString(CFGSTR_COMPATIBILITYNAME);
+                OUString aCompPath(aFuncPropPath + CFGSTR_COMPATIBILITYNAME);
                 uno::Sequence<OUString> aCompPropNames( &aCompPath, 1 );
 
                 uno::Sequence<uno::Any> aCompProperties = aAllLocalesConfig.GetProperties( aCompPropNames );
@@ -494,8 +491,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 long nVisibleCount = 0;
                 long nCallerPos = SC_CALLERPOS_NONE;
 
-                OUString aArgumentsPath = aFuncPropPath;
-                aArgumentsPath += OUString(CFGSTR_PARAMETERS);
+                OUString aArgumentsPath(aFuncPropPath + CFGSTR_PARAMETERS);
 
                 uno::Sequence<OUString> aArgumentNames = rAddInConfig.GetNodeNames( aArgumentsPath );
                 sal_Int32 nArgumentCount = aArgumentNames.getLength();
@@ -515,10 +511,10 @@ void ScUnoAddInCollection::ReadConfiguration()
                         aOneArgPath += pArgNameArray[nArgument];
                         aOneArgPath += sSlash;
 
-                        pPropNameArray[nIndex] = aOneArgPath;
-                        pPropNameArray[nIndex++] += OUString(CFGSTR_DISPLAYNAME);
-                        pPropNameArray[nIndex] = aOneArgPath;
-                        pPropNameArray[nIndex++] += OUString(CFGSTR_DESCRIPTION);
+                        pPropNameArray[nIndex++] = aOneArgPath
+                            + CFGSTR_DISPLAYNAME;
+                        pPropNameArray[nIndex++] = aOneArgPath
+                            + CFGSTR_DESCRIPTION;
                     }
 
                     uno::Sequence<uno::Any> aArgProperties = rAddInConfig.GetProperties( aArgPropNames );

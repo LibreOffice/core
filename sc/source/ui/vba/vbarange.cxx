@@ -2049,7 +2049,7 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
             uno::Reference< excel::XRange > xRange( xCollection->Item( uno::makeAny( index ), uno::Any() ), uno::UNO_QUERY_THROW );
             if ( index > 1 )
             {
-                sAddress += OUString( ',' );
+                sAddress += ",";
                                 // force external to be false
                                 // only first address should have the
                                 // document and sheet specifications

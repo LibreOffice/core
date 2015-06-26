@@ -372,10 +372,10 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
             if (!bInQuote && !aTabName.isEmpty())
             {
                 if (bQuoteTabName)
-                    aNewUrl += OUString('\'');
+                    aNewUrl += "'";
                 aNewUrl += aTabName;
                 if (bQuoteTabName)
-                    aNewUrl += OUString('\'');
+                    aNewUrl += "'";
             }
         }
         else if (bInQuote)

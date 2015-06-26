@@ -98,7 +98,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Down >>= down )
             downRows += down;
         else
-            messageBuffer += OUString( "Error getting parameter: Down\n" );
+            messageBuffer += "Error getting parameter: Down\n";
     }
     if( Up.hasValue() )
     {
@@ -106,7 +106,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Up >>= up )
             downRows -= up;
         else
-            messageBuffer += OUString( "Error getting parameter: Up\n" );
+            messageBuffer += "Error getting parameter: Up\n";
     }
     if( ToRight.hasValue() )
     {
@@ -114,7 +114,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToRight >>= right )
             rightCols += right;
         else
-            messageBuffer += OUString( "Error getting parameter: ToRight\n" );
+            messageBuffer += "Error getting parameter: ToRight\n";
     }
     if( ToLeft.hasValue() )
     {
@@ -122,7 +122,7 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToLeft >>= left )
             rightCols -= left;
         else
-            messageBuffer += OUString( "Error getting parameter: ToLeft\n" );
+            messageBuffer += "Error getting parameter: ToLeft\n";
     }
     if( !messageBuffer.isEmpty() )
         throw uno::RuntimeException( messageBuffer );
@@ -153,7 +153,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Down >>= down )
             downPages += down;
         else
-            messageBuffer += OUString( "Error getting parameter: Down\n" );
+            messageBuffer += "Error getting parameter: Down\n";
     }
     if( Up.hasValue() )
     {
@@ -161,7 +161,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( Up >>= up )
             downPages -= up;
         else
-            messageBuffer += OUString( "Error getting parameter: Up\n" );
+            messageBuffer += "Error getting parameter: Up\n";
     }
     if( ToRight.hasValue() )
     {
@@ -169,7 +169,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToRight >>= right )
             acrossPages += right;
         else
-            messageBuffer += OUString( "Error getting parameter: ToRight\n" );
+            messageBuffer += "Error getting parameter: ToRight\n";
     }
     if( ToLeft.hasValue() )
     {
@@ -177,7 +177,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
         if( ToLeft >>= left )
             acrossPages -= left;
         else
-            messageBuffer += OUString( "Error getting parameter: ToLeft\n" );
+            messageBuffer += "Error getting parameter: ToLeft\n";
     }
     if( !messageBuffer.isEmpty() )
         throw uno::RuntimeException( messageBuffer );

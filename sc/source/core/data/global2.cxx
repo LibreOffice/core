@@ -351,9 +351,8 @@ OUString ScGlobal::GetDocTabName( const OUString& rFileName,
         aDocTab = aDocTab.replaceAt( nPos, 0, "\\" );
         nPos += 2;
     }
-    aDocTab += "'";
-    aDocTab += OUString(SC_COMPILER_FILE_TAB_SEP);
-    aDocTab += rTabName;    // "'Doc'#Tab"
+    aDocTab += "'" + OUStringLiteral1<SC_COMPILER_FILE_TAB_SEP>() + rTabName;
+        // "'Doc'#Tab"
     return aDocTab;
 }
 
