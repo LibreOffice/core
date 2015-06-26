@@ -1095,9 +1095,8 @@ static uno_Environment * initDefaultEnvironment(
         OUString envPurpose = cppu::EnvDcp::getPurpose(rEnvDcp);
         if (!envPurpose.isEmpty())
         {
-            rtl::OUString libStem = envPurpose.copy(envPurpose.lastIndexOf(':') + 1);
-            libStem += rtl::OUString("_uno_uno");
-
+            rtl::OUString libStem(
+                envPurpose.copy(envPurpose.lastIndexOf(':') + 1) + "_uno_uno");
             if(!loadEnv(libStem, pEnv))
             {
                 pEnv->release(pEnv);
