@@ -159,6 +159,8 @@ void SalYieldMutex::release()
                 // Java clients doesn't come in the right order
                 GdiFlush();
 
+                // lock here to ensure that the test of mnYieldWaitCount and
+                // m_mutex.release() is atomic
                 mpInstData->mpSalWaitMutex->acquire();
                 if ( mpInstData->mnYieldWaitCount )
                     PostMessageW( mpInstData->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
@@ -203,16 +205,19 @@ sal_uLong SalYieldMutex::GetAcquireCount( sal_uLong nThreadId )
         return 0;
 }
 
+/// note: while VCL is fully up and running (other threads started and
+/// before shutdown), the main thread must acquire SolarMutex only via
+/// this function to avoid deadlock
 void ImplSalYieldMutexAcquireWithWait()
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( !pInst )
         return;
 
-    // If we are the main thread, then we must wait with wait, because
-    // in if we don't reschedule, then we create deadlocks if a Windows
-    // Function is called from another thread. If we aren't the main thread,
-    // than we call acquire directly.
+    // If this is the main thread, then we must wait with GetMessage(),
+    // because if we don't reschedule, then we create deadlocks if a Window's
+    // create/destroy is called via SendMessage() from another thread.
+    // If this is not the main thread, call acquire directly.
     DWORD nThreadId = GetCurrentThreadId();
     SalData* pSalData = GetSalData();
     if ( pSalData->mnAppThreadId == nThreadId )
@@ -233,13 +238,26 @@ void ImplSalYieldMutexAcquireWithWait()
                 }
                 else
                 {
+                    // other threads must not observe mnYieldWaitCount == 0
+                    // while main thread is blocked in GetMessage()
                     pInst->mnYieldWaitCount++;
                     pInst->mpSalWaitMutex->release();
                     MSG aTmpMsg;
+                    // this call exists because it dispatches SendMessage() msg!
                     GetMessageW( &aTmpMsg, pInst->mhComWnd, SAL_MSG_RELEASEWAITYIELD, SAL_MSG_RELEASEWAITYIELD );
+                    // it is possible that another thread acquires and releases
+                    // mpSalYieldMutex after the GetMessage call returns,
+                    // observes mnYieldWaitCount != 0 and sends an extra
+                    // SAL_MSG_RELEASEWAITYIELD - but that appears unproblematic
+                    // as it will just cause the next Yield to do an extra
+                    // iteration of the while loop here
                     pInst->mnYieldWaitCount--;
                     if ( pInst->mnYieldWaitCount )
+                    {
+                        // repeat the message so that the next instance of this
+                        // function further up the call stack is unblocked too
                         PostMessageW( pInst->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
+                    }
                 }
             }
         }
@@ -701,6 +719,8 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
         case SAL_MSG_RELEASEWAITYIELD:
             {
             WinSalInstance* pInst = GetSalData()->mpFirstInstance;
+            // this test does not need mpSalWaitMutex locked because
+            // it can only happen on the main thread
             if ( pInst && pInst->mnYieldWaitCount )
                 PostMessageW( hWnd, SAL_MSG_RELEASEWAITYIELD, wParam, lParam );
             }
