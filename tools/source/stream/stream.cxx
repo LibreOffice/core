@@ -2025,8 +2025,6 @@ bool SvScriptStream::good() const
     return mpHandle != NULL;
 }
 
-TYPEINIT0 ( SvDataCopyStream )
-
 void SvDataCopyStream::Assign( const SvDataCopyStream& )
 {
 }

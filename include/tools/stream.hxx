@@ -756,7 +756,6 @@ class TOOLS_DLLPUBLIC SvDataCopyStream
 {
 public:
     // repeated execution of Load or Assign is allowed
-                    TYPEINFO();
     virtual         ~SvDataCopyStream(){}
     virtual void    Load( SvStream & ) = 0;
     virtual void    Save( SvStream & ) = 0;

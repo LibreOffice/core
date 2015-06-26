@@ -42,8 +42,6 @@ protected:
     void            ClearAll();
 
 public:
-
-    TYPEINFO_OVERRIDE();
     FileList() {};
     virtual ~FileList();
 

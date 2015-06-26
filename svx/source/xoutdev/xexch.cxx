@@ -29,7 +29,7 @@
 #include <boost/scoped_ptr.hpp>
 
 
-TYPEINIT1_AUTOFACTORY( XFillExchangeData, SvDataCopyStream );
+TYPEINIT0_AUTOFACTORY( XFillExchangeData );
 
 /// default CTOR, for Assign()
 XFillExchangeData::XFillExchangeData() :
