@@ -21,7 +21,7 @@
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
 
-void SwFrm::Format( const SwBorderAttrs * )
+void SwFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {
     OSL_FAIL( "Format() of the base class called." );
 }

@@ -53,7 +53,7 @@ protected:
     virtual void DestroyImpl() SAL_OVERRIDE;
     virtual ~SwLayoutFrm();
 
-    virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual void MakeAll() SAL_OVERRIDE;
 
     SwFrm * m_pLower;

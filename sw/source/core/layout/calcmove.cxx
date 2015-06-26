@@ -765,7 +765,7 @@ void SwPageFrm::MakeAll()
                 {   // Set FixSize. For pages, this is not done from Upper, but from
                     // the attribute.
                     Frm().SSize( pAttrs->GetSize() );
-                    Format( pAttrs );
+                    Format( getRootFrm()->GetCurrShell()->GetOut(), pAttrs );
                 }
             }
         }
@@ -850,7 +850,7 @@ void SwLayoutFrm::MakeAll()
                 pAccess = new SwBorderAttrAccess( SwFrm::GetCache(), this );
                 pAttrs  = pAccess->Get();
             }
-            Format( pAttrs );
+            Format( getRootFrm()->GetCurrShell()->GetOut(), pAttrs );
         }
     } //while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     delete pAccess;
@@ -1334,7 +1334,7 @@ void SwContentFrm::MakeAll()
             // without change occur.
             if ( nConsecutiveFormatsWithoutChange <= cnStopFormat )
             {
-                Format();
+                Format(getRootFrm()->GetCurrShell()->GetOut());
             }
 #if OSL_DEBUG_LEVEL > 0
             else
@@ -1386,7 +1386,7 @@ void SwContentFrm::MakeAll()
                             Prepare( PREP_WIDOWS_ORPHANS, 0, false );
                         mbValidSize = true;
                         bFormatted = sal_True;
-                        Format();
+                        Format(getRootFrm()->GetCurrShell()->GetOut());
                     }
                 }
                 SwFrm *pNxt = HasFollow() ? NULL : FindNext();
@@ -1716,7 +1716,7 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
                 pNxt->Frm().Width( pNxt->GetUpper()->Prt().Width() );
         }
         static_cast<SwContentFrm*>(pNxt)->MakePrtArea( rAttrs );
-        pNxt->Format( &rAttrs );
+        pNxt->Format( pNxt->getRootFrm()->GetCurrShell()->GetOut(), &rAttrs );
     }
     else
     {
@@ -1730,7 +1730,7 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
             else
                 pNxt->Frm().Width( pNxt->GetUpper()->Prt().Width() );
         }
-        pNxt->Format( &rAttrs );
+        pNxt->Format( pNxt->getRootFrm()->GetCurrShell()->GetOut(), &rAttrs );
     }
 
     pFrm->mbValidPos      = bOldPos;

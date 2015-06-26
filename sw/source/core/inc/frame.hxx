@@ -573,7 +573,7 @@ public:
     // environment (not e.g. for repeating table headlines)
     bool IsFootnoteAllowed() const;
 
-    virtual void  Format( const SwBorderAttrs *pAttrs = 0 );
+    virtual void  Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 );
 
     virtual void CheckDirection( bool bVert );
 

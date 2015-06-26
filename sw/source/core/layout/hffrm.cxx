@@ -387,7 +387,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
     }
 }
 
-void SwHeadFootFrm::Format(const SwBorderAttrs * pAttrs)
+void SwHeadFootFrm::Format(vcl::RenderContext* pRenderContext, const SwBorderAttrs * pAttrs)
 {
     OSL_ENSURE( pAttrs, "SwFooterFrm::Format, pAttrs is 0." );
 
@@ -396,7 +396,7 @@ void SwHeadFootFrm::Format(const SwBorderAttrs * pAttrs)
 
     if ( ! GetEatSpacing() && IsHeaderFrm())
     {
-        SwLayoutFrm::Format(pAttrs);
+        SwLayoutFrm::Format(pRenderContext, pAttrs);
     }
     else
     {

@@ -449,7 +449,7 @@ public:
     inline SwTwips GetLeftMargin() const;
     inline SwTwips GetRightMargin() const;
 
-    virtual void Format( const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
 
     /// Returns the sum of line height in pLine

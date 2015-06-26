@@ -1207,7 +1207,7 @@ class ExtraFormatToPositionObjs
 };
 
 /// "formats" the frame; Frm and PrtArea
-void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
+void SwSectionFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttr )
 {
     if( !pSection ) // via DelEmpty
     {
@@ -1803,7 +1803,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
         if( !pNew->Lower() )    // Format single column sections
         {
             pNew->MakePos();
-            pLayLeaf->Format(); // In order that the PrtArea is correct for the MoveBwd
+            pLayLeaf->Format(getRootFrm()->GetCurrShell()->GetOut()); // In order that the PrtArea is correct for the MoveBwd
         }
         else
             pNew->SimpleFormat();

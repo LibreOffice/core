@@ -480,13 +480,13 @@ void SwNoTextFrm::MakeAll()
 
         if ( !mbValidSize )
         {   mbValidSize = true;
-            Format();
+            Format(getRootFrm()->GetCurrShell()->GetOut());
         }
     }
 }
 
 /** Calculate the Bitmap's site, if needed */
-void SwNoTextFrm::Format( const SwBorderAttrs * )
+void SwNoTextFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {
     const Size aNewSize( GetSize() );
 

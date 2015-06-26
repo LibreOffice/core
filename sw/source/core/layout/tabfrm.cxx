@@ -1898,7 +1898,7 @@ void SwTabFrm::MakeAll()
             const long nOldPrtWidth = (Prt().*fnRect->fnGetWidth)();
             const long nOldFrmWidth = (Frm().*fnRect->fnGetWidth)();
             const Point aOldPrtPos  = (Prt().*fnRect->fnGetPos)();
-            Format( pAttrs );
+            Format( getRootFrm()->GetCurrShell()->GetOut(), pAttrs );
 
             SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
             if ( pLayout &&
@@ -1964,7 +1964,7 @@ void SwTabFrm::MakeAll()
                         }
 
                         mbValidPrtArea = false;
-                        Format( pAttrs );
+                        Format( getRootFrm()->GetCurrShell()->GetOut(), pAttrs );
                     }
                     lcl_RecalcTable( *this, 0, aNotify );
                     m_bLowersFormatted = true;
@@ -2656,7 +2656,7 @@ bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
 
 /// "Formats" the frame; Frm and PrtArea.
 /// The fixed size is not adjusted here.
-void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
+void SwTabFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "TabFrm::Format, pAttrs ist 0." );
 
@@ -3928,7 +3928,7 @@ static sal_uInt16 lcl_GetBottomLineDist( const SwRowFrm& rRow )
     return nBottomLineDist;
 }
 
-void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
+void SwRowFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
     SWRECTFN( this )
     OSL_ENSURE( pAttrs, "SwRowFrm::Format without Attrs." );
@@ -4667,7 +4667,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, bool bInva )
     return bRet;
 }
 
-void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
+void SwCellFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "CellFrm::Format, pAttrs ist 0." );
     const SwTabFrm* pTab = FindTabFrm();

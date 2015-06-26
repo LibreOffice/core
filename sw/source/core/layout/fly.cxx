@@ -1236,7 +1236,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
  *
  * The FixSize is not inserted here.
  */
-void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
+void SwFlyFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttrs )
 {
     OSL_ENSURE( pAttrs, "FlyFrm::Format, pAttrs is 0." );
 
