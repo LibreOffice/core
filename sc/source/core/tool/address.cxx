@@ -2116,6 +2116,10 @@ bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 
 bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 {
+    if (dy && aStart.Row() == 0 && aEnd.Row() == MAXROW)
+        dy = 0;     // Entire column not to be moved.
+    if (dx && aStart.Col() == 0 && aEnd.Col() == MAXCOL)
+        dx = 0;     // Entire row not to be moved.
     bool b = aStart.Move( dx, dy, dz, pDoc );
     b &= aEnd.Move( dx, dy, dz, pDoc );
     return b;
