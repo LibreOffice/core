@@ -41,7 +41,7 @@ class SwNoTextFrm: public SwContentFrm
     virtual ~SwNoTextFrm();
 
 protected:
-    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 public:
     SwNoTextFrm( SwNoTextNode * const, SwFrm* );

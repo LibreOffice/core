@@ -150,7 +150,7 @@ class SwRootFrm: public SwLayoutFrm
 
 protected:
 
-    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
 
 public:
 

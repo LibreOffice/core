@@ -321,7 +321,7 @@ bool SwOszControl::ChkOsz()
 |*      alignment to not trigger a 'big oscillation' when calling from outside
 |*      again.
 |*/
-void SwFlyAtCntFrm::MakeAll()
+void SwFlyAtCntFrm::MakeAll(vcl::RenderContext* pRenderContext)
 {
     if ( !GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {
@@ -391,7 +391,7 @@ void SwFlyAtCntFrm::MakeAll()
             do {
                 SWRECTFN( this )
                 Point aOldPos( (Frm().*fnRect->fnGetPos)() );
-                SwFlyFreeFrm::MakeAll();
+                SwFlyFreeFrm::MakeAll(pRenderContext);
                 const bool bPosChgDueToOwnFormat =
                                         aOldPos != (Frm().*fnRect->fnGetPos)();
                 // #i3317#

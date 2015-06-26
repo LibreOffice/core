@@ -378,7 +378,7 @@ protected:
     // avoid formatting of superior table frame.
     friend SwFrm* sw_FormatNextContentForKeep( SwTabFrm* pTabFrm );
 
-    virtual void MakeAll() = 0;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) = 0;
     // adjust frames of a page
     SwTwips AdjustNeighbourhood( SwTwips nDiff, bool bTst = false );
 

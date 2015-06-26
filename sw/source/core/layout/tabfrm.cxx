@@ -1665,7 +1665,7 @@ SwFrm* sw_FormatNextContentForKeep( SwTabFrm* pTabFrm )
     if ( pNxt )
     {
         if ( pTabFrm->GetUpper()->IsInTab() )
-            pNxt->MakeAll();
+            pNxt->MakeAll(pNxt->getRootFrm()->GetCurrShell()->GetOut());
         else
             pNxt->Calc();
     }
@@ -1689,7 +1689,7 @@ namespace {
         return bRet;
     }
 }
-void SwTabFrm::MakeAll()
+void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
 {
     if ( IsJoinLocked() || StackHack::IsLocked() || StackHack::Count() > 50 )
         return;
@@ -2373,7 +2373,7 @@ void SwTabFrm::MakeAll()
                             StackHack aHack;
                             delete pAccess;
 
-                            GetFollow()->MakeAll();
+                            GetFollow()->MakeAll(pRenderContext);
 
                             pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                             pAttrs = pAccess->Get();
@@ -3582,11 +3582,11 @@ void SwRowFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     SwLayoutFrm::Modify( pOld, pNew );
 }
 
-void SwRowFrm::MakeAll()
+void SwRowFrm::MakeAll(vcl::RenderContext* pRenderContext)
 {
     if ( !GetNext() )
         mbValidSize = false;
-    SwLayoutFrm::MakeAll();
+    SwLayoutFrm::MakeAll(pRenderContext);
 }
 
 long CalcHeightWithFlys( const SwFrm *pFrm )
