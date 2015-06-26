@@ -357,6 +357,12 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         handleOUStringCtor(expr, 1, qname);
         return true;
     }
+    if (qname == "rtl::OUString::operator+=" && fdecl->getNumParams() == 1) {
+        handleOUStringCtor(
+            expr, dyn_cast<CXXOperatorCallExpr>(expr) == nullptr ? 0 : 1,
+            qname);
+        return true;
+    }
     if (qname == "rtl::OUString::equals" && fdecl->getNumParams() == 1) {
         unsigned n;
         bool non;
