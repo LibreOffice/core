@@ -153,7 +153,7 @@ jobject Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, OUStringToOString(aLibName, osl_getThreadTextEncoding()).getStr());
 #endif
 
-    aLibName += OUString( SAL_DLLEXTENSION );
+    aLibName += SAL_DLLEXTENSION;
 
     jobject joSLL_cpp = 0;
 
