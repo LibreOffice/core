@@ -334,9 +334,6 @@ protected:
     virtual void            Assign( const SvDataCopyStream& ) SAL_OVERRIDE;
 
 public:
-
-                            TYPEINFO_OVERRIDE();
-
                             GraphicObject( const GraphicManager* pMgr = NULL );
                             GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = NULL );
                             GraphicObject( const GraphicObject& rCacheObj, const GraphicManager* pMgr = NULL );

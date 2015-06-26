@@ -25,8 +25,6 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 
-TYPEINIT1_AUTOFACTORY( FileList, SvDataCopyStream );
-
 /*************************************************************************
 |*
 |*    FileList - Ctor/Dtor
