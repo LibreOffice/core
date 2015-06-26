@@ -930,16 +930,16 @@ namespace
                     else if ( pEntryField->isNumericOrAggreateFunction() )
                     {
                         OSL_ENSURE(!pEntryField->GetFunction().isEmpty(),"Function name cannot be empty! ;-(");
-                        aWorkStr += pEntryField->GetFunction();
-                        aWorkStr +=  OUString('(');
-                        aWorkStr += quoteTableAlias(bMulti,pEntryField->GetAlias(),aQuote);
+                        aWorkStr += pEntryField->GetFunction() + "("
+                            + quoteTableAlias(
+                                bMulti, pEntryField->GetAlias(), aQuote);
                         // only quote column name when we don't have a numeric
                         if ( pEntryField->isNumeric() )
                             aWorkStr += aColumnName;
                         else
                             aWorkStr += ::dbtools::quoteName(aQuote, aColumnName);
 
-                        aWorkStr +=  OUString(')');
+                        aWorkStr += ")";
                     }
                     else if ( pEntryField->isOtherFunction() )
                     {

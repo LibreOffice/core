@@ -391,7 +391,7 @@ void OQueryTableView::AddTabWin(const OUString& _rTableName, const OUString& _rA
                                     ::dbtools::eInDataManipulation);
         OUString sRealName(sSchema);
         if (!sRealName.isEmpty())
-            sRealName+= OUString('.');
+            sRealName += ".";
         sRealName += sTable;
 
         AddTabWin(_rTableName, sRealName, _rAliasName, bNewTable);

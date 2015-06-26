@@ -90,8 +90,7 @@ bool OQueryTableWindow::Init()
     // Alias with successive number
     if (pContainer->CountTableAlias(sAliasName, m_nAliasNum))
     {
-        sAliasName += OUString('_');
-        sAliasName += OUString::number(m_nAliasNum);
+        sAliasName += "_" + OUString::number(m_nAliasNum);
     }
 
     sAliasName = comphelper::string::remove(sAliasName, '"');
