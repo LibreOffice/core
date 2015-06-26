@@ -859,6 +859,20 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             case NS_ooxml::LN_CT_NumPicBullet_pict:
             {
                 uno::Reference<drawing::XShape> xShape = m_rDMapper.PopPendingShape();
+
+                // Respect only the aspect ratio of the picture, not its size.
+                awt::Size aPrefSize = xShape->getSize();
+                // See SwDefBulletConfig::InitFont(), default height is 14.
+                const int nFontHeight = 14;
+                // Point -> mm100.
+                const int nHeight = nFontHeight * 35;
+                if (aPrefSize.Height * aPrefSize.Width != 0)
+                {
+                    int nWidth = (nHeight * aPrefSize.Width) / aPrefSize.Height;
+                    awt::Size aSize(nWidth, nHeight);
+                    xShape->setSize(aSize);
+                }
+
                 m_pCurrentNumPicBullet->SetShape(xShape);
             }
             break;
