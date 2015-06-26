@@ -205,7 +205,7 @@ void SwFlyInCntFrm::RegistFlys()
     ::RegistFlys( pPage, this );
 }
 
-void SwFlyInCntFrm::MakeAll()
+void SwFlyInCntFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     // OD 2004-01-19 #110582#
     if ( !GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )

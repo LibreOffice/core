@@ -100,7 +100,7 @@ void SwFlyFreeFrm::NotifyBackground( SwPageFrm *pPageFrm,
     ::Notify_Background( GetVirtDrawObj(), pPageFrm, rRect, eHint, true );
 }
 
-void SwFlyFreeFrm::MakeAll()
+void SwFlyFreeFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     if ( !GetFormat()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {

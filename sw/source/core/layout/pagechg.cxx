@@ -1504,7 +1504,7 @@ Size SwRootFrm::ChgSize( const Size& aNewSize )
     return Frm().SSize();
 }
 
-void SwRootFrm::MakeAll()
+void SwRootFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
 {
     if ( !mbValidPos )
     {   mbValidPos = true;

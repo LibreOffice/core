@@ -106,7 +106,7 @@ class SwPageFrm: public SwFootnoteBossFrm
     virtual ~SwPageFrm();
 
 protected:
-    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) SAL_OVERRIDE;
 

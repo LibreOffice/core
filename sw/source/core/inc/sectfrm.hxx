@@ -58,7 +58,7 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
     virtual ~SwSectionFrm();
 
 protected:
-    virtual void MakeAll() SAL_OVERRIDE;
+    virtual void MakeAll(vcl::RenderContext* pRenderContext) SAL_OVERRIDE;
     virtual bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool bHead, bool &rReformat ) SAL_OVERRIDE;
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
