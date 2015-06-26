@@ -1191,11 +1191,11 @@ void StringConstant::handleOUStringCtor(
         && e3->getArg(0)->IgnoreParenImpCasts()->isIntegerConstantExpr(
             res, compiler.getASTContext()))
     {
-        if (res.getZExtValue() > 0 && res.getZExtValue() <= 127) {
+        if (res.getZExtValue() <= 127) {
             report(
                 DiagnosticsEngine::Warning,
-                ("in call of %0, replace OUString constructed from a (non-NUL)"
-                 " ASCII char constant with a string literal"),
+                ("in call of %0, replace OUString constructed from an ASCII"
+                 " char constant with a string literal"),
                 e3->getExprLoc())
                 << qname << expr->getSourceRange();
         }
