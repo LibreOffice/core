@@ -1684,7 +1684,7 @@ void SwTextFrm::_Format( vcl::RenderContext* pRenderContext, SwParaPortion *pPar
 
 // We calculate the text frame's size and send a notification.
 // Shrink() or Grow() to adjust the frame's size to the changed required space.
-void SwTextFrm::Format( const SwBorderAttrs * )
+void SwTextFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs * )
 {
     SWRECTFN( this )
 
@@ -1802,7 +1802,7 @@ void SwTextFrm::Format( const SwBorderAttrs * )
             }
             do
             {
-                _Format( getRootFrm()->GetCurrShell()->GetOut(), aAccess.GetPara() );
+                _Format( pRenderContext, aAccess.GetPara() );
                 if( pFootnoteBoss && nFootnoteHeight )
                 {
                     const SwFootnoteContFrm* pCont = pFootnoteBoss->FindFootnoteCont();

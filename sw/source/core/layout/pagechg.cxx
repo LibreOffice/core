@@ -66,7 +66,7 @@ SwBodyFrm::SwBodyFrm( SwFrameFormat *pFormat, SwFrm* pSib ):
     mnFrmType = FRM_BODY;
 }
 
-void SwBodyFrm::Format( const SwBorderAttrs * )
+void SwBodyFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {
     // Formatting of the body is too simple, thus, it gets an own format method.
     // Borders etc. are not taken into account here.

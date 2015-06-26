@@ -2074,7 +2074,7 @@ SwTextFrm* SwTextFrm::GetFormatted( bool bForceQuickFormat )
         // format information
         // Optimization with FormatQuick()
         if( bFormat && !FormatQuick( bForceQuickFormat ) )
-            Format();
+            Format(getRootFrm()->GetCurrShell()->GetOut());
     }
 
     return this;

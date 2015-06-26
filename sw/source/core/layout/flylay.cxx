@@ -171,7 +171,7 @@ void SwFlyFreeFrm::MakeAll()
             if ( !mbValidSize || bFormatHeightOnly )
             {
                 mbValidSize = false;
-                Format( &rAttrs );
+                Format( getRootFrm()->GetCurrShell()->GetOut(), &rAttrs );
                 bFormatHeightOnly = false;
             }
         }

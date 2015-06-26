@@ -21,6 +21,7 @@
 #include "frmtool.hxx"
 #include "hints.hxx"
 #include <fmtornt.hxx>
+#include "rootfrm.hxx"
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
 #include <dflyobj.hxx>
@@ -128,7 +129,7 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 }
 
 /// Here the content gets formatted initially.
-void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
+void SwFlyInCntFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs )
 {
     if ( !Frm().Height() )
     {
@@ -140,7 +141,7 @@ void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )
         }
         Unlock();
     }
-    SwFlyFrm::Format( pAttrs );
+    SwFlyFrm::Format( pRenderContext, pAttrs );
 }
 
 /** Calculate object position
@@ -240,7 +241,7 @@ void SwFlyInCntFrm::MakeAll()
         }
 
         if ( !mbValidSize )
-            Format( &rAttrs );
+            Format( getRootFrm()->GetCurrShell()->GetOut(), &rAttrs );
 
         if ( !mbValidPos )
         {

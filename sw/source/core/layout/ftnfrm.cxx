@@ -180,7 +180,7 @@ static long lcl_Undersize( const SwFrm* pFrm )
 }
 
 /// "format" the frame (Fixsize is not set here).
-void SwFootnoteContFrm::Format( const SwBorderAttrs * )
+void SwFootnoteContFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs * )
 {
     // calculate total border, only one distance to the top
     const SwPageFrm* pPage = FindPageFrm();

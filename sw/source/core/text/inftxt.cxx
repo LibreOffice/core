@@ -156,7 +156,7 @@ void SwTextInfo::CtorInitTextInfo( SwTextFrm *pFrm )
     if (!m_pPara)
     {
         SAL_WARN("sw.core", "+SwTextInfo::CTOR: missing paragraph information");
-        pFrm->Format();
+        pFrm->Format(pFrm->getRootFrm()->GetCurrShell()->GetOut());
         m_pPara = pFrm->GetPara();
     }
 }

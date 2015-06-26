@@ -195,7 +195,7 @@ public:
 
     SwFlyInCntFrm( SwFlyFrameFormat*, SwFrm*, SwFrm *pAnchor );
 
-    virtual void  Format(  const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
+    virtual void  Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
 
     void SetRefPoint( const Point& rPoint, const Point &rRelAttr,
         const Point &rRelPos );
