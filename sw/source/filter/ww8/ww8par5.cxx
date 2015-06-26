@@ -245,7 +245,7 @@ long SwWW8ImplReader::Read_AtnBook(WW8PLCFManResult*)
 //    general help methods to separate parameters
 
 /// translate FieldParameter names into the system character set and
-/// at the same time, douple backslashes are converted into single ones
+/// at the same time, double backslashes are converted into single ones
 OUString SwWW8ImplReader::ConvertFFileName(const OUString& rOrg)
 {
     OUString aName = rOrg;

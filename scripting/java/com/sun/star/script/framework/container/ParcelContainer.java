@@ -587,7 +587,7 @@ public class ParcelContainer implements XNameAccess {
 
         p.rename(newName);
     }
-    // removes but doesn't physically delele parcel from container
+    // removes but doesn't physically delete parcel from container
     public boolean removeParcel(String name) throws
         com.sun.star.container.NoSuchElementException,
         com.sun.star.lang.WrappedTargetException {

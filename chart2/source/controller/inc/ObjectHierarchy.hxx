@@ -45,7 +45,7 @@ public:
     typedef ::std::vector< tOID > tChildContainer;
 
     /** @param bFlattenDiagram
-            If <TRUE/>, the content of the diaram (data series, wall, floor,
+            If <TRUE/>, the content of the diagram (data series, wall, floor,
             etc.) is treated as being at the same level as the diagram. (This is
             used for keyboard navigation).
      */

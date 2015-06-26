@@ -110,7 +110,7 @@ public:
 
 private:
     ObjectContainer     maMarkerContainer;      ///< Contains all named line markers (line end polygons).
-    ObjectContainer     maDashContainer;        ///< Contains all named line dsahes.
+    ObjectContainer     maDashContainer;        ///< Contains all named line dashes.
     ObjectContainer     maGradientContainer;    ///< Contains all named fill gradients.
     ObjectContainer     maTransGradContainer;   ///< Contains all named transparency Gradients.
     ObjectContainer     maBitmapUrlContainer;   ///< Contains all named fill bitmap URLs.

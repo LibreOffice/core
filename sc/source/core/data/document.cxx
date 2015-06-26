@@ -2252,7 +2252,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
                     "TransposeClip with wrong Document" );
 
         // initialize
-        // -> pTransClip has to be delted before the original document!
+        // -> pTransClip has to be deleted before the original document!
 
     pTransClip->ResetClip(this, (ScMarkData*)NULL);     // all
 

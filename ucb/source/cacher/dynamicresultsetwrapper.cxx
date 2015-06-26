@@ -408,7 +408,7 @@ void SAL_CALL DynamicResultSetWrapper
         throw ListenerAlreadySetException();
 
     Reference< XSourceInitialization > xTarget( xCache, UNO_QUERY );
-    OSL_ENSURE( xTarget.is(), "The given Target dosn't have the required interface 'XSourceInitialization'" );
+    OSL_ENSURE( xTarget.is(), "The given Target doesn't have the required interface 'XSourceInitialization'" );
     if( xTarget.is() && m_xContext.is() )
     {
         //@todo m_aSourceSet.wait();?

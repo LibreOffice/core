@@ -764,7 +764,7 @@ namespace sdr { namespace contact {
         */
         bool    impl_isControlVisible_nofail() const { return m_bControlIsVisible; }
 
-        /** determines whether we are currently a listener at the control for desgin-mode relevant facets
+        /** determines whether we are currently a listener at the control for design-mode relevant facets
             @nofail
         */
         bool    impl_isDesignModeListening_nofail() const { return m_bIsDesignModeListening; }

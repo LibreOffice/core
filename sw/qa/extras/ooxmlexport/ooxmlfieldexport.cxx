@@ -352,7 +352,7 @@ DECLARE_OOXMLEXPORT_TEST(testAlphabeticalIndex_AutoColumn,"alphabeticalIndex_Aut
 
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:instrText", " INDEX \\e \"");
 
-    // check for section break doestn't appear for any paragraph
+    // check for section break doesn't appear for any paragraph
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr", 0);
 }
 

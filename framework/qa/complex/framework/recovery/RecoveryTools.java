@@ -81,7 +81,7 @@ public class RecoveryTools {
     }
 
     /**
-     * After a crash the office start with a recovery diaolg. It could be that the office
+     * After a crash the office start with a recovery dialog. It could be that the office
      * is connectable but not all services to get the dialog a loaded. This function
      * tries to get the dialog until the <CODE>OfficeWatcher</CODE> kills the office.
      * @return a <CODE>XDialog</CODE> interface of the dialog

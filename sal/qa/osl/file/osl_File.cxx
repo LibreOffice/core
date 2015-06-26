@@ -211,7 +211,7 @@ inline void createTestFile( const ::rtl::OUString& basename, const ::rtl::OUStri
     createTestFile( aBaseURL );
 }
 
-/** detete a temp test file using OUString name.
+/** delete a temp test file using OUString name.
 */
 inline void deleteTestFile( const ::rtl::OUString& filename )
 {

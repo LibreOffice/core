@@ -136,7 +136,7 @@ void StgDirEntry::Enum( sal_Int32& n )
 }
 
 // Delete all temporary entries before writing the TOC stream.
-// Until now Deltem is never called with bForce True
+// Until now Deltemp is never called with bForce True
 
 void StgDirEntry::DelTemp( bool bForce )
 {
