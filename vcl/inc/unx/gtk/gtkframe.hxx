@@ -471,6 +471,7 @@ public:
 extern "C" {
 
 GType ooo_fixed_get_type();
+AtkObject* ooo_fixed_get_accessible(GtkWidget *obj);
 
 } // extern "C"
 

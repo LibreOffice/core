@@ -140,6 +140,11 @@ wrapper_factory_create_accessible( GObject *obj )
     return NULL;
 }
 
+AtkObject* ooo_fixed_get_accessible(GtkWidget *obj)
+{
+    return wrapper_factory_create_accessible(G_OBJECT(obj));
+}
+
 static void
 wrapper_factory_class_init( AtkObjectFactoryClass *klass )
 {
