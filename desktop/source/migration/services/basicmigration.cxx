@@ -33,8 +33,8 @@ namespace migration
 
 
 
-    #define sSourceUserBasic OUString( "/user/basic" )
-    #define sTargetUserBasic OUString( "/user/__basic_80" )
+    #define sSourceUserBasic "/user/basic"
+    #define sTargetUserBasic "/user/__basic_80"
 
 
     // component operations
