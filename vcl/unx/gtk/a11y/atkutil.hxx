@@ -25,6 +25,7 @@
 #define OOO_TYPE_ATK_UTIL ooo_atk_util_get_type()
 
 GType ooo_atk_util_get_type();
+void ooo_atk_util_ensure_event_listener();
 
 #endif
 
