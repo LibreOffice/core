@@ -844,11 +844,9 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 sal_Int32 nDebugCellProperties = aDebugCellProperties.getLength();
                 for( sal_Int32  nDebugProperty = 0; nDebugProperty < nDebugCellProperties; ++nDebugProperty)
                 {
-                    const OUString sName = aDebugCellProperties[nDebugProperty].Name;
-                    sNames += sName;
-                    sNames += OUString('-');
+                    sNames += aDebugCellProperties[nDebugProperty].Name + "-";
                 }
-                sNames += OUString('\n');
+                sNames += "\n";
             }
             (void)sNames;
         }

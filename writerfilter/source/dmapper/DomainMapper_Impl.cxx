@@ -2672,8 +2672,7 @@ void FieldContext::AppendCommand(const OUString& rPart)
 
         if (bInString)
         {
-            sPart += OUString(' ');
-            sPart += sToken;
+            sPart += " " + sToken;
             if (!bInStringNext)
             {
                 aResult.push_back(sPart);
@@ -3720,8 +3719,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 if (aPartIt == aItEnd)
                                     break;
 
-                                sURL += OUString('#');
-                                sURL += *aPartIt;
+                                sURL += "#" + *aPartIt;
                             }
                             else if ( *aPartIt == "\\m" || *aPartIt == "\\n" )
                             {
