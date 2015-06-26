@@ -35,9 +35,9 @@
 #include <unomid.h>
 
 #ifdef WNT
-#define NEXTLINE  OUString("\r\n")
+#define NEXTLINE  "\r\n"
 #else
-#define NEXTLINE  '\n'
+#define NEXTLINE  "\n"
 #endif
 
 using namespace utl;
@@ -66,7 +66,7 @@ OUString MakeSender()
         else if (sToken == "CR")
         {
             if(bLastLength)
-                sRet += OUStringLiteral1<NEXTLINE>();
+                sRet += NEXTLINE;
             bLastLength = true;
         }
         else if (sToken == "FIRSTNAME")
