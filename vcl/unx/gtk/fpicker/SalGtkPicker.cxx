@@ -104,10 +104,7 @@ extern "C"
     }
 }
 
-RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit,
-    uno::Reference< frame::XDesktop >& rDesktop ) :
-    cppu::WeakComponentImplHelper2< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
-    mpDialog(pDialog), mxToolkit(rToolkit), mxDesktop(rDesktop)
+GtkWindow* RunDialog::GetTransientFor()
 {
     GtkWindow *pParent = NULL;
 
@@ -118,8 +115,15 @@ RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit 
         if( pFrame )
             pParent = GTK_WINDOW( pFrame->getWindow() );
     }
-    if (pParent)
-        gtk_window_set_transient_for( GTK_WINDOW( mpDialog ), pParent );
+
+    return pParent;
+}
+
+RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit,
+    uno::Reference< frame::XDesktop >& rDesktop ) :
+    cppu::WeakComponentImplHelper2< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
+    mpDialog(pDialog), mxToolkit(rToolkit), mxDesktop(rDesktop)
+{
 }
 
 RunDialog::~RunDialog()
@@ -133,7 +137,6 @@ void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, NULL);
 }
 
