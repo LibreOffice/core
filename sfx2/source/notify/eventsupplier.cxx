@@ -463,11 +463,8 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
         {
             aScript = MACRO_PRFIX;
             if ( aLibrary != SfxGetpApp()->GetName() && aLibrary != "StarDesktop" && aLibrary != "application" )
-                aScript += OUString('.');
-
-            aScript += OUString('/');
-            aScript += aMacroName;
-            aScript += OUString( MACRO_POSTFIX  );
+                aScript += ".";
+            aScript += "/" + aMacroName + MACRO_POSTFIX;
         }
         else
             // wrong properties

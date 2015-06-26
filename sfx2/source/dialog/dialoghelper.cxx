@@ -88,10 +88,8 @@ OUString getWidestTime(const LocaleDataWrapper& rWrapper)
 
 OUString formatTime(const DateTime& rDateTime, const LocaleDataWrapper& rWrapper)
 {
-    OUString sString = rWrapper.getDate(rDateTime);
-    sString += OUString(' ');
-    sString += rWrapper.getTime(rDateTime, false);
-    return sString;
+    return rWrapper.getDate(rDateTime) + " "
+        + rWrapper.getTime(rDateTime, false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
