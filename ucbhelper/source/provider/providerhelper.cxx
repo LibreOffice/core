@@ -306,7 +306,7 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
                     OUString aOldKeyWithoutSlash;
                     if ( !aOldKeyWithSlash.endsWith("/") )
                     {
-                        aOldKeyWithSlash += OUString( '/' );
+                        aOldKeyWithSlash += "/";
                         aOldKeyWithoutSlash = rOldKey;
                     }
                     else if ( !rOldKey.isEmpty() )
@@ -390,7 +390,7 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
                     OUString aSrcKeyWithoutSlash;
                     if ( !aSrcKeyWithSlash.endsWith("/") )
                     {
-                        aSrcKeyWithSlash += OUString( '/' );
+                        aSrcKeyWithSlash += "/";
                         aSrcKeyWithoutSlash = rSourceKey;
                     }
                     else if ( !rSourceKey.isEmpty() )
@@ -526,7 +526,7 @@ bool ContentProviderImplHelper::removeAdditionalPropertySet(
                     OUString aKeyWithoutSlash;
                     if ( !aKeyWithSlash.endsWith("/") )
                     {
-                        aKeyWithSlash += OUString( '/' );
+                        aKeyWithSlash += "/";
                         aKeyWithoutSlash = rKey;
                     }
                     else if ( !rKey.isEmpty() )
