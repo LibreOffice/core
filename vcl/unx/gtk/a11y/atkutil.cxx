@@ -714,12 +714,20 @@ ooo_atk_util_class_init (AtkUtilClass *)
     atk_class->get_toolkit_name = ooo_atk_util_get_toolkit_name;
     atk_class->get_toolkit_version = ooo_atk_util_get_toolkit_version;
 
-    Application::AddEventListener( g_aEventListenerLink );
+    ooo_atk_util_ensure_event_listener();
 }
 
 } // extern "C"
 
-/*****************************************************************************/
+void ooo_atk_util_ensure_event_listener()
+{
+    static bool bInited;
+    if (!bInited)
+    {
+        Application::AddEventListener( g_aEventListenerLink );
+        bInited = true;
+    }
+}
 
 GType
 ooo_atk_util_get_type()
