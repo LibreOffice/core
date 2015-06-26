@@ -39,9 +39,8 @@
 
 #include <algorithm>
 
-#define PATH_SEPARATOR_ASCII        "/"
+#define PATH_SEPARATOR "/"
 #define PATH_SEPARATOR_UNICODE      ((sal_Unicode)'/')
-#define PATH_SEPARATOR              OUString(PATH_SEPARATOR_ASCII)
 
 namespace framework
 {
@@ -104,9 +103,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
          ++pIt                    )
     {
         const OUString& sChild     = *pIt;
-              OUString  sCheckPath (sRelPath);
-                               sCheckPath += sChild;
-                               sCheckPath += PATH_SEPARATOR;
+              OUString  sCheckPath (sRelPath + sChild + PATH_SEPARATOR);
 
         // SAFE -> ------------------------------
         aReadLock.reset();
@@ -157,8 +154,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
         }
 
         xParent   = xChild;
-        sRelPath += sChild;
-        sRelPath += PATH_SEPARATOR;
+        sRelPath += sChild + PATH_SEPARATOR;
     }
 
     // TODO think about return last storage as working storage ... but dont caching it inside this holder!
@@ -183,9 +179,7 @@ StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sP
          ++pIt                    )
     {
         const OUString& sChild     = *pIt;
-              OUString  sCheckPath (sRelPath);
-                               sCheckPath += sChild;
-                               sCheckPath += PATH_SEPARATOR;
+              OUString  sCheckPath (sRelPath + sChild + PATH_SEPARATOR);
 
         TPath2StorageInfo::iterator pCheck = m_lStorages.find(sCheckPath);
         if (pCheck == m_lStorages.end())
@@ -199,8 +193,7 @@ StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sP
         TStorageInfo& rInfo = pCheck->second;
         lStoragesOfPath.push_back(rInfo.Storage);
 
-        sRelPath += sChild;
-        sRelPath += PATH_SEPARATOR;
+        sRelPath += sChild + PATH_SEPARATOR;
     }
 
     return lStoragesOfPath;
@@ -248,9 +241,7 @@ void StorageHolder::closePath(const OUString& rPath)
            pIt1 != lFolders.end();
          ++pIt1                    )
     {
-        OUString sCurrentRelPath  = sParentPath;
-                        sCurrentRelPath += *pIt1;
-                        sCurrentRelPath += PATH_SEPARATOR;
+        OUString sCurrentRelPath(sParentPath + *pIt1 + PATH_SEPARATOR);
         *pIt1       = sCurrentRelPath;
         sParentPath = sCurrentRelPath;
     }
@@ -386,8 +377,7 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
     sal_Int32       i = 0;
     for (i=0; i<c-1; ++i)
     {
-        sParentPath += lFolders[i];
-        sParentPath += PATH_SEPARATOR;
+        sParentPath += lFolders[i] + PATH_SEPARATOR;
     }
 
     TPath2StorageInfo::const_iterator pParent = m_lStorages.find(sParentPath);
@@ -494,7 +484,7 @@ OUString StorageHolder::impl_st_normPath(const OUString& sPath)
     OUString sNormedPath = sPath;
 
     // "/bla" => "bla" && "/" => "" (!)
-    sNormedPath.startsWith(PATH_SEPARATOR_ASCII, &sNormedPath);
+    sNormedPath.startsWith(PATH_SEPARATOR, &sNormedPath);
 
     // "/" => "" || "" => "" ?
     if (sNormedPath.isEmpty())

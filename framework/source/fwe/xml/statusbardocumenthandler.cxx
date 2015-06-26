@@ -576,8 +576,7 @@ throw ( SAXException, RuntimeException )
 
     if (m_aAttributeURL.isEmpty() )
     {
-        m_aAttributeURL = m_aXMLXlinkNS;
-        m_aAttributeURL += OUString( ATTRIBUTE_URL );
+        m_aAttributeURL = m_aXMLXlinkNS + ATTRIBUTE_URL;
     }
 
     // save required attribute (URL)
