@@ -270,7 +270,7 @@ static OUString & getIniFileName_Impl()
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
 
             // append config file suffix
-            fileName += OUString(SAL_CONFIGFILE(""));
+            fileName += SAL_CONFIGFILE("");
 
 #ifdef MACOSX
             // We keep only executables in the MacOS folder, and all

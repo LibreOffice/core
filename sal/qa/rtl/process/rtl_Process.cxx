@@ -62,7 +62,7 @@ inline ::rtl::OUString getModulePath()
     printUString(suDirPath, "modulePath:");
     suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') );
     suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') + 1);
-    suDirPath += rtl::OUString("bin");
+    suDirPath += "bin";
     return suDirPath;
 }
 
@@ -103,9 +103,7 @@ public:
         pParameters[2] = suParam2.pData;
         pParameters[3] = suParam3.pData;
 
-        rtl::OUString suFileURL = suCWD;
-        suFileURL += rtl::OUString("/");
-        suFileURL += EXECUTABLE_NAME;
+        rtl::OUString suFileURL = suCWD + "/" + EXECUTABLE_NAME;
 
         oslProcessError osl_error = osl_executeProcess(
             suFileURL.pData,
@@ -232,9 +230,7 @@ public:
 
     rtl::OUString suCWD = getModulePath();
         oslProcess hProcess = NULL;
-       rtl::OUString suFileURL = suCWD;
-        suFileURL += rtl::OUString("/");
-        suFileURL += EXEC_NAME;
+       rtl::OUString suFileURL = suCWD + "/" + EXEC_NAME;
     oslFileHandle* pChildOutputRead = new oslFileHandle();
         oslProcessError osl_error = osl_executeProcess_WithRedirectedIO(
             suFileURL.pData,

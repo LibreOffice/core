@@ -87,7 +87,7 @@ inline ::rtl::OUString getExecutablePath()
         reinterpret_cast<oslGenericFunction>(&getExecutablePath), dirPath);
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') );
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') + 1);
-    dirPath += rtl::OUString("Executable");
+    dirPath += "Executable";
     return dirPath;
 }
 
@@ -199,9 +199,7 @@ public:
     {
         parameters_[0] = env_param_.pData;
         suCWD = getExecutablePath();
-        suExecutableFileURL = suCWD;
-        suExecutableFileURL += rtl::OUString("/");
-        suExecutableFileURL += EXECUTABLE_NAME;
+        suExecutableFileURL = suCWD + "/" + EXECUTABLE_NAME;
     }
 
     virtual void setUp() SAL_OVERRIDE

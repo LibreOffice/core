@@ -547,8 +547,8 @@ namespace osl_FileBase
   {
 #if ( defined UNX )     //Link is not defined in Windows
         ::rtl::OUString aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
-        ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/link.file");
-        ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/canonical.name");
+        aUStr_LnkFileSys += aSlashURL + getCurrentPID() + "/link.file";
+        aUStr_SrcFileSys += aSlashURL + getCurrentPID() + "/canonical.name";
 
                 rtl::OString strLinkFileName, strSrcFileName;
                 strLinkFileName = OUStringToOString( aUStr_LnkFileSys, RTL_TEXTENCODING_ASCII_US );
@@ -1432,8 +1432,8 @@ namespace osl_FileStatus
             sal_Int32 fd;
 
             ::rtl::OUString aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
-            ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/tmpdir/link.file");
-            ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/tmpdir/tmpname");
+            aUStr_LnkFileSys += aSlashURL + getCurrentPID() + "/tmpdir/link.file";
+            aUStr_SrcFileSys += aSlashURL + getCurrentPID() + "/tmpdir/tmpname";
 
                 rtl::OString strLinkFileName;
                 rtl::OString strSrcFileName;
@@ -2053,8 +2053,8 @@ namespace osl_FileStatus
         {
             //create a link file;
             ::rtl::OUString aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
-            ( ( aUStr_LnkFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/link.file");
-            ( ( aUStr_SrcFileSys += aSlashURL ) += getCurrentPID() ) += ::rtl::OUString("/tmpname");
+            aUStr_LnkFileSys += aSlashURL + getCurrentPID() + "/link.file";
+            aUStr_SrcFileSys += aSlashURL + getCurrentPID() + "/tmpname";
 
                 rtl::OString strLinkFileName, strSrcFileName;
                 strLinkFileName = OUStringToOString( aUStr_LnkFileSys, RTL_TEXTENCODING_ASCII_US );
@@ -4406,8 +4406,8 @@ namespace osl_Directory
             bool bFoundOK = false;
 
             ::rtl::OUString aUStr_LnkFileSys( aTempDirectorySys ), aUStr_SrcFileSys( aTempDirectorySys );
-            ( aUStr_LnkFileSys += aSlashURL ) += ::rtl::OUString("/tmpdir/link.file");
-            ( aUStr_SrcFileSys += aSlashURL ) += ::rtl::OUString("/tmpdir/tmpname");
+            aUStr_LnkFileSys += aSlashURL + "/tmpdir/link.file";
+            aUStr_SrcFileSys += aSlashURL + "/tmpdir/tmpname";
 
             ::rtl::OString strLinkFileName, strSrcFileName;
             strLinkFileName = OUStringToOString( aUStr_LnkFileSys, RTL_TEXTENCODING_ASCII_US );
