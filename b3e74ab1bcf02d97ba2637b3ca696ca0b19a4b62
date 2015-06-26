@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_2c905295",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-06-26T19:55:16Z",
+      "side": 1,
+      "message": "Since January we don’t use freedesktop.org’s bug tracker, so please do not use “fdo”, but “tdf”.",
+      "revId": "b3e74ab1bcf02d97ba2637b3ca696ca0b19a4b62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
