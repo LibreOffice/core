@@ -85,18 +85,18 @@ uno::Sequence< OUString > OZipFileAccess::GetPatternsFromString_Impl( const OUSt
 
             if ( *pString == (sal_Unicode)'\\' )
             {
-                aPattern[nInd] += OUString( (sal_Unicode)'\\' );
+                aPattern[nInd] += "\\";
                 pString++;
             }
             else if ( *pString == (sal_Unicode)'*' )
             {
-                aPattern[nInd] += OUString( (sal_Unicode)'*' );
+                aPattern[nInd] += "*";
                 pString++;
             }
             else
             {
                 OSL_FAIL( "The backslash is not guarded!\n" );
-                aPattern[nInd] += OUString( (sal_Unicode)'\\' );
+                aPattern[nInd] += "\\";
             }
         }
         else if ( *pString == (sal_Unicode)'*' )
