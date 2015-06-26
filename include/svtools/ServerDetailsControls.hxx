@@ -20,6 +20,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/msgbox.hxx>
 
 class DetailsContainer
 {

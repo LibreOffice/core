@@ -202,6 +202,7 @@ namespace cmis
                 catch (const libcmis::Exception& e)
                 {
                     SAL_INFO( "ucb.ucp.cmis", "Error getting repositories: " << e.what() );
+                    throw uno::Exception( );
                 }
             }
             else

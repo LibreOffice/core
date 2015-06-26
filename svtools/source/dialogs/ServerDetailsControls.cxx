@@ -411,6 +411,10 @@ IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl  )
     }
     catch ( const Exception& )
     {
+        ScopedVclPtrInstance< ErrorBox > pErrorBox( static_cast< vcl::Window* >( NULL ),
+                                                   WB_OK,
+                                                   "Auth failed!" );
+        pErrorBox->Execute( );
     }
 
     // Auto-select the first one
