@@ -111,8 +111,7 @@ namespace fs
                 OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
             OString tmp(in.c_str());
             OUString ustrSystemPath(OStringToOUString(tmp, getThreadTextEncoding()));
-            ret.data += OUString(sal_Unicode('/'));
-            ret.data += ustrSystemPath;
+            ret.data += "/" + ustrSystemPath;
             HCDBG(std::cerr << "final is " <<
                 OUStringToOString(ret.data, RTL_TEXTENCODING_UTF8).getStr() << std::endl);
             return ret;
