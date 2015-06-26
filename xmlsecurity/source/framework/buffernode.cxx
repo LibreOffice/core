@@ -244,34 +244,29 @@ OUString BufferNode::printChildren() const
 
     for( ; ii != m_vElementCollectors.end() ; ++ii )
     {
-        rc += OUString( "BufID=" );
-        rc += OUString::number((*ii)->getBufferId());
+        rc += "BufID=" + OUString::number((*ii)->getBufferId());
 
         if ((*ii)->getModify())
         {
-            rc += OUString( "[M]" );
+            rc += "[M]";
         }
 
-        rc += OUString( ",Pri=" );
+        rc += ",Pri=";
 
         switch ((*ii)->getPriority())
         {
             case cssxc::sax::ElementMarkPriority_BEFOREMODIFY:
-                rc += OUString( "BEFOREMODIFY" );
+                rc += "BEFOREMODIFY";
                 break;
             case cssxc::sax::ElementMarkPriority_AFTERMODIFY:
-                rc += OUString( "AFTERMODIFY" );
+                rc += "AFTERMODIFY";
                 break;
             default:
-                rc += OUString( "UNKNOWN" );
+                rc += "UNKNOWN";
                 break;
         }
 
-        rc += OUString( "(" );
-        rc += OUString( "SecID=" );
-        rc += OUString::number((*ii)->getSecurityId());
-        rc += OUString( ")" );
-        rc += OUString( " " );
+        rc += "(SecID=" + OUString::number((*ii)->getSecurityId()) + ") ";
     }
 
     return rc;

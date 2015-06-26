@@ -349,44 +349,36 @@ OUString SAXEventKeeperImpl::printBufferNode(
 
     for ( int i=0; i<nIndent; ++i )
     {
-        rc += OUString( " " );
+        rc += " ";
     }
 
     if (pBufferNode == m_pCurrentBufferNode)
     {
-        rc += OUString( "[%]" );
+        rc += "[%]";
     }
 
     if (pBufferNode == m_pCurrentBlockingBufferNode)
     {
-        rc += OUString( "[B]" );
+        rc += "[B]";
     }
 
-    rc += OUString( " " );
-    rc += m_xXMLDocument->getNodeName(pBufferNode->getXMLElement());
+    rc += " " + m_xXMLDocument->getNodeName(pBufferNode->getXMLElement());
 
     BufferNode* pParent = const_cast<BufferNode*>(pBufferNode->getParent());
     if (pParent != NULL)
     {
-        rc += OUString( "[" );
-        rc += m_xXMLDocument->getNodeName(pParent->getXMLElement());
-        rc += OUString( "]" );
+        rc += "[" + m_xXMLDocument->getNodeName(pParent->getXMLElement()) + "]";
     }
 
-    rc += OUString( ":EC=" );
-    rc += pBufferNode->printChildren();
-    rc += OUString( " BR=" );
+    rc += ":EC=" + pBufferNode->printChildren() + " BR=";
 
     ElementMark * pBlocker = pBufferNode->getBlocker();
     if (pBlocker != NULL)
     {
-        rc += OUString::number( pBlocker->getBufferId() );
-        rc += OUString( "(SecId=" );
-        rc += OUString::number( pBlocker->getSecurityId() );
-        rc += OUString( ")" );
-        rc += OUString( " " );
+        rc += OUString::number( pBlocker->getBufferId() ) + "(SecId="
+            + OUString::number( pBlocker->getSecurityId() ) + ") ";
     }
-    rc += OUString( "\n" );
+    rc += "\n";
 
     std::vector< const BufferNode* >* vChildren = pBufferNode->getChildren();
     std::vector< const BufferNode* >::const_iterator jj = vChildren->begin();
@@ -1050,12 +1042,11 @@ OUString SAL_CALL SAXEventKeeperImpl::printBufferNodeTree()
 {
     OUString rc;
 
-    rc += OUString( "ElementMarkBuffers: size = " );
-    rc += OUString::number(m_vElementMarkBuffers.size());
-    rc += OUString( "\nCurrentBufferNode: " );
-    rc += m_xXMLDocument->getNodeName(m_pCurrentBufferNode->getXMLElement());
-    rc += OUString( "\n" );
-    rc += printBufferNode(m_pRootBufferNode, 0);
+    rc += "ElementMarkBuffers: size = "
+        + OUString::number(m_vElementMarkBuffers.size())
+        + "\nCurrentBufferNode: "
+        + m_xXMLDocument->getNodeName(m_pCurrentBufferNode->getXMLElement())
+        + "\n" + printBufferNode(m_pRootBufferNode, 0);
 
     return rc;
 }
