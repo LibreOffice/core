@@ -208,7 +208,8 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
     {
         bool bExpand = pDoc->IsExpandRefs();
         if ( nDx && (theRow1 >= nRow1) && (theRow2 <= nRow2) &&
-                    (theTab1 >= nTab1) && (theTab2 <= nTab2) )
+                    (theTab1 >= nTab1) && (theTab2 <= nTab2) &&
+                    !(theCol1 == 0 && theCol2 == MAXCOL) )
         {
             bool bExp = (bExpand && IsExpand( theCol1, theCol2, nCol1, nDx ));
             bCut1 = lcl_MoveStart( theCol1, nCol1, nDx, MAXCOL );
@@ -227,7 +228,8 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
             }
         }
         if ( nDy && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
-                    (theTab1 >= nTab1) && (theTab2 <= nTab2) )
+                    (theTab1 >= nTab1) && (theTab2 <= nTab2) &&
+                    !(theRow1 == 0 && theRow2 == MAXROW) )
         {
             bool bExp = (bExpand && IsExpand( theRow1, theRow2, nRow1, nDy ));
             bCut1 = lcl_MoveStart( theRow1, nRow1, nDy, MAXROW );
@@ -272,14 +274,14 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
         if ((theCol1 >= nCol1-nDx) && (theRow1 >= nRow1-nDy) && (theTab1 >= nTab1-nDz) &&
             (theCol2 <= nCol2-nDx) && (theRow2 <= nRow2-nDy) && (theTab2 <= nTab2-nDz))
         {
-            if ( nDx )
+            if ( nDx && !(theCol1 == 0 && theCol2 == MAXCOL) )
             {
                 bCut1 = lcl_MoveItCut( theCol1, nDx, MAXCOL );
                 bCut2 = lcl_MoveItCut( theCol2, nDx, MAXCOL );
                 if ( bCut1 || bCut2 )
                     eRet = UR_UPDATED;
             }
-            if ( nDy )
+            if ( nDy && !(theRow1 == 0 && theRow2 == MAXROW) )
             {
                 bCut1 = lcl_MoveItCut( theRow1, nDy, MAXROW );
                 bCut2 = lcl_MoveItCut( theRow2, nDy, MAXROW );
