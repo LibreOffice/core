@@ -159,8 +159,9 @@ namespace abp
 
 
                 // access the configuration information which the driver uses for determining it's column names
-                OUString sDriverAliasesNodeName = sDriverSettingsNodeName;
-                sDriverAliasesNodeName += OUString( "/ColumnAliases" );
+                OUString sDriverAliasesNodeName(
+                    OUStringLiteral(sDriverSettingsNodeName)
+                    + "/ColumnAliases");
 
                 // create a config node for this
                 OConfigurationTreeRoot aDriverFieldAliasing = OConfigurationTreeRoot::createWithComponentContext(
