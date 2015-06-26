@@ -142,7 +142,7 @@ class SwTextFrm: public SwContentFrm
 
     // In order to safe stack space, we split this method:
     // _Format calls _Format with parameters
-    void _Format( SwParaPortion *pPara );
+    void _Format( vcl::RenderContext* pRenderContext, SwParaPortion *pPara );
     void _Format( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
                   const bool bAdjust = false );
     void FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf );

@@ -1638,7 +1638,7 @@ void SwTextFrm::FormatOnceMore( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
     }
 }
 
-void SwTextFrm::_Format( SwParaPortion *pPara )
+void SwTextFrm::_Format( vcl::RenderContext* pRenderContext, SwParaPortion *pPara )
 {
     const bool bIsEmpty = GetText().isEmpty();
 
@@ -1665,7 +1665,7 @@ void SwTextFrm::_Format( SwParaPortion *pPara )
     if ( IsVertical() )
         SwapWidthAndHeight();
 
-    SwTextFormatInfo aInf( getRootFrm()->GetCurrShell()->GetOut(), this );
+    SwTextFormatInfo aInf( pRenderContext, this );
     SwTextFormatter  aLine( this, &aInf );
 
     HideAndShowObjects();
@@ -1817,7 +1817,7 @@ void SwTextFrm::Format( const SwBorderAttrs * )
             }
             do
             {
-                _Format( aAccess.GetPara() );
+                _Format( getRootFrm()->GetCurrShell()->GetOut(), aAccess.GetPara() );
                 if( pFootnoteBoss && nFootnoteHeight )
                 {
                     const SwFootnoteContFrm* pCont = pFootnoteBoss->FindFootnoteCont();
