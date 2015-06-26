@@ -6,11 +6,7 @@
 
 #ifndef WINDIRENT_H__
 #define WINDIRENT_H__
-
-#ifndef XP_WIN
-#error This library should only be used on Windows
-#endif
-
+#ifdef WNT
 #include <windows.h>
 
 struct DIR {
@@ -29,4 +25,5 @@ DIR* opendir(const WCHAR* path);
 int closedir(DIR* dir);
 dirent* readdir(DIR* dir);
 
+#endif  // WNT
 #endif  // WINDIRENT_H__

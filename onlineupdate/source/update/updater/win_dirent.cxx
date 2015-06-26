@@ -4,6 +4,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+#ifdef WNT
 #include "win_dirent.h"
 #include <errno.h>
 #include <string.h>
@@ -75,4 +76,4 @@ dirent* readdir(DIR* dir)
            sizeof(gDirEnt.d_name)/sizeof(gDirEnt.d_name[0]));
   return &gDirEnt;
 }
-
+#endif
