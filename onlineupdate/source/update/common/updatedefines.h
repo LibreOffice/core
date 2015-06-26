@@ -21,7 +21,7 @@
 # endif
 #endif
 
-#if defined(XP_WIN)
+#if defined(WNT)
 # include <windows.h>
 # include <shlwapi.h>
 # include <direct.h>
@@ -116,7 +116,7 @@ static inline int mywcsprintf(WCHAR* dest, size_t count, const WCHAR* fmt, ...)
 #endif
 # include <dirent.h>
 
-#ifdef XP_MACOSX
+#ifdef MACOSX
 # include <sys/time.h>
 #endif
 

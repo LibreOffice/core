@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include "mar.h"
 
-#ifdef XP_WIN
+#ifdef WNT
   typedef WCHAR NS_tchar;
 #else
   typedef char NS_tchar;

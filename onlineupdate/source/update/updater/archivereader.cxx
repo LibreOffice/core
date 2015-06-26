@@ -10,7 +10,7 @@
 #include "bzlib.h"
 #include "archivereader.h"
 #include "errors.h"
-#ifdef XP_WIN
+#ifdef WNT
 #include "nsAlgorithm.h" // Needed by nsVersionComparator.cpp
 #include "updatehelper.h"
 #endif
@@ -27,12 +27,12 @@
 #endif
 
 #define UPDATER_NO_STRING_GLUE_STL
-#include "nsVersionComparator.cpp"
+#include "nsVersionComparator.h"
 #undef UPDATER_NO_STRING_GLUE_STL
 
-#if defined(XP_UNIX)
+#if defined(UNIX)
 # include <sys/types.h>
-#elif defined(XP_WIN)
+#elif defined(WNT)
 # include <io.h>
 #endif
 
@@ -203,7 +203,7 @@ ArchiveReader::Open(const NS_tchar *path)
     }
   }
 
-#ifdef XP_WIN
+#ifdef WNT
   mArchive = mar_wopen(path);
 #else
   mArchive = mar_open(path);
@@ -240,7 +240,7 @@ ArchiveReader::ExtractFile(const char *name, const NS_tchar *dest)
   if (!item)
     return READ_ERROR;
 
-#ifdef XP_WIN
+#ifdef WNT
   FILE* fp = _wfopen(dest, L"wb+");
 #else
   int fd = creat(dest, item->flags);

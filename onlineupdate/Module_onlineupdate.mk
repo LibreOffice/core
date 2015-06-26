@@ -11,7 +11,8 @@
 $(eval $(call gb_Module_Module,onlineupdate))
 
 $(eval $(call gb_Module_add_targets,onlineupdate,\
-    Executable_mar \
+	Executable_mar \
+	Executable_updater \
 ))
 
 # vim: set noet sw=4 ts=4:

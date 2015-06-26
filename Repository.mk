@@ -179,9 +179,10 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,pdfimport, \
 ))
 endif
 
-$(eval $(call gb_Helper_register_executables_for_install,OOO,onlineupdate, \
+$(eval $(call gb_Helper_register_executables_for_install,OOO,updater,\
 	$(if $(ENABLE_ONLINE_UPDATE), \
 		mar \
+		updater \
 	) \
 ))
 

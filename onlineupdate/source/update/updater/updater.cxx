@@ -66,7 +66,7 @@
 // Amount of time in ms to wait for the parent process to close
 #define PARENT_WAIT 5000
 
-#if defined(XP_MACOSX)
+#if defined(MACOSX)
 // These functions are defined in launchchild_osx.mm
 void LaunchChild(int argc, char **argv);
 void LaunchMacPostProcess(const char* aAppBundle);
@@ -86,7 +86,7 @@ void LaunchMacPostProcess(const char* aAppBundle);
 
 // We want to use execv to invoke the callback executable on platforms where
 // we were launched using execv.  See nsUpdateDriver.cpp.
-#if defined(XP_UNIX) && !defined(XP_MACOSX)
+#if defined(UNIX) && !defined(MACOSX)
 #define USE_EXECV
 #endif
 
@@ -115,12 +115,12 @@ static bool sUseHardLinks = true;
 # define MAYBE_USE_HARD_LINKS 0
 #endif
 
-#if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(XP_WIN) && !defined(XP_MACOSX)
+#if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(WNT) && !defined(MACOSX)
 #include "nss.h"
 #include "prerror.h"
 #endif
 
-#ifdef XP_WIN
+#ifdef WNT
 #include "updatehelper.h"
 
 // Closes the handle if valid and if the updater is elevated returns with the
@@ -216,7 +216,7 @@ struct MARChannelStringTable {
 
 typedef void (* ThreadFunc)(void *param);
 
-#ifdef XP_WIN
+#ifdef WNT
 #include <process.h>
 
 class Thread
@@ -252,7 +252,7 @@ private:
   void      *mThreadParam;
 };
 
-#elif defined(XP_UNIX)
+#elif defined(UNIX)
 #include <pthread.h>
 
 class Thread
@@ -270,7 +270,6 @@ public:
 private:
   pthread_t thr;
 };
-
 #else
 #error "Unsupported platform"
 #endif
@@ -287,7 +286,7 @@ static bool sReplaceRequest = false;
 static bool sUsingService = false;
 static bool sIsOSUpdate = false;
 
-#ifdef XP_WIN
+#ifdef WNT
 // The current working directory specified in the command line.
 static NS_tchar* gDestPath;
 static NS_tchar gCallbackRelPath[MAXPATHLEN];
@@ -352,7 +351,7 @@ EnvHasValue(const char *name)
   return (val && *val);
 }
 
-#ifdef XP_WIN
+#ifdef WNT
 /**
  * Coverts a relative update path to a full path for Windows.
  *
@@ -406,7 +405,7 @@ get_valid_path(NS_tchar **line, bool isdir = false)
     return nullptr;
   }
 
-#ifdef XP_WIN
+#ifdef WNT
   // All paths must be relative from the current working directory
   if (path[0] == NS_T('\\') || path[1] == NS_T(':')) {
     LOG(("get_valid_path: path must be relative: " LOG_S, path));
@@ -461,7 +460,7 @@ get_quoted_path(const NS_tchar *path)
 
 static void ensure_write_permissions(const NS_tchar *path)
 {
-#ifdef XP_WIN
+#ifdef WNT
   (void) _wchmod(path, _S_IREAD | _S_IWRITE);
 #else
   struct stat fs;
@@ -605,7 +604,7 @@ static int ensure_parent_dir(const NS_tchar *path)
   return rv;
 }
 
-#ifdef XP_UNIX
+#ifdef UNIX
 static int ensure_copy_symlink(const NS_tchar *path, const NS_tchar *dest)
 {
   // Copy symlinks by creating a new symlink to the same target
@@ -648,7 +647,7 @@ create_hard_link(const NS_tchar *srcFilename, const NS_tchar *destFilename)
 // Copy the file named path onto a new file named dest.
 static int ensure_copy(const NS_tchar *path, const NS_tchar *dest)
 {
-#ifdef XP_WIN
+#ifdef WNT
   // Fast path for Windows
   bool result = CopyFileW(path, dest, false);
   if (!result) {
@@ -666,7 +665,7 @@ static int ensure_copy(const NS_tchar *path, const NS_tchar *dest)
     return READ_ERROR;
   }
 
-#ifdef XP_UNIX
+#ifdef UNIX
   if (S_ISLNK(ss.st_mode)) {
     return ensure_copy_symlink(path, dest);
   }
@@ -766,7 +765,7 @@ static int ensure_copy_recursive(const NS_tchar *path, const NS_tchar *dest,
     return READ_ERROR;
   }
 
-#ifdef XP_UNIX
+#ifdef UNIX
   if (S_ISLNK(sInfo.st_mode)) {
     return ensure_copy_symlink(path, dest);
   }
@@ -859,7 +858,7 @@ static int rename_file(const NS_tchar *spath, const NS_tchar *dpath,
   return OK;
 }
 
-#ifdef XP_WIN
+#ifdef WNT
 // Remove the directory pointed to by path and all of its files and
 // sub-directories. If a file is in use move it to the tobedeleted directory
 // and attempt to schedule removal of the file on reboot
@@ -967,7 +966,7 @@ static int backup_discard(const NS_tchar *path)
   }
 
   int rv = ensure_remove(backup);
-#if defined(XP_WIN)
+#if defined(WNT)
   if (rv && !sStagedUpdate && !sReplaceRequest) {
     LOG(("backup_discard: unable to remove: " LOG_S, backup));
     NS_tchar path[MAXPATHLEN];
@@ -1311,7 +1310,7 @@ AddFile::Execute()
       return rv;
   }
 
-#ifdef XP_WIN
+#ifdef WNT
   char sourcefile[MAXPATHLEN];
   if (!WideCharToMultiByte(CP_UTF8, 0, mFile, -1, sourcefile, MAXPATHLEN,
                            nullptr, nullptr)) {
@@ -1465,7 +1464,7 @@ PatchFile::Prepare()
   if (!fp)
     return WRITE_ERROR;
 
-#ifdef XP_WIN
+#ifdef WNT
   char sourcefile[MAXPATHLEN];
   if (!WideCharToMultiByte(CP_UTF8, 0, mPatchFile, -1, sourcefile, MAXPATHLEN,
                            nullptr, nullptr)) {
@@ -1495,7 +1494,7 @@ PatchFile::Execute()
     return rv;
 
   FILE *origfile = nullptr;
-#ifdef XP_WIN
+#ifdef WNT
   if (NS_tstrcmp(mFile, gCallbackRelPath) == 0) {
     // Read from the copy of the callback when patching since the callback can't
     // be opened for reading to prevent the application from being launched.
@@ -1537,7 +1536,7 @@ PatchFile::Execute()
 #if defined(HAVE_POSIX_FALLOCATE)
   AutoFile ofile(ensure_open(mFile, NS_T("wb+"), ss.st_mode));
   posix_fallocate(fileno((FILE *)ofile), 0, header.dlen);
-#elif defined(XP_WIN)
+#elif defined(WNT)
   bool shouldTruncate = true;
   // Creating the file, setting the size, and then closing the file handle
   // lessens fragmentation more than any other method tested. Other methods that
@@ -1565,7 +1564,7 @@ PatchFile::Execute()
 
   AutoFile ofile(ensure_open(mFile, shouldTruncate ? NS_T("wb+") : NS_T("rb+"),
                              ss.st_mode));
-#elif defined(XP_MACOSX)
+#elif defined(MACOSX)
   AutoFile ofile(ensure_open(mFile, NS_T("wb+"), ss.st_mode));
   // Modified code from FileUtils.cpp
   fstore_t store = {F_ALLOCATECONTIG, F_PEOFPOSMODE, 0, header.dlen};
@@ -1589,7 +1588,7 @@ PatchFile::Execute()
     return WRITE_ERROR_OPEN_PATCH_FILE;
   }
 
-#ifdef XP_WIN
+#ifdef WNT
   if (!shouldTruncate) {
     fseek(ofile, 0, SEEK_SET);
   }
@@ -1802,7 +1801,7 @@ PatchIfFile::Finish(int status)
 
 //-----------------------------------------------------------------------------
 
-#ifdef XP_WIN
+#ifdef WNT
 #include "nsWindowsRestart.cpp"
 #include "nsWindowsHelpers.h"
 #include "uachelper.h"
@@ -1827,9 +1826,9 @@ LaunchCallbackApp(const NS_tchar *workingDir,
 
 #if defined(USE_EXECV)
   execv(argv[0], argv);
-#elif defined(XP_MACOSX)
+#elif defined(MACOSX)
   LaunchChild(argc, argv);
-#elif defined(XP_WIN)
+#elif defined(WNT)
   // Do not allow the callback to run when running an update through the
   // service as session 0.  The unelevated updater.exe will do the launching.
   if (!usingService) {
@@ -1915,7 +1914,7 @@ IsUpdateStatusPendingService()
 }
 #endif
 
-#ifdef XP_WIN
+#ifdef WNT
 /*
  * Read the update.status file and sets isSuccess to true if
  * the status is set to succeeded.
@@ -1956,18 +1955,18 @@ static int
 CopyInstallDirToDestDir()
 {
   // These files should not be copied over to the updated app
-#ifdef XP_WIN
+#ifdef WNT
 #define SKIPLIST_COUNT 3
-#elif XP_MACOSX
+#elif MACOSX
 #define SKIPLIST_COUNT 0
 #else
 #define SKIPLIST_COUNT 2
 #endif
   copy_recursive_skiplist<SKIPLIST_COUNT> skiplist;
-#ifndef XP_MACOSX
+#ifndef MACOSX
   skiplist.append(0, gInstallDirPath, NS_T("updated"));
   skiplist.append(1, gInstallDirPath, NS_T("updates/0"));
-#ifdef XP_WIN
+#ifdef WNT
   skiplist.append(2, gInstallDirPath, NS_T("updated.update_in_progress.lock"));
 #endif
 #endif
@@ -1989,11 +1988,11 @@ ProcessReplaceRequest()
   // 2. Move newDir to destDir.  In case of failure, revert step 1 and abort.
   // 3. Delete tmpDir (or defer it to the next reboot).
 
-#ifdef XP_MACOSX
+#ifdef MACOSX
   NS_tchar destDir[MAXPATHLEN];
   NS_tsnprintf(destDir, sizeof(destDir)/sizeof(destDir[0]),
                NS_T("%s/Contents"), gInstallDirPath);
-#elif XP_WIN
+#elif WNT
   // Windows preserves the case of the file/directory names.  We use the
   // GetLongPathName API in order to get the correct case for the directory
   // name, so that if the user has used a different case when launching the
@@ -2013,7 +2012,7 @@ ProcessReplaceRequest()
 
   NS_tchar newDir[MAXPATHLEN];
   NS_tsnprintf(newDir, sizeof(newDir)/sizeof(newDir[0]),
-#ifdef XP_MACOSX
+#ifdef MACOSX
                NS_T("%s/Contents"),
                gWorkingDirPath);
 #else
@@ -2030,7 +2029,7 @@ ProcessReplaceRequest()
   LOG(("Begin moving destDir (" LOG_S ") to tmpDir (" LOG_S ")",
        destDir, tmpDir));
   int rv = rename_file(destDir, tmpDir, true);
-#ifdef XP_WIN
+#ifdef WNT
   // On Windows, if Firefox is launched using the shortcut, it will hold a handle
   // to its installation directory open, which might not get released in time.
   // Therefore we wait a little bit here to see if the handle is released.
@@ -2057,7 +2056,7 @@ ProcessReplaceRequest()
   LOG(("Begin moving newDir (" LOG_S ") to destDir (" LOG_S ")",
        newDir, destDir));
   rv = rename_file(newDir, destDir, true);
-#ifdef XP_MACOSX
+#ifdef MACOSX
   if (rv) {
     LOG(("Moving failed. Begin copying newDir (" LOG_S ") to destDir (" LOG_S ")",
          newDir, destDir));
@@ -2082,7 +2081,7 @@ ProcessReplaceRequest()
   rv = ensure_remove_recursive(tmpDir, true);
   if (rv) {
     LOG(("Removing tmpDir failed, err: %d", rv));
-#ifdef XP_WIN
+#ifdef WNT
     NS_tchar deleteDir[MAXPATHLEN];
     NS_tsnprintf(deleteDir, sizeof(deleteDir)/sizeof(deleteDir[0]),
                  NS_T("%s\\%s"), destDir, DELETE_DIR);
@@ -2096,7 +2095,7 @@ ProcessReplaceRequest()
 #endif
   }
 
-#ifdef XP_MACOSX
+#ifdef MACOSX
   // On OS X, we we need to remove the staging directory after its Contents
   // directory has been moved.
   NS_tchar updatedAppDir[MAXPATHLEN];
@@ -2110,7 +2109,7 @@ ProcessReplaceRequest()
   return 0;
 }
 
-#ifdef XP_WIN
+#ifdef WNT
 static void
 WaitForServiceFinishThread(void *param)
 {
@@ -2206,7 +2205,7 @@ UpdateThreadFunc(void *param)
 
 #ifdef MOZ_VERIFY_MAR_SIGNATURE
     if (rv == OK) {
-#ifdef XP_WIN
+#ifdef WNT
       HKEY baseKey = nullptr;
       wchar_t valueName[] = L"Image Path";
       wchar_t rasenh[] = L"rsaenh.dll";
@@ -2232,7 +2231,7 @@ UpdateThreadFunc(void *param)
       }
 #endif
       rv = gArchiveReader.VerifySignature();
-#ifdef XP_WIN
+#ifdef WNT
       if (baseKey) {
         if (reset) {
           RegSetValueExW(baseKey, valueName, 0, REG_SZ,
@@ -2249,7 +2248,7 @@ UpdateThreadFunc(void *param)
         NS_tchar updateSettingsPath[MAX_TEXT_LEN];
         NS_tsnprintf(updateSettingsPath,
                      sizeof(updateSettingsPath) / sizeof(updateSettingsPath[0]),
-#ifdef XP_MACOSX
+#ifdef MACOSX
                      NS_T("%s/Contents/Resources/update-settings.ini"),
 #else
                      NS_T("%s/update-settings.ini"),
@@ -2311,7 +2310,7 @@ UpdateThreadFunc(void *param)
     if (rv) {
       LOG(("failed: %d", rv));
     } else {
-#ifdef XP_MACOSX
+#ifdef MACOSX
       // If the update was successful we need to update the timestamp on the
       // top-level Mac OS X bundle directory so that Mac OS X's Launch Services
       // picks up any major changes when the bundle is updated.
@@ -2349,7 +2348,7 @@ int NS_main(int argc, NS_tchar **argv)
   }
 #endif
 
-#if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(XP_WIN) && !defined(XP_MACOSX)
+#if defined(MOZ_VERIFY_MAR_SIGNATURE) && !defined(WNT) && !defined(MACOSX)
   // On Windows and Mac we rely on native APIs to do verifications so we don't
   // need to initialize NSS at all there.
   // Otherwise, minimize the amount of NSS we depend on by avoiding all the NSS
@@ -2396,7 +2395,7 @@ int NS_main(int argc, NS_tchar **argv)
     *slash = NS_T('\0');
   }
 
-#ifdef XP_WIN
+#ifdef WNT
   bool useService = false;
   bool testOnlyFallbackKeyExists = false;
   bool noServiceFallback = EnvHasValue("MOZ_NO_SERVICE_FALLBACK");
@@ -2432,13 +2431,13 @@ int NS_main(int argc, NS_tchar **argv)
 #endif
 
   // If there is a PID specified and it is not '0' then wait for the process to exit.
-#ifdef XP_WIN
+#ifdef WNT
   __int64 pid = 0;
 #else
   int pid = 0;
 #endif
   if (argc > 4) {
-#ifdef XP_WIN
+#ifdef WNT
     pid = _wtoi64(argv[4]);
 #else
     pid = atoi(argv[4]);
@@ -2473,10 +2472,10 @@ int NS_main(int argc, NS_tchar **argv)
   if (sReplaceRequest) {
     // If we're attempting to replace the application, try to append to the
     // log generated when staging the staged update.
-#ifdef XP_WIN
+#ifdef WNT
     NS_tchar* logDir = gPatchDirPath;
 #else
-#ifdef XP_MACOSX
+#ifdef MACOSX
     NS_tchar* logDir = gPatchDirPath;
 #else
     NS_tchar logDir[MAXPATHLEN];
@@ -2536,7 +2535,7 @@ int NS_main(int argc, NS_tchar **argv)
   }
 #endif
 
-#ifdef XP_WIN
+#ifdef WNT
   if (pid > 0) {
     HANDLE parent = OpenProcess(SYNCHRONIZE, false, (DWORD) pid);
     // May return nullptr if the parent process has already gone away.
@@ -2556,7 +2555,7 @@ int NS_main(int argc, NS_tchar **argv)
 #endif
 
   if (sReplaceRequest) {
-#ifdef XP_WIN
+#ifdef WNT
     // On Windows, the current working directory of the process should be changed
     // so that it's not locked.
     NS_tchar sysDir[MAX_PATH + 1] = { L'\0' };
@@ -2571,7 +2570,7 @@ int NS_main(int argc, NS_tchar **argv)
   // argument prior to callbackIndex is the working directory.
   const int callbackIndex = 6;
 
-#if defined(XP_WIN)
+#if defined(WNT)
   sUsingService = EnvHasValue("MOZ_USING_SERVICE");
   putenv(const_cast<char*>("MOZ_USING_SERVICE="));
   // lastFallbackError keeps track of the last error for the service not being
@@ -2914,7 +2913,7 @@ int NS_main(int argc, NS_tchar **argv)
     }
   }
 
-#ifdef XP_WIN
+#ifdef WNT
   // For replace requests, we don't need to do any real updates, so this is not
   // necessary.
   if (!sReplaceRequest) {
@@ -3102,7 +3101,7 @@ int NS_main(int argc, NS_tchar **argv)
       NS_tmkdir(DELETE_DIR, 0755);
     }
   }
-#endif /* XP_WIN */
+#endif /* WNT */
 
   // Run update process on a background thread.  ShowProgressUI may return
   // before QuitProgressUI has been called, so wait for UpdateThreadFunc to
@@ -3115,7 +3114,7 @@ int NS_main(int argc, NS_tchar **argv)
   }
   t.Join();
 
-#ifdef XP_WIN
+#ifdef WNT
   if (argc > callbackIndex && !sReplaceRequest) {
     if (callbackFile != INVALID_HANDLE_VALUE) {
       CloseHandle(callbackFile);
@@ -3144,13 +3143,13 @@ int NS_main(int argc, NS_tchar **argv)
            "directory: " LOG_S, DELETE_DIR));
     }
   }
-#endif /* XP_WIN */
+#endif /* WNT */
 
 #if defined(MOZ_WIDGET_GONK)
   } // end the extra level of scope for the GonkAutoMounter
 #endif
 
-#ifdef XP_MACOSX
+#ifdef MACOSX
   // When the update is successful remove the precomplete file in the root of
   // the application bundle and move the distribution directory from
   // Contents/MacOS to Contents/Resources and if both exist delete the
@@ -3188,12 +3187,12 @@ int NS_main(int argc, NS_tchar **argv)
       }
     }
   }
-#endif /* XP_MACOSX */
+#endif /* MACOSX */
 
   LogFinish();
 
   if (argc > callbackIndex) {
-#if defined(XP_WIN)
+#if defined(WNT)
     if (gSucceeded) {
       // The service update will only be executed if it is already installed.
       // For first time installs of the service, the install will happen from
@@ -3211,12 +3210,12 @@ int NS_main(int argc, NS_tchar **argv)
       }
     }
     EXIT_WHEN_ELEVATED(elevatedLockFilePath, updateLockFileHandle, 0);
-#endif /* XP_WIN */
-#ifdef XP_MACOSX
+#endif /* WNT */
+#ifdef MACOSX
     if (gSucceeded) {
       LaunchMacPostProcess(gInstallDirPath);
     }
-#endif /* XP_MACOSX */
+#endif /* MACOSX */
     LaunchCallbackApp(argv[5],
                       argc - callbackIndex,
                       argv + callbackIndex,
@@ -3342,7 +3341,7 @@ ActionList::Finish(int status)
 }
 
 
-#ifdef XP_WIN
+#ifdef WNT
 int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
 {
   int rv = OK;
@@ -3649,7 +3648,7 @@ GetManifestContents(const NS_tchar *manifest)
   mbuf[ms.st_size] = '\0';
   rb = mbuf;
 
-#ifndef XP_WIN
+#ifndef WNT
   return rb;
 #else
   NS_tchar *wrb = (NS_tchar *) malloc((ms.st_size + 1) * sizeof(NS_tchar));
@@ -3675,7 +3674,7 @@ int AddPreCompleteActions(ActionList *list)
     return OK;
   }
 
-#ifdef XP_MACOSX
+#ifdef MACOSX
   NS_tchar *rb = GetManifestContents(NS_T("Contents/Resources/precomplete"));
 #else
   NS_tchar *rb = GetManifestContents(NS_T("precomplete"));
