@@ -703,6 +703,29 @@ DECLARE_OOXMLEXPORT_TEST(testTdf79639, "tdf79639.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xDrawPage->getCount());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf89890, "tdf89890.docx")
+{
+    // Numbering picture bullet was too large.
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    bool bFound = false;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "GraphicSize")
+        {
+            // Height of the graphic was too large: 4382 after import, then 2485 after roundtrip.
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(279), rProp.Value.get<awt::Size>().Height);
+            bFound = true;
+        }
+    }
+    CPPUNIT_ASSERT(bFound);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
