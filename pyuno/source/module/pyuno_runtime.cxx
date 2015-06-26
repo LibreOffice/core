@@ -964,9 +964,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
             str = "Could not load uno.py, no stacktrace available";
             if ( !e.Message.isEmpty() )
             {
-                str += OUString (" (Error loading uno.py: ");
-                str += e.Message;
-                str += OUString (")");
+                str += " (Error loading uno.py: " + e.Message + ")";
             }
         }
 
