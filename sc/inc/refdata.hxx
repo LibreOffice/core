@@ -146,6 +146,20 @@ struct ScComplexRefData
         tab if one sheet, or >=0 if more than one sheets. */
     bool ValidExternal() const;
 
+    /** Whether this references entire columns, A:A */
+    inline bool IsEntireCol() const
+    {
+        // Both row anchors must be absolute.
+        return Ref1.Row() == 0 && Ref2.Row() == MAXROW && !Ref1.IsRowRel() && !Ref2.IsRowRel();
+    }
+
+    /** Whether this references entire rows, 1:1 */
+    inline bool IsEntireRow() const
+    {
+        // Both column anchors must be absolute.
+        return Ref1.Col() == 0 && Ref2.Col() == MAXCOL && !Ref1.IsColRel() && !Ref2.IsColRel();
+    }
+
     SC_DLLPUBLIC ScRange toAbs( const ScAddress& rPos ) const;
     void SetRange( const ScRange& rRange, const ScAddress& rPos );
 
