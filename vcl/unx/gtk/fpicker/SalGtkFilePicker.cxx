@@ -918,6 +918,9 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
         frame::Desktop::create(m_xContext),
         UNO_QUERY_THROW );
 
+    GtkWindow *pParent = RunDialog::GetTransientFor();
+    if (pParent)
+        gtk_window_set_transient_for(GTK_WINDOW(m_pDialog), pParent);
     RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
     uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
     while( GTK_RESPONSE_NO == btn )
@@ -1005,7 +1008,8 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
                             gtk_window_set_title( GTK_WINDOW( dlg ),
                                 OUStringToOString(getResString(FILE_PICKER_TITLE_SAVE ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
-
+                            if (pParent)
+                                gtk_window_set_transient_for(GTK_WINDOW(dlg), pParent);
                             RunDialog* pAnotherDialog = new RunDialog(dlg, xToolkit, xDesktop);
                             uno::Reference < awt::XTopWindowListener > xAnotherLifeCycle(pAnotherDialog);
                             btn = pAnotherDialog->run();
