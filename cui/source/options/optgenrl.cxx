@@ -378,7 +378,7 @@ IMPL_LINK( SvxGeneralTabPage, ModifyHdl_Impl, Edit *, pEdit )
             rShortName.pEdit->SetText(OUString());
         }
         while ((unsigned)sShortName.getLength() < nInits)
-            sShortName += OUString(' ');
+            sShortName += " ";
         OUString sName = pEdit->GetText();
         OUString sLetter = sName.isEmpty()
             ? OUString(sal_Unicode(' ')) : sName.copy(0, 1);

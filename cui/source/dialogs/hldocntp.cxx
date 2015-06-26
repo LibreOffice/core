@@ -347,7 +347,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     OUString aStrFlags('S');
                     if ( m_pRbtEditLater->IsChecked() )
                     {
-                        aStrFlags += OUString('H');
+                        aStrFlags += "H";
                     }
                     SfxStringItem aFlags (SID_OPTIONS, aStrFlags);
 

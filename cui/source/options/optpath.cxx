@@ -63,9 +63,9 @@ using namespace svx;
 #define ITEMID_TYPE       1
 #define ITEMID_PATH       2
 
-#define POSTFIX_INTERNAL    OUString("_internal")
-#define POSTFIX_USER        OUString("_user")
-#define POSTFIX_WRITABLE    OUString("_writable")
+#define POSTFIX_INTERNAL    "_internal"
+#define POSTFIX_USER        "_user"
+#define POSTFIX_WRITABLE    "_writable"
 #define VAR_ONE             "%1"
 #define IODLG_CONFIGNAME    OUString("FilePicker_Save")
 
@@ -155,7 +155,7 @@ OUString Convert_Impl( const OUString& rValue )
         else if ( ::utl::LocalFileHelper::IsFileContent( aValue ) )
             aReturn += aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
         if ( i+1 < nCount)
-            aReturn += OUString(MULTIPATH_DELIMITER);
+            aReturn += OUStringLiteral1<MULTIPATH_DELIMITER>();
     }
 
     return aReturn;
@@ -313,7 +313,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
                 GetPathList( i, sInternal, sUser, sWritable, bReadOnly );
                 OUString sTmpPath = sUser;
                 if ( !sTmpPath.isEmpty() && !sWritable.isEmpty() )
-                    sTmpPath += OUString(MULTIPATH_DELIMITER);
+                    sTmpPath += OUStringLiteral1<MULTIPATH_DELIMITER>();
                 sTmpPath += sWritable;
                 OUString aValue( sTmpPath );
                 aValue = Convert_Impl( aValue );
@@ -434,7 +434,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
                 if ( !bFound )
                 {
                     if ( !sTemp.isEmpty() )
-                        sTemp += OUString(MULTIPATH_DELIMITER);
+                        sTemp += OUStringLiteral1<MULTIPATH_DELIMITER>();
                     sTemp += sOnePath;
                 }
             }
@@ -444,7 +444,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
             for ( i = 0; nOldCount > 0 && i < nOldCount - 1; ++i )
             {
                 if ( !sUserPath.isEmpty() )
-                    sUserPath += OUString(MULTIPATH_DELIMITER);
+                    sUserPath += OUStringLiteral1<MULTIPATH_DELIMITER>();
                 sUserPath += sTemp.getToken( i, MULTIPATH_DELIMITER );
             }
             sWritablePath = sTemp.getToken( nOldCount - 1, MULTIPATH_DELIMITER );
@@ -554,7 +554,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
 
             OUString sPath( sUser );
             if ( !sPath.isEmpty() )
-                sPath += OUString(MULTIPATH_DELIMITER);
+                sPath += OUStringLiteral1<MULTIPATH_DELIMITER>();
             sPath += sWritable;
             pMultiDlg->SetPath( sPath );
 
@@ -721,9 +721,8 @@ void SvxPathTabPage::GetPathList(
         }
 
         // load internal paths
-        OUString sProp( sCfgName );
-        sProp += POSTFIX_INTERNAL;
-        Any aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
+        Any aAny = pImpl->m_xPathSettings->getPropertyValue(
+            sCfgName + POSTFIX_INTERNAL);
         Sequence< OUString > aPathSeq;
         if ( aAny >>= aPathSeq )
         {
@@ -738,9 +737,8 @@ void SvxPathTabPage::GetPathList(
             }
         }
         // load user paths
-        sProp = sCfgName;
-        sProp += POSTFIX_USER;
-        aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
+        aAny = pImpl->m_xPathSettings->getPropertyValue(
+            sCfgName + POSTFIX_USER);
         if ( aAny >>= aPathSeq )
         {
             long i, nCount = aPathSeq.getLength();
@@ -754,17 +752,15 @@ void SvxPathTabPage::GetPathList(
             }
         }
         // then the writable path
-        sProp = sCfgName;
-        sProp += POSTFIX_WRITABLE;
-        aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
+        aAny = pImpl->m_xPathSettings->getPropertyValue(
+            sCfgName + POSTFIX_WRITABLE);
         OUString sWritablePath;
         if ( aAny >>= sWritablePath )
             _rWritablePath = sWritablePath;
 
         // and the readonly flag
-        sProp = sCfgName;
         Reference< XPropertySetInfo > xInfo = pImpl->m_xPathSettings->getPropertySetInfo();
-        Property aProp = xInfo->getPropertyByName( sProp );
+        Property aProp = xInfo->getPropertyByName(sCfgName);
         _rReadOnly = ( ( aProp.Attributes & PropertyAttribute::READONLY ) == PropertyAttribute::READONLY );
     }
     catch( const Exception& )
@@ -796,16 +792,14 @@ void SvxPathTabPage::SetPathList(
         OUString* pArray = aPathSeq.getArray();
         for ( sal_uInt16 i = 0; i < nCount; ++i )
             pArray[i] = _rUserPath.getToken( i, cDelim );
-        OUString sProp( sCfgName );
-        sProp += POSTFIX_USER;
         Any aValue = makeAny( aPathSeq );
-        pImpl->m_xPathSettings->setPropertyValue( sProp, aValue );
+        pImpl->m_xPathSettings->setPropertyValue(
+            sCfgName + POSTFIX_USER, aValue);
 
         // then the writable path
         aValue = makeAny( OUString( _rWritablePath ) );
-        sProp = sCfgName;
-        sProp += POSTFIX_WRITABLE;
-        pImpl->m_xPathSettings->setPropertyValue( sProp, aValue );
+        pImpl->m_xPathSettings->setPropertyValue(
+            sCfgName + POSTFIX_WRITABLE, aValue);
     }
     catch( const Exception& e )
     {
