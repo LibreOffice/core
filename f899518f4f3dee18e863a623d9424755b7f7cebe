@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_d81139b1",
+        "filename": "sc/inc/columnspanset.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-06-26T08:47:38Z",
+      "side": 1,
+      "message": "I didn\u0027t understand what you meant, but after processing your other comments, the problem had disappeared.",
+      "parentUuid": "1a54edaf_b70d7039",
+      "revId": "f899518f4f3dee18e863a623d9424755b7f7cebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_5713dc5c",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2015-06-19T13:16:23Z",
       "side": 1,
       "message": "This needs also to check if aFunc.getFirst() is not zero, and only then reset bNull.\n\nBut, actually we could get rid of bNull and its handling if we only used fMem everywhere and do\n\n if (fMem)\n     mfSum +\u003d aFunc.getFirst() + aFunc.getRest();\n else\n {\n     fMem \u003d aFunc.getFirst();\n     mfSum +\u003d aFunc.getRest();\n }\n\nof course also similar in all places of ScInterpreter::IterateParameters()\n\n if (fMem)\n     fRes +\u003d fVal;\n else\n     fMem \u003d fVal;\n\nThe bNull is an ancient legacy where it was much faster to check a bool than a double. Nowadays it makes it more confusing to read the code.",
+      "revId": "f899518f4f3dee18e863a623d9424755b7f7cebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_783cc52f",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-06-26T08:47:38Z",
+      "side": 1,
+      "message": "Cleaned up the bNull.",
+      "parentUuid": "1a54edaf_5713dc5c",
       "revId": "f899518f4f3dee18e863a623d9424755b7f7cebe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_184911d1",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 554,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-06-26T08:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a54edaf_7710584f",
+      "revId": "f899518f4f3dee18e863a623d9424755b7f7cebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_171d6466",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2015-06-19T13:16:23Z",
       "side": 1,
       "message": "ditto",
+      "revId": "f899518f4f3dee18e863a623d9424755b7f7cebe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_38464dc0",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-06-26T08:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a54edaf_171d6466",
       "revId": "f899518f4f3dee18e863a623d9424755b7f7cebe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
