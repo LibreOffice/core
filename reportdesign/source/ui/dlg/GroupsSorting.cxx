@@ -382,7 +382,7 @@ void OFieldExpressionControl::lateInit()
         aFont.SetWeight( WEIGHT_NORMAL );
         GetDataWindow().SetFont( aFont );
 
-        // Font fuer die Ueberschriften auf Light setzen
+        // Set font of the headline to light
         aFont = GetFont();
         aFont.SetWeight( WEIGHT_LIGHT );
         SetFont(aFont);
@@ -578,7 +578,7 @@ CellController* OFieldExpressionControl::GetController( long /*nRow*/, sal_uInt1
 
 bool OFieldExpressionControl::SeekRow( long _nRow )
 {
-    // die Basisklasse braucht den Aufruf, da sie sich dort merkt, welche Zeile gepainted wird
+    // the basis class needs the call, because that's how the class knows which line will be painted
     EditBrowseBox::SeekRow(_nRow);
     m_nCurrentPos = _nRow;
     return true;

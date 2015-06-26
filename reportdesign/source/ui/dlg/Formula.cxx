@@ -40,7 +40,7 @@ namespace rptui
     using namespace ::com::sun::star;
 
 
-//      Initialisierung / gemeinsame Funktionen  fuer Dialog
+//      initialization / shared functions for the dialog
 
 
 FormulaDialog::FormulaDialog(vcl::Window* pParent
