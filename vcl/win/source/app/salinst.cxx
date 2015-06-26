@@ -223,17 +223,17 @@ void ImplSalYieldMutexAcquireWithWait()
     if ( pSalData->mnAppThreadId == nThreadId )
     {
         // wait till we get the Mutex
-        bool bAcquire = FALSE;
+        bool bAcquire = false;
         do
         {
             if ( pInst->mpSalYieldMutex->tryToAcquire() )
-                bAcquire = TRUE;
+                bAcquire = true;
             else
             {
                 pInst->mpSalWaitMutex->acquire();
                 if ( pInst->mpSalYieldMutex->tryToAcquire() )
                 {
-                    bAcquire = TRUE;
+                    bAcquire = true;
                     pInst->mpSalWaitMutex->release();
                 }
                 else
@@ -273,7 +273,7 @@ bool ImplSalYieldMutexTryToAcquire()
     if ( pInst )
         return pInst->mpSalYieldMutex->tryToAcquire();
     else
-        return FALSE;
+        return false;
 }
 
 void ImplSalYieldMutexRelease()
@@ -398,16 +398,16 @@ SalData::SalData()
     mnStockBrushCount = 0;      // count of static brushes
     mnSalObjWantKeyEvt = 0;     // KeyEvent for the SalObj hook
     mnCacheDCInUse = 0;         // count of CacheDC in use
-    mbObjClassInit = FALSE;     // is SALOBJECTCLASS initialised
-    mbInPalChange = FALSE;      // is in WM_QUERYNEWPALETTE
+    mbObjClassInit = false;     // is SALOBJECTCLASS initialised
+    mbInPalChange = false;      // is in WM_QUERYNEWPALETTE
     mnAppThreadId = 0;          // Id from Applikation-Thread
     mbScrSvrEnabled = FALSE;    // ScreenSaver enabled
     mnSageStatus = 0;           // status of Sage-DLL (DISABLE_AGENT == not available)
     mpSageEnableProc = 0;       // funktion to deactivate the system agent
     mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
     mpTempFontItem = 0;
-    mbThemeChanged = FALSE;     // true if visual theme was changed: throw away theme handles
-    mbThemeMenuSupport = FALSE;
+    mbThemeChanged = false;     // true if visual theme was changed: throw away theme handles
+    mbThemeMenuSupport = false;
 
     // init with NULL
     gdiplusToken = 0;
@@ -905,7 +905,7 @@ bool WinSalInstance::AnyInput( VclInputFlags nType )
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 void SalTimer::Start( sal_uLong nMS )
