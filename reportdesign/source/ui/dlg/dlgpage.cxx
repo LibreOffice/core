@@ -33,7 +33,7 @@ namespace rptui
 {
 /*************************************************************************
 |*
-|* Konstruktor des Tab-Dialogs: Fuegt die Seiten zum Dialog hinzu
+|* constructor of the tab dialogs: Add the page to the dialog
 |*
 \************************************************************************/
 

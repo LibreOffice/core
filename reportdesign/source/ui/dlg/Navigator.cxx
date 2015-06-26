@@ -146,7 +146,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
     AutoTimer                                                                   m_aDropActionTimer;
     Timer                                                                       m_aSynchronizeTimer;
     ImageList                                                                   m_aNavigatorImages;
-    Point                                                                       m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
+    Point                                                                       m_aTimerTriggered;      // position at which the DropTimer started
     DROP_ACTION                                                                 m_aDropActionType;
     OReportController&                                                          m_rController;
     SvTreeListEntry*                                                                m_pMasterReport;
@@ -279,7 +279,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
     {
     case CommandEventId::ContextMenu:
         {
-            // die Stelle, an der geklickt wurde
+            // the point that was clicked on
             SvTreeListEntry* ptClickedOn = NULL;
             ::Point aWhere;
             if (rEvt.IsMouseEvent())
@@ -370,7 +370,7 @@ sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
     else
     {
         bool bNeedTrigger = false;
-        // auf dem ersten Eintrag ?
+        // At the first record?
         if ((aDropPos.Y() >= 0) && (aDropPos.Y() < GetEntryHeight()))
         {
             m_aDropActionType = DA_SCROLLUP;
@@ -393,12 +393,12 @@ sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
 
         if (bNeedTrigger && (m_aTimerTriggered != aDropPos))
         {
-            // neu anfangen zu zaehlen
+            // again start counting
             m_nTimerCounter = DROP_ACTION_TIMER_INITIAL_TICKS;
-            // die Pos merken, da ich auch AcceptDrops bekomme, wenn sich die Maus gar nicht bewegt hat
+            // remember the position, because I also get AcceptDrops, if the mouse does not move
             m_aTimerTriggered = aDropPos;
-            // und den Timer los
-            if (!m_aDropActionTimer.IsActive()) // gibt es den Timer schon ?
+            // start Timer
+            if (!m_aDropActionTimer.IsActive()) // Does the Timer already exists?
             {
                 m_aDropActionTimer.SetTimeout(DROP_ACTION_TIMER_TICK_BASE);
                 m_aDropActionTimer.Start();

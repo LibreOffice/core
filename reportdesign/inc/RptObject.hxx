@@ -212,7 +212,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() SAL_OVERRIDE;
     virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
     virtual sal_uInt32 GetObjInventor() const SAL_OVERRIDE;
-    // Clone() soll eine komplette Kopie des Objektes erzeugen.
+    // Clone() should make a complete copy of the object.
     virtual OOle2Obj* Clone() const SAL_OVERRIDE;
     virtual void initializeOle() SAL_OVERRIDE;
 
