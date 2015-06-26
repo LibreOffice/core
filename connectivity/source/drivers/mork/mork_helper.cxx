@@ -44,7 +44,7 @@ int main(void)
   OUString profilePath = access->getProfilePath(::com::sun::star::mozilla::MozillaProductType_Thunderbird, defaultProfile);
   SAL_INFO("connectivity.mork", "ProfilePath: " << profilePath);
 
-  profilePath += OUString( "/abook.mab" );
+  profilePath += "/abook.mab";
 
   SAL_INFO("connectivity.mork", "abook.mab: " << profilePath);
   OString aOString = OUStringToOString( profilePath, RTL_TEXTENCODING_UTF8 );
