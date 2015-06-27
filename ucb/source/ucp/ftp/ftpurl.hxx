@@ -134,7 +134,7 @@ namespace ftp {
             throw(curl_exception, malformed_exception, std::exception);
 
         OUString ren(const OUString& NewTitle)
-            throw(curl_exception);
+            throw(curl_exception, std::exception);
 
         void del() const
             throw(curl_exception, malformed_exception);

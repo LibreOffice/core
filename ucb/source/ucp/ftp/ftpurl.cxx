@@ -724,7 +724,7 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 
 
 OUString FTPURL::ren(const OUString& NewTitle)
-    throw(curl_exception)
+    throw(curl_exception, std::exception)
 {
     CURL *curl = m_pFCP->handle();
 
