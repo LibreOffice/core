@@ -77,6 +77,7 @@ RTSDialog::RTSDialog(const PrinterInfo& rJobData, vcl::Window* pParent)
     , m_pPaperPage(NULL)
     , m_pDevicePage(NULL)
     , m_aInvalidString(VclResId(SV_PRINT_INVALID_TXT))
+    , mbDataModified(false)
 {
     get(m_pOKButton, "ok");
     get(m_pCancelButton, "cancel");
