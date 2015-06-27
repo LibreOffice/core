@@ -165,7 +165,7 @@ private:
                  bool bReplaceExisting,
                  const com::sun::star::uno::Reference<
                      com::sun::star::ucb::XCommandEnvironment >& Environment )
-        throw( ::com::sun::star::uno::Exception );
+        throw( ::com::sun::star::uno::Exception, std::exception );
 
     // Command "transfer"
     void transfer( const ::com::sun::star::ucb::TransferInfo & rArgs,
