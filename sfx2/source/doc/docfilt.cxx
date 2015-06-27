@@ -180,7 +180,8 @@ OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
 
 OUString SfxFilter::GetTypeFromStorage(
     const uno::Reference<embed::XStorage>& xStorage, bool bTemplate, OUString* pFilterName )
-        throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+        throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
+                uno::RuntimeException, std::exception )
 {
     SfxFilterMatcher aMatcher;
     OUString aName;
