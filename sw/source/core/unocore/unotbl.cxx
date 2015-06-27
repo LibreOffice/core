@@ -177,7 +177,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
                                    const SfxItemPropertySimpleEntry* pEntry,
                                    const uno::Any& aValue)
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     // special treatment for "non-items"
     switch(pEntry->nWID)
