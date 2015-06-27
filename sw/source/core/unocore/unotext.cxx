@@ -99,7 +99,7 @@ public:
             const uno::Sequence< beans::PropertyValue >&
                 rCharacterAndParagraphProperties,
             const uno::Reference< text::XTextRange >& xInsertPosition)
-        throw (lang::IllegalArgumentException, uno::RuntimeException);
+        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception);
 
     sal_Int16 ComparePositions(
             const uno::Reference<text::XTextRange>& xPos1,
@@ -1258,7 +1258,7 @@ SwXText::Impl::finishOrAppendParagraph(
         const bool bFinish,
         const uno::Sequence< beans::PropertyValue > & rProperties,
         const uno::Reference< text::XTextRange >& xInsertPosition)
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
+    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     if (!m_bIsValid)
     {
