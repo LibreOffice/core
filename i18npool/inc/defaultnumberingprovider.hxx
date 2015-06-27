@@ -89,7 +89,7 @@ private:
     com::sun::star::uno::Reference < com::sun::star::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     TransliterationImpl* translit;
     OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index )
-        throw(com::sun::star::uno::RuntimeException);
+        throw(com::sun::star::uno::RuntimeException, std::exception);
     bool SAL_CALL isScriptFlagEnabled(const OUString& aName )
         throw(com::sun::star::uno::RuntimeException);
 };
