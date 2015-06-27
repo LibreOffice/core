@@ -95,7 +95,7 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
     Sequence< Type >           m_Types;
     SbModule*                m_pMod;
     SbMethodRef getMethod( const OUString& aName ) throw (RuntimeException, std::exception);
-    SbPropertyRef getProperty( const OUString& aName ) throw (RuntimeException);
+    SbPropertyRef getProperty( const OUString& aName ) throw (RuntimeException, std::exception);
     OUString mName; // for debugging
 
 public:
@@ -398,7 +398,7 @@ SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeE
     return pMethod;
 }
 
-SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (RuntimeException)
+SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (RuntimeException, std::exception)
 {
     SbPropertyRef pProperty = NULL;
     if ( m_pMod )
