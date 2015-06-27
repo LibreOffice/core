@@ -1450,7 +1450,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 uno::Any Content::open(
                 const ucb::OpenCommandArgument2& rArg,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     if ( rArg.Mode == ucb::OpenMode::ALL ||
          rArg.Mode == ucb::OpenMode::FOLDERS ||
