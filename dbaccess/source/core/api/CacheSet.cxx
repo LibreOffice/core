@@ -148,7 +148,7 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
     }
 }
 
-void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
+void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException, std::exception)
 {
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);

@@ -719,7 +719,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     }
 }
 
-void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
+void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException, std::exception)
 {
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
