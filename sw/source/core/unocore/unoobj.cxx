@@ -2019,7 +2019,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
 void SwUnoCursorHelper::SetPropertyToDefault(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
     const OUString& rPropertyName)
-throw (beans::UnknownPropertyException, uno::RuntimeException)
+throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SwDoc & rDoc = *rPaM.GetDoc();
     SfxItemPropertySimpleEntry const*const pEntry =

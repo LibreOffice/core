@@ -205,7 +205,7 @@ namespace SwUnoCursorHelper
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     ::com::sun::star::uno::Any  GetPropertyDefault(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
