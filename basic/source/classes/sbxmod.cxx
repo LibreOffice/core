@@ -94,7 +94,7 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
     Reference< XTypeProvider > m_xAggregateTypeProv;
     Sequence< Type >           m_Types;
     SbModule*                m_pMod;
-    SbMethodRef getMethod( const OUString& aName ) throw (RuntimeException);
+    SbMethodRef getMethod( const OUString& aName ) throw (RuntimeException, std::exception);
     SbPropertyRef getProperty( const OUString& aName ) throw (RuntimeException);
     OUString mName; // for debugging
 
@@ -383,7 +383,7 @@ Any SAL_CALL DocObjectWrapper::queryInterface( const Type& aType )
     return aRet;
 }
 
-SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeException)
+SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeException, std::exception)
 {
     SbMethodRef pMethod = NULL;
     if ( m_pMod )
