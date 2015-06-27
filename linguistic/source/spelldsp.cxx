@@ -448,7 +448,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
             LanguageType nLanguage,
             const PropertyValues& rProperties,
             bool bCheckDics )
-        throw(IllegalArgumentException, RuntimeException)
+        throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 

@@ -91,7 +91,7 @@ class SpellCheckerDispatcher :
             spell_Impl(const OUString& aWord, LanguageType nLanguage,
                     const ::com::sun::star::beans::PropertyValues& aProperties,
                     bool bCheckDics)
-                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
+                throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, std::exception );
 
 public:
     explicit SpellCheckerDispatcher( LngSvcMgr &rLngSvcMgr );
