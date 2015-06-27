@@ -179,6 +179,8 @@ short BrowseBox::GetCursorHideCount() const
 
 void BrowseBox::DoShowCursor( const char * )
 {
+    if (!getDataWindow())
+        return;
     short nHiddenCount = --getDataWindow()->nCursorHidden;
     if (PaintCursorIfHiddenOnce())
     {
