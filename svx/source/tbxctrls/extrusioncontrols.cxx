@@ -397,7 +397,7 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 
 void ExtrusionDepthWindow::statusChanged(
     const ::com::sun::star::frame::FeatureStateEvent& Event
-)   throw ( ::com::sun::star::uno::RuntimeException )
+)   throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     if( Event.FeatureURL.Main.equals( msExtrusionDepth ) )
     {
