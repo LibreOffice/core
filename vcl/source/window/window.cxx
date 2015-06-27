@@ -116,7 +116,7 @@ namespace
      {
          // skip border windows, they do not carry information that
          // would help with diagnosing the problem
-         while ( pWindow && ( pWindow->GetType() == WINDOW_BORDERWINDOW ) ) {
+         while ( pWindow->GetType() == WINDOW_BORDERWINDOW ) {
              const vcl::Window* pTempWin = pWindow;
              // check if the FirstChild is not null
              if ( !pTempWin )
