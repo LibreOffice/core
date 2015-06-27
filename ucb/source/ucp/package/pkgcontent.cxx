@@ -1758,7 +1758,7 @@ void Content::insert(
 void Content::destroy(
                 bool bDeletePhysical,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
