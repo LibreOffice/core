@@ -1804,7 +1804,7 @@ void Content::destroy(
 void Content::transfer(
             const ucb::TransferInfo& rInfo,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
