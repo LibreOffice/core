@@ -175,7 +175,7 @@ private:
                     ::com::sun::star::beans::PropertyValue >& rValues,
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::uno::Exception );
+        throw( ::com::sun::star::uno::Exception, std::exception );
 
     com::sun::star::uno::Any
     open( const ::com::sun::star::ucb::OpenCommandArgument2& rArg,
