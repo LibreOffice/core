@@ -172,7 +172,7 @@ public:
         GetPropertyValuesTolerant_Impl(
             const uno::Sequence< OUString >& rPropertyNames,
             bool bDirectValuesOnly)
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
 protected:
     // SwClient
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
@@ -764,7 +764,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult >
 SwXParagraph::Impl::GetPropertyValuesTolerant_Impl(
         const uno::Sequence< OUString >& rPropertyNames,
         bool bDirectValuesOnly )
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
