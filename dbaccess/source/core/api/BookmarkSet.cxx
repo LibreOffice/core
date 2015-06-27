@@ -88,7 +88,7 @@ Sequence< sal_Int32 > SAL_CALL OBookmarkSet::deleteRows( const Sequence< Any >& 
     return Sequence< sal_Int32 >();
 }
 
-void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException, std::exception)
 {
     Reference<XRowUpdate> xUpdRow(m_xRowLocate,UNO_QUERY);
     if(!xUpdRow.is())
