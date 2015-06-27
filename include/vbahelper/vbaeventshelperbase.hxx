@@ -166,7 +166,7 @@ private:
     sal_Int32 getModuleType( const OUString& rModuleName ) throw (css::uno::RuntimeException);
 
     /** Updates the map containing paths to event handlers for a Basic module. */
-    ModulePathMap& updateModulePathMap( const OUString& rModuleName ) throw (css::uno::RuntimeException);
+    ModulePathMap& updateModulePathMap( const OUString& rModuleName ) throw (css::uno::RuntimeException, std::exception);
 
 protected:
     css::uno::Reference< css::frame::XModel > mxModel;
