@@ -3114,7 +3114,7 @@ void Content::cancelCommandExecution(
                 const DAVException & e,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv,
                 bool bWrite /* = sal_False */ )
-    throw ( uno::Exception )
+    throw ( uno::Exception, std::exception )
 {
     ucbhelper::cancelCommandExecution( MapDAVException( e, bWrite ), xEnv );
     // Unreachable
