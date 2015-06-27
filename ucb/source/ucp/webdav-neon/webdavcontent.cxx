@@ -2487,7 +2487,7 @@ void Content::insert(
 void Content::transfer(
         const ucb::TransferInfo & rArgs,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
     uno::Reference< ucb::XContentProvider >      xProvider;
