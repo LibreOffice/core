@@ -112,23 +112,33 @@ Window::Window( vcl::Window* pParent, const ResId& rResId )
 #if OSL_DEBUG_LEVEL > 0
 namespace
 {
-    OString lcl_createWindowInfo(const vcl::Window& i_rWindow)
-    {
-        // skip border windows, they don't carry information which helps diagnosing the problem
-        const vcl::Window* pWindow( &i_rWindow );
-        while ( pWindow && ( pWindow->GetType() == WINDOW_BORDERWINDOW ) )
-            pWindow = pWindow->GetWindow( GetWindowType::FirstChild );
-        if ( !pWindow )
-            pWindow = &i_rWindow;
+     OString lcl_createWindowInfo(const vcl::Window* pWindow)
+     {
+         // skip border windows, they do not carry information that
+         // would help with diagnosing the problem
+         const vcl::Window* pTempWin( pWindow );
+         while ( pTempWin && pTempWin->GetType() == WINDOW_BORDERWINDOW ) {
+             pTempWin = pTempWin->GetWindow( GetWindowType::FirstChild );
+         }
+         // check if pTempWin is not null, otherwise use the
+         // original address
+         if ( pTempWin ) {
+             pWindow = pTempWin;
+         }
 
-        OStringBuffer aErrorString;
-        aErrorString.append(' ');
-        aErrorString.append(typeid( *pWindow ).name());
-        aErrorString.append(" (");
-        aErrorString.append(OUStringToOString(pWindow->GetText(), RTL_TEXTENCODING_UTF8));
-        aErrorString.append(")");
-        return aErrorString.makeStringAndClear();
-    }
+         OStringBuffer aErrorString;
+         aErrorString.append(' ');
+         aErrorString.append(typeid( *pWindow ).name());
+         aErrorString.append("(");
+         aErrorString.append(
+                 OUStringToOString(
+                     pWindow->GetText(),
+                     RTL_TEXTENCODING_UTF8
+                     )
+                 );
+         aErrorString.append(")");
+         return aErrorString.makeStringAndClear();
+     }
 }
 #endif
 
@@ -260,12 +270,12 @@ void Window::dispose()
         if ( mpWindowImpl->mpFirstChild )
         {
             OStringBuffer aTempStr("Window (");
-            aTempStr.append(lcl_createWindowInfo(*this));
+            aTempStr.append(lcl_createWindowInfo(this));
             aTempStr.append(") with live children destroyed: ");
             pTempWin = mpWindowImpl->mpFirstChild;
             while ( pTempWin )
             {
-                aTempStr.append(lcl_createWindowInfo(*pTempWin));
+                aTempStr.append(lcl_createWindowInfo(pTempWin));
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
             OSL_FAIL( aTempStr.getStr() );
@@ -280,7 +290,7 @@ void Window::dispose()
                 if ( ImplIsRealParentPath( pTempWin ) )
                 {
                     bError = true;
-                    aErrorStr.append(lcl_createWindowInfo(*pTempWin));
+                    aErrorStr.append(lcl_createWindowInfo(pTempWin));
                 }
                 pTempWin = pTempWin->mpWindowImpl->mpNextOverlap;
             }
@@ -288,7 +298,7 @@ void Window::dispose()
             {
                 OStringBuffer aTempStr;
                 aTempStr.append("Window (");
-                aTempStr.append(lcl_createWindowInfo(*this));
+                aTempStr.append(lcl_createWindowInfo(this));
                 aTempStr.append(") with live SystemWindows destroyed: ");
                 aTempStr.append(aErrorStr.toString());
                 OSL_FAIL(aTempStr.getStr());
@@ -305,14 +315,14 @@ void Window::dispose()
             if ( ImplIsRealParentPath( pTempWin ) )
             {
                 bError = true;
-                aErrorStr.append(lcl_createWindowInfo(*pTempWin));
+                aErrorStr.append(lcl_createWindowInfo(pTempWin));
             }
             pTempWin = pTempWin->mpWindowImpl->mpFrameData->mpNextFrame;
         }
         if ( bError )
         {
             OStringBuffer aTempStr( "Window (" );
-            aTempStr.append(lcl_createWindowInfo(*this));
+            aTempStr.append(lcl_createWindowInfo(this));
             aTempStr.append(") with live SystemWindows destroyed: ");
             aTempStr.append(aErrorStr.toString());
             OSL_FAIL( aTempStr.getStr() );
@@ -322,12 +332,12 @@ void Window::dispose()
         if ( mpWindowImpl->mpFirstOverlap )
         {
             OStringBuffer aTempStr("Window (");
-            aTempStr.append(lcl_createWindowInfo(*this));
+            aTempStr.append(lcl_createWindowInfo(this));
             aTempStr.append(") with live SystemWindows destroyed: ");
             pTempWin = mpWindowImpl->mpFirstOverlap;
             while ( pTempWin )
             {
-                aTempStr.append(lcl_createWindowInfo(*pTempWin));
+                aTempStr.append(lcl_createWindowInfo(pTempWin));
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
             OSL_FAIL( aTempStr.getStr() );
@@ -348,7 +358,7 @@ void Window::dispose()
         if ( pMySysWin && pMySysWin->ImplIsInTaskPaneList( this ) )
         {
             OStringBuffer aTempStr("Window (");
-            aTempStr.append(lcl_createWindowInfo(*this));
+            aTempStr.append(lcl_createWindowInfo(this));
             aTempStr.append(") still in TaskPanelList!");
             OSL_FAIL( aTempStr.getStr() );
             Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
