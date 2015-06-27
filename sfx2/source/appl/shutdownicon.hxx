@@ -108,7 +108,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         static bool GetAutostart();
         static bool bModalMode;
 
-        void init() throw( ::com::sun::star::uno::Exception );
+        void init() throw( ::com::sun::star::uno::Exception, std::exception );
 
         OUString GetResString( int id );
         static OUString GetUrlDescription( const OUString& aUrl );

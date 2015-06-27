@@ -577,7 +577,7 @@ ShutdownIcon* ShutdownIcon::createInstance()
     return pShutdownIcon;
 }
 
-void ShutdownIcon::init() throw( ::com::sun::star::uno::Exception )
+void ShutdownIcon::init() throw( ::com::sun::star::uno::Exception, std::exception )
 {
     // access resource system and sfx only protected by solarmutex
     ::SolarMutexGuard aSolarGuard;
