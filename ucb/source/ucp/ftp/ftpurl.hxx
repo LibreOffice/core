@@ -159,7 +159,7 @@ namespace ftp {
                 malformed_exception
             );
 
-        OUString net_title() const throw(curl_exception);
+        OUString net_title() const throw(curl_exception, std::exception);
     };
 
 }

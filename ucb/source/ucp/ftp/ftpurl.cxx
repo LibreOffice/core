@@ -515,7 +515,7 @@ std::vector<FTPDirentry> FTPURL::list(
 
 
 OUString FTPURL::net_title() const
-    throw(curl_exception)
+    throw(curl_exception, std::exception)
 {
     CURL *curl = m_pFCP->handle();
 
