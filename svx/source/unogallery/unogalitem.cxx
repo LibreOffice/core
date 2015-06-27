@@ -256,7 +256,8 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
            beans::PropertyVetoException,
            lang::IllegalArgumentException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           uno::RuntimeException,
+           std::exception)
 {
     const SolarMutexGuard aGuard;
 
