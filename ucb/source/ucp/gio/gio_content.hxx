@@ -99,7 +99,7 @@ private:
         bool bReplaceExisting, const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
             throw( com::sun::star::uno::Exception );
 
-    void destroy( bool bDeletePhysical ) throw( com::sun::star::uno::Exception );
+    void destroy( bool bDeletePhysical ) throw( com::sun::star::uno::Exception, std::exception );
 
     static void copyData( com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xIn,
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOut );

@@ -1020,7 +1020,7 @@ uno::Any SAL_CALL Content::execute(
 }
 
 void Content::destroy( bool bDeletePhysical )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     uno::Reference< ucb::XContent > xThis = this;
 
