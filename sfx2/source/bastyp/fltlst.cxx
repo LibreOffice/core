@@ -97,7 +97,7 @@ SfxFilterListener::~SfxFilterListener()
 {
 }
 
-void SAL_CALL SfxFilterListener::refreshed( const lang::EventObject& aSource ) throw( uno::RuntimeException )
+void SAL_CALL SfxFilterListener::refreshed( const lang::EventObject& aSource ) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Reference< util::XRefreshable > xContainer( aSource.Source, uno::UNO_QUERY );
