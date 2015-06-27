@@ -93,7 +93,7 @@ private:
 
     void transfer( const com::sun::star::ucb::TransferInfo& rTransferInfo,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
-            throw( com::sun::star::uno::Exception );
+            throw( com::sun::star::uno::Exception, std::exception );
 
     void insert( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream > & xInputStream,
         bool bReplaceExisting, const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
