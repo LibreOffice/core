@@ -159,7 +159,7 @@ public:
         GetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames)
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-                uno::RuntimeException);
+                uno::RuntimeException, std::exception);
 
     //UUUU
     void GetSinglePropertyValue_Impl(
@@ -546,7 +546,7 @@ throw(uno::RuntimeException)
 uno::Sequence< uno::Any > SwXParagraph::Impl::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException)
+    uno::RuntimeException, std::exception)
 {
     SwTextNode & rTextNode(GetTextNodeOrThrow());
 
