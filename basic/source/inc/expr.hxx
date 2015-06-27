@@ -20,6 +20,8 @@
 #ifndef INCLUDED_BASIC_SOURCE_INC_EXPR_HXX
 #define INCLUDED_BASIC_SOURCE_INC_EXPR_HXX
 
+#include <memory>
+
 #include "opcodes.hxx"
 #include "token.hxx"
 
@@ -95,15 +97,14 @@ class SbiExprNode {                  // operators (and operands)
         SbVar  aVar;                // or variable
     };
     OUString aStrVal;               // #i59791/#i45570 Store string directly
-    SbiExprNode* pLeft;             // right branch
-    SbiExprNode* pRight;            // right branch (NULL for unary ops)
+    std::unique_ptr<SbiExprNode> pLeft; // left branch
+    std::unique_ptr<SbiExprNode> pRight; // right branch (NULL for unary ops)
     SbiExprNode* pWithParent;       // node, whose member is "this per with"
-    SbiCodeGen*  pGen;              // code-generator
     SbiNodeType  eNodeType;
     SbxDataType eType;
     SbiToken     eTok;
     bool  bError;                   // true: error
-    void  FoldConstants();
+    void  FoldConstants(SbiParser*);
     void  CollectBits();            // converting numbers to strings
     bool  IsOperand()
         { return eNodeType != SbxNODE && eNodeType != SbxTYPEOF && eNodeType != SbxNEW; }
@@ -113,16 +114,16 @@ class SbiExprNode {                  // operators (and operands)
         { return eNodeType == SbxNEW; }
     bool  IsNumber();
     bool  IsLvalue();               // true, if usable as Lvalue
-    void  GenElement( SbiOpcode );
-    void  BaseInit( SbiParser* p ); // help function for Ctor, from 17.12.95
+    void  GenElement( SbiCodeGen&, SbiOpcode );
+
 public:
     SbiExprNode();
-    SbiExprNode( SbiParser*, double, SbxDataType );
-    SbiExprNode( SbiParser*, const OUString& );
-    SbiExprNode( SbiParser*, const SbiSymDef&, SbxDataType, SbiExprList* = NULL );
-    SbiExprNode( SbiParser*, SbiExprNode*, SbiToken, SbiExprNode* );
-    SbiExprNode( SbiParser*, SbiExprNode*, sal_uInt16 );    // #120061 TypeOf
-    SbiExprNode( SbiParser*, sal_uInt16 );                  // new <type>
+    SbiExprNode( double, SbxDataType );
+    SbiExprNode( const OUString& );
+    SbiExprNode( const SbiSymDef&, SbxDataType, SbiExprList* = NULL );
+    SbiExprNode( SbiExprNode*, SbiToken, SbiExprNode* );
+    SbiExprNode( SbiExprNode*, sal_uInt16 );    // #120061 TypeOf
+    SbiExprNode( sal_uInt16 );                  // new <type>
     virtual ~SbiExprNode();
 
     bool IsValid()                  { return !bError; }
@@ -146,9 +147,9 @@ public:
     SbiExprList* GetParameters()    { return aVar.pPar; }
     SbiExprListVector* GetMoreParameters()  { return aVar.pvMorePar; }
 
-    void Optimize();                // tree matching
+    void Optimize(SbiParser*);                // tree matching
 
-    void Gen( RecursiveMode eRecMode = UNDEFINED ); // giving out a node
+    void Gen( SbiCodeGen& rGen, RecursiveMode eRecMode = UNDEFINED ); // giving out a node
 };
 
 class SbiExpression {

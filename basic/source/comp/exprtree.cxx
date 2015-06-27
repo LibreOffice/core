@@ -40,7 +40,7 @@ SbiExpression::SbiExpression( SbiParser* p, SbiExprType t,
     pExpr = (t != SbSTDEXPR ) ? Term( pKeywordSymbolInfo ) : Boolean();
     if( t != SbSYMBOL )
     {
-        pExpr->Optimize();
+        pExpr->Optimize(pParser);
     }
     if( t == SbLVALUE && !pExpr->IsLvalue() )
     {
@@ -60,8 +60,8 @@ SbiExpression::SbiExpression( SbiParser* p, double n, SbxDataType t )
     eCurExpr = SbOPERAND;
     m_eMode = EXPRMODE_STANDARD;
     pNext = NULL;
-    pExpr = new SbiExprNode( pParser, n, t );
-    pExpr->Optimize();
+    pExpr = new SbiExprNode( n, t );
+    pExpr->Optimize(pParser);
 }
 
 SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPar )
@@ -72,7 +72,7 @@ SbiExpression::SbiExpression( SbiParser* p, const SbiSymDef& r, SbiExprList* pPa
     eCurExpr = SbOPERAND;
     m_eMode = EXPRMODE_STANDARD;
     pNext = NULL;
-    pExpr = new SbiExprNode( pParser, r, SbxVARIANT, pPar );
+    pExpr = new SbiExprNode( r, SbxVARIANT, pPar );
 }
 
 SbiExpression::~SbiExpression()
@@ -192,7 +192,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         if( !pNd )
         {
             pParser->Error( SbERR_UNEXPECTED, DOT );
-            pNd = new SbiExprNode( pParser, 1.0, SbxDOUBLE );
+            pNd = new SbiExprNode( 1.0, SbxDOUBLE );
         }
         return pNd;
     }
@@ -212,7 +212,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     if( eNextTok == ASSIGN )
     {
         pParser->UnlockColumn();
-        return new SbiExprNode( pParser, aSym );
+        return new SbiExprNode( aSym );
     }
     // no keywords allowed from here on!
     if( SbiTokenizer::IsKwd( eTok ) )
@@ -311,11 +311,11 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             delete pvMoreParLcl;
             if( pConst->GetType() == SbxSTRING )
             {
-                return new SbiExprNode( pParser, pConst->GetString() );
+                return new SbiExprNode( pConst->GetString() );
             }
             else
             {
-                return new SbiExprNode( pParser, pConst->GetValue(), pConst->GetType() );
+                return new SbiExprNode( pConst->GetValue(), pConst->GetType() );
             }
         }
 
@@ -366,7 +366,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
             }
         }
     }
-    SbiExprNode* pNd = new SbiExprNode( pParser, *pDef, eType );
+    SbiExprNode* pNd = new SbiExprNode( *pDef, eType );
     if( !pPar )
     {
         pPar = new SbiParameters( pParser,false,false );
@@ -473,7 +473,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
         pDef->SetType( eType );
     }
 
-    SbiExprNode* pNd = new SbiExprNode( pParser, *pDef, eType );
+    SbiExprNode* pNd = new SbiExprNode( *pDef, eType );
     pNd->aVar.pPar = pPar;
     pNd->aVar.pvMorePar = pvMoreParLcl;
     if( bObj )
@@ -518,18 +518,18 @@ SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
         if( !bUsedForTypeOf && pParser->IsVBASupportOn() && pParser->Peek() == IS )
         {
             eTok = pParser->Next();
-            pRes = new SbiExprNode( pParser, pRes, eTok, Like() );
+            pRes = new SbiExprNode( pRes, eTok, Like() );
         }
         break;
     case DOT:   // .with
         pRes = Term(); break;
     case NUMBER:
         pParser->Next();
-        pRes = new SbiExprNode( pParser, pParser->GetDbl(), pParser->GetType() );
+        pRes = new SbiExprNode( pParser->GetDbl(), pParser->GetType() );
         break;
     case FIXSTRING:
         pParser->Next();
-        pRes = new SbiExprNode( pParser, pParser->GetSym() ); break;
+        pRes = new SbiExprNode( pParser->GetSym() ); break;
     case LPAREN:
         pParser->Next();
         if( nParenLevel == 0 && m_eMode == EXPRMODE_LPAREN_PENDING && pParser->Peek() == RPAREN )
@@ -580,7 +580,7 @@ SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
         else
         {
             pParser->Next();
-            pRes = new SbiExprNode( pParser, 1.0, SbxDOUBLE );
+            pRes = new SbiExprNode( 1.0, SbxDOUBLE );
             pParser->Error( SbERR_UNEXPECTED, eTok );
         }
         break;
@@ -597,7 +597,7 @@ SbiExprNode* SbiExpression::Unary()
         case MINUS:
             eTok = NEG;
             pParser->Next();
-            pNd = new SbiExprNode( pParser, Unary(), eTok, NULL );
+            pNd = new SbiExprNode( Unary(), eTok, NULL );
             break;
         case NOT:
             if( pParser->IsVBASupportOn() )
@@ -607,7 +607,7 @@ SbiExprNode* SbiExpression::Unary()
             else
             {
                 pParser->Next();
-                pNd = new SbiExprNode( pParser, Unary(), eTok, NULL );
+                pNd = new SbiExprNode( Unary(), eTok, NULL );
             }
             break;
         case PLUS:
@@ -623,7 +623,7 @@ SbiExprNode* SbiExpression::Unary()
             OUString aDummy;
             SbiSymDef* pTypeDef = new SbiSymDef( aDummy );
             pParser->TypeDecl( *pTypeDef, true );
-            pNd = new SbiExprNode( pParser, pObjNode, pTypeDef->GetTypeId() );
+            pNd = new SbiExprNode( pObjNode, pTypeDef->GetTypeId() );
             break;
         }
         case NEW:
@@ -632,7 +632,7 @@ SbiExprNode* SbiExpression::Unary()
             OUString aStr;
             SbiSymDef* pTypeDef = new SbiSymDef( aStr );
             pParser->TypeDecl( *pTypeDef, true );
-            pNd = new SbiExprNode( pParser, pTypeDef->GetTypeId() );
+            pNd = new SbiExprNode( pTypeDef->GetTypeId() );
             break;
         }
         default:
@@ -649,7 +649,7 @@ SbiExprNode* SbiExpression::Exp()
         while( pParser->Peek() == EXPON )
         {
             SbiToken eTok = pParser->Next();
-            pNd = new SbiExprNode( pParser, pNd, eTok, Unary() );
+            pNd = new SbiExprNode( pNd, eTok, Unary() );
         }
     }
     return pNd;
@@ -668,7 +668,7 @@ SbiExprNode* SbiExpression::MulDiv()
                 break;
             }
             eTok = pParser->Next();
-            pNd = new SbiExprNode( pParser, pNd, eTok, Exp() );
+            pNd = new SbiExprNode( pNd, eTok, Exp() );
         }
     }
     return pNd;
@@ -682,7 +682,7 @@ SbiExprNode* SbiExpression::IntDiv()
         while( pParser->Peek() == IDIV )
         {
             SbiToken eTok = pParser->Next();
-            pNd = new SbiExprNode( pParser, pNd, eTok, MulDiv() );
+            pNd = new SbiExprNode( pNd, eTok, MulDiv() );
         }
     }
     return pNd;
@@ -696,7 +696,7 @@ SbiExprNode* SbiExpression::Mod()
         while( pParser->Peek() == MOD )
         {
             SbiToken eTok = pParser->Next();
-            pNd = new SbiExprNode( pParser, pNd, eTok, IntDiv() );
+            pNd = new SbiExprNode( pNd, eTok, IntDiv() );
         }
     }
     return pNd;
@@ -715,7 +715,7 @@ SbiExprNode* SbiExpression::AddSub()
                 break;
             }
             eTok = pParser->Next();
-            pNd = new SbiExprNode( pParser, pNd, eTok, Mod() );
+            pNd = new SbiExprNode( pNd, eTok, Mod() );
         }
     }
     return pNd;
@@ -734,7 +734,7 @@ SbiExprNode* SbiExpression::Cat()
                 break;
             }
             eTok = pParser->Next();
-            pNd = new SbiExprNode( pParser, pNd, eTok, AddSub() );
+            pNd = new SbiExprNode( pNd, eTok, AddSub() );
         }
     }
     return pNd;
@@ -759,7 +759,7 @@ SbiExprNode* SbiExpression::Comp()
                 break;
             }
             eTok = pParser->Next();
-            pNd = new SbiExprNode( pParser, pNd, eTok, Cat() );
+            pNd = new SbiExprNode( pNd, eTok, Cat() );
             nCount++;
         }
     }
@@ -775,7 +775,7 @@ SbiExprNode* SbiExpression::VBA_Not()
     if( eTok == NOT )
     {
         pParser->Next();
-        pNd = new SbiExprNode( pParser, VBA_Not(), eTok, NULL );
+        pNd = new SbiExprNode( VBA_Not(), eTok, NULL );
     }
     else
     {
@@ -793,7 +793,7 @@ SbiExprNode* SbiExpression::Like()
         while( pParser->Peek() == LIKE )
         {
             SbiToken eTok = pParser->Next();
-            pNd = new SbiExprNode( pParser, pNd, eTok, Comp() ), nCount++;
+            pNd = new SbiExprNode( pNd, eTok, Comp() ), nCount++;
         }
         // multiple operands in a row does not work
         if( nCount > 1 && !pParser->IsVBASupportOn() )
@@ -820,7 +820,7 @@ SbiExprNode* SbiExpression::Boolean()
                 break;
             }
             eTok = pParser->Next();
-            pNd = new SbiExprNode( pParser, pNd, eTok, Like() );
+            pNd = new SbiExprNode( pNd, eTok, Like() );
         }
     }
     return pNd;
@@ -871,7 +871,7 @@ SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
             if( bIsBool )
             {
                 delete pExpr;
-                pExpr = new SbiExprNode( pParser, (bBoolVal ? SbxTRUE : SbxFALSE), SbxINTEGER );
+                pExpr = new SbiExprNode( (bBoolVal ? SbxTRUE : SbxFALSE), SbxINTEGER );
                 eType = pExpr->GetType();
                 nVal = pExpr->nVal;
             }
