@@ -240,7 +240,7 @@ SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::
     }
 }
 
-uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) throw (uno::RuntimeException, script::BasicErrorException)
+uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) throw (uno::RuntimeException, script::BasicErrorException, std::exception)
 {
     mxModel->lockControllers();
 
