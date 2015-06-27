@@ -193,7 +193,7 @@ private:
     void destroy( bool bDeletePhysical,
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::uno::Exception );
+        throw( ::com::sun::star::uno::Exception, std::exception );
 
     void transfer( const ::com::sun::star::ucb::TransferInfo& rInfo,
                    const ::com::sun::star::uno::Reference<
