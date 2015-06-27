@@ -1875,7 +1875,7 @@ SwUnoCursorHelper::GetPropertyStates(
             SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
             const uno::Sequence< OUString >& rPropertyNames,
             const SwGetPropertyStatesCaller eCaller)
-throw (beans::UnknownPropertyException, uno::RuntimeException)
+throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     const OUString* pNames = rPropertyNames.getConstArray();
     uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());

@@ -192,7 +192,8 @@ namespace SwUnoCursorHelper
             const SwGetPropertyStatesCaller eCaller =
                 SW_PROPERTY_STATE_CALLER_DEFAULT)
         throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
     ::com::sun::star::beans::PropertyState GetPropertyState(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
