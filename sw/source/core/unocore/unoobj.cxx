@@ -1732,7 +1732,7 @@ uno::Any SwUnoCursorHelper::GetPropertyValue(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
     const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
     SfxItemPropertySimpleEntry const*const pEntry =
