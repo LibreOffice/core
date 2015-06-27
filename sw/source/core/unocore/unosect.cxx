@@ -145,7 +145,7 @@ public:
             const uno::Sequence< uno::Any >& aValues)
         throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 lang::IllegalArgumentException, lang::WrappedTargetException,
-                uno::RuntimeException);
+                uno::RuntimeException, std::exception);
     uno::Sequence< uno::Any > SAL_CALL
         GetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames)
@@ -550,7 +550,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
     const uno::Sequence< uno::Any >& rValues)
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     if(rPropertyNames.getLength() != rValues.getLength())
     {
