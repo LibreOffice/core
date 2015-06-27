@@ -146,7 +146,7 @@ void StyleLBoxString::Paint(
             }
             else if (bInit)
             {
-                SvLBoxString::InitViewData( const_cast<SvTreeListBox*>(&rDevice), const_cast<SvTreeListEntry*>(&rEntry), mpViewData);
+                SvLBoxString::InitViewData( &rDevice, const_cast<SvTreeListEntry*>(&rEntry), mpViewData);
             }
         }
     }
