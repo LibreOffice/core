@@ -2311,7 +2311,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         SwStyleBase_Impl& rBase,
                         SfxStyleSheetBase* pBase,
                         SfxStyleFamily eFamily,
-                        SwDoc *pDoc) throw(uno::RuntimeException)
+                        SwDoc *pDoc) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
 
