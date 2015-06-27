@@ -1197,7 +1197,7 @@ OUString AccessibleShape::GetFullAccessibleName (AccessibleShape *shape)
 
 OUString
     AccessibleShape::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     DescriptionGenerator aDG (mxShape);
     aDG.Initialize (CreateAccessibleBaseName());

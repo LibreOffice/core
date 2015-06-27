@@ -316,7 +316,7 @@ protected:
     */
     virtual OUString
         CreateAccessibleDescription()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     void FireEvent (const ::com::sun::star::accessibility::AccessibleEventObject& aEvent);
 

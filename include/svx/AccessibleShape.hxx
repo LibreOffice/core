@@ -447,7 +447,7 @@ protected:
     /// Create a description string that contains the accessible description.
     virtual OUString
         CreateAccessibleDescription()
-        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     OUString
        GetFullAccessibleName(AccessibleShape *shape)
        throw (::com::sun::star::uno::RuntimeException);
