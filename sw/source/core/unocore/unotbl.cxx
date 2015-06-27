@@ -2045,7 +2045,7 @@ uno::Reference<text::XTextTableCursor> SwXTextTable::createCursorByCellName(cons
 }
 
 void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     // attachToRange must only be called once
     if(!bIsDescriptor)  /* already attached ? */
