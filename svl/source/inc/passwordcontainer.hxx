@@ -281,7 +281,7 @@ bool createUrlRecord(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 
     OUString GetMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
-                                                        throw(::com::sun::star::uno::RuntimeException);
+                                                        throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     void UpdateVector( const OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, bool writeFile )
                                                         throw(::com::sun::star::uno::RuntimeException);
