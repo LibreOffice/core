@@ -175,7 +175,7 @@ private:
 
     // Command "delete"
     void destroy( bool bDeletePhysical )
-        throw( ::com::sun::star::uno::Exception );
+        throw( ::com::sun::star::uno::Exception, std::exception );
 
     // Command "lock"
     void lock( const com::sun::star::uno::Reference<

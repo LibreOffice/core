@@ -2719,7 +2719,7 @@ void Content::transfer(
 
 
 void Content::destroy( bool bDeletePhysical )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
     uno::Reference< ucb::XContent > xThis = this;
