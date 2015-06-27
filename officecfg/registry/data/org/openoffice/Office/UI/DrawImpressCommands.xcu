@@ -601,7 +601,7 @@
           <value xml:lang="en-US">Format Page/Slide</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">~Page...</value>
+          <value xml:lang="en-US">~Page/Slide Properties...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
