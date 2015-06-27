@@ -2692,7 +2692,7 @@ void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMe
     }
 }
 
-void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException )
+void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException, std::exception )
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::DataSourcePropertyChanged");
     SolarMutexGuard aGuard;
