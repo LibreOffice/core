@@ -348,7 +348,7 @@
                     <menu:menuitem menu:id=".uno:SaveGraphic"/>
                 </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:FormatObjectMenu">
+            <menu:menu menu:id=".uno:ObjectMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:TransformDialog"/>
                     <menu:menuitem menu:id=".uno:FormatLine"/>
