@@ -2195,7 +2195,7 @@ SbObjModule::~SbObjModule()
 }
 
 void
-SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException )
+SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException, std::exception )
 {
     SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,static_cast<SbxVariable*>(pDocObject));
     if ( pUnoObj && pUnoObj->getUnoAny() == aObj ) // object is equal, nothing to do

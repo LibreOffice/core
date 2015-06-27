@@ -45,7 +45,7 @@ public:
 
     using SbxValue::GetObject;
     SbxVariable* GetObject();
-    void SetUnoObject( const com::sun::star::uno::Any& aObj )throw ( com::sun::star::uno::RuntimeException ) ;
+    void SetUnoObject( const com::sun::star::uno::Any& aObj )throw ( com::sun::star::uno::RuntimeException, std::exception ) ;
 };
 
 class FormObjEventListenerImpl;
