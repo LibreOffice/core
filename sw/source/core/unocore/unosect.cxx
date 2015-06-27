@@ -150,7 +150,7 @@ public:
         GetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames)
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-                uno::RuntimeException);
+                uno::RuntimeException, std::exception);
 protected:
     // SwClient
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
@@ -949,7 +949,7 @@ uno::Sequence< uno::Any >
 SwXTextSection::Impl::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     SwSectionFormat *const pFormat = GetSectionFormat();
     if (!pFormat && !m_bIsDescriptor)
