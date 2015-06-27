@@ -281,7 +281,7 @@ bool SpellCheckerDispatcher::isValid_Impl(
             LanguageType nLanguage,
             const PropertyValues& rProperties,
             bool bCheckDics)
-        throw( RuntimeException, IllegalArgumentException )
+        throw( RuntimeException, IllegalArgumentException, std::exception )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
