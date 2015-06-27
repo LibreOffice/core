@@ -1528,7 +1528,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
 void HierarchyContent::destroy( bool bDeletePhysical,
                                 const uno::Reference<
                                     ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
