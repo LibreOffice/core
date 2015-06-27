@@ -194,8 +194,39 @@ void FormulaGroupAreaListener::collectFormulaCells(
     ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow, nBlockSize);
     if (!pp)
     {
-        SAL_WARN("sc", "GetFormulaCellBlockAddress not found");
+        SAL_WARN("sc.core", "GetFormulaCellBlockAddress not found");
         return;
+    }
+
+    /* FIXME: this is tdf#90717, when deleting a row fixed size area listeners
+     * such as BCA_ALWAYS or entire row listeners are (rightly) not destroyed,
+     * but mnTopCellRow and mnGroupLen also not updated, which needs fixing.
+     * Until then pull things as straight as possible here in such situation
+     * and prevent crash. */
+    if (!(*pp)->IsSharedTop())
+    {
+        SCROW nRow = (*pp)->GetSharedTopRow();
+        if (nRow < 0)
+            SAL_WARN("sc.core", "FormulaGroupAreaListener::collectFormulaCells() no shared top");
+        else
+        {
+            SAL_WARN("sc.core","FormulaGroupAreaListener::collectFormulaCells() syncing mnTopCellRow from " <<
+                    mnTopCellRow << " to " << nRow);
+            const_cast<FormulaGroupAreaListener*>(this)->mnTopCellRow = nRow;
+            pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow, nBlockSize);
+            if (!pp)
+            {
+                SAL_WARN("sc.core", "GetFormulaCellBlockAddress not found");
+                return;
+            }
+        }
+    }
+    SCROW nLen = (*pp)->GetSharedLength();
+    if (nLen != mnGroupLen)
+    {
+        SAL_WARN("sc.core", "FormulaGroupAreaListener::collectFormulaCells() syncing mnGroupLen from " <<
+                mnGroupLen << " to " << nLen);
+        const_cast<FormulaGroupAreaListener*>(this)->mnGroupLen = nLen;
     }
 
     /* FIXME: with tdf#89957 it happened that the actual block size in column
