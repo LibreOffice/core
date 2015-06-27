@@ -5565,6 +5565,11 @@
           <value xml:lang="en-US">F~ormat</value>
         </prop>
       </node>
+      <node oor:name=".uno:FormatObjectMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">O~bject</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ObjectMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Object</value>
