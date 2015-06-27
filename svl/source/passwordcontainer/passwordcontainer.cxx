@@ -758,7 +758,7 @@ UrlRecord PasswordContainer::find(
     const OUString& aURL,
     const OUString& aName,
     bool bName, // only needed to support empty user names
-    const Reference< XInteractionHandler >& aHandler  ) throw(RuntimeException)
+    const Reference< XInteractionHandler >& aHandler  ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( mMutex );
 

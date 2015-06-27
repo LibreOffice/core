@@ -272,7 +272,7 @@ bool createUrlRecord(
     const OUString& aURL,
     const OUString& aName,
     bool bName, // only needed to support empty user names
-    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler  ) throw(::com::sun::star::uno::RuntimeException);
+    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler  ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     static OUString GetDefaultMasterPassword();
 
