@@ -649,7 +649,7 @@ private:
     DECL_LINK( OnAsyncScriptEvent, ScriptEvent* );
 #endif
     void setShellFromModel();
-    void firing_Impl( const  ScriptEvent& evt, Any *pSyncRet=NULL ) throw( RuntimeException );
+    void firing_Impl( const  ScriptEvent& evt, Any *pSyncRet=NULL ) throw( RuntimeException, std::exception );
 
     Reference< XComponentContext > m_xContext;
     Reference< frame::XModel > m_xModel;
@@ -870,7 +870,7 @@ bool DenyMouseDrag(const ScriptEvent& evt, void* )
 // EventListener
 
 void
-EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeException)
+EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeException, std::exception)
 {
     OSL_TRACE("EventListener::firing_Impl( FAKE VBA_EVENTS )");
     static const OUString vbaInterOp =
