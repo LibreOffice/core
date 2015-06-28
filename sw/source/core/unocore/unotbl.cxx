@@ -682,12 +682,6 @@ static void lcl_SetTableSeparators(const uno::Any& rVal, SwTable* pTable, SwTabl
     pDoc->SetTabCols(*pTable, aCols, aOldCols, pBox, bRow );
 }
 
-static inline OUString lcl_getString( SwXCell &rCell )
-{
-    // getString is a member function of the base class...
-    return rCell.getString();
-}
-
 /* non UNO function call to set string in SwXCell */
 void sw_setString( SwXCell &rCell, const OUString &rText,
         bool bKeepNumberFormat = false )
@@ -3557,7 +3551,7 @@ void SwXCellRange::GetDataSequence(
             SwTableBox * pBox = pXCell ? pXCell->GetTableBox() : 0;
             if(!pBox)
                 throw uno::RuntimeException();
-            pTextData[nDtaCnt++] = lcl_getString(*pXCell);
+            pTextData[nDtaCnt++] = pXCell->getString();
         }
     }
     assert(nDtaCnt == nSize);
@@ -3589,7 +3583,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
             // check if table box value item is set
             SwFrameFormat* pBoxFormat(pBox->GetFrameFormat());
             const bool bIsNum = pBoxFormat->GetItemState(RES_BOXATR_VALUE, false) == SfxItemState::SET;
-            rCellAny = bIsNum ? uno::makeAny(pCell->getValue()) : uno::makeAny(lcl_getString(*pCell));
+            rCellAny = bIsNum ? uno::makeAny(pCell->getValue()) : uno::makeAny(pCell->getString());
             ++pCurrentCell;
         }
     }

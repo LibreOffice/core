@@ -2175,23 +2175,23 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
     SolarMutexGuard aGuard;
     if (bDisposed)
         throw lang::DisposedException();
-
-    uno::Sequence< OUString > aRes;
     SwFrameFormat* pTableFormat = GetFrameFormat();
-    if(pTableFormat)
-    {
-        SwTable* pTable = SwTable::FindTable( pTableFormat );
-        if(!pTable->IsTableComplex())
-        {
-            SwRangeDescriptor aDesc;
-            if (FillRangeDescriptor( aDesc, GetCellRangeName( *pTableFormat, *pTableCrsr ) ))
-            {
-                SwXCellRange aRange(pTableCrsr, *pTableFormat, aDesc );
-                aRange.GetDataSequence( 0, &aRes, 0 );
-            }
-        }
-    }
-    return aRes;
+    if(!pTableFormat)
+        return {};
+    SwTable* pTable = SwTable::FindTable(pTableFormat);
+    if(pTable->IsTableComplex())
+        return {};
+    SwRangeDescriptor aDesc;
+    if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat, *pTableCrsr)))
+        return {};
+    auto vCells(SwXCellRange(pTableCrsr, *pTableFormat, aDesc).getCells());
+    uno::Sequence< OUString > vTextData(vCells.size());
+    std::transform(vCells.begin(),
+        vCells.end(),
+        vTextData.begin(),
+        [] (decltype(vCells)::value_type& xCell)
+            { return static_cast<SwXCell*>(xCell.get())->getString(); });
+    return vTextData;
 }
 
 uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
