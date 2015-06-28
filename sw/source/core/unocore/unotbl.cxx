@@ -3484,13 +3484,11 @@ void SwXCellRange::GetDataSequence(
     }
 
     const size_t nSize = static_cast<size_t>(nRowCount) * static_cast<size_t>(nColCount);
-    uno::Any* pAnyData(nullptr);
     OUString* pTextData(nullptr);
     double*   pDblData(nullptr);
     if (pAnySeq)
     {
-        pAnySeq->realloc(nSize);
-        pAnyData = pAnySeq->getArray();
+        assert(false);
     }
     else if (pTextSeq)
     {
@@ -3529,16 +3527,7 @@ void SwXCellRange::GetDataSequence(
             SwTableBox * pBox = pXCell ? pXCell->GetTableBox() : 0;
             if(!pBox)
                 throw uno::RuntimeException();
-            if (pAnyData)
-            {
-                // check if table box value item is set
-                bool bIsNum = pBox->GetFrameFormat()->GetItemState( RES_BOXATR_VALUE, false ) == SfxItemState::SET;
-                if (!bIsNum)
-                    pAnyData[nDtaCnt++] <<= lcl_getString(*pXCell);
-                else
-                    pAnyData[nDtaCnt++] <<= sw_getValue(*pXCell);
-            }
-            else if (pTextData)
+            if (pTextData)
                 pTextData[nDtaCnt++] = lcl_getString(*pXCell);
             else
             {

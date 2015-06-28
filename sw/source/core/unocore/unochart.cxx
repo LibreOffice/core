@@ -23,6 +23,7 @@
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
@@ -2015,22 +2016,26 @@ uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
     if (bDisposed)
         throw lang::DisposedException();
 
-    uno::Sequence< uno::Any > aRes;
     SwFrameFormat* pTableFormat = GetFrameFormat();
-    if(pTableFormat)
-    {
-        SwTable* pTable = SwTable::FindTable( pTableFormat );
-        if(!pTable->IsTableComplex())
-        {
-            SwRangeDescriptor aDesc;
-            if (FillRangeDescriptor( aDesc, GetCellRangeName( *pTableFormat, *pTableCrsr ) ))
-            {
-                SwXCellRange aRange(pTableCrsr, *pTableFormat, aDesc );
-                aRange.GetDataSequence( &aRes, 0, 0 );
-            }
-        }
-    }
-    return aRes;
+    if(!pTableFormat)
+        return {};
+    SwTable* pTable = SwTable::FindTable(pTableFormat);
+    if(pTable->IsTableComplex())
+        return {};
+    SwRangeDescriptor aDesc;
+    if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat,*pTableCrsr)))
+        return {};
+    auto vData(SwXCellRange(pTableCrsr, *pTableFormat, aDesc).getDataArray());
+    if(!vData.getLength())
+        return {};
+    std::vector< uno::Any > vResult;
+    vResult.reserve(vData.getLength()*vData[0].getLength());
+    for(auto& rRow : vData)
+        std::copy(
+            rRow.begin(),
+            rRow.end(),
+            std::back_inserter(vResult));
+    return comphelper::containerToSequence(vResult);
 }
 
 OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
