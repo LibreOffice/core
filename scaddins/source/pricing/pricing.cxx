@@ -266,7 +266,7 @@ void ScaPricingAddIn::InitData()
     }
 }
 
-OUString ScaPricingAddIn::GetDisplFuncStr( sal_uInt16 nResId ) throw( uno::RuntimeException )
+OUString ScaPricingAddIn::GetDisplFuncStr( sal_uInt16 nResId ) throw( uno::RuntimeException, std::exception )
 {
     return ScaResStringLoader( RID_PRICING_FUNCTION_NAMES, nResId, GetResMgr() ).GetString();
 }
