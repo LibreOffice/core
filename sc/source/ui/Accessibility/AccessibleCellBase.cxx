@@ -598,7 +598,7 @@ OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs()
 //end of cell attributes
 
 OUString SAL_CALL ScAccessibleCellBase::GetAllDisplayNote()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString strNote;
     OUString strTrackText;
