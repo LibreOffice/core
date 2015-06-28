@@ -3484,20 +3484,29 @@ void SwXCellRange::GetDataSequence(
     }
 
     const size_t nSize = static_cast<size_t>(nRowCount) * static_cast<size_t>(nColCount);
+    uno::Any* pAnyData(nullptr);
+    OUString* pTextData(nullptr);
+    double*   pDblData(nullptr);
     if (pAnySeq)
-        pAnySeq->realloc( nSize );
+    {
+        pAnySeq->realloc(nSize);
+        pAnyData = pAnySeq->getArray();
+    }
     else if (pTextSeq)
-        pTextSeq->realloc( nSize );
+    {
+        pTextSeq->realloc(nSize);
+        pTextData = pTextSeq->getArray();
+    }
     else if (pDblSeq)
-        pDblSeq->realloc( nSize );
+    {
+        pDblSeq->realloc(nSize);
+        pDblData = pDblSeq->getArray();
+    }
     else
     {
         OSL_FAIL( "argument missing" );
         return;
     }
-    uno::Any   *pAnyData = pAnySeq ? pAnySeq->getArray() : 0;
-    OUString   *pTextData = pTextSeq ? pTextSeq->getArray() : 0;
-    double     *pDblData = pDblSeq ? pDblSeq->getArray() : 0;
 
     size_t nDtaCnt = 0;
     SwFrameFormat* pFormat = GetFrameFormat();
