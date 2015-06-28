@@ -450,7 +450,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     OUString
        GetFullAccessibleName(AccessibleShape *shape)
-       throw (::com::sun::star::uno::RuntimeException);
+       throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString GetStyle();
     void UpdateDocumentAllSelState(::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet > &xStateSet);

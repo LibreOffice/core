@@ -1160,7 +1160,7 @@ OUString AccessibleShape::CreateAccessibleName()
 }
 
 OUString AccessibleShape::GetFullAccessibleName (AccessibleShape *shape)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sName (shape->CreateAccessibleBaseName());
     // Append the shape's index to the name to disambiguate between shapes
