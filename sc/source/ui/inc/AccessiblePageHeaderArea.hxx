@@ -106,7 +106,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    virtual OUString SAL_CALL createAccessibleDescription() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual OUString SAL_CALL createAccessibleDescription() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL createAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual Rectangle GetBoundingBoxOnScreen() const throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

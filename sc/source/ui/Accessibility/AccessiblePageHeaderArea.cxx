@@ -217,7 +217,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //===== internal ==============================================================
 OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription()
-    throw(uno::RuntimeException)
+    throw(uno::RuntimeException, std::exception)
 {
     OUString sDesc;
     switch (meAdjust)
