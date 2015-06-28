@@ -145,7 +145,7 @@ protected:
     OUString SAL_CALL getShadowAttrs()
         throw (::com::sun::star::uno::RuntimeException, std::exception);
     OUString SAL_CALL getBorderAttrs()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 public:
     const ScAddress& GetCellAddress() const { return maCellAddress; }
     bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
