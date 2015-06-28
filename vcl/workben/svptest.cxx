@@ -70,6 +70,11 @@ SAL_IMPLEMENT_MAIN()
         SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
         return 1;
     }
+    catch (const std::exception &e)
+    {
+        fprintf(stderr, "fatal error: %s\n", e.what());
+        return 1;
+    }
 
     return 0;
 }
