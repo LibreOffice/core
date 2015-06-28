@@ -1659,7 +1659,7 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
     return ( nPgNum - 1) >> 1;
 }
 
-void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException)
+void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException, std::exception)
 {
     OUString aBookmark( aHyperLink );
 

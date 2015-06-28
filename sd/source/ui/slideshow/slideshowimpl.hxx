@@ -216,7 +216,7 @@ public:
 
     // will be called from the SlideShowListenerProxy when this event is fired from the XSlideShow
     void slideEnded(const bool bReverse);
-    void hyperLinkClicked(const OUString & hyperLink) throw (css::uno::RuntimeException);
+    void hyperLinkClicked(const OUString & hyperLink) throw (css::uno::RuntimeException, std::exception);
     void click(const css::uno::Reference< css::drawing::XShape > & xShape, const css::awt::MouseEvent & aOriginalEvent);
     bool swipe(const CommandSwipeData &rSwipeData);
     bool longpress(const CommandLongPressData& rLongPressData);
