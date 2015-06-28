@@ -40,6 +40,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
+#include <com/sun/star/table/XCell.hpp>
 
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/implbase.hxx>
@@ -349,6 +350,7 @@ public:
 
     void        FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const;
     bool        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
+    std::vector< css::uno::Reference< css::table::XCell > > getCells();
 };
 
 typedef cppu::WeakImplHelper

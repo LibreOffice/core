@@ -2169,22 +2169,27 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
     return 0;
 }
 
-uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
-    throw (uno::RuntimeException, std::exception)
+std::vector< css::uno::Reference< css::table::XCell > > SwChartDataSequence::getCells()
 {
-    SolarMutexGuard aGuard;
     if (bDisposed)
         throw lang::DisposedException();
-    SwFrameFormat* pTableFormat = GetFrameFormat();
+    auto pTableFormat(GetFrameFormat());
     if(!pTableFormat)
         return {};
-    SwTable* pTable = SwTable::FindTable(pTableFormat);
+    auto pTable(SwTable::FindTable(pTableFormat));
     if(pTable->IsTableComplex())
         return {};
     SwRangeDescriptor aDesc;
     if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat, *pTableCrsr)))
         return {};
-    auto vCells(SwXCellRange(pTableCrsr, *pTableFormat, aDesc).getCells());
+    return SwXCellRange(pTableCrsr, *pTableFormat, aDesc).getCells();
+}
+
+uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
+    throw (uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    auto vCells(getCells());
     uno::Sequence< OUString > vTextData(vCells.size());
     std::transform(vCells.begin(),
         vCells.end(),
@@ -2198,18 +2203,7 @@ uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
-        throw lang::DisposedException();
-    SwFrameFormat* pTableFormat = GetFrameFormat();
-    if(!pTableFormat)
-        return {};
-    SwTable* pTable = SwTable::FindTable(pTableFormat);
-    if(pTable->IsTableComplex())
-        return {};
-    SwRangeDescriptor aDesc;
-    if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat,*pTableCrsr)))
-        return {};
-    auto vCells(SwXCellRange(pTableCrsr, *pTableFormat, aDesc).getCells());
+    auto vCells(getCells());
     uno::Sequence< double > vNumData(vCells.size());
     std::transform(vCells.begin(),
         vCells.end(),
