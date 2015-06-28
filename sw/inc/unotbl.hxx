@@ -155,6 +155,7 @@ public:
     SwTableBox* FindBox(SwTable* pTable, SwTableBox* pBox);
     SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
     double GetForcedNumericalValue() const;
+    css::uno::Any GetAny() const;
 };
 
 class SwXTextTableRow SAL_FINAL : public cppu::WeakImplHelper

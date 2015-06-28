@@ -1220,6 +1220,17 @@ double SwXCell::GetForcedNumericalValue() const
     return fTmp;
 }
 
+uno::Any SwXCell::GetAny() const
+{
+    SwTableBox* GetTableBox();
+    if(!pBox)
+        throw uno::RuntimeException();
+    // check if table box value item is set
+    auto pBoxFormat(pBox->GetFrameFormat());
+    const bool bIsNum = pBoxFormat->GetItemState(RES_BOXATR_VALUE, false) == SfxItemState::SET;
+    return bIsNum ? uno::makeAny(getValue()) : uno::makeAny(const_cast<SwXCell*>(this)->getString());
+}
+
 OUString SwXCell::getImplementationName() throw( uno::RuntimeException, std::exception )
     { return OUString("SwXCell"); }
 
@@ -3509,13 +3520,9 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
         for(auto& rCellAny : rRow)
         {
             auto pCell(static_cast<SwXCell*>(pCurrentCell->get()));
-            SwTableBox* pBox = pCell ? pCell->GetTableBox() : nullptr;
-            if(!pBox)
+            if(!pCell)
                 throw uno::RuntimeException();
-            // check if table box value item is set
-            SwFrameFormat* pBoxFormat(pBox->GetFrameFormat());
-            const bool bIsNum = pBoxFormat->GetItemState(RES_BOXATR_VALUE, false) == SfxItemState::SET;
-            rCellAny = bIsNum ? uno::makeAny(pCell->getValue()) : uno::makeAny(pCell->getString());
+            rCellAny = pCell->GetAny();
             ++pCurrentCell;
         }
     }
