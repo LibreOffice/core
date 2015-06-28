@@ -1153,7 +1153,7 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
     const OUString& aNameBase,
     const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
 )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     // Delete files for changed defaults
     for( LocaleItemVectorIt it = m_aChangedDefaultLocaleVector.begin();
