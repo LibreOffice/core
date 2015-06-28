@@ -79,7 +79,7 @@ namespace basctl
 
     ::com::sun::star::uno::Sequence< OUString > GetMethodNames(
         const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )
-        throw (css::container::NoSuchElementException, css::uno::RuntimeException);
+        throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
 
     bool            HasMethod(
         const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName, const OUString& rMethName );
