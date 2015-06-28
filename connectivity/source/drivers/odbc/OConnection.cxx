@@ -177,7 +177,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     return nSQLRETURN;
 }
 
-SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
+SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException, std::exception)
 {
     m_aConnectionHandle  = SQL_NULL_HANDLE;
     m_sURL  = url;
@@ -188,7 +188,7 @@ SQLRETURN OConnection::Construct(const OUString& url,const Sequence< PropertyVal
         throw SQLException();
 
     sal_Int32 nLen = url.indexOf(':');
-    nLen = url.indexOf(':',nLen+1);
+    nLen = url.indexOf(':',nLen+2);
     OUString aDSN("DSN="), aUID, aPWD, aSysDrvSettings;
     aDSN += url.copy(nLen+1);
 
