@@ -246,7 +246,7 @@ namespace framework
 
             void    implts_setInplaceMenuBar(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xMergedMenuBar )
-                            throw (::com::sun::star::uno::RuntimeException);
+                            throw (::com::sun::star::uno::RuntimeException, std::exception);
             void    implts_resetInplaceMenuBar()
                             throw (::com::sun::star::uno::RuntimeException);
 
