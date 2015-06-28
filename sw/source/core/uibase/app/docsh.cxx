@@ -1259,11 +1259,17 @@ const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
 
 bool SwDocShell::IsChangeRecording() const
 {
+    if (!pWrtShell)
+        return false;
+
     return (pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0;
 }
 
 bool SwDocShell::HasChangeRecordProtection() const
 {
+    if (!pWrtShell)
+        return false;
+
     return pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0;
 }
 
