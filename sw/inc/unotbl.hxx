@@ -543,14 +543,6 @@ public:
     sal_uInt16      getColumnCount();
 
     const SwUnoCrsr* GetTableCrsr() const;
-
-    // for SwChartDataSequence
-    void GetDataSequence(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > *pAnySeq,
-            ::com::sun::star::uno::Sequence< OUString > *pTextSeq,
-            ::com::sun::star::uno::Sequence< double > *pDblSeq,
-            bool bForceNumberResults = false ) throw (::com::sun::star::uno::RuntimeException, std::exception);
-
 };
 
 class SwXTableRows SAL_FINAL : public cppu::WeakImplHelper

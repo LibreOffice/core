@@ -3490,75 +3490,7 @@ void SwXCellRange::addVetoableChangeListener(const OUString& /*PropertyName*/, c
 void SwXCellRange::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
     { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
-void SwXCellRange::GetDataSequence(
-        uno::Sequence< uno::Any >   *pAnySeq,   //-> first pointer != 0 is used
-        uno::Sequence< OUString >   *pTextSeq,   //-> as output sequence
-        uno::Sequence< double >     *pDblSeq,   //-> (previous data gets overwritten)
-        bool bForceNumberResults )              //-> when 'true' requires to make an
-                                                // extra effort to return a value different
-                                                // from 0 even if the cell is formatted to text
-    throw (uno::RuntimeException, std::exception)
-{
-    SolarMutexGuard aGuard;
-
-    // compare to SwXCellRange::getDataArray (note different return types though)
-
-    const sal_Int32 nRowCount = getRowCount();
-    const sal_Int32 nColCount = getColumnCount();
-
-    if(!nRowCount || !nColCount)
-    {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = "Table too complex";
-        throw aRuntime;
-    }
-
-    const size_t nSize = static_cast<size_t>(nRowCount) * static_cast<size_t>(nColCount);
-    OUString* pTextData(nullptr);
-    if (pAnySeq || pDblSeq)
-    {
-        assert(false);
-    }
-    else if (pTextSeq)
-    {
-        pTextSeq->realloc(nSize);
-        pTextData = pTextSeq->getArray();
-    }
-    else
-    {
-        OSL_FAIL( "argument missing" );
-        return;
-    }
-
-    size_t nDtaCnt = 0;
-    SwFrameFormat* pFormat = GetFrameFormat();
-    if(!pFormat)
-        return;
-    double fNan;
-    ::rtl::math::setNan(&fNan);
-
-    uno::Reference< table::XCell > xCellRef;
-    for(sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
-    {
-        for(sal_Int32 nCol = 0; nCol < nColCount; ++nCol)
-        {
-            SwXCell * pXCell = lcl_CreateXCell(pFormat,
-                                aRgDesc.nLeft + nCol,
-                                aRgDesc.nTop + nRow);
-            //! keep (additional) reference to object to prevent implicit destruction
-            //! in following UNO calls (when object will get referenced)
-            xCellRef = pXCell;
-            SwTableBox * pBox = pXCell ? pXCell->GetTableBox() : 0;
-            if(!pBox)
-                throw uno::RuntimeException();
-            pTextData[nDtaCnt++] = pXCell->getString();
-        }
-    }
-    assert(nDtaCnt == nSize);
-}
-
 ///@see SwXCellRange::getData
-///@see SwXCellRange::GetDataSequence
 uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
     throw (uno::RuntimeException, std::exception)
 {
