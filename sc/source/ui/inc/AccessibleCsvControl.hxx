@@ -261,7 +261,7 @@ private:
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     /** Returns this object's description. */
     virtual OUString SAL_CALL createAccessibleDescription()
-        throw( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Throws an exception, if the specified character position is invalid (outside 0..len-1). */
     void ensureValidIndex( sal_Int32 nIndex ) const
@@ -492,7 +492,7 @@ private:
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     /** Returns this object's description. */
     virtual OUString SAL_CALL createAccessibleDescription()
-        throw( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Throws an exception, if nIndex is not a valid child index. */
     void ensureValidIndex( sal_Int32 nIndex ) const

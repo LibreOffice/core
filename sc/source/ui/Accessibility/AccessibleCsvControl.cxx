@@ -762,7 +762,7 @@ OUString SAL_CALL ScAccessibleCsvRuler::createAccessibleName() throw( RuntimeExc
     return OUString( ScResId( STR_ACC_CSVRULER_NAME ) );
 }
 
-OUString SAL_CALL ScAccessibleCsvRuler::createAccessibleDescription() throw( RuntimeException )
+OUString SAL_CALL ScAccessibleCsvRuler::createAccessibleDescription() throw( RuntimeException, std::exception )
 {
     return OUString( ScResId( STR_ACC_CSVRULER_DESCR ) );
 }
@@ -1296,7 +1296,7 @@ OUString SAL_CALL ScAccessibleCsvGrid::createAccessibleName() throw( RuntimeExce
     return OUString( ScResId( STR_ACC_CSVGRID_NAME ) );
 }
 
-OUString SAL_CALL ScAccessibleCsvGrid::createAccessibleDescription() throw( RuntimeException )
+OUString SAL_CALL ScAccessibleCsvGrid::createAccessibleDescription() throw( RuntimeException, std::exception )
 {
     return OUString( ScResId( STR_ACC_CSVGRID_DESCR ) );
 }
