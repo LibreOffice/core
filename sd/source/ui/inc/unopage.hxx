@@ -67,7 +67,7 @@ protected:
 
     const SvxItemPropertySet*   mpPropSet;
 
-    virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException);
+    virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException, std::exception);
     virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw();
 
     OUString getBookmarkURL() const;
@@ -234,7 +234,7 @@ class SdMasterPage : public ::com::sun::star::presentation::XPresentationPage,
 private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 protected:
-    virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw( ::com::sun::star::lang::IllegalArgumentException  ) SAL_OVERRIDE;
+    virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw( ::com::sun::star::lang::IllegalArgumentException, std::exception  ) SAL_OVERRIDE;
     virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw() SAL_OVERRIDE;
 
 public:
