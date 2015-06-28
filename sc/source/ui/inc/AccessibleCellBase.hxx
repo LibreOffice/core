@@ -143,7 +143,7 @@ protected:
     OUString SAL_CALL GetAllDisplayNote()
         throw (::com::sun::star::uno::RuntimeException);
     OUString SAL_CALL getShadowAttrs()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     OUString SAL_CALL getBorderAttrs()
         throw (::com::sun::star::uno::RuntimeException);
 public:

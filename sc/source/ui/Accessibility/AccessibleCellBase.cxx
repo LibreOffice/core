@@ -365,7 +365,7 @@ OUString SAL_CALL ScAccessibleCellBase::GetNote()
 #include <com/sun/star/table/ShadowFormat.hpp>
 
 OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs()
-                                        throw (::com::sun::star::uno::RuntimeException)
+                                        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
