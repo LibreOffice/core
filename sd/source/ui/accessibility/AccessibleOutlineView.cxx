@@ -274,7 +274,7 @@ OUString
 */
 OUString
     AccessibleOutlineView::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

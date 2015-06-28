@@ -649,7 +649,7 @@ OUString
 */
 OUString
     AccessibleDocumentViewBase::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sDescription;
 

@@ -330,7 +330,7 @@ protected:
     */
     virtual OUString
         CreateAccessibleDescription ()
-        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** This method is called when (after) the frame containing this
         document has been activated.  Can be used to send FOCUSED state
