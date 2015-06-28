@@ -206,7 +206,7 @@ sal_Int32
 
 OUString SAL_CALL
     ScAccessibleCellBase::createAccessibleDescription()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OUString sDescription = OUString(ScResId(STR_ACC_CELL_DESCR));
 

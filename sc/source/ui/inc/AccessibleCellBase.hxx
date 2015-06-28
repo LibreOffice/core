@@ -77,7 +77,7 @@ protected:
     /// Return this object's description.
     virtual OUString SAL_CALL
         createAccessibleDescription()
-        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the object's current name.
     virtual OUString SAL_CALL
