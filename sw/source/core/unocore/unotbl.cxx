@@ -3540,7 +3540,7 @@ void SwXCellRange::GetDataSequence(
                 }
                 else if (pTextData)
                     pTextData[nDtaCnt++] = lcl_getString(*pXCell);
-                else if (pDblData)
+                else
                 {
                     double fVal = fNan;
                     if (!bForceNumberResults || table::CellContentType_TEXT != pXCell->getType())
@@ -3590,9 +3590,6 @@ void SwXCellRange::GetDataSequence(
                             fVal = fTmp;
                     }
                     pDblData[nDtaCnt++] = fVal;
-                }
-                else {
-                    OSL_FAIL( "output sequence missing" );
                 }
             }
         }
