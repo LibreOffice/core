@@ -98,7 +98,7 @@ private:
     Reference<XReportDefinition>                    m_xReportDefinition;
     ::boost::shared_ptr<rptui::OReportModel>        m_pReportModel;
 
-    bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
+    bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
 
     SvXMLImportContext* CreateStylesContext(const OUString& rLocalName,
                                      const Reference< XAttributeList>& xAttrList, bool bIsAutoStyle );

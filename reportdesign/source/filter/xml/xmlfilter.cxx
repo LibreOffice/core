@@ -422,7 +422,7 @@ sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescript
 }
 
 bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     OUString                     sFileName;
     uno::Reference< embed::XStorage >   xStorage;
