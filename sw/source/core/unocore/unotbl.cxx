@@ -3510,87 +3510,86 @@ void SwXCellRange::GetDataSequence(
 
     size_t nDtaCnt = 0;
     SwFrameFormat* pFormat = GetFrameFormat();
-    if(pFormat)
-    {
-        double fNan;
-        ::rtl::math::setNan( & fNan );
+    if(!pFormat)
+        return;
+    double fNan;
+    ::rtl::math::setNan(&fNan);
 
-        uno::Reference< table::XCell > xCellRef;
-        for(sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
+    uno::Reference< table::XCell > xCellRef;
+    for(sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
+    {
+        for(sal_Int32 nCol = 0; nCol < nColCount; ++nCol)
         {
-            for(sal_Int32 nCol = 0; nCol < nColCount; ++nCol)
+            SwXCell * pXCell = lcl_CreateXCell(pFormat,
+                                aRgDesc.nLeft + nCol,
+                                aRgDesc.nTop + nRow);
+            //! keep (additional) reference to object to prevent implicit destruction
+            //! in following UNO calls (when object will get referenced)
+            xCellRef = pXCell;
+            SwTableBox * pBox = pXCell ? pXCell->GetTableBox() : 0;
+            if(!pBox)
+                throw uno::RuntimeException();
+            if (pAnyData)
             {
-                SwXCell * pXCell = lcl_CreateXCell(pFormat,
-                                    aRgDesc.nLeft + nCol,
-                                    aRgDesc.nTop + nRow);
-                //! keep (additional) reference to object to prevent implicit destruction
-                //! in following UNO calls (when object will get referenced)
-                xCellRef = pXCell;
-                SwTableBox * pBox = pXCell ? pXCell->GetTableBox() : 0;
-                if(!pBox)
-                    throw uno::RuntimeException();
-                if (pAnyData)
-                {
-                    // check if table box value item is set
-                    bool bIsNum = pBox->GetFrameFormat()->GetItemState( RES_BOXATR_VALUE, false ) == SfxItemState::SET;
-                    if (!bIsNum)
-                        pAnyData[nDtaCnt++] <<= lcl_getString(*pXCell);
-                    else
-                        pAnyData[nDtaCnt++] <<= sw_getValue(*pXCell);
-                }
-                else if (pTextData)
-                    pTextData[nDtaCnt++] = lcl_getString(*pXCell);
+                // check if table box value item is set
+                bool bIsNum = pBox->GetFrameFormat()->GetItemState( RES_BOXATR_VALUE, false ) == SfxItemState::SET;
+                if (!bIsNum)
+                    pAnyData[nDtaCnt++] <<= lcl_getString(*pXCell);
+                else
+                    pAnyData[nDtaCnt++] <<= sw_getValue(*pXCell);
+            }
+            else if (pTextData)
+                pTextData[nDtaCnt++] = lcl_getString(*pXCell);
+            else
+            {
+                double fVal = fNan;
+                if (!bForceNumberResults || table::CellContentType_TEXT != pXCell->getType())
+                    fVal = sw_getValue(*pXCell);
                 else
                 {
-                    double fVal = fNan;
-                    if (!bForceNumberResults || table::CellContentType_TEXT != pXCell->getType())
-                        fVal = sw_getValue(*pXCell);
+                    OSL_ENSURE( table::CellContentType_TEXT == pXCell->getType(),
+                            "this branch of 'if' is only for text formatted cells" );
+
+                    // now we'll try to get a useful numerical value
+                    // from the text in the cell...
+
+                    sal_uInt32 nFIndex;
+                    SvNumberFormatter* pNumFormatter = m_pTableCrsr->GetDoc()->GetNumberFormatter();
+
+                    // look for SwTableBoxNumFormat value in parents as well
+                    const SfxPoolItem* pItem;
+                    SwFrameFormat *pBoxFormat = pXCell->GetTableBox()->GetFrameFormat();
+                    SfxItemState eState = pBoxFormat->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem);
+
+                    if (eState == SfxItemState::SET)
+                    {
+                        // please note that the language of the numberformat
+                        // is implicitly coded into the below value as well
+                        nFIndex = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+
+                        // since the current value indicates a text format but the call
+                        // to 'IsNumberFormat' below won't work for text formats
+                        // we need to get rid of the part that indicates the text format.
+                        // According to ER this can be done like this:
+                        nFIndex -= (nFIndex % SV_COUNTRY_LANGUAGE_OFFSET);
+                    }
                     else
                     {
-                        OSL_ENSURE( table::CellContentType_TEXT == pXCell->getType(),
-                                "this branch of 'if' is only for text formatted cells" );
-
-                        // now we'll try to get a useful numerical value
-                        // from the text in the cell...
-
-                        sal_uInt32 nFIndex;
-                        SvNumberFormatter* pNumFormatter = m_pTableCrsr->GetDoc()->GetNumberFormatter();
-
-                        // look for SwTableBoxNumFormat value in parents as well
-                        const SfxPoolItem* pItem;
-                        SwFrameFormat *pBoxFormat = pXCell->GetTableBox()->GetFrameFormat();
-                        SfxItemState eState = pBoxFormat->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem);
-
-                        if (eState == SfxItemState::SET)
-                        {
-                            // please note that the language of the numberformat
-                            // is implicitly coded into the below value as well
-                            nFIndex = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
-
-                            // since the current value indicates a text format but the call
-                            // to 'IsNumberFormat' below won't work for text formats
-                            // we need to get rid of the part that indicates the text format.
-                            // According to ER this can be done like this:
-                            nFIndex -= (nFIndex % SV_COUNTRY_LANGUAGE_OFFSET);
-                        }
-                        else
-                        {
-                            // system language is probably not the best possible choice
-                            // but since we have to guess anyway (because the language of at
-                            // the text is NOT the one used for the number format!)
-                            // it is at least conform to what is used in
-                            // SwTableShell::Execute when
-                            // SID_ATTR_NUMBERFORMAT_VALUE is set...
-                            LanguageType eLang = LANGUAGE_SYSTEM;
-                            nFIndex = pNumFormatter->GetStandardIndex( eLang );
-                        }
-
-                        double fTmp;
-                        if (pNumFormatter->IsNumberFormat( lcl_getString(*pXCell), nFIndex, fTmp ))
-                            fVal = fTmp;
+                        // system language is probably not the best possible choice
+                        // but since we have to guess anyway (because the language of at
+                        // the text is NOT the one used for the number format!)
+                        // it is at least conform to what is used in
+                        // SwTableShell::Execute when
+                        // SID_ATTR_NUMBERFORMAT_VALUE is set...
+                        LanguageType eLang = LANGUAGE_SYSTEM;
+                        nFIndex = pNumFormatter->GetStandardIndex( eLang );
                     }
-                    pDblData[nDtaCnt++] = fVal;
+
+                    double fTmp;
+                    if (pNumFormatter->IsNumberFormat( lcl_getString(*pXCell), nFIndex, fTmp ))
+                        fVal = fTmp;
                 }
+                pDblData[nDtaCnt++] = fVal;
             }
         }
     }
