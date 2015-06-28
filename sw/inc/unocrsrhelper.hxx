@@ -219,7 +219,7 @@ namespace SwUnoCursorHelper
             const ::com::sun::star::uno::Any& rValue,
             SwDoc & rDoc, SfxItemSet & rSet);
     void SetTextFormatColl(const ::com::sun::star::uno::Any & rAny, SwPaM & rPaM)
-        throw (::com::sun::star::lang::IllegalArgumentException, css::uno::RuntimeException);
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
     bool SetCursorPropertyValue(
             SfxItemPropertySimpleEntry const& rEntry,
             ::com::sun::star::uno::Any const& rValue,

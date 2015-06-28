@@ -261,7 +261,7 @@ throw (lang::IllegalArgumentException)
 
 void
 SwUnoCursorHelper::SetTextFormatColl(const uno::Any & rAny, SwPaM & rPaM)
-throw (lang::IllegalArgumentException, uno::RuntimeException)
+throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SwDoc *const pDoc = rPaM.GetDoc();
     SwDocShell *const pDocSh = pDoc->GetDocShell();
