@@ -768,7 +768,7 @@ OUString FTPURL::ren(const OUString& NewTitle)
 
 
 void FTPURL::del() const
-    throw(curl_exception, malformed_exception)
+    throw(curl_exception, malformed_exception, std::exception)
 {
     FTPDirentry aDirentry(direntry());
 
