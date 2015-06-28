@@ -309,7 +309,7 @@ protected:
         bool bStoreAll,
         bool bKillAll = false
     )
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
 
 public:
     StringResourcePersistenceImpl(
