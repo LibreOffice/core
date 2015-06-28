@@ -464,7 +464,7 @@ private:
         throw(::com::sun::star::uno::RuntimeException);
     void    reload_impl(bool bMoveToFirst,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >())
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     void    submit_impl(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt, bool _bAproveByListeners);
     void    reset_impl(bool _bAproveByListeners);
 

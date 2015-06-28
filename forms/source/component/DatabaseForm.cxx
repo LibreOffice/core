@@ -2931,7 +2931,7 @@ void SAL_CALL ODatabaseForm::reload() throw( RuntimeException, std::exception )
 }
 
 
-void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler ) throw( RuntimeException )
+void ODatabaseForm::reload_impl(bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler ) throw( RuntimeException, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     if (!isLoaded())
