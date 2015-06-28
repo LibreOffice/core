@@ -148,7 +148,7 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
 }
 
 void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const uno::Any& rValue )
-    throw(beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw(beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     uno::Any aValue( rValue );
 
