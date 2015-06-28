@@ -531,7 +531,6 @@ public:
 class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
 {
     Size            m_aCheckBoxImageSizePixel;
-    Link<>          m_aChangedListener;
     SvLBoxButtonData*   m_pButtonData;
     VclPtr<SvxConfigPage>  pPage;
 
@@ -550,11 +549,6 @@ public:
     SvxToolbarEntriesListBox(vcl::Window* pParent, SvxToolbarConfigPage* pPg);
     virtual ~SvxToolbarEntriesListBox();
     virtual void dispose() SAL_OVERRIDE;
-
-    void            SetChangedListener( const Link<>& aChangedListener )
-        { m_aChangedListener = aChangedListener; }
-
-    const Link<>&   GetChangedListener() const { return m_aChangedListener; }
 
     Size            GetCheckBoxPixelSize() const
         { return m_aCheckBoxImageSizePixel; }
@@ -672,8 +666,6 @@ private:
     VclPtr<Edit>           m_pEdtName;
     VclPtr<OKButton>       m_pBtnOK;
 
-    Link<>          aCheckNameHdl;
-
     DECL_LINK(ModifyHdl, Edit*);
 
 public:
@@ -686,13 +678,6 @@ public:
     OUString GetName()
     {
         return m_pEdtName->GetText();
-    }
-
-    void SetCheckNameHdl( const Link<>& rLink, bool bCheckImmediately = false )
-    {
-        aCheckNameHdl = rLink;
-        if ( bCheckImmediately )
-            m_pBtnOK->Enable( rLink.Call( this ) > 0 );
     }
 
     void SetEditHelpId( const OString& aHelpId)

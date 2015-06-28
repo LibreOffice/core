@@ -4771,9 +4771,6 @@ IMPL_LINK(SvxNewToolbarDialog, ModifyHdl, Edit*, pEdit)
 {
     (void)pEdit;
 
-    if(aCheckNameHdl.IsSet())
-        m_pBtnOK->Enable(aCheckNameHdl.Call(this) > 0);
-
     return 0;
 }
 
