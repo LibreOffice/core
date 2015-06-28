@@ -304,7 +304,7 @@ private:
 
     void removeShapeEvents();
     void registerShapeEvents( sal_Int32 nSlideNumber );
-    void registerShapeEvents( css::uno::Reference< css::drawing::XShapes >& xShapes ) throw (css::uno::Exception);
+    void registerShapeEvents( css::uno::Reference< css::drawing::XShapes >& xShapes ) throw (css::uno::Exception, std::exception);
 
     static css::uno::Reference< css::presentation::XSlideShow > createSlideShow();
 

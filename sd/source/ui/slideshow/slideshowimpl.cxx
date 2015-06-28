@@ -1306,7 +1306,7 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
     }
 }
 
-void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( Exception )
+void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( Exception, std::exception )
 {
     try
     {
