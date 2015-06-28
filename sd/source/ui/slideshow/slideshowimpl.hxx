@@ -101,7 +101,7 @@ struct PresentationSettingsEx : public PresentationSettings
 
     void SetArguments( const css::uno::Sequence< css::beans::PropertyValue >& rArguments ) throw (css::lang::IllegalArgumentException);
 
-    void SetPropertyValue( const OUString& rProperty, const css::uno::Any& rValue ) throw (css::lang::IllegalArgumentException);
+    void SetPropertyValue( const OUString& rProperty, const css::uno::Any& rValue ) throw (css::lang::IllegalArgumentException, std::exception);
 };
 
 struct WrappedShapeEventImpl

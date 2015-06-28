@@ -3305,7 +3305,7 @@ void PresentationSettingsEx::SetArguments( const Sequence< PropertyValue >& rArg
     }
 }
 
-void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const Any& rValue ) throw (IllegalArgumentException)
+void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const Any& rValue ) throw (IllegalArgumentException, std::exception)
 {
     if ( rProperty == "RehearseTimings" )
     {
