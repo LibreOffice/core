@@ -39,7 +39,7 @@ class FWE_DLLPUBLIC XMLNamespaces
             throw(  ::com::sun::star::xml::sax::SAXException );
 
         OUString applyNSToAttributeName( const OUString& ) const
-            throw(  ::com::sun::star::xml::sax::SAXException );
+            throw(  ::com::sun::star::xml::sax::SAXException, std::exception );
         OUString applyNSToElementName( const OUString& ) const
             throw(  ::com::sun::star::xml::sax::SAXException );
 
