@@ -181,7 +181,7 @@ static OString convertString( const OUString& aInput )
     return aRet;
 }
 
-static void createSlideFile( Reference< XComponent > xDoc, PlacewareZipFile& rZipFile, const OUString& rURL, vector< PageEntry* >& rPageEntries  ) throw( ::com::sun::star::uno::Exception )
+static void createSlideFile( Reference< XComponent > xDoc, PlacewareZipFile& rZipFile, const OUString& rURL, vector< PageEntry* >& rPageEntries  ) throw( ::com::sun::star::uno::Exception, std::exception )
 {
     OString aInfo;
 
