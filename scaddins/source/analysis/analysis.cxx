@@ -64,7 +64,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
     return pRet;
 }
 
-ResMgr& AnalysisAddIn::GetResMgr() throw( uno::RuntimeException )
+ResMgr& AnalysisAddIn::GetResMgr() throw( uno::RuntimeException, std::exception )
 {
     if( !pResMgr )
     {
