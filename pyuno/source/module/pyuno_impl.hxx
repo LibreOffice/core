@@ -347,7 +347,7 @@ public:
 
     static PyRef create(
         const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & xContext )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 };
 
 
