@@ -170,7 +170,7 @@ public:
     void SetCurrentIndexInParent(sal_Int32 nNew) { mnIndex = nNew; }
 
 protected:
-    virtual OUString SAL_CALL createAccessibleDescription() throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual OUString SAL_CALL createAccessibleDescription() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL createAccessibleName()
                                 throw (::com::sun::star::uno::RuntimeException,
                                        std::exception) SAL_OVERRIDE;
