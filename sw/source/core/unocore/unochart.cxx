@@ -2200,26 +2200,23 @@ uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
     SolarMutexGuard aGuard;
     if (bDisposed)
         throw lang::DisposedException();
-
-    uno::Sequence< double > aRes;
     SwFrameFormat* pTableFormat = GetFrameFormat();
-    if(pTableFormat)
-    {
-        SwTable* pTable = SwTable::FindTable( pTableFormat );
-        if(!pTable->IsTableComplex())
-        {
-            SwRangeDescriptor aDesc;
-            if (FillRangeDescriptor( aDesc, GetCellRangeName( *pTableFormat, *pTableCrsr ) ))
-            {
-                SwXCellRange aRange(pTableCrsr, *pTableFormat, aDesc );
-
-                // get numerical values and make an effort to return the
-                // numerical value for text formatted cells
-                aRange.GetDataSequence( 0, 0, &aRes, true );
-            }
-        }
-    }
-    return aRes;
+    if(!pTableFormat)
+        return {};
+    SwTable* pTable = SwTable::FindTable(pTableFormat);
+    if(pTable->IsTableComplex())
+        return {};
+    SwRangeDescriptor aDesc;
+    if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat,*pTableCrsr)))
+        return {};
+    auto vCells(SwXCellRange(pTableCrsr, *pTableFormat, aDesc).getCells());
+    uno::Sequence< double > vNumData(vCells.size());
+    std::transform(vCells.begin(),
+        vCells.end(),
+        vNumData.begin(),
+        [] (decltype(vCells)::value_type& xCell)
+            { return static_cast<SwXCell*>(xCell.get())->GetForcedNumericalValue(); });
+    return vNumData;
 }
 
 uno::Reference< util::XCloneable > SAL_CALL SwChartDataSequence::createClone(  )

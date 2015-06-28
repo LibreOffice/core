@@ -67,7 +67,6 @@ class SwXCell SAL_FINAL : public SwXCellBaseClass,
 {
     friend void   sw_setString( SwXCell &rCell, const OUString &rText,
                                 bool bKeepNumberFormat );
-    friend double sw_getValue( SwXCell &rCell );
     friend void   sw_setValue( SwXCell &rCell, double nVal );
 
     const SfxItemPropertySet*   m_pPropSet;
@@ -117,8 +116,12 @@ public:
     virtual OUString SAL_CALL getFormula(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setFormula( const OUString& aFormula ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getValue(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getValue(  ) const throw(::com::sun::star::uno::RuntimeException, std::exception)
+        { return const_cast<SwXCell*>(this)->getValue(); };
     virtual void SAL_CALL setValue( double nValue ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::table::CellContentType SAL_CALL getType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::table::CellContentType SAL_CALL getType(  ) const throw(::com::sun::star::uno::RuntimeException, std::exception)
+        { return const_cast<SwXCell*>(this)->getType(); };
     virtual sal_Int32 SAL_CALL getError(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XText
@@ -147,11 +150,11 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    SwTableBox*   GetTableBox()const {return pBox;}
-    static SwXCell*     CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable = 0 );
-    SwTableBox*     FindBox(SwTable* pTable, SwTableBox* pBox);
-
+    SwTableBox* GetTableBox() const { return pBox; }
+    static SwXCell* CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable = nullptr );
+    SwTableBox* FindBox(SwTable* pTable, SwTableBox* pBox);
     SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+    double GetForcedNumericalValue() const;
 };
 
 class SwXTextTableRow SAL_FINAL : public cppu::WeakImplHelper

@@ -705,16 +705,6 @@ void sw_setString( SwXCell &rCell, const OUString &rText,
     rCell.SwXText::setString(rText);
 }
 
-/* non UNO function call to get value from SwXCell */
-double sw_getValue( SwXCell &rCell )
-{
-    double fRet;
-    if(rCell.IsValid() && !rCell.getString().isEmpty())
-        fRet = rCell.pBox->GetFrameFormat()->GetTableBoxValue().GetValue();
-    else
-        ::rtl::math::setNan( &fRet );
-    return fRet;
-}
 
 /* non UNO function call to set value in SwXCell */
 void sw_setValue( SwXCell &rCell, double nVal )
@@ -921,7 +911,12 @@ double SwXCell::getValue() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     // #i112652# a table cell may contain NaN as a value, do not filter that
-    return sw_getValue( *this );
+    double fRet;
+    if(IsValid() && !getString().isEmpty())
+        fRet = pBox->GetFrameFormat()->GetTableBoxValue().GetValue();
+    else
+        ::rtl::math::setNan( &fRet );
+    return fRet;
 }
 
 void SwXCell::setValue(double rValue) throw( uno::RuntimeException, std::exception )
@@ -1188,6 +1183,47 @@ SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox2)
     // box not found: reset nFndPos pointer
     nFndPos = NOTFOUND;
     return nullptr;
+}
+
+double SwXCell::GetForcedNumericalValue() const
+{
+    if(table::CellContentType_TEXT != getType())
+        return getValue();
+    // now we'll try to get a useful numerical value
+    // from the text in the cell...
+    sal_uInt32 nFIndex;
+    SvNumberFormatter* pNumFormatter(const_cast<SvNumberFormatter*>(GetDoc()->GetNumberFormatter()));
+    // look for SwTableBoxNumFormat value in parents as well
+    const SfxPoolItem* pItem;
+    auto pBoxFormat(GetTableBox()->GetFrameFormat());
+    SfxItemState eState = pBoxFormat->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem);
+
+    if (eState == SfxItemState::SET)
+    {
+        // please note that the language of the numberformat
+        // is implicitly coded into the below value as well
+        nFIndex = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+
+        // since the current value indicates a text format but the call
+        // to 'IsNumberFormat' below won't work for text formats
+        // we need to get rid of the part that indicates the text format.
+        // According to ER this can be done like this:
+        nFIndex -= (nFIndex % SV_COUNTRY_LANGUAGE_OFFSET);
+    }
+    else
+    {
+        // system language is probably not the best possible choice
+        // but since we have to guess anyway (because the language of at
+        // the text is NOT the one used for the number format!)
+        // it is at least conform to what is used in
+        // SwTableShell::Execute when
+        // SID_ATTR_NUMBERFORMAT_VALUE is set...
+        LanguageType eLang = LANGUAGE_SYSTEM;
+        nFIndex = pNumFormatter->GetStandardIndex( eLang );
+    }
+    double fTmp;
+    pNumFormatter->IsNumberFormat(const_cast<SwXCell*>(this)->getString(), nFIndex, fTmp);
+    return fTmp;
 }
 
 OUString SwXCell::getImplementationName() throw( uno::RuntimeException, std::exception )
@@ -3485,8 +3521,7 @@ void SwXCellRange::GetDataSequence(
 
     const size_t nSize = static_cast<size_t>(nRowCount) * static_cast<size_t>(nColCount);
     OUString* pTextData(nullptr);
-    double*   pDblData(nullptr);
-    if (pAnySeq)
+    if (pAnySeq || pDblSeq)
     {
         assert(false);
     }
@@ -3494,11 +3529,6 @@ void SwXCellRange::GetDataSequence(
     {
         pTextSeq->realloc(nSize);
         pTextData = pTextSeq->getArray();
-    }
-    else if (pDblSeq)
-    {
-        pDblSeq->realloc(nSize);
-        pDblData = pDblSeq->getArray();
     }
     else
     {
@@ -3527,59 +3557,7 @@ void SwXCellRange::GetDataSequence(
             SwTableBox * pBox = pXCell ? pXCell->GetTableBox() : 0;
             if(!pBox)
                 throw uno::RuntimeException();
-            if (pTextData)
-                pTextData[nDtaCnt++] = lcl_getString(*pXCell);
-            else
-            {
-                double fVal = fNan;
-                if (!bForceNumberResults || table::CellContentType_TEXT != pXCell->getType())
-                    fVal = sw_getValue(*pXCell);
-                else
-                {
-                    OSL_ENSURE( table::CellContentType_TEXT == pXCell->getType(),
-                            "this branch of 'if' is only for text formatted cells" );
-
-                    // now we'll try to get a useful numerical value
-                    // from the text in the cell...
-
-                    sal_uInt32 nFIndex;
-                    SvNumberFormatter* pNumFormatter = m_pTableCrsr->GetDoc()->GetNumberFormatter();
-
-                    // look for SwTableBoxNumFormat value in parents as well
-                    const SfxPoolItem* pItem;
-                    SwFrameFormat *pBoxFormat = pXCell->GetTableBox()->GetFrameFormat();
-                    SfxItemState eState = pBoxFormat->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem);
-
-                    if (eState == SfxItemState::SET)
-                    {
-                        // please note that the language of the numberformat
-                        // is implicitly coded into the below value as well
-                        nFIndex = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
-
-                        // since the current value indicates a text format but the call
-                        // to 'IsNumberFormat' below won't work for text formats
-                        // we need to get rid of the part that indicates the text format.
-                        // According to ER this can be done like this:
-                        nFIndex -= (nFIndex % SV_COUNTRY_LANGUAGE_OFFSET);
-                    }
-                    else
-                    {
-                        // system language is probably not the best possible choice
-                        // but since we have to guess anyway (because the language of at
-                        // the text is NOT the one used for the number format!)
-                        // it is at least conform to what is used in
-                        // SwTableShell::Execute when
-                        // SID_ATTR_NUMBERFORMAT_VALUE is set...
-                        LanguageType eLang = LANGUAGE_SYSTEM;
-                        nFIndex = pNumFormatter->GetStandardIndex( eLang );
-                    }
-
-                    double fTmp;
-                    if (pNumFormatter->IsNumberFormat( lcl_getString(*pXCell), nFIndex, fTmp ))
-                        fVal = fTmp;
-                }
-                pDblData[nDtaCnt++] = fVal;
-            }
+            pTextData[nDtaCnt++] = lcl_getString(*pXCell);
         }
     }
     assert(nDtaCnt == nSize);
@@ -3611,7 +3589,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
             // check if table box value item is set
             SwFrameFormat* pBoxFormat(pBox->GetFrameFormat());
             const bool bIsNum = pBoxFormat->GetItemState(RES_BOXATR_VALUE, false) == SfxItemState::SET;
-            rCellAny = bIsNum ? uno::makeAny(sw_getValue(*pCell)) : uno::makeAny(lcl_getString(*pCell));
+            rCellAny = bIsNum ? uno::makeAny(pCell->getValue()) : uno::makeAny(lcl_getString(*pCell));
             ++pCurrentCell;
         }
     }
