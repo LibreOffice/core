@@ -69,7 +69,7 @@ DataEditor::DataEditor(vcl::Window* pParent,
 
     m_pTbxData->SetSelectHdl( LINK( this, DataEditor, ToolboxHdl ));
 
-    m_xBrwData->SetCursorMovedHdl( LINK( this, DataEditor,   BrowserCursorMovedHdl ));
+    m_xBrwData->SetCursorMovedHdl( LINK( this, DataEditor, BrowserCursorMovedHdl ));
 
     UpdateData();
     GrabFocus();
@@ -132,10 +132,10 @@ IMPL_LINK_NOARG_TYPED(DataEditor, ToolboxHdl, ToolBox *, void)
 }
 
 // refresh toolbar icons according to currently selected cell in browse box
-IMPL_LINK_NOARG(DataEditor, BrowserCursorMovedHdl)
+IMPL_LINK_NOARG_TYPED(DataEditor, BrowserCursorMovedHdl, DataBrowser*, void)
 {
     if( m_bReadOnly )
-        return 0;
+        return;
 
     bool bIsDataValid = m_xBrwData->IsEnableItem();
 
@@ -147,8 +147,6 @@ IMPL_LINK_NOARG(DataEditor, BrowserCursorMovedHdl)
 
     m_pTbxData->EnableItem( TBI_DATA_SWAP_COL,   bIsDataValid && m_xBrwData->MaySwapColumns() );
     m_pTbxData->EnableItem( TBI_DATA_SWAP_ROW,   bIsDataValid && m_xBrwData->MaySwapRows() );
-
-    return 0;
 }
 
 // disable all modifying controls

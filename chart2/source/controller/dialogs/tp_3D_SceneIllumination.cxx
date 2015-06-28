@@ -315,10 +315,10 @@ void ThreeD_SceneIllumination_TabPage::dispose()
     TabPage::dispose();
 }
 
-IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel)
+IMPL_LINK_NOARG_TYPED(ThreeD_SceneIllumination_TabPage, fillControlsFromModel, void*, void)
 {
     if( m_bInCommitToModel )//don't read own changes
-        return 0;
+        return;
 
     sal_Int32 nL=0;
     for( nL=0; nL<8; nL++)
@@ -329,8 +329,6 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel)
     lcl_selectColor( *m_pLB_AmbientLight, lcl_getAmbientColor( m_xSceneProperties ));
 
     this->updatePreview();
-
-    return 0;
 }
 
 void ThreeD_SceneIllumination_TabPage::applyLightSourceToModel( sal_uInt32 nLightNumber )

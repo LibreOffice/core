@@ -174,7 +174,7 @@ public:
 
     void SetGetFocusHdl( const Link<>& rLink );
 
-    void SetEditChangedHdl( const Link<> & rLink );
+    void SetEditChangedHdl( const Link<SeriesHeaderEdit*,void> & rLink );
 
     bool HasFocus() const;
 
@@ -183,7 +183,7 @@ private:
     VclPtr< SeriesHeaderEdit >  m_spSeriesName;
     VclPtr< FixedText >         m_spColorBar;
     VclPtr< OutputDevice>       m_pDevice;
-    Link<>                      m_aChangeLink;
+    Link<SeriesHeaderEdit*,void> m_aChangeLink;
 
     void notifyChanges();
     DECL_LINK( SeriesNameChanged, void * );
@@ -324,7 +324,7 @@ void SeriesHeader::Hide()
     m_spColorBar->Hide();
 }
 
-void SeriesHeader::SetEditChangedHdl( const Link<> & rLink )
+void SeriesHeader::SetEditChangedHdl( const Link<SeriesHeaderEdit*,void> & rLink )
 {
     m_aChangeLink = rLink;
 }
@@ -593,7 +593,7 @@ void DataBrowser::RenewTable()
     clearHeaders();
     const DataBrowserModel::tDataHeaderVector& aHeaders( m_apDataBrowserModel->getDataHeaders());
     Link<> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
-    Link<> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
+    Link<impl::SeriesHeaderEdit*,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
 
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
@@ -752,7 +752,7 @@ void DataBrowser::CursorMoved()
         m_aCursorMovedHdlLink.Call( this );
 }
 
-void DataBrowser::SetCellModifiedHdl( const Link<>& rLink )
+void DataBrowser::SetCellModifiedHdl( const Link<DataBrowser*,void>& rLink )
 {
     m_aCellModifiedLink = rLink;
 }
@@ -972,7 +972,7 @@ void DataBrowser::SwapRow()
     }
 }
 
-void DataBrowser::SetCursorMovedHdl( const Link<>& rLink )
+void DataBrowser::SetCursorMovedHdl( const Link<DataBrowser*,void>& rLink )
 {
     m_aCursorMovedHdlLink = rLink;
 }
@@ -1231,7 +1231,7 @@ void DataBrowser::RenewSeriesHeaders()
     clearHeaders();
     DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
     Link<> aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
-    Link<> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
+    Link<impl::SeriesHeaderEdit*,void> aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
 
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
@@ -1328,7 +1328,7 @@ IMPL_LINK( DataBrowser, SeriesHeaderGotFocus, impl::SeriesHeaderEdit*, pEdit )
     return 0;
 }
 
-IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit )
+IMPL_LINK_TYPED( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit, void )
 {
     if( pEdit )
     {
@@ -1353,7 +1353,6 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit )
             }
         }
     }
-    return 0;
 }
 
 } // namespace chart

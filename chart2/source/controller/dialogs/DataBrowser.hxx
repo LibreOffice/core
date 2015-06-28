@@ -127,9 +127,9 @@ public:
     void SwapRow();
     void SwapColumn();
 
-    void SetCursorMovedHdl( const Link<>& rLink );
+    void SetCursorMovedHdl( const Link<DataBrowser*,void>& rLink );
 
-    void SetCellModifiedHdl( const Link<>& rLink );
+    void SetCellModifiedHdl( const Link<DataBrowser*,void>& rLink );
 
     /// confirms all pending changes to be ready to be closed
     bool EndEditing();
@@ -169,12 +169,12 @@ private:
     VclPtr<Edit>                m_aTextEditField;
 
     /// note: m_aNumberEditField must precede this member!
-    ::svt::CellControllerRef m_rNumberEditController;
+    ::svt::CellControllerRef    m_rNumberEditController;
     /// note: m_aTextEditField must precede this member!
-    ::svt::CellControllerRef m_rTextEditController;
+    ::svt::CellControllerRef    m_rTextEditController;
 
-    Link<>              m_aCursorMovedHdlLink;
-    Link<>              m_aCellModifiedLink;
+    Link<DataBrowser*,void>     m_aCursorMovedHdlLink;
+    Link<DataBrowser*,void>     m_aCellModifiedLink;
 
     void clearHeaders();
     void RenewTable();
@@ -184,7 +184,7 @@ private:
     static OUString GetRowString( sal_Int32 nRow );
 
     DECL_LINK( SeriesHeaderGotFocus, impl::SeriesHeaderEdit* );
-    DECL_LINK( SeriesHeaderChanged,  impl::SeriesHeaderEdit* );
+    DECL_LINK_TYPED( SeriesHeaderChanged,  impl::SeriesHeaderEdit*, void );
 
     DataBrowser( const DataBrowser & ) SAL_DELETED_FUNCTION;
 };

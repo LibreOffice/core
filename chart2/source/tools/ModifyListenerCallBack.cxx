@@ -35,7 +35,7 @@ class ModifyListenerCallBack_impl
     , public ModifyListenerCallBack_Base
 {
 public:
-    explicit ModifyListenerCallBack_impl( const Link<>& rCallBack );
+    explicit ModifyListenerCallBack_impl( const Link<void*,void>& rCallBack );
     virtual ~ModifyListenerCallBack_impl();
 
     void stopListening();
@@ -49,11 +49,11 @@ public:
     using ::cppu::WeakComponentImplHelperBase::disposing;
 
 private:
-    Link<> m_aLink;//will be called on modify
+    Link<void*,void> m_aLink;//will be called on modify
     Reference< util::XModifyBroadcaster > m_xBroadcaster;//broadcaster to listen at
 };
 
-ModifyListenerCallBack_impl::ModifyListenerCallBack_impl( const Link<>& rCallBack )
+ModifyListenerCallBack_impl::ModifyListenerCallBack_impl( const Link<void*,void>& rCallBack )
                         : ModifyListenerCallBack_Base( m_aMutex )
                         , m_aLink( rCallBack )
                         , m_xBroadcaster(0)
@@ -85,7 +85,7 @@ void ModifyListenerCallBack_impl::stopListening()
     }
 }
 
-ModifyListenerCallBack::ModifyListenerCallBack( const Link<>& rCallBack )
+ModifyListenerCallBack::ModifyListenerCallBack( const Link<void*,void>& rCallBack )
                         : pModifyListener_impl( new ModifyListenerCallBack_impl(rCallBack) )
                         , m_xModifyListener( pModifyListener_impl )
 {

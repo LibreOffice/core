@@ -36,7 +36,7 @@ class ModifyListenerCallBack_impl;
 class OOO_DLLPUBLIC_CHARTTOOLS ModifyListenerCallBack
 {
 public:
-    explicit ModifyListenerCallBack( const Link<>& rCallBack );
+    explicit ModifyListenerCallBack( const Link<void*,void>& rCallBack );
 
     virtual ~ModifyListenerCallBack();
 

@@ -76,7 +76,7 @@ private:
     /// handles actions of the toolbox
     DECL_LINK_TYPED( ToolboxHdl, ToolBox*, void );
     /// is called, if the cursor of the table has moved
-    DECL_LINK( BrowserCursorMovedHdl, void*);
+    DECL_LINK_TYPED( BrowserCursorMovedHdl, DataBrowser*, void);
     /// this is called if MiscOptions change, esp. High-Contrast mode
     DECL_LINK( MiscHdl, void* );
     /// is called when the width of any column in the edit browsebox has changed

@@ -69,7 +69,7 @@ private:
     void updatePreview();
 
 private:
-    DECL_LINK(fillControlsFromModel, void *);
+    DECL_LINK_TYPED(fillControlsFromModel, void *, void);
 
     void applyLightSourceToModel( sal_uInt32 nLightNumber );
     void applyLightSourcesToModel();
