@@ -3593,13 +3593,7 @@ void SwXCellRange::GetDataSequence(
             }
         }
     }
-    OSL_ENSURE( nDtaCnt == nSize, "size mismatch. Invalid cell range?" );
-    if (pAnySeq)
-        pAnySeq->realloc( nDtaCnt );
-    else if (pTextSeq)
-        pTextSeq->realloc( nDtaCnt );
-    else if (pDblSeq)
-        pDblSeq->realloc( nDtaCnt );
+    assert(nDtaCnt == nSize);
 }
 
 ///@see SwXCellRange::getData
