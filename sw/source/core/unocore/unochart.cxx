@@ -2009,34 +2009,6 @@ sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const uno::Sequence< sal_I
     return 0;
 }
 
-uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
-    throw (uno::RuntimeException, std::exception)
-{
-    SolarMutexGuard aGuard;
-    if (bDisposed)
-        throw lang::DisposedException();
-
-    SwFrameFormat* pTableFormat = GetFrameFormat();
-    if(!pTableFormat)
-        return {};
-    SwTable* pTable = SwTable::FindTable(pTableFormat);
-    if(pTable->IsTableComplex())
-        return {};
-    SwRangeDescriptor aDesc;
-    if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat,*pTableCrsr)))
-        return {};
-    auto vData(SwXCellRange(pTableCrsr, *pTableFormat, aDesc).getDataArray());
-    if(!vData.getLength())
-        return {};
-    std::vector< uno::Any > vResult;
-    vResult.reserve(vData.getLength()*vData[0].getLength());
-    for(auto& rRow : vData)
-        std::copy(
-            rRow.begin(),
-            rRow.end(),
-            std::back_inserter(vResult));
-    return comphelper::containerToSequence(vResult);
-}
 
 OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
     throw (uno::RuntimeException, std::exception)
@@ -2197,6 +2169,20 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
         [] (decltype(vCells)::value_type& xCell)
             { return static_cast<SwXCell*>(xCell.get())->getString(); });
     return vTextData;
+}
+
+uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
+    throw (uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    auto vCells(getCells());
+    uno::Sequence< uno::Any > vAnyData(vCells.size());
+    std::transform(vCells.begin(),
+        vCells.end(),
+        vAnyData.begin(),
+        [] (decltype(vCells)::value_type& xCell)
+            { return static_cast<SwXCell*>(xCell.get())->GetAny(); });
+    return vAnyData;
 }
 
 uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
