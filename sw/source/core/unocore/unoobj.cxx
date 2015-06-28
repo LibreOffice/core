@@ -474,7 +474,8 @@ bool
 SwUnoCursorHelper::SetCursorPropertyValue(
         SfxItemPropertySimpleEntry const& rEntry, const uno::Any& rValue,
         SwPaM & rPam, SfxItemSet & rItemSet)
-throw (lang::IllegalArgumentException, uno::RuntimeException, uno::DeploymentException)
+throw (lang::IllegalArgumentException, uno::RuntimeException,
+       uno::DeploymentException, std::exception)
 {
     if (!(rEntry.nFlags & beans::PropertyAttribute::MAYBEVOID) &&
         (rValue.getValueType() == cppu::UnoType<void>::get()))
