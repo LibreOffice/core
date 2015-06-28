@@ -307,7 +307,7 @@ protected:
             siblings) name.
     */
     virtual OUString CreateAccessibleName()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** Create the accessible object's descriptive string.  May be called
         more than once.

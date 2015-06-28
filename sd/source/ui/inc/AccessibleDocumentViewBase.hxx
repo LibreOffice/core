@@ -319,7 +319,7 @@ protected:
     */
     virtual OUString
         CreateAccessibleName ()
-        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Create a description string.  The current description is not
         modified and, therefore, no events are send.  This method is usually
