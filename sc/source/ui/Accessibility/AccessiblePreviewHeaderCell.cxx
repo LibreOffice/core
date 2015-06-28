@@ -384,7 +384,7 @@ Rectangle ScAccessiblePreviewHeaderCell::GetBoundingBox() const throw (uno::Runt
     return Rectangle();
 }
 
-OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleDescription() throw(uno::RuntimeException)
+OUString SAL_CALL ScAccessiblePreviewHeaderCell::createAccessibleDescription() throw(uno::RuntimeException, std::exception)
 {
     OUString sDescription = OUString(ScResId(STR_ACC_HEADERCELL_DESCR));
     return sDescription;
