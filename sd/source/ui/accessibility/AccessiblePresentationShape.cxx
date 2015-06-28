@@ -55,7 +55,7 @@ OUString SAL_CALL
 
 /// Set this object's name if is different to the current name.
 OUString AccessiblePresentationShape::CreateAccessibleBaseName()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sName;
 

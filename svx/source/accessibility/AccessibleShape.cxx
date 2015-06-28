@@ -1147,7 +1147,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 // protected internal
 // Set this object's name if is different to the current name.
 OUString AccessibleShape::CreateAccessibleBaseName()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ShapeTypeHandler::CreateAccessibleBaseName( mxShape );
 }

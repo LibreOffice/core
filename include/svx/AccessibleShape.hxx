@@ -435,7 +435,7 @@ protected:
     */
     virtual OUString
         CreateAccessibleBaseName()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** Create a unique name string that contains the accessible name.  The
         name consists of the base name and the index.
