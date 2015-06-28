@@ -1492,10 +1492,7 @@ sal_Bool SAL_CALL SwChartDataProvider::supportsService(const OUString& rServiceN
 uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = "com.sun.star.chart2.data.DataProvider";
-    return aRes;
+    return { "com.sun.star.chart2.data.DataProvider"};
 }
 
 void SwChartDataProvider::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -1880,10 +1877,7 @@ sal_Bool SAL_CALL SwChartDataSource::supportsService(const OUString& rServiceNam
 uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = "com.sun.star.chart2.data.DataSource";
-    return aRes;
+    return { "com.sun.star.chart2.data.DataSource" };
 }
 
 SwChartDataSequence::SwChartDataSequence(
@@ -2301,10 +2295,7 @@ sal_Bool SAL_CALL SwChartDataSequence::supportsService(const OUString& rServiceN
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = "com.sun.star.chart2.data.DataSequence";
-    return aRes;
+    return { "com.sun.star.chart2.data.DataSequence" };
 }
 
 void SwChartDataSequence::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -2798,11 +2789,7 @@ sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
 uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = "com.sun.star.chart2.data.LabeledDataSequence";
-
-    return aRes;
+    return { "com.sun.star.chart2.data.LabeledDataSequence" };
 }
 
 void SAL_CALL SwChartLabeledDataSequence::disposing(
