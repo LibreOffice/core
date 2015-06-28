@@ -350,7 +350,7 @@ public:
 
     void        FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const;
     bool        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
-    std::vector< css::uno::Reference< css::table::XCell > > getCells();
+    std::vector< css::uno::Reference< css::table::XCell > > GetCells();
 };
 
 typedef cppu::WeakImplHelper

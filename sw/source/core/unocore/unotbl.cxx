@@ -3180,7 +3180,7 @@ SwXCellRange::SwXCellRange(sw::UnoCursorPointer pCrsr, SwFrameFormat& rFrameForm
     aRgDesc.Normalize();
 }
 
-std::vector< uno::Reference< table::XCell > > SwXCellRange::getCells()
+std::vector< uno::Reference< table::XCell > > SwXCellRange::GetCells()
 {
     SwFrameFormat* const pFormat = GetFrameFormat();
     const sal_Int32 nRowCount(getRowCount());
@@ -3512,7 +3512,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
     uno::Sequence< uno::Sequence< uno::Any > > aRowSeq(nRowCount);
-    auto vCells(getCells());
+    auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
     for(auto& rRow : aRowSeq)
     {
@@ -3542,7 +3542,7 @@ void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< uno
         return;
     if(rArray.getLength() != nRowCount)
         throw uno::RuntimeException("Row count mismatch. expected: " + OUString::number(nRowCount) + " got: " + OUString::number(rArray.getLength()), static_cast<cppu::OWeakObject*>(this));
-    auto vCells(getCells());
+    auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
     for(const auto& rColSeq : rArray)
     {
@@ -3578,7 +3578,7 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData() throw( uno::Run
         return xDataRange->getData();
     }
     uno::Sequence< uno::Sequence< double > > vRows(nRowCount);
-    auto vCells(getCells());
+    auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
     for(auto& rRow : vRows)
     {
@@ -3609,7 +3609,7 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
     lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
     if(rData.getLength() != nRowCount)
         throw uno::RuntimeException("Row count mismatch. expected: " + OUString::number(nRowCount) + " got: " + OUString::number(rData.getLength()), static_cast<cppu::OWeakObject*>(this));
-    auto vCells(getCells());
+    auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
     for(const auto& rRow : rData)
     {
@@ -3651,7 +3651,7 @@ uno::Sequence<OUString> SwXCellRange::getLabelDescriptions(bool bRow)
     if(!(bRow ? m_bFirstColumnAsLabel : m_bFirstRowAsLabel))
         return {};  // without labels we have no descriptions
     auto xLabelRange(getCellRangeByPosition(nLeft, nTop, nRight, nBottom));
-    auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->getCells());
+    auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->GetCells());
     uno::Sequence<OUString> vResult(vCells.size());
     std::transform(vCells.begin(), vCells.end(), vResult.begin(),
         [](uno::Reference<table::XCell> xCell) -> OUString { return uno::Reference<text::XText>(xCell, uno::UNO_QUERY_THROW)->getString(); });
@@ -3677,7 +3677,7 @@ void SwXCellRange::setLabelDescriptions(const uno::Sequence<OUString>& rDesc, bo
     if(!nRight && !nBottom)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     auto xLabelRange(getCellRangeByPosition(nLeft, nTop, nRight, nBottom));
-    auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->getCells());
+    auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->GetCells());
     if (sal::static_int_cast<sal_uInt32>(rDesc.getLength()) != vCells.size())
         throw uno::RuntimeException("Too few or too many descriptions", static_cast<cppu::OWeakObject*>(this));
     auto pDescIterator(rDesc.begin());

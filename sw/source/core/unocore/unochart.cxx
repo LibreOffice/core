@@ -2135,7 +2135,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
     return 0;
 }
 
-std::vector< css::uno::Reference< css::table::XCell > > SwChartDataSequence::getCells()
+std::vector< css::uno::Reference< css::table::XCell > > SwChartDataSequence::GetCells()
 {
     if (bDisposed)
         throw lang::DisposedException();
@@ -2148,14 +2148,14 @@ std::vector< css::uno::Reference< css::table::XCell > > SwChartDataSequence::get
     SwRangeDescriptor aDesc;
     if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat, *pTableCrsr)))
         return {};
-    return SwXCellRange(pTableCrsr, *pTableFormat, aDesc).getCells();
+    return SwXCellRange(pTableCrsr, *pTableFormat, aDesc).GetCells();
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    auto vCells(getCells());
+    auto vCells(GetCells());
     uno::Sequence< OUString > vTextData(vCells.size());
     std::transform(vCells.begin(),
         vCells.end(),
@@ -2169,7 +2169,7 @@ uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    auto vCells(getCells());
+    auto vCells(GetCells());
     uno::Sequence< uno::Any > vAnyData(vCells.size());
     std::transform(vCells.begin(),
         vCells.end(),
@@ -2183,7 +2183,7 @@ uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    auto vCells(getCells());
+    auto vCells(GetCells());
     uno::Sequence< double > vNumData(vCells.size());
     std::transform(vCells.begin(),
         vCells.end(),

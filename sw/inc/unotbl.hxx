@@ -471,7 +471,7 @@ public:
     void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel)
         { m_bFirstRowAsLabel = bFirstRowAsLabel, m_bFirstColumnAsLabel = bFirstColumnAsLabel; }
     virtual ~SwXCellRange() {};
-    std::vector< css::uno::Reference< css::table::XCell > > getCells();
+    std::vector< css::uno::Reference< css::table::XCell > > GetCells();
 
     TYPEINFO_OVERRIDE();
 
