@@ -307,7 +307,7 @@ private:
     ResMgr&                     GetResMgr() throw( ::com::sun::star::uno::RuntimeException );
     void                        InitData();
 
-    OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( ::com::sun::star::uno::RuntimeException );
+    OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
     OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
 
 public:

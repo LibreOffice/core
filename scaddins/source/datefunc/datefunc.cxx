@@ -261,7 +261,7 @@ void ScaDateAddIn::InitData()
     }
 }
 
-OUString ScaDateAddIn::GetDisplFuncStr( sal_uInt16 nResId ) throw( uno::RuntimeException )
+OUString ScaDateAddIn::GetDisplFuncStr( sal_uInt16 nResId ) throw( uno::RuntimeException, std::exception )
 {
     return ScaResStringLoader( RID_DATE_FUNCTION_NAMES, nResId, GetResMgr() ).GetString();
 }
