@@ -466,7 +466,7 @@ void NewToolbarController::functionExecuted( const OUString &rCommand )
     popup menu of this control, we return sal_True. Otherwhise we return sal_False.
     Further we return a fallback URL, in case we have to return sal_False. Because
     the outside code must select a valid item of the popup menu every time ...
-    and we define it here. By the way this m ethod was written to handle
+    and we define it here. By the way this method was written to handle
     error situations gracefully. E.g. it can be called during creation time
     but then we have no valid menu. For this case we know another fallback URL.
     Then we return the private:factory/ URL of the default factory.

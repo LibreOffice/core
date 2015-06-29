@@ -33,7 +33,7 @@
  * in UNO are: FRAME, WINDOW, DIALOG, MENU, TOOLTIP.
  * It implements the methods of XTopWindowListener and the most important method is windowOpened().
  * In this method, all the accessible objects (including COM object and Uno objects) are created and
- * cached into bridge managers, and they are monitored by listeners for later accessible evnet handling.
+ * cached into bridge managers, and they are monitored by listeners for later accessible event handling.
  */
 class AccTopWindowListener
     : public ::cppu::WeakImplHelper1<com::sun::star::awt::XTopWindowListener>

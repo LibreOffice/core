@@ -384,7 +384,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                         if (aNumberPostits)
                             --aNumberPostits;
                     }
-                    //search inside and finsih and put focus back into the doc
+                    //search inside, finish and put focus back into the doc
                     if (pPostItMgr->FinishSearchReplace(rSearchOpt,bSrchForward))
                     {
                         bFound = true ;

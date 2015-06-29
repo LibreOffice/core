@@ -359,7 +359,7 @@ bool SvxSpellWrapper::SpellNext( )
     }
     else if( bReverse == bStartChk ) //For a change of direction, an area can
     {                          // be processed during certain circumstances
-        if( bStartChk )        // If the firdt part is spell checked in backwards
+        if( bStartChk )        // If the first part is spell checked in backwards
             bEndDone = true;   // and this is reversed in the process, then
         else                   // then the end part is processed (and vice-versa).
             bStartDone = true;

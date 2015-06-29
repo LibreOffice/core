@@ -312,7 +312,7 @@ inline TokenPool& TokenPool::operator <<( const TokenId& rId )
 inline TokenPool& TokenPool::operator <<( const DefTokenId eId )
 {
     OSL_ENSURE( ( sal_uInt32 ) eId + nScTokenOff < 0xFFFF,
-        "-TokenPool::operator<<: enmum too large!" );
+        "-TokenPool::operator<<: enum too large!" );
 
     if( nP_IdAkt >= nP_Id )
 		if (!GrowId())

@@ -169,7 +169,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground()
     return nColor;
 }
 
-/** Extract the background color from the Background property of eithe the
+/** Extract the background color from the Background property of the
     draw page or its master page.
 */
 sal_Int32 SAL_CALL AccessiblePageShape::getBackground()

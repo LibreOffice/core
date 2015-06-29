@@ -2044,7 +2044,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
             const OUString aCellRange( GetCellRangeName( *pTableFormat, *pTableCrsr ) );
             OSL_ENSURE( !aCellRange.isEmpty(), "failed to get cell range" );
             bOk = FillRangeDescriptor( aDesc, aCellRange );
-            OSL_ENSURE( bOk, "falied to get SwRangeDescriptor" );
+            OSL_ENSURE( bOk, "failed to get SwRangeDescriptor" );
         }
         if (bOk)
         {

@@ -323,7 +323,7 @@ namespace basegfx
                         rRotate = atan2(aUnitVecY.getY(), aUnitVecY.getX()) - M_PI_2;
                     }
 
-                    // one or both unit vectors do not extist, determinant is zero, no decomposition possible.
+                    // one or both unit vectors do not exist, determinant is zero, no decomposition possible.
                     // Eventually used rotations or shears are lost
                     return false;
                 }
