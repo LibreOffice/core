@@ -332,10 +332,6 @@ protected:
 
     virtual ~SdrTextObj();
 
-    virtual void onOverflowStatusEvent( );
-    virtual void onUnderflowStatusEvent( );
-
-
 public:
     TYPEINFO_OVERRIDE();
 
@@ -630,10 +626,6 @@ public:
         const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
         const drawinglayer::geometry::ViewInformation2D& aViewInformation) const;
 
-    void impMoveChainedTextToNextLink(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const;
-    OutlinerParaObject *impGetOverflowingParaObject(SdrOutliner *pOutliner, SdrTextObj *pNextTextObj) const;
-    void impLeaveOnlyNonOverflowingText(SdrOutliner *pOutliner) const;
-    OutlinerParaObject *impGetNonOverflowingParaObject(SdrOutliner *pOutliner) const;
 
     // timing generators
     void impGetBlinkTextTiming(drawinglayer::animation::AnimationEntryList& rAnimList) const;

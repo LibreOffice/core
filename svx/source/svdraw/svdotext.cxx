@@ -1985,82 +1985,8 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
     }
 }
 
-void SdrTextObj::onOverflowStatusEvent( )
-{
-    // Pushes text in next link on the fly
-    if ( mbToBeChained ) {
-        SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
-
-       if (pEdtOutl != NULL)
-            mpOverflowingText = pEdtOutl->GetOverflowingText();
-        else {
-            assert(0); // Should never happen. FIXME(matteocam)
-        }
-
-        SdrTextObj *pNextTextObj = GetNextLinkInChain();
-
-        impLeaveOnlyNonOverflowingText(&aDrawOutliner);
-
-        // Transfer overflowing text
-        impMoveChainedTextToNextLink(&aDrawOutliner, pNextTextObj);
-    }
-}
-
-void SdrTextObj::onUnderflowStatusEvent( )
-{
-    SdrTextObj *pNextLink = GetNextLinkInChain();
-    SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
-
-    if (!pNextLink->HasText())
-        return;
-
-    //  Get the text of the other guy and add it to the last paragraph
-    // XXX: For now it's not merging anything just adding the while thing as a separate para
-    OutlinerParaObject *pNextLinkWholeText = pNextLink->GetOutlinerParaObject();
-    if (!pNextLinkWholeText)
-        return;
-
-    OutlinerParaObject *pCurText;
-
-    pCurText = pEdtOutl->CreateParaObject();
-
-    // NewTextForCurBox = Txt(CurBox) ++ Txt(NextBox)
-    // prepare for checking overflow
-    aDrawOutliner.SetUpdateMode(true);
-    aDrawOutliner.SetMaxAutoPaperSize(pEdtOutl->GetMaxAutoPaperSize());
-    aDrawOutliner.SetMinAutoPaperSize(pEdtOutl->GetMinAutoPaperSize());
-    aDrawOutliner.SetPaperSize(pEdtOutl->GetPaperSize());
-    aDrawOutliner.SetText(*pCurText);
-    aDrawOutliner.AddText(*pNextLinkWholeText);
-
-    bool bIsOverflowFromUnderflow = aDrawOutliner.IsPageOverflow();
-    // Save mpOverflowingText (important for overflow handlers below) // XXX: Change the wayt this is done?
-    if (bIsOverflowFromUnderflow)
-        mpOverflowingText = aDrawOutliner.GetOverflowingText();
-
-    OutlinerParaObject *pNewText = aDrawOutliner.CreateParaObject();
-
-    // Set the other box empty so if overflow does not occur we are fine
-    pNextLink->NbcSetOutlinerParaObject(aDrawOutliner.GetEmptyParaObject());
-
-    // handle overflow
-    if (bIsOverflowFromUnderflow) {
-        // prevents infinite loops when setting text for editing outliner
-        GetTextChain()->SetNilChainingEvent(const_cast<SdrTextObj*>(this), true);
-
-        impLeaveOnlyNonOverflowingText(&aDrawOutliner);
-        impMoveChainedTextToNextLink(&aDrawOutliner, pNextLink);
-    } else {
-        // No overflow: set the whole thing
-        const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
-    }
-}
-
-
 void SdrTextObj::onChainingEvent()
 {
-
-
     if (!IsChainable() || GetNextLinkInChain() == NULL)
         return;
 
@@ -2076,56 +2002,28 @@ void SdrTextObj::onChainingEvent()
     // Outliner for text transfer
     SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
 
-    // XXX: Specializing the class?
-    // OBS: you don't need all the "setting parameters" crap for underflow with this
     EditingTextChainFlow aTxtChainFlow(this);
     aTxtChainFlow.CheckForFlowEvents(pEdtOutl);
 
 
     if (aTxtChainFlow.IsOverflow()) {
-        fprintf(stderr, "Overflow going on\n");
-
+        fprintf(stderr, "[CHAINING] Overflow going on\n");
         // One outliner is for non-overflowing text, the other for overflowing text
         // In this case they can both be the drawing outliner
         aTxtChainFlow.ExecuteOverflow(&aDrawOutliner, &aDrawOutliner);
     } else if (aTxtChainFlow.IsUnderflow()) {
-        fprintf(stderr, "Underflow going on\n");
+        fprintf(stderr, "[CHAINING] Underflow going on\n");
         // underflow-induced overflow
         aTxtChainFlow.ExecuteUnderflow(&aDrawOutliner);
         bool bIsOverflowFromUnderflow = aTxtChainFlow.IsOverflow();
-
         // handle overflow
         if (bIsOverflowFromUnderflow) {
-            fprintf(stderr, "Overflow going on (underflow induced)\n");
+            fprintf(stderr, "[CHAINING] Overflow going on (underflow induced)\n");
             // prevents infinite loops when setting text for editing outliner
             GetTextChain()->SetNilChainingEvent(const_cast<SdrTextObj*>(this), true);
 
             aTxtChainFlow.ExecuteOverflow(&aDrawOutliner, &aDrawOutliner);
-        } // XXX: For the code below
-        // Probably not necessary
-        //else {
-        //    // No overflow: set the whole thing
-        //    const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
-        //}
-    }
-
-    return;
-
-    // Begin old code
-
-    bool bIsPageOverflow;
-
-    bIsPageOverflow = pEdtOutl->IsPageOverflow();
-
-    // Propagates the need for change
-    SetToBeChained( bIsPageOverflow );
-    fprintf(stderr, "[CHAINING] Need for Chaining is %s\n",
-        bIsPageOverflow ? "TRUE" : "FALSE");
-
-    if ( bIsPageOverflow ) {
-        onOverflowStatusEvent();
-    } else {
-        onUnderflowStatusEvent();
+        }
     }
 }
 
