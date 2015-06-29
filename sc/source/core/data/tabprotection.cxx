@@ -246,7 +246,7 @@ Sequence<sal_Int8> ScTableProtectionImpl::getPasswordHash(
     Sequence<sal_Int8> aPassHash;
 
     if (mbEmptyPass)
-        // Flaged as empty.
+        // Flagged as empty.
         return aPassHash;
 
     if (!maPassText.isEmpty())

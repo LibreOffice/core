@@ -169,7 +169,7 @@ void SAL_CALL EncryptorImpl::setReferenceCount(sal_Int32)
     throw (Exception, RuntimeException, std::exception)
 {
     /*
-     * dummp method, because there is only one reference in
+     * dummy method, because there is only one reference in
      * encryption, different from signature.
      * so the referenceNumber is always 1
      */

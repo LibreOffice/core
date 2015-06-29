@@ -138,7 +138,7 @@ namespace svt
         /** smaller form of <method>initialize</method>.<p/>
             The <method>initialize</method> method is called with a sequence of com.sun.star.uno::Any's,
             which is split up into the single elements, which are passed to implInitialize. The default implementation
-            tries to exract an com.sun.star.beans::PropertyValue from the value an pass it to the
+            tries to extract an com.sun.star.beans::PropertyValue from the value an pass it to the
             com.sun.star.beans::XPropertySet interface of the object.
         */
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue);

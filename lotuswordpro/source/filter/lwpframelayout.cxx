@@ -908,7 +908,7 @@ bool LwpFrameLayout::HasPreviousLinkLayout()
     return true;
 }
 /**
- * @descr whether current frame is for water mark. Problem maybe exsits by this method, must be tracking
+ * @descr whether current frame is for water mark. Problem maybe exists by this method, must be tracking
  *
  */
 bool LwpFrameLayout::IsForWaterMark()
