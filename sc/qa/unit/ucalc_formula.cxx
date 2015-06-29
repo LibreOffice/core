@@ -1747,6 +1747,14 @@ void Test::testFormulaRefUpdateInsertColumns()
     bool bInserted = m_pDoc->InsertNewRangeName("RowRelativeRange", aNamePos, "$Formula.$B2");
     CPPUNIT_ASSERT(bInserted);
 
+    // Set named range for entire absolute column B.
+    bInserted = m_pDoc->InsertNewRangeName("EntireColumn", aNamePos, "$B:$B");
+    CPPUNIT_ASSERT(bInserted);
+
+    // Set named range for entire absolute row 2.
+    bInserted = m_pDoc->InsertNewRangeName("EntireRow", aNamePos, "$2:$2");
+    CPPUNIT_ASSERT(bInserted);
+
     // Set values in B1:B3.
     m_pDoc->SetValue(ScAddress(1,0,0), 1.0);
     m_pDoc->SetValue(ScAddress(1,1,0), 2.0);
@@ -1759,6 +1767,14 @@ void Test::testFormulaRefUpdateInsertColumns()
     // Use named range in C2 to reference B2.
     m_pDoc->SetString(ScAddress(2,1,0), "=RowRelativeRange");
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+
+    // Use named range in C3 to reference column B, values in B1,B2,B3,B4
+    m_pDoc->SetString(ScAddress(2,2,0), "=SUM(EntireColumn)");
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+
+    // Use named range in C4 to reference row 2, values in B2 and C2.
+    m_pDoc->SetString(ScAddress(2,3,0), "=SUM(EntireRow)");
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2,3,0)));
 
     // Inert columns over A:B.
     ScMarkData aMark;
@@ -1783,6 +1799,29 @@ void Test::testFormulaRefUpdateInsertColumns()
     if (!checkFormula(*m_pDoc, ScAddress(4,1,0), "RowRelativeRange"))
         CPPUNIT_FAIL("Wrong formula in E2 after column insertion.");
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4,1,0)));
+
+    // Check that the named column reference points to the moved column, now D.
+    pName = m_pDoc->GetRangeName()->findByUpperName("ENTIRECOLUMN");
+    CPPUNIT_ASSERT(pName);
+    pName->GetSymbol(aSymbol, aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(OUString("$D:$D"), aSymbol);
+
+    // Check that the formula using the name, now in E3, still has the same result.
+    if (!checkFormula(*m_pDoc, ScAddress(4,2,0), "SUM(EntireColumn)"))
+        CPPUNIT_FAIL("Wrong formula in E3 after column insertion.");
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(4,2,0)));
+
+    // Check that the named row reference still points to the same entire row
+    // and does not have a #REF! error due to inserted columns.
+    pName = m_pDoc->GetRangeName()->findByUpperName("ENTIREROW");
+    CPPUNIT_ASSERT(pName);
+    pName->GetSymbol(aSymbol, aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(OUString("$2:$2"), aSymbol);
+
+    // Check that the formula using the name, now in E4, still has the same result.
+    if (!checkFormula(*m_pDoc, ScAddress(4,3,0), "SUM(EntireRow)"))
+        CPPUNIT_FAIL("Wrong formula in E4 after column insertion.");
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(4,3,0)));
 
     m_pDoc->DeleteTab(0);
 }
