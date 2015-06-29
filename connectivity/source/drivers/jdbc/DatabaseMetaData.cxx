@@ -1431,7 +1431,15 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
             args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
             args[2].l = convertwchar_tToJavaString(t.pEnv,typeNamePattern);
             jintArray pArray = t.pEnv->NewIntArray(types.getLength());
-            t.pEnv->SetIntArrayRegion(pArray,0,types.getLength(),reinterpret_cast<jint const *>(types.getConstArray()));
+            jint * typesData = reinterpret_cast<jint *>(
+               const_cast<sal_Int32 *>(types.getConstArray()));
+            // 4th param of Set*ArrayRegion changed from pointer to non-const to
+            // pointer to const between <http://docs.oracle.com/javase/6/docs/
+            // technotes/guides/jni/spec/functions.html#wp22933> and
+            // <http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/
+            // functions.html#wp22933>; work around that difference in a way
+            // that doesn't trigger loplugin:redundantcast
+            t.pEnv->SetIntArrayRegion(pArray,0,types.getLength(),typesData);
             args[3].l = pArray;
 
             out = t.pEnv->CallObjectMethod( object, mID, args[0].l, args[1].l,args[2].l,args[3].l);

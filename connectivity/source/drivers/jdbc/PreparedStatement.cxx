@@ -434,7 +434,15 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
         static jmethodID mID(NULL);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
         jbyteArray pByteArray = t.pEnv->NewByteArray(x.getLength());
-        t.pEnv->SetByteArrayRegion(pByteArray,0,x.getLength(),x.getConstArray());
+        jbyte * xData = reinterpret_cast<jbyte *>(
+            const_cast<sal_Int8 *>(x.getConstArray()));
+            // 4th param of Set*ArrayRegion changed from pointer to non-const to
+            // pointer to const between <http://docs.oracle.com/javase/6/docs/
+            // technotes/guides/jni/spec/functions.html#wp22933> and
+            // <http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/
+            // functions.html#wp22933>; work around that difference in a way
+            // that doesn't trigger loplugin:redundantcast
+        t.pEnv->SetByteArrayRegion(pByteArray,0,x.getLength(),xData);
         t.pEnv->CallVoidMethod( object, mID, parameterIndex,pByteArray);
         t.pEnv->DeleteLocalRef(pByteArray);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -466,7 +474,15 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
 
         jvalue args2[3];
         jbyteArray pByteArray = t.pEnv->NewByteArray( actualLength );
-        t.pEnv->SetByteArrayRegion(pByteArray,0,actualLength,aSeq.getConstArray());
+        jbyte * aSeqData = reinterpret_cast<jbyte *>(
+            const_cast<sal_Int8 *>(aSeq.getConstArray()));
+            // 4th param of Set*ArrayRegion changed from pointer to non-const to
+            // pointer to const between <http://docs.oracle.com/javase/6/docs/
+            // technotes/guides/jni/spec/functions.html#wp22933> and
+            // <http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/
+            // functions.html#wp22933>; work around that difference in a way
+            // that doesn't trigger loplugin:redundantcast
+        t.pEnv->SetByteArrayRegion(pByteArray,0,actualLength,aSeqData);
         args2[0].l =  pByteArray;
         args2[1].i =  0;
         args2[2].i =  actualLength;
@@ -516,7 +532,15 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
 
             jvalue args2[3];
             jbyteArray pByteArray = t.pEnv->NewByteArray(actualLength);
-            t.pEnv->SetByteArrayRegion(pByteArray,0,actualLength,aSeq.getConstArray());
+            jbyte * aSeqData = reinterpret_cast<jbyte *>(
+                const_cast<sal_Int8 *>(aSeq.getConstArray()));
+            // 4th param of Set*ArrayRegion changed from pointer to non-const to
+            // pointer to const between <http://docs.oracle.com/javase/6/docs/
+            // technotes/guides/jni/spec/functions.html#wp22933> and
+            // <http://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/
+            // functions.html#wp22933>; work around that difference in a way
+            // that doesn't trigger loplugin:redundantcast
+            t.pEnv->SetByteArrayRegion(pByteArray,0,actualLength,aSeqData);
             args2[0].l =  pByteArray;
             args2[1].i =  0;
             args2[2].i =  (sal_Int32)actualLength;
