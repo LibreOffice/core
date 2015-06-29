@@ -16,6 +16,24 @@
       "revId": "e125e87deef7ecd0ab174ad4e29b3aa9aacb4c80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_ef30ec09",
+        "filename": "sc/source/ui/unoobj/chart2uno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1000501
+      },
+      "writtenOn": "2015-06-29T19:15:45Z",
+      "side": 1,
+      "message": "Sure - I was not aware that there is a regular naming scheme. Is mAddressByIndex okay? members are prefixed with m_ and m in this file.",
+      "parentUuid": "1a54edaf_2f4e04c2",
+      "revId": "e125e87deef7ecd0ab174ad4e29b3aa9aacb4c80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
