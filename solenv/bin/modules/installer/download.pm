@@ -301,13 +301,7 @@ sub get_downloadname_productname
 
     my $start = "";
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "LibreOffice" ) { $start = "LibreOffice"; }
-
-    elsif ( $allvariables->{'PRODUCTNAME'} eq "LibreOfficeDev" ) { $start = "LibreOfficeDev"; }
-
-    elsif ( $allvariables->{'PRODUCTNAME'} eq "" ) { $start = "LibreOffice"; }
-
-    else  { $start = $allvariables->{'PRODUCTNAME'}; }
+    $start = $allvariables->{'PRODUCTNAME'};
 
     return $start;
 }
