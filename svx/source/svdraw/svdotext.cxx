@@ -2059,6 +2059,8 @@ void SdrTextObj::onUnderflowStatusEvent( )
 
 void SdrTextObj::onChainingEvent()
 {
+
+
     if (!IsChainable() || GetNextLinkInChain() == NULL)
         return;
 
@@ -2070,6 +2072,46 @@ void SdrTextObj::onChainingEvent()
         GetTextChain()->SetNilChainingEvent(this, false);
         return;
     }
+
+    // Outliner for text transfer
+    SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
+
+    // XXX: Specializing the class?
+    // OBS: you don't need all the "setting parameters" crap for underflow with this
+    TextChainFlow aTxtChainFlow(this);
+    aTxtChainFlow.CheckForFlowEvents(pEdtOutl, NULL);
+
+
+    if (aTxtChainFlow.IsOverflow()) {
+        fprintf(stderr, "Overflow going on\n");
+
+        // One outliner is for non-overflowing text, the other for overflowing text
+        // In this case they can both be the drawing outliner
+        aTxtChainFlow.ExecuteOverflow(&aDrawOutliner, &aDrawOutliner);
+    } else if (aTxtChainFlow.IsUnderflow()) {
+        fprintf(stderr, "Underflow going on\n");
+        // underflow-induced overflow
+        aTxtChainFlow.ExecuteUnderflow(&aDrawOutliner);
+        bool bIsOverflowFromUnderflow = aTxtChainFlow.IsOverflow();
+
+        // handle overflow
+        if (bIsOverflowFromUnderflow) {
+            fprintf(stderr, "Overflow going on (underflow induced)\n");
+            // prevents infinite loops when setting text for editing outliner
+            GetTextChain()->SetNilChainingEvent(const_cast<SdrTextObj*>(this), true);
+
+            aTxtChainFlow.ExecuteOverflow(&aDrawOutliner, &aDrawOutliner);
+        }
+        // Probably not necessary
+        //else {
+        //    // No overflow: set the whole thing
+        //    const_cast<SdrTextObj*>(this)->SetOutlinerParaObject(pNewText);
+        //}
+    }
+
+    return;
+
+    // Begin old code
 
     bool bIsPageOverflow;
 

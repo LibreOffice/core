@@ -41,6 +41,8 @@ class TextChainFlow {
     bool IsUnderflow();
 
     void ExecuteUnderflow(SdrOutliner *);
+
+    // Uses two outliners: one for the non-overfl text and one for overflowing (might be the same)
     void ExecuteOverflow(SdrOutliner *, SdrOutliner *);
 
     protected:
