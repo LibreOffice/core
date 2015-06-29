@@ -520,8 +520,8 @@ int main( int argc, char* argv[] )
 
     // Docview
     pDocView = lok_doc_view_new (argv[1], NULL, NULL);
-    if (pDocView == NULL)
-        g_error ("Error while creating LOKDocView widget");
+    g_assert_nonnull(pDocView);
+
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
