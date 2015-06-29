@@ -998,11 +998,6 @@ inline void SwFrm::InvalidateNextPos( bool bNoFootnote )
         ImplInvalidateNextPos( bNoFootnote );
 }
 
-inline void SwFrm::Calc() const
-{
-    if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
-        const_cast<SwFrm*>(this)->PrepareMake();
-}
 inline void SwFrm::OptCalc() const
 {
     if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
