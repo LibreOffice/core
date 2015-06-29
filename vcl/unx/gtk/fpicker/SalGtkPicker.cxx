@@ -135,8 +135,12 @@ RunDialog::~RunDialog()
 void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject& )
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
+#if !GTK_CHECK_VERSION(3,0,0)
     SolarMutexGuard g;
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, NULL);
+#else
+    SAL_WARN( "vcl", "ignoring windowOpened, because gtk3 dialog is probably not modal as expected and a tooltip was triggered" );
+#endif
 }
 
 void SAL_CALL RunDialog::queryTermination( const ::com::sun::star::lang::EventObject& )
