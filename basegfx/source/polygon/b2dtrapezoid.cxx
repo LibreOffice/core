@@ -30,7 +30,7 @@ namespace basegfx
     namespace trapezoidhelper
     {
 
-        // helper class to hold a simple ege. This is only used for horizontal edges
+        // helper class to hold a simple edge. This is only used for horizontal edges
         // currently, thus the YPositions will be equal. I did not create a special
         // class for this since holdingthe pointers is more effective and also can be
         // used as baseclass for the traversing edges

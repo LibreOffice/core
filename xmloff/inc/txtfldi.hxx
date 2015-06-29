@@ -196,7 +196,7 @@ class XMLSenderFieldImportContext : public XMLTextFieldImportContext
 protected:
     // variables for access in subclass
     bool bFixed;
-    sal_uInt16 nElementToken;   /// token for this elment field
+    sal_uInt16 nElementToken;   /// token for this element field
 
 public:
     TYPEINFO_OVERRIDE();

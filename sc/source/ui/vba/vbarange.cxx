@@ -1401,7 +1401,7 @@ table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, 
         break;
 
         default:
-            throw uno::RuntimeException("Can't extact CellRangeAddress from type" );
+            throw uno::RuntimeException("Can't extract CellRangeAddress from type" );
     }
     return lclGetRangeAddress( xRangeParam );
 }

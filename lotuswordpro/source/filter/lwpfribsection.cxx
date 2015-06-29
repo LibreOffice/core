@@ -256,7 +256,7 @@ LwpMasterPage::LwpMasterPage(LwpPara* pPara, LwpPageLayout* pLayout)
  */
 bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
 {
-    //if there is no other frib after current firb, register master page in starting para of next page
+    //if there is no other frib after current frib, register master page in starting para of next page
     if(IsNextPageType()&&(!pFrib->HasNextFrib()))
     {
         LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());

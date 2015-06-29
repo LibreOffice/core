@@ -912,7 +912,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     //Then we need not detect it again
     //For example, a sun JKD contains <jdk>/bin/java and <jdk>/jre/bin/java.
     //When <jdk>/bin/java has been found then we need not find <jdk>/jre/bin/java.
-    //Otherwise we would execute java two times for evers JDK found.
+    //Otherwise we would execute java two times for every JDK found.
     MapIt entry2 = find_if(mapJREs.begin(), mapJREs.end(),
                            SameOrSubDirJREMap(sResolvedDir));
     if (entry2 != mapJREs.end())
@@ -1248,7 +1248,7 @@ void addJavaInfosDirScan(
                 if (!arCollectDirs[j].isEmpty())
                 {
                     //usr/java/xxx
-                    //Examin every subdirectory
+                    //Examining every subdirectory
                     Directory aCollectionDir(usDir2);
 
                     Directory::RC openErr = aCollectionDir.open();

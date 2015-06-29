@@ -1081,7 +1081,7 @@ void SAL_CALL Desktop::disposing()
     @short      add/remove listener for dispose events
     @descr      Add an event listener to this object, if you wish to get information
                 about our dying!
-                You must releas ethis listener reference during your own disposing() method.
+                You must release this listener reference during your own disposing() method.
 
     @attention  Our container is threadsafe himeslf. So we don't need any lock here.
     @param      "xListener", reference to valid listener. We don't accept invalid values!

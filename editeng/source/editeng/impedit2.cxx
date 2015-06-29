@@ -2368,7 +2368,7 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, sal_uInt8 n
         }
     }
 
-    // ConnectParagraphs  not enoguh for different Nodes when
+    // ConnectParagraphs not enough for different Nodes when
     // DELMODE_RESTOFCONTENT.
     if ( ( nDelMode == DELMODE_RESTOFCONTENT ) || ( aDelStart.GetNode() == aDelEnd.GetNode() ) )
         return ImpDeleteSelection( EditSelection( aDelStart, aDelEnd ) );

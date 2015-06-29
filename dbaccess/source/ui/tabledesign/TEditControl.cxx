@@ -594,7 +594,7 @@ bool OTableEditorCtrl::SaveModified()
 
     switch( nColId )
     {
-        // Fieled type
+        // Field type
         case FIELD_TYPE:
         {
             // Reset the type

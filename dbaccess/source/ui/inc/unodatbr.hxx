@@ -305,7 +305,7 @@ namespace dbaui
         // disposes the connection associated with the given entry (which must represent a data source)
         void        disposeConnection( SvTreeListEntry* _pDSEntry );
 
-        /// flushs and disposes the given connection, and de-registers as listener
+        /// flushes and disposes the given connection, and de-registers as listener
         void        impl_releaseConnection( SharedConnection& _rxConnection );
 
         /** close the connection (and collapse the list entries) of the given list entries

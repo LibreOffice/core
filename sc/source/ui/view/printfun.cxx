@@ -1256,7 +1256,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     long nEffHeight = nScrH - nTop - nBottom;
     long nEffWidth = nScrW - nLeft - nRight;
     if (nEffHeight<=0 || nEffWidth<=0)
-        return;                                         // enmpty
+        return;                                         // empty
 
     if ( pBackground )
     {
