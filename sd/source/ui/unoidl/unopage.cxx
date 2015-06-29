@@ -1527,7 +1527,7 @@ void SdGenericDrawPage::setBackground( const Any& ) throw(lang::IllegalArgumentE
     OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
-void SdGenericDrawPage::getBackground( Any& ) throw()
+void SdGenericDrawPage::getBackground( Any& ) throw(std::exception)
 {
     OSL_FAIL( "Don't call me, I'm useless!" );
 }
@@ -2954,7 +2954,7 @@ void SdMasterPage::setBackground( const Any& rValue )
     }
 }
 
-void SdMasterPage::getBackground( Any& rValue ) throw()
+void SdMasterPage::getBackground( Any& rValue ) throw (std::exception)
 {
     if( GetModel() ) try
     {

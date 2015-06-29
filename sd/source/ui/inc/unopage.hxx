@@ -68,7 +68,7 @@ protected:
     const SvxItemPropertySet*   mpPropSet;
 
     virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException, std::exception);
-    virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw();
+    virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw(std::exception);
 
     OUString getBookmarkURL() const;
     void setBookmarkURL( OUString& rURL );
@@ -235,7 +235,7 @@ private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 protected:
     virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw( ::com::sun::star::lang::IllegalArgumentException, std::exception  ) SAL_OVERRIDE;
-    virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw() SAL_OVERRIDE;
+    virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw (std::exception) SAL_OVERRIDE;
 
 public:
     SdMasterPage( SdXImpressDocument* pModel, SdPage* pInPage ) throw();
