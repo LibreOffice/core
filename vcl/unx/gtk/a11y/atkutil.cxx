@@ -453,8 +453,7 @@ static void handle_toolbox_highlight(vcl::Window *pWindow)
 
 static void handle_toolbox_highlightoff(vcl::Window *pWindow)
 {
-    ToolBox *pToolBox = static_cast <ToolBox *> (pWindow);
-    ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pToolBox->GetParent() );
+    ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pWindow->GetParent() );
 
     // Notify when leaving sub toolboxes
     if( pToolBoxParent && pToolBoxParent->HasFocus() )
