@@ -6479,9 +6479,9 @@ void Test::testFormulaWizardSubformula()
     m_pDoc->SetString(ScAddress(0,1,0), "=1");          // B0
     m_pDoc->SetString(ScAddress(1,1,0), "=1/0");        // B1
     m_pDoc->SetString(ScAddress(2,1,0), "=gibberish");  // B2
-    ScSimpleFormulaCalculator pFCell( m_pDoc, ScAddress(0,0,0), "" );
-    if ( pFCell.GetErrCode() == 0 )
-        CPPUNIT_ASSERT_EQUAL( OUString("{1, #DIV/0!, #NAME!}"), pFCell.GetString().getString() );
+    ScSimpleFormulaCalculator aFCell( m_pDoc, ScAddress(0,0,0), "" );
+    if ( aFCell.GetErrCode() == 0 )
+        CPPUNIT_ASSERT_EQUAL( OUString("{1, #DIV/0!, #NAME!}"), aFCell.GetString().getString() );
 
     m_pDoc->DeleteTab(0);
 }
