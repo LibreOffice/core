@@ -349,14 +349,13 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
  * where IsTableComplex() returns false).
  *
  * @param rCellName e.g. A1..Z1, a1..z1, AA1..AZ1, Aa1..Az1, BA1..BZ1, Ba1..Bz1, ...
- * @param [IN,OUT] rColumn (0-based)
- * @param [IN,OUT] rRow (0-based)
+ * @param [IN,OUT] o_rColumn (0-based)
+ * @param [IN,OUT] o_rRow (0-based)
  */
 //TODO: potential for throwing proper exceptions instead of having every caller to check for errors
-void sw_GetCellPosition(const OUString &rCellName,
-                        sal_Int32 &rColumn, sal_Int32 &rRow)
+void SwXTextTable::GetCellPosition(const OUString& rCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow)
 {
-    rColumn = rRow = -1;    // default return values indicating failure
+    o_rColumn = o_rRow = -1;    // default return values indicating failure
     const sal_Int32 nLen = rCellName.getLength();
     if(!nLen)
     {
@@ -392,8 +391,8 @@ void sw_GetCellPosition(const OUString &rCellName,
             }
         }
 
-        rColumn = nColIdx;
-        rRow    = rCellName.copy(nRowPos).toInt32() - 1; // - 1 because indices ought to be 0 based
+        o_rColumn = nColIdx;
+        o_rRow    = rCellName.copy(nRowPos).toInt32() - 1; // - 1 because indices ought to be 0 based
     }
 }
 
@@ -409,8 +408,8 @@ void sw_GetCellPosition(const OUString &rCellName,
 int sw_CompareCellsByRowFirst( const OUString &rCellName1, const OUString &rCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
-    sw_GetCellPosition( rCellName1, nCol1, nRow1 );
-    sw_GetCellPosition( rCellName2, nCol2, nRow2 );
+    SwXTextTable::GetCellPosition( rCellName1, nCol1, nRow1 );
+    SwXTextTable::GetCellPosition( rCellName2, nCol2, nRow2 );
 
     if (nRow1 < nRow2 || (nRow1 == nRow2 && nCol1 < nCol2))
         return -1;
@@ -432,8 +431,8 @@ int sw_CompareCellsByRowFirst( const OUString &rCellName1, const OUString &rCell
 int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
-    sw_GetCellPosition( rCellName1, nCol1, nRow1 );
-    sw_GetCellPosition( rCellName2, nCol2, nRow2 );
+    SwXTextTable::GetCellPosition( rCellName1, nCol1, nRow1 );
+    SwXTextTable::GetCellPosition( rCellName2, nCol2, nRow2 );
 
     if (nCol1 < nCol2 || (nCol1 == nCol2 && nRow1 < nRow2))
         return -1;
@@ -484,20 +483,6 @@ int sw_CompareCellRanges(
  */
 OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 {
-#if OSL_DEBUG_LEVEL > 0
-    {
-        sal_Int32 nCol, nRow2;
-        sw_GetCellPosition( OUString("z1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 51, "sw_GetCellPosition failed" );
-        sw_GetCellPosition( OUString("AA1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 52, "sw_GetCellPosition failed" );
-        sw_GetCellPosition( OUString("AB1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 53, "sw_GetCellPosition failed" );
-        sw_GetCellPosition( OUString("BB1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 105, "sw_GetCellPosition failed" );
-    }
-#endif
-
     if (nColumn < 0 || nRow < 0)
         return OUString();
     OUString sCellName;
@@ -544,8 +529,8 @@ const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const 
 void sw_NormalizeRange(OUString &rCell1, OUString &rCell2)
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
-    sw_GetCellPosition( rCell1, nCol1, nRow1 );
-    sw_GetCellPosition( rCell2, nCol2, nRow2 );
+    SwXTextTable::GetCellPosition( rCell1, nCol1, nRow1 );
+    SwXTextTable::GetCellPosition( rCell2, nCol2, nRow2 );
     if (nCol2 < nCol1 || nRow2 < nRow1)
     {
         rCell1  = sw_GetCellName( std::min(nCol1, nCol2), std::min(nRow1, nRow2) );
@@ -2287,8 +2272,8 @@ uno::Reference<table::XCellRange> SwXTextTable::getCellRangeByName(const OUStrin
         throw uno::RuntimeException();
     SwRangeDescriptor aDesc;
     aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
-    sw_GetCellPosition(sTLName, aDesc.nLeft, aDesc.nTop );
-    sw_GetCellPosition(sBRName, aDesc.nRight, aDesc.nBottom );
+    SwXTextTable::GetCellPosition(sTLName, aDesc.nLeft, aDesc.nTop );
+    SwXTextTable::GetCellPosition(sBRName, aDesc.nRight, aDesc.nBottom );
 
     // we should normalize the range now (e.g. A5:C1 will become A1:C5)
     // since (depending on what is done later) it will be troublesome
@@ -3280,8 +3265,8 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByName(const OUSt
         throw uno::RuntimeException();
     SwRangeDescriptor aDesc;
     aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
-    sw_GetCellPosition( sTLName, aDesc.nLeft, aDesc.nTop );
-    sw_GetCellPosition( sBRName, aDesc.nRight, aDesc.nBottom );
+    SwXTextTable::GetCellPosition( sTLName, aDesc.nLeft, aDesc.nTop );
+    SwXTextTable::GetCellPosition( sBRName, aDesc.nRight, aDesc.nBottom );
     aDesc.Normalize();
     return getCellRangeByPosition(aDesc.nLeft - aRgDesc.nLeft, aDesc.nTop - aRgDesc.nTop,
                 aDesc.nRight - aRgDesc.nLeft, aDesc.nBottom - aRgDesc.nTop);

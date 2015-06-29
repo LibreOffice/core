@@ -438,6 +438,8 @@ public:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
     SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+    SW_DLLPUBLIC static void GetCellPosition(const OUString& rCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
+
 };
 
 class SwXCellRange : public cppu::WeakImplHelper
@@ -635,8 +637,6 @@ int sw_CompareCellRanges(
         bool bCmpColsFirst );
 
 void sw_NormalizeRange( OUString &rCell1, OUString &rCell2 );
-
-void sw_GetCellPosition( const OUString &rCellName, sal_Int32 &rColumn, sal_Int32 &rRow);
 
 OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
 

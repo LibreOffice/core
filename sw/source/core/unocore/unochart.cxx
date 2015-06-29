@@ -203,8 +203,8 @@ bool FillRangeDescriptor(
         return false;
 
     rDesc.nTop = rDesc.nLeft = rDesc.nBottom = rDesc.nRight = -1;
-    sw_GetCellPosition( aTLName, rDesc.nLeft,  rDesc.nTop );
-    sw_GetCellPosition( aBRName, rDesc.nRight, rDesc.nBottom );
+    SwXTextTable::GetCellPosition( aTLName, rDesc.nLeft,  rDesc.nTop );
+    SwXTextTable::GetCellPosition( aBRName, rDesc.nRight, rDesc.nBottom );
     rDesc.Normalize();
     OSL_ENSURE( rDesc.nTop    != -1 &&
                 rDesc.nLeft   != -1 &&
@@ -708,8 +708,8 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 OSL_ENSURE( bOk2, "failed to get table and start/end cells" );
 
                 sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
-                sw_GetCellPosition( aStartCell, nStartCol, nStartRow );
-                sw_GetCellPosition( aEndCell,   nEndCol,   nEndRow );
+                SwXTextTable::GetCellPosition( aStartCell, nStartCol, nStartRow );
+                SwXTextTable::GetCellPosition( aEndCell,   nEndCol,   nEndRow );
                 OSL_ENSURE( nStartRow <= nEndRow && nStartCol <= nEndCol,
                         "cell range not normalized");
 
@@ -1002,8 +1002,8 @@ OUString SwChartDataProvider::GetBrokenCellRangeForExport(
         GetTableAndCellsFromRangeRep( rCellRangeRepresentation,
             aTableName, aStartCell, aEndCell, false );
         sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
-        sw_GetCellPosition( aStartCell, nStartCol, nStartRow );
-        sw_GetCellPosition( aEndCell, nEndCol, nEndRow );
+        SwXTextTable::GetCellPosition( aStartCell, nStartCol, nStartRow );
+        SwXTextTable::GetCellPosition( aEndCell, nEndCol, nEndRow );
 
         // get new cell names
         ++nStartRow;
@@ -1118,8 +1118,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
         const OUString aCell( !aLabelStartCell.isEmpty() ? aLabelStartCell : aValuesStartCell );
         OSL_ENSURE( !aCell.isEmpty() , "start cell missing?" );
-        sw_GetCellPosition( aCell, nFirstCol, nFirstRow);
-        sw_GetCellPosition( aValuesEndCell, nLastCol, nLastRow);
+        SwXTextTable::GetCellPosition( aCell, nFirstCol, nFirstRow);
+        SwXTextTable::GetCellPosition( aValuesEndCell, nLastCol, nLastRow);
 
         sal_Int16 nDirection = -1;  // -1: not yet set,  0: columns,  1: rows, -2: failed
         if (nFirstCol == nLastCol && nFirstRow == nLastRow) // a single cell...
@@ -1172,8 +1172,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             if (!aLabelStartCell.isEmpty() && !aLabelEndCell.isEmpty())
             {
                 sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
-                sw_GetCellPosition( aLabelStartCell, nStartCol, nStartRow );
-                sw_GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow );
+                SwXTextTable::GetCellPosition( aLabelStartCell, nStartCol, nStartRow );
+                SwXTextTable::GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow );
                 if (nStartRow < 0 || nEndRow >= nTableRows ||
                     nStartCol < 0 || nEndCol >= nTableCols)
                 {
@@ -1194,8 +1194,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             if (!aValuesStartCell.isEmpty() && !aValuesEndCell.isEmpty())
             {
                 sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
-                sw_GetCellPosition( aValuesStartCell, nStartCol, nStartRow );
-                sw_GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow );
+                SwXTextTable::GetCellPosition( aValuesStartCell, nStartCol, nStartRow );
+                SwXTextTable::GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow );
                 if (nStartRow < 0 || nEndRow >= nTableRows ||
                     nStartCol < 0 || nEndCol >= nTableCols)
                 {
@@ -1222,16 +1222,16 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             sal_Int32 nStartRow = -1, nStartCol = -1, nEndRow = -1, nEndCol = -1;
             if (xCurLabel.is())
             {
-                sw_GetCellPosition( aLabelStartCell, nStartCol, nStartRow);
-                sw_GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow);
+                SwXTextTable::GetCellPosition( aLabelStartCell, nStartCol, nStartRow);
+                SwXTextTable::GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow);
                 OSL_ENSURE( (nStartCol == nEndCol && (nEndRow - nStartRow + 1) == xCurLabel->getData().getLength()) ||
                             (nStartRow == nEndRow && (nEndCol - nStartCol + 1) == xCurLabel->getData().getLength()),
                         "label sequence length does not match range representation!" );
             }
             if (xCurValues.is())
             {
-                sw_GetCellPosition( aValuesStartCell, nStartCol, nStartRow);
-                sw_GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow);
+                SwXTextTable::GetCellPosition( aValuesStartCell, nStartCol, nStartRow);
+                SwXTextTable::GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow);
                 OSL_ENSURE( (nStartCol == nEndCol && (nEndRow - nStartRow + 1) == xCurValues->getData().getLength()) ||
                             (nStartRow == nEndRow && (nEndCol - nStartCol + 1) == xCurValues->getData().getLength()),
                         "value sequence length does not match range representation!" );
@@ -1660,8 +1660,8 @@ void SwChartDataProvider::AddRowCols(
     if (pFirstBox && pLastBox)
     {
         sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
-        sw_GetCellPosition( pFirstBox->GetName(), nFirstCol, nFirstRow  );
-        sw_GetCellPosition( pLastBox->GetName(),  nLastCol,  nLastRow );
+        SwXTextTable::GetCellPosition( pFirstBox->GetName(), nFirstCol, nFirstRow  );
+        SwXTextTable::GetCellPosition( pLastBox->GetName(),  nLastCol,  nLastRow );
 
         bool bAddCols = false;  // default; also to be used if nBoxes == 1 :-/
         if (nFirstCol == nLastCol && nFirstRow != nLastRow)
@@ -1767,7 +1767,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
             throw lang::IllegalArgumentException();
 
         sal_Int32 nCol, nRow;
-        sw_GetCellPosition( aStartCell, nCol, nRow );
+        SwXTextTable::GetCellPosition( aStartCell, nCol, nRow );
         if (nCol < 0 || nRow < 0)
             throw uno::RuntimeException();
 
@@ -1780,7 +1780,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         aCellRange.aUpperLeft.bIsEmpty  = false;
         if (aStartCell != aEndCell && !aEndCell.isEmpty())
         {
-            sw_GetCellPosition( aEndCell, nCol, nRow );
+            SwXTextTable::GetCellPosition( aEndCell, nCol, nRow );
             if (nCol < 0 || nRow < 0)
                 throw uno::RuntimeException();
 
@@ -2466,8 +2466,8 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
         OUString aPointCellName( pTable->GetTableBox( pPointStartNode->GetIndex() )->GetName() );
         OUString aMarkCellName( pTable->GetTableBox( pMarkStartNode->GetIndex() )->GetName() );
 
-        sw_GetCellPosition( aPointCellName, nPointCol, nPointRow );
-        sw_GetCellPosition( aMarkCellName,  nMarkCol,  nMarkRow );
+        SwXTextTable::GetCellPosition( aPointCellName, nPointCol, nPointRow );
+        SwXTextTable::GetCellPosition( aMarkCellName,  nMarkCol,  nMarkRow );
         OSL_ENSURE( nPointRow >= 0 && nPointCol >= 0, "invalid row and col" );
         OSL_ENSURE( nMarkRow >= 0 && nMarkCol >= 0, "invalid row and col" );
 

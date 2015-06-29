@@ -34,6 +34,7 @@
 #include <test/mtfxmldump.hxx>
 #include <unocrsr.hxx>
 #include <unocrsrhelper.hxx>
+#include <unotbl.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -106,6 +107,7 @@ public:
     void testTdf90883TableBoxGetCoordinates();
     void testEmbeddedDataSource();
     void testUnoCursorPointer();
+    void testTextTableCellNames();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -152,6 +154,7 @@ public:
     CPPUNIT_TEST(testTdf90883TableBoxGetCoordinates);
     CPPUNIT_TEST(testEmbeddedDataSource);
     CPPUNIT_TEST(testUnoCursorPointer);
+    CPPUNIT_TEST(testTextTableCellNames);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1283,6 +1286,19 @@ void SwUiWriterTest::testUnoCursorPointer()
     xIdx.reset(); // we need to kill the SwNodeIndex before disposing
     xDocComponent->dispose();
     CPPUNIT_ASSERT(!static_cast<bool>(pCursor));
+}
+
+void SwUiWriterTest::testTextTableCellNames()
+{
+    sal_Int32 nCol, nRow2;
+    SwXTextTable::GetCellPosition( OUString("z1"), nCol, nRow2);
+    CPPUNIT_ASSERT(nCol == 51);
+    SwXTextTable::GetCellPosition( OUString("AA1"), nCol, nRow2);
+    CPPUNIT_ASSERT(nCol == 52);
+    SwXTextTable::GetCellPosition( OUString("AB1"), nCol, nRow2);
+    CPPUNIT_ASSERT(nCol == 53);
+    SwXTextTable::GetCellPosition( OUString("BB1"), nCol, nRow2);
+    CPPUNIT_ASSERT(nCol == 105);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
