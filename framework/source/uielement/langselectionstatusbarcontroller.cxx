@@ -104,7 +104,7 @@ private:
     OUString        m_aGuessedTextLang;     // the 'guessed' language for the selection, "" if none could be guessed
     LanguageGuessingHelper      m_aLangGuessHelper;
 
-    void LangMenu( const css::awt::Point& aPos ) throw (css::uno::RuntimeException);
+    void LangMenu( const css::awt::Point& aPos ) throw (css::uno::RuntimeException, std::exception);
 };
 
 LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::Reference< uno::XComponentContext >& xContext ) :
@@ -131,7 +131,7 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 
 void LangSelectionStatusbarController::LangMenu(
     const css::awt::Point& aPos )
-throw (css::uno::RuntimeException)
+throw (css::uno::RuntimeException, std::exception)
 {
     if (!m_bShowMenu)
         return;
