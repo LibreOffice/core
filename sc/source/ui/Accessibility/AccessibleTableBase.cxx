@@ -365,7 +365,7 @@ uno::Reference< XAccessible > SAL_CALL
 
 OUString SAL_CALL
     ScAccessibleTableBase::createAccessibleDescription()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OUString sDesc(ScResId(STR_ACC_TABLE_DESCR));
     return sDesc;
