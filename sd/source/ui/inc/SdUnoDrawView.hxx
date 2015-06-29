@@ -115,7 +115,7 @@ protected:
         @param rxLayer
             The new layer object.
     */
-    void setActiveLayer (const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>& rxLayer) throw (css::uno::RuntimeException);
+    void setActiveLayer (const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>& rxLayer) throw (css::uno::RuntimeException, std::exception);
 
     void SetZoom( sal_Int16 nZoom );
     sal_Int16 GetZoom() const;
