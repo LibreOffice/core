@@ -610,6 +610,7 @@ static bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
 {
     bool bRet = true;
 
+    vcl::RenderContext* pRenderContext = rLastLine.getRootFrm()->GetCurrShell()->GetOut();
     SwTabFrm& rTab = static_cast<SwTabFrm&>(*rLastLine.GetUpper());
 
     // If there are nested cells in rLastLine, the recalculation of the last
@@ -657,7 +658,7 @@ static bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
     // #115759# - force a format of the last line in order to
     // get the correct height.
     rLastLine.InvalidateSize();
-    rLastLine.Calc();
+    rLastLine.Calc(pRenderContext);
 
     // Unlock this tab frame and its follow
     if ( bUnlockFollow )
@@ -1355,6 +1356,7 @@ bool SwContentFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
     if ( !pLay )
         return true;
 
+    vcl::RenderContext* pRenderContext = pLay->getRootFrm()->GetCurrShell()->GetOut();
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
     bool bRet = false;
@@ -1393,7 +1395,7 @@ bool SwContentFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
             // #i26945# - no extra invalidation of floating
             // screen objects needed.
             // Thus, delete call of method <SwFrm::InvalidateObjs( true )>
-            pCnt->Calc();
+            pCnt->Calc(pRenderContext);
             // OD 2004-05-11 #i28701# - usage of new method <::FormatObjsAtFrm(..)>
             // to format the floating screen objects
             // #i46941# - frame has to be valid
@@ -1429,7 +1431,7 @@ bool SwContentFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
 #endif
                 }
             }
-            pCnt->GetUpper()->Calc();
+            pCnt->GetUpper()->Calc(pRenderContext);
         }
         if( ! bAll && (*fnRect->fnYDiff)((pCnt->Frm().*fnRect->fnGetTop)(), nBottom) > 0 )
             break;
@@ -1444,6 +1446,7 @@ static bool lcl_InnerCalcLayout( SwFrm *pFrm,
                                       long nBottom,
                                       bool _bOnlyRowsAndCells )
 {
+    vcl::RenderContext* pRenderContext = pFrm->getRootFrm()->GetCurrShell() ? pFrm->getRootFrm()->GetCurrShell()->GetOut() : 0;
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
     bool bRet = false;
@@ -1460,7 +1463,7 @@ static bool lcl_InnerCalcLayout( SwFrm *pFrm,
             // not be calculated => It will not become valid =>
             // Loop in lcl_RecalcRow(). Therefore we do not consider them for bRet.
             bRet |= !pFrm->IsValid() && ( !pFrm->IsTabFrm() || !static_cast<SwTabFrm*>(pFrm)->IsJoinLocked() );
-            pFrm->Calc();
+            pFrm->Calc(pRenderContext);
             if( static_cast<SwLayoutFrm*>(pFrm)->Lower() )
                 bRet |= lcl_InnerCalcLayout( static_cast<SwLayoutFrm*>(pFrm)->Lower(), nBottom);
 
@@ -1470,7 +1473,7 @@ static bool lcl_InnerCalcLayout( SwFrm *pFrm,
             {
                 SwCellFrm& rToCalc = const_cast<SwCellFrm&>(pThisCell->FindStartEndOfRowSpanCell( true, true ));
                 bRet |= !rToCalc.IsValid();
-                rToCalc.Calc();
+                rToCalc.Calc(pRenderContext);
                 if ( rToCalc.Lower() )
                     bRet |= lcl_InnerCalcLayout( rToCalc.Lower(), nBottom);
             }
@@ -1643,6 +1646,7 @@ static bool lcl_NoPrev( const SwFrm& rFrm )
 // Precondition: The given table frame hasn't a follow and isn't a follow.
 SwFrm* sw_FormatNextContentForKeep( SwTabFrm* pTabFrm )
 {
+    vcl::RenderContext* pRenderContext = pTabFrm->getRootFrm()->GetCurrShell()->GetOut();
     // find next content, table or section
     SwFrm* pNxt = pTabFrm->FindNext();
 
@@ -1667,7 +1671,7 @@ SwFrm* sw_FormatNextContentForKeep( SwTabFrm* pTabFrm )
         if ( pTabFrm->GetUpper()->IsInTab() )
             pNxt->MakeAll(pNxt->getRootFrm()->GetCurrShell()->GetOut());
         else
-            pNxt->Calc();
+            pNxt->Calc(pRenderContext);
     }
 
     return pNxt;
@@ -2092,7 +2096,7 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
                             //Displace the footnotes!
                             if ( bMoveFootnotes )
                                 if ( static_cast<SwLayoutFrm*>(pRowToMove)->MoveLowerFootnotes( 0, pOldBoss, FindFootnoteBossFrm( true ), true ) )
-                                    GetUpper()->Calc();
+                                    GetUpper()->Calc(pRenderContext);
 
                             pRowToMove = pNextRow;
                         }
@@ -2413,7 +2417,7 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
                                     }
                                     if ( bCalcNxt )
                                     {
-                                        pNxt->Calc();
+                                        pNxt->Calc(pRenderContext);
                                     }
                                 }
                             }
@@ -2461,8 +2465,8 @@ void SwTabFrm::MakeAll(vcl::RenderContext* pRenderContext)
             //To avoid oscillations now invalid master should drop behind.
             SwTabFrm *pTab = FindMaster();
             if ( pTab->GetUpper() )
-                pTab->GetUpper()->Calc();
-            pTab->Calc();
+                pTab->GetUpper()->Calc(pRenderContext);
+            pTab->Calc(pRenderContext);
             pTab->SetLowersFormatted( false );
         }
 

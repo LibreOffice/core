@@ -3180,6 +3180,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
     bool bBackLock = false;
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
     SwViewShellImp *pImp = pSh ? pSh->Imp() : 0;
+    vcl::RenderContext* pRenderContext = pSh ? pSh->GetOut() : 0;
     {
         // Underlying algorithm
         // We try to find the optimal height for the column.
@@ -3296,11 +3297,11 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
 
             for ( sal_uInt16 i = 0; i < nNumCols; ++i )
             {
-                pCol->Calc();
+                pCol->Calc(pRenderContext);
                 // ColumnFrms have a BodyFrm now, which needs to be calculated
-                pCol->Lower()->Calc();
+                pCol->Lower()->Calc(pRenderContext);
                 if( pCol->Lower()->GetNext() )
-                    pCol->Lower()->GetNext()->Calc();  // SwFootnoteCont
+                    pCol->Lower()->GetNext()->Calc(pRenderContext);  // SwFootnoteCont
                 pCol = static_cast<SwLayoutFrm*>(pCol->GetNext());
             }
 

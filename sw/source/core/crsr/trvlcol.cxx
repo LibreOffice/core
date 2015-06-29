@@ -85,7 +85,7 @@ bool SwCrsrShell::MoveColumn( SwWhichColumn fnWhichCol, SwPosColumn fnPosCol )
                 SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
                 SwCrsrSaveState aSaveState( *m_pCurCrsr );
 
-                pCnt->Calc();
+                pCnt->Calc(GetOut());
 
                 Point aPt( pCnt->Frm().Pos() + pCnt->Prt().Pos() );
                 if( fnPosCol == GetColumnEnd )
