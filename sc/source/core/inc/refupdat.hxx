@@ -29,9 +29,9 @@ class ScAddress;
 class ScRange;
 
 enum ScRefUpdateRes {
-    UR_NOTHING  = 0,        // keine Anpassungen
-    UR_UPDATED  = 1,        // Anpassungen erfolgt
-    UR_INVALID  = 2,        // Referenz wurde ungueltig
+    UR_NOTHING  = 0,        ///< Reference not affected, no change at all.
+    UR_UPDATED  = 1,        ///< Reference was adjusted/updated.
+    UR_INVALID  = 2,        ///< Some part of the reference became invalid.
     UR_STICKY   = 3         /**< Not updated because the reference is sticky,
                               but would had been updated if it wasn't. For
                               entire columns/rows. Essentially the same as
