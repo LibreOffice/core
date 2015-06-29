@@ -78,6 +78,7 @@ void ValidateText( SwFrm *pFrm )     // Friend of frame
 
 void SwTextFrm::ValidateFrm()
 {
+    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     // Validate surroundings to avoid oscillation
     SWAP_IF_SWAPPED( this )
 
@@ -94,7 +95,7 @@ void SwTextFrm::ValidateFrm()
         }
 
         SwFrm *pUp = GetUpper();
-        pUp->Calc();
+        pUp->Calc(pRenderContext);
         if( pSct )
             pSct->ColUnlock();
     }
@@ -115,17 +116,18 @@ void SwTextFrm::ValidateFrm()
 // First we search outwards, on the way back we calculate everything.
 void _ValidateBodyFrm( SwFrm *pFrm )
 {
+    vcl::RenderContext* pRenderContext = pFrm ? pFrm->getRootFrm()->GetCurrShell()->GetOut() : 0;
     if( pFrm && !pFrm->IsCellFrm() )
     {
         if( !pFrm->IsBodyFrm() && pFrm->GetUpper() )
             _ValidateBodyFrm( pFrm->GetUpper() );
         if( !pFrm->IsSctFrm() )
-            pFrm->Calc();
+            pFrm->Calc(pRenderContext);
         else
         {
             const bool bOld = static_cast<SwSectionFrm*>(pFrm)->IsContentLocked();
             static_cast<SwSectionFrm*>(pFrm)->SetContentLock( true );
-            pFrm->Calc();
+            pFrm->Calc(pRenderContext);
             if( !bOld )
                 static_cast<SwSectionFrm*>(pFrm)->SetContentLock( false );
         }
@@ -186,6 +188,7 @@ const SwBodyFrm *SwTextFrm::FindBodyFrm() const
 
 bool SwTextFrm::CalcFollow( const sal_Int32 nTextOfst )
 {
+    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     SWAP_IF_SWAPPED( this )
 
     OSL_ENSURE( HasFollow(), "CalcFollow: missing Follow." );
@@ -283,13 +286,13 @@ bool SwTextFrm::CalcFollow( const sal_Int32 nTextOfst )
                         }
                     }
 
-                    pMyFollow->Calc();
+                    pMyFollow->Calc(pRenderContext);
                     // The Follow can tell from its Frm().Height() that something went wrong
                     OSL_ENSURE( !pMyFollow->GetPrev(), "SwTextFrm::CalcFollow: cheesy follow" );
                     if( pMyFollow->GetPrev() )
                     {
                         pMyFollow->Prepare( PREP_CLEAR );
-                        pMyFollow->Calc();
+                        pMyFollow->Calc(pRenderContext);
                         OSL_ENSURE( !pMyFollow->GetPrev(), "SwTextFrm::CalcFollow: very cheesy follow" );
                     }
 
@@ -350,6 +353,7 @@ bool SwTextFrm::CalcFollow( const sal_Int32 nTextOfst )
 
 void SwTextFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
 {
+    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     if( IsUndersized() )
     {
         if( GetOfst() && !IsFollow() ) // A scrolled paragraph (undersized)
@@ -404,7 +408,7 @@ void SwTextFrm::AdjustFrm( const SwTwips nChgHght, bool bHasToFit )
                 {
                     SwFrm *pPre = GetUpper()->Lower();
                     do
-                    {   pPre->Calc();
+                    {   pPre->Calc(pRenderContext);
                         pPre = pPre->GetNext();
                     } while ( pPre && pPre != this );
                 }

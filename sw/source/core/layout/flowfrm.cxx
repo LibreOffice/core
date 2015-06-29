@@ -404,7 +404,7 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
             bool bUnlock = !static_cast<SwFootnoteFrm*>(pLay)->IsBackMoveLocked();
             static_cast<SwFootnoteFrm*>(pLay)->LockBackMove();
             pLay->InvalidateSize();
-            pLay->Calc();
+            pLay->Calc(pLay->getRootFrm()->GetCurrShell()->GetOut());
             SwContentFrm *pCnt = pLay->ContainsContent();
             while ( pCnt && pLay->IsAnLower( pCnt ) )
             {
@@ -415,7 +415,7 @@ SwLayoutFrm *SwFlowFrm::CutTree( SwFrm *pStart )
                 if ( static_cast<SwTextFrm*>(pCnt)->IsLocked() ||
                      static_cast<SwTextFrm*>(pCnt)->GetFollow() == pStart )
                     break;
-                pCnt->Calc();
+                pCnt->Calc(pCnt->getRootFrm()->GetCurrShell()->GetOut());
                 pCnt = pCnt->GetNextContentFrm();
             }
             if( bUnlock )
@@ -602,13 +602,13 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
     // If we're in a column section, we'd rather not call Calc "from below"
     if( !m_rThis.IsInSct() &&
         ( !m_rThis.IsInTab() || ( m_rThis.IsTabFrm() && !m_rThis.GetUpper()->IsInTab() ) ) )
-        m_rThis.GetUpper()->Calc();
+        m_rThis.GetUpper()->Calc(m_rThis.getRootFrm()->GetCurrShell()->GetOut());
     else if( m_rThis.GetUpper()->IsSctFrm() )
     {
         SwSectionFrm* pTmpSct = static_cast<SwSectionFrm*>(m_rThis.GetUpper());
         bool bOld = pTmpSct->IsContentLocked();
         pTmpSct->SetContentLock( true );
-        pTmpSct->Calc();
+        pTmpSct->Calc(m_rThis.getRootFrm()->GetCurrShell()->GetOut());
         if( !bOld )
             pTmpSct->SetContentLock( false );
     }
@@ -1858,14 +1858,14 @@ bool SwFlowFrm::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             {
                 bool bUnlock = !pSect->IsColLocked();
                 pSect->ColLock();
-                pNewUpper->Calc();
+                pNewUpper->Calc(m_rThis.getRootFrm()->GetCurrShell()->GetOut());
                 if( bUnlock )
                     pSect->ColUnlock();
             }
         }
         // Do not calculate split cell frames.
         else if ( !pNewUpper->IsCellFrm() || static_cast<SwLayoutFrm*>(pNewUpper)->Lower() )
-            pNewUpper->Calc();
+            pNewUpper->Calc(m_rThis.getRootFrm()->GetCurrShell()->GetOut());
 
         SwFootnoteBossFrm *pNewBoss = pNewUpper->FindFootnoteBossFrm();
         bool bBossChg = pNewBoss != pOldBoss;
@@ -2456,7 +2456,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
             pSect->ColLock();
             bFollow = pSect->HasFollow();
         }
-        pNewUpper->Calc();
+        pNewUpper->Calc(m_rThis.getRootFrm()->GetCurrShell()->GetOut());
         m_rThis.Cut();
 
         // optimization: format section, if its size is invalidated and if it's
@@ -2477,7 +2477,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
         m_rThis.Paste( pNewUpper );
         // - optimization
         if ( bFormatSect )
-            pSect->Calc();
+            pSect->Calc(m_rThis.getRootFrm()->GetCurrShell()->GetOut());
 
         SwPageFrm *pNewPage = m_rThis.FindPageFrm();
         if( pNewPage != pOldPage )

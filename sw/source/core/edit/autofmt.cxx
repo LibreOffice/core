@@ -51,6 +51,7 @@
 #include <swundo.hxx>
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
+#include <rootfrm.hxx>
 #include <txtfrm.hxx>
 #include <frminf.hxx>
 #include <pagedesc.hxx>
@@ -246,7 +247,7 @@ SwTextFrm* SwAutoFormat::GetFrm( const SwTextNode& rTextNd ) const
     {
         SwRect aTmpFrm( pFrm->Frm() );
         SwRect aTmpPrt( pFrm->Prt() );
-        pFrm->Calc();
+        pFrm->Calc(pFrm->getRootFrm()->GetCurrShell()->GetOut());
         if( pFrm->Frm() != aTmpFrm || pFrm->Prt() != aTmpPrt ||
             ( pFrm->IsTextFrm() && !const_cast<SwTextFrm*>(static_cast<const SwTextFrm*>(pFrm))->Paint().IsEmpty() ) )
             pFrm->SetCompletePaint();

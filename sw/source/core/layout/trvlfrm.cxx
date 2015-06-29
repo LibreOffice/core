@@ -142,11 +142,12 @@ static SwCrsrOszControl aOszCtrl = { 0, 0, 0 };
 bool SwLayoutFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                                SwCrsrMoveState* pCMS, bool ) const
 {
+    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     bool bRet = false;
     const SwFrm *pFrm = Lower();
     while ( !bRet && pFrm )
     {
-        pFrm->Calc();
+        pFrm->Calc(pRenderContext);
 
         // #i43742# New function
         const bool bContentCheck = pFrm->IsTextFrm() && pCMS && pCMS->bContentCheck;
@@ -464,6 +465,7 @@ bool SwRootFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                              SwCrsrMoveState* pCMS, bool ) const
 {
+    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     // cell frame does not necessarily have a lower (split table cell)
     if ( !Lower() )
         return false;
@@ -488,13 +490,13 @@ bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             return SwLayoutFrm::GetCrsrOfst( pPos, rPoint, pCMS );
         else
         {
-            Calc();
+            Calc(pRenderContext);
             bool bRet = false;
 
             const SwFrm *pFrm = Lower();
             while ( pFrm && !bRet )
             {
-                pFrm->Calc();
+                pFrm->Calc(pRenderContext);
                 if ( pFrm->Frm().IsInside( rPoint ) )
                 {
                     bRet = pFrm->GetCrsrOfst( pPos, rPoint, pCMS );
@@ -531,12 +533,13 @@ bool SwCellFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
                             SwCrsrMoveState* pCMS, bool ) const
 {
+    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     aOszCtrl.Entry( this );
 
     //If the Points lies inside the Fly, we try hard to set the Crsr inside it.
     //However if the Point sits inside a Fly which is completely located inside
     //the current one, we call GetCrsrOfst for it.
-    Calc();
+    Calc(pRenderContext);
     bool bInside = Frm().IsInside( rPoint ) && Lower();
     bool bRet = false;
 
@@ -575,7 +578,7 @@ bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
         const SwFrm *pFrm = Lower();
         while ( pFrm && !bRet )
         {
-            pFrm->Calc();
+            pFrm->Calc(pRenderContext);
             if ( pFrm->Frm().IsInside( rPoint ) )
             {
                 bRet = pFrm->GetCrsrOfst( pPos, rPoint, pCMS );
@@ -975,6 +978,7 @@ sal_uInt16 SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
  */
 sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
 {
+    vcl::RenderContext* pRenderContext = GetCurrShell() ? GetCurrShell()->GetOut() : 0;
     OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "No page available." );
 
     SwPageFrm *pPage = static_cast<SwPageFrm*>(Lower());
@@ -988,7 +992,7 @@ sal_uInt16 SwRootFrm::SetCurrPage( SwCursor* pToSet, sal_uInt16 nPageNum )
             const SwContentFrm *pContent = pPage->ContainsContent();
             while ( pContent && pPage->IsAnLower( pContent ) )
             {
-                pContent->Calc();
+                pContent->Calc(pRenderContext);
                 pContent = pContent->GetNextContentFrm();
             }
             //Either this is a new page or we found the last page.
@@ -1177,6 +1181,7 @@ const SwContentFrm *SwLayoutFrm::GetContentPos( Point& rPoint,
                                             const SwCrsrMoveState *pCMS,
                                             const bool bDefaultExpand ) const
 {
+    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     //Determine the first ContentFrm.
     const SwLayoutFrm *pStart = (!bDontLeave && bDefaultExpand && GetPrev()) ?
                                     static_cast<const SwLayoutFrm*>(GetPrev()) : this;
@@ -1215,7 +1220,7 @@ const SwContentFrm *SwLayoutFrm::GetContentPos( Point& rPoint,
                 if ( !pContent->IsTextFrm() || !static_cast<const SwTextFrm*>(pContent)->IsHiddenNow() )
                 {
                     if ( bCalc )
-                        pContent->Calc();
+                        pContent->Calc(pRenderContext);
 
                     SwRect aCntFrm( pContent->UnionFrm() );
                     if ( aCntFrm.IsInside( rPoint ) )
@@ -1356,7 +1361,7 @@ const SwContentFrm *SwLayoutFrm::GetContentPos( Point& rPoint,
 
     //Bring the Point in to the PrtArea
     if ( bCalc )
-        pActual->Calc();
+        pActual->Calc(pRenderContext);
     const SwRect aRect( pActual->Frm().Pos() + pActual->Prt().Pos(),
                         aActualSize );
     if ( aPoint.Y() < aRect.Top() )
@@ -1489,6 +1494,7 @@ class DisableCallbackAction
  */
 Point SwRootFrm::GetNextPrevContentPos( const Point& rPoint, bool bNext ) const
 {
+    vcl::RenderContext* pRenderContext = GetCurrShell() ? GetCurrShell()->GetOut() : 0;
     // #123110# - disable creation of an action by a callback
     // event during processing of this method. Needed because formatting is
     // triggered by this method.
@@ -1508,7 +1514,7 @@ Point SwRootFrm::GetNextPrevContentPos( const Point& rPoint, bool bNext ) const
     if ( !pCnt )
         return Point( 0, 0 );
 
-    pCnt->Calc();
+    pCnt->Calc(pRenderContext);
     if( !bNext )
     {
         // As long as the point lies before the first ContentFrm and there are
@@ -1525,7 +1531,7 @@ Point SwRootFrm::GetNextPrevContentPos( const Point& rPoint, bool bNext ) const
                 else
                     return ContainsContent()->UnionFrm().Pos();
             }
-            pCnt->Calc();
+            pCnt->Calc(pRenderContext);
         }
     }
 
@@ -1561,7 +1567,7 @@ Point SwRootFrm::GetNextPrevContentPos( const Point& rPoint, bool bNext ) const
         //If the next ContentFrm lies behind the point then it is the one we
         //searched.
         const SwTabFrm* pTFrm;
-        pNxt->Calc();
+        pNxt->Calc(pRenderContext);
         if( pNxt->Frm().Top() > rPoint.Y() &&
             !lcl_IsInRepeatedHeadline( pCnt, &pTFrm ) &&
             ( !pTFrm || pNxt->Frm().Left() > rPoint.X() ))
@@ -1786,10 +1792,10 @@ bool SwFrm::OnFirstPage() const
     return bRet;
 }
 
-void SwFrm::Calc() const
+void SwFrm::Calc(vcl::RenderContext* pRenderContext) const
 {
     if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
-        const_cast<SwFrm*>(this)->PrepareMake(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
+        const_cast<SwFrm*>(this)->PrepareMake(pRenderContext);
 }
 
 Point SwFrm::GetRelPos() const

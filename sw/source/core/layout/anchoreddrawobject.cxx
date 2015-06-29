@@ -396,7 +396,7 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
     if ( bFormatAnchor )
     {
         // --> #i50356#
-        GetAnchorFrmContainingAnchPos()->Calc();
+        GetAnchorFrmContainingAnchPos()->Calc(GetAnchorFrmContainingAnchPos()->getRootFrm()->GetCurrShell()->GetOut());
     }
 
     bool bOscillationDetected = false;
@@ -435,7 +435,7 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
         if ( bFormatAnchor )
         {
             // --> #i50356#
-            GetAnchorFrmContainingAnchPos()->Calc();
+            GetAnchorFrmContainingAnchPos()->Calc(GetAnchorFrmContainingAnchPos()->getRootFrm()->GetCurrShell()->GetOut());
         }
 
         // --> #i3317#

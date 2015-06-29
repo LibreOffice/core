@@ -82,7 +82,7 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
         InvalidatePage();
         mbValidPos = false;
         bInvalid  = true;
-        Calc();
+        Calc(getRootFrm()->GetCurrShell()->GetOut());
         delete pNotify;
     }
 }
@@ -136,7 +136,7 @@ void SwFlyInCntFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAt
         Lock(); //don't format the anchor on the crook.
         SwContentFrm *pContent = ContainsContent();
         while ( pContent )
-        {   pContent->Calc();
+        {   pContent->Calc(pRenderContext);
             pContent = pContent->GetNextContentFrm();
         }
         Unlock();
@@ -193,7 +193,7 @@ void SwFlyInCntFrm::NotifyBackground( SwPageFrm *, const SwRect& rRect,
 
 const Point SwFlyInCntFrm::GetRelPos() const
 {
-    Calc();
+    Calc(getRootFrm()->GetCurrShell()->GetOut());
     return GetCurrRelPos();
 }
 

@@ -52,6 +52,7 @@
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
 #include <viewsh.hxx>
+#include <rootfrm.hxx>
 #include <tabfrm.hxx>
 #include <redline.hxx>
 #include <unoport.hxx>
@@ -591,6 +592,7 @@ static bool lcl_FormatTable(SwFrameFormat* pTableFormat)
     SwIterator<SwFrm,SwFormat> aIter( *pTableFormat );
     for(SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next())
     {
+        vcl::RenderContext* pRenderContext = pFrm->getRootFrm()->GetCurrShell()->GetOut();
         // mba: no TYPEINFO for SwTabFrm
         if(!pFrm->IsTabFrm())
             continue;
@@ -598,7 +600,7 @@ static bool lcl_FormatTable(SwFrameFormat* pTableFormat)
         if(pTabFrm->IsValid())
             pTabFrm->InvalidatePos();
         pTabFrm->SetONECalcLowers();
-        pTabFrm->Calc();
+        pTabFrm->Calc(pRenderContext);
         bHasFrames = true;
     }
     return bHasFrames;

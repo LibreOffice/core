@@ -113,9 +113,9 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
         case RECT_PAGE :            pFrm = pFrm->FindPageFrm();
                                     break;
 
-        case RECT_PAGE_CALC:        pFrm->Calc();
+        case RECT_PAGE_CALC:        pFrm->Calc(Imp()->GetShell()->GetOut());
                                     pFrm = pFrm->FindPageFrm();
-                                    pFrm->Calc();
+                                    pFrm->Calc(Imp()->GetShell()->GetOut());
                                     break;
 
         case RECT_FLY_PRT_EMBEDDED: bFrm = false; /* no break */

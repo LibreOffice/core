@@ -392,7 +392,7 @@ void GetTableSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
             if( pTable->IsValid() )
                 pTable->InvalidatePos();
             pTable->SetONECalcLowers();
-            pTable->Calc();
+            pTable->Calc(pTable->getRootFrm()->GetCurrShell()->GetOut());
             pTable->SetCompletePaint();
             if( 0 == (pTable = pTable->GetFollow()) )
                 break;
@@ -634,7 +634,7 @@ bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd )
             if( pTable->IsValid() )
                 pTable->InvalidatePos();
             pTable->SetONECalcLowers();
-            pTable->Calc();
+            pTable->Calc(pTable->getRootFrm()->GetCurrShell()->GetOut());
             pTable->SetCompletePaint();
             if( 0 == (pTable = pTable->GetFollow()) )
                 break;

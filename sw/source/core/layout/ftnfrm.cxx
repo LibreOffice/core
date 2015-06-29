@@ -1574,7 +1574,7 @@ void SwFootnoteBossFrm::AppendFootnote( SwContentFrm *pRef, SwTextFootnote *pAtt
             SwContentFrm *pCnt = pNew->ContainsContent();
             while ( pCnt && pCnt->FindFootnoteFrm()->GetAttr() == pAttr )
             {
-                pCnt->Calc();
+                pCnt->Calc(getRootFrm()->GetCurrShell()->GetOut());
                 // #i49383# - format anchored objects
                 if ( pCnt->IsTextFrm() && pCnt->IsValid() )
                 {
@@ -1596,7 +1596,7 @@ void SwFootnoteBossFrm::AppendFootnote( SwContentFrm *pRef, SwTextFootnote *pAtt
             // #i57914# - adjust fix #i49383#
             // enable lock of lower object position before format of footnote frame.
             pNew->UnlockPosOfLowerObjs();
-            pNew->Calc();
+            pNew->Calc(getRootFrm()->GetCurrShell()->GetOut());
             // #i57914# - adjust fix #i49383#
             if ( !bOldFootnoteFrmLocked && !pNew->GetLower() &&
                  !pNew->IsColLocked() && !pNew->IsBackMoveLocked() )
@@ -1944,8 +1944,8 @@ void SwFootnoteBossFrm::_MoveFootnotes( SwFootnoteFrms &rFootnoteArr, bool bCalc
             }
             (pFootnote->Frm().*fnRect->fnSetHeight)(0);
             (pFootnote->Prt().*fnRect->fnSetHeight)(0);
-            pFootnote->Calc();
-            pFootnote->GetUpper()->Calc();
+            pFootnote->Calc(getRootFrm()->GetCurrShell()->GetOut());
+            pFootnote->GetUpper()->Calc(getRootFrm()->GetCurrShell()->GetOut());
 
             if( bCalc )
             {
@@ -1962,7 +1962,7 @@ void SwFootnoteBossFrm::_MoveFootnotes( SwFootnoteFrms &rFootnoteArr, bool bCalc
                 while ( pCnt && pCnt->FindFootnoteFrm()->GetAttr() == pAttr )
                 {
                     pCnt->_InvalidatePos();
-                    pCnt->Calc();
+                    pCnt->Calc(getRootFrm()->GetCurrShell()->GetOut());
                     // #i49383# - format anchored objects
                     if ( pCnt->IsTextFrm() && pCnt->IsValid() )
                     {
@@ -2003,7 +2003,7 @@ void SwFootnoteBossFrm::_MoveFootnotes( SwFootnoteFrms &rFootnoteArr, bool bCalc
                     // #i57914# - adjust fix #i49383#
                     // enable lock of lower object position before format of footnote frame.
                     pFootnote->UnlockPosOfLowerObjs();
-                    pFootnote->Calc();
+                    pFootnote->Calc(getRootFrm()->GetCurrShell()->GetOut());
                 }
             }
         }
@@ -2042,7 +2042,7 @@ void SwFootnoteBossFrm::_MoveFootnotes( SwFootnoteFrms &rFootnoteArr, bool bCalc
             while ( pCnt && pCnt->FindFootnoteFrm()->GetAttr() == pAttr )
             {
                 pCnt->_InvalidatePos();
-                pCnt->Calc();
+                pCnt->Calc(getRootFrm()->GetCurrShell()->GetOut());
                 // #i49383# - format anchored objects
                 if ( pCnt->IsTextFrm() && pCnt->IsValid() )
                 {
@@ -2074,7 +2074,7 @@ void SwFootnoteBossFrm::_MoveFootnotes( SwFootnoteFrms &rFootnoteArr, bool bCalc
             // #i57914# - adjust fix #i49383#
             // enable lock of lower object position before format of footnote frame.
             pNextFootnote->UnlockPosOfLowerObjs();
-            pNextFootnote->Calc();
+            pNextFootnote->Calc(getRootFrm()->GetCurrShell()->GetOut());
         }
     }
 }
@@ -2132,8 +2132,8 @@ void SwFootnoteBossFrm::RearrangeFootnotes( const SwTwips nDeadLine, const bool 
         {
             bool bUnlock = !pFirst->IsBackMoveLocked();
             pFirst->LockBackMove();
-            pFirst->Calc();
-            pContent->Calc();
+            pFirst->Calc(getRootFrm()->GetCurrShell()->GetOut());
+            pContent->Calc(getRootFrm()->GetCurrShell()->GetOut());
             // #i49383# - format anchored objects
             if ( pContent->IsTextFrm() && pContent->IsValid() )
             {
@@ -2180,7 +2180,7 @@ void SwFootnoteBossFrm::RearrangeFootnotes( const SwTwips nDeadLine, const bool 
                         // #i57914# - adjust fix #i49383#
                         // enable lock of lower object position before format of footnote frame.
                         pLastFootnoteFrm->UnlockPosOfLowerObjs();
-                        pLastFootnoteFrm->Calc();
+                        pLastFootnoteFrm->Calc(getRootFrm()->GetCurrShell()->GetOut());
                         if ( !bLock && bUnlockLastFootnoteFrm &&
                              !pLastFootnoteFrm->GetLower() &&
                              !pLastFootnoteFrm->IsColLocked() &&
@@ -2215,8 +2215,8 @@ void SwFootnoteBossFrm::RearrangeFootnotes( const SwTwips nDeadLine, const bool 
                 {
                     bool bUnlock = !pFootnoteFrm->IsBackMoveLocked();
                     pFootnoteFrm->LockBackMove();
-                    pFootnoteFrm->Calc();
-                    pCnt->Calc();
+                    pFootnoteFrm->Calc(getRootFrm()->GetCurrShell()->GetOut());
+                    pCnt->Calc(getRootFrm()->GetCurrShell()->GetOut());
                     // #i49383# - format anchored objects
                     if ( pCnt->IsTextFrm() && pCnt->IsValid() )
                     {
@@ -2245,8 +2245,8 @@ void SwFootnoteBossFrm::RearrangeFootnotes( const SwTwips nDeadLine, const bool 
                 }
                 else
                 {
-                    pFootnoteFrm->Calc();
-                    pCnt->Calc();
+                    pFootnoteFrm->Calc(getRootFrm()->GetCurrShell()->GetOut());
+                    pCnt->Calc(getRootFrm()->GetCurrShell()->GetOut());
                     // #i49383# - format anchored objects
                     if ( pCnt->IsTextFrm() && pCnt->IsValid() )
                     {
@@ -2315,7 +2315,7 @@ void SwFootnoteBossFrm::RearrangeFootnotes( const SwTwips nDeadLine, const bool 
             // #i57914# - adjust fix #i49383#
             // enable lock of lower object position before format of footnote frame.
             pLastFootnoteFrm->UnlockPosOfLowerObjs();
-            pLastFootnoteFrm->Calc();
+            pLastFootnoteFrm->Calc(getRootFrm()->GetCurrShell()->GetOut());
             if ( !bLock && bUnlockLastFootnoteFrm &&
                  !pLastFootnoteFrm->GetLower() &&
                  !pLastFootnoteFrm->IsColLocked() &&
@@ -2389,14 +2389,14 @@ void SwPageFrm::UpdateFootnoteNum()
 void SwFootnoteBossFrm::SetFootnoteDeadLine( const SwTwips nDeadLine )
 {
     SwFrm *pBody = FindBodyCont();
-    pBody->Calc();
+    pBody->Calc(getRootFrm()->GetCurrShell()->GetOut());
 
     SwFrm *pCont = FindFootnoteCont();
     const SwTwips nMax = nMaxFootnoteHeight;// current should exceed MaxHeight
     SWRECTFN( this )
     if ( pCont )
     {
-        pCont->Calc();
+        pCont->Calc(getRootFrm()->GetCurrShell()->GetOut());
         nMaxFootnoteHeight = -(pCont->Frm().*fnRect->fnBottomDist)( nDeadLine );
     }
     else
@@ -2680,7 +2680,7 @@ bool SwContentFrm::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrm *pOldBo
         if ( !( bSameBoss = (pNewBoss == pOldBoss) ) )
         {
             bSamePage = pOldBoss->FindPageFrm() == pNewBoss->FindPageFrm(); // page change?
-            pNewUpper->Calc();
+            pNewUpper->Calc(getRootFrm()->GetCurrShell()->GetOut());
         }
 
         // The layout leaf of the footnote is either a footnote container or a footnote.
@@ -2712,7 +2712,7 @@ bool SwContentFrm::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrm *pOldBo
                 while(pNx && !static_cast<SwFootnoteFrm*>(pNx)->GetAttr()->GetFootnote().IsEndNote())
                     pNx = pNx->GetNext();
             pTmpFootnote->Paste( pCont, pNx );
-            pTmpFootnote->Calc();
+            pTmpFootnote->Calc(getRootFrm()->GetCurrShell()->GetOut());
         }
         OSL_ENSURE( pTmpFootnote->GetAttr() == FindFootnoteFrm()->GetAttr(), "Wrong Footnote!" );
         // areas inside of footnotes get a special treatment

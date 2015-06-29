@@ -1379,6 +1379,7 @@ void CalcContent( SwLayoutFrm *pLay,
                 bool bNoColl,
                 bool bNoCalcFollow )
 {
+    vcl::RenderContext* pRenderContext = pLay->getRootFrm()->GetCurrShell()->GetOut();
     SwSectionFrm* pSect;
     bool bCollect = false;
     if( pLay->IsSctFrm() )
@@ -1462,7 +1463,7 @@ void CalcContent( SwLayoutFrm *pLay,
             if ( bNoCalcFollow && pFrm->IsTextFrm() )
                 static_cast<SwTextFrm*>(pFrm)->ForbidFollowFormat();
 
-            pFrm->Calc();
+            pFrm->Calc(pRenderContext);
 
             // OD 14.03.2003 #i11760# - reset control flag for follow format.
             if ( pFrm->IsTextFrm() )
@@ -1589,7 +1590,7 @@ void CalcContent( SwLayoutFrm *pLay,
                 // are formatted, if the wrapping style influence has to be considered.
                 if ( pLay->GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
                 {
-                    pFrm->Calc();
+                    pFrm->Calc(pRenderContext);
                 }
 
                 if ( bAgain )
@@ -1688,10 +1689,11 @@ void SwFlyFrm::MakeObjPos()
 {
     if ( !mbValidPos )
     {
+        vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
         mbValidPos = true;
 
         // OD 29.10.2003 #113049# - use new class to position object
-        GetAnchorFrm()->Calc();
+        GetAnchorFrm()->Calc(pRenderContext);
         objectpositioning::SwToLayoutAnchoredObjectPosition
                 aObjPositioning( *GetVirtDrawObj() );
         aObjPositioning.CalcPosition();
@@ -2457,6 +2459,7 @@ SwTwips SwFlyFrm::CalcAutoWidth() const
 bool SwFlyFrm::GetContour( tools::PolyPolygon&   rContour,
                            const bool _bForPaint ) const
 {
+    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     bool bRet = false;
     if( GetFormat()->GetSurround().IsContour() && Lower() &&
         Lower()->IsNoTextFrm() )
@@ -2496,7 +2499,7 @@ bool SwFlyFrm::GetContour( tools::PolyPolygon&   rContour,
             // We need to include the scaling here
             SwRect aClip;
             SwRect aOrig;
-            Lower()->Calc();
+            Lower()->Calc(pRenderContext);
             static_cast<const SwNoTextFrm*>(Lower())->GetGrfArea( aClip, &aOrig, false );
             // OD 16.04.2003 #i13147# - copy method code <SvxContourDlg::ScaleContour(..)>
             // in order to avoid that graphic has to be loaded for contour scale.
@@ -2654,12 +2657,12 @@ SwFlyFrameFormat * SwFlyFrm::GetFormat()
     return static_cast< SwFlyFrameFormat * >( GetDep() );
 }
 
-void SwFlyFrm::Calc() const
+void SwFlyFrm::Calc(vcl::RenderContext* pRenderContext) const
 {
     if ( !m_bValidContentPos )
-        const_cast<SwFlyFrm*>(this)->PrepareMake(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
+        const_cast<SwFlyFrm*>(this)->PrepareMake(pRenderContext);
     else
-        SwLayoutFrm::Calc();
+        SwLayoutFrm::Calc(pRenderContext);
 }
 
 SwTwips SwFlyFrm::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips nMinHeight, const SwTwips nUL)

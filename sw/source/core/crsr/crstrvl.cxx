@@ -83,7 +83,7 @@ void SwCrsrShell::MoveCrsrToNum()
     SwContentFrm * pFrm = m_pCurCrsr->GetContentNode()->getLayoutFrm( GetLayout(), &aPt,
                                                 m_pCurCrsr->GetPoint() );
     pFrm->GetCharRect( m_aCharRect, *m_pCurCrsr->GetPoint() );
-    pFrm->Calc();
+    pFrm->Calc(GetOut());
     if( pFrm->IsVertical() )
     {
         aPt.setX(m_aCharRect.Center().getX());
@@ -138,7 +138,7 @@ bool SwCrsrShell::GotoHeaderText()
         SwCallLink aLk( *this ); // watch Crsr-Moves
         SwCursor *pTmpCrsr = getShellCrsr( true );
         SwCrsrSaveState aSaveState( *pTmpCrsr );
-        pFrm->Calc();
+        pFrm->Calc(GetOut());
         Point aPt( pFrm->Frm().Pos() + pFrm->Prt().Pos() );
         pFrm->GetCrsrOfst( pTmpCrsr->GetPoint(), aPt );
         if( !pTmpCrsr->IsSelOvr() )
@@ -170,7 +170,7 @@ bool SwCrsrShell::GotoFooterText()
             // get position in footer
             SwCallLink aLk( *this ); // watch Crsr-Moves
             SwCrsrSaveState aSaveState( *pTmpCrsr );
-            pLower->Calc();
+            pLower->Calc(GetOut());
             Point aPt( pLower->Frm().Pos() + pLower->Prt().Pos() );
             pLower->GetCrsrOfst( pTmpCrsr->GetPoint(), aPt );
             if( !pTmpCrsr->IsSelOvr() )

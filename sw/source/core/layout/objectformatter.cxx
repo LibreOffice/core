@@ -21,6 +21,7 @@
 #include <objectformatterlayfrm.hxx>
 #include <anchoreddrawobject.hxx>
 #include <sortedobjs.hxx>
+#include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
@@ -239,7 +240,7 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
 */
 void SwObjectFormatter::_FormatLayout( SwLayoutFrm& _rLayoutFrm )
 {
-    _rLayoutFrm.Calc();
+    _rLayoutFrm.Calc(_rLayoutFrm.getRootFrm()->GetCurrShell()->GetOut());
 
     SwFrm* pLowerFrm = _rLayoutFrm.Lower();
     while ( pLowerFrm )

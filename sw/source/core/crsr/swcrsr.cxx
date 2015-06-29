@@ -1857,13 +1857,13 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
                 if ( pFrm->IsVertical() )
                 {
                     aPt.setX(aTmpRect.Center().getX());
-                    pFrm->Calc();
+                    pFrm->Calc(pFrm->getRootFrm()->GetCurrShell()->GetOut());
                     aPt.setY(pFrm->Frm().Top() + nUpDownX);
                 }
                 else
                 {
                     aPt.setY(aTmpRect.Center().getY());
-                    pFrm->Calc();
+                    pFrm->Calc(pFrm->getRootFrm()->GetCurrShell()->GetOut());
                     aPt.setX(pFrm->Frm().Left() + nUpDownX);
                 }
                 pFrm->GetCrsrOfst( GetPoint(), aPt, &eTmpState );

@@ -248,7 +248,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                 }
                 while( pFrm )
                 {
-                    pFrm->Calc();
+                    pFrm->Calc(getRootFrm()->GetCurrShell()->GetOut());
                     // #i43771# - format also object anchored
                     // at the frame
                     // #i46941# - frame has to be valid.
