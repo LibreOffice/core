@@ -238,7 +238,7 @@ static bool lcl_IsCalcUpperAllowed( const SwFrm& rFrm )
  *
  * @see MakeAll()
  */
-void SwFrm::PrepareMake()
+void SwFrm::PrepareMake(vcl::RenderContext* pRenderContext)
 {
     StackHack aHack;
     if ( GetUpper() )
@@ -274,7 +274,7 @@ void SwFrm::PrepareMake()
             const SwTextFrm* pMaster = static_cast<SwContentFrm*>(this)->FindMaster();
             if ( pMaster && pMaster->IsLocked() )
             {
-                MakeAll(IsRootFrm() ? 0 : getRootFrm()->GetCurrShell()->GetOut());
+                MakeAll(pRenderContext);
                 return;
             }
         }
@@ -303,7 +303,7 @@ void SwFrm::PrepareMake()
                          (SwFlowFrm::CastFlowFrm(pFrm))->IsAnFollow( pThis ) )
                         break;
 
-                    pFrm->MakeAll(IsRootFrm() ? 0 : getRootFrm()->GetCurrShell()->GetOut());
+                    pFrm->MakeAll(pRenderContext);
                     if( IsSctFrm() && !static_cast<SwSectionFrm*>(this)->GetSection() )
                         break;
                 }
@@ -337,7 +337,7 @@ void SwFrm::PrepareMake()
         if ( bTab && !bOldTabLock )
             ::PrepareUnlock( static_cast<SwTabFrm*>(this) );
     }
-    MakeAll(IsRootFrm() ? 0 : getRootFrm()->GetCurrShell()->GetOut());
+    MakeAll(pRenderContext);
 }
 
 void SwFrm::OptPrepareMake()
@@ -354,7 +354,7 @@ void SwFrm::OptPrepareMake()
             return;
     }
     if ( GetPrev() && !GetPrev()->IsValid() )
-        PrepareMake();
+        PrepareMake(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
     else
     {
         StackHack aHack;

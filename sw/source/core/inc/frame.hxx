@@ -370,7 +370,7 @@ protected:
     void setRootFrm( SwRootFrm* pRoot ) { mpRoot = pRoot; }
 
     SwPageFrm *InsertPage( SwPageFrm *pSibling, bool bFootnote );
-    void PrepareMake();
+    void PrepareMake(vcl::RenderContext* pRenderContext);
     void OptPrepareMake();
     void MakePos();
     // Format next frame of table frame to assure keeping attributes.
