@@ -72,6 +72,11 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 
     bool bIsPageOverflow = pFlowOutl->IsPageOverflow();
 
+    if (pParamOutl != NULL)
+    {
+        pFlowOutl->SetUpdateMode(false); // XXX: Plausibly should be the prev. state
+    }
+
     // NOTE: overflow and underflow cannot be both true
     bOverflow = bIsPageOverflow && mpNextLink;
     bUnderflow = !bIsPageOverflow &&  mpNextLink && mpNextLink->HasText();
