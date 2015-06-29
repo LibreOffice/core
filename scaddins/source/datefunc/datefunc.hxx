@@ -304,7 +304,7 @@ private:
 
     void                        InitDefLocales();
     const ::com::sun::star::lang::Locale& GetLocale( sal_uInt32 nIndex );
-    ResMgr&                     GetResMgr() throw( ::com::sun::star::uno::RuntimeException );
+    ResMgr&                     GetResMgr() throw( ::com::sun::star::uno::RuntimeException, std::exception );
     void                        InitData();
 
     OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( ::com::sun::star::uno::RuntimeException, std::exception );
