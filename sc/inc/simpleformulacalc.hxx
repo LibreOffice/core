@@ -30,7 +30,6 @@ private:
     ScAddress maAddr;
     ScDocument* mpDoc;
     ScFormulaResult maResult;
-    const OUString maFormula;
     formula::FormulaGrammar::Grammar maGram;
     bool bIsMatrix;
     OUString maMatrixFormulaResult;

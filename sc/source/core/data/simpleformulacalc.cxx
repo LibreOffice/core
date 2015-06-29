@@ -20,7 +20,6 @@ ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const Sc
     , mbCalculated(false)
     , maAddr(rAddr)
     , mpDoc(pDoc)
-    , maFormula(rFormula)
     , maGram(eGram)
     , bIsMatrix(false)
 {
@@ -48,15 +47,13 @@ void ScSimpleFormulaCalculator::Calculate()
     formula::StackVar aIntType = aInt.Interpret();
     if ( aIntType == formula::svMatrixCell )
     {
-        OUStringBuffer aStr;
         ScCompiler aComp(mpDoc, maAddr);
         aComp.SetGrammar(maGram);
-        mpCode.reset(aComp.CompileString(maFormula));
-        if(!mpCode->GetCodeError() && mpCode->GetLen())
-            aComp.CompileTokenArray();
-        aComp.CreateStringFromToken( aStr, aInt.GetResultToken().get(), true );
+        OUStringBuffer aStr;
+        aComp.CreateStringFromToken(aStr, aInt.GetResultToken().get(), false);
+
         bIsMatrix = true;
-        maMatrixFormulaResult = aStr.toString();
+        maMatrixFormulaResult = aStr.makeStringAndClear();
     }
     mnFormatType = aInt.GetRetFormatType();
     mnFormatIndex = aInt.GetRetFormatIndex();
@@ -69,6 +66,7 @@ bool ScSimpleFormulaCalculator::IsValue()
 
     if (bIsMatrix)
         return false;
+
     return maResult.IsValue();
 }
 
