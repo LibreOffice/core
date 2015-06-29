@@ -2657,7 +2657,7 @@ SwFlyFrameFormat * SwFlyFrm::GetFormat()
 void SwFlyFrm::Calc() const
 {
     if ( !m_bValidContentPos )
-        const_cast<SwFlyFrm*>(this)->PrepareMake();
+        const_cast<SwFlyFrm*>(this)->PrepareMake(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
     else
         SwLayoutFrm::Calc();
 }
