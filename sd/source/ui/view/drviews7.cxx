@@ -1362,6 +1362,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_RENAMEPAGE_QUICK );
         rSet.DisableItem( SID_DELETE_PAGE );
         rSet.DisableItem( SID_PAGESETUP );
+        rSet.DisableItem( SID_PAGEBACKGROUND_COLOR );
+        rSet.DisableItem( SID_PAGEBACKGROUND_GRADIENT );
+        rSet.DisableItem( SID_PAGEBACKGROUND_HATCH );
+        rSet.DisableItem( SID_PAGEBACKGROUND_BITMAP );
 
         if( xSlideshow.is() && xSlideshow->isRunning() )
         {
