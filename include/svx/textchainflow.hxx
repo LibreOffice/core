@@ -25,6 +25,7 @@ class SdrOutliner;
 class NonOverflowingText;
 class OverflowingText;
 class TextChain;
+class OutlinerParaObject;
 
 // XXX: Specialize class for Editing mode and non editing mode?
 // XXX: const qualifiers?
@@ -70,6 +71,8 @@ class TextChainFlow {
 
     OverflowingText *mpOverflowingTxt;
     NonOverflowingText *mpNonOverflowingTxt;
+
+    OutlinerParaObject *mpUnderflowingPObj;
 
 };
 
