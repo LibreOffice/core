@@ -2078,8 +2078,8 @@ void SdrTextObj::onChainingEvent()
 
     // XXX: Specializing the class?
     // OBS: you don't need all the "setting parameters" crap for underflow with this
-    TextChainFlow aTxtChainFlow(this);
-    aTxtChainFlow.CheckForFlowEvents(pEdtOutl, NULL);
+    EditingTextChainFlow aTxtChainFlow(this);
+    aTxtChainFlow.CheckForFlowEvents(pEdtOutl);
 
 
     if (aTxtChainFlow.IsOverflow()) {
@@ -2101,7 +2101,7 @@ void SdrTextObj::onChainingEvent()
             GetTextChain()->SetNilChainingEvent(const_cast<SdrTextObj*>(this), true);
 
             aTxtChainFlow.ExecuteOverflow(&aDrawOutliner, &aDrawOutliner);
-        }
+        } // XXX: For the code below
         // Probably not necessary
         //else {
         //    // No overflow: set the whole thing
