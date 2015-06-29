@@ -7095,6 +7095,53 @@ void ScInterpreter::ScIndirect()
             }
             while (false);
 
+            /* TODO: simple named ranges and database ranges could be resolved. */
+
+            // It may be even a TableRef.
+            // Anything else that resolves to one reference could be added
+            // here, but we don't want to compile every arbitrary string. This
+            // is already nasty enough..
+            sal_Int32 nIndex = 0;
+            if ((nIndex = sRefStr.indexOf('[')) >= 0 && sRefStr.indexOf(']',nIndex+1) > nIndex)
+            {
+                do
+                {
+                    ScCompiler aComp( pDok, aPos);
+                    aComp.SetGrammar( pDok->GetGrammar());
+                    aComp.SetRefConvention( eConv);     // must be after grammar
+                    boost::scoped_ptr<ScTokenArray> pArr( aComp.CompileString( sRefStr));
+
+                    // Whatever.. use only the specific case.
+                    if (!pArr->HasOpCode( ocTableRef))
+                        break;
+
+                    aComp.CompileTokenArray();
+
+                    // A syntactically valid reference will generate exactly
+                    // one RPN token, a reference or error. Discard everything
+                    // else as error.
+                    if (pArr->GetCodeLen() != 1)
+                        break;
+
+                    ScTokenRef xTok( pArr->FirstRPN());
+                    if (!xTok)
+                        break;
+
+                    switch (xTok->GetType())
+                    {
+                        case svSingleRef:
+                        case svDoubleRef:
+                        case svError:
+                            PushTempToken( xTok.get());
+                            // success!
+                            return;
+                        default:
+                            ;   // nothing
+                    }
+                }
+                while (false);
+            }
+
             PushError( errNoRef);
         }
     }
