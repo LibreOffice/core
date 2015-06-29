@@ -57,7 +57,7 @@
 
 ImplMultiTextLineInfo::ImplMultiTextLineInfo()
 {
-    mpLines = new PImplTextLineInfo[MULTITEXTLINEINFO_RESIZE];
+    mpLines = new ImplTextLineInfo*[MULTITEXTLINEINFO_RESIZE];
     mnLines = 0;
     mnSize  = MULTITEXTLINEINFO_RESIZE;
 }
@@ -74,8 +74,8 @@ void ImplMultiTextLineInfo::AddLine( ImplTextLineInfo* pLine )
     if ( mnSize == mnLines )
     {
         mnSize += MULTITEXTLINEINFO_RESIZE;
-        PImplTextLineInfo* pNewLines = new PImplTextLineInfo[mnSize];
-        memcpy( pNewLines, mpLines, mnLines*sizeof(PImplTextLineInfo) );
+        ImplTextLineInfo** pNewLines = new ImplTextLineInfo*[mnSize];
+        memcpy( pNewLines, mpLines, mnLines*sizeof(ImplTextLineInfo*) );
         mpLines = pNewLines;
     }
 

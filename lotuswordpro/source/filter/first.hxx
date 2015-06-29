@@ -64,9 +64,6 @@ namespace OpenStormBento
 // String constants
 extern const char gsBenMagicBytes[];
 
-typedef BenByte * BenByteDataPtr;
-typedef const BenByte * BenConstByteDataPtr;
-
 pCBenNamedObject FindNamedObject(pCUtList pList, const char * sName,
   pCUtListElmt * ppPrev);
 

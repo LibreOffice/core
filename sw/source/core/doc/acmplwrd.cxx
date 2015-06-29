@@ -75,8 +75,7 @@ public:
     void RemoveDocument(const SwDoc& rDoc);
 };
 
-typedef const SwDoc* SwDocPtr;
-typedef std::vector<SwDocPtr> SwDocPtrVector;
+typedef std::vector<const SwDoc*> SwDocPtrVector;
 class SwAutoCompleteString
     : public editeng::IAutoCompleteString
 {

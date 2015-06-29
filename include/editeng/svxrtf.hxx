@@ -76,8 +76,7 @@ public:
 };
 
 
-typedef Color* ColorPtr;
-typedef std::deque< ColorPtr > SvxRTFColorTbl;
+typedef std::deque< Color* > SvxRTFColorTbl;
 typedef boost::ptr_map<short, vcl::Font> SvxRTFFontTbl;
 typedef boost::ptr_map<sal_uInt16, SvxRTFStyleType> SvxRTFStyleTbl;
 
@@ -391,7 +390,7 @@ public:
 
 inline const Color& SvxRTFParser::GetColor( size_t nId ) const
 {
-    ColorPtr pColor = pDfltColor;
+    Color* pColor = pDfltColor;
     if( nId < aColorTbl.size() )
         pColor = aColorTbl[ nId ];
     return *pColor;

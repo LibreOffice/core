@@ -95,8 +95,6 @@ static const sal_Char sImplWordChars[] = "-'";
 
 OUString EncryptBlockName_Imp(const OUString& rName);
 
-typedef SvxAutoCorrectLanguageLists* SvxAutoCorrectLanguageListsPtr;
-
 static inline bool IsWordDelim( const sal_Unicode c )
 {
     return ' ' == c || '\t' == c || 0x0a == c ||
@@ -1563,7 +1561,7 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
     OUString sUserDirFile( GetAutoCorrFileName( rLanguageTag, true, false, false ));
     OUString sShareDirFile( sUserDirFile );
 
-    SvxAutoCorrectLanguageListsPtr pLists = 0;
+    SvxAutoCorrectLanguageLists* pLists = 0;
 
     tools::Time nMinTime( 0, 2 ), nAktTime( tools::Time::SYSTEM ), nLastCheckTime( tools::Time::EMPTY );
 
@@ -1692,7 +1690,7 @@ static void GeneratePackageName ( const OUString& rShort, OUString& rPackageName
 }
 
 static const SvxAutocorrWord* lcl_SearchWordsInList(
-                SvxAutoCorrectLanguageListsPtr pList, const OUString& rTxt,
+                SvxAutoCorrectLanguageLists* pList, const OUString& rTxt,
                 sal_Int32& rStt, sal_Int32 nEndPos)
 {
     const SvxAutocorrWordList* pAutoCorrWordList = pList->GetAutocorrWordList();

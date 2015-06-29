@@ -209,7 +209,7 @@ void ScFormulaDlg::fill()
         }
         else
         {
-            PtrTabViewShell pTabViewShell;
+            ScTabViewShell* pTabViewShell;
             ScInputHandler* pInputHdl = GetNextInputHandler(pData->GetDocShell(),&pTabViewShell);
 
             if ( pInputHdl == NULL ) //no more InputHandler for DocShell
@@ -277,7 +277,7 @@ bool ScFormulaDlg::IsInputHdl(ScInputHandler* pHdl)
 
 }
 
-ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh)
+ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell, ScTabViewShell** ppViewSh)
 {
     ScInputHandler* pHdl=NULL;
 

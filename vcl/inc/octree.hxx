@@ -39,9 +39,6 @@ typedef struct OctreeNode
     bool        bLeaf;
 } NODE;
 
-typedef NODE*       PNODE;
-typedef PNODE*      PPNODE;
-
 class ImpNodeCache;
 class BitmapReadAccess;
 
@@ -50,11 +47,11 @@ class VCL_PLUGIN_PUBLIC Octree
 private:
 
     BitmapPalette               aPal;
-    sal_uLong                       nMax;
-    sal_uLong                       nLeafCount;
-    sal_uLong                       nLevel;
-    PNODE                       pTree;
-    PNODE                       pReduce[ OCTREE_BITS + 1 ];
+    sal_uLong                   nMax;
+    sal_uLong                   nLeafCount;
+    sal_uLong                   nLevel;
+    NODE*                       pTree;
+    NODE*                       pReduce[ OCTREE_BITS + 1 ];
     BitmapColor*                pColor;
     ImpNodeCache*               pNodeCache;
     const BitmapReadAccess*     pAcc;
@@ -62,12 +59,12 @@ private:
 
                                 Octree() {}
 
-    void                        CreatePalette( PNODE pNode );
-    void                        GetPalIndex( PNODE pNode );
+    void                        CreatePalette( NODE* pNode );
+    void                        GetPalIndex( NODE* pNode );
 
     SAL_DLLPRIVATE void         ImplCreateOctree();
-    SAL_DLLPRIVATE void         ImplDeleteOctree( PPNODE ppNode );
-    SAL_DLLPRIVATE void         ImplAdd( PPNODE ppNode );
+    SAL_DLLPRIVATE void         ImplDeleteOctree( NODE** ppNode );
+    SAL_DLLPRIVATE void         ImplAdd( NODE** ppNode );
     SAL_DLLPRIVATE void         ImplReduce();
 
 public:
