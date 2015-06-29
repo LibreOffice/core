@@ -276,7 +276,9 @@ void Test::testFormulaParseReference()
             "'90''s Music'.B12",
             "'90''s and 70''s'.$AB$100",
             "'All Others'.Z$100",
-            "NoQuote.$C111"
+            "NoQuote.$C111",
+            "B:B",
+            "10:10"
         };
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -319,6 +321,42 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(4), aPos.Col());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), aPos.Row());
     CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
+
+    ScRange aRange;
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("B:B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), aRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), 0);
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE));
+
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("2:2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), aRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), 0);
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE));
+
+    nRes = aRange.Parse("NoQuote.B:C", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), aRange.aStart.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), aRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), aRange.aEnd.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), aRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), 0);
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE));
 
     m_pDoc->DeleteTab(4);
     m_pDoc->DeleteTab(3);
