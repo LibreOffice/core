@@ -1664,9 +1664,32 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
     return bRet;
 }
 
+namespace
+{
+/// Similar to comphelper::FlagRestorationGuard, but for vcl::RenderContext.
+class RenderContextGuard
+{
+    VclPtr<vcl::RenderContext>& m_pRef;
+    vcl::RenderContext* m_pOriginalValue;
+
+public:
+    RenderContextGuard(VclPtr<vcl::RenderContext>& pRef, vcl::RenderContext* pValue)
+        : m_pRef(pRef),
+        m_pOriginalValue(m_pRef)
+    {
+        m_pRef = pValue;
+    }
+
+    ~RenderContextGuard()
+    {
+        m_pRef = m_pOriginalValue;
+    }
+};
+}
+
 void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
 {
-    mpOut = &rRenderContext;
+    RenderContextGuard aGuard(mpOut, &rRenderContext);
     if ( mnLockPaint )
     {
         if ( Imp()->bSmoothUpdate )
