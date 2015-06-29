@@ -897,7 +897,7 @@ uno::Any ScVbaEventsHelper::createHyperlink( const uno::Sequence< uno::Any >& rA
 }
 
 uno::Any ScVbaEventsHelper::createWindow( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
+        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Any > aArgs( 3 );
     aArgs[ 0 ] <<= getVBADocument( mxModel );
