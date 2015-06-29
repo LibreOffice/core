@@ -1271,7 +1271,7 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 
     if(!bWaterDisabled)
         //make sure the watercan is only activated when there is (only) one selection
-        bWaterDisabled = pTreeBox || aFmtLb->GetSelectionCount() <= 1;
+        bWaterDisabled = !(pTreeBox || aFmtLb->GetSelectionCount() <= 1);
 
     if(pItem && !bWaterDisabled)
     {
