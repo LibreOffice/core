@@ -63,7 +63,7 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     if (pParamOutl != NULL)
     {
         // XXX: Set parameters
-        // XXX: does this work if you do it before setting the text?
+        // XXX: does this work if you do it before setting the text? Seems so.
         pFlowOutl->SetUpdateMode(true);
         pFlowOutl->SetMaxAutoPaperSize(pParamOutl->GetMaxAutoPaperSize());
         pFlowOutl->SetMinAutoPaperSize(pParamOutl->GetMinAutoPaperSize());
@@ -152,15 +152,11 @@ void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pO
 void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
     OutlinerParaObject *pNewText = impGetNonOverflowingParaObject(pNonOverflOutl);
-
-    // XXX
-    if (mpTargetLink->pEdtOutl != NULL) {
-        mpTargetLink->pEdtOutl->SetText(*pNewText);
-    }
     // adds it to current outliner anyway (useful in static decomposition)
     pNonOverflOutl->SetText(*pNewText);
 
     mpTargetLink->NbcSetOutlinerParaObject(pNewText);
+
 }
 
 void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
@@ -306,6 +302,38 @@ void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
     else
         impCheckForFlowEvents(pFlowOutl, GetLinkTarget()->pEdtOutl);
 
+}
+
+/*
+void EditingTextChainFlow::ExecuteOverflow(SdrOutliner *pOutl1, SdrOutliner *pOutl2)
+{
+
+
+    impSetTextForEditingOutliner
+
+    // Set cursor
+    pEditView->pImpEditView->SetEditSelection( aCurSel );
+    pEditView->pImpEditView->DrawSelection();
+    pEditView->ShowCursor( true, false );
+
+
+}
+*
+* */
+
+void EditingTextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
+{
+    OutlinerParaObject *pNewText = impGetNonOverflowingParaObject(pNonOverflOutl);
+    impSetTextForEditingOutliner(pNewText);
+
+    GetLinkTarget()->NbcSetOutlinerParaObject(pNewText);
+}
+
+void EditingTextChainFlow::impSetTextForEditingOutliner(OutlinerParaObject *pNewText)
+{
+    if (GetLinkTarget()->pEdtOutl != NULL) {
+        GetLinkTarget()->pEdtOutl->SetText(*pNewText);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

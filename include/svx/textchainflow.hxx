@@ -45,7 +45,7 @@ class TextChainFlow {
     void ExecuteUnderflow(SdrOutliner *);
 
     // Uses two outliners: one for the non-overfl text and one for overflowing (might be the same)
-    void ExecuteOverflow(SdrOutliner *, SdrOutliner *);
+    virtual void ExecuteOverflow(SdrOutliner *, SdrOutliner *);
 
     SdrTextObj *GetLinkTarget();
 
@@ -55,8 +55,8 @@ class TextChainFlow {
 
     TextChain *GetTextChain();
 
-    void impLeaveOnlyNonOverflowingText(SdrOutliner *);
-    void impMoveChainedTextToNextLink(SdrOutliner *);
+    virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *);
+    virtual void impMoveChainedTextToNextLink(SdrOutliner *);
 
     OutlinerParaObject *impGetNonOverflowingParaObject(SdrOutliner *pOutliner);
     OutlinerParaObject *impGetOverflowingParaObject(SdrOutliner *pOutliner);
@@ -88,6 +88,15 @@ class EditingTextChainFlow : public TextChainFlow
     public:
     EditingTextChainFlow(SdrTextObj *);
     virtual void CheckForFlowEvents(SdrOutliner *) SAL_OVERRIDE;
+
+    //virtual void ExecuteOverflow(SdrOutliner *, SdrOutliner *) SAL_OVERRIDE;
+
+
+    protected:
+    virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *) SAL_OVERRIDE;
+
+    virtual void impSetTextForEditingOutliner(OutlinerParaObject *);
+
 };
 
 #endif // INCLUDED_SVX_TEXTCHAINFLOW_HXX
