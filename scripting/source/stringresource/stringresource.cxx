@@ -999,7 +999,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     bool bUsedForStore,
     bool bStoreAll
 )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     // Delete files for deleted locales
     if( bUsedForStore )

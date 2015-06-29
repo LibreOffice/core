@@ -281,7 +281,7 @@ protected:
         bool bUsedForStore,
         bool bStoreAll
     )
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
     void implKillRemovedLocaleFiles
     (
