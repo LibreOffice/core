@@ -655,11 +655,11 @@ bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriSta
         sal_uInt16 nItemCount = pEntry->ItemCount();
         if ( nItemCount > ( _nColumn + 1 ) )
         {
-            SvLBoxButton* pItem = static_cast<SvLBoxButton*>( pEntry->GetItem( _nColumn + 1 ) );
+            SvLBoxItem* pItem = pEntry->GetItem( _nColumn + 1 );
             if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 bRet = true;
-                _rState = ( ( pItem->GetButtonFlags() & SvItemStateFlags::UNCHECKED ) == SvItemStateFlags::NONE )
+                _rState = ( ( static_cast<SvLBoxButton*>(pItem)->GetButtonFlags() & SvItemStateFlags::UNCHECKED ) == SvItemStateFlags::NONE )
                             ? TRISTATE_TRUE : TRISTATE_FALSE;
             }
         }
