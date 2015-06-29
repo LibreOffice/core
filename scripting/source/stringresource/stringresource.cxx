@@ -1127,7 +1127,7 @@ void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
     const OUString& aNameBase,
     const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
 )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     // Delete files for deleted locales
     while( m_aDeletedLocaleItemVector.size() > 0 )
