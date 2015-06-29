@@ -13,7 +13,8 @@
 
 using namespace sc::units;
 
-bool UtUnit::createUnit(const OUString& rUnitString, UtUnit& rUnitOut, const boost::shared_ptr< ut_system >& pUTSystem) {
+bool UtUnit::createUnit(const OUString& rUnitString, UtUnit& rUnitOut, const boost::shared_ptr< ut_system >& pUTSystem)
+{
     // ut_parse requires the string to be trimmed of whitespace, it's
     // simplest just to do this during conversion:
     OString sUnitStringUTF8 = OUStringToOString(rUnitString.trim(), RTL_TEXTENCODING_UTF8);
@@ -21,23 +22,28 @@ bool UtUnit::createUnit(const OUString& rUnitString, UtUnit& rUnitOut, const boo
     UtUnit pParsedUnit(ut_parse(pUTSystem.get(), sUnitStringUTF8.getStr(), UT_UTF8),
                        rUnitString);
 
-    if (pParsedUnit.isValid()) {
+    if (pParsedUnit.isValid())
+    {
         rUnitOut = pParsedUnit;
         return true;
-    } else {
+    }
+    else
+    {
         SAL_INFO("sc.units", "error encountered parsing unit \"" << rUnitString << "\": " << getUTStatus());
         return false;
     }
 }
 
 
-OUString UtUnit::getString() const {
+OUString UtUnit::getString() const
+{
     char aBuf[200];
     int nChars = ut_format(mpUnit.get(), aBuf, 200, UT_UTF8);
-    if (nChars == -1) {
+    if (nChars == -1)
+    {
         SAL_INFO("sc.units", "couldn't format unit: " << getUTStatus());
         // Placeholder for unformattable strings.
-        return "?";
+        return OUString("?");
     }
 
     // If the output doesn't fit in the buffer, ut_format doesn't write
