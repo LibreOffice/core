@@ -271,7 +271,7 @@ OUString ScaPricingAddIn::GetDisplFuncStr( sal_uInt16 nResId ) throw( uno::Runti
     return ScaResStringLoader( RID_PRICING_FUNCTION_NAMES, nResId, GetResMgr() ).GetString();
 }
 
-OUString ScaPricingAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException )
+OUString ScaPricingAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException, std::exception )
 {
     OUString aRet;
 

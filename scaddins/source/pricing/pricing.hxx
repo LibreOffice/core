@@ -323,7 +323,7 @@ private:
     void                        InitData();
 
     OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( css::uno::RuntimeException, std::exception );
-    OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException );
+    OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException, std::exception );
 
 public:
                                 ScaPricingAddIn();
