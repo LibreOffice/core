@@ -240,7 +240,7 @@ const lang::Locale& ScaPricingAddIn::GetLocale( sal_uInt32 nIndex )
     return (nIndex < sizeof( pLang )) ? pDefLocales[ nIndex ] : aFuncLoc;
 }
 
-ResMgr& ScaPricingAddIn::GetResMgr() throw( uno::RuntimeException )
+ResMgr& ScaPricingAddIn::GetResMgr() throw( uno::RuntimeException, std::exception )
 {
     if( !pResMgr )
     {

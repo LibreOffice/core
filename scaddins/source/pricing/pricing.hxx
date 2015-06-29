@@ -319,7 +319,7 @@ private:
 
     void                        InitDefLocales();
     const css::lang::Locale& GetLocale( sal_uInt32 nIndex );
-    ResMgr&                     GetResMgr() throw( css::uno::RuntimeException );
+    ResMgr&                     GetResMgr() throw( css::uno::RuntimeException, std::exception );
     void                        InitData();
 
     OUString             GetDisplFuncStr( sal_uInt16 nResId ) throw( css::uno::RuntimeException, std::exception );
