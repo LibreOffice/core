@@ -81,7 +81,7 @@ protected:
 
     // aMediaType parameter is used only for raw stream header creation
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createUnbufferedStream(
-            SotMutexHolderRef aMutexHolder,
+            const rtl::Reference<SotMutexHolder>& aMutexHolder,
             ZipEntry & rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             sal_Int8 nStreamMode,
@@ -121,7 +121,7 @@ public:
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
-            SotMutexHolderRef aMutexHolder )
+            const rtl::Reference<SotMutexHolder>& aMutexHolder )
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XDigestContext > StaticGetDigestContextForChecksum(
@@ -164,14 +164,14 @@ public:
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
-            SotMutexHolderRef aMutexHolder )
+            const rtl::Reference<SotMutexHolder>& aMutexHolder )
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getDataStream(
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             bool bDecrypt,
-            SotMutexHolderRef aMutexHolder )
+            const rtl::Reference<SotMutexHolder>& aMutexHolder )
         throw ( ::com::sun::star::packages::WrongPasswordException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::packages::zip::ZipException,
@@ -181,7 +181,7 @@ public:
             ZipEntry& rEntry,
             const ::rtl::Reference < EncryptionData > &rData,
             const OUString& aMediaType,
-            SotMutexHolderRef aMutexHolder )
+            const rtl::Reference<SotMutexHolder>& aMutexHolder )
         throw ( ::com::sun::star::packages::NoEncryptionException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::packages::zip::ZipException,

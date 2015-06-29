@@ -47,7 +47,7 @@ class XUnbufferedStream : public cppu::WeakImplHelper1
 >
 {
 protected:
-    SotMutexHolderRef maMutexHolder;
+    rtl::Reference<SotMutexHolder> maMutexHolder;
 
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > mxZipStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > mxZipSeek;
@@ -66,7 +66,7 @@ protected:
 public:
     XUnbufferedStream(
                  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-                 SotMutexHolderRef aMutexHolder,
+                 const rtl::Reference<SotMutexHolder>& aMutexHolder,
                  ZipEntry & rEntry,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                  const ::rtl::Reference< EncryptionData >& rData,

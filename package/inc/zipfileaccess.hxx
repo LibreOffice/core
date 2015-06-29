@@ -42,7 +42,7 @@ class OZipFileAccess : public ::cppu::WeakImplHelper4<
                         ::com::sun::star::lang::XComponent,
                         ::com::sun::star::lang::XServiceInfo >
 {
-    SotMutexHolderRef m_aMutexHolder;
+    rtl::Reference<SotMutexHolder> m_aMutexHolder;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 

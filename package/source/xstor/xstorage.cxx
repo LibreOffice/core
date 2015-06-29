@@ -68,7 +68,7 @@ typedef ::std::list< uno::WeakReference< lang::XComponent > > WeakComponentList;
 
 struct StorInternalData_Impl
 {
-    SotMutexHolderRef m_rSharedMutexRef;
+    rtl::Reference<SotMutexHolder> m_rSharedMutexRef;
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
     ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
     bool m_bIsRoot;
@@ -82,7 +82,7 @@ struct StorInternalData_Impl
     ::rtl::Reference< OHierarchyHolder_Impl > m_rHierarchyHolder;
 
     // the mutex reference MUST NOT be empty
-    StorInternalData_Impl( const SotMutexHolderRef& rMutexRef, bool bRoot, sal_Int32 nStorageType, bool bReadOnlyWrap )
+    StorInternalData_Impl( const rtl::Reference<SotMutexHolder>& rMutexRef, bool bRoot, sal_Int32 nStorageType, bool bReadOnlyWrap )
     : m_rSharedMutexRef( rMutexRef )
     , m_aListenersContainer( rMutexRef->GetMutex() )
     , m_pTypeCollection()
@@ -1902,7 +1902,7 @@ OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 : m_pImpl( pImpl )
 {
     // this call can be done only from OStorage_Impl implementation to create child storage
-    OSL_ENSURE( m_pImpl && m_pImpl->m_rMutexRef.Is(), "The provided pointer & mutex MUST NOT be empty!\n" );
+    OSL_ENSURE( m_pImpl && m_pImpl->m_rMutexRef.is(), "The provided pointer & mutex MUST NOT be empty!\n" );
 
     m_pData.reset(new StorInternalData_Impl( m_pImpl->m_rMutexRef, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, bReadOnlyWrap));
 

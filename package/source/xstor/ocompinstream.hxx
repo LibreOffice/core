@@ -42,7 +42,7 @@ class OInputCompStream : public cppu::WeakImplHelper4 < ::com::sun::star::io::XI
 protected:
     OWriteStream_Impl* m_pImpl;
 
-    SotMutexHolderRef m_rMutexRef;
+    rtl::Reference<SotMutexHolder> m_rMutexRef;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > m_xStream;
 

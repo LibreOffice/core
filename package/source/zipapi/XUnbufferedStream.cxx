@@ -41,7 +41,7 @@ using com::sun::star::packages::zip::ZipIOException;
 
 XUnbufferedStream::XUnbufferedStream(
                       const uno::Reference< uno::XComponentContext >& xContext,
-                      SotMutexHolderRef aMutexHolder,
+                      const rtl::Reference<SotMutexHolder>& aMutexHolder,
                       ZipEntry & rEntry,
                       Reference < XInputStream > xNewZipStream,
                       const ::rtl::Reference< EncryptionData >& rData,
@@ -49,7 +49,7 @@ XUnbufferedStream::XUnbufferedStream(
                       bool bIsEncrypted,
                       const OUString& aMediaType,
                       bool bRecoveryMode )
-: maMutexHolder( aMutexHolder.Is() ? aMutexHolder : SotMutexHolderRef( new SotMutexHolder ) )
+: maMutexHolder( aMutexHolder.is() ? aMutexHolder : rtl::Reference<SotMutexHolder>( new SotMutexHolder ) )
 , mxZipStream ( xNewZipStream )
 , mxZipSeek ( xNewZipStream, UNO_QUERY )
 , maEntry ( rEntry )

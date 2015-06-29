@@ -21,102 +21,30 @@
 #define INCLUDED_PACKAGE_INC_MUTEXHOLDER_HXX
 
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 
 class SotMutexHolder
 {
+friend class rtl::Reference<SotMutexHolder>;
+
     ::osl::Mutex m_aMutex;
     sal_Int32    m_nRefCount;
 
-    public:
-    SotMutexHolder() : m_nRefCount( 0 ) {}
-
-    void AddRef()
+    void acquire()
     {
         m_nRefCount++;
     }
 
-    void ReleaseRef()
+    void release()
     {
         if ( !--m_nRefCount )
             delete this;
     }
 
-    ::osl::Mutex& GetMutex() { return m_aMutex; }
-};
-
-class SotMutexHolderRef
-{
-    SotMutexHolder* m_pHolder;
-
 public:
-    SotMutexHolderRef()
-    : m_pHolder( NULL )
-    {}
+    SotMutexHolder() : m_nRefCount( 0 ) {}
 
-    SotMutexHolderRef( SotMutexHolder* pHolder )
-    : m_pHolder( pHolder )
-    {
-        if ( m_pHolder )
-            m_pHolder->AddRef();
-    }
-
-    SotMutexHolderRef( const SotMutexHolderRef& rRef )
-    : m_pHolder( rRef.m_pHolder )
-    {
-        if ( m_pHolder )
-            m_pHolder->AddRef();
-    }
-
-    ~SotMutexHolderRef()
-    {
-        if ( m_pHolder )
-            m_pHolder->ReleaseRef();
-    }
-
-    SotMutexHolderRef& operator =( const SotMutexHolderRef& rRef )
-    {
-        if ( m_pHolder )
-            m_pHolder->ReleaseRef();
-
-        m_pHolder = rRef.m_pHolder;
-
-        if ( m_pHolder )
-            m_pHolder->AddRef();
-
-        return *this;
-    }
-
-    SotMutexHolderRef& operator =( SotMutexHolder* pHolder )
-    {
-        if ( m_pHolder )
-            m_pHolder->ReleaseRef();
-
-        m_pHolder = pHolder;
-
-        if ( m_pHolder )
-            m_pHolder->AddRef();
-        return *this;
-    }
-
-    SotMutexHolder* operator ->() const
-    {
-        return m_pHolder;
-    }
-
-    SotMutexHolder& operator *() const
-    {
-        return *m_pHolder;
-    }
-
-    operator SotMutexHolder*() const
-    {
-        return m_pHolder;
-    }
-
-    bool Is() const
-    {
-        return m_pHolder != NULL;
-    }
+    ::osl::Mutex& GetMutex() { return m_aMutex; }
 };
 
 #endif

@@ -75,7 +75,7 @@ class ZipPackage : public cppu::WeakImplHelper7
                     >
 {
 protected:
-    SotMutexHolderRef m_aMutexHolder;
+    rtl::Reference<SotMutexHolder> m_aMutexHolder;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > m_aStorageEncryptionKeys;
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aEncryptionKey;
@@ -133,7 +133,7 @@ public:
     sal_Int32 GetChecksumAlgID() const { return m_nChecksumDigestID; }
     sal_Int32 GetDefaultDerivedKeySize() const { return m_nCommonEncryptionID == ::com::sun::star::xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 32 : 16; }
 
-    SotMutexHolderRef GetSharedMutexRef() { return m_aMutexHolder; }
+    rtl::Reference<SotMutexHolder>& GetSharedMutexRef() { return m_aMutexHolder; }
 
     void ConnectTo( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream );
     const ::com::sun::star::uno::Sequence< sal_Int8 > GetEncryptionKey();
