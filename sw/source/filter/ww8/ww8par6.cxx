@@ -2779,6 +2779,8 @@ void SwWW8ImplReader::Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen
             //themselves so they don't need to add it to the stack either.
             if (SetNewFontAttr(SVBT16ToShort( pData ), false, RES_CHRATR_FONT))
             {
+                SetNewFontAttr(SVBT16ToShort( pData ), false, RES_CHRATR_CJK_FONT);
+                SetNewFontAttr(SVBT16ToShort( pData ), false, RES_CHRATR_CTL_FONT);
                 if( m_bVer67 )
                 {
                     //convert single byte from MS1252 to Unicode
