@@ -1342,7 +1342,9 @@ AC_ARG_ENABLE(extra-font,
 AC_ARG_ENABLE(online-update,
     AS_HELP_STRING([--enable-online-update],
         [Enable the online update service that will check for new versions of
-         LibreOffice. By default, it is enabled on Windows and Mac, disabled on Linux.]),
+         LibreOffice. By default, it is enabled on Windows and Mac, disabled on Linux.
+         If the value is "mar", the experimental Mozilla-like update will be
+         enabled instead of the traditional update mechanism.]),
 ,)
 
 AC_ARG_ENABLE(extension-update,
@@ -11782,6 +11784,7 @@ dnl Test whether to enable online update service
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable online update])
 ENABLE_ONLINE_UPDATE=
+ENABLE_ONLINE_UPDATE_MAR=
 if test "$enable_online_update" = ""; then
     if test "$_os" = "WINNT" -o "$_os" = "Darwin"; then
         AC_MSG_RESULT([yes])
@@ -11790,7 +11793,10 @@ if test "$enable_online_update" = ""; then
         AC_MSG_RESULT([no])
     fi
 else
-    if test "$enable_online_update" = "yes"; then
+    if test "$enable_online_update" = "mar"; then
+        AC_MSG_RESULT([yes - MAR-based online update])
+        ENABLE_ONLINE_UPDATE_MAR="TRUE"
+    elif test "$enable_online_update" = "yes"; then
         AC_MSG_RESULT([yes])
         ENABLE_ONLINE_UPDATE="TRUE"
     else
@@ -11798,6 +11804,7 @@ else
     fi
 fi
 AC_SUBST(ENABLE_ONLINE_UPDATE)
+AC_SUBST(ENABLE_ONLINE_UPDATE_MAR)
 
 dnl ===================================================================
 dnl Test whether to enable extension update
