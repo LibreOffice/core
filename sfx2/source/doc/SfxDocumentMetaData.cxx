@@ -2282,11 +2282,11 @@ void SfxDocumentMetaData::createUserDefined()
             m_xUserDefined, css::uno::UNO_QUERY);
         if (xMB.is())
         {
-            const std::vector<css::uno::Reference<css::uno::XInterface> >
-                listeners(m_NotifyListeners.getElementsAsVector());
-            for (css::uno::Reference< css::uno::XInterface > const & iter : listeners) {
+            const css::uno::Sequence<css::uno::Reference<css::uno::XInterface> >
+                listeners(m_NotifyListeners.getElements());
+            for (css::uno::Reference< css::uno::XInterface > const * iter = listeners.begin(); iter != listeners.end(); ++iter) {
                 xMB->addModifyListener(
-                    css::uno::Reference< css::util::XModifyListener >(iter,
+                    css::uno::Reference< css::util::XModifyListener >(*iter,
                         css::uno::UNO_QUERY));
             }
         }

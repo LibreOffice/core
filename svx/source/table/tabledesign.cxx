@@ -235,10 +235,10 @@ sal_Bool SAL_CALL TableDesignStyle::isInUse() throw (RuntimeException, std::exce
     OInterfaceContainerHelper * pContainer = rBHelper.getContainer( cppu::UnoType<XModifyListener>::get() );
     if( pContainer )
     {
-        std::vector< Reference< XInterface > > aListener( pContainer->getElementsAsVector() );
+        Sequence< Reference< XInterface > > aListener( pContainer->getElements() );
         aGuard.clear();
 
-        sal_Int32 nIndex = aListener.size();
+        sal_Int32 nIndex = aListener.getLength();
         while( --nIndex >= 0 )
         {
             TableDesignUser* pUser = dynamic_cast< TableDesignUser* >( aListener[nIndex].get() );

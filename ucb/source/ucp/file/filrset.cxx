@@ -162,11 +162,11 @@ XResultSet_impl::dispose()
 void XResultSet_impl::rowCountChanged()
 {
     sal_Int32 aOldValue,aNewValue;
-    std::vector< uno::Reference< uno::XInterface > > seq;
+    uno::Sequence< uno::Reference< uno::XInterface > > seq;
     {
         osl::MutexGuard aGuard( m_aMutex );
         if( m_pRowCountListeners )
-            seq = m_pRowCountListeners->getElementsAsVector();
+            seq = m_pRowCountListeners->getElements();
         aNewValue = m_aItems.size();
         aOldValue = aNewValue-1;
     }
@@ -176,7 +176,7 @@ void XResultSet_impl::rowCountChanged()
     aEv.PropertyHandle = -1;
     aEv.OldValue <<= aOldValue;
     aEv.NewValue <<= aNewValue;
-    for( sal_Int32 i = 0; i < (sal_Int32)seq.size(); ++i )
+    for( sal_Int32 i = 0; i < seq.getLength(); ++i )
     {
         uno::Reference< beans::XPropertyChangeListener > listener(
             seq[i], uno::UNO_QUERY );
@@ -188,11 +188,11 @@ void XResultSet_impl::rowCountChanged()
 
 void XResultSet_impl::isFinalChanged()
 {
-    std::vector< uno::Reference< XInterface > > seq;
+    uno::Sequence< uno::Reference< XInterface > > seq;
     {
         osl::MutexGuard aGuard( m_aMutex );
         if( m_pIsFinalListeners )
-            seq = m_pIsFinalListeners->getElementsAsVector();
+            seq = m_pIsFinalListeners->getElements();
         m_bRowCountFinal = true;
     }
     beans::PropertyChangeEvent aEv;
@@ -203,7 +203,7 @@ void XResultSet_impl::isFinalChanged()
     bool tval = true;
     aEv.OldValue <<= fval;
     aEv.NewValue <<= tval;
-    for( sal_Int32 i = 0; i < (sal_Int32)seq.size(); ++i )
+    for( sal_Int32 i = 0; i < seq.getLength(); ++i )
     {
         uno::Reference< beans::XPropertyChangeListener > listener(
             seq[i], uno::UNO_QUERY );

@@ -410,19 +410,32 @@ void SAL_CALL ScCellFieldsObj::refresh(  )
     if (mpRefreshListeners)
     {
         //  Call all listeners.
-        std::vector< uno::Reference< uno::XInterface > > aListeners(mpRefreshListeners->getElementsAsVector());
-        if (!aListeners.empty())
+        uno::Sequence< uno::Reference< uno::XInterface > > aListeners(mpRefreshListeners->getElements());
+        sal_uInt32 nLength(aListeners.getLength());
+        if (nLength)
         {
-            lang::EventObject aEvent;
-            aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
-            for (auto & x : aListeners)
+            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
+            if (pInterfaces)
             {
-                try
+                lang::EventObject aEvent;
+                aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
+                sal_uInt32 i(0);
+                while (i < nLength)
                 {
-                    static_cast< util::XRefreshListener* >(x.get())->refreshed(aEvent);
-                }
-                catch(uno::RuntimeException&)
-                {
+                    try
+                    {
+                        while(i < nLength)
+                        {
+                            static_cast< util::XRefreshListener* >(pInterfaces->get())->refreshed(aEvent);
+                            ++pInterfaces;
+                            ++i;
+                        }
+                    }
+                    catch(uno::RuntimeException&)
+                    {
+                        ++pInterfaces;
+                        ++i;
+                    }
                 }
             }
         }
@@ -577,19 +590,32 @@ void SAL_CALL ScHeaderFieldsObj::refresh(  )
     if (mpRefreshListeners)
     {
         //  Call all listeners.
-        std::vector< uno::Reference< uno::XInterface > > aListeners(mpRefreshListeners->getElementsAsVector());
-        if (!aListeners.empty())
+        uno::Sequence< uno::Reference< uno::XInterface > > aListeners(mpRefreshListeners->getElements());
+        sal_uInt32 nLength(aListeners.getLength());
+        if (nLength)
         {
-            lang::EventObject aEvent;
-            aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
-            for (auto & x : aListeners)
+            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
+            if (pInterfaces)
             {
-                try
+                lang::EventObject aEvent;
+                aEvent.Source.set(uno::Reference< util::XRefreshable >(this));
+                sal_uInt32 i(0);
+                while (i < nLength)
                 {
-                    static_cast< util::XRefreshListener* >(x.get())->refreshed(aEvent);
-                }
-                catch(uno::RuntimeException&)
-                {
+                    try
+                    {
+                        while(i < nLength)
+                        {
+                            static_cast< util::XRefreshListener* >(pInterfaces->get())->refreshed(aEvent);
+                            ++pInterfaces;
+                            ++i;
+                        }
+                    }
+                    catch(uno::RuntimeException&)
+                    {
+                        ++pInterfaces;
+                        ++i;
+                    }
                 }
             }
         }

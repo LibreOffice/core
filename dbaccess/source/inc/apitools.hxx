@@ -328,14 +328,21 @@ public:
     return new ::cppu::OPropertyArrayHelper(aDescriptor);
 
 #define NOTIFY_LISTERNERS(_rListeners,T,method)                                   \
-    std::vector< Reference< XInterface > > aListenerSeq = _rListeners.getElementsAsVector(); \
+    Sequence< Reference< XInterface > > aListenerSeq = _rListeners.getElements(); \
+                                                                                  \
+    const Reference< XInterface >* pxIntBegin = aListenerSeq.getConstArray();     \
+    const Reference< XInterface >* pxInt = pxIntBegin + aListenerSeq.getLength(); \
                                                                                   \
     _rGuard.clear();                                                              \
-    for( auto iter = aListenerSeq.rbegin(); iter != aListenerSeq.rend(); ++iter ) \
+    while( pxInt > pxIntBegin )                                                   \
     {                                                                             \
         try                                                                       \
         {                                                                         \
-            static_cast< T* >( (*iter).get() )->method(aEvt);  \
+            while( pxInt > pxIntBegin )                                           \
+            {                                                                     \
+                --pxInt;                                                          \
+                static_cast< T* >( pxInt->get() )->method(aEvt);                  \
+            }                                                                     \
         }                                                                         \
         catch( RuntimeException& )                                                \
         {                                                                         \

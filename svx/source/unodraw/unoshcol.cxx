@@ -229,10 +229,10 @@ uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
     if( Index < 0 || Index >= getCount() )
         throw lang::IndexOutOfBoundsException();
 
-    std::vector< Reference< uno::XInterface> > xElements( maShapeContainer.getElementsAsVector() );
+    uno::Sequence< Reference< uno::XInterface> > xElements( maShapeContainer.getElements() );
 
 
-    return uno::makeAny( Reference< drawing::XShape>(static_cast< drawing::XShape* >( xElements[Index].get())) );
+    return uno::makeAny( Reference< drawing::XShape>(static_cast< drawing::XShape* >( xElements.getArray()[Index].get())) );
 }
 
 // XElementAccess

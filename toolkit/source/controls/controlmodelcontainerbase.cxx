@@ -916,11 +916,13 @@ void ControlModelContainerBase::implNotifyTabModelChange( const OUString& _rAcce
     aEvent.Changes[ 0 ].Accessor <<= _rAccessor;
 
 
-    std::vector< Reference< XInterface > > aChangeListeners( maChangeListeners.getElementsAsVector() );
-    for ( Reference< XInterface > & rListener : aChangeListeners )
+    Sequence< Reference< XInterface > > aChangeListeners( maChangeListeners.getElements() );
+    const Reference< XInterface >* pListener = aChangeListeners.getConstArray();
+    const Reference< XInterface >* pListenerEnd = aChangeListeners.getConstArray() + aChangeListeners.getLength();
+    for ( ; pListener != pListenerEnd; ++pListener )
     {
-        if ( rListener.is() )
-            static_cast< XChangesListener* >( rListener.get() )->changesOccurred( aEvent );
+        if ( pListener->is() )
+            static_cast< XChangesListener* >( pListener->get() )->changesOccurred( aEvent );
     }
 }
 
