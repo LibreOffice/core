@@ -3273,7 +3273,7 @@ sal_Bool SAL_CALL SdDocLinkTargets::hasElements()
     return mpModel->GetDoc() != NULL;
 }
 
-SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw()
+SdPage* SdDocLinkTargets::FindPage( const OUString& rName ) const throw(std::exception)
 {
     SdDrawDocument* mpDoc = mpModel->GetDoc();
     if( mpDoc == NULL )
