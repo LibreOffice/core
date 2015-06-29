@@ -678,7 +678,7 @@ Reference< XNameAccess > Connection::getUsers()
 
 
 Reference< XInterface >  ConnectionCreateInstance(
-    const Reference< XComponentContext > & ctx ) throw (Exception)
+    const Reference< XComponentContext > & ctx ) throw (Exception, std::exception)
 {
     ::rtl::Reference< RefCountedMutex > ref = new RefCountedMutex();
     return * new Connection( ref, ctx );
