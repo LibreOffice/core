@@ -77,7 +77,7 @@ ResMgr& AnalysisAddIn::GetResMgr() throw( uno::RuntimeException, std::exception 
     return *pResMgr;
 }
 
-OUString AnalysisAddIn::GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( uno::RuntimeException )
+OUString AnalysisAddIn::GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( uno::RuntimeException, std::exception )
 {
     return AnalysisRscStrLoader( RID_ANALYSIS_FUNCTION_NAMES, nFuncNum, GetResMgr() ).GetString();
 }
