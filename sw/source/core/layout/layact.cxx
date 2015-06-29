@@ -1026,7 +1026,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
             }
         }
         else
-            FormatLayout( pSh->GetOut(), prPage );
+            FormatLayout( pSh ? pSh->GetOut() : 0, prPage );
         if ( IsAgain() )
             return false;
     }
