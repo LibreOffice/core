@@ -478,7 +478,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_BtnHdl, PushButton*, pBtn )
 
             // Druckbereich veraendert?
 
-            // first try the list box, if "Entite sheet" is selected
+            // first try the list box, if "Entire sheet" is selected
             bool bEntireSheet = (pLbPrintArea->GetSelectEntryPos() == SC_AREASDLG_PR_ENTIRE);
             SfxBoolItem aEntireSheet( FN_PARAM_4, bEntireSheet );
 

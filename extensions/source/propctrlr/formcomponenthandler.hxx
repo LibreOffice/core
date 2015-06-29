@@ -275,7 +275,7 @@ namespace pcr
             @precond
                 we're inspecting (sub) database form
             @return
-                <TRUE/> if and only if the user successfully eneter master and slave fields
+                <TRUE/> if and only if the user successfully enter master and slave fields
         */
         bool impl_dialogLinkedFormFields_nothrow( ::osl::ClearableMutexGuard& _rClearBeforeDialog ) const;
 

@@ -133,7 +133,7 @@ struct ImplFrameData
     InputContext        maOldInputContext;      //< last set Input Context
     VclPtr<vcl::Window> mpNextFrame;            //< next frame window
     VclPtr<vcl::Window> mpFirstOverlap;         //< first overlap vcl::Window
-    VclPtr<vcl::Window> mpFocusWin;             //< focus window (is also set, when frame doesn't have the focous)
+    VclPtr<vcl::Window> mpFocusWin;             //< focus window (is also set, when frame doesn't have the focus)
     VclPtr<vcl::Window> mpMouseMoveWin;         //< last window, where MouseMove() called
     VclPtr<vcl::Window> mpMouseDownWin;         //< last window, where MouseButtonDown() called
     VclPtr<vcl::Window> mpFirstBackWin;         //< first overlap-window with saved background

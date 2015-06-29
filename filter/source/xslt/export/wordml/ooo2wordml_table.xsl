@@ -300,7 +300,7 @@
                         </w:right>
                     </xsl:if>
                 </w:tcMar>
-                <!-- the following code is to get the cell borders if they exsits Gary.Yang-->
+                <!-- the following code is to get the cell borders if they exists -->
                 <xsl:variable name="border-top" select="$cell-style-properties/@fo:border-top | $cell-style-properties/@fo:border"/>
                 <xsl:variable name="border-bottom" select="$cell-style-properties/@fo:border-bottom | $cell-style-properties/@fo:border"/>
                 <xsl:variable name="border-left" select="$cell-style-properties/@fo:border-left | $cell-style-properties/@fo:border"/>

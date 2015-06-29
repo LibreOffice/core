@@ -98,7 +98,7 @@ protected:
      * Get the proper color between two options, according to current status.
      *
      * The return color can be one of the given colors, or a merged one.
-     * It depends on highlight fadind status.
+     * It depends on highlight fading status.
      *
      * \param rHighColor color used to highlight status
      * \param rLowColor color used to normal status

@@ -241,7 +241,7 @@ Transliteration_l2u::Transliteration_l2u()
 
 Transliteration_togglecase::Transliteration_togglecase()
 {
-    // usually nMappingType must NOT be a combiantion of different flages here,
+    // usually nMappingType must NOT be a combination of different flags here,
     // but we take care of that problem in Transliteration_body::transliterate above
     // before that value is used. There we will decide which of both is to be used on
     // a per character basis.

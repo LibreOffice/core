@@ -2519,7 +2519,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
                 // space that is available.
                 bMinExtra = true;
             }
-            // Otherwise, if there is enouth space for every column, every
+            // Otherwise, if there is enough space for every column, every
             // column gets this space.
 
             for( colIter = aColumnWidths.begin(); nRelCols > 0UL && colIter < aColumnWidths.end(); ++colIter )

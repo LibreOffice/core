@@ -193,7 +193,7 @@ public:
         Return the download URLs from the update information.
 
         Because the <code>&lt;update-download&gt;</code> and the <code>&lt;update-website&gt;</code>
-        elements are mutually exclusive one may need to determine exacty if the element
+        elements are mutually exclusive one may need to determine exactly if the element
         was provided.
 
         @return

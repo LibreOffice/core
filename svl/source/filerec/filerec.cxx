@@ -111,7 +111,7 @@ bool SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
     _nEofRec = _pStream->Tell() + SFX_REC_OFS(nHeader);
     _nPreTag = sal::static_int_cast< sal_uInt8 >(SFX_REC_PRE(nHeader));
 
-    // Errror in cae of End of Record tag
+    // Error in case of End of Record tag
     if ( _nPreTag == SFX_REC_PRETAG_EOR )
     {
         _pStream->SetError( ERRCODE_IO_WRONGFORMAT );

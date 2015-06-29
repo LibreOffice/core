@@ -279,7 +279,7 @@ const sal_uInt16 EXC_ID_MSODRAWINGSEL       = 0x00ED;
 
 const sal_uInt16 EXC_ID_TXO                 = 0x01B6;
 
-// TXO constants are eqzal to BIFF5 OBJ text object flags
+// TXO constants are equal to BIFF5 OBJ text object flags
 
 // Structs and classes ========================================================
 

@@ -1286,7 +1286,7 @@ The following structure describes the permissions used in PDF security
     the interface to the additional stream
 
     @param bCompress
-    specifies whether the stream should be flate encoded by PDFWriter or not
+    specifies whether the stream should be flat encoded by PDFWriter or not
     */
     void AddStream( const OUString& rMimeType, PDFOutputStream* pStream, bool bCompress );
 

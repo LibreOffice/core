@@ -46,7 +46,7 @@ import com.sun.star.xml.sax.XLocator;
 * <ul>
 *  <li> <code>'XDocumentHandler.XMLData'</code> (of type <code>String[][]
 *   </code>):the XML data which will be passed to the handler. Each
-*   array of strings corresponds to some handler event. The fisrt
+*   array of strings corresponds to some handler event. The first
 *   string of event array is the type of the event they can have
 *   the following values :
 *   <ul>

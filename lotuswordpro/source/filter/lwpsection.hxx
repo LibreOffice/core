@@ -113,7 +113,7 @@ private:
 };
 
 /**
- * @descr Get flage value
+ * @descr Get flags value
  *
  */
 inline sal_uInt16 LwpSection::GetFlags()

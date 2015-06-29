@@ -1402,7 +1402,7 @@ void SmCursor::FinishEdit(SmNodeList* pLineList,
         //The most natural thing to do would be to make the line like this:
         //A + B lsub E + C ^ D
         //E.g. apply LSUB and LSUP to the first element in pLineList and RSUP
-        //and RSUB to the last eleent in pLineList. But how should this act
+        //and RSUB to the last element in pLineList. But how should this act
         //for CSUP and CSUB ???
         //For this reason and because brackets was faster to implement, this solution
         //have been chosen. It might be worth working on the other solution later...

@@ -36,7 +36,7 @@ enum class SdrSearchOptions
     WHOLEPAGE    = 0x0004, /* Not just the ObjList of PageView */
     TESTMARKABLE = 0x0008, /* just markable Objekte/Punkte/Handles/... */
     TESTMACRO    = 0x0010, /* Just objects with macro */
-    TESTTEXTEDIT = 0x0020, /* Just TextEdit-enabed objects */
+    TESTTEXTEDIT = 0x0020, /* Just TextEdit-enabled objects */
     WITHTEXT     = 0x0040, /* Just objects with text */
     TESTTEXTAREA = 0x0080, /* The textarea of objects with text  (TextEditHit) */
     BACKWARD     = 0x0100, /* Backwards search */

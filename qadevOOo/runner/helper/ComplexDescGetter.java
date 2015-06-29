@@ -141,7 +141,7 @@ public class ComplexDescGetter extends DescGetter
     }
 
     /**
-     * Creates a description exntry for the given parameter
+     * Creates a description entry for the given parameter
      * @param testObjectName the name of the object
      * @param className the class name of the class to load
      * @param testMethodNames list of all methods to test

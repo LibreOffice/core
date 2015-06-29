@@ -111,7 +111,7 @@ public:
  *
  * The factory has to create an import context for a <script:event>
  * element.  The context has to call the
- * EventsImportContext::AddEventValues() method to fave its event
+ * EventsImportContext::AddEventValues() method to save its event
  * registered with the enclosing element. For events consisting only
  * of attributes (and an empty element) an easy solution is to handle
  * all attributes in the CreateContext()-method and return a default

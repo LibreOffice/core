@@ -53,7 +53,7 @@ void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChar
     this->aPossibilityList[5]=aAxisPossibilityList[3];//secondary x axis title
     this->aPossibilityList[6]=aAxisPossibilityList[4];//secondary y axis title
 
-    //find out which title exsist and get their text
+    //find out which title exists and get their text
     //main title:
     for( sal_Int32 nTitleIndex = static_cast< sal_Int32 >( TitleHelper::TITLE_BEGIN);
          nTitleIndex < static_cast< sal_Int32 >( TitleHelper::NORMAL_TITLE_END );

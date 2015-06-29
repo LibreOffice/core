@@ -723,7 +723,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 InteractiveIOException aRequest;
                 aRequest.Classification = InteractionClassification_ERROR;
                 if ( aError.isExtractableTo( ::cppu::UnoType< IOException >::get() ) )
-                    // assume savint the document faile
+                    // assume saving the document failed
                     aRequest.Code = IOErrorCode_CANT_WRITE;
                 else
                     aRequest.Code = IOErrorCode_GENERAL;

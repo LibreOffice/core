@@ -94,7 +94,7 @@ void MenuButton::dispose()
 
 IMPL_LINK_NOARG_TYPED(MenuButton, ImplMenuTimeoutHdl, Timer *, void)
 {
-    // See if Button Tracking is still active, as it could've been cancelled earler
+    // See if Button Tracking is still active, as it could've been cancelled earlier
     if ( IsTracking() )
     {
         if ( !(GetStyle() & WB_NOPOINTERFOCUS) )

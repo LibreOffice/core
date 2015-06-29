@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
 
     // Analyze the environment a first time.
     // If we found some special cases, we can
-    // make some decisions erliar!
+    // make some decisions erlier!
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create(xContext), css::uno::UNO_QUERY_THROW);
     FrameListAnalyzer aCheck1(xDesktop, xCloseFrame, FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
 
