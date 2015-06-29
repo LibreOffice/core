@@ -1189,6 +1189,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_PAGEBACKGROUND_COLOR:
+        case SID_PAGEBACKGROUND_GRADIENT:
+        case SID_PAGEBACKGROUND_HATCH:
+        case SID_PAGEBACKGROUND_BITMAP:
+        case SID_PAGEBACKGROUND_FILLSTYLE:
         case SID_SELECT_BACKGROUND:
         case SID_PAGESETUP:  // BASIC ??
         {

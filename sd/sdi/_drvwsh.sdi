@@ -2662,6 +2662,31 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_PAGEBACKGROUND_COLOR
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState;
+    ]
+    SID_PAGEBACKGROUND_GRADIENT
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PAGEBACKGROUND_HATCH
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PAGEBACKGROUND_BITMAP
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_PAGEBACKGROUND_FILLSTYLE
+    [
+        ExecMethod = FuTemporary;
+        StateMethod = GetMenuState;
+    ]
     SID_DISPLAY_MASTER_BACKGROUND
     [
         ExecMethod = FuTemporary ;

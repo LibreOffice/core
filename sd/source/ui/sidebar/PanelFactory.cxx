@@ -30,6 +30,7 @@
 #include "NavigatorWrapper.hxx"
 #include "SlideTransitionPanel.hxx"
 #include "TableDesignPanel.hxx"
+#include <SlideBackground.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
@@ -57,6 +58,7 @@ namespace {
     const static char* gsResourceNameSlideTransitions = "/SlideTransitions";
     const static char* gsResourceNameTableDesign = "/TableDesign";
     const static char* gsResourceNameNavigator = "/NavigatorPanel";
+    const static char* gsResourceNameSlideBackground = "/SlideBackground";
 }
 
 Reference<lang::XEventListener> mxControllerDisposeListener;
@@ -140,6 +142,8 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
         pControl = VclPtr<TableDesignPanel>::Create(pParentWindow, *pBase);
     else if (EndsWith(rsUIElementResourceURL, gsResourceNameNavigator))
         pControl = VclPtr<NavigatorWrapper>::Create(pParentWindow, *pBase, pBindings);
+    else if (EndsWith(rsUIElementResourceURL, gsResourceNameSlideBackground))
+        pControl = VclPtr<SlideBackground>::Create(pParentWindow, *pBase, xFrame, pBindings);
 #undef EndsWith
 
     if (!pControl)
