@@ -520,7 +520,9 @@ int main( int argc, char* argv[] )
 
     // Docview
     pDocView = lok_doc_view_new (argv[1], NULL, NULL);
+#if GLIB_CHECK_VERSION(2,40,0)
     g_assert_nonnull(pDocView);
+#endif
 
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
