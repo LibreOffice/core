@@ -281,7 +281,8 @@ UnitsResult UnitsImpl::getOutputUnitsForOpCode(stack< RAUSItem >& rStack, const 
     return { FormulaStatus::VALID, pOut };
 }
 
-OUString UnitsImpl::extractUnitStringFromFormat(const OUString& rFormatString) {
+OUString UnitsImpl::extractUnitStringFromFormat(const OUString& rFormatString)
+{
     // TODO: decide what we do for different subformats? Simplest solution
     // would be to not allow unit storage for multiple subformats.
     // TODO: we should check the number of subformats here in future?
@@ -291,16 +292,19 @@ OUString UnitsImpl::extractUnitStringFromFormat(const OUString& rFormatString) {
     sal_Int32 nPos = rFormatString.getLength() - 1;
 
     // Only iterate if we have a string item at the end of our format string
-    if (rFormatString[nPos] == '\"') {
+    if (rFormatString[nPos] == '\"')
+    {
        // TODO: deal with escaped strings? (Does that exist in these?)
         while (rFormatString[--nPos] != '\"') {
             if (nPos == 0) {
                 // TODO: plug into our error reporting here to return bad escaping?
-                return "";
+                return OUString("");
             }
         }
-    } else { // otherwise we have no units for this cell
-        return "";
+    }
+    else
+    { // otherwise we have no units for this cell
+        return OUString("");
     }
 
     // Ensure that the parentheses are NOT included in our unit string.
@@ -364,7 +368,7 @@ HeaderUnitDescriptor UnitsImpl::findUnitInStandardHeader(const OUString& rsHeade
         }
     }
 
-    return { false, UtUnit(), boost::optional< ScAddress >(), "", -1 };
+    return { false, UtUnit(), boost::optional< ScAddress >(), OUString(""), -1 };
 }
 
 HeaderUnitDescriptor UnitsImpl::findFreestandingUnitInHeader(const OUString& rsHeader) {
@@ -427,7 +431,7 @@ HeaderUnitDescriptor UnitsImpl::findFreestandingUnitInHeader(const OUString& rsH
         return { true, aUnit, boost::optional< ScAddress >(), sUnitString, nStartPos };
     }
 
-    return { false, UtUnit(), boost::optional< ScAddress >(), "", -1 };
+    return { false, UtUnit(), boost::optional< ScAddress >(), OUString(""), -1 };
 }
 
 HeaderUnitDescriptor UnitsImpl::extractUnitFromHeaderString(const OUString& rsHeader) {
@@ -519,7 +523,7 @@ HeaderUnitDescriptor UnitsImpl::findHeaderUnitForCell(const ScAddress& rCellAddr
         }
     }
 
-    return { false, UtUnit(), boost::optional< ScAddress >(), "", -1 };
+    return { false, UtUnit(), boost::optional< ScAddress >(), OUString(""), -1 };
 }
 
 FormulaStatus UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) {
@@ -732,7 +736,7 @@ bool UnitsImpl::convertCellUnitsForColumnRange(const ScRange& rRange,
     assert(rRange.aStart.Tab() == rRange.aEnd.Tab());
     assert(rOutputUnit.getInputString());
 
-    HeaderUnitDescriptor aHeader = { false, UtUnit(), boost::optional< ScAddress >(), "", -1 };
+    HeaderUnitDescriptor aHeader = { false, UtUnit(), boost::optional< ScAddress >(), OUString(""), -1 };
 
     SCCOL nCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
