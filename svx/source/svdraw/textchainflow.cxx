@@ -50,6 +50,11 @@ TextChainFlow::~TextChainFlow()
 
 }
 
+void TextChainFlow::impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *)
+{
+    // Nothing to do if not in editing mode
+}
+
 /*
  * Check for overflow in the state of pFlowOutl.
  * If pParamOutl is not NULL sets some parameters from there.
@@ -59,22 +64,21 @@ TextChainFlow::~TextChainFlow()
 */
 void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *pParamOutl)
 {
+    bool bOldUpdateMode = pFlowOutl->GetUpdateMode();
     // NOTE: Nah you probably don't need this
     if (pParamOutl != NULL)
     {
         // XXX: Set parameters
         // XXX: does this work if you do it before setting the text? Seems so.
         pFlowOutl->SetUpdateMode(true);
-        pFlowOutl->SetMaxAutoPaperSize(pParamOutl->GetMaxAutoPaperSize());
-        pFlowOutl->SetMinAutoPaperSize(pParamOutl->GetMinAutoPaperSize());
-        pFlowOutl->SetPaperSize(pParamOutl->GetPaperSize());
+       impSetFlowOutlinerParams(pFlowOutl, pParamOutl);
     }
 
     bool bIsPageOverflow = pFlowOutl->IsPageOverflow();
 
     if (pParamOutl != NULL)
     {
-        pFlowOutl->SetUpdateMode(false); // XXX: Plausibly should be the prev. state
+        pFlowOutl->SetUpdateMode(bOldUpdateMode); // XXX: Plausibly should be the prev. state
     }
 
     // NOTE: overflow and underflow cannot be both true
@@ -334,6 +338,17 @@ void EditingTextChainFlow::impSetTextForEditingOutliner(OutlinerParaObject *pNew
     if (GetLinkTarget()->pEdtOutl != NULL) {
         GetLinkTarget()->pEdtOutl->SetText(*pNewText);
     }
+}
+
+void EditingTextChainFlow::impSetFlowOutlinerParams(SdrOutliner *pFlowOutl, SdrOutliner *pParamOutl)
+{
+    // Set right size for overflow
+    pFlowOutl->SetMaxAutoPaperSize(pParamOutl->GetMaxAutoPaperSize());
+    pFlowOutl->SetMinAutoPaperSize(pParamOutl->GetMinAutoPaperSize());
+    pFlowOutl->SetPaperSize(pParamOutl->GetPaperSize());
+
+    // Set right text attributes
+    pFlowOutl->SetEditTextObjectPool(pParamOutl->GetEditTextObjectPool());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,6 +58,8 @@ class TextChainFlow {
     virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *);
     virtual void impMoveChainedTextToNextLink(SdrOutliner *);
 
+    virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *);
+
     OutlinerParaObject *impGetNonOverflowingParaObject(SdrOutliner *pOutliner);
     OutlinerParaObject *impGetOverflowingParaObject(SdrOutliner *pOutliner);
 
@@ -96,6 +98,8 @@ class EditingTextChainFlow : public TextChainFlow
     virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *) SAL_OVERRIDE;
 
     virtual void impSetTextForEditingOutliner(OutlinerParaObject *);
+
+    virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *) SAL_OVERRIDE;
 
 };
 
