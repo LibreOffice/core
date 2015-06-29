@@ -80,7 +80,7 @@ $(foreach pkgformat,$(5),\
 && $(PERL) -w $< \
 	-f $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
 	-l $(subst $(WHITESPACE),$(COMMA),$(strip $(2))) \
-	-p LibreOffice$(if $(ENABLE_RELEASE_BUILD),,_Dev)$(3) \
+	-p $(PRODUCTNAME)$(if $(ENABLE_RELEASE_BUILD),,_Dev)$(3) \
 	-u $(instsetoo_OUT) \
 	-buildid $(if $(filter deb0 rpm0,$(pkgformat)$(LIBO_VERSION_PATCH)),1,$(LIBO_VERSION_PATCH)) \
 	$(if $(filter WNT,$(OS)), \
