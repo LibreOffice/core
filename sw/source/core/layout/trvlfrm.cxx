@@ -1786,6 +1786,12 @@ bool SwFrm::OnFirstPage() const
     return bRet;
 }
 
+void SwFrm::Calc() const
+{
+    if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
+        const_cast<SwFrm*>(this)->PrepareMake();
+}
+
 Point SwFrm::GetRelPos() const
 {
     Point aRet( maFrm.Pos() );
