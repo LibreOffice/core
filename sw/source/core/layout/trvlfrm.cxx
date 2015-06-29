@@ -1789,7 +1789,7 @@ bool SwFrm::OnFirstPage() const
 void SwFrm::Calc() const
 {
     if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
-        const_cast<SwFrm*>(this)->PrepareMake();
+        const_cast<SwFrm*>(this)->PrepareMake(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
 }
 
 Point SwFrm::GetRelPos() const
