@@ -306,6 +306,18 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             }
         }
     }
+    else if(GetSlotID() == SID_PAGEBACKGROUND_COLOR)
+    {
+    }
+    else if(GetSlotID() == SID_PAGEBACKGROUND_GRADIENT)
+    {
+    }
+    else if(GetSlotID() == SID_PAGEBACKGROUND_HATCH)
+    {
+    }
+    else if(GetSlotID() == SID_PAGEBACKGROUND_BITMAP)
+    {
+    }
     else
     {
         // create the dialog

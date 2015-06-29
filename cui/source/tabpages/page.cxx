@@ -77,6 +77,7 @@ const sal_uInt16 SvxPageDescPage::pRanges[] =
     SID_ATTR_PAGE_SHARED,
     SID_SWREGISTER_COLLECTION,
     SID_SWREGISTER_MODE,
+    SID_ATTR_PAGE,
     0
 };
 // ------- Mapping page layout ------------------------------------------
