@@ -3465,7 +3465,7 @@ void SwXCellRange::GetDataSequence(
         bool bForceNumberResults )              //-> when 'true' requires to make an
                                                 // extra effort to return a value different
                                                 // from 0 even if the cell is formatted to text
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

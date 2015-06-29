@@ -546,7 +546,7 @@ public:
             ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > *pAnySeq,
             ::com::sun::star::uno::Sequence< OUString > *pTextSeq,
             ::com::sun::star::uno::Sequence< double > *pDblSeq,
-            bool bForceNumberResults = false ) throw (::com::sun::star::uno::RuntimeException);
+            bool bForceNumberResults = false ) throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 };
 
