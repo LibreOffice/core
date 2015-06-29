@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_2f55a4c5",
+        "filename": "sc/source/ui/dbgui/validate.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-06-29T04:43:29Z",
+      "side": 1,
+      "message": "Why use a bitwise AND?\n\nMost likely this should be a \u0026\u0026",
+      "revId": "beb85f8ed29c85032f9164a19235b919cfbe3014",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
