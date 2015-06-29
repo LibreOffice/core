@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_4fc58059",
+        "filename": "reportdesign/source/ui/report/ViewsWindow.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-29T10:25:21Z",
+      "side": 1,
+      "message": "\"single\"",
+      "revId": "b378c9c16aca73c4306aa47e4019c308acce9307",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
