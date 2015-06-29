@@ -98,7 +98,7 @@ system ("cd $ENV{SRC_ROOT}/instsetoo_native/util ; " .
         "perl " .
         (scalar keys(%DB::sub) ? "-d " : "") .
         "-w $ENV{SRCDIR}/solenv/bin/make_installer.pl " .
-        "-f $ENV{BUILDDIR}/instsetoo_native/util/openoffice.lst -l $langs -p LibreOffice" . ($ENV{ENABLE_RELEASE_BUILD} ? "" : "_Dev") . " " .
+        "-f $ENV{BUILDDIR}/instsetoo_native/util/openoffice.lst -l $langs -p $ENV{PRODUCTNAME}" . " " .
         "-u $tmp_dir " .
         "-buildid $BUILD $destdir $strip $msi " .
         "-simple $path") && die "Failed to install: $!";
