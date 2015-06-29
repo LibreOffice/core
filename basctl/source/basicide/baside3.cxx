@@ -69,8 +69,6 @@ char const FilterMask_All[] = "*.*";
 char const FilterMask_All[] = "*";
 #endif
 
-TYPEINIT1( DialogWindow, BaseWindow );
-
 DialogWindow::DialogWindow(DialogWindowLayout* pParent, ScriptDocument const& rDocument,
                            const OUString& aLibName, const OUString& aName,
                            css::uno::Reference<css::container::XNameContainer> const& xDialogModel)

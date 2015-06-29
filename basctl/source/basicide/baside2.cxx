@@ -86,8 +86,6 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace utl;
 using namespace comphelper;
 
-TYPEINIT1( ModulWindow , BaseWindow );
-
 namespace
 {
 

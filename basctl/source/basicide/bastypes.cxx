@@ -40,7 +40,6 @@ namespace basctl
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-TYPEINIT0( BaseWindow )
 TYPEINIT1( SbxItem, SfxPoolItem );
 
 BaseWindow::BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName )

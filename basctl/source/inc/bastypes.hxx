@@ -167,7 +167,6 @@ protected:
     virtual void    DoScroll( ScrollBar* pCurScrollBar );
 
 public:
-                    TYPEINFO();
     BaseWindow( vcl::Window* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName );
     virtual         ~BaseWindow();
     virtual void    dispose() SAL_OVERRIDE;
