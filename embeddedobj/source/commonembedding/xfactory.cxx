@@ -378,7 +378,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         throw ( lang::IllegalArgumentException,
                 io::IOException,
                 uno::Exception,
-                uno::RuntimeException )
+                uno::RuntimeException,
+                std::exception )
 {
     uno::Reference< uno::XInterface > xResult;
 
