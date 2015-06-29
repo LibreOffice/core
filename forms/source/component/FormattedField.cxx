@@ -438,7 +438,7 @@ Any SAL_CALL OFormattedModel::getPropertyDefault( const OUString& aPropertyName 
         return OEditBaseModel::getPropertyDefault(aPropertyName);
 }
 
-void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyChangeEvent& evt ) throw(RuntimeException)
+void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyChangeEvent& evt ) throw(RuntimeException, std::exception)
 {
     // TODO: check how this works with external bindings
     OSL_ENSURE( evt.Source == m_xAggregateSet, "OFormattedModel::_propertyChanged: where did this come from?" );
