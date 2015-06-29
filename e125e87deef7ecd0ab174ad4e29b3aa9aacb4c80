@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_2f4e04c2",
+        "filename": "sc/source/ui/unoobj/chart2uno.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3277,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-06-29T16:02:34Z",
+      "side": 1,
+      "message": "Can we please use the normal Calc naming scheme for variables?\n\nThis one would be rAddress.",
+      "revId": "e125e87deef7ecd0ab174ad4e29b3aa9aacb4c80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
