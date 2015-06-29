@@ -461,7 +461,7 @@ private:
     // impl methods
     void    load_impl(bool bCausedByParentForm, bool bMoveToFirst = true,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >())
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(::com::sun::star::uno::RuntimeException, std::exception);
     void    reload_impl(bool bMoveToFirst,
         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >())
         throw(::com::sun::star::uno::RuntimeException, std::exception);

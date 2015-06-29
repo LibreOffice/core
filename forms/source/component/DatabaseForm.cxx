@@ -2829,7 +2829,7 @@ bool ODatabaseForm::implEnsureConnection()
 }
 
 
-void ODatabaseForm::load_impl(bool bCausedByParentForm, bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler ) throw( RuntimeException )
+void ODatabaseForm::load_impl(bool bCausedByParentForm, bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler ) throw( RuntimeException, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
