@@ -271,7 +271,7 @@ class Parser:
             "framework" : 1,
             "helpcompiler" : 1,
             "hwpfilter" : 1,
-            "i18npool" : 0, #
+            "i18npool" : 1,
             "i18nlangtag" : 1,
             "i18nutil" : 1,
             "idl" : 1,
@@ -301,7 +301,7 @@ class Parser:
             "salhelper" : 1,
             "sax" : 1,
             "sc" : 0, #
-            "scaddins" : 0, #
+            "scaddins" : 1,
             "sccomp" : 1,
             "scripting" : 1,
             "sd" : 1,
