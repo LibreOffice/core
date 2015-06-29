@@ -168,7 +168,7 @@ protected:
     */
     virtual OUString
         CreateAccessibleDescription ()
-        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** Make sure that the currently focused shape sends a FOCUSED state
         change event indicating that it has (regained) the focus.
