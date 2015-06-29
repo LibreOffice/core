@@ -43,6 +43,7 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/dlg/navigatr.src \
     sd/source/ui/slideshow/slideshow.src \
     sd/source/ui/view/DocumentRenderer.src \
+    sd/source/ui/sidebar/SlideBackground.src \
 ))
 
 $(eval $(call gb_SrsTarget_add_nonlocalizable_files,sd/res,\
