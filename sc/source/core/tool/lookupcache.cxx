@@ -111,7 +111,7 @@ void ScLookupCache::Notify( const SfxHint& rHint )
     if (!mpDoc->IsInDtorClear())
     {
         const ScHint* p = dynamic_cast<const ScHint*>(&rHint);
-        if (p && (p->GetId() & SC_HINT_DATACHANGED))
+        if ((p && (p->GetId() & SC_HINT_DATACHANGED)) || dynamic_cast<const ScAreaChangedHint*>(&rHint))
         {
             mpDoc->RemoveLookupCache( *this);
             delete this;
