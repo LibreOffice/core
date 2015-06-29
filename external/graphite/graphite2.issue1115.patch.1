@@ -1,6 +1,6 @@
 --- graphite/src/Code.cpp
 +++ graphite/src/Code.cpp
-@@ -169,8 +169,8 @@ Machine::Code::Code(bool is_constraint,
+@@ -175,8 +175,8 @@ Machine::Code::Code(bool is_constraint,
          bytecode_end,
          pre_context,
          rule_length,
@@ -11,7 +11,7 @@
          face.numFeatures(), 
          {1,1,1,1,1,1,1,1, 
           1,1,1,1,1,1,1,255,
-@@ -178,7 +178,7 @@ Machine::Code::Code(bool is_constraint,
+@@ -184,7 +184,7 @@ Machine::Code::Code(bool is_constraint,
           1,1,1,1,1,1,0,0, 
           0,0,0,0,0,0,0,0, 
           0,0,0,0,0,0,0,0, 
@@ -19,4 +19,4 @@
 +         0,0,0,0,0,0,0, static_cast<byte>(silf.numUser())}
      };
      
-     decoder dec(lims, *this);
+     decoder dec(lims, *this, pt);
