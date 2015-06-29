@@ -134,22 +134,30 @@ namespace sdr
                             rGrafObj.mbInsidePaint = false;
                         }
 
-                        // Invalidate paint areas.
-                        GetViewContact().ActionChanged();
-
                         bRetval = true;
                     }
                 }
             }
             else
             {
-                // it is not swapped out, somehow it was loaded. In that case, forget
+                // it is not swapped out, somehow[1] it was loaded. In that case, forget
                 // about an existing triggered event
-                if(mpAsynchLoadEvent)
+                if (mpAsynchLoadEvent)
                 {
                     // just delete it, this will remove it from the EventHandler and
                     // will trigger forgetAsynchGraphicLoadingEvent from the destructor
                     delete mpAsynchLoadEvent;
+
+                    // Invalidate paint areas.
+                    // [1] If a calc document with graphics is loaded then OnLoad will
+                    // be emitted before the graphic are due to be swapped in asynchronously
+                    // In sfx2 we generate a preview on receiving onload, which forces
+                    // the graphics to be swapped in to generate the preview. When
+                    // the timer triggers it find the graphics already swapped in. So
+                    // we should still invalidate the paint area on finding the graphic
+                    // swapped in seeing as we're still waiting in calc to draw the
+                    // graphics on receipt of their contents.
+                    GetViewContact().ActionChanged();
                 }
             }
 
@@ -188,9 +196,6 @@ namespace sdr
                         rGrafObj.ForceSwapIn();
                         rGrafObj.mbInsidePaint = false;
                     }
-
-                    // Invalidate paint areas.
-                    GetViewContact().ActionChanged();
 
                     bRetval = true;
                 }
