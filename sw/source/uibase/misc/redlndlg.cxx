@@ -594,7 +594,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
     {
         pRedlineData = pRedlineData->Next();
 
-        SwRedlineDataChildPtr pRedlineChild = new SwRedlineDataChild;
+        SwRedlineDataChild* pRedlineChild = new SwRedlineDataChild;
         pRedlineChild->pChild = pRedlineData;
         aRedlineChildren.push_back(pRedlineChild);
 
@@ -674,7 +674,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     {
         if (!bChildrenRemoved && aRedlineParents[i].pNext)
         {
-            SwRedlineDataChildPtr pChildPtr = const_cast<SwRedlineDataChildPtr>(aRedlineParents[i].pNext);
+            SwRedlineDataChild* pChildPtr = const_cast<SwRedlineDataChild*>(aRedlineParents[i].pNext);
             for( SwRedlineDataChildArr::iterator it = aRedlineChildren.begin();
                  it != aRedlineChildren.end(); ++it)
                 if (&*it == pChildPtr)
@@ -682,7 +682,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
                     sal_uInt16 nChildren = 0;
                     while (pChildPtr)
                     {
-                        pChildPtr = const_cast<SwRedlineDataChildPtr>(pChildPtr->pNext);
+                        pChildPtr = const_cast<SwRedlineDataChild*>(pChildPtr->pNext);
                         nChildren++;
                     }
 

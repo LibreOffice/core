@@ -81,11 +81,11 @@ private: // Methods
     BenError GetByte(BenByte * pByte);
     BenError GetDWord(BenDWord * pDWord);
     BenByte GetCode();
-    BenError GetData(BenDataPtr pBuffer, unsigned long Amt);
+    BenError GetData(void * pBuffer, unsigned long Amt);
 
 private: // Data
     pLtcBenContainer cpContainer;
-    BenByteDataPtr cpTOC;
+    BenByte*         cpTOC;
     unsigned long cBlockSize;
     unsigned long cCurr;
     unsigned long cTOCSize;

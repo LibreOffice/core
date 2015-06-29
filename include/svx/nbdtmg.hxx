@@ -79,7 +79,6 @@ class  SVX_DLLPUBLIC NumSettings_Impl
         ~NumSettings_Impl(){}
 };
 
-typedef NumSettings_Impl* NumSettings_ImplPtr;
 typedef std::vector< std::shared_ptr<NumSettings_Impl> > NumSettingsArr_Impl;
 
 class  SVX_DLLPUBLIC BulletsSettings
@@ -163,7 +162,6 @@ class  SVX_DLLPUBLIC NumberSettings_Impl
         ~NumberSettings_Impl(){}
 };
 
-typedef NumberSettings_Impl* NumberSettings_ImplPtr;
 typedef std::vector< std::shared_ptr<NumberSettings_Impl> > NumberSettingsArr_Impl;
 
 class  SVX_DLLPUBLIC OutlineSettings_Impl

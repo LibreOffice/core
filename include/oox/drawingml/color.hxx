@@ -150,10 +150,6 @@ private:
                         maInteropTransformations;   /// Unaltered list of transformations for interoperability purposes
 };
 
-typedef std::shared_ptr< Color > ColorPtr;
-
-
-
 } // namespace drawingml
 } // namespace oox
 

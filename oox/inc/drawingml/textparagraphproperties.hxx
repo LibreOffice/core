@@ -59,7 +59,7 @@ public:
     void setStyleName( const OUString& rStyleName ) { maStyleName <<= rStyleName; }
     void setGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rXGraphic );
 
-    ::oox::drawingml::ColorPtr  maBulletColorPtr;
+    std::shared_ptr< ::oox::drawingml::Color > maBulletColorPtr;
     ::com::sun::star::uno::Any  mbBulletColorFollowText;
     ::com::sun::star::uno::Any  mbBulletFontFollowText;
     ::oox::drawingml::TextFont  maBulletFont;

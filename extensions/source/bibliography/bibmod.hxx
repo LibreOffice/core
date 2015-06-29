@@ -42,8 +42,7 @@ class BibModul
 
 };
 
-typedef BibModul*       PtrBibModul;
-typedef PtrBibModul*    HdlBibModul;
+typedef BibModul**    HdlBibModul;
 
 HdlBibModul     OpenBibModul();
 void            CloseBibModul(HdlBibModul ppBibModul);

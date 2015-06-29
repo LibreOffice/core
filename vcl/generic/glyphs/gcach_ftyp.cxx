@@ -55,8 +55,6 @@
 
 #include "rtl/instance.hxx"
 
-typedef const FT_Vector* FT_Vector_CPtr;
-
 #include <vector>
 
 // TODO: move file mapping stuff to OSL
@@ -1471,7 +1469,7 @@ extern "C" {
 // TODO: wait till all compilers accept that calling conventions
 // for functions are the same independent of implementation constness,
 // then uncomment the const-tokens in the function interfaces below
-static int FT_move_to( FT_Vector_CPtr p0, void* vpPolyArgs )
+static int FT_move_to( const FT_Vector* p0, void* vpPolyArgs )
 {
     PolyArgs& rA = *static_cast<PolyArgs*>(vpPolyArgs);
 
@@ -1482,14 +1480,14 @@ static int FT_move_to( FT_Vector_CPtr p0, void* vpPolyArgs )
     return 0;
 }
 
-static int FT_line_to( FT_Vector_CPtr p1, void* vpPolyArgs )
+static int FT_line_to( const FT_Vector* p1, void* vpPolyArgs )
 {
     PolyArgs& rA = *static_cast<PolyArgs*>(vpPolyArgs);
     rA.AddPoint( p1->x, p1->y, POLY_NORMAL );
     return 0;
 }
 
-static int FT_conic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, void* vpPolyArgs )
+static int FT_conic_to( const FT_Vector* p1, const FT_Vector* p2, void* vpPolyArgs )
 {
     PolyArgs& rA = *static_cast<PolyArgs*>(vpPolyArgs);
 
@@ -1506,7 +1504,7 @@ static int FT_conic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, void* vpPolyArgs )
     return 0;
 }
 
-static int FT_cubic_to( FT_Vector_CPtr p1, FT_Vector_CPtr p2, FT_Vector_CPtr p3, void* vpPolyArgs )
+static int FT_cubic_to( const FT_Vector* p1, const FT_Vector* p2, const FT_Vector* p3, void* vpPolyArgs )
 {
     PolyArgs& rA = *static_cast<PolyArgs*>(vpPolyArgs);
     rA.AddPoint( p1->x, p1->y, POLY_CONTROL );

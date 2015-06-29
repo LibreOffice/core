@@ -498,7 +498,7 @@ CBenTOCReader::GetCode()
 }
 
 BenError
-CBenTOCReader::GetData(BenDataPtr pBuffer, unsigned long Amt)
+CBenTOCReader::GetData(void * pBuffer, unsigned long Amt)
 {
     if (! CanGetData(Amt))
         return BenErr_ReadPastEndOfTOC;

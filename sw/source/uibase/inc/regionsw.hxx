@@ -56,7 +56,6 @@ namespace sfx2
 
 // dialog "edit regions"
 class SectRepr;
-typedef SectRepr* SectReprPtr;
 typedef boost::ptr_set<SectRepr> SectReprArr;
 
 class SwEditRegionDlg : public SfxModalDialog

@@ -59,11 +59,9 @@ typedef boost::ptr_vector<SwRedlineDataParent> SwRedlineDataParentArr;
 
 class SwRedlineDataParentSortArr : public o3tl::sorted_vector<SwRedlineDataParent*, o3tl::less_ptr_to<SwRedlineDataParent> > {};
 
-typedef SwRedlineDataChild* SwRedlineDataChildPtr;
 typedef boost::ptr_vector<SwRedlineDataChild> SwRedlineDataChildArr;
 
-typedef SvTreeListEntry* SvLBoxEntryPtr;
-typedef std::vector<SvLBoxEntryPtr> SvLBoxEntryArr;
+typedef std::vector<SvTreeListEntry*> SvLBoxEntryArr;
 
 class SW_DLLPUBLIC SwRedlineAcceptDlg
 {
