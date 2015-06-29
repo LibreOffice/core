@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_2ff2849b",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1000560
+      },
+      "writtenOn": "2015-06-29T13:15:25Z",
+      "side": 0,
+      "message": "if(nBulletColor \u003e 0)\nwill it solve the issue?",
+      "range": {
+        "startLine": 1738,
+        "startChar": 8,
+        "endLine": 1738,
+        "endChar": 24
+      },
+      "revId": "72be3521524f1c01842010f26c234f4e6cceb358",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
