@@ -434,9 +434,9 @@ void SwFlyFreeFrm::CheckClip( const SwFormatFrmSize &rSz )
                 SwFrm *pLow = Lower();
                 do
                 {
-                    pLow->Calc();
+                    pLow->Calc(getRootFrm()->GetCurrShell()->GetOut());
                     // also calculate the (Column)BodyFrm
-                    static_cast<SwLayoutFrm*>(pLow)->Lower()->Calc();
+                    static_cast<SwLayoutFrm*>(pLow)->Lower()->Calc(getRootFrm()->GetCurrShell()->GetOut());
                     pLow = pLow->GetNext();
                 } while ( pLow );
                 ::CalcContent( this );

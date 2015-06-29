@@ -3530,11 +3530,13 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
 
 static void lcl_EmergencyFormatFootnoteCont( SwFootnoteContFrm *pCont )
 {
+    vcl::RenderContext* pRenderContext = pCont->getRootFrm()->GetCurrShell()->GetOut();
+
     //It's possible that the Cont will get destroyed.
     SwContentFrm *pCnt = pCont->ContainsContent();
     while ( pCnt && pCnt->IsInFootnote() )
     {
-        pCnt->Calc();
+        pCnt->Calc(pRenderContext);
         pCnt = pCnt->GetNextContentFrm();
     }
 }
@@ -3599,7 +3601,7 @@ void SwLayoutFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
     SwShortCut aShortCut( *pFrm, rRect );
     bool bCnt;
     if ( (bCnt = pFrm->IsContentFrm()) )
-        pFrm->Calc();
+        pFrm->Calc(&rRenderContext);
 
     if ( pFrm->IsFootnoteContFrm() )
     {
@@ -3661,7 +3663,7 @@ void SwLayoutFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
                     gProp.pSGlobalShell->InvalidateWindows( aPaintRect );
                     pFrm = pFrm->GetNext();
                     if ( pFrm && (bCnt = pFrm->IsContentFrm()) )
-                        pFrm->Calc();
+                        pFrm->Calc(&rRenderContext);
                     continue;
                 }
             }
@@ -3693,7 +3695,7 @@ void SwLayoutFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect,
         pFrm = pFrm->GetNext();
 
         if ( pFrm && (bCnt = pFrm->IsContentFrm()) )
-            pFrm->Calc();
+            pFrm->Calc(&rRenderContext);
     }
 }
 

@@ -506,7 +506,7 @@ bool SwNoTextFrm::GetCharRect( SwRect &rRect, const SwPosition& rPos,
     if ( &rPos.nNode.GetNode() != static_cast<SwNode const *>(GetNode()) )
         return false;
 
-    Calc();
+    Calc(getRootFrm()->GetCurrShell()->GetOut());
     SwRect aFrameRect( Frm() );
     rRect = aFrameRect;
     rRect.Pos( Frm().Pos() + Prt().Pos() );

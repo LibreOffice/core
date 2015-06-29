@@ -1776,7 +1776,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
 
         if( !(eFlags & SwCrsrShell::UPDOWN ))   // delete old Pos. of Up/Down
         {
-            pFrm->Calc();
+            pFrm->Calc(GetOut());
             m_nUpDownX = pFrm->IsVertical() ?
                        m_aCharRect.Top() - pFrm->Frm().Top() :
                        m_aCharRect.Left() - pFrm->Frm().Left();

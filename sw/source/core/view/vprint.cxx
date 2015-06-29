@@ -303,7 +303,7 @@ void SwViewShell::CalcPagesForPrint( sal_uInt16 nMax )
     pMyLayout->StartAllAction();
     for ( sal_uInt16 i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
     {
-        pPage->Calc();
+        pPage->Calc(GetOut());
         SwRect aOldVis( VisArea() );
         maVisArea = pPage->Frm();
         Imp()->SetFirstVisPageInvalid();

@@ -904,6 +904,7 @@ static SwFootnoteFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, bool &rbEmpty,
 
 static void lcl_ColumnRefresh( SwSectionFrm* pSect, bool bFollow )
 {
+    vcl::RenderContext* pRenderContext = pSect->getRootFrm()->GetCurrShell()->GetOut();
     while( pSect )
     {
         bool bOldLock = pSect->IsColLocked();
@@ -915,8 +916,8 @@ static void lcl_ColumnRefresh( SwSectionFrm* pSect, bool bFollow )
             {   pCol->_InvalidateSize();
                 pCol->_InvalidatePos();
                 static_cast<SwLayoutFrm*>(pCol)->Lower()->_InvalidateSize();
-                pCol->Calc();   // calculation of column and
-                static_cast<SwLayoutFrm*>(pCol)->Lower()->Calc();  // body
+                pCol->Calc(pRenderContext);   // calculation of column and
+                static_cast<SwLayoutFrm*>(pCol)->Lower()->Calc(pRenderContext);  // body
                 pCol = static_cast<SwColumnFrm*>(pCol->GetNext());
             } while ( pCol );
         }
@@ -1139,6 +1140,7 @@ class ExtraFormatToPositionObjs
 
         void FormatSectionToPositionObjs()
         {
+            vcl::RenderContext* pRenderContext = mpSectFrm->getRootFrm()->GetCurrShell()->GetOut();
             // perform extra format for multi-columned section.
             if ( mpSectFrm->Lower() && mpSectFrm->Lower()->IsColumnFrm() &&
                  mpSectFrm->Lower()->GetNext() )
@@ -1163,11 +1165,11 @@ class ExtraFormatToPositionObjs
                 SwColumnFrm* pColFrm = static_cast<SwColumnFrm*>(mpSectFrm->Lower());
                 while ( pColFrm )
                 {
-                    pColFrm->Calc();
-                    pColFrm->Lower()->Calc();
+                    pColFrm->Calc(pRenderContext);
+                    pColFrm->Lower()->Calc(pRenderContext);
                     if ( pColFrm->Lower()->GetNext() )
                     {
-                        pColFrm->Lower()->GetNext()->Calc();
+                        pColFrm->Lower()->GetNext()->Calc(pRenderContext);
                     }
 
                     pColFrm = static_cast<SwColumnFrm*>(pColFrm->GetNext());
@@ -1207,7 +1209,7 @@ class ExtraFormatToPositionObjs
 };
 
 /// "formats" the frame; Frm and PrtArea
-void SwSectionFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAttrs *pAttr )
+void SwSectionFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttr )
 {
     if( !pSection ) // via DelEmpty
     {
@@ -1295,7 +1297,7 @@ void SwSectionFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorde
 
         // Check the width of the columns and adjust if necessary
         if ( bHasColumns && ! Lower()->GetNext() && bMaximize )
-            static_cast<SwColumnFrm*>(Lower())->Lower()->Calc();
+            static_cast<SwColumnFrm*>(Lower())->Lower()->Calc(pRenderContext);
 
         if ( !bMaximize )
         {
@@ -1328,9 +1330,9 @@ void SwSectionFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorde
                 {
                     if( pFrm->IsColumnFrm() )
                     {
-                        pFrm->Calc();
+                        pFrm->Calc(pRenderContext);
                         pFrm = static_cast<SwColumnFrm*>(pFrm)->Lower();
-                        pFrm->Calc();
+                        pFrm->Calc(pRenderContext);
                         pFrm = static_cast<SwLayoutFrm*>(pFrm)->Lower();
                         CalcFootnoteContent();
                     }
@@ -1381,9 +1383,9 @@ void SwSectionFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorde
                     {
                         pFrm->_InvalidateSize();
                         pFrm->_InvalidatePos();
-                        pFrm->Calc();
+                        pFrm->Calc(pRenderContext);
                         pFrm = static_cast<SwColumnFrm*>(pFrm)->Lower();
-                        pFrm->Calc();
+                        pFrm->Calc(pRenderContext);
                         pFrm = static_cast<SwLayoutFrm*>(pFrm)->Lower();
                         CalcFootnoteContent();
                     }
@@ -2508,18 +2510,19 @@ long SwSectionFrm::Undersize( bool bOverSize )
 
 void SwSectionFrm::CalcFootnoteContent()
 {
+    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     SwFootnoteContFrm* pCont = ContainsFootnoteCont();
     if( pCont )
     {
         SwFrm* pFrm = pCont->ContainsAny();
         if( pFrm )
-            pCont->Calc();
+            pCont->Calc(pRenderContext);
         while( pFrm && IsAnLower( pFrm ) )
         {
             SwFootnoteFrm* pFootnote = pFrm->FindFootnoteFrm();
             if( pFootnote )
-                pFootnote->Calc();
-            pFrm->Calc();
+                pFootnote->Calc(pRenderContext);
+            pFrm->Calc(pRenderContext);
             if( pFrm->IsSctFrm() )
             {
                 SwFrm *pTmp = static_cast<SwSectionFrm*>(pFrm)->ContainsAny();

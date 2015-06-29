@@ -19,6 +19,7 @@
 
 #include <objectformattertxtfrm.hxx>
 #include <sortedobjs.hxx>
+#include <rootfrm.hxx>
 #include <flyfrms.hxx>
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
@@ -652,7 +653,7 @@ static void lcl_FormatContentOfLayoutFrm( SwLayoutFrm* pLayFrm,
             lcl_FormatContentOfLayoutFrm( static_cast<SwLayoutFrm*>(pLowerFrm),
                                         pLastLowerFrm );
         else
-            pLowerFrm->Calc();
+            pLowerFrm->Calc(pLowerFrm->getRootFrm()->GetCurrShell()->GetOut());
 
         pLowerFrm = pLowerFrm->GetNext();
     }
@@ -699,7 +700,7 @@ void SwObjectFormatterTextFrm::FormatAnchorFrmAndItsPrevs( SwTextFrm& _rAnchorTe
                     if ( pFrm->IsLayoutFrm() )
                         lcl_FormatContentOfLayoutFrm( static_cast<SwLayoutFrm*>(pFrm) );
                     else
-                        pFrm->Calc();
+                        pFrm->Calc(pFrm->getRootFrm()->GetCurrShell()->GetOut());
 
                     pFrm = pFrm->GetNext();
                 }
@@ -727,7 +728,7 @@ void SwObjectFormatterTextFrm::FormatAnchorFrmAndItsPrevs( SwTextFrm& _rAnchorTe
                     if ( pFrm->IsLayoutFrm() )
                         lcl_FormatContentOfLayoutFrm( static_cast<SwLayoutFrm*>(pFrm) );
                     else
-                        pFrm->Calc();
+                        pFrm->Calc(pFrm->getRootFrm()->GetCurrShell()->GetOut());
 
                     pFrm = pFrm->GetNext();
                 }
@@ -745,11 +746,11 @@ void SwObjectFormatterTextFrm::FormatAnchorFrmAndItsPrevs( SwTextFrm& _rAnchorTe
     if ( _rAnchorTextFrm.IsInTab() )
     {
         SwForbidFollowFormat aForbidFollowFormat( _rAnchorTextFrm );
-        _rAnchorTextFrm.Calc();
+        _rAnchorTextFrm.Calc(_rAnchorTextFrm.getRootFrm()->GetCurrShell()->GetOut());
     }
     else
     {
-        _rAnchorTextFrm.Calc();
+        _rAnchorTextFrm.Calc(_rAnchorTextFrm.getRootFrm()->GetCurrShell()->GetOut());
     }
 }
 

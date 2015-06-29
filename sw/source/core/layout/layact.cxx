@@ -446,7 +446,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
 {
     OSL_ENSURE( pRoot->Lower()->IsPageFrm(), ":-( No page below the root.");
 
-    pRoot->Calc();
+    pRoot->Calc(pRenderContext);
 
     // Figure out the first invalid page or the first one to be formatted,
     // respectively. A complete-action means the first invalid page.
@@ -812,7 +812,7 @@ bool SwLayAction::_TurboAction( const SwContentFrm *pCnt )
     {
         const SwRect aOldRect( pCnt->UnionFrm( true ) );
         const long   nOldBottom = pCnt->Frm().Top() + pCnt->Prt().Bottom();
-        pCnt->Calc();
+        pCnt->Calc(pImp->GetShell()->GetOut());
         if ( pCnt->Frm().Bottom() < aOldRect.Bottom() )
             pCnt->SetRetouche();
 
@@ -1002,6 +1002,7 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
  */
 bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
+    vcl::RenderContext* pRenderContext = pImp->GetShell()->GetOut();
     bool bRet = false;
     const SwViewShell *pSh = pRoot->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
@@ -1017,11 +1018,11 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
             // format its first lower.
             // NOTE: In online layout (bBrowse == true) a page can contain
             //     a header frame and/or a footer frame beside the body frame.
-            prPage->Calc();
+            prPage->Calc(pRenderContext);
             SwFrm* pPageLowerFrm = prPage->Lower();
             while ( pPageLowerFrm )
             {
-                pPageLowerFrm->Calc();
+                pPageLowerFrm->Calc(pRenderContext);
                 pPageLowerFrm = pPageLowerFrm->GetNext();
             }
         }
@@ -1097,7 +1098,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                     const SwSectionFrm *pSct = const_cast<SwFrm*>(static_cast<SwFrm const *>(pContent))->ImplFindSctFrm();
                     if ( !pSct->IsValid() )
                     {
-                        pSct->Calc();
+                        pSct->Calc(pRenderContext);
                         pSct->SetCompletePaint();
                         if ( IsAgain() )
                             return false;
@@ -1109,7 +1110,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 
                 if ( !bPageChg && !pContent->IsValid() )
                 {
-                    pContent->Calc();
+                    pContent->Calc(pRenderContext);
                     pContent->SetCompletePaint();
                     if ( IsAgain() )
                         return false;
@@ -1123,7 +1124,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                     const SwTabFrm *pTab = const_cast<SwFrm*>(static_cast<SwFrm const *>(pContent))->ImplFindTabFrm();
                     if ( !pTab->IsValid() )
                     {
-                        pTab->Calc();
+                        pTab->Calc(pRenderContext);
                         pTab->SetCompletePaint();
                         if ( IsAgain() )
                             return false;
@@ -1138,7 +1139,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                     const SwSectionFrm *pSct = const_cast<SwFrm*>(static_cast<SwFrm const *>(pContent))->ImplFindSctFrm();
                     if ( !pSct->IsValid() )
                     {
-                        pSct->Calc();
+                        pSct->Calc(pRenderContext);
                         pSct->SetCompletePaint();
                         if ( IsAgain() )
                             return false;
@@ -1239,7 +1240,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
             aOldRect = static_cast<SwPageFrm*>(pLay)->GetBoundRect(pRenderContext);
         }
 
-        pLay->Calc();
+        pLay->Calc(pRenderContext);
 
         if ( aOldFrame != pLay->Frm() )
             bChanged = true;
@@ -1428,6 +1429,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
 
 bool SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
 {
+    vcl::RenderContext* pRenderContext = pImp->GetShell()->GetOut();
     OSL_ENSURE( !IsAgain(), "Attention to the invalid page." );
     if ( IsAgain() )
         return false;
@@ -1439,7 +1441,7 @@ bool SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
     {
         // The Frame has changed, now it's getting formatted.
         const SwRect aOldRect( pFly->Frm() );
-        pFly->Calc();
+        pFly->Calc(pRenderContext);
         bChanged = aOldRect != pFly->Frm();
 
         if ( IsPaint() && (pFly->IsCompletePaint() || bChanged) &&
@@ -1483,6 +1485,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
     if ( IsAgain() || !pTab->Lower() )
         return false;
 
+    vcl::RenderContext* pRenderContext = pImp->GetShell()->GetOut();
     IDocumentTimerAccess *pTimerAccess = pRoot->GetFormat()->getIDocumentTimerAccess();
     pTimerAccess->BlockIdling();
 
@@ -1505,7 +1508,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
 
         const SwRect aOldRect( pTab->Frm() );
         pTab->SetLowersFormatted( false );
-        pTab->Calc();
+        pTab->Calc(pRenderContext);
         if ( aOldRect != pTab->Frm() )
         {
             bChanged = true;
