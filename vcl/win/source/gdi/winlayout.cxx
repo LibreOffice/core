@@ -2374,11 +2374,6 @@ GraphiteWinLayout::~GraphiteWinLayout()
 
 bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
 {
-    if (args.mnMinCharPos >= args.mnEndCharPos)
-    {
-        maImpl.clear();
-        return true;
-    }
     HFONT hUnRotatedFont = 0;
     if (args.mnOrientation)
     {
@@ -2392,15 +2387,7 @@ bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
     }
     WinLayout::AdjustLayout(args);
     maImpl.SetFontScale(WinLayout::mfFontScale);
-    gr_segment * pSegment = maImpl.CreateSegment(args);
-    bool bSucceeded = false;
-    if (pSegment)
-    {
-        // replace the DC on the font within the segment
-        // create glyph vectors
-        bSucceeded = maImpl.LayoutGlyphs(args, pSegment);
-        gr_seg_destroy(pSegment);
-    }
+    bool bSucceeded = maImpl.LayoutText(args);
     if (args.mnOrientation)
     {
         // restore the rotated font
