@@ -8503,7 +8503,13 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
     const ScQueryEntry& rEntry = rParam.GetEntry(0);
     bool bColumnsMatch = (rParam.nCol1 == rEntry.nField);
     OSL_ENSURE( bColumnsMatch, "ScInterpreter::LookupQueryWithCache: columns don't match");
-    if (!bColumnsMatch)
+    // At least all volatile functions that generate indirect references have
+    // to force non-cached lookup.
+    /* TODO: We could further classify volatile functions into reference
+     * generating and not reference generating functions to have to force less
+     * direct lookups here. We could even further attribute volatility per
+     * parameter so it would affect only the lookup range parameter. */
+    if (!bColumnsMatch || GetVolatileType() != NOT_VOLATILE)
         bFound = lcl_LookupQuery( o_rResultPos, pDok, rParam, rEntry);
     else
     {
