@@ -64,7 +64,7 @@ private:
 
     ResMgr&                     GetResMgr() throw( css::uno::RuntimeException, std::exception );
     OUString                      GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( css::uno::RuntimeException );
-    OUString                      GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException );
+    OUString                      GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException, std::exception );
     void                        InitDefLocales();
     inline const css::lang::Locale& GetLocale( sal_uInt32 nInd );
     void                        InitData();
