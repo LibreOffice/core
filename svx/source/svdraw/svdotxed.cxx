@@ -64,10 +64,9 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     }
 
     // FIXME(matteocam)
-    bool bIsChained = true; // XXX: get it from a method
-    // What is this??
+
     // disable AUTOPAGESIZE
-    if ( bIsChained ) {
+    if ( IsChainable() ) {
         sal_uIntPtr nStat1=rOutl.GetControlWord();
         nStat1 &=~EE_CNTRL_AUTOPAGESIZE;
         rOutl.SetControlWord(nStat1);
