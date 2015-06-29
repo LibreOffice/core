@@ -452,6 +452,14 @@ DECLARE_WW8EXPORT_TEST(testWw8Cjklist35, "cjklist35.doc")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf92281, "tdf92281.doc")
+{
+        uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontName"));
+        CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameAsian"));
+        CPPUNIT_ASSERT_EQUAL(OUString("Wingdings"), getProperty<OUString>(xRun, "CharFontNameComplex"));
+}
+
 DECLARE_WW8EXPORT_TEST(testCommentedTable, "commented-table.doc")
 {
     // Document has a non-trivial commented text range, as the range contains a table.
