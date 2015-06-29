@@ -7095,7 +7095,40 @@ void ScInterpreter::ScIndirect()
             }
             while (false);
 
-            /* TODO: simple named ranges and database ranges could be resolved. */
+            do
+            {
+                OUString aName( ScGlobal::pCharClass->uppercase( sRefStr));
+                ScDBCollection::NamedDBs& rDBs = pDok->GetDBCollection()->getNamedDBs();
+                const ScDBData* pData = rDBs.findByUpperName( aName);
+                if (!pData)
+                    break;
+
+                ScRange aRange;
+                pData->GetArea( aRange);
+
+                // In Excel, specifying a table name without [] resolves to the
+                // same as with [], a range that excludes header and totals
+                // rows and contains only data rows. Do the same.
+                if (pData->HasHeader())
+                    aRange.aStart.IncRow();
+                if (pData->HasTotals())
+                    aRange.aEnd.IncRow(-1);
+
+                if (aRange.aStart.Row() > aRange.aEnd.Row())
+                    break;
+
+                if (aRange.aStart == aRange.aEnd)
+                    PushSingleRef( aRange.aStart.Col(), aRange.aStart.Row(),
+                            aRange.aStart.Tab());
+                else
+                    PushDoubleRef( aRange.aStart.Col(), aRange.aStart.Row(),
+                            aRange.aStart.Tab(), aRange.aEnd.Col(),
+                            aRange.aEnd.Row(), aRange.aEnd.Tab());
+
+                // success!
+                return;
+            }
+            while (false);
 
             // It may be even a TableRef.
             // Anything else that resolves to one reference could be added
