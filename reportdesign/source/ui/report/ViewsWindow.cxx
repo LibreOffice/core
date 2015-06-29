@@ -709,7 +709,7 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
         else
         {
             if ( _bAlignAtSection || _rSortRectangles.size() == 1 )
-            { // align singel object at the page
+            { // align single object at the page
                 if ( ! bOnlyOnce )
                 {
                     bOnlyOnce = true;
