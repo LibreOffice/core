@@ -35,6 +35,7 @@
 #include <unocrsr.hxx>
 #include <unocrsrhelper.hxx>
 #include <unotbl.hxx>
+#include <pagedesc.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -97,6 +98,8 @@ public:
     void testTdf51741();
     void testdelofTableRedlines();
     void testExportToPicture();
+    void testTdf69282();
+    void testTdf69282WithMirror();
     void testSearchWithTransliterate();
     void testTdf75137();
     void testTdf83798();
@@ -144,6 +147,8 @@ public:
     CPPUNIT_TEST(testTdf51741);
     CPPUNIT_TEST(testdelofTableRedlines);
     CPPUNIT_TEST(testExportToPicture);
+    CPPUNIT_TEST(testTdf69282);
+    CPPUNIT_TEST(testTdf69282WithMirror);
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTdf75137);
     CPPUNIT_TEST(testTdf83798);
@@ -1016,6 +1021,128 @@ void SwUiWriterTest::testExportToPicture()
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, tmpFile.getSize(val));
     CPPUNIT_ASSERT(val > 100);
     aTempFile.EnableKillingFile();
+}
+
+void SwUiWriterTest::testTdf69282()
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwDoc* source = pTextDoc->GetDocShell()->GetDoc();
+    uno::Reference<lang::XComponent> xSourceDoc(mxComponent, uno::UNO_QUERY);
+    mxComponent.clear();
+    SwDoc* target = createDoc();
+    SwPageDesc* sPageDesc = source->MakePageDesc(OUString("SourceStyle"));
+    SwPageDesc* tPageDesc = target->MakePageDesc(OUString("TargetStyle"));
+    sPageDesc->ChgFirstShare(false);
+    CPPUNIT_ASSERT(!sPageDesc->IsFirstShared());
+    SwFrameFormat& sMasterFormat = sPageDesc->GetMaster();
+    //Setting horizontal spaces on master
+    SvxLRSpaceItem horizontalSpace(RES_LR_SPACE);
+    horizontalSpace.SetLeft(11);
+    horizontalSpace.SetRight(12);
+    sMasterFormat.SetFormatAttr(horizontalSpace);
+    //Setting vertical spaces on master
+    SvxULSpaceItem verticalSpace(RES_UL_SPACE);
+    verticalSpace.SetUpper(13);
+    verticalSpace.SetLower(14);
+    sMasterFormat.SetFormatAttr(verticalSpace);
+    //Changing the style and copying it to target
+    source->ChgPageDesc(OUString("SourceStyle"), *sPageDesc);
+    target->CopyPageDesc(*sPageDesc, *tPageDesc);
+    //Checking the set values on all Formats in target
+    SwFrameFormat& tMasterFormat = tPageDesc->GetMaster();
+    SwFrameFormat& tLeftFormat = tPageDesc->GetLeft();
+    SwFrameFormat& tFirstMasterFormat = tPageDesc->GetFirstMaster();
+    SwFrameFormat& tFirstLeftFormat = tPageDesc->GetFirstLeft();
+    //Checking horizontal spaces
+    const SvxLRSpaceItem hMasterFormatSpace = tMasterFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hMasterFormatSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hMasterFormatSpace.GetRight());
+    const SvxLRSpaceItem hLeftFormatSpace = tLeftFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hLeftFormatSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hLeftFormatSpace.GetRight());
+    const SvxLRSpaceItem hFirstMasterFormatSpace = tFirstMasterFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hFirstMasterFormatSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hFirstMasterFormatSpace.GetRight());
+    const SvxLRSpaceItem hFirstLeftFormatSpace = tFirstLeftFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hFirstLeftFormatSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hFirstLeftFormatSpace.GetRight());
+    //Checking vertical spaces
+    const SvxULSpaceItem vMasterFormatSpace = tMasterFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vMasterFormatSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vMasterFormatSpace.GetLower());
+    const SvxULSpaceItem vLeftFormatSpace = tLeftFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vLeftFormatSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vLeftFormatSpace.GetLower());
+    const SvxULSpaceItem vFirstMasterFormatSpace = tFirstMasterFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vFirstMasterFormatSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vFirstMasterFormatSpace.GetLower());
+    const SvxULSpaceItem vFirstLeftFormatSpace = tFirstLeftFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vFirstLeftFormatSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vFirstLeftFormatSpace.GetLower());
+    xSourceDoc->dispose();
+}
+
+void SwUiWriterTest::testTdf69282WithMirror()
+{
+    mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwDoc* source = pTextDoc->GetDocShell()->GetDoc();
+    uno::Reference<lang::XComponent> xSourceDoc(mxComponent, uno::UNO_QUERY);
+    mxComponent.clear();
+    SwDoc* target = createDoc();
+    SwPageDesc* sPageDesc = source->MakePageDesc(OUString("SourceStyle"));
+    SwPageDesc* tPageDesc = target->MakePageDesc(OUString("TargetStyle"));
+    //Enabling Mirror
+    sPageDesc->SetUseOn(nsUseOnPage::PD_MIRROR);
+    SwFrameFormat& sMasterFormat = sPageDesc->GetMaster();
+    //Setting horizontal spaces on master
+    SvxLRSpaceItem horizontalSpace(RES_LR_SPACE);
+    horizontalSpace.SetLeft(11);
+    horizontalSpace.SetRight(12);
+    sMasterFormat.SetFormatAttr(horizontalSpace);
+    //Setting vertical spaces on master
+    SvxULSpaceItem verticalSpace(RES_UL_SPACE);
+    verticalSpace.SetUpper(13);
+    verticalSpace.SetLower(14);
+    sMasterFormat.SetFormatAttr(verticalSpace);
+    //Changing the style and copying it to target
+    source->ChgPageDesc(OUString("SourceStyle"), *sPageDesc);
+    target->CopyPageDesc(*sPageDesc, *tPageDesc);
+    //Checking the set values on all Formats in target
+    SwFrameFormat& tMasterFormat = tPageDesc->GetMaster();
+    SwFrameFormat& tLeftFormat = tPageDesc->GetLeft();
+    SwFrameFormat& tFirstMasterFormat = tPageDesc->GetFirstMaster();
+    SwFrameFormat& tFirstLeftFormat = tPageDesc->GetFirstLeft();
+    //Checking horizontal spaces
+    const SvxLRSpaceItem hMasterFormatSpace = tMasterFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hMasterFormatSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hMasterFormatSpace.GetRight());
+    //mirror effect should be present
+    const SvxLRSpaceItem hLeftFormatSpace = tLeftFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hLeftFormatSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hLeftFormatSpace.GetRight());
+    const SvxLRSpaceItem hFirstMasterFormatSpace = tFirstMasterFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hFirstMasterFormatSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hFirstMasterFormatSpace.GetRight());
+    //mirror effect should be present
+    const SvxLRSpaceItem hFirstLeftFormatSpace = tFirstLeftFormat.GetLRSpace();
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetRight(), hFirstLeftFormatSpace.GetLeft());
+    CPPUNIT_ASSERT_EQUAL(horizontalSpace.GetLeft(), hFirstLeftFormatSpace.GetRight());
+    //Checking vertical spaces
+    const SvxULSpaceItem vMasterFormatSpace = tMasterFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vMasterFormatSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vMasterFormatSpace.GetLower());
+    const SvxULSpaceItem vLeftFormatSpace = tLeftFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vLeftFormatSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vLeftFormatSpace.GetLower());
+    const SvxULSpaceItem vFirstMasterFormatSpace = tFirstMasterFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vFirstMasterFormatSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vFirstMasterFormatSpace.GetLower());
+    const SvxULSpaceItem vFirstLeftFormatSpace = tFirstLeftFormat.GetULSpace();
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vFirstLeftFormatSpace.GetUpper());
+    CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vFirstLeftFormatSpace.GetLower());
+    xSourceDoc->dispose();
 }
 
 void SwUiWriterTest::testSearchWithTransliterate()
