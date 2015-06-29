@@ -306,6 +306,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             }
         }
     }
+
     else
     {
         // create the dialog
