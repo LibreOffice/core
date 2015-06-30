@@ -126,9 +126,8 @@ namespace svxform
         };
 
         typedef ::std::set< ControlData, ControlDataCompare > ControlBag;
-        typedef ::com::sun::star::awt::XVclWindowPeer                                       WindowPeer;
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >   WindowPeerRef;
-        typedef ::std::set< WindowPeerRef, ::comphelper::OInterfaceCompare< WindowPeer > >  PeerBag;
+        typedef ::std::set< css::uno::Reference< css::awt::XVclWindowPeer >,
+                            ::comphelper::OInterfaceCompare< css::awt::XVclWindowPeer > >  PeerBag;
 
         PeerBag     m_aColorableControls;
         PeerBag     m_aNonColorableControls;

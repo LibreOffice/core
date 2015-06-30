@@ -68,35 +68,18 @@ namespace xforms
  */
 typedef cppu::ImplInheritanceHelper<
     PropertySetBase,
-    com::sun::star::xforms::XModel2,
-    com::sun::star::xforms::XFormsUIHelper1,
-    com::sun::star::util::XUpdatable,
-    com::sun::star::lang::XUnoTunnel,
+    css::xforms::XModel2,
+    css::xforms::XFormsUIHelper1,
+    css::util::XUpdatable,
+    css::lang::XUnoTunnel,
     css::lang::XServiceInfo
 > Model_t;
 class Model : public Model_t
 {
     // a number of local typedefs, to make the remaining header readable
-    typedef com::sun::star::uno::Reference<com::sun::star::xml::dom::XDocument> XDocument_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> XNode_t;
-    typedef com::sun::star::lang::IndexOutOfBoundsException IndexOutOfBoundsException_t;
-    typedef com::sun::star::lang::IllegalArgumentException IllegalArgumentException_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> XPropertySet_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository> XDataTypeRepository_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> XNameContainer_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::xforms::XSubmission> XSubmission_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::frame::XModel> Frame_XModel_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::xforms::XModel> XModel_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::task::XInteractionHandler> XInteractionHandler_t;
+    typedef css::uno::Reference<css::xml::dom::XNode> XNode_t;
+    typedef css::uno::Reference<css::beans::XPropertySet> XPropertySet_t;
 
-    typedef com::sun::star::uno::Reference<com::sun::star::container::XSet> XSet_t;
-    typedef com::sun::star::beans::PropertyVetoException PropertyVetoException_t;
-    typedef com::sun::star::beans::UnknownPropertyException UnknownPropertyException_t;
-    typedef com::sun::star::util::VetoException VetoException_t;
-    typedef com::sun::star::lang::WrappedTargetException WrappedTargetException_t;
-    typedef com::sun::star::uno::RuntimeException RuntimeException_t;
-    typedef com::sun::star::uno::Any Any_t;
-    typedef com::sun::star::uno::Sequence<sal_Int8> IntSequence_t;
     typedef std::multimap<XNode_t,std::pair<void*,MIP> > MIPs_t;
 
 
@@ -107,18 +90,18 @@ private:
     SubmissionCollection* mpSubmissions;    /// the submissions
     InstanceCollection* mpInstances;        /// the instance(s)
 
-    XDataTypeRepository_t mxDataTypes;      /// the XSD data-types used
-    XDocument_t mxForeignSchema;            /// the XSD-schema part we cannot
+    css::uno::Reference<css::xforms::XDataTypeRepository> mxDataTypes;      /// the XSD data-types used
+    css::uno::Reference<css::xml::dom::XDocument> mxForeignSchema;            /// the XSD-schema part we cannot
                                             /// map onto data types
     OUString msSchemaRef;              /// xforms:model/@schema attribute
 
-    XNameContainer_t mxNamespaces;          /// namespaces for entire model
+    css::uno::Reference<css::container::XNameContainer> mxNamespaces;          /// namespaces for entire model
 
 
     // references to mpBindings/mpSubmissions, for UNO reference counting
-    XSet_t mxBindings;
-    XSet_t mxSubmissions;
-    XSet_t mxInstances;
+    css::uno::Reference<css::container::XSet> mxBindings;
+    css::uno::Reference<css::container::XSet> mxSubmissions;
+    css::uno::Reference<css::container::XSet> mxInstances;
 
     MIPs_t maMIPs;                          /// map nodes to their MIPs
 
@@ -137,25 +120,25 @@ public:
     virtual ~Model() throw();
 
     // get Model implementation from API object
-    static Model* getModel( const com::sun::star::uno::Reference<com::sun::star::xforms::XModel>& );
+    static Model* getModel( const css::uno::Reference<css::xforms::XModel>& );
 
     xforms::EvaluationContext getEvaluationContext();
 
 
-    static IntSequence_t getUnoTunnelID();
+    static css::uno::Sequence<sal_Int8> getUnoTunnelID();
 
 
     // get/set that part of the schema, that we can't interpret as data types
-    XDocument_t getForeignSchema() const { return mxForeignSchema;}
-    void setForeignSchema( const XDocument_t& );
+    css::uno::Reference<css::xml::dom::XDocument> getForeignSchema() const { return mxForeignSchema;}
+    void setForeignSchema( const css::uno::Reference<css::xml::dom::XDocument>& );
 
     // get/set the xforms:model/@schema attribute
     OUString getSchemaRef() const { return msSchemaRef;}
     void setSchemaRef( const OUString& );
 
     // get/set namespaces for entire model
-    XNameContainer_t getNamespaces() const { return mxNamespaces;}
-    void setNamespaces( const XNameContainer_t& );
+    css::uno::Reference<css::container::XNameContainer> getNamespaces() const { return mxNamespaces;}
+    void setNamespaces( const css::uno::Reference<css::container::XNameContainer>& );
 
     // get/set the ExternalData property
     bool getExternalData() const { return mbExternalData;}
@@ -210,77 +193,77 @@ public:
 
 
     virtual OUString SAL_CALL getID()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL setID( const OUString& sID )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL initialize()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL rebuild()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL recalculate()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL revalidate()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL refresh()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL submit( const OUString& sID )
-        throw( VetoException_t, WrappedTargetException_t, RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::util::VetoException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL submitWithInteraction( const OUString& id, const XInteractionHandler_t& _rxHandler )
-        throw( VetoException_t, WrappedTargetException_t, RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL submitWithInteraction( const OUString& id, const css::uno::Reference<css::task::XInteractionHandler>& _rxHandler )
+        throw( css::util::VetoException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual XDataTypeRepository_t SAL_CALL getDataTypeRepository(  )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xforms::XDataTypeRepository> SAL_CALL getDataTypeRepository(  )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     // XModel: instance management
 
-    virtual XSet_t SAL_CALL getInstances()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::container::XSet> SAL_CALL getInstances()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual XDocument_t SAL_CALL getInstanceDocument( const OUString& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xml::dom::XDocument> SAL_CALL getInstanceDocument( const OUString& )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual XDocument_t SAL_CALL getDefaultInstance()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xml::dom::XDocument> SAL_CALL getDefaultInstance()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
     // XModel: binding management
 
     virtual XPropertySet_t SAL_CALL createBinding()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual XPropertySet_t SAL_CALL cloneBinding( const XPropertySet_t& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual XPropertySet_t SAL_CALL getBinding( const OUString& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual XSet_t SAL_CALL getBindings()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::container::XSet> SAL_CALL getBindings()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     // XModel: submission management
 
-    virtual XSubmission_t SAL_CALL createSubmission()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xforms::XSubmission> SAL_CALL createSubmission()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual XSubmission_t SAL_CALL cloneSubmission( const XPropertySet_t& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xforms::XSubmission> SAL_CALL cloneSubmission( const XPropertySet_t& )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual XSubmission_t SAL_CALL getSubmission( const OUString& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::xforms::XSubmission> SAL_CALL getSubmission( const OUString& )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual XSet_t SAL_CALL getSubmissions()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::container::XSet> SAL_CALL getSubmissions()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XPropertySet
 
@@ -308,7 +291,7 @@ public:
         throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { return PropertySetBase::getPropertySetInfo(); }
 
-   virtual void SAL_CALL setPropertyValue(const OUString& p1, const com::sun::star::uno::Any& p2)
+   virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2)
         throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
         { PropertySetBase::setPropertyValue(p1, p2); }
 
@@ -319,10 +302,10 @@ public:
 
     /// determine a reasonable control service for a given node
     /// (based on data type MIP assigned to the node)
-    virtual OUString SAL_CALL getDefaultServiceNameForNode( const XNode_t& xNode ) throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getDefaultServiceNameForNode( const XNode_t& xNode ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// call getDefaultBindingExpressionForNode with default evaluation context
-    virtual OUString SAL_CALL getDefaultBindingExpressionForNode( const XNode_t& xNode ) throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getDefaultBindingExpressionForNode( const XNode_t& xNode ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// determine a reasonable default binding expression for a given node
     /// and a given evaluation context
@@ -333,88 +316,88 @@ public:
 
     virtual OUString SAL_CALL getNodeDisplayName( const XNode_t&,
                                                        sal_Bool bDetail )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getNodeName( const XNode_t& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getBindingName( const XPropertySet_t&,
                                                    sal_Bool bDetail )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getSubmissionName( const XPropertySet_t&,
                                                       sal_Bool bDetail )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual XPropertySet_t SAL_CALL cloneBindingAsGhost( const XPropertySet_t& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeBindingIfUseless( const XPropertySet_t& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual XDocument_t SAL_CALL newInstance( const OUString& sName,
+    virtual css::uno::Reference<css::xml::dom::XDocument> SAL_CALL newInstance( const OUString& sName,
                                               const OUString& sURL,
                                               sal_Bool bURLOnce )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL renameInstance( const OUString& sFrom,
                                           const OUString& sTo,
                                           const OUString& sURL,
                                           sal_Bool bURLOnce )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeInstance( const OUString& sName )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
-    virtual XModel_t SAL_CALL newModel( const Frame_XModel_t& xComponent,
+    virtual css::uno::Reference<css::xforms::XModel> SAL_CALL newModel( const css::uno::Reference<css::frame::XModel>& xComponent,
                                         const OUString& sName )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL renameModel( const Frame_XModel_t& xComponent,
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL renameModel( const css::uno::Reference<css::frame::XModel>& xComponent,
                                        const OUString& sFrom,
                                        const OUString& sTo )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL removeModel( const Frame_XModel_t& xComponent,
+    virtual void SAL_CALL removeModel( const css::uno::Reference<css::frame::XModel>& xComponent,
                                        const OUString& sName )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     virtual XNode_t SAL_CALL createElement( const XNode_t& xParent,
                                             const OUString& sName )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual XNode_t SAL_CALL createAttribute( const XNode_t& xParent,
                                               const OUString& sName )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual XNode_t SAL_CALL renameNode( const XNode_t& xNode,
                                          const OUString& sName )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual XPropertySet_t SAL_CALL getBindingForNode( const XNode_t&,
                                                        sal_Bool bCreate )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeBindingForNode( const XNode_t& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getResultForExpression(
         const XPropertySet_t& xBinding,
         sal_Bool bIsBindingExpression,
         const OUString& sExpression )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL isValidXMLName( const OUString& sName )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL isValidPrefixName( const OUString& sName )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL setNodeValue(
         const XNode_t& xNode,
         const OUString& sValue )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -423,23 +406,23 @@ public:
 
 public:
     virtual void SAL_CALL update()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     // XUnoTunnel
 
 
 public:
-    virtual sal_Int64 SAL_CALL getSomething( const IntSequence_t& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<sal_Int8>& )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     // XTypeProvider::getImplementationId
 
 
 public:
-    virtual IntSequence_t SAL_CALL getImplementationId()
-        throw( RuntimeException_t ) SAL_OVERRIDE;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
+        throw( css::uno::RuntimeException ) SAL_OVERRIDE;
 
     OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

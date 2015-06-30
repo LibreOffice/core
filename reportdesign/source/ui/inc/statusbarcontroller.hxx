@@ -27,13 +27,11 @@
 class SfxStatusBarControl;
 namespace rptui
 {
-    typedef com::sun::star::uno::Reference< com::sun::star::frame::XStatusbarController > TStatusbarRef;
-
     typedef ::cppu::ImplHelper1 <   ::com::sun::star::lang::XServiceInfo> OStatusbarController_BASE;
     class OStatusbarController : public ::svt::StatusbarController,
                                  public OStatusbarController_BASE
     {
-        TStatusbarRef   m_rController;
+        css::uno::Reference< css::frame::XStatusbarController >  m_rController;
         sal_uInt16      m_nSlotId;
         sal_uInt16      m_nId;
     public:

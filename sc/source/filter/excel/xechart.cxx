@@ -329,7 +329,7 @@ const XclChFormatInfo& XclExpChRoot::GetFormatInfo( XclChObjectType eObjType ) c
     return mxChData->mxFmtInfoProv->GetFormatInfo( eObjType );
 }
 
-void XclExpChRoot::InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const
+void XclExpChRoot::InitConversion( css::uno::Reference< css::chart2::XChartDocument > xChartDoc, const Rectangle& rChartRect ) const
 {
     mxChData->InitConversion( GetRoot(), xChartDoc, rChartRect );
 }
@@ -1962,7 +1962,7 @@ bool XclExpChSeries::ConvertDataSeries(
     return bOk;
 }
 
-bool XclExpChSeries::ConvertStockSeries( XDataSeriesRef xDataSeries,
+bool XclExpChSeries::ConvertStockSeries( css::uno::Reference< css::chart2::XDataSeries > xDataSeries,
         const OUString& rValueRole, sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx, bool bCloseSymbol )
 {
     bool bOk = false;
@@ -2070,7 +2070,7 @@ void XclExpChSeries::InitFromParent( const XclExpChSeries& rParent )
     maData.mnValueCount = rParent.maData.mnValueCount;
 }
 
-void XclExpChSeries::CreateTrendLines( XDataSeriesRef xDataSeries )
+void XclExpChSeries::CreateTrendLines( css::uno::Reference< css::chart2::XDataSeries > xDataSeries )
 {
     Reference< XRegressionCurveContainer > xRegCurveCont( xDataSeries, UNO_QUERY );
     if( xRegCurveCont.is() )
@@ -3020,7 +3020,7 @@ void XclExpChAxis::Convert( Reference< XAxis > xAxis, Reference< XAxis > xCrossi
     }
 }
 
-void XclExpChAxis::ConvertWall( XDiagramRef xDiagram )
+void XclExpChAxis::ConvertWall( css::uno::Reference< css::chart2::XDiagram > xDiagram )
 {
     if( xDiagram.is() ) switch( GetAxisType() )
     {

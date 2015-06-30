@@ -94,14 +94,12 @@ private:
 class ScSpellingEngine : public ScConversionEngineBase
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellChecker1 > XSpellCheckerRef;
-
     explicit            ScSpellingEngine(
                             SfxItemPool* pEnginePool,
                             ScViewData& rViewData,
                             ScDocument* pUndoDoc,
                             ScDocument* pRedoDoc,
-                            XSpellCheckerRef xSpeller );
+                            css::uno::Reference< css::linguistic2::XSpellChecker1 > xSpeller );
 
     /** Checks spelling of all cells in the selection or sheet. */
     virtual void        ConvertAll( EditView& rEditView ) SAL_OVERRIDE;
