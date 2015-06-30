@@ -40,19 +40,18 @@ OUString OverflowingText::GetHeadingLines() const
 }
 
 
-OFlowChainedText::OFlowChainedText(Outliner *pOutl, OutlinerParaObject* pTextToBeMerged)
-  : mpTextToBeMerged(pTextToBeMerged)
+OFlowChainedText::OFlowChainedText(Outliner *pOutl)
 {
     mpOverflowingTxt = pOutl->GetOverflowingText();
     mpNonOverflowingTxt = pOutl->GetNonOverflowingText();
 }
 
-OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOutliner)
+OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOutliner, OutlinerParaObject *pTextToBeMerged)
 {
-    if (mpOverflowingTxt == NULL)
+    if (mpOverflowingTxt == NULL || pTextToBeMerged == NULL)
         return NULL;
 
-    pOutliner->SetText(*mpTextToBeMerged);
+    pOutliner->SetText(*pTextToBeMerged);
 
     // Get text of first paragraph of destination box
     Paragraph *pOldPara0 = pOutliner->GetParagraph(0);

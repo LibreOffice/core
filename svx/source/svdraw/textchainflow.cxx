@@ -87,7 +87,7 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     bUnderflow = !bIsPageOverflow &&  mpNextLink && mpNextLink->HasText();
 
     // Set (Non)OverflowingTxt here
-    mpOverflChText = bOverflow ? new OFlowChainedText(pFlowOutl, mpNextLink->GetOutlinerParaObject()) : NULL;
+    mpOverflChText = bOverflow ? new OFlowChainedText(pFlowOutl) : NULL;
 
     //mpOverflowingTxt = bOverflow ? pFlowOutl->GetOverflowingText() : NULL;
     //mpNonOverflowingTxt = bOverflow ? pFlowOutl->GetNonOverflowingText() : NULL;
@@ -197,7 +197,7 @@ SdrTextObj *TextChainFlow::GetNextLink() const
 
 OutlinerParaObject *TextChainFlow::impGetOverflowingParaObject(SdrOutliner *pOutliner)
 {
-    return mpOverflChText->CreateOverflowingParaObject(pOutliner);
+    return mpOverflChText->CreateOverflowingParaObject(pOutliner, mpNextLink->GetOutlinerParaObject());
 }
 
 TextChain *TextChainFlow::GetTextChain()

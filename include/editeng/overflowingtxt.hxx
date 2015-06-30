@@ -85,12 +85,10 @@ class EDITENG_DLLPUBLIC NonOverflowingText {
 */
 class EDITENG_DLLPUBLIC OFlowChainedText {
     public:
-    OFlowChainedText(Outliner *, OutlinerParaObject *);
+    OFlowChainedText(Outliner *);
 
-    OutlinerParaObject *CreateOverflowingParaObject(Outliner *);
+    OutlinerParaObject *CreateOverflowingParaObject(Outliner *, OutlinerParaObject *);
     OutlinerParaObject *CreateNonOverflowingParaObject(Outliner *);
-
-    OutlinerParaObject *GetTextToBeMerged() const { return mpTextToBeMerged; }
 
     protected:
     void impSetOutlinerToEmptyTxt(Outliner *);
@@ -101,7 +99,6 @@ class EDITENG_DLLPUBLIC OFlowChainedText {
     NonOverflowingText *mpNonOverflowingTxt;
     OverflowingText *mpOverflowingTxt;
 
-    OutlinerParaObject *mpTextToBeMerged;
 
 };
 
