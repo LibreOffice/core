@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_82c10f83",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2462,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-06-30T07:18:02Z",
+      "side": 1,
+      "message": "Please initialize bShapeNameSet in the ctor.",
+      "revId": "4763d9c911022a4c715bd8d1e0b1e2f63d5b8307",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
