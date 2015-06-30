@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_42e4773a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/Sidebar.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1001045
+      },
+      "writtenOn": "2015-06-30T07:03:20Z",
+      "side": 1,
+      "message": "Why this doesn\u0027t work in writer? I expected this line to similarly hide PropertyAreaPanel like 2 others do in Calc and DrawImpress.",
+      "range": {
+        "startLine": 397,
+        "startChar": 12,
+        "endLine": 397,
+        "endChar": 48
+      },
+      "revId": "7bb74f1a73b953ef2263f25b0df202e8a588307e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
