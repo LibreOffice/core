@@ -94,6 +94,7 @@ class TextChainFlow {
 };
 
 
+// NOTE: EditingTextChainFlow might be strongly coupled with behavior in SdrTextObj::onChainingEvent
 class EditingTextChainFlow : public TextChainFlow
 {
     public:

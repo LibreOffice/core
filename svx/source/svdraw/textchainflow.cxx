@@ -122,9 +122,7 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
     OutlinerParaObject *pNextLinkWholeText = mpNextLink->GetOutlinerParaObject();
 
     // making whole text
-    OutlinerParaObject *pCurText;   // XXX: at next line we have editing outliner in editing version
-    //pCurText = pOutl->CreateParaObject();
-
+    OutlinerParaObject *pCurText;
     // We saved this text already
     pCurText = mpUnderflowingPObj;
 
@@ -182,8 +180,6 @@ OutlinerParaObject *TextChainFlow::impGetNonOverflowingParaObject(SdrOutliner *p
 {
     return mpOverflChText->CreateNonOverflowingParaObject(pOutliner);
 }
-
-
 
 SdrTextObj *TextChainFlow::GetLinkTarget() const
 {

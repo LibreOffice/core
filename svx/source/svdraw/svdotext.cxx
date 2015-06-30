@@ -1994,7 +1994,7 @@ void SdrTextObj::onChainingEvent()
 
     // This is true during an underflow-caused overflow (with pEdtOutl->SetText())
     if (GetTextChain()->GetNilChainingEvent(this)) {
-        GetTextChain()->SetNilChainingEvent(this, false);
+
         return;
     }
 
@@ -2004,6 +2004,8 @@ void SdrTextObj::onChainingEvent()
     EditingTextChainFlow aTxtChainFlow(this);
     aTxtChainFlow.CheckForFlowEvents(pEdtOutl);
 
+    // We prevent to trigger further handling of overflow/underflow for this SdrTextObj
+    GetTextChain()->SetNilChainingEvent(this, true);
 
     if (aTxtChainFlow.IsOverflow()) {
         fprintf(stderr, "[CHAINING] Overflow going on\n");
@@ -2019,11 +2021,13 @@ void SdrTextObj::onChainingEvent()
         if (bIsOverflowFromUnderflow) {
             fprintf(stderr, "[CHAINING] Overflow going on (underflow induced)\n");
             // prevents infinite loops when setting text for editing outliner
-            GetTextChain()->SetNilChainingEvent(const_cast<SdrTextObj*>(this), true);
+
 
             aTxtChainFlow.ExecuteOverflow(&aDrawOutliner, &aDrawOutliner);
+
         }
     }
+    GetTextChain()->SetNilChainingEvent(this, false);
 }
 
 
