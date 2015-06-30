@@ -70,7 +70,6 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues(bool bCharG
         size_t nCharGrabBag = 0;
         size_t nParaGrabBag = 0;
         size_t nCellGrabBag = 0;
-        size_t nCellGrabBagSaved = 0; // How many entries do we save from the returned sequence.
         size_t nRowGrabBag = 0;
         for (MapIterator i = m_vMap.begin(); i != m_vMap.end(); ++i)
         {
@@ -79,19 +78,40 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues(bool bCharG
             else if ( i->second.getGrabBagType() == PARA_GRAB_BAG )
                 nParaGrabBag++;
             else if ( i->second.getGrabBagType() == CELL_GRAB_BAG )
-            {
                 nCellGrabBag++;
-                nCellGrabBagSaved++;
-            }
-            else if ( i->first == PROP_CELL_INTEROP_GRAB_BAG)
-            {
+            else if ( i->first == PROP_CELL_INTEROP_GRAB_BAG) {
                 uno::Sequence<beans::PropertyValue> aSeq;
                 i->second.getValue() >>= aSeq;
                 nCellGrabBag += aSeq.getLength();
-                nCellGrabBagSaved++;
             }
             else if ( i->second.getGrabBagType() == ROW_GRAB_BAG )
                 nRowGrabBag++;
+        }
+
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+        //Certain style names have to be the first elements within the property
+        //sequence otherwise they will overwrite 'hard' attributes
+        MapIterator aParaStyleIter = m_vMap.find(PROP_PARA_STYLE_NAME);
+        if( aParaStyleIter != m_vMap.end()) {
+            beans::PropertyValue aValue;
+            aValue.Name = rPropNameSupplier.GetName( aParaStyleIter->first );
+            aValue.Value = aParaStyleIter->second.getValue();
+            m_aValues.push_back(aValue);
+        }
+
+        MapIterator aCharStyleIter = m_vMap.find(PROP_CHAR_STYLE_NAME);
+        if( aCharStyleIter != m_vMap.end()) {
+            beans::PropertyValue aValue;
+            aValue.Name = rPropNameSupplier.GetName( aCharStyleIter->first );
+            aValue.Value = aCharStyleIter->second.getValue();
+            m_aValues.push_back(aValue);
+        }
+        MapIterator aNumRuleIter = m_vMap.find(PROP_NUMBERING_RULES);
+        if( aNumRuleIter != m_vMap.end()) {
+            beans::PropertyValue aValue;
+            aValue.Name = rPropNameSupplier.GetName( aNumRuleIter->first );
+            aValue.Value = aNumRuleIter->second.getValue();
+            m_aValues.push_back(aValue);
         }
 
         // If there are any grab bag properties, we need one slot for them.
@@ -103,115 +123,71 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues(bool bCharG
         beans::PropertyValue* pParaGrabBagValues = aParaGrabBagValues.getArray();
         beans::PropertyValue* pCellGrabBagValues = aCellGrabBagValues.getArray();
         beans::PropertyValue* pRowGrabBagValues = aRowGrabBagValues.getArray();
-        //style names have to be the first elements within the property sequence
-        //otherwise they will overwrite 'hard' attributes
         sal_Int32 nRowGrabBagValue = 0;
         sal_Int32 nCellGrabBagValue = 0;
         sal_Int32 nParaGrabBagValue = 0;
         sal_Int32 nCharGrabBagValue = 0;
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-        MapIterator aParaStyleIter = m_vMap.find(PROP_PARA_STYLE_NAME);
-        if( aParaStyleIter != m_vMap.end())
-        {
-            beans::PropertyValue aValue;
-            aValue.Name = rPropNameSupplier.GetName( aParaStyleIter->first );
-            aValue.Value = aParaStyleIter->second.getValue();
-            m_aValues.push_back(aValue);
-        }
 
-        MapIterator aCharStyleIter = m_vMap.find(PROP_CHAR_STYLE_NAME);
-        if( aCharStyleIter != m_vMap.end())
-        {
-            beans::PropertyValue aValue;
-            aValue.Name = rPropNameSupplier.GetName( aCharStyleIter->first );
-            aValue.Value = aCharStyleIter->second.getValue();
-            m_aValues.push_back(aValue);
-        }
-        MapIterator aNumRuleIter = m_vMap.find(PROP_NUMBERING_RULES);
-        if( aNumRuleIter != m_vMap.end())
-        {
-            beans::PropertyValue aValue;
-            aValue.Name = rPropNameSupplier.GetName( aNumRuleIter->first );
-            aValue.Value = aNumRuleIter->second.getValue();
-            m_aValues.push_back(aValue);
-        }
         MapIterator aMapIter = m_vMap.begin();
-        for( ; aMapIter != m_vMap.end(); ++aMapIter )
-        {
-            if( aMapIter != aParaStyleIter && aMapIter != aCharStyleIter && aMapIter != aNumRuleIter )
-            {
-                if ( aMapIter->second.getGrabBagType() == CHAR_GRAB_BAG )
-                {
-                    if (bCharGrabBag)
-                    {
+        for( ; aMapIter != m_vMap.end(); ++aMapIter ) {
+            if( aMapIter != aParaStyleIter && aMapIter != aCharStyleIter && aMapIter != aNumRuleIter ) {
+                if ( aMapIter->second.getGrabBagType() == CHAR_GRAB_BAG ) {
+                    if (bCharGrabBag) {
                         pCharGrabBagValues[nCharGrabBagValue].Name = rPropNameSupplier.GetName( aMapIter->first );
                         pCharGrabBagValues[nCharGrabBagValue].Value = aMapIter->second.getValue();
                         ++nCharGrabBagValue;
                     }
                 }
-                else if ( aMapIter->second.getGrabBagType() == PARA_GRAB_BAG )
-                {
+                else if ( aMapIter->second.getGrabBagType() == PARA_GRAB_BAG ) {
                     pParaGrabBagValues[nParaGrabBagValue].Name = rPropNameSupplier.GetName( aMapIter->first );
                     pParaGrabBagValues[nParaGrabBagValue].Value = aMapIter->second.getValue();
                     ++nParaGrabBagValue;
                 }
-                else if ( aMapIter->second.getGrabBagType() == CELL_GRAB_BAG )
-                {
+                else if ( aMapIter->second.getGrabBagType() == CELL_GRAB_BAG ) {
                     pCellGrabBagValues[nCellGrabBagValue].Name = rPropNameSupplier.GetName( aMapIter->first );
                     pCellGrabBagValues[nCellGrabBagValue].Value = aMapIter->second.getValue();
                     ++nCellGrabBagValue;
                 }
-                else if ( aMapIter->second.getGrabBagType() == ROW_GRAB_BAG )
-                {
+                else if ( aMapIter->second.getGrabBagType() == ROW_GRAB_BAG ) {
                     pRowGrabBagValues[nRowGrabBagValue].Name = rPropNameSupplier.GetName( aMapIter->first );
                     pRowGrabBagValues[nRowGrabBagValue].Value = aMapIter->second.getValue();
                     ++nRowGrabBagValue;
                 }
-                else
-                {
-                    if (aMapIter->first == PROP_CELL_INTEROP_GRAB_BAG)
-                    {
-                        uno::Sequence<beans::PropertyValue> aSeq;
-                        aMapIter->second.getValue() >>= aSeq;
-                        for (sal_Int32 i = 0; i < aSeq.getLength(); ++i)
-                        {
-                            pCellGrabBagValues[nCellGrabBagValue] = aSeq[i];
-                            ++nCellGrabBagValue;
-                        }
+                else if (aMapIter->first == PROP_CELL_INTEROP_GRAB_BAG) {
+                    uno::Sequence<beans::PropertyValue> aSeq;
+                    aMapIter->second.getValue() >>= aSeq;
+                    for (auto& aVal : aSeq) {
+                        pCellGrabBagValues[nCellGrabBagValue] = aVal;
+                        ++nCellGrabBagValue;
                     }
-                    else
-                    {
-                        beans::PropertyValue aValue;
-                        aValue.Name = rPropNameSupplier.GetName( aMapIter->first );
-                        aValue.Value = aMapIter->second.getValue();
-                        m_aValues.push_back(aValue);
-                    }
+                }
+                else {
+                    beans::PropertyValue aValue;
+                    aValue.Name = rPropNameSupplier.GetName( aMapIter->first );
+                    aValue.Value = aMapIter->second.getValue();
+                    m_aValues.push_back(aValue);
                 }
             }
         }
-        if (nCharGrabBag && bCharGrabBag)
-        {
+        if (nCharGrabBag && bCharGrabBag) {
             beans::PropertyValue aValue;
             aValue.Name = "CharInteropGrabBag";
             aValue.Value = uno::makeAny(aCharGrabBagValues);
             m_aValues.push_back(aValue);
         }
-        if (nParaGrabBag)
-        {
+        if (nParaGrabBag) {
             beans::PropertyValue aValue;
             aValue.Name = "ParaInteropGrabBag";
             aValue.Value = uno::makeAny(aParaGrabBagValues);
             m_aValues.push_back(aValue);
         }
-        if (nCellGrabBag)
-        {
+        if (nCellGrabBag) {
             beans::PropertyValue aValue;
             aValue.Name = "CellInteropGrabBag";
             aValue.Value = uno::makeAny(aCellGrabBagValues);
             m_aValues.push_back(aValue);
         }
-        if (nRowGrabBag)
-        {
+        if (nRowGrabBag) {
             beans::PropertyValue aValue;
             aValue.Name = "RowInteropGrabBag";
             aValue.Value = uno::makeAny(aRowGrabBagValues);
