@@ -11,11 +11,11 @@ MSVC: use WNT native Schannel SSL/TLS implementation
  CFGSET = TRUE
  RESOURCE = $(DIROBJ)\libcurl.res
  !ENDIF
-@@ -411,7 +411,7 @@
+@@ -427,7 +427,7 @@
  TARGET = $(LIBCURL_DYN_LIB_DBG)
  DIROBJ = $(CFG)
  LNK    = $(LNKDLL) $(WINLIBS) /DEBUG /out:$(DIROBJ)\$(TARGET) /IMPLIB:$(DIROBJ)\$(LIBCURL_IMP_LIB_DBG) /PDB:$(DIROBJ)\$(LIBCURL_DYN_LIB_PDB)
--CC     = $(CCDEBUG) $(RTLIBD) 
+-CC     = $(CCDEBUG) $(RTLIBD)
 +CC     = $(CCDEBUG) $(RTLIBD) $(CFLAGSWINSSL)
  CFGSET = TRUE
  RESOURCE = $(DIROBJ)\libcurl.res
