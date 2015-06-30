@@ -20,7 +20,6 @@
 #define INCLUDED_TOOLS_RC_HXX
 
 #include <tools/toolsdllapi.h>
-#include <i18nlangtag/lang.h>
 #include <tools/resmgr.hxx>
 
 class TOOLS_DLLPUBLIC Resource
