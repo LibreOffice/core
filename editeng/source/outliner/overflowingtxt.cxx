@@ -39,7 +39,8 @@ OUString OverflowingText::GetHeadingLines() const
 }
 
 
-ChainedText::ChainedText(Outliner *pOutl)
+OFlowChainedText::OFlowChainedText(Outliner *pOutl, OutlinerParaObject* pTextToBeMerged)
+  : mpTextToBeMerged(pTextToBeMerged)
 {
     // Initialize stuff here
 }

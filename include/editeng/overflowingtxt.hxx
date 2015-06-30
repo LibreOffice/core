@@ -83,13 +83,21 @@ class EDITENG_DLLPUBLIC NonOverflowingText {
  * contains and handles the state of a text broken _after_ a flow event.
  *
 */
-class EDITENG_DLLPUBLIC ChainedText {
+class EDITENG_DLLPUBLIC OFlowChainedText {
     public:
-    ChainedText(Outliner *);
+    OFlowChainedText(Outliner *, OutlinerParaObject *);
+
+    OutlinerParaObject *CreateOverflowingParaObject(Outliner *);
+    OutlinerParaObject *CreateNonOverflowingParaObject(Outliner *);
+
+    OutlinerParaObject *GetTextToBeMerged() const { return mpTextToBeMerged; }
 
     private:
     NonOverflowingText *mpNonOverflowingTxt;
     OverflowingText *mpOverflowingTxt;
+
+    OutlinerParaObject *mpTextToBeMerged;
+
 };
 
 #endif
