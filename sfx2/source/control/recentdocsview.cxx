@@ -267,8 +267,9 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const Rectangle &
     if (mItemList.empty())
     {
         // No recent files to be shown yet. Show a welcome screen.
-        rRenderContext.Push(PushFlags::FONT);
+        rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
         SetMessageFont(rRenderContext);
+        SetTextColor(maTextColor);
 
         long nTextHeight = rRenderContext.GetTextHeight();
 
