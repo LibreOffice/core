@@ -232,10 +232,6 @@ public:
 
     void ShowTooltips( bool bShowTooltips );
 
-    Color GetColor() const { return maColor; }
-
-    bool IsColor() const { return maColor.GetTransparency() == 0; }
-
     void filterItems (const boost::function<bool (const ThumbnailViewItem*) > &func);
 
     void sortItems (const boost::function<bool (const ThumbnailViewItem*,
@@ -283,14 +279,12 @@ protected:
 
     friend class ThumbnailViewAcc;
     friend class ThumbnailViewItemAcc;
-    using Control::ImplInitSettings;
     using Window::ImplInit;
 
     void CalculateItemPositions (bool bScrollBarUsed = false);
     void MakeItemVisible( sal_uInt16 nId );
 
     SFX2_DLLPRIVATE void         ImplInit();
-    SFX2_DLLPRIVATE void         ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
 
     virtual void ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
@@ -330,7 +324,10 @@ protected:
     bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;
     bool mbShowTooltips : 1;
-    Color maColor;
+    Color maFillColor;
+    Color maTextColor;
+    Color maHighlightColor;
+    Color maHighlightTextColor;
 
     Link<> maItemStateHdl;
     ThumbnailItemAttributes* mpItemAttrs;
