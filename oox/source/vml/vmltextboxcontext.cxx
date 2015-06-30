@@ -212,6 +212,8 @@ TextBoxContext::TextBoxContext( ContextHandler2Helper& rParent, TextBox& rTextBo
                 rTextBox.mrTypeModel.mbAutoHeight = true;
             else if (aName == "mso-layout-flow-alt")
                 rTextBox.mrTypeModel.maLayoutFlowAlt = aValue;
+            else if (aName == "mso-next-textbox")
+                rTextBox.msNextTextbox = aValue;
             else
                 SAL_WARN("oox", "unhandled style property: " << aName);
         }
