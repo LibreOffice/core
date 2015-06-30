@@ -26,12 +26,13 @@ class NonOverflowingText;
 class OverflowingText;
 class TextChain;
 class OutlinerParaObject;
+class OFlowChainedText;
 
-// XXX: Specialize class for Editing mode and non editing mode?
 // XXX: const qualifiers?
 
 class TextChainFlow {
 
+    //  -- Public Members --
     public:
     TextChainFlow(SdrTextObj *pChainTarget);
     virtual ~TextChainFlow();
@@ -39,16 +40,22 @@ class TextChainFlow {
     // Check for flow events in Outliner
     virtual void CheckForFlowEvents(SdrOutliner *);
 
-    bool IsOverflow();
-    bool IsUnderflow();
-
     void ExecuteUnderflow(SdrOutliner *);
 
     // Uses two outliners: one for the non-overfl text and one for overflowing (might be the same)
     virtual void ExecuteOverflow(SdrOutliner *, SdrOutliner *);
 
-    SdrTextObj *GetLinkTarget();
+    // Getters
 
+    bool IsOverflow() const;
+    bool IsUnderflow() const;
+
+    SdrTextObj *GetLinkTarget() const;
+    SdrTextObj *GetNextLink() const;
+
+    OFlowChainedText *GetOverflowChainedText() const;
+
+    //  -- Protected Members --
     protected:
 
     void impCheckForFlowEvents(SdrOutliner *, SdrOutliner *);
@@ -62,11 +69,11 @@ class TextChainFlow {
 
     OutlinerParaObject *impGetNonOverflowingParaObject(SdrOutliner *pOutliner);
     OutlinerParaObject *impGetOverflowingParaObject(SdrOutliner *pOutliner);
+    // impGetMergedUnderflowingParaObject merges underflowing text with the one in the next box
+    OutlinerParaObject *impGetMergedUnderflowingParaObject(SdrOutliner *pOutliner);
 
+    //  -- Private Members --
     private:
-
-    void impSetOutlinerToEmptyTxt(SdrOutliner *pOutliner);
-
     SdrTextObj *mpTargetLink;
     SdrTextObj *mpNextLink;
 
@@ -77,8 +84,10 @@ class TextChainFlow {
     bool bUnderflow;
     bool bOverflow;
 
-    OverflowingText *mpOverflowingTxt;
-    NonOverflowingText *mpNonOverflowingTxt;
+    OFlowChainedText *mpOverflChText;
+
+    //OverflowingText *mpOverflowingTxt;
+    //NonOverflowingText *mpNonOverflowingTxt;
 
     OutlinerParaObject *mpUnderflowingPObj;
 
@@ -92,7 +101,6 @@ class EditingTextChainFlow : public TextChainFlow
     virtual void CheckForFlowEvents(SdrOutliner *) SAL_OVERRIDE;
 
     //virtual void ExecuteOverflow(SdrOutliner *, SdrOutliner *) SAL_OVERRIDE;
-
 
     protected:
     virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *) SAL_OVERRIDE;

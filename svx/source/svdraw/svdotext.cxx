@@ -50,7 +50,6 @@
 #include <svx/textchainflow.hxx>
 #include <svl/style.hxx>
 #include <editeng/editeng.hxx>
-#include <editeng/overflowingtxt.hxx>
 #include <svl/itemiter.hxx>
 #include <sdr/properties/textproperties.hxx>
 #include <vcl/metaact.hxx>

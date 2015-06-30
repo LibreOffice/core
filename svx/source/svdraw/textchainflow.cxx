@@ -34,8 +34,9 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
 
     bUnderflow = bOverflow = false;
 
-    mpOverflowingTxt = NULL;
-    mpNonOverflowingTxt = NULL;
+    mpOverflChText = NULL;
+    //mpOverflowingTxt = NULL;
+    //mpNonOverflowingTxt = NULL;
 
     mpUnderflowingPObj = NULL;
 
@@ -86,9 +87,10 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     bUnderflow = !bIsPageOverflow &&  mpNextLink && mpNextLink->HasText();
 
     // Set (Non)OverflowingTxt here
+    mpOverflChText = bOverflow ? new OFlowChainedText(pFlowOutl, mpNextLink->GetOutlinerParaObject()) : NULL;
 
-    mpOverflowingTxt = bOverflow ? pFlowOutl->GetOverflowingText() : NULL;
-    mpNonOverflowingTxt = bOverflow ? pFlowOutl->GetNonOverflowingText() : NULL;
+    //mpOverflowingTxt = bOverflow ? pFlowOutl->GetOverflowingText() : NULL;
+    //mpNonOverflowingTxt = bOverflow ? pFlowOutl->GetNonOverflowingText() : NULL;
 
     // Set current underflowing text (if any)
     mpUnderflowingPObj = bUnderflow ? pFlowOutl->CreateParaObject() : NULL;
@@ -101,12 +103,12 @@ void TextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
 }
 
 
-bool TextChainFlow::IsOverflow()
+bool TextChainFlow::IsOverflow() const
 {
     return bOverflow;
 }
 
-bool TextChainFlow::IsUnderflow()
+bool TextChainFlow::IsUnderflow() const
 {
     return bUnderflow;
 }
@@ -178,124 +180,38 @@ void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
 
 OutlinerParaObject *TextChainFlow::impGetNonOverflowingParaObject(SdrOutliner *pOutliner)
 {
-    if (mpNonOverflowingTxt == NULL)
-        return NULL;
-
-    if (mpNonOverflowingTxt->mPreOverflowingTxt == "" &&
-        mpNonOverflowingTxt->mpHeadParas != NULL) {
-        // Only (possibly empty) paragraphs before overflowing one
-        pOutliner->SetText(*mpNonOverflowingTxt->mpHeadParas);
-    } else { // We have to include the non-overflowing lines from the overfl. para
-
-        // first make a ParaObject for the strings
-        impSetOutlinerToEmptyTxt(pOutliner);
-        Paragraph *pTmpPara0 = pOutliner->GetParagraph(0);
-        pOutliner->SetText(mpNonOverflowingTxt->mPreOverflowingTxt, pTmpPara0);
-        OutlinerParaObject *pPObj = pOutliner->CreateParaObject();
-        //pOutliner->Clear();
-        //pOutliner->SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
-
-        if (mpNonOverflowingTxt->mpHeadParas != NULL) {
-            pOutliner->SetText(*mpNonOverflowingTxt->mpHeadParas);
-            pOutliner->AddText(*pPObj);
-         } else  if (mpNonOverflowingTxt->mPreOverflowingTxt != "") { // only preoverflowing txt
-            //OutlinerParaObject *pEmptyPObj = pOutliner->GetEmptyParaObject();
-            //pOutliner->SetText(*pEmptyPObj);
-            pOutliner->SetText(*pPObj);
-        } else { // no text // This case is redundant but it doesn't hurt for now
-            pOutliner->Clear();
-        }
-    }
-
-     return pOutliner->CreateParaObject();
+    return mpOverflChText->CreateNonOverflowingParaObject(pOutliner);
 }
 
-void TextChainFlow::impSetOutlinerToEmptyTxt(SdrOutliner *pOutliner)
-{
-    OutlinerParaObject *pEmptyTxt = pOutliner->GetEmptyParaObject();
-    pOutliner->SetText(*pEmptyTxt);
-}
 
-SdrTextObj *TextChainFlow::GetLinkTarget()
+
+SdrTextObj *TextChainFlow::GetLinkTarget() const
 {
     return mpTargetLink;
 }
 
+SdrTextObj *TextChainFlow::GetNextLink() const
+{
+    return mpNextLink;
+}
+
 OutlinerParaObject *TextChainFlow::impGetOverflowingParaObject(SdrOutliner *pOutliner)
 {
-
-    if (mpOverflowingTxt == NULL)
-        return NULL;
-
-    OutlinerParaObject *pCurTxt = mpNextLink->GetOutlinerParaObject();
-    pOutliner->SetText(*pCurTxt);
-
-    // Get text of first paragraph of destination box
-    Paragraph *pOldPara0 = pOutliner->GetParagraph(0);
-    OUString aOldPara0Txt;
-    if (pOldPara0)
-        aOldPara0Txt = pOutliner->GetText(pOldPara0);
-
-    // Get other paras of destination box (from second on)
-    OutlinerParaObject *pOldParasTail = NULL;
-    if (pOutliner->GetParagraphCount() > 1)
-        pOldParasTail = pOutliner->CreateParaObject(1);
-
-    // Create ParaObject appending old first para in the dest. box
-    //   to last part of overflowing text
-    Paragraph *pTmpPara0 = NULL;
-    OutlinerParaObject *pJoiningPara = NULL;
-
-    if (pOldPara0) {
-        //pOutliner->Clear(); // you need a clear outliner here
-        impSetOutlinerToEmptyTxt(pOutliner);
-
-        pTmpPara0 = pOutliner->GetParagraph(0);
-        pOutliner->SetText(mpOverflowingTxt->GetEndingLines() + aOldPara0Txt, pTmpPara0);
-        pJoiningPara = pOutliner->CreateParaObject();
-    }
-
-    // Create a Para Object out of mpMidParas
-    // (in order to use the SfxItemPool of the current outliner
-    //  instead of the ones currently in mpMidParas)
-
-    // start actual composition
-    //pOutliner->Clear();
-    impSetOutlinerToEmptyTxt(pOutliner);
-
-    // Set headText at the beginning of box
-    OUString aHeadTxt = mpOverflowingTxt->GetHeadingLines();
-    // If we haven't used heading text yet
-    if (mpOverflowingTxt->HasOtherParas()) {
-        Paragraph *pNewPara0 = pOutliner->GetParagraph(0);
-        pOutliner->SetText(aHeadTxt, pNewPara0);
-    }
-
-    // Set all the intermediate Paras
-    if (mpOverflowingTxt->mpMidParas)
-        pOutliner->AddText(*mpOverflowingTxt->mpMidParas);
-
-    // Append old first para in the destination box to
-    //   last part of overflowing text
-    if (pJoiningPara && mpOverflowingTxt->HasOtherParas())
-        pOutliner->AddText(*pJoiningPara);
-    // this second case is if there is to avoid getting an empty line before pJoiningPara
-    else if (pJoiningPara && !mpOverflowingTxt->HasOtherParas())
-        pOutliner->SetText(*pJoiningPara);
-
-    // Append all other old paras
-    if (pOldParasTail)
-        pOutliner->AddText(*pOldParasTail);
-
-    // Draw everything
-    OutlinerParaObject *pNewText = pOutliner->CreateParaObject();
-    return pNewText;
+    return mpOverflChText->CreateOverflowingParaObject(pOutliner);
 }
 
 TextChain *TextChainFlow::GetTextChain()
 {
     return mpTextChain;
 }
+
+OFlowChainedText *TextChainFlow::GetOverflowChainedText() const
+{
+    return mpOverflChText;
+}
+
+
+// EditingTextChainFlow
 
 EditingTextChainFlow::EditingTextChainFlow(SdrTextObj *pLinkTarget) :
     TextChainFlow(pLinkTarget)
@@ -366,5 +282,6 @@ void EditingTextChainFlow::impSetFlowOutlinerParams(SdrOutliner *pFlowOutl, SdrO
  *
  *
  *
+ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
