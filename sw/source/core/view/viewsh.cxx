@@ -1674,7 +1674,7 @@ namespace
 class RenderContextGuard
 {
     VclPtr<vcl::RenderContext>& m_pRef;
-    vcl::RenderContext* m_pOriginalValue;
+    VclPtr<vcl::RenderContext> m_pOriginalValue;
     SwViewShell* m_pShell;
 
 public:
