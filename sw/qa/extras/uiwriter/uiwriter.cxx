@@ -1399,8 +1399,7 @@ void SwUiWriterTest::testEmbeddedDataSource()
 
 void SwUiWriterTest::testUnoCursorPointer()
 {
-    auto xDocComponent(loadFromDesktop(
-            getURLFromSrc(DATA_DIRECTORY) + "empty.odt",
+    auto xDocComponent(loadFromDesktop("private:factory/swriter",
             "com.sun.star.text.TextDocument"));
     auto pxDocDocument(
             dynamic_cast<SwXTextDocument *>(xDocComponent.get()));
