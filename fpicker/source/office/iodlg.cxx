@@ -303,7 +303,7 @@ SvtFileDialog::SvtFileDialog
     WinBits nBits,
     WinBits nExtraBits
 ) :
-    ModalDialog( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
+    SvtFileDialog_Base( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
 
     ,_pCbReadOnly( NULL )
     ,_pCbLinkBox( NULL)
@@ -327,7 +327,7 @@ SvtFileDialog::SvtFileDialog
 
 
 SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, WinBits nBits )
-    :ModalDialog( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
+    :SvtFileDialog_Base( _pParent, "ExplorerFileDialog", "fps/ui/explorerfiledialog.ui" )
     ,_pCbReadOnly( NULL )
     ,_pCbLinkBox( NULL)
     ,_pCbPreviewBox( NULL )

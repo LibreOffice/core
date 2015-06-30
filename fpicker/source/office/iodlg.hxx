@@ -72,6 +72,46 @@ class SvtFileDialogFilter_Impl;
 
 #define FILEDIALOG_FILTER_ALL   "*.*"
 
+// SvtFileDialog_Base
+
+class SvtFileDialog_Base : public ModalDialog, public ::svt::IFilePickerController
+{
+public:
+    SvtFileDialog_Base( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription )
+    : ModalDialog( pParent, rID, rUIXMLDescription )
+    {
+    }
+
+    virtual SvtFileView* GetView() = 0;
+
+    virtual void SetHasFilename( bool bHasFilename ) = 0;
+    virtual void SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) = 0;
+    virtual const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const = 0;
+    virtual void SetStandardDir( const OUString& rStdDir ) = 0;
+    virtual const OUString& GetStandardDir() const = 0;
+    virtual void SetPath( const OUString& rNewURL ) = 0;
+    virtual const OUString& GetPath() = 0;
+    virtual std::vector<OUString> GetPathList() const = 0;
+    virtual bool ContentIsFolder( const OUString& rURL ) = 0;
+
+    virtual void AddFilter( const OUString& rFilter, const OUString& rType ) = 0;
+    virtual void AddFilterGroup( const OUString& _rFilter,
+                                const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters ) = 0;
+    virtual OUString GetCurFilter() const = 0;
+    virtual void SetCurFilter( const OUString& rFilter ) = 0;
+
+    virtual void SetFileCallback( ::svt::IFilePickerListener *pNotifier ) = 0;
+
+    virtual void EnableAutocompletion( bool _bEnable = true ) = 0;
+
+    virtual sal_Int32 getTargetColorDepth() = 0;
+    virtual sal_Int32 getAvailableWidth() = 0;
+    virtual sal_Int32 getAvailableHeight() = 0;
+
+    virtual void setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage ) = 0;
+
+    virtual bool getShowState() = 0;
+};
 
 // SvtFileDialog
 
@@ -79,7 +119,8 @@ class SvtFileDialogFilter_Impl;
 class SvtExpFileDlg_Impl;
 class CustomContainer;
 
-class SvtFileDialog : public ModalDialog, public ::svt::IFilePickerController
+class SvtFileDialog : //public ModalDialog, public ::svt::IFilePickerController,
+public SvtFileDialog_Base
 {
 private:
     VclPtr<CheckBox>                   _pCbReadOnly;
@@ -226,7 +267,7 @@ public:
     void                        PrevLevel_Impl();
     void                        OpenURL_Impl( const OUString& rURL );
 
-    inline SvtFileView*         GetView() const;
+    SvtFileView*                GetView();
 
     void                        InitSize();
     void                        UpdateControls( const OUString& rURL );
@@ -254,7 +295,7 @@ public:
     // inline
     inline void                 SetPath( const OUString& rNewURL );
     inline void                 SetHasFilename( bool bHasFilename );
-    inline const OUString&      GetPath() const;
+    inline const OUString&      GetPath();
     inline void                 SetDefaultExt( const OUString& rExt );
     inline void                 EraseDefaultExt( sal_Int32 _nIndex = 0 );
     inline const OUString&      GetDefaultExt() const;
@@ -337,7 +378,7 @@ inline void SvtFileDialog::SetHasFilename( bool bHasFilename )
 
 
 
-inline const OUString& SvtFileDialog::GetPath() const
+inline const OUString& SvtFileDialog::GetPath()
 {
     return _aPath;
 }
@@ -360,7 +401,7 @@ inline const OUString& SvtFileDialog::GetDefaultExt() const
 }
 
 
-inline SvtFileView* SvtFileDialog::GetView() const
+inline SvtFileView* SvtFileDialog::GetView()
 {
     return _pFileView;
 }

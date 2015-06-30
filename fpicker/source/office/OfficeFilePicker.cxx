@@ -20,6 +20,7 @@
 
 #include "OfficeFilePicker.hxx"
 #include "iodlg.hxx"
+#include <svtools/RemoteFilesDialog.hxx>
 
 #include <list>
 #include <functional>
@@ -463,7 +464,7 @@ sal_Int16 SvtFilePicker::implExecutePicker( )
 }
 
 
-VclPtr<SvtFileDialog> SvtFilePicker::implCreateDialog( vcl::Window* _pParent )
+VclPtr<SvtFileDialog_Base> SvtFilePicker::implCreateDialog( vcl::Window* _pParent )
 {
     WinBits nExtraBits;
     WinBits nBits = getWinBits( nExtraBits );
@@ -490,6 +491,13 @@ IMPLEMENT_FORWARD_XINTERFACE2( SvtFilePicker, OCommonPicker, SvtFilePicker_Base 
 // disambiguate XTypeProvider
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvtFilePicker, OCommonPicker, SvtFilePicker_Base )
+
+IMPLEMENT_FORWARD_XINTERFACE3( SvtRemoteFilePicker, SvtFilePicker, OCommonPicker, SvtFilePicker_Base )
+
+
+// disambiguate XTypeProvider
+
+IMPLEMENT_FORWARD_XTYPEPROVIDER3( SvtRemoteFilePicker, SvtFilePicker, OCommonPicker, SvtFilePicker_Base )
 
 
 // XExecutableDialog functions
@@ -1163,6 +1171,75 @@ Reference< XInterface > SAL_CALL SvtFilePicker::impl_createInstance(
 {
     Reference< XMultiServiceFactory > xServiceManager (rxContext->getServiceManager(), UNO_QUERY_THROW);
     return Reference< XInterface >( *new SvtFilePicker( xServiceManager ) );
+}
+
+// SvtRemoteFilePicker
+
+SvtRemoteFilePicker::SvtRemoteFilePicker( const Reference < XMultiServiceFactory >& xFactory )
+    :SvtFilePicker( xFactory )
+{
+}
+
+VclPtr<SvtFileDialog_Base> SvtRemoteFilePicker::implCreateDialog( vcl::Window* _pParent )
+{
+    WinBits nExtraBits;
+    WinBits nBits = getWinBits( nExtraBits );
+
+    VclPtrInstance<RemoteFilesDialog> dialog( _pParent, nBits); // TODO: extrabits
+
+    // Set StandardDir if present
+    if ( !m_aStandardDir.isEmpty())
+    {
+        OUString sStandardDir = m_aStandardDir;
+        dialog->SetStandardDir( sStandardDir );
+        dialog->SetBlackList( m_aBlackList );
+    }
+
+    return dialog;
+}
+
+// XServiceInfo
+
+
+/* XServiceInfo */
+OUString SAL_CALL SvtRemoteFilePicker::getImplementationName() throw( RuntimeException, std::exception )
+{
+    return impl_getStaticImplementationName();
+}
+
+/* XServiceInfo */
+sal_Bool SAL_CALL SvtRemoteFilePicker::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
+{
+    return cppu::supportsService(this, sServiceName);
+}
+
+/* XServiceInfo */
+Sequence< OUString > SAL_CALL SvtRemoteFilePicker::getSupportedServiceNames() throw( RuntimeException, std::exception )
+{
+    return impl_getStaticSupportedServiceNames();
+}
+
+/* Helper for XServiceInfo */
+Sequence< OUString > SvtRemoteFilePicker::impl_getStaticSupportedServiceNames()
+{
+    Sequence< OUString > seqServiceNames( 1 );
+    OUString* pArray = seqServiceNames.getArray();
+    pArray[0] = "com.sun.star.ui.dialogs.RemoteFilePicker";
+    return seqServiceNames ;
+}
+
+/* Helper for XServiceInfo */
+OUString SvtRemoteFilePicker::impl_getStaticImplementationName()
+{
+    return OUString( "com.sun.star.svtools.RemoteFilePicker" );
+}
+
+/* Helper for registry */
+Reference< XInterface > SAL_CALL SvtRemoteFilePicker::impl_createInstance(
+    const Reference< XComponentContext >& rxContext) throw( Exception )
+{
+    Reference< XMultiServiceFactory > xServiceManager (rxContext->getServiceManager(), UNO_QUERY_THROW);
+    return Reference< XInterface >( *new SvtRemoteFilePicker( xServiceManager ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

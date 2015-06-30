@@ -28,6 +28,12 @@
 static const cppu::ImplementationEntry g_entries[] =
 {
     {
+        SvtRemoteFilePicker::impl_createInstance,
+        SvtRemoteFilePicker::impl_getStaticImplementationName,
+        SvtRemoteFilePicker::impl_getStaticSupportedServiceNames,
+        cppu::createSingleComponentFactory, 0, 0
+    },
+    {
         SvtFilePicker::impl_createInstance,
         SvtFilePicker::impl_getStaticImplementationName,
         SvtFilePicker::impl_getStaticSupportedServiceNames,

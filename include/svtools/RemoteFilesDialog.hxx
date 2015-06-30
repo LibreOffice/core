@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 
 #include <officecfg/Office/Common.hxx>
+#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
@@ -37,6 +38,9 @@
 
 #include <vector>
 
+#include "../../../fpicker/source/office/iodlg.hxx"
+
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
@@ -66,7 +70,7 @@ class FileViewContainer;
 class Breadcrumb;
 class FolderTree;
 
-class SVT_DLLPUBLIC RemoteFilesDialog : public ModalDialog
+class SVT_DLLPUBLIC RemoteFilesDialog : public SvtFileDialog_Base
 {
 public:
     RemoteFilesDialog( vcl::Window* pParent, WinBits nBits );
@@ -75,9 +79,43 @@ public:
     virtual void dispose() SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
 
-    void AddFilter( OUString sName, OUString sType );
-
     OUString GetPath() const;
+
+    // SvtFileDialog_Base
+
+    virtual SvtFileView* GetView();
+
+    virtual void SetHasFilename( bool bHasFilename );
+    virtual void SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList );
+    virtual const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const;
+    virtual void SetStandardDir( const OUString& rStdDir );
+    virtual const OUString& GetStandardDir() const;
+    virtual void SetPath( const OUString& rNewURL );
+    virtual const OUString& GetPath();
+    virtual std::vector<OUString> GetPathList() const;
+    virtual bool ContentIsFolder( const OUString& rURL );
+
+    virtual void AddFilter( const OUString& rFilter, const OUString& rType );
+    virtual void AddFilterGroup( const OUString& _rFilter,
+                                const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters );
+    virtual OUString GetCurFilter() const;
+    virtual void SetCurFilter( const OUString& rFilter );
+
+    virtual void SetFileCallback( ::svt::IFilePickerListener *pNotifier );
+
+    virtual void EnableAutocompletion( bool _bEnable = true );
+
+    virtual sal_Int32 getTargetColorDepth();
+    virtual sal_Int32 getAvailableWidth();
+    virtual sal_Int32 getAvailableHeight();
+
+    virtual void setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage );
+
+    virtual bool getShowState();
+
+    virtual Control* getControl( sal_Int16 _nControlId, bool _bLabelControl = false ) const SAL_OVERRIDE;
+    virtual void enableControl( sal_Int16 _nControlId, bool _bEnable );
+    virtual OUString getCurFilter( ) const;
 
 private:
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;

@@ -228,7 +228,7 @@ class FileViewContainer : public vcl::Window
 };
 
 RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
-    : ModalDialog( pParent, "RemoteFilesDialog", "svt/ui/remotefilesdialog.ui" )
+    : SvtFileDialog_Base( pParent, "RemoteFilesDialog", "svt/ui/remotefilesdialog.ui" )
     , m_context( comphelper::getProcessComponentContext() )
     , m_aFolderImage( SvtResId( IMG_SVT_FOLDER ) )
     , m_pSplitter( NULL )
@@ -467,10 +467,10 @@ int RemoteFilesDialog::GetSelectedServicePos()
     return nPos;
 }
 
-void RemoteFilesDialog::AddFilter( OUString sName, OUString sType )
+void RemoteFilesDialog::AddFilter( const OUString& rFilter, const OUString& rType )
 {
-    m_aFilters.push_back( sType );
-    m_pFilter_lb->InsertEntry( sName );
+    m_aFilters.push_back( rType );
+    m_pFilter_lb->InsertEntry( rFilter );
 
     if( m_pFilter_lb->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
         m_pFilter_lb->SelectEntryPos( 0 );
@@ -741,6 +741,141 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
 {
     EndDialog( RET_OK );
     return 1;
+}
+
+// SvtFileDialog_Base
+
+SvtFileView* RemoteFilesDialog::GetView()
+{
+    return m_pFileView;
+}
+
+void RemoteFilesDialog::SetHasFilename( bool bHasFilename )
+{
+    // TODO
+}
+
+void RemoteFilesDialog::SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
+{
+    // TODO
+}
+
+const ::com::sun::star::uno::Sequence< OUString >& RemoteFilesDialog::GetBlackList() const
+{
+    // TODO
+    ::com::sun::star::uno::Sequence< OUString > aSequence( 0 );
+    return aSequence;
+}
+
+void RemoteFilesDialog::SetStandardDir( const OUString& rStdDir )
+{
+    // TODO
+}
+
+const OUString& RemoteFilesDialog::GetStandardDir() const
+{
+    // TODO
+    return OUString( "" );
+}
+
+void RemoteFilesDialog::SetPath( const OUString& rNewURL )
+{
+    m_sPath = rNewURL;
+}
+
+void RemoteFilesDialog::AddFilterGroup(
+                                  const OUString& rFilter,
+                                  const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters )
+{
+    AddFilter( rFilter, OUString() );
+    const StringPair* pSubFilters       =               rFilters.getConstArray();
+    const StringPair* pSubFiltersEnd    = pSubFilters + rFilters.getLength();
+    for ( ; pSubFilters != pSubFiltersEnd; ++pSubFilters )
+        AddFilter( pSubFilters->First, pSubFilters->Second );
+}
+
+void RemoteFilesDialog::SetCurFilter( const OUString& rFilter )
+{
+    // TODO
+}
+
+void RemoteFilesDialog::SetFileCallback( ::svt::IFilePickerListener *pNotifier )
+{
+    // TODO
+}
+
+void RemoteFilesDialog::EnableAutocompletion( bool _bEnable )
+{
+    // TODO
+}
+
+const OUString& RemoteFilesDialog::GetPath()
+{
+    return m_sPath;
+}
+
+std::vector<OUString> RemoteFilesDialog::GetPathList() const
+{
+    std::vector<OUString> aPaths;
+    aPaths.push_back(m_sPath);
+    return aPaths;
+}
+
+bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
+{
+    // TODO
+    return false;
+}
+
+sal_Int32 RemoteFilesDialog::getTargetColorDepth()
+{
+    // TODO
+    return 0;
+}
+
+sal_Int32 RemoteFilesDialog::getAvailableWidth()
+{
+    // TODO
+    return 0;
+}
+
+sal_Int32 RemoteFilesDialog::getAvailableHeight()
+{
+    // TODO
+    return 0;
+}
+
+void RemoteFilesDialog::setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage )
+{
+    // TODO
+}
+
+bool RemoteFilesDialog::getShowState()
+{
+    // TODO
+    return false;
+}
+
+OUString RemoteFilesDialog::GetCurFilter() const
+{
+    // TODO
+    return OUString( "" );
+}
+
+Control* RemoteFilesDialog::getControl( sal_Int16 _nControlId, bool _bLabelControl) const
+{
+    // TODO
+    return NULL;
+}
+void RemoteFilesDialog::enableControl( sal_Int16 _nControlId, bool _bEnable )
+{
+    // TODO
+}
+
+OUString RemoteFilesDialog::getCurFilter( ) const
+{
+    // TODO
+    return OUString("");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

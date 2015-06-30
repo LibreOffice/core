@@ -22,6 +22,9 @@
   <implementation name="com.sun.star.svtools.OfficeFilePicker">
     <service name="com.sun.star.ui.dialogs.OfficeFilePicker"/>
   </implementation>
+  <implementation name="com.sun.star.svtools.RemoteFilePicker">
+    <service name="com.sun.star.ui.dialogs.RemoteFilePicker"/>
+  </implementation>
   <implementation name="com.sun.star.svtools.OfficeFolderPicker">
     <service name="com.sun.star.ui.dialogs.OfficeFolderPicker"/>
   </implementation>
