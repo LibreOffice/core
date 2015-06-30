@@ -30,9 +30,6 @@ class OutlinerParaObject;
 class EditTextObject;
 class Outliner;
 
-typedef EditTextObject FormattedTextPortion;
-
-
 
 class OverflowingText
 {
@@ -64,21 +61,26 @@ class NonOverflowingText {
         // NOTE: mPreOverflowingTxt might be empty
 
         // Constructor
-        NonOverflowingText(
-            const OutlinerParaObject *pHeadParas,
-            const OUString &preOverflowingTxt)
-                : mpHeadParas(pHeadParas),
-                  mPreOverflowingTxt(preOverflowingTxt)
-                {
-                    if (pHeadParas == NULL) // Redundant line for debugging
-                        DBG_ASSERT( pHeadParas != NULL, "pHeadParas is null?! All text is overflowing then" );
-                }
+        NonOverflowingText(const OutlinerParaObject *pHeadParas,
+                           const OUString &preOverflowingTxt)
+        : mpHeadParas(pHeadParas),
+          mPreOverflowingTxt(preOverflowingTxt), mpContentTextObj(NULL)
+        {
+            if (pHeadParas == NULL) // Redundant line for debugging
+                DBG_ASSERT( pHeadParas != NULL, "pHeadParas is null?! All text is overflowing then" );
+        }
+
+        NonOverflowingText(const EditTextObject *pTObj)
+        : mpContentTextObj(pTObj)
+        { }
 
         OutlinerParaObject *ToParaObject(Outliner *) const;
 
     private:
         const OutlinerParaObject *mpHeadParas;
         OUString mPreOverflowingTxt;
+
+        const EditTextObject *mpContentTextObj;
 };
 
 
@@ -90,35 +92,31 @@ class NonOverflowingText {
 
 class EDITENG_DLLPUBLIC OFlowChainedText {
     public:
-    OFlowChainedText(Outliner *);
+        OFlowChainedText(Outliner *);
 
-    OutlinerParaObject *CreateOverflowingParaObject(Outliner *, OutlinerParaObject *);
-    OutlinerParaObject *CreateNonOverflowingParaObject(Outliner *);
+        OutlinerParaObject *CreateOverflowingParaObject(Outliner *, OutlinerParaObject *);
+        OutlinerParaObject *CreateNonOverflowingParaObject(Outliner *);
 
     protected:
-    void impSetOutlinerToEmptyTxt(Outliner *);
+        void impSetOutlinerToEmptyTxt(Outliner *);
 
     private:
 
-
-    NonOverflowingText *mpNonOverflowingTxt;
-    OverflowingText *mpOverflowingTxt;
-
+        NonOverflowingText *mpNonOverflowingTxt;
+        OverflowingText *mpOverflowingTxt;
 
 };
 
 // UFlowChainedText is a simpler class than OFlowChainedText: it almost only joins para-objects
 class EDITENG_DLLPUBLIC UFlowChainedText {
     public:
-    UFlowChainedText(Outliner *);
+        UFlowChainedText(Outliner *);
 
-    OutlinerParaObject *CreateMergedUnderflowParaObject(Outliner *, OutlinerParaObject *);
-
+        OutlinerParaObject *CreateMergedUnderflowParaObject(Outliner *, OutlinerParaObject *);
     protected:
 
-
     private:
-    OutlinerParaObject *mpUnderflowPObj;
+        OutlinerParaObject *mpUnderflowPObj;
 };
 
 #endif

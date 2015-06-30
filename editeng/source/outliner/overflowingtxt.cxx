@@ -22,9 +22,13 @@
 
 #include <editeng/overflowingtxt.hxx>
 #include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 
 OutlinerParaObject *NonOverflowingText::ToParaObject(Outliner *pOutliner) const
 {
+
+    if (mpContentTextObj)
+        return new OutlinerParaObject(*mpContentTextObj);
 
     // XXX: Possibility: let the NonUnderflowingParaObject just be a TextEditObject created by the Outliner (by means of a selection).
 

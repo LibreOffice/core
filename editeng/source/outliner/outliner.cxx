@@ -2124,6 +2124,27 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
             nLen += GetLineLen(nOverflowingPara, nLine);
         }
 
+        /* BEGIN Experiment with ESelection and EditTextobject */
+        sal_Int32 nStartPara = 0;
+        sal_Int32 nStartPos = 0;
+        ESelection aNonOverflowingTextSelection;
+        if (nLen == 0) {
+            // XXX: What happens inside this case might be dependent on the joining paragraps or not-thingy
+            // Overflowing paragraph is empty: it's not "Non-Overflowing" text then
+            sal_Int32 nParaLen = GetText(GetParagraph(nOverflowingPara-1)).getLength();
+            aNonOverflowingTextSelection =
+                ESelection(nStartPara, nStartPos, nOverflowingPara-1, nParaLen);
+        } else {
+            // We take until we have to from the overflowing paragraph
+            aNonOverflowingTextSelection =
+                ESelection(nStartPara, nStartPos, nOverflowingPara, nLen);
+        }
+        EditTextObject *pTObj = pEditEngine->CreateTextObject(aNonOverflowingTextSelection);
+        return new NonOverflowingText(pTObj);
+
+
+        /*  END  Experiment with ESelection and EditTextobject */
+
         // XXX: Any separator to be included?
         aPreOverflowingTxt = aWholeTxtHeadPara.copy(0, nLen);
     }

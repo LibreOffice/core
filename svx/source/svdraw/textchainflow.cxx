@@ -266,7 +266,6 @@ void EditingTextChainFlow::impSetFlowOutlinerParams(SdrOutliner *pFlowOutl, SdrO
  *
  * Some notes on how to set style sheets:
  * - save whole edittexts instead of strings only for (Non)OverflowingText; this can be done by the EditEngine::CreateTextObject method and using a selection - probably from ImpEditEngine)
- * - first, refactor the impGet*ParaObject stuff moving it in some (static?) class in overflowingtxt.hxx. Probably each of these methods should be split in smaller routines.
  * - for the refactoring of the previous point we may also add an option for whether we are joining paragraphs or not
  * - When making new OutlinerParaObjs and joining paragraphs we need to first add the string (as we already do) and then, with the appropriate selection, use Outliner::QuickSetAttribs(SfxItemSet(txtObj->GetPool()), aSelectionOfTheNewText)
  * - having all this in a whole class that contains Overflowing and NonOverflowingText would not be bad. This same class could be used to handle a cursor later on.
