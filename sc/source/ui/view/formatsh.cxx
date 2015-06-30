@@ -55,6 +55,7 @@
 #include <svtools/colorcfg.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 #include "formatsh.hxx"
 #include "sc.hrc"
@@ -1607,6 +1608,36 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
     {
         switch ( nSlot )
         {
+            case SID_GROW_FONT_SIZE:
+            case SID_SHRINK_FONT_SIZE:
+            {
+                SfxItemPool& rPool = GetPool();
+                SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, rPool );
+                aSetItem.GetItemSet().Put( pTabViewShell->GetSelectionPattern()->GetItemSet(), false );
+
+                SvtScriptType nScriptTypes = pTabViewShell->GetSelectionScriptType();
+                const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptTypes ) ) );
+
+                if ( pSize )
+                {
+                    SvxFontHeightItem aSize( *pSize );
+                    sal_uInt32 nSize = aSize.GetHeight();
+
+                    const sal_uInt32 nFontInc = 40;      // 2pt
+                    const sal_uInt32 nFontMaxSz = 19998; // 999.9pt
+                    if ( nSlot == SID_GROW_FONT_SIZE )
+                        nSize = std::min< sal_uInt32 >( nSize + nFontInc, nFontMaxSz );
+                    else
+                        nSize = std::max< sal_Int32 >( nSize - nFontInc, nFontInc );
+
+                    aSize.SetHeight( nSize );
+                    aSetItem.PutItemForScriptType( nScriptTypes, aSize );
+                    pTabViewShell->ApplyUserItemSet( aSetItem.GetItemSet() );
+                }
+                rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+            }
+            break;
+
             case SID_ATTR_CHAR_ENDPREVIEW_FONT:
             {
                 pDoc->SetPreviewFont(NULL);

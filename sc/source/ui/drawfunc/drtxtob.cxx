@@ -27,8 +27,10 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -816,6 +818,23 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 rReq.Done( aEmptyAttr );
                 pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
                 bDone = false; // bereits hier passiert
+            }
+            break;
+
+            case SID_GROW_FONT_SIZE:
+            case SID_SHRINK_FONT_SIZE:
+            {
+                OutlinerView* pOutView = pView->IsTextEdit() ?
+                    pView->GetTextEditOutlinerView() : nullptr;
+                if ( pOutView )
+                {
+                    const SvxFontListItem* pFontListItem = static_cast< const SvxFontListItem* >
+                            ( SfxObjectShell::Current()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
+                    const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
+                    pOutView->GetEditView().ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pFontList );
+                    pViewData->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
+                    bDone = false;
+                }
             }
             break;
 

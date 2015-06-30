@@ -35,6 +35,7 @@
 #include <editeng/kernitem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/lspcitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/shdditem.hxx>
@@ -98,9 +99,6 @@
 #include "chrdlg.hrc"
 #include "misc.hrc"
 #include <boost/scoped_ptr.hpp>
-
-const sal_uInt32 nFontInc = 40;      // 2pt
-const sal_uInt32 nFontMaxSz = 19998; // 999.9pt
 
 using namespace ::com::sun::star;
 
@@ -553,31 +551,10 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case FN_GROW_FONT_SIZE:
         case FN_SHRINK_FONT_SIZE:
         {
-            SfxItemPool* pPool2 = aEditAttr.GetPool()->GetSecondaryPool();
-            if( !pPool2 )
-                pPool2 = aEditAttr.GetPool();
-
-            SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, *pPool2 );
-            aSetItem.GetItemSet().Put( aEditAttr, false );
-
-            SvtScriptType nScriptTypes = pOLV->GetSelectedScriptType();
-            const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptTypes ) ) );
-
-            if (pSize)
-            {
-                SvxFontHeightItem aSize(*pSize);
-
-                sal_uInt32 nSize = aSize.GetHeight();
-
-                if( nSlot == FN_GROW_FONT_SIZE && ( nSize += nFontInc ) > nFontMaxSz )
-                    nSize = nFontMaxSz;
-                else if( nSlot == FN_SHRINK_FONT_SIZE && ( nSize -= nFontInc ) < nFontInc )
-                    nSize = nFontInc;
-
-                aSize.SetHeight( nSize );
-                aSetItem.PutItemForScriptType( nScriptTypes, aSize );
-                aNewAttr.Put( aSetItem.GetItemSet() );
-            }
+            const SvxFontListItem* pFontListItem = static_cast< const SvxFontListItem* >
+                    ( SfxObjectShell::Current()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
+            const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
+            pOLV->GetEditView().ChangeFontSize( nSlot == FN_GROW_FONT_SIZE, pFontList );
         }
         break;
 
@@ -945,14 +922,12 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
                 aSetItem.GetItemSet().Put( aEditAttr, false );
                 const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptType ) ) );
 
-                if( !pSize )
-                    rSet.DisableItem( nSlotId );
-                else
+                if( pSize )
                 {
                     sal_uInt32 nSize = pSize->GetHeight();
-                    if( nSize == nFontMaxSz )
+                    if( nSize >= 19998 )
                         rSet.DisableItem( FN_GROW_FONT_SIZE );
-                    else if( nSize == nFontInc )
+                    else if( nSize <= 40 )
                         rSet.DisableItem( FN_SHRINK_FONT_SIZE );
                 }
             }
