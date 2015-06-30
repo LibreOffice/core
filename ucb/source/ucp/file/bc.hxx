@@ -308,29 +308,24 @@ namespace fileaccess {
         com::sun::star::uno::Sequence< com::sun::star::uno::Any > SAL_CALL
         setPropertyValues(
             sal_Int32 nMyCommandIdentifier,
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& Values )
-            throw( );
+            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& Values );
 
         com::sun::star::uno::Reference< com::sun::star::ucb::XDynamicResultSet > SAL_CALL
         open(
             sal_Int32 nMyCommandIdentifier,
-            const com::sun::star::ucb::OpenCommandArgument2& aCommandArgument )
-            throw();
+            const com::sun::star::ucb::OpenCommandArgument2& aCommandArgument );
 
         void SAL_CALL
-        deleteContent( sal_Int32 nMyCommandIdentifier )
-            throw();
+        deleteContent( sal_Int32 nMyCommandIdentifier );
 
 
         void SAL_CALL
         transfer( sal_Int32 nMyCommandIdentifier,
-                  const com::sun::star::ucb::TransferInfo& aTransferInfo )
-            throw();
+                  const com::sun::star::ucb::TransferInfo& aTransferInfo );
 
         void SAL_CALL
         insert( sal_Int32 nMyCommandIdentifier,
-                const com::sun::star::ucb::InsertCommandArgument& aInsertArgument )
-            throw();
+                const com::sun::star::ucb::InsertCommandArgument& aInsertArgument );
 
         void SAL_CALL endTask( sal_Int32 CommandId );
 

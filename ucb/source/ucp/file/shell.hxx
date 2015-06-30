@@ -210,8 +210,7 @@ namespace fileaccess {
 
         void SAL_CALL page( sal_Int32 CommandId,
                             const OUString& aUnqPath,
-                            const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream )
-            throw();
+                            const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream );
 
 
         /**
@@ -221,8 +220,7 @@ namespace fileaccess {
         com::sun::star::uno::Reference< com::sun::star::io::XInputStream > SAL_CALL
         open( sal_Int32 CommandId,
               const OUString& aUnqPath,
-              bool bLock )
-            throw();
+              bool bLock );
 
 
         /**
@@ -233,8 +231,7 @@ namespace fileaccess {
         com::sun::star::uno::Reference< com::sun::star::io::XStream > SAL_CALL
         open_rw( sal_Int32 CommandId,
                  const OUString& aUnqPath,
-                 bool bLock )
-            throw();
+                 bool bLock );
 
 
         /**
@@ -247,8 +244,7 @@ namespace fileaccess {
             const OUString& aUnqPath,
             const sal_Int32 OpenMode,
             const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& sProperty,
-            const com::sun::star::uno::Sequence< com::sun::star::ucb::NumberedSortingInfo > & sSortingInfo )
-            throw();
+            const com::sun::star::uno::Sequence< com::sun::star::ucb::NumberedSortingInfo > & sSortingInfo );
 
 
         /**
@@ -257,13 +253,11 @@ namespace fileaccess {
 
         // Info for commands
         com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo > SAL_CALL
-        info_c()
-            throw();
+        info_c();
 
         // Info for the properties
         com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        info_p( const OUString& aUnqPath )
-            throw();
+        info_p( const OUString& aUnqPath );
 
 
         /**
@@ -272,8 +266,7 @@ namespace fileaccess {
 
         com::sun::star::uno::Sequence< com::sun::star::uno::Any > SAL_CALL
         setv( const OUString& aUnqPath,
-              const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& values )
-            throw();
+              const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& values );
 
 
         /**
@@ -284,8 +277,7 @@ namespace fileaccess {
         com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > SAL_CALL
         getv( sal_Int32 CommandId,
               const OUString& aUnqPath,
-              const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& properties )
-            throw();
+              const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& properties );
 
 
         /********************************************************************************/
@@ -300,8 +292,7 @@ namespace fileaccess {
         move( sal_Int32 CommandId,
               const OUString& srcUnqPath,   // Full file(folder)-path
               const OUString& dstUnqPath,   // Path to the destination-directory
-              const sal_Int32 NameClash )
-            throw();
+              const sal_Int32 NameClash );
 
         /**
          *  Copies the content belonging to fileURL srcUnqPath to fileURL dstUnqPath ( files and directories )
@@ -311,8 +302,7 @@ namespace fileaccess {
         copy( sal_Int32 CommandId,               // See "move"
               const OUString& srcUnqPath,
               const OUString& dstUnqPath,
-              sal_Int32 NameClash )
-            throw();
+              sal_Int32 NameClash );
 
 #define RemoveFolder   1
 #define RemoveFile    -1
@@ -326,8 +316,7 @@ namespace fileaccess {
         remove( sal_Int32 CommandId,
                 const OUString& aUnqPath,
                 sal_Int32 TypeToMove = RemoveUnknown,
-                bool  MustExist  = true )
-            throw();
+                bool  MustExist  = true );
 
 #undef RemoveUnknown
 #undef RemoveFile
@@ -346,8 +335,7 @@ namespace fileaccess {
         bool SAL_CALL
         mkdir( sal_Int32 CommandId,
                const OUString& aDirectoryName,
-               bool OverWrite )
-            throw();
+               bool OverWrite );
 
 
         /**
@@ -360,8 +348,7 @@ namespace fileaccess {
         mkfil( sal_Int32 CommandId,
                const OUString& aFileName,
                bool OverWrite,
-               const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream )
-            throw();
+               const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream );
 
 
         /**
@@ -373,8 +360,7 @@ namespace fileaccess {
         write( sal_Int32 CommandId,
                const OUString& aUnqPath,
                bool OverWrite,
-               const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream )
-            throw();
+               const com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& aInputStream );
 
 
 
@@ -517,8 +503,7 @@ namespace fileaccess {
         void SAL_CALL
         setFileProperties(
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& values,
-            sal_Int32 numberOfValues )
-            throw();
+            sal_Int32 numberOfValues );
 
 
         // Helper function for public copy
@@ -528,8 +513,7 @@ namespace fileaccess {
             const OUString& srcUnqPath,
             const OUString& dstUnqPath,
             sal_Int32 TypeToCopy,
-            bool  testExistence )
-            throw();
+            bool  testExistence );
 
 
         // Helper function for mkfil,mkdir and write
@@ -541,8 +525,7 @@ namespace fileaccess {
         bool SAL_CALL
         ensuredir( sal_Int32 CommandId,
                    const OUString& aDirectoryName,
-                   sal_Int32 errorCode )
-            throw();
+                   sal_Int32 errorCode );
 
         // General
         osl::Mutex m_aMutex;
