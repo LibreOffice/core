@@ -12,6 +12,8 @@
 #include <vcl/builderfactory.hxx>
 #include <sfx2/app.hxx>
 
+#include <officecfg/Office/Common.hxx>
+
 VCL_BUILDER_FACTORY(TemplateDefaultView)
 
 TemplateDefaultView::TemplateDefaultView( Window* pParent)
@@ -23,6 +25,25 @@ TemplateDefaultView::TemplateDefaultView( Window* pParent)
     Rectangle aScreen = Application::GetScreenPosSizePixel(Application::GetDisplayBuiltInScreen());
     mnItemMaxSize = std::min(aScreen.GetWidth(),aScreen.GetHeight()) > 800 ? 256 : 192;
     ThumbnailView::setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
+
+    // startcenter specific settings
+    maFillColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
+    maTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
+    maHighlightColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightColor::get());
+    maHighlightTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightTextColor::get());
+    mfHighlightTransparence = 0.25;
+
+
+    maAllButton->SetControlForeground(maTextColor);
+    maFTName->SetControlForeground(maTextColor);
+
+    // TODO - convert the TemplateAbstractView to .ui (instead of fixed layout
+    // of the button and the fixed text), and do the following:
+    // const float fMultiplier = 1.4;
+    // vcl::Font aFont(maAllButton->GetSettings().GetStyleSettings().GetPushButtonFont());
+    // aFont.SetSize(Size(0, aFont.GetSize().Height() * fMultiplier));
+    // maAllButton->SetControlFont(aFont);
+    // maFTName->SetControlFont(aFont);
 }
 
 void TemplateDefaultView::reload()
