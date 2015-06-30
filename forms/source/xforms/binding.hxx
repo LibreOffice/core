@@ -21,6 +21,22 @@
 #define INCLUDED_FORMS_SOURCE_XFORMS_BINDING_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
+#include <cppuhelper/implbase8.hxx>
+#include <propertysetbase.hxx>
+#include <com/sun/star/form/binding/XValueBinding.hpp>
+#include <com/sun/star/form/binding/XListEntrySource.hpp>
+#include <com/sun/star/form/validation/XValidator.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/xml/dom/events/XEventListener.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+
+#include "pathexpression.hxx"
+#include "boolexpression.hxx"
+#include "mip.hxx"
+#include <rtl/ustring.hxx>
+#include <vector>
 
 // forward declaractions
 namespace xforms
@@ -42,23 +58,6 @@ namespace com { namespace sun { namespace star {
     namespace xsd { class XDataType; }
 } } }
 
-#include <cppuhelper/implbase8.hxx>
-#include <propertysetbase.hxx>
-#include <com/sun/star/form/binding/XValueBinding.hpp>
-#include <com/sun/star/form/binding/XListEntrySource.hpp>
-#include <com/sun/star/form/validation/XValidator.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/xml/dom/events/XEventListener.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
-
-#include "pathexpression.hxx"
-#include "boolexpression.hxx"
-#include "mip.hxx"
-#include <rtl/ustring.hxx>
-#include <vector>
-
 
 
 namespace xforms
@@ -76,41 +75,29 @@ namespace xforms
 
 typedef cppu::ImplInheritanceHelper8<
     PropertySetBase,
-    com::sun::star::form::binding::XValueBinding,
-    com::sun::star::form::binding::XListEntrySource,
-    com::sun::star::form::validation::XValidator,
-    com::sun::star::util::XModifyBroadcaster,
-    com::sun::star::container::XNamed,
-    com::sun::star::xml::dom::events::XEventListener,
-    com::sun::star::lang::XUnoTunnel,
-    com::sun::star::util::XCloneable
+    css::form::binding::XValueBinding,
+    css::form::binding::XListEntrySource,
+    css::form::validation::XValidator,
+    css::util::XModifyBroadcaster,
+    css::container::XNamed,
+    css::xml::dom::events::XEventListener,
+    css::lang::XUnoTunnel,
+    css::util::XCloneable
 > Binding_t;
 
 class Binding : public Binding_t
 {
 public:
-    typedef com::sun::star::uno::Reference<com::sun::star::xforms::XModel> Model_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::util::XModifyListener> XModifyListener_t;
-    typedef std::vector<XModifyListener_t> ModifyListeners_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::form::validation::XValidityConstraintListener> XValidityConstraintListener_t;
-    typedef std::vector<XValidityConstraintListener_t> XValidityConstraintListeners_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::form::binding::XListEntryListener> XListEntryListener_t;
-    typedef std::vector<XListEntryListener_t> XListEntryListeners_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> XNameContainer_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> XNode_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::xml::dom::XNodeList> XNodeList_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::util::XCloneable> XCloneable_t;
-    typedef com::sun::star::uno::Sequence<sal_Int8> IntSequence_t;
-    typedef com::sun::star::uno::Sequence<OUString> StringSequence_t;
-    typedef std::vector<MIP> MIPs_t;
-    typedef std::vector<XNode_t> XNodes_t;
+    typedef std::vector<css::uno::Reference<css::util::XModifyListener> > ModifyListeners_t;
+    typedef std::vector<css::uno::Reference<css::form::validation::XValidityConstraintListener> > XValidityConstraintListeners_t;
+    typedef std::vector<css::uno::Reference<css::form::binding::XListEntryListener> > XListEntryListeners_t;
 
 
 
 private:
 
     /// the Model to which this Binding belongs; may be NULL
-    Model_t mxModel;
+    css::uno::Reference<css::xforms::XModel> mxModel;
 
     /// binding-ID. A document-wide unique ID for this binding element.
     OUString msBindingID;
@@ -137,7 +124,7 @@ private:
     ComputedExpression maCalculate;
 
     /// the XML namespaces used for XML names/XPath-expressions in this binding
-    XNameContainer_t mxNamespaces;
+    css::uno::Reference<css::container::XNameContainer> mxNamespaces;
 
     /// a type name
     OUString msTypeName;
@@ -152,7 +139,7 @@ private:
     XValidityConstraintListeners_t maValidityListeners;
 
     /// nodes on which we are listening for events
-    XNodes_t maEventNodes;
+    std::vector<css::uno::Reference<css::xml::dom::XNode> > maEventNodes;
 
     /// the current MIP object for the first node we are bound to
     MIP maMIP;
@@ -178,8 +165,8 @@ public:
     // property methods: get/set value
 
 
-    Model_t getModel() const { return mxModel;}   /// get XForms model
-    void _setModel( const Model_t& ); /// set XForms model (only called by Model)
+    css::uno::Reference<css::xforms::XModel> getModel() const { return mxModel;}   /// get XForms model
+    void _setModel( const css::uno::Reference<css::xforms::XModel>& ); /// set XForms model (only called by Model)
 
 
     OUString getModelID() const;   /// get ID of XForms model
@@ -215,13 +202,13 @@ public:
 
     // access to a binding's namespace
     // (set-method only changes local namespaces (but may add to model))
-    XNameContainer_t getBindingNamespaces() const { return mxNamespaces; }
-    void setBindingNamespaces( const XNameContainer_t& ); /// get binding nmsp.
+    css::uno::Reference<css::container::XNameContainer> getBindingNamespaces() const { return mxNamespaces; }
+    void setBindingNamespaces( const css::uno::Reference<css::container::XNameContainer>& ); /// get binding nmsp.
 
     // access to the model's namespaces
     // (set-method changes model's namespaces (unless a local one is present))
-    XNameContainer_t getModelNamespaces() const;  /// set model namespaces
-    void setModelNamespaces( const XNameContainer_t& ); /// get model nmsp.
+    css::uno::Reference<css::container::XNameContainer> getModelNamespaces() const;  /// set model namespaces
+    void setModelNamespaces( const css::uno::Reference<css::container::XNameContainer>& ); /// get model nmsp.
 
 
     // read-only properties that map MIPs to control data source properties
@@ -245,7 +232,7 @@ public:
     std::vector<xforms::EvaluationContext> getMIPEvaluationContexts();
 
     /// get nodeset the bind is bound to
-    XNodeList_t getXNodeList();
+    css::uno::Reference<css::xml::dom::XNodeList> getXNodeList();
 
     /// heuristically determine whether this binding is simple binding
     /// (here: simple binding == does not depend on other parts of the
@@ -274,48 +261,18 @@ public:
 
 
     // the ID for XUnoTunnel calls
-    static IntSequence_t getUnoTunnelID();
-    static Binding* getBinding( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& );
-
-
-    // class-scoped typedef for easy-to-read UNO interfaces
-
-
-    // basic types
-    typedef com::sun::star::uno::Any Any_t;
-    typedef com::sun::star::uno::Sequence<com::sun::star::uno::Type> Sequence_Type_t;
-    typedef com::sun::star::uno::Type Type_t;
-
-    // reference types
-    typedef com::sun::star::uno::Reference<com::sun::star::beans::XPropertyChangeListener> XPropertyChangeListener_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> XPropertySetInfo_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::beans::XVetoableChangeListener> XVetoableChangeListener_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathAPI> XXPathAPI_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::xml::dom::events::XEvent> XEvent_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::xsd::XDataType> XDataType_t;
-
-    // exceptions
-    typedef com::sun::star::beans::PropertyVetoException PropertyVetoException_t;
-    typedef com::sun::star::beans::UnknownPropertyException UnknownPropertyException_t;
-    typedef com::sun::star::lang::IllegalArgumentException IllegalArgumentException_t;
-    typedef com::sun::star::lang::NoSupportException NoSupportException_t;
-    typedef com::sun::star::lang::WrappedTargetException WrappedTargetException_t;
-    typedef com::sun::star::uno::RuntimeException RuntimeException_t;
-    typedef com::sun::star::form::binding::IncompatibleTypesException IncompatibleTypesException_t;
-    typedef com::sun::star::form::binding::InvalidBindingStateException InvalidBindingStateException_t;
-    typedef com::sun::star::lang::NullPointerException NullPointerException_t;
-    typedef com::sun::star::lang::IndexOutOfBoundsException IndexOutOfBoundsException_t;
-
+    static css::uno::Sequence<sal_Int8> getUnoTunnelID();
+    static Binding* getBinding( const css::uno::Reference<css::beans::XPropertySet>& );
 
 
 private:
     /// check whether object is live, and throw suitable exception if not
     /// (to be used be API methods before acting on the object)
-    void checkLive() throw( RuntimeException_t );
+    void checkLive() throw( css::uno::RuntimeException );
 
     /// check whether binding has a model, and throw exception if not
     /// (to be used be API methods before acting on the object)
-    void checkModel() throw( RuntimeException_t );
+    void checkModel() throw( css::uno::RuntimeException );
 
     /// determine whether object is live
     /// live: has model, and model has been initialized
@@ -323,7 +280,7 @@ private:
 
     /// get the model implementation
     xforms::Model* getModelImpl() const;
-    static xforms::Model* getModelImpl( const Model_t& xModel );
+    static xforms::Model* getModelImpl( const css::uno::Reference<css::xforms::XModel>& xModel );
 
     /// get MIP evaluation contexts
     /// (only valid if control has already been bound)
@@ -348,7 +305,7 @@ private:
     MIP getLocalMIP() const;
 
     /// get the data type that applies to this binding
-    XDataType_t getDataType();
+    css::uno::Reference<css::xsd::XDataType> getDataType();
 
     /// determine whether binding is valid according to the given data type
     bool isValid_DataType();
@@ -360,13 +317,13 @@ private:
     void clear();
 
     /// distribute MIPs from current node recursively to children
-    void distributeMIP( const XNode_t &rxNode );
+    void distributeMIP( const css::uno::Reference<css::xml::dom::XNode> &rxNode );
 
     /// implement get*Namespaces()
-    XNameContainer_t _getNamespaces() const;
+    css::uno::Reference<css::container::XNameContainer> _getNamespaces() const;
 
     /// implement set*Namespaces()
-    void _setNamespaces( const XNameContainer_t&, bool bBinding );
+    void _setNamespaces( const css::uno::Reference<css::container::XNameContainer>&, bool bBinding );
 
     /// set a useful default binding ID (if none is set)
     void _checkBindingID();
@@ -385,21 +342,21 @@ public:
 
 public:
 
-    virtual Sequence_Type_t SAL_CALL getSupportedValueTypes()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getSupportedValueTypes()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual sal_Bool SAL_CALL supportsType( const Type_t& aType )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsType( const css::uno::Type& aType )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual Any_t SAL_CALL getValue( const Type_t& aType )
-        throw( IncompatibleTypesException_t,
-               RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getValue( const css::uno::Type& aType )
+        throw( css::form::binding::IncompatibleTypesException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL setValue( const Any_t& aValue )
-        throw( IncompatibleTypesException_t,
-               InvalidBindingStateException_t,
-               NoSupportException_t,
-               RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL setValue( const css::uno::Any& aValue )
+        throw( css::form::binding::IncompatibleTypesException,
+               css::form::binding::InvalidBindingStateException,
+               css::lang::NoSupportException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -408,22 +365,22 @@ public:
 
 
     virtual sal_Int32 SAL_CALL getListEntryCount()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL getListEntry( sal_Int32 nPosition )
-        throw( IndexOutOfBoundsException_t,
-               RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::lang::IndexOutOfBoundsException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual StringSequence_t SAL_CALL getAllListEntries()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence<OUString> SAL_CALL getAllListEntries()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL addListEntryListener( const XListEntryListener_t& )
-        throw( NullPointerException_t,
-               RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL addListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>& )
+        throw( css::lang::NullPointerException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual void SAL_CALL removeListEntryListener( const XListEntryListener_t&)
-        throw( NullPointerException_t,
-               RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL removeListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>&)
+        throw( css::lang::NullPointerException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -432,22 +389,22 @@ public:
 
 
     virtual sal_Bool SAL_CALL isValid(
-        const Any_t& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        const css::uno::Any& )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual OUString SAL_CALL explainInvalid(
-        const Any_t& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        const css::uno::Any& )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL addValidityConstraintListener(
-        const XValidityConstraintListener_t& xListener )
-        throw( NullPointerException_t,
-               RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener )
+        throw( css::lang::NullPointerException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeValidityConstraintListener(
-        const XValidityConstraintListener_t& xListener )
-        throw( NullPointerException_t,
-               RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener )
+        throw( css::lang::NullPointerException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -458,12 +415,12 @@ public:
 public:
 
     virtual void SAL_CALL addModifyListener(
-        const XModifyListener_t& xListener )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        const css::uno::Reference<css::util::XModifyListener>& xListener )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL removeModifyListener(
-        const XModifyListener_t& xListener )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        const css::uno::Reference<css::util::XModifyListener>& xListener )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -476,10 +433,10 @@ public:
 public:
 
     virtual OUString SAL_CALL getName()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual void SAL_CALL setName( const OUString& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -489,8 +446,8 @@ public:
 
 
     virtual void SAL_CALL handleEvent(
-        const XEvent_t& xEvent )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+        const css::uno::Reference<css::xml::dom::events::XEvent>& xEvent )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
@@ -498,16 +455,16 @@ public:
     // XUnoTunnel
 
 
-    virtual sal_Int64 SAL_CALL getSomething( const IntSequence_t& )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence<sal_Int8>& )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
 
     // XCloneable
 
 
-    virtual XCloneable_t SAL_CALL createClone()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::util::XCloneable> SAL_CALL createClone()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 

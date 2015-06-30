@@ -171,14 +171,14 @@ EvaluationContext Model::getEvaluationContext()
 }
 
 
-Model::IntSequence_t Model::getUnoTunnelID()
+css::uno::Sequence<sal_Int8> Model::getUnoTunnelID()
 {
     static cppu::OImplementationId aImplementationId;
     return aImplementationId.getImplementationId();
 }
 
 
-void Model::setForeignSchema( const XDocument_t& rDocument )
+void Model::setForeignSchema( const css::uno::Reference<css::xml::dom::XDocument>& rDocument )
 {
     mxForeignSchema = rDocument;
 }
@@ -190,7 +190,7 @@ void Model::setSchemaRef( const OUString& rSchemaRef )
 }
 
 
-void Model::setNamespaces( const XNameContainer_t& rNamespaces )
+void Model::setNamespaces( const css::uno::Reference<css::container::XNameContainer>& rNamespaces )
 {
     if( rNamespaces.is() )
         mxNamespaces = rNamespaces;
@@ -488,7 +488,7 @@ void Model::refresh()
 
 void SAL_CALL Model::submitWithInteraction(
     const OUString& sID,
-    const XInteractionHandler_t& _rxHandler )
+    const css::uno::Reference<css::task::XInteractionHandler>& _rxHandler )
     throw( VetoException,
            WrappedTargetException,
            RuntimeException, std::exception )
@@ -514,7 +514,7 @@ void Model::submit( const OUString& sID )
     submitWithInteraction( sID, NULL );
 }
 
-Model::XDataTypeRepository_t SAL_CALL Model::getDataTypeRepository(  )
+css::uno::Reference<css::xforms::XDataTypeRepository> SAL_CALL Model::getDataTypeRepository(  )
     throw( RuntimeException, std::exception )
 {
     if ( !mxDataTypes.is() )
@@ -527,13 +527,13 @@ Model::XDataTypeRepository_t SAL_CALL Model::getDataTypeRepository(  )
 // instance management
 
 
-Model::XSet_t Model::getInstances()
+css::uno::Reference<css::container::XSet> Model::getInstances()
     throw( RuntimeException, std::exception )
 {
     return mxInstances;
 }
 
-Model::XDocument_t Model::getInstanceDocument( const OUString& rName )
+css::uno::Reference<css::xml::dom::XDocument> Model::getInstanceDocument( const OUString& rName )
     throw( RuntimeException, std::exception )
 {
     ensureAtLeastOneInstance();
@@ -545,7 +545,7 @@ Model::XDocument_t Model::getInstanceDocument( const OUString& rName )
     return aInstance;
 }
 
-Model::XDocument_t SAL_CALL Model::getDefaultInstance()
+css::uno::Reference<css::xml::dom::XDocument> SAL_CALL Model::getDefaultInstance()
     throw( RuntimeException, std::exception )
 {
     ensureAtLeastOneInstance();
@@ -584,7 +584,7 @@ Model::XPropertySet_t Model::getBinding( const OUString& sId )
     return mpBindings->hasItem( sId ) ? mpBindings->getItem( sId ) : NULL;
 }
 
-Model::XSet_t Model::getBindings()
+css::uno::Reference<css::container::XSet> Model::getBindings()
     throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
@@ -597,34 +597,34 @@ Model::XSet_t Model::getBindings()
 // submission management
 
 
-Model::XSubmission_t Model::createSubmission()
+css::uno::Reference<css::xforms::XSubmission> Model::createSubmission()
     throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
     return new Submission();
 }
 
-Model::XSubmission_t Model::cloneSubmission(const XPropertySet_t& xSubmission)
+css::uno::Reference<css::xforms::XSubmission> Model::cloneSubmission(const XPropertySet_t& xSubmission)
     throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
-    XSubmission_t xNewSubmission = createSubmission();
+    css::uno::Reference<css::xforms::XSubmission> xNewSubmission = createSubmission();
     XPropertySet_t xAsPropertySet( xNewSubmission.get() );
     copy( xSubmission.get(), xAsPropertySet );
     return xNewSubmission;
 }
 
-Model::XSubmission_t Model::getSubmission( const OUString& sId )
+css::uno::Reference<css::xforms::XSubmission> Model::getSubmission( const OUString& sId )
     throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
-    XSubmission_t xSubmission;
+    css::uno::Reference<css::xforms::XSubmission> xSubmission;
     if ( mpSubmissions->hasItem( sId ) )
         xSubmission.set(mpSubmissions->getItem( sId ), css::uno::UNO_QUERY);
     return xSubmission;
 }
 
-Model::XSet_t Model::getSubmissions()
+css::uno::Reference<css::container::XSet> Model::getSubmissions()
     throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
@@ -656,9 +656,9 @@ Model::XSet_t Model::getSubmissions()
 void Model::initializePropertySet()
 {
     REGISTER_PROPERTY_API ( ID,            OUString );
-    REGISTER_PROPERTY     ( ForeignSchema, XDocument_t );
+    REGISTER_PROPERTY     ( ForeignSchema, css::uno::Reference<css::xml::dom::XDocument> );
     REGISTER_PROPERTY     ( SchemaRef,     OUString );
-    REGISTER_PROPERTY     ( Namespaces,    XNameContainer_t );
+    REGISTER_PROPERTY     ( Namespaces,    css::uno::Reference<css::container::XNameContainer> );
     REGISTER_BOOL_PROPERTY( ExternalData );
 }
 
@@ -669,7 +669,7 @@ void Model::update()
 }
 
 
-sal_Int64 Model::getSomething( const IntSequence_t& xId )
+sal_Int64 Model::getSomething( const css::uno::Sequence<sal_Int8>& xId )
     throw( RuntimeException, std::exception )
 {
     return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : NULL );

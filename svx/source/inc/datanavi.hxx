@@ -311,12 +311,10 @@ namespace svxform
         inline void                 SetInstanceURL( const OUString &url ) { m_sInstanceURL=url; }
         inline void                 SetLinkOnce( bool bLinkOnce ) { m_bLinkOnce=bLinkOnce; }
 
-        typedef com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> XPropertySet_t;
-        typedef com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> XNode_t;
-
-        inline XPropertySet_t GetBindingForNode( const XNode_t &xNode ) { return m_xUIHelper->getBindingForNode(xNode,true); }
-        inline OUString GetServiceNameForNode( const XNode_t &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
-        inline XFormsUIHelper1_ref GetXFormsHelper() const { return m_xUIHelper; }
+        inline css::uno::Reference<css::beans::XPropertySet>
+                                    GetBindingForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getBindingForNode(xNode,true); }
+        inline OUString             GetServiceNameForNode( const css::uno::Reference<css::xml::dom::XNode> &xNode ) { return m_xUIHelper->getDefaultServiceNameForNode(xNode); }
+        inline XFormsUIHelper1_ref  GetXFormsHelper() const { return m_xUIHelper; }
     };
 
 

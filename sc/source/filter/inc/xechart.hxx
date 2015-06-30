@@ -79,16 +79,14 @@ class XclExpChChart;
 class XclExpChRoot : public XclExpRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
-
-public:
     explicit            XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart& rChartData );
     virtual             ~XclExpChRoot();
 
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclExpChRoot& GetChRoot() const { return *this; }
     /** Returns the API Chart document model. */
-    XChartDocRef        GetChartDocument() const;
+    css::uno::Reference< css::chart2::XChartDocument >
+                        GetChartDocument() const;
     /** Returns a reference to the parent chart data object. */
     XclExpChChart&      GetChartData() const;
     /** Returns chart type info for a unique chart type identifier. */
@@ -100,7 +98,8 @@ public:
     const XclChFormatInfo& GetFormatInfo( XclChObjectType eObjType ) const;
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
-    void                InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const;
+    void                InitConversion( css::uno::Reference< css::chart2::XChartDocument > xChartDoc,
+                                        const Rectangle& rChartRect ) const;
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion() const;
 
@@ -385,18 +384,14 @@ typedef std::shared_ptr< XclExpChFrame > XclExpChFrameRef;
 class XclExpChSourceLink : public XclExpRecord, protected XclExpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >   XDataSequenceRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XFormattedString >      XFormattedStringRef;
-    typedef ::com::sun::star::uno::Sequence< XFormattedStringRef >                              XFormattedStringSeq;
-
-public:
     explicit            XclExpChSourceLink( const XclExpChRoot& rRoot, sal_uInt8 nDestType );
 
     void                ConvertString( const OUString& aString );
     /** Converts the passed source link, returns the number of linked values. */
-    sal_uInt16          ConvertDataSequence( XDataSequenceRef xDataSeq, bool bSplitToColumns, sal_uInt16 nDefCount = 0 );
+    sal_uInt16          ConvertDataSequence( css::uno::Reference< css::chart2::data::XDataSequence > xDataSeq,
+                                             bool bSplitToColumns, sal_uInt16 nDefCount = 0 );
     /** Converts the passed sequence of formatted string objects, returns leading font index. */
-    sal_uInt16          ConvertStringSequence( const XFormattedStringSeq& rStringSeq );
+    sal_uInt16          ConvertStringSequence( const css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& rStringSeq );
     /** Converts the number format from the passed property set. */
     void                ConvertNumFmt( const ScfPropertySet& rPropSet, bool bPercent );
 
@@ -493,10 +488,6 @@ public:
 class XclExpChText : public XclExpChGroupBase, public XclExpChFontBase
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >            XTitleRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XRegressionCurve >  XRegressionCurveRef;
-
-public:
     explicit            XclExpChText( const XclExpChRoot& rRoot );
 
     /** Sets font color and color identifier to internal data structures. */
@@ -505,7 +496,7 @@ public:
     virtual void        SetRotation( sal_uInt16 nRotation ) SAL_OVERRIDE;
 
     /** Converts all text settings of the passed title text object. */
-    void                ConvertTitle( XTitleRef xTitle, sal_uInt16 nTarget, const OUString* pSubTitle = NULL );
+    void                ConvertTitle( css::uno::Reference< css::chart2::XTitle > xTitle, sal_uInt16 nTarget, const OUString* pSubTitle = NULL );
     /** Converts all text settings of the passed legend. */
     void                ConvertLegend( const ScfPropertySet& rPropSet );
     /** Converts all settings of the passed data point caption text object. */
@@ -656,13 +647,11 @@ typedef std::shared_ptr< XclExpChDataFormat > XclExpChDataFormatRef;
 class XclExpChSerTrendLine : public XclExpRecord, protected XclExpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XRegressionCurve > XRegressionCurveRef;
-
-public:
     explicit            XclExpChSerTrendLine( const XclExpChRoot& rRoot );
 
     /** Converts the passed trend line, returns true if trend line type is supported. */
-    bool                Convert( XRegressionCurveRef xRegCurve, sal_uInt16 nSeriesIdx );
+    bool                Convert( css::uno::Reference< css::chart2::XRegressionCurve > xRegCurve,
+                                 sal_uInt16 nSeriesIdx );
 
     /** Returns formatting information of the trend line, created in Convert(). */
     inline XclExpChDataFormatRef GetDataFormat() const { return mxDataFmt; }
@@ -707,30 +696,26 @@ typedef std::shared_ptr< XclExpChSerErrorBar > XclExpChSerErrorBarRef;
 class XclExpChSeries : public XclExpChGroupBase
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >                      XDiagramRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >                   XDataSeriesRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >    XLabeledDataSeqRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XRegressionCurve >              XRegressionCurveRef;
-
-public:
     explicit            XclExpChSeries( const XclExpChRoot& rRoot, sal_uInt16 nSeriesIdx );
 
     /** Converts the passed data series (source links and formatting). */
     bool                ConvertDataSeries(
-                            XDiagramRef xDiagram, XDataSeriesRef xDataSeries,
+                            css::uno::Reference< css::chart2::XDiagram > xDiagram,
+                            css::uno::Reference< css::chart2::XDataSeries > xDataSeries,
                             const XclChExtTypeInfo& rTypeInfo,
                             sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx );
     /** Converts the passed data series for stock charts. */
     bool                ConvertStockSeries(
-                            XDataSeriesRef xDataSeries,
+                            css::uno::Reference< css::chart2::XDataSeries > xDataSeries,
                             const OUString& rValueRole,
                             sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx, bool bCloseSymbol );
     /** Converts the passed error bar settings (called at trend line child series). */
-    bool                ConvertTrendLine( const XclExpChSeries& rParent, XRegressionCurveRef xRegCurve );
+    bool                ConvertTrendLine( const XclExpChSeries& rParent,
+                                          css::uno::Reference< css::chart2::XRegressionCurve > xRegCurve );
     /** Converts the passed error bar settings (called at error bar child series). */
     bool                ConvertErrorBar( const XclExpChSeries& rParent, const ScfPropertySet& rPropSet, sal_uInt8 nBarId );
     /** Converts and inserts category ranges for all inserted series. */
-    void                ConvertCategSequence( XLabeledDataSeqRef xCategSeq );
+    void                ConvertCategSequence( css::uno::Reference< css::chart2::data::XLabeledDataSequence > xCategSeq );
 
     /** Writes all embedded records. */
     virtual void        WriteSubRecords( XclExpStream& rStrm ) SAL_OVERRIDE;
@@ -739,7 +724,7 @@ private:
     /** Initializes members of this series to represent a child of the passed series. */
     void                InitFromParent( const XclExpChSeries& rParent );
     /** Tries to create trend line series objects (called at parent series). */
-    void                CreateTrendLines( XDataSeriesRef xDataSeries );
+    void                CreateTrendLines( css::uno::Reference< css::chart2::XDataSeries > xDataSeries );
     /** Tries to create positive and negative error bar series objects (called at parent series). */
     void                CreateErrorBars( const ScfPropertySet& rPropSet,
                             const OUString& rBarPropName,
@@ -776,15 +761,12 @@ typedef std::shared_ptr< XclExpChSeries > XclExpChSeriesRef;
 class XclExpChType : public XclExpRecord, protected XclExpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >      XDiagramRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >    XChartTypeRef;
-
-public:
     explicit            XclExpChType( const XclExpChRoot& rRoot );
 
     /** Converts the passed chart type and the contained data series. */
-    void                Convert( XDiagramRef xDiagram, XChartTypeRef xChartType,
-                            sal_Int32 nApiAxesSetIdx, bool bSwappedAxesSet, bool bHasXLabels );
+    void                Convert( css::uno::Reference< css::chart2::XDiagram > xDiagram,
+                                 css::uno::Reference< css::chart2::XChartType > xChartType,
+                                 sal_Int32 nApiAxesSetIdx, bool bSwappedAxesSet, bool bHasXLabels );
     /** Sets stacking mode (standard or percent) for the series in this chart type group. */
     void                SetStacked( bool bPercent );
 
@@ -888,22 +870,18 @@ typedef std::shared_ptr< XclExpChDropBar > XclExpChDropBarRef;
 class XclExpChTypeGroup : public XclExpChGroupBase
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >                      XDiagramRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >                    XChartTypeRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >                   XDataSeriesRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >    XLabeledDataSeqRef;
-
-public:
     explicit            XclExpChTypeGroup( const XclExpChRoot& rRoot, sal_uInt16 nGroupIdx );
 
     /** Converts the passed chart type to Excel type settings. */
-    void                ConvertType( XDiagramRef xDiagram, XChartTypeRef xChartType,
+    void                ConvertType( css::uno::Reference< css::chart2::XDiagram > xDiagram,
+                            css::uno::Reference< css::chart2::XChartType > xChartType,
                             sal_Int32 nApiAxesSetIdx, bool b3dChart, bool bSwappedAxesSet, bool bHasXLabels );
     /** Converts and inserts all series from the passed chart type. */
-    void                ConvertSeries( XDiagramRef xDiagram, XChartTypeRef xChartType,
+    void                ConvertSeries( css::uno::Reference< css::chart2::XDiagram > xDiagram,
+                            css::uno::Reference< css::chart2::XChartType > xChartType,
                             sal_Int32 nGroupAxesSetIdx, bool bPercent, bool bConnectorLines );
     /** Converts and inserts category ranges for all inserted series. */
-    void                ConvertCategSequence( XLabeledDataSeqRef xCategSeq );
+    void                ConvertCategSequence( css::uno::Reference< css::chart2::data::XLabeledDataSequence > xCategSeq );
     /** Creates a legend object and converts all legend settings. */
     void                ConvertLegend( const ScfPropertySet& rPropSet );
 
@@ -929,13 +907,13 @@ private:
     /** Returns an unused format index to be used for the next created series. */
     sal_uInt16          GetFreeFormatIdx() const;
     /** Creates all data series of any chart type except stock charts. */
-    void                CreateDataSeries( XDiagramRef xDiagram,
-                            XDataSeriesRef xDataSeries );
+    void                CreateDataSeries( css::uno::Reference< css::chart2::XDiagram > xDiagram,
+                            css::uno::Reference< css::chart2::XDataSeries > xDataSeries );
     /** Creates all data series of a stock chart. */
-    void                CreateAllStockSeries( XChartTypeRef xChartType,
-                            XDataSeriesRef xDataSeries );
+    void                CreateAllStockSeries( css::uno::Reference< css::chart2::XChartType > xChartType,
+                            css::uno::Reference< css::chart2::XDataSeries > xDataSeries );
     /** Creates a single data series of a stock chart. */
-    bool                CreateStockSeries( XDataSeriesRef xDataSeries,
+    bool                CreateStockSeries( css::uno::Reference< css::chart2::XDataSeries > xDataSeries,
                             const OUString& rValueRole, bool bCloseSymbol );
 
     virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
@@ -1034,11 +1012,6 @@ typedef std::shared_ptr< XclExpChTick > XclExpChTickRef;
 class XclExpChAxis : public XclExpChGroupBase, public XclExpChFontBase
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >  XDiagramRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >     XAxisRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart::XAxis >      XChart1AxisRef;
-
-public:
     explicit            XclExpChAxis( const XclExpChRoot& rRoot, sal_uInt16 nAxisType );
 
     /** Sets font color and color identifier to internal data structures. */
@@ -1047,10 +1020,12 @@ public:
     virtual void        SetRotation( sal_uInt16 nRotation ) SAL_OVERRIDE;
 
     /** Converts formatting and scaling settings from the passed axis. */
-    void                Convert( XAxisRef xAxis, XAxisRef xCrossingAxis,
-                            XChart1AxisRef xChart1Axis, const XclChExtTypeInfo& rTypeInfo );
+    void                Convert( css::uno::Reference< css::chart2::XAxis > xAxis,
+                            css::uno::Reference< css::chart2::XAxis > xCrossingAxis,
+                            css::uno::Reference< css::chart::XAxis > xChart1Axis,
+                            const XclChExtTypeInfo& rTypeInfo );
     /** Converts and writes 3D wall/floor properties from the passed diagram. */
-    void                ConvertWall( XDiagramRef xDiagram );
+    void                ConvertWall( css::uno::Reference< css::chart2::XDiagram > xDiagram );
 
     /** Returns the type of this axis. */
     inline sal_uInt16   GetAxisType() const { return maData.mnType; }
@@ -1087,15 +1062,12 @@ typedef std::shared_ptr< XclExpChAxis > XclExpChAxisRef;
 class XclExpChAxesSet : public XclExpChGroupBase
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >          XDiagramRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > XCoordSystemRef;
-
-public:
     explicit            XclExpChAxesSet( const XclExpChRoot& rRoot, sal_uInt16 nAxesSetId );
 
     /** Converts the passed diagram to chart record data.
         @return  First unused chart type group index. */
-    sal_uInt16          Convert( XDiagramRef xDiagram, sal_uInt16 nFirstGroupIdx );
+    sal_uInt16          Convert( css::uno::Reference< css::chart2::XDiagram > xDiagram,
+                                 sal_uInt16 nFirstGroupIdx );
 
     /** Returns true, if this axes set exists (returns false if this is a dummy object). */
     inline bool         IsValidAxesSet() const { return !maTypeGroups.IsEmpty(); }
@@ -1118,7 +1090,8 @@ private:
     /** Converts a complete axis object including axis title. */
     void                ConvertAxis( XclExpChAxisRef& rxChAxis, sal_uInt16 nAxisType,
                             XclExpChTextRef& rxChAxisTitle, sal_uInt16 nTitleTarget,
-                            XCoordSystemRef xCoordSystem, const XclChExtTypeInfo& rTypeInfo,
+                            css::uno::Reference< css::chart2::XCoordinateSystem > xCoordSystem,
+                            const XclChExtTypeInfo& rTypeInfo,
                             sal_Int32 nCrossingAxisDim );
 
     virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
@@ -1151,11 +1124,9 @@ typedef std::shared_ptr< XclExpChAxesSet > XclExpChAxesSetRef;
 class XclExpChChart : public XclExpChGroupBase
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
-
-public:
     explicit            XclExpChChart( const XclExpRoot& rRoot,
-                            XChartDocRef xChartDoc, const Rectangle& rChartRect );
+                            css::uno::Reference< css::chart2::XChartDocument > xChartDoc,
+                            const Rectangle& rChartRect );
 
     /** Creates, registers and returns a new data series object. */
     XclExpChSeriesRef   CreateSeries();
@@ -1194,7 +1165,7 @@ class XclExpChartDrawing : public XclExpRecordBase, protected XclExpRoot
 public:
     explicit            XclExpChartDrawing(
                             const XclExpRoot& rRoot,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
+                            const ::com::sun::star::uno::Reference< css::frame::XModel >& rxModel,
                             const Size& rChartSize );
     virtual             ~XclExpChartDrawing();
 
@@ -1209,11 +1180,9 @@ private:
 class XclExpChart : public XclExpSubStream, protected XclExpRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > XModelRef;
-
-public:
     explicit            XclExpChart( const XclExpRoot& rRoot,
-                            XModelRef xModel, const Rectangle& rChartRect );
+                            css::uno::Reference< css::frame::XModel > xModel,
+                            const Rectangle& rChartRect );
 };
 
 #endif

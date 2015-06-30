@@ -140,14 +140,14 @@ Binding::~Binding()
     _setModel(NULL);
 }
 
-void Binding::_setModel( const Model_t& xModel )
+void Binding::_setModel( const css::uno::Reference<css::xforms::XModel>& xModel )
 {
     PropertyChangeNotifier aNotifyModelChange( *this, HANDLE_Model );
     PropertyChangeNotifier aNotifyModelIDChange( *this, HANDLE_ModelID );
 
     // prepare binding for removal of old model
     clear(); // remove all cached data (e.g. XPath evaluation results)
-    XNameContainer_t xNamespaces = getModelNamespaces(); // save namespaces
+    css::uno::Reference<css::container::XNameContainer> xNamespaces = getModelNamespaces(); // save namespaces
 
     mxModel = xModel;
 
@@ -166,7 +166,7 @@ OUString Binding::getModelID() const
 }
 
 
-Binding::XNodeList_t Binding::getXNodeList()
+css::uno::Reference<css::xml::dom::XNodeList> Binding::getXNodeList()
 {
     // first make sure we are bound
     if( ! maBindingExpression.hasValue() )
@@ -314,7 +314,7 @@ EvaluationContext Binding::getEvaluationContext() const
 }
 
 
-Binding::IntSequence_t Binding::getUnoTunnelID()
+css::uno::Sequence<sal_Int8> Binding::getUnoTunnelID()
 {
     static cppu::OImplementationId aImplementationId;
     return aImplementationId.getImplementationId();
@@ -416,17 +416,17 @@ void Binding::setType( const OUString& sTypeName )
     bindingModified();
 }
 
-void Binding::setBindingNamespaces( const XNameContainer_t& rNamespaces )
+void Binding::setBindingNamespaces( const css::uno::Reference<css::container::XNameContainer>& rNamespaces )
 {
     _setNamespaces( rNamespaces, true );
 }
 
-Binding::XNameContainer_t Binding::getModelNamespaces() const
+css::uno::Reference<css::container::XNameContainer> Binding::getModelNamespaces() const
 {
     return _getNamespaces();
 }
 
-void Binding::setModelNamespaces( const XNameContainer_t& rNamespaces )
+void Binding::setModelNamespaces( const css::uno::Reference<css::container::XNameContainer>& rNamespaces )
 {
     _setNamespaces( rNamespaces, false );
 }
@@ -486,7 +486,7 @@ Model* Binding::getModelImpl() const
     return getModelImpl( mxModel );
 }
 
-Model* Binding::getModelImpl( const Model_t& xModel )
+Model* Binding::getModelImpl( const css::uno::Reference<css::xforms::XModel>& xModel )
 {
     Reference<XUnoTunnel> xTunnel( xModel, UNO_QUERY );
     Model* pModel = xTunnel.is()
@@ -599,7 +599,7 @@ void Binding::bind( bool bForceRebind )
     // 2) register suitable listeners on the instance (and remove old ones)
     if( maEventNodes.empty() || bForceRebind )
     {
-        for( XNodes_t::iterator aIter = maEventNodes.begin();
+        for( auto aIter = maEventNodes.begin();
              aIter != maEventNodes.end();
              ++aIter )
             lcl_removeListenerFromNode( *aIter, this );
@@ -660,7 +660,7 @@ void Binding::bind( bool bForceRebind )
 
 
 // helper for Binding::valueModified
-static void lcl_modified( const Binding::XModifyListener_t& xListener,
+static void lcl_modified( const css::uno::Reference<css::util::XModifyListener>& xListener,
                    const Reference<XInterface>& xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
@@ -668,7 +668,7 @@ static void lcl_modified( const Binding::XModifyListener_t& xListener,
 }
 
 // helper for Binding::valueModified
-static void lcl_listentry( const Binding::XListEntryListener_t& xListener,
+static void lcl_listentry( const css::uno::Reference<css::form::binding::XListEntryListener>& xListener,
                     const Reference<XInterface>& xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
@@ -677,7 +677,7 @@ static void lcl_listentry( const Binding::XListEntryListener_t& xListener,
 }
 
 // helper for Binding::valueModified
-static void lcl_validate( const Binding::XValidityConstraintListener_t& xListener,
+static void lcl_validate( const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener,
                    const Reference<XInterface>& xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
@@ -725,7 +725,7 @@ void Binding::valueModified()
         distributeMIP( xNode->getFirstChild() );
 }
 
-void Binding::distributeMIP( const XNode_t & rxNode ) {
+void Binding::distributeMIP( const css::uno::Reference<css::xml::dom::XNode> & rxNode ) {
 
     typedef com::sun::star::xforms::XFormsEventConcrete XFormsEvent_t;
     OUString sEventName("xforms-generic");
@@ -734,12 +734,12 @@ void Binding::distributeMIP( const XNode_t & rxNode ) {
     Reference<XEvent> xEvent(pEvent);
 
     // naive depth-first traversal
-    XNode_t xNode( rxNode );
+    css::uno::Reference<css::xml::dom::XNode> xNode( rxNode );
     while(xNode.is()) {
 
         // notifications should be triggered at the
         // leaf nodes first, bubbling upwards the hierarchy.
-        XNode_t child(xNode->getFirstChild());
+        css::uno::Reference<css::xml::dom::XNode> child(xNode->getFirstChild());
         if(child.is())
             distributeMIP(child);
 
@@ -799,7 +799,7 @@ MIP Binding::getLocalMIP() const
     return aMIP;
 }
 
-Binding::XDataType_t Binding::getDataType()
+css::uno::Reference<css::xsd::XDataType> Binding::getDataType()
 {
     OSL_ENSURE( getModel().is(), "need model" );
     OSL_ENSURE( getModel()->getDataTypeRepository().is(), "need types" );
@@ -836,7 +836,7 @@ void Binding::clear()
         pModel->removeMIPs( this );
 
     // remove all references
-    for( XNodes_t::iterator aIter = maEventNodes.begin();
+    for( auto aIter = maEventNodes.begin();
          aIter != maEventNodes.end();
          ++aIter )
         lcl_removeListenerFromNode( *aIter, this );
@@ -854,8 +854,8 @@ void Binding::clear()
 }
 
 
-static void lcl_removeOtherNamespaces( const Binding::XNameContainer_t& xFrom,
-                                Binding::XNameContainer_t& xTo )
+static void lcl_removeOtherNamespaces( const css::uno::Reference<css::container::XNameContainer>& xFrom,
+                                css::uno::Reference<css::container::XNameContainer>& xTo )
 {
     OSL_ENSURE( xFrom.is(), "no source" );
     OSL_ENSURE( xTo.is(), "no target" );
@@ -881,8 +881,8 @@ static void lcl_removeOtherNamespaces( const Binding::XNameContainer_t& xFrom,
  * @param bFromSource true: use elements from source
  *                    false: use only elements from target
  */
-static void lcl_copyNamespaces( const Binding::XNameContainer_t& xFrom,
-                         Binding::XNameContainer_t& xTo,
+static void lcl_copyNamespaces( const css::uno::Reference<css::container::XNameContainer>& xFrom,
+                         css::uno::Reference<css::container::XNameContainer>& xTo,
                          bool bOverwrite )
 {
     OSL_ENSURE( xFrom.is(), "no source" );
@@ -918,9 +918,9 @@ static void lcl_copyNamespaces( const Binding::XNameContainer_t& xFrom,
 
 // implement get*Namespaces()
 // (identical for both variants)
-Binding::XNameContainer_t Binding::_getNamespaces() const
+css::uno::Reference<css::container::XNameContainer> Binding::_getNamespaces() const
 {
-    XNameContainer_t xNamespaces = new NameContainer<OUString>();
+    css::uno::Reference<css::container::XNameContainer> xNamespaces = new NameContainer<OUString>();
     lcl_copyNamespaces( mxNamespaces, xNamespaces, true );
 
     // merge model's with binding's own namespaces
@@ -933,11 +933,11 @@ Binding::XNameContainer_t Binding::_getNamespaces() const
 
 // implement set*Namespaces()
 // bBinding = true: setBindingNamespaces, otherwise: setModelNamespaces
-void Binding::_setNamespaces( const XNameContainer_t& rNamespaces,
+void Binding::_setNamespaces( const css::uno::Reference<css::container::XNameContainer>& rNamespaces,
                               bool bBinding )
 {
     Model* pModel = getModelImpl();
-    XNameContainer_t xModelNamespaces = ( pModel != NULL )
+    css::uno::Reference<css::container::XNameContainer> xModelNamespaces = ( pModel != NULL )
                                             ? pModel->getNamespaces()
                                             : NULL;
     OSL_ENSURE( ( pModel != NULL ) == xModelNamespaces.is(), "no model nmsp?");
@@ -966,7 +966,7 @@ void Binding::_setNamespaces( const XNameContainer_t& rNamespaces,
                  && xModelNamespaces->hasByName( rName ) );
 
         // write namespace into the appropriate namespace container
-        XNameContainer_t& rWhich = bLocal ? mxNamespaces : xModelNamespaces;
+        css::uno::Reference<css::container::XNameContainer>& rWhich = bLocal ? mxNamespaces : xModelNamespaces;
         OSL_ENSURE( rWhich.is(), "whoops" );
         if( rWhich->hasByName( rName ) )
             rWhich->replaceByName( rName, aValue );
@@ -1016,19 +1016,19 @@ void Binding::_checkBindingID()
 // XValueBinding
 
 
-Binding::Sequence_Type_t Binding::getSupportedValueTypes()
+css::uno::Sequence<css::uno::Type> Binding::getSupportedValueTypes()
     throw( RuntimeException, std::exception )
 {
     return Convert::get().getTypes();
 }
 
-sal_Bool Binding::supportsType( const Type_t& rType )
+sal_Bool Binding::supportsType( const css::uno::Type& rType )
     throw( RuntimeException, std::exception )
 {
     return Convert::get().hasType( rType );
 }
 
-Binding::Any_t Binding::getValue( const Type_t& rType )
+css::uno::Any Binding::getValue( const css::uno::Type& rType )
     throw( IncompatibleTypesException,
            RuntimeException, std::exception )
 {
@@ -1040,7 +1040,7 @@ Binding::Any_t Binding::getValue( const Type_t& rType )
         throw IncompatibleTypesException( EXCEPT( "type unsupported" ) );
 
     // return string value (if present; else return empty Any)
-    Binding::Any_t result = Any();
+    css::uno::Any result;
     if(maBindingExpression.hasValue()) {
         OUString pathExpr(maBindingExpression.getString());
         Convert &rConvert = Convert::get();
@@ -1050,7 +1050,7 @@ Binding::Any_t Binding::getValue( const Type_t& rType )
     return result;
 }
 
-void Binding::setValue( const Any_t& aValue )
+void Binding::setValue( const css::uno::Any& aValue )
     throw( IncompatibleTypesException,
            InvalidBindingStateException,
            NoSupportException,
@@ -1065,7 +1065,7 @@ void Binding::setValue( const Any_t& aValue )
 
     if( maBindingExpression.hasValue() )
     {
-        Binding::XNode_t xNode = maBindingExpression.getNode();
+        css::uno::Reference<css::xml::dom::XNode> xNode = maBindingExpression.getNode();
         if( xNode.is() )
         {
             OUString sValue = Convert::get().toXSD( aValue );
@@ -1152,7 +1152,7 @@ Sequence<OUString> Binding::getAllListEntries()
     return aSequence;
 }
 
-void Binding::addListEntryListener( const XListEntryListener_t& xListener )
+void Binding::addListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>& xListener )
     throw( NullPointerException,
            RuntimeException, std::exception )
 {
@@ -1164,7 +1164,7 @@ void Binding::addListEntryListener( const XListEntryListener_t& xListener )
         maListEntryListeners.push_back( xListener );
 }
 
-void Binding::removeListEntryListener( const XListEntryListener_t& xListener )
+void Binding::removeListEntryListener( const css::uno::Reference<css::form::binding::XListEntryListener>& xListener )
     throw( NullPointerException,
            RuntimeException, std::exception )
 {
@@ -1180,7 +1180,7 @@ void Binding::removeListEntryListener( const XListEntryListener_t& xListener )
 // XValidator
 
 
-sal_Bool Binding::isValid( const Any_t& )
+sal_Bool Binding::isValid( const css::uno::Any& )
     throw( RuntimeException, std::exception )
 {
     // first, check for model
@@ -1191,7 +1191,7 @@ sal_Bool Binding::isValid( const Any_t& )
 }
 
 OUString Binding::explainInvalid(
-    const Any_t& /*Value*/ )
+    const css::uno::Any& /*Value*/ )
     throw( RuntimeException, std::exception )
 {
     // first, check for model
@@ -1202,7 +1202,7 @@ OUString Binding::explainInvalid(
 }
 
 void Binding::addValidityConstraintListener(
-    const XValidityConstraintListener_t& xListener )
+    const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener )
     throw( NullPointerException,
            RuntimeException, std::exception )
 {
@@ -1213,7 +1213,7 @@ void Binding::addValidityConstraintListener(
 }
 
 void Binding::removeValidityConstraintListener(
-    const XValidityConstraintListener_t& xListener )
+    const css::uno::Reference<css::form::validation::XValidityConstraintListener>& xListener )
     throw( NullPointerException,
            RuntimeException, std::exception )
 {
@@ -1230,7 +1230,7 @@ void Binding::removeValidityConstraintListener(
 // xml::dom::event::XEventListener
 
 
-void Binding::handleEvent( const XEvent_t& xEvent )
+void Binding::handleEvent( const css::uno::Reference<css::xml::dom::events::XEvent>& xEvent )
     throw( RuntimeException, std::exception )
 {
     OUString sType(xEvent->getType());
@@ -1263,7 +1263,7 @@ void Binding::handleEvent( const XEvent_t& xEvent )
 // lang::XUnoTunnel
 
 
-sal_Int64 Binding::getSomething( const IntSequence_t& xId )
+sal_Int64 Binding::getSomething( const css::uno::Sequence<sal_Int8>& xId )
     throw( RuntimeException, std::exception )
 {
     return reinterpret_cast<sal_Int64>( ( xId == getUnoTunnelID() ) ? this : NULL );
@@ -1273,7 +1273,7 @@ sal_Int64 Binding::getSomething( const IntSequence_t& xId )
 // XCloneable
 
 
-Binding::XCloneable_t SAL_CALL Binding::createClone()
+css::uno::Reference<css::util::XCloneable> SAL_CALL Binding::createClone()
     throw( RuntimeException, std::exception )
 {
     Reference< XPropertySet > xClone;
@@ -1286,7 +1286,7 @@ Binding::XCloneable_t SAL_CALL Binding::createClone()
         xClone = new Binding;
         copy( this, xClone );
     }
-    return XCloneable_t( xClone, UNO_QUERY );
+    return css::uno::Reference<css::util::XCloneable>( xClone, UNO_QUERY );
 }
 
 
@@ -1309,9 +1309,9 @@ void Binding::initializePropertySet()
 {
     REGISTER_PROPERTY        ( BindingID,            OUString );
     REGISTER_PROPERTY        ( BindingExpression,    OUString );
-    REGISTER_PROPERTY_RO     ( Model,                Model_t );
-    REGISTER_PROPERTY        ( BindingNamespaces,    XNameContainer_t );
-    REGISTER_PROPERTY        ( ModelNamespaces,      XNameContainer_t );
+    REGISTER_PROPERTY_RO     ( Model,                css::uno::Reference<css::xforms::XModel> );
+    REGISTER_PROPERTY        ( BindingNamespaces,    css::uno::Reference<css::container::XNameContainer> );
+    REGISTER_PROPERTY        ( ModelNamespaces,      css::uno::Reference<css::container::XNameContainer> );
     REGISTER_PROPERTY_RO     ( ModelID,              OUString );
     REGISTER_PROPERTY        ( ReadonlyExpression,   OUString );
     REGISTER_PROPERTY        ( RelevantExpression,   OUString );
@@ -1329,7 +1329,7 @@ void Binding::initializePropertySet()
 }
 
 void Binding::addModifyListener(
-    const XModifyListener_t& xListener )
+    const css::uno::Reference<css::util::XModifyListener>& xListener )
     throw( RuntimeException, std::exception )
 {
     OSL_ENSURE( xListener.is(), "need listener!" );
@@ -1344,7 +1344,7 @@ void Binding::addModifyListener(
 }
 
 void Binding::removeModifyListener(
-    const XModifyListener_t& xListener )
+    const css::uno::Reference<css::util::XModifyListener>& xListener )
     throw( RuntimeException, std::exception )
 {
     ModifyListeners_t::iterator aIter =

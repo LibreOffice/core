@@ -34,11 +34,6 @@ class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
 
     public:
 
-        typedef com::sun::star::uno::RuntimeException RuntimeException_t;
-        typedef com::sun::star::uno::Reference< com::sun::star::xml::dom::events::XEventTarget > XEventTarget_t;
-        typedef com::sun::star::xml::dom::events::PhaseType PhaseType_t;
-        typedef com::sun::star::util::Time Time_t;
-
         XFormsEventConcrete()
             : m_canceled(false)
             , m_phase(com::sun::star::xml::dom::events::PhaseType_CAPTURING_PHASE)
@@ -48,27 +43,27 @@ class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
         }
         virtual ~XFormsEventConcrete() {}
 
-        virtual OUString SAL_CALL getType() throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
-        virtual XEventTarget_t SAL_CALL getTarget() throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
-        virtual XEventTarget_t SAL_CALL getCurrentTarget() throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
-        virtual PhaseType_t SAL_CALL getEventPhase() throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL getBubbles() throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL getCancelable() throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
-        virtual Time_t SAL_CALL getTimeStamp() throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL stopPropagation() throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL preventDefault() throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::xml::dom::events::PhaseType SAL_CALL getEventPhase() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL getBubbles() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL getCancelable() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::util::Time SAL_CALL getTimeStamp() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL stopPropagation() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL preventDefault() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL initXFormsEvent(
                             const OUString& typeArg,
                             sal_Bool canBubbleArg,
                             sal_Bool cancelableArg )
-                            throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
+                            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL initEvent(
             const OUString& eventTypeArg,
             sal_Bool canBubbleArg,
             sal_Bool cancelableArg)
-            throw (RuntimeException_t, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
 
@@ -77,12 +72,12 @@ class XFormsEventConcrete : public cppu::WeakImplHelper1< XFormsEvent > {
     protected:
 
         OUString m_eventType;
-        XEventTarget_t m_target;
-        XEventTarget_t m_currentTarget;
-        PhaseType_t m_phase;
+        css::uno::Reference< css::xml::dom::events::XEventTarget > m_target;
+        css::uno::Reference< css::xml::dom::events::XEventTarget > m_currentTarget;
+        css::xml::dom::events::PhaseType m_phase;
         bool m_bubbles;
         bool m_cancelable;
-        Time_t m_time;
+        css::util::Time m_time;
 };
 
 } } } }

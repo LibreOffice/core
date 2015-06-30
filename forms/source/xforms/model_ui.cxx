@@ -406,13 +406,13 @@ void Model::removeBindingIfUseless( const XPropertySet_t& xBinding )
     }
 }
 
-Model::XDocument_t Model::newInstance( const OUString& sName,
+css::uno::Reference<css::xml::dom::XDocument> Model::newInstance( const OUString& sName,
                          const OUString& sURL,
                          sal_Bool bURLOnce )
     throw( RuntimeException, std::exception )
 {
     // create a default instance with <instanceData> element
-    XDocument_t xInstance = getDocumentBuilder()->newDocument();
+    css::uno::Reference<css::xml::dom::XDocument> xInstance = getDocumentBuilder()->newDocument();
     DBG_ASSERT( xInstance.is(), "failed to create DOM instance" );
 
     Reference<XNode>( xInstance, UNO_QUERY_THROW )->appendChild(
@@ -517,11 +517,11 @@ static Reference<XNameContainer> lcl_getModels(
     return xRet;
 }
 
-Model::XModel_t Model::newModel( const Reference<com::sun::star::frame::XModel>& xCmp,
+css::uno::Reference<css::xforms::XModel> Model::newModel( const Reference<com::sun::star::frame::XModel>& xCmp,
                                  const OUString& sName )
     throw( RuntimeException, std::exception )
 {
-    Model::XModel_t xModel;
+    css::uno::Reference<css::xforms::XModel> xModel;
     Reference<XNameContainer> xModels = lcl_getModels( xCmp );
     if( xModels.is()
         && ! xModels->hasByName( sName ) )

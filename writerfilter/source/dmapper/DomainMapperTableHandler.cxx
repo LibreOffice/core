@@ -51,7 +51,8 @@ using namespace ::std;
 
 #define DEF_BORDER_DIST 190  //0,19cm
 
-DomainMapperTableHandler::DomainMapperTableHandler(TextReference_t const& xText,
+DomainMapperTableHandler::DomainMapperTableHandler(
+            css::uno::Reference<css::text::XTextAppendAndConvert> const& xText,
             DomainMapper_Impl& rDMapper_Impl)
     : m_xText(xText),
         m_rDMapper_Impl( rDMapper_Impl ),
@@ -247,7 +248,7 @@ struct TableInfo
     PropertyMapPtr pTableDefaults;
     PropertyMapPtr pTableBorders;
     TableStyleSheetEntry* pTableStyle;
-    TablePropertyValues_t aTableProperties;
+    css::beans::PropertyValues aTableProperties;
 
     TableInfo()
     : nLeftBorderDistance(DEF_BORDER_DIST)
@@ -629,7 +630,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
     sal_Int32 nRow = 0;
 
     //it's a uno::Sequence< beans::PropertyValues >*
-    RowPropertyValuesSeq_t* pCellProperties = aCellProperties.getArray();
+    css::uno::Sequence<css::beans::PropertyValues>* pCellProperties = aCellProperties.getArray();
     PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
     while( aRowOfCellsIterator != aRowOfCellsIteratorEnd )
     {
@@ -907,14 +908,14 @@ bool lcl_emptyRow(TableSequence_t& rTableSeq, sal_Int32 nRow)
     return true;
 }
 
-RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
+css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTableGetRowProperties()
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("getRowProperties");
 #endif
 
     static const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
-    RowPropertyValuesSeq_t aRowProperties( m_aRowProperties.size() );
+    css::uno::Sequence<css::beans::PropertyValues> aRowProperties( m_aRowProperties.size() );
     PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
     PropertyMapVector1::const_iterator aRowIterEnd = m_aRowProperties.end();
     sal_Int32 nRow = 0;
@@ -992,7 +993,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel)
     std::vector<HorizontallyMergedCell> aMerges;
     CellPropertyValuesSeq_t aCellProperties = endTableGetCellProperties(aTableInfo, aMerges);
 
-    RowPropertyValuesSeq_t aRowProperties = endTableGetRowProperties();
+    css::uno::Sequence<css::beans::PropertyValues> aRowProperties = endTableGetRowProperties();
 
 #ifdef DEBUG_WRITERFILTER
     lcl_DumpPropertyValueSeq(aRowProperties);
@@ -1167,7 +1168,7 @@ void DomainMapperTableHandler::endRow()
 #endif
 }
 
-void DomainMapperTableHandler::startCell(const Handle_t & start,
+void DomainMapperTableHandler::startCell(const css::uno::Reference< css::text::XTextRange > & start,
                                          TablePropertyMapPtr pProps )
 {
     sal_uInt32 nRow = m_aRowProperties.size();
@@ -1197,7 +1198,7 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
     (*m_pCellSeq)[0] = start->getStart();
 }
 
-void DomainMapperTableHandler::endCell(const Handle_t & end)
+void DomainMapperTableHandler::endCell(const css::uno::Reference< css::text::XTextRange > & end)
 {
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().startElement("table.cell.end");

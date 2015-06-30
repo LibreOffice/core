@@ -379,11 +379,6 @@ typedef boost::shared_ptr< XclImpChFrame > XclImpChFrameRef;
 class XclImpChSourceLink : protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >   XDataSequenceRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XFormattedString >      XFormattedStringRef;
-    typedef ::com::sun::star::uno::Sequence< XFormattedStringRef >                              XFormattedStringSeq;
-
-public:
     explicit            XclImpChSourceLink( const XclImpChRoot& rRoot );
     virtual             ~XclImpChSourceLink();
 
@@ -410,9 +405,11 @@ public:
     void                ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const;
 
     /** Creates a data sequence containing the link into the Calc document. */
-    XDataSequenceRef    CreateDataSequence( const OUString& rRole ) const;
+    css::uno::Reference< css::chart2::data::XDataSequence >
+                        CreateDataSequence( const OUString& rRole ) const;
     /** Creates a sequence of formatted string objects. */
-    XFormattedStringSeq CreateStringSequence( const XclImpChRoot& rRoot,
+    css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >
+                        CreateStringSequence( const XclImpChRoot& rRoot,
                             sal_uInt16 nLeadFontIdx, const Color& rLeadFontColor ) const;
 
     void                FillSourceLink(::std::vector<ScTokenRef>& rTokens) const;
@@ -471,9 +468,6 @@ typedef boost::shared_ptr< XclImpChFont > XclImpChFontRef;
 class XclImpChText : public XclImpChGroupBase, public XclImpChFontBase, protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle > XTitleRef;
-
-public:
     explicit            XclImpChText( const XclImpChRoot& rRoot );
 
     /** Reads the CHTEXT record (called by base class). */
@@ -515,7 +509,8 @@ public:
     /** Converts and writes all contained data to the passed data point label property set. */
     void                ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const;
     /** Creates a title text object. */
-    XTitleRef           CreateTitle() const;
+    css::uno::Reference< css::chart2::XTitle >
+                        CreateTitle() const;
     /** Converts the manual position of the specified title */
     void                ConvertTitlePosition( const XclChTextKey& rTitleKey ) const;
 
@@ -698,9 +693,6 @@ typedef boost::shared_ptr< XclImpChDataFormat > XclImpChDataFormatRef;
 class XclImpChSerTrendLine : protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XRegressionCurve > XRegressionCurveRef;
-
-public:
     explicit            XclImpChSerTrendLine( const XclImpChRoot& rRoot );
 
     /** Reads the CHSERTRENDLINE record. */
@@ -711,7 +703,8 @@ public:
     inline void         SetTrendlineName( const OUString& aTrendlineName) { maTrendLineName = aTrendlineName; }
 
     /** Creates an API object representing this trend line. */
-    XRegressionCurveRef CreateRegressionCurve() const;
+    css::uno::Reference< css::chart2::XRegressionCurve >
+                        CreateRegressionCurve() const;
 
 private:
     OUString  maTrendLineName;
@@ -725,10 +718,6 @@ typedef boost::shared_ptr< XclImpChSerTrendLine > XclImpChSerTrendLineRef;
 class XclImpChSerErrorBar : protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >    XLabeledDataSeqRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >                   XPropertySetRef;
-
-public:
     explicit            XclImpChSerErrorBar( const XclImpChRoot& rRoot );
 
     /** Reads the CHSERERRORBAR record. */
@@ -741,10 +730,12 @@ public:
     /** Returns the type of this error bar (X/Y, plus/minus). */
     inline sal_uInt8    GetBarType() const { return maData.mnBarType; }
     /** Creates a labeled data sequence object from value data link. */
-    XLabeledDataSeqRef  CreateValueSequence() const;
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+                        CreateValueSequence() const;
 
     /** Tries to create an error bar API object from the specified Excel error bars. */
-    static XPropertySetRef CreateErrorBar(
+    static css::uno::Reference< css::beans::XPropertySet >
+                        CreateErrorBar(
                             const XclImpChSerErrorBar* pPosBar,
                             const XclImpChSerErrorBar* pNegBar );
 
@@ -764,11 +755,6 @@ typedef boost::shared_ptr< XclImpChSerErrorBar > XclImpChSerErrorBarRef;
  */
 class XclImpChSeries : public XclImpChGroupBase, protected XclImpChRoot
 {
-public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >                   XDataSeriesRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >    XLabeledDataSeqRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >                   XPropertySetRef;
-
 public:
     explicit            XclImpChSeries( const XclImpChRoot& rRoot, sal_uInt16 nSeriesIdx );
 
@@ -805,11 +791,14 @@ public:
     inline bool         HasSpline() const { return mxSeriesFmt && mxSeriesFmt->HasSpline(); }
 
     /** Creates a labeled data sequence object from value data link. */
-    XLabeledDataSeqRef  CreateValueSequence( const OUString& rValueRole ) const;
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+                        CreateValueSequence( const OUString& rValueRole ) const;
     /** Creates a labeled data sequence object from category data link. */
-    XLabeledDataSeqRef  CreateCategSequence( const OUString& rCategRole ) const;
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+                        CreateCategSequence( const OUString& rCategRole ) const;
     /** Creates a data series object with initialized source links. */
-    XDataSeriesRef      CreateDataSeries() const;
+    css::uno::Reference< css::chart2::XDataSeries >
+                        CreateDataSeries() const;
 
     void                FillAllSourceLinks(::std::vector<ScTokenRef>& rTokens) const;
 
@@ -829,9 +818,10 @@ private:
     XclImpChDataFormatRef CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx );
 
     /** Converts all trend lines and inserts them into the passed API data series object. */
-    void                ConvertTrendLines( XDataSeriesRef xDataSeries ) const;
+    void                ConvertTrendLines( css::uno::Reference< css::chart2::XDataSeries > xDataSeries ) const;
     /** Tries to create an error bar API object from the specified Excel error bars. */
-    XPropertySetRef     CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const;
+    css::uno::Reference< css::beans::XPropertySet >
+                        CreateErrorBar( sal_uInt8 nPosBarId, sal_uInt8 nNegBarId ) const;
 
 private:
     typedef ::std::map<sal_uInt16, XclImpChDataFormatRef> XclImpChDataFormatMap;
@@ -861,11 +851,6 @@ typedef boost::shared_ptr< XclImpChSeries > XclImpChSeriesRef;
 class XclImpChType : protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >          XDiagramRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > XCoordSystemRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >        XChartTypeRef;
-
-public:
     explicit            XclImpChType( const XclImpChRoot& rRoot );
 
     /** Reads a chart type record (e.g. CHBAR, CHLINE, CHPIE, ...). */
@@ -885,9 +870,11 @@ public:
     bool                HasCategoryLabels() const;
 
     /** Creates a coordinate system according to the contained chart type. */
-    XCoordSystemRef     CreateCoordSystem( bool b3dChart ) const;
+    css::uno::Reference< css::chart2::XCoordinateSystem >
+                        CreateCoordSystem( bool b3dChart ) const;
     /** Creates and returns an object that represents the contained chart type. */
-    XChartTypeRef       CreateChartType( XDiagramRef xDiagram, bool b3dChart ) const;
+    css::uno::Reference< css::chart2::XChartType >
+                        CreateChartType( css::uno::Reference< css::chart2::XDiagram > xDiagram, bool b3dChart ) const;
 
 private:
     XclChType           maData;             /// Contents of the chart type record.
@@ -920,9 +907,6 @@ typedef boost::shared_ptr< XclImpChChart3d > XclImpChChart3dRef;
 class XclImpChLegend : public XclImpChGroupBase, protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XLegend > XLegendRef;
-
-public:
     explicit            XclImpChLegend( const XclImpChRoot& rRoot );
 
     /** Reads the CHLEGEND record (called by base class). */
@@ -933,7 +917,8 @@ public:
     void                Finalize();
 
     /** Creates a new legend object. */
-    XLegendRef          CreateLegend() const;
+    css::uno::Reference< css::chart2::XLegend >
+                        CreateLegend() const;
 
 private:
     XclChLegend         maData;             /// Contents of the CHLEGEND record.
@@ -977,13 +962,6 @@ typedef boost::shared_ptr< XclImpChDropBar > XclImpChDropBarRef;
  */
 class XclImpChTypeGroup : public XclImpChGroupBase, protected XclImpChRoot
 {
-public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >                      XDiagramRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem >             XCoordSystemRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >                    XChartTypeRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >                   XDataSeriesRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >    XLabeledDataSeqRef;
-
 public:
     explicit            XclImpChTypeGroup( const XclImpChRoot& rRoot );
 
@@ -1034,11 +1012,14 @@ public:
     /** Converts and writes all 3D settings to the passed diagram. */
     void                ConvertChart3d( ScfPropertySet& rPropSet ) const;
     /** Creates a coordinate system according to the contained chart type. */
-    XCoordSystemRef     CreateCoordSystem() const;
+    css::uno::Reference< css::chart2::XCoordinateSystem >
+                        CreateCoordSystem() const;
     /** Creates and returns an object that represents the contained chart type. */
-    XChartTypeRef       CreateChartType( XDiagramRef xDiagram, sal_Int32 nApiAxesSetIdx ) const;
+    css::uno::Reference< css::chart2::XChartType >
+                        CreateChartType( css::uno::Reference< css::chart2::XDiagram > xDiagram, sal_Int32 nApiAxesSetIdx ) const;
     /** Creates a labeled data sequence object for axis categories. */
-    XLabeledDataSeqRef  CreateCategSequence() const;
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+                        CreateCategSequence() const;
 
 private:
     /** Reads a CHDROPBAR record group. */
@@ -1054,12 +1035,15 @@ private:
     inline bool         HasDropBars() const { return !maDropBars.empty(); }
 
     /** Inserts the passed series into the chart type. Adds additional properties to the series. */
-    void                InsertDataSeries( XChartTypeRef xChartType,
-                            XDataSeriesRef xSeries, sal_Int32 nApiAxesSetIdx ) const;
+    void                InsertDataSeries( css::uno::Reference< css::chart2::XChartType > xChartType,
+                                          css::uno::Reference< css::chart2::XDataSeries > xSeries,
+                                          sal_Int32 nApiAxesSetIdx ) const;
     /** Creates all data series of any chart type except stock charts. */
-    void                CreateDataSeries( XChartTypeRef xChartType, sal_Int32 nApiAxesSetIdx ) const;
+    void                CreateDataSeries( css::uno::Reference< css::chart2::XChartType > xChartType,
+                                          sal_Int32 nApiAxesSetIdx ) const;
     /** Creates all data series of a stock chart. */
-    void                CreateStockSeries( XChartTypeRef xChartType, sal_Int32 nApiAxesSetIdx ) const;
+    void                CreateStockSeries( css::uno::Reference< css::chart2::XChartType > xChartType,
+                                           sal_Int32 nApiAxesSetIdx ) const;
 
 private:
     typedef ::std::vector< XclImpChSeriesRef >               XclImpChSeriesVec;
@@ -1087,16 +1071,13 @@ typedef boost::shared_ptr< XclImpChTypeGroup > XclImpChTypeGroupRef;
 class XclImpChLabelRange : protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::chart2::ScaleData ScaleData;
-
-public:
     explicit            XclImpChLabelRange( const XclImpChRoot& rRoot );
     /** Reads the CHLABELRANGE record (category axis scaling properties). */
     void                ReadChLabelRange( XclImpStream& rStrm );
     /** Reads the CHDATERANGE record (date axis scaling properties). */
     void                ReadChDateRange( XclImpStream& rStrm );
     /** Converts category axis scaling settings. */
-    void                Convert( ScfPropertySet& rPropSet, ScaleData& rScaleData, bool bMirrorOrient ) const;
+    void                Convert( ScfPropertySet& rPropSet, css::chart2::ScaleData& rScaleData, bool bMirrorOrient ) const;
     /** Converts position settings of this axis at a crossing axis. */
     void                ConvertAxisPosition( ScfPropertySet& rPropSet, bool b3dChart ) const;
 
@@ -1110,14 +1091,11 @@ typedef boost::shared_ptr< XclImpChLabelRange > XclImpChLabelRangeRef;
 class XclImpChValueRange : protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::chart2::ScaleData ScaleData;
-
-public:
     explicit            XclImpChValueRange( const XclImpChRoot& rRoot );
     /** Reads the CHVALUERANGE record (numeric axis scaling properties). */
     void                ReadChValueRange( XclImpStream& rStrm );
     /** Converts value axis scaling settings. */
-    void                Convert( ScaleData& rScaleData, bool bMirrorOrient ) const;
+    void                Convert( css::chart2::ScaleData& rScaleData, bool bMirrorOrient ) const;
     /** Converts position settings of this axis at a crossing axis. */
     void                ConvertAxisPosition( ScfPropertySet& rPropSet ) const;
 
@@ -1159,9 +1137,6 @@ typedef boost::shared_ptr< XclImpChTick > XclImpChTickRef;
 class XclImpChAxis : public XclImpChGroupBase, public XclImpChFontBase, protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis > XAxisRef;
-
-public:
     explicit            XclImpChAxis( const XclImpChRoot& rRoot, sal_uInt16 nAxisType = EXC_CHAXIS_NONE );
 
     /** Reads the CHAXIS record (called by base class). */
@@ -1192,7 +1167,8 @@ public:
     inline bool         HasMinorGrid() const { return static_cast< bool >(mxMinorGrid); }
 
     /** Creates an API axis object. */
-    XAxisRef            CreateAxis( const XclImpChTypeGroup& rTypeGroup, const XclImpChAxis* pCrossingAxis ) const;
+    css::uno::Reference< css::chart2::XAxis >
+                        CreateAxis( const XclImpChTypeGroup& rTypeGroup, const XclImpChAxis* pCrossingAxis ) const;
     /** Converts and writes 3D wall/floor properties to the passed property set. */
     void                ConvertWall( ScfPropertySet& rPropSet ) const;
     /** Converts position settings of this axis at a crossing axis. */
@@ -1228,11 +1204,6 @@ typedef boost::shared_ptr< XclImpChAxis > XclImpChAxisRef;
 class XclImpChAxesSet : public XclImpChGroupBase, protected XclImpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >          XDiagramRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > XCoordSystemRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >             XAxisRef;
-
-public:
     explicit            XclImpChAxesSet( const XclImpChRoot& rRoot, sal_uInt16 nAxesSetId );
 
     /** Reads the CHAXESSET record (called by base class). */
@@ -1261,7 +1232,7 @@ public:
     OUString            GetSingleSeriesTitle() const;
 
     /** Creates a coordinate system and converts all series and axis settings. */
-    void                Convert( XDiagramRef xDiagram ) const;
+    void                Convert( css::uno::Reference< css::chart2::XDiagram >  xDiagram ) const;
     /** Converts the manual positions of all axis titles. */
     void                ConvertTitlePositions() const;
 
@@ -1279,14 +1250,17 @@ private:
     void                UpdateAxisTitle( XclImpChTextRef xTitle );
 
     /** Creates a coordinate system that contains all chart types for this axes set. */
-    XCoordSystemRef     CreateCoordSystem( XDiagramRef xDiagram ) const;
+    css::uno::Reference< css::chart2::XCoordinateSystem >
+                        CreateCoordSystem( css::uno::Reference< css::chart2::XDiagram >  xDiagram ) const;
     /** Creates and inserts an axis into the container and registers the coordinate system. */
     void                ConvertAxis( XclImpChAxisRef xChAxis, XclImpChTextRef xChAxisTitle,
-                            XCoordSystemRef xCoordSystem, const XclImpChAxis* pCrossingAxis ) const;
+                                     css::uno::Reference< css::chart2::XCoordinateSystem > xCoordSystem,
+                                     const XclImpChAxis* pCrossingAxis ) const;
     /** Creates and returns an API axis object. */
-    XAxisRef            CreateAxis( const XclImpChAxis& rChAxis, const XclImpChAxis* pCrossingAxis ) const;
+    css::uno::Reference< css::chart2::XAxis >
+                        CreateAxis( const XclImpChAxis& rChAxis, const XclImpChAxis* pCrossingAxis ) const;
     /** Writes all properties of the background area to the passed diagram. */
-    void                ConvertBackground( XDiagramRef xDiagram ) const;
+    void                ConvertBackground( css::uno::Reference< css::chart2::XDiagram >  xDiagram ) const;
 
 private:
     typedef ::std::map<sal_uInt16, XclImpChTypeGroupRef> XclImpChTypeGroupMap;
@@ -1417,9 +1391,6 @@ private:
 class XclImpChart : protected XclImpRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > XModelRef;
-
-public:
     /** Constructs a new chart object.
         @param bOwnTab  True = chart is on an own sheet; false = chart is an embedded object. */
     explicit            XclImpChart( const XclImpRoot& rRoot, bool bOwnTab );
@@ -1437,7 +1408,7 @@ public:
     inline bool         IsPivotChart() const { return mbIsPivotChart; }
 
     /** Creates the chart object in the passed component. */
-    void                Convert( XModelRef xModel,
+    void                Convert( css::uno::Reference< css::frame::XModel > xModel,
                             XclImpDffConverter& rDffConv,
                             const OUString& rObjName,
                             const Rectangle& rChartRect ) const;

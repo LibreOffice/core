@@ -1286,23 +1286,19 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
 class XclChObjectTable
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >     XNameContainerRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    XServiceFactoryRef;
-
-public:
-    explicit            XclChObjectTable( XServiceFactoryRef xFactory,
+    explicit            XclChObjectTable( css::uno::Reference< css::lang::XMultiServiceFactory > xFactory,
                             const OUString& rServiceName, const OUString& rObjNameBase );
 
     /** Returns a named formatting object from the chart document. */
-    ::com::sun::star::uno::Any GetObject( const OUString& rObjName );
+    css::uno::Any GetObject( const OUString& rObjName );
     /** Insertes a named formatting object into the chart document. */
-    OUString     InsertObject( const ::com::sun::star::uno::Any& rObj );
+    OUString      InsertObject( const ::com::sun::star::uno::Any& rObj );
 
 private:
-    XServiceFactoryRef  mxFactory;              /// Factory to create the container.
-    XNameContainerRef   mxContainer;            /// Container for the objects.
-    OUString     maServiceName;          /// Service name to create the container.
-    OUString     maObjNameBase;          /// Base of names for inserted objects.
+    css::uno::Reference< css::lang::XMultiServiceFactory > mxFactory;              /// Factory to create the container.
+    css::uno::Reference< css::container::XNameContainer >  mxContainer;            /// Container for the objects.
+    OUString            maServiceName;          /// Service name to create the container.
+    OUString            maObjNameBase;          /// Base of names for inserted objects.
     sal_Int32           mnIndex;                /// Index to create unique identifiers.
 };
 
@@ -1405,7 +1401,7 @@ struct XclChRootData
     typedef std::shared_ptr< XclChTypeInfoProvider >      XclChTypeProvRef;
     typedef std::shared_ptr< XclChFormatInfoProvider >    XclChFmtInfoProvRef;
     typedef std::shared_ptr< XclChObjectTable >           XclChObjectTableRef;
-    typedef ::std::map< XclChTextKey, XclChGetShapeFunc >   XclChGetShapeFuncMap;
+    typedef std::map< XclChTextKey, XclChGetShapeFunc >   XclChGetShapeFuncMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
                         mxChartDoc;             /// The chart document.

@@ -58,7 +58,7 @@ namespace connectivity
                                          ::com::sun::star::sdbcx::XDrop,
                                          ::com::sun::star::lang::XServiceInfo> OCollectionBase;
 
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > ObjectType;
+        typedef css::uno::Reference< css::beans::XPropertySet > ObjectType;
 
         class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IObjectCollection
         {

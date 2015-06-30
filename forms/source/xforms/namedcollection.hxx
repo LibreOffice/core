@@ -91,41 +91,41 @@ protected:
 public:
 
     // XElementAccess
-    virtual typename Collection<T>::Type_t SAL_CALL getElementType()
-        throw( typename Collection<T>::RuntimeException_t ) SAL_OVERRIDE
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw( css::uno::RuntimeException ) SAL_OVERRIDE
     {
         return Collection<T>::getElementType();
     }
 
     virtual sal_Bool SAL_CALL hasElements()
-        throw( typename Collection<T>::RuntimeException_t ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException ) SAL_OVERRIDE
     {
         return Collection<T>::hasElements();
     }
 
     // XNameAccess : XElementAccess
-    virtual typename Collection<T>::Any_t SAL_CALL getByName(
+    virtual css::uno::Any SAL_CALL getByName(
         const OUString& aName )
-        throw( typename Collection<T>::NoSuchElementException_t,
-               typename Collection<T>::WrappedTargetException_t,
-               typename Collection<T>::RuntimeException_t ) SAL_OVERRIDE
+        throw( css::container::NoSuchElementException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException ) SAL_OVERRIDE
     {
         if( hasItem( aName ) )
             return com::sun::star::uno::makeAny( getItem( aName ) );
         else
-            throw typename Collection<T>::NoSuchElementException_t();
+            throw css::container::NoSuchElementException();
 
     }
 
     virtual Names_t SAL_CALL getElementNames()
-        throw( typename Collection<T>::RuntimeException_t ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException ) SAL_OVERRIDE
     {
         return getNames();
     }
 
     virtual sal_Bool SAL_CALL hasByName(
         const OUString& aName )
-        throw( typename Collection<T>::RuntimeException_t ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException ) SAL_OVERRIDE
     {
         return hasItem( aName ) ? sal_True : sal_False;
     }

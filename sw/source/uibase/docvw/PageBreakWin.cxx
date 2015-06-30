@@ -165,9 +165,9 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     B2DPolygon aPolygon = createPolygonFromRect(aBRect, 3.0 / BUTTON_WIDTH, 3.0 / BUTTON_HEIGHT);
 
     // Create the polygon primitives
-    aSeq[0] = Primitive2DReference(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+    aSeq[0] = css::uno::Reference< css::graphic::XPrimitive2D >(new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aPolygon), aOtherColor));
-    aSeq[1] = Primitive2DReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+    aSeq[1] = css::uno::Reference< css::graphic::XPrimitive2D >(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
                                         aPolygon, aColor));
 
     // Create the primitive for the image
@@ -175,7 +175,7 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     double nImgOfstX = 3.0;
     if (bRtl)
         nImgOfstX = aRect.Right() - aImg.GetSizePixel().Width() - 3.0;
-    aSeq[2] = Primitive2DReference(new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
+    aSeq[2] = css::uno::Reference< css::graphic::XPrimitive2D >(new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
                                         aImg.GetBitmapEx(), B2DPoint(nImgOfstX, 1.0)));
 
     double nTop = double(aRect.getHeight()) / 2.0;
@@ -196,16 +196,16 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         aTriangleColor = Color(COL_WHITE).getBColor();
 
     aSeq.realloc(aSeq.getLength() + 1);
-    aSeq[aSeq.getLength() - 1] = Primitive2DReference(
+    aSeq[aSeq.getLength() - 1] = css::uno::Reference< css::graphic::XPrimitive2D >(
                                     new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                                         B2DPolyPolygon(aTriangle), aTriangleColor));
 
-    Primitive2DSequence aGhostedSeq(1);
+    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aGhostedSeq(1);
     double nFadeRate = double(m_nFadeRate) / 100.0;
     const basegfx::BColorModifierSharedPtr aBColorModifier(
                 new basegfx::BColorModifier_interpolate(Color(COL_WHITE).getBColor(),
                                                         1.0 - nFadeRate));
-    aGhostedSeq[0] = Primitive2DReference(
+    aGhostedSeq[0] = css::uno::Reference< css::graphic::XPrimitive2D >(
                         new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                             aSeq, aBColorModifier));
 
