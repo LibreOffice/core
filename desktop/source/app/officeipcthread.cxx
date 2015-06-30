@@ -531,6 +531,10 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         if ( aUserInstallPathHashCode.isEmpty() )
             return IPC_STATUS_BOOTSTRAP_ERROR; // Something completely broken, we cannot create a valid hash code!
 
+#if HAVE_FEATURE_MACOSX_SANDBOX
+        nPipeMode = PIPEMODE_CREATED;
+#else
+
         OUString aPipeIdent( "SingleOfficeIPC_" + aUserInstallPathHashCode );
 
         do
@@ -574,6 +578,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
             }
 
         } while ( nPipeMode == PIPEMODE_DONTKNOW );
+#endif
     }
 
     if ( nPipeMode == PIPEMODE_CREATED )
