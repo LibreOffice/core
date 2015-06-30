@@ -48,6 +48,13 @@ endef
 gb_Output_ESCAPE := $(shell echo|awk 'BEGIN { printf "%c", 27 }' -)
 gb_Output_BELL := $(shell echo|awk 'BEGIN { printf "%c", 7 }' -)
 
+# default to color output, if interactive
+ifeq ($(origin gb_COLOR),undefined)
+ifneq ($(MAKE_TERMOUT),)
+gb_COLOR=$(true)
+endif
+endif
+
 # only enable colorized output if
 # - gb_COLOR is set
 # - we have a known term
