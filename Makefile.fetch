@@ -75,6 +75,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 	@date >> $(fetch_LOGFILE)
 	$(foreach item, \
 		$(call fetch_Optional,CDR,CDR_TARBALL) \
+		$(call fetch_Optional,CURL,CURL_TARBALL) \
 		$(call fetch_Optional,EXPAT,EXPAT_TARBALL) \
 		$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
 		$(call fetch_Optional,MSPUB,MSPUB_TARBALL) \
@@ -96,7 +97,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,CMIS,$(CMIS_TARBALL)) \
 		$(call fetch_Optional,CPPUNIT,$(CPPUNIT_TARBALL)) \
 		$(call fetch_Optional,CT2N,$(CT2N_TARBALL)) \
-		$(call fetch_Optional,CURL,$(CURL_TARBALL)) \
 		$(call fetch_Optional,EPM,$(EPM_TARBALL)) \
 		$(call fetch_Optional,MARIADB,$(MARIADB_TARBALL)) \
 		$(call fetch_Optional,MORE_FONTS,$(FONT_CALADEA_TARBALL)) \
