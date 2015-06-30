@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_c2b4e7d2",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 266,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-30T13:50:41Z",
+      "side": 1,
+      "message": "this cast probably doesn\u0027t work on big-endian platforms: those will use the upper 16 bit of nIntValue which are 0.\n\nbetter use a local sal_Unicode temporary.",
+      "revId": "1179d6f25e13644e8757e698c92eeac07be7fee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
