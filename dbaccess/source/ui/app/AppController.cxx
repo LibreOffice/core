@@ -399,7 +399,7 @@ void SAL_CALL OApplicationController::disposing()
                             aFilter,
                             getStrippedDatabaseName(),
                             OUString(),
-                            OUString());
+                            boost::none);
 
                     // add to recent document list
                     if ( aURL.GetProtocol() == INetProtocol::File )
