@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_c29dc75a",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-30T13:20:18Z",
+      "side": 1,
+      "message": "actually it\u0027s better to set these to 2 different values - that way if the values are erroneously mirrored by ChgPageDesc or CopyPageDesc the test would detect the bug!",
+      "revId": "db868414a89975a8667fd47a7c4fd0259e2ec05a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_e28ec326",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-30T13:20:18Z",
+      "side": 1,
+      "message": "it\u0027s only necessary to set the attribute on the master format - the others are synced (and overwritten) by ChgPageDesc",
+      "revId": "db868414a89975a8667fd47a7c4fd0259e2ec05a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_02943f35",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1040,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-30T13:20:18Z",
+      "side": 1,
+      "message": "how about calling this variable something else, to make it more obvious which one is the horizontal one and which vertical?",
+      "revId": "db868414a89975a8667fd47a7c4fd0259e2ec05a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_a298cb6b",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1044,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-30T13:20:18Z",
+      "side": 1,
+      "message": "unnecessary - see above",
+      "revId": "db868414a89975a8667fd47a7c4fd0259e2ec05a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_82a02f92",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-30T13:20:18Z",
+      "side": 1,
+      "message": "the variable names are clearly getting out of hand here - maybe create a 2nd test method?",
+      "revId": "db868414a89975a8667fd47a7c4fd0259e2ec05a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_22adbb88",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1092,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-06-30T13:20:18Z",
+      "side": 1,
+      "message": "unnecessary - see above",
+      "revId": "db868414a89975a8667fd47a7c4fd0259e2ec05a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
