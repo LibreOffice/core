@@ -1222,7 +1222,6 @@ double SwXCell::GetForcedNumericalValue() const
 
 uno::Any SwXCell::GetAny() const
 {
-    SwTableBox* GetTableBox();
     if(!pBox)
         throw uno::RuntimeException();
     // check if table box value item is set
