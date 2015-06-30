@@ -117,14 +117,11 @@
    char proxy_env[128];
  
    no_proxy=curl_getenv("no_proxy");
-@@ -4189,9 +4265,9 @@ static char *detect_proxy(struct connectdata *conn)
+@@ -4189,6 +4265,7 @@ static char *detect_proxy(struct connectdata *conn)
      }
    } /* if(!check_noproxy(conn->host.name, no_proxy)) - it wasn't specified
         non-proxy */
 +#endif /* WIN32 */
-   if(no_proxy)
-     free(no_proxy);
--
- #else /* !CURL_DISABLE_HTTP */
+   free(no_proxy);
  
-   (void)conn;
+ #else /* !CURL_DISABLE_HTTP */
