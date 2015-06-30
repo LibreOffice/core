@@ -143,10 +143,6 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     get(mpAllButtonsBox, "all_buttons_box");
     get(mpButtonsBox, "buttons_box");
     get(mpSmallButtonsBox, "small_buttons_box");
-    get(mpThinBox1, "thin_box1");
-    get(mpThinBox2, "thin_box2");
-    get(mpHelpBox, "help_box");
-    get(mpExtensionsBox, "extensions_box");
 
     get(mpAllRecentThumbnails, "all_recent");
     get(mpLocalView, "local_view");
@@ -233,10 +229,6 @@ void BackingWindow::dispose()
     mpAllButtonsBox.clear();
     mpButtonsBox.clear();
     mpSmallButtonsBox.clear();
-    mpThinBox1.clear();
-    mpThinBox2.clear();
-    mpHelpBox.clear();
-    mpExtensionsBox.clear();
     mpAllRecentThumbnails.clear();
     mpLocalView.clear();
     vcl::Window::dispose();
@@ -323,8 +315,6 @@ void BackingWindow::initControls()
 
     mpAllButtonsBox->SetBackground(aButtonsBackground);
     mpSmallButtonsBox->SetBackground(aButtonsBackground);
-    mpHelpBox->SetBackground(aButtonsBackground);
-    mpExtensionsBox->SetBackground(aButtonsBackground);
 
     // motif image under the buttons
     Wallpaper aWallpaper(get<FixedImage>("motif")->GetImage().GetBitmapEx());
@@ -332,10 +322,6 @@ void BackingWindow::initControls()
     aWallpaper.SetColor(aButtonsBackground);
 
     mpButtonsBox->SetBackground(aWallpaper);
-
-    // thin white rectangle around the Help and Extensions buttons
-    mpThinBox1->SetBackground(maButtonsTextColor);
-    mpThinBox2->SetBackground(maButtonsTextColor);
 
     Resize();
 
