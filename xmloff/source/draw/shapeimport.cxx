@@ -874,8 +874,10 @@ void ShapeSortContext::popGroupAndSort()
     {
         while( nIndex < rHint.nShould && !maUnsortedList.empty() )
         {
-            ZOrderHint aGapHint( *maUnsortedList.begin() );
-            maUnsortedList.erase(maUnsortedList.begin());
+            auto it = maUnsortedList.begin();
+
+            ZOrderHint aGapHint(*it);
+            maUnsortedList.erase(it);
 
             moveShape( aGapHint.nIs, nIndex++ );
         }
