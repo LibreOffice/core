@@ -109,20 +109,6 @@ namespace rptui
     public:
         typedef ::std::vector< VclPtr<OSectionWindow> >                                TSectionsMap;
 
-        struct TReportPairHelper : public ::std::unary_function< TSectionsMap::value_type, OReportSection >
-        {
-            OReportSection& operator() (const TSectionsMap::value_type& lhs) const
-            {
-                return lhs->getReportSection();
-            }
-        };
-        struct TStartMarkerHelper : public ::std::unary_function< TSectionsMap::value_type, OStartMarker >
-        {
-            OStartMarker& operator() (const TSectionsMap::value_type& lhs) const
-            {
-                return lhs->getStartMarker();
-            }
-        };
     private:
         TSectionsMap                            m_aSections;
         svtools::ColorConfig                    m_aColorConfig;
