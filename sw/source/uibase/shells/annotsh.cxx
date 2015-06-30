@@ -31,6 +31,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <editeng/flstitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
@@ -245,6 +246,16 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 rReq.Done();
             }
             break;
+        case FN_GROW_FONT_SIZE:
+        case FN_SHRINK_FONT_SIZE:
+        {
+            const SvxFontListItem* pFontListItem = static_cast< const SvxFontListItem* >
+                    ( SfxObjectShell::Current()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
+            const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
+            pOLV->GetEditView().ChangeFontSize( nSlot == FN_GROW_FONT_SIZE, pFontList );
+        }
+        break;
+
         case SID_ATTR_CHAR_FONT:
         case SID_ATTR_CHAR_FONTHEIGHT:
         case SID_ATTR_CHAR_WEIGHT:

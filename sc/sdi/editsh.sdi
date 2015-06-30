@@ -47,6 +47,8 @@ interface TableText
     SID_ATTR_CHAR_FONT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_FONTHEIGHT    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_COLOR         [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_GROW_FONT_SIZE          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_SHRINK_FONT_SIZE        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
 
      // ---- Attribut - Toggles:
     SID_ATTR_CHAR_WEIGHT        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]

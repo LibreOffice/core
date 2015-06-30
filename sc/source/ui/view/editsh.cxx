@@ -32,6 +32,7 @@
 #include <editeng/editview.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/flstitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
@@ -1024,6 +1025,17 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                     aSet.Put ( pArgs->Get(pArgs->GetPool()->GetWhich(nSlot)));
                     rBindings.Invalidate( nSlot );
                 }
+            }
+            break;
+
+        case SID_GROW_FONT_SIZE:
+        case SID_SHRINK_FONT_SIZE:
+            {
+                const SvxFontListItem* pFontListItem = static_cast< const SvxFontListItem* >
+                        ( SfxObjectShell::Current()->GetItem( SID_ATTR_CHAR_FONTLIST ) );
+                const FontList* pFontList = pFontListItem ? pFontListItem->GetFontList() : nullptr;
+                pEditView->ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pFontList );
+                rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
             }
             break;
     }
