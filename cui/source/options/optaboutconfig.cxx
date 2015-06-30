@@ -153,6 +153,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     m_pEditBtn->SetClickHdl( LINK( this, CuiAboutConfigTabPage, StandardHdl_Impl ) );
     m_pResetBtn->SetClickHdl( LINK( this, CuiAboutConfigTabPage, ResetBtnHdl_Impl ) );
     m_pPrefBox->SetDoubleClickHdl( LINK(this, CuiAboutConfigTabPage, StandardHdl_Impl) );
+    m_pPrefBox->SetExpandingHdl( LINK(this, CuiAboutConfigTabPage, ExpandingHdl_Impl) );
     m_pSearchBtn->SetClickHdl( LINK(this, CuiAboutConfigTabPage, SearchHdl_Impl) );
 
     m_pPrefBox->InsertHeaderEntry(get<FixedText>("preference")->GetText());
@@ -279,6 +280,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             pEntry->AddItem( new SvLBoxString( pEntry, 0, ""));
 
             pEntry->SetUserData( new UserData(xNextNameAccess) );
+            pEntry->EnableChildrenOnDemand();
             m_pPrefBox->Insert( pEntry, pParentEntry );
         }
         else
@@ -547,16 +549,12 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, ResetBtnHdl_Impl )
 
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 {
-    SvTreeListEntry* pEntry = m_pPrefBox->FirstSelected();
+    SvTreeListEntry* pEntry = m_pPrefBox->GetHdlEntry();
+    if(pEntry == nullptr)
+        return 0;
 
     UserData *pUserData = static_cast<UserData*>(pEntry->GetUserData());
-    if(!pUserData->bIsPropertyPath)
-    {
-        //if selection is not node
-        if(!pEntry->HasChildren())
-            FillItems( pUserData->aXNameAccess, pEntry );
-    }
-    else
+    if(pUserData->bIsPropertyPath)
     {
         //if selection is a node
         OUString sPropertyName = SvTabListBox::GetEntryText( pEntry, 1 );
@@ -812,6 +810,27 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl)
     m_pPrefBox->SetUpdateMode( true );
 
     return 0;
+}
+
+IMPL_LINK_NOARG( CuiAboutConfigTabPage, ExpandingHdl_Impl )
+{
+    SvTreeListEntry* pEntry = m_pPrefBox->GetHdlEntry();
+
+    if(pEntry != nullptr && pEntry->HasChildrenOnDemand())
+    {
+        pEntry->EnableChildrenOnDemand(false);
+        SvTreeListEntry *pFirstChild = m_pPrefBox->FirstChild(pEntry);
+        if(pFirstChild)
+            m_pPrefBox->RemoveEntry(pFirstChild);
+
+        if(pEntry->GetUserData() != nullptr)
+        {
+            UserData *pUserData = static_cast<UserData*>(pEntry->GetUserData());
+            FillItems( pUserData->aXNameAccess, pEntry );
+        }
+    }
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
