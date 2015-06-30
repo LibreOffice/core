@@ -225,7 +225,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pChainingOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, this );
     ImpSetOutlinerDefaults(pChainingOutliner, true);
 
-    // Make a TextChain
+    // Make a TextChain //XXX: There should not be only one - XXX: Prototype code
     pTextChain = new TextChain;
 
     /* End Text Chaining related code */

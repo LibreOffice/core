@@ -39,4 +39,10 @@ OUString OverflowingText::GetHeadingLines() const
 }
 
 
+ChainedText::ChainedText(Outliner *pOutl)
+{
+    // Initialize stuff here
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

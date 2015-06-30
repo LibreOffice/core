@@ -27,6 +27,11 @@ class OUString;
 
 
 class OutlinerParaObject;
+class EditTextObject;
+class Outliner;
+
+typedef EditTextObject FormattedTextPortion;
+
 
 
 class EDITENG_DLLPUBLIC OverflowingText
@@ -69,6 +74,22 @@ class EDITENG_DLLPUBLIC NonOverflowingText {
                     if (pHeadParas == NULL) // Redundant line for debugging
                         DBG_ASSERT( pHeadParas != NULL, "pHeadParas is null?! All text is overflowing then" );
                 }
+};
+
+// XXX: Do we also need a class for Underflow here?
+
+/*
+ * class ChainedText:
+ * contains and handles the state of a text broken _after_ a flow event.
+ *
+*/
+class EDITENG_DLLPUBLIC ChainedText {
+    public:
+    ChainedText(Outliner *);
+
+    private:
+    NonOverflowingText *mpNonOverflowingTxt;
+    OverflowingText *mpOverflowingTxt;
 };
 
 #endif
