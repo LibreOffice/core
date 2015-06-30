@@ -13,6 +13,7 @@
 #include "reffact.hxx"
 #include "units.hxx"
 #include "viewdata.hxx"
+#include "docsh.hxx"
 
 using namespace sc::units;
 
@@ -266,7 +267,13 @@ void ScUnitsConversionDialog::PerformConversion()
 {
     OUString sOutputUnit = mpOutputUnitsEdit->GetText();
 
+    ScDocShell* pDocShell = static_cast<ScDocShell*>(mpDoc->GetDocumentShell());
+    ScDocShellModificator aModificator(*pDocShell);
     mpUnits->convertCellUnits( *mInputRange, mpDoc, sOutputUnit );
+    pDocShell->PostPaint(*mInputRange, PAINT_GRID);
+
+    aModificator.SetDocumentModified();
+    SfxGetpApp()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
