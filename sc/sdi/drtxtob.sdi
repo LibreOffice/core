@@ -94,6 +94,8 @@ interface TableDrawText
     SID_ATTR_PARA_LINESPACE_20  [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_PARASPACE_INCREASE      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_PARASPACE_DECREASE      [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_GROW_FONT_SIZE          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
+    SID_SHRINK_FONT_SIZE        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_SET_SUPER_SCRIPT        [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_SET_SUB_SCRIPT          [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
     SID_ATTR_CHAR_KERNING       [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; Export = FALSE; ]
