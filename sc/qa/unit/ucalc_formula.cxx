@@ -276,9 +276,7 @@ void Test::testFormulaParseReference()
             "'90''s Music'.B12",
             "'90''s and 70''s'.$AB$100",
             "'All Others'.Z$100",
-            "NoQuote.$C111",
-            "B:B",
-            "10:10"
+            "NoQuote.$C111"
         };
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -357,6 +355,56 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
     CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), 0);
     CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE));
+
+    // Both rows at sheet bounds and relative => convert to absolute => entire column reference.
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("B1:B1048576", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), aRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), 0);
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE));
+
+    // Both columns at sheet bounds and relative => convert to absolute => entire row reference.
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("A2:AMJ2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), aRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), 0);
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE));
+
+    // Check for reference input conversion to and display string of entire column/row.
+    {
+        const char* aChecks[][2] = {
+            { "=B:B",           "B:B" },
+            { "=B1:B1048576",   "B:B" },
+            { "=B1:B$1048576",  "B1:B$1048576" },
+            { "=B$1:B1048576",  "B$1:B1048576" },
+            { "=B$1:B$1048576", "B:B" },
+            { "=2:2",           "2:2" },
+            { "=A2:AMJ2",       "2:2" },
+            { "=A2:$AMJ2",      "A2:$AMJ2" },
+            { "=$A2:AMJ2",      "$A2:AMJ2" },
+            { "=$A2:$AMJ2",     "2:2" }
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            // Use the 'Dummy' sheet for this.
+            m_pDoc->SetString(ScAddress(0,0,0), OUString::createFromAscii(aChecks[i][0]));
+            if (!checkFormula(*m_pDoc, ScAddress(0,0,0), aChecks[i][1]))
+                CPPUNIT_FAIL("Wrong formula");
+        }
+    }
 
     m_pDoc->DeleteTab(4);
     m_pDoc->DeleteTab(3);
