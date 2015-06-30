@@ -62,6 +62,7 @@ private:
     DECL_LINK( StandardHdl_Impl, void * );
     DECL_LINK( ResetBtnHdl_Impl, void * );
     DECL_LINK( SearchHdl_Impl, void* );
+    DECL_LINK( ExpandingHdl_Impl, void* );
 
 public:
    explicit CuiAboutConfigTabPage(vcl::Window* pParent);
