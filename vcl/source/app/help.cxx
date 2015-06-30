@@ -468,11 +468,6 @@ OUString HelpTextWindow::GetText() const
     return maHelpText;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > HelpTextWindow::CreateAccessible()
-{
-    return FloatingWindow::CreateAccessible();
-}
-
 void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
                          const OUString& rHelpText, const OUString& rStatusText,
                          const Point& rScreenPos, const Rectangle* pHelpArea )
