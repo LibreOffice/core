@@ -29,6 +29,7 @@
 class SfxPoolItem;
 class SwClient;
 class SwDoc;
+class SwUnoTableCrsr;
 
 typedef ::cppu::WeakImplHelper
 <   ::com::sun::star::lang::XServiceInfo
@@ -70,6 +71,8 @@ class UnoActionContext
 
 /*
     interrupt Actions for a little while
+    FIXME: this is a vile abomination that may cause recursive layout actions!
+    C'thulhu fhtagn.
 */
 class UnoActionRemoveContext
 {
@@ -78,6 +81,7 @@ class UnoActionRemoveContext
 
     public:
         UnoActionRemoveContext(SwDoc *const pDoc);
+        UnoActionRemoveContext(SwUnoTableCrsr const& rCursor);
         ~UnoActionRemoveContext();
 };
 

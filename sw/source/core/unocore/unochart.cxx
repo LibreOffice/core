@@ -405,8 +405,6 @@ static void GetFormatAndCreateCursorFromRangeRep(
                         pTable ? pTable->GetTableBox( aStartCell, true ) : 0;
         if(pTLBox)
         {
-            // The Actions need to be removed here
-            UnoActionRemoveContext aRemoveContext(pTableFormat->GetDoc());
             const SwStartNode* pSttNd = pTLBox->GetSttNd();
             SwPosition aPos(*pSttNd);
 
@@ -425,6 +423,8 @@ static void GetFormatAndCreateCursorFromRangeRep(
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 SwUnoTableCrsr* pCrsr =
                     dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+                // HACK: remove pending actions for old style tables
+                UnoActionRemoveContext aRemoveContext(*pCrsr);
                 pCrsr->MakeBoxSels();
                 rpUnoCrsr = pUnoCrsr;
             }

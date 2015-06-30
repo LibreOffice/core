@@ -1594,11 +1594,12 @@ sal_Bool SwXTextTableCursor::mergeRange()
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(!pUnoCrsr)
         return false;
-    {
-        // The Actions need to be revoked here
-        UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
-    }
+
     SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    {
+        // HACK: remove pending actions for selecting old style tables
+        UnoActionRemoveContext aRemoveContext(rTableCrsr);
+    }
     rTableCrsr.MakeBoxSels();
     bool bResult;
     {
@@ -1624,11 +1625,11 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(!pUnoCrsr)
         return false;
-    {
-        // here, all actions need to be revoked
-        UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
-    }
     SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    {
+        // HACK: remove pending actions for selecting old style tables
+        UnoActionRemoveContext aRemoveContext(rTableCrsr);
+    }
     rTableCrsr.MakeBoxSels();
     bool bResult;
     {
@@ -2225,8 +2226,6 @@ uno::Reference<table::XCellRange>  SwXTextTable::GetRangeByName(SwFrameFormat* p
     const SwTableBox* pTLBox = pTable->GetTableBox(rTLName);
     if(!pTLBox)
         return nullptr;
-    // invalidate all actions
-    UnoActionRemoveContext aRemoveContext(pFormat->GetDoc());
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
@@ -2240,6 +2239,8 @@ uno::Reference<table::XCellRange>  SwXTextTable::GetRangeByName(SwFrameFormat* p
     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
     pUnoCrsr->Move( fnMoveForward, fnGoNode );
     SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+    // HACK: remove pending actions for selecting old style tables
+    UnoActionRemoveContext aRemoveContext(*pCrsr);
     pCrsr->MakeBoxSels();
     // pUnoCrsr will be provided and will not be deleted
     return new SwXCellRange(pUnoCrsr, *pFormat, rDesc);
@@ -2601,8 +2602,6 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     SwTable* pTable = SwTable::FindTable( pFormat );
                     SwTableLines &rLines = pTable->GetTabLines();
 
-                    // invalidate all actions
-                    UnoActionRemoveContext aRemoveContext(pDoc);
                     const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
                     const SwStartNode* pSttNd = pTLBox->GetSttNd();
                     SwPosition aPos(*pSttNd);
@@ -2616,6 +2615,8 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     SwUnoTableCrsr& rCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+                    // HACK: remove pending actions for selecting old style tables
+                    UnoActionRemoveContext aRemoveContext(rCrsr);
                     rCrsr.MakeBoxSels();
 
                     SfxItemSet aSet(pDoc->GetAttrPool(),
@@ -2790,8 +2791,6 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     SwTable* pTable = SwTable::FindTable( pFormat );
                     SwTableLines &rLines = pTable->GetTabLines();
 
-                    // invalidate all actions
-                    UnoActionRemoveContext aRemoveContext(pDoc);
                     const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
                     const SwStartNode* pSttNd = pTLBox->GetSttNd();
                     SwPosition aPos(*pSttNd);
@@ -2807,6 +2806,8 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
 
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     SwUnoTableCrsr& rCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+                    // HACK: remove pending actions for selecting old style tables
+                    UnoActionRemoveContext aRemoveContext(rCrsr);
                     rCrsr.MakeBoxSels();
 
                     SfxItemSet aSet(pDoc->GetAttrPool(),
@@ -3240,8 +3241,6 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
             const SwTableBox* pTLBox = pTable->GetTableBox( sTLName );
             if(pTLBox)
             {
-                // invalidate all actions
-                UnoActionRemoveContext aRemoveContext(pFormat->GetDoc());
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
                 // set cursor in the upper-left cell of the range
@@ -3255,6 +3254,8 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
                     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+                    // HACK: remove pending actions for selecting old style tables
+                    UnoActionRemoveContext aRemoveContext(*pCrsr);
                     pCrsr->MakeBoxSels();
                     // pUnoCrsr will be provided and will not be deleted
                     SwXCellRange* pCellRange = new SwXCellRange(pUnoCrsr, *pFormat, aNewDesc);
@@ -3312,11 +3313,11 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                 throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
             SwDoc* pDoc = m_pTableCrsr->GetDoc();
-            {
-                // remove actions to enable box selection
-                UnoActionRemoveContext aRemoveContext(pDoc);
-            }
             SwUnoTableCrsr& rCrsr = dynamic_cast<SwUnoTableCrsr&>(*m_pTableCrsr);
+            {
+                // HACK: remove pending actions for selecting old style tables
+                UnoActionRemoveContext aRemoveContext(rCrsr);
+            }
             rCrsr.MakeBoxSels();
             switch(pEntry->nWID )
             {
@@ -3856,10 +3857,12 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
     UnoActionContext aAction(pFrameFormat->GetDoc());
-    auto pUnoCrsr(pFrameFormat->GetDoc()->CreateUnoCrsr(aPos, true));
+    std::shared_ptr<SwUnoTableCrsr> const pUnoCrsr(
+            std::dynamic_pointer_cast<SwUnoTableCrsr>(
+                pFrameFormat->GetDoc()->CreateUnoCrsr(aPos, true)));
     pUnoCrsr->Move( fnMoveForward, fnGoNode );
     {
-        // remove actions
+        // remove actions - TODO: why?
         UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
     }
     pFrameFormat->GetDoc()->InsertRow(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
@@ -3879,10 +3882,6 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const SwTableBox* pTLBox = pTable->GetTableBox(sTLName);
     if(!pTLBox)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
-    {
-        // invalidate all actions
-        UnoActionRemoveContext aRemoveContext(pFrameFormat->GetDoc());
-    }
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
@@ -3897,6 +3896,10 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCrsr->GetPoint()->nNode = *pBLBox->GetSttNd();
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+    {
+        // HACK: remove pending actions for selecting old style tables
+        UnoActionRemoveContext aRemoveContext(*pCrsr);
+    }
     pCrsr->MakeBoxSels();
     {   // these braces are important
         UnoActionContext aAction(pFrameFormat->GetDoc());
@@ -3904,7 +3907,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         pUnoCrsr.reset();
     }
     {
-        // invalidate all actions
+        // invalidate all actions - TODO: why?
         UnoActionRemoveContext aRemoveContext(pFrameFormat->GetDoc());
     }
 }
@@ -3998,7 +4001,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
     {
-        // remove actions
+        // remove actions - TODO: why?
         UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
     }
 
@@ -4020,10 +4023,6 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const SwTableBox* pTLBox = pTable->GetTableBox( sTLName );
     if(!pTLBox)
         throw uno::RuntimeException("Cell not found", static_cast<cppu::OWeakObject*>(this));
-    {
-        // invalidate all actions
-        UnoActionRemoveContext aRemoveContext(pFrameFormat->GetDoc());
-    }
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
@@ -4038,6 +4037,10 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCrsr->GetPoint()->nNode = *pTRBox->GetSttNd();
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+    {
+        // HACK: remove pending actions for selecting old style tables
+        UnoActionRemoveContext aRemoveContext(*pCrsr);
+    }
     pCrsr->MakeBoxSels();
     {   // these braces are important
         UnoActionContext aAction(pFrameFormat->GetDoc());
@@ -4045,7 +4048,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         pUnoCrsr.reset();
     }
     {
-        // invalidate all actions
+        // invalidate all actions - TODO: why?
         UnoActionRemoveContext aRemoveContext(pFrameFormat->GetDoc());
     }
 }
