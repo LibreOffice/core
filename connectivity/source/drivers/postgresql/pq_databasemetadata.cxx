@@ -384,7 +384,7 @@ OUString DatabaseMetaData::getStringFunctions(  ) throw (SQLException, RuntimeEx
         "convert_to,"
         "decode,"
         "encode,"
-        "foramt,"
+        "format,"
         "initcap,"
         "left,"
         "length,"
