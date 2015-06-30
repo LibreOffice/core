@@ -43,7 +43,7 @@ private:
     sal_uInt16          mnHelpWinStyle;
     QuickHelpFlags      mnStyle;
 
-protected:
+private:
     DECL_LINK_TYPED( TimerHdl, Timer*, void );
 
     virtual void Paint(vcl::RenderContext& rRenderContext, const Rectangle&) SAL_OVERRIDE;
@@ -53,11 +53,12 @@ protected:
     virtual OUString GetText() const SAL_OVERRIDE;
     void ImplShow();
 
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
+    virtual void        dispose() SAL_OVERRIDE;
 public:
                         HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle );
     virtual             ~HelpTextWindow();
-    virtual void        dispose() SAL_OVERRIDE;
 
     const OUString&     GetHelpText() const { return maHelpText; }
     void                SetHelpText( const OUString& rHelpText );
@@ -72,8 +73,6 @@ public:
 
     Size                CalcOutSize() const;
     const Rectangle&    GetHelpArea() const { return maHelpArea; }
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };
 
 void ImplShowHelpWindow( vcl::Window* pParent, sal_uInt16 nHelpWinStyle, QuickHelpFlags nStyle,
