@@ -82,7 +82,6 @@ namespace {
 // Begin initializer and accessor public functions
 
 OutputDevice::OutputDevice() :
-    mnRefCnt(1), // cf. VclPtrInstance and README.lifecycle
     maRegion(true),
     maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT ),
@@ -179,16 +178,14 @@ OutputDevice::OutputDevice() :
     // #i75163#
     mpOutDevData->mpViewTransform   = NULL;
     mpOutDevData->mpInverseViewTransform = NULL;
-
-    mbDisposed = false;
 }
 
-OutputDevice::~OutputDevice()
+VclPtrRefCountBase::~VclPtrRefCountBase()
 {
     disposeOnce();
 }
 
-void OutputDevice::disposeOnce()
+void VclPtrRefCountBase::disposeOnce()
 {
     if ( mbDisposed )
         return;

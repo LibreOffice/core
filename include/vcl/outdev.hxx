@@ -312,7 +312,45 @@ namespace vcl {
     typedef OutputDevice RenderContext;
 }
 
-class VCL_DLLPUBLIC OutputDevice
+class VCL_DLLPUBLIC VclPtrRefCountBase
+{
+public:
+    VclPtrRefCountBase()
+        : mnRefCnt(1) // cf. VclPtrInstance and README.lifecycle
+        , mbDisposed(false)
+    {
+    }
+private:
+    mutable int mnRefCnt;         // reference count
+    mutable bool mbDisposed;
+
+    template<typename T> friend class ::rtl::Reference;
+    template<typename T> friend class ::VclPtr;
+
+    void acquire() const
+    {
+        assert(mnRefCnt>0);
+        mnRefCnt++;
+    }
+
+    void release() const
+    {
+        assert(mnRefCnt>0);
+        if (!--mnRefCnt)
+            delete this;
+    }
+
+protected:
+    virtual void dispose() = 0;
+
+public:
+    /// call the dispose() method if we have not already been disposed.
+    void disposeOnce();
+    bool isDisposed() const { return mbDisposed; }
+    virtual ~VclPtrRefCountBase();
+};
+
+class VCL_DLLPUBLIC OutputDevice : public VclPtrRefCountBase
 {
     friend class PaintHelper;
     friend class Printer;
@@ -321,28 +359,6 @@ class VCL_DLLPUBLIC OutputDevice
     friend class WorkWindow;
     friend class vcl::PDFWriterImpl;
     friend void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
-
-    // All of this will need to be replicated in Window
-    // or a shared base-class as/when we can break the
-    // OutputDevice -> Window inheritance.
-private:
-    mutable int mnRefCnt;         // reference count
-
-    template<typename T> friend class ::rtl::Reference;
-    template<typename T> friend class ::VclPtr;
-
-    inline void acquire() const
-    {
-        assert(mnRefCnt>0);
-        mnRefCnt++;
-    }
-
-    inline void release() const
-    {
-        assert(mnRefCnt>0);
-        if (!--mnRefCnt)
-            delete this;
-    }
 
 private:
     OutputDevice(const OutputDevice&) SAL_DELETED_FUNCTION;
@@ -433,7 +449,6 @@ private:
     mutable bool                    mbTextSpecial : 1;
     mutable bool                    mbRefPoint : 1;
     mutable bool                    mbEnableRTL : 1;
-    mutable bool                    mbDisposed : 1;
 
     /** @name Initialization and accessor functions
      */
@@ -441,17 +456,10 @@ private:
 
 protected:
                                 OutputDevice();
-public:
-    virtual                     ~OutputDevice();
 
 protected:
     /// release all references to other objects.
-    virtual void                dispose();
-
-public:
-    /// call the dispose() method if we have not already been disposed.
-    void                        disposeOnce();
-    bool                        isDisposed() const { return mbDisposed; }
+    virtual void                dispose() SAL_OVERRIDE;
 
 public:
 
