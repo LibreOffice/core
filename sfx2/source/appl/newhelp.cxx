@@ -1147,7 +1147,7 @@ BookmarksBox_Impl::~BookmarksBox_Impl()
     {
         OUString aTitle = GetEntry(i);
         OUString* pURL = reinterpret_cast<OUString*>(GetEntryData(i));
-        aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, sEmpty, aTitle, sEmpty, sEmpty);
+        aHistOpt.AppendItem(eHELPBOOKMARKS, *pURL, sEmpty, aTitle, sEmpty, boost::none);
         delete pURL;
     }
 }
