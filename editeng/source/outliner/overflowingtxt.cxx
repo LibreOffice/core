@@ -23,6 +23,51 @@
 #include <editeng/overflowingtxt.hxx>
 #include <editeng/outliner.hxx>
 
+OutlinerParaObject *NonOverflowingText::ToParaObject(Outliner *pOutliner) const
+{
+
+    // XXX: Possibility: let the NonUnderflowingParaObject just be a TextEditObject created by the Outliner (by means of a selection).
+
+    /* The overflow in SdrTextObj can occur:
+     * (a) exactly at the end of a paragraph, or
+     * (b) in the middle of a paragraph.
+     *
+     * In case (a), a NonUnderflowingText object contains only the
+     * paragraphs occurred before the overflow.
+     * In case (b), a NonUnderflowingText contains also the text of the
+     * paragraph that was cut by overflow.
+    */
+
+    bool bOverflowOccurredAtEndOfPara =
+        (mPreOverflowingTxt == "") &&
+        (mpHeadParas != NULL);
+
+    if (bOverflowOccurredAtEndOfPara) {
+        // Case (a) above:
+        // Only (possibly empty) paragraphs before overflowing one.
+        pOutliner->SetText(*mpHeadParas);
+    } else {
+        // Case (b): some text is non included in any OutlinerParaObject.
+        // We have to include the non-overflowing lines from the overfl. para
+
+        // first make a ParaObject for the strings
+        pOutliner->SetToEmptyText();
+        Paragraph *pTmpPara0 = pOutliner->GetParagraph(0);
+        pOutliner->SetText(mPreOverflowingTxt, pTmpPara0);
+        OutlinerParaObject *pPObj = pOutliner->CreateParaObject();
+
+        if (mpHeadParas != NULL) {
+            pOutliner->SetText(*mpHeadParas);
+            pOutliner->AddText(*pPObj);
+         } else  if (mPreOverflowingTxt != "") { // only preoverflowing txt
+            pOutliner->SetText(*pPObj);
+        } else { // no text // This case is redundant but it doesn't hurt for now
+            pOutliner->SetToEmptyText();
+        }
+    }
+
+     return pOutliner->CreateParaObject();
+}
 
 OUString OverflowingText::GetEndingLines() const
 {
@@ -120,33 +165,7 @@ OutlinerParaObject *OFlowChainedText::CreateNonOverflowingParaObject(Outliner *p
     if (mpNonOverflowingTxt == NULL)
         return NULL;
 
-    if (mpNonOverflowingTxt->mPreOverflowingTxt == "" &&
-        mpNonOverflowingTxt->mpHeadParas != NULL) {
-        // Only (possibly empty) paragraphs before overflowing one
-        pOutliner->SetText(*mpNonOverflowingTxt->mpHeadParas);
-    } else { // We have to include the non-overflowing lines from the overfl. para
-
-        // first make a ParaObject for the strings
-        pOutliner->SetToEmptyText();
-        Paragraph *pTmpPara0 = pOutliner->GetParagraph(0);
-        pOutliner->SetText(mpNonOverflowingTxt->mPreOverflowingTxt, pTmpPara0);
-        OutlinerParaObject *pPObj = pOutliner->CreateParaObject();
-        //pOutliner->Clear();
-        //pOutliner->SetStyleSheet( 0, pEdtOutl->GetStyleSheet(0));
-
-        if (mpNonOverflowingTxt->mpHeadParas != NULL) {
-            pOutliner->SetText(*mpNonOverflowingTxt->mpHeadParas);
-            pOutliner->AddText(*pPObj);
-         } else  if (mpNonOverflowingTxt->mPreOverflowingTxt != "") { // only preoverflowing txt
-            //OutlinerParaObject *pEmptyPObj = pOutliner->GetEmptyParaObject();
-            //pOutliner->SetText(*pEmptyPObj);
-            pOutliner->SetText(*pPObj);
-        } else { // no text // This case is redundant but it doesn't hurt for now
-            pOutliner->Clear();
-        }
-    }
-
-     return pOutliner->CreateParaObject();
+    return mpNonOverflowingTxt->ToParaObject(pOutliner);
 }
 
 

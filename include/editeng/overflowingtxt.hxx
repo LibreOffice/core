@@ -74,13 +74,14 @@ class EDITENG_DLLPUBLIC NonOverflowingText {
                     if (pHeadParas == NULL) // Redundant line for debugging
                         DBG_ASSERT( pHeadParas != NULL, "pHeadParas is null?! All text is overflowing then" );
                 }
+
+        OutlinerParaObject *ToParaObject(Outliner *) const;
 };
 
-// XXX: Do we also need a class for Underflow here?
 
 /*
- * classes ?FlowChainedText:
- * contains and handles the state of a text broken _after_ a flow event.
+ * classes OFlowChainedText and UFlowChainedText:
+ * contain and handle the state of a broken up text _after_ a flow event.
  *
 */
 
