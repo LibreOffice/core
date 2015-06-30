@@ -27,6 +27,7 @@ class OverflowingText;
 class TextChain;
 class OutlinerParaObject;
 class OFlowChainedText;
+class UFlowChainedText;
 
 // XXX: const qualifiers?
 
@@ -40,7 +41,7 @@ class TextChainFlow {
     // Check for flow events in Outliner
     virtual void CheckForFlowEvents(SdrOutliner *);
 
-    void ExecuteUnderflow(SdrOutliner *);
+    virtual void ExecuteUnderflow(SdrOutliner *);
 
     // Uses two outliners: one for the non-overfl text and one for overflowing (might be the same)
     virtual void ExecuteOverflow(SdrOutliner *, SdrOutliner *);
@@ -54,6 +55,7 @@ class TextChainFlow {
     SdrTextObj *GetNextLink() const;
 
     OFlowChainedText *GetOverflowChainedText() const;
+    UFlowChainedText *GetUnderflowChainedText() const;
 
     //  -- Protected Members --
     protected:
@@ -70,7 +72,7 @@ class TextChainFlow {
     OutlinerParaObject *impGetNonOverflowingParaObject(SdrOutliner *pOutliner);
     OutlinerParaObject *impGetOverflowingParaObject(SdrOutliner *pOutliner);
     // impGetMergedUnderflowingParaObject merges underflowing text with the one in the next box
-    OutlinerParaObject *impGetMergedUnderflowingParaObject(SdrOutliner *pOutliner);
+    OutlinerParaObject *impGetMergedUnderflowParaObject(SdrOutliner *pOutliner);
 
     //  -- Private Members --
     private:
@@ -85,11 +87,8 @@ class TextChainFlow {
     bool bOverflow;
 
     OFlowChainedText *mpOverflChText;
+    UFlowChainedText *mpUnderflChText;
 
-    //OverflowingText *mpOverflowingTxt;
-    //NonOverflowingText *mpNonOverflowingTxt;
-
-    OutlinerParaObject *mpUnderflowingPObj;
 
 };
 

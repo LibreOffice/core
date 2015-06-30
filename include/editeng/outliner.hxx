@@ -703,6 +703,8 @@ public:
     void            SetText( const OUString& rText, Paragraph* pParagraph );
     OUString        GetText( Paragraph* pPara, sal_Int32 nParaCount=1 ) const;
 
+    void            SetToEmptyText();
+
     OutlinerParaObject* CreateParaObject( sal_Int32 nStartPara = 0, sal_Int32 nParaCount = EE_PARA_ALL ) const;
 
     const SfxItemSet& GetEmptyItemSet() const;

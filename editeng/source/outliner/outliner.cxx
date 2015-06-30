@@ -414,6 +414,12 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
     return pPObj;
 }
 
+void Outliner::SetToEmptyText()
+{
+    OutlinerParaObject *pEmptyTxt =  GetEmptyParaObject();
+    SetText(*pEmptyTxt);
+}
+
 void Outliner::SetText( const OUString& rText, Paragraph* pPara )
 {
     DBG_ASSERT(pPara,"SetText:No Para");

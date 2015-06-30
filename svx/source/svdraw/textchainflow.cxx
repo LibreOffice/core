@@ -35,12 +35,7 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
     bUnderflow = bOverflow = false;
 
     mpOverflChText = NULL;
-    //mpOverflowingTxt = NULL;
-    //mpNonOverflowingTxt = NULL;
-
-    mpUnderflowingPObj = NULL;
-
-    // XXX: Set the next link here?
+    mpUnderflChText = NULL;
 
 
 }
@@ -69,10 +64,11 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     // NOTE: Nah you probably don't need this
     if (pParamOutl != NULL)
     {
-        // XXX: Set parameters
-        // XXX: does this work if you do it before setting the text? Seems so.
+        // We need this since it's required to check overflow
         pFlowOutl->SetUpdateMode(true);
-       impSetFlowOutlinerParams(pFlowOutl, pParamOutl);
+
+        // XXX: does this work if you do it before setting the text? Seems so.
+        impSetFlowOutlinerParams(pFlowOutl, pParamOutl);
     }
 
     bool bIsPageOverflow = pFlowOutl->IsPageOverflow();
@@ -86,14 +82,11 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     bOverflow = bIsPageOverflow && mpNextLink;
     bUnderflow = !bIsPageOverflow &&  mpNextLink && mpNextLink->HasText();
 
-    // Set (Non)OverflowingTxt here
+    // Set (Non)OverflowingTxt here (if any)
     mpOverflChText = bOverflow ? new OFlowChainedText(pFlowOutl) : NULL;
 
-    //mpOverflowingTxt = bOverflow ? pFlowOutl->GetOverflowingText() : NULL;
-    //mpNonOverflowingTxt = bOverflow ? pFlowOutl->GetNonOverflowingText() : NULL;
-
     // Set current underflowing text (if any)
-    mpUnderflowingPObj = bUnderflow ? pFlowOutl->CreateParaObject() : NULL;
+    mpUnderflChText = bUnderflow ? new UFlowChainedText(pFlowOutl) : NULL;
 
 }
 
@@ -119,26 +112,17 @@ bool TextChainFlow::IsUnderflow() const
 // XXX:Would it be possible to unify undeflow and its possibly following overrflow?
 void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 {
-    OutlinerParaObject *pNextLinkWholeText = mpNextLink->GetOutlinerParaObject();
-
     // making whole text
-    OutlinerParaObject *pCurText;
-    // We saved this text already
-    pCurText = mpUnderflowingPObj;
+    OutlinerParaObject *pNewText = impGetMergedUnderflowParaObject(pOutl);
 
-    // NewTextForCurBox = Txt(CurBox) ++ Txt(NextBox)
-    pOutl->SetText(*pCurText);
-    pOutl->AddText(*pNextLinkWholeText);
-    OutlinerParaObject *pNewText = pOutl->CreateParaObject();
-
-    // Set the other box empty so if overflow does not occur we are fine
+    // Set the other box empty; it will be replaced by the rest of the text if overflow occurs
     if (!mpTargetLink->GetPreventChainable())
         mpNextLink->NbcSetOutlinerParaObject(pOutl->GetEmptyParaObject());
 
     mpTargetLink->NbcSetOutlinerParaObject(pNewText);
 
     // Check for new overflow
-    CheckForFlowEvents(pOutl); // XXX: How do you know you don't need to set parameters here?
+    CheckForFlowEvents(pOutl);
 }
 
 void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pOverflOutl)
@@ -196,6 +180,12 @@ OutlinerParaObject *TextChainFlow::impGetOverflowingParaObject(SdrOutliner *pOut
     return mpOverflChText->CreateOverflowingParaObject(pOutliner, mpNextLink->GetOutlinerParaObject());
 }
 
+OutlinerParaObject *TextChainFlow::impGetMergedUnderflowParaObject(SdrOutliner *pOutliner)
+{
+    // Should check whether to merge paragraphs or not
+    return mpUnderflChText->CreateMergedUnderflowParaObject(pOutliner, mpNextLink->GetOutlinerParaObject());
+}
+
 TextChain *TextChainFlow::GetTextChain()
 {
     return mpTextChain;
@@ -204,6 +194,11 @@ TextChain *TextChainFlow::GetTextChain()
 OFlowChainedText *TextChainFlow::GetOverflowChainedText() const
 {
     return mpOverflChText;
+}
+
+UFlowChainedText *TextChainFlow::GetUnderflowChainedText() const
+{
+    return mpUnderflChText;
 }
 
 

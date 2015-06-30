@@ -71,7 +71,7 @@ OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOut
 
     if (pOldPara0) {
         //pOutliner->Clear(); // you need a clear outliner here
-        impSetOutlinerToEmptyTxt(pOutliner);
+        pOutliner->SetToEmptyText();
 
         pTmpPara0 = pOutliner->GetParagraph(0);
         pOutliner->SetText(mpOverflowingTxt->GetEndingLines() + aOldPara0Txt, pTmpPara0);
@@ -84,7 +84,7 @@ OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOut
 
     // start actual composition
     //pOutliner->Clear();
-    impSetOutlinerToEmptyTxt(pOutliner);
+    pOutliner->SetToEmptyText();
 
     // Set headText at the beginning of box
     OUString aHeadTxt = mpOverflowingTxt->GetHeadingLines();
@@ -127,7 +127,7 @@ OutlinerParaObject *OFlowChainedText::CreateNonOverflowingParaObject(Outliner *p
     } else { // We have to include the non-overflowing lines from the overfl. para
 
         // first make a ParaObject for the strings
-        impSetOutlinerToEmptyTxt(pOutliner);
+        pOutliner->SetToEmptyText();
         Paragraph *pTmpPara0 = pOutliner->GetParagraph(0);
         pOutliner->SetText(mpNonOverflowingTxt->mPreOverflowingTxt, pTmpPara0);
         OutlinerParaObject *pPObj = pOutliner->CreateParaObject();
@@ -149,11 +149,16 @@ OutlinerParaObject *OFlowChainedText::CreateNonOverflowingParaObject(Outliner *p
      return pOutliner->CreateParaObject();
 }
 
-void OFlowChainedText::impSetOutlinerToEmptyTxt(Outliner *pOutliner)
+OutlinerParaObject *UFlowChainedText::CreateMergedUnderflowParaObject(Outliner *pOutl, OutlinerParaObject *pNextLinkWholeText)
 {
-    OutlinerParaObject *pEmptyTxt = pOutliner->GetEmptyParaObject();
-    pOutliner->SetText(*pEmptyTxt);
+    OutlinerParaObject *pCurText = mpUnderflowPObj;
+
+    // NewTextForCurBox = Txt(CurBox) ++ Txt(NextBox)
+    pOutl->SetText(*pCurText);
+    pOutl->AddText(*pNextLinkWholeText);
+    OutlinerParaObject *pNewText = pOutl->CreateParaObject();
+
+    return pNewText;
+
 }
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

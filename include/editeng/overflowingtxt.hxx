@@ -79,10 +79,11 @@ class EDITENG_DLLPUBLIC NonOverflowingText {
 // XXX: Do we also need a class for Underflow here?
 
 /*
- * class ChainedText:
+ * classes ?FlowChainedText:
  * contains and handles the state of a text broken _after_ a flow event.
  *
 */
+
 class EDITENG_DLLPUBLIC OFlowChainedText {
     public:
     OFlowChainedText(Outliner *);
@@ -100,6 +101,20 @@ class EDITENG_DLLPUBLIC OFlowChainedText {
     OverflowingText *mpOverflowingTxt;
 
 
+};
+
+// UFlowChainedText is a simpler class than OFlowChainedText: it almost only joins para-objects
+class EDITENG_DLLPUBLIC UFlowChainedText {
+    public:
+    UFlowChainedText(Outliner *);
+
+    OutlinerParaObject *CreateMergedUnderflowParaObject(Outliner *, OutlinerParaObject *);
+
+    protected:
+
+
+    private:
+    OutlinerParaObject *mpUnderflowPObj;
 };
 
 #endif
