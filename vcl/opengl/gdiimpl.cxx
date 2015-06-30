@@ -1195,13 +1195,24 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
 
     if( UseSolid( mnLineColor ) )
     {
-        const long nX1( nX );
-        const long nY1( nY );
-        const long nX2( nX + nWidth );
-        const long nY2( nY + nHeight );
-        const SalPoint aPoints[] = { { nX1, nY1 }, { nX2, nY1 },
-                                     { nX2, nY2 }, { nX1, nY2 } };
-        DrawLines( 4, aPoints, true ); // No need for AA.
+        GLfloat fX1 = OPENGL_COORD_X(nX);
+        GLfloat fY1 = OPENGL_COORD_Y(nY);
+        GLfloat fX2 = OPENGL_COORD_X(nX + nWidth);
+        GLfloat fY2 = OPENGL_COORD_Y(nY + nHeight);
+
+        GLfloat pPoints[16];
+
+        pPoints[0] = fX1;
+        pPoints[1] = fY1;
+        pPoints[2] = fX2;
+        pPoints[3] = fY1;
+        pPoints[4] = fX2;
+        pPoints[5] = fY2;
+        pPoints[6] = fX1;
+        pPoints[7] = fY2;
+
+        mpProgram->SetVertices(pPoints);
+        glDrawArrays(GL_LINE_LOOP, 0, 4);
     }
 
     PostDraw();
