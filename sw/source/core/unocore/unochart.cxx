@@ -2141,13 +2141,13 @@ std::vector< css::uno::Reference< css::table::XCell > > SwChartDataSequence::Get
         throw lang::DisposedException();
     auto pTableFormat(GetFrameFormat());
     if(!pTableFormat)
-        return {};
+        return std::vector< css::uno::Reference< css::table::XCell > >();
     auto pTable(SwTable::FindTable(pTableFormat));
     if(pTable->IsTableComplex())
-        return {};
+        return std::vector< css::uno::Reference< css::table::XCell > >();
     SwRangeDescriptor aDesc;
     if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat, *pTableCrsr)))
-        return {};
+        return std::vector< css::uno::Reference< css::table::XCell > >();
     return SwXCellRange(pTableCrsr, *pTableFormat, aDesc).GetCells();
 }
 
