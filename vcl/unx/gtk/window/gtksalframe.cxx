@@ -4020,6 +4020,14 @@ gboolean GtkSalFrame::signalDelete( GtkWidget*, GdkEvent*, gpointer frame )
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
 
+#if GTK_CHECK_VERSION(3,0,0)
+    //If we went into the backdrop we disabled the toplevel window, if we
+    //receive a delete here, re-enable so we can process it
+    bool bBackDrop = (gtk_widget_get_state_flags(GTK_WIDGET(pThis->m_pWindow)) & GTK_STATE_FLAG_BACKDROP);
+    if (bBackDrop)
+        pThis->GetWindow()->Enable();
+#endif
+
     pThis->CallCallback( SALEVENT_CLOSE, NULL );
 
     return true;
