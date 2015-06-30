@@ -23,7 +23,6 @@
 #include "unohelper.hxx"
 #include <algorithm>
 #include <functional>
-#include <o3tl/compat_functional.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
@@ -39,7 +38,6 @@ using xforms::Convert;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using namespace std;
-using namespace o3tl;
 using namespace utl;
 
 typedef com::sun::star::util::Date UNODate;
@@ -307,7 +305,9 @@ Convert::Types_t Convert::getTypes()
 {
     Types_t aTypes( maMap.size() );
     transform( maMap.begin(), maMap.end(), aTypes.getArray(),
-               o3tl::select1st<Map_t::value_type>() );
+            [] (::std::pair<const Type_t, Convert_t>& mpair) -> Type_t
+            { return mpair.first; }
+            );
     return aTypes;
 }
 
