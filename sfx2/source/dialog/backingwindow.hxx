@@ -78,10 +78,6 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     VclPtr<VclBox> mpAllButtonsBox;
     VclPtr<VclBox> mpButtonsBox;
     VclPtr<VclBox> mpSmallButtonsBox;
-    VclPtr<VclBox> mpThinBox1;
-    VclPtr<VclBox> mpThinBox2;
-    VclPtr<VclBox> mpHelpBox;
-    VclPtr<VclBox> mpExtensionsBox;
 
     VclPtr<RecentDocsView> mpAllRecentThumbnails;
     VclPtr<TemplateDefaultView> mpLocalView;
