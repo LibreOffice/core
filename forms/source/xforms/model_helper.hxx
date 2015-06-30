@@ -64,13 +64,13 @@ protected:
     virtual void _insert( const T& t ) SAL_OVERRIDE
     {
         OSL_ENSURE( Binding::getBinding( t ) != NULL, "invalid item?" );
-        Binding::getBinding( t )->_setModel( Binding::Model_t( mpModel ) );
+        Binding::getBinding( t )->_setModel( css::uno::Reference<css::xforms::XModel>( mpModel ) );
     }
 
     virtual void _remove( const T& t ) SAL_OVERRIDE
     {
         OSL_ENSURE( Binding::getBinding( t ) != NULL, "invalid item?" );
-        Binding::getBinding( t )->_setModel( Binding::Model_t() );
+        Binding::getBinding( t )->_setModel( css::uno::Reference<css::xforms::XModel>() );
     }
 };
 

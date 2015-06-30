@@ -272,7 +272,7 @@ FrameSelectorImpl::~FrameSelectorImpl()
 {
     if( mpAccess )
         mpAccess->Invalidate();
-    for( AccessibleImplVec::iterator aIt = maChildVec.begin(), aEnd = maChildVec.end(); aIt != aEnd; ++aIt )
+    for( auto aIt = maChildVec.begin(), aEnd = maChildVec.end(); aIt != aEnd; ++aIt )
         if( *aIt )
             (*aIt)->Invalidate();
 }

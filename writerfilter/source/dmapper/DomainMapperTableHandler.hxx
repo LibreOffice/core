@@ -28,19 +28,14 @@
 namespace writerfilter {
 namespace dmapper {
 
-typedef css::uno::Reference< css::text::XTextRange > Handle_t;
-typedef css::uno::Sequence<Handle_t> CellSequence_t;
+typedef css::uno::Sequence< css::uno::Reference< css::text::XTextRange > > CellSequence_t;
 typedef std::shared_ptr<CellSequence_t> CellSequencePointer_t;
 typedef css::uno::Sequence<CellSequence_t> RowSequence_t;
 typedef std::shared_ptr<RowSequence_t> RowSequencePointer_t;
 typedef css::uno::Sequence<RowSequence_t> TableSequence_t;
 typedef std::shared_ptr<TableSequence_t> TableSequencePointer_t;
-typedef css::text::XTextAppendAndConvert Text_t;
-typedef css::uno::Reference<Text_t> TextReference_t;
 
-typedef css::beans::PropertyValues TablePropertyValues_t;
-typedef css::uno::Sequence<TablePropertyValues_t> RowPropertyValuesSeq_t;
-typedef css::uno::Sequence<RowPropertyValuesSeq_t> CellPropertyValuesSeq_t;
+typedef css::uno::Sequence< css::uno::Sequence<css::beans::PropertyValues> >  CellPropertyValuesSeq_t;
 
 typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
 typedef std::vector<PropertyMapVector1> PropertyMapVector2;
@@ -67,13 +62,13 @@ struct HorizontallyMergedCell
 
 class DomainMapperTableHandler : public TableDataHandler
 {
-    TextReference_t         m_xText;
+    css::uno::Reference<css::text::XTextAppendAndConvert>  m_xText;
     DomainMapper_Impl&      m_rDMapper_Impl;
     CellSequencePointer_t   m_pCellSeq;
     RowSequencePointer_t    m_pRowSeq;
     TableSequencePointer_t  m_pTableSeq;
 
-    Handle_t               m_xTableRange;
+    css::uno::Reference< css::text::XTextRange >           m_xTableRange;
 
     // properties
     PropertyMapVector2      m_aCellProperties;
@@ -88,12 +83,12 @@ class DomainMapperTableHandler : public TableDataHandler
 
     TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo, std::vector<css::beans::PropertyValue>& rFrameProperties);
     CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo, std::vector<HorizontallyMergedCell>& rMerges);
-    RowPropertyValuesSeq_t endTableGetRowProperties();
+    css::uno::Sequence<css::beans::PropertyValues> endTableGetRowProperties();
 
 public:
     typedef std::shared_ptr<DomainMapperTableHandler> Pointer_t;
 
-    DomainMapperTableHandler(TextReference_t const& xText,
+    DomainMapperTableHandler(css::uno::Reference<css::text::XTextAppendAndConvert> const& xText,
                              DomainMapper_Impl& rDMapper_Impl);
     virtual ~DomainMapperTableHandler();
 
@@ -102,10 +97,10 @@ public:
     virtual void endTable(unsigned int nestedTableLevel) SAL_OVERRIDE;
     virtual void startRow(unsigned int nCells, TablePropertyMapPtr pProps) SAL_OVERRIDE;
     virtual void endRow() SAL_OVERRIDE;
-    virtual void startCell(const Handle_t & start, TablePropertyMapPtr pProps) SAL_OVERRIDE;
-    virtual void endCell(const Handle_t & end) SAL_OVERRIDE;
+    virtual void startCell(const css::uno::Reference< css::text::XTextRange > & start, TablePropertyMapPtr pProps) SAL_OVERRIDE;
+    virtual void endCell(const css::uno::Reference< css::text::XTextRange > & end) SAL_OVERRIDE;
 
-    Handle_t& getTable() { return m_xTableRange; };
+    css::uno::Reference< css::text::XTextRange >& getTable() { return m_xTableRange; };
     void setHadFootOrEndnote(bool bHadFootOrEndnote);
 };
 

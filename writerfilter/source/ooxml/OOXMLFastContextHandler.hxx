@@ -471,8 +471,7 @@ public:
     bool isShapeSent( ) { return m_bShapeSent; }
 
 protected:
-    typedef css::uno::Reference<css::xml::sax::XFastShapeContextHandler> ShapeContextRef;
-    ShapeContextRef mrShapeContext;
+    css::uno::Reference<css::xml::sax::XFastShapeContextHandler> mrShapeContext;
 
     virtual void lcl_startFastElement(Token_t Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;

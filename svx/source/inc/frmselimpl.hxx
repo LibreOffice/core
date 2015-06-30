@@ -99,10 +99,6 @@ typedef std::vector< FrameBorder* > FrameBorderPtrVec;
 
 struct FrameSelectorImpl : public Resource
 {
-    typedef css::uno::Reference<css::accessibility::XAccessible> XAccessibleRef;
-    typedef std::vector<a11y::AccFrameSelector*> AccessibleImplVec;
-    typedef std::vector<XAccessibleRef> XAccessibleRefVec;
-
     FrameSelector&      mrFrameSel;     /// The control itself.
     ScopedVclPtr<VirtualDevice> mpVirDev; /// For all buffered drawing operations.
     ImageList           maILArrows;     /// Arrows in current system colors.
@@ -146,9 +142,12 @@ struct FrameSelectorImpl : public Resource
     bool                mbHCMode;       /// true = High contrast mode.
 
     a11y::AccFrameSelector* mpAccess;   /// Pointer to accessibility object of the control.
-    XAccessibleRef      mxAccess;       /// Reference to accessibility object of the control.
-    AccessibleImplVec   maChildVec;     /// Pointers to accessibility objects for frame borders.
-    XAccessibleRefVec   mxChildVec;     /// References to accessibility objects for frame borders.
+    css::uno::Reference<css::accessibility::XAccessible>
+                        mxAccess;       /// Reference to accessibility object of the control.
+    std::vector<a11y::AccFrameSelector*>
+                        maChildVec;     /// Pointers to accessibility objects for frame borders.
+    std::vector<css::uno::Reference<css::accessibility::XAccessible> >
+                        mxChildVec;     /// References to accessibility objects for frame borders.
 
     explicit            FrameSelectorImpl( FrameSelector& rFrameSel );
                         ~FrameSelectorImpl();

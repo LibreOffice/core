@@ -289,8 +289,6 @@ class XclExpChart;
 class XclExpChartObj : public XclObj, protected XclExpRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument > XChartDocRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > XShapeRef;
     explicit            XclExpChartObj(
                             XclExpObjectManager& rObjMgr,
                             ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape,
@@ -305,9 +303,9 @@ public:
 
 private:
     typedef std::shared_ptr< XclExpChart > XclExpChartRef;
-    XclExpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
-    XShapeRef mxShape;
-    XChartDocRef mxChartDoc;
+    XclExpChartRef                                    mxChart;        /// The chart itself (BOF/EOF substream data).
+    css::uno::Reference< css::drawing::XShape >       mxShape;
+    css::uno::Reference< css::chart::XChartDocument > mxChartDoc;
 };
 
 /** Represents a NOTE record containing the relevant data of a cell note.

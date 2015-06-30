@@ -28,15 +28,13 @@
 
 
 typedef boost::shared_array< sal_uInt8 > SvgDataArray;
-typedef ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XPrimitive2D > Primitive2DReference;
-typedef ::com::sun::star::uno::Sequence< Primitive2DReference > Primitive2DSequence;
 
 
 // helper to convert any Primitive2DSequence to a good quality BitmapEx,
 // using default parameters and graphic::XPrimitive2DRenderer
 
 BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
-    const Primitive2DSequence& rSequence,
+    const css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels = 500000);
 
@@ -53,7 +51,8 @@ private:
 
     // on demand created content
     basegfx::B2DRange       maRange;
-    Primitive2DSequence     maSequence;
+    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > >
+                            maSequence;
     BitmapEx                maReplacement;
 
     // on demand creators
@@ -74,7 +73,7 @@ public:
 
     /// data read and evtl. on demand creation
     const basegfx::B2DRange& getRange() const;
-    const Primitive2DSequence& getPrimitive2DSequence() const;
+    const css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > >& getPrimitive2DSequence() const;
     const BitmapEx& getReplacement() const;
 };
 

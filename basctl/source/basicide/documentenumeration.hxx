@@ -33,13 +33,12 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace basctl { namespace docs {
 
 
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >                         Model;
-    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > >   Controllers;
+    typedef ::std::vector< css::uno::Reference< css::frame::XController > >   Controllers;
 
     struct DocumentDescriptor
     {
-        Model       xModel;
-        Controllers aControllers;
+        css::uno::Reference< css::frame::XModel >  xModel;
+        Controllers                                aControllers;
     };
 
     typedef ::std::vector< DocumentDescriptor > Documents;
@@ -72,7 +71,7 @@ namespace basctl { namespace docs {
     class DocumentEnumeration
     {
     public:
-        DocumentEnumeration( com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter = NULL );
+        DocumentEnumeration( css::uno::Reference< css::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter = NULL );
         ~DocumentEnumeration();
 
         /** retrieves a list of all currently known documents in the application

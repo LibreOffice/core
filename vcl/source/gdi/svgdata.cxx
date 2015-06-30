@@ -32,7 +32,7 @@
 using namespace ::com::sun::star;
 
 BitmapEx convertPrimitive2DSequenceToBitmapEx(
-    const Primitive2DSequence& rSequence,
+    const css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > >& rSequence,
     const basegfx::B2DRange& rTargetRange,
     const sal_uInt32 nMaximumQuadraticPixels)
 {
@@ -134,7 +134,7 @@ void SvgData::ensureSequenceAndRange()
             for(sal_Int32 a(0L); a < nCount; a++)
             {
                 // get reference
-                const Primitive2DReference xReference(maSequence[a]);
+                const css::uno::Reference< css::graphic::XPrimitive2D > xReference(maSequence[a]);
 
                 if(xReference.is())
                 {
@@ -194,7 +194,7 @@ const basegfx::B2DRange& SvgData::getRange() const
     return maRange;
 }
 
-const Primitive2DSequence& SvgData::getPrimitive2DSequence() const
+const css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > >& SvgData::getPrimitive2DSequence() const
 {
     const_cast< SvgData* >(this)->ensureSequenceAndRange();
 

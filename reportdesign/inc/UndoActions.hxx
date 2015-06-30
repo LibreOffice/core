@@ -79,7 +79,6 @@ namespace rptui
         static ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OGroupHelper> getMemberFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
 
     };
-    typedef com::sun::star::uno::Reference< ::com::sun::star::report::XSection > TSection;
 
     /** Helper class to allow std::mem_fun for SAL_CALL
     */

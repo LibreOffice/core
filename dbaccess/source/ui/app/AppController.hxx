@@ -71,11 +71,11 @@ namespace dbaui
     class OApplicationView;
     class OLinkedDocumentsAccess;
     typedef OGenericUnoController   OApplicationController_CBASE;
-    typedef ::cppu::ImplHelper5 <   ::com::sun::star::container::XContainerListener
-                                ,   ::com::sun::star::beans::XPropertyChangeListener
-                                ,   ::com::sun::star::sdb::application::XDatabaseDocumentUI
-                                ,   ::com::sun::star::ui::XContextMenuInterception
-                                ,   ::com::sun::star::view::XSelectionSupplier
+    typedef ::cppu::ImplHelper5 <   css::container::XContainerListener
+                                ,   css::beans::XPropertyChangeListener
+                                ,   css::sdb::application::XDatabaseDocumentUI
+                                ,   css::ui::XContextMenuInterception
+                                ,   css::view::XSelectionSupplier
                                 >   OApplicationController_Base;
 
     class SelectionNotifier;
@@ -86,24 +86,23 @@ namespace dbaui
             ,public IApplicationController
     {
     public:
-        typedef ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer > TContainer;
-        typedef ::std::vector< TContainer >                                                 TContainerVector;
+        typedef ::std::vector< css::uno::Reference< css::container::XContainer > >  TContainerVector;
 
     private:
 
         OTableCopyHelper::DropDescriptor            m_aAsyncDrop;
 
         SharedConnection        m_xDataSourceConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
+        css::uno::Reference< css::sdbc::XDatabaseMetaData >
                                 m_xMetaData;
 
         OModuleClient           m_aModuleClient;
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        css::uno::Reference< css::beans::XPropertySet >
                                 m_xDataSource;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        css::uno::Reference< css::frame::XModel >
                                 m_xModel;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable >
+        css::uno::Reference< css::util::XModifiable >
                                 m_xDocumentModify;
         ::cppu::OInterfaceContainerHelper
                                 m_aContextMenuInterceptors;
@@ -148,7 +147,7 @@ namespace dbaui
             @param  _xContainer The container where the element type has to be found
             @return the element type corresponding to the given container
         */
-        static ElementType getElementType(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer);
+        static ElementType getElementType(const css::uno::Reference< css::container::XContainer >& _xContainer);
 
         /** opens a new frame with either the table or the query or report or form or view
             @param  _sName
@@ -161,7 +160,7 @@ namespace dbaui
                 denotes the command which instigated the action. Might be 0.
             @return the form or report model will only be returned, otherwise <NULL/>
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > openElement(
+        css::uno::Reference< css::lang::XComponent > openElement(
             const OUString& _sName,
             ElementType _eType,
             ElementOpenMode _eOpenMode,
@@ -170,7 +169,7 @@ namespace dbaui
 
         /** opens a new sub frame with a table/query/form/report/view, passing additional arguments
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > openElementWithArguments(
+        css::uno::Reference< css::lang::XComponent > openElementWithArguments(
             const OUString& _sName,
             ElementType _eType,
             ElementOpenMode _eOpenMode,
@@ -184,11 +183,11 @@ namespace dbaui
             @param  i_rAdditionalArguments
                 Additional arguments to pass when creating the component
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        css::uno::Reference< css::lang::XComponent >
             newElement(
                 ElementType _eType,
                 const ::comphelper::NamedValueCollection& i_rAdditionalArguments,
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_rDocumentDefinition
+                css::uno::Reference< css::lang::XComponent >& o_rDocumentDefinition
             );
 
         /** creates a new database object, using an auto pilot
@@ -243,7 +242,7 @@ namespace dbaui
         TransferableHelper* copyObject();
 
         /// returns the nameaccess
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getElements(ElementType _eType);
+        css::uno::Reference< css::container::XNameAccess > getElements(ElementType _eType);
 
         /** returns the document access for the specific type
             @param  _eType
@@ -253,7 +252,7 @@ namespace dbaui
         ::std::unique_ptr<OLinkedDocumentsAccess> getDocumentsAccess(ElementType _eType);
 
         /// returns the query definitions of the active data source.
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer> getQueryDefinitions() const;
+        css::uno::Reference< css::container::XNameContainer> getQueryDefinitions() const;
 
         /** pastes a special format from the system clipboard to the currently selected object types
             @param  _nFormatId
@@ -293,7 +292,7 @@ namespace dbaui
             @param  _xCollection
                 The collection where we want to listen on.
         */
-        void addContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xCollection);
+        void addContainerListener(const css::uno::Reference< css::container::XNameAccess>& _xCollection);
 
         /** opens a uno dialog withthe currently selected data source as initialize argument
             @param  _sServiceName
@@ -325,8 +324,8 @@ namespace dbaui
             const OUString&  _rName,
             const sal_Int32         _nType,
             const ElementOpenMode   _eMode,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDocument,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDefinition
+            const css::uno::Reference< css::lang::XComponent >& _xDocument,
+            const css::uno::Reference< css::lang::XComponent >& _xDefinition
         );
 
         /** Inserts a new object into the hierarchy given be the type.
@@ -344,7 +343,7 @@ namespace dbaui
         bool insertHierachyElement(  ElementType _eType
                                     ,const OUString& _sParentFolder
                                     ,bool _bCollection = true
-                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent = ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>()
+                                    ,const css::uno::Reference< css::ucb::XContent>& _xContent = css::uno::Reference< css::ucb::XContent>()
                                     ,bool _bMove = false);
         /** checks if delete command or rename comamnd is allowed
             @param  _eType
@@ -398,17 +397,17 @@ namespace dbaui
         /** forces usage of a connection which we do not own
             <p>To be used from within XInitialization::initialize only.</p>
         */
-        void                    initializeConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxForeignConn );
+        void                    initializeConnection( const css::uno::Reference< css::sdbc::XConnection >& _rxForeignConn );
 
-        // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
+        // state of a feature. 'feature' may be the handle of a css::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const SAL_OVERRIDE;
         // execute a feature
-        virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void            Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
 
         // OGenericUnoController
-        virtual void            onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager ) SAL_OVERRIDE;
+        virtual void            onLoadedMenu( const css::uno::Reference< css::frame::XLayoutManager >& _xLayoutManager ) SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getPrivateModel() const SAL_OVERRIDE
+        virtual css::uno::Reference< css::frame::XModel > getPrivateModel() const SAL_OVERRIDE
         {
             return m_xModel;
         }
@@ -416,58 +415,58 @@ namespace dbaui
         virtual ~OApplicationController();
 
     public:
-        OApplicationController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
+        OApplicationController(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // need by registration
-        static OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Reference< css::uno::XInterface >
+                SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
-        // ::com::sun::star::frame::XController
-        virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  SAL_CALL getModel() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::frame::XController
+        virtual void SAL_CALL attachFrame(const css::uno::Reference< css::frame::XFrame > & xFrame) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL attachModel(const css::uno::Reference< css::frame::XModel > & xModel) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::frame::XModel >  SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // ::com::sun::star::container::XContainerListener
-        virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        // css::container::XContainerListener
+        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XDatabaseDocumentUI
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource > SAL_CALL getDataSource() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getApplicationMainWindow() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getActiveConnection() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > SAL_CALL getSubComponents() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XDataSource > SAL_CALL getDataSource() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getApplicationMainWindow() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getActiveConnection() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::uno::Reference< css::lang::XComponent > > SAL_CALL getSubComponents() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isConnected(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         // DO NOT CALL with getMutex() held!!
-        virtual void SAL_CALL connect(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::beans::Pair< ::sal_Int32, OUString > SAL_CALL identifySubComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& SubComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL closeSubComponents(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponent( ::sal_Int32 ObjectType, const OUString& ObjectName, sal_Bool ForEditing ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponentWithArguments( ::sal_Int32 ObjectType, const OUString& ObjectName, sal_Bool ForEditing, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponent( ::sal_Int32 ObjectType, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_DocumentDefinition ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponentWithArguments( ::sal_Int32 ObjectType, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_DocumentDefinition ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL connect(  ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::beans::Pair< ::sal_Int32, OUString > SAL_CALL identifySubComponent( const css::uno::Reference< css::lang::XComponent >& SubComponent ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL closeSubComponents(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::lang::XComponent > SAL_CALL loadComponent( ::sal_Int32 ObjectType, const OUString& ObjectName, sal_Bool ForEditing ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::lang::XComponent > SAL_CALL loadComponentWithArguments( ::sal_Int32 ObjectType, const OUString& ObjectName, sal_Bool ForEditing, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::lang::XComponent > SAL_CALL createComponent( ::sal_Int32 ObjectType, css::uno::Reference< css::lang::XComponent >& o_DocumentDefinition ) throw (css::lang::IllegalArgumentException, css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::lang::XComponent > SAL_CALL createComponentWithArguments( ::sal_Int32 ObjectType, const css::uno::Sequence< css::beans::PropertyValue >& Arguments, css::uno::Reference< css::lang::XComponent >& o_DocumentDefinition ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::sdbc::SQLException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XContextMenuInterception
-        virtual void SAL_CALL registerContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL releaseContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL registerContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL releaseContextMenuInterceptor( const css::uno::Reference< css::ui::XContextMenuInterceptor >& Interceptor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XSelectionSupplier
-        virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& xSelection ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL select( const css::uno::Any& xSelection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Any SAL_CALL getSelection(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         /** retrieves the current connection, creates it if necessary
 
@@ -485,7 +484,7 @@ namespace dbaui
         /// determines whether we're currently connected to the database
         bool isConnected() const { return m_xDataSourceConnection.is(); }
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >&
+        const css::uno::Reference< css::sdbc::XDatabaseMetaData >&
             getConnectionMetaData() const { return m_xMetaData; }
 
         /** refreshes the tables
@@ -501,20 +500,20 @@ namespace dbaui
         virtual void onPasteEntry() SAL_OVERRIDE;
         virtual void onDeleteEntry() SAL_OVERRIDE;
         virtual void previewChanged( sal_Int32 _nMode) SAL_OVERRIDE;
-        virtual void containerFound( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer) SAL_OVERRIDE;
+        virtual void containerFound( const css::uno::Reference< css::container::XContainer >& _xContainer) SAL_OVERRIDE;
 
         // IController (base of IApplicationController)
-        virtual void        executeUnChecked(const ::com::sun::star::util::URL& _rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
-        virtual void        executeChecked(const ::com::sun::star::util::URL& _rCommand, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
-        virtual void        executeUnChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
-        virtual void        executeChecked(sal_uInt16 _nCommandId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void        executeUnChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void        executeChecked(const css::util::URL& _rCommand, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void        executeUnChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
+        virtual void        executeChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) SAL_OVERRIDE;
         virtual bool        isCommandEnabled(sal_uInt16 _nCommandId) const SAL_OVERRIDE;
         virtual bool        isCommandEnabled( const OUString& _rCompleteCommandURL ) const SAL_OVERRIDE;
         virtual sal_uInt16  registerCommandURL( const OUString& _rCompleteCommandURL ) SAL_OVERRIDE;
         virtual void        notifyHiContrastChanged() SAL_OVERRIDE;
         virtual bool        isDataSourceReadOnly() const SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
-                            getXController() throw( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::frame::XController >
+                            getXController() throw( css::uno::RuntimeException ) SAL_OVERRIDE;
         virtual bool        interceptUserInput( const NotifyEvent& _rEvent ) SAL_OVERRIDE;
 
         // IControlActionListener overridables
@@ -528,7 +527,7 @@ namespace dbaui
         virtual IController&    getCommandController() SAL_OVERRIDE;
         virtual ::cppu::OInterfaceContainerHelper*
                                 getContextMenuInterceptors() SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Any
+        virtual css::uno::Any
                                 getCurrentSelection( Control& _rControl ) const SAL_OVERRIDE;
 
         void OnInvalidateClipboard();
@@ -551,7 +550,7 @@ namespace dbaui
 
     protected:
         // XEventListener
-        virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // OComponentHelper
         virtual void SAL_CALL disposing() SAL_OVERRIDE;

@@ -63,11 +63,11 @@ public:
     }
 };
 
-Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
+css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
     const uno::Reference< drawing::XShape >& xShape,
     const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException, std::exception)
 {
-    Primitive2DSequence aRetval;
+    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
 
     if(xShape.is())
     {
@@ -83,11 +83,11 @@ Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
     return aRetval;
 }
 
-Primitive2DSequence SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
+css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
     const uno::Reference< drawing::XDrawPage >& xDrawPage,
     const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException, std::exception)
 {
-    Primitive2DSequence aRetval;
+    css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
 
     if(xDrawPage.is())
     {

@@ -39,17 +39,17 @@ OUString SAL_CALL XFormsEventConcrete::getType() throw (RuntimeException, std::e
     return m_eventType;
 }
 
-XFormsEventConcrete::XEventTarget_t SAL_CALL XFormsEventConcrete::getTarget() throw (RuntimeException, std::exception)
+css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL XFormsEventConcrete::getTarget() throw (RuntimeException, std::exception)
 {
     return m_target;
 }
 
-XFormsEventConcrete::XEventTarget_t SAL_CALL XFormsEventConcrete::getCurrentTarget() throw (RuntimeException, std::exception)
+css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL XFormsEventConcrete::getCurrentTarget() throw (RuntimeException, std::exception)
 {
     return m_currentTarget;
 }
 
-XFormsEventConcrete::PhaseType_t SAL_CALL XFormsEventConcrete::getEventPhase() throw (RuntimeException, std::exception)
+css::xml::dom::events::PhaseType SAL_CALL XFormsEventConcrete::getEventPhase() throw (RuntimeException, std::exception)
 {
     return m_phase;
 }
@@ -64,7 +64,7 @@ sal_Bool SAL_CALL XFormsEventConcrete::getCancelable() throw (RuntimeException, 
     return m_cancelable;
 }
 
-XFormsEventConcrete::Time_t SAL_CALL XFormsEventConcrete::getTimeStamp() throw (RuntimeException, std::exception)
+css::util::Time SAL_CALL XFormsEventConcrete::getTimeStamp() throw (RuntimeException, std::exception)
 {
     return m_time;
 }

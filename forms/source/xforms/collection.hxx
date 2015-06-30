@@ -42,9 +42,9 @@
 
 
 typedef cppu::WeakImplHelper3<
-    com::sun::star::container::XIndexReplace,
-    com::sun::star::container::XSet,
-    com::sun::star::container::XContainer>
+    css::container::XIndexReplace,
+    css::container::XSet,
+    css::container::XContainer>
 Collection_t;
 
 template<class ELEMENT_TYPE>
@@ -52,8 +52,7 @@ class Collection : public Collection_t
 {
 public:
     typedef ELEMENT_TYPE T;
-    typedef com::sun::star::uno::Reference<com::sun::star::container::XContainerListener> XContainerListener_t;
-    typedef std::vector<XContainerListener_t> Listeners_t;
+    typedef std::vector<css::uno::Reference<css::container::XContainerListener> > Listeners_t;
 
 protected:
     std::vector<T> maItems;
@@ -145,117 +144,106 @@ protected:
 
 public:
 
-    typedef com::sun::star::uno::Type Type_t;
-    typedef com::sun::star::uno::Any Any_t;
-    typedef com::sun::star::uno::RuntimeException RuntimeException_t;
-    typedef com::sun::star::lang::IllegalArgumentException IllegalArgumentException_t;
-    typedef com::sun::star::container::NoSuchElementException NoSuchElementException_t;
-    typedef com::sun::star::lang::IndexOutOfBoundsException IndexOutOfBoundsException_t;
-    typedef com::sun::star::uno::Reference<com::sun::star::container::XEnumeration> XEnumeration_t;
-    typedef com::sun::star::lang::WrappedTargetException WrappedTargetException_t;
-    typedef com::sun::star::container::ElementExistException ElementExistException_t;
-
-
     // XElementAccess
-    virtual Type_t SAL_CALL getElementType()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return cppu::UnoType<T>::get();
     }
 
     virtual sal_Bool SAL_CALL hasElements()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return hasItems();
     }
 
     // XIndexAccess : XElementAccess
     virtual sal_Int32 SAL_CALL getCount()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return countItems();
     }
 
-    virtual Any_t SAL_CALL getByIndex( sal_Int32 nIndex )
-        throw( IndexOutOfBoundsException_t,
-               WrappedTargetException_t,
-               RuntimeException_t, std::exception) SAL_OVERRIDE
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex )
+        throw( css::lang::IndexOutOfBoundsException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if( isValidIndex( nIndex ) )
-            return com::sun::star::uno::makeAny( getItem( nIndex ) );
+            return css::uno::makeAny( getItem( nIndex ) );
         else
-            throw IndexOutOfBoundsException_t();
+            throw css::lang::IndexOutOfBoundsException();
     }
 
     // XIndexReplace : XIndexAccess
     virtual void SAL_CALL replaceByIndex( sal_Int32 nIndex,
-                                          const Any_t& aElement )
-        throw( IllegalArgumentException_t,
-               IndexOutOfBoundsException_t,
-               WrappedTargetException_t,
-               RuntimeException_t, std::exception) SAL_OVERRIDE
+                                          const css::uno::Any& aElement )
+        throw( css::lang::IllegalArgumentException,
+               css::lang::IndexOutOfBoundsException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         T t;
         if( isValidIndex( nIndex) )
             if( ( aElement >>= t )  &&  isValid( t ) )
                 setItem( nIndex, t );
             else
-                throw IllegalArgumentException_t();
+                throw css::lang::IllegalArgumentException();
         else
-            throw IndexOutOfBoundsException_t();
+            throw css::lang::IndexOutOfBoundsException();
     }
 
     // XEnumerationAccess : XElementAccess
-    virtual XEnumeration_t SAL_CALL createEnumeration()
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE
+    virtual css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration()
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         return new Enumeration( this );
     }
 
 
     // XSet : XEnumerationAccess
-    virtual sal_Bool SAL_CALL has( const Any_t& aElement )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL has( const css::uno::Any& aElement )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         T t;
         return ( aElement >>= t ) ? hasItem( t ) : sal_False;
     }
 
-    virtual void SAL_CALL insert( const Any_t& aElement )
-        throw( IllegalArgumentException_t,
-               ElementExistException_t,
-               RuntimeException_t, std::exception ) SAL_OVERRIDE
+    virtual void SAL_CALL insert( const css::uno::Any& aElement )
+        throw( css::lang::IllegalArgumentException,
+               css::container::ElementExistException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         T t;
         if( ( aElement >>= t )  &&  isValid( t ) )
             if( ! hasItem( t ) )
                 addItem( t );
             else
-                throw ElementExistException_t();
+                throw css::container::ElementExistException();
         else
-            throw IllegalArgumentException_t();
+            throw css::lang::IllegalArgumentException();
     }
 
-    virtual void SAL_CALL remove( const Any_t& aElement )
-        throw( IllegalArgumentException_t,
-               NoSuchElementException_t,
-               RuntimeException_t, std::exception ) SAL_OVERRIDE
+    virtual void SAL_CALL remove( const css::uno::Any& aElement )
+        throw( css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         T t;
         if( aElement >>= t )
             if( hasItem( t ) )
                 removeItem( t );
             else
-                throw NoSuchElementException_t();
+                throw css::container::NoSuchElementException();
         else
-            throw IllegalArgumentException_t();
+            throw css::lang::IllegalArgumentException();
     }
 
 
     // XContainer
     virtual void SAL_CALL addContainerListener(
-        const XContainerListener_t& xListener )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE
+        const css::uno::Reference<css::container::XContainerListener>& xListener )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         OSL_ENSURE( xListener.is(), "need listener!" );
         if( std::find( maListeners.begin(), maListeners.end(), xListener)
@@ -264,8 +252,8 @@ public:
     }
 
     virtual void SAL_CALL removeContainerListener(
-        const XContainerListener_t& xListener )
-        throw( RuntimeException_t, std::exception ) SAL_OVERRIDE
+        const css::uno::Reference<css::container::XContainerListener>& xListener )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE
     {
         OSL_ENSURE( xListener.is(), "need listener!" );
         Listeners_t::iterator aIter =
@@ -280,11 +268,11 @@ protected:
     void _elementInserted( sal_Int32 nPos )
     {
         OSL_ENSURE( isValidIndex(nPos), "invalid index" );
-        com::sun::star::container::ContainerEvent aEvent(
-            static_cast<com::sun::star::container::XIndexReplace*>( this ),
-            com::sun::star::uno::makeAny( nPos ),
-            com::sun::star::uno::makeAny( getItem( nPos ) ),
-            com::sun::star::uno::Any() );
+        css::container::ContainerEvent aEvent(
+            static_cast<css::container::XIndexReplace*>( this ),
+            css::uno::makeAny( nPos ),
+            css::uno::makeAny( getItem( nPos ) ),
+            css::uno::Any() );
         for( Listeners_t::iterator aIter = maListeners.begin();
              aIter != maListeners.end();
              ++aIter )
@@ -295,11 +283,11 @@ protected:
 
     void _elementRemoved( const T& aOld )
     {
-        com::sun::star::container::ContainerEvent aEvent(
-            static_cast<com::sun::star::container::XIndexReplace*>( this ),
-            com::sun::star::uno::Any(),
-            com::sun::star::uno::makeAny( aOld ),
-            com::sun::star::uno::Any() );
+        css::container::ContainerEvent aEvent(
+            static_cast<css::container::XIndexReplace*>( this ),
+            css::uno::Any(),
+            css::uno::makeAny( aOld ),
+            css::uno::Any() );
         for( Listeners_t::iterator aIter = maListeners.begin();
              aIter != maListeners.end();
              ++aIter )
@@ -311,11 +299,11 @@ protected:
     void _elementReplaced( const sal_Int32 nPos, const T& aNew )
     {
         OSL_ENSURE( isValidIndex(nPos), "invalid index" );
-        com::sun::star::container::ContainerEvent aEvent(
-            static_cast<com::sun::star::container::XIndexReplace*>( this ),
-            com::sun::star::uno::makeAny( nPos ),
-            com::sun::star::uno::makeAny( getItem( nPos ) ),
-            com::sun::star::uno::makeAny( aNew ) );
+        css::container::ContainerEvent aEvent(
+            static_cast<css::container::XIndexReplace*>( this ),
+            css::uno::makeAny( nPos ),
+            css::uno::makeAny( getItem( nPos ) ),
+            css::uno::makeAny( aNew ) );
         for( Listeners_t::iterator aIter = maListeners.begin();
              aIter != maListeners.end();
              ++aIter )

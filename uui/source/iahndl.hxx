@@ -75,8 +75,6 @@ struct InteractionHandlerData
 
 typedef std::vector< InteractionHandlerData > InteractionHandlerDataList;
 
-typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > Continuations;
-
 typedef std::unordered_map< OUString, OUString, OUStringHash >    StringHashMap;
 
 class UUIInteractionHelper
@@ -289,7 +287,7 @@ private:
     handleAuthFallbackRequest(
             OUString & instructions,
             OUString & url,
-            Continuations  const & rContinuations );
+            css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations );
 };
 
 class ErrorResource: private Resource
