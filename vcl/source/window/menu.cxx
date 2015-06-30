@@ -1878,7 +1878,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                 // contained. The application itself should check for this!
                 // Otherwise it could happen entries are disabled due to
                 // asynchronous loading
-                if (!pData->bEnabled)
+                if (!pData->bEnabled || !pWindow->IsEnabled())
                 {
                     nTextStyle   |= DrawTextFlags::Disable;
                     nSymbolStyle |= DrawSymbolFlags::Disable;
@@ -1892,7 +1892,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                     if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_SEPARATOR))
                     {
                         ControlState nState = ControlState::NONE;
-                        if (pData->bEnabled)
+                        if (pData->bEnabled && !pWindow->IsEnabled())
                             nState |= ControlState::ENABLED;
                         if (bHighlighted)
                             nState |= ControlState::SELECTED;
@@ -1948,7 +1948,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                             if (pData->bChecked)
                                 nState |= ControlState::PRESSED;
 
-                            if (pData->bEnabled)
+                            if (pData->bEnabled && !pWindow->IsEnabled())
                                 nState |= ControlState::ENABLED;
 
                             if (bHighlighted)
@@ -2019,6 +2019,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
                     DrawTextFlags nStyle = nTextStyle | DrawTextFlags::Mnemonic;
+
                     if (pData->bIsTemporary)
                         nStyle |= DrawTextFlags::Disable;
                     MetricVector* pVector = bLayout ? &mpLayoutData->m_aUnicodeBoundRects : NULL;
@@ -2088,7 +2089,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                             aSpacing = nOuterSpaceX;
                         }
 
-                        if (pData->bEnabled)
+                        if (pData->bEnabled && !pWindow->IsEnabled())
                             nState |= ControlState::ENABLED;
                         if (bHighlighted)
                             nState |= ControlState::SELECTED;

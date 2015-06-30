@@ -993,6 +993,10 @@ void MenuBarWindow::StateChanged( StateChangedType nType )
         ApplySettings(*this);
         Invalidate();
     }
+    else if (nType == StateChangedType::Enable)
+    {
+        Invalidate();
+    }
     else if(pMenu)
     {
         pMenu->ImplKillLayoutData();
