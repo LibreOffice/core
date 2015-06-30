@@ -149,6 +149,12 @@ OutlinerParaObject *OFlowChainedText::CreateNonOverflowingParaObject(Outliner *p
      return pOutliner->CreateParaObject();
 }
 
+
+UFlowChainedText::UFlowChainedText(Outliner *pOutl)
+{
+    mpUnderflowPObj = pOutl->CreateParaObject();
+}
+
 OutlinerParaObject *UFlowChainedText::CreateMergedUnderflowParaObject(Outliner *pOutl, OutlinerParaObject *pNextLinkWholeText)
 {
     OutlinerParaObject *pCurText = mpUnderflowPObj;
