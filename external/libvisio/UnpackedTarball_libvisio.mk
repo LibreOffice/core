@@ -16,6 +16,8 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libvisio,0))
 $(eval $(call gb_UnpackedTarball_add_patches,libvisio,\
        external/libvisio/vsd-msvc-max.patch.1 \
        external/libvisio/ubsan.patch \
+       external/libvisio/tdf-92270-VSDX-theme-color-import-fix.patch \
+       external/libvisio/tdf-92271-fix-VSDX-char-background-handling.patch \
 ))
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)

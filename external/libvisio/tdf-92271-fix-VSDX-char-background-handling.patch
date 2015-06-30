@@ -1,0 +1,30 @@
+--- src/lib/VSDStyles.h
++++ src/lib/VSDStyles.h
+@@ -426,7 +426,7 @@ struct VSDTextBlockStyle
+ {
+   VSDTextBlockStyle() :
+     leftMargin(0.0), rightMargin(0.0), topMargin(0.0), bottomMargin(0.0), verticalAlign(1),
+-    isTextBkgndFilled(true), textBkgndColour(0xff,0xff,0xff,0), defaultTabStop(0.5), textDirection(0) {}
++    isTextBkgndFilled(false), textBkgndColour(0xff,0xff,0xff,0), defaultTabStop(0.5), textDirection(0) {}
+   VSDTextBlockStyle(double lm, double rm, double tm, double bm, unsigned char va,
+                     bool isBgFilled, Colour bgClr, double defTab, unsigned char td) :
+     leftMargin(lm), rightMargin(rm), topMargin(tm), bottomMargin(bm), verticalAlign(va),
+--- src/lib/VSDXParser.cpp
++++ src/lib/VSDXParser.cpp
+@@ -939,7 +939,7 @@ int libvisio::VSDXParser::getElementDepth(xmlTextReaderPtr reader)
+ void libvisio::VSDXParser::readShapeProperties(xmlTextReaderPtr reader)
+ {
+   // Text block properties
+-  long bgClrId = 0;
++  long bgClrId = -1;
+
+   int ret = 1;
+   int tokenId = XML_TOKEN_INVALID;
+@@ -1213,6 +1213,7 @@ void libvisio::VSDXParser::readShapeProperties(xmlTextReaderPtr reader)
+             textBkgndColour = Colour(0xff, 0xff, 0xff, 0);
+         }
+         m_shape.m_textBlockStyle.textBkgndColour = textBkgndColour;
++        m_shape.m_textBlockStyle.isTextBkgndFilled = true;
+       }
+       break;
+     case XML_DEFAULTTABSTOP:
