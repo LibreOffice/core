@@ -283,7 +283,7 @@ sal_Bool SwXTextView::select(const uno::Any& aInterface)
         }
         else if (pTableCursor)
         {
-            UnoActionRemoveContext const aContext(pDoc);
+            UnoActionRemoveContext const aContext(*pTableCursor);
             rSh.EnterStdMode();
             rSh.SetSelection(*pTableCursor);
             return sal_True;

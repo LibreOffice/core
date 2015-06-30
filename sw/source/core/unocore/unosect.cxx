@@ -531,6 +531,7 @@ lcl_UpdateSection(SwSectionFormat *const pFormat,
                         pDoc->IsInReading());
                 {
                     // temporarily remove actions to allow cursor update
+                    // TODO: why? no table cursor here!
                     UnoActionRemoveContext aRemoveContext( pDoc );
                 }
 
@@ -1702,6 +1703,7 @@ throw (uno::RuntimeException, std::exception)
             }
             {
                 // temporarily remove actions to allow cursor update
+                // TODO: why? no table cursor here!
                 UnoActionRemoveContext aRemoveContext( pFormat->GetDoc() );
             }
         }

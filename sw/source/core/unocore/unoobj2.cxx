@@ -265,22 +265,50 @@ UnoActionContext::~UnoActionContext()
     }
 }
 
-UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
-    : m_pDoc(pDoc)
+static void lcl_RemoveImpl(SwDoc *const pDoc)
 {
-    SwRootFrm *const pRootFrm = m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+    assert(pDoc);
+    SwRootFrm *const pRootFrm = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if (pRootFrm)
     {
         pRootFrm->UnoRemoveAllActions();
     }
 }
 
+UnoActionRemoveContext::UnoActionRemoveContext(SwDoc *const pDoc)
+    : m_pDoc(pDoc)
+{
+    lcl_RemoveImpl(m_pDoc);
+}
+
+static SwDoc * lcl_IsNewStyleTable(SwUnoTableCrsr const& rCursor)
+{
+    SwTableNode *const pTableNode = rCursor.GetNode().FindTableNode();
+    return (pTableNode && !pTableNode->GetTable().IsNewModel())
+        ? rCursor.GetDoc()
+        : nullptr;
+}
+
+UnoActionRemoveContext::UnoActionRemoveContext(SwUnoTableCrsr const& rCursor)
+    : m_pDoc(lcl_IsNewStyleTable(rCursor))
+{
+    // this insanity is only necessary for old-style tables
+    // because SwRootFrm::MakeTableCrsrs() creates the table cursor for these
+    if (m_pDoc)
+    {
+        lcl_RemoveImpl(m_pDoc);
+    }
+}
+
 UnoActionRemoveContext::~UnoActionRemoveContext()
 {
-    SwRootFrm *const pRootFrm = m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
-    if (pRootFrm)
+    if (m_pDoc)
     {
-        pRootFrm->UnoRestoreAllActions();
+        SwRootFrm *const pRootFrm = m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
+        if (pRootFrm)
+        {
+            pRootFrm->UnoRestoreAllActions();
+        }
     }
 }
 
