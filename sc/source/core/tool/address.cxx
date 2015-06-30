@@ -1491,15 +1491,15 @@ static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
                 {
                     rRange.aStart.SetRow(0);
                     rRange.aEnd.SetRow(MAXROW);
-                    nRes1 |= SCA_ROW_ABSOLUTE;
-                    nRes2 |= SCA_ROW_ABSOLUTE;
+                    nRes1 |= SCA_VALID_ROW | SCA_ROW_ABSOLUTE;
+                    nRes2 |= SCA_VALID_ROW | SCA_ROW_ABSOLUTE;
                 }
                 else
                 {
                     rRange.aStart.SetCol(0);
                     rRange.aEnd.SetCol(MAXCOL);
-                    nRes1 |= SCA_COL_ABSOLUTE;
-                    nRes2 |= SCA_COL_ABSOLUTE;
+                    nRes1 |= SCA_VALID_COL | SCA_COL_ABSOLUTE;
+                    nRes2 |= SCA_VALID_COL | SCA_COL_ABSOLUTE;
                 }
             }
             else if ((nRes1 & SCA_VALID) && (nRes2 & SCA_VALID))
