@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_c2f707f4",
+        "filename": "filter/source/xslt/export/wordml/ooo2wordml_table.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2015-06-30T06:40:01Z",
+      "side": 1,
+      "message": "remove the name",
+      "range": {
+        "startLine": 303,
+        "startChar": 82,
+        "endLine": 303,
+        "endChar": 91
+      },
+      "revId": "be6f86a3ad71a04f1536a60d97f260abf4a59f24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_a2f20b05",
+        "filename": "i18npool/source/transliteration/transliteration_body.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2015-06-30T06:40:01Z",
+      "side": 1,
+      "message": "combination",
+      "range": {
+        "startLine": 244,
+        "startChar": 42,
+        "endLine": 244,
+        "endChar": 53
+      },
+      "revId": "be6f86a3ad71a04f1536a60d97f260abf4a59f24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_02ee7f22",
+        "filename": "sc/source/ui/vba/vbarange.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1000028
+      },
+      "writtenOn": "2015-06-30T06:40:01Z",
+      "side": 1,
+      "message": "extract",
+      "range": {
+        "startLine": 1404,
+        "startChar": 47,
+        "endLine": 1404,
+        "endChar": 52
+      },
+      "revId": "be6f86a3ad71a04f1536a60d97f260abf4a59f24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
