@@ -804,7 +804,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             OUString msg( ::comphelper::anyToString( exc ) );
             const SolarMutexGuard guard;
             ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
-            aErrorBox->SetText( "Explanations" );
+            aErrorBox->set_title( "Explanations" );
             aErrorBox->Execute();
         }
     }

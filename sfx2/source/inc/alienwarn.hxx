@@ -22,7 +22,7 @@
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
 
-class SfxAlienWarningDialog : public MessageDialog
+class SfxAlienWarningDialog : public VclMessageDialog
 {
 private:
     VclPtr<PushButton>             m_pKeepCurrentBtn;

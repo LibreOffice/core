@@ -1325,7 +1325,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         WinBits nBits = WB_CLIPCHILDREN|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
-        xWindow = VclPtr<MessageDialog>::Create(pParent, nBits);
+        xWindow = VclPtr<VclMessageDialog>::Create(pParent, nBits);
     }
     else if (name == "GtkBox")
     {

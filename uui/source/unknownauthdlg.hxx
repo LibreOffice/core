@@ -28,7 +28,7 @@
 
 //= Https_UADialog
 
-class UnknownAuthDialog : public MessageDialog
+class UnknownAuthDialog : public VclMessageDialog
 {
 private:
     VclPtr<PushButton> m_pCommandButtonOK;

@@ -41,7 +41,7 @@ void SSLWarnDialog::ViewCert()
 SSLWarnDialog::SSLWarnDialog(vcl::Window* pParent,
     const css::uno::Reference< css::security::XCertificate >& rXCert,
     const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : MessageDialog(pParent, "SSLWarnDialog", "uui/ui/sslwarndialog.ui")
+    : VclMessageDialog(pParent, "SSLWarnDialog", "uui/ui/sslwarndialog.ui")
     , m_xContext(xContext)
     , m_rXCert(rXCert)
 {
@@ -55,7 +55,7 @@ void SSLWarnDialog::response(short nResponseId)
             ViewCert();
             break;
         default:
-            MessageDialog::response(nResponseId);
+            VclMessageDialog::response(nResponseId);
             break;
     }
 }

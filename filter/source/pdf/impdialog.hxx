@@ -54,7 +54,7 @@ public:
     PDFFilterResId( sal_uInt32 nId );
 };
 
-class ImplErrorDialog : public MessageDialog
+class ImplErrorDialog : public VclMessageDialog
 {
     VclPtr<ListBox>        m_pErrors;
     VclPtr<FixedText>      m_pExplanation;

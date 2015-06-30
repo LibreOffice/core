@@ -702,7 +702,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         OUString const aMessage(aDiagnosticMessage + "\n");
 
         ScopedVclPtrInstance< MessageDialog > aBootstrapFailedBox(nullptr, aMessage);
-        aBootstrapFailedBox->SetText( aProductKey );
+        aBootstrapFailedBox->set_title( aProductKey );
         aBootstrapFailedBox->Execute();
     }
 }

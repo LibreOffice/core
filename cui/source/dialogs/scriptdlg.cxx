@@ -921,7 +921,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                         OUString aError( m_createErrStr );
                         aError += m_createDupStr;
                         ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
-                        aErrorBox->SetText( m_createErrTitleStr );
+                        aErrorBox->set_title( m_createErrTitleStr );
                         aErrorBox->Execute();
                         xNewDlg->SetObjectName( aNewName );
                         break;
@@ -1003,7 +1003,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         //ISSUE L10N & message from exception?
         OUString aError( m_createErrStr );
         ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
-        aErrorBox->SetText( m_createErrTitleStr );
+        aErrorBox->set_title( m_createErrTitleStr );
         aErrorBox->Execute();
     }
 }
@@ -1079,7 +1079,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
         //ISSUE L10N & message from exception?
         OUString aError( m_renameErrStr );
         ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), aError);
-        aErrorBox->SetText( m_renameErrTitleStr );
+        aErrorBox->set_title( m_renameErrTitleStr );
         aErrorBox->Execute();
     }
 }
@@ -1090,7 +1090,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     // ISSUE L10N string & can we centre list?
     OUString aQuery = m_delQueryStr + getListOfChildren( node, 0 );
     VclPtrInstance< MessageDialog > aQueryBox(static_cast<vcl::Window*>(this), aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-    aQueryBox->SetText( m_delQueryTitleStr );
+    aQueryBox->set_title( m_delQueryTitleStr );
     if ( aQueryBox->Execute() == RET_NO )
     {
         return;
@@ -1125,7 +1125,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         ScopedVclPtrInstance< MessageDialog > aErrorBox(static_cast<vcl::Window*>(this), m_delErrStr);
-        aErrorBox->SetText( m_delErrTitleStr );
+        aErrorBox->set_title( m_delErrTitleStr );
         aErrorBox->Execute();
     }
 
@@ -1498,7 +1498,7 @@ IMPL_STATIC_LINK(
     }
 
     ScopedVclPtrInstance<MessageDialog> pBox( nullptr, message, VCL_MESSAGE_WARNING );
-    pBox->SetText( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
+    pBox->set_title( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     pBox->Execute();
 
     delete pMessage;

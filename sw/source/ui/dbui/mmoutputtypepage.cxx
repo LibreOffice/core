@@ -222,7 +222,7 @@ void SwMailDispatcherListener_Impl::DeleteAttachments( uno::Reference< mail::XMa
     }
 }
 
-class SwSendWarningBox_Impl : public MessageDialog
+class SwSendWarningBox_Impl : public VclMessageDialog
 {
     VclPtr<VclMultiLineEdit> m_pDetailED;
 public:
@@ -231,12 +231,12 @@ public:
     virtual void dispose() SAL_OVERRIDE
     {
         m_pDetailED.clear();
-        MessageDialog::dispose();
+        VclMessageDialog::dispose();
     }
 };
 
 SwSendWarningBox_Impl::SwSendWarningBox_Impl(vcl::Window* pParent, const OUString& rDetails)
-    : MessageDialog(pParent, "WarnEmailDialog", "modules/swriter/ui/warnemaildialog.ui")
+    : VclMessageDialog(pParent, "WarnEmailDialog", "modules/swriter/ui/warnemaildialog.ui")
 {
     get(m_pDetailED, "errors");
     m_pDetailED->SetMaxTextWidth(80 * m_pDetailED->approximate_char_width());

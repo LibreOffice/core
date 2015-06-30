@@ -22,7 +22,7 @@
 #include <svtools/miscopt.hxx>
 
 SvxLinkWarningDialog::SvxLinkWarningDialog( vcl::Window* pParent, const OUString& _rFileName )
-    : MessageDialog(pParent, "LinkWarnDialog" , "svx/ui/linkwarndialog.ui")
+    : VclMessageDialog(pParent, "LinkWarnDialog" , "svx/ui/linkwarndialog.ui")
 {
     get(m_pWarningOnBox, "ask");
 
@@ -54,7 +54,7 @@ void SvxLinkWarningDialog::dispose()
     if ( aMiscOpt.ShowLinkWarningDialog() != bChecked )
         aMiscOpt.SetShowLinkWarningDialog( bChecked );
     m_pWarningOnBox.clear();
-    MessageDialog::dispose();
+    VclMessageDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1065,7 +1065,7 @@ void Outliner::ShowEndOfSearchDialog()
 
     // Show the message in an info box that is modal with respect to the
     // whole application.
-    ScopedVclPtrInstance< MessageDialog > aInfoBox(nullptr, aString, VCL_MESSAGE_INFO);
+    ScopedVclPtrInstance< VclMessageDialog > aInfoBox(nullptr, aString, VCL_MESSAGE_INFO);
     ShowModalMessageBox (*aInfoBox.get());
 }
 
@@ -1147,7 +1147,7 @@ void Outliner::PrepareSpellCheck()
     {
         mbError = true;
         mbEndOfSearch = true;
-        ScopedVclPtrInstance<MessageDialog> aErrorBox (
+        ScopedVclPtrInstance<VclMessageDialog> aErrorBox (
             nullptr, SD_RESSTR(STR_NOLANGUAGE));
         ShowModalMessageBox (*aErrorBox.get());
     }

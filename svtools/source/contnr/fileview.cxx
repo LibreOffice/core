@@ -2318,7 +2318,7 @@ void SvtFileView_Impl::SetActualFolder( const INetURLObject& rActualFolder )
 namespace svtools {
 
 QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(vcl::Window* pParent, const OUString& rName)
-    : MessageDialog(pParent, "QueryDeleteDialog", "svt/ui/querydeletedialog.ui")
+    : VclMessageDialog(pParent, "QueryDeleteDialog", "svt/ui/querydeletedialog.ui")
 {
     get(m_pAllButton, "all");
 
@@ -2334,7 +2334,7 @@ QueryDeleteDlg_Impl::~QueryDeleteDlg_Impl()
 void QueryDeleteDlg_Impl::dispose()
 {
     m_pAllButton.clear();
-    MessageDialog::dispose();
+    VclMessageDialog::dispose();
 }
 
 }

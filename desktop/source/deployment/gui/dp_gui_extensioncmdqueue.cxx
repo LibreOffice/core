@@ -816,7 +816,7 @@ void ExtensionCmdQueue::Thread::execute()
                 ScopedVclPtr<MessageDialog> box(
                     VclPtr<MessageDialog>::Create(currentCmdEnv->activeDialog(), msg));
                 if ( m_pDialogHelper )
-                    box->SetText( m_pDialogHelper->getWindow()->GetText() );
+                    box->set_title( m_pDialogHelper->getWindow()->GetText() );
                 box->Execute();
                     //Continue with installation of the remaining extensions
             }

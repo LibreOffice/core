@@ -1972,7 +1972,26 @@ bool VclSizeGroup::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-void MessageDialog::create_owned_areas()
+MessageDialogImpl::~MessageDialogImpl()
+{
+}
+
+MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+{
+//    SalFrame* pParentFrame = pParent ? pParent->mpWindowImpl->mpFrame : NULL;
+//    m_pImpl = pSVData->mpDefInst->CreateChildFrame( pSystemParentData, nFrameStyle | SAL_FRAME_STYLE_PLUG );
+    m_pImpl = new VclMessageDialog(pParent, rID, rUIXMLDescription);
+}
+
+MessageDialog::MessageDialog(vcl::Window* pParent, const OUString &rMessage, VclMessageType eMessageType,
+                             VclButtonsType eButtonsType)
+{
+//    SalFrame* pParentFrame = pParent ? pParent->mpWindowImpl->mpFrame : NULL;
+//    m_pImpl = pSVData->mpDefInst->CreateChildFrame( pSystemParentData, nFrameStyle | SAL_FRAME_STYLE_PLUG );
+    m_pImpl = new VclMessageDialog(pParent, rMessage, eMessageType, eButtonsType);
+}
+
+void VclMessageDialog::create_owned_areas()
 {
     set_border_width(12);
     m_pOwnedContentArea.set(VclPtr<VclVBox>::Create(this, false, 24));
@@ -1983,7 +2002,7 @@ void MessageDialog::create_owned_areas()
     m_pOwnedActionArea->Show();
 }
 
-MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
+VclMessageDialog::VclMessageDialog(vcl::Window* pParent, WinBits nStyle)
     : Dialog(pParent, nStyle)
     , m_eButtonsType(VCL_BUTTONS_NONE)
     , m_eMessageType(VCL_MESSAGE_INFO)
@@ -1997,7 +2016,7 @@ MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
     SetType(WINDOW_MESSBOX);
 }
 
-MessageDialog::MessageDialog(vcl::Window* pParent,
+VclMessageDialog::VclMessageDialog(vcl::Window* pParent,
     const OUString &rMessage,
     VclMessageType eMessageType,
     VclButtonsType eButtonsType,
@@ -2015,7 +2034,7 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
     create_owned_areas();
 }
 
-MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+VclMessageDialog::VclMessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WINDOW_MESSBOX)
     , m_eButtonsType(VCL_BUTTONS_NONE)
     , m_eMessageType(VCL_MESSAGE_INFO)
@@ -2028,7 +2047,7 @@ MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUS
 {
 }
 
-void MessageDialog::dispose()
+void VclMessageDialog::dispose()
 {
     for (size_t i = 0; i < m_aOwnedButtons.size(); ++i)
         m_aOwnedButtons[i].disposeAndClear();
@@ -2043,23 +2062,23 @@ void MessageDialog::dispose()
     Dialog::dispose();
 }
 
-MessageDialog::~MessageDialog()
+VclMessageDialog::~VclMessageDialog()
 {
     disposeOnce();
 }
 
-void MessageDialog::response(short nResponseId)
+void VclMessageDialog::response(short nResponseId)
 {
     EndDialog(nResponseId);
 }
 
-IMPL_LINK(MessageDialog, ButtonHdl, Button *, pButton)
+IMPL_LINK(VclMessageDialog, ButtonHdl, Button *, pButton)
 {
     response(get_response(pButton));
     return 0;
 }
 
-short MessageDialog::get_response(const vcl::Window *pWindow) const
+short VclMessageDialog::get_response(const vcl::Window *pWindow) const
 {
     auto aFind = m_aResponses.find(pWindow);
     if (aFind != m_aResponses.end())
@@ -2069,7 +2088,7 @@ short MessageDialog::get_response(const vcl::Window *pWindow) const
     return m_pUIBuilder->get_response(pWindow);
 }
 
-void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
+void VclMessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
 {
     assert(pButtonBox);
     for (vcl::Window* pChild = pButtonBox->GetWindow(GetWindowType::FirstChild); pChild;
@@ -2080,7 +2099,7 @@ void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
             case WINDOW_PUSHBUTTON:
             {
                 PushButton* pButton = static_cast<PushButton*>(pChild);
-                pButton->SetClickHdl(LINK(this, MessageDialog, ButtonHdl));
+                pButton->SetClickHdl(LINK(this, VclMessageDialog, ButtonHdl));
                 break;
             }
             //insist that the response ids match the default actions for those
@@ -2108,7 +2127,7 @@ void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
     }
 }
 
-void MessageDialog::SetMessagesWidths(vcl::Window *pParent,
+void VclMessageDialog::SetMessagesWidths(vcl::Window *pParent,
     VclMultiLineEdit *pPrimaryMessage, VclMultiLineEdit *pSecondaryMessage)
 {
     if (pSecondaryMessage)
@@ -2125,7 +2144,7 @@ void MessageDialog::SetMessagesWidths(vcl::Window *pParent,
         pPrimaryMessage->SetMaxTextWidth(pPrimaryMessage->approximate_char_width() * 60);
 }
 
-short MessageDialog::Execute()
+short VclMessageDialog::Execute()
 {
     setDeferredProperties();
 
@@ -2183,7 +2202,7 @@ short MessageDialog::Execute()
         m_pSecondaryMessage->SetText(m_sSecondaryString);
         m_pSecondaryMessage->Show(bHasSecondaryText);
 
-        MessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, bHasSecondaryText ? m_pSecondaryMessage.get() : NULL);
+        VclMessageDialog::SetMessagesWidths(this, m_pPrimaryMessage, bHasSecondaryText ? m_pSecondaryMessage.get() : NULL);
 
         VclButtonBox *pButtonBox = get_action_area();
         assert(pButtonBox);
@@ -2247,21 +2266,21 @@ short MessageDialog::Execute()
     return Dialog::Execute();
 }
 
-OUString MessageDialog::get_primary_text() const
+OUString VclMessageDialog::get_primary_text() const
 {
-    const_cast<MessageDialog*>(this)->setDeferredProperties();
+    const_cast<VclMessageDialog*>(this)->setDeferredProperties();
 
     return m_sPrimaryString;
 }
 
-OUString MessageDialog::get_secondary_text() const
+OUString VclMessageDialog::get_secondary_text() const
 {
-    const_cast<MessageDialog*>(this)->setDeferredProperties();
+    const_cast<VclMessageDialog*>(this)->setDeferredProperties();
 
     return m_sSecondaryString;
 }
 
-bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
+bool VclMessageDialog::set_property(const OString &rKey, const OString &rValue)
 {
     if (rKey == "text")
         set_primary_text(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
@@ -2310,7 +2329,7 @@ bool MessageDialog::set_property(const OString &rKey, const OString &rValue)
     return true;
 }
 
-void MessageDialog::set_primary_text(const OUString &rPrimaryString)
+void VclMessageDialog::set_primary_text(const OUString &rPrimaryString)
 {
     m_sPrimaryString = rPrimaryString;
     if (m_pPrimaryMessage)
@@ -2320,7 +2339,7 @@ void MessageDialog::set_primary_text(const OUString &rPrimaryString)
     }
 }
 
-void MessageDialog::set_secondary_text(const OUString &rSecondaryString)
+void VclMessageDialog::set_secondary_text(const OUString &rSecondaryString)
 {
     m_sSecondaryString = rSecondaryString;
     if (m_pSecondaryMessage)

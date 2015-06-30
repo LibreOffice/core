@@ -61,7 +61,7 @@ IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl)
 UnknownAuthDialog::UnknownAuthDialog(vcl::Window* pParent,
     const css::uno::Reference< css::security::XCertificate >& rXCert,
     const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    : MessageDialog(pParent, "UnknownAuthDialog",
+    : VclMessageDialog(pParent, "UnknownAuthDialog",
         "uui/ui/unknownauthdialog.ui")
     , m_xContext(xContext)
     , m_rXCert(rXCert)
@@ -86,7 +86,7 @@ void UnknownAuthDialog::dispose()
     m_pView_Certificate.clear();
     m_pOptionButtonAccept.clear();
     m_pOptionButtonDontAccept.clear();
-    MessageDialog::dispose();
+    VclMessageDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

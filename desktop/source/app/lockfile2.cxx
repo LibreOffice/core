@@ -42,7 +42,7 @@ bool Lockfile_execWarning( Lockfile * that )
                                              VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
     // set box title
     OUString aTitle = OUString( DesktopResId( STR_TITLE_USERDATALOCKED ));
-    aBox->SetText( aTitle );
+    aBox->set_title( aTitle );
     // insert values...
     OUString aMsgText = aBox->get_primary_text();
     aMsgText = aMsgText.replaceFirst(

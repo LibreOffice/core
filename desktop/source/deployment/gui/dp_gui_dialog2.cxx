@@ -629,7 +629,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
         ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
-        aErrorBox->SetText( sTitle );
+        aErrorBox->set_title( sTitle );
         aErrorBox->Execute();
     }
 }

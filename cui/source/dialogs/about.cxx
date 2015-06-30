@@ -144,7 +144,7 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
         ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
-        aErrorBox->SetText( GetText() );
+        aErrorBox->set_title( GetText() );
         aErrorBox->Execute();
     }
 

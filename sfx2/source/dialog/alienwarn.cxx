@@ -27,7 +27,7 @@
 
 SfxAlienWarningDialog::SfxAlienWarningDialog(vcl::Window* pParent, const OUString& _rFormatName,
                                              const OUString& _rDefaultExtension, bool rDefaultIsAlien)
-    : MessageDialog(pParent, "AlienWarnDialog", "sfx/ui/alienwarndialog.ui")
+    : VclMessageDialog(pParent, "AlienWarnDialog", "sfx/ui/alienwarndialog.ui")
 {
     get(m_pWarningOnBox, "ask");
     //fdo#75121, a bit tricky because the widgets we want to align with
@@ -81,7 +81,7 @@ void SfxAlienWarningDialog::dispose()
     m_pKeepCurrentBtn.clear();
     m_pUseDefaultFormatBtn.clear();
     m_pWarningOnBox.clear();
-    MessageDialog::dispose();
+    VclMessageDialog::dispose();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

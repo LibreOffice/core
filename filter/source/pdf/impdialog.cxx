@@ -1552,7 +1552,7 @@ IMPL_LINK_NOARG(ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl)
 }
 
 ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rErrors)
-    : MessageDialog(NULL, "WarnPDFDialog", "filter/ui/warnpdfdialog.ui")
+    : VclMessageDialog(NULL, "WarnPDFDialog", "filter/ui/warnpdfdialog.ui")
 {
     get(m_pErrors, "errors");
     get(m_pExplanation, "message");
@@ -1634,7 +1634,7 @@ void ImplErrorDialog::dispose()
         delete static_cast<OUString*>(m_pErrors->GetEntryData( n ));
     m_pErrors.clear();
     m_pExplanation.clear();
-    MessageDialog::dispose();
+    VclMessageDialog::dispose();
 }
 
 IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)

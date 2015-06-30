@@ -810,7 +810,7 @@ void Edit::ShowTruncationWarning( vcl::Window* pParent )
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
     {
-        ScopedVclPtrInstance< MessageDialog > aBox( pParent, ResId(SV_EDIT_WARNING_STR, *pResMgr), VCL_MESSAGE_WARNING );
+        ScopedVclPtrInstance< VclMessageDialog > aBox( pParent, ResId(SV_EDIT_WARNING_STR, *pResMgr), VCL_MESSAGE_WARNING );
         aBox->Execute();
     }
 }

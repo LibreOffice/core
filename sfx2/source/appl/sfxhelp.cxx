@@ -75,7 +75,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system;
 
-class NoHelpErrorBox : public MessageDialog
+class NoHelpErrorBox : public VclMessageDialog
 {
 public:
     NoHelpErrorBox( vcl::Window* _pParent );
@@ -84,7 +84,7 @@ public:
 };
 
 NoHelpErrorBox::NoHelpErrorBox( vcl::Window* _pParent )
-    : MessageDialog(_pParent, SfxResId(RID_STR_HLPFILENOTEXIST))
+    : VclMessageDialog(_pParent, SfxResId(RID_STR_HLPFILENOTEXIST))
 {
     // Error message: "No help available"
 }

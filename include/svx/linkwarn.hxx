@@ -24,7 +24,7 @@
 #include <vcl/layout.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC SvxLinkWarningDialog : public MessageDialog
+class SVX_DLLPUBLIC SvxLinkWarningDialog : public VclMessageDialog
 {
 private:
     VclPtr<CheckBox> m_pWarningOnBox;

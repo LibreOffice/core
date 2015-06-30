@@ -170,7 +170,7 @@ ResMgr* ImplGetResMgr()
                 "Missing vcl resource. This indicates that files vital to localization are missing. "
                 "You might have a corrupt installation.";
             SAL_WARN("vcl", "" << pMsg << "\n");
-            ScopedVclPtrInstance< MessageDialog > aBox( nullptr, OUString(pMsg, strlen(pMsg), RTL_TEXTENCODING_ASCII_US) );
+            ScopedVclPtrInstance< VclMessageDialog > aBox( nullptr, OUString(pMsg, strlen(pMsg), RTL_TEXTENCODING_ASCII_US) );
             aBox->Execute();
         }
     }

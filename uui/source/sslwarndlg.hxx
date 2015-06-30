@@ -29,7 +29,7 @@
 
 //= Https_WarnDialog
 
-class SSLWarnDialog : public MessageDialog
+class SSLWarnDialog : public VclMessageDialog
 {
 private:
     const css::uno::Reference< css::uno::XComponentContext >& m_xContext;

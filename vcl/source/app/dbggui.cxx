@@ -354,7 +354,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         }
         if( (aData.nTestFlags & ~IMMEDIATE_FLAGS) != (pData->nTestFlags & ~IMMEDIATE_FLAGS) )
         {
-            ScopedVclPtrInstance<MessageDialog> aBox(this, OUString(
+            ScopedVclPtrInstance<VclMessageDialog> aBox(this, OUString(
                 "Some of the changed settings will only be active after "
                 "restarting the process"), VCL_MESSAGE_INFO);
             aBox->Execute();
@@ -842,7 +842,7 @@ void DbgGUIStart()
     }
     else
     {
-        ScopedVclPtrInstance<MessageDialog>::Create(nullptr, OUString("TOOLS Library has no Debug-Routines"))->Execute();
+        ScopedVclPtrInstance<VclMessageDialog>::Create(nullptr, OUString("TOOLS Library has no Debug-Routines"))->Execute();
     }
 }
 

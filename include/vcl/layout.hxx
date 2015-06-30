@@ -18,6 +18,7 @@
 #include <vcl/vclmedit.hxx>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/salnativedialogs.hxx>
 #include <boost/multi_array.hpp>
 #include <set>
 
@@ -693,25 +694,7 @@ public:
     bool set_property(const OString &rKey, const OString &rValue);
 };
 
-enum VclButtonsType
-{
-    VCL_BUTTONS_NONE,
-    VCL_BUTTONS_OK,
-    VCL_BUTTONS_CLOSE,
-    VCL_BUTTONS_CANCEL,
-    VCL_BUTTONS_YES_NO,
-    VCL_BUTTONS_OK_CANCEL
-};
-
-enum VclMessageType
-{
-    VCL_MESSAGE_INFO,
-    VCL_MESSAGE_WARNING,
-    VCL_MESSAGE_QUESTION,
-    VCL_MESSAGE_ERROR
-};
-
-class VCL_DLLPUBLIC MessageDialog : public Dialog
+class VCL_DLLPUBLIC VclMessageDialog : public Dialog, public MessageDialogImpl
 {
 private:
     VclButtonsType m_eButtonsType;
@@ -731,26 +714,28 @@ private:
     short get_response(const vcl::Window *pWindow) const;
     void create_owned_areas();
 
-    friend class VclPtr<MessageDialog>;
-    MessageDialog(vcl::Window* pParent, WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
+    friend class VclPtr<VclMessageDialog>;
+    VclMessageDialog(vcl::Window* pParent, WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
 public:
 
-    MessageDialog(vcl::Window* pParent,
+    VclMessageDialog(vcl::Window* pParent,
         const OUString &rMessage,
         VclMessageType eMessageType = VCL_MESSAGE_ERROR,
         VclButtonsType eButtonsType = VCL_BUTTONS_OK,
         WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
-    MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
+    VclMessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
+    virtual void set_title(const OUString &rTitle) SAL_OVERRIDE { SetText(rTitle); }
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
     ///Emitted when an action widget is clicked
-    virtual void response(short nResponseId);
-    OUString get_primary_text() const;
-    OUString get_secondary_text() const;
-    void set_primary_text(const OUString &rPrimaryString);
-    void set_secondary_text(const OUString &rSecondaryString);
-    virtual ~MessageDialog();
+    virtual void response(short nResponseId) SAL_OVERRIDE;
+    OUString get_primary_text() const SAL_OVERRIDE;
+    OUString get_secondary_text() const SAL_OVERRIDE;
+    void set_primary_text(const OUString &rPrimaryString) SAL_OVERRIDE;
+    void set_secondary_text(const OUString &rSecondaryString) SAL_OVERRIDE;
     virtual void dispose() SAL_OVERRIDE;
+
+    virtual ~VclMessageDialog();
 
     static void SetMessagesWidths(vcl::Window *pParent, VclMultiLineEdit *pPrimaryMessage,
         VclMultiLineEdit *pSecondaryMessage);

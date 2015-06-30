@@ -232,7 +232,7 @@ executeSSLWarnDialog(
             if (ErrorResource(aResId).getString(
                 ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, aTitle))
             {
-                xDialog->SetText(aTitle);
+                xDialog->set_title(aTitle);
             }
         }
 

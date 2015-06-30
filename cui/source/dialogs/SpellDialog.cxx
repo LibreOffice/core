@@ -2055,7 +2055,7 @@ IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
         ScopedVclPtrInstance< MessageDialog > aErrorBox(nullptr, msg);
-        aErrorBox->SetText(sTitle);
+        aErrorBox->set_title(sTitle);
         aErrorBox->Execute();
     }
 

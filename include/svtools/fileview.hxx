@@ -203,7 +203,7 @@ enum QueryDeleteResult_Impl
     QUERYDELETE_ALL = -1
 };
 
-class SVT_DLLPUBLIC QueryDeleteDlg_Impl : public MessageDialog
+class SVT_DLLPUBLIC QueryDeleteDlg_Impl : public VclMessageDialog
 {
 private:
     VclPtr<PushButton> m_pAllButton;
