@@ -236,6 +236,7 @@ public:
 #define SFX2_IMPL_DIALOG_CONFIG 0
 #define SFX2_IMPL_DIALOG_SYSTEM 1
 #define SFX2_IMPL_DIALOG_OOO 2
+#define SFX2_IMPL_DIALOG_REMOTE 3
 
 ErrCode FileOpenDialog_Impl( sal_Int16 nDialogType,
                              sal_Int64 nFlags,

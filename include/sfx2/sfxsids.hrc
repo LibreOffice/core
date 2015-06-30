@@ -138,6 +138,7 @@
 
 #define SID_FORCERELOAD                     (SID_SFX_START + 1502)
 #define SID_FILE_DIALOG                     (SID_SFX_START + 304)
+#define SID_REMOTE_DIALOG                   (SID_SFX_START + 305)
 #define SID_PATH                            (SID_SFX_START + 308)
 #define SID_SAVEDOCS                        (SID_SFX_START + 309)
 #define SID_STANDARD_DIR                    (SID_SFX_START + 450)
