@@ -805,10 +805,10 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                 if ( m_nDataFieldType == USER_DEF_FUNCTION )
                 {
                     // add function names
-                    ::std::for_each( m_aFunctionNames.begin(), m_aFunctionNames.end(),
-                        ::o3tl::compose1(
-                            ::boost::bind( &inspection::XStringListControl::appendListEntry, xListControl,_1 ),
-                            ::o3tl::select1st<TFunctions::value_type>()));
+                    ::std::for_each(m_aFunctionNames.begin(), m_aFunctionNames.end(),
+                                    [&xListControl] (TFunctions::value_type func) {
+                                        xListControl->appendListEntry(func.first);
+                                    });
                 }
                 else
                 {
