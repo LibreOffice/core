@@ -78,6 +78,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #if !HAVE_FEATURE_DESKTOP
@@ -1685,7 +1686,19 @@ public:
     ~RenderContextGuard()
     {
         if (m_pRef != m_pShell->GetWin() && m_pShell->Imp()->GetDrawView())
+        {
+            // Need to explicitly draw the overlay on m_pRef, since by default
+            // they would be only drawn for m_pOriginalValue.
+            SdrPaintWindow* pOldPaintWindow = m_pShell->Imp()->GetDrawView()->GetPaintWindow(0);
+            rtl::Reference<sdr::overlay::OverlayManager> xOldManager = pOldPaintWindow->GetOverlayManager();
+            if (xOldManager.is())
+            {
+                SdrPaintWindow* pNewPaintWindow = m_pShell->Imp()->GetDrawView()->FindPaintWindow(*m_pRef);
+                xOldManager->completeRedraw(pNewPaintWindow->GetRedrawRegion(), m_pRef);
+            }
+
             m_pShell->Imp()->GetDrawView()->DeleteWindowFromPaintView(m_pRef);
+        }
         m_pRef = m_pOriginalValue;
     }
 };
