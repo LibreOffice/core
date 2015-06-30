@@ -22,7 +22,6 @@
 #include <sfx2/templateviewitem.hxx>
 #include <vcl/button.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -75,10 +74,7 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
         aFillColor = pAttrs->aHighlightColor;
 
     if (mbHover)
-    {
-        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-        fTransparence = aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01;
-    }
+        fTransparence = pAttrs->fHighlightTransparence;
 
     aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonSelectionPrimitive2D(
                                                B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
@@ -88,9 +84,9 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
                                                true));
 
     // Create rounded rectangle border
-    aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference( new PolygonStrokePrimitive2D(
-                                              Polygon(maThumbnailArea,5,5).getB2DPolygon(),
-                                              LineAttribute(BColor(0.8, 0.8, 0.8), 2.0)));
+    aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference(new PolygonStrokePrimitive2D(
+                                              Polygon(maThumbnailArea, 5, 5).getB2DPolygon(),
+                                              LineAttribute(BColor(0.5, 0.5, 0.5), 2.0)));
 
     // Paint the thumbnails side by side on a 2x2 grid
     long nThumbPadding = 4;

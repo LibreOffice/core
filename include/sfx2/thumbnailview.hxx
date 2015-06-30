@@ -324,10 +324,11 @@ protected:
     bool mbIsTransientChildrenDisabled : 1;
     bool mbHasVisibleItems : 1;
     bool mbShowTooltips : 1;
-    Color maFillColor;
-    Color maTextColor;
-    Color maHighlightColor;
-    Color maHighlightTextColor;
+    Color maFillColor;              ///< Background color of the thumbnail view widget.
+    Color maTextColor;              ///< Text color.
+    Color maHighlightColor;         ///< Color of the highlight (background) of the hovered / selected item.
+    Color maHighlightTextColor;     ///< Color of the text for the higlighted item.
+    double mfHighlightTransparence; ///< Transparence of the highlight.
 
     Link<> maItemStateHdl;
     ThumbnailItemAttributes* mpItemAttrs;
