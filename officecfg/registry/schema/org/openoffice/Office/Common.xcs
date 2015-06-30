@@ -3573,11 +3573,46 @@
           <value>0</value>
         </prop>
         <prop oor:name="StartCenterBackgroundColor" oor:type="xs:int" oor:nillable="false">
-          <!--Default 7514196 = TDF Green-->
+          <!-- Default 14540253 = 0xdddddd as specified in tdf#90452, comment 45 -->
           <info>
             <desc>Specifies the background color of the start center.</desc>
           </info>
-          <value>7514196</value>
+          <value>14540253</value>
+        </prop>
+        <prop oor:name="StartCenterTextColor" oor:type="xs:int" oor:nillable="false">
+          <!-- Default 3355443 = 0x333333 as specified in tdf#90452, comment 45 -->
+          <info>
+            <desc>Specifies the text color of the buttons in the start center.</desc>
+          </info>
+          <value>3355443</value>
+        </prop>
+        <prop oor:name="StartCenterThumbnailsBackgroundColor" oor:type="xs:int" oor:nillable="false">
+          <!-- Default 6710886 = 0x666666 as specified in tdf#90452, comment 45 -->
+          <info>
+            <desc>Specifies the background color of the thumbnail area in the start center.</desc>
+          </info>
+          <value>6710886</value>
+        </prop>
+        <prop oor:name="StartCenterThumbnailsTextColor" oor:type="xs:int" oor:nillable="false">
+          <!-- Default 15658734 = 0xeeeeee as specified in tdf#90452, comment 45 -->
+          <info>
+            <desc>Specifies the text color of the thumbnail area in the start center.</desc>
+          </info>
+          <value>15658734</value>
+        </prop>
+        <prop oor:name="StartCenterThumbnailsHighlightColor" oor:type="xs:int" oor:nillable="false">
+          <!-- Default 14540253 = 0xdddddd as specified in tdf#90452, comment 45 -->
+          <info>
+            <desc>Specifies the background color of the highlight of a thumbnail in the start center.</desc>
+          </info>
+          <value>14540253</value>
+        </prop>
+        <prop oor:name="StartCenterThumbnailsHighlightTextColor" oor:type="xs:int" oor:nillable="false">
+          <!-- Default 3355443 = 0x333333 as specified in tdf#90452, comment 45 -->
+          <info>
+            <desc>Specifies the text color of the highlight of a thumbnail in the start center.</desc>
+          </info>
+          <value>3355443</value>
         </prop>
       </group>
     </group>

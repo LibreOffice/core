@@ -89,10 +89,11 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
 
     std::vector< VclPtr<vcl::Window> > maDndWindows;
 
+    Color maButtonsTextColor;
     Rectangle maStartCentButtons;
 
     bool mbIsSaveMode;
-    bool  mbInitControls;
+    bool mbInitControls;
     sal_Int32 mnHideExternalLinks;
     svt::AcceleratorExecute* mpAccExec;
 

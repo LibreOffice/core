@@ -71,8 +71,8 @@ const char TEMPLATE_URL[] =       ".uno:NewDoc";
 const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
+// increase size of the text in the buttons on the left fMultiplier-times
 float fMultiplier = 1.4f;
-const Color aButtonsText(COL_WHITE);
 
 /***
  *
@@ -91,6 +91,7 @@ BackingWindow::BackingWindow( vcl::Window* i_pParent ) :
     Window( i_pParent ),
     mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
     mbLocalViewInitialized(false),
+    maButtonsTextColor(officecfg::Office::Common::Help::StartCenter::StartCenterTextColor::get()),
     mbIsSaveMode( false ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
@@ -310,13 +311,13 @@ void BackingWindow::initControls()
     mpExtensionsButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
 
     // setup nice colors
-    mpCreateLabel->SetControlForeground(aButtonsText);
+    mpCreateLabel->SetControlForeground(maButtonsTextColor);
     vcl::Font aFont(mpCreateLabel->GetSettings().GetStyleSettings().GetLabelFont());
     aFont.SetSize(Size(0, aFont.GetSize().Height() * fMultiplier));
     mpCreateLabel->SetControlFont(aFont);
 
-    mpHelpButton->SetControlForeground(aButtonsText);
-    mpExtensionsButton->SetControlForeground(aButtonsText);
+    mpHelpButton->SetControlForeground(maButtonsTextColor);
+    mpExtensionsButton->SetControlForeground(maButtonsTextColor);
 
     const Color aButtonsBackground(officecfg::Office::Common::Help::StartCenter::StartCenterBackgroundColor::get());
 
@@ -333,8 +334,8 @@ void BackingWindow::initControls()
     mpButtonsBox->SetBackground(aWallpaper);
 
     // thin white rectangle around the Help and Extensions buttons
-    mpThinBox1->SetBackground(aButtonsText);
-    mpThinBox2->SetBackground(aButtonsText);
+    mpThinBox1->SetBackground(maButtonsTextColor);
+    mpThinBox2->SetBackground(maButtonsTextColor);
 
     Resize();
 
@@ -371,7 +372,7 @@ void BackingWindow::setupButton( PushButton* pButton )
     pButton->SetControlFont(aFont);
 
     // color that fits the theme
-    pButton->SetControlForeground(aButtonsText);
+    pButton->SetControlForeground(maButtonsTextColor);
     pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
 }
 
@@ -382,7 +383,7 @@ void BackingWindow::setupButton( MenuButton* pButton )
     pButton->SetControlFont(aFont);
 
     // color that fits the theme
-    pButton->SetControlForeground(aButtonsText);
+    pButton->SetControlForeground(maButtonsTextColor);
 
     PopupMenu* pMenu = pButton->GetPopupMenu();
     pMenu->SetMenuFlags(pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries);
