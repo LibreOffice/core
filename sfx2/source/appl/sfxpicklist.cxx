@@ -194,26 +194,33 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
         aFilter = pFilter->GetFilterName();
 
     // generate a thumbnail
-    OUString aThumbnail;
+    boost::optional<OUString> aThumbnail;
     // don't generate thumbnail when in headless mode, or on non-desktop (?)
 #if HAVE_FEATURE_DESKTOP
-    SFX_ITEMSET_ARG( pMed->GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
-
-    if (!pDocSh->IsModified() && !pEncryptionDataItem && !Application::IsHeadlessModeEnabled())
+    if (!pDocSh->IsModified() && !Application::IsHeadlessModeEnabled())
     {
         // not modified => the document matches what is in the shell
-        std::shared_ptr<GDIMetaFile> xMetaFile = pDocSh->GetPreviewMetaFile();
-        BitmapEx aResultBitmap;
-        if (xMetaFile->CreateThumbnail(aResultBitmap))
+        SFX_ITEMSET_ARG( pMed->GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false );
+        if ( pEncryptionDataItem )
         {
-            SvMemoryStream aStream(65535, 65535);
-            vcl::PNGWriter aWriter(aResultBitmap);
-            if (aWriter.Write(aStream))
+            // encrypted document, will show a generic document icon instead
+            aThumbnail = OUString();
+        }
+        else
+        {
+            std::shared_ptr<GDIMetaFile> xMetaFile = pDocSh->GetPreviewMetaFile();
+            BitmapEx aResultBitmap;
+            if (xMetaFile->CreateThumbnail(aResultBitmap))
             {
-                Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(aStream.GetData()), aStream.Tell());
-                OUStringBuffer aBuffer;
-                ::sax::Converter::encodeBase64(aBuffer, aSequence);
-                aThumbnail = aBuffer.makeStringAndClear();
+                SvMemoryStream aStream(65535, 65535);
+                vcl::PNGWriter aWriter(aResultBitmap);
+                if (aWriter.Write(aStream))
+                {
+                    Sequence<sal_Int8> aSequence(static_cast<const sal_Int8*>(aStream.GetData()), aStream.Tell());
+                    OUStringBuffer aBuffer;
+                    ::sax::Converter::encodeBase64(aBuffer, aSequence);
+                    aThumbnail = aBuffer.makeStringAndClear();
+                }
             }
         }
     }
