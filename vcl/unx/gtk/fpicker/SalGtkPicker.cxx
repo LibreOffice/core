@@ -25,6 +25,8 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/process.h>
 #include <osl/diagnose.h>
@@ -132,15 +134,24 @@ RunDialog::~RunDialog()
     g_source_remove_by_user_data (this);
 }
 
-void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject& )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL RunDialog::windowOpened(const css::lang::EventObject& e)
+    throw (css::uno::RuntimeException, std::exception)
 {
-#if !GTK_CHECK_VERSION(3,0,0)
     SolarMutexGuard g;
+
+    //Don't popdown dialogs if a tooltip appears elsewhere, that's ok, but do pop down
+    //if another dialog/frame is launched.
+    css::uno::Reference<css::accessibility::XAccessible> xAccessible(e.Source, css::uno::UNO_QUERY);
+    if (xAccessible.is())
+    {
+        css::uno::Reference<css::accessibility::XAccessibleContext> xContext(xAccessible->getAccessibleContext());
+        if (xContext.is() && xContext->getAccessibleRole() == css::accessibility::AccessibleRole::TOOL_TIP)
+        {
+            return;
+        }
+    }
+
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, NULL);
-#else
-    SAL_WARN( "vcl", "ignoring windowOpened, because gtk3 dialog is probably not modal as expected and a tooltip was triggered" );
-#endif
 }
 
 void SAL_CALL RunDialog::queryTermination( const ::com::sun::star::lang::EventObject& )
