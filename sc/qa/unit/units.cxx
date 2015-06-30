@@ -321,6 +321,13 @@ void UnitsTest::testUnitVerification() {
     pTokens = pCell->GetCode();
     CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::VALID);
 
+    // SUM("cm","m")
+    address.IncRow();
+    mpDoc->SetFormula(address, "=SUM(A1,E1)");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc) == FormulaStatus::ERROR_INPUT_SCALING);
+
     // PRODUCT("cm/","s")+"cm"
     address.IncRow();
     mpDoc->SetFormula(address, "=PRODUCT(C1:D1)+A1");
@@ -803,82 +810,144 @@ void UnitsTest::testRangeConversion() {
     mpDoc->EnsureTable(nTab);
 
     // Column 1: convert [cm] to [cm].
-    ScAddress headerAddress(0, 0, nTab);
-    mpDoc->SetString(headerAddress, "length [cm]");
+    ScAddress headerAddressCol1(0, 0, nTab);
+    mpDoc->SetString(headerAddressCol1, "length [cm]");
 
-    ScAddress address(headerAddress);
+    ScAddress addressCol1(headerAddressCol1);
 
     vector<double> values({10, 20, 30, 40, 1, 0.5, 0.25});
-    address.IncRow();
-    mpDoc->SetValues(address, values);
+    addressCol1.IncRow();
+    mpDoc->SetValues(addressCol1, values);
 
     // Test conversion of range _not_ including header
-    ScAddress endAddress( address.Col(), address.Row() + values.size() - 1, nTab);
+    ScAddress endAddressCol1( addressCol1.Col(), addressCol1.Row() + values.size() - 1, nTab);
 
-    ScRange aRange(address, endAddress);
+    ScRange aRange(addressCol1, endAddressCol1);
     CPPUNIT_ASSERT(mpUnitsImpl->convertCellUnits(aRange, mpDoc, "cm"));
     CPPUNIT_ASSERT(!mpUnitsImpl->convertCellUnits(aRange, mpDoc, "kg"));
 
-    CPPUNIT_ASSERT(mpDoc->GetString(headerAddress) == "length [cm]");
+    CPPUNIT_ASSERT(mpDoc->GetString(headerAddressCol1) == "length [cm]");
 
-    for (double d: values) {
+    for (double d: values)
+    {
         // Test that the value is unchanged
-        CPPUNIT_ASSERT(mpDoc->GetValue(address) == d);
+        CPPUNIT_ASSERT(mpDoc->GetValue(addressCol1) == d);
         // And NO annotation has been added
-        CPPUNIT_ASSERT(mpDoc->GetString(address) == OUString::number(d));
-        address.IncRow();
+        CPPUNIT_ASSERT(mpDoc->GetString(addressCol1) == OUString::number(d));
+        addressCol1.IncRow();
     }
 
     // Test conversion of range including header (from cm to cm)
-    aRange = ScRange(headerAddress, endAddress);
+    aRange = ScRange(headerAddressCol1, endAddressCol1);
     CPPUNIT_ASSERT(mpUnitsImpl->convertCellUnits(aRange, mpDoc, "cm"));
     CPPUNIT_ASSERT(!mpUnitsImpl->convertCellUnits(aRange, mpDoc, "kg"));
 
-    CPPUNIT_ASSERT(mpDoc->GetString(headerAddress) == "length [cm]");
+    CPPUNIT_ASSERT(mpDoc->GetString(headerAddressCol1) == "length [cm]");
 
-    address = headerAddress;
-    address.IncRow();
-    for (double d: values) {
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(mpDoc->GetValue(address), d, 1e-7);
+    addressCol1 = headerAddressCol1;
+    addressCol1.IncRow();
+    for (double d: values)
+    {
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(mpDoc->GetValue(addressCol1), d, 1e-7);
         // And NO annotation has been added
-        CPPUNIT_ASSERT(mpDoc->GetString(address) == OUString::number(d));
-        address.IncRow();
+        CPPUNIT_ASSERT(mpDoc->GetString(addressCol1) == OUString::number(d));
+        addressCol1.IncRow();
     }
 
     // Convert just the values (but not header): [cm] to [m]
-    address.SetRow(1);
-    aRange = ScRange(address, endAddress);
+    addressCol1.SetRow(1);
+    aRange = ScRange(addressCol1, endAddressCol1);
     CPPUNIT_ASSERT(mpUnitsImpl->convertCellUnits(aRange, mpDoc, "m"));
 
-    CPPUNIT_ASSERT(mpDoc->GetString(headerAddress) == "length [cm]");
+    CPPUNIT_ASSERT(mpDoc->GetString(headerAddressCol1) == "length [cm]");
 
-    for (double d: values) {
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(mpDoc->GetValue(address), d/100, 1e-7);
-        // AND test annotation
-        // Disabled for now until the precision problems are figured out
-        // CPPUNIT_ASSERT(mpDoc->GetString(address) == OUString::number(d/100) + "m");
-        address.IncRow();
+    for (double d: values)
+    {
+        OUString aResultStr = mpDoc->GetString(addressCol1);
+        OUString aValStr  = aResultStr.copy( 0, aResultStr.getLength() - 1 ); // value portion of result
+        OUString aUnitStr = aResultStr.copy( aResultStr.getLength() - 1, 1 ); // annotation portion of result
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aValStr.toDouble(), d/100, 1e-7);
+        CPPUNIT_ASSERT(aUnitStr == "m");
+        addressCol1.IncRow();
     }
 
     // Convert everything (including header) to mm: [m] to [mm]
-    aRange = ScRange(headerAddress, endAddress);
+    aRange = ScRange(headerAddressCol1, endAddressCol1);
     CPPUNIT_ASSERT(mpUnitsImpl->convertCellUnits(aRange, mpDoc, "mm"));
 
-    CPPUNIT_ASSERT(mpDoc->GetString(headerAddress) == "length [mm]");
+    CPPUNIT_ASSERT(mpDoc->GetString(headerAddressCol1) == "length [mm]");
 
-    address.SetRow(1);
+    addressCol1.SetRow(1);
 
-    for (double d: values) {
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(mpDoc->GetValue(address), d*10, 1e-7);
+    for (double d: values)
+    {
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(mpDoc->GetValue(addressCol1), d*10, 1e-7);
         // And the annotation has been REMOVED
-        CPPUNIT_ASSERT(mpDoc->GetString(address) == OUString::number(d*10));
-        address.IncRow();
+        CPPUNIT_ASSERT(mpDoc->GetString(addressCol1) == OUString::number(d*10));
+        addressCol1.IncRow();
     }
 
-    // TODO: we need to test:
-    // 1. mixture of units that can't be converted
-    // 2. mixtures of local and header annotations
-    // 3. actual sensible ranges
+    // Column 2: [kg]
+    ScAddress headerAddressCol2(1, 0, nTab);
+    mpDoc->SetString(headerAddressCol2, "weight [kg]");
+
+    ScAddress addressCol2(headerAddressCol2);
+    addressCol2.IncRow();
+    mpDoc->SetValues(addressCol2, values);
+
+    ScAddress endAddressCol2( addressCol2.Col(), addressCol2.Row() + values.size() - 1, nTab);
+
+    // Column 3: [kg] (replica of Col2, but offset downwards by 1 cell)
+    ScAddress headerAddressCol3(2, 1, nTab);
+    mpDoc->SetString(headerAddressCol3, "weight [kg]");
+
+    ScAddress addressCol3(headerAddressCol3);
+    addressCol3.IncRow();
+    mpDoc->SetValues(addressCol3, values);
+
+    ScAddress endAddressCol3( addressCol3.Col(), addressCol3.Row() + values.size() - 1, nTab);
+
+    // test mixture [mm, kg] convert to [m]
+    addressCol1.SetRow(1);
+    aRange = ScRange(addressCol1, endAddressCol2); // over range of cm and kg values
+
+    CPPUNIT_ASSERT(!mpUnitsImpl->convertCellUnits(aRange, mpDoc, "m"));
+    for (double d: values) // test that convertible units are still converted
+    {
+        OUString aResultStr = mpDoc->GetString(addressCol1);
+        OUString aValStr  = aResultStr.copy( 0, aResultStr.getLength() - 1 ); // value portion of result
+        OUString aUnitStr = aResultStr.copy( aResultStr.getLength() - 1, 1 ); // annotation portion of result
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aValStr.toDouble(), d/100, 1e-7);
+        CPPUNIT_ASSERT(aUnitStr == "m");
+        addressCol1.IncRow();
+    }
+
+    // test mixture of local (Col2) and header (Col3) annotations
+    addressCol2.SetRow(1);
+    addressCol3.SetRow(2);
+
+    aRange = ScRange(addressCol2, endAddressCol3); // Col2 local, Col3 header
+    CPPUNIT_ASSERT(mpUnitsImpl->convertCellUnits(aRange, mpDoc, "g"));
+    CPPUNIT_ASSERT(mpDoc->GetString(headerAddressCol2) == "weight [kg]");
+    CPPUNIT_ASSERT(mpDoc->GetString(headerAddressCol3) == "weight [g]" );
+    for (double d: values)
+    {
+        OUString aResultStr = mpDoc->GetString(addressCol2);
+        OUString aValStr  = aResultStr.copy( 0, aResultStr.getLength() - 1 ); // value portion of result
+        OUString aUnitStr = aResultStr.copy( aResultStr.getLength() - 1, 1 ); // annotation portion of result
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aValStr.toDouble(), d*1000, 1e-7);
+        CPPUNIT_ASSERT(aUnitStr == "g");
+        addressCol2.IncRow();
+
+        if (addressCol3 != endAddressCol3)
+        {
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(mpDoc->GetString(addressCol3).toDouble(), d*1000, 1e-7);
+            addressCol3.IncRow();
+        }
+
+        // TODO: we need to test:
+        // 1. actual sensible ranges
+    }
 }
 
 void UnitsTest::testConvertCellUnits()
