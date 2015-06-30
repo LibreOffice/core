@@ -1348,20 +1348,19 @@ bool OpenGLSalGraphicsImpl::drawPolyLine(
     //bool bDrawnOk = true;
     if( bIsHairline )
     {
-        // hairlines can be drawn in a simpler way (the linejoin and linecap styles can be ignored)
-        basegfx::B2DTrapezoidVector aB2DTrapVector;
-        basegfx::tools::createLineTrapezoidFromB2DPolygon( aB2DTrapVector, aPolygon, rLineWidth.getX() );
-        // draw tesselation result
-        if( aB2DTrapVector.size())
+        PreDraw();
+        if( UseSolidAA( mnLineColor ) )
         {
-            PreDraw();
-            if( UseSolid( mnLineColor, fTransparency ))
+            sal_uInt32 nPoints = rPolygon.count();
+            for (sal_uInt32 i = 0; i < nPoints - 1; ++i)
             {
-                for( size_t i = 0; i < aB2DTrapVector.size(); ++i )
-                    DrawTrapezoid( aB2DTrapVector[ i ] );
+                const basegfx::B2DPoint& rPt1 = rPolygon.getB2DPoint(i);
+                const basegfx::B2DPoint& rPt2 = rPolygon.getB2DPoint(i+1);
+                DrawLineAA(rPt1.getX(), rPt1.getY(),
+                           rPt2.getX(), rPt2.getY());
             }
-            PostDraw();
         }
+        PostDraw();
         return true;
     }
 
