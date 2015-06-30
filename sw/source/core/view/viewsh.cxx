@@ -188,8 +188,9 @@ void SwViewShell::DLPrePaint2(const vcl::Region& rRegion)
         if ( !HasDrawView() )
             MakeDrawView();
 
-        // Prefer window; if tot available, get mpOut (e.g. printer)
-        mpPrePostOutDev = (GetWin() && !isTiledRendering())? GetWin(): GetOut();
+        // Prefer window; if not available, get mpOut (e.g. printer)
+        const bool bWindow = GetWin() && !isTiledRendering() && !isOutputToWindow();
+        mpPrePostOutDev = bWindow ? GetWin(): GetOut();
 
         // #i74769# use SdrPaintWindow now direct
         mpTargetPaintWindow = Imp()->GetDrawView()->BeginDrawLayers(mpPrePostOutDev, rRegion);
