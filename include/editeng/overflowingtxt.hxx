@@ -34,7 +34,7 @@ typedef EditTextObject FormattedTextPortion;
 
 
 
-class EDITENG_DLLPUBLIC OverflowingText
+class OverflowingText
 {
 
 public:
@@ -58,10 +58,9 @@ public:
         bool HasOtherParas() const { return !(mTailTxt == "" && mpMidParas == NULL); }
 };
 
-class EDITENG_DLLPUBLIC NonOverflowingText {
+class NonOverflowingText {
     public:
-        const OutlinerParaObject *mpHeadParas;
-        OUString mPreOverflowingTxt;
+
         // NOTE: mPreOverflowingTxt might be empty
 
         // Constructor
@@ -76,6 +75,10 @@ class EDITENG_DLLPUBLIC NonOverflowingText {
                 }
 
         OutlinerParaObject *ToParaObject(Outliner *) const;
+
+    private:
+        const OutlinerParaObject *mpHeadParas;
+        OUString mPreOverflowingTxt;
 };
 
 
