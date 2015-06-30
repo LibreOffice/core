@@ -14,6 +14,8 @@
 
 #include "helper/qahelper.hxx"
 
+#include "rangelst.hxx"
+
 #include <com/sun/star/util/NumberFormat.hpp>
 
 using namespace sc::units;
@@ -50,6 +52,7 @@ public:
 
     void testUnitsCompatible();
     void testCellConversion();
+    void testConvertCellUnits();
     void testUnitsForRange();
     void testRangeConversion();
 
@@ -64,6 +67,7 @@ public:
 
     CPPUNIT_TEST(testUnitsCompatible);
     CPPUNIT_TEST(testCellConversion);
+    CPPUNIT_TEST(testConvertCellUnits);
     CPPUNIT_TEST(testUnitsForRange);
     CPPUNIT_TEST(testRangeConversion);
 
@@ -875,6 +879,22 @@ void UnitsTest::testRangeConversion() {
     // 1. mixture of units that can't be converted
     // 2. mixtures of local and header annotations
     // 3. actual sensible ranges
+}
+
+void UnitsTest::testConvertCellUnits()
+{
+    mpDoc->EnsureTable(0);
+
+    // Set up a column with a normal header and a few data values
+    ScAddress aAddress(20, 0, 0);
+    mpDoc->SetString(aAddress, "100km");
+    ScRange aRange(aAddress);
+    ScRangeList aRangeList(aRange);
+    OUString aOutput("miles");
+    bool bConverted = mpUnitsImpl->convertCellUnits(aRangeList, mpDoc, aOutput);
+    CPPUNIT_ASSERT(bConverted);
+    double nVal = mpDoc->GetValue(aAddress);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(62.1371192932129, nVal, 1e-14);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UnitsTest);
