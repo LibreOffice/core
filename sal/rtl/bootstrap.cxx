@@ -629,7 +629,7 @@ bootstrap_map::t * bootstrap_map::m_map = NULL;
 
 rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open (
     rtl_uString * pIniName
-) SAL_THROW_EXTERN_C()
+)
 {
     OUString iniName( pIniName );
 
@@ -721,7 +721,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
     rtl_uString      * pName,
     rtl_uString     ** ppValue,
     rtl_uString      * pDefault
-) SAL_THROW_EXTERN_C()
+)
 {
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
 
@@ -740,7 +740,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
 void SAL_CALL rtl_bootstrap_get_iniName_from_handle (
     rtlBootstrapHandle handle,
     rtl_uString     ** ppIniName
-) SAL_THROW_EXTERN_C()
+)
 {
     if(ppIniName)
     {
@@ -759,7 +759,7 @@ void SAL_CALL rtl_bootstrap_get_iniName_from_handle (
 
 void SAL_CALL rtl_bootstrap_setIniFileName (
     rtl_uString * pName
-) SAL_THROW_EXTERN_C()
+)
 {
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
     OUString & file = getIniFileName_Impl();
@@ -770,7 +770,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get (
     rtl_uString  * pName,
     rtl_uString ** ppValue,
     rtl_uString  * pDefault
-) SAL_THROW_EXTERN_C()
+)
 {
     return rtl_bootstrap_get_from_handle(0, pName, ppValue, pDefault);
 }
@@ -778,7 +778,7 @@ sal_Bool SAL_CALL rtl_bootstrap_get (
 void SAL_CALL rtl_bootstrap_set (
     rtl_uString * pName,
     rtl_uString * pValue
-) SAL_THROW_EXTERN_C()
+)
 {
     const OUString name( pName );
     const OUString value( pValue );
@@ -827,7 +827,6 @@ void SAL_CALL rtl_bootstrap_expandMacros(rtl_uString ** macro)
 }
 
 void rtl_bootstrap_encode( rtl_uString const * value, rtl_uString ** encoded )
-    SAL_THROW_EXTERN_C()
 {
     OSL_ASSERT(value != NULL);
     rtl::OUStringBuffer b;
