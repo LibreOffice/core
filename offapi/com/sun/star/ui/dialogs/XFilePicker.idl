@@ -82,8 +82,6 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
         <br/>
         <p>If the dialog is in execution mode and a single file is selected
         the complete URL of this file will be returned.</p>
-        <p>If the dialog is in execution mode and multiple files are selected
-        an empty sequence will be returned.</p>
         <p>If the dialog is in execution mode and the selected file name is false
         or any other error occurs an empty sequence will be returned.</p>
 
@@ -109,6 +107,7 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
             a checkbox "Automatic File Extension" which is checked and a valid filter is currently selected
             the dialog may automatically add an extension to the selected file name.</p>
         </p>
+        @deprecated use com::sun::star::ui::dialogs::XFilePicker2::getSelectedFiles instead
     */
     sequence< string > getFiles();
 };
