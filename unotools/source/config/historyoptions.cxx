@@ -87,7 +87,7 @@ public:
 
     void AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-        const OUString& sPassword, const OUString& sThumbnail);
+        const OUString& sPassword, const boost::optional<OUString>& sThumbnail);
 
     void DeleteItem(EHistoryType eHistory, const OUString& sURL);
 
@@ -352,7 +352,7 @@ Sequence< Sequence<PropertyValue> > SvtHistoryOptions_Impl::GetList(EHistoryType
 
 void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-        const OUString& sPassword, const OUString& sThumbnail)
+        const OUString& sPassword, const boost::optional<OUString>& sThumbnail)
 {
     uno::Reference<container::XNameAccess> xListAccess(GetListAccess(eHistory));
     if (!xListAccess.is())
@@ -377,9 +377,12 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
         // The item to be appended already exists
         if (xItemList->hasByName(sURL))
         {
-            // update the thumbnail
-            xItemList->getByName(sURL) >>= xSet;
-            xSet->setPropertyValue(s_sThumbnail, uno::makeAny(sThumbnail));
+            if (sThumbnail)
+            {
+                // update the thumbnail
+                xItemList->getByName(sURL) >>= xSet;
+                xSet->setPropertyValue(s_sThumbnail, uno::makeAny(*sThumbnail));
+            }
 
             for (sal_Int32 i=0; i<nLength; ++i)
             {
@@ -466,7 +469,7 @@ void SvtHistoryOptions_Impl::AppendItem(EHistoryType eHistory,
             xSet->setPropertyValue(s_sFilter, uno::makeAny(sFilter));
             xSet->setPropertyValue(s_sTitle, uno::makeAny(sTitle));
             xSet->setPropertyValue(s_sPassword, uno::makeAny(sPassword));
-            xSet->setPropertyValue(s_sThumbnail, uno::makeAny(sThumbnail));
+            xSet->setPropertyValue(s_sThumbnail, uno::makeAny(sThumbnail.get_value_or(OUString())));
 
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
         }
@@ -605,7 +608,7 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType e
 
 void SvtHistoryOptions::AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-        const OUString& sPassword, const OUString& sThumbnail)
+        const OUString& sPassword, const boost::optional<OUString>& sThumbnail)
 {
     MutexGuard aGuard(theHistoryOptionsMutex::get());
 

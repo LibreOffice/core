@@ -20,6 +20,7 @@
 #ifndef INCLUDED_UNOTOOLS_HISTORYOPTIONS_HXX
 #define INCLUDED_UNOTOOLS_HISTORYOPTIONS_HXX
 
+#include <boost/optional.hpp>
 #include <unotools/unotoolsdllapi.h>
 #include <sal/types.h>
 #include <osl/mutex.hxx>
@@ -94,7 +95,7 @@ public:
     */
     void AppendItem(EHistoryType eHistory,
             const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-            const OUString& sPassword, const OUString& sThumbnail);
+            const OUString& sPassword, const boost::optional<OUString>& sThumbnail);
 
     /** Delete item from the specified list.
     */
