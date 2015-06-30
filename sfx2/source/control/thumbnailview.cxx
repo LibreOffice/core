@@ -29,6 +29,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <rtl/ustring.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/scrbar.hxx>
@@ -151,6 +152,10 @@ void ThumbnailView::ImplInit()
     maTextColor = GetSettings().GetStyleSettings().GetWindowTextColor();
     maHighlightColor = GetSettings().GetStyleSettings().GetHighlightColor();
     maHighlightTextColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+
+    const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+    mfHighlightTransparence = aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01;
+
     mpStartSelRange = mFilteredItemList.end();
 
     ApplySettings(*this);
@@ -203,6 +208,7 @@ void ThumbnailView::ApplySettings(vcl::RenderContext& rRenderContext)
     mpItemAttrs->aTextColor = maTextColor.getBColor();
     mpItemAttrs->aHighlightColor = maHighlightColor.getBColor();
     mpItemAttrs->aHighlightTextColor = maHighlightTextColor.getBColor();
+    mpItemAttrs->fHighlightTransparence = mfHighlightTransparence;
     mpItemAttrs->aFontAttr = getFontAttributeFromVclFont(mpItemAttrs->aFontSize,GetFont(),false,true);
     mpItemAttrs->nMaxTextLength = 0;
 }

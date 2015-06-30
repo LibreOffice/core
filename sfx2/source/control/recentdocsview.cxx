@@ -74,6 +74,7 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     maTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
     maHighlightColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightColor::get());
     maHighlightTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightTextColor::get());
+    mfHighlightTransparence = 0.25;
 }
 
 VCL_BUILDER_FACTORY(RecentDocsView)

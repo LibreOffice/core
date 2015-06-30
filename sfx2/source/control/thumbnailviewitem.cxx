@@ -37,7 +37,6 @@
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/texteng.hxx>
-#include <svtools/optionsdrawinglayer.hxx>
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -277,10 +276,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
         aFillColor = pAttrs->aHighlightColor;
 
     if (mbHover)
-    {
-        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-        fTransparence = 0.25;
-    }
+        fTransparence = pAttrs->fHighlightTransparence;
 
     sal_uInt32 nPrimitive = 0;
     aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonSelectionPrimitive2D(
