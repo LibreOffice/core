@@ -1669,17 +1669,23 @@ class RenderContextGuard
 {
     VclPtr<vcl::RenderContext>& m_pRef;
     vcl::RenderContext* m_pOriginalValue;
+    SwViewShell* m_pShell;
 
 public:
-    RenderContextGuard(VclPtr<vcl::RenderContext>& pRef, vcl::RenderContext* pValue)
+    RenderContextGuard(VclPtr<vcl::RenderContext>& pRef, vcl::RenderContext* pValue, SwViewShell* pShell)
         : m_pRef(pRef),
-        m_pOriginalValue(m_pRef)
+        m_pOriginalValue(m_pRef),
+        m_pShell(pShell)
     {
         m_pRef = pValue;
+        if (pValue != m_pShell->GetWin() && m_pShell->Imp()->GetDrawView())
+            m_pShell->Imp()->GetDrawView()->AddWindowToPaintView(pValue);
     }
 
     ~RenderContextGuard()
     {
+        if (m_pRef != m_pShell->GetWin() && m_pShell->Imp()->GetDrawView())
+            m_pShell->Imp()->GetDrawView()->DeleteWindowFromPaintView(m_pRef);
         m_pRef = m_pOriginalValue;
     }
 };
@@ -1687,7 +1693,7 @@ public:
 
 void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
 {
-    RenderContextGuard aGuard(mpOut, &rRenderContext);
+    RenderContextGuard aGuard(mpOut, &rRenderContext, this);
     if ( mnLockPaint )
     {
         if ( Imp()->bSmoothUpdate )
@@ -1846,12 +1852,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     aMapMode.SetScaleY(scaleY);
     rDevice.SetMapMode(aMapMode);
 
-    // Update this device in DrawLayer
-    if (Imp()->GetDrawView())
-    {
-        Imp()->GetDrawView()->AddWindowToPaintView(&rDevice);
-    }
-
     Rectangle aOutRect = Rectangle(Point(tilePosX, tilePosY),
                                    rDevice.PixelToLogic(Size(contextWidth, contextHeight)));
 
@@ -1869,12 +1869,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
     // draw - works in logic coordinates
     Paint(rDevice, aOutRect);
-
-    // Remove this device in DrawLayer
-    if (Imp()->GetDrawView())
-    {
-        Imp()->GetDrawView()->DeleteWindowFromPaintView(&rDevice);
-    }
 
     // SwViewShell's output device tear down
     mpOut = pSaveOut;
