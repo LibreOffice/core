@@ -58,8 +58,8 @@ enum
 
 ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle, bool bDisableTransientChildren)
     : Control( pParent, nWinStyle )
+    , mpItemAttrs(new ThumbnailItemAttributes)
 {
-    mpItemAttrs = NULL;
     ImplInit();
     mbIsTransientChildrenDisabled = bDisableTransientChildren;
 }
@@ -147,10 +147,13 @@ void ThumbnailView::ImplInit()
     mbHasVisibleItems = false;
     mbShowTooltips = false;
     maFilterFunc = ViewFilterAll();
-    maColor = GetSettings().GetStyleSettings().GetFieldColor();
+    maFillColor = GetSettings().GetStyleSettings().GetFieldColor();
+    maTextColor = GetSettings().GetStyleSettings().GetWindowTextColor();
+    maHighlightColor = GetSettings().GetStyleSettings().GetHighlightColor();
+    maHighlightTextColor = GetSettings().GetStyleSettings().GetWindowTextColor();
     mpStartSelRange = mFilteredItemList.end();
 
-    ImplInitSettings(true, true, true);
+    ApplySettings(*this);
 }
 
 void ThumbnailView::ImplDeleteItems()
@@ -194,35 +197,12 @@ void ThumbnailView::ApplySettings(vcl::RenderContext& rRenderContext)
     ApplyControlFont(*this, rStyleSettings.GetAppFont());
     ApplyControlForeground(*this, rStyleSettings.GetButtonTextColor());
     rRenderContext.SetTextFillColor();
-    Color aColor = rStyleSettings.GetFieldColor();
-    rRenderContext.SetBackground(aColor);
-}
+    rRenderContext.SetBackground(maFillColor);
 
-void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
-{
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    if (bFont)
-    {
-        ApplyControlFont(*this, rStyleSettings.GetAppFont());
-    }
-
-    if (bForeground || bFont)
-    {
-        ApplyControlForeground(*this, rStyleSettings.GetButtonTextColor());
-        SetTextFillColor();
-    }
-
-    if (bBackground)
-    {
-        Color aColor = rStyleSettings.GetFieldColor();
-        SetBackground(aColor);
-    }
-
-    delete mpItemAttrs;
-    mpItemAttrs = new ThumbnailItemAttributes;
-    mpItemAttrs->aFillColor = maColor.getBColor();
-    mpItemAttrs->aHighlightColor = rStyleSettings.GetHighlightColor().getBColor();
+    mpItemAttrs->aFillColor = maFillColor.getBColor();
+    mpItemAttrs->aTextColor = maTextColor.getBColor();
+    mpItemAttrs->aHighlightColor = maHighlightColor.getBColor();
+    mpItemAttrs->aHighlightTextColor = maHighlightTextColor.getBColor();
     mpItemAttrs->aFontAttr = getFontAttributeFromVclFont(mpItemAttrs->aFontSize,GetFont(),false,true);
     mpItemAttrs->nMaxTextLength = 0;
 }
@@ -862,15 +842,15 @@ void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& r
     // Draw background
     drawinglayer::primitive2d::Primitive2DSequence aSeq(1);
     aSeq[0] = drawinglayer::primitive2d::Primitive2DReference(new PolyPolygonColorPrimitive2D(
-                B2DPolyPolygon(Polygon(rRect, 5, 5).getB2DPolygon()),
-                maColor.getBColor()));
+                B2DPolyPolygon(Polygon(Rectangle(Point(), GetOutputSizePixel()), 0, 0).getB2DPolygon()),
+                maFillColor.getBColor()));
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
 
-    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> mpProcessor(
+    std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(rRenderContext, aNewViewInfos));
-    mpProcessor->process(aSeq);
+    pProcessor->process(aSeq);
 
     // draw items
     for (size_t i = 0; i < nItemCount; i++)
@@ -879,7 +859,7 @@ void ThumbnailView::Paint(vcl::RenderContext& rRenderContext, const Rectangle& r
 
         if (pItem->isVisible())
         {
-            pItem->Paint(mpProcessor.get(), mpItemAttrs);
+            pItem->Paint(pProcessor.get(), mpItemAttrs);
         }
     }
 
@@ -949,22 +929,18 @@ void ThumbnailView::StateChanged( StateChangedType nType )
     else if ( (nType == StateChangedType::Zoom) ||
               (nType == StateChangedType::ControlFont) )
     {
-        ImplInitSettings( true, false, false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlForeground )
     {
-        ImplInitSettings( false, true, false );
         Invalidate();
     }
     else if ( nType == StateChangedType::ControlBackground )
     {
-        ImplInitSettings( false, false, true );
         Invalidate();
     }
     else if ( (nType == StateChangedType::Style) || (nType == StateChangedType::Enable) )
     {
-        ImplInitSettings( false, false, true );
         Invalidate();
     }
 }
@@ -979,7 +955,6 @@ void ThumbnailView::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DataChangedEventType::SETTINGS) &&
           (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
     {
-        ImplInitSettings( true, true, true );
         Invalidate();
     }
 }

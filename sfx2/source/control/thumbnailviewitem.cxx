@@ -279,7 +279,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     if (mbHover)
     {
         const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-        fTransparence = aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01;
+        fTransparence = 0.25;
     }
 
     sal_uInt32 nPrimitive = 0;
@@ -304,8 +304,8 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
                                         ));
 
     // draw thumbnail borders
-    float fWidth = aImageSize.Width();
-    float fHeight = aImageSize.Height();
+    float fWidth = aImageSize.Width() - 1;
+    float fHeight = aImageSize.Height() - 1;
     float fPosX = maPrev1Pos.getX();
     float fPosY = maPrev1Pos.getY();
 
@@ -319,8 +319,7 @@ void ThumbnailViewItem::Paint (drawinglayer::processor2d::BaseProcessor2D *pProc
     aSeq[nPrimitive++] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
 
     // Draw text below thumbnail
-    aPos = maTextPos;
-    addTextPrimitives( maTitle, pAttrs, aPos, aSeq );
+    addTextPrimitives(maTitle, pAttrs, maTextPos, aSeq);
 
     pProcessor->process(aSeq);
 }
@@ -370,13 +369,18 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
                     pAttrs->aFontSize.getX(), pAttrs->aFontSize.getY(),
                     nLineX, double( aPos.Y() ) ) );
 
+        // setup color
+        BColor aTextColor = pAttrs->aTextColor;
+        if (mbSelected || mbHover)
+            aTextColor = pAttrs->aHighlightTextColor;
+
         rSeq[nPrimitives++] = drawinglayer::primitive2d::Primitive2DReference(
                     new TextSimplePortionPrimitive2D(aTextMatrix,
-                                                     aText,nLineStart,nLineLength,
-                                                     std::vector< double >( ),
+                                                     aText, nLineStart, nLineLength,
+                                                     std::vector<double>(),
                                                      pAttrs->aFontAttr,
                                                      com::sun::star::lang::Locale(),
-                                                     Color(COL_BLACK).getBColor() ) );
+                                                     aTextColor));
         nLineStart += nLineLength;
         aPos.setY(aPos.getY() + aTextEngine.GetCharHeight());
 
@@ -388,9 +392,7 @@ void ThumbnailViewItem::addTextPrimitives (const OUString& rText, const Thumbnai
 drawinglayer::primitive2d::PolygonHairlinePrimitive2D*
 ThumbnailViewItem::createBorderLine (const basegfx::B2DPolygon& rPolygon)
 {
-    return new PolygonHairlinePrimitive2D(rPolygon, Color(186,186,186).getBColor());
+    return new PolygonHairlinePrimitive2D(rPolygon, Color(128, 128, 128).getBColor());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
-
-
