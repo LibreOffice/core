@@ -143,13 +143,6 @@ inline PyObject* PyStrBytes_FromStringAndSize(const char *string, Py_ssize_t len
 }
 #endif /* PY_MAJOR_VERSION >= 3 */
 
-// Type of argument to PySlice_GetIndicesEx() changed in Python 3.2
-#if PY_VERSION_HEX >= 0x030200f0
-typedef PyObject PySliceObject_t;
-#else
-typedef PySliceObject PySliceObject_t;
-#endif
-
 namespace pyuno
 {
 
