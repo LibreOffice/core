@@ -92,7 +92,12 @@ class EDITENG_DLLPUBLIC OFlowChainedText {
 
     OutlinerParaObject *GetTextToBeMerged() const { return mpTextToBeMerged; }
 
+    protected:
+    void impSetOutlinerToEmptyTxt(Outliner *);
+
     private:
+
+
     NonOverflowingText *mpNonOverflowingTxt;
     OverflowingText *mpOverflowingTxt;
 
