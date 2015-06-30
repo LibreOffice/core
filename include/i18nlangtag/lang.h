@@ -704,6 +704,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_KVEN_FINNISH          0x0693
 #define LANGUAGE_USER_CHURCH_SLAVIC         0x0694
 #define LANGUAGE_USER_VENETIAN              0x0695
+#define LANGUAGE_USER_ENGLISH_GAMBIA        0x9009  /* makeLangID( 0x24, getPrimaryLanguage( LANGUAGE_ENGLISH_UK)) */
 
 
 /* Primary language ID range for on-the-fly assignment. */
