@@ -1191,6 +1191,7 @@ void Window::ImplInitAppFontData( vcl::Window* pWindow )
     pSVData->maGDIData.mnAppFontX = nTextWidth * 10 / 8;
     pSVData->maGDIData.mnAppFontY = nTextHeight * 10;
 
+#ifdef MACOSX
     // FIXME: this is currently only on OS X, check with other
     // platforms
     if( pSVData->maNWFData.mbNoFocusRects )
@@ -1212,6 +1213,7 @@ void Window::ImplInitAppFontData( vcl::Window* pWindow )
                 pSVData->maGDIData.mnAppFontY = (aContentRgn.GetHeight()-4) * 10;
         }
     }
+#endif
 
     pSVData->maGDIData.mnRealAppFontX = pSVData->maGDIData.mnAppFontX;
     if ( pSVData->maAppData.mnDialogScaleX )
