@@ -14,11 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,nss,$(NSS_TARBALL)))
 $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	nss/nss.patch \
 	nss/nss-3.13.5-zlib-werror.patch \
-	nss/nss-linux-x86.patch.0 \
 	$(if $(filter WNTMSC,$(OS)$(COM)),nss/nss.windows.patch) \
-	$(if $(filter WNTGCC,$(OS)$(COM)),nss/nspr-4.9-build.patch.3 \
-	nss/nss-3.13.3-build.patch.3 \
-	nss/nss.mingw.patch.3) \
 ))
 
 # vim: set noet sw=4 ts=4:
