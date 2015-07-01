@@ -95,10 +95,6 @@ public:
     long&               Y() { return nB; }
 
     void                Move( long nHorzMove, long nVertMove );
-    bool                IsAbove( const Point& rPoint ) const;
-    bool                IsBelow( const Point& rPoint ) const;
-    bool                IsLeft( const Point& rPoint ) const;
-    bool                IsRight( const Point& rPoint ) const;
 
     void                RotateAround( long& rX, long& rY, short nOrientation ) const;
 
@@ -131,26 +127,6 @@ inline void Point::Move( long nHorzMove, long nVertMove )
 {
     nA += nHorzMove;
     nB += nVertMove;
-}
-
-inline bool Point::IsAbove( const Point& rPoint ) const
-{
-    return (nB > rPoint.nB);
-}
-
-inline bool Point::IsBelow( const Point& rPoint ) const
-{
-    return (nB < rPoint.nB);
-}
-
-inline bool Point::IsLeft( const Point& rPoint ) const
-{
-    return (nA < rPoint.nA);
-}
-
-inline bool Point::IsRight( const Point& rPoint ) const
-{
-    return (nA > rPoint.nA);
 }
 
 inline Point& Point::operator += ( const Point& rPoint )
@@ -322,7 +298,6 @@ public:
     bool            operator !() const { return !Len(); }
 
     long            getMin() const { return Min(); }
-    long            getMax() const { return Max(); }
     void            setMin(long nMin)  { Min() = nMin; }
     void            setMax(long nMax)  { Max() = nMax; }
 };
@@ -450,7 +425,7 @@ public:
     /**
      * Contracts the rectangle in all directions by the input value.
      */
-    inline void contract(long nContractBy);
+    ;
 
 private:
     long                nLeft;
@@ -706,13 +681,7 @@ inline void Rectangle::expand(long nExpandBy)
     nBottom += nExpandBy;
 }
 
-inline void Rectangle::contract(long nContractBy)
-{
-    nLeft   += nContractBy;
-    nTop    += nContractBy;
-    nRight  -= nContractBy;
-    nBottom -= nContractBy;
-}
+
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(

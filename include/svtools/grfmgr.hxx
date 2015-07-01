@@ -329,10 +329,6 @@ protected:
     SvStream*               GetSwapStream() const;
     void                    SetSwapState();
 
-    virtual void            Load( SvStream& ) SAL_OVERRIDE;
-    virtual void            Save( SvStream& ) SAL_OVERRIDE;
-    virtual void            Assign( const SvDataCopyStream& ) SAL_OVERRIDE;
-
 public:
                             GraphicObject( const GraphicManager* pMgr = NULL );
                             GraphicObject( const Graphic& rGraphic, const GraphicManager* pMgr = NULL );

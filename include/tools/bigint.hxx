@@ -114,13 +114,9 @@ public:
     operator        sal_uInt16() const;
     operator        sal_uIntPtr() const;
 
-    void            Set( bool bSet ) { bIsSet = bSet; }
+    bool            IsNeg() const;
+    bool            IsZero() const;
 
-    bool        IsSet() const { return (bool)bIsSet; }
-    bool        IsNeg() const;
-    bool        IsZero() const;
-    bool        IsOne() const;
-    bool        IsLong() const { return !((bool)bIsBig); }
     void            Abs();
 
     BigInt&         operator  =( const BigInt& rVal );
@@ -233,14 +229,6 @@ inline bool BigInt::IsZero() const
         return false;
     else
         return (nVal == 0);
-}
-
-inline bool BigInt::IsOne() const
-{
-    if ( bIsBig )
-        return false;
-    else
-        return (nVal == 1);
 }
 
 inline void BigInt::Abs()

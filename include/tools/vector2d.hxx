@@ -36,26 +36,11 @@ public:
     inline Vector2D( const Pair& rPair ) : mfX( rPair.A() ), mfY( rPair.B() ) {};
     inline ~Vector2D() {}
 
-    inline const double& X() const { return mfX; }
-    inline const double& Y() const { return mfY; }
-    inline double& X() { return mfX; }
-    inline double& Y() { return mfY; }
     inline const double& operator[] (int nPos) const { return (nPos ? mfY : mfX); }
     inline double& operator[] (int nPos) { return (nPos ? mfY : mfX); }
 
     inline double GetLength() const { return hypot( mfX, mfY ); }
     inline Vector2D& Normalize();
-
-    inline void Min(const Vector2D& rVec) { if(rVec.mfX < mfX) mfX = rVec.mfX; if(rVec.mfY < mfY) mfY = rVec.mfY; }
-    inline void Max(const Vector2D& rVec) { if(rVec.mfX > mfX) mfX = rVec.mfX; if(rVec.mfY > mfY) mfY = rVec.mfY; }
-    inline void Abs() { if(mfX < 0.0) mfX = -mfX; if(mfY < 0.0) mfY = -mfY; }
-
-    inline void CalcInBetween(Vector2D& rOld1, Vector2D& rOld2, double t)
-        { mfX = ((rOld2.mfX - rOld1.mfX) + t) + rOld1.mfX; mfY = ((rOld2.mfY - rOld1.mfY) + t) + rOld1.mfY; }
-    inline void CalcMiddle(Vector2D& rOld1, Vector2D& rOld2)
-        { mfX = (rOld1.mfX + rOld2.mfX) / 2.0; mfY = (rOld1.mfY + rOld2.mfY) / 2.0; }
-    inline void CalcMiddle(Vector2D& rOld1, Vector2D& rOld2, Vector2D& rOld3)
-        { mfX = (rOld1.mfX + rOld2.mfX + rOld3.mfX) / 3.0; mfY = (rOld1.mfY + rOld2.mfY + rOld3.mfY) / 3.0; }
 
     inline Vector2D&    operator+=( const Vector2D& rVec ) { mfX += rVec.mfX, mfY += rVec.mfY; return *this; }
     inline Vector2D&    operator-=( const Vector2D& rVec ) { mfX -= rVec.mfX, mfY -= rVec.mfY; return *this; }
