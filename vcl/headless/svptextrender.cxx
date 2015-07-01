@@ -425,17 +425,12 @@ void SvpTextRender::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
     SvpGlyphPeer& rGlyphPeer = SvpGlyphCache::GetInstance().GetPeer();
     for( int nStart = 0; rSalLayout.GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
     {
-        int nLevel = aGlyphId >> GF_FONTSHIFT;
-        DBG_ASSERT( nLevel < MAX_FALLBACK, "SvpGDI: invalid glyph fallback level" );
-        ServerFont* pSF = m_pServerFont[ nLevel ];
-        if( !pSF )
-            continue;
-
+        ServerFont& rFont = rSalLayout.GetServerFont();
         // get the glyph's alpha mask and adjust the drawing position
         aGlyphId &= GF_IDXMASK;
         B2IPoint aDstPoint( aPos.X(), aPos.Y() );
         BitmapDeviceSharedPtr aAlphaMask
-            = rGlyphPeer.GetGlyphBmp( *pSF, aGlyphId, m_eTextFmt, aDstPoint );
+            = rGlyphPeer.GetGlyphBmp(rFont, aGlyphId, m_eTextFmt, aDstPoint);
         if( !aAlphaMask )   // ignore empty glyphs
             continue;
 
