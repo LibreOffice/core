@@ -305,16 +305,6 @@ ErrCode SvAsyncLockBytes::FillAppend(const void * pBuffer, sal_Size nCount,
     return nError;
 }
 
-// virtual
-sal_uInt64 SvAsyncLockBytes::Seek(sal_uInt64 const nPos)
-{
-    // check if a truncated STREAM_SEEK_TO_END was passed
-    assert(nPos != SAL_MAX_UINT32);
-    if (nPos != STREAM_SEEK_TO_END)
-        m_nSize = nPos;
-    return m_nSize;
-}
-
 //  class SvStream
 
 sal_Size SvStream::GetData( void* pData, sal_Size nSize )
@@ -2026,10 +2016,6 @@ bool SvScriptStream::ReadLine(OString &rStr, sal_Int32)
 bool SvScriptStream::good() const
 {
     return mpHandle != NULL;
-}
-
-void SvDataCopyStream::Assign( const SvDataCopyStream& )
-{
 }
 
 //Create a OString of nLen bytes from rStream

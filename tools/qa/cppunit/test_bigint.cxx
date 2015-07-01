@@ -31,18 +31,13 @@ namespace tools
 class BigIntTest : public CppUnit::TestFixture
 {
 public:
-#if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
     void testConstructionFromLongLong();
-#endif
 
     CPPUNIT_TEST_SUITE(BigIntTest);
-#if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
     CPPUNIT_TEST(testConstructionFromLongLong);
-#endif
     CPPUNIT_TEST_SUITE_END();
 };
 
-#if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
 void BigIntTest::testConstructionFromLongLong()
 {
     // small positive number
@@ -65,6 +60,7 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT_EQUAL(-42L, static_cast<long>(bi));
     }
 
+#if SAL_TYPES_SIZEOFLONG < SAL_TYPES_SIZEOFLONGLONG
     // positive number just fitting to long
     {
         BigInt bi(static_cast<sal_Int64>(std::numeric_limits<long>::max()));
@@ -102,8 +98,8 @@ void BigIntTest::testConstructionFromLongLong()
         CPPUNIT_ASSERT(bi.IsNeg());
         CPPUNIT_ASSERT(!bi.IsLong());
     }
-}
 #endif
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BigIntTest);
 

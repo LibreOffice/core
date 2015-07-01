@@ -104,9 +104,6 @@ public:
                     /// 12 hours == 0.5 days
     double          GetTimeInDays() const;
 
-    bool            IsBetween( const tools::Time& rFrom, const tools::Time& rTo ) const
-                    { return ((nTime >= rFrom.nTime) && (nTime <= rTo.nTime)); }
-
     bool            IsEqualIgnoreNanoSec( const tools::Time& rTime ) const;
 
     bool            operator ==( const tools::Time& rTime ) const
@@ -126,9 +123,6 @@ public:
 
     /// Elapsed time since epoch in milliseconds
     static sal_uInt64 GetSystemTicks();
-
-    void            ConvertToUTC()       { *this -= Time::GetUTCOffset(); }
-    void            ConvertToLocalTime() { *this += Time::GetUTCOffset(); }
 
     tools::Time&           operator =( const tools::Time& rTime );
     Time            operator -() const
