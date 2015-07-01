@@ -444,7 +444,8 @@ VCL_BUILDER_DECL_FACTORY(SvTreeListBox)
 
 void SvTreeListBox::Clear()
 {
-    pModel->Clear();  // Model calls SvTreeListBox::ModelHasCleared()
+    if (pModel)
+        pModel->Clear();  // Model calls SvTreeListBox::ModelHasCleared()
 }
 
 void SvTreeListBox::EnableEntryMnemonics( bool _bEnable )
