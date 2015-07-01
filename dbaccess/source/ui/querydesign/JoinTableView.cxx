@@ -246,7 +246,7 @@ sal_uLong OJoinTableView::GetTabWinCount()
     return m_aTableMap.size();
 }
 
-bool OJoinTableView::RemoveConnection( OTableConnection* _pConn,bool _bDelete )
+bool OJoinTableView::RemoveConnection( OTableConnection* _pConn, bool _bDelete )
 {
     DeselectConn(_pConn);
 
@@ -255,8 +255,12 @@ bool OJoinTableView::RemoveConnection( OTableConnection* _pConn,bool _bDelete )
 
     m_pView->getController().removeConnectionData( _pConn->GetData() );
 
-    m_vTableConnection.erase(
-                        ::std::find(m_vTableConnection.begin(),m_vTableConnection.end(),_pConn) );
+    auto it = ::std::find(m_vTableConnection.begin(),m_vTableConnection.end(),_pConn);
+    if (it != m_vTableConnection.end())
+    {
+        it->disposeAndClear();
+        m_vTableConnection.erase( it );
+    }
 
     modified();
     if ( m_pAccessible )
@@ -983,10 +987,13 @@ void OJoinTableView::ClearAll()
     HideTabWins();
 
     // and the same with the Connections
-    auto aIter = m_vTableConnection.begin();
-    auto aEnd = m_vTableConnection.end();
-    for(;aIter != aEnd;++aIter)
-        RemoveConnection( *aIter ,true);
+    while(true)
+    {
+        auto aIter = m_vTableConnection.begin();
+        if (aIter == m_vTableConnection.end())
+            break;
+        RemoveConnection(*aIter, true);
+    }
     m_vTableConnection.clear();
 
     m_pLastFocusTabWin  = NULL;
