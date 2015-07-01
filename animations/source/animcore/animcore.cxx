@@ -51,7 +51,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <osl/mutex.hxx>
 #include <list>
@@ -351,7 +351,7 @@ private:
 
 
 
-class TimeContainerEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
+class TimeContainerEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
 public:
     explicit TimeContainerEnumeration( const ChildList_t &rChildren );
