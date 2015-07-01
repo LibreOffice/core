@@ -412,7 +412,7 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
 void
 SalI18N_InputContext::HandleDestroyIM()
 {
-    maContext = 0;      // noli me tangere
+    maContext = 0;      // don't change
     mbUseable = False;
 }
 
