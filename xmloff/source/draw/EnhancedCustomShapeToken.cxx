@@ -57,7 +57,7 @@ static const TokenTable pTokenTableArray[] =
     { "extrusion-light-face",               EAS_extrusion_light_face },
     { "extrusion-first-light-harsh",        EAS_extrusion_first_light_harsh },
     { "extrusion-second-light-harsh",       EAS_extrusion_second_light_harsh },
-    { "extrusion-first-light-livel",        EAS_extrusion_first_light_level },
+    { "extrusion-first-light-level",        EAS_extrusion_first_light_level },
     { "extrusion-second-light-level",       EAS_extrusion_second_light_level },
     { "extrusion-first-light-direction",    EAS_extrusion_first_light_direction },
     { "extrusion-second-light-direction",   EAS_extrusion_second_light_direction },
