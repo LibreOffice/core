@@ -2208,7 +2208,7 @@ OverflowingText *Outliner::GetOverflowingText() const
     sal_uInt32 nOverflowingPara = pEditEngine->GetOverflowingParaNum();
     ESelection aOverflowingTextSel;
     sal_Int32 nLastPara = nParaCount-1;
-    sal_Int32 nLastParaLen = GetText(GetParagraph(nLastPara-1)).getLength();
+    sal_Int32 nLastParaLen = GetText(GetParagraph(nLastPara)).getLength();
     aOverflowingTextSel = ESelection(nOverflowingPara, nLen,
                                      nLastPara, nLastParaLen);
 
