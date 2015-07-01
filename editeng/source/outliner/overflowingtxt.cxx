@@ -28,7 +28,11 @@ OutlinerParaObject *NonOverflowingText::ToParaObject(Outliner *pOutliner) const
 {
 
     if (mpContentTextObj)
-        return new OutlinerParaObject(*mpContentTextObj);
+    {
+        OutlinerParaObject *pPObj = new OutlinerParaObject(*mpContentTextObj);
+        pPObj->SetOutlinerMode(pOutliner->GetOutlinerMode());
+        return pPObj;
+    }
 
     // XXX: Possibility: let the NonUnderflowingParaObject just be a TextEditObject created by the Outliner (by means of a selection).
 
@@ -99,7 +103,10 @@ OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, Ou
     OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
     pOutl->SetText(*pOverflowingPObj);
     pOutl->AddText(*pNextPObj);
-    return pOutl->CreateParaObject();
+
+    OutlinerParaObject *pPObj = pOutl->CreateParaObject();
+    pPObj->SetOutlinerMode(pOutl->GetOutlinerMode());
+    return pPObj;
 }
 
 
