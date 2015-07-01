@@ -127,6 +127,7 @@ private:
     Image m_aFolderImage;
 
     OUString m_sPath;
+    OUString m_sStdDir;
     unsigned int m_nCurrentFilter;
 
     ::com::sun::star::uno::Sequence< OUString > m_aBlackList;

@@ -766,13 +766,12 @@ const ::com::sun::star::uno::Sequence< OUString >& RemoteFilesDialog::GetBlackLi
 
 void RemoteFilesDialog::SetStandardDir( const OUString& rStdDir )
 {
-    // TODO
+    m_sStdDir = rStdDir;
 }
 
 const OUString& RemoteFilesDialog::GetStandardDir() const
 {
-    // TODO
-    return OUString( "" );
+    return m_sStdDir;
 }
 
 void RemoteFilesDialog::SetPath( const OUString& rNewURL )
