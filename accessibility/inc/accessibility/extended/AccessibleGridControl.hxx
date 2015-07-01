@@ -22,6 +22,7 @@
 
 #include <accessibility/extended/AccessibleGridControlBase.hxx>
 #include <accessibility/extended/AccessibleGridControlTable.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <svtools/accessibletable.hxx>
 #include <memory>
@@ -180,7 +181,7 @@ private:
     <p>The instance holds its XAccessibleContext with a hard reference, while
     the contxt holds this instance weak.</p>
 */
-typedef ::cppu::WeakImplHelper1 < ::com::sun::star::accessibility::XAccessible > AccessibleGridControlAccess_Base;
+typedef ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessible > AccessibleGridControlAccess_Base;
 
 class AccessibleGridControlAccess :public AccessibleGridControlAccess_Base
     ,public ::svt::table::IAccessibleTableControl

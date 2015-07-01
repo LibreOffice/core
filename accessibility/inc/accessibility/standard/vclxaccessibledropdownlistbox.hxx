@@ -23,10 +23,6 @@
 #include <accessibility/standard/vclxaccessiblebox.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/weakref.hxx>
-
-
 /** The accessible drop down combobox has two children.  The first is the
     text field represented by an object of the
     <type>VCLXAccessibleTextField</type> class which can not be edited.  The

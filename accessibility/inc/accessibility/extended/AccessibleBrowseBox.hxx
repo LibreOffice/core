@@ -22,6 +22,7 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLEBROWSEBOX_HXX
 
 #include <accessibility/extended/AccessibleBrowseBoxBase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <svtools/accessibletableprovider.hxx>
 #include <memory>
@@ -192,8 +193,8 @@ private:
     <p>The instance holds its XAccessibleContext with a hard reference, while
     the contxt holds this instance weak.</p>
 */
-typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::accessibility::XAccessible
-                                >   AccessibleBrowseBoxAccess_Base;
+typedef ::cppu::WeakImplHelper<   ::com::sun::star::accessibility::XAccessible
+                              >   AccessibleBrowseBoxAccess_Base;
 
 class AccessibleBrowseBoxAccess :public AccessibleBrowseBoxAccess_Base
                                 ,public ::svt::IAccessibleBrowseBox

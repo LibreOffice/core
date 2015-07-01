@@ -21,7 +21,6 @@
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETOOLPANELDECKTABBARITEM_HXX
 
 #include <comphelper/accessiblecomponenthelper.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 #include <memory>
 

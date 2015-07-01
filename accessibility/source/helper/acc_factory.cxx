@@ -61,7 +61,6 @@
 #include <accessibility/extended/AccessibleGridControl.hxx>
 #include <svtools/accessibletable.hxx>
 #include <vcl/popupmenuwindow.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 #include "floatingwindowaccessible.hxx"
 
