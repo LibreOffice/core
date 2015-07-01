@@ -3505,6 +3505,177 @@ find_msvc()
     fi
 }
 
+find_csc()
+{
+    # Return value: $csctest
+
+    unset csctest
+
+    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
+    if test -n "$regvalue"; then
+        csctest=$regvalue
+        return
+    fi
+}
+
+find_al()
+{
+    # Return value: $altest
+
+    unset altest
+
+    for x in `ls /proc/registry32/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft\ SDKs/Windows`; do
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
+        if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
+            altest=$regvalue
+            return
+        fi
+    done
+}
+
+find_dotnetsdk()
+{
+    # Return value: $frametest (that's a silly name...)
+
+    unset frametest
+
+    for ver in 1.1 2.0; do
+        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv$ver
+        if test -n "$regvalue"; then
+            frametest=$regvalue
+            return
+        fi
+    done
+}
+
+find_winsdk_version()
+{
+    # Args: $1 : SDK version as in "6.0A", "7.0" etc
+    # Return values: $winsdktest, $winsdklibsubdir
+
+    unset winsdktest winsdklibsubdir
+
+    AC_MSG_CHECKING([find_winsdk_version for $1])
+
+    # Why we look for them in this particular order I don't know. But OTOH I
+    case "$1" in
+    7.*)
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
+        if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            winsdklibsubdir=.
+            return
+        fi
+        ;;
+    8.1|8.1A)
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot81"
+        if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            winsdklibsubdir=winv6.3
+            reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot10"
+            # TODO(davido): Is this correct to only retrieve SDK 10
+            # as a nested case of 8.1? It's only indespensible for VS 2015
+            if test -n "$regvalue"; then
+                win10sdktest=$regvalue
+                win10sdkdir=10.0.10056.0
+            fi
+            return
+        fi
+        ;;
+    8.0|8.0A)
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
+        if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            winsdklibsubdir=win8
+            return
+        fi
+        ;;
+    10)
+        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot10"
+        if test -n "$regvalue"; then
+            winsdktest=$regvalue
+            winsdklibsubdir=10.0.10056.0
+            return
+        fi
+        ;;
+    esac
+}
+
+find_winsdk()
+{
+    # Args: $1 (optional) : list of acceptable SDK versions
+    # Return value: $winsdktest
+
+    unset winsdktest
+
+    for ver in $WINDOWS_SDK_ACCEPTABLE_VERSIONS; do
+        find_winsdk_version $ver
+        if test -n "$winsdktest"; then
+            return
+        fi
+    done
+}
+
+find_msms()
+{
+    my_msm_file=Microsoft_VC${VCVER}_CRT_x86.msm
+    AC_MSG_CHECKING([for $my_msm_file])
+    msmdir=
+    for ver in 12.0; do
+        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
+        if test -n "$regvalue"; then
+            if test -e "$regvalue/$my_msm_file"; then
+                msmdir=$regvalue
+                break
+            fi
+        fi
+    done
+    dnl Is the following fallback really necessary, or was it added in response
+    dnl to never having started Visual Studio on a given machine, so the
+    dnl registry keys checked above had presumably not yet been created?
+    dnl Anyway, if it really is necessary, it might be worthwhile to extend it
+    dnl to also check %CommonProgramFiles(X86)% (typically expanding to
+    dnl "C:\Program Files (X86)\Common Files" compared to %CommonProgramFiles%
+    dnl expanding to "C:\Program Files\Common Files"), which would need
+    dnl something like $(perl -e 'print $ENV{"CommonProgramFiles(x86)"}') to
+    dnl obtain its value from cygwin:
+    if test -z "$msmdir"; then
+        my_msm_dir="${COMMONPROGRAMFILES}/Merge Modules"
+        if test -e "$my_msm_dir/$my_msm_file"; then
+            msmdir=$my_msm_dir
+        fi
+    fi
+    if test -n "$msmdir"; then
+        msmdir=`cygpath -m "$msmdir"`
+        AC_MSG_RESULT([$msmdir])
+    else
+        if test "$ENABLE_RELEASE_BUILD" = "TRUE" ; then
+            AC_MSG_ERROR([not found])
+        else
+            AC_MSG_WARN([not found])
+        fi
+    fi
+}
+
+find_msvc_x64_dlls()
+{
+    msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
+    # http://blogs.msdn.com/b/vcblog/archive/2014/06/03/visual-studio-14-ctp.aspx
+    # Refactored C Runtime (CRT): This CTP contains the first preview of the substantially refactored CRT.
+    # msvcr140.dll no longer exists. It is replaced by a trio of DLLs: vcruntime140.dll, appcrt140.dll,
+    # and desktopcrt140.dll.
+    if test "$VCVER" = 140; then
+       msvcdlls="msvcp${VCVER}.dll vcruntime${VCVER}.dll"
+    else
+       msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
+    fi
+    for dll in $msvcdlls; do
+        if ! test -f "$msvcdllpath/$dll"; then
+            AC_MSG_ERROR([can not find $dll in $msvcdllpath])
+        fi
+    done
+}
+
 SHOWINCLUDES_PREFIX=
 MSBUILD_PATH=
 if test "$_os" = "WINNT"; then
@@ -3648,7 +3819,16 @@ if test "$_os" = "WINNT"; then
                 ;;
             140)
                 COMEX=19
-                WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0A 8.1A 8.1 8.0 7.1A"
+                # TODO(davido): Don't add here 10.
+                WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.1A 8.1 8.0 7.1A"
+                find_winsdk
+                PathFormat "$win10sdktest"
+                ucrtincpath_formatted="$formatted_path/Include/$win10sdkdir/ucrt"
+                # TODO(davido): Should we rather add it to SOLARINC?
+                # Tried it and configure is failing to detect compiler
+                # as configure macros do not respect SOLARINC
+                CFLAGS="$CFLAGS -I$ucrtincpath_formatted"
+                CXXFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
                 ;;
             esac
 
@@ -5123,160 +5303,6 @@ if test $_os = Darwin; then
     fi
 fi
 
-find_csc()
-{
-    # Return value: $csctest
-
-    unset csctest
-
-    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/NET Framework Setup/NDP/v4/Client/InstallPath"
-    if test -n "$regvalue"; then
-        csctest=$regvalue
-        return
-    fi
-}
-
-find_al()
-{
-    # Return value: $altest
-
-    unset altest
-
-    for x in `ls /proc/registry32/HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft\ SDKs/Windows`; do
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/$x/WinSDK-NetFx40Tools/InstallationFolder"
-        if test -n "$regvalue" -a \( -f "$regvalue/al.exe" -o -f "$regvalue/bin/al.exe" \); then
-            altest=$regvalue
-            return
-        fi
-    done
-}
-
-find_dotnetsdk()
-{
-    # Return value: $frametest (that's a silly name...)
-
-    unset frametest
-
-    for ver in 1.1 2.0; do
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/.NETFramework/sdkInstallRootv$ver
-        if test -n "$regvalue"; then
-            frametest=$regvalue
-            return
-        fi
-    done
-}
-
-find_winsdk_version()
-{
-    # Args: $1 : SDK version as in "6.0A", "7.0" etc
-    # Return values: $winsdktest, $winsdklibsubdir
-
-    unset winsdktest winsdklibsubdir
-
-    # Why we look for them in this particular order I don't know. But OTOH I
-    case "$1" in
-    7.*)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/v${1}/InstallationFolder"
-        if test -n "$regvalue"; then
-            winsdktest=$regvalue
-            winsdklibsubdir=.
-            return
-        fi
-        ;;
-    8.1|8.1A)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot81"
-        if test -n "$regvalue"; then
-            winsdktest=$regvalue
-            winsdklibsubdir=winv6.3
-            return
-        fi
-        ;;
-    8.0|8.0A)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot"
-        if test -n "$regvalue"; then
-            winsdktest=$regvalue
-            winsdklibsubdir=win8
-            return
-        fi
-        ;;
-    10)
-        reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot10"
-        if test -n "$regvalue"; then
-            winsdktest=$regvalue
-            winsdklibsubdir=10.0.10056.0
-            return
-        fi
-        ;;
-    esac
-}
-
-find_winsdk()
-{
-    # Args: $1 (optional) : list of acceptable SDK versions
-    # Return value: $winsdktest
-
-    unset winsdktest
-
-    for ver in $WINDOWS_SDK_ACCEPTABLE_VERSIONS; do
-        find_winsdk_version $ver
-        if test -n "$winsdktest"; then
-            return
-        fi
-    done
-}
-
-find_msms()
-{
-    my_msm_file=Microsoft_VC${VCVER}_CRT_x86.msm
-    AC_MSG_CHECKING([for $my_msm_file])
-    msmdir=
-    for ver in 12.0; do
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
-        if test -n "$regvalue"; then
-            if test -e "$regvalue/$my_msm_file"; then
-                msmdir=$regvalue
-                break
-            fi
-        fi
-    done
-    dnl Is the following fallback really necessary, or was it added in response
-    dnl to never having started Visual Studio on a given machine, so the
-    dnl registry keys checked above had presumably not yet been created?
-    dnl Anyway, if it really is necessary, it might be worthwhile to extend it
-    dnl to also check %CommonProgramFiles(X86)% (typically expanding to
-    dnl "C:\Program Files (X86)\Common Files" compared to %CommonProgramFiles%
-    dnl expanding to "C:\Program Files\Common Files"), which would need
-    dnl something like $(perl -e 'print $ENV{"CommonProgramFiles(x86)"}') to
-    dnl obtain its value from cygwin:
-    if test -z "$msmdir"; then
-        my_msm_dir="${COMMONPROGRAMFILES}/Merge Modules"
-        if test -e "$my_msm_dir/$my_msm_file"; then
-            msmdir=$my_msm_dir
-        fi
-    fi
-    if test -n "$msmdir"; then
-        msmdir=`cygpath -m "$msmdir"`
-        AC_MSG_RESULT([$msmdir])
-    else
-        if test "$ENABLE_RELEASE_BUILD" = "TRUE" ; then
-            AC_MSG_ERROR([not found])
-        else
-            AC_MSG_WARN([not found])
-        fi
-    fi
-}
-
-find_msvc_x64_dlls()
-{
-    msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
-    msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
-    for dll in $msvcdlls; do
-        if ! test -f "$msvcdllpath/$dll"; then
-            AC_MSG_ERROR([can not find $dll in $msvcdllpath])
-        fi
-    done
-}
-
 if test "$build_os" = "cygwin"; then
     dnl Check midl.exe
     AC_MSG_CHECKING([for midl.exe])
@@ -5292,6 +5318,9 @@ if test "$build_os" = "cygwin"; then
     else
         AC_MSG_RESULT([$MIDL_PATH/midl.exe])
     fi
+
+    AC_MSG_RESULT([Wind 10 sdk found in $win10sdktest])
+    AC_MSG_RESULT([Dir is $win10sdkdir])
 
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
     MIDL_PATH=`win_short_path_for_make "$MIDL_PATH"`
@@ -12756,6 +12785,11 @@ if test "$build_os" = "cygwin"; then
             ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x64"
             ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x64"
         fi
+        if test $VCVER = 140; then
+            PathFormat "$win10sdktest"
+            ucrtlibpath_formatted="$formatted_path/lib/$win10sdkdir/ucrt/x64"
+            ILIB="$ILIB;$ucrtlibpath_formatted"
+        fi
     else
         ILIB="$ILIB;$COMPATH/lib"
         ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib"
@@ -12764,6 +12798,11 @@ if test "$build_os" = "cygwin"; then
         if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81; then
             ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x86"
             ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x86"
+        fi
+        if test $VCVER = 140; then
+            PathFormat "$win10sdktest"
+            ucrtlibpath_formatted="$formatted_path/lib/$win10sdkdir/ucrt/x86"
+            ILIB="$ILIB;$ucrtlibpath_formatted"
         fi
     fi
     ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
