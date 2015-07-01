@@ -1,0 +1,112 @@
+--- a/a/nspr/config/autoconf.mk.in
++++ a/a/nspr/config/autoconf.mk.in
+@@ -67,7 +67,7 @@
+ MSC_VER		= @MSC_VER@
+ AR		= @AR@
+ AR_FLAGS	= @AR_FLAGS@
+-LD		= @LD@
++LD		= echo
+ RANLIB		= @RANLIB@
+ PERL		= @PERL@
+ RC		= @RC@
+--- a/a/nspr/configure
++++ a/a/nspr/configure
+@@ -755,7 +755,7 @@
+ OBJDIR='$(OBJDIR_NAME)'
+ OBJDIR_NAME=.
+ OBJDIR_SUFFIX=OBJ
+-NSINSTALL='$(MOD_DEPTH)/config/$(OBJDIR_NAME)/nsinstall'
++NSINSTALL=${NSINSTALL?'$(MOD_DEPTH)/config/$(OBJDIR_NAME)/nsinstall'}
+ NOSUCHFILE=/no-such-file
+ LIBNSPR='-L$(dist_libdir) -lnspr$(MOD_MAJOR_VERSION)'
+ LIBPLC='-L$(dist_libdir) -lplc$(MOD_MAJOR_VERSION)'
+@@ -3060,7 +3060,7 @@
+ LIB_SUFFIX=a
+ DLL_SUFFIX=so
+ ASM_SUFFIX=s
+-MKSHLIB='$(LD) $(DSO_LDOPTS) -o $@'
++MKSHLIB='touch $@; echo'
+ PR_MD_ASFILES=
+ PR_MD_CSRCS=
+ PR_MD_ARCH_DIR=unix
+@@ -3904,7 +3904,7 @@
+     DSO_CFLAGS=-fPIC
+     DSO_LDOPTS='-dynamiclib -compatibility_version 1 -current_version 1 -all_load -install_name @__________________________________________________OOO/$@ -headerpad_max_install_names'
+     _OPTIMIZE_FLAGS=-O2
+-    MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
++    MKSHLIB=touch $@
+     STRIP="$STRIP -x -S"
+     DLL_SUFFIX=dylib
+     USE_PTHREADS=1
+--- a/a/nss/coreconf/ruleset.mk
++++ a/a/nss/coreconf/ruleset.mk
+@@ -68,7 +68,7 @@
+ endif
+ 
+ ifeq ($(MKPROG),)
+-    MKPROG = $(CC)
++    MKPROG = touch $@; echo
+ endif
+ 
+ #
+--- a/a/nss/coreconf/Darwin.mk
++++ a/a/nss/coreconf/Darwin.mk
+@@ -124,7 +124,7 @@
+ # May override this with -bundle to create a loadable module.
+ DSO_LDOPTS	= -dynamiclib $(DARWIN_DYLIB_VERSIONS) -install_name @__________________________________________________OOO/$(notdir $@) -headerpad_max_install_names
+ 
+-MKSHLIB		= $(CC) $(DSO_LDOPTS) $(DARWIN_SDK_SHLIBFLAGS)
++MKSHLIB		= touch $@; echo
+ DLL_SUFFIX	= dylib
+ ifdef MAPFILE
+ 	MKSHLIB += -exported_symbols_list $(MAPFILE)
+--- a/a/nss/coreconf/UNIX.mk
++++ a/a/nss/coreconf/UNIX.mk
+@@ -21,10 +21,14 @@
+ 
+ ifdef BUILD_TREE
+ NSINSTALL_DIR  = $(BUILD_TREE)/nss
++ifndef NSINSTALL
+ NSINSTALL      = $(BUILD_TREE)/nss/nsinstall
++endif
+ else
+ NSINSTALL_DIR  = $(CORE_DEPTH)/coreconf/nsinstall
++ifndef NSINSTALL
+ NSINSTALL      = $(NSINSTALL_DIR)/$(OBJDIR_NAME)/nsinstall
++endif
+ endif
+ 
+ MKDEPEND_DIR    = $(CORE_DEPTH)/coreconf/mkdepend
+--- a/a/nspr/pr/include/md/_darwin.h
++++ a/a/nspr/pr/include/md/_darwin.h
+@@ -26,6 +26,8 @@
+ #define _PR_SI_ARCHITECTURE "ppc"
+ #elif defined(__arm__)
+ #define _PR_SI_ARCHITECTURE "arm"
++#elif defined(__arm64__)
++#define _PR_SI_ARCHITECTURE "arm64"
+ #elif defined(__aarch64__)
+ #define _PR_SI_ARCHITECTURE "aarch64"
+ #else
+--- a/a/nspr/pr/src/Makefile.in
++++ a/a/nspr/pr/src/Makefile.in
+@@ -180,7 +180,7 @@
+ endif
+ 
+ ifeq ($(OS_TARGET),MacOSX)
+-OS_LIBS		= -framework CoreServices -framework CoreFoundation
++OS_LIBS		= -framework CoreFoundation
+ endif
+ 
+ EXTRA_LIBS += $(OS_LIBS)
+--- a/a/nss/cmd/shlibsign/sign.sh
++++ a/a/nss/cmd/shlibsign/sign.sh
+@@ -2,6 +2,8 @@
+ # This Source Code Form is subject to the terms of the Mozilla Public
+ # License, v. 2.0. If a copy of the MPL was not distributed with this
+ # file, You can obtain one at http://mozilla.org/MPL/2.0/.
++
++exit 0
+ 
+ # arguments:
+ # 1: full path to DIST/OBJDIR (parent dir of "lib")

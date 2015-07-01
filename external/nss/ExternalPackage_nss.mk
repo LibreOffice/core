@@ -11,7 +11,9 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,nss,nss))
 
 $(eval $(call gb_ExternalPackage_use_external_project,nss,nss))
 
-ifeq ($(OS),MACOSX)
+ifeq ($(OS),IOS)
+# nothing...
+else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		dist/out/lib/libfreebl3.dylib \
 		dist/out/lib/libnspr4.dylib \
@@ -24,7 +26,6 @@ $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		dist/out/lib/libsmime3.dylib \
 		dist/out/lib/libsoftokn3.dylib \
 		dist/out/lib/libssl3.dylib \
-		$(if $(filter 1050,$(MAC_OS_X_VERSION_MIN_REQUIRED)),dist/out/lib/libsqlite3.dylib) \
 ))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
@@ -59,7 +60,9 @@ $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 endif
 
 ifeq ($(SYSTEM_CURL),)
-ifeq ($(OS),MACOSX)
+ifeq ($(OS),IOS)
+# nothing
+else ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_files,nss,$(LIBO_LIB_FOLDER),\
 		dist/out/lib/libnsspem.dylib \
 ))

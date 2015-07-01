@@ -17,6 +17,8 @@ $(eval $(call gb_ExternalProject_register_targets,nss,\
 $(call gb_ExternalProject_get_state_target,nss,configure):
 	$(call gb_ExternalProject_run,configure,\
 		$(if $(filter MSC,$(COM)),INCLUDE="$(COMPATH)/include" LIB="$(ILIB)") \
+		$(if $(CROSS_COMPILING),\
+			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 		nspr/configure --includedir=$(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/include \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter MSC-X86_64,$(COM)-$(CPUNAME)),--enable-64bit) \
@@ -59,14 +61,22 @@ else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
-		$(if $(filter MACOSX,$(OS)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
-			$(if $(filter 1050,$(MAC_OS_X_VERSION_MIN_REQUIRED)),,NSS_USE_SYSTEM_SQLITE=1)) \
+		$(if $(filter IOS,$(OS)),\
+			$(if $(filter arm64,$(CC)),USE_64=1)) \
+		$(if $(filter MACOSX,$(OS)),\
+			$(if $(filter-out POWERPC,$(CPUNAME)),MACOS_SDK_DIR=$(MACOSX_SDK_PATH)) \
+			NSS_USE_SYSTEM_SQLITE=1) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
 		$(if $(CROSS_COMPILING),\
-		$(if $(filter MACOSXPOWERPC,$(OS)$(CPUNAME)),CPU_ARCH=ppc) \
-		NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
+			$(if $(filter MACOSXPOWERPC,$(OS)$(CPUNAME)),CPU_ARCH=ppc) \
+			$(if $(filter IOS-ARM,$(OS)-$(CPUNAME)),CPU_ARCH=arm) \
+			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py") \
 		NSDISTMODE=copy \
-		$(MAKE) -j1 AR="$(AR)" RANLIB="$(RANLIB)" NMEDIT="$(NM)edit" nss_build_all \
+		$(MAKE) -j1 AR="$(AR)" \
+			RANLIB="$(RANLIB)" \
+			NMEDIT="$(NM)edit" \
+			$(if $(CROSS_COMPILING),NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
+			nss_build_all \
 		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.a \
 		$(if $(filter MACOSX,$(OS)),\
 			&& chmod u+w $(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib/*.dylib \
@@ -77,6 +87,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnss3.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssckbi.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssdbm3.dylib \
+				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnsspem.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libnssutil3.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplc4.dylib \
 				$(gb_Package_SOURCEDIR_nss)/dist/out/lib/libplds4.dylib \

@@ -16,11 +16,17 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	external/nss/nss.aix.patch \
 	external/nss/nss-3.13.5-zlib-werror.patch \
 	external/nss/nss_macosx.patch \
-	external/nss/nss-linux-x86.patch.0 \
-	$(if $(filter WNTMSC,$(OS)$(COM)),external/nss/nss.windows.patch) \
+	external/nss/nss-win32-make.patch.1 \
+	$(if $(filter WNTMSC,$(OS)$(COM)),external/nss/nss.windows.patch \
+		external/nss/nss.vs2015.patch) \
 	$(if $(filter WNTGCC,$(OS)$(COM)),external/nss/nspr-4.9-build.patch.3 \
 		external/nss/nss-3.13.3-build.patch.3 \
 		external/nss/nss.mingw.patch.3) \
+    external/nss/ubsan.patch.0 \
+    $(if $(filter IOS,$(OS)), \
+        external/nss/nss-chromium-nss-static.patch \
+        external/nss/nss-more-static.patch \
+        external/nss/nss-ios.patch) \
 ))
 
 # nss-pem is only needed for internal curl to read the NSS CA database
@@ -30,10 +36,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 ))
 endif
 
-ifeq ($(COM_GCC_IS_CLANG)$(filter -fsanitize=address,$(CC)),TRUE-fsanitize=address)
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
 $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	external/nss/asan.patch.1 \
 ))
+endif
 endif
 
 # vim: set noet sw=4 ts=4:
