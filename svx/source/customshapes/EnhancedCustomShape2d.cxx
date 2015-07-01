@@ -2219,7 +2219,7 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
                 const drawing::LineStyle eLineStyle =static_cast<const XLineStyleItem&>(pObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
                 const drawing::FillStyle eFillStyle = static_cast<const XFillStyleItem&>(pObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
 
-                //SJ: #i40600# if bLineGeometryNeededOnly is set linystyle does not matter
+                // #i40600# if bLineGeometryNeededOnly is set, linestyle does not matter
                 if( !bLineGeometryNeededOnly && ( drawing::LineStyle_NONE == eLineStyle ) && ( drawing::FillStyle_NONE == eFillStyle ) )
                     delete pObj;
                 else
