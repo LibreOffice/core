@@ -201,8 +201,9 @@ void SdrPaintWindow::impCreateOverlayManager()
         // is it a window?
         if(OUTDEV_WINDOW == GetOutputDevice().GetOutDevType())
         {
+            vcl::Window* pWindow = dynamic_cast<vcl::Window*>(&GetOutputDevice());
             // decide which OverlayManager to use
-            if(GetPaintView().IsBufferedOverlayAllowed() && mbUseBuffer)
+            if(GetPaintView().IsBufferedOverlayAllowed() && mbUseBuffer && !pWindow->SupportsDoubleBuffering())
             {
                 // buffered OverlayManager, buffers its background and refreshes from there
                 // for pure overlay changes (no system redraw). The 3rd parameter specifies
@@ -225,7 +226,6 @@ void SdrPaintWindow::impCreateOverlayManager()
             // Request a repaint so that the buffered overlay manager fills
             // its buffer properly.  This is a workaround for missing buffer
             // updates.
-            vcl::Window* pWindow = dynamic_cast<vcl::Window*>(&GetOutputDevice());
             if (pWindow != NULL)
                 pWindow->Invalidate();
 
