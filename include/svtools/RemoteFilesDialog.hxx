@@ -103,7 +103,7 @@ public:
 
     virtual void SetFileCallback( ::svt::IFilePickerListener *pNotifier );
 
-    virtual void EnableAutocompletion( bool _bEnable = true );
+    virtual void EnableAutocompletion( bool );
 
     virtual sal_Int32 getTargetColorDepth();
     virtual sal_Int32 getAvailableWidth();
@@ -127,6 +127,10 @@ private:
     Image m_aFolderImage;
 
     OUString m_sPath;
+    unsigned int m_nCurrentFilter;
+
+    ::com::sun::star::uno::Sequence< OUString > m_aBlackList;
+    ::svt::IFilePickerListener* m_pFileNotifier;
 
     VclPtr< PushButton > m_pOpen_btn;
     VclPtr< PushButton > m_pSave_btn;
@@ -142,14 +146,12 @@ private:
     VclPtr< Edit > m_pName_ed;
 
     std::vector< ServicePtr > m_aServices;
-    std::vector< OUString > m_aFilters;
+    std::vector< std::pair< OUString, OUString > > m_aFilters;
 
     void FillServicesListbox();
 
     /* If failure returns < 0 */
     int GetSelectedServicePos();
-
-    OUString GetCurrentFilter();
 
     FileViewResult OpenURL( OUString sURL );
 

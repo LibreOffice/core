@@ -247,6 +247,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_eType = ( nBits & WB_PATH ) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
     m_bMultiselection = ( nBits & WB_MULTISELECTION ) ? true : false;
     m_bIsUpdated = false;
+    m_nCurrentFilter = LISTBOX_ENTRY_NOTFOUND;
 
     m_pOpen_btn->Enable( false );
     m_pSave_btn->Enable( false );
@@ -469,8 +470,13 @@ int RemoteFilesDialog::GetSelectedServicePos()
 
 void RemoteFilesDialog::AddFilter( const OUString& rFilter, const OUString& rType )
 {
-    m_aFilters.push_back( rType );
-    m_pFilter_lb->InsertEntry( rFilter );
+    OUString sName = rFilter;
+
+    if ( rType.isEmpty() )
+        sName = "------------------------------------------";
+
+    m_aFilters.push_back( std::pair< OUString, OUString >( rFilter, rType ) );
+    m_pFilter_lb->InsertEntry( sName );
 
     if( m_pFilter_lb->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
         m_pFilter_lb->SelectEntryPos( 0 );
@@ -481,20 +487,6 @@ OUString RemoteFilesDialog::GetPath() const
     return m_sPath;
 }
 
-OUString RemoteFilesDialog::GetCurrentFilter()
-{
-    OUString sFilter;
-
-    int nPos = m_pFilter_lb->GetSelectEntryPos();
-
-    if( nPos != LISTBOX_ENTRY_NOTFOUND )
-        sFilter = m_aFilters[nPos];
-    else
-        sFilter = FILTER_ALL;
-
-    return sFilter;
-}
-
 FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
 {
     FileViewResult eResult = eFailure;
@@ -502,7 +494,7 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
     if( m_pFileView )
     {
         OUStringList BlackList;
-        OUString sFilter = GetCurrentFilter();
+        OUString sFilter = GetCurFilter();
 
         m_pFileView->EndInplaceEditing( false );
         eResult = m_pFileView->Initialize( sURL, sFilter, NULL, BlackList );
@@ -709,10 +701,17 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SplitHdl )
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, SelectFilterHdl )
 {
-    OUString sCurrentURL = m_pFileView->GetViewURL();
+    unsigned int nPos = m_pFilter_lb->GetSelectEntryPos();
 
-    if( !sCurrentURL.isEmpty() )
-        OpenURL( sCurrentURL );
+    if( nPos != LISTBOX_ENTRY_NOTFOUND && !m_aFilters[nPos].second.isEmpty() )
+    {
+        m_nCurrentFilter = nPos;
+
+        OUString sCurrentURL = m_pFileView->GetViewURL();
+
+        if( !sCurrentURL.isEmpty() )
+            OpenURL( sCurrentURL );
+    }
 
     return 1;
 }
@@ -757,14 +756,12 @@ void RemoteFilesDialog::SetHasFilename( bool bHasFilename )
 
 void RemoteFilesDialog::SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
 {
-    // TODO
+    m_aBlackList = rBlackList;
 }
 
 const ::com::sun::star::uno::Sequence< OUString >& RemoteFilesDialog::GetBlackList() const
 {
-    // TODO
-    ::com::sun::star::uno::Sequence< OUString > aSequence( 0 );
-    return aSequence;
+    return m_aBlackList;
 }
 
 void RemoteFilesDialog::SetStandardDir( const OUString& rStdDir )
@@ -794,19 +791,53 @@ void RemoteFilesDialog::AddFilterGroup(
         AddFilter( pSubFilters->First, pSubFilters->Second );
 }
 
+OUString RemoteFilesDialog::GetCurFilter() const
+{
+    OUString sFilter;
+
+    if( m_nCurrentFilter != LISTBOX_ENTRY_NOTFOUND )
+    {
+        sFilter = m_aFilters[m_nCurrentFilter].second;
+    }
+    else
+    {
+        sFilter = FILTER_ALL;
+    }
+
+    return sFilter;
+}
+
+OUString RemoteFilesDialog::getCurFilter( ) const
+{
+    return GetCurFilter();
+}
+
 void RemoteFilesDialog::SetCurFilter( const OUString& rFilter )
 {
-    // TODO
+    DBG_ASSERT( !IsInExecute(), "SvtFileDialog::SetCurFilter: currently executing!" );
+
+    // look for corresponding filter
+    sal_uInt16 nPos = m_aFilters.size();
+
+    while ( nPos-- )
+    {
+        if ( m_aFilters[nPos].first == rFilter )
+        {
+            m_nCurrentFilter = nPos;
+            m_pFilter_lb->SelectEntryPos( m_nCurrentFilter );
+            break;
+        }
+    }
 }
 
 void RemoteFilesDialog::SetFileCallback( ::svt::IFilePickerListener *pNotifier )
 {
-    // TODO
+    m_pFileNotifier = pNotifier;
 }
 
-void RemoteFilesDialog::EnableAutocompletion( bool _bEnable )
+void RemoteFilesDialog::EnableAutocompletion( bool )
 {
-    // TODO
+    // This dialog contains Breadcrumb, not Edit
 }
 
 const OUString& RemoteFilesDialog::GetPath()
@@ -829,37 +860,31 @@ bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
 
 sal_Int32 RemoteFilesDialog::getTargetColorDepth()
 {
-    // TODO
+    // This dialog doesn't contain preview
     return 0;
 }
 
 sal_Int32 RemoteFilesDialog::getAvailableWidth()
 {
-    // TODO
+    // This dialog doesn't contain preview
     return 0;
 }
 
 sal_Int32 RemoteFilesDialog::getAvailableHeight()
 {
-    // TODO
+    // This dialog doesn't contain preview
     return 0;
 }
 
-void RemoteFilesDialog::setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage )
+void RemoteFilesDialog::setImage( sal_Int16, const ::com::sun::star::uno::Any& )
 {
-    // TODO
+    // This dialog doesn't contain preview
 }
 
 bool RemoteFilesDialog::getShowState()
 {
-    // TODO
+    // This dialog doesn't contain preview
     return false;
-}
-
-OUString RemoteFilesDialog::GetCurFilter() const
-{
-    // TODO
-    return OUString( "" );
 }
 
 Control* RemoteFilesDialog::getControl( sal_Int16 _nControlId, bool _bLabelControl) const
@@ -870,12 +895,6 @@ Control* RemoteFilesDialog::getControl( sal_Int16 _nControlId, bool _bLabelContr
 void RemoteFilesDialog::enableControl( sal_Int16 _nControlId, bool _bEnable )
 {
     // TODO
-}
-
-OUString RemoteFilesDialog::getCurFilter( ) const
-{
-    // TODO
-    return OUString("");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
