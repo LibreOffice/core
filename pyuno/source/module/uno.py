@@ -303,7 +303,11 @@ def _uno_import( name, *optargs, **kwargs ):
                    try:
                       d[x] = getConstantByName( name + "." + x )
                    except RuntimeException:
-                      failed = True
+                      # check for constant group
+                      try:
+                          d[x] = _impl_getConstantGroupByName( name, x )
+                      except ValueError:
+                          failed = True
 
           if failed:
               # We have an import failure, but cannot distinguish between
@@ -335,6 +339,31 @@ def _uno_import( name, *optargs, **kwargs ):
               raise uno_import_exc
 
     return mod
+
+# private
+class _ConstantGroup(object):
+    __slots__ = ['_constants']
+    def __init__(self, constants):
+        self._constants = constants
+    def __dir__(self):
+        return self._constants.keys()
+    def __getattr__(self,name):
+        if name in self._constants:
+            return self._constants[name]
+        raise AttributeError
+
+# private
+def _impl_getConstantGroupByName( module, group ):
+    CONSTANTS = Enum('com.sun.star.uno.TypeClass', 'CONSTANTS')
+    ONE = Enum('com.sun.star.reflection.TypeDescriptionSearchDepth', 'ONE')
+    tdm = _g_ctx.getValueByName('/singletons/com.sun.star.reflection.theTypeDescriptionManager')
+    tde = tdm.createTypeDescriptionEnumeration(module,(CONSTANTS,),ONE)
+    qualifiedName = module + '.' + group
+    for td in tde:
+        if td.Name == qualifiedName:
+            return _ConstantGroup({c.Name.split('.')[-1]: c.ConstantValue for c in td.Constants})
+    else:
+        raise ValueError
 
 # private function, don't use
 def _impl_extractName(name):
