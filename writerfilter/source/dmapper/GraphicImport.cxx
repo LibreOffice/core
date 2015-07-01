@@ -358,53 +358,48 @@ public:
 
     void applyMargins(uno::Reference< beans::XPropertySet > xGraphicObjectProperties) const
     {
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_LEFT_MARGIN ), uno::makeAny(nLeftMargin));
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_RIGHT_MARGIN ), uno::makeAny(nRightMargin));
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_TOP_MARGIN ), uno::makeAny(nTopMargin));
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ), uno::makeAny(nBottomMargin));
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_LEFT_MARGIN ), uno::makeAny(nLeftMargin));
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_RIGHT_MARGIN ), uno::makeAny(nRightMargin));
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_TOP_MARGIN ), uno::makeAny(nTopMargin));
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_BOTTOM_MARGIN ), uno::makeAny(nBottomMargin));
     }
 
     void applyPosition(uno::Reference< beans::XPropertySet > xGraphicObjectProperties) const
     {
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT          ),
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_ORIENT          ),
                 uno::makeAny(nHoriOrient));
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT          ),
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_VERT_ORIENT          ),
                 uno::makeAny(nVertOrient));
     }
 
     void applyRelativePosition(uno::Reference< beans::XPropertySet > xGraphicObjectProperties, bool bRelativeOnly = false) const
     {
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         if (!bRelativeOnly)
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_POSITION),
+            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_ORIENT_POSITION),
                                                        uno::makeAny(nLeftPosition));
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_ORIENT_RELATION ),
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_ORIENT_RELATION ),
                 uno::makeAny(nHoriRelation));
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_PAGE_TOGGLE ),
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_PAGE_TOGGLE ),
                 uno::makeAny(bPageToggle));
         if (!bRelativeOnly)
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_POSITION),
+            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_VERT_ORIENT_POSITION),
                                                        uno::makeAny(nTopPosition));
-        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_RELATION ),
+        xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_VERT_ORIENT_RELATION ),
                 uno::makeAny(nVertRelation));
     }
 
     void applyZOrder(uno::Reference<beans::XPropertySet>& xGraphicObjectProperties) const
     {
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         if (zOrder >= 0)
         {
             GraphicZOrderHelper* pZOrderHelper = rDomainMapper.graphicZOrderHelper();
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_Z_ORDER), uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
+            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_Z_ORDER), uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
             pZOrderHelper->addItem(xGraphicObjectProperties, zOrder);
         }
     }
 
     void applyName(uno::Reference<beans::XPropertySet>& xGraphicObjectProperties) const
     {
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         try
         {
             if( !sName.isEmpty() )
@@ -412,9 +407,9 @@ public:
                 uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
                 xNamed->setName( sName );
             }
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_DESCRIPTION ),
+            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_DESCRIPTION ),
                 uno::makeAny( sAlternativeText ));
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ),
+            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_TITLE ),
                 uno::makeAny( title ));
         }
         catch( const uno::Exception& e )
@@ -764,10 +759,8 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                             (m_xShape, uno::UNO_QUERY_THROW);
 
 
-                        PropertyNameSupplier& rPropNameSupplier =
-                            PropertyNameSupplier::GetPropertyNameSupplier();
                         xShapeProps->setPropertyValue
-                            (rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),
+                            (getPropertyName(PROP_ANCHOR_TYPE),
                              uno::makeAny
                              (text::TextContentAnchorType_AS_CHARACTER));
 
@@ -785,7 +778,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         {
                             bKeepRotation = true;
                             xShapeProps->setPropertyValue
-                                (rPropNameSupplier.GetName(PROP_TEXT_RANGE),
+                                (getPropertyName(PROP_TEXT_RANGE),
                                  uno::makeAny
                                  (m_pImpl->rDomainMapper.GetCurrentTextRange()));
                         }
@@ -1138,13 +1131,11 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
 
         if(xGraphic.is())
         {
-            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-
             uno::Reference< beans::XPropertySet > xGraphicObjectProperties(
             m_xTextFactory->createInstance("com.sun.star.text.TextGraphicObject"),
                 uno::UNO_QUERY_THROW);
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_GRAPHIC), uno::makeAny( xGraphic ));
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),
+            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_GRAPHIC), uno::makeAny( xGraphic ));
+            xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE),
                 uno::makeAny( m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR ?
                                     text::TextContentAnchorType_AT_CHARACTER :
                                     text::TextContentAnchorType_AS_CHARACTER ));
@@ -1177,7 +1168,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             };
 
             for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder )
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( aBorderProps[nBorder]), uno::makeAny(aBorderLine));
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( aBorderProps[nBorder]), uno::makeAny(aBorderLine));
 
             // setting graphic object shadow proerties
             if (m_pImpl->bShadow)
@@ -1208,15 +1199,15 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                         aShadow.Location = table::ShadowLocation_TOP_LEFT;
                 }
 
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SHADOW_FORMAT), uno::makeAny(aShadow));
+                xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_SHADOW_FORMAT), uno::makeAny(aShadow));
             }
 
             // setting properties for all types
             if( m_pImpl->bPositionProtected )
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_POSITION_PROTECTED ),
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_POSITION_PROTECTED ),
                     uno::makeAny(true));
             if( m_pImpl->bSizeProtected )
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SIZE_PROTECTED ),
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SIZE_PROTECTED ),
                     uno::makeAny(true));
 
             sal_Int32 nWidth = m_pImpl->nRightPosition - m_pImpl->nLeftPosition;
@@ -1270,18 +1261,18 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 bool bOpaque = m_pImpl->bOpaque && !m_pImpl->rDomainMapper.IsInHeaderFooter( );
                 if( !bOpaque )
                 {
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ),
+                    xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_OPAQUE ),
                         uno::makeAny(bOpaque));
                 }
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND ),
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND ),
                     uno::makeAny(m_pImpl->nWrap));
                 if( m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGHT )
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_FOLLOW_TEXT_FLOW ),
+                    xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_FOLLOW_TEXT_FLOW ),
                         uno::makeAny(true));
 
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND_CONTOUR ),
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_SURROUND_CONTOUR ),
                     uno::makeAny(m_pImpl->bContour));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_OUTSIDE ),
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_CONTOUR_OUTSIDE ),
                     uno::makeAny(m_pImpl->bContourOutside));
                 m_pImpl->applyMargins(xGraphicObjectProperties);
             }
@@ -1295,30 +1286,30 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 m_pImpl->nBrightness = 0;
             }
 
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_ADJUST_CONTRAST ),
+            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_ADJUST_CONTRAST ),
                 uno::makeAny((sal_Int16)m_pImpl->nContrast));
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_ADJUST_LUMINANCE ),
+            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_ADJUST_LUMINANCE ),
                 uno::makeAny((sal_Int16)m_pImpl->nBrightness));
             if(m_pImpl->eColorMode != drawing::ColorMode_STANDARD)
             {
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GRAPHIC_COLOR_MODE ),
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_GRAPHIC_COLOR_MODE ),
                     uno::makeAny(m_pImpl->eColorMode));
             }
             if(m_pImpl->fGamma > 0. )
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GAMMA ),
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_GAMMA ),
                     uno::makeAny(m_pImpl->fGamma ));
             if(m_pImpl->bHoriFlip)
             {
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_MIRRORED_ON_EVEN_PAGES ),
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_MIRRORED_ON_EVEN_PAGES ),
                 uno::makeAny( m_pImpl->bHoriFlip ));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_MIRRORED_ON_ODD_PAGES ),
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_HORI_MIRRORED_ON_ODD_PAGES ),
                 uno::makeAny( m_pImpl->bHoriFlip ));
             }
 
             if( m_pImpl->bVertFlip )
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_MIRRORED ),
+                xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_VERT_MIRRORED ),
                     uno::makeAny( m_pImpl->bVertFlip ));
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BACK_COLOR ),
+            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_BACK_COLOR ),
                 uno::makeAny( m_pImpl->nFillColor ));
 
             m_pImpl->applyZOrder(xGraphicObjectProperties);
@@ -1326,8 +1317,8 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
             //there seems to be no way to detect the original size via _real_ API
             uno::Reference< beans::XPropertySet > xGraphicProperties( xGraphic, uno::UNO_QUERY_THROW );
             awt::Size aGraphicSize, aGraphicSizePixel;
-            xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE100th_M_M )) >>= aGraphicSize;
-            xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE_PIXEL )) >>= aGraphicSizePixel;
+            xGraphicProperties->getPropertyValue(getPropertyName( PROP_SIZE100th_M_M )) >>= aGraphicSize;
+            xGraphicProperties->getPropertyValue(getPropertyName( PROP_SIZE_PIXEL )) >>= aGraphicSizePixel;
 
             uno::Any aContourPolyPolygon;
             if( aGraphicSize.Width && aGraphicSize.Height &&
@@ -1337,13 +1328,13 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 aContourPolyPolygon <<= pCorrected->getPointSequenceSequence();
             }
 
-            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
+            xGraphicObjectProperties->setPropertyValue(getPropertyName( PROP_CONTOUR_POLY_POLYGON),
                                                            aContourPolyPolygon);
 
             if(m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
             {
                 if( m_pImpl->getXSize() && m_pImpl->getYSize() )
-                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SIZE),
+                    xGraphicObjectProperties->setPropertyValue(getPropertyName(PROP_SIZE),
                         uno::makeAny( awt::Size( m_pImpl->getXSize(), m_pImpl->getYSize() )));
                 m_pImpl->applyMargins(xGraphicObjectProperties);
                 m_pImpl->applyName(xGraphicObjectProperties);
@@ -1361,10 +1352,8 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
 
 void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-
         beans::PropertyValues aMediaProperties( 1 );
-        aMediaProperties[0].Name = rPropNameSupplier.GetName(PROP_INPUT_STREAM);
+        aMediaProperties[0].Name = getPropertyName(PROP_INPUT_STREAM);
 
         uno::Reference< io::XInputStream > xIStream = new XInputStreamHelper( buf, len, m_pImpl->bIsBitmap );
         aMediaProperties[0].Value <<= xIStream;

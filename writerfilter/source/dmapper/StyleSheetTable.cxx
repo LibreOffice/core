@@ -917,9 +917,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
         uno::Reference<container::XNameContainer> xParaStyles;
         uno::Reference<container::XNameContainer> xNumberingStyles;
 
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-        xStyleFamilies->getByName(rPropNameSupplier.GetName( PROP_CHARACTER_STYLES )) >>= xCharStyles;
-        xStyleFamilies->getByName(rPropNameSupplier.GetName( PROP_PARAGRAPH_STYLES )) >>= xParaStyles;
+        xStyleFamilies->getByName(getPropertyName( PROP_CHARACTER_STYLES )) >>= xCharStyles;
+        xStyleFamilies->getByName(getPropertyName( PROP_PARAGRAPH_STYLES )) >>= xParaStyles;
         xStyleFamilies->getByName("NumberingStyles") >>= xNumberingStyles;
         if(xCharStyles.is() && xParaStyles.is())
         {
@@ -979,8 +978,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         bInsert = true;
                         xStyle = uno::Reference< style::XStyle >(xDocFactory->createInstance(
                                     bParaStyle ?
-                                        rPropNameSupplier.GetName( PROP_SERVICE_PARA_STYLE ) :
-                                        (bListStyle ? OUString("com.sun.star.style.NumberingStyle") : rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE ))),
+                                        getPropertyName( PROP_SERVICE_PARA_STYLE ) :
+                                        (bListStyle ? OUString("com.sun.star.style.NumberingStyle") : getPropertyName( PROP_SERVICE_CHAR_STYLE ))),
                                         uno::UNO_QUERY_THROW);
 
                         // Numbering styles have to be inserted early, as e.g. the NumberingRules property is only available after insertion.
@@ -1082,7 +1081,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : nullptr);
                         if ( pStyleSheetProperties )
                         {
-                            beans::PropertyValue aLvlVal( rPropNameSupplier.GetName( PROP_OUTLINE_LEVEL ), 0,
+                            beans::PropertyValue aLvlVal( getPropertyName( PROP_OUTLINE_LEVEL ), 0,
                                     uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
                                     beans::PropertyState_DIRECT_VALUE );
                             aPropValues.push_back(aLvlVal);
@@ -1095,10 +1094,10 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         {
                             //left margin is set to NULL by default
                             uno::Reference< beans::XPropertyState >xState1( xStyle, uno::UNO_QUERY_THROW );
-                            xState1->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_LEFT_MARGIN ));
+                            xState1->setPropertyToDefault(getPropertyName( PROP_PARA_LEFT_MARGIN ));
                         }
                         else if ( sConvertedStyleName == "Text body" )
-                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_BOTTOM_MARGIN ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_PARA_BOTTOM_MARGIN ));
                         else if( sConvertedStyleName == "Heading 1" ||
                                 sConvertedStyleName == "Heading 2" ||
                                 sConvertedStyleName == "Heading 3" ||
@@ -1109,15 +1108,15 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                                 sConvertedStyleName == "Heading 8" ||
                                 sConvertedStyleName == "Heading 9" )
                         {
-                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT ));
-                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT_ASIAN ));
-                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_WEIGHT_COMPLEX ));
-                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE ));
-                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE_ASIAN ));
-                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_POSTURE_COMPLEX ));
-                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_PROP_HEIGHT        ));
-                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_PROP_HEIGHT_ASIAN  ));
-                            xState->setPropertyToDefault(rPropNameSupplier.GetName( PROP_CHAR_PROP_HEIGHT_COMPLEX));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_WEIGHT ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_WEIGHT_ASIAN ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_WEIGHT_COMPLEX ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_POSTURE ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_POSTURE_ASIAN ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_POSTURE_COMPLEX ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_PROP_HEIGHT        ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_PROP_HEIGHT_ASIAN  ));
+                            xState->setPropertyToDefault(getPropertyName( PROP_CHAR_PROP_HEIGHT_COMPLEX));
 
                         }
                     }
@@ -1567,11 +1566,10 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
     sListLabel = cListLabel + OUString::number( ++nStyleFound );
     //create a new one otherwise
     uno::Reference< lang::XMultiServiceFactory > xDocFactory( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
-    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     try
     {
         uno::Reference< style::XStyle > xStyle( xDocFactory->createInstance(
-            rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE )), uno::UNO_QUERY_THROW);
+            getPropertyName( PROP_SERVICE_CHAR_STYLE )), uno::UNO_QUERY_THROW);
         uno::Reference< beans::XPropertySet > xStyleProps(xStyle, uno::UNO_QUERY_THROW );
         PropertyValueVector_t::const_iterator aCharPropIter = rCharProperties.begin();
         while( aCharPropIter != rCharProperties.end())

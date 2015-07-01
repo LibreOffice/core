@@ -626,42 +626,35 @@ public:
     void AppendFieldCommand(OUString& rPartOfCommand);
     void handleFieldAsk
         (FieldContextPtr pContext,
-        PropertyNameSupplier& rPropNameSupplier,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     void handleAutoNum
         (FieldContextPtr pContext,
-        PropertyNameSupplier& rPropNameSupplier,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     static void handleAuthor
         (OUString const& rFirstParam,
-        PropertyNameSupplier& rPropNameSupplier,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
         FieldId eFieldId);
     void handleDocProperty
         (FieldContextPtr pContext,
         OUString const& rFirstParam,
-        PropertyNameSupplier& rPropNameSupplier,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     void handleToc
         (FieldContextPtr pContext,
-        PropertyNameSupplier& rPropNameSupplier,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
         const OUString & sTOCServiceName);
     void handleIndex
         (FieldContextPtr pContext,
-        PropertyNameSupplier& rPropNameSupplier,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties,
         const OUString & sTOCServiceName);
 
     void handleBibliography
         (FieldContextPtr pContext,
-        PropertyNameSupplier& rPropNameSupplier,
         const OUString & sTOCServiceName);
     /// The field command has to be closed (cFieldSep appeared).
     void CloseFieldCommand();
