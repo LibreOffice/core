@@ -3475,6 +3475,15 @@ find_msvs()
     done
 }
 
+find_ucrt()
+{
+    reg_get_value_32 "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot10"
+    if test -n "$regvalue"; then
+        ucrttest=$regvalue
+        ucrtdir=10.0.10240.0
+    fi
+}
+
 find_msvc()
 {
     # Find Visual C++ 2013/2015
@@ -3516,6 +3525,7 @@ find_msvc()
     fi
 }
 
+SOLARINC=
 SHOWINCLUDES_PREFIX=
 MSBUILD_PATH=
 DEVENV=
@@ -3559,6 +3569,28 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([Yes])
         else
             AC_MSG_RESULT([No])
+        fi
+
+        AC_MSG_CHECKING([whether UCRT is needed for this compiler version])
+        if test "$vcnum" = "120"; then
+            AC_MSG_RESULT([No])
+        else
+            AC_MSG_RESULT([Yes])
+            AC_MSG_CHECKING([for UCRT location])
+            find_ucrt
+            if test -n "$ucrttest"; then
+                AC_MSG_RESULT([found])
+                PathFormat "$ucrttest"
+                ucrtincpath_formatted="$formatted_path/Include/$ucrtdir/ucrt"
+                # SOLARINC is used for external modules and must be set too.
+                # And no, it's not sufficient to set SOLARINC only, as configure
+                # itself doesn't honour it.
+                SOLARINC="$SOLARINC -I$ucrtincpath_formatted"
+                CFLAGS="$CFLAGS -I$ucrtincpath_formatted"
+                CXXFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
+            else
+                AC_MSG_ERROR([not found])
+            fi
         fi
 
         # Find the proper version of MSBuild.exe to use based on the VS version
@@ -4043,8 +4075,6 @@ AC_SUBST(x_LDFLAGS)
 # determine CPUNAME, OS, ...
 # The USING_X11 flag tells whether the host os uses X by default. Can be overriden with the --without-x option.
 #
-SOLARINC=
-
 case "$host_os" in
 
 aix*)
@@ -5194,6 +5224,20 @@ find_dotnetsdk()
     done
 }
 
+find_dotnetsdk46()
+{
+    unset frametest
+
+    for ver in 4.6; do
+        # TODO(davido): Do we need to take care about 32bit?
+        reg_get_value_64 "HKEY_LOCAL_MACHINE/SOFTWARE/Wow6432Node/Microsoft/Microsoft SDKs/NETFXSDK/$ver/KitsInstallationFolder"
+        if test -n "$regvalue"; then
+            frametest=$regvalue
+            return
+        fi
+    done
+}
+
 find_winsdk_version()
 {
     # Args: $1 : SDK version as in "6.0A", "7.0" etc
@@ -5297,7 +5341,15 @@ find_msms()
 find_msvc_x64_dlls()
 {
     msvcdllpath="$VC_PRODUCT_DIR/redist/x64/Microsoft.VC${VCVER}.CRT"
-    msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
+    # http://blogs.msdn.com/b/vcblog/archive/2014/06/03/visual-studio-14-ctp.aspx
+    # Refactored C Runtime (CRT): This CTP contains the first preview of the substantially refactored CRT.
+    # msvcr140.dll no longer exists. It is replaced by a trio of DLLs: vcruntime140.dll, appcrt140.dll,
+    # and desktopcrt140.dll.
+    if test "$VCVER" = 140; then
+       msvcdlls="msvcp${VCVER}.dll vcruntime${VCVER}.dll"
+    else
+       msvcdlls="msvcp${VCVER}.dll msvcr${VCVER}.dll"
+    fi
     for dll in $msvcdlls; do
         if ! test -f "$msvcdllpath/$dll"; then
             AC_MSG_ERROR([can not find $dll in $msvcdllpath])
@@ -5364,18 +5416,28 @@ if test "$build_os" = "cygwin"; then
     AL_PATH=`win_short_path_for_make "$AL_PATH"`
 
     dnl Check mscoree.lib / .NET Framework dir
-    AC_MSG_CHECKING(.NET Framework)
+    AC_MSG_CHECKING(.NET Framework find_dotnetsdk)
     find_dotnetsdk
     if test -f "$frametest/lib/mscoree.lib"; then
         DOTNET_FRAMEWORK_HOME="$frametest"
     else
+        AC_MSG_CHECKING(.NET Framework find_winsdk)
         find_winsdk
         if test -f "$winsdktest/lib/mscoree.lib" -o -f "$winsdktest/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
             DOTNET_FRAMEWORK_HOME="$winsdktest"
+        else
+            AC_MSG_CHECKING(.NET Framework find_dotnetsdk46)
+            find_dotnetsdk46
+            PathFormat "$frametest"
+            frametest="$formatted_path"
+            AC_MSG_CHECKING(found: $frametest/um/$WINDOWS_SDK_ARCH/mscoree.lib)
+            if test -f "$frametest/Lib/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
+                 DOTNET_FRAMEWORK_HOME="$frametest"
+            fi
         fi
     fi
 
-    if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
+    if test ! -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/lib/$winsdklibsubdir/um/$WINDOWS_SDK_ARCH/mscoree.lib" -a ! -f "$DOTNET_FRAMEWORK_HOME/Lib/um/$WINDOWS_SDK_ARCH/mscoree.lib"; then
         AC_MSG_ERROR([mscoree.lib not found])
     fi
     AC_MSG_RESULT(found)
@@ -8720,7 +8782,7 @@ if test "$with_system_odbc" = "yes" -o '(' "$with_system_headers" = "yes" -a "$w
         save_CPPFLAGS=$CPPFLAGS
         find_winsdk
         PathFormat "$winsdktest"
-        CPPFLAGS="$CPPFLAGS -I$formatted_path/include/um -I$formatted_path/include -I$formatted_path/include/shared"
+        CPPFLAGS="$CPPFLAGS -I$formatted_path/include/um -I$formatted_path/Include/$winsdklibsubdir/um -I$formatted_path/include -I$formatted_path/include/shared"
         AC_CHECK_HEADER(sqlext.h, [],
             [AC_MSG_ERROR(odbc not found. install odbc)],
             [#include <windows.h>])
@@ -9598,6 +9660,10 @@ if test "$_os" = "WINNT"; then
              -a -f "$WINDOWS_SDK_HOME/Include/um/SqlUcode.h" \
              -a -f "$WINDOWS_SDK_HOME/Include/um/usp10.h"; then
             have_windows_sdk_headers=yes
+        elif test -f "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um/adoint.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um/SqlUcode.h" \
+             -a -f "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um/usp10.h"; then
+            have_windows_sdk_headers=yes
         else
             have_windows_sdk_headers=no
         fi
@@ -9646,6 +9712,9 @@ the  Windows SDK are installed.])
     elif echo $WINDOWS_SDK_HOME | grep "8.1" >/dev/null 2>/dev/null; then
         WINDOWS_SDK_VERSION=81
         AC_MSG_RESULT([found Windows SDK 8.1 ($WINDOWS_SDK_HOME)])
+    elif echo $WINDOWS_SDK_HOME | grep "/10" >/dev/null 2>/dev/null; then
+        WINDOWS_SDK_VERSION=10
+        AC_MSG_RESULT([found Windows SDK 10.0 ($WINDOWS_SDK_HOME)])
     else
         AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
     fi
@@ -9655,6 +9724,8 @@ the  Windows SDK are installed.])
         SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/include"
         if test -d "$WINDOWS_SDK_HOME/include/um"; then
             SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
+        elif test -d "$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um"; then
+            SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/um -I$WINDOWS_SDK_HOME/Include/$winsdklibsubdir/shared"
         fi
     fi
 
@@ -12445,21 +12516,35 @@ if test "$build_os" = "cygwin"; then
         ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib/amd64"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/x64"
         ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/x64"
-        if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81; then
+        if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81 -o $WINDOWS_SDK_VERSION = 10; then
             ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x64"
             ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x64"
+        fi
+        if test $VCVER = 140; then
+            PathFormat "$ucrttest"
+            ucrtlibpath_formatted="$formatted_path/lib/$ucrtdir/ucrt/x64"
+            ILIB="$ILIB;$ucrtlibpath_formatted"
         fi
     else
         ILIB="$ILIB;$COMPATH/lib"
         ILIB1="$ILIB1 -LIBPATH:$COMPATH/lib"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib"
         ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib"
-        if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81; then
+        if test $WINDOWS_SDK_VERSION = 80 -o $WINDOWS_SDK_VERSION = 81 -o $WINDOWS_SDK_VERSION = 10; then
             ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x86"
             ILIB1="$ILIB1 -LIBPATH:$WINDOWS_SDK_HOME/lib/$winsdklibsubdir/um/x86"
         fi
+        if test $VCVER = 140; then
+            PathFormat "$ucrttest"
+            ucrtlibpath_formatted="$formatted_path/lib/$ucrtdir/ucrt/x86"
+            ILIB="$ILIB;$ucrtlibpath_formatted"
+        fi
     fi
-    ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
+    if test -f "$DOTNET_FRAMEWORK_HOME/lib/mscoree.lib"; then
+        ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
+    else
+        ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/Lib/um/$WINDOWS_SDK_ARCH"
+    fi
 
     AC_SUBST(ILIB)
 fi
