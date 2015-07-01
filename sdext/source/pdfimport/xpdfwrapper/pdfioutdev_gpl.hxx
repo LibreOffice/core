@@ -103,13 +103,13 @@ namespace pdfi
             isUnderline(rSrc.isUnderline),
             size(rSrc.size)
         {
-            familyName.append(const_cast<GooString*>(&rSrc.familyName));
+            familyName.append(&rSrc.getFamilyName());
         }
 
         FontAttributes& operator=( const FontAttributes& rSrc )
         {
             familyName.clear();
-            familyName.append(const_cast<GooString*>(&rSrc.familyName));
+            familyName.append(&rSrc.getFamilyName());
 
             isEmbedded  = rSrc.isEmbedded;
             isBold      = rSrc.isBold;
@@ -122,8 +122,7 @@ namespace pdfi
 
         bool operator==(const FontAttributes& rFont) const
         {
-            return familyName.cmp(
-                const_cast<GooString*>(&rFont.familyName))==0 &&
+            return getFamilyName().cmp(&rFont.getFamilyName())==0 &&
                 isEmbedded == rFont.isEmbedded &&
                 isBold == rFont.isBold &&
                 isItalic == rFont.isItalic &&
@@ -137,6 +136,11 @@ namespace pdfi
         bool        isItalic;
         bool        isUnderline;
         double      size;
+
+    private:
+        // Work around const-ness issues in the GooString API:
+        GooString & getFamilyName() const
+        { return const_cast<GooString &>(familyName); }
     };
 
     class PDFOutDev : public OutputDev
