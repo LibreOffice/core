@@ -371,13 +371,21 @@ void ScAccessibleEditObject::CreateTextHelper()
         SAL_WNODEPRECATED_DECLARATIONS_POP
         mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
         mpTextHelper->SetEventSource(this);
-        mpTextHelper->SetFocus(mbHasFocus);
+
+        const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+        if ( pInputHdl && pInputHdl->IsEditMode() )
+        {
+            mpTextHelper->SetFocus(true);
+        }
+        else
+        {
+            mpTextHelper->SetFocus(mbHasFocus);
+        }
 
         // #i54814# activate cell in edit mode
         if( meObjectType == CellInEditMode )
         {
             // do not activate cell object, if top edit line is active
-            const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
             if( pInputHdl && !pInputHdl->IsTopMode() )
             {
                 SdrHint aHint( HINT_BEGEDIT );

@@ -4459,7 +4459,7 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
     uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(pFocusWin);
     if (xText.is())
     {
-        sal_uInt32 nPosition = xText->getCaretPosition();
+        sal_Int32 nPosition = xText->getCaretPosition();
         OUString sAllText = xText->getText();
         OString sUTF = OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
         OUString sCursorText(sAllText.copy(0, nPosition));
@@ -4481,7 +4481,7 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
     uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText(pFocusWin);
     if (xText.is())
     {
-        sal_uInt32 nPosition = xText->getCaretPosition();
+        sal_Int32 nPosition = xText->getCaretPosition();
         // #i111768# range checking
         sal_Int32 nDeletePos = nPosition + offset;
         sal_Int32 nDeleteEnd = nDeletePos + nchars;
@@ -4493,6 +4493,14 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
             nDeleteEnd = xText->getCharacterCount();
 
         xText->deleteText(nDeletePos, nDeleteEnd);
+        //tdf91641 adjust cursor if deleted chars shift it forward (normal case)
+        if (nDeletePos < nPosition)
+        {
+            if (nDeleteEnd <= nPosition)
+                xText->setCaretPosition( nPosition-(nDeleteEnd-nDeletePos) );
+            else
+                xText->setCaretPosition( nDeletePos );
+        }
         return true;
     }
 
