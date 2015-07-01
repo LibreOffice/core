@@ -100,6 +100,8 @@ ScMenuFloatingWindow::~ScMenuFloatingWindow()
 void ScMenuFloatingWindow::dispose()
 {
     EndPopupMode();
+    for (auto i = maMenuItems.begin(); i != maMenuItems.end(); ++i)
+        i->mpSubMenuWin.disposeAndClear();
     mpParentMenu.clear();
     PopupMenuFloatingWindow::dispose();
 }
@@ -919,6 +921,7 @@ void ScCheckListMenuWindow::dispose()
     maBtnUnselectSingle.disposeAndClear();
     maBtnOk.disposeAndClear();
     maBtnCancel.disposeAndClear();
+    maTabStopCtrls.clear();
     ScMenuFloatingWindow::dispose();
 }
 
