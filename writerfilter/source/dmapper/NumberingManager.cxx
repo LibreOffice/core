@@ -39,7 +39,7 @@
 using namespace com::sun::star;
 
 #define MAKE_PROPVAL(NameId, Value) \
-    beans::PropertyValue(aPropNameSupplier.GetName(NameId), 0, uno::makeAny(Value), beans::PropertyState_DIRECT_VALUE )
+    beans::PropertyValue(getPropertyName(NameId), 0, uno::makeAny(Value), beans::PropertyState_DIRECT_VALUE )
 
 #define NUMBERING_MAX_LEVELS    10
 
@@ -244,7 +244,6 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
         text::HoriOrientation::RIGHT,
     };
 
-    PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     std::vector<beans::PropertyValue> aNumberingProperties;
 
     if( m_nIStartAt >= 0)
@@ -319,14 +318,14 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
         boost::optional<PropertyMap::Property> aProp = getProperty(aReadIds[i]);
         if (aProp)
             aNumberingProperties.push_back(
-                    beans::PropertyValue( aPropNameSupplier.GetName(aProp->first), 0, aProp->second, beans::PropertyState_DIRECT_VALUE )
+                    beans::PropertyValue( getPropertyName(aProp->first), 0, aProp->second, beans::PropertyState_DIRECT_VALUE )
                     );
     }
 
     boost::optional<PropertyMap::Property> aPropFont = getProperty(PROP_CHAR_FONT_NAME);
     if(aPropFont && !isOutlineNumbering())
         aNumberingProperties.push_back(
-                beans::PropertyValue( aPropNameSupplier.GetName(PROP_BULLET_FONT_NAME), 0, aPropFont->second, beans::PropertyState_DIRECT_VALUE )
+                beans::PropertyValue( getPropertyName(PROP_BULLET_FONT_NAME), 0, aPropFont->second, beans::PropertyState_DIRECT_VALUE )
                 );
 
     return comphelper::containerToSequence(aNumberingProperties);
@@ -336,11 +335,10 @@ uno::Sequence< beans::PropertyValue > ListLevel::GetLevelProperties( )
 void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props )
 {
     uno::Sequence< beans::PropertyValue >& aProps = *props;
-    PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
-    OUString sFirstLineIndent = aPropNameSupplier.GetName(
+    OUString sFirstLineIndent = getPropertyName(
             PROP_FIRST_LINE_INDENT );
-    OUString sIndentAt = aPropNameSupplier.GetName(
+    OUString sIndentAt = getPropertyName(
             PROP_INDENT_AT );
 
     bool hasFirstLineIndent = lcl_findProperty( aProps, sFirstLineIndent );
@@ -354,9 +352,9 @@ void ListLevel::AddParaProperties( uno::Sequence< beans::PropertyValue >* props 
     // ParaFirstLineIndent -> FirstLineIndent
     // ParaLeftMargin -> IndentAt
 
-    OUString sParaIndent = aPropNameSupplier.GetName(
+    OUString sParaIndent = getPropertyName(
             PROP_PARA_FIRST_LINE_INDENT );
-    OUString sParaLeftMargin = aPropNameSupplier.GetName(
+    OUString sParaLeftMargin = getPropertyName(
             PROP_PARA_LEFT_MARGIN );
 
     sal_Int32 nLen = aParaProps.getLength( );
@@ -539,10 +537,8 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             uno::Any oStyle = xStyles->getByName( sStyleName );
             xStyle.set( oStyle, uno::UNO_QUERY_THROW );
 
-            PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-
             // Get the default OOo Numbering style rules
-            uno::Any aRules = xStyle->getPropertyValue( aPropNameSupplier.GetName( PROP_NUMBERING_RULES ) );
+            uno::Any aRules = xStyle->getPropertyValue( getPropertyName( PROP_NUMBERING_RULES ) );
             aRules >>= m_xNumRules;
 
             uno::Sequence< uno::Sequence< beans::PropertyValue > > aProps = GetPropertyValues( );
@@ -580,7 +576,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                     //create (or find) a character style containing the character
                     // attributes of the symbol and apply it to the numbering level
                     OUString sStyle = rDMapper.getOrCreateCharStyle( aStyleProps );
-                    aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_CHAR_STYLE_NAME), sStyle));
+                    aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_CHAR_STYLE_NAME), sStyle));
                 }
 
                 // Get the prefix / suffix / Parent numbering
@@ -597,7 +593,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 sal_Int16 nParentNum = ListLevel::GetParentNumbering(
                        sText, nLevel, rPrefix, rSuffix );
 
-                aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_PREFIX), rPrefix));
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PREFIX), rPrefix));
 
                 if (sText.isEmpty())
                 {
@@ -612,10 +608,10 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                     }
                 }
 
-                aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_SUFFIX), rSuffix));
-                aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_PARENT_NUMBERING), nParentNum));
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SUFFIX), rSuffix));
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_PARENT_NUMBERING), nParentNum));
 
-                aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_POSITION_AND_SPACE_MODE), sal_Int16(text::PositionAndSpaceMode::LABEL_ALIGNMENT)));
+                aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_POSITION_AND_SPACE_MODE), sal_Int16(text::PositionAndSpaceMode::LABEL_ALIGNMENT)));
 
 
                 // Replace the numbering rules for the level
@@ -630,7 +626,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                         xOutlines->getChapterNumberingRules( );
 
                     StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
-                    aLvlProps.push_back(comphelper::makePropertyValue(aPropNameSupplier.GetName(PROP_HEADING_STYLE_NAME), pParaStyle->sConvertedStyleName));
+                    aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEADING_STYLE_NAME), pParaStyle->sConvertedStyleName));
 
                     xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
                 }
@@ -639,7 +635,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             }
 
             // Create the numbering style for these rules
-            OUString sNumRulesName = aPropNameSupplier.GetName( PROP_NUMBERING_RULES );
+            OUString sNumRulesName = getPropertyName( PROP_NUMBERING_RULES );
             xStyle->setPropertyValue( sNumRulesName, uno::makeAny( m_xNumRules ) );
         }
         catch( const lang::IllegalArgumentException& e )

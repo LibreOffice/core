@@ -88,7 +88,7 @@ namespace writerfilter {
 namespace dmapper{
 
 //line numbering for header/footer
-void lcl_linenumberingHeaderFooter( PropertyNameSupplier& rPropNameSupplier, uno::Reference<container::XNameContainer> xStyles, const OUString& rname, DomainMapper_Impl* dmapper )
+void lcl_linenumberingHeaderFooter( uno::Reference<container::XNameContainer> xStyles, const OUString& rname, DomainMapper_Impl* dmapper )
 {
     const StyleSheetEntryPtr pEntry = dmapper->GetStyleSheetTable()->FindStyleSheetByISTD( rname );
     if (!pEntry)
@@ -106,7 +106,7 @@ void lcl_linenumberingHeaderFooter( PropertyNameSupplier& rPropNameSupplier, uno
             if( !xStyle.is() )
                 return;
             uno::Reference<beans::XPropertySet> xPropertySet( xStyle, uno::UNO_QUERY );
-            xPropertySet->setPropertyValue( rPropNameSupplier.GetName( PROP_PARA_LINE_NUMBER_COUNT ), uno::makeAny( ( bool )( nListId >= 0 ) ) );
+            xPropertySet->setPropertyValue( getPropertyName( PROP_PARA_LINE_NUMBER_COUNT ), uno::makeAny( ( bool )( nListId >= 0 ) ) );
         }
     }
 }
@@ -133,18 +133,18 @@ void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFie
     }
 }
 
-void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rxFieldProps, FFDataHandler::Pointer_t pFFDataHandler, PropertyNameSupplier& rPropNameSupplier )
+void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rxFieldProps, FFDataHandler::Pointer_t pFFDataHandler )
 {
     if ( rxFieldProps.is() && pFFDataHandler )
     {
         rxFieldProps->setPropertyValue
-            (rPropNameSupplier.GetName(PROP_HINT),
+            (getPropertyName(PROP_HINT),
             uno::makeAny(pFFDataHandler->getStatusText()));
         rxFieldProps->setPropertyValue
-            (rPropNameSupplier.GetName(PROP_HELP),
+            (getPropertyName(PROP_HELP),
             uno::makeAny(pFFDataHandler->getHelpText()));
         rxFieldProps->setPropertyValue
-            (rPropNameSupplier.GetName(PROP_CONTENT),
+            (getPropertyName(PROP_CONTENT),
             uno::makeAny(pFFDataHandler->getTextDefault()));
     }
 }
@@ -775,10 +775,9 @@ void lcl_MoveBorderPropertiesToFrame(std::vector<beans::PropertyValue>& rFramePr
 
         sal_uInt32 nBorderPropertyCount = sizeof( aBorderProperties ) / sizeof(PropertyIds);
 
-        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         for( sal_uInt32 nProperty = 0; nProperty < nBorderPropertyCount; ++nProperty)
         {
-            OUString sPropertyName = rPropNameSupplier.GetName(aBorderProperties[nProperty]);
+            OUString sPropertyName = getPropertyName(aBorderProperties[nProperty]);
             beans::PropertyValue aValue;
             aValue.Name = sPropertyName;
             aValue.Value = xTextRangeProperties->getPropertyValue(sPropertyName);
@@ -825,7 +824,6 @@ void lcl_AddRangeAndStyle(
 
 void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 {
-    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     if (m_aTextAppendStack.empty())
         return;
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
@@ -852,34 +850,34 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 bool bAutoWidth = nWidth < 1;
                 if( bAutoWidth )
                     nWidth = DEFAULT_FRAME_MIN_WIDTH;
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_WIDTH), nWidth));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH), nWidth));
 
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_HEIGHT),
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT),
                     rAppendContext.pLastParagraphProperties->Geth() > 0 ?
                         rAppendContext.pLastParagraphProperties->Geth() :
                         pStyleProperties->Geth() > 0 ? pStyleProperties->Geth() : DEFAULT_FRAME_MIN_HEIGHT));
 
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_SIZE_TYPE), sal_Int16(
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), sal_Int16(
                     rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
                         rAppendContext.pLastParagraphProperties->GethRule() :
                         pStyleProperties->GethRule() >=0 ? pStyleProperties->GethRule() : text::SizeType::VARIABLE)));
 
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
 
                 sal_Int16 nHoriOrient = sal_Int16(
                     rAppendContext.pLastParagraphProperties->GetxAlign() >= 0 ?
                         rAppendContext.pLastParagraphProperties->GetxAlign() :
                         pStyleProperties->GetxAlign() >= 0 ? pStyleProperties->GetxAlign() : text::HoriOrientation::NONE );
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_HORI_ORIENT), nHoriOrient));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), nHoriOrient));
 
                 //set a non negative default value
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_HORI_ORIENT_POSITION),
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION),
                     rAppendContext.pLastParagraphProperties->IsxValid() ?
                         rAppendContext.pLastParagraphProperties->Getx() :
                         pStyleProperties->IsxValid() ? pStyleProperties->Getx() : DEFAULT_VALUE));
 
                 //Default the anchor in case FramePr_hAnchor is missing ECMA 17.3.1.11
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_HORI_ORIENT_RELATION), sal_Int16(
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_RELATION), sal_Int16(
                     rAppendContext.pLastParagraphProperties->GethAnchor() >= 0 ?
                         rAppendContext.pLastParagraphProperties->GethAnchor() :
                     pStyleProperties->GethAnchor() >=0 ? pStyleProperties->GethAnchor() : text::RelOrientation::FRAME )));
@@ -888,21 +886,21 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     rAppendContext.pLastParagraphProperties->GetyAlign() >= 0 ?
                         rAppendContext.pLastParagraphProperties->GetyAlign() :
                         pStyleProperties->GetyAlign() >= 0 ? pStyleProperties->GetyAlign() : text::VertOrientation::NONE );
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_VERT_ORIENT), nVertOrient));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
 
                 //set a non negative default value
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_VERT_ORIENT_POSITION),
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION),
                     rAppendContext.pLastParagraphProperties->IsyValid() ?
                         rAppendContext.pLastParagraphProperties->Gety() :
                         pStyleProperties->IsyValid() ? pStyleProperties->Gety() : DEFAULT_VALUE));
 
                 //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_VERT_ORIENT_RELATION), sal_Int16(
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_RELATION), sal_Int16(
                     rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
                         rAppendContext.pLastParagraphProperties->GetvAnchor() :
                         pStyleProperties->GetvAnchor() >= 0 ? pStyleProperties->GetvAnchor() : text::RelOrientation::FRAME )));
 
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_SURROUND), text::WrapTextMode(
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SURROUND), text::WrapTextMode(
                     rAppendContext.pLastParagraphProperties->GetWrap() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GetWrap() :
                     pStyleProperties->GetWrap() >= 0 ? pStyleProperties->GetWrap() : 0 )));
@@ -917,8 +915,8 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     rAppendContext.pLastParagraphProperties->GethSpace() :
                     pStyleProperties->GethSpace() >= 0 ? pStyleProperties->GethSpace() : 0;
 
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_LEFT_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist));
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_RIGHT_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LEFT_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nLeftDist));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_RIGHT_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nRightDist));
 
                 sal_Int32 nBottomDist;
                 sal_Int32 nTopDist = nBottomDist =
@@ -926,12 +924,12 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                     rAppendContext.pLastParagraphProperties->GetvSpace() :
                     pStyleProperties->GetvSpace() >= 0 ? pStyleProperties->GetvSpace() : 0;
 
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_TOP_MARGIN), nVertOrient == text::VertOrientation::TOP ? 0 : nTopDist));
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_BOTTOM_MARGIN), nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), nVertOrient == text::VertOrientation::TOP ? 0 : nTopDist));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), nVertOrient == text::VertOrientation::BOTTOM ? 0 : nBottomDist));
                 // If there is no fill, the Word default is 100% transparency.
                 // Otherwise CellColorHandler has priority, and this setting
                 // will be ignored.
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BACK_COLOR_TRANSPARENCY), sal_Int32(100)));
 
                 beans::PropertyValue aRet;
                 uno::Sequence<beans::PropertyValue> aGrabBag(1);
@@ -950,50 +948,50 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 bool bAutoWidth = nWidth < 1;
                 if( bAutoWidth )
                     nWidth = DEFAULT_FRAME_MIN_WIDTH;
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_WIDTH), nWidth));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH), nWidth));
 
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_SIZE_TYPE), sal_Int16(
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_SIZE_TYPE), sal_Int16(
                     rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
                         rAppendContext.pLastParagraphProperties->GethRule() :
                         text::SizeType::VARIABLE)));
 
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_WIDTH_TYPE), bAutoWidth ?  text::SizeType::MIN : text::SizeType::FIX));
 
                 sal_Int16 nHoriOrient = sal_Int16(
                     rAppendContext.pLastParagraphProperties->GetxAlign() >= 0 ?
                         rAppendContext.pLastParagraphProperties->GetxAlign() :
                         text::HoriOrientation::NONE );
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_HORI_ORIENT), nHoriOrient));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT), nHoriOrient));
 
                 sal_Int16 nVertOrient = sal_Int16(
                     rAppendContext.pLastParagraphProperties->GetyAlign() >= 0 ?
                         rAppendContext.pLastParagraphProperties->GetyAlign() :
                         text::VertOrientation::NONE );
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_VERT_ORIENT), nVertOrient));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT), nVertOrient));
 
                 sal_Int32 nVertDist = rAppendContext.pLastParagraphProperties->GethSpace();
                 if( nVertDist < 0 )
                     nVertDist = 0;
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_LEFT_MARGIN), nVertOrient == text::VertOrientation::TOP ? 0 : nVertDist));
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_RIGHT_MARGIN), nVertOrient == text::VertOrientation::BOTTOM ? 0 : nVertDist));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_LEFT_MARGIN), nVertOrient == text::VertOrientation::TOP ? 0 : nVertDist));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_RIGHT_MARGIN), nVertOrient == text::VertOrientation::BOTTOM ? 0 : nVertDist));
 
                 sal_Int32 nHoriDist = rAppendContext.pLastParagraphProperties->GetvSpace();
                 if( nHoriDist < 0 )
                     nHoriDist = 0;
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_TOP_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nHoriDist));
-                aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_BOTTOM_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nHoriDist));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_TOP_MARGIN), nHoriOrient == text::HoriOrientation::LEFT ? 0 : nHoriDist));
+                aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_BOTTOM_MARGIN), nHoriOrient == text::HoriOrientation::RIGHT ? 0 : nHoriDist));
 
                 if( rAppendContext.pLastParagraphProperties->Geth() > 0 )
-                    aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_HEIGHT), rAppendContext.pLastParagraphProperties->Geth()));
+                    aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEIGHT), rAppendContext.pLastParagraphProperties->Geth()));
 
                 if( rAppendContext.pLastParagraphProperties->IsxValid() )
-                    aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_HORI_ORIENT_POSITION), rAppendContext.pLastParagraphProperties->Getx()));
+                    aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HORI_ORIENT_POSITION), rAppendContext.pLastParagraphProperties->Getx()));
 
                 if( rAppendContext.pLastParagraphProperties->GethAnchor() >= 0 )
                     aFrameProperties.push_back(comphelper::makePropertyValue("HoriOrientRelation", sal_Int16(rAppendContext.pLastParagraphProperties->GethAnchor())));
 
                 if( rAppendContext.pLastParagraphProperties->IsyValid() )
-                    aFrameProperties.push_back(comphelper::makePropertyValue(rPropNameSupplier.GetName(PROP_VERT_ORIENT_POSITION), rAppendContext.pLastParagraphProperties->Gety()));
+                    aFrameProperties.push_back(comphelper::makePropertyValue(getPropertyName(PROP_VERT_ORIENT_POSITION), rAppendContext.pLastParagraphProperties->Gety()));
 
                 if( rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 )
                     aFrameProperties.push_back(comphelper::makePropertyValue("VertOrientRelation", sal_Int16(rAppendContext.pLastParagraphProperties->GetvAnchor())));
@@ -1031,7 +1029,6 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     uno::Reference< text::XTextAppend >  xTextAppend;
     if (!m_aTextAppendStack.empty())
         xTextAppend = rAppendContext.xTextAppend;
-    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
 #ifdef DEBUG_WRITERFILTER
     TagLogger::getInstance().attribute("isTextAppend", sal_uInt32(xTextAppend.is()));
@@ -1070,8 +1067,8 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 //select paragraph
                 xParaCursor->gotoStartOfParagraph( true );
                 uno::Reference< beans::XPropertyState > xParaProperties( xParaCursor, uno::UNO_QUERY_THROW );
-                xParaProperties->setPropertyToDefault(rPropNameSupplier.GetName(PROP_CHAR_ESCAPEMENT));
-                xParaProperties->setPropertyToDefault(rPropNameSupplier.GetName(PROP_CHAR_HEIGHT));
+                xParaProperties->setPropertyToDefault(getPropertyName(PROP_CHAR_ESCAPEMENT));
+                xParaProperties->setPropertyToDefault(getPropertyName(PROP_CHAR_HEIGHT));
                 //handles (2) and part of (6)
                 pToBeSavedProperties.reset( new ParagraphProperties(*pParaContext) );
                 sal_Int32 nCount = xParaCursor->getString().getLength();
@@ -1129,7 +1126,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 if( aDrop.Lines > 1 )
                 {
                     beans::PropertyValue aValue;
-                    aValue.Name = rPropNameSupplier.GetName(PROP_DROP_CAP_FORMAT);
+                    aValue.Name = getPropertyName(PROP_DROP_CAP_FORMAT);
                     aValue.Value <<= aDrop;
                     aProperties.push_back(aValue);
                 }
@@ -1338,7 +1335,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pO
 
         OUString aCLSID = pOLEHandler->getCLSID(m_xComponentContext);
         if (aCLSID.isEmpty())
-            xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_STREAM_NAME ),
+            xOLEProperties->setPropertyValue(getPropertyName( PROP_STREAM_NAME ),
                             uno::makeAny( rStreamName ));
         else
             xOLEProperties->setPropertyValue("CLSID", uno::makeAny(OUString(aCLSID)));
@@ -1348,13 +1345,13 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pO
             aSize.Width = 1000;
         if( !aSize.Height )
             aSize.Height = 1000;
-        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_WIDTH ),
+        xOLEProperties->setPropertyValue(getPropertyName( PROP_WIDTH ),
                         uno::makeAny(aSize.Width));
-        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_HEIGHT ),
+        xOLEProperties->setPropertyValue(getPropertyName( PROP_HEIGHT ),
                         uno::makeAny(aSize.Height));
 
         uno::Reference< graphic::XGraphic > xGraphic = pOLEHandler->getReplacement();
-        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_GRAPHIC ),
+        xOLEProperties->setPropertyValue(getPropertyName( PROP_GRAPHIC ),
                         uno::makeAny(xGraphic));
         uno::Reference<beans::XPropertySet> xReplacementProperties(pOLEHandler->getShape(), uno::UNO_QUERY);
         if (xReplacementProperties.is())
@@ -1373,7 +1370,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pO
         else
             // mimic the treatment of graphics here.. it seems anchoring as character
             // gives a better ( visually ) result
-            xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
+            xOLEProperties->setPropertyValue(getPropertyName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
         // remove ( if valid ) associated shape ( used for graphic replacement )
         SAL_WARN_IF(m_aAnchoredStack.empty(), "writerfilter.dmapper", "no anchor stack");
         if (!m_aAnchoredStack.empty())
@@ -1407,20 +1404,20 @@ void DomainMapper_Impl::appendStarMath( const Value& val )
             uno::Reference< text::XTextContent > xStarMath( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xStarMathProperties(xStarMath, uno::UNO_QUERY_THROW);
 
-            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_EMBEDDED_OBJECT ),
+            xStarMathProperties->setPropertyValue(getPropertyName( PROP_EMBEDDED_OBJECT ),
                 val.getAny());
 
             uno::Reference< uno::XInterface > xInterface( formula->getComponent(), uno::UNO_QUERY );
             Size size( 1000, 1000 );
             if( oox::FormulaImportBase* formulaimport = dynamic_cast< oox::FormulaImportBase* >( xInterface.get()))
                 size = formulaimport->getFormulaSize();
-            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_WIDTH ),
+            xStarMathProperties->setPropertyValue(getPropertyName( PROP_WIDTH ),
                 uno::makeAny( sal_Int32(size.Width())));
-            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_HEIGHT ),
+            xStarMathProperties->setPropertyValue(getPropertyName( PROP_HEIGHT ),
                 uno::makeAny( sal_Int32(size.Height())));
             // mimic the treatment of graphics here.. it seems anchoring as character
             // gives a better ( visually ) result
-            xStarMathProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),
+            xStarMathProperties->setPropertyValue(getPropertyName( PROP_ANCHOR_TYPE ),
                 uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
             appendTextContent( xStarMath, uno::Sequence< beans::PropertyValue >() );
         }
@@ -1497,11 +1494,9 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
             bool bFirst = eType == SectionPropertyMap::PAGE_FIRST;
             if ((!bLeft && !GetSettingsTable()->GetEvenAndOddHeaders()) || (GetSettingsTable()->GetEvenAndOddHeaders()))
             {
-                PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-
                 //switch on header/footer use
                 xPageStyle->setPropertyValue(
-                        rPropNameSupplier.GetName(ePropIsOn),
+                        getPropertyName(ePropIsOn),
                         uno::makeAny(sal_True));
 
                 if (bFirst)
@@ -1511,18 +1506,18 @@ void DomainMapper_Impl::PushPageHeaderFooter(bool bHeader, SectionPropertyMap::P
                     {
                         // This is a first page and has a follow style, then enable the header/footer there as well to be consistent.
                         uno::Reference<beans::XPropertySet> xFollowStyle(GetPageStyles()->getByName(aFollowStyle), uno::UNO_QUERY);
-                        xFollowStyle->setPropertyValue(rPropNameSupplier.GetName(ePropIsOn), uno::makeAny(sal_True));
+                        xFollowStyle->setPropertyValue(getPropertyName(ePropIsOn), uno::makeAny(sal_True));
                     }
                 }
 
                 // If the 'Different Even & Odd Pages' flag is turned on - do not ignore it
                 // Even if the 'Even' header/footer is blank - the flag should be imported (so it would look in LO like in Word)
                 if (!bFirst && GetSettingsTable()->GetEvenAndOddHeaders())
-                    xPageStyle->setPropertyValue(rPropNameSupplier.GetName(ePropShared), uno::makeAny(false));
+                    xPageStyle->setPropertyValue(getPropertyName(ePropShared), uno::makeAny(false));
 
                 //set the interface
                 uno::Reference< text::XText > xText;
-                xPageStyle->getPropertyValue(rPropNameSupplier.GetName(bLeft? ePropTextLeft: ePropText)) >>= xText;
+                xPageStyle->getPropertyValue(getPropertyName(bLeft? ePropTextLeft: ePropText)) >>= xText;
 
                 m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >(xText, uno::UNO_QUERY_THROW),
                             m_bIsNewDoc? uno::Reference<text::XTextCursor>(): m_xBodyText->createTextCursorByRange(xText->getStart())));
@@ -1635,20 +1630,19 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
         try
         {
             OUString sType;
-            PropertyNameSupplier & rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier(  );
             switch ( pRedline->m_nToken & 0xffff )
             {
             case XML_mod:
-                sType = rPropNameSupplier.GetName( PROP_FORMAT );
+                sType = getPropertyName( PROP_FORMAT );
                 break;
             case XML_ins:
-                sType = rPropNameSupplier.GetName( PROP_INSERT );
+                sType = getPropertyName( PROP_INSERT );
                 break;
             case XML_del:
-                sType = rPropNameSupplier.GetName( PROP_DELETE );
+                sType = getPropertyName( PROP_DELETE );
                 break;
             case XML_ParagraphFormat:
-                sType = rPropNameSupplier.GetName( PROP_PARAGRAPH_FORMAT );
+                sType = getPropertyName( PROP_PARAGRAPH_FORMAT );
                 break;
             default:
                 throw lang::IllegalArgumentException("illegal redline token type", nullptr, 0);
@@ -1656,11 +1650,11 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
             uno::Reference < text::XRedline > xRedline( xRange, uno::UNO_QUERY_THROW );
             beans::PropertyValues aRedlineProperties( 3 );
             beans::PropertyValue * pRedlineProperties = aRedlineProperties.getArray(  );
-            pRedlineProperties[0].Name = rPropNameSupplier.GetName( PROP_REDLINE_AUTHOR );
+            pRedlineProperties[0].Name = getPropertyName( PROP_REDLINE_AUTHOR );
             pRedlineProperties[0].Value <<= pRedline->m_sAuthor;
-            pRedlineProperties[1].Name = rPropNameSupplier.GetName( PROP_REDLINE_DATE_TIME );
+            pRedlineProperties[1].Name = getPropertyName( PROP_REDLINE_DATE_TIME );
             pRedlineProperties[1].Value <<= ConversionHelper::ConvertDateStringToDateTime( pRedline->m_sDate );
-            pRedlineProperties[2].Name = rPropNameSupplier.GetName( PROP_REDLINE_REVERT_PROPERTIES );
+            pRedlineProperties[2].Name = getPropertyName( PROP_REDLINE_REVERT_PROPERTIES );
             pRedlineProperties[2].Value <<= pRedline->m_aRevertProperties;
             xRedline->makeRedline( sType, aRedlineProperties );
         }
@@ -1849,12 +1843,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             m_aAnchoredStack.push(xTextContent);
             uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
 
-            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-
             m_xEmbedded.set(m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW);
             uno::Reference<beans::XPropertySet> xEmbeddedProperties(m_xEmbedded, uno::UNO_QUERY_THROW);
-            xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_EMBEDDED_OBJECT), xShapePropertySet->getPropertyValue(rPropNameSupplier.GetName(PROP_EMBEDDED_OBJECT)));
-            xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_ANCHOR_TYPE), uno::makeAny(text::TextContentAnchorType_AS_CHARACTER));
+            xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT), xShapePropertySet->getPropertyValue(getPropertyName(PROP_EMBEDDED_OBJECT)));
+            xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_ANCHOR_TYPE), uno::makeAny(text::TextContentAnchorType_AS_CHARACTER));
             // So that the original bitmap-only shape will be replaced by the embedded object.
             m_aAnchoredStack.top().bToRemove = true;
             m_aTextAppendStack.pop();
@@ -1871,14 +1863,12 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
             m_aAnchoredStack.push( xTxtContent );
 
-            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-
             uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
 #ifdef DEBUG_WRITERFILTER
             TagLogger::getInstance().unoPropertySet(xProps);
 #endif
             text::TextContentAnchorType nAnchorType(text::TextContentAnchorType_AT_PARAGRAPH);
-            xProps->getPropertyValue(rPropNameSupplier.GetName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
+            xProps->getPropertyValue(getPropertyName( PROP_ANCHOR_TYPE )) >>= nAnchorType;
             bool checkZOrderStatus = false;
             if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
             {
@@ -1934,7 +1924,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                 PropertyMapPtr paragraphContext = GetTopContextOfType( CONTEXT_PARAGRAPH );
                 boost::optional<PropertyMap::Property> aPropMargin = paragraphContext->getProperty(PROP_PARA_BOTTOM_MARGIN);
                 if(aPropMargin)
-                    xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ), aPropMargin->second );
+                    xProps->setPropertyValue( getPropertyName( PROP_BOTTOM_MARGIN ), aPropMargin->second );
             }
             else
             {
@@ -1950,7 +1940,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         aGrabBag[i].Value >>= zOrder;
                         xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
                         pZOrderHelper->addItem(xShapePropertySet, zOrder);
-                        xShapePropertySet->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ), uno::makeAny( false ) );
+                        xShapePropertySet->setPropertyValue(getPropertyName( PROP_OPAQUE ), uno::makeAny( false ) );
                         checkZOrderStatus = true;
                     }
                     else if ( aGrabBag[i].Name == "TxbxHasLink" )
@@ -1983,7 +1973,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
             }
             if (!m_bInHeaderFooterImport && !checkZOrderStatus)
                 xProps->setPropertyValue(
-                        rPropNameSupplier.GetName( PROP_OPAQUE ),
+                        getPropertyName( PROP_OPAQUE ),
                         uno::makeAny( true ) );
         }
         m_bParaChanged = true;
@@ -2002,11 +1992,10 @@ void DomainMapper_Impl::UpdateEmbeddedShapeProps(const uno::Reference< drawing::
     if (!xShape.is())
         return;
 
-    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     uno::Reference<beans::XPropertySet> xEmbeddedProperties(m_xEmbedded, uno::UNO_QUERY_THROW);
     awt::Size aSize = xShape->getSize( );
-    xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_WIDTH), uno::makeAny(sal_Int32(aSize.Width)));
-    xEmbeddedProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_HEIGHT), uno::makeAny(sal_Int32(aSize.Height)));
+    xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_WIDTH), uno::makeAny(sal_Int32(aSize.Width)));
+    xEmbeddedProperties->setPropertyValue(getPropertyName(PROP_HEIGHT), uno::makeAny(sal_Int32(aSize.Height)));
 }
 
 
@@ -2426,10 +2415,10 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
             nKey = xNumberSupplier->getNumberFormats()->addNewConverted( sFormat, aUSLocale, aCurrentLocale );
         }
         xPropertySet->setPropertyValue(
-            PropertyNameSupplier::GetPropertyNameSupplier().GetName(PROP_NUMBER_FORMAT),
+            getPropertyName(PROP_NUMBER_FORMAT),
             uno::makeAny( nKey ));
         xPropertySet->getPropertyValue(
-            PropertyNameSupplier::GetPropertyNameSupplier().GetName(PROP_NUMBER_FORMAT ) ) >>= nKey;
+            getPropertyName(PROP_NUMBER_FORMAT ) ) >>= nKey;
     }
     catch(const uno::Exception&)
     {
@@ -2550,7 +2539,7 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::FindOrCreateFieldMaster(c
                 m_xTextFactory->createInstance(sFieldMasterService), uno::UNO_QUERY_THROW);
         //set the master's name
             xMaster->setPropertyValue(
-                    PropertyNameSupplier::GetPropertyNameSupplier().GetName(PROP_NAME),
+                    getPropertyName(PROP_NAME),
                     uno::makeAny(rFieldMasterName));
     }
     return xMaster;
@@ -2821,7 +2810,6 @@ const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
 
 void DomainMapper_Impl::handleFieldAsk
     (FieldContextPtr pContext,
-     PropertyNameSupplier& rPropNameSupplier,
      uno::Reference< uno::XInterface > & xFieldInterface,
      uno::Reference< beans::XPropertySet > const& xFieldProperties)
 {
@@ -2837,7 +2825,7 @@ void DomainMapper_Impl::handleFieldAsk
             FindOrCreateFieldMaster
             ("com.sun.star.text.FieldMaster.SetExpression", sVariable );
         // An ASK field is always a string of characters
-        xMaster->setPropertyValue(rPropNameSupplier.GetName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
+        xMaster->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
 
         // attach the master to the field
         uno::Reference< text::XDependentTextField > xDependentField
@@ -2846,14 +2834,14 @@ void DomainMapper_Impl::handleFieldAsk
 
         // set input flag at the field
         xFieldProperties->setPropertyValue(
-            rPropNameSupplier.GetName(PROP_IS_INPUT), uno::makeAny( true ));
+            getPropertyName(PROP_IS_INPUT), uno::makeAny( true ));
         // set the prompt
         xFieldProperties->setPropertyValue(
-            rPropNameSupplier.GetName(PROP_HINT),
+            getPropertyName(PROP_HINT),
             uno::makeAny( sHint ));
-        xFieldProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
+        xFieldProperties->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
         // The ASK has no field value to display
-        xFieldProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_IS_VISIBLE), uno::makeAny(sal_False));
+        xFieldProperties->setPropertyValue(getPropertyName(PROP_IS_VISIBLE), uno::makeAny(sal_False));
     }
     else
     {
@@ -2865,7 +2853,6 @@ void DomainMapper_Impl::handleFieldAsk
 
 void DomainMapper_Impl::handleAutoNum
     (FieldContextPtr pContext,
-    PropertyNameSupplier& rPropNameSupplier,
     uno::Reference< uno::XInterface > & xFieldInterface,
     uno::Reference< beans::XPropertySet > const& xFieldProperties)
 {
@@ -2875,12 +2862,12 @@ void DomainMapper_Impl::handleAutoNum
         ("com.sun.star.text.FieldMaster.SetExpression",
         "AutoNr");
 
-    xMaster->setPropertyValue( rPropNameSupplier.GetName(PROP_SUB_TYPE),
+    xMaster->setPropertyValue( getPropertyName(PROP_SUB_TYPE),
         uno::makeAny(text::SetVariableType::SEQUENCE));
 
     //apply the numbering type
     xFieldProperties->setPropertyValue(
-        rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+        getPropertyName(PROP_NUMBERING_TYPE),
         uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
         // attach the master to the field
     uno::Reference< text::XDependentTextField > xDependentField
@@ -2890,19 +2877,18 @@ void DomainMapper_Impl::handleAutoNum
 
 void DomainMapper_Impl::handleAuthor
     (OUString const& rFirstParam,
-    PropertyNameSupplier& rPropNameSupplier,
      uno::Reference< uno::XInterface > & /*xFieldInterface*/,
      uno::Reference< beans::XPropertySet > const& xFieldProperties,
      FieldId  eFieldId )
 {
     if ( eFieldId != FIELD_USERINITIALS )
         xFieldProperties->setPropertyValue
-            ( rPropNameSupplier.GetName(PROP_FULL_NAME), uno::makeAny( true ));
+            ( getPropertyName(PROP_FULL_NAME), uno::makeAny( true ));
 
     if (!rFirstParam.isEmpty())
     {
         xFieldProperties->setPropertyValue(
-                rPropNameSupplier.GetName( PROP_IS_FIXED ),
+                getPropertyName( PROP_IS_FIXED ),
                 uno::makeAny( true ));
         //PROP_CURRENT_PRESENTATION is set later anyway
     }
@@ -2911,7 +2897,6 @@ void DomainMapper_Impl::handleAuthor
     void DomainMapper_Impl::handleDocProperty
         (FieldContextPtr pContext,
         OUString const& rFirstParam,
-        PropertyNameSupplier& rPropNameSupplier,
         uno::Reference< uno::XInterface > & xFieldInterface,
         uno::Reference< beans::XPropertySet > const&)
 {
@@ -2990,23 +2975,23 @@ void DomainMapper_Impl::handleAuthor
         if( bIsCustomField )
         {
             xFieldProperties->setPropertyValue(
-                rPropNameSupplier.GetName(PROP_NAME), uno::makeAny(rFirstParam));
+                getPropertyName(PROP_NAME), uno::makeAny(rFirstParam));
             pContext->SetCustomField( xFieldProperties );
         }
         else
         {
             if(0 != (aDocProperties[nMap].nFlags & SET_ARABIC))
                 xFieldProperties->setPropertyValue(
-                    rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+                    getPropertyName(PROP_NUMBERING_TYPE),
                     uno::makeAny( style::NumberingType::ARABIC ));
             else if(0 != (aDocProperties[nMap].nFlags & SET_FULL_NAME))
                 xFieldProperties->setPropertyValue(
-                    rPropNameSupplier.GetName(PROP_FULL_NAME),
+                    getPropertyName(PROP_FULL_NAME),
                         uno::makeAny( true ));
             else if(0 != (aDocProperties[nMap].nFlags & SET_DATE))
             {
                 xFieldProperties->setPropertyValue(
-                    rPropNameSupplier.GetName(PROP_IS_DATE),
+                    getPropertyName(PROP_IS_DATE),
                         uno::makeAny( true ));
                 SetNumberFormat( pContext->GetCommand(), xFieldProperties );
             }
@@ -3019,8 +3004,7 @@ void DomainMapper_Impl::handleAuthor
 }
 
 uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyperlinks, const OUString& sChapterNoSeparator,
-                                   const uno::Sequence< beans::PropertyValues >& aLevel,
-                                   PropertyNameSupplier& rPropNameSupplier )
+                                   const uno::Sequence< beans::PropertyValues >& aLevel )
 {
     //create a copy of the level and add two new entries - hyperlink start and end
     bool bChapterNoSeparator  = !sChapterNoSeparator.isEmpty();
@@ -3030,26 +3014,26 @@ uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyper
     if( bHyperlinks )
     {
         beans::PropertyValues aHyperlink(1);
-        aHyperlink[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
-        aHyperlink[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_HYPERLINK_START );
+        aHyperlink[0].Name = getPropertyName( PROP_TOKEN_TYPE );
+        aHyperlink[0].Value <<= getPropertyName( PROP_TOKEN_HYPERLINK_START );
         pNewLevel[0] = aHyperlink;
-        aHyperlink[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_HYPERLINK_END );
+        aHyperlink[0].Value <<= getPropertyName( PROP_TOKEN_HYPERLINK_END );
         pNewLevel[aNewLevel.getLength() -1] = aHyperlink;
     }
     if( bChapterNoSeparator )
     {
         beans::PropertyValues aChapterNo(2);
-        aChapterNo[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
-        aChapterNo[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_CHAPTER_INFO );
-        aChapterNo[1].Name = rPropNameSupplier.GetName( PROP_CHAPTER_FORMAT );
+        aChapterNo[0].Name = getPropertyName( PROP_TOKEN_TYPE );
+        aChapterNo[0].Value <<= getPropertyName( PROP_TOKEN_CHAPTER_INFO );
+        aChapterNo[1].Name = getPropertyName( PROP_CHAPTER_FORMAT );
         //todo: is ChapterFormat::Number correct?
         aChapterNo[1].Value <<= (sal_Int16)text::ChapterFormat::NUMBER;
         pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 4 : 2) ] = aChapterNo;
 
         beans::PropertyValues aChapterSeparator(2);
-        aChapterSeparator[0].Name = rPropNameSupplier.GetName( PROP_TOKEN_TYPE );
-        aChapterSeparator[0].Value <<= rPropNameSupplier.GetName( PROP_TOKEN_TEXT );
-        aChapterSeparator[1].Name = rPropNameSupplier.GetName( PROP_TEXT );
+        aChapterSeparator[0].Name = getPropertyName( PROP_TOKEN_TYPE );
+        aChapterSeparator[0].Value <<= getPropertyName( PROP_TOKEN_TEXT );
+        aChapterSeparator[1].Name = getPropertyName( PROP_TEXT );
         aChapterSeparator[1].Value <<= sChapterNoSeparator;
         pNewLevel[aNewLevel.getLength() - (bHyperlinks ? 3 : 1)] = aChapterSeparator;
     }
@@ -3067,7 +3051,6 @@ uno::Sequence< beans::PropertyValues > lcl_createTOXLevelHyperlinks( bool bHyper
 
 void DomainMapper_Impl::handleToc
     (FieldContextPtr pContext,
-    PropertyNameSupplier& rPropNameSupplier,
      uno::Reference< uno::XInterface > & /*xFieldInterface*/,
      uno::Reference< beans::XPropertySet > const& /*xFieldProperties*/,
     const OUString & sTOCServiceName)
@@ -3200,18 +3183,18 @@ void DomainMapper_Impl::handleToc
                   : sTOCServiceName),
                 uno::UNO_QUERY_THROW);
     if (xTOC.is())
-        xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ), uno::makeAny(OUString()));
+        xTOC->setPropertyValue(getPropertyName( PROP_TITLE ), uno::makeAny(OUString()));
     if (!aBookmarkName.isEmpty())
-        xTOC->setPropertyValue(rPropNameSupplier.GetName(PROP_TOC_BOOKMARK), uno::makeAny(aBookmarkName));
+        xTOC->setPropertyValue(getPropertyName(PROP_TOC_BOOKMARK), uno::makeAny(aBookmarkName));
     if( !bTableOfFigures && xTOC.is() )
     {
-        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_LEVEL ), uno::makeAny( nMaxLevel ) );
-        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_OUTLINE ), uno::makeAny( bFromOutline ));
-        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
-        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_HIDE_TAB_LEADER_AND_PAGE_NUMBERS ), uno::makeAny( bHideTabLeaderPageNumbers ));
-        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TAB_IN_TOC ), uno::makeAny( bIsTabEntry ));
-        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TOC_NEW_LINE ), uno::makeAny( bNewLine ));
-        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TOC_PARAGRAPH_OUTLINE_LEVEL ), uno::makeAny( bParagraphOutlineLevel ));
+        xTOC->setPropertyValue( getPropertyName( PROP_LEVEL ), uno::makeAny( nMaxLevel ) );
+        xTOC->setPropertyValue( getPropertyName( PROP_CREATE_FROM_OUTLINE ), uno::makeAny( bFromOutline ));
+        xTOC->setPropertyValue( getPropertyName( PROP_CREATE_FROM_MARKS ), uno::makeAny( bFromEntries ));
+        xTOC->setPropertyValue( getPropertyName( PROP_HIDE_TAB_LEADER_AND_PAGE_NUMBERS ), uno::makeAny( bHideTabLeaderPageNumbers ));
+        xTOC->setPropertyValue( getPropertyName( PROP_TAB_IN_TOC ), uno::makeAny( bIsTabEntry ));
+        xTOC->setPropertyValue( getPropertyName( PROP_TOC_NEW_LINE ), uno::makeAny( bNewLine ));
+        xTOC->setPropertyValue( getPropertyName( PROP_TOC_PARAGRAPH_OUTLINE_LEVEL ), uno::makeAny( bParagraphOutlineLevel ));
         if( !sTemplate.isEmpty() )
         {
                             //the string contains comma separated the names and related levels
@@ -3232,7 +3215,7 @@ void DomainMapper_Impl::handleToc
                     aMap.insert( TOCStyleMap::value_type(nLevel, sStyleName) );
             }
             uno::Reference< container::XIndexReplace> xParaStyles;
-            xTOC->getPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL_PARAGRAPH_STYLES)) >>= xParaStyles;
+            xTOC->getPropertyValue(getPropertyName(PROP_LEVEL_PARAGRAPH_STYLES)) >>= xParaStyles;
             for( nLevel = 1; nLevel < 10; ++nLevel)
             {
                 sal_Int32 nLevelCount = aMap.count( nLevel );
@@ -3248,13 +3231,13 @@ void DomainMapper_Impl::handleToc
                     xParaStyles->replaceByIndex(nLevel - 1, uno::makeAny(aStyles));
                 }
             }
-            xTOC->setPropertyValue(rPropNameSupplier.GetName(PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES), uno::makeAny( true ));
+            xTOC->setPropertyValue(getPropertyName(PROP_CREATE_FROM_LEVEL_PARAGRAPH_STYLES), uno::makeAny( true ));
 
         }
         if(bHyperlinks  || !sChapterNoSeparator.isEmpty())
         {
             uno::Reference< container::XIndexReplace> xLevelFormats;
-            xTOC->getPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL_FORMAT)) >>= xLevelFormats;
+            xTOC->getPropertyValue(getPropertyName(PROP_LEVEL_FORMAT)) >>= xLevelFormats;
             sal_Int32 nLevelCount = xLevelFormats->getCount();
                             //start with level 1, 0 is the header level
             for( sal_Int32 nLevel = 1; nLevel < nLevelCount; ++nLevel)
@@ -3264,7 +3247,7 @@ void DomainMapper_Impl::handleToc
 
                 uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
                                                     bHyperlinks, sChapterNoSeparator,
-                                                    aLevel, rPropNameSupplier );
+                                                    aLevel );
                 xLevelFormats->replaceByIndex( nLevel, uno::makeAny( aNewLevel ) );
             }
         }
@@ -3272,19 +3255,19 @@ void DomainMapper_Impl::handleToc
     else if (bTableOfFigures && xTOC.is())
     {
         if (!sFigureSequence.isEmpty())
-            xTOC->setPropertyValue(rPropNameSupplier.GetName(PROP_LABEL_CATEGORY),
+            xTOC->setPropertyValue(getPropertyName(PROP_LABEL_CATEGORY),
                                    uno::makeAny(sFigureSequence));
 
         if ( bHyperlinks )
         {
             uno::Reference< container::XIndexReplace> xLevelFormats;
-            xTOC->getPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL_FORMAT)) >>= xLevelFormats;
+            xTOC->getPropertyValue(getPropertyName(PROP_LEVEL_FORMAT)) >>= xLevelFormats;
             uno::Sequence< beans::PropertyValues > aLevel;
             xLevelFormats->getByIndex( 1 ) >>= aLevel;
 
             uno::Sequence< beans::PropertyValues > aNewLevel = lcl_createTOXLevelHyperlinks(
                                                 bHyperlinks, sChapterNoSeparator,
-                                                aLevel, rPropNameSupplier );
+                                                aLevel );
             xLevelFormats->replaceByIndex( 1, uno::makeAny( aNewLevel ) );
         }
     }
@@ -3312,7 +3295,6 @@ void DomainMapper_Impl::handleToc
 
 void DomainMapper_Impl::handleBibliography
     (FieldContextPtr pContext,
-    PropertyNameSupplier& rPropNameSupplier,
     const OUString & sTOCServiceName)
 {
     uno::Reference< beans::XPropertySet > xTOC;
@@ -3324,7 +3306,7 @@ void DomainMapper_Impl::handleBibliography
                 sTOCServiceName),
                 uno::UNO_QUERY_THROW);
     if (xTOC.is())
-        xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ), uno::makeAny(OUString()));
+        xTOC->setPropertyValue(getPropertyName( PROP_TITLE ), uno::makeAny(OUString()));
 
     pContext->SetTOC( xTOC );
     m_bParaHadField = false;
@@ -3335,7 +3317,6 @@ void DomainMapper_Impl::handleBibliography
 
 void DomainMapper_Impl::handleIndex
     (FieldContextPtr pContext,
-    PropertyNameSupplier& rPropNameSupplier,
      uno::Reference< uno::XInterface > & /*xFieldInterface*/,
      uno::Reference< beans::XPropertySet > const& /*xFieldProperties*/,
     const OUString & sTOCServiceName)
@@ -3354,7 +3335,7 @@ void DomainMapper_Impl::handleIndex
                 uno::UNO_QUERY_THROW);
     if (xTOC.is())
     {
-        xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ), uno::makeAny(OUString()));
+        xTOC->setPropertyValue(getPropertyName( PROP_TITLE ), uno::makeAny(OUString()));
 
         if( lcl_FindInCommand( pContext->GetCommand(), 'r', sValue ))
         {
@@ -3368,7 +3349,7 @@ void DomainMapper_Impl::handleIndex
         {
             if(!sValue.isEmpty())
                 sIndexEntryType = sValue ;
-            xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_INDEX_ENTRY_TYPE ), uno::makeAny(sIndexEntryType));
+            xTOC->setPropertyValue(getPropertyName( PROP_INDEX_ENTRY_TYPE ), uno::makeAny(sIndexEntryType));
         }
     }
     pContext->SetTOC( xTOC );
@@ -3381,11 +3362,11 @@ void DomainMapper_Impl::handleIndex
     {
         sValue = sValue.replaceAll("\"", "");
         uno::Reference<text::XTextColumns> xTextColumns;
-        xTOC->getPropertyValue(rPropNameSupplier.GetName( PROP_TEXT_COLUMNS )) >>= xTextColumns;
+        xTOC->getPropertyValue(getPropertyName( PROP_TEXT_COLUMNS )) >>= xTextColumns;
         if (xTextColumns.is())
         {
             xTextColumns->setColumnCount( sValue.toInt32() );
-            xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xTextColumns ) );
+            xTOC->setPropertyValue( getPropertyName( PROP_TEXT_COLUMNS ), uno::makeAny( xTextColumns ) );
         }
     }
 }
@@ -3494,23 +3475,22 @@ void DomainMapper_Impl::CloseFieldCommand()
                         xFieldProperties = uno::Reference< beans::XPropertySet >( xFieldInterface, uno::UNO_QUERY_THROW);
                     }
                 }
-                PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
                 switch( aIt->second.eFieldId )
                 {
                     case FIELD_ADDRESSBLOCK: break;
                     case FIELD_ADVANCE     : break;
                     case FIELD_ASK         :
-                        handleFieldAsk(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties);
+                        handleFieldAsk(pContext, xFieldInterface, xFieldProperties);
                     break;
                     case FIELD_AUTONUM    :
                     case FIELD_AUTONUMLGL :
                     case FIELD_AUTONUMOUT :
-                        handleAutoNum(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties);
+                        handleAutoNum(pContext, xFieldInterface, xFieldProperties);
                     break;
                     case FIELD_AUTHOR       :
                     case FIELD_USERNAME     :
                     case FIELD_USERINITIALS :
-                        handleAuthor(sFirstParam, rPropNameSupplier,
+                        handleAuthor(sFirstParam,
                             xFieldInterface, xFieldProperties,
                             aIt->second.eFieldId);
                     break;
@@ -3521,17 +3501,17 @@ void DomainMapper_Impl::CloseFieldCommand()
                         if (pContext->IsFieldLocked())
                         {
                             xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_IS_FIXED),
+                                getPropertyName(PROP_IS_FIXED),
                                 uno::makeAny( true ));
                             m_bSetDateValue = true;
                         }
                         else
                             xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_IS_FIXED),
+                                getPropertyName(PROP_IS_FIXED),
                                 uno::makeAny( false ));
 
                         xFieldProperties->setPropertyValue(
-                            rPropNameSupplier.GetName(PROP_IS_DATE),
+                            getPropertyName(PROP_IS_DATE),
                             uno::makeAny( true ));
                         SetNumberFormat( pContext->GetCommand(), xFieldProperties );
                     }
@@ -3548,19 +3528,19 @@ void DomainMapper_Impl::CloseFieldCommand()
                         // overwrite the Comments document property
                         // #TODO implement the above too
                         xFieldProperties->setPropertyValue(
-                            rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( false ));
+                            getPropertyName( PROP_IS_FIXED ), uno::makeAny( false ));
                             //PROP_CURRENT_PRESENTATION is set later anyway
                     }
                     break;
                     case FIELD_CREATEDATE  :
                     {
                         xFieldProperties->setPropertyValue(
-                            rPropNameSupplier.GetName( PROP_IS_DATE ), uno::makeAny( true ));
+                            getPropertyName( PROP_IS_DATE ), uno::makeAny( true ));
                         SetNumberFormat( pContext->GetCommand(), xFieldProperties );
                     }
                     break;
                     case FIELD_DOCPROPERTY :
-                        handleDocProperty(pContext, sFirstParam, rPropNameSupplier,
+                        handleDocProperty(pContext, sFirstParam,
                                 xFieldInterface, xFieldProperties);
                     break;
                     case FIELD_DOCVARIABLE  :
@@ -3588,7 +3568,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             xFieldProperties =
                                 uno::Reference< beans::XPropertySet >( xFieldInterface,
                                     uno::UNO_QUERY_THROW);
-                            xFieldProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_CONTENT), uno::makeAny(aResult.sResult));
+                            xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::makeAny(aResult.sResult));
                         }
                         else
                         {
@@ -3627,7 +3607,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         sal_Int32 nIndex = 0;
                         if (xFieldProperties.is())
                             xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName(PROP_HINT), uno::makeAny( pContext->GetCommand().getToken( 1, '\"', nIndex)));
+                                    getPropertyName(PROP_HINT), uno::makeAny( pContext->GetCommand().getToken( 1, '\"', nIndex)));
                     }
                     break;
                     case FIELD_FILENAME:
@@ -3635,7 +3615,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         sal_Int32 nNumberingTypeIndex = pContext->GetCommand().indexOf("\\p");
                         if (xFieldProperties.is())
                             xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName(PROP_FILE_FORMAT),
+                                    getPropertyName(PROP_FILE_FORMAT),
                                     uno::makeAny( nNumberingTypeIndex > 0 ? text::FilenameDisplayFormat::FULL : text::FilenameDisplayFormat::NAME_AND_EXT ));
                     }
                     break;
@@ -3670,7 +3650,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 if ( aIt->second.eFieldId == FIELD_FORMDROPDOWN )
                                     lcl_handleDropdownField( xFieldProperties, pContext->getFFDataHandler() );
                                 else
-                                    lcl_handleTextField( xFieldProperties, pContext->getFFDataHandler(), rPropNameSupplier );
+                                    lcl_handleTextField( xFieldProperties, pContext->getFFDataHandler() );
                             }
                         }
                         break;
@@ -3735,7 +3715,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         if (!sFirstParam.isEmpty())
                         {
                             xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
+                                    getPropertyName( PROP_IS_FIXED ), uno::makeAny( true ));
                             //PROP_CURRENT_PRESENTATION is set later anyway
                         }
                     }
@@ -3748,13 +3728,13 @@ void DomainMapper_Impl::CloseFieldCommand()
                         OUString sMacro = pContext->GetCommand().getToken( 0, ' ', nIndex);
                         if (xFieldProperties.is())
                             xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName(PROP_MACRO_NAME), uno::makeAny( sMacro ));
+                                    getPropertyName(PROP_MACRO_NAME), uno::makeAny( sMacro ));
 
                         //extract quick help text
                         if(xFieldProperties.is() && pContext->GetCommand().getLength() > nIndex + 1)
                         {
                             xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_HINT),
+                                getPropertyName(PROP_HINT),
                                 uno::makeAny( pContext->GetCommand().copy( nIndex )));
                         }
                     }
@@ -3781,10 +3761,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                         if (xFieldProperties.is())
                         {
                             xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+                                    getPropertyName(PROP_NUMBERING_TYPE),
                                     uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
                             xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName(PROP_SUB_TYPE),
+                                    getPropertyName(PROP_SUB_TYPE),
                                     uno::makeAny( text::PageNumberType_CURRENT ));
                         }
 
@@ -3804,10 +3784,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 + sFirstParam))
                         {
                         xFieldProperties->setPropertyValue(
-                            rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_SOURCE),
+                            getPropertyName(PROP_REFERENCE_FIELD_SOURCE),
                             uno::makeAny( sal_Int16(text::ReferenceFieldSource::BOOKMARK)) );
                         xFieldProperties->setPropertyValue(
-                            rPropNameSupplier.GetName(PROP_SOURCE_NAME),
+                            getPropertyName(PROP_SOURCE_NAME),
                             uno::makeAny(sFirstParam) );
                         sal_Int16 nFieldPart = (bPageRef ? text::ReferenceFieldPart::PAGE : text::ReferenceFieldPart::TEXT);
                         OUString sValue;
@@ -3832,16 +3812,16 @@ void DomainMapper_Impl::CloseFieldCommand()
                             nFieldPart = text::ReferenceFieldPart::NUMBER_FULL_CONTEXT;
                         }
                         xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName( PROP_REFERENCE_FIELD_PART ), uno::makeAny( nFieldPart ));
+                                getPropertyName( PROP_REFERENCE_FIELD_PART ), uno::makeAny( nFieldPart ));
                         }
                         else
                         {
                             xFieldInterface = m_xTextFactory->createInstance("com.sun.star.text.TextField.GetExpression");
                             xFieldProperties.set(xFieldInterface, uno::UNO_QUERY);
                             xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_CONTENT),
+                                getPropertyName(PROP_CONTENT),
                                 uno::makeAny(sFirstParam));
-                            xFieldProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
+                            xFieldProperties->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
                         }
                     }
                     break;
@@ -3865,12 +3845,12 @@ void DomainMapper_Impl::CloseFieldCommand()
                                     sSeqName);
 
                         xMaster->setPropertyValue(
-                            rPropNameSupplier.GetName(PROP_SUB_TYPE),
+                            getPropertyName(PROP_SUB_TYPE),
                             uno::makeAny(text::SetVariableType::SEQUENCE));
 
                         // apply the numbering type
                         xFieldProperties->setPropertyValue(
-                            rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+                            getPropertyName(PROP_NUMBERING_TYPE),
                             uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
 
                         // attach the master to the field
@@ -3890,7 +3870,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         // TODO \s isn't handled, but the spec isn't easy to understand without
                         // an example for this one.
                         xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_CONTENT),
+                                getPropertyName(PROP_CONTENT),
                                 uno::makeAny(sFormula));
 
                         // Take care of the numeric formatting definition, default is Arabic
@@ -3898,7 +3878,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         if (nNumberingType == style::NumberingType::PAGE_DESCRIPTOR)
                             nNumberingType = style::NumberingType::ARABIC;
                         xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+                                getPropertyName(PROP_NUMBERING_TYPE),
                                 uno::makeAny(nNumberingType));
                     }
                     break;
@@ -3910,7 +3890,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         if (!sFirstParam.isEmpty())
                         {
                             xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
+                                    getPropertyName( PROP_IS_FIXED ), uno::makeAny( true ));
                             //PROP_CURRENT_PRESENTATION is set later anyway
                         }
                     }
@@ -3922,7 +3902,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         if (pContext->IsFieldLocked())
                         {
                             xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_IS_FIXED),
+                                getPropertyName(PROP_IS_FIXED),
                                 uno::makeAny( true ));
                             m_bSetDateValue = true;
                         }
@@ -3934,7 +3914,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         if (!sFirstParam.isEmpty())
                         {
                             xFieldProperties->setPropertyValue(
-                                    rPropNameSupplier.GetName( PROP_IS_FIXED ), uno::makeAny( true ));
+                                    getPropertyName( PROP_IS_FIXED ), uno::makeAny( true ));
                             //PROP_CURRENT_PRESENTATION is set later anyway
                         }
                     }
@@ -3942,15 +3922,15 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_USERADDRESS  : //todo: user address collects street, city ...
                     break;
                     case FIELD_INDEX:
-                        handleIndex(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties,
+                        handleIndex(pContext, xFieldInterface, xFieldProperties,
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                         break;
                     case FIELD_BIBLIOGRAPHY:
-                        handleBibliography(pContext, rPropNameSupplier,
+                        handleBibliography(pContext,
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                         break;
                     case FIELD_TOC:
-                        handleToc(pContext, rPropNameSupplier, xFieldInterface, xFieldProperties,
+                        handleToc(pContext, xFieldInterface, xFieldProperties,
                                   OUString::createFromAscii(aIt->second.cFieldServiceName));
                     break;
                     case FIELD_XE:
@@ -4011,7 +3991,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 uno::UNO_QUERY_THROW);
                         if (!sFirstParam.isEmpty())
                         {
-                            xTC->setPropertyValue(rPropNameSupplier.GetName(PROP_ALTERNATIVE_TEXT),
+                            xTC->setPropertyValue(getPropertyName(PROP_ALTERNATIVE_TEXT),
                                 uno::makeAny(sFirstParam));
                         }
                         OUString sValue;
@@ -4025,7 +4005,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         {
                             sal_Int32 nLevel = sValue.toInt32();
                             if( !sValue.isEmpty() && nLevel >= 0 && nLevel <= 10 )
-                                xTC->setPropertyValue(rPropNameSupplier.GetName(PROP_LEVEL), uno::makeAny( (sal_Int16)nLevel ));
+                                xTC->setPropertyValue(getPropertyName(PROP_LEVEL), uno::makeAny( (sal_Int16)nLevel ));
                         }
     //                    if( lcl_FindInCommand( pContext->GetCommand(), 'n', sValue ))
     //                    \n Suppress page numbers
@@ -4040,7 +4020,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case  FIELD_NUMPAGES:
                     if (xFieldProperties.is())
                         xFieldProperties->setPropertyValue(
-                            rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+                            getPropertyName(PROP_NUMBERING_TYPE),
                             uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
                     break;
                 }
@@ -4146,7 +4126,6 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
         uno::Reference<text::XTextField> xTextField = pContext->GetTextField();
         try
         {
-            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
             OSL_ENSURE( xTextField.is()
             //||m_xTOC.is() ||m_xTC.is()
             //||m_sHyperlinkURL.getLength()
@@ -4160,7 +4139,7 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                         // user field content has to be set at the field master
                         uno::Reference< text::XDependentTextField > xDependentField( xTextField, uno::UNO_QUERY_THROW );
                         xDependentField->getTextFieldMaster()->setPropertyValue(
-                                rPropNameSupplier.GetName(PROP_CONTENT),
+                                getPropertyName(PROP_CONTENT),
                              uno::makeAny( rResult ));
                     }
                     else if ( m_bSetCitation )
@@ -4233,11 +4212,11 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                         if (bIsSetExpression)
                         {   // this will throw for field types without Content
                             uno::Any aValue(xFieldProperties->getPropertyValue(
-                                    rPropNameSupplier.GetName(PROP_CONTENT)));
+                                    getPropertyName(PROP_CONTENT)));
                             aValue >>= sValue;
                         }
                         xFieldProperties->setPropertyValue(
-                                rPropNameSupplier.GetName(bIsSetExpression && sValue.isEmpty()? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
+                                getPropertyName(bIsSetExpression && sValue.isEmpty()? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
                              uno::makeAny( rResult ));
                     }
                 }
@@ -4383,11 +4362,10 @@ void DomainMapper_Impl::PopFieldContext()
                         }
                         else if(!pContext->GetHyperlinkURL().isEmpty())
                         {
-                            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
                             xCrsr->gotoEnd( true );
 
                             uno::Reference< beans::XPropertySet > xCrsrProperties( xCrsr, uno::UNO_QUERY_THROW );
-                            xCrsrProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_HYPER_LINK_U_R_L), uno::
+                            xCrsrProperties->setPropertyValue(getPropertyName(PROP_HYPER_LINK_U_R_L), uno::
                                                               makeAny(pContext->GetHyperlinkURL()));
 
                             if (m_bStartTOC) {
@@ -4637,33 +4615,30 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_uInt32 nLnc, sa
 {
     if( !m_bLineNumberingSet )
     {
-        const PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-
         try
         {
             uno::Reference< text::XLineNumberingProperties > xLineProperties( m_xTextDocument, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xProperties = xLineProperties->getLineNumberingProperties();
             uno::Any aTrue( uno::makeAny( true ));
-            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_IS_ON                  ), aTrue);
-            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_COUNT_EMPTY_LINES      ), aTrue );
-            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_COUNT_LINES_IN_FRAMES  ), uno::makeAny( false ) );
-            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_INTERVAL               ), uno::makeAny( static_cast< sal_Int16 >( nLnnMod )));
-            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_DISTANCE               ), uno::makeAny( ConversionHelper::convertTwipToMM100(ndxaLnn) ));
-            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_NUMBER_POSITION        ), uno::makeAny( style::LineNumberPosition::LEFT));
-            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_NUMBERING_TYPE         ), uno::makeAny( style::NumberingType::ARABIC));
-            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_RESTART_AT_EACH_PAGE   ), uno::makeAny( nLnc == NS_ooxml::LN_Value_ST_LineNumberRestart_newPage ));
+            xProperties->setPropertyValue( getPropertyName( PROP_IS_ON                  ), aTrue);
+            xProperties->setPropertyValue( getPropertyName( PROP_COUNT_EMPTY_LINES      ), aTrue );
+            xProperties->setPropertyValue( getPropertyName( PROP_COUNT_LINES_IN_FRAMES  ), uno::makeAny( false ) );
+            xProperties->setPropertyValue( getPropertyName( PROP_INTERVAL               ), uno::makeAny( static_cast< sal_Int16 >( nLnnMod )));
+            xProperties->setPropertyValue( getPropertyName( PROP_DISTANCE               ), uno::makeAny( ConversionHelper::convertTwipToMM100(ndxaLnn) ));
+            xProperties->setPropertyValue( getPropertyName( PROP_NUMBER_POSITION        ), uno::makeAny( style::LineNumberPosition::LEFT));
+            xProperties->setPropertyValue( getPropertyName( PROP_NUMBERING_TYPE         ), uno::makeAny( style::NumberingType::ARABIC));
+            xProperties->setPropertyValue( getPropertyName( PROP_RESTART_AT_EACH_PAGE   ), uno::makeAny( nLnc == NS_ooxml::LN_Value_ST_LineNumberRestart_newPage ));
         }
         catch( const uno::Exception& )
         {}
     }
     m_bLineNumberingSet = true;
-    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( GetTextDocument(), uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
     uno::Reference<container::XNameContainer> xStyles;
-    xStyleFamilies->getByName(rPropNameSupplier.GetName( PROP_PARAGRAPH_STYLES )) >>= xStyles;
-    lcl_linenumberingHeaderFooter( rPropNameSupplier, xStyles, "Header", this );
-    lcl_linenumberingHeaderFooter( rPropNameSupplier, xStyles, "Footer", this );
+    xStyleFamilies->getByName(getPropertyName( PROP_PARAGRAPH_STYLES )) >>= xStyles;
+    lcl_linenumberingHeaderFooter( xStyles, "Header", this );
+    lcl_linenumberingHeaderFooter( xStyles, "Footer", this );
 }
 
 
@@ -4866,16 +4841,15 @@ void DomainMapper_Impl::ApplySettingsTable()
         {
             uno::Reference< beans::XPropertySet > xTextDefaults(m_xTextFactory->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY_THROW );
             sal_Int32 nDefTab = m_pSettingsTable->GetDefaultTabStop();
-            xTextDefaults->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_TAB_STOP_DISTANCE ), uno::makeAny(nDefTab) );
+            xTextDefaults->setPropertyValue( getPropertyName( PROP_TAB_STOP_DISTANCE ), uno::makeAny(nDefTab) );
             if (m_pSettingsTable->GetLinkStyles())
             {
-                PropertyNameSupplier& rSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
                 // If linked styles are enabled, set paragraph defaults from Word's default template
-                xTextDefaults->setPropertyValue(rSupplier.GetName(PROP_PARA_BOTTOM_MARGIN), uno::makeAny(ConversionHelper::convertTwipToMM100(200)));
+                xTextDefaults->setPropertyValue(getPropertyName(PROP_PARA_BOTTOM_MARGIN), uno::makeAny(ConversionHelper::convertTwipToMM100(200)));
                 style::LineSpacing aSpacing;
                 aSpacing.Mode = style::LineSpacingMode::PROP;
                 aSpacing.Height = sal_Int16(115);
-                xTextDefaults->setPropertyValue(rSupplier.GetName(PROP_PARA_LINE_SPACING), uno::makeAny(aSpacing));
+                xTextDefaults->setPropertyValue(getPropertyName(PROP_PARA_LINE_SPACING), uno::makeAny(aSpacing));
             }
 
             if (m_pSettingsTable->GetZoomFactor())
@@ -4899,9 +4873,9 @@ void DomainMapper_Impl::ApplySettingsTable()
             if (m_pSettingsTable->GetUsePrinterMetrics())
                 xSettings->setPropertyValue("PrinterIndependentLayout", uno::makeAny(document::PrinterIndependentLayout::DISABLED));
             if( m_pSettingsTable->GetEmbedTrueTypeFonts())
-                xSettings->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_EMBED_FONTS ), uno::makeAny(true) );
+                xSettings->setPropertyValue( getPropertyName( PROP_EMBED_FONTS ), uno::makeAny(true) );
             if( m_pSettingsTable->GetEmbedSystemFonts())
-                xSettings->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_EMBED_SYSTEM_FONTS ), uno::makeAny(true) );
+                xSettings->setPropertyValue( getPropertyName( PROP_EMBED_SYSTEM_FONTS ), uno::makeAny(true) );
             xSettings->setPropertyValue("AddParaTableSpacing", uno::makeAny(m_pSettingsTable->GetDoNotUseHTMLParagraphAutoSpacing()));
         }
         catch(const uno::Exception&)

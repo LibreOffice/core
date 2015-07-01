@@ -107,7 +107,6 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
             {
                 m_xShape.set( xTempShape );
                 uno::Reference< beans::XPropertySet > xShapeProps( xTempShape, uno::UNO_QUERY );
-                PropertyNameSupplier& rNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
                 try
                 {
@@ -118,7 +117,7 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
                     m_aShapeSize = xTempShape->getSize();
                     m_aShapePosition = xTempShape->getPosition();
 
-                    xShapeProps->getPropertyValue( rNameSupplier.GetName( PROP_BITMAP ) ) >>= m_xReplacement;
+                    xShapeProps->getPropertyValue( getPropertyName( PROP_BITMAP ) ) >>= m_xReplacement;
                 }
                 catch( const uno::Exception& e )
                 {
@@ -161,10 +160,9 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
                 try
                 {
                     uno::Reference< beans::XPropertySet > xShapeProps( m_xShape, uno::UNO_QUERY_THROW );
-                    PropertyNameSupplier& rNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
                     xShapeProps->setPropertyValue(
-                        rNameSupplier.GetName( PROP_SURROUND ),
+                        getPropertyName( PROP_SURROUND ),
                         uno::makeAny( m_nWrapMode ) );
                 }
                 catch( const uno::Exception& e )

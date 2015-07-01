@@ -65,32 +65,30 @@ uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() 
     uno::Sequence< beans::PropertyValue > aRedlineProperties(3);
     beans::PropertyValue* pRedlineProperties = aRedlineProperties.getArray();
 
-    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-
     OUString sType;
     switch ( m_pRedlineParams->m_nToken & 0xffff )
     {
         case XML_tableRowInsert:
-            sType = rPropNameSupplier.GetName( PROP_TABLE_ROW_INSERT );
+            sType = getPropertyName( PROP_TABLE_ROW_INSERT );
             break;
         case XML_tableRowDelete:
-            sType = rPropNameSupplier.GetName( PROP_TABLE_ROW_DELETE );
+            sType = getPropertyName( PROP_TABLE_ROW_DELETE );
             break;
         case XML_tableCellInsert:
-            sType = rPropNameSupplier.GetName( PROP_TABLE_CELL_INSERT );
+            sType = getPropertyName( PROP_TABLE_CELL_INSERT );
             break;
         case XML_tableCellDelete:
-            sType = rPropNameSupplier.GetName( PROP_TABLE_CELL_DELETE );
+            sType = getPropertyName( PROP_TABLE_CELL_DELETE );
             break;
     }
 
-    pRedlineProperties[0].Name = rPropNameSupplier.GetName( PROP_REDLINE_TYPE );
+    pRedlineProperties[0].Name = getPropertyName( PROP_REDLINE_TYPE );
     pRedlineProperties[0].Value <<= sType;
-    pRedlineProperties[1].Name = rPropNameSupplier.GetName( PROP_REDLINE_AUTHOR );
+    pRedlineProperties[1].Name = getPropertyName( PROP_REDLINE_AUTHOR );
     pRedlineProperties[1].Value <<= m_pRedlineParams->m_sAuthor;
-    pRedlineProperties[2].Name = rPropNameSupplier.GetName( PROP_REDLINE_DATE_TIME );
+    pRedlineProperties[2].Name = getPropertyName( PROP_REDLINE_DATE_TIME );
     pRedlineProperties[2].Value <<= ConversionHelper::ConvertDateStringToDateTime( m_pRedlineParams->m_sDate );
-    //pRedlineProperties[3].Name = rPropNameSupplier.GetName( PROP_REDLINE_REVERT_PROPERTIES );
+    //pRedlineProperties[3].Name = getPropertyName( PROP_REDLINE_REVERT_PROPERTIES );
     //pRedlineProperties[3].Value <<= pRedline->m_aRevertProperties;
 
     return aRedlineProperties;
