@@ -3960,7 +3960,8 @@ vcl::RenderSettings& Window::GetRenderSettings()
 
 bool Window::SupportsDoubleBuffering() const
 {
-    return mpWindowImpl->mbDoubleBuffering;
+    static bool bDoubleBuffering = getenv("VCL_DOUBLEBUFFERING_FORCE_ENABLE");
+    return mpWindowImpl->mbDoubleBuffering || bDoubleBuffering;
 }
 
 void Window::SetDoubleBuffering(bool bDoubleBuffering)
