@@ -147,8 +147,8 @@ private:
     struct MenuItemData
     {
         OUString maText;
-        bool            mbEnabled:1;
-        bool            mbSeparator:1;
+        bool     mbEnabled:1;
+        bool     mbSeparator:1;
 
         ::boost::shared_ptr<Action> mpAction;
         VclPtr<ScMenuFloatingWindow> mpSubMenuWin;
