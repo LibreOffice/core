@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_a50e95e3",
+        "filename": "icon-themes/breeze/cmd/sc_duplicatepage.png",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-07-01T11:52:05Z",
+      "side": 1,
+      "message": "This icon came out blurred.",
+      "revId": "239df81f2bbe536e598cd9839928abc7ee2f31a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
