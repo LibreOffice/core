@@ -51,10 +51,6 @@ protected:
     static sal_uInt32   GetObjSizeRes( RSHEADER_TYPE * pHT )
     { return ResMgr::GetObjSize( pHT ); }
 
-    // return the remaining size of this Resource's data
-    sal_uInt32 GetRemainSizeRes()
-    { return m_pResMgr->GetRemainSize(); }
-
     // get a 32bit value from Resource data
     static sal_Int32    GetLongRes( void * pLong )
     { return ResMgr::GetLong( pLong ); }

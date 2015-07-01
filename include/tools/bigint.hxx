@@ -36,7 +36,7 @@ private:
     long            nVal;
     unsigned short  nNum[MAX_DIGITS];
     sal_uInt8       nLen        : 5;    // current length
-    bool        bIsNeg      : 1,    // Is Sign negative?
+    bool            bIsNeg      : 1,    // Is Sign negative?
                     bIsBig      : 1,    // sal_True == BigInt
                     bIsSet      : 1;    // Not "Null" (not "not 0")
 
@@ -114,13 +114,11 @@ public:
     operator        sal_uInt16() const;
     operator        sal_uIntPtr() const;
 
-    void            Set( bool bSet ) { bIsSet = bSet; }
+    bool            IsSet() const { return bIsSet; }
+    bool            IsNeg() const;
+    bool            IsZero() const;
+    bool            IsLong() const { return !bIsBig; }
 
-    bool        IsSet() const { return (bool)bIsSet; }
-    bool        IsNeg() const;
-    bool        IsZero() const;
-    bool        IsOne() const;
-    bool        IsLong() const { return !((bool)bIsBig); }
     void            Abs();
 
     BigInt&         operator  =( const BigInt& rVal );
@@ -233,14 +231,6 @@ inline bool BigInt::IsZero() const
         return false;
     else
         return (nVal == 0);
-}
-
-inline bool BigInt::IsOne() const
-{
-    if ( bIsBig )
-        return false;
-    else
-        return (nVal == 1);
 }
 
 inline void BigInt::Abs()

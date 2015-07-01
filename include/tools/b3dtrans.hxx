@@ -118,10 +118,6 @@ public:
 
     void Reset();
 
-    // ObjectTrans
-    const basegfx::B3DHomMatrix& GetObjectTrans() { return maObjectTrans; }
-    const basegfx::B3DHomMatrix& GetInvObjectTrans() { return maInvObjectTrans; }
-
     // Orientation
     void SetOrientation(
         const basegfx::B3DPoint& rVRP = basegfx::B3DPoint(0.0,0.0,1.0),
@@ -135,26 +131,22 @@ public:
     const basegfx::B3DHomMatrix& GetProjection();
 
     // Texture
-    const basegfx::B2DHomMatrix& GetTexture() { return maTexture; }
 
     // aspect ratio accessors and the defined method of keeping defined aspect ratio
     double GetRatio() { return mfRatio; }
     void SetRatio(double fNew=1.0);
-    Base3DRatio GetRatioMode() { return meRatio; }
 
     // Parameters of ViewportTransformation
     void SetDeviceRectangle(double fL=-1.0, double fR=1.0,
                             double fB=-1.0, double fT=1.0,
                             bool bBroadCastChange=true);
     double GetDeviceRectangleWidth() const { return mfRightBound - mfLeftBound; }
-    double GetDeviceRectangleHeight() const { return mfTopBound - mfBottomBound; }
-    double GetFrontClippingPlane() { return mfNearBound; }
-    double GetBackClippingPlane() { return mfFarBound; }
+
     void SetPerspective(bool bNew);
-    bool GetPerspective() { return mbPerspective; }
+
     void SetViewportRectangle(Rectangle& rRect, Rectangle& rVisible);
     void SetViewportRectangle(Rectangle& rRect) { SetViewportRectangle(rRect, rRect); }
-    const Rectangle& GetViewportRectangle() { return maViewportRectangle; }
+
     void CalcViewport();
 
     // Direct accessors for miscellaneous transformations
@@ -235,16 +227,6 @@ public:
         double fFocLen = 35.0, double fBnkAng = 0.0,
         bool bUseFocLen = false);
     virtual ~B3dCamera();
-
-    const basegfx::B3DPoint& GetPosition() const { return aPosition; }
-    const basegfx::B3DVector& GetLookAt() const { return aLookAt; }
-
-    // Focal length in mm
-    double GetFocalLength() const { return fFocalLength; }
-
-    double GetBankAngle() const { return fBankAngle; }
-
-    bool GetUseFocalLength() const { return (bool)bUseFocalLength; }
 
 protected:
     void CalcNewViewportValues();
