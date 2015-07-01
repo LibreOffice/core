@@ -7058,7 +7058,7 @@ then
             my_java_arch=ppc64
             ;;
         powerpc64le)
-            AS_IF([test -d "$JAVA_HOME/jre/lib/ppc64le"], [my_java_arch=ppc64le], [my_java_arch=ppc64])
+            AS_IF([test -d "$JAVA_HOME/jre/lib/ppc64le/libjawt.so"], [my_java_arch=ppc64le], [my_java_arch=ppc64])
             JAVA_ARCH=$my_java_arch
             ;;
         x86_64)
