@@ -10,15 +10,15 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLMANAGER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLMANAGER_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XManager.hpp>
 
 namespace avmedia { namespace ogl {
 
-class OGLManager : public ::cppu::WeakImplHelper2 < com::sun::star::media::XManager,
-                                                    com::sun::star::lang::XServiceInfo >
+class OGLManager : public ::cppu::WeakImplHelper< com::sun::star::media::XManager,
+                                                  com::sun::star::lang::XServiceInfo >
 {
 public:
 

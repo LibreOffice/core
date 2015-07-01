@@ -21,7 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_WIN_FRAMEGRABBER_HXX
 
 #include "wincommon.hxx"
-
+#include <cppuhelper/implbase.hxx>
 #include "com/sun/star/media/XFrameGrabber.hpp"
 
 struct IMediaDet;
@@ -32,8 +32,8 @@ namespace avmedia { namespace win {
 // - FrameGrabber -
 
 
-class FrameGrabber : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XFrameGrabber,
-                                                      ::com::sun::star::lang::XServiceInfo >
+class FrameGrabber : public ::cppu::WeakImplHelper< ::com::sun::star::media::XFrameGrabber,
+                                                    ::com::sun::star::lang::XServiceInfo >
 {
 public:
 

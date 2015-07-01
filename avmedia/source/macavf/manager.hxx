@@ -21,6 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_MACAVF_MANAGER_HXX
 
 #include "macavfcommon.hxx"
+#include <cppuhelper/implbase.hxx>
 
 #include "com/sun/star/media/XManager.hdl"
 
@@ -30,8 +31,8 @@
 
 namespace avmedia { namespace macavf {
 
-class Manager : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XManager,
-                                                 ::com::sun::star::lang::XServiceInfo >
+class Manager : public ::cppu::WeakImplHelper< ::com::sun::star::media::XManager,
+                                               ::com::sun::star::lang::XServiceInfo >
 {
 public:
 

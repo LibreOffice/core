@@ -21,8 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_VLC_VLCPLAYER_HXX
 
 #include "vlccommon.hxx"
-#include <boost/shared_ptr.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/media/XPlayer.hpp>
 #include <cppuhelper/basemutex.hxx>
 
@@ -34,8 +33,8 @@
 namespace avmedia {
 namespace vlc {
 
-typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
-                                          ::com::sun::star::lang::XServiceInfo > VLC_Base;
+typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::media::XPlayer,
+                                         ::com::sun::star::lang::XServiceInfo > VLC_Base;
 
 class VLCPlayer : public ::cppu::BaseMutex,
                   public VLC_Base

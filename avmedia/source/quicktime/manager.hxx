@@ -21,6 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_QUICKTIME_MANAGER_HXX
 
 #include "quicktimecommon.hxx"
+#include <cppuhelper/implbase.hxx>
 
 #include "com/sun/star/media/XManager.hpp"
 
@@ -30,8 +31,8 @@
 
 namespace avmedia { namespace quicktime {
 
-class Manager : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XManager,
-                                                 ::com::sun::star::lang::XServiceInfo >
+class Manager : public ::cppu::WeakImplHelper< ::com::sun::star::media::XManager,
+                                               ::com::sun::star::lang::XServiceInfo >
 {
 public:
 

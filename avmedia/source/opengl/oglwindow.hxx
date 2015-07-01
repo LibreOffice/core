@@ -12,7 +12,7 @@
 
 #include "oglplayer.hxx"
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XPlayerWindow.hpp>
 #include <com/sun/star/media/ZoomLevel.hpp>
@@ -24,8 +24,8 @@
 
 namespace avmedia { namespace ogl {
 
-class OGLWindow : public ::cppu::WeakImplHelper2 < com::sun::star::media::XPlayerWindow,
-                                                   com::sun::star::lang::XServiceInfo >
+class OGLWindow : public ::cppu::WeakImplHelper< com::sun::star::media::XPlayerWindow,
+                                                 com::sun::star::lang::XServiceInfo >
 {
 public:
     OGLWindow( libgltf::glTFHandle& rHandle, OpenGLContext& rContext, vcl::Window& rEventHandlerParent );

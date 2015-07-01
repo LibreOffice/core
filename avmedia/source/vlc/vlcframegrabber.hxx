@@ -22,15 +22,15 @@
 
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/media/XFrameGrabber.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "vlccommon.hxx"
 #include "wrapper/Wrapper.hxx"
 
 namespace avmedia {
 namespace vlc {
 
-typedef ::cppu::WeakImplHelper2< ::com::sun::star::media::XFrameGrabber,
-                                 ::com::sun::star::lang::XServiceInfo > FrameGrabber_BASE;
+typedef ::cppu::WeakImplHelper< ::com::sun::star::media::XFrameGrabber,
+                                ::com::sun::star::lang::XServiceInfo > FrameGrabber_BASE;
 
 class VLCFrameGrabber : public FrameGrabber_BASE
 {

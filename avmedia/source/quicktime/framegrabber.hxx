@@ -21,6 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_QUICKTIME_FRAMEGRABBER_HXX
 
 #include "quicktimecommon.hxx"
+#include <cppuhelper/implbase.hxx>
 
 #include "com/sun/star/media/XFrameGrabber.hpp"
 
@@ -30,8 +31,8 @@ namespace avmedia { namespace quicktime {
 // - FrameGrabber -
 
 
-class FrameGrabber : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XFrameGrabber,
-                                                      ::com::sun::star::lang::XServiceInfo >
+class FrameGrabber : public ::cppu::WeakImplHelper< ::com::sun::star::media::XFrameGrabber,
+                                                    ::com::sun::star::lang::XServiceInfo >
 {
 public:
 

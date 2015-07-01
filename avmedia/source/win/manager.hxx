@@ -21,7 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_WIN_MANAGER_HXX
 
 #include "wincommon.hxx"
-
+#include <cppuhelper/implbase.hxx>
 #include "com/sun/star/media/XManager.hpp"
 
 
@@ -30,8 +30,8 @@
 
 namespace avmedia { namespace win {
 
-class Manager : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XManager,
-                                                 ::com::sun::star::lang::XServiceInfo >
+class Manager : public ::cppu::WeakImplHelper< ::com::sun::star::media::XManager,
+                                               ::com::sun::star::lang::XServiceInfo >
 {
 public:
 

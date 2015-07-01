@@ -21,7 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_QUICKTIME_PLAYER_HXX
 
 #include "quicktimecommon.hxx"
-
+#include <cppuhelper/implbase.hxx>
 #include "com/sun/star/media/XPlayer.hpp"
 
 namespace avmedia { namespace quicktime {
@@ -32,8 +32,8 @@ namespace avmedia { namespace quicktime {
 
 */
 
-class Player : public ::cppu::WeakImplHelper2< ::com::sun::star::media::XPlayer,
-                                               ::com::sun::star::lang::XServiceInfo >
+class Player : public ::cppu::WeakImplHelper< ::com::sun::star::media::XPlayer,
+                                              ::com::sun::star::lang::XServiceInfo >
 {
 public:
 

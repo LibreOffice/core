@@ -31,8 +31,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/factory.hxx>
 

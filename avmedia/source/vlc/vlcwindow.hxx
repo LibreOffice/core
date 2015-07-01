@@ -20,13 +20,14 @@
 #define INCLUDED_AVMEDIA_SOURCE_VLC_VLCWINDOW_HXX
 
 #include "vlccommon.hxx"
+#include <cppuhelper/implbase.hxx>
 
 namespace avmedia {
 namespace vlc {
 class VLCPlayer;
 
-class VLCWindow : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPlayerWindow,
-                                                   ::com::sun::star::lang::XServiceInfo >
+class VLCWindow : public ::cppu::WeakImplHelper< ::com::sun::star::media::XPlayerWindow,
+                                                 ::com::sun::star::lang::XServiceInfo >
 {
     VLCPlayer& mPlayer;
     const intptr_t mPrevWinID;
