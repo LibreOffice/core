@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_folders.h>
-
 #include <sal/config.h>
 
 #include <algorithm>
@@ -38,6 +36,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <config_folders.h>
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -64,7 +63,8 @@
 #include "xcdparser.hxx"
 #include "xcuparser.hxx"
 #include "xcsparser.hxx"
-#ifdef WNT
+
+#if defined WNT
 #include "winreg.hxx"
 #endif
 
@@ -490,16 +490,15 @@ Components::Components(
         }
         OUString type(conf.copy(i, c - i));
         OUString url(conf.copy(c + 1, n - c - 1));
-        if ( type == "xcsxcu" ) {
+        if (type == "xcsxcu") {
             sal_uInt32 nStartTime = osl_getGlobalTimer();
             parseXcsXcuLayer(layer, url);
             SAL_INFO("configmgr", "parseXcsXcuLayer() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
             layer += 2; //TODO: overflow
-        } else if ( type == "bundledext" )
-        {
+        } else if (type == "bundledext") {
             parseXcsXcuIniLayer(layer, url, false);
             layer += 2; //TODO: overflow
-        } else if ( type == "sharedext" ) {
+        } else if (type == "sharedext") {
             if (sharedExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: multiple \"sharedext\" layers");
@@ -507,7 +506,7 @@ Components::Components(
             sharedExtensionLayer_ = layer;
             parseXcsXcuIniLayer(layer, url, true);
             layer += 2; //TODO: overflow
-        } else if ( type == "userext" ) {
+        } else if (type == "userext") {
             if (userExtensionLayer_ != -1) {
                 throw css::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: multiple \"userext\" layers");
@@ -515,40 +514,35 @@ Components::Components(
             userExtensionLayer_ = layer;
             parseXcsXcuIniLayer(layer, url, true);
             layer += 2; //TODO: overflow
-        } else if ( type == "module" ) {
+        } else if (type == "module") {
             parseModuleLayer(layer, url);
             ++layer; //TODO: overflow
-        } else if ( type == "res" ) {
+        } else if (type == "res") {
             sal_uInt32 nStartTime = osl_getGlobalTimer();
             parseResLayer(layer, url);
             SAL_INFO("configmgr", "parseResLayer() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
             ++layer; //TODO: overflow
-        } else if ( type == "user" ) {
+#if defined WNT
+        } else if (type == "winreg") {
+            if (!url.isEmpty()) {
+                throw css::uno::RuntimeException(
+                    "CONFIGURATION_LAYERS: non-empty \"winreg\" URL");
+            }
+            OUString aTempFileURL;
+            if (dumpWindowsRegistry(&aTempFileURL)) {
+                parseFileLeniently(&parseXcuFile, aTempFileURL, layer, 0, 0, 0);
+                osl::File::remove(aTempFileURL);
+            }
+            ++layer; //TODO: overflow
+#endif
+        } else if (type == "user") {
             if (url.isEmpty()) {
                 throw css::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: empty \"user\" URL");
             }
             modificationFileUrl_ = url;
             parseModificationLayer(url);
-        }
-#ifdef WNT
-        else if ( type == "winreg" )
-        {
-            if (!url.isEmpty()) {
-                SAL_WARN(
-                    "configmgr",
-                    "winreg URL is not empty, URL handling is not implemented for winreg");
-            }
-            OUString aTempFileURL;
-            if ( dumpWindowsRegistry(&aTempFileURL) )
-            {
-                parseFileLeniently(&parseXcuFile, aTempFileURL, layer, 0, 0, 0);
-                layer++;
-                osl::File::remove(aTempFileURL);
-            }
-        }
-#endif
-        else {
+        } else {
             throw css::uno::RuntimeException(
                 "CONFIGURATION_LAYERS: unknown layer type \"" + type + "\"");
         }
