@@ -26,57 +26,12 @@
 
 OutlinerParaObject *NonOverflowingText::ToParaObject(Outliner *pOutliner) const
 {
-
-    if (mpContentTextObj)
-    {
-        OutlinerParaObject *pPObj = new OutlinerParaObject(*mpContentTextObj);
-        pPObj->SetOutlinerMode(pOutliner->GetOutlinerMode());
-        return pPObj;
-    }
-
-    // XXX: Possibility: let the NonUnderflowingParaObject just be a TextEditObject created by the Outliner (by means of a selection).
-
-    /* The overflow in SdrTextObj can occur:
-     * (a) exactly at the end of a paragraph, or
-     * (b) in the middle of a paragraph.
-     *
-     * In case (a), a NonUnderflowingText object contains only the
-     * paragraphs occurred before the overflow.
-     * In case (b), a NonUnderflowingText contains also the text of the
-     * paragraph that was cut by overflow.
-    */
-
-    bool bOverflowOccurredAtEndOfPara =
-        (mPreOverflowingTxt == "") &&
-        (mpHeadParas != NULL);
-
-    if (bOverflowOccurredAtEndOfPara) {
-        // Case (a) above:
-        // Only (possibly empty) paragraphs before overflowing one.
-        pOutliner->SetText(*mpHeadParas);
-    } else {
-        // Case (b): some text is non included in any OutlinerParaObject.
-        // We have to include the non-overflowing lines from the overfl. para
-
-        // first make a ParaObject for the strings
-        pOutliner->SetToEmptyText();
-        Paragraph *pTmpPara0 = pOutliner->GetParagraph(0);
-        pOutliner->SetText(mPreOverflowingTxt, pTmpPara0);
-        OutlinerParaObject *pPObj = pOutliner->CreateParaObject();
-
-        if (mpHeadParas != NULL) {
-            pOutliner->SetText(*mpHeadParas);
-            pOutliner->AddText(*pPObj);
-         } else  if (mPreOverflowingTxt != "") { // only preoverflowing txt
-            pOutliner->SetText(*pPObj);
-        } else { // no text // This case is redundant but it doesn't hurt for now
-            pOutliner->SetToEmptyText();
-        }
-    }
-
-     return pOutliner->CreateParaObject();
+    OutlinerParaObject *pPObj = new OutlinerParaObject(*mpContentTextObj);
+    pPObj->SetOutlinerMode(pOutliner->GetOutlinerMode());
+    return pPObj;
 }
 
+/*
 OUString OverflowingText::GetEndingLines() const
 {
     // If the only overflowing part is some lines in a paragraph,
@@ -91,6 +46,7 @@ OUString OverflowingText::GetHeadingLines() const
 {
     return mHeadTxt;
 }
+* */
 
 OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
 {
@@ -99,7 +55,7 @@ OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, Ou
         return NULL;
     }
 
-    // Simply Juxtaposing; no within para-merging
+    // Simply Juxtaposing; no within-para merging
     OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
     pOutl->SetText(*pOverflowingPObj);
     pOutl->AddText(*pNextPObj);

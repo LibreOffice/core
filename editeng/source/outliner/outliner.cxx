@@ -2090,7 +2090,6 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
     // last non-overflowing paragraph is before the first overflowing one
     sal_Int32 nCount = pEditEngine->GetOverflowingParaNum();
     sal_Int32 nOverflowLine = pEditEngine->GetOverflowingLineNum();
-    OUString aPreOverflowingTxt("");
 
     // Defensive check: oveflowing para index beyond actual # of paragraphs?
     if ( nCount > GetParagraphCount()-1) {
@@ -2101,20 +2100,23 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         return NULL;
     }
 
-    // Only overflowing text, i.e. 1st line of 1st paragraph overflowing
-    if ( nCount == 0 && nOverflowLine == 0)
-    {
-        OutlinerParaObject* pEmptyPObj = GetEmptyParaObject();
-        return new NonOverflowingText(pEmptyPObj, "");
+     if (nCount < 0)
+     {
+        fprintf(stderr,
+                "[Overflowing] No Overflowing text but GetNonOverflowinText called?!\n");
+        return NULL;
+     }
 
-    } else if (nCount < 0) { // No overflowing Text: all para-s included
-        nCount = GetParagraphCount();
-        // aPreOverflowingText == ""
+    // Only overflowing text, i.e. 1st line of 1st paragraph overflowing
+    bool bItAllOverflew = nCount == 0 && nOverflowLine == 0;
+    if ( bItAllOverflew )
+    {
+        ESelection aEmptySel(0,0,0,0);
+        EditTextObject *pTObj = pEditEngine->CreateTextObject(aEmptySel);
+        return new NonOverflowingText(pTObj);
     } else { // Get the lines that of the overflowing para fit in the box
 
-        // XXX: Is there a proper method to join lines in a single string?
         sal_Int32 nOverflowingPara = nCount;
-        OUString aWholeTxtHeadPara = GetText(GetParagraph(nOverflowingPara));
         sal_uInt32 nLen = 0;
 
         for ( sal_Int32 nLine = 0;
@@ -2130,7 +2132,7 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         ESelection aNonOverflowingTextSelection;
         if (nLen == 0) {
             // XXX: What happens inside this case might be dependent on the joining paragraps or not-thingy
-            // Overflowing paragraph is empty: it's not "Non-Overflowing" text then
+            // Overflowing paragraph is empty or first line overflowing: it's not "Non-Overflowing" text then
             sal_Int32 nParaLen = GetText(GetParagraph(nOverflowingPara-1)).getLength();
             aNonOverflowingTextSelection =
                 ESelection(nStartPara, nStartPos, nOverflowingPara-1, nParaLen);
@@ -2141,21 +2143,7 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         }
         EditTextObject *pTObj = pEditEngine->CreateTextObject(aNonOverflowingTextSelection);
         return new NonOverflowingText(pTObj);
-
-
-        /*  END  Experiment with ESelection and EditTextobject */
-
-        // XXX: Any separator to be included?
-        aPreOverflowingTxt = aWholeTxtHeadPara.copy(0, nLen);
     }
-
-    OutlinerParaObject *pHeadParas;
-    if (nCount == 0) // No text to save expect for the one in the overflowing para (i.e. aPreOverflowingTxt)
-        pHeadParas = NULL;
-    else
-        pHeadParas = CreateParaObject(0, nCount);
-
-    return new NonOverflowingText(pHeadParas, aPreOverflowingTxt);
 }
 
 OutlinerParaObject *Outliner::GetEmptyParaObject() const
@@ -2183,19 +2171,10 @@ OverflowingText *Outliner::GetOverflowingText() const
         return NULL;
     }
 
-    OUString aHeadTxt, aTailTxt("");
-    OutlinerParaObject *pMidParas = NULL;
 
 
     sal_Int32 nHeadPara = pEditEngine->GetOverflowingParaNum();
     sal_uInt32 nParaCount = GetParagraphCount();
-    sal_Int32 nTailPara = nParaCount-1;
-    sal_Int32 nMidParas = nTailPara-nHeadPara-1;
-
-    // Set the head text
-    // XXX: Is there a proper method to join lines in a single string?
-    OUString aWholeTxtHeadPara = GetText(GetParagraph(nHeadPara));
-
 
     sal_uInt32 nLen = 0;
     for ( sal_Int32 nLine = 0;
@@ -2217,23 +2196,6 @@ OverflowingText *Outliner::GetOverflowingText() const
 
     /* END experiment ESel */
 
-    // XXX: Any separator to be included?
-    aHeadTxt = aWholeTxtHeadPara.copy(nLen);
-
-
-    // If there is at least one more paragraph overflowing
-    if (nTailPara > nHeadPara) {
-        // Get text of last paragraph
-        aTailTxt = GetText(GetParagraph(nTailPara));
-    }
-
-    if (nMidParas > 0) {
-        // Get everything between first and last overflowing para
-        pMidParas = CreateParaObject(nHeadPara+1, nMidParas);
-    }
-
-    // XXX: Who deletes this?
-    return new OverflowingText(aHeadTxt, pMidParas, aTailTxt);
 }
 
 void Outliner::ClearOverflowingParaNum()

@@ -35,20 +35,7 @@ class OverflowingText
 {
 
 public:
-        OUString mHeadTxt;
-        const OutlinerParaObject *mpMidParas;
-        OUString mTailTxt;
-        // NOTE: mpMidParas and mTailTxt might be empty
-
         // Constructor
-        OverflowingText(
-            const OUString &headTxt,
-            const OutlinerParaObject *pMidParas,
-            const OUString &tailTxt)
-                : mHeadTxt(headTxt),
-                  mpMidParas(pMidParas),
-                  mTailTxt(tailTxt)
-                { }
 
         OverflowingText(EditTextObject *pTObj) : mpContentTextObj(pTObj)
         {
@@ -56,9 +43,9 @@ public:
 
         OutlinerParaObject *GetJuxtaposedParaObject(Outliner *, OutlinerParaObject *);
 
-        OUString GetHeadingLines() const;
-        OUString GetEndingLines() const;
-        bool HasOtherParas() const { return !(mTailTxt == "" && mpMidParas == NULL); }
+        //OUString GetHeadingLines() const;
+        //OUString GetEndingLines() const;
+        //bool HasOtherParas() const { return !(mTailTxt == "" && mpMidParas == NULL); }
 
 private:
     const EditTextObject *mpContentTextObj;
@@ -70,15 +57,6 @@ class NonOverflowingText {
         // NOTE: mPreOverflowingTxt might be empty
 
         // Constructor
-        NonOverflowingText(const OutlinerParaObject *pHeadParas,
-                           const OUString &preOverflowingTxt)
-        : mpHeadParas(pHeadParas),
-          mPreOverflowingTxt(preOverflowingTxt), mpContentTextObj(NULL)
-        {
-            if (pHeadParas == NULL) // Redundant line for debugging
-                DBG_ASSERT( pHeadParas != NULL, "pHeadParas is null?! All text is overflowing then" );
-        }
-
         NonOverflowingText(const EditTextObject *pTObj)
         : mpContentTextObj(pTObj)
         { }
@@ -86,9 +64,6 @@ class NonOverflowingText {
         OutlinerParaObject *ToParaObject(Outliner *) const;
 
     private:
-        const OutlinerParaObject *mpHeadParas;
-        OUString mPreOverflowingTxt;
-
         const EditTextObject *mpContentTextObj;
 };
 
