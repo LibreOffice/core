@@ -213,11 +213,6 @@ public:
 
     sal_uIntPtr GetHeaderCount() const { return m_aHeaderList.size(); }
 
-    OUString GetHeaderName (sal_uIntPtr nIndex) const
-    {
-        return GetHeaderName_Impl (nIndex, RTL_TEXTENCODING_ASCII_US);
-    }
-
     OUString GetHeaderValue (sal_uIntPtr nIndex) const
     {
         return GetHeaderValue_Impl (nIndex, INetMIME::HEADER_FIELD_TEXT);
@@ -240,149 +235,17 @@ public:
     sal_uIntPtr GetDocumentSize() const { return m_nDocSize; }
     void  SetDocumentSize (sal_uIntPtr nSize) { m_nDocSize = nSize; }
 
-    const OUString& GetDocumentName() const { return m_aDocName; }
-    void  SetDocumentName (const OUString& rName) { m_aDocName = rName; }
-
     SvLockBytes* GetDocumentLB() const { return m_xDocLB; }
     void         SetDocumentLB (SvLockBytes *pDocLB) { m_xDocLB = pDocLB; }
 
     static bool ParseDateField (
         const OUString& rDateField, DateTime& rDateTime);
 
-    bool HeaderParsed() const { return bHeaderParsed; }
-
     static INetMIMEMessage* CreateMessage (
         const INetMIMEMessage& rMsg);
 
-    // Header fields.
-
-    OUString GetBCC() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::BCC),
-            INetMIME::HEADER_FIELD_ADDRESS);
-    }
-
-    OUString GetCC() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::CC),
-            INetMIME::HEADER_FIELD_ADDRESS);
-    }
-
-    OUString GetComments() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::COMMENTS),
-            INetMIME::HEADER_FIELD_TEXT);
-    }
-
-    OUString GetDate() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::DATE),
-            INetMIME::HEADER_FIELD_STRUCTURED);
-    }
-
-    OUString GetFrom() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::FROM),
-            INetMIME::HEADER_FIELD_ADDRESS);
-    }
-
-    OUString GetInReplyTo() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::REPLY_TO),
-            INetMIME::HEADER_FIELD_ADDRESS); // ??? MESSAGE_ID ???
-    }
-
-    OUString GetKeywords() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::KEYWORDS),
-            INetMIME::HEADER_FIELD_PHRASE);
-    }
-
-    OUString GetMessageID() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::MESSAGE_ID),
-            INetMIME::HEADER_FIELD_MESSAGE_ID);
-    }
-
-    OUString GetReferences() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::REFERENCES),
-            INetMIME::HEADER_FIELD_ADDRESS);
-    }
-
-    OUString GetReplyTo() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::REPLY_TO),
-            INetMIME::HEADER_FIELD_ADDRESS);
-    }
-
-    OUString GetReturnPath() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::RETURN_PATH),
-            INetMIME::HEADER_FIELD_ADDRESS);
-    }
-
-    OUString GetReturnReceiptTo() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::RETURN_RECEIPT_TO),
-            INetMIME::HEADER_FIELD_ADDRESS);
-    }
-
-    OUString GetSender() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::SENDER),
-            INetMIME::HEADER_FIELD_ADDRESS);
-    }
-
-    OUString GetSubject() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::SUBJECT),
-            INetMIME::HEADER_FIELD_TEXT);
-    }
-
-    OUString GetTo() const
-    {
-        return GetHeaderValue_Impl (
-            m_nRFC822Index.at(InetMessageField::TO),
-            INetMIME::HEADER_FIELD_TEXT);
-    }
-
     void     SetMIMEVersion (const OUString& rVersion);
-    OUString GetMIMEVersion() const
-    {
-        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::VERSION));
-    }
-
-    OUString GetContentDescription() const
-    {
-        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::CONTENT_DESCRIPTION));
-    }
-
     void     SetContentDisposition (const OUString& rDisposition);
-    OUString GetContentDisposition() const
-    {
-        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::CONTENT_DISPOSITION));
-    }
-
-    OUString GetContentID() const
-    {
-        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::CONTENT_ID));
-    }
-
     void     SetContentType (const OUString& rType);
     OUString GetContentType() const
     {

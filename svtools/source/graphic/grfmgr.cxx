@@ -363,21 +363,6 @@ bool GraphicObject::operator==( const GraphicObject& rGraphicObj ) const
             ( rGraphicObj.GetLink() == GetLink() ) );
 }
 
-void GraphicObject::Load( SvStream& rIStm )
-{
-    ReadGraphicObject( rIStm, *this );
-}
-
-void GraphicObject::Save( SvStream& rOStm )
-{
-    WriteGraphicObject( rOStm, *this );
-}
-
-void GraphicObject::Assign( const SvDataCopyStream& rCopyStream )
-{
-    *this = static_cast<const GraphicObject&>(rCopyStream);
-}
-
 OString GraphicObject::GetUniqueID() const
 {
     if ( !IsInSwapIn() && IsEPS() )

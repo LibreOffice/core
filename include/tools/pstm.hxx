@@ -144,7 +144,6 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
     SvPersistUIdx       aPUIdx;
     sal_uIntPtr         nStartIdx;
     const SvPersistStream * pRefStm;
-    sal_uInt32          nFlags;
 
     virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
     virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize ) SAL_OVERRIDE;
@@ -156,8 +155,6 @@ protected:
     sal_uInt32          ReadObj( SvPersistBase * & rpObj, bool bRegister );
 
 public:
-    bool                IsStreamed( SvPersistBase * pObj ) const
-                            { return 0 != GetIndex( pObj ); }
     virtual void        ResetError() SAL_OVERRIDE;
 
                         SvPersistStream( SvClassManager &, SvStream * pStream,
@@ -169,9 +166,6 @@ public:
 
     SvPersistBase *     GetObject( sal_uIntPtr nIdx ) const;
     sal_uIntPtr         GetIndex( SvPersistBase * ) const;
-
-    void                SetContextFlags( sal_uInt32 n ) { nFlags = n; }
-    sal_uInt32          GetContextFlags() const { return nFlags; }
 
     static void         WriteCompressed( SvStream & rStm, sal_uInt32 nVal );
     static sal_uInt32   ReadCompressed( SvStream & rStm );

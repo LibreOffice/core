@@ -160,10 +160,6 @@ public:
     virtual ErrCode FillAppend(const void * pBuffer, sal_Size nCount,
                                sal_Size * pWritten) = 0;
 
-    virtual sal_uInt64 Tell() const = 0;
-
-    virtual sal_uInt64 Seek(sal_uInt64 nPos) = 0;
-
     virtual void    Terminate() = 0;
 };
 
@@ -188,10 +184,6 @@ public:
 
     virtual ErrCode FillAppend(const void * pBuffer, sal_Size nCount,
                                sal_Size * pWritten) SAL_OVERRIDE;
-
-    virtual sal_uInt64 Tell() const SAL_OVERRIDE { return m_nSize; }
-
-    virtual sal_uInt64 Seek(sal_uInt64 nPos) SAL_OVERRIDE;
 
     virtual void    Terminate() SAL_OVERRIDE { m_bTerminated = true; }
 };
@@ -287,7 +279,6 @@ public:
     SvStreamCompressFlags GetCompressMode() const { return nCompressMode; }
 
     void SetCryptMaskKey(const OString& rCryptMaskKey);
-    const OString& GetCryptMaskKey() const { return m_aCryptMaskKey; }
 
     void            SetStreamCharSet( rtl_TextEncoding eCharSet )
                         { eStreamCharSet = eCharSet; }
@@ -449,7 +440,6 @@ public:
     sal_uInt16      GetBufferSize() const { return nBufSize; }
 
     void            RefreshBuffer();
-    SvStream&       PutBack( char aCh );
 
     bool            IsWritable() const { return bIsWritable; }
     StreamMode      GetStreamMode() const { return eStreamMode; }
@@ -664,7 +654,6 @@ public:
     void            Open( const OUString& rFileName, StreamMode eOpenMode );
     void            Close();
     bool            IsOpen() const { return bIsOpen; }
-    bool            IsLocked() const { return ( nLockCounter!=0 ); }
 
     const OUString& GetFileName() const { return aFilename; }
 };
@@ -675,8 +664,6 @@ class TOOLS_DLLPUBLIC SvMemoryStream : public SvStream
 {
     SvMemoryStream (const SvMemoryStream&) SAL_DELETED_FUNCTION;
     SvMemoryStream & operator= (const SvMemoryStream&) SAL_DELETED_FUNCTION;
-
-    sal_Size        GetBufSize() const { return nSize; }
 
 protected:
     sal_Size        nSize;
@@ -728,9 +715,7 @@ public:
                                bool bOwnsData=true, sal_Size nEOF=0 );
 
     void            ObjectOwnsMemory( bool bOwn ) { bOwnsData = bOwn; }
-    bool            IsObjectMemoryOwner() { return bOwnsData; }
     void            SetResizeOffset( sal_Size nNewResize ) { nResize = nNewResize; }
-    sal_Size        GetResizeOffset() const { return nResize; }
     virtual sal_uInt64 remainingSize() SAL_OVERRIDE { return GetEndOfData() - Tell(); }
 };
 
@@ -757,9 +742,6 @@ class TOOLS_DLLPUBLIC SvDataCopyStream
 public:
     // repeated execution of Load or Assign is allowed
     virtual         ~SvDataCopyStream(){}
-    virtual void    Load( SvStream & ) = 0;
-    virtual void    Save( SvStream & ) = 0;
-    virtual void    Assign( const SvDataCopyStream & );
 };
 
 #endif

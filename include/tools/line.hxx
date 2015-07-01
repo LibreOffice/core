@@ -38,11 +38,6 @@ public:
     void            SetEnd( const Point& rEndPt ) { maEnd = rEndPt; }
     const Point&    GetEnd() const { return maEnd; }
 
-    long            Left() const { return ( maStart.X() < maEnd.X() ) ? maStart.X() : maEnd.X(); }
-    long            Top() const { return ( maStart.Y() < maEnd.Y() ) ? maStart.Y() : maEnd.Y(); }
-    long            Right() const { return ( maStart.X() > maEnd.X() ) ? maStart.X() : maEnd.X(); }
-    long            Bottom() const { return ( maStart.Y() > maEnd.Y() ) ? maStart.Y() : maEnd.Y(); }
-
     double          GetLength() const;
 
     bool            Intersection( const Line& rLine, double& rIntersectionX, double& rIntersectionY ) const;

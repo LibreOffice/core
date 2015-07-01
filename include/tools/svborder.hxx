@@ -75,11 +75,6 @@ public:
                 Bottom() -= rBorder.Bottom();
                 return *this;
             }
-    bool    IsInside( const SvBorder & rInside )
-            {
-                return nTop >= rInside.nTop && nRight >= rInside.nRight &&
-                       nBottom >= rInside.nBottom && nLeft >= rInside.nLeft;
-            }
     long &  Top()    { return nTop; }
     long &  Right()  { return nRight; }
     long &  Bottom() { return nBottom; }

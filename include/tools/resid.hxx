@@ -66,7 +66,6 @@ public:
         ImplInit( nId, rMgr, NULL );
     }
 
-    sal_uInt32 GetWinBits() const { return m_nWinBits; }
     void SetWinBits( sal_uInt32 nBits ) const { m_nWinBits = nBits; }
 
     RESOURCE_TYPE   GetRT() const { return m_nRT; }
@@ -97,18 +96,6 @@ public:
     RESOURCE_TYPE   GetRT2() const
     {
         return (RSC_NOTYPE == m_nRT2) ? m_nRT : m_nRT2;
-    }
-
-    /** Set the superceding type. Ask spcifically for it with GetRT2()
-
-    SetRT2() may only be called if no derived class calls SetRT in its
-    Resource constructor.
-    */
-    const ResId &   SetRT2( RESOURCE_TYPE nTyp ) const
-    {
-        if( RSC_NOTYPE == m_nRT2 )
-            m_nRT2 = nTyp;
-        return *this;
     }
 
     ResMgr *        GetResMgr() const { return m_pResMgr; }

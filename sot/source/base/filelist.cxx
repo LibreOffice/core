@@ -56,27 +56,6 @@ FileList& FileList::operator=( const FileList& rFileList )
 
 /******************************************************************************
 |*
-|*  virtuelle SvData-Methoden
-|*
-\******************************************************************************/
-
-void FileList::Load( SvStream& rIStm )
-{
-    ReadFileList( rIStm, *this );
-}
-
-void FileList::Save( SvStream& rOStm )
-{
-    WriteFileList( rOStm, *this );
-}
-
-void FileList::Assign( const SvDataCopyStream& rCopyStream )
-{
-    *this = static_cast<const FileList&>(rCopyStream);
-}
-
-/******************************************************************************
-|*
 |*  Stream-Operatoren
 |*
 \******************************************************************************/

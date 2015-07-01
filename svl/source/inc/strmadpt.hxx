@@ -55,10 +55,6 @@ public:
     virtual ErrCode FillAppend(const void * pBuffer, sal_uLong nCount,
                                sal_uLong * pWritten) SAL_OVERRIDE;
 
-    virtual sal_uInt64 Tell() const SAL_OVERRIDE;
-
-    virtual sal_uInt64 Seek(sal_uInt64) SAL_OVERRIDE;
-
     virtual void Terminate() SAL_OVERRIDE;
 };
 

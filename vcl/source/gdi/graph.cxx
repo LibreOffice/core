@@ -302,21 +302,6 @@ bool Graphic::operator!() const
     return( GRAPHIC_NONE == mpImpGraphic->ImplGetType() );
 }
 
-void Graphic::Load( SvStream& rIStm )
-{
-    ReadGraphic( rIStm, *this );
-}
-
-void Graphic::Save( SvStream& rOStm )
-{
-    WriteGraphic( rOStm, *this );
-}
-
-void Graphic::Assign( const SvDataCopyStream& rCopyStream )
-{
-    *this = static_cast<const Graphic&>( rCopyStream );
-}
-
 void Graphic::Clear()
 {
     ImplTestRefCount();

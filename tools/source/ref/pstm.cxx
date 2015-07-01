@@ -60,7 +60,6 @@ SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream, sal
     , aPUIdx( nStartIdxP )
     , nStartIdx( nStartIdxP )
     , pRefStm( NULL )
-    , nFlags( 0 )
 {
     DBG_ASSERT( nStartIdx != 0, "zero index not allowed" );
     bIsWritable = true;

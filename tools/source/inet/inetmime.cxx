@@ -2869,12 +2869,6 @@ void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,
     delete[] pBufferBegin;
 }
 
-// virtual
-ErrCode INetMIMEOutputSink::getError() const
-{
-    return ERRCODE_NONE;
-}
-
 void INetMIMEOutputSink::writeLineEnd()
 {
     static const sal_Char aCRLF[2] = { 0x0D, 0x0A };
@@ -2892,12 +2886,6 @@ void INetMIMEStringOutputSink::writeSequence(const sal_Char * pBegin,
                "INetMIMEStringOutputSink::writeSequence(): Bad sequence");
 
     m_aBuffer.append(pBegin, pEnd - pBegin);
-}
-
-// virtual
-ErrCode INetMIMEStringOutputSink::getError() const
-{
-    return ERRCODE_NONE;
 }
 
 //  INetMIMEEncodedWordOutputSink

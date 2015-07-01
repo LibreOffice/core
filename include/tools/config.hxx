@@ -43,29 +43,22 @@ public:
                         Config( const OUString& rFileName );
                         ~Config();
 
-    const OUString& GetPathName() const { return maFileName; }
+    void                SetGroup(const OString& rGroup);
+    const OString&      GetGroup() const { return maGroupName; }
+    void                DeleteGroup(const OString& rGroup);
+    OString             GetGroupName(sal_uInt16 nGroup) const;
+    sal_uInt16          GetGroupCount() const;
+    bool                HasGroup(const OString& rGroup) const;
 
-    void SetGroup(const OString& rGroup);
-    const OString& GetGroup() const { return maGroupName; }
-    void DeleteGroup(const OString& rGroup);
-    OString GetGroupName(sal_uInt16 nGroup) const;
-    sal_uInt16 GetGroupCount() const;
-    bool HasGroup(const OString& rGroup) const;
-
-    OString ReadKey(const OString& rKey) const;
-    OString ReadKey(const OString& rKey, const OString& rDefault) const;
+    OString             ReadKey(const OString& rKey) const;
+    OString             ReadKey(const OString& rKey, const OString& rDefault) const;
     void                WriteKey(const OString& rKey, const OString& rValue);
-    void DeleteKey(const OString& rKey);
-    OString GetKeyName(sal_uInt16 nKey) const;
-    OString ReadKey(sal_uInt16 nKey) const;
-    sal_uInt16              GetKeyCount() const;
+    void                DeleteKey(const OString& rKey);
+    OString             GetKeyName(sal_uInt16 nKey) const;
+    OString             ReadKey(sal_uInt16 nKey) const;
+    sal_uInt16          GetKeyCount() const;
 
-    bool                IsLocked() const { return (mnLockCount != 0); }
     void                Flush();
-
-    void                EnablePersistence( bool bPersistence = true )
-                            { mbPersistence = bPersistence; }
-    bool                IsPersistenceEnabled() const { return mbPersistence; }
 
 private:
                         Config( const Config& rConfig ) SAL_DELETED_FUNCTION;

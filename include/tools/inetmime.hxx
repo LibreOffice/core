@@ -715,11 +715,6 @@ public:
 
     sal_uInt32 getLineLengthLimit() const { return m_nLineLengthLimit; }
 
-    void setLineLengthLimit(sal_uInt32 nTheLineLengthLimit)
-    { m_nLineLengthLimit = nTheLineLengthLimit; }
-
-    virtual ErrCode getError() const;
-
     /** Write a sequence of octets.
 
         @param pBegin  Points to the start of the sequence, must not be null.
@@ -727,15 +722,6 @@ public:
         @param pEnd  Points past the end of the sequence, must be >= pBegin.
      */
     inline void write(const sal_Char * pBegin, const sal_Char * pEnd);
-
-    /** Write a sequence of octets.
-
-        @param pBegin  Points to the start of the sequence, must not be null.
-
-        @param nLength  The length of the sequence.
-     */
-    void write(const sal_Char * pBegin, sal_Size nLength)
-    { write(pBegin, pBegin + nLength); }
 
     /** Write a sequence of octets.
 
@@ -748,20 +734,6 @@ public:
         @param pEnd  Points past the end of the sequence, must be >= pBegin.
      */
     inline void write(const sal_Unicode * pBegin, const sal_Unicode * pEnd);
-
-    /** Write a sequence of octets.
-
-        @param rOctets  A OString, interpreted as a sequence of octets.
-
-        @param nBegin  The offset of the first character to write.
-
-        @param nEnd  The offset past the last character to write.
-     */
-    void write(const OString& rOctets, sal_Int32 nBegin, sal_Int32 nEnd)
-    {
-        writeSequence(rOctets.getStr() + nBegin, rOctets.getStr() + nEnd);
-        m_nColumn += nEnd - nBegin;
-    }
 
     /** Write a single octet.
 
@@ -877,8 +849,6 @@ public:
                                         = INetMIME::SOFT_LINE_LENGTH_LIMIT):
         INetMIMEOutputSink(nColumn, nLineLengthLimit) {}
 
-    virtual ErrCode getError() const SAL_OVERRIDE;
-
     OString takeBuffer()
     {
         return m_aBuffer.makeStringAndClear();
@@ -935,8 +905,6 @@ public:
 
     INetMIMEEncodedWordOutputSink & WriteUInt32(sal_uInt32 nChar);
 
-    inline void write(const sal_Char * pBegin, const sal_Char * pEnd);
-
     inline void write(const sal_Unicode * pBegin, const sal_Unicode * pEnd);
 
     inline bool flush();
@@ -963,15 +931,7 @@ inline INetMIMEEncodedWordOutputSink::INetMIMEEncodedWordOutputSink(
     m_pBufferEnd = m_pBuffer;
 }
 
-inline void INetMIMEEncodedWordOutputSink::write(const sal_Char * pBegin,
-                                                 const sal_Char * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIMEEncodedWordOutputSink::write(): Bad sequence");
 
-    while (pBegin != pEnd)
-        WriteUInt32(*pBegin++);
-}
 
 inline void INetMIMEEncodedWordOutputSink::write(const sal_Unicode * pBegin,
                                                  const sal_Unicode * pEnd)
@@ -1051,19 +1011,9 @@ public:
 
     void Clear();
 
-    void Insert(INetContentTypeParameter * pParameter, sal_uIntPtr nIndex)
-    {
-        maEntries.insert(maEntries.begin()+nIndex,pParameter);
-    }
-
     void Append(INetContentTypeParameter *pParameter)
     {
         maEntries.push_back(pParameter);
-    }
-
-    inline const INetContentTypeParameter * GetObject(sal_uIntPtr nIndex) const
-    {
-        return &(maEntries[nIndex]);
     }
 
     const INetContentTypeParameter * find(const OString& rAttribute) const;
