@@ -1,17 +1,6 @@
 diff -ru a/nspr/configure b/nspr/configure
 --- a/a/nspr/configure	2014-09-29 16:50:33.907375937 +0100
 +++ b/b/nspr/configure	2014-09-29 16:51:59.213931947 +0100
-@@ -6568,7 +6568,9 @@
-             ;;
-     esac
-     if test "`echo $CC | grep -c '\-arch '`" = "0"; then
--        CC="$CC -arch $CPU_ARCH"
-+        if test "$CPU_ARCH" != "ppc"; then
-+            CC="$CC -arch $CPU_ARCH"
-+        fi
-     fi
-     ac_fn_c_check_header_mongrel "$LINENO" "crt_externs.h" "ac_cv_header_crt_externs_h" "$ac_includes_default"
- if test "x$ac_cv_header_crt_externs_h" = xyes; then :
 @@ -6577,7 +6579,7 @@
  
  
@@ -21,20 +10,6 @@ diff -ru a/nspr/configure b/nspr/configure
      _OPTIMIZE_FLAGS=-O2
      MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
      STRIP="$STRIP -x -S"
-diff -ru a/nspr/configure.in b/nspr/configure.in
---- a/a/nspr/configure.in	2014-09-29 16:50:33.908375942 +0100
-+++ b/b/nspr/configure.in	2014-09-29 16:51:59.209931921 +0100
-@@ -1402,7 +1402,9 @@
-             ;;
-     esac
-     if test "`echo $CC | grep -c '\-arch '`" = "0"; then
--        CC="$CC -arch $CPU_ARCH"
-+        if test "$CPU_ARCH" != "ppc"; then
-+            CC="$CC -arch $CPU_ARCH"
-+        fi
-     fi
-     AC_CHECK_HEADER(crt_externs.h)
-     DSO_CFLAGS=-fPIC
 diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
 --- a/a/nss/coreconf/Darwin.mk	2014-09-29 16:50:22.992304799 +0100
 +++ b/b/nss/coreconf/Darwin.mk	2014-09-29 16:51:59.214931953 +0100
@@ -69,12 +44,7 @@ diff -ru a/nss/coreconf/Darwin.mk b/nss/coreconf/Darwin.mk
  override CPU_ARCH	= x86
  endif
  else
-@@ -31,17 +39,20 @@
- # Nothing set for arm currently.
- else
- OS_REL_CFLAGS	= -Dppc
--CC              += -arch ppc
- endif
+@@ -31,12 +39,16 @@
  endif
  
  ifneq (,$(MACOS_SDK_DIR))
