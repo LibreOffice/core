@@ -351,9 +351,11 @@ void CmisDetailsContainer::selectRepository( )
 {
     // Get the repo ID and call the Change listener
     sal_uInt16 nPos = m_pLBRepository->GetSelectEntryPos( );
-    m_sRepoId = m_aRepoIds[nPos];
-
-    notifyChange( );
+    if( nPos < m_aRepoIds.size() )
+    {
+        m_sRepoId = m_aRepoIds[nPos];
+        notifyChange( );
+    }
 }
 
 IMPL_LINK_NOARG( CmisDetailsContainer, RefreshReposHdl  )
