@@ -24,7 +24,7 @@
 
 #include "com/sun/star/media/XPlayer.hpp"
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 struct IGraphBuilder;
@@ -46,8 +46,8 @@ namespace avmedia { namespace win {
 // - Player -
 
 
-typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
-                                          ::com::sun::star::lang::XServiceInfo > Player_BASE;
+typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::media::XPlayer,
+                                         ::com::sun::star::lang::XServiceInfo > Player_BASE;
 
 class Player : public cppu::BaseMutex,
                public Player_BASE

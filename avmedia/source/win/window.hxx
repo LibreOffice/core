@@ -21,6 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_WIN_WINDOW_HXX
 
 #include "wincommon.hxx"
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include "com/sun/star/media/XPlayerWindow.hpp"
@@ -35,8 +36,8 @@ namespace avmedia { namespace win {
 
 class Player;
 
-class Window : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPlayerWindow,
-                                                ::com::sun::star::lang::XServiceInfo >
+class Window : public ::cppu::WeakImplHelper< ::com::sun::star::media::XPlayerWindow,
+                                              ::com::sun::star::lang::XServiceInfo >
 {
 public:
 

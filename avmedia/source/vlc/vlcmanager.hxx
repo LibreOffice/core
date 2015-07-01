@@ -23,12 +23,13 @@
 #include "vlccommon.hxx"
 #include "wrapper/Wrapper.hxx"
 #include <memory>
+#include <cppuhelper/implbase.hxx>
 
 namespace avmedia {
 namespace vlc {
 
-class Manager : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XManager,
-                                                    ::com::sun::star::lang::XServiceInfo >
+class Manager : public ::cppu::WeakImplHelper< ::com::sun::star::media::XManager,
+                                               ::com::sun::star::lang::XServiceInfo >
 {
     std::unique_ptr<wrapper::Instance> mInstance;
     wrapper::EventHandler mEventHandler;

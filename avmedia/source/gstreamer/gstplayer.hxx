@@ -24,7 +24,7 @@
 #include "gstcommon.hxx"
 
 #include "com/sun/star/media/XPlayer.hpp"
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 typedef struct _GstVideoOverlay GstVideoOverlay;
@@ -35,8 +35,8 @@ namespace avmedia { namespace gstreamer {
 // - Player -
 
 
-typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
-                                          ::com::sun::star::lang::XServiceInfo > GstPlayer_BASE;
+typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::media::XPlayer,
+                                         ::com::sun::star::lang::XServiceInfo > GstPlayer_BASE;
 
 class Player : public ::cppu::BaseMutex,
                public GstPlayer_BASE

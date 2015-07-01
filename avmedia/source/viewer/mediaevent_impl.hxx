@@ -21,7 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_VIEWER_MEDIAEVENT_IMPL_HXX
 
 #include <avmedia/mediawindow.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/awt/XKeyListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
 #include <com/sun/star/awt/XMouseMotionListener.hpp>
@@ -35,10 +35,10 @@ namespace avmedia
 
         // - MediaEventListenersImpl -
 
-        class MediaEventListenersImpl : public ::cppu::WeakImplHelper4< ::com::sun::star::awt::XKeyListener,
-                                                                        ::com::sun::star::awt::XMouseListener,
-                                                                        ::com::sun::star::awt::XMouseMotionListener,
-                                                                        ::com::sun::star::awt::XFocusListener >
+        class MediaEventListenersImpl : public ::cppu::WeakImplHelper< ::com::sun::star::awt::XKeyListener,
+                                                                       ::com::sun::star::awt::XMouseListener,
+                                                                       ::com::sun::star::awt::XMouseMotionListener,
+                                                                       ::com::sun::star::awt::XFocusListener >
         {
         public:
 

@@ -21,6 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_GSTREAMER_GSTWINDOW_HXX
 
 #include "gstcommon.hxx"
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include "com/sun/star/media/XPlayerWindow.hpp"
@@ -33,8 +34,8 @@ namespace avmedia { namespace gstreamer {
 
 class Player;
 
-class Window : public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPlayerWindow,
-                                                ::com::sun::star::lang::XServiceInfo >
+class Window : public ::cppu::WeakImplHelper< ::com::sun::star::media::XPlayerWindow,
+                                              ::com::sun::star::lang::XServiceInfo >
 {
 public:
 

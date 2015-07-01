@@ -22,6 +22,7 @@
 
 #include <osl/conditn.h>
 #include "macavfcommon.hxx"
+#include <cppuhelper/implbase.hxx>
 
 #include "com/sun/star/media/XPlayer.hdl"
 
@@ -35,8 +36,8 @@ namespace avmedia { namespace macavf {
 
 class Player
 :   public MacAVObserverHandler
-,   public ::cppu::WeakImplHelper2< ::com::sun::star::media::XPlayer,
-                                    ::com::sun::star::lang::XServiceInfo >
+,   public ::cppu::WeakImplHelper< ::com::sun::star::media::XPlayer,
+                                   ::com::sun::star::lang::XServiceInfo >
 {
 public:
     explicit Player( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );

@@ -10,7 +10,7 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLPLAYER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLPLAYER_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
@@ -26,8 +26,8 @@ namespace avmedia { namespace ogl {
 
 class OGLWindow;
 
-typedef ::cppu::WeakComponentImplHelper2< com::sun::star::media::XPlayer,
-                                          com::sun::star::lang::XServiceInfo > Player_BASE;
+typedef ::cppu::WeakComponentImplHelper< com::sun::star::media::XPlayer,
+                                         com::sun::star::lang::XServiceInfo > Player_BASE;
 
 class OGLPlayer : public cppu::BaseMutex,
                   public Player_BASE

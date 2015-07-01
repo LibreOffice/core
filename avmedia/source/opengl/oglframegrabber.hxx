@@ -10,7 +10,7 @@
 #ifndef INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLFRAMEGRABBER_HXX
 #define INCLUDED_AVMEDIA_SOURCE_OPENGL_OGLFRAMEGRABBER_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XFrameGrabber.hpp>
 
@@ -18,8 +18,8 @@
 
 namespace avmedia { namespace ogl {
 
-typedef ::cppu::WeakImplHelper2< com::sun::star::media::XFrameGrabber,
-                                 com::sun::star::lang::XServiceInfo > FrameGrabber_BASE;
+typedef ::cppu::WeakImplHelper< com::sun::star::media::XFrameGrabber,
+                                com::sun::star::lang::XServiceInfo > FrameGrabber_BASE;
 
 class OGLFrameGrabber : public FrameGrabber_BASE
 {

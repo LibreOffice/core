@@ -21,6 +21,7 @@
 #define INCLUDED_AVMEDIA_SOURCE_MACAVF_WINDOW_HXX
 
 #include "macavfcommon.hxx"
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include "com/sun/star/media/XPlayerWindow.hdl"
@@ -46,8 +47,8 @@ class Player;
 
 class Window
 :   public MacAVObserverHandler
-,   public ::cppu::WeakImplHelper2 < ::com::sun::star::media::XPlayerWindow,
-                                     ::com::sun::star::lang::XServiceInfo >
+,   public ::cppu::WeakImplHelper< ::com::sun::star::media::XPlayerWindow,
+                                   ::com::sun::star::lang::XServiceInfo >
 {
 public:
 
