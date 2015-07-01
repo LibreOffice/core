@@ -391,24 +391,23 @@ public:
 
 struct CustomPropertyLine
 {
-    VclPtr<ComboBox>                      m_aNameBox;
-    VclPtr<CustomPropertiesTypeBox>       m_aTypeBox;
-    VclPtr<CustomPropertiesEdit>          m_aValueEdit;
-    VclPtr<CustomPropertiesDateField>     m_aDateField;
-    VclPtr<CustomPropertiesTimeField>     m_aTimeField;
-    const OUString                        m_sDurationFormat;
-    VclPtr<CustomPropertiesDurationField> m_aDurationField;
-    VclPtr<CustomPropertiesEditButton>    m_aEditButton;
-    VclPtr<CustomPropertiesYesNoButton>   m_aYesNoButton;
-    VclPtr<CustomPropertiesRemoveButton>  m_aRemoveButton;
+    ScopedVclPtr<ComboBox>                      m_aNameBox;
+    ScopedVclPtr<CustomPropertiesTypeBox>       m_aTypeBox;
+    ScopedVclPtr<CustomPropertiesEdit>          m_aValueEdit;
+    ScopedVclPtr<CustomPropertiesDateField>     m_aDateField;
+    ScopedVclPtr<CustomPropertiesTimeField>     m_aTimeField;
+    const OUString                              m_sDurationFormat;
+    ScopedVclPtr<CustomPropertiesDurationField> m_aDurationField;
+    ScopedVclPtr<CustomPropertiesEditButton>    m_aEditButton;
+    ScopedVclPtr<CustomPropertiesYesNoButton>   m_aYesNoButton;
+    ScopedVclPtr<CustomPropertiesRemoveButton>  m_aRemoveButton;
 
     bool                            m_bIsDate;
     bool                            m_bIsRemoved;
     bool                            m_bTypeLostFocus;
 
     CustomPropertyLine( vcl::Window* pParent );
-
-    void    SetRemoved();
+    void SetRemoved();
 };
 
 // class CustomPropertiesWindow ------------------------------------------
