@@ -98,7 +98,6 @@
 #include <sfx2/event.hxx>
 #include <sfx2/templatedlg.hxx>
 #include "openuriexternally.hxx"
-#include <svtools/RemoteFilesDialog.hxx>
 
 #include <officecfg/Office/ProtocolHandler.hxx>
 
