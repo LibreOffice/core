@@ -804,157 +804,157 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
         switch(eOST)
         {
             case    OST_Cell:
-                    {
-                        AddSubShell(*pCellShell);
-                        if(bPgBrk) AddSubShell(*pPageBreakShell);
-                        bCellBrush = true;
-                    }
-                    break;
+            {
+                AddSubShell(*pCellShell);
+                if(bPgBrk) AddSubShell(*pPageBreakShell);
+                bCellBrush = true;
+            }
+            break;
             case    OST_Editing:
-                    {
-                        AddSubShell(*pCellShell);
-                        if(bPgBrk) AddSubShell(*pPageBreakShell);
+            {
+                AddSubShell(*pCellShell);
+                if(bPgBrk) AddSubShell(*pPageBreakShell);
 
-                        if(pEditShell)
-                        {
-                            AddSubShell(*pEditShell);
-                        }
-                    }
-                    break;
+                if(pEditShell)
+                {
+                    AddSubShell(*pEditShell);
+                }
+            }
+            break;
             case    OST_DrawText:
-                    {
-                        if ( !pDrawTextShell )
-                        {
-                            pDocSh->MakeDrawLayer();
-                            pDrawTextShell = new ScDrawTextObjectBar( &GetViewData() );
-                        }
-                        AddSubShell(*pDrawTextShell);
-                    }
-                    break;
+            {
+                if ( !pDrawTextShell )
+                {
+                    pDocSh->MakeDrawLayer();
+                    pDrawTextShell = new ScDrawTextObjectBar( &GetViewData() );
+                }
+                AddSubShell(*pDrawTextShell);
+            }
+            break;
             case    OST_Drawing:
-                    {
-                        if (svx::checkForSelectedCustomShapes(
-                                GetScDrawView(), true /* bOnlyExtruded */ )) {
-                            if (pExtrusionBarShell == 0)
-                                pExtrusionBarShell = new svx::ExtrusionBar(this);
-                            AddSubShell( *pExtrusionBarShell );
-                        }
-                        sal_uInt32 nCheckStatus = 0;
-                        if (svx::checkForSelectedFontWork(
-                                GetScDrawView(), nCheckStatus )) {
-                            if (pFontworkBarShell == 0)
-                                pFontworkBarShell = new svx::FontworkBar(this);
-                            AddSubShell( *pFontworkBarShell );
-                        }
+            {
+                if (svx::checkForSelectedCustomShapes(
+                            GetScDrawView(), true /* bOnlyExtruded */ )) {
+                    if (pExtrusionBarShell == 0)
+                        pExtrusionBarShell = new svx::ExtrusionBar(this);
+                    AddSubShell( *pExtrusionBarShell );
+                }
+                sal_uInt32 nCheckStatus = 0;
+                if (svx::checkForSelectedFontWork(
+                            GetScDrawView(), nCheckStatus )) {
+                    if (pFontworkBarShell == 0)
+                        pFontworkBarShell = new svx::FontworkBar(this);
+                    AddSubShell( *pFontworkBarShell );
+                }
 
-                        if ( !pDrawShell )
-                        {
-                            pDocSh->MakeDrawLayer();
-                            pDrawShell = new ScDrawShell( &GetViewData() );
-                            pDrawShell->SetRepeatTarget( &aTarget );
-                        }
-                        AddSubShell(*pDrawShell);
-                        bDrawBrush = true;
-                    }
-                    break;
+                if ( !pDrawShell )
+                {
+                    pDocSh->MakeDrawLayer();
+                    pDrawShell = new ScDrawShell( &GetViewData() );
+                    pDrawShell->SetRepeatTarget( &aTarget );
+                }
+                AddSubShell(*pDrawShell);
+                bDrawBrush = true;
+            }
+            break;
 
             case    OST_DrawForm:
-                    {
-                        if ( !pDrawFormShell )
-                        {
-                            pDocSh->MakeDrawLayer();
-                            pDrawFormShell = new ScDrawFormShell( &GetViewData() );
-                            pDrawFormShell->SetRepeatTarget( &aTarget );
-                        }
-                        AddSubShell(*pDrawFormShell);
-                        bDrawBrush = true;
-                    }
-                    break;
+            {
+                if ( !pDrawFormShell )
+                {
+                    pDocSh->MakeDrawLayer();
+                    pDrawFormShell = new ScDrawFormShell( &GetViewData() );
+                    pDrawFormShell->SetRepeatTarget( &aTarget );
+                }
+                AddSubShell(*pDrawFormShell);
+                bDrawBrush = true;
+            }
+            break;
 
             case    OST_Chart:
-                    {
-                        if ( !pChartShell )
-                        {
-                            pDocSh->MakeDrawLayer();
-                            pChartShell = new ScChartShell( &GetViewData() );
-                            pChartShell->SetRepeatTarget( &aTarget );
-                        }
-                        AddSubShell(*pChartShell);
-                        bDrawBrush = true;
-                    }
-                    break;
+            {
+                if ( !pChartShell )
+                {
+                    pDocSh->MakeDrawLayer();
+                    pChartShell = new ScChartShell( &GetViewData() );
+                    pChartShell->SetRepeatTarget( &aTarget );
+                }
+                AddSubShell(*pChartShell);
+                bDrawBrush = true;
+            }
+            break;
 
             case    OST_OleObject:
-                    {
-                        if ( !pOleObjectShell )
-                        {
-                            pDocSh->MakeDrawLayer();
-                            pOleObjectShell = new ScOleObjectShell( &GetViewData() );
-                            pOleObjectShell->SetRepeatTarget( &aTarget );
-                        }
-                        AddSubShell(*pOleObjectShell);
-                        bDrawBrush = true;
-                    }
-                    break;
+            {
+                if ( !pOleObjectShell )
+                {
+                    pDocSh->MakeDrawLayer();
+                    pOleObjectShell = new ScOleObjectShell( &GetViewData() );
+                    pOleObjectShell->SetRepeatTarget( &aTarget );
+                }
+                AddSubShell(*pOleObjectShell);
+                bDrawBrush = true;
+            }
+            break;
 
             case    OST_Graphic:
-                    {
-                        if ( !pGraphicShell)
-                        {
-                            pDocSh->MakeDrawLayer();
-                            pGraphicShell = new ScGraphicShell( &GetViewData() );
-                            pGraphicShell->SetRepeatTarget( &aTarget );
-                        }
-                        AddSubShell(*pGraphicShell);
-                        bDrawBrush = true;
-                    }
-                    break;
+            {
+                if ( !pGraphicShell)
+                {
+                    pDocSh->MakeDrawLayer();
+                    pGraphicShell = new ScGraphicShell( &GetViewData() );
+                    pGraphicShell->SetRepeatTarget( &aTarget );
+                }
+                AddSubShell(*pGraphicShell);
+                bDrawBrush = true;
+            }
+            break;
 
             case    OST_Media:
-                    {
-                        if ( !pMediaShell)
-                        {
-                            pDocSh->MakeDrawLayer();
-                            pMediaShell = new ScMediaShell( &GetViewData() );
-                            pMediaShell->SetRepeatTarget( &aTarget );
-                        }
-                        AddSubShell(*pMediaShell);
-                    }
-                    break;
+            {
+                if ( !pMediaShell)
+                {
+                    pDocSh->MakeDrawLayer();
+                    pMediaShell = new ScMediaShell( &GetViewData() );
+                    pMediaShell->SetRepeatTarget( &aTarget );
+                }
+                AddSubShell(*pMediaShell);
+            }
+            break;
 
             case    OST_Pivot:
-                    {
-                        AddSubShell(*pCellShell);
-                        if(bPgBrk) AddSubShell(*pPageBreakShell);
+            {
+                AddSubShell(*pCellShell);
+                if(bPgBrk) AddSubShell(*pPageBreakShell);
 
-                        if ( !pPivotShell )
-                        {
-                            pPivotShell = new ScPivotShell( this );
-                            pPivotShell->SetRepeatTarget( &aTarget );
-                        }
-                        AddSubShell(*pPivotShell);
-                        bCellBrush = true;
-                    }
-                    break;
+                if ( !pPivotShell )
+                {
+                    pPivotShell = new ScPivotShell( this );
+                    pPivotShell->SetRepeatTarget( &aTarget );
+                }
+                AddSubShell(*pPivotShell);
+                bCellBrush = true;
+            }
+            break;
             case    OST_Auditing:
-                    {
-                        AddSubShell(*pCellShell);
-                        if(bPgBrk) AddSubShell(*pPageBreakShell);
+            {
+                AddSubShell(*pCellShell);
+                if(bPgBrk) AddSubShell(*pPageBreakShell);
 
-                        if ( !pAuditingShell )
-                        {
-                            pDocSh->MakeDrawLayer();    // die Wartezeit lieber jetzt als beim Klick
+                if ( !pAuditingShell )
+                {
+                    pDocSh->MakeDrawLayer();    // die Wartezeit lieber jetzt als beim Klick
 
-                            pAuditingShell = new ScAuditingShell( &GetViewData() );
-                            pAuditingShell->SetRepeatTarget( &aTarget );
-                        }
-                        AddSubShell(*pAuditingShell);
-                        bCellBrush = true;
-                    }
-                    break;
+                    pAuditingShell = new ScAuditingShell( &GetViewData() );
+                    pAuditingShell->SetRepeatTarget( &aTarget );
+                }
+                AddSubShell(*pAuditingShell);
+                bCellBrush = true;
+            }
+            break;
             default:
-                    OSL_FAIL("Falsche Shell angefordert");
-                    break;
+            OSL_FAIL("Falsche Shell angefordert");
+            break;
         }
 
         if (pFormShell && bFormShellAtTop)
