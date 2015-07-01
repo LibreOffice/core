@@ -250,9 +250,9 @@ void IconChoiceDialog::dispose()
     if (m_pIconCtrl)
     {
         // remove Userdata from Icons
-        for ( sal_uLong i=0; i < m_pIconCtrl->GetEntryCount(); i++)
+        for ( sal_Int32 i=0; i < m_pIconCtrl->GetEntryCount(); i++)
         {
-            SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
+            SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry( i );
             delete static_cast<sal_uInt16*>(pEntry->GetUserData());
         }
     }
@@ -358,13 +358,11 @@ void IconChoiceDialog::ShowPage(sal_uInt16 nId)
 \**********************************************************************/
 IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl)
 {
-    sal_uLong nPos;
-
-    SvxIconChoiceCtrlEntry *pEntry = m_pIconCtrl->GetSelectedEntry ( nPos );
+    SvxIconChoiceCtrlEntry *pEntry = m_pIconCtrl->GetSelectedEntry();
     if ( !pEntry )
         pEntry = m_pIconCtrl->GetCursor( );
 
-    sal_uInt16 *pId = static_cast<sal_uInt16*>(pEntry->GetUserData ());
+    sal_uInt16 *pId = static_cast<sal_uInt16*>(pEntry->GetUserData());
 
     if( *pId != mnCurrentPageId )
     {
@@ -841,7 +839,7 @@ short IconChoiceDialog::Ok()
 void IconChoiceDialog::FocusOnIcon( sal_uInt16 nId )
 {
     // set focus to icon for the current visible page
-    for ( sal_uLong i=0; i<m_pIconCtrl->GetEntryCount(); i++)
+    for ( sal_Int32 i=0; i<m_pIconCtrl->GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
         sal_uInt16* pUserData = static_cast<sal_uInt16*>(pEntry->GetUserData());

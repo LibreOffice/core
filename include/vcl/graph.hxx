@@ -89,9 +89,6 @@ public:
     SAL_DLLPRIVATE ImpGraphic*  ImplGetImpGraphic() const { return mpImpGraphic; }
 
 public:
-
-                        TYPEINFO_OVERRIDE();
-
                         Graphic();
                         Graphic( const Graphic& rGraphic );
                         Graphic( const Bitmap& rBmp );

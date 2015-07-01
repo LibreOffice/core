@@ -874,7 +874,8 @@ bool SwAccessibleParagraph::GetTextBoundary(
     throw (
         lang::IndexOutOfBoundsException,
         lang::IllegalArgumentException,
-        uno::RuntimeException)
+        uno::RuntimeException,
+        std::exception)
 {
     // error checking
     if( !( AccessibleTextType::LINE == nTextType

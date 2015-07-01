@@ -1140,7 +1140,7 @@ void LayoutManager::implts_setOffset( const sal_Int32 nBottomOffset )
 }
 
 void LayoutManager::implts_setInplaceMenuBar( const Reference< XIndexAccess >& xMergedMenuBar )
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aWriteLock;

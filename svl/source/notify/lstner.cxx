@@ -68,7 +68,10 @@ SfxListener::~SfxListener()
 
 void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
 {
-    mpImpl->maBCs.erase( std::find( mpImpl->maBCs.begin(), mpImpl->maBCs.end(), &rBroadcaster ) );
+    auto it = std::find( mpImpl->maBCs.begin(), mpImpl->maBCs.end(), &rBroadcaster );
+    if (it != mpImpl->maBCs.end()) {
+        mpImpl->maBCs.erase( it );
+    }
 }
 
 

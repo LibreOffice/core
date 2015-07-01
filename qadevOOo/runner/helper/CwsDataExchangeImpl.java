@@ -101,7 +101,7 @@ public class CwsDataExchangeImpl
     }
 
     /**
-     * Set the test status of cws related UnoAPI tests to the EIS dabase
+     * Set the test status of cws related UnoAPI tests to the EIS database
      * @param status the status of the UnoAPI test
      */
     public void setUnoApiCwsStatus(boolean status)

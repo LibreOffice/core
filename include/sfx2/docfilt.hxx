@@ -116,7 +116,8 @@ public:
         bool bTemplate = false, OUString* pName = NULL )
             throw ( com::sun::star::beans::UnknownPropertyException,
                     com::sun::star::lang::WrappedTargetException,
-                    com::sun::star::uno::RuntimeException );
+                    com::sun::star::uno::RuntimeException,
+                    std::exception );
 };
 
 #endif

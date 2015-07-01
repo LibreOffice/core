@@ -48,6 +48,13 @@ endef
 gb_Output_ESCAPE := $(shell echo|awk 'BEGIN { printf "%c", 27 }' -)
 gb_Output_BELL := $(shell echo|awk 'BEGIN { printf "%c", 7 }' -)
 
+# default to color output, if interactive
+ifeq ($(origin gb_COLOR),undefined)
+ifneq ($(MAKE_TERMOUT),)
+gb_COLOR=$(true)
+endif
+endif
+
 # only enable colorized output if
 # - gb_COLOR is set
 # - we have a known term
@@ -93,8 +100,8 @@ gb_Output_COLOR_ERROR := $(gb_Output_COLOR_RESETANDESCAPE)[37;1;41m
 
 define gb_Output__format_type
 $(subst :, ,$(word 2,$(1) \
-	$(gb_Output_COLOR_OUTBUILD_LEVEL$(3))[:$(gb_Output_COLOR_INBUILD_LEVEL$(3))$(subst $(WHITESPACE),:,$(2))$(gb_Output_COLOR_OUTBUILD_LEVEL$(3)):] \
-	$(gb_Output_COLOR_OUTCLEAN_LEVEL$(3))[:$(gb_Output_COLOR_INCLEAN_LEVEL$(3))$(subst $(WHITESPACE),:,$(2))$(gb_Output_COLOR_OUTCLEAN_LEVEL$(3)):]))$(gb_Output_COLOR_RESET)
+	$(gb_Output_COLOR_OUTBUILD_LEVEL$(3))[$(gb_Output_COLOR_INBUILD_LEVEL$(3))$(subst $(WHITESPACE),:,$(2))$(gb_Output_COLOR_OUTBUILD_LEVEL$(3))] \
+	$(gb_Output_COLOR_OUTCLEAN_LEVEL$(3))[$(gb_Output_COLOR_INCLEAN_LEVEL$(3))$(subst $(WHITESPACE),:,$(2))$(gb_Output_COLOR_OUTCLEAN_LEVEL$(3))]))$(gb_Output_COLOR_RESET)
 endef
 
 define gb_Output_info

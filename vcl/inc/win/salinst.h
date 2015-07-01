@@ -27,11 +27,21 @@ class SalYieldMutex;
 class WinSalInstance : public SalInstance
 {
 public:
-    HINSTANCE           mhInst;                 // Instance Handle
-    HWND                mhComWnd;               // window, for communication (between threads and the main thread)
-    SalYieldMutex*      mpSalYieldMutex;        // Sal-Yield-Mutex
-    osl::Mutex*         mpSalWaitMutex;         // Sal-Wait-Mutex
-    sal_uInt16              mnYieldWaitCount;       // Wait-Count
+    /// Instance Handle
+    HINSTANCE           mhInst;
+    /// invisible Window so non-main threads can SendMessage() the main thread
+    HWND                mhComWnd;
+    /// The Yield mutex ensures that only one thread calls into VCL
+    SalYieldMutex*      mpSalYieldMutex;
+    /// The Wait mutex ensures increment of mnYieldWaitCount and acquisition
+    /// or release of mpSalYieldMutex is atomic
+    osl::Mutex*         mpSalWaitMutex;
+    /// count main thread's pending ImplSalYieldMutexAcquireWithWait() calls
+    /// (it's not clear to me if this will be > 1 in practice; it would be
+    /// possible if main thread's handling of SAL_MSG_* sent by other threads
+    /// via SendMessage() ends up calling ImplSalYieldMutexAcquireWithWait())
+    sal_uInt16          mnYieldWaitCount;
+
 public:
     WinSalInstance();
     virtual ~WinSalInstance();
@@ -62,7 +72,7 @@ public:
     virtual void                AcquireYieldMutex( sal_uIntPtr nCount ) SAL_OVERRIDE;
     virtual bool                CheckYieldMutex() SAL_OVERRIDE;
 
-    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
+    virtual void                DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) SAL_OVERRIDE;
     virtual bool                AnyInput( VclInputFlags nType ) SAL_OVERRIDE;
     virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* ) SAL_OVERRIDE;
     virtual void                DestroyMenu( SalMenu* ) SAL_OVERRIDE;

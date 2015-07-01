@@ -158,7 +158,7 @@ public class SpreadsheetSample extends SpreadsheetDocHelper
         }
         catch (Exception ex)
         {
-            System.out.println( "\nError: Dota pilot sample caught exception!\nException Message = "
+            System.out.println( "\nError: Data pilot sample caught exception!\nException Message = "
                                 + ex.getMessage());
             ex.printStackTrace();
         }

@@ -78,7 +78,7 @@ public:
     */
     void    UpdateTableList(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
-            )   throw(::com::sun::star::sdbc::SQLException);
+            )   throw(::com::sun::star::sdbc::SQLException, std::exception);
 
     /** fill the table list with the tables and views determined by the two given containers.
         The views sequence is used to determine which table is of type view.

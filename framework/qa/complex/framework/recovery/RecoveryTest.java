@@ -52,7 +52,7 @@ public class RecoveryTest extends ComplexTestCase {
     static SOfficeFactory SOF;
     static RecoveryTools rt;
     /**
-     * If you devid the screen in four parts in the first of them the office
+     * If you divide the screen in four parts in the first of them the office
      * windows should be placed. The range of the first quarter is stored in the variable.
      */
     static Point windowMaxPosition;

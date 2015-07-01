@@ -92,10 +92,10 @@ static const sal_Unicode aDefaultBulletTypes[] =
     0x2714
 };
 
-NumSettings_ImplPtr lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
+NumSettings_Impl* lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
     const PropertyValue* pValues = rLevelProps.getConstArray();
-    NumSettings_ImplPtr pNew = new NumSettings_Impl;
+    NumSettings_Impl* pNew = new NumSettings_Impl;
     for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
     {
         if(pValues[j].Name == "NumberingType")
@@ -1307,7 +1307,7 @@ void NumberingTypeMgr::Init()
         const Sequence<PropertyValue>* pValuesArr = aNumberings.getConstArray();
         for(sal_Int32 i = 0; i < nLength; i++)
         {
-            NumSettings_ImplPtr pNew = lcl_CreateNumberingSettingsPtr(pValuesArr[i]);
+            NumSettings_Impl* pNew = lcl_CreateNumberingSettingsPtr(pValuesArr[i]);
             NumberSettings_Impl* pNumEntry = new NumberSettings_Impl;
             pNumEntry->nIndex = i + 1;
             pNumEntry->nIndexDefault = i;
@@ -1342,7 +1342,7 @@ sal_uInt16 NumberingTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 m
     sal_uInt16 nCount = pNumberSettingsArr->size();
     for(sal_uInt16 i = nFromIndex; i < nCount; ++i)
     {
-        NumberSettings_ImplPtr _pSet = (*pNumberSettingsArr)[i].get();
+        NumberSettings_Impl* _pSet = (*pNumberSettingsArr)[i].get();
         sal_Int16 eNType = _pSet->pNumSetting->nNumberType;
         OUString sLocalPrefix = _pSet->pNumSetting->sPrefix;
         OUString sLocalSuffix = _pSet->pNumSetting->sSuffix;
@@ -1380,7 +1380,7 @@ bool NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_
     if ( nIndex >= nCount )
         return false;
 
-    NumberSettings_ImplPtr _pSet = (*pNumberSettingsArr)[nIndex].get();
+    NumberSettings_Impl* _pSet = (*pNumberSettingsArr)[nIndex].get();
 
     _pSet->pNumSetting->sPrefix = aFmt.GetPrefix();
     _pSet->pNumSetting->sSuffix = aFmt.GetSuffix();
@@ -1414,7 +1414,7 @@ bool NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uIn
         return false;
     NumberSettingsArr_Impl*     pCurrentNumberSettingsArr=pNumberSettingsArr;
     if (isDefault) pCurrentNumberSettingsArr=pDefaultNumberSettingsArr;
-    NumberSettings_ImplPtr _pSet = (*pCurrentNumberSettingsArr)[nIndex].get();
+    NumberSettings_Impl* _pSet = (*pCurrentNumberSettingsArr)[nIndex].get();
     sal_Int16 eNewType = _pSet->pNumSetting->nNumberType;
 
     sal_uInt16 nMask = 1;
@@ -1531,7 +1531,7 @@ void OutlineTypeMgr::Init()
                 Any aValueAny = xLevel->getByIndex(nLevel);
                 Sequence<PropertyValue> aLevelProps;
                 aValueAny >>= aLevelProps;
-                NumSettings_ImplPtr pNew = lcl_CreateNumberingSettingsPtr(aLevelProps);
+                NumSettings_Impl* pNew = lcl_CreateNumberingSettingsPtr(aLevelProps);
                 SvxNumberFormat aNumFmt( aDefNumRule.GetLevel( nLevel) );
                 pNew->eLabelFollowedBy = aNumFmt.GetLabelFollowedBy();
                 pNew->nTabValue = aNumFmt.GetListtabPos();
@@ -1557,7 +1557,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
         sal_uInt16 nCount = pItemArr->pNumSettingsArr->size();
         for (sal_uInt16 iLevel=0;iLevel < nCount;iLevel++)
         {
-            NumSettings_ImplPtr _pSet = (*pItemArr->pNumSettingsArr)[iLevel].get();
+            NumSettings_Impl* _pSet = (*pItemArr->pNumSettingsArr)[iLevel].get();
             sal_Int16 eNType = _pSet->nNumberType;
 
             SvxNumberFormat aFmt(aNum.GetLevel(iLevel));
@@ -1641,7 +1641,7 @@ bool OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
         //sal_Unicode cSuffix = rtl::OUString(aFmt.GetSuffix())[0];
         sal_Int16 eNumType = aFmt.GetNumberingType();
 
-        NumSettings_ImplPtr _pSet = (*pItemArr->pNumSettingsArr)[iLevel].get();
+        NumSettings_Impl* _pSet = (*pItemArr->pNumSettingsArr)[iLevel].get();
 
         _pSet->eLabelFollowedBy = aFmt.GetLabelFollowedBy();
         _pSet->nTabValue = aFmt.GetListtabPos();
@@ -1711,7 +1711,7 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     //Font& rActBulletFont = lcl_GetDefaultBulletFont();
     NumSettingsArr_Impl *pNumSettingsArr=pItemArr->pNumSettingsArr;
 
-    NumSettings_ImplPtr pLevelSettings = 0;
+    NumSettings_Impl* pLevelSettings = 0;
     OUString sBulletCharFormatName = GetBulCharFmtName();
     for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
     {

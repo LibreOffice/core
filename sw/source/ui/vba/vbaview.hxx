@@ -35,7 +35,7 @@ private:
     css::uno::Reference< css::text::XTextViewCursor > mxViewCursor;
     css::uno::Reference< css::beans::XPropertySet > mxViewSettings;
 
-    css::uno::Reference< css::text::XTextRange > getHFTextRange( sal_Int32 nType ) throw (css::uno::RuntimeException, css::script::BasicErrorException);
+    css::uno::Reference< css::text::XTextRange > getHFTextRange( sal_Int32 nType ) throw (css::uno::RuntimeException, css::script::BasicErrorException, std::exception);
     css::uno::Reference< css::text::XTextRange > getFirstObjectPosition( const css::uno::Reference< css::text::XText >& xText ) throw (css::uno::RuntimeException);
 
 public:

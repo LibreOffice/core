@@ -52,6 +52,7 @@
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
 #include <viewsh.hxx>
+#include <rootfrm.hxx>
 #include <tabfrm.hxx>
 #include <redline.hxx>
 #include <unoport.hxx>
@@ -177,7 +178,7 @@ static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
                                    const SfxItemPropertySimpleEntry* pEntry,
                                    const uno::Any& aValue)
     throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
+           uno::RuntimeException, std::exception)
 {
     // special treatment for "non-items"
     switch(pEntry->nWID)
@@ -348,14 +349,13 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
  * where IsTableComplex() returns false).
  *
  * @param rCellName e.g. A1..Z1, a1..z1, AA1..AZ1, Aa1..Az1, BA1..BZ1, Ba1..Bz1, ...
- * @param [IN,OUT] rColumn (0-based)
- * @param [IN,OUT] rRow (0-based)
+ * @param [IN,OUT] o_rColumn (0-based)
+ * @param [IN,OUT] o_rRow (0-based)
  */
 //TODO: potential for throwing proper exceptions instead of having every caller to check for errors
-void sw_GetCellPosition(const OUString &rCellName,
-                        sal_Int32 &rColumn, sal_Int32 &rRow)
+void SwXTextTable::GetCellPosition(const OUString& rCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow)
 {
-    rColumn = rRow = -1;    // default return values indicating failure
+    o_rColumn = o_rRow = -1;    // default return values indicating failure
     const sal_Int32 nLen = rCellName.getLength();
     if(!nLen)
     {
@@ -391,8 +391,8 @@ void sw_GetCellPosition(const OUString &rCellName,
             }
         }
 
-        rColumn = nColIdx;
-        rRow    = rCellName.copy(nRowPos).toInt32() - 1; // - 1 because indices ought to be 0 based
+        o_rColumn = nColIdx;
+        o_rRow    = rCellName.copy(nRowPos).toInt32() - 1; // - 1 because indices ought to be 0 based
     }
 }
 
@@ -408,8 +408,8 @@ void sw_GetCellPosition(const OUString &rCellName,
 int sw_CompareCellsByRowFirst( const OUString &rCellName1, const OUString &rCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
-    sw_GetCellPosition( rCellName1, nCol1, nRow1 );
-    sw_GetCellPosition( rCellName2, nCol2, nRow2 );
+    SwXTextTable::GetCellPosition( rCellName1, nCol1, nRow1 );
+    SwXTextTable::GetCellPosition( rCellName2, nCol2, nRow2 );
 
     if (nRow1 < nRow2 || (nRow1 == nRow2 && nCol1 < nCol2))
         return -1;
@@ -431,8 +431,8 @@ int sw_CompareCellsByRowFirst( const OUString &rCellName1, const OUString &rCell
 int sw_CompareCellsByColFirst( const OUString &rCellName1, const OUString &rCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
-    sw_GetCellPosition( rCellName1, nCol1, nRow1 );
-    sw_GetCellPosition( rCellName2, nCol2, nRow2 );
+    SwXTextTable::GetCellPosition( rCellName1, nCol1, nRow1 );
+    SwXTextTable::GetCellPosition( rCellName2, nCol2, nRow2 );
 
     if (nCol1 < nCol2 || (nCol1 == nCol2 && nRow1 < nRow2))
         return -1;
@@ -483,20 +483,6 @@ int sw_CompareCellRanges(
  */
 OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 {
-#if OSL_DEBUG_LEVEL > 0
-    {
-        sal_Int32 nCol, nRow2;
-        sw_GetCellPosition( OUString("z1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 51, "sw_GetCellPosition failed" );
-        sw_GetCellPosition( OUString("AA1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 52, "sw_GetCellPosition failed" );
-        sw_GetCellPosition( OUString("AB1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 53, "sw_GetCellPosition failed" );
-        sw_GetCellPosition( OUString("BB1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 105, "sw_GetCellPosition failed" );
-    }
-#endif
-
     if (nColumn < 0 || nRow < 0)
         return OUString();
     OUString sCellName;
@@ -543,8 +529,8 @@ const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const 
 void sw_NormalizeRange(OUString &rCell1, OUString &rCell2)
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
-    sw_GetCellPosition( rCell1, nCol1, nRow1 );
-    sw_GetCellPosition( rCell2, nCol2, nRow2 );
+    SwXTextTable::GetCellPosition( rCell1, nCol1, nRow1 );
+    SwXTextTable::GetCellPosition( rCell2, nCol2, nRow2 );
     if (nCol2 < nCol1 || nRow2 < nRow1)
     {
         rCell1  = sw_GetCellName( std::min(nCol1, nCol2), std::min(nRow1, nRow2) );
@@ -591,6 +577,7 @@ static bool lcl_FormatTable(SwFrameFormat* pTableFormat)
     SwIterator<SwFrm,SwFormat> aIter( *pTableFormat );
     for(SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next())
     {
+        vcl::RenderContext* pRenderContext = pFrm->getRootFrm()->GetCurrShell()->GetOut();
         // mba: no TYPEINFO for SwTabFrm
         if(!pFrm->IsTabFrm())
             continue;
@@ -598,7 +585,7 @@ static bool lcl_FormatTable(SwFrameFormat* pTableFormat)
         if(pTabFrm->IsValid())
             pTabFrm->InvalidatePos();
         pTabFrm->SetONECalcLowers();
-        pTabFrm->Calc();
+        pTabFrm->Calc(pRenderContext);
         bHasFrames = true;
     }
     return bHasFrames;
@@ -680,12 +667,6 @@ static void lcl_SetTableSeparators(const uno::Any& rVal, SwTable* pTable, SwTabl
     pDoc->SetTabCols(*pTable, aCols, aOldCols, pBox, bRow );
 }
 
-static inline OUString lcl_getString( SwXCell &rCell )
-{
-    // getString is a member function of the base class...
-    return rCell.getString();
-}
-
 /* non UNO function call to set string in SwXCell */
 void sw_setString( SwXCell &rCell, const OUString &rText,
         bool bKeepNumberFormat = false )
@@ -703,16 +684,6 @@ void sw_setString( SwXCell &rCell, const OUString &rText,
     rCell.SwXText::setString(rText);
 }
 
-/* non UNO function call to get value from SwXCell */
-double sw_getValue( SwXCell &rCell )
-{
-    double fRet;
-    if(rCell.IsValid() && !rCell.getString().isEmpty())
-        fRet = rCell.pBox->GetFrameFormat()->GetTableBoxValue().GetValue();
-    else
-        ::rtl::math::setNan( &fRet );
-    return fRet;
-}
 
 /* non UNO function call to set value in SwXCell */
 void sw_setValue( SwXCell &rCell, double nVal )
@@ -919,7 +890,12 @@ double SwXCell::getValue() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     // #i112652# a table cell may contain NaN as a value, do not filter that
-    return sw_getValue( *this );
+    double fRet;
+    if(IsValid() && !getString().isEmpty())
+        fRet = pBox->GetFrameFormat()->GetTableBoxValue().GetValue();
+    else
+        ::rtl::math::setNan( &fRet );
+    return fRet;
 }
 
 void SwXCell::setValue(double rValue) throw( uno::RuntimeException, std::exception )
@@ -1186,6 +1162,57 @@ SwTableBox* SwXCell::FindBox(SwTable* pTable, SwTableBox* pBox2)
     // box not found: reset nFndPos pointer
     nFndPos = NOTFOUND;
     return nullptr;
+}
+
+double SwXCell::GetForcedNumericalValue() const
+{
+    if(table::CellContentType_TEXT != getType())
+        return getValue();
+    // now we'll try to get a useful numerical value
+    // from the text in the cell...
+    sal_uInt32 nFIndex;
+    SvNumberFormatter* pNumFormatter(const_cast<SvNumberFormatter*>(GetDoc()->GetNumberFormatter()));
+    // look for SwTableBoxNumFormat value in parents as well
+    const SfxPoolItem* pItem;
+    auto pBoxFormat(GetTableBox()->GetFrameFormat());
+    SfxItemState eState = pBoxFormat->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem);
+
+    if (eState == SfxItemState::SET)
+    {
+        // please note that the language of the numberformat
+        // is implicitly coded into the below value as well
+        nFIndex = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+
+        // since the current value indicates a text format but the call
+        // to 'IsNumberFormat' below won't work for text formats
+        // we need to get rid of the part that indicates the text format.
+        // According to ER this can be done like this:
+        nFIndex -= (nFIndex % SV_COUNTRY_LANGUAGE_OFFSET);
+    }
+    else
+    {
+        // system language is probably not the best possible choice
+        // but since we have to guess anyway (because the language of at
+        // the text is NOT the one used for the number format!)
+        // it is at least conform to what is used in
+        // SwTableShell::Execute when
+        // SID_ATTR_NUMBERFORMAT_VALUE is set...
+        LanguageType eLang = LANGUAGE_SYSTEM;
+        nFIndex = pNumFormatter->GetStandardIndex( eLang );
+    }
+    double fTmp;
+    pNumFormatter->IsNumberFormat(const_cast<SwXCell*>(this)->getString(), nFIndex, fTmp);
+    return fTmp;
+}
+
+uno::Any SwXCell::GetAny() const
+{
+    if(!pBox)
+        throw uno::RuntimeException();
+    // check if table box value item is set
+    auto pBoxFormat(pBox->GetFrameFormat());
+    const bool bIsNum = pBoxFormat->GetItemState(RES_BOXATR_VALUE, false) == SfxItemState::SET;
+    return bIsNum ? uno::makeAny(getValue()) : uno::makeAny(const_cast<SwXCell*>(this)->getString());
 }
 
 OUString SwXCell::getImplementationName() throw( uno::RuntimeException, std::exception )
@@ -1552,11 +1579,12 @@ sal_Bool SwXTextTableCursor::mergeRange()
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(!pUnoCrsr)
         return false;
-    {
-        // The Actions need to be revoked here
-        UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
-    }
+
     SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    {
+        // HACK: remove pending actions for selecting old style tables
+        UnoActionRemoveContext aRemoveContext(rTableCrsr);
+    }
     rTableCrsr.MakeBoxSels();
     bool bResult;
     {
@@ -1582,11 +1610,11 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(!pUnoCrsr)
         return false;
-    {
-        // here, all actions need to be revoked
-        UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
-    }
     SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    {
+        // HACK: remove pending actions for selecting old style tables
+        UnoActionRemoveContext aRemoveContext(rTableCrsr);
+    }
     rTableCrsr.MakeBoxSels();
     bool bResult;
     {
@@ -2045,7 +2073,7 @@ uno::Reference<text::XTextTableCursor> SwXTextTable::createCursorByCellName(cons
 }
 
 void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
+    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     // attachToRange must only be called once
     if(!bIsDescriptor)  /* already attached ? */
@@ -2183,8 +2211,6 @@ uno::Reference<table::XCellRange>  SwXTextTable::GetRangeByName(SwFrameFormat* p
     const SwTableBox* pTLBox = pTable->GetTableBox(rTLName);
     if(!pTLBox)
         return nullptr;
-    // invalidate all actions
-    UnoActionRemoveContext aRemoveContext(pFormat->GetDoc());
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
@@ -2198,6 +2224,8 @@ uno::Reference<table::XCellRange>  SwXTextTable::GetRangeByName(SwFrameFormat* p
     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
     pUnoCrsr->Move( fnMoveForward, fnGoNode );
     SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+    // HACK: remove pending actions for selecting old style tables
+    UnoActionRemoveContext aRemoveContext(*pCrsr);
     pCrsr->MakeBoxSels();
     // pUnoCrsr will be provided and will not be deleted
     return new SwXCellRange(pUnoCrsr, *pFormat, rDesc);
@@ -2244,8 +2272,8 @@ uno::Reference<table::XCellRange> SwXTextTable::getCellRangeByName(const OUStrin
         throw uno::RuntimeException();
     SwRangeDescriptor aDesc;
     aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
-    sw_GetCellPosition(sTLName, aDesc.nLeft, aDesc.nTop );
-    sw_GetCellPosition(sBRName, aDesc.nRight, aDesc.nBottom );
+    SwXTextTable::GetCellPosition(sTLName, aDesc.nLeft, aDesc.nTop );
+    SwXTextTable::GetCellPosition(sBRName, aDesc.nRight, aDesc.nBottom );
 
     // we should normalize the range now (e.g. A5:C1 will become A1:C5)
     // since (depending on what is done later) it will be troublesome
@@ -2559,8 +2587,6 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     SwTable* pTable = SwTable::FindTable( pFormat );
                     SwTableLines &rLines = pTable->GetTabLines();
 
-                    // invalidate all actions
-                    UnoActionRemoveContext aRemoveContext(pDoc);
                     const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
                     const SwStartNode* pSttNd = pTLBox->GetSttNd();
                     SwPosition aPos(*pSttNd);
@@ -2574,6 +2600,8 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     SwUnoTableCrsr& rCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+                    // HACK: remove pending actions for selecting old style tables
+                    UnoActionRemoveContext aRemoveContext(rCrsr);
                     rCrsr.MakeBoxSels();
 
                     SfxItemSet aSet(pDoc->GetAttrPool(),
@@ -2748,8 +2776,6 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     SwTable* pTable = SwTable::FindTable( pFormat );
                     SwTableLines &rLines = pTable->GetTabLines();
 
-                    // invalidate all actions
-                    UnoActionRemoveContext aRemoveContext(pDoc);
                     const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
                     const SwStartNode* pSttNd = pTLBox->GetSttNd();
                     SwPosition aPos(*pSttNd);
@@ -2765,6 +2791,8 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
 
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     SwUnoTableCrsr& rCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+                    // HACK: remove pending actions for selecting old style tables
+                    UnoActionRemoveContext aRemoveContext(rCrsr);
                     rCrsr.MakeBoxSels();
 
                     SfxItemSet aSet(pDoc->GetAttrPool(),
@@ -3137,7 +3165,7 @@ SwXCellRange::SwXCellRange(sw::UnoCursorPointer pCrsr, SwFrameFormat& rFrameForm
     aRgDesc.Normalize();
 }
 
-std::vector< uno::Reference< table::XCell > > SwXCellRange::getCells()
+std::vector< uno::Reference< table::XCell > > SwXCellRange::GetCells()
 {
     SwFrameFormat* const pFormat = GetFrameFormat();
     const sal_Int32 nRowCount(getRowCount());
@@ -3198,8 +3226,6 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
             const SwTableBox* pTLBox = pTable->GetTableBox( sTLName );
             if(pTLBox)
             {
-                // invalidate all actions
-                UnoActionRemoveContext aRemoveContext(pFormat->GetDoc());
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
                 // set cursor in the upper-left cell of the range
@@ -3213,6 +3239,8 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
                     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+                    // HACK: remove pending actions for selecting old style tables
+                    UnoActionRemoveContext aRemoveContext(*pCrsr);
                     pCrsr->MakeBoxSels();
                     // pUnoCrsr will be provided and will not be deleted
                     SwXCellRange* pCellRange = new SwXCellRange(pUnoCrsr, *pFormat, aNewDesc);
@@ -3237,8 +3265,8 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByName(const OUSt
         throw uno::RuntimeException();
     SwRangeDescriptor aDesc;
     aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
-    sw_GetCellPosition( sTLName, aDesc.nLeft, aDesc.nTop );
-    sw_GetCellPosition( sBRName, aDesc.nRight, aDesc.nBottom );
+    SwXTextTable::GetCellPosition( sTLName, aDesc.nLeft, aDesc.nTop );
+    SwXTextTable::GetCellPosition( sBRName, aDesc.nRight, aDesc.nBottom );
     aDesc.Normalize();
     return getCellRangeByPosition(aDesc.nLeft - aRgDesc.nLeft, aDesc.nTop - aRgDesc.nTop,
                 aDesc.nRight - aRgDesc.nLeft, aDesc.nBottom - aRgDesc.nTop);
@@ -3270,11 +3298,11 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                 throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
             SwDoc* pDoc = m_pTableCrsr->GetDoc();
-            {
-                // remove actions to enable box selection
-                UnoActionRemoveContext aRemoveContext(pDoc);
-            }
             SwUnoTableCrsr& rCrsr = dynamic_cast<SwUnoTableCrsr&>(*m_pTableCrsr);
+            {
+                // HACK: remove pending actions for selecting old style tables
+                UnoActionRemoveContext aRemoveContext(rCrsr);
+            }
             rCrsr.MakeBoxSels();
             switch(pEntry->nWID )
             {
@@ -3458,150 +3486,7 @@ void SwXCellRange::addVetoableChangeListener(const OUString& /*PropertyName*/, c
 void SwXCellRange::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
     { throw uno::RuntimeException("Not implemented", static_cast<cppu::OWeakObject*>(this)); }
 
-void SwXCellRange::GetDataSequence(
-        uno::Sequence< uno::Any >   *pAnySeq,   //-> first pointer != 0 is used
-        uno::Sequence< OUString >   *pTextSeq,   //-> as output sequence
-        uno::Sequence< double >     *pDblSeq,   //-> (previous data gets overwritten)
-        bool bForceNumberResults )              //-> when 'true' requires to make an
-                                                // extra effort to return a value different
-                                                // from 0 even if the cell is formatted to text
-    throw (uno::RuntimeException)
-{
-    SolarMutexGuard aGuard;
-
-    // compare to SwXCellRange::getDataArray (note different return types though)
-
-    const sal_Int32 nRowCount = getRowCount();
-    const sal_Int32 nColCount = getColumnCount();
-
-    if(!nRowCount || !nColCount)
-    {
-        uno::RuntimeException aRuntime;
-        aRuntime.Message = "Table too complex";
-        throw aRuntime;
-    }
-
-    const size_t nSize = static_cast<size_t>(nRowCount) * static_cast<size_t>(nColCount);
-    if (pAnySeq)
-        pAnySeq->realloc( nSize );
-    else if (pTextSeq)
-        pTextSeq->realloc( nSize );
-    else if (pDblSeq)
-        pDblSeq->realloc( nSize );
-    else
-    {
-        OSL_FAIL( "argument missing" );
-        return;
-    }
-    uno::Any   *pAnyData = pAnySeq ? pAnySeq->getArray() : 0;
-    OUString   *pTextData = pTextSeq ? pTextSeq->getArray() : 0;
-    double     *pDblData = pDblSeq ? pDblSeq->getArray() : 0;
-
-    size_t nDtaCnt = 0;
-    SwFrameFormat* pFormat = GetFrameFormat();
-    if(pFormat)
-    {
-        double fNan;
-        ::rtl::math::setNan( & fNan );
-
-        uno::Reference< table::XCell > xCellRef;
-        for(sal_Int32 nRow = 0; nRow < nRowCount; ++nRow)
-        {
-            for(sal_Int32 nCol = 0; nCol < nColCount; ++nCol)
-            {
-                SwXCell * pXCell = lcl_CreateXCell(pFormat,
-                                    aRgDesc.nLeft + nCol,
-                                    aRgDesc.nTop + nRow);
-                //! keep (additional) reference to object to prevent implicit destruction
-                //! in following UNO calls (when object will get referenced)
-                xCellRef = pXCell;
-                SwTableBox * pBox = pXCell ? pXCell->GetTableBox() : 0;
-                if(!pBox)
-                {
-                    throw uno::RuntimeException();
-                }
-                else
-                {
-                    if (pAnyData)
-                    {
-                        // check if table box value item is set
-                        bool bIsNum = pBox->GetFrameFormat()->GetItemState( RES_BOXATR_VALUE, false ) == SfxItemState::SET;
-                        if (!bIsNum)
-                            pAnyData[nDtaCnt++] <<= lcl_getString(*pXCell);
-                        else
-                            pAnyData[nDtaCnt++] <<= sw_getValue(*pXCell);
-                    }
-                    else if (pTextData)
-                        pTextData[nDtaCnt++] = lcl_getString(*pXCell);
-                    else if (pDblData)
-                    {
-                        double fVal = fNan;
-                        if (!bForceNumberResults || table::CellContentType_TEXT != pXCell->getType())
-                            fVal = sw_getValue(*pXCell);
-                        else
-                        {
-                            OSL_ENSURE( table::CellContentType_TEXT == pXCell->getType(),
-                                    "this branch of 'if' is only for text formatted cells" );
-
-                            // now we'll try to get a useful numerical value
-                            // from the text in the cell...
-
-                            sal_uInt32 nFIndex;
-                            SvNumberFormatter* pNumFormatter = m_pTableCrsr->GetDoc()->GetNumberFormatter();
-
-                            // look for SwTableBoxNumFormat value in parents as well
-                            const SfxPoolItem* pItem;
-                            SwFrameFormat *pBoxFormat = pXCell->GetTableBox()->GetFrameFormat();
-                            SfxItemState eState = pBoxFormat->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem);
-
-                            if (eState == SfxItemState::SET)
-                            {
-                                // please note that the language of the numberformat
-                                // is implicitly coded into the below value as well
-                                nFIndex = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
-
-                                // since the current value indicates a text format but the call
-                                // to 'IsNumberFormat' below won't work for text formats
-                                // we need to get rid of the part that indicates the text format.
-                                // According to ER this can be done like this:
-                                nFIndex -= (nFIndex % SV_COUNTRY_LANGUAGE_OFFSET);
-                            }
-                            else
-                            {
-                                // system language is probably not the best possible choice
-                                // but since we have to guess anyway (because the language of at
-                                // the text is NOT the one used for the number format!)
-                                // it is at least conform to what is used in
-                                // SwTableShell::Execute when
-                                // SID_ATTR_NUMBERFORMAT_VALUE is set...
-                                LanguageType eLang = LANGUAGE_SYSTEM;
-                                nFIndex = pNumFormatter->GetStandardIndex( eLang );
-                            }
-
-                            double fTmp;
-                            if (pNumFormatter->IsNumberFormat( lcl_getString(*pXCell), nFIndex, fTmp ))
-                                fVal = fTmp;
-                        }
-                        pDblData[nDtaCnt++] = fVal;
-                    }
-                    else {
-                        OSL_FAIL( "output sequence missing" );
-                    }
-                }
-            }
-        }
-    }
-    OSL_ENSURE( nDtaCnt == nSize, "size mismatch. Invalid cell range?" );
-    if (pAnySeq)
-        pAnySeq->realloc( nDtaCnt );
-    else if (pTextSeq)
-        pTextSeq->realloc( nDtaCnt );
-    else if (pDblSeq)
-        pDblSeq->realloc( nDtaCnt );
-}
-
 ///@see SwXCellRange::getData
-///@see SwXCellRange::GetDataSequence
 uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
     throw (uno::RuntimeException, std::exception)
 {
@@ -3612,7 +3497,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
     uno::Sequence< uno::Sequence< uno::Any > > aRowSeq(nRowCount);
-    auto vCells(getCells());
+    auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
     for(auto& rRow : aRowSeq)
     {
@@ -3620,13 +3505,9 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
         for(auto& rCellAny : rRow)
         {
             auto pCell(static_cast<SwXCell*>(pCurrentCell->get()));
-            SwTableBox* pBox = pCell ? pCell->GetTableBox() : nullptr;
-            if(!pBox)
+            if(!pCell)
                 throw uno::RuntimeException();
-            // check if table box value item is set
-            SwFrameFormat* pBoxFormat(pBox->GetFrameFormat());
-            const bool bIsNum = pBoxFormat->GetItemState(RES_BOXATR_VALUE, false) == SfxItemState::SET;
-            rCellAny = bIsNum ? uno::makeAny(sw_getValue(*pCell)) : uno::makeAny(lcl_getString(*pCell));
+            rCellAny = pCell->GetAny();
             ++pCurrentCell;
         }
     }
@@ -3646,7 +3527,7 @@ void SAL_CALL SwXCellRange::setDataArray(const uno::Sequence< uno::Sequence< uno
         return;
     if(rArray.getLength() != nRowCount)
         throw uno::RuntimeException("Row count mismatch. expected: " + OUString::number(nRowCount) + " got: " + OUString::number(rArray.getLength()), static_cast<cppu::OWeakObject*>(this));
-    auto vCells(getCells());
+    auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
     for(const auto& rColSeq : rArray)
     {
@@ -3682,7 +3563,7 @@ uno::Sequence< uno::Sequence< double > > SwXCellRange::getData() throw( uno::Run
         return xDataRange->getData();
     }
     uno::Sequence< uno::Sequence< double > > vRows(nRowCount);
-    auto vCells(getCells());
+    auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
     for(auto& rRow : vRows)
     {
@@ -3713,7 +3594,7 @@ void SwXCellRange::setData(const uno::Sequence< uno::Sequence< double > >& rData
     lcl_EnsureCoreConnected(GetFrameFormat(), static_cast<cppu::OWeakObject*>(this));
     if(rData.getLength() != nRowCount)
         throw uno::RuntimeException("Row count mismatch. expected: " + OUString::number(nRowCount) + " got: " + OUString::number(rData.getLength()), static_cast<cppu::OWeakObject*>(this));
-    auto vCells(getCells());
+    auto vCells(GetCells());
     auto pCurrentCell(vCells.begin());
     for(const auto& rRow : rData)
     {
@@ -3755,7 +3636,7 @@ uno::Sequence<OUString> SwXCellRange::getLabelDescriptions(bool bRow)
     if(!(bRow ? m_bFirstColumnAsLabel : m_bFirstRowAsLabel))
         return {};  // without labels we have no descriptions
     auto xLabelRange(getCellRangeByPosition(nLeft, nTop, nRight, nBottom));
-    auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->getCells());
+    auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->GetCells());
     uno::Sequence<OUString> vResult(vCells.size());
     std::transform(vCells.begin(), vCells.end(), vResult.begin(),
         [](uno::Reference<table::XCell> xCell) -> OUString { return uno::Reference<text::XText>(xCell, uno::UNO_QUERY_THROW)->getString(); });
@@ -3781,7 +3662,7 @@ void SwXCellRange::setLabelDescriptions(const uno::Sequence<OUString>& rDesc, bo
     if(!nRight && !nBottom)
         throw uno::RuntimeException("Table too complex", static_cast<cppu::OWeakObject*>(this));
     auto xLabelRange(getCellRangeByPosition(nLeft, nTop, nRight, nBottom));
-    auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->getCells());
+    auto vCells(static_cast<SwXCellRange*>(xLabelRange.get())->GetCells());
     if (sal::static_int_cast<sal_uInt32>(rDesc.getLength()) != vCells.size())
         throw uno::RuntimeException("Too few or too many descriptions", static_cast<cppu::OWeakObject*>(this));
     auto pDescIterator(rDesc.begin());
@@ -3961,10 +3842,12 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
     UnoActionContext aAction(pFrameFormat->GetDoc());
-    auto pUnoCrsr(pFrameFormat->GetDoc()->CreateUnoCrsr(aPos, true));
+    std::shared_ptr<SwUnoTableCrsr> const pUnoCrsr(
+            std::dynamic_pointer_cast<SwUnoTableCrsr>(
+                pFrameFormat->GetDoc()->CreateUnoCrsr(aPos, true)));
     pUnoCrsr->Move( fnMoveForward, fnGoNode );
     {
-        // remove actions
+        // remove actions - TODO: why?
         UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
     }
     pFrameFormat->GetDoc()->InsertRow(*pUnoCrsr, (sal_uInt16)nCount, bAppend);
@@ -3984,10 +3867,6 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const SwTableBox* pTLBox = pTable->GetTableBox(sTLName);
     if(!pTLBox)
         throw uno::RuntimeException("Illegal arguments", static_cast<cppu::OWeakObject*>(this));
-    {
-        // invalidate all actions
-        UnoActionRemoveContext aRemoveContext(pFrameFormat->GetDoc());
-    }
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
@@ -4002,6 +3881,10 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCrsr->GetPoint()->nNode = *pBLBox->GetSttNd();
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+    {
+        // HACK: remove pending actions for selecting old style tables
+        UnoActionRemoveContext aRemoveContext(*pCrsr);
+    }
     pCrsr->MakeBoxSels();
     {   // these braces are important
         UnoActionContext aAction(pFrameFormat->GetDoc());
@@ -4009,7 +3892,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         pUnoCrsr.reset();
     }
     {
-        // invalidate all actions
+        // invalidate all actions - TODO: why?
         UnoActionRemoveContext aRemoveContext(pFrameFormat->GetDoc());
     }
 }
@@ -4103,7 +3986,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
     {
-        // remove actions
+        // remove actions - TODO: why?
         UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
     }
 
@@ -4125,10 +4008,6 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     const SwTableBox* pTLBox = pTable->GetTableBox( sTLName );
     if(!pTLBox)
         throw uno::RuntimeException("Cell not found", static_cast<cppu::OWeakObject*>(this));
-    {
-        // invalidate all actions
-        UnoActionRemoveContext aRemoveContext(pFrameFormat->GetDoc());
-    }
     const SwStartNode* pSttNd = pTLBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     // set cursor to the upper-left cell of the range
@@ -4143,6 +4022,10 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
     pUnoCrsr->GetPoint()->nNode = *pTRBox->GetSttNd();
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
     SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+    {
+        // HACK: remove pending actions for selecting old style tables
+        UnoActionRemoveContext aRemoveContext(*pCrsr);
+    }
     pCrsr->MakeBoxSels();
     {   // these braces are important
         UnoActionContext aAction(pFrameFormat->GetDoc());
@@ -4150,7 +4033,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount)
         pUnoCrsr.reset();
     }
     {
-        // invalidate all actions
+        // invalidate all actions - TODO: why?
         UnoActionRemoveContext aRemoveContext(pFrameFormat->GetDoc());
     }
 }

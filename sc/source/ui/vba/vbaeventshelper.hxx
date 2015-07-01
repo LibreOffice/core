@@ -61,7 +61,7 @@ private:
     /** Creates a VBA Hyperlink object (the argument must contain a UNO cell). */
     css::uno::Any createHyperlink( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
     /** Creates a VBA Window object (the argument must contain a model controller). */
-    css::uno::Any createWindow( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    css::uno::Any createWindow( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
 private:
     ::rtl::Reference< ScVbaEventListener > mxListener;

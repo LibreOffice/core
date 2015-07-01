@@ -127,7 +127,7 @@ void TimerTest::testIdleMainloop()
         // can't test this via Application::Yield since this
         // also processes all tasks directly via the scheduler.
         pSVData->maAppData.mnDispatchLevel++;
-        pSVData->mpDefInst->Yield( true, false );
+        pSVData->mpDefInst->DoYield(true, false, 0);
         pSVData->maAppData.mnDispatchLevel--;
     }
     CPPUNIT_ASSERT_MESSAGE("mainloop idle triggered", bTriggered);

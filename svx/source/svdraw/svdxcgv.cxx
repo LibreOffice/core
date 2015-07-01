@@ -570,7 +570,7 @@ GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) co
             // moving the result is more reliable then setting a relative MapMode at the VDev (used
             // before), also see #i99268# in GetObjGraphic() below. Some draw actions at
             // the OutDev are simply not handled correctly when a MapMode is set at the
-            // target devive, e.g. MetaFloatTransparentAction. Even the Move for this action
+            // target device, e.g. MetaFloatTransparentAction. Even the Move for this action
             // was missing the manipulation of the embedded Metafile
             aMtf.Move(-aBound.Left(), -aBound.Top());
 

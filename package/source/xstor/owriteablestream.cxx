@@ -57,13 +57,13 @@ using namespace ::com::sun::star;
 
 struct WSInternalData_Impl
 {
-    SotMutexHolderRef m_rSharedMutexRef;
+    rtl::Reference<SotMutexHolder> m_rSharedMutexRef;
     ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
     ::cppu::OMultiTypeInterfaceContainerHelper m_aListenersContainer; // list of listeners
     sal_Int32 m_nStorageType;
 
     // the mutex reference MUST NOT be empty
-    WSInternalData_Impl( const SotMutexHolderRef& rMutexRef, sal_Int32 nStorageType )
+    WSInternalData_Impl( const rtl::Reference<SotMutexHolder>& rMutexRef, sal_Int32 nStorageType )
     : m_rSharedMutexRef( rMutexRef )
     , m_pTypeCollection()
     , m_aListenersContainer( rMutexRef->GetMutex() )
@@ -1694,9 +1694,9 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, bool bTransacted )
 , m_bTransacted( bTransacted )
 {
     OSL_ENSURE( pImpl, "No base implementation!\n" );
-    OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex!\n" );
+    OSL_ENSURE( m_pImpl->m_rMutexRef.is(), "No mutex!\n" );
 
-    if ( !m_pImpl || !m_pImpl->m_rMutexRef.Is() )
+    if ( !m_pImpl || !m_pImpl->m_rMutexRef.is() )
         throw uno::RuntimeException(); // just a disaster
 
     m_pData.reset(new WSInternalData_Impl(pImpl->m_rMutexRef, m_pImpl->m_nStorageType));
@@ -1710,9 +1710,9 @@ OWriteStream::OWriteStream( OWriteStream_Impl* pImpl, uno::Reference< io::XStrea
 , m_bTransacted( bTransacted )
 {
     OSL_ENSURE( pImpl && xStream.is(), "No base implementation!\n" );
-    OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex!\n" );
+    OSL_ENSURE( m_pImpl->m_rMutexRef.is(), "No mutex!\n" );
 
-    if ( !m_pImpl || !m_pImpl->m_rMutexRef.Is() )
+    if ( !m_pImpl || !m_pImpl->m_rMutexRef.is() )
         throw uno::RuntimeException(); // just a disaster
 
     m_pData.reset(new WSInternalData_Impl(pImpl->m_rMutexRef, m_pImpl->m_nStorageType));

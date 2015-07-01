@@ -2058,6 +2058,7 @@ sal_uInt16 SwTextFrm::GetParHeight() const
  */
 SwTextFrm* SwTextFrm::GetFormatted( bool bForceQuickFormat )
 {
+    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     SWAP_IF_SWAPPED swap( this );
 
     // The IdleCollector could've removed my cached information
@@ -2067,7 +2068,7 @@ SwTextFrm* SwTextFrm::GetFormatted( bool bForceQuickFormat )
     {
         // Calc() must be called, because frame position can be wrong
         const bool bFormat = GetValidSizeFlag();
-        Calc();
+        Calc(pRenderContext);
 
         // It could be that Calc() did not trigger Format(), because
         // we've been asked by the IdleCollector to throw away our

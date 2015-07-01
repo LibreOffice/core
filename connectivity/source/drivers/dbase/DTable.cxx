@@ -2366,7 +2366,7 @@ namespace
     }
 }
 
-void SAL_CALL ODbaseTable::renameImpl( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODbaseTable::renameImpl( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -2519,7 +2519,7 @@ OUString ODbaseTable::createTempFile()
 
 void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
 {
-    sal_Int32 nPos = _nPos + 1; // +1 because we always have the bookmark clumn as well
+    sal_Int32 nPos = _nPos + 1; // +1 because we always have the bookmark column as well
     OValueRefRow aRow = new OValueRefVector(m_pColumns->getCount());
     OValueRefRow aInsertRow;
     if(_nPos)

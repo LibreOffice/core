@@ -24,7 +24,7 @@ import share.LogWriter;
 import util.*;
 
 /**
- * This class support you to execute some shell commands in a buld environment. At ervery call of commands
+ * This class support you to execute some shell commands in a buld environment. At every call of commands
  * a build environment was created and the commands will be executed.
  *
  */

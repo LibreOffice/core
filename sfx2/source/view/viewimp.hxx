@@ -34,8 +34,7 @@
 
 class SfxBaseController;
 
-typedef SfxShell* SfxShellPtr_Impl;
-typedef std::vector<SfxShellPtr_Impl> SfxShellArr_Impl;
+typedef std::vector<SfxShell*> SfxShellArr_Impl;
 
 class SfxClipboardChangeListener;
 class SfxInPlaceClientList;

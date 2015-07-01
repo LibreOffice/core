@@ -370,7 +370,7 @@ protected:
     void setRootFrm( SwRootFrm* pRoot ) { mpRoot = pRoot; }
 
     SwPageFrm *InsertPage( SwPageFrm *pSibling, bool bFootnote );
-    void PrepareMake();
+    void PrepareMake(vcl::RenderContext* pRenderContext);
     void OptPrepareMake();
     void MakePos();
     // Format next frame of table frame to assure keeping attributes.
@@ -652,7 +652,7 @@ public:
     inline SwLayoutFrm *GetPrevLayoutLeaf();
     inline SwLayoutFrm *GetNextLayoutLeaf();
 
-    virtual void Calc() const;      // here might be "formatted"
+    virtual void Calc(vcl::RenderContext* pRenderContext) const; // here might be "formatted"
     inline void OptCalc() const;    // here we assume (for optimization) that
                                     // the predecessors are already formatted
 
@@ -998,11 +998,6 @@ inline void SwFrm::InvalidateNextPos( bool bNoFootnote )
         ImplInvalidateNextPos( bNoFootnote );
 }
 
-inline void SwFrm::Calc() const
-{
-    if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )
-        const_cast<SwFrm*>(this)->PrepareMake();
-}
 inline void SwFrm::OptCalc() const
 {
     if ( !mbValidPos || !mbValidPrtArea || !mbValidSize )

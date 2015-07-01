@@ -47,7 +47,7 @@ SwVbaStyle::getName() throw (uno::RuntimeException, std::exception)
     return mxStyle->getName();
 }
 
-sal_Int32 SwVbaStyle::getLanguageID( const uno::Reference< beans::XPropertySet >& xTCProps ) throw (uno::RuntimeException)
+sal_Int32 SwVbaStyle::getLanguageID( const uno::Reference< beans::XPropertySet >& xTCProps ) throw (uno::RuntimeException, std::exception)
 {
     lang::Locale aLocale;
     xTCProps->getPropertyValue("CharLocale") >>= aLocale;

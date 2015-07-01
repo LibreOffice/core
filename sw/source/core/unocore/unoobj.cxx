@@ -208,7 +208,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
 
 static void
 lcl_setCharStyle(SwDoc *const pDoc, const uno::Any & rValue, SfxItemSet & rSet)
-throw (lang::IllegalArgumentException)
+    throw (lang::IllegalArgumentException, std::exception)
 {
     SwDocShell *const pDocSh = pDoc->GetDocShell();
     if(pDocSh)
@@ -261,7 +261,7 @@ throw (lang::IllegalArgumentException)
 
 void
 SwUnoCursorHelper::SetTextFormatColl(const uno::Any & rAny, SwPaM & rPaM)
-throw (lang::IllegalArgumentException, uno::RuntimeException)
+throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SwDoc *const pDoc = rPaM.GetDoc();
     SwDocShell *const pDocSh = pDoc->GetDocShell();
@@ -474,7 +474,8 @@ bool
 SwUnoCursorHelper::SetCursorPropertyValue(
         SfxItemPropertySimpleEntry const& rEntry, const uno::Any& rValue,
         SwPaM & rPam, SfxItemSet & rItemSet)
-throw (lang::IllegalArgumentException, uno::RuntimeException, uno::DeploymentException)
+throw (lang::IllegalArgumentException, uno::RuntimeException,
+       uno::DeploymentException, std::exception)
 {
     if (!(rEntry.nFlags & beans::PropertyAttribute::MAYBEVOID) &&
         (rValue.getValueType() == cppu::UnoType<void>::get()))
@@ -1732,7 +1733,7 @@ uno::Any SwUnoCursorHelper::GetPropertyValue(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
     const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     uno::Any aAny;
     SfxItemPropertySimpleEntry const*const pEntry =
@@ -1875,7 +1876,7 @@ SwUnoCursorHelper::GetPropertyStates(
             SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
             const uno::Sequence< OUString >& rPropertyNames,
             const SwGetPropertyStatesCaller eCaller)
-throw (beans::UnknownPropertyException, uno::RuntimeException)
+throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     const OUString* pNames = rPropertyNames.getConstArray();
     uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
@@ -2019,7 +2020,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
 void SwUnoCursorHelper::SetPropertyToDefault(
     SwPaM& rPaM, const SfxItemPropertySet& rPropSet,
     const OUString& rPropertyName)
-throw (beans::UnknownPropertyException, uno::RuntimeException)
+throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SwDoc & rDoc = *rPaM.GetDoc();
     SfxItemPropertySimpleEntry const*const pEntry =

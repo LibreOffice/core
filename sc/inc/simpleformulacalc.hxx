@@ -30,6 +30,9 @@ private:
     ScAddress maAddr;
     ScDocument* mpDoc;
     ScFormulaResult maResult;
+    formula::FormulaGrammar::Grammar maGram;
+    bool bIsMatrix;
+    OUString maMatrixFormulaResult;
 
 public:
     ScSimpleFormulaCalculator(ScDocument* pDoc, const ScAddress& rAddr,

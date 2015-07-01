@@ -3854,7 +3854,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
     }
 
-    // new part to comute the user's drag activities
+    // new part to commute the user's drag activities
     // get the original objects transformation
     basegfx::B2DHomMatrix aOriginalMatrix;
     basegfx::B2DPolyPolygon aPolyPolygon;

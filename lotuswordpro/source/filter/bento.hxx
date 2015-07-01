@@ -132,8 +132,6 @@ UtDefClassP(CBenTypeName);
 typedef unsigned char BenByte;
 typedef unsigned short BenWord;
 typedef unsigned long BenDWord;
-typedef void * BenDataPtr;
-typedef const void  * BenConstDataPtr;
 
 typedef unsigned long BenContainerPos;
 typedef unsigned long BenObjectID;
@@ -216,9 +214,9 @@ public: // Internal methods
     explicit LtcBenContainer(LwpSvStream * pStream);
     ~LtcBenContainer();
 
-    BenError Read(BenDataPtr pBuffer, unsigned long MaxSize,
+    BenError Read(void * pBuffer, unsigned long MaxSize,
       unsigned long * pAmtRead);
-    BenError ReadKnownSize(BenDataPtr pBuffer, unsigned long Amt);
+    BenError ReadKnownSize(void * pBuffer, unsigned long Amt);
     BenError SeekToPosition(BenContainerPos Pos);
     BenError SeekFromEnd(long Offset);
 
@@ -267,7 +265,7 @@ class CBenValue : public CBenIDListElmt
 {
 public:
     unsigned long GetValueSize();
-    BenError ReadValueData(BenDataPtr pBuffer,
+    BenError ReadValueData(void * pBuffer,
       unsigned long Offset, unsigned long MaxSize, unsigned long * pAmtRead);
 
     pCBenProperty BEN_EXPORT GetProperty() { return cpProperty; }
@@ -351,14 +349,14 @@ public: // Internal methods
       unsigned long Size) : CUtListElmt(&pValue->GetValueSegments())
       { cpValue = pValue; cImmediate = false; cPos = Pos;
       cSize = Size; }
-    CBenValueSegment(pCBenValue pValue, BenConstDataPtr pImmData,
+    CBenValueSegment(pCBenValue pValue, const void  * pImmData,
       unsigned short Size) : CUtListElmt(&pValue->GetValueSegments())
       { cpValue = pValue; cImmediate = true;
       UtHugeMemcpy(cImmData, pImmData, Size); cSize = Size; }
     CBenValueSegment(BenContainerPos Pos, unsigned long Size)
       { cpValue = NULL; cImmediate = false; cPos = Pos;
       cSize = Size; }
-    CBenValueSegment(BenConstDataPtr pImmData, unsigned short Size)
+    CBenValueSegment(const void  * pImmData, unsigned short Size)
       { cpValue = NULL; cImmediate = true;
       UtHugeMemcpy(cImmData, pImmData, Size); cSize = Size; }
     bool IsLast()

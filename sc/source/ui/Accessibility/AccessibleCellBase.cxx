@@ -206,7 +206,7 @@ sal_Int32
 
 OUString SAL_CALL
     ScAccessibleCellBase::createAccessibleDescription()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OUString sDescription = OUString(ScResId(STR_ACC_CELL_DESCR));
 
@@ -365,7 +365,7 @@ OUString SAL_CALL ScAccessibleCellBase::GetNote()
 #include <com/sun/star/table/ShadowFormat.hpp>
 
 OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs()
-                                        throw (::com::sun::star::uno::RuntimeException)
+                                        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -448,7 +448,7 @@ OUString SAL_CALL ScAccessibleCellBase::getShadowAttrs()
 #include <com/sun/star/table/BorderLine.hpp>
 
 OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs()
-                                        throw (::com::sun::star::uno::RuntimeException)
+                                        throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -598,7 +598,7 @@ OUString SAL_CALL ScAccessibleCellBase::getBorderAttrs()
 //end of cell attributes
 
 OUString SAL_CALL ScAccessibleCellBase::GetAllDisplayNote()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString strNote;
     OUString strTrackText;

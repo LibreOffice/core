@@ -137,7 +137,7 @@ public:
     // the following method supports only storages of OOo formats
     static sal_Int32 GetXStorageFormat(
             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
-        throw ( ::com::sun::star::uno::Exception );
+        throw ( ::com::sun::star::uno::Exception, std::exception );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
         GetStorageOfFormatFromURL(

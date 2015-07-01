@@ -419,22 +419,8 @@ shrinkFilterName( const OUString &rFilterName, bool bAllowNoStar = false )
 }
 
 static void
-dialog_remove_buttons( GtkDialog *pDialog )
+dialog_remove_buttons(GtkWidget *pActionArea)
 {
-    g_return_if_fail( GTK_IS_DIALOG( pDialog ) );
-
-    GtkWidget *pActionArea;
-
-#if GTK_CHECK_VERSION(3,0,0)
-#if GTK_CHECK_VERSION(3,12,0)
-    pActionArea = gtk_dialog_get_header_bar(pDialog);
-#else
-    pActionArea = gtk_dialog_get_action_area(pDialog);
-#endif
-#else
-    pActionArea = pDialog->action_area;
-#endif
-
     GList *pChildren =
         gtk_container_get_children( GTK_CONTAINER( pActionArea ) );
 
@@ -442,6 +428,21 @@ dialog_remove_buttons( GtkDialog *pDialog )
         gtk_widget_destroy( GTK_WIDGET( p->data ) );
 
     g_list_free( pChildren );
+}
+
+static void
+dialog_remove_buttons( GtkDialog *pDialog )
+{
+    g_return_if_fail( GTK_IS_DIALOG( pDialog ) );
+
+#if GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3,12,0)
+    dialog_remove_buttons(gtk_dialog_get_header_bar(pDialog));
+#endif
+    dialog_remove_buttons(gtk_dialog_get_action_area(pDialog));
+#else
+    dialog_remove_buttons(pDialog->action_area);
+#endif
 }
 
 namespace {
@@ -917,6 +918,9 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
         frame::Desktop::create(m_xContext),
         UNO_QUERY_THROW );
 
+    GtkWindow *pParent = RunDialog::GetTransientFor();
+    if (pParent)
+        gtk_window_set_transient_for(GTK_WINDOW(m_pDialog), pParent);
     RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
     uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
     while( GTK_RESPONSE_NO == btn )
@@ -1004,7 +1008,8 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException, std
                             gtk_window_set_title( GTK_WINDOW( dlg ),
                                 OUStringToOString(getResString(FILE_PICKER_TITLE_SAVE ),
                                 RTL_TEXTENCODING_UTF8 ).getStr() );
-
+                            if (pParent)
+                                gtk_window_set_transient_for(GTK_WINDOW(dlg), pParent);
                             RunDialog* pAnotherDialog = new RunDialog(dlg, xToolkit, xDesktop);
                             uno::Reference < awt::XTopWindowListener > xAnotherLifeCycle(pAnotherDialog);
                             btn = pAnotherDialog->run();

@@ -191,19 +191,6 @@ static void getVisibleAreaTwips(GdkRectangle* pArea)
 #endif
 }
 
-
-/// Handles the key-press-event of the window.
-static gboolean signalKey(GtkWidget* /*pWidget*/, GdkEvent* pEvent, gpointer/* pData*/)
-{
-    LOKDocView* pLOKDocView = LOK_DOC_VIEW(pDocView);
-    if (!gtk_widget_get_visible(pFindbar) && bool(lok_doc_view_get_edit(pLOKDocView)))
-        {
-            lok_doc_view_post_key(pLOKDocView, pEvent);
-            return TRUE;
-        }
-    return FALSE;
-}
-
 /// Searches for the next or previous text of pFindbarEntry.
 static void doSearch(bool bBackwards)
 {
@@ -311,7 +298,18 @@ static void signalPart(LOKDocView* /*pLOKDocView*/, int nPart, gpointer /*pData*
     g_bPartSelectorBroadcast = true;
 }
 
-/// User clicked on a cmmand button -> inform LOKDocView.
+/// User clicked on a command button -> inform LOKDocView.
+static void signalHyperlink(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer /*pData*/)
+{
+    GError* pError = NULL;
+    gtk_show_uri(NULL, pPayload, GDK_CURRENT_TIME, &pError);
+    if (pError != NULL)
+    {
+        g_warning("Unable to show URI %s : %s", pPayload, pError->message);
+        g_error_free(pError);
+    }
+}
+
 static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 {
     if (g_bToolItemBroadcast)
@@ -522,16 +520,15 @@ int main( int argc, char* argv[] )
 
     // Docview
     pDocView = lok_doc_view_new (argv[1], NULL, NULL);
-    if (pDocView == NULL)
-        g_error ("Error while creating LOKDocView widget");
+#if GLIB_CHECK_VERSION(2,40,0)
+    g_assert_nonnull(pDocView);
+#endif
+
     g_signal_connect(pDocView, "edit-changed", G_CALLBACK(signalEdit), NULL);
     g_signal_connect(pDocView, "command-changed", G_CALLBACK(signalCommand), NULL);
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), NULL);
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), NULL);
-
-    // Input handling.
-    g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), pDocView);
-    g_signal_connect(pWindow, "key-release-event", G_CALLBACK(signalKey), pDocView);
+    g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), NULL);
 
     // Scrolled window for DocView
     pScrolledWindow = gtk_scrolled_window_new(0, 0);
@@ -555,6 +552,11 @@ int main( int argc, char* argv[] )
     // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
     g_signal_connect(G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
     g_signal_connect(G_OBJECT(pPartSelector), "changed", G_CALLBACK(changePart), 0);
+
+    // Make only LOKDocView widget as focussable
+    GList *focusChain = NULL;
+    focusChain = g_list_append( focusChain, pDocView );
+    gtk_container_set_focus_chain ( GTK_CONTAINER (pVBox), focusChain );
 
     gtk_main();
 

@@ -327,8 +327,6 @@ protected:
     virtual void    DoScroll( ScrollBar* pCurScrollBar ) SAL_OVERRIDE;
 
 public:
-                    TYPEINFO_OVERRIDE();
-
     ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, OUString& aModule );
 
                     virtual ~ModulWindow();

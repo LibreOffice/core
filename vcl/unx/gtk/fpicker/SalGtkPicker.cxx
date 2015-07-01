@@ -25,6 +25,8 @@
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <comphelper/processfactory.hxx>
 #include <rtl/process.h>
 #include <osl/diagnose.h>
@@ -103,10 +105,7 @@ extern "C"
     }
 }
 
-RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit,
-    uno::Reference< frame::XDesktop >& rDesktop ) :
-    cppu::WeakComponentImplHelper2< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
-    mpDialog(pDialog), mxToolkit(rToolkit), mxDesktop(rDesktop)
+GtkWindow* RunDialog::GetTransientFor()
 {
     GtkWindow *pParent = NULL;
 
@@ -117,8 +116,15 @@ RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit 
         if( pFrame )
             pParent = GTK_WINDOW( pFrame->getWindow() );
     }
-    if (pParent)
-        gtk_window_set_transient_for( GTK_WINDOW( mpDialog ), pParent );
+
+    return pParent;
+}
+
+RunDialog::RunDialog( GtkWidget *pDialog, uno::Reference< awt::XExtendedToolkit >& rToolkit,
+    uno::Reference< frame::XDesktop >& rDesktop ) :
+    cppu::WeakComponentImplHelper2< awt::XTopWindowListener, frame::XTerminateListener >( maLock ),
+    mpDialog(pDialog), mxToolkit(rToolkit), mxDesktop(rDesktop)
+{
 }
 
 RunDialog::~RunDialog()
@@ -128,10 +134,22 @@ RunDialog::~RunDialog()
     g_source_remove_by_user_data (this);
 }
 
-void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject& )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL RunDialog::windowOpened(const css::lang::EventObject& e)
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
+
+    //Don't popdown dialogs if a tooltip appears elsewhere, that's ok, but do pop down
+    //if another dialog/frame is launched.
+    css::uno::Reference<css::accessibility::XAccessible> xAccessible(e.Source, css::uno::UNO_QUERY);
+    if (xAccessible.is())
+    {
+        css::uno::Reference<css::accessibility::XAccessibleContext> xContext(xAccessible->getAccessibleContext());
+        if (xContext.is() && xContext->getAccessibleRole() == css::accessibility::AccessibleRole::TOOL_TIP)
+        {
+            return;
+        }
+    }
 
     g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, NULL);
 }

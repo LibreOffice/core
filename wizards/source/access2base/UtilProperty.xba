@@ -156,7 +156,7 @@ Dim iNumProperties As Integer, i As Integer
 				pvPropertyValuesArray(i) = pvPropertyValuesArray(i + 1)
 			Next i
 		EndIf
-		&apos; Redimension the array to have one feweer element.
+		&apos; Redimension the array to have one fewer element.
 		Redim Preserve pvPropertyValuesArray(iNumProperties - 2)
 	EndIf
 

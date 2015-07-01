@@ -75,7 +75,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
                                           bool bVerifyPasswordOnly=false )
             throw(::com::sun::star::lang::WrappedTargetException,
-                  ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void onNewRootStorage() SAL_OVERRIDE;
 

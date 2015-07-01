@@ -834,7 +834,6 @@ Sequence< Any > SAL_CALL
 BaseContent::setPropertyValues(
     sal_Int32 nMyCommandIdentifier,
     const Sequence< beans::PropertyValue >& Values )
-    throw()
 {
     if( m_nState & Deleted )
     {   //  To do
@@ -971,7 +970,6 @@ Reference< XDynamicResultSet > SAL_CALL
 BaseContent::open(
     sal_Int32 nMyCommandIdentifier,
     const OpenCommandArgument2& aCommandArgument )
-    throw()
 {
     Reference< XDynamicResultSet > retValue( 0 );
 
@@ -1047,7 +1045,6 @@ BaseContent::open(
 
 void SAL_CALL
 BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier )
-    throw()
 {
     if( m_nState & Deleted )
         return;
@@ -1064,7 +1061,6 @@ BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier )
 void SAL_CALL
 BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
                        const TransferInfo& aTransferInfo )
-    throw()
 {
     if( m_nState & Deleted )
         return;
@@ -1136,7 +1132,6 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 
 void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
                                    const InsertCommandArgument& aInsertArgument )
-    throw()
 {
     if( m_nState & FullFeatured )
     {

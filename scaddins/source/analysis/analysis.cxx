@@ -64,7 +64,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL analysis_component_getFactory(
     return pRet;
 }
 
-ResMgr& AnalysisAddIn::GetResMgr() throw( uno::RuntimeException )
+ResMgr& AnalysisAddIn::GetResMgr() throw( uno::RuntimeException, std::exception )
 {
     if( !pResMgr )
     {
@@ -77,7 +77,7 @@ ResMgr& AnalysisAddIn::GetResMgr() throw( uno::RuntimeException )
     return *pResMgr;
 }
 
-OUString AnalysisAddIn::GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( uno::RuntimeException )
+OUString AnalysisAddIn::GetDisplFuncStr( sal_uInt16 nFuncNum ) throw( uno::RuntimeException, std::exception )
 {
     return AnalysisRscStrLoader( RID_ANALYSIS_FUNCTION_NAMES, nFuncNum, GetResMgr() ).GetString();
 }
@@ -103,7 +103,7 @@ AnalysisFuncRes::AnalysisFuncRes( ResId& rRes, ResMgr& rResMgr, sal_uInt16 nInd,
     FreeResource();
 }
 
-OUString AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException )
+OUString AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException, std::exception )
 {
     OUString                      aRet;
     AnalysisResourcePublisher   aResPubl( AnalysisResId( RID_ANALYSIS_FUNCTION_DESCRIPTIONS, GetResMgr() ) );

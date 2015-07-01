@@ -1537,6 +1537,7 @@ public:
 
 private:
     virtual void SAL_CALL disposing() SAL_OVERRIDE {
+        osl::MutexGuard g(m_aMutex);
         reflection_.clear();
         classCache_.clear();
         typeCache_.clear();
@@ -1572,16 +1573,20 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     css::uno::Any const & aObject)
     throw (css::uno::RuntimeException, std::exception)
 {
-    osl::MutexGuard g(m_aMutex);
-    if (rBHelper.bDisposed || rBHelper.bInDispose) {
-        throw css::lang::DisposedException(
-            getImplementationName(), static_cast<OWeakObject *>(this));
+    css::uno::Reference<css::reflection::XIdlReflection> reflection;
+    {
+        osl::MutexGuard g(m_aMutex);
+        if (rBHelper.bDisposed || rBHelper.bInDispose) {
+            throw css::lang::DisposedException(
+                getImplementationName(), static_cast<OWeakObject *>(this));
+        }
+        reflection = reflection_;
     }
     css::uno::Any aToInspectObj;
     css::uno::Type t;
     if (aObject >>= t) {
         css::uno::Reference<css::reflection::XIdlClass> c(
-            reflection_->forName(t.getTypeName()));
+            reflection->forName(t.getTypeName()));
         if (!c.is()) {
             SAL_WARN("stoc", "cannot reflect type " << t.getTypeName());
             return css::uno::Reference<css::beans::XIntrospectionAccess>();
@@ -1632,7 +1637,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                 const Type* pTypes = SupportedTypesSeq.getConstArray();
                 for( sal_Int32 i = 0 ; i < nTypeCount ; i++ )
                 {
-                    pClasses[i] = reflection_->forName(pTypes[i].getTypeName());
+                    pClasses[i] = reflection->forName(pTypes[i].getTypeName());
                 }
                 // TODO: Caching!
             }
@@ -1641,7 +1646,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                 "stoc",
                 "object of type \"" << aToInspectObj.getValueTypeName()
                     << "\" lacks XTypeProvider");
-            xImplClass = reflection_->forName(aToInspectObj.getValueTypeName());
+            xImplClass = reflection->forName(aToInspectObj.getValueTypeName());
             SupportedClassSeq.realloc(1);
             SupportedClassSeq[0] = xImplClass;
         }
@@ -1651,24 +1656,36 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         if( xPropSet.is() )
             xPropSetInfo = xPropSet->getPropertySetInfo();
     } else {
-        xImplClass = reflection_->forName(aToInspectObj.getValueTypeName());
+        xImplClass = reflection->forName(aToInspectObj.getValueTypeName());
     }
 
     if (xTypeProvider.is()) {
         TypeKey key(xPropSetInfo, xTypeProvider->getTypes());
+
+        osl::MutexGuard g(m_aMutex);
+        if (rBHelper.bDisposed || rBHelper.bInDispose) {
+            throw css::lang::DisposedException(
+                getImplementationName(), static_cast<OWeakObject *>(this));
+        }
         pAccess = typeCache_.find(key);
         if (pAccess.is()) {
             return new ImplIntrospectionAccess(aToInspectObj, pAccess);
         }
-        pAccess = new IntrospectionAccessStatic_Impl(reflection_);
+        pAccess = new IntrospectionAccessStatic_Impl(reflection);
         typeCache_.insert(key, pAccess);
     } else if (xImplClass.is()) {
         ClassKey key(xPropSetInfo, xImplClass, SupportedClassSeq);
+
+        osl::MutexGuard g(m_aMutex);
+        if (rBHelper.bDisposed || rBHelper.bInDispose) {
+            throw css::lang::DisposedException(
+                getImplementationName(), static_cast<OWeakObject *>(this));
+        }
         pAccess = classCache_.find(key);
         if (pAccess.is()) {
             return new ImplIntrospectionAccess(aToInspectObj, pAccess);
         }
-        pAccess = new IntrospectionAccessStatic_Impl(reflection_);
+        pAccess = new IntrospectionAccessStatic_Impl(reflection);
         classCache_.insert(key, pAccess);
     }
 
@@ -1681,7 +1698,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     sal_Int32 i;
 
     if( !pAccess.is() )
-        pAccess = new IntrospectionAccessStatic_Impl( reflection_ );
+        pAccess = new IntrospectionAccessStatic_Impl( reflection );
 
     // Referenzen auf wichtige Daten von pAccess
     sal_Int32& rPropCount = pAccess->mnPropCount;
@@ -2317,7 +2334,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             // void als Default-Klasse eintragen
                             css::uno::Reference<css::reflection::XIdlClass>
                                 xListenerClass(
-                                    reflection_->forName(
+                                    reflection->forName(
                                         cppu::UnoType<void>::get()
                                         .getTypeName()));
                             // ALT: Reference<XIdlClass> xListenerClass = Void_getReflection()->getIdlClass();
@@ -2329,7 +2346,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                             css::uno::Reference<css::reflection::XIdlClass>
                                 xEventListenerClass(
-                                    reflection_->forName(
+                                    reflection->forName(
                                         cppu::UnoType<
                                             css::lang::XEventListener>::get()
                                         .getTypeName()));
@@ -2404,7 +2421,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         // Ist es ein Interface oder eine struct?
         //Reference<XIdlClass> xClassRef = aToInspectObj.getReflection()->getIdlClass();
         css::uno::Reference<css::reflection::XIdlClass> xClassRef(
-            reflection_->forName(aToInspectObj.getValueTypeName()));
+            reflection->forName(aToInspectObj.getValueTypeName()));
         if( !xClassRef.is() )
         {
             SAL_WARN( "stoc", "Can't get XIdlClass from Reflection" );

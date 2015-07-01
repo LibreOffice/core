@@ -32,6 +32,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <templateview.hrc>
 
+#include <officecfg/Office/Common.hxx>
+
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -67,6 +69,12 @@ RecentDocsView::RecentDocsView( vcl::Window* pParent )
     SetStyle(GetStyle() | WB_VSCROLL);
     setItemMaxTextLength( mnItemMaxTextLength );
     setItemDimensions( mnItemMaxSize, mnItemMaxSize, mnTextHeight, mnItemPadding );
+
+    maFillColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsBackgroundColor::get());
+    maTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsTextColor::get());
+    maHighlightColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightColor::get());
+    maHighlightTextColor = Color(officecfg::Office::Common::Help::StartCenter::StartCenterThumbnailsHighlightTextColor::get());
+    mfHighlightTransparence = 0.25;
 }
 
 VCL_BUILDER_FACTORY(RecentDocsView)
@@ -260,8 +268,9 @@ void RecentDocsView::Paint(vcl::RenderContext& rRenderContext, const Rectangle &
     if (mItemList.empty())
     {
         // No recent files to be shown yet. Show a welcome screen.
-        rRenderContext.Push(PushFlags::FONT);
+        rRenderContext.Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
         SetMessageFont(rRenderContext);
+        SetTextColor(maTextColor);
 
         long nTextHeight = rRenderContext.GetTextHeight();
 
@@ -296,7 +305,6 @@ void RecentDocsView::LoseFocus()
 
     ThumbnailView::LoseFocus();
 }
-
 
 void RecentDocsView::Clear()
 {

@@ -53,7 +53,7 @@ public:
               std::string* pExtensionPath = NULL,
               std::string* pDestination = NULL,
               const OUString* pOfficeHelpPath = NULL )
-            throw( HelpProcessingException );
+            throw( HelpProcessingException, std::exception );
 
     HelpLinker()
         : bExtensionMode(false)

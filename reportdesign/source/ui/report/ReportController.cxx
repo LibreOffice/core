@@ -3163,7 +3163,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     if ( !pSectionWindow )
         return;
 
-    OSL_ENSURE(pSectionWindow->getReportSection().getSection() == _xSection,"Invalid section after marking the corrct one.");
+    OSL_ENSURE(pSectionWindow->getReportSection().getSection() == _xSection,"Invalid section after marking the correct one.");
 
     sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_LEFTMARGIN);
     const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_RIGHTMARGIN);

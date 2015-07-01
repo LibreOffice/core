@@ -99,7 +99,7 @@ protected:
 
     // Forwared from XStatusListener (subclasses must override this one to get
     // the status updates):
-    virtual void statusChanged(const css::frame::FeatureStateEvent& Event ) throw (css::uno::RuntimeException);
+    virtual void statusChanged(const css::frame::FeatureStateEvent& Event ) throw (css::uno::RuntimeException, std::exception);
 
     void            StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     void            DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

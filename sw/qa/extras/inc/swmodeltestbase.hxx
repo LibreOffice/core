@@ -572,14 +572,20 @@ protected:
 
     void load(const char* pDir, const char* pName)
     {
+        return loadURL(getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName);
+    }
+
+    void loadURL(OUString const& rURL, const char* pName)
+    {
         if (mxComponent.is())
             mxComponent->dispose();
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
-        std::cout << pName << ",";
+        if (pName)
+            std::cout << pName << ",";
         mnStartTime = osl_getGlobalTimer();
-        mxComponent = loadFromDesktop(getURLFromSrc(pDir) + OUString::createFromAscii(pName), "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(rURL, "com.sun.star.text.TextDocument");
         discardDumpedLayout();
-        if (mustCalcLayoutOf(pName))
+        if (pName && mustCalcLayoutOf(pName))
             calcLayout();
     }
 

@@ -1603,7 +1603,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 //=====  internal  ========================================================
 
 OUString SAL_CALL ScAccessibleDocumentPagePreview::createAccessibleDescription()
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     OUString sDescription = OUString(ScResId(STR_ACC_PREVIEWDOC_DESCR));
     return sDescription;

@@ -429,7 +429,7 @@ public class FunctionHelper
      * URL too. But nobody guarantee that such notifications will occur.
      * (see dispatchWithNotification() if you interest on that)
      * The returned dispatch object should be hold alive by caller
-     * till he deosn't need it any longer. Otherwise the dispatcher can(!)
+     * till he doesn't need it any longer. Otherwise the dispatcher can(!)
      * die by decreasing his refcount.
      *
      * @param   xFrame      frame which should be the target of this dispatch

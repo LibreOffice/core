@@ -65,8 +65,6 @@ protected:
 
 public:
 
-    TYPEINFO();
-
                         ImageMap() {};
                         ImageMap( const OUString& rName );
                         ImageMap( const ImageMap& rImageMap );

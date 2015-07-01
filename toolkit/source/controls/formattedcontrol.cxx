@@ -327,7 +327,7 @@ namespace toolkit
 
     sal_Bool UnoControlFormattedFieldModel::convertFastPropertyValue(
                 Any& rConvertedValue, Any& rOldValue, sal_Int32 nPropId,
-                const Any& rValue ) throw (IllegalArgumentException)
+                const Any& rValue ) throw (IllegalArgumentException, std::exception)
     {
         if ( BASEPROPERTY_EFFECTIVE_DEFAULT == nPropId && rValue.hasValue() )
         {

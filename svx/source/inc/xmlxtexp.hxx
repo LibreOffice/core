@@ -50,7 +50,7 @@ public:
                       const ::com::sun::star::uno::Reference <
                           ::com::sun::star::embed::XStorage > &xStorage,
                       OUString *pOptName )
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException, std::exception);
 
     // methods without content:
     virtual void _ExportAutoStyles() SAL_OVERRIDE;

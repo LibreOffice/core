@@ -332,7 +332,7 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePageHeader::getSupportedServiceName
 //====  internal  =========================================================
 
 OUString SAL_CALL ScAccessiblePageHeader::createAccessibleDescription()
-                    throw (uno::RuntimeException)
+                    throw (uno::RuntimeException, std::exception)
 {
     OUString sDesc(SC_RESSTR(mbHeader ? STR_ACC_HEADER_DESCR : STR_ACC_FOOTER_DESCR));
     return sDesc.replaceFirst("%1", SC_RESSTR(SCSTR_UNKNOWN));

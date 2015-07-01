@@ -320,6 +320,112 @@ void Test::testFormulaParseReference()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(12), aPos.Row());
     CPPUNIT_ASSERT_MESSAGE("This is not an external address.", !aExtInfo.mbExternal);
 
+    ScRange aRange;
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("B:B", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), aRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2),
+            (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+             SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2));
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), 0);
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE));
+
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("2:2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), aRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2),
+            (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+             SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2));
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), 0);
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE));
+
+    nRes = aRange.Parse("NoQuote.B:C", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), aRange.aStart.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), aRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(4), aRange.aEnd.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(2), aRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2),
+            (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+             SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2));
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), 0);
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE));
+
+    // Both rows at sheet bounds and relative => convert to absolute => entire column reference.
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("B1:B1048576", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), aRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(MAXROW), aRange.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2),
+            (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+             SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2));
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), 0);
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE));
+
+    // Both columns at sheet bounds and relative => convert to absolute => entire row reference.
+    aRange.aStart.SetTab(0);
+    nRes = aRange.Parse("A2:AMJ2", m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & SCA_VALID) != 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aStart.Row());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aEnd.Tab());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(MAXCOL), aRange.aEnd.Col());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), aRange.aEnd.Row());
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2),
+            (SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+             SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2));
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_ROW_ABSOLUTE | SCA_ROW2_ABSOLUTE), 0);
+    CPPUNIT_ASSERT_EQUAL(nRes & (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE), (SCA_COL_ABSOLUTE | SCA_COL2_ABSOLUTE));
+
+    // Check for reference input conversion to and display string of entire column/row.
+    {
+        const char* aChecks[][2] = {
+            { "=B:B",           "B:B" },
+            { "=B1:B1048576",   "B:B" },
+            { "=B1:B$1048576",  "B1:B$1048576" },
+            { "=B$1:B1048576",  "B$1:B1048576" },
+            { "=B$1:B$1048576", "B:B" },
+            { "=2:2",           "2:2" },
+            { "=A2:AMJ2",       "2:2" },
+            { "=A2:$AMJ2",      "A2:$AMJ2" },
+            { "=$A2:AMJ2",      "$A2:AMJ2" },
+            { "=$A2:$AMJ2",     "2:2" }
+        };
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            // Use the 'Dummy' sheet for this.
+            m_pDoc->SetString(ScAddress(0,0,0), OUString::createFromAscii(aChecks[i][0]));
+            if (!checkFormula(*m_pDoc, ScAddress(0,0,0), aChecks[i][1]))
+                CPPUNIT_FAIL("Wrong formula");
+        }
+    }
+
     m_pDoc->DeleteTab(4);
     m_pDoc->DeleteTab(3);
     m_pDoc->DeleteTab(2);
@@ -1709,6 +1815,14 @@ void Test::testFormulaRefUpdateInsertColumns()
     bool bInserted = m_pDoc->InsertNewRangeName("RowRelativeRange", aNamePos, "$Formula.$B2");
     CPPUNIT_ASSERT(bInserted);
 
+    // Set named range for entire absolute column B.
+    bInserted = m_pDoc->InsertNewRangeName("EntireColumn", aNamePos, "$B:$B");
+    CPPUNIT_ASSERT(bInserted);
+
+    // Set named range for entire absolute row 2.
+    bInserted = m_pDoc->InsertNewRangeName("EntireRow", aNamePos, "$2:$2");
+    CPPUNIT_ASSERT(bInserted);
+
     // Set values in B1:B3.
     m_pDoc->SetValue(ScAddress(1,0,0), 1.0);
     m_pDoc->SetValue(ScAddress(1,1,0), 2.0);
@@ -1721,6 +1835,14 @@ void Test::testFormulaRefUpdateInsertColumns()
     // Use named range in C2 to reference B2.
     m_pDoc->SetString(ScAddress(2,1,0), "=RowRelativeRange");
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,1,0)));
+
+    // Use named range in C3 to reference column B, values in B1,B2,B3,B4
+    m_pDoc->SetString(ScAddress(2,2,0), "=SUM(EntireColumn)");
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(2,2,0)));
+
+    // Use named range in C4 to reference row 2, values in B2 and C2.
+    m_pDoc->SetString(ScAddress(2,3,0), "=SUM(EntireRow)");
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2,3,0)));
 
     // Inert columns over A:B.
     ScMarkData aMark;
@@ -1745,6 +1867,29 @@ void Test::testFormulaRefUpdateInsertColumns()
     if (!checkFormula(*m_pDoc, ScAddress(4,1,0), "RowRelativeRange"))
         CPPUNIT_FAIL("Wrong formula in E2 after column insertion.");
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4,1,0)));
+
+    // Check that the named column reference points to the moved column, now D.
+    pName = m_pDoc->GetRangeName()->findByUpperName("ENTIRECOLUMN");
+    CPPUNIT_ASSERT(pName);
+    pName->GetSymbol(aSymbol, aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(OUString("$D:$D"), aSymbol);
+
+    // Check that the formula using the name, now in E3, still has the same result.
+    if (!checkFormula(*m_pDoc, ScAddress(4,2,0), "SUM(EntireColumn)"))
+        CPPUNIT_FAIL("Wrong formula in E3 after column insertion.");
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(4,2,0)));
+
+    // Check that the named row reference still points to the same entire row
+    // and does not have a #REF! error due to inserted columns.
+    pName = m_pDoc->GetRangeName()->findByUpperName("ENTIREROW");
+    CPPUNIT_ASSERT(pName);
+    pName->GetSymbol(aSymbol, aNamePos, formula::FormulaGrammar::GRAM_ENGLISH);
+    CPPUNIT_ASSERT_EQUAL(OUString("$2:$2"), aSymbol);
+
+    // Check that the formula using the name, now in E4, still has the same result.
+    if (!checkFormula(*m_pDoc, ScAddress(4,3,0), "SUM(EntireRow)"))
+        CPPUNIT_FAIL("Wrong formula in E4 after column insertion.");
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(4,3,0)));
 
     m_pDoc->DeleteTab(0);
 }

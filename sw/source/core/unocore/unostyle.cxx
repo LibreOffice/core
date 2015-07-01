@@ -2311,7 +2311,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         SwStyleBase_Impl& rBase,
                         SfxStyleSheetBase* pBase,
                         SfxStyleFamily eFamily,
-                        SwDoc *pDoc) throw(uno::RuntimeException)
+                        SwDoc *pDoc) throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
 
@@ -3685,7 +3685,8 @@ lcl_makeHeaderFooter(
 
 uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
         const uno::Sequence< OUString >& rPropertyNames )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException,
+           uno::RuntimeException, std::exception )
 {
     if(!GetDoc())
         throw uno::RuntimeException();

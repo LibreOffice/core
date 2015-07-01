@@ -435,7 +435,7 @@ protected:
     */
     virtual OUString
         CreateAccessibleBaseName()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     /** Create a unique name string that contains the accessible name.  The
         name consists of the base name and the index.
@@ -447,10 +447,10 @@ protected:
     /// Create a description string that contains the accessible description.
     virtual OUString
         CreateAccessibleDescription()
-        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     OUString
        GetFullAccessibleName(AccessibleShape *shape)
-       throw (::com::sun::star::uno::RuntimeException);
+       throw (::com::sun::star::uno::RuntimeException, std::exception);
     virtual OUString GetStyle();
     void UpdateDocumentAllSelState(::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet > &xStateSet);

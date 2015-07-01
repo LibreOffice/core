@@ -57,6 +57,7 @@ Reference< XHyphenatedWord >  SwTextFormatInfo::HyphWord(
  */
 bool SwTextFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
+    vcl::RenderContext* pRenderContext = getRootFrm()->GetCurrShell()->GetOut();
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTextFrm::Hyphenate" );
 
     if( !g_pBreakIt->GetBreakIter().is() )
@@ -66,7 +67,7 @@ bool SwTextFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
     OSL_ENSURE( !IsLocked(), "SwTextFrm::Hyphenate: this is locked" );
 
     // The frame::Frame must have a valid SSize!
-    Calc();
+    Calc(pRenderContext);
     GetFormatted();
 
     bool bRet = false;

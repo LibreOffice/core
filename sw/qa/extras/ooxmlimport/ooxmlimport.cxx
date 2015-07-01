@@ -1107,7 +1107,7 @@ DECLARE_OOXMLIMPORT_TEST(testWordArtResizing, "WordArt.docx")
 {
     /* The Word-Arts and watermarks were getting resized automatically, It was as if they were
        getting glued to the fallback geometry(the sdrObj) and were getting bound to the font size.
-       The test-case esures the original height and width of the word-art is not changed while importing*/
+       The test-case ensures the original height and width of the word-art is not changed while importing*/
 
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDrawPage(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);

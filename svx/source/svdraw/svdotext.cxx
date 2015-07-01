@@ -2055,7 +2055,7 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 // - Edit
 // - Printing, Saving, Painting in neighboring View while editing
 // - ModelChanged (e. g. through a neighboring View or rulers) while editing
-// - FillColorChanged while editin
+// - FillColorChanged while editing
 // - and many more...
 
 

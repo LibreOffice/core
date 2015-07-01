@@ -29,8 +29,6 @@
 #include <boost/scoped_ptr.hpp>
 
 
-TYPEINIT1_AUTOFACTORY( XFillExchangeData, SvDataCopyStream );
-
 /// default CTOR, for Assign()
 XFillExchangeData::XFillExchangeData() :
     pXFillAttrSetItem( NULL ),

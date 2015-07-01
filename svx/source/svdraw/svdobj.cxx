@@ -162,8 +162,6 @@ SdrObjMacroHitRec::SdrObjMacroHitRec() :
 
 
 
-TYPEINIT0(SdrObjUserData);
-
 SdrObjUserData::SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId, sal_uInt16 nVer) :
     nInventor(nInv),
     nIdentifier(nId),

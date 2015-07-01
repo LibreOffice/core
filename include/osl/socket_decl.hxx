@@ -99,7 +99,7 @@ namespace osl
         inline bool SAL_CALL setPort( sal_Int32 nPort );
 
         /** Sets the address of the underlying socket address struct in network byte order.
-            @return true on success, false signales falure.
+            @return true on success, false signales failure.
          */
         inline bool SAL_CALL setAddr( const ::rtl::ByteSequence & address );
 

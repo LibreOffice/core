@@ -94,8 +94,8 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
     Reference< XTypeProvider > m_xAggregateTypeProv;
     Sequence< Type >           m_Types;
     SbModule*                m_pMod;
-    SbMethodRef getMethod( const OUString& aName ) throw (RuntimeException);
-    SbPropertyRef getProperty( const OUString& aName ) throw (RuntimeException);
+    SbMethodRef getMethod( const OUString& aName ) throw (RuntimeException, std::exception);
+    SbPropertyRef getProperty( const OUString& aName ) throw (RuntimeException, std::exception);
     OUString mName; // for debugging
 
 public:
@@ -383,7 +383,7 @@ Any SAL_CALL DocObjectWrapper::queryInterface( const Type& aType )
     return aRet;
 }
 
-SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeException)
+SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeException, std::exception)
 {
     SbMethodRef pMethod = NULL;
     if ( m_pMod )
@@ -398,7 +398,7 @@ SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeE
     return pMethod;
 }
 
-SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (RuntimeException)
+SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (RuntimeException, std::exception)
 {
     SbPropertyRef pProperty = NULL;
     if ( m_pMod )
@@ -2195,7 +2195,7 @@ SbObjModule::~SbObjModule()
 }
 
 void
-SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException )
+SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException, std::exception )
 {
     SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,static_cast<SbxVariable*>(pDocObject));
     if ( pUnoObj && pUnoObj->getUnoAny() == aObj ) // object is equal, nothing to do

@@ -328,7 +328,7 @@ sal_Int32 VbaEventsHelperBase::getModuleType( const OUString& rModuleName ) thro
     throw uno::RuntimeException();
 }
 
-VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( const OUString& rModuleName ) throw (uno::RuntimeException)
+VbaEventsHelperBase::ModulePathMap& VbaEventsHelperBase::updateModulePathMap( const OUString& rModuleName ) throw (uno::RuntimeException, std::exception)
 {
     // get type of the specified module (throws on error)
     sal_Int32 nModuleType = getModuleType( rModuleName );

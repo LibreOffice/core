@@ -75,7 +75,7 @@ void DockingAreaWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 static void ImplInvalidateMenubar( DockingAreaWindow* pThis )
 {
-    // due to a possible comon gradient covering menubar and top dockingarea
+    // due to a possible common gradient covering menubar and top dockingarea
     // the menubar must be repainted if the top dockingarea changes size or visibility
     if( ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG &&
         (pThis->GetAlign() == WINDOWALIGN_TOP)

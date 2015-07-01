@@ -58,7 +58,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 struct PreCreationStruct
 {
-    SotMutexHolderRef m_rMutexRef;
+    const rtl::Reference<SotMutexHolder> m_rMutexRef;
 
     PreCreationStruct()
     : m_rMutexRef( new SotMutexHolder )

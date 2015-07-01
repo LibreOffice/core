@@ -20,9 +20,11 @@ ScSimpleFormulaCalculator::ScSimpleFormulaCalculator( ScDocument* pDoc, const Sc
     , mbCalculated(false)
     , maAddr(rAddr)
     , mpDoc(pDoc)
+    , maGram(eGram)
+    , bIsMatrix(false)
 {
     // compile already here
-    ScCompiler aComp(pDoc, rAddr);
+    ScCompiler aComp(mpDoc, maAddr);
     aComp.SetGrammar(eGram);
     mpCode.reset(aComp.CompileString(rFormula));
     if(!mpCode->GetCodeError() && mpCode->GetLen())
@@ -40,8 +42,19 @@ void ScSimpleFormulaCalculator::Calculate()
 
     mbCalculated = true;
     ScInterpreter aInt(NULL, mpDoc, maAddr, *mpCode.get());
-    aInt.Interpret();
+    aInt.AssertFormulaMatrix();
 
+    formula::StackVar aIntType = aInt.Interpret();
+    if ( aIntType == formula::svMatrixCell )
+    {
+        ScCompiler aComp(mpDoc, maAddr);
+        aComp.SetGrammar(maGram);
+        OUStringBuffer aStr;
+        aComp.CreateStringFromToken(aStr, aInt.GetResultToken().get(), false);
+
+        bIsMatrix = true;
+        maMatrixFormulaResult = aStr.makeStringAndClear();
+    }
     mnFormatType = aInt.GetRetFormatType();
     mnFormatIndex = aInt.GetRetFormatIndex();
     maResult.SetToken(aInt.GetResultToken().get());
@@ -50,6 +63,9 @@ void ScSimpleFormulaCalculator::Calculate()
 bool ScSimpleFormulaCalculator::IsValue()
 {
     Calculate();
+
+    if (bIsMatrix)
+        return false;
 
     return maResult.IsValue();
 }
@@ -78,6 +94,9 @@ double ScSimpleFormulaCalculator::GetValue()
 svl::SharedString ScSimpleFormulaCalculator::GetString()
 {
     Calculate();
+
+    if (bIsMatrix)
+        return maMatrixFormulaResult;
 
     if ((!mpCode->GetCodeError() || mpCode->GetCodeError() == errDoubleRef) &&
             !maResult.GetResultError())

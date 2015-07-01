@@ -56,7 +56,7 @@ namespace dbaui
         void cut() SAL_OVERRIDE   { }
         void paste() SAL_OVERRIDE { }
 
-        inline sal_uLong                    GetEntryCount() const { return m_aIconControl->GetEntryCount(); }
+        inline sal_Int32                GetEntryCount() const { return m_aIconControl->GetEntryCount(); }
         inline SvxIconChoiceCtrlEntry*  GetEntry( sal_uLong nPos ) const { return m_aIconControl->GetEntry(nPos); }
         inline Rectangle                GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const { return m_aIconControl->GetBoundingBox(pEntry); }
 

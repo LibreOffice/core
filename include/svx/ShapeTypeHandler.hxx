@@ -155,7 +155,7 @@ public:
     /// get the accessible base name for an object
     static OUString CreateAccessibleBaseName (
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape)
-            throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException, std::exception);
 
 protected:
     // Declare default constructor, copy constructor, destructor, and

@@ -1757,7 +1757,7 @@ namespace svxform
         pFormShell->GetFormView()->DeleteMarked();
 
         // start UNDO at this point. Unfortunately, this results in 2 UNDO actions, since DeleteMarked is
-        // creating an own one. However, if we'd move it before DeleteMarked, Writer doesi not really like
+        // creating an own one. However, if we'd move it before DeleteMarked, Writer does not really like
         // this ... :(
         // #i31038#
         {

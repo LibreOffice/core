@@ -350,7 +350,7 @@ public class Protocol extends JComponent
                 bTypeCellFilled = true;
             }
 
-            // if no tyope information was added to the current coloum, we must
+            // if no type information was added to the current column, we must
             // write any content into this cell. Otherwise some browser
             // shows a strange layout!
             if (! bTypeCellFilled)

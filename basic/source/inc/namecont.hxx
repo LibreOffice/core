@@ -324,7 +324,7 @@ protected:
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
                                           bool bVerifyPasswordOnly=false )
             throw(::com::sun::star::lang::WrappedTargetException,
-                  ::com::sun::star::uno::RuntimeException);
+                  ::com::sun::star::uno::RuntimeException, std::exception);
 
     virtual void onNewRootStorage() = 0;
 

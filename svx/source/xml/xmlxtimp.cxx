@@ -445,13 +445,11 @@ bool SvxXMLXTableImport::load( const OUString &rPath, const OUString &rReferer,
         if( pGraphicHelper )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
     }
-    catch (const uno::Exception&)
+    catch (...)
     {
 //      thrown each time you load a document with property tables that are not
 //      on the current machine. FIXME: would be better to check a file exists
 //      before importing ...
-//        fprintf (stderr, "parsing etc. exception '%s'\n",
-//                 OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
         bRet = false;
     }
 

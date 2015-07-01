@@ -159,7 +159,7 @@ public:
         GetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames)
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-                uno::RuntimeException);
+                uno::RuntimeException, std::exception);
 
     //UUUU
     void GetSinglePropertyValue_Impl(
@@ -172,7 +172,7 @@ public:
         GetPropertyValuesTolerant_Impl(
             const uno::Sequence< OUString >& rPropertyNames,
             bool bDirectValuesOnly)
-        throw (uno::RuntimeException);
+        throw (uno::RuntimeException, std::exception);
 protected:
     // SwClient
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
@@ -546,7 +546,7 @@ throw(uno::RuntimeException)
 uno::Sequence< uno::Any > SwXParagraph::Impl::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException)
+    uno::RuntimeException, std::exception)
 {
     SwTextNode & rTextNode(GetTextNodeOrThrow());
 
@@ -764,7 +764,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult >
 SwXParagraph::Impl::GetPropertyValuesTolerant_Impl(
         const uno::Sequence< OUString >& rPropertyNames,
         bool bDirectValuesOnly )
-throw (uno::RuntimeException)
+throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

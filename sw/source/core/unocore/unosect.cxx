@@ -145,12 +145,12 @@ public:
             const uno::Sequence< uno::Any >& aValues)
         throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 lang::IllegalArgumentException, lang::WrappedTargetException,
-                uno::RuntimeException);
+                uno::RuntimeException, std::exception);
     uno::Sequence< uno::Any > SAL_CALL
         GetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames)
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-                uno::RuntimeException);
+                uno::RuntimeException, std::exception);
 protected:
     // SwClient
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
@@ -531,6 +531,7 @@ lcl_UpdateSection(SwSectionFormat *const pFormat,
                         pDoc->IsInReading());
                 {
                     // temporarily remove actions to allow cursor update
+                    // TODO: why? no table cursor here!
                     UnoActionRemoveContext aRemoveContext( pDoc );
                 }
 
@@ -550,7 +551,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
     const uno::Sequence< uno::Any >& rValues)
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     if(rPropertyNames.getLength() != rValues.getLength())
     {
@@ -949,7 +950,7 @@ uno::Sequence< uno::Any >
 SwXTextSection::Impl::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     SwSectionFormat *const pFormat = GetSectionFormat();
     if (!pFormat && !m_bIsDescriptor)
@@ -1702,6 +1703,7 @@ throw (uno::RuntimeException, std::exception)
             }
             {
                 // temporarily remove actions to allow cursor update
+                // TODO: why? no table cursor here!
                 UnoActionRemoveContext aRemoveContext( pFormat->GetDoc() );
             }
         }

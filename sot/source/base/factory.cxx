@@ -73,7 +73,6 @@ SotData_Impl * SOTDATA()
 |*
 |*    Beschreibung
 *************************************************************************/
-TYPEINIT0(SotFactory);
 
 SotFactory::SotFactory( const SvGlobalName & rName,
                         const OUString & rClassName,

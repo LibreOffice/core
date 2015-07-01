@@ -235,7 +235,7 @@ const lang::Locale& ScaDateAddIn::GetLocale( sal_uInt32 nIndex )
     return (nIndex < sizeof( pLang )) ? pDefLocales[ nIndex ] : aFuncLoc;
 }
 
-ResMgr& ScaDateAddIn::GetResMgr() throw( uno::RuntimeException )
+ResMgr& ScaDateAddIn::GetResMgr() throw( uno::RuntimeException, std::exception )
 {
     if( !pResMgr )
     {
@@ -261,12 +261,12 @@ void ScaDateAddIn::InitData()
     }
 }
 
-OUString ScaDateAddIn::GetDisplFuncStr( sal_uInt16 nResId ) throw( uno::RuntimeException )
+OUString ScaDateAddIn::GetDisplFuncStr( sal_uInt16 nResId ) throw( uno::RuntimeException, std::exception )
 {
     return ScaResStringLoader( RID_DATE_FUNCTION_NAMES, nResId, GetResMgr() ).GetString();
 }
 
-OUString ScaDateAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException )
+OUString ScaDateAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException, std::exception )
 {
     OUString aRet;
 

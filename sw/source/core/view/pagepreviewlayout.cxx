@@ -122,6 +122,7 @@ void SwPagePreviewLayout::_ClearPreviewPageData()
 */
 void SwPagePreviewLayout::_CalcPreviewLayoutSizes()
 {
+    vcl::RenderContext* pRenderContext = mrParentViewShell.GetOut();
     // calculate maximal page size; calculate also number of pages
 
     const SwPageFrm* pPage = static_cast<const SwPageFrm*>(mrLayoutRootFrm.Lower());
@@ -134,7 +135,7 @@ void SwPagePreviewLayout::_CalcPreviewLayoutSizes()
         }
 
         ++mnPages;
-        pPage->Calc();
+        pPage->Calc(pRenderContext);
         const Size& rPageSize = pPage->Frm().SSize();
         if ( rPageSize.Width() > maMaxPageSize.Width() )
             maMaxPageSize.Width() = rPageSize.Width();
@@ -547,6 +548,7 @@ void SwPagePreviewLayout::_CalcDocPreviewPaintRect()
 */
 void SwPagePreviewLayout::_CalcPreviewPages()
 {
+    vcl::RenderContext* pRenderContext = mrParentViewShell.GetOut();
     _ClearPreviewPageData();
 
     if ( mbNoPageVisible )
@@ -589,7 +591,7 @@ void SwPagePreviewLayout::_CalcPreviewPages()
             continue;
         }
 
-        pPage->Calc();
+        pPage->Calc(pRenderContext);
 
         // consider only pages, which have to be painted.
         if ( nCurrCol < mnPaintStartCol )

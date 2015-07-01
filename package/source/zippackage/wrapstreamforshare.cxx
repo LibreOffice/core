@@ -30,13 +30,13 @@ using namespace ::com::sun::star;
 #endif
 
 WrapStreamForShare::WrapStreamForShare( const uno::Reference< io::XInputStream >& xInStream,
-                                        const SotMutexHolderRef& rMutexRef )
+                                        const rtl::Reference<SotMutexHolder>& rMutexRef )
 : m_rMutexRef( rMutexRef )
 , m_xInStream( xInStream )
 , m_nCurPos( 0 )
 {
     m_xSeekable = uno::Reference< io::XSeekable >( m_xInStream, uno::UNO_QUERY );
-    if ( !m_rMutexRef.Is() || !m_xInStream.is() || !m_xSeekable.is() )
+    if ( !m_rMutexRef.is() || !m_xInStream.is() || !m_xSeekable.is() )
     {
         OSL_FAIL( "Wrong initialization of wrapping stream!\n" );
         throw uno::RuntimeException(THROW_WHERE );

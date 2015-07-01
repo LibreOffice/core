@@ -338,7 +338,13 @@ int lcl_PySlice_GetIndicesEx( PyObject *pObject, sal_Int32 nLen, sal_Int32 *nSta
 {
     Py_ssize_t nStart_ssize, nStop_ssize, nStep_ssize, nSliceLength_ssize;
 
-    int nResult = PySlice_GetIndicesEx( static_cast<PySliceObject_t*>(pObject), nLen, &nStart_ssize, &nStop_ssize, &nStep_ssize, &nSliceLength_ssize );
+    int nResult = PySlice_GetIndicesEx(
+#if PY_VERSION_HEX >= 0x030200f0
+        pObject,
+#else
+        reinterpret_cast<PySliceObject*>(pObject),
+#endif
+        nLen, &nStart_ssize, &nStop_ssize, &nStep_ssize, &nSliceLength_ssize );
     if (nResult == -1)
         return -1;
 

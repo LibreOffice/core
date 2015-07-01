@@ -325,12 +325,9 @@ OUString AccessibleControlShape::CreateAccessibleBaseName() throw (RuntimeExcept
     return sName;
 }
 
-
-
-
 OUString
     AccessibleControlShape::CreateAccessibleDescription()
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     DescriptionGenerator aDG (mxShape);
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);

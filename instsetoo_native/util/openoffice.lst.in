@@ -84,7 +84,7 @@ LibreOffice
     }
 }
 
-LibreOffice_Dev
+LibreOfficeDev
 {
     Settings
     {
@@ -176,7 +176,7 @@ LibreOffice_SDK
     }
 }
 
-LibreOffice_Dev_SDK
+LibreOfficeDev_SDK
 {
     Settings
     {

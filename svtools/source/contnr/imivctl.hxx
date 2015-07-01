@@ -211,7 +211,7 @@ class SvxIconChoiceCtrl_Impl
     SvxIconChoiceCtrlEntry* pCurEditedEntry;
     SvxIconChoiceCtrlTextMode eTextMode;
     SelectionMode           eSelectionMode;
-    sal_uLong               nSelectionCount;
+    sal_Int32               nSelectionCount;
     SvxIconChoiceCtrlPositionMode ePositionMode;
     bool                    bBoundRectsDirty;
     bool                    bUpdateMode;
@@ -438,7 +438,7 @@ public:
     void                Command( const CommandEvent& rCEvt );
     void                ToTop( SvxIconChoiceCtrlEntry* );
 
-    sal_uLong           GetSelectionCount() const;
+    sal_Int32           GetSelectionCount() const;
     void                SetGrid( const Size& );
     Size                GetMinGrid() const;
     void                Scroll( long nDeltaX, long nDeltaY, bool bScrollBar = false );
@@ -457,7 +457,7 @@ public:
                             std::vector<Rectangle*>* pOtherRects = 0
                         );
 
-    bool            IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos );
+    bool               IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Point& rDocPos );
     void                MakeVisible(
                             const Rectangle& rDocPos,
                             bool bInScrollBarEvent=false,
@@ -485,7 +485,7 @@ public:
                             {
                                 return aEntries[ nPos ];
                             }
-    SvxIconChoiceCtrlEntry* GetFirstSelectedEntry( sal_uLong& ) const;
+    SvxIconChoiceCtrlEntry* GetFirstSelectedEntry() const;
     SvxIconChoiceCtrlEntry* GetHdlEntry() const { return pHdlEntry; }
     void                SetHdlEntry( SvxIconChoiceCtrlEntry* pEntry ) { pHdlEntry = pEntry; }
 
@@ -500,7 +500,7 @@ public:
                             else
                                 nFlags &= ~(F_MOVED_ENTRIES);
                         }
-    sal_uLong           GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
+    sal_Int32           GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
     void                SetEntryImageSize( const Size& rSize ) { aImageSize = rSize; }
     void                InitSettings();
     Rectangle           GetOutputRect() const;

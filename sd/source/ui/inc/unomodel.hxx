@@ -387,7 +387,7 @@ public:
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // intern
-    SdPage* FindPage( const OUString& rName ) const throw();
+    SdPage* FindPage( const OUString& rName ) const throw(std::exception);
 };
 
 #endif

@@ -420,7 +420,7 @@ void SvxRTFParser::ReadColorTable()
             {
                 // one color is finished, fill in the table
                 // try to map the values to SV internal names
-                ColorPtr pColor = new Color( nRed, nGreen, nBlue );
+                Color* pColor = new Color( nRed, nGreen, nBlue );
                 if( aColorTbl.empty() &&
                     sal_uInt8(-1) == nRed && sal_uInt8(-1) == nGreen && sal_uInt8(-1) == nBlue )
                     pColor->SetColor( COL_AUTO );

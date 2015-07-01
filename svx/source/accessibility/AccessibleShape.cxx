@@ -1147,7 +1147,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
 // protected internal
 // Set this object's name if is different to the current name.
 OUString AccessibleShape::CreateAccessibleBaseName()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return ShapeTypeHandler::CreateAccessibleBaseName( mxShape );
 }
@@ -1160,7 +1160,7 @@ OUString AccessibleShape::CreateAccessibleName()
 }
 
 OUString AccessibleShape::GetFullAccessibleName (AccessibleShape *shape)
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sName (shape->CreateAccessibleBaseName());
     // Append the shape's index to the name to disambiguate between shapes
@@ -1197,7 +1197,7 @@ OUString AccessibleShape::GetFullAccessibleName (AccessibleShape *shape)
 
 OUString
     AccessibleShape::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     DescriptionGenerator aDG (mxShape);
     aDG.Initialize (CreateAccessibleBaseName());

@@ -1539,7 +1539,7 @@ void ToolbarMenu::AddStatusListener( const OUString& rCommandURL )
 
 
 
-void ToolbarMenu::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& /*Event*/ ) throw ( ::com::sun::star::uno::RuntimeException )
+void ToolbarMenu::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& /*Event*/ ) throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
 }
 

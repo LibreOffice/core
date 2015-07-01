@@ -127,7 +127,7 @@ Reference<drawing::XLayer> SdUnoDrawView::getActiveLayer() throw ()
 }
 
 void SdUnoDrawView::setActiveLayer (const Reference<drawing::XLayer>& rxLayer)
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     // Get the SdrLayer object corresponding to the given reference.
     if ( ! rxLayer.is())

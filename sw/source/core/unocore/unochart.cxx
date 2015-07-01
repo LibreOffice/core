@@ -23,6 +23,7 @@
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
@@ -202,8 +203,8 @@ bool FillRangeDescriptor(
         return false;
 
     rDesc.nTop = rDesc.nLeft = rDesc.nBottom = rDesc.nRight = -1;
-    sw_GetCellPosition( aTLName, rDesc.nLeft,  rDesc.nTop );
-    sw_GetCellPosition( aBRName, rDesc.nRight, rDesc.nBottom );
+    SwXTextTable::GetCellPosition( aTLName, rDesc.nLeft,  rDesc.nTop );
+    SwXTextTable::GetCellPosition( aBRName, rDesc.nRight, rDesc.nBottom );
     rDesc.Normalize();
     OSL_ENSURE( rDesc.nTop    != -1 &&
                 rDesc.nLeft   != -1 &&
@@ -404,8 +405,6 @@ static void GetFormatAndCreateCursorFromRangeRep(
                         pTable ? pTable->GetTableBox( aStartCell, true ) : 0;
         if(pTLBox)
         {
-            // The Actions need to be removed here
-            UnoActionRemoveContext aRemoveContext(pTableFormat->GetDoc());
             const SwStartNode* pSttNd = pTLBox->GetSttNd();
             SwPosition aPos(*pSttNd);
 
@@ -424,6 +423,8 @@ static void GetFormatAndCreateCursorFromRangeRep(
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 SwUnoTableCrsr* pCrsr =
                     dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr.get());
+                // HACK: remove pending actions for old style tables
+                UnoActionRemoveContext aRemoveContext(*pCrsr);
                 pCrsr->MakeBoxSels();
                 rpUnoCrsr = pUnoCrsr;
             }
@@ -707,8 +708,8 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 OSL_ENSURE( bOk2, "failed to get table and start/end cells" );
 
                 sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
-                sw_GetCellPosition( aStartCell, nStartCol, nStartRow );
-                sw_GetCellPosition( aEndCell,   nEndCol,   nEndRow );
+                SwXTextTable::GetCellPosition( aStartCell, nStartCol, nStartRow );
+                SwXTextTable::GetCellPosition( aEndCell,   nEndCol,   nEndRow );
                 OSL_ENSURE( nStartRow <= nEndRow && nStartCol <= nEndCol,
                         "cell range not normalized");
 
@@ -1001,8 +1002,8 @@ OUString SwChartDataProvider::GetBrokenCellRangeForExport(
         GetTableAndCellsFromRangeRep( rCellRangeRepresentation,
             aTableName, aStartCell, aEndCell, false );
         sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
-        sw_GetCellPosition( aStartCell, nStartCol, nStartRow );
-        sw_GetCellPosition( aEndCell, nEndCol, nEndRow );
+        SwXTextTable::GetCellPosition( aStartCell, nStartCol, nStartRow );
+        SwXTextTable::GetCellPosition( aEndCell, nEndCol, nEndRow );
 
         // get new cell names
         ++nStartRow;
@@ -1117,8 +1118,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
         const OUString aCell( !aLabelStartCell.isEmpty() ? aLabelStartCell : aValuesStartCell );
         OSL_ENSURE( !aCell.isEmpty() , "start cell missing?" );
-        sw_GetCellPosition( aCell, nFirstCol, nFirstRow);
-        sw_GetCellPosition( aValuesEndCell, nLastCol, nLastRow);
+        SwXTextTable::GetCellPosition( aCell, nFirstCol, nFirstRow);
+        SwXTextTable::GetCellPosition( aValuesEndCell, nLastCol, nLastRow);
 
         sal_Int16 nDirection = -1;  // -1: not yet set,  0: columns,  1: rows, -2: failed
         if (nFirstCol == nLastCol && nFirstRow == nLastRow) // a single cell...
@@ -1171,8 +1172,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             if (!aLabelStartCell.isEmpty() && !aLabelEndCell.isEmpty())
             {
                 sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
-                sw_GetCellPosition( aLabelStartCell, nStartCol, nStartRow );
-                sw_GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow );
+                SwXTextTable::GetCellPosition( aLabelStartCell, nStartCol, nStartRow );
+                SwXTextTable::GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow );
                 if (nStartRow < 0 || nEndRow >= nTableRows ||
                     nStartCol < 0 || nEndCol >= nTableCols)
                 {
@@ -1193,8 +1194,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             if (!aValuesStartCell.isEmpty() && !aValuesEndCell.isEmpty())
             {
                 sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
-                sw_GetCellPosition( aValuesStartCell, nStartCol, nStartRow );
-                sw_GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow );
+                SwXTextTable::GetCellPosition( aValuesStartCell, nStartCol, nStartRow );
+                SwXTextTable::GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow );
                 if (nStartRow < 0 || nEndRow >= nTableRows ||
                     nStartCol < 0 || nEndCol >= nTableCols)
                 {
@@ -1221,16 +1222,16 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             sal_Int32 nStartRow = -1, nStartCol = -1, nEndRow = -1, nEndCol = -1;
             if (xCurLabel.is())
             {
-                sw_GetCellPosition( aLabelStartCell, nStartCol, nStartRow);
-                sw_GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow);
+                SwXTextTable::GetCellPosition( aLabelStartCell, nStartCol, nStartRow);
+                SwXTextTable::GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow);
                 OSL_ENSURE( (nStartCol == nEndCol && (nEndRow - nStartRow + 1) == xCurLabel->getData().getLength()) ||
                             (nStartRow == nEndRow && (nEndCol - nStartCol + 1) == xCurLabel->getData().getLength()),
                         "label sequence length does not match range representation!" );
             }
             if (xCurValues.is())
             {
-                sw_GetCellPosition( aValuesStartCell, nStartCol, nStartRow);
-                sw_GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow);
+                SwXTextTable::GetCellPosition( aValuesStartCell, nStartCol, nStartRow);
+                SwXTextTable::GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow);
                 OSL_ENSURE( (nStartCol == nEndCol && (nEndRow - nStartRow + 1) == xCurValues->getData().getLength()) ||
                             (nStartRow == nEndRow && (nEndCol - nStartCol + 1) == xCurValues->getData().getLength()),
                         "value sequence length does not match range representation!" );
@@ -1491,10 +1492,7 @@ sal_Bool SAL_CALL SwChartDataProvider::supportsService(const OUString& rServiceN
 uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = "com.sun.star.chart2.data.DataProvider";
-    return aRes;
+    return { "com.sun.star.chart2.data.DataProvider"};
 }
 
 void SwChartDataProvider::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -1662,8 +1660,8 @@ void SwChartDataProvider::AddRowCols(
     if (pFirstBox && pLastBox)
     {
         sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
-        sw_GetCellPosition( pFirstBox->GetName(), nFirstCol, nFirstRow  );
-        sw_GetCellPosition( pLastBox->GetName(),  nLastCol,  nLastRow );
+        SwXTextTable::GetCellPosition( pFirstBox->GetName(), nFirstCol, nFirstRow  );
+        SwXTextTable::GetCellPosition( pLastBox->GetName(),  nLastCol,  nLastRow );
 
         bool bAddCols = false;  // default; also to be used if nBoxes == 1 :-/
         if (nFirstCol == nLastCol && nFirstRow != nLastRow)
@@ -1769,7 +1767,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
             throw lang::IllegalArgumentException();
 
         sal_Int32 nCol, nRow;
-        sw_GetCellPosition( aStartCell, nCol, nRow );
+        SwXTextTable::GetCellPosition( aStartCell, nCol, nRow );
         if (nCol < 0 || nRow < 0)
             throw uno::RuntimeException();
 
@@ -1782,7 +1780,7 @@ OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const OUString& rRange
         aCellRange.aUpperLeft.bIsEmpty  = false;
         if (aStartCell != aEndCell && !aEndCell.isEmpty())
         {
-            sw_GetCellPosition( aEndCell, nCol, nRow );
+            SwXTextTable::GetCellPosition( aEndCell, nCol, nRow );
             if (nCol < 0 || nRow < 0)
                 throw uno::RuntimeException();
 
@@ -1879,10 +1877,7 @@ sal_Bool SAL_CALL SwChartDataSource::supportsService(const OUString& rServiceNam
 uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = "com.sun.star.chart2.data.DataSource";
-    return aRes;
+    return { "com.sun.star.chart2.data.DataSource" };
 }
 
 SwChartDataSequence::SwChartDataSequence(
@@ -2008,30 +2003,6 @@ sal_Int64 SAL_CALL SwChartDataSequence::getSomething( const uno::Sequence< sal_I
     return 0;
 }
 
-uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
-    throw (uno::RuntimeException, std::exception)
-{
-    SolarMutexGuard aGuard;
-    if (bDisposed)
-        throw lang::DisposedException();
-
-    uno::Sequence< uno::Any > aRes;
-    SwFrameFormat* pTableFormat = GetFrameFormat();
-    if(pTableFormat)
-    {
-        SwTable* pTable = SwTable::FindTable( pTableFormat );
-        if(!pTable->IsTableComplex())
-        {
-            SwRangeDescriptor aDesc;
-            if (FillRangeDescriptor( aDesc, GetCellRangeName( *pTableFormat, *pTableCrsr ) ))
-            {
-                SwXCellRange aRange(pTableCrsr, *pTableFormat, aDesc );
-                aRange.GetDataSequence( &aRes, 0, 0 );
-            }
-        }
-    }
-    return aRes;
-}
 
 OUString SAL_CALL SwChartDataSequence::getSourceRangeRepresentation(  )
     throw (uno::RuntimeException, std::exception)
@@ -2073,7 +2044,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
             const OUString aCellRange( GetCellRangeName( *pTableFormat, *pTableCrsr ) );
             OSL_ENSURE( !aCellRange.isEmpty(), "failed to get cell range" );
             bOk = FillRangeDescriptor( aDesc, aCellRange );
-            OSL_ENSURE( bOk, "falied to get SwRangeDescriptor" );
+            OSL_ENSURE( bOk, "failed to get SwRangeDescriptor" );
         }
         if (bOk)
         {
@@ -2164,57 +2135,62 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
     return 0;
 }
 
+std::vector< css::uno::Reference< css::table::XCell > > SwChartDataSequence::GetCells()
+{
+    if (bDisposed)
+        throw lang::DisposedException();
+    auto pTableFormat(GetFrameFormat());
+    if(!pTableFormat)
+        return std::vector< css::uno::Reference< css::table::XCell > >();
+    auto pTable(SwTable::FindTable(pTableFormat));
+    if(pTable->IsTableComplex())
+        return std::vector< css::uno::Reference< css::table::XCell > >();
+    SwRangeDescriptor aDesc;
+    if(!FillRangeDescriptor(aDesc, GetCellRangeName(*pTableFormat, *pTableCrsr)))
+        return std::vector< css::uno::Reference< css::table::XCell > >();
+    return SwXCellRange(pTableCrsr, *pTableFormat, aDesc).GetCells();
+}
+
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getTextualData()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
-        throw lang::DisposedException();
+    auto vCells(GetCells());
+    uno::Sequence< OUString > vTextData(vCells.size());
+    std::transform(vCells.begin(),
+        vCells.end(),
+        vTextData.begin(),
+        [] (decltype(vCells)::value_type& xCell)
+            { return static_cast<SwXCell*>(xCell.get())->getString(); });
+    return vTextData;
+}
 
-    uno::Sequence< OUString > aRes;
-    SwFrameFormat* pTableFormat = GetFrameFormat();
-    if(pTableFormat)
-    {
-        SwTable* pTable = SwTable::FindTable( pTableFormat );
-        if(!pTable->IsTableComplex())
-        {
-            SwRangeDescriptor aDesc;
-            if (FillRangeDescriptor( aDesc, GetCellRangeName( *pTableFormat, *pTableCrsr ) ))
-            {
-                SwXCellRange aRange(pTableCrsr, *pTableFormat, aDesc );
-                aRange.GetDataSequence( 0, &aRes, 0 );
-            }
-        }
-    }
-    return aRes;
+uno::Sequence< uno::Any > SAL_CALL SwChartDataSequence::getData()
+    throw (uno::RuntimeException, std::exception)
+{
+    SolarMutexGuard aGuard;
+    auto vCells(GetCells());
+    uno::Sequence< uno::Any > vAnyData(vCells.size());
+    std::transform(vCells.begin(),
+        vCells.end(),
+        vAnyData.begin(),
+        [] (decltype(vCells)::value_type& xCell)
+            { return static_cast<SwXCell*>(xCell.get())->GetAny(); });
+    return vAnyData;
 }
 
 uno::Sequence< double > SAL_CALL SwChartDataSequence::getNumericalData()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    if (bDisposed)
-        throw lang::DisposedException();
-
-    uno::Sequence< double > aRes;
-    SwFrameFormat* pTableFormat = GetFrameFormat();
-    if(pTableFormat)
-    {
-        SwTable* pTable = SwTable::FindTable( pTableFormat );
-        if(!pTable->IsTableComplex())
-        {
-            SwRangeDescriptor aDesc;
-            if (FillRangeDescriptor( aDesc, GetCellRangeName( *pTableFormat, *pTableCrsr ) ))
-            {
-                SwXCellRange aRange(pTableCrsr, *pTableFormat, aDesc );
-
-                // get numerical values and make an effort to return the
-                // numerical value for text formatted cells
-                aRange.GetDataSequence( 0, 0, &aRes, true );
-            }
-        }
-    }
-    return aRes;
+    auto vCells(GetCells());
+    uno::Sequence< double > vNumData(vCells.size());
+    std::transform(vCells.begin(),
+        vCells.end(),
+        vNumData.begin(),
+        [] (decltype(vCells)::value_type& xCell)
+            { return static_cast<SwXCell*>(xCell.get())->GetForcedNumericalValue(); });
+    return vNumData;
 }
 
 uno::Reference< util::XCloneable > SAL_CALL SwChartDataSequence::createClone(  )
@@ -2319,10 +2295,7 @@ sal_Bool SAL_CALL SwChartDataSequence::supportsService(const OUString& rServiceN
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = "com.sun.star.chart2.data.DataSequence";
-    return aRes;
+    return { "com.sun.star.chart2.data.DataSequence" };
 }
 
 void SwChartDataSequence::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -2493,8 +2466,8 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
         OUString aPointCellName( pTable->GetTableBox( pPointStartNode->GetIndex() )->GetName() );
         OUString aMarkCellName( pTable->GetTableBox( pMarkStartNode->GetIndex() )->GetName() );
 
-        sw_GetCellPosition( aPointCellName, nPointCol, nPointRow );
-        sw_GetCellPosition( aMarkCellName,  nMarkCol,  nMarkRow );
+        SwXTextTable::GetCellPosition( aPointCellName, nPointCol, nPointRow );
+        SwXTextTable::GetCellPosition( aMarkCellName,  nMarkCol,  nMarkRow );
         OSL_ENSURE( nPointRow >= 0 && nPointCol >= 0, "invalid row and col" );
         OSL_ENSURE( nMarkRow >= 0 && nMarkCol >= 0, "invalid row and col" );
 
@@ -2816,11 +2789,7 @@ sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
 uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNames(  )
     throw (uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aRes(1);
-    aRes.getArray()[0] = "com.sun.star.chart2.data.LabeledDataSequence";
-
-    return aRes;
+    return { "com.sun.star.chart2.data.LabeledDataSequence" };
 }
 
 void SAL_CALL SwChartLabeledDataSequence::disposing(

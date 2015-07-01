@@ -46,8 +46,6 @@ protected:
                               const OUString& rFileName, const OUString& rShort, SfxObjectShell&, OUString& ) SAL_OVERRIDE;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     SwAutoCorrect( const SvxAutoCorrect& rACorr );
     virtual ~SwAutoCorrect();
 };

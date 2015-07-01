@@ -391,6 +391,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "French (Togo)" ; LANGUAGE_USER_FRENCH_TOGO ; > ;
         < "Kven Finnish" ; LANGUAGE_USER_KVEN_FINNISH ; > ;
         < "Venetian" ; LANGUAGE_USER_VENETIAN ; > ;
+        < "English (Gambia)" ; LANGUAGE_USER_ENGLISH_GAMBIA ; > ;
     };
 };
 

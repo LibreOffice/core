@@ -54,7 +54,7 @@ FrameContainer::~FrameContainer()
 
 /**-***************************************************************************************************************
     @short      append a new frame to the container
-    @descr      We accept the incoming frame only, if it is a valid reference and dosnt exist already.
+    @descr      We accept the incoming frame only, if it is a valid reference and doesn't exist already.
 
     @param      xFrame
                     frame, which should be added to this container

@@ -1064,6 +1064,7 @@ def __boxshape__(shapetype, l):
     if shapetype == "Rectangle" and len(l) > 2:
         shape.CornerRadius = (l[2] * __PT_TO_TWIP__) / __MM10_TO_TWIP__
     elif shapetype == "Ellipse" and len(l) > 2:
+        oldBoundRect = shape.BoundRect
         try:
             shape.CircleKind = __SECTION__
             shape.CircleStartAngle = (-l[3] - 270) * 100
@@ -1071,6 +1072,9 @@ def __boxshape__(shapetype, l):
             shape.CircleKind = [__FULL__, __SECTION__, __CUT__, __ARC__][l[4]]
         except:
             pass
+        pos.X = pos.X + shape.BoundRect.X - oldBoundRect.X
+        pos.Y = pos.Y + shape.BoundRect.Y - oldBoundRect.Y
+        shape.setPosition(pos)
     __visible__(shape, True)
     __removeshape__(__ACTUAL__)
     _.shapecache[__ACTUAL__] = shape

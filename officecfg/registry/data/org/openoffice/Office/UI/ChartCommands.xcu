@@ -108,6 +108,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Data Ranges...</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:DiagramData" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
@@ -221,6 +224,9 @@
       <node oor:name=".uno:DiagramAxisAll" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~All Axes...</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <!-- sub menu: format grid-->

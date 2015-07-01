@@ -3224,7 +3224,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
                 SdrView* pDrawView = pViewSh->GetSdrView();
                 if (pDrawView && pDrawView->AreObjectsMarked())
                 {
-                    // #100442#; the conext menu should open in the middle of the selected objects
+                    // #100442#; the context menu should open in the middle of the selected objects
                     Rectangle aSelectRect(LogicToPixel(pDrawView->GetAllMarkedBoundRect()));
                     aMenuPos = aSelectRect.Center();
                 }

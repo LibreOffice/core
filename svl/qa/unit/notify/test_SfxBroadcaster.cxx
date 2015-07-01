@@ -22,12 +22,16 @@ class SfxBroadcasterTest : public CppUnit::TestFixture
     void AddingListenersIncreasesCount();
     void RemovingListenersDecreasesCount();
     void HintsAreNotForwardedToRemovedListeners();
+    void SameListenerCanBeAddedMoreThanOnce();
+    void StoppingListeningAffectsOnlyFirstOfIdenticalListeners();
 
     // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(SfxBroadcasterTest);
     CPPUNIT_TEST(AddingListenersIncreasesCount);
     CPPUNIT_TEST(RemovingListenersDecreasesCount);
     CPPUNIT_TEST(HintsAreNotForwardedToRemovedListeners);
+    CPPUNIT_TEST(SameListenerCanBeAddedMoreThanOnce);
+    CPPUNIT_TEST(StoppingListeningAffectsOnlyFirstOfIdenticalListeners);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -91,6 +95,27 @@ SfxBroadcasterTest::HintsAreNotForwardedToRemovedListeners()
     sb.Forward(sb, hint);
     CPPUNIT_ASSERT_EQUAL(true, sl2.NotifyWasCalled());
     CPPUNIT_ASSERT_EQUAL(false, sl1.NotifyWasCalled());
+}
+
+void
+SfxBroadcasterTest::SameListenerCanBeAddedMoreThanOnce()
+{
+    MockedSfxListener sl;
+    SfxBroadcaster sb;
+    sb.AddListener(sl);
+    sb.AddListener(sl);
+    CPPUNIT_ASSERT_EQUAL((size_t)2, sb.GetListenerCount());
+}
+
+void
+SfxBroadcasterTest::StoppingListeningAffectsOnlyFirstOfIdenticalListeners()
+{
+    MockedSfxListener sl;
+    SfxBroadcaster sb;
+    sb.AddListener(sl);
+    sb.AddListener(sl);
+    sb.RemoveListener(sl);
+    CPPUNIT_ASSERT_EQUAL((size_t)1, sb.GetListenerCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SfxBroadcasterTest);

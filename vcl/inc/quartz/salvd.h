@@ -37,8 +37,7 @@ struct SalVirDevData
 };
 
 typedef struct SalVirDevData   SalVirDevData;
-typedef SalVirDevData         *SalVirDevDataPtr;
-typedef SalVirDevDataPtr      *SalVirDevDataHandle;
+typedef SalVirDevData**        SalVirDevDataHandle;
 
 class AquaSalGraphics;
 

@@ -877,7 +877,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
 
 bool SfxScriptLibraryContainer::implLoadPasswordLibrary
     ( SfxLibrary* pLib, const OUString& Name, bool bVerifyPasswordOnly )
-        throw(WrappedTargetException, RuntimeException)
+        throw(WrappedTargetException, RuntimeException, std::exception)
 {
     bool bRet = true;
 

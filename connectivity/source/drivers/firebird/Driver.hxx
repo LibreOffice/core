@@ -38,7 +38,7 @@ namespace connectivity
         // 3: Is IB6 -- minimum required for delimited identifiers.
         static const int FIREBIRD_SQL_DIALECT = 3;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL FirebirdDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL FirebirdDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception, std::exception );
 
         typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XDriver,
                                                     ::com::sun::star::sdbcx::XDataDefinitionSupplier,

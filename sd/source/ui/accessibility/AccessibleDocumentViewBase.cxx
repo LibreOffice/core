@@ -639,7 +639,7 @@ void SAL_CALL AccessibleDocumentViewBase::disposing()
 /// Create a name for this view.
 OUString
     AccessibleDocumentViewBase::CreateAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString ("AccessibleDocumentViewBase");
 }
@@ -649,7 +649,7 @@ OUString
 */
 OUString
     AccessibleDocumentViewBase::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sDescription;
 

@@ -178,6 +178,7 @@ SwPageFrm::SwPageFrm( SwFrameFormat *pFormat, SwFrm* pSib, SwPageDesc *pPgDsc ) 
 
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+    vcl::RenderContext* pRenderContext = pSh ? pSh->GetOut() : 0;
     if ( bBrowseMode )
     {
         Frm().Height( 0 );
@@ -194,11 +195,11 @@ SwPageFrm::SwPageFrm( SwFrameFormat *pFormat, SwFrm* pSib, SwPageDesc *pPgDsc ) 
     if ( !(bEmptyPage = (pFormat == pDoc->GetEmptyPageFormat())) )
     {
         bEmptyPage = false;
-        Calc();                     // so that the PrtArea is correct
+        Calc(pRenderContext); // so that the PrtArea is correct
         SwBodyFrm *pBodyFrm = new SwBodyFrm( pDoc->GetDfltFrameFormat(), this );
         pBodyFrm->ChgSize( Prt().SSize() );
         pBodyFrm->Paste( this );
-        pBodyFrm->Calc();           // so that the columns can be inserted correctly
+        pBodyFrm->Calc(pRenderContext); // so that the columns can be inserted correctly
         pBodyFrm->InvalidatePos();
 
         if ( bBrowseMode )
@@ -342,6 +343,7 @@ void SwPageFrm::CheckDirection( bool bVert )
 /// create specific Flys for this page and format generic content
 static void lcl_FormatLay( SwLayoutFrm *pLay )
 {
+    vcl::RenderContext* pRenderContext = pLay->getRootFrm()->GetCurrShell()->GetOut();
     // format all LayoutFrms - no tables, Flys etc.
 
     SwFrm *pTmp = pLay->Lower();
@@ -352,7 +354,7 @@ static void lcl_FormatLay( SwLayoutFrm *pLay )
             ::lcl_FormatLay( static_cast<SwLayoutFrm*>(pTmp) );
         pTmp = pTmp->GetNext();
     }
-    pLay->Calc();
+    pLay->Calc(pRenderContext);
 }
 
 /// Create Flys or register draw objects
@@ -1862,6 +1864,7 @@ static void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
 // Calculate how the pages have to be positioned
 void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVisArea )
 {
+    vcl::RenderContext* pRenderContext = GetCurrShell() ? GetCurrShell()->GetOut() : 0;
     // #i91432#
     // No calculation of page positions, if only an empty page is present.
     // This situation occurs when <SwRootFrm> instance is in construction
@@ -1900,7 +1903,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
         mbBookMode = false;
     }
 
-    Calc();
+    Calc(pRenderContext);
 
     const bool bOldCallbackActionEnabled = IsCallbackActionEnabled();
     SetCallbackActionEnabled( false );
@@ -2167,7 +2170,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
     {
         ChgSize( aNewSize );
         ::AdjustSizeChgNotify( this );
-        Calc();
+        Calc(pRenderContext);
 
         SwViewShell* pSh = GetCurrShell();
 

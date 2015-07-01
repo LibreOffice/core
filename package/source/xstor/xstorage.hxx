@@ -117,19 +117,19 @@ struct OStorage_Impl
 {
     typedef std::list<StorageHolder_Impl> StorageHoldersType;
 
-    SotMutexHolderRef           m_rMutexRef;
+    rtl::Reference<SotMutexHolder> m_rMutexRef;
 
     OStorage*                   m_pAntiImpl;         // only valid if external references exists
-    StorageHoldersType      m_aReadOnlyWrapList; // only valid if readonly external reference exists
+    StorageHoldersType          m_aReadOnlyWrapList; // only valid if readonly external reference exists
 
     sal_Int32                   m_nStorageMode; // open mode ( read/write/trunc/nocreate )
-    bool                    m_bIsModified;  // only modified elements will be sent to the original content
-    bool                    m_bBroadcastModified;  // will be set if notification is required
+    bool                        m_bIsModified;  // only modified elements will be sent to the original content
+    bool                        m_bBroadcastModified;  // will be set if notification is required
 
-    bool                    m_bCommited;    // sending the streams is coordinated by the root storage of the package
+    bool                        m_bCommited;    // sending the streams is coordinated by the root storage of the package
 
-    bool                    m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
-    bool                    m_bListCreated;
+    bool                        m_bIsRoot;      // marks this storage as root storages that manages all commits and reverts
+    bool                        m_bListCreated;
 
     /// Count of registered modification listeners
     oslInterlockedCount         m_nModifiedListenerCount;

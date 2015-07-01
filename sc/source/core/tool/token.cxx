@@ -2569,13 +2569,18 @@ void setRefDeleted( ScComplexRefData& rRef, const sc::RefUpdateContext& rCxt )
     }
 }
 
-bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rDeletedRange )
+bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rDeletedRange,
+        const ScComplexRefData& rRef )
 {
     if (!rDeletedRange.Intersects(rRefRange))
         return false;
 
     if (rCxt.mnColDelta < 0)
     {
+        if (rRef.IsEntireRow())
+            // Entire rows are not affected, columns are anchored.
+            return false;
+
         // Shifting left.
         if (rRefRange.aStart.Row() < rDeletedRange.aStart.Row() || rDeletedRange.aEnd.Row() < rRefRange.aEnd.Row())
             // Deleted range is only partially overlapping in vertical direction. Bail out.
@@ -2614,6 +2619,10 @@ bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
     }
     else if (rCxt.mnRowDelta < 0)
     {
+        if (rRef.IsEntireCol())
+            // Entire columns are not affected, rows are anchored.
+            return false;
+
         // Shifting up.
 
         if (rRefRange.aStart.Col() < rDeletedRange.aStart.Col() || rDeletedRange.aEnd.Col() < rRefRange.aEnd.Col())
@@ -2655,13 +2664,18 @@ bool shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
     return false;
 }
 
-bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rSelectedRange )
+bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rSelectedRange,
+        const ScComplexRefData& rRef )
 {
     if (!rSelectedRange.Intersects(rRefRange))
         return false;
 
     if (rCxt.mnColDelta > 0)
     {
+        if (rRef.IsEntireRow())
+            // Entire rows are not affected, columns are anchored.
+            return false;
+
         // Insert and shifting right.
         if (rRefRange.aStart.Row() < rSelectedRange.aStart.Row() || rSelectedRange.aEnd.Row() < rRefRange.aEnd.Row())
             // Selected range is only partially overlapping in vertical direction. Bail out.
@@ -2687,6 +2701,10 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
     }
     else if (rCxt.mnRowDelta > 0)
     {
+        if (rRef.IsEntireCol())
+            // Entire columns are not affected, rows are anchored.
+            return false;
+
         // Insert and shifting down.
         if (rRefRange.aStart.Col() < rSelectedRange.aStart.Col() || rSelectedRange.aEnd.Col() < rRefRange.aEnd.Col())
             // Selected range is only partially overlapping in horizontal direction. Bail out.
@@ -2717,7 +2735,8 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
  * Check if the referenced range is expandable when the selected range is
  * not overlapping the referenced range.
  */
-bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rSelectedRange )
+bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const ScRange& rSelectedRange,
+        const ScComplexRefData& rRef )
 {
     if (!rCxt.mrDoc.IsExpandRefs())
         // Edge-expansion is turned off.
@@ -2729,6 +2748,10 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
 
     if (rCxt.mnColDelta > 0)
     {
+        if (rRef.IsEntireRow())
+            // Entire rows are not affected, columns are anchored.
+            return false;
+
         // Insert and shift right.
 
         if (rRefRange.aEnd.Col() - rRefRange.aStart.Col() < 1)
@@ -2750,6 +2773,10 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
     }
     else if (rCxt.mnRowDelta > 0)
     {
+        if (rRef.IsEntireCol())
+            // Entire columns are not affected, rows are anchored.
+            return false;
+
         if (rRefRange.aEnd.Row() - rRefRange.aStart.Row() < 1)
             // Reference must be at least two rows tall.
             return false;
@@ -2866,7 +2893,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             }
                             else if (aSelectedRange.Intersects(aAbs))
                             {
-                                if (shrinkRange(rCxt, aAbs, aSelectedRange))
+                                if (shrinkRange(rCxt, aAbs, aSelectedRange, rRef))
                                 {
                                     // The reference range has been shrunk.
                                     rRef.SetRange(aAbs, aNewPos);
@@ -2879,7 +2906,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 
                         if (rCxt.isInserted())
                         {
-                            if (expandRange(rCxt, aAbs, aSelectedRange))
+                            if (expandRange(rCxt, aAbs, aSelectedRange, rRef))
                             {
                                 // The reference range has been expanded.
                                 rRef.SetRange(aAbs, aNewPos);
@@ -2888,7 +2915,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                                 break;
                             }
 
-                            if (expandRangeByEdge(rCxt, aAbs, aSelectedRange))
+                            if (expandRangeByEdge(rCxt, aAbs, aSelectedRange, rRef))
                             {
                                 // The reference range has been expanded on the edge.
                                 rRef.SetRange(aAbs, aNewPos);
@@ -3307,11 +3334,37 @@ bool adjustDoubleRefInName(
         }
     }
 
-    if (adjustSingleRefInName(rRef.Ref1, rCxt, rPos))
-        bRefChanged = true;
+    if ((rCxt.mnRowDelta && rRef.IsEntireCol()) || (rCxt.mnColDelta && rRef.IsEntireRow()))
+    {
+        // References to entire col/row are not to be adjusted in the other axis.
+        sc::RefUpdateContext aCxt( rCxt.mrDoc);
+        // We only need a few parameters of RefUpdateContext.
+        aCxt.maRange = rCxt.maRange;
+        aCxt.mnColDelta = rCxt.mnColDelta;
+        aCxt.mnRowDelta = rCxt.mnRowDelta;
+        aCxt.mnTabDelta = rCxt.mnTabDelta;
+        if (aCxt.mnRowDelta && rRef.IsEntireCol())
+            aCxt.mnRowDelta = 0;
+        if (aCxt.mnColDelta && rRef.IsEntireRow())
+            aCxt.mnColDelta = 0;
+        if (!aCxt.mnColDelta && !aCxt.mnRowDelta && !aCxt.mnTabDelta)
+            // early bailout
+            return bRefChanged;
 
-    if (adjustSingleRefInName(rRef.Ref2, rCxt, rPos))
-        bRefChanged = true;
+        if (adjustSingleRefInName(rRef.Ref1, aCxt, rPos))
+            bRefChanged = true;
+
+        if (adjustSingleRefInName(rRef.Ref2, aCxt, rPos))
+            bRefChanged = true;
+    }
+    else
+    {
+        if (adjustSingleRefInName(rRef.Ref1, rCxt, rPos))
+            bRefChanged = true;
+
+        if (adjustSingleRefInName(rRef.Ref2, rCxt, rPos))
+            bRefChanged = true;
+    }
 
     return bRefChanged;
 }
@@ -3359,6 +3412,11 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                         else if (rCxt.mnRowDelta < 0)
                         {
                             // row(s) deleted.
+
+                            if (rRef.IsEntireCol())
+                                // Rows of entire columns are not affected.
+                                break;
+
                             if (rRef.Ref1.IsRowRel() || rRef.Ref2.IsRowRel())
                                 // Don't modify relative references in names.
                                 break;

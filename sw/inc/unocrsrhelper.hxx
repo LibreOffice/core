@@ -181,8 +181,9 @@ namespace SwUnoCursorHelper
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::lang::WrappedTargetException,
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
     ::com::sun::star::uno::Sequence<
                 ::com::sun::star::beans::PropertyState > GetPropertyStates(
             SwPaM & rPaM,
@@ -192,7 +193,8 @@ namespace SwUnoCursorHelper
             const SwGetPropertyStatesCaller eCaller =
                 SW_PROPERTY_STATE_CALLER_DEFAULT)
         throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
+               ::com::sun::star::uno::RuntimeException,
+               std::exception);
     ::com::sun::star::beans::PropertyState GetPropertyState(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
@@ -204,7 +206,7 @@ namespace SwUnoCursorHelper
             const SfxItemPropertySet & rPropSet,
             const OUString & rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::uno::RuntimeException);
+                ::com::sun::star::uno::RuntimeException, std::exception);
     ::com::sun::star::uno::Any  GetPropertyDefault(
             SwPaM & rPaM,
             const SfxItemPropertySet & rPropSet,
@@ -217,12 +219,13 @@ namespace SwUnoCursorHelper
             const ::com::sun::star::uno::Any& rValue,
             SwDoc & rDoc, SfxItemSet & rSet);
     void SetTextFormatColl(const ::com::sun::star::uno::Any & rAny, SwPaM & rPaM)
-        throw (::com::sun::star::lang::IllegalArgumentException, css::uno::RuntimeException);
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
     bool SetCursorPropertyValue(
             SfxItemPropertySimpleEntry const& rEntry,
             ::com::sun::star::uno::Any const& rValue,
             SwPaM & rPam, SfxItemSet & rItemSet)
-        throw (::com::sun::star::lang::IllegalArgumentException, css::uno::RuntimeException, css::uno::DeploymentException);
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException,
+               css::uno::DeploymentException, std::exception);
 
     /// try to get something that can be selected out of the XInterface
     /// at most one of the out parameters gets assigned a non-null value

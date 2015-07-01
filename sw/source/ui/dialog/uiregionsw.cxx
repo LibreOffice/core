@@ -400,7 +400,7 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     while( pEntry )
     {
-        SectReprPtr pRepr = static_cast<SectReprPtr>(pEntry->GetUserData());
+        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         if (!pRepr->GetTempPasswd().getLength()
             && pRepr->GetSectionData().GetPassword().getLength())
         {
@@ -559,7 +559,7 @@ void    SwEditRegionDlg::SelectSection(const OUString& rSectionName)
     SvTreeListEntry* pEntry = m_pTree->First();
     while(pEntry)
     {
-        SectReprPtr pRepr = static_cast<SectReprPtr>(pEntry->GetUserData());
+        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         if (pRepr->GetSectionData().GetSectionName() == rSectionName)
             break;
         pEntry = m_pTree->Next(pEntry);
@@ -778,7 +778,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
 
     while( pEntry )
     {
-        SectReprPtr pRepr = static_cast<SectReprPtr>(pEntry->GetUserData());
+        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         SwSectionFormat* pFormat = aOrigArray[ pRepr->GetArrPos() ];
         if (!pRepr->GetSectionData().IsProtectFlag())
         {
@@ -847,7 +847,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
     bool bCheck = TRISTATE_TRUE == pBox->GetState();
     while( pEntry )
     {
-        SectReprPtr pRepr = static_cast<SectReprPtr>(pEntry->GetUserData());
+        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         pRepr->GetSectionData().SetProtectFlag(bCheck);
         Image aImage = BuildBitmap(bCheck,
                                    TRISTATE_TRUE == m_pHideCB->GetState());
@@ -870,7 +870,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
-        SectReprPtr pRepr = static_cast<SectReprPtr>(pEntry->GetUserData());
+        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         pRepr->GetSectionData().SetHidden(TRISTATE_TRUE == pBox->GetState());
 
         Image aImage = BuildBitmap(TRISTATE_TRUE == m_pProtectCB->GetState(),
@@ -897,7 +897,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
-        SectReprPtr pRepr = static_cast<SectReprPtr>(pEntry->GetUserData());
+        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         pRepr->GetSectionData().SetEditInReadonlyFlag(
                 TRISTATE_TRUE == pBox->GetState());
         pEntry = m_pTree->NextSelected(pEntry);
@@ -917,7 +917,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
     // at first mark all selected
     while(pEntry)
     {
-        const SectReprPtr pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+        SectRepr* const pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         pSectRepr->SetSelected();
         pEntry = m_pTree->NextSelected(pEntry);
     }
@@ -925,7 +925,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
     // then delete
     while(pEntry)
     {
-        const SectReprPtr pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+        SectRepr* const pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         SvTreeListEntry* pRemove = 0;
         bool bRestart = false;
         if(pSectRepr->IsSelected())
@@ -984,7 +984,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
     {
         while(pEntry)
         {
-            const SectReprPtr pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+            SectRepr* const pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
             bool bContent = pSectRepr->IsContent();
             if( pBox->IsChecked() && bContent && rSh.HasSelection() )
             {
@@ -1050,7 +1050,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
 
     if(pEntry)
     {
-        SectReprPtr pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+        SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         SfxItemSet aSet(rSh.GetView().GetPool(),
                             RES_COL, RES_COL,
                             RES_COLUMNBALANCE, RES_FRAMEDIR,
@@ -1116,7 +1116,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
                     SvTreeListEntry* pSelEntry = m_pTree->FirstSelected();
                     while( pSelEntry )
                     {
-                        SectReprPtr pRepr = static_cast<SectReprPtr>(pSelEntry->GetUserData());
+                        SectRepr* pRepr = static_cast<SectRepr*>(pSelEntry->GetUserData());
                         if( SfxItemState::SET == eColState )
                             pRepr->GetCol() = *static_cast<const SwFormatCol*>(pColItem);
                         if( SfxItemState::SET == eBrushState )
@@ -1151,7 +1151,7 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
     pEdit->SetSelection(aSelect);
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
-    SectReprPtr pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+    SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
     if (pEdit == m_pFileNameED)
     {
         m_bSubRegionsFilled = false;
@@ -1200,7 +1200,7 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
     if(pEntry)
     {
         bool bFile = m_pFileCB->IsChecked();
-        SectReprPtr pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+        SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         SwSectionData & rData( pSectRepr->GetSectionData() );
         bool bDDE = pBox->IsChecked();
         if(bDDE)
@@ -1255,7 +1255,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
-        SectReprPtr pRepr = static_cast<SectReprPtr>(pEntry->GetUserData());
+        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         if(bSet)
         {
             if(!pRepr->GetTempPasswd().getLength() || bChange)
@@ -1306,7 +1306,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl)
     {
         const OUString aName = m_pCurName->GetText();
         m_pTree->SetEntryText(pEntry,aName);
-        SectReprPtr pRepr = static_cast<SectReprPtr>(pEntry->GetUserData());
+        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         pRepr->GetSectionData().SetSectionName(aName);
 
         m_pOK->Enable(!aName.isEmpty());
@@ -1324,7 +1324,7 @@ IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit *, pEdit )
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
-        SectReprPtr pRepr = static_cast<SectReprPtr>(pEntry->GetUserData());
+        SectRepr* pRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         pRepr->GetSectionData().SetCondition(pEdit->GetText());
         pEntry = m_pTree->NextSelected(pEntry);
     }
@@ -1352,7 +1352,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
     OSL_ENSURE( pEntry, "no entry found" );
     if ( pEntry )
     {
-        SectReprPtr pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
+        SectRepr* pSectRepr = static_cast<SectRepr*>(pEntry->GetUserData());
         pSectRepr->SetFile( sFileName );
         pSectRepr->SetFilter( sFilterName );
         pSectRepr->GetSectionData().SetLinkFilePassword(sPassword);

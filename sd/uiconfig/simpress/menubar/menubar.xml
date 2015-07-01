@@ -157,6 +157,7 @@
     <menu:menu menu:id=".uno:InsertMenu">
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:InsertGraphic"/>
+            <menu:menuitem menu:id=".uno:SelectBackground"/>
             <menu:menuitem menu:id=".uno:InsertAVMedia"/>
             <menu:menuitem menu:id=".uno:InsertTable"/>
             <menu:menuitem menu:id=".uno:InsertObjectChart"/>
@@ -315,8 +316,6 @@
             <menu:menuitem menu:id=".uno:FontDialog"/>
             <menu:menuitem menu:id=".uno:ParagraphDialog"/>
             <menu:menuitem menu:id=".uno:OutlineBullet"/>
-            <menu:menuitem menu:id=".uno:PageSetup"/>
-            <menu:menuitem menu:id=".uno:MasterLayouts"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:FormatImageMenu">
               <menu:menupopup>
@@ -358,7 +357,7 @@
                   <menu:menuitem menu:id=".uno:ColorSettings"/>
               </menu:menupopup>
             </menu:menu>
-            <menu:menu menu:id=".uno:FormatObjectMenu">
+            <menu:menu menu:id=".uno:ObjectMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:TransformDialog"/>
                     <menu:menuitem menu:id=".uno:FormatLine"/>
@@ -429,17 +428,18 @@
         <menu:menupopup>
             <menu:menuitem menu:id=".uno:InsertPage"/>
             <menu:menuitem menu:id=".uno:DuplicatePage"/>
-            <menu:menuitem menu:id=".uno:RenamePage"/>
             <menu:menuitem menu:id=".uno:DeletePage"/>
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SelectBackground"/>
+            <menu:menuitem menu:id=".uno:InsertMasterPage"/>
+            <menu:menuitem menu:id=".uno:DeleteMasterPage"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:DisplayMasterBackground"/>
             <menu:menuitem menu:id=".uno:DisplayMasterObjects"/>
+            <menu:menuitem menu:id=".uno:MasterLayouts"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HideSlide"/>
             <menu:menuitem menu:id=".uno:ShowSlide"/>
-            <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:SlideChangeWindow"/>
+            <menu:menuitem menu:id=".uno:RenamePage"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SummaryPage"/>
             <menu:menuitem menu:id=".uno:ExpandPage"/>
@@ -448,8 +448,14 @@
             <menu:menuitem menu:id=".uno:CustomAnimation"/>
             <menu:menuitem menu:id=".uno:AnimationEffects"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:FirstPage"/>
+            <menu:menuitem menu:id=".uno:PreviousPage"/>
+            <menu:menuitem menu:id=".uno:NextPage"/>
+            <menu:menuitem menu:id=".uno:LastPage"/>
+            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:PresentationLayout"/>
             <menu:menuitem menu:id=".uno:ModifyPage"/>
+            <menu:menuitem menu:id=".uno:PageSetup"/>
         </menu:menupopup>
     </menu:menu>
     <menu:menu menu:id=".uno:SlideShowMenu">

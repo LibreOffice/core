@@ -999,7 +999,7 @@ void StringResourcePersistenceImpl::implStoreAtStorage
     bool bUsedForStore,
     bool bStoreAll
 )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     // Delete files for deleted locales
     if( bUsedForStore )
@@ -1127,7 +1127,7 @@ void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
     const OUString& aNameBase,
     const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
 )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     // Delete files for deleted locales
     while( m_aDeletedLocaleItemVector.size() > 0 )
@@ -1153,7 +1153,7 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
     const OUString& aNameBase,
     const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
 )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     // Delete files for changed defaults
     for( LocaleItemVectorIt it = m_aChangedDefaultLocaleVector.begin();
@@ -1183,7 +1183,7 @@ void StringResourcePersistenceImpl::implStoreAtLocation
     bool bStoreAll,
     bool bKillAll
 )
-    throw (Exception, RuntimeException)
+    throw (Exception, RuntimeException, std::exception)
 {
     // Delete files for deleted locales
     if( bUsedForStore || bKillAll )

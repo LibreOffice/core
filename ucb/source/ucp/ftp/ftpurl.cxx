@@ -515,7 +515,7 @@ std::vector<FTPDirentry> FTPURL::list(
 
 
 OUString FTPURL::net_title() const
-    throw(curl_exception)
+    throw(curl_exception, std::exception)
 {
     CURL *curl = m_pFCP->handle();
 
@@ -674,7 +674,7 @@ void FTPURL::insert(bool replaceExisting,void* stream) const
 
 
 void FTPURL::mkdir(bool ReplaceExisting) const
-    throw (curl_exception, malformed_exception)
+    throw (curl_exception, malformed_exception, std::exception)
 {
     OString title;
     if(!m_aPathSegmentVec.empty()) {
@@ -724,7 +724,7 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 
 
 OUString FTPURL::ren(const OUString& NewTitle)
-    throw(curl_exception)
+    throw(curl_exception, std::exception)
 {
     CURL *curl = m_pFCP->handle();
 
@@ -768,7 +768,7 @@ OUString FTPURL::ren(const OUString& NewTitle)
 
 
 void FTPURL::del() const
-    throw(curl_exception, malformed_exception)
+    throw(curl_exception, malformed_exception, std::exception)
 {
     FTPDirentry aDirentry(direntry());
 

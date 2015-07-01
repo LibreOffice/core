@@ -111,7 +111,7 @@ public:
 
 protected:
     // FmXChangeListener
-    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
+    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
     inline          SfxBindings&    GetBindings()       { return SfxControllerItem::GetBindings(); }

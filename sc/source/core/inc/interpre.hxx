@@ -890,6 +890,7 @@ public:
 
     void SetError(sal_uInt16 nError)
             { if (nError && !nGlobalError) nGlobalError = nError; }
+    void AssertFormulaMatrix();
 
     sal_uInt16                  GetError() const            { return nGlobalError; }
     formula::StackVar           GetResultType() const       { return xResult->GetType(); }

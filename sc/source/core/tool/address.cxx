@@ -1491,11 +1491,34 @@ static sal_uInt16 lcl_ScRange_Parse_OOo( ScRange& rRange,
                 {
                     rRange.aStart.SetRow(0);
                     rRange.aEnd.SetRow(MAXROW);
+                    nRes1 |= SCA_VALID_ROW | SCA_ROW_ABSOLUTE;
+                    nRes2 |= SCA_VALID_ROW | SCA_ROW_ABSOLUTE;
                 }
                 else
                 {
                     rRange.aStart.SetCol(0);
                     rRange.aEnd.SetCol(MAXCOL);
+                    nRes1 |= SCA_VALID_COL | SCA_COL_ABSOLUTE;
+                    nRes2 |= SCA_VALID_COL | SCA_COL_ABSOLUTE;
+                }
+            }
+            else if ((nRes1 & SCA_VALID) && (nRes2 & SCA_VALID))
+            {
+                // Flag entire column/row references so they can be displayed
+                // as such. If the sticky reference parts are not both
+                // absolute or relative, assume that the user thought about
+                // something we should not touch.
+                if (rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW &&
+                        ((nRes1 & SCA_ROW_ABSOLUTE) == 0) && ((nRes2 & SCA_ROW_ABSOLUTE) == 0))
+                {
+                    nRes1 |= SCA_ROW_ABSOLUTE;
+                    nRes2 |= SCA_ROW_ABSOLUTE;
+                }
+                else if (rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL &&
+                        ((nRes1 & SCA_COL_ABSOLUTE) == 0) && ((nRes2 & SCA_COL_ABSOLUTE) == 0))
+                {
+                    nRes1 |= SCA_COL_ABSOLUTE;
+                    nRes2 |= SCA_COL_ABSOLUTE;
                 }
             }
             if (nRes1 && nRes2)
@@ -2112,6 +2135,10 @@ bool ScAddress::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 
 bool ScRange::Move( SCsCOL dx, SCsROW dy, SCsTAB dz, ScDocument* pDoc )
 {
+    if (dy && aStart.Row() == 0 && aEnd.Row() == MAXROW)
+        dy = 0;     // Entire column not to be moved.
+    if (dx && aStart.Col() == 0 && aEnd.Col() == MAXCOL)
+        dx = 0;     // Entire row not to be moved.
     bool b = aStart.Move( dx, dy, dz, pDoc );
     b &= aEnd.Move( dx, dy, dz, pDoc );
     return b;

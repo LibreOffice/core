@@ -96,8 +96,7 @@ namespace accessibility
                         SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
                         if ( pEntry == NULL )
                         {
-                            sal_uLong nPos=0;
-                            pEntry = getCtrl()->GetSelectedEntry ( nPos );
+                            pEntry = getCtrl()->GetSelectedEntry();
                         }
                         if ( pEntry )
                         {

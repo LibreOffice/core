@@ -278,7 +278,7 @@ public:
 
     virtual void dumpAsXml( xmlTextWriterPtr writer ) const SAL_OVERRIDE { SwLayoutFrm::dumpAsXml( writer ); };
 
-    virtual void Calc() const SAL_OVERRIDE;
+    virtual void Calc(vcl::RenderContext* pRenderContext) const SAL_OVERRIDE;
 
     const Point& ContentPos() const { return m_aContentPos; }
     Point& ContentPos() { return m_aContentPos; }

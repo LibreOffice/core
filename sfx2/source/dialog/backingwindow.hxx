@@ -78,10 +78,6 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
     VclPtr<VclBox> mpAllButtonsBox;
     VclPtr<VclBox> mpButtonsBox;
     VclPtr<VclBox> mpSmallButtonsBox;
-    VclPtr<VclBox> mpThinBox1;
-    VclPtr<VclBox> mpThinBox2;
-    VclPtr<VclBox> mpHelpBox;
-    VclPtr<VclBox> mpExtensionsBox;
 
     VclPtr<RecentDocsView> mpAllRecentThumbnails;
     VclPtr<TemplateDefaultView> mpLocalView;
@@ -89,10 +85,11 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
 
     std::vector< VclPtr<vcl::Window> > maDndWindows;
 
+    Color maButtonsTextColor;
     Rectangle maStartCentButtons;
 
     bool mbIsSaveMode;
-    bool  mbInitControls;
+    bool mbInitControls;
     sal_Int32 mnHideExternalLinks;
     svt::AcceleratorExecute* mpAccExec;
 

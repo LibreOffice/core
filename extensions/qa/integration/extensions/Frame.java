@@ -24,7 +24,7 @@ import com.sun.star.task.XStatusIndicatorFactory;
 import com.sun.star.util.XCloseable;
 
 /**
- * wraps the coms.sun.star.frame.Frame service
+ * wraps the com.sun.star.frame.Frame service
  */
 public class Frame implements   XDispatchProvider,
                                 XDispatchProviderInterception,

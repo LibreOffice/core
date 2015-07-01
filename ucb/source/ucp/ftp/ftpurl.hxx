@@ -131,13 +131,13 @@ namespace ftp {
             throw(curl_exception);
 
         void mkdir(bool ReplaceExisting) const
-            throw(curl_exception, malformed_exception);
+            throw(curl_exception, malformed_exception, std::exception);
 
         OUString ren(const OUString& NewTitle)
-            throw(curl_exception);
+            throw(curl_exception, std::exception);
 
         void del() const
-            throw(curl_exception, malformed_exception);
+            throw(curl_exception, malformed_exception, std::exception);
 
 
     private:
@@ -159,7 +159,7 @@ namespace ftp {
                 malformed_exception
             );
 
-        OUString net_title() const throw(curl_exception);
+        OUString net_title() const throw(curl_exception, std::exception);
     };
 
 }

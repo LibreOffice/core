@@ -281,7 +281,7 @@ protected:
         bool bUsedForStore,
         bool bStoreAll
     )
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
     void implKillRemovedLocaleFiles
     (
@@ -289,7 +289,7 @@ protected:
         const OUString& aNameBase,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
     )
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
 
     void implKillChangedDefaultFiles
     (
@@ -297,7 +297,7 @@ protected:
         const OUString& aNameBase,
         const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
     )
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
 
     void implStoreAtLocation
     (
@@ -309,7 +309,7 @@ protected:
         bool bStoreAll,
         bool bKillAll = false
     )
-    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception);
 
 public:
     StringResourcePersistenceImpl(

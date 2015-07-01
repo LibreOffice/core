@@ -57,7 +57,7 @@ public:
     /**
     set the properties from the submission element
     that control aspects of the serialization
-    eachs serialization may support individual properties
+    each serialization may support individual properties
     */
     void setProperties(const css::uno::Sequence< css::beans::NamedValue >& props)
     {

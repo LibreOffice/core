@@ -2246,7 +2246,7 @@ void Content::insert(
         const uno::Reference< io::XInputStream > & xInputStream,
         bool bReplaceExisting,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     bool bTransient, bCollection;
     OUString aEscapedTitle;
@@ -2487,7 +2487,7 @@ void Content::insert(
 void Content::transfer(
         const ucb::TransferInfo & rArgs,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
     uno::Reference< ucb::XContentProvider >      xProvider;
@@ -2719,7 +2719,7 @@ void Content::transfer(
 
 
 void Content::destroy( bool bDeletePhysical )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
     uno::Reference< ucb::XContent > xThis = this;
@@ -3114,7 +3114,7 @@ void Content::cancelCommandExecution(
                 const DAVException & e,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv,
                 bool bWrite /* = sal_False */ )
-    throw ( uno::Exception )
+    throw ( uno::Exception, std::exception )
 {
     ucbhelper::cancelCommandExecution( MapDAVException( e, bWrite ), xEnv );
     // Unreachable

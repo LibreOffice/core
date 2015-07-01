@@ -510,7 +510,7 @@ bool ZipFile::hasValidPassword ( ZipEntry & rEntry, const ::rtl::Reference< Encr
 }
 
 uno::Reference< XInputStream > ZipFile::createUnbufferedStream(
-            SotMutexHolderRef aMutexHolder,
+            const rtl::Reference<SotMutexHolder>& aMutexHolder,
             ZipEntry & rEntry,
             const ::rtl::Reference< EncryptionData > &rData,
             sal_Int8 nStreamMode,
@@ -530,7 +530,7 @@ ZipEnumeration * SAL_CALL ZipFile::entries(  )
 uno::Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData > &rData,
         bool bIsEncrypted,
-        SotMutexHolderRef aMutexHolder )
+        const rtl::Reference<SotMutexHolder>& aMutexHolder )
     throw(IOException, ZipException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -558,7 +558,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getInputStream( ZipEntry& rEntr
 uno::Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData > &rData,
         bool bIsEncrypted,
-        SotMutexHolderRef aMutexHolder )
+        const rtl::Reference<SotMutexHolder>& aMutexHolder )
     throw ( packages::WrongPasswordException,
             IOException,
             ZipException,
@@ -598,7 +598,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry
 uno::Reference< XInputStream > SAL_CALL ZipFile::getRawData( ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
         bool bIsEncrypted,
-        SotMutexHolderRef aMutexHolder )
+        const rtl::Reference<SotMutexHolder>& aMutexHolder )
     throw(IOException, ZipException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -613,7 +613,7 @@ uno::Reference< XInputStream > SAL_CALL ZipFile::getWrappedRawStream(
         ZipEntry& rEntry,
         const ::rtl::Reference< EncryptionData >& rData,
         const OUString& aMediaType,
-        SotMutexHolderRef aMutexHolder )
+        const rtl::Reference<SotMutexHolder>& aMutexHolder )
     throw ( packages::NoEncryptionException,
             IOException,
             ZipException,

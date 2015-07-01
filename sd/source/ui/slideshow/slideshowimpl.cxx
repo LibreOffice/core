@@ -1306,7 +1306,7 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nSlideNumber)
     }
 }
 
-void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( Exception )
+void SlideshowImpl::registerShapeEvents( Reference< XShapes >& xShapes ) throw( Exception, std::exception )
 {
     try
     {
@@ -1659,7 +1659,7 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
     return ( nPgNum - 1) >> 1;
 }
 
-void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException)
+void SlideshowImpl::hyperLinkClicked( OUString const& aHyperLink ) throw (RuntimeException, std::exception)
 {
     OUString aBookmark( aHyperLink );
 
@@ -3305,7 +3305,7 @@ void PresentationSettingsEx::SetArguments( const Sequence< PropertyValue >& rArg
     }
 }
 
-void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const Any& rValue ) throw (IllegalArgumentException)
+void PresentationSettingsEx::SetPropertyValue( const OUString& rProperty, const Any& rValue ) throw (IllegalArgumentException, std::exception)
 {
     if ( rProperty == "RehearseTimings" )
     {

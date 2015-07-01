@@ -138,7 +138,7 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                 try
                 {
                     // some tests are very dynamic in its exceution time so that
-                    // a threadTimeOut fials. In this cases the logging mechanisim
+                    // a threadTimeOut fails. In this cases the logging mechanisim
                     // is a useful way to detect that a office respective a test
                     // is running and not death.
                     // But way ThreadTimeOut?

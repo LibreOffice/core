@@ -67,7 +67,6 @@ class SwXCell SAL_FINAL : public SwXCellBaseClass,
 {
     friend void   sw_setString( SwXCell &rCell, const OUString &rText,
                                 bool bKeepNumberFormat );
-    friend double sw_getValue( SwXCell &rCell );
     friend void   sw_setValue( SwXCell &rCell, double nVal );
 
     const SfxItemPropertySet*   m_pPropSet;
@@ -117,8 +116,12 @@ public:
     virtual OUString SAL_CALL getFormula(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setFormula( const OUString& aFormula ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getValue(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getValue(  ) const throw(::com::sun::star::uno::RuntimeException, std::exception)
+        { return const_cast<SwXCell*>(this)->getValue(); };
     virtual void SAL_CALL setValue( double nValue ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::table::CellContentType SAL_CALL getType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::table::CellContentType SAL_CALL getType(  ) const throw(::com::sun::star::uno::RuntimeException, std::exception)
+        { return const_cast<SwXCell*>(this)->getType(); };
     virtual sal_Int32 SAL_CALL getError(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XText
@@ -147,11 +150,12 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    SwTableBox*   GetTableBox()const {return pBox;}
-    static SwXCell*     CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable = 0 );
-    SwTableBox*     FindBox(SwTable* pTable, SwTableBox* pBox);
-
+    SwTableBox* GetTableBox() const { return pBox; }
+    static SwXCell* CreateXCell(SwFrameFormat* pTableFormat, SwTableBox* pBox, SwTable *pTable = nullptr );
+    SwTableBox* FindBox(SwTable* pTable, SwTableBox* pBox);
     SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+    double GetForcedNumericalValue() const;
+    css::uno::Any GetAny() const;
 };
 
 class SwXTextTableRow SAL_FINAL : public cppu::WeakImplHelper
@@ -422,7 +426,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+    void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception );
 
     sal_uInt16          getRowCount();
     sal_uInt16          getColumnCount();
@@ -434,6 +438,8 @@ public:
    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
     SwFrameFormat* GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
+    SW_DLLPUBLIC static void GetCellPosition(const OUString& rCellName, sal_Int32& o_rColumn, sal_Int32& o_rRow);
+
 };
 
 class SwXCellRange : public cppu::WeakImplHelper
@@ -467,7 +473,7 @@ public:
     void SetLabels(bool bFirstRowAsLabel, bool bFirstColumnAsLabel)
         { m_bFirstRowAsLabel = bFirstRowAsLabel, m_bFirstColumnAsLabel = bFirstColumnAsLabel; }
     virtual ~SwXCellRange() {};
-    std::vector< css::uno::Reference< css::table::XCell > > getCells();
+    std::vector< css::uno::Reference< css::table::XCell > > GetCells();
 
     TYPEINFO_OVERRIDE();
 
@@ -540,14 +546,6 @@ public:
     sal_uInt16      getColumnCount();
 
     const SwUnoCrsr* GetTableCrsr() const;
-
-    // for SwChartDataSequence
-    void GetDataSequence(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > *pAnySeq,
-            ::com::sun::star::uno::Sequence< OUString > *pTextSeq,
-            ::com::sun::star::uno::Sequence< double > *pDblSeq,
-            bool bForceNumberResults = false ) throw (::com::sun::star::uno::RuntimeException);
-
 };
 
 class SwXTableRows SAL_FINAL : public cppu::WeakImplHelper
@@ -639,8 +637,6 @@ int sw_CompareCellRanges(
         bool bCmpColsFirst );
 
 void sw_NormalizeRange( OUString &rCell1, OUString &rCell2 );
-
-void sw_GetCellPosition( const OUString &rCellName, sal_Int32 &rColumn, sal_Int32 &rRow);
 
 OUString sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
 

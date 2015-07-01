@@ -1165,7 +1165,7 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const OUString
     return xConn;
 }
 
-Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password,bool _bIsolated) throw( SQLException, RuntimeException )
+Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, const OUString& password,bool _bIsolated) throw( SQLException, RuntimeException, std::exception )
 {
     ModelMethodGuard aGuard( *this );
 

@@ -105,7 +105,6 @@ class ImpSdrObjTextLinkUserData : public SdrObjUserData
     rtl_TextEncoding            eCharSet;
 
 public:
-    TYPEINFO_OVERRIDE();
     ImpSdrObjTextLinkUserData(SdrTextObj* pObj1);
     virtual ~ImpSdrObjTextLinkUserData();
 

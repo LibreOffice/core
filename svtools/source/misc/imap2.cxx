@@ -37,8 +37,6 @@
 
 #define NOTEOL(c) ((c)!='\0')
 
-TYPEINIT0_AUTOFACTORY( ImageMap );
-
 void IMapObject::AppendCERNCoords(OStringBuffer& rBuf, const Point& rPoint100)
 {
     const Point aPixPt( Application::GetDefaultDevice()->LogicToPixel( rPoint100, MapMode( MAP_100TH_MM ) ) );

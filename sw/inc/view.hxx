@@ -181,7 +181,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     sal_uInt16          m_nOldPageNum;
     OUString            m_sOldSectionName;
 
-    Point               m_aTabColFromDocPos;  // moving table colmns out of the document
+    Point               m_aTabColFromDocPos;  // moving table columns out of the document
     SwTextNode           * m_pNumRuleNodeFromDoc; // Moving indent of numrule #i23726#
 
     Size                m_aDocSz;         // current document size

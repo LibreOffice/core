@@ -93,7 +93,7 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
     }
 }
 
-OUString XMLNamespaces::applyNSToAttributeName( const OUString& aName ) const throw( SAXException )
+OUString XMLNamespaces::applyNSToAttributeName( const OUString& aName ) const throw( SAXException, std::exception )
 {
     // xml draft: there is no default namespace for attributes!
 
@@ -118,7 +118,7 @@ OUString XMLNamespaces::applyNSToAttributeName( const OUString& aName ) const th
     return aName;
 }
 
-OUString XMLNamespaces::applyNSToElementName( const OUString& aName ) const   throw( SAXException )
+OUString XMLNamespaces::applyNSToElementName( const OUString& aName ) const   throw( SAXException, std::exception )
 {
     // xml draft: element names can have a default namespace
 

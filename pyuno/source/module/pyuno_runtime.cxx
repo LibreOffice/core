@@ -250,7 +250,7 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
  RuntimeImpl implementations
  *-------------------------------------------------------------------*/
 PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
-    throw( com::sun::star::uno::RuntimeException )
+    throw( com::sun::star::uno::RuntimeException, std::exception )
 {
     RuntimeImpl *me = PyObject_New (RuntimeImpl, &RuntimeImpl_Type);
     if( ! me )

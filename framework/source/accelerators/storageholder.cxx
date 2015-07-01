@@ -484,7 +484,7 @@ OUString StorageHolder::impl_st_normPath(const OUString& sPath)
     OUString sNormedPath = sPath;
 
     // "/bla" => "bla" && "/" => "" (!)
-    sNormedPath.startsWith(PATH_SEPARATOR, &sNormedPath);
+    (void)sNormedPath.startsWith(PATH_SEPARATOR, &sNormedPath);
 
     // "/" => "" || "" => "" ?
     if (sNormedPath.isEmpty())

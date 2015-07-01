@@ -7095,6 +7095,86 @@ void ScInterpreter::ScIndirect()
             }
             while (false);
 
+            do
+            {
+                OUString aName( ScGlobal::pCharClass->uppercase( sRefStr));
+                ScDBCollection::NamedDBs& rDBs = pDok->GetDBCollection()->getNamedDBs();
+                const ScDBData* pData = rDBs.findByUpperName( aName);
+                if (!pData)
+                    break;
+
+                ScRange aRange;
+                pData->GetArea( aRange);
+
+                // In Excel, specifying a table name without [] resolves to the
+                // same as with [], a range that excludes header and totals
+                // rows and contains only data rows. Do the same.
+                if (pData->HasHeader())
+                    aRange.aStart.IncRow();
+                if (pData->HasTotals())
+                    aRange.aEnd.IncRow(-1);
+
+                if (aRange.aStart.Row() > aRange.aEnd.Row())
+                    break;
+
+                if (aRange.aStart == aRange.aEnd)
+                    PushSingleRef( aRange.aStart.Col(), aRange.aStart.Row(),
+                            aRange.aStart.Tab());
+                else
+                    PushDoubleRef( aRange.aStart.Col(), aRange.aStart.Row(),
+                            aRange.aStart.Tab(), aRange.aEnd.Col(),
+                            aRange.aEnd.Row(), aRange.aEnd.Tab());
+
+                // success!
+                return;
+            }
+            while (false);
+
+            // It may be even a TableRef.
+            // Anything else that resolves to one reference could be added
+            // here, but we don't want to compile every arbitrary string. This
+            // is already nasty enough..
+            sal_Int32 nIndex = 0;
+            if ((nIndex = sRefStr.indexOf('[')) >= 0 && sRefStr.indexOf(']',nIndex+1) > nIndex)
+            {
+                do
+                {
+                    ScCompiler aComp( pDok, aPos);
+                    aComp.SetGrammar( pDok->GetGrammar());
+                    aComp.SetRefConvention( eConv);     // must be after grammar
+                    boost::scoped_ptr<ScTokenArray> pArr( aComp.CompileString( sRefStr));
+
+                    // Whatever.. use only the specific case.
+                    if (!pArr->HasOpCode( ocTableRef))
+                        break;
+
+                    aComp.CompileTokenArray();
+
+                    // A syntactically valid reference will generate exactly
+                    // one RPN token, a reference or error. Discard everything
+                    // else as error.
+                    if (pArr->GetCodeLen() != 1)
+                        break;
+
+                    ScTokenRef xTok( pArr->FirstRPN());
+                    if (!xTok)
+                        break;
+
+                    switch (xTok->GetType())
+                    {
+                        case svSingleRef:
+                        case svDoubleRef:
+                        case svError:
+                            PushTempToken( xTok.get());
+                            // success!
+                            return;
+                        default:
+                            ;   // nothing
+                    }
+                }
+                while (false);
+            }
+
             PushError( errNoRef);
         }
     }
@@ -8423,7 +8503,13 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
     const ScQueryEntry& rEntry = rParam.GetEntry(0);
     bool bColumnsMatch = (rParam.nCol1 == rEntry.nField);
     OSL_ENSURE( bColumnsMatch, "ScInterpreter::LookupQueryWithCache: columns don't match");
-    if (!bColumnsMatch)
+    // At least all volatile functions that generate indirect references have
+    // to force non-cached lookup.
+    /* TODO: We could further classify volatile functions into reference
+     * generating and not reference generating functions to have to force less
+     * direct lookups here. We could even further attribute volatility per
+     * parameter so it would affect only the lookup range parameter. */
+    if (!bColumnsMatch || GetVolatileType() != NOT_VOLATILE)
         bFound = lcl_LookupQuery( o_rResultPos, pDok, rParam, rEntry);
     else
     {

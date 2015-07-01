@@ -83,7 +83,7 @@ public:
 
     virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aValues ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

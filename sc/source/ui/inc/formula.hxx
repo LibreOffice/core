@@ -40,8 +40,6 @@ class ScInputHandler;
 class ScDocShell;
 class ScFormulaCell;
 
-typedef ScTabViewShell* PtrTabViewShell;
-
 class ScFormulaDlg : public formula::FormulaDlg,
                      public IAnyRefDialog
 {
@@ -105,7 +103,7 @@ protected:
     static void  SaveLRUEntry(const ScFuncDesc* pFuncDesc);
 
     static bool  IsInputHdl(ScInputHandler* pHdl);
-    static ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell,PtrTabViewShell* ppViewSh);
+    static ScInputHandler* GetNextInputHandler(ScDocShell* pDocShell, ScTabViewShell** ppViewSh);
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FORMULA_HXX

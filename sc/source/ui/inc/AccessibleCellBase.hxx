@@ -77,7 +77,7 @@ protected:
     /// Return this object's description.
     virtual OUString SAL_CALL
         createAccessibleDescription()
-        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Return the object's current name.
     virtual OUString SAL_CALL
@@ -141,11 +141,11 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     OUString SAL_CALL GetAllDisplayNote()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     OUString SAL_CALL getShadowAttrs()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
     OUString SAL_CALL getBorderAttrs()
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 public:
     const ScAddress& GetCellAddress() const { return maCellAddress; }
     bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);

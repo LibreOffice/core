@@ -184,7 +184,7 @@ namespace
             double* pDashArray = o_rStrokeAttributes.DashArray.getArray();
 
 
-            // iteratively fill dash array, first with dashs, then
+            // iteratively fill dash array, first with dashes, then
             // with dots.
 
 

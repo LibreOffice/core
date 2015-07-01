@@ -119,11 +119,9 @@ void SAL_CALL OPropertyMediator::propertyChange( const PropertyChangeEvent& evt 
                             aFind = ::std::find_if(
                                 m_aNameMap.begin(),
                                 m_aNameMap.end(),
-                                ::o3tl::compose1(
-                                ::std::bind2nd(::std::equal_to< OUString >(), evt.PropertyName),
-                                    ::o3tl::compose1(::o3tl::select1st<TPropertyConverter>(),::o3tl::select2nd<TPropertyNamePair::value_type>())
-                                )
-                            );
+                                [&evt] (TPropertyNamePair::value_type namePair) {
+                                    return namePair.second.first == evt.PropertyName;
+                                });
                             if ( aFind != m_aNameMap.end() )
                                 sPropName = aFind->first;
                         }

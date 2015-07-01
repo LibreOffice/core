@@ -41,7 +41,7 @@ ImplPolyPolygon::ImplPolyPolygon( sal_uInt16 nInitSize )
     mnCount     = nInitSize;
     mnSize      = nInitSize;
     mnResize    = 16;
-    mpPolyAry   = new SVPPOLYGON[ nInitSize ];
+    mpPolyAry   = new Polygon*[ nInitSize ];
 }
 
 ImplPolyPolygon::ImplPolyPolygon( const ImplPolyPolygon& rImplPolyPoly )
@@ -53,7 +53,7 @@ ImplPolyPolygon::ImplPolyPolygon( const ImplPolyPolygon& rImplPolyPoly )
 
     if ( rImplPolyPoly.mpPolyAry )
     {
-        mpPolyAry = new SVPPOLYGON[mnSize];
+        mpPolyAry = new Polygon*[mnSize];
         for ( sal_uInt16 i = 0; i < mnCount; i++ )
             mpPolyAry[i] = new Polygon( *rImplPolyPoly.mpPolyAry[i] );
     }
@@ -128,19 +128,19 @@ void PolyPolygon::Insert( const Polygon& rPoly, sal_uInt16 nPos )
         nPos = mpImplPolyPolygon->mnCount;
 
     if ( !mpImplPolyPolygon->mpPolyAry )
-        mpImplPolyPolygon->mpPolyAry = new SVPPOLYGON[mpImplPolyPolygon->mnSize];
+        mpImplPolyPolygon->mpPolyAry = new Polygon*[mpImplPolyPolygon->mnSize];
     else if ( mpImplPolyPolygon->mnCount == mpImplPolyPolygon->mnSize )
     {
         sal_uInt16      nOldSize = mpImplPolyPolygon->mnSize;
         sal_uInt16      nNewSize = nOldSize + mpImplPolyPolygon->mnResize;
-        SVPPOLYGON* pNewAry;
+        Polygon**       pNewAry;
 
         if ( nNewSize >= MAX_POLYGONS )
             nNewSize = MAX_POLYGONS;
-        pNewAry = new SVPPOLYGON[nNewSize];
-        memcpy( pNewAry, mpImplPolyPolygon->mpPolyAry, nPos*sizeof(SVPPOLYGON) );
+        pNewAry = new Polygon*[nNewSize];
+        memcpy( pNewAry, mpImplPolyPolygon->mpPolyAry, nPos*sizeof(Polygon*) );
         memcpy( pNewAry+nPos+1, mpImplPolyPolygon->mpPolyAry+nPos,
-                (nOldSize-nPos)*sizeof(SVPPOLYGON) );
+                (nOldSize-nPos)*sizeof(Polygon*) );
         delete[] mpImplPolyPolygon->mpPolyAry;
         mpImplPolyPolygon->mpPolyAry = pNewAry;
         mpImplPolyPolygon->mnSize = nNewSize;
@@ -149,7 +149,7 @@ void PolyPolygon::Insert( const Polygon& rPoly, sal_uInt16 nPos )
     {
         memmove( mpImplPolyPolygon->mpPolyAry+nPos+1,
                  mpImplPolyPolygon->mpPolyAry+nPos,
-                 (mpImplPolyPolygon->mnCount-nPos)*sizeof(SVPPOLYGON) );
+                 (mpImplPolyPolygon->mnCount-nPos)*sizeof(Polygon*) );
     }
 
     mpImplPolyPolygon->mpPolyAry[nPos] = new Polygon( rPoly );
@@ -170,7 +170,7 @@ void PolyPolygon::Remove( sal_uInt16 nPos )
     mpImplPolyPolygon->mnCount--;
     memmove( mpImplPolyPolygon->mpPolyAry+nPos,
              mpImplPolyPolygon->mpPolyAry+nPos+1,
-             (mpImplPolyPolygon->mnCount-nPos)*sizeof(SVPPOLYGON) );
+             (mpImplPolyPolygon->mnCount-nPos)*sizeof(Polygon*) );
 }
 
 void PolyPolygon::Replace( const Polygon& rPoly, sal_uInt16 nPos )

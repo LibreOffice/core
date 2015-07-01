@@ -51,7 +51,7 @@ namespace toolkit
                     ::com::sun::star::uno::Any& rOldValue,
                     sal_Int32 nPropId,
                     const ::com::sun::star::uno::Any& rValue
-                ) throw (::com::sun::star::lang::IllegalArgumentException) SAL_OVERRIDE;
+                ) throw (::com::sun::star::lang::IllegalArgumentException, std::exception) SAL_OVERRIDE;
 
         void SAL_CALL setFastPropertyValue_NoBroadcast(
                     sal_Int32 nHandle,

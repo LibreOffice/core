@@ -1037,7 +1037,7 @@ void handleNameClashRename(
         const uno::Reference<
             ucb::XCommandProcessor > & xCommandProcessorS,
         /* [inout] */ uno::Reference< io::XInputStream > & xInputStream )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     sal_Int32 nTry = 0;
 

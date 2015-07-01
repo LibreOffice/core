@@ -1069,7 +1069,8 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
         {
             aRange = ScRange( theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 );
             pArea->UpdateRange( aRange );
-            pArea->GetBroadcaster().Broadcast( ScAreaChangedHint( aRange ) );   // for DDE
+            // For DDE and ScLookupCache
+            pArea->GetBroadcaster().Broadcast( ScAreaChangedHint( aRange ) );
         }
 
         // insert to slots

@@ -229,7 +229,7 @@ void OStorageHelper::SetCommonStorageEncryptionData(
 
 sal_Int32 OStorageHelper::GetXStorageFormat(
             const uno::Reference< embed::XStorage >& xStorage )
-        throw ( uno::Exception )
+        throw ( uno::Exception, std::exception )
 {
     uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
 

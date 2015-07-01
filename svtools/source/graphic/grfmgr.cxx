@@ -56,8 +56,6 @@ struct GrfSimpleCacheObj
                     maGraphic( rGraphic ), maAttr( rAttr ) {}
 };
 
-TYPEINIT1_AUTOFACTORY( GraphicObject, SvDataCopyStream );
-
 // unique increasing ID for being able to detect the GraphicObject with the
 // oldest last data changes
 static sal_uLong aIncrementingTimeOfLastDataChange = 1;

@@ -64,7 +64,7 @@ namespace basegfx
                 uno::Sequence< geometry::RealBezierSegment2D > outputSequence(nPointCount);
                 geometry::RealBezierSegment2D* pOutput = outputSequence.getArray();
 
-                // fill sequences and imply clodes polygon on this implementation layer
+                // fill sequences and imply closed polygon on this implementation layer
                 for(sal_uInt32 a(0); a < nPointCount; a++)
                 {
                     const basegfx::B2DPoint aStart(rPoly.getB2DPoint(a));

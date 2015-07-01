@@ -82,6 +82,12 @@ extern "C"
             XInitThreads();
 
 #if GTK_CHECK_VERSION(3,0,0)
+        if (gtk_minor_version < 14)
+        {
+            g_warning("require a newer gtk than 3.%d for theme expectations", gtk_minor_version);
+            return NULL;
+        }
+
         const gchar* pVersion = gtk_check_version( 3, 2, 0 );
 #else
         const gchar* pVersion = gtk_check_version( 2, 2, 0 );
@@ -392,8 +398,10 @@ void GtkInstance::RemoveTimer (SalTimer *pTimer)
         m_aTimers.erase( it );
 }
 
-void GtkInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
+void GtkInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
+    (void) nReleased;
+    assert(nReleased == 0); // not implemented
     EnsureInit();
     GetGtkSalData()->Yield( bWait, bHandleAllCurrentEvents );
 }

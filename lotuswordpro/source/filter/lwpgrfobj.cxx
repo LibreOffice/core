@@ -383,7 +383,7 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
 }
 
 /**
- * @descr   get the image data (only -D dara) read from bento stream according to the VO_GRAPHIC ID.
+ * @descr   get the image data (only -D data) read from bento stream according to the VO_GRAPHIC ID.
  * @param   pGrafData   the array to store the image data. the pointer need to be deleted outside.
  * @return  the length of the image data.
  */

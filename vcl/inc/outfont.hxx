@@ -277,12 +277,11 @@ public:
 };
 
 #define MULTITEXTLINEINFO_RESIZE    16
-typedef ImplTextLineInfo* PImplTextLineInfo;
 
 class ImplMultiTextLineInfo
 {
 private:
-    PImplTextLineInfo*  mpLines;
+    ImplTextLineInfo**  mpLines;
     sal_Int32           mnLines;
     sal_Int32           mnSize;
 

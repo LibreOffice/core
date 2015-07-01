@@ -1421,7 +1421,7 @@ void OBoundControlModel::onValuePropertyChange( ControlModelLock& i_rControLock 
         recheckValidity( true );
 }
 
-void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) throw ( RuntimeException )
+void OBoundControlModel::_propertyChanged( const PropertyChangeEvent& _rEvt ) throw ( RuntimeException, std::exception )
 {
     ControlModelLock aLock( *this );
     OSL_ENSURE( _rEvt.PropertyName == m_sValuePropertyName,

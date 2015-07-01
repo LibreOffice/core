@@ -48,13 +48,12 @@ public:
 #define MAX_POLYGONS        ((sal_uInt16)0x3FF0)
 
 class Polygon;
-typedef Polygon* SVPPOLYGON;
 
 class SAL_WARN_UNUSED ImplPolyPolygon
 {
 public:
-    SVPPOLYGON*     mpPolyAry;
-    sal_uIntPtr           mnRefCount;
+    Polygon**           mpPolyAry;
+    sal_uIntPtr         mnRefCount;
     sal_uInt16          mnCount;
     sal_uInt16          mnSize;
     sal_uInt16          mnResize;

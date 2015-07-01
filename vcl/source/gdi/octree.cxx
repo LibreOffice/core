@@ -65,7 +65,7 @@ Octree::Octree( const BitmapReadAccess& rReadAcc, sal_uLong nColors ) :
             pAcc        ( &rReadAcc )
 {
     pNodeCache = new ImpNodeCache( nColors );
-    memset( pReduce, 0, ( OCTREE_BITS + 1 ) * sizeof( PNODE ) );
+    memset( pReduce, 0, ( OCTREE_BITS + 1 ) * sizeof( NODE* ) );
     ImplCreateOctree();
 }
 
@@ -119,7 +119,7 @@ void Octree::ImplCreateOctree()
     }
 }
 
-void Octree::ImplDeleteOctree( PPNODE ppNode )
+void Octree::ImplDeleteOctree( NODE** ppNode )
 {
     for ( sal_uLong i = 0UL; i < 8UL; i++ )
     {
@@ -131,7 +131,7 @@ void Octree::ImplDeleteOctree( PPNODE ppNode )
     *ppNode = NULL;
 }
 
-void Octree::ImplAdd( PPNODE ppNode )
+void Octree::ImplAdd( NODE** ppNode )
 {
     // ggf. neuen Knoten erzeugen
     if( !*ppNode )
@@ -171,7 +171,7 @@ void Octree::ImplAdd( PPNODE ppNode )
 void Octree::ImplReduce()
 {
     sal_uLong   i;
-    PNODE   pNode;
+    NODE*       pNode;
     sal_uLong   nRedSum = 0L;
     sal_uLong   nGreenSum = 0L;
     sal_uLong   nBlueSum = 0L;
@@ -186,7 +186,7 @@ void Octree::ImplReduce()
     {
         if ( pNode->pChild[ i ] )
         {
-            PNODE pChild = pNode->pChild[ i ];
+            NODE* pChild = pNode->pChild[ i ];
 
             nRedSum += pChild->nRed;
             nGreenSum += pChild->nGreen;
@@ -206,7 +206,7 @@ void Octree::ImplReduce()
     nLeafCount -= --nChildren;
 }
 
-void Octree::CreatePalette( PNODE pNode )
+void Octree::CreatePalette( NODE* pNode )
 {
     if( pNode->bLeaf )
     {
@@ -221,7 +221,7 @@ void Octree::CreatePalette( PNODE pNode )
 
 }
 
-void Octree::GetPalIndex( PNODE pNode )
+void Octree::GetPalIndex( NODE* pNode )
 {
     if ( pNode->bLeaf )
         nPalIndex = pNode->nPalIndex;

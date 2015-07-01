@@ -27,9 +27,6 @@
 
 using namespace ::com::sun::star;
 
-TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
-
-
 /**
  * Returns the replacement text
  *

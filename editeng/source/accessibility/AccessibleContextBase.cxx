@@ -568,7 +568,7 @@ void AccessibleContextBase::SetAccessibleName (
 
 
 OUString AccessibleContextBase::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("Empty Description");
 }
@@ -577,7 +577,7 @@ OUString AccessibleContextBase::CreateAccessibleDescription()
 
 
 OUString AccessibleContextBase::CreateAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return OUString("Empty Name");
 }

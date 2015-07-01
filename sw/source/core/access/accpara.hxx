@@ -233,7 +233,8 @@ protected:
         throw (
             ::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::lang::IllegalArgumentException,
-            ::com::sun::star::uno::RuntimeException);
+            ::com::sun::star::uno::RuntimeException,
+            std::exception);
 
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew) SAL_OVERRIDE;
 

@@ -266,6 +266,7 @@ protected:
     void FilterSelect( sal_uInt16 nFilterIdx, bool bForce = false );
     void SetFamilyState( sal_uInt16 nSlotId, const SfxTemplateItem* );
     void SetWaterCanState( const SfxBoolItem* pItem );
+    bool IsSafeForWaterCan() const;
 
     void SelectStyle( const OUString& rStyle );
     bool HasSelectedStyle() const;

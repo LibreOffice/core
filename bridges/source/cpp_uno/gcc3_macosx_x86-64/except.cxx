@@ -25,6 +25,7 @@
 #include <string.h>
 #include <typeinfo>
 
+#include <cxxabi.h>
 #include <dlfcn.h>
 
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -290,7 +291,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
             OUString::unacquired( &pUnoExc->pType->pTypeName ) );
     }
 
-    pCppExc = __cxa_allocate_exception( pTypeDescr->nSize );
+    pCppExc = __cxxabiv1::__cxa_allocate_exception( pTypeDescr->nSize );
     ::uno_copyAndConvertData( pCppExc, pUnoExc->pData, pTypeDescr, pUno2Cpp );
 
     // destruct uno exception
@@ -321,7 +322,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     }
     }
 
-    __cxa_throw( pCppExc, rtti, deleteException );
+    __cxxabiv1::__cxa_throw( pCppExc, rtti, deleteException );
 }
 
 void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )

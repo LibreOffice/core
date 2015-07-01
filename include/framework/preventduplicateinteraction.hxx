@@ -55,7 +55,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
                                     ,public ::cppu::WeakImplHelper1< css::task::XInteractionHandler2 >
 {
 
-    // structs, types etcp.
+    // structs, types etc.
     public:
 
         struct InteractionInfo

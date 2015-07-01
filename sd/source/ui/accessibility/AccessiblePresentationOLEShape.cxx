@@ -82,7 +82,7 @@ OUString
 
 OUString
     AccessiblePresentationOLEShape::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     //    return createAccessibleName();
     DescriptionGenerator aDG (mxShape);

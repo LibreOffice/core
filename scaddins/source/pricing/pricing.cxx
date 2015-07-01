@@ -240,7 +240,7 @@ const lang::Locale& ScaPricingAddIn::GetLocale( sal_uInt32 nIndex )
     return (nIndex < sizeof( pLang )) ? pDefLocales[ nIndex ] : aFuncLoc;
 }
 
-ResMgr& ScaPricingAddIn::GetResMgr() throw( uno::RuntimeException )
+ResMgr& ScaPricingAddIn::GetResMgr() throw( uno::RuntimeException, std::exception )
 {
     if( !pResMgr )
     {
@@ -266,12 +266,12 @@ void ScaPricingAddIn::InitData()
     }
 }
 
-OUString ScaPricingAddIn::GetDisplFuncStr( sal_uInt16 nResId ) throw( uno::RuntimeException )
+OUString ScaPricingAddIn::GetDisplFuncStr( sal_uInt16 nResId ) throw( uno::RuntimeException, std::exception )
 {
     return ScaResStringLoader( RID_PRICING_FUNCTION_NAMES, nResId, GetResMgr() ).GetString();
 }
 
-OUString ScaPricingAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException )
+OUString ScaPricingAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException, std::exception )
 {
     OUString aRet;
 

@@ -273,7 +273,7 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
 }
 
 bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException)
+    throw (RuntimeException, std::exception)
 {
     OUString sFileName;
     ::comphelper::NamedValueCollection aMediaDescriptor( rDescriptor );

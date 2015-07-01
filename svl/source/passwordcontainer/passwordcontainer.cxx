@@ -758,7 +758,7 @@ UrlRecord PasswordContainer::find(
     const OUString& aURL,
     const OUString& aName,
     bool bName, // only needed to support empty user names
-    const Reference< XInteractionHandler >& aHandler  ) throw(RuntimeException)
+    const Reference< XInteractionHandler >& aHandler  ) throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( mMutex );
 
@@ -838,7 +838,7 @@ OUString PasswordContainer::RequestPasswordFromUser( PasswordRequestMode aRMode,
 }
 
 
-OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException)
+OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException, std::exception)
 {
     PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_ENTER;
     if( !m_pStorageFile || !m_pStorageFile->useStorage() )

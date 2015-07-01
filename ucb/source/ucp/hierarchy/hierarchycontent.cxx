@@ -1075,7 +1075,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1381,7 +1381,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                                const uno::Reference<
                                     ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1528,7 +1528,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
 void HierarchyContent::destroy( bool bDeletePhysical,
                                 const uno::Reference<
                                     ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
@@ -1585,7 +1585,7 @@ void HierarchyContent::destroy( bool bDeletePhysical,
 void HierarchyContent::transfer(
             const ucb::TransferInfo& rInfo,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 

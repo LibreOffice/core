@@ -159,6 +159,8 @@ void SalYieldMutex::release()
                 // Java clients doesn't come in the right order
                 GdiFlush();
 
+                // lock here to ensure that the test of mnYieldWaitCount and
+                // m_mutex.release() is atomic
                 mpInstData->mpSalWaitMutex->acquire();
                 if ( mpInstData->mnYieldWaitCount )
                     PostMessageW( mpInstData->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
@@ -203,43 +205,59 @@ sal_uLong SalYieldMutex::GetAcquireCount( sal_uLong nThreadId )
         return 0;
 }
 
+/// note: while VCL is fully up and running (other threads started and
+/// before shutdown), the main thread must acquire SolarMutex only via
+/// this function to avoid deadlock
 void ImplSalYieldMutexAcquireWithWait()
 {
     WinSalInstance* pInst = GetSalData()->mpFirstInstance;
     if ( !pInst )
         return;
 
-    // If we are the main thread, then we must wait with wait, because
-    // in if we don't reschedule, then we create deadlocks if a Windows
-    // Function is called from another thread. If we aren't the main thread,
-    // than we call acquire directly.
+    // If this is the main thread, then we must wait with GetMessage(),
+    // because if we don't reschedule, then we create deadlocks if a Window's
+    // create/destroy is called via SendMessage() from another thread.
+    // If this is not the main thread, call acquire directly.
     DWORD nThreadId = GetCurrentThreadId();
     SalData* pSalData = GetSalData();
     if ( pSalData->mnAppThreadId == nThreadId )
     {
         // wait till we get the Mutex
-        bool bAcquire = FALSE;
+        bool bAcquire = false;
         do
         {
             if ( pInst->mpSalYieldMutex->tryToAcquire() )
-                bAcquire = TRUE;
+                bAcquire = true;
             else
             {
                 pInst->mpSalWaitMutex->acquire();
                 if ( pInst->mpSalYieldMutex->tryToAcquire() )
                 {
-                    bAcquire = TRUE;
+                    bAcquire = true;
                     pInst->mpSalWaitMutex->release();
                 }
                 else
                 {
+                    // other threads must not observe mnYieldWaitCount == 0
+                    // while main thread is blocked in GetMessage()
                     pInst->mnYieldWaitCount++;
                     pInst->mpSalWaitMutex->release();
                     MSG aTmpMsg;
+                    // this call exists because it dispatches SendMessage() msg!
                     GetMessageW( &aTmpMsg, pInst->mhComWnd, SAL_MSG_RELEASEWAITYIELD, SAL_MSG_RELEASEWAITYIELD );
+                    // it is possible that another thread acquires and releases
+                    // mpSalYieldMutex after the GetMessage call returns,
+                    // observes mnYieldWaitCount != 0 and sends an extra
+                    // SAL_MSG_RELEASEWAITYIELD - but that appears unproblematic
+                    // as it will just cause the next Yield to do an extra
+                    // iteration of the while loop here
                     pInst->mnYieldWaitCount--;
                     if ( pInst->mnYieldWaitCount )
+                    {
+                        // repeat the message so that the next instance of this
+                        // function further up the call stack is unblocked too
                         PostMessageW( pInst->mhComWnd, SAL_MSG_RELEASEWAITYIELD, 0, 0 );
+                    }
                 }
             }
         }
@@ -255,7 +273,7 @@ bool ImplSalYieldMutexTryToAcquire()
     if ( pInst )
         return pInst->mpSalYieldMutex->tryToAcquire();
     else
-        return FALSE;
+        return false;
 }
 
 void ImplSalYieldMutexRelease()
@@ -380,16 +398,16 @@ SalData::SalData()
     mnStockBrushCount = 0;      // count of static brushes
     mnSalObjWantKeyEvt = 0;     // KeyEvent for the SalObj hook
     mnCacheDCInUse = 0;         // count of CacheDC in use
-    mbObjClassInit = FALSE;     // is SALOBJECTCLASS initialised
-    mbInPalChange = FALSE;      // is in WM_QUERYNEWPALETTE
+    mbObjClassInit = false;     // is SALOBJECTCLASS initialised
+    mbInPalChange = false;      // is in WM_QUERYNEWPALETTE
     mnAppThreadId = 0;          // Id from Applikation-Thread
     mbScrSvrEnabled = FALSE;    // ScreenSaver enabled
     mnSageStatus = 0;           // status of Sage-DLL (DISABLE_AGENT == not available)
     mpSageEnableProc = 0;       // funktion to deactivate the system agent
     mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
     mpTempFontItem = 0;
-    mbThemeChanged = FALSE;     // true if visual theme was changed: throw away theme handles
-    mbThemeMenuSupport = FALSE;
+    mbThemeChanged = false;     // true if visual theme was changed: throw away theme handles
+    mbThemeMenuSupport = false;
 
     // init with NULL
     gdiplusToken = 0;
@@ -628,13 +646,17 @@ void ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-void WinSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
+void WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
+    // NOTE: if nReleased != 0 this will be called without SolarMutex
+    //       so don't do anything dangerous before releasing it here
     SalYieldMutex*  pYieldMutex = mpSalYieldMutex;
     SalData*        pSalData = GetSalData();
     DWORD           nCurThreadId = GetCurrentThreadId();
-    sal_uLong           nCount = pYieldMutex->GetAcquireCount( nCurThreadId );
-    sal_uLong           n = nCount;
+    sal_uLong const nCount = (nReleased != 0)
+                                ? nReleased
+                                : pYieldMutex->GetAcquireCount(nCurThreadId);
+    sal_uLong       n = (nReleased != 0) ? 0 : nCount;
     while ( n )
     {
         pYieldMutex->release();
@@ -697,6 +719,8 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
         case SAL_MSG_RELEASEWAITYIELD:
             {
             WinSalInstance* pInst = GetSalData()->mpFirstInstance;
+            // this test does not need mpSalWaitMutex locked because
+            // it can only happen on the main thread
             if ( pInst && pInst->mnYieldWaitCount )
                 PostMessageW( hWnd, SAL_MSG_RELEASEWAITYIELD, wParam, lParam );
             }
@@ -881,7 +905,7 @@ bool WinSalInstance::AnyInput( VclInputFlags nType )
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 void SalTimer::Start( sal_uLong nMS )

@@ -570,7 +570,6 @@ shell::deassociate( const OUString& aUnqPath,
 void SAL_CALL shell::page( sal_Int32 CommandId,
                            const OUString& aUnqPath,
                            const uno::Reference< io::XOutputStream >& xOutputStream )
-    throw()
 {
     uno::Reference< XContentProvider > xProvider( m_pProvider );
     osl::File aFile( aUnqPath );
@@ -661,7 +660,6 @@ uno::Reference< io::XInputStream > SAL_CALL
 shell::open( sal_Int32 CommandId,
              const OUString& aUnqPath,
              bool bLock )
-    throw()
 {
     XInputStream_impl* xInputStream = new XInputStream_impl( this, aUnqPath, bLock ); // from filinpstr.hxx
 
@@ -698,7 +696,6 @@ uno::Reference< io::XStream > SAL_CALL
 shell::open_rw( sal_Int32 CommandId,
                 const OUString& aUnqPath,
                 bool bLock )
-    throw()
 {
     XStream_impl* xStream = new XStream_impl( this, aUnqPath, bLock );  // from filstr.hxx
 
@@ -735,7 +732,6 @@ shell::ls( sal_Int32 CommandId,
            const sal_Int32 OpenMode,
            const uno::Sequence< beans::Property >& seq,
            const uno::Sequence< NumberedSortingInfo >& seqSort )
-    throw()
 {
     XResultSet_impl* p = new XResultSet_impl( this,aUnqPath,OpenMode,seq,seqSort );
 
@@ -766,7 +762,6 @@ shell::ls( sal_Int32 CommandId,
 
 uno::Reference< XCommandInfo > SAL_CALL
 shell::info_c()
-    throw()
 {
     XCommandInfo_impl* p = new XCommandInfo_impl( this );
     return uno::Reference< XCommandInfo >( p );
@@ -784,7 +779,6 @@ shell::info_c()
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 shell::info_p( const OUString& aUnqPath )
-    throw()
 {
     osl::MutexGuard aGuard( m_aMutex );
     XPropertySetInfo_impl* p = new XPropertySetInfo_impl( this,aUnqPath );
@@ -807,7 +801,6 @@ shell::info_p( const OUString& aUnqPath )
 uno::Sequence< uno::Any > SAL_CALL
 shell::setv( const OUString& aUnqPath,
              const uno::Sequence< beans::PropertyValue >& values )
-    throw()
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -1044,7 +1037,6 @@ uno::Reference< sdbc::XRow > SAL_CALL
 shell::getv( sal_Int32 CommandId,
              const OUString& aUnqPath,
              const uno::Sequence< beans::Property >& properties )
-    throw()
 {
     uno::Sequence< uno::Any > seq( properties.getLength() );
 
@@ -1112,7 +1104,6 @@ shell::move( sal_Int32 CommandId,
              const OUString& srcUnqPath,
              const OUString& dstUnqPathIn,
              const sal_Int32 NameClash )
-    throw()
 {
     // --> #i88446# Method notifyContentExchanged( getContentExchangedEventListeners( srcUnqPath,dstUnqPath,!isDocument ) ); crashes if
     // srcUnqPath and dstUnqPathIn are equal
@@ -1323,7 +1314,6 @@ shell::copy(
     const OUString& srcUnqPath,
     const OUString& dstUnqPathIn,
     sal_Int32 NameClash )
-    throw()
 {
     osl::FileBase::RC nError;
     OUString dstUnqPath( dstUnqPathIn );
@@ -1497,7 +1487,6 @@ shell::remove( sal_Int32 CommandId,
                const OUString& aUnqPath,
                sal_Int32 IsWhat,
                bool  MustExist )
-    throw()
 {
     sal_Int32 nMask = osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL;
 
@@ -1660,7 +1649,6 @@ bool SAL_CALL
 shell::mkdir( sal_Int32 CommandId,
               const OUString& rUnqPath,
               bool OverWrite )
-    throw()
 {
     OUString aUnqPath;
 
@@ -1722,7 +1710,6 @@ shell::mkfil( sal_Int32 CommandId,
               const OUString& aUnqPath,
               bool Overwrite,
               const uno::Reference< io::XInputStream >& aInputStream )
-    throw()
 {
     // return value unimportant
     bool bSuccess = write( CommandId,
@@ -1754,7 +1741,6 @@ shell::write( sal_Int32 CommandId,
               const OUString& aUnqPath,
               bool OverWrite,
               const uno::Reference< io::XInputStream >& aInputStream )
-    throw()
 {
     if( ! aInputStream.is() )
     {
@@ -1989,7 +1975,6 @@ shell::copy_recursive( const OUString& srcUnqPath,
                        const OUString& dstUnqPath,
                        sal_Int32 TypeToCopy,
                        bool testExistBeforeCopy )
-    throw()
 {
     osl::FileBase::RC err = osl::FileBase::E_None;
 
@@ -2061,7 +2046,6 @@ shell::copy_recursive( const OUString& srcUnqPath,
 bool SAL_CALL shell::ensuredir( sal_Int32 CommandId,
                                     const OUString& rUnqPath,
                                     sal_Int32 errorCode )
-    throw()
 {
     OUString aPath;
 

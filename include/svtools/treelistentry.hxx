@@ -89,7 +89,7 @@ public:
     size_t ItemCount() const;
 
     // MAY ONLY BE CALLED IF THE ENTRY HAS NOT YET BEEN INSERTED INTO
-    // THE MODEL, AS OTHERWISE NO VIEW-DEPENDENT DATEA ARE ALLOCATED
+    // THE MODEL, AS OTHERWISE NO VIEW-DEPENDENT DATA ARE ALLOCATED
     // FOR THE ITEM!
     void        AddItem( SvLBoxItem* pItem );
     void ReplaceItem( SvLBoxItem* pNewItem, size_t nPos );

@@ -843,7 +843,7 @@ throw (uno::RuntimeException, std::exception)
             OUString aDocId = aIt->second;
             if (!m_aCurCheckedDocId.isEmpty() && m_aCurCheckedDocId == aDocId)
             {
-                // an entry for that document was dequed and is currently being checked.
+                // an entry for that document was dequeued and is currently being checked.
                 bRes = true;
             }
             else

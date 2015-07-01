@@ -83,7 +83,7 @@ private:
     sal_Int32                                       m_nPreviewMode;
     bool                                            m_bNewFormat;
 
-    bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
+    bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
 
     /** fills the map with the Properties
         @param  _rValue

@@ -238,13 +238,13 @@ static bool lcl_IsCalcUpperAllowed( const SwFrm& rFrm )
  *
  * @see MakeAll()
  */
-void SwFrm::PrepareMake()
+void SwFrm::PrepareMake(vcl::RenderContext* pRenderContext)
 {
     StackHack aHack;
     if ( GetUpper() )
     {
         if ( lcl_IsCalcUpperAllowed( *this ) )
-            GetUpper()->Calc();
+            GetUpper()->Calc(pRenderContext);
         OSL_ENSURE( GetUpper(), ":-( Layout unstable (Upper gone)." );
         if ( !GetUpper() )
             return;
@@ -274,7 +274,7 @@ void SwFrm::PrepareMake()
             const SwTextFrm* pMaster = static_cast<SwContentFrm*>(this)->FindMaster();
             if ( pMaster && pMaster->IsLocked() )
             {
-                MakeAll(IsRootFrm() ? 0 : getRootFrm()->GetCurrShell()->GetOut());
+                MakeAll(pRenderContext);
                 return;
             }
         }
@@ -303,7 +303,7 @@ void SwFrm::PrepareMake()
                          (SwFlowFrm::CastFlowFrm(pFrm))->IsAnFollow( pThis ) )
                         break;
 
-                    pFrm->MakeAll(IsRootFrm() ? 0 : getRootFrm()->GetCurrShell()->GetOut());
+                    pFrm->MakeAll(pRenderContext);
                     if( IsSctFrm() && !static_cast<SwSectionFrm*>(this)->GetSection() )
                         break;
                 }
@@ -329,7 +329,7 @@ void SwFrm::PrepareMake()
                 return;
 
             if ( lcl_IsCalcUpperAllowed( *this ) )
-                GetUpper()->Calc();
+                GetUpper()->Calc(pRenderContext);
 
             OSL_ENSURE( GetUpper(), "Layout unstable (Upper gone III)." );
         }
@@ -337,7 +337,7 @@ void SwFrm::PrepareMake()
         if ( bTab && !bOldTabLock )
             ::PrepareUnlock( static_cast<SwTabFrm*>(this) );
     }
-    MakeAll(IsRootFrm() ? 0 : getRootFrm()->GetCurrShell()->GetOut());
+    MakeAll(pRenderContext);
 }
 
 void SwFrm::OptPrepareMake()
@@ -347,14 +347,14 @@ void SwFrm::OptPrepareMake()
          !GetUpper()->IsFlyFrm() )
     {
         ForbidDelete();
-        GetUpper()->Calc();
+        GetUpper()->Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
         AllowDelete();
         OSL_ENSURE( GetUpper(), ":-( Layout unstable (Upper gone)." );
         if ( !GetUpper() )
             return;
     }
     if ( GetPrev() && !GetPrev()->IsValid() )
-        PrepareMake();
+        PrepareMake(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
     else
     {
         StackHack aHack;
@@ -368,7 +368,7 @@ void SwFrm::PrepareCrsr()
     if( GetUpper() && !GetUpper()->IsSctFrm() )
     {
         GetUpper()->PrepareCrsr();
-        GetUpper()->Calc();
+        GetUpper()->Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
 
         OSL_ENSURE( GetUpper(), ":-( Layout unstable (Upper gone)." );
         if ( !GetUpper() )
@@ -429,14 +429,14 @@ void SwFrm::PrepareCrsr()
         if ( !GetUpper() )
             return;
 
-        GetUpper()->Calc();
+        GetUpper()->Calc(getRootFrm()->GetCurrShell()->GetOut());
 
         OSL_ENSURE( GetUpper(), "Layout unstable (Upper gone III)." );
 
         if ( bTab && !bOldTabLock )
             ::PrepareUnlock( static_cast<SwTabFrm*>(this) );
     }
-    Calc();
+    Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);
 }
 
 // Here we return GetPrev(); however we will ignore empty SectionFrms
@@ -480,7 +480,7 @@ void SwFrm::MakePos()
                  !pPrv->GetAttrSet()->GetKeep().GetValue()
                )
             {
-                pPrv->Calc();   // This may cause Prev to vanish!
+                pPrv->Calc(getRootFrm()->GetCurrShell() ? getRootFrm()->GetCurrShell()->GetOut() : 0);   // This may cause Prev to vanish!
             }
             else if ( pPrv->Frm().Top() == 0 )
             {
@@ -542,7 +542,7 @@ void SwFrm::MakePos()
                     GetUpper()->IsColLocked() )
                )
             {
-                GetUpper()->Calc();
+                GetUpper()->Calc(getRootFrm()->GetCurrShell()->GetOut());
             }
             pPrv = lcl_Prev( this, false );
             if ( !bUseUpper && pPrv )
@@ -1405,7 +1405,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                 }
                 if ( pNxt )
                 {
-                    pNxt->Calc();
+                    pNxt->Calc(getRootFrm()->GetCurrShell()->GetOut());
                     if( mbValidPos && !GetIndNext() )
                     {
                         SwSectionFrm *pSct = FindSctFrm();
@@ -1498,7 +1498,7 @@ void SwContentFrm::MakeAll(vcl::RenderContext* /*pRenderContext*/)
                         ( 0 == (pNxt->Prt().*fnRect->fnGetHeight)() ) &&
                         (!pNxt->IsTextFrm() ||!static_cast<SwTextFrm*>(pNxt)->IsHiddenNow());
 
-                    pNxt->Calc();
+                    pNxt->Calc(getRootFrm()->GetCurrShell()->GetOut());
 
                     if ( !bMovedBwd &&
                          ((bMoveFwdInvalid && !GetIndNext()) ||

@@ -2199,7 +2199,7 @@ utl::AccessibleRelationSetHelper* ScAccessibleDocument::GetRelationSet(const ScA
 
 OUString SAL_CALL
     ScAccessibleDocument::createAccessibleDescription()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OUString sDescription = OUString(ScResId(STR_ACC_DOC_DESCR));
     return sDescription;

@@ -79,7 +79,7 @@ namespace
 class StyleLBoxString : public SvLBoxString
 {
     SfxStyleFamily meStyleFamily;
-    std::unique_ptr<sfx2::StylePreviewRenderer> mpStylePreviewRenderer;
+    SvViewDataItem* mpViewData;
 
 public:
     StyleLBoxString(SvTreeListEntry* pEntry,
@@ -115,47 +115,39 @@ void StyleLBoxString::InitViewData(SvTreeListBox* pView, SvTreeListEntry* pEntry
     {
         pViewData = pView->GetViewDataItem(pEntry, this);
     }
-
-    SfxObjectShell* pShell = SfxObjectShell::Current();
-    if (!pShell)
-        return;
-
-    sfx2::StyleManager* pStyleManager = pShell->GetStyleManager();
-
-    if (!pStyleManager)
-    {
-        return;
-    }
-    mpStylePreviewRenderer.reset(pStyleManager->CreateStylePreviewRenderer(*pView, GetText(), meStyleFamily, 32 * pView->GetDPIScaleFactor()));
-
-    if (!mpStylePreviewRenderer)
-    {
-        return;
-    }
-
-    if (mpStylePreviewRenderer->recalculate())
-    {
-        pViewData->maSize = mpStylePreviewRenderer->getRenderSize();
-    }
-    else
-    {
-        SvLBoxString::InitViewData(pView, pEntry, pViewData);
-    }
+    mpViewData = pViewData;
 }
 
 void StyleLBoxString::Paint(
-    const Point& aPos, SvTreeListBox& /*rDevice*/, vcl::RenderContext& rRenderContext,
-    const SvViewDataEntry* pView, const SvTreeListEntry& /*rEntry*/)
+    const Point& aPos, SvTreeListBox& rDevice, vcl::RenderContext& rRenderContext,
+    const SvViewDataEntry* pView, const SvTreeListEntry& rEntry)
 {
-    bool bResult = false;
+    bool bPainted = false;
 
-    if (mpStylePreviewRenderer)
+    SfxObjectShell* pShell = SfxObjectShell::Current();
+    sfx2::StyleManager* pStyleManager = pShell? pShell->GetStyleManager(): nullptr;
+
+    if (pStyleManager)
     {
-        Rectangle aPaintRectangle = pView->GetPaintRectangle();
-        bResult = mpStylePreviewRenderer->render(aPaintRectangle);
+        std::unique_ptr<sfx2::StylePreviewRenderer> pStylePreviewRenderer(pStyleManager->CreateStylePreviewRenderer(rRenderContext, GetText(), meStyleFamily, 32 * rRenderContext.GetDPIScaleFactor()));
+
+        if (pStylePreviewRenderer)
+        {
+            if (pStylePreviewRenderer->recalculate())
+            {
+                mpViewData->maSize = pStylePreviewRenderer->getRenderSize();
+            }
+            else
+            {
+                SvLBoxString::InitViewData( &rDevice, const_cast<SvTreeListEntry*>(&rEntry), mpViewData);
+            }
+
+            Rectangle aPaintRectangle = pView->GetPaintRectangle();
+            bPainted = pStylePreviewRenderer->render(aPaintRectangle);
+        }
     }
 
-    if (!bResult)
+    if (!bPainted)
     {
         rRenderContext.DrawText(aPos, GetText());
     }
@@ -941,6 +933,20 @@ SfxStyleSheetBase *SfxCommonTemplateDialog_Impl::GetSelectedStyle() const
     return pStyleSheetPool->Find( aTemplName, pItem->GetFamily(), SFXSTYLEBIT_ALL );
 }
 
+/**
+ * Is it safe to show the water-can / fill icon. If we've a
+ * hierarchical widget - we have only single select, otherwise
+ * we need to check if we have a multi-selection. We either have
+ * a pTreeBox showing or an aFmtLb (which we hide when not shown)
+ */
+bool SfxCommonTemplateDialog_Impl::IsSafeForWaterCan() const
+{
+    if ( pTreeBox.get() != NULL )
+        return pTreeBox->FirstSelected() != 0;
+    else
+        return aFmtLb->GetSelectionCount() == 1;
+}
+
 void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
 {
     const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
@@ -998,7 +1004,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr)
                     aFmtLb->MakeVisible( pEntry );
                     aFmtLb->SelectAll(false);
                     aFmtLb->Select( pEntry );
-                    bWaterDisabled = !(pTreeBox || aFmtLb->GetSelectionCount() <= 1);
+                    bWaterDisabled = !IsSafeForWaterCan();
                     FmtSelectHdl( NULL );
                 }
             }
@@ -1265,11 +1271,11 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
 // Updated display: Watering the house
 void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
 {
-    bWaterDisabled =  pItem == 0;
+    bWaterDisabled = (pItem == 0);
 
     if(!bWaterDisabled)
         //make sure the watercan is only activated when there is (only) one selection
-        bWaterDisabled = pTreeBox || aFmtLb->GetSelectionCount() <= 1;
+        bWaterDisabled = !IsSafeForWaterCan();
 
     if(pItem && !bWaterDisabled)
     {
@@ -1277,10 +1283,12 @@ void SfxCommonTemplateDialog_Impl::SetWaterCanState(const SfxBoolItem *pItem)
         EnableItem( SID_STYLE_WATERCAN, true );
     }
     else
+    {
         if(!bWaterDisabled)
             EnableItem(SID_STYLE_WATERCAN, true);
         else
             EnableItem(SID_STYLE_WATERCAN, false);
+    }
 
 // Ignore while in watercan mode statusupdates
 
@@ -2158,12 +2166,11 @@ SfxStyleFamily SfxCommonTemplateDialog_Impl::GetActualFamily() const
 
 void SfxCommonTemplateDialog_Impl::EnableExample_Impl(sal_uInt16 nId, bool bEnable)
 {
+    bool bDisable = !bEnable || !IsSafeForWaterCan();
     if( nId == SID_STYLE_NEW_BY_EXAMPLE )
-    {
-        bNewByExampleDisabled = !(pTreeBox || aFmtLb->GetSelectionCount() <= 1) || !bEnable;
-    }
+        bNewByExampleDisabled = bDisable;
     else if( nId == SID_STYLE_UPDATE_BY_EXAMPLE )
-        bUpdateByExampleDisabled = !(pTreeBox || aFmtLb->GetSelectionCount() <= 1) || !bEnable;
+        bUpdateByExampleDisabled = bDisable;
 
     EnableItem(nId, bEnable);
 }

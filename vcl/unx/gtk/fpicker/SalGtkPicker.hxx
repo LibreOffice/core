@@ -115,6 +115,7 @@ public:
     virtual ~RunDialog();
     gint run();
     void cancel();
+    static GtkWindow* GetTransientFor();
 };
 
 #endif

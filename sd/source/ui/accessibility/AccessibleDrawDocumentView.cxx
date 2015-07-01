@@ -554,7 +554,7 @@ OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
 
 /// Create a name for this view.
 OUString AccessibleDrawDocumentView::CreateAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sName;
 
@@ -607,7 +607,7 @@ OUString AccessibleDrawDocumentView::CreateAccessibleName()
 */
 OUString
     AccessibleDrawDocumentView::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     OUString sDescription;
 

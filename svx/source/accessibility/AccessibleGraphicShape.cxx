@@ -175,7 +175,7 @@ OUString
 }
 
 OUString AccessibleGraphicShape::CreateAccessibleDescription()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     //Don't use the same information for accessible name and accessible description.
     OUString sDesc;

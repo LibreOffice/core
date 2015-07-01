@@ -78,6 +78,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
+#include <svx/sdr/overlay/overlaymanager.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #if !HAVE_FEATURE_DESKTOP
@@ -188,8 +189,9 @@ void SwViewShell::DLPrePaint2(const vcl::Region& rRegion)
         if ( !HasDrawView() )
             MakeDrawView();
 
-        // Prefer window; if tot available, get mpOut (e.g. printer)
-        mpPrePostOutDev = (GetWin() && !isTiledRendering())? GetWin(): GetOut();
+        // Prefer window; if not available, get mpOut (e.g. printer)
+        const bool bWindow = GetWin() && !isTiledRendering() && !isOutputToWindow();
+        mpPrePostOutDev = bWindow ? GetWin(): GetOut();
 
         // #i74769# use SdrPaintWindow now direct
         mpTargetPaintWindow = Imp()->GetDrawView()->BeginDrawLayers(mpPrePostOutDev, rRegion);
@@ -410,10 +412,7 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
 
                         if ( bPaintsFromSystem )
                             PaintDesktop(*GetOut(), aRect);
-                        if (!isTiledRendering())
-                            pCurrentLayout->Paint( *mpOut, aRect );
-                        else
-                            pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
+                        pCurrentLayout->GetCurrShell()->InvalidateWindows(aRect.SVRect());
 
                         // #i75172# end DrawingLayer paint
                         DLPostPaint2(true);
@@ -1664,9 +1663,50 @@ bool SwViewShell::CheckInvalidForPaint( const SwRect &rRect )
     return bRet;
 }
 
+namespace
+{
+/// Similar to comphelper::FlagRestorationGuard, but for vcl::RenderContext.
+class RenderContextGuard
+{
+    VclPtr<vcl::RenderContext>& m_pRef;
+    VclPtr<vcl::RenderContext> m_pOriginalValue;
+    SwViewShell* m_pShell;
+
+public:
+    RenderContextGuard(VclPtr<vcl::RenderContext>& pRef, vcl::RenderContext* pValue, SwViewShell* pShell)
+        : m_pRef(pRef),
+        m_pOriginalValue(m_pRef),
+        m_pShell(pShell)
+    {
+        m_pRef = pValue;
+        if (pValue != m_pShell->GetWin() && m_pShell->Imp()->GetDrawView())
+            m_pShell->Imp()->GetDrawView()->AddWindowToPaintView(pValue);
+    }
+
+    ~RenderContextGuard()
+    {
+        if (m_pRef != m_pShell->GetWin() && m_pShell->Imp()->GetDrawView())
+        {
+            // Need to explicitly draw the overlay on m_pRef, since by default
+            // they would be only drawn for m_pOriginalValue.
+            SdrPaintWindow* pOldPaintWindow = m_pShell->Imp()->GetDrawView()->GetPaintWindow(0);
+            rtl::Reference<sdr::overlay::OverlayManager> xOldManager = pOldPaintWindow->GetOverlayManager();
+            if (xOldManager.is())
+            {
+                SdrPaintWindow* pNewPaintWindow = m_pShell->Imp()->GetDrawView()->FindPaintWindow(*m_pRef);
+                xOldManager->completeRedraw(pNewPaintWindow->GetRedrawRegion(), m_pRef);
+            }
+
+            m_pShell->Imp()->GetDrawView()->DeleteWindowFromPaintView(m_pRef);
+        }
+        m_pRef = m_pOriginalValue;
+    }
+};
+}
+
 void SwViewShell::Paint(vcl::RenderContext& rRenderContext, const Rectangle &rRect)
 {
-    mpOut = &rRenderContext;
+    RenderContextGuard aGuard(mpOut, &rRenderContext, this);
     if ( mnLockPaint )
     {
         if ( Imp()->bSmoothUpdate )
@@ -1825,12 +1865,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     aMapMode.SetScaleY(scaleY);
     rDevice.SetMapMode(aMapMode);
 
-    // Update this device in DrawLayer
-    if (Imp()->GetDrawView())
-    {
-        Imp()->GetDrawView()->AddWindowToPaintView(&rDevice);
-    }
-
     Rectangle aOutRect = Rectangle(Point(tilePosX, tilePosY),
                                    rDevice.PixelToLogic(Size(contextWidth, contextHeight)));
 
@@ -1848,12 +1882,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
 
     // draw - works in logic coordinates
     Paint(rDevice, aOutRect);
-
-    // Remove this device in DrawLayer
-    if (Imp()->GetDrawView())
-    {
-        Imp()->GetDrawView()->DeleteWindowFromPaintView(&rDevice);
-    }
 
     // SwViewShell's output device tear down
     mpOut = pSaveOut;

@@ -1522,12 +1522,12 @@ Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
     return new SdPageLinkTargets( this );
 }
 
-void SdGenericDrawPage::setBackground( const Any& ) throw(lang::IllegalArgumentException)
+void SdGenericDrawPage::setBackground( const Any& ) throw(lang::IllegalArgumentException, std::exception)
 {
     OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
-void SdGenericDrawPage::getBackground( Any& ) throw()
+void SdGenericDrawPage::getBackground( Any& ) throw(std::exception)
 {
     OSL_FAIL( "Don't call me, I'm useless!" );
 }
@@ -2849,7 +2849,7 @@ Any SAL_CALL SdMasterPage::getByIndex( sal_Int32 Index )
 
 // intern
 void SdMasterPage::setBackground( const Any& rValue )
-    throw( lang::IllegalArgumentException )
+    throw( lang::IllegalArgumentException, std::exception )
 {
     // we need at least an beans::XPropertySet
     Reference< beans::XPropertySet > xInputSet( rValue, UNO_QUERY );
@@ -2954,7 +2954,7 @@ void SdMasterPage::setBackground( const Any& rValue )
     }
 }
 
-void SdMasterPage::getBackground( Any& rValue ) throw()
+void SdMasterPage::getBackground( Any& rValue ) throw (std::exception)
 {
     if( GetModel() ) try
     {

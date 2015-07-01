@@ -111,7 +111,7 @@ public:
                         二 item2
                         三 item3
 
-                    Of cource, for unordered-list, you can also set the format to
+                    Of course, for unordered-list, you can also set the format to
                     be a bullet char,ie:
                         '','','','','',
      * @param:      prefix

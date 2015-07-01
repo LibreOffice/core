@@ -1511,7 +1511,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         if( mnExportFlags & SvXMLExportFlags::MASTERSTYLES )
             ImplExportMasterStyles( false );
 
-        // contnt
+        // content
         if( mnExportFlags & SvXMLExportFlags::CONTENT )
             ImplExportContent();
     }

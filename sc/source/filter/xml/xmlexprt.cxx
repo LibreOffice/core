@@ -3398,7 +3398,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
         }
 
         boost::scoped_ptr< SvXMLElementExport > pDrawA;
-        // enlose shapes with <draw:a> element only if sHlink contains something
+        // enclose shapes with <draw:a> element only if sHlink contains something
         if ( !sHlink.isEmpty() )
         {
             // need to get delete the attributes that are pre-loaded

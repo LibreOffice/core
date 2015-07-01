@@ -1126,7 +1126,7 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
     return true;
 }
 
-bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, OUString& rString ) throw()
+bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, OUString& rString ) throw(std::exception)
 {
     // first, calculate the search string length without an optional number behind the name
     sal_Int32 nLength = rString.getLength();
@@ -1281,7 +1281,7 @@ static const sal_uInt16 SvxUnoColorNameResId[] =
 
 
 
-bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uInt16* pDestResIds, int nCount, OUString& rString ) throw()
+bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uInt16* pDestResIds, int nCount, OUString& rString ) throw (std::exception)
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't
     //replace "Red Hat 1" with the translation of Red :-)
@@ -1312,7 +1312,7 @@ bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uIn
 /** if the given name is a predefined name for the current language it is replaced by
     the corresponding api name.
 */
-OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rInternalName) throw()
+OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rInternalName) throw(std::exception)
 {
     OUString aNew = rInternalName;
 
@@ -1345,7 +1345,7 @@ OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rIntern
 /** if the given name is a predefined api name it is replaced by the predefined name
     for the current language.
 */
-OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rApiName) throw()
+OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rApiName) throw(std::exception)
 {
     OUString aNew = rApiName;
 

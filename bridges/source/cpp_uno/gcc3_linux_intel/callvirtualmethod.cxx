@@ -58,7 +58,7 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         // unexpected size of int
     assert(nStackLongs && pStackLongs); // no stack
 
-#if defined __clang__ || __GNUC__ == 4 && __GNUC_MINOR__ <= 6
+#if defined __clang__
     if (! pAdjustedThisPtr) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
 #endif
 

@@ -1040,7 +1040,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 uno::Sequence< uno::Any > Content::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1450,7 +1450,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 uno::Any Content::open(
                 const ucb::OpenCommandArgument2& rArg,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     if ( rArg.Mode == ucb::OpenMode::ALL ||
          rArg.Mode == ucb::OpenMode::FOLDERS ||
@@ -1600,7 +1600,7 @@ void Content::insert(
             const uno::Reference< io::XInputStream >& xStream,
             sal_Int32 nNameClashResolve,
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1758,7 +1758,7 @@ void Content::insert(
 void Content::destroy(
                 bool bDeletePhysical,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
@@ -1804,7 +1804,7 @@ void Content::destroy(
 void Content::transfer(
             const ucb::TransferInfo& rInfo,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 

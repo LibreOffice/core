@@ -500,7 +500,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 OUString SAL_CALL
     ScAccessibleContextBase::createAccessibleDescription()
-    throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("should be implemented in the abrevated class");
     return OUString();

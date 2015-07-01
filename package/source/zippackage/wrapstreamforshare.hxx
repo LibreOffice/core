@@ -30,7 +30,7 @@ class WrapStreamForShare : public cppu::WeakImplHelper2 < ::com::sun::star::io::
                                                         , ::com::sun::star::io::XSeekable >
 {
 protected:
-    SotMutexHolderRef m_rMutexRef;
+    rtl::Reference<SotMutexHolder> m_rMutexRef;
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > m_xInStream;
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XSeekable > m_xSeekable;
 
@@ -38,7 +38,7 @@ protected:
 
 public:
     WrapStreamForShare( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
-                        const SotMutexHolderRef& rMutexRef );
+                        const rtl::Reference<SotMutexHolder>& rMutexRef );
     virtual ~WrapStreamForShare();
 
     // XInputStream

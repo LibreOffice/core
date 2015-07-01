@@ -1079,7 +1079,7 @@ protected:
 protected:
     // OPropertyChangeListener
     virtual void
-                _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& _rEvt ) throw ( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
+                _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& _rEvt ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /// checks whether we currently have an external value binding in place
     inline  bool    hasExternalValueBinding() const { return m_xExternalBinding.is(); }

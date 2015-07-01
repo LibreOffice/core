@@ -724,7 +724,7 @@ SvxFrameShape::~SvxFrameShape() throw()
 {
 }
 
-void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw (uno::RuntimeException)
+void SvxFrameShape::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage ) throw (uno::RuntimeException, std::exception)
 {
     SvxShape::Create( pNewObj, pNewPage );
     const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );

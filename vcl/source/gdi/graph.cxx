@@ -178,8 +178,6 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
     pOutDev->Pop();
 }
 
-TYPEINIT1_AUTOFACTORY( Graphic, SvDataCopyStream );
-
 Graphic::Graphic()
 {
     mpImpGraphic = new ImpGraphic;
