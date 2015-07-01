@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <cppuhelper/implbase.hxx>
 #include <svtools/toolpanel/toolpaneldeck.hxx>
 #include <svtools/toolpanel/paneltabbar.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -64,7 +65,7 @@ namespace accessibility
     typedef ::com::sun::star::awt::Point        UnoPoint;
 
     // AccessibleWrapper
-    typedef ::cppu::WeakImplHelper1< XAccessible > AccessibleWrapper_Base;
+    typedef ::cppu::WeakImplHelper< XAccessible > AccessibleWrapper_Base;
     class AccessibleWrapper : public AccessibleWrapper_Base
     {
     public:

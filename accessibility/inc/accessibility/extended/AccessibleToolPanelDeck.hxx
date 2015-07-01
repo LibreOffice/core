@@ -20,7 +20,6 @@
 #ifndef INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETOOLPANELDECK_HXX
 #define INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_EXTENDED_ACCESSIBLETOOLPANELDECK_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
 #include <memory>

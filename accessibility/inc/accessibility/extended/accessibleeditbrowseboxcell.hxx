@@ -25,8 +25,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleValue.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/accessiblewrapper.hxx>
 
 namespace accessibility
@@ -95,8 +94,8 @@ namespace accessibility
 
     // = EditBrowseBoxTableCell
 
-    typedef ::cppu::WeakComponentImplHelper1    <   ::com::sun::star::accessibility::XAccessible
-                                                >   EditBrowseBoxTableCellAccess_Base;
+    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::accessibility::XAccessible
+                                           >   EditBrowseBoxTableCellAccess_Base;
     // XAccessible providing an EditBrowseBoxTableCell
     class EditBrowseBoxTableCellAccess
                         :public ::comphelper::OBaseMutex
