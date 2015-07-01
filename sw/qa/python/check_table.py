@@ -356,7 +356,7 @@ class CheckTable(unittest.TestCase):
         xTable.ChartRowAsLabel = False
         xTable.Data = ((1,2,3), (4,5,6), (7,8,9), (10,11,12))
         xRows = xTable.Rows
-        self.assertIs(type(xRows.ImplementationName), type('SwXTableRows')) # not testing value, just type and coverage
+        self.assertEquals(xRows.ImplementationName, 'SwXTableRows')
         self.assertTrue(xRows.supportsService('com.sun.star.text.TableRows'))
         self.assertFalse(xRows.supportsService('foo'))
         self.assertIn('com.sun.star.text.TableRows', xRows.SupportedServiceNames)
@@ -364,7 +364,7 @@ class CheckTable(unittest.TestCase):
         xRows.removeByIndex(1, 2)
         self.assertEqual( xTable.Data, ((1,2,3), (10,11,12)))
         xCols = xTable.Columns
-        self.assertIs(type(xCols.ImplementationName), type('SwXTableColumns')) # not testing value, just type and coverage
+        self.assertEquals(xCols.ImplementationName, 'SwXTableColumns')
         self.assertTrue(xCols.supportsService('com.sun.star.text.TableColumns'))
         self.assertFalse(xCols.supportsService('foo'))
         self.assertIn('com.sun.star.text.TableColumns', xCols.SupportedServiceNames)
@@ -427,7 +427,7 @@ class CheckTable(unittest.TestCase):
         self.assertTrue(xTable.Name == 'Table1')
         self.assertIn('com.sun.star.text.GenericTextDocument', xDoc.SupportedServiceNames)
         xChartdataprovider = xDoc.createInstance('com.sun.star.chart2.data.DataProvider')
-        self.assertIs(type(xChartdataprovider.ImplementationName), type('SwChartDataProvider')) # not testing value, just type and coverage
+        self.assertEquals(xChartdataprovider.ImplementationName, 'SwChartDataProvider')
         self.assertTrue(xChartdataprovider.supportsService('com.sun.star.chart2.data.DataProvider'))
         self.assertFalse(xChartdataprovider.supportsService('foo'))
         self.assertIn('com.sun.star.chart2.data.DataProvider', xChartdataprovider.SupportedServiceNames)
@@ -440,7 +440,7 @@ class CheckTable(unittest.TestCase):
         expectedCellrange = ('A1:A2', 'B1:B2', 'C1:C2')
         for col in range(3):
             xSeq = xDataSource.DataSequences[col].Values
-            self.assertIs(type(xSeq.ImplementationName), type('SwChartDataSequence')) # not testing value, just type and coverage
+            self.assertEquals(xSeq.ImplementationName, 'SwChartDataSequence')
             self.assertTrue(xSeq.supportsService('com.sun.star.chart2.data.DataSequence'))
             self.assertFalse(xSeq.supportsService('foo'))
             self.assertIn('com.sun.star.chart2.data.DataSequence', xSeq.SupportedServiceNames)
