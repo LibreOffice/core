@@ -549,7 +549,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
 {
     int nPos = GetSelectedServicePos();
 
-    if( nPos > 0 )
+    if( nPos >= 0 )
     {
         OUString sURL = m_aServices[nPos]->GetUrl();
         OUString sName = m_aServices[nPos]->GetName();
@@ -578,7 +578,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
         unsigned int nSelected = m_pServices_lb->GetSelectEntryPos();
         int nPos = GetSelectedServicePos();
 
-        if( nPos > 0 )
+        if( nPos >= 0 )
         {
             ScopedVclPtrInstance< PlaceEditDialog > aDlg( this, m_aServices[nPos] );
             short aRetCode = aDlg->Execute();
@@ -609,7 +609,7 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
         unsigned int nSelected = m_pServices_lb->GetSelectEntryPos();
         int nPos = GetSelectedServicePos();
 
-        if( nPos > 0 )
+        if( nPos >= 0 )
         {
             // TODO: Confirm dialog
 
