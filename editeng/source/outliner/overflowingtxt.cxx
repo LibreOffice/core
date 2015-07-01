@@ -88,6 +88,20 @@ OUString OverflowingText::GetHeadingLines() const
     return mHeadTxt;
 }
 
+OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
+{
+    if (mpContentTextObj == NULL) {
+        fprintf(stderr, "[Chaining] OverflowingText's mpContentTextObj is NULL!\n");
+        return NULL;
+    }
+
+    // Simply Juxtaposing; no within para-merging
+    OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
+    pOutl->SetText(*pOverflowingPObj);
+    pOutl->AddText(*pNextPObj);
+    return pOutl->CreateParaObject();
+}
+
 
 OFlowChainedText::OFlowChainedText(Outliner *pOutl)
 {
@@ -97,6 +111,13 @@ OFlowChainedText::OFlowChainedText(Outliner *pOutl)
 
 OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOutliner, OutlinerParaObject *pTextToBeMerged)
 {
+    // Just return the roughly merged paras fpr now
+    if (mpOverflowingTxt == NULL || pTextToBeMerged == NULL)
+        return NULL;
+
+    return mpOverflowingTxt->GetJuxtaposedParaObject(pOutliner, pTextToBeMerged );
+
+    /*
     if (mpOverflowingTxt == NULL || pTextToBeMerged == NULL)
         return NULL;
 
@@ -162,6 +183,7 @@ OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOut
     // Draw everything
     OutlinerParaObject *pNewText = pOutliner->CreateParaObject();
     return pNewText;
+    * */
 }
 
 OutlinerParaObject *OFlowChainedText::CreateNonOverflowingParaObject(Outliner *pOutliner)

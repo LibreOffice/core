@@ -50,9 +50,18 @@ public:
                   mTailTxt(tailTxt)
                 { }
 
+        OverflowingText(EditTextObject *pTObj) : mpContentTextObj(pTObj)
+        {
+        }
+
+        OutlinerParaObject *GetJuxtaposedParaObject(Outliner *, OutlinerParaObject *);
+
         OUString GetHeadingLines() const;
         OUString GetEndingLines() const;
         bool HasOtherParas() const { return !(mTailTxt == "" && mpMidParas == NULL); }
+
+private:
+    const EditTextObject *mpContentTextObj;
 };
 
 class NonOverflowingText {

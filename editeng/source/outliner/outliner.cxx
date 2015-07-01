@@ -2187,20 +2187,36 @@ OverflowingText *Outliner::GetOverflowingText() const
     OutlinerParaObject *pMidParas = NULL;
 
 
-    sal_uInt32 nHeadPara = pEditEngine->GetOverflowingParaNum();
+    sal_Int32 nHeadPara = pEditEngine->GetOverflowingParaNum();
     sal_uInt32 nParaCount = GetParagraphCount();
-    sal_uInt32 nTailPara = nParaCount-1;
+    sal_Int32 nTailPara = nParaCount-1;
     sal_Int32 nMidParas = nTailPara-nHeadPara-1;
 
     // Set the head text
     // XXX: Is there a proper method to join lines in a single string?
     OUString aWholeTxtHeadPara = GetText(GetParagraph(nHeadPara));
+
+
     sal_uInt32 nLen = 0;
     for ( sal_Int32 nLine = 0;
           nLine < pEditEngine->GetOverflowingLineNum();
           nLine++) {
         nLen += GetLineLen(nHeadPara, nLine);
     }
+
+    /* BEGIN experiment ESEL */
+    sal_uInt32 nOverflowingPara = pEditEngine->GetOverflowingParaNum();
+    ESelection aOverflowingTextSel;
+    sal_Int32 nLastPara = nParaCount-1;
+    sal_Int32 nLastParaLen = GetText(GetParagraph(nOverflowingPara-1)).getLength();
+    aOverflowingTextSel = ESelection(nOverflowingPara, nLen,
+                                     nLastPara, nLastParaLen);
+
+    EditTextObject *pTObj = pEditEngine->CreateTextObject(aOverflowingTextSel);
+    return new OverflowingText(pTObj);
+
+    /* END experiment ESel */
+
     // XXX: Any separator to be included?
     aHeadTxt = aWholeTxtHeadPara.copy(nLen);
 
