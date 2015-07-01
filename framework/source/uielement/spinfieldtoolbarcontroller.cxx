@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
 #include <stdio.h>
 #include <wchar.h>
 
@@ -35,9 +37,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/toolbox.hxx>
-#ifdef WINNT
-#include <systools/win32/snprintf.h>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
