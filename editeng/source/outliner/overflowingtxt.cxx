@@ -57,11 +57,13 @@ OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, Ou
 
     // Simply Juxtaposing; no within-para merging
     OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
+    // the OutlinerParaObject constr. at the prev line gives no valid outliner mode, so we set it
+    pOverflowingPObj->SetOutlinerMode(pOutl->GetOutlinerMode());
     pOutl->SetText(*pOverflowingPObj);
     pOutl->AddText(*pNextPObj);
 
     OutlinerParaObject *pPObj = pOutl->CreateParaObject();
-    pPObj->SetOutlinerMode(pOutl->GetOutlinerMode());
+    //pPObj->SetOutlinerMode(pOutl->GetOutlinerMode());
     return pPObj;
 }
 
