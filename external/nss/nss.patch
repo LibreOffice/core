@@ -50,8 +50,8 @@ diff -ru a/nss/coreconf/arch.mk b/nss/coreconf/arch.mk
 -OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
 +# OBJDIR_NAME is used to build the directory containing the built objects, for 
 +# example mozilla/dist/Linux2.6_x86_glibc_PTH_DBG.OBJ
-+# We need to deliver the contents of that folder into the solver. To make that easier
-+# in the makefile we rename this directory to "out". 
++# We need to deliver the contents of that folder into instdir. To make that 
++# easier in the makefile we rename this directory to "out". 
 +#OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
 +OBJDIR_NAME = out
  
@@ -105,7 +105,7 @@ diff -ru a/nss/coreconf/Linux.mk b/nss/coreconf/Linux.mk
 +ifneq ($(SYSTEM_ZLIB),)
 +# Currently (3.12.4) only the tools modutil and signtool are linked with libz
 +# If USE_SYSTEM_ZLIB is not set then the tools link statically libzlib.a which
-+# is also build in nss.
++# is also built in nss.
  USE_SYSTEM_ZLIB = 1
  ZLIB_LIBS = -lz
 +endif
