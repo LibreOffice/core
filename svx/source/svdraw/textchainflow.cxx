@@ -259,7 +259,7 @@ void EditingTextChainFlow::impSetFlowOutlinerParams(SdrOutliner *pFlowOutl, SdrO
     pFlowOutl->SetPaperSize(pParamOutl->GetPaperSize());
 
     // Set right text attributes // XXX: Not enough: it does not handle complex attributes
-    pFlowOutl->SetEditTextObjectPool(pParamOutl->GetEditTextObjectPool());
+    //pFlowOutl->SetEditTextObjectPool(pParamOutl->GetEditTextObjectPool());
 }
 
 /*
