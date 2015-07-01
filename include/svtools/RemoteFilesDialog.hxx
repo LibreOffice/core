@@ -44,6 +44,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 using namespace ::svt;
 
@@ -85,7 +86,7 @@ public:
 
     virtual SvtFileView* GetView();
 
-    virtual void SetHasFilename( bool bHasFilename );
+    virtual void SetHasFilename( bool );
     virtual void SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList );
     virtual const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const;
     virtual void SetStandardDir( const OUString& rStdDir );

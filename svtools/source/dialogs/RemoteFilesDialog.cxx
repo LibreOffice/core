@@ -749,9 +749,8 @@ SvtFileView* RemoteFilesDialog::GetView()
     return m_pFileView;
 }
 
-void RemoteFilesDialog::SetHasFilename( bool bHasFilename )
+void RemoteFilesDialog::SetHasFilename( bool )
 {
-    // TODO
 }
 
 void RemoteFilesDialog::SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
@@ -846,6 +845,7 @@ const OUString& RemoteFilesDialog::GetPath()
 
 std::vector<OUString> RemoteFilesDialog::GetPathList() const
 {
+    // TODO
     std::vector<OUString> aPaths;
     aPaths.push_back(m_sPath);
     return aPaths;
@@ -853,8 +853,12 @@ std::vector<OUString> RemoteFilesDialog::GetPathList() const
 
 bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
 {
-    // TODO
-    return false;
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference< XInteractionHandler > xInteractionHandler(
+                    InteractionHandler::createWithParent( xContext, 0 ), UNO_QUERY_THROW );
+    Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
+    ::ucbhelper::Content aContent( rURL, xEnv, xContext );
+    return aContent.isFolder();
 }
 
 sal_Int32 RemoteFilesDialog::getTargetColorDepth()
@@ -886,14 +890,12 @@ bool RemoteFilesDialog::getShowState()
     return false;
 }
 
-Control* RemoteFilesDialog::getControl( sal_Int16 _nControlId, bool _bLabelControl) const
+Control* RemoteFilesDialog::getControl( sal_Int16, bool) const
 {
-    // TODO
     return NULL;
 }
-void RemoteFilesDialog::enableControl( sal_Int16 _nControlId, bool _bEnable )
+void RemoteFilesDialog::enableControl( sal_Int16, bool )
 {
-    // TODO
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
