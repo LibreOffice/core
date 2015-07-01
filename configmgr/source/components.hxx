@@ -119,9 +119,9 @@ public:
     ~Components();
 private:
 
-    static void parseFileLeniently(
+    void parseFileLeniently(
         FileParser * parseFile, OUString const & url, int layer,
-        Data & data, Partial const * partial, Modifications * modifications,
+        Partial const * partial, Modifications * modifications,
         Additions * additions);
 
     void parseFiles(

@@ -391,8 +391,7 @@ void Components::insertModificationXcuFile(
     Partial part(includedPaths, excludedPaths);
     try {
         parseFileLeniently(
-            &parseXcuFile, fileUri, Data::NO_LAYER, data_, &part, modifications,
-            0);
+            &parseXcuFile, fileUri, Data::NO_LAYER, &part, modifications, 0);
     } catch (css::container::NoSuchElementException & e) {
         SAL_WARN(
             "configmgr",
@@ -543,7 +542,7 @@ Components::Components(
             OUString aTempFileURL;
             if ( dumpWindowsRegistry(&aTempFileURL) )
             {
-                parseFileLeniently(&parseXcuFile, aTempFileURL, layer, data_, 0, 0, 0);
+                parseFileLeniently(&parseXcuFile, aTempFileURL, layer, 0, 0, 0);
                 layer++;
                 osl::File::remove(aTempFileURL);
             }
@@ -566,13 +565,13 @@ Components::~Components()
 }
 
 void Components::parseFileLeniently(
-    FileParser * parseFile, OUString const & url, int layer, Data & data,
+    FileParser * parseFile, OUString const & url, int layer,
     Partial const * partial, Modifications * modifications,
     Additions * additions)
 {
     assert(parseFile != 0);
     try {
-        (*parseFile)(url, layer, data, partial, modifications, additions);
+        (*parseFile)(url, layer, data_, partial, modifications, additions);
     } catch (css::container::NoSuchElementException &) {
         throw;
     } catch (css::uno::Exception & e) { //TODO: more specific exception catching
@@ -625,7 +624,7 @@ void Components::parseFiles(
             if (file.endsWith(extension)) {
                 try {
                     parseFileLeniently(
-                        parseFile, stat.getFileURL(), layer, data_, 0, 0, 0);
+                        parseFile, stat.getFileURL(), layer, 0, 0, 0);
                 } catch (css::container::NoSuchElementException & e) {
                     throw css::uno::RuntimeException(
                         "stat'ed file does not exist: " + e.Message);
@@ -647,7 +646,7 @@ void Components::parseFileList(
                 adds = data_.addExtensionXcuAdditions(url, layer);
             }
             try {
-                parseFileLeniently(parseFile, url, layer, data_, 0, 0, adds);
+                parseFileLeniently(parseFile, url, layer, 0, 0, adds);
             } catch (css::container::NoSuchElementException & e) {
                 SAL_WARN(
                     "configmgr", "file does not exist: \"" << e.Message << '"');
@@ -785,7 +784,7 @@ void Components::parseResLayer(int layer, OUString const & url) {
 
 void Components::parseModificationLayer(OUString const & url) {
     try {
-        parseFileLeniently(&parseXcuFile, url, Data::NO_LAYER, data_, 0, 0, 0);
+        parseFileLeniently(&parseXcuFile, url, Data::NO_LAYER, 0, 0, 0);
     } catch (css::container::NoSuchElementException &) {
         SAL_INFO(
             "configmgr", "user registrymodifications.xcu does not (yet) exist");
