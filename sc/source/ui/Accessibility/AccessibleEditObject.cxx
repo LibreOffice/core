@@ -372,13 +372,21 @@ void ScAccessibleEditObject::CreateTextHelper()
         ::std::unique_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(std::move(pAccessibleTextData)));
         mpTextHelper = new ::accessibility::AccessibleTextHelper(std::move(pEditSource));
         mpTextHelper->SetEventSource(this);
-        mpTextHelper->SetFocus(mbHasFocus);
+
+        const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+        if ( pInputHdl && pInputHdl->IsEditMode() )
+        {
+            mpTextHelper->SetFocus(true);
+        }
+        else
+        {
+            mpTextHelper->SetFocus(mbHasFocus);
+        }
 
         // #i54814# activate cell in edit mode
         if( meObjectType == CellInEditMode )
         {
             // do not activate cell object, if top edit line is active
-            const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
             if( pInputHdl && !pInputHdl->IsTopMode() )
             {
                 SdrHint aHint( HINT_BEGEDIT );
