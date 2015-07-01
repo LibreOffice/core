@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_c5ce31b4",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3508,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-01T09:55:25Z",
+      "side": 1,
+      "message": "Note for reviewers: This block was just moved from below, so that find_winsdk can be called on line 3824.",
+      "revId": "8245c0e796cad89daa17a2e86d92aee4c3acf75b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_a5c9b5ae",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 5323,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-01T09:55:25Z",
+      "side": 1,
+      "message": "Left over diagnostic messages should be removed.",
+      "range": {
+        "startLine": 5322,
+        "startChar": 4,
+        "endLine": 5323,
+        "endChar": 40
+      },
+      "revId": "8245c0e796cad89daa17a2e86d92aee4c3acf75b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
