@@ -27,7 +27,7 @@
 #include <salbmp.hxx>
 #include <salobj.hxx>
 #include <salmenu.hxx>
-
+#include <vcl/layout.hxx>
 
 SalFrame::SalFrame()
     : m_bPaintsBlocked(false)
@@ -91,6 +91,11 @@ void SalInstance::DestroyMenuItem( SalMenuItem* pItem )
 {
     (void)pItem;
     OSL_ENSURE( pItem == 0, "DestroyMenu called with non-native menus" );
+}
+
+VclPtr<MessageDialogImpl> SalInstance::CreateSalDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+{
+    return VclPtr<VclMessageDialog>::Create(pParent, rID, rUIXMLDescription);
 }
 
 SalTimer::~SalTimer()

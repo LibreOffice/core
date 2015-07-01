@@ -93,6 +93,7 @@ SystemWindow::SystemWindow(WindowType nType)
     : Window(nType)
     , mbIsDefferedInit(false)
 {
+    fprintf(stderr, "SystemWindow ctor %p\n", this);
     Init();
 }
 
@@ -106,11 +107,13 @@ void SystemWindow::loadUI(vcl::Window* pParent, const OString& rID, const OUStri
 
 SystemWindow::~SystemWindow()
 {
+    fprintf(stderr, "SystemWindow dtor %p\n", this);
     disposeOnce();
 }
 
 void SystemWindow::dispose()
 {
+    fprintf(stderr, "SystemWindow dispose %p\n", this);
     maLayoutIdle.Stop();
     delete mpImplData;
     mpImplData = NULL;

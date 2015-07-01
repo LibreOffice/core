@@ -28,6 +28,7 @@
 #include "tools/solar.h"
 #include "displayconnectiondispatch.hxx"
 #include "vcl/dllapi.h"
+#include "vcl/window.hxx"
 #include <sal/types.h>
 
 #include "rtl/ref.hxx"
@@ -55,6 +56,7 @@ struct SalItemParams;
 class SalSession;
 struct SystemGraphicsData;
 struct SystemWindowData;
+class MessageDialogImpl;
 class Menu;
 enum class VclInputFlags;
 
@@ -79,6 +81,8 @@ public:
     // Object (System Child Window)
     virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) = 0;
     virtual void            DestroyObject( SalObject* pObject ) = 0;
+
+    virtual VclPtr<MessageDialogImpl> CreateSalDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
 
     // VirtualDevice
     // nDX and nDY in pixels

@@ -28,6 +28,7 @@
 #include "cppuhelper/compbase.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include <cppuhelper/supportsservice.hxx>
+#include <vcl/layout.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -627,5 +628,82 @@ Reference< XInterface > GtkInstance::CreateClipboard(const Sequence< Any >& argu
 
     return Reference< XInterface >( static_cast<cppu::OWeakObject *>(new VclGtkClipboard()) );
 }
+
+class SalMessageDialog : public MessageDialogImpl
+{
+private:
+    GtkBuilder *m_pBuilder;
+    GtkWidget *m_pDialog;
+public:
+    SalMessageDialog(vcl::Window* /*pParent*/, const OString& rID, const OUString& rUIXMLDescription)
+    {
+        OUString sURL = VclBuilderContainer::getUIRootDir() + rUIXMLDescription;
+        OUString sFileName;
+        osl::FileBase::getSystemPathFromFileURL(sURL, sFileName);
+
+        m_pBuilder = gtk_builder_new_from_file(OUStringToOString(sFileName, RTL_TEXTENCODING_UTF8).getStr());
+
+        m_pDialog = GTK_WIDGET(gtk_builder_get_object(m_pBuilder, rID.getStr()));
+
+        gtk_window_set_title(GTK_WINDOW(m_pDialog), "");
+    }
+
+    virtual void set_title(const OUString &rTitle) SAL_OVERRIDE
+    {
+        gtk_window_set_title(GTK_WINDOW(m_pDialog), OUStringToOString(rTitle, RTL_TEXTENCODING_UTF8).getStr());
+    }
+
+    virtual short Execute() SAL_OVERRIDE
+    {
+        gint nStatus = gtk_dialog_run(GTK_DIALOG(m_pDialog));
+        gtk_widget_hide(m_pDialog);
+        return nStatus;
+    }
+
+    ///Emitted when an action widget is clicked
+    virtual void response(short /*nResponseId*/) SAL_OVERRIDE
+    {
+    }
+
+    OUString get_primary_text() const SAL_OVERRIDE
+    {
+        gchar *text;
+        g_object_get(m_pDialog, "text", &text, NULL);
+        return OUString(text, rtl_str_getLength(text), RTL_TEXTENCODING_UTF8);
+    }
+
+    OUString get_secondary_text() const SAL_OVERRIDE
+    {
+        gchar *text;
+        g_object_get(m_pDialog, "secondary-text", &text, NULL);
+        return OUString(text, rtl_str_getLength(text), RTL_TEXTENCODING_UTF8);
+    }
+
+    void set_primary_text(const OUString &rPrimaryString) SAL_OVERRIDE
+    {
+        g_object_set(m_pDialog, "text", OUStringToOString(rPrimaryString, RTL_TEXTENCODING_UTF8).getStr(), NULL);
+    }
+
+    void set_secondary_text(const OUString &rSecondaryString) SAL_OVERRIDE
+    {
+        g_object_set(m_pDialog, "secondary-text", OUStringToOString(rSecondaryString, RTL_TEXTENCODING_UTF8).getStr(), NULL);
+    }
+
+    virtual void dispose() SAL_OVERRIDE
+    {
+        g_object_unref(G_OBJECT(m_pBuilder));
+    }
+
+    virtual ~SalMessageDialog()
+    {
+        disposeOnce();
+    }
+};
+
+VclPtr<MessageDialogImpl> GtkInstance::CreateSalDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+{
+    return VclPtr<SalMessageDialog>::Create(pParent, rID, rUIXMLDescription);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -96,6 +96,7 @@ public:
 
 #if GTK_CHECK_VERSION(3,0,0)
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments ) SAL_OVERRIDE;
+    virtual VclPtr<MessageDialogImpl> CreateSalDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription) SAL_OVERRIDE;
 #endif
 
     void                        RemoveTimer (SalTimer *pTimer);

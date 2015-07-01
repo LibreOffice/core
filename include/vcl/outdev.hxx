@@ -350,7 +350,7 @@ public:
     virtual ~VclPtrRefCountBase();
 };
 
-class VCL_DLLPUBLIC OutputDevice : public VclPtrRefCountBase
+class VCL_DLLPUBLIC OutputDevice : public virtual VclPtrRefCountBase
 {
     friend class PaintHelper;
     friend class Printer;

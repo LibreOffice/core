@@ -4,7 +4,6 @@
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkMessageDialog" id="QuerySaveDialog">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
     <property name="title" translatable="yes">Save Document?</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
@@ -15,12 +14,15 @@
     <child internal-child="vbox">
       <object class="GtkBox" id="messagedialog-vbox">
         <property name="can_focus">False</property>
+        <property name="margin_top">6</property>
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="margin_top">6</property>
+            <property name="hexpand">True</property>
+            <property name="layout_style">expand</property>
             <child>
               <object class="GtkButton" id="discard">
                 <property name="label" translatable="yes">_Don’t Save</property>
@@ -68,7 +70,7 @@
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>

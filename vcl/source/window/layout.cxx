@@ -14,6 +14,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include "window.h"
+#include "svdata.hxx"
+#include "salinst.hxx"
 
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WINDOW_CONTAINER)
@@ -1978,9 +1980,8 @@ MessageDialogImpl::~MessageDialogImpl()
 
 MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
 {
-//    SalFrame* pParentFrame = pParent ? pParent->mpWindowImpl->mpFrame : NULL;
-//    m_pImpl = pSVData->mpDefInst->CreateChildFrame( pSystemParentData, nFrameStyle | SAL_FRAME_STYLE_PLUG );
-    m_pImpl = new VclMessageDialog(pParent, rID, rUIXMLDescription);
+    ImplSVData* pSVData = ImplGetSVData();
+    m_xImpl = pSVData->mpDefInst->CreateSalDialog(pParent, rID, rUIXMLDescription);
 }
 
 MessageDialog::MessageDialog(vcl::Window* pParent, const OUString &rMessage, VclMessageType eMessageType,
@@ -1988,7 +1989,12 @@ MessageDialog::MessageDialog(vcl::Window* pParent, const OUString &rMessage, Vcl
 {
 //    SalFrame* pParentFrame = pParent ? pParent->mpWindowImpl->mpFrame : NULL;
 //    m_pImpl = pSVData->mpDefInst->CreateChildFrame( pSystemParentData, nFrameStyle | SAL_FRAME_STYLE_PLUG );
-    m_pImpl = new VclMessageDialog(pParent, rMessage, eMessageType, eButtonsType);
+    m_xImpl = VclPtr<VclMessageDialog>::Create(pParent, rMessage, eMessageType, eButtonsType);
+}
+
+MessageDialog::~MessageDialog()
+{
+    disposeOnce();
 }
 
 void VclMessageDialog::create_owned_areas()
