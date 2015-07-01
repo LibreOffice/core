@@ -22,6 +22,23 @@
       "revId": "faaa47331d0aa0496cf511c96ed4c576ca03dd6a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_e5dc8d1a",
+        "filename": "svx/source/sidebar/line/LinePropertyPanel.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 801,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2015-07-01T14:59:16Z",
+      "side": 1,
+      "message": "You can save a lot of typing by using Enable(false). Actually that\u0027s what the Disable method calls.",
+      "revId": "faaa47331d0aa0496cf511c96ed4c576ca03dd6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
