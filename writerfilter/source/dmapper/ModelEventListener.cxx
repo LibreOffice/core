@@ -56,8 +56,6 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
     {
         try
         {
-            PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-
             //remove listener
             uno::Reference<document::XEventBroadcaster>(rEvent.Source, uno::UNO_QUERY )->removeEventListener(
             uno::Reference<document::XEventListener>(this));
@@ -72,9 +70,9 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
                 {
                     uno::Reference<beans::XPropertySet> xPropertySet(xEnumeration->nextElement(), uno::UNO_QUERY);
                     sal_Int16 nSource = 0;
-                    xPropertySet->getPropertyValue(rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_SOURCE)) >>= nSource;
+                    xPropertySet->getPropertyValue(getPropertyName(PROP_REFERENCE_FIELD_SOURCE)) >>= nSource;
                     sal_Int16 nPart = 0;
-                    xPropertySet->getPropertyValue(rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_PART)) >>= nPart;
+                    xPropertySet->getPropertyValue(getPropertyName(PROP_REFERENCE_FIELD_PART)) >>= nPart;
                     if (nSource == text::ReferenceFieldSource::BOOKMARK && nPart == text::ReferenceFieldPart::PAGE)
                         ++nIndex;
                 }

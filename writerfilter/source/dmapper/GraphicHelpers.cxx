@@ -271,15 +271,13 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight, bool bOldSt
             return 0;
         sal_Int32 itemZOrder(0);
         --it;
-        if( it->second->getPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier()
-            .GetName( PROP_Z_ORDER )) >>= itemZOrder )
+        if( it->second->getPropertyValue(getPropertyName( PROP_Z_ORDER )) >>= itemZOrder )
             return itemZOrder + 1; // after the topmost
     }
     else
     {
         sal_Int32 itemZOrder(0);
-        if( it->second->getPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier()
-            .GetName( PROP_Z_ORDER )) >>= itemZOrder )
+        if( it->second->getPropertyValue(getPropertyName( PROP_Z_ORDER )) >>= itemZOrder )
             return itemZOrder; // before the item
     }
     SAL_WARN( "writerfilter", "findZOrder() didn't find item z-order" );

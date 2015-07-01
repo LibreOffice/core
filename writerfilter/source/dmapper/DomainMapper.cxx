@@ -104,13 +104,13 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
 {
     // #i24363# tab stops relative to indent
     m_pImpl->SetDocumentSettingsProperty(
-        PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_TABS_RELATIVE_TO_INDENT ),
+        getPropertyName( PROP_TABS_RELATIVE_TO_INDENT ),
         uno::makeAny( false ) );
     m_pImpl->SetDocumentSettingsProperty(
-        PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_SURROUND_TEXT_WRAP_SMALL ),
+        getPropertyName( PROP_SURROUND_TEXT_WRAP_SMALL ),
         uno::makeAny( true ) );
     m_pImpl->SetDocumentSettingsProperty(
-        PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ),
+        getPropertyName( PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ),
         uno::makeAny( true ) );
 
     // Don't load the default style definitions to avoid weird mix
@@ -1167,7 +1167,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     const OUString sStringValue = pValue->getString();
-    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
 
     switch(nSprmId)
     {
@@ -1534,7 +1533,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
 
                         uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
                         if (xCharStyle.is())
-                            xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_WEIGHT), aBold);
+                            xCharStyle->setPropertyValue(getPropertyName(PROP_CHAR_WEIGHT), aBold);
                         if (nSprmId == NS_ooxml::LN_EG_RPrBase_b)
                             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "b", OUString::number(nIntValue));
                         else if (nSprmId == NS_ooxml::LN_EG_RPrBase_bCs)
@@ -1614,7 +1613,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
 
                     uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
                     if (xCharStyle.is())
-                        xCharStyle->setPropertyValue(rPropNameSupplier.GetName(PROP_CHAR_HEIGHT), aVal);
+                        xCharStyle->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), aVal);
                 }
             }
             // Make sure char sizes defined in the stylesheets don't affect char props from direct formatting.
@@ -1874,13 +1873,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         {
             uno::Reference< text::XLineNumberingProperties > xLineNumberingProperties( m_pImpl->GetTextDocument(), uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xLineNumberingPropSet = xLineNumberingProperties->getLineNumberingProperties();
-            PropertyNameSupplier& rNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-            xLineNumberingPropSet->setPropertyValue(rNameSupplier.GetName( PROP_IS_ON ), uno::makeAny(true) );
+            xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_IS_ON ), uno::makeAny(true) );
             if( aSettings.nInterval )
-                xLineNumberingPropSet->setPropertyValue(rNameSupplier.GetName( PROP_INTERVAL ), uno::makeAny((sal_Int16)aSettings.nInterval) );
+                xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_INTERVAL ), uno::makeAny((sal_Int16)aSettings.nInterval) );
             if( aSettings.nDistance )
-                xLineNumberingPropSet->setPropertyValue(rNameSupplier.GetName( PROP_DISTANCE ), uno::makeAny(aSettings.nDistance) );
-            xLineNumberingPropSet->setPropertyValue(rNameSupplier.GetName( PROP_RESTART_AT_EACH_PAGE ), uno::makeAny(aSettings.bRestartAtEachPage) );
+                xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_DISTANCE ), uno::makeAny(aSettings.nDistance) );
+            xLineNumberingPropSet->setPropertyValue(getPropertyName( PROP_RESTART_AT_EACH_PAGE ), uno::makeAny(aSettings.bRestartAtEachPage) );
         }
         catch( const uno::Exception& )
         {
@@ -1987,13 +1985,13 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                 if( xTOC.is() )
                 {
                     uno::Reference<text::XTextColumns> xTextColumns;
-                    xTOC->getPropertyValue(rPropNameSupplier.GetName( PROP_TEXT_COLUMNS )) >>= xTextColumns;
+                    xTOC->getPropertyValue(getPropertyName( PROP_TEXT_COLUMNS )) >>= xTextColumns;
                     if (xTextColumns.is())
                     {
                         uno::Reference< beans::XPropertySet > xColumnPropSet( xTextColumns, uno::UNO_QUERY_THROW );
                         if ( xColumnPropSet.is() )
-                            xColumnPropSet->setPropertyValue( rPropNameSupplier.GetName( PROP_AUTOMATIC_DISTANCE ), uno::makeAny( pSectHdl->GetSpace() ));
-                        xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_TEXT_COLUMNS ), uno::makeAny( xTextColumns ) );
+                            xColumnPropSet->setPropertyValue( getPropertyName( PROP_AUTOMATIC_DISTANCE ), uno::makeAny( pSectHdl->GetSpace() ));
+                        xTOC->setPropertyValue( getPropertyName( PROP_TEXT_COLUMNS ), uno::makeAny( xTextColumns ) );
                     }
                 }
             }
@@ -2210,7 +2208,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             if( NS_ooxml::LN_EG_FtnEdnNumProps_numStart == nSprmId && xFtnEdnSettings.is())
             {
                 xFtnEdnSettings->setPropertyValue(
-                    PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_START_AT),
+                    getPropertyName( PROP_START_AT),
                                                                     uno::makeAny( sal_Int16( nIntValue - 1 )));
             }
             else if( NS_ooxml::LN_EG_FtnEdnNumProps_numRestart == nSprmId && xFtnEdnSettings.is())
@@ -2224,14 +2222,14 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                     default: break;
                 }
                 xFtnEdnSettings->setPropertyValue(
-                        PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_FOOTNOTE_COUNTING ),
+                        getPropertyName( PROP_FOOTNOTE_COUNTING ),
                         uno::makeAny( nFootnoteCounting ));
             }
             else if (xFtnEdnSettings.is())
             {
                 sal_Int16 nNumType = ConversionHelper::ConvertNumberingType( nIntValue );
                 xFtnEdnSettings->setPropertyValue(
-                    PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_NUMBERING_TYPE),
+                    getPropertyName( PROP_NUMBERING_TYPE),
                                                                     uno::makeAny( nNumType ));
             }
         }
@@ -2579,7 +2577,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         if( rContext->GetFootnote().is())
         {
             uno::Reference< beans::XPropertySet > xAnchorProps( rContext->GetFootnote()->getAnchor(), uno::UNO_QUERY );
-            xAnchorProps->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_CHAR_FONT_NAME), aVal);
+            xAnchorProps->setPropertyValue( getPropertyName( PROP_CHAR_FONT_NAME), aVal);
             rContext->GetFootnote()->setLabel(OUString( aSymbolData.cSymbol ));
         }
         else //it's a _real_ symbol

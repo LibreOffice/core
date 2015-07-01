@@ -19,8 +19,6 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYIDS_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYIDS_HXX
 
-#include <memory>
-
 namespace writerfilter {
 namespace dmapper{
 enum PropertyIds
@@ -380,17 +378,10 @@ enum PropertyIds
         ,PROP_SNAP_TO_GRID
         ,PROP_GRID_SNAP_TO_CHARS
     };
-struct PropertyNameSupplier_Impl;
-class PropertyNameSupplier
-{
-    std::unique_ptr<PropertyNameSupplier_Impl> m_pImpl;
-public:
-    PropertyNameSupplier();
-    ~PropertyNameSupplier();
-    OUString GetName( PropertyIds eId ) const;
 
-    static PropertyNameSupplier& GetPropertyNameSupplier();
-};
+//Returns the UNO string equivalent to eId.
+OUString getPropertyName(PropertyIds eId);
+
 } //namespace dmapper
 } // namespace writerfilter
 #endif
