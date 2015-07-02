@@ -37,6 +37,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         std::cerr << e.m_aErrorMsg;
         exit(1);
     }
+    catch (const std::exception &e)
+    {
+        std::cerr << e.what();
+        exit(1);
+    }
     return 0;
 }
 
