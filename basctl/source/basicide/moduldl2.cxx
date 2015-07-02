@@ -54,6 +54,7 @@
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 
 #include <comphelper/propertysequence.hxx>
+#include <cppuhelper/implbase.hxx>
 
 
 namespace basctl
@@ -65,7 +66,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 
-typedef ::cppu::WeakImplHelper1< task::XInteractionHandler > HandlerImpl_BASE;
+typedef ::cppu::WeakImplHelper< task::XInteractionHandler > HandlerImpl_BASE;
 
 namespace
 {
@@ -1165,7 +1166,7 @@ void LibPage::implExportLib( const OUString& aLibName, const OUString& aTargetUR
 }
 
 // Implementation XCommandEnvironment
-typedef cppu::WeakImplHelper1< XCommandEnvironment > LibCommandEnvironmentHelper;
+typedef cppu::WeakImplHelper< XCommandEnvironment > LibCommandEnvironmentHelper;
 
 class OLibCommandEnvironment : public LibCommandEnvironmentHelper
 {

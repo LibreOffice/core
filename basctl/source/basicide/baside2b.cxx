@@ -43,7 +43,7 @@
 #include <svtools/treelistentry.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
-
+#include <cppuhelper/implbase.hxx>
 #include <vector>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 
@@ -176,7 +176,7 @@ void lcl_SeparateNameAndIndex( const OUString& rVName, OUString& rVar, OUString&
 
 
 class EditorWindow::ChangesListener:
-    public cppu::WeakImplHelper1< beans::XPropertiesChangeListener >
+    public cppu::WeakImplHelper< beans::XPropertiesChangeListener >
 {
 public:
     explicit ChangesListener(EditorWindow & editor): editor_(editor) {}

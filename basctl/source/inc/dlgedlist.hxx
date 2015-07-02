@@ -20,7 +20,7 @@
 #ifndef INCLUDED_BASCTL_SOURCE_INC_DLGEDLIST_HXX
 #define INCLUDED_BASCTL_SOURCE_INC_DLGEDLIST_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 
@@ -33,7 +33,7 @@ class DlgEdObj;
 // DlgEdPropListenerImpl
 
 
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener > PropertyChangeListenerHelper;
+typedef ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertyChangeListener > PropertyChangeListenerHelper;
 
 class DlgEdPropListenerImpl: public PropertyChangeListenerHelper
 {
@@ -56,7 +56,7 @@ public:
 // DlgEdEvtContListenerImpl
 
 
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener > ContainerListenerHelper;
+typedef ::cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener > ContainerListenerHelper;
 
 class DlgEdEvtContListenerImpl: public ContainerListenerHelper
 {

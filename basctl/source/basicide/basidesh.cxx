@@ -55,6 +55,7 @@
 #include <sfx2/viewfac.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace basctl
 {
@@ -62,7 +63,7 @@ namespace basctl
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-typedef ::cppu::WeakImplHelper1< container::XContainerListener > ContainerListenerBASE;
+typedef ::cppu::WeakImplHelper< container::XContainerListener > ContainerListenerBASE;
 
 class ContainerListenerImpl : public ContainerListenerBASE
 {

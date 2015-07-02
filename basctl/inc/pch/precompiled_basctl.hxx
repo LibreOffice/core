@@ -103,7 +103,7 @@
 #include <comphelper/types.hxx>
 #include <config_options.h>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
