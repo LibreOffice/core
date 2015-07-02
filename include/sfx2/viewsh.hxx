@@ -148,6 +148,7 @@ friend class SfxPrinterController;
     SfxShell*                   pSubShell;
     VclPtr<vcl::Window>         pWindow;
     bool                        bNoNewWindow;
+    bool                        mbPrinterSettingsModified;
 
 protected:
     virtual void                Activate(bool IsMDIActivate) SAL_OVERRIDE;
