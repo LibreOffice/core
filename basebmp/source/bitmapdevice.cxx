@@ -412,13 +412,6 @@ namespace
             return boost::dynamic_pointer_cast<alphamask_bitmap_type>( bmp );
         }
 
-        virtual bool isCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const SAL_OVERRIDE
-        {
-            // TODO(P1): dynamic_cast usually called twice for
-            // compatible formats
-            return getCompatibleAlphaMask( bmp ).get() != NULL;
-        }
-
         virtual void clear_i( Color                   fillColor,
                               const basegfx::B2IBox&  rBounds ) SAL_OVERRIDE
         {
