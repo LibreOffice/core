@@ -157,7 +157,7 @@ private:
     void post( const com::sun::star::ucb::PostCommandArgument2 & rArg,
                const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::uno::Exception );
+        throw( ::com::sun::star::uno::Exception, std::exception );
 
     // Command "insert"
     void insert( const ::com::sun::star::uno::Reference<

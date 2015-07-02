@@ -1207,7 +1207,7 @@ void globalTransfer_(
         const uno::Reference< ucb::XContent > & xSource,
         const uno::Reference< ucb::XContent > & xTarget,
         const uno::Reference< sdbc::XRow > & xSourceProps )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     // IsFolder: property is required.
     bool bSourceIsFolder = xSourceProps->getBoolean( 1 );

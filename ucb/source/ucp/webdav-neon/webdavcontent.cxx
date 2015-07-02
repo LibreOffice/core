@@ -2106,11 +2106,10 @@ uno::Any Content::open(
     return aRet;
 }
 
-
 void Content::post(
                 const ucb::PostCommandArgument2 & rArg,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     uno::Reference< io::XActiveDataSink > xSink( rArg.Sink, uno::UNO_QUERY );
     if ( xSink.is() )
