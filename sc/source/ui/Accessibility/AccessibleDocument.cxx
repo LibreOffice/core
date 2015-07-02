@@ -813,8 +813,9 @@ uno::Reference< XAccessible > ScChildrenShapes::GetSelected(sal_Int32 nSelectedC
         std::vector < uno::Reference < drawing::XShape > > aShapes;
         FillShapes(aShapes);
 
-        if(aShapes.size()<=0)
+        if (nSelectedChildIndex < 0 || static_cast<size_t>(nSelectedChildIndex) >= aShapes.size())
             return xAccessible;
+
         SortedShapes::iterator aItr;
         if (FindShape(aShapes[nSelectedChildIndex], aItr))
             xAccessible = Get(aItr - maZOrderedShapes.begin());
