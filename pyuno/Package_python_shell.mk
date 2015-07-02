@@ -9,6 +9,10 @@
 
 $(eval $(call gb_Package_Package,python_shell,$(call gb_CustomTarget_get_workdir,pyuno/python_shell)))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Package_add_file,python_shell,$(LIBO_ETC_FOLDER)/python,python.sh))
+else
 $(eval $(call gb_Package_add_file,python_shell,$(LIBO_BIN_FOLDER)/python,python.sh))
+endif
 
 # vim: set noet sw=4 ts=4:
