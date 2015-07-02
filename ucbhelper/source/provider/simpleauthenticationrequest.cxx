@@ -33,7 +33,8 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       const OUString & rPassword,
                                       const OUString & rAccount,
                                       bool bAllowPersistentStoring,
-                                      bool bAllowUseSystemCredentials )
+                                      bool bAllowUseSystemCredentials,
+                                      bool bAllowSessionStoring )
 {
 
     // Fill request...
@@ -61,7 +62,8 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        true,
        aRequest.HasAccount,
        bAllowPersistentStoring,
-       bAllowUseSystemCredentials );
+       bAllowUseSystemCredentials,
+       bAllowSessionStoring );
 }
 
 
@@ -115,17 +117,29 @@ void SimpleAuthenticationRequest::initialize(
       bool bCanSetPassword,
       bool bCanSetAccount,
       bool bAllowPersistentStoring,
-      bool bAllowUseSystemCredentials )
+      bool bAllowUseSystemCredentials,
+      bool bAllowSessionStoring )
 {
     setRequest( uno::makeAny( rRequest ) );
 
     // Fill continuations...
-    uno::Sequence< ucb::RememberAuthentication > aRememberModes(
-        bAllowPersistentStoring ? 3 : 2 );
-    aRememberModes[ 0 ] = ucb::RememberAuthentication_NO;
-    aRememberModes[ 1 ] = ucb::RememberAuthentication_SESSION;
-    if (bAllowPersistentStoring)
-        aRememberModes[ 2 ] = ucb::RememberAuthentication_PERSISTENT;
+    unsigned int nSize = 1;
+    unsigned int nPos = 0;
+
+    if( bAllowSessionStoring )
+        nSize++;
+
+    if( bAllowPersistentStoring )
+        nSize++;
+
+    uno::Sequence< ucb::RememberAuthentication > aRememberModes( nSize );
+    aRememberModes[ nPos++ ] = ucb::RememberAuthentication_NO;
+
+    if( bAllowSessionStoring )
+        aRememberModes[ nPos++ ] = ucb::RememberAuthentication_SESSION;
+
+    if ( bAllowPersistentStoring )
+        aRememberModes[ nPos++ ] = ucb::RememberAuthentication_PERSISTENT;
 
     m_xAuthSupplier
         = new InteractionSupplyAuthentication(

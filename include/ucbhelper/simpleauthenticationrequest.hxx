@@ -60,8 +60,9 @@ private:
                      bool bCanSetUserName,
                      bool bCanSetPassword,
                      bool bCanSetAccount,
-                      bool bAllowPersistentStoring,
-                     bool bAllowUseSystemCredentials );
+                     bool bAllowPersistentStoring,
+                     bool bAllowUseSystemCredentials,
+                     bool bAllowSessionStoring = true );
 
 public:
     /** Specification whether some entity (realm, username, password, account)
@@ -97,7 +98,8 @@ public:
                                  const OUString & rPassword,
                                  const OUString & rAccount,
                                  bool bAllowPersistentStoring,
-                                 bool bAllowUseSystemCredentials );
+                                 bool bAllowUseSystemCredentials,
+                                 bool bAllowSessionStoring = true );
 
 
     /**
