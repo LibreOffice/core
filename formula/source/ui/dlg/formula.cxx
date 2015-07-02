@@ -709,8 +709,7 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,Fo
                 {
                     OUString aCellResult;
                     OUString aEquals(" = ");
-                    CalcValue( "=" + aResult, aCellResult);
-                    if (aCellResult != aResult) // cell is a formula, print subformula
+                    if (CalcValue( "=" + aResult, aCellResult) && aCellResult != aResult) // cell is a formula, print subformula
                         _pTree->InsertEntry(aResult + aEquals + aCellResult,pParent,STRUCT_END,0,_pToken);
                     else
                         _pTree->InsertEntry(aResult,pParent,STRUCT_END,0,_pToken);
