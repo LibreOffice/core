@@ -173,7 +173,7 @@ private:
         given type
         @param code  points to the start of the area where code snippets can be
         generated
-        @param writetoexecdiff when the same code area is mmaped twice, once for
+        @param writetoexecdiff when the same code area is mapped twice, once for
         writing for code-generation, and once for code-execution, then this
         records the offset from a writable address to its executable address
         @param type  the interface type description for which to generate vtable

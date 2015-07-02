@@ -69,7 +69,7 @@ void LineNumberWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangl
     // rather than doing that re-calculation at each Paint event
     m_nBaseWidth = GetTextWidth("8");
 
-    // reserve enough for 3 sigit minimum, with a bit to spare for confort
+    // reserve enough for 3 digit minimum, with a bit to spare for confort
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
     int i = (nEndLine + 1) / 1000;
     while (i)

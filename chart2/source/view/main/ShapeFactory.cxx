@@ -1075,7 +1075,7 @@ uno::Reference< drawing::XShape >
                 , uno::makeAny( true) );
 
             //the z component of the polygon is now ignored by the drawing layer,
-            //so we nned to translate the object via transformation matrix
+            //so we need to translate the object via transformation matrix
 
             //Matrix for position
             if( rPolyPolygon.SequenceZ.getLength()&& rPolyPolygon.SequenceZ[0].getLength() )

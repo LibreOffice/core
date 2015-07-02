@@ -412,7 +412,7 @@ const std::vector< WrappedProperty* > LegendWrapper::createWrappedProperties()
     aWrappedProperties.push_back( new WrappedLegendAlignmentProperty() );
     aWrappedProperties.push_back( new WrappedProperty( "Expansion", "Expansion"));
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
-    //same problem as for wall: thje defaults ion the old chart are different for different charttypes, so we need to export explicitly
+    //same problem as for wall: the defaults in the old chart are different for different charttypes, so we need to export explicitly
     aWrappedProperties.push_back( new WrappedDirectStateProperty("FillStyle", "FillStyle"));
     aWrappedProperties.push_back( new WrappedDirectStateProperty("FillColor", "FillColor"));
     WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );

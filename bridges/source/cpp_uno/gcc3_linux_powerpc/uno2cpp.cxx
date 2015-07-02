@@ -80,9 +80,9 @@ static void callVirtualMethod(
      // Note: could require up to  2*nStackLongs words of parameter stack area
      // if the call has many float parameters (i.e. floats take up only 1
      // word on the stack but double takes 2 words in parameter area in the
-     // stack frame .
+     // stack frame.
 
-     // Update! floats on the outgoing parameter stack only take up 1 word
+     // Update! Floats on the outgoing parameter stack only take up 1 word
      // (stfs is used) which is not correct according to the ABI but we
      // will match what the compiler does until this is figured out
 

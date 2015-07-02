@@ -2038,7 +2038,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         {
             // for this, we first remove everything from the source storage, then copy the complete content
             // from the temporary target storage. From then on, what used to be the "source storage" becomes
-            // the "targt storage" for all subsequent operations.
+            // the "target storage" for all subsequent operations.
 
             // (We cannot simply remove the storage, denoted by maLibrariesDir, from i_rStorage - there might be
             // open references to it.)

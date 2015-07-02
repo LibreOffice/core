@@ -1073,7 +1073,7 @@ namespace basegfx
                         if(fTools::more(fCut1, fZero) && fTools::less(fCut1, fOne)
                             && (!fTools::equalZero(rEdge2Delta.getX()) || !fTools::equalZero(rEdge2Delta.getY())))
                         {
-                            // take the mopre precise calculation of the two possible
+                            // take the more precise calculation of the two possible
                             if(fabs(rEdge2Delta.getX()) > fabs(rEdge2Delta.getY()))
                             {
                                 fCut2 = (rEdge1Start.getX() + fCut1

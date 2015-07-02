@@ -735,7 +735,7 @@ SbError SbiStream::Write( const OString& rBuf, sal_uInt16 n )
     {
         aLine = aLine + rBuf;
         // Get it out, if the end is an LF, but strip CRLF before,
-        // because the SvStrm adds a CRLF!
+        // because the SvStream adds a CRLF!
         sal_Int32 nLineLen = aLine.getLength();
         if (nLineLen && aLine[--nLineLen] == 0x0A)
         {

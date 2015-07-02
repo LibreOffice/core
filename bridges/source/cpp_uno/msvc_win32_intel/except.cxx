@@ -443,7 +443,7 @@ type_info * msci_getRTTI( OUString const & rUNOname )
 void msci_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 {
     // no ctor/dtor in here: this leads to dtors called twice upon RaiseException()!
-    // thus this obj file will be compiled without opt, so no inling of
+    // thus this obj file will be compiled without opt, so no inlining of
     // ExceptionInfos::getRaiseInfo()
 
     // construct cpp exception object

@@ -196,7 +196,7 @@ SbModuleRef ModulWindow::XModule()
     // elementInserted event from the BasicLibrary container.
     // However the SbModule is also created from a different listener to
     // the same event ( in basmgr ) Therefore it is possible when we look
-    // for xModule it may not yet be available, here we keep tring to access
+    // for xModule it may not yet be available, here we keep trying to access
     // the module until such time as it exists
 
     if ( !xModule.Is() )

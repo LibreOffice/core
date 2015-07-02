@@ -494,7 +494,7 @@ namespace basegfx
 
                     const sal_uInt32 nPointCount(aGeometry.count());
 
-                    // If it's not a pezier polygon, at least four points are needed to create
+                    // If it's not a bezier polygon, at least four points are needed to create
                     // a self-intersection. If it's a bezier polygon, the minimum point number
                     // is two, since with a single point You get a curve, but no self-intersection
                     if(nPointCount > 3 || (nPointCount > 1 && mbIsCurve))
