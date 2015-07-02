@@ -2772,7 +2772,7 @@ bool Content::supportsExclusiveWriteLock(
 
 void Content::lock(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     try
     {
