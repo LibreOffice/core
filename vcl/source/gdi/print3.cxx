@@ -152,6 +152,7 @@ public:
     bool                                                    mbLastPage;
     bool                                                    mbReversePageOrder;
     bool                                                    mbPapersizeFromSetup;
+    bool                                                    mbPrinterModified;
     view::PrintableState                                        meJobState;
 
     vcl::PrinterController::MultiPageSetup                      maMultiPage;
@@ -186,6 +187,7 @@ public:
         mbLastPage( false ),
         mbReversePageOrder( false ),
         mbPapersizeFromSetup( false ),
+        mbPrinterModified( false ),
         meJobState( view::PrintableState_JOB_STARTED ),
         mpProgress( NULL ),
         mnDefaultPaperBin( -1 ),
@@ -817,7 +819,7 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
         // whatever happens to be the current page
         // (but only if the printer config has changed, otherwise
         // don't override printer page auto-detection - tdf#91362)
-        if (!mpImplData->mxPrinter->IsDefPrinter())
+        if (getPrinterModified())
         {
             resetPaperToLastConfigured();
         }
@@ -849,8 +851,6 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
             {
                 mpImplData->maPageCache.invalidate();
             }
-            // Settings have been modified (i.e. this printer is no longer default )
-            mpImplData->mxPrinter->SetDefPrinter( false );
         }
         else
         {
@@ -1372,6 +1372,16 @@ void PrinterController::setPapersizeFromSetup( bool i_bPapersizeFromSetup )
 bool PrinterController::getPapersizeFromSetup() const
 {
     return mpImplData->mbPapersizeFromSetup;
+}
+
+void PrinterController::setPrinterModified( bool i_bPrinterModified )
+{
+    mpImplData->mbPrinterModified = i_bPrinterModified;
+}
+
+bool PrinterController::getPrinterModified() const
+{
+    return mpImplData->mbPrinterModified;
 }
 
 Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const

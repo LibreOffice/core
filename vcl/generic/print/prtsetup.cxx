@@ -282,11 +282,11 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
     }
     if( pKey )
     {
-        m_pParent->SetDataModified( true );
         PPDValue* pValue = static_cast<PPDValue*>(pBox->GetSelectEntryData());
         m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
         update();
     }
+    m_pParent->SetDataModified( true );
     return 0;
 }
 
