@@ -50,7 +50,7 @@ JavaInteractionHandler::JavaInteractionHandler(bool bReportErrorOnce) :
     m_bShowErrorsOnce(bReportErrorOnce),
     m_bJavaDisabled_Handled(false),
     m_bInvalidSettings_Handled(false),
-    m_bJavaNotFound_Handled(false),
+    m_bJavaNotFound_Handled(true), // users are annoyed by "JRE Required" dialog
     m_bVMCreationFailure_Handled(false),
     m_bRestartRequired_Handled(false),
     m_nResult_JavaDisabled(RET_NO)
