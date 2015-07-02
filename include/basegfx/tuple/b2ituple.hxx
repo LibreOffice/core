@@ -171,11 +171,6 @@ namespace basegfx
             return B2ITuple(-mnX, -mnY);
         }
 
-        bool equalZero() const
-        {
-            return mnX == 0 && mnY == 0;
-        }
-
         bool operator==( const B2ITuple& rTup ) const
         {
             return this == &rTup || (rTup.mnX == mnX && rTup.mnY == mnY);
