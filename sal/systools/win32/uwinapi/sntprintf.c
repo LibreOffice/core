@@ -90,6 +90,9 @@ static _TCHAR *GetLastBufferChar( _TCHAR *buffer, size_t count )
     return last;
 }
 
+/* VS 2015 and above support ISO C snprintf */
+#if _MSC_VER < 1900
+
 /* Implementation of snprintf following the ISO/IEC 9899:1999 (ISO C99) standard */
 
 _SNPRINTF_DLLIMPORT int __cdecl vsntprintf( _TCHAR *buffer, size_t count, const _TCHAR *format, va_list list )
@@ -141,6 +144,7 @@ _SNPRINTF_DLLIMPORT int __cdecl sntprintf( _TCHAR *buffer, size_t count, const _
 
     return retval;
 }
+#endif
 
 #endif
 

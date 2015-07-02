@@ -38,9 +38,12 @@ $(eval $(call gb_Library_add_cobjects,uwinapi,\
 	sal/systools/win32/uwinapi/legacy \
 ))
 
+# VS 2015 implements ISO Standard for snprintf and friends
+ifneq ($(filter 140,$(VCVER)),)
 $(eval $(call gb_Library_add_ldflags,uwinapi,\
 	/DEF:$(SRCDIR)/sal/systools/win32/uwinapi/uwinapi.def \
 ))
+endif
 
 endif
 
