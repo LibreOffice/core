@@ -107,7 +107,7 @@ namespace dbaui
 
         /** erase the data in the data vector
             @param  _pData
-                    the data whioch should be erased
+                    the data which should be erased
         */
         void    removeConnectionData(const TTableConnectionData::value_type& _pData);
 

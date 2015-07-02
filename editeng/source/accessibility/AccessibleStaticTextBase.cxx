@@ -748,7 +748,7 @@ namespace accessibility
 
             if( i<=aEndIndex.nPara )
             {
-                //if the below condition is mathed it means the endindex is at mid of the last paragraph
+                //if the below condition is matched it means that endindex is at mid of the last paragraph
                 //we need to add a "\n" before we add the last part of the string.
                 if ( !bEnd && aEndIndex.nIndex )
                 {

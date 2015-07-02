@@ -299,7 +299,7 @@ void SvxSpellWrapper::ReplaceAll( const OUString &, sal_Int16 )
 }
 
 void SvxSpellWrapper::InsertHyphen( const sal_Int32 )
-{   // inserting and deleting Hyphae
+{   // inserting and deleting Hyphen
 }
 
 // Testing of the document areas in the order specified by the flags

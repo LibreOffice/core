@@ -192,7 +192,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
             }
             else
             {
-                OSL_FAIL("OConnection::construct: ::ucbhelper::Content isn't a folde nor a document! How that?!");
+                OSL_FAIL("OConnection::construct: ::ucbhelper::Content isn't a folder nor a document! How that?!");
                 throw SQLException();
             }
         }

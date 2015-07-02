@@ -547,7 +547,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
         m_bProfileExists = sal_False;
         //If there are no profiles for this product
         //Or the given profile name does not found
-        //We will reaise a "No Addressbook Directories Exist" error
+        //We will raise a "No Addressbook Directories Exist" error
         if ( xMozillaBootstrap->getProfileCount(m_ProductType) == 0 ||
             ( !m_ProfileName.isEmpty() && xMozillaBootstrap->getProfilePath(m_ProductType,m_ProfileName).isEmpty()))
             m_bProfileExists = sal_False;

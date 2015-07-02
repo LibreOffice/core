@@ -268,7 +268,7 @@ namespace dbaui
                 nNext = (nNext + 1) % nCount;
 
             if ( m_aVisitedParams[nNext] & EF_VISITED )
-                // there is no such "not visited yet" entry -> simpy take the next one
+                // there is no such "not visited yet" entry -> simply take the next one
                 nNext = (nCurrent + 1) % nCount;
 
             m_pAllParams->SelectEntryPos(nNext);

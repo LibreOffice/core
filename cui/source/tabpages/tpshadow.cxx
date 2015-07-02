@@ -311,7 +311,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
         // If the values of the shadow distances==SfxItemState::DONTCARE and the displayed
         // string in the respective MetricField=="", then the comparison of the old
         // and the new distance values would return a wrong result because in such a
-        // case the new distance values would matche the default values of the MetricField !!!!
+        // case the new distance values would match the default values of the MetricField !!!!
         if ( !m_pMtrDistance->IsEmptyFieldValue()                                  ||
              rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE ||
              rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE    )

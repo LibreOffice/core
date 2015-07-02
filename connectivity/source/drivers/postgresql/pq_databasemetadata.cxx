@@ -170,7 +170,7 @@ sal_Bool DatabaseMetaData::nullsAreSortedHigh(  ) throw (SQLException, RuntimeEx
 {
     // Whether NULL values are considered, for sorting purposes, LARGER than any other value.
     // Specification: http://download.oracle.com/javase/6/docs/api/java/sql/DatabaseMetaData.html#nullsAreSortedHigh()
-    // PostgreSQL behaviour: http://www.postgresql.org/docs/9.1/static/queries-order.htlm
+    // PostgreSQL behaviour: http://www.postgresql.org/docs/9.1/static/queries-order.html
     return sal_True;
 }
 

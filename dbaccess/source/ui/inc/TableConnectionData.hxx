@@ -80,7 +80,7 @@ namespace dbaui
 
             caller is responsible for repainting them
 
-            @return infex of first changed line, or one-past-the-end if no change
+            @return index of first changed line, or one-past-the-end if no change
          */
         OConnectionLineDataVec::size_type normalizeLines();
 

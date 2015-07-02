@@ -94,7 +94,7 @@ namespace dbaui
 
         /** allows to access the connection data from outside
 
-            @return rthe connection data
+            @return the connection data
         */
         inline TTableConnectionData::value_type getData() const { return m_pConnData; }
 

@@ -642,7 +642,7 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(vcl::Window* pParent, const SfxIt
     get(m_pTsbAutoGrowWidth, "TSB_AUTOGROW_WIDTH");
     get(m_pTsbAutoGrowHeight, "TSB_AUTOGROW_HEIGHT");
 
-    // this pege needs ExchangeSupport
+    // this page needs ExchangeSupport
     SetExchangeSupport();
 
     // evaluate PoolUnit

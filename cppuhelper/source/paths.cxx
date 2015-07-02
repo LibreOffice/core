@@ -61,7 +61,7 @@ rtl::OUString get_this_libpath() {
 
 rtl::OUString cppu::getUnoIniUri() {
 #if defined ANDROID
-    // Wouldn't it be lovely to avoid this fugly hard-coding.
+    // Wouldn't it be lovely to avoid this ugly hard-coding.
     // The problem is that the 'create_bootstrap_macro_expander_factory()'
     // required for bootstrapping services, calls cppu::get_unorc directly
     // instead of re-using the BoostrapHandle from:

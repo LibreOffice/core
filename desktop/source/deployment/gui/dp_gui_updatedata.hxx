@@ -62,7 +62,7 @@ struct UpdateData
     //The URL of the locally downloaded extension. It will only be set if there were no errors
     //during the download
     OUString sLocalURL;
-    //The URL of the website wher the download can be obtained.
+    //The URL of the website where the download can be obtained.
     OUString sWebsiteURL;
 
     //For local update

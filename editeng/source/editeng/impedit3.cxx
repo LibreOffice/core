@@ -1800,7 +1800,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                 nBreakPos = nMaxBreakPos;
             }
 
-            // nBreakPos can never be outside the portion, even not with hangig punctuation
+            // nBreakPos can never be outside the portion, even not with hanging punctuation
             if ( nBreakPos > nMaxBreakPos )
                 nBreakPos = nMaxBreakPos;
         }

@@ -523,7 +523,7 @@ private:
     /** resets everything
 
         @precond
-            m_pImpl is not <NULLL/>
+            m_pImpl is not <NULL/>
     */
     void
             impl_reset_nothrow();

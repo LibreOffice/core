@@ -69,7 +69,7 @@ namespace drawinglayer
                         basegfx::B2DVector aLogicSize(rPixelSize.Width(), rPixelSize.Height());
                         aLogicSize = aInverseViewTransformation * aLogicSize;
 
-                        // apply laout
+                        // apply layout
                         basegfx::B2DPoint aTargetTopLeft(getLocalObjectRange().getMinimum());
                         bool bUseTargetTopLeft(true);
                         bool bNeedsClipping(false);

@@ -367,7 +367,7 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
         OUString aName,sCatalog,aSchema,sOldFKName;
         while( xResult->next() )
         {
-            // this must be outsid the "if" because we have to call in a right order
+            // this must be outside the "if" because we have to call in a right order
             sCatalog    = xRow->getString(1);
             if ( xRow->wasNull() )
                 sCatalog.clear();

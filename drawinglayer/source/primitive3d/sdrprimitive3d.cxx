@@ -43,7 +43,7 @@ namespace drawinglayer
 
                 if(!rLine.isDefault() && !basegfx::fTools::equalZero(rLine.getWidth()))
                 {
-                    // expand by hald LineWidth as tube radius
+                    // expand by held LineWidth as tube radius
                     aUnitRange.grow(rLine.getWidth() / 2.0);
                 }
             }

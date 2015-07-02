@@ -1402,7 +1402,7 @@ int Desktop::Main()
 
         xDesktop = css::frame::Desktop::create( xContext );
 
-        // create service for loadin SFX (still needed in startup)
+        // create service for loading SFX (still needed in startup)
         pExecGlobals->xGlobalBroadcaster = Reference < css::document::XDocumentEventListener >
             ( css::frame::theGlobalEventBroadcaster::get(xContext), UNO_SET_THROW );
 
