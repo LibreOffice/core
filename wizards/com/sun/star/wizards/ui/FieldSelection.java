@@ -355,7 +355,7 @@ public class FieldSelection
     private void changeSelectionOrder(int iNeighbor)
     {
         short[] iSelIndices = xSelectedFieldsListBox.getSelectedItemsPos();
-        // TODO: we are assuming that the array starts with the lowest index. Verfy this assumption!!!!!
+        // TODO: we are assuming that the array starts with the lowest index. Verify this assumption!!!!!
         if (iSelIndices.length == 1)
         {
             short iSelIndex = iSelIndices[0];

@@ -1137,7 +1137,7 @@ void SdXMLLineShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString
 void SdXMLLineShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
     // #85920# use SetTransformation() to handle import of simple lines.
-    // This is necessary to kake into account all anchor positions and
+    // This is necessary to take into account all anchor positions and
     // other things. All shape imports use the same import schemata now.
     // create necessary shape (Line Shape)
     AddShape("com.sun.star.drawing.PolyLineShape");

@@ -446,7 +446,7 @@ class Process(ProcessErrors):
                     #
                     # In present this is always the case.
                     # may be in the future, when
-                    # a tree is used, it will be abit different.
+                    # a tree is used, it will be a bit different.
                     if (isinstance (item, CGDocument)):
                         if (not self.export2(item, contentDir, task)):
                             return False

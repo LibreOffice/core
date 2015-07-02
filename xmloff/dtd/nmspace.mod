@@ -40,5 +40,5 @@
 <!ENTITY nConfig "&nOpenOffice2001;/config">
 <!ENTITY nPresentation "&nOpenOffice2001;/presentation">
 
-<!-- dublin core namespace name and prefic -->
+<!-- dublin core namespace name and prefix -->
 <!ENTITY nDC "http://purl.org/dc/elements/1.1/">

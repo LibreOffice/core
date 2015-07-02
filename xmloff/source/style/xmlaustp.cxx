@@ -276,7 +276,7 @@ SvXMLExport& SvXMLAutoStylePoolP::GetExport() const
     return pImpl->GetExport();
 }
 
-// TODO: romove this
+// TODO: remove this
 void SvXMLAutoStylePoolP::AddFamily(
         sal_Int32 nFamily,
         const OUString& rStrName,

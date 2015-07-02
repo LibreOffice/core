@@ -51,7 +51,7 @@ namespace xmloff
         OAttribListMerger() { }
 
         // attribute list handling
-        // (very thinn at the moment ... only adding lists is allowed ... add more if you need it :)
+        // (very thin at the moment... only adding lists is allowed... add more if you need it :)
         void addList(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rList);
 
         // XAttributeList

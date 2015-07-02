@@ -410,7 +410,7 @@ class AgendaDocument(TextDocument):
     '''
     create the minutes for the given topics or remove the minutes
     section from the document.
-    If no topics are supplied, or the user specified not to create minuts,
+    If no topics are supplied, or the user specified not to create minutes,
     the minutes section will be removed,
     @param topicsData supplies PropertyValue arrays containing
     the values for the topics.
@@ -514,7 +514,7 @@ class AgendaDocument(TextDocument):
 
     '''given a text range and a text, fills the given
     text range with the given text.
-    If the given text is empty, uses a placeholder with the giveb
+    If the given text is empty, uses a placeholder with the given
     placeholder text.
     @param range text range to fill
     @param text the text to fill to the text range object.
