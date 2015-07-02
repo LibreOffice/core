@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/instance.hxx>
 
 namespace basic {
@@ -52,7 +52,7 @@ uno::Reference< frame::XModuleManager2 > lclCreateModuleManager()
 
 /** Implementation of an enumeration of all open documents of the same type.
  */
-class DocumentsEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
+class DocumentsEnumeration : public ::cppu::WeakImplHelper< container::XEnumeration >
 {
 public:
     explicit DocumentsEnumeration( const uno::Reference< frame::XModel >& rxModel );

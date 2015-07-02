@@ -43,7 +43,7 @@
 #include <osl/mutex.hxx>
 #include "sbobjmod.hxx"
 #include <basic/vbahelper.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <unotools/eventcfg.hxx>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -63,7 +63,6 @@
 #include <comphelper/processfactory.hxx>
 #include <map>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
@@ -84,7 +83,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::script;
 using namespace com::sun::star::uno;
 
-typedef ::cppu::WeakImplHelper1< XInvocation > DocObjectWrapper_BASE;
+typedef ::cppu::WeakImplHelper< XInvocation > DocObjectWrapper_BASE;
 typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
 
 class DocObjectWrapper : public DocObjectWrapper_BASE
@@ -2235,7 +2234,7 @@ void SbObjModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper<
     awt::XTopWindowListener,
     awt::XWindowListener,
     document::XDocumentEventListener > FormObjEventListener_BASE;

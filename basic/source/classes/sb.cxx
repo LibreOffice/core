@@ -39,7 +39,7 @@
 #include "sb.hrc"
 #include <basrid.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
@@ -65,7 +65,7 @@ using com::sun::star::lang::XMultiServiceFactory;
 
 
 
-class DocBasicItem : public ::cppu::WeakImplHelper1< util::XCloseListener >
+class DocBasicItem : public ::cppu::WeakImplHelper< util::XCloseListener >
 {
 public:
     explicit DocBasicItem( StarBASIC& rDocBasic );

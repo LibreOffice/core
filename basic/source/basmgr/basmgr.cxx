@@ -66,18 +66,18 @@
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using com::sun::star::uno::Reference;
 using namespace com::sun::star;
 using namespace com::sun::star::script;
 using namespace cppu;
 
-typedef WeakImplHelper1< container::XNameContainer > NameContainerHelper;
-typedef WeakImplHelper1< script::XStarBasicModuleInfo > ModuleInfoHelper;
-typedef WeakImplHelper1< script::XStarBasicDialogInfo > DialogInfoHelper;
-typedef WeakImplHelper1< script::XStarBasicLibraryInfo > LibraryInfoHelper;
-typedef WeakImplHelper1< script::XStarBasicAccess > StarBasicAccessHelper;
+typedef WeakImplHelper< container::XNameContainer > NameContainerHelper;
+typedef WeakImplHelper< script::XStarBasicModuleInfo > ModuleInfoHelper;
+typedef WeakImplHelper< script::XStarBasicDialogInfo > DialogInfoHelper;
+typedef WeakImplHelper< script::XStarBasicLibraryInfo > LibraryInfoHelper;
+typedef WeakImplHelper< script::XStarBasicAccess > StarBasicAccessHelper;
 
 // Version 1
 //    sal_uInt32    nEndPos
@@ -139,7 +139,7 @@ BasicManagerImpl::~BasicManagerImpl()
 // BasMgrContainerListenerImpl
 
 
-typedef ::cppu::WeakImplHelper1< container::XContainerListener > ContainerListenerHelper;
+typedef ::cppu::WeakImplHelper< container::XContainerListener > ContainerListenerHelper;
 
 class BasMgrContainerListenerImpl: public ContainerListenerHelper
 {
@@ -2242,7 +2242,7 @@ void LibraryContainer_Impl::removeByName( const OUString& Name )
 
 
 
-typedef WeakImplHelper1< script::XStarBasicAccess > StarBasicAccessHelper;
+typedef WeakImplHelper< script::XStarBasicAccess > StarBasicAccessHelper;
 
 
 class StarBasicAccess_Impl : public StarBasicAccessHelper

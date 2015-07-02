@@ -45,8 +45,8 @@
 
 #include <osl/mutex.hxx>
 #include <unotools/eventlisteneradapter.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/component.hxx>
@@ -55,13 +55,12 @@
 #include <sot/storage.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
-#include <cppuhelper/compbase9.hxx>
 
 class BasicManager;
 
 namespace basic
 {
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper<
     ::com::sun::star::container::XNameContainer,
     ::com::sun::star::container::XContainer,
     ::com::sun::star::util::XChangesNotifier > NameContainer_BASE;
@@ -210,7 +209,7 @@ private:
 
 class SfxLibrary;
 
-typedef ::cppu::WeakComponentImplHelper9<
+typedef ::cppu::WeakComponentImplHelper<
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::script::XStorageBasedLibraryContainer,
     ::com::sun::star::script::XLibraryContainerPassword,
