@@ -119,14 +119,6 @@ namespace comphelper
         //- XLogger::log equivalents/wrappers
         //- string messages
 
-        /// logs a given message, without any arguments, or source class/method names
-        bool        log( const sal_Int32 _nLogLevel, const OUString& _rMessage ) const
-        {
-            if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, NULL, NULL, _rMessage );
-            return false;
-        }
-
         /** logs a given message, replacing a placeholder in the message with an argument
 
             The function takes, additionally to the log level and the message, an arbitrary
@@ -211,14 +203,6 @@ namespace comphelper
 
         //- XLogger::log equivalents/wrappers
         //- ASCII messages
-
-        /// logs a given message, without any arguments, or source class/method names
-        bool        log( const sal_Int32 _nLogLevel, const sal_Char* _pMessage ) const
-        {
-            if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, NULL, NULL, OUString::createFromAscii( _pMessage ) );
-            return false;
-        }
 
         /** logs a given message, replacing a placeholder in the message with an argument
 
@@ -305,14 +289,6 @@ namespace comphelper
         //- XLogger::logp equivalents/wrappers
         //- string messages
 
-        /// logs a given message, without any arguments, or source class/method names
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const OUString& _rMessage ) const
-        {
-            if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, _rMessage );
-            return false;
-        }
-
         /** logs a given message, replacing a placeholder in the message with an argument
 
             The function takes, additionally to the logp level and the message, an arbitrary
@@ -397,14 +373,6 @@ namespace comphelper
 
         //- XLogger::logp equivalents/wrappers
         //- ASCII messages
-
-        /// logs a given ASCII message, without any arguments, or source class/method names
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Char* _pAsciiMessage ) const
-        {
-            if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, OUString::createFromAscii( _pAsciiMessage ) );
-            return false;
-        }
 
         /** logs a given ASCII message, replacing a placeholder in the message with an argument
 
@@ -628,14 +596,6 @@ namespace comphelper
 
         //- XLogger::logp equivalents/wrappers
         //- resource IDs
-
-        /// logs a given ASCII message, without any arguments, or source class/method names
-        bool        logp( const sal_Int32 _nLogLevel, const sal_Char* _pSourceClass, const sal_Char* _pSourceMethod, const sal_Int32 _nMessageResID ) const
-        {
-            if ( isLoggable( _nLogLevel ) )
-                return impl_log( _nLogLevel, _pSourceClass, _pSourceMethod, impl_loadStringMessage_nothrow( _nMessageResID ) );
-            return false;
-        }
 
         /** logs a given ASCII message, replacing a placeholder in the message with an argument
         */

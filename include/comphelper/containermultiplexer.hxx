@@ -101,8 +101,6 @@ namespace comphelper
         /// dispose the object. No multiplexing anymore
         void        dispose();
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >&
-                    getContainer() const { return m_xContainer; }
     };
 
 

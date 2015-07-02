@@ -77,11 +77,6 @@ namespace comphelper
         inline bool
                 empty() const;
 
-        /** determines the number of elements in the container
-        */
-        inline size_t
-                size() const;
-
         /** creates an iterator for looping through all registered listeners
         */
         ::std::unique_ptr< ::cppu::OInterfaceIteratorHelper > createIterator()
@@ -145,11 +140,6 @@ namespace comphelper
         return ( m_aListeners.getLength() == 0 );
     }
 
-    inline size_t OListenerContainer::size() const
-    {
-        return m_aListeners.getLength();
-    }
-
 
     //= OSimpleListenerContainer
 
@@ -194,7 +184,6 @@ namespace comphelper
         using OListenerContainer::disposing;
         using OListenerContainer::clear;
         using OListenerContainer::empty;
-        using OListenerContainer::size;
         using OListenerContainer::createIterator;
 
         /// typed notification

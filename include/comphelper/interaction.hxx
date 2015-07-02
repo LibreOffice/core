@@ -51,9 +51,6 @@ namespace comphelper
     public:
         /// determines whether or not this handler was selected
         bool    wasSelected() const { return m_bSelected; }
-        /// resets the state to "not selected", so you may reuse the handler
-        void        reset() { m_bSelected = false; }
-
     protected:
         void    implSelected() { m_bSelected = true; }
     };
