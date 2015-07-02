@@ -127,7 +127,7 @@ protected:
     /** Derived classes have to return the argument list for the specified VBA event handler. */
     virtual css::uno::Sequence< css::uno::Any > implBuildArgumentList(
         const EventHandlerInfo& rInfo,
-        const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) = 0;
+        const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) = 0;
 
     /** Derived classes may do additional postprocessing. Called even if the
         event handler does not exist, or if an error occurred during execution. */

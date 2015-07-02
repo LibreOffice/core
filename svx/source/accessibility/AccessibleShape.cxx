@@ -1154,7 +1154,7 @@ OUString AccessibleShape::CreateAccessibleBaseName()
 
 
 OUString AccessibleShape::CreateAccessibleName()
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     return GetFullAccessibleName(this);
 }

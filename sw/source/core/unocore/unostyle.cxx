@@ -2624,7 +2624,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 
 uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     if ( !m_pDoc )
         throw uno::RuntimeException();

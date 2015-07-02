@@ -280,7 +280,7 @@ getUnoSheetModuleObj( const uno::Reference< table::XCell >& xCell ) throw ( uno:
 }
 
 uno::Reference< XHelperInterface >
-getUnoSheetModuleObj( const uno::Reference< frame::XModel >& xModel, SCTAB nTab ) throw ( uno::RuntimeException )
+getUnoSheetModuleObj( const uno::Reference< frame::XModel >& xModel, SCTAB nTab ) throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xSheets( xDoc->getSheets(), uno::UNO_QUERY_THROW );

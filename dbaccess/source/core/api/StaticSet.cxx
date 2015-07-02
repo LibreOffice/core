@@ -296,7 +296,7 @@ void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connect
     }
 }
 
-void SAL_CALL OStaticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
+void SAL_CALL OStaticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException, std::exception)
 {
     OCacheSet::updateRow( _rInsertRow,_rOriginalRow,_xTable);
 }

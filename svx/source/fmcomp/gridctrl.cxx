@@ -261,7 +261,7 @@ public:
     void suspend() { ++m_nSuspended; }
     void resume() { --m_nSuspended; }
 
-    virtual void _propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException ) SAL_OVERRIDE;
+    virtual void _propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 FmXGridSourcePropListener::FmXGridSourcePropListener(DbGridControl* _pParent)
@@ -272,7 +272,7 @@ FmXGridSourcePropListener::FmXGridSourcePropListener(DbGridControl* _pParent)
     DBG_ASSERT(m_pParent, "FmXGridSourcePropListener::FmXGridSourcePropListener : invalid parent !");
 }
 
-void FmXGridSourcePropListener::_propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException )
+void FmXGridSourcePropListener::_propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException, std::exception )
 {
     DBG_ASSERT(m_nSuspended>=0, "FmXGridSourcePropListener::_propertyChanged : resume > suspend !");
     if (m_nSuspended <= 0)

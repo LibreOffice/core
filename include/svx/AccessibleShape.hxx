@@ -442,7 +442,7 @@ protected:
     */
     virtual OUString
         CreateAccessibleName()
-        throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// Create a description string that contains the accessible description.
     virtual OUString

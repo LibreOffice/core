@@ -686,7 +686,7 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
 }
 
 uno::Sequence< uno::Any > ScVbaEventsHelper::implBuildArgumentList( const EventHandlerInfo& rInfo,
-        const uno::Sequence< uno::Any >& rArgs ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+        const uno::Sequence< uno::Any >& rArgs ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     // fill arguments for workbook events associated to sheet events according to sheet events, sheet will be added below
     bool bSheetEventAsBookEvent = rInfo.mnEventId > USERDEFINED_START;

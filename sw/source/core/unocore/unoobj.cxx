@@ -1798,7 +1798,7 @@ void SwUnoCursorHelper::SetPropertyValues(
     const SetAttrMode nAttrMode, const bool bTableMode)
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         lang::IllegalArgumentException, lang::WrappedTargetException,
-        uno::RuntimeException)
+        uno::RuntimeException, std::exception)
 {
     if (!rPropertyValues.getLength())
         return;

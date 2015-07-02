@@ -171,11 +171,12 @@ namespace SwUnoCursorHelper
             rPropertyValues,
             const SetAttrMode nAttrMode = SetAttrMode::DEFAULT,
             const bool bTableMode = false)
-        throw (::com::sun::star::beans::UnknownPropertyException,
-                ::com::sun::star::beans::PropertyVetoException,
-                ::com::sun::star::lang::IllegalArgumentException,
-                ::com::sun::star::lang::WrappedTargetException,
-                ::com::sun::star::uno::RuntimeException);
+        throw (css::beans::UnknownPropertyException,
+               css::beans::PropertyVetoException,
+               css::lang::IllegalArgumentException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException,
+               std::exception);
     ::com::sun::star::uno::Any  GetPropertyValue(
             SwPaM& rPaM,
             const SfxItemPropertySet & rPropSet,
