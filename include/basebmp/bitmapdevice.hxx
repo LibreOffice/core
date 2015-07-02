@@ -567,7 +567,6 @@ protected:
 private:
     BASEBMP_DLLPRIVATE virtual bool isCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const = 0;
     BASEBMP_DLLPRIVATE virtual bool isCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const = 0;
-    BASEBMP_DLLPRIVATE virtual bool isCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const = 0;
 
     BASEBMP_DLLPRIVATE virtual void clear_i( Color                  fillColor,
                                              const basegfx::B2IBox& rBounds ) = 0;
