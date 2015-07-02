@@ -195,13 +195,6 @@ struct OStoreBTreeNodeData : public store::OStorePageData
         self::m_aGuard.m_nMagic = store::htonl(nDepth);
     }
 
-    /** queryMerge.
-    */
-    bool queryMerge (const self &rPageR) const
-    {
-        return ((usageCount() + rPageR.usageCount()) <= capacityCount());
-    }
-
     /** querySplit.
     */
     bool querySplit() const
