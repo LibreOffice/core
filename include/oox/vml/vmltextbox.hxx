@@ -95,6 +95,7 @@ public:
     bool borderDistanceSet;
     int borderDistanceLeft, borderDistanceTop, borderDistanceRight, borderDistanceBottom;
     OUString maLayoutFlow;
+    OUString msNextTextbox;
 
 private:
     typedef ::std::vector< TextPortionModel > PortionVector;
