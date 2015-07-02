@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_60172bee",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1206,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-02T11:39:20Z",
+      "side": 1,
+      "message": "better move the lines before insertTextContent out of the try block, as an exception in these steps would be a bug",
+      "revId": "9869a2f07d5f4e66290756eda37189ddb6ed9ed0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_a01d2311",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-02T11:39:20Z",
+      "side": 1,
+      "message": "better add something like CPPUNIT_FAIL with a message here, then it is more obvious what is going wrong than some bool flag1 variable",
+      "revId": "9869a2f07d5f4e66290756eda37189ddb6ed9ed0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_8020274b",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1210,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-02T11:39:20Z",
+      "side": 1,
+      "message": "better catch only IllegalArgumentException - if there\u0027s a different exception it\u0027s probably a bug",
+      "revId": "9869a2f07d5f4e66290756eda37189ddb6ed9ed0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_00d3d739",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1215,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-02T11:39:20Z",
+      "side": 1,
+      "message": "something is going wrong with the indentation here - or perhaps before, make sure it\u0027s 4 spaces (and configure your editor to ensure that, if it is too dumb to do it out of the box)",
+      "revId": "9869a2f07d5f4e66290756eda37189ddb6ed9ed0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
