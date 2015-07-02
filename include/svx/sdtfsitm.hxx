@@ -25,7 +25,7 @@
 
 enum SdrFitToSizeType {
     SDRTEXTFIT_NONE,         // - no fit-to-size
-    SDRTEXTFIT_PROPORTIONAL, // - resize all glyhs proportionally
+    SDRTEXTFIT_PROPORTIONAL, // - resize all glyphs proportionally
                              //   (might scale anisotrophically)
     SDRTEXTFIT_ALLLINES,     // - like SDRTEXTFIT_PROPORTIONAL, but
                              //   scales each line separately

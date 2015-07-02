@@ -29,7 +29,7 @@ Service Name
 
 
 Implementation Name
-  For geneic service: com.sun.star.i18n.Transliteration,
+  For generic service: com.sun.star.i18n.Transliteration,
          com.sun.star.i18n.Transliteration
 
   com.sun.star.i18n.Transliteration.u2l

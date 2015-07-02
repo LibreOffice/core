@@ -46,7 +46,7 @@ extern "C" {
     about these JREs as well as starting the VMs.</dd>
     <dt>UNO_JAVA_JFW_USER_DATA</dt>
     <dd>The file contains settings for a particular user. One can use the macro
-    $SYSUSERCONFIG in the URL which expands to a directory whery the user's data are
+    $SYSUSERCONFIG in the URL which expands to a directory where the user's data are
     kept. On UNIX this would be the home directory and on Windows some sub-directory
     of the &quot;Documents and Settings&quot; folder.The content of this file is an
     implementation detail and may change in the future.</dd>

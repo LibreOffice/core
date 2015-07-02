@@ -53,7 +53,7 @@ protected:
     sal_uLong           nlLinePos;          // current column number
 
     SvParser_Impl       *pImplData;         // internal data
-    long                nTokenValue;        // additional vavlue (RTF)
+    long                nTokenValue;        // additional value (RTF)
     bool                bTokenHasValue;     // indicates whether nTokenValue is valid
     SvParserState       eState;             // status also in derived classes
 

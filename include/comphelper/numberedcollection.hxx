@@ -39,9 +39,9 @@ namespace comphelper{
 
 /** @short  defines a collection of UNO components, where every component will get its own unique number.
 
-    @descr  Such number will be unique at runtime only ... but it supports fragmentation.
+    @descr  Such number will be unique at runtime only... but it supports fragmentation.
             Note: This collection uses weak references only to know her components.
-            So lifetime of thise components must be controlled outside.
+            So lifetime of these components must be controlled outside.
 
     @threadsafe
  */

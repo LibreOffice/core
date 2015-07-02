@@ -45,7 +45,7 @@ typedef sal_uIntPtr SbError;
 #define ERRCODE_BASIC_PROP_WRITEONLY        ERRCODE_SBX_PROP_WRITEONLY          // Property is write only
 #define ERRCODE_BASIC_INVALID_OBJECT        ERRCODE_SBX_INVALID_OBJECT          // Invalid object reference
 #define ERRCODE_BASIC_NO_METHOD             ERRCODE_SBX_NO_METHOD               // Property or method not found
-#define ERRCODE_BASIC_INVALID_USAGE_OBJECT  ERRCODE_SBX_INVALID_USAGE_OBJECT    // Invalid usee of object
+#define ERRCODE_BASIC_INVALID_USAGE_OBJECT  ERRCODE_SBX_INVALID_USAGE_OBJECT    // Invalid use of object
 #define ERRCODE_BASIC_NO_OLE                ERRCODE_SBX_NO_OLE                  // Class does not support OLE
 #define ERRCODE_BASIC_BAD_METHOD            ERRCODE_SBX_BAD_METHOD              // Object doesn't support method
 #define ERRCODE_BASIC_OLE_ERROR             ERRCODE_SBX_OLE_ERROR               // OLE Automation error

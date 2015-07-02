@@ -188,7 +188,7 @@ namespace basegfx
             polygon will be emptied as preparation.
 
             @param fFullDashDotLen
-            The sumed-up length of the rDotDashArray. If zero, it will
+            The summed-up length of the rDotDashArray. If zero, it will
             be calculated internally.
         */
         BASEGFX_DLLPUBLIC void applyLineDashing(

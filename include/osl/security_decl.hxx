@@ -92,7 +92,7 @@ public:
     */
     inline bool SAL_CALL getConfigDir( rtl::OUString & strDirectory) const;
 
-    /** Query if the user who is logged inhas administrator rights.
+    /** Query if the user who is logged in has administrator rights.
         @return True, if the user has administrator rights, otherwise false.
     */
     inline bool SAL_CALL isAdministrator() const;

@@ -59,7 +59,7 @@ namespace svt
             eTravelForward,         // traveling forward (maybe with skipping pages)
             eTravelBackward,        // traveling backward (maybe with skipping pages)
             eFinish,                // the wizard is about to be finished
-            eValidate               // the data should be validated only, no traveling wll happen
+            eValidate               // the data should be validated only, no traveling will happen
         };
     };
 

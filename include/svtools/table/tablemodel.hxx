@@ -245,7 +245,7 @@ namespace svt { namespace table
         */
         virtual void        setFlexibility( sal_Int32 const i_flexibility ) = 0;
 
-        /** returns the width of the column, in app-font unitss
+        /** returns the width of the column, in app-font units
 
             The returned value must be a positive ->TableMetrics value.
 

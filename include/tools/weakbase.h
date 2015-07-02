@@ -129,7 +129,7 @@ public:
     /** clears the reference pointer in all living weak references for this instance.
         Further created weak references will also be invalid.
         You should call this method in the d'tor of your derived classes for an early
-        invalidate of all living weak references while youre object is already inside
+        invalidate of all living weak references while your object is already inside
         it d'tor.
     */
     inline void clearWeak();

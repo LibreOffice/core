@@ -79,7 +79,7 @@ namespace toolkit
         void ProcessWindowEvent( const VclWindowEvent& i_windowEvent ) SAL_OVERRIDE;
 
     private:
-        /** updates our images with the ones from the givem XAnimatedImages component
+        /** updates our images with the ones from the given XAnimatedImages component
         */
         void    impl_updateImages_nolck( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_animatedImages );
 

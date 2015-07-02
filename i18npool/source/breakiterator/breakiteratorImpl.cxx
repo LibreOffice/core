@@ -574,7 +574,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
         OUStringBuffer aBuf(l+c+v+3);
 
         if ((l > 0 && c > 0 && v > 0 &&
-                    // load service with name <base>_<lang>_<country>_<varian>
+                    // load service with name <base>_<lang>_<country>_<variant>
                     createLocaleSpecificBreakIterator(aBuf.append(rLocale.Language).append(under).append(
                             rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear())) ||
                 (l > 0 && c > 0 &&

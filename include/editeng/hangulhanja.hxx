@@ -197,7 +197,7 @@ namespace editeng
             in your document, than you have to remember the document position immediately <em>behind</em>
             the changed text. In a next call to ReplaceUnit, an index of <em>0</em> will denote exactly
             this position behind the previous replacement<br/>
-            The reaons for this is that this class here does not know anything about your document structure,
+            The reason is that this class here does not know anything about your document structure,
             so after a replacement took place, it's impossible to address anything in the range from the
             beginning of the portion up to the replaced text.<br/>
             In the very first call to ReplaceUnit, an index of <em>0</em> denotes the very first position of

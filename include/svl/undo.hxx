@@ -410,7 +410,7 @@ class SVL_DLLPUBLIC SfxLinkUndoAction : public SfxUndoAction
 /*  [Explanation]
 
     SfxLinkUndoAction is used to link two SfxUndoManager. The Undo/Redos inserted
-    in the first SfxUndoManager redict their Undo/Redo to the second. With this it
+    in the first SfxUndoManager redirect their Undo/Redo to the second. With this it
     does not matter, if the undo/redo initially was on the first or the second.
 
     After inserting SfxLinkUndoAction on the first SfxUndoManager, you have to

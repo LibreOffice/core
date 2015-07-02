@@ -270,7 +270,7 @@ public:
                               The implementation does NOT check for array bounds!
 
         @param nIndex index
-        @return const C++ reference to byte at element of indenx nIndex
+        @return const C++ reference to byte at element of index nIndex
     */
     inline const sal_Int8 & SAL_CALL operator [] ( sal_Int32 nIndex ) const
         { return getConstArray()[ nIndex ]; }

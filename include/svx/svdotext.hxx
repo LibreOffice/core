@@ -204,7 +204,7 @@ protected:
     SdrObjKind                  eTextKind;
 
     // #108784#
-    // For text editing in SW Haeder/Footer it is necessary to be
+    // For text editing in SW Header/Footer it is necessary to be
     // able to set an offset for the text edit to allow text editing at the
     // position of the virtual object. This offset is used when setting up
     // and maintaining the OutlinerView.

@@ -580,7 +580,7 @@ public:
     const Link<>& GetNotifyUndoActionHdl() const             { return aUndoLink; }
 
     /** application can set its own undo manager, BegUndo, EndUndo and AddUndoAction
-        calls are routet to this interface if given */
+        calls are routed to this interface if given */
     void SetSdrUndoManager( SfxUndoManager* pUndoManager );
     SfxUndoManager* GetSdrUndoManager() const;
 

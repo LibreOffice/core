@@ -191,7 +191,7 @@ public:
     // The snapping angles is independent of snapping coordinates
     // and so independent of the attitude IsSnapEnabled()
     // Only values should be specified for them is applied:
-    //     36000 modulu nAngle = 0
+    //     36000 modulo nAngle = 0
     // Implemented for:
     // - Rotate (Dragging)
     // - Shear (Dragging)

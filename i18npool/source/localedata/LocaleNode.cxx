@@ -498,7 +498,7 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
      * need to adapt quite some locales' data. */
     if (aQuoteStart == aDoubleQuoteStart)
         fprintf( stderr, "Warning: %s\n",
-                "QuotationStart equals DoubleQuotationStart. Not necessarily an isue, but unusual.");
+                "QuotationStart equals DoubleQuotationStart. Not necessarily an issue, but unusual.");
     if (aQuoteEnd == aDoubleQuoteEnd)
         fprintf( stderr, "Warning: %s\n",
                 "QuotationEnd equals DoubleQuotationEnd. Not necessarily an issue, but unusual.");

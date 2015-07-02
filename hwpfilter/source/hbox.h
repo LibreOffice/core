@@ -807,7 +807,7 @@ struct NewNum: public HBox
     virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
 };
 
-// page numger(20)
+// page number(20)
 /**
  * @short Input page index in footer or header
  */
