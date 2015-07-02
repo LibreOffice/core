@@ -173,7 +173,7 @@ void SbiExprNode::GenElement( SbiCodeGen& rGen, SbiOpcode eOp )
 {
 #ifdef DBG_UTIL
     if ((eOp < _RTL || eOp > _CALLC) && eOp != _FIND_G && eOp != _FIND_CM && eOp != _FIND_STATIC)
-        pGen->GetParser()->Error( SbERR_INTERNAL_ERROR, "Opcode" );
+        rGen.GetParser()->Error( SbERR_INTERNAL_ERROR, "Opcode" );
 #endif
     SbiSymDef* pDef = aVar.pDef;
     // The ID is either the position or the String-ID
