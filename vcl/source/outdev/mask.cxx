@@ -27,12 +27,6 @@
 #include <impbmp.hxx>
 #include <outdata.hxx>
 
-extern const sal_uLong nVCLRLut[ 6 ];
-extern const sal_uLong nVCLGLut[ 6 ];
-extern const sal_uLong nVCLBLut[ 6 ];
-extern const sal_uLong nVCLDitherLut[ 256 ];
-extern const sal_uLong nVCLLut[ 256 ];
-
 void OutputDevice::DrawMask( const Point& rDestPt,
                              const Bitmap& rBitmap, const Color& rMaskColor )
 {

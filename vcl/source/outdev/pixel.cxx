@@ -29,12 +29,6 @@
 #include "outdata.hxx"
 #include "salgdi.hxx"
 
-extern const sal_uLong nVCLRLut[ 6 ];
-extern const sal_uLong nVCLGLut[ 6 ];
-extern const sal_uLong nVCLBLut[ 6 ];
-extern const sal_uLong nVCLDitherLut[ 256 ];
-extern const sal_uLong nVCLLut[ 256 ];
-
 Color OutputDevice::GetPixel( const Point& rPt ) const
 {
 
