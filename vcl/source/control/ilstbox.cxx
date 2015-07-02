@@ -1613,8 +1613,9 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
         )
     {
         DBG_ASSERT( !mpEntryList->IsEntryPosSelected( nSelect ) || mbMulti, "ImplListBox: Selecting same Entry" );
-        if( nSelect >= mpEntryList->GetEntryCount() )
-            nSelect = mpEntryList->GetEntryCount()-1;
+        sal_Int32 nCount = mpEntryList->GetEntryCount();
+        if (nSelect >= nCount)
+            nSelect = nCount ? nCount-1 : LISTBOX_ENTRY_NOTFOUND;
         bool bCurPosChange = (mnCurrentPos != nSelect);
         mnCurrentPos = nSelect;
         if(SelectEntries( nSelect, eLET, bShift, bCtrl, bCurPosChange))
@@ -1674,8 +1675,9 @@ void ImplListBoxWindow::SelectEntry( vcl::StringEntryIdentifier _entry )
 
     // normalize
     OSL_ENSURE( nSelect < mpEntryList->GetEntryCount(), "ImplListBoxWindow::SelectEntry: how that?" );
-    if( nSelect >= mpEntryList->GetEntryCount() )
-        nSelect = mpEntryList->GetEntryCount()-1;
+    sal_Int32 nCount = mpEntryList->GetEntryCount();
+    if (nSelect >= nCount)
+        nSelect = nCount ? nCount-1 : LISTBOX_ENTRY_NOTFOUND;
 
     // make visible
     ShowProminentEntry( nSelect );
