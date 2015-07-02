@@ -249,7 +249,7 @@ private:
 
     bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
 
-    bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException);
+    bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
     static Reference< XWriter >     implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 
     bool                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
