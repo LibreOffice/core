@@ -300,12 +300,6 @@ typedef boost::intrusive_ptr< FontCharMap > FontCharMapPtr;
 BmpMirrorFlags AdjustTwoRect( SalTwoRect& rTwoRect, const Size& rSizePix );
 void AdjustTwoRect( SalTwoRect& rTwoRect, const Rectangle& rValidSrcRect );
 
-extern const sal_uLong nVCLRLut[ 6 ];
-extern const sal_uLong nVCLGLut[ 6 ];
-extern const sal_uLong nVCLBLut[ 6 ];
-extern const sal_uLong nVCLDitherLut[ 256 ];
-extern const sal_uLong nVCLLut[ 256 ];
-
 class OutputDevice;
 
 namespace vcl {
