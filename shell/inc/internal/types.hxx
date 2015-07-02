@@ -62,7 +62,7 @@ const Chunk_t EMPTY_CHUNK = ::std::make_pair( EMPTY_LOCALE, ::std::wstring());
 
 //+-------------------------------------------------------------------------
 //  Declare:    StyleName_t, style name of a style-locale pair.
-//              StyleLocaleMap, the map of Styple-Locale pair.
+//              StyleLocaleMap, the map of Style-Locale pair.
 //  Contents:   Definitions of Style Names.
 
 typedef ::std::wstring StyleName_t;

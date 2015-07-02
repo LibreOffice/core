@@ -259,7 +259,7 @@ void AccessibleControlShape::Init()
                     if ( m_xControlContextProxy.is() )
                     {
                         // At this point in time, the proxy has a ref count of exactly one - in m_xControlContextProxy.
-                        // Remember to _not_ reset this member unles the delegator of the proxy has been reset, too!
+                        // Remember to _not_ reset this member unless the delegator of the proxy has been reset, too!
                         m_xControlContextProxy->setDelegator( *this );
                     }
                     osl_atomic_decrement( &m_refCount );

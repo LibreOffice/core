@@ -1155,7 +1155,7 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                         aOldScripts = xEvManager->getScriptEvents(nIndex);
                 }
 
-                // replace the mdoel within the parent container
+                // replace the model within the parent container
                 Reference< XIndexContainer> xIndexParent(xChild->getParent(), UNO_QUERY);
                 if (xIndexParent.is())
                 {
@@ -3056,7 +3056,7 @@ void FmXFormShell::stopFiltering(bool bSave)
                  j != rControllerList.end(); ++j)
             {
                 if (bSave)
-                {   // remember the current filter settings in case we're goin to reload the forms below (which may fail)
+                {   // remember the current filter settings in case we're going to reload the forms below (which may fail)
                     try
                     {
                         Reference< XPropertySet > xFormAsSet((*j)->getModel(), UNO_QUERY);

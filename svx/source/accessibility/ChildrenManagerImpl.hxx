@@ -345,7 +345,7 @@ protected:
     AccessibleShapeTreeInfo maShapeTreeInfo;
 
     /** Reference to an accessible context object that is used to inform its
-        listeners of new and remved children.
+        listeners of new and removed children.
     */
     AccessibleContextBase& mrContext;
 

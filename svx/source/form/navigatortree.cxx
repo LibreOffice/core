@@ -808,7 +808,7 @@ namespace svxform
         // 5) a control or form will be dropped onto a control which is _not_ a sibling (dropping onto a sibling
         //      means moving the control)
 
-        // collect the ancestors of the drop targte (speeds up 3)
+        // collect the ancestors of the drop target (speeds up 3)
         SvLBoxEntrySortedArray arrDropAnchestors;
         SvTreeListEntry* pLoop = _pTargetEntry;
         while (pLoop)

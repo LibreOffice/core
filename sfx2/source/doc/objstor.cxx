@@ -1795,7 +1795,7 @@ bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMedium& r
             {
                 // the following call will only compare stream sizes
                 // TODO/LATER: this is a very risky part, since if the URL contents are different from the storage
-                // contents, the storag will be broken
+                // contents, the storage will be broken
                 xOptStorage->attachToURL( aBackupURL, sal_True );
 
                 // the storage is successfully attached to backup, thus it is owned by the document not by the medium

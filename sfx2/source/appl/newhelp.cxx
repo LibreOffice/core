@@ -681,7 +681,7 @@ void IndexTabPage_Impl::InitializeIndex()
                     else
                         aIndex.clear();
 
-                    // Assume the token is trimed
+                    // Assume the token is trimmed
                     UNIFY_AND_INSERT_TOKEN( aKeywordPair );
 
                     sal_uInt32 nRefListLen = aRefList.getLength();

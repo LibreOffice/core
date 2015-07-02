@@ -1262,7 +1262,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     if (!xIn.is() && URL.isEmpty()) {
         throw lang::IllegalArgumentException(
             "DocumentMetadataAccess::loadMetadataFromMedium: "
-            "inalid medium: no URL, no input stream", *this, 0);
+            "invalid medium: no URL, no input stream", *this, 0);
     }
     uno::Reference<embed::XStorage> xStorage;
     try {

@@ -782,7 +782,7 @@ IMPL_LINK_TYPED( SfxVirtualMenu, Activate, Menu *, pMenu, bool )
             << pSVMenu);
 
     // MI: for what was it still good for?
-    // MBA: seemes to be an old QAP-Hack( checked-in in rev.1.41  ! )
+    // MBA: seems to be an old QAP-Hack (checked-in in rev.1.41!)
 
     if ( pMenu )
     {

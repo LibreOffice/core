@@ -1516,7 +1516,7 @@ namespace sdr { namespace contact {
     void LazyControlCreationPrimitive2D::getTransformation( const ViewContactOfUnoControl& _rVOC, ::basegfx::B2DHomMatrix& _out_Transformation )
     {
         // Do use model data directly to create the correct geometry. Do NOT
-        // use getBoundRect()/getSnapRect() here; tese will use the sequence of
+        // use getBoundRect()/getSnapRect() here; these will use the sequence of
         // primitives themselves in the long run.
         Rectangle aSdrGeoData( _rVOC.GetSdrUnoObj().GetGeoRect() );
         Point aGridOffset = _rVOC.GetSdrUnoObj().GetGridOffset();
@@ -1678,7 +1678,7 @@ namespace sdr { namespace contact {
         {
             // when live mode is switched on, a refresh is needed. The edit mode visualisation
             // needs to be repainted and the now used VCL-Window needs to be positioned and
-            // sized. Both is done from the repant refresh.
+            // sized. Both is done from the repaint refresh.
             const_cast< ViewObjectContactOfUnoControl* >(this)->ActionChanged();
         }
     }

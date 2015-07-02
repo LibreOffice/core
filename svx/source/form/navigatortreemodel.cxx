@@ -510,7 +510,7 @@ namespace svxform
     void NavigatorTreeModel::FillBranch( FmFormData* pFormData )
     {
 
-        // insert froms from root
+        // insert forms from root
         if( pFormData == NULL )
         {
             Reference< XIndexContainer >   xForms(GetForms(), UNO_QUERY);

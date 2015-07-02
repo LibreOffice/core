@@ -470,8 +470,8 @@ void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyVal
 
 
 /* This implements a thread which will be started to wait for asynchronous
-   print jobs to temp. localy files. If they finish we move the temp. files
-   to her right locations by using the ucb.
+   print jobs to temp. locally files. If they finish we move the temp. files
+   to their right locations by using the ucb.
  */
 class ImplUCBPrintWatcher : public ::osl::Thread
 {
@@ -509,7 +509,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
             /* } SAFE */
 
             // lock for further using of our member isn't necessary - because
-            // we truns alone by defenition. Nobody join for us nor use us ...
+            // we run alone by definition. Nobody join for us nor use us...
             moveAndDeleteTemp(&m_pTempFile,m_sTargetURL);
 
             // finishing of this run() method will call onTerminate() automatically
@@ -787,7 +787,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         // b)
         else
         {
-            // Note: we create(d) some resource on the heap. (thread and tep file)
+            // Note: we create(d) some resource on the heap (thread and temp file).
             // They will be deleted by the thread automatically if he finish his run() method.
             ImplUCBPrintWatcher* pWatcher = new ImplUCBPrintWatcher( pPrinter, pUCBPrintTempFile, sUcbUrl );
             pWatcher->create();

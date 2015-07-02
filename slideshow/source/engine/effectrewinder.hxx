@@ -55,7 +55,7 @@ public:
         UserEventQueue& rUserEventQueue);
     ~EffectRewinder();
 
-    /** Call Dispose() before the ownder of an EffectRewinder object dies so
+    /** Call Dispose() before the owner of an EffectRewinder object dies so
         that the EffectRewinder can release all references to the owner.
 
     */

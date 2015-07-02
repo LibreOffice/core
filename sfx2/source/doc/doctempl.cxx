@@ -615,7 +615,7 @@ bool SfxDocumentTemplates::CopyOrMove
             else
             {
                 if ( xTemplates->removeTemplate( pTargetRgn->GetTitle(), aTitle ) )
-                    return false; // will trigger tetry with copy instead of move
+                    return false; // will trigger retry with copy instead of move
 
                 // if it is not possible to remove just created template ( must be possible! )
                 // it is better to report success here, since at least the copy has succeeded

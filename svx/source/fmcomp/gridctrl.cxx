@@ -2056,7 +2056,7 @@ bool DbGridControl::SetCurrent(long nNewRow)
                 {
                     // to we need to move the cursor to the insert row?
                     // we need to insert the if the current row isn't the insert row or if the
-                    // cursor triggered the move by itselt and we need a reinitialization of the row
+                    // cursor triggered the move by itself and we need a reinitialization of the row
                     Reference< XPropertySet > xCursorProps = m_pDataCursor->getPropertySet();
                     if ( !::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_ISNEW)) )
                     {

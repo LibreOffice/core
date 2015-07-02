@@ -213,7 +213,7 @@ OUString XDashList::GetStringForUiNoLine() const
 {
     if(maStringNoLine.isEmpty())
     {
-        // formally was RID_SVXSTR_INVISIBLE, but tomake equal
+        // formally was RID_SVXSTR_INVISIBLE, but to make equal
         // everywhere, use RID_SVXSTR_NONE
         const_cast< XDashList* >(this)->maStringNoLine = ResId(RID_SVXSTR_NONE, DIALOG_MGR()).toString();
     }

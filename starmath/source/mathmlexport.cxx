@@ -19,7 +19,7 @@
 
 /*
  Warning: The SvXMLElementExport helper class creates the beginning and
- closing tags of xml elements in its constructor and destructor, so theres
+ closing tags of xml elements in its constructor and destructor, so there's
  hidden stuff going on, on occasion the ordering of these classes declarations
  may be significant
 */
@@ -1211,7 +1211,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
             default:
                 SAL_WARN("starmath", "unexpected case");
         }
-        // According to the parser every node that is to be evaluated heres
+        // According to the parser every node that is to be evaluated here
         // has a single non-zero subnode at index 1!! Thus we only need to check
         // that single node for follow-up nodes that have an effect on the attribute.
         if (pNode->GetNumSubNodes() > 1 && pNode->GetSubNode(1) &&

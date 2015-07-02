@@ -1398,7 +1398,7 @@ SvStream &SfxItemSet::Store
  * This method loads an SfxItemSet from a stream.
  * If the SfxItemPool was loaded without RefCounts the loaded Item
  * references are counted, else we assume the they were accounted for
- * when loadig the SfxItemPool.
+ * when loading the SfxItemPool.
  *
  * @see SfxItemSet::Store(Stream&,bool) const
  */

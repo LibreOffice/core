@@ -1120,7 +1120,7 @@ void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
             }
             else if( fBrightness >= 10.0 )
             {
-                nLevel = 1; // Noraml;
+                nLevel = 1; // Normal;
             }
             else
             {

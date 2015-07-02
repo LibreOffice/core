@@ -39,7 +39,7 @@ namespace svt { namespace table
 
         if ( m_nResizingColumn == COL_INVALID )
         {
-            // if we hit a column divider, change the mosue pointer accordingly
+            // if we hit a column divider, change the mouse pointer accordingly
             Pointer aNewPointer( PointerStyle::Arrow );
             TableCell const tableCell = i_tableControl.hitTest( aPoint );
             if ( ( tableCell.nRow == ROW_COL_HEADERS ) && ( tableCell.eArea == ColumnDivider ) )

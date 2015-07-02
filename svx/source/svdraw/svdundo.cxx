@@ -1161,7 +1161,7 @@ void SdrUndoObjSetText::Redo()
 
     pTarget->ActionChanged();
 
-    // #i124389# if it's a table, als oneed to relayout TextFrame
+    // #i124389# if it's a table, also need to relayout TextFrame
     if(0 != dynamic_cast< sdr::table::SdrTableObj* >(pTarget))
     {
         pTarget->NbcAdjustTextFrameWidthAndHeight();

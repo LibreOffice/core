@@ -483,7 +483,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
             Application::Reschedule();
             // do 2 reschedules because of #70226# : some things done within this loop's body may cause an user event
             // to be posted (deep within vcl), and these user events will be handled before any keyinput or paintings
-            // or anything like that. So within each loop we create one user event and hanel one user event (and no
+            // or anything like that. So within each loop we create one user event and handle one user event (and no
             // paintings and these), so the office seems to be frozen while searching.
             // FS - 70226 - 02.12.99
         }

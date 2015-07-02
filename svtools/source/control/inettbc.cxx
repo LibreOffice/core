@@ -313,7 +313,7 @@ void SvtMatchContext_Impl::ReadFolder( const OUString& rURL,
                 || aText.endsWith("/..");
 
     // for pure home paths ( ~username ) the '.' at the end of rMatch
-    // means that it poits to root catalog
+    // means that it points to root catalog
     // this is done only for file contents since home paths parsing is useful only for them
     if ( bPureHomePath && rMatch == "file:///." )
     {

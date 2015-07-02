@@ -68,7 +68,7 @@ void MathType::Init()
 
  General solution required to force starmath to handle
  unicode math chars the way it handles its own math
- chars rathar than handle them as text as it will do
+ chars rather than handle them as text as it will do
  for the default case below, i.e. incorrect spacing
  between math symbols and ordinary text e.g. 1=2 rather
  than 1 = 2
