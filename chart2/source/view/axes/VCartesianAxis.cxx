@@ -1088,7 +1088,7 @@ B2DVector VCartesianAxis::getScreenPosition( double fLogicX, double fLogicY, dou
             }
             else
             {
-                OSL_FAIL("cannot calculate scrren position in VCartesianAxis::getScreenPosition");
+                OSL_FAIL("cannot calculate screen position in VCartesianAxis::getScreenPosition");
             }
         }
         else

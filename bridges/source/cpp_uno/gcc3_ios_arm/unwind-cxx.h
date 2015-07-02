@@ -177,7 +177,7 @@ struct __cxa_eh_globals
 extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
 extern "C" __cxa_eh_globals *__cxa_get_globals_fast () throw();
 
-// Allocate memory for the exception plus the thown object.
+// Allocate memory for the exception plus the thrown object.
 extern "C" void *__cxa_allocate_exception(size_t thrown_size) throw();
 
 // Free the space allocated for the exception.

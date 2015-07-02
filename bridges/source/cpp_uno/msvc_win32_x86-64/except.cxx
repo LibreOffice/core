@@ -36,7 +36,7 @@
 #if 0
 
 /* This information until the corresponding '#endif // 0' is covered
- * by ONTL's license, which is said to be the "zlib/libgng license"
+ * by ONTL's license, which is said to be the "zlib/libpng license"
  * below, which as far as I see is permissive enough to allow this
  * information to be included here in this source file. Note that no
  * actual code from ONTL below gets compiled into the object file.

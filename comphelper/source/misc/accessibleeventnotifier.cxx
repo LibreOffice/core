@@ -116,7 +116,7 @@ namespace
             to be called with our mutex locked
 
         @param nClient
-            the id of the client to loopup
+            the id of the client to lookup
         @param rPos
             out-parameter for the position of the client in the client map
 

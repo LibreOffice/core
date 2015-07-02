@@ -54,7 +54,7 @@ System::Object^ Bridge::call_uno(uno_Interface * pUnoI,
         if (return_td.get()->nSize > sizeof (largest))
             return_size = return_td.get()->nSize;
     }
-    //Prepare memory that contains all converted arguments and return valuse
+    //Prepare memory that contains all converted arguments and return value
     //The memory block contains first pointers to the arguments which are in the same block
     // For example, 2 arguments, 1 ret.
     //

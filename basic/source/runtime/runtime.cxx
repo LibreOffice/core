@@ -2842,7 +2842,7 @@ void SbiRuntime::StepLOADI( sal_uInt32 nOp1 )
     PushVar( p );
 }
 
-// stora a named argument in Argv (+Arg-no. from 1!)
+// store a named argument in Argv (+Arg-no. from 1!)
 
 void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
 {

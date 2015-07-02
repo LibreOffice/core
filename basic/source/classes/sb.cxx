@@ -1319,7 +1319,7 @@ void StarBASIC::DeInitAllModules()
 }
 
 // This implementation at first searches within the runtime library,
-// then it looks for an element within one module. This moudle can be
+// then it looks for an element within one module. This module can be
 // a public var or an entrypoint. If it is not found and we look for a
 // method and a module with the given name is found the search continues
 // for entrypoint "Main".

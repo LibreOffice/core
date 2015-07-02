@@ -79,7 +79,7 @@ public class Document {
     }
 
     /**
-     * Callback triggered through JNI to indicate that a new singal
+     * Callback triggered through JNI to indicate that a new signal
      * from LibreOfficeKit was retrieved.
      */
     private void messageRetrieved(int signalNumber, String payload) {
