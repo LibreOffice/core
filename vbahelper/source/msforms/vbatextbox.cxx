@@ -45,7 +45,7 @@ ScVbaTextBox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeExcepti
     setText( sVal );
 }
 
-//getString() will cause some imfo lose.
+//getString() will cause some info lose.
 OUString SAL_CALL
 ScVbaTextBox::getText() throw (css::uno::RuntimeException, std::exception)
 {

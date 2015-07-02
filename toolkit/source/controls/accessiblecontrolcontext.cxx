@@ -275,7 +275,7 @@ namespace toolkit
             if ( pVCLWindow )
                 aWindowRelativePos = pVCLWindow->GetPosPixel();
 
-            // the screnn position of the "window parent" of the control
+            // the screen position of the "window parent" of the control
             ::Point aVCLParentScreenPos( 0, 0 );
             if ( pVCLParent )
                 aVCLParentScreenPos = pVCLParent->GetPosPixel();

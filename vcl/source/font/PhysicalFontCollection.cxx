@@ -1113,7 +1113,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindByFont( FontSelectPattern& r
     // if the first font was not available find the next available font in
     // the semicolon separated list of font names. A font is also considered
     // available when there is a matching entry in the Tools->Options->Fonts
-    // dialog witho neither ALWAYS nor SCREENONLY flags set and the substitution
+    // dialog with neither ALWAYS nor SCREENONLY flags set and the substitution
     // font is available
     for( nTokenPos = 0; nTokenPos != -1; )
     {

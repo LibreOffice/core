@@ -660,7 +660,7 @@ void SwView::Replace()
             m_pSrchItem->SetCommand( SvxSearchCmd::FIND );
             m_pSrchItem->SetSelection(true);
 
-            //check if it matchs
+            //check if it matches
             SwSearchOptions aOpts( m_pWrtShell, m_pSrchItem->GetBackward() );
             if( ! FUNC_Search(aOpts) )
             {

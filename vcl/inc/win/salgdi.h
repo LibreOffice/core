@@ -164,7 +164,7 @@ private:
     /// Mapping between the GDI position and OpenGL, to use for OpenGL drawing.
     SalTwoRect maRects;
 
-    /// The OpenGL-based SalGraphicsImpl where we will draw.  If null, we ignora the drawing, it means it happened directly to the DC..
+    /// The OpenGL-based SalGraphicsImpl where we will draw.  If null, we ignore the drawing, it means it happened directly to the DC...
     WinOpenGLSalGraphicsImpl *mpImpl;
 
 public:

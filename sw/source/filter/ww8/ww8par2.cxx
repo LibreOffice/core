@@ -3141,7 +3141,7 @@ void WW8TabDesc::AdjustNewBand()
         SetTabBorders(pBox, j);
 
         // #i18128# word has only one line between adjoining vertical cells
-        // we have to mimick this in the filter by picking the larger of the
+        // we have to mimic this in the filter by picking the larger of the
         // sides and using that one on one side of the line (right)
         SvxBoxItem aCurrentBox(sw::util::ItemGet<SvxBoxItem>(*(pBox->GetFrameFormat()), RES_BOX));
         const ::editeng::SvxBorderLine *pLeftLine = aCurrentBox.GetLine(SvxBoxItemLine::LEFT);

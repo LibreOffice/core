@@ -269,7 +269,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
 {
     HWND hWnd = NULL;
     GLWindow glWin;
-    //create a temp windwo to check whether support multi-sample, if support, get the format
+    //create a temp window to check whether support multi-sample, if support, get the format
     if (InitTempWindow(&hWnd, 1, 1, pfd, glWin) < 0)
     {
         SAL_WARN("vcl.opengl", "Can't create temp window to test");

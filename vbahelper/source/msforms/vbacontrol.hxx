@@ -107,7 +107,7 @@ public:
     //XHelperInterface
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
-    //General helper methods for properties (may or maynot be relevant for all
+    //General helper methods for properties (may or may not be relevant for all
     //controls)
     sal_Int32 getBackColor() throw (css::uno::RuntimeException);
     void setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException);

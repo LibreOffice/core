@@ -187,7 +187,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         SetFillColor(aOldLineColor);
         InitFillColor();
 
-        // draw usig a loop; else the topology will paint a PolyPolygon
+        // draw using a loop; else the topology will paint a PolyPolygon
         for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
         {
             ImplDrawPolyPolygonWithB2DPolyPolygon(

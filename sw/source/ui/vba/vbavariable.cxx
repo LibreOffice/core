@@ -57,7 +57,7 @@ SwVbaVariable::getValue() throw ( css::uno::RuntimeException, std::exception )
 void SAL_CALL
 SwVbaVariable::setValue( const uno::Any& rValue ) throw ( css::uno::RuntimeException, std::exception )
 {
-    // FIXME: fail to set the value if the new type of vaue is differenct from the original one.
+    // FIXME: fail to set the value if the new type of value is different from the original one.
     uno::Reference< beans::XPropertySet > xProp( mxUserDefined, uno::UNO_QUERY_THROW );
     xProp->setPropertyValue( maName, rValue );
 }

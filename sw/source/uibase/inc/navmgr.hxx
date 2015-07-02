@@ -26,7 +26,7 @@ class SwNavigationMgr
 private:
     /*
      * List of entries in the navigation history
-     * Entries are SwUnoCrsr because thos gets corrected automatically
+     * Entries are SwUnoCrsr because these gets corrected automatically
      * when nodes are deleted.
      *
      * The navigation history behaves as a stack, to which items are added when we jump to a new position

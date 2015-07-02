@@ -423,7 +423,7 @@ public:
     /**
        Returns numbering rule of this text node.
 
-       @param bInParent     serach in parent attributes, too
+       @param bInParent     search in parent attributes, too
 
        @return numbering rule of this text node or NULL if none is set
      */

@@ -194,7 +194,7 @@ sal_uLong SwASCIIParser::CallParser()
                     // to export the pool defaults (or to be more precise:
                     // the HTML filter is not able to detect whether a pool
                     // default has changed or not. Even a comparison with the
-                    // HTMLi template does not work, because the defaults are
+                    // HTML template does not work, because the defaults are
                     // not copied when a new doc is created. The result of
                     // comparing pool defaults therefore would be that the
                     // defaults are exported always if the have changed for

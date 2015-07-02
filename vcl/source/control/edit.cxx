@@ -1706,7 +1706,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             break;
 
             /* #i101255# disable autocomplete tab forward/backward
-               users expect tab/shif-tab to move the focus to other controls
+               users expect tab/shift-tab to move the focus to other controls
                not suddenly to cycle the autocompletion
             case KEY_TAB:
             {

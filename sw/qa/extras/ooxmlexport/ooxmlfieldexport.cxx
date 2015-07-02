@@ -573,7 +573,7 @@ DECLARE_OOXMLEXPORT_TEST(testEditTime, "fdo81341.docx")
     /* Issue was LO was not able to Import and Export EditTime in seconds format.
      * It was supporting Time in "HH:MM" format. But if DOCX conatins Time in seconds,
      * then LO was not able to display time in "HH:MM:SS" format.
-     * While exporting LO was writing plian text instead of field entry.
+     * While exporting LO was writing plain text instead of field entry.
      */
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
     {

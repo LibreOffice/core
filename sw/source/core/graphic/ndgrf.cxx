@@ -753,7 +753,7 @@ void SwGrfNode::ReleaseLink()
         // information about the original data. Only when this is given will
         // SvXMLGraphicHelper::ImplInsertGraphicURL which is used at export use that type
         // and use the original graphic at export for the ODF, without evtl. recoding
-        // of trhe bitmap graphic data to something without loss (e.g. PNG) but bigger
+        // of the bitmap graphic data to something without loss (e.g. PNG) but bigger
         if(bHasOriginalData)
         {
             // #i15508# if we have the original data at the Graphic, let it survive

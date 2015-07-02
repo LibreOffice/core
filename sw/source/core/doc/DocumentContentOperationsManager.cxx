@@ -3244,7 +3244,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             continue;
         //frames at the last source node are not always copied:
         //- if the node is empty and is the last node of the document or a table cell
-        //  or a text frame then tey have to be copied
+        //  or a text frame then they have to be copied
         //- if the content index in this node is > 0 then paragph and frame bound objects are copied
         //- to-character bound objects are copied if their index is <= nEndContentIndex
         bool bAdd = false;

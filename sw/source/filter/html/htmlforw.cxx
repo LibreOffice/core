@@ -313,7 +313,7 @@ void SwHTMLWriter::OutForm( bool bTag_On, const SwStartNode *pStartNd )
         if( !xNewFormComps.is() && xCurrentFormComps.is() &&
             nCurrentCtrls != xCurrentFormComps->getCount() )
         {
-            // In der Tablle/dem Bereich sollte eine Form aufgemacht werden,
+            // In der Table/dem Bereich sollte eine Form aufgemacht werden,
             // die nicht vollstaendig in der Tabelle liegt. Dan muessen
             // wie die Form jetzt ebenfalls oeffen.
             xNewFormComps = xCurrentFormComps;

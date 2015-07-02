@@ -628,7 +628,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
 }
 
 /**
- * When popping an attribute from the stack, the top mose remaining
+ * When popping an attribute from the stack, the top more remaining
  * attribute in the stack becomes valid. The following function change
  * a font depending on the stack id.
  */

@@ -41,7 +41,7 @@ private:
     PhysicalFontFamilies    maPhysicalFontFamilies;
 
     ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
-    ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyh fallback substitution
+    ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyph fallback substitution
 
 public:
     explicit                PhysicalFontCollection();

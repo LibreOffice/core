@@ -1035,7 +1035,7 @@ void Printer::dispose()
         mpDisplayDev.disposeAndClear();
     else
     {
-        // OutputDevice Dtor is tryig the same thing; that why we need to set
+        // OutputDevice Dtor is trying the same thing; that why we need to set
         // the FontEntry to NULL here
         // TODO: consolidate duplicate cleanup by Printer and OutputDevice
         if ( mpFontEntry )

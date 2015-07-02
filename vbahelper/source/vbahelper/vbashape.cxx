@@ -326,7 +326,7 @@ ScVbaShape::setRotation( double _rotation ) throw (uno::RuntimeException, std::e
 uno::Reference< msforms::XLineFormat > SAL_CALL
 ScVbaShape::getLine() throw (uno::RuntimeException, std::exception)
 {
-    // TODO should ongly return line
+    // TODO should only return line
     return uno::Reference< msforms::XLineFormat >( new ScVbaLineFormat( this, mxContext, m_xShape ) );
 }
 
