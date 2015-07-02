@@ -82,22 +82,7 @@ namespace comphelper
 
         ~NamedValueCollection();
 
-        inline void assign( const ::com::sun::star::uno::Any& i_rWrappedElements )
-        {
-            impl_assign( i_rWrappedElements );
-        }
-
         inline void assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments )
-        {
-            impl_assign( _rArguments );
-        }
-
-        inline void assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments )
-        {
-            impl_assign( _rArguments );
-        }
-
-        inline void assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rArguments )
         {
             impl_assign( _rArguments );
         }

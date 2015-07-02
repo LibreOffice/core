@@ -136,10 +136,6 @@ namespace comphelper
         {
             m_aMutexGuard.clear();
         }
-        inline void reset()
-        {
-            m_aMutexGuard.reset();
-        }
 
     private:
         ::osl::ResettableMutexGuard   m_aMutexGuard;

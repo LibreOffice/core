@@ -41,7 +41,6 @@ namespace comphelper
         {
         }
 
-        inline ::osl::Mutex& getMutex() { return *m_pMutexImpl; }
         inline operator ::osl::Mutex& () { return *m_pMutexImpl; }
 
     private:

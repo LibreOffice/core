@@ -58,7 +58,6 @@ private:
     /// wait until all work is completed, then join all threads
     void        waitAndCleanupWorkers();
 
-    ThreadTask *waitForWork( osl::Condition &rNewWork );
     ThreadTask *popWork();
     void        startWork();
     void        stopWork();
