@@ -395,7 +395,7 @@ public class CheckModuleAPI extends ComplexTestCase
             final String line = outs[i];
             if (line.matches("[0-9]+? of [0-9]+? tests failed"))
             {
-                log.println("mached line: " + line);
+                log.println("matched line: " + line);
                 if (line.matches("0 of [0-9]+? tests failed"))
                 {
                     ok = true;

@@ -186,7 +186,7 @@ public class _XPropertyState extends MultiMethodTest {
                     result = false ;
                 } else {
                     if (ps.length != 1) {
-                        log.println("!!! Array lebgth returned is invalid - " +
+                        log.println("!!! Array length returned is invalid - " +
                              ps.length) ;
                         result = false ;
                     }

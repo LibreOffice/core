@@ -49,7 +49,7 @@ import com.sun.star.uno.UnoRuntime;
   @attention    This class mustn't be threadsafe - because instances of it
                 are used temp. only - not as members. So no concurrent access
                 should occur.
-                Another reason: It wuold be very difficult to safe every
+                Another reason: it would be very difficult to safe every
                 access on our internal member. To do so - we must implement
                 special methods instead of allowing pure member access.
  ************************************************************************-*/

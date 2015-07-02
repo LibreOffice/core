@@ -369,7 +369,7 @@ void XFFont::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute("style:text-blinking", "true" );
     }
 
-    //position & sacle:
+    //position & scale:
     if( ((m_nFlag & XFFONT_FLAG_SCALE) && m_nScale>0 ) ||
         ((m_nFlag & XFFONT_FLAG_POSITION) && m_nPosition != 0)
         )

@@ -83,7 +83,7 @@ public class _XTableChart extends MultiMethodTest {
     /**
      * Test calls the method and stores the range returned. <p>
      * Has <b> OK </b> status if the method returns not
-     * <code>null</code> valuie. <p>
+     * <code>null</code> value. <p>
      */
     public void _getRanges() {
         the_Ranges = oObj.getRanges();

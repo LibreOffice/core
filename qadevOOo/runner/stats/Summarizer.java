@@ -23,7 +23,7 @@ import share.DescEntry;
 
 /**
  *
- * this class summs up the results of the subentries of a given DescEntry<br>
+ * this class adds up the results of the subentries of a given DescEntry
  * and fills the subentries in cases of SKIPPED states
  */
 public class Summarizer

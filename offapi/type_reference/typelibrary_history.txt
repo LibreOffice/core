@@ -82,7 +82,7 @@
   the service nad singleton type info.
   In the same step i have updated the reference type library with the rdb of
   OOo2.0.1 and have patched the following singleton types to ensure that we need
-  only one type ibrary:
+  only one type library:
     - com.sun.star.script.browse.theBrowseNodeFactory
     - com.sun.star.script.provider.theMasterScriptProviderFactory
     - com.sun.star.util.theMacroExpander

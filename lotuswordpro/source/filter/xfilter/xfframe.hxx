@@ -122,7 +122,7 @@ public:
     void    SetY(double y);
 
     /**
-     * @descr   Set frame wieth.
+     * @descr   Set frame width.
      */
     void    SetWidth(double width);
 

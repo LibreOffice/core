@@ -786,7 +786,7 @@ void LwpPara::RegisterStyle()
                     pStyle->SetParentStyleName(m_ParentStyleName);
         m_StyleName = pXFStyleManager->AddStyle(pStyle).m_pStyle->GetStyleName();
     }
-    // maybe useful for futer version
+    // maybe useful for further version
     // deleted because Leader of Table is not supported in this version
     //AddTabStyleForTOC();
 }

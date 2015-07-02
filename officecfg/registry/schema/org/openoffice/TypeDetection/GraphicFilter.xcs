@@ -53,7 +53,7 @@
       </prop>
       <prop oor:name="UIName" oor:localized="true" oor:type="xs:string">
         <info>
-          <desc>Localized name of the filter, whch can be shown at the UI.</desc>
+          <desc>Localized name of the filter, which can be shown at the UI.</desc>
         </info>
       </prop>
     </group>

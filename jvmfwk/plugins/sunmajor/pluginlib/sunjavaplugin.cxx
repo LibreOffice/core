@@ -661,7 +661,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 #ifndef ANDROID
     // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
     // libjdwp.so need a symbol (fork1) from libjvm which it only gets if the jvm is loaded
-    // witd RTLD_GLOBAL. On Solaris libjdwp.so is correctly linked with libjvm.so
+    // with RTLD_GLOBAL. On Solaris libjdwp.so is correctly linked with libjvm.so
     osl::Module moduleRt;
 #if defined(LINUX)
     if (!moduleRt.load(sRuntimeLib, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW))

@@ -214,8 +214,8 @@ public class AsciiReplaceFilter
         /**
         * For external user of us we must provide our internal filter name
         * (which is registered inside configuration package TypeDetection).
-        * User will be able then to ask there for furthe information about us.
-        * Otherwhise we must implement a full featured XPropertySet ...
+        * User will be able then to ask there for further information about us.
+        * Otherwhise we must implement a full featured XPropertySet...
         *
         * @return our internal filter name of configuration
         */
@@ -593,7 +593,7 @@ public class AsciiReplaceFilter
         }
 
         /**
-         * helper function to convert the used StringBuffer into a Strig value.
+         * helper function to convert the used StringBuffer into a String value.
          * And we use this chance to have a look on optional filter options
          * which can invite replacing of strings.
          */

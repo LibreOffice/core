@@ -186,7 +186,7 @@ public class AnyConverter
      *
      * <p>If <em>object</em> is an any with an interface type, then true is also
      * returned if the any contains a null reference. This is because interfaces
-     * are allowed to havea null value contrary to other UNO types.</p>
+     * are allowed to have a null value contrary to other UNO types.</p>
      *
      * @param object the object to check.
      * @return true if the any contains an object.

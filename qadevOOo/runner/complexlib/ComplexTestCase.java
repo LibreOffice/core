@@ -137,13 +137,13 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
 
                 try
                 {
-                    // some tests are very dynamic in its exceution time so that
-                    // a threadTimeOut fails. In this cases the logging mechanisim
+                    // some tests are very dynamic in their execution time so that
+                    // a threadTimeOut fails. In this cases the logging mechanism
                     // is a useful way to detect that a office respective a test
                     // is running and not death.
                     // But way ThreadTimeOut?
                     // There exists a complex test which uses no office. Therefore
-                    // a logging mechanisim to detect a stalled test.
+                    // a logging mechanism to detect a stalled test.
                     int lastPing = -1;
                     int newPing = 0;
 

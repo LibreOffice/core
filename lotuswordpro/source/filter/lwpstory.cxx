@@ -172,7 +172,7 @@ void LwpStory::Parse(IXFStream* pOutputStream)
 
 #include "lwppagelayout.hxx"
 /**************************************************************************
- * @descr:   Set current page layout. If pPageLayout is a mirro page layout,
+ * @descr:   Set current page layout. If pPageLayout is a mirror page layout,
              use odd child page layout as current page layout.
  * @param:
  * @param:
@@ -235,7 +235,7 @@ void LwpStory::SortPageLayout()
         if(pLayout->IsPage())
         {
             LwpLayout::UseWhenType eSectionType = static_cast<LwpPageLayout*>(pLayout)->GetUseWhenType();
-            //for mirror page, the child  is pagelayout
+            //for mirror page, the child is pagelayout
             LwpVirtualLayout* pParent = pLayout->GetParentLayout();
             if(eSectionType != LwpLayout::StartWithinColume && pParent && !pParent->IsPage())
             {

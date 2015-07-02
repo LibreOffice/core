@@ -383,7 +383,7 @@ class SalesFilter implements XActionListener, XPropertyChangeListener, XResetLis
 
         if ( aFilterItems.size() > 10 ) // (6 standard items + 5 user defined items)
         {
-            // the first (and thus oldes) user defined item
+            // the first (and thus oldest) user defined item
             aFilterItems.remove( 6 );
             // keep our date vector synchron
             m_aFilterDates.remove( 6 );

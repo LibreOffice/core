@@ -8,7 +8,7 @@
 #
 
 # wikilinks.py:
-# This throwaway prgram can be used to convert idl_chapter_refs.txt to a
+# This throwaway program can be used to convert idl_chapter_refs.txt to a
 # "fake" IDL file that can be fed to doxygen to get the DevGuide Wiki links.
 
 import sys

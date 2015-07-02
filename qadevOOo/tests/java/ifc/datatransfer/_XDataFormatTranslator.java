@@ -52,7 +52,7 @@ public class _XDataFormatTranslator extends MultiMethodTest {
     /**
      * Gets data flavour from system data type, which was gotten
      * from 'text/html' MIME type. <p>
-     * Has <b>OK</b> status if DataFlavour returned has 'text/hrml' MIME
+     * Has <b>OK</b> status if DataFlavour returned has 'text/html' MIME
      * type.
      */
     public void _getDataFlavorFromSystemDataType() {

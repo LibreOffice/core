@@ -378,7 +378,7 @@ bool BinaryCodec_RCF::startBlock( sal_Int32 nCounter )
     rtlCipherError eResult =
         rtl_cipher_init( mhCipher, rtl_Cipher_DirectionDecode, pnKeyData, RTL_DIGEST_LENGTH_MD5, 0, 0 );
 
-    // rrase key data array and leave
+    // erase key data array and leave
     rtl_secureZeroMemory (pnKeyData, sizeof(pnKeyData));
     return eResult == rtl_Cipher_E_None;
 }

@@ -60,7 +60,7 @@ public class _XFormLayerAccess extends MultiMethodTest {
     }
 
     /**
-     * Test disables the FormDesignMode and calls the mthod. <p>
+     * Test disables the FormDesignMode and calls the method. <p>
      * Has <b> OK </b> status if the method returns
      * a not empty object of kind of com.sun.star.form.XFormController<P>
      * The following method tests are to be completed successfully before :

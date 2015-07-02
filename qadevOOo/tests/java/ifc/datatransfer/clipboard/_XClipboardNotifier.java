@@ -65,7 +65,7 @@ public class _XClipboardNotifier extends MultiMethodTest {
 
     /**
      * Simpliest <code>XTransferable</code> interface implementation
-     * which supports "text/htmp" data type.
+     * which supports "text/html" data type.
      */
     class MyTransferable implements XTransferable {
         DataFlavor[] supportedFlavors;

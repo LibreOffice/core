@@ -202,7 +202,7 @@ public class _XExtendedIndexEntrySupplier extends MultiMethodTest {
 
     /**
      * Helper class to handle the phonetic equivalence of unicode characters
-     * This class delivers an amount oif unicode characters and the equivalent phonetics
+     * This class delivers an amount of unicode characters and the equivalent phonetics
      * for the "getPhoneticCandidate" test. Euivalents are only usable for zh,CN locale.
      */
     public static class UnicodeStringPair {

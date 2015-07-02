@@ -89,7 +89,7 @@ class SimpleStatus {
     }
 
     /**
-     * The constructor initialize state and reson field.
+     * The constructor initialize state and reason field.
      */
     protected SimpleStatus(String runStateString, boolean state) {
         this.state = state;

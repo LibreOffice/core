@@ -647,7 +647,7 @@ public class ConfigExamples
             }
         }
 
-        /// this method is called to report an error during dialog execution to the zuser
+        // this method is called to report an error during dialog execution to the user
         public void informUserOfError(Exception e) {
             System.err.println("ERROR in GridEditor:");
             e.printStackTrace();
