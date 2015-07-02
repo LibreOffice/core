@@ -2341,7 +2341,7 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
     Remove( OUString("Name"), SbxCLASS_DONTCARE );
     Remove( OUString("Parent"), SbxCLASS_DONTCARE );
 
-    // check the type of the ojekts
+    // check the type of the objects
     TypeClass eType = aUnoObj_.getValueType().getTypeClass();
     Reference< XInterface > x;
     if( eType == TypeClass_INTERFACE )

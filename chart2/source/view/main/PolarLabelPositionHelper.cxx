@@ -72,7 +72,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
 
     double fAngleDegree = fUnitCircleStartAngleDegree + fUnitCircleWidthAngleDegree/2.0;
     double fRadius = 0.0;
-    if( !bCenter ) //e.g. for pure pie chart(one ring only) or for angle axis of polyar coordinate system
+    if( !bCenter ) //e.g. for pure pie chart(one ring only) or for angle axis of polar coordinate system
         fRadius = fUnitCircleOuterRadius;
     else
         fRadius = fUnitCircleInnerRadius + (fUnitCircleOuterRadius-fUnitCircleInnerRadius)/2.0 ;

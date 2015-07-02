@@ -142,7 +142,7 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitIncrementData
     distance between two neighboring main tickmarks is divided for positioning
     of further sub tickmarks. Every following SubIncrement determines the
     positions of subsequent tickmarks in relation to their parent tickmarks
-    iven by the preceding SubIncrement.</p>
+    given by the preceding SubIncrement.</p>
     */
     ::std::vector< ExplicitSubIncrement > SubIncrements;
 };

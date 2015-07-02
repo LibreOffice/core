@@ -46,7 +46,7 @@ class VCLXAccessibleBox
 public:
     enum BoxType {COMBOBOX, LISTBOX};
 
-    /** The constructor is initialized with the box type whitch may be
+    /** The constructor is initialized with the box type which may be
         either <const>COMBOBOX</const> or <const>LISTBOX</const> and a flag
         indicating whether the box is a drop down box.
     */

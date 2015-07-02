@@ -1358,7 +1358,7 @@ namespace basegfx
             }
             else
             {
-                // no bezier, reset control poins at rTarget
+                // no bezier, reset control points at rTarget
                 rTarget.setControlPointA(rTarget.getStartPoint());
                 rTarget.setControlPointB(rTarget.getEndPoint());
             }

@@ -62,7 +62,7 @@ namespace basegfx
             }
             else
             {
-                // TODO(P1): Maybe use glibc's sincos here (though
+                // TODO(P1): Maybe use glibc's SinCos here (though
                 // that's kinda non-portable...)
                 o_rSin = sin(fRadiant);
                 o_rCos = cos(fRadiant);

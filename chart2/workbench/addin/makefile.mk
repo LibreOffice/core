@@ -36,7 +36,7 @@ INCPRE+=$(UNOUCROUT)
 
 # --- Types -------------------------------------
 
-# comprehensive type info, so rdb needn't be installed
+# comprehensive type info, so rdb need not to be installed
 # CPPUMAKERFLAGS*=-C
 
 # UNOTYPES=\
