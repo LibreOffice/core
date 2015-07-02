@@ -273,7 +273,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
 
     // The SwLineLayout is an exception to this, which splits at the first
     // portion change.
-    // Here inly the other way around:
+    // Here only the other way around:
     if( rInf.GetLast() == pCurr )
     {
         if( pPor->InTextGrp() && !pPor->InExpGrp() )
@@ -304,7 +304,7 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
                                     SwLinePortion *pPor ) const
 {
     // The new portion is inserted, but everything's different for
-    // LineLayout ...
+    // LineLayout...
     if( pPor == pCurr )
     {
         if ( pCurr->GetPortion() )
@@ -2748,7 +2748,7 @@ namespace {
             SwRect aRect;
 
             // Note: GetChareRect is not const. It definitely changes the
-            // bMulti flag. We have to save and resore the old value.
+            // bMulti flag. We have to save and restore the old value.
             bool bOldMulti = txtFormatInfo.IsMulti();
             rThis.GetCharRect( &aRect, nReformat );
             txtFormatInfo.SetMulti( bOldMulti );

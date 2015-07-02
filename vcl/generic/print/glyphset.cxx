@@ -462,7 +462,7 @@ void GlyphSet::DrawGlyphs(
         aGlyphSet.insert (pGlyphSetID[nChar]);
     }
 
-    // loop over all glyph sets to detect substrings that can be xshown together
+    // loop over all glyph sets to detect substrings that can be shown together
     // without changing the postscript font
     sal_Int32 *pDeltaSubset = static_cast<sal_Int32*>(alloca (nLen * sizeof(sal_Int32)));
     unsigned char *pGlyphSubset = static_cast<unsigned char*>(alloca (nLen * sizeof(unsigned char)));

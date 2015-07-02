@@ -768,7 +768,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     if( WEAK == g_pBreakIt->GetBreakIter()->getScriptType( rText, nChg ) )
     {
         // If the beginning of the current group is weak, this means that
-        // all of the characters in this grounp are weak. We have to assign
+        // all of the characters in this group are weak. We have to assign
         // the scripts to these characters depending on the fonts which are
         // set for these characters to display them.
         sal_Int32 nEnd =

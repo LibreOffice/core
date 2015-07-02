@@ -44,7 +44,7 @@ namespace ww
     {
         /*
          Massage a single argument and a ret value into two arguments to allow
-         a determination if the dest type is the same as the sourct type
+         a determination if the dest type is the same as the source type
         */
         return checking_cast(in, Ret());
     }

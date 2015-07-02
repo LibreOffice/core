@@ -446,7 +446,7 @@ long SwWrtShell::ExtSelWrd(const Point *pPt, bool )
     default:    bMoveCrsr = false;  break;
     }
 
-    SwCrsrShell::Pop( false );              // retore the saved cursor
+    SwCrsrShell::Pop( false );              // restore the saved cursor
 
     if( bMoveCrsr )
     {

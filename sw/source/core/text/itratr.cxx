@@ -205,7 +205,7 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
         while ( ( nEndIndex < pHints->GetEndCount() ) &&
                 (*(pTextAttr=pHints->GetEnd(nEndIndex))->GetAnyEnd()<=nNewPos))
         {
-            // Close the TextAttributes, whoes StartPos were before or at
+            // Close the TextAttributes, whose StartPos were before or at
             // the old nPos and are currently open
             if (pTextAttr->GetStart() <= nPos)  Rst( pTextAttr );
             nEndIndex++;

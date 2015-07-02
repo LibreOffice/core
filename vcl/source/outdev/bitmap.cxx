@@ -1011,7 +1011,7 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const Al
         }
 
         // #110958# Disable alpha VDev, we're doing the necessary
-        // stuff explicitly furher below
+        // stuff explicitly further below
         if (mpAlphaVDev)
             mpAlphaVDev = NULL;
 

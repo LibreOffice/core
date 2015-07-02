@@ -47,7 +47,7 @@ published interface XUriReferenceFactory;
    &ldquo;<code>+</code>&rdquo;, &ldquo;<code>-</code>&rdquo;, and
    &ldquo;<code>.</code>&rdquo;.  A scheme&nbsp;<var>s</var> is transformed into
    a string&nbsp;<var>s</var>&prime; character-by-character, by translating
-   Lating capital letters to their small counterparts, translating
+   Latin capital letters to their small counterparts, translating
    &ldquo;<code>+</code>&rdquo; to &ldquo;<code>PLUS</code>&rdquo;,
    &ldquo;<code>-</code>&rdquo; to &ldquo;<code>HYPHEN</code>&rdquo;,
    &ldquo;<code>.</code>&rdquo; to &ldquo;<code>DOT</code>&rdquo;, and copying

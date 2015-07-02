@@ -247,7 +247,7 @@ public:
      *
      * @param rSet
      * output parameter - the SfxItemSet where the automatic paragraph format attribute(s) will be store.
-     * The attributes aren't invalidated or cleared if the function reach the getMaxLookup limite.
+     * The attributes aren't invalidated or cleared if the function reach the getMaxLookup limit.
      *
      * @return true if the function inspect all the nodes point by the pPaM parameter,
      * false if the function reach the limit of getMaxLookup number of nodes inspected.

@@ -63,7 +63,7 @@ using namespace ::com::sun::star::uno;
 
 Point SwGetChartDialogPos( const vcl::Window *pParentWin, const Size& rDialogSize, const Rectangle& rLogicChart )
 {
-    // positioning code according to spepc; similar to Calc fuins2.cxx
+    // positioning code according to spec; similar to Calc fuins2.cxx
     Point aRet;
 
     OSL_ENSURE( pParentWin, "Window not found" );

@@ -643,7 +643,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelect, ListBox *, pBox )
                         break;
 
                 if( MAXLEVEL == n )
-                    // it was a outline leveld name and the current entries is zero.
+                    // it was an outline level name and the current entries is zero.
                     pCollNames[ i ] = sOldName;
             }
 

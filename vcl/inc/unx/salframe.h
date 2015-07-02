@@ -56,7 +56,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public X11WindowProvider
     friend class vcl_sal::GnomeWMAdaptor;
 
     X11SalFrame*    mpParent;             // pointer to parent frame
-                                          // which should never obscur this frame
+                                          // which should never obscure this frame
     bool            mbTransientForRoot;
     std::list< X11SalFrame* > maChildren; // List of child frames
 

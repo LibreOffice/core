@@ -2765,7 +2765,7 @@ void SwTabFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAtt
                     // - Consider left indent given by left line attributes.
                     // - Consider negative left indent.
                     // wished left indent determined by wished table width and
-                    // right offset given by surrounding fyl frames on the right:
+                    // right offset given by surrounding fly frames on the right:
                     const SwTwips nWishLeft = nMax - nWishedTableWidth - nRightOffset;
                     if ( nLeftOffset > 0 )
                     {
@@ -5313,7 +5313,7 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
             // actually is determined by a lower cell with rowspan = -1. In this case we should not
             // just return the height of the first line. Basically we need to get the height of the
             // line as it would be on the last page. Since this is quite complicated to calculate,
-            // we olny calculate the height of the first line.
+            // we only calculate the height of the first line.
             if ( pFirstRow->GetPrev() &&
                  static_cast<SwRowFrm*>(pFirstRow->GetPrev())->IsRowSpanLine() )
             {

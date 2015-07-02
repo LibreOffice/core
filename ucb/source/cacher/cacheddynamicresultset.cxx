@@ -124,7 +124,7 @@ XSERVICEINFO_NOFACTORY_IMPL_1( CachedDynamicResultSet,
                             CACHED_DRS_SERVICE_NAME );
 
 
-// own methds. ( inherited )
+// own methods. ( inherited )
 
 //virtual
 void SAL_CALL CachedDynamicResultSet
