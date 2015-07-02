@@ -2960,7 +2960,7 @@ SdrObject* XclImpPictureObj::DoCreateSdrObj( XclImpDffConverter& rDffConv, const
     // graphic at a base level  but unlikely, normally controls have a valid
     // preview in the IMGDATA record ( see below )
     // It might be possible to push such an imported graphic up to this
-    // XclImpPictureObj instance but there are somany layers of indirection I
+    // XclImpPictureObj instance but there are so many layers of indirection I
     // don't see an easy way. This way at least ensures that we can
     // avoid a 'blank' shape that can result from a failed control import
     if ( !xSdrObj && IsOcxControl() && maGraphic.GetType() == GRAPHIC_NONE )

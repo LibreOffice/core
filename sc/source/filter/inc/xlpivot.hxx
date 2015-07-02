@@ -392,7 +392,7 @@ public:
     /** Returns the text representation of the item. */
     inline const OUString& ConvertToText() const { return maText; }
 
-    /** Returns true, if the passed iterm equals this item. */
+    /** Returns true, if the passed term equals this item. */
     bool                IsEqual( const XclPCItem& rItem ) const;
 
     /** Returns true, if the item type is 'empty'. */

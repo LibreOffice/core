@@ -74,9 +74,9 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
     ScDocument* pDoc = rViewData.GetDocument();
     if ( pDoc )
     {
-        // rInOutPos mightn't be where you think it is if there is zoom
+        // rInOutPos might not be where you think it is if there is zoom
         // involved. Lets calculate where aPos would be at 100% zoom
-        // that's the actual correct position for the object ( when you
+        // that's the actual correct position for the object (when you
         // restore the zoom.
         bool bNegative = pDoc->IsNegativePage(pView->GetTab());
         Rectangle aObjRect( rInOutPos, rInOutPos );

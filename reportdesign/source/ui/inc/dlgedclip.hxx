@@ -29,7 +29,7 @@ namespace rptui
 // OReportExchange
 
 /** \class OReportExchange
- * \brief defines a clipboard fromat for copying selection elements.
+ * \brief defines a clipboard format for copying selection elements.
  * \ingroup reportdesign_source_ui_report
  *
  *

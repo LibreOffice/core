@@ -1234,7 +1234,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     long nTop    = 0;
     long nBottom = 0;
 
-    //  aFrameRect - ouside around frame, without shadow
+    //  aFrameRect - outside around frame, without shadow
     if ( pShadow && pShadow->GetLocation() != SVX_SHADOW_NONE )
     {
         nLeft   += (long) ( pShadow->CalcShadowSpace(SvxShadowItemSide::LEFT)   * nScaleX );
@@ -1852,7 +1852,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData
     static_cast<const ScPatternAttr&>(pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont( aMarkFont, eColorMode );
     pDev->SetFont( aMarkFont );
     long nMarkLen = pDev->GetTextWidth(OUString("GW99999:"));
-    // without Space-Char, because it rarle arrives there
+    // without Space-Char, because it rarely arrives there
 
     Size aDataSize = aPageRect.GetSize();
     if ( nMarkLen > aDataSize.Width() / 2 )     // everything much too small?

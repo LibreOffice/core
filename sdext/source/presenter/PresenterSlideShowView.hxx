@@ -55,7 +55,7 @@ namespace {
         > PresenterSlideShowViewInterfaceBase;
 }
 
-/** Life view in a secondary windo of a full screen slide show.
+/** Life view in a secondary window of a full screen slide show.
 */
 class PresenterSlideShowView
     : private ::boost::noncopyable,

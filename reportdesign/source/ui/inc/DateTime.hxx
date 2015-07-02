@@ -56,7 +56,7 @@ class ODateTimeDialog : public ModalDialog
                                             m_xHoldAlive;
     ::com::sun::star::lang::Locale          m_nLocale;
 
-    /** returns the frmat string
+    /** returns the format string
     *
     * \param _nNumberFormatKey the number format key
     * \param _xFormats

@@ -2550,7 +2550,7 @@ void ScDocShell::PrepareReload()
 
     //  The Disconnect of DDE Links can trigger a Reschedule.
     //  If the DDE Links are not deleted before the Document dtor,
-    //  the DDE Link Update for this Document can be triggered ofrom this Reschedule on Reload.
+    //  the DDE Link Update for this Document can be triggered from this Reschedule on Reload.
     //  This causes a hang.
     //
     //  Thus: Disconnect the DDE Links of the old Document before Reload

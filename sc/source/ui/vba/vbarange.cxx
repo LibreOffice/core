@@ -3341,7 +3341,7 @@ void updateTableSortField( const uno::Reference< table::XCellRange >& xParentRan
 
         table::CellRangeAddress colRowKeyAddress = colRowRange.getCellRangeAddressable()->getRangeAddress();
 
-        // make sure that upper left poing of key range is within the
+        // make sure that upper left point of key range is within the
         // parent range
         if (  ( !bIsSortColumn && colRowKeyAddress.StartColumn >= parentRangeAddress.StartColumn &&
             colRowKeyAddress.StartColumn <= parentRangeAddress.EndColumn ) || ( bIsSortColumn &&

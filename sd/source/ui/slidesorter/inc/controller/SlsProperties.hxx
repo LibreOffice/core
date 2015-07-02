@@ -65,7 +65,7 @@ public:
     bool IsCenterSelection() const { return mbIsCenterSelection;}
     void SetCenterSelection (const bool bIsCenterSelection);
 
-    /** When this mehod returns <TRUE/> then the view may try to change the
+    /** When this method returns <TRUE/> then the view may try to change the
         visible area by scrolling it smoothly on the screen.  Experimental.
         Default value is <FALSE/>.
     */

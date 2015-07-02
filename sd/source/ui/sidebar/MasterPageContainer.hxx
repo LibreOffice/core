@@ -147,7 +147,7 @@ public:
         (asynchronously) for expensive PreviewProviders.
         Call GetPreviewState() to find out if that is necessary.
         @param aToken
-            This token specifies for which master page to return the prview.
+            This token specifies for which master page to return the preview.
             Tokens are returned for example by the GetTokenFor...() methods.
         @return
             The returned image is the requested preview or a substitution.
