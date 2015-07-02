@@ -104,24 +104,6 @@ namespace basegfx
             return mnZ;
         }
 
-        /// set X-Coordinate of 3D Tuple
-        void setX(sal_Int32 nX)
-        {
-            mnX = nX;
-        }
-
-        /// set Y-Coordinate of 3D Tuple
-        void setY(sal_Int32 nY)
-        {
-            mnY = nY;
-        }
-
-        /// set Z-Coordinate of 3D Tuple
-        void setZ(sal_Int32 nZ)
-        {
-            mnZ = nZ;
-        }
-
         /// Array-access to 3D Tuple
         const sal_Int32& operator[] (int nPos) const
         {
