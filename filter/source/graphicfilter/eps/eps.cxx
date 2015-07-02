@@ -58,7 +58,7 @@ using namespace ::com::sun::star::uno;
 #define PS_RET              2
 #define PS_WRAP             4
 
-// -----------------------------Feld-Typen-------------------------------
+// -----------------------------field-types------------------------------
 
 struct ChrSet
 {
@@ -240,7 +240,7 @@ public:
     ~PSWriter();
 };
 
-//========================== Methoden von PSWriter ==========================
+//========================== methods from PSWriter ==========================
 
 
 
@@ -2221,7 +2221,7 @@ void PSWriter::ImplSetAttrForText( const Point& rPoint )
         mpPS->WriteCharPtr( "sf " );
     }
     if ( eTextAlign != ALIGN_BASELINE )
-    {                                                       // PostScript kennt kein FontAlignment
+    {                                                       // PostScript does not know about FontAlignment
         if ( eTextAlign == ALIGN_TOP )                      // -> so I assume that
             aPoint.Y() += ( aSize.Height() * 4 / 5 );       // the area under the baseline
         else if ( eTextAlign == ALIGN_BOTTOM )              // is about 20% of the font size
@@ -2845,7 +2845,7 @@ bool PSWriter::ImplGetBoundingBox( double* nNumb, sal_uInt8* pSource, sal_uLong 
     return bRetValue;
 }
 
-//================== GraphicExport - die exportierte Funktion ================
+//================== GraphicExport - the exported function ===================
 
 // this needs to be kept in sync with
 // ImpFilterLibCacheEntry::GetImportFunction() from
