@@ -362,7 +362,6 @@ namespace cmis
                         ONEDRIVE_SCOPE, ONEDRIVE_REDIRECT_URI,
                         ONEDRIVE_CLIENT_ID, ONEDRIVE_CLIENT_SECRET ) );
                 }
-
                 m_pSession = libcmis::SessionFactory::createSession(
                         OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
                         rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ), false, oauth2Data );
@@ -372,7 +371,8 @@ namespace cmis
                                         uno::Sequence< uno::Any >( 0 ),
                                         xEnv,
                                         OUString( ) );
-                m_pProvider->registerSession( sSessionId, m_pSession );
+                else
+                    m_pProvider->registerSession( sSessionId, m_pSession );
             }
             else
             {
