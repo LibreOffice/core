@@ -714,8 +714,8 @@ bool SvtFileDialog::createNewUserFilter( const OUString& _rNewFilter, bool _bAll
         EraseDefaultExt();
     else
         SetDefaultExt( _rNewFilter.copy( 2 ) );
-        // TODO: this is nonsense. In the whole file there are a lotta places where we assume that a user filter
-        // is always "*.<something>". But changing this would take some more time than I have now ...
+        // TODO: this is nonsense. In the whole file there are a lot of places where we assume that a user filter
+        // is always "*.<something>". But changing this would take some more time than I have now...
 
     // now, the default extension is set to the one of the user filter (or empty)
     // if the former is not allowed (_bAllowUserDefExt = <FALSE/>), we have to use the ext of the current filter

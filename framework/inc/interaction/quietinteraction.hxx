@@ -86,7 +86,7 @@ class QuietInteraction : public  ::cppu::WeakImplHelper1<
             @short      return the handled interaction request
             @descr      We saved any getted interaction request internally.
                         May the outside user of this class is interessted
-                        on that. Especially we gotted an unknown interaction
+                        on that. Especially we got an unknown interaction
                         and aborted it hard.
 
             @return     [com.sun.star.uno.Any]

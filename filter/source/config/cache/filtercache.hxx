@@ -260,10 +260,10 @@ class FilterCache : public BaseLock
             @descr  Its not allowed to do anything here ...
                     especially is forbidden to start operations,
                     which needs a FilterCache instance too!
-                    Why? Because thie FilterCache instance will be
+                    Why? Because this FilterCache instance will be
                     used as a singleton! And if during this ctor any
                     action related to this FilterCache singleton is
-                    started ... a race will be the result.
+                    started... a race will be the result.
 
                     The first method after construction of a new
                     singleton reference should be "load()". There

@@ -420,7 +420,7 @@ WW8ReadFieldParams::WW8ReadFieldParams( const OUString& _rData )
 {
 
     /*
-        First look for an opening bracket or a space or a quatation mark or a backslash, so that the field (i.e. INCLUDEPICTURE or EINFUEGENGRAFIK or...) gets oread over
+        First look for an opening bracket or a space or a question mark or a backslash, so that the field (i.e. INCLUDEPICTURE or EINFUEGENGRAFIK or...) gets read over
     */
     const sal_Int32 nLen = aData.getLength();
 

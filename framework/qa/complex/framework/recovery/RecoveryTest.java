@@ -218,7 +218,7 @@ public class RecoveryTest extends ComplexTestCase {
             // if the office crashes, the recovery feature needs some time
             // to save all docs. Therefore the recovery dialog could need some
             // time to pop up.
-            log.println("wating for recovery dialog...");
+            log.println("waiting for recovery dialog...");
 
             int counter = 0;
             int maximum = param.getInt(PropertyName.THREAD_TIME_OUT) / utils.DEFAULT_SHORT_WAIT_MS;

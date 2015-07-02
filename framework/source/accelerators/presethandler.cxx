@@ -332,7 +332,7 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
     try
     {
 
-    // a) inside share layer we should not create any new structures ... We jave to use
+    // a) inside share layer we should not create any new structures... We have to use
     //    existing ones only!
     // b) inside user layer we can (SOFT mode!) but sometimes we should not (HARD mode!)
     //    create new empty structures. We should preferr using of any existing structure.

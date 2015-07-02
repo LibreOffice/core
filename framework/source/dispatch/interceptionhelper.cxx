@@ -228,7 +228,7 @@ void SAL_CALL InterceptionHelper::disposing(const css::lang::EventObject& aEvent
     // SAFE ->
     SolarMutexResettableGuard aReadLock;
 
-    // check calli ... we accept such disposing call's only from our onwer frame.
+    // check call... we accept such disposing calls only from our owner frame.
     css::uno::Reference< css::frame::XFrame > xOwner(m_xOwnerWeak.get(), css::uno::UNO_QUERY);
     if (aEvent.Source != xOwner)
         return;

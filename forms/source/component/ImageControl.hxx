@@ -191,7 +191,7 @@ private:
     void    implClearGraphics( bool _bForce );
     bool    implInsertGraphics();
 
-    /** determines whether the control does currently have an empty grahic set
+    /** determines whether the control does currently have an empty graphic set
     */
     bool    impl_isEmptyGraphics_nothrow() const;
 };

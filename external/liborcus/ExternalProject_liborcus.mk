@@ -24,7 +24,7 @@ $(eval $(call gb_ExternalProject_register_targets,liborcus,\
 ))
 
 # Must be built with debug GNU C++ library if --enable-dbgutil has
-# caused the LO code to be built thusly.
+# caused the LO code to be built thus.
 
 # The LIBS setting for Android is needed to get the orcus-xml-dump
 # executable to build successfully. We obviously don't actually need

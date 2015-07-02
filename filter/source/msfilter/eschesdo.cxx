@@ -1189,7 +1189,7 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
         }
         else
         {
-            // if it's no group, use position and size directly, roated/sheared or not
+            // if it's no group, use position and size directly, rotated/sheared or not
             const Point aOldP(mXShape->getPosition().X, mXShape->getPosition().Y);
             const Size aOldS(mXShape->getSize().Width, mXShape->getSize().Height);
 

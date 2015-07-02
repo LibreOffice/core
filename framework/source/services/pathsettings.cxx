@@ -1064,7 +1064,7 @@ void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
             rPath.lUserPaths.erase(pItem);
     }
 
-    // Erase itsems not in lList from the user path list.
+    // Erase items not in lList from the user path list.
     pIt = rPath.lUserPaths.begin();
     while ( pIt != rPath.lUserPaths.end() )
     {

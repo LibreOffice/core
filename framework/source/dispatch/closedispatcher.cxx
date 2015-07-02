@@ -193,10 +193,10 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // OK - URLs are the right ones.
     // But we can't execute synchronously :-)
     // May we are called from a generic key-input handler,
-    // which isn't aware that this call kill its own environment ...
+    // which isn't aware that this call kill its own environment...
     // Do it asynchronous everytimes!
 
-    // But dont forget to hold usself alive.
+    // But don't forget to hold ourselves alive.
     // We are called back from an environment, which doesn't know an uno reference.
     // They call us back by using our c++ interface.
 

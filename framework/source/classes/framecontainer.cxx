@@ -102,7 +102,7 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
     @param      xFrame
                     reference to the queried frame
 
-    @return     <TRUE/> if frame is oart of this container
+    @return     <TRUE/> if frame is part of this container
                 <FALSE/> otherwise
 
     @threadsafe yes
@@ -149,7 +149,7 @@ sal_uInt32 FrameContainer::getCount() const
                 So it will be marked as deprecatedf and should be replaced by "getAllElements()".
 
     @param      nIndex
-                    a valud between 0 and (getCount()-1) to address one container item
+                    a value between 0 and (getCount()-1) to address one container item
 
     @return     a reference to a frame inside the container, which match with given index
 
@@ -213,9 +213,9 @@ void FrameContainer::setActive( const css::uno::Reference< css::frame::XFrame >&
 }
 
 /**-***************************************************************************************************************
-    @short      return sthe current active frame of this container
+    @short      return the current active frame of this container
     @descr      Value can be null in case the frame was removed from the container and nobody
-                from outside decide which of all others should be the new one ...
+                from outside decide which of all others should be the new one...
 
     @return     a reference to the current active frame
                 Value can be NULL!

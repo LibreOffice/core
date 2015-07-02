@@ -6261,7 +6261,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* pVisA
                 pStData2->ResetError();
             else
                 bOk = GetBLIPDirect( *pStData2, rData, pVisArea );
-            // restore olf FilePos of the second data stream
+            // restore of FilePos of the second data stream
             pStData2->Seek( nOldPosData2 );
         }
         // restore old FilePos of the stream(s)

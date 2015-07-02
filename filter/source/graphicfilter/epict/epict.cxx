@@ -999,7 +999,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                     nx = 0;
                     while ( nx < nWidth )
                     {
-                        // look up the position of 3 equal bytes and seve it in nEqu3
+                        // look up the position of 3 equal bytes and save it in nEqu3
                         // if it's not found, set nEqu3=nWidth
                         // if it's found save the value of the bytes in nEquData
                         nEqu3 = nx;

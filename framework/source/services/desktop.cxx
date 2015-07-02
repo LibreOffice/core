@@ -1185,7 +1185,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
 
     // Don't check incoming request!
     // If somewhere starts interaction without right parameter - he made something wrong.
-    // loadComponentFromURL() waits for thjese event - otherwise it yield for ever!
+    // loadComponentFromURL() waits for these event - otherwise it yield for ever!
 
     // get packed request and work on it first
     // Attention: Don't set it on internal member BEFORE interaction is finished - because

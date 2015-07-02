@@ -32,7 +32,7 @@
 
 // Entry in the Huffman table:
 struct CCIHuffmanTableEntry {
-    sal_uInt16 nValue;    // The data vlaue.
+    sal_uInt16 nValue;    // The data value.
     sal_uInt16 nCode;     // The code through which the data value is represented.
     sal_uInt16 nCodeBits; // Size of the code in bits.
 };

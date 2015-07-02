@@ -472,7 +472,7 @@ void NewToolbarController::functionExecuted( const OUString &rCommand )
     Then we return the private:factory/ URL of the default factory.
 
     @param  rPopupMenu
-                pounts to the popup menu, on which item we try to locate the given URL
+                points to the popup menu, on which item we try to locate the given URL
                 Can be NULL! Search will be suppressed then.
 
     @param  sURL

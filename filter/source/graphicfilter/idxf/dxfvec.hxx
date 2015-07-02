@@ -79,7 +79,7 @@ public:
     // vector product
     DXFVector   operator *  (const DXFVector & rV) const;
 
-    // skalar product:
+    // scalar product:
     double SProd(const DXFVector & rV) const;
 
     // multiplication with scalar:

@@ -66,7 +66,7 @@ class LoadDispatcher : public  ::cppu::WeakImplHelper2< css::frame::XNotifyingDi
         /** @short  creates a new instance and initialize it with all necessary parameters.
 
             @descr  Every instance of such LoadDispatcher can be used for the specified context only.
-                    That means: It can be used to load any further requested content into tzhe here(!)
+                    That means: it can be used to load any further requested content into the here(!)
                     specified target frame.
 
             @param  xContext

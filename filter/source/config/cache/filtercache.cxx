@@ -193,7 +193,7 @@ void FilterCache::takeOver(const FilterCache& rClone)
     // renew all dependencies and optimizations
     // Because we can't be sure, that changed filters on one clone
     // and changed types of another clone work together.
-    // But here we can check against the lates changes ...
+    // But here we can check against the later changes...
     impl_validateAndOptimize();
     // <- SAFE ----------------------------------
 }

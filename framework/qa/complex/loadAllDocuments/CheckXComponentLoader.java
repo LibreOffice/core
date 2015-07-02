@@ -418,7 +418,7 @@ public class CheckXComponentLoader
 
     /**
      * Loads one URL with the given parameters using the method
-     * loadComponentFromURL(). Further it's possible to specify, whch result is
+     * loadComponentFromURL(). Further it's possible to specify, which result is
      * required and we check internally if it was reached. Logging of errors
      * and success stories is done inside this method too. Of course we catch
      * all possible exceptions and try to leave the office without any forgotten

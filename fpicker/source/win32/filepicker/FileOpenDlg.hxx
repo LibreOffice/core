@@ -28,7 +28,7 @@
 #include "platform_xp.h"
 #include "getfilenamewrapper.hxx"
 
-// because we don't want to import the new W2k platform skd
+// because we don't want to import the new W2k platform sdk
 // into our build environment if have stolen the definition
 // for the new OPENFILENAME structure from the new headers
 

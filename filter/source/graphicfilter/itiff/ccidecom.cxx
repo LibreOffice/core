@@ -813,7 +813,7 @@ bool CCIDecompressor::Read2DTag()
 {
     sal_uInt8 nByte;
 
-    // read abit and return sal_True if it's 0, otherwise return sal_False
+    // read a bit and return sal_True if it's 0, otherwise return sal_False
     if (nInputBitsBufSize==0) {
         pIStream->ReadUChar( nByte );
         if ( nOptions & CCI_OPTION_INVERSEBITORDER )

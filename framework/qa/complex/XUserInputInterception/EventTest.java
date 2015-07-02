@@ -92,7 +92,7 @@ public class EventTest {
 
 
     /**
-     * creates the mebmer <CODE>m_xMSF</CODE> and <CODE>m_SOF</CODE>
+     * creates the member <CODE>m_xMSF</CODE> and <CODE>m_SOF</CODE>
      * @short Create the environment for following tests.
      * @descr create an empty test frame, where we can load
      * different components inside.
