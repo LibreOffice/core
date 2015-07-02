@@ -286,7 +286,7 @@ namespace pdfi
 
 extern FILE* g_binary_out;
 
-// note: if you ever hcange Output_t, please keep in mind that the current code
+// note: if you ever change Output_t, please keep in mind that the current code
 // relies on it being of 8 bit size
 typedef Guchar Output_t;
 typedef std::vector< Output_t > OutputBuffer;

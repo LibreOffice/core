@@ -74,7 +74,7 @@ void ScChartListener::ExternalRefListener::notify(sal_uInt16 nFileId, ScExternal
         {
             if (maFileIds.count(nFileId))
                 // We are listening to this external document.  Send an update
-                // requst to the chart.
+                // request to the chart.
                 mrParent.SetUpdateQueue();
         }
         break;

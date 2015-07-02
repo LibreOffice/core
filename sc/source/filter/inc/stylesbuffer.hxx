@@ -125,7 +125,7 @@ public:
     /** Appends a new color from the passed RGBCOLOR record. */
     void                importPaletteColor( SequenceInputStream& rStrm );
 
-    /** Rturns the RGB value of the color with the passed index. */
+    /** Returns the RGB value of the color with the passed index. */
     sal_Int32           getColor( sal_Int32 nPaletteIdx ) const;
 
 private:

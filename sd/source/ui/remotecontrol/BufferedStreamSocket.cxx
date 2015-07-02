@@ -85,7 +85,7 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
 {
     while ( true )
     {
-        // Process buffer first incase data already present.
+        // Process buffer first in case data already present.
         vector<char>::iterator aIt;
         if ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
              != aBuffer.end() )

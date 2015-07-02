@@ -209,7 +209,7 @@ void ScInterpreter::ScWebservice()
  followed by hex digits.
  It is encoded the same way that the posted data from a WWW form is encoded,
  that is the same way as in application/x-www-form-urlencoded media type and
- as pwer RFC 3986.
+ as per RFC 3986.
 
  @see fdo#76870
 */

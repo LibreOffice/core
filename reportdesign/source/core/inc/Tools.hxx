@@ -52,7 +52,7 @@ namespace reportdesign
     /** uses the XChild interface to get the section from any child of it.
      *
      * \param _xReportComponent A report component which is a child of the section.
-     * \return The sectin where this report component resists in.
+     * \return The section where this report component resists in.
      */
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> lcl_getSection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
 

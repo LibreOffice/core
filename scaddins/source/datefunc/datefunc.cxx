@@ -797,7 +797,7 @@ sal_Int32 SAL_CALL ScaDateAddIn::getDaysInYear(
  * Get number of weeks in the year for a date
  *
  * Most years have 52 weeks, but years that start on a Thursday
- * and leep years that start on a Wednesday have 53 weeks
+ * and leapyears that start on a Wednesday have 53 weeks
  *
  * The International Standard IS-8601 has decreed that Monday
  * shall be the first day of the week.

@@ -187,7 +187,7 @@ private:
         @EventListenerHdl
             The event listener handler
         @VclSimpleEvent *
-            a poiter to a VCLSimpleEvent (see vcl/vclevent.hxx )
+            a pointer to a VCLSimpleEvent (see vcl/vclevent.hxx )
     */
     DECL_STATIC_LINK( SdModule, EventListenerHdl, VclSimpleEvent* );
 

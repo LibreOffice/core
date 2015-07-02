@@ -1702,7 +1702,7 @@ bool ScGridWindow::IsCellCoveredByText(SCsCOL nPosX, SCsROW nPosY, SCTAB nTab, S
             break;
     }
 
-    // the inital cell already contains text
+    // the initial cell already contains text
     if (nNonEmptyX == nPosX)
     {
         rTextStartPosX = nNonEmptyX;

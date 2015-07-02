@@ -224,7 +224,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         {
             bManualBreak = (nY == nNextManualBreak);
             if (nY >= nNextManualBreak)
-                // Query the next menual break position.
+                // Query the next manual break position.
                 nNextManualBreak = GetNextManualBreak(nY+1);
         }
 

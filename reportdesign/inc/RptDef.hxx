@@ -95,7 +95,7 @@ public:
 REPORTDESIGN_DLLPUBLIC sal_uInt16 getObjectType(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
 typedef ::std::pair< OUString, ::boost::shared_ptr<AnyConverter> > TPropertyConverter;
 typedef std::map<OUString, TPropertyConverter> TPropertyNamePair;
-/** returns the property name map for the givern property id
+/** returns the property name map for the given property id
     @param  _nObjectId  the object id
 */
 REPORTDESIGN_DLLPUBLIC const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId);

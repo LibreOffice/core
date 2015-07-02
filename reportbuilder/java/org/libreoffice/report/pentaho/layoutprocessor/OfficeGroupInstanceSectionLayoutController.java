@@ -77,7 +77,7 @@ public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutCon
     }
 
     // isDisplayable is private in version 0.9.1, so until the upgrade we keep this copy of the method
-    // todo: Delete it unce the sun-cvs contains version 0.9.2.
+    // todo: Delete it once the sun-cvs contains version 0.9.2.
     @Override
     protected LayoutController processChild(final SectionLayoutController derived,
             final Node node,

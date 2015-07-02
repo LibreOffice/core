@@ -147,7 +147,7 @@ public:
     virtual ~OGroupsSortingDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    /** sets the newe columns at the groups dialog.
+    /** sets the new columns at the groups dialog.
         @param  _xColumns the new columns
     */
     void setColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xColumns);

@@ -148,7 +148,7 @@ public:
         sal_Int32 nGap);
 
     /** Calculate the logical part of the insert position, i.e. the page
-        after whicht to insert.
+        after which to insert.
     */
     virtual void CalculateLogicalInsertPosition (
         const Point& rModelPosition,
