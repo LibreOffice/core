@@ -157,7 +157,7 @@ private:
     /** Searches the event handler in the document and returns its full script path. */
     OUString getEventHandlerPath(
         const EventHandlerInfo& rInfo,
-        const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+        const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
     /** On first call, accesses the Basic library containing the VBA source code. */
     void ensureVBALibrary() throw (css::uno::RuntimeException);
