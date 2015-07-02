@@ -21,7 +21,7 @@
 +PLAT_CLASSIC_POST_TARGET=
  
 -PLAT_SUPER_PRE_TARGET=darwin_setup_framework
--PLAT_SUPER_POST_TRAGET=darwin_finish_ss_framework
+-PLAT_SUPER_POST_TARGET=darwin_finish_ss_framework
 +PLAT_SUPER_PRE_TARGET=
 +PLAT_SUPER_POST_TRAGET=
  
@@ -65,7 +65,7 @@ diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.
  	mkdir -p $(FB_FW)/Resources/doc
 --- firebird.org/builds/posix/prefix.darwin_i386
 +++ firebird/builds/posix/prefix.darwin_i386
-@@ -19,7 +19,7 @@
+@@ -24,7 +24,7 @@
  # 4. for  CFLAGS, CXXFLAGS, LDFLAGS export '-m32 -arch i386'
  # 5. export MACOSX_DEPLOYMENT_TARGET=10.6
  
@@ -74,17 +74,19 @@ diff -ur firebird.org/builds/posix/postfix.darwin firebird/builds/posix/postfix.
  export DYLD_LIBRARY_PATH
  
  MACOSX_DEPLOYMENT_TARGET=10.6
-@@ -32,8 +32,8 @@
+@@ -32,9 +32,9 @@
  
  OS_ServerFiles=inet_server.cpp
  
 -PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common -arch i386 -mmacosx-version-min=10.6
 -DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall -arch i386 -mmacosx-version-min=10.6
+-CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
 +PROD_FLAGS=-O1 -DDARWIN -pipe -p -MMD -fPIC -fno-common
 +DEV_FLAGS=-ggdb -DDARWIN -pipe -p -MMD -fPIC -fno-common -Wall
- CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden -fno-weak
++CXXFLAGS:=$(CXXFLAGS) -fvisibility-inlines-hidden -fvisibility=hidden
  EMBED_UTIL_TARGETS=gstat gds_relay gsec fbguard nbackup fb_lock_print fbsvcmgr fbtracemgr
  CLIENT_UTIL_TARGETS=gds_relay gstat gsec fbguard fbmgr_bin nbackup fb_lock_print fbsvcmgr \
+ 	fbtracemgr
 --- firebird.org/builds/posix/prefix.darwin_x86_64
 +++ firebird/builds/posix/prefix.darwin_x86_64
 @@ -19,7 +19,7 @@
