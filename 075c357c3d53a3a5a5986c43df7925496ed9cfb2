@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_c0dcdf48",
+        "filename": "sal/Library_uwinapi.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-02T11:56:46Z",
+      "side": 1,
+      "message": "better check the \"old\" version number, we\u0027ll assume future versions stay conformant...",
+      "revId": "075c357c3d53a3a5a5986c43df7925496ed9cfb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_e0e1dbff",
+        "filename": "sal/Library_uwinapi.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-02T11:56:46Z",
+      "side": 1,
+      "message": "there is one other function in that file which is a PRIVATE export because it overrides some windows function; did you check that it gets exported even without /DEF?\n\ncheck with dumpbin /exports or depends.exe",
+      "revId": "075c357c3d53a3a5a5986c43df7925496ed9cfb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
