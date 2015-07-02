@@ -107,7 +107,7 @@ bool SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
 {
     bool bRet = true;
 
-    // determine reord end and PreTag from the header
+    // determine record end and PreTag from the header
     _nEofRec = _pStream->Tell() + SFX_REC_OFS(nHeader);
     _nPreTag = sal::static_int_cast< sal_uInt8 >(SFX_REC_PRE(nHeader));
 
@@ -520,7 +520,7 @@ bool SfxMultiRecordReader::ReadHeader_Impl()
     _pStream->ReadUInt16( _nContentCount );
     _pStream->ReadUInt32( _nContentSize ); // Fix: each on its own, Var|Mix: table position
 
-    // do we still need to rade a table with Content offsets?
+    // do we still need to read a table with Content offsets?
     if ( _nRecordType != SFX_REC_TYPE_FIXSIZE )
     {
         // read table from the stream

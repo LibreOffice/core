@@ -625,7 +625,7 @@ void E3dScene::NbcRotate(const Point& rRef, long nAngle, double sn, double cs)
 
     // So that was the scene, now the objects used in the scene
     // 3D objects, if there is only one it can still have multiple surfaces but
-    // the surfaces do not hve to be connected. This allows you to access child
+    // the surfaces do not have to be connected. This allows you to access child
     // objects. So going through the entire list and rotate around the Z axis
     // through the enter of aOutRect's (Steiner's theorem), so RotateZ
 

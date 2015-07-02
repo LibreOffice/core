@@ -242,7 +242,7 @@ PassMap StorageItem::getInfo()
             }
         }
         else
-            OSL_FAIL( "Wrong index sintax!\n" );
+            OSL_FAIL( "Wrong index syntax!\n" );
     }
 
     return aResult;

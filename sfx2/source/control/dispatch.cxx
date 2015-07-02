@@ -1266,8 +1266,8 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
         xImp->aObjBars[n].nResId = 0;
     xImp->aChildWins.clear();
 
-    // bQuiet : own shells aren't considered for UI and SlotServer
-    // bNoUI: own Shells aren't considered fors UI
+    // bQuiet: own shells aren't considered for UI and SlotServer
+    // bNoUI: own Shells aren't considered forms UI
     if ( xImp->bQuiet || xImp->bNoUI || (xImp->pFrame && xImp->pFrame->GetObjectShell()->IsPreview()) )
         return;
 
@@ -1538,7 +1538,7 @@ void SfxDispatcher::FlushImpl()
     // If more changes have occurred on the stach when
     // Activate/Deactivate/Delete:
     if (!xImp->bFlushed)
-        // If Push/Pop hs been called by someone, theb also EnterReg was called!
+        // If Push/Pop has been called by someone, then also EnterReg was called!
         FlushImpl();
 
     if( bAwakeBindings && GetBindings() )

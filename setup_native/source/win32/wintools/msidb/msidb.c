@@ -492,7 +492,7 @@ int wmain(int argc, WCHAR *argv[])
                 argv++; argc--; i++;
             }
             break;
-        case 'c':                   /* Create/ovrwrt .msi db */
+        case 'c':                   /* Create/overwrite .msi db */
             createdb = TRUE;
             break;
         case 'f':                   /* Specify working dir */

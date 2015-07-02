@@ -483,7 +483,7 @@ namespace sdr
                 SfxItemSet* pDestItemSet = new SfxItemSet(*mpItemSet);
                 pDestItemSet->SetParent(0L);
 
-                // pepare forgetting the current stylesheet like in RemoveStyleSheet()
+                // prepare forgetting the current stylesheet like in RemoveStyleSheet()
                 EndListening(*mpStyleSheet);
                 EndListening(mpStyleSheet->GetPool());
 

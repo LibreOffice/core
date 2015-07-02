@@ -1133,7 +1133,7 @@ void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPo
         // get single polygon
         const basegfx::B2DPolygon aPoly(rPolyPoly.getB2DPolygon(a));
 
-        // #i75974# take closed stae into account, the API polygon still uses the old closed definition
+        // #i75974# take closed state into account, the API polygon still uses the old closed definition
         // with last/first point are identical (cannot hold information about open polygons with identical
         // first and last point, though)
         const sal_uInt32 nPointCount(aPoly.count());

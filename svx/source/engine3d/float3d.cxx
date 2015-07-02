@@ -982,7 +982,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
             bUpdate = true;
         }
     }
-    // Ligh 3 (on/off)
+    // Light 3 (on/off)
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTON_3);
     if( eState != SfxItemState::DONTCARE )
     {

@@ -1442,7 +1442,7 @@ bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName 
 bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName, SfxItemSet& rSet, SdrModel* pModel )
 {
     // check if an item with the given name and which id is inside the models
-    // pool or the stylesheet pool, if found its puttet in the itemse
+    // pool or the stylesheet pool, if found it's put in the itemset
     if( !SetFillAttribute( nWID, rName, rSet ) )
     {
         // we did not find such item in one of the pools, so we check
@@ -2287,7 +2287,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                 {
                     basegfx::B2DPolyPolygon aNewPolyPolygon;
 
-                    // #123616# be a little bit more flexible regardin gthe data type used
+                    // #123616# be a little bit more flexible regarding the data type used
                     if( rValue.getValueType() == cppu::UnoType<drawing::PointSequenceSequence>::get())
                     {
                         // get polygpon data from PointSequenceSequence

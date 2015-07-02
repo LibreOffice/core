@@ -398,7 +398,7 @@ public:
     virtual Reference<XInterface > SAL_CALL createInstance(const OUString &) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Reference<XInterface > SAL_CALL createInstanceWithArguments(const OUString &, const Sequence<Any >& Arguments) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // The same as the getAvailableServiceNames, but only uique names
+    // The same as the getAvailableServiceNames, but only unique names
     Sequence< OUString > getUniqueAvailableServiceNames(
         HashSet_OWString & aNameSet );
 

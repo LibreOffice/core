@@ -360,7 +360,7 @@ private:
     bool MatchedReturn();
 
     //! Be sure that the string to be analyzed is already converted to upper
-    //! case and if it contained native humber digits that they are already
+    //! case and if it contained native number digits that they are already
     //! converted to ASCII.
 
     // Main analyzing function

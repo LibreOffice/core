@@ -230,10 +230,8 @@ sub make_path_absolute
     $$pathref =~ s/[\/\\]\s*$//;    # removing ending slashes
 }
 
-##################################################
 # Setting some global parameters
-# This has to be expanded with furher platforms
-##################################################
+# This has to be expanded with further platforms
 
 sub setglobalvariables
 {

@@ -214,7 +214,7 @@ sal_uInt32 CheckPasswd_Impl
                 {
                     // TODO/LATER:
                     // the storage either has no encrypted elements or it's just
-                    // does not allow to detect it, probably it should be implemented laiter
+                    // does not allow to detect it, probably it should be implemented later
                 }
 
                 if ( bIsEncrypted )

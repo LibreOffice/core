@@ -78,7 +78,7 @@ namespace svgio
         };
 
         // helper to convert a string associated with a token of type SVGTokenDisplay
-        // to the enum Display. Empty trings return the default 'Display_inline' with
+        // to the enum Display. Empty strings return the default 'Display_inline' with
         // which members should be initialized
         Display getDisplayFromContent(const OUString& aContent);
 

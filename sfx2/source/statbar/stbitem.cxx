@@ -426,7 +426,7 @@ void SfxStatusBarControl::StateChanged
     sal_uInt16              nSID,
     SfxItemState        eState,
     const SfxPoolItem*  pState  /* Pointer to SfxPoolItem, is only valid
-                                   withih this Method call. This can be a
+                                   within this Method call. This can be a
                                    Null-Pointer, a Pointer to SfxVoidItem
                                    or of this Type found registered by the
                                    Subclass of SfxStatusBarControl.

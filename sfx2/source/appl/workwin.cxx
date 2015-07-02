@@ -78,7 +78,7 @@ static const ResIdToResName pToolBarResToName[] =
     { 18001,    "formsnavigationbar"   }, // Probably the rest are defined in .hrc files that are higher
                                           // up in the dependency chain and/or later in the build order,
                                           // and that is the (bad) reason why their symbolic names are
-                                          // not available? Would it really be so owful to move the .hrc
+                                          // not available? Would it really be so awful to move the .hrc
                                           // files in question out from the modules where they now are?
 
     { 18002,    "formsfilterbar"       },

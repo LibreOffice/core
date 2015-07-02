@@ -157,7 +157,7 @@ void SvNumberFormatsSupplierServiceObject::implEnsureFormatter()
         SvtSysLocale aSysLocale;
         css::lang::Locale aOfficeLocale = aSysLocale.GetLocaleData().getLanguageTag().getLocale();
 
-        // initi with this locale
+        // initialize with this locale
         Sequence< Any > aFakedInitProps( 1 );
         aFakedInitProps[0] <<= aOfficeLocale;
 
