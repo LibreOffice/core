@@ -3317,7 +3317,7 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
                         {
                             SwObjectFormatter::FormatObj( *pFlyFrm );
                         }
-                        pTmpFrm->Calc(pLayout->GetCurrShell()->GetOut());
+                        pTmpFrm->Calc(pLayout ? pLayout->GetCurrShell()->GetOut() : 0);
                     }
 
                     // #127369#
