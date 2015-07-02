@@ -158,7 +158,6 @@ public:
     inline bool is() const
         { return (0 != m_jo); }
     inline jobject release();
-    inline void reset();
     inline void reset( jobject jo );
     inline JLocalAutoRef & operator = ( JLocalAutoRef & auto_ref );
 };
@@ -181,13 +180,6 @@ inline jobject JLocalAutoRef::release()
     jobject jo = m_jo;
     m_jo = 0;
     return jo;
-}
-
-inline void JLocalAutoRef::reset()
-{
-    if (0 != m_jo)
-        m_jni->DeleteLocalRef( m_jo );
-    m_jo = 0;
 }
 
 inline void JLocalAutoRef::reset( jobject jo )

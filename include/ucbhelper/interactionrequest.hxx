@@ -529,14 +529,6 @@ public:
     const OUString & getPassword() const { return m_aPassword; }
 
     /**
-      * This method returns the account that was supplied by the interaction
-      * handler.
-      *
-      * @return the account.
-      */
-    const OUString & getAccount()  const { return m_aAccount; }
-
-    /**
       * This method returns the authentication remember-mode for the password
       * that was supplied by the interaction handler.
       *
@@ -544,15 +536,6 @@ public:
       */
     const com::sun::star::ucb::RememberAuthentication &
     getRememberPasswordMode() const { return m_eRememberPasswordMode; }
-
-    /**
-      * This method returns the authentication remember-mode for the account
-      * that was supplied by the interaction handler.
-      *
-      * @return the remember-mode for the account.
-      */
-    const com::sun::star::ucb::RememberAuthentication &
-    getRememberAccountMode() const { return m_eRememberAccountMode; }
 
     bool getUseSystemCredentials() const { return m_bUseSystemCredentials; }
 };

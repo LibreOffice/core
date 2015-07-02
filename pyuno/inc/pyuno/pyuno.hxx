@@ -133,14 +133,6 @@ public:
         m = 0;
     }
 
-    /** clears the reference decreasing the refcount of the holded object.
-     */
-    void clear()
-    {
-        Py_XDECREF( m );
-        m = 0;
-    }
-
     /** returns 1 when the reference points to a python object python object,
         otherwise 0.
     */
