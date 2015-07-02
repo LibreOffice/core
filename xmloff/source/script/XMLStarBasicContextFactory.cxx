@@ -71,7 +71,7 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
             {
                 sMacroNameVal = xAttrList->getValueByIndex(nAttr);
             }
-            // else: ingore
+            // else: ignore
         }
         // else: ignore
     }

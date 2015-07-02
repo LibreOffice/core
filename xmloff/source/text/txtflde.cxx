@@ -964,7 +964,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_UNKNOWN:
     default:
         OSL_FAIL("unknown field type!");
-        // ignore -> no format for ukowns
+        // ignore -> no format for unknown
         break;
     }
 }

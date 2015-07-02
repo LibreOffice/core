@@ -122,7 +122,7 @@ void DomBuilderContext::StartElement(
         const OUString& rName = xAttrList->getNameByIndex( i );
         const OUString& rValue = xAttrList->getValueByIndex( i );
 
-        // namespace handling: determine namespace & namespace keykey
+        // namespace handling: determine namespace & namespace key
         OUString sNamespace;
         sal_uInt16 nNamespaceKey =
             GetImport().GetNamespaceMap()._GetKeyByAttrName(

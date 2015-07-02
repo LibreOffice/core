@@ -203,7 +203,7 @@ bool XSecController::chainOn( bool bRetrievingLastEvent )
 /****** XSecController/chainOn ************************************************
  *
  *   NAME
- *  chainOn -- tyies to connect the SAXEventKeeper with the SAX chain.
+ *  chainOn -- tries to connect the SAXEventKeeper with the SAX chain.
  *
  *   SYNOPSIS
  *  bJustChainingOn = chainOn( bRetrievingLastEvent );

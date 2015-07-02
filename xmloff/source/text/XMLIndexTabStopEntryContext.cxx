@@ -123,7 +123,7 @@ void XMLIndexTabStopEntryContext::StartElement(
 void XMLIndexTabStopEntryContext::FillPropertyValues(
     Sequence<PropertyValue> & rValues)
 {
-    // fill vlues from parent class (type + style name)
+    // fill values from parent class (type + style name)
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
     // get values array and next entry to be written;

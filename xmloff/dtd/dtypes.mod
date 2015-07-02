@@ -72,7 +72,7 @@
 <!-- a style name -->
 <!ENTITY % styleName			"CDATA">
 
-<!-- a target frame mame -->
+<!-- a target frame name -->
 <!ENTITY % targetFrameName			"CDATA">
 
 <!-- a language without a country as specified by ISO639 -->

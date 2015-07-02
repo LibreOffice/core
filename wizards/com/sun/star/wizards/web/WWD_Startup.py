@@ -533,7 +533,7 @@ class WWD_Startup(WWD_General):
 
     '''
     changes the DataAwares Objects' (in
-    the gioen list) DataObject to the
+    the given list) DataObject to the
     @param data
     @param list
     '''

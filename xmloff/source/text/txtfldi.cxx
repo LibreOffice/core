@@ -3404,9 +3404,9 @@ static SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
 };
 
 
-// we'll process attributes on our own and forfit the standard
-// tecfield mechanism, because our attributes have zero overlp with
-// all the oher textfields.
+// we'll process attributes on our own and for fit the standard
+// textfield mechanism, because our attributes have zero overlap with
+// all the other textfields.
 void XMLBibliographyFieldImportContext::StartElement(
         const Reference<XAttributeList> & xAttrList)
 {

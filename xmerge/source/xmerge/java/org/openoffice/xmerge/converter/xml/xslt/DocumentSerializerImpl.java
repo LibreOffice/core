@@ -218,7 +218,7 @@ public final class DocumentSerializerImpl
     }
 
     /**
-     * This method performs the sxl transformation on the supplied
+     * This method performs the xsl transformation on the supplied
      * {@code Document} and returns a {@code DOMResult} object.
      *
      * <p>Xslt transformation code.</p>
