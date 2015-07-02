@@ -193,62 +193,37 @@ public:
 
     // Non-interface methods
 
-
     void appendString( const OUString& rPropName, const OUString& rValue );
-    void appendString( const sal_Char* pAsciiPropName, const OUString& rValue )
-    {
-        appendString( OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
     void appendString( const ::com::sun::star::beans::Property& rProp, const OUString& rValue )
     {
         appendString( rProp.Name, rValue );
     }
 
     void appendBoolean( const OUString& rPropName, bool bValue );
-    void appendBoolean( const sal_Char* pAsciiPropName, bool bValue )
-    {
-        appendBoolean( OUString::createFromAscii( pAsciiPropName ), bValue );
-    }
     void appendBoolean( const ::com::sun::star::beans::Property& rProp, bool bValue )
     {
         appendBoolean( rProp.Name, bValue );
     }
 
     void appendLong( const OUString& rPropName, sal_Int64 nValue );
-    void appendLong( const sal_Char* pAsciiPropName, sal_Int64 nValue )
-    {
-        appendLong( OUString::createFromAscii( pAsciiPropName ), nValue );
-    }
     void appendLong( const ::com::sun::star::beans::Property& rProp, sal_Int64 nValue )
     {
         appendLong( rProp.Name, nValue );
     }
 
     void appendTimestamp( const OUString& rPropName, const ::com::sun::star::util::DateTime& rValue );
-    void appendTimestamp( const sal_Char* pAsciiPropName, const ::com::sun::star::util::DateTime& rValue )
-    {
-        appendTimestamp( OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
     void appendTimestamp( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::util::DateTime& rValue )
     {
         appendTimestamp( rProp.Name, rValue );
     }
 
     void appendObject( const OUString& rPropName, const ::com::sun::star::uno::Any& rValue );
-    void appendObject( const sal_Char* pAsciiPropName, const ::com::sun::star::uno::Any& rValue )
-    {
-        appendObject( OUString::createFromAscii( pAsciiPropName ), rValue );
-    }
     void appendObject( const ::com::sun::star::beans::Property& rProp, const ::com::sun::star::uno::Any& rValue )
     {
         appendObject( rProp.Name, rValue );
     }
 
     void appendVoid( const OUString& rPropName );
-    void appendVoid( const sal_Char* pAsciiPropName)
-    {
-        appendVoid( OUString::createFromAscii( pAsciiPropName ) );
-    }
     void appendVoid( const ::com::sun::star::beans::Property& rProp )
     {
         appendVoid( rProp.Name );

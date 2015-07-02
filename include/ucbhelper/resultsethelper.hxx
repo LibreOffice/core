@@ -201,18 +201,6 @@ public:
     getCapabilities()
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-
-    // Non-interface methods.
-
-
-    /**
-      * This method returns, whether the resultset is static or dynamic.
-      * If neither getStatic() nor getDynamic() was called, the type
-      * of the resultset is "dynamic".
-      *
-      * @return true, if the resultset type is "static". False, otherwise.
-      */
-    bool isStatic() const { return m_bStatic; }
 };
 
 }

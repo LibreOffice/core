@@ -57,7 +57,6 @@ public:
     virtual void    skip( sal_Int32 nBytesToSkip )
                                                        throw( I_FIFO_OutOfBoundsException )=0;
     virtual sal_Int32   getSize() const throw(  )  =0;
-    virtual void    shrink() throw() = 0;
 
     virtual ~I_FIFO() {};
 };
@@ -87,7 +86,6 @@ public:
         throw( IRingBuffer_OutOfBoundsException )=0;
     virtual sal_Int32   getSize() const throw(  )  =0;
     virtual void    forgetFromStart( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException)=0;
-    virtual void    forgetFromEnd( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException)=0;
     virtual void    shrink() throw() = 0;
     virtual ~IRingBuffer() {};
 };
@@ -107,7 +105,6 @@ public:
                                                     throw( IRingBuffer_OutOfBoundsException ) SAL_OVERRIDE;
     virtual sal_Int32   getSize() const throw(  ) SAL_OVERRIDE;
     virtual void    forgetFromStart( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException) SAL_OVERRIDE;
-    virtual void    forgetFromEnd( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException) SAL_OVERRIDE;
 
     virtual void shrink() throw() SAL_OVERRIDE;
 

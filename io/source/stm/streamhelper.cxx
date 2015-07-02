@@ -202,17 +202,6 @@ void MemRingBuffer::forgetFromStart( sal_Int32 nBytesToForget ) throw (IRingBuff
 }
 
 
-void MemRingBuffer::forgetFromEnd( sal_Int32 nBytesToForget ) throw (IRingBuffer_OutOfBoundsException)
-{
-    checkInvariants();
-    if( nBytesToForget > m_nOccupiedBuffer ) {
-        throw IRingBuffer_OutOfBoundsException();
-    }
-    m_nOccupiedBuffer -= nBytesToForget;
-    checkInvariants();
-}
-
-
 void MemRingBuffer::shrink() throw ()
 {
     checkInvariants();
