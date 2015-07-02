@@ -1256,6 +1256,7 @@ SfxViewShell::SfxViewShell
 ,   pSubShell(0)
 ,   pWindow(0)
 ,   bNoNewWindow( nFlags & SfxViewShellFlags::NO_NEWWINDOW )
+,   mbPrinterSettingsWereModified(false)
 {
 
     if ( pViewFrame->GetParentViewFrame() )

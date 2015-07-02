@@ -817,7 +817,8 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
         // whatever happens to be the current page
         // (but only if the printer config has changed, otherwise
         // don't override printer page auto-detection - tdf#91362)
-        if (!mpImplData->mxPrinter->IsDefPrinter())
+        //if (!mpImplData->mxPrinter->IsDefPrinter())
+        if (mbPrinterSettingsWereModified)
         {
             resetPaperToLastConfigured();
         }
@@ -849,8 +850,8 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
             {
                 mpImplData->maPageCache.invalidate();
             }
-            // Settings have been modified (i.e. this printer is no longer default )
-            mpImplData->mxPrinter->SetDefPrinter( false );
+            // Settings have been modified, tag accordingly
+            mbPrinterSettingsWereModified = false;
         }
         else
         {
