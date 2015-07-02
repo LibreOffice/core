@@ -152,6 +152,7 @@ public:
     sal_Bool                                                    mbLastPage;
     sal_Bool                                                    mbReversePageOrder;
     sal_Bool                                                    mbPapersizeFromSetup;
+    sal_Bool                                                    mbPrinterModified;
     view::PrintableState                                        meJobState;
 
     vcl::PrinterController::MultiPageSetup                      maMultiPage;
@@ -186,6 +187,7 @@ public:
         mbLastPage( sal_False ),
         mbReversePageOrder( sal_False ),
         mbPapersizeFromSetup( sal_False ),
+        mbPrinterModified( sal_False ),
         meJobState( view::PrintableState_JOB_STARTED ),
         mpProgress( NULL ),
         mnDefaultPaperBin( -1 ),
@@ -818,7 +820,7 @@ bool PrinterController::setupPrinter( Window* i_pParent )
         // whatever happens to be the current page
         // (but only if the printer config has changed, otherwise
         // don't override printer page auto-detection - tdf#91362)
-        if (!mpImplData->mpPrinter->IsDefPrinter())
+        if (getPrinterModified())
         {
             resetPaperToLastConfigured();
         }
@@ -1375,6 +1377,16 @@ void PrinterController::setPapersizeFromSetup( sal_Bool i_bPapersizeFromSetup )
 bool PrinterController::getPapersizeFromSetup() const
 {
     return mpImplData->mbPapersizeFromSetup;
+}
+
+void PrinterController::setPrinterModified( bool i_bPrinterModified )
+{
+    mpImplData->mbPrinterModified = i_bPrinterModified;
+}
+
+bool PrinterController::getPrinterModified() const
+{
+    return mpImplData->mbPrinterModified;
 }
 
 Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< PropertyValue >& i_rMergeList ) const

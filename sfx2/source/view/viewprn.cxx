@@ -624,6 +624,7 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
     SfxObjectShell *pObjShell = GetObjectShell();
     pController->setValue( OUString( "JobName"  ),
                         makeAny( OUString( pObjShell->GetTitle(0) ) ) );
+    pController->setPrinterModified( mbPrinterSettingsModified );
 }
 
 void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rProps, sal_Bool bIsAPI, sal_Bool bIsDirect )
@@ -882,6 +883,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
 
                     // forget new printer, it was taken over (as pPrinter) or deleted
                     pDlgPrinter = NULL;
+                    mbPrinterSettingsModified = true;
 
                 }
                 else

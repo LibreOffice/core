@@ -1238,6 +1238,7 @@ SfxViewShell::SfxViewShell
 ,   pSubShell(0)
 ,   pWindow(0)
 ,   bNoNewWindow( 0 != (nFlags & SFX_VIEW_NO_NEWWINDOW) )
+,   mbPrinterSettingsModified(false)
 {
     DBG_CTOR(SfxViewShell, 0);
 
