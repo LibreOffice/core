@@ -214,19 +214,19 @@
         {                                                                   \
             Identifier = FN_UPDATE_CUR_TOX ;                                \
             HelpId = CMD_FN_UPDATE_CUR_TOX ;                                    \
-            Text [ en-US ] = "~Update Index or Table";                         \
+            Text [ en-US ] = "~Update Index or Table of Contents";          \
         };                                                                  \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_EDIT_CURRENT_TOX;                               \
             HelpId = CMD_FN_EDIT_CURRENT_TOX;                                   \
-            Text [ en-US ] = "~Edit Index or Table";                           \
+            Text [ en-US ] = "~Edit Index or Table of Contents";                           \
         };                                                                  \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_REMOVE_CUR_TOX;                                 \
             HelpId = CMD_FN_REMOVE_CUR_TOX;                                     \
-            Text [ en-US ] = "Delete Index or Table";                          \
+            Text [ en-US ] = "Delete Index or Table of Contents";                          \
         };                                                                  \
         SEPARATOR ;
 
