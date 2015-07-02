@@ -607,7 +607,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
     @short      check URL for support by our used loader or handler
     @descr      If we must return our own dispatch helper implementations (self, blank, create dispatcher!)
                 we should be sure, that URL describe any loadable content. Otherwise slot/uno URLs
-                will be detected ... but there exist nothing for ral loading into a target frame!
+                will be detected... but there exist nothing for real loading into a target frame!
 
     @param      aURL
                     URL which should be "detected"

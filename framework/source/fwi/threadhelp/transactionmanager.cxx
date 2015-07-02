@@ -90,8 +90,8 @@ void  TransactionManager::setWorkingMode( EWorkingMode eMode )
     }
 
     // Wait for current existing transactions then!
-    // (Only necessary for changing to E_BEFORECLOSE or E_CLOSE! ...
-    // otherwise; if you wait at setting E_WORK another thrad could finish a acquire-call during our unlock() and wait() call
+    // (Only necessary for changing to E_BEFORECLOSE or E_CLOSE!...
+    // otherwise; if you wait at setting E_WORK another thread could finish a acquire-call during our unlock() and wait() call
     // ... and we will wait forever here!!!)
     // Don't forget to release access mutex before.
     aAccessGuard.clear();
@@ -256,7 +256,7 @@ void TransactionManager::impl_throwExceptions( EExceptionMode eMode, ERejectReas
                                         // Help programmer to find out, why this exception is thrown!
                                         SAL_WARN( "fwk", "TransactionManager...: Owner instance not correctly initialized yet. Call was rejected! Normally it's an algorithm error ... wrong use of class!" );
                                         //ATTENTION: temp. disabled - till all bad code positions are detected and changed! */
-                                        // throw css::uno::RuntimeException( "TransactionManager...\nOwner instance not right initialized yet. Call was rejected! Normally it's an algorithm error ... wrong usin of class!\n", css::uno::Reference< css::uno::XInterface >() );
+                                        // throw css::uno::RuntimeException( "TransactionManager...\nOwner instance not right initialized yet. Call was rejected! Normally it's an algorithm error... wrong using of class!\n", css::uno::Reference< css::uno::XInterface >() );
                                     }
                                     break;
         case E_INCLOSE         :    if( eMode == E_HARDEXCEPTIONS )

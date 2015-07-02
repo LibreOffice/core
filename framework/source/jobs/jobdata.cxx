@@ -189,7 +189,7 @@ void JobData::setService( const OUString& sService )
                 the underlying configuration! (That must be done from outside.
                 Because the caller must have the configuration already open to
                 get the values for sEvent and sAlias! And doing so it can perform
-                only, if the time stanp values are readed outside too.
+                only, if the time stamp values are readed outside too.
                 Further it make no sense to initialize and start a disabled job.
                 So this initialization method will be called for enabled jobs only.)
 
@@ -400,9 +400,9 @@ bool JobData::hasConfig() const
 /**
     @short      mark a job as non startable for further requests
     @descr      We don't remove the configuration entry! We set a timestamp value only.
-                And there exist two of them: one for an administrator ... and one for the
+                And there exist two of them: one for an administrator... and one for the
                 current user. We change it for the user layer only. So this JobDispatch can't be
-                started any more ... till the administrator change his timestamp.
+                started any more... till the administrator change his timestamp.
                 That can be useful for post setup scenarios, which must run one time only.
 
                 Note: This method don't do anything, if this represented job doesn't have a configuration!

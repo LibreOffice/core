@@ -1723,7 +1723,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(FuncDesc& aFuncDesc,
     }
     else
     {
-        //If there are namesd arguments, then the dispparams.cArgs
+        //If there are named arguments, then the dispparams.cArgs
         //is the number of supplied args, otherwise it is the expected number.
         if (dispparams.cNamedArgs)
             dispparams.cArgs = nUnoArgs;

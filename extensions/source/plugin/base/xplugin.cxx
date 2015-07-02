@@ -687,7 +687,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
     OString aURL  = OUStringToOString( url, m_aEncoding );
 
     // check whether there is a notifylistener for this stream
-    // this means that the strema is created from the plugin
+    // this means that the stream is created from the plugin
     // via NPN_GetURLNotify or NPN_PostURLNotify
     std::list<PluginEventListener*>::iterator iter;
     for( iter = m_aPEventListeners.begin();
@@ -1101,7 +1101,7 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw(std
     m_aFileStream.Write( Buffer.getConstArray(), Buffer.getLength() );
 
     if( m_nMode == NP_SEEK )
-        // hold reference, streem gets destroyed in NPN_DestroyStream
+        // hold reference, stream gets destroyed in NPN_DestroyStream
         m_xSelf = this;
 
     if( m_nMode == -1 || !m_pPlugin->getPluginComm() )

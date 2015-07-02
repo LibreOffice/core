@@ -206,7 +206,7 @@ Public Functions
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="$abs-x  &gt;  1">
-                <xsl:message>acos error : abs(<xsl:value-of select="$x"/>) greate then 1 !</xsl:message>
+                <xsl:message>acos error : abs(<xsl:value-of select="$x"/>) greater then 1 !</xsl:message>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="atan2">
@@ -231,7 +231,7 @@ Public Functions
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="$abs-x  &gt;  1">
-                <xsl:message>asin error : abs(<xsl:value-of select="$x"/>) greate then 1 !</xsl:message>
+                <xsl:message>asin error : abs(<xsl:value-of select="$x"/>) greater then 1 !</xsl:message>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:call-template name="atan2">

@@ -254,8 +254,8 @@ void LoadEnv::initializeLoading(const OUString&                                 
     }
 
     // make URL part of the MediaDescriptor
-    // It doesn't mater, if it is already an item of it.
-    // It must be the same value ... so we can overwrite it :-)
+    // It doesn't matter if it is already an item of it.
+    // It must be the same value... so we can overwrite it :-)
     m_lMediaDescriptor[utl::MediaDescriptor::PROP_URL()] <<= sURL;
 
     // parse it - because some following code require that

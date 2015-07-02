@@ -880,7 +880,7 @@ public class FormControlTest extends complexlib.ComplexTestCase implements XSQLE
         }
         log.println( "created temporary image file: " + m_sImageURL );
 
-        // for later setting the url at the imaghe control, we need a real URL, no system path
+        // for later setting the url at the image control, we need a real URL, no system path
         m_sImageURL = util.utils.getOfficeTemp( m_orb ) + "image.gif";
     }
 

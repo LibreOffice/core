@@ -481,7 +481,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(utl::MediaDescriptor& rDes
 
     // b)
     // check a preselected document service too.
-    // Then we have to search a suitable filter witin this module.
+    // Then we have to search a suitable filter within this module.
     OUString sDocumentService = rDescriptor.getUnpackedValueOrDefault(
                                             utl::MediaDescriptor::PROP_DOCUMENTSERVICE(),
                                             OUString());

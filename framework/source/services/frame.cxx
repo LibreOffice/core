@@ -394,14 +394,14 @@ private:
     css::uno::Reference< css::awt::XWindow >                                m_xComponentWindow;          /// window of the actual component
     css::uno::Reference< css::frame::XController >                          m_xController;               /// controller of the actual frame
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >      m_xDropTargetListener;       /// listen to drag & drop
-    EActiveState                                                            m_eActiveState;              /// state, if i'am a member of active path in tree or i have the focus or ...
+    EActiveState                                                            m_eActiveState;              /// state, if I am a member of active path in tree or I have the focus or...
     OUString                                                                m_sName;                     /// name of this frame
-    bool                                                                    m_bIsFrameTop;               /// frame has no parent or the parent is a taskor the desktop
+    bool                                                                    m_bIsFrameTop;               /// frame has no parent or the parent is a task or the desktop
     bool                                                                    m_bConnected;                /// due to FrameActionEvent
     sal_Int16                                                               m_nExternalLockCount;
     css::uno::Reference< css::frame::XDispatchRecorderSupplier >            m_xDispatchRecorderSupplier; /// is used for dispatch recording and will be set/get from outside. Frame provide it only!
     SvtCommandOptions                                                       m_aCommandOptions;           /// ref counted class to support disabling commands defined by configuration file
-    bool                                                                    m_bSelfClose;                /// in case of CloseVetoException on method close() wqs thrown by ourself - we must close ourself later if no internal processes are running
+    bool                                                                    m_bSelfClose;                /// in case of CloseVetoException on method close() was thrown by ourself - we must close ourself later if no internal processes are running
     bool                                                                    m_bIsHidden;                 /// indicates, if this frame is used in hidden mode or not
     static css::uno::WeakReference< css::frame::XFrame2 >                   m_xCloserFrame;              /// holds the only frame, which must show the special closer menu item (can be NULL!)
     css::uno::Reference< css::frame::XLayoutManager2 >                      m_xLayoutManager;            /// is used to layout the child windows of the frame.
@@ -633,8 +633,8 @@ css::uno::Reference< css::frame::XFrames > SAL_CALL Frame::getFrames() throw( cs
 /*TODO
     This is a temp. HACK!
     Our parent (a Task!) stand in close/dispose and set working mode to E_BEFOERECLOSE
-    and call dispose on us! We tra to get this xFramesHelper and are reject by an "already closed" pranet instance ....
-    => We use SOFTEXCEPTIONS here ... but we should make it right in further times ....
+    and call dispose on us! We tra to get this xFramesHelper and are reject by an "already closed" parent instance....
+    => We use SOFTEXCEPTIONS here... but we should make it right in further times....
  */
 
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
@@ -1837,9 +1837,9 @@ void SAL_CALL Frame::addCloseListener( const css::uno::Reference< css::util::XCl
 
 void SAL_CALL Frame::removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
 {
-    // Use soft exception mode - moslty this method is called during disposing of this frame ...
+    // Use soft exception mode - mostly this method is called during disposing of this frame...
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
-    // We don't need any lock here ...
+    // We don't need any lock here...
     // Container lives if we live and is threadsafe by himself.
     m_aListenerContainer.removeInterface( cppu::UnoType<css::util::XCloseListener>::get(), xListener );
 }
@@ -2940,8 +2940,8 @@ void Frame::implts_setIconOnWindow()
             }
         }
 
-        // c) if b) failed ... analyze argument list of currently loaded document insde the frame to find the filter.
-        //    He can be used to detect right factory - and these can be used to match factory to icon ...
+        // c) if b) failed... analyze argument list of currently loaded document inside the frame to find the filter.
+        //    He can be used to detect right factory - and these can be used to match factory to icon...
         if( nIcon == -1 )
         {
             css::uno::Reference< css::frame::XModel > xModel = xController->getModel();

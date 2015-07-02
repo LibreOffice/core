@@ -41,7 +41,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This test executes the API tests internally in StarOffice. Prerequiste is
  * that a OOoRunner.jar is registered inseide of StarOffice. Adjust the joblist
- * inside of the ChekAPI.props to determine which tetss will be executed.
+ * inside of the ChekAPI.props to determine which tests will be executed.
  */
 public class CheckAPI  {
 

@@ -104,7 +104,7 @@ private:
         the given event focus.
 
         Typically called twice from broadcastEvent(), once for the
-        given event focus and onece for NULL.
+        given event focus and once for NULL.
     */
     void BroadcastEventToSingleContainer (
         const css::ui::ContextChangeEventObject& rEventObject,

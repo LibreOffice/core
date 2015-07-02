@@ -885,7 +885,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
         OUString("Could not open accelerator configuration for saving."),
         static_cast< ::cppu::OWeakObject* >(this));
 
-    // the original m_aCache has been split into primay cache and secondary cache...
+    // the original m_aCache has been split into primary cache and secondary cache...
     // we should merge them before storing to storage
     AcceleratorCache aCache;
     {

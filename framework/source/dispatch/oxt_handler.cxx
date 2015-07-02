@@ -150,19 +150,19 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
 OUString SAL_CALL Oxt_Handler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor )
     throw( css::uno::RuntimeException, std::exception )
 {
-    // Our default is "nothing". So we can return it, if detection failed or fily type is really unknown.
+    // Our default is "nothing". So we can return it, if detection failed or file type is really unknown.
     OUString sTypeName;
 
-    // Analyze given descriptor to find filename or input stream or ...
+    // Analyze given descriptor to find filename or input stream or...
     utl::MediaDescriptor aDescriptor( lDescriptor );
     OUString               sURL       = aDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
 
     long nLength = sURL.getLength();
     if ( ( nLength > 4 ) && sURL.matchIgnoreAsciiCase( ".oxt", nLength-4 ) )
     {
-        // "IsSoundFile" idffer between different "wav" and "au" file versions ...
-        // couldn't return this information ... because: He use the OS to detect it!
-        // I think we can the following ones:
+        // "IsSoundFile" differs between different "wav" and "au" file versions...
+        // couldn't return this information... because: it use the OS to detect it!
+        // I think we can than following ones:
         //  a) look for given extension of url to map our type decision HARD CODED!!!
         //  b) return preferred type every time... it's easy :-)
         sTypeName = "oxt_OpenOffice_Extension";

@@ -761,7 +761,7 @@ private:
                 It does not:
                 - patch the configuration.
 
-                Note further: It paches the info struct
+                Note further: it patches the info struct
                 more than ones. E.g. the new temp URL is set
                 before the file is saved. And the old URL is removed
                 only if removing oft he old file was successfully.
@@ -2583,7 +2583,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
 
     // Sometimes we close documents by ourself.
     // And these documents can't be deregistered.
-    // Otherwhise we loos our configuration data ... but need it !
+    // Otherwhise we lose our configuration data... but need it !
     // see SessionSave !
     if (aInfo.IgnoreClosing)
         return;
@@ -2834,7 +2834,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
         implts_stopModifyListeningOnDoc(rInfo);
 
         // if the session save is still running the documents should not be thrown away,
-        // actually that would be a bad sign, that means that the SessionManager tryes
+        // actually that would be a bad sign, that means that the SessionManager tries
         // to kill the session before the saving is ready
         if ((m_eJob & AutoRecovery::E_SESSION_SAVE) != AutoRecovery::E_SESSION_SAVE)
         {

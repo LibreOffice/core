@@ -991,7 +991,7 @@ typedef enum {
  * @RASQAL_UPDATE_TYPE_LOAD: Load graph.
  * @RASQAL_UPDATE_TYPE_UPDATE: Insert or Delete graph or triples.
  * @RASQAL_UPDATE_TYPE_ADD: Add graph to another graph.
- * @RASQAL_UPDATE_TYPE_MOVE: Move graph to another grpah.
+ * @RASQAL_UPDATE_TYPE_MOVE: Move graph to another graph.
  * @RASQAL_UPDATE_TYPE_COPY: Copy graph to another graph.
  * @RASQAL_UPDATE_TYPE_UNKNOWN: Internal
  * @RASQAL_UPDATE_TYPE_LAST: Internal
@@ -1523,7 +1523,7 @@ typedef struct rasqal_random_s rasqal_random;
  * @base_uri: base URI of expression context (or NULL)
  * @locator: locator or NULL
  * @flags: expression comparison flags
- * @seed: random seeed
+ * @seed: random seed
  * @random: random number generator object
  *
  * A context for evaluating an expression such as with

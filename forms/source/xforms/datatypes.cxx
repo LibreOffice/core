@@ -921,7 +921,7 @@ namespace xforms
         // (say "12345678"), while internally, and at submission time, this is cut to
         // some smaller value.
 
-        // Additionally, this of course does not care for strings which are no numers ...
+        // Additionally, this of course does not care for strings which are no numbers...
         return true;
     }
 

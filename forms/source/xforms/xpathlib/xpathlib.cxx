@@ -488,7 +488,7 @@ void xforms_monthsFuction(xmlXPathParserContextPtr ctxt, int nargs)
     if (parseDuration(pString, bNegative, nYears, nMonths, nDays, nHours, nMinutes, nSeconds))
     {
         nMonths += nYears*12;
-        // Days, Houres, Minutes and seconds are ignored, see spec
+        // Days, Hours, Minutes and seconds are ignored, see spec
         if (bNegative)
             nMonths = 0 - nMonths;
         xmlXPathReturnNumber(ctxt, nMonths);

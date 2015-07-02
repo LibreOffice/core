@@ -58,7 +58,7 @@ JobResult::JobResult()
                         The returned list of (for this generic implementation unknown!)
                         properties, will be written directly to the configuration and replace
                         any old values there. There will no check for changes and we don't
-                        support any mege feature here. They are written only. The job has
+                        support any merge feature here. They are written only. The job has
                         to modify this list.
                     </li>
                     <li>

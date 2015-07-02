@@ -293,7 +293,7 @@ public:
     }
     virtual void growCharSet( SVGFilter::UCharSetMapMap & aTextFieldCharSets ) const SAL_OVERRIDE
     {
-        // we use the unicode char set in an improper way: we put in the date/time fortat
+        // we use the unicode char set in an improper way: we put in the date/time format
         // in order to pass it to the CalcFieldValue method
         static const OUString sFieldId = aOOOAttrDateTimeField + "-variable";
         SVGFilter::ObjectSet::const_iterator aMasterPageIt = mMasterPageSet.begin();
@@ -1278,7 +1278,7 @@ void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPat
 
 /** SVGFilter::implExportTextEmbeddedBitmaps
  *  We export bitmaps embedded into text shapes, such as those used by list
- *  items with image style, only once in a specic <defs> element.
+ *  items with image style, only once in a specific <defs> element.
  */
 bool SVGFilter::implExportTextEmbeddedBitmaps()
 {

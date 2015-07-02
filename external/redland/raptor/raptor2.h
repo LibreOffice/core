@@ -933,7 +933,7 @@ typedef enum {
  * @data1: first data object
  * @data2: second data object
  *
- * Function to compare two data objects - signature like strcmp() and function pssed to qsort()
+ * Function to compare two data objects - signature like strcmp() and function passed to qsort()
  *
  * Designed to be passed into generic data structure constructors
  * like raptor_new_avltree().
