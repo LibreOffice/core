@@ -262,7 +262,7 @@ void SAL_CALL OGenericUnoDialog::endExecute(  ) throw(RuntimeException)
             throw RuntimeException();
 
         if (!m_pDialog->IsInExecute())
-            // we tighly missed it ... another thread finished the execution of the dialog,
+            // we tightly missed it... another thread finished the execution of the dialog,
             // but did not manage it to reset m_bExecuting, it currently tries to acquire
             // m_aMutex or m_aExecutionMutex
             // => nothing to do

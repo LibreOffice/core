@@ -39,7 +39,7 @@
 
 int Pflag = 0;                          /* print no line information */
 int Iflag = 0;                          /* print includes */
-int Mflag = 0;                          /* print macor expansion */
+int Mflag = 0;                          /* print macro expansion */
 int Aflag = 0;                          /* translate character sets */
 int Xflag = 0;                          /* print pragma for include/import */
 int Vflag = 0;                          /* verbose flag */

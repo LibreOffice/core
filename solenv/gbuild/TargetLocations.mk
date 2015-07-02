@@ -19,7 +19,7 @@
 
 # outdir target pattern
 
-# thoese are hard-coded to URE for now since there are so few of them...
+# these are hard-coded to URE for now since there are so few of them...
 gb_CliLibrary_get_target = $(INSTROOT)/$(LIBO_URE_LIB_FOLDER)/$(1)$(gb_CliLibrary_EXT)
 gb_CliNativeLibrary_get_target = $(INSTROOT)/$(LIBO_URE_LIB_FOLDER)/$(1)$(gb_CliNativeLibrary_EXT)
 gb_CliUnoApi_get_target = $(INSTROOT)/$(if $(filter cli_uretypes,$(1)),$(LIBO_URE_LIB_FOLDER),$(LIBO_LIB_FOLDER))/$(1)$(gb_CliUnoApi_EXT)

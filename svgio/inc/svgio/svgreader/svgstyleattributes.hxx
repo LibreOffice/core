@@ -223,7 +223,7 @@ namespace svgio
 
             // defines if this attributes are part of a ClipPath. If yes,
             // rough geometry will be created on decomposition by patching
-            // vaules for fill, stroke, strokeWidth and others
+            // values for fill, stroke, strokeWidth and others
             bool                        mbIsClipPathContent : 1;
 
             // #121221# Defines if evtl. an empty array *is* set
