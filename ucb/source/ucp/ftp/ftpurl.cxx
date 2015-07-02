@@ -595,7 +595,7 @@ OUString FTPURL::net_title() const
 
 
 FTPDirentry FTPURL::direntry() const
-    throw (curl_exception, malformed_exception)
+    throw (curl_exception, malformed_exception, std::exception)
 {
     OUString nettitle = net_title();
     FTPDirentry aDirentry;
