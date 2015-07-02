@@ -249,7 +249,7 @@ class StatusListener implements com.sun.star.frame.XStatusListener,
             // Only if status is enabled we can look for his value!
             if (aEvent.IsEnabled)
             {
-                // look for the right type ofthe UI control
+                // look for the right type of the UI control
                 // Following actions depend on it.
 
 

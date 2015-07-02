@@ -910,7 +910,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
     //check if the directory path is good, that is a JRE was already recognized.
     //Then we need not detect it again
-    //For example, a sun JKD contains <jdk>/bin/java and <jdk>/jre/bin/java.
+    //For example, a sun JDK contains <jdk>/bin/java and <jdk>/jre/bin/java.
     //When <jdk>/bin/java has been found then we need not find <jdk>/jre/bin/java.
     //Otherwise we would execute java two times for every JDK found.
     MapIt entry2 = find_if(mapJREs.begin(), mapJREs.end(),

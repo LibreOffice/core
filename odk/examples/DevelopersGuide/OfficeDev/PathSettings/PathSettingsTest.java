@@ -39,7 +39,7 @@ import com.sun.star.util.thePathSettings;
 
 /*
  * Provides example code how to access and use the
- * path pathsettings servce.
+ * path pathsettings service.
  */
 public class PathSettingsTest {
 
@@ -131,7 +131,7 @@ public class PathSettingsTest {
                 }
             }
 
-            // Try to modfiy the work path property. After running this example
+            // Try to modify the work path property. After running this example
             // you should see the new value of "My Documents" in the path options
             // tab page, accessible via "Tools - Options - [Star|Open]Office -
             // Paths".

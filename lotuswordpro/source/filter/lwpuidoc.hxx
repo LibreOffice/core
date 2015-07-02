@@ -105,7 +105,7 @@ public:
     void Read(LwpObjectStream *pStrm);
 };
 /**
- * @brief       Merget options contained in UIDocument structure
+ * @brief       Merge options contained in UIDocument structure
  *          not parsed yet
 */
 class LwpMergeOptions

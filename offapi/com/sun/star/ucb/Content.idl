@@ -204,7 +204,7 @@ published service Content
                                 be sorted, otherwise it can be left empty.
                             </li>
                         </ul>
-                        The exceution must be aborted by the implementation of this command
+                        The execution must be aborted by the implementation of this command
                         (by throwing a CommandAbortedException), if an
                         unsupported mode is requested.
                     </td>
@@ -234,7 +234,7 @@ published service Content
                             <li>com::sun::star::ucb::OpenCommandArgument::Properties: empty ( ignored )</li>
                             <li>com::sun::star::ucb::OpenCommandArgument2::SortingInfo: empty ( ignored )</li>
                         </ul>
-                        <p>The exceution must be aborted by the implementation of this command
+                        <p>The execution must be aborted by the implementation of this command
                         (by throwing a CommandAbortedException), if an
                         unsupported mode is requested.</p>
                     </td>

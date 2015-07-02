@@ -71,7 +71,7 @@
 /**
  * @brief
  * Font factory.
- * Because font object are so used so offten, so make a factory to manager them.
+ * Because font object are so used so often, so make a factory to manager them.
  * The fonts with same properties will only exist one instance.
  */
 class XFFontFactory

@@ -76,7 +76,7 @@ struct AxisModel
     sal_Int32           mnLabelOffset;      /// Tick mark label distance from axis.
     sal_Int32           mnMajorTickMark;    /// Major tick mark style.
     sal_Int32           mnMajorTimeUnit;    /// Time unit for major tick marks on date axis.
-    sal_Int32           mnMinorTickMark;    /// Mainor tick mark style.
+    sal_Int32           mnMinorTickMark;    /// Minor tick mark style.
     sal_Int32           mnMinorTimeUnit;    /// Time unit for minor tick marks on date axis.
     sal_Int32           mnOrientation;      /// Axis orientation (value order min to max, or max to min).
     sal_Int32           mnTickLabelPos;     /// Position of tick mark labels relative to the axis.

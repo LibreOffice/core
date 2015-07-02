@@ -38,7 +38,7 @@ public class java_complex implements TestBase
 {
 
     /**
-     * This function executes the complex tests given as parameter "-o" or "TestJob". It querys for the correspond class
+     * This function executes the complex tests given as parameter "-o" or "TestJob". It queries for the correspond class
      * and crates the JobDescription.
      * @return true of all tests run successfully, else false
      */

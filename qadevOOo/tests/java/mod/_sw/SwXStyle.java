@@ -97,7 +97,7 @@ public class SwXStyle extends TestCase {
     *     Object relations created :
     * <ul>
     *  <li> <code>'PoolStyle'</code> for
-    *      {@link ifc.style._XStyle} : slyle indexed '10' obtained from
+    *      {@link ifc.style._XStyle} : style indexed '10' obtained from
     *  StyleFamily indexed '0' from text document using
     *  <code>XIndexAccess</code> interface.</li>
     * </ul>

@@ -72,7 +72,7 @@ public class UITools {
     }
 
     /**
-     * Helper mathod: set a text into AccessibleEdit field
+     * Helper method: set a text into AccessibleEdit field
      * @param textfiledName is the name of the text field
      * @param stringToSet is the string to set
      * @throws java.lang.Exception if something fail

@@ -455,7 +455,7 @@ public class FunctionHelper
                 com.sun.star.frame.XDispatchProvider.class,
                 xFrame);
 
-            // Ask himn for right dispatch object for given URL.
+            // Ask him for right dispatch object for given URL.
             // Force given frame as target for following dispatch by using "".
             // It means the same like "_self".
             xDispatcher = xProvider.queryDispatch(aURL,"",0);
@@ -866,8 +866,8 @@ public class FunctionHelper
 
     /**
      * helper to get a file URL selected by user
-     * This method doesn't show any API concepts ...
-     * but is necessary rof this demo application.
+     * This method doesn't show any API concepts...
+     * but is necessary for this demo application.
      *
      * @param   aParent parent window of this dialog
      * @param   bOpen   If it is set to true =>

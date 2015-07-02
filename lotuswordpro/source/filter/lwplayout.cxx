@@ -252,7 +252,7 @@ bool LwpVirtualLayout::IsPage()
     return (GetLayoutType() == LWP_PAGE_LAYOUT);
 }
 /**
- * @descr:  Whether this layout is heaer layout or not
+ * @descr:  Whether this layout is header layout or not
  * @param:
  * @return:
 */

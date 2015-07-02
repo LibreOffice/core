@@ -508,7 +508,7 @@ public class XMLTools {
 
         /**
          * Checks if this tag matches tag passed in parameters.
-         * I.e. if tag specifies only its name it mathes if names
+         * I.e. if tag specifies only its name it matches if names
          * are equal (attributes don't make sense). If there are
          * some attributes names specified in this tag method checks
          * if all names present in attribute list <code>list</code>

@@ -43,7 +43,7 @@ public class _XDeleteRows extends MultiMethodTest {
     * Retrieves bookmark using XRowLocate and deletes
     * row pointed by this bookmark. <p>
     * Has OK status if number of rows after deleting is less than before
-    * and no exception rizes while method call, FAILED otherwise. <p>
+    * and no exception rises while method call, FAILED otherwise. <p>
     */
     public void _deleteRows() {
         XRowLocate xRowLocate = UnoRuntime.queryInterface(XRowLocate.class, oObj);

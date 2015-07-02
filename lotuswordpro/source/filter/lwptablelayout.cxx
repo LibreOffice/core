@@ -738,7 +738,7 @@ void LwpTableLayout::RegisterStyle()
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_StyleName = pXFStyleManager->AddStyle(pTableStyle).m_pStyle->GetStyleName();
 
-    //convert to OO table now and register row stle
+    //convert to OO table now and register row style
     // traverse
     TraverseTable();
 

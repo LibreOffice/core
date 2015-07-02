@@ -98,7 +98,7 @@ public class _XPropertyAccess extends MultiMethodTest {
      *    <CODE>XPropertyAccess.propertyToChange</CODE> has changed</LI>
      *    <li><CODE>com.sun.star.lang.IllegalArgumentException</CODE> was thrown if a <CODE>Integer</CODE>
      *    value was set to a <CODE>String</CODE> property</LI>
-     *    <li><CODE>com.sun.star.beans.UnknownPropertyException</CODE> was throen if an invalid property
+     *    <li><CODE>com.sun.star.beans.UnknownPropertyException</CODE> was thrown if an invalid property
      *    was set</LI>
      * </ul>
      */
@@ -112,7 +112,7 @@ public class _XPropertyAccess extends MultiMethodTest {
             PropertyValue[] newProps = new PropertyValue[1];
             newProps[0] = propertyToChange;
 
-            log.println("try to set property vlaues given by object relation 'XPropertyAccess.propertyToChange'...");
+            log.println("try to set property values given by object relation 'XPropertyAccess.propertyToChange'...");
             oObj.setPropertyValues(newProps);
 
         } catch (UnknownPropertyException ex) {

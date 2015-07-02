@@ -62,7 +62,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
     /**
      * Retrieves all relations. If optional relation
      * <code>FrameLoader.Frame</code> not found
-     * creates a new document and otains its frame for loading. <p>
+     * creates a new document and obtains its frame for loading. <p>
      *
      * Also <code>MediaDescriptor</code> is created using
      * URL from <code>FrameLoader.URL</code> relation.
@@ -83,7 +83,7 @@ public class _XSynchronousFrameLoader extends MultiMethodTest {
 
         XURLTransformer xURLTrans = null;
 
-        // if frame is not contained in relations the writer frmame will be used.
+        // if frame is not contained in relations the writer frame will be used.
         if (frame == null) {
             try {
                 log.println( "creating a textdocument" );

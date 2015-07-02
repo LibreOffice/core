@@ -166,7 +166,7 @@ if ( $main::operatingSystem =~ m/darwin/ )
             print " Error: An office installation is required, please specify the path to a valid installation.\n";
         } else
         {
-            # special work for a network installation, no prgram directory but a link to the soffice binary
+            # special work for a network installation, no program directory but a link to the soffice binary
             if ( (! -d "$main::OFFICE_HOME/program") && (-e "$main::OFFICE_HOME/soffice") )
             {
                 my $soserver = `ls -l $OFFICE_HOME_SUGGESTION/soffice | sed -n 's/.* -> //p'`;

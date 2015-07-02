@@ -42,7 +42,7 @@ import java.util.ArrayList;
  * It's not allowed to call synchronous back to the office if a java object
  * was called in a oneway declared interface method. Then it must be
  * executed asynchronous. To do so - a thread can be created which use this
- * interface. It get the object, which whis to be called back and the type and
+ * interface. It get the object, which has to be called back and the type and
  * parameter of the original request.
  *
  */
