@@ -1201,7 +1201,8 @@ double SwXCell::GetForcedNumericalValue() const
         nFIndex = pNumFormatter->GetStandardIndex( eLang );
     }
     double fTmp;
-    pNumFormatter->IsNumberFormat(const_cast<SwXCell*>(this)->getString(), nFIndex, fTmp);
+    if (!pNumFormatter->IsNumberFormat(const_cast<SwXCell*>(this)->getString(), nFIndex, fTmp))
+        ::rtl::math::setNan(&fTmp);
     return fTmp;
 }
 
