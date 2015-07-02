@@ -210,7 +210,7 @@ public:
     */
     static void SAL_CALL initialize(
         const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > & ctx )
-        throw ( com::sun::star::uno::RuntimeException );
+        throw ( com::sun::star::uno::RuntimeException, std::exception );
 
     /** Checks, whether the uno runtime is already initialized in the current python interpreter.
      */

@@ -302,7 +302,7 @@ void  stRuntimeImpl::del(PyObject* self)
 
 
 void Runtime::initialize( const Reference< XComponentContext > & ctx )
-    throw ( RuntimeException )
+    throw ( RuntimeException, std::exception )
 {
     PyRef globalDict, runtime;
     getRuntimeImpl( globalDict , runtime );
