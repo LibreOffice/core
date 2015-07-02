@@ -259,7 +259,7 @@ private:
                                         const ::std::list< NamePassRecord >& userlist,
                                         const OUString& name,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
-                                                        throw(::com::sun::star::uno::RuntimeException);
+                                                        throw(css::uno::RuntimeException, std::exception);
 bool createUrlRecord(
     const PassMap::iterator & rIter,
     bool bName,

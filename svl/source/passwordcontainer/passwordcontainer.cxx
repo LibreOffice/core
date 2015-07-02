@@ -704,7 +704,7 @@ UrlRecord SAL_CALL PasswordContainer::findForName( const OUString& aURL, const O
 }
 
 
-Sequence< UserRecord > PasswordContainer::FindUsr( const list< NamePassRecord >& userlist, const OUString& aName, const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException)
+Sequence< UserRecord > PasswordContainer::FindUsr( const list< NamePassRecord >& userlist, const OUString& aName, const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException, std::exception)
 {
     sal_uInt32 nInd = 0;
     for( list< NamePassRecord >::const_iterator aNPIter = userlist.begin();
