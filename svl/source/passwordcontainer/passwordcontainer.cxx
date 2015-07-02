@@ -656,7 +656,7 @@ void SAL_CALL PasswordContainer::addPersistent( const OUString& Url, const OUStr
 }
 
 
-void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserName, const Sequence< OUString >& Passwords, char Mode, const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException)
+void PasswordContainer::PrivateAdd( const OUString& Url, const OUString& UserName, const Sequence< OUString >& Passwords, char Mode, const Reference< XInteractionHandler >& aHandler ) throw(RuntimeException, std::exception)
 {
     NamePassRecord aRecord( UserName );
     ::std::vector< OUString > aStorePass = copySequenceToVector( Passwords );

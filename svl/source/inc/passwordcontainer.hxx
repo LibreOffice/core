@@ -291,7 +291,7 @@ bool createUrlRecord(
                               const ::com::sun::star::uno::Sequence< OUString >& aPasswords,
                               char  aMode,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
-                                                        throw(::com::sun::star::uno::RuntimeException);
+                                                        throw(css::uno::RuntimeException, std::exception);
 
     static ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword )
                                                         throw(::com::sun::star::uno::RuntimeException);
