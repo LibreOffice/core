@@ -327,11 +327,11 @@ public:
     // The object has been moved by the layout
     virtual void InvalidatePosOrSize( const SwRect& rFrm );
 
-    // The vhild object has been moved by the layout
+    // The child object has been moved by the layout
     virtual void InvalidateChildPosOrSize( const sw::access::SwAccessibleChild& rFrmOrObj,
                                            const SwRect& rFrm );
 
-    // The content may have changed (but it hasn't tohave changed)
+    // The content may have changed (but it hasn't to have changed)
     void InvalidateContent();
 
     // The caretPos has changed

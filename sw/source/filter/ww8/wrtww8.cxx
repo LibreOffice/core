@@ -1559,7 +1559,7 @@ void WW8Export::WriteAsStringTable(const std::vector<OUString>& rStrings,
     }
 }
 
-// WriteShort() traegt an FilePos nPos den Wert nVal ein und seekt auf die
+// WriteShort() target an FilePos nPos den Wert nVal ein und seekt auf die
 // alte FilePos zurueck. Benutzt zum Nachtragen von Laengen.
 void SwWW8Writer::WriteShort( SvStream& rStrm, sal_uLong nPos, sal_Int16 nVal )
 {

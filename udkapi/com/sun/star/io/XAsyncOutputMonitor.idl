@@ -65,7 +65,7 @@ interface XAsyncOutputMonitor {
        blocks long enough so that any errors encountered during previous calls
        to com::sun::star::io::XOutputStream::writeBytes()
        can reliably be reported.  It specificially does not guarantee that any
-       data have savely been stored on a stable physical medium, like a hard
+       data have safely been stored on a stable physical medium, like a hard
        disk (and it is completely unspecified whether <code>flush</code> should
        give this guarantee).</p>
 

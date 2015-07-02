@@ -70,7 +70,7 @@ void SwTextNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                     // Now we have the row which causes a new page,
                     // this row is a follow flow line and therefore cannot get
                     // the soft page break itself.
-                    // Every first content frame of every cell frane in this row
+                    // Every first content frame of every cell frame in this row
                     // will get the soft page break
                     const SwFrm* pCell = pRow->Lower();
                     while( pCell )

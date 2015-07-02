@@ -1416,7 +1416,7 @@ void ImplStdBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHeigh
     ImplInitTitle(&maFrameData);
     if (pData->mnTitleHeight)
     {
-        // to improve symbol display force a minum title height
+        // to improve symbol display force a minimum title height
         if( pData->mnTitleHeight < MIN_CAPTION_HEIGHT )
             pData->mnTitleHeight = MIN_CAPTION_HEIGHT;
 

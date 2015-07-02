@@ -445,7 +445,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
     // that hint would also have already split any hint in OverlappingExisting
     // so any hint in OverlappingExisting can be split at most by one hint
     // in SplitNew, or even not at all (this is not true for existing hints
-    // that go _around_ new hint, which is the raison d'^etre for pass 4)
+    // that go _around_ new hint, which is the reason d'^etre for pass 4)
     for (NestList_t::iterator itOther = OverlappingExisting.begin();
             itOther != OverlappingExisting.end(); ++itOther)
     {

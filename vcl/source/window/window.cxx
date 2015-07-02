@@ -2952,7 +2952,7 @@ void Window::setPosSizePixel( long nX, long nY,
 
         pWindow->mpWindowImpl->mpFrame->SetPosSize( nX, nY, nWidth, nHeight, nSysFlags );
 
-        // Resize should be called directly. If we havn't
+        // Resize should be called directly. If we haven't
         // set the correct size, we get a second resize from
         // the system with the correct size. This can be happened
         // if the size is to small or to large.

@@ -848,8 +848,8 @@ public:
     inline sal_uInt32 GetFrmId() const { return mnFrmId; }
     static inline sal_uInt32 GetLastFrmId() { return mnLastFrmId; }
 
-    // NEW TABELS
-    // Some functions for covered/covering table cells. This way unnessessary
+    // NEW TABLES
+    // Some functions for covered/covering table cells. This way unnecessary
     // includes can be avoided
     bool IsLeaveUpperAllowed() const;
     bool IsCoveredCell() const;

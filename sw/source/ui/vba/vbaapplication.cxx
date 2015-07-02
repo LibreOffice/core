@@ -65,7 +65,7 @@ SwVbaApplication::getActiveDocument() throw (uno::RuntimeException, std::excepti
 uno::Reference< word::XWindow > SAL_CALL
 SwVbaApplication::getActiveWindow() throw (uno::RuntimeException, std::exception)
 {
-    // #FIXME sofar can't determine Parent
+    // #FIXME so far can't determine Parent
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_SET_THROW );
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
     return new SwVbaWindow( uno::Reference< XHelperInterface >(), mxContext, xModel, xController );

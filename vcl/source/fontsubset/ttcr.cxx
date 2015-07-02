@@ -383,7 +383,7 @@ typedef struct {
 typedef struct {
     sal_uInt32 n;                           /* number of used CMAP sub-tables       */
     sal_uInt32 m;                           /* number of allocated CMAP sub-tables  */
-    CmapSubTable *s;                    /* sotred array of sub-tables           */
+    CmapSubTable *s;                    /* sorted array of sub-tables           */
 } table_cmap;
 
 typedef struct {

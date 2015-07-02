@@ -327,7 +327,7 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
 
 
 
-        // Currently no difference between reonly /read-write
+        // Currently no difference between read-only/read-write
         // -> all props ar read-only
 
         static const beans::Property aRootFolderPropertyInfoTable[] =

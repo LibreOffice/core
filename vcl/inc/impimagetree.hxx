@@ -79,7 +79,7 @@ private:
     /// Remember all the (used) icon styles and individual icons in them.
     StyleIconSet maIconSet;
 
-    /// Styly used for the current operations; switches switch several times during fallback search.
+    /// Style used for the current operations; switches switch several times during fallback search.
     OUString maCurrentStyle;
 
     bool doLoadImage(
@@ -103,7 +103,7 @@ private:
     /// Return name of a real .png according to links.txt.
     OUString const & getRealImageName(OUString const & name);
 
-    /** Rerurn name of the fallback style for the provided one.
+    /** Return name of the fallback style for the provided one.
 
         Must not be cyclic :-)  The last theme in the chain returns an empty string.
     */

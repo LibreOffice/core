@@ -887,7 +887,7 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 15);
         aDocStat.Reset();
 
-        //But default configuration should, msword-alike treak emdash
+        //But default configuration should, msword-alike treat emdash
         //and endash as word separators for word-counting
         m_pDoc->getIDocumentContentOperations().AppendTextNode(*aPaM.GetPoint());
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, sTemplate.replace('X', 0x2013));

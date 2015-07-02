@@ -949,7 +949,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     maGroups.reserve( aControlModels.getLength() );
 
     GroupingMachineState eState = eLookingForGroup;     // the current state of our machine
-    Reference< XServiceInfo > xModelSI;                 // for checking for a radion button
+    Reference< XServiceInfo > xModelSI;                 // for checking for a radio button
     AllGroups::iterator aCurrentGroup = maGroups.end(); // the group which we're currently building
     sal_Int32   nCurrentGroupStep = -1;                 // the step which all controls of the current group belong to
     bool    bIsRadioButton;                         // is it a radio button?

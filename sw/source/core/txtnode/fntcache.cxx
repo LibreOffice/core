@@ -983,7 +983,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // almost the same as getting the offset for the first character:
                 // punctuation characters are not centered, so just add half an
                 // average character width minus the characters actual char width
-                // to get the offset intot the centre of the next character
+                // to get the offset into the centre of the next character
 
                 cChar = rInf.GetText()[ rInf.GetIdx() + j ];
                 nType = lcl_WhichPunctuation( cChar );

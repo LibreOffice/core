@@ -734,7 +734,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
             // >= min           min = min       min = width
             //                  max = width     max = width
 
-            // >= absmin        min = wdith(*)  min = width
+            // >= absmin        min = width(*)  min = width
             //                  max = width     max = width
 
             // < absmin         min = absmin    min = absmin

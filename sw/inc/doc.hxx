@@ -260,7 +260,7 @@ class SW_DLLPUBLIC SwDoc :
     /* @@@MAINTAINABILITY-HORROR@@@
        Timer should not be members of the model
     */
-    Idle       maOLEModifiedIdle;      //< Timer for update modified OLE-Objecs
+    Idle       maOLEModifiedIdle;      //< Timer for update modified OLE-Objects
     SwDBData    maDBData;                //< database descriptor
     OUString    msTOIAutoMarkURL;        //< URL of table of index AutoMark file
     boost::ptr_vector< boost::nullable<OUString> > maPatternNms;          // Array for names of document-templates
@@ -458,7 +458,7 @@ private:
 public:
     enum DocumentType {
         DOCTYPE_NATIVE,
-        DOCTYPE_MSWORD              //This doc medul is come from Ms Word
+        DOCTYPE_MSWORD              //This doc model comes from MS Word
         };
     DocumentType    meDocType;
     DocumentType    GetDocumentType(){ return meDocType; }
@@ -1288,7 +1288,7 @@ public:
     SwTableBoxFormat* MakeTableBoxFormat();
     SwTableLineFormat* MakeTableLineFormat();
 
-    // Check if box has numerical valule. Change format of box if required.
+    // Check if box has numerical value. Change format of box if required.
     void ChkBoxNumFormat( SwTableBox& rAktBox, bool bCallUpdate );
     void SetTableBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet );
     void ClearBoxNumAttrs( const SwNodeIndex& rNode );

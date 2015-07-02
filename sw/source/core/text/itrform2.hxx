@@ -68,7 +68,7 @@ class SwTextFormatter : public SwTextPainter
     SwTextPortion *WhichTextPor( SwTextFormatInfo &rInf ) const;
     SwExpandPortion * TryNewNoLengthPortion( SwTextFormatInfo & rInfo );
 
-    // The center pice of formatting
+    // The center piece of formatting
     void BuildPortions( SwTextFormatInfo &rInf );
 
     bool BuildMultiPortion( SwTextFormatInfo &rInf, SwMultiPortion& rMulti );

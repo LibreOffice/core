@@ -3982,7 +3982,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         }
                         else if( pCapStNd )
                         {
-                            // Da wir diese Sction nicht mehr loeschen
+                            // Da wir diese Section nicht mehr loeschen
                             // koennen (sie koeente zur erster Box
                             // gehoeren), fuegen wir sie ein.
                             pSaveStruct->AddContents(

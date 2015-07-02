@@ -399,7 +399,7 @@ public: // TODO: is public really needed?
     void    updateWidth( bool bUseFirstVal);
 
 private:
-    // typeop exceution context
+    // typeop execution context
     int mnStackIdx;
     ValType mnValStack[ NMAXSTACK+4];
     ValType mnTransVals[ NMAXTRANS];

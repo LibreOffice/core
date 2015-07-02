@@ -1168,7 +1168,7 @@ position of the first set before the ref.
 So what we will do is
 
 1) keep a list of all bookmarks that were set, any bookmark names mentioned
-here that are refed by content will be converted to show variables.
+here that are referred by content will be converted to show variables.
 
 2) create pseudo bookmarks for every position that a bookmark is set with SET
 or ASK but has no existing bookmark. We can then keep a map from the original

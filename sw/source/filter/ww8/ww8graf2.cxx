@@ -121,7 +121,7 @@ sal_uLong wwZOrderer::GetEscherObjectPos( sal_uLong nSpId,
     sal_uInt16 nFound = GetEscherObjectIdx(nSpId);
     // Match the ordering position from the ShapeOrders to the ordering of all
     // objects in the document, there is a complexity when escherobjects
-    // contain inlines objects, we need to consider thsose as part of the
+    // contain inlines objects, we need to consider those as part of the
     // escher count
     sal_uLong nRet=0;
     myeiter aIter = maEscherLayer.begin();
@@ -573,7 +573,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     }
 
                     //A graphic of this type in this location is always
-                    //inline, and uses the pic in the same mould as ww6
+                    //inline, and uses the pic in the same module as ww6
                     //graphics.
                     if (m_pWFlyPara && m_pWFlyPara->bGrafApo)
                     {
