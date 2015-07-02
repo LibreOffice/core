@@ -1698,7 +1698,7 @@ void WMFWriter::UpdateHeader()
     nFileSize>>=1;                    // convert to number of words
     pWMF->Seek(nMetafileHeaderPos+6); // to filesize entry in second header
     pWMF->WriteUInt32( nFileSize );               // rectify file size
-    pWMF->SeekRel(2);                 // to max-recond-length-entry in second header
+    pWMF->SeekRel(2);                 // to max-record-length-entry in second header
     pWMF->WriteUInt32( nMaxRecordSize );          // and rectify
     pWMF->Seek(nPos);
 }

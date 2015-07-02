@@ -2714,7 +2714,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     rVector.clear();
 
     // fall back to bitmap conversion
-    // Here, we can savely assume that the mapping between characters and glyphs
+    // Here, we can safely assume that the mapping between characters and glyphs
     // is one-to-one. This is most probably valid for the old bitmap fonts.
     // fall back to bitmap method to get the bounding rectangle,
     // so we need a monochrome virtual device with matching font

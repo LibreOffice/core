@@ -2820,7 +2820,7 @@ static bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 // The position comparison's result
 //  POS_BEFORE,             // Box comes before
 //  POS_BEHIND,             // Box comes after
-//  POS_INSIDE,             // Box is completely wthin start/end
+//  POS_INSIDE,             // Box is completely within start/end
 //  POS_OUTSIDE,            // Box overlaps start/end completely
 //  POS_EQUAL,              // Box and start/end are the same
 //  POS_OVERLAP_BEFORE,     // Box overlapps the start
@@ -3356,7 +3356,7 @@ static _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
     // Find Lines for the Layout update
     pFndBox->DelFrms( rTable );
 
-    // TL_CHART2: this function gest called from SetColWidth exclusively,
+    // TL_CHART2: this function get called from SetColWidth exclusively,
     // thus it is currently speculated that nothing needs to be done here.
     // Note: that SetColWidth is currently not completely understood though :-(
 

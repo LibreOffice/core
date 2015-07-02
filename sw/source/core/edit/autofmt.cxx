@@ -761,7 +761,7 @@ sal_uInt16 SwAutoFormat::GetDigitLevel( const SwTextNode& rNd, sal_Int32& rPos,
             else if( pNumTypes && !(eScan & DIGIT) )
                 *pNumTypes += OUStringLiteral1<'0' + SVX_NUM_ARABIC>();
 
-            eScan &= ~DELIM;        // remvoe Delim
+            eScan &= ~DELIM;        // remove Delim
             if( 0 != (eScan & ~CHG) && DIGIT != (eScan & ~CHG))
                 return USHRT_MAX;
 

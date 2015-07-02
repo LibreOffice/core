@@ -303,7 +303,7 @@ public:
      sophisticated one day. */
     bool IsDirectlyInSection() const;
 
-    /** For return valies see above FrmType.
+    /** For return values see above FrmType.
      pPt: Cursr or DocPos respectively; bStopAtFly: Stop at flys or continue over anchor.
      Although (0,TRUE) is kind of a standard, the parameters are not defaulted here
      in order to force more conscious use especially of bStopAtFly. */

@@ -2345,7 +2345,7 @@ bool SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         // when using internal D&Ds, still the source object is selected and
         // this is necessary to get the correct source data which is also
         // dependent from selection. After receiving the drag data it is
-        // now tiime to select the correct target object
+        // now time to select the correct target object
         SwTransferable::SetSelInShell( rSh, true, pPt );
     }
 

@@ -215,7 +215,7 @@ namespace DOM
             case NodeType_ENTITY_REFERENCE_NODE:
                 return true;
             case NodeType_ATTRIBUTE_NODE:
-                /* this is not relly allowed by the DOM spec, but this
+                /* this is not really allowed by the DOM spec, but this
                    implementation has evidently supported it (by special case
                    handling, so the attribute does not actually become a child)
                    so allow it for backward compatibility */

@@ -177,7 +177,7 @@ public class _XCommandProcessor {
      * The following method tests are to be completed successfully before :
      * <ul>
      *  <li> <code> createCommandIdentifier() </code> : to have a unique
-     *  identifier which is used to abourt started command. </li>
+     *  identifier which is used to abort started command. </li>
      * </ul>
      */
     public boolean _abort() {

@@ -1317,7 +1317,7 @@ bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
     {
         SelectClipRgn( mrParent.getHDC(), mrParent.mhRegion );
 
-        // debug code if you weant to check range of the newly applied ClipRegion
+        // debug code if you want to check range of the newly applied ClipRegion
         //RECT aBound;
         //const int aRegionType = GetRgnBox(mrParent.mhRegion, &aBound);
 

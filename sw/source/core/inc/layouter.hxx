@@ -115,7 +115,7 @@ public:
     static bool FrmMovedFwdByObjPos( const SwDoc& _rDoc,
                                      const SwTextFrm& _rTextFrm,
                                      sal_uInt32& _ornToPageNum );
-    // --> #i40155# - ummark given frame as to be moved forward.
+    // --> #i40155# - unmark given frame as to be moved forward.
     static void RemoveMovedFwdFrm( const SwDoc& _rDoc,
                                    const SwTextFrm& _rTextFrm );
     // --> #i26945#

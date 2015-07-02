@@ -1109,7 +1109,7 @@ class HTMLEndPosLst
     std::deque<sal_Int32> aScriptChgLst;    // positions where script changes
                                     // 0 is not contained in this list,
                                     // but the text length
-    // the script that is valif up to the position
+    // the script that is valid up to the position
     // contained in aScriptChgList at the same index
     ::std::vector<sal_uInt16> aScriptLst;
 

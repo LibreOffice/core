@@ -711,7 +711,7 @@ void SwSectionFormat::DelFrms()
     if( pIdx )
     {
         // Send Hint for PageDesc. Actually the Layout contained in the
-        // Paste of the Framei tself would need to do this. But that leads
+        // Paste of the Frame itself would need to do this. But that leads
         // to subsequent errors, which we'd need to solve at run-time.
         SwNodeIndex aNextNd( *pIdx );
         SwContentNode* pCNd = GetDoc()->GetNodes().GoNextSection( &aNextNd, true, false );

@@ -1031,7 +1031,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                 // ''Property Modifier(variant 1) (PRM)''
                 // see file: s62f39.htm
 
-                // Since isprm is 7 bits, rgsprmPrm can hold 0x80 entries.
+                // Since Sprm is 7 bits, rgsprmPrm can hold 0x80 entries.
                 static const sal_uInt16 aSprmId[0x80] =
                 {
                     // sprmNoop, sprmNoop, sprmNoop, sprmNoop

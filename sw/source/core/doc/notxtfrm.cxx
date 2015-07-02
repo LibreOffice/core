@@ -715,7 +715,7 @@ bool paintUsingPrimitivesHelper(
         if(!basegfx::fTools::equalZero(rTargetRange.getWidth()) && !basegfx::fTools::equalZero(rTargetRange.getHeight()))
         {
             // map graphic range to target range. This will e.g. automatically include
-            // tme mapping from 1/100th mm content to twips if needed when the target
+            // the mapping from 1/100th mm content to twips if needed when the target
             // range is defined in twips
             const basegfx::B2DHomMatrix aMappingTransform(
                 basegfx::tools::createSourceRangeTargetRangeTransform(

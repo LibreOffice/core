@@ -2135,7 +2135,7 @@ void AttributeOutputBase::StartTOX( const SwSection& rSect )
                         //\t option
                         if( nMaxMSAutoEvaluate < nTOXLvl )
                         {
-                            // collect this templates into the \t otion
+                            // collect this templates into the \t option
                             for( n = rColls.size(); n;)
                             {
                                 const SwTextFormatColl* pColl = rColls[ --n ];

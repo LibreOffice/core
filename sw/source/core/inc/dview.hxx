@@ -87,7 +87,7 @@ public:
     virtual void         MarkListHasChanged() SAL_OVERRIDE;
 
     // #i7672#
-    // Override to resue edit background color in active text edit view (OutlinerView)
+    // Override to reuse edit background color in active text edit view (OutlinerView)
     virtual void ModelHasChanged() SAL_OVERRIDE;
 
     virtual void         ObjOrderChanged( SdrObject* pObj, sal_uLong nOldPos,

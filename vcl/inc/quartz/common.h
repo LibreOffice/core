@@ -35,7 +35,7 @@
 
 // CoreFoundation designers, in their wisdom, decided that CFRelease of NULL
 // cause a Crash, yet few API can return NULL when asking for the creation
-// of an object, which force us to peper the code with ugly if construct everywhere
+// of an object, which force us to paper the code with ugly if construct everywhere
 // and open the door to very nasty crash on rare occasion
 // this macro hide the mess
 #define SafeCFRelease(a) do { if(a) { CFRelease(a); (a)=NULL; } } while(false)

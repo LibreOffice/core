@@ -2448,7 +2448,7 @@ bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
     // to be set if the last box of the data-sequence was removed here
     bool bNowEmpty = false;
 
-    // if the implementation cursor gets affected (i.e. thew box where it is located
+    // if the implementation cursor gets affected (i.e. the box where it is located
     // in gets removed) we need to move it before that... (otherwise it does not need to change)
 
     const SwStartNode* pPointStartNode = pTableCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();

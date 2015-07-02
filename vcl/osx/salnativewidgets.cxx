@@ -1284,7 +1284,7 @@ bool AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                     x += 4; // add an offset for rounded borders
                     y += 2; // don't draw into upper border
                     w -= 8; // offset for left and right rounded border
-                    h -= 4; // don't draw into upper or ower border
+                    h -= 4; // don't draw into upper or lower border
 
                     rNativeContentRegion = Rectangle( Point( x + FOCUS_RING_WIDTH, y + FOCUS_RING_WIDTH ), Size( w - 2* FOCUS_RING_WIDTH, h ) );
                     rNativeBoundingRegion = Rectangle( Point( x, y ), Size( w, h+2*FOCUS_RING_WIDTH ) );

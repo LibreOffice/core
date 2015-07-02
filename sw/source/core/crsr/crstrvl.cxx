@@ -2229,7 +2229,7 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
         }
     }
 
-    // then check all the Flys with a URL or imapge map
+    // then check all the Flys with a URL or image map
     {
         const SwFrameFormats* pFormats = GetDoc()->GetSpzFrameFormats();
         for( SwFrameFormats::size_type n = 0, nEnd = pFormats->size(); n < nEnd; ++n )

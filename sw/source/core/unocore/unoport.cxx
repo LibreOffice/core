@@ -409,7 +409,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
 
     {
         SfxItemSet *pSet = 0;
-        // get startting pount fo the look-up, either the provided one or else
+        // get starting point for the look-up, either the provided one or else
         // from the beginning of the map
         const SfxItemPropertyMap& rMap = m_pPropSet->getPropertyMap();
         for(sal_Int32 nProp = 0; nProp < nLength; nProp++)

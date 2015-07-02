@@ -4917,8 +4917,8 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
 
                             m_bPostponedProcessingFly = false ;
                         }
-                        // IsAlternateContentChoiceOpen() : check is to ensure that only one object is getting added. Without this check, plus one obejct gets added
-                        // m_bParagraphFrameOpen : Check if the frame is open.
+                        // IsAlternateContentChoiceOpen(): check is to ensure that only one object is getting added. Without this check, plus one object gets added
+                        // m_bParagraphFrameOpen: check if the frame is open.
                         else if (IsAlternateContentChoiceOpen() && m_bParagraphFrameOpen)
                             m_pPostponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrameFormat()), &rNdTopLeft));
                         else

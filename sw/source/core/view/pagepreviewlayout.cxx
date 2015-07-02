@@ -1268,7 +1268,7 @@ void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
     const sal_uInt16 nOldSelectedPageNum = mnSelectedPageNum;
     mnSelectedPageNum = _nSelectedPage;
 
-    // re-paint for current selected page in order to umark it.
+    // re-paint for current selected page in order to unmark it.
     const PreviewPage* pOldSelectedPreviewPage = _GetPreviewPageByPageNum( nOldSelectedPageNum );
     if ( pOldSelectedPreviewPage && pOldSelectedPreviewPage->bVisible )
     {

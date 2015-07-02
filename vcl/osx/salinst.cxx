@@ -604,7 +604,7 @@ void AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
     }
 
     // handle cocoa event queue
-    // cocoa events mye be only handled in the thread the NSApp was created
+    // cocoa events may be only handled in the thread the NSApp was created
     if( isNSAppThread() && mnActivePrintJobs == 0 )
     {
         // we need to be woken up by a cocoa-event
