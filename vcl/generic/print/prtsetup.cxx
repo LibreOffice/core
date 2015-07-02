@@ -278,7 +278,12 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
     }
     else if( pBox == m_pOrientBox )
     {
-        m_pParent->m_aJobData.m_eOrientation = m_pOrientBox->GetSelectEntryPos() == 0 ? orientation::Portrait : orientation::Landscape;
+        orientation::type newOrientation = m_pOrientBox->GetSelectEntryPos() == 0 ? orientation::Portrait : orientation::Landscape;
+        if ( newOrientation != m_pParent->m_aJobData.m_eOrientation )
+        {
+            m_pParent->m_aJobData.m_eOrientation = newOrientation;
+            m_pParent->SetDataModified( true );
+        }
     }
     if( pKey )
     {
