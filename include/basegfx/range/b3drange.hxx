@@ -102,13 +102,6 @@ namespace basegfx
                 || maRangeZ != rRange.maRangeZ);
         }
 
-        bool equal(const B3DRange& rRange) const
-        {
-            return (maRangeX.equal(rRange.maRangeX)
-                    && maRangeY.equal(rRange.maRangeY)
-                    && maRangeZ.equal(rRange.maRangeZ));
-        }
-
         double getMinX() const
         {
             return maRangeX.getMinimum();
@@ -154,24 +147,6 @@ namespace basegfx
             return maRangeZ.getRange();
         }
 
-        B3DPoint getMinimum() const
-        {
-            return B3DPoint(
-                maRangeX.getMinimum(),
-                maRangeY.getMinimum(),
-                maRangeZ.getMinimum()
-                );
-        }
-
-        B3DPoint getMaximum() const
-        {
-            return B3DPoint(
-                maRangeX.getMaximum(),
-                maRangeY.getMaximum(),
-                maRangeZ.getMaximum()
-                );
-        }
-
         B3DVector getRange() const
         {
             return B3DVector(
@@ -187,39 +162,6 @@ namespace basegfx
                 maRangeX.getCenter(),
                 maRangeY.getCenter(),
                 maRangeZ.getCenter()
-                );
-        }
-
-        double getCenterX() const
-        {
-            return maRangeX.getCenter();
-        }
-
-        double getCenterY() const
-        {
-            return maRangeY.getCenter();
-        }
-
-        double getCenterZ() const
-        {
-            return maRangeZ.getCenter();
-        }
-
-        bool isInside(const B3DTuple& rTuple) const
-        {
-            return (
-                maRangeX.isInside(rTuple.getX())
-                && maRangeY.isInside(rTuple.getY())
-                && maRangeZ.isInside(rTuple.getZ())
-                );
-        }
-
-        bool isInside(const B3DRange& rRange) const
-        {
-            return (
-                maRangeX.isInside(rRange.maRangeX)
-                && maRangeY.isInside(rRange.maRangeY)
-                && maRangeZ.isInside(rRange.maRangeZ)
                 );
         }
 
@@ -244,13 +186,6 @@ namespace basegfx
             maRangeX.expand(rRange.maRangeX);
             maRangeY.expand(rRange.maRangeY);
             maRangeZ.expand(rRange.maRangeZ);
-        }
-
-        void intersect(const B3DRange& rRange)
-        {
-            maRangeX.intersect(rRange.maRangeX);
-            maRangeY.intersect(rRange.maRangeY);
-            maRangeZ.intersect(rRange.maRangeZ);
         }
 
         void grow(double fValue)
