@@ -729,9 +729,13 @@ void PushButton::ImplDrawPushButtonFrame(vcl::RenderContext& rRenderContext,
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         aStyleSettings.Set3DColors(GetControlBackground());
         aSettings.SetStyleSettings(aStyleSettings);
-        rRenderContext.SetSettings(aSettings);
+
+        // Call OutputDevice::SetSettings() explicitly, as rRenderContext may
+        // be a vcl::Window in fact, and vcl::Window::SetSettings() will call
+        // Invalidate(), which is a problem, since we're in Paint().
+        rRenderContext.OutputDevice::SetSettings(aSettings);
         rRect = aDecoView.DrawButton(rRect, nStyle);
-        rRenderContext.SetSettings(aOldSettings);
+        rRenderContext.OutputDevice::SetSettings(aOldSettings);
     }
     else
         rRect = aDecoView.DrawButton(rRect, nStyle);
