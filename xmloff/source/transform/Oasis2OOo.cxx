@@ -242,7 +242,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1Q( TEXT, TAB, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_TEXT, XML_TAB_STOP ),
 
-    // replace <table:table tabke:is-sub-table> with <table:sub-table>
+    // replace <table:table table:is-sub-table> with <table:sub-table>
     ENTRY0( TABLE, TABLE, XML_ETACTION_TABLE ),
 
     // merge frame element

@@ -1060,7 +1060,7 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
             {
                 OUString aPureEntry = aEntry.copy( nLastSlash + 1 );
 
-                // Check language sceme
+                // Check language scheme
                 int nLen = aPureEntry.getLength();
                 const sal_Unicode* pc = aPureEntry.getStr();
                 bool bStartCanBeLanguage = ( nLen >= 2 && isLetter( pc[0] ) && isLetter( pc[1] ) );

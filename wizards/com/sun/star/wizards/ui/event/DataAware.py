@@ -135,7 +135,7 @@ class DataAware(object):
 
     '''
     given a collection containing DataAware objects,
-    calls updateUI() on each memebr of the collection.
+    calls updateUI() on each member of the collection.
     @param dataAwares a collection containing DataAware objects.
     '''
 

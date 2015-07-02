@@ -202,7 +202,7 @@ void XMLTextHeaderFooterContext::EndElement()
     }
     else if( !bLeft )
     {
-        // If no content has been inserted inro the header or footer,
+        // If no content has been inserted into the header or footer,
         // switch it off.
         sal_Bool bOn = sal_False;
         Any aAny;

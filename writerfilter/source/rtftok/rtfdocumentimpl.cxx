@@ -1860,7 +1860,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             if (!m_aStates.top().pCurrentBuffer)
             {
                 // the object is in a table or another container.
-                // Don't try to treate it as an OLE object (fdo#53594).
+                // Don't try to treat it as an OLE object (fdo#53594).
                 // Use the \result (RTF_RESULT) element of the object instead,
                 // the result element contain picture representing the OLE Object.
                 m_bObject = true;

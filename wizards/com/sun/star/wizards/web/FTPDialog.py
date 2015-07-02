@@ -353,7 +353,7 @@ class FTPDialog(UnoDialog2, UIConsts):
 
     # changes the status label and icon, according to the
     # given status
-    # @param status one opf the private status-constants.
+    # @param status one of the private status-constants.
     # if this param is not one of them, an "unknown error" status is displayed.
     def setLabel(self, status):
         if status == self.STATUS_UNKNOWN:
@@ -363,7 +363,7 @@ class FTPDialog(UnoDialog2, UIConsts):
             # connected!
             self.setLabel1(self.resources.resFTPConnected, self.ICON_OK)
         elif status == self.STATUS_USER_PWD_WRONG:
-            # wronf password
+            # wrong password
             self.setLabel1(self.resources.resFTPUserPwdWrong, self.ICON_ERROR)
         elif status == self.STATUS_SERVER_NOT_FOUND:
             # problem resolving server name

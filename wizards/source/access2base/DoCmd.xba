@@ -2016,7 +2016,7 @@ End Sub				&apos;	_DispatchCommand	V1.3.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _getTempDirectoryURL()	As String
-&apos;	Return the tempry directory defined in the OO Options (Paths)
+&apos;	Return the temporary directory defined in the OO Options (Paths)
 Dim sDirectory As String, oSettings As Object, oPathSettings As Object	
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function

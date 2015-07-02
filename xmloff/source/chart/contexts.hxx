@@ -31,7 +31,7 @@ namespace com { namespace sun { namespace star { namespace xml { namespace sax {
 }}}}}
 
 /*
-   These contexts are only nedded by
+   These contexts are only needed by
    SchXMLImport not by the SchXMLImportHelper
    that is also used by other applications
 */

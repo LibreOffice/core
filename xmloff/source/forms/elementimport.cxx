@@ -2018,7 +2018,7 @@ namespace xmloff
 
                 aElements.push_back(sElement);
 
-                // swith to the next element
+                // switch to the next element
                 nElementStart = 1 + nNextSep;
             }
             while (nElementStart < nLength);

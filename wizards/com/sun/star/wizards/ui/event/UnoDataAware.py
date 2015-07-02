@@ -22,7 +22,7 @@ from ...common.PropertyNames import PropertyNames
 
 '''
 @author rpiterman
-This class suppoprts imple cases where a UI control can
+This class supports simple cases where a UI control can
 be directly synchronized with a data property.
 Such controls are: the different text controls
 (synchronizing the "Text" , "Value", "Date", "Time" property),

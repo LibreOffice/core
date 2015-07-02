@@ -205,7 +205,7 @@ End Function
 
 Function QueryValue(BaseKey As Long, sKeyName As String, sValueName As String) As Variant
 Dim lRetVal As Long         &apos; Returnvalue API-Call
-Dim hKey As Long            &apos; Onen key handle
+Dim hKey As Long            &apos; One key handle
 Dim vValue As String        &apos; Key value
 
     lRetVal = RegOpenKeyEx(BaseKey, sKeyName, 0, KEY_ALL_ACCESS, hKey)

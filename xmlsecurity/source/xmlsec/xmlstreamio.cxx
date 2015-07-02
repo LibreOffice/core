@@ -200,7 +200,7 @@ int xmlRegisterStreamInputCallbacks(
 int xmlUnregisterStreamInputCallbacks()
 {
     if( ( enableXmlStreamIO & XMLSTREAMIO_REGISTERED ) ) {
-        //Clear the uir-stream binding
+        //Clear the uri-stream binding
         m_xUriBinding.clear() ;
 
         //disable the registered flag
