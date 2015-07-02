@@ -1563,10 +1563,10 @@ bool Outliner::ConvertNextDocument()
 
 sal_uInt16 Outliner::ShowModalMessageBox (Dialog& rMessageBox)
 {
-    // We assume that the parent of the given messge box is NULL, i.e. it is
+    // We assume that the parent of the given message box is NULL, i.e. it is
     // modal with respect to the top application window. However, this
-    // does not affect the search dialog.  Therefore we have to lock it here
-    // while the message box is being shown.  We also have to take into
+    // does not affect the search dialog. Therefore we have to lock it here
+    // while the message box is being shown. We also have to take into
     // account that we are called during a spell check and the search dialog
     // is not available.
     vcl::Window* pSearchDialog = NULL;

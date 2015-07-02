@@ -736,7 +736,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                 rtl_uString_newFromStr_WithLength( &strTempPath, reinterpret_cast<const sal_Unicode*>(WSTR_SYSTEM_ROOT_PATH), SAL_N_ELEMENTS(WSTR_SYSTEM_ROOT_PATH) - 1 );
             else
             {
-                /* do not separate the directory and file case, so the maximal path lengs without prefix is MAX_PATH-12 */
+                /* do not separate the directory and file case, so the maximal path length without prefix is MAX_PATH-12 */
                 if ( nDecodedLen - nSkip <= MAX_PATH - 12 )
                 {
                     rtl_uString_newFromStr_WithLength( &strTempPath, pDecodedURL + nSkip, nDecodedLen - nSkip );

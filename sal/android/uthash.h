@@ -76,7 +76,7 @@ typedef unsigned int uint32_t;
 #define HASH_INITIAL_NUM_BUCKETS_LOG2 5  /* lg2 of initial number of buckets */
 #define HASH_BKT_CAPACITY_THRESH 10      /* expand when bucket count reaches */
 
-/* calculate the element whose hash handle address is hhe */
+/* calculate the element whose hash handle address is the */
 #define ELMT_FROM_HH(tbl,hhp) ((void*)(((char*)(hhp)) - ((tbl)->hho)))
 
 #define HASH_FIND(hh,head,keyptr,keylen,out)                                     \

@@ -1588,7 +1588,7 @@ struct FormulaGroupDumper : std::unary_function<sc::CellStoreType::value_type, v
 
 void ScColumn::DumpFormulaGroups() const
 {
-    cout << "-- formua groups" << endl;
+    cout << "-- formula groups" << endl;
     std::for_each(maCells.begin(), maCells.end(), FormulaGroupDumper());
     cout << "--" << endl;
 }

@@ -3683,7 +3683,7 @@ public:
     /// Produce kernel hash
     std::string GetMD5();
 
-    /// Create program, build, and create kerenl
+    /// Create program, build, and create kernel
     /// TODO cache results based on kernel body hash
     /// TODO: abstract OpenCL part out into OpenCL wrapper.
     void CreateKernel();

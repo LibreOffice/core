@@ -524,7 +524,7 @@ ScVbaApplication::getActiveSheet() throw (uno::RuntimeException, std::exception)
  *  Reference   Optional Variant. The destination. Can be a Range
  *  object, a string that contains a cell reference in R1C1-style notation,
  *  or a string that contains a Visual Basic procedure name.
- *  Scroll   Optional Variant. True to scrol, False to not scroll through
+ *  Scroll Optional Variant. True to scroll, False to not scroll through
  *  the window. The default is False.
  *  Parser is split to three parts, Range, R1C1 string and procedure name.
  *  by test excel, it seems Scroll no effect. ???

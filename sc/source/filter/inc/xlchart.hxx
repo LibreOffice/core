@@ -695,7 +695,7 @@ const sal_uInt8 EXC_CH3DDATAFORMAT_CIRC         = 1;        /// Circular base.
 
 const sal_uInt8 EXC_CH3DDATAFORMAT_STRAIGHT     = 0;        /// Straight to top.
 const sal_uInt8 EXC_CH3DDATAFORMAT_SHARP        = 1;        /// Sharp top.
-const sal_uInt8 EXC_CH3DDATAFORMAT_TRUNC        = 2;        /// Shart top, truncated.
+const sal_uInt8 EXC_CH3DDATAFORMAT_TRUNC        = 2;        /// Sharp top, truncated.
 
 // (0x1061) CHPIEEXT ----------------------------------------------------------
 

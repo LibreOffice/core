@@ -206,7 +206,7 @@ sal_Bool SAL_CALL DrawController::suspend( sal_Bool Suspend ) throw (::com::sun:
 OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeException, std::exception)
 {
     // Do not throw an excepetion at the moment.  This leads to a crash
-    // under Solaris on relead.  See issue i70929 for details.
+    // under Solaris on reload.  See issue i70929 for details.
     //    ThrowIfDisposed();
     return OUString("DrawController") ;
 }

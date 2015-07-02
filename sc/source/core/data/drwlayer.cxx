@@ -875,15 +875,15 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             // get bounding rectangle of shape ( include any hidden row/columns ), <sigh> we need to do this
             // because if the shape is rotated the anchor from xml is in terms of the unrotated shape, if
             // the shape is hidden ( by the rows that contain the shape being hidden ) then our hack of
-            // trying to infer the 'real' e.g. rotated anchor from the SnapRect will fail ( because the LogicRect will
-            // not have the correct position or size ) The only way we can possible do this is to first get the
+            // trying to infer the 'real' e.g. rotated anchor from the SnapRect will fail (because the LogicRect will
+            // not have the correct position or size). The only way we can possible do this is to first get the
             // 'unrotated' shape dimensions from the persisted Anchor (from xml) and then 'create' an Anchor from the
-            // associated rotated shape ( note: we do this by actually setting the LogicRect for the shape temporarily to the
-            // *full* size then grabbing the SnapRect ( which gives the transformed rotated dimensions ), it would be
-            // wonderful if we could do this mathematically without having to temporarily tweak the object... othoh this way
-            // is guaranteed to get consistent results )
+            // associated rotated shape (note: we do this by actually setting the LogicRect for the shape temporarily to the
+            // *full* size then grabbing the SnapRect (which gives the transformed rotated dimensions), it would be
+            // wonderful if we could do this mathematically without having to temporarily tweak the object... otoh this way
+            // is guaranteed to get consistent results)
             ResizeLastRectFromAnchor( pObj, rData, true, bNegativePage, bCanResize, false );
-            // aFullRect contains the unrotated size and position of the shape ( regardless of any hidden row/columns )
+            // aFullRect contains the unrotated size and position of the shape (regardless of any hidden row/columns)
             Rectangle aFullRect = rData.maLastRect;
 
             // get current size and position from the anchor for use later
@@ -1894,7 +1894,7 @@ void ScDrawLayer::SetCellAnchoredFromPosition( SdrObject &rObj, const ScDocument
     ScDrawObjData aVisAnchor;
     GetCellAnchorFromPosition( rObj, aVisAnchor, rDoc, nTab );
     SetVisualCellAnchored( rObj, aVisAnchor );
-    // absolutely necessary to set flag that in order to preven ScDrawLayer::RecalcPos
+    // absolutely necessary to set flag that in order to prevent ScDrawLayer::RecalcPos
     // doing an initialisation hack
     if ( ScDrawObjData* pAnchor = GetObjData( &rObj ) )
     {

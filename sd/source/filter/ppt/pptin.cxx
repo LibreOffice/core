@@ -2577,7 +2577,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                         pAnimation->SetAnimateAssociatedShape(false);
 
                                     //maybe some actions necessary to ensure that animations on master pages are played before animations on normal pages
-                                    ///mabe todo in future: bool bIsEffectOnMasterPage = !bInhabitanceChecked;?
+                                    //maybe todo in future: bool bIsEffectOnMasterPage = !bInhabitanceChecked;?
 
                                     maAnimations[pObj] = pAnimation;
 

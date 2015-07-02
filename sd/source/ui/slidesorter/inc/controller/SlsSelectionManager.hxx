@@ -43,8 +43,8 @@ class SelectionObserver;
     slides.
     <p>It has methods to modify the selected slides (delete them or
     move them to other places in the document), change the visible area so
-    to make the selected slides visble, tell listeners when the selection
-    changes.</p>
+    to make the selected slides visible, tell listeners when the selection
+    change.</p>
 */
 class SelectionManager
 {

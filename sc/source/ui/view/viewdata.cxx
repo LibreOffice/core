@@ -913,7 +913,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     bool bWasThere = false;
     if (pEditView[eWhich])
     {
-        //  if the view is already therem don't call anything that changes the cursor position
+        //  if the view is already there don't call anything that changes the cursor position
         if (bEditActive[eWhich])
             bWasThere = true;
         else

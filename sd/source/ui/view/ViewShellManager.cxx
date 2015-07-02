@@ -946,7 +946,7 @@ void ViewShellManager::Implementation::CreateShells()
 void ViewShellManager::Implementation::CreateTargetStack (ShellStack& rStack) const
 {
     // Create a local stack of the shells that are to push on the shell
-    // stack.  We can thus safly create the required shells wile still
+    // stack.  We can thus safely create the required shells wile still
     // having a valid shell stack.
     for (ActiveShellList::const_reverse_iterator iViewShell (maActiveViewShells.rbegin());
          iViewShell != maActiveViewShells.rend();

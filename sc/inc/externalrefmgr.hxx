@@ -648,7 +648,7 @@ public:
     void resetSrcFileData(const OUString& rBaseFileUrl);
 
     /**
-     * Replace the original URL wirh the real URL that was generated from the relative URL.
+     * Replace the original URL with the real URL that was generated from the relative URL.
      */
     void updateAbsAfterLoad();
 

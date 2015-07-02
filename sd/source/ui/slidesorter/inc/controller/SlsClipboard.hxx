@@ -198,7 +198,7 @@ private:
         @param pDropEvent
             Event though the AcceptDropEvent and ExecuteDropEvent are very
             similar they do not have a common base class.  Because of that
-            we have to use a void* to pase these structs.
+            we have to use a void* to pass these structs.
         @param nPage
             When the page number is given as 0xffff then it is replaced by
             the number of the page at the mouse position.  If the mouse is
