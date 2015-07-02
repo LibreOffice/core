@@ -2813,7 +2813,7 @@ void Content::lock(
 
 void Content::unlock(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     try
     {

@@ -185,7 +185,7 @@ private:
     // Command "unlock"
     void unlock( const com::sun::star::uno::Reference<
                   com::sun::star::ucb::XCommandEnvironment >& Environment )
-        throw( ::com::sun::star::uno::Exception );
+        throw( ::com::sun::star::uno::Exception, std::exception );
 
     ::com::sun::star::uno::Any MapDAVException( const DAVException & e,
                                                 bool bWrite );
