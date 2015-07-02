@@ -101,6 +101,7 @@ public:
     void testTdf69282();
     void testTdf69282WithMirror();
     void testSearchWithTransliterate();
+    void testTdf90808();
     void testTdf75137();
     void testTdf83798();
     void testTableBackgroundColor();
@@ -150,6 +151,7 @@ public:
     CPPUNIT_TEST(testTdf69282);
     CPPUNIT_TEST(testTdf69282WithMirror);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testTdf90808);
     CPPUNIT_TEST(testTdf75137);
     CPPUNIT_TEST(testTdf83798);
     CPPUNIT_TEST(testTableBackgroundColor);
@@ -1178,6 +1180,62 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testTdf90808()
+{
+    createDoc();
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xTextRange->getText(), uno::UNO_QUERY);
+    bool flag1=false,flag2=false;
+    //inserting text into document so that the paragraph is not empty
+    xText->setString(OUString("Hello World!"));
+    uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
+    //creating bookmark 1
+    uno::Reference<text::XTextContent> type1bookmark1(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xName1(type1bookmark1, uno::UNO_QUERY);
+    xName1->setName("__RefHeading__1");
+    //inserting the bookmark in paragraph
+    xText->insertTextContent(xTextRange, type1bookmark1, false);
+    //only one bookmark of this type is allowed in each paragraph an exception of com.sun.star.lang.IllegalArgumentException must be thrown when inserting the other bookmark in same paragraph
+    try{
+        //creating bookmark 2
+        uno::Reference<text::XTextContent> type1bookmark2(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xName2(type1bookmark2, uno::UNO_QUERY);
+        xName2->setName("__RefHeading__2");
+        //inserting the bookmark in same paragraph
+        xText->insertTextContent(xTextRange, type1bookmark2, false);
+   }
+   catch(...)
+   {
+        //Exception Found
+        flag1=true;
+   }
+    //resetting the paragraph and checking for another type of bookmarks
+    xText->setString(OUString("Hello World!"));
+    //creating bookmark 1
+    uno::Reference<text::XTextContent> type2bookmark1(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+    uno::Reference<container::XNamed> xName3(type2bookmark1, uno::UNO_QUERY);
+    xName3->setName("__RefNumPara__1");
+    //inserting the bookmark in paragraph
+    xText->insertTextContent(xTextRange, type2bookmark1, false);
+    //only one bookmark of this type is allowed in each paragraph an exception of com.sun.star.lang.IllegalArgumentException must be thrown when inserting the other bookmark in same paragraph
+    try{
+        //creating bookmark 2
+        uno::Reference<text::XTextContent> type2bookmark2(xFact->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY);
+         uno::Reference<container::XNamed> xName4(type2bookmark2, uno::UNO_QUERY);
+        xName4->setName("__RefNumPara__2");
+        //inserting the bookmark in same paragraph
+        xText->insertTextContent(xTextRange, type2bookmark2, false);
+   }
+   catch(...)
+   {
+        //Exception Found
+        flag2=true;
+   }
+   CPPUNIT_ASSERT(flag1);
+   CPPUNIT_ASSERT(flag2);
 }
 
 void SwUiWriterTest::testTdf75137()
