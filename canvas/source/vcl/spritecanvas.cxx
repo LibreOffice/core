@@ -145,7 +145,7 @@ namespace vclcanvas
         // avoid repaints on hidden window (hidden: not mapped to
         // screen). Return failure, since the screen really has _not_
         // been updated (caller should try again later)
-        return !mbIsVisible && maCanvasHelper.updateScreen(bUpdateAll,
+        return mbIsVisible && maCanvasHelper.updateScreen(bUpdateAll,
                                                                   mbSurfaceDirty);
     }
 
