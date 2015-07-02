@@ -61,8 +61,6 @@ namespace DOM
         NodeStack m_aNodeStack;
         NSStack m_aNSStack;
 
-        OUString resolvePrefix(const OUString& aPrefix);
-
         css::uno::Reference< css::xml::dom::XDocument > m_aDocument;
         css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
         css::uno::Reference< css::xml::sax::XLocator > m_aLocator;

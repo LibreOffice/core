@@ -159,16 +159,6 @@ class TOOLS_DLLPUBLIC INetMIMEMessage
     void CopyImp    (const INetMIMEMessage& rMsg);
     void SetHeaderParsed() { bHeaderParsed = true; }
 
-    OUString GetHeaderName_Impl (
-        sal_uIntPtr nIndex, rtl_TextEncoding eEncoding) const
-    {
-        if ( nIndex < m_aHeaderList.size() ) {
-            return OStringToOUString(m_aHeaderList[ nIndex ]->GetName(), eEncoding);
-        } else {
-            return OUString();
-        }
-    }
-
     OUString GetHeaderValue_Impl (
         sal_uIntPtr nIndex, INetMIME::HeaderFieldType eType) const
     {
