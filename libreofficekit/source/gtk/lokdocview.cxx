@@ -812,6 +812,7 @@ lok_doc_view_signal_button(GtkWidget* pWidget, GdkEventButton* pEvent)
            (int)pEvent->x, (int)pEvent->y,
            (int)pixelToTwip(pEvent->x, priv->m_fZoom),
            (int)pixelToTwip(pEvent->y, priv->m_fZoom));
+    gtk_widget_grab_focus(GTK_WIDGET(pDocView));
 
     if (pEvent->type == GDK_BUTTON_RELEASE)
     {
