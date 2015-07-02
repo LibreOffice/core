@@ -58,6 +58,7 @@ const sal_Int32 VML_CLIENTDATA_FORMULA          = 4;
 struct OOX_DLLPUBLIC ShapeTypeModel
 {
     OUString     maShapeId;              ///< Unique identifier of the shape.
+    OUString     maLegacyId;             ///< Plaintext identifier of the shape.
     OUString     maShapeName;            ///< Name of the shape, if present.
     OptValue< sal_Int32 > moShapeType;          ///< Builtin shape type identifier.
 
