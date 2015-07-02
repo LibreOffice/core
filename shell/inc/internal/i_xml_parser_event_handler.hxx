@@ -40,10 +40,6 @@ class i_xml_parser_event_handler
 public:
     virtual ~i_xml_parser_event_handler() {};
 
-    virtual void start_document() = 0;
-
-    virtual void end_document() = 0;
-
     virtual void start_element(
         const string_t& raw_name,
         const string_t& local_name,
@@ -58,9 +54,6 @@ public:
 
     virtual void ignore_whitespace(
         const string_t& whitespaces) = 0;
-
-    virtual void processing_instruction(
-        const string_t& target, const string_t& data) = 0;
 
     virtual void comment(const string_t& comment) = 0;
 };

@@ -131,15 +131,6 @@ namespace basegfx
             return *this;
         }
 
-        // blend to another color using luminance
-        void blend(const BColor& rColor)
-        {
-            const double fLuminance(luminance());
-            mfX = rColor.getRed() * fLuminance;
-            mfY = rColor.getGreen() * fLuminance;
-            mfZ = rColor.getBlue() * fLuminance;
-        }
-
         // luminance
         double luminance() const
         {
@@ -162,16 +153,6 @@ namespace basegfx
             const double fDistB(getDistanceBlue(rColor));
 
             return sqrt(fDistR * fDistR + fDistG * fDistG + fDistB * fDistB);
-        }
-
-        double getMinimumDistance(const BColor& rColor) const
-        {
-            const double fDistR(getDistanceRed(rColor));
-            const double fDistG(getDistanceGreen(rColor));
-            const double fDistB(getDistanceBlue(rColor));
-
-            double fRetval(fDistR < fDistG ? fDistR : fDistG);
-            return (fRetval < fDistB ? fRetval : fDistB);
         }
 
         double getMaximumDistance(const BColor& rColor) const
@@ -206,18 +187,6 @@ namespace basegfx
             return static_cast<const BColor&>( ::basegfx::B3DTuple::getEmptyTuple() );
         }
 
-        com::sun::star::uno::Sequence< double > colorToDoubleSequence(const com::sun::star::uno::Reference< com::sun::star::rendering::XGraphicDevice >& /*xGraphicDevice*/) const
-        {
-            com::sun::star::uno::Sequence< double > aRet(4);
-            double* pRet = aRet.getArray();
-
-            pRet[0] = mfX;
-            pRet[1] = mfY;
-            pRet[2] = mfZ;
-            pRet[3] = 1.0;
-
-            return aRet;
-        }
     };
 } // end of namespace basegfx
 

@@ -104,13 +104,6 @@ namespace basegfx
             return maRangeX.isEmpty() || maRangeY.isEmpty();
         }
 
-        /// reset the object to empty state again, clearing all values
-        void reset()
-        {
-            maRangeX.reset();
-            maRangeY.reset();
-        }
-
         bool operator==( const B2IBox& rBox ) const
         {
             return (maRangeX == rBox.maRangeX
@@ -177,48 +170,12 @@ namespace basegfx
                 );
         }
 
-        /// return difference between upper and lower value. returns (0,0) for empty sets.
-        B2I64Tuple getRange() const
-        {
-            return B2I64Tuple(
-                maRangeX.getRange(),
-                maRangeY.getRange()
-                );
-        }
-
-        /// return center point of set. returns (0,0) for empty sets.
-        B2DPoint getCenter() const
-        {
-            return B2DPoint(
-                maRangeX.getCenter(),
-                maRangeY.getCenter()
-                );
-        }
-
         /// yields true if point is contained in set
         bool isInside(const B2ITuple& rTuple) const
         {
             return (
                 maRangeX.isInside(rTuple.getX())
                 && maRangeY.isInside(rTuple.getY())
-                );
-        }
-
-        /// yields true if rBox is inside, or equal to set
-        bool isInside(const B2IBox& rBox) const
-        {
-            return (
-                maRangeX.isInside(rBox.maRangeX)
-                && maRangeY.isInside(rBox.maRangeY)
-                );
-        }
-
-        /// yields true if rBox at least partly inside set
-        bool overlaps(const B2IBox& rBox) const
-        {
-            return (
-                maRangeX.overlaps(rBox.maRangeX)
-                && maRangeY.overlaps(rBox.maRangeY)
                 );
         }
 
@@ -229,25 +186,11 @@ namespace basegfx
             maRangeY.expand(rTuple.getY());
         }
 
-        /// add rBox to the set, expanding as necessary
-        void expand(const B2IBox& rBox)
-        {
-            maRangeX.expand(rBox.maRangeX);
-            maRangeY.expand(rBox.maRangeY);
-        }
-
         /// calc set intersection
         void intersect(const B2IBox& rBox)
         {
             maRangeX.intersect(rBox.maRangeX);
             maRangeY.intersect(rBox.maRangeY);
-        }
-
-        /// grow set by nValue on all sides
-        void grow(sal_Int32 nValue)
-        {
-            maRangeX.grow(nValue);
-            maRangeY.grow(nValue);
         }
 
     private:

@@ -128,9 +128,6 @@ private:
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    JavaVM * createJavaVM(JVM const & jvm, JNIEnv ** pMainThreadEnv);
-        // throws css::uno::RuntimeException
-
     void registerConfigChangesListener();
 
     void setINetSettingsInVM(bool set_reset);
