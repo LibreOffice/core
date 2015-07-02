@@ -1721,6 +1721,9 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         for( i = 0; i <= (int)t->nglyphs; ++i )
             t->goffsets[i] = indexfmt ? GetUInt32(table, i << 2, 1) : (sal_uInt32)GetUInt16(table, i << 1, 1) << 1;
     } else if( getTable(t, O_CFF) ) {           /* PS-OpenType */
+        int k = getTableSize(t, O_CFF); /* set a limit here, presumably much lower than the table size, but establishes some sort of physical bound */
+        if( k < (int)t->nglyphs )
+            t->nglyphs = k;
         t->goffsets = static_cast<sal_uInt32 *>(calloc(1+t->nglyphs, sizeof(sal_uInt32)));
         /* TODO: implement to get subsetting */
         assert(t->goffsets != 0);
