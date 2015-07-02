@@ -1620,6 +1620,7 @@ void SdrObject::ImpSetAnchorPos(const Point& rPnt)
 
 void SdrObject::NbcSetAnchorPos(const Point& rPnt)
 {
+    fprintf(stderr, "NbcSetAnchorPos %ld %ld\n", rPnt.X(), rPnt.Y());
     Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());
     aAnchor=rPnt;
     NbcMove(aSiz); // This also calls SetRectsDirty()

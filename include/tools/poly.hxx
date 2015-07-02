@@ -210,8 +210,6 @@ private:
     ImplPolyPolygon*    mpImplPolyPolygon;
 
     TOOLS_DLLPRIVATE void  ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, sal_uIntPtr nOperation ) const;
-    TOOLS_DLLPRIVATE void *ImplCreateArtVpath() const;
-    TOOLS_DLLPRIVATE void  ImplSetFromArtVpath( void *pVpath );
 
 public:
                         PolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );

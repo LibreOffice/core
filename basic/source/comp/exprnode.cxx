@@ -26,54 +26,44 @@
 #include "expr.hxx"
 
 
-SbiExprNode::SbiExprNode()
+SbiExprNode::SbiExprNode( SbiExprNode* l, SbiToken t, SbiExprNode* r ) :
+    pLeft(l),
+    pRight(r),
+    pWithParent(NULL),
+    eNodeType(SbxNODE),
+    eType(SbxVARIANT), // Nodes are always Variant
+    eTok(t),
+    bError(false)
 {
-    pLeft = NULL;
-    pRight = NULL;
-    pWithParent = NULL;
-    pGen = NULL;
-    eNodeType = SbxDUMMY;
-    eType = SbxVARIANT;
-    eTok = NIL;
-    bError = false;
 }
 
-SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, SbiToken t, SbiExprNode* r )
+SbiExprNode::SbiExprNode( double n, SbxDataType t ):
+    nVal(n),
+    pWithParent(NULL),
+    eNodeType(SbxNUMVAL),
+    eType(t),
+    eTok(NIL),
+    bError(false)
 {
-    BaseInit( p );
-
-    pLeft     = l;
-    pRight    = r;
-    eTok      = t;
-    nVal      = 0;
-    eType     = SbxVARIANT;     // Nodes are always Variant
-    eNodeType = SbxNODE;
 }
 
-SbiExprNode::SbiExprNode( SbiParser* p, double n, SbxDataType t )
+SbiExprNode::SbiExprNode( const OUString& rVal ):
+    aStrVal(rVal),
+    pWithParent(NULL),
+    eNodeType(SbxSTRVAL),
+    eType(SbxSTRING),
+    eTok(NIL),
+    bError(false)
 {
-    BaseInit( p );
-
-    eType     = t;
-    eNodeType = SbxNUMVAL;
-    nVal      = n;
 }
 
-SbiExprNode::SbiExprNode( SbiParser* p, const OUString& rVal )
+SbiExprNode::SbiExprNode( const SbiSymDef& r, SbxDataType t, SbiExprList* l ) :
+    pWithParent(NULL),
+    eNodeType(SbxVARVAL),
+    eTok(NIL),
+    bError(false)
 {
-    BaseInit( p );
-
-    eType     = SbxSTRING;
-    eNodeType = SbxSTRVAL;
-    aStrVal   = rVal;
-}
-
-SbiExprNode::SbiExprNode( SbiParser* p, const SbiSymDef& r, SbxDataType t, SbiExprList* l )
-{
-    BaseInit( p );
-
     eType     = ( t == SbxVARIANT ) ? r.GetType() : t;
-    eNodeType = SbxVARVAL;
     aVar.pDef = const_cast<SbiSymDef*>(&r);
     aVar.pPar = l;
     aVar.pvMorePar = NULL;
@@ -81,41 +71,39 @@ SbiExprNode::SbiExprNode( SbiParser* p, const SbiSymDef& r, SbxDataType t, SbiEx
 }
 
 // #120061 TypeOf
-SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, sal_uInt16 nId )
+SbiExprNode::SbiExprNode( SbiExprNode* l, sal_uInt16 nId ) :
+    nTypeStrId(nId),
+    pLeft(l),
+    pWithParent(NULL),
+    eNodeType(SbxTYPEOF),
+    eType(SbxBOOL),
+    eTok(NIL),
+    bError(false)
 {
-    BaseInit( p );
-
-    pLeft      = l;
-    eType      = SbxBOOL;
-    eNodeType  = SbxTYPEOF;
-    nTypeStrId = nId;
 }
 
 // new <type>
-SbiExprNode::SbiExprNode( SbiParser* p, sal_uInt16 nId )
+SbiExprNode::SbiExprNode( sal_uInt16 nId ) :
+    nTypeStrId(nId),
+    pWithParent(NULL),
+    eNodeType(SbxNEW),
+    eType(SbxOBJECT),
+    eTok(NIL),
+    bError(false)
 {
-    BaseInit( p );
-
-    eType     = SbxOBJECT;
-    eNodeType = SbxNEW;
-    nTypeStrId = nId;
 }
 
-// From 1995-12-17, auxiliary function for Ctor for the uniform initialisation
-void SbiExprNode::BaseInit( SbiParser* p )
+SbiExprNode::SbiExprNode() :
+    pWithParent(NULL),
+    eNodeType(SbxDUMMY),
+    eType(SbxVARIANT),
+    eTok(NIL),
+    bError(false)
 {
-    pGen = &p->aGen;
-    eTok = NIL;
-    pLeft       = NULL;
-    pRight      = NULL;
-    pWithParent = NULL;
-    bError      = false;
 }
 
 SbiExprNode::~SbiExprNode()
 {
-    delete pLeft;
-    delete pRight;
     if( IsVariable() )
     {
         delete aVar.pPar;
@@ -217,9 +205,9 @@ short SbiExprNode::GetDepth()
 // 3. Conversion of the operans into Strings
 // 4. Lifting of the composite- and error-bits
 
-void SbiExprNode::Optimize()
+void SbiExprNode::Optimize(SbiParser* pParser)
 {
-    FoldConstants();
+    FoldConstants(pParser);
     CollectBits();
 }
 
@@ -241,14 +229,14 @@ void SbiExprNode::CollectBits()
 
 // If a twig can be converted, True will be returned. In this case
 // the result is in the left twig.
-void SbiExprNode::FoldConstants()
+void SbiExprNode::FoldConstants(SbiParser* pParser)
 {
     if( IsOperand() || eTok == LIKE ) return;
     if( pLeft )
-        pLeft->FoldConstants();
+        pLeft->FoldConstants(pParser);
     if (pLeft && pRight)
     {
-        pRight->FoldConstants();
+        pRight->FoldConstants(pParser);
         if( pLeft->IsConstant() && pRight->IsConstant()
             && pLeft->eNodeType == pRight->eNodeType )
         {
@@ -263,8 +251,8 @@ void SbiExprNode::FoldConstants()
             {
                 OUString rl( pLeft->GetString() );
                 OUString rr( pRight->GetString() );
-                delete pLeft; pLeft = NULL;
-                delete pRight; pRight = NULL;
+                pLeft.reset();
+                pRight.reset();
                 if( eTok == PLUS || eTok == CAT )
                 {
                     eTok = CAT;
@@ -300,7 +288,7 @@ void SbiExprNode::FoldConstants()
                         nVal = ( eRes >= 0 ) ? SbxTRUE : SbxFALSE;
                         break;
                     default:
-                        pGen->GetParser()->Error( SbERR_CONVERSION );
+                        pParser->Error( SbERR_CONVERSION );
                         bError = true;
                         break;
                     }
@@ -326,14 +314,14 @@ void SbiExprNode::FoldConstants()
                     lrMod = static_cast<long>(nr);
                     if( err )
                     {
-                        pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
+                        pParser->Error( SbERR_MATH_OVERFLOW );
                         bError = true;
                     }
                 }
                 bool bBothInt = ( pLeft->eType < SbxSINGLE
                                    && pRight->eType < SbxSINGLE );
-                delete pLeft; pLeft = NULL;
-                delete pRight; pRight = NULL;
+                pLeft.reset();
+                pRight.reset();
                 nVal = 0;
                 eType = SbxDOUBLE;
                 eNodeType = SbxNUMVAL;
@@ -348,7 +336,7 @@ void SbiExprNode::FoldConstants()
                     case DIV:
                         if( !nr )
                         {
-                            pGen->GetParser()->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
+                            pParser->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
                             bError = true;
                         } else nVal = nl / nr;
                         break;
@@ -379,14 +367,14 @@ void SbiExprNode::FoldConstants()
                     case IDIV:
                         if( !lr )
                         {
-                            pGen->GetParser()->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
+                            pParser->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
                             bError = true;
                         } else nVal = ll / lr;
                         eType = SbxLONG; break;
                     case MOD:
                         if( !lr )
                         {
-                            pGen->GetParser()->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
+                            pParser->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
                             bError = true;
                         } else nVal = llMod - lrMod * (llMod/lrMod);
                         eType = SbxLONG; break;
@@ -404,7 +392,7 @@ void SbiExprNode::FoldConstants()
                 }
 
                 if( !::rtl::math::isFinite( nVal ) )
-                    pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
+                    pParser->Error( SbERR_MATH_OVERFLOW );
 
                 // Recover the data type to kill rounding error
                 if( bCheckType && bBothInt
@@ -422,8 +410,7 @@ void SbiExprNode::FoldConstants()
     else if (pLeft && pLeft->IsNumber())
     {
         nVal = pLeft->nVal;
-        delete pLeft;
-        pLeft = NULL;
+        pLeft.reset();
         eType = SbxDOUBLE;
         eNodeType = SbxNUMVAL;
         switch( eTok )
@@ -437,7 +424,7 @@ void SbiExprNode::FoldConstants()
                 else if( nVal < SbxMINLNG ) err = true, nVal = SbxMINLNG;
                 if( err )
                 {
-                    pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
+                    pParser->Error( SbERR_MATH_OVERFLOW );
                     bError = true;
                 }
                 nVal = (double) ~((long) nVal);

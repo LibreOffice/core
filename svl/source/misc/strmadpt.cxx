@@ -209,18 +209,6 @@ ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
 }
 
 // virtual
-sal_uInt64 SvOutputStreamOpenLockBytes::Tell() const
-{
-    return m_nPosition;
-}
-
-// virtual
-sal_uInt64 SvOutputStreamOpenLockBytes::Seek(sal_uInt64)
-{
-    return m_nPosition;
-}
-
-// virtual
 void SvOutputStreamOpenLockBytes::Terminate()
 {
     if (m_xOutputStream.is())

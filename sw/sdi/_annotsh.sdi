@@ -230,6 +230,20 @@ interface _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    FN_GROW_FONT_SIZE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_SHRINK_FONT_SIZE
+    [
+        ExecMethod = Exec;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_ATTR_CHAR_COLOR // api:
     [
         ExecMethod = Exec;

@@ -188,10 +188,6 @@ public:
 
 public:
 
-    virtual void        Load( SvStream& ) SAL_OVERRIDE;
-    virtual void        Save( SvStream& ) SAL_OVERRIDE;
-    virtual void        Assign( const SvDataCopyStream& ) SAL_OVERRIDE;
-
     const SvgDataPtr&   getSvgData() const;
 
     static css::uno::Sequence<sal_Int8> getUnoTunnelId();

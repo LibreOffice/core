@@ -248,7 +248,7 @@ private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > CopyToUserRecordSequence(
                                         const ::std::list< NamePassRecord >& original,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
-                                                        throw(::com::sun::star::uno::RuntimeException);
+                                                        throw(css::uno::RuntimeException, std::exception);
 
     ::com::sun::star::task::UserRecord CopyToUserRecord(
                                         const NamePassRecord& aRecord,

@@ -28,8 +28,6 @@ namespace vista{
 static void lcl_sleep( ::osl::Condition& aCondition,
                        ::sal_Int32       nMilliSeconds )
 {
-    SolarMutexReleaser aReleaser;
-
     if (nMilliSeconds < 1)
         aCondition.wait(0);
     else
@@ -43,6 +41,8 @@ static void lcl_sleep( ::osl::Condition& aCondition,
 
 void Request::wait( ::sal_Int32 nMilliSeconds )
 {
+    SolarMutexReleaser aReleaser;
+
     lcl_sleep( m_aJoiner, nMilliSeconds );
 }
 
