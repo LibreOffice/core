@@ -1151,6 +1151,16 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields, SwPageFrm** p
 #endif
 }
 
+namespace
+{
+    bool isDeleteForbidden(const SwPageFrm *pDel)
+    {
+        const SwLayoutFrm* pBody = pDel->FindBodyCont();
+        const SwFrm* pBodyContent = pBody ? pBody->Lower() : NULL;
+        return pBodyContent && pBodyContent->IsDeleteForbidden();
+    }
+}
+
 SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, bool bFootnote )
 {
     SwRootFrm *pRoot = static_cast<SwRootFrm*>(pPrevPage->GetUpper());
@@ -1216,7 +1226,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, bool bFootnote )
     pPage->PreparePage( bFootnote );
     // If the sibling has no body text, destroy it as long as it is no footnote page.
     if ( pSibling && !pSibling->IsFootnotePage() &&
-         !pSibling->FindFirstBodyContent() )
+         !pSibling->FindFirstBodyContent() && !isDeleteForbidden(pSibling) )
     {
         SwPageFrm *pDel = pSibling;
         pSibling = static_cast<SwPageFrm*>(pSibling->GetNext());
