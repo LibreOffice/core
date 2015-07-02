@@ -24,6 +24,12 @@
 #include <tools/gen.hxx>
 #include <tools/solar.h>
 
+extern const sal_uLong nVCLRLut[ 6 ];
+extern const sal_uLong nVCLGLut[ 6 ];
+extern const sal_uLong nVCLBLut[ 6 ];
+extern const sal_uLong nVCLDitherLut[ 256 ];
+extern const sal_uLong nVCLLut[ 256 ];
+
 struct BitmapBuffer;
 class SalBitmap;
 class BitmapPalette;
