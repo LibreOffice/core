@@ -69,11 +69,16 @@ extern "C" {
 
 #if !defined(__MINGW32__) || defined (__NO_ISOCEXT)
 
+/* VS 2015 and above support ISO C snprintf */
+#if _MSC_VER < 1900
+
 /* UNICODE version */
 _SNPRINTF_DLLIMPORT int __cdecl snwprintf( wchar_t *buffer, size_t count, const wchar_t *format, ... );
 
 /* SBCS and MBCS version */
 _SNPRINTF_DLLIMPORT int __cdecl snprintf( char *buffer, size_t count, const char *format, ... );
+
+#endif
 
 #endif
 
