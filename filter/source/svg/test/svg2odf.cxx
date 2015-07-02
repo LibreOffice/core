@@ -123,6 +123,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         SAL_WARN("vcl.app", "Fatal exception: " << e.Message);
         return 1;
     }
+    catch (const std::exception &e)
+    {
+        SAL_WARN("vcl.app", "Fatal exception: " << e.what());
+        return 1;
+    }
     return nRet;
 }
 
