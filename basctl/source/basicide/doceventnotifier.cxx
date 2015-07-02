@@ -29,7 +29,7 @@
 #include <comphelper/processfactory.hxx>
 
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 namespace basctl
@@ -51,8 +51,8 @@ namespace basctl
 
     // DocumentEventNotifier::Impl
 
-    typedef ::cppu::WeakComponentImplHelper1    <   XDocumentEventListener
-                                                >   DocumentEventNotifier_Impl_Base;
+    typedef ::cppu::WeakComponentImplHelper<   XDocumentEventListener
+                                           >   DocumentEventNotifier_Impl_Base;
 
     enum ListenerAction
     {

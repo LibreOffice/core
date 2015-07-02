@@ -24,7 +24,7 @@
 #include <toolkit/awt/vclxdevice.hxx>
 #include <tools/multisel.hxx>
 #include <tools/resary.hxx>
-
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/propertysequence.hxx>
 
 namespace basctl
@@ -34,7 +34,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
 Renderable::Renderable (BaseWindow* pWin)
-: cppu::WeakComponentImplHelper1< com::sun::star::view::XRenderable >( maMutex )
+: cppu::WeakComponentImplHelper< com::sun::star::view::XRenderable >( maMutex )
 , mpWindow( pWin )
 {
     ResStringArray aStrings( IDEResId( RID_PRINTDLG_STRLIST )  );

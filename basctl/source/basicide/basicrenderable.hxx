@@ -20,7 +20,7 @@
 #define INCLUDED_BASCTL_SOURCE_BASICIDE_BASICRENDERABLE_HXX
 
 #include <com/sun/star/view/XRenderable.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <vcl/print.hxx>
 
@@ -30,7 +30,7 @@ namespace basctl
 class BaseWindow;
 
 class Renderable :
-    public cppu::WeakComponentImplHelper1< com::sun::star::view::XRenderable >,
+    public cppu::WeakComponentImplHelper< com::sun::star::view::XRenderable >,
     public vcl::PrinterOptionsHelper
 {
     VclPtr<BaseWindow>  mpWindow;

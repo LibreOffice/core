@@ -21,7 +21,7 @@
 #define INCLUDED_BASCTL_SOURCE_INC_DLGEDCLIP_HXX
 
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace basctl
 {
@@ -30,7 +30,7 @@ namespace basctl
 // DlgEdTransferableImpl
 
 
-typedef ::cppu::WeakImplHelper2< ::com::sun::star::datatransfer::XTransferable, ::com::sun::star::datatransfer::clipboard::XClipboardOwner > DlgEdTransferableHelper;
+typedef ::cppu::WeakImplHelper< ::com::sun::star::datatransfer::XTransferable, ::com::sun::star::datatransfer::clipboard::XClipboardOwner > DlgEdTransferableHelper;
 
 class DlgEdTransferableImpl : public DlgEdTransferableHelper
 {
