@@ -543,6 +543,7 @@ public:
 
     bool isShowDialogs() const;
     bool isDirectPrint() const;
+    bool mbPrinterSettingsWereModified;
 
     // implementation details, not usable outside vcl
     // don't use outside vcl. Some of these are exported for
