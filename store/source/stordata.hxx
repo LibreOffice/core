@@ -70,13 +70,6 @@ struct OStoreDataPageData : public store::OStorePageData
         return self::capacity (base::m_aDescr);
     }
 
-    /** usage.
-    */
-    sal_uInt16 usage() const
-    {
-        return (store::ntohs(base::m_aDescr.m_nUsed) - self::thePageSize);
-    }
-
     /** Construction.
     */
     explicit OStoreDataPageData (sal_uInt16 nPageSize = self::thePageSize)
@@ -576,26 +569,6 @@ struct OStoreDirectoryPageData : public store::OStorePageData
         return (store::ntohs(base::m_aDescr.m_nSize) - self::thePageSize);
     }
 
-    /** usage.
-    */
-    sal_uInt16 usage() const
-    {
-        return (store::ntohs(base::m_aDescr.m_nUsed) - self::thePageSize);
-    }
-
-    /** initialize.
-    */
-    void initialize()
-    {
-        base::m_aGuard.m_nMagic = store::htonl(self::theTypeId);
-        base::m_aDescr.m_nUsed  = store::htons(self::thePageSize);
-
-        m_aNameBlock.initialize();
-        m_aDataBlock.initialize();
-
-        memset (m_pData, 0, capacity());
-    }
-
     /** Construction.
     */
     explicit OStoreDirectoryPageData (sal_uInt16 nPageSize)
@@ -727,14 +700,6 @@ public:
         const sal_Char * pszName = rPage.m_aNameBlock.m_pData;
         sal_uInt32       nPath   = store::ntohl(rPage.m_aNameBlock.m_aKey.m_nHigh);
         return rtl_crc32 (nPath, pszName, rtl_str_getLength(pszName));
-    }
-
-    sal_Size getName (sal_Char * pBuffer, sal_Size nBufsize) const
-    {
-        sal_Char const * pszName = PAGE().m_aNameBlock.m_pData;
-        sal_Size nLength = rtl_str_getLength(pszName);
-        memcpy (pBuffer, pszName, nLength < nBufsize ? nLength : nBufsize);
-        return nLength;
     }
 
     /** dataLength.

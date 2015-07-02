@@ -295,12 +295,6 @@ struct OStorePageKey
           m_nHigh (store::htonl(nHigh))
     {}
 
-    void swap (OStorePageKey & rhs)
-    {
-        store::swap(m_nLow,  rhs.m_nLow);
-        store::swap(m_nHigh, rhs.m_nHigh);
-    }
-
     OStorePageKey (const OStorePageKey & rhs)
         : m_nLow (rhs.m_nLow), m_nHigh (rhs.m_nHigh)
     {}
@@ -386,19 +380,6 @@ struct OStorePageLink
         return store::ntohl(m_nAddr);
     }
 
-    void link (OStorePageLink & rPred)
-    {
-        // @@@ swap (rPred); @@@
-        OStorePageLink tmp (rPred);
-        rPred = *this;
-        *this = tmp;
-    }
-
-    void unlink (OStorePageLink& rPred)
-    {
-        rPred = *this;
-        *this = OStorePageLink();
-    }
 };
 
 /*========================================================================
@@ -551,13 +532,6 @@ struct PageData
         return store_E_None;
     }
 
-    storeError verifyVersion (sal_uInt32 nMagic) const
-    {
-        if (m_aGuard.m_nMagic != store::htonl(nMagic))
-            return store_E_WrongVersion;
-        else
-            return store_E_None;
-    }
 };
 
 /*========================================================================
@@ -803,7 +777,6 @@ public:
     /** Location.
      */
     inline sal_uInt32 location() const;
-    inline void       location (sal_uInt32 nAddr);
 
 protected:
     /** Representation.
@@ -843,7 +816,6 @@ public:
     }
 
     PageHolder & get() { return m_xPage; }
-    PageHolder const & get() const { return m_xPage; }
 
     virtual storeError guard  (sal_uInt32 nAddr) = 0;
     virtual storeError verify (sal_uInt32 nAddr) const = 0;
@@ -867,12 +839,6 @@ inline void OStorePageObject::touch()
 inline sal_uInt32 OStorePageObject::location() const
 {
     return m_xPage->location();
-}
-
-inline void OStorePageObject::location (sal_uInt32 nAddr)
-{
-    m_xPage->location(nAddr);
-    touch();
 }
 
 /*========================================================================

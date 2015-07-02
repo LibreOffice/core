@@ -152,36 +152,6 @@ public:
     */
     inline RegError destroy(const rtl::OUString& registryName);
 
-    /** loads registry information from a specified file and save it under the
-        specified keyName.
-
-        @param  rKey references a currently open key. The key which should store the registry information
-                     is a subkey of this key.
-        @param  keyName specifies the name of the key which stores the registry information. If keyName is
-                        is an empty string the registry information will be saved under the key specified
-                        by rKey.
-        @param  regFileName specifies the file containing the registry information.
-        @return RegError::NO_ERROR if succeeds else an error code.
-    */
-    inline RegError loadKey(RegistryKey& rKey,
-                               const rtl::OUString& keyName,
-                               const rtl::OUString& regFileName);
-
-    /** saves the registry information of the specified key and all subkeys and save
-        it in the specified file.
-
-        @param  rKey references a currently open key. The key which information is saved by this
-                     function is a subkey of this key.
-        @param  keyName specifies the name of the key which information should be stored.
-                        If keyName is an empty string the registry information under the key specified
-                        by rKey is saved in the specified file.
-        @param  regFileName specifies the file containing the registry information.
-        @return RegError::NO_ERROR if succeeds else an error code.
-    */
-    inline RegError saveKey(RegistryKey& rKey,
-                               const rtl::OUString& keyName,
-                               const rtl::OUString& regFileName);
-
     /** merges the registry information of the specified key with the registry
         information of the specified file.
 
@@ -202,15 +172,6 @@ public:
                                 const rtl::OUString& regFileName,
                                 bool bWarnings = false,
                                 bool bReport = false);
-
-    /** This function reports the complete registry information of a key and all of its subkeys.
-
-        All information which are available (keynames, value types, values, ...)
-        will be printed to stdout for report issues only.
-        @param  rKey references a currently open key which content will be reported.
-        @return RegError::NO_ERROR if succeeds else an error code.
-    */
-    inline RegError dumpRegistry(RegistryKey& rKey);
 
     friend class RegistryKey;
     friend class RegistryKeyArray;
@@ -297,8 +258,6 @@ protected:
         @param length specifies the length of the array specified by pKeyNames.
      */
     inline void setKeyNames(Registry& registry, rtl_uString** pKeyNames, sal_uInt32 length);
-    /// delete the array of key names.
-    inline RegError freeKeyNames();
 
     /// stores the number of key names, the number of elements.
     sal_uInt32      m_length;
@@ -454,13 +413,6 @@ public:
     */
     inline RegError getKeyNames(const rtl::OUString& keyName,
                                     RegistryKeyNames& rSubKeyNames);
-
-    /** closes all keys specified in the array.
-
-        @param  rSubKeys reference a RegistryKeyArray which contains the open keys.
-        @return RegError::NO_ERROR if succeeds else an error code.
-    */
-    inline RegError closeSubKeys(RegistryKeyArray& rSubKeys);
 
     /** deletes the specified key.
 
@@ -627,9 +579,6 @@ public:
     /// returns the name of the registry in which the key is defined.
     inline rtl::OUString getRegistryName();
 
-    /// returns the registry in which the key is defined.
-    Registry getRegistry() const { return m_registry; }
-
     friend class Registry;
 public:
     /// @cond INTERNAL
@@ -640,10 +589,6 @@ public:
     */
     inline RegistryKey(Registry&    registry,
                        RegKeyHandle hKey);
-
-    /** returns the internal key handle.
-     */
-    RegKeyHandle getKeyHandle() const { return m_hImpl; }
 
 protected:
     /** sets the internal registry on which this key should work.
@@ -745,22 +690,6 @@ inline void RegistryKeyNames::setKeyNames(Registry& registry,
     m_length = length;
     m_registry = registry;
 }
-
-inline RegError RegistryKeyNames::freeKeyNames()
-{
-    if (m_registry.isValid() && m_pKeyNames)
-    {
-        RegError ret = RegError::NO_ERROR;
-        ret = m_registry.m_pApi->freeKeyNames(m_pKeyNames, m_length);
-        m_registry = Registry();
-        m_length = 0;
-        m_pKeyNames = NULL;
-        return ret;
-    } else
-        return RegError::INVALID_KEY;
-}
-
-
 
 inline RegistryKey::RegistryKey()
     : m_hImpl(NULL)
@@ -897,14 +826,6 @@ inline RegError RegistryKey::getKeyNames(const rtl::OUString& keyName,
                 return ret;
             }
         } else
-            return RegError::INVALID_KEY;
-    }
-
-inline RegError RegistryKey::closeSubKeys(RegistryKeyArray& rSubKeys)
-    {
-        if (m_registry.isValid())
-            return rSubKeys.closeKeyHandles();
-        else
             return RegError::INVALID_KEY;
     }
 
@@ -1206,25 +1127,12 @@ inline RegError Registry::destroy(const rtl::OUString& registryName)
         return ret;
     }
 
-inline RegError Registry::loadKey(RegistryKey& rKey,
-                                      const rtl::OUString& keyName,
-                                      const rtl::OUString& regFileName)
-    {  return m_pApi->loadKey(m_hImpl, rKey.m_hImpl, keyName.pData, regFileName.pData); }
-
-inline RegError Registry::saveKey(RegistryKey& rKey,
-                                     const rtl::OUString& keyName,
-                                     const rtl::OUString& regFileName)
-    {  return m_pApi->saveKey(m_hImpl, rKey.m_hImpl, keyName.pData, regFileName.pData); }
-
 inline RegError Registry::mergeKey(RegistryKey& rKey,
                                          const rtl::OUString& keyName,
                                          const rtl::OUString& regFileName,
                                          bool bWarnings,
                                          bool bReport)
     {  return m_pApi->mergeKey(m_hImpl, rKey.m_hImpl, keyName.pData, regFileName.pData, bWarnings, bReport); }
-
-inline RegError Registry::dumpRegistry(RegistryKey& rKey)
-    {  return m_pApi->dumpRegistry(m_hImpl, rKey.m_hImpl); }
 
 
 #endif

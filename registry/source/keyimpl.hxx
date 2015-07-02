@@ -121,9 +121,6 @@ public:
     const OUString& getName() const
                     { return m_name; }
 
-    sal_uInt32 getRefCount() const
-                    { return m_refCount; }
-
     OUString getFullPath(OUString const & path) const;
 
 private:

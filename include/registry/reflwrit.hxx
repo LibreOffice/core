@@ -112,26 +112,6 @@ public:
     /// Assign operator
     inline RegistryTypeWriter& operator == (const RegistryTypeWriter& toAssign);
 
-    /** @deprecated
-        sets the unique identifier for an interface type.
-
-        An earlier version of UNO used an unique identifier for interfaces. In the
-        current version of UNO this uik was eliminated and this function is
-        not longer used.
-     */
-    inline void setUik(const RTUik& uik);
-
-    /** sets a documentation string for the type.
-
-        This documentation should be the same as the documentation which is provided
-        for this type in IDL.
-     */
-    inline void setDoku(const rtl::OUString& doku);
-
-    /** sets the IDL filename where this type is defined.
-     */
-    inline void setFileName(const rtl::OUString& fileName);
-
     /** sets the data for a field member of a type blob.
 
         @param index indicates the index of the field.
@@ -151,48 +131,6 @@ public:
                               RTFieldAccess           access,
                               const RTConstValue&     constValue = RTConstValue());
 
-    /** sets the data for a method.
-
-        @param index indicates the index of the method.
-        @param name specifies the name.
-        @param returnTypeName specifies the full qualified return typename.
-        @param mode specifies the method mode.
-        @param paramCount specifies the number of parameters.
-        @param excCount specifies the number of exceptions.
-        @param doku specifies the documentation string of the field.
-     */
-    inline void setMethodData(sal_uInt16                index,
-                              const rtl::OUString&    name,
-                              const rtl::OUString&    returnTypeName,
-                              RTMethodMode              mode,
-                              sal_uInt16                paramCount,
-                              sal_uInt16                excCount,
-                              const rtl::OUString&    doku);
-
-    /** sets the data for the specified parameter of a method.
-
-        @param index indicates the index of the method.
-        @param paramIndex specifies the index of the parameter.
-        @param type specifies the full qualified typename.
-        @param name specifies the name.
-        @param mode specifies the parameter mode.
-     */
-    inline void setParamData(sal_uInt16             index,
-                             sal_uInt16             paramIndex,
-                             const rtl::OUString& type,
-                             const rtl::OUString& name,
-                             RTParamMode            mode);
-
-    /** sets the data for the specified exception of a method.
-
-        @param index indicates the index of the method.
-        @param excIndex specifies the index of the exception.
-        @param type specifies the full qualified typename of the exception.
-     */
-    inline void setExcData(sal_uInt16               index,
-                           sal_uInt16               excIndex,
-                           const rtl::OUString&   type);
-
     /** returns a pointer to the new type blob.
 
         The pointer will be invalid (NULL) if the instance of
@@ -203,20 +141,6 @@ public:
     /** returns the size of the new type blob in bytes.
      */
     inline sal_uInt32       getBlopSize();
-
-    /** sets the data for a reference member.
-
-        @param index indicates the index of the reference.
-        @param name specifies the name.
-        @param refType specifies the full qualified typename of the reference.
-        @param doku specifies the documentation string of the reference.
-        @param access specifies the access mode of the reference.
-     */
-    inline void setReferenceData( sal_uInt16                index,
-                                    const rtl::OUString&  name,
-                                    RTReferenceType             refType,
-                                    const rtl::OUString&  doku,
-                                    RTFieldAccess               access = RTFieldAccess::INVALID);
 
 protected:
 
@@ -281,50 +205,6 @@ inline void RegistryTypeWriter::setFieldData( sal_uInt16              index,
     m_pApi->setFieldData(m_hImpl, index, name.pData, typeName.pData, doku.pData, fileName.pData, access, constValue.m_type, constValue.m_value);
 }
 
-
-inline void RegistryTypeWriter::setMethodData(sal_uInt16                index,
-                                              const rtl::OUString&    name,
-                                              const rtl::OUString&    returnTypeName,
-                                              RTMethodMode              mode,
-                                              sal_uInt16                paramCount,
-                                              sal_uInt16                excCount,
-                                              const rtl::OUString&    doku)
-{
-    m_pApi->setMethodData(m_hImpl, index, name.pData, returnTypeName.pData, mode, paramCount, excCount, doku.pData);
-}
-
-
-inline void RegistryTypeWriter::setUik(const RTUik& uik)
-{
-    m_pApi->setUik(m_hImpl, &uik);
-}
-
-inline void RegistryTypeWriter::setDoku(const rtl::OUString& doku)
-{
-    m_pApi->setDoku(m_hImpl, doku.pData);
-}
-
-inline void RegistryTypeWriter::setFileName(const rtl::OUString& doku)
-{
-    m_pApi->setFileName(m_hImpl, doku.pData);
-}
-
-inline void RegistryTypeWriter::setParamData(sal_uInt16             index,
-                                             sal_uInt16             paramIndex,
-                                             const rtl::OUString& type,
-                                             const rtl::OUString& name,
-                                             RTParamMode            mode)
-{
-    m_pApi->setParamData(m_hImpl, index, paramIndex, type.pData, name.pData, mode);
-}
-
-inline void RegistryTypeWriter::setExcData(sal_uInt16               index,
-                                           sal_uInt16               excIndex,
-                                           const rtl::OUString&   type)
-{
-    m_pApi->setExcData(m_hImpl, index, excIndex, type.pData);
-}
-
 inline const sal_uInt8* RegistryTypeWriter::getBlop()
 {
     return m_pApi->getBlop(m_hImpl);
@@ -335,15 +215,6 @@ inline sal_uInt32 RegistryTypeWriter::getBlopSize()
     return m_pApi->getBlopSize(m_hImpl);
 }
 
-
-inline void RegistryTypeWriter::setReferenceData( sal_uInt16                index,
-                                                    const rtl::OUString&  name,
-                                                    RTReferenceType             refType,
-                                                    const rtl::OUString&  doku,
-                                                    RTFieldAccess           access)
-{
-    m_pApi->setReferenceData(m_hImpl, index, name.pData, refType, doku.pData, access);
-}
 
 #endif
 
