@@ -24,7 +24,7 @@
 
 namespace sfx2 { namespace sidebar {
 
-/** Outer container of the sidbar window.
+/** Outer container of the sidebar window.
 
     Has to be registered for every application via the
     RegisterChildWindow() method from the RegisterControllers() method

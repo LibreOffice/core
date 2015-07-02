@@ -109,7 +109,7 @@ struct ResultSetColumnData
 };
 
 // Note: Never change the initial values! Implementations using this struct
-//       may havily depend on the behaviour of the default constructor.
+//       may heavily depend on the behaviour of the default constructor.
 
 ResultSetColumnData::ResultSetColumnData()
 : isAutoIncrement( false ),

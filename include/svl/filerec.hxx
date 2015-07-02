@@ -137,7 +137,7 @@ private:
  *  is predetermined. So the record type serves mainly for checks
  *  and for file viewers that do not know the exact file format.
  *
- *  For that purpse 'SfxMiniRecordReader' provides a static method
+ *  For that purpose 'SfxMiniRecordReader' provides a static method
  *  'ScanRecordType()', with which it is possible to find out what
  *  Record type can be found in the stream that was passed.
  *
@@ -152,7 +152,7 @@ private:
  *  If the record starts with 0x44 it could be a Drawing-Engine-Record.
  *  This is the case if the following 3 bytes spell 'RMD' or 'RVW'
  *  (which together with  'D'==0x44 form an abbreviation for 'DRaw-MoDel'
- *  or 'DRaw-VieW'). Records of this type cannot be readby the classes
+ *  or 'DRaw-VieW'). Records of this type cannot be read by the classes
  *  represented here, nor interpreted in any way. Only the
  *  'ScanRecordType()' method can recognise it - but further processing
  *  is impossible.
@@ -167,7 +167,7 @@ private:
  *                           3 sal_uInt8         OffsetToEndOfRec
  *       OffsetToEndOfRec*   1 sal_uInt8         Content
  *
- *  For Extended-Reords the 4 byte header is followed by an extended header,
+ *  For Extended-Records the 4 byte header is followed by an extended header,
  *  which contains first the record type, than a version number
  *  and a tag, which indicates the kind of content.
  *

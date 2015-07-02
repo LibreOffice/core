@@ -111,7 +111,7 @@ protected:
     SfxItemSet*     GetInputSetImpl();
     SfxTabPage*     GetTabPage( sal_uInt16 nPageId ) const;
 
-    /** prepare to leace the current page. Calls the DeactivatePage method of the current page, (if necessary),
+    /** prepare to leave the current page. Calls the DeactivatePage method of the current page, (if necessary),
         handles the item sets to copy.
         @return sal_True if it is allowed to leave the current page, sal_False otherwise
     */

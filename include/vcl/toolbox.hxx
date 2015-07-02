@@ -474,7 +474,7 @@ public:
     Size                CalcFloatingWindowSizePixel() const;
     // floating window size with a given number of lines
     Size                CalcFloatingWindowSizePixel( sal_uInt16 nCalcLines ) const;
-    // automatic window size for popoup mode
+    // automatic window size for popup mode
     Size                CalcPopupWindowSizePixel() const;
 
     // computes the smallest useful size when docked, ie with the first item visible only (+drag area and menu button)

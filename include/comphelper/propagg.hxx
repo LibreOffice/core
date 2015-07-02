@@ -170,7 +170,7 @@ public:
 
         For instance, some derivee of OPropertySetAggregationHelper may decide to create an
         OPropertyArrayAggregationHelper which contains only a subset of the aggregate properties. This way,
-        some of the aggregate properties may be hidded to the public.<br/>
+        some of the aggregate properties may be hidden to the public.<br/>
 
         When using the XPropertySetInfo of the aggregate set to determine the existence of a property, then this
         would return false positives.</p>

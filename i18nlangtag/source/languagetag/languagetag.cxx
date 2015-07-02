@@ -711,7 +711,7 @@ void LanguageTag::setConfiguredSystemLanguage( LanguageType nLang )
     }
     SAL_INFO( "i18nlangtag", "LanguageTag::setConfiguredSystemLanguage: setting to 0x" << ::std::hex << nLang);
     MsLangId::LanguageTagAccess::setConfiguredSystemLanguage( nLang);
-    // Resest system locale to none and let registerImpl() do the rest to
+    // Reset system locale to none and let registerImpl() do the rest to
     // initialize a new one.
     theSystemLocale::get().reset();
     LanguageTag aLanguageTag( LANGUAGE_SYSTEM);

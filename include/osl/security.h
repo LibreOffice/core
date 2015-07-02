@@ -71,7 +71,7 @@ SAL_DLLPUBLIC oslSecurityError SAL_CALL osl_loginUser(
 
 /** Create a security handle for the denoted user.
     Try to log in the user on the denoted file server. On success the homedir will be
-    the maped drive on this server.
+    the mapped drive on this server.
     @param[in] strUserName denotes the name of the user to logg in.
     @param[in] strPasswd the password for this user.
     @param[in] strFileServer denotes the file server on which the user is logged in.

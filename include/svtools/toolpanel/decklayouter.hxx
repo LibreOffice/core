@@ -63,7 +63,7 @@ namespace svt
         */
         virtual void        Destroy() = 0;
 
-        /** assuming that a layouter neesds to provide some kind of panel selector control, this method
+        /** assuming that a layouter needs to provide some kind of panel selector control, this method
             requests to set the focus to this control.
         */
         virtual void        SetFocusToPanelSelector() = 0;

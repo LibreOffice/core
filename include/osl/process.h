@@ -321,7 +321,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_joinProcessWithTimeout(
                         osl_Process_EXITCODE
                         osl_Process_CPUTIMES
                         osl_Process_HEAPUSAGE
-    @param[out] pInfo   a pointer to a vaid oslProcessInfo structure.
+    @param[out] pInfo   a pointer to a valid oslProcessInfo structure.
                         the Size field has to be initialized with the size
                         of the oslProcessInfo structure.
                         on success the Field member holds the (or'ed)

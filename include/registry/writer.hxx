@@ -267,7 +267,7 @@ public:
        called on this type writer
 
        @exception std::bad_alloc is raised if an out-of-memory condition occurs
-       (in which case <code>siez</code> is not modified
+       (in which case <code>size</code> is not modified
      */
     void const * getBlob(sal_uInt32 * size) {
         void const * p = typereg_writer_getBlob(m_handle, size);

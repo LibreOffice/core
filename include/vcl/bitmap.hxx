@@ -594,7 +594,7 @@ public:
     */
     static bool HasFastScale();
 
-    // Adapt the BitCount of rNew to BitCount of lolal, including grey or color paltette
+    // Adapt the BitCount of rNew to BitCount of total, including grey or color palette
     // Can be used to create alpha/mask bitmaps after their processing in 24bit
     void                    AdaptBitCount(Bitmap& rNew) const;
 

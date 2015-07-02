@@ -86,7 +86,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
         void setOwner (const css::uno::Reference< css::uno::XInterface >& xOwner);
 
 
-        /** set an outside component which provides the righht string and number for
+        /** set an outside component which provides the right string and number for
             an untitled component.
 
             It's holded weak only so we do not need any complex dispose sessions.

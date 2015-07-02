@@ -25,7 +25,7 @@
 // #i121267# Added tooling to be able to support old exporters which are based on
 // metafiles as graphic content, but do not implement using the contained clip
 // regions.
-// The given metafile will internall yclip it's graphic content against the
+// The given metafile will internally clip it's graphic content against the
 // included clip regions so that it is safe to ignore clip actions there. This
 // is not done completely, but implemented and extended as needed (on demand)
 // since all this is a workarund; the better and long term solution will be to

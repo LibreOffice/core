@@ -165,7 +165,7 @@ public:
     SdrObjCustomShape();
     virtual ~SdrObjCustomShape();
 
-    /* is merging default attributes from type-shype into the SdrCustomShapeGeometryItem. If pType
+    /* is merging default attributes from type-shape into the SdrCustomShapeGeometryItem. If pType
     is NULL then the type is being taken from the "Type" property of the SdrCustomShapeGeometryItem.
     MergeDefaultAttributes is called when creating CustomShapes via UI and after importing */
     void MergeDefaultAttributes( const OUString* pType = NULL );

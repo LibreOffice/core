@@ -827,7 +827,7 @@ The following structure describes the permissions used in PDF security
     behaviour; after calling BeginTransparencyGroup all drawing
     operations will be grouped together into a transparent object.
 
-    The transparency behaviour is set with ond of the EndTransparencyGroup
+    The transparency behaviour is set with one of the EndTransparencyGroup
     calls and can be either a constant transparency factor or a transparent
     soft mask in form of an 8 bit gray scale bitmap.
 

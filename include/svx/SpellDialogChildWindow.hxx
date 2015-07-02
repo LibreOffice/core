@@ -30,7 +30,7 @@ class AbstractSpellDialog;
 namespace svx {
 
 /** The child window wrapper of the actual spellin dialog.  To use the
-    spelling dialog in an application you have to do the ususal things:
+    spelling dialog in an application you have to do the usual things:
     <ol>
     <li>Call this class' RegisterChildWindow() method with the module
     as second argument that you want the dialog included in.</li>

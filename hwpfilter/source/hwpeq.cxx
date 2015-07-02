@@ -54,7 +54,7 @@ using namespace std;
 #define STRICMP strcasecmp
 #endif
 
-// sub and sup scipt script status
+// sub and sup script status
 enum { SCRIPT_NONE, SCRIPT_SUB, SCRIPT_SUP, SCRIPT_ALL};
 
 static int  eq_word(MzString& outs, istream *strm, int script = SCRIPT_NONE);

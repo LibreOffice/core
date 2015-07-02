@@ -1058,7 +1058,7 @@ public:
     */
     static void                 SetDisplayName( const OUString& rDisplayName );
 
-    /** Get the default name of the application for messag dialogs and printing.
+    /** Get the default name of the application for message dialogs and printing.
 
      @returns The display name of the application.
     */

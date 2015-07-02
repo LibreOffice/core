@@ -676,7 +676,7 @@ CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_acquire(
     typelib_TypeDescription * pDesc )
     SAL_THROW_EXTERN_C();
 
-/** Decrements reference count of given type. If reference count reaches 0, the trype description
+/** Decrements reference count of given type. If reference count reaches 0, the type description
     is deleted.
 
     @param pDesc type description

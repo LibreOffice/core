@@ -292,7 +292,7 @@ public:
     inline void                 SetPool( SfxItemPool *pNewPool ) ;
 
     /**
-        Each Subclass of SfxShell can hava a <SfxUndoManager>. This can be set in
+        Each Subclass of SfxShell can have a <SfxUndoManager>. This can be set in
         the derived class with <SfxShell:SetUndoManager()>.
 
         The class SfxShell itself does not have a SfxUndoManager, a NULL-pointer

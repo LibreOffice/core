@@ -105,7 +105,7 @@ public:
         scenarios where you need certain information on how a control is painted onto a window, without
         actually painting it. For example, you might be interested in the DeviceInfo of an UNO control.
 
-        For those cases, you can ontain an XControl which behaves as the control which *would* be used to
+        For those cases, you can contain an XControl which behaves as the control which *would* be used to
         paint onto a window.
 
         @param  _rWindow

@@ -47,7 +47,7 @@ namespace drawinglayer
             created from unit polygon and maTransformation).
 
             At least in this primitive the units of the crop values are
-            already in the local coordinate system; inthe core these distances
+            already in the local coordinate system; in the core these distances
             are defined relative to the object content size (PrefMapMode
             and PrefSize of the content)...
 

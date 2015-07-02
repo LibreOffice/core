@@ -90,7 +90,7 @@ namespace basegfx
 
             It will check edges for trivial bezier to avoid unnecessary
             bezier polygons. Care is taken to produce the in-between
-            polygon points (the ones original on the source poygon) since
+            polygon points (the ones original on the source polygon) since
             it has showed that without those, the raster converters leave
             non-filled gaps.
 

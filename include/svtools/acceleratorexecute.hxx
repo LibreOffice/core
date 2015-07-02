@@ -59,7 +59,7 @@ struct TMutexInit
 
     @attention
 
-            Because exceution of an accelerator command can be dangerous
+            Because execution of an accelerator command can be dangerous
             (in case it force an office shutdown for key "ALT+F4"!)
             all internal dispatches are done asynchronous.
             Menas that the trigger call doesn't wait till the dispatch

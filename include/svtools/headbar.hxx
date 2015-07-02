@@ -157,7 +157,7 @@ Tips and tricks:
 1) ContextMenu
 If a context sensitive PopupMenu should be shown, the command
 handler must be overlaid. Using GetItemId() and when passing the
-mous position, it can be determined whether the mouse click has been
+mouse position, it can be determined whether the mouse click has been
 carried out over an item resp. over which item the mouse click has been
 carried out.
 

@@ -82,7 +82,7 @@ static sal_uInt8 lcl_getMappingTypeForToggleCase( sal_uInt8 nMappingType, sal_Un
             nRes = MappingTypeLowerToUpper;
         else
         {
-            // should also work properly for non-upper characters like white spacs, numbers, ...
+            // should also work properly for non-upper characters like white spaces, numbers, ...
             nRes = MappingTypeUpperToLower;
         }
     }

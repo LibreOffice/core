@@ -403,7 +403,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
         Back2Delemitter( rOutStm );
     else
     {
-        // at leaast one dummy
+        // at least one dummy
         WriteTab( rOutStm, 1 );
         rOutStm.WriteCharPtr("{ (const SfxType*) &aSfxVoidItem_Impl, 0, 0 }" ) << endl;
     }
