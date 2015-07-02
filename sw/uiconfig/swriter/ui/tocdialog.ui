@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="TocDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Insert Index/Table</property>
+    <property name="title" translatable="yes">Insert Index or Table of Contents</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -134,7 +134,7 @@
                   <object class="GtkLabel" id="index">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Index/Table</property>
+                    <property name="label" translatable="yes">Index or Table of Contents</property>
                   </object>
                   <packing>
                     <property name="tab_fill">False</property>

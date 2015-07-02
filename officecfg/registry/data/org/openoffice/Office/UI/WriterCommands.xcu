@@ -112,7 +112,7 @@
       </node>
       <node oor:name=".uno:InsertMultiIndex" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Indexes and Tables...</value>
+          <value xml:lang="en-US">~Indexes and Tables of Contents...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
