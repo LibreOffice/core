@@ -431,7 +431,7 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
         return -1;
 
 
-    //insert ldap bind info to mozilla profile(in memery,none saved),so we can use it in mozilla part codes
+    //insert ldap bind info to mozilla profile(in memory, none saved), so we can use it in mozilla part codes
     if (_pCon->isLDAP())
     {
           rv = InsertLoginInfo(_pCon);

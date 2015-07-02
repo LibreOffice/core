@@ -733,7 +733,7 @@ namespace drawinglayer
               Moved to toolkit, so i have to link against it. I tried VCL first, but it did
               not work since VCLUnoHelper::CreateFont is unresolved in VCL (!). Other then the name
               may imply, it is defined in toolkit (!). Since toolkit is linked against VCL itself,
-              the lowest move,ment plave is toolkit.
+              the lowest movement plane is toolkit.
               Checked form control export, it works well. Done.
 
             - In goodies, in GraphicObject::Draw, when the used Graphic is linked, infos are
@@ -1909,7 +1909,7 @@ namespace drawinglayer
                             }
                             else
                             {
-                                // svae old mfCurrentUnifiedTransparence and set new one
+                                // save old mfCurrentUnifiedTransparence and set new one
                                 // so that contained SvtGraphicStroke may use the current one
                                 const double fLastCurrentUnifiedTransparence(mfCurrentUnifiedTransparence);
                                 // #i105377# paint the content metafile opaque as the transparency gets

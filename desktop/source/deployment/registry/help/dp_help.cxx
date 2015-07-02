@@ -518,7 +518,7 @@ void BackendImpl::implProcessHelp(
                             {
                                 aErrStr = getResourceString( nErrStrId );
 
-                                // Remoce CR/LF
+                                // Remove CR/LF
                                 OUString aErrMsg( aErrorInfo.m_aErrorMsg );
                                 sal_Unicode nCR = 13, nLF = 10;
                                 sal_Int32 nSearchCR = aErrMsg.indexOf( nCR );

@@ -499,7 +499,7 @@ Any ORowSetCache::getBookmark(  )
 
     if ( m_aMatrixIter >= m_pMatrix->end() || m_aMatrixIter < m_pMatrix->begin() || !(*m_aMatrixIter).is())
     {
-        return Any(); // this is allowed here because the rowset knowns what it is doing
+        return Any(); // this is allowed here because the rowset knows what it is doing
     }
 
     return lcl_getBookmark(((*m_aMatrixIter)->get())[0],m_pCacheSet);

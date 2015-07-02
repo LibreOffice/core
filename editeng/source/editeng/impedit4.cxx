@@ -967,7 +967,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             MapMode aPntMode( MAP_POINT );
             long nFontHeight = GetRefDevice()->LogicToLogic(
                     aFont.GetSize(), &GetRefMapMode(), &aPntMode ).Height();
-            nFontHeight *=2;    // HalfP oints
+            nFontHeight *=2;    // Half Points
             sal_uInt16 nProp = static_cast<const SvxEscapementItem&>(rItem).GetProp();
             sal_uInt16 nProp100 = nProp*100;    // For SWG-Token Prop in 100th percent.
             short nEsc = static_cast<const SvxEscapementItem&>(rItem).GetEsc();

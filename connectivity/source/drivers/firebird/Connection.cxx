@@ -196,7 +196,7 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
 
                 xFileAccess->writeFile(m_sFirebirdURL,xDBStream->getInputStream());
             }
-            // TOOO: Get DB properties from XML
+            // TODO: Get DB properties from XML
 
         }
         // External file AND/OR remote connection

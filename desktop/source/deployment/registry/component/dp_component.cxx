@@ -819,7 +819,7 @@ void BackendImpl::unorc_verify_init(
                 //  ("?" ("BUNDLED_EXTENSIONS" |                       -- third
                 //   "UNO_SHARED_PACKAGES_CACHE" | "UNO_USER_PACKAGES_CACHE")
                 //   ...)*
-                // so can unambiguously be split into its thre parts:
+                // so can unambiguously be split into its three parts:
                 int state = 1;
                 for (sal_Int32 i = RTL_CONSTASCII_LENGTH("UNO_SERVICES=");
                      i >= 0;)

@@ -902,7 +902,7 @@ namespace drawinglayer
         {
             const sal_uInt32 nPointCount(rLoopA.count());
 
-            // with idetic polygons there are no outlines
+            // with identic polygons there are no outlines
             if(rLoopA != rLoopB)
             {
                 if(nPointCount && nPointCount == rLoopB.count())

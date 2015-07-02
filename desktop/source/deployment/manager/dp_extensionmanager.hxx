@@ -219,7 +219,7 @@ private:
     //only to be used within addExtension
     ::osl::Mutex m_addMutex;
     /* contains the names of all repositories (except tmp) in order of there
-       priority. That is, the first element is "user" follod by "shared" and
+       priority. That is, the first element is "user" followed by "shared" and
        then "bundled"
      */
     ::std::list< OUString > m_repositoryNames;

@@ -1453,10 +1453,10 @@ AC_ARG_ENABLE(openssl,
 
 AC_ARG_ENABLE(library-bin-tar,
     AS_HELP_STRING([--enable-library-bin-tar],
-        [Enable the building and reused of tarball of binary build for some 'external' libraries
+        [Enable the building and reused of tarball of binary build for some 'external' libraries.
         Some libraries can save their build result in a tarball
-        stored in TARFILE_LOCATION. that binary tarball is
-        uniquely identified by the source tarbal,
+        stored in TARFILE_LOCATION. That binary tarball is
+        uniquely identified by the source tarball,
         the content of the config_host.mk file and the content
         of the top-level directory in core for that library
         If this option is enabled, then if such a tarfile exist, it will be untarred

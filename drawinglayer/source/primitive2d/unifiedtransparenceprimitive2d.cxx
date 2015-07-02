@@ -80,7 +80,7 @@ namespace drawinglayer
                 // - Grow the used polygon range by one discrete unit in X and Y. This
                 // will make the decomposition view-dependent.
 
-                // - For all filled polygon renderings, dra wthe polygon outline extra. This
+                // - For all filled polygon renderings, draw the polygon outline extra. This
                 // would lead to unwanted side effects when using concatenated polygons.
 
                 // - At this decomposition, add a filled polygon and a hairline polygon. This

@@ -1379,7 +1379,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
                             << "> has no explicit version");
 
                     //We provide a special command environment that will prevent
-                    //showing a license if simple-licens/@accept-by = "admin"
+                    //showing a license if simple-license/@accept-by = "admin"
                     //It will also prevent showing the license for bundled extensions
                     //which is not supported.
                     OSL_ASSERT(!(m_context == "user"));

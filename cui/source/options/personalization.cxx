@@ -143,7 +143,7 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, pButton )
         return 0;
 
     // TODO FIXME!
-    // Before the release, the allizom.org url shoud be changed to:
+    // Before the release, the allizom.org url should be changed to:
     // OUString rSearchURL = "https://services.addons.mozilla.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
     // The problem why it cannot be done just now is that the SSL negotiation
     // with services.addons.mozilla.org fails very early - during an early
@@ -153,7 +153,7 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, pButton )
     // This is not cleared anywhere during the init, and so later, even though
     // we have found the certificate, this triggers
     // NeonSession_CertificationNotify callback, that
-    // causes that NE_SSL_UNTRUSTED is igored in cases when the condition
+    // causes that NE_SSL_UNTRUSTED is ignored in cases when the condition
     //   if ( pSession->isDomainMatch(
     //      GetHostnamePart( xEECert.get()->getSubjectName() ) ) )
     // is true; but that is only when getSubjectName() actually returns a

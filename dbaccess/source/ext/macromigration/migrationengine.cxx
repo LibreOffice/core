@@ -970,7 +970,7 @@ namespace dbmm
             if ( !impl_handleDocument_nothrow( *doc ) )
                 return false;
 
-            // update overall progress vallue
+            // update overall progress value
             m_rProgress.setOverallProgressValue( nOverallProgressValue );
         }
 

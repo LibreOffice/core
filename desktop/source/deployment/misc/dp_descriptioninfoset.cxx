@@ -111,7 +111,7 @@ class ExtensionDescription
 public:
     /**throws an exception if the description.xml is not
         available, cannot be read, does not contain the expected data,
-        or any other error occurred. Therefore it shoult only be used with
+        or any other error occurred. Therefore it should only be used with
         new extensions.
 
         Throws com::sun::star::uno::RuntimeException,

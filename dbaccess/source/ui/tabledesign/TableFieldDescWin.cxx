@@ -167,7 +167,7 @@ void OTableFieldDescWin::Resize()
             nPageWidth = nOutputWidth - STANDARD_MARGIN - STANDARD_MARGIN;
         }
         else
-        {   // unfortunately that's not even enough, to show page at its optimum and help with minimum widthn
+        {   // unfortunately that's not even enough, to show page at its optimum and help with minimum width
             nHelpX = nHelpY = nHelpWidth = nHelpHeight = 0; // thus no help window
             nPageWidth = nOutputWidth - STANDARD_MARGIN - STANDARD_MARGIN;
             nPageHeight = nOutputHeight - STANDARD_MARGIN - DETAILS_HEADER_HEIGHT - STANDARD_MARGIN;

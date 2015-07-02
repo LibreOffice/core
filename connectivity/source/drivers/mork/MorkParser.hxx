@@ -160,7 +160,7 @@ protected: // Data
     int defaultListScope_;
     int defaultTableId_;
 
-    // Indicates intity is being parsed
+    // Indicates entity is being parsed
     enum { NPColumns, NPValues, NPRows } nowParsing_;
 
 private:
