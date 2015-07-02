@@ -23,9 +23,9 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
-class ComEnumerationWrapper : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumeration >
+class ComEnumerationWrapper : public ::cppu::WeakImplHelper< ::com::sun::star::container::XEnumeration >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > m_xInvocation;
     sal_Int32 m_nCurInd;

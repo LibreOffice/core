@@ -22,8 +22,7 @@
 #include <tools/errcode.hxx>
 #include <svl/hint.hxx>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -106,7 +105,7 @@ TYPEINIT1(SbUnoService,SbxObject)
 TYPEINIT1(SbUnoServiceCtor,SbxMethod)
 TYPEINIT1(SbUnoSingleton,SbxObject)
 
-typedef WeakImplHelper1< XAllListener > BasicAllListenerHelper;
+typedef WeakImplHelper< XAllListener > BasicAllListenerHelper;
 
 // Identifiers for creating the strings for dbg_Properties
 static char const ID_DBG_SUPPORTEDINTERFACES[] = "Dbg_SupportedInterfaces";
@@ -3996,7 +3995,7 @@ void BasicAllListener_Impl ::disposing(const EventObject& ) throw ( RuntimeExcep
 //  class InvocationToAllListenerMapper
 //  helper class to map XInvocation to XAllListener (also in project eventattacher!)
 
-class InvocationToAllListenerMapper : public WeakImplHelper1< XInvocation >
+class InvocationToAllListenerMapper : public WeakImplHelper< XInvocation >
 {
 public:
     InvocationToAllListenerMapper( const Reference< XIdlClass >& ListenerType,
@@ -4325,7 +4324,7 @@ protected:
 };
 } // namespace
 
-typedef WeakImplHelper2< XInvocation, XComponent > ModuleInvocationProxyHelper;
+typedef WeakImplHelper< XInvocation, XComponent > ModuleInvocationProxyHelper;
 
 class ModuleInvocationProxy : public OMutexBasis,
                               public ModuleInvocationProxyHelper

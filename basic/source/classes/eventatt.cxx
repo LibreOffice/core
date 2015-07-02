@@ -58,7 +58,7 @@
 #include <sbintern.hxx>
 #include <eventatt.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
@@ -136,7 +136,7 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
 }
 
 
-class BasicScriptListener_Impl : public WeakImplHelper1< XScriptListener >
+class BasicScriptListener_Impl : public WeakImplHelper< XScriptListener >
 {
     StarBASICRef maBasicRef;
         Reference< frame::XModel > m_xModel;

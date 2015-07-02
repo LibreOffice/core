@@ -24,15 +24,14 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 typedef ::boost::ptr_vector< ::com::sun::star::beans::PropertyValue >
     SbPropertyValueArr_Impl;
 
-typedef ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertySet,
-                                 ::com::sun::star::beans::XPropertyAccess > SbPropertyValuesHelper;
+typedef ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertySet,
+                                ::com::sun::star::beans::XPropertyAccess > SbPropertyValuesHelper;
 
 
 
@@ -88,7 +87,7 @@ public:
 
 
 
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo > SbPropertySetInfoHelper;
+typedef ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertySetInfo > SbPropertySetInfoHelper;
 
 // AB 20.3.2000 Help Class for XPropertySetInfo implementation
 class PropertySetInfoImpl

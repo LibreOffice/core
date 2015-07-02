@@ -19,7 +19,7 @@
 
 #include "errobject.hxx"
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/script/XDefaultProperty.hpp>
 #include "sbintern.hxx"
 #include "runtime.hxx"
@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo;
 
-typedef ::cppu::WeakImplHelper2< vba::XErrObject, script::XDefaultProperty > ErrObjectImpl_BASE;
+typedef ::cppu::WeakImplHelper< vba::XErrObject, script::XDefaultProperty > ErrObjectImpl_BASE;
 
 class ErrObject : public ErrObjectImpl_BASE
 {
