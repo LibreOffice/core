@@ -820,6 +820,10 @@ String MN_DRAW_POPUPMENU
 {
     Text [ en-US ] = "Graphic" ;
 };
+string MN_DRAWLINE_POPUPMENU
+{
+    Text [ en-US ] = "Draw Line";
+};
 #define MN_WRAP_DRAW                                                                                                            \
     MenuItem\
     {\

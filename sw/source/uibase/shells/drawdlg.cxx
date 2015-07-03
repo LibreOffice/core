@@ -107,52 +107,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             }
         }
         break;
-
-        case SID_ATTRIBUTES_LINE:
-        {
-            bool bHasMarked = pView->AreObjectsMarked();
-
-            const SdrObject* pObj = NULL;
-            const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-            if( rMarkList.GetMarkCount() == 1 )
-                pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialog creation failed!");
-            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( NULL,
-                    &aNewAttr,
-                pDoc,
-                pObj,
-                bHasMarked));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
-            if (pDlg->Execute() == RET_OK)
-            {
-                pSh->StartAction();
-                if(bHasMarked)
-                    pView->SetAttrToMarked(*pDlg->GetOutputItemSet(), false);
-                else
-                    pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), false);
-                pSh->EndAction();
-
-                static sal_uInt16 aInval[] =
-                {
-                    SID_ATTR_LINE_STYLE,                // ( SID_SVX_START + 169 )
-                    SID_ATTR_LINE_DASH,                 // ( SID_SVX_START + 170 )
-                    SID_ATTR_LINE_WIDTH,                // ( SID_SVX_START + 171 )
-                    SID_ATTR_LINE_COLOR,                // ( SID_SVX_START + 172 )
-                    SID_ATTR_LINE_START,                // ( SID_SVX_START + 173 )
-                    SID_ATTR_LINE_END,                  // ( SID_SVX_START + 174 )
-                    SID_ATTR_LINE_TRANSPARENCE,         // (SID_SVX_START+1107)
-                    SID_ATTR_LINE_JOINT,                // (SID_SVX_START+1110)
-                    SID_ATTR_LINE_CAP,                  // (SID_SVX_START+1111)
-                    0
-                };
-
-                GetView().GetViewFrame()->GetBindings().Invalidate(aInval);
-            }
-        }
-        break;
-
         default:
             break;
     }
@@ -194,15 +148,6 @@ void SwDrawShell::ExecDrawAttrArgs(SfxRequest& rReq)
             case SID_ATTR_FILL_TRANSPARENCE:
             case SID_ATTR_FILL_FLOATTRANSPARENCE:
                 pDis->Execute(SID_ATTRIBUTES_AREA);
-                break;
-            case SID_ATTR_LINE_STYLE:
-            case SID_ATTR_LINE_DASH:
-            case SID_ATTR_LINE_WIDTH:
-            case SID_ATTR_LINE_COLOR:
-            case SID_ATTR_LINE_TRANSPARENCE:
-            case SID_ATTR_LINE_JOINT:
-            case SID_ATTR_LINE_CAP:
-                pDis->Execute(SID_ATTRIBUTES_LINE);
                 break;
         }
     }

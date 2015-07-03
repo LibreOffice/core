@@ -194,6 +194,11 @@ SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
         nPoolId = RES_POOLCOLL_LABEL_DRAWING;
         sString = ::GetOldDrwCat();
     }
+    else if( eType & nsSelectionType::SEL_DRW_LINE )
+    {
+        nPoolId = RES_POOLCOLL_LABEL_DRAWING;
+        sString = ::GetOldDrwCat();
+    }
     if( nPoolId )
     {
         if (!sString.isEmpty())

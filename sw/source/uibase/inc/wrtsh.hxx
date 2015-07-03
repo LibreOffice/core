@@ -62,6 +62,7 @@ namespace nsSelectionType
     const SelectionType SEL_TBL             = 0x000080; // cursor is in table
     const SelectionType SEL_TBL_CELLS       = 0x000100; // table cells are selected
     const SelectionType SEL_DRW             = 0x000200; // drawing objects (rectangle, circle...)
+
     const SelectionType SEL_DRW_TXT         = 0x000400; // draw-textobjects in edit mode
     const SelectionType SEL_BEZ             = 0x000800; // edit ornament objects
     const SelectionType SEL_DRW_FORM        = 0x001000; // drawing objects: DB-Forms
@@ -70,6 +71,7 @@ namespace nsSelectionType
     const SelectionType SEL_EXTRUDED_CUSTOMSHAPE = 0x008000;    // extruded custom shape
     const SelectionType SEL_FONTWORK        = 0x010000; // fontwork
     const SelectionType SEL_POSTIT          = 0x020000; //annotation
+    const SelectionType SEL_DRW_LINE        = 0x040000;
 }
 
 /** Used by the UI to modify the document model.

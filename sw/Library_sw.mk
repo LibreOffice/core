@@ -651,6 +651,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/uibase/shells/beziersh \
     sw/source/uibase/shells/drawdlg \
     sw/source/uibase/shells/drawsh \
+    sw/source/uibase/shells/drlinesh \
     sw/source/uibase/shells/drformsh \
     sw/source/uibase/shells/drwbassh \
     sw/source/uibase/shells/drwtxtex \

@@ -20,77 +20,6 @@ interface TextDraw : TextDrawBase
     uuid = "626DE480-111A-101D-9757-6E74207A7520"
 ]
 {
-    SID_ATTR_LINEEND_STYLE
-    [
-        SlotType = SfxBoolItem ;
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = DisableState ;
-        Export = FALSE;
-    ]
-
-    SID_ATTR_LINE_START
-    [
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = GetDrawAttrState ;
-        Export = FALSE;
-    ]
-
-    SID_ATTR_LINE_END
-    [
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = GetDrawAttrState ;
-        Export = FALSE;
-    ]
-
-    SID_ATTR_LINE_STYLE
-    [
-        Export = FALSE;
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = GetDrawAttrState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_ATTR_LINE_DASH
-    [
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = GetDrawAttrState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_ATTR_LINE_TRANSPARENCE
-    [
-        Export = FALSE;
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = GetDrawAttrState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_ATTR_LINE_JOINT
-    [
-        Export = FALSE;
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = GetDrawAttrState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_ATTR_LINE_CAP
-    [
-        Export = FALSE;
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = GetDrawAttrState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_DASH_LIST
-    [
-        StateMethod = GetDrawAttrState ;
-    ]
-
-    SID_LINEEND_LIST
-    [
-        StateMethod = GetDrawAttrState ;
-    ]
-
     SID_COLOR_TABLE
     [
         StateMethod = GetDrawAttrState ;
@@ -109,22 +38,6 @@ interface TextDraw : TextDrawBase
     SID_BITMAP_LIST
     [
         StateMethod = GetDrawAttrState ;
-    ]
-
-    SID_ATTR_LINE_WIDTH
-    [
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = GetDrawAttrState ;
-        Export = FALSE;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_ATTR_LINE_COLOR
-    [
-        Export = FALSE;
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = GetDrawAttrState ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
     SID_ATTR_FILL_STYLE
@@ -181,12 +94,6 @@ interface TextDraw : TextDrawBase
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-
-    SID_ATTRIBUTES_LINE
-    [
-        ExecMethod = ExecDrawDlg ;
-        StateMethod = DisableState ;
     ]
 
     SID_ATTRIBUTES_AREA

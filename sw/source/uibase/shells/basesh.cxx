@@ -884,6 +884,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         {
             ShellModes eMode = GetView().GetShellMode();
             if ( SHELL_MODE_DRAW != eMode &&
+                 SHELL_MODE_DRAW_LINE != eMode &&
                  SHELL_MODE_DRAW_CTRL != eMode &&
                  SHELL_MODE_DRAW_FORM != eMode &&
                  SHELL_MODE_DRAWTEXT != eMode &&
@@ -1784,6 +1785,7 @@ void SwBaseShell::StateStyle( SfxItemSet &rSet )
 
     if ( bParentCntProt ||
          SHELL_MODE_DRAW == eMode ||
+         SHELL_MODE_DRAW_LINE == eMode ||
          SHELL_MODE_DRAW_CTRL == eMode ||
          SHELL_MODE_DRAW_FORM == eMode ||
          SHELL_MODE_DRAWTEXT == eMode ||
