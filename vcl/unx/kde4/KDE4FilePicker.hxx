@@ -66,6 +66,8 @@ protected:
 
     //running filter string to add to dialog
     QString _filter;
+    // string to set the current filter
+    QString _currentFilter;
 
     //mapping of SAL control ID's to created custom controls
     QHash<sal_Int16, QWidget*> _customWidgets;
