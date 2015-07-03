@@ -46,17 +46,9 @@ struct RegistryTypeWriter_Api
     TypeWriterImpl          (TYPEREG_CALLTYPE *createEntry)         (RTTypeClass, rtl_uString*, rtl_uString*, sal_uInt16, sal_uInt16, sal_uInt16);
     void                    (TYPEREG_CALLTYPE *acquire)             (TypeWriterImpl);
     void                    (TYPEREG_CALLTYPE *release)             (TypeWriterImpl);
-    void                    (TYPEREG_CALLTYPE *setUik)              (TypeWriterImpl, const RTUik*);
-    void                    (TYPEREG_CALLTYPE *setDoku)             (TypeWriterImpl, rtl_uString*);
-    void                    (TYPEREG_CALLTYPE *setFileName)         (TypeWriterImpl, rtl_uString*);
     void                    (TYPEREG_CALLTYPE *setFieldData)        (TypeWriterImpl, sal_uInt16, rtl_uString*, rtl_uString*, rtl_uString*, rtl_uString*, RTFieldAccess, RTValueType, RTConstValueUnion);
-    void                    (TYPEREG_CALLTYPE *setMethodData)       (TypeWriterImpl, sal_uInt16, rtl_uString*, rtl_uString*, RTMethodMode, sal_uInt16, sal_uInt16, rtl_uString*);
-    void                    (TYPEREG_CALLTYPE *setParamData)        (TypeWriterImpl, sal_uInt16, sal_uInt16, rtl_uString*, rtl_uString*, RTParamMode);
-    void                    (TYPEREG_CALLTYPE *setExcData)          (TypeWriterImpl, sal_uInt16, sal_uInt16, rtl_uString*);
     const sal_uInt8*        (TYPEREG_CALLTYPE *getBlop)             (TypeWriterImpl);
     sal_uInt32              (TYPEREG_CALLTYPE *getBlopSize)         (TypeWriterImpl);
-
-    void                    (TYPEREG_CALLTYPE *setReferenceData)    (TypeWriterImpl, sal_uInt16, rtl_uString*, RTReferenceType, rtl_uString*, RTFieldAccess);
 };
 
 /** the API initialization function.

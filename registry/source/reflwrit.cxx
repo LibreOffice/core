@@ -1184,35 +1184,6 @@ static void TYPEREG_CALLTYPE release(TypeWriterImpl hEntry)
     }
 }
 
-static void TYPEREG_CALLTYPE setUik(TypeWriterImpl  hEntry, const RTUik* uik)
-{
-    TypeWriter* pEntry = static_cast<TypeWriter*>(hEntry);
-
-    if (pEntry != NULL)
-    {
-        if (pEntry->m_pUik)
-        {
-            pEntry->m_pUik->m_Data1 = uik->m_Data1;
-            pEntry->m_pUik->m_Data2 = uik->m_Data2;
-            pEntry->m_pUik->m_Data3 = uik->m_Data3;
-            pEntry->m_pUik->m_Data4 = uik->m_Data4;
-            pEntry->m_pUik->m_Data5 = uik->m_Data5;
-        }
-        else
-            pEntry->m_pUik = new RTUik(*uik);
-    }
-}
-
-static void TYPEREG_CALLTYPE setDoku(TypeWriterImpl hEntry, rtl_uString* doku)
-{
-    static_cast< TypeWriter * >(hEntry)->m_doku = toByteString(doku);
-}
-
-static void TYPEREG_CALLTYPE setFileName(TypeWriterImpl hEntry, rtl_uString* fileName)
-{
-    static_cast< TypeWriter * >(hEntry)->m_fileName = toByteString(fileName);
-}
-
 sal_Bool TYPEREG_CALLTYPE typereg_writer_setFieldData(
     void * handle, sal_uInt16 index, rtl_uString const * documentation,
     rtl_uString const * fileName, RTFieldAccess flags, rtl_uString const * name,
@@ -1263,19 +1234,6 @@ sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodData(
     return true;
 }
 
-static void TYPEREG_CALLTYPE setMethodData(TypeWriterImpl   hEntry,
-                                           sal_uInt16       index,
-                                           rtl_uString*     name,
-                                           rtl_uString*     returnTypeName,
-                                           RTMethodMode     mode,
-                                           sal_uInt16       paramCount,
-                                           sal_uInt16       excCount,
-                                           rtl_uString*     doku)
-{
-    typereg_writer_setMethodData(
-        hEntry, index, doku, mode, name, returnTypeName, paramCount, excCount);
-}
-
 sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodParameterData(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 parameterIndex,
     RTParamMode flags, rtl_uString const * name, rtl_uString const * typeName)
@@ -1291,17 +1249,6 @@ sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodParameterData(
     return true;
 }
 
-static void TYPEREG_CALLTYPE setParamData(TypeWriterImpl    hEntry,
-                                          sal_uInt16        index,
-                                          sal_uInt16        paramIndex,
-                                          rtl_uString*      type,
-                                          rtl_uString*      name,
-                                          RTParamMode       mode)
-{
-    typereg_writer_setMethodParameterData(
-        hEntry, index, paramIndex, mode, name, type);
-}
-
 sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodExceptionTypeName(
     void * handle, sal_uInt16 methodIndex, sal_uInt16 exceptionIndex,
     rtl_uString const * typeName)
@@ -1314,14 +1261,6 @@ sal_Bool TYPEREG_CALLTYPE typereg_writer_setMethodExceptionTypeName(
         return false;
     }
     return true;
-}
-
-static void TYPEREG_CALLTYPE setExcData(TypeWriterImpl  hEntry,
-                                        sal_uInt16      index,
-                                        sal_uInt16      excIndex,
-                                        rtl_uString*    type)
-{
-    typereg_writer_setMethodExceptionTypeName(hEntry, index, excIndex, type);
 }
 
 void const * TYPEREG_CALLTYPE typereg_writer_getBlob(void * handle, sal_uInt32 * size)
@@ -1365,16 +1304,6 @@ sal_Bool TYPEREG_CALLTYPE typereg_writer_setReferenceData(
         return false;
     }
     return true;
-}
-
-static void TYPEREG_CALLTYPE setReferenceData(TypeWriterImpl    hEntry,
-                                              sal_uInt16        index,
-                                              rtl_uString*      name,
-                                              RTReferenceType   refType,
-                                              rtl_uString*      doku,
-                                              RTFieldAccess     access)
-{
-    typereg_writer_setReferenceData(hEntry, index, doku, refType, access, name);
 }
 
 void * TYPEREG_CALLTYPE typereg_writer_create(
@@ -1429,22 +1358,15 @@ static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
 
 RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api()
 {
-    static RegistryTypeWriter_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0};
+    static RegistryTypeWriter_Api aApi= {0,0,0,0,0,0};
     if (!aApi.acquire)
     {
         aApi.createEntry        = &createEntry;
         aApi.acquire            = &acquire;
         aApi.release            = &release;
-        aApi.setUik             = &setUik;
-        aApi.setDoku            = &setDoku;
-        aApi.setFileName        = &setFileName;
         aApi.setFieldData       = &setFieldData;
-        aApi.setMethodData      = &setMethodData;
-        aApi.setParamData       = &setParamData;
-        aApi.setExcData         = &setExcData;
         aApi.getBlop            = &getBlop;
         aApi.getBlopSize        = &getBlopSize;
-        aApi.setReferenceData   = &setReferenceData;
 
         return (&aApi);
     }
