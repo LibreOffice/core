@@ -77,7 +77,9 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
             if (nev instanceof com.sun.star.accessibility.XAccessible) {
                 System.out.println("New: "+((XAccessible)nev).getAccessibleContext().getAccessibleName());
             }
-            notifiedEvent = ev;
+            synchronized (this) {
+                notifiedEvent = ev;
+            }
         }
 
         public void disposing(EventObject ev) {}
@@ -118,7 +120,11 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
 
         boolean works = true;
 
-        if (list.notifiedEvent == null) {
+        AccessibleEventObject ne;
+        synchronized (list) {
+            ne = list.notifiedEvent;
+        }
+        if (ne == null) {
             if (!isTransient) {
                 log.println("listener wasn't called");
                 works = false;
@@ -151,17 +157,23 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
     public void _removeEventListener() throws Exception {
         requiredMethod("addEventListener()");
 
-        list.notifiedEvent = null;
-
         log.println("remove listener");
         oObj.removeAccessibleEventListener(list);
+
+        synchronized (list) {
+            list.notifiedEvent = null;
+        }
 
         log.println("fire event");
         prod.fireEvent() ;
 
         waitForEventIdle();
 
-        if (list.notifiedEvent == null) {
+        AccessibleEventObject ne;
+        synchronized (list) {
+            ne = list.notifiedEvent;
+        }
+        if (ne == null) {
             log.println("listener wasn't called -- OK");
         }
 
