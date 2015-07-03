@@ -46,12 +46,7 @@ struct RegistryTypeReader_Api
     TypeReaderImpl      (TYPEREG_CALLTYPE *createEntry)         (const sal_uInt8*, sal_uInt32, bool);
     void                (TYPEREG_CALLTYPE *acquire)             (TypeReaderImpl);
     void                (TYPEREG_CALLTYPE *release)             (TypeReaderImpl);
-    sal_uInt16          (TYPEREG_CALLTYPE *getMinorVersion)     (TypeReaderImpl);
-    sal_uInt16          (TYPEREG_CALLTYPE *getMajorVersion)     (TypeReaderImpl);
     RTTypeClass         (TYPEREG_CALLTYPE *getTypeClass)        (TypeReaderImpl);
-    void                (TYPEREG_CALLTYPE *getUik)              (TypeReaderImpl, RTUik*);
-    void                (TYPEREG_CALLTYPE *getDoku)             (TypeReaderImpl, rtl_uString**);
-    void                (TYPEREG_CALLTYPE *getFileName)         (TypeReaderImpl, rtl_uString**);
     void                (TYPEREG_CALLTYPE *getTypeName)         (TypeReaderImpl, rtl_uString**);
     void                (TYPEREG_CALLTYPE *getSuperTypeName)    (TypeReaderImpl, rtl_uString**);
     sal_uInt32          (TYPEREG_CALLTYPE *getFieldCount)       (TypeReaderImpl);
@@ -61,23 +56,6 @@ struct RegistryTypeReader_Api
     RTValueType         (TYPEREG_CALLTYPE *getFieldConstValue)  (TypeReaderImpl, sal_uInt16, RTConstValueUnion*);
     void                (TYPEREG_CALLTYPE *getFieldDoku)        (TypeReaderImpl, rtl_uString**, sal_uInt16);
     void                (TYPEREG_CALLTYPE *getFieldFileName)    (TypeReaderImpl, rtl_uString**, sal_uInt16);
-    sal_uInt32          (TYPEREG_CALLTYPE *getMethodCount)      (TypeReaderImpl);
-    void                (TYPEREG_CALLTYPE *getMethodName)       (TypeReaderImpl, rtl_uString**, sal_uInt16);
-    sal_uInt32          (TYPEREG_CALLTYPE *getMethodParamCount) (TypeReaderImpl, sal_uInt16);
-    void                (TYPEREG_CALLTYPE *getMethodParamType)  (TypeReaderImpl, rtl_uString**, sal_uInt16, sal_uInt16);
-    void                (TYPEREG_CALLTYPE *getMethodParamName)  (TypeReaderImpl, rtl_uString**, sal_uInt16, sal_uInt16);
-    RTParamMode         (TYPEREG_CALLTYPE *getMethodParamMode)  (TypeReaderImpl, sal_uInt16, sal_uInt16);
-    sal_uInt32          (TYPEREG_CALLTYPE *getMethodExcCount)   (TypeReaderImpl, sal_uInt16);
-    void                (TYPEREG_CALLTYPE *getMethodExcType)    (TypeReaderImpl, rtl_uString**, sal_uInt16, sal_uInt16);
-    void                (TYPEREG_CALLTYPE *getMethodReturnType) (TypeReaderImpl, rtl_uString**, sal_uInt16);
-    RTMethodMode        (TYPEREG_CALLTYPE *getMethodMode)       (TypeReaderImpl, sal_uInt16);
-    void                (TYPEREG_CALLTYPE *getMethodDoku)       (TypeReaderImpl, rtl_uString**, sal_uInt16);
-
-    sal_uInt32          (TYPEREG_CALLTYPE *getReferenceCount)   (TypeReaderImpl);
-    void                (TYPEREG_CALLTYPE *getReferenceName)    (TypeReaderImpl, rtl_uString**, sal_uInt16);
-    RTReferenceType     (TYPEREG_CALLTYPE *getReferenceType)    (TypeReaderImpl, sal_uInt16);
-    void                (TYPEREG_CALLTYPE *getReferenceDoku)    (TypeReaderImpl, rtl_uString**, sal_uInt16);
-    RTFieldAccess       (TYPEREG_CALLTYPE *getReferenceAccess)  (TypeReaderImpl, sal_uInt16);
 };
 
 /** the API initialization function.

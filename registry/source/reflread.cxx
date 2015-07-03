@@ -288,7 +288,6 @@ public:
     double              readDoubleConstant(sal_uInt16 index);
     const sal_Unicode*  readStringConstant(sal_uInt16 index);
         // throws std::bad_alloc
-    void                readUIK(sal_uInt16 index, RTUik* uik);
 };
 
 ConstantPool::~ConstantPool()
@@ -580,29 +579,6 @@ const sal_Unicode* ConstantPool::readStringConstant(sal_uInt16 index)
     }
 
     return aString;
-}
-
-void ConstantPool::readUIK(sal_uInt16 index, RTUik* uik)
-{
-    if (index == 0)
-    {
-        uik->m_Data1 = 0;
-        uik->m_Data2 = 0;
-        uik->m_Data3 = 0;
-        uik->m_Data4 = 0;
-        uik->m_Data5 = 0;
-    }
-    else if (m_pIndex && (index <= m_numOfEntries))
-    {
-        if (readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_TAG) == CP_TAG_UIK)
-        {
-            uik->m_Data1 = readUINT32(m_pIndex[index - 1] + CP_OFFSET_ENTRY_UIK1);
-            uik->m_Data2 = readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_UIK2);
-            uik->m_Data3 = readUINT16(m_pIndex[index - 1] + CP_OFFSET_ENTRY_UIK3);
-            uik->m_Data4 = readUINT32(m_pIndex[index - 1] + CP_OFFSET_ENTRY_UIK4);
-            uik->m_Data5 = readUINT32(m_pIndex[index - 1] + CP_OFFSET_ENTRY_UIK5);
-        }
-    }
 }
 
 /**************************************************************************
@@ -1325,32 +1301,6 @@ typereg_Version TYPEREG_CALLTYPE typereg_reader_getVersion(void * handle) {
     return TYPEREG_VERSION_0;
 }
 
-static sal_uInt16 TYPEREG_CALLTYPE getMinorVersion(TypeReaderImpl hEntry)
-{
-    TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
-    if (pEntry != nullptr) {
-        try {
-            return pEntry->readUINT16(OFFSET_MINOR_VERSION);
-        } catch (BlopObject::BoundsError &) {
-            SAL_WARN("registry", "bad data");
-        }
-    }
-    return 0;
-}
-
-static sal_uInt16 TYPEREG_CALLTYPE getMajorVersion(TypeReaderImpl hEntry)
-{
-    TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
-    if (pEntry != nullptr) {
-        try {
-            return pEntry->readUINT16(OFFSET_MAJOR_VERSION);
-        } catch (BlopObject::BoundsError &) {
-            SAL_WARN("registry", "bad data");
-        }
-    }
-    return 0;
-}
-
 RTTypeClass TYPEREG_CALLTYPE typereg_reader_getTypeClass(void * hEntry)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
@@ -1411,20 +1361,6 @@ static void TYPEREG_CALLTYPE getSuperTypeName(TypeReaderImpl hEntry, rtl_uString
         }
     }
     rtl_uString_new(pSuperTypeName);
-}
-
-static void TYPEREG_CALLTYPE getUik(TypeReaderImpl hEntry, RTUik* uik)
-{
-    TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
-
-    if (pEntry != NULL)
-    {
-        try {
-            pEntry->m_pCP->readUIK(pEntry->readUINT16(OFFSET_UIK), uik);
-        } catch (BlopObject::BoundsError &) {
-            SAL_WARN("registry", "bad data");
-        }
-    }
 }
 
 void TYPEREG_CALLTYPE typereg_reader_getDocumentation(void * hEntry, rtl_uString** pDoku)
@@ -1584,11 +1520,6 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodCount(void * hEntry)
     return pEntry->m_pMethods->m_numOfEntries;
 }
 
-static sal_uInt32 TYPEREG_CALLTYPE getMethodCount(TypeReaderImpl hEntry)
-{
-    return typereg_reader_getMethodCount(hEntry);
-}
-
 void TYPEREG_CALLTYPE typereg_reader_getMethodName(void * hEntry, rtl_uString** pMethodName, sal_uInt16 index)
 {
     TypeRegistryEntry* pEntry = static_cast<TypeRegistryEntry*>(hEntry);
@@ -1613,11 +1544,6 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodParameterCount(
     if (pEntry == NULL) return 0;
 
     return pEntry->m_pMethods->getMethodParamCount(index);
-}
-
-static sal_uInt32 TYPEREG_CALLTYPE getMethodParamCount(TypeReaderImpl hEntry, sal_uInt16 index)
-{
-    return typereg_reader_getMethodParameterCount(hEntry, index);
 }
 
 void TYPEREG_CALLTYPE typereg_reader_getMethodParameterTypeName(void * hEntry, rtl_uString** pMethodParamType, sal_uInt16 index, sal_uInt16 paramIndex)
@@ -1669,11 +1595,6 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getMethodExceptionCount(
     if (pEntry == NULL) return 0;
 
     return pEntry->m_pMethods->getMethodExcCount(index);
-}
-
-static sal_uInt32 TYPEREG_CALLTYPE getMethodExcCount(TypeReaderImpl hEntry, sal_uInt16 index)
-{
-    return typereg_reader_getMethodExceptionCount(hEntry, index);
 }
 
 void TYPEREG_CALLTYPE typereg_reader_getMethodExceptionTypeName(void * hEntry, rtl_uString** pMethodExcpType, sal_uInt16 index, sal_uInt16 excIndex)
@@ -1740,11 +1661,6 @@ sal_uInt16 TYPEREG_CALLTYPE typereg_reader_getReferenceCount(void * hEntry)
     if (pEntry == NULL) return 0;
 
     return pEntry->m_pReferences->m_numOfEntries;
-}
-
-static sal_uInt32 TYPEREG_CALLTYPE getReferenceCount(TypeReaderImpl hEntry)
-{
-    return typereg_reader_getReferenceCount(hEntry);
 }
 
 void TYPEREG_CALLTYPE typereg_reader_getReferenceTypeName(void * hEntry, rtl_uString** pReferenceName, sal_uInt16 index)
@@ -1827,20 +1743,15 @@ void TYPEREG_CALLTYPE typereg_reader_getSuperTypeName(
 
 RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api()
 {
-    static RegistryTypeReader_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    static RegistryTypeReader_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0};
     if (!aApi.acquire)
     {
         aApi.createEntry            = &createEntry;
         aApi.acquire                = &typereg_reader_acquire;
         aApi.release                = &typereg_reader_release;
-        aApi.getMinorVersion        = &getMinorVersion;
-        aApi.getMajorVersion        = &getMajorVersion;
         aApi.getTypeClass           = &typereg_reader_getTypeClass;
         aApi.getTypeName            = &typereg_reader_getTypeName;
         aApi.getSuperTypeName       = &getSuperTypeName;
-        aApi.getUik                 = &getUik;
-        aApi.getDoku                = &typereg_reader_getDocumentation;
-        aApi.getFileName            = &typereg_reader_getFileName;
         aApi.getFieldCount          = &getFieldCount;
         aApi.getFieldName           = &typereg_reader_getFieldName;
         aApi.getFieldType           = &typereg_reader_getFieldTypeName;
@@ -1848,22 +1759,6 @@ RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api()
         aApi.getFieldConstValue     = &getFieldConstValue;
         aApi.getFieldDoku           = &typereg_reader_getFieldDocumentation;
         aApi.getFieldFileName       = &typereg_reader_getFieldFileName;
-        aApi.getMethodCount         = &getMethodCount;
-        aApi.getMethodName          = &typereg_reader_getMethodName;
-        aApi.getMethodParamCount    = &getMethodParamCount;
-        aApi.getMethodParamType = &typereg_reader_getMethodParameterTypeName;
-        aApi.getMethodParamName     = &typereg_reader_getMethodParameterName;
-        aApi.getMethodParamMode     = &typereg_reader_getMethodParameterFlags;
-        aApi.getMethodExcCount      = &getMethodExcCount;
-        aApi.getMethodExcType = &typereg_reader_getMethodExceptionTypeName;
-        aApi.getMethodReturnType    = &typereg_reader_getMethodReturnTypeName;
-        aApi.getMethodMode          = &typereg_reader_getMethodFlags;
-        aApi.getMethodDoku          = &typereg_reader_getMethodDocumentation;
-        aApi.getReferenceCount      = &getReferenceCount;
-        aApi.getReferenceName       = &typereg_reader_getReferenceTypeName;
-        aApi.getReferenceType       = &typereg_reader_getReferenceSort;
-        aApi.getReferenceDoku       = &typereg_reader_getReferenceDocumentation;
-        aApi.getReferenceAccess     = &typereg_reader_getReferenceFlags;
 
         return (&aApi);
     }
