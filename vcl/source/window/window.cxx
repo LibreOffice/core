@@ -3184,7 +3184,7 @@ void Window::SetCursor( vcl::Cursor* pCursor )
 
 void Window::SetText( const OUString& rStr )
 {
-    if (rStr == mpWindowImpl->maText)
+    if (!mpWindowImpl || rStr == mpWindowImpl->maText)
         return;
 
     OUString oldTitle( mpWindowImpl->maText );
