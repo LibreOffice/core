@@ -105,9 +105,6 @@ public:
     inline  void                setGregorianDateTime( const DateTime& rDateTime )
                                     { setLocalDateTime( rDateTime - aEpochStart ); }
 
-    /// get the DateTime as a local (!) Gregorian DateTime
-    inline  DateTime            getGregorianDateTime() const
-                                    { return aEpochStart + getLocalDateTime(); }
 };
 
 #endif

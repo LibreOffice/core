@@ -211,9 +211,7 @@ public:
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DOUBLE_QUOTATION_START ); }
     const OUString&       getDoubleQuotationMarkEnd() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::DOUBLE_QUOTATION_END ); }
-    const OUString&       getMeasurementSystem() const
-                            { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::MEASUREMENT_SYSTEM ); }
-    MeasurementSystem   getMeasurementSystemEnum() const
+    MeasurementSystem     getMeasurementSystemEnum() const
                             { return mapMeasurementStringToEnum( getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::MEASUREMENT_SYSTEM ) ); }
     const OUString&       getTimeAM() const
                             { return getOneLocaleItem( ::com::sun::star::i18n::LocaleItem::TIME_AM ); }
@@ -285,13 +283,6 @@ public:
     OUString       getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
                             const OUString& rCurrencySymbol,
                             bool bUseThousandSep = true ) const;
-                        /** Default currency formatted string, use with
-                            care as default currency may change in any
-                            locale, for example, DEM -> EUR */
-    OUString       getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
-                                bool bUseThousandSep = true ) const
-                            { return getCurr( nNumber, nDecimals,
-                                getCurrSymbol(), bUseThousandSep ); }
 
     // dummy returns, to be implemented
     inline  sal_Unicode         getCurrZeroChar() const
@@ -310,9 +301,6 @@ public:
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::TRUE_WORD ); }
     const OUString&        getFalseWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::FALSE_WORD ); }
-    /// return a quarter string matching nQuarter (0..3) => "1st quarter" .. "4th quarter"
-    const OUString&        getQuarterWord( sal_Int16 nQuarter ) const
-                                    { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::QUARTER1_WORD + nQuarter ); }
     const OUString&        getAboveWord() const
                                     { return getOneReservedWord( ::com::sun::star::i18n::reservedWords::ABOVE_WORD ); }
     const OUString&        getBelowWord() const

@@ -208,10 +208,8 @@ public:
     bool isDigit( const OUString& rStr, sal_Int32 nPos ) const;
     bool isAlphaNumeric( const OUString& rStr, sal_Int32 nPos ) const;
     bool isLetterNumeric( const OUString& rStr, sal_Int32 nPos ) const;
-    bool isAlpha( const OUString& rStr ) const;
     bool isLetter( const OUString& rStr ) const;
     bool isNumeric( const OUString& rStr ) const;
-    bool isAlphaNumeric( const OUString& rStr ) const;
     bool isLetterNumeric( const OUString& rStr ) const;
 
 private:

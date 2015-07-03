@@ -149,9 +149,6 @@ class UNOTOOLS_DLLPUBLIC SvtLinguConfig: public utl::detail::Options
 
     com::sun::star::uno::Reference< com::sun::star::util::XChangesBatch > GetMainUpdateAccess() const;
 
-    com::sun::star::uno::Sequence< OUString > GetCurrentOrLastActiveDicts_Impl( const OUString &rPropName ) const;
-    void SetCurrentOrLastActiveDicts_Impl( const OUString &rPropName, const com::sun::star::uno::Sequence< OUString > &rDictionaries ) const;
-
     OUString GetVendorImageUrl_Impl( const OUString &rServiceImplName, const OUString &rImageName ) const;
 
     SvtLinguConfig( const SvtLinguConfig & ) SAL_DELETED_FUNCTION;

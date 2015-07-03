@@ -110,22 +110,12 @@ namespace utl
         */
         OConfigurationNode  createNode(const OUString& _rName) const throw();
 
-        OConfigurationNode  createNode( const sal_Char* _pAsciiName ) const
-        {
-            return createNode( OUString::createFromAscii( _pAsciiName ) );
-        }
-
         /** remove an existent child nod
 
             If the object represents a set node, this method may be used to delete an existent child. For non-set-nodes,
             the method will fail.
         */
         bool            removeNode(const OUString& _rName) const throw();
-
-        bool            removeNode( const sal_Char* _pAsciiName ) const
-        {
-            return removeNode( OUString::createFromAscii( _pAsciiName ) );
-        }
 
         /** retrieves the content of a descendant
 
@@ -186,7 +176,6 @@ namespace utl
 
         /// checks whether or not a descendent (no matter if direct or indirect) with the given name exists
         bool hasByHierarchicalName( const OUString& _rName ) const throw();
-        bool hasByHierarchicalName( const sal_Char* _pAsciiName ) const { return hasByHierarchicalName( OUString::createFromAscii( _pAsciiName ) ); }
 
         /// check if the objects represents a valid configuration node
         bool isValid() const { return m_xHierarchyAccess.is(); }

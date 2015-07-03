@@ -48,9 +48,6 @@ public:
     /// set a new Locale
             void                setLocale( const ::com::sun::star::lang::Locale& rLocale );
 
-    /// get current Locale
-    const ::com::sun::star::lang::Locale& getLocale() const { return aLocale; }
-
     // Wrapper implementations of class NumberFormatCodeMapper
 
     ::com::sun::star::i18n::NumberFormatCode getFormatCode( sal_Int16 nFormatIndex ) const;
