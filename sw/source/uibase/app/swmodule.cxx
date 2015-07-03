@@ -75,6 +75,7 @@
 #include <mediash.hxx>
 #include <olesh.hxx>
 #include <drawsh.hxx>
+#include <drlinesh.hxx>
 #include <wformsh.hxx>
 #include <drwtxtsh.hxx>
 #include <beziersh.hxx>
@@ -266,6 +267,7 @@ void SwDLL::RegisterInterfaces()
     SwFrameShell::RegisterInterface(pMod);
     SwDrawBaseShell::RegisterInterface(pMod);
     SwDrawShell::RegisterInterface(pMod);
+    SwDrawLineShell::RegisterInterface(pMod);
     SwDrawFormShell::RegisterInterface(pMod);
     SwDrawTextShell::RegisterInterface(pMod);
     SwBezierShell::RegisterInterface(pMod);

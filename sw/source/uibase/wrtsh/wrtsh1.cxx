@@ -1720,6 +1720,10 @@ OUString SwWrtShell::GetSelDescr() const
             aResult = SW_RESSTR(STR_DRAWING_OBJECTS);
         }
         break;
+    case nsSelectionType::SEL_DRW_LINE:
+        {
+            aResult = SW_RESSTR(STR_DRAWING_LINE);
+        }
     default:
         if (0 != mpDoc)
             aResult = GetCrsrDescr();

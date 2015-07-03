@@ -434,7 +434,7 @@ void SwView::HyphenateDocument()
         return;
     }
 
-    if (m_pWrtShell->GetSelectionType() & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_DRW))
+    if (m_pWrtShell->GetSelectionType() & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_DRW|nsSelectionType::SEL_DRW_LINE))
     {
         // Hyphenation in a Draw object
         HyphenateDrawText();

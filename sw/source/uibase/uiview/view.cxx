@@ -59,6 +59,7 @@
 #include <frmsh.hxx>
 #include <olesh.hxx>
 #include <drawsh.hxx>
+#include <drlinesh.hxx>
 #include <drawbase.hxx>
 #include <drformsh.hxx>
 #include <drwtxtsh.hxx>
@@ -339,6 +340,12 @@ void SwView::SelectShell()
             {
                 eShellMode = SHELL_MODE_BEZIER;
                 m_pShell = new SwBezierShell( *this );
+                rDispatcher.Push( *m_pShell );
+            }
+            else if( m_nSelectionType & nsSelectionType::SEL_DRW_LINE)
+            {
+                eShellMode = SHELL_MODE_DRAW_LINE;
+                m_pShell = new SwDrawLineShell( *this );
                 rDispatcher.Push( *m_pShell );
             }
 #if HAVE_FEATURE_AVMEDIA

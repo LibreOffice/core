@@ -124,7 +124,7 @@ long SwWrtShell::DelLeft()
 {
     // If it's a Fly, throw it away
     int nSelType = GetSelectionType();
-    const int nCmp = nsSelectionType::SEL_FRM | nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE | nsSelectionType::SEL_DRW;
+    const int nCmp = nsSelectionType::SEL_FRM | nsSelectionType::SEL_GRF | nsSelectionType::SEL_OLE | nsSelectionType::SEL_DRW | nsSelectionType::SEL_DRW_LINE;
     if( nCmp & nSelType )
     {
         // #108205# Remember object's position.
@@ -346,6 +346,7 @@ long SwWrtShell::DelRight()
     case nsSelectionType::SEL_GRF:
     case nsSelectionType::SEL_OLE:
     case nsSelectionType::SEL_DRW:
+    case nsSelectionType::SEL_DRW_LINE:
     case nsSelectionType::SEL_DRW_TXT:
     case nsSelectionType::SEL_DRW_FORM:
         {
@@ -384,7 +385,8 @@ long SwWrtShell::DelRight()
             if ( nsSelectionType::SEL_FRM & nSelection ||
                  nsSelectionType::SEL_GRF & nSelection ||
                  nsSelectionType::SEL_OLE & nSelection ||
-                 nsSelectionType::SEL_DRW & nSelection )
+                 nsSelectionType::SEL_DRW & nSelection ||
+                 nsSelectionType::SEL_DRW_LINE & nSelection)
             {
                 EnterSelFrmMode();
                 GotoNextFly();

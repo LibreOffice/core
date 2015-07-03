@@ -263,7 +263,7 @@ bool SwFormatClipboard::HasContentForThisType( int nSelectionType ) const
 bool SwFormatClipboard::CanCopyThisType( int nSelectionType )
 {
     if( nSelectionType & (nsSelectionType::SEL_FRM | nsSelectionType::SEL_OLE | nsSelectionType::SEL_GRF
-         | nsSelectionType::SEL_TXT | nsSelectionType::SEL_DRW | nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS ) )
+         | nsSelectionType::SEL_TXT | nsSelectionType::SEL_DRW | nsSelectionType::SEL_DRW_LINE | nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS ) )
          return true;
     return false;
 }
@@ -355,7 +355,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             }
         }
     }
-    else if ( nSelectionType & nsSelectionType::SEL_DRW )
+    else if ( nSelectionType & (nsSelectionType::SEL_DRW || nsSelectionType::SEL_DRW_LINE) )
     {
         SdrView* pDrawView = rWrtShell.GetDrawView();
         if(pDrawView)
@@ -531,7 +531,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
 
     if(m_pItemSet_TextAttr)
     {
-        if( nSelectionType & nsSelectionType::SEL_DRW )
+        if( nSelectionType & (nsSelectionType::SEL_DRW || nsSelectionType::SEL_DRW_LINE) )
         {
             SdrView* pDrawView = rWrtShell.GetDrawView();
             if(pDrawView)

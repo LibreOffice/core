@@ -78,6 +78,7 @@ ModulePrefix( "Sw" )
     include "wformsh.sdi"
 
     include "drawsh.sdi"
+    include "drlinesh.sdi"
     include "drwtxtsh.sdi"
 
     include "_listsh.sdi"

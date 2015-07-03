@@ -61,6 +61,7 @@
 #define SW_ANNOTATIONSHELL      (SFX_INTERFACE_SW_START + 32)
 
 #define SW_NAVIGATIONSHELL      (SFX_INTERFACE_SW_START + 33)
+#define SW_DRAWLINESHELL        (SFX_INTERFACE_SW_START + 34)
 #endif // _UIPARAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

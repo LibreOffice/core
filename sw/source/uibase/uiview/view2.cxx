@@ -1241,6 +1241,12 @@ void SwView::Execute(SfxRequest &rReq)
                 GetViewFrame()->GetDispatcher()->Execute(
                                 SID_OBJECT_ALIGN, SfxCallMode::ASYNCHRON, &aEnumItem, 0L);
             }
+            else if(nAlias && (m_nSelectionType & (nsSelectionType::SEL_DRW_LINE)))
+            {
+                SfxAllEnumItem aEnumItem(SID_OBJECT_ALIGN, nAlias - SID_OBJECT_ALIGN_LEFT);
+                GetViewFrame()->GetDispatcher()->Execute(
+                                SID_OBJECT_ALIGN, SfxCallMode::ASYNCHRON, &aEnumItem, 0L);
+            }
             else if(nAlias)
             //these slots are either re-mapped to text or object alignment
                 GetViewFrame()->GetDispatcher()->Execute(
