@@ -259,6 +259,13 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         }
         break;
 
+        case SID_DISPLAY_MODE:
+        {
+            SAL_DEBUG("SID_DISPLAY_MODE received in SlsSlotManager");
+            rRequest.Done();
+        }
+        break;
+
         case SID_PHOTOALBUM:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
@@ -389,7 +396,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
 
         case SID_DRAWINGMODE:
         case SID_NOTESMODE:
-        case SID_HANDOUTMODE:
+        case SID_HANDOUTMASTERMODE:
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
         {
@@ -541,7 +548,8 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     rSet.Put( SfxBoolItem( SID_DIAMODE, true ) );
     rSet.Put( SfxBoolItem( SID_OUTLINEMODE, false ) );
     rSet.Put( SfxBoolItem( SID_NOTESMODE, false ) );
-    rSet.Put( SfxBoolItem( SID_HANDOUTMODE, false ) );
+    rSet.Put( SfxBoolItem( SID_HANDOUTMASTERMODE, false ) );
+    rSet.Put( SfxUInt16Item( SID_DISPLAY_MODE, 2 ) );
 
     if (pShell!=NULL && pShell->IsMainViewShell())
     {

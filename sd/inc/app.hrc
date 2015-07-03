@@ -71,6 +71,7 @@
 #define SID_DRAWINGMODE                     (SID_SD_START+9)
 #define SID_OUTLINEMODE                     (SID_SD_START+10)
 #define SID_DIAMODE                         (SID_SD_START+11)
+#define SID_DISPLAY_MODE                    (SID_SD_START+12)
     // FREE
 #define SID_INSERTPAGE                      (SID_SD_START+14)
 #define SID_INSERTFILE                      (SID_SD_START+15)
@@ -128,7 +129,7 @@
 // In svxids.hrc: SID_BEZIER_SYMMTR             (SID_SD_START+67)
 #define SID_PRESENTATION_TEMPLATES          (SID_SD_START+68)
 #define SID_NOTESMODE                       (SID_SD_START+69)
-#define SID_HANDOUTMODE                     (SID_SD_START+70)
+#define SID_HANDOUTMASTERMODE               (SID_SD_START+70)
 #define SID_LINEEND_POLYGON                 (SID_SD_START+71)
     // FREE
 #define SID_GRAPHIC_EXPORT                  (SID_SD_START+73)
@@ -388,10 +389,10 @@
 #define SID_SUMMARY_PAGE                    (SID_SD_START+344)
 #define SID_LEAVE_ALL_GROUPS                (SID_SD_START+345)
     // FREE
-#define SID_SLIDE_MASTERPAGE                (SID_SD_START+348)
+#define SID_DRAWMASTERMODE                  (SID_SD_START+348)
 #define SID_HANDOUT_MASTERPAGE              (SID_SD_START+349)
-#define SID_NOTES_MASTERPAGE                (SID_SD_START+350)
-#define SID_TITLE_MASTERPAGE                (SID_SD_START+351)
+#define SID_NOTESMASTERMODE                 (SID_SD_START+350)
+    // FREE
 #define SID_INSERTPAGE_QUICK                (SID_SD_START+352)
     // FREE
 #define SID_INSERT_FLD_PAGE_TITLE           (SID_SD_START+356)

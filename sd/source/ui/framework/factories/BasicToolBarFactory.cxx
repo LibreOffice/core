@@ -98,7 +98,7 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
                 if (mxConfigurationController.is())
                 {
                     mxConfigurationController->addResourceFactory(
-                        FrameworkHelper::msViewTabBarURL, this);
+                        FrameworkHelper::msViewPagerURL, this);
                 }
 
                 Reference<lang::XComponent> xComponent (mxConfigurationController, UNO_QUERY);
@@ -140,7 +140,7 @@ Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
 
     Reference<XResource> xToolBar;
 
-    if (rxToolBarId->getResourceURL().equals(FrameworkHelper::msViewTabBarURL))
+    if (rxToolBarId->getResourceURL().equals(FrameworkHelper::msViewPagerURL))
     {
         xToolBar = new ViewTabBar(rxToolBarId, mxController);
     }

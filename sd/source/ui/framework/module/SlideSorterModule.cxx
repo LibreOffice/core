@@ -42,14 +42,14 @@ SlideSorterModule::SlideSorterModule (
     const OUString& rsLeftPaneURL)
     : ResourceManager(rxController,
         FrameworkHelper::CreateResourceId(FrameworkHelper::msSlideSorterURL, rsLeftPaneURL)),
-      mxViewTabBarId(FrameworkHelper::CreateResourceId(
-          FrameworkHelper::msViewTabBarURL,
+      mxViewPagerId(FrameworkHelper::CreateResourceId(
+          FrameworkHelper::msViewPagerURL,
           FrameworkHelper::msCenterPaneURL)),
       mxControllerManager(rxController,UNO_QUERY)
 {
     if (mxConfigurationController.is())
     {
-        UpdateViewTabBar(NULL);
+        UpdateViewPager(NULL);
 
         if (SvtSlideSorterBarOptions().GetVisibleImpressView())
             AddActiveMainView(FrameworkHelper::msImpressViewURL);
@@ -91,11 +91,11 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
 {
     if (rEvent.Type.equals(FrameworkHelper::msResourceActivationEvent))
     {
-        if (rEvent.ResourceId->compareTo(mxViewTabBarId) == 0)
+        if (rEvent.ResourceId->compareTo(mxViewPagerId) == 0)
         {
             // Update the view tab bar because the view tab bar has just
             // become active.
-            UpdateViewTabBar(Reference<XTabBar>(rEvent.ResourceObject,UNO_QUERY));
+            UpdateViewPager(Reference<XTabBar>(rEvent.ResourceObject,UNO_QUERY));
         }
         else if (rEvent.ResourceId->getResourceTypePrefix().equals(
             FrameworkHelper::msViewURLPrefix)
@@ -105,7 +105,7 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
         {
             // Update the view tab bar because the view in the center pane
             // has changed.
-            UpdateViewTabBar(NULL);
+            UpdateViewPager(NULL);
         }
     }
     else
@@ -114,7 +114,7 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
     }
 }
 
-void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
+void SlideSorterModule::UpdateViewPager (const Reference<XTabBar>& rxTabBar)
 {
     if ( ! mxControllerManager.is())
         return;
@@ -125,7 +125,7 @@ void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
         Reference<XConfigurationController> xCC (
             mxControllerManager->getConfigurationController());
         if (xCC.is())
-            xBar = Reference<XTabBar>(xCC->getResource(mxViewTabBarId), UNO_QUERY);
+            xBar = Reference<XTabBar>(xCC->getResource(mxViewPagerId), UNO_QUERY);
     }
 
     if (xBar.is())

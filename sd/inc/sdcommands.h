@@ -56,7 +56,7 @@
 #define CMD_SID_GLUE_VERTALIGN_CENTER               ".uno:GlueVertAlignCenter"
 #define CMD_SID_GLUE_VERTALIGN_TOP                  ".uno:GlueVertAlignTop"
 #define CMD_SID_GRID_FRONT                          ".uno:GridFront"
-#define CMD_SID_HANDOUTMODE                         ".uno:HandoutMode"
+#define CMD_SID_HANDOUTMASTERMODE                   ".uno:HandoutMode"
 #define CMD_SID_HELPLINES_FRONT                     ".uno:HelplinesFront"
 #define CMD_SID_HELPLINES_USE                       ".uno:HelplinesUse"
 #define CMD_SID_HELPLINES_VISIBLE                   ".uno:HelplinesVisible"

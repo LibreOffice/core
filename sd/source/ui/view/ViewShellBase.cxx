@@ -631,7 +631,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
         case SID_NOTESMODE:
-        case SID_HANDOUTMODE:
+        case SID_HANDOUTMASTERMODE:
             framework::FrameworkHelper::Instance(*this)->HandleModeChangeSlot(nSlotId, rRequest);
             break;
 
@@ -1231,7 +1231,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                             FrameworkHelper::msCenterPaneURL);
                         break;
 
-                    case SID_HANDOUTMODE:
+                    case SID_HANDOUTMASTERMODE:
                         // There is only the master page mode for the handout
                         // view so ignore the master page flag.
                         xResourceId = ResourceId::createWithAnchorURL(
@@ -1281,7 +1281,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     break;
                 }
 
-                case SID_HANDOUTMODE:
+                case SID_HANDOUTMASTERMODE:
                     // There is only the master page mode for the handout
                     // view so ignore the master page flag.
                     break;

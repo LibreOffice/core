@@ -72,10 +72,20 @@ interface ViewShellBaseView
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_HANDOUTMODE
+    SID_HANDOUTMASTERMODE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
+    ]
+    SID_DRAWMASTERMODE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_NOTESMASTERMODE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
     ]
     SID_WIN_FULLSCREEN
     [

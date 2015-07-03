@@ -401,6 +401,14 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_DISPLAY_MODE:
+        {
+            SAL_DEBUG("SID_DISPLAY_MODE received in FuTemporary in drviews2.cxx");
+            Cancel();
+            rReq.Done();
+        }
+        break;
+
         case SID_RENAMEPAGE:
         case SID_RENAME_MASTER_PAGE:
         {

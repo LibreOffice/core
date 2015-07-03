@@ -2944,7 +2944,7 @@ SfxVoidItem HandoutMasterPage SID_HANDOUT_MASTERPAGE
     GroupId = GID_VIEW;
 ]
 
-SfxBoolItem HandoutMode SID_HANDOUTMODE
+SfxBoolItem HandoutMode SID_HANDOUTMASTERMODE
 
 [
     /* flags: */
@@ -4160,6 +4160,30 @@ SfxUInt32Item AssignLayout SID_ASSIGN_LAYOUT
     GroupId = GID_MODIFY;
 ]
 
+SfxUInt16Item DisplayMode SID_DISPLAY_MODE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
+
 SfxVoidItem ModifyPresentationObject SID_PRESENTATIONOBJECT
 ()
 [
@@ -4463,7 +4487,7 @@ SfxBoolItem NewRouting SID_CONNECTION_NEW_ROUTING
     GroupId = GID_DRAWING;
 ]
 
-SfxVoidItem NotesMasterPage SID_NOTES_MASTERPAGE
+SfxVoidItem NotesMasterPage SID_NOTESMASTERMODE
 (SfxBoolItem Isactive ID_VAL_ISACTIVE)
 [
     /* flags: */
@@ -5615,7 +5639,7 @@ SfxBoolItem SlideChangeWindow SID_SLIDE_TRANSITIONS_PANEL
     GroupId = GID_MODIFY;
 ]
 
-SfxVoidItem SlideMasterPage SID_SLIDE_MASTERPAGE
+SfxVoidItem SlideMasterPage SID_DRAWMASTERMODE
 (SfxBoolItem Isactive ID_VAL_ISACTIVE)
 [
     /* flags: */
@@ -6018,33 +6042,6 @@ TbxImageItem TextToolbox SID_DRAWTBX_TEXT
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_DRAWING;
-]
-
-SfxVoidItem TitleMasterPage SID_TITLE_MASTERPAGE
-(SfxBoolItem Isactive ID_VAL_ISACTIVE)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = SfxBoolItem
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
 ]
 
 SfxBoolItem Torus SID_3D_TORUS
