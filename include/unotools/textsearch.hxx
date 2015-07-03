@@ -86,26 +86,12 @@ public:
     bool            IsSrchInSelection() const   { return m_bSrchInSel; }
     bool            IsSrchWordOnly() const      { return m_bWordOnly; }
 
-    void SetSrchStr( const OUString& rStr )     { sSrchStr = rStr; }
-    void SetReplaceStr( const OUString& rStr )  { sReplaceStr = rStr; }
-    void SetSrchType( SearchType eType )        { m_eSrchType = eType; }
-
-    void SetCaseSensitive( int bFlag )          { m_bCaseSense = bFlag; }
-    void SetSrchInSelection( int bFlag )        { m_bSrchInSel = bFlag; }
-    void SetSrchWordOnly( int bFlag )           { m_bWordOnly = bFlag; }
-
     bool            IsSrchRelaxed() const       { return bLEV_Relaxed; }
     int             GetLEVOther() const         { return nLEV_OtherX; }
     int             GetLEVShorter() const       { return nLEV_ShorterY; }
     int             GetLEVLonger() const        { return nLEV_LongerZ; }
 
-    void SetSrchRelaxed( int bFlag )            { bLEV_Relaxed = bFlag; }
-    void SetLEVOther( int nValue )              { nLEV_OtherX = nValue; }
-    void SetLEVShorter( int nValue )            { nLEV_ShorterY = nValue; }
-    void SetLEVLonger( int nValue )             { nLEV_LongerZ = nValue; }
-
     long GetTransliterationFlags() const        { return nTransliterationFlags; }
-    void SetTransliterationFlags( long nValue ) { nTransliterationFlags = nValue; }
 };
 
 //  Utility class for searching a substring in a string.

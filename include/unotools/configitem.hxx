@@ -147,7 +147,6 @@ namespace utl
                 @see EnableNotification
             */
             void                    DisableNotification();
-            bool                IsInternalNotification()const {return IsInValueChange();}
 
             //returns all members of a node in a specific format
             com::sun::star::uno::Sequence< OUString >

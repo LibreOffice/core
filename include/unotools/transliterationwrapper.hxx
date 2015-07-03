@@ -55,10 +55,6 @@ public:
 
     ~TransliterationWrapper();
 
-    // get current Locale / Language
-    const ::com::sun::star::lang::Locale& getLocale() const { return aLanguageTag.getLocale();}
-    sal_uInt16 getLanguage() const { return aLanguageTag.getLanguageType(); }
-
     sal_uInt32 getType() const { return nType; }
 
     bool needLanguageForTheMode() const;
