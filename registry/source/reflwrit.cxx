@@ -1165,14 +1165,6 @@ void TypeWriter::createBlop()
 
 extern "C" {
 
-static void TYPEREG_CALLTYPE acquire(TypeWriterImpl hEntry)
-{
-    TypeWriter* pEntry = static_cast<TypeWriter*>(hEntry);
-
-    if (pEntry != NULL)
-        pEntry->m_refCount++;
-}
-
 static void TYPEREG_CALLTYPE release(TypeWriterImpl hEntry)
 {
     TypeWriter* pEntry = static_cast<TypeWriter*>(hEntry);
@@ -1374,27 +1366,9 @@ RegistryTypeWriter::RegistryTypeWriter(RTTypeClass               RTTypeClass,
                                   referenceCount);
 }
 
-RegistryTypeWriter::RegistryTypeWriter(const RegistryTypeWriter& toCopy)
-    : m_hImpl(toCopy.m_hImpl)
-{
-    acquire(m_hImpl);
-}
-
 RegistryTypeWriter::~RegistryTypeWriter()
 {
     release(m_hImpl);
-}
-
-RegistryTypeWriter& RegistryTypeWriter::operator == (const RegistryTypeWriter& toAssign)
-{
-    if (m_hImpl != toAssign.m_hImpl)
-    {
-        release(m_hImpl);
-        m_hImpl = toAssign.m_hImpl;
-        acquire(m_hImpl);
-    }
-
-    return *this;
 }
 
 void RegistryTypeWriter::setFieldData( sal_uInt16              index,

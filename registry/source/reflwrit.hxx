@@ -58,17 +58,11 @@ public:
                               sal_uInt16                methodCount,
                               sal_uInt16                referenceCount);
 
-    /// Copy constructcor
-    RegistryTypeWriter(const RegistryTypeWriter& toCopy);
-
     /** Destructor. The Destructor frees the internal data block.
 
         The pointer (returned by getBlop) will be set to NULL.
      */
     ~RegistryTypeWriter();
-
-    /// Assign operator
-    RegistryTypeWriter& operator == (const RegistryTypeWriter& toAssign);
 
     /** sets the data for a field member of a type blob.
 
@@ -100,7 +94,9 @@ public:
      */
     sal_uInt32       getBlopSize();
 
-protected:
+private:
+    RegistryTypeWriter(RegistryTypeWriter &) = delete;
+    void operator =(RegistryTypeWriter) = delete;
 
     /// stores the handle of an implementation class
     TypeWriterImpl                                               m_hImpl;
