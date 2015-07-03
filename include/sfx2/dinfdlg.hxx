@@ -185,7 +185,7 @@ private:
     VclPtr<PushButton>            m_pChangePassBtn;
 
     VclPtr<SelectableFixedText>   m_pShowTypeFT;
-    VclPtr<Edit>                  m_pFileValEd;
+    VclPtr<SelectableFixedText>   m_pFileValEd;
     VclPtr<SelectableFixedText>   m_pShowSizeFT;
 
     VclPtr<SelectableFixedText>   m_pCreateValFt;
