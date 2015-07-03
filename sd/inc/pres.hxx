@@ -101,6 +101,20 @@ enum AutoLayout
     AUTOLAYOUT__END
 };
 
+enum DisplayMode
+{
+    // ID for display modes. They will match item id
+    // in the DisplayModeController
+    DM_SLIDE            = 1,
+    DM_NOTES,
+    DM_OUTLINE,
+    DM_SLIDE_SORTER,
+    DM_SLIDE_MASTER,
+    DM_NOTES_MASTER,
+    DM_HANDOUT_MASTER,
+    DM_SLIDE_SHOW
+};
+
 enum PageKind
 {
     PK_STANDARD,

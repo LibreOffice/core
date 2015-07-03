@@ -298,7 +298,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     /* In order to set the correct EditMode of the FrameView, we select another
        one (small trick).  */
-    if (mpFrameView->GetViewShEditMode(mePageKind) == EM_PAGE)
+    if (mpFrameView->GetViewShEditMode(/*mePageKind*/) == EM_PAGE)
     {
         meEditMode = EM_MASTERPAGE;
     }
@@ -308,6 +308,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     }
 
     // Use configuration of FrameView
+    SAL_DEBUG("DrawViewShell::Construct calls ReadFrameViewData");
     ReadFrameViewData(mpFrameView);
 
     if( eDocType == DOCUMENT_TYPE_DRAW )
@@ -320,18 +321,18 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     {
         if (mePageKind == PK_NOTES)
         {
-            SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetHelpId( CMD_SID_NOTESMODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_NOTESMODE );
+            SetHelpId( SID_ACTIVATE_NOTES_MODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_ACTIVATE_NOTES_MODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_ACTIVATE_NOTES_MODE );
 
             // AutoLayouts have to be created
             GetDoc()->StopWorkStartupDelay();
         }
         else if (mePageKind == PK_HANDOUT)
         {
-            SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMODE );
+            SetHelpId( SID_ACTIVATE_HANDOUTMASTER_MODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_ACTIVATE_HANDOUTMASTER_MODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_ACTIVATE_HANDOUTMASTER_MODE );
 
             // AutoLayouts have to be created
             GetDoc()->StopWorkStartupDelay();

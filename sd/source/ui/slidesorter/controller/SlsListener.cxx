@@ -490,6 +490,8 @@ void SAL_CALL Listener::propertyChange (
     {
         bool bIsMasterPageMode = false;
         rEvent.NewValue >>= bIsMasterPageMode;
+        SAL_DEBUG("Listener::propertyChange bIsMasterPageMode=" << bIsMasterPageMode);
+        SAL_DEBUG("Listener::propertyChange calls mrController.ChangeEditMode");
         mrController.ChangeEditMode (
             bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
     }
@@ -553,6 +555,7 @@ void Listener::UpdateEditMode()
             bIsMasterPageMode = false;
         }
     }
+    SAL_DEBUG("Listener::UpdateEditMode calls mrController.ChangeEditMode");
     mrController.ChangeEditMode (
         bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
 }

@@ -704,6 +704,7 @@ void SdLayerManager::UpdateLayerView( bool modify ) const throw()
         if(pDrViewSh)
         {
             bool bLayerMode = pDrViewSh->IsLayerModeActive();
+            SAL_DEBUG("SdLayerManager::UpdateLayerView calls ChangeEditMode");
             pDrViewSh->ChangeEditMode(pDrViewSh->GetEditMode(), !bLayerMode);
             pDrViewSh->ChangeEditMode(pDrViewSh->GetEditMode(), bLayerMode);
         }

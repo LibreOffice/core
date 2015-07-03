@@ -282,6 +282,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
                 static_cast<DrawViewShell*>(mpViewShell);
             EditMode eMode = pDrawViewSh->GetEditMode();
             bool bLayer = pDrawViewSh->IsLayerModeActive();
+SAL_DEBUG("FuPresentationLayout::DoExecute calls ChangeEditMode");
             pDrawViewSh->ChangeEditMode( eMode, !bLayer );
             pDrawViewSh->ChangeEditMode( eMode, bLayer );
         }

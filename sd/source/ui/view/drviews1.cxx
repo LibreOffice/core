@@ -325,6 +325,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 {
     if (meEditMode != eEMode || mbIsLayerModeActive != bIsLayerModeActive)
     {
+SAL_DEBUG("DrawViewShell::ChangeEditMode");
         ViewShellManager::UpdateLock aLock (GetViewShellBase().GetViewShellManager());
 
         sal_uInt16 nActualPageNum = 0;
@@ -483,10 +484,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         Invalidate( SID_MASTERPAGE );
         Invalidate( SID_DELETE_MASTER_PAGE );
         Invalidate( SID_DELETE_PAGE );
-        Invalidate( SID_SLIDE_MASTERPAGE );
-        Invalidate( SID_TITLE_MASTERPAGE );
-        Invalidate( SID_NOTES_MASTERPAGE );
-        Invalidate( SID_HANDOUT_MASTERPAGE );
+        // Invalidate( SID_ACTIVATE_SLIDEMASTER_MODE );
+        // Invalidate( SID_ACTIVATE_NOTESMASTER_MODE );
+        // Invalidate( SID_ACTIVATE_HANDOUTMASTER_MODE );
         InvalidateWindows();
 
         SetContextName(GetSidebarContextName());

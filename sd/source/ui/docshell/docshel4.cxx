@@ -1155,6 +1155,7 @@ void DrawDocShell::setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage)
     if (eNewEditMode != pDrawViewShell->GetEditMode())
     {
         // Set EditMode
+SAL_DEBUG("DrawDocShell::setEditMode calls ChangeEditMode");
         pDrawViewShell->ChangeEditMode(eNewEditMode, false);
     }
 }

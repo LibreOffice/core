@@ -671,6 +671,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
                 ::boost::shared_ptr<DrawViewShell> pDrawViewShell(::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
                 if (pDrawViewShell.get() != NULL)
                 {
+SAL_DEBUG("AnnotationManagerImpl::SelectNextAnnotation calls ChangeEditMode");
                     pDrawViewShell->ChangeEditMode(pPage->IsMasterPage() ? EM_MASTERPAGE : EM_PAGE, false);
                     pDrawViewShell->SwitchPage((pPage->GetPageNum() - 1) >> 1);
 

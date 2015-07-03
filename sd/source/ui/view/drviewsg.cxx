@@ -202,6 +202,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         WriteFrameViewData();
 
         mpFrameView->Update( pOptions );
+SAL_DEBUG("DrawViewShell::ExecOptionsBar calls ReadFrameViewData");
         ReadFrameViewData( mpFrameView );
 
         Invalidate( nSlot );

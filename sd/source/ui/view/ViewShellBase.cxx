@@ -239,6 +239,8 @@ ViewShellBase::ViewShellBase (
       mpDocShell (NULL),
       mpDocument (NULL)
 {
+    SAL_DEBUG("ViewShellBase::ViewShellBase");
+
     mpImpl.reset(new Implementation(*this));
     mpImpl->mpViewWindow = VclPtr<FocusForwardingWindow>::Create(_pFrame->GetWindow(),*this);
     mpImpl->mpViewWindow->SetBackground(Wallpaper());
@@ -625,13 +627,18 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
 
-        case SID_NORMAL_MULTI_PANE_GUI:
-        case SID_SLIDE_SORTER_MULTI_PANE_GUI:
+        // draw
         case SID_DRAWINGMODE:
-        case SID_DIAMODE:
-        case SID_OUTLINEMODE:
-        case SID_NOTESMODE:
-        case SID_HANDOUTMODE:
+        // impress normal
+        case SID_NORMAL_MULTI_PANE_GUI:
+        case SID_ACTIVATE_NOTES_MODE:
+        case SID_ACTIVATE_OUTLINE_MODE:
+        case SID_SLIDE_SORTER_MULTI_PANE_GUI:
+        case SID_ACTIVATE_SLIDE_SORTER_MODE:
+        // impress master
+        case SID_ACTIVATE_SLIDEMASTER_MODE:
+        case SID_ACTIVATE_NOTESMASTER_MODE:
+        case SID_ACTIVATE_HANDOUTMASTER_MODE:
             framework::FrameworkHelper::Instance(*this)->HandleModeChangeSlot(nSlotId, rRequest);
             break;
 
@@ -655,6 +662,16 @@ void ViewShellBase::GetState (SfxItemSet& rSet)
     mpImpl->GetSlotState(rSet);
 
     FuBullet::GetSlotState( rSet, 0, GetViewFrame() );
+}
+
+void ViewShellBase::ExecuteDisplayMode(SfxRequest& rRequest)
+{
+    SAL_DEBUG("ViewShellBase::ExecuteDisplayMode");
+}
+
+void ViewShellBase::GetDisplayModeState(SfxItemSet& rSet)
+{
+    rSet.Put(SfxUInt16Item(SID_DISPLAY_MODE, 4));
 }
 
 void ViewShellBase::WriteUserDataSequence (
@@ -1038,9 +1055,11 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot()
         if (pFrameView != NULL)
         {
             // Set view shell, edit mode, and page kind.
+            // pFrameView->SetViewShEditMode(
+            //     pFrameView->GetViewShEditModeOnLoad(),
+            //     pFrameView->GetPageKindOnLoad());
             pFrameView->SetViewShEditMode(
-                pFrameView->GetViewShEditModeOnLoad(),
-                pFrameView->GetPageKindOnLoad());
+                pFrameView->GetViewShEditModeOnLoad() );
             pFrameView->SetPageKind(
                 pFrameView->GetPageKindOnLoad());
             ::boost::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(mrBase));
@@ -1217,21 +1236,21 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         break;
 
                     case SID_SLIDE_SORTER_MULTI_PANE_GUI:
-                    case SID_DIAMODE:
+                    case SID_ACTIVATE_SLIDE_SORTER_MODE:
                         xResourceId = ResourceId::createWithAnchorURL(
                             xContext,
                             FrameworkHelper::msSlideSorterURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
 
-                    case SID_OUTLINEMODE:
+                    case SID_ACTIVATE_OUTLINE_MODE:
                         xResourceId = ResourceId::createWithAnchorURL(
                             xContext,
                             FrameworkHelper::msOutlineViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
 
-                    case SID_HANDOUTMODE:
+                    case SID_ACTIVATE_HANDOUTMASTER_MODE:
                         // There is only the master page mode for the handout
                         // view so ignore the master page flag.
                         xResourceId = ResourceId::createWithAnchorURL(
@@ -1240,7 +1259,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                             FrameworkHelper::msCenterPaneURL);
                         break;
 
-                    case SID_NOTESMODE:
+                    case SID_ACTIVATE_NOTES_MODE:
                         xResourceId = ResourceId::createWithAnchorURL(
                             xContext,
                             FrameworkHelper::msNotesViewURL,
@@ -1264,7 +1283,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
             switch (nItemId)
             {
                 case SID_NORMAL_MULTI_PANE_GUI:
-                case SID_NOTESMODE:
+                case SID_ACTIVATE_NOTES_MODE:
                 {
                     // Determine the master page mode.
                     ViewShell* pCenterViewShell = FrameworkHelper::Instance(mrBase)->GetViewShell(
@@ -1281,7 +1300,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     break;
                 }
 
-                case SID_HANDOUTMODE:
+                case SID_ACTIVATE_HANDOUTMASTER_MODE:
                     // There is only the master page mode for the handout
                     // view so ignore the master page flag.
                     break;

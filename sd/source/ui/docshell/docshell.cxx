@@ -326,6 +326,7 @@ void DrawDocShell::InPlaceActivate( bool bActive )
 
             if ( pViewSh )
             {
+                SAL_DEBUG("DrawDocShell::InPlaceActivate calls ReadFrameViewData");
                 pViewSh->ReadFrameViewData( rViews[ i ] );
             }
 

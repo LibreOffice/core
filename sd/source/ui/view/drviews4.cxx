@@ -116,6 +116,7 @@ void DrawViewShell::DeleteActualLayer()
         // ( View::Notify() --> ViewShell::ResetActualLayer() )
 
         mbIsLayerModeActive = false;    // so that ChangeEditMode() does something
+SAL_DEBUG("DrawViewShell::DeleteActualLayer calls ChangeEditMode");
         ChangeEditMode(GetEditMode(), true);
     }
 }

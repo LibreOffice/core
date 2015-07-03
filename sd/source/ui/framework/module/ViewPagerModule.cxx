@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "ViewTabBarModule.hxx"
+#include "ViewPagerModule.hxx"
 
 #include "framework/FrameworkHelper.hxx"
 #include "framework/ConfigurationController.hxx"
@@ -43,14 +43,14 @@ static const sal_Int32 ResourceActivationEvent = 2;
 
 namespace sd { namespace framework {
 
-//===== ViewTabBarModule ==================================================
+//===== ViewPagerModule ==================================================
 
-ViewTabBarModule::ViewTabBarModule (
+ViewPagerModule::ViewPagerModule (
     const Reference<frame::XController>& rxController,
-    const Reference<XResourceId>& rxViewTabBarId)
-    : ViewTabBarModuleInterfaceBase(MutexOwner::maMutex),
+    const Reference<XResourceId>& rxViewPagerId)
+    : ViewPagerModuleInterfaceBase(MutexOwner::maMutex),
       mxConfigurationController(),
-      mxViewTabBarId(rxViewTabBarId)
+      mxViewPagerId(rxViewPagerId)
 {
     Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY);
 
@@ -68,7 +68,7 @@ ViewTabBarModule::ViewTabBarModule (
                 FrameworkHelper::msResourceDeactivationRequestEvent,
                 makeAny(ResourceDeactivationRequestEvent));
 
-            UpdateViewTabBar(NULL);
+            UpdateViewPager(NULL);
             mxConfigurationController->addConfigurationChangeListener(
                 this,
                 FrameworkHelper::msResourceActivationEvent,
@@ -77,11 +77,11 @@ ViewTabBarModule::ViewTabBarModule (
     }
 }
 
-ViewTabBarModule::~ViewTabBarModule()
+ViewPagerModule::~ViewPagerModule()
 {
 }
 
-void SAL_CALL ViewTabBarModule::disposing()
+void SAL_CALL ViewPagerModule::disposing()
 {
     if (mxConfigurationController.is())
         mxConfigurationController->removeConfigurationChangeListener(this);
@@ -89,7 +89,7 @@ void SAL_CALL ViewTabBarModule::disposing()
     mxConfigurationController = NULL;
 }
 
-void SAL_CALL ViewTabBarModule::notifyConfigurationChange (
+void SAL_CALL ViewPagerModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
     throw (RuntimeException, std::exception)
 {
@@ -100,31 +100,31 @@ void SAL_CALL ViewTabBarModule::notifyConfigurationChange (
         switch (nEventType)
         {
             case ResourceActivationRequestEvent:
-                if (mxViewTabBarId->isBoundTo(rEvent.ResourceId, AnchorBindingMode_DIRECT))
+                if (mxViewPagerId->isBoundTo(rEvent.ResourceId, AnchorBindingMode_DIRECT))
                 {
                     mxConfigurationController->requestResourceActivation(
-                        mxViewTabBarId,
+                        mxViewPagerId,
                         ResourceActivationMode_ADD);
                 }
                 break;
 
             case ResourceDeactivationRequestEvent:
-                if (mxViewTabBarId->isBoundTo(rEvent.ResourceId, AnchorBindingMode_DIRECT))
+                if (mxViewPagerId->isBoundTo(rEvent.ResourceId, AnchorBindingMode_DIRECT))
                 {
-                    mxConfigurationController->requestResourceDeactivation(mxViewTabBarId);
+                    mxConfigurationController->requestResourceDeactivation(mxViewPagerId);
                 }
                 break;
 
             case ResourceActivationEvent:
-                if (rEvent.ResourceId->compareTo(mxViewTabBarId) == 0)
+                if (rEvent.ResourceId->compareTo(mxViewPagerId) == 0)
                 {
-                    UpdateViewTabBar(Reference<XTabBar>(rEvent.ResourceObject,UNO_QUERY));
+                    UpdateViewPager(Reference<XTabBar>(rEvent.ResourceObject,UNO_QUERY));
                 }
         }
     }
 }
 
-void SAL_CALL ViewTabBarModule::disposing (
+void SAL_CALL ViewPagerModule::disposing (
     const lang::EventObject& rEvent)
     throw (RuntimeException, std::exception)
 {
@@ -137,20 +137,20 @@ void SAL_CALL ViewTabBarModule::disposing (
     }
 }
 
-void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
+void ViewPagerModule::UpdateViewPager (const Reference<XTabBar>& rxTabBar)
 {
     if (mxConfigurationController.is())
     {
         Reference<XTabBar> xBar (rxTabBar);
         if ( ! xBar.is())
             xBar = Reference<XTabBar>(
-                mxConfigurationController->getResource(mxViewTabBarId), UNO_QUERY);
+                mxConfigurationController->getResource(mxViewPagerId), UNO_QUERY);
 
         if (xBar.is())
         {
             TabBarButton aEmptyButton;
 
-            Reference<XResourceId> xAnchor (mxViewTabBarId->getAnchor());
+            Reference<XResourceId> xAnchor (mxViewPagerId->getAnchor());
 
             TabBarButton aImpressViewButton;
             aImpressViewButton.ResourceId = FrameworkHelper::CreateResourceId(
@@ -180,7 +180,7 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
             aHandoutViewButton.ResourceId = FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msHandoutViewURL,
                 xAnchor);
-            aHandoutViewButton.ButtonLabel = SD_RESSTR(STR_HANDOUT_MODE);
+            aHandoutViewButton.ButtonLabel = SD_RESSTR(STR_HANDOUT_MASTER_MODE);
             if ( ! xBar->hasTabBarButton(aHandoutViewButton))
                 xBar->addTabBarButtonAfter(aHandoutViewButton, aNotesViewButton);
         }

@@ -72,6 +72,7 @@ void SdUnoDrawView::setMasterPageMode (bool bMasterPageMode) throw()
 {
     if ((mrDrawViewShell.GetEditMode() == EM_MASTERPAGE) != bMasterPageMode)
     {
+        SAL_DEBUG("SdUnoDrawView::setMasterPageMode calls ChangeEditMode");
         mrDrawViewShell.ChangeEditMode (
             bMasterPageMode ? EM_MASTERPAGE : EM_PAGE,
             mrDrawViewShell.IsLayerModeActive());
@@ -87,6 +88,7 @@ void SdUnoDrawView::setLayerMode (bool bLayerMode) throw()
 {
     if (mrDrawViewShell.IsLayerModeActive() != bLayerMode)
     {
+        SAL_DEBUG("SdUnoDrawView::setLayerMode calls ChangeEditMode");
         mrDrawViewShell.ChangeEditMode (
             mrDrawViewShell.GetEditMode(),
             bLayerMode);

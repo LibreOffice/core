@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_VIEWTABBARMODULE_HXX
-#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_VIEWTABBARMODULE_HXX
+#ifndef INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_VIEWPAGERMODULE_HXX
+#define INCLUDED_SD_SOURCE_UI_FRAMEWORK_MODULE_VIEWPAGERMODULE_HXX
 
 #include "MutexOwner.hxx"
 
@@ -33,33 +33,33 @@ namespace {
 
 typedef ::cppu::WeakComponentImplHelper1 <
     css::drawing::framework::XConfigurationChangeListener
-    > ViewTabBarModuleInterfaceBase;
+    > ViewPagerModuleInterfaceBase;
 
 } // end of anonymous namespace.
 
 namespace sd { namespace framework {
 
-/** This module is responsible for showing the ViewTabBar above the view in
+/** This module is responsible for showing the ViewPager above the view in
     the center pane.
 */
-class ViewTabBarModule
+class ViewPagerModule
     : private sd::MutexOwner,
-      public ViewTabBarModuleInterfaceBase
+      public ViewPagerModuleInterfaceBase
 {
 public:
     /** Create a new module that controls the view tab bar above the view
         in the specified pane.
         @param rxController
             This is the access point to the drawing framework.
-        @param rxViewTabBarId
+        @param rxViewPagerId
             This ResourceId specifies which tab bar is to be managed by the
             new module.
     */
-    ViewTabBarModule (
+    ViewPagerModule (
         const css::uno::Reference<css::frame::XController>& rxController,
         const css::uno::Reference<
-            css::drawing::framework::XResourceId>& rxViewTabBarId);
-    virtual ~ViewTabBarModule();
+            css::drawing::framework::XResourceId>& rxViewPagerId);
+    virtual ~ViewPagerModule();
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
@@ -78,13 +78,13 @@ public:
 private:
     css::uno::Reference<
         css::drawing::framework::XConfigurationController> mxConfigurationController;
-    css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
+    css::uno::Reference<css::drawing::framework::XResourceId> mxViewPagerId;
 
     /** This is the place where the view tab bar is filled.  Only missing
         buttons are added, so it is safe to call this method multiple
         times.
     */
-    void UpdateViewTabBar (
+    void UpdateViewPager (
         const css::uno::Reference<css::drawing::framework::XTabBar>& rxTabBar);
 };
 

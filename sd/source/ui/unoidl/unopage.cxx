@@ -2327,7 +2327,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
             if( eMode == EM_PAGE )
             {
                 bool bLayer = pDrawViewSh->IsLayerModeActive();
-
+SAL_DEBUG("SdDrawPage::setName calls ChangeEditMode");
                 pDrawViewSh->ChangeEditMode( eMode, !bLayer );
                 pDrawViewSh->ChangeEditMode( eMode, bLayer );
             }
@@ -3045,7 +3045,7 @@ void SAL_CALL SdMasterPage::setName( const OUString& rName )
             if( eMode == EM_MASTERPAGE )
             {
                 bool bLayer = pDrawViewSh->IsLayerModeActive();
-
+SAL_DEBUG("SdMasterPage::setName calls ChangeEditMode");
                 pDrawViewSh->ChangeEditMode( eMode, !bLayer );
                 pDrawViewSh->ChangeEditMode( eMode, bLayer );
             }

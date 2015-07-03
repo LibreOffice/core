@@ -136,8 +136,10 @@ void PresentationViewShell::Activate( bool bIsMDIActivate )
             GetCurrentFunction()->Activate();
     }
 
-    if( bIsMDIActivate )
+    if( bIsMDIActivate ) {
+SAL_DEBUG("PresentationViewShell::Activate calls ReadFrameViewData");
         ReadFrameViewData( mpFrameView );
+    }
     GetDocSh()->Connect( this );
 }
 

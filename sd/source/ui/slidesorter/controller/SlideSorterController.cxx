@@ -798,6 +798,7 @@ void SlideSorterController::PrepareEditModeChange()
 bool SlideSorterController::ChangeEditMode (EditMode eEditMode)
 {
     bool bResult (false);
+SAL_DEBUG("SlideSorterController::ChangeEditMode eEditMode=" << eEditMode);
     if (mrModel.GetEditMode() != eEditMode)
     {
         ModelChangeLock aLock (*this);
@@ -806,12 +807,15 @@ bool SlideSorterController::ChangeEditMode (EditMode eEditMode)
         bResult = mrModel.SetEditMode(eEditMode);
         if (bResult)
             HandleModelChange();
-    }
+    } else
+        SAL_DEBUG("SlideSorterController::ChangeEditMode nothing to do");
+
     return bResult;
 }
 
 void SlideSorterController::FinishEditModeChange()
 {
+SAL_DEBUG("SlideSorterController::FinishEditModeChange mrModel.GetEditMode()=" << mrModel.GetEditMode());
     if (mrModel.GetEditMode() == EM_MASTERPAGE)
     {
         mpPageSelector->DeselectAllPages();

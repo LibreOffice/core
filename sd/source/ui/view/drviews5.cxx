@@ -277,7 +277,8 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         nSelectedPage = pView->GetSelectedPage();
     }
 
-    EditMode eNewEditMode = pView->GetViewShEditMode(mePageKind);
+    EditMode eNewEditMode = pView->GetViewShEditMode(/*mePageKind*/);
+    SAL_DEBUG("DrawViewShell::ReadFrameViewData asks eNewEditMode from " << typeid(*pView).name() << " and got " << eNewEditMode);
     bool bNewLayerMode = pView->IsLayerMode();
 
     if(IsLayerModeActive() && bNewLayerMode)
@@ -290,6 +291,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         mbIsLayerModeActive = false;
     }
 
+    SAL_DEBUG("DrawViewShell::ReadFrameViewData calls ChangeEditMode");
     ChangeEditMode(eNewEditMode, bNewLayerMode);
     SwitchPage(nSelectedPage);
 
@@ -355,7 +357,7 @@ void DrawViewShell::WriteFrameViewData()
         mpFrameView->SetSelectedPage( maTabControl->GetCurPageId() - 1 );
     }
 
-    mpFrameView->SetViewShEditMode(meEditMode, mePageKind);
+    mpFrameView->SetViewShEditMode(meEditMode);
     mpFrameView->SetLayerMode(IsLayerModeActive());
 
     SdrPageView* pPageView = mpDrawView->GetSdrPageView();
@@ -478,15 +480,15 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
 
         if (mePageKind == PK_NOTES)
         {
-            SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetHelpId( CMD_SID_NOTESMODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_NOTESMODE );
+            SetHelpId( SID_ACTIVATE_NOTES_MODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_ACTIVATE_NOTES_MODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_ACTIVATE_NOTES_MODE );
         }
         else if (mePageKind == PK_HANDOUT)
         {
-            SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMODE );
+            SetHelpId( SID_ACTIVATE_HANDOUTMASTER_MODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_ACTIVATE_HANDOUTMASTER_MODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_ACTIVATE_HANDOUTMASTER_MODE );
         }
         else
         {
@@ -496,6 +498,7 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
         }
     }
 
+    SAL_DEBUG("DrawViewShell::ReadUserDataSequence calls ReadFrameViewData");
     ReadFrameViewData( mpFrameView );
 
     if( !mbZoomOnPage )
@@ -518,7 +521,7 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
 
         SetZoomRect(aVisArea);
     }
-
+SAL_DEBUG("DrawViewShell::ReadUserDataSequence calls ChangeEditMode");
     ChangeEditMode (meEditMode, ! IsLayerModeActive());
     ResetActualLayer();
 }

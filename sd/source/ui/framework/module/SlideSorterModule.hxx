@@ -47,10 +47,10 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    css::uno::Reference<css::drawing::framework::XResourceId> mxViewTabBarId;
+    css::uno::Reference<css::drawing::framework::XResourceId> mxViewPagerId;
     css::uno::Reference<css::drawing::framework::XControllerManager> mxControllerManager;
 
-    void UpdateViewTabBar (
+    void UpdateViewPager (
         const css::uno::Reference<css::drawing::framework::XTabBar>& rxViewTabBar);
 };
 

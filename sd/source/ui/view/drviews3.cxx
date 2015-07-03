@@ -254,7 +254,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
             // turn on default layer of page
             mpDrawView->SetActiveLayer(SD_RESSTR(STR_LAYER_LAYOUT));
-
+SAL_DEBUG("DrawViewShell::ExecCtrl calls ChangeEditMode");
             ChangeEditMode(EM_PAGE, mbIsLayerModeActive);
 
             Invalidate();
@@ -279,6 +279,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     meEditMode = (EditMode) nWhatLayer;
                 }
             }
+SAL_DEBUG("DrawViewShell::ExecCtrl calls ChangeEditMode");
 
             ChangeEditMode(meEditMode, !mbIsLayerModeActive);
 

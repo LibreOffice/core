@@ -1197,6 +1197,7 @@ void Outliner::SetViewMode (PageKind ePageKind)
     if (pDrawViewShell.get()!=NULL && ePageKind != pDrawViewShell->GetPageKind())
     {
         // Restore old edit mode.
+SAL_DEBUG("Outliner::SetViewMode calls ChangeEditMode");
         pDrawViewShell->ChangeEditMode(mpImpl->meOriginalEditMode, false);
 
         SetStatusEventHdl(Link<>());
@@ -1263,6 +1264,7 @@ void Outliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
         OSL_ASSERT(pDrawViewShell.get()!=NULL);
         if (pDrawViewShell.get() != NULL)
         {
+            SAL_DEBUG("Outliner::SetPage calls ChangeEditMode");
             pDrawViewShell->ChangeEditMode(eEditMode, false);
             pDrawViewShell->SwitchPage(nPageIndex);
         }
