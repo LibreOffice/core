@@ -161,6 +161,15 @@ private:
         Int8Sequence maPostponed;
 
     public:
+#ifdef DBG_UTIL
+        // pending close tags, followed by pending open tags
+        ::std::deque<sal_Int32> m_DebugEndedElements;
+        ::std::deque<sal_Int32> m_DebugStartedElements;
+        // ... and another buffer for maPostponed ...
+        ::std::deque<sal_Int32> m_DebugPostponedEndedElements;
+        ::std::deque<sal_Int32> m_DebugPostponedStartedElements;
+#endif
+
         ForMerge() : maData(), maPostponed() {}
         virtual ~ForMerge() {}
 

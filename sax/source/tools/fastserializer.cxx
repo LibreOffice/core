@@ -196,7 +196,10 @@ namespace sax_fastparser {
         }
 
 #ifdef DBG_UTIL
-        m_DebugStartedElements.push(Element);
+        if (mbMarkStackEmpty)
+            m_DebugStartedElements.push(Element);
+        else
+            maMarkStack.top()->m_DebugStartedElements.push_back(Element);
 #endif
 
         writeBytes(sOpeningBracket, N_CHARS(sOpeningBracket));
@@ -213,10 +216,30 @@ namespace sax_fastparser {
     void FastSaxSerializer::endFastElement( ::sal_Int32 Element )
     {
 #ifdef DBG_UTIL
-        assert(!m_DebugStartedElements.empty());
         // Well-formedness constraint: Element Type Match
-        assert(Element == m_DebugStartedElements.top());
-        m_DebugStartedElements.pop();
+        if (mbMarkStackEmpty)
+        {
+            assert(!m_DebugStartedElements.empty());
+            assert(Element == m_DebugStartedElements.top());
+            m_DebugStartedElements.pop();
+        }
+        else
+        {
+            if (dynamic_cast<ForSort*>(maMarkStack.top().get()))
+            {
+                // Sort is always well-formed fragment
+                assert(!maMarkStack.top()->m_DebugStartedElements.empty());
+            }
+            if (maMarkStack.top()->m_DebugStartedElements.empty())
+            {
+                maMarkStack.top()->m_DebugEndedElements.push_back(Element);
+            }
+            else
+            {
+                assert(Element == maMarkStack.top()->m_DebugStartedElements.back());
+                maMarkStack.top()->m_DebugStartedElements.pop_back();
+            }
+        }
 #endif
 
         writeBytes(sOpeningBracketAndSlash, N_CHARS(sOpeningBracketAndSlash));
@@ -324,17 +347,98 @@ namespace sax_fastparser {
         mbMarkStackEmpty = false;
     }
 
+#ifdef DBG_UTIL
+    static void lcl_DebugMergeAppend(
+            std::deque<sal_Int32> & rLeftEndedElements,
+            std::deque<sal_Int32> & rLeftStartedElements,
+            std::deque<sal_Int32> & rRightEndedElements,
+            std::deque<sal_Int32> & rRightStartedElements)
+    {
+        while (!rRightEndedElements.empty())
+        {
+            if (rLeftStartedElements.empty())
+            {
+                rLeftEndedElements.push_back(rRightEndedElements.front());
+            }
+            else
+            {
+                assert(rLeftStartedElements.back() == rRightEndedElements.front());
+                rLeftStartedElements.pop_back();
+            }
+            rRightEndedElements.pop_front();
+        }
+        while (!rRightStartedElements.empty())
+        {
+            rLeftStartedElements.push_back(rRightStartedElements.front());
+            rRightStartedElements.pop_front();
+        }
+    }
+
+    static void lcl_DebugMergePrepend(
+            std::deque<sal_Int32> & rLeftEndedElements,
+            std::deque<sal_Int32> & rLeftStartedElements,
+            std::deque<sal_Int32> & rRightEndedElements,
+            std::deque<sal_Int32> & rRightStartedElements)
+    {
+        while (!rLeftStartedElements.empty())
+        {
+            if (rRightEndedElements.empty())
+            {
+                rRightStartedElements.push_front(rLeftStartedElements.back());
+            }
+            else
+            {
+                assert(rRightEndedElements.front() == rLeftStartedElements.back());
+                rRightEndedElements.pop_front();
+            }
+            rLeftStartedElements.pop_back();
+        }
+        while (!rLeftEndedElements.empty())
+        {
+            rRightEndedElements.push_front(rLeftEndedElements.back());
+            rLeftEndedElements.pop_back();
+        }
+    }
+#endif
+
     void FastSaxSerializer::mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType )
     {
         SAL_WARN_IF(mbMarkStackEmpty, "sax", "Empty mark stack - nothing to merge");
         if ( mbMarkStackEmpty )
             return;
 
+#ifdef DBG_UTIL
+        if (dynamic_cast<ForSort*>(maMarkStack.top().get()))
+        {
+            // Sort is always well-formed fragment
+            assert(maMarkStack.top()->m_DebugStartedElements.empty());
+            assert(maMarkStack.top()->m_DebugEndedElements.empty());
+        }
+        lcl_DebugMergeAppend(
+            maMarkStack.top()->m_DebugEndedElements,
+            maMarkStack.top()->m_DebugStartedElements,
+            maMarkStack.top()->m_DebugPostponedEndedElements,
+            maMarkStack.top()->m_DebugPostponedStartedElements);
+#endif
+
         // flush, so that we get everything in getData()
         maCachedOutputStream.flush();
 
         if ( maMarkStack.size() == 1  && eMergeType != MERGE_MARKS_IGNORE)
         {
+#if DBG_UTIL
+            while (!maMarkStack.top()->m_DebugEndedElements.empty())
+            {
+                assert(maMarkStack.top()->m_DebugEndedElements.front() == m_DebugStartedElements.top());
+                maMarkStack.top()->m_DebugEndedElements.pop_front();
+                m_DebugStartedElements.pop();
+            }
+            while (!maMarkStack.top()->m_DebugStartedElements.empty())
+            {
+                m_DebugStartedElements.push(maMarkStack.top()->m_DebugStartedElements.front());
+                maMarkStack.top()->m_DebugStartedElements.pop_front();
+            }
+#endif
             Sequence<sal_Int8> aSeq( maMarkStack.top()->getData() );
             maMarkStack.pop();
             mbMarkStackEmpty = true;
@@ -343,8 +447,51 @@ namespace sax_fastparser {
             return;
         }
 
+#if DBG_UTIL
+        ::std::deque<sal_Int32> topDebugStartedElements(maMarkStack.top()->m_DebugStartedElements);
+        ::std::deque<sal_Int32> topDebugEndedElements(maMarkStack.top()->m_DebugEndedElements);
+#endif
         const Int8Sequence aMerge( maMarkStack.top()->getData() );
         maMarkStack.pop();
+#if DBG_UTIL
+        switch (eMergeType)
+        {
+            case MERGE_MARKS_APPEND:
+                lcl_DebugMergeAppend(
+                    maMarkStack.top()->m_DebugEndedElements,
+                    maMarkStack.top()->m_DebugStartedElements,
+                    topDebugEndedElements,
+                    topDebugStartedElements);
+                break;
+            case MERGE_MARKS_PREPEND:
+                if (dynamic_cast<ForSort*>(maMarkStack.top().get())) // argh...
+                {
+                    lcl_DebugMergeAppend(
+                        maMarkStack.top()->m_DebugEndedElements,
+                        maMarkStack.top()->m_DebugStartedElements,
+                        topDebugEndedElements,
+                        topDebugStartedElements);
+                }
+                else
+                {
+                    lcl_DebugMergePrepend(
+                        topDebugEndedElements,
+                        topDebugStartedElements,
+                        maMarkStack.top()->m_DebugEndedElements,
+                        maMarkStack.top()->m_DebugStartedElements);
+                }
+                break;
+            case MERGE_MARKS_POSTPONE:
+                lcl_DebugMergeAppend(
+                    maMarkStack.top()->m_DebugPostponedEndedElements,
+                    maMarkStack.top()->m_DebugPostponedStartedElements,
+                    topDebugEndedElements,
+                    topDebugStartedElements);
+                break;
+            case MERGE_MARKS_IGNORE:
+                break;
+        }
+#endif
         if (maMarkStack.empty())
         {
             mbMarkStackEmpty = true;
