@@ -56,6 +56,10 @@ public:
     Unicode2TextConverter( rtl_TextEncoding encoding );
     ~Unicode2TextConverter();
 
+    inline ::com::sun::star::uno::Sequence<sal_Int8> convert( const OUString &s )
+        {
+            return convert( s.getStr() , s.getLength() );
+        }
     ::com::sun::star::uno::Sequence<sal_Int8> convert( const sal_Unicode * , sal_Int32 nLength );
     bool canContinue() {  return m_bCanContinue; }
 

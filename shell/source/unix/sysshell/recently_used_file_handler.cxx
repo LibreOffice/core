@@ -266,7 +266,14 @@ namespace /* private */ {
                 current_element_ += character;
         }
 
+        virtual void start_document() SAL_OVERRIDE {}
+        virtual void end_document() SAL_OVERRIDE   {}
+
         virtual void ignore_whitespace(const string_t& /*whitespaces*/) SAL_OVERRIDE
+        {}
+
+        virtual void processing_instruction(
+            const string_t& /*target*/, const string_t& /*data*/) SAL_OVERRIDE
         {}
 
         virtual void comment(const string_t& /*comment*/) SAL_OVERRIDE

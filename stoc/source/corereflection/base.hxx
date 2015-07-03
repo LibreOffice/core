@@ -159,6 +159,10 @@ public:
         { return _pTypeDescr; }
     IdlReflectionServiceImpl *  getReflection() const
         { return _pReflection; }
+    css::uno::Reference< css::lang::XMultiServiceFactory > getSMgr() const
+        { return _pReflection->getSMgr(); }
+    css::uno::Reference< css::container::XHierarchicalNameAccess > getTDMgr() const
+        { return getReflection()->getTDMgr(); }
 
     // Ctor
     IdlClassImpl( IdlReflectionServiceImpl * pReflection,
@@ -342,6 +346,8 @@ protected:
 public:
     IdlReflectionServiceImpl *  getReflection() const
         { return _pReflection; }
+    css::uno::Reference< css::lang::XMultiServiceFactory > getSMgr() const
+        { return _pReflection->getSMgr(); }
     typelib_TypeDescription *   getTypeDescr() const
         { return _pTypeDescr; }
     typelib_TypeDescription *   getDeclTypeDescr() const

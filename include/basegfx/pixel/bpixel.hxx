@@ -95,16 +95,21 @@ namespace basegfx
         sal_uInt8 getGreen() const { return maPixelUnion.maRGBO.mnG; }
         sal_uInt8 getBlue() const { return maPixelUnion.maRGBO.mnB; }
         sal_uInt8 getOpacity() const { return maPixelUnion.maRGBO.mnO; }
+        sal_uInt32 getRedGreenBlueOpacity() const { return maPixelUnion.maCombinedRGBO.mnValue; }
 
         // data access write
         void setRed(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnR = nNew; }
         void setGreen(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnG = nNew; }
         void setBlue(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnB = nNew; }
         void setOpacity(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnO = nNew; }
+        void setRedGreenBlueOpacity(sal_uInt32 nRedGreenBlueOpacity) { maPixelUnion.maCombinedRGBO.mnValue = nRedGreenBlueOpacity; }
+        void setRedGreenBlue(sal_uInt8 nR, sal_uInt8 nG, sal_uInt8 nB) { maPixelUnion.maRGBO.mnR = nR; maPixelUnion.maRGBO.mnG = nG; maPixelUnion.maRGBO.mnB = nB; }
 
         // comparators
         bool isInvisible() const { return (0 == maPixelUnion.maRGBO.mnO); }
         bool isVisible() const { return (0 != maPixelUnion.maRGBO.mnO); }
+        bool isEmpty() const { return isInvisible(); }
+        bool isUsed() const { return isVisible(); }
 
         bool operator==( const BPixel& rPixel ) const
         {

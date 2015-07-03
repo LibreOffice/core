@@ -91,6 +91,18 @@ namespace basegfx
             return mnY;
         }
 
+        /// Set X-Coordinate of 2D Tuple
+        void setX(sal_Int64 fX)
+        {
+            mnX = fX;
+        }
+
+        /// Set Y-Coordinate of 2D Tuple
+        void setY(sal_Int64 fY)
+        {
+            mnY = fY;
+        }
+
         /// Array-access to 2D Tuple
         const sal_Int64& operator[] (int nPos) const
         {
@@ -158,6 +170,8 @@ namespace basegfx
         {
             return B2I64Tuple(-mnX, -mnY);
         }
+
+        bool equalZero() const { return mnX == 0 && mnY == 0; }
 
         bool operator==( const B2I64Tuple& rTup ) const
         {

@@ -71,6 +71,12 @@ namespace basegfx
             return maRange.isEmpty();
         }
 
+        /// reset the object to empty state again, clearing all values
+        void reset()
+        {
+            maRange.reset();
+        }
+
         bool operator==( const B1DRange& rRange ) const
         {
             return (maRange == rRange.maRange);
@@ -79,6 +85,11 @@ namespace basegfx
         bool operator!=( const B1DRange& rRange ) const
         {
             return (maRange != rRange.maRange);
+        }
+
+        bool equal(const B1DRange& rRange) const
+        {
+            return (maRange.equal(rRange.maRange));
         }
 
         /// get lower bound of the set. returns arbitrary values for empty sets.
@@ -111,6 +122,12 @@ namespace basegfx
             return maRange.isInside(fValue);
         }
 
+        /// yields true if rRange is inside, or equal to set
+        bool isInside(const B1DRange& rRange) const
+        {
+            return maRange.isInside(rRange.maRange);
+        }
+
         /// yields true if rRange at least partly inside set
         bool overlaps(const B1DRange& rRange) const
         {
@@ -141,6 +158,11 @@ namespace basegfx
             maRange.intersect(rRange.maRange);
         }
 
+        /// grow set by fValue on both sides
+        void grow(double fValue)
+        {
+            maRange.grow(fValue);
+        }
     };
 
 } // end of namespace basegfx
