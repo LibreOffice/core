@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_3baac21a",
+        "filename": "sw/inc/doc.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-07-03T16:43:07Z",
+      "side": 1,
+      "message": "comes from MS Word",
+      "revId": "685fe33ba7eeee04a7a1eba04d75f8e232dedcdd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
