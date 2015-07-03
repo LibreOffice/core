@@ -34,8 +34,9 @@ ScFormulaOptions::ScFormulaOptions()
 
 ScFormulaOptions::ScFormulaOptions( const ScFormulaOptions& rCpy ) :
     bUseEnglishFuncName ( rCpy.bUseEnglishFuncName ),
+    bUnitValidat        ( rCpy.bUnitValidat ),
     eFormulaGrammar     ( rCpy.eFormulaGrammar ),
-    aCalcConfig(rCpy.aCalcConfig),
+    aCalcConfig         ( rCpy.aCalcConfig ),
     mbWriteCalcConfig   (rCpy.mbWriteCalcConfig),
     aFormulaSepArg      ( rCpy.aFormulaSepArg ),
     aFormulaSepArrayRow ( rCpy.aFormulaSepArrayRow ),
@@ -52,6 +53,7 @@ ScFormulaOptions::~ScFormulaOptions()
 void ScFormulaOptions::SetDefaults()
 {
     bUseEnglishFuncName = false;
+    bUnitValidat = false;
     eFormulaGrammar     = ::formula::FormulaGrammar::GRAM_NATIVE;
     mbWriteCalcConfig = true;
     meOOXMLRecalc = RECALC_ASK;
@@ -129,9 +131,10 @@ const LocaleDataWrapper& ScFormulaOptions::GetLocaleDataWrapper()
 ScFormulaOptions& ScFormulaOptions::operator=( const ScFormulaOptions& rCpy )
 {
     bUseEnglishFuncName = rCpy.bUseEnglishFuncName;
+    bUnitValidat        = rCpy.bUnitValidat;
     eFormulaGrammar     = rCpy.eFormulaGrammar;
-    aCalcConfig = rCpy.aCalcConfig;
-    mbWriteCalcConfig = rCpy.mbWriteCalcConfig;
+    aCalcConfig         = rCpy.aCalcConfig;
+    mbWriteCalcConfig   = rCpy.mbWriteCalcConfig;
     aFormulaSepArg      = rCpy.aFormulaSepArg;
     aFormulaSepArrayRow = rCpy.aFormulaSepArrayRow;
     aFormulaSepArrayCol = rCpy.aFormulaSepArrayCol;
@@ -143,8 +146,9 @@ ScFormulaOptions& ScFormulaOptions::operator=( const ScFormulaOptions& rCpy )
 bool ScFormulaOptions::operator==( const ScFormulaOptions& rOpt ) const
 {
     return bUseEnglishFuncName == rOpt.bUseEnglishFuncName
+        && bUnitValidat        == rOpt.bUnitValidat
         && eFormulaGrammar     == rOpt.eFormulaGrammar
-        && aCalcConfig == rOpt.aCalcConfig
+        && aCalcConfig         == rOpt.aCalcConfig
         && mbWriteCalcConfig   == rOpt.mbWriteCalcConfig
         && aFormulaSepArg      == rOpt.aFormulaSepArg
         && aFormulaSepArrayRow == rOpt.aFormulaSepArrayRow
@@ -189,22 +193,23 @@ SfxPoolItem* ScTpFormulaItem::Clone( SfxItemPool * ) const
 
 #define CFGPATH_FORMULA           "Office.Calc/Formula"
 
-#define SCFORMULAOPT_GRAMMAR              0
-#define SCFORMULAOPT_ENGLISH_FUNCNAME     1
-#define SCFORMULAOPT_SEP_ARG              2
-#define SCFORMULAOPT_SEP_ARRAY_ROW        3
-#define SCFORMULAOPT_SEP_ARRAY_COL        4
-#define SCFORMULAOPT_STRING_REF_SYNTAX    5
-#define SCFORMULAOPT_STRING_CONVERSION    6
-#define SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO 7
-#define SCFORMULAOPT_OOXML_RECALC         8
-#define SCFORMULAOPT_ODF_RECALC           9
-#define SCFORMULAOPT_OPENCL_AUTOSELECT   10
-#define SCFORMULAOPT_OPENCL_DEVICE       11
-#define SCFORMULAOPT_OPENCL_SUBSET_ONLY  12
-#define SCFORMULAOPT_OPENCL_MIN_SIZE     13
-#define SCFORMULAOPT_OPENCL_SUBSET_OPS   14
-#define SCFORMULAOPT_COUNT               15
+#define SCFORMULAOPT_GRAMMAR                0
+#define SCFORMULAOPT_ENGLISH_FUNCNAME       1
+#define SCFORMULAOPT_UNIT_VALIDAT           2
+#define SCFORMULAOPT_SEP_ARG                3
+#define SCFORMULAOPT_SEP_ARRAY_ROW          4
+#define SCFORMULAOPT_SEP_ARRAY_COL          5
+#define SCFORMULAOPT_STRING_REF_SYNTAX      6
+#define SCFORMULAOPT_STRING_CONVERSION      7
+#define SCFORMULAOPT_EMPTY_OUSTRING_AS_ZERO 8
+#define SCFORMULAOPT_OOXML_RECALC           9
+#define SCFORMULAOPT_ODF_RECALC            10
+#define SCFORMULAOPT_OPENCL_AUTOSELECT     11
+#define SCFORMULAOPT_OPENCL_DEVICE         12
+#define SCFORMULAOPT_OPENCL_SUBSET_ONLY    13
+#define SCFORMULAOPT_OPENCL_MIN_SIZE       14
+#define SCFORMULAOPT_OPENCL_SUBSET_OPS     15
+#define SCFORMULAOPT_COUNT                 16
 
 Sequence<OUString> ScFormulaCfg::GetPropertyNames()
 {
@@ -212,6 +217,7 @@ Sequence<OUString> ScFormulaCfg::GetPropertyNames()
     {
         "Syntax/Grammar",                // SCFORMULAOPT_GRAMMAR
         "Syntax/EnglishFunctionName",    // SCFORMULAOPT_ENGLISH_FUNCNAME
+        "Syntax/UnitValidat",            // SCFORMULAOPT_UNIT_VALIDAT
         "Syntax/SeparatorArg",           // SCFORMULAOPT_SEP_ARG
         "Syntax/SeparatorArrayRow",      // SCFORMULAOPT_SEP_ARRAY_ROW
         "Syntax/SeparatorArrayCol",      // SCFORMULAOPT_SEP_ARRAY_COL
@@ -240,6 +246,7 @@ ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
     static sal_uInt16 aVals[] = {
         SCFORMULAOPT_GRAMMAR,
         SCFORMULAOPT_ENGLISH_FUNCNAME,
+        SCFORMULAOPT_UNIT_VALIDAT,
         SCFORMULAOPT_SEP_ARG,
         SCFORMULAOPT_SEP_ARRAY_ROW,
         SCFORMULAOPT_SEP_ARRAY_COL,
@@ -321,6 +328,13 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                     bool bEnglish = false;
                     if (pValues[nProp] >>= bEnglish)
                         SetUseEnglishFuncName(bEnglish);
+                }
+                break;
+                case SCFORMULAOPT_UNIT_VALIDAT:
+                {
+                    bool bValidat = false;
+                    if (pValues[nProp] >>= bValidat)
+                        SetUnitValidat(bValidat);
                 }
                 break;
                 case SCFORMULAOPT_SEP_ARG:
@@ -539,6 +553,12 @@ void ScFormulaCfg::ImplCommit()
             case SCFORMULAOPT_ENGLISH_FUNCNAME:
             {
                 bool b = GetUseEnglishFuncName();
+                pValues[nProp] <<= b;
+            }
+            break;
+            case SCFORMULAOPT_UNIT_VALIDAT:
+            {
+                bool b = GetUnitValidat();
                 pValues[nProp] <<= b;
             }
             break;

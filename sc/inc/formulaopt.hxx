@@ -23,6 +23,7 @@ class SC_DLLPUBLIC ScFormulaOptions
 {
 private:
     bool bUseEnglishFuncName;     // use English function name even if the locale is not English.
+    bool bUnitValidat;
     formula::FormulaGrammar::Grammar eFormulaGrammar;  // formula grammar used to switch different formula syntax
     ScCalcConfig aCalcConfig;
     bool mbWriteCalcConfig;
@@ -53,6 +54,8 @@ public:
 
     void SetWriteCalcConfig( bool bVal ) { mbWriteCalcConfig = bVal; }
     bool GetWriteCalcConfig() const { return mbWriteCalcConfig; }
+    void SetUnitValidat( bool bVal ) { bUnitValidat = bVal; }
+    bool GetUnitValidat() const { return bUnitValidat; }
 
     void SetFormulaSepArg(const OUString& rSep) { aFormulaSepArg = rSep; }
     OUString GetFormulaSepArg() const { return aFormulaSepArg; }

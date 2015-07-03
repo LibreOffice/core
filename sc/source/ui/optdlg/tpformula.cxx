@@ -44,6 +44,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(vcl::Window* pParent, const SfxItemSet& r
 {
     get(mpLbFormulaSyntax, "formulasyntax");
     get(mpCbEnglishFuncName, "englishfuncname");
+    get(mpCbUnitValidat, "unitvalidat");
     get(mpBtnCustomCalcDefault, "calcdefault");
     get(mpBtnCustomCalcCustom, "calccustom");
     get(mpBtnCustomCalcDetails, "details");
@@ -92,6 +93,7 @@ void ScTpFormulaOptions::dispose()
 {
     mpLbFormulaSyntax.clear();
     mpCbEnglishFuncName.clear();
+    mpCbUnitValidat.clear();
     mpBtnCustomCalcDefault.clear();
     mpBtnCustomCalcCustom.clear();
     mpBtnCustomCalcDetails.clear();
@@ -246,6 +248,7 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
     bool bRet = false;
     ScFormulaOptions aOpt;
     bool bEnglishFuncName = mpCbEnglishFuncName->IsChecked();
+    bool bUnitValidat     = mpCbUnitValidat->IsChecked();
     sal_Int16 aSyntaxPos      = mpLbFormulaSyntax->GetSelectEntryPos();
     OUString aSep             = mpEdSepFuncArg->GetText();
     OUString aSepArrayCol     = mpEdSepArrayCol->GetText();
@@ -261,6 +264,7 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
 
     if ( mpLbFormulaSyntax->GetSavedValue() != aSyntaxPos
          || mpCbEnglishFuncName->GetSavedValue() != (bEnglishFuncName ? 1 : 0)
+         || mpCbUnitValidat->GetSavedValue() != (bUnitValidat ? 1 : 0)
          || static_cast<OUString>(mpEdSepFuncArg->GetSavedValue()) != aSep
          || static_cast<OUString>(mpEdSepArrayCol->GetSavedValue()) != aSepArrayCol
          || static_cast<OUString>(mpEdSepArrayRow->GetSavedValue()) != aSepArrayRow
@@ -289,6 +293,7 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
 
         aOpt.SetFormulaSyntax(eGram);
         aOpt.SetUseEnglishFuncName(bEnglishFuncName);
+        aOpt.SetUnitValidat(bUnitValidat);
         aOpt.SetFormulaSepArg(aSep);
         aOpt.SetFormulaSepArrayCol(aSepArrayCol);
         aOpt.SetFormulaSepArrayRow(aSepArrayRow);
@@ -344,6 +349,10 @@ void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
     // english function name.
     mpCbEnglishFuncName->Check( aOpt.GetUseEnglishFuncName() );
     mpCbEnglishFuncName->SaveValue();
+
+    // unit validation
+    mpCbUnitValidat->Check( aOpt.GetUnitValidat() );
+    mpCbUnitValidat->SaveValue();
 
     // Separators
     OUString aSep = aOpt.GetFormulaSepArg();

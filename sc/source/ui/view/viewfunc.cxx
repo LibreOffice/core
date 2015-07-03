@@ -471,25 +471,28 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             }
 
 #ifdef ENABLE_CALC_UNITVERIFICATION
-            boost::shared_ptr< Units > pUnits = Units::GetUnits();
-            FormulaStatus aStatus = pUnits->verifyFormula( pArr, aPos, pDoc );
-            if ( aStatus == FormulaStatus::VALID || aStatus == FormulaStatus::UNKNOWN )
+            if ( SC_MOD()->GetFormulaOptions().GetUnitValidat() )
             {
-                SAL_INFO( "sc.units", "verification successful" );
+                boost::shared_ptr< Units > pUnits = Units::GetUnits();
+                FormulaStatus aStatus = pUnits->verifyFormula( pArr, aPos, pDoc );
+                if ( aStatus == FormulaStatus::VALID || aStatus == FormulaStatus::UNKNOWN )
+                {
+                    SAL_INFO( "sc.units", "verification successful" );
 
-                // If we have fixed a previously erronous cell we need to make sure we remove
-                // the associate warning infobar. It's simplest to simply call RemoveInfoBar
-                // with the hypothetical ID, and RemoveInfoBar deals with the remaning details.
-                // (The cell address is used as it's infobar id, see NotifyUnitErrorInFormula
-                // for further details.)
-                SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
-                OUString sAddress = aPos.Format( SCA_BITS, pDoc );
-                pViewFrame->RemoveInfoBar( sAddress );
-            }
-            else
-            {
-                SAL_INFO( "sc.units", "verification failed" );
-                NotifyUnitErrorInFormula( aPos, pDoc, aStatus );
+                    // If we have fixed a previously erronous cell we need to make sure we remove
+                    // the associate warning infobar. It's simplest to simply call RemoveInfoBar
+                    // with the hypothetical ID, and RemoveInfoBar deals with the remaning details.
+                    // (The cell address is used as it's infobar id, see NotifyUnitErrorInFormula
+                    // for further details.)
+                    SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
+                    OUString sAddress = aPos.Format( SCA_BITS, pDoc );
+                    pViewFrame->RemoveInfoBar( sAddress );
+                }
+                else
+                {
+                    SAL_INFO( "sc.units", "verification failed" );
+                    NotifyUnitErrorInFormula( aPos, pDoc, aStatus );
+                }
             }
 #endif
         } while ( bAgain );
@@ -585,17 +588,21 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             }
 
 #ifdef ENABLE_CALC_UNITVERIFICATION
-            boost::shared_ptr< Units > pUnits = Units::GetUnits();
+            if ( SC_MOD()->GetFormulaOptions().GetUnitValidat() )
+            {
+                boost::shared_ptr< Units > pUnits = Units::GetUnits();
 
-            OUString sHeaderUnit, sCellUnit;
-            ScAddress aHeaderAddress;
+                OUString sHeaderUnit, sCellUnit;
+                ScAddress aHeaderAddress;
 
-            if ( pUnits->isCellConversionRecommended( aAddress, pDoc, sHeaderUnit, aHeaderAddress, sCellUnit ) ) {
-                NotifyUnitConversionRecommended( aAddress, pDoc, sHeaderUnit, aHeaderAddress, sCellUnit, pDocSh );
-            } else {
-                SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
-                OUString sAddress = aAddress.Format( SCA_BITS, pDoc );
-                pViewFrame->RemoveInfoBar( sAddress );
+                if ( pUnits->isCellConversionRecommended( aAddress, pDoc, sHeaderUnit, aHeaderAddress, sCellUnit ) )
+                    NotifyUnitConversionRecommended( aAddress, pDoc, sHeaderUnit, aHeaderAddress, sCellUnit, pDocSh );
+                else
+                {
+                    SfxViewFrame* pViewFrame = GetViewData().GetViewShell()->GetFrame();
+                    OUString sAddress = aAddress.Format( SCA_BITS, pDoc );
+                    pViewFrame->RemoveInfoBar( sAddress );
+                }
             }
 #endif
         }
