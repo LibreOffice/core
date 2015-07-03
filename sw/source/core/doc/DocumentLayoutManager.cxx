@@ -343,7 +343,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     SwDoc* pSrcDoc = const_cast<SwDoc*>(rSource.GetDoc());
 
     // May we copy this object?
-    // We may, unless it's 1) it's a control (and therfore a draw)
+    // We may, unless it's 1) it's a control (and therefore a draw)
     //                     2) anchored in a header/footer
     //                     3) anchored (to paragraph?)
     bool bMayNotCopy = false;

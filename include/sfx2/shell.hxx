@@ -513,7 +513,7 @@ public:
     this must be set directly from one derived SfxShell class and ny
     derivatives of SfxObjectShell.
 
-    The SfxShell class itself does not have any SfxItemPool, therfore a
+    The SfxShell class itself does not have any SfxItemPool, therefore a
     null-pointer is returned.
 */
 SfxItemPool& SfxShell::GetPool() const

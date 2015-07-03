@@ -454,7 +454,7 @@ public class _XFrame extends MultiMethodTest {
     * Test calls the method, then result is checked.<p>
     * Has <b> OK </b> status if method returns true, and values, set by the
     * method are nulls, or if method returns false, and values are not changed.
-    * This method destroy the object. Therfore all other methods have to be
+    * This method destroy the object. Therefore all other methods have to be
     * executed before :
     * <ul>
     *  <li> <code> getName() </code>

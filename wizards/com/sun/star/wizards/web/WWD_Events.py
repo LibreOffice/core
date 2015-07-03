@@ -41,7 +41,7 @@ from com.sun.star.container import NoSuchElementException
 '''
 This class implements the ui-events of the
 web wizard.
-it is therfore sorted to steps.
+it is therefore sorted to steps.
 not much application-logic here - just plain
 methods which react to events.
 The only exception are the finish methods with the save

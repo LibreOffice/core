@@ -244,7 +244,7 @@ bool MenuBarMerger::ReplaceMenuItem(
     const OUString&    rModuleIdentifier,
     const AddonMenuContainer& rAddonMenuItems )
 {
-    // There is no replace available. Therfore we first have to
+    // There is no replace available. Therefore we first have to
     // remove the old menu entry,
     pMenu->RemoveItem( nPos );
 

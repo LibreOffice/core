@@ -428,7 +428,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     do
     {
         //get the intermediate certificate
-        //the returned value is const ! Therfore it does not need to be freed
+        //the returned value is const ! Therefore it does not need to be freed
         //with ne_ssl_cert_free, which takes a non-const argument
         issuerCert = ne_ssl_cert_signedby( issuerCert );
         if ( NULL == issuerCert )

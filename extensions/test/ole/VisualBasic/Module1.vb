@@ -201,7 +201,7 @@ Public Sub Main()
         objOleTest.testout_methodUHyper(outUHyper)
         objOleTest.testout_methodString(outString)
         objOleTest.testout_methodChar(outChar)
-        'outCharAsString is a string. Therfore the returned sal_Unicode value of 65 will be converted
+        'outCharAsString is a string. Therefore the returned sal_Unicode value of 65 will be converted
         'to a string "65"
         objOleTest.testout_methodChar(outCharAsString)
         objOleTest.testout_methodAny(outAny)

@@ -23,7 +23,7 @@ Please note the semicolons!
  Office/user/config/javarc
  under SystemClasspath.
 
-There is a bug with jdk1.1.8, therfore use 1.2 instead.
+There is a bug with jdk1.1.8, therefore use 1.2 instead.
 
 The TestPGP is called without ;iiop; :
 

@@ -1481,7 +1481,7 @@ short UpdateRequiredDialog::Execute()
     //be disabled because they are in a read only repository. However, disabling extensions
     //is now always possible because the registration data of all repositories
     //are in the user installation.
-    //Therfore all extensions could be displayed and all the handling around m_bHasLockedEntries
+    //Therefore all extensions could be displayed and all the handling around m_bHasLockedEntries
     //could be removed.
     if ( m_bHasLockedEntries )
     {
