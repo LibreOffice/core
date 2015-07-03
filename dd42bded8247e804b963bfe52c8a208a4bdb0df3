@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_3bfc023e",
+        "filename": "basegfx/source/matrix/b2dhommatrixtools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-07-03T15:26:45Z",
+      "side": 1,
+      "message": "this is a function named \"sincos\" (all lowercase) from glibc",
+      "revId": "dd42bded8247e804b963bfe52c8a208a4bdb0df3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_5bf9be4c",
+        "filename": "bridges/inc/bridges/cpp_uno/shared/vtablefactory.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-07-03T15:26:45Z",
+      "side": 1,
+      "message": "mapped",
+      "revId": "dd42bded8247e804b963bfe52c8a208a4bdb0df3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
