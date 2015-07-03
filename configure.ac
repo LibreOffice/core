@@ -1574,6 +1574,11 @@ AC_ARG_WITH(system-libs,
         [Use libraries already on system -- enables all --with-system-* flags.]),
 ,)
 
+AC_ARG_WITH(system-bzip2,
+    AS_HELP_STRING([--with-system-bzip2],
+        [Use bzip2 already on system. Used only when --enable-online-update=mar]),,
+    [with_system_bzip2="$with_system_libs"])
+
 AC_ARG_WITH(system-headers,
     AS_HELP_STRING([--with-system-headers],
         [Use headers already on system -- enables all --with-system-* flags for
@@ -11805,6 +11810,25 @@ else
 fi
 AC_SUBST(ENABLE_ONLINE_UPDATE)
 AC_SUBST(ENABLE_ONLINE_UPDATE_MAR)
+
+dnl ===================================================================
+dnl Test whether we need bzip2
+dnl ===================================================================
+SYSTEM_BZIP2=
+if test "$ENABLE_ONLINE_UPDATE_MAR" = "TRUE"; then
+    AC_MSG_CHECKING([whether to use system bzip2])
+    if test "$with_system_bzip2" = yes; then
+        SYSTEM_BZIP2=TRUE
+        AC_MSG_RESULT([yes])
+        PKG_CHECK_MODULES(BZIP2, bzip2)
+    else
+        AC_MSG_RESULT([no])
+        BUILD_TYPE="$BUILD_TYPE BZIP2"
+    fi
+fi
+AC_SUBST(SYSTEM_BZIP2)
+AC_SUBST(BZIP2_CFLAGS)
+AC_SUBST(BZIP2_LIBS)
 
 dnl ===================================================================
 dnl Test whether to enable extension update

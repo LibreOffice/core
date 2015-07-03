@@ -4120,4 +4120,34 @@ endef
 
 endif
 
+ifneq ($(ENABLE_ONLINE_UPDATE_MAR),)
+ifneq ($(SYSTEM_BZIP2),)
+
+define gb_LinkTarget__use_bzip2
+$(call gb_LinkTarget_set_include,$(1),\
+	$(BZIP2_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(BZIP2_LIBS))
+
+endef
+gb_ExternalProject__use_bzip2 :=
+
+else # !SYSTEM_BZIP2
+
+define gb_LinkTarget__use_bzip2
+$(call gb_LinkTarget_use_external_project,$(1),bzip2)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,bzip2) \
+	$$(INCLUDE) \
+)
+endef
+
+define gb_ExternalProject__use_bzip2
+$(call gb_ExternalProject_use_external_project,$(1),bzip2)
+endef
+
+endif
+endif
+
 # vim: set noet sw=4 ts=4:

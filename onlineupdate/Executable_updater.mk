@@ -50,12 +50,9 @@ $(eval $(call gb_Executable_add_libs,updater,\
     $(GTK3_LIBS) \
 ))
 
-$(eval $(call gb_Executable_use_libraries,updater,\
-	libreofficekitgtk \
-))
-
 $(eval $(call gb_Executable_use_externals,updater,\
 	gtk \
+	bzip2 \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,updater,\
