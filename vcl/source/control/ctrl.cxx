@@ -36,6 +36,8 @@ using namespace vcl;
 void Control::ImplInitControlData()
 {
     mbHasControlFocus       = false;
+    mbFont                  = false;
+    mbForeground            = false;
     mpControlData   = new ImplControlData;
 }
 
@@ -417,16 +419,23 @@ void Control::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    vcl::Font rFont(GetCanonicalFont(rStyleSettings));
-    ApplyControlFont(rRenderContext, rFont);
+    if (mbFont)
+    {
+        vcl::Font rFont(GetCanonicalFont(rStyleSettings));
+        ApplyControlFont(rRenderContext, rFont);
+    }
 
-    ApplyControlForeground(rRenderContext, GetCanonicalTextColor(rStyleSettings));
-
-    rRenderContext.SetTextFillColor();
+    if (mbFont || mbForeground)
+    {
+        ApplyControlForeground(rRenderContext, GetCanonicalTextColor(rStyleSettings));
+        rRenderContext.SetTextFillColor();
+    }
 }
 
-void Control::ImplInitSettings(const bool, const bool)
+void Control::ImplInitSettings(const bool _bFont, const bool _bForeground)
 {
+    mbFont = _bFont;
+    mbForeground = _bForeground;
     ApplySettings(*this);
 }
 
