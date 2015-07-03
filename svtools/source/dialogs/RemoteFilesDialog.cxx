@@ -15,6 +15,7 @@ class FolderTree : public SvTreeListBox
 private:
     Reference< XCommandEnvironment > m_xEnv;
     ::osl::Mutex m_aMutex;
+    Sequence< OUString > m_aBlackList;
 
 public:
     FolderTree( vcl::Window* pParent, WinBits nBits )
@@ -46,10 +47,9 @@ public:
             if( pURL )
             {
                 FolderDescriptor aFolder( *pURL );
-                Sequence< OUString > aBlackList;
 
                 EnumerationResult eResult =
-                    pContentEnumerator->enumerateFolderContentSync( aFolder, aBlackList );
+                    pContentEnumerator->enumerateFolderContentSync( aFolder, m_aBlackList );
 
                 if ( SUCCESS == eResult )
                 {
@@ -113,6 +113,11 @@ public:
             else
                 break;
         }
+    }
+
+    void SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
+    {
+        m_aBlackList = rBlackList;
     }
 };
 
@@ -493,11 +498,10 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
 
     if( m_pFileView )
     {
-        OUStringList BlackList;
         OUString sFilter = GetCurFilter();
 
         m_pFileView->EndInplaceEditing( false );
-        eResult = m_pFileView->Initialize( sURL, sFilter, NULL, BlackList );
+        eResult = m_pFileView->Initialize( sURL, sFilter, NULL, GetBlackList() );
 
         if( eResult == eSuccess )
         {
@@ -756,6 +760,7 @@ void RemoteFilesDialog::SetHasFilename( bool )
 void RemoteFilesDialog::SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
 {
     m_aBlackList = rBlackList;
+    m_pTreeView->SetBlackList( rBlackList );
 }
 
 const ::com::sun::star::uno::Sequence< OUString >& RemoteFilesDialog::GetBlackList() const
