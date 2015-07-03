@@ -235,6 +235,11 @@ public:
     // Beim Gruppenobjekt muss wenigstens ein Member sichtbar sein,
     // gesperrt sein darf keiner.
     bool IsObjMarkable(SdrObject* pObj) const;
+    // hmm, selectable is surely the same as markable, now that I
+    // see this as I look for a place to put it. TO-DO,
+    // merge these
+    bool IsObjSelectable(SdrObject *pObj) const;
+
 
     // Betreten (Editieren) einer Objektgruppe. Anschliessend liegen alle
     // Memberobjekte der Gruppe im direkten Zugriff. Alle anderen Objekte
