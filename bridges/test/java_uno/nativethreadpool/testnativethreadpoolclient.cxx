@@ -36,7 +36,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/implbase.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/thread.hxx"
@@ -47,7 +47,7 @@
 
 namespace {
 
-class Client: public cppu::WeakImplHelper2<
+class Client: public cppu::WeakImplHelper<
     css::lang::XMain, test::javauno::nativethreadpool::XSource >
 {
 public:

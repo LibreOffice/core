@@ -32,7 +32,7 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "cppuhelper/basemutex.hxx"
-#include "cppuhelper/compbase2.hxx"
+#include "cppuhelper/compbase.hxx"
 #include "sal/types.h"
 
 namespace com { namespace sun { namespace star {
@@ -49,7 +49,7 @@ namespace binaryurp {
 // the implementation does not care about a disposed state:
 
 typedef
-    cppu::WeakComponentImplHelper2<
+    cppu::WeakComponentImplHelper<
         com::sun::star::lang::XServiceInfo,
         com::sun::star::bridge::XBridgeFactory2 >
     BridgeFactoryBase;

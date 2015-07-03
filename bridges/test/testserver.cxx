@@ -26,7 +26,6 @@
 #include <osl/thread.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/connection/XAcceptor.hpp>
 #include <com/sun/star/connection/XConnection.hpp>
