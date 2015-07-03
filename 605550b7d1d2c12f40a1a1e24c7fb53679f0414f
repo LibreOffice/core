@@ -16,6 +16,23 @@
       "revId": "605550b7d1d2c12f40a1a1e24c7fb53679f0414f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_5b553e1b",
+        "filename": "sfx2/source/control/dispatch.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1541,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-03T17:59:06Z",
+      "side": 1,
+      "message": "there\u0027s \"hs\" here too",
+      "revId": "605550b7d1d2c12f40a1a1e24c7fb53679f0414f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
