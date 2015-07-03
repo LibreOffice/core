@@ -3514,6 +3514,9 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_SAUTOUPD:
         m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_autoRedefine, std::make_shared<RTFValue>(1));
         break;
+    case RTF_WIDOWCTRL:
+        m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_widowControl, std::make_shared<RTFValue>(1));
+        break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
