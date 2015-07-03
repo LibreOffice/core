@@ -1749,25 +1749,8 @@ RegistryTypeReader::RegistryTypeReader(const sal_uInt8* buffer,
     m_hImpl = createEntry(buffer, bufferLen, copyData);
 }
 
-RegistryTypeReader::RegistryTypeReader(const RegistryTypeReader& toCopy)
-    : m_hImpl(toCopy.m_hImpl)
-{ typereg_reader_acquire(m_hImpl); }
-
-
 RegistryTypeReader::~RegistryTypeReader()
 { typereg_reader_release(m_hImpl); }
-
-RegistryTypeReader& RegistryTypeReader::operator == (const RegistryTypeReader& toAssign)
-{
-    if (m_hImpl != toAssign.m_hImpl)
-    {
-        typereg_reader_release(m_hImpl);
-        m_hImpl = toAssign.m_hImpl;
-        typereg_reader_acquire(m_hImpl);
-    }
-
-    return *this;
-}
 
 RTTypeClass RegistryTypeReader::getTypeClass() const
 {  return typereg_reader_getTypeClass(m_hImpl); }

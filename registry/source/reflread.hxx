@@ -51,15 +51,8 @@ public:
                               sal_uInt32 bufferLen,
                               bool copyData);
 
-    /// Copy constructcor
-    RegistryTypeReader(const RegistryTypeReader& toCopy);
-
     /// Destructor. The Destructor frees the data block if the copyData flag was TRUE.
     ~RegistryTypeReader();
-
-    /// Assign operator
-    RegistryTypeReader& operator == (const RegistryTypeReader& toAssign);
-
 
     /** returns the typeclass of the type represented by this blob.
 
@@ -113,7 +106,9 @@ public:
      */
     rtl::OUString  getFieldFileName( sal_uInt16 index ) const;
 
-protected:
+private:
+    RegistryTypeReader(RegistryTypeReader &) = delete;
+    void operator =(RegistryTypeReader) = delete;
 
     /// stores the handle of an implementation class
     TypeReaderImpl                                              m_hImpl;
