@@ -118,7 +118,6 @@ class MzString
 // Access to specific characters
 //char      &operator [] (int n);
         char      operator [] (int n);
-        char      last();
 
 // Comparison
 //  Return:
@@ -130,8 +129,6 @@ class MzString
 // Searching for parts
         int       find    (char c);
         int       find    (char c, int pos);
-        int       find    (char *);
-        int       find    (char *, int pos);
         int       rfind   (char c);
         int       rfind   (char c, int pos);
 

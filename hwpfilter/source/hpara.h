@@ -117,8 +117,6 @@ class DLLEXPORT HWPPara
         ~HWPPara(void);
 
         bool  Read(HWPFile &hwpf, unsigned char flag = 0);
-        int   Write(CTextOut &txtf);
-        int   Write(CHTMLOut &html);
 
         void  SetNext(HWPPara *n) { _next = n; };
 
@@ -133,17 +131,12 @@ class DLLEXPORT HWPPara
         ParaShape& GetParaShape(void) { return pshape;}
 
 /**
- * Returns previous paragraph.
- */
-        HWPPara *Prev(void);
-/**
  * Returns next paragraph.
  */
         HWPPara *Next(void) { return _next;}
 
         int HomePos(int line) const;
         int EndPos(int line) const;
-        int LineLen(int line) const;
 
     private:
         HBox *readHBox(HWPFile &);
@@ -165,10 +158,6 @@ inline int HWPPara::EndPos(int line) const
 }
 
 
-inline int HWPPara::LineLen(int line) const
-{
-    return EndPos(line) - HomePos(line);
-}
 #endif // INCLUDED_HWPFILTER_SOURCE_HPARA_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

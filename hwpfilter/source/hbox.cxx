@@ -71,11 +71,6 @@ hchar_string HBox::GetString()
 }
 
 
-hunit HBox::Height(CharShape *csty)
-{
-    return( csty->size );
-}
-
 // skip block
 SkipData::SkipData(hchar hch)
     : HBox(hch)
@@ -378,12 +373,6 @@ TxtBox::~TxtBox()
 }
 
 
-hunit TxtBox::Height(CharShape * csty)
-{
-    return (style.anchor_type == CHAR_ANCHOR) ? box_ys : csty->size;
-}
-
-
 // picture(11)
 
 Picture::Picture()
@@ -419,12 +408,6 @@ Picture::~Picture()
 int Picture::Type()
 {
     return pictype;
-}
-
-
-hunit Picture::Height(CharShape * sty)
-{
-    return (style.anchor_type == CHAR_ANCHOR) ? box_ys : sty->size;
 }
 
 

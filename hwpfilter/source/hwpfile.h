@@ -228,12 +228,10 @@ class DLLEXPORT HWPFile
         HWPFont& GetHWPFont(void) { return _hwpFont; }
         HWPStyle& GetHWPStyle(void) { return _hwpStyle; }
         HWPPara *GetFirstPara(void) { return plist.front(); }
-        HWPPara *GetLastPara(void) { return plist.back(); }
 
         EmPicture *GetEmPicture(Picture *pic);
         EmPicture *GetEmPictureByName(char * name);
         HyperText *GetHyperText();
-        FBox *GetBoxHead (void) { return blist.size()?blist.front():0; }
         ParaShape *getParaShape(int);
         CharShape *getCharShape(int);
         FBoxStyle *getFBoxStyle(int);
