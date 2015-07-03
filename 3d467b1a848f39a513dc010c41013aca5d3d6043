@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_dbba8e6e",
+        "filename": "scaddins/source/datefunc/datefunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 800,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-07-03T16:38:28Z",
+      "side": 1,
+      "message": "leapyears",
+      "revId": "3d467b1a848f39a513dc010c41013aca5d3d6043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_7bb03a8c",
+        "filename": "sd/source/ui/slidesorter/inc/controller/SlsSelectionManager.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-07-03T16:38:28Z",
+      "side": 1,
+      "message": "\"changes\" is correct here",
+      "revId": "3d467b1a848f39a513dc010c41013aca5d3d6043",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
