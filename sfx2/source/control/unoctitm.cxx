@@ -598,11 +598,14 @@ class UsageInfo {
 
     typedef std::map<OUString, int> UsageMap;
 
+    /// Are we collecting the info?  We cache the value because the call to save can happen very late.
+    bool mbIsCollecting;
+
     /// Command vs. how many times it was used
     UsageMap maUsage;
 
 public:
-    UsageInfo()
+    UsageInfo() : mbIsCollecting(false)
     {
     }
 
@@ -616,6 +619,9 @@ public:
 
     /// Save the usage data for the next session.
     void save();
+
+    /// Modify the flag whether we are collecting.
+    void setCollecting(bool bIsCollecting) { mbIsCollecting = bIsCollecting; }
 };
 
 void UsageInfo::increment(const OUString &rCommand)
@@ -630,7 +636,7 @@ void UsageInfo::increment(const OUString &rCommand)
 
 void UsageInfo::save()
 {
-    if (!officecfg::Office::Common::Misc::CollectUsageInformation::get())
+    if (!mbIsCollecting)
         return;
 
     // TODO - do a real saving here, not only dump to the screen
@@ -647,7 +653,9 @@ class theUsageInfo : public rtl::Static<UsageInfo, theUsageInfo> {};
 /// Extracts information about the command + args, and stores that.
 void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::PropertyValue>& rArgs)
 {
-    if (!officecfg::Office::Common::Misc::CollectUsageInformation::get())
+    bool bCollecting = officecfg::Office::Common::Misc::CollectUsageInformation::get();
+    theUsageInfo::get().setCollecting(bCollecting);
+    if (!bCollecting)
         return;
 
     OUStringBuffer aBuffer;
