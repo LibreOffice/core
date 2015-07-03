@@ -74,7 +74,6 @@ public:
 
     void SetDirty()  { bDirty = true; }
     bool IsDirty();
-    void ClearDirty();
 
     bool Commit();
     bool Revert();
@@ -84,7 +83,6 @@ public:
     sal_Int32 GetSize();
     bool  SetSize( sal_Int32 );
     sal_Int32 Seek( sal_Int32 );
-    sal_Int32 Tell() { return nPos; }
     sal_Int32 Read( void*, sal_Int32 );
     sal_Int32 Write( const void*, sal_Int32 );
     void  Copy( BaseStorageStream& );
@@ -105,7 +103,6 @@ public:
     StgDirEntry* GetRoot() { return pRoot; }
     StgDirEntry* Find( StgDirEntry&, const OUString& );
     StgDirEntry* Create( StgDirEntry&, const OUString&, StgEntryType );
-    bool         Remove( StgDirEntry&, const OUString& );
     bool         Rename( StgDirEntry&, const OUString&, const OUString& );
     bool         Move( StgDirEntry&, StgDirEntry&, const OUString& );
 };

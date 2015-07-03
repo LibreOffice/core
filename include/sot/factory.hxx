@@ -59,12 +59,6 @@ public:
     void                PutSuperClass( const SotFactory * );
 
     bool                Is( const SotFactory * pSuperClass ) const;
-    const SotFactory *  GetSuper( sal_uInt16 nPos ) const
-                        {
-                            return nPos < nSuperCount ?
-                                         pSuperClasses[ nPos ]
-                                         : NULL;
-                        }
 
 private:
                         SotFactory( const SotFactory & ) SAL_DELETED_FUNCTION;
