@@ -149,15 +149,6 @@ public:
                                             eLang, GetCurrencyConfigString() );
                                     }
 
-            void                SetCurrencyAbbrevAndLanguage(
-                                        const OUString& rAbbrev,
-                                        LanguageType eLang )
-                                    {
-                                        SetCurrencyConfigString(
-                                            CreateCurrencyConfigString(
-                                            rAbbrev, eLang ) );
-                                    }
-
     /** Set a link to a method to be called whenever the default currency
         changes. This can be only one method, and normally it is the static
         link method which calls SvNumberFormatter::SetDefaultSystemCurrency().

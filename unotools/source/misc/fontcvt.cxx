@@ -1034,7 +1034,6 @@ private:
 public:
     explicit StarSymbolToMSMultiFontImpl(bool bPerfectOnly);
     OUString ConvertChar(sal_Unicode &rChar) SAL_OVERRIDE;
-    OUString ConvertString(OUString &rString, sal_Int32& rIndex) SAL_OVERRIDE;
 };
 
 struct ExtraTable { sal_Unicode cStar; sal_uInt8 cMS;};
@@ -1234,80 +1233,6 @@ OUString StarSymbolToMSMultiFontImpl::ConvertChar(sal_Unicode &rChar)
         const char* pc = SymbolFontToString(rEntry.eFont);
         sRet = OUString(pc, strlen(pc), RTL_TEXTENCODING_ASCII_US);
         rChar = rEntry.cIndex;
-    }
-
-    return sRet;
-}
-
-OUString StarSymbolToMSMultiFontImpl::ConvertString(OUString &rString,
-                                                    sal_Int32& rIndex)
-{
-    typedef ::std::multimap<sal_Unicode, SymbolEntry>::iterator MI;
-    typedef ::std::pair<MI, MI> Result;
-
-    OUString sRet;
-
-    sal_Int32 nLen = rString.getLength();
-    if (rIndex >= nLen)
-        return sRet;
-
-    int nTotal = 0, nResult = 0;
-    ::std::vector<Result> aPossibilities;
-    aPossibilities.reserve(nLen - rIndex);
-    sal_Int32 nStart = rIndex;
-    do
-    {
-        Result aResult = maMagicMap.equal_range(rString[rIndex]);
-        int nBitfield = 0;
-        for (MI aIndex = aResult.first; aIndex != aResult.second; ++aIndex)
-            nBitfield |= aIndex->second.eFont;
-
-        if (!nTotal)
-            nTotal = nBitfield;
-        else
-        {
-            if (nTotal != nBitfield)    //Allow a series of failures
-            {
-                nTotal &= nBitfield;
-                if (!nTotal)
-                    break;
-            }
-        }
-        nResult = nTotal;
-        if (nResult)    //Don't bother storing a series of failures
-            aPossibilities.push_back(aResult);
-        ++rIndex;
-    }while(rIndex < nLen);
-
-    if (nResult)
-    {
-        int nI = Symbol;
-        while (nI <= nResult)
-        {
-            if (!(nI & nResult))
-                nI = nI << 1;
-            else
-                break;
-        }
-        const char* pc = SymbolFontToString(nI);
-        sRet = OUString(pc, strlen(pc), RTL_TEXTENCODING_ASCII_US);
-
-        sal_Int32 nSize = aPossibilities.size();
-        OUStringBuffer sBuff(rString);
-        for(sal_Int32 nPos = 0; nPos < nSize; ++nPos)
-        {
-            const Result &rResult = aPossibilities[nPos];
-
-            for (MI aIndex = rResult.first; aIndex != rResult.second; ++aIndex)
-            {
-                if (aIndex->second.eFont == nI)
-                {
-                    sBuff[nPos + nStart] = aIndex->second.cIndex;
-                    break;
-                }
-            }
-        }
-        rString = sBuff.makeStringAndClear();
     }
 
     return sRet;

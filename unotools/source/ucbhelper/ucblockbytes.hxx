@@ -69,14 +69,9 @@ typedef tools::SvRef<UcbLockBytes> UcbLockBytesRef;
 
 class UcbLockBytesHandler : public SvRefBase
 {
-    bool            m_bActive;
 public:
                     UcbLockBytesHandler()
-                        : m_bActive( true )
                     {}
-
-    void            Activate( bool bActivate = true ) { m_bActive = bActivate; }
-    bool            IsActive() const { return m_bActive; }
 };
 
 typedef tools::SvRef<UcbLockBytesHandler> UcbLockBytesHandlerRef;
@@ -94,7 +89,6 @@ class UcbLockBytes : public virtual SvLockBytes
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >  m_xInputStream;
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > m_xOutputStream;
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XSeekable >     m_xSeekable;
-    void*                   m_pCommandThread; // is alive only for compatibility reasons
     UcbLockBytesHandlerRef  m_xHandler;
 
     ErrCode                 m_nError;
@@ -132,11 +126,6 @@ public:
     ErrCode                 GetError() const
                             { return m_nError; }
 
-    // the following properties are available when and after the first DataAvailable callback has been executed
-    OUString                GetContentType() const;
-    OUString                GetRealURL() const;
-    DateTime                GetExpireDate() const;
-
     // calling this method delegates the responsibility to call closeinput to the caller!
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > getInputStream();
 
@@ -161,12 +150,6 @@ public:
                             {
                                 osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
                                 return m_xSeekable;
-                            }
-
-    bool                    hasInputStream_Impl() const
-                            {
-                                osl::MutexGuard aGuard( (const_cast< UcbLockBytes* >(this))->m_aMutex );
-                                return m_xInputStream.is();
                             }
 
     void                    setDontClose_Impl()

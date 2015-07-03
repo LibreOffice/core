@@ -55,14 +55,6 @@ public:
     //want to convert a string, you don't want to use this.
     virtual OUString ConvertChar(sal_Unicode &rChar) = 0;
 
-    //Starts converting the string at position rIndex. It converts as much of
-    //the string that can be converted to the same symbol font and returns the
-    //name of that font. rIndex is modified to the last index that was
-    //converted. Typically you call if continuously until rIndex ==
-    //rString.Len() and handle each section as separate 8bit strings using
-    //separate fonts. Will return an empty string for a continuous section
-    //that has no possible mapping.
-    virtual OUString ConvertString(OUString &rString, sal_Int32 &rIndex) = 0;
     virtual ~StarSymbolToMSMultiFont() {}
 };
 
