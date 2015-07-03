@@ -50,6 +50,7 @@ class OOXMLDocPropHandler : public ::cppu::WeakImplHelper1< ::com::sun::star::xm
 
     sal_Int32 m_nInBlock;
 
+    enum { NONE, INSERTED } m_CustomStringPropertyState;
     OUString m_aCustomPropertyName;
 
 public:

@@ -1037,7 +1037,8 @@ void FastSaxParserImpl::parse()
 void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
     int numNamespaces, const xmlChar** namespaces, int numAttributes, int /*defaultedAttributes*/, const xmlChar **attributes)
 {
-    sendPendingCharacters();
+    if (!pendingCharacters.isEmpty())
+        sendPendingCharacters();
     Entity& rEntity = getEntity();
     if( rEntity.maNamespaceCount.empty() )
     {
@@ -1144,7 +1145,8 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
 
 void FastSaxParserImpl::callbackEndElement( const xmlChar*, const xmlChar*, const xmlChar* )
 {
-    sendPendingCharacters();
+    if (!pendingCharacters.isEmpty())
+        sendPendingCharacters();
     Entity& rEntity = getEntity();
     SAL_WARN_IF(rEntity.maNamespaceCount.empty(), "sax", "Empty NamespaceCount");
     if( !rEntity.maNamespaceCount.empty() )

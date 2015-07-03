@@ -45,6 +45,7 @@ OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< uno::XComponentC
     , m_nBlock( 0 )
     , m_nType( 0 )
     , m_nInBlock( 0 )
+    , m_CustomStringPropertyState(NONE)
 {
     if ( !xContext.is() || !rDocProp.is() )
         throw uno::RuntimeException();
@@ -61,6 +62,7 @@ void OOXMLDocPropHandler::InitNew()
     m_aCustomPropertyName.clear();
     m_nType = 0;
     m_nInBlock = 0;
+    m_CustomStringPropertyState = NONE;
 }
 
 void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
@@ -345,7 +347,29 @@ void SAL_CALL OOXMLDocPropHandler::endFastElement( ::sal_Int32 )
             m_aCustomPropertyName.clear();
         }
         else if ( m_nInBlock == 2 )
+        {
+            if (   m_nState == CUSTPR_TOKEN(Properties)
+                && m_nBlock == CUSTPR_TOKEN(property))
+            {
+                switch (m_nType)
+                {
+                    case VT_TOKEN(bstr):
+                    case VT_TOKEN(lpstr):
+                    case VT_TOKEN(lpwstr):
+                        if (!m_aCustomPropertyName.isEmpty() &&
+                            INSERTED != m_CustomStringPropertyState)
+                        {
+                            // the property has string type, so it is valid
+                            // even with an empty value - characters() has
+                            // not been called in that case
+                            AddCustomProperty(uno::makeAny(OUString()));
+                        }
+                    break;
+                }
+            }
+            m_CustomStringPropertyState = NONE;
             m_nType = 0;
+        }
     }
 }
 
@@ -595,6 +619,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     case VT_TOKEN( lpwstr ):
                         // the property has string type
                         AddCustomProperty( uno::makeAny( AttributeConversion::decodeXString( aChars ) ) );
+                        m_CustomStringPropertyState = INSERTED;
                         break;
 
                     case VT_TOKEN( date ):
