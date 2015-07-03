@@ -195,6 +195,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/app/tbxww \
 	sd/source/ui/app/tmplctrl \
 	sd/source/ui/controller/slidelayoutcontroller \
+	sd/source/ui/controller/displaymodecontroller \
 	sd/source/ui/dlg/AnimationChildWindow \
 	sd/source/ui/dlg/LayerTabBar \
 	sd/source/ui/dlg/NavigatorChildWindow \
@@ -254,7 +255,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/framework/module/SlideSorterModule \
 	sd/source/ui/framework/module/ToolBarModule \
 	sd/source/ui/framework/module/ToolPanelModule \
-	sd/source/ui/framework/module/ViewTabBarModule \
+	sd/source/ui/framework/module/ViewPagerModule \
 	sd/source/ui/framework/tools/FrameworkHelper \
 	sd/source/ui/func/bulmaper \
 	sd/source/ui/func/fuarea \
