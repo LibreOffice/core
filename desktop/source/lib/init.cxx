@@ -161,13 +161,18 @@ static OUString getUString(const char* pString)
     return OStringToOUString(sString, RTL_TEXTENCODING_UTF8);
 }
 
-// Try to convert a relative URL to an absolute one
+/// Try to convert a relative URL to an absolute one, unless it already looks like an URL.
 static OUString getAbsoluteURL(const char* pURL)
 {
-    OUString aURL( getUString( pURL ) );
+    OUString aURL(getUString(pURL));
+
+    // return unchanged if it likely is an URL already
+    if (aURL.indexOf("://") > 0)
+        return aURL;
+
     OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
 
-    // FIXME: this would appear to kill non-file URLs.
+    // convert relative paths to absolute ones
     osl_getProcessWorkingDir(&sWorkingDir.pData);
     osl::FileBase::getFileURLFromSystemPath( aURL, sDocPathUrl );
     osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
@@ -343,7 +348,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
 
     SolarMutexGuard aGuard;
 
-    OUString aURL = getAbsoluteURL(pURL);
+    OUString aURL(getAbsoluteURL(pURL));
 
     pLib->maLastExceptionMsg.clear();
 
@@ -409,7 +414,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
     OUString sFormat = getUString(pFormat);
-    OUString aURL = getAbsoluteURL(sUrl);
+    OUString aURL(getAbsoluteURL(sUrl));
 
     try
     {
