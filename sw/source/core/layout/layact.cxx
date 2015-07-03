@@ -1260,7 +1260,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
         if ( !bNoPaint && IsPaint() && bAddRect && (pLay->IsCompletePaint() || bChanged) )
         {
             SwRect aPaint( pLay->Frm() );
-            // OD 13.02.2003 #i9719#, #105645# - consider border and shadow for
+            // #i9719# - consider border and shadow for
             // page frames -> enlarge paint rectangle correspondingly.
             if ( pLay->IsPageFrm() )
             {
@@ -1306,7 +1306,7 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
                 aFrmAtCompletePaint = pLay->Frm();
             }
 
-            // OD 13.02.2003 #i9719#, #105645# - provide paint of spacing
+            // #i9719# - provide paint of spacing
             // between pages (not only for in online mode).
             if ( pLay->IsPageFrm() )
             {

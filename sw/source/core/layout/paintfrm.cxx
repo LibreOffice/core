@@ -6027,7 +6027,7 @@ bool SwPageFrm::IsLeftShadowNeeded() const
 
 /**
  * Determine rectangle for bottom page shadow
- * OD 12.02.2003 for #i9719# and #105645#
+ * for #i9719#
  */
 /*static*/ void SwPageFrm::GetHorizontalShadowRect( const SwRect& _rPageRect,
                                                 const SwViewShell*    _pViewShell,
@@ -6090,7 +6090,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
 /**
  * Paint page border and shadow
  *
- * OD 12.02.2003 for #i9719# and #105645#
+ * for #i9719#
  * implement paint of page border and shadow
 */
 /*static*/ void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
@@ -6367,7 +6367,7 @@ static void lcl_paintBitmapExToRect(vcl::RenderContext *pOut, const Point& aPoin
 /**
  * Get bound rectangle of border and shadow for repaints
  *
- * OD 12.02.2003 for #i9719# and #105645#
+ * for #i9719#
  */
 /*static*/ void SwPageFrm::GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
                                                         const SwViewShell*    _pViewShell,

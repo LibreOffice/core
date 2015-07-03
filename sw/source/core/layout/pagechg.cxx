@@ -257,7 +257,7 @@ void SwPageFrm::DestroyImpl()
                 pImp->SetFirstVisPageInvalid();
                 if ( pImp->IsAction() )
                     pImp->GetLayAction().SetAgain();
-                // OD 12.02.2003 #i9719#, #105645# - retouche area of page
+                // #i9719# - retouche area of page
                 // including border and shadow area.
                 const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT);
                 SwRect aRetoucheRect;
@@ -621,7 +621,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             // cleanup Window
             if( pSh && pSh->GetWin() && aOldPageFrmRect.HasArea() )
             {
-                // OD 12.02.2003 #i9719#, #105645# - consider border and shadow of
+                // #i9719# - consider border and shadow of
                 // page frame for determine 'old' rectangle - it's used for invalidating.
                 const bool bRightSidebar = (SidebarPosition() == sw::sidebarwindows::SidebarPosition::RIGHT);
                 SwRect aOldRectWithBorderAndShadow;
