@@ -539,7 +539,11 @@ GLXFBConfig OpenGLHelper::GetPixmapFBConfig( Display* pDisplay, bool& bInverted 
         }
 
         glXGetFBConfigAttrib( pDisplay, aFbConfigs[i], GLX_Y_INVERTED_EXT, &nValue );
-        bInverted = nValue == True;
+
+        // Looks like that X sends GLX_DONT_CARE but this usually means "true" for most
+        // of the X implementations. Investigation on internet pointed that this could be
+        // safely "true" all the time (for example gnome-shell always assumes "true").
+        bInverted = nValue == True || nValue == int(GLX_DONT_CARE);
 
         break;
     }
