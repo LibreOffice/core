@@ -250,6 +250,10 @@ sal_Int16 SAL_CALL KDE4FilePicker::execute()
 
     _dialog->clearFilter();
     _dialog->setFilter(_filter);
+
+    if(!_currentFilter.isNull())
+        _dialog->filterWidget()->setCurrentItem(_currentFilter);
+
     _dialog->filterWidget()->setEditable(false);
 
     VCLKDEApplication::preDialogSetup();
@@ -384,9 +388,7 @@ void SAL_CALL KDE4FilePicker::setCurrentFilter( const OUString &title )
         return Q_EMIT setCurrentFilterSignal( title );
     }
 
-    QString t = toQString(title);
-    t.replace("/", "\\/");
-    _dialog->filterWidget()->setCurrentFilter(t);
+    _currentFilter = toQString(title);
 }
 
 OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
@@ -633,6 +635,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     }
 
     _filter.clear();
+    _currentFilter.clear();
 
     // parameter checking
     uno::Any arg;
