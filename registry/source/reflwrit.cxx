@@ -1356,26 +1356,66 @@ static TypeWriterImpl TYPEREG_CALLTYPE createEntry(
     return t;
 }
 
-RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api()
-{
-    static RegistryTypeWriter_Api aApi= {0,0,0,0,0,0};
-    if (!aApi.acquire)
-    {
-        aApi.createEntry        = &createEntry;
-        aApi.acquire            = &acquire;
-        aApi.release            = &release;
-        aApi.setFieldData       = &setFieldData;
-        aApi.getBlop            = &getBlop;
-        aApi.getBlopSize        = &getBlopSize;
-
-        return (&aApi);
-    }
-    else
-    {
-        return (&aApi);
-    }
 }
 
+RegistryTypeWriter::RegistryTypeWriter(RTTypeClass               RTTypeClass,
+                                              const rtl::OUString&    typeName,
+                                              const rtl::OUString&    superTypeName,
+                                              sal_uInt16                fieldCount,
+                                              sal_uInt16                methodCount,
+                                              sal_uInt16                referenceCount)
+    : m_hImpl(NULL)
+{
+    m_hImpl = createEntry(RTTypeClass,
+                                  typeName.pData,
+                                  superTypeName.pData,
+                                  fieldCount,
+                                  methodCount,
+                                  referenceCount);
+}
+
+RegistryTypeWriter::RegistryTypeWriter(const RegistryTypeWriter& toCopy)
+    : m_hImpl(toCopy.m_hImpl)
+{
+    acquire(m_hImpl);
+}
+
+RegistryTypeWriter::~RegistryTypeWriter()
+{
+    release(m_hImpl);
+}
+
+RegistryTypeWriter& RegistryTypeWriter::operator == (const RegistryTypeWriter& toAssign)
+{
+    if (m_hImpl != toAssign.m_hImpl)
+    {
+        release(m_hImpl);
+        m_hImpl = toAssign.m_hImpl;
+        acquire(m_hImpl);
+    }
+
+    return *this;
+}
+
+void RegistryTypeWriter::setFieldData( sal_uInt16              index,
+                                              const rtl::OUString&    name,
+                                              const rtl::OUString&    typeName,
+                                              const rtl::OUString&    doku,
+                                              const rtl::OUString&    fileName,
+                                              RTFieldAccess           access,
+                                              const RTConstValue&     constValue)
+{
+    ::setFieldData(m_hImpl, index, name.pData, typeName.pData, doku.pData, fileName.pData, access, constValue.m_type, constValue.m_value);
+}
+
+const sal_uInt8* RegistryTypeWriter::getBlop()
+{
+    return ::getBlop(m_hImpl);
+}
+
+sal_uInt32 RegistryTypeWriter::getBlopSize()
+{
+    return ::getBlopSize(m_hImpl);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

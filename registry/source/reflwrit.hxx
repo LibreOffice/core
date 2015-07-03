@@ -27,43 +27,10 @@
 /// Implememetation handle
 typedef void* TypeWriterImpl;
 
-/****************************************************************************
-
-    C-Api
-
-*****************************************************************************/
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/** specifies a collection of function pointers which represents the complete registry type writer C-API.
-
-    This funtions pointers are used by the C++ wrapper to call the C-API.
-*/
-struct RegistryTypeWriter_Api
-{
-    TypeWriterImpl          (TYPEREG_CALLTYPE *createEntry)         (RTTypeClass, rtl_uString*, rtl_uString*, sal_uInt16, sal_uInt16, sal_uInt16);
-    void                    (TYPEREG_CALLTYPE *acquire)             (TypeWriterImpl);
-    void                    (TYPEREG_CALLTYPE *release)             (TypeWriterImpl);
-    void                    (TYPEREG_CALLTYPE *setFieldData)        (TypeWriterImpl, sal_uInt16, rtl_uString*, rtl_uString*, rtl_uString*, rtl_uString*, RTFieldAccess, RTValueType, RTConstValueUnion);
-    const sal_uInt8*        (TYPEREG_CALLTYPE *getBlop)             (TypeWriterImpl);
-    sal_uInt32              (TYPEREG_CALLTYPE *getBlopSize)         (TypeWriterImpl);
-};
-
-/** the API initialization function.
-*/
-RegistryTypeWriter_Api* TYPEREG_CALLTYPE initRegistryTypeWriter_Api();
-
-#ifdef __cplusplus
-}
-#endif
-
 /** RegistryTypeWriter writes/creates a binary type blob.
 
     This class provides the necessary functions to write type information
     for all kinds of types into a blob.
-    The class is inline and use a C-Api.
 
     @deprecated
     use typereg::Writer instead
@@ -84,7 +51,7 @@ public:
         @param referenceCount specifies the number of references (eg. number of supported interfaces,
                               exported services ...)
      */
-    inline RegistryTypeWriter(RTTypeClass               RTTypeClass,
+    RegistryTypeWriter(RTTypeClass               RTTypeClass,
                               const rtl::OUString&    typeName,
                               const rtl::OUString&    superTypeName,
                               sal_uInt16                fieldCount,
@@ -92,16 +59,16 @@ public:
                               sal_uInt16                referenceCount);
 
     /// Copy constructcor
-    inline RegistryTypeWriter(const RegistryTypeWriter& toCopy);
+    RegistryTypeWriter(const RegistryTypeWriter& toCopy);
 
     /** Destructor. The Destructor frees the internal data block.
 
         The pointer (returned by getBlop) will be set to NULL.
      */
-    inline ~RegistryTypeWriter();
+    ~RegistryTypeWriter();
 
     /// Assign operator
-    inline RegistryTypeWriter& operator == (const RegistryTypeWriter& toAssign);
+    RegistryTypeWriter& operator == (const RegistryTypeWriter& toAssign);
 
     /** sets the data for a field member of a type blob.
 
@@ -114,7 +81,7 @@ public:
         @param constValue specifies the value of the field. The value is only interesting
                           for enum values or constants.
      */
-    inline void setFieldData( sal_uInt16              index,
+    void setFieldData( sal_uInt16              index,
                               const rtl::OUString&    name,
                               const rtl::OUString&    typeName,
                               const rtl::OUString&    doku,
@@ -127,85 +94,17 @@ public:
         The pointer will be invalid (NULL) if the instance of
         the RegistryTypeWriter will be destroyed.
      */
-    inline const sal_uInt8*     getBlop();
+    const sal_uInt8*     getBlop();
 
     /** returns the size of the new type blob in bytes.
      */
-    inline sal_uInt32       getBlopSize();
+    sal_uInt32       getBlopSize();
 
 protected:
 
-    /// stores the registry type writer Api.
-    const RegistryTypeWriter_Api*                                m_pApi;
     /// stores the handle of an implementation class
     TypeWriterImpl                                               m_hImpl;
 };
-
-
-
-inline RegistryTypeWriter::RegistryTypeWriter(RTTypeClass               RTTypeClass,
-                                              const rtl::OUString&    typeName,
-                                              const rtl::OUString&    superTypeName,
-                                              sal_uInt16                fieldCount,
-                                              sal_uInt16                methodCount,
-                                              sal_uInt16                referenceCount)
-    : m_pApi(initRegistryTypeWriter_Api())
-    , m_hImpl(NULL)
-{
-    m_hImpl = m_pApi->createEntry(RTTypeClass,
-                                  typeName.pData,
-                                  superTypeName.pData,
-                                  fieldCount,
-                                  methodCount,
-                                  referenceCount);
-}
-
-
-inline RegistryTypeWriter::RegistryTypeWriter(const RegistryTypeWriter& toCopy)
-    : m_pApi(toCopy.m_pApi)
-    , m_hImpl(toCopy.m_hImpl)
-{
-    m_pApi->acquire(m_hImpl);
-}
-
-inline RegistryTypeWriter::~RegistryTypeWriter()
-{
-    m_pApi->release(m_hImpl);
-}
-
-inline RegistryTypeWriter& RegistryTypeWriter::operator == (const RegistryTypeWriter& toAssign)
-{
-    if (m_hImpl != toAssign.m_hImpl)
-    {
-        m_pApi->release(m_hImpl);
-        m_hImpl = toAssign.m_hImpl;
-        m_pApi->acquire(m_hImpl);
-    }
-
-    return *this;
-}
-
-inline void RegistryTypeWriter::setFieldData( sal_uInt16              index,
-                                              const rtl::OUString&    name,
-                                              const rtl::OUString&    typeName,
-                                              const rtl::OUString&    doku,
-                                              const rtl::OUString&    fileName,
-                                              RTFieldAccess           access,
-                                              const RTConstValue&     constValue)
-{
-    m_pApi->setFieldData(m_hImpl, index, name.pData, typeName.pData, doku.pData, fileName.pData, access, constValue.m_type, constValue.m_value);
-}
-
-inline const sal_uInt8* RegistryTypeWriter::getBlop()
-{
-    return m_pApi->getBlop(m_hImpl);
-}
-
-inline sal_uInt32 RegistryTypeWriter::getBlopSize()
-{
-    return m_pApi->getBlopSize(m_hImpl);
-}
-
 
 #endif
 
