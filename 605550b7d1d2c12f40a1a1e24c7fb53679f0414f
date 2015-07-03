@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_1bc106e5",
+        "filename": "setup_native/source/win32/wintools/msidb/msidb.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-07-03T16:33:51Z",
+      "side": 1,
+      "message": "overwrite",
+      "revId": "605550b7d1d2c12f40a1a1e24c7fb53679f0414f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
