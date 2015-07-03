@@ -58,6 +58,7 @@ public:
     Link<>          GetPreSelectHdl() const { return aHighHdl; }
     void            SetPreSelectHdl( const Link<>& rHdl ) { aPreSelectHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
+    void            SetFont( const vcl::Font& rFont );
 
     svx::SvxShowCharSetItem*  ImplGetItem( int _nPos );
     int                         FirstInView() const;
@@ -108,11 +109,13 @@ private:
     sal_Int32       nSelectedIndex;
 
     FontCharMapPtr  mpFontCharMap;
+    Size            maFontSize;
     VclPtr<ScrollBar>  aVscrollSB;
 
     bool mbRecalculateFont  : 1;
     bool mbUpdateForeground : 1;
     bool mbUpdateBackground : 1;
+
 
 private:
     void            DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, int n2);
