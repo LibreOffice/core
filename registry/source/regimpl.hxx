@@ -23,7 +23,7 @@
 #include <set>
 #include <unordered_map>
 
-#include <registry/registry.h>
+#include <registry.h>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <store/store.hxx>

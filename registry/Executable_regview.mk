@@ -9,6 +9,11 @@
 
 $(eval $(call gb_Executable_Executable,regview))
 
+$(eval $(call gb_Executable_set_include,regview, \
+    $$(INCLUDE) \
+    -I$(SRCDIR)/registry/inc \
+))
+
 $(eval $(call gb_Executable_use_libraries,regview,\
     sal \
     reg \

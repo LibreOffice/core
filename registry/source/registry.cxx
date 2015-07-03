@@ -18,7 +18,7 @@
  */
 
 
-#include <registry/registry.h>
+#include <registry.h>
 #include <registry/registry.hxx>
 
 #include <osl/process.h>

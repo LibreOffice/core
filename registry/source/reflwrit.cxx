@@ -26,7 +26,7 @@
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 
-#include "registry/reflwrit.hxx"
+#include "reflwrit.hxx"
 #include "registry/version.h"
 #include "registry/writer.h"
 

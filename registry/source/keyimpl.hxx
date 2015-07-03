@@ -20,7 +20,7 @@
 #ifndef INCLUDED_REGISTRY_SOURCE_KEYIMPL_HXX
 #define INCLUDED_REGISTRY_SOURCE_KEYIMPL_HXX
 
-#include <registry/registry.h>
+#include <registry.h>
 #include "regimpl.hxx"
 #include <rtl/ustring.hxx>
 

@@ -17,10 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_REFLREAD_HXX
-#define INCLUDED_REGISTRY_REFLREAD_HXX
+#ifndef INCLUDED_REGISTRY_SOURCE_REFLREAD_HXX
+#define INCLUDED_REGISTRY_SOURCE_REFLREAD_HXX
 
-#include <registry/regdllapi.h>
 #include <registry/refltype.hxx>
 #include <registry/regtype.h>
 #include <rtl/ustring.hxx>
@@ -83,7 +82,7 @@ struct RegistryTypeReader_Api
 
 /** the API initialization function.
 */
-REG_DLLPUBLIC RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api();
+RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api();
 
 #ifdef __cplusplus
 }

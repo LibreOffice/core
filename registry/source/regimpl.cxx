@@ -31,9 +31,9 @@
 #include <unistd.h>
 #endif
 
-#include <registry/reflread.hxx>
+#include <reflread.hxx>
 
-#include <registry/reflwrit.hxx>
+#include <reflwrit.hxx>
 
 #include "registry/reader.hxx"
 #include "registry/refltype.hxx"
