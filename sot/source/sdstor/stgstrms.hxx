@@ -81,15 +81,13 @@ public:
     sal_Int32   GetStart() const { return nStart; }
     sal_Int32   GetSize() const  { return nSize;  }
     sal_Int32   GetPage() const  { return nPage;  }
-    short   GetPageSize() const { return nPageSize; }
     sal_Int32   GetPages() const { return ( nSize + nPageSize - 1 ) / nPageSize;}
-    short   GetOffset() const { return nOffset;}
-    void    SetEntry( StgDirEntry& );
+    short       GetOffset() const { return nOffset;}
+    void        SetEntry( StgDirEntry& );
     virtual bool SetSize( sal_Int32 );
     virtual bool Pos2Page( sal_Int32 nBytePos );
     virtual sal_Int32 Read( void*, sal_Int32 )        { return 0; }
     virtual sal_Int32 Write( const void*, sal_Int32 ) { return 0; }
-    virtual rtl::Reference< StgPage > GetPhysPage( sal_Int32 nBytePos, bool bForce = false );
     virtual bool IsSmallStrm() const { return false; }
 };
 
@@ -106,7 +104,6 @@ public:
     using StgStrm::GetPage;
     sal_Int32 GetPage( short, bool, sal_uInt16 *pnMasterAlloc = 0);
     virtual bool SetSize( sal_Int32 ) SAL_OVERRIDE;
-    virtual rtl::Reference< StgPage > GetPhysPage( sal_Int32 nBytePos, bool bForce = false ) SAL_OVERRIDE;
 };
 
 // The stream has a size increment which normally is 1, but which can be

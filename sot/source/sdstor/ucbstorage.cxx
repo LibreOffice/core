@@ -1350,15 +1350,6 @@ bool UCBStorageStream::ValidateMode( StreamMode m ) const
     return true;
 }
 
-const SvStream* UCBStorageStream::GetSvStream() const
-{
-    if( !pImp->Init() )
-        return NULL;
-
-    pImp->CopySourceToTemporary();
-    return pImp->m_pStream; // should not live longer then pImp!!!
-}
-
 SvStream* UCBStorageStream::GetModifySvStream()
 {
     return static_cast<SvStream*>(pImp);
@@ -1375,11 +1366,6 @@ bool UCBStorageStream::Commit()
     // mark this stream for sending it on root commit
     pImp->FlushData();
     return true;
-}
-
-bool UCBStorageStream::Revert()
-{
-    return pImp->Revert();
 }
 
 bool UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
@@ -2466,17 +2452,6 @@ const ClsId& UCBStorage::GetClassId() const
     return ( const ClsId& ) pImp->m_aClassId.GetCLSID();
 }
 
-void UCBStorage::SetConvertClass( const SvGlobalName & /*rConvertClass*/, SotClipboardFormatId /*nOriginalClipFormat*/, const OUString & /*rUserTypeName*/ )
-{
-    // ???
-}
-
-bool UCBStorage::ShouldConvert()
-{
-    // ???
-    return false;
-}
-
 SvGlobalName UCBStorage::GetClassName()
 {
     return  pImp->m_aClassId;
@@ -2994,40 +2969,6 @@ bool UCBStorage::Rename( const OUString& rEleName, const OUString& rNewName )
     return pElement != NULL;
 }
 
-bool UCBStorage::MoveTo( const OUString& rEleName, BaseStorage* pNewSt, const OUString& rNewName )
-{
-    if( rEleName.isEmpty() || rNewName.isEmpty() )
-        return false;
-
-    if ( pNewSt == static_cast<BaseStorage*>(this) && !FindElement_Impl( rNewName ) )
-    {
-        return Rename( rEleName, rNewName );
-    }
-    else
-    {
-/*
-        if ( PTR_CAST( UCBStorage, pNewSt ) )
-        {
-            // because the element is moved, not copied, a special optimization is possible :
-            // first copy the UCBStorageElement; flag old element as "Removed" and new as "Inserted",
-            // clear original name/type of the new element
-            // if moved element is open: copy content, but change absolute URL ( and those of all children of the element! ),
-            // clear original name/type of new content, keep the old original stream/storage, but forget its working streams,
-                // close original UCBContent and original stream, only the TempFile and its stream may remain unchanged, but now
-            // belong to the new content
-            // if original and editable stream are identical ( readonly element ), it has to be copied to the editable
-            // stream of the destination object
-            // Not implemented at the moment ( risky?! ), perhaps later
-        }
-*/
-        // MoveTo is done by first copying to the new destination and then removing the old element
-        bool bRet = CopyTo( rEleName, pNewSt, rNewName );
-        if ( bRet )
-            bRet = Remove( rEleName );
-        return bRet;
-    }
-}
-
 bool UCBStorage::ValidateFAT()
 {
     // ???
@@ -3052,13 +2993,6 @@ bool UCBStorage::ValidateMode( StreamMode m ) const
         return true;
 
     return true;
-}
-
-const SvStream* UCBStorage::GetSvStream() const
-{
-    // this would cause a complete download of the file
-    // as it looks, this method is NOT used inside of SOT, only exported by class SotStorage - but for what ???
-    return pImp->m_pSource;
 }
 
 bool UCBStorage::Equals( const BaseStorage& rStorage ) const

@@ -62,7 +62,6 @@ public:
     bool      Load( SvStream& );
     bool      Store( StgIo& );
     bool      Check();                      // check the signature and version
-    short     GetByteOrder() const          { return nByteOrder; }
     sal_Int32 GetTOCStart() const           { return nTOCstrm; }
     void      SetTOCStart( sal_Int32 n );
     sal_Int32 GetDataFATStart() const       { return nDataFAT; }
@@ -79,7 +78,6 @@ public:
     sal_Int32 GetMasters() const            { return nMaster; }
     void      SetMasters( sal_Int32 n );
     static short GetFAT1Size()              { return cFATPagesInHeader; }
-    const ClsId& GetClassId() const         { return aClsId;        }
     sal_Int32 GetFATPage( short ) const;
     void      SetFATPage( short, sal_Int32 );
 };
@@ -136,8 +134,6 @@ public:
     StgEntryType GetType() const            { return (StgEntryType) cType;  }
     sal_Int32   GetStartPage() const        { return nPage1; }
     void        SetType( StgEntryType t )   { cType = (sal_uInt8) t; }
-    sal_uInt8   GetFlags() const            { return cFlags; }
-    void        SetFlags( sal_uInt8 c )     { cFlags = c; }
     sal_Int32   GetSize() const             { return nSize; }
     void        SetSize( sal_Int32 n )      { nSize = n; }
     const ClsId& GetClassId() const         { return aClsId; }

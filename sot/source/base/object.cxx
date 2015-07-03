@@ -52,10 +52,6 @@ void * SotObject::CreateInstance( SotObject ** ppObj )
     return p;
 }
 
-const SotFactory * SotObject::GetSvFactory() const
-{
-    return ClassFactory();
-}
 
 void * SotObject::Cast( const SotFactory * pFact )
 {

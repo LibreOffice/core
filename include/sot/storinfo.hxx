@@ -46,7 +46,6 @@ public:
                                 , bStorage( bIsStorage )
                             {}
 
-    const SvGlobalName &    GetClassName() const { return aClassName; }
     const OUString &        GetName() const { return aName; }
     bool                    IsStream() const { return bStream; }
     bool                    IsStorage() const { return bStorage; }

@@ -62,7 +62,6 @@ private:
 public:
     static void *              CreateInstance( SotObject ** = NULL );
     static SotFactory *        ClassFactory();
-    virtual const SotFactory * GetSvFactory() const SAL_OVERRIDE;
     virtual void *             Cast( const SotFactory * ) SAL_OVERRIDE;
 
     virtual void        ResetError() SAL_OVERRIDE;
@@ -116,7 +115,6 @@ private:
 public:
     static void *              CreateInstance( SotObject ** = NULL );
     static SotFactory *        ClassFactory();
-    virtual const SotFactory * GetSvFactory() const SAL_OVERRIDE;
     virtual void *             Cast( const SotFactory * ) SAL_OVERRIDE;
 
     SvMemoryStream *    CreateMemoryStream();
@@ -139,7 +137,6 @@ public:
                             return m_nVersion;
                         }
 
-    sal_uLong           GetErrorCode() const { return m_nError; }
     sal_uLong           GetError() const { return ERRCODE_TOERROR(m_nError); }
     void                SetError( sal_uLong nErrorCode )
                         {
@@ -147,9 +144,7 @@ public:
                                 m_nError = nErrorCode;
                         }
 
-    bool                IsRoot() const              { return m_bIsRoot; }
     void                SignAsRoot( bool b = true ) { m_bIsRoot = b; }
-    void                SetDeleteStream( bool bDelete ) { m_bDelStm = bDelete; }
 
                         // own data sector
     void                SetClass( const SvGlobalName & rClass,

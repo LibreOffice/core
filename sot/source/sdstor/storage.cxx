@@ -76,11 +76,6 @@ void * SotStorageStream::CreateInstance( SotObject ** ppObj )
     return p;
 }
 
-const SotFactory * SotStorageStream::GetSvFactory() const
-{
-    return ClassFactory();
-}
-
 void * SotStorageStream::Cast( const SotFactory * pFact )
 {
     void * pRet = NULL;
@@ -340,11 +335,6 @@ void * SotStorage::CreateInstance( SotObject ** ppObj )
     if( ppObj )
         *ppObj = pBasicObj;
     return p;
-}
-
-const SotFactory * SotStorage::GetSvFactory() const
-{
-    return ClassFactory();
 }
 
 void * SotStorage::Cast( const SotFactory * pFact )
