@@ -57,6 +57,7 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
 SvxShowCharSet::SvxShowCharSet(vcl::Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
     , m_pAccessible(nullptr)
+    , maFontSize(0, 0)
     , aVscrollSB( VclPtr<ScrollBar>::Create(this, WB_VERT) )
     , mbRecalculateFont(true)
     , mbUpdateForeground(true)
@@ -114,6 +115,7 @@ void SvxShowCharSet::StateChanged(StateChangedType nType)
     Invalidate();
 
     Control::StateChanged( nType );
+
 }
 
 
@@ -331,6 +333,12 @@ void SvxShowCharSet::Paint( vcl::RenderContext& rRenderContext, const Rectangle&
     DrawChars_Impl(rRenderContext, FirstInView(), LastInView());
 }
 
+void SvxShowCharSet::SetFont( const vcl::Font& rFont )
+{
+    Control::SetFont(rFont);
+    Invalidate();
+}
+
 void SvxShowCharSet::DeSelect()
 {
     Invalidate();
@@ -506,6 +514,14 @@ void SvxShowCharSet::InitSettings(vcl::RenderContext& rRenderContext)
 
         mbUpdateBackground = false;
     }
+
+    vcl::Font aFont(rRenderContext.GetFont());
+    aFont.SetWeight(WEIGHT_LIGHT);
+    aFont.SetAlign(ALIGN_TOP);
+    aFont.SetSize(maFontSize);
+    aFont.SetTransparent(true);
+    rRenderContext.SetFont(aFont);
+
 }
 
 
@@ -536,7 +552,8 @@ void SvxShowCharSet::RecalculateFont(vcl::RenderContext& rRenderContext)
     aFont.SetWeight(WEIGHT_LIGHT);
     aFont.SetAlign(ALIGN_TOP);
     int nFontHeight = (aSize.Height() - 5) * 2 / (3 * ROW_COUNT);
-    aFont.SetSize(rRenderContext.PixelToLogic(Size(0, nFontHeight)));
+    maFontSize = rRenderContext.PixelToLogic(Size(0, nFontHeight));
+    aFont.SetSize(maFontSize);
     aFont.SetTransparent(true);
     rRenderContext.SetFont(aFont);
     rRenderContext.GetFontCharMap(mpFontCharMap);
