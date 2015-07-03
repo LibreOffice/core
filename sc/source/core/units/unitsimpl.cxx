@@ -789,8 +789,9 @@ bool UnitsImpl::convertCellUnitsForColumnRange(const ScRange& rRange,
                 }
             }
 
-            bool bLocalAnnotationRequired = (aHeader.address && !rRange.In(*aHeader.address)) &&
-                (rOutputUnit != aHeader.unit);
+            bool bLocalAnnotationRequired = !aHeader.address || (
+                                            !rRange.In(*aHeader.address) &&
+                                            (rOutputUnit != aHeader.unit) );
             double nValue = pDoc->GetValue(aCurrent);
 
             if (!aLocalUnit.areConvertibleTo(rOutputUnit))
