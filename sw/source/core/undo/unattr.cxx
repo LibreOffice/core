@@ -480,9 +480,9 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         }
     }
 
+    SwDrawContact *pCont = NULL;
     if ( RES_DRAWFRMFMT == pFrameFormat->Which() ) {
-        SwDrawContact *pCont =
-            static_cast<SwDrawContact*>(pFrameFormat->FindContactObj());
+        pCont = static_cast<SwDrawContact*>(pFrameFormat->FindContactObj());
         // The Draw model also prepared an Undo object for its right positioning
         // which unfortunately is relative. Therefore block here a position
         // change of the Contact object by setting the anchor.
@@ -508,8 +508,13 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         pTextNd->InsertItem( aFormat, pPos->nContent.GetIndex(), 0 );
     }
 
-    if( RES_DRAWFRMFMT != pFrameFormat->Which() )
+    if (RES_DRAWFRMFMT != pFrameFormat->Which())
         pFrameFormat->MakeFrms();
+    else
+    {
+        SdrObject* pSdrObj = pFrameFormat->FindSdrObject();
+        pCont->GetAnchoredObj(pSdrObj)->MakeObjPos();
+    }
 
     rContext.SetSelections(pFrameFormat, 0);
 
