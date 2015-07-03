@@ -812,7 +812,7 @@ void XclImpAutoFilterData::CreateScDBData()
     // or if we need to create the Advanced Filter.
     if( bActive || bCriteria)
     {
-        ScDocument* pDoc = pExcRoot->pIR->GetDocPtr();
+        ScDocument& rDoc = pExcRoot->pIR->GetDocRef();
         OUString aNewName(STR_DB_LOCAL_NONAME);
         pCurrDBData = new ScDBData(aNewName , Tab(),
                                 StartCol(),StartRow(), EndCol(),EndRow() );
@@ -825,7 +825,7 @@ void XclImpAutoFilterData::CreateScDBData()
         }
         else
             pCurrDBData->SetAdvancedQuerySource(NULL);
-        pDoc->SetAnonymousDBData(Tab(), pCurrDBData);
+        rDoc.SetAnonymousDBData(Tab(), pCurrDBData);
     }
 
 }

@@ -686,8 +686,8 @@ public:
     }
 };
 
-SwUnoCrsr*SwXTextCursor::GetCursor()
-    { return &(*m_pImpl->m_pUnoCursor); }
+SwUnoCrsr& SwXTextCursor::GetCursor()
+    { return *m_pImpl->m_pUnoCursor; }
 
 SwPaM const* SwXTextCursor::GetPaM() const
     { return &(*m_pImpl->m_pUnoCursor); }

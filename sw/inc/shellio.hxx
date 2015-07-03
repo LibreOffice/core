@@ -387,11 +387,11 @@ protected:
     virtual sal_uLong WriteStream() = 0;
     void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
 
-    IDocumentSettingAccess* getIDocumentSettingAccess();
-    const IDocumentSettingAccess* getIDocumentSettingAccess() const;
+    IDocumentSettingAccess& getIDocumentSettingAccess();
+    const IDocumentSettingAccess& getIDocumentSettingAccess() const;
 
-    IDocumentStylePoolAccess* getIDocumentStylePoolAccess();
-    const IDocumentStylePoolAccess* getIDocumentStylePoolAccess() const;
+    IDocumentStylePoolAccess& getIDocumentStylePoolAccess();
+    const IDocumentStylePoolAccess& getIDocumentStylePoolAccess() const;
 
 public:
     SwDoc* pDoc;

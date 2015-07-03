@@ -34,6 +34,8 @@ public:
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitCXXMethodDecl(const CXXMethodDecl * decl);
+private:
+    std::string getFilename(SourceLocation loc);
 };
 
 bool ReturnByRef::VisitCXXMethodDecl(const CXXMethodDecl * functionDecl) {
@@ -64,13 +66,26 @@ bool ReturnByRef::VisitCXXMethodDecl(const CXXMethodDecl * functionDecl) {
         return true;
     }
 
+    std::string aFilename = getFilename(functionDecl->getCanonicalDecl()->getLocStart());
+    if (aFilename == SRCDIR "/include/o3tl/cow_wrapper.hxx")
+    {
+        return true;
+    }
+    if ( functionDecl->getNameAsString() == "operator->") {
+        return true;
+    }
+    /*
+    std::string aParentName = functionDecl->getParent()->getQualifiedNameAsString();
+    std::string fqn = aParentName + "::" + functionDecl->getNameAsString();
+    if (aFilename == "TextCharAttribList::GetAttrib") {
+        return true;
+    }*/
+
     /*
       The AST here looks like:
       -CompoundStmt
        `-ReturnStmt
           `-UnaryOperator
-            `-MemberExpr
-              `-CXXThisExpr
     */
 
     const CompoundStmt* compoundStmt = dyn_cast< CompoundStmt >( functionDecl->getBody() );
@@ -87,32 +102,31 @@ bool ReturnByRef::VisitCXXMethodDecl(const CXXMethodDecl * functionDecl) {
     if (unaryOperator == nullptr || unaryOperator->getOpcode() != UO_AddrOf) {
         return true;
     }
-
-    nextStmt = dyn_cast<Expr>(*unaryOperator->child_begin())->IgnoreParens();
-    const MemberExpr* memberExpr = dyn_cast<MemberExpr>(nextStmt);
-    if (memberExpr == nullptr) {
-        return true;
-    }
-
-    nextStmt = dyn_cast<Expr>(*memberExpr->child_begin())->IgnoreParens();
-    const CXXThisExpr* cXXThisExpr = dyn_cast<CXXThisExpr>(nextStmt);
-    if (cXXThisExpr == nullptr) {
-        return true;
-    }
-
+nextStmt->dump();
     report(
         DiagnosticsEngine::Warning,
-        "rather return by reference",
+        "rather return by reference ",
         functionDecl->getSourceRange().getBegin())
       << functionDecl->getSourceRange();
+
     // display the location of the class member declaration so I don't have to search for it by hand
-    report(
-        DiagnosticsEngine::Note,
-        "rather return by reference",
-        functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
-      << functionDecl->getCanonicalDecl()->getSourceRange();
+    auto otherLoc = functionDecl->getCanonicalDecl()->getSourceRange().getBegin();
+    if (otherLoc != functionDecl->getSourceRange().getBegin())
+    {
+        report(
+            DiagnosticsEngine::Note,
+            "rather return by reference",
+            functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
+          << functionDecl->getCanonicalDecl()->getSourceRange();
+    }
 
     return true;
+}
+
+std::string ReturnByRef::getFilename(SourceLocation loc)
+{
+    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(loc);
+    return compiler.getSourceManager().getFilename(spellingLocation);
 }
 
 loplugin::Plugin::Registration< ReturnByRef > X("returnbyref");

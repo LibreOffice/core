@@ -46,7 +46,7 @@ using namespace ::com::sun::star;
 void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf, SwTextFrm* pFrm )
 {
     // during HTML-Import it can happen, that no layout exists
-    SwRootFrm* pRootFrm = rTextNode.getIDocumentLayoutAccess()->GetCurrentLayout();
+    SwRootFrm* pRootFrm = rTextNode.getIDocumentLayoutAccess().GetCurrentLayout();
     pShell = pRootFrm ? pRootFrm->GetCurrShell() : 0;
 
     pScriptInfo = &rScrInf;
@@ -126,13 +126,13 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     nStartIndex = nEndIndex = nPos = nChgCnt = 0;
     nPropFont = 0;
     SwDoc* pDoc = rTextNode.GetDoc();
-    const IDocumentRedlineAccess* pIDRA = rTextNode.getIDocumentRedlineAccess();
+    const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
 
     const SwExtTextInput* pExtInp = pDoc->GetExtTextInput( rTextNode );
-    const bool bShow = IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() );
+    const bool bShow = IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() );
     if( pExtInp || bShow )
     {
-        const sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTextNode, USHRT_MAX );
+        const sal_uInt16 nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
         if( pExtInp || USHRT_MAX != nRedlPos )
         {
             const std::vector<sal_uInt16> *pArr = 0;

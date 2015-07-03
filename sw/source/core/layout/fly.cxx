@@ -276,7 +276,7 @@ SwFlyFrm::~SwFlyFrm()
 {
 }
 
-const IDocumentDrawModelAccess* SwFlyFrm::getIDocumentDrawModelAccess()
+const IDocumentDrawModelAccess& SwFlyFrm::getIDocumentDrawModelAccess()
 {
     return GetFormat()->getIDocumentDrawModelAccess();
 }
@@ -389,7 +389,7 @@ SwVirtFlyDrawObj* SwFlyFrm::CreateNewRef( SwFlyDrawContact *pContact )
     // into drawing page with correct order number
     else
     {
-        pContact->GetFormat()->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 )->
+        pContact->GetFormat()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )->
                         InsertObject( pDrawObj, _GetOrdNumForNewRef( pContact ) );
     }
     // #i38889# - assure, that new <SwVirtFlyDrawObj> instance
@@ -403,13 +403,13 @@ void SwFlyFrm::InitDrawObj( bool bNotify )
     // Find ContactObject from the Format. If there's already one, we just
     // need to create a new Ref, else we create the Contact now.
 
-    IDocumentDrawModelAccess* pIDDMA = GetFormat()->getIDocumentDrawModelAccess();
+    IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
     SwFlyDrawContact *pContact = SwIterator<SwFlyDrawContact,SwFormat>( *GetFormat() ).First();
     if ( !pContact )
     {
         // #i52858# - method name changed
         pContact = new SwFlyDrawContact( GetFormat(),
-                                          pIDDMA->GetOrCreateDrawModel() );
+                                          rIDDMA.GetOrCreateDrawModel() );
     }
     OSL_ENSURE( pContact, "InitDrawObj failed" );
     // OD 2004-03-22 #i26791#
@@ -417,8 +417,8 @@ void SwFlyFrm::InitDrawObj( bool bNotify )
 
     // Set the right Layer
     // OD 2004-01-19 #110582#
-    SdrLayerID nHeavenId = pIDDMA->GetHeavenId();
-    SdrLayerID nHellId = pIDDMA->GetHellId();
+    SdrLayerID nHeavenId = rIDDMA.GetHeavenId();
+    SdrLayerID nHellId = rIDDMA.GetHellId();
     // OD 2004-03-22 #i26791#
     GetVirtDrawObj()->SetLayer( GetFormat()->GetOpaque().GetValue()
                                 ? nHeavenId
@@ -895,10 +895,10 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
 
             if ( pSh )
                 pSh->InvalidateWindows( Frm() );
-            const IDocumentDrawModelAccess* pIDDMA = GetFormat()->getIDocumentDrawModelAccess();
+            const IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
             const sal_uInt8 nId = GetFormat()->GetOpaque().GetValue() ?
-                             pIDDMA->GetHeavenId() :
-                             pIDDMA->GetHellId();
+                             rIDDMA.GetHeavenId() :
+                             rIDDMA.GetHellId();
             GetVirtDrawObj()->SetLayer( nId );
 
             if ( Lower() )
@@ -976,10 +976,10 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 if ( pSh )
                     pSh->InvalidateWindows( Frm() );
 
-                const IDocumentDrawModelAccess* pIDDMA = GetFormat()->getIDocumentDrawModelAccess();
+                const IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
                 const sal_uInt8 nId = static_cast<const SvxOpaqueItem*>(pNew)->GetValue() ?
-                                    pIDDMA->GetHeavenId() :
-                                    pIDDMA->GetHellId();
+                                    rIDDMA.GetHeavenId() :
+                                    rIDDMA.GetHellId();
                 GetVirtDrawObj()->SetLayer( nId );
                 if( pSh )
                 {
@@ -1595,7 +1595,7 @@ void CalcContent( SwLayoutFrm *pLay,
 
                 // OD 2004-05-17 #i28701# - format anchor frame after its objects
                 // are formatted, if the wrapping style influence has to be considered.
-                if ( pLay->GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+                if ( pLay->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
                 {
                     pFrm->Calc(pRenderContext);
                 }
@@ -2116,15 +2116,15 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
     // Assure the control objects and group objects containing controls are on the control layer
     if ( ::CheckControlLayer( _rNewObj.DrawObj() ) )
     {
-        const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
+        const IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
         const SdrLayerID aCurrentLayer(_rNewObj.DrawObj()->GetLayer());
-        const SdrLayerID aControlLayerID(pIDDMA->GetControlsId());
-        const SdrLayerID aInvisibleControlLayerID(pIDDMA->GetInvisibleControlsId());
+        const SdrLayerID aControlLayerID(rIDDMA.GetControlsId());
+        const SdrLayerID aInvisibleControlLayerID(rIDDMA.GetInvisibleControlsId());
 
         if(aCurrentLayer != aControlLayerID && aCurrentLayer != aInvisibleControlLayerID)
         {
-            if ( aCurrentLayer == pIDDMA->GetInvisibleHellId() ||
-                 aCurrentLayer == pIDDMA->GetInvisibleHeavenId() )
+            if ( aCurrentLayer == rIDDMA.GetInvisibleHellId() ||
+                 aCurrentLayer == rIDDMA.GetInvisibleHeavenId() )
             {
                 _rNewObj.DrawObj()->SetLayer(aInvisibleControlLayerID);
             }

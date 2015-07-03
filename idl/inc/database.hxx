@@ -113,7 +113,7 @@ public:
                                     const OString& rErrorText,
                                     sal_uLong nRow = 0, sal_uLong nColumn = 0 );
     void                    WriteError( SvTokenStream & rInStm );
-    void                    SetError( const OString& rError, SvToken * pTok );
+    void                    SetError( const OString& rError, SvToken& rTok );
     void                    Push( SvMetaObject * pObj );
     bool                    Pop( bool bOk, SvTokenStream & rInStm, sal_uInt32 nTokPos )
                             {

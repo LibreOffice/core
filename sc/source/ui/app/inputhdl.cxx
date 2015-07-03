@@ -333,16 +333,16 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
     ScTabViewShell* pDocView = pRefViewSh ? pRefViewSh : pActiveViewSh;
     if ( pDocView && pRangeFindList && nIndex < pRangeFindList->Count() )
     {
-        ScRangeFindData* pData = pRangeFindList->GetObject( nIndex );
-        sal_Int32 nOldStart = pData->nSelStart;
-        sal_Int32 nOldEnd = pData->nSelEnd;
+        ScRangeFindData& rData = pRangeFindList->GetObject( nIndex );
+        sal_Int32 nOldStart = rData.nSelStart;
+        sal_Int32 nOldEnd = rData.nSelEnd;
         ColorData nNewColor = pRangeFindList->FindColor( rNew, nIndex );
 
         ScRange aJustified = rNew;
         aJustified.Justify(); // Always display Ref in the Formula the right way
         ScDocument* pDoc = pDocView->GetViewData().GetDocument();
         const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
-        OUString aNewStr(aJustified.Format(pData->nFlags, pDoc, aAddrDetails));
+        OUString aNewStr(aJustified.Format(rData.nFlags, pDoc, aAddrDetails));
         ESelection aOldSel( 0, nOldStart, 0, nOldEnd );
         SfxItemSet aSet( pEngine->GetEmptyItemSet() );
 
@@ -359,16 +359,16 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
 
         long nDiff = aNewStr.getLength() - (long)(nOldEnd-nOldStart);
 
-        pData->aRef = rNew;
-        pData->nSelEnd = pData->nSelEnd + nDiff;
-        pData->nColorData = nNewColor;
+        rData.aRef = rNew;
+        rData.nSelEnd = rData.nSelEnd + nDiff;
+        rData.nColorData = nNewColor;
 
         sal_uInt16 nCount = (sal_uInt16) pRangeFindList->Count();
         for (sal_uInt16 i=nIndex+1; i<nCount; i++)
         {
-            ScRangeFindData* pNext = pRangeFindList->GetObject( i );
-            pNext->nSelStart = pNext->nSelStart + nDiff;
-            pNext->nSelEnd   = pNext->nSelEnd   + nDiff;
+            ScRangeFindData& rNext = pRangeFindList->GetObject( i );
+            rNext.nSelStart = rNext.nSelStart + nDiff;
+            rNext.nSelEnd   = rNext.nSelEnd   + nDiff;
         }
 
         EditView* pActiveView = pTopView ? pTopView : pTableView;

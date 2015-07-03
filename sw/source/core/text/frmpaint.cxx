@@ -122,7 +122,7 @@ SwExtraPainter::SwExtraPainter( const SwTextFrm *pFrm, SwViewShell *pVwSh,
         */
         nDivider = !rLineInf.GetDivider().isEmpty() ? rLineInf.GetDividerCountBy() : 0;
         nX = pFrm->Frm().Left();
-        SwCharFormat* pFormat = rLineInf.GetCharFormat( const_cast<IDocumentStylePoolAccess&>(*pFrm->GetNode()->getIDocumentStylePoolAccess()) );
+        SwCharFormat* pFormat = rLineInf.GetCharFormat( const_cast<IDocumentStylePoolAccess&>(pFrm->GetNode()->getIDocumentStylePoolAccess()) );
         OSL_ENSURE( pFormat, "PaintExtraData without CharFormat" );
         pFnt = new SwFont( &pFormat->GetAttrSet(), pFrm->GetTextNode()->getIDocumentSettingAccess() );
         pFnt->Invalidate();
@@ -285,13 +285,13 @@ void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
         return;
 
     const SwTextNode& rTextNode = *GetTextNode();
-    const IDocumentRedlineAccess* pIDRA = rTextNode.getIDocumentRedlineAccess();
+    const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
     const SwLineNumberInfo &rLineInf = rTextNode.GetDoc()->GetLineNumberInfo();
     const SwFormatLineNumber &rLineNum = GetAttrSet()->GetLineNumber();
     bool bLineNum = !IsInTab() && rLineInf.IsPaintLineNumbers() &&
                ( !IsInFly() || rLineInf.IsCountInFlys() ) && rLineNum.IsCount();
     sal_Int16 eHor = (sal_Int16)SW_MOD()->GetRedlineMarkPos();
-    if( eHor != text::HoriOrientation::NONE && !IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
+    if( eHor != text::HoriOrientation::NONE && !IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
         eHor = text::HoriOrientation::NONE;
     bool bRedLine = eHor != text::HoriOrientation::NONE;
     if ( bLineNum || bRedLine )
@@ -384,7 +384,7 @@ void SwTextFrm::PaintExtraData( const SwRect &rRect ) const
         }
         else
         {
-            if ( USHRT_MAX == pIDRA->GetRedlinePos(rTextNode, USHRT_MAX) )
+            if ( USHRT_MAX == rIDRA.GetRedlinePos(rTextNode, USHRT_MAX) )
                 bRedLine = false;
 
             if( bLineNum && rLineInf.IsCountBlankLines() &&
@@ -478,10 +478,10 @@ bool SwTextFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
                 pFnt = new SwFont( aFontAccess.Get()->GetFont() );
             }
 
-            const IDocumentRedlineAccess* pIDRA = rTextNode.getIDocumentRedlineAccess();
-            if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
+            const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
+            if( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
             {
-                const sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTextNode, USHRT_MAX );
+                const sal_uInt16 nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
                 if( USHRT_MAX != nRedlPos )
                 {
                     SwAttrHandler aAttrHandler;

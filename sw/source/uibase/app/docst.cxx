@@ -782,8 +782,8 @@ sal_uInt16 SwDocShell::Edit(
         // get one here.
         SwWrtShell* pCurrShell = (pActShell) ? pActShell : m_pWrtShell;
         if( ( HTMLMODE_ON & nHtmlMode ) &&
-            !pCurrShell->getIDocumentDeviceAccess()->getPrinter( false ) )
-            pCurrShell->InitPrt( pCurrShell->getIDocumentDeviceAccess()->getPrinter( true ) );
+            !pCurrShell->getIDocumentDeviceAccess().getPrinter( false ) )
+            pCurrShell->InitPrt( pCurrShell->getIDocumentDeviceAccess().getPrinter( true ) );
 
         PutItem(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
         FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));

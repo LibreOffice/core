@@ -349,8 +349,8 @@ const Size& SvLBoxItem::GetSize(const SvTreeListBox* pView, const SvTreeListEntr
 
 const Size& SvLBoxItem::GetSize(const SvViewDataEntry* pData, sal_uInt16 nItemPos)
 {
-    const SvViewDataItem* pIData = pData->GetItem(nItemPos);
-    return pIData->maSize;
+    const SvViewDataItem& rIData = pData->GetItem(nItemPos);
+    return rIData.maSize;
 }
 
 struct SvTreeListBoxImpl
@@ -800,8 +800,8 @@ void SvTreeListBox::RecalcViewData()
         sal_uInt16 nCurPos = 0;
         while ( nCurPos < nCount )
         {
-            SvLBoxItem* pItem = pEntry->GetItem( nCurPos );
-            pItem->InitViewData( this, pEntry );
+            SvLBoxItem& rItem = pEntry->GetItem( nCurPos );
+            rItem.InitViewData( this, pEntry );
             nCurPos++;
         }
         pEntry = Next( pEntry );
@@ -934,7 +934,7 @@ const SvViewDataItem* SvTreeListBox::GetViewDataItem(const SvTreeListEntry* pEnt
     const SvViewDataEntry* pEntryData = SvListView::GetViewData(pEntry);
     DBG_ASSERT(pEntryData,"Entry not in View");
     sal_uInt16 nItemPos = pEntry->GetPos(pItem);
-    return pEntryData->GetItem(nItemPos);
+    return &pEntryData->GetItem(nItemPos);
 }
 
 SvViewDataEntry* SvTreeListBox::CreateViewData( SvTreeListEntry* )
@@ -953,10 +953,9 @@ void SvTreeListBox::InitViewData( SvViewDataEntry* pData, SvTreeListEntry* pEntr
     sal_uInt16 nCurPos = 0;
     while( nCurPos < nCount )
     {
-        SvLBoxItem* pItem = pInhEntry->GetItem( nCurPos );
-        SvViewDataItem* pItemData = pEntryData->GetItem(nCurPos);
-        pItem->InitViewData( this, pInhEntry, pItemData );
-        pItemData++;
+        SvLBoxItem& rItem = pInhEntry->GetItem( nCurPos );
+        SvViewDataItem& rItemData = pEntryData->GetItem(nCurPos);
+        rItem.InitViewData( this, pInhEntry, &rItemData );
         nCurPos++;
     }
 }
@@ -1479,9 +1478,9 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
     while( nCur < nCount )
     {
         // MT: SV_ITEM_ID_EXTENDRLBOXSTRING / GetExtendText() was in use in IA2 cws, but only used in sc: ScSolverOptionsString. Needed?
-        SvLBoxItem* pItem = pEntry->GetItem( nCur );
-        if ( (pItem->GetType() == SV_ITEM_ID_LBOXSTRING ) &&
-             !static_cast<SvLBoxString*>( pItem )->GetText().isEmpty() )
+        SvLBoxItem& rItem = pEntry->GetItem( nCur );
+        if ( (rItem.GetType() == SV_ITEM_ID_LBOXSTRING ) &&
+             !static_cast<SvLBoxString&>( rItem ).GetText().isEmpty() )
         {
             //want the column header
             if (!headString.isEmpty())
@@ -1513,11 +1512,11 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
                     }
                     nHeaderCur++;
                 }
-                sRet += static_cast<SvLBoxString*>( pItem )->GetText();
+                sRet += static_cast<SvLBoxString&>( rItem ).GetText();
             }
             else
             {
-                sRet += static_cast<SvLBoxString*>( pItem )->GetText();
+                sRet += static_cast<SvLBoxString&>( rItem ).GetText();
                 sRet += ",";
             }
             //end want to the column header
@@ -2658,8 +2657,8 @@ void SvTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* pEntry )
     sal_uInt16 nCount = pEntry->ItemCount();
     for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++ )
     {
-        SvLBoxItem* pItem = pEntry->GetItem( nIdx );
-        pItem->InitViewData( this, pEntry, 0 );
+        SvLBoxItem& rItem = pEntry->GetItem( nIdx );
+        rItem.InitViewData( this, pEntry, 0 );
     }
 
     // repaint
@@ -2725,16 +2724,16 @@ void SvTreeListBox::ImplEditEntry( SvTreeListEntry* pEntry )
         long nTabPos, nNextTabPos = 0;
         for( sal_uInt16 i = 0 ; i < nCount ; i++ )
         {
-            SvLBoxItem* pTmpItem = pEntry->GetItem( i );
-            if (pTmpItem->GetType() != SV_ITEM_ID_LBOXSTRING)
+            SvLBoxItem& rTmpItem = pEntry->GetItem( i );
+            if (rTmpItem.GetType() != SV_ITEM_ID_LBOXSTRING)
                 continue;
 
-            SvLBoxTab* pTab = GetTab( pEntry, pTmpItem );
+            SvLBoxTab* pTab = GetTab( pEntry, &rTmpItem );
             nNextTabPos = -1;
             if( i < nCount - 1 )
             {
-                SvLBoxItem* pNextItem = pEntry->GetItem( i + 1 );
-                SvLBoxTab* pNextTab = GetTab( pEntry, pNextItem );
+                SvLBoxItem& rNextItem = pEntry->GetItem( i + 1 );
+                SvLBoxTab* pNextTab = GetTab( pEntry, &rNextItem );
                 nNextTabPos = pNextTab->GetPos();
             }
 
@@ -2743,7 +2742,7 @@ void SvTreeListBox::ImplEditEntry( SvTreeListEntry* pEntry )
                 nTabPos = pTab->GetPos();
                 if( !bIsMouseTriggered || (nClickX > nTabPos && (nNextTabPos == -1 || nClickX < nNextTabPos ) ) )
                 {
-                    pItem = static_cast<SvLBoxString*>( pTmpItem );
+                    pItem = &static_cast<SvLBoxString&>( rTmpItem );
                     break;
                 }
             }
@@ -2924,7 +2923,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, long nLine, vcl::Render
         SvLBoxTab* pTab = aTabs[nCurTab];
         sal_uInt16 nNextTab = nCurTab + 1;
         SvLBoxTab* pNextTab = nNextTab < nTabCount ? aTabs[nNextTab] : 0;
-        SvLBoxItem* pItem = nCurItem < nItemCount ? rEntry.GetItem(nCurItem) : 0;
+        SvLBoxItem* pItem = nCurItem < nItemCount ? &rEntry.GetItem(nCurItem) : 0;
 
         SvLBoxTabFlags nFlags = pTab->nFlags;
         Size aSize(SvLBoxItem::GetSize(pViewDataEntry, nCurItem));
@@ -3223,8 +3222,8 @@ Rectangle SvTreeListBox::GetFocusRect( SvTreeListEntry* pEntry, long nLine )
     {
         if( pTab && nCurTab < pEntry->ItemCount() )
         {
-            SvLBoxItem* pItem = pEntry->GetItem( nCurTab );
-            aSize.Width() = pItem->GetSize( this, pEntry ).Width();
+            SvLBoxItem& rItem = pEntry->GetItem( nCurTab );
+            aSize.Width() = rItem.GetSize( this, pEntry ).Width();
             if( !aSize.Width() )
                 aSize.Width() = 15;
             long nX = nTabPos; //GetTabPos( pEntry, pTab );
@@ -3305,7 +3304,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
     sal_uInt16 nTabCount = aTabs.size();
     sal_uInt16 nItemCount = pEntry->ItemCount();
     SvLBoxTab* pTab = aTabs.front();
-    SvLBoxItem* pItem = pEntry->GetItem(0);
+    SvLBoxItem& rItem = pEntry->GetItem(0);
     sal_uInt16 nNextItem = 1;
     nX -= GetMapMode().GetOrigin().X();
     long nRealWidth = pImp->GetOutputSize().Width();
@@ -3326,7 +3325,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
                 nNextTabPos += 50;
         }
 
-        Size aItemSize( pItem->GetSize(this, pEntry));
+        Size aItemSize( rItem.GetSize(this, pEntry));
         nStart += pTab->CalcOffset( aItemSize.Width(), nNextTabPos - nStart );
         long nLen = aItemSize.Width();
         if( pNextTab )
@@ -3341,7 +3340,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
 
         if( nX >= nStart && nX < (nStart+nLen ) )
         {
-            pItemClicked = pItem;
+            pItemClicked = &rItem;
             if( ppTab )
             {
                 *ppTab = pTab;
@@ -3351,7 +3350,7 @@ SvLBoxItem* SvTreeListBox::GetItem_Impl( SvTreeListEntry* pEntry, long nX,
         if( nNextItem >= nItemCount || nNextItem >= nTabCount)
             break;
         pTab = aTabs[ nNextItem ];
-        pItem = pEntry->GetItem( nNextItem );
+        rItem = pEntry->GetItem( nNextItem );
         nNextItem++;
     }
     return pItemClicked;
@@ -3370,8 +3369,8 @@ long SvTreeListBox::getPreferredDimensions(std::vector<long> &rWidths) const
             rWidths.resize(nCount);
         while (nCurPos < nCount)
         {
-            SvLBoxItem* pItem = pEntry->GetItem( nCurPos );
-            long nWidth = pItem->GetSize(this, pEntry).Width();
+            SvLBoxItem& rItem = pEntry->GetItem( nCurPos );
+            long nWidth = rItem.GetSize(this, pEntry).Width();
             if (nWidth)
             {
                 nWidth += SV_TAB_BORDER * 2;

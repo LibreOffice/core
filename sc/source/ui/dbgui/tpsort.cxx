@@ -841,7 +841,7 @@ void ScTabPageSortOptions::FillUserSortListBox()
         size_t nCount = pUserLists->size();
         if ( nCount > 0 )
             for ( size_t i=0; i<nCount; ++i )
-                m_pLbSortUser->InsertEntry( (*pUserLists)[i]->GetString() );
+                m_pLbSortUser->InsertEntry( (*pUserLists)[i].GetString() );
     }
 }
 

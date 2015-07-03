@@ -345,9 +345,9 @@ void ScDocShell::AfterXMLLoading(bool bRet)
                 size_t nDPCount = pDPCollection->GetCount();
                 for (size_t nDP=0; nDP<nDPCount; ++nDP)
                 {
-                    ScDPObject* pDPObj = (*pDPCollection)[nDP];
-                    if (pDPObj->GetName().isEmpty())
-                        pDPObj->SetName( pDPCollection->CreateNewName() );
+                    ScDPObject& rDPObj = (*pDPCollection)[nDP];
+                    if (rDPObj.GetName().isEmpty())
+                        rDPObj.SetName( pDPCollection->CreateNewName() );
                 }
             }
         }

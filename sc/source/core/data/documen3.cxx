@@ -338,8 +338,8 @@ ScDPObject* ScDocument::GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
     sal_uInt16 nCount = pDPCollection->GetCount();
     ScAddress aPos( nCol, nRow, nTab );
     for (sal_uInt16 i=0; i<nCount; i++)
-        if ( (*pDPCollection)[i]->GetOutRange().In( aPos ) )
-            return (*pDPCollection)[i];
+        if ( (*pDPCollection)[i].GetOutRange().In( aPos ) )
+            return &(*pDPCollection)[i];
 
     return NULL;
 }
@@ -353,8 +353,8 @@ ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
      * approximation of MS Excels 'most recent' effect. */
     sal_uInt16 i = pDPCollection->GetCount();
     while ( i-- > 0 )
-        if ( (*pDPCollection)[i]->GetOutRange().In( rBlock ) )
-            return (*pDPCollection)[i];
+        if ( (*pDPCollection)[i].GetOutRange().In( rBlock ) )
+            return &(*pDPCollection)[i];
 
     return NULL;
 }

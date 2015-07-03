@@ -691,8 +691,8 @@ void SwDocShell::SubInitNew()
 /*
  * Document Interface Access
  */
-IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return &m_pDoc->getIDocumentDeviceAccess(); }
-const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return &m_pDoc->getIDocumentSettingAccess(); }
-IDocumentChartDataProviderAccess* SwDocShell::getIDocumentChartDataProviderAccess() { return &m_pDoc->getIDocumentChartDataProviderAccess(); }
+IDocumentDeviceAccess& SwDocShell::getIDocumentDeviceAccess() { return m_pDoc->getIDocumentDeviceAccess(); }
+const IDocumentSettingAccess& SwDocShell::getIDocumentSettingAccess() const { return m_pDoc->getIDocumentSettingAccess(); }
+IDocumentChartDataProviderAccess& SwDocShell::getIDocumentChartDataProviderAccess() { return m_pDoc->getIDocumentChartDataProviderAccess(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

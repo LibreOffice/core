@@ -922,7 +922,7 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
     if ( Imp()->HasDrawView() )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
-        const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
+        const IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
         // correct type of <nControls>
         for ( size_t i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
@@ -945,7 +945,7 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
                 {
                     SwFormat *pFormat = static_cast<SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetFormat();
                     SvxOpaqueItem aOpa( pFormat->GetOpaque() );
-                    aOpa.SetValue(  nLayerId == pIDDMA->GetHellId() );
+                    aOpa.SetValue(  nLayerId == rIDDMA.GetHellId() );
                     pFormat->SetFormatAttr( aOpa );
                 }
             }
@@ -956,12 +956,12 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
 
 void SwFEShell::SelectionToHeaven()
 {
-    ChangeOpaque( getIDocumentDrawModelAccess()->GetHeavenId() );
+    ChangeOpaque( getIDocumentDrawModelAccess().GetHeavenId() );
 }
 
 void SwFEShell::SelectionToHell()
 {
-    ChangeOpaque( getIDocumentDrawModelAccess()->GetHellId() );
+    ChangeOpaque( getIDocumentDrawModelAccess().GetHellId() );
 }
 
 size_t SwFEShell::IsObjSelected() const
@@ -1125,13 +1125,13 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 
         if ( bRet && pObj )
         {
-            const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
+            const IDocumentDrawModelAccess& rIDDMA = getIDocumentDrawModelAccess();
             // #i89920#
             // Do not select object in background which is overlapping this text
             // at the given position.
             bool bObjInBackground( false );
             {
-                if ( pObj->GetLayer() == pIDDMA->GetHellId() )
+                if ( pObj->GetLayer() == rIDDMA.GetHellId() )
                 {
                     const SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
                     const SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
@@ -1198,7 +1198,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 
             if ( bRet )
             {
-                const SdrPage* pPage = pIDDMA->GetDrawModel()->GetPage(0);
+                const SdrPage* pPage = rIDDMA.GetDrawModel()->GetPage(0);
                 for(size_t a = pObj->GetOrdNum()+1; bRet && a < pPage->GetObjCount(); ++a)
                 {
                     SdrObject *pCandidate = pPage->GetObj(a);
@@ -1319,7 +1319,7 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
             // Here we are if
             // A  No object has been selected and no group has been entered or
             // B  An object has been selected and it is not inside a group
-            pList = getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 );
+            pList = getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 );
         }
 
         OSL_ENSURE( pList, "No object list to iterate" );
@@ -1758,10 +1758,10 @@ bool SwFEShell::ImpEndCreate()
         // via the available SS be generated.
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false); // see above
         // #i52858# - method name changed
-        SdrPage *pPg = getIDocumentDrawModelAccess()->GetOrCreateDrawModel()->GetPage( 0 );
+        SdrPage *pPg = getIDocumentDrawModelAccess().GetOrCreateDrawModel()->GetPage( 0 );
         if( !pPg )
         {
-            SdrModel* pTmpSdrModel = getIDocumentDrawModelAccess()->GetDrawModel();
+            SdrModel* pTmpSdrModel = getIDocumentDrawModelAccess().GetDrawModel();
             pPg = pTmpSdrModel->AllocPage( false );
             pTmpSdrModel->InsertPage( pPg );
         }
@@ -1827,7 +1827,7 @@ bool SwFEShell::ImpEndCreate()
         }
         SwFormatVertOrient aVert( nYOffset, text::VertOrientation::NONE, text::RelOrientation::FRAME );
         aSet.Put( aVert );
-        SwDrawFrameFormat* pFormat = static_cast<SwDrawFrameFormat*>(getIDocumentLayoutAccess()->MakeLayoutFormat( RND_DRAW_OBJECT, &aSet ));
+        SwDrawFrameFormat* pFormat = static_cast<SwDrawFrameFormat*>(getIDocumentLayoutAccess().MakeLayoutFormat( RND_DRAW_OBJECT, &aSet ));
         // #i36010# - set layout direction of the position
         pFormat->SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
@@ -2531,7 +2531,7 @@ void SwFEShell::CheckUnboundObjects()
 
             aSet.Put( aAnch );
             aSet.Put( SwFormatSurround( SURROUND_THROUGHT ) );
-            SwFrameFormat* pFormat = getIDocumentLayoutAccess()->MakeLayoutFormat( RND_DRAW_OBJECT, &aSet );
+            SwFrameFormat* pFormat = getIDocumentLayoutAccess().MakeLayoutFormat( RND_DRAW_OBJECT, &aSet );
 
             SwDrawContact *pContact = new SwDrawContact(
                                             static_cast<SwDrawFrameFormat*>(pFormat), pObj );

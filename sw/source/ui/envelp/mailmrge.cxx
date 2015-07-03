@@ -76,17 +76,16 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::ui::dialogs;
 
-struct SwMailMergeDlg_Impl
-{
+struct SwMailMergeDlg_Impl {
     uno::Reference<runtime::XFormController> xFController;
     uno::Reference<XSelectionChangeListener> xChgLstnr;
     uno::Reference<XSelectionSupplier> xSelSupp;
 };
 
 class SwXSelChgLstnr_Impl : public cppu::WeakImplHelper
-<
+    <
     view::XSelectionChangeListener
->
+    >
 {
     SwMailMergeDlg& rParent;
 public:
@@ -115,8 +114,7 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (Runtime
     rParent.m_pMarkedRB->Enable(bEnable);
     if(bEnable)
         rParent.m_pMarkedRB->Check();
-    else if(rParent.m_pMarkedRB->IsChecked())
-    {
+    else if(rParent.m_pMarkedRB->IsChecked()) {
         rParent.m_pAllRB->Check();
         rParent.m_aSelection.realloc(0);
     }
@@ -128,11 +126,11 @@ void SwXSelChgLstnr_Impl::disposing( const EventObject&  ) throw (RuntimeExcepti
 }
 
 SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
-        const OUString& rSourceName,
-        const OUString& rTableName,
-        sal_Int32 nCommandType,
-        const uno::Reference< XConnection>& _xConnection,
-        Sequence< Any >* pSelection) :
+                               const OUString& rSourceName,
+                               const OUString& rTableName,
+                               sal_Int32 nCommandType,
+                               const uno::Reference< XConnection>& _xConnection,
+                               Sequence< Any >* pSelection) :
 
     SvxStandardDialog(pParent, "MailmergeDialog", "modules/swriter/ui/mailmerge.ui"),
 
@@ -201,33 +199,25 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     aFilePos.X() -= (aFilePos.X() - aMailPos.X()) /2;
     m_pFileRB->SetPosPixel(aFilePos);
     uno::Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
-    if(pSelection)
-    {
+    if(pSelection) {
         m_aSelection = *pSelection;
         m_pBeamerWin->Show(false);
-    }
-    else
-    {
-        try
-        {
+    } else {
+        try {
             // create a frame wrapper for myself
             m_xFrame = frame::Frame::create( comphelper::getProcessComponentContext() );
             m_pUIBuilder->drop_ownership(m_pBeamerWin);
             m_xFrame->initialize( VCLUnoHelper::GetInterface ( m_pBeamerWin ) );
-        }
-        catch (const Exception&)
-        {
+        } catch (const Exception&) {
             m_xFrame.clear();
         }
-        if(m_xFrame.is())
-        {
+        if(m_xFrame.is()) {
             URL aURL;
             aURL.Complete = ".component:DB/DataSourceBrowser";
             uno::Reference<XDispatch> xD = m_xFrame->queryDispatch(aURL,
-                        "",
-                        0x0C);
-            if(xD.is())
-            {
+                                           "",
+                                           0x0C);
+            if(xD.is()) {
                 Sequence<PropertyValue> aProperties(3);
                 PropertyValue* pProperties = aProperties.getArray();
                 pProperties[0].Name = "DataSourceName";
@@ -241,12 +231,10 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
             }
             uno::Reference<XController> xController = m_xFrame->getController();
             pImpl->xFController = uno::Reference<runtime::XFormController>(xController, UNO_QUERY);
-            if(pImpl->xFController.is())
-            {
+            if(pImpl->xFController.is()) {
                 uno::Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
                 pImpl->xSelSupp = uno::Reference<XSelectionSupplier>(xCtrl, UNO_QUERY);
-                if(pImpl->xSelSupp.is())
-                {
+                if(pImpl->xSelSupp.is()) {
                     pImpl->xChgLstnr = new SwXSelChgLstnr_Impl(*this);
                     pImpl->xSelSupp->addSelectionChangeListener(  pImpl->xChgLstnr );
                 }
@@ -308,8 +296,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     m_pAddressFieldLB->SelectEntry("EMAIL");
 
     OUString sPath(pModOpt->GetMailingPath());
-    if(sPath.isEmpty())
-    {
+    if(sPath.isEmpty()) {
         SvtPathOptions aPathOpt;
         sPath = aPathOpt.GetWorkPath();
     }
@@ -319,11 +306,9 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     else
         m_pPathED->SetText(aURL.GetFull());
 
-    if (!bColumn )
-    {
+    if (!bColumn ) {
         m_pColumnLB->SelectEntry("NAME");
-    }
-    else
+    } else
         m_pColumnLB->SelectEntry(pModOpt->GetNameFromColumn());
 
     if (m_pAddressFieldLB->GetSelectEntryCount() == 0)
@@ -335,27 +320,24 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     m_pMarkedRB->Enable(bEnable);
     if (bEnable)
         m_pMarkedRB->Check();
-    else
-    {
+    else {
         m_pAllRB->Check();
         m_pMarkedRB->Enable(false);
     }
     SetMinOutputSizePixel(m_aDialogSize);
-    try
-    {
+    try {
         uno::Reference< container::XNameContainer> xFilterFactory(
-                xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY_THROW);
+            xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY_THROW);
         uno::Reference< container::XContainerQuery > xQuery(xFilterFactory, UNO_QUERY_THROW);
         const OUString sCommand("matchByDocumentService=com.sun.star.text.TextDocument:iflags="
-            + OUString::number(static_cast<sal_Int32>(SfxFilterFlags::EXPORT))
-            + ":eflags="
-            + OUString::number(static_cast<sal_Int32>(SfxFilterFlags::NOTINFILEDLG))
-            + ":default_first");
+                                + OUString::number(static_cast<sal_Int32>(SfxFilterFlags::EXPORT))
+                                + ":eflags="
+                                + OUString::number(static_cast<sal_Int32>(SfxFilterFlags::NOTINFILEDLG))
+                                + ":default_first");
         uno::Reference< container::XEnumeration > xList = xQuery->createSubSetEnumerationByQuery(sCommand);
         const OUString sName("Name");
         sal_Int32 nODT = -1;
-        while(xList->hasMoreElements())
-        {
+        while(xList->hasMoreElements()) {
             comphelper::SequenceAsHashMap aFilter(xList->nextElement());
             const OUString sFilter = aFilter.getUnpackedValueOrDefault(sName, OUString());
 
@@ -364,16 +346,13 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
             aProps >>= aFilterProperties;
             OUString sUIName2;
             const beans::PropertyValue* pFilterProperties = aFilterProperties.getConstArray();
-            for(sal_Int32 nProp = 0; nProp < aFilterProperties.getLength(); ++nProp)
-            {
-                if(pFilterProperties[nProp].Name == "UIName")
-                {
+            for(sal_Int32 nProp = 0; nProp < aFilterProperties.getLength(); ++nProp) {
+                if(pFilterProperties[nProp].Name == "UIName") {
                     pFilterProperties[nProp].Value >>= sUIName2;
                     break;
                 }
             }
-            if( !sUIName2.isEmpty() )
-            {
+            if( !sUIName2.isEmpty() ) {
                 const sal_Int32 nFilter = m_pFilterLB->InsertEntry( sUIName2 );
                 if( sFilter == "writer8" )
                     nODT = nFilter;
@@ -381,9 +360,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
             }
         }
         m_pFilterLB->SelectEntryPos( nODT );
-    }
-    catch (const uno::Exception&)
-    {
+    } catch (const uno::Exception&) {
     }
 }
 
@@ -394,14 +371,12 @@ SwMailMergeDlg::~SwMailMergeDlg()
 
 void SwMailMergeDlg::dispose()
 {
-    if(m_xFrame.is())
-    {
+    if(m_xFrame.is()) {
         m_xFrame->setComponent(NULL, NULL);
         m_xFrame->dispose();
     }
 
-    for( sal_Int32 nFilter = 0; nFilter < m_pFilterLB->GetEntryCount(); ++nFilter )
-    {
+    for( sal_Int32 nFilter = 0; nFilter < m_pFilterLB->GetEntryCount(); ++nFilter ) {
         OUString* pData = static_cast< OUString* >( m_pFilterLB->GetEntryData(nFilter) );
         delete pData;
     }
@@ -447,8 +422,7 @@ void SwMailMergeDlg::Apply()
 
 IMPL_LINK( SwMailMergeDlg, ButtonHdl, Button *, pBtn )
 {
-    if (pBtn == m_pOkBTN)
-    {
+    if (pBtn == m_pOkBTN) {
         if( ExecQryShell() )
             EndDialog(RET_OK);
     }
@@ -464,12 +438,9 @@ IMPL_LINK( SwMailMergeDlg, OutputTypeHdl, RadioButton *, pBtn )
     m_pSaveSingleDocRB->Enable( !bPrint );
     m_pSaveIndividualRB->Enable( !bPrint );
 
-    if( !bPrint )
-    {
+    if( !bPrint ) {
         SaveTypeHdl( m_pSaveSingleDocRB->IsChecked() ? m_pSaveSingleDocRB : m_pSaveIndividualRB );
-    }
-    else
-    {
+    } else {
         m_pPathFT->Enable(false);
         m_pPathED->Enable(false);
         m_pPathPB->Enable(false);
@@ -488,12 +459,9 @@ IMPL_LINK( SwMailMergeDlg, SaveTypeHdl, RadioButton*,  pBtn )
     bool bIndividual = pBtn == m_pSaveIndividualRB;
 
     m_pGenerateFromDataBaseCB->Enable( bIndividual );
-    if( bIndividual )
-    {
+    if( bIndividual ) {
         FilenameHdl( m_pGenerateFromDataBaseCB );
-    }
-    else
-    {
+    } else {
         m_pColumnFT->Enable(false);
         m_pColumnLB->Enable(false);
         m_pPathFT->Enable( false );
@@ -515,7 +483,7 @@ IMPL_LINK( SwMailMergeDlg, FilenameHdl, CheckBox*, pBox )
     m_pPathPB->Enable( bEnable );
     m_pFilterFT->Enable( bEnable );
     m_pFilterLB->Enable( bEnable );
- return 0;
+    return 0;
 }
 
 IMPL_LINK_NOARG(SwMailMergeDlg, ModifyHdl)
@@ -526,16 +494,14 @@ IMPL_LINK_NOARG(SwMailMergeDlg, ModifyHdl)
 
 bool SwMailMergeDlg::ExecQryShell()
 {
-    if(pImpl->xSelSupp.is())
-    {
+    if(pImpl->xSelSupp.is()) {
         pImpl->xSelSupp->removeSelectionChangeListener(  pImpl->xChgLstnr );
     }
     SwDBManager* pMgr = rSh.GetDBManager();
 
     if (m_pPrinterRB->IsChecked())
         nMergeType = DBMGR_MERGE_PRINTER;
-    else
-    {
+    else {
         nMergeType = DBMGR_MERGE_FILE;
         SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
         INetURLObject aAbs;
@@ -551,15 +517,12 @@ bool SwMailMergeDlg::ExecQryShell()
 
         pModOpt->SetIsNameFromColumn(m_pGenerateFromDataBaseCB->IsChecked());
 
-        if (m_pGenerateFromDataBaseCB->IsEnabled() && m_pGenerateFromDataBaseCB->IsChecked())
-        {
+        if (m_pGenerateFromDataBaseCB->IsEnabled() && m_pGenerateFromDataBaseCB->IsChecked()) {
             pMgr->SetEMailColumn(m_pColumnLB->GetSelectEntry());
             pModOpt->SetNameFromColumn(m_pColumnLB->GetSelectEntry());
             if( m_pFilterLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
                 m_sSaveFilter = *static_cast<const OUString*>(m_pFilterLB->GetSelectEntryData());
-        }
-        else
-        {
+        } else {
             //#i97667# reset column name - otherwise it's remembered from the last run
             pMgr->SetEMailColumn(OUString());
             //start save as dialog
@@ -573,8 +536,7 @@ bool SwMailMergeDlg::ExecQryShell()
         pMgr->SetSubject(sPath);
     }
 
-    if (m_pFromRB->IsChecked())    // Insert list
-    {
+    if (m_pFromRB->IsChecked()) {  // Insert list
         // Safe: the maximal value of the fields is limited
         sal_Int32 nStart = sal::static_int_cast<sal_Int32>(m_pFromNF->GetValue());
         sal_Int32 nEnd = sal::static_int_cast<sal_Int32>(m_pToNF->GetValue());
@@ -586,33 +548,28 @@ bool SwMailMergeDlg::ExecQryShell()
         Any* pSelection = m_aSelection.getArray();
         for (sal_Int32 i = nStart; i <= nEnd; ++i, ++pSelection)
             *pSelection <<= i;
-    }
-    else if (m_pAllRB->IsChecked() )
+    } else if (m_pAllRB->IsChecked() )
         m_aSelection.realloc(0);    // Empty selection = insert all
-    else
-    {
-        if(pImpl->xSelSupp.is())
-        {
+    else {
+        if(pImpl->xSelSupp.is()) {
             //update selection
             uno::Reference< XRowLocate > xRowLocate(GetResultSet(),UNO_QUERY);
             uno::Reference< XResultSet > xRes(xRowLocate,UNO_QUERY);
             pImpl->xSelSupp->getSelection() >>= m_aSelection;
-            if ( xRowLocate.is() )
-            {
+            if ( xRowLocate.is() ) {
                 Any* pBegin = m_aSelection.getArray();
                 Any* pEnd   = pBegin + m_aSelection.getLength();
-                for (;pBegin != pEnd ; ++pBegin)
-                {
+                for (; pBegin != pEnd ; ++pBegin) {
                     if ( xRowLocate->moveToBookmark(*pBegin) )
                         *pBegin <<= xRes->getRow();
                 }
             }
         }
     }
-    IDocumentDeviceAccess* pIDDA = rSh.getIDocumentDeviceAccess();
-    SwPrintData aPrtData( pIDDA->getPrintData() );
+    IDocumentDeviceAccess& rIDDA = rSh.getIDocumentDeviceAccess();
+    SwPrintData aPrtData( rIDDA.getPrintData() );
     aPrtData.SetPrintSingleJobs(m_pSingleJobsCB->IsChecked());
-    pIDDA->setPrintData(aPrtData);
+    rIDDA.setPrintData(aPrtData);
 
     pModOpt->SetSinglePrintJob(m_pSingleJobsCB->IsChecked());
 
@@ -631,8 +588,7 @@ bool SwMailMergeDlg::ExecQryShell()
 IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl)
 {
     OUString sPath( m_pPathED->GetText() );
-    if( sPath.isEmpty() )
-    {
+    if( sPath.isEmpty() ) {
         SvtPathOptions aPathOpt;
         sPath = aPathOpt.GetWorkPath();
     }
@@ -640,8 +596,7 @@ IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl)
     uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     uno::Reference < XFolderPicker2 > xFP = FolderPicker::create(xContext);
     xFP->setDisplayDirectory(sPath);
-    if( xFP->execute() == RET_OK )
-    {
+    if( xFP->execute() == RET_OK ) {
         INetURLObject aURL(xFP->getDirectory());
         if(aURL.GetProtocol() == INetProtocol::File)
             m_pPathED->SetText(aURL.PathToFileName());
@@ -654,8 +609,7 @@ IMPL_LINK_NOARG(SwMailMergeDlg, InsertPathHdl)
 uno::Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
 {
     uno::Reference< XResultSet >  xResSetClone;
-    if ( pImpl->xFController.is() )
-    {
+    if ( pImpl->xFController.is() ) {
         // we create a clone to do the task
         uno::Reference< XResultSetAccess > xResultSetAccess( pImpl->xFController->getModel(),UNO_QUERY);
         if ( xResultSetAccess.is() )
@@ -666,7 +620,7 @@ uno::Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
 
 SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "MailMergeDialog",
-        "modules/swriter/ui/mailmergedialog.ui")
+                  "modules/swriter/ui/mailmergedialog.ui")
 {
     get(m_pThisDocRB, "document");
 }
@@ -684,7 +638,7 @@ void SwMailMergeCreateFromDlg::dispose()
 
 SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(vcl::Window* pParent)
     : ModalDialog(pParent, "MergeConnectDialog",
-        "modules/swriter/ui/mergeconnectdialog.ui")
+                  "modules/swriter/ui/mergeconnectdialog.ui")
 {
     get(m_pUseExistingRB, "existing");
 }

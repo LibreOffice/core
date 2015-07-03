@@ -93,8 +93,8 @@ public:
     // FOR THE ITEM!
     void        AddItem( SvLBoxItem* pItem );
     void ReplaceItem( SvLBoxItem* pNewItem, size_t nPos );
-    const SvLBoxItem* GetItem( size_t nPos ) const;
-    SvLBoxItem* GetItem( size_t nPos );
+    const SvLBoxItem& GetItem( size_t nPos ) const;
+    SvLBoxItem& GetItem( size_t nPos );
     const SvLBoxItem* GetFirstItem( sal_uInt16 nId ) const;
     SvLBoxItem* GetFirstItem( sal_uInt16 nId );
     size_t GetPos( const SvLBoxItem* pItem ) const;

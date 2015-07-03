@@ -49,9 +49,7 @@ bool ScPivotLayoutTreeList::DoubleClickHdl()
         return false;
 
     SCCOL nCurrentColumn = rCurrentFunctionData.mnCol;
-    ScDPLabelData* pCurrentLabelData = mpParent->GetLabelData(nCurrentColumn);
-    if (!pCurrentLabelData)
-        return false;
+    ScDPLabelData& rCurrentLabelData = mpParent->GetLabelData(nCurrentColumn);
 
     ScAbstractDialogFactory* pFactory = ScAbstractDialogFactory::Create();
 
@@ -59,11 +57,11 @@ bool ScPivotLayoutTreeList::DoubleClickHdl()
     mpParent->PushDataFieldNames(aDataFieldNames);
 
     boost::scoped_ptr<AbstractScDPSubtotalDlg> pDialog(
-        pFactory->CreateScDPSubtotalDlg(this, mpParent->maPivotTableObject, *pCurrentLabelData, rCurrentFunctionData, aDataFieldNames, true));
+        pFactory->CreateScDPSubtotalDlg(this, mpParent->maPivotTableObject, rCurrentLabelData, rCurrentFunctionData, aDataFieldNames, true));
 
     if (pDialog->Execute() == RET_OK)
     {
-        pDialog->FillLabelData(*pCurrentLabelData);
+        pDialog->FillLabelData(rCurrentLabelData);
         rCurrentFunctionData.mnFuncMask = pDialog->GetFuncMask();
     }
 

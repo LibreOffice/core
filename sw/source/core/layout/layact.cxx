@@ -85,7 +85,7 @@ static void BreakPoint()
             {   if ( IsAgain() ) \
                 { \
                     if( bNoLoop ) \
-                        pLayoutAccess->GetLayouter()->EndLoopControl(); \
+                        rLayoutAccess.GetLayouter()->EndLoopControl(); \
                     return; \
                 } \
             }
@@ -141,8 +141,8 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrm *pCn
             continue;
 
         // OD 2004-01-15 #110582# - do not consider invisible objects
-        const IDocumentDrawModelAccess* pIDDMA = pPage->GetFormat()->getIDocumentDrawModelAccess();
-        if ( !pIDDMA->IsVisibleLayerId( pO->GetLayer() ) )
+        const IDocumentDrawModelAccess& rIDDMA = pPage->GetFormat()->getIDocumentDrawModelAccess();
+        if ( !rIDDMA.IsVisibleLayerId( pO->GetLayer() ) )
         {
             continue;
         }
@@ -155,7 +155,7 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwContentFrm *pCn
         if ( pSelfFly && pSelfFly->IsLowerOf( pFly ) )
             continue;
 
-        if ( pFly->GetVirtDrawObj()->GetLayer() == pIDDMA->GetHellId() )
+        if ( pFly->GetVirtDrawObj()->GetLayer() == rIDDMA.GetHellId() )
             continue;
 
         if ( pSelfFly )
@@ -467,7 +467,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
     while ( pPage && !pPage->IsInvalid() && !pPage->IsInvalidFly() )
         pPage = static_cast<SwPageFrm*>(pPage->GetNext());
 
-    IDocumentLayoutAccess *pLayoutAccess = pRoot->GetFormat()->getIDocumentLayoutAccess();
+    IDocumentLayoutAccess& rLayoutAccess = pRoot->GetFormat()->getIDocumentLayoutAccess();
     bool bNoLoop = pPage && SwLayouter::StartLoopControl( pRoot->GetFormat()->GetDoc(), pPage );
     sal_uInt16 nPercentPageNum = 0;
     while ( (pPage && !IsInterrupt()) || nCheckPageNum != USHRT_MAX )
@@ -519,7 +519,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                 if ( IsAgain() )
                 {
                     if( bNoLoop )
-                        pLayoutAccess->GetLayouter()->EndLoopControl();
+                        rLayoutAccess.GetLayouter()->EndLoopControl();
                     return;
                 }
                 pPage = static_cast<SwPageFrm*>(pRoot->Lower());
@@ -598,7 +598,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                         }
                     }
                     if( bNoLoop )
-                        pLayoutAccess->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
+                        rLayoutAccess.GetLayouter()->LoopControl( pPage, LOOP_PAGE );
                 }
 
                 unlockPositionOfObjects( pPage );
@@ -651,7 +651,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
                     pPage = static_cast<SwPageFrm*>(pPage->GetNext());
                 }
                 if( bNoLoop )
-                    pLayoutAccess->GetLayouter()->LoopControl( pPage, LOOP_PAGE );
+                    rLayoutAccess.GetLayouter()->LoopControl( pPage, LOOP_PAGE );
             }
             CheckIdleEnd();
         }
@@ -669,7 +669,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
             if ( IsAgain() )
             {
                 if( bNoLoop )
-                    pLayoutAccess->GetLayouter()->EndLoopControl();
+                    rLayoutAccess.GetLayouter()->EndLoopControl();
                 return;
             }
             pPage = static_cast<SwPageFrm*>(pRoot->Lower());
@@ -801,7 +801,7 @@ void SwLayAction::InternalAction(OutputDevice* pRenderContext)
     }
     pOptTab = 0;
     if( bNoLoop )
-        pLayoutAccess->GetLayouter()->EndLoopControl();
+        rLayoutAccess.GetLayouter()->EndLoopControl();
 }
 
 bool SwLayAction::_TurboAction( const SwContentFrm *pCnt )
@@ -1486,8 +1486,8 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
         return false;
 
     vcl::RenderContext* pRenderContext = pImp->GetShell()->GetOut();
-    IDocumentTimerAccess *pTimerAccess = pRoot->GetFormat()->getIDocumentTimerAccess();
-    pTimerAccess->BlockIdling();
+    IDocumentTimerAccess& rTimerAccess = pRoot->GetFormat()->getIDocumentTimerAccess();
+    rTimerAccess.BlockIdling();
 
     bool bChanged = false;
     bool bPainted = false;
@@ -1596,7 +1596,7 @@ bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, bool bAddRect )
 
     CheckWaitCrsr();
 
-    pTimerAccess->UnblockIdling();
+    rTimerAccess.UnblockIdling();
 
     // Ugly shortcut!
     if ( pTab->IsLowersFormatted() &&
@@ -2027,7 +2027,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
                 return false;
             break;
         case WORD_COUNT :
-            if ( !pViewShell->getIDocumentStatistics()->GetDocStat().bModified )
+            if ( !pViewShell->getIDocumentStatistics().GetDocStat().bModified )
                 return false;
             break;
         case SMART_TAGS :
@@ -2274,7 +2274,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
         // See conditions in DoIdleJob()
         const bool bSpell     = rVOpt.IsOnlineSpell();
         const bool bACmplWrd  = SwViewOption::IsAutoCompleteWords();
-        const bool bWordCount = pViewShell->getIDocumentStatistics()->GetDocStat().bModified;
+        const bool bWordCount = pViewShell->getIDocumentStatistics().GetDocStat().bModified;
         const bool bSmartTags = !pViewShell->GetDoc()->GetDocShell()->IsHelpDocument() &&
                                 !pViewShell->GetDoc()->isXForms() &&
                                 SwSmartTagMgr::Get().IsSmartTagsEnabled();

@@ -110,11 +110,9 @@ void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUSt
 
     if (pRange)
     {
-        SwDoc* pDoc = reinterpret_cast<SwDoc*>(pRange->GetDoc());
+        SwDoc& rDoc = pRange->GetDoc();
 
-        if (!pDoc) return;
-
-        SwUnoInternalPaM aPam(*pDoc);
+        SwUnoInternalPaM aPam(rDoc);
 
         ::sw::XTextRangeToSwPaM(aPam, xRange);
 

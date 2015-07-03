@@ -2107,14 +2107,14 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXParagraph::getUnoTunnelId( ) ) ) );
 
         if (pRange)
-            pDoc = pRange->GetDoc();
+            pDoc = &pRange->GetDoc();
         else if (!pDoc && pText)
             pDoc = pText->GetDoc();
         else if (!pDoc && pCursor)
             pDoc = pCursor->GetDoc();
-        else if ( !pDoc && pPortion && pPortion->GetCursor() )
+        else if ( !pDoc && pPortion )
         {
-            pDoc = pPortion->GetCursor()->GetDoc();
+            pDoc = pPortion->GetCursor().GetDoc();
         }
         else if ( !pDoc && pParagraph && pParagraph->GetTextNode( ) )
         {

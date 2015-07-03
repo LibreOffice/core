@@ -847,8 +847,8 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
     SvTabListBox::InitEntry(pEntry, rText, rImage1, rImage2, eButtonKind);
     DBG_ASSERT( TabCount() == 2, "*RecovDocList::InitEntry(): structure missmatch" );
 
-    SvLBoxString*       pCol = static_cast<SvLBoxString*>(pEntry->GetItem(2));
-    RecovDocListEntry*  p    = new RecovDocListEntry(pEntry, 0, pCol->GetText());
+    SvLBoxString&       rCol = static_cast<SvLBoxString&>(pEntry->GetItem(2));
+    RecovDocListEntry*  p    = new RecovDocListEntry(pEntry, 0, rCol.GetText());
     pEntry->ReplaceItem(p, 2);
 }
 

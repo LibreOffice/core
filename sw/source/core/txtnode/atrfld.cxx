@@ -402,8 +402,8 @@ void SwTextField::CopyTextField( SwTextField *pDest ) const
     OSL_ENSURE( m_pTextNode, "SwTextField: where is my TextNode?" );
     OSL_ENSURE( pDest->m_pTextNode, "SwTextField: where is pDest's TextNode?" );
 
-    IDocumentFieldsAccess* pIDFA = m_pTextNode->getIDocumentFieldsAccess();
-    IDocumentFieldsAccess* pDestIDFA = pDest->m_pTextNode->getIDocumentFieldsAccess();
+    IDocumentFieldsAccess* pIDFA = &m_pTextNode->getIDocumentFieldsAccess();
+    IDocumentFieldsAccess* pDestIDFA = &pDest->m_pTextNode->getIDocumentFieldsAccess();
 
     SwFormatField& rDestFormatField = (SwFormatField&)pDest->GetFormatField();
     const sal_uInt16 nFieldWhich = rDestFormatField.GetField()->GetTyp()->Which();

@@ -131,7 +131,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     {
         SwWrtShell& rWrtShell = pAppView->GetWrtShell();
 
-        SfxPrinter* pPrt = rWrtShell.getIDocumentDeviceAccess()->getPrinter( false );
+        SfxPrinter* pPrt = rWrtShell.getIDocumentDeviceAccess().getPrinter( false );
         if( pPrt )
             pRet->Put(SwPtrItem(FN_PARAM_PRINTER, pPrt));
         pRet->Put(SwPtrItem(FN_PARAM_WRTSHELL, &rWrtShell));
@@ -218,7 +218,7 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 
     // Options for PrintTabPage
     const SwPrintData* pOpt = pAppView ?
-                        &pAppView->GetWrtShell().getIDocumentDeviceAccess()->getPrintData() :
+                        &pAppView->GetWrtShell().getIDocumentDeviceAccess().getPrintData() :
                         0;
 
     if(!pOpt)
@@ -383,7 +383,7 @@ void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
             *pOpt = *pAddPrinterAttr;
 
             if(pAppView)
-                pAppView->GetWrtShell().getIDocumentDeviceAccess()->setPrintData( *pOpt );
+                pAppView->GetWrtShell().getIDocumentDeviceAccess().setPrintData( *pOpt );
         }
 
     }

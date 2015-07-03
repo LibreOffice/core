@@ -241,10 +241,10 @@ static ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUS
             size_t nCount = pColl->GetCount();
             for (size_t i=0; i<nCount; ++i)
             {
-                ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
-                     pDPObj->GetName() == rName )
-                    return pDPObj;
+                ScDPObject& rDPObj = (*pColl)[i];
+                if ( rDPObj.GetOutRange().aStart.Tab() == nTab &&
+                     rDPObj.GetName() == rName )
+                    return &rDPObj;
             }
         }
     }
@@ -321,12 +321,12 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nInd
             size_t nCount = pColl->GetCount();
             for (size_t i=0; i<nCount; ++i)
             {
-                ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
+                ScDPObject& rDPObj = (*pColl)[i];
+                if ( rDPObj.GetOutRange().aStart.Tab() == nTab )
                 {
                     if ( nFound == nIndex )
                     {
-                        OUString aName = pDPObj->GetName();
+                        OUString aName = rDPObj.GetName();
                         return new ScDataPilotTableObj( pDocShell, nTab, aName );
                     }
                     ++nFound;
@@ -471,8 +471,8 @@ sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException, std:
             size_t nCount = pColl->GetCount();
             for (size_t i=0; i<nCount; ++i)
             {
-                ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
+                ScDPObject& rDPObj = (*pColl)[i];
+                if ( rDPObj.GetOutRange().aStart.Tab() == nTab )
                     ++nFound;
             }
             return nFound;
@@ -533,8 +533,8 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
             size_t i;
             for (i=0; i<nCount; ++i)
             {
-                ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
+                ScDPObject& rDPObj = (*pColl)[i];
+                if ( rDPObj.GetOutRange().aStart.Tab() == nTab )
                     ++nFound;
             }
 
@@ -543,9 +543,9 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
             OUString* pAry = aSeq.getArray();
             for (i=0; i<nCount; ++i)
             {
-                ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->GetOutRange().aStart.Tab() == nTab )
-                    pAry[nPos++] = pDPObj->GetName();
+                ScDPObject& rDPObj = (*pColl)[i];
+                if ( rDPObj.GetOutRange().aStart.Tab() == nTab )
+                    pAry[nPos++] = rDPObj.GetName();
             }
 
             return aSeq;
@@ -567,9 +567,9 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
             size_t nCount = pColl->GetCount();
             for (size_t i=0; i<nCount; ++i)
             {
-                ScDPObject* pDPObj = (*pColl)[i];
-                if ( pDPObj->GetOutRange().aStart.Tab() == nTab &&
-                     pDPObj->GetName() == aName )
+                ScDPObject& rDPObj = (*pColl)[i];
+                if ( rDPObj.GetOutRange().aStart.Tab() == nTab &&
+                     rDPObj.GetName() == aName )
                     return true;
             }
         }
@@ -2395,15 +2395,13 @@ DataPilotFieldGroupInfo ScDataPilotFieldObj::getGroupInfo()
                     ScFieldGroups aGroups;
                     for( sal_Int32 nIdx = 0, nCount = pGroupDim->GetGroupCount(); nIdx < nCount; ++nIdx )
                     {
-                        if( const ScDPSaveGroupItem* pGroup = pGroupDim->GetGroupByIndex( nIdx ) )
-                        {
-                            ScFieldGroup aGroup;
-                            aGroup.maName = pGroup->GetGroupName();
-                            for( sal_Int32 nMemIdx = 0, nMemCount = pGroup->GetElementCount(); nMemIdx < nMemCount; ++nMemIdx )
-                                if (const OUString* pMem = pGroup->GetElementByIndex(nMemIdx))
-                                    aGroup.maMembers.push_back( *pMem );
-                            aGroups.push_back( aGroup );
-                        }
+                        const ScDPSaveGroupItem& rGroup = pGroupDim->GetGroupByIndex( nIdx );
+                        ScFieldGroup aGroup;
+                        aGroup.maName = rGroup.GetGroupName();
+                        for( sal_Int32 nMemIdx = 0, nMemCount = rGroup.GetElementCount(); nMemIdx < nMemCount; ++nMemIdx )
+                            if (const OUString* pMem = rGroup.GetElementByIndex(nMemIdx))
+                                aGroup.maMembers.push_back( *pMem );
+                        aGroups.push_back( aGroup );
                     }
                     aInfo.Groups = new ScDataPilotFieldGroupsObj( aGroups );
                 }
@@ -2611,13 +2609,13 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
                 long nGroupCount = pBaseGroupDim->GetGroupCount();
                 for ( long nGroup = 0; nGroup < nGroupCount; nGroup++ )
                 {
-                    const ScDPSaveGroupItem* pBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
+                    const ScDPSaveGroupItem& rBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
 
-                    if (!HasString(rItems, pBaseGroup->GetGroupName()))    //! ignore case?
+                    if (!HasString(rItems, rBaseGroup.GetGroupName()))    //! ignore case?
                     {
                         // add an additional group for each item that is not in the selection
-                        ScDPSaveGroupItem aGroup( pBaseGroup->GetGroupName() );
-                        aGroup.AddElementsFromGroup( *pBaseGroup );
+                        ScDPSaveGroupItem aGroup( rBaseGroup.GetGroupName() );
+                        aGroup.AddElementsFromGroup( rBaseGroup );
                         pGroupDimension->AddGroupItem( aGroup );
                     }
                 }

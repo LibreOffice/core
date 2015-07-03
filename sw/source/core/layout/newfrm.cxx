@@ -487,16 +487,16 @@ void SwRootFrm::Init( SwFrameFormat* pFormat )
 {
     InitCurrShells( this );
 
-    IDocumentTimerAccess *pTimerAccess = pFormat->getIDocumentTimerAccess();
-    IDocumentLayoutAccess *pLayoutAccess = pFormat->getIDocumentLayoutAccess();
-    IDocumentFieldsAccess *pFieldsAccess = pFormat->getIDocumentFieldsAccess();
-    const IDocumentSettingAccess *pSettingAccess = pFormat->getIDocumentSettingAccess();
-    pTimerAccess->StopIdling();
+    IDocumentTimerAccess& rTimerAccess = pFormat->getIDocumentTimerAccess();
+    IDocumentLayoutAccess& rLayoutAccess = pFormat->getIDocumentLayoutAccess();
+    IDocumentFieldsAccess& rFieldsAccess = pFormat->getIDocumentFieldsAccess();
+    const IDocumentSettingAccess& rSettingAccess = pFormat->getIDocumentSettingAccess();
+    rTimerAccess.StopIdling();
     // For creating the Flys by MakeFrms()
-    pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );
+    rLayoutAccess.SetCurrentViewShell( this->GetCurrShell() );
     mbCallbackActionEnabled = false; // needs to be set to true before leaving!
 
-    SwDrawModel* pMd = pFormat->getIDocumentDrawModelAccess()->GetDrawModel();
+    SwDrawModel* pMd = pFormat->getIDocumentDrawModelAccess().GetDrawModel();
     if ( pMd )
     {
         // Disable "multiple layout"
@@ -556,16 +556,16 @@ void SwRootFrm::Init( SwFrameFormat* pFormat )
     ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), true );
     //Remove masters that haven't been replaced yet from the list.
     RemoveMasterObjs( mpDrawPage );
-    if( pSettingAccess->get(DocumentSettingId::GLOBAL_DOCUMENT) )
-        pFieldsAccess->UpdateRefFields( NULL );
+    if( rSettingAccess.get(DocumentSettingId::GLOBAL_DOCUMENT) )
+        rFieldsAccess.UpdateRefFields( NULL );
     //b6433357: Update page fields after loading
     if ( !mpCurrShell || !mpCurrShell->Imp()->IsUpdateExpFields() )
     {
         SwDocPosUpdate aMsgHint( pPage->Frm().Top() );
-        pFieldsAccess->UpdatePageFields( &aMsgHint );
+        rFieldsAccess.UpdatePageFields( &aMsgHint );
     }
 
-    pTimerAccess->StartIdling();
+    rTimerAccess.StartIdling();
     mbCallbackActionEnabled = true;
 
     SwViewShell *pViewSh  = GetCurrShell();

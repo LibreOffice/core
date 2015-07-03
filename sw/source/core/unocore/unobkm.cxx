@@ -216,7 +216,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwDoc *const pDoc =
-        (pRange) ? pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
+        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
     if (!pDoc)
     {
         throw lang::IllegalArgumentException();

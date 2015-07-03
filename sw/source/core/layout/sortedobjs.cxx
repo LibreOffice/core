@@ -156,9 +156,9 @@ struct ObjAnchorOrder
         // objects anchored at the same content and at the same content anchor
         // node position with the same anchor type
         // Thus, compare its wrapping style including its layer
-        const IDocumentDrawModelAccess* pIDDMA = rFormatListed.getIDocumentDrawModelAccess();
-        const SdrLayerID nHellId = pIDDMA->GetHellId();
-        const SdrLayerID nInvisibleHellId = pIDDMA->GetInvisibleHellId();
+        const IDocumentDrawModelAccess& rIDDMA = rFormatListed.getIDocumentDrawModelAccess();
+        const SdrLayerID nHellId = rIDDMA.GetHellId();
+        const SdrLayerID nInvisibleHellId = rIDDMA.GetInvisibleHellId();
         const bool bWrapThroughOrHellListed =
                     rFormatListed.GetSurround().GetSurround() == SURROUND_THROUGHT ||
                     _pListedAnchoredObj->GetDrawObj()->GetLayer() == nHellId ||

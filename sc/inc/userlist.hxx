@@ -76,8 +76,8 @@ public:
     /// If the list in rStr is already inserted
     bool HasEntry( const OUString& rStr ) const;
 
-    const ScUserListData*  operator[](size_t nIndex) const;
-    ScUserListData*  operator[](size_t nIndex);
+    const ScUserListData&  operator[](size_t nIndex) const;
+    ScUserListData&  operator[](size_t nIndex);
     ScUserList&     operator= ( const ScUserList& r );
     bool            operator==( const ScUserList& r ) const;
     bool            operator!=( const ScUserList& r ) const;

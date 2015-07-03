@@ -414,7 +414,7 @@ bool SwTextNode::IsSymbol( const sal_Int32 nBegin ) const
     SwAttrIter aIter( *const_cast<SwTextNode*>(this), aScriptInfo );
     aIter.Seek( nBegin );
     return aIter.GetFnt()->IsSymbol(
-        const_cast<SwViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()) );
+        const_cast<SwViewShell *>(getIDocumentLayoutAccess().GetCurrentViewShell()) );
 }
 
 class SwMinMaxNodeArgs
@@ -665,7 +665,7 @@ void SwTextNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rM
             case CHAR_HARDHYPHEN:
             {
                 OUString sTmp( cChar );
-                SwDrawTextInfo aDrawInf( getIDocumentLayoutAccess()->GetCurrentViewShell(),
+                SwDrawTextInfo aDrawInf( getIDocumentLayoutAccess().GetCurrentViewShell(),
                     *pOut, 0, sTmp, 0, 1, 0, false );
                 nAktWidth = aIter.GetFnt()->_GetTextSize( aDrawInf ).Width();
                 aArg.nWordWidth += nAktWidth;
@@ -799,7 +799,7 @@ sal_uInt16 SwTextNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd 
         if ( getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE) )
             pOut = Application::GetDefaultDevice();
         else
-            pOut = getIDocumentDeviceAccess()->getReferenceDevice( true );
+            pOut = getIDocumentDeviceAccess().getReferenceDevice( true );
     }
 
     OSL_ENSURE( pOut, "GetScalingOfSelectedText without outdev" );

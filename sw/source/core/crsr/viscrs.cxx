@@ -733,7 +733,7 @@ void SwShellTableCrsr::FillRects()
     bool bStart = true;
     SwRegionRects aReg( GetShell()->VisArea() );
     if (GetShell()->isTiledRendering())
-        aReg = GetShell()->getIDocumentLayoutAccess()->GetCurrentLayout()->Frm();
+        aReg = GetShell()->getIDocumentLayoutAccess().GetCurrentLayout()->Frm();
     SwNodes& rNds = GetDoc()->GetNodes();
     SwFrm* pEndFrm = 0;
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)

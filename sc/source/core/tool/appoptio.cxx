@@ -201,7 +201,7 @@ static void lcl_GetSortList( Any& rDest )
         Sequence<OUString> aSeq( nCount );
         OUString* pArray = aSeq.getArray();
         for (size_t i=0; i<nCount; ++i)
-            pArray[i] = (*pUserList)[sal::static_int_cast<sal_uInt16>(i)]->GetString();
+            pArray[i] = (*pUserList)[sal::static_int_cast<sal_uInt16>(i)].GetString();
         rDest <<= aSeq;
     }
     else

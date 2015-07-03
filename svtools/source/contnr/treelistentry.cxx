@@ -158,14 +158,14 @@ void SvTreeListEntry::ReplaceItem( SvLBoxItem* pNewItem, size_t nPos )
     maItems.insert(maItems.begin()+nPos, pNewItem);
 }
 
-const SvLBoxItem* SvTreeListEntry::GetItem( size_t nPos ) const
+const SvLBoxItem& SvTreeListEntry::GetItem( size_t nPos ) const
 {
-    return &maItems[nPos];
+    return maItems[nPos];
 }
 
-SvLBoxItem* SvTreeListEntry::GetItem( size_t nPos )
+SvLBoxItem& SvTreeListEntry::GetItem( size_t nPos )
 {
-    return &maItems[nPos];
+    return maItems[nPos];
 }
 
 namespace {

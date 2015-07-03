@@ -1825,7 +1825,7 @@ void ScTable::ResetChanged( const ScRange& rRange )
 const SfxPoolItem* ScTable::GetAttr( SCCOL nCol, SCROW nRow, sal_uInt16 nWhich ) const
 {
     if (ValidColRow(nCol,nRow))
-        return aCol[nCol].GetAttr( nRow, nWhich );
+        return &aCol[nCol].GetAttr( nRow, nWhich );
     else
         return NULL;
 }

@@ -2537,14 +2537,14 @@ bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
     // --> #108724# Page header/footer content doesn't have to wrap around
     //              floating screen objects
 
-    const IDocumentSettingAccess* pIDSA = GetFormat()->getIDocumentSettingAccess();
-    const bool bWrapAllowed = pIDSA->get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
+    const IDocumentSettingAccess& rIDSA = GetFormat()->getIDocumentSettingAccess();
+    const bool bWrapAllowed = rIDSA.get(DocumentSettingId::USE_FORMER_TEXT_WRAPPING) ||
                                 ( !IsInFootnote() && 0 == FindFooterOrHeader() );
 
     if ( pPage->GetSortedObjs() && bWrapAllowed )
     {
         SWRECTFN( this )
-        const bool bConsiderWrapOnObjPos = pIDSA->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
+        const bool bConsiderWrapOnObjPos = rIDSA.get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION);
         long nPrtPos = (Frm().*fnRect->fnGetTop)();
         nPrtPos = (*fnRect->fnYInc)( nPrtPos, rUpper );
         SwRect aRect( Frm() );
@@ -2865,7 +2865,7 @@ void SwTabFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAtt
 
         // #i26250# - extend bottom printing area, if table
         // is last content inside a table cell.
-        if ( GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) &&
+        if ( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) &&
              GetUpper()->IsInTab() && !GetIndNext() )
         {
             nLower += pAttrs->GetULSpace().GetLower();
@@ -2980,7 +2980,7 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
         // forward due to the positioning of its objects ). Thus, invalivate this
         // next frame, if document compatibility option 'Consider wrapping style
         // influence on object positioning' is ON.
-        else if ( GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+        else if ( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
         {
             InvalidateNextPos();
         }
@@ -4843,7 +4843,7 @@ void SwCellFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorderAt
         // #i43913# - no vertical alignment, if wrapping
         // style influence is considered on object positioning and
         // an object is anchored inside the cell.
-        const bool bConsiderWrapOnObjPos( GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) );
+        const bool bConsiderWrapOnObjPos( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) );
         //No alignment if border with flow overlaps the cell.
         if ( pPg->GetSortedObjs() )
         {

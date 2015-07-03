@@ -81,15 +81,15 @@ SvMetaModule * SvIdlDataBase::GetModule( const OString& rName )
     return NULL;
 }
 
-void SvIdlDataBase::SetError( const OString& rError, SvToken * pTok )
+void SvIdlDataBase::SetError( const OString& rError, SvToken& rTok )
 {
-    if( pTok->GetLine() > 10000 )
+    if( rTok.GetLine() > 10000 )
         aError.SetText( "line count overflow" );
 
-    if( aError.nLine < pTok->GetLine()
-      || (aError.nLine == pTok->GetLine() && aError.nColumn < pTok->GetColumn()) )
+    if( aError.nLine < rTok.GetLine()
+      || (aError.nLine == rTok.GetLine() && aError.nColumn < rTok.GetColumn()) )
     {
-        aError = SvIdlError( pTok->GetLine(), pTok->GetColumn() );
+        aError = SvIdlError( rTok.GetLine(), rTok.GetColumn() );
         aError.SetText( rError );
     }
 }
@@ -159,7 +159,7 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                     {
                         OString aStr("unexpected token after define");
                         // set error
-                        SetError( aStr, pTok );
+                        SetError( aStr, *pTok );
                         WriteError( aTokStm );
                         return false;
                     }
@@ -191,7 +191,7 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                                 aStr.append(pTok->GetChar());
                                 aStr.append("'in define");
                                 // set error
-                                SetError( aStr.makeStringAndClear(), pTok );
+                                SetError( aStr.makeStringAndClear(), *pTok );
                                 WriteError( aTokStm );
                                 return false;
                             }
@@ -214,7 +214,7 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                         if( !InsertId( aDefName, nVal ) )
                         {
                             OString aStr("hash table overflow: ");
-                            SetError( aStr, pTok );
+                            SetError( aStr, *pTok );
                             WriteError( aTokStm );
                             return false;
                         }
@@ -239,7 +239,7 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                         {
                             OString aStr("unexpected eof in #include");
                             // set error
-                            SetError(aStr, pTok);
+                            SetError(aStr, *pTok);
                             WriteError( aTokStm );
                             return false;
                         }
@@ -249,7 +249,7 @@ bool SvIdlDataBase::ReadIdFile( const OUString & rFileName )
                     {
                         OStringBuffer aStr("cannot read file: ");
                         aStr.append(aName.makeStringAndClear());
-                        SetError(aStr.makeStringAndClear(), pTok);
+                        SetError(aStr.makeStringAndClear(), *pTok);
                         WriteError( aTokStm );
                         return false;
                     }
@@ -337,7 +337,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
         }
         if( pType )
         {
-            pTok = rInStm.GetToken();
+            pTok = &rInStm.GetToken();
             if( pTok->IsChar() )
             {
                 if( pTok->GetChar() == '&' || pTok->GetChar() == '*' )
@@ -345,7 +345,7 @@ SvMetaType * SvIdlDataBase::ReadKnownType( SvTokenStream & rInStm )
                     nCall0 = (pTok->GetChar() == '&') ? CALL_REFERENCE :
                                                         CALL_POINTER;
                     rInStm.GetToken_Next();
-                    pTok = rInStm.GetToken();
+                    pTok = &rInStm.GetToken();
                     if( pTok->GetChar() == '&' || pTok->GetChar() == '*' )
                     {
                         nCall1 = (pTok->GetChar() == '&') ? CALL_REFERENCE :
@@ -480,7 +480,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     sal_uLong   nRow = 0, nColumn = 0;
 
     rInStm.SeekEnd();
-    SvToken *pTok = rInStm.GetToken();
+    SvToken *pTok = &rInStm.GetToken();
 
     // error position
     nRow    = pTok->GetLine();
@@ -527,7 +527,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     if( !pTok->IsIdentifier() )
     {
         rInStm.GetToken_PrevAll();
-        pTok = rInStm.GetToken();
+        pTok = &rInStm.GetToken();
     }
     if( pTok && pTok->IsIdentifier() )
     {
@@ -545,7 +545,7 @@ bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, bool bImported, const 
 {
     aPath = rPath; // only valid for this iteration
     bool bOk = true;
-    SvToken * pTok = rInStm.GetToken();
+    SvToken * pTok = &rInStm.GetToken();
     // only one import at the very beginning
     if( pTok->Is( SvHash_import() ) )
     {
@@ -578,7 +578,7 @@ bool SvIdlWorkingBase::ReadSvIdl( SvTokenStream & rInStm, bool bImported, const 
     while( bOk && nBeginPos != rInStm.Tell() )
     {
         nBeginPos = rInStm.Tell();
-        pTok = rInStm.GetToken();
+        pTok = &rInStm.GetToken();
         if( pTok->IsEof() )
             return true;
         if( pTok->IsEmpty() )

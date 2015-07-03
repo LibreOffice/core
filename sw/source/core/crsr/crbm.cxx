@@ -130,7 +130,7 @@ bool SwCrsrShell::GotoMark(const ::sw::mark::IMark* const pMark)
 
 bool SwCrsrShell::GoNextBookmark()
 {
-    IDocumentMarkAccess* const pMarkAccess = getIDocumentMarkAccess();
+    IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
     IDocumentMarkAccess::container_t vCandidates;
     remove_copy_if(
         upper_bound( // finds the first that is starting after
@@ -163,7 +163,7 @@ bool SwCrsrShell::GoNextBookmark()
 
 bool SwCrsrShell::GoPrevBookmark()
 {
-    IDocumentMarkAccess* const pMarkAccess = getIDocumentMarkAccess();
+    IDocumentMarkAccess* pMarkAccess = getIDocumentMarkAccess();
     // candidates from which to choose the mark before
     // no need to consider marks starting after rPos
     IDocumentMarkAccess::container_t vCandidates;
@@ -208,7 +208,7 @@ bool SwCrsrShell::GoPrevBookmark()
 
 bool SwCrsrShell::IsFormProtected()
 {
-    return getIDocumentSettingAccess()->get(DocumentSettingId::PROTECT_FORM);
+    return getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_FORM);
 }
 
 ::sw::mark::IFieldmark* SwCrsrShell::GetCurrentFieldmark()

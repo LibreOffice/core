@@ -190,8 +190,8 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
             sal_uInt16 nItemCount = pEntry->ItemCount();
             for (sal_uInt16 nItemPos=0; nItemPos<nItemCount && !bHasData; ++nItemPos)
             {
-                SvLBoxItem* pItem = pEntry->GetItem( nItemPos );
-                ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(pItem);
+                SvLBoxItem& rItem = pEntry->GetItem( nItemPos );
+                ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(&rItem);
                 if ( pStringItem )
                 {
                     if ( pStringItem->IsDouble() )
@@ -313,8 +313,8 @@ void ScSolverOptionsDialog::EditOption()
         sal_uInt16 nItemCount = pEntry->ItemCount();
         for (sal_uInt16 nPos=0; nPos<nItemCount; ++nPos)
         {
-            SvLBoxItem* pItem = pEntry->GetItem( nPos );
-            ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(pItem);
+            SvLBoxItem& rItem = pEntry->GetItem( nPos );
+            ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(&rItem);
             if ( pStringItem )
             {
                 if ( pStringItem->IsDouble() )

@@ -206,7 +206,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
     //added for exporting OCX control
     sal_Int16 nMsCtlType = 0;
     if ( !pObj )
-        pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, GetDocPtr() );  // just what is it?!?
+        pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDocRef() );  // just what is it?!?
     else
     {
         pCurrXclObj = NULL;
@@ -231,10 +231,10 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                         pCurrXclObj = new XclObjOle( mrObjMgr, *pObj );
                 }
                 else    // just a metafile
-                    pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, GetDocPtr() );
+                    pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDocRef() );
             }
             else
-                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, GetDocPtr() );
+                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDocRef() );
         }
         else if( nObjType == OBJ_UNO )
         {
@@ -255,13 +255,13 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
             else  //TBX Form Control
                 pCurrXclObj = CreateTBXCtrlObj( rxShape, pChildAnchor );
             if( !pCurrXclObj )
-                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, GetDocPtr() );   // just a metafile
+                pCurrXclObj = new XclObjAny( mrObjMgr, rxShape, &GetDocRef() );   // just a metafile
         }
         else if( !ScDrawLayer::IsNoteCaption( pObj ) )
         {
             // ignore permanent note shapes
             // #i12190# do not ignore callouts (do not filter by object type ID)
-            pCurrXclObj = ShapeInteractionHelper::CreateShapeObj( mrObjMgr, rxShape, GetDocPtr() );
+            pCurrXclObj = ShapeInteractionHelper::CreateShapeObj( mrObjMgr, rxShape, &GetDocRef() );
             ShapeInteractionHelper::PopulateShapeInteractionInfo( mrObjMgr, rxShape, *pCurrAppData );
         }
     }

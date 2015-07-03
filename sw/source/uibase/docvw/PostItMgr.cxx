@@ -527,7 +527,7 @@ bool SwPostItMgr::CalcRects()
             mPages[aPageNum-1]->eSidebarPosition = pItem->maLayoutInfo.meSidebarPosition;
         }
 
-        if (!bChange && mpWrtShell->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE))
+        if (!bChange && mpWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE))
         {
             long nLayoutHeight = SwPostItHelper::getLayoutHeight( mpWrtShell->GetLayout() );
             if( nLayoutHeight > mbLayoutHeight )
@@ -622,7 +622,7 @@ void SwPostItMgr::LayoutPostIts()
                         mlPageBorder = mpEditWin->LogicToPixel( Point( mPages[n]->mPageRect.Left(), 0)).X() - GetSidebarWidth(true);// - GetSidebarBorderWidth(true);
                         //bending point
                         mlPageEnd =
-                            mpWrtShell->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE)
+                            mpWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)
                             ? pItem->maLayoutInfo.mPagePrtArea.Left()
                             : mPages[n]->mPageRect.Left() + 350;
                     }
@@ -632,7 +632,7 @@ void SwPostItMgr::LayoutPostIts()
                         mlPageBorder = mpEditWin->LogicToPixel( Point(mPages[n]->mPageRect.Right(), 0)).X() + GetSidebarBorderWidth(true);
                         //bending point
                         mlPageEnd =
-                            mpWrtShell->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE)
+                            mpWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE)
                             ? pItem->maLayoutInfo.mPagePrtArea.Right() :
                             mPages[n]->mPageRect.Right() - 350;
                     }
@@ -1631,7 +1631,7 @@ void SwPostItMgr::PrepareView(bool bIgnoreCount)
         SwRootFrm* pLayout = mpWrtShell->GetLayout();
         if ( pLayout )
             SwPostItHelper::setSidebarChanged( pLayout,
-                mpWrtShell->getIDocumentSettingAccess()->get( DocumentSettingId::BROWSE_MODE ) );
+                mpWrtShell->getIDocumentSettingAccess().get( DocumentSettingId::BROWSE_MODE ) );
         mpWrtShell->EndAllAction();
     }
 }

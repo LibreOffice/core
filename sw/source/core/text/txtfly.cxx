@@ -501,7 +501,7 @@ bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
     {
-        const sal_uInt16 nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
+        const sal_uInt16 nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess().GetHellId();
         for( SwAnchoredObjList::size_type i = 0; i < nCount; ++i )
         {
             // #i68520#
@@ -589,7 +589,7 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
     {
-        const sal_uInt16 nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
+        const sal_uInt16 nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess().GetHellId();
         for( SwAnchoredObjList::size_type i = 0; i < nCount; ++i )
         {
             // #i68520#
@@ -899,7 +899,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
         const long nLeft = (aRect.*fnRect->fnGetLeft)() + 1;
         const bool bR2L = pCurrFrm->IsRightToLeft();
 
-        const IDocumentDrawModelAccess* pIDDMA = pCurrFrm->GetTextNode()->getIDocumentDrawModelAccess();
+        const IDocumentDrawModelAccess& rIDDMA = pCurrFrm->GetTextNode()->getIDocumentDrawModelAccess();
 
         for( size_t i = 0; i < nCount; ++i )
         {
@@ -914,7 +914,7 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
             SwAnchoredObject* pAnchoredObj = (*pSorted)[ i ];
             assert(pAnchoredObj);
             if ( !pAnchoredObj ||
-                 !pIDDMA->IsVisibleLayerId( pAnchoredObj->GetDrawObj()->GetLayer() ) ||
+                 !rIDDMA.IsVisibleLayerId( pAnchoredObj->GetDrawObj()->GetLayer() ) ||
                  !pAnchoredObj->ConsiderForTextWrap() ||
                  ( mbIgnoreObjsInHeaderFooter && !bFooterHeader &&
                    pAnchoredObj->GetAnchorFrm()->FindFooterOrHeader() ) )

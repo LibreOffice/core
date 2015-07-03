@@ -78,10 +78,10 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos(
                 o_rInfo.meSidebarPosition = pPage->SidebarPosition();
                 o_rInfo.mRedlineAuthor = 0;
 
-                const IDocumentRedlineAccess* pIDRA = pTextNode->getIDocumentRedlineAccess();
-                if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
+                const IDocumentRedlineAccess& rIDRA = pTextNode->getIDocumentRedlineAccess();
+                if( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
                 {
-                    const SwRangeRedline* pRedline = pIDRA->GetRedline( rAnchorPos, 0 );
+                    const SwRangeRedline* pRedline = rIDRA.GetRedline( rAnchorPos, 0 );
                     if( pRedline )
                     {
                         if( nsRedlineType_t::REDLINE_INSERT == pRedline->GetType() )

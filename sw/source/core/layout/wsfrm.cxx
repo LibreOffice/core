@@ -81,7 +81,7 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     mbForbidDelete = false;
 }
 
-const IDocumentDrawModelAccess* SwFrm::getIDocumentDrawModelAccess()
+const IDocumentDrawModelAccess& SwFrm::getIDocumentDrawModelAccess()
 {
     return GetUpper()->GetFormat()->getIDocumentDrawModelAccess();
 }
@@ -1732,7 +1732,7 @@ SwTwips SwContentFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
             // due to the positioning of its objects ). Thus, invalivate this next frame,
             // if document compatibility option 'Consider wrapping style influence on
             // object positioning' is ON.
-            else if ( GetUpper()->GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+            else if ( GetUpper()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
             {
                 InvalidateNextPos();
             }
@@ -1798,7 +1798,7 @@ SwTwips SwContentFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
         {
             GetNext()->InvalidatePos();
         }
-        else if ( GetUpper()->GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+        else if ( GetUpper()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
         {
             InvalidateNextPos();
         }
@@ -2046,7 +2046,7 @@ void SwContentFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew
                 }
                 // OD 2004-03-17 #i11860#
                 if ( GetIndNext() &&
-                     !GetUpper()->GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::USE_FORMER_OBJECT_POS) )
+                     !GetUpper()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::USE_FORMER_OBJECT_POS) )
                 {
                     // OD 2004-07-01 #i28701# - use new method <InvalidateObjs(..)>
                     GetIndNext()->InvalidateObjs( true );
@@ -2066,9 +2066,9 @@ void SwContentFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew
         case RES_BREAK:
             {
                 rInvFlags |= 0x42;
-                const IDocumentSettingAccess* pIDSA = GetUpper()->GetFormat()->getIDocumentSettingAccess();
-                if( pIDSA->get(DocumentSettingId::PARA_SPACE_MAX) ||
-                    pIDSA->get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES) )
+                const IDocumentSettingAccess& rIDSA = GetUpper()->GetFormat()->getIDocumentSettingAccess();
+                if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) ||
+                    rIDSA.get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES) )
                 {
                     rInvFlags |= 0x1;
                     SwFrm* pNxt = FindNext();

@@ -471,33 +471,30 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
         size_t nCount = pList->Count();
         for (size_t i=0; i < nCount; ++i)
         {
-            const ScDetOpData* pData = pList->GetObject(i);
-            if (pData)
+            const ScDetOpData& rData = pList->GetObject(i);
+            ScAddress aPos = rData.GetPos();
+            ScDetectiveFunc aFunc( &rDoc, aPos.Tab() );
+            SCCOL nCol = aPos.Col();
+            SCROW nRow = aPos.Row();
+            switch (rData.GetOperation())
             {
-                ScAddress aPos = pData->GetPos();
-                ScDetectiveFunc aFunc( &rDoc, aPos.Tab() );
-                SCCOL nCol = aPos.Col();
-                SCROW nRow = aPos.Row();
-                switch (pData->GetOperation())
-                {
-                    case SCDETOP_ADDSUCC:
-                        aFunc.ShowSucc( nCol, nRow );
-                        break;
-                    case SCDETOP_DELSUCC:
-                        aFunc.DeleteSucc( nCol, nRow );
-                        break;
-                    case SCDETOP_ADDPRED:
-                        aFunc.ShowPred( nCol, nRow );
-                        break;
-                    case SCDETOP_DELPRED:
-                        aFunc.DeletePred( nCol, nRow );
-                        break;
-                    case SCDETOP_ADDERROR:
-                        aFunc.ShowError( nCol, nRow );
-                        break;
-                    default:
-                        OSL_FAIL("falsche Op bei DetectiveRefresh");
-                }
+                case SCDETOP_ADDSUCC:
+                    aFunc.ShowSucc( nCol, nRow );
+                    break;
+                case SCDETOP_DELSUCC:
+                    aFunc.DeleteSucc( nCol, nRow );
+                    break;
+                case SCDETOP_ADDPRED:
+                     aFunc.ShowPred( nCol, nRow );
+                     break;
+                case SCDETOP_DELPRED:
+                    aFunc.DeletePred( nCol, nRow );
+                    break;
+                case SCDETOP_ADDERROR:
+                    aFunc.ShowError( nCol, nRow );
+                    break;
+                default:
+                    OSL_FAIL("falsche Op bei DetectiveRefresh");
             }
         }
 

@@ -448,9 +448,9 @@ IMPL_LINK( SwInputWindow, SelTableCellsNotify, SwWrtShell *, pCaller )
             aPam.SetMark();
             aPam.Move( fnMoveForward, fnGoSection );
 
-            IDocumentContentOperations* pIDCO = pWrtShell->getIDocumentContentOperations();
-            pIDCO->DeleteRange( aPam );
-            pIDCO->InsertString( aPam, sNew );
+            IDocumentContentOperations& rIDCO = pWrtShell->getIDocumentContentOperations();
+            rIDCO.DeleteRange( aPam );
+            rIDCO.InsertString( aPam, sNew );
             pWrtShell->EndAllAction();
             sOldFormula = sNew;
         }

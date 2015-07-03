@@ -462,9 +462,9 @@ namespace accessibility
         sal_uInt16 iTotleItemCount = pEntry->ItemCount();
         while( iCount < iTotleItemCount )
         {
-            const SvLBoxItem* pItem = pEntry->GetItem( iCount );
-            if ( pItem->GetType() == SV_ITEM_ID_LBOXSTRING &&
-                 !static_cast<const SvLBoxString*>( pItem )->GetText().isEmpty() )
+            const SvLBoxItem& rItem = pEntry->GetItem( iCount );
+            if ( rItem.GetType() == SV_ITEM_ID_LBOXSTRING &&
+                 !static_cast<const SvLBoxString&>( rItem ).GetText().isEmpty() )
             {
                 iRealItemCount++;
             }

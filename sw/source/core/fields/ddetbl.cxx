@@ -135,9 +135,9 @@ void SwDDETable::ChangeContent()
         }
     }
 
-    const IDocumentSettingAccess* pIDSA = GetFrameFormat()->getIDocumentSettingAccess();
+    const IDocumentSettingAccess& rIDSA = GetFrameFormat()->getIDocumentSettingAccess();
     SwDoc* pDoc = GetFrameFormat()->GetDoc();
-    if( AUTOUPD_FIELD_AND_CHARTS == pIDSA->getFieldUpdateFlags(true) )
+    if( AUTOUPD_FIELD_AND_CHARTS == rIDSA.getFieldUpdateFlags(true) )
         pDoc->getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
 }
 

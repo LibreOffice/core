@@ -312,7 +312,7 @@ static bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTe
     bool bRet = false;
     pInsDoc->getIDocumentFieldsAccess().LockExpFields();
     {
-        SwDoc *const pDoc((pxCursor) ? pxCursor->GetDoc() : pxRange->GetDoc());
+        SwDoc *const pDoc((pxCursor) ? pxCursor->GetDoc() : &pxRange->GetDoc());
         SwPaM aPam(pDoc->GetNodes());
         SwPaM * pPam(0);
         if(pxCursor)
@@ -923,7 +923,7 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
 
     SwDoc* pDoc = 0;
     if (pRange)
-        pDoc = pRange->GetDoc();
+        pDoc = &pRange->GetDoc();
     else if ( pCursor )
         pDoc = pCursor->GetDoc();
     else if ( pText && pText->GetDoc() )

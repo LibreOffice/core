@@ -151,8 +151,8 @@ bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
         aSlotId.ReadSvIdl( rBase, rInStm );
 
         bOk = true;
-        SvToken * pTok  = rInStm.GetToken();
-        if( bOk && pTok->IsChar() && pTok->GetChar() == '(' )
+        SvToken& rTok  = rInStm.GetToken();
+        if( bOk && rTok.IsChar() && rTok.GetChar() == '(' )
         {
             SvMetaTypeRef xT = new SvMetaType();
             xT->SetRef( GetType() );
@@ -164,11 +164,11 @@ bool SvMetaAttribute::ReadSvIdl( SvIdlDataBase & rBase,
     }
     else
     {
-        SvToken *pTok = rInStm.GetToken();
+        SvToken& rTok = rInStm.GetToken();
         rBase.SetError( "unknown type of token. Each new SID needs an "
                         "item statement in an SDI file, eg. "
-                        "SfxVoidItem FooItem  " + pTok->GetTokenAsString() +
-                        " ... which describes the slot more fully", pTok );
+                        "SfxVoidItem FooItem  " + rTok.GetTokenAsString() +
+                        " ... which describes the slot more fully", rTok );
     }
 
     if( !bOk )

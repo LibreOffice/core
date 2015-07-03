@@ -865,7 +865,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     rFlyAttrSet.Put( SwFormatAnchor( FLY_AT_PARA ));
     // #i89920#
     rFlyAttrSet.Put( SwFormatSurround( SURROUND_THROUGHT ) );
-    rDrawObj.SetLayer( getIDocumentDrawModelAccess()->GetHeavenId() );
+    rDrawObj.SetLayer( getIDocumentDrawModelAccess().GetHeavenId() );
 
     // find anchor position
     SwPaM aPam( mpDoc->GetNodes() );

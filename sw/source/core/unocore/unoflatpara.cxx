@@ -284,8 +284,8 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
             xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
     }
 
-    IDocumentContentOperations* pIDCO = pOldTextNode->getIDocumentContentOperations();
-    pIDCO->ReplaceRange( aPaM, aNewText, false );
+    IDocumentContentOperations& rIDCO = pOldTextNode->getIDocumentContentOperations();
+    rIDCO.ReplaceRange( aPaM, aNewText, false );
 
     ClearTextNode(); // TODO: is this really needed?
 }

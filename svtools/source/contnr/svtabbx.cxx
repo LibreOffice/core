@@ -263,19 +263,19 @@ OUString SvTabListBox::GetEntryText( SvTreeListEntry* pEntry, sal_uInt16 nCol )
         sal_uInt16 nCur = 0;
         while( nCur < nCount )
         {
-            const SvLBoxItem* pStr = pEntry->GetItem( nCur );
-            if (pStr->GetType() == SV_ITEM_ID_LBOXSTRING)
+            const SvLBoxItem& rStr = pEntry->GetItem( nCur );
+            if (rStr.GetType() == SV_ITEM_ID_LBOXSTRING)
             {
                 if( nCol == 0xffff )
                 {
                     if (!aResult.isEmpty())
                         aResult += "\t";
-                    aResult += static_cast<const SvLBoxString*>(pStr)->GetText();
+                    aResult += static_cast<const SvLBoxString&>(rStr).GetText();
                 }
                 else
                 {
                     if( nCol == 0 )
-                        return static_cast<const SvLBoxString*>(pStr)->GetText();
+                        return static_cast<const SvLBoxString&>(rStr).GetText();
                     nCol--;
                 }
             }
@@ -312,13 +312,13 @@ void SvTabListBox::SetEntryText(const OUString& rStr, SvTreeListEntry* pEntry, s
     const sal_uInt16 nCount = pEntry->ItemCount();
     for (sal_uInt16 nCur = 0; nCur < nCount; ++nCur)
     {
-        SvLBoxItem* pStr = pEntry->GetItem( nCur );
-        if (pStr && pStr->GetType() == SV_ITEM_ID_LBOXSTRING)
+        SvLBoxItem& rBoxItem = pEntry->GetItem( nCur );
+        if (rBoxItem.GetType() == SV_ITEM_ID_LBOXSTRING)
         {
             if (!nCol || nCol==0xFFFF)
             {
                 const OUString aTemp(GetToken(rStr, nIndex));
-                static_cast<SvLBoxString*>(pStr)->SetText( aTemp );
+                static_cast<SvLBoxString&>(rBoxItem).SetText( aTemp );
                 if (!nCol && nIndex<0)
                     break;
             }
@@ -342,9 +342,9 @@ OUString SvTabListBox::GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const
     OUString aResult;
     if (pEntry && pEntry->ItemCount() > static_cast<size_t>(nCol+1))
     {
-        const SvLBoxItem* pStr = pEntry->GetItem( nCol + 1 );
-        if (pStr && pStr->GetType() == SV_ITEM_ID_LBOXSTRING)
-            aResult = static_cast<const SvLBoxString*>(pStr)->GetText();
+        const SvLBoxItem& rStr = pEntry->GetItem( nCol + 1 );
+        if (rStr.GetType() == SV_ITEM_ID_LBOXSTRING)
+            aResult = static_cast<const SvLBoxString&>(rStr).GetText();
     }
     return aResult;
 }
@@ -400,20 +400,20 @@ OUString SvTabListBox::GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const
         sal_uInt16 nCur = ( 0 == nCol && IsCellFocusEnabled() ) ? GetCurrentTabPos() : 0;
         while( nCur < nCount )
         {
-            const SvLBoxItem* pStr = pEntry->GetItem( nCur );
-            if (pStr->GetType() == SV_ITEM_ID_LBOXSTRING)
+            const SvLBoxItem& rBoxItem = pEntry->GetItem( nCur );
+            if (rBoxItem.GetType() == SV_ITEM_ID_LBOXSTRING)
             {
                 if ( nCol == 0xffff )
                 {
                     if (!aResult.isEmpty())
                         aResult += "\t";
-                    aResult += static_cast<const SvLBoxString*>(pStr)->GetText();
+                    aResult += static_cast<const SvLBoxString&>(rBoxItem).GetText();
                 }
                 else
                 {
                     if ( nCol == 0 )
                     {
-                        OUString sRet = static_cast<const SvLBoxString*>(pStr)->GetText();
+                        OUString sRet = static_cast<const SvLBoxString&>(rBoxItem).GetText();
                         if ( sRet.isEmpty() )
                             sRet = SVT_RESSTR( STR_SVT_ACC_EMPTY_FIELD );
                         return sRet;
@@ -545,11 +545,11 @@ void SvHeaderTabListBox::InitHeaderBar( HeaderBar* pHeaderBar )
 bool SvHeaderTabListBox::IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
-    SvLBoxButton* pItem = static_cast<SvLBoxButton*>( pEntry->GetItem( nCol + 1 ) );
+    SvLBoxButton& rItem = static_cast<SvLBoxButton&>( pEntry->GetItem( nCol + 1 ) );
 
-    if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+    if (rItem.GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
-        SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
+        SvItemStateFlags nButtonFlags = rItem.GetButtonFlags();
         eState = SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
     }
 
@@ -655,11 +655,11 @@ bool SvHeaderTabListBox::IsCellCheckBox( long _nRow, sal_uInt16 _nColumn, TriSta
         sal_uInt16 nItemCount = pEntry->ItemCount();
         if ( nItemCount > ( _nColumn + 1 ) )
         {
-            SvLBoxItem* pItem = pEntry->GetItem( _nColumn + 1 );
-            if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+            SvLBoxItem& rItem = pEntry->GetItem( _nColumn + 1 );
+            if (rItem.GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 bRet = true;
-                _rState = ( ( static_cast<SvLBoxButton*>(pItem)->GetButtonFlags() & SvItemStateFlags::UNCHECKED ) == SvItemStateFlags::NONE )
+                _rState = ( ( static_cast<SvLBoxButton&>(rItem).GetButtonFlags() & SvItemStateFlags::UNCHECKED ) == SvItemStateFlags::NONE )
                             ? TRISTATE_TRUE : TRISTATE_FALSE;
             }
         }

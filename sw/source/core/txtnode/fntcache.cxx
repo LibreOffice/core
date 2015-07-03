@@ -379,7 +379,7 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
                 nExtLeading = 0;
         }
 
-        const IDocumentSettingAccess& rIDSA = *pSh->getIDocumentSettingAccess();
+        const IDocumentSettingAccess& rIDSA = pSh->getIDocumentSettingAccess();
         const bool bBrowse = ( pSh->GetWin() &&
                                pSh->GetViewOptions()->getBrowseMode() &&
                               !pSh->GetViewOptions()->IsPrtFormat() );

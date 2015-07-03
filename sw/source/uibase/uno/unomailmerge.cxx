@@ -684,10 +684,10 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     {
     case MailMergeType::PRINTER:
         {
-            IDocumentDeviceAccess* pIDDA = rSh.getIDocumentDeviceAccess();
-            SwPrintData aPrtData( pIDDA->getPrintData() );
+            IDocumentDeviceAccess& rIDDA = rSh.getIDocumentDeviceAccess();
+            SwPrintData aPrtData( rIDDA.getPrintData() );
             aPrtData.SetPrintSingleJobs( bCurSinglePrintJobs );
-            pIDDA->setPrintData( aPrtData );
+            rIDDA.setPrintData( aPrtData );
             // #i25686# printing should not be done asynchronously to prevent dangling offices
             // when mail merge is called as command line macro
             aMergeDesc.bPrintAsync = false;

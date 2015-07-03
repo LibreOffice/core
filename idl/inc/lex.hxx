@@ -212,7 +212,7 @@ public:
         return GetToken_NextAll();
     }
 
-    SvToken* GetToken() const { return &(*pCurToken); }
+    SvToken& GetToken() const { return *pCurToken; }
 
     bool     Read( char cChar )
                     {

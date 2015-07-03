@@ -454,7 +454,7 @@ SvLBoxItem* SvSimpleTable::GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nP
 
         if( nPos < nCount )
         {
-            pItem = pEntry->GetItem( nPos);
+            pItem = &pEntry->GetItem( nPos);
         }
     }
     return pItem;

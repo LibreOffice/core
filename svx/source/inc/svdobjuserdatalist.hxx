@@ -26,7 +26,7 @@ public:
     ~SdrObjUserDataList();
 
     size_t GetUserDataCount() const;
-    SdrObjUserData* GetUserData(size_t nNum);
+    SdrObjUserData& GetUserData(size_t nNum);
     void AppendUserData(SdrObjUserData* pData);
     void DeleteUserData(size_t nNum);
 };

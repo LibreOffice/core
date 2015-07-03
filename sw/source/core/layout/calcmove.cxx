@@ -102,7 +102,7 @@ bool SwContentFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool & )
         // if <nMoveAnyway> equals 3 and no space is left in new upper.
         nMoveAnyway |= BwdMoveNecessary( pOldPage, Frm() );
         {
-            const IDocumentSettingAccess* pIDSA = pNewPage->GetFormat()->getIDocumentSettingAccess();
+            const IDocumentSettingAccess& rIDSA = pNewPage->GetFormat()->getIDocumentSettingAccess();
             SwTwips nSpace = 0;
             SwRect aRect( pNewUpper->Prt() );
             aRect.Pos() += pNewUpper->Frm().Pos();
@@ -116,7 +116,7 @@ bool SwContentFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, bool, bool & )
                     // check, if last frame is inside table and if it includes
                     // its lower spacing.
                     if ( !pPrevFrm->GetNext() && pPrevFrm->IsInTab() &&
-                         pIDSA->get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
+                         rIDSA.get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
                     {
                         const SwFrm* pLastFrm = pPrevFrm;
                         // if last frame is a section, take its last content
@@ -1907,7 +1907,7 @@ bool SwContentFrm::_WouldFit( SwTwips nSpace,
 
         // OD 2004-03-01 #106629# - also consider lower spacing in table cells
         if ( bRet && IsInTab() &&
-             pNewUpper->GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
+             pNewUpper->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
         {
             nSpace -= rAttrs.GetULSpace().GetLower();
             if ( nSpace < 0 )

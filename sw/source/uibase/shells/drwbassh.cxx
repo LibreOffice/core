@@ -606,7 +606,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     else
     {
         nRet = 1;
-        SwDrawModel* pModel = rSh.getIDocumentDrawModelAccess()->GetDrawModel();
+        SwDrawModel* pModel = rSh.getIDocumentDrawModelAccess().GetDrawModel();
         SdrObjListIter aIter( *(pModel->GetPage(0)), IM_DEEPWITHGROUPS );
         while( aIter.IsMore() )
         {

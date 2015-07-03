@@ -3570,14 +3570,14 @@ size_t ScDPCollection::GetCount() const
     return maTables.size();
 }
 
-ScDPObject* ScDPCollection::operator [](size_t nIndex)
+ScDPObject& ScDPCollection::operator [](size_t nIndex)
 {
-    return &maTables[nIndex];
+    return maTables[nIndex];
 }
 
-const ScDPObject* ScDPCollection::operator [](size_t nIndex) const
+const ScDPObject& ScDPCollection::operator [](size_t nIndex) const
 {
-    return &maTables[nIndex];
+    return maTables[nIndex];
 }
 
 const ScDPObject* ScDPCollection::GetByName(const OUString& rName) const

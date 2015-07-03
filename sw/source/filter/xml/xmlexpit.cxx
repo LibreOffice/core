@@ -72,17 +72,17 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
 
     while( nIndex < nCount )
     {
-        SvXMLItemMapEntry* pEntry = mrMapEntries->getByIndex( nIndex );
+        SvXMLItemMapEntry& rEntry = mrMapEntries->getByIndex( nIndex );
 
         // we have a valid map entry here, so lets use it...
-        if( 0 == (pEntry->nMemberId & MID_SW_FLAG_NO_ITEM_EXPORT) )
+        if( 0 == (rEntry.nMemberId & MID_SW_FLAG_NO_ITEM_EXPORT) )
         {
-            const SfxPoolItem* pItem = GetItem( rSet, pEntry->nWhichId,
+            const SfxPoolItem* pItem = GetItem( rSet, rEntry.nWhichId,
                                                 nFlags );
             // do we have an item?
             if(pItem)
             {
-                if( 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT) )
+                if( 0 != (rEntry.nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT) )
                 {
                     // element items do not add any properties,
                     // we export it later
@@ -92,14 +92,14 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                 }
                 else
                 {
-                    exportXML( rExport, rAttrList, *pItem, *pEntry, rUnitConverter,
+                    exportXML( rExport, rAttrList, *pItem, rEntry, rUnitConverter,
                                   rNamespaceMap, nFlags, &rSet );
                 }
             }
         }
         else
         {
-            handleNoItem( rAttrList, *pEntry, rUnitConverter, rNamespaceMap,
+            handleNoItem( rAttrList, rEntry, rUnitConverter, rNamespaceMap,
                           rSet );
         }
         nIndex++;
@@ -228,16 +228,16 @@ void SvXMLExportItemMapper::exportElementItems(
     for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
     {
         const sal_uInt16 nElement = rIndexArray[ nIndex ];
-        SvXMLItemMapEntry* pEntry = mrMapEntries->getByIndex( nElement );
-        OSL_ENSURE( 0 != (pEntry->nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT),
+        SvXMLItemMapEntry& rEntry = mrMapEntries->getByIndex( nElement );
+        OSL_ENSURE( 0 != (rEntry.nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT),
                     "wrong mid flag!" );
 
-        const SfxPoolItem* pItem = GetItem( rSet, pEntry->nWhichId, nFlags );
+        const SfxPoolItem* pItem = GetItem( rSet, rEntry.nWhichId, nFlags );
         // do we have an item?
         if(pItem)
         {
             rExport.IgnorableWhitespace();
-            handleElementItem( rExport, *pEntry, *pItem, rUnitConverter,
+            handleElementItem( rExport, rEntry, *pItem, rUnitConverter,
                                rSet, nFlags);
             bItemsExported = true;
         }

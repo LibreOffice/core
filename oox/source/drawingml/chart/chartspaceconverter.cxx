@@ -67,12 +67,9 @@ ChartSpaceConverter::~ChartSpaceConverter()
 
 void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExternalPage, const awt::Point& rChartPos )
 {
-    if( !getChartConverter() )
-        return;
-
     /*  create data provider (virtual function in the ChartConverter class,
         derived converters may create an external data provider) */
-    getChartConverter()->createDataProvider( getChartDocument() );
+    getChartConverter().createDataProvider( getChartDocument() );
 
     // formatting of the chart background.  The default fill style varies with applications.
     PropertySet aBackPropSet( getChartDocument()->getPageBackground() );

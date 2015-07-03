@@ -216,7 +216,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     // extend format cache.
     if ( SwTextFrm::GetTextCache()->GetCurMax() < 2550 )
         SwTextFrm::GetTextCache()->IncreaseMax( 100 );
-    if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
+    if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess().GetDrawModel() )
         Imp()->MakeDrawView();
 
     // OD 2004-06-01 #i26791#
@@ -288,7 +288,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     // extend format cache.
     if ( SwTextFrm::GetTextCache()->GetCurMax() < 2550 )
         SwTextFrm::GetTextCache()->IncreaseMax( 100 );
-    if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess()->GetDrawModel() )
+    if( mpOpt->IsGridVisible() || getIDocumentDrawModelAccess().GetDrawModel() )
         Imp()->MakeDrawView();
 
     // OD 2004-06-01 #i26791#

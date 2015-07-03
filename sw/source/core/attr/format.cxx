@@ -780,14 +780,14 @@ bool SwFormat::IsBackgroundTransparent() const
 /*
  * Document Interface Access
  */
-const IDocumentSettingAccess* SwFormat::getIDocumentSettingAccess() const { return & GetDoc()->GetDocumentSettingManager(); }
-const IDocumentDrawModelAccess* SwFormat::getIDocumentDrawModelAccess() const { return & GetDoc()->getIDocumentDrawModelAccess(); }
-IDocumentDrawModelAccess* SwFormat::getIDocumentDrawModelAccess() { return & GetDoc()->getIDocumentDrawModelAccess(); }
-const IDocumentLayoutAccess* SwFormat::getIDocumentLayoutAccess() const { return &GetDoc()->getIDocumentLayoutAccess(); }
-IDocumentLayoutAccess* SwFormat::getIDocumentLayoutAccess() { return &GetDoc()->getIDocumentLayoutAccess(); }
-IDocumentTimerAccess* SwFormat::getIDocumentTimerAccess() { return & GetDoc()->getIDocumentTimerAccess(); }
-IDocumentFieldsAccess* SwFormat::getIDocumentFieldsAccess() { return &GetDoc()->getIDocumentFieldsAccess(); }
-IDocumentChartDataProviderAccess* SwFormat::getIDocumentChartDataProviderAccess() { return & GetDoc()->getIDocumentChartDataProviderAccess(); }
+const IDocumentSettingAccess& SwFormat::getIDocumentSettingAccess() const { return GetDoc()->GetDocumentSettingManager(); }
+const IDocumentDrawModelAccess& SwFormat::getIDocumentDrawModelAccess() const { return GetDoc()->getIDocumentDrawModelAccess(); }
+IDocumentDrawModelAccess& SwFormat::getIDocumentDrawModelAccess() { return GetDoc()->getIDocumentDrawModelAccess(); }
+const IDocumentLayoutAccess& SwFormat::getIDocumentLayoutAccess() const { return GetDoc()->getIDocumentLayoutAccess(); }
+IDocumentLayoutAccess& SwFormat::getIDocumentLayoutAccess() { return GetDoc()->getIDocumentLayoutAccess(); }
+IDocumentTimerAccess& SwFormat::getIDocumentTimerAccess() { return GetDoc()->getIDocumentTimerAccess(); }
+IDocumentFieldsAccess& SwFormat::getIDocumentFieldsAccess() { return GetDoc()->getIDocumentFieldsAccess(); }
+IDocumentChartDataProviderAccess& SwFormat::getIDocumentChartDataProviderAccess() { return GetDoc()->getIDocumentChartDataProviderAccess(); }
 
 void SwFormat::GetGrabBagItem(uno::Any& rVal) const
 {

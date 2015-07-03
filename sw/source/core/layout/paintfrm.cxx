@@ -1628,8 +1628,8 @@ static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
 
         //If the content of the Fly is transparent, we subtract it only if it's
         //contained in the hell layer.
-        const IDocumentDrawModelAccess* pIDDMA = pFly->GetFormat()->getIDocumentDrawModelAccess();
-        bool bHell = pSdrObj->GetLayer() == pIDDMA->GetHellId();
+        const IDocumentDrawModelAccess& rIDDMA = pFly->GetFormat()->getIDocumentDrawModelAccess();
+        bool bHell = pSdrObj->GetLayer() == rIDDMA.GetHellId();
         if ( (bStopOnHell && bHell) ||
              /// Change internal order of condition
              ///    first check "!bHell", then "..->Lower()" and "..->IsNoTextFrm()"
@@ -3367,8 +3367,8 @@ void SwRootFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, S
                 if ( pSh->Imp()->HasDrawView() )
                 {
                     gProp.pSLines->LockLines( true );
-                    const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
-                    pSh->Imp()->PaintLayer( pIDDMA->GetHellId(),
+                    const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
+                    pSh->Imp()->PaintLayer( rIDDMA.GetHellId(),
                                             pPrintData,
                                             pPage->Frm(),
                                             &aPageBackgrdColor,
@@ -4057,7 +4057,7 @@ bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
             {
                 if ( !pAnch->GetValidPosFlag() )
                     pAnch = 0;
-                else if ( sal_IntPtr(pSh->GetOut()) == sal_IntPtr(pSh->getIDocumentDeviceAccess()->getPrinter( false )))
+                else if ( sal_IntPtr(pSh->GetOut()) == sal_IntPtr(pSh->getIDocumentDeviceAccess().getPrinter( false )))
                 {
                     //HACK: we have to omit some of the objects for printing,
                     //otherwise they would be printed twice.
@@ -4210,16 +4210,16 @@ void SwFlyFrm::Paint(vcl::RenderContext& rRenderContext, SwRect const& rRect, Sw
         // for transparent graphics in layer Hell, if parent fly frame isn't
         // in layer Hell. It's only painted the intersection between the
         // parent fly frame area and the paint area <aRect>
-        const IDocumentDrawModelAccess* pIDDMA = GetFormat()->getIDocumentDrawModelAccess();
+        const IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
 
         if (bIsGraphicTransparent &&
             GetFormat()->GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::SUBTRACT_FLYS) &&
-            GetVirtDrawObj()->GetLayer() == pIDDMA->GetHellId() &&
+            GetVirtDrawObj()->GetLayer() == rIDDMA.GetHellId() &&
             GetAnchorFrm()->FindFlyFrm() )
         {
             const SwFlyFrm* pParentFlyFrm = GetAnchorFrm()->FindFlyFrm();
             if ( pParentFlyFrm->GetDrawObj()->GetLayer() !=
-                                            pIDDMA->GetHellId() )
+                                            rIDDMA.GetHellId() )
             {
                 SwFlyFrm* pOldRet = gProp.pSRetoucheFly2;
                 gProp.pSRetoucheFly2 = const_cast<SwFlyFrm*>(this);
@@ -7414,16 +7414,16 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
             if ( aRetouchePart.HasArea() )
             {
                 const Color aPageBackgrdColor(pPage->GetDrawBackgrdColor());
-                const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
+                const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
                 // --> OD #i76669#
                 SwViewObjectContactRedirector aSwRedirector( *pSh );
                 // <--
 
-                pSh->Imp()->PaintLayer( pIDDMA->GetHellId(), 0,
+                pSh->Imp()->PaintLayer( rIDDMA.GetHellId(), 0,
                                         aRetouchePart, &aPageBackgrdColor,
                                         pPage->IsRightToLeft(),
                                         &aSwRedirector );
-                pSh->Imp()->PaintLayer( pIDDMA->GetHeavenId(), 0,
+                pSh->Imp()->PaintLayer( rIDDMA.GetHeavenId(), 0,
                                         aRetouchePart, &aPageBackgrdColor,
                                         pPage->IsRightToLeft(),
                                         &aSwRedirector );
@@ -7703,11 +7703,11 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
         // OD 09.12.2002 #103045# - determine page, fly frame is on
         const SwPageFrm* pFlyPage = pFly->FindPageFrm();
         const Color aPageBackgrdColor(pFlyPage->GetDrawBackgrdColor());
-        const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
+        const IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
         // --> OD #i76669#
         SwViewObjectContactRedirector aSwRedirector( *pSh );
         // <--
-        pImp->PaintLayer( pIDDMA->GetHellId(), 0, aOut, &aPageBackgrdColor,
+        pImp->PaintLayer( rIDDMA.GetHellId(), 0, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
         gProp.pSLines->PaintLines( pDev, gProp );
@@ -7715,7 +7715,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
             pFly->Paint( *pDev, aOut );
         gProp.pSLines->PaintLines( pDev, gProp );
         // OD 30.08.2002 #102450# - add 3rd parameter
-        pImp->PaintLayer( pIDDMA->GetHeavenId(), 0, aOut, &aPageBackgrdColor,
+        pImp->PaintLayer( rIDDMA.GetHeavenId(), 0, aOut, &aPageBackgrdColor,
                           pFlyPage->IsRightToLeft(),
                           &aSwRedirector );
         gProp.pSLines->PaintLines( pDev, gProp );
@@ -7748,7 +7748,7 @@ Graphic SwFlyFrameFormat::MakeGraphic( ImageMap* pMap )
 Graphic SwDrawFrameFormat::MakeGraphic( ImageMap* )
 {
     Graphic aRet;
-    SwDrawModel* pMod = getIDocumentDrawModelAccess()->GetDrawModel();
+    SwDrawModel* pMod = getIDocumentDrawModelAccess().GetDrawModel();
     if ( pMod )
     {
         SdrObject *pObj = FindSdrObject();

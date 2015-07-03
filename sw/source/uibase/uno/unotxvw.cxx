@@ -642,7 +642,7 @@ void SAL_CALL SwXTextView::setRubyList(
 SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
 {
     SwWrtShell& rOldSh = m_pView->GetWrtShell();
-    SfxPrinter *pPrt = rOldSh.getIDocumentDeviceAccess()->getPrinter( false );
+    SfxPrinter *pPrt = rOldSh.getIDocumentDeviceAccess().getPrinter( false );
     SwDocShell* pDocSh;
     SfxObjectShellLock xDocSh( pDocSh = new SwDocShell( /*pPrtDoc, */SfxObjectCreateMode::STANDARD ) );
     xDocSh->DoInitNew( 0 );
@@ -655,18 +655,18 @@ SfxObjectShellLock SwXTextView::BuildTmpSelectionDoc()
     pDocView->AttrChangedNotify( &pDocView->GetWrtShell() );//So that SelectShell is called.
     SwWrtShell* pSh = pDocView->GetWrtShellPtr();
 
-    IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
-    SfxPrinter* pTempPrinter = pIDDA->getPrinter( true );
+    IDocumentDeviceAccess& rIDDA = pSh->getIDocumentDeviceAccess();
+    SfxPrinter* pTempPrinter = rIDDA.getPrinter( true );
 
     const SwPageDesc& rCurPageDesc = rOldSh.GetPageDesc(rOldSh.GetCurPageDesc());
 
-    IDocumentDeviceAccess* pIDDA_old = rOldSh.getIDocumentDeviceAccess();
+    IDocumentDeviceAccess& rIDDA_old = rOldSh.getIDocumentDeviceAccess();
 
-    if( pIDDA_old->getPrinter( false ) )
+    if( rIDDA_old.getPrinter( false ) )
     {
-        pIDDA->setJobsetup( *pIDDA_old->getJobsetup() );
+        rIDDA.setJobsetup( *rIDDA_old.getJobsetup() );
         //#69563# if it isn't the same printer then the pointer has been invalidated!
-        pTempPrinter = pIDDA->getPrinter( true );
+        pTempPrinter = rIDDA.getPrinter( true );
     }
 
     pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
@@ -1107,7 +1107,7 @@ void SwXTextViewCursor::gotoRange(
         }
         else if (pRange)
         {
-            SwPaM aPam(pRange->GetDoc()->GetNodes());
+            SwPaM aPam(pRange->GetDoc().GetNodes());
             if (pRange->GetPositions(aPam))
             {
                 pSrcNode = &aPam.GetNode();

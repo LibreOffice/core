@@ -1680,8 +1680,8 @@ void ScContentTree::InitEntry(SvTreeListEntry* pEntry,
 {
     sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
-    SvLBoxString* pCol = static_cast<SvLBoxString*>(pEntry->GetItem( nColToHilite ));
-    SvLBoxString* pStr = new SvLBoxString( pEntry, 0, pCol->GetText() );
+    SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nColToHilite ));
+    SvLBoxString* pStr = new SvLBoxString( pEntry, 0, rCol.GetText() );
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
 

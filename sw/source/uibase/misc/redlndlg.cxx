@@ -295,7 +295,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     if (pFilterPage->SelectAuthor(sOldAuthor) == LISTBOX_ENTRY_NOTFOUND && !aStrings.empty())
         pFilterPage->SelectAuthor(aStrings[0]);
 
-    bool bEnable = pTable->GetEntryCount() != 0 && !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
+    bool bEnable = pTable->GetEntryCount() != 0 && !pSh->getIDocumentRedlineAccess().GetRedlinePassword().getLength();
     bool bSel = pTable->FirstSelected() != 0;
 
     SvTreeListEntry* pSelEntry = pTable->FirstSelected();
@@ -1014,7 +1014,7 @@ IMPL_LINK_NOARG_TYPED(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
         pSh->EndAction();
         SwViewShell::SetCareWin(NULL);
     }
-    bool bEnable = !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
+    bool bEnable = !pSh->getIDocumentRedlineAccess().GetRedlinePassword().getLength();
     pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
     pTPView->EnableReject( bEnable && bSel && bIsNotFormated /*&& !bReadonlySel*/ );
     pTPView->EnableRejectAll( bEnable && !bOnlyFormatedRedlines && !bHasReadonlySel );

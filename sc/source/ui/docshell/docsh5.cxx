@@ -437,13 +437,11 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
     ScDBDocFunc aFunc(*this);
     for (size_t i = 0, n = pColl->GetCount(); i < n; ++i)
     {
-        ScDPObject* pOld = (*pColl)[i];
-        if (!pOld)
-            continue;
+        ScDPObject& rOld = (*pColl)[i];
 
-        const ScSheetSourceDesc* pSheetDesc = pOld->GetSheetDesc();
+        const ScSheetSourceDesc* pSheetDesc = rOld.GetSheetDesc();
         if (pSheetDesc && pSheetDesc->GetSourceRange().Intersects(rSource))
-            aFunc.UpdatePivotTable(*pOld, true, false);
+            aFunc.UpdatePivotTable(rOld, true, false);
     }
 }
 

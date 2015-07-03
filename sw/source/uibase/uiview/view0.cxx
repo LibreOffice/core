@@ -243,7 +243,6 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     SfxBoolItem aBool;
     const SwViewOption* pOpt = GetWrtShell().GetViewOptions();
-    const IDocumentSettingAccess* pIDSA = GetDocShell()->getIDocumentSettingAccess();
 
     while(nWhich)
     {
@@ -327,7 +326,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
                 aBool.SetValue( pOpt->IsOnlineSpell() );
             break;
             case FN_SHADOWCURSOR:
-                if (pIDSA == 0 || pOpt->getBrowseMode() )
+                if ( pOpt->getBrowseMode() )
                 {
                     rSet.DisableItem( nWhich );
                     nWhich = 0;

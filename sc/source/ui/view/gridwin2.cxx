@@ -487,8 +487,8 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
             aUserSortNames.reserve(n);
             for (size_t i = 0; i < n; ++i)
             {
-                const ScUserListData* pData = (*pUserList)[i];
-                aUserSortNames.push_back(pData->GetString());
+                const ScUserListData& rData = (*pUserList)[i];
+                aUserSortNames.push_back(rData.GetString());
             }
         }
 

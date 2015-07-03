@@ -291,15 +291,15 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     {
         SvIdlDataBase::WriteError( "warning", OUStringToOString(rInStm.GetFileName(), RTL_TEXTENCODING_UTF8),
                     "<Get> old style, use Readonly",
-                    rInStm.GetToken()->GetLine(),
-                    rInStm.GetToken()->GetColumn() );
+                    rInStm.GetToken().GetLine(),
+                    rInStm.GetToken().GetColumn() );
     }
     if( aSet.ReadSvIdl( SvHash_Set(), rInStm ) )
     {
         SvIdlDataBase::WriteError( "warning", OUStringToOString(rInStm.GetFileName(), RTL_TEXTENCODING_UTF8),
                     "<Set> old style, use method declaration",
-                    rInStm.GetToken()->GetLine(),
-                    rInStm.GetToken()->GetColumn() );
+                    rInStm.GetToken().GetLine(),
+                    rInStm.GetToken().GetColumn() );
     }
 
     if( aCachable.ReadSvIdl( SvHash_Cachable(), rInStm ) )
@@ -379,8 +379,8 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
         }
         if( !aMethod.Is() )
         {
-            SvToken * pTok = rInStm.GetToken();
-            if( pTok->IsIdentifier() )
+            SvToken& rTok = rInStm.GetToken();
+            if( rTok.IsIdentifier() )
             {
                 aMethod = new SvMetaSlot();
                 sal_uInt32 nTokPos = rInStm.Tell();

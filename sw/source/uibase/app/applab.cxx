@@ -198,7 +198,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
         if (pPrt)
         {
             SwDocShell *pDocSh = static_cast<SwDocShell*>(&*xDocSh);
-            pDocSh->getIDocumentDeviceAccess()->setJobsetup(pPrt->GetJobSetup());
+            pDocSh->getIDocumentDeviceAccess().setJobsetup(pPrt->GetJobSetup());
         }
 
         SfxViewFrame* pViewFrame = SfxViewFrame::DisplayNewDocument( *xDocSh, rReq );
@@ -272,7 +272,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
             const SwPageDesc &rFollow = pSh->GetPageDesc( pSh->GetCurPageDesc() );
             aDesc.SetFollow( &rFollow );
 
-            pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( true );
+            pPrt = pSh->getIDocumentDeviceAccess().getPrinter( true );
             SvxPaperBinItem aItem( RES_PAPER_BIN );
             aItem.SetValue((sal_Int8)pPrt->GetPaperBin());
             rFormat.SetFormatAttr(aItem);

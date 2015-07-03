@@ -111,8 +111,8 @@ public:
     bool HasOnlyHidden(const ScDPUniqueStringSet& rVisible);
 
     long    GetGroupCount() const;
-    const ScDPSaveGroupItem* GetGroupByIndex( long nIndex ) const;
-    ScDPSaveGroupItem* GetGroupAccByIndex( long nIndex );
+    const ScDPSaveGroupItem& GetGroupByIndex( long nIndex ) const;
+    ScDPSaveGroupItem& GetGroupAccByIndex( long nIndex );
 
     void    Rename( const OUString& rNewName );
 

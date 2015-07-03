@@ -71,9 +71,9 @@ using namespace ::com::sun::star;
 
 SfxPrinter* SwView::GetPrinter( bool bCreate )
 {
-    const IDocumentDeviceAccess* pIDDA = GetWrtShell().getIDocumentDeviceAccess();
-    SfxPrinter *pOld = pIDDA->getPrinter( false );
-    SfxPrinter *pPrt = pIDDA->getPrinter( bCreate );
+    const IDocumentDeviceAccess& rIDDA = GetWrtShell().getIDocumentDeviceAccess();
+    SfxPrinter *pOld = rIDDA.getPrinter( false );
+    SfxPrinter *pPrt = rIDDA.getPrinter( bCreate );
     if ( pOld != pPrt )
     {
         bool bWeb = 0 != dynamic_cast<SwWebView*>(this);
@@ -107,19 +107,19 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, bool bWeb )
 sal_uInt16 SwView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFlags, bool  )
 {
     SwWrtShell &rSh = GetWrtShell();
-    SfxPrinter* pOld = rSh.getIDocumentDeviceAccess()->getPrinter( false );
+    SfxPrinter* pOld = rSh.getIDocumentDeviceAccess().getPrinter( false );
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
 
     if ( (SfxPrinterChangeFlags::JOBSETUP | SfxPrinterChangeFlags::PRINTER) & nDiffFlags )
     {
-        rSh.getIDocumentDeviceAccess()->setPrinter( pNew, true, true );
+        rSh.getIDocumentDeviceAccess().setPrinter( pNew, true, true );
         if ( nDiffFlags & SfxPrinterChangeFlags::PRINTER )
             rSh.SetModified();
     }
     bool bWeb = this->ISA(SwWebView);
     if ( nDiffFlags & SfxPrinterChangeFlags::OPTIONS )
-        ::SetPrinter( rSh.getIDocumentDeviceAccess(), pNew, bWeb );
+        ::SetPrinter( &rSh.getIDocumentDeviceAccess(), pNew, bWeb );
 
     const bool bChgOri  = bool(nDiffFlags & SfxPrinterChangeFlags::CHG_ORIENTATION);
     const bool bChgSize = bool(nDiffFlags & SfxPrinterChangeFlags::CHG_SIZE);
@@ -273,10 +273,10 @@ VclPtr<SfxTabPage> CreatePrintOptionsPage( vcl::Window *pParent,
 
 void SetAppPrintOptions( SwViewShell* pSh, bool bWeb )
 {
-    const IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
-    SwPrintData aPrtData = pIDDA->getPrintData();
+    const IDocumentDeviceAccess& rIDDA = pSh->getIDocumentDeviceAccess();
+    SwPrintData aPrtData = rIDDA.getPrintData();
 
-    if( pIDDA->getPrinter( false ) )
+    if( rIDDA.getPrinter( false ) )
     {
         // Close application own printing options in SfxPrinter.
         SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
@@ -299,7 +299,7 @@ void SetAppPrintOptions( SwViewShell* pSh, bool bWeb )
             static_cast<int>(aMisc.IsPaperSizeWarning() ? SfxPrinterChangeFlags::CHG_SIZE : SfxPrinterChangeFlags::NONE)   |
             static_cast<int>(aMisc.IsPaperOrientationWarning()  ? SfxPrinterChangeFlags::CHG_ORIENTATION : SfxPrinterChangeFlags::NONE )));
 
-        pIDDA->getPrinter( true )->SetOptions( aSet );
+        rIDDA.getPrinter( true )->SetOptions( aSet );
     }
 
 }

@@ -1500,22 +1500,17 @@ short ScTable::CompareCell(
                 if (bUserDef)
                 {
                     ScUserList* pList = ScGlobal::GetUserList();
-                    const ScUserListData* pData = (*pList)[aSortParam.nUserIndex];
+                    const ScUserListData& rData = (*pList)[aSortParam.nUserIndex];
 
-                    if (pData)
-                    {
-                        if ( bNaturalSort )
-                            nRes = naturalsort::Compare( aStr1, aStr2, bCaseSens, pData, pSortCollator );
-                        else
-                        {
-                            if ( bCaseSens )
-                                nRes = sal::static_int_cast<short>( pData->Compare(aStr1, aStr2) );
-                            else
-                                nRes = sal::static_int_cast<short>( pData->ICompare(aStr1, aStr2) );
-                        }
-                    }
+                    if ( bNaturalSort )
+                        nRes = naturalsort::Compare( aStr1, aStr2, bCaseSens, &rData, pSortCollator );
                     else
-                        bUserDef = false;
+                    {
+                        if ( bCaseSens )
+                            nRes = sal::static_int_cast<short>( rData.Compare(aStr1, aStr2) );
+                        else
+                            nRes = sal::static_int_cast<short>( rData.ICompare(aStr1, aStr2) );
+                    }
 
                 }
                 if (!bUserDef)

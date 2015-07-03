@@ -2002,17 +2002,17 @@ drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwContentNode::getSdrAllF
  * Document Interface Access
  */
 const IDocumentSettingAccess* SwNode::getIDocumentSettingAccess() const { return &GetDoc()->GetDocumentSettingManager(); }
-const IDocumentDeviceAccess* SwNode::getIDocumentDeviceAccess() const { return &GetDoc()->getIDocumentDeviceAccess(); }
-const IDocumentRedlineAccess* SwNode::getIDocumentRedlineAccess() const { return &GetDoc()->getIDocumentRedlineAccess(); }
-const IDocumentStylePoolAccess* SwNode::getIDocumentStylePoolAccess() const { return &GetDoc()->getIDocumentStylePoolAccess(); }
-const IDocumentDrawModelAccess* SwNode::getIDocumentDrawModelAccess() const { return & GetDoc()->getIDocumentDrawModelAccess(); }
-const IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() const { return &GetDoc()->getIDocumentLayoutAccess(); }
-IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() { return &GetDoc()->getIDocumentLayoutAccess(); }
-const IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() const { return &GetDoc()->getIDocumentLinksAdministration(); }
-IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() { return &GetDoc()->getIDocumentLinksAdministration(); }
-const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return &GetDoc()->getIDocumentFieldsAccess(); }
-IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return &GetDoc()->getIDocumentFieldsAccess(); }
-IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return &GetDoc()->getIDocumentContentOperations(); }
+const IDocumentDeviceAccess& SwNode::getIDocumentDeviceAccess() const { return GetDoc()->getIDocumentDeviceAccess(); }
+const IDocumentRedlineAccess& SwNode::getIDocumentRedlineAccess() const { return GetDoc()->getIDocumentRedlineAccess(); }
+const IDocumentStylePoolAccess& SwNode::getIDocumentStylePoolAccess() const { return GetDoc()->getIDocumentStylePoolAccess(); }
+const IDocumentDrawModelAccess& SwNode::getIDocumentDrawModelAccess() const { return GetDoc()->getIDocumentDrawModelAccess(); }
+const IDocumentLayoutAccess& SwNode::getIDocumentLayoutAccess() const { return GetDoc()->getIDocumentLayoutAccess(); }
+IDocumentLayoutAccess& SwNode::getIDocumentLayoutAccess() { return GetDoc()->getIDocumentLayoutAccess(); }
+const IDocumentLinksAdministration& SwNode::getIDocumentLinksAdministration() const { return GetDoc()->getIDocumentLinksAdministration(); }
+IDocumentLinksAdministration& SwNode::getIDocumentLinksAdministration() { return GetDoc()->getIDocumentLinksAdministration(); }
+const IDocumentFieldsAccess& SwNode::getIDocumentFieldsAccess() const { return GetDoc()->getIDocumentFieldsAccess(); }
+IDocumentFieldsAccess& SwNode::getIDocumentFieldsAccess() { return GetDoc()->getIDocumentFieldsAccess(); }
+IDocumentContentOperations& SwNode::getIDocumentContentOperations() { return GetDoc()->getIDocumentContentOperations(); }
 IDocumentListItems& SwNode::getIDocumentListItems() { return GetDoc()->getIDocumentListItems(); } // #i83479#
 
 const IDocumentMarkAccess* SwNode::getIDocumentMarkAccess() const { return GetDoc()->getIDocumentMarkAccess(); }

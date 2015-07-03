@@ -2707,7 +2707,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
     }
 
-    SwDoc* pDoc = pRange ? pRange->GetDoc() : pCursor ? pCursor->GetDoc() : 0;
+    SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : 0;
     if(pDoc)
     {
         SwUnoInternalPaM aIntPam(*pDoc);

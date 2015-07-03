@@ -290,7 +290,7 @@ public:
 
     virtual const FontList *GetFontList() const;
 
-    const sal_uInt16 *GetWhichMap() const { return &aWhichMap[0]; }
+    const sal_uInt16 *GetWhichMap() const { return aWhichMap.data(); }
 
     static void InsertMapEntry( const OUString& rKey, const SfxItemSet& rItemSet,
                          const SvxCSS1PropertyInfo& rProp, CSS1Map& rMap );

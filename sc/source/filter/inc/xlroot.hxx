@@ -206,7 +206,7 @@ public:
     /** Returns the destination document (import) or source document (export). */
     ScDocument& GetDoc() const;
     /** Returns pointer to the destination document (import) or source document (export). */
-    ScDocument* GetDocPtr() const;
+    ScDocument& GetDocRef() const;
 
     /** Returns the object shell of the Calc document. May be 0 (i.e. import from clipboard). */
     SfxObjectShell*     GetDocShell() const;

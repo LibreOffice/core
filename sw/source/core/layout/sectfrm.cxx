@@ -1263,7 +1263,7 @@ void SwSectionFrm::Format( vcl::RenderContext* pRenderContext, const SwBorderAtt
         // and releases this position lock keeping on destruction.
         ExtraFormatToPositionObjs aExtraFormatToPosObjs( *this );
         if ( !bMaximize &&
-             GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
+             GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              !GetFormat()->GetBalancedColumns().GetValue() )
         {
             aExtraFormatToPosObjs.FormatSectionToPositionObjs();
@@ -1964,7 +1964,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, bool bTst )
                 // was moved forward due to the positioning of its objects ).
                 // Thus, invalivate this next frame, if document compatibility
                 // option 'Consider wrapping style influence on object positioning' is ON.
-                else if ( GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
+                else if ( GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION) )
                 {
                     InvalidateNextPos();
                 }

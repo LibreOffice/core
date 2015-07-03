@@ -686,10 +686,10 @@ bool SwGrfNode::RestorePersistentData()
 {
     if( refLink.Is() )
     {
-        IDocumentLinksAdministration* pIDLA = getIDocumentLinksAdministration();
-        refLink->SetVisible( pIDLA->IsVisibleLinks() );
-        pIDLA->GetLinkManager().InsertDDELink( refLink );
-        if( getIDocumentLayoutAccess()->GetCurrentLayout() )
+        IDocumentLinksAdministration& rIDLA = getIDocumentLinksAdministration();
+        refLink->SetVisible( rIDLA.IsVisibleLinks() );
+        rIDLA.GetLinkManager().InsertDDELink( refLink );
+        if( getIDocumentLayoutAccess().GetCurrentLayout() )
             refLink->Update();
     }
     return true;
@@ -699,10 +699,10 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
 {
     refLink = new SwBaseLink( SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::GDIMETAFILE, this );
 
-    IDocumentLinksAdministration* pIDLA = getIDocumentLinksAdministration();
+    IDocumentLinksAdministration& rIDLA = getIDocumentLinksAdministration();
     if( GetNodes().IsDocNodes() )
     {
-        refLink->SetVisible( pIDLA->IsVisibleLinks() );
+        refLink->SetVisible( rIDLA.IsVisibleLinks() );
         if( rFltName == "DDE" )
         {
             sal_Int32 nTmp = 0;
@@ -710,7 +710,7 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
             sApp = rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp );
             sTopic = rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp );
             sItem = rGrfName.copy( nTmp );
-            pIDLA->GetLinkManager().InsertDDELink( refLink,
+            rIDLA.GetLinkManager().InsertDDELink( refLink,
                                             sApp, sTopic, sItem );
         }
         else
@@ -719,7 +719,7 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
             refLink->SetSynchron( bSync );
             refLink->SetContentType( SotClipboardFormatId::SVXB );
 
-            pIDLA->GetLinkManager().InsertFileLink( *refLink,
+            rIDLA.GetLinkManager().InsertFileLink( *refLink,
                                             OBJECT_CLIENT_GRF, rGrfName,
                                 (!bSync && !rFltName.isEmpty() ? &rFltName : 0) );
         }
@@ -742,7 +742,7 @@ void SwGrfNode::ReleaseLink()
             bInSwapIn = false;
         }
 
-        getIDocumentLinksAdministration()->GetLinkManager().Remove( refLink );
+        getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
         refLink.Clear();
         maGrfObj.SetLink();
 

@@ -563,7 +563,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
             pFollow = pPageDesc->GetFollow();
         }
 
-        IDocumentStylePoolAccess* pStylePoolAccess = getIDocumentStylePoolAccess();
+        IDocumentStylePoolAccess* pStylePoolAccess = &getIDocumentStylePoolAccess();
         if( pPageDesc == pFollow )
         {
             // The document is one-sided; no matter what page, we do not create a 2-sided doc.
@@ -596,7 +596,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc, bool bUsed )
     // The text body style has to be exported always (if it is changed compared
     // to the template), because it is used as reference for any style
     // that maps to <P>, and that's especially the standard style
-    getIDocumentStylePoolAccess()->GetTextCollFromPool( RES_POOLCOLL_TEXT, false );
+    getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_TEXT, false );
 
     // the Default-TextStyle is not also exported !!
     // 0-Style is the Default; is never exported !!

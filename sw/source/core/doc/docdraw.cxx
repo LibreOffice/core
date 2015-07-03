@@ -488,7 +488,7 @@ _ZSortFly::_ZSortFly( const SwFrameFormat* pFrameFormat, const SwFormatAnchor* p
     // FlyFrames an alternative method is used now in that case.
     if( RES_FLYFRMFMT == pFormat->Which() )
     {
-        if( pFormat->getIDocumentLayoutAccess()->GetCurrentViewShell() )
+        if( pFormat->getIDocumentLayoutAccess().GetCurrentViewShell() )
         {
             // See if there is an SdrObject for it
             SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFormat>( *pFrameFormat ).First();

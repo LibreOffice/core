@@ -216,8 +216,7 @@ void _SvxMacroTabPage::EnableButtons()
     const SvTreeListEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
     if ( pE )
     {
-        const SvLBoxString* pEventMacro = static_cast<const SvLBoxString*>(pE->GetItem( LB_MACROS_ITEMPOS ));
-        mpImpl->pDeletePB->Enable( 0 != pEventMacro && !mpImpl->bReadOnly );
+        mpImpl->pDeletePB->Enable( !mpImpl->bReadOnly );
 
         mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly );
         if( mpImpl->pAssignComponentPB )

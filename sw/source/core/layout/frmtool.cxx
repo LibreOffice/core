@@ -1058,7 +1058,7 @@ void AppendObjs( const SwFrameFormats *pTable, sal_uLong nIndex,
                 {
                     if ( !pSdrObj->GetPage() )
                     {
-                        pFormat->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
+                        pFormat->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0)->
                                 InsertObject(pSdrObj, pSdrObj->GetOrdNumDirect());
                     }
 

@@ -1334,7 +1334,7 @@ void SwTextFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     } // switch
 
     if( bSetFieldsDirty )
-        GetNode()->getIDocumentFieldsAccess()->SetFieldsDirty( true, GetNode(), 1 );
+        GetNode()->getIDocumentFieldsAccess().SetFieldsDirty( true, GetNode(), 1 );
 
     if ( bRecalcFootnoteFlag )
         CalcFootnoteFlag();
@@ -2244,7 +2244,7 @@ void SwTextFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     if ( !pVsh->GetViewOptions()->getBrowseMode() ||
           pVsh->GetViewOptions()->IsPrtFormat() )
     {
-        pOut = GetTextNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
+        pOut = GetTextNode()->getIDocumentDeviceAccess().getReferenceDevice( true );
     }
     OSL_ENSURE( pOut, "<SwTextFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice" );
     // #i78921# - make code robust, according to provided patch

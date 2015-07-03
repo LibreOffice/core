@@ -944,8 +944,8 @@ uno::Reference<text::XTextCursor> SwXCell::createTextCursor() throw( uno::Runtim
     SwPosition aPos(*pSttNd);
     SwXTextCursor* const pXCursor =
         new SwXTextCursor(*GetDoc(), this, CURSOR_TBLTEXT, aPos);
-    auto pUnoCrsr(pXCursor->GetCursor());
-    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+    auto& rUnoCrsr(pXCursor->GetCursor());
+    rUnoCrsr.Move(fnMoveForward, fnGoNode);
     return static_cast<text::XWordCursor*>(pXCursor);
 }
 
@@ -1427,12 +1427,12 @@ sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName) throw
     { return cppu::supportsService(this, rServiceName); }
 
 IMPLEMENT_FORWARD_XINTERFACE2(SwXTextTableCursor,SwXTextTableCursor_Base,OTextCursorHelper)
-const SwPaM*        SwXTextTableCursor::GetPaM() const  { return GetCrsr(); }
-SwPaM*              SwXTextTableCursor::GetPaM()        { return GetCrsr(); }
+const SwPaM*        SwXTextTableCursor::GetPaM() const  { return &GetCrsr(); }
+SwPaM*              SwXTextTableCursor::GetPaM()        { return &GetCrsr(); }
 const SwDoc*        SwXTextTableCursor::GetDoc() const  { return GetFrameFormat()->GetDoc(); }
 SwDoc*              SwXTextTableCursor::GetDoc()        { return GetFrameFormat()->GetDoc(); }
-const SwUnoCrsr*    SwXTextTableCursor::GetCrsr() const { return &(*m_pUnoCrsr); }
-SwUnoCrsr*          SwXTextTableCursor::GetCrsr()       { return &(*m_pUnoCrsr); }
+const SwUnoCrsr&    SwXTextTableCursor::GetCrsr() const { return *m_pUnoCrsr; }
+SwUnoCrsr&          SwXTextTableCursor::GetCrsr()       { return *m_pUnoCrsr; }
 
 uno::Sequence<OUString> SwXTextTableCursor::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
     { return {"com.sun.star.text.TextTableCursor"}; }
@@ -1471,8 +1471,8 @@ OUString SwXTextTableCursor::getRangeName()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    SwUnoTableCrsr* pTableCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
+    SwUnoTableCrsr* pTableCrsr = dynamic_cast<SwUnoTableCrsr*>(&rUnoCrsr);
     //!! see also SwChartDataSequence::getSourceRangeRepresentation
     if(!pTableCrsr)
         return OUString();
@@ -1499,10 +1499,8 @@ sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& sCellName, sal_Bool 
     throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
-        return false;
-    auto& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
+    auto& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     lcl_CrsrSelect(rTableCrsr, bExpand);
     return rTableCrsr.GotoTableBox(sCellName);
 }
@@ -1510,10 +1508,8 @@ sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& sCellName, sal_Bool 
 sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
-        return false;
-    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
+    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     lcl_CrsrSelect(rTableCrsr, bExpand);
     return rTableCrsr.Left(Count, CRSR_SKIP_CHARS, false, false);
 }
@@ -1521,10 +1517,8 @@ sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool bExpand) throw( un
 sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
-        return false;
-    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
+    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     lcl_CrsrSelect(rTableCrsr, bExpand);
     return rTableCrsr.Right(Count, CRSR_SKIP_CHARS, false, false);
 }
@@ -1532,10 +1526,8 @@ sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool bExpand) throw( u
 sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
-        return false;
-    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
+    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     lcl_CrsrSelect(rTableCrsr, bExpand);
     return rTableCrsr.UpDown(true, Count, 0, 0);
 }
@@ -1543,10 +1535,8 @@ sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool bExpand) throw( uno:
 sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
-        return false;
-    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
+    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     lcl_CrsrSelect(rTableCrsr, bExpand);
     return rTableCrsr.UpDown(false, Count, 0, 0);
 }
@@ -1554,10 +1544,8 @@ sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool bExpand) throw( un
 void SwXTextTableCursor::gotoStart(sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
-        return;
-    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
+    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     lcl_CrsrSelect(rTableCrsr, bExpand);
     rTableCrsr.MoveTable(fnTableCurr, fnTableStart);
 }
@@ -1565,10 +1553,8 @@ void SwXTextTableCursor::gotoStart(sal_Bool bExpand) throw( uno::RuntimeExceptio
 void SwXTextTableCursor::gotoEnd(sal_Bool bExpand) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
-        return;
-    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
+    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     lcl_CrsrSelect(rTableCrsr, bExpand);
     rTableCrsr.MoveTable(fnTableCurr, fnTableEnd);
 }
@@ -1577,11 +1563,9 @@ sal_Bool SwXTextTableCursor::mergeRange()
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
-        return false;
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
 
-    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     {
         // HACK: remove pending actions for selecting old style tables
         UnoActionRemoveContext aRemoveContext(rTableCrsr);
@@ -1589,7 +1573,7 @@ sal_Bool SwXTextTableCursor::mergeRange()
     rTableCrsr.MakeBoxSels();
     bool bResult;
     {
-        UnoActionContext aContext(pUnoCrsr->GetDoc());
+        UnoActionContext aContext(rUnoCrsr.GetDoc());
         bResult = TBLMERGE_OK == rTableCrsr.GetDoc()->MergeTable(rTableCrsr);
     }
     if(bResult)
@@ -1608,10 +1592,8 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
     SolarMutexGuard aGuard;
     if (Count <= 0)
         throw uno::RuntimeException("Illegal first argument: needs to be > 0", static_cast<cppu::OWeakObject*>(this));
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
-        return false;
-    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
+    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     {
         // HACK: remove pending actions for selecting old style tables
         UnoActionRemoveContext aRemoveContext(rTableCrsr);
@@ -1619,7 +1601,7 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
     rTableCrsr.MakeBoxSels();
     bool bResult;
     {
-        UnoActionContext aContext(pUnoCrsr->GetDoc());
+        UnoActionContext aContext(rUnoCrsr.GetDoc());
         bResult = rTableCrsr.GetDoc()->SplitTable(rTableCrsr.GetSelectedBoxes(), !Horizontal, Count);
     }
     rTableCrsr.MakeBoxSels();
@@ -1641,30 +1623,28 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
            std::exception)
 {
     SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
-        return;
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
     auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
     if(!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
     if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
         throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
     {
-        auto pSttNode = pUnoCrsr->GetNode().StartOfSectionNode();
+        auto pSttNode = rUnoCrsr.GetNode().StartOfSectionNode();
         const SwTableNode* pTableNode = pSttNode->FindTableNode();
         lcl_FormatTable(pTableNode->GetTable().GetFrameFormat());
     }
-    auto& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    auto& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     rTableCrsr.MakeBoxSels();
-    SwDoc* pDoc = pUnoCrsr->GetDoc();
+    SwDoc* pDoc = rUnoCrsr.GetDoc();
     switch(pEntry->nWID)
     {
         case FN_UNO_TABLE_CELL_BACKGROUND:
         {
             SvxBrushItem aBrush(RES_BACKGROUND);
-            SwDoc::GetBoxAttr(*pUnoCrsr, aBrush);
+            SwDoc::GetBoxAttr(rUnoCrsr, aBrush);
             aBrush.PutValue(aValue, pEntry->nMemberId);
-            pDoc->SetBoxAttr(*pUnoCrsr, aBrush);
+            pDoc->SetBoxAttr(rUnoCrsr, aBrush);
 
         }
         break;
@@ -1672,11 +1652,11 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
         {
             SfxUInt32Item aNumberFormat(RES_BOXATR_FORMAT);
             aNumberFormat.PutValue(aValue, 0);
-            pDoc->SetBoxAttr(*pUnoCrsr, aNumberFormat);
+            pDoc->SetBoxAttr(rUnoCrsr, aNumberFormat);
         }
         break;
         case FN_UNO_PARA_STYLE:
-            SwUnoCursorHelper::SetTextFormatColl(aValue, *pUnoCrsr);
+            SwUnoCursorHelper::SetTextFormatColl(aValue, rUnoCrsr);
         break;
         default:
         {
@@ -1702,15 +1682,13 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
            std::exception)
 {
     SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(!pUnoCrsr)
-        return uno::Any();
+    SwUnoCrsr& rUnoCrsr = GetCrsr();
     {
-        auto pSttNode = pUnoCrsr->GetNode().StartOfSectionNode();
+        auto pSttNode = rUnoCrsr.GetNode().StartOfSectionNode();
         const SwTableNode* pTableNode = pSttNode->FindTableNode();
         lcl_FormatTable(pTableNode->GetTable().GetFrameFormat());
     }
-    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(rUnoCrsr);
     auto pEntry(m_pPropSet->getPropertyMap().getByName(rPropertyName));
     if(!pEntry)
         throw beans::UnknownPropertyException("Unknown property: " + rPropertyName, static_cast<cppu::OWeakObject*>(this));
@@ -1721,7 +1699,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         case FN_UNO_TABLE_CELL_BACKGROUND:
         {
             SvxBrushItem aBrush(RES_BACKGROUND);
-            if (SwDoc::GetBoxAttr(*pUnoCrsr, aBrush))
+            if (SwDoc::GetBoxAttr(rUnoCrsr, aBrush))
                 aBrush.QueryValue(aResult, pEntry->nMemberId);
         }
         break;
@@ -1731,7 +1709,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         break;
         case FN_UNO_PARA_STYLE:
         {
-            auto pFormat(SwUnoCursorHelper::GetCurTextFormatColl(*pUnoCrsr, false));
+            auto pFormat(SwUnoCursorHelper::GetCurTextFormatColl(rUnoCrsr, false));
             if(pFormat)
                 aResult = uno::makeAny(pFormat->GetName());
         }
@@ -2090,7 +2068,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
         pCursor = reinterpret_cast<OTextCursorHelper*>(
                 sal::static_int_cast<sal_IntPtr>(xRangeTunnel->getSomething(OTextCursorHelper::getUnoTunnelId())));
     }
-    SwDoc* pDoc = pRange ? pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
+    SwDoc* pDoc = pRange ? &pRange->GetDoc() : pCursor ? pCursor->GetDoc() : nullptr;
     if(!pDoc || !nRows || !nColumns)
         throw lang::IllegalArgumentException();
     SwUnoInternalPaM aPam(*pDoc);

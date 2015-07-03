@@ -172,55 +172,55 @@ void TextNode::ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNew )
     sal_uInt16 nAttribs = maCharAttribs.Count();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
-        TextCharAttrib* pAttrib = maCharAttribs.GetAttrib( nAttr );
-        if ( pAttrib->GetEnd() >= nIndex )
+        TextCharAttrib& rAttrib = maCharAttribs.GetAttrib( nAttr );
+        if ( rAttrib.GetEnd() >= nIndex )
         {
             // move all attributes that are behind the cursor
-            if ( pAttrib->GetStart() > nIndex )
+            if ( rAttrib.GetStart() > nIndex )
             {
-                pAttrib->MoveForward( nNew );
+                rAttrib.MoveForward( nNew );
             }
             // 0: expand empty attribute, if at cursor
-            else if ( pAttrib->IsEmpty() )
+            else if ( rAttrib.IsEmpty() )
             {
                 // Do not check the index; empty one may only be here.
                 // If checking later anyway, special case:
                 // Start == 0; AbsLen == 1, nNew = 1 => Expand due to new paragraph!
                 // Start <= nIndex, End >= nIndex => Start=End=nIndex!
-                pAttrib->Expand( nNew );
+                rAttrib.Expand( nNew );
             }
             // 1: attribute starts before and reaches up to index
-            else if ( pAttrib->GetEnd() == nIndex ) // start must be before
+            else if ( rAttrib.GetEnd() == nIndex ) // start must be before
             {
                 // Only expand if no feature and not in Exclude list!
                 // Otherwise e.g. an UL would go until the new ULDB, thus expand both.
-                if ( !maCharAttribs.FindEmptyAttrib( pAttrib->Which(), nIndex ) )
+                if ( !maCharAttribs.FindEmptyAttrib( rAttrib.Which(), nIndex ) )
                 {
-                    pAttrib->Expand( nNew );
+                    rAttrib.Expand( nNew );
                 }
                 else
                     bResort = true;
             }
             // 2: attribute starts before and reaches past the index
-            else if ( ( pAttrib->GetStart() < nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
+            else if ( ( rAttrib.GetStart() < nIndex ) && ( rAttrib.GetEnd() > nIndex ) )
             {
-                pAttrib->Expand( nNew );
+                rAttrib.Expand( nNew );
             }
             // 3: attribute starts at Index
-            else if ( pAttrib->GetStart() == nIndex )
+            else if ( rAttrib.GetStart() == nIndex )
             {
                 if ( nIndex == 0 )
                 {
-                    pAttrib->Expand( nNew );
+                    rAttrib.Expand( nNew );
                 }
                 else
-                    pAttrib->MoveForward( nNew );
+                    rAttrib.MoveForward( nNew );
             }
         }
 
-        DBG_ASSERT( pAttrib->GetStart() <= pAttrib->GetEnd(), "Expand: Attribut verdreht!" );
-        DBG_ASSERT( ( pAttrib->GetEnd() <= maText.getLength() ), "Expand: Attrib groesser als Absatz!" );
-        DBG_ASSERT( !pAttrib->IsEmpty(), "Leeres Attribut nach ExpandAttribs?" );
+        DBG_ASSERT( rAttrib.GetStart() <= rAttrib.GetEnd(), "Expand: Attribut verdreht!" );
+        DBG_ASSERT( ( rAttrib.GetEnd() <= maText.getLength() ), "Expand: Attrib groesser als Absatz!" );
+        DBG_ASSERT( !rAttrib.IsEmpty(), "Leeres Attribut nach ExpandAttribs?" );
     }
 
     if ( bResort )
@@ -237,52 +237,51 @@ void TextNode::CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDeleted )
 
     for ( sal_uInt16 nAttr = 0; nAttr < maCharAttribs.Count(); nAttr++ )
     {
-        TextCharAttrib* pAttrib = maCharAttribs.GetAttrib( nAttr );
+        TextCharAttrib& rAttrib = maCharAttribs.GetAttrib( nAttr );
         bool bDelAttr = false;
-        if ( pAttrib->GetEnd() >= nIndex )
+        if ( rAttrib.GetEnd() >= nIndex )
         {
             // move all attributes that are behind the cursor
-            if ( pAttrib->GetStart() >= nEndChanges )
+            if ( rAttrib.GetStart() >= nEndChanges )
             {
-                pAttrib->MoveBackward( nDeleted );
+                rAttrib.MoveBackward( nDeleted );
             }
             // 1. delete inner attributes
-            else if ( ( pAttrib->GetStart() >= nIndex ) && ( pAttrib->GetEnd() <= nEndChanges ) )
+            else if ( ( rAttrib.GetStart() >= nIndex ) && ( rAttrib.GetEnd() <= nEndChanges ) )
             {
                 // special case: attribute covers the region exactly
                 // => keep as an empty attribute
-                if ( ( pAttrib->GetStart() == nIndex ) && ( pAttrib->GetEnd() == nEndChanges ) )
-                    pAttrib->GetEnd() = nIndex; // empty
+                if ( ( rAttrib.GetStart() == nIndex ) && ( rAttrib.GetEnd() == nEndChanges ) )
+                    rAttrib.GetEnd() = nIndex; // empty
                 else
                     bDelAttr = true;
             }
             // 2. attribute starts before, ends inside or after
-            else if ( ( pAttrib->GetStart() <= nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
+            else if ( ( rAttrib.GetStart() <= nIndex ) && ( rAttrib.GetEnd() > nIndex ) )
             {
-                if ( pAttrib->GetEnd() <= nEndChanges ) // ends inside
-                    pAttrib->GetEnd() = nIndex;
+                if ( rAttrib.GetEnd() <= nEndChanges ) // ends inside
+                    rAttrib.GetEnd() = nIndex;
                 else
-                    pAttrib->Collaps( nDeleted );       // ends after
+                    rAttrib.Collaps( nDeleted );       // ends after
             }
             // 3. attribute starts inside, ends after
-            else if ( ( pAttrib->GetStart() >= nIndex ) && ( pAttrib->GetEnd() > nEndChanges ) )
+            else if ( ( rAttrib.GetStart() >= nIndex ) && ( rAttrib.GetEnd() > nEndChanges ) )
             {
                 // features are not allowed to expand!
-                pAttrib->GetStart() = nEndChanges;
-                pAttrib->MoveBackward( nDeleted );
+                rAttrib.GetStart() = nEndChanges;
+                rAttrib.MoveBackward( nDeleted );
             }
         }
 
-        DBG_ASSERT( pAttrib->GetStart() <= pAttrib->GetEnd(), "Collaps: Attribut verdreht!" );
-        DBG_ASSERT( ( pAttrib->GetEnd() <= maText.getLength()) || bDelAttr, "Collaps: Attrib groesser als Absatz!" );
-        if ( bDelAttr /* || pAttrib->IsEmpty() */ )
+        DBG_ASSERT( rAttrib.GetStart() <= rAttrib.GetEnd(), "Collaps: Attribut verdreht!" );
+        DBG_ASSERT( ( rAttrib.GetEnd() <= maText.getLength()) || bDelAttr, "Collaps: Attrib groesser als Absatz!" );
+        if ( bDelAttr /* || rAttrib.IsEmpty() */ )
         {
             bResort = true;
             maCharAttribs.RemoveAttrib( nAttr );
-            delete pAttrib;
             nAttr--;
         }
-        else if ( pAttrib->IsEmpty() )
+        else if ( rAttrib.IsEmpty() )
             maCharAttribs.HasEmptyAttribs() = true;
     }
 
@@ -320,44 +319,44 @@ TextNode* TextNode::Split( sal_uInt16 nPos, bool bKeepEndingAttribs )
 
     for ( sal_uInt16 nAttr = 0; nAttr < maCharAttribs.Count(); nAttr++ )
     {
-        TextCharAttrib* pAttrib = maCharAttribs.GetAttrib( nAttr );
-        if ( pAttrib->GetEnd() < nPos )
+        TextCharAttrib& rAttrib = maCharAttribs.GetAttrib( nAttr );
+        if ( rAttrib.GetEnd() < nPos )
         {
             // no change
             ;
         }
-        else if ( pAttrib->GetEnd() == nPos )
+        else if ( rAttrib.GetEnd() == nPos )
         {
             // must be copied as an empty attribute
             // !FindAttrib only sensible if traversing backwards through the list!
-            if ( bKeepEndingAttribs && !pNew->maCharAttribs.FindAttrib( pAttrib->Which(), 0 ) )
+            if ( bKeepEndingAttribs && !pNew->maCharAttribs.FindAttrib( rAttrib.Which(), 0 ) )
             {
-                TextCharAttrib* pNewAttrib = new TextCharAttrib( *pAttrib );
+                TextCharAttrib* pNewAttrib = new TextCharAttrib( rAttrib );
                 pNewAttrib->GetStart() = 0;
                 pNewAttrib->GetEnd() = 0;
                 pNew->maCharAttribs.InsertAttrib( pNewAttrib );
             }
         }
-        else if ( pAttrib->IsInside( nPos ) || ( !nPos && !pAttrib->GetStart() ) )
+        else if ( rAttrib.IsInside( nPos ) || ( !nPos && !rAttrib.GetStart() ) )
         {
             // If cutting at the very beginning, the attribute has to be
             // copied and changed
-            TextCharAttrib* pNewAttrib = new TextCharAttrib( *pAttrib );
+            TextCharAttrib* pNewAttrib = new TextCharAttrib( rAttrib );
             pNewAttrib->GetStart() = 0;
-            pNewAttrib->GetEnd() = pAttrib->GetEnd()-nPos;
+            pNewAttrib->GetEnd() = rAttrib.GetEnd()-nPos;
             pNew->maCharAttribs.InsertAttrib( pNewAttrib );
             // trim
-            pAttrib->GetEnd() = nPos;
+            rAttrib.GetEnd() = nPos;
         }
         else
         {
-            DBG_ASSERT( pAttrib->GetStart() >= nPos, "Start < nPos!" );
-            DBG_ASSERT( pAttrib->GetEnd() >= nPos, "End < nPos!" );
+            DBG_ASSERT( rAttrib.GetStart() >= nPos, "Start < nPos!" );
+            DBG_ASSERT( rAttrib.GetEnd() >= nPos, "End < nPos!" );
             // move all into the new node (this)
             maCharAttribs.RemoveAttrib( nAttr );
-            pNew->maCharAttribs.InsertAttrib( pAttrib );
-            pAttrib->GetStart() = pAttrib->GetStart() - nPos;
-            pAttrib->GetEnd() = pAttrib->GetEnd() - nPos;
+            pNew->maCharAttribs.InsertAttrib( &rAttrib );
+            rAttrib.GetStart() = rAttrib.GetStart() - nPos;
+            rAttrib.GetEnd() = rAttrib.GetEnd() - nPos;
             nAttr--;
         }
     }
@@ -381,15 +380,14 @@ void TextNode::Append( const TextNode& rNode )
             sal_uInt16 nTmpAttribs = maCharAttribs.Count();
             for ( sal_uInt16 nTmpAttr = 0; nTmpAttr < nTmpAttribs; nTmpAttr++ )
             {
-                TextCharAttrib* pTmpAttrib = maCharAttribs.GetAttrib( nTmpAttr );
+                TextCharAttrib& rTmpAttrib = maCharAttribs.GetAttrib( nTmpAttr );
 
-                if ( pTmpAttrib->GetEnd() == nOldLen )
+                if ( rTmpAttrib.GetEnd() == nOldLen )
                 {
-                    if ( ( pTmpAttrib->Which() == rAttrib.Which() ) &&
-                         ( pTmpAttrib->GetAttr() == rAttrib.GetAttr() ) )
+                    if ( ( rTmpAttrib.Which() == rAttrib.Which() ) &&
+                         ( rTmpAttrib.GetAttr() == rAttrib.GetAttr() ) )
                     {
-                        pTmpAttrib->GetEnd() =
-                            pTmpAttrib->GetEnd() + rAttrib.GetLen();
+                        rTmpAttrib.GetEnd() = rTmpAttrib.GetEnd() + rAttrib.GetLen();
                         bMelted = true;
                         break;  // there can be only one of this type at this position
                     }
