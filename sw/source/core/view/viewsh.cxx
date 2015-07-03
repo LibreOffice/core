@@ -203,6 +203,9 @@ void SwViewShell::DLPrePaint2(const vcl::Region& rRegion)
             mpBufferedOut = mpOut;
             mpOut = &(mpTargetPaintWindow->GetTargetOutputDevice());
         }
+        else
+            // In case mpOut is used without buffering, need to set clipping.
+            mpOut->SetClipRegion(rRegion);
 
         // remember original paint MapMode for wrapped FlyFrame paints
         maPrePostMapMode = mpOut->GetMapMode();
