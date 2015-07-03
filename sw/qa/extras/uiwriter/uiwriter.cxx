@@ -113,6 +113,7 @@ public:
     void testEmbeddedDataSource();
     void testUnoCursorPointer();
     void testTextTableCellNames();
+    void testShapeAnchorUndo();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -163,6 +164,7 @@ public:
     CPPUNIT_TEST(testEmbeddedDataSource);
     CPPUNIT_TEST(testUnoCursorPointer);
     CPPUNIT_TEST(testTextTableCellNames);
+    CPPUNIT_TEST(testShapeAnchorUndo);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1474,6 +1476,31 @@ void SwUiWriterTest::testTextTableCellNames()
     CPPUNIT_ASSERT(nCol == 53);
     SwXTextTable::GetCellPosition( OUString("BB1"), nCol, nRow2);
     CPPUNIT_ASSERT(nCol == 105);
+}
+
+void SwUiWriterTest::testShapeAnchorUndo()
+{
+    SwDoc* pDoc = createDoc("draw-anchor-undo.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    Rectangle aOrigLogicRect(pObject->GetLogicRect());
+
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    rUndoManager.StartUndo(UNDO_START, NULL);
+
+    pWrtShell->SelectObj(Point(), 0, pObject);
+
+    pWrtShell->GetDrawView()->MoveMarkedObj(Size(100, 100), false);
+    pWrtShell->ChgAnchor(0, true, true);
+
+    rUndoManager.EndUndo(UNDO_END, NULL);
+
+    CPPUNIT_ASSERT(aOrigLogicRect != pObject->GetLogicRect());
+
+    rUndoManager.Undo();
+
+    CPPUNIT_ASSERT(aOrigLogicRect == pObject->GetLogicRect());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
