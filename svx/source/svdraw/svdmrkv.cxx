@@ -1226,6 +1226,33 @@ void SdrMarkView::SetRef2(const Point& rPt)
     }
 }
 
+bool SdrPageView::IsObjSelectable(SdrObject *pObj) const
+{
+    SdrLayerID nLay=pObj->GetLayer();
+    bool bRaus=!pObj->IsInserted(); // Obj deleted?
+    if (!pObj->Is3DObj()) {
+        bRaus=bRaus || pObj->GetPage()!=GetPage();   // Obj suddenly in different Page or Group
+    }
+    bRaus=bRaus || GetLockedLayers().IsSet(nLay) ||  // Layer locked?
+                   !GetVisibleLayers().IsSet(nLay);  // Layer invisible?
+
+    if( !bRaus )
+        bRaus = !pObj->IsVisible(); // invisible objects can not be selected
+
+    if (!bRaus) {
+        // Grouped objects can now be selected.
+        // After EnterGroup the higher-level objects,
+        // have to be deselected, though.
+        const SdrObjList* pOOL=pObj->GetObjList();
+        const SdrObjList* pVOL=GetObjList();
+        while (pOOL!=NULL && pOOL!=pVOL) {
+            pOOL=pOOL->GetUpList();
+        }
+        bRaus=pOOL!=pVOL;
+    }
+    return !bRaus;
+}
+
 void SdrMarkView::CheckMarked()
 {
     for (size_t nm=GetMarkedObjectCount(); nm>0;) {
@@ -1233,29 +1260,7 @@ void SdrMarkView::CheckMarked()
         SdrMark* pM=GetSdrMarkByIndex(nm);
         SdrObject* pObj=pM->GetMarkedSdrObj();
         SdrPageView* pPV=pM->GetPageView();
-        SdrLayerID nLay=pObj->GetLayer();
-        bool bRaus=!pObj->IsInserted(); // Obj deleted?
-        if (!pObj->Is3DObj()) {
-            bRaus=bRaus || pObj->GetPage()!=pPV->GetPage();   // Obj suddenly in different Page or Group
-        }
-        bRaus=bRaus || pPV->GetLockedLayers().IsSet(nLay) ||  // Layer locked?
-                       !pPV->GetVisibleLayers().IsSet(nLay);  // Layer invisible?
-
-        if( !bRaus )
-            bRaus = !pObj->IsVisible(); // invisible objects can not be selected
-
-        if (!bRaus) {
-            // Grouped objects can now be selected.
-            // After EnterGroup the higher-level objects,
-            // have to be deselected, though.
-            const SdrObjList* pOOL=pObj->GetObjList();
-            const SdrObjList* pVOL=pPV->GetObjList();
-            while (pOOL!=NULL && pOOL!=pVOL) {
-                pOOL=pOOL->GetUpList();
-            }
-            bRaus=pOOL!=pVOL;
-        }
-
+        bool bRaus=!pPV->IsObjSelectable(pObj);
         if (bRaus)
         {
             GetMarkedObjectListWriteAccess().DeleteMark(nm);
