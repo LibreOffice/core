@@ -109,12 +109,15 @@ public:
         slots for switching the pane docking windows on and off.
     */
     virtual void Execute (SfxRequest& rRequest);
+    void ExecuteDisplayMode(SfxRequest& rRequest);
 
     /** Callback function for retrieving item values related to certain
         slots.  This is the companion of Execute() and handles the slots
         concerned with showing the pane docking windows.
     */
     void GetState (SfxItemSet& rSet);
+    void GetDisplayModeState(SfxItemSet& rSet);
+
 
     /* override these from SfxViewShell */
     virtual OUString GetSelectionText(bool) SAL_OVERRIDE;

@@ -202,7 +202,8 @@ const OUString FrameworkHelper::msSidebarViewURL( msViewURLPrefix + "SidebarView
 // Tool bar URLs.
 
 const OUString FrameworkHelper::msToolBarURLPrefix("private:resource/toolbar/");
-const OUString FrameworkHelper::msViewTabBarURL( msToolBarURLPrefix + "ViewTabBar");
+// TODO: to be verified. Why the TabBar/Pager is under toolbar ?
+const OUString FrameworkHelper::msViewPagerURL( msToolBarURLPrefix + "ViewPager");
 
 // Task panel URLs.
 const OUString FrameworkHelper::msTaskPanelURLPrefix( "private:resource/toolpanel/" );
@@ -529,9 +530,11 @@ void FrameworkHelper::HandleModeChangeSlot (
     switch (nSlotId)
     {
         case SID_DRAWINGMODE:
+        case SID_DRAWMASTERMODE:
         case SID_NOTESMODE:
-        case SID_HANDOUTMODE:
-        case SID_DIAMODE:
+        case SID_NOTESMASTERMODE:
+        case SID_HANDOUTMASTERMODE:
+        case SID_SLIDE_SORTER_MODE:
         case SID_OUTLINEMODE:
         {
             const SfxItemSet* pRequestArguments = rRequest.GetArgs();
@@ -565,19 +568,21 @@ void FrameworkHelper::HandleModeChangeSlot (
             {
                 case SID_NORMAL_MULTI_PANE_GUI:
                 case SID_DRAWINGMODE:
+                case SID_DRAWMASTERMODE:
                     sRequestedView = FrameworkHelper::msImpressViewURL;
                     break;
 
                 case SID_NOTESMODE:
+                case SID_NOTESMASTERMODE:
                     sRequestedView = FrameworkHelper::msNotesViewURL;
                 break;
 
-                case SID_HANDOUTMODE:
+                case SID_HANDOUTMASTERMODE:
                     sRequestedView = FrameworkHelper::msHandoutViewURL;
                     break;
 
                 case SID_SLIDE_SORTER_MULTI_PANE_GUI:
-                case SID_DIAMODE:
+                case SID_SLIDE_SORTER_MODE:
                     sRequestedView = FrameworkHelper::msSlideSorterURL;
                     break;
 
@@ -587,30 +592,36 @@ void FrameworkHelper::HandleModeChangeSlot (
             }
         }
 
-        if (xView.is()
-            && xView->getResourceId()->getResourceURL().equals(sRequestedView))
-        {
-            // We do not have to switch the view shell but maybe the edit mode
-            // has changed.
-            DrawViewShell* pDrawViewShell
-                = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
-            if (pDrawViewShell != NULL)
-            {
-                pCenterViewShell->Broadcast (
-                    ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
+        // Compute the target expected mode
+        EditMode eEMode = EM_PAGE;
+        if (nSlotId == SID_DRAWMASTERMODE
+            || nSlotId == SID_NOTESMASTERMODE
+            || nSlotId == SID_HANDOUTMASTERMODE)
+            eEMode = EM_MASTERPAGE;
+SAL_DEBUG("On s'assure que la vue existe " << sRequestedView);
+        // Ensure we have the expected view shell
+        if (!(xView.is() && xView->getResourceId()->getResourceURL().equals(sRequestedView)))
 
-                pDrawViewShell->ChangeEditMode (
-                    EM_PAGE, pDrawViewShell->IsLayerModeActive());
-
-                pCenterViewShell->Broadcast (
-                    ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
-            }
-        }
-        else
         {
             mxConfigurationController->requestResourceActivation(
                 CreateResourceId(sRequestedView, msCenterPaneURL),
                 ResourceActivationMode_REPLACE);
+        }
+SAL_DEBUG("On s'assure du mode");
+        // Ensure we have the expected edit mode
+        DrawViewShell* pDrawViewShell
+            = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
+        if (pDrawViewShell != NULL)
+        {
+            pCenterViewShell->Broadcast (
+                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
+
+SAL_DEBUG("eEMode:" << eEMode);
+            pDrawViewShell->ChangeEditMode (
+                eEMode, pDrawViewShell->IsLayerModeActive());
+
+            pCenterViewShell->Broadcast (
+                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
         }
     }
     catch (RuntimeException&)
