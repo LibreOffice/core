@@ -52,12 +52,17 @@ interface ViewShellBaseView
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    SID_DISPLAY_MODE
+    [
+        ExecMethod = ExecuteDisplayMode;
+        StateMethod = GetDisplayModeState;
+    ]
     SID_DRAWINGMODE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_DIAMODE
+    SID_SLIDE_SORTER_MODE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
@@ -72,10 +77,20 @@ interface ViewShellBaseView
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_HANDOUTMODE
+    SID_HANDOUTMASTERMODE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
+    ]
+    SID_DRAWMASTERMODE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_NOTESMASTERMODE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
     ]
     SID_WIN_FULLSCREEN
     [

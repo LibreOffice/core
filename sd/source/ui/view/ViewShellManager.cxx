@@ -235,6 +235,7 @@ ViewShellManager::ViewShellManager (ViewShellBase& rBase)
     : mpImpl(new Implementation(*this,rBase)),
       mbValid(true)
 {
+    SAL_DEBUG("ViewShellManager::ViewShellManager");
 }
 
 ViewShellManager::~ViewShellManager()

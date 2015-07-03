@@ -20,7 +20,7 @@
 #include "framework/ImpressModule.hxx"
 
 #include "framework/FrameworkHelper.hxx"
-#include "ViewTabBarModule.hxx"
+#include "ViewPagerModule.hxx"
 #include "CenterViewFocusModule.hxx"
 #include "SlideSorterModule.hxx"
 #include "ToolPanelModule.hxx"
@@ -35,10 +35,10 @@ namespace sd { namespace framework {
 void ImpressModule::Initialize (Reference<frame::XController>& rxController)
 {
     new CenterViewFocusModule(rxController);
-    new ViewTabBarModule(
+    new ViewPagerModule(
         rxController,
         FrameworkHelper::CreateResourceId(
-            FrameworkHelper::msViewTabBarURL,
+            FrameworkHelper::msViewPagerURL,
             FrameworkHelper::msCenterPaneURL));
     new SlideSorterModule(
         rxController,

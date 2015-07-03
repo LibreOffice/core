@@ -389,8 +389,8 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
 
         case SID_DRAWINGMODE:
         case SID_NOTESMODE:
-        case SID_HANDOUTMODE:
-        case SID_DIAMODE:
+        case SID_HANDOUTMASTERMODE:
+        case SID_SLIDE_SORTER_MODE:
         case SID_OUTLINEMODE:
         {
             ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
@@ -538,10 +538,10 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
         rSet.Put( SfxBoolItem( nSId, true ) );
     }
     rSet.Put( SfxBoolItem( SID_DRAWINGMODE, false ) );
-    rSet.Put( SfxBoolItem( SID_DIAMODE, true ) );
+    rSet.Put( SfxBoolItem( SID_SLIDE_SORTER_MODE, true ) );
     rSet.Put( SfxBoolItem( SID_OUTLINEMODE, false ) );
     rSet.Put( SfxBoolItem( SID_NOTESMODE, false ) );
-    rSet.Put( SfxBoolItem( SID_HANDOUTMODE, false ) );
+    rSet.Put( SfxBoolItem( SID_HANDOUTMASTERMODE, false ) );
 
     if (pShell!=NULL && pShell->IsMainViewShell())
     {

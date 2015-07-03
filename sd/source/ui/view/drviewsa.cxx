@@ -329,9 +329,9 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         }
         else if (mePageKind == PK_HANDOUT)
         {
-            SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMODE );
+            SetHelpId( SID_HANDOUTMASTERMODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMASTERMODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMASTERMODE );
 
             // AutoLayouts have to be created
             GetDoc()->StopWorkStartupDelay();

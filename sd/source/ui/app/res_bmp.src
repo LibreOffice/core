@@ -103,6 +103,34 @@ Bitmap BMP_FOILH_09
 {
     File = "foilh09.png";
 };
+Bitmap BMP_DISPLAYMODE_SLIDE
+{
+    File = "displaymode_slide.png";
+};
+Bitmap BMP_DISPLAYMODE_OUTLINE
+{
+    File = "displaymode_outline.png";
+};
+Bitmap BMP_DISPLAYMODE_NOTES
+{
+    File = "displaymode_notes.png";
+};
+Bitmap BMP_DISPLAYMODE_SLIDE_SORTER
+{
+    File = "displaymode_slidesorter.png";
+};
+Bitmap BMP_DISPLAYMODE_SLIDE_MASTER
+{
+    File = "displaymode_slidemaster.png";
+};
+Bitmap BMP_DISPLAYMODE_NOTES_MASTER
+{
+    File = "displaymode_notesmaster.png";
+};
+Bitmap BMP_DISPLAYMODE_HANDOUT_MASTER
+{
+    File = "displaymode_handoutmaster.png";
+};
 Bitmap BMP_PLACEHOLDER_CHART_SMALL
 {
     File = "placeholder_chart_small.png";

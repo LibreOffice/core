@@ -78,7 +78,7 @@ public:
 
     // URLs of frequently used tool bars.
     static const OUString msToolBarURLPrefix;
-    static const OUString msViewTabBarURL;
+    static const OUString msViewPagerURL;
 
     // URLs of task panels.
     static const OUString msTaskPanelURLPrefix;
