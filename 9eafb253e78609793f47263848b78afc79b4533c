@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_1bbfc6d1",
+        "filename": "wizards/com/sun/star/wizards/web/WWD_Startup.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-07-03T08:53:58Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be \u0027given\u0027?",
+      "revId": "9eafb253e78609793f47263848b78afc79b4533c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_7b959a3e",
+        "filename": "xmloff/source/text/txtflde.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-07-03T08:53:58Z",
+      "side": 1,
+      "message": "unknown",
+      "revId": "9eafb253e78609793f47263848b78afc79b4533c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_9b92d656",
+        "filename": "xmloff/source/text/txtfldi.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3408,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-07-03T08:53:58Z",
+      "side": 1,
+      "message": "textfield",
+      "revId": "9eafb253e78609793f47263848b78afc79b4533c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_3b9f2261",
+        "filename": "xmloff/source/text/txtprmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1004,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-07-03T08:53:58Z",
+      "side": 1,
+      "message": "indices",
+      "revId": "9eafb253e78609793f47263848b78afc79b4533c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
