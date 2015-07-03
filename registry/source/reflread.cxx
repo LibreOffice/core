@@ -1741,31 +1741,90 @@ void TYPEREG_CALLTYPE typereg_reader_getSuperTypeName(
     rtl_uString_new(pSuperTypeName);
 }
 
-RegistryTypeReader_Api* TYPEREG_CALLTYPE initRegistryTypeReader_Api()
+RegistryTypeReader::RegistryTypeReader(const sal_uInt8* buffer,
+                                              sal_uInt32 bufferLen,
+                                              bool copyData)
+    : m_hImpl(NULL)
 {
-    static RegistryTypeReader_Api aApi= {0,0,0,0,0,0,0,0,0,0,0,0,0};
-    if (!aApi.acquire)
-    {
-        aApi.createEntry            = &createEntry;
-        aApi.acquire                = &typereg_reader_acquire;
-        aApi.release                = &typereg_reader_release;
-        aApi.getTypeClass           = &typereg_reader_getTypeClass;
-        aApi.getTypeName            = &typereg_reader_getTypeName;
-        aApi.getSuperTypeName       = &getSuperTypeName;
-        aApi.getFieldCount          = &getFieldCount;
-        aApi.getFieldName           = &typereg_reader_getFieldName;
-        aApi.getFieldType           = &typereg_reader_getFieldTypeName;
-        aApi.getFieldAccess         = &typereg_reader_getFieldFlags;
-        aApi.getFieldConstValue     = &getFieldConstValue;
-        aApi.getFieldDoku           = &typereg_reader_getFieldDocumentation;
-        aApi.getFieldFileName       = &typereg_reader_getFieldFileName;
+    m_hImpl = createEntry(buffer, bufferLen, copyData);
+}
 
-        return (&aApi);
-    }
-    else
+RegistryTypeReader::RegistryTypeReader(const RegistryTypeReader& toCopy)
+    : m_hImpl(toCopy.m_hImpl)
+{ typereg_reader_acquire(m_hImpl); }
+
+
+RegistryTypeReader::~RegistryTypeReader()
+{ typereg_reader_release(m_hImpl); }
+
+RegistryTypeReader& RegistryTypeReader::operator == (const RegistryTypeReader& toAssign)
+{
+    if (m_hImpl != toAssign.m_hImpl)
     {
-        return (&aApi);
+        typereg_reader_release(m_hImpl);
+        m_hImpl = toAssign.m_hImpl;
+        typereg_reader_acquire(m_hImpl);
     }
+
+    return *this;
+}
+
+RTTypeClass RegistryTypeReader::getTypeClass() const
+{  return typereg_reader_getTypeClass(m_hImpl); }
+
+rtl::OUString RegistryTypeReader::getTypeName() const
+{
+    rtl::OUString sRet;
+    typereg_reader_getTypeName(m_hImpl, &sRet.pData);
+    return sRet;
+}
+
+rtl::OUString RegistryTypeReader::getSuperTypeName() const
+{
+    rtl::OUString sRet;
+    ::getSuperTypeName(m_hImpl, &sRet.pData);
+    return sRet;
+}
+
+sal_uInt32 RegistryTypeReader::getFieldCount() const
+{   return ::getFieldCount(m_hImpl); }
+
+rtl::OUString RegistryTypeReader::getFieldName( sal_uInt16 index ) const
+{
+    rtl::OUString sRet;
+    typereg_reader_getFieldName(m_hImpl, &sRet.pData, index);
+    return sRet;
+}
+
+rtl::OUString RegistryTypeReader::getFieldType( sal_uInt16 index ) const
+{
+    rtl::OUString sRet;
+    typereg_reader_getFieldTypeName(m_hImpl, &sRet.pData, index);
+    return sRet;
+}
+
+RTFieldAccess RegistryTypeReader::getFieldAccess( sal_uInt16 index ) const
+{  return typereg_reader_getFieldFlags(m_hImpl, index); }
+
+RTConstValue RegistryTypeReader::getFieldConstValue( sal_uInt16 index ) const
+{
+    RTConstValue ret;
+    ret.m_type = ::getFieldConstValue(m_hImpl, index, &ret.m_value);
+    return ret;
+}
+
+rtl::OUString RegistryTypeReader::getFieldDoku( sal_uInt16 index ) const
+{
+    rtl::OUString sRet;
+    typereg_reader_getFieldDocumentation(m_hImpl, &sRet.pData, index);
+    return sRet;
+}
+
+rtl::OUString RegistryTypeReader::getFieldFileName( sal_uInt16 index ) const
+{
+    rtl::OUString sRet;
+    typereg_reader_getFieldFileName(m_hImpl, &sRet.pData, index);
+    return sRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
