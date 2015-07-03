@@ -18,7 +18,7 @@
  */
 
 
-#include <registry.h>
+#include <regapi.hxx>
 #include <registry/registry.hxx>
 
 #include <osl/process.h>
@@ -485,8 +485,8 @@ RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
 RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
                                         rtl_uString* keyName,
                                         rtl_uString* regFileName,
-                                        sal_Bool bWarnings,
-                                        sal_Bool bReport)
+                                        bool bWarnings,
+                                        bool bReport)
 {
     ORegKey *pKey;
 
@@ -541,7 +541,7 @@ RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uString** pName)
 
 //  reg_isReadOnly
 
-sal_Bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hRegistry)
+bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hRegistry)
 {
     return isReadOnly(hRegistry);
 }

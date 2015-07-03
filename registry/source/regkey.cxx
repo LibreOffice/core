@@ -907,7 +907,7 @@ RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueType,
 
 RegError REGISTRY_CALLTYPE reg_getResolvedKeyName(RegKeyHandle hKey,
                                                     rtl_uString* keyName,
-                                                    sal_Bool firstLinkOnly,
+                                                    bool firstLinkOnly,
                                                       rtl_uString** pResolvedName)
 {
     if (!hKey)

@@ -17,17 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_REGISTRY_INC_REGISTRY_H
-#define INCLUDED_REGISTRY_INC_REGISTRY_H
+#ifndef INCLUDED_REGISTRY_INC_REGAPI_HXX
+#define INCLUDED_REGISTRY_INC_REGAPI_HXX
 
 #include <stddef.h>
 #include <rtl/ustring.h>
 #include <registry/regtype.h>
 #include <registry/regdllapi.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif  /* __cplusplus */
 
 /** This function creates the specified key.
 
@@ -295,7 +291,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_freeValueList(RegValueType valueTyp
  */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getResolvedKeyName(RegKeyHandle hKey,
                                                     rtl_uString* keyName,
-                                                   sal_Bool firstLinkOnly,
+                                                   bool firstLinkOnly,
                                                       rtl_uString** pResolvedName);
 
 /** This function loads registry information from a file and save it under the
@@ -350,8 +346,8 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_saveKey(RegKeyHandle hKey,
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_mergeKey(RegKeyHandle hKey,
                                            rtl_uString* keyName,
                                            rtl_uString* regFileName,
-                                           sal_Bool bWarnings,
-                                           sal_Bool bReport);
+                                           bool bWarnings,
+                                           bool bReport);
 
 
 /** This function creates a new registry with the specified name and creates a root key.
@@ -388,7 +384,7 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_getName(RegHandle hRegistry, rtl_uS
     @param  hReg identifies a currently open registry.
     @return TRUE if accessmode is read only else FALSE.
 */
-REG_DLLPUBLIC sal_Bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hReg);
+REG_DLLPUBLIC bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hReg);
 
 
 /** This function opens a registry with the specified name.
@@ -430,10 +426,6 @@ REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_destroyRegistry(RegHandle hRegistry
     @return REG_NO_ERROR if succeeds else an error code.
 */
 REG_DLLPUBLIC RegError REGISTRY_CALLTYPE reg_dumpRegistry(RegKeyHandle hKey);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

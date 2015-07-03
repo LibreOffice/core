@@ -18,7 +18,7 @@
  */
 
 
-#include "registry.h"
+#include "regapi.hxx"
 #include "fileurl.hxx"
 
 #include "rtl/ustring.hxx"
