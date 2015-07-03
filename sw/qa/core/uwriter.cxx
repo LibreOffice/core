@@ -109,6 +109,7 @@ public:
     void testFormulas();
     void testIntrusiveRing();
     void testClientModify();
+    void testTdf92308();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
 
@@ -141,6 +142,7 @@ public:
     CPPUNIT_TEST(testFormulas);
     CPPUNIT_TEST(testIntrusiveRing);
     CPPUNIT_TEST(testClientModify);
+    CPPUNIT_TEST(testTdf92308);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1563,6 +1565,11 @@ void SwDocTest::testClientModify()
     CPPUNIT_ASSERT_EQUAL(aClient2.m_nModifyCount,2);
     CPPUNIT_ASSERT_EQUAL(aClient1.m_nNotifyCount,1);
     CPPUNIT_ASSERT_EQUAL(aClient2.m_nNotifyCount,1);
+}
+
+void SwDocTest::testTdf92308()
+{
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->HasInvisibleContent(), false);
 }
 
 void SwDocTest::setUp()
