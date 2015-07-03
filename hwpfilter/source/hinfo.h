@@ -206,8 +206,6 @@ class DLLEXPORT HWPInfo
         ~HWPInfo(void);
 
         bool Read(HWPFile &hwpf);
-        bool Write(CTextOut &txtf);
-        bool Write(CHTMLOut &html);
 
 };
 

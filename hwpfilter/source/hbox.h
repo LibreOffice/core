@@ -54,10 +54,6 @@ struct HBox
  */
         int           WSize();
 /**
- * @returns The Height of HBox object as hunit value.
- */
-        virtual hunit Height(CharShape *csty);
-/**
  * Read properties from HIODevice object like stream, file, memory.
  *
  * @param hwpf HWPFile Object having all information for a hwp file.
@@ -391,8 +387,6 @@ struct TxtBox: public FBox
     int Type()    { return type;  }
 
     virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
-
-    virtual hunit  Height(CharShape *csty) SAL_OVERRIDE;
 };
 
 #define ALLOWED_GAP 5
@@ -662,8 +656,6 @@ struct Picture: public FBox
 
     int   Type    ();
     virtual bool Read    (HWPFile &hwpf) SAL_OVERRIDE;
-
-    virtual hunit  Height (CharShape *sty) SAL_OVERRIDE;
 };
 
 // line (14)
