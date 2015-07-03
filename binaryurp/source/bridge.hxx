@@ -31,7 +31,7 @@
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
-#include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/implbase.hxx"
 #include "osl/conditn.hxx"
 #include "osl/mutex.hxx"
 #include "rtl/ref.hxx"
@@ -67,7 +67,7 @@ namespace rtl { class ByteSequence; }
 namespace binaryurp {
 
 class Bridge:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         com::sun::star::bridge::XBridge, com::sun::star::lang::XComponent >
 {
 public:

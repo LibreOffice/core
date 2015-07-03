@@ -34,7 +34,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase3.hxx"
+#include "cppuhelper/implbase.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include "cppuhelper/weak.hxx"
 #include "osl/conditn.hxx"
@@ -176,7 +176,7 @@ css::uno::Any Derived::queryInterface(css::uno::Type const & type)
 
 namespace {
 
-class Service: public cppu::WeakImplHelper3<
+class Service: public cppu::WeakImplHelper<
     css::lang::XServiceInfo, css::lang::XMain, test::javauno::acquire::XTest >
 {
 public:

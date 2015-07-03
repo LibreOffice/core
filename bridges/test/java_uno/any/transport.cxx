@@ -25,7 +25,7 @@
 #include "uno/environment.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 #include "jvmaccess/unovirtualmachine.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase.hxx"
 
 #include "test/java_uno/anytest/XTransport.hpp"
 #include "test/java_uno/anytest/DerivedInterface.hpp"
@@ -37,7 +37,7 @@ using ::test::java_uno::anytest::XTransport;
 namespace
 {
 
-class Transport : public ::cppu::WeakImplHelper1< XTransport >
+class Transport : public ::cppu::WeakImplHelper< XTransport >
 {
 public:
     virtual Any SAL_CALL mapAny( Any const & any )

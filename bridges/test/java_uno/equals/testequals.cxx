@@ -35,7 +35,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase2.hxx"
+#include "cppuhelper/implbase.hxx"
 #include <cppuhelper/supportsservice.hxx>
 #include "cppuhelper/weak.hxx"
 #include "rtl/string.h"
@@ -48,7 +48,7 @@
 
 namespace {
 
-class Service: public cppu::WeakImplHelper2<
+class Service: public cppu::WeakImplHelper<
     css::lang::XServiceInfo, test::java_uno::equals::XTestInterface >
 {
 public:
