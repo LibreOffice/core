@@ -111,6 +111,7 @@ public:
     void testIntrusiveRing();
     void testClientModify();
     void test64kPageDescs();
+    void testTdf92308();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
 
@@ -144,6 +145,7 @@ public:
     CPPUNIT_TEST(testIntrusiveRing);
     CPPUNIT_TEST(testClientModify);
     CPPUNIT_TEST(test64kPageDescs);
+    CPPUNIT_TEST(testTdf92308);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1613,6 +1615,11 @@ void SwDocTest::test64kPageDescs()
     pDesc = m_pDoc->FindPageDesc( aZeroName, &nPos );
     CPPUNIT_ASSERT( pDesc != NULL );
     CPPUNIT_ASSERT( nPos == 0 );
+}
+
+void SwDocTest::testTdf92308()
+{
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->HasInvisibleContent(), false);
 }
 
 void SwDocTest::setUp()

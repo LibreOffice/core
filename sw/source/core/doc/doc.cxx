@@ -1450,10 +1450,8 @@ bool SwDoc::HasInvisibleContent() const
         }
     }
 
-    const SwSectionFormats& rSectFormats = GetSections();
-    for( SwSectionFormats::size_type n = rSectFormats.size()-1; n; --n )
+    for(auto pSectFormat : GetSections())
     {
-        SwSectionFormat* pSectFormat = rSectFormats[ n ];
         // don't add sections in Undo/Redo
         if( !pSectFormat->IsInNodesArr())
             continue;
