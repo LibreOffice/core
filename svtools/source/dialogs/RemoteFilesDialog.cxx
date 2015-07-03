@@ -850,10 +850,17 @@ const OUString& RemoteFilesDialog::GetPath()
 
 std::vector<OUString> RemoteFilesDialog::GetPathList() const
 {
-    // TODO
-    std::vector<OUString> aPaths;
-    aPaths.push_back(m_sPath);
-    return aPaths;
+    std::vector<OUString> aList;
+    sal_uLong nCount = m_pFileView->GetSelectionCount();
+    SvTreeListEntry* pEntry = nCount ? m_pFileView->FirstSelected() : NULL;
+
+    while( pEntry )
+    {
+        aList.push_back( SvtFileView::GetURL( pEntry ) );
+        pEntry = m_pFileView->NextSelected( pEntry );
+    }
+
+    return aList;
 }
 
 bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
