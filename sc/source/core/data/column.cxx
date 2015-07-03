@@ -372,9 +372,9 @@ const ScPatternAttr* ScColumn::GetPattern( SCROW nRow ) const
     return pAttrArray->GetPattern( nRow );
 }
 
-const SfxPoolItem* ScColumn::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const
+const SfxPoolItem& ScColumn::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const
 {
-    return &pAttrArray->GetPattern( nRow )->GetItemSet().Get(nWhich);
+    return pAttrArray->GetPattern( nRow )->GetItemSet().Get(nWhich);
 }
 
 const ScPatternAttr* ScColumn::GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const

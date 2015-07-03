@@ -239,8 +239,8 @@ public:
 
     SwTextPortionType GetTextPortionType() const { return m_ePortionType; }
 
-    SwUnoCrsr* GetCursor() const
-        { return &(*m_pUnoCursor); }
+    SwUnoCrsr& GetCursor() const
+        { return *m_pUnoCursor; }
 };
 
 class SwXTextPortionEnumeration
@@ -253,8 +253,8 @@ class SwXTextPortionEnumeration
     TextRangeList_t m_Portions; // contains all portions, filled by ctor
     sw::UnoCursorPointer m_pUnoCrsr;
 
-    SwUnoCrsr* GetCursor() const
-        {return &(*m_pUnoCrsr);}
+    SwUnoCrsr& GetCursor() const
+        {return *m_pUnoCrsr;}
 
 protected:
     virtual ~SwXTextPortionEnumeration();

@@ -77,29 +77,27 @@ bool ScPivotLayoutTreeListData::DoubleClickHdl()
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
 
     SCCOL nCurrentColumn = rCurrentFunctionData.mnCol;
-    ScDPLabelData* pCurrentLabelData = mpParent->GetLabelData(nCurrentColumn);
-    if (!pCurrentLabelData)
-        return false;
+    ScDPLabelData& rCurrentLabelData = mpParent->GetLabelData(nCurrentColumn);
 
     ScAbstractDialogFactory* pFactory = ScAbstractDialogFactory::Create();
 
     boost::scoped_ptr<AbstractScDPFunctionDlg> pDialog(
-        pFactory->CreateScDPFunctionDlg(this, mpParent->GetLabelDataVector(), *pCurrentLabelData, rCurrentFunctionData));
+        pFactory->CreateScDPFunctionDlg(this, mpParent->GetLabelDataVector(), rCurrentLabelData, rCurrentFunctionData));
 
     if (pDialog->Execute() == RET_OK)
     {
         rCurrentFunctionData.mnFuncMask = pDialog->GetFuncMask();
-        pCurrentLabelData->mnFuncMask = pDialog->GetFuncMask();
+        rCurrentLabelData.mnFuncMask = pDialog->GetFuncMask();
 
         rCurrentFunctionData.maFieldRef = pDialog->GetFieldRef();
 
-        ScDPLabelData* pDFData = mpParent->GetLabelData(rCurrentFunctionData.mnCol);
+        ScDPLabelData& rDFData = mpParent->GetLabelData(rCurrentFunctionData.mnCol);
 
         AdjustDuplicateCount(pCurrentItemValue);
 
         OUString sDataItemName = lclCreateDataItemName(
                                     rCurrentFunctionData.mnFuncMask,
-                                    pDFData->maName,
+                                    rDFData.maName,
                                     rCurrentFunctionData.mnDupCount);
 
         SetEntryText(GetCurEntry(), sDataItemName);
@@ -152,12 +150,12 @@ void ScPivotLayoutTreeListData::PushDataFieldNames(vector<ScDPName>& rDataFieldN
         ScItemValue* pEachItemValue = static_cast<ScItemValue*>(pLoopEntry->GetUserData());
         SCCOL nColumn = pEachItemValue->maFunctionData.mnCol;
 
-        ScDPLabelData* pLabelData = mpParent->GetLabelData(nColumn);
+        ScDPLabelData& rLabelData = mpParent->GetLabelData(nColumn);
 
-        if (pLabelData == NULL || pLabelData->maName.isEmpty())
+        if (rLabelData.maName.isEmpty())
             continue;
 
-        OUString sLayoutName = pLabelData->maLayoutName;
+        OUString sLayoutName = rLabelData.maLayoutName;
         if (sLayoutName.isEmpty())
         {
             sLayoutName = lclCreateDataItemName(
@@ -166,7 +164,7 @@ void ScPivotLayoutTreeListData::PushDataFieldNames(vector<ScDPName>& rDataFieldN
                             pEachItemValue->maFunctionData.mnDupCount);
         }
 
-        rDataFieldNames.push_back(ScDPName(pLabelData->maName, sLayoutName, pLabelData->mnDupCount));
+        rDataFieldNames.push_back(ScDPName(rLabelData.maName, sLayoutName, rLabelData.mnDupCount));
     }
 }
 

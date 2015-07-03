@@ -852,14 +852,14 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             sal_uInt16 nCount = (sal_uInt16)pRangeFinder->Count();
             for (sal_uInt16 i=0; i<nCount; i++)
             {
-                ScRangeFindData* pData = pRangeFinder->GetObject(i);
+                ScRangeFindData& rData = pRangeFinder->GetObject(i);
 
-                ScRange aRef = pData->aRef;
+                ScRange aRef = rData.aRef;
                 aRef.Justify();
                 if ( aRef.aStart.Tab() >= nTab && aRef.aEnd.Tab() <= nTab )
                     aOutputData.DrawRefMark( aRef.aStart.Col(), aRef.aStart.Row(),
                                             aRef.aEnd.Col(), aRef.aEnd.Row(),
-                                            Color( pData->nColorData ),
+                                            Color( rData.nColorData ),
                                             true );
             }
         }

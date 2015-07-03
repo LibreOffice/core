@@ -66,7 +66,7 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
         ::sw::UnoTunnelGetImplementation<SwXTextRange>(xTunnel);
     // #i115174#: this may be a SvxUnoTextRange
     // OSL_ENSURE( pXRange, "SwXTextRange missing" );
-    return (pXRange) ? pXRange->GetDoc() : 0;
+    return (pXRange) ? &pXRange->GetDoc() : 0;
 }
 
 // XTextRangeOrNodeIndexPosition: store a position into the text
@@ -486,7 +486,7 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
         SwPosition aPos(*pRedlineNode);
         SwXTextCursor *const pXCursor =
             new SwXTextCursor(*pDoc, pXText, CURSOR_REDLINE, aPos);
-        pXCursor->GetCursor()->Move(fnMoveForward, fnGoNode);
+        pXCursor->GetCursor().Move(fnMoveForward, fnGoNode);
         // cast to avoid ambiguity
         xReturn = static_cast<text::XWordCursor*>(pXCursor);
     }

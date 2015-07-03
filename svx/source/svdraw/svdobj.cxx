@@ -2765,7 +2765,7 @@ sal_uInt16 SdrObject::GetUserDataCount() const
 SdrObjUserData* SdrObject::GetUserData(sal_uInt16 nNum) const
 {
     if (pPlusData==NULL || pPlusData->pUserDataList==NULL) return NULL;
-    return pPlusData->pUserDataList->GetUserData(nNum);
+    return &pPlusData->pUserDataList->GetUserData(nNum);
 }
 
 void SdrObject::AppendUserData(SdrObjUserData* pData)

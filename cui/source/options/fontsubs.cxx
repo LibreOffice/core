@@ -502,23 +502,22 @@ bool SvxFontSubstCheckListBox::IsChecked(SvTreeListEntry* pEntry, sal_uInt16 nCo
 
 void SvxFontSubstCheckListBox::SetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
 {
-    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem(nCol + 1));
+    SvLBoxButton& rItem = static_cast<SvLBoxButton&>(pEntry->GetItem(nCol + 1));
 
-    DBG_ASSERT(pItem,"SetCheckButton:Item not found");
-    if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+    if (rItem.GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         switch( eState )
         {
             case SV_BUTTON_CHECKED:
-                pItem->SetStateChecked();
+                rItem.SetStateChecked();
                 break;
 
             case SV_BUTTON_UNCHECKED:
-                pItem->SetStateUnchecked();
+                rItem.SetStateUnchecked();
                 break;
 
             case SV_BUTTON_TRISTATE:
-                pItem->SetStateTristate();
+                rItem.SetStateTristate();
                 break;
         }
         InvalidateEntry( pEntry );
@@ -528,12 +527,11 @@ void SvxFontSubstCheckListBox::SetCheckButtonState( SvTreeListEntry* pEntry, sal
 SvButtonState SvxFontSubstCheckListBox::GetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
-    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem(nCol + 1));
-    DBG_ASSERT(pItem,"GetChButnState:Item not found");
+    SvLBoxButton& rItem = static_cast<SvLBoxButton&>(pEntry->GetItem(nCol + 1));
 
-    if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+    if (rItem.GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
-        SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
+        SvItemStateFlags nButtonFlags = rItem.GetButtonFlags();
         eState = SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
     }
 

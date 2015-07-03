@@ -128,7 +128,7 @@ public:
     ScItemValue* GetItem(SCCOL nColumn);
     bool IsDataElement(SCCOL nColumn);
 
-    ScDPLabelData* GetLabelData(SCCOL nColumn);
+    ScDPLabelData& GetLabelData(SCCOL nColumn);
     ScDPLabelDataVector& GetLabelDataVector() { return maPivotParameters.maLabelArray;}
     void PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames);
 };

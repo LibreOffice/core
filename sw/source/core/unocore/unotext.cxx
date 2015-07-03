@@ -299,7 +299,7 @@ throw (uno::RuntimeException, std::exception)
         ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
     OTextCursorHelper *const pCursor =
         ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
-    if ((!pRange  || pRange ->GetDoc() != GetDoc()) &&
+    if ((!pRange  || &pRange ->GetDoc() != GetDoc()) &&
         (!pCursor || pCursor->GetDoc() != GetDoc()))
     {
         throw uno::RuntimeException();
@@ -1382,23 +1382,23 @@ SwXText::insertTextPortion(
     OUString sMessage;
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
-    auto pCursor(pTextCursor->GetCursor());
-    m_pImpl->m_pDoc->DontExpandFormat( *pCursor->Start() );
+    auto& rCursor(pTextCursor->GetCursor());
+    m_pImpl->m_pDoc->DontExpandFormat( *rCursor.Start() );
 
     if (!rText.isEmpty())
     {
-        const sal_Int32 nContentPos = pCursor->GetPoint()->nContent.GetIndex();
+        const sal_Int32 nContentPos = rCursor.GetPoint()->nContent.GetIndex();
         SwUnoCursorHelper::DocInsertStringSplitCR(
-            *m_pImpl->m_pDoc, *pCursor, rText, false);
-        SwUnoCursorHelper::SelectPam(*pCursor, true);
-        pCursor->GetPoint()->nContent = nContentPos;
+            *m_pImpl->m_pDoc, rCursor, rText, false);
+        SwUnoCursorHelper::SelectPam(rCursor, true);
+        rCursor.GetPoint()->nContent = nContentPos;
     }
 
     try
     {
       SfxItemPropertySet const*const pCursorPropSet =
           aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR);
-      SwUnoCursorHelper::SetPropertyValues(*pCursor, *pCursorPropSet,
+      SwUnoCursorHelper::SetPropertyValues(rCursor, *pCursorPropSet,
                                            rCharacterAndParagraphProperties,
                                            SetAttrMode::NOFORMATATTR);
     }
@@ -1429,7 +1429,7 @@ SwXText::insertTextPortion(
             throw aEx;
         }
     }
-    xRet = new SwXTextRange(*pCursor, this);
+    xRet = new SwXTextRange(rCursor, this);
     return xRet;
 }
 
@@ -2745,28 +2745,28 @@ SwXHeadFootText::createTextCursor() throw (uno::RuntimeException, std::exception
     SwPosition aPos(rNode);
     SwXTextCursor *const pXCursor = new SwXTextCursor(*GetDoc(), this,
             (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER, aPos);
-    auto pUnoCrsr(pXCursor->GetCursor());
-    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+    auto& rUnoCrsr(pXCursor->GetCursor());
+    rUnoCrsr.Move(fnMoveForward, fnGoNode);
 
     // save current start node to be able to check if there is content
     // after the table - otherwise the cursor would be in the body text!
     SwStartNode const*const pOwnStartNode = rNode.FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     // is there a table here?
-    SwTableNode* pTableNode = pUnoCrsr->GetNode().FindTableNode();
+    SwTableNode* pTableNode = rUnoCrsr.GetNode().FindTableNode();
     SwContentNode* pCont = 0;
     while (pTableNode)
     {
-        pUnoCrsr->GetPoint()->nNode = *pTableNode->EndOfSectionNode();
-        pCont = GetDoc()->GetNodes().GoNext(&pUnoCrsr->GetPoint()->nNode);
+        rUnoCrsr.GetPoint()->nNode = *pTableNode->EndOfSectionNode();
+        pCont = GetDoc()->GetNodes().GoNext(&rUnoCrsr.GetPoint()->nNode);
         pTableNode = pCont->FindTableNode();
     }
     if (pCont)
     {
-        pUnoCrsr->GetPoint()->nContent.Assign(pCont, 0);
+        rUnoCrsr.GetPoint()->nContent.Assign(pCont, 0);
     }
     SwStartNode const*const pNewStartNode =
-        pUnoCrsr->GetNode().FindSttNodeByType(
+        rUnoCrsr.GetNode().FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
     if (!pNewStartNode || (pNewStartNode != pOwnStartNode))
     {

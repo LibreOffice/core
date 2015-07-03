@@ -126,24 +126,24 @@ public:
           SwDoc *GetDoc()               { return m_aSet.GetDoc(); }
 
     /// Provides access to the document settings interface.
-    const IDocumentSettingAccess* getIDocumentSettingAccess() const;
+    const IDocumentSettingAccess& getIDocumentSettingAccess() const;
 
     /// Provides access to the document draw model interface.
-    const IDocumentDrawModelAccess* getIDocumentDrawModelAccess() const;
-          IDocumentDrawModelAccess* getIDocumentDrawModelAccess();
+    const IDocumentDrawModelAccess& getIDocumentDrawModelAccess() const;
+          IDocumentDrawModelAccess& getIDocumentDrawModelAccess();
 
     /// Provides access to the document layout interface.
-    const IDocumentLayoutAccess* getIDocumentLayoutAccess() const;
-          IDocumentLayoutAccess* getIDocumentLayoutAccess();
+    const IDocumentLayoutAccess& getIDocumentLayoutAccess() const;
+          IDocumentLayoutAccess& getIDocumentLayoutAccess();
 
      /// Provides access to the document idle timer interface.
-     IDocumentTimerAccess* getIDocumentTimerAccess();
+     IDocumentTimerAccess& getIDocumentTimerAccess();
 
      /// Provides access to the document idle timer interface.
-    IDocumentFieldsAccess* getIDocumentFieldsAccess();
+    IDocumentFieldsAccess& getIDocumentFieldsAccess();
 
      /// Gives access to the chart data-provider.
-    IDocumentChartDataProviderAccess* getIDocumentChartDataProviderAccess();
+    IDocumentChartDataProviderAccess& getIDocumentChartDataProviderAccess();
 
     /// Get and set Pool style IDs.
     sal_uInt16 GetPoolFormatId() const { return m_nPoolFormatId; }

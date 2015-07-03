@@ -2683,7 +2683,7 @@ class MaxStringLenHandler
     {
         Color* pColor;
         OUString aString;
-        sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT))->GetValue();
+        sal_uInt32 nFormat = static_cast<const SfxUInt32Item&>(mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT)).GetValue();
         ScCellFormat::GetString(rCell, nFormat, aString, &pColor, *mpFormatter, &mrColumn.GetDoc());
         sal_Int32 nLen = 0;
         if (mbOctetEncoding)
@@ -2789,8 +2789,8 @@ class MaxNumStringLenHandler
         OUString aString;
         OUString aSep;
         sal_uInt16 nPrec;
-        sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(
-                mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT))->GetValue();
+        sal_uInt32 nFormat = static_cast<const SfxUInt32Item&>(
+                mrColumn.GetAttr(nRow, ATTR_VALUE_FORMAT)).GetValue();
         if (nFormat % SV_COUNTRY_LANGUAGE_OFFSET)
         {
             aSep = mpFormatter->GetFormatDecimalSep(nFormat);

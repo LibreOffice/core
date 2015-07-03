@@ -152,7 +152,7 @@ protected:
     virtual const SwRect GetObjBoundRect() const SAL_OVERRIDE;
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;
 
-    virtual const IDocumentDrawModelAccess* getIDocumentDrawModelAccess( ) SAL_OVERRIDE;
+    virtual const IDocumentDrawModelAccess& getIDocumentDrawModelAccess( ) SAL_OVERRIDE;
 
     SwTwips CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips nMinHeight, const SwTwips nUL);
 

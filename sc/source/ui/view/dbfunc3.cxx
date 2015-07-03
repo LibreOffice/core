@@ -1133,13 +1133,13 @@ void ScDBFunc::GroupDataPilot()
             long nGroupCount = pBaseGroupDim->GetGroupCount();
             for ( long nGroup = 0; nGroup < nGroupCount; nGroup++ )
             {
-                const ScDPSaveGroupItem* pBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
+                const ScDPSaveGroupItem& rBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
 
-                if (!aEntries.count(pBaseGroup->GetGroupName()))
+                if (!aEntries.count(rBaseGroup.GetGroupName()))
                 {
                     // add an additional group for each item that is not in the selection
-                    ScDPSaveGroupItem aGroup( pBaseGroup->GetGroupName() );
-                    aGroup.AddElementsFromGroup( *pBaseGroup );
+                    ScDPSaveGroupItem aGroup( rBaseGroup.GetGroupName() );
+                    aGroup.AddElementsFromGroup( rBaseGroup );
                     pGroupDimension->AddGroupItem( aGroup );
                 }
             }
@@ -1677,19 +1677,16 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
                     return false;
             }
 
-            const ScUserListData* pData = (*pUserList)[*pUserListId];
-            if (pData)
+            const ScUserListData& rData = (*pUserList)[*pUserListId];
+            sal_uInt16 n = rData.GetSubCount();
+            for (sal_uInt16 i = 0; i < n; ++i)
             {
-                sal_uInt16 n = pData->GetSubCount();
-                for (sal_uInt16 i = 0; i < n; ++i)
-                {
-                    OUString aSub = pData->GetSubStr(i);
-                    if (!aMemberSet.count(aSub))
-                        // This string doesn't exist in the member name set.  Don't add this.
-                        continue;
+                OUString aSub = rData.GetSubStr(i);
+                if (!aMemberSet.count(aSub))
+                    // This string doesn't exist in the member name set.  Don't add this.
+                    continue;
 
-                    aSubStrs.insert(UserSortMap::value_type(aSub, nSubCount++));
-                }
+                aSubStrs.insert(UserSortMap::value_type(aSub, nSubCount++));
             }
         }
 

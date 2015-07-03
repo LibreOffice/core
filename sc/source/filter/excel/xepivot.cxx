@@ -368,24 +368,22 @@ void XclExpPCField::InitStdGroupField( const XclExpPCField& rBaseField, const Sc
     // loop over all groups of this field
     for( long nGroupIdx = 0, nGroupCount = rGroupDim.GetGroupCount(); nGroupIdx < nGroupCount; ++nGroupIdx )
     {
-        if( const ScDPSaveGroupItem* pGroupItem = rGroupDim.GetGroupByIndex( nGroupIdx ) )
+        const ScDPSaveGroupItem& rGroupItem = rGroupDim.GetGroupByIndex( nGroupIdx );
+        // the index of the new item containing the grouping name
+        sal_uInt16 nGroupItemIdx = EXC_PC_NOITEM;
+        // loop over all elements of one group
+        for( size_t nElemIdx = 0, nElemCount = rGroupItem.GetElementCount(); nElemIdx < nElemCount; ++nElemIdx )
         {
-            // the index of the new item containing the grouping name
-            sal_uInt16 nGroupItemIdx = EXC_PC_NOITEM;
-            // loop over all elements of one group
-            for( size_t nElemIdx = 0, nElemCount = pGroupItem->GetElementCount(); nElemIdx < nElemCount; ++nElemIdx )
+            if (const OUString* pElemName = rGroupItem.GetElementByIndex(nElemIdx))
             {
-                if (const OUString* pElemName = pGroupItem->GetElementByIndex(nElemIdx))
+                // try to find the item that is part of the group in the base field
+                sal_uInt16 nBaseItemIdx = rBaseField.GetItemIndex( *pElemName );
+                if( nBaseItemIdx < maFieldInfo.mnBaseItems )
                 {
-                    // try to find the item that is part of the group in the base field
-                    sal_uInt16 nBaseItemIdx = rBaseField.GetItemIndex( *pElemName );
-                    if( nBaseItemIdx < maFieldInfo.mnBaseItems )
-                    {
-                        // add group name item only if there are any valid base items
-                        if( nGroupItemIdx == EXC_PC_NOITEM )
-                            nGroupItemIdx = InsertGroupItem( new XclExpPCItem( pGroupItem->GetGroupName() ) );
-                        maGroupOrder[ nBaseItemIdx ] = nGroupItemIdx;
-                    }
+                    // add group name item only if there are any valid base items
+                    if( nGroupItemIdx == EXC_PC_NOITEM )
+                        nGroupItemIdx = InsertGroupItem( new XclExpPCItem( rGroupItem.GetGroupName() ) );
+                    maGroupOrder[ nBaseItemIdx ] = nGroupItemIdx;
                 }
             }
         }
@@ -522,7 +520,7 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
         if (!pCache)
             return;
 
-        ScSheetDPData aDPData(GetDocPtr(), *pSrcDesc, *pCache);
+        ScSheetDPData aDPData(&GetDocRef(), *pSrcDesc, *pCache);
         long nDim = GetFieldIndex();
         // get the string collection with generated grouping elements
         ScDPNumGroupDimension aTmpDim( rNumInfo );
@@ -1634,9 +1632,11 @@ void XclExpPivotTableManager::CreatePivotTables()
 {
     if( ScDPCollection* pDPColl = GetDoc().GetDPCollection() )
         for( size_t nDPObj = 0, nCount = pDPColl->GetCount(); nDPObj < nCount; ++nDPObj )
-            if( ScDPObject* pDPObj = (*pDPColl)[ nDPObj ] )
-                if( const XclExpPivotCache* pPCache = CreatePivotCache( *pDPObj ) )
-                    maPTableList.AppendNewRecord( new XclExpPivotTable( GetRoot(), *pDPObj, *pPCache, nDPObj ) );
+        {
+            ScDPObject& rDPObj = (*pDPColl)[ nDPObj ];
+            if( const XclExpPivotCache* pPCache = CreatePivotCache( rDPObj ) )
+                maPTableList.AppendNewRecord( new XclExpPivotTable( GetRoot(), rDPObj, *pPCache, nDPObj ) );
+        }
 }
 
 XclExpRecordRef XclExpPivotTableManager::CreatePivotCachesRecord()

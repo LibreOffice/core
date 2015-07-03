@@ -439,14 +439,14 @@ sal_Int32 TextPortionList::Count() const
     return (sal_Int32)maPortions.size();
 }
 
-const TextPortion* TextPortionList::operator[](sal_Int32 nPos) const
+const TextPortion& TextPortionList::operator[](sal_Int32 nPos) const
 {
-    return &maPortions[nPos];
+    return maPortions[nPos];
 }
 
-TextPortion* TextPortionList::operator[](sal_Int32 nPos)
+TextPortion& TextPortionList::operator[](sal_Int32 nPos)
 {
-    return &maPortions[nPos];
+    return maPortions[nPos];
 }
 
 void TextPortionList::Append(TextPortion* p)
@@ -636,12 +636,12 @@ sal_Int32 ParaPortion::GetLineNumber( sal_Int32 nIndex ) const
 
     for ( sal_Int32 nLine = 0; nLine < aLineList.Count(); nLine++ )
     {
-        if ( aLineList[nLine]->IsIn( nIndex ) )
+        if ( aLineList[nLine].IsIn( nIndex ) )
             return (sal_Int32)nLine;
     }
 
     // Then it should be at the end of the last line!
-    DBG_ASSERT( nIndex == aLineList[ aLineList.Count() - 1 ]->GetEnd(), "Index dead wrong!" );
+    DBG_ASSERT( nIndex == aLineList[ aLineList.Count() - 1 ].GetEnd(), "Index dead wrong!" );
     return (aLineList.Count()-1);
 }
 
@@ -656,10 +656,10 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormatted
     DBG_ASSERT( nLines, "CorrectPortionNumbersFromLine: Empty Portion?" );
     if ( nLastFormattedLine < ( nLines - 1 ) )
     {
-        const EditLine* pLastFormatted = aLineList[ nLastFormattedLine ];
-        const EditLine* pUnformatted = aLineList[ nLastFormattedLine+1 ];
-        sal_Int32 nPortionDiff = pUnformatted->GetStartPortion() - pLastFormatted->GetEndPortion();
-        sal_Int32 nTextDiff = pUnformatted->GetStart() - pLastFormatted->GetEnd();
+        const EditLine& rLastFormatted = aLineList[ nLastFormattedLine ];
+        const EditLine& rUnformatted = aLineList[ nLastFormattedLine+1 ];
+        sal_Int32 nPortionDiff = rUnformatted.GetStartPortion() - rLastFormatted.GetEndPortion();
+        sal_Int32 nTextDiff = rUnformatted.GetStart() - rLastFormatted.GetEnd();
         nTextDiff++;    // LastFormatted->GetEnd() was included => 1 deducted too much!
 
         // The first unformatted must begin exactly one Portion behind the last
@@ -672,19 +672,19 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormatted
         {
             for ( sal_Int32 nL = nLastFormattedLine+1; nL < nLines; nL++ )
             {
-                EditLine* pLine = aLineList[ nL ];
+                EditLine& rLine = aLineList[ nL ];
 
-                pLine->GetStartPortion() = pLine->GetStartPortion() + nPDiff;
-                pLine->GetEndPortion() = pLine->GetEndPortion() + nPDiff;
+                rLine.GetStartPortion() = rLine.GetStartPortion() + nPDiff;
+                rLine.GetEndPortion() = rLine.GetEndPortion() + nPDiff;
 
-                pLine->GetStart() = pLine->GetStart() + nTDiff;
-                pLine->GetEnd() = pLine->GetEnd() + nTDiff;
+                rLine.GetStart() = rLine.GetStart() + nTDiff;
+                rLine.GetEnd() = rLine.GetEnd() + nTDiff;
 
-                pLine->SetValid();
+                rLine.SetValid();
             }
         }
     }
-    DBG_ASSERT( aLineList[ aLineList.Count()-1 ]->GetEnd() == pNode->Len(), "CorrectLines: The end is not right!" );
+    DBG_ASSERT( aLineList[ aLineList.Count()-1 ].GetEnd() == pNode->Len(), "CorrectLines: The end is not right!" );
 }
 
 // Shared reverse lookup acceleration pieces ...
@@ -1074,20 +1074,19 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
 {
     Size aSz;
     Size aTmpSz;
-    TextPortion* pPortion;
 
     DBG_ASSERT( rParaPortion.GetTextPortions().Count(), "GetTextSize before CreatePortions !" );
 
     for ( sal_Int32 n = nStartPortion; n <= nEndPortion; n++ )
     {
-        pPortion = rParaPortion.GetTextPortions()[n];
-        switch ( pPortion->GetKind() )
+        TextPortion& rPortion = rParaPortion.GetTextPortions()[n];
+        switch ( rPortion.GetKind() )
         {
             case PortionKind::TEXT:
             case PortionKind::FIELD:
             case PortionKind::HYPHENATOR:
             {
-                aTmpSz = pPortion->GetSize();
+                aTmpSz = rPortion.GetSize();
                 aSz.Width() += aTmpSz.Width();
                 if ( aSz.Height() < aTmpSz.Height() )
                     aSz.Height() = aTmpSz.Height();
@@ -1095,7 +1094,7 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
             break;
             case PortionKind::TAB:
             {
-                aSz.Width() += pPortion->GetSize().Width();
+                aSz.Width() += rPortion.GetSize().Width();
             }
             break;
             case PortionKind::LINEBREAK: break;
@@ -1150,14 +1149,14 @@ sal_Int32 EditLineList::Count() const
     return maLines.size();
 }
 
-const EditLine* EditLineList::operator[](sal_Int32 nPos) const
+const EditLine& EditLineList::operator[](sal_Int32 nPos) const
 {
-    return &maLines[nPos];
+    return maLines[nPos];
 }
 
-EditLine* EditLineList::operator[](sal_Int32 nPos)
+EditLine& EditLineList::operator[](sal_Int32 nPos)
 {
-    return &maLines[nPos];
+    return maLines[nPos];
 }
 
 void EditLineList::Append(EditLine* p)

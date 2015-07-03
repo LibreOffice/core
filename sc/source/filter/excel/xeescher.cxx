@@ -166,7 +166,7 @@ static void lcl_GetFromTo( const XclExpRoot& rRoot, const Rectangle &aRect, sal_
 
     while(true)
     {
-        Rectangle r = rRoot.GetDocPtr()->GetMMRect( nCol,nRow,nCol,nRow,nTab );
+        Rectangle r = rRoot.GetDocRef().GetMMRect( nCol,nRow,nCol,nRow,nTab );
         if( !bTo )
         {
             if( r.Left() <= aRect.Left() )

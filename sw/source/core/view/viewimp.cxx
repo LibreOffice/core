@@ -48,9 +48,9 @@ void SwViewShellImp::Init( const SwViewOption *pNewOpt )
     SwRootFrm *pRoot = pSh->GetLayout();
     if ( !pSdrPageView )
     {
-        IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
+        IDocumentDrawModelAccess& rIDDMA = pSh->getIDocumentDrawModelAccess();
         if ( !pRoot->GetDrawPage() )
-            pRoot->SetDrawPage( pIDDMA->GetDrawModel()->GetPage( 0 ) );
+            pRoot->SetDrawPage( rIDDMA.GetDrawModel()->GetPage( 0 ) );
 
         if ( pRoot->GetDrawPage()->GetSize() != pRoot->Frm().SSize() )
             pRoot->GetDrawPage()->SetSize( pRoot->Frm().SSize() );
@@ -58,7 +58,7 @@ void SwViewShellImp::Init( const SwViewOption *pNewOpt )
         pSdrPageView = pDrawView->ShowSdrPage( pRoot->GetDrawPage());
         // OD 26.06.2003 #108784# - notify drawing page view about invisible
         // layers.
-        pIDDMA->NotifyInvisibleLayers( *pSdrPageView );
+        rIDDMA.NotifyInvisibleLayers( *pSdrPageView );
     }
     pDrawView->SetDragStripes( pNewOpt->IsCrossHair() );
     pDrawView->SetGridSnap( pNewOpt->IsSnap() );
@@ -208,13 +208,13 @@ void SwViewShellImp::SetFirstVisPage(OutputDevice* pRenderContext)
 
 void SwViewShellImp::MakeDrawView()
 {
-    IDocumentDrawModelAccess* pIDDMA = GetShell()->getIDocumentDrawModelAccess();
+    IDocumentDrawModelAccess& rIDDMA = GetShell()->getIDocumentDrawModelAccess();
 
     // the else here is not an error, _MakeDrawModel() calls this method again
     // after the DrawModel is created to create DrawViews for all shells...
-    if( !pIDDMA->GetDrawModel() )
+    if( !rIDDMA.GetDrawModel() )
     {
-        pIDDMA->_MakeDrawModel();
+        rIDDMA._MakeDrawModel();
     }
     else
     {
@@ -233,7 +233,7 @@ void SwViewShellImp::MakeDrawView()
                 pOutDevForDrawView = GetShell()->GetOut();
             }
 
-            pDrawView = new SwDrawView( *this, pIDDMA->GetDrawModel(), pOutDevForDrawView);
+            pDrawView = new SwDrawView( *this, rIDDMA.GetDrawModel(), pOutDevForDrawView);
         }
 
         GetDrawView()->SetActiveLayer("Heaven");
@@ -295,12 +295,12 @@ void SwViewShellImp::InitPagePreviewLayout()
 void SwViewShellImp::UpdateAccessible()
 {
     // We require a layout and an XModel to be accessible.
-    IDocumentLayoutAccess* pIDLA = GetShell()->getIDocumentLayoutAccess();
+    IDocumentLayoutAccess& rIDLA = GetShell()->getIDocumentLayoutAccess();
     vcl::Window *pWin = GetShell()->GetWin();
     OSL_ENSURE( GetShell()->GetLayout(), "no layout, no access" );
     OSL_ENSURE( pWin, "no window, no access" );
 
-    if( IsAccessible() && pIDLA->GetCurrentViewShell() && pWin )
+    if( IsAccessible() && rIDLA.GetCurrentViewShell() && pWin )
         GetAccessibleMap().GetDocumentView();
 }
 

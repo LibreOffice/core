@@ -86,9 +86,9 @@ bool ScDetOpList::operator==( const ScDetOpList& r ) const
     return bEqual;
 }
 
-const ScDetOpData* ScDetOpList::GetObject( size_t nPos ) const
+const ScDetOpData& ScDetOpList::GetObject( size_t nPos ) const
 {
-    return &aDetOpDataVector[nPos];
+    return aDetOpDataVector[nPos];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

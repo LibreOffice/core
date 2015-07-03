@@ -385,17 +385,17 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
         sal_Int32 n = 0;
         for ( z = 0; z < nTextPortions; z++ )
         {
-            TextPortion* pPortion = pPPortion->GetTextPortions()[z];
+            TextPortion& rPortion = pPPortion->GetTextPortions()[z];
             aPortionStr.append(' ');
-            aPortionStr.append(static_cast<sal_Int32>(pPortion->GetLen()));
+            aPortionStr.append(static_cast<sal_Int32>(rPortion.GetLen()));
             aPortionStr.append('(');
-            aPortionStr.append(static_cast<sal_Int32>(pPortion->GetSize().Width()));
+            aPortionStr.append(static_cast<sal_Int32>(rPortion.GetSize().Width()));
             aPortionStr.append(')');
             aPortionStr.append('[');
-            aPortionStr.append(static_cast<sal_Int32>(pPortion->GetKind()));
+            aPortionStr.append(static_cast<sal_Int32>(rPortion.GetKind()));
             aPortionStr.append(']');
             aPortionStr.append(';');
-            n += pPortion->GetLen();
+            n += rPortion.GetLen();
         }
         aPortionStr.append("\nA");
         aPortionStr.append(static_cast<sal_Int32>(nPortion));
@@ -410,17 +410,17 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, bool bInfoBox )
         sal_uInt16 nLine;
         for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
-            EditLine* pLine = pPPortion->GetLines()[nLine];
+            EditLine& rLine = pPPortion->GetLines()[nLine];
 
-            OString aLine(OUStringToOString(pPPortion->GetNode()->Copy(pLine->GetStart(), pLine->GetEnd() - pLine->GetStart()), RTL_TEXTENCODING_ASCII_US));
+            OString aLine(OUStringToOString(pPPortion->GetNode()->Copy(rLine.GetStart(), rLine.GetEnd() - rLine.GetStart()), RTL_TEXTENCODING_ASCII_US));
             fprintf( fp, "\nLine %i\t>%s<", nLine, aLine.getStr() );
         }
         // then the internal data ...
         for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
-            EditLine* pLine = pPPortion->GetLines()[nLine];
-            fprintf( fp, "\nZeile %i:\tStart: %" SAL_PRIdINT32 ",\tEnd: %" SAL_PRIdINT32, nLine, pLine->GetStart(), pLine->GetEnd() );
-            fprintf( fp, "\t\tPortions: %" SAL_PRIdINT32 " - %" SAL_PRIdINT32 ".\tHight: %i, Ascent=%i", pLine->GetStartPortion(), pLine->GetEndPortion(), pLine->GetHeight(), pLine->GetMaxAscent() );
+            EditLine& rLine = pPPortion->GetLines()[nLine];
+            fprintf( fp, "\nZeile %i:\tStart: %" SAL_PRIdINT32 ",\tEnd: %" SAL_PRIdINT32, nLine, rLine.GetStart(), rLine.GetEnd() );
+            fprintf( fp, "\t\tPortions: %" SAL_PRIdINT32 " - %" SAL_PRIdINT32 ".\tHight: %i, Ascent=%i", rLine.GetStartPortion(), rLine.GetEndPortion(), rLine.GetHeight(), rLine.GetMaxAscent() );
         }
 
         fprintf( fp, "\n-----------------------------------------------------------------------------" );
@@ -494,7 +494,7 @@ bool ParaPortion::DbgCheckTextPortions(ParaPortion const& rPara)
     sal_uInt16 nXLen = 0;
     for (sal_Int32 nPortion = 0; nPortion < rPara.aTextPortionList.Count(); nPortion++)
     {
-        nXLen = nXLen + rPara.aTextPortionList[nPortion]->GetLen();
+        nXLen = nXLen + rPara.aTextPortionList[nPortion].GetLen();
     }
     return nXLen == rPara.pNode->Len();
 }

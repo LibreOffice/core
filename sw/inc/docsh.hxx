@@ -204,9 +204,9 @@ public:
     /// returns Doc. But be careful!
     inline SwDoc*                   GetDoc() { return m_pDoc; }
     inline const SwDoc*             GetDoc() const { return m_pDoc; }
-    IDocumentDeviceAccess*          getIDocumentDeviceAccess();
-    const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
-    IDocumentChartDataProviderAccess*       getIDocumentChartDataProviderAccess();
+    IDocumentDeviceAccess&          getIDocumentDeviceAccess();
+    const IDocumentSettingAccess&   getIDocumentSettingAccess() const;
+    IDocumentChartDataProviderAccess& getIDocumentChartDataProviderAccess();
 
     void                    UpdateFontList();
     void                    UpdateChildWindows();

@@ -286,7 +286,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
             ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
     }
     SwDoc *const pDocument =
-        (pRange) ? pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
+        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
     if (!pDocument)
     {
         throw lang::IllegalArgumentException();
@@ -1013,7 +1013,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwDoc * const pDoc(
-            pRange ? pRange->GetDoc() : pCursor->GetDoc());
+            pRange ? &pRange->GetDoc() : pCursor->GetDoc());
     if (!pDoc)
     {
         throw lang::IllegalArgumentException(

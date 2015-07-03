@@ -110,9 +110,9 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
         // set default horizontal text direction on painting <hell> or
         // <heaven>.
         EEHorizontalTextDirection aOldEEHoriTextDir = EE_HTEXTDIR_L2R;
-        const IDocumentDrawModelAccess* pIDDMA = GetShell()->getIDocumentDrawModelAccess();
-        if ( (_nLayerID == pIDDMA->GetHellId()) ||
-             (_nLayerID == pIDDMA->GetHeavenId()) )
+        const IDocumentDrawModelAccess& rIDDMA = GetShell()->getIDocumentDrawModelAccess();
+        if ( (_nLayerID == rIDDMA.GetHellId()) ||
+             (_nLayerID == rIDDMA.GetHeavenId()) )
         {
             OSL_ENSURE( _pPageBackgrdColor,
                     "incorrect usage of SwViewShellImp::PaintLayer: pPageBackgrdColor have to be set for painting layer <hell> or <heaven>");
@@ -141,8 +141,8 @@ void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
         pOutDev->Pop();
 
         // reset background color of the outliner & default horiz. text dir.
-        if ( (_nLayerID == pIDDMA->GetHellId()) ||
-             (_nLayerID == pIDDMA->GetHeavenId()) )
+        if ( (_nLayerID == rIDDMA.GetHellId()) ||
+             (_nLayerID == rIDDMA.GetHeavenId()) )
         {
             GetDrawView()->GetModel()->GetDrawOutliner().SetBackgroundColor( aOldOutlinerBackgrdColor );
             GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aOldEEHoriTextDir );
@@ -204,8 +204,8 @@ void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
     if ( !bCheckDrawObjs )
         return;
 
-    OSL_ENSURE( pSh->getIDocumentDrawModelAccess()->GetDrawModel(), "NotifySizeChg without DrawModel" );
-    SdrPage* pPage = pSh->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 );
+    OSL_ENSURE( pSh->getIDocumentDrawModelAccess().GetDrawModel(), "NotifySizeChg without DrawModel" );
+    SdrPage* pPage = pSh->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 );
     const size_t nObjs = pPage->GetObjCount();
     for( size_t nObj = 0; nObj < nObjs; ++nObj )
     {

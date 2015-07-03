@@ -85,8 +85,8 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                                      SvTokenStream & rInStm )
 {
     sal_uInt32  nTokPos = rInStm.Tell();
-    if( rInStm.GetToken()->Is( SvHash_interface() )
-      || rInStm.GetToken()->Is( SvHash_shell() ) )
+    if( rInStm.GetToken().Is( SvHash_interface() )
+      || rInStm.GetToken().Is( SvHash_shell() ) )
     {
         SvMetaClassRef aClass = new SvMetaClass();
         if( aClass->ReadSvIdl( rBase, rInStm ) )
@@ -96,7 +96,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
             rBase.GetClassList().push_back( aClass );
         }
     }
-    else if( rInStm.GetToken()->Is( SvHash_enum() ) )
+    else if( rInStm.GetToken().Is( SvHash_enum() ) )
     {
         SvMetaTypeEnumRef aEnum = new SvMetaTypeEnum();
 
@@ -108,9 +108,9 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
             rBase.GetTypeList().push_back( aEnum );
         }
     }
-    else if( rInStm.GetToken()->Is( SvHash_item() )
-      || rInStm.GetToken()->Is( SvHash_struct() )
-      || rInStm.GetToken()->Is( SvHash_typedef() ) )
+    else if( rInStm.GetToken().Is( SvHash_item() )
+      || rInStm.GetToken().Is( SvHash_struct() )
+      || rInStm.GetToken().Is( SvHash_typedef() ) )
     {
         SvMetaTypeRef xItem = new SvMetaType();
 
@@ -122,7 +122,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
             rBase.GetTypeList().push_back( xItem );
         }
     }
-    else if( rInStm.GetToken()->Is( SvHash_include() ) )
+    else if( rInStm.GetToken().Is( SvHash_include() ) )
     {
         bool bOk = false;
         rInStm.GetToken_Next();
@@ -153,7 +153,7 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                         ReadContextSvIdl( rBase, aTokStm );
                         aTokStm.ReadDelemiter();
                     }
-                    bOk = aTokStm.GetToken()->IsEof();
+                    bOk = aTokStm.GetToken().IsEof();
                     if( !bOk )
                     {
                         rBase.WriteError( aTokStm );
@@ -165,14 +165,14 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                 {
                     OStringBuffer aStr("cannot open file: ");
                     aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
-                    rBase.SetError(aStr.makeStringAndClear(), pTok);
+                    rBase.SetError(aStr.makeStringAndClear(), *pTok);
                 }
             }
             else
             {
                 OStringBuffer aStr("cannot find file:");
                 aStr.append(OUStringToOString(aFullName, RTL_TEXTENCODING_UTF8));
-                rBase.SetError(aStr.makeStringAndClear(), pTok);
+                rBase.SetError(aStr.makeStringAndClear(), *pTok);
             }
         }
         if( !bOk )

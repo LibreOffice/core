@@ -207,14 +207,14 @@ long ScDPSaveGroupDimension::GetGroupCount() const
     return aGroups.size();
 }
 
-const ScDPSaveGroupItem* ScDPSaveGroupDimension::GetGroupByIndex( long nIndex ) const
+const ScDPSaveGroupItem& ScDPSaveGroupDimension::GetGroupByIndex( long nIndex ) const
 {
-    return const_cast< ScDPSaveGroupDimension* >( this )->GetGroupAccByIndex( nIndex );
+    return aGroups[nIndex];
 }
 
-ScDPSaveGroupItem* ScDPSaveGroupDimension::GetGroupAccByIndex( long nIndex )
+ScDPSaveGroupItem& ScDPSaveGroupDimension::GetGroupAccByIndex( long nIndex )
 {
-    return &aGroups[nIndex];
+    return aGroups[nIndex];
 }
 
 void ScDPSaveGroupDimension::RemoveFromGroups( const OUString& rItemName )

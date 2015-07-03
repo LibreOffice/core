@@ -1370,8 +1370,8 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     SwTwips nUpper = 0;
     // OD 06.01.2004 #i11859#
     {
-        const IDocumentSettingAccess* pIDSA = m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess();
-        const bool bUseFormerLineSpacing = pIDSA->get(DocumentSettingId::OLD_LINE_SPACING);
+        const IDocumentSettingAccess& rIDSA = m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess();
+        const bool bUseFormerLineSpacing = rIDSA.get(DocumentSettingId::OLD_LINE_SPACING);
         if( pPrevFrm )
         {
             // OD 2004-03-10 #i11860# - use new method to determine needed spacing
@@ -1383,7 +1383,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
             GetSpacingValuesOfFrm( (*pPrevFrm),
                                    nPrevLowerSpace, nPrevLineSpacing,
                                    bPrevLineSpacingPorportional );
-            if( pIDSA->get(DocumentSettingId::PARA_SPACE_MAX) )
+            if( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) )
             {
                 nUpper = nPrevLowerSpace + pAttrs->GetULSpace().GetUpper();
                 SwTwips nAdd = nPrevLineSpacing;
@@ -1473,7 +1473,7 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                 }
             }
         }
-        else if ( pIDSA->get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES) &&
+        else if ( rIDSA.get(DocumentSettingId::PARA_SPACE_MAX_AT_PAGES) &&
                   CastFlowFrm( pOwn )->HasParaSpaceAtPages( m_rThis.IsSctFrm() ) )
         {
             nUpper = pAttrs->GetULSpace().GetUpper();
@@ -1580,9 +1580,9 @@ SwTwips SwFlowFrm::_GetUpperSpaceAmountConsideredForPrevFrm() const
         GetSpacingValuesOfFrm( (*pPrevFrm), nPrevLowerSpace, nPrevLineSpacing, bDummy );
         if ( nPrevLowerSpace > 0 || nPrevLineSpacing > 0 )
         {
-            const IDocumentSettingAccess* pIDSA = m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess();
-            if (  pIDSA->get(DocumentSettingId::PARA_SPACE_MAX) ||
-                 !pIDSA->get(DocumentSettingId::OLD_LINE_SPACING) )
+            const IDocumentSettingAccess& rIDSA = m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess();
+            if (  rIDSA.get(DocumentSettingId::PARA_SPACE_MAX) ||
+                 !rIDSA.get(DocumentSettingId::OLD_LINE_SPACING) )
             {
                 nUpperSpaceAmountOfPrevFrm = nPrevLowerSpace + nPrevLineSpacing;
             }
@@ -1606,7 +1606,7 @@ SwTwips SwFlowFrm::GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() const
 {
     SwTwips nUpperSpaceAmountConsideredForPrevFrmAndPageGrid = 0;
 
-    if ( !m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::USE_FORMER_OBJECT_POS) )
+    if ( !m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::USE_FORMER_OBJECT_POS) )
     {
         nUpperSpaceAmountConsideredForPrevFrmAndPageGrid =
             _GetUpperSpaceAmountConsideredForPrevFrm() +
@@ -1669,7 +1669,7 @@ SwTwips SwFlowFrm::CalcAddLowerSpaceAsLastInTableCell(
 {
     SwTwips nAdditionalLowerSpace = 0;
 
-    if ( m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
+    if ( m_rThis.GetUpper()->GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::ADD_PARA_SPACING_TO_TABLE_CELLS) )
     {
         const SwFrm* pFrm = &m_rThis;
         if ( pFrm->IsSctFrm() )

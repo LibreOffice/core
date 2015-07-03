@@ -747,8 +747,8 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                 SvTreeListEntries::iterator it = std::find_if(m_prefBoxEntries.begin(), m_prefBoxEntries.end(),
                   [&pUserData, &sPropertyName](SvTreeListEntry &entry) -> bool
                   {
-                      return static_cast< SvLBoxString* >( entry.GetItem(1) )->GetText().equals( pUserData->sPropertyPath ) &&
-                              static_cast< SvLBoxString* >( entry.GetItem(2) )->GetText().equals( sPropertyName );
+                      return static_cast< SvLBoxString& >( entry.GetItem(1) ).GetText().equals( pUserData->sPropertyPath ) &&
+                              static_cast< SvLBoxString& >( entry.GetItem(2) ).GetText().equals( sPropertyName );
                   }
                 );
                 if (it != m_prefBoxEntries.end())
@@ -793,7 +793,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl)
 
             for(size_t i = 1; i < it->ItemCount(); ++i)
             {
-                OUString scrTxt = static_cast< SvLBoxString* >( it->GetItem(i) )->GetText();
+                OUString scrTxt = static_cast< SvLBoxString& >( it->GetItem(i) ).GetText();
                 endPos = scrTxt.getLength();
                 if( textSearch.SearchForward( scrTxt, &startPos, &endPos ) )
                 {

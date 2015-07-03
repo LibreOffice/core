@@ -294,13 +294,13 @@ public:
 
     /** Provides access to the document setting interface
      */
-    const IDocumentSettingAccess* getIDocumentSettingAccess() const;
-          IDocumentSettingAccess* getIDocumentSettingAccess();
+    const IDocumentSettingAccess& getIDocumentSettingAccess() const;
+          IDocumentSettingAccess& getIDocumentSettingAccess();
 
     /** Provides access to the document device interface
      */
-    const IDocumentDeviceAccess* getIDocumentDeviceAccess() const;
-          IDocumentDeviceAccess* getIDocumentDeviceAccess();
+    const IDocumentDeviceAccess& getIDocumentDeviceAccess() const;
+          IDocumentDeviceAccess& getIDocumentDeviceAccess();
 
     /** Provides access to the document bookmark interface
      */
@@ -309,30 +309,30 @@ public:
 
     /** Provides access to the document draw model interface
      */
-    const IDocumentDrawModelAccess* getIDocumentDrawModelAccess() const;
-          IDocumentDrawModelAccess* getIDocumentDrawModelAccess();
+    const IDocumentDrawModelAccess& getIDocumentDrawModelAccess() const;
+          IDocumentDrawModelAccess& getIDocumentDrawModelAccess();
 
     /** Provides access to the document redline interface
      */
-    const IDocumentRedlineAccess* getIDocumentRedlineAccess() const;
-          IDocumentRedlineAccess* getIDocumentRedlineAccess();
+    const IDocumentRedlineAccess& getIDocumentRedlineAccess() const;
+          IDocumentRedlineAccess& getIDocumentRedlineAccess();
 
     /** Provides access to the document layout interface
      */
-    const IDocumentLayoutAccess* getIDocumentLayoutAccess() const;
-          IDocumentLayoutAccess* getIDocumentLayoutAccess();
+    const IDocumentLayoutAccess& getIDocumentLayoutAccess() const;
+          IDocumentLayoutAccess& getIDocumentLayoutAccess();
 
     /** Provides access to the content operations interface
      */
-    IDocumentContentOperations* getIDocumentContentOperations();
+    IDocumentContentOperations& getIDocumentContentOperations();
 
     /** Provides access to the document style pool interface
      */
-    IDocumentStylePoolAccess* getIDocumentStylePoolAccess();
+    IDocumentStylePoolAccess& getIDocumentStylePoolAccess();
 
     /** Provides access to the document statistics interface
      */
-    const IDocumentStatistics* getIDocumentStatistics() const;
+    const IDocumentStatistics& getIDocumentStatistics() const;
 
     /** Provides access to the document undo/redo interface
      */

@@ -1777,7 +1777,7 @@ void EditEngine::GetPortions( sal_Int32 nPara, std::vector<sal_Int32>& rList )
         sal_Int32 nTextPortions = pParaPortion->GetTextPortions().Count();
         for ( sal_Int32 n = 0; n < nTextPortions; n++ )
         {
-            nEnd = nEnd + pParaPortion->GetTextPortions()[n]->GetLen();
+            nEnd = nEnd + pParaPortion->GetTextPortions()[n].GetLen();
             rList.push_back( nEnd );
         }
     }
@@ -1884,8 +1884,8 @@ long EditEngine::GetFirstLineStartX( sal_Int32 nParagraph )
         DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetFirstLineStartX: Doc not formatted - unable to format!" );
         if ( !pImpEditEngine->IsFormatted() )
             pImpEditEngine->FormatDoc();
-        const EditLine* pFirstLine = pPPortion->GetLines()[0];
-        nX = pFirstLine->GetStartPosX();
+        const EditLine& rFirstLine = pPPortion->GetLines()[0];
+        nX = rFirstLine.GetStartPosX();
     }
     return nX;
 }
@@ -1916,8 +1916,8 @@ Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
         if ( pPPortion->GetLines().Count() )
         {
             // Correct it if large Bullet.
-            const EditLine* pFirstLine = pPPortion->GetLines()[0];
-            aPoint.X() = pFirstLine->GetStartPosX();
+            const EditLine& rFirstLine = pPPortion->GetLines()[0];
+            aPoint.X() = rFirstLine.GetStartPosX();
         }
         else
         {
@@ -1968,8 +1968,8 @@ bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
             DBG_ASSERT( pParaPortion, "ParaPortion?" );
 
             sal_Int32 nLine = pParaPortion->GetLineNumber( aPaM.GetIndex() );
-            const EditLine* pLine = pParaPortion->GetLines()[nLine];
-            Range aLineXPosStartEnd = pImpEditEngine->GetLineXPosStartEnd( pParaPortion, pLine );
+            const EditLine& rLine = pParaPortion->GetLines()[nLine];
+            Range aLineXPosStartEnd = pImpEditEngine->GetLineXPosStartEnd( pParaPortion, &rLine );
             if ( ( aDocPos.X() >= aLineXPosStartEnd.Min() - nBorder ) &&
                  ( aDocPos.X() <= aLineXPosStartEnd.Max() + nBorder ) )
             {
@@ -2387,7 +2387,7 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
     {
         const ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions()[nPara];
         const EditLine* pLine = (pParaPortion && pParaPortion->GetLines().Count()) ?
-                pParaPortion->GetLines()[0] : NULL;
+                &pParaPortion->GetLines()[0] : NULL;
         DBG_ASSERT( pParaPortion && pLine, "GetParagraphInfos - Paragraph out of range" );
         if ( pParaPortion && pLine )
         {

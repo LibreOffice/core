@@ -1399,7 +1399,7 @@ void XclImpPivotTable::Convert()
     // *** insert into Calc document ***
 
     // create source descriptor
-    ScSheetSourceDesc aDesc(GetDocPtr());
+    ScSheetSourceDesc aDesc(&GetDocRef());
     const OUString& rSrcName = mxPCache->GetSourceRangeName();
     if (!rSrcName.isEmpty())
         // Range name is the data source.
@@ -1417,7 +1417,7 @@ void XclImpPivotTable::Convert()
     }
 
     // create the DataPilot
-    ScDPObject* pDPObj = new ScDPObject( GetDocPtr() );
+    ScDPObject* pDPObj = new ScDPObject( &GetDocRef() );
     pDPObj->SetName( maPTInfo.maTableName );
     if (!maPTInfo.maDataName.isEmpty())
         aSaveData.GetDataLayoutDimension()->SetLayoutName(maPTInfo.maDataName);

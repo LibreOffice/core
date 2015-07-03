@@ -1738,7 +1738,7 @@ void ScFiltersTest::testPivotTableBasicODS()
         "There should be exactly one pivot table instance.", size_t(1),
         pDPs->GetCount());
 
-    const ScDPObject* pDPObj = (*pDPs)[0];
+    const ScDPObject* pDPObj = &(*pDPs)[0];
     CPPUNIT_ASSERT_MESSAGE("Failed to get an pivot table object.", pDPObj);
     const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT_MESSAGE("Failed to get ScDPSaveData instance.", pSaveData);
@@ -1795,7 +1795,7 @@ void ScFiltersTest::testPivotTableNamedRangeSourceODS()
     ScDPCollection* pDPs = rDoc.GetDPCollection();
     CPPUNIT_ASSERT(pDPs->GetCount() == 1);
 
-    ScDPObject* pDP = (*pDPs)[0];
+    ScDPObject* pDP = &(*pDPs)[0];
     CPPUNIT_ASSERT(pDP);
 
     // Make sure this pivot table is based on a named range source.

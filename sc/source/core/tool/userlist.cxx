@@ -279,14 +279,14 @@ const ScUserListData* ScUserList::GetData(const OUString& rSubStr) const
     return NULL;
 }
 
-const ScUserListData* ScUserList::operator[](size_t nIndex) const
+const ScUserListData& ScUserList::operator[](size_t nIndex) const
 {
-    return &maData[nIndex];
+    return maData[nIndex];
 }
 
-ScUserListData* ScUserList::operator[](size_t nIndex)
+ScUserListData& ScUserList::operator[](size_t nIndex)
 {
-    return &maData[nIndex];
+    return maData[nIndex];
 }
 
 ScUserList& ScUserList::operator=( const ScUserList& r )

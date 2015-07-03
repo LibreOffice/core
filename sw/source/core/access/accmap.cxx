@@ -243,7 +243,7 @@ public:
         maInfo.SetViewForwarder( pMap );
         uno::Reference < document::XEventBroadcaster > xModelBroadcaster =
             new SwDrawModellListener_Impl(
-                    pMap->GetShell()->getIDocumentDrawModelAccess()->GetOrCreateDrawModel() );
+                    pMap->GetShell()->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
         maInfo.SetModelBroadcaster( xModelBroadcaster );
     }
 

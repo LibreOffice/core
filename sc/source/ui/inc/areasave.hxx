@@ -64,8 +64,8 @@ public:
     // returns NULL if empty
     static ScAreaLinkSaveCollection* CreateFromDoc( const ScDocument* pDoc );
 
-    ScAreaLinkSaver* operator[](size_t nIndex);
-    const ScAreaLinkSaver* operator[](size_t nIndex) const;
+    ScAreaLinkSaver& operator[](size_t nIndex);
+    const ScAreaLinkSaver& operator[](size_t nIndex) const;
     size_t size() const;
     void push_back(ScAreaLinkSaver* p);
 };

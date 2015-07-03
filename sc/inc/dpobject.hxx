@@ -373,8 +373,8 @@ public:
     bool ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
 
     SC_DLLPUBLIC size_t GetCount() const;
-    SC_DLLPUBLIC ScDPObject* operator[](size_t nIndex);
-    SC_DLLPUBLIC const ScDPObject* operator[](size_t nIndex) const;
+    SC_DLLPUBLIC ScDPObject& operator[](size_t nIndex);
+    SC_DLLPUBLIC const ScDPObject& operator[](size_t nIndex) const;
 
     const ScDPObject* GetByName(const OUString& rName) const;
 

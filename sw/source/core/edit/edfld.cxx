@@ -405,12 +405,12 @@ void SwEditShell::UnlockExpFields()
 
 void SwEditShell::SetFieldUpdateFlags( SwFieldUpdateFlags eFlags )
 {
-    getIDocumentSettingAccess()->setFieldUpdateFlags( eFlags );
+    getIDocumentSettingAccess().setFieldUpdateFlags( eFlags );
 }
 
 SwFieldUpdateFlags SwEditShell::GetFieldUpdateFlags(bool bDocSettings) const
 {
-    return getIDocumentSettingAccess()->getFieldUpdateFlags( !bDocSettings );
+    return getIDocumentSettingAccess().getFieldUpdateFlags( !bDocSettings );
 }
 
 void SwEditShell::SetLabelDoc( bool bFlag )
@@ -420,7 +420,7 @@ void SwEditShell::SetLabelDoc( bool bFlag )
 
 bool SwEditShell::IsLabelDoc() const
 {
-    return getIDocumentSettingAccess()->get(DocumentSettingId::LABEL_DOCUMENT);
+    return getIDocumentSettingAccess().get(DocumentSettingId::LABEL_DOCUMENT);
 }
 
 void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)

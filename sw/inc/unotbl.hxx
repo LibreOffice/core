@@ -273,8 +273,8 @@ public:
     virtual const SwDoc*        GetDoc() const SAL_OVERRIDE;
     virtual SwDoc*              GetDoc() SAL_OVERRIDE;
 
-    const SwUnoCrsr*            GetCrsr() const;
-    SwUnoCrsr*                  GetCrsr();
+    const SwUnoCrsr&            GetCrsr() const;
+    SwUnoCrsr&                  GetCrsr();
     sw::UnoCursorPointer m_pUnoCrsr;
     SwFrameFormat*       GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
     virtual ~SwXTextTableCursor() { };

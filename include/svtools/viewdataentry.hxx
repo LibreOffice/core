@@ -73,8 +73,8 @@ public:
 
     void Init(size_t nSize);
 
-    const SvViewDataItem* GetItem(size_t nPos) const;
-    SvViewDataItem* GetItem(size_t nPos);
+    const SvViewDataItem& GetItem(size_t nPos) const;
+    SvViewDataItem& GetItem(size_t nPos);
 
     void SetPaintRectangle(Rectangle aRectangle);
     Rectangle GetPaintRectangle() const;

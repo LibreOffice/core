@@ -1270,7 +1270,7 @@ bool SwDocShell::HasChangeRecordProtection() const
 {
     if (!m_pWrtShell)
         return false;
-    return m_pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0;
+    return m_pWrtShell->getIDocumentRedlineAccess().GetRedlinePassword().getLength() > 0;
 }
 
 void SwDocShell::SetChangeRecording( bool bActivate )
@@ -1286,8 +1286,8 @@ bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
     const SfxItemSet*   pArgs = &aSet;
     const SfxPoolItem*  pItem = NULL;
 
-    IDocumentRedlineAccess* pIDRA = m_pWrtShell->getIDocumentRedlineAccess();
-    Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
+    IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
+    Sequence< sal_Int8 > aPasswd = rIDRA.GetRedlinePassword();
     if (pArgs && SfxItemState::SET == pArgs->GetItemState( FN_REDLINE_PROTECT, false, &pItem )
         && static_cast<const SfxBoolItem*>(pItem)->GetValue() == (aPasswd.getLength() > 0))
         return false;
@@ -1301,12 +1301,12 @@ bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
 
         Sequence< sal_Int8 > aNewPasswd;
         SvPasswordHelper::GetHashPassword( aNewPasswd, rNewPassword );
-        pIDRA->SetRedlinePassword( aNewPasswd );
+        rIDRA.SetRedlinePassword( aNewPasswd );
         bRes = true;
     }
     else
     {
-        pIDRA->SetRedlinePassword( Sequence< sal_Int8 >() );
+        rIDRA.SetRedlinePassword( Sequence< sal_Int8 >() );
         bRes = true;
     }
 
@@ -1321,8 +1321,8 @@ bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
     const SfxItemSet*   pArgs = &aSet;
     const SfxPoolItem*  pItem = NULL;
 
-    IDocumentRedlineAccess* pIDRA = m_pWrtShell->getIDocumentRedlineAccess();
-    Sequence< sal_Int8 > aPasswdHash( pIDRA->GetRedlinePassword() );
+    IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
+    Sequence< sal_Int8 > aPasswdHash( rIDRA.GetRedlinePassword() );
     if (pArgs && SfxItemState::SET == pArgs->GetItemState( FN_REDLINE_PROTECT, false, &pItem )
         && static_cast<const SfxBoolItem*>(pItem)->GetValue() == (aPasswdHash.getLength() != 0))
         return false;

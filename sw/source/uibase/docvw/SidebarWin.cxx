@@ -545,14 +545,14 @@ void SwSidebarWin::SetPosAndSize()
         {
             case sw::sidebarwindows::SidebarPosition::LEFT:
             {
-                aLineStart = EditWin()->PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
-                aLineEnd = EditWin()->PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
+                aLineStart = EditWin().PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
+                aLineEnd = EditWin().PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
             }
             break;
             case sw::sidebarwindows::SidebarPosition::RIGHT:
             {
-                aLineStart = EditWin()->PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
-                aLineEnd = EditWin()->PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
+                aLineStart = EditWin().PixelToLogic( Point(GetPosPixel().X(),GetPosPixel().Y()-1) );
+                aLineEnd = EditWin().PixelToLogic( Point(GetPosPixel().X()+GetSizePixel().Width(),GetPosPixel().Y()-1) );
             }
             break;
             default:
@@ -609,8 +609,8 @@ void SwSidebarWin::SetPosAndSize()
 
     if (bChange)
     {
-        Point aStart = EditWin()->PixelToLogic(GetPosPixel()+Point(0,GetSizePixel().Height()));
-        Point aEnd = EditWin()->PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width()-1,GetSizePixel().Height()));
+        Point aStart = EditWin().PixelToLogic(GetPosPixel()+Point(0,GetSizePixel().Height()));
+        Point aEnd = EditWin().PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width()-1,GetSizePixel().Height()));
         mpShadow->SetPosition(basegfx::B2DPoint(aStart.X(),aStart.Y()), basegfx::B2DPoint(aEnd.X(),aEnd.Y()));
     }
 
@@ -818,8 +818,8 @@ void SwSidebarWin::SetSizePixel( const Size& rNewSize )
 
     if (mpShadow)
     {
-        Point aStart = EditWin()->PixelToLogic(GetPosPixel()+Point(0,GetSizePixel().Height()));
-        Point aEnd = EditWin()->PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width()-1,GetSizePixel().Height()));
+        Point aStart = EditWin().PixelToLogic(GetPosPixel()+Point(0,GetSizePixel().Height()));
+        Point aEnd = EditWin().PixelToLogic(GetPosPixel()+Point(GetSizePixel().Width()-1,GetSizePixel().Height()));
         mpShadow->SetPosition(basegfx::B2DPoint(aStart.X(),aStart.Y()), basegfx::B2DPoint(aEnd.X(),aEnd.Y()));
     }
 }
@@ -1096,9 +1096,9 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
     }
 }
 
-SwEditWin*  SwSidebarWin::EditWin()
+SwEditWin&  SwSidebarWin::EditWin()
 {
-    return &mrView.GetEditWin();
+    return mrView.GetEditWin();
 }
 
 long SwSidebarWin::GetPostItTextHeight()

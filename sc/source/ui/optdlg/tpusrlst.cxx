@@ -266,7 +266,7 @@ size_t ScTpUserLists::UpdateUserListBox()
 
     for ( size_t i=0; i<nCount; ++i )
     {
-        aEntry = (*pUserLists)[i]->GetString();
+        aEntry = (*pUserLists)[i].GetString();
         OSL_ENSURE( !aEntry.isEmpty(), "Empty UserList-entry :-/" );
         mpLbLists->InsertEntry( aEntry );
     }
@@ -280,15 +280,15 @@ void ScTpUserLists::UpdateEntries( size_t nList )
 
     if ( nList < pUserLists->size() )
     {
-        const ScUserListData* pList = (*pUserLists)[nList];
-        std::size_t nSubCount = pList->GetSubCount();
+        const ScUserListData& rList = (*pUserLists)[nList];
+        std::size_t nSubCount = rList.GetSubCount();
         OUString          aEntryListStr;
 
         for ( size_t i=0; i<nSubCount; i++ )
         {
             if ( i!=0 )
                 aEntryListStr += OUStringLiteral1<CR>();
-            aEntryListStr += pList->GetSubStr(i);
+            aEntryListStr += rList.GetSubStr(i);
         }
 
         mpEdEntries->SetText(convertLineEnd(aEntryListStr, GetSystemLineEnd()));
@@ -442,7 +442,7 @@ void ScTpUserLists::ModifyList( size_t            nSelList,
 
     MakeListStr( theEntriesStr );
 
-    (*pUserLists)[nSelList]->SetString( theEntriesStr );
+    (*pUserLists)[nSelList].SetString( theEntriesStr );
 }
 
 void ScTpUserLists::RemoveList( size_t nList )

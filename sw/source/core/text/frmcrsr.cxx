@@ -1378,7 +1378,7 @@ void SwTextFrm::FillCrsrPos( SwFillData& rFill ) const
     }
     OutputDevice* pOut = pSh->GetOut();
     if( !pSh->GetViewOptions()->getBrowseMode() || pSh->GetViewOptions()->IsPrtFormat() )
-        pOut = GetTextNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
+        pOut = GetTextNode()->getIDocumentDeviceAccess().getReferenceDevice( true );
 
     pFnt->SetFntChg( true );
     pFnt->ChgPhysFnt( pSh, *pOut );

@@ -366,7 +366,7 @@ void SwMailMergeOutputPage::ActivatePage()
     OSL_ENSURE(pTargetView, "no target view exists");
     if(pTargetView)
     {
-        SfxPrinter* pPrinter = pTargetView->GetWrtShell().getIDocumentDeviceAccess()->getPrinter( true );
+        SfxPrinter* pPrinter = pTargetView->GetWrtShell().getIDocumentDeviceAccess().getPrinter( true );
         m_pPrinterLB->SelectEntry( pPrinter->GetName() );
         m_pToNF->SetValue( rConfigItem.GetMergedDocumentCount() );
         m_pToNF->SetMax( rConfigItem.GetMergedDocumentCount() );
@@ -826,7 +826,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
 {
     SwView *const pTargetView = m_pWizard->GetConfigItem().GetTargetView();
     SfxPrinter *const pDocumentPrinter = pTargetView->GetWrtShell()
-        .getIDocumentDeviceAccess()->getPrinter(true);
+        .getIDocumentDeviceAccess().getPrinter(true);
     if (pDocumentPrinter && pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
     {
         const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectEntry(), false );
@@ -897,7 +897,7 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     if(m_pTempPrinter)
     {
         SfxPrinter *const pDocumentPrinter = pTargetView->GetWrtShell()
-            .getIDocumentDeviceAccess()->getPrinter(true);
+            .getIDocumentDeviceAccess().getPrinter(true);
         pDocumentPrinter->SetPrinterProps(m_pTempPrinter);
         // this should be able to handle setting its own printer
         pTargetView->SetPrinter(pDocumentPrinter);

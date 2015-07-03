@@ -237,10 +237,10 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
         SvTreeListEntry* pEntry = GetEntry4Type( pArr->eType );
         if( pEntry )
         {
-            SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem( nCol ));
-            if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+            SvLBoxButton& rItem = static_cast<SvLBoxButton&>(pEntry->GetItem( nCol ));
+            if (rItem.GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
-                SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
+                SvItemStateFlags nButtonFlags = rItem.GetButtonFlags();
                 bCheck = SV_BUTTON_CHECKED ==
                         SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
 
@@ -305,13 +305,13 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
         SvTreeListEntry* pEntry = GetEntry4Type( static_cast< sal_IntPtr >( pArr->eType ) );
         if( pEntry )
         {
-            SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem( nCol ));
-            if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+            SvLBoxButton& rItem = static_cast<SvLBoxButton&>(pEntry->GetItem( nCol ));
+            if (rItem.GetType() == SV_ITEM_ID_LBOXBUTTON)
             {
                 if( (rOpt.*pArr->FnIs)() )
-                    pItem->SetStateChecked();
+                    rItem.SetStateChecked();
                 else
-                    pItem->SetStateUnchecked();
+                    rItem.SetStateUnchecked();
                 m_pCheckLB->InvalidateEntry( pEntry );
             }
         }
@@ -391,23 +391,22 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::HBarClick()
 void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
                             SvTreeListEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
 {
-    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem(nCol + 1));
+    SvLBoxButton& rItem = static_cast<SvLBoxButton&>(pEntry->GetItem(nCol + 1));
 
-    DBG_ASSERT(pItem,"SetCheckButton:Item not found");
-    if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+    if (rItem.GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
         switch( eState )
         {
             case SV_BUTTON_CHECKED:
-                pItem->SetStateChecked();
+                rItem.SetStateChecked();
                 break;
 
             case SV_BUTTON_UNCHECKED:
-                pItem->SetStateUnchecked();
+                rItem.SetStateUnchecked();
                 break;
 
             case SV_BUTTON_TRISTATE:
-                pItem->SetStateTristate();
+                rItem.SetStateTristate();
                 break;
         }
         InvalidateEntry( pEntry );
@@ -418,12 +417,11 @@ SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
                                     SvTreeListEntry* pEntry, sal_uInt16 nCol )
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
-    SvLBoxButton* pItem = static_cast<SvLBoxButton*>(pEntry->GetItem(nCol + 1));
-    DBG_ASSERT(pItem,"GetChButnState:Item not found");
+    SvLBoxButton& rItem = static_cast<SvLBoxButton&>(pEntry->GetItem(nCol + 1));
 
-    if (pItem->GetType() == SV_ITEM_ID_LBOXBUTTON)
+    if (rItem.GetType() == SV_ITEM_ID_LBOXBUTTON)
     {
-        SvItemStateFlags nButtonFlags = pItem->GetButtonFlags();
+        SvItemStateFlags nButtonFlags = rItem.GetButtonFlags();
         eState = SvLBoxButtonData::ConvertToButtonState( nButtonFlags );
     }
 

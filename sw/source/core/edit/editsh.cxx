@@ -929,12 +929,12 @@ void SwEditShell::SetLineNumberInfo(const SwLineNumberInfo& rInfo)
 
 sal_uInt16 SwEditShell::GetLinkUpdMode(bool bDocSettings) const
 {
-    return getIDocumentSettingAccess()->getLinkUpdateMode( !bDocSettings );
+    return getIDocumentSettingAccess().getLinkUpdateMode( !bDocSettings );
 }
 
 void SwEditShell::SetLinkUpdMode( sal_uInt16 nMode )
 {
-    getIDocumentSettingAccess()->setLinkUpdateMode( nMode );
+    getIDocumentSettingAccess().setLinkUpdateMode( nMode );
 }
 
 // Interface for TextInputData - (for text input of japanese/chinese characters)

@@ -81,14 +81,14 @@ void SvViewDataEntry::Init(size_t nSize)
     maItems.resize(nSize);
 }
 
-const SvViewDataItem* SvViewDataEntry::GetItem(size_t nPos) const
+const SvViewDataItem& SvViewDataEntry::GetItem(size_t nPos) const
 {
-    return &maItems[nPos];
+    return maItems[nPos];
 }
 
-SvViewDataItem* SvViewDataEntry::GetItem(size_t nPos)
+SvViewDataItem& SvViewDataEntry::GetItem(size_t nPos)
 {
-    return &maItems[nPos];
+    return maItems[nPos];
 }
 
 void SvViewDataEntry::SetPaintRectangle(Rectangle aRectangle)

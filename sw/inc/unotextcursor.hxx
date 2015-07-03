@@ -91,7 +91,7 @@ public:
             SwPaM const& rSourceCursor,
             const enum CursorType eType = CURSOR_ALL);
 
-    SwUnoCrsr* GetCursor();
+    SwUnoCrsr& GetCursor();
     bool IsAtEndOfMeta() const;
 
     void DeleteAndInsert(OUString const& rText,

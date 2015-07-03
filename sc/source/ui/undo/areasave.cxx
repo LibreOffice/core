@@ -109,7 +109,7 @@ bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
             ::sfx2::SvBaseLink* pBase = *rLinks[i];
             if (pBase->ISA(ScAreaLink))
             {
-                if ( nPos >= size() || !(*this)[nPos]->IsEqual( *static_cast<ScAreaLink*>(pBase) ) )
+                if ( nPos >= size() || !(*this)[nPos].IsEqual( *static_cast<ScAreaLink*>(pBase) ) )
                     return false;
 
                 ++nPos;
@@ -151,12 +151,12 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc )
         size_t nSaveCount = size();
         for (size_t nPos=0; nPos<nSaveCount; ++nPos)
         {
-            ScAreaLinkSaver* pSaver = (*this)[nPos];
-            ScAreaLink* pLink = lcl_FindLink( rLinks, *pSaver );
+            ScAreaLinkSaver& rSaver = (*this)[nPos];
+            ScAreaLink* pLink = lcl_FindLink( rLinks, rSaver );
             if ( pLink )
-                pSaver->WriteToLink( *pLink );          // restore output position
+                rSaver.WriteToLink( *pLink );          // restore output position
             else
-                pSaver->InsertNewLink( pDoc );          // re-insert deleted link
+                rSaver.InsertNewLink( pDoc );          // re-insert deleted link
         }
     }
 }
@@ -187,14 +187,14 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
     return pColl;
 }
 
-ScAreaLinkSaver* ScAreaLinkSaveCollection::operator [](size_t nIndex)
+ScAreaLinkSaver& ScAreaLinkSaveCollection::operator [](size_t nIndex)
 {
-    return &maData[nIndex];
+    return maData[nIndex];
 }
 
-const ScAreaLinkSaver* ScAreaLinkSaveCollection::operator [](size_t nIndex) const
+const ScAreaLinkSaver& ScAreaLinkSaveCollection::operator [](size_t nIndex) const
 {
-    return &maData[nIndex];
+    return maData[nIndex];
 }
 
 size_t ScAreaLinkSaveCollection::size() const

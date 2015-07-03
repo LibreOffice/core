@@ -126,7 +126,7 @@ void LibLBoxString::Paint(const Point& rPos, SvTreeListBox& /*rDev*/, vcl::Rende
     {
         ScriptDocument aDocument(static_cast<LibUserData*>(rEntry.GetUserData())->GetDocument());
 
-        OUString aLibName = static_cast<const SvLBoxString*>(rEntry.GetItem(1))->GetText();
+        OUString aLibName = static_cast<const SvLBoxString&>(rEntry.GetItem(1)).GetText();
         Reference<script::XLibraryContainer2> xModLibContainer(aDocument.getLibraryContainer(E_SCRIPTS), UNO_QUERY);
         Reference<script::XLibraryContainer2 > xDlgLibContainer(aDocument.getLibraryContainer(E_DIALOGS), UNO_QUERY);
         bReadOnly = (xModLibContainer.is() && xModLibContainer->hasByName(aLibName) && xModLibContainer->isLibraryReadOnly(aLibName))
@@ -251,8 +251,8 @@ void CheckBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rTxt,
         sal_uInt16 nCount = pEntry->ItemCount();
         for ( sal_uInt16 nCol = 1; nCol < nCount; ++nCol )
         {
-            SvLBoxString* pCol = static_cast<SvLBoxString*>(pEntry->GetItem( nCol ));
-            LibLBoxString* pStr = new LibLBoxString( pEntry, 0, pCol->GetText() );
+            SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nCol ));
+            LibLBoxString* pStr = new LibLBoxString( pEntry, 0, rCol.GetText() );
             pEntry->ReplaceItem( pStr, nCol );
         }
     }

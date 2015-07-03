@@ -742,7 +742,7 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
     if(pWrtShell)
     {
         pWrtShell->StartAllAction();
-        SfxPrinter* pPrinter = pWrtShell->getIDocumentDeviceAccess()->getPrinter( false );
+        SfxPrinter* pPrinter = pWrtShell->getIDocumentDeviceAccess().getPrinter( false );
         bool bMod = false;
         const sal_uInt16 nFontWhich = sal::static_int_cast< sal_uInt16, RES_CHRATR >(
             nFontGroup == FONT_GROUP_DEFAULT  ? RES_CHRATR_FONT :

@@ -207,7 +207,7 @@ void* lcl_GetKeyFromFrame( const SwFrm& rFrm )
     void* pKey = 0;
 
     if ( rFrm.IsPageFrm() )
-        pKey = const_cast<void*>(static_cast<void const *>((static_cast<const SwPageFrm&>(rFrm).GetFormat()->getIDocumentSettingAccess())));
+        pKey = const_cast<void*>(static_cast<void const *>(&(static_cast<const SwPageFrm&>(rFrm).GetFormat()->getIDocumentSettingAccess())));
     else if ( rFrm.IsTextFrm() )
         pKey = const_cast<void*>(static_cast<void const *>(static_cast<const SwTextFrm&>(rFrm).GetTextNode()));
     else if ( rFrm.IsSctFrm() )

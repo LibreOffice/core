@@ -72,8 +72,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                         if( xAutomationInterface.Is() )
                         {
                             // set error
-                            rBase.SetError( "Automation already set",
-                                            rInStm.GetToken() );
+                            rBase.SetError( "Automation already set", rInStm.GetToken() );
                             rBase.WriteError( rInStm );
                         }
                         xAutomationInterface = pClass;
@@ -89,12 +88,11 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                 else
                 {
                     // set error
-                    rBase.SetError( "only attribute Automation allowed",
-                                    rInStm.GetToken() );
+                    rBase.SetError( "only attribute Automation allowed", rInStm.GetToken() );
                     rBase.WriteError( rInStm );
                 }
             }
-            pTok = rInStm.GetToken();
+            pTok = &rInStm.GetToken();
             if( pTok->IsString() )
             {
                 xEle->SetPrefix( pTok->GetString() );
@@ -159,8 +157,7 @@ bool SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             if( !bOk )
             {
                 // set error
-                rBase.SetError( "unknown super class",
-                                rInStm.GetToken() );
+                rBase.SetError( "unknown super class", rInStm.GetToken() );
                 rBase.WriteError( rInStm );
             }
         }

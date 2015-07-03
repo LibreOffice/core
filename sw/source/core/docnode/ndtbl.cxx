@@ -117,7 +117,7 @@ static void lcl_SetDfltBoxAttr( SwFrameFormat& rFormat, sal_uInt8 nId )
     case 3: bBottom = bLeft = bRight = true;        break;
     }
 
-    const bool bHTML = rFormat.getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE);
+    const bool bHTML = rFormat.getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
     Color aCol( bHTML ? COL_GRAY : COL_BLACK );
     SvxBorderLine aLine( &aCol, DEF_LINE_WIDTH_0 );
     if ( bHTML )
@@ -3421,7 +3421,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, bool bAfter,
         /* From the back (bottom right) to the front (top left) deregister all Boxes from the
            Chart Data Provider. The Modify event is triggered in the calling function.
          TL_CHART2: */
-        SwChartDataProvider *pPCD = rTable.GetFrameFormat()->getIDocumentChartDataProviderAccess()->GetChartDataProvider();
+        SwChartDataProvider *pPCD = rTable.GetFrameFormat()->getIDocumentChartDataProviderAccess().GetChartDataProvider();
         if( pPCD )
         {
             for (SwTableLines::size_type k = nLinePos;  k < rTable.GetTabLines().size(); ++k)

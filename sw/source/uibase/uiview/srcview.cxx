@@ -672,7 +672,7 @@ sal_uInt16 SwSrcView::SetPrinter(SfxPrinter* pNew, SfxPrinterChangeFlags nDiffFl
             pDocSh->SetModified();
     }
     if ( nDiffFlags & SfxPrinterChangeFlags::OPTIONS )
-        ::SetPrinter( pDocSh->getIDocumentDeviceAccess(), pNew, true );
+        ::SetPrinter( &pDocSh->getIDocumentDeviceAccess(), pNew, true );
 
     const bool bChgOri  = bool(nDiffFlags & SfxPrinterChangeFlags::CHG_ORIENTATION);
     const bool bChgSize = bool(nDiffFlags & SfxPrinterChangeFlags::CHG_SIZE);

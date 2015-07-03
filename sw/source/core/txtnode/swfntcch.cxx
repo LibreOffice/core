@@ -31,7 +31,7 @@ SwFontCache *pSwFontCache = NULL;
 
 SwFontObj::SwFontObj( const void *pOwn, SwViewShell *pSh ) :
     SwCacheObj( pOwn ),
-    aSwFont( &static_cast<SwTextFormatColl const *>(pOwn)->GetAttrSet(), pSh ? pSh->getIDocumentSettingAccess() : 0 )
+    aSwFont( &static_cast<SwTextFormatColl const *>(pOwn)->GetAttrSet(), pSh ? &pSh->getIDocumentSettingAccess() : 0 )
 {
     aSwFont.GoMagic( pSh, aSwFont.GetActual() );
     const SwAttrSet& rAttrSet = static_cast<SwTextFormatColl const *>(pOwn)->GetAttrSet();

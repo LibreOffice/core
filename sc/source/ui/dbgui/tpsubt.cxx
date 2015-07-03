@@ -558,7 +558,7 @@ void ScTpSubTotalOptions::FillUserSortListBox()
     {
         size_t nCount = pUserLists->size();
         for ( size_t i=0; i<nCount; ++i )
-            pLbUserDef->InsertEntry( (*pUserLists)[i]->GetString() );
+            pLbUserDef->InsertEntry( (*pUserLists)[i].GetString() );
     }
 }
 

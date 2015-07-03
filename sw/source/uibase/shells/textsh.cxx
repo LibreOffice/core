@@ -439,7 +439,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         + GetShell().GetBoxNms();
 
                     // get table data provider
-                    xDataProvider.set( GetView().GetDocShell()->getIDocumentChartDataProviderAccess()->GetChartDataProvider() );
+                    xDataProvider.set( GetView().GetDocShell()->getIDocumentChartDataProviderAccess().GetChartDataProvider() );
                 }
                 else
                     bFillWithData = false;  // will create chart with only it's default image

@@ -244,13 +244,13 @@ SwTwips SwTextFrm::EmptyHeight() const
     if ( !pOut || !pSh->GetViewOptions()->getBrowseMode() ||
          pSh->GetViewOptions()->IsPrtFormat() )
     {
-        pOut = rTextNode.getIDocumentDeviceAccess()->getReferenceDevice(true);
+        pOut = rTextNode.getIDocumentDeviceAccess().getReferenceDevice(true);
     }
 
-    const IDocumentRedlineAccess* pIDRA = rTextNode.getIDocumentRedlineAccess();
-    if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
+    const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
+    if( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
     {
-        const sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTextNode, USHRT_MAX );
+        const sal_uInt16 nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
         if( USHRT_MAX != nRedlPos )
         {
             SwAttrHandler aAttrHandler;
@@ -384,7 +384,7 @@ bool SwTextFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                             OutputDevice *pOut = 0;
                             if( !pSh || !pSh->GetViewOptions()->getBrowseMode() ||
                                 pSh->GetViewOptions()->IsPrtFormat() )
-                                pOut = GetTextNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
+                                pOut = GetTextNode()->getIDocumentDeviceAccess().getReferenceDevice( true );
 
                             if( pSh && !pOut )
                                 pOut = pSh->GetWin();

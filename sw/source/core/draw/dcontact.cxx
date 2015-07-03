@@ -190,7 +190,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 {
     // #i46297# - notify background about the arriving of
     // the object and invalidate its position.
-    const bool bNotify( !GetFormat()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
+    const bool bNotify( !GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) );
 
     _MoveObjToLayer( true, _pDrawObj );
 
@@ -220,7 +220,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
 void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
 {
     // #i46297# - notify background about the leaving of the object.
-    const bool bNotify( GetFormat()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) );
+    const bool bNotify( GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) );
 
     _MoveObjToLayer( false, _pDrawObj );
 
@@ -260,25 +260,20 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
         return;
     }
 
-    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrameFormat*>(GetRegisteredInNonConst())->getIDocumentDrawModelAccess();
-    if ( !pIDDMA )
-    {
-        OSL_FAIL( "SwDrawContact::_MoveObjToLayer(..) - no writer document!" );
-        return;
-    }
+    const IDocumentDrawModelAccess& rIDDMA = static_cast<SwFrameFormat*>(GetRegisteredInNonConst())->getIDocumentDrawModelAccess();
 
     SdrLayerID nToHellLayerId =
-        _bToVisible ? pIDDMA->GetHellId() : pIDDMA->GetInvisibleHellId();
+        _bToVisible ? rIDDMA.GetHellId() : rIDDMA.GetInvisibleHellId();
     SdrLayerID nToHeavenLayerId =
-        _bToVisible ? pIDDMA->GetHeavenId() : pIDDMA->GetInvisibleHeavenId();
+        _bToVisible ? rIDDMA.GetHeavenId() : rIDDMA.GetInvisibleHeavenId();
     SdrLayerID nToControlLayerId =
-        _bToVisible ? pIDDMA->GetControlsId() : pIDDMA->GetInvisibleControlsId();
+        _bToVisible ? rIDDMA.GetControlsId() : rIDDMA.GetInvisibleControlsId();
     SdrLayerID nFromHellLayerId =
-        _bToVisible ? pIDDMA->GetInvisibleHellId() : pIDDMA->GetHellId();
+        _bToVisible ? rIDDMA.GetInvisibleHellId() : rIDDMA.GetHellId();
     SdrLayerID nFromHeavenLayerId =
-        _bToVisible ? pIDDMA->GetInvisibleHeavenId() : pIDDMA->GetHeavenId();
+        _bToVisible ? rIDDMA.GetInvisibleHeavenId() : rIDDMA.GetHeavenId();
     SdrLayerID nFromControlLayerId =
-        _bToVisible ? pIDDMA->GetInvisibleControlsId() : pIDDMA->GetControlsId();
+        _bToVisible ? rIDDMA.GetInvisibleControlsId() : rIDDMA.GetControlsId();
 
     if ( _pDrawObj->ISA( SdrObjGroup ) )
     {
@@ -292,8 +287,8 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
                 // is a control
                 nNewLayerId = nToControlLayerId;
             }
-            else if ( _pDrawObj->GetLayer() == pIDDMA->GetHeavenId() ||
-                      _pDrawObj->GetLayer() == pIDDMA->GetInvisibleHeavenId() )
+            else if ( _pDrawObj->GetLayer() == rIDDMA.GetHeavenId() ||
+                      _pDrawObj->GetLayer() == rIDDMA.GetInvisibleHeavenId() )
             {
                 // it has to be the heaven layer, if method <GetLayer()> reveals
                 // a heaven layer
@@ -481,7 +476,7 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     OSL_ENSURE( _pDrawObj->ISA(SwVirtFlyDrawObj),
             "<SwFlyDrawContact::MoveObjToVisibleLayer(..)> - wrong SdrObject type -> crash" );
 
-    if ( GetFormat()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
+    if ( GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) )
     {
         // nothing to do
         return;
@@ -522,7 +517,7 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     OSL_ENSURE( _pDrawObj->ISA(SwVirtFlyDrawObj),
             "<SwFlyDrawContact::MoveObjToInvisibleLayer(..)> - wrong SdrObject type -> crash" );
 
-    if ( !GetFormat()->getIDocumentDrawModelAccess()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
+    if ( !GetFormat()->getIDocumentDrawModelAccess().IsVisibleLayerId( _pDrawObj->GetLayer() ) )
     {
         // nothing to do
         return;
@@ -592,7 +587,7 @@ SwDrawContact::SwDrawContact( SwFrameFormat* pToRegisterIn, SdrObject* pObj ) :
     // in the drawing page.
     if ( !pObj->IsInserted() )
     {
-        pToRegisterIn->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
+        pToRegisterIn->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0)->
                                 InsertObject( pObj, pObj->GetOrdNumDirect() );
     }
 
@@ -601,7 +596,7 @@ SwDrawContact::SwDrawContact( SwFrameFormat* pToRegisterIn, SdrObject* pObj ) :
     if ( ::CheckControlLayer( pObj ) )
     {
         // set layer of object to corresponding invisible layer.
-        pObj->SetLayer( pToRegisterIn->getIDocumentDrawModelAccess()->GetInvisibleControlsId() );
+        pObj->SetLayer( pToRegisterIn->getIDocumentDrawModelAccess().GetInvisibleControlsId() );
     }
 
     // #i26791#
@@ -1243,15 +1238,15 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
             {
                 if(::CheckControlLayer(maAnchoredDrawObj.DrawObj()))
                 {
-                    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrameFormat*>(GetRegisteredInNonConst())->getIDocumentDrawModelAccess();
+                    const IDocumentDrawModelAccess& rIDDMA = static_cast<SwFrameFormat*>(GetRegisteredInNonConst())->getIDocumentDrawModelAccess();
                     const SdrLayerID aCurrentLayer(maAnchoredDrawObj.DrawObj()->GetLayer());
-                    const SdrLayerID aControlLayerID(pIDDMA->GetControlsId());
-                    const SdrLayerID aInvisibleControlLayerID(pIDDMA->GetInvisibleControlsId());
+                    const SdrLayerID aControlLayerID(rIDDMA.GetControlsId());
+                    const SdrLayerID aInvisibleControlLayerID(rIDDMA.GetInvisibleControlsId());
 
                     if(aCurrentLayer != aControlLayerID && aCurrentLayer != aInvisibleControlLayerID)
                     {
-                        if ( aCurrentLayer == pIDDMA->GetInvisibleHellId() ||
-                             aCurrentLayer == pIDDMA->GetInvisibleHeavenId() )
+                        if ( aCurrentLayer == rIDDMA.GetInvisibleHellId() ||
+                             aCurrentLayer == rIDDMA.GetInvisibleHeavenId() )
                         {
                             maAnchoredDrawObj.DrawObj()->SetLayer(aInvisibleControlLayerID);
                         }
@@ -1652,7 +1647,7 @@ void SwDrawContact::RemoveMasterFromDrawPage()
         GetMaster()->SetUserCall( 0 );
         if ( GetMaster()->IsInserted() )
         {
-            static_cast<SwFrameFormat*>(GetRegisteredIn())->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)->
+            static_cast<SwFrameFormat*>(GetRegisteredIn())->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0)->
                                         RemoveObject( GetMaster()->GetOrdNum() );
         }
     }
@@ -1734,7 +1729,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
 
     SwFrameFormat* pDrawFrameFormat = static_cast<SwFrameFormat*>(GetRegisteredIn());
 
-    if( !pDrawFrameFormat->getIDocumentLayoutAccess()->GetCurrentViewShell() )
+    if( !pDrawFrameFormat->getIDocumentLayoutAccess().GetCurrentViewShell() )
         return;
 
     // remove 'virtual' drawing objects from writer
@@ -1752,7 +1747,7 @@ void SwDrawContact::ConnectToLayout( const SwFormatAnchor* pAnch )
         case FLY_AT_PAGE:
                 {
                 sal_uInt16 nPgNum = pAnch->GetPageNum();
-                SwViewShell *pShell = pDrawFrameFormat->getIDocumentLayoutAccess()->GetCurrentViewShell();
+                SwViewShell *pShell = pDrawFrameFormat->getIDocumentLayoutAccess().GetCurrentViewShell();
                 if( !pShell )
                     break;
                 SwRootFrm* pRoot = pShell->GetLayout();
@@ -1902,7 +1897,7 @@ void SwDrawContact::InsertMasterIntoDrawPage()
 {
     if ( !GetMaster()->IsInserted() )
     {
-        GetFormat()->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage(0)
+        GetFormat()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0)
                 ->InsertObject( GetMaster(), GetMaster()->GetOrdNumDirect() );
     }
     GetMaster()->SetUserCall( this );

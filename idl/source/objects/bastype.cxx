@@ -129,7 +129,7 @@ bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
         bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
-            pTok = rInStm.GetToken();
+            pTok = &rInStm.GetToken();
             if( pTok->IsBool() )
             {
                 *this = pTok->GetBool();
@@ -159,7 +159,7 @@ bool SvIdentifier::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm 
         bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
-            pTok = rInStm.GetToken();
+            pTok = &rInStm.GetToken();
             if( pTok->IsIdentifier() )
             {
                 setString(pTok->GetString());
@@ -236,7 +236,7 @@ bool SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
         bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
-            pTok = rInStm.GetToken();
+            pTok = &rInStm.GetToken();
             if( pTok->IsString() )
             {
                 setString(pTok->GetString());
@@ -281,7 +281,7 @@ bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
         bool bBraket = rInStm.Read( '(' );
         if( bBraket || rInStm.Read( '=' ) )
         {
-            pTok = rInStm.GetToken();
+            pTok = &rInStm.GetToken();
             if( pTok->IsString() )
             {
                 pTok = rInStm.GetToken_Next();

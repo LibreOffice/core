@@ -47,22 +47,17 @@ namespace {
         }
         const SwTextNode& rTextNode( *(rTextFrm.GetTextNode()) );
 
-        const IDocumentRedlineAccess* pIDocChangeTrack( rTextNode.getIDocumentRedlineAccess() );
-        if ( !pIDocChangeTrack )
-        {
-            OSL_FAIL( "<initChangeTrackTextMarkupLists(..) - missing <IDocumentRedlineAccess> instance!" );
-            return;
-        }
+        const IDocumentRedlineAccess& rIDocChangeTrack( rTextNode.getIDocumentRedlineAccess() );
 
-        if ( !IDocumentRedlineAccess::IsShowChanges( pIDocChangeTrack->GetRedlineMode() ) ||
-             pIDocChangeTrack->GetRedlineTable().empty() )
+        if ( !IDocumentRedlineAccess::IsShowChanges( rIDocChangeTrack.GetRedlineMode() ) ||
+             rIDocChangeTrack.GetRedlineTable().empty() )
         {
             // nothing to do --> empty change track text markup lists.
             return;
         }
 
         const sal_uInt16 nIdxOfFirstRedlineForTextNode =
-                    pIDocChangeTrack->GetRedlinePos( rTextNode, USHRT_MAX );
+                    rIDocChangeTrack.GetRedlinePos( rTextNode, USHRT_MAX );
         if ( nIdxOfFirstRedlineForTextNode == USHRT_MAX )
         {
             // nothing to do --> empty change track text markup lists.
@@ -77,7 +72,7 @@ namespace {
                                              : rTextFrm.GetText().getLength();
 
         // iteration over the redlines which overlap with the text node.
-        const SwRedlineTable& rRedlineTable = pIDocChangeTrack->GetRedlineTable();
+        const SwRedlineTable& rRedlineTable = rIDocChangeTrack.GetRedlineTable();
         const sal_uInt16 nRedlineCount( rRedlineTable.size() );
         for ( sal_uInt16 nActRedline = nIdxOfFirstRedlineForTextNode;
               nActRedline < nRedlineCount;

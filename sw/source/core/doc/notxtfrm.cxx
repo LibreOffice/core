@@ -839,7 +839,7 @@ void SwNoTextFrm::PaintPicture( vcl::RenderContext* pOut, const SwRect &rGrfArea
     SwGrfNode* pGrfNd = rNoTNd.GetGrfNode();
     SwOLENode* pOLENd = rNoTNd.GetOLENode();
 
-    const bool bPrn = pOut == rNoTNd.getIDocumentDeviceAccess()->getPrinter( false ) ||
+    const bool bPrn = pOut == rNoTNd.getIDocumentDeviceAccess().getPrinter( false ) ||
                           pOut->GetConnectMetaFile();
 
     const bool bIsChart = pOLENd && pOLENd->GetOLEObj().GetObject().IsChart();

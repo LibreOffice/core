@@ -654,13 +654,13 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     if( !mxScCondFmt.get() )
     {
         sal_uLong nKey = 0;
-        mxScCondFmt.reset( new ScConditionalFormat( nKey, GetDocPtr() ) );
+        mxScCondFmt.reset( new ScConditionalFormat( nKey, &GetDocRef() ) );
         if(maRanges.size() > 1)
             maRanges.Join(*maRanges[0], true);
         mxScCondFmt->SetRange(maRanges);
     }
 
-    ScCondFormatEntry* pEntry = new ScCondFormatEntry( eMode, xTokArr1.get(), pTokArr2.get(), GetDocPtr(), rPos, aStyleName );
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry( eMode, xTokArr1.get(), pTokArr2.get(), &GetDocRef(), rPos, aStyleName );
     mxScCondFmt->AddEntry( pEntry );
     ++mnCondIndex;
 }

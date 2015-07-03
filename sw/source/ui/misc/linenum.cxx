@@ -99,9 +99,9 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     ::FillCharStyleListBox(*m_pCharStyleLB, pSh->GetView().GetDocShell());
 
     const SwLineNumberInfo &rInf = pSh->GetLineNumberInfo();
-    IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
+    IDocumentStylePoolAccess& rIDSPA = pSh->getIDocumentStylePoolAccess();
 
-    OUString sStyleName(rInf.GetCharFormat( *pIDSPA )->GetName());
+    OUString sStyleName(rInf.GetCharFormat( rIDSPA )->GetName());
     const sal_Int32 nPos = m_pCharStyleLB->GetEntryPos(sStyleName);
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)

@@ -721,9 +721,9 @@ SwUnoCrsr* SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCr
     SwXTextCursor *const pXTextCursor = pBText->CreateTextCursor(true);
     xCrsr.set( static_cast<text::XWordCursor*>(pXTextCursor) );
 
-    auto pUnoCrsr(pXTextCursor->GetCursor());
-    pUnoCrsr->SetRemainInSection(false);
-    return pUnoCrsr;
+    auto& rUnoCrsr(pXTextCursor->GetCursor());
+    rUnoCrsr.SetRemainInSection(false);
+    return &rUnoCrsr;
 }
 
 sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor > & xDesc)
@@ -1688,7 +1688,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     {
         return Reference<XInterface>(
             dynamic_cast<chart2::data::XDataProvider *>(
-                pDocShell->getIDocumentChartDataProviderAccess()->
+                pDocShell->getIDocumentChartDataProviderAccess().
                 GetChartDataProvider()));
     }
     if (!rServiceName.startsWith("com.sun.star.")

@@ -36,7 +36,7 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
         if (nCount!=0) {
             pNeuPlusData->pUserDataList=new SdrObjUserDataList;
             for (sal_uInt16 i=0; i<nCount; i++) {
-                SdrObjUserData* pNeuUserData=pUserDataList->GetUserData(i)->Clone(pObj1);
+                SdrObjUserData* pNeuUserData=pUserDataList->GetUserData(i).Clone(pObj1);
                 if (pNeuUserData!=NULL) {
                     pNeuPlusData->pUserDataList->AppendUserData(pNeuUserData);
                 } else {

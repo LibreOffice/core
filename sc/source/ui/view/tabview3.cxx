@@ -2100,13 +2100,13 @@ void ScTabView::PaintRangeFinder( long nNumber )
             if (nNumber < 0)
             {
                 for (sal_uInt16 i=0; i<nCount; i++)
-                    PaintRangeFinderEntry(pRangeFinder->GetObject(i),nTab);
+                    PaintRangeFinderEntry(&pRangeFinder->GetObject(i),nTab);
             }
             else
             {
                 sal_uInt16 idx = nNumber;
                 if (idx < nCount)
-                    PaintRangeFinderEntry(pRangeFinder->GetObject(idx),nTab);
+                    PaintRangeFinderEntry(&pRangeFinder->GetObject(idx),nTab);
             }
         }
     }

@@ -76,7 +76,7 @@ public:
 
     void        Append( ScDetOpData* pData );
     ScDetOpDataVector&  GetDataVector() { return aDetOpDataVector; }
-    const ScDetOpData* GetObject( size_t nPos ) const;
+    const ScDetOpData& GetObject( size_t nPos ) const;
 
     bool        HasAddError() const     { return bHasAddError; }
     size_t      Count() const { return aDetOpDataVector.size(); }

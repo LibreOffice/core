@@ -17,9 +17,9 @@ size_t SdrObjUserDataList::GetUserDataCount() const
     return maList.size();
 }
 
-SdrObjUserData* SdrObjUserDataList::GetUserData(size_t nNum)
+SdrObjUserData& SdrObjUserDataList::GetUserData(size_t nNum)
 {
-    return &maList.at(nNum);
+    return maList.at(nNum);
 }
 
 void SdrObjUserDataList::AppendUserData(SdrObjUserData* pData)

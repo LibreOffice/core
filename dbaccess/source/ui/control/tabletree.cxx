@@ -112,10 +112,10 @@ void OTableTreeListBox::notifyHiContrastChanged()
         size_t nCount = pEntryLoop->ItemCount();
         for (size_t i=0;i<nCount;++i)
         {
-            SvLBoxItem* pItem = pEntryLoop->GetItem(i);
-            if (pItem && pItem->GetType() == SV_ITEM_ID_LBOXCONTEXTBMP)
+            SvLBoxItem& rItem = pEntryLoop->GetItem(i);
+            if (rItem.GetType() == SV_ITEM_ID_LBOXCONTEXTBMP)
             {
-                SvLBoxContextBmp* pContextBitmapItem = static_cast< SvLBoxContextBmp* >( pItem );
+                SvLBoxContextBmp& rContextBitmapItem = static_cast< SvLBoxContextBmp& >( rItem );
 
                 Image aImage;
                 if ( isFolderEntry( pEntryLoop ) )
@@ -128,8 +128,8 @@ void OTableTreeListBox::notifyHiContrastChanged()
                     m_xImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage );
                 }
 
-                pContextBitmapItem->SetBitmap1( aImage );
-                pContextBitmapItem->SetBitmap2( aImage );
+                rContextBitmapItem.SetBitmap1( aImage );
+                rContextBitmapItem.SetBitmap2( aImage );
                 break;
             }
         }

@@ -188,8 +188,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 // special handling if target is a cross-reference bookmark
                 {
                     OUString sTmpSearchStr = sText.copy( 1 );
-                    IDocumentMarkAccess* const pMarkAccess =
-                                                rSh.getIDocumentMarkAccess();
+                    IDocumentMarkAccess* pMarkAccess = rSh.getIDocumentMarkAccess();
                     IDocumentMarkAccess::const_iterator_t ppBkmk =
                                     pMarkAccess->findBookmark( sTmpSearchStr );
                     if ( ppBkmk != pMarkAccess->getBookmarksEnd() &&

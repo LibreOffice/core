@@ -80,7 +80,7 @@ class SwSidebarWin : public vcl::Window
         void CheckMetaText();
 
         inline Point GetAnchorPos() { return mAnchorRect.Pos(); }
-        SwEditWin* EditWin();
+        SwEditWin& EditWin();
 
         inline OutlinerView* GetOutlinerView() { return mpOutlinerView;}
         bool HasScrollbar() const;

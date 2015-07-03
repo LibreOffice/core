@@ -459,8 +459,8 @@ public:
     sal_Int32 GetStartPos(sal_Int32 nPortion);
     void DeleteFromPortion(sal_Int32 nDelFrom);
     sal_Int32 Count() const;
-    const TextPortion* operator[](sal_Int32 nPos) const;
-    TextPortion* operator[](sal_Int32 nPos);
+    const TextPortion& operator[](sal_Int32 nPos) const;
+    TextPortion& operator[](sal_Int32 nPos);
 
     void Append(TextPortion* p);
     void Insert(sal_Int32 nPos, TextPortion* p);
@@ -574,8 +574,8 @@ public:
     void DeleteFromLine(sal_Int32 nDelFrom);
     sal_Int32 FindLine(sal_Int32 nChar, bool bInclEnd);
     sal_Int32 Count() const;
-    const EditLine* operator[](sal_Int32 nPos) const;
-    EditLine* operator[](sal_Int32 nPos);
+    const EditLine& operator[](sal_Int32 nPos) const;
+    EditLine& operator[](sal_Int32 nPos);
 
     void Append(EditLine* p);
     void Insert(sal_Int32 nPos, EditLine* p);
@@ -633,7 +633,7 @@ public:
     void                SetVisible( bool bVisible );
     bool                IsVisible() const { return bVisible; }
 
-    bool            IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0]->GetLen() == 0; }
+    bool            IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0].GetLen() == 0; }
 
     long                GetHeight() const           { return ( bVisible ? nHeight : 0 ); }
     sal_Int32           GetFirstLineOffset() const  { return ( bVisible ? nFirstLineOffset : 0 ); }

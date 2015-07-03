@@ -2039,8 +2039,7 @@ void Test::testPivotTableDocFunc()
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
     CPPUNIT_ASSERT_MESSAGE("Failed to get pivot table collection.", pDPs);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
-    pDPObj = (*pDPs)[0];
-    CPPUNIT_ASSERT_MESSAGE("Failed to retrieve pivot table object from the collection", pDPObj);
+    pDPObj = &(*pDPs)[0];
     ScRange aOutRange = pDPObj->GetOutRange();
     {
         // Expected output table content.  0 = empty cell

@@ -1334,7 +1334,7 @@ void SwScriptInfo::DeleteHiddenRanges( SwTextNode& rNode )
         nHiddenStart = *(rFirst++);
 
         SwPaM aPam( rNode, nHiddenStart, rNode, nHiddenEnd );
-        rNode.getIDocumentContentOperations()->DeleteRange( aPam );
+        rNode.getIDocumentContentOperations().DeleteRange( aPam );
     }
 }
 
@@ -2091,7 +2091,7 @@ void SwScriptInfo::selectRedLineDeleted(const SwTextNode& rNode, MultiSelection 
     assert((rNode.GetText().isEmpty() && rHiddenMulti.GetTotalRange().Len() == 1)
         || (rNode.GetText().getLength() == rHiddenMulti.GetTotalRange().Len()));
 
-    const IDocumentRedlineAccess& rIDRA = *rNode.getIDocumentRedlineAccess();
+    const IDocumentRedlineAccess& rIDRA = rNode.getIDocumentRedlineAccess();
     if ( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineMode() ) )
     {
         sal_uInt16 nAct = rIDRA.GetRedlinePos( rNode, USHRT_MAX );

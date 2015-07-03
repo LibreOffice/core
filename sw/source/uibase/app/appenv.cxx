@@ -186,7 +186,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
     SfxItemSet aSet(GetPool(), FN_ENVELOP, FN_ENVELOP, 0);
     aSet.Put(aEnvCfg.GetItem());
 
-    SfxPrinter* pTempPrinter = pSh->getIDocumentDeviceAccess()->getPrinter( true );
+    SfxPrinter* pTempPrinter = pSh->getIDocumentDeviceAccess().getPrinter( true );
     if(pOldSh )
     {
         const SwPageDesc& rCurPageDesc = pOldSh->GetPageDesc(pOldSh->GetCurPageDesc());
@@ -194,13 +194,13 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         SwStyleNameMapper::FillUIName( RES_POOLPAGE_JAKET, sJacket );
         bEnvChange = rCurPageDesc.GetName() == sJacket;
 
-        IDocumentDeviceAccess* pIDDA_old = pOldSh->getIDocumentDeviceAccess();
-        if( pIDDA_old->getPrinter( false ) )
+        IDocumentDeviceAccess& rIDDA_old = pOldSh->getIDocumentDeviceAccess();
+        if( rIDDA_old.getPrinter( false ) )
         {
-            IDocumentDeviceAccess* pIDDA = pSh->getIDocumentDeviceAccess();
-            pIDDA->setJobsetup( *pIDDA_old->getJobsetup() );
+            IDocumentDeviceAccess& rIDDA = pSh->getIDocumentDeviceAccess();
+            rIDDA.setJobsetup( *rIDDA_old.getJobsetup() );
             //#69563# if it isn't the same printer then the pointer has been invalidated!
-            pTempPrinter = pIDDA->getPrinter( true );
+            pTempPrinter = rIDDA.getPrinter( true );
         }
         pTempPrinter->SetPaperBin(rCurPageDesc.GetMaster().GetPaperBin().GetValue());
 
@@ -244,7 +244,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         {
             OSL_ENSURE(pOldSh, "No document - wasn't 'Insert' disabled???");
             SvxPaperBinItem aItem( RES_PAPER_BIN );
-            aItem.SetValue((sal_uInt8)pSh->getIDocumentDeviceAccess()->getPrinter(true)->GetPaperBin());
+            aItem.SetValue((sal_uInt8)pSh->getIDocumentDeviceAccess().getPrinter(true)->GetPaperBin());
             pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetFormatAttr(aItem);
         }
 
@@ -338,7 +338,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
         SwPageDesc* pDesc = pSh->GetPageDescFromPool(RES_POOLPAGE_JAKET);
         SwFrameFormat&   rFormat  = pDesc->GetMaster();
 
-        Printer *pPrt = pSh->getIDocumentDeviceAccess()->getPrinter( true );
+        Printer *pPrt = pSh->getIDocumentDeviceAccess().getPrinter( true );
 
     // Borders (are put together by Shift-Offset and alignment)
         Size aPaperSize = pPrt->PixelToLogic( pPrt->GetPaperSizePixel(),

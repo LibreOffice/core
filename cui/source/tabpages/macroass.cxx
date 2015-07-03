@@ -126,7 +126,7 @@ void _SfxMacroTabPage::EnableButtons()
         const SvxMacro* pM = aTbl.Get( (sal_uInt16)reinterpret_cast<sal_uLong>(pE->GetUserData()) );
         mpImpl->pDeletePB->Enable( 0 != pM && !mpImpl->bReadOnly );
 
-        OUString sEventMacro = static_cast<const SvLBoxString*>(pE->GetItem( LB_MACROS_ITEMPOS ))->GetText();
+        OUString sEventMacro = static_cast<const SvLBoxString&>(pE->GetItem( LB_MACROS_ITEMPOS )).GetText();
 
         OUString sScriptURI = mpImpl->pMacroLB->GetSelectedScriptURI();
         mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly && !sScriptURI.equalsIgnoreAsciiCase( sEventMacro ) );
@@ -415,10 +415,10 @@ void _SfxMacroTabPage::FillEvents()
         SvTreeListEntry*    pE = rListBox.GetEntry( n );
         if( pE )
         {
-            SvLBoxString*   pLItem = static_cast<SvLBoxString*>( pE->GetItem( LB_MACROS_ITEMPOS ) );
-            DBG_ASSERT( pLItem && SV_ITEM_ID_LBOXSTRING == pLItem->GetType(), "_SfxMacroTabPage::FillEvents(): no LBoxString" );
+            SvLBoxString&     rLItem = static_cast<SvLBoxString&>( pE->GetItem( LB_MACROS_ITEMPOS ) );
+            DBG_ASSERT( SV_ITEM_ID_LBOXSTRING == rLItem.GetType(), "_SfxMacroTabPage::FillEvents(): no LBoxString" );
 
-            OUString          sOld( pLItem->GetText() );
+            OUString          sOld( rLItem.GetText() );
             OUString          sNew;
             sal_uInt16        nEventId = ( sal_uInt16 ) reinterpret_cast<sal_uLong>( pE->GetUserData() );
             if( aTbl.IsKeyValid( nEventId ) )

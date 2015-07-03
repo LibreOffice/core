@@ -494,8 +494,8 @@ void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndo
         sal_uInt16 nEnd = nStart + nChars;
         for ( sal_uInt16 nAttr = pNode->GetCharAttribs().Count(); nAttr; )
         {
-            TextCharAttrib* pAttr = pNode->GetCharAttribs().GetAttrib( --nAttr );
-            if ( ( pAttr->GetEnd() >= nStart ) && ( pAttr->GetStart() < nEnd ) )
+            TextCharAttrib& rAttr = pNode->GetCharAttribs().GetAttrib( --nAttr );
+            if ( ( rAttr.GetEnd() >= nStart ) && ( rAttr.GetStart() < nEnd ) )
             {
                 break;  // for
             }
@@ -1395,25 +1395,25 @@ void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, vcl::Font& rFont,
     sal_uInt16 nAttribs = pNode->GetCharAttribs().Count();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
-        TextCharAttrib* pAttrib = pNode->GetCharAttribs().GetAttrib( nAttr );
-        if ( pAttrib->GetStart() > nPos )
+        TextCharAttrib& rAttrib = pNode->GetCharAttribs().GetAttrib( nAttr );
+        if ( rAttrib.GetStart() > nPos )
             break;
 
         // When seeking don't use Attr that start there!
         // Do not use empty attributes:
         // - If just being setup and empty => no effect on Font
         // - Characters that are setup in an empty paragraph become visible right away.
-        if ( ( ( pAttrib->GetStart() < nPos ) && ( pAttrib->GetEnd() >= nPos ) )
+        if ( ( ( rAttrib.GetStart() < nPos ) && ( rAttrib.GetEnd() >= nPos ) )
                     || pNode->GetText().isEmpty() )
         {
-            if ( pAttrib->Which() != TEXTATTR_FONTCOLOR )
+            if ( rAttrib.Which() != TEXTATTR_FONTCOLOR )
             {
-                pAttrib->GetAttr().SetFont(rFont);
+                rAttrib.GetAttr().SetFont(rFont);
             }
             else
             {
                 if ( pOutDev )
-                    pOutDev->SetTextColor( static_cast<const TextAttribFontColor&>(pAttrib->GetAttr()).GetColor() );
+                    pOutDev->SetTextColor( static_cast<const TextAttribFontColor&>(rAttrib.GetAttr()).GetColor() );
             }
         }
     }
@@ -1755,10 +1755,10 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
     sal_uInt16 nAttribs = pNode->GetCharAttribs().Count();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
-        TextCharAttrib* pAttrib = pNode->GetCharAttribs().GetAttrib( nAttr );
+        TextCharAttrib& rAttrib = pNode->GetCharAttribs().GetAttrib( nAttr );
 
-        aPositions.insert( pAttrib->GetStart() );
-        aPositions.insert( pAttrib->GetEnd() );
+        aPositions.insert( rAttrib.GetStart() );
+        aPositions.insert( rAttrib.GetEnd() );
     }
     aPositions.insert( pNode->GetText().getLength() );
 
@@ -2640,7 +2640,7 @@ void TextEngine::RemoveAttribs( sal_uLong nPara, sal_uInt16 nWhich, bool bIdleFo
             sal_uInt16 nAttrCount = rAttribs.Count();
             for(sal_uInt16 nAttr = nAttrCount; nAttr; --nAttr)
             {
-                if(rAttribs.GetAttrib( nAttr - 1 )->Which() == nWhich)
+                if(rAttribs.GetAttrib( nAttr - 1 ).Which() == nWhich)
                     rAttribs.RemoveAttrib( nAttr -1 );
             }
             TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
@@ -2664,7 +2664,7 @@ void TextEngine::RemoveAttrib( sal_uLong nPara, const TextCharAttrib& rAttrib )
             sal_uInt16 nAttrCount = rAttribs.Count();
             for(sal_uInt16 nAttr = nAttrCount; nAttr; --nAttr)
             {
-                if(rAttribs.GetAttrib( nAttr - 1 ) == &rAttrib)
+                if(&(rAttribs.GetAttrib( nAttr - 1 )) == &rAttrib)
                 {
                     rAttribs.RemoveAttrib( nAttr -1 );
                     break;

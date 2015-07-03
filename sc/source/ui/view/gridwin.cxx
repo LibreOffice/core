@@ -4952,22 +4952,22 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
             {
                 //  search backwards so that the last repainted frame is found
                 --i;
-                ScRangeFindData* pData = pRangeFinder->GetObject(i);
-                if ( pData->aRef.In(aAddr) )
+                ScRangeFindData& rData = pRangeFinder->GetObject(i);
+                if ( rData.aRef.In(aAddr) )
                 {
                     if (pIndex)
                         *pIndex = i;
                     if (pAddX)
-                        *pAddX = nPosX - pData->aRef.aStart.Col();
+                        *pAddX = nPosX - rData.aRef.aStart.Col();
                     if (pAddY)
-                        *pAddY = nPosY - pData->aRef.aStart.Row();
+                        *pAddY = nPosY - rData.aRef.aStart.Row();
 
                     bFound = true;
 
                     rCorner = NONE;
 
-                    ScAddress aEnd = pData->aRef.aEnd;
-                    ScAddress aStart = pData->aRef.aStart;
+                    ScAddress aEnd = rData.aRef.aEnd;
+                    ScAddress aStart = rData.aRef.aStart;
 
                     if ( bCornerHorizontalLeft && bCornerVerticalUp &&
                          aAddr == aStart)
@@ -5145,7 +5145,7 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
     ScRangeFindList* pRangeFinder = pHdl->GetRangeFindList();
     if (!pRangeFinder || nRFIndex >= pRangeFinder->Count())
         return;
-    ScRangeFindData* pData = pRangeFinder->GetObject( nRFIndex );
+    ScRangeFindData& rData = pRangeFinder->GetObject( nRFIndex );
 
     //  Mauszeiger
 
@@ -5203,7 +5203,7 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
     SCsROW  nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
 
-    ScRange aOld = pData->aRef;
+    ScRange aOld = rData.aRef;
     ScRange aNew = aOld;
     if ( bRFSize )
     {

@@ -441,7 +441,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
             OUString* pAry = aSeq.getArray();
             for (size_t i=0; i<nCount; ++i)
             {
-                OUString aEntry((*pUserList)[i]->GetString());
+                OUString aEntry((*pUserList)[i].GetString());
                 pAry[i] = aEntry;
             }
             aRet <<= aSeq;

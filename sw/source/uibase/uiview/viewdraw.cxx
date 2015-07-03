@@ -522,7 +522,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     uno::Reference< linguistic2::XSpellChecker1 >  xSpell( ::GetSpellChecker() );
     if (pOutliner)
     {
-        pOutliner->SetRefDevice(pSh->getIDocumentDeviceAccess()->getReferenceDevice(false));
+        pOutliner->SetRefDevice(pSh->getIDocumentDeviceAccess().getReferenceDevice(false));
         pOutliner->SetSpeller(xSpell);
         uno::Reference<linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );
         pOutliner->SetHyphenator( xHyphenator );

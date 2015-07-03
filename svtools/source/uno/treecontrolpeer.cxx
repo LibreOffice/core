@@ -275,7 +275,7 @@ bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
     if( pEntry && pEntry->mxNode.is() && mpTreeImpl )
     {
         const OUString aValue( getEntryString( pEntry->mxNode->getDisplayValue() ) );
-        UnoTreeListItem* pUnoItem = dynamic_cast< UnoTreeListItem* >( pEntry->GetItem( 1 ) );
+        UnoTreeListItem* pUnoItem = dynamic_cast< UnoTreeListItem* >( &pEntry->GetItem( 1 ) );
         if( pUnoItem )
         {
             if( aValue != pUnoItem->GetText() )
@@ -303,7 +303,7 @@ bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
             bChanged = true;
         }
 
-        ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( pEntry->GetItem( 0 ) );
+        ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( &pEntry->GetItem( 0 ) );
         if( pContextGraphicItem )
         {
             if( pContextGraphicItem->msExpandedGraphicURL != pEntry->mxNode->getExpandedGraphicURL() )
@@ -719,7 +719,7 @@ void SAL_CALL TreeControlPeer::setDefaultExpandedGraphicURL( const OUString& sDe
         SvTreeListEntry* pEntry = rTree.First();
         while( pEntry )
         {
-            ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( pEntry->GetItem( 0 ) );
+            ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( &pEntry->GetItem( 0 ) );
             if( pContextGraphicItem )
             {
                 if( pContextGraphicItem->msExpandedGraphicURL.isEmpty() )
@@ -757,7 +757,7 @@ void SAL_CALL TreeControlPeer::setDefaultCollapsedGraphicURL( const OUString& sD
         SvTreeListEntry* pEntry = rTree.First();
         while( pEntry )
         {
-            ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( pEntry->GetItem( 0 ) );
+            ImplContextGraphicItem* pContextGraphicItem = dynamic_cast< ImplContextGraphicItem* >( &pEntry->GetItem( 0 ) );
             if( pContextGraphicItem )
             {
                 if( pContextGraphicItem->msCollapsedGraphicURL.isEmpty() )

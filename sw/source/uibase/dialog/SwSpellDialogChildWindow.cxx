@@ -780,7 +780,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     aTmpOutliner.SetSpeller( xSpell );
 
                     OutlinerView* pOutlView = new OutlinerView( &aTmpOutliner, &(rView.GetEditWin()) );
-                    pOutlView->GetOutliner()->SetRefDevice( rSh.getIDocumentDeviceAccess()->getPrinter( false ) );
+                    pOutlView->GetOutliner()->SetRefDevice( rSh.getIDocumentDeviceAccess().getPrinter( false ) );
                     aTmpOutliner.InsertView( pOutlView );
                     Point aPt;
                     Size aSize(1,1);

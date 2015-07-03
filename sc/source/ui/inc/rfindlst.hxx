@@ -44,20 +44,20 @@ class ScRangeFindList
     sal_uInt16  nIndexColor;
 
 public:
-            ScRangeFindList(const OUString& rName);
+                     ScRangeFindList(const OUString& rName);
 
-    sal_uLong   Count() const                       { return maEntries.size(); }
-    ColorData    Insert( const ScRangeFindData &rNew );
+    sal_uLong        Count() const                       { return maEntries.size(); }
+    ColorData        Insert( const ScRangeFindData &rNew );
 
-    ScRangeFindData* GetObject( sal_uLong nIndex ) { return &(maEntries[nIndex]); }
+    ScRangeFindData& GetObject( sal_uLong nIndex ) { return maEntries[nIndex]; }
 
-    void    SetHidden( bool bSet )              { bHidden = bSet; }
+    void             SetHidden( bool bSet ) { bHidden = bSet; }
 
-    const OUString& GetDocName() const          { return aDocName; }
-    bool            IsHidden() const            { return bHidden; }
+    const OUString&  GetDocName() const { return aDocName; }
+    bool             IsHidden() const   { return bHidden; }
 
     static ColorData GetColorName(const size_t nIndex);
-    ColorData FindColor(const ScRange& rRef, const size_t nIndex);
+    ColorData        FindColor(const ScRange& rRef, const size_t nIndex);
 };
 
 #endif

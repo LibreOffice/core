@@ -318,17 +318,16 @@ void XclExpXmlPivotTableManager::Initialize()
 
     for (size_t i = 0, n = pDPColl->GetCount(); i < n; ++i)
     {
-        const ScDPObject* pDPObj = (*pDPColl)[i];
-        assert(pDPObj); // We don't store NULL here.
+        const ScDPObject& rDPObj = (*pDPColl)[i];
 
         // Get the cache ID for this pivot table.
-        CacheIdMapType::iterator itCache = maCacheIdMap.find(pDPObj);
+        CacheIdMapType::iterator itCache = maCacheIdMap.find(&rDPObj);
         if (itCache == maCacheIdMap.end())
             // No cache ID found.  Something is wrong here....
             continue;
 
         sal_Int32 nCacheId = itCache->second;
-        SCTAB nTab = pDPObj->GetOutRange().aStart.Tab();
+        SCTAB nTab = rDPObj.GetOutRange().aStart.Tab();
 
         TablesType::iterator it = maTables.find(nTab);
         if (it == maTables.end())
@@ -340,7 +339,7 @@ void XclExpXmlPivotTableManager::Initialize()
         }
 
         XclExpXmlPivotTables* p = it->second;
-        p->AppendTable(pDPObj, nCacheId, i+1);
+        p->AppendTable(&rDPObj, nCacheId, i+1);
     }
 
     maCaches.SetCaches(aCaches);

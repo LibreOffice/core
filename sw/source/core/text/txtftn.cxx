@@ -643,7 +643,7 @@ void SwTextFrm::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDeadL
                 SwFootnoteFrm *pNew = new SwFootnoteFrm(pDoc->GetDfltFrameFormat(),this,this,pFootnote);
                  SwNodeIndex aIdx( *pFootnote->GetStartNode(), 1 );
                  ::_InsertCnt( pNew, pDoc, aIdx.GetIndex() );
-                GetNode()->getIDocumentLayoutAccess()->GetLayouter()->CollectEndnote( pNew );
+                GetNode()->getIDocumentLayoutAccess().GetLayouter()->CollectEndnote( pNew );
             }
             else if( pSrcFrm != this )
                 SwFootnoteBossFrm::ChangeFootnoteRef( pSrcFrm, pFootnote, this );

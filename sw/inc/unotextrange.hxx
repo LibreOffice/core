@@ -116,8 +116,8 @@ public:
     // only for RANGE_IS_TABLE
     SwXTextRange(SwFrameFormat& rTableFormat);
 
-    const SwDoc* GetDoc() const;
-          SwDoc* GetDoc();
+    const SwDoc& GetDoc() const;
+          SwDoc& GetDoc();
     bool GetPositions(SwPaM & rToFill) const;
 
     static ::com::sun::star::uno::Reference<

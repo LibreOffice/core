@@ -734,19 +734,16 @@ void ScXMLExport::GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp )
             size_t nCount = pOpList->Count();
             for (size_t nIndex = 0; nIndex < nCount; ++nIndex )
             {
-                const ScDetOpData* pDetData = pOpList->GetObject( nIndex);
-                if( pDetData )
+                const ScDetOpData& rDetData = pOpList->GetObject( nIndex);
+                const ScAddress& rDetPos = rDetData.GetPos();
+                SCTAB nTab = rDetPos.Tab();
+                if ( nTab < pDoc->GetTableCount() )
                 {
-                    const ScAddress& rDetPos = pDetData->GetPos();
-                    SCTAB nTab = rDetPos.Tab();
-                    if ( nTab < pDoc->GetTableCount() )
-                    {
-                        rDetOp.AddOperation( pDetData->GetOperation(), rDetPos, static_cast<sal_uInt32>( nIndex) );
+                    rDetOp.AddOperation( rDetData.GetOperation(), rDetPos, static_cast<sal_uInt32>( nIndex) );
 
-                        // cells with detective operations are written even if empty
-                        pSharedData->SetLastColumn( nTab, rDetPos.Col() );
-                        pSharedData->SetLastRow( nTab, rDetPos.Row() );
-                    }
+                    // cells with detective operations are written even if empty
+                    pSharedData->SetLastColumn( nTab, rDetPos.Col() );
+                    pSharedData->SetLastRow( nTab, rDetPos.Row() );
                 }
             }
             rDetOp.Sort();

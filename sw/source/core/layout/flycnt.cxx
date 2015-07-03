@@ -1321,7 +1321,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     GetFormat()->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
     if( pCnt != GetAnchorFrm() || ( IsAutoPos() && pCnt->IsTextFrm() &&
-                                  GetFormat()->getIDocumentSettingAccess()->get(DocumentSettingId::HTML_MODE)) )
+                                  GetFormat()->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE)) )
     {
         //Set the anchor attribute according to the new Cnt.
         SwFormatAnchor aAnch( pFormat->GetAnchor() );

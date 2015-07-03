@@ -633,9 +633,9 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
             (rTypo.cchLeadingPunct+1)*2);
     }
 
-    const IDocumentSettingAccess* pIDocumentSettingAccess = GetWriter().getIDocumentSettingAccess();
+    const IDocumentSettingAccess& rIDocumentSettingAccess = GetWriter().getIDocumentSettingAccess();
 
-    rTypo.fKerningPunct = sal_uInt16(pIDocumentSettingAccess->get(DocumentSettingId::KERN_ASIAN_PUNCTUATION));
+    rTypo.fKerningPunct = sal_uInt16(rIDocumentSettingAccess.get(DocumentSettingId::KERN_ASIAN_PUNCTUATION));
     rTypo.iJustification = m_pDoc->getIDocumentSettingAccess().getCharacterCompressionType();
 }
 

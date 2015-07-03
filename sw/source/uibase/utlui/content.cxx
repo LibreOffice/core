@@ -427,7 +427,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         {
             sTypeToken.clear();
             nMemberCount = 0;
-            SwDrawModel* pModel = pWrtShell->getIDocumentDrawModelAccess()->GetDrawModel();
+            SwDrawModel* pModel = pWrtShell->getIDocumentDrawModelAccess().GetDrawModel();
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
@@ -736,8 +736,8 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             else if(!pMember->empty())
                 pMember->DeleteAndDestroyAll();
 
-            IDocumentDrawModelAccess* pIDDMA = pWrtShell->getIDocumentDrawModelAccess();
-            SwDrawModel* pModel = pIDDMA->GetDrawModel();
+            IDocumentDrawModelAccess& rIDDMA = pWrtShell->getIDocumentDrawModelAccess();
+            SwDrawModel* pModel = rIDDMA.GetDrawModel();
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
@@ -757,7 +757,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                                             this,
                                             pTemp->GetName(),
                                             nYPos);
-                        if(!pIDDMA->IsVisibleLayerId(pTemp->GetLayer()))
+                        if(!rIDDMA.IsVisibleLayerId(pTemp->GetLayer()))
                             pCnt->SetInvisible();
                         pMember->insert(pCnt);
                         nMemberCount++;
@@ -3367,7 +3367,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
             {
                 pDrawView->SdrEndTextEdit();
                 pDrawView->UnmarkAll();
-                SwDrawModel* _pModel = pActiveShell->getIDocumentDrawModelAccess()->GetDrawModel();
+                SwDrawModel* _pModel = pActiveShell->getIDocumentDrawModelAccess().GetDrawModel();
                 SdrPage* pPage = _pModel->GetPage(0);
                 const size_t nCount = pPage->GetObjCount();
                 for( size_t i=0; i<nCount; ++i )
@@ -3460,8 +3460,8 @@ void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
 {
     const size_t nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
-    SvLBoxString* pCol = static_cast<SvLBoxString*>(pEntry->GetItem( nColToHilite ));
-    SwContentLBoxString* pStr = new SwContentLBoxString( pEntry, 0, pCol->GetText() );
+    SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nColToHilite ));
+    SwContentLBoxString* pStr = new SwContentLBoxString( pEntry, 0, rCol.GetText() );
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
 

@@ -277,7 +277,7 @@ void SwTextSizeInfo::CtorInitTextSizeInfo( OutputDevice* pRenderContext, SwTextF
             m_pOut = Application::GetDefaultDevice();
         }
         else
-            m_pOut = pNd->getIDocumentDeviceAccess()->getPrinter( false );
+            m_pOut = pNd->getIDocumentDeviceAccess().getPrinter( false );
 
         m_pRef = m_pOut;
     }

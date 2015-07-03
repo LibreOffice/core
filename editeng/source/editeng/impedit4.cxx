@@ -626,10 +626,10 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         // start at 0, so the index is right ...
         for ( sal_Int32 n = 0; n <= nEndPortion; n++ )
         {
-            const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[n];
+            const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
             if ( n < nStartPortion )
             {
-                nIndex = nIndex + pTextPortion->GetLen();
+                nIndex = nIndex + rTextPortion.GetLen();
                 continue;
             }
 
@@ -660,7 +660,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                     rOutput.WriteChar( ' ' );
 
                 sal_Int32 nS = nIndex;
-                sal_Int32 nE = nIndex + pTextPortion->GetLen();
+                sal_Int32 nE = nIndex + rTextPortion.GetLen();
                 if ( n == nStartPortion )
                     nS = nStartPos;
                 if ( n == nEndPortion )
@@ -676,7 +676,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 bFinishPortion = false;
             }
 
-            nIndex = nIndex + pTextPortion->GetLen();
+            nIndex = nIndex + rTextPortion.GetLen();
         }
 
         rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PAR ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PARD ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_PLAIN );
@@ -1133,8 +1133,8 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
             sal_uInt16 n;
             for ( n = 0; n < nCount; n++ )
             {
-                const TextPortion* pTextPortion = pParaPortion->GetTextPortions()[n];
-                TextPortion* pNew = new TextPortion( *pTextPortion );
+                const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
+                TextPortion* pNew = new TextPortion( rTextPortion );
                 pX->aTextPortions.Append(pNew);
             }
 
@@ -1142,17 +1142,17 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel, SfxItemPool
             nCount = pParaPortion->GetLines().Count();
             for ( n = 0; n < nCount; n++ )
             {
-                const EditLine* pLine = pParaPortion->GetLines()[n];
-                EditLine* pNew = pLine->Clone();
+                const EditLine& rLine = pParaPortion->GetLines()[n];
+                EditLine* pNew = rLine.Clone();
                 pX->aLines.Append(pNew);
             }
 #ifdef DBG_UTIL
             sal_uInt16 nTest;
             int nTPLen = 0, nTxtLen = 0;
             for ( nTest = pParaPortion->GetTextPortions().Count(); nTest; )
-                nTPLen += pParaPortion->GetTextPortions()[--nTest]->GetLen();
+                nTPLen += pParaPortion->GetTextPortions()[--nTest].GetLen();
             for ( nTest = pParaPortion->GetLines().Count(); nTest; )
-                nTxtLen += pParaPortion->GetLines()[--nTest]->GetLen();
+                nTxtLen += pParaPortion->GetLines()[--nTest].GetLen();
             DBG_ASSERT( ( nTPLen == pParaPortion->GetNode()->Len() ) && ( nTxtLen == pParaPortion->GetNode()->Len() ), "CreateBinTextObject: ParaPortion not completely formatted!" );
 #endif
         }
@@ -1332,8 +1332,8 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 sal_uInt16 nCount = rXP.aTextPortions.Count();
                 for ( sal_uInt16 _n = 0; _n < nCount; _n++ )
                 {
-                    const TextPortion* pTextPortion = rXP.aTextPortions[_n];
-                    TextPortion* pNew = new TextPortion( *pTextPortion );
+                    const TextPortion& rTextPortion = rXP.aTextPortions[_n];
+                    TextPortion* pNew = new TextPortion( rTextPortion );
                     pParaPortion->GetTextPortions().Insert(_n, pNew);
                 }
 
@@ -1342,8 +1342,8 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 nCount = rXP.aLines.Count();
                 for ( sal_uInt16 m = 0; m < nCount; m++ )
                 {
-                    const EditLine* pLine = rXP.aLines[m];
-                    EditLine* pNew = pLine->Clone();
+                    const EditLine& rLine = rXP.aLines[m];
+                    EditLine* pNew = rLine.Clone();
                     pNew->SetInvalid(); // Paint again!
                     pParaPortion->GetLines().Insert(m, pNew);
                 }
@@ -1351,9 +1351,9 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 sal_uInt16 nTest;
                 int nTPLen = 0, nTxtLen = 0;
                 for ( nTest = pParaPortion->GetTextPortions().Count(); nTest; )
-                    nTPLen += pParaPortion->GetTextPortions()[--nTest]->GetLen();
+                    nTPLen += pParaPortion->GetTextPortions()[--nTest].GetLen();
                 for ( nTest = pParaPortion->GetLines().Count(); nTest; )
-                    nTxtLen += pParaPortion->GetLines()[--nTest]->GetLen();
+                    nTxtLen += pParaPortion->GetLines()[--nTest].GetLen();
                 DBG_ASSERT( ( nTPLen == pParaPortion->GetNode()->Len() ) && ( nTxtLen == pParaPortion->GetNode()->Len() ), "InsertBinTextObject: ParaPortion not completely formatted!" );
 #endif
             }

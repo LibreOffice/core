@@ -158,7 +158,7 @@ void SwInsertChart(vcl::Window* pParent, SfxBindings* pBindings )
             aRangeString = pTableFormat->GetName() + "." + rWrtShell.GetBoxNms();
 
             // get table data provider
-            xDataProvider.set( pView->GetDocShell()->getIDocumentChartDataProviderAccess()->GetChartDataProvider( true ) );
+            xDataProvider.set( pView->GetDocShell()->getIDocumentChartDataProviderAccess().GetChartDataProvider( true ) );
         }
     }
 

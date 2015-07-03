@@ -429,7 +429,7 @@ public:
     void PreprocessDBDataUpdate(
         sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
 
-    const SfxPoolItem*      GetAttr( SCROW nRow, sal_uInt16 nWhich ) const;
+    const SfxPoolItem&      GetAttr( SCROW nRow, sal_uInt16 nWhich ) const;
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
 

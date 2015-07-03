@@ -58,7 +58,7 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
             xInStrm->Seek( STREAM_SEEK_TO_BEGIN );
             pStrm = new XclImpStream( *xInStrm, GetRoot() );
             pStrm->CopyDecrypterFrom( rBookStrm );
-            pChangeTrack = new ScChangeTrack( GetDocPtr() );
+            pChangeTrack = new ScChangeTrack( &GetDocRef() );
 
             sOldUsername = pChangeTrack->GetUser();
             pChangeTrack->SetUseFixDateTime( true );
@@ -273,7 +273,7 @@ void XclImpChangeTrack::ReadCell(
             if( pStrm->IsValid() && pTokenArray )
             {
                 rCell.meType = CELLTYPE_FORMULA;
-                rCell.mpFormula = new ScFormulaCell(GetDocPtr(), rPosition, *pTokenArray);
+                rCell.mpFormula = new ScFormulaCell(&GetDocRef(), rPosition, *pTokenArray);
             }
             delete pTokenArray;
         }

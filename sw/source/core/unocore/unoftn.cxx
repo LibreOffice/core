@@ -300,7 +300,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     OTextCursorHelper *const pCursor =
         ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
     SwDoc *const pNewDoc =
-        (pRange) ? pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
+        (pRange) ? &pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
     if (!pNewDoc)
     {
         throw lang::IllegalArgumentException();
@@ -431,8 +431,8 @@ SwXFootnote::createTextCursor() throw (uno::RuntimeException, std::exception)
     SwPosition aPos( *pTextFootnote->GetStartNode() );
     SwXTextCursor *const pXCursor =
         new SwXTextCursor(*GetDoc(), this, CURSOR_FOOTNOTE, aPos);
-    auto pUnoCrsr(pXCursor->GetCursor());
-    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+    auto& rUnoCrsr(pXCursor->GetCursor());
+    rUnoCrsr.Move(fnMoveForward, fnGoNode);
     const uno::Reference< text::XTextCursor > xRet =
         static_cast<text::XWordCursor*>(pXCursor);
     return xRet;

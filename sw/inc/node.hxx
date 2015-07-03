@@ -210,7 +210,7 @@ public:
 
     /** Provides access to the document device interface
      */
-    const IDocumentDeviceAccess* getIDocumentDeviceAccess() const;
+    const IDocumentDeviceAccess& getIDocumentDeviceAccess() const;
 
     /** Provides access to the document bookmark interface
      */
@@ -218,34 +218,34 @@ public:
 
     /** Provides access to the document redline interface
      */
-    const IDocumentRedlineAccess* getIDocumentRedlineAccess() const;
+    const IDocumentRedlineAccess& getIDocumentRedlineAccess() const;
 
     /** Provides access to the document style pool interface
      */
-    const IDocumentStylePoolAccess* getIDocumentStylePoolAccess() const;
+    const IDocumentStylePoolAccess& getIDocumentStylePoolAccess() const;
 
     /** Provides access to the document draw model interface
      */
-    const IDocumentDrawModelAccess* getIDocumentDrawModelAccess() const;
+    const IDocumentDrawModelAccess& getIDocumentDrawModelAccess() const;
 
     /** Provides access to the document layout interface
      */
-    const IDocumentLayoutAccess* getIDocumentLayoutAccess() const;
-          IDocumentLayoutAccess* getIDocumentLayoutAccess();
+    const IDocumentLayoutAccess& getIDocumentLayoutAccess() const;
+          IDocumentLayoutAccess& getIDocumentLayoutAccess();
 
     /** Provides access to the document links administration interface
      */
-    const IDocumentLinksAdministration* getIDocumentLinksAdministration() const;
-          IDocumentLinksAdministration* getIDocumentLinksAdministration();
+    const IDocumentLinksAdministration& getIDocumentLinksAdministration() const;
+          IDocumentLinksAdministration& getIDocumentLinksAdministration();
 
     /** Provides access to the document fields administration interface
      */
-    const IDocumentFieldsAccess* getIDocumentFieldsAccess() const;
-          IDocumentFieldsAccess* getIDocumentFieldsAccess();
+    const IDocumentFieldsAccess& getIDocumentFieldsAccess() const;
+          IDocumentFieldsAccess& getIDocumentFieldsAccess();
 
     /** Provides access to the document content operations interface
      */
-          IDocumentContentOperations* getIDocumentContentOperations();
+          IDocumentContentOperations& getIDocumentContentOperations();
 
     /** Provides access to the document automatic styles interface
      */

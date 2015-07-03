@@ -43,7 +43,7 @@ public:
     sal_uInt16          Count() const               { return maAttribs.size(); }
 
     const TextCharAttrib& GetAttrib( sal_uInt16 n ) const { return maAttribs[n]; }
-    TextCharAttrib* GetAttrib( sal_uInt16 n )       { return &maAttribs[n]; }
+    TextCharAttrib& GetAttrib( sal_uInt16 n )       { return maAttribs[n]; }
     void            RemoveAttrib( sal_uInt16 n )    { maAttribs.release( maAttribs.begin() + n ).release(); }
 
     void            InsertAttrib( TextCharAttrib* pAttrib );

@@ -225,13 +225,13 @@ void SvImpLBox::CalcCellFocusRect( SvTreeListEntry* pEntry, Rectangle& rRect )
     {
         if ( nCurTabPos > FIRST_ENTRY_TAB )
         {
-            SvLBoxItem* pItem = pCursor->GetItem( nCurTabPos );
-            rRect.Left() = pView->GetTab( pCursor, pItem )->GetPos();
+            SvLBoxItem& rItem = pCursor->GetItem( nCurTabPos );
+            rRect.Left() = pView->GetTab( pCursor, &rItem )->GetPos();
         }
         if (pCursor->ItemCount() > static_cast<size_t>(nCurTabPos+1))
         {
-            SvLBoxItem* pNextItem = pCursor->GetItem( nCurTabPos + 1 );
-            long nRight = pView->GetTab( pCursor, pNextItem )->GetPos() - 1;
+            SvLBoxItem& rNextItem = pCursor->GetItem( nCurTabPos + 1 );
+            long nRight = pView->GetTab( pCursor, &rNextItem )->GetPos() - 1;
             if ( nRight < rRect.Right() )
                 rRect.Right() = nRight;
         }
@@ -3259,7 +3259,7 @@ bool SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
             nLastTab = nLastItem;
 
         SvLBoxTab* pTab = pView->aTabs[ nLastTab ];
-        SvLBoxItem* pItem = pEntry->GetItem( nLastTab );
+        SvLBoxItem& rItem = pEntry->GetItem( nLastTab );
 
         long nTabPos = pView->GetTabPos( pEntry, pTab );
 
@@ -3270,7 +3270,7 @@ bool SvImpLBox::SetMostRight( SvTreeListEntry* pEntry )
 
         long nNextTab = nTabPos < nMaxRight ? nMaxRight : nMaxRight + 50;
         long nTabWidth = nNextTab - nTabPos + 1;
-        long nItemSize = pItem->GetSize(pView,pEntry).Width();
+        long nItemSize = rItem.GetSize(pView,pEntry).Width();
         long nOffset = pTab->CalcOffset( nItemSize, nTabWidth );
 
         long nRight = nTabPos + nOffset + nItemSize;

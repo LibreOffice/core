@@ -379,7 +379,7 @@ sal_uLong SwCompatibilityOptPage::GetDocumentOptions() const
     sal_uLong nRet = 0;
     if ( m_pWrtShell )
     {
-        const IDocumentSettingAccess& rIDocumentSettingAccess = *m_pWrtShell->getIDocumentSettingAccess();
+        const IDocumentSettingAccess& rIDocumentSettingAccess = m_pWrtShell->getIDocumentSettingAccess();
         nRet = convertBools2Ulong_Impl(
                 !rIDocumentSettingAccess.get(DocumentSettingId::USE_VIRTUAL_DEVICE),
                 rIDocumentSettingAccess.get(DocumentSettingId::PARA_SPACE_MAX),

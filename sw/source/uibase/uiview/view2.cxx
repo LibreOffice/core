@@ -532,7 +532,7 @@ void SwView::Execute(SfxRequest &rReq)
     switch( nSlot )
     {
         case SID_CREATE_SW_DRAWVIEW:
-            m_pWrtShell->getIDocumentDrawModelAccess()->GetOrCreateDrawModel();
+            m_pWrtShell->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
             break;
 
         case FN_LINE_NUMBERING_DLG:
@@ -573,8 +573,8 @@ void SwView::Execute(SfxRequest &rReq)
             if( pArgs &&
                 SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem ))
             {
-                IDocumentRedlineAccess* pIDRA = m_pWrtShell->getIDocumentRedlineAccess();
-                Sequence <sal_Int8> aPasswd = pIDRA->GetRedlinePassword();
+                IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
+                Sequence <sal_Int8> aPasswd = rIDRA.GetRedlinePassword();
                 if( aPasswd.getLength() )
                 {
                     OSL_ENSURE( !static_cast<const SfxBoolItem*>(pItem)->GetValue(), "SwView::Execute(): password set an redlining off doesn't match!" );
@@ -590,10 +590,10 @@ void SwView::Execute(SfxRequest &rReq)
                     //#i69751# the result of Execute() can be ignored
                     (void)aPasswdDlg->Execute();
                     OUString sNewPasswd( aPasswdDlg->GetPassword() );
-                    Sequence <sal_Int8> aNewPasswd = pIDRA->GetRedlinePassword();
+                    Sequence <sal_Int8> aNewPasswd = rIDRA.GetRedlinePassword();
                     SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                     if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
-                        pIDRA->SetRedlinePassword(Sequence <sal_Int8> ());
+                        rIDRA.SetRedlinePassword(Sequence <sal_Int8> ());
                     else
                     {   // xmlsec05: message box for wrong password
                         break;
@@ -609,8 +609,8 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_REDLINE_PROTECT :
         {
-            IDocumentRedlineAccess* pIDRA = m_pWrtShell->getIDocumentRedlineAccess();
-            Sequence <sal_Int8> aPasswd = pIDRA->GetRedlinePassword();
+            IDocumentRedlineAccess& rIDRA = m_pWrtShell->getIDocumentRedlineAccess();
+            Sequence <sal_Int8> aPasswd = rIDRA.GetRedlinePassword();
             if( pArgs && SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem )
                 && static_cast<const SfxBoolItem*>(pItem)->GetValue() == ( aPasswd.getLength() != 0 ) )
                 break;
@@ -632,18 +632,18 @@ void SwView::Execute(SfxRequest &rReq)
                 sal_uInt16 nOn = nsRedlineMode_t::REDLINE_ON;
                 OUString sNewPasswd( aPasswdDlg->GetPassword() );
                 Sequence <sal_Int8> aNewPasswd =
-                        pIDRA->GetRedlinePassword();
+                        rIDRA.GetRedlinePassword();
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if(!aPasswd.getLength())
                 {
-                    pIDRA->SetRedlinePassword(aNewPasswd);
+                    rIDRA.SetRedlinePassword(aNewPasswd);
                 }
                 else if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
                 {
-                    pIDRA->SetRedlinePassword(Sequence <sal_Int8> ());
+                    rIDRA.SetRedlinePassword(Sequence <sal_Int8> ());
                     nOn = 0;
                 }
-                const sal_uInt16 nMode = pIDRA->GetRedlineMode();
+                const sal_uInt16 nMode = rIDRA.GetRedlineMode();
                 m_pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
                 rReq.AppendItem( SfxBoolItem( FN_REDLINE_PROTECT, ((nMode&nsRedlineMode_t::REDLINE_ON)==0) ) );
             }
@@ -1438,7 +1438,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM, MAXZOOM );
                     aZoomSliderItem.AddSnappingPoint( 100 );
 
-                    if ( !m_pWrtShell->getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE) )
+                    if ( !m_pWrtShell->getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE) )
                     {
                         const sal_uInt16 nColumns = pVOpt->GetViewLayoutColumns();
                         const bool bAutomaticViewLayout = 0 == nColumns;
@@ -1761,7 +1761,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
 
         case SID_ATTR_VIEWLAYOUT:
         {
-            if ( pArgs && !rSh.getIDocumentSettingAccess()->get(DocumentSettingId::BROWSE_MODE) &&
+            if ( pArgs && !rSh.getIDocumentSettingAccess().get(DocumentSettingId::BROWSE_MODE) &&
                 ( ( GetDocShell()->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
                 if ( SfxItemState::SET == pArgs->GetItemState(SID_ATTR_VIEWLAYOUT, true, &pItem ))
