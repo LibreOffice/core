@@ -55,7 +55,6 @@ protected:
     virtual         ~StorageBase();
 public:
                     TYPEINFO();
-    virtual const SvStream* GetSvStream() const = 0;
     virtual bool    Validate( bool=false ) const = 0;
     virtual bool    ValidateMode( StreamMode ) const = 0;
     void            ResetError() const;
@@ -80,7 +79,6 @@ public:
     virtual sal_uLong   GetSize() const = 0;
     virtual bool        CopyTo( BaseStorageStream * pDestStm ) = 0;
     virtual bool        Commit() = 0;
-    virtual bool        Revert() = 0;
     virtual bool        Equals( const BaseStorageStream& rStream ) const = 0;
 };
 
@@ -98,13 +96,9 @@ public:
     virtual void                SetClass( const SvGlobalName & rClass,
                                           SotClipboardFormatId nOriginalClipFormat,
                                           const OUString & rUserTypeName ) = 0;
-    virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                                 SotClipboardFormatId nOriginalClipFormat,
-                                                 const OUString & rUserTypeName ) = 0;
     virtual SvGlobalName        GetClassName() = 0;
     virtual SotClipboardFormatId         GetFormat() = 0;
     virtual OUString            GetUserName() = 0;
-    virtual bool                ShouldConvert() = 0;
     virtual void                FillInfoList( SvStorageInfoList* ) const = 0;
     virtual bool                CopyTo( BaseStorage* pDestStg ) const = 0;
     virtual bool                Commit() = 0;
@@ -127,7 +121,6 @@ public:
     virtual bool                Remove( const OUString & rEleName ) = 0;
     virtual bool                Rename( const OUString & rEleName, const OUString & rNewName ) = 0;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) = 0;
-    virtual bool                MoveTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) = 0;
     virtual bool                ValidateFAT() = 0;
     virtual bool                Equals( const BaseStorage& rStream ) const = 0;
 };
@@ -164,10 +157,8 @@ public:
     virtual sal_uLong   GetSize() const SAL_OVERRIDE;
     virtual bool        CopyTo( BaseStorageStream * pDestStm ) SAL_OVERRIDE;
     virtual bool        Commit() SAL_OVERRIDE;
-    virtual bool        Revert() SAL_OVERRIDE;
     virtual bool        Validate( bool=false ) const SAL_OVERRIDE;
     virtual bool        ValidateMode( StreamMode ) const SAL_OVERRIDE;
-    const SvStream*     GetSvStream() const SAL_OVERRIDE;
     virtual bool        Equals( const BaseStorageStream& rStream ) const SAL_OVERRIDE;
 };
 
@@ -198,13 +189,9 @@ public:
     virtual void                SetClass( const SvGlobalName & rClass,
                                           SotClipboardFormatId nOriginalClipFormat,
                                           const OUString & rUserTypeName ) SAL_OVERRIDE;
-    virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                                 SotClipboardFormatId nOriginalClipFormat,
-                                                 const OUString & rUserTypeName ) SAL_OVERRIDE;
     virtual SvGlobalName        GetClassName() SAL_OVERRIDE;
     virtual SotClipboardFormatId         GetFormat() SAL_OVERRIDE;
     virtual OUString            GetUserName() SAL_OVERRIDE;
-    virtual bool                ShouldConvert() SAL_OVERRIDE;
     virtual void                FillInfoList( SvStorageInfoList* ) const SAL_OVERRIDE;
     virtual bool                CopyTo( BaseStorage* pDestStg ) const SAL_OVERRIDE;
     virtual bool                Commit() SAL_OVERRIDE;
@@ -227,12 +214,10 @@ public:
     virtual bool                Remove( const OUString & rEleName ) SAL_OVERRIDE;
     virtual bool                Rename( const OUString & rEleName, const OUString & rNewName ) SAL_OVERRIDE;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) SAL_OVERRIDE;
-    virtual bool                MoveTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) SAL_OVERRIDE;
     virtual bool                ValidateFAT() SAL_OVERRIDE;
     virtual bool                Validate( bool=false ) const SAL_OVERRIDE;
     virtual bool                ValidateMode( StreamMode ) const SAL_OVERRIDE;
     bool                        ValidateMode( StreamMode, StgDirEntry* p ) const;
-    virtual const SvStream*     GetSvStream() const SAL_OVERRIDE;
     virtual bool                Equals( const BaseStorage& rStream ) const SAL_OVERRIDE;
 };
 
@@ -259,10 +244,8 @@ public:
     virtual sal_uLong           GetSize() const SAL_OVERRIDE;
     virtual bool                CopyTo( BaseStorageStream * pDestStm ) SAL_OVERRIDE;
     virtual bool                Commit() SAL_OVERRIDE;
-    virtual bool                Revert() SAL_OVERRIDE;
     virtual bool                Validate( bool=false ) const SAL_OVERRIDE;
     virtual bool                ValidateMode( StreamMode ) const SAL_OVERRIDE;
-    const SvStream*             GetSvStream() const SAL_OVERRIDE;
     virtual bool                Equals( const BaseStorageStream& rStream ) const SAL_OVERRIDE;
     bool                        SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue );
 
@@ -312,13 +295,9 @@ public:
     virtual void                SetClass( const SvGlobalName & rClass,
                                           SotClipboardFormatId nOriginalClipFormat,
                                           const OUString & rUserTypeName ) SAL_OVERRIDE;
-    virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                                 SotClipboardFormatId nOriginalClipFormat,
-                                                 const OUString & rUserTypeName ) SAL_OVERRIDE;
     virtual SvGlobalName        GetClassName() SAL_OVERRIDE;
     virtual SotClipboardFormatId         GetFormat() SAL_OVERRIDE;
     virtual OUString            GetUserName() SAL_OVERRIDE;
-    virtual bool                ShouldConvert() SAL_OVERRIDE;
     virtual void                FillInfoList( SvStorageInfoList* ) const SAL_OVERRIDE;
     virtual bool                CopyTo( BaseStorage* pDestStg ) const SAL_OVERRIDE;
     virtual bool                Commit() SAL_OVERRIDE;
@@ -341,13 +320,10 @@ public:
     virtual bool                Remove( const OUString & rEleName ) SAL_OVERRIDE;
     virtual bool                Rename( const OUString & rEleName, const OUString & rNewName ) SAL_OVERRIDE;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) SAL_OVERRIDE;
-    virtual bool                MoveTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) SAL_OVERRIDE;
     virtual bool                ValidateFAT() SAL_OVERRIDE;
     virtual bool                Validate( bool=false ) const SAL_OVERRIDE;
     virtual bool                ValidateMode( StreamMode ) const SAL_OVERRIDE;
-    virtual const SvStream*     GetSvStream() const SAL_OVERRIDE;
     virtual bool                Equals( const BaseStorage& rStream ) const SAL_OVERRIDE;
-    bool                        GetProperty( const OUString& rEleName, const OUString& rName, ::com::sun::star::uno::Any& rValue );
 
     UCBStorageElement_Impl*     FindElement_Impl( const OUString& rName ) const;
     bool                        CopyStorageElement_Impl( UCBStorageElement_Impl& rElement,

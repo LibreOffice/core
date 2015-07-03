@@ -35,7 +35,6 @@ friend class SotFactory;
 
 protected:
     virtual             ~SotObject();
-    void                SetExtern() { bOwner = false; }
     virtual bool        Close();
 public:
                         SotObject();
@@ -46,7 +45,6 @@ private:
 public:
     static void *              CreateInstance( SotObject ** = NULL );
     static SotFactory *        ClassFactory();
-    virtual const SotFactory * GetSvFactory() const;
     virtual void *             Cast( const SotFactory * );
 
     bool                Owner() const { return bOwner; }

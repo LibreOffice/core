@@ -74,7 +74,6 @@ public:
     void  SetStrm( UCBStorageStream* );
     bool  IsWritable()                      { return ( pStrm && pStrm->IsWritable() ); }
     bool  Good()                            { return nError == SVSTREAM_OK; }
-    bool  Bad()                             { return nError != SVSTREAM_OK; }
     sal_uLong GetError()                    { return nError;    }
     void  MoveError( StorageBase& );
     void  SetError( sal_uLong );

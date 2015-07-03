@@ -274,20 +274,6 @@ bool StorageStream::Commit()
     }
 }
 
-bool StorageStream::Revert()
-{
-    bool bResult = false;
-
-    if ( Validate() )
-    {
-        pEntry->Revert();
-        pIo->MoveError( *this );
-        bResult = Good();
-    }
-
-    return bResult;
-}
-
 bool StorageStream::CopyTo( BaseStorageStream* pDest )
 {
     if( !Validate() || !pDest || !pDest->Validate( true ) || Equals( *pDest ) )
@@ -297,11 +283,6 @@ bool StorageStream::CopyTo( BaseStorageStream* pDest )
     pIo->MoveError( *this );
     SetError( pDest->GetError() );
     return Good() && pDest->Good();
-}
-
-const SvStream* StorageStream::GetSvStream() const
-{
-    return GetSvStream_Impl();
 }
 
 bool StorageStream::Validate( bool bValidate ) const
@@ -810,59 +791,6 @@ bool Storage::CopyTo( BaseStorage* pDest ) const
     return Good() && pDest->Good();
 }
 
-// Move one element
-
-bool Storage::MoveTo( const OUString& rElem, BaseStorage* pODest, const OUString& rNew )
-{
-    if( !Validate() || !pODest || !pODest->Validate( true ) || Equals( *pODest ) )
-    {
-        SetError( SVSTREAM_ACCESS_DENIED );
-        return false;
-    }
-
-    StgDirEntry* pElem = pIo->pTOC->Find( *pEntry, rElem );
-    if( pElem )
-    {
-        // Simplest case: both storages share the same file
-        bool bRes;
-        Storage *pOther = PTR_CAST( Storage, pODest );
-        if( pOther && pIo == pOther->pIo && rElem == rNew )
-        {
-            Storage *p = static_cast<Storage*>(pODest);
-            Storage *pDest = p;
-            // both storages are conventional storages, use implementation dependent code
-            if( !pElem->IsContained( pDest->pEntry ) )
-            {
-                // cyclic move
-                SetError( SVSTREAM_ACCESS_DENIED );
-                return false;
-            }
-            bRes = pIo->pTOC->Move( *pEntry, *pDest->pEntry, rNew );
-            if( !bRes )
-            {
-                pIo->MoveError( *this );
-                pDest->pIo->MoveError( *pDest );
-                sal_uLong nErr = GetError();
-                if( !nErr )
-                    nErr = pDest->GetError();
-                SetError( nErr );
-                pDest->SetError( nErr );
-            }
-        }
-        else
-        {
-            bRes = CopyTo( rElem, pODest, rNew );
-            if( bRes )
-                bRes = Remove( rElem );
-        }
-        if( !bRes )
-            SetError( pIo->GetError() );
-        return bRes;
-    }
-    SetError( SVSTREAM_FILE_NOT_FOUND );
-    return false;
-}
-
 bool Storage::IsStorage( const OUString& rName ) const
 {
     if( Validate() )
@@ -959,21 +887,6 @@ void Storage::SetClass( const SvGlobalName & rClass,
         SetError( SVSTREAM_ACCESS_DENIED );
 }
 
-void Storage::SetConvertClass( const SvGlobalName & rConvertClass,
-                               SotClipboardFormatId nOriginalClipFormat,
-                               const OUString & rUserTypeName )
-{
-    if( Validate( true ) )
-    {
-        SetClass( rConvertClass, nOriginalClipFormat, rUserTypeName );
-        // plus the convert flag:
-        StgOleStream aOle( *this, true );
-        aOle.GetFlags() |= 4;
-        if( !aOle.Store() )
-            SetError( aOle.GetError() );
-    }
-}
-
 SvGlobalName Storage::GetClassName()
 {
     StgCompObjStream aCompObj( *this, false );
@@ -1005,18 +918,6 @@ OUString Storage::GetUserName()
     return OUString();
 }
 
-bool Storage::ShouldConvert()
-{
-    StgOleStream aOle( *this, false );
-    if( aOle.Load() )
-        return ( aOle.GetFlags() & 4 ) != 0;
-    else
-    {
-        pIo->ResetError();
-        return false;
-    }
-}
-
 bool Storage::ValidateFAT()
 {
     Link<> aLink = StgIo::GetErrorLink();
@@ -1044,11 +945,6 @@ const ClsId& Storage::GetClassId() const
 
     static ClsId aDummyId = {0,0,0,{0,0,0,0,0,0,0,0}};
     return aDummyId;
-}
-
-const SvStream* Storage::GetSvStream() const
-{
-    return GetSvStream_Impl();
 }
 
 bool Storage::Validate( bool bValidate ) const

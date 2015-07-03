@@ -458,15 +458,6 @@ bool StgStrm::Pos2Page( sal_Int32 nBytePos )
     return nPage >= 0;
 }
 
-// Retrieve the physical page for a given byte offset.
-
-rtl::Reference< StgPage > StgStrm::GetPhysPage( sal_Int32 nBytePos, bool bForce )
-{
-    if( !Pos2Page( nBytePos ) )
-        return NULL;
-    return rIo.Get( nPage, bForce );
-}
-
 // Copy an entire stream. Both streams are allocated in the FAT.
 // The target stream is this stream.
 
@@ -567,16 +558,6 @@ bool StgFATStrm::Pos2Page( sal_Int32 nBytePos )
     nPos    = nBytePos;
     nPage   = GetPage( (short) nPage, false );
     return nPage >= 0;
-}
-
-// Retrieve the physical page for a given byte offset.
-// Since Pos2Page() already has computed the physical offset,
-// use the byte offset directly.
-
-rtl::Reference< StgPage > StgFATStrm::GetPhysPage( sal_Int32 nBytePos, bool bForce )
-{
-    OSL_ENSURE( nBytePos >= 0, "The value may not be negative!" );
-    return rIo.Get( nBytePos / ( nPageSize >> 2 ), bForce );
 }
 
 // Get the page number entry for the given page offset.
