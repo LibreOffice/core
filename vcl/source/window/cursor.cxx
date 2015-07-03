@@ -167,9 +167,6 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
 
         if ( pWindow )
         {
-            if ( pWindow->SupportsDoubleBuffering() )
-                bDrawDirect = false;
-
             if ( !mpData )
             {
                 mpData = new ImplCursorData;
