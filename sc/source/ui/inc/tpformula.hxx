@@ -59,6 +59,7 @@ private:
 private:
     VclPtr<ListBox>     mpLbFormulaSyntax;
     VclPtr<CheckBox>    mpCbEnglishFuncName;
+    VclPtr<CheckBox>    mpCbUnitValidat;
 
     VclPtr<RadioButton> mpBtnCustomCalcDefault;
     VclPtr<RadioButton> mpBtnCustomCalcCustom;
