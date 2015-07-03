@@ -26,22 +26,6 @@ $(eval $(call gb_Executable_add_libs,updater,\
     -lICE \
 ))
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Executable_set_include,updater,\
-	-lgtk \
-))
-$(eval $(call gb_Exectuable_add_libs,updater,\
-	-lpthread \
-))
-else ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_set_include,updater,\
-	-lgtk \
-))
-$(eval $(call gb_Exectuable_add_libs,updater,\
-	-lpthread \
-))
-endif
-
 $(eval $(call gb_Executable_add_cxxflags,updater,\
     $$(GTK3_CFLAGS) \
 ))
