@@ -17,7 +17,6 @@ CTRunData::CTRunData( CTRunRef pRun, int start)
     : ownership_flags(0)
     , m_StartPos(start)
     , m_pRun(pRun)
-    , m_pAdjPositions(NULL)
 {
     assert(pRun);
 
@@ -87,7 +86,6 @@ CTRunData::~CTRunData()
     {
         delete [] m_pPositions;
     }
-    delete [] m_pAdjPositions;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
