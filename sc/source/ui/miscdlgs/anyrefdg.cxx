@@ -65,17 +65,24 @@ ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindi
 
 ScFormulaReferenceHelper::~ScFormulaReferenceHelper()
 {
+    dispose();
+}
+
+void ScFormulaReferenceHelper::dispose()
+{
     if (bAccInserted)
         Application::RemoveAccel( pAccel.get() );
+    bAccInserted = false;
 
     // common cleanup for ScAnyRefDlg and ScFormulaDlg is done here
-
     HideReference();
     enableInput( true );
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
     if ( pInputHdl )
         pInputHdl->ResetDelayTimer();   // stop the timer for disabling the input line
+
+    pAccel.reset();
 }
 
 void ScFormulaReferenceHelper::enableInput( bool bEnable )
@@ -831,6 +838,7 @@ void ScRefHandler::disposeRefHandler()
     m_rWindow.clear();
     pActiveWin.clear();
     LeaveRefMode();
+    m_aHelper.dispose();
 }
 
 bool ScRefHandler::LeaveRefMode()
