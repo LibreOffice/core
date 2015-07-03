@@ -656,9 +656,12 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             **************************************************************/
             if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
             {
-                mpView->UnmarkAllObj();
-                mpView->MarkObj(pObj,pPV,false,false);
-                return (bReturn);
+                if (pPV->IsObjSelectable(pObj))
+                {
+                    mpView->UnmarkAllObj();
+                    mpView->MarkObj(pObj,pPV,false,false);
+                    return bReturn;
+                }
             }
         }
     }
