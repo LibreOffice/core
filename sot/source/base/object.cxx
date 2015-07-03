@@ -32,9 +32,38 @@ public:
 };
 
 
-SO2_IMPL_BASIC_CLASS_DLL(SotObject,SotObjectFactory,
-                    SvGlobalName( 0xf44b7830, 0xf83c, 0x11d0,
-                            0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) )
+SotFactory * SotObject::ClassFactory()
+{
+    SotFactory **ppFactory = GetFactoryAdress();
+    if( !*ppFactory )
+    {
+        *ppFactory = new SotObjectFactory( SvGlobalName( 0xf44b7830, 0xf83c, 0x11d0,
+                            0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ),
+            OUString( "SotObject" ), SotObject::CreateInstance );
+    }
+    return *ppFactory;
+}
+
+void * SotObject::CreateInstance( SotObject ** ppObj )
+{
+    SotObject * p = new SotObject();
+    if( ppObj )
+        *ppObj = p;
+    return p;
+}
+
+const SotFactory * SotObject::GetSvFactory() const
+{
+    return ClassFactory();
+}
+
+void * SotObject::Cast( const SotFactory * pFact )
+{
+    void * pRet = NULL;
+    if( !pFact || pFact == ClassFactory() )
+        pRet = this;
+    return pRet;
+}
 
 /*************************************************************************
 |*    SotObject::SotObject()
@@ -91,7 +120,7 @@ bool SotObject::DoClose()
     bool bRet = false;
     if( !bInClose )
     {
-        SotObjectRef xHoldAlive( this );
+        tools::SvRef<SotObject> xHoldAlive( this );
         bInClose = true;
         bRet = Close();
         bInClose = false;

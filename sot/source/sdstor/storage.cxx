@@ -53,9 +53,43 @@ public:
 };
 
 
-SO2_IMPL_BASIC_CLASS1_DLL(SotStorageStream,SotStorageStreamFactory,SotObject,
-                        SvGlobalName( 0xd7deb420, 0xf902, 0x11d0,
-                            0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) )
+SotFactory * SotStorageStream::ClassFactory()
+{
+    SotFactory **ppFactory = GetFactoryAdress();
+    if( !*ppFactory )
+    {
+        *ppFactory = new SotStorageStreamFactory( SvGlobalName( 0xd7deb420, 0xf902, 0x11d0,
+                            0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ),
+            OUString( "SotStorageStream" ), SotStorageStream::CreateInstance );
+        (*ppFactory)->PutSuperClass( SotObject::ClassFactory() );
+    }
+    return *ppFactory;
+}
+
+void * SotStorageStream::CreateInstance( SotObject ** ppObj )
+{
+    SotStorageStream * p = new SotStorageStream();
+    SotObject* pSuper1 = p;
+    SotObject* pBasicObj = pSuper1;
+    if( ppObj )
+        *ppObj = pBasicObj;
+    return p;
+}
+
+const SotFactory * SotStorageStream::GetSvFactory() const
+{
+    return ClassFactory();
+}
+
+void * SotStorageStream::Cast( const SotFactory * pFact )
+{
+    void * pRet = NULL;
+    if( !pFact || pFact == ClassFactory() )
+        pRet = this;
+    if( !pRet )
+        pRet = SotObject::Cast( pFact );
+    return pRet;
+}
 
 SvLockBytesRef MakeLockBytes_Impl( const OUString & rName, StreamMode nMode )
 {
@@ -285,9 +319,43 @@ public:
 };
 
 
-SO2_IMPL_BASIC_CLASS1_DLL(SotStorage,SotStorageFactory,SotObject,
-                          SvGlobalName( 0x980ce7e0, 0xf905, 0x11d0,
-                                        0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ) )
+SotFactory * SotStorage::ClassFactory()
+{
+    SotFactory **ppFactory = GetFactoryAdress();
+    if( !*ppFactory )
+    {
+        *ppFactory = new SotStorageFactory( SvGlobalName( 0x980ce7e0, 0xf905, 0x11d0,
+                                        0xaa, 0xa1, 0x0, 0xa0, 0x24, 0x9d, 0x55, 0x90 ),
+            OUString( "SotStorage" ), SotStorage::CreateInstance );
+        (*ppFactory)->PutSuperClass( SotObject::ClassFactory() );
+    }
+    return *ppFactory;
+}
+
+void * SotStorage::CreateInstance( SotObject ** ppObj )
+{
+    SotStorage * p = new SotStorage();
+    SotObject* pSuper1 = p;
+    SotObject* pBasicObj = pSuper1;
+    if( ppObj )
+        *ppObj = pBasicObj;
+    return p;
+}
+
+const SotFactory * SotStorage::GetSvFactory() const
+{
+    return ClassFactory();
+}
+
+void * SotStorage::Cast( const SotFactory * pFact )
+{
+    void * pRet = NULL;
+    if( !pFact || pFact == ClassFactory() )
+        pRet = this;
+    if( !pRet )
+        pRet = SotObject::Cast( pFact );
+    return pRet;
+}
 
 /************************************************************************
 |*
