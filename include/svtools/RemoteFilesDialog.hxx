@@ -38,7 +38,7 @@
 
 #include <vector>
 
-#include "../../../fpicker/source/office/iodlg.hxx"
+#include "../../../fpicker/source/office/fpdialogbase.hxx"
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -47,10 +47,6 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::comphelper;
 using namespace ::svt;
-
-#define WB_MULTISELECTION 0x20000000L
-
-#define FILTER_ALL "*.*"
 
 enum SvtRemoteDlgMode
 {

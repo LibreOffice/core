@@ -245,7 +245,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
 
     m_eMode = ( nBits & WB_SAVEAS ) ? REMOTEDLG_MODE_SAVE : REMOTEDLG_MODE_OPEN;
     m_eType = ( nBits & WB_PATH ) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
-    m_bMultiselection = ( nBits & WB_MULTISELECTION ) ? true : false;
+    m_bMultiselection = ( nBits & SFXWB_MULTISELECTION ) ? true : false;
     m_bIsUpdated = false;
     m_nCurrentFilter = LISTBOX_ENTRY_NOTFOUND;
 
@@ -799,7 +799,7 @@ OUString RemoteFilesDialog::GetCurFilter() const
     }
     else
     {
-        sFilter = FILTER_ALL;
+        sFilter = FILEDIALOG_FILTER_ALL;
     }
 
     return sFilter;
