@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+
 #include <mmconfigitem.hxx>
+#include <vector>
 #include <swtypes.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/uno/Any.hxx>
@@ -34,6 +36,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <comphelper/sequence.hxx>
 #include <rtl/instance.hxx>
 #include <unotools/configitem.hxx>
 #include <mailmergehelper.hxx>
@@ -1021,56 +1024,33 @@ sal_Int32 SwMailMergeConfigItem::GetResultSetPosition() const
     return m_pImpl->nResultSetCursorPos;
 }
 
-bool SwMailMergeConfigItem::IsRecordExcluded(sal_Int32 nRecord)
-{
-    bool bRet = false;
-    if(nRecord > 0 && nRecord < m_aSelection.getLength())
-    {
-        sal_Int32 nTemp = 0;
-        m_aSelection[nRecord - 1] >>= nTemp;
-        bRet = nTemp < 1;
-    }
-    return bRet;
-}
+bool SwMailMergeConfigItem::IsRecordExcluded(sal_Int32 nRecord) const
+    { return m_aExcludedRecords.find(nRecord) != m_aExcludedRecords.end(); }
 
 void SwMailMergeConfigItem::ExcludeRecord(sal_Int32 nRecord, bool bExclude)
 {
-    //nRecord is based on 1
-    //the selection array contains Anys for all records
-    //excluded records  contain a '-1'
-    if(!m_aSelection.getLength() || nRecord > m_aSelection.getLength())
-    {
-        if(bExclude)
-        {
-            //if no selection array is available we need to create one containing the
-            //entries for all available records
-            if(!m_pImpl->xResultSet.is())
-                GetResultSet();
-            if(m_pImpl->xResultSet.is())
-            {
-                m_pImpl->xResultSet->last();
-                sal_Int32 nEnd = m_pImpl->xResultSet->getRow();
-                sal_Int32 nStart = m_aSelection.getLength();
-                m_aSelection.realloc(nEnd);
-                Any* pSelection = m_aSelection.getArray();
-                for(sal_Int32 nIndex = nStart; nIndex < nEnd; ++nIndex)
-                {
-                    if((nRecord - 1) != nIndex)
-                        pSelection[nIndex] <<= nIndex + 1;
-                    else
-                        pSelection[nIndex] <<= (sal_Int32) -1;
-                }
-            }
-        }
-    }
+    if(bExclude)
+        m_aExcludedRecords.insert(nRecord);
     else
-    {
-        if(nRecord > 0 && m_aSelection.getLength() > nRecord)
-        {
-            m_aSelection[nRecord - 1] <<= bExclude ? -1 : nRecord;
-        }
-    }
+        m_aExcludedRecords.erase(nRecord);
 }
+
+uno::Sequence<uno::Any> SwMailMergeConfigItem::GetSelection() const
+{
+    if(!m_pImpl->xResultSet.is())
+        GetResultSet();
+    if(!m_pImpl->xResultSet.is())
+        return {};
+    m_pImpl->xResultSet->last();
+    sal_Int32 nResultSetSize = m_pImpl->xResultSet->getRow()+1;
+    std::vector<uno::Any> vResult;
+    vResult.reserve(nResultSetSize);
+    for(sal_Int32 nIdx=1; nIdx<nResultSetSize;++nIdx)
+        if(!IsRecordExcluded(nIdx))
+            vResult.push_back(uno::makeAny<sal_Int32>(nIdx));
+    return comphelper::containerToSequence(vResult);
+}
+
 
 const uno::Sequence< OUString>&
                     SwMailMergeConfigItem::GetSavedDocuments() const

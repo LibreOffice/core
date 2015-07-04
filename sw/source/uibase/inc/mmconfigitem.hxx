@@ -22,6 +22,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <tools/resary.hxx>
+#include <set>
 #include <swdbdata.hxx>
 #include "swdllapi.h"
 #include "sharedconnection.hxx"
@@ -56,7 +57,7 @@ class SW_DLLPUBLIC SwMailMergeConfigItem
     bool                                                        m_bGreetingInserted;
     sal_Int32                                                   m_nGreetingMoves;
     OUString                                             m_rAddressBlockFrame;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> m_aSelection;
+    std::set<sal_Int32> m_aExcludedRecords;
 
     sal_uInt16                                                      m_nStartPrint;
     sal_uInt16                                                      m_nEndPrint;
@@ -112,8 +113,9 @@ public:
     sal_Int32           GetResultSetPosition()const;
     bool                IsResultSetFirstLast(bool& bIsFirst, bool& bIsLast);
 
-    bool                IsRecordExcluded(sal_Int32 nRecord);
+    bool                IsRecordExcluded(sal_Int32 nRecord) const;
     void                ExcludeRecord(sal_Int32 nRecord, bool bExclude);
+    css::uno::Sequence< css::uno::Any> GetSelection() const;
 
     const com::sun::star::uno::Sequence< OUString>&
                         GetSavedDocuments() const;
