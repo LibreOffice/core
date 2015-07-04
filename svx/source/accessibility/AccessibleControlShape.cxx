@@ -605,7 +605,7 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
     return xSet;
 }
 
-OUString AccessibleControlShape::CreateAccessibleName() throw (RuntimeException)
+OUString AccessibleControlShape::CreateAccessibleName() throw (RuntimeException, std::exception)
 {
     ensureControlModelAccess();
 
