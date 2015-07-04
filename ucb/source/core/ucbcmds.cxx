@@ -1684,7 +1684,7 @@ UniversalContentBroker::getCommandInfo()
 void UniversalContentBroker::globalTransfer(
             const ucb::GlobalTransferCommandArgument2 & rArg,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception )
+    throw( uno::Exception, std::exception )
 {
     // Use own command environment with own interaction handler intercepting
     // some interaction requests that shall not be handled by the user-supplied
