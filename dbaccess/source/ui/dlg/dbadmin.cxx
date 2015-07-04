@@ -194,8 +194,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     // extract all relevant data from the property set of the data source
     m_pImpl->translateProperties(_rxDatasource, *GetInputSetImpl());
 
-    // propagate this set as our new input set and reset the example set
-    SetInputSet(GetInputSetImpl());
+    // reset the example set
     delete pExampleSet;
     pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
