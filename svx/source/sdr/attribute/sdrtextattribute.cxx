@@ -265,7 +265,7 @@ namespace drawinglayer
             bool bInEditMode,
             bool bFixedCellHeight,
             bool bWrongSpell,
-	    bool bIsToBeChained,
+        bool bIsToBeChained,
             bool bChainable)
         :   mpSdrTextAttribute(
                 ImpSdrTextAttribute(
@@ -273,20 +273,13 @@ namespace drawinglayer
                     aTextUpperDistance, aTextRightDistance, aTextLowerDistance,
                     aSdrTextHorzAdjust, aSdrTextVertAdjust, bContour, bFitToSize, bAutoFit,
                     bHideContour, bBlink, bScroll, bInEditMode, bFixedCellHeight, bWrongSpell,
-		    bIsToBeChained, bChainable))
+            bIsToBeChained, bChainable))
         {
         }
 
         SdrTextAttribute::SdrTextAttribute()
             :   mpSdrTextAttribute(theGlobalDefault::get())
         {
-        }
-
-        SdrTextAttribute::SdrTextAttribute(bool bIsToBeChained)
-        :   mpSdrTextAttribute(ImpSdrTextAttribute::get_global_default())
-        {
-            mpSdrTextAttribute->mbToBeChained = bIsToBeChained;
-            mpSdrTextAttribute->mnRefCount++;
         }
 
         SdrTextAttribute::SdrTextAttribute(const SdrTextAttribute& rCandidate)

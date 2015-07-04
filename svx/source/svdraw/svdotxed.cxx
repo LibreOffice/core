@@ -67,8 +67,8 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
 
     // disable AUTOPAGESIZE
     if ( IsChainable() ) {
-        sal_uIntPtr nStat1=rOutl.GetControlWord();
-        nStat1 &=~EE_CNTRL_AUTOPAGESIZE;
+        EEControlBits nStat1=rOutl.GetControlWord();
+        nStat1 &=~EEControlBits::AUTOPAGESIZE;
         rOutl.SetControlWord(nStat1);
     }
 
