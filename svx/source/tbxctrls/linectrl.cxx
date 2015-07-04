@@ -622,13 +622,6 @@ SvxLineEndToolBoxControl::~SvxLineEndToolBoxControl()
 
 
 
-SfxPopupWindowType SvxLineEndToolBoxControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONCLICK;
-}
-
-
-
 VclPtr<SfxPopupWindow> SvxLineEndToolBoxControl::CreatePopupWindow()
 {
     SvxLineEndWindow* pLineEndWin =

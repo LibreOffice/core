@@ -52,9 +52,4 @@ VclPtr<SfxPopupWindow> SvxSubToolBoxControl::CreatePopupWindow()
     return NULL;
 }
 
-SfxPopupWindowType  SvxSubToolBoxControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONCLICK;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

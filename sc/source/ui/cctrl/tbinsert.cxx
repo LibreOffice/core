@@ -93,11 +93,6 @@ VclPtr<SfxPopupWindow> ScTbxInsertCtrl::CreatePopupWindow()
     return NULL;
 }
 
-SfxPopupWindowType ScTbxInsertCtrl::GetPopupWindowType() const
-{
-    return nLastSlotId ? SfxPopupWindowType::ONTIMEOUT : SfxPopupWindowType::ONCLICK;
-}
-
 void ScTbxInsertCtrl::Select( bool /* bMod1 */ )
 {
     SfxViewShell*   pCurSh( SfxViewShell::Current() );

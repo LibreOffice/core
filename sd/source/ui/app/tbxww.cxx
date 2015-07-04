@@ -49,13 +49,6 @@ SdTbxControl::SdTbxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) 
     rTbx.Invalidate();
 }
 
-/*-------------------------------------------------------------------------*/
-
-SfxPopupWindowType SdTbxControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONTIMEOUT;
-}
-
 /**
  * We create the window here
  * You can get the position of the toolbox with GetToolBox()

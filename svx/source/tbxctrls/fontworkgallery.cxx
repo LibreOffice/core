@@ -276,13 +276,6 @@ FontWorkShapeTypeControl::~FontWorkShapeTypeControl()
 
 
 
-SfxPopupWindowType FontWorkShapeTypeControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONCLICK; //( aLastAction.getLength() == 0 ? SfxPopupWindowType::ONCLICK : SfxPopupWindowType::ONTIMEOUT );
-}
-
-
-
 VclPtr<SfxPopupWindow> FontWorkShapeTypeControl::CreatePopupWindow()
 {
     OUString aSubTbxResName( "private:resource/toolbar/fontworkshapetype" );

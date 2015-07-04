@@ -47,15 +47,6 @@ SvxTbxCtlAlign::SvxTbxCtlAlign( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTb
 }
 
 /*
- * Wenn man ein PopupWindow erzeugen will
- */
-
-SfxPopupWindowType SvxTbxCtlAlign::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONCLICK;
-}
-
-/*
  * Hier wird das Fenster erzeugt
  * Lage der Toolbox mit GetToolBox() abfragbar
  * rItemRect sind die Screen-Koordinaten

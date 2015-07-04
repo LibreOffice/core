@@ -970,13 +970,6 @@ void SfxToolBoxControl::Click()
 
 
 
-SfxPopupWindowType SfxToolBoxControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::NONE;
-}
-
-
-
 VclPtr<SfxPopupWindow> SfxToolBoxControl::CreatePopupWindow()
 {
     return 0;

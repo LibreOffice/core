@@ -62,18 +62,6 @@ struct SfxTbxCtrlFactory
 
 
 
-enum class SfxPopupWindowType
-{
-    NONE,
-    ONCLICK,
-    ONTIMEOUT,
-    ONCLICKANDMOVE,
-    ONTIMEOUTANDMOVE,
-    CONTEXTMENU
-};
-
-
-
 class SfxFrameStatusListener : public svt::FrameStatusListener
 {
     public:
@@ -197,7 +185,6 @@ protected:
 
     virtual void               DoubleClick();
     virtual void               Click();
-    virtual SfxPopupWindowType GetPopupWindowType() const;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow();
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent );
 

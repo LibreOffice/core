@@ -732,13 +732,6 @@ SvxTableToolBoxControl::~SvxTableToolBoxControl()
 
 
 
-SfxPopupWindowType SvxTableToolBoxControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONTIMEOUTANDMOVE;
-}
-
-
-
 VclPtr<SfxPopupWindow> SvxTableToolBoxControl::CreatePopupWindow()
 {
     if ( bEnabled )
@@ -782,13 +775,6 @@ SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt
 
 SvxColumnsToolBoxControl::~SvxColumnsToolBoxControl()
 {
-}
-
-
-
-SfxPopupWindowType SvxColumnsToolBoxControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONTIMEOUTANDMOVE;
 }
 
 

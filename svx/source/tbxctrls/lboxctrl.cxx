@@ -162,12 +162,6 @@ VclPtr<SfxPopupWindow> SvxListBoxControl::CreatePopupWindow()
 }
 
 
-SfxPopupWindowType SvxListBoxControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONTIMEOUT;
-}
-
-
 void SvxListBoxControl::StateChanged(
         sal_uInt16, SfxItemState, const SfxPoolItem* pState )
 {
