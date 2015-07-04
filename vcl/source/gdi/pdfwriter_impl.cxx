@@ -8590,7 +8590,7 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
                     else
                     {
                         OString aChar(&cChar, 1, RTL_TEXTENCODING_MS_1252);
-                        cChar = ((sal_Ucs)aChar[0]) & 0x00ff;
+                        cChar = !aChar.isEmpty() ? (static_cast<sal_Ucs>(aChar[0]) & 0x00ff) : 0;
                     }
                 }
             }
