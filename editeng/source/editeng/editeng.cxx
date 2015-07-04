@@ -1523,6 +1523,11 @@ void EditEngine::SetStatusEventHdl( const Link<>& rLink )
     pImpEditEngine->SetStatusEventHdl( rLink );
 }
 
+Link<> EditEngine::GetStatusEventHdl() const
+{
+    return pImpEditEngine->GetStatusEventHdl();
+}
+
 void EditEngine::SetChainingEventHdl( const Link<>& rLink )
 {
     pImpEditEngine->SetChainingEventHdl( rLink );
