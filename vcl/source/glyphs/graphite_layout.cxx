@@ -561,36 +561,33 @@ gr_segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
         int limit = rArgs.mnEndCharPos;
         if (!(SalLayoutFlags::ComplexDisabled & rArgs.mnFlags))
         {
-            int nSegCharMin = maximum<int>(0, mnMinCharPos - EXTRA_CONTEXT_LENGTH);
-            int nSegCharLimit = minimum(rArgs.mnLength, mnEndCharPos + EXTRA_CONTEXT_LENGTH);
-            while (nSegCharMin < mnSegCharOffset)
+            const int nSegCharMin = maximum<int>(0, mnMinCharPos - EXTRA_CONTEXT_LENGTH);
+            const int nSegCharLimit = minimum(rArgs.mnLength, mnEndCharPos + EXTRA_CONTEXT_LENGTH);
+            if (nSegCharMin < mnSegCharOffset)
             {
-                int sameDirEnd = nSegCharMin + findSameDirLimit(rArgs.mpStr + nSegCharMin,
+                int sameDirEnd = findSameDirLimit(rArgs.mpStr + nSegCharMin,
                     rArgs.mnEndCharPos - nSegCharMin, bRtl);
-                if (sameDirEnd >= rArgs.mnMinCharPos)
-                {
+                if (sameDirEnd == rArgs.mnEndCharPos)
                     mnSegCharOffset = nSegCharMin;
-                    break;
-                }
-                else
-                    nSegCharMin = sameDirEnd;
             }
             if (nSegCharLimit > limit)
             {
                 limit += findSameDirLimit(rArgs.mpStr + rArgs.mnEndCharPos,
                     nSegCharLimit - rArgs.mnEndCharPos, bRtl);
-                if (limit > rArgs.mnLength)
-                    limit = rArgs.mnLength;
             }
-        }
-        else
-        {
-            limit = minimum(rArgs.mnLength, mnEndCharPos + EXTRA_CONTEXT_LENGTH);
-            mnSegCharOffset = maximum<int>(0, mnMinCharPos - EXTRA_CONTEXT_LENGTH);
         }
 
         size_t numchars = gr_count_unicode_characters(gr_utf16, rArgs.mpStr + mnSegCharOffset,
-                 rArgs.mpStr + limit, NULL);
+                 rArgs.mpStr + (rArgs.mnLength > limit + 64 ? limit + 64 : rArgs.mnLength), NULL);
+        static com::sun::star::uno::Reference< com::sun::star::i18n::XCharacterClassification > xCharClass;
+        if ( !xCharClass.is() )
+            xCharClass = vcl::unohelper::CreateCharacterClassification();
+        size_t numchars2 = rArgs.mnEndCharPos - mnSegCharOffset; // fdo#52540, fdo#68313, fdo#70666 avoid bad ligature replacement, fdo#88051 layout problem
+        if (numchars > numchars2 && (rArgs.mpStr[mnSegCharOffset + numchars2] == '\t' ||
+            xCharClass->getType(rArgs.mpStr + mnSegCharOffset, numchars2 + 1) == ::com::sun::star::i18n::UnicodeType::LOWERCASE_LETTER))
+        {
+            numchars = numchars2;
+        }
         if (mpFeatures)
             pSegment = gr_make_seg(mpFont, mpFace, 0, mpFeatures->values(), gr_utf16,
                                         rArgs.mpStr + mnSegCharOffset, numchars, bRtl);
