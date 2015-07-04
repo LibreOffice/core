@@ -276,6 +276,7 @@ void SwMailMergeWizard::CreateTargetDocument()
     aDescriptor[ svx::daCursor ]      <<= m_rConfigItem.GetResultSet();
     aDescriptor[ svx::daCommand ]     <<= m_rConfigItem.GetCurrentDBData().sCommand;
     aDescriptor[ svx::daCommandType ] <<= m_rConfigItem.GetCurrentDBData().nCommandType;
+    aDescriptor[ svx::daSelection ]   <<= m_rConfigItem.GetSelection();
 
     SwMergeDescriptor aMergeDesc( DBMGR_MERGE_SHELL, GetSwView()->GetWrtShell(),
         aDescriptor);
