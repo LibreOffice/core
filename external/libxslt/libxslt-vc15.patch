@@ -1,0 +1,13 @@
+diff -ur xslt.org/libxslt/win32config.h xslt/libxslt/win32config.h
+--- misc/xslt/libxslt/win32config.h	2015-07-04 22:36:52.522061462 +0200
++++ misc/xslt/libxslt/win32config.h	2015-07-04 22:37:33.023064181 +0200
+@@ -79,7 +79,9 @@
+ #include <direct.h>
+ #if defined(_MSC_VER) || defined(__MINGW32__)
+ #define mkdir(p,m) _mkdir(p)
++#if _MSC_VER < 1900
+ #define snprintf _snprintf
++#endif
+ #if _MSC_VER < 1500
+ #define vsnprintf(b,c,f,a) _vsnprintf(b,c,f,a)
+ #endif
