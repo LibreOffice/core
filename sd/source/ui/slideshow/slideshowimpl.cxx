@@ -3293,7 +3293,7 @@ PresentationSettingsEx::PresentationSettingsEx( PresentationSettings& r )
 {
 }
 
-void PresentationSettingsEx::SetArguments( const Sequence< PropertyValue >& rArguments ) throw (IllegalArgumentException)
+void PresentationSettingsEx::SetArguments( const Sequence< PropertyValue >& rArguments ) throw (IllegalArgumentException, std::exception)
 {
     sal_Int32 nArguments = rArguments.getLength();
     const PropertyValue* pValue = rArguments.getConstArray();
