@@ -850,7 +850,7 @@ bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rAr
 }
 
 uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
+        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     // extract sheet index, will throw, if parameter is invalid
     SCTAB nTab = lclGetTabFromArgs( rArgs, nIndex );
