@@ -317,11 +317,14 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                 sal_Int32 id = 0;
                 sal_Int32 idPos = sLinkChainName.indexOf("_x");
                 sal_Int32 seq = 0;
-                sal_Int32 seqPos = sLinkChainName.indexOf("_s",idPos);
-                if( idPos >= 0 && idPos < seqPos )
+                if (idPos >= 0)
                 {
-                    id = sLinkChainName.copy(idPos+2,seqPos-idPos+2).toInt32();
-                    seq = sLinkChainName.copy(seqPos+2).toInt32();
+                    sal_Int32 seqPos = sLinkChainName.indexOf("_s",idPos);
+                    if (idPos < seqPos)
+                    {
+                        id = sLinkChainName.copy(idPos+2,seqPos-idPos+2).toInt32();
+                        seq = sLinkChainName.copy(seqPos+2).toInt32();
+                    }
                 }
 
                 OUString s_mso_next_textbox;
