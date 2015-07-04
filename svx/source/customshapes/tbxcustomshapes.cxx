@@ -94,12 +94,6 @@ void SvxTbxCtlCustomShapes::StateChanged( sal_uInt16 nSID, SfxItemState eState,
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
 }
 
-// when one wants to create a popup window
-SfxPopupWindowType SvxTbxCtlCustomShapes::GetPopupWindowType() const
-{
-    return( m_aCommand.isEmpty() ? SfxPopupWindowType::ONCLICK : SfxPopupWindowType::ONTIMEOUT);
-}
-
 // Here is the window created
 // The location of the Toolbox is queried through GetToolBox()
 // rItemRect are the screen coordinates

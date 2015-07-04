@@ -441,11 +441,6 @@ void SvxGrafFilterToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState,
     GetToolBox().EnableItem( GetId(), ( eState != SfxItemState::DISABLED ) );
 }
 
-SfxPopupWindowType SvxGrafFilterToolBoxControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONCLICK;
-}
-
 VclPtr<SfxPopupWindow> SvxGrafFilterToolBoxControl::CreatePopupWindow()
 {
     OUString aSubTbxResName( "private:resource/toolbar/graffilterbar" );

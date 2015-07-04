@@ -34,7 +34,6 @@ public:
             SdTbxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
             virtual ~SdTbxControl() {}
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState ) SAL_OVERRIDE;

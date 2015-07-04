@@ -44,7 +44,6 @@ public:
     SvxClipBoardControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SvxClipBoardControl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,

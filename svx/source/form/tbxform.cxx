@@ -191,12 +191,6 @@ void SvxFmTbxCtlConfig::StateChanged(sal_uInt16 nSID, SfxItemState eState, const
 }
 
 
-SfxPopupWindowType SvxFmTbxCtlConfig::GetPopupWindowType() const
-{
-    return( nLastSlot == 0 ? SfxPopupWindowType::ONCLICK : SfxPopupWindowType::ONTIMEOUT );
-}
-
-
 VclPtr<SfxPopupWindow> SvxFmTbxCtlConfig::CreatePopupWindow()
 {
     if ( GetSlotId() == SID_FM_CONFIG )

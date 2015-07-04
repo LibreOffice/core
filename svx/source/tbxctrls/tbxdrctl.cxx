@@ -68,13 +68,6 @@ void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
 
 
-SfxPopupWindowType SvxTbxCtlDraw::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONCLICK;
-}
-
-
-
 void SvxTbxCtlDraw::toggleToolbox()
 {
     Reference< XLayoutManager > xLayoutMgr = getLayoutManager();

@@ -2618,11 +2618,6 @@ SvxColorToolBoxControl::~SvxColorToolBoxControl()
 {
 }
 
-SfxPopupWindowType SvxColorToolBoxControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONTIMEOUT;
-}
-
 VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
 {
     SvxColorWindow_Impl* pColorWin =
@@ -2808,11 +2803,6 @@ SvxFrameToolBoxControl::SvxFrameToolBoxControl(
     rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
-SfxPopupWindowType SvxFrameToolBoxControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONCLICK;
-}
-
 VclPtr<SfxPopupWindow> SvxFrameToolBoxControl::CreatePopupWindow()
 {
     VclPtr<SvxFrameWindow_Impl> pFrameWin = VclPtr<SvxFrameWindow_Impl>::Create(
@@ -2848,11 +2838,6 @@ SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(
     :    SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-}
-
-SfxPopupWindowType SvxFrameLineStyleToolBoxControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONCLICK;
 }
 
 VclPtr<SfxPopupWindow> SvxFrameLineStyleToolBoxControl::CreatePopupWindow()

@@ -30,7 +30,6 @@ public:
     SwTableOptimizeCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SwTableOptimizeCtrl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
 
 };

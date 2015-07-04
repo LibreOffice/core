@@ -64,7 +64,6 @@ public:
     SwTbxInsertCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SwTbxInsertCtrl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
@@ -84,7 +83,6 @@ public:
     SwTbxAutoTextCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SwTbxAutoTextCtrl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
@@ -101,7 +99,6 @@ public:
     SwTbxFieldCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     virtual ~SwTbxFieldCtrl();
 
-    virtual SfxPopupWindowType  GetPopupWindowType() const SAL_OVERRIDE;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,

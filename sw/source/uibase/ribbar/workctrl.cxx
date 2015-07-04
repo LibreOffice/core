@@ -137,11 +137,6 @@ VclPtr<SfxPopupWindow> SwTbxInsertCtrl::CreatePopupWindow()
     return NULL;
 }
 
-SfxPopupWindowType  SwTbxInsertCtrl::GetPopupWindowType() const
-{
-    return nLastSlotId ? SfxPopupWindowType::ONTIMEOUT : SfxPopupWindowType::ONCLICK;
-}
-
 void SwTbxInsertCtrl::Select( sal_uInt16 /*nSelectModifier*/ )
 {
     if( nLastSlotId )
@@ -224,11 +219,6 @@ VclPtr<SfxPopupWindow> SwTbxAutoTextCtrl::CreatePopupWindow()
     DelPopup();
     return 0;
 
-}
-
-SfxPopupWindowType SwTbxAutoTextCtrl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONTIMEOUT;
 }
 
 void SwTbxAutoTextCtrl::StateChanged( sal_uInt16,
@@ -321,11 +311,6 @@ VclPtr<SfxPopupWindow> SwTbxFieldCtrl::CreatePopupWindow()
     GetToolBox().EndSelection();
 
     return 0;
-}
-
-SfxPopupWindowType SwTbxFieldCtrl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONTIMEOUT;
 }
 
 void SwTbxFieldCtrl::StateChanged( sal_uInt16,

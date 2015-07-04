@@ -108,12 +108,6 @@ VclPtr<SfxPopupWindow> SvxClipBoardControl::CreatePopupWindow()
 }
 
 
-SfxPopupWindowType SvxClipBoardControl::GetPopupWindowType() const
-{
-    return SfxPopupWindowType::ONTIMEOUT;
-}
-
-
 void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( SID_CLIPBOARD_FORMAT_ITEMS == nSID )
