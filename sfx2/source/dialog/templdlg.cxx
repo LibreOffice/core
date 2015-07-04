@@ -104,6 +104,7 @@ public:
 StyleLBoxString::StyleLBoxString(SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& sText, const SfxStyleFamily& eStyleFamily)
     : SvLBoxString(pEntry, nFlags, sText)
     , meStyleFamily(eStyleFamily)
+    , mpViewData(NULL)
 {}
 
 StyleLBoxString::~StyleLBoxString()
