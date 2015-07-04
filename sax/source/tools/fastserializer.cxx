@@ -426,7 +426,7 @@ namespace sax_fastparser {
 
         if ( maMarkStack.size() == 1  && eMergeType != MERGE_MARKS_IGNORE)
         {
-#if DBG_UTIL
+#ifdef DBG_UTIL
             while (!maMarkStack.top()->m_DebugEndedElements.empty())
             {
                 assert(maMarkStack.top()->m_DebugEndedElements.front() == m_DebugStartedElements.top());
@@ -447,13 +447,13 @@ namespace sax_fastparser {
             return;
         }
 
-#if DBG_UTIL
+#ifdef DBG_UTIL
         ::std::deque<sal_Int32> topDebugStartedElements(maMarkStack.top()->m_DebugStartedElements);
         ::std::deque<sal_Int32> topDebugEndedElements(maMarkStack.top()->m_DebugEndedElements);
 #endif
         const Int8Sequence aMerge( maMarkStack.top()->getData() );
         maMarkStack.pop();
-#if DBG_UTIL
+#ifdef DBG_UTIL
         switch (eMergeType)
         {
             case MERGE_MARKS_APPEND:
