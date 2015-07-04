@@ -18,6 +18,8 @@
  */
 
 #include <mmpreparemergepage.hxx>
+
+#include <comphelper/propertysequence.hxx>
 #include <mailmergewizard.hxx>
 #include <mmconfigitem.hxx>
 #include <dbui.hrc>
@@ -116,25 +118,16 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
     m_pExcludeCB->Check(rConfigItem.IsRecordExcluded( rConfigItem.GetResultSetPosition() ));
     //now the record has to be merged into the source document
     const SwDBData& rDBData = rConfigItem.GetCurrentDBData();
-
-    Sequence< PropertyValue > aArgs(7);
-    Sequence<Any> aSelection(1);
-    aSelection[0] <<= rConfigItem.GetResultSetPosition();
-    aArgs[0].Name = "Selection";
-    aArgs[0].Value <<= aSelection;
-    aArgs[1].Name = "DataSourceName";
-    aArgs[1].Value <<= rDBData.sDataSource;
-    aArgs[2].Name = "Command";
-    aArgs[2].Value <<= rDBData.sCommand;
-    aArgs[3].Name = "CommandType";
-    aArgs[3].Value <<= rDBData.nCommandType;
-    aArgs[4].Name = "ActiveConnection";
-    aArgs[4].Value <<=  rConfigItem.GetConnection().getTyped();
-    aArgs[5].Name = "Filter";
-    aArgs[5].Value <<= rConfigItem.GetFilter();
-    aArgs[6].Name = "Cursor";
-    aArgs[6].Value <<= rConfigItem.GetResultSet();
-
+    Sequence<Any> vSelection = { makeAny(rConfigItem.GetResultSetPosition()) };
+    auto aArgs(::comphelper::InitPropertySequence({
+        {"Selection",        makeAny(vSelection)},
+        {"DataSourceNamea",  makeAny(rDBData.sDataSource)},
+        {"Command",          makeAny(rDBData.sCommand)},
+        {"CommandType",      makeAny(rDBData.nCommandType)},
+        {"ActiveConnection", makeAny(rConfigItem.GetConnection().getTyped())},
+        {"Filter",           makeAny(rConfigItem.GetFilter())},
+        {"Cursor",           makeAny(rConfigItem.GetResultSet())}
+    }));
     svx::ODataAccessDescriptor aDescriptor(aArgs);
     SwWrtShell& rSh = m_pWizard->GetSwView()->GetWrtShell();
     SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
