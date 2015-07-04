@@ -206,11 +206,11 @@ public:
             DrawMode::Paint );
 
         CPPUNIT_ASSERT_MESSAGE( "output not cleared to white",
-                                xOutput->getPixelData( basegfx::B2IPoint( 0, 0 ) ) == 0xffffff );
+                                xOutput->getPixel( basegfx::B2IPoint( 0, 0 ) ) == Color(0xffffff) );
         CPPUNIT_ASSERT_MESSAGE( "bitmap not drawn",
-                                xOutput->getPixelData( basegfx::B2IPoint( 2, 2 ) ) == 0x808080 );
+                                xOutput->getPixel( basegfx::B2IPoint( 2, 2 ) ) == Color(0x808080) );
         CPPUNIT_ASSERT_MESSAGE( "mask not applied",
-                                xOutput->getPixelData( basegfx::B2IPoint( 6, 6 ) ) == 0xffffff );
+                                xOutput->getPixel( basegfx::B2IPoint( 6, 6 ) ) == Color(0xffffff) );
     }
 
     // Change the following lines only, if you add, remove or rename
