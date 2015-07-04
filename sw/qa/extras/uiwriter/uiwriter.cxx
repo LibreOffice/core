@@ -1033,6 +1033,7 @@ void SwUiWriterTest::testTdf69282()
 {
     mxComponent = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
     SwDoc* source = pTextDoc->GetDocShell()->GetDoc();
     uno::Reference<lang::XComponent> xSourceDoc(mxComponent, uno::UNO_QUERY);
     mxComponent.clear();
