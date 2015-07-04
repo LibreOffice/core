@@ -1008,12 +1008,6 @@ EditTextObject* ImpEditEngine::GetEmptyTextObject()
     return CreateTextObject( aEmptySel );
 }
 
-sal_uInt32 ImpEditEngine::WriteHTML( SvStream&, EditSelection )
-{
-    return 0;
-}
-
-
 EditTextObject* ImpEditEngine::CreateTextObject()
 {
     EditSelection aCompleteSelection;

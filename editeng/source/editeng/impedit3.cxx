@@ -576,7 +576,7 @@ void ImpEditEngine::CheckPageOverflow()
 
     sal_uInt32 nBoxHeight = GetMaxAutoPaperSize().Height();
     fprintf(stderr, "[OVERFLOW-CHECK] Current MaxAutoPaperSize is %d\n", nBoxHeight);
-    fprintf(stderr, "[CONTROL_STATUS] AutoPageSize is %s",  ( aStatus.GetControlWord() & EE_CNTRL_AUTOPAGESIZE ) ? "ON\n" : "OFF\n" );
+    fprintf(stderr, "[CONTROL_STATUS] AutoPageSize is %s",  ( aStatus.GetControlWord() & EEControlBits::AUTOPAGESIZE ) ? "ON\n" : "OFF\n" );
 
     sal_uInt32 nTxtHeight = CalcTextHeight(NULL);
 
@@ -590,12 +590,12 @@ void ImpEditEngine::CheckPageOverflow()
     {
         // which paragraph is the first to cause higher size of the box?
         ImplUpdateOverflowingParaNum( nBoxHeight); // XXX: currently only for horizontal text
-        aStatus.SetPageOverflow(true);
+        //aStatus.SetPageOverflow(true);
         mbNeedsChainingHandling = true;
     } else
     {
         // No overflow if withing box boundaries
-        aStatus.SetPageOverflow(false);
+        //aStatus.SetPageOverflow(false);
         mbNeedsChainingHandling = false;
     }
 
