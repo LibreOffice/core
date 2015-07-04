@@ -29,6 +29,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu.changeset_36727.patch.1 \
 	external/icu/icu.changeset_36801.patch.1 \
 	$(if $(filter-out ANDROID,$(OS)),external/icu/icu4c-icudata-stdlibs.diff) \
+	external/icu/icu.vc15.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
