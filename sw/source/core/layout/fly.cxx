@@ -1464,12 +1464,12 @@ void CalcContent( SwLayoutFrm *pLay,
                 static_cast<SwTextFrm*>(pFrm)->ForbidFollowFormat();
 
             const bool bDeleteForbidden(pSect && pSect->IsDeleteForbidden());
-            if (pSect)
+            if (pSect && !bDeleteForbidden)
                 pSect->ForbidDelete();
 
             pFrm->Calc(pRenderContext);
 
-            if (!bDeleteForbidden)
+            if (pSect && !bDeleteForbidden)
                 pSect->AllowDelete();
 
             // OD 14.03.2003 #i11760# - reset control flag for follow format.
