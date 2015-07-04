@@ -246,7 +246,7 @@ class WWD_Events(WWD_Startup):
                 sd = self.getStatusDialog()
                 sd.setLabel(self.resources.resValidatingDocuments)
                 sd.execute(self, task, self.resources.prodName)
-                oLoadDocs = self.LoadDocs(self.xMSF, self.xUnoDialog, files, self)
+                oLoadDocs = self.LoadDocs(self.xMSF, self.xUnoDialog, files, task, self)
                 oLoadDocs.loadDocuments()
                 task.removeTaskListener(sd)
             else:
@@ -926,7 +926,7 @@ class WWD_Events(WWD_Startup):
                 if start == 0:
                     doc.cp_URL = self.files[i]
                 else:
-                    doc.cp_URL = FileAccess.connectURLs(files[0], self.files[i])
+                    doc.cp_URL = FileAccess.connectURLs(self.files[0], self.files[i])
 
                 '''
                 so - i check each document and if it is ok I add it.
