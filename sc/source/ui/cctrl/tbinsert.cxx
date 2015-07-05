@@ -27,7 +27,6 @@
 #include <vcl/toolbox.hxx>
 
 #include "tbinsert.hxx"
-#include "tbinsert.hrc"
 #include "global.hxx"
 #include "scmod.hxx"
 #include "scresid.hxx"

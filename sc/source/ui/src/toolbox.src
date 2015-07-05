@@ -19,7 +19,6 @@
 
 #include "sc.hrc"
 #include <svx/globlmn.hrc>
-#include "tbinsert.hrc"
 
 String SCSTR_QHELP_POSWND
 {
