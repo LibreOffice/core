@@ -30,6 +30,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
+#include <osl/endian.h>
 #include <rtl/alloc.h>
 #include <osl/mutex.h>
 #include <osl/doublecheckedlocking.h>
@@ -101,14 +102,27 @@ sal_Int32 rtl_ustr_indexOfAscii_WithLength(
 {
     assert(len >= 0);
     assert(subLen >= 0);
-    if (subLen > 0 && subLen <= len) {
-        sal_Int32 i;
-        for (i = 0; i <= len - subLen; ++i) {
-            if (rtl_ustr_asciil_reverseEquals_WithLength(
-                    str + i, subStr, subLen))
+    if (subLen > 0 && subLen <= len)
+    {
+        sal_Unicode const* start = str;
+        sal_Unicode const* end = start + len;
+        sal_Unicode const* cursor = start;
+
+        while(cursor < end)
+        {
+            cursor = std::char_traits<sal_Unicode>::find(cursor, end - cursor, *subStr);
+            if(!cursor || (end - cursor < subLen))
             {
-                return i;
+                /* no enough left to actually have a match */
+                break;
             }
+            /* now it is worth trying a full match */
+            if (rtl_ustr_asciil_reverseEquals_WithLength(
+                        (sal_Unicode const*)cursor, subStr, subLen))
+            {
+                return cursor - start;
+            }
+            cursor += 1;
         }
     }
     return -1;
