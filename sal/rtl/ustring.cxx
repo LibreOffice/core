@@ -27,6 +27,7 @@
 #include <cstdlib>
 #include <limits>
 #include <stdexcept>
+#include <string>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
@@ -101,14 +102,25 @@ sal_Int32 rtl_ustr_indexOfAscii_WithLength(
 {
     assert(len >= 0);
     assert(subLen >= 0);
-    if (subLen > 0 && subLen <= len) {
-        sal_Int32 i;
-        for (i = 0; i <= len - subLen; ++i) {
-            if (rtl_ustr_asciil_reverseEquals_WithLength(
-                    str + i, subStr, subLen))
+    if (subLen > 0 && subLen <= len)
+    {
+        sal_Unicode const* end = str + len;
+        sal_Unicode const* cursor = str;
+
+        while(cursor < end)
+        {
+            cursor = std::char_traits<sal_Unicode>::find(cursor, end - cursor, *subStr);
+            if(!cursor || (end - cursor < subLen))
             {
-                return i;
+                /* no enough left to actually have a match */
+                break;
             }
+            /* now it is worth trying a full match */
+            if (rtl_ustr_asciil_reverseEquals_WithLength(cursor, subStr, subLen))
+            {
+                return cursor - str;
+            }
+            cursor += 1;
         }
     }
     return -1;
