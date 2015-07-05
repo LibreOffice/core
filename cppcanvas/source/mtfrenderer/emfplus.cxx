@@ -1288,7 +1288,7 @@ namespace cppcanvas
                 rState.isFillColorSet = true;
                 // extract UseBrush
                 EMFPBrush* brush = static_cast<EMFPBrush*>( aObjects [brushIndexOrColor & 0xff] );
-                SAL_INFO("cppcanvas.emf", "EMF+\tbrush fill slot: " << brushIndexOrColor << " (type: " << brush->GetType () << ")");
+                SAL_INFO("cppcanvas.emf", "EMF+\tbrush fill slot: " << brushIndexOrColor << " (type: " << (brush ? brush->GetType() : -1) << ")");
 
                 // give up in case something wrong happened
                 if( !brush )
