@@ -480,7 +480,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
 
         // Remember and preserve Modified-Flag without calling the Link
         // (for OLE; after Statement from MM)
-        bool bIsModified = m_pDoc->getIDocumentState().IsModified();
+        const bool bIsModified = m_pDoc->getIDocumentState().IsModified();
         m_pDoc->GetIDocumentUndoRedo().LockUndoNoModifiedPosition();
         Link<> aOldOLELnk( m_pDoc->GetOle2Link() );
         m_pDoc->SetOle2Link( Link<>() );
