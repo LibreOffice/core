@@ -345,7 +345,7 @@ void ODbaseTable::fillColumns()
         char cType[2];
         cType[0] = aDBFColumn.db_typ;
         cType[1] = 0;
-        aTypeName = OUString::createFromAscii(cType);
+        aTypeName = OUString(cType, 1, RTL_TEXTENCODING_ASCII_US);
         SAL_INFO( "connectivity.drivers","column type: " << aDBFColumn.db_typ);
 
         switch (aDBFColumn.db_typ)
