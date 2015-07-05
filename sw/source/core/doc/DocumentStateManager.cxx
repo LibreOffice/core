@@ -65,6 +65,7 @@ void DocumentStateManager::ResetModified()
     //  Bit 1:  -> new state
     sal_IntPtr nCall = mbModified ? 1 : 0;
     mbModified = false;
+    m_rDoc.GetDocumentStatisticsManager().GetDocStat().bModified = false;
     m_rDoc.GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
     if( nCall && m_rDoc.GetOle2Link().IsSet() )
     {
