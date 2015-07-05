@@ -177,7 +177,7 @@ namespace vclcanvas
     SpriteCanvasHelper::SpriteCanvasHelper() :
         mpRedrawManager( NULL ),
         mpOwningSpriteCanvas( NULL ),
-        maVDev(),
+        maVDev(VclPtr<VirtualDevice>::Create()),
         maLastUpdate(),
         mbShowFrameInfo( false ),
         mbShowSpriteBounds( false ),
