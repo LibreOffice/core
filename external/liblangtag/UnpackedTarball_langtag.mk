@@ -30,6 +30,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,langtag,\
 	external/liblangtag/liblangtag-0.5.1-unistd.patch \
 	external/liblangtag/liblangtag-0.5.1-include-last-record-in-language-subtag-registry.patch \
 	external/liblangtag/liblangtag-leak.patch.0 \
+	external/liblangtag/liblangtag-vc15.patch \
 ))
 
 ifeq ($(OS),WNT)
