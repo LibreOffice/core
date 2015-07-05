@@ -116,6 +116,7 @@ private:
     bool setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const ::com::sun::star::uno::Any& rValue );
     void UpdateLook();
 
+    DECL_LINK(UpdateAnimationLB, void* );
     DECL_LINK( implControlHdl, Control* );
     DECL_LINK(implPropertyHdl, void *);
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
@@ -131,6 +132,9 @@ private:
     VclPtr<PushButton> mpPBRemoveEffect;
     VclPtr<FixedText>  mpFTEffect;
     VclPtr<FixedText>  mpFTStart;
+    VclPtr<FixedText>  mpFTAnimation;
+    VclPtr<ListBox>    mpLBAnimation;
+    VclPtr<ListBox>    mpLBCategory;
     VclPtr<ListBox>    mpLBStart;
     VclPtr<FixedText>  mpFTProperty;
     VclPtr<VclHBox>    mpPlaceholderBox;
