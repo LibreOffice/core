@@ -39,6 +39,7 @@
 #include <sfx2/dispatch.hxx>
 #include "STLPropertySet.hxx"
 #include "CustomAnimationPane.hxx"
+#include <CustomAnimationPreset.hxx>
 #include "CustomAnimationDialog.hxx"
 #include "CustomAnimationCreateDialog.hxx"
 #include "CustomAnimation.hrc"
@@ -160,7 +161,9 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     get(mpPBAddEffect, "add_effect");
     get(mpPBChangeEffect, "change_effect");
     get(mpPBRemoveEffect, "remove_effect");
-
+    get(mpFTAnimation, "categorylabel");
+    get(mpLBCategory, "categorylistbox");
+    get(mpLBAnimation, "animations_list");
     get(mpFTEffect, "effect_label");
 
     get(mpFTStart, "start_effect");
@@ -176,8 +179,11 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     get(mpCustomAnimationList, "custom_animation_list");
     mpCustomAnimationList->setController( dynamic_cast<ICustomAnimationListController*> ( this ) );
     mpCustomAnimationList->set_width_request(mpCustomAnimationList->approximate_char_width() * 16);
-    mpCustomAnimationList->set_height_request(mpCustomAnimationList->GetTextHeight() * 16);
+    mpCustomAnimationList->set_height_request(mpCustomAnimationList->GetTextHeight() * 8);
 
+    mpLBAnimation->set_width_request(mpLBAnimation->approximate_char_width() * 16);
+    mpLBAnimation->set_height_request(mpLBAnimation->GetTextHeight() * 8);
+    mpLBCategory->SelectEntryPos(1);
     get(mpPBMoveUp, "move_up");
     get(mpPBMoveDown, "move_down");
     get(mpPBPlay, "play");
@@ -197,7 +203,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     mpPBMoveDown->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpPBPlay->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
-
+    mpLBCategory->SetSelectHdl( LINK( this,CustomAnimationPane, UpdateAnimationLB ) );
     maStrModify = mpFTEffect->GetText();
 
     // get current controller and initialize listeners
@@ -253,6 +259,9 @@ void CustomAnimationPane::dispose()
     mpFTSpeed.clear();
     mpCBSpeed.clear();
     mpCustomAnimationList.clear();
+    mpFTAnimation.clear();
+    mpLBAnimation.clear();
+    mpLBCategory.clear();
     mpPBMoveUp.clear();
     mpPBMoveDown.clear();
     mpPBPlay.clear();
@@ -477,6 +486,8 @@ void CustomAnimationPane::updateControls()
     mpFTSpeed->Enable( mxView.is() );
     mpCBSpeed->Enable( mxView.is() );
     mpCustomAnimationList->Enable( mxView.is() );
+    mpLBAnimation->Enable( mxView.is() );
+    mpLBCategory->Enable( mxView.is() );
     mpPBMoveUp->Enable( mxView.is() );
     mpPBMoveDown->Enable( mxView.is() );
     mpPBPlay->Enable( mxView.is() );
@@ -493,6 +504,8 @@ void CustomAnimationPane::updateControls()
         mpLBProperty->Enable( false );
         mpFTProperty->Enable( false );
         mpCustomAnimationList->clear();
+        mpLBCategory->Enable( false );
+        mpLBAnimation->Enable( false );
         return;
     }
 
@@ -688,7 +701,6 @@ void CustomAnimationPane::updateControls()
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     mpCBAutoPreview->Check( pOptions->IsPreviewChangedEffects() );
-
     updateMotionPathTags();
 }
 
@@ -2018,6 +2030,11 @@ void CustomAnimationPane::onChangeSpeed()
 IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl)
 {
     onChangeProperty();
+    return 0;
+}
+
+IMPL_LINK_NOARG(CustomAnimationPane, UpdateAnimationLB)
+{
     return 0;
 }
 
