@@ -44,7 +44,7 @@ protected:
     virtual ~OInterceptor();
 public:
 
-    OInterceptor( ODocumentDefinition* _pContentHolder );
+    explicit OInterceptor( ODocumentDefinition* _pContentHolder );
 
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 

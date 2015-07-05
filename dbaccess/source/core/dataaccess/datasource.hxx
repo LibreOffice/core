@@ -89,7 +89,7 @@ private:
     virtual ~ODatabaseSource();
 
 public:
-    ODatabaseSource( const ::rtl::Reference< ODatabaseModelImpl >& _pImpl );
+    explicit ODatabaseSource( const ::rtl::Reference< ODatabaseModelImpl >& _pImpl );
 
     struct DBContextAccess { friend class ODatabaseContext; private: DBContextAccess() { } };
 

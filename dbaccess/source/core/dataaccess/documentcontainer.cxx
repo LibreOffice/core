@@ -65,7 +65,7 @@ class LocalNameApproval : public IContainerApprove
     ::connectivity::SQLError    m_aErrors;
 
 public:
-    LocalNameApproval( const Reference< XComponentContext >& _rxContext )
+    explicit LocalNameApproval( const Reference< XComponentContext >& _rxContext )
         :m_aErrors( _rxContext )
     {
     }

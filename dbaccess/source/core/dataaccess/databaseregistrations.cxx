@@ -74,7 +74,7 @@ namespace dbaccess
                                 ,public DatabaseRegistrations_Base
     {
     public:
-        DatabaseRegistrations( const Reference<XComponentContext>& _rxContext );
+        explicit DatabaseRegistrations( const Reference<XComponentContext>& _rxContext );
 
     protected:
         virtual ~DatabaseRegistrations();

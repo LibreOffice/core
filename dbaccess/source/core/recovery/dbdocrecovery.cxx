@@ -222,7 +222,7 @@ namespace dbaccess
     {
         const Reference<XComponentContext> aContext;
 
-        DatabaseDocumentRecovery_Data( const Reference<XComponentContext> & i_rContext )
+        explicit DatabaseDocumentRecovery_Data( const Reference<XComponentContext> & i_rContext )
             :aContext( i_rContext )
         {
         }

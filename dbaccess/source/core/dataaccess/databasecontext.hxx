@@ -115,7 +115,7 @@ protected:
     DatabaseDocumentLoader*                 m_pDatabaseDocumentLoader;
 
 public:
-    ODatabaseContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
+    explicit ODatabaseContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
     virtual ~ODatabaseContext();
 
     // OComponentHelper

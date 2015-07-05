@@ -94,7 +94,7 @@ namespace dbaccess
     class OfficeSettingsImport : public SettingsImport
     {
     public:
-        OfficeSettingsImport( ::comphelper::NamedValueCollection& o_rSettings );
+        explicit OfficeSettingsImport( ::comphelper::NamedValueCollection& o_rSettings );
 
         // SettingsImport overridables
         virtual ::rtl::Reference< SettingsImport >  nextState(
@@ -113,7 +113,7 @@ namespace dbaccess
     class ConfigItemImport : public SettingsImport
     {
     public:
-        ConfigItemImport( ::comphelper::NamedValueCollection& o_rSettings );
+        explicit ConfigItemImport( ::comphelper::NamedValueCollection& o_rSettings );
 
     protected:
         virtual ~ConfigItemImport();
@@ -139,7 +139,7 @@ namespace dbaccess
     class ConfigItemSetImport : public ConfigItemImport
     {
     public:
-        ConfigItemSetImport( ::comphelper::NamedValueCollection& o_rSettings );
+        explicit ConfigItemSetImport( ::comphelper::NamedValueCollection& o_rSettings );
 
     protected:
         virtual ~ConfigItemSetImport();

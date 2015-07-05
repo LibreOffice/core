@@ -68,7 +68,7 @@ namespace dbaccess
         WeakReference< XEventsSupplier >    xDocument;
         Reference< XURLTransformer >        xURLTransformer;
 
-        DocumentEventExecutor_Data( const Reference< XEventsSupplier >& _rxDocument )
+        explicit DocumentEventExecutor_Data( const Reference< XEventsSupplier >& _rxDocument )
             :xDocument( _rxDocument )
         {
         }

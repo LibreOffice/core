@@ -53,7 +53,7 @@ namespace dbmm
     {
         Reference< XInteractionHandler >    xHandler;
 
-        InteractionHandler_Data( const Reference<XComponentContext>& _rContext )
+        explicit InteractionHandler_Data( const Reference<XComponentContext>& _rContext )
             :xHandler( ::com::sun::star::task::InteractionHandler::createWithParent(_rContext, 0), UNO_QUERY )
         {
         }

@@ -225,7 +225,7 @@ namespace dbaccess
     {
         ODocumentDefinition* m_pClient;
     public:
-        OEmbeddedClientHelper(ODocumentDefinition* _pClient) :m_pClient(_pClient) {}
+        explicit OEmbeddedClientHelper(ODocumentDefinition* _pClient) :m_pClient(_pClient) {}
 
         virtual void SAL_CALL saveObject(  ) throw (ObjectSaveVetoException, Exception, RuntimeException, std::exception) SAL_OVERRIDE
         {
@@ -247,7 +247,7 @@ namespace dbaccess
     class LockModifiable
     {
     public:
-        LockModifiable( const Reference< XInterface >& i_rModifiable )
+        explicit LockModifiable( const Reference< XInterface >& i_rModifiable )
             :m_xModifiable( i_rModifiable, UNO_QUERY )
         {
             OSL_ENSURE( m_xModifiable.is(), "LockModifiable::LockModifiable: invalid component!" );
@@ -555,7 +555,7 @@ class OExecuteImpl
 {
     bool& m_rbSet;
 public:
-    OExecuteImpl(bool& _rbSet) : m_rbSet(_rbSet){ m_rbSet=true; }
+    explicit OExecuteImpl(bool& _rbSet) : m_rbSet(_rbSet){ m_rbSet=true; }
     ~OExecuteImpl(){ m_rbSet = false; }
 };
 
@@ -633,7 +633,7 @@ namespace
         awt::Size m_aOriginalSize;
 
     public:
-        inline PreserveVisualAreaSize( const Reference< XModel >& _rxModel )
+        explicit PreserveVisualAreaSize( const Reference< XModel >& _rxModel )
             :m_xVisObject( _rxModel, UNO_QUERY )
         {
             if ( m_xVisObject.is() )
@@ -674,7 +674,7 @@ namespace
         Reference< XLayoutManager > m_xLayoutManager;
 
     public:
-        inline LayoutManagerLock( const Reference< XController >& _rxController )
+        explicit LayoutManagerLock( const Reference< XController >& _rxController )
         {
             OSL_ENSURE( _rxController.is(), "LayoutManagerLock::LayoutManagerLock: this will crash!" );
             Reference< XFrame > xFrame( _rxController->getFrame() );

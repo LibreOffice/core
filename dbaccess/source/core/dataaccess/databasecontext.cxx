@@ -101,7 +101,7 @@ namespace dbaccess
             ::std::list< const ODatabaseModelImpl* >  m_aDatabaseDocuments;
 
         public:
-            DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext);
+            explicit DatabaseDocumentLoader( const Reference<XComponentContext> & rxContext);
 
             inline void append(const ODatabaseModelImpl& _rModelImpl )
             {

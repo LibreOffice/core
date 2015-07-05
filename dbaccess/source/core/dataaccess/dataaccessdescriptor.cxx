@@ -78,7 +78,7 @@ namespace dbaccess
                                 ,public ::comphelper::OPropertyArrayUsageHelper< DataAccessDescriptor >
     {
     public:
-        DataAccessDescriptor( const Reference<XComponentContext> & _rContext );
+        explicit DataAccessDescriptor( const Reference<XComponentContext> & _rContext );
 
         // UNO
         DECLARE_XINTERFACE()
@@ -234,7 +234,7 @@ namespace dbaccess
         virtual Reference< XPropertySet > SAL_CALL createDataAccessDescriptor(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        DataAccessDescriptorFactory( const Reference< XComponentContext >& _rxContext );
+        explicit DataAccessDescriptorFactory( const Reference< XComponentContext >& _rxContext );
         virtual ~DataAccessDescriptorFactory();
 
     private:

@@ -56,7 +56,7 @@ namespace dbmm
     class PreparationPage : public MacroMigrationPage
     {
     public:
-        PreparationPage(vcl::Window *pParent);
+        explicit PreparationPage(vcl::Window *pParent);
         virtual ~PreparationPage();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -73,7 +73,7 @@ namespace dbmm
     class SaveDBDocPage : public MacroMigrationPage
     {
     public:
-        SaveDBDocPage(MacroMigrationDialog& _rParentDialog);
+        explicit SaveDBDocPage(MacroMigrationDialog& _rParentDialog);
         virtual ~SaveDBDocPage();
         virtual void dispose() SAL_OVERRIDE;
         static VclPtr<TabPage> Create( ::svt::RoadmapWizard& _rParentDialog );
@@ -103,7 +103,7 @@ namespace dbmm
     class ProgressPage : public MacroMigrationPage, public IMigrationProgress
     {
     public:
-        ProgressPage(vcl::Window *pParent);
+        explicit ProgressPage(vcl::Window *pParent);
         virtual ~ProgressPage();
         virtual void dispose() SAL_OVERRIDE;
 
@@ -136,7 +136,7 @@ namespace dbmm
     class ResultPage : public MacroMigrationPage
     {
     public:
-        ResultPage(vcl::Window *pParent);
+        explicit ResultPage(vcl::Window *pParent);
         virtual ~ResultPage();
         virtual void dispose() SAL_OVERRIDE;
 

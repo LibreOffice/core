@@ -51,7 +51,7 @@ struct ResultListEntry
     Reference< XRow >                   xRow;
     const ContentProperties&            rData;
 
-    ResultListEntry( const ContentProperties& rEntry ) : rData( rEntry ) {}
+    explicit ResultListEntry(const ContentProperties& rEntry) : rData( rEntry ) {}
 };
 
 // ResultList.

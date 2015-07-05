@@ -257,7 +257,7 @@ namespace
         const ContainerEvent&   m_rEvent;
 
     public:
-        RaiseExceptionFromVeto( ContainerApprovalMethod _pMethod, const ContainerEvent& _rEvent )
+        explicit RaiseExceptionFromVeto( ContainerApprovalMethod _pMethod, const ContainerEvent& _rEvent )
             :m_pMethod( _pMethod )
             ,m_rEvent( _rEvent )
         {

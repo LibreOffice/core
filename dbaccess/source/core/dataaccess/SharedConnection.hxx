@@ -52,7 +52,7 @@ namespace dbaccess
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
         virtual ~OSharedConnection();
     public:
-        OSharedConnection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxProxyConnection);
+        explicit OSharedConnection(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxProxyConnection);
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

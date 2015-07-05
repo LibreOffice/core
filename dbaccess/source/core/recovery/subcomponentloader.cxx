@@ -55,13 +55,13 @@ namespace dbaccess
         const Reference< XComponent >           xNonDocComponent;
         Reference< XWindow >                    xAppComponentWindow;
 
-        SubComponentLoader_Data( const Reference< XCommandProcessor >& i_rDocumentDefinition )
+        explicit SubComponentLoader_Data( const Reference< XCommandProcessor >& i_rDocumentDefinition )
             :xDocDefCommands( i_rDocumentDefinition )
             ,xNonDocComponent()
         {
         }
 
-        SubComponentLoader_Data( const Reference< XComponent >& i_rNonDocumentComponent )
+        explicit SubComponentLoader_Data( const Reference< XComponent >& i_rNonDocumentComponent )
             :xDocDefCommands()
             ,xNonDocComponent( i_rNonDocumentComponent )
         {

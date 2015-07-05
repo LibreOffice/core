@@ -82,7 +82,7 @@ typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame
 class ViewMonitor : public boost::noncopyable
 {
 public:
-    ViewMonitor( DocumentEventNotifier& _rEventNotifier )
+    explicit ViewMonitor( DocumentEventNotifier& _rEventNotifier )
         :m_rEventNotifier( _rEventNotifier )
         ,m_bIsNewDocument( true )
         ,m_bEverHadController( false )
@@ -272,7 +272,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xComponent = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
 
 private:
-    ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
+    explicit ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
     // Do NOT create those documents directly, always use ODatabaseModelImpl::getModel. Reason is that
     // ODatabaseDocument requires clear ownership, and in turn lifetime synchronisation with the ModelImpl.
     // If you create a ODatabaseDocument directly, you might easily create a leak.

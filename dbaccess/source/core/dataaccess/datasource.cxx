@@ -305,7 +305,7 @@ protected:
     virtual ~OSharedConnectionManager();
 
 public:
-    OSharedConnectionManager(const Reference< XComponentContext >& _rxContext);
+    explicit OSharedConnectionManager(const Reference< XComponentContext >& _rxContext);
 
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
     Reference<XConnection> getConnection(   const OUString& url,
@@ -455,7 +455,7 @@ namespace
         const PropertyAttributeCache& m_rAttribs;
 
     public:
-        IsDefaultAndNotRemoveable( const PropertyAttributeCache& _rAttribs ) : m_rAttribs( _rAttribs ) { }
+        explicit IsDefaultAndNotRemoveable( const PropertyAttributeCache& _rAttribs ) : m_rAttribs( _rAttribs ) { }
 
         bool operator()( const PropertyValue& _rProp )
         {
