@@ -98,7 +98,7 @@ SfxPopupWindowType ScTbxInsertCtrl::GetPopupWindowType() const
     return nLastSlotId ? SfxPopupWindowType::ONTIMEOUT : SfxPopupWindowType::ONCLICK;
 }
 
-void ScTbxInsertCtrl::Select( bool /* bMod1 */ )
+void ScTbxInsertCtrl::Select( sal_uInt16 /*nSelectModifier*/ )
 {
     SfxViewShell*   pCurSh( SfxViewShell::Current() );
     SfxDispatcher*  pDispatch( 0 );
