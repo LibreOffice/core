@@ -1297,7 +1297,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
     }
 }
 
-void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void GenericSalLayout::GetCaretPositions( int nMaxIndex, DeviceCoordinate* pCaretXArray ) const
 {
     // initialize result array
     for (int i = 0; i < nMaxIndex; ++i)
@@ -2041,14 +2041,14 @@ DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) co
     return nMaxWidth;
 }
 
-void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void MultiSalLayout::GetCaretPositions( int nMaxIndex, DeviceCoordinate* pCaretXArray ) const
 {
     SalLayout& rLayout = *mpLayouts[ 0 ];
     rLayout.GetCaretPositions( nMaxIndex, pCaretXArray );
 
     if( mnLevel > 1 )
     {
-        long* pTempPos = static_cast<long*>(alloca( nMaxIndex * sizeof(long) ));
+        DeviceCoordinate* pTempPos = static_cast<DeviceCoordinate*>(alloca( nMaxIndex * sizeof(DeviceCoordinate) ));
         for( int n = 1; n < mnLevel; ++n )
         {
             mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos );
@@ -2057,9 +2057,13 @@ void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) cons
             for( int i = 0; i < nMaxIndex; ++i )
                 if( pTempPos[i] >= 0 )
                 {
+#if VCL_FLOAT_DEVICE_PIXEL
+                    pCaretXArray[i] *= fUnitMul;
+#else
                     long w = pTempPos[i];
                     w = static_cast<long>(w*fUnitMul + 0.5);
                     pCaretXArray[i] = w;
+#endif
                 }
         }
     }

@@ -1101,7 +1101,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
 bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
                                       sal_Int32 nIndex, sal_Int32 nLen,
                                       long* pDXAry, long nLayoutWidth,
-                                      bool bCellBreaking ) const
+                                      bool /* bCellBreaking */ ) const
 {
 
     if( nIndex >= rStr.getLength() )
@@ -1116,36 +1116,31 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
         return false;
 
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
-    pSalLayout->GetCaretPositions( 2*nLen, pCaretXArray );
-    long nWidth = pSalLayout->GetTextWidth();
+    DeviceCoordinate* pDCaretXArray = (DeviceCoordinate*)alloca(2*nLen * sizeof(DeviceCoordinate));
+    pSalLayout->GetCaretPositions( 2*nLen, pDCaretXArray );
+
+    DeviceCoordinate nWidth = pSalLayout->GetTextWidth();
     pSalLayout->Release();
 
     // fixup unknown caret positions
     int i;
     for( i = 0; i < 2 * nLen; ++i )
-        if( pCaretXArray[ i ] >= 0 )
+        if( pDCaretXArray[ i ] >= 0 )
             break;
-    long nXPos = pCaretXArray[ i ];
+    DeviceCoordinate nXPos = pDCaretXArray[ i ];
     for( i = 0; i < 2 * nLen; ++i )
     {
-        if( pCaretXArray[ i ] >= 0 )
-            nXPos = pCaretXArray[ i ];
+        if( pDCaretXArray[ i ] >= 0 )
+            nXPos = pDCaretXArray[ i ];
         else
-            pCaretXArray[ i ] = nXPos;
+            pDCaretXArray[ i ] = nXPos;
     }
 
     // handle window mirroring
     if( IsRTLEnabled() )
     {
         for( i = 0; i < 2 * nLen; ++i )
-            pCaretXArray[i] = nWidth - pCaretXArray[i] - 1;
-    }
-
-    // convert from font units to logical units
-    if( mbMap )
-    {
-        for( i = 0; i < 2*nLen; ++i )
-            pCaretXArray[i] = ImplDevicePixelToLogicWidth( pCaretXArray[i] );
+            pDCaretXArray[i] = nWidth - pDCaretXArray[i] - 1;
     }
 
     if( nWidthFactor != 1 )
@@ -1154,10 +1149,16 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
             pCaretXArray[i] /= nWidthFactor;
     }
 
-    // if requested move caret position to cell limits
-    if( bCellBreaking )
+    // convert from font units to logical units
+    if( mbMap )
     {
-        ; // FIXME
+        for( i = 0; i < 2*nLen; ++i )
+            pCaretXArray[i] = ImplDevicePixelToLogicWidth( pDCaretXArray[i] );
+    }
+    else
+    {
+        for( i = 0; i < 2*nLen; ++i )
+            pCaretXArray[i] = vcl::dc_to_long(pDCaretXArray[i] );
     }
 
     return true;
@@ -1695,7 +1696,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
 
                         long* pCaretXArray = static_cast<long*>(alloca( 2 * sizeof(long) * nLineLen ));
                         /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray,
-                                                nIndex, nLineLen );
+                                                                        nIndex, nLineLen );
                         long lc_x1 = pCaretXArray[2*(nMnemonicPos - nIndex)];
                         long lc_x2 = pCaretXArray[2*(nMnemonicPos - nIndex)+1];
                         nMnemonicWidth = rTargetDevice.LogicWidthToDeviceCoordinate( std::abs(lc_x1 - lc_x2) );
@@ -2217,7 +2218,7 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             /*sal_Bool bRet =*/ GetCaretPositions( aStr, pCaretXArray, nIndex, nLen );
             long lc_x1 = pCaretXArray[ 2*(nMnemonicPos - nIndex) ];
             long lc_x2 = pCaretXArray[ 2*(nMnemonicPos - nIndex)+1 ];
-            nMnemonicWidth = ::abs((int)(lc_x1 - lc_x2));
+            nMnemonicWidth = std::abs((lc_x1 - lc_x2));
 
             Point aTempPos( std::min(lc_x1,lc_x2), GetFontMetric().GetAscent() );
             if( bInvalidPos )  // #106952#, place behind the (last) character

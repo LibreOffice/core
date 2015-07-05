@@ -81,7 +81,7 @@ public:
 
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
+    virtual void    GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const;
 
     // for glyph+font+script fallback
     virtual void    MoveGlyph( int nStart, long nNewXPos );
@@ -123,7 +123,7 @@ public:
 
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
+    virtual void    GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const;
     virtual bool    IsKashidaPosValid ( int nCharPos ) const SAL_OVERRIDE;
 
     // for glyph+font+script fallback
@@ -209,7 +209,7 @@ public:
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
 
-    virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
+    virtual void  GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const;
 
     // methods using glyph indexing
     virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,

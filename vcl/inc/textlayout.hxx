@@ -55,7 +55,7 @@ namespace vcl
         virtual ~DefaultTextLayout();
 
         // ITextLayout overridables
-        virtual long        GetTextWidth( const OUString& _rText,
+        virtual long       GetTextWidth( const OUString& _rText,
                                           sal_Int32 _nStartIndex,
                                           sal_Int32 _nLength ) const SAL_OVERRIDE;
 

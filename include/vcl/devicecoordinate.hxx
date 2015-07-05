@@ -17,11 +17,27 @@
 typedef double DeviceCoordinate;
 typedef ::basegfx::B2DPoint DevicePoint;
 
+namespace vcl
+{
+    inline long dc_to_long( DeviceCoordinate fVal )
+    {
+        return fVal > 0.0 ? static_cast<long>( fVal + .5 ) : -static_cast<long>( -fVal + .5 );
+    }
+
+}
 #else /* !VCL_FLOAT_DEVICE_PIXEL */
 
 #include <basegfx/point/b2ipoint.hxx>
 typedef long DeviceCoordinate;
 typedef ::basegfx::B2IPoint DevicePoint;
+
+namespace vcl
+{
+    inline long dc_to_long( DeviceCoordinate val )
+    {
+        return (long)val;
+    }
+}
 
 #endif /* ! Carpet Cushion */
 

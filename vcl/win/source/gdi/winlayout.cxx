@@ -672,7 +672,7 @@ sal_Int32 SimpleWinLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoord
     return -1;
 }
 
-void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
+void SimpleWinLayout::GetCaretPositions( int nMaxIdx, DeviceCoordinate* pCaretXArray ) const
 {
     long nXPos = mnBaseAdv;
 
@@ -2097,7 +2097,7 @@ sal_Int32 UniscribeLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoord
     return -1;
 }
 
-void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
+void UniscribeLayout::GetCaretPositions( int nMaxIdx, DeviceCoordinate* pCaretXArray ) const
 {
     int i;
     for( i = 0; i < nMaxIdx; ++i )
@@ -2679,7 +2679,7 @@ DeviceCoordinate GraphiteWinLayout::FillDXArray( DeviceCoordinate* pDXArray ) co
     return maImpl.FillDXArray(pDXArray);
 }
 
-void GraphiteWinLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) const
+void GraphiteWinLayout::GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const
 {
     maImpl.GetCaretPositions(nArraySize, pCaretXArray);
 }
