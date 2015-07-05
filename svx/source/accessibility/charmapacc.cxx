@@ -625,8 +625,8 @@ SvxShowCharSetItemAcc::~SvxShowCharSetItemAcc()
     delete getExternalLock();
 }
 
-IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_2 )
-IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_2 )
+IMPLEMENT_FORWARD_XINTERFACE2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_3 )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( SvxShowCharSetItemAcc, OAccessibleComponentHelper, OAccessibleHelper_Base_3 )
 
 
 void SvxShowCharSetItemAcc::ParentDestroyed()
@@ -761,6 +761,47 @@ uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSe
 
     return pStateSet;
 }
+
+
+
+sal_Int32 SvxShowCharSetItemAcc::getAccessibleActionCount() throw (RuntimeException, std::exception)
+{
+    return 1;
+}
+
+
+
+sal_Bool SvxShowCharSetItemAcc::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+{
+    OExternalLockGuard aGuard( this );
+
+    if( nIndex == 0 )
+    {
+        mpParent->mrParent.OutputIndex( mpParent->mnId );
+        return 1;
+    }
+    throw IndexOutOfBoundsException();
+}
+
+
+
+OUString SvxShowCharSetItemAcc::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+{
+    if( nIndex == 0 )
+        return OUString( "press" );
+    throw IndexOutOfBoundsException();
+}
+
+
+
+Reference< css::accessibility::XAccessibleKeyBinding > SvxShowCharSetItemAcc::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
+{
+    if( nIndex == 0 )
+        return Reference< css::accessibility::XAccessibleKeyBinding >();
+    throw IndexOutOfBoundsException();
+}
+
+
 
 void SAL_CALL SvxShowCharSetItemAcc::grabFocus()
     throw (uno::RuntimeException, std::exception)

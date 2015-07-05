@@ -662,6 +662,15 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
 
 
 
+void SvxShowCharSet::OutputIndex( int nNewIndex )
+{
+    SelectIndex( nNewIndex, true );
+    aSelectHdl.Call( this );
+
+}
+
+
+
 void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, bool bFocus )
 {
     if (mpFontCharMap == nullptr)

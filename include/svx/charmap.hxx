@@ -65,6 +65,7 @@ public:
     int                         LastInView() const;
     int                         PixelToMapIndex( const Point&) const;
     void                        SelectIndex( int index, bool bFocus = false );
+    void                        OutputIndex( int index );
     void                        DeSelect();
     inline bool                 IsSelected(sal_uInt16 _nPos) const { return _nPos == nSelectedIndex; }
     inline sal_uInt16           GetSelectIndexId() const { return sal::static_int_cast<sal_uInt16>(nSelectedIndex); }
