@@ -23,6 +23,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/image.hxx>
 #include <comphelper/accessibleselectionhelper.hxx>
+#include <com/sun/star/accessibility/XAccessibleAction.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 
 #include <vector>
@@ -209,10 +210,14 @@ namespace svx
 
     // - SvxShowCharSetItemAcc -
 
+    typedef ::cppu::ImplHelper2 <   ::com::sun::star::accessibility::XAccessible,
+                                    ::com::sun::star::accessibility::XAccessibleAction
+                                >   OAccessibleHelper_Base_3;
+
     /** The child implementation of the table.
     */
     class SvxShowCharSetItemAcc : public ::comphelper::OAccessibleComponentHelper,
-                                  public OAccessibleHelper_Base_2
+                                  public OAccessibleHelper_Base_3
     {
     private:
         SvxShowCharSetItem* mpParent;
@@ -251,6 +256,13 @@ namespace svx
 
         virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return mpParent->m_pParent->getForeground(); }
         virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return mpParent->m_pParent->getBackground(); }
+
+        // XAccessibleAction
+        virtual sal_Int32 SAL_CALL getAccessibleActionCount( ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL doAccessibleAction ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::rtl::OUString SAL_CALL getAccessibleActionDescription ( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
 
         inline void SAL_CALL fireEvent(
                     const sal_Int16 _nEventId,
