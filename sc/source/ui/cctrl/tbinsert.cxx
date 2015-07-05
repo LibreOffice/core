@@ -93,7 +93,7 @@ VclPtr<SfxPopupWindow> ScTbxInsertCtrl::CreatePopupWindow()
     return NULL;
 }
 
-void ScTbxInsertCtrl::Select( bool /* bMod1 */ )
+void ScTbxInsertCtrl::Select( sal_uInt16 /*nSelectModifier*/ )
 {
     SfxViewShell*   pCurSh( SfxViewShell::Current() );
     SfxDispatcher*  pDispatch( 0 );
