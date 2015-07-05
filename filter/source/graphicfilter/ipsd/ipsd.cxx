@@ -331,7 +331,7 @@ bool PSDReader::ImplReadHeader()
 bool PSDReader::ImplReadBody()
 {
     sal_uLong       nX, nY;
-    char        nRunCount = 0;
+    signed char nRunCount = 0;
     sal_uInt8       nDat = 0, nDummy, nRed, nGreen, nBlue;
     BitmapColor aBitmapColor;
     nX = nY = 0;
@@ -346,7 +346,11 @@ bool PSDReader::ImplReadBody()
                 if ( nBitCount == -1 )
                 {
                     if ( mbCompression )    // else nRunCount = 0 -> so we use only single raw packets
-                        m_rPSD.ReadChar( nRunCount );
+                    {
+                        char nTmp(0);
+                        m_rPSD.ReadChar(nTmp);
+                        nRunCount = nTmp;
+                    }
                 }
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
@@ -399,7 +403,11 @@ bool PSDReader::ImplReadBody()
             while ( nY < mpFileHeader->nRows )
             {
                 if ( mbCompression )        // else nRunCount = 0 -> so we use only single raw packets
-                    m_rPSD.ReadChar( nRunCount );
+                {
+                    char nTmp(0);
+                    m_rPSD.ReadChar(nTmp);
+                    nRunCount = nTmp;
+                }
 
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
@@ -448,7 +456,12 @@ bool PSDReader::ImplReadBody()
             while ( nY < mpFileHeader->nRows )
             {
                 if ( mbCompression )        // else nRunCount = 0 -> so we use only single raw packets
-                    m_rPSD.ReadChar( nRunCount );
+                {
+                    char nTmp(0);
+                    m_rPSD.ReadChar(nTmp);
+                    nRunCount = nTmp;
+                }
+
 
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
@@ -489,7 +502,12 @@ bool PSDReader::ImplReadBody()
             while ( nY < mpFileHeader->nRows )
             {
                 if ( mbCompression )
-                    m_rPSD.ReadChar( nRunCount );
+                {
+                    char nTmp(0);
+                    m_rPSD.ReadChar(nTmp);
+                    nRunCount = nTmp;
+                }
+
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
                     m_rPSD.ReadUChar( nGreen );
@@ -531,7 +549,12 @@ bool PSDReader::ImplReadBody()
             while ( nY < mpFileHeader->nRows )
             {
                 if ( mbCompression )
-                    m_rPSD.ReadChar( nRunCount );
+                {
+                    char nTmp(0);
+                    m_rPSD.ReadChar(nTmp);
+                    nRunCount = nTmp;
+                }
+
                 if ( nRunCount & 0x80 )     // a run length packet
                 {
                     m_rPSD.ReadUChar( nBlue );
@@ -577,7 +600,11 @@ bool PSDReader::ImplReadBody()
                 while ( nY < mpFileHeader->nRows )
                 {
                     if ( mbCompression )        // else nRunCount = 0 -> so we use only single raw packets
-                        m_rPSD.ReadChar( nRunCount );
+                    {
+                        char nTmp(0);
+                        m_rPSD.ReadChar(nTmp);
+                        nRunCount = nTmp;
+                    }
 
                     if ( nRunCount & 0x80 )     // a run length packet
                     {
@@ -662,7 +689,11 @@ bool PSDReader::ImplReadBody()
         while ( nY < mpFileHeader->nRows )
         {
             if ( mbCompression )        // else nRunCount = 0 -> so we use only single raw packets
-                m_rPSD.ReadChar( nRunCount );
+            {
+                char nTmp(0);
+                m_rPSD.ReadChar(nTmp);
+                nRunCount = nTmp;
+            }
 
             if ( nRunCount & 0x80 )     // a run length packet
             {
