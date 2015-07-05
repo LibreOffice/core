@@ -30,6 +30,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
+#include <osl/endian.h>
 #include <rtl/alloc.h>
 #include <osl/mutex.h>
 #include <osl/doublecheckedlocking.h>
@@ -101,14 +102,72 @@ sal_Int32 rtl_ustr_indexOfAscii_WithLength(
 {
     assert(len >= 0);
     assert(subLen >= 0);
-    if (subLen > 0 && subLen <= len) {
-        sal_Int32 i;
-        for (i = 0; i <= len - subLen; ++i) {
-            if (rtl_ustr_asciil_reverseEquals_WithLength(
-                    str + i, subStr, subLen))
+    if (subLen > 0 && subLen <= len)
+    {
+        char const* start = (char const *)str;
+        char const* end = start + 2 * len;
+        char const* cursor = start;
+
+        while(cursor < end)
+        {
+            /* find a byte in the source that match the fist ascii byte searched */
+            cursor = (char const*)memchr(cursor, *subStr, (size_t)(uintptr_t)(end - cursor));
+            if(!cursor)
             {
-                return i;
+                /* can't find it -> done: not found */
+                break;
             }
+#ifdef OSL_LITENDIAN
+            /* in little endian world if the cursor is odd that means we match the high order byte
+             * of a unicode char -> no good */
+            if(!((uintptr_t)cursor & 1))
+            {
+                /* to really mactch an ascii char the next byte need to be 0 */
+                if(!cursor[1])
+                {
+                    if(cursor + subLen * 2 > end)
+                    {
+                        /* no enough left to actually have a match */
+                        break;
+                    }
+                    /* now it is worth trying a full match */
+                    if (rtl_ustr_asciil_reverseEquals_WithLength(
+                                (sal_Unicode const*)cursor, subStr, subLen))
+                    {
+                        return (sal_Int32)(uintptr_t)(cursor - start) >> 1;
+                    }
+                }
+            }
+#else
+            /* in big endian world if the cursor is even we match a high order bute -> no good */
+            if((uintptr_t)cursor & 1)
+            {
+                /* let's move back to the beginning of the unicode character */
+                cursor -= 1;
+                /* the high order byte of the unicode char must be 0 */
+                if(*cursor)
+                {
+                    if(cursor + subLen * 2 > end)
+                    {
+                        /* no enough left to actually have a match */
+                        break;
+                    }
+                    if (rtl_ustr_asciil_reverseEquals_WithLength(
+                                (sal_Unicode const *)cursor, subStr, subLen))
+                    {
+                        return (sal_Int32)(uintptr_t)(cursor - start) >> 1;
+                    }
+                }
+                else
+                {
+                    /* we need to give back the byte we backed to
+                     * otherwise we should loop endlessly
+                     */
+                    cursor +=1;
+                }
+            }
+#endif
+            cursor += 1;
         }
     }
     return -1;
