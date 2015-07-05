@@ -4537,33 +4537,6 @@ SfxVoidItem InsertRowsAfter FID_INS_ROWS_AFTER
 ]
 
 
-SfxUInt16Item InsObjCtrl SID_TBXCTL_INSOBJ
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
-
 SfxVoidItem JumpToNextCell SID_CURSORENTERDOWN
 ()
 [

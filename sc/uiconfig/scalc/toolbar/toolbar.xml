@@ -20,7 +20,6 @@
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:InsertCtrl" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:InsCellsCtrl" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:InsObjCtrl" toolbar:style="dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:style="dropdown"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AutoFormat"/>

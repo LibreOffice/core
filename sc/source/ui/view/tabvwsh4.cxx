@@ -106,7 +106,6 @@ using namespace com::sun::star;
 
 sal_uInt16 ScTabViewShell::nInsertCtrlState = SID_INSERT_GRAPHIC;
 sal_uInt16 ScTabViewShell::nInsCellsCtrlState = 0;
-sal_uInt16 ScTabViewShell::nInsObjCtrlState = SID_INSERT_DIAGRAM;
 
 void ScTabViewShell::Activate(bool bMDI)
 {
@@ -1849,10 +1848,6 @@ void ScTabViewShell::ExecTbx( SfxRequest& rReq )
             if ( pItem )
                 nInsCellsCtrlState = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
             break;
-        case SID_TBXCTL_INSOBJ:
-            if ( pItem )
-                nInsObjCtrlState = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-            break;
         default:
             OSL_FAIL("Slot im Wald");
     }
@@ -1863,12 +1858,6 @@ void ScTabViewShell::GetTbxState( SfxItemSet& rSet )
 {
     rSet.Put( SfxUInt16Item( SID_TBXCTL_INSERT,   nInsertCtrlState ) );
     rSet.Put( SfxUInt16Item( SID_TBXCTL_INSCELLS, nInsCellsCtrlState ) );
-
-    //  ohne installiertes Chart darf Chart nicht Default sein...
-    if ( nInsObjCtrlState == SID_DRAW_CHART && !SvtModuleOptions().IsChart() )
-        nInsObjCtrlState = SID_INSERT_OBJECT;
-
-    rSet.Put( SfxUInt16Item( SID_TBXCTL_INSOBJ,   nInsObjCtrlState ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

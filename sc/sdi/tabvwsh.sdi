@@ -269,7 +269,6 @@ shell ScTabViewShell
     SID_STATUS_PAGESTYLE    [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_TBXCTL_INSERT       [ ExecMethod = ExecTbx; StateMethod = GetTbxState; ]
     SID_TBXCTL_INSCELLS     [ ExecMethod = ExecTbx; StateMethod = GetTbxState; ]
-    SID_TBXCTL_INSOBJ       [ ExecMethod = ExecTbx; StateMethod = GetTbxState; ]
 
 }
 

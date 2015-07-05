@@ -94,7 +94,6 @@ class ScTabViewShell: public SfxViewShell, public ScDBFunc
 private:
     static sal_uInt16           nInsertCtrlState;
     static sal_uInt16           nInsCellsCtrlState;
-    static sal_uInt16           nInsObjCtrlState;
 
     SvxHtmlOptions          aHTMLOpt;
     ObjectSelectionType     eCurOST;

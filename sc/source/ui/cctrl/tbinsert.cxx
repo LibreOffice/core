@@ -84,11 +84,6 @@ VclPtr<SfxPopupWindow> ScTbxInsertCtrl::CreatePopupWindow()
         OUString aInsertCellsBarResStr( "private:resource/toolbar/insertcellsbar" );
         createAndPositionSubToolBar( aInsertCellsBarResStr );
     }
-    else
-    {
-        OUString aInsertObjectBarResStr( "private:resource/toolbar/insertobjectbar" );
-        createAndPositionSubToolBar( aInsertObjectBarResStr );
-    }
     return NULL;
 }
 

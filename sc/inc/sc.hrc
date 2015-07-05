@@ -616,7 +616,6 @@
 //  slots for toolbox controller in toolbar
 #define SID_TBXCTL_INSERT       (SID_NEW_SLOTS+55)
 #define SID_TBXCTL_INSCELLS     (SID_NEW_SLOTS+56)
-#define SID_TBXCTL_INSOBJ       (SID_NEW_SLOTS+57)
 
 #define SID_DEFINE_COLROWNAMERANGES (SID_NEW_SLOTS+58)
 

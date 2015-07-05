@@ -157,7 +157,6 @@ void ScDLL::Init()
     // Own Controller
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSERT, pMod);
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSCELLS, pMod);
-    ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSOBJ, pMod);
     ScZoomSliderControl ::RegisterControl(SID_PREVIEW_SCALINGFACTOR, pMod);
 
     // SvxToolboxController

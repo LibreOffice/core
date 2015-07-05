@@ -25,6 +25,6 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectStarMath"/>
- <toolbar:toolbaritem xlink:href=".uno:DrawChart" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:DrawChart"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertObject"/>
 </toolbar:toolbar>
