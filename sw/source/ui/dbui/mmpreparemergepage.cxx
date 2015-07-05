@@ -121,7 +121,7 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
     Sequence<Any> vSelection = { makeAny(rConfigItem.GetResultSetPosition()) };
     auto aArgs(::comphelper::InitPropertySequence({
         {"Selection",        makeAny(vSelection)},
-        {"DataSourceNamea",  makeAny(rDBData.sDataSource)},
+        {"DataSourceName",  makeAny(rDBData.sDataSource)},
         {"Command",          makeAny(rDBData.sCommand)},
         {"CommandType",      makeAny(rDBData.nCommandType)},
         {"ActiveConnection", makeAny(rConfigItem.GetConnection().getTyped())},
