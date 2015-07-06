@@ -31,7 +31,7 @@
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
 
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/basemutexhelper.hxx>
@@ -48,7 +48,7 @@
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper7< ::com::sun::star::rendering::XBitmapCanvas,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
                                                ::com::sun::star::rendering::XGraphicDevice,
                                               ::com::sun::star::lang::XMultiServiceFactory,

@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASBITMAP_HXX
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASBITMAP_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
@@ -29,7 +29,7 @@
 
 namespace oglcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XBitmapCanvas,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap > CanvasBitmapBase_Base;
     typedef ::canvas::IntegerBitmapBase<
         canvas::BitmapCanvasBase2<

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_VCL_TEXTLAYOUT_HXX
 #define INCLUDED_CANVAS_SOURCE_VCL_TEXTLAYOUT_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -39,7 +39,7 @@
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XTextLayout,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XTextLayout,
                                                ::com::sun::star::lang::XServiceInfo > TextLayout_Base;
 
     class TextLayout : public ::comphelper::OBaseMutex,

@@ -21,7 +21,7 @@
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
 
-#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
@@ -36,7 +36,7 @@ namespace oglcanvas
 {
     class CanvasCustomSprite;
 
-    typedef ::cppu::WeakComponentImplHelper8< ::com::sun::star::rendering::XSpriteCanvas,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XSpriteCanvas,
                                                 ::com::sun::star::rendering::XGraphicDevice,
                                                 ::com::sun::star::lang::XMultiServiceFactory,
                                                 ::com::sun::star::rendering::XBufferController,

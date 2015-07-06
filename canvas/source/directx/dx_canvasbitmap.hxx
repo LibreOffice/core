@@ -20,8 +20,6 @@
 #ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_CANVASBITMAP_HXX
 #define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_CANVASBITMAP_HXX
 
-#include <cppuhelper/compbase4.hxx>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
@@ -31,7 +29,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <canvas/base/basemutexhelper.hxx>
 #include <canvas/base/integerbitmapbase.hxx>
@@ -47,7 +45,7 @@
 
 namespace dxcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XBitmapCanvas,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
                                                ::com::sun::star::lang::XServiceInfo,
                                                ::com::sun::star::beans::XFastPropertySet >      CanvasBitmapBase_Base;

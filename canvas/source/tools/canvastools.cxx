@@ -52,7 +52,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/instance.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
@@ -220,7 +220,7 @@ namespace canvas
 
         namespace
         {
-            class StandardColorSpace : public cppu::WeakImplHelper1< com::sun::star::rendering::XIntegerBitmapColorSpace >
+            class StandardColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XIntegerBitmapColorSpace >
             {
             private:
                 uno::Sequence< sal_Int8 >  maComponentTags;
@@ -558,7 +558,7 @@ namespace canvas
                 }
             };
 
-            class StandardNoAlphaColorSpace : public cppu::WeakImplHelper1< com::sun::star::rendering::XIntegerBitmapColorSpace >
+            class StandardNoAlphaColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XIntegerBitmapColorSpace >
             {
             private:
                 uno::Sequence< sal_Int8 >  maComponentTags;

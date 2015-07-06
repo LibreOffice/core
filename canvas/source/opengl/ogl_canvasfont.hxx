@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASFONT_HXX
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASFONT_HXX
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
@@ -28,7 +28,7 @@ namespace oglcanvas
 {
     class SpriteCanvas;
 
-    typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::rendering::XCanvasFont > CanvasFontBaseT;
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XCanvasFont > CanvasFontBaseT;
 
     class CanvasFont : public ::comphelper::OBaseMutex,
                        public CanvasFontBaseT,

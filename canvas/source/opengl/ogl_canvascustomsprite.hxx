@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASCUSTOMSPRITE_HXX
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASCUSTOMSPRITE_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -29,7 +29,7 @@
 
 namespace oglcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XCustomSprite,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XCustomSprite,
                                               ::com::sun::star::rendering::XCanvas > CanvasCustomSpriteBase_Base;
     typedef ::canvas::CanvasBase<
          ::canvas::BaseMutexHelper< CanvasCustomSpriteBase_Base >,

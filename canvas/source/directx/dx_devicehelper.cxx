@@ -27,8 +27,6 @@
 #include <tools/diagnose_ex.h>
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase1.hxx>
-
 #include <com/sun/star/lang/NoSupportException.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <basegfx/tools/canvastools.hxx>
