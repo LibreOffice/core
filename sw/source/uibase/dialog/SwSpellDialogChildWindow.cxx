@@ -426,13 +426,9 @@ The code below would only be part of the solution.
                 // take care that the now valid selection is stored
                 LoseFocus();
             }
-
-            // close the spelling dialog
-            GetBindings().GetDispatcher()->Execute(FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
         }
     }
     return aRet;
-
 }
 
 void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rChanged, bool bRecheck)
