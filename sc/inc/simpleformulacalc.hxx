@@ -41,6 +41,7 @@ public:
 
     void Calculate();
     bool IsValue();
+    bool IsMatrix();
     sal_uInt16 GetErrCode();
     double GetValue();
     svl::SharedString GetString();

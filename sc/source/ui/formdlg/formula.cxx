@@ -330,7 +330,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
     }
 
     sal_uInt16 nErrCode = pFCell->GetErrCode();
-    if ( nErrCode == 0 )
+    if ( nErrCode == 0 || pFCell->IsMatrix() )
     {
         SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());
         Color* pColor;

@@ -70,6 +70,11 @@ bool ScSimpleFormulaCalculator::IsValue()
     return maResult.IsValue();
 }
 
+bool ScSimpleFormulaCalculator::IsMatrix()
+{
+    return bIsMatrix;
+}
+
 sal_uInt16 ScSimpleFormulaCalculator::GetErrCode()
 {
     Calculate();

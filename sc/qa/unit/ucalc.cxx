@@ -6483,6 +6483,12 @@ void Test::testFormulaWizardSubformula()
     if ( aFCell.GetErrCode() == 0 )
         CPPUNIT_ASSERT_EQUAL( OUString("{1, #DIV/0!, #NAME!}"), aFCell.GetString().getString() );
 
+    m_pDoc->SetString(ScAddress(0,1,0), "=NA()");       // B0
+    m_pDoc->SetString(ScAddress(1,1,0), "2");           // B1
+    m_pDoc->SetString(ScAddress(2,1,0), "=1+2");        // B2
+    if ( aFCell.GetErrCode() == 0 )
+        CPPUNIT_ASSERT_EQUAL(OUString("{#N/A, 2, 3}"), aFCell.GetString().getString());
+
     m_pDoc->DeleteTab(0);
 }
 
