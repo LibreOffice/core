@@ -1998,8 +1998,6 @@ void SdrTextObj::onChainingEvent()
     EditingTextChainFlow aTxtChainFlow(this);
     aTxtChainFlow.CheckForFlowEvents(pEdtOutl);
 
-    // We prevent to trigger further handling of overflow/underflow for this SdrTextObj
-    GetTextChain()->SetNilChainingEvent(this, true);
 
     if (aTxtChainFlow.IsOverflow()) {
         fprintf(stderr, "[CHAINING] Overflow going on\n");
