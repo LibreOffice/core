@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/solar.hrc>
 #include <tools/debug.hxx>
@@ -46,15 +45,21 @@ struct BasicDLL::Impl
     { }
 };
 
+namespace {
+
+BasicDLL * BASIC_DLL;
+
+}
+
 BasResId::BasResId( sal_uInt32 nId ) :
-    ResId( nId, *(BASIC_DLL()->GetBasResMgr()) )
+    ResId( nId, *(BASIC_DLL->GetBasResMgr()) )
 {
 }
 
 BasicDLL::BasicDLL()
     : m_xImpl(new Impl)
 {
-    BASIC_DLL() = this;
+    BASIC_DLL = this;
 }
 
 BasicDLL::~BasicDLL()
@@ -65,7 +70,7 @@ ResMgr* BasicDLL::GetBasResMgr() const { return m_xImpl->xBasResMgr.get(); }
 
 void BasicDLL::EnableBreak( bool bEnable )
 {
-    BasicDLL* pThis = BASIC_DLL();
+    BasicDLL* pThis = BASIC_DLL;
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
@@ -75,7 +80,7 @@ void BasicDLL::EnableBreak( bool bEnable )
 
 void BasicDLL::SetDebugMode( bool bDebugMode )
 {
-    BasicDLL* pThis = BASIC_DLL();
+    BasicDLL* pThis = BASIC_DLL;
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
@@ -86,7 +91,7 @@ void BasicDLL::SetDebugMode( bool bDebugMode )
 
 void BasicDLL::BasicBreak()
 {
-    BasicDLL* pThis = BASIC_DLL();
+    BasicDLL* pThis = BASIC_DLL;
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
@@ -106,7 +111,7 @@ void BasicDLL::BasicBreak()
 
 SbxAppData& GetSbxData_Impl()
 {
-    return *BASIC_DLL()->m_xImpl->xSbxAppData;
+    return *BASIC_DLL->m_xImpl->xSbxAppData;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -47,7 +47,7 @@
 //20 (SHL_IDE) removed
 //21 (SHL_EDIT) removed
 //22 (SHL_VCED) removed
-#define SHL_BASIC       23
+//23 (SHL_BASIC) removed
 //24 (SHL_HELP) removed
 //25 (SHL_LNKCCH) removed
 //26 (SHL_CHANNEL) removed
