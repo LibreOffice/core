@@ -181,7 +181,7 @@ private:
 
     struct S { char c[2]; };
 
-#if defined _MSC_VER
+#if defined _MSC_VER && _MSC_VER < 1800
     static char f(T2 *, long);
     static S f(T1 * const &, int);
 #else
@@ -190,8 +190,8 @@ private:
 #endif
 
     struct H {
-        H(); // avoid C2514 "class has no constructors" from MSVC 2008
-#if defined _MSC_VER
+        H(); // avoid C2514 "class has no constructors" from MSVC
+#if defined _MSC_VER && _MSC_VER < 1800
         operator T1 * const & () const;
 #else
         operator T1 * () const;
