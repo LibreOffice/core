@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_9122b7b8",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1014,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-06T19:24:30Z",
+      "side": 1,
+      "message": "these numbers need to be sal_Int32(5) to build on Windows because C++ overloading is just awful...",
+      "revId": "876c1b1665ab218516a39e593d98761bee9fb755",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
