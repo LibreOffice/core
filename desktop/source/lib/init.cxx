@@ -26,8 +26,9 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/bootstrap.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/uri.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/lok.hxx>
@@ -165,19 +166,21 @@ static OUString getUString(const char* pString)
 static OUString getAbsoluteURL(const char* pURL)
 {
     OUString aURL(getUString(pURL));
-
-    // return unchanged if it likely is an URL already
-    if (aURL.indexOf("://") > 0)
+    if (aURL.isEmpty())
         return aURL;
 
-    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
-
     // convert relative paths to absolute ones
-    osl_getProcessWorkingDir(&sWorkingDir.pData);
-    osl::FileBase::getFileURLFromSystemPath( aURL, sDocPathUrl );
-    osl::FileBase::getAbsoluteFileURL(sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
+    OUString aWorkingDir;
+    osl_getProcessWorkingDir(&aWorkingDir.pData);
 
-    return sAbsoluteDocUrl;
+    try {
+        return rtl::Uri::convertRelToAbs(aWorkingDir + "/", aURL);
+    }
+    catch (const rtl::MalformedUriException &)
+    {
+    }
+
+    return OUString();
 }
 
 extern "C"
@@ -349,6 +352,12 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     SolarMutexGuard aGuard;
 
     OUString aURL(getAbsoluteURL(pURL));
+    if (aURL.isEmpty())
+    {
+        pLib->maLastExceptionMsg = "Filename to load was not provided.";
+        SAL_INFO("lok", "URL for load is empty");
+        return NULL;
+    }
 
     pLib->maLastExceptionMsg.clear();
 
@@ -415,6 +424,12 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
     OUString sFormat = getUString(pFormat);
     OUString aURL(getAbsoluteURL(sUrl));
+    if (aURL.isEmpty())
+    {
+        gImpl->maLastExceptionMsg = "Filename to save to was not provided.";
+        SAL_INFO("lok", "URL for save is empty");
+        return false;
+    }
 
     try
     {
