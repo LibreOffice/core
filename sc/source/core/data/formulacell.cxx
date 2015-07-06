@@ -850,6 +850,9 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
         pCode->AdjustAbsoluteRefs( rCell.pDocument, rCell.aPos, aPos, false, bCopyBetweenDocs );
     }
 
+    if (!pDocument->IsClipOrUndo())
+        pCode->AdjustReferenceOnCopy( aPos);
+
     if ( nCloneFlags & SC_CLONECELL_ADJUST3DREL )
         pCode->ReadjustRelative3DReferences( rCell.aPos, aPos );
 

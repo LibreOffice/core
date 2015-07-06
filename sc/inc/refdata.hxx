@@ -104,6 +104,9 @@ public:
     SCCOL Col() const;
     SCTAB Tab() const;
 
+    /** Adjust ordering (front-top-left/rear-bottom-right) to a new position. */
+    static void PutInOrder( ScSingleRefData& rRef1, ScSingleRefData& rRef2, const ScAddress& rPos );
+
     bool operator==( const ScSingleRefData& ) const;
     bool operator!=( const ScSingleRefData& ) const;
 
@@ -161,7 +164,13 @@ struct ScComplexRefData
     }
 
     SC_DLLPUBLIC ScRange toAbs( const ScAddress& rPos ) const;
+
+    /** Set a new range, assuming that the ordering of the range matches the
+        ordering of the reference data flags already set. */
     void SetRange( const ScRange& rRange, const ScAddress& rPos );
+
+    /** Adjust ordering (front-top-left/rear-bottom-right) to a new position. */
+    void PutInOrder( const ScAddress& rPos );
 
     inline bool operator==( const ScComplexRefData& r ) const
         { return Ref1 == r.Ref1 && Ref2 == r.Ref2; }
