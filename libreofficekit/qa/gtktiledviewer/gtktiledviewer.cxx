@@ -41,6 +41,7 @@ std::map<std::string, GtkToolItem*> g_aCommandNameToolItems;
 bool g_bToolItemBroadcast = true;
 static GtkWidget* pVBox;
 static GtkComboBoxText* pPartSelector;
+static GtkWidget* pPartModeComboBox;
 /// Should the part selector avoid calling lok::Document::setPart()?
 static bool g_bPartSelectorBroadcast = true;
 GtkWidget* pFindbar;
@@ -291,6 +292,7 @@ static void signalSearch(LOKDocView* /*pLOKDocView*/, char* /*pPayload*/, gpoint
     gtk_label_set_text(GTK_LABEL(pFindbarLabel), "Search key not found");
 }
 
+
 static void signalPart(LOKDocView* /*pLOKDocView*/, int nPart, gpointer /*pData*/)
 {
     g_bPartSelectorBroadcast = false;
@@ -381,6 +383,28 @@ static void changePartMode( GtkWidget* pSelector, gpointer /* pItem */ )
     }
 }
 
+static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpointer /*userdata*/)
+{
+    LOKDocView* pDocView1 = LOK_DOC_VIEW (source_object);
+    GError* error = NULL;
+    GList *focusChain = NULL;
+
+    if (!lok_doc_view_open_document_finish(pDocView1, res, &error))
+    {
+        g_warning ("Error occurred while opening the document : %s", error->message);
+        g_error_free (error);
+    }
+
+    populatePartSelector();
+    populatePartModeSelector( GTK_COMBO_BOX_TEXT(pPartModeComboBox) );
+    // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
+    g_signal_connect(G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
+    g_signal_connect(G_OBJECT(pPartSelector), "changed", G_CALLBACK(changePart), 0);
+
+    focusChain = g_list_append( focusChain, pDocView1 );
+    gtk_container_set_focus_chain ( GTK_CONTAINER (pVBox), focusChain );
+}
+
 int main( int argc, char* argv[] )
 {
     if( argc < 3 ||
@@ -436,7 +460,7 @@ int main( int argc, char* argv[] )
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pSeparator2, -1);
 
     GtkToolItem* pPartModeSelectorToolItem = gtk_tool_item_new();
-    GtkWidget* pPartModeComboBox = gtk_combo_box_text_new();
+    pPartModeComboBox = gtk_combo_box_text_new();
     gtk_container_add( GTK_CONTAINER(pPartModeSelectorToolItem), pPartModeComboBox );
     gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pPartModeSelectorToolItem, -1 );
 
@@ -543,21 +567,7 @@ int main( int argc, char* argv[] )
     // Hide the findbar by default.
     gtk_widget_hide(pFindbar);
 
-    int bOpened = lok_doc_view_open_document( LOK_DOC_VIEW(pDocView), argv[2] );
-    if (!bOpened)
-        g_error("main: lok_doc_view_open_document() failed");
-    assert(lok_doc_view_get_document(LOK_DOC_VIEW(pDocView)));
-
-    populatePartSelector();
-    populatePartModeSelector( GTK_COMBO_BOX_TEXT(pPartModeComboBox) );
-    // Connect these signals after populating the selectors, to avoid re-rendering on setting the default part/partmode.
-    g_signal_connect(G_OBJECT(pPartModeComboBox), "changed", G_CALLBACK(changePartMode), 0);
-    g_signal_connect(G_OBJECT(pPartSelector), "changed", G_CALLBACK(changePart), 0);
-
-    // Make only LOKDocView widget as focussable
-    GList *focusChain = NULL;
-    focusChain = g_list_append( focusChain, pDocView );
-    gtk_container_set_focus_chain ( GTK_CONTAINER (pVBox), focusChain );
+    lok_doc_view_open_document( LOK_DOC_VIEW(pDocView), argv[2], NULL, openDocumentCallback, pDocView );
 
     gtk_main();
 

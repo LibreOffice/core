@@ -45,8 +45,15 @@ GtkWidget*                     lok_doc_view_new                    (const gchar*
                                                                     GCancellable *cancellable,
                                                                     GError **error);
 
-gboolean                       lok_doc_view_open_document          (LOKDocView* pDocView,
-                                                                    const gchar* pPath);
+void                           lok_doc_view_open_document          (LOKDocView* pDocView,
+                                                                    const gchar* pPath,
+                                                                    GCancellable* cancellable,
+                                                                    GAsyncReadyCallback callback,
+                                                                    gpointer userdata);
+
+gboolean                       lok_doc_view_open_document_finish   (LOKDocView* pDocView,
+                                                                    GAsyncResult* res,
+                                                                    GError** error);
 
 /// Gets the document the viewer displays.
 LibreOfficeKitDocument*        lok_doc_view_get_document           (LOKDocView* pDocView);

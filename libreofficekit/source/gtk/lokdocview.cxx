@@ -108,8 +108,6 @@ struct _LOKDocViewPrivate
 
 enum
 {
-    LOAD_CHANGED,
-    LOAD_FAILED,
     EDIT_CHANGED,
     COMMAND_CHANGED,
     SEARCH_NOT_FOUND,
@@ -337,19 +335,23 @@ static gboolean
 globalCallback (gpointer pData)
 {
     CallbackData* pCallback = static_cast<CallbackData*>(pData);
+    LOKDocViewPrivate* priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pCallback->m_pDocView));
 
     switch (pCallback->m_nType)
     {
     case LOK_CALLBACK_STATUS_INDICATOR_START:
     {
+        priv->m_nLoadProgress = 0;
     }
     break;
     case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
     {
+        priv->m_nLoadProgress = std::stoi(pCallback->m_aPayload);
     }
     break;
     case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
     {
+        priv->m_nLoadProgress = 100;
     }
     break;
     default:
@@ -1389,15 +1391,30 @@ lok_doc_view_new (const gchar* pPath, GCancellable *cancellable, GError **error)
 }
 
 /**
- * lok_doc_view_open_document:
+ * lok_doc_view_open_document_finish:
  * @pDocView: The #LOKDocView instance
- * @pPath: The path of the document that #LOKDocView widget should try to open
+ * @res:
+ * @error:
  *
  * Returns: %TRUE if the document is loaded succesfully, %FALSE otherwise
  */
 SAL_DLLPUBLIC_EXPORT gboolean
-lok_doc_view_open_document (LOKDocView* pDocView, const gchar* pPath)
+lok_doc_view_open_document_finish (LOKDocView* pDocView, GAsyncResult* res, GError** error)
 {
+    GTask* task = G_TASK(res);
+
+    g_return_val_if_fail(g_task_is_valid(res, pDocView), NULL);
+    //FIXME: make source_tag workx
+    //g_return_val_if_fail(g_task_get_source_tag(task) == lok_doc_view_open_document, NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
+
+    return g_task_propagate_boolean(task, error);
+}
+
+static void
+lok_doc_view_open_document_func (GTask* task, gpointer source_object, gpointer task_data, GCancellable* cancellable)
+{
+    LOKDocView* pDocView = LOK_DOC_VIEW(source_object);
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
 
     if ( priv->m_pDocument )
@@ -1407,13 +1424,13 @@ lok_doc_view_open_document (LOKDocView* pDocView, const gchar* pPath)
     }
 
     priv->m_pOffice->pClass->registerCallback(priv->m_pOffice, globalCallbackWorker, pDocView);
-    priv->m_pDocument = priv->m_pOffice->pClass->documentLoad( priv->m_pOffice, pPath );
+    priv->m_pDocument = priv->m_pOffice->pClass->documentLoad( priv->m_pOffice, priv->m_aDocPath );
     if ( !priv->m_pDocument )
     {
         // FIXME: should have a GError parameter and populate it.
         char *pError = priv->m_pOffice->pClass->getError( priv->m_pOffice );
         fprintf( stderr, "Error opening document '%s'\n", pError );
-        return FALSE;
+        g_task_return_new_error(task, 0, 0, pError);
     }
     else
     {
@@ -1438,8 +1455,34 @@ lok_doc_view_open_document (LOKDocView* pDocView, const gchar* pPath)
                                     nDocumentHeightPixels);
         gtk_widget_set_can_focus(GTK_WIDGET(pDocView), TRUE);
         gtk_widget_grab_focus(GTK_WIDGET(pDocView));
+        g_task_return_boolean (task, true);
     }
-    return TRUE;
+}
+
+/**
+ * lok_doc_view_open_document:
+ * @pDocView: The #LOKDocView instance
+ * @pPath: The path of the document that #LOKDocView widget should try to open
+ *
+ * Returns: %TRUE if the document is loaded succesfully, %FALSE otherwise
+ */
+SAL_DLLPUBLIC_EXPORT void
+lok_doc_view_open_document (LOKDocView* pDocView,
+                            const gchar* pPath,
+                            GCancellable* cancellable,
+                            GAsyncReadyCallback callback,
+                            gpointer userdata)
+{
+    GTask *task;
+    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    priv->m_aDocPath = g_strdup(pPath);
+
+    task = g_task_new(pDocView, cancellable, callback, userdata);
+    // FIXME: Use source_tag to check the task.
+    //g_task_set_source_tag(task, lok_doc_view_open_document);
+
+    g_task_run_in_thread(task, lok_doc_view_open_document_func);
+    g_object_unref(task);
 }
 
 /**
