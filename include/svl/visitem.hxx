@@ -71,8 +71,6 @@ public:
     OUString GetValueTextByVal(bool bTheValue) const;
 
     bool GetValue() const { return m_nValue.bVisible; }
-
-    void SetValue(bool bVisible) { m_nValue.bVisible = bVisible; }
 };
 
 #endif // INCLUDED_SVL_VISITEM_HXX

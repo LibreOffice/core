@@ -247,7 +247,6 @@ public:
     sal_uInt16          GetPositiveFormat() const   { return nPositiveFormat; }
     sal_uInt16          GetNegativeFormat() const   { return nNegativeFormat; }
     sal_uInt16          GetDigits() const           { return nDigits; }
-    sal_Unicode         GetZeroChar() const         { return cZeroChar; }
 
                         /** [$DM-407] (bBank==false) or [$DEM] (bBank==true)
                             is returned. If bBank==false and
@@ -601,9 +600,6 @@ public:
         entries merge table to ::std::map with old index key and new index key.
         @ATTENTION! Also clears the old table using ClearMergeTable() */
     SvNumberFormatterMergeMap ConvertMergeTableToMap();
-
-    /// Return the last used position ever of a language/country combination
-    sal_uInt16 GetLastInsertKey(sal_uInt32 CLOffset);
 
     /** Return the format index of a builtin format for a specific language/country.
         If nFormat is not a builtin format nFormat is returned. */

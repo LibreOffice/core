@@ -48,17 +48,6 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
 }
 
 // virtual
-int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith,
-                                    IntlWrapper const & rIntlWrapper)
-    const
-{
-    DBG_ASSERT(rWith.ISA(CntUnencodedStringItem),
-               "CntUnencodedStringItem::Compare(): Bad type");
-    return rIntlWrapper.getCollator()->compareString( m_aValue,
-        static_cast< CntUnencodedStringItem const * >(&rWith)->m_aValue );
-}
-
-// virtual
 bool CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
                                         SfxMapUnit, OUString & rText,
                                         const IntlWrapper *) const

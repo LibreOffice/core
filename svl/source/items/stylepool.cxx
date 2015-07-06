@@ -292,7 +292,6 @@ namespace {
               mbSkipIgnorable( bSkipIgnorable )
         {}
         virtual StylePool::SfxItemSet_Pointer_t getNext() SAL_OVERRIDE;
-        virtual OUString getName() SAL_OVERRIDE;
     };
 
     StylePool::SfxItemSet_Pointer_t Iterator::getNext()
@@ -325,16 +324,6 @@ namespace {
             }
         }
         return pReturn;
-    }
-
-    OUString Iterator::getName()
-    {
-        OUString aString;
-        if( mpNode && mpNode->hasItemSet( false ) )
-        {
-            aString = StylePool::nameOf( mpNode->getUsedOrLastAddedItemSet() );
-        }
-        return aString;
     }
 
 }
@@ -386,7 +375,6 @@ public:
     // #i86923#
     IStylePoolIteratorAccess* createIterator( bool bSkipUnusedItemSets = false,
                                               bool bSkipIgnorableItems = false );
-    sal_Int32 getCount() const { return mnCount; }
 };
 
 StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& rSet )
@@ -478,9 +466,6 @@ IStylePoolIteratorAccess* StylePool::createIterator( const bool bSkipUnusedItemS
 {
     return pImpl->createIterator( bSkipUnusedItemSets, bSkipIgnorableItems );
 }
-
-sal_Int32 StylePool::getCount() const
-{ return pImpl->getCount(); }
 
 StylePool::~StylePool() { delete pImpl; }
 

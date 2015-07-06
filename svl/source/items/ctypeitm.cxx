@@ -121,16 +121,6 @@ void CntContentTypeItem::SetValue( const OUString& rNewVal )
     CntUnencodedStringItem::SetValue( rNewVal );
 }
 
-int CntContentTypeItem::Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const
-{
-    OUString aOwnText, aWithText;
-    GetPresentation( SFX_ITEM_PRESENTATION_NAMELESS,
-                     SFX_MAPUNIT_APPFONT, SFX_MAPUNIT_APPFONT, aOwnText, &rIntlWrapper );
-    rWith.GetPresentation( SFX_ITEM_PRESENTATION_NAMELESS,
-                           SFX_MAPUNIT_APPFONT, SFX_MAPUNIT_APPFONT, aWithText, &rIntlWrapper );
-    return rIntlWrapper.getCollator()->compareString( aOwnText, aWithText );
-}
-
 bool CntContentTypeItem::GetPresentation(
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreMetric,

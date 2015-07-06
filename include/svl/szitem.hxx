@@ -52,11 +52,6 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
-
-    const Size&             GetValue() const { return aVal; }
-    void                    SetValue( const Size& rNewVal ) {
-                                 DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
-                                 aVal = rNewVal; }
 };
 
 #endif

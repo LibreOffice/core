@@ -32,7 +32,6 @@
 #define SFX_REC_PRE(n) ( ((n) & 0x000000FF) )
 #define SFX_REC_OFS(n) ( ((n) & 0xFFFFFF00) >> 8 )
 #define SFX_REC_TYP(n) ( ((n) & 0x000000FF) )
-#define SFX_REC_VER(n) ( ((n) & 0x0000FF00) >> 8 )
 #define SFX_REC_TAG(n) ( ((n) & 0xFFFF0000) >> 16 )
 
 #define SFX_REC_CONTENT_VER(n) ( ((n) & 0x000000FF) )
@@ -221,37 +220,6 @@ SfxSingleRecordWriter::SfxSingleRecordWriter(sal_uInt8  nRecordType,
     // write extend header after the SfxMiniRec
     lclWriteHeader(pStream, nRecordType, nContentTag, nContentVer);
 }
-
-/**
- *
- * Internal method for reading an SfxMultiRecord header, after
- * the base class has been initialized and its header has been read.
- * Set an error code on the stream if needed, but don't seek back
- * in case of error.
- */
-inline bool SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
-{
-    bool bRet;
-
-    // read header of the base class
-    sal_uInt32 nHeader=0;
-    _pStream->ReadUInt32( nHeader );
-    if ( !SetHeader_Impl( nHeader ) )
-        bRet = false;
-    else
-    {
-        // read own header
-        _pStream->ReadUInt32( nHeader );
-        _nRecordVer = sal::static_int_cast< sal_uInt8 >(SFX_REC_VER(nHeader));
-        _nRecordTag = sal::static_int_cast< sal_uInt16 >(SFX_REC_TAG(nHeader));
-
-        // wrong record type?
-        _nRecordType = sal::static_int_cast< sal_uInt8 >(SFX_REC_TYP(nHeader));
-        bRet = 0 != ( nTypes & _nRecordType);
-    }
-    return bRet;
-}
-
 
 /**
  *

@@ -48,9 +48,6 @@ public:
 
     virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
-    virtual int Compare(SfxPoolItem const & rWith,
-                        IntlWrapper const & rIntlWrapper) const SAL_OVERRIDE;
-
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,

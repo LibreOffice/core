@@ -170,7 +170,6 @@ public:
     bool                     operator!=( const SfxPoolItem& rItem ) const
                              { return !(*this == rItem); }
     virtual int              Compare( const SfxPoolItem &rWith ) const;
-    virtual int              Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const;
 
     /**  @return true if it has a valid string representation */
     virtual bool             GetPresentation( SfxItemPresentation ePresentation,
@@ -270,7 +269,6 @@ public:
 
     // create a copy of itself
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-            void            SetWhich(sal_uInt16 nWh) { m_nWhich = nWh; }
 };
 
 class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem

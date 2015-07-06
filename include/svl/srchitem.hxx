@@ -136,9 +136,6 @@ public:
             bool            GetPattern() const { return m_bPattern; }
             void            SetPattern(bool bNewPattern) { m_bPattern = bNewPattern; }
 
-            bool            IsContent() const { return m_bContent; }
-            void            SetContent( bool bNew ) { m_bContent = bNew; }
-
             SfxStyleFamily  GetFamily() const { return m_eFamily; }
             void            SetFamily( SfxStyleFamily eNewFamily )
                                 { m_eFamily = eNewFamily; }

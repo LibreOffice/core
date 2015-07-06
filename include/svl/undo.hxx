@@ -177,7 +177,6 @@ public:
     virtual void resetAll() = 0;
     virtual void listActionEntered( const OUString& i_comment ) = 0;
     virtual void listActionLeft( const OUString& i_comment ) = 0;
-    virtual void listActionLeftAndMerged() = 0;
     virtual void listActionCancelled() = 0;
     virtual void undoManagerDying() = 0;
 

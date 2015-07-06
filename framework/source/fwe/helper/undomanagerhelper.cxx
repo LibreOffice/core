@@ -246,7 +246,6 @@ namespace framework
         virtual void resetAll() SAL_OVERRIDE;
         virtual void listActionEntered( const OUString& i_comment ) SAL_OVERRIDE;
         virtual void listActionLeft( const OUString& i_comment ) SAL_OVERRIDE;
-        virtual void listActionLeftAndMerged() SAL_OVERRIDE;
         virtual void listActionCancelled() SAL_OVERRIDE;
         virtual void undoManagerDying() SAL_OVERRIDE;
 
@@ -838,20 +837,6 @@ namespace framework
             return;
 
         notify( i_comment, &XUndoManagerListener::leftContext );
-    }
-
-    void UndoManagerHelper_Impl::listActionLeftAndMerged()
-    {
-#if OSL_DEBUG_LEVEL > 0
-        const bool bCurrentContextIsAPIContext = m_aContextAPIFlags.top();
-        m_aContextAPIFlags.pop();
-        OSL_ENSURE( bCurrentContextIsAPIContext == m_bAPIActionRunning, "UndoManagerHelper_Impl::listActionLeftAndMerged: API and non-API contexts interwoven!" );
-#endif
-
-        if ( m_bAPIActionRunning )
-            return;
-
-        notify( &XUndoManagerListener::leftHiddenContext );
     }
 
     void UndoManagerHelper_Impl::listActionCancelled()

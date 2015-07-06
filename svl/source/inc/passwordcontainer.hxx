@@ -403,8 +403,6 @@ public:
 
     RW_SvMemoryStream( sal_uLong InitSize=512, sal_uLong Resize=64 ):
             SvMemoryStream( InitSize, Resize ){}
-
-    sal_uLong getActualSize(){ return nEndOfData; }
 };
 
 

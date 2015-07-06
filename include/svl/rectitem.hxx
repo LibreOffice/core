@@ -49,10 +49,6 @@ public:
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
 
     const Rectangle&         GetValue() const { return aVal; }
-            void             SetValue( const Rectangle& rNewVal ) {
-                                 DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
-                                 aVal = rNewVal;
-                             }
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal,
                                           sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
