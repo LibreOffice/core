@@ -494,10 +494,9 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
     if(pTextEditOutliner )
     {
         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( mxTextEditObj.get() );
-        if( pTextObj )
+        OutlinerView* pOLV = GetTextEditOutlinerView();
+        if( pTextObj && pOLV)
         {
-            OutlinerView* pOLV = GetTextEditOutlinerView();
-            assert(pOLV);
             // Save previous selection pos
             ESelection aPreChainingSel(pOLV->GetSelection());
 
@@ -519,6 +518,9 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
 
             pOLV->SetSelection(aPreChainingSel);
 
+        } else {
+            // XXX
+            fprintf(stderr, "[OnChaining] No Edit Outliner View\n");
         }
     }
     return 0;
@@ -953,6 +955,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             pTEOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
             pTEOutliner->SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
             pTEOutliner->SetEndPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
+
+            pTEOutliner->SetChainingEventHdl(Link<>());
 
             const bool bUndo = IsUndoEnabled();
             if( bUndo )
