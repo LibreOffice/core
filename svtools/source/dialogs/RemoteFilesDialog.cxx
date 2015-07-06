@@ -317,6 +317,9 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_pContainer->Show();
     m_pContainer->Enable( false );
 
+    m_pName_ed->SetGetFocusHdl( LINK( this, RemoteFilesDialog, FileNameGetFocusHdl ) );
+    m_pName_ed->SetModifyHdl( LINK( this, RemoteFilesDialog, FileNameModifyHdl ) );
+
     m_pAddService_btn->SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
     m_pAddService_btn->SetClickHdl( LINK( this, RemoteFilesDialog, AddServiceHdl ) );
     m_pAddService_btn->SetSelectHdl( LINK( this, RemoteFilesDialog, EditServiceMenuHdl ) );
@@ -675,6 +678,24 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
         m_sPath = "";
         m_pName_ed->SetText( "" );
     }
+
+    return 1;
+}
+
+IMPL_LINK_NOARG( RemoteFilesDialog, FileNameGetFocusHdl )
+{
+    m_pFileView->SetNoSelection();
+    return 1;
+}
+
+IMPL_LINK_NOARG( RemoteFilesDialog, FileNameModifyHdl )
+{
+    m_pFileView->SetNoSelection();
+
+    if( !m_pName_ed->GetText().isEmpty() )
+        m_pOpen_btn->Enable( true );
+    else
+        m_pOpen_btn->Enable( false );
 
     return 1;
 }

@@ -160,6 +160,9 @@ private:
     DECL_LINK( DoubleClickHdl, void * );
     DECL_LINK( SelectHdl, void * );
 
+    DECL_LINK( FileNameGetFocusHdl, void * );
+    DECL_LINK( FileNameModifyHdl, void * );
+
     DECL_LINK( SplitHdl, void * );
 
     DECL_LINK( SelectFilterHdl, void * );
