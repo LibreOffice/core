@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_91ce3759",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T13:15:51Z",
+      "side": 1,
+      "message": "this can go again",
+      "revId": "3bab59df9c79595818d8c946d9850e635b4c507b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_f103eb74",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T13:15:51Z",
+      "side": 1,
+      "message": "variable start is redundant",
+      "revId": "3bab59df9c79595818d8c946d9850e635b4c507b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_51d8bf1d",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T13:15:51Z",
+      "side": 1,
+      "message": "* need to #include \u003cstring\u003e for std::char_traits\n\n* use std::char_traits\u003cchar16_t\u003e (and appropriate casting; you can static_cast the assumption that sizeof (char16_t) \u003d\u003d sizeof (sal_Unicode) for clearliness); there should be no specialization for sal_Unicode",
+      "revId": "3bab59df9c79595818d8c946d9850e635b4c507b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_31dbc31d",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T13:15:51Z",
+      "side": 1,
+      "message": "don\u0027t use C-style casts",
+      "revId": "3bab59df9c79595818d8c946d9850e635b4c507b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
