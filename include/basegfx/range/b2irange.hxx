@@ -178,48 +178,12 @@ namespace basegfx
                 );
         }
 
-        /// return center point of set. returns (0,0) for empty sets.
-        B2DPoint getCenter() const
-        {
-            return B2DPoint(
-                maRangeX.getCenter(),
-                maRangeY.getCenter()
-                );
-        }
-
         /// yields true if given point is contained in set
         bool isInside(const B2ITuple& rTuple) const
         {
             return (
                 maRangeX.isInside(rTuple.getX())
                 && maRangeY.isInside(rTuple.getY())
-                );
-        }
-
-        /// yields true if rRange is inside, or equal to set
-        bool isInside(const B2IRange& rRange) const
-        {
-            return (
-                maRangeX.isInside(rRange.maRangeX)
-                && maRangeY.isInside(rRange.maRangeY)
-                );
-        }
-
-        /// yields true if rRange at least partly inside set
-        bool overlaps(const B2IRange& rRange) const
-        {
-            return (
-                maRangeX.overlaps(rRange.maRangeX)
-                && maRangeY.overlaps(rRange.maRangeY)
-                );
-        }
-
-        /// yields true if overlaps(rRange) does, and the overlap is larger than infinitesimal
-        bool overlapsMore(const B2IRange& rRange) const
-        {
-            return (
-                maRangeX.overlapsMore(rRange.maRangeX)
-                && maRangeY.overlapsMore(rRange.maRangeY)
                 );
         }
 
@@ -242,13 +206,6 @@ namespace basegfx
         {
             maRangeX.intersect(rRange.maRangeX);
             maRangeY.intersect(rRange.maRangeY);
-        }
-
-        /// grow set by nValue on all sides
-        void grow(sal_Int32 nValue)
-        {
-            maRangeX.grow(nValue);
-            maRangeY.grow(nValue);
         }
 
     private:

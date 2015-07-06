@@ -126,18 +126,6 @@ namespace basegfx
             return sqrt(fLen);
         }
 
-        /** Calculate the length in the XY-Plane for this 3D Vector
-
-            @return The XY-Plane Length of the 3D Vector
-        */
-        double getXYLength() const
-        {
-            double fLen((mfX * mfX) + (mfY * mfY));
-            if((0.0 == fLen) || (1.0 == fLen))
-                return fLen;
-            return sqrt(fLen);
-        }
-
         /** Calculate the length in the XZ-Plane for this 3D Vector
 
             @return The XZ-Plane Length of the 3D Vector
@@ -193,20 +181,6 @@ namespace basegfx
             The length of the 3D Vector is set to 1.0
         */
         B3DVector& normalize();
-
-        /** Test if this 3D Vector is normalized
-
-            @return
-            true if lenth of vector is equal to 1.0
-            false else
-        */
-        bool isNormalized() const
-        {
-            const double fOne(1.0);
-            const double fScalar(scalar(*this));
-
-            return (::basegfx::fTools::equal(fOne, fScalar));
-        }
 
         /** get a 3D Vector which is perpendicular to this and a given 3D Vector
 
