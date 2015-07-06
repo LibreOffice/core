@@ -497,6 +497,20 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
         if( pTextObj )
         {
             pTextObj->onChainingEvent();
+
+            /* Cursor motion stuff */
+            OutlinerView* pOLV = GetTextEditOutlinerView();
+
+            // Find last Para
+            const sal_Int32 nParaCount = pTextEditOutliner->GetParagraphCount();
+            const sal_Int32 nLastParaIndex = nParaCount > 1 ? nParaCount - 1 : 0;
+            Paragraph* pLastPara = pTextEditOutliner->GetParagraph( nLastParaIndex);
+            const sal_Int32 nLenLastPara = pTextEditOutliner->GetText(pLastPara).getLength();
+            // End of editing space
+            ESelection aSel = ESelection(nLastParaIndex,nLenLastPara,nLastParaIndex,nLenLastPara);
+
+            pOLV->SetSelection(aSel);
+
         }
     }
     return 0;
