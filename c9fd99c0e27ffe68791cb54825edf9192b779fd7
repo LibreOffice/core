@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_b16c9309",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-06T17:58:38Z",
+      "side": 1,
+      "message": "Using isAsciiAlphanumeric() misses other characters, for example \u0027.\u0027 dot and \u0027_\u0027 underscore that are allowed in function names, also it doesn\u0027t match letters and numbers of other scripts than Latin if function names are translated. For this to work for any language you\u0027d need to use CharClass::isLetterNumeric(), a CharClass instance is available as ScGlobal::pCharClass. However, a separate check for \u0027.\u0027 and \u0027_\u0027 is still necessary then.",
+      "revId": "c9fd99c0e27ffe68791cb54825edf9192b779fd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
