@@ -217,6 +217,12 @@ public:
     void AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rOldPos, const ScAddress& rNewPos );
 
     /**
+     * Adjust internal range references on base position change to justify /
+     * put in order the relative references.
+     */
+    void AdjustReferenceOnCopy( const ScAddress& rNewPos );
+
+    /**
      * Clear sheet deleted flag from internal reference tokens if the sheet
      * index falls within specified range.  Note that when a reference is on a
      * sheet that's been deleted, its referenced sheet index retains the
