@@ -498,13 +498,14 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
         OutlinerView* pOLV = GetTextEditOutlinerView();
         if( pTextObj && pOLV)
         {
+            TextChain *pTextChain = pTextObj->GetTextChain();
             // This is true during an underflow-caused overflow (with pEdtOutl->SetText())
-            if (GetTextChain()->GetNilChainingEvent(pTextObj)) {
+            if (pTextChain->GetNilChainingEvent(pTextObj)) {
                 return 0;
             }
 
             // We prevent to trigger further handling of overflow/underflow for pTextObj
-            GetTextChain()->SetNilChainingEvent(pTextObj, true);
+            pTextChain->SetNilChainingEvent(pTextObj, true);
 
             // Save previous selection pos
             ESelection aPreChainingSel(pOLV->GetSelection());
@@ -515,7 +516,7 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
             // XXX: this logic could be put in a separate approppriate class
             /* Cursor motion stuff */
 
-            CursorChainingEvent aCursorEvent = pTextObj->GetTextChain()->GetCursorEvent(pTextObj);
+            CursorChainingEvent aCursorEvent = pTextChain->GetCursorEvent(pTextObj);
             SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
 
             switch (aCursorEvent) {
@@ -542,8 +543,8 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
             ESelection aEndSel(nLastParaIndex,nLenLastPara,nLastParaIndex,nLenLastPara);
             */
 
-            // XXX: Must be called
-            GetTextChain()->SetNilChainingEvent(pTextObj, false);
+            // NOTE: Must be called. Don't let the function return if you set it to true and not reset it
+            pTextChain->SetNilChainingEvent(pTextObj, false);
         } else {
             // XXX
             fprintf(stderr, "[OnChaining] No Edit Outliner View\n");
