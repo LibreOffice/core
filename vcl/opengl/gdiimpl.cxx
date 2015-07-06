@@ -1825,6 +1825,7 @@ void OpenGLSalGraphicsImpl::endPaint()
         mpContext->makeCurrent();
         mpContext->AcquireDefaultFramebuffer();
         glFlush();
+        mpContext->swapBuffers();
     }
 
     CHECK_GL_ERROR();
