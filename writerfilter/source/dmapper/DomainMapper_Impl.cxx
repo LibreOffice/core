@@ -179,6 +179,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bInHeaderFooterImport( false ),
         m_bDiscardHeaderFooter( false ),
         m_bInFootOrEndnote(false),
+        m_bSeenFootOrEndnoteSeparator(false),
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( false ),
         m_bIsCustomFtnMark( false ),
@@ -1757,6 +1758,9 @@ void DomainMapper_Impl::PushAnnotation()
 
 void DomainMapper_Impl::PopFootOrEndnote()
 {
+    if (!IsRTFImport())
+        RemoveLastParagraph();
+
     // In case the foot or endnote did not contain a tab.
     m_bIgnoreNextTab = false;
 
@@ -1769,9 +1773,18 @@ void DomainMapper_Impl::PopFootOrEndnote()
         return;
     }
     m_aRedlines.pop();
+    m_bSeenFootOrEndnoteSeparator = false;
     m_bInFootOrEndnote = false;
 }
 
+void DomainMapper_Impl::SeenFootOrEndnoteSeparator()
+{
+    if (!m_bSeenFootOrEndnoteSeparator)
+    {
+        m_bSeenFootOrEndnoteSeparator = true;
+        m_bIgnoreNextPara = true;
+    }
+}
 
 void DomainMapper_Impl::PopAnnotation()
 {
