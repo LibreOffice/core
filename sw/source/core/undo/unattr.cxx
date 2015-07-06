@@ -395,7 +395,7 @@ void SwUndoFormatAttr::SaveFlyAnchor( bool bSvDrwPt )
 bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
-    SwFlyFrameFormat* pFrameFormat = static_cast<SwFlyFrameFormat*>(m_pFormat);
+    SwFrameFormat* pFrameFormat = static_cast<SwFrameFormat*>(m_pFormat);
     const SwFormatAnchor& rAnchor =
         static_cast<const SwFormatAnchor&>( m_pOldSet->Get( RES_ANCHOR, false ) );
 
