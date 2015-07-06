@@ -427,8 +427,8 @@ The code below would only be part of the solution.
                 LoseFocus();
             }
 
-            // close the spelling dialog
-            GetBindings().GetDispatcher()->Execute(FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON);
+            /* this comment prevents spellcheck window to exit when clicked on OK button
+            GetBindings().GetDispatcher()->Execute(FN_SPELL_GRAMMAR_DIALOG, SfxCallMode::ASYNCHRON); */
         }
     }
     return aRet;

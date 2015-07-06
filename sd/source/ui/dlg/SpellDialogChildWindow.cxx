@@ -83,11 +83,8 @@ svx::SpellPortions SpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck
     if (aResult.empty())
     {
         SfxBoolItem aItem (SID_SPELL_DIALOG, false);
-        GetBindings().GetDispatcher()->Execute(
-            SID_SPELL_DIALOG,
-            SfxCallMode::ASYNCHRON,
-            &aItem,
-            0L);
+        /* this comment prevents spellcheck window to exit when clicked on OK button
+        GetBindings().GetDispatcher()->Execute(SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON, &aItem, 0L); */
     }
 
     return aResult;
