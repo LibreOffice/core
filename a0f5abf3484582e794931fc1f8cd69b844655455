@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_f1cf6bb1",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-07-06T08:46:04Z",
+      "side": 1,
+      "message": "I have no idea what std:char_traits\u003cchar16\u003e::find is...\nso... after a bit of reading and a test using\ngcc -O2 -S\nit seems that std:char_traits is worth using.\nit is completely inlined (hence saving a prologue/epilogue\nand yes test only sal_unicode char so no false positive which save some extra logic inlined...\n\nWill upload a new version based on that.. which\nwill likely render moot the casting things and the other remarks...",
+      "parentUuid": "1a54edaf_f1e8cb18",
+      "revId": "a0f5abf3484582e794931fc1f8cd69b844655455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_d1f7cff3",
         "filename": "sal/rtl/ustring.cxx",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_51e43f3a",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-07-06T08:46:04Z",
+      "side": 1,
+      "message": "the assumption hold to the extent that this is called by us using OUString, surely we do not allocated unaligned OUString buffer do we ?",
+      "parentUuid": "1a54edaf_d1f7cff3",
+      "revId": "a0f5abf3484582e794931fc1f8cd69b844655455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_11eec722",
         "filename": "sal/rtl/ustring.cxx",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2015-07-06T07:47:10Z",
       "side": 1,
       "message": "Avoid undefined behavior by not computing pointer values potentially pointing past the end of an array, and by not causing potential overflow in \"subLen * 2\" (i.e., check \"subLen \u003e end - cursor / 2\" instead).",
+      "revId": "a0f5abf3484582e794931fc1f8cd69b844655455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_11d56742",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-07-06T08:46:04Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "1a54edaf_11eec722",
       "revId": "a0f5abf3484582e794931fc1f8cd69b844655455",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
