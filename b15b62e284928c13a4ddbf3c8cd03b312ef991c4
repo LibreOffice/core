@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_1109e795",
+        "filename": "tools/source/zcodec/zcodec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-07-06T13:11:24Z",
+      "side": 1,
+      "message": "Z_ERRNO instead of -1 might be more readable and leaves less room to guess the outcome of (err \u003d\u003d Z_BUF_ERROR) below.",
+      "range": {
+        "startLine": 156,
+        "startChar": 57,
+        "endLine": 156,
+        "endChar": 59
+      },
+      "revId": "b15b62e284928c13a4ddbf3c8cd03b312ef991c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
