@@ -62,6 +62,10 @@ namespace svt
     class AcceleratorExecute;
 }
 
+namespace svx { namespace sidebar {
+    class SelectionChangeHandler;
+}}
+
 class DropTargetHelper;
 
 namespace com { namespace sun { namespace star {
@@ -148,6 +152,8 @@ public:
     explicit ChartController(::com::sun::star::uno::Reference<
                ::com::sun::star::uno::XComponentContext > const & xContext);
     virtual ~ChartController();
+
+    OUString GetContextName();
 
     // ::com::sun::star::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -537,6 +543,8 @@ private:
             ::com::sun::star::frame::XLayoutManagerEventBroadcaster > m_xLayoutManagerEventBroadcaster;
 
     ChartDrawMode m_eDrawMode;
+
+    boost::scoped_ptr<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
 
 private:
     //private methods

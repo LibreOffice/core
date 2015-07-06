@@ -59,6 +59,7 @@
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/document/XUndoAction.hpp>
 
+#include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <vcl/msgbox.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -67,6 +68,8 @@
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+
+#include <boost/bind.hpp>
 
 // this is needed to properly destroy the unique_ptr to the AcceleratorExecute
 // object in the DTOR
@@ -107,7 +110,10 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     m_bConnectingToView(false),
     m_xUndoManager( 0 ),
     m_aDispatchContainer( m_xCC, this ),
-    m_eDrawMode( CHARTDRAW_SELECT )
+    m_eDrawMode( CHARTDRAW_SELECT ),
+    mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
+                boost::bind(&ChartController::GetContextName, this), this,
+                sfx2::sidebar::EnumContext::Context_Cell))
 {
     m_aDoubleClickTimer.SetTimeoutHdl( LINK( this, ChartController, DoubleClickWaitingHdl ) );
 }
@@ -286,6 +292,11 @@ bool ChartController::TheModelRef::is() const
     return (m_pTheModel != 0);
 }
 
+OUString ChartController::GetContextName()
+{
+    return OUString("Chart");
+}
+
 // private methods
 
 bool ChartController::impl_isDisposedOrSuspended() const
@@ -346,6 +357,8 @@ void SAL_CALL ChartController::attachFrame(
     if( impl_isDisposedOrSuspended() ) //@todo? allow attaching the frame while suspended?
         return; //behave passive if already disposed or suspended
 
+    mpSelectionChangeHandler->Connect();
+
     if(m_xFrame.is()) //what happens, if we do have a Frame already??
     {
         //@todo? throw exception?
@@ -386,6 +399,7 @@ void SAL_CALL ChartController::attachFrame(
         m_apDropTargetHelper.reset();
     }
     {
+        SAL_DEBUG("attached frame");
         // calls to VCL
         SolarMutexGuard aSolarGuard;
         m_pChartWindow = VclPtr<ChartWindow>::Create(this,pParent,pParent?pParent->GetStyle():0);
@@ -710,6 +724,7 @@ void ChartController::impl_deleteDrawViewController()
 void SAL_CALL ChartController::dispose()
     throw(uno::RuntimeException, std::exception)
 {
+    mpSelectionChangeHandler->Disconnect();
     try
     {
         //This object should release all resources and references in the
@@ -771,6 +786,7 @@ void SAL_CALL ChartController::dispose()
             m_xLayoutManagerEventBroadcaster.set( 0 );
         }
 
+        SAL_DEBUG("disposing");
         m_xFrame.clear();
         m_xUndoManager.clear();
 
@@ -889,6 +905,7 @@ void SAL_CALL ChartController::notifyClosing(
             try
             {
                 xFrameCloseable->close( sal_False /* DeliverOwnership */ );
+                SAL_DEBUG("notifyClosing");
                 m_xFrame.clear();
             }
             catch( const util::CloseVetoException & )

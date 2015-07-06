@@ -122,6 +122,7 @@ void EnumContext::ProvideApplicationContainers()
         AddEntry(OUString("com.sun.star.sdb.FormDesign"), EnumContext::Application_WriterForm);
         AddEntry(OUString("com.sun.star.sdb.TextReportDesign"), EnumContext::Application_WriterReport);
         AddEntry(OUString("com.sun.star.sheet.SpreadsheetDocument"), EnumContext::Application_Calc);
+        AddEntry(OUString("com.sun.star.chart2.ChartDocument"), EnumContext::Application_Chart);
         AddEntry(OUString("com.sun.star.drawing.DrawingDocument"), EnumContext::Application_Draw);
         AddEntry(OUString("com.sun.star.presentation.PresentationDocument"), EnumContext::Application_Impress);
 
@@ -174,6 +175,7 @@ void EnumContext::ProvideContextContainers()
         AddContext(3DObject);
         AddContext(Annotation);
         AddContext(Auditing);
+        AddContext(Axis);
         AddContext(Cell);
         AddContext(Chart);
         AddContext(Chart);

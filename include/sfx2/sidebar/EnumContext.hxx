@@ -40,6 +40,7 @@ public:
         Application_WriterForm,
         Application_WriterReport,
         Application_Calc,
+        Application_Chart,
         Application_Draw,
         Application_Impress,
 
@@ -65,6 +66,7 @@ public:
         Context_3DObject,
         Context_Annotation,
         Context_Auditing,
+        Context_Axis,
         Context_Cell,
         Context_Chart,
         Context_Draw,
