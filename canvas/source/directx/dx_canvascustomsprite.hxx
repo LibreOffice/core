@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_DIRECTX_DX_CANVASCUSTOMSPRITE_HXX
 #define INCLUDED_CANVAS_SOURCE_DIRECTX_DX_CANVASCUSTOMSPRITE_HXX
 
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -45,7 +45,7 @@
 
 namespace dxcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XCustomSprite,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XCustomSprite,
                                                ::com::sun::star::rendering::XBitmapCanvas,
                                               ::com::sun::star::rendering::XIntegerBitmap,
                                                 ::com::sun::star::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
@@ -56,7 +56,7 @@ namespace dxcanvas
         already implement some of those interface methods.
 
         The reason why this appears kinda convoluted is the fact that
-        we cannot specify non-IDL types as WeakComponentImplHelperN
+        we cannot specify non-IDL types as WeakComponentImplHelper
         template args, and furthermore, don't want to derive
         ::canvas::CanvasCustomSpriteBase directly from
         ::canvas::Sprite (because derivees of

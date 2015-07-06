@@ -10,7 +10,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_TEXTLAYOUT_HXX
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_TEXTLAYOUT_HXX
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 #include <com/sun/star/rendering/XTextLayout.hpp>
@@ -26,7 +26,7 @@
 
 namespace oglcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::rendering::XTextLayout > TextLayoutBaseT;
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XTextLayout > TextLayoutBaseT;
 
     class TextLayout : public ::comphelper::OBaseMutex,
                        public TextLayoutBaseT,

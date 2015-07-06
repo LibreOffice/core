@@ -45,7 +45,7 @@
 #include <basegfx/tools/lerp.hxx>
 
 #include <comphelper/sequence.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <canvas/canvastools.hxx>
 #include <canvas/parametricpolypolygon.hxx>
@@ -1580,7 +1580,7 @@ namespace cairocanvas
 
     namespace
     {
-        class CairoColorSpace : public cppu::WeakImplHelper1< com::sun::star::rendering::XIntegerBitmapColorSpace >
+        class CairoColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XIntegerBitmapColorSpace >
         {
         private:
             uno::Sequence< sal_Int8 >  maComponentTags;
@@ -1937,7 +1937,7 @@ namespace cairocanvas
             }
         };
 
-        class CairoNoAlphaColorSpace : public cppu::WeakImplHelper1< com::sun::star::rendering::XIntegerBitmapColorSpace >
+        class CairoNoAlphaColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XIntegerBitmapColorSpace >
         {
         private:
             uno::Sequence< sal_Int8 >  maComponentTags;

@@ -32,7 +32,7 @@
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
 
-#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <canvas/base/spritecanvasbase.hxx>
@@ -51,7 +51,7 @@
 
 namespace cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper9< ::com::sun::star::rendering::XSpriteCanvas,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XSpriteCanvas,
                                                 ::com::sun::star::rendering::XIntegerBitmap,
                                                 ::com::sun::star::rendering::XGraphicDevice,
                                                 ::com::sun::star::lang::XMultiServiceFactory,
@@ -71,7 +71,7 @@ namespace cairocanvas
         implement some of those interface methods.
 
         The reason why this appears kinda convoluted is the fact that
-        we cannot specify non-IDL types as WeakComponentImplHelperN
+        we cannot specify non-IDL types as WeakComponentImplHelper
         template args, and furthermore, don't want to derive
         ::canvas::SpriteCanvasBase directly from
         ::canvas::SpriteSurface (because derivees of

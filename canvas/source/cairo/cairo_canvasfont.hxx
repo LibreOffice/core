@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CANVASFONT_HXX
 #define INCLUDED_CANVAS_SOURCE_CAIRO_CAIRO_CANVASFONT_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -41,7 +41,7 @@
 
 namespace cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XCanvasFont,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XCanvasFont,
                                                ::com::sun::star::lang::XServiceInfo > CanvasFont_Base;
 
     class CanvasFont : public ::comphelper::OBaseMutex,

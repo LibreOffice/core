@@ -22,8 +22,6 @@
 #include <canvas/canvastools.hxx>
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase1.hxx>
-
 #include <com/sun/star/lang/NoSupportException.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>

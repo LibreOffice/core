@@ -22,7 +22,7 @@
 #include <osl/process.h>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -50,7 +50,7 @@ namespace
 {
 
 class CanvasFactory
-    : public ::cppu::WeakImplHelper3< lang::XServiceInfo,
+    : public ::cppu::WeakImplHelper< lang::XServiceInfo,
                                       lang::XMultiComponentFactory,
                                       lang::XMultiServiceFactory >
 {

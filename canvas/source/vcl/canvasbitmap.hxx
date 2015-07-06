@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CANVAS_SOURCE_VCL_CANVASBITMAP_HXX
 #define INCLUDED_CANVAS_SOURCE_VCL_CANVASBITMAP_HXX
 
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
@@ -45,7 +45,7 @@
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::rendering::XBitmapCanvas,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XBitmapCanvas,
                                                ::com::sun::star::rendering::XIntegerBitmap,
                                                 ::com::sun::star::lang::XServiceInfo,
                                              ::com::sun::star::beans::XFastPropertySet >    CanvasBitmapBase_Base;

@@ -27,7 +27,7 @@
 #include <o3tl/lazy_update.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <comphelper/servicedecl.hxx>
@@ -106,7 +106,7 @@ namespace
     };
 
 
-    typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::rendering::XSimpleCanvas,
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XSimpleCanvas,
                                               ::com::sun::star::lang::XServiceName >    SimpleCanvasBase;
 
     class SimpleCanvasImpl : private cppu::BaseMutex,
