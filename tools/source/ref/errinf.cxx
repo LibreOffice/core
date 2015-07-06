@@ -72,9 +72,6 @@ EDcrData::EDcrData()
 
 EDcrData *EDcrData::GetData()
 {
-#ifdef BOOTSTRAP
-    return 0x0;
-#else
     EDcrData **ppDat=reinterpret_cast<EDcrData **>(GetAppData(SHL_ERR));
     if(!*ppDat)
     {
@@ -82,7 +79,6 @@ EDcrData *EDcrData::GetData()
     }
     else
         return *ppDat;
-#endif
 }
 
 void EDcr_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
