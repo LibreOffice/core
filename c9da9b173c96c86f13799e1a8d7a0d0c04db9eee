@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_d1afcf92",
+        "filename": "sd/source/ui/dlg/SpellDialogChildWindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000981
+      },
+      "writtenOn": "2015-07-06T11:40:45Z",
+      "side": 1,
+      "message": "Why do you keep this part of code? It will consume some CPU cycle to check the \"if\" and allocate memory ?",
+      "range": {
+        "startLine": 83,
+        "startChar": 8,
+        "endLine": 83,
+        "endChar": 15
+      },
+      "revId": "c9da9b173c96c86f13799e1a8d7a0d0c04db9eee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
