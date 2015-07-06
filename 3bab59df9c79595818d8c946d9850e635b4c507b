@@ -53,6 +53,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_d1390f43",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T13:27:33Z",
+      "side": 1,
+      "message": "\"you can *static_assert* the assumption ...\", of course",
+      "parentUuid": "1a54edaf_51d8bf1d",
+      "revId": "3bab59df9c79595818d8c946d9850e635b4c507b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_31dbc31d",
         "filename": "sal/rtl/ustring.cxx",
         "patchSetId": 2
