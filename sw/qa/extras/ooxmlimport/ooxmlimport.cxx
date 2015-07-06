@@ -2724,6 +2724,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf87460, "tdf87460.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xEndnotes->getCount());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf90611, "tdf90611.docx")
+{
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xFootnoteText;
+    xFootnotes->getByIndex(0) >>= xFootnoteText;
+    // This was 11.
+    CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(getParagraphOfText(1, xFootnoteText), "CharHeight"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
