@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_31774304",
+        "filename": "desktop/source/lib/init.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T14:36:55Z",
+      "side": 1,
+      "message": "you should only add a trailing slash to aWorkingDir if it does not already end with one; not sure convertRelToAbs would not treat // as an empty segment",
+      "revId": "eeef67213c7cca3f9f81ee4091addaa82f6562a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
