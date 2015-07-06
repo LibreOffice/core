@@ -85,8 +85,6 @@ namespace chelp {
         OUString get_title() const { return m_aTitle; }
         OUString get_id() const { return m_aStartId; }
         OUString get_program() const { return m_aProgramSwitch; }
-        OUString get_heading() const { return m_aHeading; }
-        OUString get_fulltext() const { return m_aFulltext; }
         int get_order() const { return m_nOrder; }
     };  // end class StaticModuleInformation
 

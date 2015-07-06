@@ -29,8 +29,7 @@ RoleFiller RoleFiller::roleFiller_;
 
 
 RoleFiller::RoleFiller()
-    : m_nRefcount( 0 ),
-      fillers_( 0 )
+    : fillers_( 0 )
 {
 }
 
