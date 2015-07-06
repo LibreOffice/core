@@ -18,7 +18,6 @@
  */
 
 #include <limits.h>
-#include <tools/shl.hxx>
 #include <tools/debug.hxx>
 #include <tools/errinf.hxx>
 #include <rtl/strbuf.hxx>
@@ -42,9 +41,9 @@ public:
     DynamicErrorInfo            *ppDcr[ERRCODE_DYNAMIC_COUNT];
     sal_uInt16                  nNextDcr;
                                 EDcrData();
-
-static  EDcrData                *GetData();
 };
+
+struct TheEDcrData: public rtl::Static<EDcrData, TheEDcrData> {};
 
 class EDcr_Impl
 {
@@ -70,40 +69,27 @@ EDcrData::EDcrData()
         ppDcr[n]=0;
 }
 
-EDcrData *EDcrData::GetData()
-{
-    EDcrData **ppDat=reinterpret_cast<EDcrData **>(GetAppData(SHL_ERR));
-    if(!*ppDat)
-    {
-        return (*ppDat=new EDcrData);
-    }
-    else
-        return *ppDat;
-}
-
 void EDcr_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
 {
     // Register dynamic identifier
-    EDcrData* pData=EDcrData::GetData();
-    lErrId= (((sal_uIntPtr)pData->nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
+    EDcrData& pData=TheEDcrData::get();
+    lErrId= (((sal_uIntPtr)pData.nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
         pDcr->GetErrorCode();
-    DynamicErrorInfo **ppDcr=pData->ppDcr;
-    sal_uInt16 nNext=pData->nNextDcr;
+    DynamicErrorInfo **ppDcr=pData.ppDcr;
+    sal_uInt16 nNext=pData.nNextDcr;
 
     if(ppDcr[nNext])
     {
         delete ppDcr[nNext];
     }
     ppDcr[nNext]=pDcr;
-    if(++pData->nNextDcr>=ERRCODE_DYNAMIC_COUNT)
-        pData->nNextDcr=0;
+    if(++pData.nNextDcr>=ERRCODE_DYNAMIC_COUNT)
+        pData.nNextDcr=0;
 }
 
 void EDcr_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
 {
-
-    EDcrData* pData=EDcrData::GetData();
-    DynamicErrorInfo **ppDcr=pData->ppDcr;
+    DynamicErrorInfo **ppDcr=TheEDcrData::get().ppDcr;
     sal_uIntPtr lIdx=(
         ((sal_uIntPtr)(*pDcr) & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DBG_ASSERT(ppDcr[lIdx]==pDcr,"ErrHdl: Error nicht gefunden");
@@ -147,7 +133,7 @@ DynamicErrorInfo::~DynamicErrorInfo()
 ErrorInfo* EDcr_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
 {
     sal_uIntPtr lIdx=((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
-    DynamicErrorInfo* pDcr=EDcrData::GetData()->ppDcr[lIdx];
+    DynamicErrorInfo* pDcr=TheEDcrData::get().ppDcr[lIdx];
     if(pDcr && (sal_uIntPtr)(*pDcr)==lId)
         return pDcr;
     else
@@ -192,8 +178,7 @@ struct ErrorContextImpl
 ErrorContext::ErrorContext(vcl::Window *pWinP)
 {
     pImpl = new ErrorContextImpl();
-    EDcrData *pData=EDcrData::GetData();
-    ErrorContext *&pHdl = pData->pFirstCtx;
+    ErrorContext *&pHdl = TheEDcrData::get().pFirstCtx;
     pImpl->pWin = pWinP;
     pImpl->pNext = pHdl;
     pHdl = this;
@@ -201,7 +186,7 @@ ErrorContext::ErrorContext(vcl::Window *pWinP)
 
 ErrorContext::~ErrorContext()
 {
-    ErrorContext **ppCtx=&(EDcrData::GetData()->pFirstCtx);
+    ErrorContext **ppCtx=&(TheEDcrData::get().pFirstCtx);
     while(*ppCtx && *ppCtx!=this)
         ppCtx=&((*ppCtx)->pImpl->pNext);
     if(*ppCtx)
@@ -211,23 +196,23 @@ ErrorContext::~ErrorContext()
 
 ErrorContext *ErrorContext::GetContext()
 {
-    return EDcrData::GetData()->pFirstCtx;
+    return TheEDcrData::get().pFirstCtx;
 }
 
 ErrorHandler::ErrorHandler()
 {
     pImpl=new ErrHdl_Impl;
-    EDcrData *pData=EDcrData::GetData();
-    ErrorHandler *&pHdl=pData->pFirstHdl;
+    EDcrData &pData=TheEDcrData::get();
+    ErrorHandler *&pHdl=pData.pFirstHdl;
     pImpl->pNext=pHdl;
     pHdl=this;
-    if(!pData->pDsp)
+    if(!pData.pDsp)
         RegisterDisplay(&aDspFunc);
 }
 
 ErrorHandler::~ErrorHandler()
 {
-    ErrorHandler **ppHdl=&(EDcrData::GetData()->pFirstHdl);
+    ErrorHandler **ppHdl=&(TheEDcrData::get().pFirstHdl);
     while(*ppHdl && *ppHdl!=this)
         ppHdl=&((*ppHdl)->pImpl->pNext);
     if(*ppHdl)
@@ -242,16 +227,16 @@ vcl::Window* ErrorContext::GetParent()
 
 void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 {
-    EDcrData *pData=EDcrData::GetData();
-    pData->bIsWindowDsp=true;
-    pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
+    EDcrData &pData=TheEDcrData::get();
+    pData.bIsWindowDsp=true;
+    pData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
 {
-    EDcrData *pData=EDcrData::GetData();
-    pData->bIsWindowDsp=false;
-    pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
+    EDcrData &pData=TheEDcrData::get();
+    pData.bIsWindowDsp=false;
+    pData.pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 /** Handles an error.
@@ -279,7 +264,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
     OUString aAction;
     if(!lId || lId == ERRCODE_ABORT)
         return 0;
-    EDcrData *pData=EDcrData::GetData();
+    EDcrData &pData=TheEDcrData::get();
     ErrorInfo *pInfo=ErrorInfo::GetErrorInfo(lId);
     ErrorContext *pCtx=ErrorContext::GetContext();
     if(pCtx)
@@ -308,7 +293,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
             nErrFlags = nDynFlags;
     }
 
-    if(ErrHdl_Impl::CreateString(pData->pFirstHdl,pInfo,aErr,nErrFlags))
+    if(ErrHdl_Impl::CreateString(pData.pFirstHdl,pInfo,aErr,nErrFlags))
     {
         if (bJustCreateString)
         {
@@ -317,7 +302,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
         }
         else
         {
-            if(!pData->pDsp)
+            if(!pData.pDsp)
             {
                 OStringBuffer aStr("Action: ");
                 aStr.append(OUStringToOString(aAction, RTL_TEXTENCODING_ASCII_US));
@@ -328,16 +313,16 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
             else
             {
                 delete pInfo;
-                if(!pData->bIsWindowDsp)
+                if(!pData.bIsWindowDsp)
                 {
-                    (*reinterpret_cast<BasicDisplayErrorFunc*>(pData->pDsp))(aErr,aAction);
+                    (*reinterpret_cast<BasicDisplayErrorFunc*>(pData.pDsp))(aErr,aAction);
                     return 0;
                 }
                 else
                 {
                     if (nFlags != USHRT_MAX)
                         nErrFlags = nFlags;
-                    return (*reinterpret_cast<WindowDisplayErrorFunc*>(pData->pDsp))(
+                    return (*reinterpret_cast<WindowDisplayErrorFunc*>(pData.pDsp))(
                         pParent, nErrFlags, aErr, aAction);
                 }
             }

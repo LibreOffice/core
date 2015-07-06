@@ -34,7 +34,7 @@
 // 7 (SHL_SV) removed
 // 8 (SHL_SVT) removed
 #define SHL_SVDDE       9
-#define SHL_ERR         10
+// 10 (SHL_ERR) removed
 //11 (SHL_IPC) removed
 //12 (SHL_SVX) removed
 //13 (SHL_ITEM) removed
