@@ -141,11 +141,10 @@ void vcl::Cursor::ImplDraw()
 
 void vcl::Cursor::ImplRestore()
 {
-    if ( mpData && mpData->mbCurVisible )
-    {
-        ImplCursorInvert( mpData );
-        mpData->mbCurVisible = false;
-    }
+    assert( mpData && mpData->mbCurVisible );
+
+    ImplCursorInvert( mpData );
+    mpData->mbCurVisible = false;
 }
 
 void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
