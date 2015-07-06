@@ -59,6 +59,7 @@ struct UserData
 {
     bool bIsPropertyPath;
     OUString sPropertyPath;
+    int aLineage;
     Reference<XNameAccess> aXNameAccess;
 
     explicit UserData( OUString const & rPropertyPath )
@@ -66,8 +67,9 @@ struct UserData
         , sPropertyPath(rPropertyPath)
     {}
 
-    explicit UserData( Reference<XNameAccess> const & rXNameAccess )
+    explicit UserData( Reference<XNameAccess> const & rXNameAccess, int rIndex = 0 )
         : bIsPropertyPath( false )
+        , aLineage(rIndex)
         , aXNameAccess( rXNameAccess )
     {}
 };
@@ -195,7 +197,8 @@ void CuiAboutConfigTabPage::dispose()
 }
 
 void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUString& rProp, const OUString& rStatus,
-                                        const OUString& rType, const OUString& rValue, SvTreeListEntry *pParentEntry)
+                                        const OUString& rType, const OUString& rValue, SvTreeListEntry *pParentEntry,
+                                        bool bInsertToPrefBox)
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false)); //It is needed, otherwise causes crash
@@ -205,11 +208,10 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rValue));
     pEntry->SetUserData( new UserData(rPropertyPath) );
 
-    m_pPrefBox->Insert( pEntry, pParentEntry );
-
-    SvTreeListEntry* pEntryClone = new SvTreeListEntry;
-    pEntryClone->Clone( pEntry );
-    m_prefBoxEntries.push_back( pEntryClone );
+    if(bInsertToPrefBox)
+        m_pPrefBox->Insert( pEntry, pParentEntry );
+    else
+        m_prefBoxEntries.push_back( pEntry );
 }
 
 void CuiAboutConfigTabPage::Reset()
@@ -218,9 +220,14 @@ void CuiAboutConfigTabPage::Reset()
 
     m_vectorOfModified.clear();
     m_pPrefBox->GetModel()->SetSortMode( SortNone );
+    m_prefBoxEntries.clear();
+    m_modifiedPrefBoxEntries.clear();
 
     m_pPrefBox->SetUpdateMode(false);
     Reference< XNameAccess > xConfigAccess = getConfigAccess( "/", false );
+    //Load all XNameAcces to m_prefBoxEntries
+    FillItems( xConfigAccess, nullptr, 0, true );
+    //Load xConfigAccess' children to m_prefBox
     FillItems( xConfigAccess );
     m_pPrefBox->SetUpdateMode(true);
 }
@@ -245,7 +252,8 @@ bool CuiAboutConfigTabPage::FillItemSet()
     return bModified;
 }
 
-void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAccess, SvTreeListEntry *pParentEntry)
+void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAccess, SvTreeListEntry *pParentEntry,
+                                      int lineage, bool bLoadAll)
 {
     OUString sPath = Reference< XHierarchicalName >(
         xNameAccess, uno::UNO_QUERY_THROW )->getHierarchicalName();
@@ -269,89 +277,87 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
 
         if (bNotLeaf)
         {
-            // not leaf node
-            SvTreeListEntry* pEntry = new SvTreeListEntry;
-            pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, SvTreeListBox::GetDefaultExpandedNodeImage(),
-                                                   SvTreeListBox::GetDefaultCollapsedNodeImage(), false));
-            pEntry->AddItem( new SvLBoxString( pEntry, 0, seqItems[i]));
-            //It is needed, without this the selection line will be truncated.
-            pEntry->AddItem( new SvLBoxString( pEntry, 0, ""));
-            pEntry->AddItem( new SvLBoxString( pEntry, 0, ""));
-            pEntry->AddItem( new SvLBoxString( pEntry, 0, ""));
+            if(bLoadAll)
+                FillItems(xNextNameAccess, nullptr, lineage + 1, true);
+            else
+            {
+                // not leaf node
+                SvTreeListEntry* pEntry = new SvTreeListEntry;
+                pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, SvTreeListBox::GetDefaultExpandedNodeImage(),
+                                                       SvTreeListBox::GetDefaultCollapsedNodeImage(), false));
+                pEntry->AddItem( new SvLBoxString( pEntry, 0, seqItems[i]));
+                //It is needed, without this the selection line will be truncated.
+                pEntry->AddItem( new SvLBoxString( pEntry, 0, ""));
+                pEntry->AddItem( new SvLBoxString( pEntry, 0, ""));
+                pEntry->AddItem( new SvLBoxString( pEntry, 0, ""));
 
-            pEntry->SetUserData( new UserData(xNextNameAccess) );
-            pEntry->EnableChildrenOnDemand();
-            m_pPrefBox->Insert( pEntry, pParentEntry );
+                pEntry->SetUserData( new UserData(xNextNameAccess, lineage + 1) );
+                pEntry->EnableChildrenOnDemand();
+                m_pPrefBox->Insert( pEntry, pParentEntry );
+            }
         }
         else
         {
             // leaf node
+            OUString sPropertyName = seqItems[i];
+            SvTreeListEntries::iterator it = std::find_if(m_modifiedPrefBoxEntries.begin(), m_modifiedPrefBoxEntries.end(),
+              [&sPath, &sPropertyName](SvTreeListEntry &entry) -> bool
+              {
+                  return static_cast< UserData* >( entry.GetUserData() )->sPropertyPath.equals( sPath ) &&
+                          static_cast< SvLBoxString& >( entry.GetItem(2) ).GetText().equals( sPropertyName );
+              }
+            );
+
             OUString sType = aNode.getValueTypeName();
-
             OUString sValue;
-            switch( aNode.getValueType().getTypeClass() )
+
+            if (it != m_modifiedPrefBoxEntries.end())
+                sValue = static_cast< SvLBoxString& >( it->GetItem(4) ).GetText();
+            else
             {
-            case ::com::sun::star::uno::TypeClass_VOID:
-                break;
-
-            case ::com::sun::star::uno::TypeClass_BOOLEAN:
-                sValue = OUString::boolean( aNode.get<bool>() );
-                break;
-
-            case ::com::sun::star::uno::TypeClass_SHORT:
-            case ::com::sun::star::uno::TypeClass_LONG:
-            case ::com::sun::star::uno::TypeClass_HYPER:
-                sValue = OUString::number( aNode.get<sal_Int64>() );
-                break;
-
-            case ::com::sun::star::uno::TypeClass_DOUBLE:
-                sValue = OUString::number( aNode.get<double>() );
-                break;
-
-            case ::com::sun::star::uno::TypeClass_STRING:
-                sValue = aNode.get<OUString>();
-                break;
-
-            case ::com::sun::star::uno::TypeClass_SEQUENCE:
-                if( sType == "[]boolean" )
+                switch( aNode.getValueType().getTypeClass() )
                 {
-                    uno::Sequence<sal_Bool> seq = aNode.get< uno::Sequence<sal_Bool> >();
-                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                case ::com::sun::star::uno::TypeClass_VOID:
+                    break;
+
+                case ::com::sun::star::uno::TypeClass_BOOLEAN:
+                    sValue = OUString::boolean( aNode.get<bool>() );
+                    break;
+
+                case ::com::sun::star::uno::TypeClass_SHORT:
+                case ::com::sun::star::uno::TypeClass_LONG:
+                case ::com::sun::star::uno::TypeClass_HYPER:
+                    sValue = OUString::number( aNode.get<sal_Int64>() );
+                    break;
+
+                case ::com::sun::star::uno::TypeClass_DOUBLE:
+                    sValue = OUString::number( aNode.get<double>() );
+                    break;
+
+                case ::com::sun::star::uno::TypeClass_STRING:
+                    sValue = aNode.get<OUString>();
+                    break;
+
+                case ::com::sun::star::uno::TypeClass_SEQUENCE:
+                    if( sType == "[]boolean" )
                     {
-                        if( j != 0 )
+                        uno::Sequence<sal_Bool> seq = aNode.get< uno::Sequence<sal_Bool> >();
+                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
                         {
-                            sValue += ",";
+                            if( j != 0 )
+                            {
+                                sValue += ",";
+                            }
+                            sValue += OUString::boolean( seq[j] );
                         }
-                        sValue += OUString::boolean( seq[j] );
                     }
-                }
-                else if( sType == "[]byte" )
-                {
-                    uno::Sequence<sal_Int8> seq = aNode.get< uno::Sequence<sal_Int8> >();
-                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    else if( sType == "[]byte" )
                     {
-                        OUString s = OUString::number(
-                            static_cast<sal_uInt8>(seq[j]), 16 );
-                        if( s.getLength() == 1 )
-                        {
-                            sValue += "0";
-                        }
-                        sValue += s.toAsciiUpperCase();
-                    }
-                }
-                else if( sType == "[][]byte" )
-                {
-                    uno::Sequence< uno::Sequence<sal_Int8> > seq = aNode.get< uno::Sequence< uno::Sequence<sal_Int8> > >();
-                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
-                    {
-                        if( j != 0 )
-                        {
-                            sValue += ",";
-                        }
-                        for( sal_Int32 k = 0; k != seq[j].getLength(); ++k )
+                        uno::Sequence<sal_Int8> seq = aNode.get< uno::Sequence<sal_Int8> >();
+                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
                         {
                             OUString s = OUString::number(
-                                static_cast<sal_uInt8>(seq[j][k]), 16 );
+                                static_cast<sal_uInt8>(seq[j]), 16 );
                             if( s.getLength() == 1 )
                             {
                                 sValue += "0";
@@ -359,95 +365,111 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
                             sValue += s.toAsciiUpperCase();
                         }
                     }
-                }
-                else if( sType == "[]short" )
-                {
-                    uno::Sequence<sal_Int16> seq = aNode.get< uno::Sequence<sal_Int16> >();
-                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    else if( sType == "[][]byte" )
                     {
-                        if( j != 0 )
+                        uno::Sequence< uno::Sequence<sal_Int8> > seq = aNode.get< uno::Sequence< uno::Sequence<sal_Int8> > >();
+                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
                         {
-                            sValue += ",";
+                            if( j != 0 )
+                            {
+                                sValue += ",";
+                            }
+                            for( sal_Int32 k = 0; k != seq[j].getLength(); ++k )
+                            {
+                                OUString s = OUString::number(
+                                    static_cast<sal_uInt8>(seq[j][k]), 16 );
+                                if( s.getLength() == 1 )
+                                {
+                                    sValue += "0";
+                                }
+                                sValue += s.toAsciiUpperCase();
+                            }
                         }
-                        sValue += OUString::number( seq[j] );
                     }
-                }
-                else if( sType == "[]long" )
-                {
-                    uno::Sequence<sal_Int32> seq = aNode.get< uno::Sequence<sal_Int32> >();
-                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    else if( sType == "[]short" )
                     {
-                        if( j != 0 )
+                        uno::Sequence<sal_Int16> seq = aNode.get< uno::Sequence<sal_Int16> >();
+                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
                         {
-                            sValue += ",";
+                            if( j != 0 )
+                            {
+                                sValue += ",";
+                            }
+                            sValue += OUString::number( seq[j] );
                         }
-                        sValue += OUString::number( seq[j] );
                     }
-                }
-                else if( sType == "[]hyper" )
-                {
-                    uno::Sequence<sal_Int64> seq = aNode.get< uno::Sequence<sal_Int64> >();
-                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    else if( sType == "[]long" )
                     {
-                        if( j != 0 )
+                        uno::Sequence<sal_Int32> seq = aNode.get< uno::Sequence<sal_Int32> >();
+                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
                         {
-                            sValue += ",";
+                            if( j != 0 )
+                            {
+                                sValue += ",";
+                            }
+                            sValue += OUString::number( seq[j] );
                         }
-                        sValue += OUString::number( seq[j] );
                     }
-                }
-                else if( sType == "[]double" )
-                {
-                    uno::Sequence<double> seq = aNode.get< uno::Sequence<double> >();
-                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    else if( sType == "[]hyper" )
                     {
-                        if( j != 0 )
+                        uno::Sequence<sal_Int64> seq = aNode.get< uno::Sequence<sal_Int64> >();
+                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
                         {
-                            sValue += ",";
+                            if( j != 0 )
+                            {
+                                sValue += ",";
+                            }
+                            sValue += OUString::number( seq[j] );
                         }
-                        sValue += OUString::number( seq[j] );
                     }
-                }
-                else if( sType == "[]string" )
-                {
-                    uno::Sequence<OUString> seq = aNode.get< uno::Sequence<OUString> >();
-                    for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                    else if( sType == "[]double" )
                     {
-                        if( j != 0 )
+                        uno::Sequence<double> seq = aNode.get< uno::Sequence<double> >();
+                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
                         {
-                            sValue += ",";
+                            if( j != 0 )
+                            {
+                                sValue += ",";
+                            }
+                            sValue += OUString::number( seq[j] );
                         }
-                        sValue += seq[j];
                     }
-                }
-                else
-                {
+                    else if( sType == "[]string" )
+                    {
+                        uno::Sequence<OUString> seq = aNode.get< uno::Sequence<OUString> >();
+                        for( sal_Int32 j = 0; j != seq.getLength(); ++j )
+                        {
+                            if( j != 0 )
+                            {
+                                sValue += ",";
+                            }
+                            sValue += seq[j];
+                        }
+                    }
+                    else
+                    {
+                        SAL_WARN(
+                            "cui.options",
+                            "path \"" << sPath << "\" member " << seqItems[i]
+                                << " of unsupported type " << sType);
+                    }
+                    break;
+
+                default:
                     SAL_WARN(
                         "cui.options",
                         "path \"" << sPath << "\" member " << seqItems[i]
                             << " of unsupported type " << sType);
+                    break;
                 }
-                break;
-
-            default:
-                SAL_WARN(
-                    "cui.options",
-                    "path \"" << sPath << "\" member " << seqItems[i]
-                        << " of unsupported type " << sType);
-                break;
             }
 
             //Short name
             int index = 0;
-            int lineage;
-            SvTreeListEntry *parentEntry = pParentEntry;
-            for(lineage = 0; parentEntry != nullptr; ++lineage)
-                parentEntry = m_pPrefBox->GetParent(parentEntry);
-
             for(int j = 1; j < lineage; ++j)
                 index = sPath.indexOf("/", index + 1);
 
-            InsertEntry(sPath, sPath.copy(index+1), seqItems[i], sType, sValue, pParentEntry);
+            InsertEntry(sPath, sPath.copy(index+1), seqItems[i], sType, sValue, pParentEntry, !bLoadAll);
         }
     }
     m_pPrefBox->SetAlternatingRowColors( true );
@@ -554,7 +576,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
         return 0;
 
     UserData *pUserData = static_cast<UserData*>(pEntry->GetUserData());
-    if(pUserData->bIsPropertyPath)
+    if(pUserData && pUserData->bIsPropertyPath)
     {
         //if selection is a node
         OUString sPropertyName = SvTabListBox::GetEntryText( pEntry, 1 );
@@ -745,12 +767,32 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                 SvTreeListEntries::iterator it = std::find_if(m_prefBoxEntries.begin(), m_prefBoxEntries.end(),
                   [&pUserData, &sPropertyName](SvTreeListEntry &entry) -> bool
                   {
-                      return static_cast< SvLBoxString& >( entry.GetItem(1) ).GetText().equals( pUserData->sPropertyPath ) &&
+                      return static_cast< UserData* >( entry.GetUserData() )->sPropertyPath.equals( pUserData->sPropertyPath ) &&
                               static_cast< SvLBoxString& >( entry.GetItem(2) ).GetText().equals( sPropertyName );
                   }
                 );
                 if (it != m_prefBoxEntries.end())
+                {
                     it->ReplaceItem( new SvLBoxString( &(*it), 0, sDialogValue ), 4 );
+
+                    SvTreeListEntries::iterator modifiedIt = std::find_if(
+                                m_modifiedPrefBoxEntries.begin(), m_modifiedPrefBoxEntries.end(),
+                                [&pUserData, &sPropertyName](SvTreeListEntry &entry) -> bool
+                                {
+                                    return static_cast< UserData* >( entry.GetUserData() )->sPropertyPath.equals( pUserData->sPropertyPath ) &&
+                                            static_cast< SvLBoxString& >( entry.GetItem(2) ).GetText().equals( sPropertyName );
+                                }
+                    );
+
+                    if( modifiedIt != m_modifiedPrefBoxEntries.end())
+                        modifiedIt->ReplaceItem( new SvLBoxString( &(*modifiedIt), 0, sDialogValue ), 4 );
+                    else
+                    {
+                        SvTreeListEntry *pCloneEntry = new SvTreeListEntry;
+                        pCloneEntry->Clone( &(*it));
+                        m_modifiedPrefBoxEntries.push_back( pCloneEntry );
+                    }
+                }
             }
         }
         catch( uno::Exception& )
@@ -773,31 +815,31 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl)
 
     if( m_pSearchEdit->GetText().isEmpty() )
     {
-        for( auto it = m_prefBoxEntries.begin(); it != m_prefBoxEntries.end(); ++it )
-        {
-            SvTreeListEntry* pEntry = new SvTreeListEntry;
-            pEntry->Clone( &(*it) ) ;
-            m_pPrefBox->Insert( pEntry );
-        }
+        m_pPrefBox->Clear();
+        Reference< XNameAccess > xConfigAccess = getConfigAccess( "/", false );
+        FillItems( xConfigAccess );
     }
     else
     {
         m_options.searchString = m_pSearchEdit->GetText();
         utl::TextSearch textSearch( m_options );
-
         for(auto it = m_prefBoxEntries.begin(); it != m_prefBoxEntries.end(); ++it)
         {
             sal_Int32 endPos, startPos = 0;
 
             for(size_t i = 1; i < it->ItemCount(); ++i)
             {
-                OUString scrTxt = static_cast< SvLBoxString& >( it->GetItem(i) ).GetText();
+                OUString scrTxt;
+                if(i == 1)
+                    scrTxt = static_cast< UserData* >( it->GetUserData() )->sPropertyPath;
+                else
+                    scrTxt = static_cast< SvLBoxString& >( it->GetItem(i) ).GetText();
                 endPos = scrTxt.getLength();
                 if( textSearch.SearchForward( scrTxt, &startPos, &endPos ) )
                 {
                     SvTreeListEntry* pEntry = new SvTreeListEntry;
-                    pEntry->Clone( &(*it) ) ;
-                    m_pPrefBox->Insert( pEntry );
+                    pEntry->Clone( &(*it) );
+                    InsertEntry( pEntry );
                     break;
                 }
             }
@@ -808,8 +850,56 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl)
         m_pPrefBox->SortByCol(sortedCol, sortMode == SortAscending);
 
     m_pPrefBox->SetUpdateMode( true );
+    m_pPrefBox->SetAlternatingRowColors( true );
 
     return 0;
+}
+
+void CuiAboutConfigTabPage::InsertEntry( SvTreeListEntry *pEntry)
+{
+    OUString sPathWithProperty = static_cast< UserData* >(pEntry->GetUserData())->sPropertyPath;
+    sal_Int32 index = sPathWithProperty.lastIndexOf(static_cast< SvLBoxString& >(pEntry->GetItem(1)).GetText());
+    OUString sPath = sPathWithProperty.copy(0, index);
+    index = 0;
+    int prevIndex;
+    SvTreeListEntry* pParentEntry;
+    SvTreeListEntry* pGrandParentEntry = nullptr;
+
+    do
+    {
+        prevIndex = index;
+        index = sPath.indexOf("/", index+1);
+        OUString sParentName = sPath.copy(prevIndex+1, index - prevIndex - 1);
+
+        bool hasEntry = false;
+        for(pParentEntry = m_pPrefBox->FirstChild(pGrandParentEntry); pParentEntry != nullptr; pParentEntry = m_pPrefBox->NextSibling(pParentEntry))
+            if(static_cast< SvLBoxString& >(pParentEntry->GetItem(1)).GetText() == sParentName)
+            {
+                hasEntry = true;
+                break;
+            }
+
+        if(!hasEntry)
+        {
+            pParentEntry = new SvTreeListEntry;
+            pParentEntry->AddItem( new SvLBoxContextBmp( pParentEntry, 0, SvTreeListBox::GetDefaultExpandedNodeImage(),
+                                                   SvTreeListBox::GetDefaultCollapsedNodeImage(), false));
+            pParentEntry->AddItem( new SvLBoxString( pParentEntry, 0, sParentName));
+            //It is needed, without this the selection line will be truncated.
+            pParentEntry->AddItem( new SvLBoxString( pParentEntry, 0, ""));
+            pParentEntry->AddItem( new SvLBoxString( pParentEntry, 0, ""));
+            pParentEntry->AddItem( new SvLBoxString( pParentEntry, 0, ""));
+            pParentEntry->EnableChildrenOnDemand(false);
+            m_pPrefBox->Insert( pParentEntry, pGrandParentEntry );
+        }
+
+        if(pGrandParentEntry)
+            m_pPrefBox->Expand( pGrandParentEntry );
+        pGrandParentEntry = pParentEntry;
+    } while(index < sPath.getLength() - 1);
+
+    m_pPrefBox->Insert( pEntry, pParentEntry );
+    m_pPrefBox->Expand( pParentEntry );
 }
 
 IMPL_LINK_NOARG( CuiAboutConfigTabPage, ExpandingHdl_Impl )
@@ -826,7 +916,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, ExpandingHdl_Impl )
         if(pEntry->GetUserData() != nullptr)
         {
             UserData *pUserData = static_cast<UserData*>(pEntry->GetUserData());
-            FillItems( pUserData->aXNameAccess, pEntry );
+            FillItems( pUserData->aXNameAccess, pEntry, pUserData->aLineage );
         }
     }
 

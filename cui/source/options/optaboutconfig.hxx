@@ -49,6 +49,7 @@ private:
     VclPtr<PushButton> m_pSearchBtn;
     VclPtr<Edit> m_pSearchEdit;
 
+    SvTreeListEntries m_modifiedPrefBoxEntries;
     std::vector< boost::shared_ptr< Prop_Impl > > m_vectorOfModified;
     VclPtr< SvSimpleTable > m_pPrefBox;
 
@@ -58,6 +59,7 @@ private:
 
     void AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp );
     static std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
+    void InsertEntry( SvTreeListEntry *pEntry);
 
     DECL_LINK( StandardHdl_Impl, void * );
     DECL_LINK( ResetBtnHdl_Impl, void * );
@@ -69,10 +71,10 @@ public:
    virtual ~CuiAboutConfigTabPage();
    virtual void dispose() SAL_OVERRIDE;
    void     InsertEntry(const OUString &rPropertyPath, const OUString& rProp, const OUString& rStatus, const OUString& rType, const OUString& rValue,
-                        SvTreeListEntry *pParentEntry = nullptr);
+                        SvTreeListEntry *pParentEntry = nullptr, bool bInsertToPrefBox = true);
    void     Reset();
    void     FillItems(const com::sun::star::uno::Reference<com::sun::star::container::XNameAccess>& xNameAccess,
-                      SvTreeListEntry *pParentEntry = nullptr);
+                      SvTreeListEntry *pParentEntry = nullptr, int lineage = 0, bool bLoadAll = false);
    static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getConfigAccess( const OUString& sNodePath, bool bUpdate );
    bool FillItemSet();
 };
