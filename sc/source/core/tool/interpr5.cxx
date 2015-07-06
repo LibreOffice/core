@@ -1482,7 +1482,7 @@ void ScInterpreter::ScMul()
         {
             SCSIZE nCount = nC * nR;
             for ( SCSIZE i = 0; i < nCount; i++ )
-                if (pMat->IsValue(i))
+                if (pMat->IsValueOrEmpty(i))
                     pResMat->PutDouble(pMat->GetDouble(i)*fVal, i);
                 else
                     pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
@@ -1561,14 +1561,14 @@ void ScInterpreter::ScDiv()
             SCSIZE nCount = nC * nR;
             if (bFlag)
             {   for ( SCSIZE i = 0; i < nCount; i++ )
-                    if (pMat->IsValue(i))
+                    if (pMat->IsValueOrEmpty(i))
                         pResMat->PutDouble( div( fVal, pMat->GetDouble(i)), i);
                     else
                         pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
             }
             else
             {   for ( SCSIZE i = 0; i < nCount; i++ )
-                    if (pMat->IsValue(i))
+                    if (pMat->IsValueOrEmpty(i))
                         pResMat->PutDouble( div( pMat->GetDouble(i), fVal), i);
                     else
                         pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
@@ -1640,14 +1640,14 @@ void ScInterpreter::ScPow()
             SCSIZE nCount = nC * nR;
             if (bFlag)
             {   for ( SCSIZE i = 0; i < nCount; i++ )
-                    if (pMat->IsValue(i))
+                    if (pMat->IsValueOrEmpty(i))
                         pResMat->PutDouble(pow(fVal,pMat->GetDouble(i)), i);
                     else
                         pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
             }
             else
             {   for ( SCSIZE i = 0; i < nCount; i++ )
-                    if (pMat->IsValue(i))
+                    if (pMat->IsValueOrEmpty(i))
                         pResMat->PutDouble(pow(pMat->GetDouble(i),fVal), i);
                     else
                         pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);

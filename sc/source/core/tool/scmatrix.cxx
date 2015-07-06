@@ -258,6 +258,7 @@ public:
     bool IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
     bool IsValue( SCSIZE nIndex ) const;
     bool IsValue( SCSIZE nC, SCSIZE nR ) const;
+    bool IsValueOrEmpty( SCSIZE nIndex ) const;
     bool IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const;
     bool IsBoolean( SCSIZE nC, SCSIZE nR ) const;
     bool IsNumeric() const;
@@ -741,6 +742,13 @@ bool ScMatrixImpl::IsValue( SCSIZE nC, SCSIZE nR ) const
             ;
     }
     return false;
+}
+
+bool ScMatrixImpl::IsValueOrEmpty( SCSIZE nIndex ) const
+{
+    SCSIZE nC, nR;
+    CalcPosition(nIndex, nC, nR);
+    return IsValueOrEmpty(nC, nR);
 }
 
 bool ScMatrixImpl::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
@@ -2145,6 +2153,11 @@ bool ScMatrix::IsValue( SCSIZE nIndex ) const
 bool ScMatrix::IsValue( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsValue(nC, nR);
+}
+
+bool ScMatrix::IsValueOrEmpty( SCSIZE nIndex ) const
+{
+    return pImpl->IsValueOrEmpty(nIndex);
 }
 
 bool ScMatrix::IsValueOrEmpty( SCSIZE nC, SCSIZE nR ) const
