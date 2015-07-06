@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_31818390",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-06T21:57:20Z",
+      "side": 1,
+      "message": "Actually this doesn\u0027t need an extra check if(fVal!\u003d0.0), this branch is executed only if fMem\u003d\u003d0.0, assigning fVal without condition to fMem doesn\u0027t change fMem if fVal\u003d\u003d0.0 ;-) similar to what is now done in NumericCellAccumulator.",
+      "revId": "954cfb636f3ea3329c6283b21b787216725245ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_517e7faf",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-06T21:57:20Z",
+      "side": 1,
+      "message": "ditto, remove condition",
+      "revId": "954cfb636f3ea3329c6283b21b787216725245ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_f149ab8f",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-06T21:57:20Z",
+      "side": 1,
+      "message": "remove condition",
+      "revId": "954cfb636f3ea3329c6283b21b787216725245ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_b53ebeb6",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-06T21:57:20Z",
+      "side": 1,
+      "message": "See removal of ifSUM case below.",
+      "range": {
+        "startLine": 672,
+        "startChar": 44,
+        "endLine": 672,
+        "endChar": 60
+      },
+      "revId": "954cfb636f3ea3329c6283b21b787216725245ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_114fa793",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-06T21:57:20Z",
+      "side": 1,
+      "message": "remove condition",
+      "revId": "954cfb636f3ea3329c6283b21b787216725245ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_b143336c",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 731,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-06T21:57:20Z",
+      "side": 1,
+      "message": "remove condition",
+      "revId": "954cfb636f3ea3329c6283b21b787216725245ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

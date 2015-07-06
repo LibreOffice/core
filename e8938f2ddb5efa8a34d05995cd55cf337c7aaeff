@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_352bae84",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-06T21:57:20Z",
+      "side": 0,
+      "message": "Removing this case results in ifSUM not being handled if mnSubTotalFlags is given.",
+      "revId": "e8938f2ddb5efa8a34d05995cd55cf337c7aaeff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
