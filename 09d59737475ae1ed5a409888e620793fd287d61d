@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_71f93bc8",
+        "filename": "stoc/source/inspect/introspection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 903,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T09:23:34Z",
+      "side": 1,
+      "message": "css.container.XNameContainer is derived from css.container.XNameReplace (which is derived from css.container.XNameAccess), so this fails now to cover queryInterface for XNameReplace",
+      "revId": "09d59737475ae1ed5a409888e620793fd287d61d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_91f637d6",
+        "filename": "stoc/source/inspect/introspection.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 905,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T09:23:34Z",
+      "side": 1,
+      "message": "css.container.XIndexContainer is derived from css.container.XIndexReplace (which is derived from css.container.XIndexAccess), so this fails now to cover queryInterface for XIndexReplace",
+      "revId": "09d59737475ae1ed5a409888e620793fd287d61d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_3103c3ba",
+        "filename": "stoc/source/invocation/invocation.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T09:23:34Z",
+      "side": 1,
+      "message": "for multi-thread--safety, Invocation_Impl apparently relies on all its member vars only being written by setMaterial() which in turn is only called from the ctor",
+      "revId": "09d59737475ae1ed5a409888e620793fd287d61d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
