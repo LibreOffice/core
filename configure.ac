@@ -9594,7 +9594,7 @@ AC_SUBST(SYSTEM_LPSOLVE)
 dnl ===================================================================
 dnl Checking for libexttextcat
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libexttextcat],[LIBEXTTEXTCAT],[libexttextcat >= 3.1.1])
+libo_CHECK_SYSTEM_MODULE([libexttextcat],[LIBEXTTEXTCAT],[libexttextcat >= 3.4.1])
 if test "$with_system_libexttextcat" = "yes"; then
     SYSTEM_LIBEXTTEXTCAT_DATA=file://`$PKG_CONFIG --variable=pkgdatadir libexttextcat`
 fi
