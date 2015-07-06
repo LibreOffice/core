@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_71261b18",
+        "filename": "stoc/source/inspect/introspection.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T14:21:09Z",
+      "side": 1,
+      "message": "erm, looking again and noting that the implementation of cppu::queryInterface,\n\ntemplate\u003c class Interface1 \u003e\ninline ::com::sun::star::uno::Any SAL_CALL queryInterface(\n    const ::com::sun::star::uno::Type \u0026 rType,\n    Interface1 * p1 )\n{\n    if (rType \u003d\u003d Interface1::static_type())\n        return ::com::sun::star::uno::Any( \u0026p1, rType );\n    else\n        return ::com::sun::star::uno::Any();\n}\n\nthen\n\n(a) the original code apparently had that shortcoming already, to not handle XNameReplace and XIndexReplace\n\n(b) what is the presumed benefit of the change anyway?",
+      "revId": "780cdd54bed958e49727e1d284586652737d5102",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_f178cbfa",
+        "filename": "stoc/source/invocation/invocation.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T14:21:09Z",
+      "side": 1,
+      "message": "lets hope there\u0027ll be no deadlock caused by Invocation_Impl calling out into _xIntrospectionAccess with m_aMutex locked (the correct way to release m_aMutex after checking for _xNameContainer.is(), call out to obtain a reference, then acquire m_aMutex again and throw away the reference if _xNameContainer has meanwhile been set, is somewhat more awkward)",
+      "revId": "780cdd54bed958e49727e1d284586652737d5102",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_117ec7e4",
+        "filename": "stoc/source/invocation/invocation.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T14:21:09Z",
+      "side": 1,
+      "message": "getXPropertySet must apparently only be called when _xIntrospectionAccess is non-null",
+      "revId": "780cdd54bed958e49727e1d284586652737d5102",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
