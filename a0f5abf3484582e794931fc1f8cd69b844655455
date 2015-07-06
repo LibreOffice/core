@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_f1e8cb18",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T07:47:10Z",
+      "side": 1,
+      "message": "* Hope is that all our supported compilers support std::char_traits\u003cchar16_t\u003e::find, so you don\u0027t need to resort to char-based memchr and not handle accidental matches against individual bytes of a UTF-16 code unit.\n\n* Do not use C-style casts.\n\n* What is the intermediate casting to uintptr_t good for?",
+      "revId": "a0f5abf3484582e794931fc1f8cd69b844655455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_d1f7cff3",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T07:47:10Z",
+      "side": 1,
+      "message": "This assumes that sal_Unicode values are always at least 2-byte aligned, which need not hold universally.",
+      "revId": "a0f5abf3484582e794931fc1f8cd69b844655455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_11eec722",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-06T07:47:10Z",
+      "side": 1,
+      "message": "Avoid undefined behavior by not computing pointer values potentially pointing past the end of an array, and by not causing potential overflow in \"subLen * 2\" (i.e., check \"subLen \u003e end - cursor / 2\" instead).",
+      "revId": "a0f5abf3484582e794931fc1f8cd69b844655455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
