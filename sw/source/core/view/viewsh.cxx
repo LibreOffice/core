@@ -407,8 +407,8 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
                     {
                         InvalidateWindows(aRect.SVRect());
                     }
-
-                    lcl_PaintTransparentFormControls(*this, aRect); // i#107365
+                    else
+                        lcl_PaintTransparentFormControls(*this, aRect); // i#107365
                 }
 
                 pVout.disposeAndClear();
