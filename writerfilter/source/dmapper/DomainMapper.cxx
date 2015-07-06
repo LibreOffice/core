@@ -992,7 +992,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_FtnEdn_type:
             // This is the "separator" footnote, ignore its linebreak.
             if (static_cast<sal_uInt32>(nIntValue) == NS_ooxml::LN_Value_doc_ST_FtnEdn_separator)
-                m_pImpl->m_bIgnoreNextPara = true;
+                m_pImpl->SeenFootOrEndnoteSeparator();
         break;
         case NS_ooxml::LN_CT_DataBinding_prefixMappings:
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_DataBinding_prefixMappings", sStringValue);
