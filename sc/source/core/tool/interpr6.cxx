@@ -819,9 +819,9 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
         case ifPRODUCT: if ( !nCount ) fRes = 0.0; break;
         default: ; // nothing
     }
-    // Bei Summen etc. macht ein bool-Ergebnis keinen Sinn
-    // und Anzahl ist immer Number (#38345#)
-    if( nFuncFmtType == css::util::NumberFormat::LOGICAL || eFunc == ifCOUNT )
+    // A boolean return type makes no sense on sums et al.
+    // Counts are always numbers.
+    if( nFuncFmtType == css::util::NumberFormat::LOGICAL || eFunc == ifCOUNT || eFunc == ifCOUNT2 )
         nFuncFmtType = css::util::NumberFormat::NUMBER;
     return fRes;
 }
