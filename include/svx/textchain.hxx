@@ -32,6 +32,12 @@ namespace rtl {
 typedef rtl::OUString ChainLinkId;
 typedef std::map< ChainLinkId, ImpChainLinkProperties *> LinkPropertiesMap;
 
+enum class CursorChainingEvent
+{
+    TO_NEXT_LINK,
+    TO_PREV_LINK,
+    UNCHANGED
+};
 
 class ImpChainLinkProperties
 {
@@ -40,7 +46,9 @@ class ImpChainLinkProperties
 
     ImpChainLinkProperties();
 
+    // NOTE: Remember to set default value in contructor when adding field
     bool bNilChainingEvent;
+    CursorChainingEvent aCursorEvent; // XXX: replace with enum instead of bool?
 };
 
 
@@ -53,6 +61,9 @@ class TextChain {
     void AppendLink(SdrTextObj *);
     bool IsLinkInChain(SdrTextObj *) const;
     SdrTextObj *GetNextLink(SdrTextObj *) const;
+
+    CursorChainingEvent GetCursorEvent(SdrTextObj *);
+    void SetCursorEvent(SdrTextObj *, CursorChainingEvent);
 
     ChainLinkId GetId(SdrTextObj *) const;
     ImpChainLinkProperties *GetLinkProperties(SdrTextObj *);

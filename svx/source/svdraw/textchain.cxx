@@ -25,6 +25,7 @@ ImpChainLinkProperties::ImpChainLinkProperties()
 {
     // give defaults
     bNilChainingEvent = false;
+    aCursorEvent = CursorChainingEvent::UNCHANGED;
 }
 
 // XXX: All getters in the class assume that the guy is in the chain
@@ -51,6 +52,18 @@ void TextChain::AppendLink(SdrTextObj *)
 SdrTextObj *TextChain::GetNextLink(SdrTextObj *) const
 {
     return NULL; // XXX: To be changed. It'd be a mess to implement now
+}
+
+CursorChainingEvent TextChain::GetCursorEvent(SdrTextObj *pTarget)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    return pLinkProperties->aCursorEvent;
+}
+
+void TextChain::SetCursorEvent(SdrTextObj *pTarget, CursorChainingEvent aCursorEvent)
+{
+    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
+    pLinkProperties->aCursorEvent = aCursorEvent;
 }
 
 bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj* /* pPrevLink */, SdrTextObj* /* pNextLink */)
