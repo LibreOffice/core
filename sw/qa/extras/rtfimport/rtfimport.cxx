@@ -2313,6 +2313,12 @@ DECLARE_RTFIMPORT_TEST(testTdf92061, "tdf92061.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("body-after"), getRun(getParagraph(1), 3)->getString());
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf92481, "tdf92481.rtf")
+{
+    // This was 0, RTF_WIDOWCTRL was not imported.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int8>(2), getProperty<sal_Int8>(getParagraph(1), "ParaWidows"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

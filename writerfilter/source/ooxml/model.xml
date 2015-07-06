@@ -60,6 +60,10 @@
   <token tokenid="ooxml:footerl"/>
   <token tokenid="ooxml:footerr"/>
   <token tokenid="ooxml:footerf"/>
+
+  <!-- Present in RTF, but not in OOXML. -->
+  <token tokenid="ooxml:CT_Settings_widowControl"/>
+
   <namespace name="dml-stylesheet">
     <start name="theme"/>
     <start name="themeOverride"/>

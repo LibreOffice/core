@@ -79,6 +79,7 @@ struct SettingsTable_Impl
     bool                m_bDoNotUseHTMLParagraphAutoSpacing;
     bool                m_bNoColumnBalance;
     bool                m_bAutoHyphenation;
+    bool                m_bWidowControl;
     bool                m_bSplitPgBreakAndParaMark;
     bool                m_bMirrorMargin;
     uno::Sequence<beans::PropertyValue> m_pThemeFontLangProps;
@@ -111,6 +112,7 @@ struct SettingsTable_Impl
     , m_bDoNotUseHTMLParagraphAutoSpacing(false)
     , m_bNoColumnBalance(false)
     , m_bAutoHyphenation(false)
+    , m_bWidowControl(false)
     , m_bSplitPgBreakAndParaMark(false)
     , m_bMirrorMargin(false)
     , m_pThemeFontLangProps(3)
@@ -288,6 +290,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Settings_autoHyphenation:
         m_pImpl->m_bAutoHyphenation = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Settings_widowControl:
+        m_pImpl->m_bWidowControl = nIntValue;
+        break;
     default:
     {
 #ifdef DEBUG_WRITERFILTER
@@ -373,6 +378,11 @@ uno::Sequence<beans::PropertyValue> SettingsTable::GetCompatSettings() const
     return comphelper::containerToSequence(m_pImpl->m_aCompatSettings);
 }
 
+static bool lcl_isDefault(const uno::Reference<beans::XPropertyState>& xPropertyState, const OUString& rPropertyName)
+{
+    return xPropertyState->getPropertyState(rPropertyName) == beans::PropertyState_DEFAULT_VALUE;
+}
+
 void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& xDoc)
 {
     uno::Reference< beans::XPropertySet> xDocProps( xDoc, uno::UNO_QUERY );
@@ -382,17 +392,28 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
         xDocProps->setPropertyValue("RecordChanges", uno::makeAny( m_pImpl->m_bRecordChanges ) );
 
     // Auto hyphenation: turns on hyphenation by default, <w:suppressAutoHyphens/> may still disable it at a paragraph level.
-    if (m_pImpl->m_bAutoHyphenation)
+    // Situation is similar for RTF_WIDOWCTRL, which turns on widow / orphan control by default.
+    if (m_pImpl->m_bAutoHyphenation || m_pImpl->m_bWidowControl)
     {
         uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDoc, uno::UNO_QUERY);
+        if (!xStyleFamiliesSupplier.is())
+            return;
+
         uno::Reference<container::XNameAccess> xStyleFamilies = xStyleFamiliesSupplier->getStyleFamilies();
         uno::Reference<container::XNameContainer> xParagraphStyles = xStyleFamilies->getByName("ParagraphStyles").get< uno::Reference<container::XNameContainer> >();
         uno::Reference<style::XStyle> xDefault = xParagraphStyles->getByName("Standard").get< uno::Reference<style::XStyle> >();
         uno::Reference<beans::XPropertyState> xPropertyState(xDefault, uno::UNO_QUERY);
-        if (xPropertyState->getPropertyState("ParaIsHyphenation") == beans::PropertyState_DEFAULT_VALUE)
+        if (m_pImpl->m_bAutoHyphenation && lcl_isDefault(xPropertyState, "ParaIsHyphenation"))
         {
             uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
             xPropertySet->setPropertyValue("ParaIsHyphenation", uno::makeAny(true));
+        }
+        if (m_pImpl->m_bWidowControl && lcl_isDefault(xPropertyState, "ParaWidows") && lcl_isDefault(xPropertyState, "ParaOrphans"))
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
+            uno::Any aAny = uno::makeAny(static_cast<sal_Int8>(2));
+            xPropertySet->setPropertyValue("ParaWidows", aAny);
+            xPropertySet->setPropertyValue("ParaOrphans", aAny);
         }
     }
 }
