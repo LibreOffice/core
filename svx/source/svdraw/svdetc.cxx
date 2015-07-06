@@ -92,6 +92,15 @@ const LocaleDataWrapper*    SdrGlobalData::GetLocaleData()
     return pLocaleData;
 }
 
+namespace {
+
+struct TheSdrGlobalData: public rtl::Static<SdrGlobalData, TheSdrGlobalData> {};
+
+}
+
+SdrGlobalData & GetSdrGlobalData() {
+    return TheSdrGlobalData::get();
+}
 
 OLEObjCache::OLEObjCache()
 {

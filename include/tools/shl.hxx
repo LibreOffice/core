@@ -38,7 +38,7 @@
 //11 (SHL_IPC) removed
 //12 (SHL_SVX) removed
 //13 (SHL_ITEM) removed
-#define SHL_SVD         14
+//14 (SHL_SVD) removed
 //15 (SHL_SI) removed
 //16 (SHL_SFC) removed
 //17 (SHL_SFX) removed

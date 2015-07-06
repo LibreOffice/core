@@ -24,7 +24,6 @@
 #include <editeng/outliner.hxx>
 #include <svx/svxdllapi.h>
 #include <tools/link.hxx>
-#include <tools/shl.hxx>
 #include <tools/fract.hxx>
 #include <vcl/outdev.hxx>
 
@@ -239,14 +238,7 @@ public:
     OLEObjCache&        GetOLEObjCache() { return aOLEObjCache; }
 };
 
-inline SdrGlobalData& GetSdrGlobalData()
-{
-    void** ppAppData=GetAppData(SHL_SVD);
-    if (*ppAppData==NULL) {
-        *ppAppData=new SdrGlobalData;
-    }
-    return *static_cast<SdrGlobalData*>(*ppAppData);
-}
+SVX_DLLPUBLIC SdrGlobalData & GetSdrGlobalData();
 
 namespace sdr
 {
