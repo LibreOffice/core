@@ -92,8 +92,6 @@ class NeonUri
         static OUString makeConnectionEndPointString(
                                         const OUString & rHostName,
                                         int nPort );
-        OUString makeConnectionEndPointString() const
-        { return makeConnectionEndPointString( GetHost(), GetPort() ); }
 };
 
 } // namespace webdav_ucp

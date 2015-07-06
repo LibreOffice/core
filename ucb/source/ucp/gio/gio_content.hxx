@@ -113,10 +113,6 @@ private:
     bool feedSink( com::sun::star::uno::Reference< com::sun::star::uno::XInterface> aSink,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
-    com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
-        createInputStream(const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
-            throw( com::sun::star::uno::Exception );
-
     bool exchangeIdentity(const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >&  xNewId);
 
 public:

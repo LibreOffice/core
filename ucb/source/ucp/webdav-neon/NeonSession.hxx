@@ -86,12 +86,6 @@ public:
     const DAVRequestEnvironment & getRequestEnvironment() const
     { return m_aEnv; }
 
-    virtual void
-    OPTIONS( const OUString &  inPath,
-             DAVCapabilities & outCapabilities,
-             const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
-
     // allprop & named
     virtual void
     PROPFIND( const OUString & inPath,
@@ -204,12 +198,6 @@ public:
     virtual void LOCK( const OUString & inURL,
                        com::sun::star::ucb::Lock & inLock,
                        const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) SAL_OVERRIDE;
-
-    // refresh existing lock.
-    virtual sal_Int64 LOCK( const OUString & inURL,
-                            sal_Int64 nTimeout,
-                            const DAVRequestEnvironment & rEnv )
         throw ( std::exception ) SAL_OVERRIDE;
 
     virtual void UNLOCK( const OUString & inURL,

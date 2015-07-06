@@ -1364,9 +1364,4 @@ BaseContent::cPCL()
 }
 
 
-OUString BaseContent::getKey()
-{
-    return m_aUncPath;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

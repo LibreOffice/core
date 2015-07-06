@@ -88,11 +88,6 @@ class XResultSet_impl : public Notifier,
             return 0;
         }
 
-        virtual OUString                  getKey() SAL_OVERRIDE
-        {
-            return m_aBaseDirectory;
-        }
-
         sal_Int32 SAL_CALL CtorSuccess() { return m_nErrorCode;}
         sal_Int32 SAL_CALL getMinorError() { return m_nMinorErrorCode;}
 

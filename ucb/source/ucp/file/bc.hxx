@@ -264,7 +264,6 @@ namespace fileaccess {
         ContentEventNotifier*          cCEL() SAL_OVERRIDE;
         PropertySetInfoChangeNotifier* cPSL() SAL_OVERRIDE;
         PropertyChangeNotifier*        cPCL() SAL_OVERRIDE;
-        OUString                  getKey() SAL_OVERRIDE;
 
     private:
         // Data members

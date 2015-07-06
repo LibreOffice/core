@@ -32,9 +32,6 @@ namespace ftp {
 
     class FTPStreamContainer
     {
-    public:
-        virtual size_t write(void *buffer,size_t size,size_t nmemb) = 0;
-
     protected:
         ~FTPStreamContainer() {}
     };

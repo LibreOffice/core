@@ -75,12 +75,6 @@ public:
 
     // DAV methods
 
-
-    virtual void OPTIONS( const OUString & inPath,
-                          DAVCapabilities & outCapabilities,
-                          const DAVRequestEnvironment & rEnv )
-        throw( std::exception ) = 0;
-
     // allprop & named
     virtual void PROPFIND( const OUString & inPath,
                            const Depth inDepth,
@@ -182,12 +176,6 @@ public:
     virtual void LOCK( const OUString & inPath,
                        com::sun::star::ucb::Lock & inLock,
                        const DAVRequestEnvironment & rEnv )
-        throw ( std::exception ) = 0;
-
-    // refresh existing lock.
-    virtual sal_Int64 LOCK( const OUString & inPath,
-                            sal_Int64 nTimeout,
-                            const DAVRequestEnvironment & rEnv )
         throw ( std::exception ) = 0;
 
     virtual void UNLOCK( const OUString & inPath,

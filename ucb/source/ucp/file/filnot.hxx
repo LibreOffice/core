@@ -113,7 +113,6 @@ namespace fileaccess {
         virtual ContentEventNotifier*          cCEL() = 0;
         virtual PropertySetInfoChangeNotifier* cPSL() = 0;
         virtual PropertyChangeNotifier*        cPCL() = 0;
-        virtual OUString                  getKey() = 0;
 
     protected:
         ~Notifier() {}

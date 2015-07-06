@@ -129,12 +129,7 @@ public:
     // Additional interfaces
 
 
-
     // Non-interface methods.
-
-
-    rtl::Reference< DAVSessionFactory > getDAVSessionFactory()
-    { return m_xDAVSessionFactory; }
 
     bool getProperty( const OUString & rPropName,
                       ::com::sun::star::beans::Property & rProp,

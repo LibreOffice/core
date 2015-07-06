@@ -824,30 +824,6 @@ bool NeonSession::UsesProxy()
     return  !m_aProxyName.isEmpty() ;
 }
 
-void NeonSession::OPTIONS( const OUString & inPath,
-                           DAVCapabilities & outCapabilities,
-                           const DAVRequestEnvironment & rEnv )
-    throw( std::exception )
-{
-    osl::Guard< osl::Mutex > theGuard( m_aMutex );
-
-    Init( rEnv );
-
-    HttpServerCapabilities servercaps;
-    memset( &servercaps, 0, sizeof( servercaps ) );
-
-    int theRetVal = ne_options( m_pHttpSession,
-                                OUStringToOString(
-                                    inPath, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                &servercaps );
-
-    HandleError( theRetVal, inPath, rEnv );
-
-    outCapabilities.class1     = !!servercaps.dav_class1;
-    outCapabilities.class2     = !!servercaps.dav_class2;
-    outCapabilities.executable = !!servercaps.dav_executable;
-}
-
 void NeonSession::PROPFIND( const OUString & inPath,
                             const Depth inDepth,
                             const std::vector< OUString > & inPropNames,
@@ -1422,42 +1398,6 @@ void NeonSession::LOCK( const OUString & inPath,
     }
 
     HandleError( theRetVal, inPath, rEnv );
-}
-
-// Refresh existing lock
-sal_Int64 NeonSession::LOCK( const OUString & inPath,
-                             sal_Int64 nTimeout,
-                             const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
-{
-    osl::Guard< osl::Mutex > theGuard( m_aMutex );
-
-    // Try to get the neon lock from lock store
-    NeonLock * theLock
-        = m_aNeonLockStore.findByUri( makeAbsoluteURL( inPath ) );
-    if ( !theLock )
-         throw DAVException( DAVException::DAV_NOT_LOCKED );
-
-    Init( rEnv );
-
-    // refresh existing lock.
-    theLock->timeout = static_cast< long >( nTimeout );
-
-    TimeValue startCall;
-    osl_getSystemTime( &startCall );
-
-    int theRetVal = ne_lock_refresh( m_pHttpSession, theLock );
-
-    if ( theRetVal == NE_OK )
-    {
-        m_aNeonLockStore.updateLock( theLock,
-                                     lastChanceToSendRefreshRequest(
-                                         startCall, theLock->timeout ) );
-    }
-
-    HandleError( theRetVal, inPath, rEnv );
-
-    return theLock->timeout;
 }
 
 // Refresh existing lock
