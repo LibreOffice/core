@@ -76,6 +76,9 @@ class TextChainFlow {
 
     //  -- Private Members --
     private:
+
+    void impUpdateCursorEvent(SdrOutliner *, bool);
+
     SdrTextObj *mpTargetLink;
     SdrTextObj *mpNextLink;
 
