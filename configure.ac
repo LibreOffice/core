@@ -3685,6 +3685,7 @@ find_msvc_x64_dlls()
 
 SHOWINCLUDES_PREFIX=
 MSBUILD_PATH=
+DEVENV=
 if test "$_os" = "WINNT"; then
     if test "$WITH_MINGW" != "yes"; then
         AC_MSG_CHECKING([Visual C++])
@@ -3731,6 +3732,12 @@ if test "$_os" = "WINNT"; then
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
         if test -n "$regvalue" ; then
             MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
+        fi
+
+        # Find the version of devenv.exe
+        DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe"
+        if test ! -e "$DEVENV"; then
+            AC_MSG_ERROR([No devenv.exe found, Visual Studio installation broken?])
         fi
 
         dnl ===========================================================
@@ -3924,6 +3931,7 @@ if test "$_os" = "WINNT"; then
     fi
 fi
 AC_SUBST(VCVER)
+AC_SUBST(DEVENV)
 PathFormat "$MSPDB_PATH"
 MSPDB_PATH="$formatted_path"
 AC_SUBST(SHOWINCLUDES_PREFIX)
