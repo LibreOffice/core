@@ -153,7 +153,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
                 UpdateCRC( mpInBuf, nInToRead );
 
         }
-        err = inflate( PZSTREAM, Z_NO_FLUSH );
+        err = mbStatus ? inflate(PZSTREAM, Z_NO_FLUSH) : -1;
         if ( err < 0 )
         {
             mbStatus = false;
@@ -220,7 +220,7 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
                 UpdateCRC( mpInBuf, nInToRead );
 
         }
-        err = inflate( PZSTREAM, Z_NO_FLUSH );
+        err = mbStatus ? inflate(PZSTREAM, Z_NO_FLUSH) : -1;
         if ( err < 0 )
         {
             // Accept Z_BUF_ERROR as EAGAIN or EWOULDBLOCK.
@@ -273,7 +273,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize
                 UpdateCRC( mpInBuf, nInToRead );
 
         }
-        err = inflate( PZSTREAM, Z_NO_FLUSH );
+        err = mbStatus ? inflate(PZSTREAM, Z_NO_FLUSH) : -1;
         if ( err < 0 )
         {
             // Accept Z_BUF_ERROR as EAGAIN or EWOULDBLOCK.
