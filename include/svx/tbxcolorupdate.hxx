@@ -49,7 +49,7 @@ namespace svx
                                                ToolBox*     ptrTbx);
                     ~ToolboxButtonColorUpdater();
 
-        void        Update( const Color& rColor );
+        void        Update( const Color& rColor, bool bForceUpdate = false );
 
     private:
         sal_uInt16      mnBtnId;

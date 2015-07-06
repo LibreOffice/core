@@ -243,6 +243,10 @@ public:
                               const SfxPoolItem* pState) SAL_OVERRIDE;
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
     virtual void Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
+
+    // XSubToolbarController
+    virtual sal_Bool SAL_CALL opensSubToolbar() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL updateImage() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 class SVX_DLLPUBLIC SvxFrameToolBoxControl : public SfxToolBoxControl

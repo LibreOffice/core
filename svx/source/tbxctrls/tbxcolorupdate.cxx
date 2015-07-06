@@ -76,7 +76,7 @@ namespace svx
     ToolboxButtonColorUpdater::~ToolboxButtonColorUpdater()
     {}
 
-    void ToolboxButtonColorUpdater::Update(const Color& rColor)
+    void ToolboxButtonColorUpdater::Update(const Color& rColor, bool bForceUpdate)
     {
         Image aImage(mpTbx->GetItemImageOriginal(mnBtnId));
         Size aItemSize(mpTbx->GetItemContentSize(mnBtnId));
@@ -93,7 +93,8 @@ namespace svx
         // is COL_BLACK, then (maCurColor != aColor) becomes 'false', therefore we take
         // explicit care of COL_BLACK from the last argument in the condition so that the
         // Update() does its routine job appropriately !
-        if ((maCurColor != aColor) || bSizeChanged || bDisplayModeChanged || (aColor == COL_BLACK))
+        if ((maCurColor != aColor) || (aColor == COL_BLACK) ||
+            bSizeChanged || bDisplayModeChanged || bForceUpdate )
         {
             // create an empty bitmap, and copy the original bitmap inside
             // (so that it grows in case the original bitmap was smaller)

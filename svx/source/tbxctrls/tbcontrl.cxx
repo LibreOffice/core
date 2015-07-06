@@ -35,6 +35,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/imagemgr.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/templdlg.hxx>
@@ -2773,6 +2774,26 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
     aArgs[0].Name  = aParamName;
     aArgs[0].Value = makeAny( (sal_uInt32)( mPaletteManager.GetLastColor().GetColor() ));
     Dispatch( aCommand, aArgs );
+}
+
+sal_Bool SvxColorToolBoxControl::opensSubToolbar()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    // For a split button (i.e. bSidebarType == false), we mark this controller as
+    // a sub-toolbar controller, so we get notified (through updateImage method) on
+    // button image changes, and could redraw the last used color on top of it.
+    return !bSidebarType;
+}
+
+void SvxColorToolBoxControl::updateImage()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    Image aImage = GetImage( m_xFrame, m_aCommandURL, hasBigImages() );
+    if ( !!aImage )
+    {
+        GetToolBox().SetItemImage( GetId(), aImage );
+        m_xBtnUpdater->Update( mPaletteManager.GetLastColor(), true );
+    }
 }
 
 SfxToolBoxControl* SvxColorToolBoxControl::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx )
