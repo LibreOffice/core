@@ -77,17 +77,8 @@ svx::SpellPortions SpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck
         ProvideOutliner();
         aResult = mpSdOutliner->GetNextSpellSentence();
     }
-
-    // Close the spell check dialog when there are no more sentences to
-    // check.
-    if (aResult.empty())
-    {
-        SfxBoolItem aItem (SID_SPELL_DIALOG, false);
-        /* this comment prevents spellcheck window to exit when clicked on OK button
-        GetBindings().GetDispatcher()->Execute(SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON, &aItem, 0L); */
-    }
-
     return aResult;
+
 }
 
 void SpellDialogChildWindow::ApplyChangedSentence (
