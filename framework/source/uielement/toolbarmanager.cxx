@@ -325,6 +325,8 @@ void ToolBarManager::RefreshImages()
     SolarMutexGuard g;
 
     bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
+    m_pToolBar->SetToolboxButtonSize( bBigImages ? TOOLBOX_BUTTONSIZE_LARGE : TOOLBOX_BUTTONSIZE_SMALL );
+
     for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
     {
         sal_uInt16 nId( m_pToolBar->GetItemId( nPos ) );
@@ -355,7 +357,6 @@ void ToolBarManager::RefreshImages()
         }
     }
 
-    m_pToolBar->SetToolboxButtonSize( bBigImages ? TOOLBOX_BUTTONSIZE_LARGE : TOOLBOX_BUTTONSIZE_SMALL );
     ::Size aSize = m_pToolBar->CalcWindowSizePixel();
     m_pToolBar->SetOutputSizePixel( aSize );
 }
