@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_51551f1b",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-07-06T18:51:01Z",
+      "side": 1,
+      "message": "right, now that these works in sal_Unicode*, not needed indeed",
+      "parentUuid": "1a54edaf_f103eb74",
+      "revId": "3bab59df9c79595818d8c946d9850e635b4c507b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_51d8bf1d",
         "filename": "sal/rtl/ustring.cxx",
         "patchSetId": 2
@@ -71,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_1136c703",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-07-06T18:51:01Z",
+      "side": 1,
+      "message": "if sal_Unicode where to be changed to 4 bytes this would still work as is no ? why add an unneeded constraint.\n\n(we already got the include via \u003clog.hxx\u003e (at least)\nthat is why the compiler did not wine.. but yeah I\u0027ll add it for clarity.",
+      "parentUuid": "1a54edaf_51d8bf1d",
+      "revId": "3bab59df9c79595818d8c946d9850e635b4c507b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_31dbc31d",
         "filename": "sal/rtl/ustring.cxx",
         "patchSetId": 2
@@ -82,6 +118,24 @@
       "writtenOn": "2015-07-06T13:15:51Z",
       "side": 1,
       "message": "don\u0027t use C-style casts",
+      "revId": "3bab59df9c79595818d8c946d9850e635b4c507b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_f130cb09",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2015-07-06T18:51:01Z",
+      "side": 1,
+      "message": "even better the cast is not needed at all anymore",
+      "parentUuid": "1a54edaf_31dbc31d",
       "revId": "3bab59df9c79595818d8c946d9850e635b4c507b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
