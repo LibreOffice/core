@@ -393,6 +393,8 @@ private:
     bool                            m_bInHeaderFooterImport;
     bool                            m_bDiscardHeaderFooter;
     bool                            m_bInFootOrEndnote;
+    /// Did we get a <w:separator/> for this footnote already?
+    bool                            m_bSeenFootOrEndnoteSeparator;
 
     bool                            m_bLineNumberingSet;
     bool                            m_bIsInFootnoteProperties;
@@ -607,6 +609,8 @@ public:
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
     bool IsInFootOrEndnote() const { return m_bInFootOrEndnote; }
+    /// Got a <w:separator/>.
+    void SeenFootOrEndnoteSeparator();
 
     void PushAnnotation();
     void PopAnnotation();
