@@ -1473,14 +1473,14 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
 
     //first, loop through ALL of the chained textboxes to identify a unique ID for each chain, and sequence number for each textbox in that chain.
     std::map<OUString, MSWordExportBase::LinkedTextboxInfo>::iterator linkedTextboxesIter;
-    if( !m_pImpl->m_rExport.m_bLinkedTextboxesHelperInitialized )
+    if (!m_pImpl->m_rExport.m_bLinkedTextboxesHelperInitialized)
     {
         sal_Int32 nSeq=0;
         linkedTextboxesIter = m_pImpl->m_rExport.m_aLinkedTextboxesHelper.begin();
-        while ( linkedTextboxesIter != m_pImpl->m_rExport.m_aLinkedTextboxesHelper.end() )
+        while (linkedTextboxesIter != m_pImpl->m_rExport.m_aLinkedTextboxesHelper.end())
         {
             //find the start of a textbox chain: has no PREVIOUS link, but does have NEXT link
-            if ( linkedTextboxesIter->second.sPrevChain.isEmpty() && !linkedTextboxesIter->second.sNextChain.isEmpty() )
+            if (linkedTextboxesIter->second.sPrevChain.isEmpty() && !linkedTextboxesIter->second.sNextChain.isEmpty())
             {
                 //assign this chain a unique ID and start a new sequence
                 nSeq = 0;
@@ -1492,18 +1492,18 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
                 //follow the chain and assign the same id, and incremental sequence numbers.
                 std::map<OUString, MSWordExportBase::LinkedTextboxInfo>::iterator  followChainIter;
                 followChainIter = m_pImpl->m_rExport.m_aLinkedTextboxesHelper.find(linkedTextboxesIter->second.sNextChain);
-                while ( followChainIter != m_pImpl->m_rExport.m_aLinkedTextboxesHelper.end() )
+                while (followChainIter != m_pImpl->m_rExport.m_aLinkedTextboxesHelper.end())
                 {
                     //verify that the NEXT textbox also points to me as the PREVIOUS.
                     // A broken link indicates a leftover remnant that can be ignored.
-                    if( followChainIter->second.sPrevChain != sCheckForBrokenChains )
+                    if (followChainIter->second.sPrevChain != sCheckForBrokenChains)
                         break;
 
                     followChainIter->second.nId = m_pImpl->m_rExport.m_nLinkedTextboxesChainId;
                     followChainIter->second.nSeq = ++nSeq;
 
                     //empty next chain indicates the end of the linked chain.
-                    if ( followChainIter->second.sNextChain.isEmpty() )
+                    if (followChainIter->second.sNextChain.isEmpty())
                         break;
 
                     sCheckForBrokenChains = followChainIter->first;
@@ -1520,19 +1520,19 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
     bool isTxbxLinked = false ;
 
     OUString sLinkChainName;
-    if ( xPropSetInfo.is() )
+    if (xPropSetInfo.is())
     {
-        if ( xPropSetInfo->hasPropertyByName("LinkDisplayName") )
+        if (xPropSetInfo->hasPropertyByName("LinkDisplayName"))
             xPropertySet->getPropertyValue("LinkDisplayName") >>= sLinkChainName;
-        else if ( xPropSetInfo->hasPropertyByName("ChainName") )
+        else if (xPropSetInfo->hasPropertyByName("ChainName"))
             xPropertySet->getPropertyValue("ChainName") >>= sLinkChainName;
     }
 
     // second, check if THIS textbox is linked and then decide whether to write the tag txbx or linkedTxbx
     linkedTextboxesIter = m_pImpl->m_rExport.m_aLinkedTextboxesHelper.find(sLinkChainName);
-    if ( linkedTextboxesIter != m_pImpl->m_rExport.m_aLinkedTextboxesHelper.end() )
+    if (linkedTextboxesIter != m_pImpl->m_rExport.m_aLinkedTextboxesHelper.end())
     {
-        if( (linkedTextboxesIter->second.nId !=0) && (linkedTextboxesIter->second.nSeq != 0) )
+        if ((linkedTextboxesIter->second.nId !=0) && (linkedTextboxesIter->second.nSeq != 0))
         {
             //not the first in the chain, so write the tag as linkedTxbx
             pFS->singleElementNS(XML_wps, XML_linkedTxbx,
@@ -1545,7 +1545,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
             */
             skipTxBxContent = true ;
         }
-        else if( (linkedTextboxesIter->second.nId != 0) && (linkedTextboxesIter->second.nSeq == 0) )
+        else if ((linkedTextboxesIter->second.nId != 0) && (linkedTextboxesIter->second.nSeq == 0))
         {
             /* this is the first textbox in the chaining, we add the text content
                to this block*/
