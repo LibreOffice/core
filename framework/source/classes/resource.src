@@ -114,6 +114,11 @@ String STR_CLEAR_RECENT_FILES_HELP
     Text [ en-US ] = "Clears the list with the most recently opened files. This action can not be undone.";
 };
 
+String STR_OPEN_REMOTE
+{
+    Text [ en-US ] = "Open remote file";
+};
+
 String STR_TOOLBAR_TITLE_ADDON
 {
     Text [ en-US ] = "Add-On %num%";
