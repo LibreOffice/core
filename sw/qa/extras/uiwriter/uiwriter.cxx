@@ -36,6 +36,7 @@
 #include <unocrsrhelper.hxx>
 #include <unotbl.hxx>
 #include <pagedesc.hxx>
+#include "com/sun/star/text/XDefaultNumberingProvider.hpp"
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -97,6 +98,7 @@ public:
     void testTdf90003();
     void testTdf51741();
     void testdelofTableRedlines();
+    void testTdf81995();
     void testExportToPicture();
     void testTdf69282();
     void testTdf69282WithMirror();
@@ -146,6 +148,7 @@ public:
     CPPUNIT_TEST(testTdf90003);
     CPPUNIT_TEST(testTdf51741);
     CPPUNIT_TEST(testdelofTableRedlines);
+    CPPUNIT_TEST(testTdf81995);
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testTdf69282);
     CPPUNIT_TEST(testTdf69282WithMirror);
@@ -996,6 +999,38 @@ void SwUiWriterTest::testdelofTableRedlines()
     SwExtraRedlineTable& redtbl = pDocRed.GetExtraRedlineTable();
     redtbl.DeleteAllTableRedlines(pDoc, tbl, false, sal_uInt16(USHRT_MAX));
     CPPUNIT_ASSERT(redtbl.IsEmpty());
+}
+
+void SwUiWriterTest::testTdf81995()
+{
+    createDoc();
+    uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance("com.sun.star.text.DefaultNumberingProvider"), uno::UNO_QUERY);
+    com::sun::star::lang::Locale xlocale;
+    xlocale.Language = OUString("en");
+    xlocale.Country = OUString("US");
+    uno::Sequence<uno::Reference<container::XIndexAccess>> aIndexAccess(xDefNum->getDefaultOutlineNumberings(xlocale));
+    uno::Sequence<beans::PropertyValue> aProps;
+    CPPUNIT_ASSERT_EQUAL(8, aIndexAccess.getLength());
+    for(int i=0;i<aIndexAccess.getLength();i++)
+    {
+        CPPUNIT_ASSERT_EQUAL(5, aIndexAccess[i]->getCount());
+        for(int j=0;j<aIndexAccess[i]->getCount();j++)
+        {
+            aIndexAccess[i]->getByIndex(j) >>= aProps;
+            CPPUNIT_ASSERT_EQUAL(12, aProps.getLength());
+            for(int k=0;k<aProps.getLength();k++)
+            {
+                const beans::PropertyValue& rProp = aProps[k];
+                uno::Any aAny = rProp.Value;
+                if(rProp.Name == "Prefix" || rProp.Name == "Suffix" || rProp.Name == "BulletChar" || rProp.Name == "BulletFontName" || rProp.Name == "Transliteration")
+                    CPPUNIT_ASSERT_EQUAL(OUString("string"), aAny.getValueTypeName());
+                else if(rProp.Name == "NumberingType" || rProp.Name == "ParentNumbering" || rProp.Name == "Adjust")
+                    CPPUNIT_ASSERT_EQUAL(OUString("short"), aAny.getValueTypeName());
+                else if(rProp.Name == "LeftMargin" || rProp.Name == "SymbolTextDistance" || rProp.Name == "FirstLineOffset" || rProp.Name == "NatNum")
+                    CPPUNIT_ASSERT_EQUAL(OUString("long"), aAny.getValueTypeName());
+            }
+        }
+    }
 }
 
 void SwUiWriterTest::testExportToPicture()
