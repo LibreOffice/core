@@ -1197,7 +1197,7 @@ if ( !defined( $result_shapes{'textBox'} ) ) {
 
 # Generate the data
 if ($drawingml_adj_names_data eq 1) {
-    foreach my $adj_name (keys %adj_names)
+    foreach my $adj_name (sort(keys %adj_names))
     {
         foreach my $adj (@{$adj_names{$adj_name}})
         {
