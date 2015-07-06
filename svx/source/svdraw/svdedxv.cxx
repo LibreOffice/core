@@ -815,6 +815,15 @@ bool SdrObjEditView::SdrBeginTextEdit(
                 }
             }
 
+            // FIXME(matteocam)
+            // XXX: Trying to get to the next text obj directly
+            if (pTextObj->IsChainable()) {
+                SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
+                SdrEndTextEdit();
+                SdrBeginTextEdit(pNextLink);
+            }
+
+
             return true; // ran fine, let TextEdit run now
         }
         else
