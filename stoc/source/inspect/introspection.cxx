@@ -162,6 +162,7 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
 {
     friend class Implementation;
     friend class ImplIntrospectionAccess;
+    friend class ImplIntrospectionAdapter;
 
     // Holding CoreReflection
     Reference< XIdlReflection > mxCoreReflection;
@@ -194,8 +195,16 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
     sal_Int32 mnAttributePropCount;
     sal_Int32 mnMethodPropCount;
 
-    // Flag, if a FastPropertySet is supported
+    // Flags which indicate if various interfaces are present
     bool mbFastPropSet;
+    bool mbPropertySet;
+    bool mbElementAccess;
+    bool mbNameAccess;
+    bool mbNameContainer;
+    bool mbIndexAccess;
+    bool mbIndexContainer;
+    bool mbEnumerationAccess;
+    bool mbIdlArray;
 
     // Original-Handles of FastPropertySets
     sal_Int32* mpOrgPropertyHandleArray;
@@ -261,6 +270,15 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
     maPropertyConceptSeq.realloc( ARRAY_SIZE_STEP );
 
     mbFastPropSet = false;
+    mbPropertySet = false;
+    mbElementAccess = false;
+    mbNameAccess = false;
+    mbNameContainer = false;
+    mbIndexAccess = false;
+    mbIndexContainer = false;
+    mbEnumerationAccess = false;
+    mbIdlArray = false;
+
     mpOrgPropertyHandleArray = NULL;
 
     mnPropCount = 0;
@@ -675,6 +693,9 @@ class ImplIntrospectionAccess : public IntrospectionAccessHelper
 {
     friend class Implementation;
 
+    // Guards the instantiation of ImplIntrospectionAdapter
+    osl::Mutex m_aMutex;
+
     // Untersuchtes Objekt
     Any maInspectedObject;
 
@@ -871,14 +892,20 @@ ImplIntrospectionAdapter::ImplIntrospectionAdapter( ImplIntrospectionAccess* pAc
     if( eType == TypeClass_INTERFACE )
     {
         mxIface = *static_cast<Reference< XInterface > const *>(mrInspectedObject.getValue());
-
-        mxObjElementAccess = Reference<XElementAccess>::query( mxIface );
-        mxObjNameAccess = Reference<XNameAccess>::query( mxIface );
-        mxObjNameContainer = Reference<XNameContainer>::query( mxIface );
-        mxObjIndexAccess = Reference<XIndexAccess>::query( mxIface );
-        mxObjIndexContainer = Reference<XIndexContainer>::query( mxIface );
-        mxObjEnumerationAccess = Reference<XEnumerationAccess>::query( mxIface );
-        mxObjIdlArray = Reference<XIdlArray>::query( mxIface );
+        if( mpStaticImpl->mbElementAccess )
+            mxObjElementAccess = Reference<XElementAccess>::query( mxIface );
+        if( mpStaticImpl->mbNameAccess )
+            mxObjNameAccess = Reference<XNameAccess>::query( mxIface );
+        if( mpStaticImpl->mbNameContainer )
+            mxObjNameContainer = Reference<XNameContainer>::query( mxIface );
+        if( mpStaticImpl->mbIndexAccess )
+            mxObjIndexAccess = Reference<XIndexAccess>::query( mxIface );
+        if( mpStaticImpl->mbIndexContainer )
+            mxObjIndexContainer = Reference<XIndexContainer>::query( mxIface );
+        if( mpStaticImpl->mbEnumerationAccess )
+            mxObjEnumerationAccess = Reference<XEnumerationAccess>::query( mxIface );
+        if( mpStaticImpl->mbIdlArray )
+            mxObjIdlArray = Reference<XIdlArray>::query( mxIface );
     }
 }
 
@@ -903,7 +930,7 @@ Any SAL_CALL ImplIntrospectionAdapter::queryInterface( const Type& rType )
             || ( mxObjNameContainer.is() && (aRet = ::cppu::queryInterface( rType, static_cast< XNameContainer* >( this ) ) ).hasValue() )
             || ( mxObjIndexAccess.is() && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexAccess* >( this ) ) ).hasValue() )
             || ( mxObjIndexContainer.is() && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexContainer* >( this ) ) ).hasValue() )
-            || ( mxObjEnumerationAccess    .is() && (aRet = ::cppu::queryInterface( rType, static_cast< XEnumerationAccess* >( this ) ) ).hasValue() )
+            || ( mxObjEnumerationAccess.is() && (aRet = ::cppu::queryInterface( rType, static_cast< XEnumerationAccess* >( this ) ) ).hasValue() )
             || ( mxObjIdlArray.is() && (aRet = ::cppu::queryInterface( rType, static_cast< XIdlArray* >( this ) ) ).hasValue() )
           )
         {
@@ -1345,12 +1372,18 @@ Sequence< Type > ImplIntrospectionAccess::getSupportedListeners()
 Reference<XInterface> SAL_CALL ImplIntrospectionAccess::queryAdapter( const Type& rType )
     throw( IllegalTypeException, RuntimeException, std::exception )
 {
+    osl::ResettableGuard< osl::Mutex > aGuard( m_aMutex );
+
     // Gibt es schon einen Adapter?
     Reference< XInterface > xAdapter( maAdapter );
+    aGuard.clear();
+
     if( !xAdapter.is() )
     {
         xAdapter = *( new ImplIntrospectionAdapter( this, maInspectedObject, mpStaticImpl ) );
-        maAdapter = xAdapter;
+        aGuard.reset();
+        if( !Reference< XInterface >(maAdapter).is() )
+            maAdapter = xAdapter;
     }
 
     Reference<XInterface> xRet;
@@ -1620,6 +1653,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     Reference<XIdlClass>                xImplClass;
     Reference<XPropertySetInfo>            xPropSetInfo;
     Reference<XPropertySet>                xPropSet;
+    bool                                bHasPropertySet = false;
 
     // Look for interfaces XTypeProvider and PropertySet
     if( eType == TypeClass_INTERFACE )
@@ -1637,7 +1671,10 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                 const Type* pTypes = SupportedTypesSeq.getConstArray();
                 for( sal_Int32 i = 0 ; i < nTypeCount ; i++ )
                 {
-                    pClasses[i] = reflection->forName(pTypes[i].getTypeName());
+                    OUString typeName( pTypes[i].getTypeName() );
+                    pClasses[i] = reflection->forName( typeName );
+                    if( !bHasPropertySet && typeName == "com.sun.star.beans.XPropertySet" )
+                        bHasPropertySet = true;
                 }
                 // TODO: Caching!
             }
@@ -1651,7 +1688,8 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
             SupportedClassSeq[0] = xImplClass;
         }
 
-        xPropSet = Reference<XPropertySet>::query( x );
+        if ( bHasPropertySet )
+            xPropSet = Reference<XPropertySet>::query( x );
         // Jetzt versuchen, das PropertySetInfo zu bekommen
         if( xPropSet.is() )
             xPropSetInfo = xPropSet->getPropertySetInfo();
@@ -1660,7 +1698,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     }
 
     if (xTypeProvider.is()) {
-        TypeKey key(xPropSetInfo, xTypeProvider->getTypes());
+        TypeKey key(xPropSetInfo, SupportedTypesSeq);
 
         osl::MutexGuard g(m_aMutex);
         if (rBHelper.bDisposed || rBHelper.bInDispose) {
@@ -1699,6 +1737,8 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
     if( !pAccess.is() )
         pAccess = new IntrospectionAccessStatic_Impl( reflection );
+
+    pAccess->mbPropertySet = bHasPropertySet;
 
     // Referenzen auf wichtige Daten von pAccess
     sal_Int32& rPropCount = pAccess->mnPropCount;
@@ -1952,22 +1992,36 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             rMethodConcept_i |= ( NAMECONTAINER  |
                                                   INDEXCONTAINER |
                                                   ENUMERATION );
+                            pAccess->mbElementAccess = true;
                         } else if ((className
-                                    == "com.sun.star.container.XNameContainer")
-                                   || (className
-                                       == "com.sun.star.container.XNameAccess"))
+                                    == "com.sun.star.container.XNameContainer"))
                         {
                             rMethodConcept_i |= NAMECONTAINER;
+                            pAccess->mbNameContainer = true;
                         } else if ((className
-                                    == "com.sun.star.container.XIndexContainer")
-                                   || (className
-                                       == "com.sun.star.container.XIndexAccess"))
+                                    == "com.sun.star.container.XNameAccess"))
+                        {
+                            rMethodConcept_i |= NAMECONTAINER;
+                            pAccess->mbNameAccess = true;
+                        } else if ((className
+                                    == "com.sun.star.container.XIndexContainer"))
                         {
                             rMethodConcept_i |= INDEXCONTAINER;
+                            pAccess->mbIndexContainer = true;
+                        } else if ((className
+                                    == "com.sun.star.container.XIndexAccess"))
+                        {
+                            rMethodConcept_i |= INDEXCONTAINER;
+                            pAccess->mbIndexAccess = true;
                         } else if (className
                                    == "com.sun.star.container.XEnumerationAccess")
                         {
                             rMethodConcept_i |= ENUMERATION;
+                            pAccess->mbEnumerationAccess = true;
+                        } else if (className
+                                   == "com.sun.star.reflection.XIdlArray")
+                        {
+                            pAccess->mbIdlArray = true;
                         }
 
                         // Wenn der Name zu kurz ist, wird's sowieso nichts
