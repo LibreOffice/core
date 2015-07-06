@@ -43,7 +43,7 @@
 //16 (SHL_SFC) removed
 //17 (SHL_SFX) removed
 //18 (SHL_SO2) removed
-#define SHL_IDL         19
+//19 (SHL_IDL) removed
 //20 (SHL_IDE) removed
 //21 (SHL_EDIT) removed
 //22 (SHL_VCED) removed

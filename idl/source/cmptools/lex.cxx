@@ -342,8 +342,8 @@ bool SvTokenStream::MakeToken( SvToken & rToken )
         else
         {
             sal_uInt32 nHashId;
-            if( IDLAPP->pHashTable->Test( aStr, &nHashId ) )
-                rToken.SetHash( IDLAPP->pHashTable->Get( nHashId ) );
+            if( GetIdlApp().pHashTable->Test( aStr, &nHashId ) )
+                rToken.SetHash( GetIdlApp().pHashTable->Get( nHashId ) );
             else
             {
                 rToken.nType   = SVTOKEN_IDENTIFIER;

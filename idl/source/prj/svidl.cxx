@@ -211,7 +211,6 @@ int main ( int argc, char ** argv)
     }
 
     delete pDataBase;
-    DeInit();
     if( nExit != 0 )
         fprintf( stderr, "svidl terminated with errors\n" );
     return nExit;

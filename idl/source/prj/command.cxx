@@ -116,15 +116,10 @@ char CommandLineSyntax[] =
 
 void Init()
 {
-    if( !IDLAPP->pHashTable )
-        IDLAPP->pHashTable      = new SvStringHashTable( 2801 );
-    if( !IDLAPP->pGlobalNames )
-        IDLAPP->pGlobalNames    = new SvGlobalHashNames();
-}
-
-void DeInit()
-{
-    delete IDLAPP;
+    if( !GetIdlApp().pHashTable )
+        GetIdlApp().pHashTable      = new SvStringHashTable( 2801 );
+    if( !GetIdlApp().pGlobalNames )
+        GetIdlApp().pGlobalNames    = new SvGlobalHashNames();
 }
 
 bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )

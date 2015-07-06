@@ -125,13 +125,12 @@ public:
                 ~IdlDll();
 };
 
-IdlDll * GetIdlApp();
-#define IDLAPP GetIdlApp()
+IdlDll & GetIdlApp();
 
 #define SV_GLOBAL_HASH_ACCESS( Name )                           \
-    if( !IDLAPP->pGlobalNames )                                 \
-        IDLAPP->pGlobalNames = new SvGlobalHashNames();         \
-    return IDLAPP->pGlobalNames->MM_##Name;
+    if( !GetIdlApp().pGlobalNames )                                 \
+        GetIdlApp().pGlobalNames = new SvGlobalHashNames();         \
+    return GetIdlApp().pGlobalNames->MM_##Name;
 
 #define HASH_INLINE( Name )                                             \
 inline SvStringHashEntry * SvHash_##Name() { SV_GLOBAL_HASH_ACCESS( Name ) }

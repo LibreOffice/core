@@ -531,7 +531,7 @@ void SvIdlDataBase::WriteError( SvTokenStream & rInStm )
     }
     if( pTok && pTok->IsIdentifier() )
     {
-        OString aN = IDLAPP->pHashTable->GetNearString( pTok->GetString() );
+        OString aN = GetIdlApp().pHashTable->GetNearString( pTok->GetString() );
         if( !aN.isEmpty() )
             fprintf( stderr, "%s versus %s\n", pTok->GetString().getStr(), aN.getStr() );
     }

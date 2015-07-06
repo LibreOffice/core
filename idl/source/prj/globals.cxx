@@ -17,19 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include <tools/shl.hxx>
+#include <sal/config.h>
 
 #include <globals.hxx>
 #include <database.hxx>
 
-IdlDll * GetIdlApp()
+namespace {
+
+struct TheIdlDll: public rtl::Static<IdlDll, TheIdlDll> {};
+
+}
+
+IdlDll & GetIdlApp()
 {
-    if( !(*reinterpret_cast<IdlDll**>(GetAppData(SHL_IDL))) )
-    {
-        (*reinterpret_cast<IdlDll**>(GetAppData(SHL_IDL))) = new IdlDll();
-    }
-    return (*reinterpret_cast<IdlDll**>(GetAppData(SHL_IDL)));
+    return TheIdlDll::get();
 }
 
 IdlDll::IdlDll()
@@ -47,8 +48,8 @@ IdlDll::~IdlDll()
 inline SvStringHashEntry * INS( const OString& rName )
 {
     sal_uInt32  nIdx;
-    IDLAPP->pHashTable->Insert( rName, &nIdx );
-    return IDLAPP->pHashTable->Get( nIdx );
+    GetIdlApp().pHashTable->Insert( rName, &nIdx );
+    return GetIdlApp().pHashTable->Get( nIdx );
 }
 #define A_ENTRY( Name ) , MM_##Name( INS( #Name ) )
 
