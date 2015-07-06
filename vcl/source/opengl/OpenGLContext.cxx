@@ -232,33 +232,33 @@ bool WGLisExtensionSupported(const char *extension)
     const size_t extlen = strlen(extension);
     const char *supported = NULL;
 
-    // Try To Use wglGetExtensionStringARB On Current DC, If Possible
+    // Try to use wglGetExtensionStringARB on current DC, if possible
     PROC wglGetExtString = wglGetProcAddress("wglGetExtensionsStringARB");
 
     if (wglGetExtString)
         supported = ((char*(__stdcall*)(HDC))wglGetExtString)(wglGetCurrentDC());
-    // If That Failed, Try Standard Opengl Extensions String
+    // If that failed, try standard OpenGL extensions string
     if (supported == NULL)
         supported = (char*)glGetString(GL_EXTENSIONS);
-    // If That Failed Too, Must Be No Extensions Supported
+    // If that failed too, must be no extensions supported
     if (supported == NULL)
         return false;
 
-    // Begin Examination At Start Of String, Increment By 1 On False Match
+    // Begin examination at start of string, increment by 1 on false match
     for (const char* p = supported; ; p++)
     {
-        // Advance p Up To The Next Possible Match
+        // Advance p up to the next possible match
         p = strstr(p, extension);
 
         if (p == NULL)
             return 0; // No Match
 
-        // Make Sure That Match Is At The Start Of The String Or That
-        // The Previous Char Is A Space, Or Else We Could Accidentally
-        // Match "wglFunkywglExtension" With "wglExtension"
+        // Make sure that match is at the start of the string or that
+        // the previous char is a space, or else we could accidentally
+        // match "wglFunkywglExtension" with "wglExtension"
 
-        // Also, Make Sure That The Following Character Is Space Or NULL
-        // Or Else "wglExtensionTwo" Might Match "wglExtension"
+        // Also, make sure that the following character is space or null
+        // or else "wglExtensionTwo" might match "wglExtension"
         if ((p==supported || p[-1]==' ') && (p[extlen]=='\0' || p[extlen]==' '))
             return 1; // Match
     }
@@ -269,37 +269,37 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
 {
     HWND hWnd = NULL;
     GLWindow glWin;
-    //create a temp window to check whether support multi-sample, if support, get the format
+    // Create a temp window to check whether support multi-sample, if support, get the format
     if (InitTempWindow(&hWnd, 1, 1, pfd, glWin) < 0)
     {
         SAL_WARN("vcl.opengl", "Can't create temp window to test");
         return false;
     }
 
-    // See If The String Exists In WGL!
+    // See if the string exists in WGL
     if (!WGLisExtensionSupported("WGL_ARB_multisample"))
     {
-        SAL_WARN("vcl.opengl", "Device doesn't support multi sample");
+        SAL_WARN("vcl.opengl", "Device doesn't support multisample");
         return false;
     }
-    // Get Our Pixel Format
+    // Get our pixel format
     PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
     if (!wglChoosePixelFormatARB)
     {
         return false;
     }
-    // Get Our Current Device Context
+    // Get our current device context
     HDC hDC = GetDC(hWnd);
 
     int pixelFormat;
     int valid;
     UINT    numFormats;
     float   fAttributes[] = {0,0};
-    // These Attributes Are The Bits We Want To Test For In Our Sample
-    // Everything Is Pretty Standard, The Only One We Want To
-    // Really Focus On Is The SAMPLE BUFFERS ARB And WGL SAMPLES
-    // These Two Are Going To Do The Main Testing For Whether Or Not
-    // We Support Multisampling On This Hardware.
+    // These attributes are the bits we want to test for in our sample.
+    // Everything is pretty standard, the only one we want to
+    // really focus on is the WGL_SAMPLE_BUFFERS_ARB and WGL_SAMPLES_ARB.
+    // These two are going to do the main testing for whether or not
+    // we support multisampling on this hardware.
     int iAttributes[] =
     {
         WGL_DOUBLE_BUFFER_ARB,GL_TRUE,
@@ -325,9 +325,9 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
 
     bool bArbMultisampleSupported = true;
 
-    // First We Check To See If We Can Get A Pixel Format For 4 Samples
+    // First we check to see if we can get a pixel format for 4 samples
     valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
-    // If We Returned True, And Our Format Count Is Greater Than 1
+    // If we returned true, and our format count is greater than 1
     if (valid && numFormats >= 1)
     {
         bArbMultisampleSupported = true;
@@ -338,7 +338,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
         DestroyWindow(hWnd);
         return bArbMultisampleSupported;
     }
-    // Our Pixel Format With 4 Samples Failed, Test For 2 Samples
+    // Our pixel format with 4 samples failed, test for 2 samples
     iAttributes[19] = 2;
     valid = wglChoosePixelFormatARB(hDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
     if (valid && numFormats >= 1)
@@ -351,7 +351,7 @@ bool InitMultisample(const PIXELFORMATDESCRIPTOR& pfd, int& rPixelFormat,
         DestroyWindow(hWnd);
         return bArbMultisampleSupported;
     }
-    // Return The Valid Format
+    // Return the valid format
     wglMakeCurrent(NULL, NULL);
     wglDeleteContext(glWin.hRC);
     ReleaseDC(hWnd, glWin.hDC);
@@ -1187,7 +1187,7 @@ void OpenGLContext::initGLWindow(Visual* pVisual)
         m_aGLWin.vi = pInfos;
     }
 
-    // Check multi sample support
+    // Check multisample support
     /* TODO: moggi: This is not necessarily correct in the DBG_UTIL path, as it picks
      *      an FBConfig instead ... */
     int nSamples = 0;
