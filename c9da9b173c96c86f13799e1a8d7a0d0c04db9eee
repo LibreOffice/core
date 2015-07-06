@@ -22,6 +22,52 @@
       "revId": "c9da9b173c96c86f13799e1a8d7a0d0c04db9eee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_118d6731",
+        "filename": "sd/source/ui/dlg/SpellDialogChildWindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000981
+      },
+      "writtenOn": "2015-07-06T11:49:39Z",
+      "side": 1,
+      "message": "After reflexion, remove the whole code, don\u0027t comment it or else LO code will end up as a bunch of // code",
+      "range": {
+        "startLine": 81,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 5
+      },
+      "revId": "c9da9b173c96c86f13799e1a8d7a0d0c04db9eee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_b181f3fd",
+        "filename": "sw/source/uibase/dialog/SwSpellDialogChildWindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000981
+      },
+      "writtenOn": "2015-07-06T11:49:39Z",
+      "side": 1,
+      "message": "Same remark. Remove the old code",
+      "range": {
+        "startLine": 430,
+        "startChar": 0,
+        "endLine": 431,
+        "endChar": 103
+      },
+      "revId": "c9da9b173c96c86f13799e1a8d7a0d0c04db9eee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
