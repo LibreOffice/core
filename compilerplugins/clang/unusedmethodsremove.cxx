@@ -59,7 +59,7 @@ UnusedMethodsRemove::UnusedMethodsRemove(InstantiationData const & data): Rewrit
     mmapFD = open(sInputFile, O_RDONLY, 0);
     assert(mmapFD != -1);
     //Execute mmap
-    mmappedData = static_cast<char*>(mmap(NULL, mmapFilesize, PROT_READ, MAP_PRIVATE | MAP_POPULATE, mmapFD, 0));
+    mmappedData = static_cast<char*>(mmap(NULL, mmapFilesize, PROT_READ, MAP_PRIVATE, mmapFD, 0));
     assert(mmappedData != NULL);
 }
 
