@@ -935,11 +935,6 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
     return SfxStyleSheetBase::GetDescription(eUnit);
 }
 
-OUString  SwDocStyleSheet::GetDescription()
-{
-    return GetDescription(SFX_MAPUNIT_CM);
-}
-
 // Set names
 bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
 {
@@ -2237,100 +2232,6 @@ SfxStyleSheetBase*   SwDocStyleSheetPool::Create( const OUString &,
 {
     OSL_ENSURE( false, "Create im SW-Stylesheet-Pool geht nicht" );
     return NULL;
-}
-
-void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
-                                    SfxStyleSheetBase& rTarget )
-{
-    SfxStyleFamily eFamily( rSource.GetFamily() );
-    if( rSource.HasParentSupport())
-    {
-        const OUString sParentName = rSource.GetParent();
-        if (!sParentName.isEmpty())
-        {
-            SfxStyleSheetBase* pParentOfNew = Find( sParentName, eFamily );
-            if( pParentOfNew )
-                rTarget.SetParent( sParentName );
-        }
-    }
-    if( rSource.HasFollowSupport())
-    {
-        const OUString sFollowName = rSource.GetFollow();
-        if (!sFollowName.isEmpty())
-        {
-            SfxStyleSheetBase* pFollowOfNew = Find( sFollowName, eFamily );
-            if( pFollowOfNew )
-                rTarget.SetFollow( sFollowName );
-        }
-    }
-
-    SwImplShellAction aTmpSh( rDoc );
-
-    bool bSwSrcPool = GetAppName() == rSource.GetPool().GetAppName();
-    if( SFX_STYLE_FAMILY_PAGE == eFamily && bSwSrcPool )
-    {
-        // deal with separately!
-        SwPageDesc* pDestDsc =
-            const_cast<SwPageDesc*>(static_cast<SwDocStyleSheet&>(rTarget).GetPageDesc());
-        SwPageDesc* pCpyDsc =
-            const_cast<SwPageDesc*>(static_cast<SwDocStyleSheet&>(rSource).GetPageDesc());
-        rDoc.CopyPageDesc( *pCpyDsc, *pDestDsc );
-    }
-    else
-    {
-        const SwFormat *pSourceFormat = 0;
-        SwFormat *pTargetFormat = 0;
-        size_t nPgDscPos = SIZE_MAX;
-        switch( eFamily )
-        {
-        case SFX_STYLE_FAMILY_CHAR :
-            if( bSwSrcPool )
-                pSourceFormat = static_cast<SwDocStyleSheet&>(rSource).GetCharFormat();
-            pTargetFormat = static_cast<SwDocStyleSheet&>(rTarget).GetCharFormat();
-            break;
-        case SFX_STYLE_FAMILY_PARA :
-            if( bSwSrcPool )
-                pSourceFormat = static_cast<SwDocStyleSheet&>(rSource).GetCollection();
-            pTargetFormat = static_cast<SwDocStyleSheet&>(rTarget).GetCollection();
-            break;
-        case SFX_STYLE_FAMILY_FRAME:
-            if( bSwSrcPool )
-                pSourceFormat = static_cast<SwDocStyleSheet&>(rSource).GetFrameFormat();
-            pTargetFormat = static_cast<SwDocStyleSheet&>(rTarget).GetFrameFormat();
-            break;
-        case SFX_STYLE_FAMILY_PAGE:
-            {
-                SwPageDesc *pDesc = rDoc.FindPageDesc(
-                    static_cast<SwDocStyleSheet&>(rTarget).GetPageDesc()->GetName(),
-                    &nPgDscPos );
-
-                if( pDesc )
-                    pTargetFormat = &pDesc->GetMaster();
-            }
-            break;
-        case SFX_STYLE_FAMILY_PSEUDO:
-            // A NumRule only consists of one Item, so nothing has
-            // to be deleted here.
-            break;
-        default:; //prevent warning
-        }
-        if( pTargetFormat )
-        {
-            if( pSourceFormat )
-                pTargetFormat->DelDiffs( *pSourceFormat );
-            else if( SIZE_MAX != nPgDscPos )
-                pTargetFormat->ResetFormatAttr( RES_PAGEDESC, RES_FRMATR_END-1 );
-            else
-            {
-                // #i73790# - method renamed
-                pTargetFormat->ResetAllFormatAttr();
-            }
-            if( SIZE_MAX != nPgDscPos )
-                rDoc.ChgPageDesc( nPgDscPos,
-                                  rDoc.GetPageDesc(nPgDscPos) );
-        }
-        static_cast<SwDocStyleSheet&>(rTarget).SetItemSet( rSource.GetItemSet() );
-    }
 }
 
 SfxStyleSheetIteratorPtr SwDocStyleSheetPool::CreateIterator( SfxStyleFamily eFam, sal_uInt16 _nMask )

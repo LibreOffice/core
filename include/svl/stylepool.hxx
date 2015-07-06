@@ -67,10 +67,6 @@ public:
     IStylePoolIteratorAccess* createIterator( const bool bSkipUnusedItemSets = false,
                                                       const bool bSkipIgnorableItems = false );
 
-    /** Returns the number of styles
-    */
-    sal_Int32 getCount() const;
-
     virtual ~StylePool();
 
     static OUString nameOf( SfxItemSet_Pointer_t pSet );
@@ -83,7 +79,6 @@ public:
         If there is no more SfxItemSet, the delivered share_pointer is empty.
     */
     virtual StylePool::SfxItemSet_Pointer_t getNext() = 0;
-    virtual OUString getName() = 0;
     virtual ~IStylePoolIteratorAccess() {};
 };
 #endif

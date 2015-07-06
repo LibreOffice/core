@@ -94,8 +94,6 @@ public:
 
             bool                isInitialized() const   { return bInitialized; }
 
-            bool                is() const      { return pCurrent != NULL; }
-
             void                init(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                                     const LanguageTag& rLanguageTag
@@ -138,21 +136,6 @@ public:
             LanguageType        getCurrentLanguage() const
                                     { return eCurrentLanguage; }
 
-            LocaleDataWrapper*  getAnyLocale()
-                                    {
-                                        if ( !pAny )
-                                        {
-                                            pAny = new LocaleDataWrapper( m_xContext, pCurrent->getLanguageTag() );
-                                            eLastAnyLanguage = eCurrentLanguage;
-                                        }
-                                        else if ( pCurrent != pAny )
-                                        {
-                                            pAny->setLanguageTag( pCurrent->getLanguageTag() );
-                                            eLastAnyLanguage = eCurrentLanguage;
-                                        }
-                                        return pAny;
-                                    }
-
     const   LocaleDataWrapper*  get() const         { return pCurrent; }
     const   LocaleDataWrapper*  operator->() const  { return get(); }
     const   LocaleDataWrapper&  operator*() const   { return *get(); }
@@ -190,10 +173,6 @@ public:
                                     {
                                         delete pPtr;
                                     }
-
-            bool                isInitialized() const   { return bInitialized; }
-
-            bool                is() const      { return pPtr != NULL; }
 
             void                init(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
@@ -271,8 +250,6 @@ public:
 
             bool                isInitialized() const   { return bInitialized; }
 
-            bool                is() const      { return pPtr != NULL; }
-
             void                init(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                                     LanguageType eLang,
@@ -305,15 +282,6 @@ public:
                                             pPtr->loadModuleIfNeeded( eLanguage );
                                             bValid = true;
                                         }
-                                        return pPtr;
-                                    }
-
-    const   ::utl::TransliterationWrapper*  getForModule( const OUString& rModule, LanguageType eLang ) const
-                                    {
-                                        if ( !pPtr )
-                                            pPtr = new ::utl::TransliterationWrapper( m_xContext, nType );
-                                        pPtr->loadModuleByImplName( rModule, eLang );
-                                        bValid = false; // reforce settings change in get()
                                         return pPtr;
                                     }
 
@@ -352,8 +320,6 @@ public:
                                         delete pPtr;
                                     }
 
-            bool                isInitialized() const   { return bInitialized; }
-
             void                init(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
                                     )
@@ -366,8 +332,6 @@ public:
                                         }
                                         bInitialized = true;
                                     }
-
-            bool                is() const      { return pPtr != NULL; }
 
             NativeNumberWrapper*    get() const
                                     {

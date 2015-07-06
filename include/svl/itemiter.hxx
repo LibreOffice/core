@@ -43,18 +43,12 @@ public:
         m_nCurrent = m_nStart;
         return m_rSet.m_nCount ? *(m_rSet.m_pItems + m_nCurrent) : nullptr;
     }
-    const SfxPoolItem* LastItem()
-    {
-        m_nCurrent = m_nEnd;
-        return m_rSet.m_nCount ? *(m_rSet.m_pItems + m_nCurrent) : nullptr;
-    }
     const SfxPoolItem* GetCurItem()
     {
         return m_rSet.m_nCount ? *(m_rSet.m_pItems + m_nCurrent) : nullptr;
     }
     const SfxPoolItem* NextItem();
 
-    bool       IsAtStart()   const { return m_nCurrent == m_nStart; }
     bool       IsAtEnd()     const { return m_nCurrent == m_nEnd; }
 
     sal_uInt16 GetCurPos()   const { return m_nCurrent; }

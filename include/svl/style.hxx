@@ -124,9 +124,6 @@ public:
     virtual bool HasParentSupport() const;      // Default true
     virtual bool HasClearParentSupport() const; // Default false
     virtual bool IsUsed() const;                // Default true
-    // Default from the Itemset; either from the passed one
-    // or from the Set returned by GetItemSet()
-    virtual OUString GetDescription();
     virtual OUString GetDescription( SfxMapUnit eMetric );
 
     SfxStyleSheetBasePool& GetPool() { return *pPool; }
@@ -173,7 +170,6 @@ protected:
 
 
 private:
-    sal_uInt16                  GetPos() { return nAktPosition; }
     SVL_DLLPRIVATE bool         IsTrivialSearch();
 
     SfxStyleSheetBase*      pAktStyle;
@@ -235,9 +231,6 @@ public:
                                      SfxStyleFamily eFam,
                                      sal_uInt16 nMask = SFXSTYLEBIT_ALL);
 
-    virtual void             Replace(
-        SfxStyleSheetBase& rSource, SfxStyleSheetBase& rTarget );
-
     virtual void                Remove( SfxStyleSheetBase* );
     void                Insert( SfxStyleSheetBase* );
 
@@ -245,8 +238,6 @@ public:
 
     SfxStyleSheetBasePool&      operator=( const SfxStyleSheetBasePool& );
     SfxStyleSheetBasePool&      operator+=( const SfxStyleSheetBasePool& );
-
-    unsigned                    GetNumberOfStyles();
 
     SfxStyleSheetBase*  First();
     SfxStyleSheetBase*  Next();
@@ -318,12 +309,8 @@ enum SfxStyleSheetHintId
 
 class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
 {
-    SfxStyleSheetHintId nHint;
-
 public:
-                         SfxStyleSheetPoolHint(SfxStyleSheetHintId nArgHint) :  nHint(nArgHint){}
-    SfxStyleSheetHintId  GetHint() const
-                         { return nHint; }
+                         SfxStyleSheetPoolHint(SfxStyleSheetHintId ) {}
 };
 
 

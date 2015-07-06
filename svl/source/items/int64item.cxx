@@ -46,11 +46,6 @@ int SfxInt64Item::Compare( const SfxPoolItem& r ) const
     return 0;
 }
 
-int SfxInt64Item::Compare( const SfxPoolItem& r, const IntlWrapper& /*rIntlWrapper*/ ) const
-{
-    return Compare(r);
-}
-
 bool SfxInt64Item::GetPresentation(
     SfxItemPresentation, SfxMapUnit, SfxMapUnit, OUString& rText,
     const IntlWrapper* /*pIntlWrapper*/ ) const

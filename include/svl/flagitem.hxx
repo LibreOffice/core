@@ -55,7 +55,6 @@ public:
                                  nVal = nNewVal;
                              }
             bool             GetFlag( sal_uInt8 nFlag ) const { return ( (nVal & ( 1<<nFlag))); }
-            void             SetFlag( sal_uInt8 nFlag, bool bVal ) { if(bVal) { nVal |= (1<<nFlag); } else { nVal &= ~(1<<nFlag);};}
 };
 
 #endif

@@ -96,14 +96,6 @@ public:
         if (QueryProtocol (rUrl.GetProtocol()))
             PutUrl_Impl (rUrl);
     }
-
-    void PutUrl (const OUString &rUrl)
-    {
-        INetProtocol eProto =
-            INetURLObject::CompareProtocolScheme (rUrl);
-        if (QueryProtocol (eProto))
-            PutUrl_Impl (INetURLObject (rUrl));
-    }
 };
 
 // broadcasted from PutUrl().

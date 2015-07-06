@@ -87,10 +87,9 @@ public:
                     SvNumberNatNum() : eLang( LANGUAGE_DONTKNOW ), nNum(0),
                                         bDBNum(false), bDate(false), bSet(false) {}
     bool            IsComplete() const  { return bSet && eLang != LANGUAGE_DONTKNOW; }
-    sal_uInt8            GetRawNum() const   { return nNum; }
-    sal_uInt8            GetNatNum() const   { return bDBNum ? MapDBNumToNatNum( nNum, eLang, bDate ) : nNum; }
+    sal_uInt8       GetNatNum() const   { return bDBNum ? MapDBNumToNatNum( nNum, eLang, bDate ) : nNum; }
 #ifdef THE_FUTURE
-    sal_uInt8            GetDBNum() const    { return bDBNum ? nNum : MapNatNumToDBNum( nNum, eLang, bDate ); }
+    sal_uInt8       GetDBNum() const    { return bDBNum ? nNum : MapNatNumToDBNum( nNum, eLang, bDate ); }
 #endif
     LanguageType    GetLang() const     { return eLang; }
     void            SetLang( LanguageType e ) { eLang = e; }
@@ -200,9 +199,6 @@ public:
                                     const LocaleDataWrapper& rLoc,
                                     bool bDontQuote = false ) const;
 
-    void SetUsed(const bool b)                  { bIsUsed = b; }
-    bool GetUsed() const                        { return bIsUsed; }
-    bool IsStarFormatSupported() const          { return bStarFlag; }
     void SetStarFormatSupport( bool b )         { bStarFlag = b; }
 
     /**
@@ -384,8 +380,6 @@ public:
         or: MM/YY => ('M' << 8) | 'Y'  */
     sal_uInt32 GetExactDateOrder() const;
 
-    ImpSvNumberformatScan& ImpGetScan() const { return rScan; }
-
     // used in XML export
     void GetConditions( SvNumberformatLimitOps& rOper1, double& rVal1,
                         SvNumberformatLimitOps& rOper2, double& rVal2 ) const;
@@ -397,16 +391,6 @@ public:
     void GetNatNumXml(
             ::com::sun::star::i18n::NativeNumberXmlAttributes& rAttr,
             sal_uInt16 nNumFor ) const;
-
-    /** @returns <TRUE/> if E,EE,R,RR,AAA,AAAA in format code of subformat
-        nNumFor (0..3) and <b>no</b> preceding calendar was specified and the
-        currently loaded calendar is "gregorian". */
-    bool IsOtherCalendar( sal_uInt16 nNumFor ) const
-        {
-            if ( nNumFor < 4 )
-                return ImpIsOtherCalendar( NumFor[nNumFor] );
-            return false;
-        }
 
     /** Switches to the first non-"gregorian" calendar, but only if the current
         calendar is "gregorian"; original calendar name and date/time returned,

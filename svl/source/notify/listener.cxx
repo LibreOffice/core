@@ -77,11 +77,6 @@ void SvtListener::EndListeningAll()
 }
 
 
-bool SvtListener::IsListening( SvtBroadcaster& rBroadcaster ) const
-{
-    return maBroadcasters.count(&rBroadcaster) > 0;
-}
-
 void SvtListener::CopyAllBroadcasters( const SvtListener& r )
 {
     BroadcastersType aCopy(r.maBroadcasters);

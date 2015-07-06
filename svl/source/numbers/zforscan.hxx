@@ -76,7 +76,6 @@ public:
         }
     const OUString& GetTrueString() const     { return GetSpecialKeyword( NF_KEY_TRUE ); }
     const OUString& GetFalseString() const    { return GetSpecialKeyword( NF_KEY_FALSE ); }
-    const OUString& GetColorString() const    { return GetKeywords()[NF_KEY_COLOR]; }
     const OUString& GetRedString() const      { return GetKeywords()[NF_KEY_RED]; }
     const OUString& GetBooleanString() const  { return GetKeywords()[NF_KEY_BOOLEAN]; }
     const OUString& GetErrorString() const    { return sErrStr; }

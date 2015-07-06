@@ -50,7 +50,6 @@ public:
     void SetValue( const OUString& rNewVal );
 
     using SfxPoolItem::Compare;
-    virtual int Compare( const SfxPoolItem &rWith, const IntlWrapper& rIntlWrapper ) const SAL_OVERRIDE;
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,

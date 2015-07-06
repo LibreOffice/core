@@ -51,7 +51,6 @@ public:
     bool StartListening( SvtBroadcaster& rBroadcaster );
     bool EndListening( SvtBroadcaster& rBroadcaster );
     void EndListeningAll();
-    bool IsListening( SvtBroadcaster& rBroadcaster ) const;
 
     void CopyAllBroadcasters( const SvtListener& r );
     bool HasBroadcaster() const;

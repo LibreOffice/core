@@ -89,7 +89,6 @@ public:
 
     inline SvStream& operator*() const;
 
-    inline void     Reset();
     sal_uInt32      Close( bool bSeekToEndOfRec = true );
 
 private:
@@ -258,9 +257,6 @@ public:
     SfxMiniRecordReader( SvStream *pStream, sal_uInt8 nTag );
     inline              ~SfxMiniRecordReader();
 
-    inline sal_uInt8    GetTag() const;
-    inline bool         IsValid() const;
-
     inline SvStream&    operator*() const;
 
     inline void         Skip();
@@ -303,8 +299,6 @@ protected:
                                            sal_uInt16 nTag, sal_uInt8 nCurVer );
 
 public:
-    inline void     Reset();
-
     sal_uInt32          Close( bool bSeekToEndOfRec = true );
 };
 
@@ -335,14 +329,6 @@ protected:
                                     pStream, SFX_REC_PRETAG_EXT );
                         }
     bool                FindHeader_Impl( sal_uInt16 nTypes, sal_uInt16 nTag );
-    bool                ReadHeader_Impl( sal_uInt16 nTypes );
-
-public:
-
-    inline sal_uInt16       GetTag() const;
-
-    inline sal_uInt8        GetVersion() const;
-    inline bool         HasVersion( sal_uInt16 nVersion ) const;
 };
 
 /**
@@ -405,10 +391,6 @@ protected:
 
 public:
     inline          ~SfxMultiFixRecordWriter();
-
-    inline void     NewContent();
-
-    inline void     Reset();
 
     sal_uInt32          Close( bool bSeekToEndOfRec = true );
 };
@@ -512,9 +494,6 @@ public:
                                                  sal_uInt8 nRecordVer );
 
     void                NewContent( sal_uInt16 nTag, sal_uInt8 nVersion );
-// private: not possible, since some compilers then make the previous also private
-    void                NewContent()
-                        { OSL_FAIL( "NewContent() only allowed with args" ); }
 };
 
 /** Read multiple content items of an existing record
@@ -571,9 +550,6 @@ public:
     bool                GetContent();
     inline sal_uInt16   GetContentTag();
     inline sal_uInt8    GetContentVersion() const;
-    inline bool         HasContentVersion( sal_uInt16 nVersion ) const;
-
-    inline sal_uInt32   ContentCount() const;
 };
 
 /** create a mini record
@@ -613,12 +589,6 @@ inline SvStream& SfxMiniRecordWriter::operator*() const
     return *_pStream;
 }
 
-inline void SfxMiniRecordWriter::Reset()
-{
-    _pStream->Seek( _nStartPos + SFX_REC_HEADERSIZE_MINI );
-    _bHeaderOk = false;
-}
-
 /** The dtor moves the stream automatically to the position directly behind the record */
 inline SfxMiniRecordReader::~SfxMiniRecordReader()
 {
@@ -631,28 +601,6 @@ inline void SfxMiniRecordReader::Skip()
 {
     _pStream->Seek(_nEofRec);
     _bSkipped = true;
-}
-
-/** Get the pre-tag of this record
- *
- * The pre-tag might also be SFX_REC_PRETAG_EXT or SFX_REC_PRETAG_EOR.
- * The latter means that in the stream the error code ERRCODE_IO_WRONGFORMAT
- * is set. The former is valid, since extended records are just building on
- * top of SfxMiniRecord.
- *
- * @return The pre-tag
- */
-inline sal_uInt8 SfxMiniRecordReader::GetTag() const
-{
-    return _nPreTag;
-}
-
-/** This method allows to check if the record could be recreated successfully
- *  from the stream and, hence, was correct for this record type.
- */
-inline bool SfxMiniRecordReader::IsValid() const
-{
-    return _nPreTag != SFX_REC_PRETAG_EOR;
 }
 
 /** get the owning stream
@@ -691,30 +639,6 @@ inline sal_uInt32 SfxSingleRecordWriter::Close( bool bSeekToEndOfRec )
     return nRet;
 }
 
-inline void SfxSingleRecordWriter::Reset()
-{
-    _pStream->Seek( _nStartPos + SFX_REC_HEADERSIZE_MINI +
-                                 SFX_REC_HEADERSIZE_SINGLE );
-    _bHeaderOk = false;
-}
-
-/** @returns the tag for the overall record (stored in the record's head) */
-inline sal_uInt16 SfxSingleRecordReader::GetTag() const
-{
-    return _nRecordTag;
-}
-
-/** @returns version of the record */
-inline sal_uInt8 SfxSingleRecordReader::GetVersion() const
-{
-    return _nRecordVer;
-}
-
-/** determine if the read record has at least the given version */
-inline bool SfxSingleRecordReader::HasVersion( sal_uInt16 nVersion ) const
-{
-    return _nRecordVer >= nVersion;
-}
 
 /** The destructor closes the record automatically if not done earlier */
 inline SfxMultiFixRecordWriter::~SfxMultiFixRecordWriter()
@@ -722,33 +646,6 @@ inline SfxMultiFixRecordWriter::~SfxMultiFixRecordWriter()
     // the header was not written, yet, or needs to be checked
     if ( !_bHeaderOk )
         Close();
-}
-
-/** add a new content into a record
- *
- * @note each, also the first record, must be initialized by this method
- */
-inline void SfxMultiFixRecordWriter::NewContent()
-{
-    #ifdef DBG_UTIL
-    sal_uLong nOldStartPos;
-    // store starting position of the current content - CAUTION: sub classes!
-    nOldStartPos = _nContentStartPos;
-    #endif
-    _nContentStartPos = _pStream->Tell();
-
-#ifdef DBG_UTIL
-    // is there a previous content?
-    if ( _nContentCount )
-    {
-        // check if the previous content stays in specified max. size
-        DBG_ASSERT( _nContentStartPos - nOldStartPos == _nContentSize,
-                    "wrong content size detected" );
-    }
-#endif
-
-    // count how many
-    ++_nContentCount;
 }
 
 /**
@@ -767,14 +664,6 @@ inline SfxMultiMixRecordWriter::SfxMultiMixRecordWriter( SvStream* pStream,
 {
 }
 
-inline void SfxMultiFixRecordWriter::Reset()
-{
-    _pStream->Seek( _nStartPos + SFX_REC_HEADERSIZE_MINI +
-                                 SFX_REC_HEADERSIZE_SINGLE +
-                                 SFX_REC_HEADERSIZE_MULTI );
-    _bHeaderOk = false;
-}
-
 /** @returns the tag of the last opened content
  *  @see SfxMultiRecordReder::GetContent()
  */
@@ -789,26 +678,6 @@ inline sal_uInt16 SfxMultiRecordReader::GetContentTag()
 inline sal_uInt8 SfxMultiRecordReader::GetContentVersion() const
 {
     return _nContentVer;
-}
-
-/** Determines if the given version is in the last opened content
- *
- * This method checks if the version is contained in the last version of the
- * content that was opened with SfxMultiRecordReder::GetContent().
- *
- * @param nVersion The version to find
- * @return true, if found
- * @see SfxMultiRecordReder::GetContent()
- */
-inline bool SfxMultiRecordReader::HasContentVersion( sal_uInt16 nVersion ) const
-{
-    return _nContentVer >= nVersion;
-}
-
-/** @returns number of this record's contents */
-inline sal_uInt32 SfxMultiRecordReader::ContentCount() const
-{
-    return _nContentCount;
 }
 
 #endif

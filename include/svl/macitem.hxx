@@ -88,9 +88,6 @@ public:
     SvxMacroTableDtor& operator=( const SvxMacroTableDtor &rCpy );
     bool operator==( const SvxMacroTableDtor& rOther ) const;
 
-    // deletes all entries
-    void clear() { aSvxMacroTable.clear(); }
-
     SvStream&   Read( SvStream &, sal_uInt16 nVersion = SVX_MACROTBL_AKTVERSION );
     SvStream&   Write( SvStream & ) const;
 
@@ -145,7 +142,6 @@ public:
     inline const SvxMacro& GetMacro( sal_uInt16 nEvent ) const;
     inline bool HasMacro( sal_uInt16 nEvent ) const;
            void SetMacro( sal_uInt16 nEvent, const SvxMacro& );
-    inline bool DelMacro( sal_uInt16 nEvent );
 
 private:
     SvxMacroTableDtor aMacroTable;
@@ -169,10 +165,6 @@ inline bool SvxMacroItem::HasMacro( sal_uInt16 nEvent ) const
 inline const SvxMacro& SvxMacroItem::GetMacro( sal_uInt16 nEvent ) const
 {
     return *(aMacroTable.Get(nEvent));
-}
-inline bool SvxMacroItem::DelMacro( sal_uInt16 nEvent )
-{
-    return aMacroTable.Erase(nEvent);
 }
 
 #endif

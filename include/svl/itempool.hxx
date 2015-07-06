@@ -210,7 +210,6 @@ public:
                                                    sal_uInt16 nOldStart, sal_uInt16 nOldEnd,
                                                    const sal_uInt16 *pWhichIdTab );
     sal_uInt16                      GetNewWhich( sal_uInt16 nOldWhich ) const;
-    sal_uInt16                      GetVersion() const;
     void                            SetFileFormatVersion( sal_uInt16 nFileFormatVersion );
     bool                            IsCurrentVersionLoading() const;
 

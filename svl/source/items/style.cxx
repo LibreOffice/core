@@ -337,14 +337,6 @@ bool SfxStyleSheetBase::IsUsed() const
 /**
  * Return set attributes
  */
-OUString SfxStyleSheetBase::GetDescription()
-{
-    return GetDescription( SFX_MAPUNIT_CM );
-}
-
-/**
- * Return set attributes
- */
 OUString SfxStyleSheetBase::GetDescription( SfxMapUnit eMetric )
 {
     SfxItemIter aIter( GetItemSet() );
@@ -568,16 +560,6 @@ sal_uInt16 SfxStyleSheetIterator::GetSearchMask() const
     return mask;
 }
 
-
-void SfxStyleSheetBasePool::Replace( SfxStyleSheetBase& rSource, SfxStyleSheetBase& rTarget )
-{
-    rTarget.SetFollow( rSource.GetFollow() );
-    rTarget.SetParent( rSource.GetParent() );
-    SfxItemSet& rSourceSet = rSource.GetItemSet();
-    SfxItemSet& rTargetSet = rTarget.GetItemSet();
-    rTargetSet.Intersect( rSourceSet );
-    rTargetSet.Put( rSourceSet );
-}
 
 SfxStyleSheetIterator& SfxStyleSheetBasePool::GetIterator_Impl()
 {

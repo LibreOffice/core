@@ -122,7 +122,6 @@ public:
     virtual bool            HasFollowSupport() const SAL_OVERRIDE;
     virtual bool            HasParentSupport() const SAL_OVERRIDE;
     virtual bool            HasClearParentSupport() const SAL_OVERRIDE;
-    virtual OUString        GetDescription() SAL_OVERRIDE;
     virtual OUString        GetDescription(SfxMapUnit eUnit) SAL_OVERRIDE;
 
     SwCharFormat*              GetCharFormat();
@@ -199,8 +198,6 @@ class SwDocStyleSheetPool : public SfxStyleSheetBasePool
 public:
     SwDocStyleSheetPool( SwDoc&, bool bOrganizer = false );
 
-    virtual void Replace( SfxStyleSheetBase& rSource,
-                          SfxStyleSheetBase& rTarget ) SAL_OVERRIDE;
     virtual SfxStyleSheetBase& Make(const OUString&, SfxStyleFamily,
             sal_uInt16 nMask) SAL_OVERRIDE;
 
