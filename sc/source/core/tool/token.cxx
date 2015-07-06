@@ -3951,6 +3951,34 @@ void ScTokenArray::AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rO
     }
 }
 
+void ScTokenArray::AdjustReferenceOnCopy( const ScAddress& rNewPos )
+{
+    TokenPointers aPtrs( pCode, nLen, pRPN, nRPN, false);
+    for (size_t j=0; j<2; ++j)
+    {
+        FormulaToken** pp = aPtrs.maPointerRange[j].mpStart;
+        FormulaToken** pEnd = aPtrs.maPointerRange[j].mpStop;
+        for (; pp != pEnd; ++pp)
+        {
+            FormulaToken* p = aPtrs.getHandledToken(j,pp);
+            if (!p)
+                continue;
+
+            switch (p->GetType())
+            {
+                case svDoubleRef:
+                    {
+                        ScComplexRefData& rRef = *p->GetDoubleRef();
+                        rRef.PutInOrder( rNewPos);
+                    }
+                    break;
+                default:
+                    ;
+            }
+        }
+    }
+}
+
 namespace {
 
 void clearTabDeletedFlag( ScSingleRefData& rRef, const ScAddress& rPos, SCTAB nStartTab, SCTAB nEndTab )
