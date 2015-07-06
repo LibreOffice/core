@@ -55,7 +55,6 @@ private:
 
 public:
     SAL_DLLPRIVATE void         ImplDraw();
-    SAL_DLLPRIVATE void         ImplRestore();
     DECL_DLLPRIVATE_LINK_TYPED( ImplTimerHdl, Timer*, void );
     SAL_DLLPRIVATE void         ImplShow( bool bDrawDirect = true );
     SAL_DLLPRIVATE void         ImplHide( bool bStopTimer );
@@ -101,6 +100,7 @@ public:
                         { return !(Cursor::operator==( rCursor )); }
 
 private:
+    void ImplRestore();
     void ImplDoShow( bool bDrawDirect, bool bRestore );
     bool ImplDoHide( bool bStop );
 };
