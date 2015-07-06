@@ -28,25 +28,17 @@ namespace xmlsearch {
 
     namespace qe {
 
-
         class RoleFiller
         {
         public:
-
             static RoleFiller* STOP() { return &roleFiller_; }
 
             RoleFiller();
 
             ~RoleFiller();
 
-            void acquire() { ++m_nRefcount; }
-            void release() { if( ! --m_nRefcount ) delete this; }
-
         private:
-
             static RoleFiller roleFiller_;
-
-            sal_uInt32     m_nRefcount;
 
             std::vector< RoleFiller* > fillers_;
         };

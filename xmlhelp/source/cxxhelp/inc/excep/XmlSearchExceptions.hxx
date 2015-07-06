@@ -30,20 +30,12 @@ namespace xmlsearch {
         class XmlSearchException
         {
         public:
-
             XmlSearchException( const OUString& message )
                 : _message( message )
             {
             }
 
-            OUString getMessage() const
-            {
-                return _message;
-            }
-
-
         private:
-
             OUString _message;
         };
 
@@ -52,7 +44,6 @@ namespace xmlsearch {
             : public virtual XmlSearchException
         {
         public:
-
             IOException( const OUString& message )
                 : XmlSearchException( message )
             {

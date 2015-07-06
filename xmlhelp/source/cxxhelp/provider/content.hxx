@@ -128,10 +128,6 @@ namespace chelp
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
         getPropertyValues( const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::beans::Property >& rProperties );
-        void setPropertyValues(
-            const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue >& rValues );
-
     };
 
 }

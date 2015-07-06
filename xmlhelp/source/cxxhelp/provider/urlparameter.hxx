@@ -119,13 +119,10 @@ namespace chelp {
         bool isPicture() const { return m_aModule == "picture"; }
         bool isActive() const { return !m_aActive.isEmpty() && m_aActive == "true"; }
         bool isQuery() const { return m_aId.isEmpty() && !m_aQuery.isEmpty(); }
-        bool isEntryForModule() const { return m_aId == "start" || m_bStart; }
         bool isFile() const { return !m_aId.isEmpty(); }
         bool isModule() const { return m_aId.isEmpty() && !m_aModule.isEmpty(); }
         bool isRoot() const { return m_aModule.isEmpty(); }
         bool isErrorDocument();
-
-        OUString get_url() const { return m_aURL; }
 
         OUString get_id();
 
@@ -156,8 +153,6 @@ namespace chelp {
         OUString get_prefix() const { return m_aPrefix; }
 
         OUString get_language();
-
-        OUString get_device() const { return m_aDevice; }
 
         OUString get_program();
 
