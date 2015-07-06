@@ -763,7 +763,58 @@ IMPL_LINK ( RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr )
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
 {
-    EndDialog( RET_OK );
+    // check if file/path exists
+
+    OUString sCurrentPath = m_pFileView->GetViewURL();
+    OUString sSelectedItem = m_pFileView->GetCurrentURL();
+    OUString sName = m_pName_ed->GetText();
+
+    bool bFileDlg = ( m_eType == REMOTEDLG_TYPE_FILEDLG );
+    bool bSelected = ( m_pFileView->GetSelectionCount() > 0 );
+
+    if( !bSelected )
+    {
+        m_sPath = sCurrentPath + "/" + INetURLObject::encode( sName, INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL );
+    }
+    else
+    {
+        if( m_eType == REMOTEDLG_TYPE_PATHDLG )
+            m_sPath = sCurrentPath;
+        else
+            m_sPath = sSelectedItem;
+    }
+
+    bool bExists = false;
+
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    Reference< XInteractionHandler > xInteractionHandler(
+                    InteractionHandler::createWithParent( xContext, 0 ), UNO_QUERY_THROW );
+    Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment(
+                    xInteractionHandler, Reference< XProgressHandler >() );
+    ::ucbhelper::Content m_aContent( m_sPath, xEnv, xContext );
+
+    try
+    {
+        if( bFileDlg )
+            bExists = m_aContent.isDocument();
+        else
+            bExists = m_aContent.isFolder();
+    }
+    catch( const Exception& )
+    {
+        bExists = false;
+    }
+
+    if ( !bExists )
+    {
+        // TODO
+
+        return 0;
+    }
+
+    if( bExists )
+        EndDialog( RET_OK );
+
     return 1;
 }
 
@@ -880,6 +931,9 @@ std::vector<OUString> RemoteFilesDialog::GetPathList() const
         aList.push_back( SvtFileView::GetURL( pEntry ) );
         pEntry = m_pFileView->NextSelected( pEntry );
     }
+
+    if( aList.size() == 0 && !m_sPath.isEmpty() )
+        aList.push_back( m_sPath );
 
     return aList;
 }
