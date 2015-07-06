@@ -1335,9 +1335,6 @@ bool SwLayAction::FormatLayout( OutputDevice *pRenderContext, SwLayoutFrm *pLay,
                     if(aSpaceToPrevPage.Height() > 0 && aSpaceToPrevPage.Width() > 0)
                         pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
 
-                    if (pSh)
-                        pRenderContext->DrawRect( aSpaceToPrevPage.SVRect() );
-
                     // left
                     aSpaceToPrevPage = aPageRect;
                     aSpaceToPrevPage.Left( aSpaceToPrevPage.Left() - nHalfDocBorder );
