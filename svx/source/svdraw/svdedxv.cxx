@@ -496,20 +496,28 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj * >( mxTextEditObj.get() );
         if( pTextObj )
         {
+            OutlinerView* pOLV = GetTextEditOutlinerView();
+            assert(pOLV);
+            // Save previous selection pos
+            ESelection aPreChainingSel(pOLV->GetSelection());
+
+            // trigger actual chaining
             pTextObj->onChainingEvent();
 
             /* Cursor motion stuff */
-            OutlinerView* pOLV = GetTextEditOutlinerView();
+
 
             // Find last Para
+            /*
             const sal_Int32 nParaCount = pTextEditOutliner->GetParagraphCount();
             const sal_Int32 nLastParaIndex = nParaCount > 1 ? nParaCount - 1 : 0;
             Paragraph* pLastPara = pTextEditOutliner->GetParagraph( nLastParaIndex);
             const sal_Int32 nLenLastPara = pTextEditOutliner->GetText(pLastPara).getLength();
-            // End of editing space
-            ESelection aSel = ESelection(nLastParaIndex,nLenLastPara,nLastParaIndex,nLenLastPara);
+            // Selection at end of editing area
+            ESelection aEndSel(nLastParaIndex,nLenLastPara,nLastParaIndex,nLenLastPara);
+            */
 
-            pOLV->SetSelection(aSel);
+            pOLV->SetSelection(aPreChainingSel);
 
         }
     }
