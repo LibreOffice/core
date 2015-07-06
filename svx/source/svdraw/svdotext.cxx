@@ -1992,12 +1992,6 @@ void SdrTextObj::onChainingEvent()
     if (!pEdtOutl)
         return;
 
-    // This is true during an underflow-caused overflow (with pEdtOutl->SetText())
-    if (GetTextChain()->GetNilChainingEvent(this)) {
-
-        return;
-    }
-
     // Outliner for text transfer
     SdrOutliner &aDrawOutliner = ImpGetDrawOutliner();
 
@@ -2027,7 +2021,6 @@ void SdrTextObj::onChainingEvent()
 
         }
     }
-    GetTextChain()->SetNilChainingEvent(this, false);
 }
 
 
