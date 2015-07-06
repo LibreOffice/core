@@ -22,6 +22,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_stream \
     tools/qa/cppunit/test_urlobj \
     tools/qa/cppunit/test_color \
+    tools/qa/cppunit/test_rectangle \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,tools_test, \
