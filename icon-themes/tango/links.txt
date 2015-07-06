@@ -269,8 +269,10 @@ cmd/sc_nextpage.png cmd/sc_navigateforward.png
 res/sc06300.png cmd/sc_navigateforward.png
 cmd/lc_openfromwriter.png cmd/lc_open.png
 cmd/lc_openfromcalc.png cmd/lc_open.png
+cmd/lc_openremote.png cmd/lc_open.png
 cmd/sc_openfromwriter.png cmd/sc_open.png
 cmd/sc_openfromcalc.png cmd/sc_open.png
+cmd/sc_openremote.png cmd/sc_open.png
 sc/imglst/lc26048.png cmd/lc_autosum.png
 sc/imglst/sc26048.png cmd/sc_autosum.png
 cmd/lc_fontcolor.png cmd/lc_color.png
