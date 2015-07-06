@@ -107,11 +107,8 @@ namespace fileaccess {
             inline const sal_Int16& SAL_CALL getAttributes() const;
 
             // The set* functions are declared const, because the key of "this" stays intact
-            inline void SAL_CALL setHandle( const sal_Int32&  __Handle ) const;
-            inline void SAL_CALL setType( const com::sun::star::uno::Type& __Type ) const;
             inline void SAL_CALL setValue( const com::sun::star::uno::Any& __Value ) const;
             inline void SAL_CALL setState( const com::sun::star::beans::PropertyState& __State ) const;
-            inline void SAL_CALL setAttributes( const sal_Int16& __Attributes ) const;
         };
 
         struct eMyProperty
@@ -498,12 +495,6 @@ namespace fileaccess {
         getMaskFromProperties(
             sal_Int32& n_Mask,
             const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& seq );
-
-
-        void SAL_CALL
-        setFileProperties(
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& values,
-            sal_Int32 numberOfValues );
 
 
         // Helper function for public copy

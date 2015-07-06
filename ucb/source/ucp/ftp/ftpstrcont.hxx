@@ -32,25 +32,18 @@
 
 namespace ftp {
 
-
     class FTPInputStream;
-
 
     class FTPOutputStreamContainer
         : public FTPStreamContainer
     {
     public:
-
         explicit FTPOutputStreamContainer(const com::sun::star::uno::Reference<
                                  com::sun::star::io::XOutputStream>& out);
 
         virtual ~FTPOutputStreamContainer() {}
 
-        virtual size_t write(void *buffer,size_t size,size_t nmemb) SAL_OVERRIDE;
-
-
     private:
-
         com::sun::star::uno::Reference<
         com::sun::star::io::XOutputStream> m_out;
     };
@@ -60,21 +53,16 @@ namespace ftp {
         : public FTPStreamContainer
     {
     public:
-
         explicit FTPInputStreamContainer(FTPInputStream* out);
 
         virtual ~FTPInputStreamContainer() {}
-
-        virtual size_t write(void *buffer,size_t size,size_t nmemb) SAL_OVERRIDE;
 
         com::sun::star::uno::Reference<
         com::sun::star::io::XInputStream> operator()();
 
     private:
-
         FTPInputStream* m_out;
     };
-
 
 }
 

@@ -104,14 +104,6 @@ namespace ftp {
             m_nMode = INETCOREFTP_FILEMODE_UNKNOWN;
             m_nSize = sal_uInt32(-1);
         }
-
-        bool isDir() const {
-            return (m_nMode & INETCOREFTP_FILEMODE_ISDIR) != 0;
-        }
-
-        bool isFile() const {
-            return (m_nMode & INETCOREFTP_FILEMODE_ISDIR) == 0;
-        }
     };
 
 

@@ -10,6 +10,7 @@
 #include <cassert>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <set>
 #include "plugin.hxx"
 #include "compat.hxx"
@@ -18,13 +19,12 @@
 Dump a list of calls to methods, and a list of method definitions.
 Then we will post-process the 2 lists and find the set of unused methods.
 
-Be warned that it produces around 3G of log file.
+Be warned that it produces around 2.4G of log file.
 
 The process goes something like this:
   $ make check
-  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unusedmethods' check > log.txt
-  $ grep -P '(call:)|(definition:)' log.txt | sort -u > log2.txt
-  $ ./compilerplugins/clang/unusedmethods.py log2.txt > result.txt
+  $ make FORCE_COMPILE_ALL=1 COMPILER_PLUGIN_TOOL='unusedmethods' check
+  $ ./compilerplugins/clang/unusedmethods.py unusedmethods.log > result.txt
 
 and then
   $ for dir in *; do make FORCE_COMPILE_ALL=1 UPDATE_FILES=$dir COMPILER_PLUGIN_TOOL='unusedmethodsremove' $dir; done
@@ -44,13 +44,33 @@ TODO track instantiations of template class constructor methods
 
 namespace {
 
+// try to limit the volumninous output a little
+static std::set<std::string> callSet;
+static std::set<std::string> definitionSet;
+
+
 class UnusedMethods:
     public RecursiveASTVisitor<UnusedMethods>, public loplugin::Plugin
 {
 public:
     explicit UnusedMethods(InstantiationData const & data): Plugin(data) {}
 
-    virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
+    virtual void run() override
+    {
+        TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
+
+        // dump all our output in one write call - this is to try and limit IO "crosstalk" between multiple processes
+        // writing to the same logfile
+        std::string output;
+        for (const std::string & s : callSet)
+            output += "call:\t" + s + "\t\n";
+        for (const std::string & s : definitionSet)
+            output += "definition:\t" + s + "\t\n";
+        ofstream myfile;
+        myfile.open("/home/noel/libo4/unusedmethods.log", ios::app | ios::out);
+        myfile << output;
+        myfile.close();
+    }
 
     bool VisitCallExpr(CallExpr* );
     bool VisitCXXMethodDecl( const CXXMethodDecl* decl );
@@ -80,13 +100,11 @@ static std::string niceName(const CXXMethodDecl* functionDecl)
     return s;
 }
 
-// try to limit the volumninous output a little
-static std::set<std::string> alreadySeenCallSet;
-
 static void logCallToRootMethods(const CXXMethodDecl* decl)
 {
     // For virtual/overriding methods, we need to pretend we called the root method(s),
     // so that they get marked as used.
+    decl = decl->getCanonicalDecl();
     bool bPrinted = false;
     for(CXXMethodDecl::method_iterator it = decl->begin_overridden_methods();
         it != decl->end_overridden_methods(); ++it)
@@ -97,8 +115,7 @@ static void logCallToRootMethods(const CXXMethodDecl* decl)
     if (!bPrinted)
     {
         std::string s = niceName(decl);
-        if (alreadySeenCallSet.insert(s).second)
-            cout << "call:\t" << niceName(decl) << endl;
+        callSet.insert(s);
     }
 }
 
@@ -173,7 +190,7 @@ bool UnusedMethods::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
         return true;
     }
 
-    cout << "definition:\t" << niceName(functionDecl) << endl;
+    definitionSet.insert(niceName(functionDecl));
     return true;
 }
 

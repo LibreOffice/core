@@ -33,15 +33,19 @@ exclusionSet = set([
     ])
 
 
+# The parsing here is designed to also grab output which is mixed into the output from gbuild.
+# I have not yet found a way of suppressing the gbuild output.
 with open(sys.argv[1]) as txt:
     for line in txt:
-        if line.startswith("definition:\t"):
-            idx1 = line.find("\t")
-            clazzName = line[idx1+1 : len(line)-1]
+        if line.find("definition:\t") != -1:
+            idx1 = line.find("definition:\t")
+            idx2 = line.find("\t", idx1+12)
+            clazzName = line[idx1+12 : idx2]
             definitionSet.add(clazzName)
-        elif line.startswith("call:\t"):
-            idx1 = line.find("\t")
-            clazzName = line[idx1+1 : len(line)-1]
+        elif line.find("call:\t") != -1:
+            idx1 = line.find("call:\t")
+            idx2 = line.find("\t", idx1+6)
+            clazzName = line[idx1+6 : idx2]
             callSet.add(clazzName)
 
 for clazz in sorted(definitionSet - callSet - exclusionSet):

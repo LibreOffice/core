@@ -54,9 +54,6 @@ public:
     const OUString & getUri() const
     { init(); return m_aUri; }
 
-    void setUri( const OUString & rUri )
-    { m_aPath.clear(); m_aUri = rUri; m_bValid = false; }
-
     const OUString & getParentUri() const
     { init(); return m_aParentUri; }
 
@@ -65,9 +62,6 @@ public:
 
     const OUString & getPath() const
     { init(); return m_aPath; }
-
-    const OUString & getName() const
-    { init(); return m_aName; }
 
     inline bool isRootFolder() const;
 };

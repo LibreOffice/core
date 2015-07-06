@@ -69,14 +69,8 @@ public:
     const OUString & getParentUri() const
     { init(); return m_aParentUri; }
 
-    const OUString & getPath() const
-    { init(); return m_aPath; }
-
     const OUString & getDocumentId() const
     { init(); return m_aDocId; }
-
-    const OUString & getInternalPath() const
-    { init(); return m_aInternalPath; }
 
     const OUString & getName() const
     { init(); return m_aName; }
@@ -87,8 +81,6 @@ public:
     inline bool isRoot() const;
 
     inline bool isDocument() const;
-
-    inline bool isFolder() const;
 };
 
 inline void Uri::setUri( const OUString & rUri )
@@ -114,12 +106,6 @@ inline bool Uri::isDocument() const
     init();
     return ( ( !m_aDocId.isEmpty() ) /* not root */
              && ( m_aPath.copy( m_aDocId.getLength() + 1 ).getLength() < 2 ) );
-}
-
-inline bool Uri::isFolder() const
-{
-    init();
-    return m_aPath.isEmpty() || m_aPath.endsWith( "/" );
 }
 
 } // namespace tdoc_ucp

@@ -112,15 +112,6 @@ namespace fileaccess
                 return m_nMinorCode;
             }
 
-            com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler > SAL_CALL
-            getProgressHandler()
-            {
-                if( ! m_xProgressHandler.is() && m_xCommandEnvironment.is() )
-                    m_xProgressHandler = m_xCommandEnvironment->getProgressHandler();
-
-                return m_xProgressHandler;
-            }
-
             com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > SAL_CALL
             getInteractionHandler()
             {
@@ -166,8 +157,6 @@ namespace fileaccess
          *  filerror.hxx.
          *  The minor code refines the information given in ErrorCode.
          */
-
-        void SAL_CALL clearError();
 
         void SAL_CALL installError( sal_Int32 CommandId,
                                     sal_Int32 ErrorCode,
