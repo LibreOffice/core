@@ -889,7 +889,7 @@ sal_Int32 ImpSvNumberformatScan::Symbol_Division(const OUString& rString)
     // Do we have some sort of currency?
     OUString sString = pFormatter->GetCharClass()->uppercase(rString);
     sal_Int32 nCPos = 0;
-    while (nCPos >= 0)
+    while (nCPos >= 0 && nCPos < sString.getLength())
     {
         nCPos = sString.indexOf(GetCurString(),nCPos);
         if (nCPos >= 0)
