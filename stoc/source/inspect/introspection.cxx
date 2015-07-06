@@ -897,14 +897,14 @@ Any SAL_CALL ImplIntrospectionAdapter::queryInterface( const Type& rType )
     if( !aRet.hasValue() )
     {
         // Wrapper fuer die Objekt-Interfaces
-        if(   ( mxObjElementAccess.is() && (aRet = ::cppu::queryInterface
+        if(   ( mxObjElementAccess.is() && (rType == cppu::UnoType<XElementAccess>::get()) && (aRet = ::cppu::queryInterface
                     ( rType, static_cast< XElementAccess* >( static_cast< XNameAccess* >( this ) ) ) ).hasValue() )
-            || ( mxObjNameAccess.is() && (aRet = ::cppu::queryInterface( rType, static_cast< XNameAccess* >( this ) ) ).hasValue() )
-            || ( mxObjNameContainer.is() && (aRet = ::cppu::queryInterface( rType, static_cast< XNameContainer* >( this ) ) ).hasValue() )
-            || ( mxObjIndexAccess.is() && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexAccess* >( this ) ) ).hasValue() )
-            || ( mxObjIndexContainer.is() && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexContainer* >( this ) ) ).hasValue() )
-            || ( mxObjEnumerationAccess    .is() && (aRet = ::cppu::queryInterface( rType, static_cast< XEnumerationAccess* >( this ) ) ).hasValue() )
-            || ( mxObjIdlArray.is() && (aRet = ::cppu::queryInterface( rType, static_cast< XIdlArray* >( this ) ) ).hasValue() )
+            || ( mxObjNameAccess.is() && (rType == cppu::UnoType<XNameAccess>::get()) && (aRet = ::cppu::queryInterface( rType, static_cast< XNameAccess* >( this ) ) ).hasValue() )
+            || ( mxObjNameContainer.is() && (rType == cppu::UnoType<XNameContainer>::get()) && (aRet = ::cppu::queryInterface( rType, static_cast< XNameContainer* >( this ) ) ).hasValue() )
+            || ( mxObjIndexAccess.is() && (rType == cppu::UnoType<XIndexAccess>::get()) && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexAccess* >( this ) ) ).hasValue() )
+            || ( mxObjIndexContainer.is() && (rType == cppu::UnoType<XIndexContainer>::get()) && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexContainer* >( this ) ) ).hasValue() )
+            || ( mxObjEnumerationAccess.is() && (rType == cppu::UnoType<XEnumerationAccess>::get()) && (aRet = ::cppu::queryInterface( rType, static_cast< XEnumerationAccess* >( this ) ) ).hasValue() )
+            || ( mxObjIdlArray.is() && (rType == cppu::UnoType<XIdlArray>::get()) && (aRet = ::cppu::queryInterface( rType, static_cast< XIdlArray* >( this ) ) ).hasValue() )
           )
         {
         }
@@ -1660,7 +1660,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     }
 
     if (xTypeProvider.is()) {
-        TypeKey key(xPropSetInfo, xTypeProvider->getTypes());
+        TypeKey key(xPropSetInfo, SupportedTypesSeq);
 
         osl::MutexGuard g(m_aMutex);
         if (rBHelper.bDisposed || rBHelper.bInDispose) {
