@@ -103,6 +103,7 @@ public:
     void testTdf63214();
     void testTdf90003();
     void testTdf51741();
+    void testDefaultsOfOutlineNumbering();
     void testdelofTableRedlines();
     void testTdf81995();
     void testExportToPicture();
@@ -156,6 +157,7 @@ public:
     CPPUNIT_TEST(testTdf63214);
     CPPUNIT_TEST(testTdf90003);
     CPPUNIT_TEST(testTdf51741);
+    CPPUNIT_TEST(testDefaultsOfOutlineNumbering);
     CPPUNIT_TEST(testdelofTableRedlines);
     CPPUNIT_TEST(testTdf81995);
     CPPUNIT_TEST(testExportToPicture);
@@ -992,6 +994,33 @@ void SwUiWriterTest::testTdf51741()
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
+}
+
+void SwUiWriterTest::testDefaultsOfOutlineNumbering()
+{
+    uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance("com.sun.star.text.DefaultNumberingProvider"), uno::UNO_QUERY);
+    com::sun::star::lang::Locale alocale;
+    alocale.Language = "en";
+    alocale.Country = "US";
+    uno::Sequence<beans::PropertyValues> aPropVal(xDefNum->getDefaultContinuousNumberingLevels(alocale));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aPropVal.getLength());
+    for(int i=0;i<aPropVal.getLength();i++)
+    {
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aPropVal[i].getLength());
+        for(int j=0;j<aPropVal[i].getLength();j++)
+        {
+            uno::Any aAny = (aPropVal[i])[j].Value;
+            if((aPropVal[i])[j].Name == "Prefix" || (aPropVal[i])[j].Name == "Suffix" || (aPropVal[i])[j].Name == "Transliteration")
+                CPPUNIT_ASSERT_EQUAL(OUString("string"), aAny.getValueTypeName());
+            else if((aPropVal[i])[j].Name == "NumberingType")
+                CPPUNIT_ASSERT_EQUAL(OUString("short"), aAny.getValueTypeName());
+            else if((aPropVal[i])[j].Name == "NatNum")
+                CPPUNIT_ASSERT_EQUAL(OUString("short"), aAny.getValueTypeName());
+                //It is expected to be long but right now its short !error!
+            else
+                CPPUNIT_FAIL("Property Name not matched");
+        }
+    }
 }
 
 void SwUiWriterTest::testdelofTableRedlines()
