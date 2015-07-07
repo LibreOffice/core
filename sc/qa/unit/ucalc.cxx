@@ -4145,6 +4145,45 @@ void Test::testCopyPasteRepeatOneFormula()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCopyPasteMixedReferenceFormula()
+{
+    sc::AutoCalcSwitch aAC(*m_pDoc, true); // turn on auto calc.
+    m_pDoc->InsertTab(0, "Test");
+
+    // Insert value to C3
+    m_pDoc->SetValue(2,2,0, 1.0);
+
+    // Insert formula to A1 with mixed relative/absolute addressing.
+    m_pDoc->SetString(0,0,0, "=SUM(B:$C)");
+    if (!checkFormula(*m_pDoc, ScAddress(0,0,0), "SUM(B:$C)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(0,0,0));
+
+    // Copy formula in A1 to clipboard.
+    ScRange aRange(ScAddress(0,0,0));
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    copyToClip(m_pDoc, aRange, &aClipDoc);
+
+    // Paste formula to B1.
+    aRange = ScAddress(1,0,0);
+    pasteFromClip(m_pDoc, aRange, &aClipDoc);
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "SUM(C:$C)"))
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(1,0,0));
+
+    // Paste formula to C1. All three results now must be circular reference.
+    aRange = ScAddress(2,0,0);
+    pasteFromClip(m_pDoc, aRange, &aClipDoc);
+    if (!checkFormula(*m_pDoc, ScAddress(2,0,0), "SUM($C:D)"))  // reference put in order
+        CPPUNIT_FAIL("Wrong formula.");
+    CPPUNIT_ASSERT_EQUAL(OUString("Err:522"), m_pDoc->GetString(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Err:522"), m_pDoc->GetString(1,0,0));
+    CPPUNIT_ASSERT_EQUAL(OUString("Err:522"), m_pDoc->GetString(2,0,0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testMergedCells()
 {
     //test merge and unmerge
