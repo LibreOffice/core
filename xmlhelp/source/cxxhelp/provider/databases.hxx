@@ -59,8 +59,6 @@ namespace chelp {
         OUString m_aStartId;
         OUString m_aProgramSwitch;
         OUString m_aTitle;
-        OUString m_aHeading;
-        OUString m_aFulltext;
         int m_nOrder;
 
     public:
@@ -68,14 +66,10 @@ namespace chelp {
         StaticModuleInformation( const OUString& aTitle,
                                  const OUString& aStartId,
                                  const OUString& aProgramSwitch,
-                                 const OUString& aHeading,
-                                 const OUString& aFulltext,
                                  const OUString& aOrder )
             : m_aStartId( aStartId ),
               m_aProgramSwitch( aProgramSwitch ),
               m_aTitle( aTitle ),
-              m_aHeading( aHeading ),
-              m_aFulltext( aFulltext ),
               m_nOrder( aOrder.toInt32() )
         {
         }

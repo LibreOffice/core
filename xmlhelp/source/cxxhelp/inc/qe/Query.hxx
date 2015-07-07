@@ -52,15 +52,12 @@ namespace xmlsearch {
         class QueryHitData
         {
         public:
-            QueryHitData( const OUString& document, OUString* terms )
-                : document_( document ),
-                  terms_( terms )      { }
+            QueryHitData( OUString* terms )
+                : terms_( terms )      { }
 
             ~QueryHitData() { delete[] terms_; }
 
         private:
-            const OUString document_;
-
             OUString* terms_;
 
         };  // end class QueryHitData

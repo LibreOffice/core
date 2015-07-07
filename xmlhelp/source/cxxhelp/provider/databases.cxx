@@ -459,7 +459,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
             cfgFile.close();
 
             const sal_Unicode* str = fileContent.getStr();
-            OUString current,lang_,program,startid,title,heading,fulltext;
+            OUString current,lang_,program,startid,title;
             OUString order( "1" );
 
             for( sal_Int32 i = 0;i < fileContent.getLength();i++ )
@@ -487,14 +487,6 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
                         {
                             program = current.copy( current.indexOf('=') + 1 );
                         }
-                        else if( current.startsWith("Heading") )
-                        {
-                            heading = current.copy( current.indexOf('=') + 1 );
-                        }
-                        else if( current.startsWith("FullText") )
-                        {
-                            fulltext = current.copy( current.indexOf('=') + 1 );
-                        }
                         else if( current.startsWith("Order") )
                         {
                             order = current.copy( current.indexOf('=') + 1 );
@@ -509,8 +501,6 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const OUStrin
             it->second = new StaticModuleInformation( title,
                                                       startid,
                                                       program,
-                                                      heading,
-                                                      fulltext,
                                                       order );
         }
     }

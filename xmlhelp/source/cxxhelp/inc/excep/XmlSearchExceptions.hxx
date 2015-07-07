@@ -28,60 +28,27 @@ namespace xmlsearch {
 
 
         class XmlSearchException
-        {
-        public:
-            XmlSearchException( const OUString& message )
-                : _message( message )
-            {
-            }
-
-        private:
-            OUString _message;
-        };
+        {};
 
 
         class IOException
             : public virtual XmlSearchException
-        {
-        public:
-            IOException( const OUString& message )
-                : XmlSearchException( message )
-            {
-            }
-        };
+        {};
 
 
         class NoFactoryException
             : public virtual XmlSearchException
-        {
-        public:
-            NoFactoryException( const OUString& message )
-                : XmlSearchException( message )
-            {
-            }
-        };
+        {};
 
 
         class NoSuchBlock
             : public virtual XmlSearchException
-        {
-        public:
-            NoSuchBlock( const OUString& message )
-                : XmlSearchException( message )
-            {
-            }
-        };
+        {};
 
 
         class IllegalIndexException
             : public virtual XmlSearchException
-        {
-        public:
-            IllegalIndexException( const OUString& message )
-                : XmlSearchException( message )
-            {
-            }
-        };
+        {};
 
     }
 }
