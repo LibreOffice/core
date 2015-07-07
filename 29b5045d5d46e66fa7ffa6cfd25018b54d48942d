@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_7569268b",
+        "filename": "include/rtl/stringutils.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-07T06:32:03Z",
+      "side": 1,
+      "message": "Update to VS 2015 or remove this section?",
+      "range": {
+        "startLine": 80,
+        "startChar": 41,
+        "endLine": 80,
+        "endChar": 62
+      },
+      "revId": "29b5045d5d46e66fa7ffa6cfd25018b54d48942d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
