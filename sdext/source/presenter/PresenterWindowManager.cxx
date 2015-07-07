@@ -79,7 +79,6 @@ PresenterWindowManager::PresenterWindowManager (
       mpTheme(),
       mpBackgroundBitmap(),
       mxScaledBackgroundBitmap(),
-      maPaneBackgroundColor(),
       mxClipPolygon(),
       meLayoutMode(LM_Generic),
       mbIsSlideSorterActive(false),

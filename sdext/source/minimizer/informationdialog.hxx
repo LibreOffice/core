@@ -67,10 +67,6 @@ private :
     sal_Int64 mnApproxSize;
     bool& mrbOpenNewDocument;
     const OUString& maSaveAsURL;
-
-public :
-
-    css::uno::Reference< css::frame::XFrame>& GetFrame() { return mxFrame; };
 };
 
 class OKActionListener : public ::cppu::WeakImplHelper1< css::awt::XActionListener >

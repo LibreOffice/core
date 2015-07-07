@@ -178,7 +178,6 @@ private:
     ::boost::shared_ptr<PresenterTheme> mpTheme;
     SharedBitmapDescriptor mpBackgroundBitmap;
     css::uno::Reference<css::rendering::XBitmap> mxScaledBackgroundBitmap;
-    css::util::Color maPaneBackgroundColor;
     css::uno::Reference<css::rendering::XPolyPolygon2D> mxClipPolygon;
     LayoutMode meLayoutMode;
     bool mbIsSlideSorterActive;
@@ -193,11 +192,8 @@ private:
     void PaintBackground (const css::awt::Rectangle& rUpdateBox);
     void ProvideBackgroundBitmap();
     css::uno::Reference<css::rendering::XPolyPolygon2D> CreateClipPolyPolygon() const;
-    void ToTop ();
 
     static void UpdateWindowList();
-    bool ChildNeedsRepaint (
-        const css::uno::Reference<css::drawing::framework::XPane>& rxPane) const;
 
     void Invalidate();
 

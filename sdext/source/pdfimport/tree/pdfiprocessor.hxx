@@ -84,13 +84,8 @@ namespace pdfi
         GraphicsContext& getCurrentContext() { return m_aGCStack.back(); }
         const GraphicsContext& getCurrentContext() const { return m_aGCStack.back(); }
 
-        ImageContainer& getImages() { return m_aImages; }
-        boost::shared_ptr<ElementFactory> getElementFactory() const { return m_pElFactory; }
-
         const css::uno::Reference< css::task::XStatusIndicator >& getStatusIndicator() const
         { return m_xStatusIndicator; }
-        void setStatusIndicator( const css::uno::Reference< css::task::XStatusIndicator >& xStatus )
-        { m_xStatusIndicator = xStatus; }
 
         const FontAttributes& getFont( sal_Int32 nFontId ) const;
         sal_Int32 getFontId( const FontAttributes& rAttr ) const;
@@ -122,7 +117,6 @@ namespace pdfi
         virtual void setLineWidth(double) SAL_OVERRIDE;
         virtual void setFillColor( const css::rendering::ARGBColor& rColor ) SAL_OVERRIDE;
         virtual void setStrokeColor( const css::rendering::ARGBColor& rColor ) SAL_OVERRIDE;
-        virtual void setBlendMode(sal_Int8) SAL_OVERRIDE;
         virtual void setFont( const FontAttributes& rFont ) SAL_OVERRIDE;
         virtual void setTextRenderMode( sal_Int32 ) SAL_OVERRIDE;
 

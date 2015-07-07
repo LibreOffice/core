@@ -123,7 +123,6 @@ namespace pdfi
         virtual void setLineWidth(double) = 0;
         virtual void setFillColor( const css::rendering::ARGBColor& rColor ) = 0;
         virtual void setStrokeColor( const css::rendering::ARGBColor& rColor ) = 0;
-        virtual void setBlendMode( sal_Int8 blendMode ) = 0;
         virtual void setFont( const FontAttributes& rFont ) = 0;
         virtual void setTextRenderMode( sal_Int32 ) = 0;
 

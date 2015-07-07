@@ -194,9 +194,6 @@ private:
         const css::geometry::RealRectangle2D& rBoundingBox,
         const css::geometry::RealSize2D& rPartSize,
         const bool bIsHorizontal);
-    void Clear (
-        const css::awt::Rectangle& rUpdateBox,
-        const css::rendering::ViewState& rViewState);
     void Paint (
         const css::awt::Rectangle& rUpdateBox,
         const css::rendering::ViewState& rViewState);

@@ -140,8 +140,6 @@ public:
     SharedPaneDescriptor RemoveView (
         const css::uno::Reference<css::drawing::framework::XView>& rxView);
 
-    void CreateBorderWindow (PaneDescriptor& rDescriptor);
-
     /** Find the pane whose border window is identical to the given border
         window.
     */
@@ -177,8 +175,6 @@ public:
 
 private:
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;
-
-    PaneList::const_iterator FindIteratorForPaneURL (const OUString& rsPaneURL);
 };
 
 } } // end of namespace ::sdext::presenter

@@ -674,12 +674,6 @@ sal_Int32 PresenterVerticalScrollBar::GetSize() const
     return mnScrollBarWidth;
 }
 
-geometry::RealPoint2D PresenterVerticalScrollBar::GetPoint (
-    const double nMajor, const double nMinor) const
-{
-    return geometry::RealPoint2D(nMinor, nMajor);
-}
-
 double PresenterVerticalScrollBar::GetMinor (const double nX, const double nY) const
 {
     (void)nY;

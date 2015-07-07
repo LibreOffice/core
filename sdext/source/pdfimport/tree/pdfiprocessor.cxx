@@ -161,11 +161,6 @@ void PDFIProcessor::setStrokeColor( const rendering::ARGBColor& rColor )
     getCurrentContext().LineColor = rColor;
 }
 
-void PDFIProcessor::setBlendMode(sal_Int8)
-{
-    OSL_TRACE("PDFIProcessor::setBlendMode(): not supported by ODF");
-}
-
 void PDFIProcessor::setFont( const FontAttributes& i_rFont )
 {
     FontAttributes aChangedFont( i_rFont );
