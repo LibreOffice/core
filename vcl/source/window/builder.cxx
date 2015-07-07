@@ -543,6 +543,7 @@ void VclBuilder::disposeBuilder()
         delete aI->m_pMenu;
     }
     m_aMenus.clear();
+    m_pParent.clear();
 }
 
 void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
