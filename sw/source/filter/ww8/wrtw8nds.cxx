@@ -800,7 +800,7 @@ void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/,
 
     /*
      MS needs to know the name and size of the font used in the ruby item,
-     but we coud have written it in a mixture of asian and western
+     but we could have written it in a mixture of asian and western
      scripts, and each of these can be a different font and size than the
      other, so we make a guess based upon the first character of the text,
      defaulting to asian.
@@ -1976,7 +1976,7 @@ void MSWordExportBase::GetSortedAnnotationMarks( const SwTextNode& rNode, sal_In
         {
             IMark* pMark = (*it);
 
-            // Remove the positions egals to the current pos
+            // Remove the positions equal to the current pos
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
@@ -2012,7 +2012,7 @@ void MSWordExportBase::GetSortedBookmarks( const SwTextNode& rNode, sal_Int32 nA
         {
             IMark* pMark = (*it);
 
-            // Remove the positions egals to the current pos
+            // Remove the positions equal to the current pos
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 

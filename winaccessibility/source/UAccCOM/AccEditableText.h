@@ -68,7 +68,7 @@ public:
 public:
     // IAccessibleEditableText
 
-    // Copys a range of text to the clipboard.
+    // Copies a range of text to the clipboard.
     STDMETHOD(copyText)(long startOffset, long endOffset);
 
     // Deletes a range of text.

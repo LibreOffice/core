@@ -1418,11 +1418,11 @@ namespace //local functions originally from docfmt.cxx
                 if( pStt->nNode == pEnd->nNode )
                 {
                 //The data parameter flag: bExpandCharToPara, comes from the data member of SwDoc,
-                //Which is set in SW MS word Binary filter WW8ImplRreader. With this flag on, means that
-                //current setting attribute set is a character range properties set and comes from a MS word
-                //binary file, And the setting range include a paragraph end position (0X0D);
-                //More specifications, as such property inside the character range properties set recorded in
-                //MS word binary file are dealed and inserted into data model (SwDoc) one by one, so we
+                //which is set in SW MS Word Binary filter WW8ImplRreader. With this flag on, means that
+                //current setting attribute set is a character range properties set and comes from a MS Word
+                //binary file, and the setting range include a paragraph end position (0X0D);
+                //more specifications, as such property inside the character range properties set recorded in
+                //MS Word binary file are dealed and inserted into data model (SwDoc) one by one, so we
                 //only dealing the scenario that the char properties set with 1 item inside;
 
                     if (bExpandCharToPara && pCharSet && pCharSet->Count() ==1 )
@@ -1536,11 +1536,11 @@ namespace //local functions originally from docfmt.cxx
         }
 
         //The data parameter flag: bExpandCharToPara, comes from the data member of SwDoc,
-        //Which is set in SW MS word Binary filter WW8ImplRreader. With this flag on, means that
-        //current setting attribute set is a character range properties set and comes from a MS word
-        //binary file, And the setting range include a paragraph end position (0X0D);
-        //More specifications, as such property inside the character range properties set recorded in
-        //MS word binary file are dealed and inserted into data model (SwDoc) one by one, so we
+        //which is set in SW MS Word Binary filter WW8ImplRreader. With this flag on, means that
+        //current setting attribute set is a character range properties set and comes from a MS Word
+        //binary file, and the setting range include a paragraph end position (0X0D);
+        //more specifications, as such property inside the character range properties set recorded in
+        //MS Word binary file are dealed and inserted into data model (SwDoc) one by one, so we
         //only dealing the scenario that the char properties set with 1 item inside;
         if (bExpandCharToPara && pCharSet && pCharSet->Count() ==1)
         {

@@ -1063,7 +1063,7 @@ com_sun_star_comp_Svx_GraphicImportHelper_get_implementation(
     SvXMLGraphicHelper that only gets the create mode
 
     To write the Pictures stream, you have to call dispose at this component.
-    Make sure you call dipose before you commit the parent storage.
+    Make sure you call dispose before you commit the parent storage.
 
     uses eCreateMode == GRAPHICHELPER_MODE_WRITE, bDirect == sal_True in
     SvXMLGraphicHelper

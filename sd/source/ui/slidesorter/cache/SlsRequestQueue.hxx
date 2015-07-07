@@ -49,7 +49,7 @@ public:
             The priority class in which to insert the request with highest
             or lowest priority.
         @param bInsertWithHighestPriority
-            When this flag is <TRUE/> the request is inserted with highes
+            When this flag is <TRUE/> the request is inserted with highest
             priority in its class.  When <FALSE/> the request is inserted
             with lowest priority.
     */

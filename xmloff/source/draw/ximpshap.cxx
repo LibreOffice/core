@@ -888,7 +888,7 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const OUString& rL
         }
         else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
-            // because of #85127# take svg:transform into account and hanle like
+            // because of #85127# take svg:transform into account and handle like
             // draw:transform for compatibility
             mnTransform.SetString(rValue, GetImport().GetMM100UnitConverter());
         }

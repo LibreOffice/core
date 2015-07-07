@@ -1428,7 +1428,7 @@ namespace cmis
             }
             else
             {
-                SAL_INFO( "ucb.ucp.cmis", "Couln't set property: " << rValue.Name );
+                SAL_INFO( "ucb.ucp.cmis", "Couldn't set property: " << rValue.Name );
                 lang::IllegalAccessException e ( OUString("Property is read-only!"),
                        static_cast< cppu::OWeakObject* >( this ) );
                 aRet[ n ] <<= e;

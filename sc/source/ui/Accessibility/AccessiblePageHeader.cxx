@@ -372,7 +372,7 @@ Rectangle ScAccessiblePageHeader::GetBoundingBox() const throw (uno::RuntimeExce
         else
             rData.GetFooterPosition( aRect );
 
-        // the Rectangle could contain negative coordinates so it should be cliped
+        // the Rectangle could contain negative coordinates so it should be clipped
         Rectangle aClipRect(Point(0, 0), aRect.GetSize());
         vcl::Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)

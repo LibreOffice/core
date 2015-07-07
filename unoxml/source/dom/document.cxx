@@ -357,7 +357,7 @@ namespace DOM
         return len;
     }
 
-    // clsoe callback
+    // close callback
     //int xmlOutputCloseCallback (void * context)
     static int closeCallback(void *context)
     {

@@ -235,7 +235,7 @@ void SAL_CALL DynamicResultSetWrapper
     <p>The Listener is allowed to blockade this call, until he really want to go
     to the new version. The only situation, where the listener has to return the
     update call at once is, while he disposes his broadcaster or while he is
-    removing himsef as listener (otherwise you deadlock)!!!
+    removing himself as listener (otherwise you deadlock)!!!
     */
     // handle the actions in the list
 

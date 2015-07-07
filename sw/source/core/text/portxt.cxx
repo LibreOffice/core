@@ -279,7 +279,7 @@ static bool lcl_HasContent( const SwFieldPortion& rField, SwTextFormatInfo &rInf
 
 bool SwTextPortion::_Format( SwTextFormatInfo &rInf )
 {
-    // 5744: If only the hypen does not fit anymore, we still need to wrap
+    // 5744: If only the hyphen does not fit anymore, we still need to wrap
     // the word, or else return true!
     if( rInf.IsUnderflow() && rInf.GetSoftHyphPos() )
     {

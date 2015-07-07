@@ -2032,7 +2032,7 @@ void Test::testPivotTableDocFunc()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObj);
 
-    // Craete a new pivot table output.
+    // Create a new pivot table output.
     ScDBDocFunc aFunc(getDocShell());
     bool bSuccess = aFunc.CreatePivotTable(*pDPObj, false, true);
     CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table output via ScDBDocFunc.", bSuccess);

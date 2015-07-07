@@ -305,7 +305,7 @@ private:
     ScVbaPalette m_Palette;
     sal_Int32 getTableIndex( sal_Int32 nConst )
     {
-        // hokay return position of the index in the table
+        // okay return position of the index in the table
         sal_Int32 nIndexes = getCount();
         sal_Int32 realIndex = 0;
         const sal_Int16* pTableEntry = supportedIndexTable;

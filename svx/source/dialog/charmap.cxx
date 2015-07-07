@@ -642,9 +642,9 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
             svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
             // Don't fire the focus event.
             if ( bFocus )
-                m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), makeAny(pItem->GetAccessible()) ); // this call asures that m_pItem is set
+                m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), makeAny(pItem->GetAccessible()) ); // this call assures that m_pItem is set
             else
-                m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS, Any(), makeAny(pItem->GetAccessible()) ); // this call asures that m_pItem is set
+                m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS, Any(), makeAny(pItem->GetAccessible()) ); // this call assures that m_pItem is set
 
             assert(pItem->m_pItem && "No accessible created!");
             Any aOldAny, aNewAny;

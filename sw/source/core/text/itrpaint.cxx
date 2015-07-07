@@ -310,7 +310,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             SeekAndChg( GetInfo() );
         else if ( !bFirst && pPor->IsBreakPortion() && GetInfo().GetOpt().IsParagraph() )
         {
-            // Paragraph symbols should have the same fon as the paragraph in fron of them,
+            // Paragraph symbols should have the same font as the paragraph in front of them,
             // except for the case that there's redlining in the paragraph
             if( GetRedln() )
                 SeekAndChg( GetInfo() );

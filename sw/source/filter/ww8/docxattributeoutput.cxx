@@ -670,7 +670,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                 m_rExport.SdrExporter().setParagraphSdtOpen(true);
         }
         else
-            // Support multiple runs inside a run-evel SDT: don't close the SDT block yet.
+            // Support multiple runs inside a run-level SDT: don't close the SDT block yet.
             m_bStartedCharSdt = true;
 
         // clear sdt status

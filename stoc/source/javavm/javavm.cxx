@@ -1191,7 +1191,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                 if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:GetMethodID java.util.Properties.remove", 0);
                 pJNIEnv->CallObjectMethod( joProperties, jmRemove, jsPropName);
 
-                // special calse for ftp.nonProxyHosts and http.nonProxyHosts. The office only
+                // special case for ftp.nonProxyHosts and http.nonProxyHosts. The office only
                 // has a value for two java properties
                 if (!aPropertyName2.isEmpty())
                 {
@@ -1208,7 +1208,7 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
                 pJNIEnv->CallStaticObjectMethod( jcSystem, jmSetProps, jsPropName, jsPropValue);
                 if(pJNIEnv->ExceptionOccurred()) throw css::uno::RuntimeException("JNI:CallStaticObjectMethod java.lang.System.setProperty", 0);
 
-                // special calse for ftp.nonProxyHosts and http.nonProxyHosts. The office only
+                // special case for ftp.nonProxyHosts and http.nonProxyHosts. The office only
                 // has a value for two java properties
                 if (!aPropertyName2.isEmpty())
                 {

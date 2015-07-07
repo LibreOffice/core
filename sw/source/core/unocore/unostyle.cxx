@@ -2008,7 +2008,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 throw lang::IllegalArgumentException();
 
             OSL_ENSURE(COND_COMMAND_COUNT == 28,
-                    "invalid size of comman count?");
+                    "invalid size of command count?");
             const beans::NamedValue *pSeq = aSeq.getConstArray();
             const sal_Int32 nLen = aSeq.getLength();
 
@@ -2452,7 +2452,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             case FN_UNO_PARA_STYLE_CONDITIONS:
             {
                 OSL_ENSURE(COND_COMMAND_COUNT == 28,
-                        "invalid size of comman count?");
+                        "invalid size of command count?");
                 uno::Sequence< beans::NamedValue > aSeq(COND_COMMAND_COUNT);
                 beans::NamedValue *pSeq = aSeq.getArray();
 
