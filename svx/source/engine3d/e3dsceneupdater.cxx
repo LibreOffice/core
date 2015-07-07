@@ -96,7 +96,7 @@ E3DModifySceneSnapRectUpdater::~E3DModifySceneSnapRectUpdater()
                 aAllContentRange.getMinX(), aAllContentRange.getMinY(),
                 aAllContentRange.getMaxX(), aAllContentRange.getMaxY());
 
-            // transform to 2D world coordiantes using scene's 2D transformation
+            // transform to 2D world coordinates using scene's 2D transformation
             aSnapRange.transform(rVCScene.getObjectTransformation());
 
             // snap to (old) integer

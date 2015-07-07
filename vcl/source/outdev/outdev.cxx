@@ -757,7 +757,7 @@ bool OutputDevice::ImplIsAntiparallel() const
     return bRet;
 }
 
-// note: the coordinates to be remirrored are in frame coordiantes !
+// note: the coordinates to be remirrored are in frame coordinates !
 
 void    OutputDevice::ReMirror( Point &rPoint ) const
 {

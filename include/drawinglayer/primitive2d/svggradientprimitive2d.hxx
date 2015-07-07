@@ -305,14 +305,14 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /*  basic primitive for a single linear GradientRun in unit coordiantes.
+        /*  basic primitive for a single linear GradientRun in unit coordinates.
             It's derived from DiscreteMetricDependentPrimitive2D to allow view-dependent
             decompositions allowing reduced color steps
          **/
         class DRAWINGLAYER_DLLPUBLIC SvgLinearAtomPrimitive2D : public DiscreteMetricDependentPrimitive2D
         {
         private:
-            /// the geometric definition in unit coordiantes
+            /// the geometric definition in unit coordinates
             basegfx::BColor             maColorA;
             basegfx::BColor             maColorB;
             double                      mfOffsetA;
@@ -351,14 +351,14 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /*  basic primitive for a single radial GradientRun in unit coordiantes.
+        /*  basic primitive for a single radial GradientRun in unit coordinates.
             It's derived from DiscreteMetricDependentPrimitive2D to allow view-dependent
             decompositions allowing reduced color steps
          **/
         class DRAWINGLAYER_DLLPUBLIC SvgRadialAtomPrimitive2D : public DiscreteMetricDependentPrimitive2D
         {
         private:
-            /// the geometric definition in unit coordiantes
+            /// the geometric definition in unit coordinates
             basegfx::BColor             maColorA;
             basegfx::BColor             maColorB;
             double                      mfScaleA;

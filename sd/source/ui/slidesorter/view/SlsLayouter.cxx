@@ -134,7 +134,7 @@ public:
             The row index of the upper row or the column index of the left
             column.
         @param nGap
-             Width or height of the gap in model coordiantes between the
+             Width or height of the gap in model coordinates between the
              page borders.
         @return
            Returns either the index of the upper row (as given as nRow), the

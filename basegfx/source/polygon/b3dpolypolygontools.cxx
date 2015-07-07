@@ -221,7 +221,7 @@ namespace basegfx
             return aRetval;
         }
 
-        // helper for getting the 3D Point from given cartesian coordiantes. fHor is defined from
+        // helper for getting the 3D Point from given cartesian coordinates. fHor is defined from
         // [F_PI2 .. -F_PI2], fVer from [0.0 .. F_2PI]
         inline B3DPoint getPointFromCartesian(double fHor, double fVer)
         {

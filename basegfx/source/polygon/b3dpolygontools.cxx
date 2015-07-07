@@ -401,7 +401,7 @@ namespace basegfx
                     {
                         double fX(fOne - ((atan2(aVector.getZ(), aVector.getX()) + F_PI) / F_2PI));
 
-                        // correct cartesinan point coordiante dependent from center value
+                        // correct cartesian point coordinate dependent from center value
                         if(fX > fXCenter + 0.5)
                         {
                             fX -= fOne;
