@@ -37,7 +37,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 
 using namespace css;

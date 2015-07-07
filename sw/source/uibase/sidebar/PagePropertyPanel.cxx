@@ -48,8 +48,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 
-#include <boost/bind.hpp>
-
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
@@ -171,16 +169,16 @@ PagePropertyPanel::PagePropertyPanel(
     , m_aSwPagePgMetricControl(SID_ATTR_METRIC, *pBindings, *this)
 
     , maOrientationPopup( this,
-                          ::boost::bind( &PagePropertyPanel::CreatePageOrientationControl, this, _1 ),
+            [this] (svx::sidebar::PopupContainer *parent)  { return this->CreatePageOrientationControl(parent); },
                           OUString("Page orientation") )
     , maMarginPopup( this,
-                     ::boost::bind( &PagePropertyPanel::CreatePageMarginControl, this, _1 ),
+            [this] (svx::sidebar::PopupContainer *parent) { return this->CreatePageMarginControl(parent); },
                      OUString("Page margins") )
     , maSizePopup( this,
-                   ::boost::bind( &PagePropertyPanel::CreatePageSizeControl, this, _1 ),
+            [this] (svx::sidebar::PopupContainer *parent) { return this->CreatePageSizeControl(parent); },
                    OUString("Page size") )
     , maColumnPopup( this,
-                     ::boost::bind( &PagePropertyPanel::CreatePageColumnControl, this, _1 ),
+            [this] (svx::sidebar::PopupContainer *parent) { return this->CreatePageColumnControl(parent); },
                      OUString("Page columns") )
 
     , mxUndoManager( getUndoManager( rxFrame ) )
