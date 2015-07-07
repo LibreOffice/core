@@ -294,6 +294,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
         m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
         update();
     }
+
     m_pParent->SetDataModified( true );
     return 0;
 }
