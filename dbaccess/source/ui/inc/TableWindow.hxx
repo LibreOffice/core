@@ -25,6 +25,7 @@
 #include <tools/rtti.hxx>
 #include <rtl/ref.hxx>
 #include "TableWindowData.hxx"
+#include "TableWindowListBox.hxx"
 #include <vector>
 #include <vcl/window.hxx>
 
@@ -41,7 +42,6 @@ namespace dbaui
     const sal_uInt16 SIZING_LEFT    = 0x0004;
     const sal_uInt16 SIZING_RIGHT   = 0x0008;
 
-    class OTableWindowListBox;
     class OJoinDesignView;
     class OJoinTableView;
     class OTableWindowAccess;
@@ -55,8 +55,8 @@ namespace dbaui
     protected:
         // and the table itself (needed for me as I want to lock it as long as the window is alive)
         VclPtr<FixedImage>          m_aTypeImage;
-        VclPtr<OTableWindowTitle>   m_aTitle;
-        VclPtr<OTableWindowListBox>    m_pListBox;
+        VclPtr<OTableWindowTitle>   m_xTitle;
+        VclPtr<OTableWindowListBox> m_xListBox;
         OTableWindowAccess*     m_pAccessible;
 
     private:
@@ -146,9 +146,9 @@ namespace dbaui
         OUString             GetTableName() const { return m_pData->GetTableName(); }
         OUString             GetWinName() const { return m_pData->GetWinName(); }
         OUString             GetComposedName() const { return m_pData->GetComposedName(); }
-        OTableWindowListBox*         GetListBox() const { return m_pListBox; }
+        VclPtr<OTableWindowListBox>  GetListBox() const { return m_xListBox; }
         TTableWindowData::value_type GetData() const { return m_pData; }
-        OTableWindowTitle&           GetTitleCtrl() { return *m_aTitle.get(); }
+        VclPtr<OTableWindowTitle>    GetTitleCtrl() { return m_xTitle; }
 
         /** returns the name which should be used when displaying join or relations
             @return

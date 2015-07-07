@@ -105,16 +105,24 @@ namespace dbaui
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Reference< XAccessible > aRet;
-        if(m_pTable && !m_pTable->IsDisposed())
+        if (m_pTable && !m_pTable->IsDisposed())
         {
             switch(i)
             {
                 case 0:
-                    aRet = m_pTable->GetTitleCtrl().GetAccessible();
+                {
+                    VclPtr<OTableWindowTitle> xCtrl(m_pTable->GetTitleCtrl());
+                    if (xCtrl)
+                        aRet = xCtrl->GetAccessible();
                     break;
+                }
                 case 1:
-                    aRet = m_pTable->GetListBox()->GetAccessible();
+                {
+                    VclPtr<OTableWindowListBox> xCtrl(m_pTable->GetListBox());
+                    if (xCtrl)
+                        aRet = xCtrl->GetAccessible();
                     break;
+                }
                 default:
                     throw IndexOutOfBoundsException();
             }
