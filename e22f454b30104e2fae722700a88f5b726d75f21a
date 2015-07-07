@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_956dc234",
+        "filename": "sw/inc/pam.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-07T13:28:34Z",
+      "side": 1,
+      "message": "This one looks nice.",
+      "revId": "e22f454b30104e2fae722700a88f5b726d75f21a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
