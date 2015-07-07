@@ -1373,7 +1373,7 @@ void SwUiWriterTest::testTdf88899()
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xProps(xDocumentPropertiesSupplier->getDocumentProperties());
     uno::Reference<beans::XPropertyContainer> xUserProps(xProps->getUserDefinedProperties(), uno::UNO_QUERY);
-    com::sun::star::util::DateTime aDateTime = {sal_uInt32(1234567), sal_uInt16(3), sal_uInt16(3), sal_uInt16(3), sal_uInt16(10), sal_uInt16(11), sal_uInt16(2014), sal_Bool(true)};
+    com::sun::star::util::DateTime aDateTime = {sal_uInt32(1234567), sal_uInt16(3), sal_uInt16(3), sal_uInt16(3), sal_uInt16(10), sal_uInt16(11), sal_uInt16(2014), true};
     xUserProps->addProperty("dateTime", sal_Int16(beans::PropertyAttribute::OPTIONAL), uno::makeAny(aDateTime));
     uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextField> xTextField(xFact->createInstance("com.sun.star.text.textfield.docinfo.Custom"), uno::UNO_QUERY);
