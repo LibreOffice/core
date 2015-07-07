@@ -544,7 +544,7 @@ private:
 
     ChartDrawMode m_eDrawMode;
 
-    boost::scoped_ptr<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
+    rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
 
 private:
     //private methods
