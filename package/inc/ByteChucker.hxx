@@ -64,13 +64,6 @@ public:
         WriteBytes( a4Sequence );
     }
 
-    void WriteUInt16(sal_uInt16 nuInt16)
-    {
-        p2Sequence[0] = static_cast< sal_Int8 >((nuInt16 >>  0 ) & 0xFF);
-        p2Sequence[1] = static_cast< sal_Int8 >((nuInt16 >>  8 ) & 0xFF);
-        WriteBytes( a2Sequence );
-    }
-
     void WriteUInt32(sal_uInt32 nuInt32)
     {
         p4Sequence[0] = static_cast < sal_Int8 > ((nuInt32 >>  0 ) & 0xFF);

@@ -27,6 +27,8 @@ exclusionSet = set([
     "void unoidl::detail::SourceProviderScannerData::setSource(const void *,unsigned long)",
     # TODO track instantiations of template class constructors
     "void comphelper::IEventProcessor::release()",
+    "void SotMutexHolder::acquire()",
+    "void SotMutexHolder::release()",
     # used by Windows build
     "_Bool basegfx::B2ITuple::equalZero() const",
     "class basegfx::B2DPolyPolygon basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const",

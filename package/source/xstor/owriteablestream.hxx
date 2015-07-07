@@ -191,12 +191,6 @@ public:
     void Commit();
     void Revert();
 
-    void Free( bool bMust ); // allows to try to disconnect from the temporary stream
-                             // in case bMust is set to sal_True the method
-                            // will throw exception in case the file is still busy
-
-    void SetModified(); // can be done only by parent storage after renaming
-
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetStreamProperties();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > GetAllRelationshipsIfAny();

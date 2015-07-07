@@ -142,19 +142,20 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
     if (ignoreLocation(expr)) {
         return true;
     }
-    CXXMethodDecl* decl = dyn_cast_or_null<CXXMethodDecl>(
-        expr->getDirectCallee());
-    if (decl == nullptr) {
-        return true;
-    }
-    logCallToRootMethods(decl);
+    FunctionDecl* calleeFunctionDecl = expr->getDirectCallee();
     // if we see a call to a templated method, it effectively instantiates a new method,
     // so we need to examine it's interior to see if it in turn calls anything else
-    if (decl->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate
-        || decl->isFunctionTemplateSpecialization())
+    if (calleeFunctionDecl->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate
+        || calleeFunctionDecl->isFunctionTemplateSpecialization())
     {
-        TraverseCXXMethodDecl(decl);
+        TraverseFunctionDecl(calleeFunctionDecl);
     }
+
+    CXXMethodDecl* calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(calleeFunctionDecl);
+    if (calleeMethodDecl == nullptr) {
+        return true;
+    }
+    logCallToRootMethods(calleeMethodDecl);
     return true;
 }
 
