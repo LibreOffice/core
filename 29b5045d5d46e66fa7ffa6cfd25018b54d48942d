@@ -22,6 +22,47 @@
       "revId": "29b5045d5d46e66fa7ffa6cfd25018b54d48942d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_759cc669",
+        "filename": "include/rtl/stringutils.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-07T08:30:47Z",
+      "side": 1,
+      "message": "* I do not understand your question.\n\n* Fix comment to match.",
+      "parentUuid": "1a54edaf_7569268b",
+      "range": {
+        "startLine": 80,
+        "startChar": 41,
+        "endLine": 80,
+        "endChar": 62
+      },
+      "revId": "29b5045d5d46e66fa7ffa6cfd25018b54d48942d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_d581fafc",
+        "filename": "include/rtl/stringutils.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-07T08:30:47Z",
+      "side": 1,
+      "message": "Fix comment to match.",
+      "revId": "29b5045d5d46e66fa7ffa6cfd25018b54d48942d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
