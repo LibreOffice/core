@@ -106,8 +106,6 @@ public:
     bool            operator==( const Gradient& rGradient ) const;
     bool            operator!=( const Gradient& rGradient ) const
                         { return !(Gradient::operator==( rGradient )); }
-    bool            IsSameInstance( const Gradient& rGradient ) const
-                        { return (mpImplGradient == rGradient.mpImplGradient); }
 
     friend VCL_DLLPUBLIC SvStream& ReadGradient( SvStream& rIStm, Gradient& rGradient );
     friend VCL_DLLPUBLIC SvStream& WriteGradient( SvStream& rOStm, const Gradient& rGradient );

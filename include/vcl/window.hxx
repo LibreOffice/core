@@ -837,9 +837,6 @@ protected:
         OutputDevice::DrawGradientWallpaper(nX, nY, nWidth, nHeight, rWallpaper);
     }
 
-    void DrawGradientWallpaper(vcl::RenderContext& rRenderContext, long nX, long nY,
-                                       long nWidth, long nHeight, const Wallpaper& rWallpaper);
-
     virtual void ApplySettings(vcl::RenderContext& rRenderContext);
 public:
     bool                                HasMirroredGraphics() const SAL_OVERRIDE;
@@ -933,8 +930,6 @@ public:
 
     /// Can the widget derived from this Window do the double-buffering via RenderContext properly?
     bool                                SupportsDoubleBuffering() const;
-    /// Mark this window / widget derived from this window as working with double-buffering via RenderContext.
-    void                                SetDoubleBuffering(bool bDoubleBuffering = true);
 
     void                                EnableAllResize( bool bEnable = true );
 
@@ -967,8 +962,6 @@ public:
     };
     PointerState                        GetPointerState();
     bool                                IsMouseOver();
-
-    sal_uLong                           GetCurrentModButtons();
 
     void                                SetInputContext( const InputContext& rInputContext );
     const InputContext&                 GetInputContext() const;
@@ -1044,8 +1037,6 @@ public:
     void                                EnableInput( bool bEnable, bool bChild, bool bSysWin,
                                                      const vcl::Window* pExcludeWindow = NULL );
     bool                                IsInputEnabled() const;
-
-    vcl::RenderSettings&                GetRenderSettings();
 
     /** Override <code>EnableInput</code>. This can be necessary due to other people
         using EnableInput for whole window hierarchies.
@@ -1260,8 +1251,6 @@ public:
 
     // transparent background for selected or checked items in toolboxes etc.
     void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly );
-    // the same, but fills a passed Color with a text color complementing the selection background
-    void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly, Color* pSelectionTextColor );
     // support rounded edges in the selection rect
     void                                DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly, long nCornerRadius, Color* pSelectionTextColor, Color* pPaintColor );
 

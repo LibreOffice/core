@@ -60,7 +60,6 @@ OpenGLContext::OpenGLContext():
     mnRefCount(1),
     mbRequestLegacyContext(false),
     mbUseDoubleBufferedRendering(true),
-    mbRequestVirtualDevice(false),
     mnFramebufferCount(0),
     mpCurrentFramebuffer(NULL),
     mpFirstFramebuffer(NULL),
@@ -150,11 +149,6 @@ void OpenGLContext::requestLegacyContext()
 void OpenGLContext::requestSingleBufferedRendering()
 {
     mbUseDoubleBufferedRendering = false;
-}
-
-void OpenGLContext::requestVirtualDevice()
-{
-    mbRequestVirtualDevice = true;
 }
 
 #if defined( _WIN32 )
@@ -513,56 +507,6 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
     return 0;
 }
 
-GLXFBConfig* getFBConfigForPixmap(Display* dpy, int& nBestFBC, bool bUseDoubleBufferedRendering, int screen)
-{
-    static int visual_attribs[] =
-    {
-        GLX_DOUBLEBUFFER,       False,
-        GLX_DRAWABLE_TYPE,      GLX_PIXMAP_BIT,
-        GLX_X_RENDERABLE,       True,
-        GLX_RED_SIZE,           8,
-        GLX_GREEN_SIZE,         8,
-        GLX_BLUE_SIZE,          8,
-        GLX_ALPHA_SIZE,         8,
-        GLX_DEPTH_SIZE,         24,
-        GLX_X_VISUAL_TYPE,      GLX_TRUE_COLOR,
-        None
-    };
-
-    if (bUseDoubleBufferedRendering)
-        visual_attribs[1] = True;
-
-    int fbCount = 0;
-    GLXFBConfig* pFBC = glXChooseFBConfig( dpy,
-            screen,
-            visual_attribs, &fbCount );
-
-    if(!pFBC)
-    {
-        SAL_WARN("vcl.opengl", "no suitable fb format found");
-        return NULL;
-    }
-
-    int best_num_samp = -1;
-    for(int i = 0; i < fbCount; ++i)
-    {
-        // pick the one with the most samples per pixel
-        int nSampleBuf = 0;
-        int nSamples = 0;
-        glXGetFBConfigAttrib( dpy, pFBC[i], GLX_SAMPLE_BUFFERS, &nSampleBuf );
-        glXGetFBConfigAttrib( dpy, pFBC[i], GLX_SAMPLES       , &nSamples  );
-
-        if ( nBestFBC < 0 || (nSampleBuf && ( nSamples > best_num_samp )) )
-        {
-            nBestFBC = i;
-            best_num_samp = nSamples;
-        }
-    }
-
-    CHECK_GL_ERROR();
-    return pFBC;
-}
-
 GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubleBufferedRendering, bool bWithSameVisualID)
 {
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
@@ -709,36 +653,7 @@ bool OpenGLContext::init(Display* dpy, Window win, int screen)
     return ImplInit();
 }
 
-bool OpenGLContext::init(Display* dpy, Pixmap pix, unsigned int width, unsigned int height, int nScreen)
-{
-    if(mbInitialized)
-        return true;
 
-    if (!dpy)
-        return false;
-
-    initOpenGLFunctionPointers();
-
-    SAL_INFO("vcl.opengl", "init with pixmap");
-    m_aGLWin.dpy = dpy;
-    m_aGLWin.Width = width;
-    m_aGLWin.Height = height;
-    m_aGLWin.pix = pix;
-    const int attrib_list[] = { GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGB_EXT,
-          GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
-          None};
-    int best_fbc = -1;
-    GLXFBConfig* config = getFBConfigForPixmap(dpy, best_fbc, mbUseDoubleBufferedRendering, nScreen);
-    if (best_fbc == -1)
-        return false;
-
-    m_aGLWin.vi = glXGetVisualFromFBConfig( dpy, config[best_fbc] );
-    m_aGLWin.glPix = glXCreatePixmap(dpy, config[best_fbc], pix, attrib_list);
-
-    mbPixmap = true;
-
-    return ImplInit();
-}
 
 bool OpenGLContext::ImplInit()
 {
@@ -899,15 +814,12 @@ bool OpenGLContext::ImplInit()
     // rendering - otherwise we get errors with virtual devices
     PixelFormatFront.dwFlags |= PFD_DOUBLEBUFFER;
 
-    if (mbRequestVirtualDevice)
-        PixelFormatFront.dwFlags |= PFD_DRAW_TO_BITMAP;
-    else
-        PixelFormatFront.dwFlags |= PFD_DRAW_TO_WINDOW;
+    PixelFormatFront.dwFlags |= PFD_DRAW_TO_WINDOW;
 
     //  we must check whether can set the MSAA
     int WindowPix = 0;
     bool bMultiSampleSupport = InitMultisample(PixelFormatFront, WindowPix,
-            mbUseDoubleBufferedRendering, mbRequestVirtualDevice);
+            mbUseDoubleBufferedRendering, false);
     if (bMultiSampleSupport && WindowPix != 0)
     {
         m_aGLWin.bMultiSampleSupported = true;
@@ -1073,14 +985,7 @@ void OpenGLContext::setWinSize(const Size& rSize)
     m_aGLWin.Height = rSize.Height();
 }
 
-void OpenGLContext::renderToFile()
-{
-    int iWidth = m_aGLWin.Width;
-    int iHeight = m_aGLWin.Height;
-    static int nIdx = 0;
-    OUString aName = "file:///home/moggi/Documents/work/output" + OUString::number( nIdx++ ) + ".png";
-    OpenGLHelper::renderToFile(iWidth, iHeight, aName);
-}
+
 
 #if defined( WNT )
 

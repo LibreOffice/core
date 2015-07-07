@@ -172,7 +172,6 @@ public:
 
     void requestLegacyContext();
     void requestSingleBufferedRendering();
-    void requestVirtualDevice();
 
     bool init(vcl::Window* pParent = 0);
     bool init(SystemChildWindow* pChildWindow);
@@ -181,7 +180,6 @@ public:
 // only in vcl's platform code
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     bool init(Display* dpy, Window win, int screen);
-    bool init(Display* dpy, Pixmap pix, unsigned int width, unsigned int height, int nScreen);
 #elif defined( _WIN32 )
     bool init( HDC hDC, HWND hWnd );
 #endif
@@ -225,8 +223,6 @@ public:
     SystemChildWindow* getChildWindow();
     const SystemChildWindow* getChildWindow() const;
 
-    void renderToFile();
-
     bool isInitialized()
     {
         return mbInitialized;
@@ -256,7 +252,6 @@ private:
     int  mnRefCount;
     bool mbRequestLegacyContext;
     bool mbUseDoubleBufferedRendering;
-    bool mbRequestVirtualDevice;
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID && !defined(LIBO_HEADLESS)
     bool mbPixmap; // is a pixmap instead of a window
 #endif

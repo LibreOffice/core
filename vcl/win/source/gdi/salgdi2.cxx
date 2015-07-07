@@ -76,13 +76,6 @@ void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSal
 
 void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
-                              SalColor nTransparentColor )
-{
-    mpImpl->drawBitmap( rPosAry, rSSalBitmap, nTransparentColor );
-}
-
-void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
-                              const SalBitmap& rSSalBitmap,
                               const SalBitmap& rSTransparentBitmap )
 {
     mpImpl->drawBitmap( rPosAry, rSSalBitmap, rSTransparentBitmap );
