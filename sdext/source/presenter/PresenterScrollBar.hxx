@@ -191,7 +191,6 @@ protected:
     css::geometry::RealRectangle2D GetRectangle (const Area eArea) const;
     virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const = 0;
     virtual void UpdateDragAnchor (const double nDragDistance) = 0;
-    virtual css::geometry::RealPoint2D GetPoint (const double nMajor, const double nMinor) const = 0;
     virtual double GetMinor (const double nX, const double nY) const = 0;
     virtual void UpdateBorders() = 0;
     virtual void UpdateBitmaps() = 0;
@@ -258,7 +257,6 @@ public:
 protected:
     virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const SAL_OVERRIDE;
     virtual void UpdateDragAnchor (const double nDragDistance) SAL_OVERRIDE;
-    virtual css::geometry::RealPoint2D GetPoint (const double nMajor, const double nMinor) const SAL_OVERRIDE;
     virtual double GetMinor (const double nX, const double nY) const SAL_OVERRIDE;
     virtual void UpdateBorders() SAL_OVERRIDE;
     virtual void UpdateBitmaps() SAL_OVERRIDE;

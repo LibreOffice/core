@@ -201,11 +201,6 @@ namespace
             getCurrentContext().LineColor = rColor;
         }
 
-        virtual void setBlendMode(sal_Int8 nMode) SAL_OVERRIDE
-        {
-            getCurrentContext().BlendMode = nMode;
-        }
-
         virtual void setFont( const FontAttributes& rFont ) SAL_OVERRIDE
         {
             FontToIdMap::const_iterator it = m_aFontToId.find( rFont );

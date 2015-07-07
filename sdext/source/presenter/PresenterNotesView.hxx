@@ -166,7 +166,6 @@ private:
     void Scroll (const double nDistance);
     void SetTop (const double nTop);
     void UpdateScrollBar();
-    void MoveCaret (const sal_Int32 nDistance);
 
     /** This method throws a DisposedException when the object has already been
         disposed.

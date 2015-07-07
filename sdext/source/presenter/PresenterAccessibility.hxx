@@ -64,8 +64,6 @@ public:
         const css::uno::Reference<css::drawing::framework::XPane>& rxMainPane);
     virtual ~PresenterAccessible();
 
-    void SetAccessibleParent (const css::uno::Reference<css::accessibility::XAccessible>& rxAccessibleParent);
-
     void UpdateAccessibilityHierarchy();
 
     void NotifyCurrentSlideChange (

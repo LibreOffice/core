@@ -271,7 +271,6 @@ private:
 
     void RequestFormat();
     void Format();
-    SharedPresenterTextParagraph GetParagraphForCharacterIndex (const sal_Int32 nCharacterIndex) const;
     css::awt::Rectangle GetCaretBounds (
         const sal_Int32 nParagraphIndex,
         const sal_Int32 nCharacterIndex) const;

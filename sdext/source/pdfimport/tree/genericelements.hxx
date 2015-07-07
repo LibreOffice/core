@@ -255,7 +255,6 @@ namespace pdfi
 
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) SAL_OVERRIDE;
 
-        void emitPageAnchoredElements( EmitContext& rEmitContext );
         static void updateParagraphGeometry( Element* pEle );
         void resolveHyperlinks();
         void resolveFontStyles( PDFIProcessor& rProc );

@@ -106,7 +106,6 @@ public:
     ::boost::shared_ptr<PresenterCanvasHelper> GetCanvasHelper() const;
     css::uno::Reference<css::drawing::XPresenterHelper> GetPresenterHelper() const;
     ::boost::shared_ptr<PresenterPaintManager> GetPaintManager() const;
-    void HideSlideSorter();
     double GetSlideAspectRatio() const;
     void ShowView (const OUString& rsViewURL);
     void HideView (const OUString& rsViewURL);
@@ -206,7 +205,6 @@ private:
     css::uno::Reference<css::drawing::XDrawPage> mxNextSlide;
     ::rtl::Reference<PresenterWindowManager> mpWindowManager;
     ::boost::shared_ptr<PresenterPaneAnimator> mpCurrentPaneAnimation;
-    sal_Int32 mnWindowBackgroundColor;
     ::boost::shared_ptr<PresenterTheme> mpTheme;
     css::uno::Reference<css::awt::XWindow> mxMainWindow;
     ::rtl::Reference<PresenterPaneBorderPainter> mpPaneBorderPainter;
@@ -218,8 +216,6 @@ private:
     ::rtl::Reference<PresenterAccessible> mpAccessibleObject;
     bool mbIsAccessibilityActive;
 
-    void InitializePresenterScreen();
-    void InitializeSlideShowView (const css::uno::Reference<css::uno::XInterface>& rxView);
     void GetSlides (const sal_Int32 nOffset);
     void UpdateViews();
     void InitializeMainPane (const css::uno::Reference<css::drawing::framework::XPane>& rxPane);

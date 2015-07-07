@@ -101,7 +101,6 @@ PresenterController::PresenterController (
       mxCurrentSlide(),
       mxNextSlide(),
       mpWindowManager(new PresenterWindowManager(rxContext,mpPaneContainer,this)),
-      mnWindowBackgroundColor(0x00ffffff),
       mpTheme(),
       mxMainWindow(),
       mpPaneBorderPainter(),
