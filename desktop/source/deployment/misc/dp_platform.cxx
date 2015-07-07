@@ -40,7 +40,9 @@
 #define PLATFORM_LINUX_ARM_EABI     "linux_arm_eabi"
 #define PLATFORM_LINUX_ARM_OABI     "linux_arm_oabi"
 #define PLATFORM_LINUX_MIPS_EL      "linux_mips_el"
+#define PLATFORM_LINUX_MIPS64_EL    "linux_mips64_el"
 #define PLATFORM_LINUX_MIPS_EB      "linux_mips_eb"
+#define PLATFORM_LINUX_MIPS64_EB    "linux_mips64_eb"
 #define PLATFORM_LINUX_IA64         "linux_ia64"
 #define PLATFORM_LINUX_M68K         "linux_m68k"
 #define PLATFORM_LINUX_S390         "linux_s390"
@@ -139,8 +141,12 @@ namespace
             ret = checkOSandCPU("Linux", "ARM_OABI");
         else if (token == PLATFORM_LINUX_MIPS_EL)
             ret = checkOSandCPU("Linux", "MIPS_EL");
+        else if (token == PLATFORM_LINUX_MIPS64_EL)
+            ret = checkOSandCPU("Linux", "MIPS64_EL");
         else if (token == PLATFORM_LINUX_MIPS_EB)
             ret = checkOSandCPU("Linux", "MIPS_EB");
+        else if (token == PLATFORM_LINUX_MIPS64_EB)
+            ret = checkOSandCPU("Linux", "MIPS64_EB");
         else if (token == PLATFORM_LINUX_IA64)
             ret = checkOSandCPU("Linux", "IA64");
         else if (token == PLATFORM_LINUX_M68K)
