@@ -62,6 +62,7 @@
 
 // Region: File
 #define FN_NEW_GLOBAL_DOC       (FN_FILE + 4 )    /* Create Global Document */
+#define FN_SAVE_FILE_AS         (FN_FILE + 5 )    /* Save As */
 #define FN_OPEN_FILE            (FN_FILE + 7 )    /* Open */
 
 #define FN_OUTLINE_TO_IMPRESS   (FN_FILE + 36)  /* Send outline to impress */

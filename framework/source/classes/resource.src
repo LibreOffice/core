@@ -119,6 +119,11 @@ String STR_OPEN_REMOTE
     Text [ en-US ] = "Open remote file";
 };
 
+String STR_REMOTE_FILE
+{
+    Text [ en-US ] = "Remote file";
+};
+
 String STR_TOOLBAR_TITLE_ADDON
 {
     Text [ en-US ] = "Add-On %num%";

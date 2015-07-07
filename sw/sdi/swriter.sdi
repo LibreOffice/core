@@ -10124,6 +10124,33 @@ SfxVoidItem OpenFromWriter FN_OPEN_FILE
     GroupId = GID_APPLICATION;
 ]
 
+SfxVoidItem SaveAs FN_SAVE_FILE_AS
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
+
 SfxInt16Item PageColumnType SID_ATTR_PAGE_COLUMN
 
 [
