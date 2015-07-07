@@ -2504,9 +2504,9 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     // classify the used application module, which is used by this document.
     implts_specifyAppModuleAndFactory(aNew);
 
-    // Hack! Check for "illegal office documents" ... as e.g. the Basic IDE
+    // Hack! Check for "illegal office documents"... as e.g. the Basic IDE
     // Its not really a full featured office document. It doesn't provide an URL, any filter, a factory URL etcpp.
-    // TODO file bug to Basci IDE developers. They must remove the office document API from its service.
+    // TODO file bug to Basic IDE developers. They must remove the office document API from its service.
     if (
         (aNew.OrgURL.isEmpty()) &&
         (aNew.FactoryURL.isEmpty())
@@ -2598,8 +2598,8 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
     } /* SAFE */
 
     /* This method is called within disposing() of the document too. But there it's not a good idea to
-       deregister us as listener. Furter it make no sense - because the broadcaster dies.
-       So we suppress deregistration in such case ...
+       deregister us as listener. Further it make no sense - because the broadcaster dies.
+       So we suppress deregistration in such case...
     */
     if (bStopListening)
         implts_stopModifyListeningOnDoc(aInfo);

@@ -187,7 +187,7 @@ public:
 
 /*
     Window-Bits:
-        WB_ICON             // Text beneth the icon
+        WB_ICON             // Text beneath the icon
         WB_SMALL_ICON       // Text right to the icon, position does not mind
         WB_DETAILS          // Text right to the icon, limited positioning
         WB_BORDER
@@ -201,7 +201,7 @@ public:
         WB_NODRAGSELECTION  // No selection with tracking rectangle
         WB_NOCOLUMNHEADER   // No Headerbar in Details view (Headerbar not implemented)
         WB_NOPOINTERFOCUS   // No GrabFocus at MouseButtonDown
-        WB_HIGHLIGHTFRAME   // The entry beneth the mouse willbe highlighted
+        WB_HIGHLIGHTFRAME   // The entry beneath the mouse will be highlighted
         WB_NOASYNCSELECTHDL // Do not collect events -> Selection handlers will be called synchronously
 */
 

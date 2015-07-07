@@ -4430,7 +4430,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     // mso_sptArc special treating:
                     // sj: since we actually can't render the arc because of its weird SnapRect settings,
                     // we will create a new CustomShape, that can be saved/loaded without problems.
-                    // We will change the shape type, so this code applys only if importing arcs from msoffice.
+                    // We will change the shape type, so this code applies only if importing arcs from msoffice.
                     if ( aObjData.eShapeType == mso_sptArc )
                     {
                         const OUString sAdjustmentValues( "AdjustmentValues" );

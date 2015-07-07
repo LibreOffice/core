@@ -469,7 +469,7 @@ void OPropertySetHelper::setDependentFastPropertyValue( sal_Int32 i_handle, cons
         return;
 
     // don't fire vetoable events. This method is called with our mutex locked, so calling into listeners would not be
-    // a good idea. The caler is responsible for not invoking this for constrained properties.
+    // a good idea. The caller is responsible for not invoking this for constrained properties.
     OSL_ENSURE( ( nAttributes & PropertyAttribute::CONSTRAINED ) == 0,
         "OPropertySetHelper::setDependentFastPropertyValue: not to be used for constrained properties!" );
     (void)nAttributes;

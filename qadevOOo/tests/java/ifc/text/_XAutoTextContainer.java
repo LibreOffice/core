@@ -110,7 +110,7 @@ public class _XAutoTextContainer  extends MultiMethodTest {
             result &= true;
         } catch (com.sun.star.container.NoSuchElementException e) {
             result = false;
-            log.println("removeByName(): " + e + " -> FAILD");
+            log.println("removeByName(): " + e + " -> FAILED");
         }
 
         log.println("2nd removeByName()");

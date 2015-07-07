@@ -90,9 +90,9 @@ public class _TableAutoFormatField extends MultiPropertyTest {
     }
 
     /**
-    * Locale values are predefined and can't be chaged arbitrary.
+    * Locale values are predefined and can't be arbitrary changed.
     * In this property value is changed from ('de', 'DE', '')
-    * to ('es', 'ES', '') and vise versa.
+    * to ('es', 'ES', '') and vice versa.
     */
     public void _CharLocale() {
         testProperty("CharLocale", new PropertyTester() {

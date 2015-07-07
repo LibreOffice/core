@@ -61,7 +61,7 @@ public class DynamicClassLoader {
 
     /**
      * Get an instance of a class. The constructor matching to the
-     * given calss types is used and the instance is created using the arguments
+     * given calls types is used and the instance is created using the arguments
      * for the constructor.
      * @param className The class to instantiate.
      * @param ctorClassTypes The class types matching to the constructor.

@@ -128,7 +128,7 @@ namespace drawinglayer
                 aNewRange.expand(basegfx::B2DPoint(a3DRange.getMaxX(), a3DRange.getMaxY()));
                 aNewRange.transform(getObjectTransformation());
 
-                // cehck for 3D shadows and their 2D projections. If those exist, they need to be
+                // check for 3D shadows and their 2D projections. If those exist, they need to be
                 // taken into account
                 if(impGetShadow3D(rViewInformation))
                 {

@@ -179,7 +179,7 @@ private:
 /** the XAccessible which creates/returns an AccessibleGridControl
 
     <p>The instance holds its XAccessibleContext with a hard reference, while
-    the contxt holds this instance weak.</p>
+    the context holds this instance weak.</p>
 */
 typedef ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessible > AccessibleGridControlAccess_Base;
 

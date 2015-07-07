@@ -1400,7 +1400,7 @@ public:
       Returns the first character from this string.
 
       @return   the first character from this string or 0, if this string
-                is emptry.
+                is empty.
     */
     sal_Char toChar() const
     {

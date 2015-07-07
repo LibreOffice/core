@@ -1223,7 +1223,7 @@ void FilterCache::impl_validateAndOptimize()
         // Note: of course the default loader must be ignored here.
         // Because we replace its registration later completely with all
         // types, which are not referenced by any other loader.
-        // So we can avaoid our code against the complexity of a diff!
+        // So we can avoid our code against the complexity of a diff!
         OUString sLoader = pIt->first;
         if (sLoader.equals(sDefaultFrameLoader))
             continue;
@@ -1872,7 +1872,7 @@ void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XName
             // special handling for flags! Convert it from an integer flag field back
             // to a list of names ...
             // But note: because we work directly on a reference to the cache item,
-            // its not allowd to change the value here. We must work on a copy!
+            // its not allowed to change the value here. We must work on a copy!
             pIt = aItem.find(PROPNAME_FLAGS);
             if (pIt != aItem.end())
             {

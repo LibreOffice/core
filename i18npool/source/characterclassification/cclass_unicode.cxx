@@ -134,7 +134,7 @@ cclass_Unicode::getCharacterDirection( const OUString& Text, sal_Int32 nPos ) th
 sal_Int16 SAL_CALL
 cclass_Unicode::getScript( const OUString& Text, sal_Int32 nPos ) throw(RuntimeException, std::exception) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
-    // ICU Unicode script type UBlockCode starts from 1 for Basci Latin,
+    // ICU Unicode script type UBlockCode starts from 1 for Basic Latin,
     // while OO.o enum UnicideScript starts from 0.
     // To map ICU UBlockCode to OO.o UnicodeScript, it needs to shift 1.
     return (sal_Int16) ublock_getCode(Text.iterateCodePoints(&nPos, 0))-1;

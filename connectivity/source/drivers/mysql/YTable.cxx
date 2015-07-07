@@ -222,7 +222,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
             ||  bOldAutoIncrement != bAutoIncrement
             || sOldDesc != sNewDesc )
         {
-            // special handling because they change dthe type names to distinguish
+            // special handling because they changed the type names to distinguish
             // if a column should be an auto_incmrement one
             if ( bOldAutoIncrement != bAutoIncrement )
             {

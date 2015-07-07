@@ -74,7 +74,7 @@ namespace dbaui
             @param  _nColId
                     the column id SOURCE_COLUMN or DEST_COLUMN
 
-            @return the current column id eihter SOURCE_COLUMN or DEST_COLUMN depends on the connection data
+            @return the current column id either SOURCE_COLUMN or DEST_COLUMN depends on the connection data
         */
         sal_uInt16 getColumnIdent( sal_uInt16 _nColId ) const;
     public:

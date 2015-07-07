@@ -173,7 +173,7 @@ public class StyleInitialization {
 
             // BEGIN: 'Finding a suitable style' Section from the Tutorial
 
-            // craete a supplier to get the styles-collection
+            // create a supplier to get the styles-collection
             com.sun.star.style.XStyleFamiliesSupplier xSupplier = null;
             xSupplier = UnoRuntime.queryInterface(
                 com.sun.star.style.XStyleFamiliesSupplier.class, xTextDocument );

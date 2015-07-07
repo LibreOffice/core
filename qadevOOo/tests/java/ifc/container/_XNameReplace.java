@@ -38,7 +38,7 @@ import com.sun.star.uno.UnoRuntime;
 *   for more information.</li>
 *  <li> <code>'NAMEREPLACE'</code> <b>optional</b>: <code>String</code>
 *    relation which represents element name to be replaced.
-*    Some Objects can't replace the firsr that comes along, i.e.
+*    Some Objects can't replace the first that comes along, i.e.
 *    SwXStyleFamily. It has some pool styles which can't be replaced.
 *    So the test need a special object to replace it by name. </li>
 *  <li> <code>'XNameReplaceINDEX'</code> : For internal test
@@ -109,7 +109,7 @@ public class _XNameReplace extends MultiMethodTest {
         XNameAccess oNameAccess = UnoRuntime.queryInterface(
                                                        XNameAccess.class, oObj);
         oNames = oNameAccess.getElementNames();
-        /* Some Objects can't replace the firsr that comes along, i.e.
+        /* Some Objects can't replace the first that comes along, i.e.
            SwXStyleFamily. It has some pool styles which can't be replaced.
            So the test need a special object to replace it by name.
         */

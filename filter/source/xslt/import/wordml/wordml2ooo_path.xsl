@@ -697,7 +697,7 @@
             <xsl:when test="$command = 't' ">
                 <!-- relative moveto -->
                 <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' M ' ) "/>
-                <!--####maybe this is not crect because t r and v hasn't direct image in enhaced-path-->
+                <!--####maybe this is not created because t r and v haven't direct image in enhanced-path-->
                 <xsl:variable name="num-and-pos">
                     <xsl:call-template name="get-number-after">
                         <xsl:with-param name="vml-path" select="$vml-path"/>
@@ -716,7 +716,7 @@
             </xsl:when>
             <xsl:when test="$command = 'r' ">
                 <!-- relative lineto -->
-                <!--####maybe this is not crect because 't' 'r' and 'v' hasn't direct image in enhaced-path-->
+                <!--####maybe this is not created because 't' 'r' and 'v' haven't direct image in enhanced-path-->
                 <!-- 'l' command is not supported currently, so we use 'L' -->
                 <xsl:message>'l' command is not supported currently, so we use 'L'. This may case problem.</xsl:message>
                 <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' L ' ) "/>
@@ -742,7 +742,7 @@
             </xsl:when>
             <xsl:when test="$command = 'v' ">
                 <!-- relative curveto -->
-                <!--####maybe this is not crect because 't' 'r' and 'v' hasn't direct image in enhaced-path-->
+                <!--####maybe this is not created because 't' 'r' and 'v' haven't direct image in enhanced-path-->
                 <xsl:variable name="new-enhanced-path" select="concat($enhanced-path ,' C ' ) "/>
                 <!--<xsl:variable name="control-and-pos">
                     <xsl:call-template name="get-number-after">
