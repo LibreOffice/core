@@ -4144,6 +4144,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),\
 	-L$(call gb_UnpackedTarball_get_dir,bzip2) -lbz2 \
 )
+$(call gb_LinkTarget_use_external_project,$(1),bzip2)
 endef
 
 define gb_ExternalProject__use_bzip2
