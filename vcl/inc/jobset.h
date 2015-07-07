@@ -43,6 +43,7 @@ struct ImplJobSetup
     long            mnPaperHeight;      // paper height (100th mm)
     sal_uIntPtr         mnDriverDataLen;    // length of system specific data
     sal_uInt8*          mpDriverData;       // system specific data (will be streamed a byte block)
+    bool            mbPapersizeFromSetup;
     std::unordered_map< OUString, OUString, OUStringHash >         maValueMap;
 
                     ImplJobSetup();

@@ -320,7 +320,7 @@ public:
     bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
 
-    bool                        Setup( vcl::Window* pWindow = NULL );
+    bool                        Setup( vcl::Window* pWindow = NULL, bool bPapersizeFromSetup = false );
     bool                        SetPrinterProps( const Printer* pPrinter );
 
     // SetPrinterOptions is used internally only now
