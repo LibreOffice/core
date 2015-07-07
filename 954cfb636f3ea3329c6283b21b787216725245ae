@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_35a64ec2",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-07-07T08:01:09Z",
+      "side": 1,
+      "message": "You\u0027re right, I\u0027m not that sharp usually to notice the possible code simplification (and I don\u0027t think there\u0027s a significant difference in speed between an if-evaluation and an assignment).",
+      "parentUuid": "1a54edaf_31818390",
+      "revId": "954cfb636f3ea3329c6283b21b787216725245ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_517e7faf",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 4
