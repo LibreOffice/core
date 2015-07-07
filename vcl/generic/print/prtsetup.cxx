@@ -256,6 +256,14 @@ void RTSPaperPage::update()
         m_pSlotText->Enable( false );
         m_pSlotBox->Enable( false );
     }
+
+    // disable those, unless user wants to use papersize from printer prefs
+    // as they have no influence on what's going to be printed anyway
+    if (!m_pParent->m_aJobData.m_bPapersizeFromSetup)
+    {
+        m_pPaperBox->Enable( false );
+        m_pOrientBox->Enable( false );
+    }
 }
 
 IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )

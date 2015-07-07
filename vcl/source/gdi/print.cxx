@@ -1133,7 +1133,7 @@ bool Printer::SetJobSetup( const JobSetup& rSetup )
     return false;
 }
 
-bool Printer::Setup( vcl::Window* pWindow )
+bool Printer::Setup( vcl::Window* pWindow, bool bPapersizeFromSetup )
 {
     if ( IsDisplayPrinter() )
         return false;
@@ -1142,6 +1142,8 @@ bool Printer::Setup( vcl::Window* pWindow )
         return false;
 
     JobSetup aJobSetup = maJobSetup;
+    ImplJobSetup* pData = aJobSetup.ImplGetData();
+    pData->mbPapersizeFromSetup = bPapersizeFromSetup;
     SalFrame* pFrame;
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
@@ -1153,7 +1155,7 @@ bool Printer::Setup( vcl::Window* pWindow )
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mnModalMode++;
     nImplSysDialog++;
-    bool bSetup = mpInfoPrinter->Setup( pFrame, aJobSetup.ImplGetData() );
+    bool bSetup = mpInfoPrinter->Setup( pFrame, pData );
     pSVData->maAppData.mnModalMode--;
     nImplSysDialog--;
     if ( bSetup )
