@@ -4234,16 +4234,16 @@ linux-gnu*)
         PLATFORMID=linux_mips_eb
         ;;
     mips64)
-        CPUNAME=GODSON
-        RTL_ARCH=MIPS_EB
+        CPUNAME=GODSON64
+        RTL_ARCH=MIPS64_EB
         EPM_FLAGS="-a mips64"
-        PLATFORMID=linux_mips_eb
+        PLATFORMID=linux_mips64_eb
         ;;
     mips64el)
-        CPUNAME=GODSON
-        RTL_ARCH=MIPS_EL
+        CPUNAME=GODSON64
+        RTL_ARCH=MIPS64_EL
         EPM_FLAGS="-a mips64el"
-        PLATFORMID=linux_mips_el
+        PLATFORMID=linux_mips64_el
         ;;
     mipsel)
         CPUNAME=GODSON
