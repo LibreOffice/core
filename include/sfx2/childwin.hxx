@@ -163,6 +163,8 @@ private:
                         GetContext() const
                         { return pContext; }
 
+    SAL_DLLPRIVATE void ClearWorkwin();
+
 protected:
                         SfxChildWindow(vcl::Window *pParentWindow, sal_uInt16 nId);
 
