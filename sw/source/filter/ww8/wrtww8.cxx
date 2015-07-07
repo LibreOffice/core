@@ -3529,6 +3529,8 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     , m_pAtn(0)
     , m_pTextBxs(0)
     , m_pHFTextBxs(0)
+    , m_bLinkedTextboxesHelperInitialized(false)
+    , m_nLinkedTextboxesChainId(0)
     , m_pParentFrame(0)
     , m_pFlyOffset(0)
     , m_eNewAnchorType(FLY_AS_CHAR)

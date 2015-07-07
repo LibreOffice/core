@@ -506,8 +506,8 @@ public:
         LinkedTextboxInfo(): nId(0), nSeq(0) {}
     };
     std::map<OUString,LinkedTextboxInfo> m_aLinkedTextboxesHelper;
-    bool m_bLinkedTextboxesHelperInitialized = false;
-    sal_Int32 m_nLinkedTextboxesChainId=0;
+    bool m_bLinkedTextboxesHelperInitialized;
+    sal_Int32 m_nLinkedTextboxesChainId;
 
     const sw::Frame *m_pParentFrame; // If set we are exporting content inside
                                     // a frame, e.g. a graphic node
