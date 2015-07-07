@@ -751,7 +751,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
                 //certificateUsageSSLCA. This, however, will be only set when in the trust settings dialog
                 //the button "This certificate can identify websites" is checked. If for example only
                 //"This certificate can identify mail users" is set then the end certificate can
-                //be validated and the returned usage will conain certificateUsageEmailRecipient.
+                //be validated and the returned usage will contain certificateUsageEmailRecipient.
                 //But checking directly the root or intermediate certificate will fail. In the
                 //certificate path view the end certificate will be shown as valid but the others
                 //will be displayed as invalid.

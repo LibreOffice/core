@@ -60,7 +60,7 @@ const OUString ApplyLreOrRleEmbedding( const OUString &rText )
     const sal_Unicode cRLE_Embedding  = 0x202B;      // the start char of an RLE embedding
     const sal_Unicode cPopDirectionalFormat = 0x202C;   // the unicode PDF (POP_DIRECTIONAL_FORMAT) char that terminates an LRE/RLE embedding
 
-    // check if there are alreay embedding characters at the strings start
+    // check if there are already embedding characters at the strings start
     // if so change nothing
     const sal_Unicode cChar = rText[0];
     if (cChar == cLRE_Embedding || cChar == cRLE_Embedding)

@@ -467,8 +467,8 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
 {
     {
         // This example doc contains cell anchored shape that is rotated, the
-        // rotated shape is in fact cliped by the sheet boundries ( and thus
-        // is a good edge case test to see if we import it still correctly )
+        // rotated shape is in fact clipped by the sheet boundries (and thus
+        // is a good edge case test to see if we import it still correctly)
         ScDocShellRef xDocSh = loadDoc("legacycellanchoredrotatedclippedshape.", ODS);
 
         ScDocument& rDoc = xDocSh->GetDocument();

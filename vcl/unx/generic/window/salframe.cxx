@@ -3473,7 +3473,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
         else
         {
             /*
-             *  do not unset the IC focuse here because would kill
+             *  do not unset the IC focus here because would kill
              *  a lookup choice windows that might have the focus now
              *      mpInputContext->UnsetICFocus( this );
              */

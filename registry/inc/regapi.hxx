@@ -390,7 +390,7 @@ REG_DLLPUBLIC bool REGISTRY_CALLTYPE reg_isReadOnly(RegHandle hReg);
 /** This function opens a registry with the specified name.
 
     @param  registryName points to a null terminated string specifying the name of the registry.
-    @param  phRegistry points to a hanle of the opened registry if the function succeeds otherwise NULL.
+    @param  phRegistry points to a handle of the opened registry if the function succeeds otherwise NULL.
     @param  accessMode specifies the accessmode of the registry, RegAccessMode::READONLY or RegAccessMode::READWRITE.
     @return REG_NO_ERROR if succeeds else an error code.
 */

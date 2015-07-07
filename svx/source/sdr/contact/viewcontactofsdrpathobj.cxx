@@ -118,7 +118,7 @@ namespace sdr
                     rGeoStat.nRotationAngle ? (36000 - rGeoStat.nRotationAngle) * F_PI18000 : 0.0,
                     aObjectRange.getMinX(), aObjectRange.getMinY());
 
-                // ceate unit polygon from object's absolute path
+                // create unit polygon from object's absolute path
                 basegfx::B2DHomMatrix aInverse(aObjectMatrix);
                 aInverse.invert();
                 aUnitPolyPolygon.transform(aInverse);

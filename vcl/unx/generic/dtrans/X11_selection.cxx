@@ -1074,7 +1074,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
     else if( rType == "image/bmp" )
     {
         // #i83376# try if someone has the data in image/bmp already before
-        // doing the PIXMAP stuff (e.g. the gimp has this)
+        // doing the PIXMAP stuff (e.g. the Gimp has this)
         bSuccess = getPasteData( selection, m_nImageBmpAtom, rData );
         #if OSL_DEBUG_LEVEL > 1
         if( bSuccess )

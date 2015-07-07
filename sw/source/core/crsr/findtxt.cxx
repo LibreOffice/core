@@ -470,7 +470,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSText,
     OUString sCleanStr;
     std::vector<sal_Int32> aFltArr;
     LanguageType eLastLang = 0;
-    // if the search string contains a soft hypen,
+    // if the search string contains a soft hyphen,
     // we don't strip them from the text:
     bool bRemoveSoftHyphens = true;
 

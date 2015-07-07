@@ -306,7 +306,7 @@ namespace svt { namespace table
                 aRetText = "Grid control";
                 break;
             case TCTYPE_TABLE:
-                aRetText = "Grid conrol";
+                aRetText = "Grid control";
                 break;
             case TCTYPE_ROWHEADERBAR:
                 aRetText = "RowHeaderBar";

@@ -2578,7 +2578,7 @@ bool isDPSourceValid(const ScDPObject& rDPObj)
 
         const ScDPCache* pCache = pDesc->CreateCache(pDimData);
         if (!pCache)
-            // cashe creation failed, probably due to invalid connection.
+            // cache creation failed, probably due to invalid connection.
             return false;
     }
     return true;

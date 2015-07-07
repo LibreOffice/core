@@ -45,7 +45,7 @@ sub open_file
 {
     my  $filename = pop @_;
 
-    #   Create base directory of temporary directory tree if not alreay
+    #   Create base directory of temporary directory tree if not already
     #   present.
     if ($TempDir eq "")
     {

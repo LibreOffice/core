@@ -871,7 +871,7 @@ public:
     SwTableFormat* FindTableFormatByName( const OUString& rName, bool bAll = false ) const;
 
     /** Access to frames.
-    Iterate over Flys - forr Basic-Collections. */
+    Iterate over Flys - for Basic-Collections. */
     size_t GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false ) const;
     SwFrameFormat* GetFlyNum(size_t nIdx, FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false );
 
