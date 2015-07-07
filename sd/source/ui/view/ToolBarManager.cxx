@@ -1067,7 +1067,7 @@ void ToolBarRules::MainViewShellChanged (const ViewShell& rMainViewShell)
                     mpToolBarManager->AddToolBar(
                         ToolBarManager::TBG_MASTER_MODE,
                         ToolBarManager::msMasterViewToolBar);
-                else
+                else if ( rMainViewShell.GetShellType() != ::sd::ViewShell::ST_DRAW )
                     mpToolBarManager->AddToolBar(
                         ToolBarManager::TBG_COMMON_TASK,
                         ToolBarManager::msCommonTaskToolBar);
