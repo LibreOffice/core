@@ -59,7 +59,8 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
- #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
@@ -108,6 +109,7 @@ public:
     void testFdo83751();
     void testFdo79731();
     void testSwappedOutImageExport();
+    void testTdf80020();
     void testLinkedGraphicRT();
     void testImageWithSpecialID();
     void testTableCellFillProperties();
@@ -144,6 +146,7 @@ public:
     CPPUNIT_TEST(testFdo83751);
     CPPUNIT_TEST(testFdo79731);
     CPPUNIT_TEST(testSwappedOutImageExport);
+    CPPUNIT_TEST(testTdf80020);
     CPPUNIT_TEST(testLinkedGraphicRT);
     CPPUNIT_TEST(testImageWithSpecialID);
     CPPUNIT_TEST(testTableCellFillProperties);
@@ -672,6 +675,24 @@ void SdExportTest::testSwappedOutImageExport()
         }
         xDocShRef->DoClose();
     }
+}
+
+void SdExportTest::testTdf80020()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/tdf80020.odp"), ODP);
+    {
+        uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
+        uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("Test Style"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
+    }
+    xDocShRef = saveAndReload( xDocShRef, ODP );
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("Test Style"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
 }
 
 void SdExportTest::testLinkedGraphicRT()
