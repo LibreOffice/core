@@ -77,7 +77,6 @@ class Desktop : public Application
         virtual bool        QueryExit() SAL_OVERRIDE;
         virtual sal_uInt16      Exception(sal_uInt16 nError) SAL_OVERRIDE;
         virtual void            OverrideSystemSettings( AllSettings& rSettings ) SAL_OVERRIDE;
-        virtual void            AppEvent( const ApplicationEvent& rAppEvent ) SAL_OVERRIDE;
 
         DECL_LINK( OpenClients_Impl, void* );
 

@@ -389,7 +389,6 @@ public:
     sal_uLong               GetChecksum() const;
 
     Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
-    Bitmap                  GetColorTransformedBitmap() const;
 
     static const BitmapPalette&
                             GetGreyPalette( int nEntries );

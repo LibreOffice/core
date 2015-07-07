@@ -912,14 +912,6 @@ public:
     */
     static css::uno::Reference< css::awt::XDisplayConnection > GetDisplayConnection();
 
-    /** @deprecated AppEvent is used only in the Desktop class now. However, it is
-     intended to notify the application that an event has occurred. It was in oldsv.cxx,
-     but is still needed by a number of functions.
-
-     @param     rAppEvent       const reference to ApplicationEvent event
-    */
-    virtual void                AppEvent( const ApplicationEvent& rAppEvent );
-
     ///@}
 
     /** @name Application Window Functions

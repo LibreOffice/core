@@ -1248,12 +1248,6 @@ sal_uInt16 Desktop::Exception(sal_uInt16 nError)
     return 0;
 }
 
-void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
-{
-    HandleAppEvent( rAppEvent );
-}
-
-
 struct ExecuteGlobals
 {
     Reference < css::document::XDocumentEventListener > xGlobalBroadcaster;

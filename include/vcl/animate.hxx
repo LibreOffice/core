@@ -87,15 +87,6 @@ struct VCL_DLLPUBLIC AnimationBitmap
     bool            operator!=( const AnimationBitmap& rAnimBmp ) const
                         { return !( *this == rAnimBmp ); }
 
-    bool            IsEqual( const AnimationBitmap& rAnimBmp ) const
-                        {
-                            return( rAnimBmp.aPosPix == aPosPix &&
-                                    rAnimBmp.aSizePix == aSizePix &&
-                                    rAnimBmp.nWait == nWait &&
-                                    rAnimBmp.eDisposal == eDisposal &&
-                                    rAnimBmp.bUserInput == bUserInput &&
-                                    rAnimBmp.aBmpEx.IsEqual( aBmpEx ) );
-                        }
 
     sal_uLong       GetChecksum() const;
 };
@@ -148,7 +139,6 @@ public:
 
     bool            IsInAnimation() const { return mbIsInAnimation; }
     bool            IsTransparent() const;
-    bool            IsTerminated() const { return mbLoopTerminated; }
 
     const Size&     GetDisplaySizePixel() const { return maGlobalSize; }
     void            SetDisplaySizePixel( const Size& rSize ) { maGlobalSize = rSize; }
@@ -160,7 +150,6 @@ public:
     void            SetLoopCount( const sal_uLong nLoopCount );
     void            ResetLoopCount();
 
-    void            SetCycleMode( CycleMode eMode );
     CycleMode       GetCycleMode() const { return meCycleMode; }
 
     void            SetNotifyHdl( const Link<>& rLink ) { maNotifyLink = rLink; }

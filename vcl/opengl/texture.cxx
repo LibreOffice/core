@@ -262,35 +262,6 @@ void OpenGLTexture::Unbind()
     CHECK_GL_ERROR();
 }
 
-bool OpenGLTexture::Draw()
-{
-    GLfloat aPosition[8] = { -1, -1, -1, 1, 1, 1, 1, -1 };
-    GLfloat aTexCoord[8];
-
-    if( mpImpl == NULL )
-    {
-        SAL_WARN( "vcl.opengl", "Can't draw invalid texture" );
-        return false;
-    }
-
-    SAL_INFO( "vcl.opengl", "Drawing texture " << Id() << " [" << maRect.Left() << "," << maRect.Top() << "] " << GetWidth() << "x" << GetHeight() );
-
-    GetWholeCoord( aTexCoord );
-    glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, mpImpl->mnTexture );
-    glEnableVertexAttribArray( 0 );
-    glVertexAttribPointer( 0, 2, GL_FLOAT, GL_FALSE, 0, aPosition );
-    glEnableVertexAttribArray( 1 );
-    glVertexAttribPointer( 1, 2, GL_FLOAT, GL_FALSE, 0, aTexCoord );
-    glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
-    glDisableVertexAttribArray( 0 );
-    glDisableVertexAttribArray( 1 );
-    glBindTexture( GL_TEXTURE_2D, 0 );
-
-    CHECK_GL_ERROR();
-    return true;
-}
-
 void OpenGLTexture::Read( GLenum nFormat, GLenum nType, sal_uInt8* pData )
 {
     if( mpImpl == NULL )

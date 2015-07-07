@@ -1383,34 +1383,6 @@ bool vcl::Region::IsInside( const Point& rPoint ) const
     return false;
 }
 
-bool vcl::Region::IsInside( const Rectangle& rRect ) const
-{
-    if(IsEmpty())
-    {
-        // no rectangle can be in empty region
-        return false;
-    }
-
-    if(IsNull())
-    {
-        // rectangle always inside null-region
-        return true;
-    }
-
-    if ( rRect.IsEmpty() )
-    {
-        // is rectangle empty? -> not inside
-        return false;
-    }
-
-    // create region from rectangle and intersect own region
-    vcl::Region aRegion(rRect);
-    aRegion.Exclude(*this);
-
-    // rectangle is inside if exclusion is empty
-    return aRegion.IsEmpty();
-}
-
 bool vcl::Region::IsOver( const Rectangle& rRect ) const
 {
     if(IsEmpty())

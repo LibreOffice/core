@@ -521,11 +521,6 @@ protected:
     virtual void                drawBitmap(
                                     const SalTwoRect& rPosAry,
                                     const SalBitmap& rSalBitmap,
-                                    SalColor nTransparentColor ) = 0;
-
-    virtual void                drawBitmap(
-                                    const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalBitmap,
                                     const SalBitmap& rMaskBitmap ) = 0;
 
     virtual void                drawMask(

@@ -239,7 +239,6 @@ private:
 public:
                         TextRectInfo();
 
-    sal_uInt16          GetLineCount() const { return mnLineCount; }
     long                GetMaxLineWidth() const { return mnMaxWidth; }
     bool                IsEllipses() const { return mbEllipsis; }
 

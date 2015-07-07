@@ -208,13 +208,6 @@ bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     return mxImpl->drawAlphaRect( nX, nY, nWidth, nHeight, nTransparency );
 }
 
-void X11SalGraphics::drawBitmap( const SalTwoRect& rRect,
-                                 const SalBitmap& rBitmap,
-                                 SalColor nColor )
-{
-    mxImpl->drawBitmap( rRect, rBitmap, nColor );
-}
-
 void X11SalGraphics::drawMask( const SalTwoRect& rPosAry,
                                const SalBitmap &rSalBitmap,
                                SalColor nMaskColor )
