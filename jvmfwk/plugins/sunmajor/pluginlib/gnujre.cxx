@@ -53,6 +53,8 @@ char const* const* GnuInfo::getJavaExePaths(int * size)
 
 #if defined(MIPS) && defined(OSL_LITENDIAN)
 #define GCJ_JFW_PLUGIN_ARCH "mipsel"
+#elif defined(MIPS64) && defined(OSL_LITENDIAN)
+#define GCJ_JFW_PLUGIN_ARCH "mips64el"
 #else
 #define GCJ_JFW_PLUGIN_ARCH JFW_PLUGIN_ARCH
 #endif

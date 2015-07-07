@@ -55,6 +55,12 @@ namespace jfw_plugin
 OpenJDK at least, but probably not true for Lemotes JDK */
 #  define JFW_PLUGIN_ARCH "mipsel"
 #endif
+#elif defined MIPS64
+#ifdef OSL_BIGENDIAN
+#  define JFW_PLUGIN_ARCH "mips64"
+#else
+#  define JFW_PLUGIN_ARCH "mips64el"
+#endif
 #elif defined S390X
 #define JFW_PLUGIN_ARCH "s390x"
 #elif defined S390
@@ -71,9 +77,9 @@ OpenJDK at least, but probably not true for Lemotes JDK */
 #define JFW_PLUGIN_ARCH "alpha"
 #elif defined AARCH64
 #define JFW_PLUGIN_ARCH "aarch64"
-#else // SPARC, INTEL, POWERPC, MIPS, ARM, IA64, M68K, HPPA, ALPHA
+#else // SPARC, INTEL, POWERPC, MIPS, MIPS64, ARM, IA64, M68K, HPPA, ALPHA
 #error unknown platform
-#endif // SPARC, INTEL, POWERPC, MIPS, ARM, IA64, M68K, HPPA, ALPHA
+#endif // SPARC, INTEL, POWERPC, MIPS, MIPS64, ARM, IA64, M68K, HPPA, ALPHA
 
 
 class MalformedVersionException
