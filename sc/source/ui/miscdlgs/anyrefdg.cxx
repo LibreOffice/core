@@ -83,6 +83,11 @@ void ScFormulaReferenceHelper::dispose()
         pInputHdl->ResetDelayTimer();   // stop the timer for disabling the input line
 
     pAccel.reset();
+
+    mpOldEditParent.clear();
+    m_pWindow.clear();
+    pRefBtn.clear();
+    pRefEdit.clear();
 }
 
 void ScFormulaReferenceHelper::enableInput( bool bEnable )
