@@ -42,8 +42,11 @@ import com.sun.star.document.XUndoAction;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.XEventListener;
+
 import java.lang.reflect.InvocationTargetException;
+
 import org.openoffice.test.tools.OfficeDocument;
+
 import com.sun.star.document.XUndoManagerSupplier;
 import com.sun.star.document.XUndoManager;
 import com.sun.star.document.XUndoManagerListener;
@@ -60,28 +63,34 @@ import com.sun.star.script.ScriptEventDescriptor;
 import com.sun.star.script.XEventAttacherManager;
 import com.sun.star.script.XLibraryContainer;
 import com.sun.star.task.XJob;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.InvalidStateException;
 import com.sun.star.util.NotLockedException;
 import com.sun.star.view.XControlAccess;
+
 import complex.sfx2.undo.CalcDocumentTest;
 import complex.sfx2.undo.ChartDocumentTest;
 import complex.sfx2.undo.DocumentTest;
 import complex.sfx2.undo.DrawDocumentTest;
 import complex.sfx2.undo.ImpressDocumentTest;
 import complex.sfx2.undo.WriterDocumentTest;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
+
 import org.openoffice.test.OfficeConnection;
 import org.openoffice.test.tools.DocumentType;
 import org.openoffice.test.tools.SpreadsheetDocument;
@@ -118,7 +127,7 @@ public class UndoManager
 
 
 //FIXME fails fdo#35663   @Test
-    public void checkCalcUndo() throws Exception
+    public void checkCalcUndo() throws java.lang.Exception
     {
         m_currentTestCase = new CalcDocumentTest( getORB() );
         impl_checkUndo();
@@ -385,38 +394,31 @@ public class UndoManager
 
 
     private void impl_assignScript( final XPropertySet i_controlModel, final String i_interfaceName,
-        final String i_interfaceMethod, final String i_scriptURI )
+        final String i_interfaceMethod, final String i_scriptURI ) throws Exception
     {
-        try
+        final XChild modelAsChild = UnoRuntime.queryInterface( XChild.class, i_controlModel );
+        final XIndexContainer parentForm = UnoRuntime.queryInterface( XIndexContainer.class, modelAsChild.getParent() );
+
+        final XEventAttacherManager manager = UnoRuntime.queryInterface( XEventAttacherManager.class, parentForm );
+
+        int containerPosition = -1;
+        for ( int i = 0; i < parentForm.getCount(); ++i )
         {
-            final XChild modelAsChild = UnoRuntime.queryInterface( XChild.class, i_controlModel );
-            final XIndexContainer parentForm = UnoRuntime.queryInterface( XIndexContainer.class, modelAsChild.getParent() );
-
-            final XEventAttacherManager manager = UnoRuntime.queryInterface( XEventAttacherManager.class, parentForm );
-
-            int containerPosition = -1;
-            for ( int i = 0; i < parentForm.getCount(); ++i )
+            final XPropertySet child = UnoRuntime.queryInterface( XPropertySet.class, parentForm.getByIndex( i ) );
+            if ( UnoRuntime.areSame( child, i_controlModel ) )
             {
-                final XPropertySet child = UnoRuntime.queryInterface( XPropertySet.class, parentForm.getByIndex( i ) );
-                if ( UnoRuntime.areSame( child, i_controlModel ) )
-                {
-                    containerPosition = i;
-                    break;
-                }
+                containerPosition = i;
+                break;
             }
-            assertFalse( "could not find the given control model within its parent", containerPosition == -1 );
-            manager.registerScriptEvent( containerPosition, new ScriptEventDescriptor(
-                i_interfaceName,
-                i_interfaceMethod,
-                "",
-                "Script",
-                i_scriptURI
-            ) );
         }
-        catch( com.sun.star.uno.Exception e )
-        {
-            fail( "caught an exception while assigning the script event to the button: " + e.toString() );
-        }
+        assertFalse( "could not find the given control model within its parent", containerPosition == -1 );
+        manager.registerScriptEvent( containerPosition, new ScriptEventDescriptor(
+            i_interfaceName,
+            i_interfaceMethod,
+            "",
+            "Script",
+            i_scriptURI
+        ) );
     }
 
 
@@ -1195,7 +1197,7 @@ public class UndoManager
 
 
     @BeforeClass
-    public static void setUpConnection() throws Exception
+    public static void setUpConnection() throws java.lang.Exception
     {
         System.out.println( "--------------------------------------------------------------------------------" );
         System.out.println( "starting class: " + UndoManager.class.getName() );

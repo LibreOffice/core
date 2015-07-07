@@ -84,76 +84,76 @@ public class DocumentProperties
         }
     }
 
-    @Test public void check() {
-        try {
-            XMultiServiceFactory xMSF = getMSF();
-            assertNotNull("could not create MultiServiceFactory.", xMSF);
-            XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xMSF);
-            Object defaultCtx = xPropertySet.getPropertyValue("DefaultContext");
-            XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class, defaultCtx);
-            assertNotNull("could not get component context.", xContext);
+    @Test public void check() throws Exception
+    {
+        XMultiServiceFactory xMSF = getMSF();
+        assertNotNull("could not create MultiServiceFactory.", xMSF);
+        XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xMSF);
+        Object defaultCtx = xPropertySet.getPropertyValue("DefaultContext");
+        XComponentContext xContext = UnoRuntime.queryInterface(XComponentContext.class, defaultCtx);
+        assertNotNull("could not get component context.", xContext);
 
-            // TODO: Path to temp
-            String temp = util.utils.getOfficeTemp/*Dir*/(xMSF);
-            System.out.println("tempdir: " + temp);
+        // TODO: Path to temp
+        String temp = util.utils.getOfficeTemp/*Dir*/(xMSF);
+        System.out.println("tempdir: " + temp);
 
-            PropertyValue[] noArgs = { };
-            PropertyValue mimetype = new PropertyValue();
-            mimetype.Name = "MediaType";
-            mimetype.Value = "application/vnd.oasis.opendocument.text";
-            PropertyValue[] mimeArgs = { mimetype };
-            PropertyValue cfile = new PropertyValue();
-            cfile.Name = "URL";
-            cfile.Value = temp + "EMPTY.odt";
-            PropertyValue[] mimeEmptyArgs = { mimetype, cfile };
+        PropertyValue[] noArgs = { };
+        PropertyValue mimetype = new PropertyValue();
+        mimetype.Name = "MediaType";
+        mimetype.Value = "application/vnd.oasis.opendocument.text";
+        PropertyValue[] mimeArgs = { mimetype };
+        PropertyValue cfile = new PropertyValue();
+        cfile.Name = "URL";
+        cfile.Value = temp + "EMPTY.odt";
+        PropertyValue[] mimeEmptyArgs = { mimetype, cfile };
 
-            System.out.println("Creating service DocumentProperties...");
+        System.out.println("Creating service DocumentProperties...");
 
-            Object oDP =
-                xMSF.createInstance("com.sun.star.document.DocumentProperties");
-            XDocumentProperties xDP = UnoRuntime.queryInterface(XDocumentProperties.class, oDP);
+        Object oDP =
+            xMSF.createInstance("com.sun.star.document.DocumentProperties");
+        XDocumentProperties xDP = UnoRuntime.queryInterface(XDocumentProperties.class, oDP);
 
-            System.out.println("...done");
+        System.out.println("...done");
 
 
-            System.out.println("Checking initialize ...");
+        System.out.println("Checking initialize ...");
 
-            XDocumentProperties xDP2 = UnoRuntime.queryInterface(XDocumentProperties.class, xMSF.createInstance("com.sun.star.document.DocumentProperties"));
-            XInitialization xInit = UnoRuntime.queryInterface(XInitialization.class, xDP2);
-            xInit.initialize(new Object[] { });
+        XDocumentProperties xDP2 = UnoRuntime.queryInterface(XDocumentProperties.class, xMSF.createInstance("com.sun.star.document.DocumentProperties"));
+        XInitialization xInit = UnoRuntime.queryInterface(XInitialization.class, xDP2);
+        xInit.initialize(new Object[] { });
 
-            System.out.println("...done");
+        System.out.println("...done");
 
-            System.out.println("Checking storing default-initialized meta data ...");
+        System.out.println("Checking storing default-initialized meta data ...");
 
-            xDP2.storeToMedium("", mimeEmptyArgs);
+        xDP2.storeToMedium("", mimeEmptyArgs);
 
-            System.out.println("...done");
+        System.out.println("...done");
 
-            System.out.println("Checking loading default-initialized meta data ...");
+        System.out.println("Checking loading default-initialized meta data ...");
 
-            xDP2.loadFromMedium("", mimeEmptyArgs);
-            assertEquals("Author", "", xDP2.getAuthor());
+        xDP2.loadFromMedium("", mimeEmptyArgs);
+        assertEquals("Author", "", xDP2.getAuthor());
 
-            System.out.println("...done");
+        System.out.println("...done");
 
-            System.out.println("(Not) Checking preservation of custom meta data ...");
+        System.out.println("(Not) Checking preservation of custom meta data ...");
 
-            xDP2.loadFromMedium(TestDocument.getUrl("CUSTOM.odt"),
-                noArgs);
-            assertEquals("Author", "", xDP2.getAuthor());
-            xDP2.storeToMedium(temp + "CUSTOM.odt", mimeArgs);
+        xDP2.loadFromMedium(TestDocument.getUrl("CUSTOM.odt"),
+            noArgs);
+        assertEquals("Author", "", xDP2.getAuthor());
+        xDP2.storeToMedium(temp + "CUSTOM.odt", mimeArgs);
 
-            //FIXME: now what? comparing for binary equality seems useless
-            // we could unzip the written file and grep for the custom stuff
-            // but would that work on windows...
+        //FIXME: now what? comparing for binary equality seems useless
+        // we could unzip the written file and grep for the custom stuff
+        // but would that work on windows...
 
-            System.out.println("...done");
+        System.out.println("...done");
 
-            System.out.println("Checking loading from test document...");
+        System.out.println("Checking loading from test document...");
 
-            String file = TestDocument.getUrl("TEST.odt");
-            xDP.loadFromMedium(file, noArgs);
+        String file = TestDocument.getUrl("TEST.odt");
+        xDP.loadFromMedium(file, noArgs);
 /*            XInputStream xStream =
                 new StreamSimulator("./testdocuments/TEST.odt", true, param);
             Object oSF =
@@ -166,298 +166,294 @@ public class DocumentProperties
                 XStorage.class, oStor);
             xDP.loadFromStorage(xStor);*/
 
-            System.out.println("...done");
+        System.out.println("...done");
 
-            System.out.println("Checking meta-data import...");
+        System.out.println("Checking meta-data import...");
 
-            assertEquals("Author", "Karl-Heinz Mustermann", xDP.getAuthor());
-            assertEquals(
-                "Generator",
-                "StarOffice/8$Solaris_x86 OpenOffice.org_project/680m232$Build-9227",
-                xDP.getGenerator());
-            assertEquals("CreationDate", 2007, xDP.getCreationDate().Year);
-            assertEquals("Title", "Urgent Memo", xDP.getTitle());
-            assertEquals("Subject", "Wichtige Mitteilung", xDP.getSubject());
-            assertEquals(
-                "Description",
-                "Modern internal company memorandum in full-blocked style",
-                xDP.getDescription());
-            assertEquals(
-                "ModifiedBy", "Karl-Heinz Mustermann", xDP.getModifiedBy());
-            assertEquals(
-                "ModificationDate", 10, xDP.getModificationDate().Month);
-            assertEquals(
-                "PrintedBy", "Karl-Heinz Mustermann", xDP.getPrintedBy());
-            assertEquals("PrintDate", 29, xDP.getPrintDate().Day);
-            assertEquals("TemplateName", "Modern Memo", xDP.getTemplateName());
-            assertTrue("TemplateURL",
-                xDP.getTemplateURL().endsWith("memmodern.ott"));
-            assertEquals("TemplateDate", 17, xDP.getTemplateDate().Hours);
-            assertTrue(
-                "AutoloadURL", xDP.getAutoloadURL().endsWith("/TEST.odt"));
-            assertEquals("AutoloadSecs", 0, xDP.getAutoloadSecs());
-            assertEquals("DefaultTarget", "_blank", xDP.getDefaultTarget());
-            assertEquals("EditingCycles", 3, xDP.getEditingCycles());
-            assertEquals("EditingDuration", 320, xDP.getEditingDuration());
+        assertEquals("Author", "Karl-Heinz Mustermann", xDP.getAuthor());
+        assertEquals(
+            "Generator",
+            "StarOffice/8$Solaris_x86 OpenOffice.org_project/680m232$Build-9227",
+            xDP.getGenerator());
+        assertEquals("CreationDate", 2007, xDP.getCreationDate().Year);
+        assertEquals("Title", "Urgent Memo", xDP.getTitle());
+        assertEquals("Subject", "Wichtige Mitteilung", xDP.getSubject());
+        assertEquals(
+            "Description",
+            "Modern internal company memorandum in full-blocked style",
+            xDP.getDescription());
+        assertEquals(
+            "ModifiedBy", "Karl-Heinz Mustermann", xDP.getModifiedBy());
+        assertEquals(
+            "ModificationDate", 10, xDP.getModificationDate().Month);
+        assertEquals(
+            "PrintedBy", "Karl-Heinz Mustermann", xDP.getPrintedBy());
+        assertEquals("PrintDate", 29, xDP.getPrintDate().Day);
+        assertEquals("TemplateName", "Modern Memo", xDP.getTemplateName());
+        assertTrue("TemplateURL",
+            xDP.getTemplateURL().endsWith("memmodern.ott"));
+        assertEquals("TemplateDate", 17, xDP.getTemplateDate().Hours);
+        assertTrue(
+            "AutoloadURL", xDP.getAutoloadURL().endsWith("/TEST.odt"));
+        assertEquals("AutoloadSecs", 0, xDP.getAutoloadSecs());
+        assertEquals("DefaultTarget", "_blank", xDP.getDefaultTarget());
+        assertEquals("EditingCycles", 3, xDP.getEditingCycles());
+        assertEquals("EditingDuration", 320, xDP.getEditingDuration());
 
-            String[] kws = xDP.getKeywords();
-            assertTrue("Keywords", fromArray(kws).containsAll(
-                    fromArray(new Object[] { "Asien", "Memo", "Reis" })));
+        String[] kws = xDP.getKeywords();
+        assertTrue("Keywords", fromArray(kws).containsAll(
+                fromArray(new Object[] { "Asien", "Memo", "Reis" })));
 
-            NamedValue[] ds = xDP.getDocumentStatistics();
-            assertTrue("DocumentStatistics:WordCount", containsNV(ds,
-                        new NamedValue("WordCount", Integer.valueOf(23))));
-            assertTrue("DocumentStatistics:PageCount", containsNV(ds,
-                        new NamedValue("PageCount", Integer.valueOf(1))));
+        NamedValue[] ds = xDP.getDocumentStatistics();
+        assertTrue("DocumentStatistics:WordCount", containsNV(ds,
+                    new NamedValue("WordCount", Integer.valueOf(23))));
+        assertTrue("DocumentStatistics:PageCount", containsNV(ds,
+                    new NamedValue("PageCount", Integer.valueOf(1))));
 
-            XPropertyContainer udpc = xDP.getUserDefinedProperties();
-            XPropertySet udps = UnoRuntime.queryInterface( XPropertySet.class, udpc );
-            assertEquals(
-                "UserDefined 1", "Dies ist ein wichtiger Hinweis",
-                udps.getPropertyValue("Hinweis"));
-            assertEquals(
-                "UserDefined 2", "Kann Spuren von N\u00FCssen enthalten",
-                udps.getPropertyValue("Warnung"));
+        XPropertyContainer udpc = xDP.getUserDefinedProperties();
+        XPropertySet udps = UnoRuntime.queryInterface( XPropertySet.class, udpc );
+        assertEquals(
+            "UserDefined 1", "Dies ist ein wichtiger Hinweis",
+            udps.getPropertyValue("Hinweis"));
+        assertEquals(
+            "UserDefined 2", "Kann Spuren von N\u00FCssen enthalten",
+            udps.getPropertyValue("Warnung"));
 
-            System.out.println("...done");
+        System.out.println("...done");
 
-            System.out.println("Checking meta-data updates...");
+        System.out.println("Checking meta-data updates...");
 
-            String str;
-            DateTime dt = new DateTime();
-            Locale l = new Locale();
-            int i;
+        String str;
+        DateTime dt = new DateTime();
+        Locale l = new Locale();
+        int i;
 
-            str = "me";
-            xDP.setAuthor(str);
-            assertEquals("setAuthor", str, xDP.getAuthor());
-            str = "the computa";
-            xDP.setGenerator(str);
-            assertEquals("setGenerator", str, xDP.getGenerator());
-            dt.Year = 2038;
-            dt.Month = 1;
-            dt.Day = 1;
-            xDP.setCreationDate(dt);
-            assertEquals(
-                "setCreationDate", dt.Year, xDP.getCreationDate().Year);
-            str = "El t'itulo";
-            xDP.setTitle(str);
-            assertEquals("setTitle", str, xDP.getTitle());
-            str = "Ein verkommenes Subjekt";
-            xDP.setSubject(str);
-            assertEquals("setSubject", str, xDP.getSubject());
-            str = "Este descripci'on no es importante";
-            xDP.setDescription(str);
-            assertEquals("setDescription", str, xDP.getDescription());
-            l.Language = "en";
-            l.Country = "GB";
-            xDP.setLanguage(l);
-            Locale l2 = xDP.getLanguage();
-            assertEquals("setLanguage Lang", l.Language, l2.Language);
-            assertEquals("setLanguage Cty", l.Country, l2.Country);
-            str = "myself";
-            xDP.setModifiedBy(str);
-            assertEquals("setModifiedBy", str, xDP.getModifiedBy());
-            dt.Year = 2042;
-            xDP.setModificationDate(dt);
-            assertEquals(
-                "setModificationDate", dt.Year, xDP.getModificationDate().Year);
-            str = "i did not do it";
-            xDP.setPrintedBy(str);
-            assertEquals("setPrintedBy", str, xDP.getPrintedBy());
-            dt.Year = 2024;
-            xDP.setPrintDate(dt);
-            assertEquals("setPrintDate", dt.Year, xDP.getPrintDate().Year);
-            str = "blah";
-            xDP.setTemplateName(str);
-            assertEquals("setTemplateName", str, xDP.getTemplateName());
-            str = "gopher://some-hole-in-the-ground/";
-            xDP.setTemplateURL(str);
-            assertEquals("setTemplateURL", str, xDP.getTemplateURL());
-            dt.Year = 2043;
-            xDP.setTemplateDate(dt);
-            assertEquals(
-                "setTemplateDate", dt.Year, xDP.getTemplateDate().Year);
-            str = "http://nowhere/";
-            xDP.setAutoloadURL(str);
-            assertEquals("setAutoloadURL", str, xDP.getAutoloadURL());
-            i = 3661; // this might not work (due to conversion via double...)
-            xDP.setAutoloadSecs(i);
-            assertEquals("setAutoloadSecs", i, xDP.getAutoloadSecs());
-            str = "_blank";
-            xDP.setDefaultTarget(str);
-            assertEquals("setDefaultTarget", str, xDP.getDefaultTarget());
-            i = 42;
-            xDP.setEditingCycles((short) i);
-            assertEquals("setEditingCycles", i, xDP.getEditingCycles());
-            i = 84;
-            xDP.setEditingDuration(i);
-            assertEquals("setEditingDuration", i, xDP.getEditingDuration());
-            str = "";
+        str = "me";
+        xDP.setAuthor(str);
+        assertEquals("setAuthor", str, xDP.getAuthor());
+        str = "the computa";
+        xDP.setGenerator(str);
+        assertEquals("setGenerator", str, xDP.getGenerator());
+        dt.Year = 2038;
+        dt.Month = 1;
+        dt.Day = 1;
+        xDP.setCreationDate(dt);
+        assertEquals(
+            "setCreationDate", dt.Year, xDP.getCreationDate().Year);
+        str = "El t'itulo";
+        xDP.setTitle(str);
+        assertEquals("setTitle", str, xDP.getTitle());
+        str = "Ein verkommenes Subjekt";
+        xDP.setSubject(str);
+        assertEquals("setSubject", str, xDP.getSubject());
+        str = "Este descripci'on no es importante";
+        xDP.setDescription(str);
+        assertEquals("setDescription", str, xDP.getDescription());
+        l.Language = "en";
+        l.Country = "GB";
+        xDP.setLanguage(l);
+        Locale l2 = xDP.getLanguage();
+        assertEquals("setLanguage Lang", l.Language, l2.Language);
+        assertEquals("setLanguage Cty", l.Country, l2.Country);
+        str = "myself";
+        xDP.setModifiedBy(str);
+        assertEquals("setModifiedBy", str, xDP.getModifiedBy());
+        dt.Year = 2042;
+        xDP.setModificationDate(dt);
+        assertEquals(
+            "setModificationDate", dt.Year, xDP.getModificationDate().Year);
+        str = "i did not do it";
+        xDP.setPrintedBy(str);
+        assertEquals("setPrintedBy", str, xDP.getPrintedBy());
+        dt.Year = 2024;
+        xDP.setPrintDate(dt);
+        assertEquals("setPrintDate", dt.Year, xDP.getPrintDate().Year);
+        str = "blah";
+        xDP.setTemplateName(str);
+        assertEquals("setTemplateName", str, xDP.getTemplateName());
+        str = "gopher://some-hole-in-the-ground/";
+        xDP.setTemplateURL(str);
+        assertEquals("setTemplateURL", str, xDP.getTemplateURL());
+        dt.Year = 2043;
+        xDP.setTemplateDate(dt);
+        assertEquals(
+            "setTemplateDate", dt.Year, xDP.getTemplateDate().Year);
+        str = "http://nowhere/";
+        xDP.setAutoloadURL(str);
+        assertEquals("setAutoloadURL", str, xDP.getAutoloadURL());
+        i = 3661; // this might not work (due to conversion via double...)
+        xDP.setAutoloadSecs(i);
+        assertEquals("setAutoloadSecs", i, xDP.getAutoloadSecs());
+        str = "_blank";
+        xDP.setDefaultTarget(str);
+        assertEquals("setDefaultTarget", str, xDP.getDefaultTarget());
+        i = 42;
+        xDP.setEditingCycles((short) i);
+        assertEquals("setEditingCycles", i, xDP.getEditingCycles());
+        i = 84;
+        xDP.setEditingDuration(i);
+        assertEquals("setEditingDuration", i, xDP.getEditingDuration());
+        str = "";
 
-            String[] kws2 = new String[] {
-                "keywordly", "keywordlike", "keywordalicious" };
-            xDP.setKeywords(kws2);
-            kws = xDP.getKeywords();
-            assertTrue("setKeywords", fromArray(kws).containsAll(fromArray(kws2)));
+        String[] kws2 = new String[] {
+            "keywordly", "keywordlike", "keywordalicious" };
+        xDP.setKeywords(kws2);
+        kws = xDP.getKeywords();
+        assertTrue("setKeywords", fromArray(kws).containsAll(fromArray(kws2)));
 
-            NamedValue[] ds2 = new NamedValue[] {
-                    new NamedValue("SyllableCount", Integer.valueOf(9)),
-                    new NamedValue("FrameCount", Integer.valueOf(2)),
-                    new NamedValue("SentenceCount", Integer.valueOf(7)) };
-            xDP.setDocumentStatistics(ds2);
-            ds = xDP.getDocumentStatistics();
-            assertTrue("setDocumentStatistics:SyllableCount", containsNV(ds,
-                        new NamedValue("SyllableCount", Integer.valueOf(9))));
-            assertTrue("setDocumentStatistics:FrameCount", containsNV(ds,
-                        new NamedValue("FrameCount", Integer.valueOf(2))));
-            assertTrue("setDocumentStatistics:SentenceCount", containsNV(ds,
-                        new NamedValue("SentenceCount", Integer.valueOf(7))));
+        NamedValue[] ds2 = new NamedValue[] {
+                new NamedValue("SyllableCount", Integer.valueOf(9)),
+                new NamedValue("FrameCount", Integer.valueOf(2)),
+                new NamedValue("SentenceCount", Integer.valueOf(7)) };
+        xDP.setDocumentStatistics(ds2);
+        ds = xDP.getDocumentStatistics();
+        assertTrue("setDocumentStatistics:SyllableCount", containsNV(ds,
+                    new NamedValue("SyllableCount", Integer.valueOf(9))));
+        assertTrue("setDocumentStatistics:FrameCount", containsNV(ds,
+                    new NamedValue("FrameCount", Integer.valueOf(2))));
+        assertTrue("setDocumentStatistics:SentenceCount", containsNV(ds,
+                    new NamedValue("SentenceCount", Integer.valueOf(7))));
 
-            System.out.println("...done");
+        System.out.println("...done");
 
-            System.out.println("Checking user-defined meta-data updates...");
+        System.out.println("Checking user-defined meta-data updates...");
 
-            // actually, this tests the PropertyBag service
-            // but maybe the DocumentProperties service will be implemented
-            // differently some day...
-            boolean b = true;
-            double d = 3.1415;
-            // note that Time is only supported for backward compatibility!
-            Time t = new Time();
-            t.Hours = 1;
-            t.Minutes = 16;
-            Date date = new Date();
-            date.Year = 2071;
-            date.Month = 2;
-            date.Day = 3;
-            dt.Year = 2065;
-            Duration dur = new Duration();
-            dur.Negative = true;
-            dur.Years = 1001;
-            dur.Months = 999;
-            dur.Days = 888;
-            dur.Hours = 777;
-            dur.Minutes = 666;
-            dur.Seconds = 555;
-            dur.NanoSeconds = 444444444;
+        // actually, this tests the PropertyBag service
+        // but maybe the DocumentProperties service will be implemented
+        // differently some day...
+        boolean b = true;
+        double d = 3.1415;
+        // note that Time is only supported for backward compatibility!
+        Time t = new Time();
+        t.Hours = 1;
+        t.Minutes = 16;
+        Date date = new Date();
+        date.Year = 2071;
+        date.Month = 2;
+        date.Day = 3;
+        dt.Year = 2065;
+        Duration dur = new Duration();
+        dur.Negative = true;
+        dur.Years = 1001;
+        dur.Months = 999;
+        dur.Days = 888;
+        dur.Hours = 777;
+        dur.Minutes = 666;
+        dur.Seconds = 555;
+        dur.NanoSeconds = 444444444;
 
-            udpc.addProperty("Frobnicate", PropertyAttribute.REMOVABLE, b);
-            udpc.addProperty("FrobDuration", PropertyAttribute.REMOVABLE, dur);
-            udpc.addProperty("FrobDuration2", PropertyAttribute.REMOVABLE, t);
-            udpc.addProperty("FrobEndDate", PropertyAttribute.REMOVABLE, date);
-            udpc.addProperty("FrobStartTime", PropertyAttribute.REMOVABLE, dt);
-            udpc.addProperty("Pi", PropertyAttribute.REMOVABLE, new Double(d));
-            udpc.addProperty("Foo", PropertyAttribute.REMOVABLE, "bar");
-            udpc.addProperty("Removed", PropertyAttribute.REMOVABLE, "bar");
-            // #i94175#: empty property name is valid ODF 1.1
-            udpc.addProperty("", PropertyAttribute.REMOVABLE, "eeeeek");
-            try {
-                udpc.removeProperty("Info 1");
-                udpc.removeProperty("Removed");
-            } catch (UnknownPropertyException e) {
-                fail("removeProperty failed");
-            }
-
-            try {
-                udpc.addProperty("Forbidden", PropertyAttribute.REMOVABLE,
-                    new String[] { "foo", "bar" });
-                fail("inserting value of non-supported type did not fail");
-            } catch (IllegalTypeException e) {
-                // ignore
-            }
-
-            assertEquals(
-                "UserDefined bool", b, udps.getPropertyValue("Frobnicate"));
-            assertTrue("UserDefined duration", eqDuration(dur, (Duration)
-                    udps.getPropertyValue("FrobDuration")));
-            assertTrue("UserDefined time", eqTime(t, (Time)
-                    udps.getPropertyValue("FrobDuration2")));
-            assertTrue("UserDefined date", eqDate(date, (Date)
-                    udps.getPropertyValue("FrobEndDate")));
-            assertTrue("UserDefined datetime", eqDateTime(dt, (DateTime)
-                    udps.getPropertyValue("FrobStartTime")));
-            assertEquals("UserDefined float", d, udps.getPropertyValue("Pi"));
-            assertEquals(
-                "UserDefined string", "bar", udps.getPropertyValue("Foo"));
-            assertEquals(
-                "UserDefined empty name", "eeeeek", udps.getPropertyValue(""));
-
-            try {
-                udps.getPropertyValue("Removed");
-                fail("UserDefined remove didn't");
-            } catch (UnknownPropertyException e) {
-                // ok
-            }
-
-            System.out.println("...done");
-
-            System.out.println("Checking storing meta-data to file...");
-
-            xDP.storeToMedium(temp + "TEST.odt", mimeArgs);
-
-            System.out.println("...done");
-
-            System.out.println("Checking loading meta-data from stored file...");
-
-            xDP.loadFromMedium(temp + "TEST.odt", noArgs);
-
-            System.out.println("...done");
-
-            System.out.println("Checking user-defined meta-data from stored file...");
-
-            udpc = xDP.getUserDefinedProperties();
-            udps = UnoRuntime.queryInterface( XPropertySet.class, udpc );
-
-            assertEquals(
-                "UserDefined bool", b, udps.getPropertyValue("Frobnicate"));
-            assertTrue("UserDefined duration", eqDuration(dur, (Duration)
-                    udps.getPropertyValue("FrobDuration")));
-            // this is now a Duration!
-            Duration t_dur = new Duration(false, (short)0, (short)0, (short)0,
-                    t.Hours, t.Minutes, t.Seconds,
-                    t.NanoSeconds);
-            assertTrue("UserDefined time", eqDuration(t_dur, (Duration)
-                    udps.getPropertyValue("FrobDuration2")));
-            assertTrue("UserDefined date", eqDate(date, (Date)
-                    udps.getPropertyValue("FrobEndDate")));
-            assertTrue("UserDefined datetime", eqDateTime(dt, (DateTime)
-                    udps.getPropertyValue("FrobStartTime")));
-            assertEquals("UserDefined float", d, udps.getPropertyValue("Pi"));
-            assertEquals(
-                "UserDefined string", "bar", udps.getPropertyValue("Foo"));
-
-            try {
-                udps.getPropertyValue("Removed");
-                fail("UserDefined remove didn't");
-            } catch (UnknownPropertyException e) {
-                // ok
-            }
-
-            System.out.println("...done");
-
-            System.out.println("Checking notification listener interface...");
-
-            Listener listener = new Listener();
-            XModifyBroadcaster xMB = UnoRuntime.queryInterface( XModifyBroadcaster.class, xDP );
-            xMB.addModifyListener(listener);
-            xDP.setAuthor("not me");
-            assertTrue("Listener Author", listener.reset());
-            udpc.addProperty("Listener", PropertyAttribute.REMOVABLE, "foo");
-            assertTrue("Listener UserDefined Add", listener.reset());
-            udps.setPropertyValue("Listener", "bar");
-            assertTrue("Listener UserDefined Set", listener.reset());
-            udpc.removeProperty("Listener");
-            assertTrue("Listener UserDefined Remove", listener.reset());
-            xMB.removeModifyListener(listener);
-            udpc.addProperty("Listener2", PropertyAttribute.REMOVABLE, "foo");
-            assertTrue("Removed Listener UserDefined Add", !listener.reset());
-
-            System.out.println("...done");
-
-        } catch (Exception e) {
-            report(e);
+        udpc.addProperty("Frobnicate", PropertyAttribute.REMOVABLE, b);
+        udpc.addProperty("FrobDuration", PropertyAttribute.REMOVABLE, dur);
+        udpc.addProperty("FrobDuration2", PropertyAttribute.REMOVABLE, t);
+        udpc.addProperty("FrobEndDate", PropertyAttribute.REMOVABLE, date);
+        udpc.addProperty("FrobStartTime", PropertyAttribute.REMOVABLE, dt);
+        udpc.addProperty("Pi", PropertyAttribute.REMOVABLE, new Double(d));
+        udpc.addProperty("Foo", PropertyAttribute.REMOVABLE, "bar");
+        udpc.addProperty("Removed", PropertyAttribute.REMOVABLE, "bar");
+        // #i94175#: empty property name is valid ODF 1.1
+        udpc.addProperty("", PropertyAttribute.REMOVABLE, "eeeeek");
+        try {
+            udpc.removeProperty("Info 1");
+            udpc.removeProperty("Removed");
+        } catch (UnknownPropertyException e) {
+            fail("removeProperty failed");
         }
+
+        try {
+            udpc.addProperty("Forbidden", PropertyAttribute.REMOVABLE,
+                new String[] { "foo", "bar" });
+            fail("inserting value of non-supported type did not fail");
+        } catch (IllegalTypeException e) {
+            // ignore
+        }
+
+        assertEquals(
+            "UserDefined bool", b, udps.getPropertyValue("Frobnicate"));
+        assertTrue("UserDefined duration", eqDuration(dur, (Duration)
+                udps.getPropertyValue("FrobDuration")));
+        assertTrue("UserDefined time", eqTime(t, (Time)
+                udps.getPropertyValue("FrobDuration2")));
+        assertTrue("UserDefined date", eqDate(date, (Date)
+                udps.getPropertyValue("FrobEndDate")));
+        assertTrue("UserDefined datetime", eqDateTime(dt, (DateTime)
+                udps.getPropertyValue("FrobStartTime")));
+        assertEquals("UserDefined float", d, udps.getPropertyValue("Pi"));
+        assertEquals(
+            "UserDefined string", "bar", udps.getPropertyValue("Foo"));
+        assertEquals(
+            "UserDefined empty name", "eeeeek", udps.getPropertyValue(""));
+
+        try {
+            udps.getPropertyValue("Removed");
+            fail("UserDefined remove didn't");
+        } catch (UnknownPropertyException e) {
+            // ok
+        }
+
+        System.out.println("...done");
+
+        System.out.println("Checking storing meta-data to file...");
+
+        xDP.storeToMedium(temp + "TEST.odt", mimeArgs);
+
+        System.out.println("...done");
+
+        System.out.println("Checking loading meta-data from stored file...");
+
+        xDP.loadFromMedium(temp + "TEST.odt", noArgs);
+
+        System.out.println("...done");
+
+        System.out.println("Checking user-defined meta-data from stored file...");
+
+        udpc = xDP.getUserDefinedProperties();
+        udps = UnoRuntime.queryInterface( XPropertySet.class, udpc );
+
+        assertEquals(
+            "UserDefined bool", b, udps.getPropertyValue("Frobnicate"));
+        assertTrue("UserDefined duration", eqDuration(dur, (Duration)
+                udps.getPropertyValue("FrobDuration")));
+        // this is now a Duration!
+        Duration t_dur = new Duration(false, (short)0, (short)0, (short)0,
+                t.Hours, t.Minutes, t.Seconds,
+                t.NanoSeconds);
+        assertTrue("UserDefined time", eqDuration(t_dur, (Duration)
+                udps.getPropertyValue("FrobDuration2")));
+        assertTrue("UserDefined date", eqDate(date, (Date)
+                udps.getPropertyValue("FrobEndDate")));
+        assertTrue("UserDefined datetime", eqDateTime(dt, (DateTime)
+                udps.getPropertyValue("FrobStartTime")));
+        assertEquals("UserDefined float", d, udps.getPropertyValue("Pi"));
+        assertEquals(
+            "UserDefined string", "bar", udps.getPropertyValue("Foo"));
+
+        try {
+            udps.getPropertyValue("Removed");
+            fail("UserDefined remove didn't");
+        } catch (UnknownPropertyException e) {
+            // ok
+        }
+
+        System.out.println("...done");
+
+        System.out.println("Checking notification listener interface...");
+
+        Listener listener = new Listener();
+        XModifyBroadcaster xMB = UnoRuntime.queryInterface( XModifyBroadcaster.class, xDP );
+        xMB.addModifyListener(listener);
+        xDP.setAuthor("not me");
+        assertTrue("Listener Author", listener.reset());
+        udpc.addProperty("Listener", PropertyAttribute.REMOVABLE, "foo");
+        assertTrue("Listener UserDefined Add", listener.reset());
+        udps.setPropertyValue("Listener", "bar");
+        assertTrue("Listener UserDefined Set", listener.reset());
+        udpc.removeProperty("Listener");
+        assertTrue("Listener UserDefined Remove", listener.reset());
+        xMB.removeModifyListener(listener);
+        udpc.addProperty("Listener2", PropertyAttribute.REMOVABLE, "foo");
+        assertTrue("Removed Listener UserDefined Add", !listener.reset());
+
+        System.out.println("...done");
     }
 
     // grrr...
@@ -504,14 +500,7 @@ public class DocumentProperties
         return false;
     }
 
-    public void report(Exception e) {
-        System.out.println("Exception occurred:");
-        e.printStackTrace();
-        fail();
-    }
-
-
-        private XMultiServiceFactory getMSF()
+    private XMultiServiceFactory getMSF()
     {
         final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface( XMultiServiceFactory.class, connection.getComponentContext().getServiceManager() );
         return xMSF1;

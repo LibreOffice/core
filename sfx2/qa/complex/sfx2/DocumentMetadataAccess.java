@@ -18,47 +18,14 @@
 
 package complex.sfx2;
 
-import com.sun.star.beans.Pair;
-import com.sun.star.rdf.Literal;
-import com.sun.star.rdf.XLiteral;
-import com.sun.star.rdf.XNamedGraph;
-import com.sun.star.rdf.BlankNode;
-import com.sun.star.rdf.XQuerySelectResult;
-import com.sun.star.rdf.XNode;
-import com.sun.star.rdf.XDocumentRepository;
-import com.sun.star.rdf.XMetadatable;
-import com.sun.star.rdf.Statement;
-import com.sun.star.rdf.FileFormat;
-import com.sun.star.rdf.URIs;
-import com.sun.star.rdf.URI;
-import com.sun.star.rdf.XDocumentMetadataAccess;
-import com.sun.star.rdf.XRepositorySupplier;
-import com.sun.star.rdf.XRepository;
-import com.sun.star.rdf.XBlankNode;
-import com.sun.star.rdf.XURI;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import helper.StreamSimulator;
 
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XComponent;
+import java.io.IOException;
 
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.StringPair;
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.container.XEnumeration;
-import com.sun.star.io.XInputStream;
-import com.sun.star.util.XCloseable;
-import com.sun.star.frame.XStorable;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextRange;
-import com.sun.star.text.XText;
-import complex.sfx2.tools.TestDocument;
 import lib.TestParameters;
-
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -66,7 +33,43 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
-import static org.junit.Assert.*;
+
+import com.sun.star.beans.Pair;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.StringPair;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XEnumeration;
+import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.frame.XStorable;
+import com.sun.star.io.XInputStream;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
+import com.sun.star.rdf.BlankNode;
+import com.sun.star.rdf.FileFormat;
+import com.sun.star.rdf.Literal;
+import com.sun.star.rdf.Statement;
+import com.sun.star.rdf.URI;
+import com.sun.star.rdf.URIs;
+import com.sun.star.rdf.XBlankNode;
+import com.sun.star.rdf.XDocumentMetadataAccess;
+import com.sun.star.rdf.XDocumentRepository;
+import com.sun.star.rdf.XLiteral;
+import com.sun.star.rdf.XMetadatable;
+import com.sun.star.rdf.XNamedGraph;
+import com.sun.star.rdf.XNode;
+import com.sun.star.rdf.XQuerySelectResult;
+import com.sun.star.rdf.XRepository;
+import com.sun.star.rdf.XRepositorySupplier;
+import com.sun.star.rdf.XURI;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XTextRange;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.util.XCloseable;
+import complex.sfx2.tools.TestDocument;
 
 /**
  * Test case for interface com.sun.star.rdf.XDocumentMetadataAccess
@@ -119,58 +122,52 @@ public class DocumentMetadataAccess
      */
     private static TestParameters param = null;
 
-    @Before public void before()
+    @Before public void before() throws Exception
     {
-        try {
+        xMSF = getMSF();
+        param = new TestParameters();
+        param.put("ServiceFactory", xMSF);  // important for param.getMSF()
 
-            xMSF = getMSF();
-            param = new TestParameters();
-            param.put("ServiceFactory", xMSF);  // important for param.getMSF()
+        assertNotNull("could not create MultiServiceFactory.", xMSF);
+        XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xMSF);
+        Object defaultCtx = xPropertySet.getPropertyValue("DefaultContext");
+        xContext = UnoRuntime.queryInterface(XComponentContext.class, defaultCtx);
+        assertNotNull("could not get component context.", xContext);
 
-            assertNotNull("could not create MultiServiceFactory.", xMSF);
-            XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xMSF);
-            Object defaultCtx = xPropertySet.getPropertyValue("DefaultContext");
-            xContext = UnoRuntime.queryInterface(XComponentContext.class, defaultCtx);
-            assertNotNull("could not get component context.", xContext);
+        tempDir = util.utils.getOfficeTemp/*Dir*/(xMSF);
+        System.out.println("tempdir: " + tempDir);
 
-            tempDir = util.utils.getOfficeTemp/*Dir*/(xMSF);
-            System.out.println("tempdir: " + tempDir);
+        foo = URI.create(xContext, "uri:foo");
+        assertNotNull("foo", foo);
+        bar = URI.create(xContext, "uri:bar");
+        assertNotNull("bar", bar);
+        baz = URI.create(xContext, "uri:baz");
+        assertNotNull("baz", baz);
 
-            foo = URI.create(xContext, "uri:foo");
-            assertNotNull("foo", foo);
-            bar = URI.create(xContext, "uri:bar");
-            assertNotNull("bar", bar);
-            baz = URI.create(xContext, "uri:baz");
-            assertNotNull("baz", baz);
-
-            blank1 = BlankNode.create(xContext, "_:1");
-            assertNotNull("blank1", blank1);
-            blank2 = BlankNode.create(xContext, "_:2");
-            assertNotNull("blank2", blank2);
-            blank3 = BlankNode.create(xContext, "_:3");
-            assertNotNull("blank3", blank3);
-            blank4 = BlankNode.create(xContext, "_:4");
-            assertNotNull("blank4", blank4);
-            rdf_type = URI.createKnown(xContext, URIs.RDF_TYPE);
-            assertNotNull("rdf_type", rdf_type);
-            rdfs_label = URI.createKnown(xContext, URIs.RDFS_LABEL);
-            assertNotNull("rdfs_label", rdfs_label);
-            pkg_Document = URI.createKnown(xContext, URIs.PKG_DOCUMENT);
-            assertNotNull("pkg_Document", pkg_Document);
-            pkg_hasPart = URI.createKnown(xContext, URIs.PKG_HASPART);
-            assertNotNull("pkg_hasPart", pkg_hasPart);
-            pkg_MetadataFile = URI.createKnown(xContext, URIs.PKG_METADATAFILE);
-            assertNotNull("pkg_MetadataFile", pkg_MetadataFile);
-            odf_ContentFile = URI.createKnown(xContext, URIs.ODF_CONTENTFILE);
-            assertNotNull("odf_ContentFile", odf_ContentFile);
-            odf_StylesFile = URI.createKnown(xContext, URIs.ODF_STYLESFILE);
-            assertNotNull("odf_StylesFile", odf_StylesFile);
-            odf_Element = URI.createKnown(xContext, URIs.ODF_ELEMENT);
-            assertNotNull("odf_Element", odf_Element);
-
-        } catch (Exception e) {
-            report(e);
-        }
+        blank1 = BlankNode.create(xContext, "_:1");
+        assertNotNull("blank1", blank1);
+        blank2 = BlankNode.create(xContext, "_:2");
+        assertNotNull("blank2", blank2);
+        blank3 = BlankNode.create(xContext, "_:3");
+        assertNotNull("blank3", blank3);
+        blank4 = BlankNode.create(xContext, "_:4");
+        assertNotNull("blank4", blank4);
+        rdf_type = URI.createKnown(xContext, URIs.RDF_TYPE);
+        assertNotNull("rdf_type", rdf_type);
+        rdfs_label = URI.createKnown(xContext, URIs.RDFS_LABEL);
+        assertNotNull("rdfs_label", rdfs_label);
+        pkg_Document = URI.createKnown(xContext, URIs.PKG_DOCUMENT);
+        assertNotNull("pkg_Document", pkg_Document);
+        pkg_hasPart = URI.createKnown(xContext, URIs.PKG_HASPART);
+        assertNotNull("pkg_hasPart", pkg_hasPart);
+        pkg_MetadataFile = URI.createKnown(xContext, URIs.PKG_METADATAFILE);
+        assertNotNull("pkg_MetadataFile", pkg_MetadataFile);
+        odf_ContentFile = URI.createKnown(xContext, URIs.ODF_CONTENTFILE);
+        assertNotNull("odf_ContentFile", odf_ContentFile);
+        odf_StylesFile = URI.createKnown(xContext, URIs.ODF_STYLESFILE);
+        assertNotNull("odf_StylesFile", odf_StylesFile);
+        odf_Element = URI.createKnown(xContext, URIs.ODF_ELEMENT);
+        assertNotNull("odf_Element", odf_Element);
     }
 
     @After public void after()
@@ -180,7 +177,7 @@ public class DocumentMetadataAccess
         xDMA = null;
     }
 
-    @Test public void check()
+    @Test public void check() throws Exception
     {
         XComponent xComp = null;
         XComponent xComp2 = null;
@@ -595,15 +592,13 @@ public class DocumentMetadataAccess
 
             System.out.println("...done");
 
-        } catch (Exception e) {
-            report(e);
         } finally {
             close(xComp);
             close(xComp2);
         }
     }
 
-    @Test public void checkRDFa()
+    @Test public void checkRDFa() throws Exception
     {
         XComponent xComp = null;
         try {
@@ -622,250 +617,233 @@ public class DocumentMetadataAccess
         }
     }
 
-    private void storeRDFa(XComponent xComp, String file)
+    private void storeRDFa(XComponent xComp, String file) throws com.sun.star.io.IOException
     {
-        try {
+        System.out.println("Storing test document...");
 
-            System.out.println("Storing test document...");
+        XStorable xStor = UnoRuntime.queryInterface(XStorable.class, xComp);
 
-            XStorable xStor = UnoRuntime.queryInterface(XStorable.class, xComp);
+        xStor.storeToURL(file, new PropertyValue[0]);
 
-            xStor.storeToURL(file, new PropertyValue[0]);
-
-            System.out.println("...done");
-
-        } catch (Exception e) {
-            report(e);
-        }
+        System.out.println("...done");
     }
 
-    private XComponent loadRDFa(String file)
+    private XComponent loadRDFa(String file) throws Exception
     {
         XComponent xComp = null;
-        try {
 
-            System.out.println("Loading test document...");
+        System.out.println("Loading test document...");
 
-            PropertyValue[] loadProps = new PropertyValue[1];
-            loadProps[0] = new PropertyValue();
-            loadProps[0].Name = "Hidden";
-            loadProps[0].Value = true;
-
+        PropertyValue[] loadProps = new PropertyValue[1];
+        loadProps[0] = new PropertyValue();
+        loadProps[0].Name = "Hidden";
+        loadProps[0].Value = true;
 
 
-            xComp = util.DesktopTools.loadDoc(xMSF, file, loadProps);
 
-            XRepositorySupplier xRepoSupplier = UnoRuntime.queryInterface(XRepositorySupplier.class, xComp);
-            assertTrue("xRS null", null != xRepoSupplier);
+        xComp = util.DesktopTools.loadDoc(xMSF, file, loadProps);
 
-            XDocumentRepository xDocRepository = UnoRuntime.queryInterface(XDocumentRepository.class, xRepoSupplier.getRDFRepository());
-            assertTrue("xRep null", null != xDocRepository);
+        XRepositorySupplier xRepoSupplier = UnoRuntime.queryInterface(XRepositorySupplier.class, xComp);
+        assertTrue("xRS null", null != xRepoSupplier);
 
-            XTextDocument xTextDoc = UnoRuntime.queryInterface(XTextDocument.class, xComp);
+        XDocumentRepository xDocRepository = UnoRuntime.queryInterface(XDocumentRepository.class, xRepoSupplier.getRDFRepository());
+        assertTrue("xRep null", null != xDocRepository);
 
-            XText xText = xTextDoc.getText();
+        XTextDocument xTextDoc = UnoRuntime.queryInterface(XTextDocument.class, xComp);
 
-            XEnumerationAccess xEA = UnoRuntime.queryInterface(XEnumerationAccess.class, xText);
-            XEnumeration xEnum = xEA.createEnumeration();
+        XText xText = xTextDoc.getText();
 
-            System.out.println("...done");
+        XEnumerationAccess xEA = UnoRuntime.queryInterface(XEnumerationAccess.class, xText);
+        XEnumeration xEnum = xEA.createEnumeration();
 
-            System.out.println("Checking RDFa in loaded test document...");
+        System.out.println("...done");
 
-            XMetadatable xPara;
-            Pair<Statement[], Boolean> result;
+        System.out.println("Checking RDFa in loaded test document...");
 
-            Statement x_FooBarLit1 = new Statement(foo, bar, mkLit("1"), null);
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 1",
-                !result.Second &&
-                eq(result.First, new Statement[] {
-                        x_FooBarLit1
-                    }));
+        XMetadatable xPara;
+        Pair<Statement[], Boolean> result;
 
-            Statement x_FooBarLit2 = new Statement(foo, bar, mkLit("2"), null);
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 2",
-                !result.Second &&
-                eq(result.First, new Statement[] {
-                        x_FooBarLit2
-                    }));
+        Statement x_FooBarLit1 = new Statement(foo, bar, mkLit("1"), null);
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 1",
+            !result.Second &&
+            eq(result.First, new Statement[] {
+                    x_FooBarLit1
+                }));
 
-            Statement x_BlankBarLit3 =
-                new Statement(blank1, bar, mkLit("3"), null);
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 3",
-                !result.Second &&
-                eq(result.First, new Statement[] {
-                        x_BlankBarLit3
-                    }));
-            XBlankNode b3 = UnoRuntime.queryInterface(XBlankNode.class, result.First[0].Subject);
+        Statement x_FooBarLit2 = new Statement(foo, bar, mkLit("2"), null);
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 2",
+            !result.Second &&
+            eq(result.First, new Statement[] {
+                    x_FooBarLit2
+                }));
 
-            Statement x_BlankBarLit4 =
-                new Statement(blank2, bar, mkLit("4"), null);
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 4",
-                !result.Second &&
-                eq(result.First, new Statement[] {
-                        x_BlankBarLit4
-                    }));
-            XBlankNode b4 = UnoRuntime.queryInterface(XBlankNode.class, result.First[0].Subject);
+        Statement x_BlankBarLit3 =
+            new Statement(blank1, bar, mkLit("3"), null);
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 3",
+            !result.Second &&
+            eq(result.First, new Statement[] {
+                    x_BlankBarLit3
+                }));
+        XBlankNode b3 = UnoRuntime.queryInterface(XBlankNode.class, result.First[0].Subject);
 
-            Statement x_BlankBarLit5 =
-                new Statement(blank1, bar, mkLit("5"), null);
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 5",
-                !result.Second &&
-                eq(result.First, new Statement[] {
-                        x_BlankBarLit5
-                    }));
-            XBlankNode b5 = UnoRuntime.queryInterface(XBlankNode.class, result.First[0].Subject);
+        Statement x_BlankBarLit4 =
+            new Statement(blank2, bar, mkLit("4"), null);
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 4",
+            !result.Second &&
+            eq(result.First, new Statement[] {
+                    x_BlankBarLit4
+                }));
+        XBlankNode b4 = UnoRuntime.queryInterface(XBlankNode.class, result.First[0].Subject);
 
-            assertTrue("RDFa: 3 != 4",
-                !b3.getStringValue().equals(b4.getStringValue()));
-            assertTrue("RDFa: 3 == 5",
-                 b3.getStringValue().equals(b5.getStringValue()));
+        Statement x_BlankBarLit5 =
+            new Statement(blank1, bar, mkLit("5"), null);
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 5",
+            !result.Second &&
+            eq(result.First, new Statement[] {
+                    x_BlankBarLit5
+                }));
+        XBlankNode b5 = UnoRuntime.queryInterface(XBlankNode.class, result.First[0].Subject);
 
-            Statement x_FooBarLit6 = new Statement(foo, bar, mkLit("6"), null);
-            Statement x_FooBazLit6 = new Statement(foo, baz, mkLit("6"), null);
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 6",
-                !result.Second &&
-                eq(result.First, new Statement[] {
-                        x_FooBarLit6, x_FooBazLit6
-                    }));
+        assertTrue("RDFa: 3 != 4",
+            !b3.getStringValue().equals(b4.getStringValue()));
+        assertTrue("RDFa: 3 == 5",
+             b3.getStringValue().equals(b5.getStringValue()));
 
-            Statement x_FooBarLit7 = new Statement(foo, bar, mkLit("7"), null);
-            Statement x_FooBazLit7 = new Statement(foo, baz, mkLit("7"), null);
-            Statement x_FooFooLit7 = new Statement(foo, foo, mkLit("7"), null);
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 7",
-                !result.Second &&
-                eq(result.First, new Statement[] {
-                        x_FooBarLit7, x_FooBazLit7, x_FooFooLit7
-                    }));
+        Statement x_FooBarLit6 = new Statement(foo, bar, mkLit("6"), null);
+        Statement x_FooBazLit6 = new Statement(foo, baz, mkLit("6"), null);
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 6",
+            !result.Second &&
+            eq(result.First, new Statement[] {
+                    x_FooBarLit6, x_FooBazLit6
+                }));
 
-            XNode lit = mkLit("a fooish bar");
-            XNode lit_type= mkLit("a fooish bar", bar);
-            Statement x_FooBarLit = new Statement(foo, bar, lit, null);
-            Statement x_FooBarLittype = new Statement(foo, bar, lit_type, null);
+        Statement x_FooBarLit7 = new Statement(foo, bar, mkLit("7"), null);
+        Statement x_FooBazLit7 = new Statement(foo, baz, mkLit("7"), null);
+        Statement x_FooFooLit7 = new Statement(foo, foo, mkLit("7"), null);
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 7",
+            !result.Second &&
+            eq(result.First, new Statement[] {
+                    x_FooBarLit7, x_FooBazLit7, x_FooFooLit7
+                }));
 
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 8",
-                result.Second &&
-                eq(result.First, new Statement[] {
-                        x_FooBarLit
-                    }));
+        XNode lit = mkLit("a fooish bar");
+        XNode lit_type= mkLit("a fooish bar", bar);
+        Statement x_FooBarLit = new Statement(foo, bar, lit, null);
+        Statement x_FooBarLittype = new Statement(foo, bar, lit_type, null);
 
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 9",
-                result.Second &&
-                eq(result.First, new Statement[] {
-                        x_FooBarLit
-                    }));
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 8",
+            result.Second &&
+            eq(result.First, new Statement[] {
+                    x_FooBarLit
+                }));
 
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 10",
-                result.Second &&
-                eq(result.First, new Statement[] {
-                        x_FooBarLittype
-                    }));
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 9",
+            result.Second &&
+            eq(result.First, new Statement[] {
+                    x_FooBarLit
+                }));
 
-            Statement x_FooBarLit11
-                = new Statement(foo, bar, mkLit("11", bar), null);
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 11",
-                !result.Second &&
-                eq(result.First, new Statement[] {
-                        x_FooBarLit11
-                    }));
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 10",
+            result.Second &&
+            eq(result.First, new Statement[] {
+                    x_FooBarLittype
+                }));
 
-            XURI xFile = URI.createNS(xContext, file, "/" + contentPath);
-            Statement x_FileBarLit12 =
-                new Statement(xFile, bar, mkLit("12"), null);
-              xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 12",
-                !result.Second &&
-                eq(result.First, new Statement[] {
-                        x_FileBarLit12
-                    }));
+        Statement x_FooBarLit11
+            = new Statement(foo, bar, mkLit("11", bar), null);
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 11",
+            !result.Second &&
+            eq(result.First, new Statement[] {
+                    x_FooBarLit11
+                }));
 
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 13",
-                result.Second &&
-                eq(result.First, new Statement[] {
-                        x_FooBarLit
-                    }));
+        XURI xFile = URI.createNS(xContext, file, "/" + contentPath);
+        Statement x_FileBarLit12 =
+            new Statement(xFile, bar, mkLit("12"), null);
+          xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 12",
+            !result.Second &&
+            eq(result.First, new Statement[] {
+                    x_FileBarLit12
+                }));
 
-            new Statement(foo, rdfs_label, mkLit("14"), null);
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 14",
-                result.Second &&
-                eq(result.First, new Statement[] {
-                        /* x_FooLabelLit14 */ x_FooBarLit
-                    }));
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 13",
+            result.Second &&
+            eq(result.First, new Statement[] {
+                    x_FooBarLit
+                }));
 
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 15", eq(result.First, new Statement[] { } ));
+        new Statement(foo, rdfs_label, mkLit("14"), null);
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 14",
+            result.Second &&
+            eq(result.First, new Statement[] {
+                    /* x_FooLabelLit14 */ x_FooBarLit
+                }));
 
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 16", eq(result.First, new Statement[] { } ));
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 15", eq(result.First, new Statement[] { } ));
 
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 17", eq(result.First, new Statement[] { } ));
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 16", eq(result.First, new Statement[] { } ));
 
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 18", eq(result.First, new Statement[] { } ));
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 17", eq(result.First, new Statement[] { } ));
 
-            xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 19", eq(result.First, new Statement[] { } ));
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 18", eq(result.First, new Statement[] { } ));
 
-            xPara = UnoRuntime.queryInterface(
-                XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 20", eq(result.First, new Statement[] { } ));
+        xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 19", eq(result.First, new Statement[] { } ));
 
-            xPara = UnoRuntime.queryInterface(
-                XMetadatable.class, xEnum.nextElement());
-            result = xDocRepository.getStatementRDFa(xPara);
-            assertTrue("RDFa: 21", eq(result.First, new Statement[] { } ));
+        xPara = UnoRuntime.queryInterface(
+            XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 20", eq(result.First, new Statement[] { } ));
 
-            System.out.println("...done");
+        xPara = UnoRuntime.queryInterface(
+            XMetadatable.class, xEnum.nextElement());
+        result = xDocRepository.getStatementRDFa(xPara);
+        assertTrue("RDFa: 21", eq(result.First, new Statement[] { } ));
 
-        } catch (Exception e) {
-            report(e);
-            close(xComp);
-        }
+        System.out.println("...done");
+
         return xComp;
     }
 
 
 // utilities -------------------------------------------------------------
-
-    public void report(Exception e) {
-        System.out.println("Exception occurred:");
-        e.printStackTrace(System.err);
-        fail();
-    }
 
     static void close(XComponent i_comp)
     {

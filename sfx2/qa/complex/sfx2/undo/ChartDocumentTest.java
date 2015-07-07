@@ -115,23 +115,16 @@ public class ChartDocumentTest implements DocumentTest
         return wallProperties;
     }
 
-    private XPropertySet impl_getYAxisProperties()
+    private XPropertySet impl_getYAxisProperties() throws IndexOutOfBoundsException
     {
         XPropertySet axisProperties = null;
-        try
-        {
-            final XChartDocument chartDoc = UnoRuntime.queryInterface( XChartDocument.class, m_chartDocument.getDocument() );
-            final XDiagram diagram = chartDoc.getFirstDiagram();
-            final XCoordinateSystemContainer coordContainer = UnoRuntime.queryInterface( XCoordinateSystemContainer.class, diagram );
-            final XCoordinateSystem[] coordSystems = coordContainer.getCoordinateSystems();
-            final XCoordinateSystem coordSystem = coordSystems[0];
-            final XAxis primaryYAxis = coordSystem.getAxisByDimension( 1, 0 );
-            axisProperties = UnoRuntime.queryInterface( XPropertySet.class, primaryYAxis );
-        }
-        catch ( Exception ex )
-        {
-            fail( "internal error: could not retrieve primary Y axis properties" );
-        }
+        final XChartDocument chartDoc = UnoRuntime.queryInterface( XChartDocument.class, m_chartDocument.getDocument() );
+        final XDiagram diagram = chartDoc.getFirstDiagram();
+        final XCoordinateSystemContainer coordContainer = UnoRuntime.queryInterface( XCoordinateSystemContainer.class, diagram );
+        final XCoordinateSystem[] coordSystems = coordContainer.getCoordinateSystems();
+        final XCoordinateSystem coordSystem = coordSystems[0];
+        final XAxis primaryYAxis = coordSystem.getAxisByDimension( 1, 0 );
+        axisProperties = UnoRuntime.queryInterface( XPropertySet.class, primaryYAxis );
         return axisProperties;
     }
 
