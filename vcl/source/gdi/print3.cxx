@@ -826,7 +826,7 @@ bool PrinterController::setupPrinter( Window* i_pParent )
         }
 
         // call driver setup
-        bRet = mpImplData->mpPrinter->Setup( i_pParent );
+        bRet = mpImplData->mpPrinter->Setup( i_pParent, getPapersizeFromSetup() );
         Size aNewPaperSize(mpImplData->mpPrinter->GetPaperSize());
         if (bRet)
         {

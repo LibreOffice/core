@@ -302,7 +302,7 @@ public:
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
     void                        SetJobValue( const OUString& rKey, const OUString& rValue ) { maJobSetup.SetValue( rKey, rValue ); }
 
-    sal_Bool                        Setup( Window* pWindow = NULL );
+    sal_Bool                        Setup( Window* pWindow = NULL, bool bPapersizeFromSetup = false );
     sal_Bool                        SetPrinterProps( const Printer* pPrinter );
 
     // SetPrinterOptions is used internally only now

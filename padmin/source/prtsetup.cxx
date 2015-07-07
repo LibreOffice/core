@@ -283,6 +283,14 @@ void RTSPaperPage::update()
         m_pSlotText->Enable( sal_False );
         m_pSlotBox->Enable( sal_False );
     }
+
+    // disable those, unless user wants to use papersize from printer prefs
+    // as they have no influence on what's going to be printed anyway
+    if (!m_pParent->m_aJobData.m_bPapersizeFromSetup)
+    {
+        m_pPaperBox->Enable( sal_False );
+        m_pOrientBox->Enable( sal_False );
+    }
 }
 
 // --------------------------------------------------------------------------

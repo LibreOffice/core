@@ -752,7 +752,7 @@ sal_Bool Printer::SetJobSetup( const JobSetup& rSetup )
 
 
 
-sal_Bool Printer::Setup( Window* pWindow )
+sal_Bool Printer::Setup( Window* pWindow, bool bPapersizeFromSetup )
 {
     if ( IsDisplayPrinter() )
         return sal_False;
@@ -761,6 +761,8 @@ sal_Bool Printer::Setup( Window* pWindow )
         return sal_False;
 
     JobSetup aJobSetup = maJobSetup;
+    ImplJobSetup* pData = aJobSetup.ImplGetData();
+    pData->mbPapersizeFromSetup = bPapersizeFromSetup;
     SalFrame* pFrame;
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
