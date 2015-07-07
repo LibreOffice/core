@@ -172,9 +172,11 @@ static OUString getAbsoluteURL(const char* pURL)
     // convert relative paths to absolute ones
     OUString aWorkingDir;
     osl_getProcessWorkingDir(&aWorkingDir.pData);
+    if (!aWorkingDir.endsWith("/"))
+        aWorkingDir += "/";
 
     try {
-        return rtl::Uri::convertRelToAbs(aWorkingDir + "/", aURL);
+        return rtl::Uri::convertRelToAbs(aWorkingDir, aURL);
     }
     catch (const rtl::MalformedUriException &)
     {
