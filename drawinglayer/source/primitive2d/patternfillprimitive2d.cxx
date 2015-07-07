@@ -80,7 +80,7 @@ namespace drawinglayer
                                 aContent);
                         }
 
-                        // transform result which is in unit coordinates to mask's object coordiantes
+                        // transform result which is in unit coordinates to mask's object coordinates
                         {
                             const basegfx::B2DHomMatrix aMaskTransform(
                                 basegfx::tools::createScaleTranslateB2DHomMatrix(

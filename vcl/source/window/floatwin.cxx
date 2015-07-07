@@ -462,7 +462,7 @@ FloatingWindow* FloatingWindow::ImplFloatHitTest( vcl::Window* pReference, const
     if( pReference->HasMirroredGraphics()  )
     {
         if(!pReference->IsRTLEnabled() )
-            // --- RTL --- re-mirror back to get device coordiantes
+            // --- RTL --- re-mirror back to get device coordinates
             pWindowOutDev->ReMirror( aAbsolute );
 
         Rectangle aRect( pReference->ScreenToOutputPixel(aAbsolute), Size(1,1) ) ;
@@ -677,7 +677,7 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
     if( pReference->HasMirroredGraphics()  )
     {
         if(!pReference->IsRTLEnabled() )
-            // --- RTL --- re-mirror back to get device coordiantes
+            // --- RTL --- re-mirror back to get device coordinates
             pParentWinOutDev->ReMirror(maFloatRect);
 
         maFloatRect.SetPos(pReference->ScreenToOutputPixel(maFloatRect.TopLeft()));

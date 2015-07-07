@@ -401,7 +401,7 @@ public:
 
         @param rTransformation
         The back transformation for each pixel in (0 .. fWidth),(0 .. fHeight) to
-        local pixel coordiantes
+        local pixel coordinates
 
         @param bSmooth
         Defines if pixel interpolation is to be used to create the result

@@ -73,8 +73,8 @@ Rectangle AccessibleViewForwarder::GetVisibleArea() const
     return aVisibleArea;
 }
 
-/** Tansform the given point into pixel coordiantes.  After the pixel
-    coordiantes of the window origin are added to make the point coordinates
+/** Tansform the given point into pixel coordinates.  After the pixel
+    coordinates of the window origin are added to make the point coordinates
     absolute.
 */
 Point AccessibleViewForwarder::LogicToPixel (const Point& rPoint) const

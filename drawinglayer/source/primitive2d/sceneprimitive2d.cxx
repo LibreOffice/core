@@ -237,7 +237,7 @@ namespace drawinglayer
                         // and not yet flipped in Y
                         basegfx::B3DHomMatrix aExtendedProjection(aViewInformation3D.getProjection());
 
-                        // bring to unit coordiantes, flip Y, leave Z unchanged
+                        // bring to unit coordinates, flip Y, leave Z unchanged
                         aExtendedProjection.scale(0.5, -0.5, 1.0);
                         aExtendedProjection.translate(0.5, 0.5, 0.0);
 

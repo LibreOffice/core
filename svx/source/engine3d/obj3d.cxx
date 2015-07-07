@@ -926,7 +926,7 @@ void E3dCompoundObject::RecalcSnapRect()
                     aBoundVolume.getMinX(), aBoundVolume.getMinY(),
                     aBoundVolume.getMaxX(), aBoundVolume.getMaxY());
 
-                // transform to 2D world coordiantes
+                // transform to 2D world coordinates
                 const sdr::contact::ViewContactOfE3dScene& rVCScene = static_cast< sdr::contact::ViewContactOfE3dScene& >(pRootScene->GetViewContact());
                 aSnapRange.transform(rVCScene.getObjectTransformation());
 
