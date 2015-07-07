@@ -11,7 +11,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/undo.hxx>
-#include <boost/scoped_ptr.hpp>
 
 #include "formulacell.hxx"
 #include "rangelst.hxx"

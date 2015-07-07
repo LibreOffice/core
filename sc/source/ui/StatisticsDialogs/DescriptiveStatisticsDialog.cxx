@@ -11,7 +11,6 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/undo.hxx>
-#include <boost/scoped_ptr.hpp>
 
 #include "formulacell.hxx"
 #include "rangelst.hxx"
@@ -87,7 +86,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
     FormulaTemplate aTemplate(mDocument);
 
-    boost::scoped_ptr<DataRangeIterator> pIterator;
+    std::unique_ptr<DataRangeIterator> pIterator;
     if (mGroupedBy == BY_COLUMN)
         pIterator.reset(new DataRangeByColumnIterator(mInputRange));
     else
