@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_35316ea3",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-07T06:59:18Z",
+      "side": 1,
+      "message": "Ah, you are probably right in that std::char_traits\u003csal_Unicode\u003e::find is legal and does what one would expect (though the standard isn\u0027t very precise on that, IMO).  However, the result can likely be less optimized than the explicit specialization of std::char_traits\u003cchart16_t\u003e::find.  But yeah, let\u0027s leave it at that; at least, keeps the code simpler.",
+      "parentUuid": "1a54edaf_1136c703",
+      "revId": "3bab59df9c79595818d8c946d9850e635b4c507b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_31dbc31d",
         "filename": "sal/rtl/ustring.cxx",
         "patchSetId": 2
