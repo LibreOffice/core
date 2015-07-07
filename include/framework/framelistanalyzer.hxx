@@ -157,10 +157,10 @@ class FWE_DLLPUBLIC FrameListAnalyzer
 
     public:
 
-        /** starts analyze phase and fille all members with valid information.
+        /** starts analyze phase and fill all members with valid information.
 
             @param xSupplier
-                    Must be a valid reference to a frames supplier, which provies
+                    Must be a valid reference to a frames supplier, which provides
                     access to the frame list for analyzing.
 
             @param xReferenceFrame

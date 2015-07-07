@@ -160,7 +160,7 @@ namespace basegfx
         // extract snippet from fStart to fEnd from this bezier
         B2DCubicBezier snippet(double fStart, double fEnd) const;
 
-        // get range including conrol points
+        // get range including control points
         B2DRange getRange() const;
 
         /** Get the minimum extremum position t

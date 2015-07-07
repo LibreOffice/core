@@ -137,7 +137,7 @@ public class _XCellRangesQuery extends MultiMethodTest {
     }
 
     /**
-     * Tested method returns all cells of a given type, defind in
+     * Tested method returns all cells of a given type, defined in
      * CellFlags
      * @see com.sun.star.sheet.CellFlags
      */
@@ -191,7 +191,7 @@ public class _XCellRangesQuery extends MultiMethodTest {
     }
 
     /**
-     * Tested method returns all cells of a given type, defind in
+     * Tested method returns all cells of a given type, defined in
      * FormulaResult
      * @see com.sun.star.sheet.FormulaResult
      */

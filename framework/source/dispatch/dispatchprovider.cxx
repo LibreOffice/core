@@ -441,7 +441,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
 /**
     @short      search for a registered protocol handler and ask him for a dispatch object
-    @descr      Wes earch a suitable handler inside our cfg package org.openoffice.Office.ProtocolHandler.
+    @descr      We search a suitable handler inside our cfg package org.openoffice.Office.ProtocolHandler.
                 If we found anyone, we create and initialize it. Initialize means: we set our owner frame on it
                 as context information. He can use it or leave it. Of course - we are aware of handler implementations,
                 which doesn't support initialization. It's an optional feature.

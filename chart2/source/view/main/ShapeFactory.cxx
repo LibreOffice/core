@@ -627,7 +627,7 @@ uno::Reference<drawing::XShape>
             "com.sun.star.drawing.Shape3DLatheObject" ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
-    double fWidth      = rSize.DirectionX/2.0; //The depth will be corrrected within Matrix
+    double fWidth      = rSize.DirectionX/2.0; //The depth will be corrected within Matrix
     double fRadius     = fWidth; //!!!!!!!! problem in drawing layer: rotation object calculates wrong needed size -> wrong camera (it's a problem with bounding boxes)
     double fHeight     = rSize.DirectionY;
 

@@ -200,7 +200,7 @@ public class _XWindow extends MultiMethodTest {
     * performed depending on 'XWindow.ControlShape' existence. If this
     * relation exists then the size and position of container control
     * shape is changed, else the position and size of window itself is
-    * chaged<p>
+    * changed<p>
     *
     * Has <b> OK </b> status if methods of wListener were called when
     * corresponding events occurred. <p>

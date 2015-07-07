@@ -761,7 +761,7 @@ public class OOoBean
             com.sun.star.lang.IllegalArgumentException,
             com.sun.star.util.CloseVetoException
     {
-        // wrap byte arrray into UNO stream
+        // wrap byte array into UNO stream
         com.sun.star.io.XInputStream xStream =
                 new com.sun.star.lib.uno.adapter.ByteArrayToXInputStreamAdapter(
                     aInBuffer );
@@ -896,7 +896,7 @@ public class OOoBean
             java.io.IOException,
             com.sun.star.lang.IllegalArgumentException
  {
-        // wrap byte arrray into UNO stream
+        // wrap byte array into UNO stream
         com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter aStream = new com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter(
                 aOutBuffer);
 

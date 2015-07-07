@@ -21,7 +21,7 @@
 #define _CHART2_RESOURCE_IDS_HRC
 
 //for strings see Strings.hrc
-//for Bimaps see Bimaps.hrc
+//for Bitmaps see Bitmaps.hrc
 
 //TabPage Ids:
 #define TP_LEGEND_POS   900

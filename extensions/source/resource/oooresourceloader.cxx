@@ -54,7 +54,7 @@ namespace extensions { namespace resource
             @return
                 the required resource
             @precond
-                the caler checked via <code>_resourceManager.IsAvailable( getResourceType(), _resourceId )</code>
+                the caller checked via <code>_resourceManager.IsAvailable( getResourceType(), _resourceId )</code>
                 that the required resource really exists
         */
         virtual Any getResource( SimpleResMgr& _resourceManager, sal_Int32 _resourceId ) const = 0;

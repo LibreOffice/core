@@ -86,7 +86,7 @@ CDIBPreview::CDIBPreview(HINSTANCE instance,HWND parent,sal_Bool bShowWindow) :
 
     if (!IsWindow(m_Hwnd))
     {
-        SAL_WARN("fpicker","Coud not create preview window");
+        SAL_WARN("fpicker","Could not create preview window");
         UnregisterDibPreviewWindowClass();
         throw std::runtime_error("Could not create preview window");
     }

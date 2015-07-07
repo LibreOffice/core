@@ -36,7 +36,7 @@ import com.sun.star.lang.WrappedTargetException;
 * <ul>
 *  <li> <code>'ENUM'</code> (of type <code>XEnumerationAccess</code>):
 *   This test creates its own oObj because the method nextElement()
-*   will be modified this Object directly so other threads may be faild.
+*   will be modified this Object directly so other threads may be failed.
 *  </li>
 * <ul> <p>
 * Test is multithread compliant. <p>

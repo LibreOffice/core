@@ -310,7 +310,7 @@ namespace dbaui
         void InitColors();
         bool ScrollWhileDragging();
 
-        /** opens the context menu to delate a connection
+        /** opens the context menu to delete a connection
             @param _aPos the position where the popup menu should appear
             @param _pSelConnection the connection which should be deleted
         */

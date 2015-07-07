@@ -358,7 +358,7 @@ public:
     Point           GetDocPos( const Point& rPaperPos ) const;
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder = 0 );
 
-    // StartDocPos corrresponds to VisArea.TopLeft().
+    // StartDocPos corresponds to VisArea.TopLeft().
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect );
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos );
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );

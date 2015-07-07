@@ -574,7 +574,7 @@ IMPL_LINK(SvxEditDictionaryDialog, SelectHdl, SvTabListBox*, pBox)
         {
             SvTreeListEntry* pEntry = pBox->FirstSelected();
             OUString sTmpShort(SvTabListBox::GetEntryText(pEntry, 0));
-            // without this the curser is always at the beginning of a word, if the text
+            // without this the cursor is always at the beginning of a word, if the text
             // is set over the ModifyHdl, although you're editing there at the moment
             if(pWordED->GetText() != sTmpShort)
                 pWordED->SetText(sTmpShort);

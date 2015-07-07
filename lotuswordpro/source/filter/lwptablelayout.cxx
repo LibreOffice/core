@@ -750,9 +750,9 @@ void LwpTableLayout::RegisterStyle()
     // Parse table
     ParseTable();
 
-    //Comment:The old code doesn't check if the LwpFoundry pointer is NULL,
-    //        So the NULL pointer cause sodc frozee. Add code to check the
-    //        the pointer.
+    //Comment: the old code doesn't check if the LwpFoundry pointer is NULL,
+    //         so the NULL pointer cause sodc freeze. Add code to check the
+    //         the pointer.
     //New Code
     if( GetFoundry() && GetTable() )
 

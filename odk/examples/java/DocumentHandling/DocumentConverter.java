@@ -135,7 +135,7 @@ public class DocumentConverter {
                     // Storing and converting the document
                     xStorable.storeAsURL(sStoreUrl, propertyValues);
 
-                    // Closing the converted document. Use XCloseable.clsoe if the
+                    // Closing the converted document. Use XCloseable.close if the
                     // interface is supported, otherwise use XComponent.dispose
                     com.sun.star.util.XCloseable xCloseable =
                         UnoRuntime.queryInterface(

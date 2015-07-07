@@ -717,7 +717,7 @@ public:
         value. Tries to match a rSymbol with rExtension first, then with
          eFormatLanguage, then rSymbol only. This is because a currency entry
         might have been constructed using I18N locale data where a used locale
-        of a currrency format code must not necessarily match the locale of
+        of a currency format code must not necessarily match the locale of
         the locale data itself, e.g. [$HK$-40C] (being "zh_HK" locale) in
         zh_CN locale data. Here the rExtension would have the value 0x40c but
          eFormatLanguage of the number format would have the value of zh_CN

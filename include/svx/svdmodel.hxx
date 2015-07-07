@@ -173,7 +173,7 @@ protected:
                     m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
     SdrOutliner*    pDrawOutliner;  // an Outliner for outputting text
     SdrOutliner*    pHitTestOutliner;// an Outliner for the HitTest
-    sal_uIntPtr           nDefTextHgt;    // Default text heigth in logical units
+    sal_uIntPtr           nDefTextHgt;    // Default text height in logical units
     VclPtr<OutputDevice>  pRefOutDev;     // ReferenceDevice for the EditEngine
     /// Set if we are doing tiled rendering.
     bool mbTiledRendering;
@@ -354,7 +354,7 @@ public:
     void libreOfficeKitCallback(int nType, const char* pPayload) const;
     // If a new MapMode is set on the RefDevice (or similar)
     void                 RefDeviceChanged(); // not yet implemented
-    // default font heigth in logical units
+    // default font height in logical units
     void                 SetDefaultFontHeight(sal_uIntPtr nVal);
     sal_uIntPtr                GetDefaultFontHeight() const           { return nDefTextHgt; }
     // default tabulator width for the EditEngine
