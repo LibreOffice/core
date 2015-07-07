@@ -81,7 +81,7 @@ uno::Sequence< OUString > SAL_CALL SfxUnoPanels::getElementNames()
         pSidebarController->GetResourceManager()->GetMatchingPanels(aPanels,
                                                       pSidebarController->GetCurrentContext(),
                                                       mDeckId,
-                                                      xFrame);
+                                                      xFrame->getController());
 
         panelList.realloc(aPanels.size());
 
@@ -114,7 +114,7 @@ sal_Bool SAL_CALL SfxUnoPanels::hasByName( const OUString& aName )
         pSidebarController->GetResourceManager()->GetMatchingPanels(aPanels,
                                                       pSidebarController->GetCurrentContext(),
                                                       mDeckId,
-                                                      xFrame);
+                                                      xFrame->getController());
 
         for (ResourceManager::PanelContextDescriptorContainer::const_iterator
             iPanel(aPanels.begin()), iEnd(aPanels.end());

@@ -68,7 +68,7 @@ uno::Sequence< OUString > SAL_CALL SfxUnoDecks::getElementNames()
             aDecks,
             pSidebarController->GetCurrentContext(),
             pSidebarController->IsDocumentReadOnly(),
-            xFrame);
+            xFrame->getController());
 
         deckList.realloc(aDecks.size());
 
@@ -104,7 +104,7 @@ sal_Bool SAL_CALL SfxUnoDecks::hasByName( const OUString& aName )
             aDecks,
             pSidebarController->GetCurrentContext(),
             pSidebarController->IsDocumentReadOnly(),
-            xFrame);
+            xFrame->getController());
 
         for (ResourceManager::DeckContextDescriptorContainer::const_iterator
             iDeck(aDecks.begin()), iEnd(aDecks.end());

@@ -146,16 +146,16 @@ Reference<frame::XDispatch> Tools::GetDispatch (
 }
 
 ::rtl::OUString Tools::GetModuleName (
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    const css::uno::Reference<css::frame::XController>& rxController)
 {
-    if ( ! rxFrame.is() || ! rxFrame->getController().is())
+    if (!rxController.is())
         return ::rtl::OUString();
 
     try
     {
         const Reference<XComponentContext> xComponentContext (::comphelper::getProcessComponentContext());
         const Reference<frame::XModuleManager> xModuleManager = frame::ModuleManager::create( xComponentContext );
-        return xModuleManager->identify(rxFrame);
+        return xModuleManager->identify(rxController);
     }
     catch (const Exception&)
     {

@@ -153,7 +153,7 @@ SidebarController::SidebarController (
     WeakReference<SidebarController> xWeakController (this);
     maSidebarControllerContainer.insert(
         SidebarControllerContainer::value_type(
-            rxFrame,
+            rxFrame->getController(),
             xWeakController));
 }
 
@@ -164,7 +164,7 @@ SidebarController::~SidebarController()
 SidebarController* SidebarController::GetSidebarControllerForFrame (
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
-    SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(rxFrame));
+    SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(rxFrame->getController()));
     if (iEntry == maSidebarControllerContainer.end())
         return NULL;
 
@@ -190,7 +190,7 @@ void SAL_CALL SidebarController::disposing()
             aDecks,
             GetCurrentContext(),
             IsDocumentReadOnly(),
-            mxFrame);
+            mxFrame->getController());
 
         for (ResourceManager::DeckContextDescriptorContainer::const_iterator
             iDeck(aDecks.begin()), iEnd(aDecks.end());
@@ -202,7 +202,7 @@ void SAL_CALL SidebarController::disposing()
                     aDeck.disposeAndClear();
             }
 
-    SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(mxFrame));
+    SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(mxFrame->getController()));
     if (iEntry != maSidebarControllerContainer.end())
         maSidebarControllerContainer.erase(iEntry);
 
@@ -425,7 +425,7 @@ void SidebarController::UpdateConfigurations()
             aDecks,
             maCurrentContext,
             mbIsDocumentReadOnly,
-            mxFrame);
+            mxFrame->getController());
 
         // Notify the tab bar about the updated set of decks.
         mpTabBar->SetDecks(aDecks);
@@ -564,7 +564,7 @@ void SidebarController::SwitchToDeck (
         aPanelContextDescriptors,
         rContext,
         rDeckDescriptor.msId,
-        mxFrame);
+        mxFrame->getController());
 
     if (aPanelContextDescriptors.empty())
     {
@@ -1219,7 +1219,7 @@ ResourceManager::DeckContextDescriptorContainer SidebarController::GetMatchingDe
     mpResourceManager->GetMatchingDecks (aDecks,
                                         GetCurrentContext(),
                                         IsDocumentReadOnly(),
-                                        mxFrame);
+                                        mxFrame->getController());
     return aDecks;
 }
 
@@ -1230,7 +1230,7 @@ ResourceManager::PanelContextDescriptorContainer SidebarController::GetMatchingP
     mpResourceManager->GetMatchingPanels(aPanels,
                                         GetCurrentContext(),
                                         rDeckId,
-                                        mxFrame);
+                                        mxFrame->getController());
     return aPanels;
 }
 

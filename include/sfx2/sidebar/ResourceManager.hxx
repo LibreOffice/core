@@ -23,7 +23,7 @@
 #include "PanelDescriptor.hxx"
 #include <sfx2/sidebar/Context.hxx>
 #include <unotools/confignode.hxx>
-#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XController.hpp>
 #include <set>
 #include <boost/shared_ptr.hpp>
 #include <svtools/miscopt.hxx>
@@ -89,13 +89,13 @@ public:
                                             DeckContextDescriptorContainer& rDeckDescriptors,
                                             const Context& rContext,
                                             const bool bIsDocumentReadOnly,
-                                            const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                                            const css::uno::Reference<css::frame::XController>& rxController);
 
     const PanelContextDescriptorContainer& GetMatchingPanels(
                                             PanelContextDescriptorContainer& rPanelDescriptors,
                                             const Context& rContext,
                                             const OUString& rsDeckId,
-                                            const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                                            const css::uno::Reference<css::frame::XController>& rxController);
 
     /** Remember the expansions state per panel and context.
         This is not persistent past application end.
@@ -121,13 +121,13 @@ private:
     static void ReadContextList(const utl::OConfigurationNode& rNode,
                          ContextList& rContextList,
                          const OUString& rsDefaultMenuCommand);
-    void ReadLegacyAddons(const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    void ReadLegacyAddons(const css::uno::Reference<css::frame::XController>& rxController);
     static utl::OConfigurationTreeRoot GetLegacyAddonRootNode(const OUString& rsModuleName);
     static void GetToolPanelNodeNames(std::vector<OUString>& rMatchingNames,
                                const utl::OConfigurationTreeRoot& aRoot);
     static bool IsDeckEnabled(const OUString& rsDeckId,
                        const Context& rContext,
-                       const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                       const css::uno::Reference<css::frame::XController>& rxController);
 };
 
 } } // end of namespace sfx2::sidebar

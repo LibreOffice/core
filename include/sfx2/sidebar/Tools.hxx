@@ -54,7 +54,7 @@ public:
         const css::util::URL& rURL);
 
     static ::rtl::OUString GetModuleName (
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XController>& rxFrame);
 };
 
 

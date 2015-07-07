@@ -143,7 +143,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
     {
         Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
         Reference<frame::XUIControllerFactory> xFactory = frame::theToolbarControllerFactory::get( xContext );
-        OUString sModuleName (Tools::GetModuleName(rxFrame));
+        OUString sModuleName (Tools::GetModuleName(rxFrame->getController()));
 
         if (xFactory.is() && xFactory->hasController(rsCommandName,  sModuleName))
         {

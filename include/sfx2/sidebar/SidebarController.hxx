@@ -158,7 +158,7 @@ public:
 
 private:
     typedef ::std::map<
-        const css::uno::Reference<css::frame::XFrame>,
+        const css::uno::Reference<css::frame::XController>,
         css::uno::WeakReference<SidebarController>
     > SidebarControllerContainer;
     static SidebarControllerContainer maSidebarControllerContainer;

@@ -179,9 +179,9 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
                                                             DeckContextDescriptorContainer& rDecks,
                                                             const Context& rContext,
                                                             const bool bIsDocumentReadOnly,
-                                                            const Reference<frame::XFrame>& rxFrame)
+                                                            const Reference<frame::XController>& rxController)
 {
-    ReadLegacyAddons(rxFrame);
+    ReadLegacyAddons(rxController);
 
     std::multimap<sal_Int32,DeckContextDescriptor> aOrderedIds;
     DeckContainer::const_iterator iDeck;
@@ -196,7 +196,7 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
         aDeckContextDescriptor.msId = rDeckDescriptor.msId;
         aDeckContextDescriptor.mbIsEnabled =
             ! bIsDocumentReadOnly
-            || IsDeckEnabled(rDeckDescriptor.msId, rContext, rxFrame);
+            || IsDeckEnabled(rDeckDescriptor.msId, rContext, rxController);
         aOrderedIds.insert(::std::multimap<sal_Int32,DeckContextDescriptor>::value_type(
                 rDeckDescriptor.mnOrderIndex,
                 aDeckContextDescriptor));
@@ -215,9 +215,9 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
                                                             PanelContextDescriptorContainer& rPanelIds,
                                                             const Context& rContext,
                                                             const OUString& rsDeckId,
-                                                            const Reference<frame::XFrame>& rxFrame)
+                                                            const Reference<frame::XController>& rxController)
 {
-    ReadLegacyAddons(rxFrame);
+    ReadLegacyAddons(rxController);
 
     std::multimap<sal_Int32, PanelContextDescriptor> aOrderedIds;
     PanelContainer::const_iterator iPanel;
@@ -485,10 +485,10 @@ void ResourceManager::ReadContextList (
     }
 }
 
-void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
+void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxController)
 {
     // Get module name for given frame.
-    OUString sModuleName (Tools::GetModuleName(rxFrame));
+    OUString sModuleName (Tools::GetModuleName(rxController));
     if (sModuleName.getLength() == 0)
         return;
     if (maProcessedApplications.find(sModuleName) != maProcessedApplications.end())
@@ -625,14 +625,14 @@ void ResourceManager::GetToolPanelNodeNames (
 bool ResourceManager::IsDeckEnabled (
                         const OUString& rsDeckId,
                         const Context& rContext,
-                        const Reference<frame::XFrame>& rxFrame)
+                        const Reference<frame::XController>& rxController)
 {
     // Check if any panel that matches the current context can be
     // displayed.
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
 
     ResourceManager::Instance().GetMatchingPanels(aPanelContextDescriptors,
-                                                  rContext, rsDeckId, rxFrame);
+                                                  rContext, rsDeckId, rxController);
 
     ResourceManager::PanelContextDescriptorContainer::const_iterator iPanel;
     for (iPanel = aPanelContextDescriptors.begin(); iPanel != aPanelContextDescriptors.end(); ++iPanel)
