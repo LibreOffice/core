@@ -1010,8 +1010,8 @@ void SwUiWriterTest::testTdf81995()
 {
     uno::Reference<text::XDefaultNumberingProvider> xDefNum(m_xSFactory->createInstance("com.sun.star.text.DefaultNumberingProvider"), uno::UNO_QUERY);
     com::sun::star::lang::Locale alocale;
-    alocale.Language = OUString("en");
-    alocale.Country = OUString("US");
+    alocale.Language = "en";
+    alocale.Country = "US";
     uno::Sequence<uno::Reference<container::XIndexAccess>> aIndexAccess(xDefNum->getDefaultOutlineNumberings(alocale));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(8), aIndexAccess.getLength());
     for(int i=0;i<aIndexAccess.getLength();i++)
