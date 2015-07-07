@@ -239,6 +239,93 @@ SCTAB ScSingleRefData::Tab() const
     return mnTab;
 }
 
+// static
+void ScSingleRefData::PutInOrder( ScSingleRefData& rRef1, ScSingleRefData& rRef2, const ScAddress& rPos )
+{
+    sal_uInt8 nRelState1 = rRef1.Flags.bRelName ?
+        ((rRef1.Flags.bTabRel ? 4 : 0) |
+         (rRef1.Flags.bRowRel ? 2 : 0) |
+         (rRef1.Flags.bColRel ? 1 : 0)) :
+        0;
+
+    sal_uInt8 nRelState2 = rRef2.Flags.bRelName ?
+        ((rRef2.Flags.bTabRel ? 4 : 0) |
+         (rRef2.Flags.bRowRel ? 2 : 0) |
+         (rRef2.Flags.bColRel ? 1 : 0)) :
+        0;
+
+    SCCOL nCol1 = rRef1.Flags.bColRel ? rPos.Col() + rRef1.mnCol : rRef1.mnCol;
+    SCCOL nCol2 = rRef2.Flags.bColRel ? rPos.Col() + rRef2.mnCol : rRef2.mnCol;
+    if (nCol2 < nCol1)
+    {
+        rRef1.mnCol = rRef2.Flags.bColRel ? nCol2 - rPos.Col() : nCol2;
+        rRef2.mnCol = rRef1.Flags.bColRel ? nCol1 - rPos.Col() : nCol1;
+        if (rRef1.Flags.bRelName && rRef1.Flags.bColRel)
+            nRelState2 |= 1;
+        else
+            nRelState2 &= ~1;
+        if (rRef2.Flags.bRelName && rRef2.Flags.bColRel)
+            nRelState1 |= 1;
+        else
+            nRelState1 &= ~1;
+        bool bTmp = rRef1.Flags.bColRel;
+        rRef1.Flags.bColRel = rRef2.Flags.bColRel;
+        rRef2.Flags.bColRel = bTmp;
+        bTmp = rRef1.Flags.bColDeleted;
+        rRef1.Flags.bColDeleted = rRef2.Flags.bColDeleted;
+        rRef2.Flags.bColDeleted = bTmp;
+    }
+
+    SCROW nRow1 = rRef1.Flags.bRowRel ? rPos.Row() + rRef1.mnRow : rRef1.mnRow;
+    SCROW nRow2 = rRef2.Flags.bRowRel ? rPos.Row() + rRef2.mnRow : rRef2.mnRow;
+    if (nRow2 < nRow1)
+    {
+        rRef1.mnRow = rRef2.Flags.bRowRel ? nRow2 - rPos.Row() : nRow2;
+        rRef2.mnRow = rRef1.Flags.bRowRel ? nRow1 - rPos.Row() : nRow1;
+        if (rRef1.Flags.bRelName && rRef1.Flags.bRowRel)
+            nRelState2 |= 2;
+        else
+            nRelState2 &= ~2;
+        if (rRef2.Flags.bRelName && rRef2.Flags.bRowRel)
+            nRelState1 |= 2;
+        else
+            nRelState1 &= ~2;
+        bool bTmp = rRef1.Flags.bRowRel;
+        rRef1.Flags.bRowRel = rRef2.Flags.bRowRel;
+        rRef2.Flags.bRowRel = bTmp;
+        bTmp = rRef1.Flags.bRowDeleted;
+        rRef1.Flags.bRowDeleted = rRef2.Flags.bRowDeleted;
+        rRef2.Flags.bRowDeleted = bTmp;
+    }
+
+    SCTAB nTab1 = rRef1.Flags.bTabRel ? rPos.Tab() + rRef1.mnTab : rRef1.mnTab;
+    SCTAB nTab2 = rRef2.Flags.bTabRel ? rPos.Tab() + rRef2.mnTab : rRef2.mnTab;
+    if (nTab2 < nTab1)
+    {
+        rRef1.mnTab = rRef2.Flags.bTabRel ? nTab2 - rPos.Tab() : nTab2;
+        rRef2.mnTab = rRef1.Flags.bTabRel ? nTab1 - rPos.Tab() : nTab1;
+        if (rRef1.Flags.bRelName && rRef1.Flags.bTabRel)
+            nRelState2 |= 4;
+        else
+            nRelState2 &= ~4;
+        if (rRef2.Flags.bRelName && rRef2.Flags.bTabRel)
+            nRelState1 |= 4;
+        else
+            nRelState1 &= ~4;
+        bool bTmp = rRef1.Flags.bTabRel;
+        rRef1.Flags.bTabRel = rRef2.Flags.bTabRel;
+        rRef2.Flags.bTabRel = bTmp;
+        bTmp = rRef1.Flags.bTabDeleted;
+        rRef1.Flags.bTabDeleted = rRef2.Flags.bTabDeleted;
+        rRef2.Flags.bTabDeleted = bTmp;
+    }
+
+    // bFlag3D stays the same on both references.
+
+    rRef1.Flags.bRelName = (nRelState1 != 0);
+    rRef2.Flags.bRelName = (nRelState2 != 0);
+}
+
 bool ScSingleRefData::operator==( const ScSingleRefData& r ) const
 {
     return mnFlagValue == r.mnFlagValue && mnCol == r.mnCol && mnRow == r.mnRow && mnTab == r.mnTab;
@@ -380,6 +467,11 @@ void ScComplexRefData::SetRange( const ScRange& rRange, const ScAddress& rPos )
 {
     Ref1.SetAddress(rRange.aStart, rPos);
     Ref2.SetAddress(rRange.aEnd, rPos);
+}
+
+void ScComplexRefData::PutInOrder( const ScAddress& rPos )
+{
+    ScSingleRefData::PutInOrder( Ref1, Ref2, rPos);
 }
 
 #if DEBUG_FORMULA_COMPILER
