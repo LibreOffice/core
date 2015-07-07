@@ -291,7 +291,7 @@ struct ScRefHdlrImpl: ScRefHdlrImplBase< TBase, bBindRef >
 
     ~ScRefHdlrImpl()
     {
-        dispose();
+        TBase::disposeOnce();
     }
 };
 
