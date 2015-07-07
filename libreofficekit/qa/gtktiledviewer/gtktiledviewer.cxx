@@ -30,6 +30,7 @@ static int help()
 }
 
 static GtkWidget* pDocView;
+static GtkWidget* pStatusBar;
 static GtkToolItem* pEnableEditing;
 static GtkToolItem* pBold;
 static GtkToolItem* pItalic;
@@ -286,6 +287,12 @@ static void signalCommand(LOKDocView* /*pLOKDocView*/, char* pPayload, gpointer 
     }
 }
 
+static void loadChanged(LOKDocView* /*pLOKDocView*/, gdouble fValue, gpointer pData)
+{
+    GtkWidget* pProgressBar = GTK_WIDGET (pData);
+    gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(pProgressBar), fValue);
+}
+
 /// LOKDocView found no search matches -> set the search label accordingly.
 static void signalSearch(LOKDocView* /*pLOKDocView*/, char* /*pPayload*/, gpointer /*pData*/)
 {
@@ -410,6 +417,8 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
 
     focusChain = g_list_append( focusChain, pDocView1 );
     gtk_container_set_focus_chain ( GTK_CONTAINER (pVBox), focusChain );
+
+    gtk_widget_hide (pStatusBar);
 }
 
 int main( int argc, char* argv[] )
@@ -565,6 +574,7 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "size-changed", G_CALLBACK(signalSize), NULL);
 #endif
 
+
     // Scrolled window for DocView
     pScrolledWindow = gtk_scrolled_window_new(0, 0);
     gtk_widget_set_hexpand (pScrolledWindow, TRUE);
@@ -572,6 +582,13 @@ int main( int argc, char* argv[] )
     gtk_container_add(GTK_CONTAINER(pVBox), pScrolledWindow);
 
     gtk_container_add(GTK_CONTAINER(pScrolledWindow), pDocView);
+
+    GtkWidget* pProgressBar = gtk_progress_bar_new ();
+    g_signal_connect(pDocView, "load-changed", G_CALLBACK(loadChanged), pProgressBar);
+
+    pStatusBar = gtk_statusbar_new ();
+    gtk_container_add (GTK_CONTAINER(pVBox), pStatusBar);
+    gtk_container_add (GTK_CONTAINER(pStatusBar), pProgressBar);
 
     gtk_widget_show_all( pWindow );
     // Hide the findbar by default.
