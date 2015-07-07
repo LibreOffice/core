@@ -42,8 +42,7 @@ FullScreenPane::FullScreenPane (
     const Reference<XResourceId>& rxPaneId,
     const vcl::Window* pViewShellWindow)
     : FrameWindowPane(rxPaneId,NULL),
-      mxComponentContext(rxComponentContext),
-      mpWorkWindow(NULL)
+      mxComponentContext(rxComponentContext)
 {
     vcl::Window* pParent = NULL;
     mpWorkWindow.reset(VclPtr<WorkWindow>::Create(
@@ -110,7 +109,7 @@ void SAL_CALL FullScreenPane::disposing()
     {
         Link<> aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
         mpWorkWindow->RemoveEventListener(aWindowEventHandler);
-        mpWorkWindow.reset();
+        mpWorkWindow.disposeAndClear();
     }
 
     FrameWindowPane::disposing();
@@ -186,7 +185,7 @@ IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent*, pEvent)
             break;
 
         case VCLEVENT_OBJECT_DYING:
-            mpWorkWindow.reset();
+            mpWorkWindow.disposeAndClear();
             break;
     }
     return 1;
