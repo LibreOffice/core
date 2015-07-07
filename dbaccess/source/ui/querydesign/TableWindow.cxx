@@ -96,8 +96,7 @@ OTableWindow::OTableWindow( vcl::Window* pParent, const TTableWindowData::value_
           : ::comphelper::OContainerListener(m_aMutex)
           ,Window( pParent, WB_3DLOOK|WB_MOVEABLE )
           ,m_aTypeImage( VclPtr<FixedImage>::Create(this) )
-          ,m_aTitle( VclPtr<OTableWindowTitle>::Create(this) )
-          ,m_pListBox(NULL)
+          ,m_xTitle( VclPtr<OTableWindowTitle>::Create(this) )
           ,m_pAccessible(NULL)
           ,m_pData( pTabWinData )
           ,m_nMoveCount(0)
@@ -130,17 +129,17 @@ OTableWindow::~OTableWindow()
 
 void OTableWindow::dispose()
 {
-    if (m_pListBox)
+    if (m_xListBox)
     {
-        OSL_ENSURE(m_pListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
+        OSL_ENSURE(m_xListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
     }
-    m_pListBox.disposeAndClear();
+    m_xListBox.disposeAndClear();
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
 
     m_pAccessible = NULL;
     m_aTypeImage.disposeAndClear();
-    m_aTitle.disposeAndClear();
+    m_xTitle.disposeAndClear();
     vcl::Window::dispose();
 }
 
@@ -194,7 +193,7 @@ VclPtr<OTableWindowListBox> OTableWindow::CreateListBox()
 
 bool OTableWindow::FillListBox()
 {
-    m_pListBox->Clear();
+    m_xListBox->Clear();
     if ( !m_pContainerListener.is() )
     {
         Reference< XContainer> xContainer(m_pData->getColumns(),UNO_QUERY);
@@ -208,7 +207,7 @@ bool OTableWindow::FillListBox()
 
     if (GetData()->IsShowAll())
     {
-        SvTreeListEntry* pEntry = m_pListBox->InsertEntry( OUString("*") );
+        SvTreeListEntry* pEntry = m_xListBox->InsertEntry( OUString("*") );
         pEntry->SetUserData( createUserData(NULL,false) );
     }
 
@@ -236,9 +235,9 @@ bool OTableWindow::FillListBox()
                 bool bPrimaryKeyColumn = xPKeyColumns.is() && xPKeyColumns->hasByName( *pIter );
                 // is this column in the primary key
                 if ( bPrimaryKeyColumn )
-                    pEntry = m_pListBox->InsertEntry(*pIter, aPrimKeyImage, aPrimKeyImage);
+                    pEntry = m_xListBox->InsertEntry(*pIter, aPrimKeyImage, aPrimKeyImage);
                 else
-                    pEntry = m_pListBox->InsertEntry(*pIter);
+                    pEntry = m_xListBox->InsertEntry(*pIter);
 
                 Reference<XPropertySet> xColumn(xColumns->getByName(*pIter),UNO_QUERY);
                 if ( xColumn.is() )
@@ -267,16 +266,16 @@ void OTableWindow::deleteUserData(void*& _pUserData)
 
 void OTableWindow::clearListBox()
 {
-    if ( m_pListBox )
+    if ( m_xListBox )
     {
-        SvTreeListEntry* pEntry = m_pListBox->First();
+        SvTreeListEntry* pEntry = m_xListBox->First();
 
         while(pEntry)
         {
             void* pUserData = pEntry->GetUserData();
             deleteUserData(pUserData);
-            SvTreeListEntry* pNextEntry = m_pListBox->Next(pEntry);
-            m_pListBox->GetModel()->Remove(pEntry);
+            SvTreeListEntry* pNextEntry = m_xListBox->Next(pEntry);
+            m_xListBox->GetModel()->Remove(pEntry);
             pEntry = pNextEntry;
         }
     }
@@ -302,24 +301,24 @@ void OTableWindow::impl_updateImage()
 bool OTableWindow::Init()
 {
     // create list box if necessary
-    if ( !m_pListBox )
+    if ( !m_xListBox )
     {
-        m_pListBox = CreateListBox();
-        OSL_ENSURE( m_pListBox != nullptr, "OTableWindow::Init() : CreateListBox returned NULL !" );
-        m_pListBox->SetSelectionMode( MULTIPLE_SELECTION );
+        m_xListBox = CreateListBox();
+        OSL_ENSURE( m_xListBox != nullptr, "OTableWindow::Init() : CreateListBox returned NULL !" );
+        m_xListBox->SetSelectionMode( MULTIPLE_SELECTION );
     }
 
     // Set the title
-    m_aTitle->SetText( m_pData->GetWinName() );
-    m_aTitle->Show();
+    m_xTitle->SetText( m_pData->GetWinName() );
+    m_xTitle->Show();
 
-    m_pListBox->Show();
+    m_xListBox->Show();
 
     // add the fields to the ListBox
     clearListBox();
     bool bSuccess = FillListBox();
     if ( bSuccess )
-        m_pListBox->SelectAll( false );
+        m_xListBox->SelectAll( false );
 
     impl_updateImage();
 
@@ -474,11 +473,11 @@ void OTableWindow::Resize()
         nTitleHeight = aImageSize.Height();
 
     nPositionX += aImageSize.Width() + CalcZoom( 2 );
-    m_aTitle->SetPosSizePixel( Point( nPositionX, nPositionY ), Size( aOutSize.Width() - nPositionX - n5Pos, nTitleHeight ) );
+    m_xTitle->SetPosSizePixel( Point( nPositionX, nPositionY ), Size( aOutSize.Width() - nPositionX - n5Pos, nTitleHeight ) );
 
     long nTitleToList = CalcZoom( 3 );
 
-    m_pListBox->SetPosSizePixel(
+    m_xListBox->SetPosSizePixel(
         Point( n5Pos, nPositionY + nTitleHeight + nTitleToList ),
         Size( aOutSize.Width() - 2 * n5Pos, aOutSize.Height() - ( nPositionY + nTitleHeight + nTitleToList ) - n5Pos )
     );
@@ -488,26 +487,26 @@ void OTableWindow::Resize()
 
 void OTableWindow::SetBoldTitle( bool bBold )
 {
-    vcl::Font aFont = m_aTitle->GetFont();
+    vcl::Font aFont = m_xTitle->GetFont();
     aFont.SetWeight( bBold?WEIGHT_BOLD:WEIGHT_NORMAL );
-    m_aTitle->SetFont( aFont );
-    m_aTitle->Invalidate();
+    m_xTitle->SetFont( aFont );
+    m_xTitle->Invalidate();
 }
 
 void OTableWindow::GetFocus()
 {
     Window::GetFocus();
     // we have to forward the focus to our listbox to enable keystokes
-    if(m_pListBox)
-        m_pListBox->GrabFocus();
+    if(m_xListBox)
+        m_xListBox->GrabFocus();
 }
 
 void OTableWindow::setActive(bool _bActive)
 {
     SetBoldTitle( _bActive );
     m_bActive = _bActive;
-    if (!_bActive && m_pListBox && m_pListBox->GetSelectionCount() != 0)
-        m_pListBox->SelectAll(false);
+    if (!_bActive && m_xListBox && m_xListBox->GetSelectionCount() != 0)
+        m_xListBox->SelectAll(false);
 }
 
 void OTableWindow::Remove()
@@ -544,14 +543,14 @@ void OTableWindow::EnumValidFields(::std::vector< OUString>& arrstrFields)
 {
     arrstrFields.clear();
     // This default implementation counts every item in the ListBox ... for any other behaviour it must be over-written
-    if ( m_pListBox )
+    if ( m_xListBox )
     {
-        arrstrFields.reserve(m_pListBox->GetEntryCount());
-        SvTreeListEntry* pEntryLoop = m_pListBox->First();
+        arrstrFields.reserve(m_xListBox->GetEntryCount());
+        SvTreeListEntry* pEntryLoop = m_xListBox->First();
         while (pEntryLoop)
         {
-            arrstrFields.push_back(m_pListBox->GetEntryText(pEntryLoop));
-            pEntryLoop = m_pListBox->Next(pEntryLoop);
+            arrstrFields.push_back(m_xListBox->GetEntryText(pEntryLoop));
+            pEntryLoop = m_xListBox->Next(pEntryLoop);
         }
     }
 }
@@ -571,8 +570,8 @@ void OTableWindow::StateChanged( StateChangedType nType )
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont(*this, aFont);
 
-        m_aTitle->SetZoom(GetZoom());
-        m_pListBox->SetZoom(GetZoom());
+        m_xTitle->SetZoom(GetZoom());
+        m_xListBox->SetZoom(GetZoom());
         Resize();
         Invalidate();
     }
@@ -599,11 +598,11 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                     ptWhere = rEvt.GetMousePosPixel();
                 else
                 {
-                    SvTreeListEntry* pCurrent = m_pListBox->GetCurEntry();
+                    SvTreeListEntry* pCurrent = m_xListBox->GetCurEntry();
                     if ( pCurrent )
-                        ptWhere = m_pListBox->GetEntryPosition(pCurrent);
+                        ptWhere = m_xListBox->GetEntryPosition(pCurrent);
                     else
-                        ptWhere = m_aTitle->GetPosPixel();
+                        ptWhere = m_xTitle->GetPosPixel();
                 }
 
                 PopupMenu aContextMenu(ModuleRes(RID_MENU_JOINVIEW_TABLE));
@@ -758,7 +757,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
 
 OUString OTableWindow::getTitle() const
 {
-    return m_aTitle->GetText();
+    return m_xTitle->GetText();
 }
 
 void OTableWindow::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(::com::sun::star::uno::RuntimeException, std::exception)
