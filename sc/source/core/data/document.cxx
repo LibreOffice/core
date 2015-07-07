@@ -5647,18 +5647,81 @@ void ScDocument::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData
 
 void ScDocument::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
+    sc::AutoCalcSwitch aACSwitch(*this, false);
+
+    std::vector<ScAddress> aGroupPos;
+    // Destroy and reconstruct listeners only if content is affected.
+    bool bDelContent = ((nDelFlag & ~IDF_CONTENTS) != nDelFlag);
+    if (bDelContent)
+    {
+        // Record the positions of top and/or bottom formula groups that
+        // intersect the area borders.
+        sc::EndListeningContext aCxt(*this);
+        ScRangeList aRangeList;
+        rMark.FillRangeListWithMarks( &aRangeList, false);
+        for (size_t i = 0; i < aRangeList.size(); ++i)
+        {
+            const ScRange* pRange = aRangeList[i];
+            if (pRange)
+                EndListeningIntersectedGroups( aCxt, *pRange, &aGroupPos);
+        }
+        aCxt.purgeEmptyBroadcasters();
+    }
+
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && *itr < nMax; ++itr)
         if (maTabs[*itr])
             maTabs[*itr]->DeleteSelection(nDelFlag, rMark, bBroadcast);
+
+    if (bDelContent)
+    {
+        // Re-start listeners on those top bottom groups that have been split.
+        SetNeedsListeningGroups(aGroupPos);
+        StartNeededListeners();
+    }
 }
 
 void ScDocument::DeleteSelectionTab(
     SCTAB nTab, InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+    {
+        sc::AutoCalcSwitch aACSwitch(*this, false);
+
+        std::vector<ScAddress> aGroupPos;
+        // Destroy and reconstruct listeners only if content is affected.
+        bool bDelContent = ((nDelFlag & ~IDF_CONTENTS) != nDelFlag);
+        if (bDelContent)
+        {
+            // Record the positions of top and/or bottom formula groups that
+            // intersect the area borders.
+            sc::EndListeningContext aCxt(*this);
+            ScRangeList aRangeList;
+            rMark.FillRangeListWithMarks( &aRangeList, false);
+            for (size_t i = 0; i < aRangeList.size(); ++i)
+            {
+                const ScRange* pRange = aRangeList[i];
+                if (pRange && pRange->aStart.Tab() <= nTab && nTab <= pRange->aEnd.Tab())
+                {
+                    ScRange aRange( *pRange);
+                    aRange.aStart.SetTab( nTab);
+                    aRange.aEnd.SetTab( nTab);
+                    EndListeningIntersectedGroups( aCxt, aRange, &aGroupPos);
+                }
+            }
+            aCxt.purgeEmptyBroadcasters();
+        }
+
         maTabs[nTab]->DeleteSelection(nDelFlag, rMark, bBroadcast);
+
+        if (bDelContent)
+        {
+            // Re-start listeners on those top bottom groups that have been split.
+            SetNeedsListeningGroups(aGroupPos);
+            StartNeededListeners();
+        }
+    }
     else
     {
         OSL_FAIL("wrong table");
