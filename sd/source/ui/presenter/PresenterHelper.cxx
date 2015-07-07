@@ -73,10 +73,10 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
     sal_Bool bEnableParentClip)
     throw (css::uno::RuntimeException, std::exception)
 {
-    vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(rxParentWindow);
+    VclPtr<vcl::Window> pParentWindow(VCLUnoHelper::GetWindow(rxParentWindow));
 
     // Create a new window.
-    vcl::Window* pWindow = NULL;
+    VclPtr<vcl::Window> pWindow;
     if (bCreateSystemChildWindow)
     {
         pWindow = VclPtr<WorkWindow>::Create(pParentWindow, WB_SYSTEMCHILDWINDOW);
@@ -91,7 +91,7 @@ Reference<awt::XWindow> SAL_CALL PresenterHelper::createWindow (
     {
         // Make the frame window transparent and make the parent able to
         // draw behind it.
-        if (pParentWindow != NULL)
+        if (pParentWindow.get() != NULL)
             pParentWindow->EnableChildTransparentMode(true);
     }
 
