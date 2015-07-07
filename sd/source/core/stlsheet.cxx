@@ -773,6 +773,13 @@ void SAL_CALL SdStyleSheet::dispose(  ) throw (RuntimeException, std::exception)
 
 void SdStyleSheet::disposing()
 {
+    SolarMutexGuard aGuard;
+    if (bMySet)
+    {
+        delete pSet;
+    }
+    pSet = nullptr;
+    pPool = nullptr;
     mxPool.clear();
 }
 
