@@ -97,8 +97,8 @@ bool OQueryTableWindow::Init()
     SetAliasName(sAliasName);
         // SetAliasName passes it as WinName, hence it uses the base class
     // reset the title
-    m_aTitle->SetText( pWinData->GetWinName() );
-    m_aTitle->Show();
+    m_xTitle->SetText( pWinData->GetWinName() );
+    m_xTitle->Show();
 
     getTableView()->getDesignView()->getController().InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
     return bSuccess;
@@ -131,10 +131,10 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
     OSL_ENSURE(pInf != NULL, "OQueryTableWindow::OnEntryDoubleClicked : field doesn't have FieldInfo !");
 
     // build up DragInfo
-    OTableFieldDescRef aInfo = new OTableFieldDesc(GetTableName(),m_pListBox->GetEntryText(pEntry));
+    OTableFieldDescRef aInfo = new OTableFieldDesc(GetTableName(), m_xListBox->GetEntryText(pEntry));
     aInfo->SetTabWindow(this);
     aInfo->SetAlias(GetAliasName());
-    aInfo->SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
+    aInfo->SetFieldIndex(m_xListBox->GetModel()->GetAbsPos(pEntry));
     aInfo->SetDataType(pInf->GetDataType());
 
     // and insert corresponding field
@@ -143,13 +143,13 @@ void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
 
 bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDescRef& rInfo)
 {
-    OSL_ENSURE(m_pListBox != nullptr, "OQueryTableWindow::ExistsField : doesn't have ::com::sun::star::form::ListBox !");
+    OSL_ENSURE(m_xListBox != nullptr, "OQueryTableWindow::ExistsField : doesn't have ::com::sun::star::form::ListBox !");
     OSL_ENSURE(rInfo.is(),"OQueryTableWindow::ExistsField: invalid argument for OTableFieldDescRef!");
     Reference< XConnection> xConnection = getTableView()->getDesignView()->getController().getConnection();
     bool bExists = false;
     if(xConnection.is())
     {
-        SvTreeListEntry* pEntry = m_pListBox->First();
+        SvTreeListEntry* pEntry = m_xListBox->First();
         try
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
@@ -157,7 +157,7 @@ bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDes
 
             while (pEntry)
             {
-                if (bCase(strFieldName,OUString(m_pListBox->GetEntryText(pEntry))))
+                if (bCase(strFieldName,OUString(m_xListBox->GetEntryText(pEntry))))
                 {
                     OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
                     assert(pInf && "OQueryTableWindow::ExistsField : field doesn't have FieldInfo !");
@@ -166,12 +166,12 @@ bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDes
                     rInfo->SetField(strFieldName);
                     rInfo->SetTable(GetTableName());
                     rInfo->SetAlias(GetAliasName());
-                    rInfo->SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
+                    rInfo->SetFieldIndex(m_xListBox->GetModel()->GetAbsPos(pEntry));
                     rInfo->SetDataType(pInf->GetDataType());
                     bExists = true;
                     break;
                 }
-                pEntry = m_pListBox->Next(pEntry);
+                pEntry = m_xListBox->Next(pEntry);
             }
         }
         catch(SQLException&)
