@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_152c7249",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-07-07T07:00:12Z",
+      "side": 1,
+      "message": "s/no/not",
+      "revId": "b0dd45d845fa01156582159887eff40a65baa892",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
