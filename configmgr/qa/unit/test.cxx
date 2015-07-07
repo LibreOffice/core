@@ -28,11 +28,13 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -66,6 +68,7 @@ public:
     void testKeySet();
     void testKeyReset();
     void testSetSetMemberName();
+    void testInsertSetMember();
     void testReadCommands();
 #if 0
     void testThreads();
@@ -93,6 +96,7 @@ public:
     CPPUNIT_TEST(testKeySet);
     CPPUNIT_TEST(testKeyReset);
     CPPUNIT_TEST(testSetSetMemberName);
+    CPPUNIT_TEST(testInsertSetMember);
     CPPUNIT_TEST(testReadCommands);
 #if 0
     CPPUNIT_TEST(testThreads);
@@ -284,6 +288,39 @@ void Test::testSetSetMemberName()
             OUString("Label")) >>=
         s);
     CPPUNIT_ASSERT( s == "Fontwork Gallery..." );
+}
+
+void Test::testInsertSetMember() {
+    css::uno::Reference<css::container::XNameContainer> access(
+        createUpdateAccess(
+            "/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands"),
+        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::uno::XInterface> member;
+    member.set(
+        css::uno::Reference<css::lang::XSingleServiceFactory>(
+            access, css::uno::UNO_QUERY_THROW)->createInstance());
+    CPPUNIT_ASSERT(member.is());
+    access->insertByName("A", css::uno::makeAny(member));
+    member.set(
+        css::uno::Reference<css::lang::XSingleServiceFactory>(
+            access, css::uno::UNO_QUERY_THROW)->createInstance());
+    CPPUNIT_ASSERT(member.is());
+    try {
+        access->insertByName("", css::uno::makeAny(member));
+        CPPUNIT_FAIL("expected IllegalArgumentException");
+    } catch (css::lang::IllegalArgumentException &) {}
+    try {
+        access->insertByName("\x01", css::uno::makeAny(member));
+        CPPUNIT_FAIL("expected IllegalArgumentException");
+    } catch (css::lang::IllegalArgumentException &) {}
+    try {
+        access->insertByName("a/b", css::uno::makeAny(member));
+        CPPUNIT_FAIL("expected IllegalArgumentException");
+    } catch (css::lang::IllegalArgumentException &) {}
+    css::uno::Reference<css::util::XChangesBatch>(
+        access, css::uno::UNO_QUERY_THROW)->commitChanges();
+    css::uno::Reference<css::lang::XComponent>(
+        access, css::uno::UNO_QUERY_THROW)->dispose();
 }
 
 void Test::testReadCommands()

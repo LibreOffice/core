@@ -76,6 +76,7 @@
 #include <cppuhelper/weak.hxx>
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
+#include <rtl/character.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
@@ -102,6 +103,26 @@
 #include "type.hxx"
 
 namespace configmgr {
+
+namespace {
+
+// Conservatively forbid what is either not an XML Char (including lone
+// surrogates, even though they should not appear in well-formed UNO OUString
+// instances anyway), or is a slash (as it causes problems in path syntax):
+bool isValidName(OUString const & name) {
+    for (sal_Int32 i = 0; i != name.getLength();) {
+        sal_uInt32 c = name.iterateCodePoints(&i);
+        if ((c < 0x20 && !(c == 0x09 || c == 0x0A || c == 0x0D))
+            || rtl::isHighSurrogate(c) || rtl::isLowSurrogate(c) || c == 0xFFFE
+            || c == 0xFFFF || c == '/')
+        {
+            return false;
+        }
+    }
+    return !name.isEmpty();
+}
+
+}
 
 oslInterlockedCount Access::acquireCounting() {
     return osl_atomic_increment(&m_refCount);
@@ -648,6 +669,10 @@ void Access::setName(OUString const & aName)
                         if (node->getMandatory() == Data::NO_LAYER &&
                             !(other.is() && other->isFinalized()))
                         {
+                            if (!isValidName(aName)) {
+                                throw css::uno::RuntimeException(
+                                    "invalid element name " + aName);
+                            }
                             rtl::Reference< RootAccess > root(getRootAccess());
                             rtl::Reference< ChildAccess > childAccess(
                                 static_cast< ChildAccess * >(this));
@@ -1163,10 +1188,18 @@ void Access::insertByName(
         Modifications localMods;
         switch (getNode()->kind()) {
         case Node::KIND_LOCALIZED_PROPERTY:
+            if (!isValidName(aName)) {
+                throw css::lang::IllegalArgumentException(
+                    aName, static_cast<cppu::OWeakObject *>(this), 0);
+            }
             insertLocalizedValueChild(aName, aElement, &localMods);
             break;
         case Node::KIND_GROUP:
             {
+                if (!isValidName(aName)) {
+                    throw css::lang::IllegalArgumentException(
+                        aName, static_cast<cppu::OWeakObject *>(this), 0);
+                }
                 checkValue(aElement, TYPE_ANY, true);
                 rtl::Reference< ChildAccess > child(
                     new ChildAccess(
@@ -1179,6 +1212,10 @@ void Access::insertByName(
             break;
         case Node::KIND_SET:
             {
+                if (!isValidName(aName)) {
+                    throw css::lang::IllegalArgumentException(
+                        aName, static_cast<cppu::OWeakObject *>(this), 0);
+                }
                 rtl::Reference< ChildAccess > freeAcc(
                     getFreeSetMember(aElement));
                 freeAcc->bind(getRootAccess(), this, aName); // must not throw
