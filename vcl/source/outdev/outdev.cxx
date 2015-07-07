@@ -433,29 +433,6 @@ sal_uLong OutputDevice::GetColorCount() const
     return( ( nBitCount > 31 ) ? ULONG_MAX : ( ( (sal_uLong) 1 ) << nBitCount) );
 }
 
-css::uno::Reference< css::rendering::XCanvas > OutputDevice::GetCanvas() const
-{
-    css::uno::Sequence< css::uno::Any > aArg(6);
-
-    aArg[ 0 ] = css::uno::makeAny( reinterpret_cast<sal_Int64>(this) );
-    aArg[ 2 ] = css::uno::makeAny( css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
-    aArg[ 3 ] = css::uno::makeAny( sal_False );
-    aArg[ 5 ] = GetSystemGfxDataAny();
-
-    css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
-
-    // Create canvas instance with window handle
-    static css::uno::Reference<css::lang::XMultiComponentFactory > xCanvasFactory( css::rendering::CanvasFactory::create( xContext ) );
-
-    css::uno::Reference<css::rendering::XCanvas> xCanvas;
-    xCanvas.set(
-        xCanvasFactory->createInstanceWithArgumentsAndContext(
-            "com.sun.star.rendering.Canvas", aArg, xContext ),
-        css::uno::UNO_QUERY );
-
-    return xCanvas;
-}
-
 css::uno::Reference< css::awt::XGraphics > OutputDevice::CreateUnoGraphics()
 {
     UnoWrapperBase* pWrapper = Application::GetUnoWrapper();

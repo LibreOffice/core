@@ -43,14 +43,11 @@ public:
     bool        operator==( const AlphaMask& rAlphaMask ) const { return Bitmap::operator==( rAlphaMask ); }
     bool        operator!=( const AlphaMask& rAlphaMask ) const { return Bitmap::operator!=( rAlphaMask ); }
 
-    const       MapMode&  GetPrefMapMode() const { return Bitmap::GetPrefMapMode(); }
     void        SetPrefMapMode( const MapMode& rMapMode ) { Bitmap::SetPrefMapMode( rMapMode ); }
 
-    const       Size& GetPrefSize() const { return Bitmap::GetPrefSize(); }
     void        SetPrefSize( const Size& rSize ) { Bitmap::SetPrefSize( rSize ); }
 
     Size        GetSizePixel() const { return Bitmap::GetSizePixel(); }
-    sal_uLong   GetSizeBytes() const { return Bitmap::GetSizeBytes(); }
 
     sal_uLong   GetChecksum() const { return Bitmap::GetChecksum(); }
 

@@ -1578,7 +1578,7 @@ public:
     HandleSwipeEvent(vcl::Window *pWindow, const SalSwipeEvent& rEvt)
         : HandleGestureEvent(pWindow, Point(rEvt.mnX, rEvt.mnY))
     {
-        m_aSwipeData = CommandSwipeData(rEvt.mnVelocityX, rEvt.mnVelocityY);
+        m_aSwipeData = CommandSwipeData(rEvt.mnVelocityX);
     }
     virtual bool CallCommand(vcl::Window *pWindow, const Point &/*rMousePos*/) SAL_OVERRIDE
     {

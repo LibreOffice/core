@@ -75,8 +75,6 @@ public:
 
     bool            GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
 
-    bool            Crop( const Rectangle& rRectPixel ) SAL_OVERRIDE;
-    bool            Erase( const Color& rFillColor ) SAL_OVERRIDE;
     bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) SAL_OVERRIDE;
     bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) SAL_OVERRIDE;
 

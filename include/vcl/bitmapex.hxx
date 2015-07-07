@@ -77,8 +77,6 @@ public:
     Bitmap              GetBitmap( const Color* pTransReplaceColor = NULL ) const;
     Bitmap              GetMask() const;
 
-    BitmapEx            GetColorTransformedBitmapEx() const;
-
     bool                IsAlpha() const;
     AlphaMask           GetAlpha() const;
 
@@ -92,7 +90,6 @@ public:
     void                SetPrefMapMode( const MapMode& rPrefMapMode ) { aBitmap.SetPrefMapMode( rPrefMapMode ); }
 
     const Color&        GetTransparentColor() const { return aTransparentColor; }
-    void                SetTransparentColor( const Color& rColor ) { aTransparentColor = rColor; }
 
     sal_uInt16          GetBitCount() const { return aBitmap.GetBitCount(); }
     sal_uLong           GetSizeBytes() const;

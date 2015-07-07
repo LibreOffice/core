@@ -61,7 +61,6 @@ public:
                         maFont( rFont )
                     { mnOptions = nOptions; }
 
-    void            SetFont( const vcl::Font& rFont ) { maFont = rFont; }
     const vcl::Font& GetFont() const { return maFont; }
 
     void              SetOptions( InputContextFlags nOptions ) { mnOptions = nOptions; }

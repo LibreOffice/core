@@ -59,8 +59,6 @@ public:
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) = 0;
     virtual bool            GetSystemData( BitmapSystemData& rData ) = 0;
 
-    virtual bool            Crop( const Rectangle& rRectPixel ) = 0;
-    virtual bool            Erase( const Color& rFillColor ) = 0;
     virtual bool            Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag nScaleFlag ) = 0;
     virtual bool            Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol ) = 0;
 };

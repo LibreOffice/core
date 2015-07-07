@@ -151,8 +151,7 @@ public:
     sal_uInt32          GetUserId() const { return mnUserId; }
 
     sal_uInt32          GetDataSize() const { return mnBufSize;}
-    void                SetData( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, bool bOwns );
-    const sal_uInt8*            GetData() const;
+    const sal_uInt8*    GetData() const;
 
     const Size&         GetPrefSize() const { return mpImpData->maPrefSize;}
     void                SetPrefSize( const Size& rPrefSize );
@@ -163,7 +162,6 @@ public:
     bool                IsPrefMapModeValid() { return mpImpData->mbPrefMapModeValid;}
 
     bool                IsNative() const;
-    bool                IsUser() const { return( GFX_LINK_TYPE_USER == meType ); }
 
     bool                LoadNative( Graphic& rGraphic );
 

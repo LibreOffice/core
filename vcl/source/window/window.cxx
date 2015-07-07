@@ -3433,11 +3433,6 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlig
     DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, bDrawExtBorderOnly, 0, NULL, NULL );
 }
 
-void Window::DrawSelectionBackground( const Rectangle& rRect, sal_uInt16 highlight, bool bChecked, bool bDrawBorder, bool bDrawExtBorderOnly, Color* pSelectionTextColor )
-{
-    DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, bDrawExtBorderOnly, 0, pSelectionTextColor, NULL );
-}
-
 void Window::DrawSelectionBackground( const Rectangle& rRect,
                                       sal_uInt16 highlight,
                                       bool bChecked,
@@ -3872,45 +3867,6 @@ void Window::ApplySettings(vcl::RenderContext& /*rRenderContext*/)
 {
 }
 
-void Window::DrawGradientWallpaper(vcl::RenderContext& rRenderContext,
-                                   long nX, long nY, long nWidth, long nHeight,
-                                   const Wallpaper& rWallpaper)
-{
-    Rectangle aBound;
-    GDIMetaFile* pOldMetaFile = mpMetaFile;
-    const bool bOldMap = mbMap;
-    bool bNeedGradient = true;
-
-    aBound = Rectangle(Point(nX, nY), Size(nWidth, nHeight));
-
-    mpMetaFile = NULL;
-    rRenderContext.EnableMapMode(false);
-    rRenderContext.Push(PushFlags::CLIPREGION);
-    rRenderContext.IntersectClipRegion(Rectangle(Point(nX, nY), Size(nWidth, nHeight)));
-
-    if (rWallpaper.GetStyle() == WALLPAPER_APPLICATIONGRADIENT)
-    {
-        // limit gradient to useful size, so that it still can be noticed
-        // in maximized windows
-        long gradientWidth = GetDesktopRectPixel().GetSize().Width();
-        if (gradientWidth > 1024)
-            gradientWidth = 1024;
-        if (mnOutOffX + nWidth > gradientWidth)
-            rRenderContext.DrawColorWallpaper(nX, nY, nWidth, nHeight, rWallpaper.GetGradient().GetEndColor());
-        if (mnOutOffX > gradientWidth)
-            bNeedGradient = false;
-        else
-            aBound = Rectangle(Point(-mnOutOffX, nY), Size(gradientWidth, nHeight));
-    }
-
-    if (bNeedGradient)
-        rRenderContext.DrawGradient(aBound, rWallpaper.GetGradient());
-
-    rRenderContext.Pop();
-    rRenderContext.EnableMapMode(bOldMap);
-    mpMetaFile = pOldMetaFile;
-}
-
 const SystemEnvData* Window::GetSystemData() const
 {
 
@@ -3929,19 +3885,9 @@ Any Window::GetSystemDataAny() const
     return aRet;
 }
 
-vcl::RenderSettings& Window::GetRenderSettings()
-{
-    return mpWindowImpl->maRenderSettings;
-}
-
 bool Window::SupportsDoubleBuffering() const
 {
     return mpWindowImpl->mbDoubleBuffering;
-}
-
-void Window::SetDoubleBuffering(bool bDoubleBuffering)
-{
-    mpWindowImpl->mbDoubleBuffering = bDoubleBuffering;
 }
 
 /*

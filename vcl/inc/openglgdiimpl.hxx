@@ -83,7 +83,6 @@ public:
 
     void DrawPoint( long nX, long nY );
     void DrawLine( double nX1, double nY1, double nX2, double nY2 );
-    void DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose );
     void DrawLineAA( double nX1, double nY1, double nX2, double nY2 );
     void DrawLinesAA( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose );
     void DrawEdgeAA( double nX1, double nY1, double nX2, double nY2 );

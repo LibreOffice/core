@@ -137,18 +137,25 @@ static bool isStandardStuff(const std::string& s)
           || startsWith(s, "(anonymous namespace)::");
 }
 
+// prevent recursive templates from blowing up the stack
+static std::set<std::string> traversedTemplateFunctionSet;
+
 bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 {
     if (ignoreLocation(expr)) {
         return true;
     }
     FunctionDecl* calleeFunctionDecl = expr->getDirectCallee();
-    // if we see a call to a templated method, it effectively instantiates a new method,
-    // so we need to examine it's interior to see if it in turn calls anything else
-    if (calleeFunctionDecl->getTemplatedKind() != clang::FunctionDecl::TemplatedKind::TK_NonTemplate
+    if (calleeFunctionDecl == nullptr) {
+        return true;
+    }
+    // if we see a call to a templated function, it effectively creates new code,
+    // so we need to examine it's interior to see if it, in turn, calls anything else
+    if (calleeFunctionDecl->getTemplatedKind() != FunctionDecl::TemplatedKind::TK_NonTemplate
         || calleeFunctionDecl->isFunctionTemplateSpecialization())
     {
-        TraverseFunctionDecl(calleeFunctionDecl);
+        if (traversedTemplateFunctionSet.insert(calleeFunctionDecl->getQualifiedNameAsString()).second)
+            TraverseFunctionDecl(calleeFunctionDecl);
     }
 
     CXXMethodDecl* calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(calleeFunctionDecl);

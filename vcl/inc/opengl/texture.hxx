@@ -69,7 +69,6 @@ public:
 
     void            Bind();
     void            Unbind();
-    bool            Draw();
     void            Read( GLenum nFormat, GLenum nType, sal_uInt8* pData );
 
     GLenum          GetFilter() const;

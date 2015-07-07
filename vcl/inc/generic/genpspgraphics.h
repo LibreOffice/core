@@ -173,9 +173,6 @@ public:
                                         const SalBitmap& rSalBitmap ) SAL_OVERRIDE;
     virtual void            drawBitmap( const SalTwoRect& rPosAry,
                                         const SalBitmap& rSalBitmap,
-                                        SalColor nTransparentColor ) SAL_OVERRIDE;
-    virtual void            drawBitmap( const SalTwoRect& rPosAry,
-                                        const SalBitmap& rSalBitmap,
                                         const SalBitmap& rTransparentBitmap ) SAL_OVERRIDE;
     virtual void            drawMask( const SalTwoRect& rPosAry,
                                       const SalBitmap& rSalBitmap,

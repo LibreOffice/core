@@ -1054,14 +1054,6 @@ tools::PolyPolygon OutputDevice::LogicToPixel( const tools::PolyPolygon& rLogicP
     return aPolyPoly;
 }
 
-basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogicPoly ) const
-{
-    basegfx::B2DPolygon aTransformedPoly = rLogicPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
-    aTransformedPoly.transform( rTransformationMatrix );
-    return aTransformedPoly;
-}
-
 basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const
 {
     basegfx::B2DPolyPolygon aTransformedPoly = rLogicPolyPoly;
@@ -1229,49 +1221,6 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygo
     const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation( rMapMode );
     aTransformedPoly.transform( rTransformationMatrix );
     return aTransformedPoly;
-}
-
-basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
-                                                const MapMode& rMapMode ) const
-{
-    basegfx::B2DPolygon aTransformedPoly = rLogicPoly;
-    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation( rMapMode );
-    aTransformedPoly.transform( rTransformationMatrix );
-    return aTransformedPoly;
-}
-
-vcl::Region OutputDevice::LogicToPixel( const vcl::Region& rLogicRegion, const MapMode& rMapMode ) const
-{
-
-    if(rMapMode.IsDefault() || rLogicRegion.IsNull() || rLogicRegion.IsEmpty())
-    {
-        return rLogicRegion;
-    }
-
-    vcl::Region aRegion;
-
-    if(rLogicRegion.getB2DPolyPolygon())
-    {
-        aRegion = vcl::Region(LogicToPixel(*rLogicRegion.getB2DPolyPolygon(), rMapMode));
-    }
-    else if(rLogicRegion.getPolyPolygon())
-    {
-        aRegion = vcl::Region(LogicToPixel(*rLogicRegion.getPolyPolygon(), rMapMode));
-    }
-    else if(rLogicRegion.getRegionBand())
-    {
-        RectangleVector aRectangles;
-        rLogicRegion.GetRegionRectangles(aRectangles);
-        const RectangleVector& rRectangles(aRectangles); // needed to make the '!=' work
-
-        // make reverse run to fill new region bottom-up, this will speed it up due to the used data structuring
-        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); ++aRectIter)
-        {
-            aRegion.Union(LogicToPixel(*aRectIter, rMapMode));
-        }
-    }
-
-    return aRegion;
 }
 
 Point OutputDevice::PixelToLogic( const Point& rDevicePt ) const
@@ -1547,40 +1496,6 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
     const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation( rMapMode );
     aTransformedPoly.transform( rTransformationMatrix );
     return aTransformedPoly;
-}
-
-vcl::Region OutputDevice::PixelToLogic( const vcl::Region& rDeviceRegion, const MapMode& rMapMode ) const
-{
-
-    if(rMapMode.IsDefault() || rDeviceRegion.IsNull() || rDeviceRegion.IsEmpty())
-    {
-        return rDeviceRegion;
-    }
-
-    vcl::Region aRegion;
-
-    if(rDeviceRegion.getB2DPolyPolygon())
-    {
-        aRegion = vcl::Region(PixelToLogic(*rDeviceRegion.getB2DPolyPolygon(), rMapMode));
-    }
-    else if(rDeviceRegion.getPolyPolygon())
-    {
-        aRegion = vcl::Region(PixelToLogic(*rDeviceRegion.getPolyPolygon(), rMapMode));
-    }
-    else if(rDeviceRegion.getRegionBand())
-    {
-        RectangleVector aRectangles;
-        rDeviceRegion.GetRegionRectangles(aRectangles);
-        const RectangleVector& rRectangles(aRectangles); // needed to make the '!=' work
-
-        // make reverse run to fill new region bottom-up, this will speed it up due to the used data structuring
-        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); ++aRectIter)
-        {
-            aRegion.Union(PixelToLogic(*aRectIter, rMapMode));
-        }
-    }
-
-    return aRegion;
 }
 
 #define ENTER1( rSource, pMapModeSource, pMapModeDest )                 \

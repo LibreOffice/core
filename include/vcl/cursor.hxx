@@ -75,7 +75,6 @@ public:
     bool            IsVisible() const { return mbVisible; }
 
     void            SetWindow( vcl::Window* pWindow );
-    vcl::Window*         GetWindow() const { return mpWindow; }
 
     void            SetPos( const Point& rNewPos );
     const Point&    GetPos() const { return maPos; }
@@ -86,13 +85,9 @@ public:
     long            GetWidth() const { return maSize.Width(); }
     long            GetHeight() const { return maSize.Height(); }
 
-    long            GetSlant() const { return mnSlant; }
-
     void            SetOrientation( short nOrientation = 0 );
-    short           GetOrientation() const { return mnOrientation; }
 
     void            SetDirection( CursorDirection nDirection = CursorDirection::NONE );
-    CursorDirection GetDirection() const { return mnDirection; }
 
     Cursor&         operator=( const Cursor& rCursor );
     bool            operator==( const Cursor& rCursor ) const;
