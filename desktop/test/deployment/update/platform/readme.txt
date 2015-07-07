@@ -7,7 +7,9 @@ linux_arm_eabi.oxt: linux_arm_eabi
 linux_arm_oabi.oxt: linux_arm_oabi
 linux_ia64.oxt: linux_ia64
 linux_mips_eb.oxt: linux_mips_eb
+linux_mips64_eb.oxt: linux_mips64_eb
 linux_mips_el.oxt: linux_mips_el
+linux_mips64_el.oxt: linux_mips64_el
 linux_powerpc64.oxt: linux_powerpc64
 linux_powerpc.oxt: linux_powerpc
 linux_s390.oxt: linux_s390
