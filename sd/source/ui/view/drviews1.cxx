@@ -365,7 +365,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         bool bShowMasterViewToolbar (meEditMode == EM_MASTERPAGE
              && GetShellType() != ViewShell::ST_HANDOUT);
         bool bShowPresentationToolbar (meEditMode != EM_MASTERPAGE
-             && GetShellType() != ViewShell::ST_HANDOUT);
+             && GetShellType() != ViewShell::ST_HANDOUT
+             && GetShellType() != ViewShell::ST_DRAW);
 
         // If the master view toolbar is not shown we hide it before
         // switching the edit mode.
