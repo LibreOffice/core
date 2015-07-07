@@ -20,6 +20,8 @@
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 
 class LifecycleTest : public test::BootstrapFixture
 {
@@ -37,6 +39,7 @@ public:
     void testPostDispose();
     void testFocus();
     void testLeakage();
+    void testToolkit();
 
     CPPUNIT_TEST_SUITE(LifecycleTest);
     CPPUNIT_TEST(testCast);
@@ -48,6 +51,7 @@ public:
     CPPUNIT_TEST(testPostDispose);
     CPPUNIT_TEST(testFocus);
     CPPUNIT_TEST(testLeakage);
+    CPPUNIT_TEST(testToolkit);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -287,6 +291,28 @@ void LifecycleTest::testLeakage()
 
     for (auto i = aObjects.begin(); i != aObjects.end(); ++i)
         delete *i;
+}
+
+void LifecycleTest::testToolkit()
+{
+    LeakTestObject *pVclWin = LeakTestObject::Create<WorkWindow>(nullptr, WB_APP|WB_STDWORK);
+    css::uno::Reference<css::awt::XWindow> xWindow(pVclWin->getRef()->GetComponentInterface(), css::uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xWindow.is());
+
+    // test UNO dispose
+    css::uno::Reference<css::lang::XComponent> xWinComponent(xWindow, css::uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xWinComponent.is());
+    CPPUNIT_ASSERT(!pVclWin->getRef()->IsDisposed());
+    xWinComponent->dispose();
+    CPPUNIT_ASSERT(pVclWin->getRef()->IsDisposed());
+
+    // test UNO cleanup
+    xWinComponent.clear();
+    xWindow.clear();
+    pVclWin->disposeAndClear();
+    pVclWin->assertDeleted();
+
+    delete pVclWin;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LifecycleTest);
