@@ -641,13 +641,6 @@ void OpenGLSalGraphicsImpl::ImplDrawLineAA( double nX1, double nY1, double nX2, 
     CHECK_GL_ERROR();
 }
 
-void OpenGLSalGraphicsImpl::DrawLines( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose )
-{
-    for( int i = 0; i < int(nPoints) - 1; ++i )
-        DrawLine( pPtAry[ i ].mnX, pPtAry[ i ].mnY, pPtAry[ i + 1 ].mnX, pPtAry[ i + 1 ].mnY );
-    if( bClose )
-        DrawLine( pPtAry[ nPoints - 1 ].mnX, pPtAry[ nPoints - 1 ].mnY, pPtAry[ 0 ].mnX, pPtAry[ 0 ].mnY );
-}
 
 void OpenGLSalGraphicsImpl::DrawLinesAA( sal_uInt32 nPoints, const SalPoint* pPtAry, bool bClose )
 {

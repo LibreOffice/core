@@ -62,19 +62,10 @@ public:
 
     const OUString&     GetText() const { return maText; }
     const sal_uInt16*   GetTextAttr() const { return mpTextAttr; }
-    sal_uInt16          GetCharTextAttr(sal_Int32 nIndex) const
-    {
-        assert(nIndex >= 0);
-        if (mpTextAttr && nIndex < maText.getLength() && nIndex >=0)
-            return mpTextAttr[nIndex];
-        else
-            return 0;
-    }
 
     sal_Int32           GetCursorPos() const { return mnCursorPos; }
     bool                IsCursorVisible() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_INVISIBLE) == 0; }
     bool                IsCursorOverwrite() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_OVERWRITE) != 0; }
-    sal_uInt16          GetCursorFlags() const { return mnCursorFlags; }
     bool                IsOnlyCursorChanged() const { return mbOnlyCursor; }
 };
 
@@ -90,8 +81,6 @@ private:
 public:
                     CommandInputContextData();
                     CommandInputContextData( LanguageType eLang );
-
-    LanguageType    GetLanguage() const { return meLanguage; }
 };
 
 inline CommandInputContextData::CommandInputContextData()
@@ -154,8 +143,6 @@ public:
                         { return ((mnCode & KEY_MOD1) != 0); }
     bool            IsMod2() const
                         { return ((mnCode & KEY_MOD2) != 0); }
-    bool            IsMod3() const
-                        { return ((mnCode & KEY_MOD3) != 0); }
 };
 
 inline CommandWheelData::CommandWheelData()
@@ -226,20 +213,10 @@ public:
                     CommandModKeyData();
                     CommandModKeyData( sal_uInt16 nCode );
 
-    bool            IsShift()   const { return (mnCode & MODKEY_SHIFT) != 0; }
     bool            IsMod1()    const { return (mnCode & MODKEY_MOD1) != 0; }
     bool            IsMod2()    const { return (mnCode & MODKEY_MOD2) != 0; }
-    bool            IsMod3()    const { return (mnCode & MODKEY_MOD3) != 0; }
-
     bool            IsLeftShift() const { return (mnCode & MODKEY_LSHIFT) != 0; }
-    bool            IsLeftMod1()  const { return (mnCode & MODKEY_LMOD1) != 0; }
-    bool            IsLeftMod2()  const { return (mnCode & MODKEY_LMOD2) != 0; }
-    bool            IsLeftMod3()  const { return (mnCode & MODKEY_LMOD3) != 0; }
-
     bool            IsRightShift() const { return (mnCode & MODKEY_RSHIFT) != 0; }
-    bool            IsRightMod1()  const { return (mnCode & MODKEY_RMOD1) != 0; }
-    bool            IsRightMod2()  const { return (mnCode & MODKEY_RMOD2) != 0; }
-    bool            IsRightMod3()  const { return (mnCode & MODKEY_RMOD3) != 0; }
 };
 
 inline CommandModKeyData::CommandModKeyData()
@@ -345,20 +322,16 @@ inline CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart,
 class VCL_DLLPUBLIC CommandSwipeData
 {
     double mnVelocityX;
-    double mnVelocityY;
 public:
     CommandSwipeData()
         : mnVelocityX(0)
-        , mnVelocityY(0)
     {
     }
-    CommandSwipeData(double nVelocityX, double nVelocityY)
+    CommandSwipeData(double nVelocityX)
         : mnVelocityX(nVelocityX)
-        , mnVelocityY(nVelocityY)
     {
     }
     double getVelocityX() const { return mnVelocityX; }
-    double getVelocityY() const { return mnVelocityY; }
 };
 
 class VCL_DLLPUBLIC CommandLongPressData
@@ -427,7 +400,6 @@ public:
     void*                               GetEventData() const { return mpData; }
 
     const CommandExtTextInputData*      GetExtTextInputData() const;
-    const CommandInputContextData*      GetInputContextChangeData() const;
     const CommandWheelData*             GetWheelData() const;
     const CommandScrollData*            GetAutoScrollData() const;
     const CommandModKeyData*            GetModKeyData() const;
@@ -458,14 +430,6 @@ inline const CommandExtTextInputData* CommandEvent::GetExtTextInputData() const
 {
     if ( mnCommand == CommandEventId::ExtTextInput )
         return static_cast<const CommandExtTextInputData*>(mpData);
-    else
-        return NULL;
-}
-
-inline const CommandInputContextData* CommandEvent::GetInputContextChangeData() const
-{
-    if ( mnCommand == CommandEventId::InputContextChange )
-        return static_cast<const CommandInputContextData*>(mpData);
     else
         return NULL;
 }

@@ -757,12 +757,6 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rS
     DBG_DRAW_OPERATION_EXIT("drawBitmap");
 }
 
-void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,SalColor )
-{
-    OSL_FAIL("not implemented for color masking!");
-    drawBitmap( rPosAry, rSalBitmap );
-}
-
 void AquaSalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap,
                                   const SalBitmap& rTransparentBitmap )
 {

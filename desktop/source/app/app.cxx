@@ -1253,7 +1253,6 @@ void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
     HandleAppEvent( rAppEvent );
 }
 
-
 struct ExecuteGlobals
 {
     Reference < css::document::XDocumentEventListener > xGlobalBroadcaster;

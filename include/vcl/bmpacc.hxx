@@ -42,8 +42,6 @@ public:
 
     inline long Width() const;
     inline long Height() const;
-    inline Point TopLeft() const;
-    inline Point BottomRight() const;
 
     inline bool  IsTopDown() const;
     inline bool  IsBottomUp() const;
@@ -61,7 +59,6 @@ public:
     inline const BitmapColor& GetBestPaletteColor(const BitmapColor& rBitmapColor) const;
     sal_uInt16 GetBestPaletteIndex(const BitmapColor& rBitmapColor) const;
 
-    inline bool                 HasColorMask() const;
     inline ColorMask&           GetColorMask() const;
 
 private:
@@ -253,16 +250,6 @@ inline long BitmapInfoAccess::Height() const
     return mpBuffer ? mpBuffer->mnHeight : 0L;
 }
 
-inline Point BitmapInfoAccess::TopLeft() const
-{
-    return Point();
-}
-
-inline Point BitmapInfoAccess::BottomRight() const
-{
-    return Point(Width() - 1L, Height() - 1L);
-}
-
 inline bool BitmapInfoAccess::IsTopDown() const
 {
     assert(mpBuffer && "Access is not valid!");
@@ -338,18 +325,7 @@ inline const BitmapColor& BitmapInfoAccess::GetBestPaletteColor(const BitmapColo
     return GetPaletteColor(GetBestPaletteIndex(rBitmapColor));
 }
 
-inline bool BitmapInfoAccess::HasColorMask() const
-{
-    assert(mpBuffer && "Access is not valid!");
 
-    const sal_uLong nFormat = BMP_SCANLINE_FORMAT(mpBuffer->mnFormat);
-
-    return nFormat == BMP_FORMAT_8BIT_TC_MASK  ||
-           nFormat == BMP_FORMAT_16BIT_TC_MSB_MASK ||
-           nFormat == BMP_FORMAT_16BIT_TC_LSB_MASK ||
-           nFormat == BMP_FORMAT_24BIT_TC_MASK ||
-           nFormat == BMP_FORMAT_32BIT_TC_MASK;
-}
 
 inline ColorMask& BitmapInfoAccess::GetColorMask() const
 {
