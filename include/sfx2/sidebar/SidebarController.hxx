@@ -89,6 +89,10 @@ public:
     static SidebarController* GetSidebarControllerForFrame (
         const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
+    static void registerSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xFrame);
+
+    static void unregisterSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xFrame);
+
     // ui::XContextChangeEventListener
     virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

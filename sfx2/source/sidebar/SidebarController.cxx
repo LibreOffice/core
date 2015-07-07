@@ -124,15 +124,7 @@ SidebarController::SidebarController (
     // Decks and panel collections for this sidebar
     mpResourceManager = std::unique_ptr<ResourceManager>(new ResourceManager());
 
-    // Listen for context change events.
-    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
-        css::ui::ContextChangeEventMultiplexer::get(
-            ::comphelper::getProcessComponentContext()));
-    if (xMultiplexer.is())
-        xMultiplexer->addContextChangeEventListener(
-            static_cast<css::ui::XContextChangeEventListener*>(this),
-            mxFrame->getController());
-
+    registerSidebarForFrame(this, mxFrame->getController());
     // Listen for window events.
     mpParentWindow->AddEventListener(LINK(this, SidebarController, WindowEventHandler));
 
@@ -149,12 +141,6 @@ SidebarController::SidebarController (
         mxReadOnlyModeDispatch->addStatusListener(this, aURL);
 
     SwitchToDeck(gsDefaultDeckId);
-
-    WeakReference<SidebarController> xWeakController (this);
-    maSidebarControllerContainer.insert(
-        SidebarControllerContainer::value_type(
-            rxFrame->getController(),
-            xWeakController));
 }
 
 SidebarController::~SidebarController()
@@ -173,6 +159,39 @@ SidebarController* SidebarController::GetSidebarControllerForFrame (
         return NULL;
 
     return dynamic_cast<SidebarController*>(xController.get());
+}
+
+void SidebarController::registerSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xController)
+{
+    // Listen for context change events.
+    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+        css::ui::ContextChangeEventMultiplexer::get(
+            ::comphelper::getProcessComponentContext()));
+    if (xMultiplexer.is())
+        xMultiplexer->addContextChangeEventListener(
+            static_cast<css::ui::XContextChangeEventListener*>(pController),
+            xController);
+
+    WeakReference<SidebarController> xWeakController (pController);
+    maSidebarControllerContainer.insert(
+        SidebarControllerContainer::value_type(
+            xController,
+            xWeakController));
+}
+
+void SidebarController::unregisterSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xController)
+{
+    SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(xController));
+    if (iEntry != maSidebarControllerContainer.end())
+        maSidebarControllerContainer.erase(iEntry);
+
+    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+        css::ui::ContextChangeEventMultiplexer::get(
+            ::comphelper::getProcessComponentContext()));
+    if (xMultiplexer.is())
+        xMultiplexer->removeContextChangeEventListener(
+            static_cast<css::ui::XContextChangeEventListener*>(pController),
+            xController);
 }
 
 void SAL_CALL SidebarController::disposing()
