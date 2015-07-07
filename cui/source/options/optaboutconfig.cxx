@@ -872,7 +872,7 @@ void CuiAboutConfigTabPage::InsertEntry( SvTreeListEntry *pEntry)
         OUString sParentName = sPath.copy(prevIndex+1, index - prevIndex - 1);
 
         bool hasEntry = false;
-        for(pParentEntry = m_pPrefBox->FirstChild(pGrandParentEntry); pParentEntry != nullptr; pParentEntry = m_pPrefBox->NextSibling(pParentEntry))
+        for(pParentEntry = m_pPrefBox->FirstChild(pGrandParentEntry); pParentEntry != nullptr; pParentEntry = SvTreeListBox::NextSibling(pParentEntry))
             if(static_cast< SvLBoxString& >(pParentEntry->GetItem(1)).GetText() == sParentName)
             {
                 hasEntry = true;
