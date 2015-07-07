@@ -377,7 +377,9 @@ public:
     void                SetSize( const Size& rSize );
     inline Size         GetSize() const;
 
+    /// Returns the difference between right and left, assuming the range is inclusive.
     inline long         GetWidth() const;
+    /// Returns the difference between bottom and top, assuming the range is inclusive.
     inline long         GetHeight() const;
 
     Rectangle&          Union( const Rectangle& rRect );
@@ -409,7 +411,9 @@ public:
     // ONE
     long                getX() const { return nLeft; }
     long                getY() const { return nTop; }
+    /// Returns the difference between right and left, assuming the range includes one end, but not the other.
     long                getWidth() const { return nRight - nLeft; }
+    /// Returns the difference between bottom and top, assuming the range includes one end, but not the other.
     long                getHeight() const { return nBottom - nTop; }
     void                setX( long n ) { nRight += n-nLeft; nLeft = n; }
     void                setY( long n ) { nBottom += n-nTop; nTop = n; }
