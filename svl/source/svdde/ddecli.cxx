@@ -29,20 +29,27 @@
 #include <tools/solarmutex.hxx>
 #include <osl/mutex.hxx>
 
+namespace {
+
+DdeInstData * theDdeInstData;
+
+}
+
+DdeInstData* ImpGetInstData()
+{
+    return theDdeInstData;
+}
+
 DdeInstData* ImpInitInstData()
 {
-    DdeInstData* pData = new DdeInstData;
-
-    DdeInstData** ppInst = (DdeInstData**)GetAppData( SHL_SVDDE );
-    *ppInst = pData;
-    return pData;
+    theDdeInstData = new DdeInstData;
+    return theDdeInstData;
 }
 
 void ImpDeinitInstData()
 {
-    DdeInstData** ppInst = (DdeInstData**)GetAppData( SHL_SVDDE );
-    delete (*ppInst);
-    *ppInst = 0;
+    delete theDdeInstData;
+    theDdeInstData = 0;
 }
 
 

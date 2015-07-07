@@ -33,7 +33,7 @@
 // 6 (SHL_TOOLS) removed
 // 7 (SHL_SV) removed
 // 8 (SHL_SVT) removed
-#define SHL_SVDDE       9
+// 9 (SHL_SVDDE) removed
 // 10 (SHL_ERR) removed
 //11 (SHL_IPC) removed
 //12 (SHL_SVX) removed

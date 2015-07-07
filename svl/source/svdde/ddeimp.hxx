@@ -26,7 +26,6 @@
 #include <boost/noncopyable.hpp>
 #include <rtl/ustring.hxx>
 #include <svl/svdde.hxx>
-#include <tools/shl.hxx>
 #include <vector>
 
 
@@ -121,10 +120,7 @@ public:
     }
 };
 
-inline DdeInstData* ImpGetInstData()
-{
-    return (DdeInstData*)(*GetAppData( SHL_SVDDE ));
-}
+DdeInstData* ImpGetInstData();
 DdeInstData* ImpInitInstData();
 void ImpDeinitInstData();
 
