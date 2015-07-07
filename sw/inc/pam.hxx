@@ -143,7 +143,9 @@ typedef SwMoveFnCollection* SwMoveFn;
 SW_DLLPUBLIC extern SwMoveFn fnMoveForward; ///< SwPam::Move()/Find() default argument.
 SW_DLLPUBLIC extern SwMoveFn fnMoveBackward;
 
-typedef bool (*SwGoInDoc)( SwPaM& rPam, SwMoveFn fnMove );
+// also works: using SwGoInDoc = bool (*) (SwPaM& rPam, SwMoveFn fnMove);
+// no works: using SwGoInDoc = [](SwPaM& rPam, SwMoveFn fnMove) -> bool;
+using SwGoInDoc = auto (*)(SwPaM& rPam, SwMoveFn fnMove) -> bool;
 SW_DLLPUBLIC extern SwGoInDoc fnGoDoc;
 extern SwGoInDoc fnGoSection;
 SW_DLLPUBLIC extern SwGoInDoc fnGoNode;
