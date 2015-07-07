@@ -446,7 +446,7 @@ Point FloatingWindow::ImplCalcPos( vcl::Window* pWindow,
             Rectangle( e1, e2 );
     }
 
-    // caller expects cordinates relative to top-level win
+    // caller expects coordinates relative to top-level win
     return pW->OutputToScreenPixel( aPos );
 }
 

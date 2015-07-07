@@ -730,7 +730,7 @@ class ControlRow(object):
 
     tabIndex = 520
     '''
-    constructor. Create the row in the given dialog given cordinates,
+    constructor. Create the row in the given dialog given coordinates,
     with the given offset (row number) and tabindex.
     Note that since I use this specifically for the agenda wizard,
     the step and all control coordinates inside the
