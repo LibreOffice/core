@@ -688,7 +688,7 @@ namespace drawinglayer
                 {
                     // step two:
                     //
-                    // bring from [0.0 .. 1.0] in X,Y and Z to view cordinates
+                    // bring from [0.0 .. 1.0] in X,Y and Z to view coordinates
                     //
                     // #i102611#
                     // also: scale Z to [1.5 .. 65534.5]. Normally, a range of [0.0 .. 65535.0]
