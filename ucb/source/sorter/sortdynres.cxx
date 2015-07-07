@@ -285,7 +285,7 @@ sal_Int16 SAL_CALL SortedDynamicResultSet::getCapabilities()
  <p>The Listener is allowed to blockade this call, until he really want to go
  to the new version. The only situation, where the listener has to return the
  update call at once is, while he disposes his broadcaster or while he is
- removing himsef as listener (otherwise you deadlock)!!!
+ removing himself as listener (otherwise you deadlock)!!!
 */
 void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     throw( RuntimeException )

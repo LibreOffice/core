@@ -42,7 +42,7 @@ using namespace com::sun::star::beans;
 using namespace std;
 
 /**
- * Copys a range of text to the clipboard.
+ * Copy a range of text to the clipboard.
  *
  * @param    startOffset    the start offset of copying.
  * @param    endOffset      the end offset of copying.
@@ -124,8 +124,8 @@ STDMETHODIMP CAccEditableText::insertText(long offset, BSTR * text)
 /**
  * Cuts a range of text to the clipboard.
  *
- * @param    startOffset    the start offset of cuting.
- * @param    endOffset      the end offset of cuting.
+ * @param    startOffset    the start offset of cutting.
+ * @param    endOffset      the end offset of cutting.
  * @param    success        the boolean result to be returned.
  */
 STDMETHODIMP CAccEditableText::cutText(long startOffset, long endOffset)

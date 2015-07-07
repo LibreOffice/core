@@ -164,7 +164,7 @@ static OUString ImplMakeSearchStringFromName(const OUString& rStr)
 
 ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong* pIndex) const
 {
-    // Append if there is no enty in the list or if the entry is larger
+    // Append if there is no entry in the list or if the entry is larger
     // then the last one. We only compare to the last entry as the list of VCL
     // is returned sorted, which increases the probability that appending
     // is more likely

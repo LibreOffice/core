@@ -392,7 +392,7 @@ void read_file(
     }
 }
 
-/** A simple helper function that appens the
+/** A simple helper function that happens the
     content of one file to another one  */
 void concatenate_files(std::ostream& os, std::istream& is)
 {

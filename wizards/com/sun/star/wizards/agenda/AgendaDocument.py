@@ -265,11 +265,11 @@ class AgendaDocument(TextDocument):
 
     '''Initializes a template.<br/>
     This method does the following tasks:<br/>
-    Get a Time and Date format for the document, and retrieve the null
+    get a Time and Date format for the document, and retrieve the null
     date of the document (which is document-specific).<br/>
     Initializes the Items Cache map.
     Analyses the document:<br/>
-    -find all "fille-ins" (appear as &gt;xxx&lt; in the document).
+    -find all "filled-ins" (appear as &gt;xxx&lt; in the document).
     -analyze all items sections (and the tables in them).
     -locate the titles and actualize them
     -analyze the topics table

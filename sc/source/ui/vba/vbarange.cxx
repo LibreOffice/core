@@ -1782,7 +1782,7 @@ ScVbaRange::HasFormula() throw (uno::RuntimeException, std::exception)
         if ( pFormulaRanges->GetRangeList().empty() )
             return uno::makeAny(sal_False);
 
-        // chech if there are holes (where some cells are not formulas)
+        // check if there are holes (where some cells are not formulas)
         // or returned range is not equal to this range
         if (  ( pFormulaRanges->GetRangeList().size() > 1 )
            || ( pFormulaRanges->GetRangeList().front()->aStart != pThisRanges->GetRangeList().front()->aStart )

@@ -682,7 +682,7 @@ oslFileError SAL_CALL osl_createDirectoryPath(
 
     // const_cast because sys_path is a local copy
     // which we want to modify inplace instead of
-    // coyp it into another buffer on the heap again
+    // copy it into another buffer on the heap again
     return oslTranslateFileError(create_dir_recursively_(
         sys_path.pData, aDirectoryCreationCallbackFunc, pData));
 }

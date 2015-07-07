@@ -338,7 +338,7 @@ Dim nBaseWidth as Long
 		Set oLocTextShape = oTCShapeList(a)
 		If CurArrangement = cLeftJustified Then
 			If nYDBPos + nDBHeight = nMaxRowY Then
-				&apos; The last Control was the highes in the row
+				&apos; The last Control was the highest in the row
 				nYDBPos = nSecMaxRowY + cVertDistance
 			Else
 				nYDBPos = nMaxRowY + cVertDistance

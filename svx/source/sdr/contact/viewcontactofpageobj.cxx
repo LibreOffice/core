@@ -66,7 +66,7 @@ void ViewContactOfPageObj::ActionChanged()
 
 drawinglayer::primitive2d::Primitive2DSequence ViewContactOfPageObj::createViewIndependentPrimitive2DSequence() const
 {
-    // ceate graphical visualisation data. Since this is the view-independent version which should not be used,
+    // create graphical visualisation data. Since this is the view-independent version which should not be used,
     // create a replacement graphic visualisation here. Use GetLastBoundRect to access the model data directly
     // which is aOutRect for SdrPageObj.
     const Rectangle aModelRectangle(GetPageObj().GetLastBoundRect());

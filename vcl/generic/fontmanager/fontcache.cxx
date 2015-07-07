@@ -145,7 +145,7 @@ void FontCache::flush()
                 /*
                  *  for each font entry write:
                  *  name[;name[;name]]
-                 *  fontnr;PSName;italic;weight;width;pitch;encoding;ascend;descend;leading;vsubst;gxw;gxh;gyw;gyh;useroverrride;embed;antialias[;{metricfile,typeflags}][;stylename]
+                 *  fontnr;PSName;italic;weight;width;pitch;encoding;ascend;descend;leading;vsubst;gxw;gxh;gyw;gyh;useroverride;embed;antialias[;{metricfile,typeflags}][;stylename]
                  */
                 if( nEntrySize > 1 )
                     nSubEntry = static_cast<const PrintFontManager::TrueTypeFontFile*>(*it)->m_nCollectionEntry;

@@ -407,7 +407,7 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "length of ascci string of size 1",
+                "length of ascii string of size 1",
                 aStrBuf.getLength() == expVal
             );
         }
@@ -538,7 +538,7 @@ namespace rtl_OStringBuffer
 
             CPPUNIT_ASSERT_MESSAGE
             (
-                "capacity of ascci string of size 1",
+                "capacity of ascii string of size 1",
                 aStrBuf.getCapacity() == expVal
             );
         }

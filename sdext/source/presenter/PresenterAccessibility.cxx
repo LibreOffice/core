@@ -1959,7 +1959,7 @@ void AccessibleNotes::NotifyCaretChange (
     if (nOldParagraphIndex != nNewParagraphIndex)
     {
         // Moved caret from one paragraph to another (or showed or
-        // hid the caret).  Move focuse from one accessible
+        // hid the caret).  Move focus from one accessible
         // paragraph to another.
         if (nOldParagraphIndex >= 0)
         {

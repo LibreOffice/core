@@ -172,7 +172,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
 
         if(xTargetOverlay.is())
         {
-            // buld transfoprmation: translate and rotate so that given edge is
+            // build transfoprmation: translate and rotate so that given edge is
             // on x axis, them mirror in y and translate back
             const basegfx::B2DVector aEdge(aMirrorAxisB.X() - aMirrorAxisA.X(), aMirrorAxisB.Y() - aMirrorAxisA.Y());
             basegfx::B2DHomMatrix aMatrixTransform(basegfx::tools::createTranslateB2DHomMatrix(

@@ -543,7 +543,7 @@ public:
 };
 
 /** Represents a STYLE record containing the data of a cell style.
-    @descr  The calss is able to store built-in and user-defined styles. */
+    @descr  The class is able to store built-in and user-defined styles. */
 class XclExpStyle : public XclExpRecord
 {
 public:

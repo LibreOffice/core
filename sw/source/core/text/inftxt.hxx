@@ -513,7 +513,7 @@ class SwTextFormatInfo : public SwTextPaintInfo
 
     SwTabPortion    *pLastTab;     // The _last_ TabPortion
 
-    sal_Int32 nSoftHyphPos;    // SoftHyphPos forr Hyphenation
+    sal_Int32 nSoftHyphPos;    // SoftHyphPos for Hyphenation
     sal_Int32 nLineStart;      // Current line start in rText
     sal_Int32 nUnderScorePos;  // enlarge repaint if underscore has been found
     // #i34348# Changed type from sal_uInt16 to SwTwips

@@ -59,7 +59,7 @@ private:
 
     ScEditEngineDefaulter*  pEngine;                    ///< Edited data in the sheet (when the user clicks into the sheet, and starts writing there).
     EditView*               pTableView;                 // associated active EditView
-    EditView*               pTopView;                   // EditView in dthe input row
+    EditView*               pTopView;                   // EditView in the input row
 
     ScTypedCaseStrSet* pColumnData;
     ScTypedCaseStrSet* pFormulaData;

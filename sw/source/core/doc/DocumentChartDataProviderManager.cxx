@@ -98,7 +98,7 @@ DocumentChartDataProviderManager::~DocumentChartDataProviderManager()
     // clean up chart related structures...
     // Note: the chart data provider gets already disposed in ~SwDocShell
     // since all UNO API related functionality requires an existing SwDocShell
-    // this assures that dipose gets called if there is need for it.
+    // this assures that dispose gets called if there is need for it.
     maChartDataProviderImplRef.clear();
     delete mpChartControllerHelper;
 }

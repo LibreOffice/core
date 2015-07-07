@@ -733,7 +733,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
     if ( GetItemCount( 0 ) == 1 && GetItemCount( 1 ) == 1 )
     {
         // The Rearranging in WorkWindow and a Show() on the SplitWindow is
-        // caues by SfxDockingwindow (->SfxWorkWindow::ConfigChild_Impl)
+        // caused by SfxDockingwindow (->SfxWorkWindow::ConfigChild_Impl)
         if ( !bPinned && !IsFloatingMode() )
         {
             bPinned = true;
@@ -815,7 +815,7 @@ void SfxSplitWindow::RemoveWindow( SfxDockingWindow* pDockWin, bool bHide )
     // removing the last DockingWindows.
     if ( GetItemCount( nSet ) == 1 && GetItemCount( 0 ) == 1 )
     {
-        // The Rearranging in WorkWindow is caues by SfxDockingwindow
+        // The Rearranging in WorkWindow is caused by SfxDockingwindow
         Hide();
         pEmptyWin->aTimer.Stop();
         sal_uInt16 nRealState = pEmptyWin->nState;

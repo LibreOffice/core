@@ -934,7 +934,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
         // #i44177# - assure that for documents in OpenOffice.org
         // file format the relation between outline numbering rule and styles is
         // filled-up accordingly.
-        // Note: The OpenOffice.org file format, which has no content that applys
+        // Note: The OpenOffice.org file format, which has no content that applies
         //       a certain style, which is related to the outline numbering rule,
         //       has lost the information, that this certain style is related to
         //       the outline numbering rule.

@@ -226,9 +226,9 @@ public class CheckMemoryUsage
     }
 
     /**
-     * Checks how much memory should consum
+     * Checks how much memory should consume
      * @param storageBefore
-     * @return 1 if consum is ok, else 0
+     * @return 1 if consume is ok, else 0
      */
     private int checkMemory(int nConsumMore)
     {
