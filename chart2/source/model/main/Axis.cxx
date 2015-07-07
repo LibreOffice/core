@@ -436,6 +436,7 @@ void Axis::AllocateSubGrids()
             {
                 m_aSubGridProperties[ i ] = new GridProperties();
                 LinePropertiesHelper::SetLineInvisible( m_aSubGridProperties[ i ] );
+                LinePropertiesHelper::SetLineColor( m_aSubGridProperties[ i ], static_cast<sal_Int32>(0xdddddd) ); //gray2
                 aNewBroadcasters.push_back( m_aSubGridProperties[ i ] );
             }
         }
