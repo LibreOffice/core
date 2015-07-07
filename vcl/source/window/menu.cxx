@@ -1892,7 +1892,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                     if (rRenderContext.IsNativeControlSupported(CTRL_MENU_POPUP, PART_MENU_SEPARATOR))
                     {
                         ControlState nState = ControlState::NONE;
-                        if (pData->bEnabled && !pWindow->IsEnabled())
+                        if (pData->bEnabled && pWindow->IsEnabled())
                             nState |= ControlState::ENABLED;
                         if (bHighlighted)
                             nState |= ControlState::SELECTED;
@@ -1948,7 +1948,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                             if (pData->bChecked)
                                 nState |= ControlState::PRESSED;
 
-                            if (pData->bEnabled && !pWindow->IsEnabled())
+                            if (pData->bEnabled && pWindow->IsEnabled())
                                 nState |= ControlState::ENABLED;
 
                             if (bHighlighted)
@@ -2089,7 +2089,7 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                             aSpacing = nOuterSpaceX;
                         }
 
-                        if (pData->bEnabled && !pWindow->IsEnabled())
+                        if (pData->bEnabled && pWindow->IsEnabled())
                             nState |= ControlState::ENABLED;
                         if (bHighlighted)
                             nState |= ControlState::SELECTED;
