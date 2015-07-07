@@ -686,8 +686,8 @@ void SdExportTest::testTdf80020()
         uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
         uno::Reference<style::XStyle> xStyle(xStyleFamily->getByName("Test Style"), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(OUString("text"), xStyle->getParentStyle());
+        xDocShRef = saveAndReload( xDocShRef, ODP );
     }
-    xDocShRef = saveAndReload( xDocShRef, ODP );
     uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamilies(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("graphics"), uno::UNO_QUERY);
