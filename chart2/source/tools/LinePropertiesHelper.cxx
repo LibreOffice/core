@@ -168,6 +168,23 @@ void LinePropertiesHelper::SetLineInvisible( const ::com::sun::star::uno::Refere
     }
 }
 
+void LinePropertiesHelper::SetLineColor( const ::com::sun::star::uno::Reference<
+     ::com::sun::star::beans::XPropertySet >& xLineProperties, sal_Int32 nColor  )
+{
+    try
+    {
+        if( xLineProperties.is() )
+        {
+            xLineProperties->setPropertyValue( "LineColor", uno::makeAny( nColor ) );
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+
 } //  namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

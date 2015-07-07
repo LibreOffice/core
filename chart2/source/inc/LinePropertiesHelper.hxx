@@ -56,6 +56,8 @@ namespace LinePropertiesHelper
         ::com::sun::star::beans::XPropertySet >& xLineProperties );
     void SetLineInvisible( const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >& xLineProperties );
+    void SetLineColor( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >& xGridProperties, sal_Int32 nColor  );
 }
 
 } //  namespace chart
