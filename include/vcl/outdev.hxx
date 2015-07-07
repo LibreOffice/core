@@ -507,7 +507,6 @@ public:
 
     sal_uLong                   GetColorCount() const;
 
-
     css::uno::Reference< css::awt::XGraphics >
                                 CreateUnoGraphics();
     std::vector< VCLXGraphics* > *GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
