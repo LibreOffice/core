@@ -942,43 +942,6 @@ DeviceCoordinate GenericSalLayout::GetTextWidth() const
     return nWidth;
 }
 
-Rectangle GenericSalLayout::GetTextRect() const
-{
-    if( m_GlyphItems.empty() )
-        return Rectangle(Point(0, 0), Size(0, 0));
-
-    // initialize the extent
-    DeviceCoordinate nMinXPos = 0;
-    DeviceCoordinate nMaxXPos = 0;
-
-    DeviceCoordinate nMinYPos = 0;
-    DeviceCoordinate nMaxYPos = 0;
-
-    for( GlyphVector::const_iterator pGlyphIter = m_GlyphItems.begin(), end = m_GlyphItems.end(); pGlyphIter != end ; ++pGlyphIter )
-    {
-        // update the text extent with the glyph extent
-        DeviceCoordinate nXPos = pGlyphIter->maLinearPos.X();
-        DeviceCoordinate nYPos = pGlyphIter->maLinearPos.Y();
-
-        if( nMinXPos > nXPos )
-            nMinXPos = nXPos;
-        nXPos += pGlyphIter->mnNewWidth - pGlyphIter->mnXOffset;
-        if( nMaxXPos < nXPos )
-            nMaxXPos = nXPos;
-
-        if( nMinYPos > nYPos )
-            nMinYPos = nYPos;
-        nYPos += pGlyphIter->mnNewWidth - pGlyphIter->mnYOffset;
-        if( nMaxYPos < nYPos )
-            nMaxYPos = nYPos;
-    }
-
-    DeviceCoordinate nWidth  = nMaxXPos - nMinXPos;
-    DeviceCoordinate nHeight = nMaxYPos - nMinYPos;
-
-    return Rectangle( Point(nMinXPos, nMinYPos), Size(nWidth, nHeight) );
-}
-
 void GenericSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 {
     SalLayout::AdjustLayout( rArgs );

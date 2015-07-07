@@ -50,8 +50,6 @@ public:
     virtual         ~GraphicReader();
 
     const OUString&   GetUpperFilterName() const { return maUpperName; }
-    ReaderData*     GetReaderData() const { return mpReaderData; }
-    bool            IsReading() const { return mbIsReading; }
 
     // TODO: when incompatible changes are possible again
     // the preview size hint should be redone

@@ -179,11 +179,6 @@ void MetaAction::Scale( double, double )
 {
 }
 
-bool MetaAction::Compare( const MetaAction& ) const
-{
-    return true;
-}
-
 void MetaAction::Write( SvStream& rOStm, ImplMetaWriteData* )
 {
     rOStm.WriteUInt16( static_cast<sal_uInt16>(mnType) );
@@ -308,12 +303,6 @@ void MetaPixelAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-bool MetaPixelAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maPt == static_cast<const MetaPixelAction&>(rMetaAction).maPt ) &&
-           ( maColor == static_cast<const MetaPixelAction&>(rMetaAction).maColor );
-}
-
 void MetaPixelAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -361,11 +350,6 @@ void MetaPointAction::Move( long nHorzMove, long nVertMove )
 void MetaPointAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
-}
-
-bool MetaPointAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maPt == static_cast<const MetaPointAction&>(rMetaAction).maPt;
 }
 
 void MetaPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -430,13 +414,6 @@ void MetaLineAction::Scale( double fScaleX, double fScaleY )
     ImplScaleLineInfo( maLineInfo, fScaleX, fScaleY );
 }
 
-bool MetaLineAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maLineInfo == static_cast<const MetaLineAction&>(rMetaAction).maLineInfo ) &&
-           ( maStartPt == static_cast<const MetaLineAction&>(rMetaAction).maStartPt ) &&
-           ( maEndPt == static_cast<const MetaLineAction&>(rMetaAction).maEndPt );
-}
-
 void MetaLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -496,11 +473,6 @@ void MetaRectAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
 
-bool MetaRectAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maRect == static_cast<const MetaRectAction&>(rMetaAction).maRect;
-}
-
 void MetaRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -555,13 +527,6 @@ void MetaRoundRectAction::Scale( double fScaleX, double fScaleY )
     mnVertRound = FRound( mnVertRound * fabs(fScaleY) );
 }
 
-bool MetaRoundRectAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maRect == static_cast<const MetaRoundRectAction&>(rMetaAction).maRect ) &&
-           ( mnHorzRound == static_cast<const MetaRoundRectAction&>(rMetaAction).mnHorzRound ) &&
-           ( mnVertRound == static_cast<const MetaRoundRectAction&>(rMetaAction).mnVertRound );
-}
-
 void MetaRoundRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -608,11 +573,6 @@ void MetaEllipseAction::Move( long nHorzMove, long nVertMove )
 void MetaEllipseAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
-}
-
-bool MetaEllipseAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maRect == static_cast<const MetaEllipseAction&>(rMetaAction).maRect;
 }
 
 void MetaEllipseAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -667,13 +627,6 @@ void MetaArcAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( maRect, fScaleX, fScaleY );
     ImplScalePoint( maStartPt, fScaleX, fScaleY );
     ImplScalePoint( maEndPt, fScaleX, fScaleY );
-}
-
-bool MetaArcAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maRect == static_cast<const MetaArcAction&>(rMetaAction).maRect ) &&
-           ( maStartPt == static_cast<const MetaArcAction&>(rMetaAction).maStartPt ) &&
-           ( maEndPt == static_cast<const MetaArcAction&>(rMetaAction).maEndPt );
 }
 
 void MetaArcAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -734,13 +687,6 @@ void MetaPieAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maEndPt, fScaleX, fScaleY );
 }
 
-bool MetaPieAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maRect == static_cast<const MetaPieAction&>(rMetaAction).maRect ) &&
-           ( maStartPt == static_cast<const MetaPieAction&>(rMetaAction).maStartPt ) &&
-           ( maEndPt == static_cast<const MetaPieAction&>(rMetaAction).maEndPt );
-}
-
 void MetaPieAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -797,13 +743,6 @@ void MetaChordAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( maRect, fScaleX, fScaleY );
     ImplScalePoint( maStartPt, fScaleX, fScaleY );
     ImplScalePoint( maEndPt, fScaleX, fScaleY );
-}
-
-bool MetaChordAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maRect == static_cast<const MetaChordAction&>(rMetaAction).maRect ) &&
-           ( maStartPt == static_cast<const MetaChordAction&>(rMetaAction).maStartPt ) &&
-           ( maEndPt == static_cast<const MetaChordAction&>(rMetaAction).maEndPt );
 }
 
 void MetaChordAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -865,17 +804,6 @@ void MetaPolyLineAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoly( maPoly, fScaleX, fScaleY );
     ImplScaleLineInfo( maLineInfo, fScaleX, fScaleY );
-}
-
-bool MetaPolyLineAction::Compare( const MetaAction& rMetaAction ) const
-{
-    bool bIsEqual = true;
-    if ( maLineInfo != static_cast<const MetaPolyLineAction&>(rMetaAction).maLineInfo )
-        bIsEqual = false;
-    else
-        bIsEqual = maPoly.IsEqual(static_cast<const MetaPolyLineAction&>(rMetaAction).maPoly );
-    return bIsEqual;
-
 }
 
 void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -948,11 +876,6 @@ void MetaPolygonAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoly( maPoly, fScaleX, fScaleY );
 }
 
-bool MetaPolygonAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maPoly.IsEqual(static_cast<const MetaPolygonAction&>(rMetaAction).maPoly );
-}
-
 void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -1016,11 +939,6 @@ void MetaPolyPolygonAction::Scale( double fScaleX, double fScaleY )
 {
     for( sal_uInt16 i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
-}
-
-bool MetaPolyPolygonAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maPolyPoly.IsEqual(static_cast<const MetaPolyPolygonAction&>(rMetaAction).maPolyPoly );
 }
 
 void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -1130,14 +1048,6 @@ void MetaTextAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-bool MetaTextAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maPt == static_cast<const MetaTextAction&>(rMetaAction).maPt ) &&
-           ( maStr == static_cast<const MetaTextAction&>(rMetaAction).maStr ) &&
-           ( mnIndex == static_cast<const MetaTextAction&>(rMetaAction).mnIndex ) &&
-           ( mnLen == static_cast<const MetaTextAction&>(rMetaAction).mnLen );
-}
-
 void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -1244,15 +1154,6 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
         for ( sal_uInt16 i = 0, nCount = mnLen; i < nCount; i++ )
             mpDXAry[ i ] = FRound( mpDXAry[ i ] * fabs(fScaleX) );
     }
-}
-
-bool MetaTextArrayAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maStartPt == static_cast<const MetaTextArrayAction&>(rMetaAction).maStartPt ) &&
-           ( maStr == static_cast<const MetaTextArrayAction&>(rMetaAction).maStr ) &&
-           ( mnIndex == static_cast<const MetaTextArrayAction&>(rMetaAction).mnIndex ) &&
-           ( mnLen == static_cast<const MetaTextArrayAction&>(rMetaAction).mnLen ) &&
-           ( memcmp( mpDXAry, static_cast<const MetaTextArrayAction&>(rMetaAction).mpDXAry, mnLen ) == 0 );
 }
 
 void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -1381,15 +1282,6 @@ void MetaStretchTextAction::Scale( double fScaleX, double fScaleY )
     mnWidth = (sal_uLong)FRound( mnWidth * fabs(fScaleX) );
 }
 
-bool MetaStretchTextAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maPt == static_cast<const MetaStretchTextAction&>(rMetaAction).maPt ) &&
-           ( maStr == static_cast<const MetaStretchTextAction&>(rMetaAction).maStr ) &&
-           ( mnWidth == static_cast<const MetaStretchTextAction&>(rMetaAction).mnWidth ) &&
-           ( mnIndex == static_cast<const MetaStretchTextAction&>(rMetaAction).mnIndex ) &&
-           ( mnLen == static_cast<const MetaStretchTextAction&>(rMetaAction).mnLen );
-}
-
 void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -1456,13 +1348,6 @@ void MetaTextRectAction::Move( long nHorzMove, long nVertMove )
 void MetaTextRectAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
-}
-
-bool MetaTextRectAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maRect == static_cast<const MetaTextRectAction&>(rMetaAction).maRect ) &&
-           ( maStr == static_cast<const MetaTextRectAction&>(rMetaAction).maStr ) &&
-           ( mnStyle == static_cast<const MetaTextRectAction&>(rMetaAction).mnStyle );
 }
 
 void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -1535,15 +1420,6 @@ void MetaTextLineAction::Scale( double fScaleX, double fScaleY )
     mnWidth = FRound( mnWidth * fabs(fScaleX) );
 }
 
-bool MetaTextLineAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maPos == static_cast<const MetaTextLineAction&>(rMetaAction).maPos ) &&
-           ( mnWidth == static_cast<const MetaTextLineAction&>(rMetaAction).mnWidth ) &&
-           ( meStrikeout == static_cast<const MetaTextLineAction&>(rMetaAction).meStrikeout ) &&
-           ( meUnderline == static_cast<const MetaTextLineAction&>(rMetaAction).meUnderline ) &&
-           ( meOverline  == static_cast<const MetaTextLineAction&>(rMetaAction).meOverline );
-}
-
 void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -1613,12 +1489,6 @@ void MetaBmpAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-bool MetaBmpAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maBmp.IsEqual(static_cast<const MetaBmpAction&>(rMetaAction).maBmp ) &&
-           ( maPt == static_cast<const MetaBmpAction&>(rMetaAction).maPt );
-}
-
 void MetaBmpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmp )
@@ -1675,13 +1545,6 @@ void MetaBmpScaleAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPt = aRectangle.TopLeft();
     maSz = aRectangle.GetSize();
-}
-
-bool MetaBmpScaleAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maBmp.IsEqual(static_cast<const MetaBmpScaleAction&>(rMetaAction).maBmp )) &&
-           ( maPt == static_cast<const MetaBmpScaleAction&>(rMetaAction).maPt ) &&
-           ( maSz == static_cast<const MetaBmpScaleAction&>(rMetaAction).maSz );
 }
 
 void MetaBmpScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -1747,15 +1610,6 @@ void MetaBmpScalePartAction::Scale( double fScaleX, double fScaleY )
     maDstSz = aRectangle.GetSize();
 }
 
-bool MetaBmpScalePartAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maBmp.IsEqual(static_cast<const MetaBmpScalePartAction&>(rMetaAction).maBmp )) &&
-           ( maDstPt == static_cast<const MetaBmpScalePartAction&>(rMetaAction).maDstPt ) &&
-           ( maDstSz == static_cast<const MetaBmpScalePartAction&>(rMetaAction).maDstSz ) &&
-           ( maSrcPt == static_cast<const MetaBmpScalePartAction&>(rMetaAction).maSrcPt ) &&
-           ( maSrcSz == static_cast<const MetaBmpScalePartAction&>(rMetaAction).maSrcSz );
-}
-
 void MetaBmpScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmp )
@@ -1815,12 +1669,6 @@ void MetaBmpExAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-bool MetaBmpExAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maBmpEx.IsEqual(static_cast<const MetaBmpExAction&>(rMetaAction).maBmpEx )) &&
-           ( maPt == static_cast<const MetaBmpExAction&>(rMetaAction).maPt );
-}
-
 void MetaBmpExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmpEx.GetBitmap() )
@@ -1877,13 +1725,6 @@ void MetaBmpExScaleAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPt = aRectangle.TopLeft();
     maSz = aRectangle.GetSize();
-}
-
-bool MetaBmpExScaleAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maBmpEx.IsEqual(static_cast<const MetaBmpExScaleAction&>(rMetaAction).maBmpEx )) &&
-           ( maPt == static_cast<const MetaBmpExScaleAction&>(rMetaAction).maPt ) &&
-           ( maSz == static_cast<const MetaBmpExScaleAction&>(rMetaAction).maSz );
 }
 
 void MetaBmpExScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -1949,15 +1790,6 @@ void MetaBmpExScalePartAction::Scale( double fScaleX, double fScaleY )
     maDstSz = aRectangle.GetSize();
 }
 
-bool MetaBmpExScalePartAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maBmpEx.IsEqual(static_cast<const MetaBmpExScalePartAction&>(rMetaAction).maBmpEx )) &&
-           ( maDstPt == static_cast<const MetaBmpExScalePartAction&>(rMetaAction).maDstPt ) &&
-           ( maDstSz == static_cast<const MetaBmpExScalePartAction&>(rMetaAction).maDstSz ) &&
-           ( maSrcPt == static_cast<const MetaBmpExScalePartAction&>(rMetaAction).maSrcPt ) &&
-           ( maSrcSz == static_cast<const MetaBmpExScalePartAction&>(rMetaAction).maSrcSz );
-}
-
 void MetaBmpExScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmpEx.GetBitmap() )
@@ -2020,13 +1852,6 @@ void MetaMaskAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-bool MetaMaskAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maBmp.IsEqual(static_cast<const MetaMaskAction&>(rMetaAction).maBmp )) &&
-           ( maColor == static_cast<const MetaMaskAction&>(rMetaAction).maColor ) &&
-           ( maPt == static_cast<const MetaMaskAction&>(rMetaAction).maPt );
-}
-
 void MetaMaskAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmp )
@@ -2085,14 +1910,6 @@ void MetaMaskScaleAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPt = aRectangle.TopLeft();
     maSz = aRectangle.GetSize();
-}
-
-bool MetaMaskScaleAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maBmp.IsEqual(static_cast<const MetaMaskScaleAction&>(rMetaAction).maBmp )) &&
-           ( maColor == static_cast<const MetaMaskScaleAction&>(rMetaAction).maColor ) &&
-           ( maPt == static_cast<const MetaMaskScaleAction&>(rMetaAction).maPt ) &&
-           ( maSz == static_cast<const MetaMaskScaleAction&>(rMetaAction).maSz );
 }
 
 void MetaMaskScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2160,16 +1977,6 @@ void MetaMaskScalePartAction::Scale( double fScaleX, double fScaleY )
     maDstSz = aRectangle.GetSize();
 }
 
-bool MetaMaskScalePartAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maBmp.IsEqual(static_cast<const MetaMaskScalePartAction&>(rMetaAction).maBmp )) &&
-           ( maColor == static_cast<const MetaMaskScalePartAction&>(rMetaAction).maColor ) &&
-           ( maDstPt == static_cast<const MetaMaskScalePartAction&>(rMetaAction).maDstPt ) &&
-           ( maDstSz == static_cast<const MetaMaskScalePartAction&>(rMetaAction).maDstSz ) &&
-           ( maSrcPt == static_cast<const MetaMaskScalePartAction&>(rMetaAction).maSrcPt ) &&
-           ( maSrcSz == static_cast<const MetaMaskScalePartAction&>(rMetaAction).maSrcSz );
-}
-
 void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     if( !!maBmp )
@@ -2231,12 +2038,6 @@ void MetaGradientAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
 
-bool MetaGradientAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maRect == static_cast<const MetaGradientAction&>(rMetaAction).maRect ) &&
-           ( maGradient == static_cast<const MetaGradientAction&>(rMetaAction).maGradient );
-}
-
 void MetaGradientAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -2290,12 +2091,6 @@ void MetaGradientExAction::Scale( double fScaleX, double fScaleY )
 {
     for( sal_uInt16 i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
-}
-
-bool MetaGradientExAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maPolyPoly == static_cast<const MetaGradientExAction&>(rMetaAction).maPolyPoly ) &&
-           ( maGradient == static_cast<const MetaGradientExAction&>(rMetaAction).maGradient );
 }
 
 void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2354,12 +2149,6 @@ void MetaHatchAction::Scale( double fScaleX, double fScaleY )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
 
-bool MetaHatchAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maPolyPoly == static_cast<const MetaHatchAction&>(rMetaAction).maPolyPoly ) &&
-           ( maHatch == static_cast<const MetaHatchAction&>(rMetaAction).maHatch );
-}
-
 void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -2416,12 +2205,6 @@ void MetaWallpaperAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
 
-bool MetaWallpaperAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maRect == static_cast<const MetaWallpaperAction&>(rMetaAction).maRect ) &&
-           ( maWallpaper == static_cast<const MetaWallpaperAction&>(rMetaAction).maWallpaper );
-}
-
 void MetaWallpaperAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -2475,12 +2258,6 @@ void MetaClipRegionAction::Scale( double fScaleX, double fScaleY )
     maRegion.Scale( fScaleX, fScaleY );
 }
 
-bool MetaClipRegionAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maRegion == static_cast<const MetaClipRegionAction&>(rMetaAction).maRegion ) &&
-           ( mbClip == static_cast<const MetaClipRegionAction&>(rMetaAction).mbClip );
-}
-
 void MetaClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -2531,11 +2308,6 @@ void MetaISectRectClipRegionAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
 
-bool MetaISectRectClipRegionAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maRect == static_cast<const MetaISectRectClipRegionAction&>(rMetaAction).maRect;
-}
-
 void MetaISectRectClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -2584,11 +2356,6 @@ void MetaISectRegionClipRegionAction::Scale( double fScaleX, double fScaleY )
     maRegion.Scale( fScaleX, fScaleY );
 }
 
-bool MetaISectRegionClipRegionAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maRegion == static_cast<const MetaISectRegionClipRegionAction&>(rMetaAction).maRegion;
-}
-
 void MetaISectRegionClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -2633,12 +2400,6 @@ void MetaMoveClipRegionAction::Scale( double fScaleX, double fScaleY )
 {
     mnHorzMove = FRound( mnHorzMove * fScaleX );
     mnVertMove = FRound( mnVertMove * fScaleY );
-}
-
-bool MetaMoveClipRegionAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( mnHorzMove == static_cast<const MetaMoveClipRegionAction&>(rMetaAction).mnHorzMove ) &&
-           ( mnVertMove == static_cast<const MetaMoveClipRegionAction&>(rMetaAction).mnVertMove );
 }
 
 void MetaMoveClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2686,12 +2447,6 @@ MetaAction* MetaLineColorAction::Clone()
     return pClone;
 }
 
-bool MetaLineColorAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maColor == static_cast<const MetaLineColorAction&>(rMetaAction).maColor ) &&
-           ( mbSet == static_cast<const MetaLineColorAction&>(rMetaAction).mbSet );
-}
-
 void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -2736,12 +2491,6 @@ MetaAction* MetaFillColorAction::Clone()
     return pClone;
 }
 
-bool MetaFillColorAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maColor == static_cast<const MetaFillColorAction&>(rMetaAction).maColor ) &&
-           ( mbSet == static_cast<const MetaFillColorAction&>(rMetaAction).mbSet );
-}
-
 void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -2779,11 +2528,6 @@ MetaAction* MetaTextColorAction::Clone()
     MetaAction* pClone = static_cast<MetaAction*>(new MetaTextColorAction( *this ));
     pClone->ResetRefCount();
     return pClone;
-}
-
-bool MetaTextColorAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maColor == static_cast<const MetaTextColorAction&>(rMetaAction).maColor;
 }
 
 void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2826,12 +2570,6 @@ MetaAction* MetaTextFillColorAction::Clone()
     MetaAction* pClone = static_cast<MetaAction*>(new MetaTextFillColorAction( *this ));
     pClone->ResetRefCount();
     return pClone;
-}
-
-bool MetaTextFillColorAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maColor == static_cast<const MetaTextFillColorAction&>(rMetaAction).maColor ) &&
-           ( mbSet == static_cast<const MetaTextFillColorAction&>(rMetaAction).mbSet );
 }
 
 void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -2878,12 +2616,6 @@ MetaAction* MetaTextLineColorAction::Clone()
     return pClone;
 }
 
-bool MetaTextLineColorAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maColor == static_cast<const MetaTextLineColorAction&>(rMetaAction).maColor ) &&
-           ( mbSet == static_cast<const MetaTextLineColorAction&>(rMetaAction).mbSet );
-}
-
 void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -2928,12 +2660,6 @@ MetaAction* MetaOverlineColorAction::Clone()
     return pClone;
 }
 
-bool MetaOverlineColorAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maColor == static_cast<const MetaOverlineColorAction&>(rMetaAction).maColor ) &&
-           ( mbSet == static_cast<const MetaOverlineColorAction&>(rMetaAction).mbSet );
-}
-
 void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -2972,11 +2698,6 @@ MetaAction* MetaTextAlignAction::Clone()
     MetaAction* pClone = static_cast<MetaAction*>(new MetaTextAlignAction( *this ));
     pClone->ResetRefCount();
     return pClone;
-}
-
-bool MetaTextAlignAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maAlign == static_cast<const MetaTextAlignAction&>(rMetaAction).maAlign;
 }
 
 void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -3024,11 +2745,6 @@ void MetaMapModeAction::Scale( double fScaleX, double fScaleY )
 
     ImplScalePoint( aPoint, fScaleX, fScaleY );
     maMapMode.SetOrigin( aPoint );
-}
-
-bool MetaMapModeAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maMapMode == static_cast<const MetaMapModeAction&>(rMetaAction).maMapMode;
 }
 
 void MetaMapModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -3086,11 +2802,6 @@ void MetaFontAction::Scale( double fScaleX, double fScaleY )
     maFont.SetSize( aSize );
 }
 
-bool MetaFontAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return maFont == static_cast<const MetaFontAction&>(rMetaAction).maFont;
-}
-
 void MetaFontAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -3133,11 +2844,6 @@ MetaAction* MetaPushAction::Clone()
     MetaAction* pClone = static_cast<MetaAction*>(new MetaPushAction( *this ));
     pClone->ResetRefCount();
     return pClone;
-}
-
-bool MetaPushAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return mnFlags == static_cast<const MetaPushAction&>(rMetaAction).mnFlags;
 }
 
 void MetaPushAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -3211,11 +2917,6 @@ MetaAction* MetaRasterOpAction::Clone()
     return pClone;
 }
 
-bool MetaRasterOpAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return meRasterOp == static_cast<const MetaRasterOpAction&>(rMetaAction).meRasterOp;
-}
-
 void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -3266,12 +2967,6 @@ void MetaTransparentAction::Scale( double fScaleX, double fScaleY )
 {
     for( sal_uInt16 i = 0, nCount = maPolyPoly.Count(); i < nCount; i++ )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
-}
-
-bool MetaTransparentAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maPolyPoly == static_cast<const MetaTransparentAction&>(rMetaAction).maPolyPoly ) &&
-           ( mnTransPercent == static_cast<const MetaTransparentAction&>(rMetaAction).mnTransPercent );
 }
 
 void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -3343,14 +3038,6 @@ void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
     maSize = aRectangle.GetSize();
 }
 
-bool MetaFloatTransparentAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maMtf == static_cast<const MetaFloatTransparentAction&>(rMetaAction).maMtf ) &&
-           ( maPoint == static_cast<const MetaFloatTransparentAction&>(rMetaAction).maPoint ) &&
-           ( maSize == static_cast<const MetaFloatTransparentAction&>(rMetaAction).maSize ) &&
-           ( maGradient == static_cast<const MetaFloatTransparentAction&>(rMetaAction).maGradient );
-}
-
 void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -3412,14 +3099,6 @@ void MetaEPSAction::Scale( double fScaleX, double fScaleY )
     maSize = aRectangle.GetSize();
 }
 
-bool MetaEPSAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maGfxLink.IsEqual(static_cast<const MetaEPSAction&>(rMetaAction).maGfxLink )) &&
-           ( maSubst == static_cast<const MetaEPSAction&>(rMetaAction).maSubst ) &&
-           ( maPoint == static_cast<const MetaEPSAction&>(rMetaAction).maPoint ) &&
-           ( maSize == static_cast<const MetaEPSAction&>(rMetaAction).maSize );
-}
-
 void MetaEPSAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -3467,12 +3146,6 @@ MetaAction* MetaRefPointAction::Clone()
     MetaAction* pClone = static_cast<MetaAction*>(new MetaRefPointAction( *this ));
     pClone->ResetRefCount();
     return pClone;
-}
-
-bool MetaRefPointAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maRefPoint == static_cast<const MetaRefPointAction&>(rMetaAction).maRefPoint ) &&
-           ( mbSet == static_cast<const MetaRefPointAction&>(rMetaAction).mbSet );
 }
 
 void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
@@ -3666,14 +3339,6 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
     }
 }
 
-bool MetaCommentAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return ( maComment == static_cast<const MetaCommentAction&>(rMetaAction).maComment ) &&
-           ( mnValue == static_cast<const MetaCommentAction&>(rMetaAction).mnValue ) &&
-           ( mnDataSize == static_cast<const MetaCommentAction&>(rMetaAction).mnDataSize ) &&
-           ( memcmp( mpData, static_cast<const MetaCommentAction&>(rMetaAction).mpData, mnDataSize ) == 0 );
-}
-
 void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -3729,11 +3394,6 @@ MetaAction* MetaLayoutModeAction::Clone()
     return pClone;
 }
 
-bool MetaLayoutModeAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return mnLayoutMode == static_cast<const MetaLayoutModeAction&>(rMetaAction).mnLayoutMode;
-}
-
 void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     MetaAction::Write(rOStm, pData);
@@ -3772,11 +3432,6 @@ MetaAction* MetaTextLanguageAction::Clone()
     MetaAction* pClone = static_cast<MetaAction*>(new MetaTextLanguageAction( *this ));
     pClone->ResetRefCount();
     return pClone;
-}
-
-bool MetaTextLanguageAction::Compare( const MetaAction& rMetaAction ) const
-{
-    return meTextLanguage == static_cast<const MetaTextLanguageAction&>(rMetaAction).meTextLanguage;
 }
 
 void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )

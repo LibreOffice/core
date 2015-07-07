@@ -390,7 +390,6 @@ public:
     BitmapChecksum          GetChecksum() const;
 
     Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
-    Bitmap                  GetColorTransformedBitmap() const;
 
     static const BitmapPalette&
                             GetGreyPalette( int nEntries );

@@ -345,7 +345,6 @@ public:
 
     // used by upper layers
     virtual DeviceCoordinate GetTextWidth() const SAL_OVERRIDE;
-    Rectangle GetTextRect() const;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;

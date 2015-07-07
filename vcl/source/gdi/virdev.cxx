@@ -549,14 +549,6 @@ sal_uInt16 VirtualDevice::GetBitCount() const
     return mnBitCount;
 }
 
-sal_uInt16 VirtualDevice::GetAlphaBitCount() const
-{
-    if (mpAlphaVDev)
-        return mpAlphaVDev->GetBitCount();
-
-    return 0;
-}
-
 bool VirtualDevice::UsePolyPolygonForComplexGradient()
 {
     return true;

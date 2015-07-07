@@ -112,8 +112,6 @@ public:
     bool            operator==( const Wallpaper& rWallpaper ) const;
     bool            operator!=( const Wallpaper& rWallpaper ) const
                         { return !(Wallpaper::operator==( rWallpaper )); }
-    bool            IsSameInstance( const Wallpaper& rWallpaper ) const
-                        { return (mpImplWallpaper == rWallpaper.mpImplWallpaper); }
 
     friend VCL_DLLPUBLIC SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper );
     friend VCL_DLLPUBLIC SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper );

@@ -113,16 +113,6 @@ Color OutputDevice::ImplDrawModeToColor( const Color& rColor ) const
     return aColor;
 }
 
-sal_uInt16 OutputDevice::GetAlphaBitCount() const
-{
-    return 0;
-}
-
-bool OutputDevice::HasAlpha()
-{
-    return mpAlphaVDev != nullptr;
-}
-
 void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask,
                                          const Point& rDestPt, const Size& rDestSize,
                                          const Point& rSrcPtPixel, const Size& rSrcSizePixel )

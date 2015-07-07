@@ -138,11 +138,8 @@ public:
     inline BitmapColor& Invert();
 
     inline sal_uInt8    GetLuminance() const;
-    inline BitmapColor& IncreaseLuminance( sal_uInt8 cGreyInc );
-    inline BitmapColor& DecreaseLuminance( sal_uInt8 cGreyDec );
 
     inline BitmapColor& Merge( const BitmapColor& rColor, sal_uInt8 cTransparency );
-    inline BitmapColor& Merge( sal_uInt8 cR, sal_uInt8 cG, sal_uInt8 cB, sal_uInt8 cTransparency );
 
     inline sal_uLong    GetColorError( const BitmapColor& rBitmapColor ) const;
 };
@@ -405,25 +402,9 @@ inline sal_uInt8 BitmapColor::GetLuminance() const
     return (static_cast<unsigned long>(mcBlueOrIndex) * 28UL + static_cast<unsigned long>(mcGreen) * 151UL + static_cast<unsigned long>(mcRed) * 77UL) >> 8;
 }
 
-inline BitmapColor& BitmapColor::IncreaseLuminance( sal_uInt8 cGreyInc )
-{
-    DBG_ASSERT( !mbIndex, "Pixel represents index into colortable!" );
-    mcBlueOrIndex = (sal_uInt8) MinMax( (long) mcBlueOrIndex + cGreyInc, 0L, 255L );
-    mcGreen = (sal_uInt8) MinMax( (long) mcGreen + cGreyInc, 0L, 255L );
-    mcRed = (sal_uInt8) MinMax( (long) mcRed + cGreyInc, 0L, 255L );
 
-    return *this;
-}
 
-inline BitmapColor& BitmapColor::DecreaseLuminance( sal_uInt8 cGreyDec )
-{
-    DBG_ASSERT( !mbIndex, "Pixel represents index into colortable!" );
-    mcBlueOrIndex = (sal_uInt8) MinMax( (long) mcBlueOrIndex - cGreyDec, 0L, 255L );
-    mcGreen = (sal_uInt8) MinMax( (long) mcGreen - cGreyDec, 0L, 255L );
-    mcRed = (sal_uInt8) MinMax( (long) mcRed - cGreyDec, 0L, 255L );
 
-    return *this;
-}
 
 inline BitmapColor& BitmapColor::Merge( const BitmapColor& rBitmapColor, sal_uInt8 cTransparency )
 {
@@ -436,15 +417,7 @@ inline BitmapColor& BitmapColor::Merge( const BitmapColor& rBitmapColor, sal_uIn
     return *this;
 }
 
-inline BitmapColor& BitmapColor::Merge( sal_uInt8 cR, sal_uInt8 cG, sal_uInt8 cB, sal_uInt8 cTransparency )
-{
-    DBG_ASSERT( !mbIndex, "Pixel represents index into colortable!" );
-    mcBlueOrIndex = COLOR_CHANNEL_MERGE( mcBlueOrIndex, cB, cTransparency );
-    mcGreen = COLOR_CHANNEL_MERGE( mcGreen, cG, cTransparency );
-    mcRed = COLOR_CHANNEL_MERGE( mcRed, cR, cTransparency );
 
-    return *this;
-}
 
 inline sal_uLong BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) const
 {

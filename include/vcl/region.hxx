@@ -108,7 +108,6 @@ public:
     void GetRegionRectangles(RectangleVector& rTarget) const;
 
     bool IsInside( const Point& rPoint ) const;
-    bool IsInside( const Rectangle& rRect ) const;
     bool IsOver( const Rectangle& rRect ) const;
 
     vcl::Region& operator=( const vcl::Region& rRegion );

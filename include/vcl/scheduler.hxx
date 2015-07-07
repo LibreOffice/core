@@ -71,7 +71,6 @@ public:
     SchedulerPriority GetPriority() const { return mePriority; }
 
     void            SetDebugName( const sal_Char *pDebugName ) { mpDebugName = pDebugName; }
-    const sal_Char *GetDebugName() { return mpDebugName; }
 
     // Call handler
     virtual void    Invoke() = 0;
@@ -80,7 +79,6 @@ public:
     void            Stop();
 
     bool            IsActive() const { return mbActive; }
-    void            SetInActive() { mbActive = false; }
 
     Scheduler&          operator=( const Scheduler& rScheduler );
     static void ImplDeInitScheduler();

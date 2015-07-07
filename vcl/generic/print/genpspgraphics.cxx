@@ -529,13 +529,6 @@ void GenPspGraphics::drawBitmap( const SalTwoRect&,
     OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent bitmap");
 }
 
-void GenPspGraphics::drawBitmap( const SalTwoRect&,
-                              const SalBitmap&,
-                              SalColor )
-{
-    OSL_FAIL("Error: no PrinterGfx::DrawBitmap() for transparent color");
-}
-
 void GenPspGraphics::drawMask( const SalTwoRect&,
                             const SalBitmap &,
                             SalColor )

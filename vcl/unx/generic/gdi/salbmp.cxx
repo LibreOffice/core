@@ -859,16 +859,6 @@ bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
     return false;
 }
 
-bool X11SalBitmap::Crop( const Rectangle& /*rRectPixel*/ )
-{
-    return false;
-}
-
-bool X11SalBitmap::Erase( const ::Color& /*rFillColor*/ )
-{
-    return false;
-}
-
 bool X11SalBitmap::Scale( const double& /*rScaleX*/, const double& /*rScaleY*/, BmpScaleFlag /*nScaleFlag*/ )
 {
     return false;

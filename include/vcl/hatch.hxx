@@ -67,7 +67,6 @@ public:
     Hatch&          operator=( const Hatch& rHatch );
     bool            operator==( const Hatch& rHatch ) const;
     bool            operator!=( const Hatch& rHatch ) const { return !(Hatch::operator==( rHatch ) ); }
-    bool            IsSameInstance( const Hatch& rHatch ) const { return( mpImplHatch == rHatch.mpImplHatch ); }
 
     HatchStyle      GetStyle() const { return mpImplHatch->meStyle; }
 

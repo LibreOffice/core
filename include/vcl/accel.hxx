@@ -77,8 +77,6 @@ public:
 
     sal_uInt16              GetCurItemId() const { return mnCurId; }
     const vcl::KeyCode&     GetCurKeyCode() const { return maCurKeyCode; }
-    sal_uInt16              GetCurRepeat() const { return mnCurRepeat; }
-    bool                    IsCancel() const { return mbIsCancel; }
 
     sal_uInt16              GetItemCount() const;
     sal_uInt16              GetItemId( sal_uInt16 nPos ) const;
@@ -86,15 +84,8 @@ public:
 
     Accelerator*            GetAccel( sal_uInt16 nItemId ) const;
 
-    void                    SetHelpText( const OUString& rHelpText ) { maHelpStr = rHelpText; }
-    const OUString&         GetHelpText() const { return maHelpStr; }
-
     void                    SetActivateHdl( const Link<>& rLink ) { maActivateHdl = rLink; }
-    const Link<>&           GetActivateHdl() const { return maActivateHdl; }
-    void                    SetDeactivateHdl( const Link<>& rLink ) { maDeactivateHdl = rLink; }
-    const Link<>&           GetDeactivateHdl() const { return maDeactivateHdl; }
     void                    SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
-    const Link<>&           GetSelectHdl() const { return maSelectHdl; }
 
     Accelerator&            operator=( const Accelerator& rAccel );
 };
