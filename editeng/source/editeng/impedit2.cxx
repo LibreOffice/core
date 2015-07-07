@@ -1525,7 +1525,7 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
         i18n::Boundary aBoundary = _xBI->getWordBoundary(
             aPaM.GetNode()->GetString(), aPaM.GetIndex(), aLocale, nWordType, true);
 
-        // don't select when curser at end of word
+        // don't select when cursor at end of word
         if ( ( aBoundary.endPos > aPaM.GetIndex() ) &&
              ( ( aBoundary.startPos < aPaM.GetIndex() ) || ( bAcceptStartOfWord && ( aBoundary.startPos == aPaM.GetIndex() ) ) ) )
         {

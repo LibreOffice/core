@@ -124,7 +124,7 @@ public class _XText extends MultiMethodTest {
 
 
     /**
-     * Removes the text contet added before. <p>
+     * Removes the text contest added before. <p>
      * Has <b> OK </b> status if the method successfully returns
      * and no exceptions were thrown. <p>
      * The following method tests are to be completed successfully before :

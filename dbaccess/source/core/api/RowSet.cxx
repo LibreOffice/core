@@ -875,7 +875,7 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
 void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
-    // insertRow is not allowd when
+    // insertRow is not allowed when
     // standing not on the insert row nor
     // when the row isn't modified
     // or the concurency is read only

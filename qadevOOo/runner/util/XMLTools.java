@@ -210,7 +210,7 @@ public class XMLTools {
     * If any collisions found appropriate error message is
     * output into a stream specified. No XML data output, i.e.
     * no output will be performed if no errors occur.<p>
-    * After document is completed there is a way to cehck
+    * After document is completed there is a way to check
     * if the XML data and structure was valid.
     */
     private static class XMLWellFormChecker extends XMLWriter {

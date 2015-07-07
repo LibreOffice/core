@@ -303,7 +303,7 @@ public:
      */
     void startLoading();
 
-    /** @short  wait for an alreay running load request (started by calling
+    /** @short  wait for an already running load request (started by calling
                 startLoading() before).
 
         @descr  The timeout parameter can be used to wait some times only

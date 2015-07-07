@@ -99,7 +99,7 @@ public:
         data source actually *is* registered at the database context.
 
         Normally, this name is passed at time of creation of the ODatabaseModelImpl instance,
-        but if a newly creaed data source is registered, then it must be possible to propagate
+        but if a newly created data source is registered, then it must be possible to propagate
         the new trgistration name.
     */
     static void setName(

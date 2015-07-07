@@ -42,7 +42,7 @@ typedef tPointVecType::size_type        lcl_tSizeType;
 class lcl_SplineCalculation
 {
 public:
-    /** @descr creates an object that calculates cublic splines on construction
+    /** @descr creates an object that calculates cubic splines on construction
 
         @param rSortedPoints  the points for which splines shall be calculated, they need to be sorted in x values
         @param fY1FirstDerivation the resulting spline should have the first
@@ -57,7 +57,7 @@ public:
                            double fY1FirstDerivation,
                            double fYnFirstDerivation );
 
-    /** @descr creates an object that calculates cublic splines on construction
+    /** @descr creates an object that calculates cubic splines on construction
                for the special case of periodic cubic spline
 
         @param rSortedPoints  the points for which splines shall be calculated,

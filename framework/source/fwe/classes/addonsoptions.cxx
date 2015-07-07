@@ -1639,7 +1639,7 @@ Mutex& AddonsOptions::GetOwnStaticMutex()
         // ... we must create a new one. Protect follow code with the global mutex -
         // It must be - we create a static variable!
         MutexGuard aGuard( Mutex::getGlobalMutex() );
-        // We must check our pointer again - because it can be that another instance of our class will be fastr then these!
+        // We must check our pointer again - because it can be that another instance of our class will be faster than these!
         if( pMutex == NULL )
         {
             // Create the new mutex and set it for return on static variable.

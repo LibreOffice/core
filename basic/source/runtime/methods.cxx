@@ -3630,7 +3630,7 @@ RTLFUNC(Shell)
         }
         else if( aCmdLine.isEmpty() )
         {
-            // avaoid special treatment (empty list)
+            // avoid special treatment (empty list)
             aCmdLine += " ";
         }
         sal_Int32 nLen = aCmdLine.getLength();

@@ -1941,7 +1941,7 @@ void ImpEditView::dragOver(const ::com::sun::star::datatransfer::dnd::DropTarget
             {
                 long nScrollX = 0;
                 long nScrollY = 0;
-                // Chech if in the sensitive area
+                // Check if in the sensitive area
                 if ( ( (aMousePos.X()-pDragAndDropInfo->nSensibleRange) < GetOutputArea().Left() ) && ( ( aMousePos.X() + pDragAndDropInfo->nSensibleRange ) > GetOutputArea().Left() ) )
                         nScrollX = GetOutputArea().GetWidth() / SCRLRANGE;
                 else if ( ( (aMousePos.X()+pDragAndDropInfo->nSensibleRange) > GetOutputArea().Right() ) && ( ( aMousePos.X() - pDragAndDropInfo->nSensibleRange ) < GetOutputArea().Right() ) )

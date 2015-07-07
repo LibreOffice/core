@@ -2480,7 +2480,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                         "basic",
                         "couldn't open library element stream - attempted to"
                             " open library \"" << Name << '"');
-                    throw RuntimeException("couln't open library element stream", *this);
+                    throw RuntimeException("couldn't open library element stream", *this);
                 }
             }
             else

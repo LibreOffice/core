@@ -29,7 +29,7 @@ namespace connectivity { namespace hsqldb
     class HTools
     {
     public:
-        /** appens a proper WHERE clause to the given buffer, which filters
+        /** appends a proper WHERE clause to the given buffer, which filters
             for a given table name
 
             @param _bShortForm
