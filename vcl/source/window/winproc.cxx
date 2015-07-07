@@ -739,11 +739,13 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
             }
         }
 
-        if ( !aDelData.IsDead() )
-            aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
+        assert(aNEvt.GetWindow() == pChild);
+
+        if (!pChild->isDisposed() || !aDelData.IsDead())
+            pChild->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
     }
 
-    if ( aDelData.IsDead() )
+    if (pChild->isDisposed() || aDelData.IsDead())
         return true;
 
     if ( nSVEvent == MouseNotifyEvent::MOUSEMOVE )
