@@ -195,8 +195,6 @@ public:
     const MapMode&  GetPrefMapMode() const { return aPrefMapMode; }
     void            SetPrefMapMode( const MapMode& rMapMode ) { aPrefMapMode = rMapMode; }
 
-    void            SetHookHdl( const Link<>& rLink ) { aHookHdlLink = rLink; }
-    const Link<>&   GetHookHdl() const { return aHookHdlLink; }
 
     sal_uLong       GetChecksum() const;
     sal_uLong       GetSizeBytes() const;

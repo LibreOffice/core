@@ -32,6 +32,19 @@ exclusionSet = set([
     # used by Windows build
     "_Bool basegfx::B2ITuple::equalZero() const",
     "class basegfx::B2DPolyPolygon basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const",
+    "void OpenGLContext::requestSingleBufferedRendering()",
+	"_Bool TabitemValue::isBothAligned() const",
+	"_Bool TabitemValue::isNotAligned() const",
+	"void StyleSettings::SetSpinSize(long)",
+	"void StyleSettings::SetFloatTitleHeight(long)",
+    "void StyleSettings::SetTitleHeight(long)",
+    "void StyleSettings::SetUseFlatBorders(_Bool)",
+    "void StyleSettings::SetUseFlatMenus(_Bool)",
+    "void StyleSettings::SetCursorSize(long)",
+    "_Bool CommandMediaData::GetPassThroughToOS() const",
+    "void Application::AppEvent(const class ApplicationEvent &)",
+    # instantiated from a template in VCL, not sure why it is not being picked up
+    "class basegfx::B2DPolygon OutputDevice::PixelToLogic(const class basegfx::B2DPolygon &,const class MapMode &) const",
     ])
 
 

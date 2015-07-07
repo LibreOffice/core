@@ -77,7 +77,6 @@ public:
     LineInfo&       operator=( const LineInfo& rLineInfo );
     bool            operator==( const LineInfo& rLineInfo ) const;
     bool            operator!=( const LineInfo& rLineInfo ) const { return !(LineInfo::operator==( rLineInfo ) ); }
-    bool            IsSameInstance( const LineInfo& rLineInfo ) const { return( mpImplLineInfo == rLineInfo.mpImplLineInfo ); }
 
     void            SetStyle( LineStyle eStyle );
     LineStyle       GetStyle() const { return mpImplLineInfo->meStyle; }

@@ -359,12 +359,10 @@ public:
 
     bool                IsTrackingRepeat() const
                             { return bool(mnFlags & TrackingEventFlags::Repeat); }
-
     bool                IsTrackingEnded() const
                             { return bool(mnFlags & TrackingEventFlags::End); }
     bool                IsTrackingCanceled() const
                             { return bool(mnFlags & TrackingEventFlags::Cancel); }
-    TrackingEventFlags  GetTrackingFlags() const { return mnFlags; }
 };
 
 inline TrackingEvent::TrackingEvent()
@@ -418,10 +416,6 @@ public:
     MouseNotifyEvent        GetType() const { return mnEventType; }
     vcl::Window*            GetWindow() const { return mpWindow; }
     void*                   GetData() const { return mpData; }
-
-    void                    SetReturnValue( long nRet ) { mnRetValue = nRet; }
-    long                    GetReturnValue() const { return mnRetValue; }
-
     const KeyEvent*         GetKeyEvent() const;
     const MouseEvent*       GetMouseEvent() const;
     const CommandEvent*     GetCommandEvent() const;
@@ -479,7 +473,6 @@ public:
                                               AllSettingsFlags nFlags = AllSettingsFlags::NONE );
 
     DataChangedEventType    GetType() const { return mnType; }
-    void*                   GetData() const { return mpData; }
     AllSettingsFlags        GetFlags() const { return mnFlags; }
 
     const AllSettings*      GetOldSettings() const;

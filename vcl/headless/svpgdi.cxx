@@ -708,13 +708,6 @@ void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawBitmap( const SalTwoRect&,
-                                 const SalBitmap&,
-                                 SalColor )
-{
-    // SNI, as in X11 plugin
-}
-
 void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                                  const SalBitmap& rSalBitmap,
                                  const SalBitmap& rTransparentBitmap )

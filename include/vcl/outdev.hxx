@@ -496,10 +496,6 @@ public:
     sal_uLong                   GetColorCount() const;
 
 
-    /// request XCanvas render interface for this OutputDevice
-    css::uno::Reference< css::rendering::XCanvas >
-                                GetCanvas() const;
-
     css::uno::Reference< css::awt::XGraphics >
                                 CreateUnoGraphics();
     std::vector< VCLXGraphics* > *GetUnoGraphicsList() const  { return mpUnoGraphicsList; }
@@ -632,9 +628,7 @@ public:
 
     void                        EnableOutput( bool bEnable = true );
     bool                        IsOutputEnabled() const { return mbOutput; }
-    bool                        IsDeviceOutput() const { return mbDevOutput; }
     bool                        IsDeviceOutputNecessary() const { return (mbOutput && mbDevOutput); }
-    bool                        IsOutputNecessary() const { return ((mbOutput && mbDevOutput) || (mpMetaFile != NULL)); }
 
     void                        SetAntialiasing( AntialiasingFlags nMode = AntialiasingFlags::NONE );
     AntialiasingFlags           GetAntialiasing() const { return mnAntialiasing; }
@@ -1584,13 +1578,6 @@ private:
 
 public:
 
-    /** Query availability of alpha channel
-
-        @return sal_True, if this device has an alpha channel.
-     */
-    bool                        HasAlpha();
-
-
     /** helper method removing transparencies from a metafile (e.g. for printing)
 
         @returns
@@ -1615,14 +1602,6 @@ public:
                                     const Point& rSrcPtPixel, const Size& rSrcSizePixel );
 
     SAL_DLLPRIVATE Color        ImplDrawModeToColor  ( const Color& rColor ) const;
-
-
-    /** Query the existence and depth of the alpha channel
-
-        @return 0, if no alpha channel available, and the bit depth of
-        the alpha channel otherwise.
-     */
-    virtual sal_uInt16          GetAlphaBitCount() const;
 
 
     void                        DrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent );
@@ -1739,15 +1718,10 @@ public:
                                               const MapMode& rMapMode ) const;
     Polygon                     LogicToPixel( const Polygon& rLogicPoly,
                                               const MapMode& rMapMode ) const;
-    basegfx::B2DPolygon         LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
-                                              const MapMode& rMapMode ) const;
     tools::PolyPolygon          LogicToPixel( const tools::PolyPolygon& rLogicPolyPoly,
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                               const MapMode& rMapMode ) const;
-    vcl::Region                 LogicToPixel( const vcl::Region& rLogicRegion,
-                                              const MapMode& rMapMode ) const;
-    basegfx::B2DPolygon         LogicToPixel( const basegfx::B2DPolygon& rLogicPoly ) const;
 
     Point                       PixelToLogic( const Point& rDevicePt ) const;
     Size                        PixelToLogic( const Size& rDeviceSize ) const;
@@ -1769,8 +1743,6 @@ public:
     tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly,
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
-                                              const MapMode& rMapMode ) const;
-    vcl::Region                 PixelToLogic( const vcl::Region& rDeviceRegion,
                                               const MapMode& rMapMode ) const;
 
     Point                       LogicToLogic( const Point&      rPtSource,
