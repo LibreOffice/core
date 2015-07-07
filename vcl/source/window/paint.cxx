@@ -1563,7 +1563,11 @@ void Window::ImplScroll( const Rectangle& rRect,
             Rectangle aDestRect( aRectMirror );
             aDestRect.Move( bReMirror ? -nHorzScroll : nHorzScroll, nVertScroll );
             vcl::Region aWinInvalidateRegion( aRectMirror );
-            aWinInvalidateRegion.Exclude( aDestRect );
+            if (!SupportsDoubleBuffering())
+                // There will be no CopyArea() call below, so invalidate the
+                // whole visible area, not only the smaller one that was just
+                // scrolled in.
+                aWinInvalidateRegion.Exclude(aDestRect);
 
             aInvalidateRegion.Union( aWinInvalidateRegion );
         }
@@ -1609,7 +1613,9 @@ void Window::ImplScroll( const Rectangle& rRect,
         // rendering is all there is.
 
         SalGraphics* pGraphics = ImplGetFrameGraphics();
-        if ( pGraphics )
+        // The invalidation area contains the area what would be copied here,
+        // so avoid copying in case of double buffering.
+        if (pGraphics && !SupportsDoubleBuffering())
         {
             if( bReMirror )
             {
