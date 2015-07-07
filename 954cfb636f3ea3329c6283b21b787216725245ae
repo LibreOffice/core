@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_15b6b2dc",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-07T09:52:01Z",
+      "side": 1,
+      "message": "Actually evaluating the condition should be faster than a memory read-write, in this case though it is not a \"read-and-compare vs write\", because usually values are !\u003d0.0 so most times both, the read and comparison and the write to fMem would be executed. Anyhow, it\u0027s not much about speed, we reach here only if fMem doesn\u0027t have a value already, but rather clarity of code.",
+      "parentUuid": "1a54edaf_35a64ec2",
+      "revId": "954cfb636f3ea3329c6283b21b787216725245ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_517e7faf",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 4
