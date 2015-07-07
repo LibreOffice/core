@@ -1,1 +1,20 @@
 Extensions for the Impress and Draw applications.
+
+source/pdfimport/ - PDF import
+
+	Uses an external poplar process to parse and handle PDF
+	import as draw shapes.
+
+source/minimizer/ - Presentation Minizer
+
+	Shrinks presentations by down-scaling images, and removing
+	extraneous eg. embedded OLE content.
+
+source/presenter/ - Impress / Presenter Console.
+
+	This couples to sd/ in rather strange ways. Its design is
+	heavily mangled by an attempt to use only UNO interfaces
+	which are highly inadequate. This leads to somewhat
+	ridiculous situations. Activating in response to
+	configuration keys (for example), and the 'XPresenterHelper'
+	interface inside sd/ used to create and manage windows.
