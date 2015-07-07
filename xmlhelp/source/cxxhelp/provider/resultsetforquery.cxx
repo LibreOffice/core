@@ -55,7 +55,6 @@
 
 using namespace std;
 using namespace chelp;
-using namespace xmlsearch::excep;
 using namespace xmlsearch::qe;
 using namespace com::sun::star;
 using namespace com::sun::star::ucb;

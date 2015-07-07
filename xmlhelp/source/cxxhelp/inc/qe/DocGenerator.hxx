@@ -21,7 +21,6 @@
 
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <excep/XmlSearchExceptions.hxx>
 #include <vector>
 
 namespace xmlsearch {
