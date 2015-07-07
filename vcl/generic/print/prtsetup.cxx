@@ -256,6 +256,12 @@ void RTSPaperPage::update()
         m_pSlotText->Enable( false );
         m_pSlotBox->Enable( false );
     }
+
+    if (m_pParent->m_aJobData.m_bPapersizeFromSetup)
+    {
+        m_pPaperBox->Enable( false );
+        m_pOrientBox->Enable( false );
+    }
 }
 
 IMPL_LINK( RTSPaperPage, SelectHdl, ListBox*, pBox )
