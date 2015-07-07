@@ -23,9 +23,9 @@ SwWordCountWrapper::SwWordCountWrapper(   vcl::Window *pParentWindow,
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     assert(pFact && "SwAbstractDialogFactory fail!");
-    pAbstDlg = pFact->CreateSwWordCountDialog(pBindings, this, pParentWindow, pInfo);
-    assert(pAbstDlg && "Dialog construction failed!");
-    pWindow = pAbstDlg->GetWindow();
+    xAbstDlg.reset(pFact->CreateSwWordCountDialog(pBindings, this, pParentWindow, pInfo));
+    assert(xAbstDlg && "Dialog construction failed!");
+    pWindow = xAbstDlg->GetWindow();
 
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
 }
@@ -38,12 +38,12 @@ SfxChildWinInfo SwWordCountWrapper::GetInfo() const
 
 void SwWordCountWrapper::UpdateCounts()
 {
-    pAbstDlg->UpdateCounts();
+    xAbstDlg->UpdateCounts();
 }
 
 void SwWordCountWrapper::SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat)
 {
-    pAbstDlg->SetCounts(rCurrCnt, rDocStat);
+    xAbstDlg->SetCounts(rCurrCnt, rDocStat);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
