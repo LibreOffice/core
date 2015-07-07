@@ -40,7 +40,7 @@ struct _LOKDocViewPrivate
 {
     gchar* m_aLOPath;
     gchar* m_aDocPath;
-    guint m_nLoadProgress;
+    gdouble m_nLoadProgress;
     gboolean m_bIsLoading;
     gboolean m_bCanZoomIn;
     gboolean m_bCanZoomOut;
@@ -108,6 +108,7 @@ struct _LOKDocViewPrivate
 
 enum
 {
+    LOAD_CHANGED,
     EDIT_CHANGED,
     COMMAND_CHANGED,
     SEARCH_NOT_FOUND,
@@ -341,17 +342,20 @@ globalCallback (gpointer pData)
     {
     case LOK_CALLBACK_STATUS_INDICATOR_START:
     {
-        priv->m_nLoadProgress = 0;
+        priv->m_nLoadProgress = 0.0;
+        g_signal_emit (pCallback->m_pDocView, doc_view_signals[LOAD_CHANGED], 0, 0.0);
     }
     break;
     case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
     {
-        priv->m_nLoadProgress = std::stoi(pCallback->m_aPayload);
+        priv->m_nLoadProgress = static_cast<gdouble>(std::stoi(pCallback->m_aPayload)/100.0);
+        g_signal_emit (pCallback->m_pDocView, doc_view_signals[LOAD_CHANGED], 0, priv->m_nLoadProgress);
     }
     break;
     case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
     {
-        priv->m_nLoadProgress = 100;
+        priv->m_nLoadProgress = 1.0;
+        g_signal_emit (pCallback->m_pDocView, doc_view_signals[LOAD_CHANGED], 0, 1.0);
     }
     break;
     default:
@@ -1069,7 +1073,7 @@ static void lok_doc_view_get_property (GObject* object, guint propId, GValue *va
         g_value_set_boolean (value, priv->m_bEdit);
         break;
     case PROP_LOAD_PROGRESS:
-        g_value_set_uint (value, priv->m_nLoadProgress);
+        g_value_set_double (value, priv->m_nLoadProgress);
         break;
     case PROP_ZOOM:
         g_value_set_float (value, priv->m_fZoom);
@@ -1210,11 +1214,11 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
      */
     g_object_class_install_property (pGObjectClass,
           PROP_LOAD_PROGRESS,
-          g_param_spec_int("load-progress",
-                           "Estimated Load Progress",
-                           "Whether the content is in edit mode or not",
-                           0, 100, 0,
-                           G_PARAM_READABLE));
+          g_param_spec_double("load-progress",
+                              "Estimated Load Progress",
+                              "Shows the progress of the document load operation",
+                              0.0, 1.0, 0.0,
+                              G_PARAM_READABLE));
 
     /**
      * LOKDocView:zoom-level:
@@ -1298,6 +1302,21 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                                TRUE,
                                static_cast<GParamFlags>(G_PARAM_READABLE
                                                        | G_PARAM_STATIC_STRINGS)));
+
+    /**
+     * LOKDocView::load-changed:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @fLoadProgress: the new progress value
+     */
+    doc_view_signals[LOAD_CHANGED] =
+        g_signal_new("load-changed",
+                     G_TYPE_FROM_CLASS (pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     NULL, NULL,
+                     g_cclosure_marshal_VOID__DOUBLE,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_DOUBLE);
 
     /**
      * LOKDocView::edit-changed:
@@ -1403,16 +1422,16 @@ lok_doc_view_open_document_finish (LOKDocView* pDocView, GAsyncResult* res, GErr
 {
     GTask* task = G_TASK(res);
 
-    g_return_val_if_fail(g_task_is_valid(res, pDocView), NULL);
+    g_return_val_if_fail(g_task_is_valid(res, pDocView), false);
     //FIXME: make source_tag workx
     //g_return_val_if_fail(g_task_get_source_tag(task) == lok_doc_view_open_document, NULL);
-    g_return_val_if_fail(error == NULL || *error == NULL, NULL);
+    g_return_val_if_fail(error == NULL || *error == NULL, false);
 
     return g_task_propagate_boolean(task, error);
 }
 
 static void
-lok_doc_view_open_document_func (GTask* task, gpointer source_object, gpointer task_data, GCancellable* cancellable)
+lok_doc_view_open_document_func (GTask* task, gpointer source_object, gpointer /*task_data*/, GCancellable* /*cancellable*/)
 {
     LOKDocView* pDocView = LOK_DOC_VIEW(source_object);
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
