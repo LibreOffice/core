@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_f8a98be0",
+        "filename": "connectivity/source/drivers/mysql/YTable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2015-07-07T21:40:59Z",
+      "side": 1,
+      "message": "rather \"changed\"?",
+      "range": {
+        "startLine": 225,
+        "startChar": 51,
+        "endLine": 225,
+        "endChar": 52
+      },
+      "revId": "677d7fa27337b2e6817e18fe0c861696ecbd9716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_d8a4cf09",
+        "filename": "connectivity/source/inc/hsqldb/HTools.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2015-07-07T21:40:59Z",
+      "side": 1,
+      "message": "I would rather suggest \"appends\"",
+      "range": {
+        "startLine": 32,
+        "startChar": 12,
+        "endLine": 32,
+        "endChar": 19
+      },
+      "revId": "677d7fa27337b2e6817e18fe0c861696ecbd9716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_b8ac73ee",
+        "filename": "filter/source/xslt/import/wordml/wordml2ooo_path.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 700,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2015-07-07T21:40:59Z",
+      "side": 1,
+      "message": "haven\u0027t ... enhanced...",
+      "range": {
+        "startLine": 700,
+        "startChar": 72,
+        "endLine": 700,
+        "endChar": 73
+      },
+      "revId": "677d7fa27337b2e6817e18fe0c861696ecbd9716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_58b9bf2d",
+        "filename": "filter/source/xslt/import/wordml/wordml2ooo_path.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2015-07-07T21:40:59Z",
+      "side": 1,
+      "message": "same comment",
+      "range": {
+        "startLine": 719,
+        "startChar": 58,
+        "endLine": 719,
+        "endChar": 59
+      },
+      "revId": "677d7fa27337b2e6817e18fe0c861696ecbd9716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_78b6fb3e",
+        "filename": "filter/source/xslt/import/wordml/wordml2ooo_path.xsl",
+        "patchSetId": 1
+      },
+      "lineNbr": 745,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2015-07-07T21:40:59Z",
+      "side": 1,
+      "message": "same comment",
+      "range": {
+        "startLine": 745,
+        "startChar": 42,
+        "endLine": 745,
+        "endChar": 49
+      },
+      "revId": "677d7fa27337b2e6817e18fe0c861696ecbd9716",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
