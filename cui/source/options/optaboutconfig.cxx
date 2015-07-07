@@ -920,7 +920,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, ExpandingHdl_Impl )
         }
     }
 
-    return true;
+    return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
