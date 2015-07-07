@@ -1630,7 +1630,7 @@ bitmapToPixbuf( SalBitmap *pSalBitmap, SalBitmap *pSalAlpha )
 
     BitmapBuffer *pBitmap = pSalBitmap->AcquireBuffer( BITMAP_READ_ACCESS );
     g_return_val_if_fail( pBitmap != NULL, NULL );
-    g_return_val_if_fail( pBitmap->mnBitCount == 24, NULL );
+    g_return_val_if_fail( pBitmap->mnBitCount == 24 || pBitmap->mnBitCount == 32, NULL );
 
     BitmapBuffer *pAlpha = pSalAlpha->AcquireBuffer( BITMAP_READ_ACCESS );
     g_return_val_if_fail( pAlpha != NULL, NULL );
@@ -1650,19 +1650,20 @@ bitmapToPixbuf( SalBitmap *pSalBitmap, SalBitmap *pSalAlpha )
 
         for( nX = 0; nX < pBitmap->mnWidth; nX++ )
         {
-            if( pBitmap->mnFormat == BMP_FORMAT_24BIT_TC_BGR )
+            BitmapColor aColor;
+            if (pBitmap->mnBitCount == 24)
             {
-                pDestData[2] = *pData++;
-                pDestData[1] = *pData++;
-                pDestData[0] = *pData++;
+                pBitmap->maColorMask.GetColorFor24Bit(aColor, pData);
+                pData+=3;
             }
-            else // BMP_FORMAT_24BIT_TC_RGB
+            else
             {
-                pDestData[0] = *pData++;
-                pDestData[1] = *pData++;
-                pDestData[2] = *pData++;
+                pBitmap->maColorMask.GetColorFor32Bit(aColor, pData);
+                pData+=4;
             }
-            pDestData += 3;
+            *pDestData++ = aColor.GetRed();
+            *pDestData++ = aColor.GetGreen();
+            *pDestData++ = aColor.GetBlue();
             *pDestData++ = 255 - *pAlphaData++;
         }
     }
