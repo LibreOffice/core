@@ -40,7 +40,6 @@ public:
     virtual ~ZipPackageBuffer();
 
     inline void realloc ( sal_Int32 nSize ) { m_aBuffer.realloc ( nSize ); }
-    inline const sal_Int8 * getConstArray () const { return m_aBuffer.getConstArray(); }
     inline const com::sun::star::uno::Sequence < sal_Int8> getSequence () const { return m_aBuffer; }
 
     // XInputStream

@@ -213,8 +213,6 @@ struct OStorage_Impl
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > GetAllRelationshipsIfAny();
     void CopyLastCommitTo( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewStor );
-    void CopyLastCommitTo( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewStor,
-                            const OUString& aPass );
 
     void InsertIntoPackageFolder(
             const OUString& aName,
@@ -232,8 +230,6 @@ struct OStorage_Impl
                             const OUString& aName,
                             bool bDirect );
 
-    void SetModified( bool bModified );
-
     SotElement_Impl* FindElement( const OUString& rName );
 
     SotElement_Impl* InsertStream( const OUString& aName, bool bEncr );
@@ -250,7 +246,6 @@ struct OStorage_Impl
 
     void RemoveElement( SotElement_Impl* pElement );
     static void ClearElement( SotElement_Impl* pElement );
-    void DisposeChildren();
 
     void CloneStreamElement(
                     const OUString& aStreamName,
@@ -297,8 +292,6 @@ class OStorage  : public ::com::sun::star::lang::XTypeProvider
     std::unique_ptr<StorInternalData_Impl> m_pData;
 
 protected:
-
-    void Commit_Impl();
 
     SotElement_Impl* OpenStreamElement_Impl( const OUString& aStreamName, sal_Int32 nOpenMode, bool bEncr );
 

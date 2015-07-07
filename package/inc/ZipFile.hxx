@@ -67,18 +67,6 @@ protected:
 
     bool bRecoveryMode;
 
-    com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createMemoryStream(
-            ZipEntry & rEntry,
-            const ::rtl::Reference < EncryptionData > &rData,
-            bool bRawStream,
-            bool bDecrypt );
-
-    com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createFileStream(
-            ZipEntry & rEntry,
-            const ::rtl::Reference < EncryptionData > &rData,
-            bool bRawStream,
-            bool bDecrypt );
-
     // aMediaType parameter is used only for raw stream header creation
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createUnbufferedStream(
             const rtl::Reference<SotMutexHolder>& aMutexHolder,

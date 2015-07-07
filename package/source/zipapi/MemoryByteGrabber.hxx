@@ -59,48 +59,13 @@ public:
         return nBytesToRead;
     }
 
-    sal_Int32 SAL_CALL readSomeBytes( com::sun::star::uno::Sequence< sal_Int8 >& aData,
-                                                    sal_Int32 nMaxBytesToRead )
-        throw(com::sun::star::io::NotConnectedException, com::sun::star::io::BufferSizeExceededException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
-    {
-        return readBytes( aData, nMaxBytesToRead );
-    }
     void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
         throw(com::sun::star::io::NotConnectedException, com::sun::star::io::BufferSizeExceededException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
     {
         mnCurrent += nBytesToSkip;
     }
-    sal_Int32 SAL_CALL available(  )
-        throw(com::sun::star::io::NotConnectedException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
-    {
-        return mnEnd - mnCurrent;
-    }
 
     // XSeekable chained...
-    sal_Int64 SAL_CALL seek( sal_Int64 location )
-        throw(com::sun::star::lang::IllegalArgumentException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
-    {
-        if ( location < 0 || location > mnEnd )
-            throw com::sun::star::lang::IllegalArgumentException ();
-        mnCurrent = static_cast < sal_Int32 > ( location );
-        return mnCurrent;
-    }
-    sal_Int64 SAL_CALL getPosition(  )
-            throw(com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
-    {
-        return mnCurrent;
-    }
-    sal_Int64 SAL_CALL getLength(  )
-            throw(com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
-    {
-        return mnEnd;
-    }
-    sal_Int8 ReadInt8()
-    {
-        if (mnCurrent + 1 > mnEnd )
-            return 0;
-        return mpBuffer [mnCurrent++] & 0xFF;
-    }
     sal_Int16 ReadInt16()
     {
         if (mnCurrent + 2 > mnEnd )
@@ -121,21 +86,6 @@ public:
         return nInt32;
     }
 
-    sal_uInt8 ReadUInt8()
-    {
-        if (mnCurrent + 1 > mnEnd )
-            return 0;
-        return mpBuffer [mnCurrent++] & 0xFF;
-    }
-    sal_uInt16 ReadUInt16()
-    {
-        if (mnCurrent + 2 > mnEnd )
-            return 0;
-
-        sal_uInt16 nInt16  =   mpBuffer [mnCurrent++] & 0xFF;
-        nInt16 |= ( mpBuffer [mnCurrent++] & 0xFF ) << 8;
-        return nInt16;
-    }
     sal_uInt32 ReadUInt32()
     {
         if (mnCurrent + 4 > mnEnd )
