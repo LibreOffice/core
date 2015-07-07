@@ -25,7 +25,7 @@
 // GetAppData()
 
 // 0 (SHL_SHL1) removed
-#define SHL_SHL2        1
+// 1 (SHL_SHL2) removed
 // 2 (SHL_SHL3) removed
 // 3 (SHL_APP1) removed
 // 4 (SHL_APP2) removed

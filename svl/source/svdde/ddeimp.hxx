@@ -121,10 +121,6 @@ public:
     }
 };
 
-#ifndef SHL_SVDDE
-#define SHL_SVDDE   SHL_SHL2
-#endif
-
 inline DdeInstData* ImpGetInstData()
 {
     return (DdeInstData*)(*GetAppData( SHL_SVDDE ));
