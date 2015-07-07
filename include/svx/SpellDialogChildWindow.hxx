@@ -46,7 +46,7 @@ class SVX_DLLPUBLIC SpellDialogChildWindow
     : public SfxChildWindow
 {
     friend class SpellDialog;
-    AbstractSpellDialog* m_pAbstractSpellDialog;
+    std::unique_ptr<AbstractSpellDialog> m_xAbstractSpellDialog;
 public:
     SpellDialogChildWindow (
         vcl::Window*pParent,

@@ -35,10 +35,10 @@ SpellDialogChildWindow::SpellDialogChildWindow (
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "SvxAbstractDialogFactory::Create() failed");
-    m_pAbstractSpellDialog = pFact->CreateSvxSpellDialog(_pParent,
+    m_xAbstractSpellDialog.reset(pFact->CreateSvxSpellDialog(_pParent,
                                             pBindings,
-                                            this );
-    pWindow = m_pAbstractSpellDialog->GetWindow();
+                                            this ));
+    pWindow = m_xAbstractSpellDialog->GetWindow();
     eChildAlignment = SfxChildAlignment::NOALIGNMENT;
     SetHideNotDelete(true);
 }
@@ -49,15 +49,15 @@ SpellDialogChildWindow::~SpellDialogChildWindow()
 
 SfxBindings& SpellDialogChildWindow::GetBindings() const
 {
-    OSL_ASSERT (m_pAbstractSpellDialog != NULL);
-    return m_pAbstractSpellDialog->GetBindings();
+    assert(m_xAbstractSpellDialog);
+    return m_xAbstractSpellDialog->GetBindings();
 }
 
 void SpellDialogChildWindow::InvalidateSpellDialog()
 {
-    OSL_ASSERT (m_pAbstractSpellDialog != NULL);
-    if(m_pAbstractSpellDialog)
-        m_pAbstractSpellDialog->Invalidate();
+    OSL_ASSERT (m_xAbstractSpellDialog);
+    if (m_xAbstractSpellDialog)
+        m_xAbstractSpellDialog->Invalidate();
 }
 
 bool SpellDialogChildWindow::HasAutoCorrection()
