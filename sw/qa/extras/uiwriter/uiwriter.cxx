@@ -50,12 +50,17 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "com/sun/star/util/XNumberFormatTypes.hpp"
+#include "com/sun/star/util/NumberFormat.hpp"
+#include "com/sun/star/util/XNumberFormatsSupplier.hpp"
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include "com/sun/star/util/SearchAlgorithms.hpp"
 #include "com/sun/star/i18n/TransliterationModulesExtra.hpp"
 #include "com/sun/star/sdbcx/XTablesSupplier.hpp"
 #include "com/sun/star/text/XParagraphCursor.hpp"
+#include "com/sun/star/beans/PropertyAttribute.hpp"
+#include "com/sun/star/text/XTextField.hpp"
 #include <osl/file.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
@@ -108,6 +113,7 @@ public:
     void testTdf75137();
     void testTdf83798();
     void testTableBackgroundColor();
+    void testTdf88899();
     void testTdf90362();
     void testUndoCharAttribute();
     void testTdf86639();
@@ -160,6 +166,7 @@ public:
     CPPUNIT_TEST(testTdf75137);
     CPPUNIT_TEST(testTdf83798);
     CPPUNIT_TEST(testTableBackgroundColor);
+    CPPUNIT_TEST(testTdf88899);
     CPPUNIT_TEST(testTdf90362);
     CPPUNIT_TEST(testUndoCharAttribute);
     CPPUNIT_TEST(testTdf86639);
@@ -1358,6 +1365,36 @@ void SwUiWriterTest::testTableBackgroundColor()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
     xCell = xTable->getCellByName("C3");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
+}
+
+void SwUiWriterTest::testTdf88899()
+{
+    createDoc();
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xProps(xDocumentPropertiesSupplier->getDocumentProperties());
+    uno::Reference<beans::XPropertyContainer> xUserProps(xProps->getUserDefinedProperties(), uno::UNO_QUERY);
+    com::sun::star::util::DateTime aDateTime = {sal_uInt32(1234567), sal_uInt16(3), sal_uInt16(3), sal_uInt16(3), sal_uInt16(10), sal_uInt16(11), sal_uInt16(2014), sal_Bool(true)};
+    xUserProps->addProperty("dateTime", sal_Int16(beans::PropertyAttribute::OPTIONAL), uno::makeAny(aDateTime));
+    uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextField> xTextField(xFact->createInstance("com.sun.star.text.textfield.docinfo.Custom"), uno::UNO_QUERY);
+    //Setting Name Property
+    uno::Reference<beans::XPropertySet> xPropSet(xTextField, uno::UNO_QUERY_THROW);
+    xPropSet->setPropertyValue(OUString("Name"), uno::makeAny(OUString("dateTime")));
+    //Setting NumberFormat
+    uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XNumberFormatTypes> xNumFormat(xNumberFormatsSupplier->getNumberFormats(), uno::UNO_QUERY);
+    com::sun::star::lang::Locale alocale;
+    alocale.Language = OUString("en");
+    alocale.Country = OUString("US");
+    sal_Int16 key = xNumFormat->getStandardFormat(util::NumberFormat::DATETIME, alocale);
+    xPropSet->setPropertyValue(OUString("NumberFormat"), uno::makeAny(sal_Int16(key)));
+    //Inserting Text Content
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xTextRange->getText(), uno::UNO_QUERY);
+    xText->insertTextContent(xTextRange, xTextField, true);
+    //Retrieving the contents for verification
+    CPPUNIT_ASSERT_EQUAL(OUString("11/10/14 03:03 AM"), xTextField->getPresentation(false));
 }
 
 void SwUiWriterTest::testTdf90362()
