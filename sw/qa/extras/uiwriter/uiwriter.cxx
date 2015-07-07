@@ -1384,8 +1384,8 @@ void SwUiWriterTest::testTdf88899()
     uno::Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<util::XNumberFormatTypes> xNumFormat(xNumberFormatsSupplier->getNumberFormats(), uno::UNO_QUERY);
     com::sun::star::lang::Locale alocale;
-    alocale.Language = OUString("en");
-    alocale.Country = OUString("US");
+    alocale.Language = "en";
+    alocale.Country = "US";
     sal_Int16 key = xNumFormat->getStandardFormat(util::NumberFormat::DATETIME, alocale);
     xPropSet->setPropertyValue(OUString("NumberFormat"), uno::makeAny(sal_Int16(key)));
     //Inserting Text Content
