@@ -825,7 +825,7 @@ bool PrinterController::setupPrinter( vcl::Window* i_pParent )
         }
 
         // call driver setup
-        bRet = mpImplData->mxPrinter->Setup( i_pParent );
+        bRet = mpImplData->mxPrinter->Setup( i_pParent, getPapersizeFromSetup() );
         Size aNewPaperSize(mpImplData->mxPrinter->GetPaperSize());
         if (bRet)
         {

@@ -61,6 +61,7 @@ ImplJobSetup::ImplJobSetup()
     mnPaperHeight       = 0;
     mnDriverDataLen     = 0;
     mpDriverData        = NULL;
+    mbPapersizeFromSetup = false;
 }
 
 ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
@@ -83,6 +84,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
     }
     else
         mpDriverData = NULL;
+    mbPapersizeFromSetup = rJobSetup.mbPapersizeFromSetup;
     maValueMap          = rJobSetup.maValueMap;
 }
 
