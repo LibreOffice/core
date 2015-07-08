@@ -1933,6 +1933,20 @@ void GtkData::initNWF()
     pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
     pSVData->maNWFData.mbDDListBoxNoTextArea = true;
     pSVData->maNWFData.mbNoFocusRects = true;
+
+    GtkSettings *gtks = gtk_settings_get_default ();
+    gint val;
+    g_object_get (gtks, "gtk-auto-mnemonics", &val, NULL);
+    if (val)
+        pSVData->maNWFData.mbAutoAccel = true;
+    else
+        pSVData->maNWFData.mbAutoAccel = false;
+
+    g_object_get (gtks, "gtk-enable-mnemonics", &val, NULL);
+    if (val)
+        pSVData->maNWFData.mbEnableAccel = true;
+    else
+        pSVData->maNWFData.mbEnableAccel = false;
 }
 
 void GtkData::deInitNWF()

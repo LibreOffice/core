@@ -80,6 +80,8 @@ private:
     bool            mbAutoPopup;
     bool            bIgnoreFirstMove;
     bool            bStayActive;
+    bool            mbHideAccel;
+    bool            mbMenuKey;
 
     VclPtr<DecoToolBox>  aCloseBtn;
     VclPtr<PushButton>   aFloatBtn;
@@ -145,6 +147,10 @@ public:
     virtual Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId) SAL_OVERRIDE;
     virtual void RemoveMenuBarButton(sal_uInt16 nId) SAL_OVERRIDE;
     virtual bool HandleMenuButtonEvent(sal_uInt16 i_nButtonId) SAL_OVERRIDE;
+    virtual void SetMBWHideAccel (bool val) { mbHideAccel = val; }
+    virtual bool GetMBWHideAccel (void) const { return mbHideAccel; }
+    virtual void SetMBWMenuKey (bool val) { mbMenuKey = val; }
+    virtual bool GetMBWMenuKey (void) const { return mbMenuKey; }
 };
 
 #endif // INCLUDED_VCL_SOURCE_WINDOW_MENUBARWINDOW_HXX
