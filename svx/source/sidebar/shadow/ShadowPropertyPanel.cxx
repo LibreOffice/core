@@ -28,6 +28,35 @@ using namespace css;
 using namespace css::uno;
 using sfx2::sidebar::Theme;
 
+namespace {
+
+sal_uInt32 ParseText(OUString const & sTmp)
+{
+    if (sTmp.isEmpty())
+        return 0;
+    sal_Unicode nChar = sTmp[0];
+    if( nChar == '-' )
+    {
+        if (sTmp.getLength() < 2)
+            return 0;
+        nChar = sTmp[1];
+    }
+
+    if( (nChar < '0') || (nChar > '9') )
+        return 0;
+
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+    const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
+
+    rtl_math_ConversionStatus eStatus;
+    double fTmp = rtl::math::stringToDouble( sTmp, cSep, 0, &eStatus);
+    if (eStatus != rtl_math_ConversionStatus_Ok)
+        return 0;
+
+    return fTmp;
+}
+
+}
 
 namespace svx { namespace sidebar {
 
@@ -169,33 +198,6 @@ IMPL_LINK_NOARG(ShadowPropertyPanel, ModifyShadowDistanceHdl)
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_SHADOW_XDISTANCE, SfxCallMode::RECORD, &aXItem, 0L);
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_SHADOW_YDISTANCE, SfxCallMode::RECORD, &aYItem, 0L);
     return 0;
-}
-
-sal_uInt32 ShadowPropertyPanel::ParseText(OUString sTmp)
-{
-    if (sTmp.isEmpty())
-        return 0;
-    sal_Unicode nChar = sTmp[0];
-    if( nChar == '-' )
-    {
-        if (sTmp.getLength() < 2)
-            return 0;
-        nChar = sTmp[1];
-    }
-
-    if( (nChar < '0') || (nChar > '9') )
-        return 0;
-
-    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
-
-    rtl_math_ConversionStatus eStatus;
-    double fTmp = rtl::math::stringToDouble( sTmp, cSep, 0, &eStatus);
-    if (eStatus != rtl_math_ConversionStatus_Ok)
-        return 0;
-
-    return fTmp;
-
 }
 
 void ShadowPropertyPanel::UpdateControls()

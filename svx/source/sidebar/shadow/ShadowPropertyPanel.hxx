@@ -65,7 +65,6 @@ private:
     VclPtr<Slider>        mpShadowTransSlider;
     VclPtr<MetricField>   mpShadowTransMetric;
     XColorListRef         pColorList;
-    bool bDisabled;
 
     ::sfx2::sidebar::ControllerItem maShadowController;
     ::sfx2::sidebar::ControllerItem maShadowTransController;
@@ -83,7 +82,6 @@ private:
     void InsertAngleValues();
     void SetTransparencyValue(long);
     void UpdateControls();
-    sal_uInt32 ParseText(OUString pStr);
     DECL_LINK(ClickShadowHdl, void*);
     DECL_LINK(ModifyShadowColorHdl, void*);
     DECL_LINK(ModifyShadowTransMetricHdl, void*);
