@@ -65,6 +65,7 @@ struct UserData
     explicit UserData( OUString const & rPropertyPath )
         : bIsPropertyPath( true )
         , sPropertyPath(rPropertyPath)
+        , aLineage(0)
     {}
 
     explicit UserData( Reference<XNameAccess> const & rXNameAccess, int rIndex = 0 )
