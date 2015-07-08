@@ -906,16 +906,9 @@ uno::Sequence< uno::Any > PropValVector::getValues()
 }
 uno::Sequence< OUString > PropValVector::getNames()
 {
-    uno::Sequence< OUString > aRet( m_aValues.size() );
-    OUString* pNames = aRet.getArray();
-    sal_Int32 nVal = 0;
-    auto aIt = m_aValues.begin();
-    while (aIt != m_aValues.end())
-    {
-        pNames[nVal++] = aIt->Name;
-        ++aIt;
-    }
-    return aRet;
+    std::vector<OUString> aRet;
+    std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet), [](const beans::PropertyValue& rValue) { return rValue.Name; });
+    return comphelper::containerToSequence(aRet);
 }
 
 
