@@ -28,6 +28,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
+#include <boost/bind.hpp>
 #include <boost/cast.hpp>
 
 #include "dx_spritecanvashelper.hxx"

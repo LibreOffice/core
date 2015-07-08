@@ -34,6 +34,8 @@
 
 #include <basegfx/tools/canvastools.hxx>
 
+#include <boost/bind.hpp>
+
 #include <algorithm>
 
 #include "spritecanvas.hxx"

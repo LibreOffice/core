@@ -33,7 +33,6 @@
 #include <algorithm>
 
 #include <boost/utility.hpp>
-#include <boost/bind.hpp>
 
 #include <canvas/canvastoolsdllapi.h>
 
