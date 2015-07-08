@@ -430,7 +430,7 @@ Reference< chart2::XChartType > SAL_CALL PieChartTypeTemplate::getChartTypeForNe
             GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
         xResult.set( xFact->createInstance(
                          CHART2_SERVICE_NAME_CHARTTYPE_PIE ), uno::UNO_QUERY_THROW );
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
+        ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
         Reference< beans::XPropertySet > xCTProp( xResult, uno::UNO_QUERY );
         if( xCTProp.is())
         {

@@ -124,7 +124,7 @@ namespace drawinglayer
                 // transform texture coordinates to texture size
                 basegfx::B2DHomMatrix aTexMatrix;
                 aTexMatrix.scale(getTextureSize().getX(), getTextureSize().getY());
-                aFill.transformTextureCoordiantes(aTexMatrix);
+                aFill.transformTextureCoordinates(aTexMatrix);
             }
 
             // build vector of PolyPolygons

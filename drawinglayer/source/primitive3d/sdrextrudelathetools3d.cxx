@@ -883,7 +883,7 @@ namespace drawinglayer
 
                 if(bCreateTextureCoordinates)
                 {
-                    aEdgeRounding.transformTextureCoordiantes(rTexTransform);
+                    aEdgeRounding.transformTextureCoordinates(rTexTransform);
                 }
 
                 for(a = 0L; a < aEdgeRounding.count(); a++)

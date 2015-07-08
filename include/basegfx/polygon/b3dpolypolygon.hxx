@@ -73,7 +73,7 @@ namespace basegfx
         void clearNormals();
 
         // TextureCoordinate interface
-        void transformTextureCoordiantes(const B2DHomMatrix& rMatrix);
+        void transformTextureCoordinates(const B2DHomMatrix& rMatrix);
         bool areTextureCoordinatesUsed() const;
         void clearTextureCoordinates();
 

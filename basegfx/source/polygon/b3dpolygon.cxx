@@ -753,7 +753,7 @@ class ImplB3DPolygon
 
     // The TextureCoordinates vector. This vectors are created on demand
     // and may be zero.
-    TextureCoordinate2D*                            mpTextureCoordiantes;
+    TextureCoordinate2D*                            mpTextureCoordinates;
 
     // The calculated plane normal. mbPlaneNormalValid says if it's valid.
     ::basegfx::B3DVector                            maPlaneNormal;
@@ -781,7 +781,7 @@ public:
     :   maPoints(0L),
         mpBColors(0L),
         mpNormals(0L),
-        mpTextureCoordiantes(0L),
+        mpTextureCoordinates(0L),
         maPlaneNormal(::basegfx::B3DVector::getEmptyVector()),
         mbIsClosed(false),
         mbPlaneNormalValid(true)
@@ -793,7 +793,7 @@ public:
     :   maPoints(rToBeCopied.maPoints),
         mpBColors(0L),
         mpNormals(0L),
-        mpTextureCoordiantes(0L),
+        mpTextureCoordinates(0L),
         maPlaneNormal(rToBeCopied.maPlaneNormal),
         mbIsClosed(rToBeCopied.mbIsClosed),
         mbPlaneNormalValid(rToBeCopied.mbPlaneNormalValid)
@@ -809,9 +809,9 @@ public:
             mpNormals = new NormalsArray3D(*rToBeCopied.mpNormals);
         }
 
-        if(rToBeCopied.mpTextureCoordiantes && rToBeCopied.mpTextureCoordiantes->isUsed())
+        if(rToBeCopied.mpTextureCoordinates && rToBeCopied.mpTextureCoordinates->isUsed())
         {
-            mpTextureCoordiantes = new TextureCoordinate2D(*rToBeCopied.mpTextureCoordiantes);
+            mpTextureCoordinates = new TextureCoordinate2D(*rToBeCopied.mpTextureCoordinates);
         }
     }
 
@@ -819,7 +819,7 @@ public:
     :   maPoints(rToBeCopied.maPoints, nIndex, nCount),
         mpBColors(0L),
         mpNormals(0L),
-        mpTextureCoordiantes(0L),
+        mpTextureCoordinates(0L),
         maPlaneNormal(::basegfx::B3DVector::getEmptyVector()),
         mbIsClosed(rToBeCopied.mbIsClosed),
         mbPlaneNormalValid(false)
@@ -847,14 +847,14 @@ public:
             }
         }
 
-        if(rToBeCopied.mpTextureCoordiantes && rToBeCopied.mpTextureCoordiantes->isUsed())
+        if(rToBeCopied.mpTextureCoordinates && rToBeCopied.mpTextureCoordinates->isUsed())
         {
-            mpTextureCoordiantes = new TextureCoordinate2D(*rToBeCopied.mpTextureCoordiantes, nIndex, nCount);
+            mpTextureCoordinates = new TextureCoordinate2D(*rToBeCopied.mpTextureCoordinates, nIndex, nCount);
 
-            if(!mpTextureCoordiantes->isUsed())
+            if(!mpTextureCoordinates->isUsed())
             {
-                delete mpTextureCoordiantes;
-                mpTextureCoordiantes = 0L;
+                delete mpTextureCoordinates;
+                mpTextureCoordinates = 0L;
             }
         }
     }
@@ -873,10 +873,10 @@ public:
             mpNormals = 0L;
         }
 
-        if(mpTextureCoordiantes)
+        if(mpTextureCoordinates)
         {
-            delete mpTextureCoordiantes;
-            mpTextureCoordiantes = 0L;
+            delete mpTextureCoordinates;
+            mpTextureCoordinates = 0L;
         }
     }
 
@@ -918,7 +918,7 @@ public:
         {
             if(rCandidate.mpBColors)
             {
-                // we have no TextureCoordiantes, so it's assumed all unused.
+                // we have no TextureCoordinates, so it's assumed all unused.
                 bBColorsAreEqual = !rCandidate.mpBColors->isUsed();
             }
         }
@@ -958,24 +958,24 @@ public:
     {
         bool bTextureCoordinatesAreEqual(true);
 
-        if(mpTextureCoordiantes)
+        if(mpTextureCoordinates)
         {
-            if(rCandidate.mpTextureCoordiantes)
+            if(rCandidate.mpTextureCoordinates)
             {
-                bTextureCoordinatesAreEqual = (*mpTextureCoordiantes == *rCandidate.mpTextureCoordiantes);
+                bTextureCoordinatesAreEqual = (*mpTextureCoordinates == *rCandidate.mpTextureCoordinates);
             }
             else
             {
                 // candidate has no TextureCoordinates, so it's assumed all unused.
-                bTextureCoordinatesAreEqual = !mpTextureCoordiantes->isUsed();
+                bTextureCoordinatesAreEqual = !mpTextureCoordinates->isUsed();
             }
         }
         else
         {
-            if(rCandidate.mpTextureCoordiantes)
+            if(rCandidate.mpTextureCoordinates)
             {
-                // we have no TextureCoordiantes, so it's assumed all unused.
-                bTextureCoordinatesAreEqual = !rCandidate.mpTextureCoordiantes->isUsed();
+                // we have no TextureCoordinates, so it's assumed all unused.
+                bTextureCoordinatesAreEqual = !rCandidate.mpTextureCoordinates->isUsed();
             }
         }
 
@@ -1033,9 +1033,9 @@ public:
                 mpNormals->insert(nIndex, ::basegfx::B3DVector::getEmptyVector(), nCount);
             }
 
-            if(mpTextureCoordiantes)
+            if(mpTextureCoordinates)
             {
-                mpTextureCoordiantes->insert(nIndex, ::basegfx::B2DPoint::getEmptyPoint(), nCount);
+                mpTextureCoordinates->insert(nIndex, ::basegfx::B2DPoint::getEmptyPoint(), nCount);
             }
         }
     }
@@ -1157,9 +1157,9 @@ public:
 
     const ::basegfx::B2DPoint& getTextureCoordinate(sal_uInt32 nIndex) const
     {
-        if(mpTextureCoordiantes)
+        if(mpTextureCoordinates)
         {
-            return mpTextureCoordiantes->getTextureCoordinate(nIndex);
+            return mpTextureCoordinates->getTextureCoordinate(nIndex);
         }
         else
         {
@@ -1169,45 +1169,45 @@ public:
 
     void setTextureCoordinate(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rValue)
     {
-        if(!mpTextureCoordiantes)
+        if(!mpTextureCoordinates)
         {
             if(!rValue.equalZero())
             {
-                mpTextureCoordiantes = new TextureCoordinate2D(maPoints.count());
-                mpTextureCoordiantes->setTextureCoordinate(nIndex, rValue);
+                mpTextureCoordinates = new TextureCoordinate2D(maPoints.count());
+                mpTextureCoordinates->setTextureCoordinate(nIndex, rValue);
             }
         }
         else
         {
-            mpTextureCoordiantes->setTextureCoordinate(nIndex, rValue);
+            mpTextureCoordinates->setTextureCoordinate(nIndex, rValue);
 
-            if(!mpTextureCoordiantes->isUsed())
+            if(!mpTextureCoordinates->isUsed())
             {
-                delete mpTextureCoordiantes;
-                mpTextureCoordiantes = 0L;
+                delete mpTextureCoordinates;
+                mpTextureCoordinates = 0L;
             }
         }
     }
 
     bool areTextureCoordinatesUsed() const
     {
-        return (mpTextureCoordiantes && mpTextureCoordiantes->isUsed());
+        return (mpTextureCoordinates && mpTextureCoordinates->isUsed());
     }
 
     void clearTextureCoordinates()
     {
-        if(mpTextureCoordiantes)
+        if(mpTextureCoordinates)
         {
-            delete mpTextureCoordiantes;
-            mpTextureCoordiantes = 0L;
+            delete mpTextureCoordinates;
+            mpTextureCoordinates = 0L;
         }
     }
 
     void transformTextureCoordinates(const ::basegfx::B2DHomMatrix& rMatrix)
     {
-        if(mpTextureCoordiantes)
+        if(mpTextureCoordinates)
         {
-            mpTextureCoordiantes->transform(rMatrix);
+            mpTextureCoordinates->transform(rMatrix);
         }
     }
 
@@ -1254,20 +1254,20 @@ public:
                 }
             }
 
-            if(rSource.mpTextureCoordiantes && rSource.mpTextureCoordiantes->isUsed())
+            if(rSource.mpTextureCoordinates && rSource.mpTextureCoordinates->isUsed())
             {
-                if(!mpTextureCoordiantes)
+                if(!mpTextureCoordinates)
                 {
-                    mpTextureCoordiantes = new TextureCoordinate2D(maPoints.count());
+                    mpTextureCoordinates = new TextureCoordinate2D(maPoints.count());
                 }
 
-                mpTextureCoordiantes->insert(nIndex, *rSource.mpTextureCoordiantes);
+                mpTextureCoordinates->insert(nIndex, *rSource.mpTextureCoordinates);
             }
             else
             {
-                if(mpTextureCoordiantes)
+                if(mpTextureCoordinates)
                 {
-                    mpTextureCoordiantes->insert(nIndex, ::basegfx::B2DPoint::getEmptyPoint(), nCount);
+                    mpTextureCoordinates->insert(nIndex, ::basegfx::B2DPoint::getEmptyPoint(), nCount);
                 }
             }
         }
@@ -1302,14 +1302,14 @@ public:
                 }
             }
 
-            if(mpTextureCoordiantes)
+            if(mpTextureCoordinates)
             {
-                mpTextureCoordiantes->remove(nIndex, nCount);
+                mpTextureCoordinates->remove(nIndex, nCount);
 
-                if(!mpTextureCoordiantes->isUsed())
+                if(!mpTextureCoordinates->isUsed())
                 {
-                    delete mpTextureCoordiantes;
-                    mpTextureCoordiantes = 0L;
+                    delete mpTextureCoordinates;
+                    mpTextureCoordinates = 0L;
                 }
             }
         }
@@ -1337,9 +1337,9 @@ public:
                 mpNormals->flip();
             }
 
-            if(mpTextureCoordiantes)
+            if(mpTextureCoordinates)
             {
-                mpTextureCoordiantes->flip();
+                mpTextureCoordinates->flip();
             }
         }
     }
@@ -1361,7 +1361,7 @@ public:
 
                     if(bNormalsEqual)
                     {
-                        const bool bTextureCoordinatesEqual(!mpTextureCoordiantes || (mpTextureCoordiantes->getTextureCoordinate(0L) == mpTextureCoordiantes->getTextureCoordinate(nIndex)));
+                        const bool bTextureCoordinatesEqual(!mpTextureCoordinates || (mpTextureCoordinates->getTextureCoordinate(0L) == mpTextureCoordinates->getTextureCoordinate(nIndex)));
 
                         if(bTextureCoordinatesEqual)
                         {
@@ -1385,7 +1385,7 @@ public:
 
                     if(bNormalsEqual)
                     {
-                        const bool bTextureCoordinatesEqual(!mpTextureCoordiantes || (mpTextureCoordiantes->getTextureCoordinate(a) == mpTextureCoordiantes->getTextureCoordinate(a + 1L)));
+                        const bool bTextureCoordinatesEqual(!mpTextureCoordinates || (mpTextureCoordinates->getTextureCoordinate(a) == mpTextureCoordinates->getTextureCoordinate(a + 1L)));
 
                         if(bTextureCoordinatesEqual)
                         {
@@ -1425,7 +1425,7 @@ public:
                         bRemove = false;
                     }
 
-                    if(bRemove && mpTextureCoordiantes && !(mpTextureCoordiantes->getTextureCoordinate(0L) == mpTextureCoordiantes->getTextureCoordinate(nIndex)))
+                    if(bRemove && mpTextureCoordinates && !(mpTextureCoordinates->getTextureCoordinate(0L) == mpTextureCoordinates->getTextureCoordinate(nIndex)))
                     {
                         bRemove = false;
                     }
@@ -1461,7 +1461,7 @@ public:
                 bRemove = false;
             }
 
-            if(bRemove && mpTextureCoordiantes && !(mpTextureCoordiantes->getTextureCoordinate(nIndex) == mpTextureCoordiantes->getTextureCoordinate(nNextIndex)))
+            if(bRemove && mpTextureCoordinates && !(mpTextureCoordinates->getTextureCoordinate(nIndex) == mpTextureCoordinates->getTextureCoordinate(nNextIndex)))
             {
                 bRemove = false;
             }
@@ -1629,7 +1629,7 @@ namespace basegfx
             mpPolygon->setTextureCoordinate(nIndex, rValue);
     }
 
-    void B3DPolygon::transformTextureCoordiantes(const B2DHomMatrix& rMatrix)
+    void B3DPolygon::transformTextureCoordinates(const B2DHomMatrix& rMatrix)
     {
         if(mpPolygon->areTextureCoordinatesUsed() && !rMatrix.isIdentity())
             mpPolygon->transformTextureCoordinates(rMatrix);

@@ -151,11 +151,11 @@ public:
         }
     }
 
-    void transformTextureCoordiantes(const ::basegfx::B2DHomMatrix& rMatrix)
+    void transformTextureCoordinates(const ::basegfx::B2DHomMatrix& rMatrix)
     {
         for(size_t a(0L); a < maPolygons.size(); a++)
         {
-            maPolygons[a].transformTextureCoordiantes(rMatrix);
+            maPolygons[a].transformTextureCoordinates(rMatrix);
         }
     }
 
@@ -307,10 +307,10 @@ namespace basegfx
             mpPolyPolygon->clearNormals();
     }
 
-    void B3DPolyPolygon::transformTextureCoordiantes(const B2DHomMatrix& rMatrix)
+    void B3DPolyPolygon::transformTextureCoordinates(const B2DHomMatrix& rMatrix)
     {
         if(!rMatrix.isIdentity())
-            mpPolyPolygon->transformTextureCoordiantes(rMatrix);
+            mpPolyPolygon->transformTextureCoordinates(rMatrix);
     }
 
     bool B3DPolyPolygon::areTextureCoordinatesUsed() const

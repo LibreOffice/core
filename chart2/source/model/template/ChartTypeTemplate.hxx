@@ -244,7 +244,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
         GetComponentContext() const { return m_xContext;}
 
-    static void copyPropertiesFromOldToNewCoordianteSystem(
+    static void copyPropertiesFromOldToNewCoordinateSystem(
                     const ::com::sun::star::uno::Sequence<
                       ::com::sun::star::uno::Reference<
                           ::com::sun::star::chart2::XChartType > > & rOldChartTypesSeq,

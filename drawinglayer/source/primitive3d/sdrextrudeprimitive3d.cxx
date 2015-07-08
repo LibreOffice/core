@@ -53,11 +53,11 @@ namespace drawinglayer
                 // decide what to create
                 const ::com::sun::star::drawing::NormalsKind eNormalsKind(getSdr3DObjectAttribute().getNormalsKind());
                 const bool bCreateNormals(::com::sun::star::drawing::NormalsKind_SPECIFIC == eNormalsKind);
-                const bool bCreateTextureCoordiantesX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
-                const bool bCreateTextureCoordiantesY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
+                const bool bCreateTextureCoordinatesX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
+                const bool bCreateTextureCoordinatesY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
                 basegfx::B2DHomMatrix aTexTransform;
 
-                if(!getSdrLFSAttribute().getFill().isDefault() && (bCreateTextureCoordiantesX || bCreateTextureCoordiantesY))
+                if(!getSdrLFSAttribute().getFill().isDefault() && (bCreateTextureCoordinatesX || bCreateTextureCoordinatesY))
                 {
                     const basegfx::B2DPolygon aFirstPolygon(maCorrectedPolyPolygon.getB2DPolygon(0L));
                     const double fFrontLength(basegfx::tools::getLength(aFirstPolygon));
@@ -81,7 +81,7 @@ namespace drawinglayer
                 ::std::vector< basegfx::B3DPolyPolygon > aFill;
                 extractPlanesFromSlice(aFill, rSliceVector,
                     bCreateNormals, getSmoothHorizontalNormals(), getSmoothNormals(), getSmoothLids(), false,
-                    0.5, 0.6, bCreateTextureCoordiantesX || bCreateTextureCoordiantesY, aTexTransform);
+                    0.5, 0.6, bCreateTextureCoordinatesX || bCreateTextureCoordinatesY, aTexTransform);
 
                 // get full range
                 const basegfx::B3DRange aRange(getRangeFrom3DGeometry(aFill));

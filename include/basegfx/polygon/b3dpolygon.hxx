@@ -87,7 +87,7 @@ namespace basegfx
         // TextureCoordinate interface
         B2DPoint getTextureCoordinate(sal_uInt32 nIndex) const;
         void setTextureCoordinate(sal_uInt32 nIndex, const B2DPoint& rValue);
-        void transformTextureCoordiantes(const B2DHomMatrix& rMatrix);
+        void transformTextureCoordinates(const B2DHomMatrix& rMatrix);
         bool areTextureCoordinatesUsed() const;
         void clearTextureCoordinates();
 

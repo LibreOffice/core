@@ -205,7 +205,7 @@ void ColumnLineChartTypeTemplate::createChartTypes(
         Reference< XChartType > xCT(
             xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
 
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aOldChartTypesSeq, xCT );
+        ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aOldChartTypesSeq, xCT );
 
         Reference< XChartTypeContainer > xCTCnt( rCoordSys[ 0 ], uno::UNO_QUERY_THROW );
         xCTCnt->setChartTypes( Sequence< Reference< chart2::XChartType > >( &xCT, 1 ));
@@ -385,7 +385,7 @@ Reference< XChartType > SAL_CALL ColumnLineChartTypeTemplate::getChartTypeForNew
             GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
         xResult.set( xFact->createInstance(
                          CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
+        ChartTypeTemplate::copyPropertiesFromOldToNewCoordinateSystem( aFormerlyUsedChartTypes, xResult );
     }
     catch( const uno::Exception & ex )
     {

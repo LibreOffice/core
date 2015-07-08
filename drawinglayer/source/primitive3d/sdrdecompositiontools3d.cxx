@@ -129,7 +129,7 @@ namespace drawinglayer
 
             for(a = 0; a < rFill.size(); a++)
             {
-                rFill[a].transformTextureCoordiantes(aTexMatrix);
+                rFill[a].transformTextureCoordinates(aTexMatrix);
             }
         }
 

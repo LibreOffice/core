@@ -55,12 +55,12 @@ namespace drawinglayer
                 // decide what to create
                 const ::com::sun::star::drawing::NormalsKind eNormalsKind(getSdr3DObjectAttribute().getNormalsKind());
                 const bool bCreateNormals(::com::sun::star::drawing::NormalsKind_SPECIFIC == eNormalsKind);
-                const bool bCreateTextureCoordiantesX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
-                const bool bCreateTextureCoordiantesY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
+                const bool bCreateTextureCoordinatesX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionX());
+                const bool bCreateTextureCoordinatesY(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC == getSdr3DObjectAttribute().getTextureProjectionY());
                 basegfx::B2DHomMatrix aTexTransform;
 
                 if(!getSdrLFSAttribute().getFill().isDefault()
-                    && (bCreateTextureCoordiantesX || bCreateTextureCoordiantesY))
+                    && (bCreateTextureCoordinatesX || bCreateTextureCoordinatesY))
                 {
                     aTexTransform.set(0, 0, 0.0);
                     aTexTransform.set(0, 1, 1.0);
@@ -76,7 +76,7 @@ namespace drawinglayer
                 ::std::vector< basegfx::B3DPolyPolygon > aFill;
                 extractPlanesFromSlice(aFill, rSliceVector,
                     bCreateNormals, getSmoothHorizontalNormals(), getSmoothNormals(), getSmoothLids(), bClosedRotation,
-                    0.85, 0.6, bCreateTextureCoordiantesX || bCreateTextureCoordiantesY, aTexTransform);
+                    0.85, 0.6, bCreateTextureCoordinatesX || bCreateTextureCoordinatesY, aTexTransform);
 
                 // get full range
                 const basegfx::B3DRange aRange(getRangeFrom3DGeometry(aFill));
