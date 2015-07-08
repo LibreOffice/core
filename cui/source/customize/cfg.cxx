@@ -4749,7 +4749,6 @@ SvxNewToolbarDialog::SvxNewToolbarDialog(vcl::Window* pWindow, const OUString& r
     get(m_pSaveInListBox, "savein");
     m_pEdtName->SetText( rName );
     m_pEdtName->SetSelection(Selection(SELECTION_MIN, SELECTION_MAX));
-    ModifyHdl(m_pEdtName);
     m_pEdtName->SetModifyHdl(LINK(this, SvxNewToolbarDialog, ModifyHdl));
 }
 
@@ -4767,10 +4766,8 @@ void SvxNewToolbarDialog::dispose()
 }
 
 
-IMPL_LINK(SvxNewToolbarDialog, ModifyHdl, Edit*, pEdit)
+IMPL_STATIC_LINK_NOARG(SvxNewToolbarDialog, ModifyHdl)
 {
-    (void)pEdit;
-
     return 0;
 }
 
