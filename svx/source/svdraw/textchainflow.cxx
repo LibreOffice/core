@@ -99,10 +99,8 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 
 void TextChainFlow::impUpdateCursorInfo(SdrOutliner *, bool bIsOverflow)
 {
-    // XXX: Current implementation might create problems with UF-
-    //      In fact UF causes a
-
-
+    // XXX: Maybe we can get rid of mbOFisUFinduced by not allowing handling of more than one event by the same TextChainFlow
+    // if this is not an OF triggered during an UF
     if (bIsOverflow && !mbOFisUFinduced) {
         bool bCursorOut = true; // XXX: Should have real check
         if (bCursorOut) {
@@ -241,7 +239,7 @@ void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
         impCheckForFlowEvents(pFlowOutl, GetLinkTarget()->pEdtOutl);
 
     // Broadcast events for cursor handling
-    impBroadcasCursorInfo();
+    impBroadcastCursorInfo();
 }
 
 /*

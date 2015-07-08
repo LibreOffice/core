@@ -118,7 +118,7 @@ protected:
     virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *) SAL_OVERRIDE;
 
 private:
-    void impBroadcasCursorInfo() const;
+    void impBroadcastCursorInfo() const;
 
 };
 

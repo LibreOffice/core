@@ -36,14 +36,6 @@ class OverflowingText
 {
 
 public:
-        // Constructor
-
-        OverflowingText(EditTextObject *pTObj) : mpContentTextObj(pTObj)
-        {
-            ESelection aStartPos(0,0,0,0);
-            maInsertionPointSel = aStartPos;
-        }
-
         OutlinerParaObject *GetJuxtaposedParaObject(Outliner *, OutlinerParaObject *);
         ESelection GetInsertionPointSel() const;
 
@@ -52,25 +44,26 @@ public:
         //bool HasOtherParas() const { return !(mTailTxt == "" && mpMidParas == NULL); }
 
 private:
+    friend class Outliner;
+    // Constructor
+    OverflowingText(EditTextObject *pTObj);
+
     const EditTextObject *mpContentTextObj;
     ESelection maInsertionPointSel;
-
-    ESelection impGetEndSelection(Outliner *pOutl) const;
 };
 
 class NonOverflowingText {
-    public:
+public:
+    OutlinerParaObject *ToParaObject(Outliner *) const;
+    ESelection GetOverflowPointSel() const;
 
-        // NOTE: mPreOverflowingTxt might be empty
-
+private:
         // Constructor
         NonOverflowingText(const EditTextObject *pTObj)
         : mpContentTextObj(pTObj)
         { }
 
-        OutlinerParaObject *ToParaObject(Outliner *) const;
-
-    private:
+        friend class Outliner;
         const EditTextObject *mpContentTextObj;
 };
 
@@ -87,6 +80,8 @@ class EDITENG_DLLPUBLIC OFlowChainedText {
 
         OutlinerParaObject *CreateOverflowingParaObject(Outliner *, OutlinerParaObject *);
         OutlinerParaObject *CreateNonOverflowingParaObject(Outliner *);
+
+        ESelection GetInsertionPointSel() const { return mpOverflowingTxt->GetInsertionPointSel(); }
 
     protected:
         void impSetOutlinerToEmptyTxt(Outliner *);

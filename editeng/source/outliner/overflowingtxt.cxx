@@ -23,12 +23,39 @@
 #include <editeng/overflowingtxt.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+
+ESelection getLastPositionSel(const EditTextObject *pTObj)
+{
+    sal_Int32 nLastPara = pTObj->GetParagraphCount()-1;
+    // If text is empty
+    if (nLastPara < 0 )
+        nLastPara = 0;
+    sal_Int32 nLen = pTObj->GetText(nLastPara).getLength();
+    ESelection aEndPos(nLastPara, nLen, nLastPara, nLen);
+
+    return aEndPos;
+}
+
+OverflowingText::OverflowingText(EditTextObject *pTObj) : mpContentTextObj(pTObj)
+{
+}
+
+ESelection OverflowingText::GetInsertionPointSel() const
+{
+    return getLastPositionSel(mpContentTextObj);
+}
 
 OutlinerParaObject *NonOverflowingText::ToParaObject(Outliner *pOutliner) const
 {
     OutlinerParaObject *pPObj = new OutlinerParaObject(*mpContentTextObj);
     pPObj->SetOutlinerMode(pOutliner->GetOutlinerMode());
     return pPObj;
+}
+
+ESelection NonOverflowingText::GetOverflowPointSel() const
+{
+    return getLastPositionSel(mpContentTextObj);
 }
 
 // The equivalent of ToParaObject for OverflowingText. Here we are prepending the overflowing text to the old dest box's text
@@ -49,7 +76,7 @@ OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, Ou
     pOutl->SetText(*pOverflowingPObj);
 
     // Set selection position between new and old text
-    maInsertionPointSel = impGetEndSelection(pOutl);
+    //maInsertionPointSel = impGetEndSelection(pOutl);  // XXX: Maybe setting in the constructor is just right
 
     pOutl->AddText(*pNextPObj);
 
@@ -60,6 +87,7 @@ OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, Ou
     return pPObj;
 }
 
+/*
 ESelection OverflowingText::impGetEndSelection(Outliner *pOutl) const
 {
     const sal_Int32 nParaCount = pOutl->GetParagraphCount();
@@ -70,6 +98,7 @@ ESelection OverflowingText::impGetEndSelection(Outliner *pOutl) const
     ESelection aEndSel(nLastParaIndex,nLenLastPara,nLastParaIndex,nLenLastPara);
     return aEndSel;
 }
+* */
 
 /*
 OUString OverflowingText::GetEndingLines() const
