@@ -536,8 +536,8 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
     if (!pTextObj->IsChainable() || !pTextObj->GetNextLinkInChain())
         return;
 
-    assert(maCursorEvent);
-    assert(maPreChainingSel);
+    if(!maCursorEvent || !maPreChainingSel)
+        return;
 
     SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
     OutlinerView* pOLV = GetTextEditOutlinerView();
