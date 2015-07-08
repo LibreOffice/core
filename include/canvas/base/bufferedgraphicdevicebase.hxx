@@ -87,10 +87,9 @@ namespace canvas
             mbIsVisible( false ),
             mbIsTopLevel( false )
         {
-            BaseType::maPropHelper.addProperties( PropertySetHelper::MakeMap
-                                                  ("Window",
-                                                   boost::bind(&OurType::getXWindow,
-                                                               this)));
+            BaseType::maPropHelper.addProperties(
+                PropertySetHelper::MakeMap("Window",
+                   [this] () { return this->getXWindow(); }));
         }
 
         // XGraphicDevice

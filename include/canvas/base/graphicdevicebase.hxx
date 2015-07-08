@@ -119,21 +119,15 @@ namespace canvas
             mbDumpScreenContent(false)
         {
             maPropHelper.initProperties( PropertySetHelper::MakeMap
-                                         ("HardwareAcceleration",
-                                          boost::bind(&DeviceHelper::isAccelerated,
-                                                      boost::ref(maDeviceHelper)))
-                                         ("DeviceHandle",
-                                          boost::bind(&DeviceHelper::getDeviceHandle,
-                                                      boost::ref(maDeviceHelper)))
-                                         ("SurfaceHandle",
-                                          boost::bind(&DeviceHelper::getSurfaceHandle,
-                                                      boost::ref(maDeviceHelper)))
-                                         ("DumpScreenContent",
-                                          boost::bind(&ThisType::getDumpScreenContent,
-                                                      this),
-                                          boost::bind(&ThisType::setDumpScreenContent,
-                                                      this,
-                                                      _1)));
+                ("HardwareAcceleration",
+                 [this] () { return this->maDeviceHelper.isAccelerated(); } )
+                ("DeviceHandle",
+                 [this] () { return this->maDeviceHelper.getDeviceHandle(); } )
+                ("SurfaceHandle",
+                 [this] () { return this->maDeviceHelper.getSurfaceHandle(); } )
+                ("DumpScreenContent",
+                 [this] () { return this->getDumpScreenContent(); },
+                 [this] (css::uno::Any const& rAny) { this->setDumpScreenContent(rAny); }));
         }
 
         virtual void disposeThis() SAL_OVERRIDE
