@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_bb378de2",
+        "filename": "svx/source/sidebar/shadow/ShadowPropertyPanel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2015-07-08T15:32:16Z",
+      "side": 1,
+      "message": "need to call parent dispose here too",
+      "revId": "139e86ac64e6dfe2978c0542d383669ce398d51f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_5b3459dd",
+        "filename": "svx/uiconfig/ui/sidebarshadow.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2015-07-08T15:32:16Z",
+      "side": 1,
+      "message": "FIELD:TRANSPARENCY:0% to get per cent as the units here",
+      "revId": "139e86ac64e6dfe2978c0542d383669ce398d51f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
