@@ -52,6 +52,24 @@
       "revId": "1c49d76bc11de6e90ed56f0f665421aaaee8a643",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_bbc1cd82",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-08T21:10:41Z",
+      "side": 1,
+      "message": ";-)\n\nWhile playing with replacement of boost::bind with std::bind I\u0027m seeing the failures to compile on most recent clang++. That\u0027s because std::bind cannot induce the type of overloaded function: [1]. So something like that is failing to compile (without explicit cast, that is going to be ugly):\n\n  +++ b/basegfx/source/range/b2drangeclipper.cxx\n  +using namespace std::placeholders;\n  namespace basegfx\n {\n     namespace\n  @@ -496,9 +497,9 @@ namespace basegfx\n                 B2DPolygon aRes;\n                 std::for_each( maPoints.begin(),\n                                maPoints.end(),\n  -                             boost::bind(\n  +                             std::bind(\n                      \u0026B2DPolygon::append,\n  -                                 boost::ref(aRes),\n  +                                 std::ref(aRes),\n                                    _1,\n                                    1 ) );\n\nwith the following error: [2]. How can you replce the bind above with labmda?\n\n* [1] http://stackoverflow.com/questions/10555566/is-there-any-difference-between-c11-stdbind-and-boostbind\n* [2] http://paste.openstack.org/show/356353",
+      "parentUuid": "1a54edaf_3bd5dd42",
+      "revId": "1c49d76bc11de6e90ed56f0f665421aaaee8a643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
