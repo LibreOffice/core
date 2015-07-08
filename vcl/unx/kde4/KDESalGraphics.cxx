@@ -85,47 +85,38 @@ KDESalGraphics::~KDESalGraphics()
 
 bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart part )
 {
-    if (type == CTRL_PUSHBUTTON) return true;
+    switch (type)
+    {
+        case CTRL_PUSHBUTTON:
+        case CTRL_RADIOBUTTON:
+        case CTRL_CHECKBOX:
+        case CTRL_TOOLTIP:
+        case CTRL_PROGRESS:
+        case CTRL_LISTNODE:
+            return (part == PART_ENTIRE_CONTROL);
 
-    if (type == CTRL_MENUBAR) return true;
+        case CTRL_MENUBAR:
+        case CTRL_MENU_POPUP:
+        case CTRL_EDITBOX:
+        case CTRL_COMBOBOX:
+        case CTRL_TOOLBAR:
+        case CTRL_LISTBOX:
+        case CTRL_FRAME:
+        case CTRL_SCROLLBAR:
+        case CTRL_WINDOW_BACKGROUND:
+        case CTRL_GROUPBOX:
+        case CTRL_FIXEDLINE:
+            return true;
 
-    if (type == CTRL_MENU_POPUP) return true;
+        case CTRL_SPINBOX:
+            return (part == PART_ENTIRE_CONTROL || part == HAS_BACKGROUND_TEXTURE);
 
-    if (type == CTRL_EDITBOX) return true;
+        case CTRL_SLIDER:
+            return (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA);
 
-    if (type == CTRL_COMBOBOX) return true;
-
-    if (type == CTRL_TOOLBAR) return true;
-
-    if (type == CTRL_CHECKBOX) return true;
-
-    if (type == CTRL_LISTBOX) return true;
-
-    if (type == CTRL_LISTNODE) return true;
-
-    if (type == CTRL_FRAME) return true;
-
-    if (type == CTRL_SCROLLBAR) return true;
-
-    if (type == CTRL_WINDOW_BACKGROUND) return true;
-
-    if (type == CTRL_SPINBOX && (part == PART_ENTIRE_CONTROL || part == HAS_BACKGROUND_TEXTURE) ) return true;
-
-    // no spinbuttons for KDE, paint spinbox complete
-    //if (type == CTRL_SPINBUTTONS) return true;
-
-    if (type == CTRL_GROUPBOX) return true;
-
-    if (type == CTRL_FIXEDLINE) return true;
-
-    if (type == CTRL_TOOLTIP) return true;
-
-    if (type == CTRL_RADIOBUTTON) return true;
-
-    if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA) )
-        return true;
-
-    if ( (type == CTRL_PROGRESS) && (part == PART_ENTIRE_CONTROL) ) return true;
+        default:
+            break;
+    }
 
     return false;
 }
@@ -221,14 +212,14 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                                         const ImplControlValue& value,
                                         const OUString& )
 {
-    if( lastPopupRect.isValid() && ( type != CTRL_MENU_POPUP || part != PART_MENU_ITEM ))
-        lastPopupRect = QRect();
-
-    // put not implemented types here
-    if (type == CTRL_SPINBUTTONS)
-    {
+    bool nativeSupport = IsNativeControlSupported( type, part );
+    if( ! nativeSupport ) {
+        assert( ! nativeSupport && "drawNativeControl called without native support!" );
         return false;
     }
+
+    if( lastPopupRect.isValid() && ( type != CTRL_MENU_POPUP || part != PART_MENU_ITEM ))
+        lastPopupRect = QRect();
 
     bool returnVal = true;
 
