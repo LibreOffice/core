@@ -712,9 +712,11 @@ void SvxFontPrevWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
 
             if (pImpl->maText.getLength() > (TEXT_WIDTH - 1))
             {
-                sal_Int32 nSpaceIdx = pImpl->maText.indexOf(" ", TEXT_WIDTH);
+                const sal_Int32 nSpaceIdx = pImpl->maText.indexOf(" ", TEXT_WIDTH);
                 if (nSpaceIdx != -1)
                     pImpl->maText = pImpl->maText.copy(0, nSpaceIdx);
+                else
+                    pImpl->maText = pImpl->maText.copy(0, (TEXT_WIDTH - 1));
             }
         }
 
