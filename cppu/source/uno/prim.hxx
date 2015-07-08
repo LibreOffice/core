@@ -130,17 +130,14 @@ inline typelib_TypeDescriptionReference * _getVoidType()
     return g_pVoidType;
 }
 
-
+inline void CONSTRUCT_EMPTY_ANY(uno_Any * pAny) {
+    pAny->pType = _getVoidType();
 #if OSL_DEBUG_LEVEL > 0
-#define CONSTRUCT_EMPTY_ANY( pAny ) \
-(pAny)->pType = _getVoidType(); \
-(pAny)->pData = reinterpret_cast<void *>(0xdeadbeef);
+    pAny->pData = reinterpret_cast<void *>(0xdeadbeef);
 #else
-#define CONSTRUCT_EMPTY_ANY( pAny ) \
-(pAny)->pType = _getVoidType(); \
-(pAny)->pData = (pAny);
+    pAny->pData = pAny;
 #endif
-
+}
 
 #define TYPE_ACQUIRE( pType ) \
     osl_atomic_increment( &(pType)->nRefCount );
