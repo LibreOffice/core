@@ -3935,7 +3935,6 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
                  pThis->m_bSendModChangeOnRelease )
         {
             aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
-            pThis->m_nKeyModifiers = 0;
         }
 
         sal_uInt16 nExtModMask = 0;
@@ -3996,6 +3995,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
 
         aModEvt.mnCode = nModCode;
         aModEvt.mnTime = pEvent->time;
+        aModEvt.mnModKeyCode = pThis->m_nKeyModifiers;
 
         pThis->CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
 

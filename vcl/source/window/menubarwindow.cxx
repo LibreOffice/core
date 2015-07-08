@@ -133,6 +133,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     nSaveFocusId = 0;
     bIgnoreFirstMove = true;
     bStayActive = false;
+    SetMBWHideAccel(true);
 
     ResMgr* pResMgr = ImplGetResMgr();
 
@@ -383,6 +384,7 @@ void MenuBarWindow::PopupClosed( Menu* pPopup )
 void MenuBarWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     mbAutoPopup = true;
+    SetMBWMenuKey(false);
     sal_uInt16 nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
     if ( ( nEntry != ITEMPOS_INVALID ) && !pActivePopup )
     {
@@ -407,7 +409,18 @@ void MenuBarWindow::MouseMove( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeaveWindow() )
     {
         if ( nRolloveredItem != ITEMPOS_INVALID && nRolloveredItem != nHighlightedItem )
-            Invalidate(); //HighlightItem( nRolloveredItem, false );
+        {
+            // there is a spurious MouseMove generated after a menu is launched from the keyboard, hence this...
+            if (nHighlightedItem != ITEMPOS_INVALID)
+            {
+                bool hide = GetMBWHideAccel();
+                SetMBWHideAccel(true);
+                Invalidate(); //HighlightItem( nRolloveredItem, false );
+                SetMBWHideAccel(hide);
+            }
+            else
+                Invalidate(); //HighlightItem( nRolloveredItem, false );
+        }
 
         nRolloveredItem = ITEMPOS_INVALID;
         return;
@@ -443,6 +456,9 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
 {
     if( ! pMenu )
         return;
+
+    // always hide accelerators when updating the menu bar...
+    SetMBWHideAccel(true);
 
     // #57934# close active popup if applicable, as TH's background storage works.
     MenuItemData* pNextData = pMenu->pItemList->GetDataFromPos( n );
@@ -824,18 +840,12 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
         {
             if( pActivePopup )
             {
-                // bring focus to menu bar without any open popup
+                // hide the menu and remove the focus...
                 mbAutoPopup = false;
-                sal_uInt16 n = nHighlightedItem;
-                nHighlightedItem = ITEMPOS_INVALID;
-                bStayActive = true;
-                ChangeHighlightItem( n, false );
-                bStayActive = false;
                 KillActivePopup();
-                GrabFocus();
             }
-            else
-                ChangeHighlightItem( ITEMPOS_INVALID, false );
+
+            ChangeHighlightItem( ITEMPOS_INVALID, false );
 
             if( nCode == KEY_F6 && rKEvent.GetKeyCode().IsMod1() )
             {
@@ -847,7 +857,8 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
         }
     }
 
-    if ( !bDone && ( bFromMenu || rKEvent.GetKeyCode().IsMod2() ) )
+    bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
+    if ( !bDone && ( bFromMenu || (rKEvent.GetKeyCode().IsMod2() && accel) ) )
     {
         sal_Unicode nCharCode = rKEvent.GetCharCode();
         if ( nCharCode )
@@ -857,6 +868,9 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
             if ( pData && (nEntry != ITEMPOS_INVALID) )
             {
                 mbAutoPopup = true;
+                SetMBWMenuKey(true);
+                SetMBWHideAccel(true);
+                Invalidate(InvalidateFlags::Update);
                 ChangeHighlightItem( nEntry, true );
                 bDone = true;
             }
