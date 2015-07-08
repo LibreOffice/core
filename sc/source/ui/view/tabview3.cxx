@@ -2028,7 +2028,7 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
 void ScTabView::PaintRangeFinderEntry (ScRangeFindData* pData, const SCTAB nTab)
 {
     ScRange aRef = pData->aRef;
-    aRef.Justify();                 // Justify fuer die Abfragen unten
+    aRef.PutInOrder();                 // PutInOrder fuer die Abfragen unten
 
     if ( aRef.aStart == aRef.aEnd )     //! Tab ignorieren?
         aViewData.GetDocument()->ExtendMerge(aRef);

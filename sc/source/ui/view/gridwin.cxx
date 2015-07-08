@@ -5068,8 +5068,8 @@ static void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, cons
 
     ScRange aOld = rOldUn;
     ScRange aNew = rNewUn;
-    aOld.Justify();
-    aNew.Justify();
+    aOld.PutInOrder();
+    aNew.PutInOrder();
 
     if ( aOld.aStart == aOld.aEnd )                 //! Tab ignorieren?
         pDocSh->GetDocument().ExtendMerge(aOld);
@@ -5255,7 +5255,7 @@ void ScGridWindow::RFMouseMove( const MouseEvent& rMEvt, bool bUp )
     }
 
     if ( bUp )
-        aNew.Justify();             // beim ButtonUp wieder richtigherum
+        aNew.PutInOrder();             // beim ButtonUp wieder richtigherum
 
     if ( aNew != aOld )
     {

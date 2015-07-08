@@ -203,7 +203,7 @@ bool XclExpAddressConverter::CheckRange( const ScRange& rScRange, bool bWarn )
 
 bool XclExpAddressConverter::ValidateRange( ScRange& rScRange, bool bWarn )
 {
-    rScRange.Justify();
+    rScRange.PutInOrder();
 
     // check start position
     bool bValidStart = CheckAddress( rScRange.aStart, bWarn );

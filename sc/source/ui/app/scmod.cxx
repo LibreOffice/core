@@ -1723,7 +1723,7 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
 
     // In RefDialogs we also trigger the ZoomIn, if the Ref's Start and End are different
     ScRange aNew = rRef;
-    aNew.Justify(); // Always in the right direction
+    aNew.PutInOrder(); // Always in the right direction
 
     if( nCurRefDlgId )
     {

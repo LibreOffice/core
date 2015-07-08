@@ -2170,7 +2170,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokensFromSr
     }
 
     ScRange aRange(rRange);
-    aRange.Justify();
+    aRange.PutInOrder();
     SCTAB nTabSpan = aRange.aEnd.Tab() - aRange.aStart.Tab();
 
     vector<ScExternalRefCache::SingleRangeData> aCacheData;

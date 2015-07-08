@@ -1308,7 +1308,7 @@ void ScInterpreter::DoubleRefToRange( const ScComplexRefData & rCRef,
     rRange.aStart.Set( nCol, nRow, nTab );
     SingleRefToVars( rCRef.Ref2, nCol, nRow, nTab);
     rRange.aEnd.Set( nCol, nRow, nTab );
-    rRange.Justify();
+    rRange.PutInOrder();
     if (! pDok->aTableOpList.empty() && !bDontCheckForTableOp )
     {
         if ( IsTableOpInRange( rRange ) )

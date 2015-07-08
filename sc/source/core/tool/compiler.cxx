@@ -5287,7 +5287,7 @@ bool ScCompiler::HandleTableRef()
                                 else
                                 {
                                     aColRange.aEnd = mpToken->GetSingleRef()->toAbs( aPos);
-                                    aColRange.Justify();
+                                    aColRange.PutInOrder();
                                     bCol2Rel = mpToken->GetSingleRef()->IsColRel();
                                     bCol2RelName = mpToken->GetSingleRef()->IsRelName();
                                 }

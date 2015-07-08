@@ -360,9 +360,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         {
                             ScRange aOldMark;
                             rMark.GetMarkArea( aOldMark );
-                            aOldMark.Justify();
+                            aOldMark.PutInOrder();
                             ScRange aCurrent = aScRange;
-                            aCurrent.Justify();
+                            aCurrent.PutInOrder();
                             bNothing = ( aCurrent == aOldMark );
                         }
                         else

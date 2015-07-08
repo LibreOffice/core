@@ -339,7 +339,7 @@ void ScInputHandler::UpdateRange( sal_uInt16 nIndex, const ScRange& rNew )
         ColorData nNewColor = pRangeFindList->FindColor( rNew, nIndex );
 
         ScRange aJustified = rNew;
-        aJustified.Justify(); // Always display Ref in the Formula the right way
+        aJustified.PutInOrder(); // Always display Ref in the Formula the right way
         ScDocument* pDoc = pDocView->GetViewData().GetDocument();
         const ScAddress::Details aAddrDetails( pDoc, aCursorPos );
         OUString aNewStr(aJustified.Format(rData.nFlags, pDoc, aAddrDetails));

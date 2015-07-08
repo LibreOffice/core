@@ -2008,7 +2008,7 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
                             const ScMarkData* pMarks, bool bColRowFlags)
 {
     ScRange aNewRange = rRange;
-    aNewRange.Justify();
+    aNewRange.PutInOrder();
 
     if( pDestDoc->aDocName.isEmpty() )
         pDestDoc->aDocName = aDocName;
@@ -2041,7 +2041,7 @@ void ScDocument::UndoToDocument(const ScRange& rRange,
     sc::AutoCalcSwitch aAutoCalcSwitch(*this, false);
 
     ScRange aNewRange = rRange;
-    aNewRange.Justify();
+    aNewRange.PutInOrder();
     SCTAB nTab1 = aNewRange.aStart.Tab();
     SCTAB nTab2 = aNewRange.aEnd.Tab();
 

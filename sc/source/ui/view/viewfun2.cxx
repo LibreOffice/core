@@ -1503,7 +1503,7 @@ void ScViewFunc::FillCrossDblClick()
 {
     ScRange aRange;
     GetViewData().GetSimpleArea( aRange );
-    aRange.Justify();
+    aRange.PutInOrder();
 
     SCTAB nTab = GetViewData().GetCurPos().Tab();
     SCCOL nStartX = aRange.aStart.Col();
@@ -1563,7 +1563,7 @@ void ScViewFunc::ConvertFormulaToValue()
 {
     ScRange aRange;
     GetViewData().GetSimpleArea(aRange);
-    aRange.Justify();
+    aRange.PutInOrder();
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     pDocSh->GetDocFunc().ConvertFormulaToValue(aRange, true, true);

@@ -3692,7 +3692,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                 if (nGlobalError)
                     break;
 
-                aRange.Justify();
+                aRange.PutInOrder();
                 SCSIZE nCellCount = aRange.aEnd.Col() - aRange.aStart.Col() + 1;
                 nCellCount *= aRange.aEnd.Row() - aRange.aStart.Row() + 1;
                 rArray.reserve( rArray.size() + nCellCount);

@@ -3125,7 +3125,7 @@ public:
         ScRange r;
         bool bExternal = ScRefTokenHelper::isExternalRef(pToken);
         ScRefTokenHelper::getRangeFromToken(r, pToken, ScAddress(), bExternal);
-        r.Justify();
+        r.PutInOrder();
         mnCols += r.aEnd.Col() - r.aStart.Col() + 1;
         mnRows += r.aEnd.Row() - r.aStart.Row() + 1;
     }

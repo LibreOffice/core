@@ -100,7 +100,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion() throw(uno::RuntimeExcep
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
     ScRange aOneRange( *rRanges[ 0 ] );
 
-    aOneRange.Justify();
+    aOneRange.PutInOrder();
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
@@ -126,7 +126,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
     ScRange aOneRange( *rRanges[ 0 ] );
 
-    aOneRange.Justify();
+    aOneRange.PutInOrder();
     ScAddress aCursor(aOneRange.aStart);        //  use the start address of the range
 
     ScDocShell* pDocSh = GetDocShell();
@@ -210,7 +210,7 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
         OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
         ScRange aNewRange( *rRanges[ 0 ] );
 
-        aNewRange.Justify();    //! wirklich?
+        aNewRange.PutInOrder();    //! wirklich?
 
         long nEndX = aNewRange.aStart.Col() + nColumns - 1;
         long nEndY = aNewRange.aStart.Row() + nRows - 1;
@@ -223,7 +223,7 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
         aNewRange.aEnd.SetCol((SCCOL)nEndX);
         aNewRange.aEnd.SetRow((SCROW)nEndY);
 
-        aNewRange.Justify();    //! wirklich?
+        aNewRange.PutInOrder();    //! wirklich?
 
         SetNewRange( aNewRange );
     }
@@ -299,7 +299,7 @@ void SAL_CALL ScCellCursorObj::gotoStart() throw(uno::RuntimeException, std::exc
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
     ScRange aOneRange( *rRanges[ 0 ]);
 
-    aOneRange.Justify();
+    aOneRange.PutInOrder();
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
@@ -327,7 +327,7 @@ void SAL_CALL ScCellCursorObj::gotoEnd() throw(uno::RuntimeException, std::excep
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
     ScRange aOneRange( *rRanges[ 0 ] );
 
-    aOneRange.Justify();
+    aOneRange.PutInOrder();
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
@@ -352,7 +352,7 @@ void SAL_CALL ScCellCursorObj::gotoNext() throw(uno::RuntimeException, std::exce
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
     ScRange aOneRange( *rRanges[ 0 ] );
 
-    aOneRange.Justify();
+    aOneRange.PutInOrder();
     ScAddress aCursor(aOneRange.aStart);        //  bei Block immer den Start nehmen
 
     ScMarkData aMark;   // not used with bMarked=FALSE
@@ -374,7 +374,7 @@ void SAL_CALL ScCellCursorObj::gotoPrevious() throw(uno::RuntimeException, std::
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
     ScRange aOneRange( *rRanges[ 0 ] );
 
-    aOneRange.Justify();
+    aOneRange.PutInOrder();
     ScAddress aCursor(aOneRange.aStart);        //  bei Block immer den Start nehmen
 
     ScMarkData aMark;   // not used with bMarked=FALSE
@@ -396,7 +396,7 @@ void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nR
     const ScRangeList& rRanges = GetRangeList();
     OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
     ScRange aOneRange( *rRanges[ 0 ] );
-    aOneRange.Justify();
+    aOneRange.PutInOrder();
 
     if ( aOneRange.aStart.Col() + nColumnOffset >= 0 &&
          aOneRange.aEnd.Col()   + nColumnOffset <= MAXCOL &&

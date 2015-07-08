@@ -896,7 +896,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     for ( size_t nRangePos=0, nRange = aVarRanges.size(); nRangePos < nRange; ++nRangePos )
     {
         ScRange aRange(*aVarRanges[ nRangePos ] );
-        aRange.Justify();
+        aRange.PutInOrder();
         SCTAB nTab = aRange.aStart.Tab();
 
         // resolve into single cells

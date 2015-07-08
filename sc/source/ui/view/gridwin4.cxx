@@ -855,7 +855,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 ScRangeFindData& rData = pRangeFinder->GetObject(i);
 
                 ScRange aRef = rData.aRef;
-                aRef.Justify();
+                aRef.PutInOrder();
                 if ( aRef.aStart.Tab() >= nTab && aRef.aEnd.Tab() <= nTab )
                     aOutputData.DrawRefMark( aRef.aStart.Col(), aRef.aStart.Row(),
                                             aRef.aEnd.Col(), aRef.aEnd.Row(),

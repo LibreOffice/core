@@ -99,7 +99,7 @@ void ScMarkData::ResetMark()
 void ScMarkData::SetMarkArea( const ScRange& rRange )
 {
     aMarkRange = rRange;
-    aMarkRange.Justify();
+    aMarkRange.PutInOrder();
     if ( !bMarked )
     {
         // Upon creation of a document ScFormatShell GetTextAttrState

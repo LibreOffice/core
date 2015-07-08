@@ -1414,7 +1414,7 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     --m_refCount;
 
     ScRange aCellRange(rR);
-    aCellRange.Justify();
+    aCellRange.PutInOrder();
     aRanges.Append( aCellRange );
 
     if (pDocShell)  // Null if created with createInstance
@@ -1705,7 +1705,7 @@ void ScCellRangesBase::InitInsertRange(ScDocShell* pDocSh, const ScRange& rR)
         pDocShell = pDocSh;
 
         ScRange aCellRange(rR);
-        aCellRange.Justify();
+        aCellRange.PutInOrder();
         aRanges.RemoveAll();
         aRanges.Append( aCellRange );
 
@@ -1727,7 +1727,7 @@ void ScCellRangesBase::AddRange(const ScRange& rRange, const bool bMergeRanges)
 void ScCellRangesBase::SetNewRange(const ScRange& rNew)
 {
     ScRange aCellRange(rNew);
-    aCellRange.Justify();
+    aCellRange.PutInOrder();
 
     aRanges.RemoveAll();
     aRanges.Append( aCellRange );
@@ -4792,7 +4792,7 @@ ScCellRangeObj::ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR) :
     pRangePropSet( lcl_GetRangePropertySet() ),
     aRange( rR )
 {
-    aRange.Justify();       // Anfang / Ende richtig
+    aRange.PutInOrder();       // Anfang / Ende richtig
 }
 
 ScCellRangeObj::~ScCellRangeObj()
@@ -4809,7 +4809,7 @@ void ScCellRangeObj::RefChanged()
     {
         const ScRange* pFirst = rRanges[0];
         aRange = ScRange(*pFirst);
-        aRange.Justify();
+        aRange.PutInOrder();
     }
 }
 

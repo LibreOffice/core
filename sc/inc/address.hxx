@@ -540,15 +540,14 @@ public:
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
                          SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
+    SC_DLLPUBLIC void PutInOrder();
     // The document for the maximum defined sheet number
     SC_DLLPUBLIC bool Move( SCsCOL aDeltaX, SCsROW aDeltaY, SCsTAB aDeltaZ, ScDocument* pDocument = NULL );
-    SC_DLLPUBLIC void Justify();
     SC_DLLPUBLIC void ExtendTo( const ScRange& rRange );
     SC_DLLPUBLIC bool Intersects( const ScRange& rRange ) const;    // do two ranges intersect?
 
     ScRange Intersection( const ScRange& rOther ) const;
 
-    void PutInOrder();
     inline bool operator==( const ScRange& rRange ) const;
     inline bool operator!=( const ScRange& rRange ) const;
     inline bool operator<( const ScRange& rRange ) const;

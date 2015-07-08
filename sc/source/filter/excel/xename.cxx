@@ -601,7 +601,7 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
                     // Calc document does not care about sheet index in print ranges
                     aRange.aStart.SetTab( nScTab );
                     aRange.aEnd.SetTab( nScTab );
-                    aRange.Justify();
+                    aRange.PutInOrder();
                     aRangeList.Append( aRange );
                 }
                 // create the NAME record (do not warn if ranges are shrunken)
