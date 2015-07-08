@@ -504,8 +504,9 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 
     if (bDrawText)
     {
-        ImplSetFocusRect(Rectangle(aTextPos, aTextSize));
-        pDev->DrawText(Rectangle(aTextPos, aTextSize), aText, nTextStyle, pVector, pDisplayText);
+        Rectangle       aTOutRect( aTextPos, aTextSize );
+        ImplSetFocusRect( aTOutRect );
+        DrawControlText( *pDev, aTOutRect, aText, nTextStyle, pVector, pDisplayText );
     }
     else
     {

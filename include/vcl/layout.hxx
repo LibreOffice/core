@@ -786,6 +786,7 @@ inline bool isContainerWindow(const vcl::Window &rWindow)
 {
     WindowType eType = rWindow.GetType();
     return eType == WINDOW_CONTAINER || eType == WINDOW_SCROLLWINDOW ||
+            eType == WINDOW_TABCONTROL || eType == WINDOW_TABPAGE ||
            (eType == WINDOW_DOCKINGWINDOW && ::isLayoutEnabled(&rWindow));
 }
 

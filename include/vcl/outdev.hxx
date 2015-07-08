@@ -160,30 +160,29 @@ typedef std::vector< Rectangle > MetricVector;
 // Flags for DrawText()
 enum class DrawTextFlags
 {
-    NONE                  = 0x0000,
-    Disable               = 0x0001,
-    Mnemonic              = 0x0002,
-    Mono                  = 0x0004,
-    Clip                  = 0x0008,
-    Left                  = 0x0010,
-    Center                = 0x0020,
-    Right                 = 0x0040,
-    Top                   = 0x0080,
-    VCenter               = 0x0100,
-    Bottom                = 0x0200,
-    EndEllipsis           = 0x0400,
-    PathEllipsis          = 0x0800,
-    MultiLine             = 0x1000,
-    WordBreak             = 0x2000,
-    NewsEllipsis          = 0x4000,
-    // in the long run we should make text style flags longer
-    // but at the moment we can get away with this 2 bit field for ellipsis style
-    CenterEllipsis        = EndEllipsis | PathEllipsis,
-    WordBreakHyphenation  = 0x8000 | WordBreak,
+    NONE                  = 0x00000000,
+    Disable               = 0x00000001,
+    Mnemonic              = 0x00000002,
+    Mono                  = 0x00000004,
+    Clip                  = 0x00000008,
+    Left                  = 0x00000010,
+    Center                = 0x00000020,
+    Right                 = 0x00000040,
+    Top                   = 0x00000080,
+    VCenter               = 0x00000100,
+    Bottom                = 0x00000200,
+    EndEllipsis           = 0x00000400,
+    PathEllipsis          = 0x00000800,
+    MultiLine             = 0x00001000,
+    WordBreak             = 0x00002000,
+    NewsEllipsis          = 0x00004000,
+    WordBreakHyphenation  = 0x00008000 | WordBreak,
+    CenterEllipsis        = 0x00010000,
+    HideMnemonic          = 0x00020000,
 };
 namespace o3tl
 {
-    template<> struct typed_flags<DrawTextFlags> : is_typed_flags<DrawTextFlags, 0xffff> {};
+    template<> struct typed_flags<DrawTextFlags> : is_typed_flags<DrawTextFlags, 0x3ffff> {};
 }
 
 // Flags for DrawImage(), these must match the definitions in css::awt::ImageDrawMode

@@ -19,6 +19,7 @@
 
 #include "menufloatingwindow.hxx"
 #include "menuitemlist.hxx"
+#include "menubarwindow.hxx"
 
 #include <svdata.hxx>
 #include <vcl/decoview.hxx>
@@ -1108,8 +1109,13 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             sal_Unicode nCharCode = rKEvent.GetCharCode();
             sal_uInt16 nPos = 0;
             sal_uInt16 nDuplicates = 0;
-            MenuItemData* pData = (nCharCode && pMenu) ? pMenu->GetItemList()->SearchItem( nCharCode, rKEvent.GetKeyCode(), nPos, nDuplicates, nHighlightedItem ) : NULL;
-            if ( pData )
+            MenuItemData* pData = (nCharCode && pMenu) ?
+                pMenu->GetItemList()->SearchItem(nCharCode, rKEvent.GetKeyCode(), nPos, nDuplicates, nHighlightedItem) : NULL;
+            bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
+            Menu *men = pMenu;
+            while (!men->IsMenuBar())
+                men = men->pStartedFrom;
+            if ( pData && (static_cast<MenuBarWindow*>(men->pWindow.get()))->GetMBWMenuKey () && accel )
             {
                 if ( pData->pSubMenu || nDuplicates > 1 )
                 {

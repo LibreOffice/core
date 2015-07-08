@@ -2242,6 +2242,9 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
         }
     }
 
+    bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
+    bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
+
     if ( nStyle & DrawTextFlags::Disable && ! pVector )
     {
         Color aOldTextColor;
@@ -2278,7 +2281,8 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
             SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
 
         DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
-        if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector )
+        if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector
+            && accel && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
         {
             if ( nMnemonicPos != -1 )
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
@@ -2290,7 +2294,8 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const OUString& rStr,
     else
     {
         DrawText( rPos, aStr, nIndex, nLen, pVector, pDisplayText );
-        if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector )
+        if ( !(GetSettings().GetStyleSettings().GetOptions() & StyleSettingsOptions::NoMnemonics) && !pVector
+            && accel && (!autoacc || !(nStyle & DrawTextFlags::HideMnemonic)) )
         {
             if ( nMnemonicPos != -1 )
                 ImplDrawMnemonicLine( nMnemonicX, nMnemonicY, nMnemonicWidth );
