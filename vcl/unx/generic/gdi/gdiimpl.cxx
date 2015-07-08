@@ -949,13 +949,6 @@ bool X11SalGraphicsImpl::drawAlphaRect( long nX, long nY, long nWidth,
     return true;
 }
 
-void X11SalGraphicsImpl::drawBitmap( const SalTwoRect&,
-                                 const SalBitmap&,
-                                 SalColor )
-{
-    OSL_FAIL( "::DrawBitmap with transparent color not supported" );
-}
-
 void X11SalGraphicsImpl::drawMask( const SalTwoRect& rPosAry,
                                const SalBitmap &rSalBitmap,
                                SalColor nMaskColor )

@@ -55,13 +55,11 @@ public:
     virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const = 0;
 
     int                     GetHeight() const           { return mnHeight; }
-    int                     GetWidth() const            { return mnWidth; }
     virtual sal_IntPtr      GetFontId() const = 0;
     int                     GetFontMagic() const        { return mnMagic; }
     bool                    IsScalable() const          { return (mnHeight == 0); }
     bool                    CheckMagic( int n ) const   { return (n == mnMagic); }
     PhysicalFontFace*       GetNextFace() const         { return mpNext; }
-    PhysicalFontFace*       CreateAlias() const         { return Clone(); }
 
     bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
     sal_Int32               CompareWithSize( const PhysicalFontFace& ) const;
@@ -71,7 +69,6 @@ public:
 
 protected:
     explicit                PhysicalFontFace( const ImplDevFontAttributes&, int nMagic );
-    void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     long                    mnWidth;    // Width (in pixels)
     long                    mnHeight;   // Height (in pixels)

@@ -64,7 +64,6 @@ public:
     void                Add( int nHeight )      { maSizeList.push_back( nHeight ); }
     int                 Count() const           { return maSizeList.size(); }
     int                 Get( int nIndex ) const { return maSizeList[ nIndex ]; }
-    const OUString&     GetFontName() const     { return maFontName; }
 };
 
 // nowadays these substitutions are needed for backward compatibility and tight platform integration:
@@ -107,8 +106,6 @@ public:
     void    AddFontSubstitute( const OUString& rFontName, const OUString& rSubstName, AddFontSubstituteFlags nFlags );
     void    RemoveFontSubstitute( int nIndex );
     int     GetFontSubstituteCount() const { return maFontSubstList.size(); };
-    bool    Empty() const { return maFontSubstList.empty(); }
-    void    Clear() { maFontSubstList.clear(); }
 
     bool    FindFontSubstitute( OUString& rSubstName, const OUString& rFontName, AddFontSubstituteFlags nFlags ) const;
 };
