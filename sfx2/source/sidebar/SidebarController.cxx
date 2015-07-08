@@ -205,21 +205,21 @@ void SAL_CALL SidebarController::disposing()
         // clear decks
     ResourceManager::DeckContextDescriptorContainer aDecks;
 
-        mpResourceManager->GetMatchingDecks (
+    mpResourceManager->GetMatchingDecks (
             aDecks,
             GetCurrentContext(),
             IsDocumentReadOnly(),
             mxFrame->getController());
 
-        for (ResourceManager::DeckContextDescriptorContainer::const_iterator
+    for (ResourceManager::DeckContextDescriptorContainer::const_iterator
             iDeck(aDecks.begin()), iEnd(aDecks.end());
             iDeck!=iEnd; ++iDeck)
-            {
-                const DeckDescriptor* deckDesc = mpResourceManager->GetDeckDescriptor(iDeck->msId);
-                VclPtr<Deck> aDeck = deckDesc->mpDeck;
-                if (aDeck)
-                    aDeck.disposeAndClear();
-            }
+    {
+        const DeckDescriptor* deckDesc = mpResourceManager->GetDeckDescriptor(iDeck->msId);
+        VclPtr<Deck> aDeck = deckDesc->mpDeck;
+        if (aDeck)
+            aDeck.disposeAndClear();
+    }
 
     SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(mxFrame->getController()));
     if (iEntry != maSidebarControllerContainer.end())
