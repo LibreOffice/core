@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_d80b6f7c",
+        "filename": "sc/source/filter/inc/xestyle.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-08T10:22:40Z",
+      "side": 1,
+      "message": "\"class\" sounds more likely",
+      "revId": "3169be70cbdae9f880cbe9a5eb736608595cc69a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_b8231305",
+        "filename": "xmlhelp/Library_ucpchelp1.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-08T10:22:40Z",
+      "side": 1,
+      "message": "this is all obsolete and i\u0027ll remove it on master...",
+      "revId": "3169be70cbdae9f880cbe9a5eb736608595cc69a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
