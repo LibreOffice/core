@@ -176,6 +176,7 @@ enum class DrawTextFlags
     MultiLine             = 0x1000,
     WordBreak             = 0x2000,
     NewsEllipsis          = 0x4000,
+    HideMnemonic          = 0x8000,
     // in the long run we should make text style flags longer
     // but at the moment we can get away with this 2 bit field for ellipsis style
     CenterEllipsis        = EndEllipsis | PathEllipsis,
