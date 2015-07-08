@@ -270,7 +270,8 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             }
             else
             {
-                aRepresentation = ( ( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+                DocumentType eDocType = pDoc ? pDoc->GetDocumentType() : DOCUMENT_TYPE_IMPRESS;
+                aRepresentation = ( ( eDocType == DOCUMENT_TYPE_IMPRESS )
                                     ? SdResId(STR_FIELD_PLACEHOLDER_SLIDENAME).toString()
                                     : SdResId(STR_FIELD_PLACEHOLDER_PAGENAME).toString() );
             }
