@@ -449,11 +449,6 @@ void AbstractSearchProgress_Impl::Update()
      pDlg->Update();
 }
 
-void AbstractSearchProgress_Impl::Sync()
-{
-     pDlg->Sync();
-}
-
 void AbstractSearchProgress_Impl::SetFileType( const OUString& rType )
 {
      pDlg->SetFileType( rType );
@@ -471,11 +466,6 @@ PLinkStub   AbstractSearchProgress_Impl::GetLinkStubCleanUpHdl()
 void AbstractTakeProgress_Impl::Update()
 {
      pDlg->Update();
-}
-
-void AbstractTakeProgress_Impl::Sync()
-{
-     pDlg->Sync();
 }
 
 void AbstractTakeProgress_Impl::SetFile( const INetURLObject& rURL )
@@ -501,11 +491,6 @@ sal_uLong AbstractGalleryIdDialog_Impl::GetId() const
 void VclAbstractRefreshableDialog_Impl::Update()
 {
     pDlg->Update();
-}
-
-void VclAbstractRefreshableDialog_Impl::Sync()
-{
-     pDlg->Sync();
 }
 
 OUString AbstractURLDlg_Impl::GetURL() const

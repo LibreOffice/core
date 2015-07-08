@@ -86,10 +86,6 @@ public:
     {
         m_bHomogeneous = bHomogeneous;
     }
-    bool get_homogeneous() const
-    {
-        return m_bHomogeneous;
-    }
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 protected:
     virtual sal_uInt16 getDefaultAccessibleRole() const SAL_OVERRIDE;
@@ -105,8 +101,6 @@ protected:
     virtual void setPrimaryCoordinate(Point &rPos, long) const = 0;
     virtual long getSecondaryDimension(const Size &rSize) const = 0;
     virtual void setSecondaryDimension(Size &rSize, long) const = 0;
-    virtual long getSecondaryCoordinate(const Point &rPos) const = 0;
-    virtual void setSecondaryCoordinate(Point &rPos, long) const = 0;
 
     virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const = 0;
 };
@@ -143,14 +137,6 @@ protected:
     virtual void setSecondaryDimension(Size &rSize, long nWidth) const SAL_OVERRIDE
     {
         rSize.setWidth(nWidth);
-    }
-    virtual long getSecondaryCoordinate(const Point &rPos) const SAL_OVERRIDE
-    {
-        return rPos.getX();
-    }
-    virtual void setSecondaryCoordinate(Point &rPos, long nPos) const SAL_OVERRIDE
-    {
-        rPos.setX(nPos);
     }
     virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
     {
@@ -191,14 +177,6 @@ protected:
     {
         rSize.setHeight(nHeight);
     }
-    virtual long getSecondaryCoordinate(const Point &rPos) const SAL_OVERRIDE
-    {
-        return rPos.getY();
-    }
-    virtual void setSecondaryCoordinate(Point &rPos, long nPos) const SAL_OVERRIDE
-    {
-        rPos.setY(nPos);
-    }
     virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
     {
         return rWindow.get_expand() || rWindow.get_hexpand();
@@ -226,10 +204,6 @@ public:
     void set_layout(VclButtonBoxStyle eStyle)
     {
         m_eLayoutStyle = eStyle;
-    }
-    VclButtonBoxStyle get_layout() const
-    {
-        return m_eLayoutStyle;
     }
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
     void sort_native_button_order();
@@ -283,14 +257,6 @@ protected:
     {
         rSize.setWidth(nWidth);
     }
-    virtual long getSecondaryCoordinate(const Point &rPos) const SAL_OVERRIDE
-    {
-        return rPos.getX();
-    }
-    virtual void setSecondaryCoordinate(Point &rPos, long nPos) const SAL_OVERRIDE
-    {
-        rPos.setX(nPos);
-    }
     virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
     {
         return rWindow.get_expand() || rWindow.get_vexpand();
@@ -329,14 +295,6 @@ protected:
     virtual void setSecondaryDimension(Size &rSize, long nHeight) const SAL_OVERRIDE
     {
         rSize.setHeight(nHeight);
-    }
-    virtual long getSecondaryCoordinate(const Point &rPos) const SAL_OVERRIDE
-    {
-        return rPos.getY();
-    }
-    virtual void setSecondaryCoordinate(Point &rPos, long nPos) const SAL_OVERRIDE
-    {
-        rPos.setY(nPos);
     }
     virtual bool getPrimaryDimensionChildExpand(const vcl::Window &rWindow) const SAL_OVERRIDE
     {
@@ -539,13 +497,8 @@ public:
     {
         m_pDisclosureButton->SetText(rLabel);
     }
-    OUString get_label() const
-    {
-        return m_pDisclosureButton->GetText();
-    }
     virtual void StateChanged(StateChangedType nType) SAL_OVERRIDE;
     void  SetExpandedHdl( const Link<>& rLink ) { maExpandedHdl = rLink; }
-    const Link<>& GetExpandedHdl() const { return maExpandedHdl; }
 protected:
     virtual Size calculateRequisition() const SAL_OVERRIDE;
     virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;

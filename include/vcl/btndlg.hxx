@@ -57,7 +57,6 @@ public:
     void                Click();
 
     void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
-    const Size&         GetPageSizePixel() const { return maPageSize; }
 
     sal_uInt16          GetCurButtonId() const { return mnCurButtonId; }
 
@@ -72,10 +71,6 @@ public:
     void                SetButtonHelpText( sal_uInt16 nId, const OUString& rText );
 
     void                SetFocusButton( sal_uInt16 nId = BUTTONDIALOG_BUTTON_NOTFOUND ) { mnFocusButtonId = nId; }
-    sal_uInt16          GetFocusButton() const { return mnFocusButtonId; }
-
-    void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
-    const Link<>&       GetClickHdl() const { return maClickHdl; }
 
 protected:
                         ButtonDialog( WindowType nType );

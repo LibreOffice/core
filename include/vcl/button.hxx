@@ -180,7 +180,6 @@ public:
     void            SetSymbolAlign( SymbolAlign eAlign );
 
     void            SetDropDown( PushButtonDropdownStyle nStyle );
-    PushButtonDropdownStyle GetDropDown() const { return mnDDStyle; }
 
     void            SetState( TriState eState );
     TriState        GetState() const { return meState; }
@@ -194,14 +193,11 @@ public:
     void            EndSelection();
 
     void            SaveValue() { meSaveValue = GetState(); }
-    TriState        GetSavedValue() const { return meSaveValue; }
     bool            IsValueChangedFromSaved() const { return meSaveValue != GetState(); }
 
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    void            SetToggleHdl( const Link<>& rLink ) { maToggleHdl = rLink; }
-    const Link<>&   GetToggleHdl() const { return maToggleHdl; }
     virtual bool    set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
     virtual void    ShowFocus(const Rectangle& rRect) SAL_OVERRIDE;
 };
@@ -327,10 +323,8 @@ protected:
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
 
-    inline void             SetMouseRect( const Rectangle& _rMouseRect )    { maMouseRect = _rMouseRect; }
-    inline const Rectangle& GetMouseRect( ) const                           { return maMouseRect; }
-    inline void             SetStateRect( const Rectangle& _rStateRect )    { maStateRect = _rStateRect; }
-    inline const Rectangle& GetStateRect( ) const                           { return maStateRect; }
+    inline void     SetMouseRect( const Rectangle& _rMouseRect )    { maMouseRect = _rMouseRect; }
+    inline void     SetStateRect( const Rectangle& _rStateRect )    { maStateRect = _rStateRect; }
 
     // draws the radio button (the knob image), in its current state (pressed/checked)
     // at the usual location, which can be overridden with SetStateRect
@@ -379,7 +373,6 @@ public:
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
     void            SetToggleHdl( const Link<>& rLink ) { maToggleHdl = rLink; }
-    const Link<>&   GetToggleHdl() const { return maToggleHdl; }
 
     /** GetRadioButtonGroup returns a list of pointers to <code>RadioButton</code>s in the same group.
 
@@ -491,8 +484,6 @@ public:
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
     void            SetToggleHdl( const Link<>& rLink ) { maToggleHdl = rLink; }
-    const Link<>&   GetToggleHdl() const { return maToggleHdl; }
-    bool            IsLegacyNoTextAlign() { return mbLegacyNoTextAlign; }
     void            SetLegacyNoTextAlign( bool bVal ) { mbLegacyNoTextAlign = bVal; }
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;

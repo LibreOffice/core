@@ -167,7 +167,6 @@ public:
     bool            IsPopupModeTearOff() const { return mbPopupModeTearOff; }
 
     void            SetPopupModeEndHdl( const Link<>& rLink ) { maPopupModeEndHdl = rLink; }
-    const Link<>&   GetPopupModeEndHdl() const  { return maPopupModeEndHdl; }
 
     bool            GrabsFocus() const { return mbGrabFocus; }
 

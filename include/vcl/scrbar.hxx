@@ -115,7 +115,6 @@ public:
 
     void            EnableDrag( bool bEnable = true )
                         { mbFullDrag = bEnable; }
-    bool            IsDragEnabled() const { return mbFullDrag; }
 
     void            SetRangeMin( long nNewRange );
     long            GetRangeMin() const { return mnMinRange; }
@@ -136,7 +135,6 @@ public:
     ScrollType      GetType() const { return meScrollType; }
 
     void            SetScrollHdl( const Link<>& rLink ) { maScrollHdl = rLink; }
-    const Link<>&   GetScrollHdl() const { return maScrollHdl;    }
     void            SetEndScrollHdl( const Link<>& rLink ) { maEndScrollHdl = rLink; }
     const Link<>&   GetEndScrollHdl() const { return maEndScrollHdl; }
 

@@ -75,7 +75,6 @@ public:
     virtual bool                AnyInput( VclInputFlags nType ) SAL_OVERRIDE;
 
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) SAL_OVERRIDE;
-    virtual void                FillFontPathList( std::list< OString >& o_rFontPaths ) SAL_OVERRIDE;
     void                        SetLib( SalXLib *pXLib ) { mpXLib = pXLib; }
 
     // dtrans implementation

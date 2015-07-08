@@ -53,7 +53,6 @@ class VCL_DLLPUBLIC VclAbstractRefreshableDialog : public VclAbstractDialog
 {
 public:
     virtual void        Update() = 0;
-    virtual void        Sync() = 0;
 };
 
 class VCL_DLLPUBLIC AbstractPasswordToOpenModifyDialog : public VclAbstractDialog

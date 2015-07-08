@@ -140,9 +140,6 @@ public:
     void                SelectTabPage( sal_uInt16 nPageId );
 
     void                SetMaxPageWidth( long nMaxWidth ) { mnMaxPageWidth = nMaxWidth; }
-    long                GetMaxPageWidth() const { return mnMaxPageWidth; }
-    void                ResetMaxPageWidth() { SetMaxPageWidth( 0 ); }
-    bool                IsMaxPageWidth() const { return mnMaxPageWidth != 0; }
 
     void                SetTabPage( sal_uInt16 nPageId, TabPage* pPage );
     TabPage*            GetTabPage( sal_uInt16 nPageId ) const;
@@ -161,18 +158,12 @@ public:
 
     void                SetPageImage( sal_uInt16 nPageId, const Image& rImage );
 
-    void                SetHelpText( const OUString& rText )
-                            { Control::SetHelpText( rText ); }
-    const OUString&     GetHelpText() const
-                            { return Control::GetHelpText(); }
-
     void                SetHelpId( const OString& rId )
                             { Control::SetHelpId( rId ); }
     const OString&      GetHelpId() const
                             { return Control::GetHelpId(); }
 
     void                SetActivatePageHdl( const Link<>& rLink ) { maActivateHdl = rLink; }
-    const Link<>&       GetActivatePageHdl() const { return maActivateHdl; }
     void                SetDeactivatePageHdl( const Link<TabControl *, bool>& rLink ) { maDeactivateHdl = rLink; }
 
     // returns (control relative) bounding rectangle for the

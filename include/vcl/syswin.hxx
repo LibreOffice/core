@@ -228,7 +228,6 @@ public:
     void            SetMenuBar(MenuBar* pMenuBar, const css::uno::Reference<css::frame::XFrame>& rFrame = css::uno::Reference<css::frame::XFrame>());
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
     void            SetMenuBarMode( MenuBarMode nMode );
-    MenuBarMode     GetMenuBarMode() const { return mnMenuBarMode; }
 
     TaskPaneList*   GetTaskPaneList();
     void            GetWindowStateData( WindowStateData& rData ) const;

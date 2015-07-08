@@ -166,7 +166,6 @@ public:
     long ToRelativeLineIndex( long nIndex ) const;
 
     void            SetGetFocusHdl( const Link<>& rLink ) { maGetFocusHdl = rLink; }
-    const Link<>&   GetGetFocusHdl() const   { return maGetFocusHdl; }
     void            SetLoseFocusHdl( const Link<>& rLink ) { maLoseFocusHdl = rLink; }
     const Link<>&   GetLoseFocusHdl() const { return maLoseFocusHdl; }
 

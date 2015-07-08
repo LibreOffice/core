@@ -55,7 +55,6 @@ private:
     OUString sForbiddenChars;
 public:
     void SetForbiddenChars(const OUString& rSet) { sForbiddenChars = rSet; }
-    const OUString& GetForbiddenChars() { return sForbiddenChars; }
 
     virtual OUString filter(const OUString &rText);
 
@@ -212,7 +211,6 @@ public:
     virtual sal_Int32   GetMaxTextLen() const { return mnMaxTextLen; }
 
     void                SetWidthInChars(sal_Int32 nWidthInChars);
-    sal_Int32           GetWidthInChars() const { return mnWidthInChars; }
 
     void                setMaxWidthChars(sal_Int32 nWidth);
 

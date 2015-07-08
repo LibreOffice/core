@@ -29,12 +29,6 @@ public:
     virtual ~RenderSettings()
     {}
 
-    inline void SetLineColor(const Color& rColor);
-    inline void SetFillColor(const Color& rColor);
-    inline void SetBackground(const Wallpaper& rBackground);
-    inline void SetFont(const vcl::Font& rNewFont);
-
-    void PushAndApply(vcl::RenderContext& rRenderContext);
     void Apply(vcl::RenderContext& rRenderContext);
 };
 

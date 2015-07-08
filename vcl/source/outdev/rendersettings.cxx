@@ -13,35 +13,6 @@
 namespace vcl
 {
 
-void RenderSettings::SetLineColor(const Color& rColor)
-{
-    maOutDevState.mpLineColor = new Color(rColor);
-    maOutDevState.mnFlags |= PushFlags::LINECOLOR;
-}
-
-void RenderSettings::SetFillColor(const Color& rColor)
-{
-    maOutDevState.mpFillColor = new Color(rColor);
-    maOutDevState.mnFlags |= PushFlags::FILLCOLOR;
-}
-
-void RenderSettings::SetFont(const vcl::Font& rNewFont)
-{
-    maOutDevState.mpFont = new vcl::Font(rNewFont);
-    maOutDevState.mnFlags |= PushFlags::FONT;
-}
-
-void RenderSettings::SetBackground(const Wallpaper& rBackground)
-{
-    mpBackground.reset(new Wallpaper(rBackground));
-}
-
-void RenderSettings::PushAndApply(vcl::RenderContext& rRenderContext)
-{
-    rRenderContext.Push(maOutDevState.mnFlags);
-    Apply(rRenderContext);
-}
-
 void RenderSettings::Apply(vcl::RenderContext& rRenderContext)
 {
     if (maOutDevState.mnFlags & PushFlags::LINECOLOR)

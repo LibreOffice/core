@@ -75,7 +75,6 @@ public:
 
 protected:
     void                    InitMatchData() const;
-    bool                    AreMapNamesAvailable() const { return mbMapNames; }
 
     PhysicalFontFamily*    ImplFindByAliasName(const OUString& rSearchName,
         const OUString& rShortName) const;

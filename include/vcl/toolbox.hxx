@@ -52,12 +52,6 @@ public:
                 ToolBoxCustomizeEvent( ToolBox* pDropBox,
                                        sal_uInt16 nId, sal_uInt16 nPos = 0,
                                        void* pUserData = NULL );
-
-    ToolBox*    GetTargetBox() const { return mpTargetBox; }
-    sal_uInt16      GetTargetPos() const { return mnPosTo; }
-    sal_uInt16      GetSourceId() const { return mnIdFrom; }
-    void*       GetData() const { return mpData; }
-    bool        IsResized() const;
 };
 
 inline ToolBoxCustomizeEvent::ToolBoxCustomizeEvent()
@@ -76,14 +70,6 @@ inline ToolBoxCustomizeEvent::ToolBoxCustomizeEvent( ToolBox* pDropBox,
     mnIdFrom    = nId;
     mnPosTo     = nPos;
     mpData      = pUserData;
-}
-
-inline bool ToolBoxCustomizeEvent::IsResized() const
-{
-    if ( mnPosTo == TOOLBOX_CUSTOMIZE_RESIZE )
-        return true;
-    else
-        return false;
 }
 
 #define TOOLBOX_STYLE_FLAT          ((sal_uInt16)0x0004)
@@ -372,8 +358,6 @@ public:
     bool                IsHorizontal() const { return mbHorz; }
 
     void                SetLineCount( sal_uInt16 nNewLines );
-    sal_uInt16          GetLineCount() const { return mnLines; }
-    sal_uInt16          GetCurLine() const { return mnCurLine; }
     void                ShowLine( bool bNext );
 
     // Used to enable/disable scrolling one page at a time for toolbar
@@ -396,10 +380,8 @@ public:
     /// Retrieves the optimal position to place a popup window for this item (subtoolbar or dropdown)
     Point               GetItemPopupPosition( sal_uInt16 nItemId, const Size& rSize ) const;
 
-    Rectangle           GetScrollRect() const;
     sal_uInt16          GetCurItemId() const { return mnCurItemId; }
     sal_uInt16          GetDownItemId() const { return mnDownItemId; }
-    sal_uInt16          GetClicks() const { return mnMouseClicks; }
     sal_uInt16          GetModifier() const { return mnMouseModifier; }
     sal_uInt16          GetKeyModifier() const { return mnKeyModifier; }
 
@@ -480,8 +462,6 @@ public:
     // computes the smallest useful size when docked, ie with the first item visible only (+drag area and menu button)
     Size                CalcMinimumWindowSizePixel() const;
 
-    void                SetDockingRects( const Rectangle& rOutRect,
-                                         const Rectangle& rInRect );
     void                SetFloatingLines( sal_uInt16 nFloatLines );
     sal_uInt16          GetFloatingLines() const;
 
@@ -495,14 +475,12 @@ public:
     static bool         AlwaysLocked();
 
     void                EnableMenuStrings( bool bEnable = true ) { mbMenuStrings = bEnable; }
-    bool                IsMenuStringsEnabled() const { return mbMenuStrings; }
 
     void                SetOutStyle( sal_uInt16 nNewStyle );
     sal_uInt16          GetOutStyle() const { return mnOutStyle; }
 
     void                EnableCustomize( bool bEnable = true );
     bool                IsCustomize() { return mbCustomize; }
-    bool                IsInCustomizeMode() const { return mbCustomizeMode; }
 
     using DockingWindow::SetHelpText;
     using DockingWindow::GetHelpText;
@@ -537,8 +515,6 @@ public:
     // open custommenu
     void                ExecuteCustomMenu();
 
-    // allow Click Handler to detect special key
-    bool                IsShift() const { return mbIsShift; }
     // allow Click Handler to distinguish between mouse and key input
     bool                IsKeyEvent() const { return mbIsKeyEvent; }
 
@@ -580,17 +556,6 @@ inline Size ToolBox::CalcWindowSizePixel() const
     return CalcWindowSizePixel( mnLines );
 }
 
-inline Rectangle ToolBox::GetScrollRect() const
-{
-    return maUpperRect.GetUnion( maLowerRect );
-}
-
-inline void ToolBox::SetDockingRects( const Rectangle& rOutRect,
-                                      const Rectangle& rInRect )
-{
-    maOutDockRect = rOutRect;
-    maInDockRect = rInRect;
-}
 
 inline void ToolBox::SetFloatingLines( sal_uInt16 nNewLines )
 {

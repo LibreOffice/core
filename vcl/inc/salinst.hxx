@@ -147,16 +147,8 @@ public:
     bool                    CallEventCallback( void* pEvent, int nBytes )
         { return m_pEventInst.is() && m_pEventInst->dispatchEvent( pEvent, nBytes ); }
 
-    bool                    CallErrorCallback( void* pEvent, int nBytes )
-        { return m_pEventInst.is() && m_pEventInst->dispatchErrorEvent( pEvent, nBytes ); }
-
     enum ConnectionIdentifierType { AsciiCString, Blob };
     virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) = 0;
-
-    // this is a vehicle for PrintFontManager to bridge the gap between vcl and libvclplug_*
-    // this is only necessary because PrintFontManager is an exported vcl API and therefore
-    // needs to be in libvcl while libvclplug_* do not contain exported C++ API
-    virtual void            FillFontPathList( std::list< OString >& o_rFontPaths );
 
     // dtrans implementation
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments );
