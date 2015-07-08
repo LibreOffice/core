@@ -18,7 +18,6 @@
  */
 
 
-#include <svx/textchain.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/outlobj.hxx>
@@ -38,6 +37,8 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
 
     mpOverflChText = NULL;
     mpUnderflChText = NULL;
+
+    maCursorEvent = CursorChainingEvent::UNCHANGED;
 }
 
 
@@ -78,7 +79,7 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     bOverflow = bIsPageOverflow && mpNextLink;
     bUnderflow = !bIsPageOverflow &&  mpNextLink && mpNextLink->HasText();
 
-    impUpdateCursorEvent(pFlowOutl, bOverflow);
+    impUpdateCursorInfo(pFlowOutl, bOverflow);
 
     if (pParamOutl != NULL)
     {
@@ -96,7 +97,7 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 
 }
 
-void TextChainFlow::impUpdateCursorEvent(SdrOutliner *, bool bIsOverflow)
+void TextChainFlow::impUpdateCursorInfo(SdrOutliner *, bool bIsOverflow)
 {
     // XXX: Current implementation might create problems with UF-
     //      In fact UF causes a
@@ -105,12 +106,10 @@ void TextChainFlow::impUpdateCursorEvent(SdrOutliner *, bool bIsOverflow)
     if (bIsOverflow && !mbOFisUFinduced) {
         bool bCursorOut = true; // XXX: Should have real check
         if (bCursorOut) {
-            GetTextChain()->SetCursorEvent(GetLinkTarget(),
-                                     CursorChainingEvent::TO_NEXT_LINK);
+            maCursorEvent = CursorChainingEvent::TO_NEXT_LINK;
         }
     } else {
-        GetTextChain()->SetCursorEvent(GetLinkTarget(),
-                                     CursorChainingEvent::UNCHANGED);
+        maCursorEvent = CursorChainingEvent::UNCHANGED;
     }
 }
 
@@ -210,7 +209,7 @@ OutlinerParaObject *TextChainFlow::impGetMergedUnderflowParaObject(SdrOutliner *
     return mpUnderflChText->CreateMergedUnderflowParaObject(pOutliner, mpNextLink->GetOutlinerParaObject());
 }
 
-TextChain *TextChainFlow::GetTextChain()
+TextChain *TextChainFlow::GetTextChain() const
 {
     return mpTextChain;
 }
@@ -241,6 +240,8 @@ void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
     else
         impCheckForFlowEvents(pFlowOutl, GetLinkTarget()->pEdtOutl);
 
+    // Broadcast events for cursor handling
+    impBroadcasCursorInfo();
 }
 
 /*
@@ -284,6 +285,11 @@ void EditingTextChainFlow::impSetFlowOutlinerParams(SdrOutliner *pFlowOutl, SdrO
 
     // Set right text attributes // XXX: Not enough: it does not handle complex attributes
     //pFlowOutl->SetEditTextObjectPool(pParamOutl->GetEditTextObjectPool());
+}
+
+void EditingTextChainFlow::impBroadcasCursorInfo() const
+{
+    GetTextChain()->SetCursorEvent(GetLinkTarget(), maCursorEvent);
 }
 
 /*

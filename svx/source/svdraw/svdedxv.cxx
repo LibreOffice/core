@@ -551,7 +551,6 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
             case CursorChainingEvent::TO_NEXT_LINK:
                     SdrEndTextEdit();
                     SdrBeginTextEdit(pNextLink);
-
                     //SdrEndTextEdit(true);
                     //SdrBeginTextEdit(pNextLink, nullptr, nullptr, false, nullptr, nullptr, true, true);
                     break;

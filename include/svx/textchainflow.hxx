@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SVX_TEXTCHAINFLOW_HXX
 #define INCLUDED_SVX_TEXTCHAINFLOW_HXX
 
+
+#include <svx/textchain.hxx>
+
 class SdrTextObj;
 class SdrOutliner;
 class NonOverflowingText;
@@ -59,10 +62,11 @@ class TextChainFlow {
 
     //  -- Protected Members --
     protected:
+    CursorChainingEvent maCursorEvent;
 
     void impCheckForFlowEvents(SdrOutliner *, SdrOutliner *);
 
-    TextChain *GetTextChain();
+    TextChain *GetTextChain() const;
 
     virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *);
     virtual void impMoveChainedTextToNextLink(SdrOutliner *);
@@ -77,7 +81,7 @@ class TextChainFlow {
     //  -- Private Members --
     private:
 
-    void impUpdateCursorEvent(SdrOutliner *, bool);
+    void impUpdateCursorInfo(SdrOutliner *, bool);
 
     SdrTextObj *mpTargetLink;
     SdrTextObj *mpNextLink;
@@ -92,6 +96,7 @@ class TextChainFlow {
     OFlowChainedText *mpOverflChText;
     UFlowChainedText *mpUnderflChText;
 
+    // XXX: It would be nice to get rid of this
     bool mbOFisUFinduced;
 };
 
@@ -99,18 +104,21 @@ class TextChainFlow {
 // NOTE: EditingTextChainFlow might be strongly coupled with behavior in SdrTextObj::onChainingEvent
 class EditingTextChainFlow : public TextChainFlow
 {
-    public:
+public:
     EditingTextChainFlow(SdrTextObj *);
     virtual void CheckForFlowEvents(SdrOutliner *) SAL_OVERRIDE;
 
     //virtual void ExecuteOverflow(SdrOutliner *, SdrOutliner *) SAL_OVERRIDE;
 
-    protected:
+protected:
     virtual void impLeaveOnlyNonOverflowingText(SdrOutliner *) SAL_OVERRIDE;
 
     virtual void impSetTextForEditingOutliner(OutlinerParaObject *);
 
     virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *) SAL_OVERRIDE;
+
+private:
+    void impBroadcasCursorInfo() const;
 
 };
 
