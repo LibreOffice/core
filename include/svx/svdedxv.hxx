@@ -35,6 +35,9 @@ class ImpSdrEditPara;
 struct PasteOrDropInfos;
 class SdrUndoManager;
 
+enum class CursorChainingEvent;
+class ESelection;
+
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
 } } } }
@@ -94,6 +97,10 @@ private:
 
     SVX_DLLPRIVATE void ImpClearVars();
 
+    // FIXME(matteocam)
+    CursorChainingEvent *maCursorEvent;
+    ESelection *maPreChainingSel;
+
 protected:
     // central method to get an SdrUndoManager for enhanced TextEdit. Default will
     // try to return a dynamic_casted GetModel()->GetSdrUndoManager(). Applications
@@ -102,6 +109,8 @@ protected:
     virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const;
 
     OutlinerView* ImpFindOutlinerView(vcl::Window* pWin) const;
+
+    void ImpMoveCursorAfterChainingEvent();
 
     // Create a new OutlinerView at the heap and initialize all required parameters.
     // pTextEditObj, pTextEditPV and pTextEditOutliner have to be initialized
