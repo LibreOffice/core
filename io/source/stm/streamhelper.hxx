@@ -118,6 +118,7 @@ private:
         assert( m_nOccupiedBuffer <= m_nBufferLen );
         assert( m_nStart >= 0 );
         assert( 0 == m_nStart || m_nStart < m_nBufferLen );
+        (void) this; // avoid loplugin:staticmethods
     }
 
     sal_Int8    *m_p;
