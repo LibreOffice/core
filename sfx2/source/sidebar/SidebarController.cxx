@@ -273,19 +273,15 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
     }
 }
 
-void SAL_CALL SidebarController::disposing (const css::lang::EventObject& rEventObject)
+void SAL_CALL SidebarController::disposing (const css::lang::EventObject& )
     throw(css::uno::RuntimeException, std::exception)
 {
-    (void)rEventObject;
-
     dispose();
 }
 
-void SAL_CALL SidebarController::propertyChange (const css::beans::PropertyChangeEvent& rEvent)
+void SAL_CALL SidebarController::propertyChange (const css::beans::PropertyChangeEvent& )
     throw(css::uno::RuntimeException, std::exception)
 {
-    (void)rEvent;
-
     maPropertyChangeForwarder.RequestCall();
 }
 
