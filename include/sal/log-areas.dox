@@ -407,6 +407,7 @@ certain functionality.
 @li @c vcl.sm - Session Manager
 @li @c vcl.unity
 @li @c vcl.unx.print
+@li @c vcl.unx.dtrans
 @li @c vcl.virdev
 @li @c vcl.window
 @li @c vcl.wmf
