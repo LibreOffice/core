@@ -11,12 +11,11 @@ attribute vec4 position;
 attribute vec2 tex_coord_in;
 uniform vec2 viewport;
 uniform mat4 transform;
+uniform mat4 mvp;
 varying vec2 tex_coord;
 
 void main() {
-    vec4 pos = transform * position;
-    pos.x = (2.0 * pos.x) / viewport.x - 1.0;
-    pos.y = 1.0 - (2.0 * pos.y / viewport.y);
+    vec4 pos = mvp * transform * position;
     gl_Position = pos;
     tex_coord = tex_coord_in;
 }
