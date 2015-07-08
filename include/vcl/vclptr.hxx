@@ -46,21 +46,12 @@ private:
 
     struct S { char c[2]; };
 
-#if defined _MSC_VER
-    static char f(T2 *, long);
-    static S f(T1 * const &, int);
-#else
     template< typename U > static char f(T2 *, U);
     static S f(T1 *, int);
-#endif
 
     struct H {
         H(); // avoid C2514 "class has no constructors" from MSVC 2008
-#if defined _MSC_VER
-        operator T1 * const & () const;
-#else
         operator T1 * () const;
-#endif
         operator T2 * ();
     };
 
