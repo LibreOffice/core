@@ -20,6 +20,9 @@
 #ifndef INCLUDED_SVX_TEXTCHAIN_HXX
 #define INCLUDED_SVX_TEXTCHAIN_HXX
 
+#include <editeng/editdata.hxx>
+#include <map>
+
 /*
  * Properties can be accessed and set from a TextChain with:
  * - T TextChain::GetPROPNAME(SdrTextObj *)
@@ -66,7 +69,6 @@
 
 /* End Special Properties Macro */
 
-#include <map>
 
 class ImpChainLinkProperties;
 class SdrTextObj;
@@ -112,12 +114,14 @@ class ImpChainLinkProperties
     ImpChainLinkProperties() {
         INIT_CHAIN_PROP(NilChainingEvent, false)
         INIT_CHAIN_PROP(CursorEvent, CursorChainingEvent::UNCHANGED)
+        INIT_CHAIN_PROP(PreChainingSel, ESelection(0,0,0,0));
     }
 
     private:
     // NOTE: Remember to set default value in contructor when adding field
     DECL_CHAIN_PROP(NilChainingEvent, bool)
     DECL_CHAIN_PROP(CursorEvent, CursorChainingEvent)
+    DECL_CHAIN_PROP(PreChainingSel, ESelection)
 
 };
 
@@ -138,6 +142,7 @@ class TextChain {
     // Specific Link Properties
     DECL_CHAIN_PROP_INTERFACE(CursorEvent, CursorChainingEvent)
     DECL_CHAIN_PROP_INTERFACE(NilChainingEvent, bool)
+    DECL_CHAIN_PROP_INTERFACE(PreChainingSel, ESelection)
 
 
 

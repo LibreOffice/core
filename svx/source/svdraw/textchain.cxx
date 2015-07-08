@@ -26,6 +26,7 @@
 
 IMPL_CHAIN_PROP_INTERFACE(CursorEvent, CursorChainingEvent)
 IMPL_CHAIN_PROP_INTERFACE(NilChainingEvent, bool)
+IMPL_CHAIN_PROP_INTERFACE(PreChainingSel, ESelection)
 
 /* End Definition of Properties Interface */
 

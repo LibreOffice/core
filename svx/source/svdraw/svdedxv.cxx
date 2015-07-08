@@ -508,12 +508,13 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
             pTextChain->SetNilChainingEvent(pTextObj, true);
 
             // Save previous selection pos
-            maPreChainingSel = new ESelection(pOLV->GetSelection());
+            pTextChain->SetPreChainingSel(pTextObj, pOLV->GetSelection());
+            //maPreChainingSel = new ESelection(pOLV->GetSelection());
 
             // trigger actual chaining
             pTextObj->onChainingEvent();
 
-            maCursorEvent = new CursorChainingEvent(pTextChain->GetCursorEvent(pTextObj));
+            //maCursorEvent = new CursorChainingEvent(pTextChain->GetCursorEvent(pTextObj));
             //SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
 
             // NOTE: Must be called. Don't let the function return if you set it to true and not reset it
@@ -536,16 +537,16 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
     if (!pTextObj->IsChainable() || !pTextObj->GetNextLinkInChain())
         return;
 
-    if(!maCursorEvent || !maPreChainingSel)
-        return;
 
     SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
     OutlinerView* pOLV = GetTextEditOutlinerView();
 
-    switch (*maCursorEvent) {
+    TextChain *pTextChain = pTextObj->GetTextChain();
+
+    switch ( pTextChain->GetCursorEvent(pTextObj) ) {
 
             case CursorChainingEvent::UNCHANGED:
-                    pOLV->SetSelection(*maPreChainingSel);
+                    pOLV->SetSelection(pTextChain->GetPreChainingSel(pTextObj));
                     break;
             case CursorChainingEvent::TO_NEXT_LINK:
                     SdrEndTextEdit();
@@ -558,11 +559,6 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
                     // XXX: To be handled
                     break;
     }
-
-    // Default case
-    // XXX: You should delete the old ones here too.
-    maCursorEvent = NULL;
-    maPreChainingSel = NULL;
 
 }
 
