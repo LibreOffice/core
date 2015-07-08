@@ -255,6 +255,7 @@ struct ImplSVNWFData
     int                     mnStatusBarLowerRightOffset;    // amount in pixel to avoid in the lower righthand corner
     int                     mnMenuFormatBorderX;            // horizontal inner popup menu border
     int                     mnMenuFormatBorderY;            // vertical inner popup menu border
+    int                     mnMenuSeparatorBorderX;         // gap at each side of separator
     ::Color                 maMenuBarHighlightTextColor;    // override higlight text color
                                                             // in menubar if not transparent
     bool                    mbMenuBarDockingAreaCommonBG:1; // e.g. WinXP default theme
