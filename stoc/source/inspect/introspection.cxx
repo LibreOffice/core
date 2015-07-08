@@ -1906,9 +1906,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         pLocalMethodConcepts[ i ] = 0;
                     }
 
-                    OUString aMethName;
-                    OUString aPropName;
-                    OUString aStartStr;
                     for( i = 0 ; i < nSourceMethodCount ; i++ )
                     {
                         // Methode ansprechen
@@ -1916,7 +1913,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         sal_Int32& rMethodConcept_i = pLocalMethodConcepts[ i ];
 
                         // Namen besorgen
-                        aMethName = rxMethod_i->getName();
+                        OUString aMethName = rxMethod_i->getName();
 
                         // Methoden katalogisieren
                         // Alle (?) Methoden von XInterface filtern, damit z.B. nicht
@@ -1975,11 +1972,11 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             continue;
 
                         // Ist es eine get-Methode?
-                        aStartStr = aMethName.copy( 0, 3 );
+                        OUString aStartStr = aMethName.copy( 0, 3 );
                         if( aStartStr == "get" )
                         {
                             // Namen der potentiellen Property
-                            aPropName = aMethName.copy( 3 );
+                            OUString aPropName = aMethName.copy( 3 );
 
                             // get-Methode darf keinen Parameter haben
                             Sequence< Reference<XIdlClass> > getParams = rxMethod_i->getParameterTypes();
@@ -2178,18 +2175,18 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             continue;
 
                         // Namen besorgen
-                        aMethName = rxMethod_i->getName();
+                        OUString aMethName = rxMethod_i->getName();
 
                         // Wenn der Name zu kurz ist, wird's sowieso nichts
                         if( aMethName.getLength() <= 3 )
                             continue;
 
                         // Ist es eine set-Methode ohne zugehoerige get-Methode?
-                        aStartStr = aMethName.copy( 0, 3 );
+                        OUString aStartStr = aMethName.copy( 0, 3 );
                         if( aStartStr == "set" )
                         {
                             // Namen der potentiellen Property
-                            aPropName = aMethName.copy( 3 );
+                            OUString aPropName = aMethName.copy( 3 );
 
                             // set-Methode muss void returnen
                             Reference<XIdlClass> xSetRetType = rxMethod_i->getReturnType();
