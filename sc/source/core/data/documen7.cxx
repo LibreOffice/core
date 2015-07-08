@@ -419,6 +419,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
         CalcAll();
     else
     {
+        ::std::vector<ScFormulaCell*> vAlwaysDirty;
         ScFormulaCell* pCell = pFormulaTree;
         while ( pCell )
         {
@@ -428,12 +429,11 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
             {
                 if ( pCell->GetCode()->IsRecalcModeAlways() )
                 {
-                    // pCell is set to Dirty again!
-                    ScFormulaCell* pNext = pCell->GetNext();
-                    pCell->SetDirty();
-                    // if pNext==0 and new dependencies were appended at the end,
-                    // this does not matter since they all are bDirty
-                    pCell = pNext;
+                    // pCell and dependents are to be set dirty again, collect
+                    // them first and broadcast afterwards to not break the
+                    // FormulaTree chain here.
+                    vAlwaysDirty.push_back( pCell);
+                    pCell = pCell->GetNext();
                 }
                 else
                 {   // calculate the other single
@@ -443,6 +443,14 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
                 }
             }
         }
+        for (::std::vector<ScFormulaCell*>::iterator it( vAlwaysDirty.begin()), itEnd( vAlwaysDirty.end());
+                it != itEnd; ++it)
+        {
+            pCell = *it;
+            if (!pCell->GetDirty())
+                pCell->SetDirty();
+        }
+
         bool bProgress = !bOnlyForced && nFormulaCodeInTree && bProgressBar;
         if ( bProgress )
             ScProgress::CreateInterpretProgress( this, true );
