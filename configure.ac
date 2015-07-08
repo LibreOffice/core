@@ -1475,6 +1475,11 @@ AC_ARG_ENABLE(collada,
     AS_HELP_STRING([--disable-collada],
         [Disable collada support (Rendering 3D models stored in *.dae and *.kmz format).]))
 
+AC_ARG_ENABLE(dconf,
+    AS_HELP_STRING([--disable-dconf],
+        [Disable the dconf configuration backend (enabled by default where
+         available).]))
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -10493,6 +10498,29 @@ AC_SUBST([COLLADA2GLTF_CFLAGS])
 AC_SUBST([COLLADA2GLTF_LIBS])
 AC_SUBST([SYSTEM_COLLADA2GLTF])
 
+if test "$enable_dconf" != no; then
+    PKG_CHECK_MODULES([DCONF], [dconf], [], [
+        if test "$enable_dconf" = yes; then
+            AC_MSG_ERROR([dconf not found])
+        else
+            enable_dconf=no
+        fi])
+fi
+AC_MSG_CHECKING([whether to enable dconf])
+if test "$enable_dconf" = no; then
+    DCONF_CFLAGS=
+    DCONF_LIBS=
+    ENABLE_DCONF=
+    AC_MSG_RESULT([no])
+else
+    ENABLE_DCONF=TRUE
+    AC_DEFINE(ENABLE_DCONF)
+    AC_MSG_RESULT([yes])
+fi
+AC_SUBST([DCONF_CFLAGS])
+AC_SUBST([DCONF_LIBS])
+AC_SUBST([ENABLE_DCONF])
+
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])
 ENABLE_PDFIMPORT=
@@ -13112,6 +13140,7 @@ AC_CONFIG_FILES([config_host.mk
                  ios/lo.xcconfig])
 AC_CONFIG_HEADERS([config_host/config_buildid.h])
 AC_CONFIG_HEADERS([config_host/config_clang.h])
+AC_CONFIG_HEADERS([config_host/config_dconf.h])
 AC_CONFIG_HEADERS([config_host/config_eot.h])
 AC_CONFIG_HEADERS([config_host/config_extension_update.h])
 AC_CONFIG_HEADERS([config_host/config_cairo_canvas.h])

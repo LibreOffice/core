@@ -38,15 +38,19 @@ $(eval $(call gb_Library_add_exception_objects,configmgr, \
     configmgr/source/type \
     configmgr/source/update \
     configmgr/source/valueparser \
-    $(if $(filter $(OS),WNT), configmgr/source/winreg ) \
     configmgr/source/writemodfile \
     configmgr/source/xcdparser \
     configmgr/source/xcsparser \
     configmgr/source/xcuparser \
     configmgr/source/xmldata \
+    $(if $(ENABLE_DCONF),configmgr/source/readdconflayer) \
+    $(if $(filter $(OS),WNT),configmgr/source/winreg) \
 ))
 
-$(eval $(call gb_Library_use_external,configmgr,boost_headers))
+$(eval $(call gb_Library_use_externals,configmgr, \
+    boost_headers \
+    dconf \
+))
 
 $(eval $(call gb_Library_use_sdk_api,configmgr))
 
