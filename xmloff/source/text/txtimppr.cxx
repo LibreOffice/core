@@ -241,6 +241,8 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
                                                        aAny );
         }
     }
+
+    (void) this; // avoid loplugin:staticmethods
 }
 
 namespace {

@@ -340,7 +340,7 @@ public:
 
     // Check if common attribute list is empty.
 #ifndef DBG_UTIL
-    void CheckAttrList() {}
+    void CheckAttrList() { (void) this; /* avoid loplugin:staticmethods */ }
 #else
     void CheckAttrList();
 #endif
