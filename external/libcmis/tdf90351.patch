@@ -1,0 +1,10 @@
+--- src/libcmis/atom-session.cxx
++++ src/libcmis/atom-session.cxx
+@@ -233,6 +233,7 @@ libcmis::ObjectPtr AtomPubSession::createObjectFromEntryDoc( xmlDocPtr doc )
+                 else
+                 {
+                     // Not a valid CMIS atom entry... weird
++                    cmisObject.reset( new AtomDocument( this, node ) );
+                 }
+             }
+             xmlXPathFreeObject( xpathObj );
