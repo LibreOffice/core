@@ -235,8 +235,7 @@ OUString SAL_CALL CFileOpenDialog::getFileName() const
 OUString CFileOpenDialog::getFileExtension()
 {
     if (m_ofn.nFileExtension)
-        return OUString(m_fileNameBuffer.getStr() + m_ofn.nFileExtension,
-            rtl_ustr_getLength(m_fileNameBuffer.getStr() + m_ofn.nFileExtension));
+        return m_fileNameBuffer.substring(m_ofn.nFileExtension);
 
     return OUString();
 }

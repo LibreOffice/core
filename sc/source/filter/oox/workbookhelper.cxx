@@ -106,9 +106,8 @@ using ::oox::core::XmlFilterBase;
 
 bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
 {
-    // there is no wrapper in OUString, TODO: compare with collator
-    return ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
-        rName1.getStr(), rName1.getLength(), rName2.getStr(), rName2.getLength() ) < 0;
+    // TODO: compare with collator
+    return rName1.compareToIgnoreAsciiCase(rName2 ) < 0;
 }
 
 class WorkbookGlobals : boost::noncopyable

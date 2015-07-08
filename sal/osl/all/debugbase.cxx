@@ -91,8 +91,7 @@ bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses( char const* pName )
         return false;
     // check for "all":
     rtl::OString const& rFirst = rVec[0];
-    if (rtl_str_compare_WithLength( rFirst.getStr(), rFirst.getLength(),
-                                    RTL_CONSTASCII_STRINGPARAM("all") ) == 0)
+    if ( rFirst == "all" )
         return true;
     OStringVec::const_iterator const iEnd( rVec.end() );
     return std::find_if( rVec.begin(), iEnd,

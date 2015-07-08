@@ -305,12 +305,7 @@ bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) const
         case DataType::LONGVARCHAR:
         {
             OUString sLH = aLH, sRH = aRH;
-            sal_Int32 nRes = rtl_ustr_compareIgnoreAsciiCase_WithLength
-                (
-                 sLH.pData->buffer,
-                 sLH.pData->length,
-                 sRH.pData->buffer,
-                 sRH.pData->length );
+            sal_Int32 nRes = sLH.compareToIgnoreAsciiCase(sRH);
             switch(aPredicateType)
             {
                 case SQLFilterOperator::EQUAL:          bResult = (nRes == 0); break;
