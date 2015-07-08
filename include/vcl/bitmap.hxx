@@ -826,7 +826,6 @@ public:
     SAL_DLLPRIVATE void     ImplAdaptBitCount(Bitmap& rNew) const;
     SAL_DLLPRIVATE bool     ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE bool     ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
-    SAL_DLLPRIVATE bool     ImplScaleSuper( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE bool     ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel);
 
     SAL_DLLPRIVATE bool     ImplConvolutionPass(

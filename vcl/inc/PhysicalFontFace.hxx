@@ -61,7 +61,6 @@ public:
     bool                    IsScalable() const          { return (mnHeight == 0); }
     bool                    CheckMagic( int n ) const   { return (n == mnMagic); }
     PhysicalFontFace*       GetNextFace() const         { return mpNext; }
-    PhysicalFontFace*       CreateAlias() const         { return Clone(); }
 
     bool                    IsBetterMatch( const FontSelectPattern&, FontMatchStatus& ) const;
     sal_Int32               CompareWithSize( const PhysicalFontFace& ) const;

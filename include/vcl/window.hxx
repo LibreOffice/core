@@ -570,7 +570,6 @@ public:
     DECL_DLLPRIVATE_LINK_TYPED( ImplTrackTimerHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK(      ImplAsyncFocusHdl, void* );
     DECL_DLLPRIVATE_LINK_TYPED( ImplHandleResizeTimerHdl, Idle*, void );
-    DECL_DLLPRIVATE_LINK(      ImplHideOwnerDrawWindowsHdl, void* );
 
 
     SAL_DLLPRIVATE static void          ImplInitAppFontData( vcl::Window* pWindow );
@@ -760,7 +759,6 @@ private:
 
     SAL_DLLPRIVATE void                 ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl = true );
 
-    SAL_DLLPRIVATE void                 ImplAlignChildren();
     SAL_DLLPRIVATE void                 ImplToBottomChild();
 
     SAL_DLLPRIVATE void                 ImplCalcToTop( ImplCalcToTopData* pPrevData );
@@ -1363,8 +1361,6 @@ private:
     SAL_DLLPRIVATE bool                 ImplIsAccessibleNativeFrame() const;
     SAL_DLLPRIVATE sal_uInt16           ImplGetAccessibleCandidateChildWindowCount( GetWindowType nFirstWindowType ) const;
     SAL_DLLPRIVATE vcl::Window*         ImplGetAccessibleCandidateChild( sal_uInt16 nChild, sal_uInt16& rChildCount, GetWindowType nFirstWindowType, bool bTopLevel = true ) const;
-    SAL_DLLPRIVATE bool                 ImplRegisterAccessibleNativeFrame();
-    SAL_DLLPRIVATE void                 ImplRevokeAccessibleNativeFrame();
     ///@}
 
     /*
