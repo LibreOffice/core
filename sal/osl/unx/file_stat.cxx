@@ -427,9 +427,7 @@ SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
     if (a == b)
         return sal_True;
     /* same name => same item, unless renaming / moving madness has occurred */
-    if (rtl_ustr_compare_WithLength(
-                pA->m_ustrFilePath->buffer, pA->m_ustrFilePath->length,
-                pB->m_ustrFilePath->buffer, pB->m_ustrFilePath->length ) == 0)
+    if (pA->m_ustrFilePath == pB->m_ustrFilePath)
         return sal_True;
 
     struct stat a_stat, b_stat;

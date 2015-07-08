@@ -259,7 +259,7 @@ FileProvider::compareContentIds(
                     error = osl::FileBase::getSystemPathFromFileURL( aStatus2.getFileURL(), aPath2 );
 
                 if ( error == osl::FileBase::E_None )
-                    iComp = rtl_ustr_compareIgnoreAsciiCase( aPath1.getStr(), aPath2.getStr() );
+                    iComp = aPath1.compareToIgnoreAsciiCase( aPath2 );
             }
 #endif
         }

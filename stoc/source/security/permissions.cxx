@@ -380,8 +380,7 @@ bool FilePermission::implies( Permission const & perm ) const
     if (m_url.getLength() > demanded.m_url.getLength())
         return false;
     // check /- wildcard: all files and recursive in that path
-    if (1 < m_url.getLength() &&
-        0 == ::rtl_ustr_ascii_compare_WithLength( m_url.getStr() + m_url.getLength() - 2, 2, "/-" ))
+    if (m_url.endsWith("/-"))
     {
         // demanded url must start with granted path (including path trailing path sep)
         sal_Int32 len = m_url.getLength() -1;
@@ -394,8 +393,7 @@ bool FilePermission::implies( Permission const & perm ) const
 #endif
     }
     // check /* wildcard: all files in that path (not recursive!)
-    if (1 < m_url.getLength() &&
-        0 == ::rtl_ustr_ascii_compare_WithLength( m_url.getStr() + m_url.getLength() - 2, 2, "/*" ))
+    if (m_url.endsWith("/*"))
     {
         // demanded url must start with granted path (including path trailing path sep)
         sal_Int32 len = m_url.getLength() -1;
