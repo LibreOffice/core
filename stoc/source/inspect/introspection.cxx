@@ -1972,12 +1972,9 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             continue;
 
                         // Ist es eine get-Methode?
-                        OUString aStartStr = aMethName.copy( 0, 3 );
-                        if( aStartStr == "get" )
+                        OUString aPropName;
+                        if( aMethName.startsWith("get", &aPropName) )
                         {
-                            // Namen der potentiellen Property
-                            OUString aPropName = aMethName.copy( 3 );
-
                             // get-Methode darf keinen Parameter haben
                             Sequence< Reference<XIdlClass> > getParams = rxMethod_i->getParameterTypes();
                             if( getParams.getLength() > 0 )
@@ -2044,13 +2041,9 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                                 // Name holen und auswerten
                                 OUString aMethName2 = rxMethod_k->getName();
-                                OUString aStartStr2 = aMethName2.copy( 0, 3 );
-                                if( aStartStr2 != "set" )
-                                    continue;
-
-                                // Ist es denn der gleiche Name?
-                                OUString aPropName2 = aMethName2.copy( 3 );
-                                if( aPropName != aPropName2 )
+                                OUString aPropName2;
+                                if (!(aMethName2.startsWith("set", &aPropName2)
+                                      && aPropName2 == aPropName))
                                     continue;
 
                                 // set-Methode muss void returnen
@@ -2092,21 +2085,12 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         }
 
                         // Ist es eine addListener-Methode?
-                        else if( aStartStr == "add" )
+                        else if( aMethName.startsWith("add", &aPropName) )
                         {
-                            OUString aListenerStr( "Listener" );
-
-                            // Namen der potentiellen Property
-                            sal_Int32 nStrLen = aMethName.getLength();
-                            sal_Int32 nCopyLen = nStrLen - aListenerStr.getLength();
-                            OUString aEndStr = aMethName.copy( nCopyLen > 0 ? nCopyLen : 0 );
-
                             // Endet das Teil auf Listener?
-                            if( aEndStr != aListenerStr )
+                            OUString aListenerName;
+                            if( !aPropName.endsWith("Listener", &aListenerName) )
                                 continue;
-
-                            // Welcher Listener?
-                            OUString aListenerName = aMethName.copy( 3, nStrLen - aListenerStr.getLength() - 3 );
 
                             // TODO: Hier koennten noch genauere Pruefungen vorgenommen werden
                             // - Rueckgabe-Typ
@@ -2126,19 +2110,12 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
                                 // Name holen und auswerten
                                 OUString aMethName2 = rxMethod_k->getName();
-                                sal_Int32 nNameLen = aMethName2.getLength();
-                                sal_Int32 nCopyLen2 = (nNameLen < 6) ? nNameLen : 6;
-                                OUString aStartStr2 = aMethName2.copy( 0, nCopyLen2 );
-                                OUString aRemoveStr("remove" );
-                                if( aStartStr2 != aRemoveStr )
-                                    continue;
-
-                                // Ist es denn der gleiche Listener?
-                                if( aMethName2.getLength() - aRemoveStr.getLength() <= aListenerStr.getLength() )
-                                    continue;
-                                OUString aListenerName2 = aMethName2.copy
-                                      ( 6, aMethName2.getLength() - aRemoveStr.getLength() - aListenerStr.getLength() );
-                                if( aListenerName != aListenerName2 )
+                                OUString aListenerName2;
+                                if (!(aMethName2.startsWith(
+                                          "remove", &aPropName)
+                                      && aPropName.endsWith(
+                                          "Listener", &aListenerName2)
+                                      && aListenerName2 == aListenerName))
                                     continue;
 
                                 // TODO: Hier koennten noch genauere Pruefungen vorgenommen werden
@@ -2177,12 +2154,9 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             continue;
 
                         // Ist es eine set-Methode ohne zugehoerige get-Methode?
-                        OUString aStartStr = aMethName.copy( 0, 3 );
-                        if( aStartStr == "set" )
+                        OUString aPropName;
+                        if( aMethName.startsWith("set", &aPropName) )
                         {
-                            // Namen der potentiellen Property
-                            OUString aPropName = aMethName.copy( 3 );
-
                             // set-Methode muss void returnen
                             Reference<XIdlClass> xSetRetType = rxMethod_i->getReturnType();
                             if( xSetRetType->getTypeClass() != TypeClass_VOID )
