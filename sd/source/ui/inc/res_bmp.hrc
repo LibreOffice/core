@@ -64,6 +64,14 @@
 #define BMP_LAYOUT_VERTICAL01               RID_SD_START+364
 #define BMP_LAYOUT_VERTICAL02               RID_SD_START+366
 
+#define BMP_DISPLAYMODE_SLIDE               (RID_SD_START+367)
+#define BMP_DISPLAYMODE_OUTLINE             (RID_SD_START+368)
+#define BMP_DISPLAYMODE_NOTES               (RID_SD_START+369)
+#define BMP_DISPLAYMODE_SLIDE_SORTER        (RID_SD_START+370)
+#define BMP_DISPLAYMODE_SLIDE_MASTER        (RID_SD_START+371)
+#define BMP_DISPLAYMODE_NOTES_MASTER        (RID_SD_START+372)
+#define BMP_DISPLAYMODE_HANDOUT_MASTER      (RID_SD_START+373)
+    // FREE
 #define BMP_FOILH_01                        RID_SD_START+388
 #define BMP_FOILH_02                        RID_SD_START+390
 #define BMP_FOILH_03                        RID_SD_START+392
