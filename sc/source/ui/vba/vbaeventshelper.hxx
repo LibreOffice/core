@@ -57,7 +57,7 @@ private:
     /** Creates a VBA Worksheet object (the argument must contain a sheet index). */
     css::uno::Any createWorksheet( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
     /** Creates a VBA Range object (the argument must contain a UNO range or UNO range list). */
-    css::uno::Any createRange( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    css::uno::Any createRange( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
     /** Creates a VBA Hyperlink object (the argument must contain a UNO cell). */
     css::uno::Any createHyperlink( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
     /** Creates a VBA Window object (the argument must contain a model controller). */

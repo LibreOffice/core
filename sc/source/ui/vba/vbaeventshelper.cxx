@@ -858,7 +858,7 @@ uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< uno::Any >& rA
 }
 
 uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
+        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     // it is possible to pass an existing VBA Range object
     uno::Reference< excel::XRange > xVbaRange = getXSomethingFromArgs< excel::XRange >( rArgs, nIndex );
