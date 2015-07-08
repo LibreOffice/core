@@ -102,6 +102,7 @@
 #define SID_JUMPTOMARK                      (SID_SFX_START + 598)
 #define SID_OPENTEMPLATE                    (SID_SFX_START + 594)
 #define SID_SAVEASDOC                       (SID_SFX_START + 502)
+#define SID_SAVEASREMOTE                    (SID_SFX_START + 516)
 #define SID_SAVEACOPY                       (SID_SFX_START + 999)
 #define SID_SAVEACOPYITEM                   (SID_SFX_START + 998)
 #define SID_CLOSING                         (SID_SFX_START +1539)

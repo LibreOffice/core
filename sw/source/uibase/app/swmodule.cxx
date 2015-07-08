@@ -296,7 +296,7 @@ void SwDLL::RegisterControls()
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
 
-    SfxSaveAsToolBoxControl::RegisterControl(FN_SAVE_FILE_AS, pMod );
+    SfxSaveAsToolBoxControl::RegisterControl(SID_SAVEASDOC, pMod );
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
     SvxUndoRedoControl::RegisterControl(SID_UNDO, pMod );
     SvxUndoRedoControl::RegisterControl(SID_REDO, pMod );

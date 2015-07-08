@@ -5013,6 +5013,33 @@ SfxBoolItem SaveAs SID_SAVEASDOC
     GroupId = GID_DOCUMENT;
 ]
 
+SfxBoolItem SaveAsRemote SID_SAVEASREMOTE
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxBoolItem PasswordInteraction SID_PASSWORDINTERACTION,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK,SfxBoolItem SaveTo SID_SAVETO)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
 
 SfxBoolItem SaveAsTemplate SID_DOCTEMPLATE
 (SfxStringItem TemplateRegion SID_TEMPLATE_REGIONNAME,SfxStringItem TemplateName SID_TEMPLATE_NAME)

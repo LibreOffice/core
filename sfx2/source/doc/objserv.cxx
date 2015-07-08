@@ -528,13 +528,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
         case SID_EXPORTDOCASPDF:
         case SID_DIRECTEXPORTDOCASPDF:
             bIsPDFExport = true;
             //fall-through
         case SID_EXPORTDOC:
         case SID_SAVEASDOC:
+        case SID_SAVEASREMOTE:
         case SID_SAVEDOC:
         {
             // derived class may decide to abort this

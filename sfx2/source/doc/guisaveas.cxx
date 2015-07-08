@@ -105,6 +105,7 @@
 #define SAVE_REQUESTED              16
 #define SAVEAS_REQUESTED            32
 #define SAVEACOPY_REQUESTED         64
+#define SAVEASREMOTE_REQUESTED      -1
 
 // possible statuses of save operation
 #define STATUS_NO_ACTION            0
@@ -136,6 +137,8 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
         nResult = SID_DIRECTEXPORTDOCASPDF;
     else if ( nStoreMode == SAVEAS_REQUESTED || nStoreMode == ( EXPORT_REQUESTED | WIDEEXPORT_REQUESTED ) )
         nResult = SID_SAVEASDOC;
+    else if ( nStoreMode == SAVEASREMOTE_REQUESTED )
+        nResult = SID_SAVEASREMOTE;
     else {
         DBG_ASSERT( false, "Unacceptable slot name is provided!\n" );
     }
@@ -157,6 +160,8 @@ static sal_uInt8 getStoreModeFromSlotName( const OUString& aSlotName )
         nResult = SAVE_REQUESTED;
     else if ( aSlotName == "SaveAs" )
         nResult = SAVEAS_REQUESTED;
+    else if ( aSlotName == "SaveAsRemote" )
+        nResult = SAVEASREMOTE_REQUESTED;
     else
         throw task::ErrorCodeIOException(
             ("getStoreModeFromSlotName(\"" + aSlotName
@@ -544,7 +549,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
     SfxFilterFlags nMust = getMustFlags( nStoreMode );
     SfxFilterFlags nDont = getDontFlags( nStoreMode );
 
-    if ( nStoreMode & PDFEXPORT_REQUESTED )
+    if ( ( nStoreMode != SAVEASREMOTE_REQUESTED ) && ( nStoreMode & PDFEXPORT_REQUESTED ) )
     {
         // Preselect PDF-Filter for EXPORT
         uno::Sequence< beans::NamedValue > aSearchRequest( 2 );
@@ -1545,17 +1550,25 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
     if ( aFileNameIter == aModelData.GetMediaDescr().end() )
     {
         sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG;
-        ::comphelper::SequenceAsHashMap::const_iterator aDlgIter =
-            aModelData.GetMediaDescr().find( OUString("UseSystemDialog") );
-        if ( aDlgIter != aModelData.GetMediaDescr().end() )
+
+        if( nStoreMode == SAVEASREMOTE_REQUESTED )
         {
-            bool bUseSystemDialog = true;
-            if ( aDlgIter->second >>= bUseSystemDialog )
+            nDialog = SFX2_IMPL_DIALOG_REMOTE;
+        }
+        else
+        {
+            ::comphelper::SequenceAsHashMap::const_iterator aDlgIter =
+                aModelData.GetMediaDescr().find( OUString("UseSystemDialog") );
+            if ( aDlgIter != aModelData.GetMediaDescr().end() )
             {
-                if ( bUseSystemDialog )
-                    nDialog = SFX2_IMPL_DIALOG_SYSTEM;
-                else
-                    nDialog = SFX2_IMPL_DIALOG_OOO;
+                bool bUseSystemDialog = true;
+                if ( aDlgIter->second >>= bUseSystemDialog )
+                {
+                    if ( bUseSystemDialog )
+                        nDialog = SFX2_IMPL_DIALOG_SYSTEM;
+                    else
+                        nDialog = SFX2_IMPL_DIALOG_OOO;
+                }
             }
         }
 

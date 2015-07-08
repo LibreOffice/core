@@ -41,7 +41,7 @@ using namespace framework;
 
 namespace {
 
-static const char CMD_SAVE_REMOTE[]  = ".uno:OpenRemote"; // TODO
+static const char CMD_SAVE_REMOTE[]  = ".uno:SaveAsRemote";
 
 class SaveAsMenuController :  public svt::PopupMenuControllerBase
 {
@@ -115,9 +115,9 @@ void SaveAsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     if ( pVCLPopupMenu )
     {
         // Open remote menu entry
-        pVCLPopupMenu->InsertItem( sal_uInt16( 0 ),
+        pVCLPopupMenu->InsertItem( sal_uInt16( 1 ),
                                    FWK_RESSTR( STR_REMOTE_FILE ) );
-        pVCLPopupMenu->SetItemCommand( sal_uInt16( 0 ),
+        pVCLPopupMenu->SetItemCommand( sal_uInt16( 1 ),
                                        OUString( CMD_SAVE_REMOTE ) );
     }
 }
@@ -160,6 +160,7 @@ void SAL_CALL SaveAsMenuController::itemSelected( const css::awt::MenuEvent& rEv
         if ( aCommand == CMD_SAVE_REMOTE )
         {
             Sequence< PropertyValue > aArgsList( 0 );
+
             dispatchCommand( CMD_SAVE_REMOTE, aArgsList );
         }
     }
