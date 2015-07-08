@@ -70,8 +70,6 @@ public:
 
     void                            EnableEraseBackground( bool bEnable )
                                         { m_bEraseBackground = bEnable; }
-    bool                            IsEraseBackgroundEnabled()
-                                        { return m_bEraseBackground; }
 };
 
 #endif // INCLUDED_VCL_INC_SALOBJ_HXX

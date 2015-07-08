@@ -60,8 +60,6 @@ public:
     bool                operator!=( const BitmapEx& rBitmapEx ) const { return !(*this==rBitmapEx); }
     bool                operator!() const { return !aBitmap; }
 
-    bool                IsEqual( const BitmapEx& rBmpEx ) const;
-
     bool                IsEmpty() const;
     void                SetEmpty();
     void                Clear();

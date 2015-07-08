@@ -1718,8 +1718,6 @@ public:
                                               const MapMode& rMapMode ) const;
     Polygon                     LogicToPixel( const Polygon& rLogicPoly,
                                               const MapMode& rMapMode ) const;
-    tools::PolyPolygon          LogicToPixel( const tools::PolyPolygon& rLogicPolyPoly,
-                                              const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon     LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                               const MapMode& rMapMode ) const;
 
@@ -1739,8 +1737,6 @@ public:
     Polygon                     PixelToLogic( const Polygon& rDevicePoly,
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolygon         PixelToLogic( const basegfx::B2DPolygon& rDevicePoly,
-                                              const MapMode& rMapMode ) const;
-    tools::PolyPolygon          PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly,
                                               const MapMode& rMapMode ) const;
     basegfx::B2DPolyPolygon     PixelToLogic( const basegfx::B2DPolyPolygon& rDevicePolyPoly,
                                               const MapMode& rMapMode ) const;
@@ -1807,7 +1803,6 @@ public:
     SAL_DLLPRIVATE long         ImplLogicWidthToDevicePixel( long nWidth ) const;
 
     SAL_DLLPRIVATE DeviceCoordinate LogicWidthToDeviceCoordinate( long nWidth ) const;
-    SAL_DLLPRIVATE DeviceCoordinate LogicHeightToDeviceCoordinate( long nHeight ) const;
 
 protected:
     /**
@@ -1905,22 +1900,6 @@ private:
      @returns Rectangle based on logical coordinates and units.
      */
     SAL_DLLPRIVATE Rectangle    ImplDevicePixelToLogic( const Rectangle& rPixelRect ) const;
-
-    /** Convert a logical B2DPolygon to a B2DPolygon in physical device pixel units.
-
-     @param         rLogicSize  Const reference to a B2DPolygon in logical units
-
-     @returns B2DPolyPolygon based on physical device pixel coordinates and units.
-     */
-    SAL_DLLPRIVATE ::basegfx::B2DPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolygon& rLogicPoly ) const;
-
-    /** Convert a logical B2DPolyPolygon to a B2DPolyPolygon in physical device pixel units.
-
-     @param         rLogicPolyPoly  Const reference to a B2DPolyPolygon in logical units
-
-     @returns B2DPolyPolygon based on physical device pixel coordinates and units.
-     */
-    SAL_DLLPRIVATE ::basegfx::B2DPolyPolygon ImplLogicToDevicePixel( const ::basegfx::B2DPolyPolygon& rLogicPolyPoly ) const;
 
     /** Convert a logical polygon to a polygon in physical device pixel units.
 

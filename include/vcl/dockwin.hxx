@@ -149,7 +149,6 @@ public:
     void            TitleButtonClick( TitleButton nButton );
     void            Resizing( Size& rSize );
     void            Tracking( const TrackingEvent& rTEvt );
-    long            Notify( NotifyEvent& rNEvt );
 
     void            ShowTitleButton( TitleButton nButton, bool bVisible = true );
 
@@ -160,7 +159,6 @@ public:
     bool            IsDocking() const { return mbDocking; }
     bool            IsDockable() const { return mbDockable; }
     bool            IsDockingCanceled() const { return mbDockCanceled; }
-    bool            IsFloatingPrevented() const { return mbFloatPrevented; }
 
     void            SetFloatingMode( bool bFloatMode = false );
     bool            IsFloatingMode() const;
@@ -172,9 +170,6 @@ public:
     void            setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      PosSizeFlags nFlags = PosSizeFlags::All );
-    void            SetPosSizePixel( const Point& rNewPos,
-                                     const Size& rNewSize )
-                        { mpDockingWindow->SetPosSizePixel( rNewPos, rNewSize ); }
     Point           GetPosPixel() const;
     Size            GetSizePixel() const;
 };
@@ -314,15 +309,8 @@ public:
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    void            SetPin( bool bPin );
-    bool            IsPinned() const;
-
-    void            RollUp();
     void            RollDown();
     bool            IsRollUp() const;
-
-    void            SetRollUpOutputSizePixel( const Size& rSize );
-    Size            GetRollUpOutputSizePixel() const;
 
     void            SetMinOutputSizePixel( const Size& rSize );
     const Size&     GetMinOutputSizePixel() const;
@@ -333,7 +321,6 @@ public:
     bool            IsDockable() const { return mbDockable; }
     bool            IsDockingCanceled() const { return mbDockCanceled; }
     bool            IsDockingPrevented() const { return mbDockPrevented; }
-    bool            IsFloatingPrevented() const { return mbFloatPrevented; }
 
     void            SetFloatingMode( bool bFloatMode = false );
     bool            IsFloatingMode() const;
@@ -362,26 +349,7 @@ public:
     virtual void queue_resize(StateChangedType eReason = StateChangedType::Layout) SAL_OVERRIDE;
 };
 
-inline void DockingWindow::SetPin( bool bPin )
-{
-    if ( mpFloatWin )
-        mpFloatWin->SetPin( bPin );
-    mbPinned = bPin;
-}
 
-inline bool DockingWindow::IsPinned() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->IsPinned();
-    return mbPinned;
-}
-
-inline void DockingWindow::RollUp()
-{
-    if ( mpFloatWin )
-        mpFloatWin->RollUp();
-    mbRollUp = true;
-}
 
 inline void DockingWindow::RollDown()
 {
@@ -397,19 +365,6 @@ inline bool DockingWindow::IsRollUp() const
     return mbRollUp;
 }
 
-inline void DockingWindow::SetRollUpOutputSizePixel( const Size& rSize )
-{
-    if ( mpFloatWin )
-        mpFloatWin->SetRollUpOutputSizePixel( rSize );
-    maRollUpOutSize = rSize;
-}
-
-inline Size DockingWindow::GetRollUpOutputSizePixel() const
-{
-    if ( mpFloatWin )
-        return mpFloatWin->GetRollUpOutputSizePixel();
-    return maRollUpOutSize;
-}
 
 inline void DockingWindow::SetMinOutputSizePixel( const Size& rSize )
 {
