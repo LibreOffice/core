@@ -13,6 +13,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 OpenGLProgram::OpenGLProgram() :
     mnId( 0 ),
@@ -238,6 +239,19 @@ void OpenGLProgram::SetTransform(
     glUniformMatrix4fv( nUniform, 1, GL_FALSE, glm::value_ptr( mMatrix ) );
 }
 
+void OpenGLProgram::ApplyMatrix(float fWidth, float fHeight, float fPixelOffset)
+{
+    OString sProjectionMatrix("mvp");
+    GLuint nUniform = GetUniformLocation(sProjectionMatrix);
+
+    glm::mat4 mMVP = glm::ortho(0.0f, fWidth, fHeight, 0.0f, 0.0f, 1.0f);
+
+    if (fPixelOffset != 0.0f)
+        mMVP = glm::translate(mMVP, glm::vec3(fPixelOffset, fPixelOffset, 0.0f));
+
+    glUniformMatrix4fv(nUniform, 1, GL_FALSE, glm::value_ptr(mMVP));
+}
+
 void OpenGLProgram::SetBlendMode( GLenum nSFactor, GLenum nDFactor )
 {
     glEnable( GL_BLEND );
@@ -247,11 +261,19 @@ void OpenGLProgram::SetBlendMode( GLenum nSFactor, GLenum nDFactor )
 
 bool OpenGLProgram::DrawTexture( OpenGLTexture& rTexture )
 {
-    GLfloat aPosition[8] = { -1, -1, -1, 1, 1, 1, 1, -1 };
-    GLfloat aTexCoord[8];
-
-    if( !rTexture )
+    if (!rTexture)
         return false;
+
+    float fWidth = rTexture.GetWidth();
+    float fHeight = rTexture.GetHeight();
+
+    float fMinX = 0.0f;
+    float fMaxX = fWidth;
+    float fMinY = 0.0f;
+    float fMaxY = fHeight;
+
+    GLfloat aPosition[8] = { fMinX, fMaxY, fMinX, fMinY, fMaxX, fMinY, fMaxX, fMaxY };
+    GLfloat aTexCoord[8];
 
     rTexture.GetWholeCoord( aTexCoord );
     SetVertices( aPosition );

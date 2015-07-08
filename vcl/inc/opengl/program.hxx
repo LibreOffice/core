@@ -67,6 +67,8 @@ public:
                        const basegfx::B2DPoint& rY );
     void SetBlendMode( GLenum nSFactor, GLenum nDFactor );
 
+    void ApplyMatrix(float fWidth, float fHeight, float fPixelOffset = 0.0f);
+
     bool DrawTexture( OpenGLTexture& rTexture );
 
 protected:
