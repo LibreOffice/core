@@ -29,9 +29,11 @@
 #include <tools/diagnose_ex.h>
 #include <osl/conditn.hxx>
 
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
+
 #include <stack>
 #include <queue>
-#include <boost/function.hpp>
 
 namespace framework
 {

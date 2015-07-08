@@ -22,7 +22,6 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <boost/function.hpp>
-#include <boost/bind.hpp>
 
 namespace comphelper {
 

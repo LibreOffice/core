@@ -26,15 +26,13 @@
 namespace comphelper
 {
 
-
-
     //= FlagRestorationGuard
 
     class COMPHELPER_DLLPUBLIC FlagRestorationGuard : public ScopeGuard
     {
     public:
         FlagRestorationGuard( bool& i_flagRef, bool i_temporaryValue, exc_handling i_excHandling = IGNORE_EXCEPTIONS )
-            :ScopeGuard( ::boost::bind( RestoreFlag, ::boost::ref( i_flagRef ), !!i_flagRef ), i_excHandling )
+            : ScopeGuard(RestoreFlag(i_flagRef), i_excHandling)
         {
             i_flagRef = i_temporaryValue;
         }
@@ -42,10 +40,19 @@ namespace comphelper
         ~FlagRestorationGuard();
 
     private:
-        static void RestoreFlag( bool& i_flagRef, bool i_originalValue )
+        // note: can't store the originalValue in a FlagRestorationGuard member,
+        // because it will be used from base class dtor
+        struct RestoreFlag
         {
-            i_flagRef = i_originalValue;
-        }
+            bool & rFlag;
+            bool originalValue;
+            RestoreFlag(bool & i_flagRef)
+                : rFlag(i_flagRef), originalValue(i_flagRef) {}
+            void operator()()
+            {
+                rFlag = originalValue;
+            }
+        };
     };
 
 
@@ -55,18 +62,12 @@ namespace comphelper
     {
     public:
         explicit FlagGuard( bool& i_flagRef, exc_handling i_excHandling = IGNORE_EXCEPTIONS )
-            :ScopeGuard( ::boost::bind( ResetFlag, ::boost::ref( i_flagRef ) ), i_excHandling )
+            : ScopeGuard( [&i_flagRef] () { i_flagRef = false; }, i_excHandling)
         {
             i_flagRef = true;
         }
 
         ~FlagGuard();
-
-    private:
-        static void ResetFlag( bool& i_flagRef )
-        {
-            i_flagRef = false;
-        }
     };
 
 
