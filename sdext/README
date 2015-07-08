@@ -2,7 +2,7 @@ Extensions for the Impress and Draw applications.
 
 source/pdfimport/ - PDF import
 
-	Uses an external poplar process to parse and handle PDF
+	Uses an external poppler process to parse and handle PDF
 	import as draw shapes.
 
 source/minimizer/ - Presentation Minizer
