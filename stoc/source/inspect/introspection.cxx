@@ -2045,14 +2045,12 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                 // Name holen und auswerten
                                 OUString aMethName2 = rxMethod_k->getName();
                                 OUString aStartStr2 = aMethName2.copy( 0, 3 );
-                                // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                                if( !( aStartStr2 == "set" ) )
+                                if( aStartStr2 != "set" )
                                     continue;
 
                                 // Ist es denn der gleiche Name?
                                 OUString aPropName2 = aMethName2.copy( 3 );
-                                // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                                if( !( aPropName == aPropName2 ) )
+                                if( aPropName != aPropName2 )
                                     continue;
 
                                 // set-Methode muss void returnen
@@ -2104,8 +2102,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             OUString aEndStr = aMethName.copy( nCopyLen > 0 ? nCopyLen : 0 );
 
                             // Endet das Teil auf Listener?
-                            // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                            if( !( aEndStr == aListenerStr ) )
+                            if( aEndStr != aListenerStr )
                                 continue;
 
                             // Welcher Listener?
@@ -2133,8 +2130,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                 sal_Int32 nCopyLen2 = (nNameLen < 6) ? nNameLen : 6;
                                 OUString aStartStr2 = aMethName2.copy( 0, nCopyLen2 );
                                 OUString aRemoveStr("remove" );
-                                // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                                if( !( aStartStr2 == aRemoveStr ) )
+                                if( aStartStr2 != aRemoveStr )
                                     continue;
 
                                 // Ist es denn der gleiche Listener?
@@ -2142,8 +2138,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                     continue;
                                 OUString aListenerName2 = aMethName2.copy
                                       ( 6, aMethName2.getLength() - aRemoveStr.getLength() - aListenerStr.getLength() );
-                                // ACHTUNG: Wegen SDL-Bug NICHT != bei OUString verwenden !!!
-                                if( !( aListenerName == aListenerName2 ) )
+                                if( aListenerName != aListenerName2 )
                                     continue;
 
                                 // TODO: Hier koennten noch genauere Pruefungen vorgenommen werden
