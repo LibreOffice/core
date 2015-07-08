@@ -70,6 +70,24 @@
       "revId": "1c49d76bc11de6e90ed56f0f665421aaaee8a643",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_1b37c1b1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-08T21:39:54Z",
+      "side": 1,
+      "message": "OK, this compiles, but is wrong:\n\n  @@ -496,11 +497,10 @@ namespace basegfx\n                 B2DPolygon aRes;\n                 std::for_each( maPoints.begin(),\n                                maPoints.end(),\n  -                             boost::bind(\n  -                   \u0026B2DPolygon::append,\n  -                                 boost::ref(aRes),\n  -                                 _1,\n  -                                 1 ) );\n  +                             [\u0026](const B2DPoint\u0026 p)\n  +                             {\n  +                   std::mem_fun_ref(\u0026B2DPolygon::append)(aRes, p);\n  +                             } );",
+      "parentUuid": "1a54edaf_bbc1cd82",
+      "revId": "1c49d76bc11de6e90ed56f0f665421aaaee8a643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
