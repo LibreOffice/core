@@ -98,5 +98,11 @@ uno::Reference<ui::XDecks> SAL_CALL SfxUnoSidebar::getDecks()
     return decks;
 }
 
+uno::Reference<ui::XSidebar> SAL_CALL SfxUnoSidebar::getSidebar()
+                            throw (uno::RuntimeException, std::exception)
+{
+    return getSidebarController();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

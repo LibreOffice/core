@@ -14,6 +14,7 @@
 #include <sfx2/dllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XSidebarProvider.hpp>
+#include <com/sun/star/ui/XSidebar.hpp>
 
 #include <com/sun/star/awt/XWindow2.hpp>
 
@@ -54,6 +55,9 @@ public:
                                 throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     virtual css::uno::Reference<css::ui::XDecks> SAL_CALL getDecks()
+                                    throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual css::uno::Reference<css::ui::XSidebar> SAL_CALL getSidebar()
                                     throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };

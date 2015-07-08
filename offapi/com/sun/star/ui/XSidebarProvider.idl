@@ -14,6 +14,7 @@
 #include <com/sun/star/frame/XFrame.idl>
 #include <com/sun/star/awt/XWindow2.idl>
 
+#include <com/sun/star/ui/XSidebar.idl>
 #include <com/sun/star/ui/XDecks.idl>
 
 
@@ -52,6 +53,11 @@ interface XSidebarProvider: com::sun::star::uno::XInterface
             </ul>
     */
     void showDecks([in] boolean bVisible);
+
+    /**
+     * Returns the sidebar object
+     */
+    com::sun::star::ui::XSidebar getSidebar();
 } ;
 
 } ; } ; } ; } ;
