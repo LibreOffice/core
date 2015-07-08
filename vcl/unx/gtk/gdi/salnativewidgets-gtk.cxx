@@ -563,6 +563,15 @@ void GtkData::initNWF()
     std::fprintf( stderr, "GtkPlugin: using %s NWF\n",
              GtkSalGraphics::bNeedPixmapPaint ? "offscreen" : "direct" );
     #endif
+
+    GtkSettings *gtks = gtk_settings_get_default ();
+    gint val;
+    g_object_get (gtks, "gtk-auto-mnemonics", &val, NULL);
+    if (val) pSVData->maNWFData.mbAutoAccel = true;
+    else pSVData->maNWFData.mbAutoAccel = false;
+    g_object_get (gtks, "gtk-enable-mnemonics", &val, NULL);
+    if (val) pSVData->maNWFData.mbEnableAccel = true;
+    else pSVData->maNWFData.mbEnableAccel = false;
 }
 
 /*********************************************************

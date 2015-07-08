@@ -1933,6 +1933,8 @@ void GtkData::initNWF()
     pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
     pSVData->maNWFData.mbDDListBoxNoTextArea = true;
     pSVData->maNWFData.mbNoFocusRects = true;
+    pSVData->maNWFData.mbAutoAccel = true;
+    pSVData->maNWFData.mbEnableAccel = true;
 }
 
 void GtkData::deInitNWF()
