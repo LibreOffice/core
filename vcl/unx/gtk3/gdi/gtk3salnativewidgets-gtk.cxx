@@ -1971,8 +1971,6 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     if(style_loaded)
         return;
 
-    GtkWidgetPath* path;
-
     style_loaded = true;
     gtk_init(NULL, NULL);
     /* Load the GtkStyleContexts, it might be a bit slow, but usually,
@@ -1989,24 +1987,19 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     getStyleContext(&mpTextViewStyle, gtk_text_view_new());
     getStyleContext(&mpButtonStyle, gtk_button_new());
 
-    getStyleContext(&mpToolbarStyle, gtk_toolbar_new());
+    GtkWidget* pToolbar = gtk_toolbar_new();
+    mpToolbarStyle = gtk_widget_get_style_context(pToolbar);
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
     gtk_style_context_add_class(mpToolbarStyle, GTK_STYLE_CLASS_TOOLBAR);
 
-    getStyleContext(&mpToolbarSeperatorStyle, GTK_WIDGET(gtk_separator_tool_item_new()));
+    GtkToolItem *item = gtk_separator_tool_item_new();
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), item, -1);
+    mpToolbarSeperatorStyle = gtk_widget_get_style_context(GTK_WIDGET(item));
 
-    getStyleContext(&mpToolButtonStyle, gtk_button_new());
-
-    /* Create a widget path for our toolbutton widget */
-    path = gtk_widget_path_new();
-    gtk_widget_path_append_type(path, GTK_TYPE_TOOLBAR);
-    gtk_widget_path_append_type(path, GTK_TYPE_TOOL_BUTTON);
-    gtk_widget_path_append_type(path, GTK_TYPE_BUTTON);
-    gtk_widget_path_iter_add_class (path, 0, GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
-    gtk_widget_path_iter_add_class (path, 1, GTK_STYLE_CLASS_TOOLBAR);
-    gtk_widget_path_iter_add_class (path, 2, GTK_STYLE_CLASS_BUTTON);
-    gtk_style_context_set_path(mpToolButtonStyle, path);
-    gtk_widget_path_free (path);
+    GtkWidget *pButton = gtk_button_new();
+    item = gtk_tool_button_new(pButton, NULL);
+    gtk_toolbar_insert(GTK_TOOLBAR(pToolbar), item, -1);
+    mpToolButtonStyle = gtk_widget_get_style_context(GTK_WIDGET(pButton));
 
     getStyleContext(&mpVScrollbarStyle, gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, NULL));
     gtk_style_context_add_class(mpVScrollbarStyle, GTK_STYLE_CLASS_SCROLLBAR);
