@@ -4017,8 +4017,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     aTextColor = aStyleSet.GetPersonaMenuBarTextColor().get_value_or( getColor( pMenubarStyle->fg[GTK_STATE_NORMAL] ) );
     aStyleSet.SetMenuBarTextColor( aTextColor );
-    aStyleSet.SetMenuBarRolloverTextColor( aTextColor );
-    aStyleSet.SetMenuBarHighlightTextColor(aStyleSet.GetMenuHighlightTextColor());
+    aStyleSet.SetMenuBarRolloverTextColor(getColor(pMenubarStyle->fg[GTK_STATE_PRELIGHT]));
+    aStyleSet.SetMenuBarHighlightTextColor(getColor(pMenubarStyle->fg[GTK_STATE_SELECTED]));
 
 #if OSL_DEBUG_LEVEL > 1
     std::fprintf( stderr, "==\n" );
@@ -4049,9 +4049,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     }
 
     aHighlightColor = getColor( pMenuItemStyle->bg[ GTK_STATE_SELECTED ] );
-    aHighlightTextColor = getColor( pMenuTextStyle->fg[ GTK_STATE_PRELIGHT ] );
-    if( aHighlightColor == aHighlightTextColor )
-        aHighlightTextColor = (aHighlightColor.GetLuminance() < 128) ? Color( COL_WHITE ) : Color( COL_BLACK );
+    aHighlightTextColor = getColor( pMenuItemStyle->fg[ GTK_STATE_SELECTED ] );
     aStyleSet.SetMenuHighlightColor( aHighlightColor );
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
