@@ -69,7 +69,7 @@ class SidebarDockingWindow;
 class TabBar;
 class TabBarConfiguration;
 
-class SidebarController
+class SFX2_DLLPUBLIC SidebarController
     : private ::boost::noncopyable,
       private ::cppu::BaseMutex,
       public SidebarControllerInterfaceBase

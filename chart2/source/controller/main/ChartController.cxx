@@ -51,6 +51,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/embed/XEmbeddedClient.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
@@ -58,6 +59,7 @@
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/document/XUndoAction.hpp>
+#include <com/sun/star/ui/XSidebar.hpp>
 
 #include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <vcl/msgbox.hxx>
@@ -65,6 +67,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+
+#include <sfx2/sidebar/SidebarController.hxx>
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -346,6 +350,21 @@ uno::Sequence< OUString > ChartController::getSupportedServiceNames_Static()
     return aSNS;
 }
 
+namespace {
+
+uno::Reference<ui::XSidebar> getSidebarFromModel(uno::Reference<frame::XModel> xModel)
+{
+    uno::Reference<container::XChild> xChild(xModel, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xParent (xChild->getParent(), uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XController2> xController(xParent->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<ui::XSidebarProvider> xSidebarProvider (xController->getSidebar(), uno::UNO_QUERY);
+    uno::Reference<ui::XSidebar> xSidebar(xSidebarProvider->getSidebar(), uno::UNO_QUERY);
+
+    return xSidebar;
+}
+
+}
+
 // XController
 
 void SAL_CALL ChartController::attachFrame(
@@ -358,6 +377,10 @@ void SAL_CALL ChartController::attachFrame(
         return; //behave passive if already disposed or suspended
 
     mpSelectionChangeHandler->Connect();
+
+    uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getModel());
+    sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
+    sfx2::sidebar::SidebarController::registerSidebarForFrame(pSidebar, this);
 
     if(m_xFrame.is()) //what happens, if we do have a Frame already??
     {
@@ -725,6 +748,14 @@ void SAL_CALL ChartController::dispose()
     throw(uno::RuntimeException, std::exception)
 {
     mpSelectionChangeHandler->Disconnect();
+
+    if (getModel().is())
+    {
+        uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getModel());
+        sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
+        sfx2::sidebar::SidebarController::unregisterSidebarForFrame(pSidebar, this);
+    }
+
     try
     {
         //This object should release all resources and references in the
