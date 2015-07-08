@@ -886,7 +886,7 @@ uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs,
 }
 
 uno::Any ScVbaEventsHelper::createHyperlink( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
+        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     uno::Reference< table::XCell > xCell = getXSomethingFromArgs< table::XCell >( rArgs, nIndex, false );
     uno::Sequence< uno::Any > aArgs( 2 );
