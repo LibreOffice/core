@@ -1853,12 +1853,11 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                         rRenderContext.SetTextColor(rSettings.GetMenuBarRolloverTextColor());
                     else if (bHighlighted)
                         rRenderContext.SetTextColor(rSettings.GetMenuBarHighlightTextColor());
+                    else
+                        rRenderContext.SetTextColor(rSettings.GetMenuBarTextColor());
                 }
-                else
-                {
-                    if (bHighlighted)
-                        rRenderContext.SetTextColor(rSettings.GetMenuHighlightTextColor());
-                }
+                else if (bHighlighted)
+                    rRenderContext.SetTextColor(rSettings.GetMenuHighlightTextColor());
             }
 
             Point aPos(aTopLeft);
