@@ -84,6 +84,8 @@ ImplSVData::ImplSVData()
     memset( this, 0, sizeof( ImplSVData ) );
     maHelpData.mbAutoHelpId = true;
     maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
+    maNWFData.mbEnableAccel = 1;
+    maNWFData.mbAutoAccel = 0;
 }
 
 ImplSVGDIData::~ImplSVGDIData()

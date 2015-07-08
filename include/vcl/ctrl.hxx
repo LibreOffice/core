@@ -43,6 +43,7 @@ private:
     bool                    mbHasControlFocus;
     bool                    mbFont;
     bool                    mbForeground;
+    bool                    mbShowAccelerator;
     Link<>                  maGetFocusHdl;
     Link<>                  maLoseFocusHdl;
 
@@ -184,6 +185,8 @@ public:
     OutputDevice*   GetReferenceDevice() const;
 
     vcl::Font       GetUnzoomedControlPointFont() const;
+    void            SetShowAccelerator (bool val);
+    bool            GetShowAccelerator (void) const;
 };
 
 #endif // INCLUDED_VCL_CTRL_HXX
