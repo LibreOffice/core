@@ -1151,9 +1151,7 @@ SAL_CALL osl_identicalDirectoryItem( oslDirectoryItem a, oslDirectoryItem b)
     if (a == b)
         return sal_True;
     /* same name => same item, unless renaming / moving madness has occurred */
-    if (rtl_ustr_compare_WithLength(
-                pA->m_pFullPath->buffer, pA->m_pFullPath->length,
-                pB->m_pFullPath->buffer, pB->m_pFullPath->length ) == 0)
+    if (pA->m_pFullPath == pB->m_pFullPath)
         return sal_True;
 
     // FIXME: as/when/if this is used in anger on Windows we could

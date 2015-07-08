@@ -769,9 +769,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
             token ++;
         }
 
-        if( token < vec.size() && rtl_str_compare_WithLength(
-                vec[token].getStr(), vec[token].getLength(),
-                RTL_CONSTASCII_STRINGPARAM("(") ) )
+        if( token < vec.size() && vec[token] == "(" )
         {
             // it is a table or a function name
             OStringBuffer buf(128);
@@ -783,9 +781,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
 
             if( token < vec.size() )
             {
-                if( rtl_str_compare_WithLength(
-                        vec[token].getStr(), vec[token].getLength(),
-                        RTL_CONSTASCII_STRINGPARAM( "." ) ) == 0 )
+                if( vec[token] == "." )
                 {
                     buf.append( vec[token] );
                     token ++;
@@ -803,9 +799,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
             ret = buf.makeStringAndClear();
             // now got my table candidate
 
-            if( token < vec.size() && rtl_str_compare_WithLength(
-                    vec[token].getStr(), vec[token].getLength(),
-                    RTL_CONSTASCII_STRINGPARAM( "(" ) ) == 0 )
+            if( token < vec.size() && vec[token] == "(" )
             {
                 // whoops, it is a function
                 ret.clear();
@@ -823,9 +817,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
 
                 if( token < vec.size() )
                 {
-                    if( rtl_str_compare_WithLength(
-                            vec[token].getStr(), vec[token].getLength(),
-                            RTL_CONSTASCII_STRINGPARAM( "," ) ) == 0 )
+                    if( vec[token] == "," )
                     {
                         // whoops, multiple tables are used
                         ret.clear();

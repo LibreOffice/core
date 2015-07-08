@@ -484,27 +484,22 @@ SectionPropertyMap::~SectionPropertyMap()
 
 OUString lcl_FindUnusedPageStyleName(const uno::Sequence< OUString >& rPageStyleNames)
 {
-    static const sal_Char cDefaultStyle[] = "Converted";
-    //find the hightest number x in each style with the name "cDefaultStyle+x" and
+    static const char DEFAULT_STYLE[] = "Converted";
+    //find the highest number x in each style with the name "DEFAULT_STYLE+x" and
     //return an incremented name
     sal_Int32 nMaxIndex = 0;
-    const sal_Int32 nDefaultLength = sizeof(cDefaultStyle)/sizeof(sal_Char) - 1;
-    const OUString sDefaultStyle( cDefaultStyle, nDefaultLength, RTL_TEXTENCODING_ASCII_US );
 
     const OUString* pStyleNames = rPageStyleNames.getConstArray();
     for( sal_Int32 nStyle = 0; nStyle < rPageStyleNames.getLength(); ++nStyle)
     {
-        if( pStyleNames[nStyle].getLength() > nDefaultLength &&
-                !rtl_ustr_compare_WithLength( sDefaultStyle.getStr(), nDefaultLength, pStyleNames[nStyle].getStr(), nDefaultLength))
+        if( pStyleNames[nStyle].startsWith(DEFAULT_STYLE) )
         {
-            sal_Int32 nIndex = pStyleNames[nStyle].copy( nDefaultLength ).toInt32();
+            sal_Int32 nIndex = pStyleNames[nStyle].copy( strlen(DEFAULT_STYLE) ).toInt32();
             if( nIndex > nMaxIndex)
                 nMaxIndex = nIndex;
         }
     }
-    OUString sRet( sDefaultStyle );
-    sRet += OUString::number( nMaxIndex + 1);
-    return sRet;
+    return DEFAULT_STYLE + OUString::number( nMaxIndex + 1);
 }
 
 
