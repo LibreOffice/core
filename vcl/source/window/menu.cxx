@@ -2642,6 +2642,8 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
             {
                 if ( bIsMenuBar && bRollover )
                     pWin->SetTextColor( rSettings.GetMenuBarRolloverTextColor() );
+                else if ( bIsMenuBar )
+                    pWin->SetTextColor( rSettings.GetMenuBarTextColor() );
                 else if ( bHighlighted )
                     pWin->SetTextColor( rSettings.GetMenuHighlightTextColor() );
             }
