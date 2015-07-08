@@ -218,7 +218,9 @@ public:
     SAL_DLLPRIVATE Menu* ImplGetStartedFrom() const { return pStartedFrom; }
 
     SAL_DLLPRIVATE vcl::Window* ImplGetWindow() const { return pWindow; }
+#if defined(MACOSX)
     void ImplSelectWithStart( Menu* pStartMenu = NULL );
+#endif
 
 protected:
 
@@ -289,7 +291,6 @@ public:
     bool IsItemChecked( sal_uInt16 nItemId ) const;
 
     virtual void SelectItem(sal_uInt16 nItemId) = 0;
-    void DeSelect() { SelectItem( 0xFFFF ); } // MENUITEMPOS_INVALID
 
     void EnableItem( sal_uInt16 nItemId, bool bEnable = true );
     void EnableItem(const OString &rIdent, bool bEnable = true)
@@ -350,15 +351,6 @@ public:
     {
         aSelectHdl = rLink;
     }
-    const Link<>& GetSelectHdl() const
-    {
-        return aSelectHdl;
-    }
-
-    bool HasLogo() const
-    {
-        return pLogo != nullptr;
-    }
 
     sal_uInt16 GetTitleHeight()
     {
@@ -367,8 +359,6 @@ public:
 
     void AddEventListener( const Link<>& rEventListener );
     void RemoveEventListener( const Link<>& rEventListener );
-    void AddChildEventListener( const Link<>& rEventListener );
-    void RemoveChildEventListener( const Link<>& rEventListener );
 
     Menu& operator =( const Menu& rMenu );
 
@@ -479,9 +469,7 @@ public:
 
     void SetCloseButtonClickHdl( const Link<>& rLink ) { maCloseHdl = rLink; }
     const Link<>& GetCloseButtonClickHdl() const              { return maCloseHdl; }
-    void SetFloatButtonClickHdl( const Link<>& rLink ) { maFloatHdl = rLink; }
     const Link<>& GetFloatButtonClickHdl() const              { return maFloatHdl; }
-    void SetHideButtonClickHdl( const Link<>& rLink ) { maHideHdl = rLink; }
     const Link<>& GetHideButtonClickHdl() const               { return maHideHdl; }
 
     //  - by default a menubar is displayable
@@ -549,10 +537,6 @@ public:
     void SetText( const OUString& rTitle )
     {
         aTitleText = rTitle;
-    }
-    const OUString& GetText() const
-    {
-        return aTitleText;
     }
 
     sal_uInt16 Execute( vcl::Window* pWindow, const Point& rPopupPos );

@@ -97,7 +97,6 @@ class VclAbstractRefreshableDialog_Impl : public VclAbstractRefreshableDialog
 {
     DECL_ABSTDLG_BASE(VclAbstractRefreshableDialog_Impl,Dialog)
     virtual void        Update() SAL_OVERRIDE ;
-    virtual void        Sync() SAL_OVERRIDE ;
 };
 
 class CuiAbstractSfxDialog_Impl : public SfxAbstractDialog
@@ -213,7 +212,6 @@ class AbstractSearchProgress_Impl : public AbstractSearchProgress
 {
     DECL_ABSTDLG_BASE(AbstractSearchProgress_Impl,SearchProgress)
     virtual void        Update() SAL_OVERRIDE ;
-    virtual void        Sync() SAL_OVERRIDE ;
     virtual void        SetFileType( const OUString& rType ) SAL_OVERRIDE ;
     virtual void        SetDirectory( const INetURLObject& rURL ) SAL_OVERRIDE ;
     virtual PLinkStub   GetLinkStubCleanUpHdl() SAL_OVERRIDE ;
@@ -225,7 +223,6 @@ class AbstractTakeProgress_Impl : public AbstractTakeProgress
 {
     DECL_ABSTDLG_BASE(AbstractTakeProgress_Impl,TakeProgress)
     virtual void        Update() SAL_OVERRIDE ;
-    virtual void        Sync() SAL_OVERRIDE ;
     virtual void        SetFile( const INetURLObject& rURL ) SAL_OVERRIDE ;
     virtual PLinkStub   GetLinkStubCleanUpHdl() SAL_OVERRIDE ;
 

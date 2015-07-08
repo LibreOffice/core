@@ -108,7 +108,6 @@ public:
 
     void            SaveValue()                         { aSaveValue = GetText(); }
     const OUString&    GetSavedValue() const            { return aSaveValue; }
-    bool               IsValueChangedFromSaved() const  { return aSaveValue != GetText(); }
 
     void            SetModifyHdl( const Link<>& rLink ) SAL_OVERRIDE { aModifyHdlLink = rLink; }
     const Link<>&   GetModifyHdl() const SAL_OVERRIDE                { return aModifyHdlLink; }

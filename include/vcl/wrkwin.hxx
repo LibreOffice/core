@@ -96,7 +96,6 @@ public:
     */
     void            StartPresentationMode( bool   bPresentation = true,
                                            PresentationFlags nFlags = PresentationFlags::NONE );
-    void            EndPresentationMode() {  StartPresentationMode( false ); }
     bool            IsPresentationMode() const { return mbPresentationMode; }
 
     bool            IsMinimized() const;

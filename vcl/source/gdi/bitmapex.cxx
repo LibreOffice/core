@@ -224,14 +224,6 @@ bool BitmapEx::operator==( const BitmapEx& rBitmapEx ) const
     return( ( aMask == rBitmapEx.aMask ) && ( bAlpha == rBitmapEx.bAlpha ) );
 }
 
-bool BitmapEx::IsEqual( const BitmapEx& rBmpEx ) const
-{
-    return( rBmpEx.eTransparent == eTransparent &&
-            rBmpEx.bAlpha == bAlpha &&
-            rBmpEx.aBitmap.IsEqual( aBitmap ) &&
-            rBmpEx.aMask.IsEqual( aMask ) );
-}
-
 bool BitmapEx::IsEmpty() const
 {
     return( aBitmap.IsEmpty() && aMask.IsEmpty() );

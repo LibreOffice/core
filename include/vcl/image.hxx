@@ -66,8 +66,6 @@ public:
     BitmapEx        GetBitmapEx() const;
     css::uno::Reference< css::graphic::XGraphic > GetXGraphic() const;
 
-    Image           GetColorTransformedImage( ImageColorTransform eColorTransform ) const;
-
     bool            operator!() const { return !mpImplData; }
     Image&          operator=( const Image& rImage );
     bool            operator==( const Image& rImage ) const;

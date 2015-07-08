@@ -71,17 +71,15 @@ public:
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    void setMaxWidthChars(sal_Int32 nWidth);
-    sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
-    void setMinWidthChars(sal_Int32 nWidth);
-    sal_Int32 getMinWidthChars() const { return m_nMinWidthChars; }
+    void            setMaxWidthChars(sal_Int32 nWidth);
+    void            setMinWidthChars(sal_Int32 nWidth);
     static Size     CalcMinimumTextSize(Control const* pControl, long nMaxWidth = 0x7fffffff);
     static Size     getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth);
     Size            CalcMinimumSize(long nMaxWidth = 0x7fffffff) const;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    void set_mnemonic_widget(vcl::Window *pWindow);
-    vcl::Window* get_mnemonic_widget() const { return m_pMnemonicWindow; }
+    virtual bool    set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    void            set_mnemonic_widget(vcl::Window *pWindow);
+    vcl::Window*    get_mnemonic_widget() const { return m_pMnemonicWindow; }
 };
 
 class VCL_DLLPUBLIC SelectableFixedText : public Edit
@@ -154,7 +152,6 @@ public:
 
     void            SetBitmap( const Bitmap& rBitmap );
     using OutputDevice::GetBitmap;
-    const Bitmap&   GetBitmap() const { return maBitmap; }
 };
 
 

@@ -47,9 +47,8 @@ public:
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
     void                SetViewWindow( vcl::Window* pWindow ) { mpViewWindow = pWindow; }
-    vcl::Window*             GetViewWindow() const { return mpViewWindow; }
+    vcl::Window*        GetViewWindow() const { return mpViewWindow; }
     void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
-    WindowAlign         GetViewAlign() const { return meViewAlign; }
 };
 
 #endif // INCLUDED_VCL_TABDLG_HXX
