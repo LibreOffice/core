@@ -150,11 +150,6 @@ interface ImpressEditView : DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-    SID_TITLE_MASTERPAGE // deprecated, to be removed see issue #i35731#
-    [
-        ExecMethod = FuSupport ;
-        StateMethod = GetMenuState ;
-    ]
     SID_STYLE_FAMILY
     [
         ExecMethod = FuSupport ;
