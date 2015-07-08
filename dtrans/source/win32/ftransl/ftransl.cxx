@@ -458,6 +458,8 @@ void SAL_CALL CDataFormatTranslator::initTranslationTable()
     m_TranslTable.push_back(FormatEntry("image/bmp", "Windows Bitmap", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     //SotClipboardFormatId::PNG
     m_TranslTable.push_back(FormatEntry("image/png", "PNG", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
+    //SotClipboardFormatId::MATHML
+    m_TranslTable.push_back(FormatEntry("application/mathml+xml", "MathML", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     //SotClipboardFormatId::DUMMY3
     m_TranslTable.push_back(FormatEntry("application/x-openoffice-dummy3;windows_formatname=\"SO_DUMMYFORMAT_3\"", "SO_DUMMYFORMAT_3", NULL, CF_INVALID, CPPUTYPE_DEFAULT));
     //SotClipboardFormatId::DUMMY4

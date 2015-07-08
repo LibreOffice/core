@@ -61,6 +61,7 @@
 #include <vcl/settings.hxx>
 
 #include <fstream>
+#include <unotools/streamwrap.hxx>
 
 #include "unomodel.hxx"
 #include "view.hxx"
@@ -1650,6 +1651,80 @@ void SmViewShell::Execute(SfxRequest& rReq)
             pImpl->pDocInserter.reset(new ::sfx2::DocumentInserter(
                               GetDoc()->GetFactory().GetFactoryName(), false ));
             pImpl->pDocInserter->StartExecuteModal( LINK( this, SmViewShell, DialogClosedHdl ) );
+            break;
+        }
+
+        case SID_IMPORT_MATHML_CLIPBOARD:
+        {
+            TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard(GetEditWindow()) );
+            uno::Reference < io::XInputStream > xStrm;
+            SotClipboardFormatId nId = SOT_FORMAT_SYSTEM_START; //dummy initialize to avoid warning
+            if  ( aDataHelper.GetTransferable().is() )
+            {
+                if (aDataHelper.HasFormat(nId = SotClipboardFormatId::MATHML))
+                {
+                    xStrm = aDataHelper.GetInputStream(nId, "");
+                    if (xStrm.is())
+                    {
+                        SfxMedium* pClipboardMedium = new SfxMedium();
+                        pClipboardMedium->GetItemSet(); //generate initial itemset, not sure if necessary
+                        const SfxFilter* pMathFilter =
+                            SfxFilter::GetFilterByName(OUString::createFromAscii(MATHML_XML));
+                        pClipboardMedium->SetFilter(pMathFilter);
+                        pClipboardMedium->setStreamToLoadFrom(xStrm, true /*bIsReadOnly*/);
+                        InsertFrom(*pClipboardMedium);
+                        GetDoc()->UpdateText();
+                        delete pClipboardMedium;
+                    }
+                }
+                else
+                {
+                    if (aDataHelper.HasFormat(nId = SotClipboardFormatId::STRING))
+                    {
+                        // In case of FORMAT_STRING no stream exists, need to generate one
+                        ::rtl::OUString aString;
+                        if (aDataHelper.GetString( nId, aString))
+                        {
+                            SfxMedium* pClipboardMedium = new SfxMedium();
+                            pClipboardMedium->GetItemSet(); //generates initial itemset, not sure if necessary
+                            const SfxFilter* pMathFilter =
+                                SfxFilter::GetFilterByName(OUString::createFromAscii(MATHML_XML));
+                            pClipboardMedium->SetFilter(pMathFilter);
+
+                            SvMemoryStream * pStrm;
+                            // The text to be imported might asserts encoding like 'encoding="utf-8"' but FORMAT_STRING is UTF-16.
+                            // Force encoding to UTF-16, if encoding exists.
+                            bool bForceUTF16 = false;
+                            sal_Int32 nPosL = aString.indexOf( OUString::createFromAscii("encoding=\""));
+                            sal_Int32 nPosU = -1;
+                            if ( nPosL >= 0 && nPosL +10 < aString.getLength() )
+                            {
+                                nPosL += 10;
+                                nPosU = aString.indexOf( '"',nPosL);
+                                if (nPosU > nPosL)
+                                {
+                                    bForceUTF16 = true;
+                                }
+                            }
+                            if ( bForceUTF16 )
+                            {
+                                OUString aNewString = aString.replaceAt( nPosL,nPosU-nPosL,OUString::createFromAscii("UTF-16"));
+                                pStrm = new SvMemoryStream( (void*)aNewString.getStr(), aNewString.getLength() * sizeof(sal_Unicode), StreamMode::READ);
+                            }
+                            else
+                            {
+                                pStrm = new SvMemoryStream( (void*)aString.getStr(), aString.getLength() * sizeof(sal_Unicode), StreamMode::READ);
+                            }
+                            uno::Reference<io::XInputStream> xStrm2( new ::utl::OInputStreamWrapper(*pStrm) );
+                            pClipboardMedium->setStreamToLoadFrom(xStrm2, true /*bIsReadOnly*/);
+                            InsertFrom(*pClipboardMedium);
+                            GetDoc()->UpdateText();
+                            delete pClipboardMedium;
+                            delete pStrm;
+                        }
+                    }
+                }
+            }
             break;
         }
 

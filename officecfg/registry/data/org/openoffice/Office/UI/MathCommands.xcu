@@ -43,6 +43,11 @@
           <value xml:lang="en-US">~Import Formula...</value>
         </prop>
       </node>
+      <node oor:name=".uno:ImportMathMLClipboard" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Import MathML from Clipboard</value>
+        </prop>
+      </node>
       <node oor:name=".uno:FitInWindow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Fit To Window</value>

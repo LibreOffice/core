@@ -418,6 +418,29 @@ SfxBoolItem ImportFormula SID_IMPORT_FORMULA
     GroupId = GID_INSERT;
 ]
 
+SfxBoolItem ImportMathMLClipboard SID_IMPORT_MATHML_CLIPBOARD
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE, /*obsolete */
+    HasDialog = FALSE, /*obsolete */
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE, /*obsolete */
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_INSERT;
+]
 
 SfxVoidItem LoadSymbols SID_LOADSYMBOLS
 ()
