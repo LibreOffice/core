@@ -398,6 +398,8 @@ void PropertyMap::printProperties()
     }
 
     TagLogger::getInstance().endElement();
+#else
+    (void) this; // avoid loplugin:staticmethods
 #endif
 }
 
