@@ -254,7 +254,9 @@ public:
         const SwFEShell *pFESh = nullptr,
         SwAccessibleObjShape_Impl  **pSelShape = nullptr ) const;
 
+#if OSL_DEBUG_LEVEL > 0
     iterator begin() { return maMap.begin(); }
+#endif
     iterator end() { return maMap.end(); }
     const_iterator cbegin() const { return maMap.cbegin(); }
     const_iterator cend() const { return maMap.cend(); }
@@ -599,7 +601,9 @@ public:
 private:
     std::map <key_type,mapped_type,key_compare> maMap;
 public:
+#if OSL_DEBUG_LEVEL > 0
     iterator begin() { return maMap.begin(); }
+#endif
     iterator end() { return maMap.end(); }
     iterator find(const key_type& key) { return maMap.find(key); }
     std::pair<iterator,bool> insert(const value_type& value ) { return maMap.insert(value); }
