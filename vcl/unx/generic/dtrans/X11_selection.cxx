@@ -1305,10 +1305,8 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
         sal_Int32 nNativeTypesIndex = 0;
         while( nAtoms-- )
         {
-#if OSL_DEBUG_LEVEL > 1
-            if( *pAtoms && *pAtoms < 0x01000000 )
-                fprintf( stderr, "native type: %s\n", OUStringToOString( getString( *pAtoms ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
-#endif
+            SAL_INFO_IF(*pAtoms && *pAtoms < 0x01000000, "vcl.unx.dtrans",
+                "getPasteDataTypes: available: \"" << getString(*pAtoms) << "\"");
             if( *pAtoms == m_nCOMPOUNDAtom )
                 bHaveText = bHaveCompound = true;
             else if( *pAtoms && *pAtoms < 0x01000000 )
