@@ -48,7 +48,6 @@
 #include <docsh.hxx>
 #include <svl/zforlist.hxx>
 
-#include <boost/bind.hpp>
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -811,7 +810,7 @@ MetaFieldManager::getMetaFields()
     // erase deleted fields
     const MetaFieldList_t::iterator iter(
         ::std::remove_if(m_MetaFields.begin(), m_MetaFields.end(),
-            ::boost::bind(&::boost::weak_ptr<MetaField>::expired, _1)));
+            [] (::boost::weak_ptr<MetaField> const& rField) { return rField.expired(); }));
     m_MetaFields.erase(iter, m_MetaFields.end());
     // filter out fields in UNDO
     MetaFieldList_t filtered(m_MetaFields.size());

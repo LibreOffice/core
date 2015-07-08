@@ -109,7 +109,6 @@
 #include <sortopt.hxx>
 #include <algorithm>
 #include <iterator>
-#include <boost/bind.hpp>
 #include <calbck.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
