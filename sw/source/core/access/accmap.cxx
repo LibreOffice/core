@@ -71,7 +71,6 @@
 #include <dflyobj.hxx>
 #include <prevwpage.hxx>
 #include <calbck.hxx>
-#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -3092,7 +3091,7 @@ void SwAccessibleMap::FireEvents()
             mpEvents->SetFiring();
             mpEvents->MoveInvalidXAccToEnd();
             ::std::for_each(mpEvents->begin(), mpEvents->end(),
-                            boost::bind(&SwAccessibleMap::FireEvent, this, _1));
+                [this] (SwAccessibleEvent_Impl const& rEvent) { this->FireEvent(rEvent); } );
 
             delete mpEventMap;
             mpEventMap = nullptr;

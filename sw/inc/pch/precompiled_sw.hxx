@@ -43,7 +43,6 @@
 #include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxvar.hxx>
-#include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/noncopyable.hpp>
