@@ -525,8 +525,8 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
                     pOLV->SetSelection(aPreChainingSel);
                     break;
             case CursorChainingEvent::TO_NEXT_LINK:
-                    SdrEndTextEdit(true);
-                    SdrBeginTextEdit(pNextLink, nullptr, nullptr, false, nullptr, nullptr, true, true);
+                    //SdrEndTextEdit(true);
+                    //SdrBeginTextEdit(pNextLink, nullptr, nullptr, false, nullptr, nullptr, true, true);
                     break;
             case CursorChainingEvent::TO_PREV_LINK:
                     // XXX: To be handled
