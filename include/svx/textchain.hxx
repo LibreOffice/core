@@ -84,7 +84,8 @@ enum class CursorChainingEvent
 {
     TO_NEXT_LINK,
     TO_PREV_LINK,
-    UNCHANGED
+    UNCHANGED,
+    NULL_EVENT
 };
 
 /*
@@ -113,7 +114,7 @@ class ImpChainLinkProperties
 
     ImpChainLinkProperties() {
         INIT_CHAIN_PROP(NilChainingEvent, false)
-        INIT_CHAIN_PROP(CursorEvent, CursorChainingEvent::UNCHANGED)
+        INIT_CHAIN_PROP(CursorEvent, CursorChainingEvent::NULL_EVENT)
         INIT_CHAIN_PROP(PreChainingSel, ESelection(0,0,0,0));
     }
 

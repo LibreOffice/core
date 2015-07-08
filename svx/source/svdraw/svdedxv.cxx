@@ -560,7 +560,7 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
     }
 
     // Reset event
-    pTextChain->SetCursorEvent(pTextObj, CursorChainingEvent::UNCHANGED);
+    pTextChain->SetCursorEvent(pTextObj, CursorChainingEvent::NULL_EVENT);
 
 }
 
