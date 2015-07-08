@@ -1896,9 +1896,12 @@ void Menu::ImplPaint(vcl::RenderContext& rRenderContext,
                             nState |= ControlState::ENABLED;
                         if (bHighlighted)
                             nState |= ControlState::SELECTED;
+                        int nSepPad = ImplGetSVData()->maNWFData.mnMenuSeparatorBorderX;
+                        Point aMpos (aPos);
+                        aMpos.X() += nSepPad;
                         Size aSz(pData->aSz);
-                        aSz.Width() = aOutSz.Width() - 2 * nOuterSpaceX;
-                        Rectangle aItemRect(aPos, aSz);
+                        aSz.Width() = aOutSz.Width() - 2*nOuterSpaceX - 2 * nSepPad;
+                        Rectangle aItemRect(aMpos, aSz);
                         MenupopupValue aVal(nTextPos - GUTTERBORDER, aItemRect);
                         bNativeOk = rRenderContext.DrawNativeControl(CTRL_MENU_POPUP, PART_MENU_SEPARATOR,
                                                                      aItemRect, nState, aVal, OUString());
