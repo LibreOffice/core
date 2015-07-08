@@ -6020,33 +6020,6 @@ SfxVoidItem TextToolbox SID_DRAWTBX_TEXT
     GroupId = GID_DRAWING;
 ]
 
-SfxVoidItem TitleMasterPage SID_TITLE_MASTERPAGE
-(SfxBoolItem Isactive ID_VAL_ISACTIVE)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* status: */
-    SlotType = SfxBoolItem
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
-
 SfxBoolItem Torus SID_3D_TORUS
 
 [

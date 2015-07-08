@@ -752,40 +752,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, false));
         rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, false));
 
-        if (mePageKind == PK_STANDARD &&
-            rSet.GetItemState(SID_TITLE_MASTERPAGE) == SfxItemState::DEFAULT)
-        {
-            // Is there a page with the AutoLayout "Title"?
-            bool bDisable = true;
-            sal_uInt16 i = 0;
-            sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
-
-            while (i < nCount && bDisable)
-            {
-                SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
-
-                if (pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
-                {
-                    bDisable = false;
-                }
-
-                i++;
-            }
-
-            if (bDisable)
-            {
-                rSet.DisableItem(SID_TITLE_MASTERPAGE);
-            }
-            else
-            {
-                rSet.Put(SfxBoolItem(SID_TITLE_MASTERPAGE, false));
-            }
-        }
-        else
-        {
-            rSet.DisableItem(SID_TITLE_MASTERPAGE);
-        }
-
         rSet.DisableItem (SID_INSERT_MASTER_PAGE);
         rSet.DisableItem (SID_DELETE_MASTER_PAGE);
         rSet.DisableItem (SID_RENAME_MASTER_PAGE);
@@ -805,68 +771,16 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, false));
             rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, false));
 
-            if (rSet.GetItemState(SID_TITLE_MASTERPAGE) == SfxItemState::DEFAULT)
-            {
-                bool bCheck = false;
-                bool bDisable = true;
-                if( pPageView )
-                {
-                    SdPage* pMPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
-
-                    sal_uInt16 i = 0;
-                    sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
-
-                    // Is there a reference to the current master page from a page
-                    // with the AutoLayout "Title"?
-                    while (i < nCount && !bCheck && bDisable)
-                    {
-                        SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
-
-                        // page does reference the current master page
-                        if (pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
-                        {
-                            // a page does have a AutoLayout "Title"
-                            bDisable = false;
-
-                            SdPage& rRefMPage = static_cast<SdPage&>(pPage->TRG_GetMasterPage());
-
-                            if(&rRefMPage == pMPage)
-                            {
-                                // a page with the AutoLayout "Title" does reference
-                                // the current master page
-                                bCheck = true;
-                            }
-                        }
-
-                        i++;
-                    }
-                }
-
-                if (bCheck)
-                {
-                    rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, false));
-                }
-
-                rSet.Put(SfxBoolItem(SID_TITLE_MASTERPAGE, bCheck));
-
-                if (bDisable)
-                {
-                    rSet.ClearItem(SID_TITLE_MASTERPAGE);
-                    rSet.DisableItem(SID_TITLE_MASTERPAGE);
-                }
-            }
         }
         else if (mePageKind == PK_NOTES)
         {
             rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, false));
-            rSet.DisableItem(SID_TITLE_MASTERPAGE);
             rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, true));
             rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, false));
         }
         else if (mePageKind == PK_HANDOUT)
         {
             rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, false));
-            rSet.DisableItem(SID_TITLE_MASTERPAGE);
             rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, false));
             rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, true));
         }
