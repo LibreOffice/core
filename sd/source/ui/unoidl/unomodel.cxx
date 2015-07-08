@@ -1855,6 +1855,25 @@ bool ImplRenderPaintProc::IsPrintable( const SdrObject* pObj ) const
     return bPrintable;
 
 }
+
+namespace
+{
+    sal_Int16 CalcOutputPageNum(vcl::PDFExtOutDevData* pPDFExtOutDevData, SdDrawDocument *pDoc, sal_Int16 nPageNumber)
+    {
+        //export all pages, simple one to one case
+        if (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides())
+            return nPageNumber-1;
+        //check all preceding pages, and only count non-hidden ones
+        sal_Int16 nRet = 0;
+        for (sal_Int16 i = 0; i < nPageNumber-1; ++i)
+        {
+           if (!(pDoc->GetSdPage(i, PK_STANDARD))->IsExcluded())
+                ++nRet;
+        }
+        return nRet;
+    }
+}
+
 void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& rSelection,
                                           const uno::Sequence< beans::PropertyValue >& rxOptions )
     throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
@@ -2139,9 +2158,12 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                 OUString aPageName = mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1 , PK_STANDARD )->GetName();
                                 if( !aPageName.isEmpty() )
                                 {
+                                    // Destination PageNum
+                                    const sal_Int32 nDestPageNum = CalcOutputPageNum(pPDFExtOutDevData, mpDoc, nPageNumber);
+
                                     // insert the bookmark to this page into the NamedDestinations
                                     if( pPDFExtOutDevData->GetIsExportNamedDestinations() )
-                                        pPDFExtOutDevData->CreateNamedDest( aPageName, aPageRect,  nPageNumber - 1 );
+                                        pPDFExtOutDevData->CreateNamedDest(aPageName, aPageRect, nDestPageNum);
 
                                     // add the name to the outline, (almost) same code as in sc/source/ui/unoobj/docuno.cxx
                                     // issue #i40318.
@@ -2150,7 +2172,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     {
                                         // Destination Export
                                         const sal_Int32 nDestId =
-                                            pPDFExtOutDevData->CreateDest( aPageRect , nPageNumber - 1 );
+                                            pPDFExtOutDevData->CreateDest(aPageRect , nDestPageNum);
 
                                         // Create a new outline item:
                                         pPDFExtOutDevData->CreateOutlineItem( -1 , aPageName, nDestId );
