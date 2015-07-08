@@ -391,7 +391,7 @@
 #define SID_SLIDE_MASTERPAGE                (SID_SD_START+348)
 #define SID_HANDOUT_MASTERPAGE              (SID_SD_START+349)
 #define SID_NOTES_MASTERPAGE                (SID_SD_START+350)
-#define SID_TITLE_MASTERPAGE                (SID_SD_START+351)
+    // FREE
 #define SID_INSERTPAGE_QUICK                (SID_SD_START+352)
     // FREE
 #define SID_INSERT_FLD_PAGE_TITLE           (SID_SD_START+356)

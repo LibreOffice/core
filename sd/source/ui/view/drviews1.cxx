@@ -484,8 +484,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         Invalidate( SID_DELETE_MASTER_PAGE );
         Invalidate( SID_DELETE_PAGE );
         Invalidate( SID_SLIDE_MASTERPAGE );
-        Invalidate( SID_TITLE_MASTERPAGE );
-        Invalidate( SID_NOTES_MASTERPAGE );
         Invalidate( SID_HANDOUT_MASTERPAGE );
         InvalidateWindows();
 

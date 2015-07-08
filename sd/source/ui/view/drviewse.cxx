@@ -968,7 +968,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_MASTERPAGE:          // BASIC
         case SID_SLIDE_MASTERPAGE:    // BASIC
-        case SID_TITLE_MASTERPAGE:    // BASIC
         case SID_NOTES_MASTERPAGE:    // BASIC
         case SID_HANDOUT_MASTERPAGE:  // BASIC
         {
@@ -988,7 +987,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if (nSId == SID_MASTERPAGE                                       ||
                 (nSId == SID_SLIDE_MASTERPAGE   && mePageKind == PK_STANDARD) ||
-                (nSId == SID_TITLE_MASTERPAGE   && mePageKind == PK_STANDARD) ||
                 (nSId == SID_NOTES_MASTERPAGE   && mePageKind == PK_NOTES)    ||
                 (nSId == SID_HANDOUT_MASTERPAGE && mePageKind == PK_HANDOUT))
             {
