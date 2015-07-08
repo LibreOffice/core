@@ -16,6 +16,24 @@
       "revId": "c9fd99c0e27ffe68791cb54825edf9192b779fd7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_9b6891bc",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1064,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-07-08T16:03:17Z",
+      "side": 1,
+      "message": "I have improved this part of the code. Without studying the innards of the CharClass class I expect the code to recognize letters and numbers in other scripts than Latin.",
+      "parentUuid": "1a54edaf_b16c9309",
+      "revId": "c9fd99c0e27ffe68791cb54825edf9192b779fd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
