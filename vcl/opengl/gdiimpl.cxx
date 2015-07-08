@@ -36,9 +36,6 @@
 
 #include <vector>
 
-#define OPENGL_COORD_X(x) GLfloat((2.0 * double(x)) / GetWidth() - 1.0)
-#define OPENGL_COORD_Y(y) GLfloat(1.0 - (2.0 * double(y)) / GetHeight())
-
 OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider *pProvider)
     : mpContext(0)
     , mrParent(rParent)
@@ -192,6 +189,11 @@ void OpenGLSalGraphicsImpl::PostDraw()
     }
 
     CHECK_GL_ERROR();
+}
+
+void OpenGLSalGraphicsImpl::ApplyProgramMatrices(float fPixelOffset)
+{
+    mpProgram->ApplyMatrix(GetWidth(), GetHeight(), fPixelOffset);
 }
 
 void OpenGLSalGraphicsImpl::freeResources()
@@ -453,9 +455,10 @@ void OpenGLSalGraphicsImpl::DrawPoint( long nX, long nY )
 {
     GLfloat pPoint[2];
 
-    pPoint[0] = OPENGL_COORD_X(nX);
-    pPoint[1] = OPENGL_COORD_Y(nY);
+    pPoint[0] = GLfloat(nX);
+    pPoint[1] = GLfloat(nY);
 
+    ApplyProgramMatrices(0.5f);
     mpProgram->SetVertices( pPoint );
     glDrawArrays( GL_POINTS, 0, 1 );
 
@@ -466,11 +469,12 @@ void OpenGLSalGraphicsImpl::DrawLine( double nX1, double nY1, double nX2, double
 {
     GLfloat pPoints[4];
 
-    pPoints[0] = OPENGL_COORD_X(nX1);
-    pPoints[1] = OPENGL_COORD_Y(nY1);
-    pPoints[2] = OPENGL_COORD_X(nX2);
-    pPoints[3] = OPENGL_COORD_Y(nY2);
+    pPoints[0] = GLfloat(nX1);
+    pPoints[1] = GLfloat(nY1);
+    pPoints[2] = GLfloat(nX2);
+    pPoints[3] = GLfloat(nY2);
 
+    ApplyProgramMatrices(0.5f);
     mpProgram->SetVertices( pPoints );
     glDrawArrays( GL_LINES, 0, 2 );
 
@@ -484,19 +488,12 @@ void OpenGLSalGraphicsImpl::DrawLineAA( double nX1, double nY1, double nX2, doub
 
     if( nX1 == nX2 || nY1 == nY2 )
     {   // Horizontal/vertical, no need for AA, both points have normal color.
-        GLfloat pPoints[4];
 
-        pPoints[0] = OPENGL_COORD_X(nX1);
-        pPoints[1] = OPENGL_COORD_Y(nY1);
-        pPoints[2] = OPENGL_COORD_X(nX2);
-        pPoints[3] = OPENGL_COORD_Y(nY2);
-
-        mpProgram->SetVertices( pPoints );
         // Still set up for the trivial "gradients", because presumably UseSolidAA() has been called.
         GLfloat aTexCoord[4] = { 0, 1, 1, 1 };
         mpProgram->SetTextureCoord( aTexCoord );
+        DrawLine(nX1, nY1, nX2, nY2);
 
-        glDrawArrays( GL_LINES, 0, 2 );
         return;
     }
     ImplDrawLineAA( nX1, nY1, nX2, nY2 );
@@ -623,16 +620,17 @@ void OpenGLSalGraphicsImpl::ImplDrawLineAA( double nX1, double nY1, double nX2, 
 
     GLfloat vertices[]=
     {
-        OPENGL_COORD_X(x1-tx-Rx), OPENGL_COORD_Y(y1-ty-Ry), //fading edge1
-        OPENGL_COORD_X(x2-tx-Rx), OPENGL_COORD_Y(y2-ty-Ry),
-        OPENGL_COORD_X(x1-tx),    OPENGL_COORD_Y(y1-ty),    //core
-        OPENGL_COORD_X(x2-tx),    OPENGL_COORD_Y(y2-ty),
-        OPENGL_COORD_X(x1+tx),    OPENGL_COORD_Y(y1+ty),
-        OPENGL_COORD_X(x2+tx),    OPENGL_COORD_Y(y2+ty),
-        OPENGL_COORD_X(x1+tx+Rx), OPENGL_COORD_Y(y1+ty+Ry), //fading edge2
-        OPENGL_COORD_X(x2+tx+Rx), OPENGL_COORD_Y(y2+ty+Ry)
+        GLfloat(x1-tx-Rx), GLfloat(y1-ty-Ry), //fading edge1
+        GLfloat(x2-tx-Rx), GLfloat(y2-ty-Ry),
+        GLfloat(x1-tx),    GLfloat(y1-ty),    //core
+        GLfloat(x2-tx),    GLfloat(y2-ty),
+        GLfloat(x1+tx),    GLfloat(y1+ty),
+        GLfloat(x2+tx),    GLfloat(y2+ty),
+        GLfloat(x1+tx+Rx), GLfloat(y1+ty+Ry), //fading edge2
+        GLfloat(x2+tx+Rx), GLfloat(y2+ty+Ry)
     };
 
+    ApplyProgramMatrices(0.0f);
     GLfloat aTexCoord[16] = { 0, 0, 1, 0, 2, 1, 3, 1, 4, 1, 5, 1, 6, 0, 7, 0 };
     mpProgram->SetTextureCoord( aTexCoord );
     mpProgram->SetVertices( vertices );
@@ -665,10 +663,11 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( sal_uInt32 nPoints, const SalPoin
 
     for( i = 0, j = 0; i < nPoints; i++, j += 2 )
     {
-        aVertices[j]   = OPENGL_COORD_X(pPtAry[i].mnX);
-        aVertices[j+1] = OPENGL_COORD_Y(pPtAry[i].mnY);
+        aVertices[j]   = GLfloat(pPtAry[i].mnX);
+        aVertices[j+1] = GLfloat(pPtAry[i].mnY);
     }
 
+    ApplyProgramMatrices();
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
 
@@ -707,10 +706,11 @@ void OpenGLSalGraphicsImpl::DrawConvexPolygon( const Polygon& rPolygon, bool blo
     for( i = 0, j = 0; i < nPoints; i++, j += 2 )
     {
         const Point& rPt = rPolygon.GetPoint( i );
-        aVertices[j]   = OPENGL_COORD_X(rPt.X());
-        aVertices[j+1] = OPENGL_COORD_Y(rPt.Y());
+        aVertices[j]   = GLfloat(rPt.X());
+        aVertices[j+1] = GLfloat(rPt.Y());
     }
 
+    ApplyProgramMatrices();
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
 
@@ -750,10 +750,11 @@ void OpenGLSalGraphicsImpl::DrawTrapezoid( const basegfx::B2DTrapezoid& trapezoi
     for( i = 0, j = 0; i < nPoints; i++, j += 2 )
     {
         const basegfx::B2DPoint& rPt = rPolygon.getB2DPoint( i );
-        aVertices[j]   = OPENGL_COORD_X(rPt.getX());
-        aVertices[j+1] = OPENGL_COORD_Y(rPt.getY());
+        aVertices[j]   = GLfloat(rPt.getX());
+        aVertices[j+1] = GLfloat(rPt.getY());
     }
 
+    ApplyProgramMatrices();
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLE_FAN, 0, nPoints );
 
@@ -850,8 +851,8 @@ void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
         return;
 
 #define ADD_VERTICE(pt) \
-    aVertices.push_back(OPENGL_COORD_X(pt.X())); \
-    aVertices.push_back(OPENGL_COORD_Y(pt.Y()));
+    aVertices.push_back(GLfloat(pt.X())); \
+    aVertices.push_back(GLfloat(pt.Y()));
 
     for( size_t i = 0; i < aRects.size(); ++i )
     {
@@ -866,6 +867,7 @@ void OpenGLSalGraphicsImpl::DrawRegionBand( const RegionBand& rRegion )
     }
 #undef ADD_VERTICE
 
+    ApplyProgramMatrices();
     mpProgram->SetVertices( &aVertices[0] );
     glDrawArrays( GL_TRIANGLES, 0, aVertices.size() / 2 );
 
@@ -968,6 +970,7 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
         }
     }
 
+    ApplyProgramMatrices();
     mpProgram->SetUniform2f( "viewport", GetWidth(), GetHeight() );
     mpProgram->SetTransform( "transform", rTexture, rNull, rX, rY );
     rTexture.GetWholeCoord( aTexCoord );
@@ -1188,10 +1191,10 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
 
     if( UseSolid( mnLineColor ) )
     {
-        GLfloat fX1 = OPENGL_COORD_X(nX);
-        GLfloat fY1 = OPENGL_COORD_Y(nY);
-        GLfloat fX2 = OPENGL_COORD_X(nX + nWidth - 1);
-        GLfloat fY2 = OPENGL_COORD_Y(nY + nHeight - 1);
+        GLfloat fX1(nX);
+        GLfloat fY1(nY);
+        GLfloat fX2(nX + nWidth - 1);
+        GLfloat fY2(nY + nHeight - 1);
 
         GLfloat pPoints[16];
 
@@ -1204,6 +1207,7 @@ void OpenGLSalGraphicsImpl::drawRect( long nX, long nY, long nWidth, long nHeigh
         pPoints[6] = fX1;
         pPoints[7] = fY2;
 
+        ApplyProgramMatrices(0.5f);
         mpProgram->SetVertices(pPoints);
         glDrawArrays(GL_LINE_LOOP, 0, 4);
     }
@@ -1823,8 +1827,5 @@ void OpenGLSalGraphicsImpl::endPaint()
 
     CHECK_GL_ERROR();
 }
-
-#undef OPENGL_COORD_X
-#undef OPENGL_COORD_Y
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
