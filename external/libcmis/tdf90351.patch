@@ -1,10 +1,109 @@
+From 2b85882048847a3d2076a8ac0ed63d905aeea1dd Mon Sep 17 00:00:00 2001
+From: Thorsten Behrens <Thorsten.Behrens@CIB.de>
+Date: Wed, 8 Jul 2015 14:26:01 +0200
+Subject: [PATCH] tdf#90351: response does not always contain cmis:baseTypeId
+
+So if we know which object we just created, don't rely on the server
+response to tell us.
+---
+ src/libcmis/atom-document.cxx | 4 ++--
+ src/libcmis/atom-folder.cxx   | 4 ++--
+ src/libcmis/atom-session.cxx  | 6 +++---
+ src/libcmis/atom-session.hxx  | 3 ++-
+ 4 files changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/src/libcmis/atom-document.cxx b/src/libcmis/atom-document.cxx
+index b7f28b3..49cfd45 100644
+--- src/libcmis/atom-document.cxx
++++ src/libcmis/atom-document.cxx
+@@ -280,7 +280,7 @@ libcmis::DocumentPtr AtomDocument::checkOut( ) throw ( libcmis::Exception )
+     if ( NULL == doc )
+         throw libcmis::Exception( "Failed to parse object infos" );
+ 
+-    libcmis::ObjectPtr created = getSession( )->createObjectFromEntryDoc( doc );
++    libcmis::ObjectPtr created = getSession( )->createObjectFromEntryDoc( doc, AtomPubSession::RESULT_DOCUMENT );
+     xmlFreeDoc( doc );
+ 
+     libcmis::DocumentPtr pwc = boost::dynamic_pointer_cast< libcmis::Document >( created );
+@@ -377,7 +377,7 @@ libcmis::DocumentPtr AtomDocument::checkIn( bool isMajor, string comment,
+         throw libcmis::Exception( "Failed to parse object infos" );
+ 
+ 
+-    libcmis::ObjectPtr newVersion = getSession( )->createObjectFromEntryDoc( doc );
++    libcmis::ObjectPtr newVersion = getSession( )->createObjectFromEntryDoc( doc, AtomPubSession::RESULT_DOCUMENT );
+ 
+     if ( newVersion->getId( ) == getId( ) )
+         refreshImpl( doc );
+diff --git a/src/libcmis/atom-folder.cxx b/src/libcmis/atom-folder.cxx
+index 7947883..55ac2a9 100644
+--- src/libcmis/atom-folder.cxx
++++ src/libcmis/atom-folder.cxx
+@@ -170,7 +170,7 @@ libcmis::FolderPtr AtomFolder::createFolder( const PropertyPtrMap& properties )
+     if ( NULL == doc )
+         throw libcmis::Exception( "Failed to parse object infos" );
+ 
+-    libcmis::ObjectPtr created = getSession( )->createObjectFromEntryDoc( doc );
++    libcmis::ObjectPtr created = getSession( )->createObjectFromEntryDoc( doc, AtomPubSession::RESULT_FOLDER );
+     xmlFreeDoc( doc );
+ 
+     libcmis::FolderPtr newFolder = boost::dynamic_pointer_cast< libcmis::Folder >( created );
+@@ -244,7 +244,7 @@ libcmis::DocumentPtr AtomFolder::createDocument( const PropertyPtrMap& propertie
+             throw libcmis::Exception( "Missing expected response from server" );
+     }
+ 
+-    libcmis::ObjectPtr created = getSession( )->createObjectFromEntryDoc( doc );
++    libcmis::ObjectPtr created = getSession( )->createObjectFromEntryDoc( doc, AtomPubSession::RESULT_DOCUMENT );
+     xmlFreeDoc( doc );
+ 
+     libcmis::DocumentPtr newDocument = boost::dynamic_pointer_cast< libcmis::Document >( created );
+diff --git a/src/libcmis/atom-session.cxx b/src/libcmis/atom-session.cxx
+index ffa93a7..e470884 100644
 --- src/libcmis/atom-session.cxx
 +++ src/libcmis/atom-session.cxx
-@@ -233,6 +233,7 @@ libcmis::ObjectPtr AtomPubSession::createObjectFromEntryDoc( xmlDocPtr doc )
-                 else
+@@ -201,7 +201,7 @@ bool AtomPubSession::setRepository( string repositoryId )
+     return found;
+ }
+ 
+-libcmis::ObjectPtr AtomPubSession::createObjectFromEntryDoc( xmlDocPtr doc )
++libcmis::ObjectPtr AtomPubSession::createObjectFromEntryDoc( xmlDocPtr doc, ResultObjectType res )
+ {
+     libcmis::ObjectPtr cmisObject;
+ 
+@@ -222,11 +222,11 @@ libcmis::ObjectPtr AtomPubSession::createObjectFromEntryDoc( xmlDocPtr doc )
+                 string baseType = libcmis::getXPathValue( xpathCtx, baseTypeReq );
+ 
+                 xmlNodePtr node = xpathObj->nodesetval->nodeTab[0];
+-                if ( baseType == "cmis:folder" )
++                if ( res == RESULT_FOLDER || baseType == "cmis:folder" )
                  {
-                     // Not a valid CMIS atom entry... weird
-+                    cmisObject.reset( new AtomDocument( this, node ) );
+                     cmisObject.reset( new AtomFolder( this, node ) );
                  }
-             }
-             xmlXPathFreeObject( xpathObj );
+-                else if ( baseType == "cmis:document" )
++                else if ( res == RESULT_DOCUMENT || baseType == "cmis:document" )
+                 {
+                     cmisObject.reset( new AtomDocument( this, node ) );
+                 }
+diff --git a/src/libcmis/atom-session.hxx b/src/libcmis/atom-session.hxx
+index c887b6d..953aa17 100644
+--- src/libcmis/atom-session.hxx
++++ src/libcmis/atom-session.hxx
+@@ -37,6 +37,7 @@ class AtomPubSession : public BaseSession
+         AtomRepositoryPtr m_repository;
+ 
+     public:
++        enum ResultObjectType { RESULT_DYNAMIC, RESULT_FOLDER, RESULT_DOCUMENT };
+         AtomPubSession( std::string sAtomPubUrl, std::string repositoryId,
+                         std::string username, std::string password, bool noSslCheck = false,
+                         libcmis::OAuth2DataPtr oauth2 = libcmis::OAuth2DataPtr(),
+@@ -58,7 +59,7 @@ class AtomPubSession : public BaseSession
+ 
+         // Utility methods
+ 
+-        libcmis::ObjectPtr createObjectFromEntryDoc( xmlDocPtr doc );
++        libcmis::ObjectPtr createObjectFromEntryDoc( xmlDocPtr doc, ResultObjectType res=RESULT_DYNAMIC );
+ 
+         std::vector< libcmis::ObjectTypePtr > getChildrenTypes( std::string url )
+             throw ( libcmis::Exception );
+-- 
+2.1.4
+
