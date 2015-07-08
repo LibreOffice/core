@@ -92,7 +92,7 @@ class TextChainFlow {
     OFlowChainedText *mpOverflChText;
     UFlowChainedText *mpUnderflChText;
 
-
+    bool mbOFisUFinduced;
 };
 
 

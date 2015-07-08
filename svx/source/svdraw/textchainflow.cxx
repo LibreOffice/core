@@ -34,6 +34,8 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
 
     bUnderflow = bOverflow = false;
 
+    mbOFisUFinduced = false;
+
     mpOverflChText = NULL;
     mpUnderflChText = NULL;
 
@@ -73,16 +75,16 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 
     bool bIsPageOverflow = pFlowOutl->IsPageOverflow();
 
-    impUpdateCursorEvent(pFlowOutl, bIsPageOverflow);
+    // NOTE: overflow and underflow cannot be both true
+    bOverflow = bIsPageOverflow && mpNextLink;
+    bUnderflow = !bIsPageOverflow &&  mpNextLink && mpNextLink->HasText();
+
+    impUpdateCursorEvent(pFlowOutl, bOverflow);
 
     if (pParamOutl != NULL)
     {
         pFlowOutl->SetUpdateMode(bOldUpdateMode); // XXX: Plausibly should be the prev. state
     }
-
-    // NOTE: overflow and underflow cannot be both true
-    bOverflow = bIsPageOverflow && mpNextLink;
-    bUnderflow = !bIsPageOverflow &&  mpNextLink && mpNextLink->HasText();
 
     // Set (Non)OverflowingTxt here (if any)
     mpOverflChText = bOverflow ? new OFlowChainedText(pFlowOutl) : NULL;
@@ -90,15 +92,18 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     // Set current underflowing text (if any)
     mpUnderflChText = bUnderflow ? new UFlowChainedText(pFlowOutl) : NULL;
 
+    // To check whether an overflow is underflow induced or not (useful in cursor checking)
+    mbOFisUFinduced = bUnderflow;
+
 }
 
-void TextChainFlow::impUpdateCursorEvent(SdrOutliner *pFlowOutl, bool bIsOverflow)
+void TextChainFlow::impUpdateCursorEvent(SdrOutliner *, bool bIsOverflow)
 {
     // XXX: Current implementation might create problems with UF-
     //      In fact UF causes a
 
 
-    if (bIsOverflow) {
+    if (bIsOverflow && !mbOFisUFinduced) {
         bool bCursorOut = true; // XXX: Should have real check
         if (bCursorOut) {
             GetTextChain()->SetCursorEvent(GetLinkTarget(),
