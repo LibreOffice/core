@@ -182,7 +182,19 @@ void PaintHelper::PaintBuffer()
         m_pWindow->SetMapMode(m_aPaintRectMapMode);
         m_pBuffer->SetMapMode(m_aPaintRectMapMode);
 
-        m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), m_aPaintRect.TopLeft(), m_aPaintRect.GetSize(), *m_pBuffer.get());
+        // Make sure that the +1 value GetSize() adds to the size is in pixels.
+        Size aPaintRectSize;
+        if (m_pWindow->GetMapMode().GetMapUnit() == MAP_PIXEL)
+        {
+            aPaintRectSize = m_aPaintRect.GetSize();
+        }
+        else
+        {
+            Rectangle aRectanglePixel = m_pWindow->LogicToPixel(m_aPaintRect);
+            aPaintRectSize = m_pWindow->PixelToLogic(aRectanglePixel.GetSize());
+        }
+
+        m_pWindow->DrawOutDev(m_aPaintRect.TopLeft(), aPaintRectSize, m_aPaintRect.TopLeft(), aPaintRectSize, *m_pBuffer.get());
     }
 }
 
