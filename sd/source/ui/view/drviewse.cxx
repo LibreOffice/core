@@ -982,7 +982,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
         case SID_MASTERPAGE:          // BASIC
         case SID_SLIDE_MASTERPAGE:    // BASIC
-        case SID_TITLE_MASTERPAGE:    // BASIC
         case SID_NOTES_MASTERPAGE:    // BASIC
         case SID_HANDOUT_MASTERPAGE:  // BASIC
         {
@@ -1002,12 +1001,10 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
             if (nSId == SID_MASTERPAGE                                       ||
                 (nSId == SID_SLIDE_MASTERPAGE   && mePageKind == PK_STANDARD) ||
-                (nSId == SID_TITLE_MASTERPAGE   && mePageKind == PK_STANDARD) ||
                 (nSId == SID_NOTES_MASTERPAGE   && mePageKind == PK_NOTES)    ||
                 (nSId == SID_HANDOUT_MASTERPAGE && mePageKind == PK_HANDOUT))
             {
-                if (nSId == SID_TITLE_MASTERPAGE ||
-                    nSId == SID_SLIDE_MASTERPAGE)
+                if (nSId == SID_SLIDE_MASTERPAGE)
                 {
                     // Is there a page with the AutoLayout "Title"?
                     bool bFound = false;
@@ -1018,12 +1015,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     {
                         SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
 
-                        if (nSId == SID_TITLE_MASTERPAGE && pPage->GetAutoLayout() == AUTOLAYOUT_TITLE)
-                        {
-                            bFound = true;
-                            SwitchPage((pPage->GetPageNum() - 1) / 2);
-                        }
-                        else if (nSId == SID_SLIDE_MASTERPAGE && pPage->GetAutoLayout() != AUTOLAYOUT_TITLE)
+                        if (nSId == SID_SLIDE_MASTERPAGE && pPage->GetAutoLayout() != AUTOLAYOUT_TITLE)
                         {
                             bFound = true;
                             SwitchPage((pPage->GetPageNum() - 1) / 2);
@@ -1049,7 +1041,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 switch (nSId)
                 {
                     case SID_SLIDE_MASTERPAGE:
-                    case SID_TITLE_MASTERPAGE:
                     default:
                         sRequestedView = framework::FrameworkHelper::msImpressViewURL;
                         ePageKind = PK_STANDARD;

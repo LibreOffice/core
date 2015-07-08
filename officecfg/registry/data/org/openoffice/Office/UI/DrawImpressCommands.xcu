@@ -447,11 +447,6 @@
           <value xml:lang="en-US">~Notes Master</value>
         </prop>
       </node>
-      <node oor:name=".uno:TitleMasterPage" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Title Slide Master</value>
-        </prop>
-      </node>
       <node oor:name=".uno:InsertPageQuick" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Slide Direct</value>
