@@ -94,10 +94,6 @@ private:
 class ImplDevFontAttributes : public ImplFontAttributes
 {
 public: // TODO: create matching interface class
-    const OUString&    GetAliasNames() const     { return maMapNames; }
-    int                GetQuality() const        { return mnQuality; }
-    bool               IsRotatable() const       { return mbOrientation; }
-    bool               IsDeviceFont() const      { return mbDevice; }
     bool               IsEmbeddable() const      { return mbEmbeddable; }
     bool               IsSubsettable() const     { return mbSubsettable; }
 

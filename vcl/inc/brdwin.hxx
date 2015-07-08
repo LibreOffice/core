@@ -144,7 +144,6 @@ public:
     void                    Draw( const Rectangle& rRect, OutputDevice* pDev, const Point& rPos );
 
     void                    SetDisplayActive( bool bActive );
-    bool                    IsDisplayActive() const { return mbDisplayActive; }
     void                    SetTitleType( sal_uInt16 nTitleType, const Size& rSize );
     void                    SetBorderStyle( WindowBorderStyle nStyle );
     WindowBorderStyle       GetBorderStyle() const { return mnBorderStyle; }
@@ -234,7 +233,6 @@ public:
     static void             ImplInitTitle( ImplBorderFrameData* pData );
     static sal_uInt16       ImplHitTest( ImplBorderFrameData* pData, const Point& rPos );
     static bool             ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
-    bool                    ImplMouseButtonDown( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
     static OUString         ImplRequestHelp( ImplBorderFrameData* pData, const Point& rPos, Rectangle& rHelpRect );
     static long             ImplCalcTitleWidth( const ImplBorderFrameData* pData );
 };

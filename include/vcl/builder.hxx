@@ -474,10 +474,6 @@ public:
     {
         return m_pUIBuilder->get<T>(sID);
     }
-    PopupMenu* get_menu(PopupMenu*& ret, const OString & sID)
-    {
-        return m_pUIBuilder->get_menu(ret, sID);
-    }
     PopupMenu* get_menu(const OString & sID)
     {
         return m_pUIBuilder->get_menu(sID);

@@ -717,60 +717,6 @@ void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& 
 
 void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
-                              SalColor nTransparentColor )
-{
-    DBG_ASSERT( !mrParent.isPrinter(), "No transparency print possible!" );
-
-    const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
-
-    WinSalBitmap*   pMask = new WinSalBitmap;
-    const Point aPoint;
-    const Size  aSize( rSalBitmap.GetSize() );
-    HBITMAP     hMaskBitmap = CreateBitmap( (int) aSize.Width(), (int) aSize.Height(), 1, 1, NULL );
-    HDC         hMaskDC = ImplGetCachedDC( CACHED_HDC_1, hMaskBitmap );
-    const BYTE  cRed = SALCOLOR_RED( nTransparentColor );
-    const BYTE  cGreen = SALCOLOR_GREEN( nTransparentColor );
-    const BYTE  cBlue = SALCOLOR_BLUE( nTransparentColor );
-
-    if( rSalBitmap.ImplGethDDB() )
-    {
-        HDC         hSrcDC = ImplGetCachedDC( CACHED_HDC_2, rSalBitmap.ImplGethDDB() );
-        COLORREF    aOldCol = SetBkColor( hSrcDC, RGB( cRed, cGreen, cBlue ) );
-
-        BitBlt( hMaskDC, 0, 0, (int) aSize.Width(), (int) aSize.Height(), hSrcDC, 0, 0, SRCCOPY );
-
-        SetBkColor( hSrcDC, aOldCol );
-        ImplReleaseCachedDC( CACHED_HDC_2 );
-    }
-    else
-    {
-        WinSalBitmap*   pTmpSalBmp = new WinSalBitmap;
-
-        if( pTmpSalBmp->Create( rSalBitmap, &mrParent ) )
-        {
-            HDC         hSrcDC = ImplGetCachedDC( CACHED_HDC_2, pTmpSalBmp->ImplGethDDB() );
-            COLORREF    aOldCol = SetBkColor( hSrcDC, RGB( cRed, cGreen, cBlue ) );
-
-            BitBlt( hMaskDC, 0, 0, (int) aSize.Width(), (int) aSize.Height(), hSrcDC, 0, 0, SRCCOPY );
-
-            SetBkColor( hSrcDC, aOldCol );
-            ImplReleaseCachedDC( CACHED_HDC_2 );
-        }
-
-        delete pTmpSalBmp;
-    }
-
-    ImplReleaseCachedDC( CACHED_HDC_1 );
-
-    // hMaskBitmap is destroyed by new SalBitmap 'pMask' ( bDIB==FALSE, bCopy == FALSE )
-    if( pMask->Create( hMaskBitmap, FALSE, FALSE ) )
-        drawBitmap( rPosAry, rSalBitmap, *pMask );
-
-    delete pMask;
-}
-
-void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
-                              const SalBitmap& rSSalBitmap,
                               const SalBitmap& rSTransparentBitmap )
 {
     DBG_ASSERT( !mrParent.isPrinter(), "No transparency print possible!" );
