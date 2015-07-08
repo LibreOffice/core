@@ -11,19 +11,6 @@ $(eval $(call gb_Library_Library,ucpchelp1))
 
 $(eval $(call gb_Library_set_componentfile,ucpchelp1,xmlhelp/util/ucpchelp1))
 
-# TODO: is this still relevant?
-# GCC versions 4.2.x introduced a warning "allocating zero-element array"
-# Allocating zero-element arrays is an allowed if not somewhat dubious
-# technique though, so this warning is plain wrong and has been fixed
-# in gcc 4.3. Unfortunately there is no way at all to suppress this warning.
-# Some files in this directory use zero allocated arrays, we need to
-# disable the WaE mechanism for the GCC 4.2.x series.
-# .IF "$(COM)"=="GCC"
-# .IF "$(CCNUMVER)">="000400020000" && "$(CCNUMVER)"<="000400020003"
-# CFLAGSWERRCXX:=
-# .ENDIF # "$(CCNUMVER)">="000400020000" && "$(CCNUMVER)"<="000400020003"
-# .ENDIF # "$(COM)"=="GCC"
-
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Library_add_cxxflags,ucpchelp1,\
 	-GR \
