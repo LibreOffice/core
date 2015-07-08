@@ -18,6 +18,7 @@
  */
 
 #include <TableManager.hxx>
+#include <DomainMapperTableHandler.hxx>
 #include <util.hxx>
 
 namespace writerfilter
@@ -408,7 +409,7 @@ void TableManager::handle(const css::uno::Reference<css::text::XTextRange>& rHan
     setHandle(rHandle);
 }
 
-void TableManager::setHandler(TableDataHandler::Pointer_t pTableDataHandler)
+void TableManager::setHandler(std::shared_ptr<DomainMapperTableHandler> pTableDataHandler)
 {
     mpTableDataHandler = pTableDataHandler;
 }
