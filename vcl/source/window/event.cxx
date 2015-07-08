@@ -295,6 +295,7 @@ void Window::RemoveUserEvent( ImplSVEvent * nUserEvent )
                 "Window::RemoveUserEvent(): Event doesn't send to this window or is already removed" );
     DBG_ASSERT( nUserEvent->mbCall,
                 "Window::RemoveUserEvent(): Event is already removed" );
+    (void) this; // avoid loplugin:staticmethods
 
     if ( nUserEvent->mpWindow )
     {
