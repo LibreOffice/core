@@ -63,7 +63,8 @@ void TextChainFlow::impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *)
 void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *pParamOutl)
 {
     bool bOldUpdateMode = pFlowOutl->GetUpdateMode();
-    // NOTE: Nah you probably don't need this
+
+    // XXX: This could be reorganized moving most of this stuff inside EditingTextChainFlow (we need update=true anyway for TextChainFlow though)
     if (pParamOutl != NULL)
     {
         // We need this since it's required to check overflow
@@ -83,7 +84,7 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 
     if (pParamOutl != NULL)
     {
-        pFlowOutl->SetUpdateMode(bOldUpdateMode); // XXX: Plausibly should be the prev. state
+        pFlowOutl->SetUpdateMode(bOldUpdateMode);
     }
 
     // Set (Non)OverflowingTxt here (if any)

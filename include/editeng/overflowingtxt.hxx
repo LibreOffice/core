@@ -22,6 +22,7 @@
 
 #include <editeng/macros.hxx>
 #include <editeng/editengdllapi.h>
+#include <editeng/editdata.hxx>
 
 class OUString;
 
@@ -39,9 +40,12 @@ public:
 
         OverflowingText(EditTextObject *pTObj) : mpContentTextObj(pTObj)
         {
+            ESelection aStartPos(0,0,0,0);
+            maInsertionPointSel = aStartPos;
         }
 
         OutlinerParaObject *GetJuxtaposedParaObject(Outliner *, OutlinerParaObject *);
+        ESelection GetInsertionPointSel() const;
 
         //OUString GetHeadingLines() const;
         //OUString GetEndingLines() const;
@@ -49,6 +53,9 @@ public:
 
 private:
     const EditTextObject *mpContentTextObj;
+    ESelection maInsertionPointSel;
+
+    ESelection impGetEndSelection(Outliner *pOutl) const;
 };
 
 class NonOverflowingText {

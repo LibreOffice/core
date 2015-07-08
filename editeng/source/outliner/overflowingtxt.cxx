@@ -31,6 +31,46 @@ OutlinerParaObject *NonOverflowingText::ToParaObject(Outliner *pOutliner) const
     return pPObj;
 }
 
+// The equivalent of ToParaObject for OverflowingText. Here we are prepending the overflowing text to the old dest box's text
+// XXX: In a sense a better name for OverflowingText and NonOverflowingText are respectively DestLinkText and SourceLinkText
+OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
+{
+    if (mpContentTextObj == NULL) {
+        fprintf(stderr, "[Chaining] OverflowingText's mpContentTextObj is NULL!\n");
+        return NULL;
+    }
+
+    // Simply Juxtaposing; no within-para merging
+    OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
+    // the OutlinerParaObject constr. at the prev line gives no valid outliner mode, so we set it
+    pOverflowingPObj->SetOutlinerMode(pOutl->GetOutlinerMode());
+
+    /* Actual Text Setting */
+    pOutl->SetText(*pOverflowingPObj);
+
+    // Set selection position between new and old text
+    maInsertionPointSel = impGetEndSelection(pOutl);
+
+    pOutl->AddText(*pNextPObj);
+
+    // End Text Setting
+
+    OutlinerParaObject *pPObj = pOutl->CreateParaObject();
+    //pPObj->SetOutlinerMode(pOutl->GetOutlinerMode());
+    return pPObj;
+}
+
+ESelection OverflowingText::impGetEndSelection(Outliner *pOutl) const
+{
+    const sal_Int32 nParaCount = pOutl->GetParagraphCount();
+    const sal_Int32 nLastParaIndex = nParaCount > 1 ? nParaCount - 1 : 0;
+    Paragraph* pLastPara = pOutl->GetParagraph( nLastParaIndex);
+    const sal_Int32 nLenLastPara = pOutl->GetText(pLastPara).getLength();
+    // Selection at end of editing area
+    ESelection aEndSel(nLastParaIndex,nLenLastPara,nLastParaIndex,nLenLastPara);
+    return aEndSel;
+}
+
 /*
 OUString OverflowingText::GetEndingLines() const
 {
@@ -48,24 +88,7 @@ OUString OverflowingText::GetHeadingLines() const
 }
 * */
 
-OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, OutlinerParaObject *pNextPObj)
-{
-    if (mpContentTextObj == NULL) {
-        fprintf(stderr, "[Chaining] OverflowingText's mpContentTextObj is NULL!\n");
-        return NULL;
-    }
 
-    // Simply Juxtaposing; no within-para merging
-    OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
-    // the OutlinerParaObject constr. at the prev line gives no valid outliner mode, so we set it
-    pOverflowingPObj->SetOutlinerMode(pOutl->GetOutlinerMode());
-    pOutl->SetText(*pOverflowingPObj);
-    pOutl->AddText(*pNextPObj);
-
-    OutlinerParaObject *pPObj = pOutl->CreateParaObject();
-    //pPObj->SetOutlinerMode(pOutl->GetOutlinerMode());
-    return pPObj;
-}
 
 
 OFlowChainedText::OFlowChainedText(Outliner *pOutl)
