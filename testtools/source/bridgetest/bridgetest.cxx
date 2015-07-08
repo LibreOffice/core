@@ -967,7 +967,7 @@ static bool raiseException( const Reference< XBridgeTest > & xLBT )
                 if (rExc.ArgumentPosition == 5 &&
 #if OSL_DEBUG_LEVEL == 0
                     // java stack traces trash Message
-                    rExc.Message.equalsAscii( STRING_TEST_CONSTANT ) &&
+                    rExc.Message == STRING_TEST_CONSTANT &&
 #endif
                     rExc.Context == xLBT->getInterface())
                 {
@@ -994,7 +994,7 @@ static bool raiseException( const Reference< XBridgeTest > & xLBT )
             if (rExc.Context == xLBT->getInterface()
 #if OSL_DEBUG_LEVEL == 0
                     // java stack traces trash Message
-                && rExc.Message.equalsAscii( STRING_TEST_CONSTANT )
+                && rExc.Message == STRING_TEST_CONSTANT
 #endif
                 )
             {
@@ -1014,7 +1014,7 @@ static bool raiseException( const Reference< XBridgeTest > & xLBT )
         if (rExc.Context == xLBT->getInterface()
 #if OSL_DEBUG_LEVEL == 0
             // java stack traces trash Message
-            && rExc.Message.equalsAscii( STRING_TEST_CONSTANT )
+            && rExc.Message == STRING_TEST_CONSTANT
 #endif
             )
         {
