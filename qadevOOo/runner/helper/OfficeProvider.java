@@ -655,7 +655,7 @@ public class OfficeProvider implements AppProvider
     /**
      * If the office is connected but the <CODE>AppExecutionCommand</CODE> is not set,
      * this function asks the office for its location and fill the
-     * <CODE>AppExecutionCommand</CODE> with valid contest.
+     * <CODE>AppExecutionCommand</CODE> with valid content.
      * This function was only called if parameter <CODE>AutoRestart</CODE> is set.
      * @param msf the <CODE>MultiServiceFactory</CODE>
      * @param param the <CODE>TestParameters</CODE>
