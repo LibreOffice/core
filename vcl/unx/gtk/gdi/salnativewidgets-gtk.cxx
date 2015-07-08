@@ -430,16 +430,21 @@ void GtkData::initNWF( void )
     NWEnsureGTKMenu( SalX11Screen( 0 ) );
     gint horizontal_padding = 1;
     gint vertical_padding = 1;
+    gint separator_padding = 1;
     gtk_widget_style_get( gWidgetData[0].gMenuWidget,
             "horizontal-padding", &horizontal_padding,
             (char *)NULL);
     gtk_widget_style_get( gWidgetData[0].gMenuWidget,
             "vertical-padding", &vertical_padding,
             (char *)NULL);
+    gtk_widget_style_get( gWidgetData[0].gMenuItemSeparatorMenuWidget,
+            "horizontal-padding", &separator_padding,
+            (char *)NULL);
     gint xthickness = gWidgetData[0].gMenuWidget->style->xthickness;
     gint ythickness = gWidgetData[0].gMenuWidget->style->ythickness;
     pSVData->maNWFData.mnMenuFormatBorderX = xthickness + horizontal_padding;
     pSVData->maNWFData.mnMenuFormatBorderY = ythickness + vertical_padding;
+    pSVData->maNWFData.mnMenuSeparatorBorderX = separator_padding;
 
     if( SalGetDesktopEnvironment() == "KDE" )
     {
@@ -4382,7 +4387,7 @@ static void NWEnsureGTKMenu( SalX11Screen nScreen )
         gWidgetData[nScreen].gMenuItemMenuWidget          = gtk_menu_item_new_with_label( "b" );
         gWidgetData[nScreen].gMenuItemCheckMenuWidget     = gtk_check_menu_item_new_with_label( "b" );
         gWidgetData[nScreen].gMenuItemRadioMenuWidget     = gtk_radio_menu_item_new_with_label( NULL, "b" );
-        gWidgetData[nScreen].gMenuItemSeparatorMenuWidget = gtk_menu_item_new();
+        gWidgetData[nScreen].gMenuItemSeparatorMenuWidget = gtk_separator_menu_item_new();
         gWidgetData[nScreen].gImageMenuItem               = gtk_image_menu_item_new();
 
         gtk_menu_shell_append( GTK_MENU_SHELL( gWidgetData[nScreen].gMenuWidget ), gWidgetData[nScreen].gMenuItemMenuWidget );

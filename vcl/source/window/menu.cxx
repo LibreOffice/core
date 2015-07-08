@@ -2684,9 +2684,12 @@ void Menu::ImplPaint( Window* pWin, sal_uInt16 nBorder, long nStartY, MenuItemDa
                             nState |= CTRL_STATE_ENABLED;
                         if ( bHighlighted )
                             nState |= CTRL_STATE_SELECTED;
+                        int nSepPad = ImplGetSVData()->maNWFData.mnMenuSeparatorBorderX;
+                        Point aMpos (aPos);
+                        aMpos.X() += nSepPad;
                         Size aSz( pData->aSz );
-                        aSz.Width() = aOutSz.Width() - 2*nOuterSpaceX;
-                        Rectangle aItemRect( aPos, aSz );
+                        aSz.Width() = aOutSz.Width() - 2*nOuterSpaceX - 2 * nSepPad;
+                        Rectangle aItemRect( aMpos, aSz );
                         MenupopupValue aVal( nTextPos-GUTTERBORDER, aItemRect );
                         bNativeOk = pWin->DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_SEPARATOR,
                                                              aItemRect,
