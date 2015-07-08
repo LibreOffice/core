@@ -38,8 +38,6 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
 
     mpOverflChText = NULL;
     mpUnderflChText = NULL;
-
-
 }
 
 

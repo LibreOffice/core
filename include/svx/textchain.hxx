@@ -20,6 +20,52 @@
 #ifndef INCLUDED_SVX_TEXTCHAIN_HXX
 #define INCLUDED_SVX_TEXTCHAIN_HXX
 
+/*
+ * Properties can be accessed and set from a TextChain with:
+ * - T TextChain::GetPROPNAME(SdrTextObj *)
+ * - void TextChain::SetPROPNAME(SdrTextObj *, T)
+ * where T and PROPNAME are respectively type and name of a property.
+ *
+ * To add a property PROPNAME of type T (and its interface) in TextChain:
+ * 1) Add
+ *      "DECL_CHAIN_PROP(PROPNAME, T)"
+ *    in class ImpChainLinkProperties;
+ * 2) Add
+ *      "INIT_CHAIN_PROP(PROPNAME, V)"
+ *    in constructor of ImpChainLinkProperties below
+ *    (V is the initialization value for PROPNAME)
+ *
+ * 2) Add
+ *      "DECL_CHAIN_PROP_INTERFACE(PROPNAME, T)"
+ *    in class TextChain (under "public:");
+ * 3)  Add
+ *       "IMPL_CHAIN_PROP_INTERFACE(PROPNAME, T)"
+ *    in file "svx/source/svdraw/textchain.cxx"
+*/
+
+#define DECL_CHAIN_PROP(PropName, PropType) \
+    PropType a##PropName;
+
+#define INIT_CHAIN_PROP(PropName, PropDefault) \
+    a##PropName = (PropDefault);
+
+#define DECL_CHAIN_PROP_INTERFACE(PropName, PropType) \
+    PropType Get##PropName (SdrTextObj *); \
+    void Set##PropName (SdrTextObj *, PropType);
+
+#define IMPL_CHAIN_PROP_INTERFACE(PropName, PropType) \
+    PropType TextChain::Get##PropName (SdrTextObj *pTarget) { \
+        ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget); \
+        return pLinkProperties->a##PropName; \
+    } \
+    void TextChain::Set##PropName (SdrTextObj *pTarget, PropType aPropParam) \
+    { \
+        ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget); \
+        pLinkProperties->a##PropName = aPropParam; \
+    }
+
+/* End Special Properties Macro */
+
 #include <map>
 
 class ImpChainLinkProperties;
@@ -39,16 +85,40 @@ enum class CursorChainingEvent
     UNCHANGED
 };
 
+/*
+ * // Note Sure I need the code here
+struct CursorChainingInfo
+{
+    public:
+        CursorChainingEvent GetEvent() const;
+        ESelection GetPreChainingSel() const;
+        ESelection GetPostChainingSel() const;
+
+        void SetEvent(CursorChainingEvent aEvent) { maEvent = aEvent; }
+        void SetPreChainingSel(ESelection aSel) { maPreChainingSel = aSel; }
+        void SetPostChainingSel(ESelection aSel) { maPostChaingingSel = aSel; }
+    private:
+        CursorChainingEvent maEvent;
+        ESelection maPreChainingSel;
+        ESelection maPostChainingSel;
+};
+* */
+
 class ImpChainLinkProperties
 {
     protected:
     friend class TextChain;
 
-    ImpChainLinkProperties();
+    ImpChainLinkProperties() {
+        INIT_CHAIN_PROP(NilChainingEvent, false)
+        INIT_CHAIN_PROP(CursorEvent, CursorChainingEvent::UNCHANGED)
+    }
 
+    private:
     // NOTE: Remember to set default value in contructor when adding field
-    bool bNilChainingEvent;
-    CursorChainingEvent aCursorEvent; // XXX: replace with enum instead of bool?
+    DECL_CHAIN_PROP(NilChainingEvent, bool)
+    DECL_CHAIN_PROP(CursorEvent, CursorChainingEvent)
+
 };
 
 
@@ -62,17 +132,17 @@ class TextChain {
     bool IsLinkInChain(SdrTextObj *) const;
     SdrTextObj *GetNextLink(SdrTextObj *) const;
 
-    CursorChainingEvent GetCursorEvent(SdrTextObj *);
-    void SetCursorEvent(SdrTextObj *, CursorChainingEvent);
-
     ChainLinkId GetId(SdrTextObj *) const;
     ImpChainLinkProperties *GetLinkProperties(SdrTextObj *);
 
+    // Specific Link Properties
+    DECL_CHAIN_PROP_INTERFACE(CursorEvent, CursorChainingEvent)
+    DECL_CHAIN_PROP_INTERFACE(NilChainingEvent, bool)
+
+
+
     // return whether a paragraph is split between the two links in the argument
     bool GetLinksHaveMergeableFirstPara(SdrTextObj *, SdrTextObj *);
-
-    bool GetNilChainingEvent(SdrTextObj *pTarget);
-    void SetNilChainingEvent(SdrTextObj *, bool);
 
     protected:
     LinkPropertiesMap maLinkPropertiesMap;

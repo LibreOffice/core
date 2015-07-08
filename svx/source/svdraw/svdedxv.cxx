@@ -513,22 +513,8 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
             // trigger actual chaining
             pTextObj->onChainingEvent();
 
-            // XXX: this logic could be put in a separate approppriate class
-            /* Cursor motion stuff */
-
             maCursorEvent = new CursorChainingEvent(pTextChain->GetCursorEvent(pTextObj));
             //SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
-
-
-            // Find last Para
-            /*
-            const sal_Int32 nParaCount = pTextEditOutliner->GetParagraphCount();
-            const sal_Int32 nLastParaIndex = nParaCount > 1 ? nParaCount - 1 : 0;
-            Paragraph* pLastPara = pTextEditOutliner->GetParagraph( nLastParaIndex);
-            const sal_Int32 nLenLastPara = pTextEditOutliner->GetText(pLastPara).getLength();
-            // Selection at end of editing area
-            ESelection aEndSel(nLastParaIndex,nLenLastPara,nLastParaIndex,nLenLastPara);
-            */
 
             // NOTE: Must be called. Don't let the function return if you set it to true and not reset it
             pTextChain->SetNilChainingEvent(pTextObj, false);

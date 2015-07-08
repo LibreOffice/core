@@ -20,15 +20,18 @@
 #include <svx/textchain.hxx>
 #include <svx/svdotext.hxx>
 
+/*
+ * Definition of Properties Interface
+*/
 
-ImpChainLinkProperties::ImpChainLinkProperties()
-{
-    // give defaults
-    bNilChainingEvent = false;
-    aCursorEvent = CursorChainingEvent::UNCHANGED;
-}
+IMPL_CHAIN_PROP_INTERFACE(CursorEvent, CursorChainingEvent)
+IMPL_CHAIN_PROP_INTERFACE(NilChainingEvent, bool)
 
-// XXX: All getters in the class assume that the guy is in the chain
+/* End Definition of Properties Interface */
+
+/* TextChain */
+
+// NOTE: All getters in the class assume that the guy is in the chain
 
 TextChain::TextChain()
 {
@@ -54,17 +57,6 @@ SdrTextObj *TextChain::GetNextLink(SdrTextObj *) const
     return NULL; // XXX: To be changed. It'd be a mess to implement now
 }
 
-CursorChainingEvent TextChain::GetCursorEvent(SdrTextObj *pTarget)
-{
-    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
-    return pLinkProperties->aCursorEvent;
-}
-
-void TextChain::SetCursorEvent(SdrTextObj *pTarget, CursorChainingEvent aCursorEvent)
-{
-    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
-    pLinkProperties->aCursorEvent = aCursorEvent;
-}
 
 bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj* /* pPrevLink */, SdrTextObj* /* pNextLink */)
 {
@@ -72,17 +64,6 @@ bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj* /* pPrevLink */, SdrT
     return false;
 }
 
-bool TextChain::GetNilChainingEvent(SdrTextObj *pTarget)
-{
-    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
-    return pLinkProperties->bNilChainingEvent;
-}
-
-void TextChain::SetNilChainingEvent(SdrTextObj *pTarget, bool bNilChainingEvent)
-{
-    ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget);
-    pLinkProperties->bNilChainingEvent = bNilChainingEvent;
-}
 
 ImpChainLinkProperties *TextChain::GetLinkProperties(SdrTextObj *pLink)
 {
