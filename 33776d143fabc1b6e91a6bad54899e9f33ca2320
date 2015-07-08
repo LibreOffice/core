@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_38308356",
+        "filename": "stoc/source/inspect/introspection.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 873,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-08T09:55:31Z",
+      "side": 0,
+      "message": "ImplIntrospectionAdapter::mxIface is never set anymore?",
+      "revId": "33776d143fabc1b6e91a6bad54899e9f33ca2320",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
