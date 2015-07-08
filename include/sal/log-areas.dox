@@ -491,6 +491,7 @@ certain functionality.
 @li @c basebmp
 @li @c binaryurp
 @li @c configmgr
+@li @c configmgr.dconf
 @li @c cppcanvas
 @li @c cppcanvas.emf
 @li @c drawinglayer

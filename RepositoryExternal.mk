@@ -3584,6 +3584,11 @@ endif # ENABLE_COLLADA
 
 endif # ENABLE_GLTF
 
+define gb_LinkTarget__use_dconf
+$(call gb_LinkTarget_add_defs,$(1),$(DCONF_CFLAGS))
+$(call gb_LinkTarget_add_libs,$(1),$(DCONF_LIBS))
+endef
+
 ### Jars ############################################################
 
 ifneq ($(SYSTEM_HSQLDB),)

@@ -29,6 +29,7 @@
 
 #include "AutoInstall/brand"
 
+#include "config_dconf.h"
 #include "config_folders.h"
 
 Module gid_Module_Root_Brand
@@ -1117,17 +1118,25 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Bin_Dir
     Value = "${BRAND_BASE_DIR}/" LIBO_URE_BIN_FOLDER;
 End
 
+#if ENABLE_DCONF
+#define CONFIGURATION_LAYERS_DCONF " dconf:"
+#else
+#define CONFIGURATION_LAYERS_DCONF
+#endif
+#if defined WNT
+#define CONFIGURATION_LAYERS_WINREG " winreg:"
+#else
+#define CONFIGURATION_LAYERS_WINREG
+#endif
 ProfileItem gid_Brand_Profileitem_Fundamental_Configuration_Layers
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     ModuleID = gid_Module_Root_Brand;
     Section = "Bootstrap";
     Key = "CONFIGURATION_LAYERS";
-#if defined WNT
-    Value = "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry winreg: bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
-#else
-    Value = "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
-#endif
+    Value = "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry" CONFIGURATION_LAYERS_WINREG " bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
 End
+#undef CONFIGURATION_LAYERS_DCONF
+#undef CONFIGURATION_LAYERS_WINREG
 
 #if !defined MACOSX
 ProfileItem gid_Brand_Profileitem_Redirect_Ure_Bootstrap

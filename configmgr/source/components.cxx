@@ -36,6 +36,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <config_dconf.h>
 #include <config_folders.h>
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
@@ -63,6 +64,10 @@
 #include "xcdparser.hxx"
 #include "xcuparser.hxx"
 #include "xcsparser.hxx"
+
+#if ENABLE_DCONF
+#include <readdconflayer.hxx>
+#endif
 
 #if defined WNT
 #include "winreg.hxx"
@@ -522,6 +527,15 @@ Components::Components(
             parseResLayer(layer, url);
             SAL_INFO("configmgr", "parseResLayer() took " << (osl_getGlobalTimer() - nStartTime) << " ms");
             ++layer; //TODO: overflow
+#if ENABLE_DCONF
+        } else if (type == "dconf") {
+            if (!url.isEmpty()) {
+                throw css::uno::RuntimeException(
+                    "CONFIGURATION_LAYERS: non-empty \"dconf\" URL");
+            }
+            readDconfLayer(data_, layer);
+            ++layer; //TODO: overflow
+#endif
 #if defined WNT
         } else if (type == "winreg") {
             if (!url.isEmpty()) {
