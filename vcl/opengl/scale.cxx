@@ -65,6 +65,7 @@ bool OpenGLSalBitmap::ImplScaleFilter(
     pProgram->SetTexture( "sampler", maTexture );
     nOldFilter = maTexture.GetFilter();
     maTexture.SetFilter( nFilter );
+    pProgram->ApplyMatrix(mnWidth, mnHeight);
     pProgram->DrawTexture( maTexture );
     maTexture.SetFilter( nOldFilter );
     pProgram->Clean();
