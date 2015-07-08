@@ -1494,14 +1494,6 @@ void OpenGLSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry, const SalBitm
 }
 
 void OpenGLSalGraphicsImpl::drawBitmap(
-            const SalTwoRect& /*rPosAry*/,
-            const SalBitmap& /*rSalBitmap*/,
-            SalColor /*nTransparentColor*/ )
-{
-    OSL_FAIL( "::DrawBitmap with transparent color not supported" );
-}
-
-void OpenGLSalGraphicsImpl::drawBitmap(
             const SalTwoRect& rPosAry,
             const SalBitmap& rSalBitmap,
             const SalBitmap& rMaskBitmap )

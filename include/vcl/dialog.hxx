@@ -145,9 +145,7 @@ public:
 
 protected:
     using Window::Show;
-    void            Show( bool bVisible = true );
     using Window::Hide;
-    void            Hide();
 
 private:
 

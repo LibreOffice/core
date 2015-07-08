@@ -1197,23 +1197,6 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
     return aPoly;
 }
 
-tools::PolyPolygon OutputDevice::LogicToPixel( const tools::PolyPolygon& rLogicPolyPoly,
-    const MapMode& rMapMode ) const
-{
-
-    if ( rMapMode.IsDefault() )
-        return rLogicPolyPoly;
-
-    tools::PolyPolygon aPolyPoly( rLogicPolyPoly );
-    sal_uInt16              nPoly = aPolyPoly.Count();
-    for( sal_uInt16 i = 0; i < nPoly; i++ )
-    {
-        Polygon& rPoly = aPolyPoly[i];
-        rPoly = LogicToPixel( rPoly, rMapMode );
-    }
-    return aPolyPoly;
-}
-
 basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                                     const MapMode& rMapMode ) const
 {
@@ -1461,23 +1444,6 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
     }
 
     return aPoly;
-}
-
-tools::PolyPolygon OutputDevice::PixelToLogic( const tools::PolyPolygon& rDevicePolyPoly,
-    const MapMode& rMapMode ) const
-{
-
-    if ( rMapMode.IsDefault() )
-        return rDevicePolyPoly;
-
-    tools::PolyPolygon aPolyPoly( rDevicePolyPoly );
-    sal_uInt16      nPoly = aPolyPoly.Count();
-    for( sal_uInt16 i = 0; i < nPoly; i++ )
-    {
-        Polygon& rPoly = aPolyPoly[i];
-        rPoly = PixelToLogic( rPoly, rMapMode );
-    }
-    return aPolyPoly;
 }
 
 basegfx::B2DPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolygon& rPixelPoly,
@@ -2070,20 +2036,6 @@ DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( long nWidth ) const
     return ImplLogicToPixel( nWidth, mnDPIX,
                              maMapRes.mnMapScNumX, maMapRes.mnMapScDenomX,
                              maThresRes.mnThresLogToPixX );
-#endif
-}
-
-DeviceCoordinate OutputDevice::LogicHeightToDeviceCoordinate( long nHeight ) const
-{
-    if ( !mbMap )
-        return (DeviceCoordinate)nHeight;
-#if VCL_FLOAT_DEVICE_PIXEL
-    return (double)nHeight * maMapRes.mfScaleY * mnDPIY;
-#else
-
-    return ImplLogicToPixel( nHeight, mnDPIY,
-                             maMapRes.mnMapScNumY, maMapRes.mnMapScDenomY,
-                             maThresRes.mnThresLogToPixY );
 #endif
 }
 
