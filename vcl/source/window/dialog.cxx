@@ -564,6 +564,33 @@ IMPL_LINK_NOARG(Dialog, ImplAsyncCloseHdl)
     return 0;
 }
 
+bool Dialog::ImplHandleCmdEvent( const CommandEvent& rCEvent )
+{
+    if (rCEvent.GetCommand() == COMMAND_MODKEYCHANGE)
+    {
+        const CommandModKeyData *pCData = rCEvent.GetModKeyData ();
+
+        Window *pGetChild = GetWindow (WINDOW_FIRSTCHILD);
+        while (pGetChild)
+        {
+            Control *pControl = (Control *)(pGetChild->ImplGetWindow());
+
+            const char *cptr = OUStringToOString (pControl->GetText (), RTL_TEXTENCODING_UTF8).getStr();
+            if (strchr (cptr, '~'))
+            {
+                if (pCData && pCData->IsMod2())
+                    pControl->SetShowAccelerator (true);
+                else
+                    pControl->SetShowAccelerator (false);
+                pControl->Invalidate (INVALIDATE_UPDATE);
+            }
+            pGetChild = nextLogicalChildOfParent (this, pGetChild);
+        }
+        return true;
+    }
+    return false;
+}
+
 bool Dialog::Notify( NotifyEvent& rNEvt )
 {
     // first call the base class due to Tab control
@@ -606,6 +633,11 @@ bool Dialog::Notify( NotifyEvent& rNEvt )
                 }
 
             }
+        }
+        else if (rNEvt.GetType() == EVENT_COMMAND)
+        {
+            if (ImplHandleCmdEvent( *rNEvt.GetCommandEvent()))
+                return true;
         }
     }
 

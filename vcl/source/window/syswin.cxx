@@ -104,6 +104,19 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
             return true;
     }
 
+    if (rNEvt.GetType() == EVENT_COMMAND)
+    {
+        MenuBar* pMBar = mpMenuBar;
+        if ( !pMBar && ( GetType() == WINDOW_FLOATINGWINDOW ) )
+        {
+            Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
+            if( pWin && pWin->IsSystemWindow() )
+                pMBar = ((SystemWindow*)pWin)->GetMenuBar();
+        }
+        if ( pMBar && pMBar->ImplHandleCmdEvent( *rNEvt.GetCommandEvent() ) )
+            return true;
+    }
+
     return Window::Notify( rNEvt );
 }
 

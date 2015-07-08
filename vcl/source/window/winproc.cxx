@@ -2029,17 +2029,21 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
 
     // #105224# send commandevent to allow special treatment of Ctrl-LeftShift/Ctrl-RightShift etc.
 
-    // find window
-    Window* pChild = ImplGetKeyInputWindow( pWindow );
-    if ( !pChild )
-        return;
-
-    // send modkey events only if useful data is available
-    if( pEvent->mnModKeyCode != 0 )
+    // find window - first look to see if the system window is available
+    Window *pChild = pWindow->ImplGetWindowImpl()->mpFirstChild;
+    while ( pChild )
     {
-        CommandModKeyData data( pEvent->mnModKeyCode );
-        ImplCallCommand( pChild, COMMAND_MODKEYCHANGE, &data );
+        if ( pChild->ImplGetWindowImpl()->mbSysWin )
+            break;
+        pChild = pChild->ImplGetWindowImpl()->mpNext;
     }
+    //...if not, try to find a key input window...
+    if (!pChild) ImplGetKeyInputWindow( pWindow );
+    //...otherwise fail safe...
+    if (!pChild) pChild = pWindow;
+
+    CommandModKeyData data( pEvent->mnModKeyCode );
+    ImplCallCommand( pChild, COMMAND_MODKEYCHANGE, &data );
 }
 
 static void ImplHandleInputLanguageChange( Window* pWindow )

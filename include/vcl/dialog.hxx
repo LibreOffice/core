@@ -126,6 +126,7 @@ public:
 private:
     bool            ImplStartExecuteModal();
     void            ImplEndExecuteModal();
+    bool            ImplHandleCmdEvent ( const CommandEvent& rCEvent );
 public:
 
     // Dialog::Execute replacement API

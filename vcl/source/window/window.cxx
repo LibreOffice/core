@@ -3865,6 +3865,17 @@ void Window::MouseButtonUp( const MouseEvent& rMEvt )
 
 void Window::KeyInput( const KeyEvent& rKEvt )
 {
+    KeyCode cod = rKEvt.GetKeyCode ();
+    bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
+    bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
+
+    // do not respond to accelerators unless Alt is held */
+    if (cod.GetCode () >= 0x200 && cod.GetCode () <= 0x219)
+    {
+        if (!accel) return;
+        if (autoacc && cod.GetModifier () != 0x4000) return;
+    }
+
     NotifyEvent aNEvt( EVENT_KEYINPUT, this, &rKEvt );
     if ( !Notify( aNEvt ) )
         mpWindowImpl->mbKeyInput = true;

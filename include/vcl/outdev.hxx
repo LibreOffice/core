@@ -144,6 +144,7 @@ namespace vcl
 #define TEXT_DRAW_MULTILINE             ((sal_uInt16)0x1000)
 #define TEXT_DRAW_WORDBREAK             ((sal_uInt16)0x2000)
 #define TEXT_DRAW_NEWSELLIPSIS          ((sal_uInt16)0x4000)
+#define TEXT_DRAW_HIDEMNEMONIC          ((sal_uInt16)0x8000)
 // in the long run we should make text style flags longer
 // but at the moment we can get away with this 2 bit field for ellipsis style
 #define TEXT_DRAW_CENTERELLIPSIS        (TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_PATHELLIPSIS)

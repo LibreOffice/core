@@ -36,6 +36,7 @@ using namespace vcl;
 void Control::ImplInitControlData()
 {
     mbHasControlFocus       = false;
+    mbShowAccelerator       = false;
     mpControlData   = new ImplControlData;
 }
 
@@ -368,6 +369,16 @@ void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
     pDev->OutputDevice::SetSettings( aOriginalSettings );
 }
 
+void Control::SetShowAccelerator (bool val)
+{
+    mbShowAccelerator = val;
+};
+
+bool Control::GetShowAccelerator (void) const
+{
+    return mbShowAccelerator;
+}
+
 ControlLayoutData::~ControlLayoutData()
 {
     if( m_pParent )
@@ -431,15 +442,27 @@ void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
 void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const OUString& _rStr,
     sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText ) const
 {
+    OUString rPStr = _rStr;
+    sal_uInt16 nPStyle = _nStyle;
+
+    bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
+    bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
+
+    if (!accel || (autoacc && !mbShowAccelerator))
+    {
+        rPStr = GetNonMnemonicString( _rStr );
+        nPStyle &= ~TEXT_DRAW_MNEMONIC;
+    }
+
     if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
     {
-        _io_rRect = _rTargetDevice.GetTextRect( _io_rRect, _rStr, _nStyle );
-        _rTargetDevice.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
+        _io_rRect = _rTargetDevice.GetTextRect( _io_rRect, rPStr, nPStyle );
+        _rTargetDevice.DrawText( _io_rRect, rPStr, nPStyle, _pVector, _pDisplayText );
     }
     else
     {
         ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
-        _io_rRect = aRenderer.DrawText( _io_rRect, _rStr, _nStyle, _pVector, _pDisplayText );
+        _io_rRect = aRenderer.DrawText( _io_rRect, rPStr, nPStyle, _pVector, _pDisplayText );
     }
 }
 

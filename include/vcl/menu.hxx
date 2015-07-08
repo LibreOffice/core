@@ -42,6 +42,7 @@ class Image;
 class PopupMenu;
 class KeyCode;
 class KeyEvent;
+class CommandEvent;
 class MenuFloatingWindow;
 class Window;
 class SalMenu;
@@ -381,6 +382,7 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     SAL_DLLPRIVATE static Window*   ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu );
     SAL_DLLPRIVATE static void      ImplDestroy( MenuBar* pMenu, bool bDelete );
     SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu = true );
+    SAL_DLLPRIVATE bool         ImplHandleCmdEvent( const CommandEvent& rCEvent );
 
 public:
                         MenuBar();
