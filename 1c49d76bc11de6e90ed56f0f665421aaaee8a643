@@ -34,6 +34,24 @@
       "revId": "1c49d76bc11de6e90ed56f0f665421aaaee8a643",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_3bd5dd42",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-08T20:02:27Z",
+      "side": 1,
+      "message": "\"if you look at the first example in this patch\" \u003c- not this patch, but the one for comphelper that i haven\u0027t uploaded :)",
+      "parentUuid": "1a54edaf_7be4b53a",
+      "revId": "1c49d76bc11de6e90ed56f0f665421aaaee8a643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
