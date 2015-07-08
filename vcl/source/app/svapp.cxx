@@ -347,6 +347,10 @@ inline void ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
         Scheduler::ProcessTaskScheduling(false);
     }
 
+    // TODO: there's a data race here on WNT only because ImplYield may be
+    // called without SolarMutex; if we can get rid of LazyDelete (with VclPtr)
+    // then the only remaining use of mnDispatchLevel is in OSX specific code
+    // so that would effectively eliminate the race on WNT
     pSVData->maAppData.mnDispatchLevel++;
     // do not wait for events if application was already quit; in that
     // case only dispatch events already available
