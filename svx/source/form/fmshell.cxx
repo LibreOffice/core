@@ -1426,6 +1426,8 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
             OSL_ENSURE( !pUnoObject, "FmFormShell::GetFormControl: the given control model belongs to a wrong page (displayed elsewhere)!" );
         }
     }
+#else
+    (void) this; // avoid loplugin:staticmethods
 #endif
 
     return NULL;
