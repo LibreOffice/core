@@ -19,7 +19,6 @@
 
 #include <MarkManager.hxx>
 #include <bookmrk.hxx>
-#include <boost/bind.hpp>
 #include <boost/function.hpp>
 #include <cntfrm.hxx>
 #include <crossrefbookmark.hxx>
@@ -168,7 +167,7 @@ namespace
             rMarks.begin(),
             pCandidatesEnd,
             back_inserter(vCandidates),
-            boost::bind( ::std::logical_not<bool>(), boost::bind( &IMark::EndsBefore, _1, rPos ) ) );
+            [&] (IDocumentMarkAccess::pMark_t const& rpMark) { return !rpMark->EndsBefore(rPos); } );
         // no candidate left => we are in front of the first mark or there are none
         if(vCandidates.empty()) return NULL;
         // return the highest (last) candidate using mark end ordering
@@ -269,7 +268,7 @@ namespace
         return find_if(
             ppMarksBegin,
             ppMarksEnd,
-            boost::bind(&OUString::equals, boost::bind(&IMark::GetName, _1), rName));
+            [&] (IDocumentMarkAccess::pMark_t const& rpMark) { return rpMark->GetName() == rName; } );
     }
 
 #if 0
@@ -960,7 +959,7 @@ namespace sw { namespace mark
             find_if(
                 pMarkLow,
                 pMarkHigh,
-                boost::bind( ::std::equal_to<const IMark*>(), boost::bind(&boost::shared_ptr<IMark>::get, _1), pMark ) );
+                [&] (pMark_t const& rpMark) { return rpMark.get() == pMark; } );
         if(pMarkFound != pMarkHigh)
             deleteMark(pMarkFound);
     }
@@ -1015,8 +1014,8 @@ namespace sw { namespace mark
     {
         const_iterator_t pFieldmark = find_if(
             m_vFieldmarks.begin(),
-            m_vFieldmarks.end( ),
-            boost::bind(&IMark::IsCoveringPosition, _1, rPos));
+            m_vFieldmarks.end(),
+            [&] (pMark_t const& rpMark) { return rpMark->IsCoveringPosition(rPos); } );
         if(pFieldmark == m_vFieldmarks.end()) return NULL;
         return dynamic_cast<IFieldmark*>(pFieldmark->get());
     }
@@ -1081,8 +1080,8 @@ namespace sw { namespace mark
     {
         const_iterator_t pAnnotationMark = find_if(
             m_vAnnotationMarks.begin(),
-            m_vAnnotationMarks.end( ),
-            boost::bind(&IMark::IsCoveringPosition, _1, rPos));
+            m_vAnnotationMarks.end(),
+            [&] (pMark_t const& rpMark) { return rpMark->IsCoveringPosition(rPos); } );
         if (pAnnotationMark == m_vAnnotationMarks.end())
             return NULL;
         return pAnnotationMark->get();
