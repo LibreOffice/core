@@ -17,7 +17,10 @@ $(eval $(call gb_Executable_set_include,mar,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_Executable_use_externals,mar,nss3))
+$(eval $(call gb_Executable_use_externals,mar,\
+	nss3 \
+	plc4 \
+))
 
 $(eval $(call gb_Executable_add_cobjects,mar,\
 	onlineupdate/source/libmar/src/mar_create \
