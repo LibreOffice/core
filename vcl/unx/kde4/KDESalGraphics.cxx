@@ -100,13 +100,18 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
         case CTRL_EDITBOX:
         case CTRL_COMBOBOX:
         case CTRL_TOOLBAR:
-        case CTRL_LISTBOX:
         case CTRL_FRAME:
         case CTRL_SCROLLBAR:
         case CTRL_WINDOW_BACKGROUND:
         case CTRL_GROUPBOX:
         case CTRL_FIXEDLINE:
             return true;
+
+        case CTRL_LISTBOX:
+            return (part == PART_ENTIRE_CONTROL
+                 || part == PART_SUB_EDIT
+                 || part == PART_WINDOW
+                 || part == PART_BUTTON_DOWN);
 
         case CTRL_SPINBOX:
             return (part == PART_ENTIRE_CONTROL || part == HAS_BACKGROUND_TEXTURE);
@@ -405,24 +410,26 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_LISTBOX)
     {
-        if( part == PART_WINDOW )
-        {
-            lcl_drawFrame( QStyle::PE_Frame, m_image,
-                           vclStateValue2StateFlag(nControlState, value) );
-        }
-        else
-        {
-            QStyleOptionComboBox option;
-            if (part == PART_SUB_EDIT)
-            {
+        QStyleOptionComboBox option;
+        switch (part) {
+            case PART_WINDOW:
+                lcl_drawFrame( QStyle::PE_Frame, m_image,
+                               vclStateValue2StateFlag(nControlState, value) );
+                break;
+            case PART_SUB_EDIT:
                 draw( QStyle::CE_ComboBoxLabel, &option, m_image,
                       vclStateValue2StateFlag(nControlState, value) );
-            }
-            else
-            {
+                break;
+            case PART_ENTIRE_CONTROL:
                 draw( QStyle::CC_ComboBox, &option, m_image,
                       vclStateValue2StateFlag(nControlState, value) );
-            }
+                break;
+            case PART_BUTTON_DOWN:
+                m_image->fill( Qt::transparent );
+                option.subControls = QStyle::SC_ComboBoxArrow;
+                draw( QStyle::CC_ComboBox, &option, m_image,
+                      vclStateValue2StateFlag(nControlState, value) );
+                break;
         }
     }
     else if (type == CTRL_LISTNODE)
@@ -643,6 +650,12 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                                              const OUString&,
                                              Rectangle &nativeBoundingRegion, Rectangle &nativeContentRegion )
 {
+    bool nativeSupport = IsNativeControlSupported( type, part );
+    if( ! nativeSupport ) {
+        assert( ! nativeSupport && "drawNativeControl called without native support!" );
+        return false;
+    }
+
     bool retVal = false;
 
     QRect boundingRect = region2QRect( controlRegion );
@@ -724,8 +737,6 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             {
                 case PART_ENTIRE_CONTROL:
                 {
-                    int size = QApplication::style()->pixelMetric(QStyle::PM_ComboBoxFrameWidth) - 2;
-
                     // find out the minimum size that should be used
                     // assume contents is a text ling
                     int nHeight = QApplication::fontMetrics().height();
@@ -738,8 +749,10 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     // FIXME: why this difference between comboboxes and listboxes ?
                     // because a combobox has a sub edit and that is positioned
                     // inside the outer bordered control ?
-                    if( type == CTRL_COMBOBOX )
+                    if( type == CTRL_COMBOBOX ) {
+                        int size = QApplication::style()->pixelMetric(QStyle::PM_ComboBoxFrameWidth) - 2;
                         contentRect.adjust(-size,-size,size,size);
+                    }
                     retVal = true;
                     break;
                 }
@@ -752,13 +765,22 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     retVal = true;
                     break;
                 case PART_SUB_EDIT:
+                {
                     contentRect = QApplication::style()->subControlRect(
                         QStyle::CC_ComboBox, &cbo, QStyle::SC_ComboBoxEditField );
 
-                    contentRect.translate( boundingRect.left(), boundingRect.top() );
+                    int hmargin = QApplication::style()->pixelMetric(
+                            QStyle::PM_FocusFrameHMargin, &styleOption);
+                    int vmargin = QApplication::style()->pixelMetric(
+                            QStyle::PM_FocusFrameVMargin, &styleOption);
+
+                    contentRect.translate( boundingRect.left() + hmargin, boundingRect.top() + vmargin );
+                    contentRect.adjust( 0, 0, -2 * hmargin, -2 * vmargin );
+                    boundingRect = contentRect;
 
                     retVal = true;
                     break;
+                }
                 case PART_WINDOW:
                     retVal = true;
                     break;
