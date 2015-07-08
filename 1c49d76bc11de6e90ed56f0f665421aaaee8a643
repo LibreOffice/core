@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_3ba07df4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-08T16:34:44Z",
+      "side": 1,
+      "message": "Another question is: can\u0027t boost::bind be replaced with std::bind? MSVC 2015 is failing to compile in boost::bind atm.",
+      "revId": "1c49d76bc11de6e90ed56f0f665421aaaee8a643",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
