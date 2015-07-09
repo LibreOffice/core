@@ -601,7 +601,10 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "de-Latn-DE", &aCanonicalized) && aCanonicalized == "de-DE" );
         /* TODO: at least some (those we know) grandfathered tags should be
          * recognized by the replacement code. */
-        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-GB-oed", &aCanonicalized) && aCanonicalized == "en-GB-oed" );
+        CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "en-GB-oed", &aCanonicalized) );
+        // en-GB-oed has become deprecated in updated language-subtag-registry database
+        // (liblangtag 0.5.7)
+        CPPUNIT_ASSERT( ( aCanonicalized == "en-GB-oxendict" ) || ( aCanonicalized == "en-GB-oed" ) );
 #else
         CPPUNIT_ASSERT( LanguageTag::isValidBcp47( "de-Latn-DE", &aCanonicalized) && aCanonicalized == "de-Latn-DE" );
 #endif
