@@ -49,10 +49,12 @@
  <toolbar:toolbaritem xlink:href=".uno:GridVisible"/>
  <toolbar:toolbaritem xlink:href=".uno:HelplinesMove"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="10140" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:style="radio"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AdvancedMode" toolbar:style="radio dropdown"/>
