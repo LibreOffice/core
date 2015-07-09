@@ -2150,6 +2150,15 @@ LanguageTag & LanguageTag::makeFallback()
     getBcp47();     // have maBcp47 now
     if (bIncludeFullBcp47)
         aVec.push_back( maBcp47);
+
+    // Special cases for deprecated tags and their replacements, include both
+    // in fallbacks in a sensible order.
+    /* TODO: could such things be generalized and automated with liblangtag? */
+    if (maBcp47 == "en-GB-oed")
+        aVec.push_back( "en-GB-oxendict");
+    else if (maBcp47 == "en-GB-oxendict")
+        aVec.push_back( "en-GB-oed");
+
     OUString aScript;
     OUString aVariants( getVariants());
     OUString aTmp;

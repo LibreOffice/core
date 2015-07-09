@@ -420,7 +420,8 @@ void TestLanguageTag::testAllTags()
     }
 
     // 'en-GB-oed' is known grandfathered for English, Oxford English
-    // Dictionary spelling
+    // Dictionary spelling.
+    // Deprecated as of 2015-04-17, prefer en-GB-oxendict instead.
     {
         OUString s_en_GB_oed( "en-GB-oed" );
         LanguageTag en_GB_oed( s_en_GB_oed );
@@ -436,11 +437,36 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( en_GB_oed.getLanguageAndScript() == "en" );
         CPPUNIT_ASSERT( en_GB_oed.getVariants() == "oed" );
         ::std::vector< OUString > en_GB_oed_Fallbacks( en_GB_oed.getFallbackStrings( true));
-        CPPUNIT_ASSERT( en_GB_oed_Fallbacks.size() == 3);
+        CPPUNIT_ASSERT( en_GB_oed_Fallbacks.size() == 4);
         CPPUNIT_ASSERT( en_GB_oed_Fallbacks[0] == "en-GB-oed");
-        CPPUNIT_ASSERT( en_GB_oed_Fallbacks[1] == "en-GB");
-        CPPUNIT_ASSERT( en_GB_oed_Fallbacks[2] == "en");
+        CPPUNIT_ASSERT( en_GB_oed_Fallbacks[1] == "en-GB-oxendict");
+        CPPUNIT_ASSERT( en_GB_oed_Fallbacks[2] == "en-GB");
+        CPPUNIT_ASSERT( en_GB_oed_Fallbacks[3] == "en");
         // 'en-oed' is not a valid fallback!
+    }
+
+    // 'en-GB-oxendict' as preferred over 'en-GB-oed'.
+    {
+        OUString s_en_GB_oxendict( "en-GB-oxendict" );
+        LanguageTag en_GB_oxendict( s_en_GB_oxendict );
+        lang::Locale aLocale = en_GB_oxendict.getLocale();
+        CPPUNIT_ASSERT( en_GB_oxendict.getBcp47() == s_en_GB_oxendict );
+        CPPUNIT_ASSERT( aLocale.Language == "qlt" );
+        CPPUNIT_ASSERT( aLocale.Country == "GB" );
+        CPPUNIT_ASSERT( aLocale.Variant == s_en_GB_oxendict );
+        CPPUNIT_ASSERT( en_GB_oxendict.getLanguageType() == LANGUAGE_USER_ENGLISH_UK_OXENDICT );
+        CPPUNIT_ASSERT( en_GB_oxendict.isValidBcp47() );
+        CPPUNIT_ASSERT( !en_GB_oxendict.isIsoLocale() );
+        CPPUNIT_ASSERT( !en_GB_oxendict.isIsoODF() );
+        CPPUNIT_ASSERT( en_GB_oxendict.getLanguageAndScript() == "en" );
+        CPPUNIT_ASSERT( en_GB_oxendict.getVariants() == "oxendict" );
+        ::std::vector< OUString > en_GB_oxendict_Fallbacks( en_GB_oxendict.getFallbackStrings( true));
+        CPPUNIT_ASSERT( en_GB_oxendict_Fallbacks.size() == 5);
+        CPPUNIT_ASSERT( en_GB_oxendict_Fallbacks[0] == "en-GB-oxendict");
+        CPPUNIT_ASSERT( en_GB_oxendict_Fallbacks[1] == "en-GB-oed");
+        CPPUNIT_ASSERT( en_GB_oxendict_Fallbacks[2] == "en-oxendict");
+        CPPUNIT_ASSERT( en_GB_oxendict_Fallbacks[3] == "en-GB");
+        CPPUNIT_ASSERT( en_GB_oxendict_Fallbacks[4] == "en");
     }
 
 #if USE_LIBLANGTAG
