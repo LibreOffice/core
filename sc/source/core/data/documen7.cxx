@@ -149,12 +149,20 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint )
             continue;
 
         ScConditionalFormatList* pCondFormList = GetCondFormList(nTab);
-        if (pCondFormList)
+        if (pCondFormList && !pCondFormList->empty())
         {
+            /* TODO: looping over all possible cells is a terrible bottle neck,
+             * for each cell looping over all conditional formats even worse,
+             * this certainly needs a better method. */
+            ScAddress aAddress( 0, 0, nTab);
             for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
             {
+                aAddress.SetRow(nRow);
                 for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-                    pCondFormList->SourceChanged(ScAddress(nCol,nRow,nTab));
+                {
+                    aAddress.SetCol(nCol);
+                    pCondFormList->SourceChanged(aAddress);
+                }
             }
         }
     }
