@@ -424,24 +424,20 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
         while ( pCell )
         {
             if ( pCell->GetDirty() )
-                pCell = pCell->GetNext();       // all clear
-            else
+                ;   // nothing to do
+            else if ( pCell->GetCode()->IsRecalcModeAlways() )
             {
-                if ( pCell->GetCode()->IsRecalcModeAlways() )
-                {
-                    // pCell and dependents are to be set dirty again, collect
-                    // them first and broadcast afterwards to not break the
-                    // FormulaTree chain here.
-                    vAlwaysDirty.push_back( pCell);
-                    pCell = pCell->GetNext();
-                }
-                else
-                {   // calculate the other single
-                    if( bSetAllDirty )
-                        pCell->SetDirtyVar();
-                    pCell = pCell->GetNext();
-                }
+                // pCell and dependents are to be set dirty again, collect
+                // them first and broadcast afterwards to not break the
+                // FormulaTree chain here.
+                vAlwaysDirty.push_back( pCell);
             }
+            else if ( bSetAllDirty )
+            {
+                // Force calculating all in tree, without broadcasting.
+                pCell->SetDirtyVar();
+            }
+            pCell = pCell->GetNext();
         }
         for (::std::vector<ScFormulaCell*>::iterator it( vAlwaysDirty.begin()), itEnd( vAlwaysDirty.end());
                 it != itEnd; ++it)
