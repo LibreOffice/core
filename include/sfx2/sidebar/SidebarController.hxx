@@ -173,6 +173,7 @@ private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
     Context maCurrentContext;
     Context maRequestedContext;
+    css::uno::Reference<css::frame::XController> mxCurrentController;
     /// Use a combination of SwitchFlag_* as value.
     sal_Int32 mnRequestedForceFlags;
     ::rtl::OUString msCurrentDeckId;

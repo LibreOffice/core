@@ -266,6 +266,7 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
         rEvent.ContextName);
     if (maRequestedContext != maCurrentContext)
     {
+        mxCurrentController = css::uno::Reference<css::frame::XController>(rEvent.Source, css::uno::UNO_QUERY);
         maAsynchronousDeckSwitch.CancelRequest();
         maContextChangeUpdate.RequestCall();
         // TODO: this call is redundant but mandatory for unit test to update context on document loading
@@ -436,11 +437,13 @@ void SidebarController::UpdateConfigurations()
         // Find the set of decks that could be displayed for the new context.
         ResourceManager::DeckContextDescriptorContainer aDecks;
 
+        css::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
+
         mpResourceManager->GetMatchingDecks (
             aDecks,
             maCurrentContext,
             mbIsDocumentReadOnly,
-            mxFrame->getController());
+            xController);
 
         // Notify the tab bar about the updated set of decks.
         mpTabBar->SetDecks(aDecks);
@@ -575,11 +578,13 @@ void SidebarController::SwitchToDeck (
     // Determine the panels to display in the deck.
     ResourceManager::PanelContextDescriptorContainer aPanelContextDescriptors;
 
+    css::uno::Reference<css::frame::XController> xController = mxCurrentController.is() ? mxCurrentController : mxFrame->getController();
+
     mpResourceManager->GetMatchingPanels(
         aPanelContextDescriptors,
         rContext,
         rDeckDescriptor.msId,
-        mxFrame->getController());
+        xController);
 
     if (aPanelContextDescriptors.empty())
     {
