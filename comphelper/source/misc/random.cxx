@@ -39,6 +39,13 @@ struct RandomNumberGenerator
     STD_RNG_ALGO global_rng;
     RandomNumberGenerator()
     {
+        bool bRepeatable = (getenv("SAL_RAND_REPEATABLE") != 0);
+        if (bRepeatable)
+        {
+            global_rng.seed(42);
+            return;
+        }
+
         try
         {
             std::random_device rd;

@@ -33,7 +33,6 @@ $(eval $(call gb_Library_use_libraries,analysis,\
 	comphelper \
 	cppu \
 	cppuhelper \
-	for \
 	sal \
 	tl \
 	i18nlangtag \
