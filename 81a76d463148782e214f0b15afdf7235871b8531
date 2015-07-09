@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_de6d97cd",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1065,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-09T17:12:44Z",
+      "side": 1,
+      "message": "This should work, fine.",
+      "revId": "81a76d463148782e214f0b15afdf7235871b8531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_de56f705",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1082,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-09T17:12:44Z",
+      "side": 1,
+      "message": "\u003cnitpick\u003e\na literal string is quoted, not bracketed ;-)\n\u003c/nitpick\u003e",
+      "range": {
+        "startLine": 1082,
+        "startChar": 64,
+        "endLine": 1082,
+        "endChar": 73
+      },
+      "revId": "81a76d463148782e214f0b15afdf7235871b8531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_9e415f3c",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-09T17:12:44Z",
+      "side": 1,
+      "message": "This should not run to the paragraph end but to the current cursor position instead, which can be somewhere in the formula not necessarily at the end.",
+      "range": {
+        "startLine": 1084,
+        "startChar": 41,
+        "endLine": 1084,
+        "endChar": 63
+      },
+      "revId": "81a76d463148782e214f0b15afdf7235871b8531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_3e794b94",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-09T17:12:44Z",
+      "side": 1,
+      "message": "Note that in formula expressions within a literal string a \" double quote is escaped by doubling it, so two consecutive double quotes do not end the string, like \"ab\"\"cd\" is one quoted string.",
+      "revId": "81a76d463148782e214f0b15afdf7235871b8531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
