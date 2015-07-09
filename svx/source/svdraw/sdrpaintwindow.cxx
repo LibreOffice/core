@@ -244,8 +244,9 @@ void SdrPaintWindow::impCreateOverlayManager()
     }
 }
 
-SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut)
+SdrPaintWindow::SdrPaintWindow(SdrPaintView& rNewPaintView, OutputDevice& rOut, vcl::Window* pWindow)
 :   mrOutputDevice(rOut),
+    mpWindow(pWindow),
     mrPaintView(rNewPaintView),
     mpPreRenderDevice(0L),
     mbTemporaryTarget(false), // #i72889#
