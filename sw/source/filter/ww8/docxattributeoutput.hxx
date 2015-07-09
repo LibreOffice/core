@@ -776,7 +776,7 @@ private:
     std::vector<OString> m_rAnnotationMarksEnd;
 
     /// Maps of the bookmarks ids
-    std::map<OString, sal_uInt16> m_rOpenedBookmarksIds;
+    std::map<OString, sal_Int32> m_rOpenedBookmarksIds;
 
     /// Name of the last opened bookmark.
     OString m_sLastOpenedBookmark;

@@ -1295,7 +1295,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
         const OString& rName = *it;
 
         // Output the bookmark
-        sal_uInt16 nId = m_nNextBookmarkId++;
+        const sal_Int32 nId = m_nNextBookmarkId++;
         m_rOpenedBookmarksIds[rName] = nId;
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkStart,
             FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
@@ -1312,7 +1312,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
         const OString& rName = *it;
 
         // Get the id of the bookmark
-        std::map< OString, sal_uInt16 >::iterator pPos = m_rOpenedBookmarksIds.find( rName );
+        std::map< OString, sal_Int32 >::iterator pPos = m_rOpenedBookmarksIds.find( rName );
         if ( pPos != m_rOpenedBookmarksIds.end(  ) )
         {
             const sal_Int32 nId = ( *pPos ).second;
