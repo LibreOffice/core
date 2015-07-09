@@ -2017,9 +2017,7 @@ void ScExportTest::testCeilingFloorXLSX()
 
 void ScExportTest::testCeilingFloorXLS()
 {
-    // CEILING.PRECISE() and FLOOR.PRECISE() with one parameter only currently
-    // (2015-06-18) don't survive .xls save/reload and give NA()
-    //testCeilingFloor(XLS);
+    testCeilingFloor(XLS);
 }
 
 void ScExportTest::testCeilingFloorODS()
