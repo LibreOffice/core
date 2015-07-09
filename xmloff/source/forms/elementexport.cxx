@@ -950,10 +950,12 @@ namespace xmloff
         #endif
         }
 
+        #if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( 0 == nIncludeBinding,
             "OControlExport::exportBindingAtributes: forgot some flags!");
             // in the debug version, we should have removed every bit we handled from the mask, so it should
             // be 0 now ...
+        #endif
     }
 
     void OControlExport::exportSpecialAttributes()
@@ -1609,10 +1611,8 @@ namespace xmloff
                     // for a list box, if the ListSourceType is VALUE_LIST, no ListSource is stored, but instead
                     // a sequence of pairs which is build from the StringItemList and the ValueList
                     ListSourceType eListSourceType = ListSourceType_VALUELIST;
-                #if OSL_DEBUG_LEVEL > 0
                     bool bSuccess =
-                #endif
-                    m_xProps->getPropertyValue(PROPERTY_LISTSOURCETYPE) >>= eListSourceType;
+                        m_xProps->getPropertyValue(PROPERTY_LISTSOURCETYPE) >>= eListSourceType;
                     OSL_ENSURE(bSuccess, "OControlExport::examineControl: could not retrieve the ListSourceType!");
                     if (ListSourceType_VALUELIST != eListSourceType)
                     {

@@ -267,20 +267,15 @@ namespace svx
 
             // extract the any from the transferable
             DataFlavor aFlavor;
-#if OSL_DEBUG_LEVEL > 0
             bool bSuccess =
-#endif
-            SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
+                SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
             Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
             // extract the property value sequence
             Sequence< PropertyValue > aDescriptorProps;
-#if OSL_DEBUG_LEVEL > 0
-            bSuccess =
-#endif
-            aDescriptor >>= aDescriptorProps;
+            bSuccess = aDescriptor >>= aDescriptorProps;
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid clipboard format!");
 
             // build the real descriptor
@@ -511,20 +506,15 @@ namespace svx
         {
             // extract the any from the transferable
             DataFlavor aFlavor;
-#if OSL_DEBUG_LEVEL > 0
             bool bSuccess =
-#endif
-            SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
+                SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
             Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
             // extract the property value sequence
             Sequence< PropertyValue > aDescriptorProps;
-#if OSL_DEBUG_LEVEL > 0
-            bSuccess =
-#endif
-            aDescriptor >>= aDescriptorProps;
+            bSuccess = aDescriptor >>= aDescriptorProps;
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid clipboard format!");
 
             // build the real descriptor
@@ -669,10 +659,8 @@ namespace svx
         {
             // extract the any from the transferable
             DataFlavor aFlavor;
-#if OSL_DEBUG_LEVEL > 0
             bool bSuccess =
-#endif
-            SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
+                SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
             _rData.GetAny(aFlavor, OUString()) >>= aList;

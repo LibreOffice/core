@@ -401,12 +401,8 @@ private:
     /**_______________________________________________________________________________________________________
     */
 
-    #ifdef DBG_UTIL
-
     static bool impl_debug_checkParameter( const OUString& sTopic, const OUString& sText, bool bbeforeProgress );    // addText, updateText
     static bool impl_debug_checkParameter( const OUString& rTopic, bool bbeforeProgress );                              // removeText
-
-    #endif
 
 // private variables
 

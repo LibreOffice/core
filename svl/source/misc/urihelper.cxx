@@ -140,9 +140,7 @@ Result normalizePrefix( css::uno::Reference< css::ucb::XUniversalContentBroker >
         return GeneralFailure;
     }
     try {
-        #if OSL_DEBUG_LEVEL > 0
         bool ok =
-        #endif
             (css::uno::Reference< css::ucb::XCommandProcessor >(
                    content, css::uno::UNO_QUERY_THROW)->execute(
                        css::ucb::Command("getCasePreservingURL",

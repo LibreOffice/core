@@ -209,10 +209,8 @@ namespace logging
 
         sal_uInt64 nBytesToWrite( _rEntry.getLength() );
         sal_uInt64 nBytesWritten( 0 );
-    #if OSL_DEBUG_LEVEL > 0
         ::osl::FileBase::RC res =
-    #endif
-        m_pFile->write( _rEntry.getStr(), nBytesToWrite, nBytesWritten );
+              m_pFile->write( _rEntry.getStr(), nBytesToWrite, nBytesWritten );
         OSL_ENSURE( ( res == ::osl::FileBase::E_None ) && ( nBytesWritten == nBytesToWrite ),
             "FileHandler::impl_writeString_nothrow: could not write the log entry!" );
     }
@@ -310,10 +308,7 @@ namespace logging
             OSL_PRECOND(false, "FileHandler::flush: no file!");
             return;
         }
-        #if OSL_DEBUG_LEVEL > 0
-            ::osl::FileBase::RC res =
-        #endif
-                m_pFile->sync();
+        ::osl::FileBase::RC res = m_pFile->sync();
         OSL_ENSURE(res == ::osl::FileBase::E_None, "FileHandler::flush: Could not sync logfile to filesystem.");
     }
 

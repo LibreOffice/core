@@ -158,11 +158,7 @@ namespace utl
         }
     }
 
-    void SAL_CALL CloseableComponentImpl::queryClosing( const EventObject&
-    #ifdef DBG_UTIL
-    Source
-    #endif
-    , sal_Bool /*GetsOwnership*/ ) throw (CloseVetoException, RuntimeException, std::exception)
+    void SAL_CALL CloseableComponentImpl::queryClosing( const EventObject& Source, sal_Bool /*GetsOwnership*/ ) throw (CloseVetoException, RuntimeException, std::exception)
     {
         // as long as we live, somebody wants to keep the object alive. So, veto the
         // closing
@@ -170,11 +166,7 @@ namespace utl
         throw CloseVetoException();
     }
 
-    void SAL_CALL CloseableComponentImpl::notifyClosing( const EventObject&
-    #ifdef DBG_UTIL
-    Source
-    #endif
-    ) throw (RuntimeException, std::exception)
+    void SAL_CALL CloseableComponentImpl::notifyClosing( const EventObject& Source ) throw (RuntimeException, std::exception)
     {
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::notifyClosing: where did this come from?" );
 
@@ -184,11 +176,7 @@ namespace utl
         OSL_FAIL( "CloseableComponentImpl::notifyClosing: unreachable!" );
     }
 
-    void SAL_CALL CloseableComponentImpl::disposing( const EventObject&
-    #ifdef DBG_UTIL
-    Source
-    #endif
-    ) throw (RuntimeException, std::exception)
+    void SAL_CALL CloseableComponentImpl::disposing( const EventObject& Source ) throw (RuntimeException, std::exception)
     {
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::disposing: where did this come from?" );
         OSL_FAIL( "CloseableComponentImpl::disposing: unreachable!" );
