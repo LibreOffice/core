@@ -1022,10 +1022,6 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             InvalidateOneWin(*pWin,aRect);
             pWin->SetFillColor();
             pWin->SetLineColor(COL_BLACK);
-            pWin->DrawPixel(aRect.TopLeft());
-            pWin->DrawPixel(aRect.TopRight());
-            pWin->DrawPixel(aRect.BottomLeft());
-            pWin->DrawPixel(aRect.BottomRight());
         }
         // and now the Outliner itself
         if (!bTextEditDontDelete) delete pTEOutliner;
