@@ -845,6 +845,14 @@ const OUString& RemoteFilesDialog::GetStandardDir() const
 void RemoteFilesDialog::SetPath( const OUString& rNewURL )
 {
     m_sPath = rNewURL;
+
+    if( m_eMode == REMOTEDLG_MODE_SAVE )
+    {
+        INetURLObject aUrl( m_sPath );
+        OUString sFileName = aUrl.GetLastName( INetURLObject::DECODE_WITH_CHARSET );
+
+        m_pName_ed->SetText( sFileName );
+    }
 }
 
 void RemoteFilesDialog::AddFilterGroup(
