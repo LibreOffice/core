@@ -126,6 +126,16 @@ OFlowChainedText::OFlowChainedText(Outliner *pOutl)
     mpNonOverflowingTxt = pOutl->GetNonOverflowingText();
 }
 
+ESelection OFlowChainedText::GetInsertionPointSel() const
+{
+    return mpOverflowingTxt->GetInsertionPointSel();
+}
+
+ESelection OFlowChainedText::GetOverflowPointSel() const
+{
+    return mpNonOverflowingTxt->GetOverflowPointSel();
+}
+
 OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOutliner, OutlinerParaObject *pTextToBeMerged)
 {
     // Just return the roughly merged paras fpr now

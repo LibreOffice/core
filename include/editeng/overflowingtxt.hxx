@@ -49,7 +49,6 @@ private:
     OverflowingText(EditTextObject *pTObj);
 
     const EditTextObject *mpContentTextObj;
-    ESelection maInsertionPointSel;
 };
 
 class NonOverflowingText {
@@ -81,7 +80,8 @@ class EDITENG_DLLPUBLIC OFlowChainedText {
         OutlinerParaObject *CreateOverflowingParaObject(Outliner *, OutlinerParaObject *);
         OutlinerParaObject *CreateNonOverflowingParaObject(Outliner *);
 
-        ESelection GetInsertionPointSel() const { return mpOverflowingTxt->GetInsertionPointSel(); }
+        ESelection GetInsertionPointSel() const;
+        ESelection GetOverflowPointSel() const;
 
     protected:
         void impSetOutlinerToEmptyTxt(Outliner *);

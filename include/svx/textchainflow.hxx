@@ -62,7 +62,12 @@ class TextChainFlow {
 
     //  -- Protected Members --
     protected:
+
+    // Cursor related
+    bool mbPossiblyCursorOut;
     CursorChainingEvent maCursorEvent;
+    ESelection maOverflowPosSel;
+
 
     void impCheckForFlowEvents(SdrOutliner *, SdrOutliner *);
 
@@ -80,8 +85,10 @@ class TextChainFlow {
 
     //  -- Private Members --
     private:
+    // XXX: It would be nice to get rid of this
+    bool mbOFisUFinduced;
 
-    void impUpdateCursorInfo(SdrOutliner *, bool);
+    void impUpdateCursorInfo();
 
     SdrTextObj *mpTargetLink;
     SdrTextObj *mpNextLink;
@@ -96,8 +103,6 @@ class TextChainFlow {
     OFlowChainedText *mpOverflChText;
     UFlowChainedText *mpUnderflChText;
 
-    // XXX: It would be nice to get rid of this
-    bool mbOFisUFinduced;
 };
 
 

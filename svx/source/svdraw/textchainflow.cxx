@@ -38,7 +38,8 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
     mpOverflChText = NULL;
     mpUnderflChText = NULL;
 
-    maCursorEvent = CursorChainingEvent::UNCHANGED;
+    maCursorEvent = CursorChainingEvent::NULL_EVENT;
+    mbPossiblyCursorOut = false;
 }
 
 
@@ -79,8 +80,6 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     bOverflow = bIsPageOverflow && mpNextLink;
     bUnderflow = !bIsPageOverflow &&  mpNextLink && mpNextLink->HasText();
 
-    impUpdateCursorInfo(pFlowOutl, bOverflow);
-
     if (pParamOutl != NULL)
     {
         pFlowOutl->SetUpdateMode(bOldUpdateMode);
@@ -92,22 +91,22 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     // Set current underflowing text (if any)
     mpUnderflChText = bUnderflow ? new UFlowChainedText(pFlowOutl) : NULL;
 
+    // NOTE: Must be called after mp*ChText abd b*flow have been set but before mbOFisUFinduced is reset
+    impUpdateCursorInfo();
+
     // To check whether an overflow is underflow induced or not (useful in cursor checking)
     mbOFisUFinduced = bUnderflow;
 
 }
 
-void TextChainFlow::impUpdateCursorInfo(SdrOutliner *, bool bIsOverflow)
+void TextChainFlow::impUpdateCursorInfo()
 {
     // XXX: Maybe we can get rid of mbOFisUFinduced by not allowing handling of more than one event by the same TextChainFlow
     // if this is not an OF triggered during an UF
-    if (bIsOverflow && !mbOFisUFinduced) {
-        bool bCursorOut = true; // XXX: Should have real check
-        if (bCursorOut) {
-            maCursorEvent = CursorChainingEvent::TO_NEXT_LINK;
-        }
-    } else {
-        maCursorEvent = CursorChainingEvent::UNCHANGED;
+
+    mbPossiblyCursorOut = bOverflow && !mbOFisUFinduced;
+    if (mbPossiblyCursorOut) {
+        maOverflowPosSel = ESelection(mpOverflChText->GetOverflowPointSel());
     }
 }
 
@@ -285,21 +284,29 @@ void EditingTextChainFlow::impSetFlowOutlinerParams(SdrOutliner *pFlowOutl, SdrO
     //pFlowOutl->SetEditTextObjectPool(pParamOutl->GetEditTextObjectPool());
 }
 
-void EditingTextChainFlow::impBroadcasCursorInfo() const
+void EditingTextChainFlow::impBroadcastCursorInfo() const
 {
-    GetTextChain()->SetCursorEvent(GetLinkTarget(), maCursorEvent);
-}
+    bool bCursorOut = false;
 
-/*
- *
- * Some notes on how to set style sheets:
- * - save whole edittexts instead of strings only for (Non)OverflowingText; this can be done by the EditEngine::CreateTextObject method and using a selection - probably from ImpEditEngine)
- * - for the refactoring of the previous point we may also add an option for whether we are joining paragraphs or not
- * - When making new OutlinerParaObjs and joining paragraphs we need to first add the string (as we already do) and then, with the appropriate selection, use Outliner::QuickSetAttribs(SfxItemSet(txtObj->GetPool()), aSelectionOfTheNewText)
- * - having all this in a whole class that contains Overflowing and NonOverflowingText would not be bad. This same class could be used to handle a cursor later on.
- *
- *
- *
- */
+    // Possibility: 1) why don't we stop passing the actual event to the TextChain and instead we pass
+    //              the overflow pos and mbPossiblyCursorOut
+    //              2) We pass the current selection before anything happens and we make impBroadcastCursorInfo compute it.
+
+    if (mbPossiblyCursorOut) {
+        ESelection aPreChainingSel = GetTextChain()->GetPreChainingSel(GetLinkTarget()) ;
+        bCursorOut = maOverflowPosSel.IsLess(aPreChainingSel);
+    }
+
+    if (bCursorOut) {
+            //maCursorEvent = CursorChainingEvent::TO_NEXT_LINK;
+            // XXX: GetTextChain()->SetPostChainingPos()sdasd)
+            GetTextChain()->SetCursorEvent(GetLinkTarget(), CursorChainingEvent::TO_NEXT_LINK);
+    } else {
+        //maCursorEvent = CursorChainingEvent::UNCHANGED;
+        GetTextChain()->SetCursorEvent(GetLinkTarget(), CursorChainingEvent::UNCHANGED);
+    }
+
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
