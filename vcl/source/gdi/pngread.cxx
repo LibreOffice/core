@@ -1360,8 +1360,10 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 {
                     OSL_ENSURE(mpScanline, "No Scanline allocated (!)");
                     OSL_ENSURE(mpScanlineAlpha, "No ScanlineAlpha allocated (!)");
+#if OSL_DEBUG_LEVEL > 0
                     OSL_ENSURE(mnAllocSizeScanline >= maOrigSize.Width() * 3, "Allocated Scanline too small (!)");
                     OSL_ENSURE(mnAllocSizeScanlineAlpha >= maOrigSize.Width(), "Allocated ScanlineAlpha too small (!)");
+#endif
                     sal_uInt8* pScanline(mpScanline);
                     sal_uInt8* pScanlineAlpha(mpScanlineAlpha);
 
@@ -1495,7 +1497,9 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 if(bDoDirectScanline)
                 {
                     OSL_ENSURE(mpScanline, "No Scanline allocated (!)");
+#if OSL_DEBUG_LEVEL > 0
                     OSL_ENSURE(mnAllocSizeScanline >= maOrigSize.Width() * 3, "Allocated Scanline too small (!)");
+#endif
                     sal_uInt8* pScanline(mpScanline);
 
                     for (long nX(0); nX < maOrigSize.Width(); nX++, pTmp += 3)

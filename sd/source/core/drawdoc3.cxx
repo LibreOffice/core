@@ -1565,10 +1565,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                     if (pMySheet)
                     {
                         // A stylesheet of the same name already exists -> overwrite contents
-#ifdef DBG_UTIL
-                        bool bTest =
-#endif
-                            pMySheet->SetName(pHisSheet->GetName());
+                        bool bTest = pMySheet->SetName(pHisSheet->GetName());
                         DBG_ASSERT(bTest, "Renaming StyleSheet failed.");
                         pMySheet->GetItemSet().ClearItem(0);  // Delete all
 

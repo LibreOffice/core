@@ -77,9 +77,7 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
         {
             OSL_FAIL("marshalling failed");
 
-            #if OSL_DEBUG_LEVEL > 0
             HGLOBAL hGlobal =
-            #endif
                 GlobalFree(m_hGlobal);
             OSL_ENSURE(NULL == hGlobal, "GlobalFree failed");
             m_hGlobal = NULL;

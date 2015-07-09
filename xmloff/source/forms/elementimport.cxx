@@ -936,10 +936,7 @@ namespace xmloff
         Property aProp = _rxPropInfo->getPropertyByName(_rPropValue.Name);
         // the untranslated string value as read in handleAttribute
         OUString sValue;
-    #if OSL_DEBUG_LEVEL > 0
-        bool bSuccess =
-    #endif
-        _rPropValue.Value >>= sValue;
+        bool bSuccess = _rPropValue.Value >>= sValue;
         OSL_ENSURE(bSuccess, "OControlImport::implTranslateValueProperty: supposed to be called with non-translated string values!");
 
         if (TypeClass_ANY == aProp.Type.getTypeClass())

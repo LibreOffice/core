@@ -985,10 +985,7 @@ void SvImpLBox::MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop )
             {
                 if( !pView->IsExpanded( pParent ) )
                 {
-                    #ifdef DBG_UTIL
-                    bool bRet =
-                    #endif
-                        pView->Expand( pParent );
+                    bool bRet = pView->Expand( pParent );
                     DBG_ASSERT(bRet,"Not expanded!");
                 }
                 pParent = pView->GetParent( pParent );

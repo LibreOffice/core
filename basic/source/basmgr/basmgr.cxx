@@ -184,10 +184,8 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
     if( !pMgr->GetLib( aLibName ) )
     {
         BasicManager* pBasMgr = static_cast< BasicManager* >( pMgr );
-#ifdef DBG_UTIL
         StarBASIC* pLib =
-#endif
-        pBasMgr->CreateLibForLibContainer( aLibName, xScriptCont );
+            pBasMgr->CreateLibForLibContainer( aLibName, xScriptCont );
         DBG_ASSERT( pLib, "XML Import: Basic library could not be created");
     }
 
@@ -308,10 +306,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
     Event.Accessor >>= aName;
 
     // Replace not possible for library container
-#ifdef DBG_UTIL
-    bool bLibContainer = maLibName.isEmpty();
-#endif
-    DBG_ASSERT( !bLibContainer, "library container fired elementReplaced()");
+    DBG_ASSERT( !maLibName.isEmpty(), "library container fired elementReplaced()");
 
     StarBASIC* pLib = mpMgr->GetLib( maLibName );
     if( pLib )
@@ -2287,10 +2282,7 @@ void SAL_CALL StarBasicAccess_Impl::createLibrary
     throw(container::ElementExistException, uno::RuntimeException, std::exception)
 {
     (void)ExternalSourceURL;
-#ifdef DBG_UTIL
-    StarBASIC* pLib =
-#endif
-    mpMgr->CreateLib( LibName, Password, LinkTargetURL );
+    StarBASIC* pLib = mpMgr->CreateLib( LibName, Password, LinkTargetURL );
     DBG_ASSERT( pLib, "XML Import: Basic library could not be created");
 }
 

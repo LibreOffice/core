@@ -1338,9 +1338,7 @@ void SvListView::Impl::ActionInserted( SvTreeListEntry* pEntry )
     DBG_ASSERT(pEntry,"Insert:No Entry");
     SvViewDataEntry* pData = m_rThis.CreateViewData( pEntry );
     m_rThis.InitViewData( pData, pEntry );
-    #ifdef DBG_UTIL
     std::pair<SvDataTable::iterator, bool> aSuccess =
-    #endif
         m_DataTable.insert( pEntry, pData );
     DBG_ASSERT(aSuccess.second,"Entry already in View");
     if (m_nVisibleCount && m_rThis.pModel->IsEntryVisible(&m_rThis, pEntry))

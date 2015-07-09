@@ -275,10 +275,7 @@ namespace xmloff
             return;
         }
 
-#if OSL_DEBUG_LEVEL > 0
-        bool bPageIsKnown =
-#endif
-            implMoveIterators(_rxDrawPage, false);
+        bool bPageIsKnown = implMoveIterators(_rxDrawPage, false);
         OSL_ENSURE(bPageIsKnown, "OFormLayerXMLExport_Impl::exportForms: exporting a page which has not been examined!");
 
         // export forms collection
@@ -414,10 +411,7 @@ namespace xmloff
         }
 
         // move the iterator which specify the currently handled page
-#if OSL_DEBUG_LEVEL > 0
-        bool bPageIsKnown =
-#endif
-            implMoveIterators(_rxDrawPage, true);
+        bool bPageIsKnown = implMoveIterators(_rxDrawPage, true);
         OSL_ENSURE(!bPageIsKnown, "OFormLayerXMLExport_Impl::examineForms: examining a page twice!");
 
         ::std::stack< Reference< XIndexAccess > >   aContainerHistory;
@@ -752,10 +746,8 @@ namespace xmloff
     {
         Reference< XPropertySet > xProps( _rxControl, UNO_QUERY );
         OSL_ENSURE( xProps.is(), "OFormLayerXMLExport_Impl::excludeFromExport: invalid control model!" );
-#if OSL_DEBUG_LEVEL > 0
         ::std::pair< PropertySetBag::iterator, bool > aPos =
-#endif
-        m_aIgnoreList.insert( xProps );
+              m_aIgnoreList.insert( xProps );
         OSL_ENSURE( aPos.second, "OFormLayerXMLExport_Impl::excludeFromExport: element already exists in the ignore list!" );
     }
 

@@ -50,9 +50,8 @@ namespace dbaui
         void SetControlText( sal_uInt16 nControlId, const OUString& rText );
         OUString GetControlText( sal_uInt16 nControlId );
         void SetReadOnly( bool bReadOnly );
-#if OSL_DEBUG_LEVEL > 0
         OTableEditorCtrl* GetEditorCtrl();
-#endif
+
         // short GetFormatCategory(OFieldDescription* pFieldDescr);
         // gives you one of the CAT_xxx-values (CAT_NUMBER, CAT_DATE ...) belonging to the format specified by the field
 

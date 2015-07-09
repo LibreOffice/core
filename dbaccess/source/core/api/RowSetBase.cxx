@@ -242,9 +242,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
             ORowSetValueVector* pTemp = k->get();
             OSL_ENSURE( pTemp != reinterpret_cast<void*>(0xfeeefeee),"HALT!" );
         }
-#endif
         OSL_ENSURE(!m_aCurrentRow.isNull() && m_aCurrentRow < m_pCache->getEnd() && aCacheIter != m_pCache->m_aCacheIterators.end(),"Invalid iterator set for currentrow!");
-#if OSL_DEBUG_LEVEL > 0
         ORowSetRow rRow = (*m_aCurrentRow);
         OSL_ENSURE(rRow.is() && static_cast<sal_uInt16>(columnIndex) < (rRow->get()).size(),"Invalid size of vector!");
 #endif

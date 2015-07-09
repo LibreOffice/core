@@ -899,11 +899,7 @@ void XMLSectionExport::ExportBaseIndexSource(
 
 
 void XMLSectionExport::ExportBaseIndexBody(
-    SectionTypeEnum
-    #if OSL_DEBUG_LEVEL > 0
-    eType
-    #endif
-    ,
+    SectionTypeEnum eType,
     const Reference<XPropertySet> &)
 {
     // type not used; checked anyway.

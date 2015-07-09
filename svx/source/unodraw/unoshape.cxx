@@ -2182,9 +2182,7 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
             SdrObjList* pObjList = mpObj->GetObjList();
             if( pObjList )
             {
-#ifdef DBG_UTIL
                 SdrObject* pCheck =
-#endif
                             pObjList->SetObjectOrdNum( mpObj->GetOrdNum(), static_cast<size_t>(nNewOrdNum) );
                 DBG_ASSERT( pCheck == mpObj.get(), "GetOrdNum() failed!" );
             }

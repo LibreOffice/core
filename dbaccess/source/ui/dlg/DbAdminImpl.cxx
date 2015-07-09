@@ -883,7 +883,6 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty(const Reference< X
     lcl_putProperty(_rxSet, _rName,aValue);
 }
 
-#if OSL_DEBUG_LEVEL > 0
 OString ODbDataSourceAdministrationHelper::translatePropertyId( sal_Int32 _nId )
 {
     OUString aString;
@@ -903,8 +902,6 @@ OString ODbDataSourceAdministrationHelper::translatePropertyId( sal_Int32 _nId )
     OString aReturn( aString.getStr(), aString.getLength(), RTL_TEXTENCODING_ASCII_US );
     return aReturn;
 }
-
-#endif
 
 void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet, sal_Int32  _nId, const Any& _rValue )
 {

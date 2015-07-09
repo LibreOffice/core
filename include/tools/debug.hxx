@@ -101,15 +101,6 @@ inline void DbgSetTestSolarMutex( DbgTestSolarMutexProc pProc )
     DbgFunc( DBG_FUNC_SETTESTSOLARMUTEX, reinterpret_cast<void*>(reinterpret_cast<sal_uIntPtr>(pProc)) );
 }
 
-#define DBG_ASSERTWARNING( sCon, aWarning ) \
-    SAL_DETAIL_INFO_IF_FORMAT(!(sCon), "legacy.tools", "%s", aWarning)
-
-#define DBG_ASSERT( sCon, aError ) \
-    SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.tools", "%s", aError)
-
-#define DBG_WARNING( aWarning ) \
-    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", "%s", aWarning)
-
 #define DBG_TESTSOLARMUTEX()                \
 do                                          \
 {                                           \
@@ -119,13 +110,18 @@ do                                          \
 #else
 // NO DBG_UITL
 
-#define DBG_ASSERTWARNING( sCon, aWarning ) ((void)0)
-#define DBG_ASSERT( sCon, aError ) ((void)0)
-#define DBG_WARNING( aWarning ) ((void)0)
-
 #define DBG_TESTSOLARMUTEX() ((void)0)
 
 #endif
+
+#define DBG_ASSERTWARNING( sCon, aWarning ) \
+    SAL_DETAIL_INFO_IF_FORMAT(!(sCon), "legacy.tools", "%s", aWarning)
+
+#define DBG_ASSERT( sCon, aError ) \
+    SAL_DETAIL_WARN_IF_FORMAT(!(sCon), "legacy.tools", "%s", aError)
+
+#define DBG_WARNING( aWarning ) \
+    SAL_DETAIL_INFO_IF_FORMAT(true, "legacy.tools", "%s", aWarning)
 
 #endif
 

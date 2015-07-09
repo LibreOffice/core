@@ -869,7 +869,6 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, b
 }
 
 //  debug methods
-#ifdef DBG_UTIL
 
 // addText, updateText
 bool ProgressMonitor::impl_debug_checkParameter (
@@ -897,8 +896,6 @@ bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, bool /
     // Parameter OK ... return true.
     return true;
 }
-
-#endif  // #ifdef DBG_UTIL
 
 }   // namespace unocontrols
 

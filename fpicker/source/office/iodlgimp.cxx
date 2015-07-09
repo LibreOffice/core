@@ -266,9 +266,6 @@ void SvtExpFileDlg_Impl::SetStandardDir( const OUString& _rDir )
         _aStdDir = "file:///";
 }
 
-
-#if defined DBG_UTIL
-
 namespace {
     OUString lcl_DecoratedFilter( const OUString& _rOriginalFilter )
     {
@@ -279,8 +276,6 @@ namespace {
         return aDecoratedFilter.makeStringAndClear();
     }
 }
-#endif
-
 
 void SvtExpFileDlg_Impl::ClearFilterList( )
 {

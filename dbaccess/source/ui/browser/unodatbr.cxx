@@ -1006,10 +1006,7 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
                 {
                     // if it's the slot for the document data source, remember the state
                     Sequence< PropertyValue > aDescriptor;
-    #if OSL_DEBUG_LEVEL > 0
-                    bool bProperFormat =
-    #endif
-                    _rEvent.State >>= aDescriptor;
+                    bool bProperFormat = _rEvent.State >>= aDescriptor;
                     OSL_ENSURE(bProperFormat, "SbaTableQueryBrowser::statusChanged: need a data access descriptor here!");
                     m_aDocumentDataSource.initializeFrom(aDescriptor);
 
@@ -1879,10 +1876,8 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                 OUString sNewQueryCommand;
                 bool bNewQueryEP;
 
-#if OSL_DEBUG_LEVEL > 0
                 bool bIsQuery =
-#endif
-                implGetQuerySignature( sNewQueryCommand, bNewQueryEP );
+                    implGetQuerySignature( sNewQueryCommand, bNewQueryEP );
                 OSL_ENSURE( bIsQuery, "SbaTableQueryBrowser::Execute: was a query before, but is not anymore?" );
 
                 bFullReinit = ( sNewQueryCommand != m_sQueryCommand ) || ( m_bQueryEscapeProcessing != bNewQueryEP );
@@ -3318,13 +3313,10 @@ bool SbaTableQueryBrowser::getExistentConnectionFor( SvTreeListEntry* _pAnyEntry
     return _rConnection.is();
 }
 
-#if OSL_DEBUG_LEVEL > 0
 bool SbaTableQueryBrowser::impl_isDataSourceEntry( SvTreeListEntry* _pEntry ) const
 {
     return m_pTreeModel->GetRootLevelParent( _pEntry ) == _pEntry;
 }
-
-#endif
 
 bool SbaTableQueryBrowser::ensureConnection( SvTreeListEntry* _pDSEntry, void* pDSData, SharedConnection& _rConnection )
 {

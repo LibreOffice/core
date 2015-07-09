@@ -91,10 +91,8 @@ namespace abp
                     Reference< XPropertySet > xDialogProps( xDialog, UNO_QUERY );
 
                     Sequence< AliasProgrammaticPair > aMapping;
-#ifdef DBG_UTIL
                     bool bSuccess =
-#endif
-                    xDialogProps->getPropertyValue("FieldMapping") >>= aMapping;
+                        xDialogProps->getPropertyValue("FieldMapping") >>= aMapping;
                     DBG_ASSERT( bSuccess, "fieldmapping::invokeDialog: invalid property type for FieldMapping!" );
 
                     // and copy it into the map
@@ -235,10 +233,10 @@ namespace abp
 #ifdef DBG_UTIL
                 OUString sRedundantProgrammaticName;
                 aFields.openNode( *pExistentFields ).getNodeValue( sProgrammaticNodeName ) >>= sRedundantProgrammaticName;
-#endif
                 DBG_ASSERT( sRedundantProgrammaticName == *pExistentFields,
                     "fieldmapping::writeTemplateAddressFieldMapping: inconsistent config data!" );
                     // there should be a redundancy in the config data .... if this asserts, there isn't anymore!
+#endif
 
                 // do we have a new alias for the programmatic?
                 MapString2String::iterator aPos = aFieldAssignment.find( *pExistentFields );

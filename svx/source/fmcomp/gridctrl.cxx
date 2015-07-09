@@ -3550,9 +3550,7 @@ void DbGridControl::DisconnectFromFields()
     ColumnFieldValueListeners* pListeners = static_cast<ColumnFieldValueListeners*>(m_pFieldListeners);
     while (!pListeners->empty())
     {
-#ifdef DBG_UTIL
         sal_Int32 nOldSize = pListeners->size();
-#endif
         pListeners->begin()->second->dispose();
         DBG_ASSERT(nOldSize > (sal_Int32)pListeners->size(), "DbGridControl::DisconnectFromFields : dispose on a listener should result in a removal from my list !");
     }

@@ -293,11 +293,7 @@ int main(int argc, char* argv[])
             ulRet = SUCCESS_SUCCESS;
 
     }
-    catch (const std::runtime_error&
-    #if OSL_DEBUG_LEVEL > 0
-    ex
-    #endif
-    )
+    catch (const std::runtime_error& ex)
     {
         OSL_FAIL(ex.what());
     }
