@@ -236,7 +236,7 @@ void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     }
 }
 
-void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
+void OutlineView::AddWindowToPaintView(OutputDevice* pWin, vcl::Window* pWindow)
 {
     bool bAdded = false;
     bool bValidArea = false;
@@ -270,7 +270,7 @@ void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
     // white background in Outliner
     pWin->SetBackground( Wallpaper( aWhiteColor ) );
 
-    ::sd::View::AddWindowToPaintView(pWin);
+    ::sd::View::AddWindowToPaintView(pWin, pWindow);
 }
 
 void OutlineView::DeleteWindowFromPaintView(OutputDevice* pWin)

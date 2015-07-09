@@ -225,7 +225,7 @@ public:
     bool SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr);
 
     // Intern: at mounting new OutlinerView...
-    virtual void AddWindowToPaintView(OutputDevice* pNewWin) SAL_OVERRIDE;
+    virtual void AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow) SAL_OVERRIDE;
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin) SAL_OVERRIDE;
 
     sal_uInt16 GetSelectionLevel() const;

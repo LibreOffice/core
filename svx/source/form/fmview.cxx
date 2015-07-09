@@ -199,9 +199,9 @@ namespace
 }
 
 
-void FmFormView::AddWindowToPaintView(OutputDevice* pNewWin)
+void FmFormView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow)
 {
-    E3dView::AddWindowToPaintView(pNewWin);
+    E3dView::AddWindowToPaintView(pNewWin, pWindow);
 
     if ( !pNewWin )
         return;

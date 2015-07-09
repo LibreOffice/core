@@ -812,7 +812,7 @@ bool SlideshowImpl::startPreview(
 
         if( mpView )
         {
-            mpView->AddWindowToPaintView( mpShowWindow );
+            mpView->AddWindowToPaintView( mpShowWindow, 0 );
             mpView->SetAnimationPause( true );
         }
 
@@ -1006,7 +1006,7 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             if( mpView )
             {
-                mpView->AddWindowToPaintView( mpShowWindow );
+                mpView->AddWindowToPaintView( mpShowWindow, 0 );
                 mpView->SetAnimationPause( true );
             }
 

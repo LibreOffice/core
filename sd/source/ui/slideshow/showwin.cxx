@@ -614,7 +614,7 @@ void ShowWindow::DeleteWindowFromPaintView()
 void ShowWindow::AddWindowToPaintView()
 {
     if( mpViewShell->GetView() )
-        mpViewShell->GetView()->AddWindowToPaintView( this );
+        mpViewShell->GetView()->AddWindowToPaintView( this, 0 );
 
     sal_uInt16 nChild = GetChildCount();
     while( nChild-- )
