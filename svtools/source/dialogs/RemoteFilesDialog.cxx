@@ -592,6 +592,8 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
             pRoot->SetUserData( static_cast< void* >( sData ) );
 
             m_pTreeView->Expand( pRoot );
+
+            m_pName_ed->GrabFocus();
         }
     }
 
