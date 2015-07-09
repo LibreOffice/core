@@ -1537,7 +1537,7 @@ void OJoinTableView::clearLayoutInformation()
     {
         if ( aIter->second )
             aIter->second->clearListBox();
-        aIter->second = NULL;
+        aIter->second.disposeAndClear();
     }
 
     m_aTableMap.clear();
