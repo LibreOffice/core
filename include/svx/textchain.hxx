@@ -116,6 +116,7 @@ class ImpChainLinkProperties
         INIT_CHAIN_PROP(NilChainingEvent, false)
         INIT_CHAIN_PROP(CursorEvent, CursorChainingEvent::NULL_EVENT)
         INIT_CHAIN_PROP(PreChainingSel, ESelection(0,0,0,0));
+        INIT_CHAIN_PROP(PostChainingSel, ESelection(0,0,0,0));
     }
 
     private:
@@ -123,6 +124,7 @@ class ImpChainLinkProperties
     DECL_CHAIN_PROP(NilChainingEvent, bool)
     DECL_CHAIN_PROP(CursorEvent, CursorChainingEvent)
     DECL_CHAIN_PROP(PreChainingSel, ESelection)
+    DECL_CHAIN_PROP(PostChainingSel, ESelection)
 
 };
 
@@ -144,8 +146,7 @@ class TextChain {
     DECL_CHAIN_PROP_INTERFACE(CursorEvent, CursorChainingEvent)
     DECL_CHAIN_PROP_INTERFACE(NilChainingEvent, bool)
     DECL_CHAIN_PROP_INTERFACE(PreChainingSel, ESelection)
-
-
+    DECL_CHAIN_PROP_INTERFACE(PostChainingSel, ESelection)
 
     // return whether a paragraph is split between the two links in the argument
     bool GetLinksHaveMergeableFirstPara(SdrTextObj *, SdrTextObj *);

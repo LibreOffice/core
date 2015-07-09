@@ -87,39 +87,6 @@ OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, Ou
     return pPObj;
 }
 
-/*
-ESelection OverflowingText::impGetEndSelection(Outliner *pOutl) const
-{
-    const sal_Int32 nParaCount = pOutl->GetParagraphCount();
-    const sal_Int32 nLastParaIndex = nParaCount > 1 ? nParaCount - 1 : 0;
-    Paragraph* pLastPara = pOutl->GetParagraph( nLastParaIndex);
-    const sal_Int32 nLenLastPara = pOutl->GetText(pLastPara).getLength();
-    // Selection at end of editing area
-    ESelection aEndSel(nLastParaIndex,nLenLastPara,nLastParaIndex,nLenLastPara);
-    return aEndSel;
-}
-* */
-
-/*
-OUString OverflowingText::GetEndingLines() const
-{
-    // If the only overflowing part is some lines in a paragraph,
-    // the end of the overflowing text is its head.
-    if (!HasOtherParas())
-        return mHeadTxt;
-
-    return mTailTxt;
-}
-
-OUString OverflowingText::GetHeadingLines() const
-{
-    return mHeadTxt;
-}
-* */
-
-
-
-
 OFlowChainedText::OFlowChainedText(Outliner *pOutl)
 {
     mpOverflowingTxt = pOutl->GetOverflowingText();
@@ -143,74 +110,6 @@ OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOut
         return NULL;
 
     return mpOverflowingTxt->GetJuxtaposedParaObject(pOutliner, pTextToBeMerged );
-
-    /*
-    if (mpOverflowingTxt == NULL || pTextToBeMerged == NULL)
-        return NULL;
-
-    pOutliner->SetText(*pTextToBeMerged);
-
-    // Get text of first paragraph of destination box
-    Paragraph *pOldPara0 = pOutliner->GetParagraph(0);
-    OUString aOldPara0Txt;
-    if (pOldPara0)
-        aOldPara0Txt = pOutliner->GetText(pOldPara0);
-
-    // Get other paras of destination box (from second on)
-    OutlinerParaObject *pOldParasTail = NULL;
-    if (pOutliner->GetParagraphCount() > 1)
-        pOldParasTail = pOutliner->CreateParaObject(1);
-
-    // Create ParaObject appending old first para in the dest. box
-    //   to last part of overflowing text
-    Paragraph *pTmpPara0 = NULL;
-    OutlinerParaObject *pJoiningPara = NULL;
-
-    if (pOldPara0) {
-        //pOutliner->Clear(); // you need a clear outliner here
-        pOutliner->SetToEmptyText();
-
-        pTmpPara0 = pOutliner->GetParagraph(0);
-        pOutliner->SetText(mpOverflowingTxt->GetEndingLines() + aOldPara0Txt, pTmpPara0);
-        pJoiningPara = pOutliner->CreateParaObject();
-    }
-
-    // Create a Para Object out of mpMidParas
-    // (in order to use the SfxItemPool of the current outliner
-    //  instead of the ones currently in mpMidParas)
-
-    // start actual composition
-    //pOutliner->Clear();
-    pOutliner->SetToEmptyText();
-
-    // Set headText at the beginning of box
-    OUString aHeadTxt = mpOverflowingTxt->GetHeadingLines();
-    // If we haven't used heading text yet
-    if (mpOverflowingTxt->HasOtherParas()) {
-        Paragraph *pNewPara0 = pOutliner->GetParagraph(0);
-        pOutliner->SetText(aHeadTxt, pNewPara0);
-    }
-
-    // Set all the intermediate Paras
-    if (mpOverflowingTxt->mpMidParas)
-        pOutliner->AddText(*mpOverflowingTxt->mpMidParas);
-
-    // Append old first para in the destination box to
-    //   last part of overflowing text
-    if (pJoiningPara && mpOverflowingTxt->HasOtherParas())
-        pOutliner->AddText(*pJoiningPara);
-    // this second case is if there is to avoid getting an empty line before pJoiningPara
-    else if (pJoiningPara && !mpOverflowingTxt->HasOtherParas())
-        pOutliner->SetText(*pJoiningPara);
-
-    // Append all other old paras
-    if (pOldParasTail)
-        pOutliner->AddText(*pOldParasTail);
-
-    // Draw everything
-    OutlinerParaObject *pNewText = pOutliner->CreateParaObject();
-    return pNewText;
-    * */
 }
 
 OutlinerParaObject *OFlowChainedText::CreateNonOverflowingParaObject(Outliner *pOutliner)
@@ -220,7 +119,6 @@ OutlinerParaObject *OFlowChainedText::CreateNonOverflowingParaObject(Outliner *p
 
     return mpNonOverflowingTxt->ToParaObject(pOutliner);
 }
-
 
 UFlowChainedText::UFlowChainedText(Outliner *pOutl)
 {

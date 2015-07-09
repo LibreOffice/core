@@ -45,7 +45,10 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
 
 TextChainFlow::~TextChainFlow()
 {
-
+    if (mpOverflChText)
+        delete mpOverflChText;
+    if (mpUnderflChText)
+        delete mpUnderflChText;
 }
 
 void TextChainFlow::impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *)
@@ -105,8 +108,10 @@ void TextChainFlow::impUpdateCursorInfo()
     // if this is not an OF triggered during an UF
 
     mbPossiblyCursorOut = bOverflow && !mbOFisUFinduced;
-    if (mbPossiblyCursorOut) {
+    if (mbPossiblyCursorOut) { // if this is false, mpOverflChText might be NULL
         maOverflowPosSel = ESelection(mpOverflChText->GetOverflowPointSel());
+        // After the chaining event the cursor is where the text from the source box merged with the rest
+        maPostChainingSel = ESelection(mpOverflChText->GetInsertionPointSel());
     }
 }
 
@@ -241,23 +246,6 @@ void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
     impBroadcastCursorInfo();
 }
 
-/*
-void EditingTextChainFlow::ExecuteOverflow(SdrOutliner *pOutl1, SdrOutliner *pOutl2)
-{
-
-
-    impSetTextForEditingOutliner
-
-    // Set cursor
-    pEditView->pImpEditView->SetEditSelection( aCurSel );
-    pEditView->pImpEditView->DrawSelection();
-    pEditView->ShowCursor( true, false );
-
-
-}
-*
-* */
-
 void EditingTextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
     OutlinerParaObject *pNewText = impGetNonOverflowingParaObject(pNonOverflOutl);
@@ -279,27 +267,26 @@ void EditingTextChainFlow::impSetFlowOutlinerParams(SdrOutliner *pFlowOutl, SdrO
     pFlowOutl->SetMaxAutoPaperSize(pParamOutl->GetMaxAutoPaperSize());
     pFlowOutl->SetMinAutoPaperSize(pParamOutl->GetMinAutoPaperSize());
     pFlowOutl->SetPaperSize(pParamOutl->GetPaperSize());
-
-    // Set right text attributes // XXX: Not enough: it does not handle complex attributes
-    //pFlowOutl->SetEditTextObjectPool(pParamOutl->GetEditTextObjectPool());
 }
 
 void EditingTextChainFlow::impBroadcastCursorInfo() const
 {
     bool bCursorOut = false;
 
+    // NOTE: I handled already the stuff for the comments below. They will be kept temporarily till stuff settles down.
     // Possibility: 1) why don't we stop passing the actual event to the TextChain and instead we pass
     //              the overflow pos and mbPossiblyCursorOut
     //              2) We pass the current selection before anything happens and we make impBroadcastCursorInfo compute it.
 
     if (mbPossiblyCursorOut) {
         ESelection aPreChainingSel = GetTextChain()->GetPreChainingSel(GetLinkTarget()) ;
+        // Test whether the cursor is out of the box.
         bCursorOut = maOverflowPosSel.IsLess(aPreChainingSel);
     }
 
     if (bCursorOut) {
             //maCursorEvent = CursorChainingEvent::TO_NEXT_LINK;
-            // XXX: GetTextChain()->SetPostChainingPos()sdasd)
+            GetTextChain()->SetPostChainingSel(GetLinkTarget(), maPostChainingSel);
             GetTextChain()->SetCursorEvent(GetLinkTarget(), CursorChainingEvent::TO_NEXT_LINK);
     } else {
         //maCursorEvent = CursorChainingEvent::UNCHANGED;

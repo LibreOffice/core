@@ -67,6 +67,7 @@ class TextChainFlow {
     bool mbPossiblyCursorOut;
     CursorChainingEvent maCursorEvent;
     ESelection maOverflowPosSel;
+    ESelection maPostChainingSel;
 
 
     void impCheckForFlowEvents(SdrOutliner *, SdrOutliner *);
