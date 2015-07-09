@@ -2569,6 +2569,7 @@ void Test::testComplex() {
 }
 
 void Test::testComplexCut() {
+#if WITH_LOCALE_ALL || WITH_LOCALE_ja || WITH_LOCALE_zh
     static ComplexCharSetTest const data[]
         = {
 #if WITH_LOCALE_ALL || WITH_LOCALE_ja
@@ -2660,6 +2661,7 @@ void Test::testComplexCut() {
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         doComplexCharSetCutTest(data[i]);
     }
+#endif
 }
 
 void Test::testSRCBUFFERTOSMALL() {
