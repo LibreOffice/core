@@ -427,6 +427,7 @@ Reference< XUIElement > SAL_CALL UIElementFactoryManager::createUIElement(
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception )
 {
     Reference< XFrame > xFrame;
+    OUString aModuleId;
     { // SAFE
     osl::MutexGuard g(rBHelper.rMutex);
 
@@ -443,6 +444,8 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     {
         if ( Args[i].Name == "Frame")
             Args[i].Value >>= xFrame;
+        if (Args[i].Name == "Module")
+            Args[i].Value >>= aModuleId;
     }
     } // SAFE
 
@@ -451,8 +454,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     // Determine the module identifier
     try
     {
-        OUString aModuleId;
-        if ( xFrame.is() && xManager.is() )
+        if ( aModuleId.isEmpty() && xFrame.is() && xManager.is() )
             aModuleId = xManager->identify( Reference<XInterface>( xFrame, UNO_QUERY ) );
 
         Reference< XUIElementFactory > xUIElementFactory = getFactory( ResourceURL, aModuleId );

@@ -807,6 +807,16 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
             Reference<rendering::XSpriteCanvas> xCanvas (VCLUnoHelper::GetWindow(rxWindow)->GetSpriteCanvas());
             aCreationArguments.put("Canvas", makeAny(xCanvas));
         }
+
+        if (mxCurrentController.is())
+        {
+            OUString aModule = Tools::GetModuleName(mxCurrentController);
+            if (!aModule.isEmpty())
+            {
+                aCreationArguments.put("Module", makeAny(aModule));
+            }
+        }
+
         aCreationArguments.put("ApplicationName", makeAny(rContext.msApplication));
         aCreationArguments.put("ContextName", makeAny(rContext.msContext));
 
