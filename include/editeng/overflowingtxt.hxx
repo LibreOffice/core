@@ -31,6 +31,11 @@ class OutlinerParaObject;
 class EditTextObject;
 class Outliner;
 
+/*
+ * The classes OverflowingText and NonOverflowingText handle the
+ * actual preparation of the OutlinerParaObjects to be used in destination
+ * and source box respectively.
+*/
 
 class OverflowingText
 {
@@ -58,9 +63,7 @@ public:
 
 private:
         // Constructor
-        NonOverflowingText(const EditTextObject *pTObj)
-        : mpContentTextObj(pTObj)
-        { }
+        NonOverflowingText(const EditTextObject *pTObj);
 
         friend class Outliner;
         const EditTextObject *mpContentTextObj;
@@ -69,7 +72,8 @@ private:
 
 /*
  * classes OFlowChainedText and UFlowChainedText:
- * contain and handle the state of a broken up text _after_ a flow event.
+ * contain and handle the state of a broken up text _after_ a flow event
+ * (respectively after Overflow and Underflow).
  *
 */
 

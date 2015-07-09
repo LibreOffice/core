@@ -25,6 +25,9 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 
+
+// Helper function for *OverflowingText classes
+
 ESelection getLastPositionSel(const EditTextObject *pTObj)
 {
     sal_Int32 nLastPara = pTObj->GetParagraphCount()-1;
@@ -37,14 +40,27 @@ ESelection getLastPositionSel(const EditTextObject *pTObj)
     return aEndPos;
 }
 
-OverflowingText::OverflowingText(EditTextObject *pTObj) : mpContentTextObj(pTObj)
+// class OverflowingText
+
+OverflowingText::OverflowingText(EditTextObject *pTObj)
+    : mpContentTextObj(pTObj->Clone())
 {
+    // XXX: may have to delete pTObj
 }
 
 ESelection OverflowingText::GetInsertionPointSel() const
 {
     return getLastPositionSel(mpContentTextObj);
 }
+
+// class NonOverflowingText
+
+NonOverflowingText::NonOverflowingText(const EditTextObject *pTObj)
+    : mpContentTextObj(pTObj->Clone())
+{
+     // XXX: may have to delete pTObj
+}
+
 
 OutlinerParaObject *NonOverflowingText::ToParaObject(Outliner *pOutliner) const
 {
@@ -87,6 +103,8 @@ OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, Ou
     return pPObj;
 }
 
+// class OFlowChainedText
+
 OFlowChainedText::OFlowChainedText(Outliner *pOutl)
 {
     mpOverflowingTxt = pOutl->GetOverflowingText();
@@ -119,6 +137,8 @@ OutlinerParaObject *OFlowChainedText::CreateNonOverflowingParaObject(Outliner *p
 
     return mpNonOverflowingTxt->ToParaObject(pOutliner);
 }
+
+// classes UFlowChainedText
 
 UFlowChainedText::UFlowChainedText(Outliner *pOutl)
 {
