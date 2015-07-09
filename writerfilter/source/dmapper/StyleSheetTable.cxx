@@ -866,9 +866,9 @@ void StyleSheetTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>
 /*-------------------------------------------------------------------------
     sorting helper
   -----------------------------------------------------------------------*/
-typedef std::vector< beans::PropertyValue > _PropValVector;
-class PropValVector : public _PropValVector
+class PropValVector
 {
+    std::vector<beans::PropertyValue> m_aValues;
 public:
     PropValVector(){}
 
@@ -879,25 +879,25 @@ public:
 
 void PropValVector::Insert(const beans::PropertyValue& rVal)
 {
-    _PropValVector::iterator aIt = begin();
-    while(aIt != end())
+    auto aIt = m_aValues.begin();
+    while (aIt != m_aValues.end())
     {
-        if(aIt->Name > rVal.Name)
+        if (aIt->Name > rVal.Name)
         {
-            insert( aIt, rVal );
+            m_aValues.insert( aIt, rVal );
             return;
         }
         ++aIt;
     }
-    push_back(rVal);
+    m_aValues.push_back(rVal);
 }
 uno::Sequence< uno::Any > PropValVector::getValues()
 {
-    uno::Sequence< uno::Any > aRet( size() );
+    uno::Sequence< uno::Any > aRet( m_aValues.size() );
     uno::Any* pValues = aRet.getArray();
     sal_Int32 nVal = 0;
-    _PropValVector::iterator aIt = begin();
-    while(aIt != end())
+    auto aIt = m_aValues.begin();
+    while (aIt != m_aValues.end())
     {
         pValues[nVal++] = aIt->Value;
         ++aIt;
@@ -906,11 +906,11 @@ uno::Sequence< uno::Any > PropValVector::getValues()
 }
 uno::Sequence< OUString > PropValVector::getNames()
 {
-    uno::Sequence< OUString > aRet( size() );
+    uno::Sequence< OUString > aRet( m_aValues.size() );
     OUString* pNames = aRet.getArray();
     sal_Int32 nVal = 0;
-    _PropValVector::iterator aIt = begin();
-    while(aIt != end())
+    auto aIt = m_aValues.begin();
+    while (aIt != m_aValues.end())
     {
         pNames[nVal++] = aIt->Name;
         ++aIt;
