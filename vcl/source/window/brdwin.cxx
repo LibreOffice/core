@@ -1851,27 +1851,32 @@ void ImplBorderWindow::dispose()
 
 void ImplBorderWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    mpBorderView->MouseMove( rMEvt );
+    if (mpBorderView)
+        mpBorderView->MouseMove( rMEvt );
 }
 
 void ImplBorderWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    mpBorderView->MouseButtonDown( rMEvt );
+    if (mpBorderView)
+        mpBorderView->MouseButtonDown( rMEvt );
 }
 
 void ImplBorderWindow::Tracking( const TrackingEvent& rTEvt )
 {
-    mpBorderView->Tracking( rTEvt );
+    if (mpBorderView)
+        mpBorderView->Tracking( rTEvt );
 }
 
 void ImplBorderWindow::Paint( vcl::RenderContext& rRenderContext, const Rectangle& )
 {
-    mpBorderView->DrawWindow(rRenderContext, BORDERWINDOW_DRAW_ALL);
+    if (mpBorderView)
+        mpBorderView->DrawWindow(rRenderContext, BORDERWINDOW_DRAW_ALL);
 }
 
 void ImplBorderWindow::Draw( const Rectangle&, OutputDevice* pOutDev, const Point& rPos )
 {
-    mpBorderView->DrawWindow(*pOutDev, BORDERWINDOW_DRAW_ALL, &rPos);
+    if (mpBorderView)
+        mpBorderView->DrawWindow(*pOutDev, BORDERWINDOW_DRAW_ALL, &rPos);
 }
 
 void ImplBorderWindow::Activate()
