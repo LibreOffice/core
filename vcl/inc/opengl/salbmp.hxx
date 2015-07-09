@@ -98,8 +98,8 @@ private:
 private:
 
     bool ImplScaleFilter( const double& rScaleX, const double& rScaleY, GLenum nFilter );
-    static void ImplCreateKernel( const double& fScale, const Kernel& rKernel, GLfloat*& pWeights, sal_uInt32& aKernelSize );
-    bool ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel );
+    static void ImplCreateKernel( const double& fScale, const vcl::Kernel& rKernel, GLfloat*& pWeights, sal_uInt32& aKernelSize );
+    bool ImplScaleConvolution(const double& rScaleX, const double& rScaleY, const vcl::Kernel& rKernel);
     bool ImplScaleArea( double rScaleX, double rScaleY );
 
 public:

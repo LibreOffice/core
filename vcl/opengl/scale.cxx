@@ -28,6 +28,14 @@
 #include "opengl/program.hxx"
 #include "opengl/texture.hxx"
 
+#include <ResampleKernel.hxx>
+
+using vcl::Kernel;
+using vcl::Lanczos3Kernel;
+using vcl::BicubicKernel;
+using vcl::BilinearKernel;
+using vcl::BoxKernel;
+
 class ScaleOp : public OpenGLSalBitmapOp
 {
 private:

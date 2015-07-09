@@ -20,7 +20,6 @@
 #ifndef INCLUDED_VCL_BITMAP_HXX
 #define INCLUDED_VCL_BITMAP_HXX
 
-#include <boost/math/special_functions/sinc.hpp>
 #include <tools/color.hxx>
 #include <tools/link.hxx>
 #include <tools/solar.h>
@@ -217,106 +216,6 @@ private:
 
 };
 
-// Resample kernels
-
-class Kernel
-{
-
-public:
-                    Kernel () {}
-    virtual         ~Kernel() {}
-
-    virtual double  GetWidth() const = 0;
-    virtual double  Calculate( double x ) const = 0;
-};
-
-class Lanczos3Kernel : public Kernel
-{
-public:
-                    Lanczos3Kernel() : Kernel () {}
-
-    virtual double  GetWidth() const SAL_OVERRIDE { return 3.0; }
-    virtual double  Calculate (double x) const SAL_OVERRIDE
-    {
-        return (-3.0 <= x && x < 3.0) ? SincFilter(x) * SincFilter( x / 3.0 ) : 0.0;
-    }
-
-    static inline double SincFilter(double x)
-    {
-        if (x == 0.0)
-        {
-            return 1.0;
-        }
-        x = x * M_PI;
-        return boost::math::sinc_pi(x, SincPolicy());
-    }
-
-private:
-    typedef boost::math::policies::policy<
-        boost::math::policies::promote_double<false> > SincPolicy;
-};
-
-class BicubicKernel : public Kernel
-{
-public:
-                    BicubicKernel() : Kernel () {}
-
-private:
-    virtual double  GetWidth() const SAL_OVERRIDE { return 2.0; }
-    virtual double  Calculate (double x) const SAL_OVERRIDE
-    {
-        if (x < 0.0)
-        {
-            x = -x;
-        }
-
-        if (x <= 1.0)
-        {
-            return (1.5 * x - 2.5) * x * x + 1.0;
-        }
-        else if (x < 2.0)
-        {
-            return ((-0.5 * x + 2.5) * x - 4) * x + 2;
-        }
-        return 0.0;
-    }
-};
-
-class BilinearKernel : public Kernel
-{
-public:
-                    BilinearKernel() : Kernel () {}
-private:
-    virtual double  GetWidth() const SAL_OVERRIDE { return 1.0; }
-    virtual double  Calculate (double x) const SAL_OVERRIDE
-    {
-        if (x < 0.0)
-        {
-            x = -x;
-        }
-        if (x < 1.0)
-        {
-            return 1.0-x;
-        }
-        return 0.0;
-    }
-};
-
-class BoxKernel : public Kernel
-{
-public:
-                    BoxKernel() : Kernel () {}
-
-private:
-    virtual double  GetWidth() const SAL_OVERRIDE { return 0.5; }
-    virtual double  Calculate (double x) const SAL_OVERRIDE
-    {
-        if (-0.5 <= x && x < 0.5)
-            return 1.0;
-        return 0.0;
-    }
-};
-
 class   BitmapInfoAccess;
 class   BitmapReadAccess;
 class   BitmapWriteAccess;
@@ -328,6 +227,10 @@ class   GDIMetaFile;
 class   AlphaMask;
 class   OutputDevice;
 class   SalBitmap;
+namespace vcl
+{
+    class Kernel;
+}
 
 struct BitmapSystemData
 {
@@ -826,7 +729,7 @@ public:
     SAL_DLLPRIVATE void     ImplAdaptBitCount(Bitmap& rNew) const;
     SAL_DLLPRIVATE bool     ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE bool     ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
-    SAL_DLLPRIVATE bool     ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel);
+    SAL_DLLPRIVATE bool     ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const vcl::Kernel& rKernel);
 
     SAL_DLLPRIVATE bool     ImplConvolutionPass(
                                 Bitmap& aNewBitmap,

@@ -33,6 +33,13 @@
 #include <impvect.hxx>
 
 #include "octree.hxx"
+#include <ResampleKernel.hxx>
+
+using vcl::Kernel;
+using vcl::Lanczos3Kernel;
+using vcl::BicubicKernel;
+using vcl::BilinearKernel;
+using vcl::BoxKernel;
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uLong)(_def_cR)<<10UL)|((sal_uLong)(_def_cG)<<5UL)|(sal_uLong)(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0L,255L))
