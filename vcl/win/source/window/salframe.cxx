@@ -1472,10 +1472,7 @@ static void ImplSetParentFrame( WinSalFrame* pThis, HWND hNewParentWnd, bool bAs
     HPEN    hPen    = NULL;
     HBRUSH  hBrush  = NULL;
 
-    #if OSL_DEBUG_LEVEL > 0
     int oldCount = pSalData->mnCacheDCInUse;
-    (void)oldCount;
-    #endif
 
     // Release Cache DC
     if ( pThis->mpGraphics2 &&

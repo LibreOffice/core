@@ -91,11 +91,7 @@ void EditBrowseBox::implCreateActiveAccessible( )
 }
 
 
-Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32
-#ifdef DBG_UTIL
-_nIndex
-#endif
-)
+Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nIndex )
 {
     DBG_ASSERT( 0 == _nIndex, "EditBrowseBox::CreateAccessibleControl: invalid index!" );
 

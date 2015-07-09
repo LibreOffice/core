@@ -212,10 +212,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
             {
                 // obtain the preference list
                 Any aPreferences = xDriverManagerNode->getByName(sDriverPreferenceLocation);
-#if OSL_DEBUG_LEVEL > 0
-                bool bSuccess =
-#endif
-                aPreferences >>= _rPrecedence;
+                bool bSuccess = aPreferences >>= _rPrecedence;
                 OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "lcl_getDriverPrecedence: invalid value for the preferences node (no string sequence but not NULL)!");
             }
         }

@@ -191,11 +191,7 @@ static const SvXMLTokenMapEntry aTypes[] =
 };
 
 sal_uInt16 xforms_getTypeClass(
-    const Reference<XDataTypeRepository>&
-    #ifdef DBG_UTIL
-    xRepository
-    #endif
-    ,
+    const Reference<XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName )
 {

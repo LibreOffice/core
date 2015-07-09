@@ -81,12 +81,11 @@ namespace dbmm
 
     namespace
     {
-#if OSL_DEBUG_LEVEL > 0
         bool lcl_isRunning( const ProgressMixer_Data& _rData )
         {
             return _rData.pCurrentPhase != _rData.aPhases.end();
         }
-#endif
+
         void lcl_ensureInitialized( ProgressMixer_Data& _rData )
         {
             OSL_PRECOND( _rData.nWeightSum, "lcl_ensureInitialized: we have no phases, this will crash!" );

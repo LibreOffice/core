@@ -425,10 +425,7 @@ void View::DragFinished( sal_Int8 nDropAction )
             if( pObj && pObj->GetPage() )
             {
                 const size_t nOrdNum = pObj->GetOrdNumDirect();
-#ifdef DBG_UTIL
-                SdrObject* pChkObj =
-#endif
-                    pObj->GetPage()->RemoveObject(nOrdNum);
+                SdrObject* pChkObj = pObj->GetPage()->RemoveObject(nOrdNum);
                 DBG_ASSERT(pChkObj==pObj,"pChkObj!=pObj in RemoveObject()");
             }
         }

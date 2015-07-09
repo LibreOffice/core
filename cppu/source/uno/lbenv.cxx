@@ -408,9 +408,7 @@ static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
                     {
                         // proxy ptr not registered for another interface:
                         // remove from ptr map
-#if OSL_DEBUG_LEVEL > 0
                         ::std::size_t erased =
-#endif
                               that->aPtr2ObjectMap.erase( pInterface );
                         OSL_ASSERT( erased == 1 );
                     }

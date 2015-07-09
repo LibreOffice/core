@@ -709,10 +709,7 @@ void CMtaOleClipboard::createMtaOleReqWnd( )
 
 unsigned int CMtaOleClipboard::run( )
 {
-    #if OSL_DEBUG_LEVEL > 0
-    HRESULT hr =
-    #endif
-        OleInitialize( NULL );
+    HRESULT hr = OleInitialize( NULL );
     OSL_ASSERT( SUCCEEDED( hr ) );
 
     createMtaOleReqWnd( );

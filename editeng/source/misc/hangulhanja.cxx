@@ -679,10 +679,7 @@ namespace editeng
         }
         else
         {
-#ifdef DBG_UTIL
-            const bool bCompletelyDone =
-#endif
-            ContinueConversion( false );
+            const bool bCompletelyDone = ContinueConversion( false );
             DBG_ASSERT( bCompletelyDone, "HangulHanjaConversion_Impl::DoDocumentConversion: ContinueConversion should have returned true here!" );
         }
     }

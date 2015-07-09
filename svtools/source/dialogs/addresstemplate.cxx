@@ -400,10 +400,8 @@ void AssignmentPersistentData::ImplCommit()
         aNewFieldDescription[1].Value <<= _rAssignment;
 
         // just set the new value
-#ifdef DBG_UTIL
         bool bSuccess =
-#endif
-        SetSetProperties(sDescriptionNodePath, aNewFieldDescription);
+            SetSetProperties(sDescriptionNodePath, aNewFieldDescription);
         DBG_ASSERT(bSuccess, "AssignmentPersistentData::setFieldAssignment: could not commit the changes a field!");
     }
 

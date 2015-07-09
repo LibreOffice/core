@@ -79,11 +79,7 @@ void CBaseReader::Initialize( const std::string& ContentName)
             parser.parse(&m_ZipContent[0], m_ZipContent.size());
         }
     }
-    catch(std::exception&
-    #if OSL_DEBUG_LEVEL > 0
-        ex
-    #endif
-        )
+    catch(std::exception& ex)
     {
         OSL_ENSURE( false, ex.what() );
     }

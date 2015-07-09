@@ -406,10 +406,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
                             OUString sSave( aToken );
                             nNextCh = '\\';
-                            #ifdef DBG_UTIL
-                            int nToken =
-                            #endif
-                                _GetNextToken();
+                            int nToken = _GetNextToken();
                             DBG_ASSERT( RTF_U == nToken, "doch kein UNI-Code Zeichen" );
                             // dont convert symbol chars
                             aStrBuffer.append(static_cast< sal_Unicode >(nTokenValue));

@@ -121,20 +121,15 @@ namespace svx
 
             // extract the any from the transferable
             DataFlavor aFlavor;
-#if OSL_DEBUG_LEVEL > 0
             bool bSuccess =
-#endif
-            SotExchange::GetFormatDataFlavor(getDescriptorFormatId(bForm), aFlavor);
+                SotExchange::GetFormatDataFlavor(getDescriptorFormatId(bForm), aFlavor);
             OSL_ENSURE(bSuccess, "OComponentTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
             Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
             // extract the property value sequence
             Sequence< PropertyValue > aDescriptorProps;
-#if OSL_DEBUG_LEVEL > 0
-            bSuccess =
-#endif
-            aDescriptor >>= aDescriptorProps;
+            bSuccess = aDescriptor >>= aDescriptorProps;
             OSL_ENSURE(bSuccess, "OComponentTransferable::extractColumnDescriptor: invalid clipboard format!");
 
             // build the real descriptor

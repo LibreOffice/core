@@ -106,11 +106,7 @@ bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
     return bRet;
 }
 
-bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong
-#ifdef DBG_UTIL
-nTol
-#endif
-)
+bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong nTol )
 {
     BitmapWriteAccess*  pAcc = AcquireWriteAccess();
     bool                bRet = false;

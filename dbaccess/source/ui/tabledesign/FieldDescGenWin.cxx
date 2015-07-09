@@ -82,14 +82,12 @@ void OFieldDescGenWin::DisplayData( OFieldDescription* pFieldDescr )
     m_pFieldControl->DisplayData(pFieldDescr);
 }
 
-#if OSL_DEBUG_LEVEL > 0
 OTableEditorCtrl* OFieldDescGenWin::GetEditorCtrl()
 {
     OTableDesignView* pDesignWin = static_cast<OTableDesignView*>(GetParent()->GetParent()->GetParent());
     return pDesignWin->GetEditorCtrl();
 }
 
-#endif
 void OFieldDescGenWin::SaveData( OFieldDescription* pFieldDescr )
 {
     m_pFieldControl->SaveData(pFieldDescr);

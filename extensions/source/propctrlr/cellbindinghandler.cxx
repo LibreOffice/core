@@ -407,10 +407,7 @@ namespace pcr
             case PROPERTY_ID_BOUND_CELL:
             {
                 Reference< XValueBinding > xBinding;
-#if OSL_DEBUG_LEVEL > 0
-                bool bSuccess =
-#endif
-                _rPropertyValue >>= xBinding;
+                bool bSuccess = _rPropertyValue >>= xBinding;
                 OSL_ENSURE( bSuccess, "CellBindingPropertyHandler::convertToControlValue: invalid value (1)!" );
 
                 // the only value binding we support so far is linking to spreadsheet cells
@@ -421,10 +418,7 @@ namespace pcr
             case PROPERTY_ID_LIST_CELL_RANGE:
             {
                 Reference< XListEntrySource > xSource;
-#if OSL_DEBUG_LEVEL > 0
-                bool bSuccess =
-#endif
-                _rPropertyValue >>= xSource;
+                bool bSuccess = _rPropertyValue >>= xSource;
                 OSL_ENSURE( bSuccess, "CellBindingPropertyHandler::convertToControlValue: invalid value (2)!" );
 
                 // the only value binding we support so far is linking to spreadsheet cells

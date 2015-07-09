@@ -878,7 +878,9 @@ namespace frm
 
     bool FormOperations::impl_commitCurrentRecord_throw( sal_Bool* _pRecordInserted ) const
     {
+#ifdef DBG_UTIL
         DBG_ASSERT( m_nMethodNestingLevel, "FormOperations::impl_commitCurrentRecord_throw: to be called within a MethodGuard'ed section only!" );
+#endif
 
         if ( !impl_hasCursor_nothrow() )
             return false;
@@ -911,7 +913,9 @@ namespace frm
 
     bool FormOperations::impl_commitCurrentControl_throw() const
     {
+#ifdef DBG_UTIL
         DBG_ASSERT( m_nMethodNestingLevel, "FormOperations::impl_commitCurrentControl_throw: to be called within a MethodGuard'ed section only!" );
+#endif
         OSL_PRECOND( m_xController.is(), "FormOperations::commitCurrentControl: no controller!" );
         if ( !m_xController.is() )
             return false;

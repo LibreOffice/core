@@ -72,7 +72,9 @@ ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< :
 
 ODsnTypeCollection::~ODsnTypeCollection()
 {
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
+#endif
 }
 
 OUString ODsnTypeCollection::getTypeDisplayName(const OUString& _sURL) const

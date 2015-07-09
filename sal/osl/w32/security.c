@@ -100,10 +100,7 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
     sal_Unicode*    strUser;
     sal_Unicode*    strDomain = _wcsdup(rtl_uString_getStr(strUserName));
     HANDLE  hUserToken;
-
-    #if OSL_DEBUG_LEVEL > 0
-        LUID luid;
-    #endif
+    LUID luid;
 
     if (NULL != (strUser = wcschr(strDomain, L'/')))
         *strUser++ = L'\0';
@@ -115,6 +112,7 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
 
     // this process must have the right: 'act as a part of operatingsystem'
     OSL_ASSERT(LookupPrivilegeValue(NULL, SE_TCB_NAME, &luid));
+    (void) luid;
 
     if (LogonUserW(strUser, strDomain ? strDomain : L"", rtl_uString_getStr(strPasswd),
                   LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT,

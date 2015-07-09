@@ -917,9 +917,7 @@ void SlotManager::RenameSlide()
                 aNameDlg->GetName( aNewName );
                 if (aNewName != aPageName)
                 {
-#ifdef DBG_UTIL
                     bool bResult =
-#endif
                         RenameSlideFromDrawViewShell(
                           pSelectedPage->GetPageNum()/2, aNewName );
                     DBG_ASSERT( bResult, "Couldn't rename slide" );

@@ -103,10 +103,8 @@ namespace svxform
             Reference< XInterface > xNormalizedModel( pFormObject->GetUnoControlModel(), UNO_QUERY );
                 // note that this is normalized (i.e. queried for XInterface explicitly)
 
-#ifdef DBG_UTIL
             ::std::pair< MapModelToShape::iterator, bool > aPos =
-#endif
-            _rMapping.insert( ModelShapePair( xNormalizedModel, pSdrObject ) );
+                  _rMapping.insert( ModelShapePair( xNormalizedModel, pSdrObject ) );
             DBG_ASSERT( aPos.second, "collectShapeModelMapping: model was already existent!" );
                 // if this asserts, this would mean we have 2 shapes pointing to the same model
         }
@@ -947,13 +945,17 @@ namespace svxform
 
         if ( DND_ACTION_COPY == _nAction )
         {   // bHasHiddenControlsFormat means that only hidden controls are part of the data
+#ifdef DBG_UTIL
             DBG_ASSERT( bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: copy allowed for hidden controls only!" );
+#endif
             DBG_ASSERT( _pTargetEntry && ( _pTargetEntry != m_pRootEntry ) && IsFormEntry( _pTargetEntry ),
                 "NavigatorTree::implExecuteDataTransfer: should not be here!" );
                 // implAcceptDataTransfer should have caught both cases
 
+#ifdef DBG_UTIL
             DBG_ASSERT(bHasHiddenControlsFormat, "NavigatorTree::implExecuteDataTransfer: only copying of hidden controls is supported !");
                 // should be catched by AcceptDrop
+#endif
 
             // because i want to select all targets (and only them)
             SelectAll(false);

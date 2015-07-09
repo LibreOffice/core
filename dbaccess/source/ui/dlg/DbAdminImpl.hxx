@@ -167,9 +167,7 @@ namespace dbaui
         */
         static bool hasAuthentication(const SfxItemSet& _rSet);
 
-#if OSL_DEBUG_LEVEL > 0
         OString translatePropertyId( sal_Int32 _nId );
-#endif
     };
 
 }   // namespace dbaui

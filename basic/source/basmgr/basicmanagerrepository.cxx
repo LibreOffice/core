@@ -540,9 +540,6 @@ namespace basic
         SolarMutexGuard g;
 
         Reference< XInterface > xNormalizedSource( _rSource.Source, UNO_QUERY );
-    #if OSL_DEBUG_LEVEL > 0
-        bool bFound = false;
-    #endif
 
         for (   BasicManagerStore::iterator loop = m_aStore.begin();
                 loop != m_aStore.end();
@@ -552,14 +549,11 @@ namespace basic
             if ( loop->first.get() == xNormalizedSource.get() )
             {
                 impl_removeFromRepository( loop );
-            #if OSL_DEBUG_LEVEL > 0
-                bFound = true;
-            #endif
-                break;
+                return;
             }
         }
 
-        OSL_ENSURE( bFound, "ImplRepository::_disposing: where does this come from?" );
+        OSL_FAIL( "ImplRepository::_disposing: where does this come from?" );
     }
 
 

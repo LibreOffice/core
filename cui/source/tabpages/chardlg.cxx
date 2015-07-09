@@ -2904,9 +2904,7 @@ IMPL_LINK_NOARG(SvxCharPositionPage, KerningModifyHdl_Impl)
 
 IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
 {
-#ifdef DBG_UTIL
     bool bHigh = m_pHighPosBtn->IsChecked();
-#endif
     bool bLow = m_pLowPosBtn->IsChecked();
     DBG_ASSERT( bHigh || bLow, "normal position is not valid" );
 

@@ -615,11 +615,7 @@ BaseStorage* Storage::OpenStorage( const OUString& rName, StreamMode m, bool bDi
 // Open a stream
 
 BaseStorageStream* Storage::OpenStream( const OUString& rName, StreamMode m, bool,
-                                        const OString*
-#ifdef DBG_UTIL
-                                        pB
-#endif
-)
+                                        const OString* pB )
 {
     DBG_ASSERT(!pB, "Encryption not supported");
 

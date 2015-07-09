@@ -72,19 +72,14 @@ OReportExchange::TSectionElements OReportExchange::extractCopies(const Transfera
     {
         // extract the any from the transferable
         datatransfer::DataFlavor aFlavor;
-#if OSL_DEBUG_LEVEL > 0
         bool bSuccess =
-#endif
-        SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
+            SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
         OSL_ENSURE(bSuccess, "OReportExchange::extractCopies: invalid data format (no flavor)!");
 
         uno::Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
         TSectionElements aCopies;
-#if OSL_DEBUG_LEVEL > 0
-        bSuccess =
-#endif
-        aDescriptor >>= aCopies;
+        bSuccess = aDescriptor >>= aCopies;
         OSL_ENSURE(bSuccess, "OReportExchange::extractCopies: invalid clipboard format!");
 
         // build the real descriptor

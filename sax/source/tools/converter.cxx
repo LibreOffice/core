@@ -1956,10 +1956,7 @@ void Converter::encodeBase64(OUStringBuffer& aStrBuffer, const uno::Sequence<sal
 
 void Converter::decodeBase64(uno::Sequence<sal_Int8>& aBuffer, const OUString& sBuffer)
 {
-#if OSL_DEBUG_LEVEL > 0
-    sal_Int32 nCharsDecoded =
-#endif
-    decodeBase64SomeChars( aBuffer, sBuffer );
+    sal_Int32 nCharsDecoded = decodeBase64SomeChars( aBuffer, sBuffer );
     OSL_ENSURE( nCharsDecoded == sBuffer.getLength(), "some bytes left in base64 decoding!" );
 }
 
