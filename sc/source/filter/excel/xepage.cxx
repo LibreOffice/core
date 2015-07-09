@@ -56,7 +56,7 @@ void XclExpHeaderFooter::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     sal_Int32 nElement = GetRecId() == EXC_ID_HEADER ?  XML_oddHeader : XML_oddFooter;
-    rWorksheet->startElement( nElement, FSEND );
+    rWorksheet->startElement( nElement );
     rWorksheet->writeEscaped( maHdrString );
     rWorksheet->endElement( nElement );
 }
@@ -186,18 +186,16 @@ void XclExpPageBreaks::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& pWorksheet = rStrm.GetCurrentStream();
     OString sNumPageBreaks = OString::number(  mrPageBreaks.size() );
     pWorksheet->startElement( nElement,
-            XML_count,              sNumPageBreaks.getStr(),
-            XML_manualBreakCount,   sNumPageBreaks.getStr(),
-            FSEND );
+            {{XML_count,              sNumPageBreaks.getStr()},
+             {XML_manualBreakCount,   sNumPageBreaks.getStr()}} );
     for( ScfUInt16Vec::const_iterator aIt = mrPageBreaks.begin(), aEnd = mrPageBreaks.end(); aIt != aEnd; ++aIt )
     {
         pWorksheet->singleElement( XML_brk,
-                XML_id,     OString::number(  *aIt ).getStr(),
-                XML_man,    "true",
-                XML_max,    OString::number(  mnMaxPos ).getStr(),
-                XML_min,    "0",
+                {{XML_id,     OString::number(  *aIt ).getStr()},
+                 {XML_man,    "true"},
+                 {XML_max,    OString::number(  mnMaxPos ).getStr()},
+                 {XML_min,    "0"}} );
                 // OOXTODO: XML_pt, "",
-                FSEND );
     }
     pWorksheet->endElement( nElement );
 }
@@ -347,10 +345,9 @@ void XclExpXmlStartHeaderFooterElementRecord::SaveXml(XclExpXmlStream& rStrm)
     sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
     rStream->startElement( mnElement,
             // OOXTODO: XML_alignWithMargins,
-            XML_differentFirst,     "false",    // OOXTODO
-            XML_differentOddEven,   "false",    // OOXTODO
+            {{XML_differentFirst,     "false"},    // OOXTODO
+             {XML_differentOddEven,   "false"}} ); // OOXTODO
             // OOXTODO: XML_scaleWithDoc
-            FSEND );
 }
 
 void XclExpPageSettings::Save( XclExpStream& rStrm )
