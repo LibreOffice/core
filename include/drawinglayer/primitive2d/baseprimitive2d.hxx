@@ -23,7 +23,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <cppuhelper/compbase1.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <basegfx/range/b2drange.hxx>

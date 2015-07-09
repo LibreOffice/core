@@ -27,7 +27,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <canvas/canvastoolsdllapi.h>
 
 namespace basegfx

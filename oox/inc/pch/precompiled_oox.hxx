@@ -35,7 +35,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <cassert>
 #include <com/sun/star/animations/AnimationCalcMode.hpp>
 #include <com/sun/star/animations/AnimationColorSpace.hpp>

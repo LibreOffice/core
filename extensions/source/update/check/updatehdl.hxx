@@ -20,7 +20,7 @@
 #ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
 #define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEHDL_HXX
 
-#include "boost/utility.hpp"
+#include "boost/noncopyable.hpp"
 #include <osl/mutex.hxx>
 #include "com/sun/star/uno/Any.h"
 #include "com/sun/star/uno/Reference.h"

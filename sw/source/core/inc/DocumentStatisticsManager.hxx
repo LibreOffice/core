@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTSTATISTICSMANAGER_HXX
 
 #include <IDocumentStatistics.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <vcl/timer.hxx>
 
 class SwDoc;

@@ -29,7 +29,7 @@
 
 #include <canvas/rendering/isurfaceproxymanager.hxx>
 #include <vcl/vclptr.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 class OutputDevice;
 /* Definition of DeviceHelper class */

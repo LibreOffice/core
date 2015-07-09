@@ -17,7 +17,7 @@
 
 #include <basegfx/vector/b2isize.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "ogl_canvasfont.hxx"
 

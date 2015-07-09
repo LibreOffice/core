@@ -25,7 +25,7 @@
 #include "unoview.hxx"
 #include "rgbcolor.hxx"
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 

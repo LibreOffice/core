@@ -24,7 +24,7 @@
 #include <map>
 #include <vector>
 #include <stack>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <xmloff/xmlictxt.hxx>

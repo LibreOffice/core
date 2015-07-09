@@ -31,7 +31,7 @@
 #include "backbuffer.hxx"
 #include "devicehelper.hxx"
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 
 /* Definition of DeviceHelper class */

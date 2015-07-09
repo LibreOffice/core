@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <vector>
 

@@ -31,7 +31,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "cachedprimitivebase.hxx"
 #include "polypolyaction.hxx"

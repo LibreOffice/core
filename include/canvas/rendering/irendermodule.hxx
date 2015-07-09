@@ -23,7 +23,7 @@
 #include <sal/types.h>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 
 namespace basegfx

@@ -29,7 +29,7 @@
 #include <canvas/base/integerbitmapbase.hxx>
 #include <canvas/base/sprite.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 
 namespace canvas

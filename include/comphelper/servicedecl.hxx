@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <uno/environment.h>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/function.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/repetition.hpp>

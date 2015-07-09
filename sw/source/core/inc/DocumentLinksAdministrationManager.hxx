@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLINKSADMINISTRATIONMANAGER_HXX
 
 #include <IDocumentLinksAdministration.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 
 namespace sfx2 { class LinkManager; }

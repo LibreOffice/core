@@ -27,7 +27,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "tools.hxx"
 #include "shapeattributelayer.hxx"

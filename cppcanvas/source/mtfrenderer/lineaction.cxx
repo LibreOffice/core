@@ -31,7 +31,7 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <cppcanvas/canvas.hxx>
 

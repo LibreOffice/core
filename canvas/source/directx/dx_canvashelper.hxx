@@ -31,7 +31,7 @@
 #include "dx_gdiplususer.hxx"
 #include "dx_impltools.hxx"
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 
 namespace dxcanvas

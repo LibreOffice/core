@@ -30,7 +30,7 @@
 
 #include <vcl/outdev.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <vcl/cairo.hxx>
 #include "cairo_canvasfont.hxx"

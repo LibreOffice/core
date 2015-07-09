@@ -36,7 +36,7 @@
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 
 #include <boost/optional.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include "license_dialog.hxx"
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"

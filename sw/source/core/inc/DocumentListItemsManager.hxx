@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLISTITEMSMANAGER_HXX
 
 #include <IDocumentListItems.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <set>
 
 namespace sw

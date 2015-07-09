@@ -24,7 +24,7 @@
 
 #include <algorithm>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/checked_delete.hpp>
 
 namespace o3tl

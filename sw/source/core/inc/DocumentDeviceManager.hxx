@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTDEVICEMANAGER_HXX
 
 #include <IDocumentDeviceAccess.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <sal/types.h>
 #include <vcl/vclptr.hxx>
 

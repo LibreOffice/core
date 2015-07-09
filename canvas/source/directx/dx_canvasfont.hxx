@@ -30,7 +30,7 @@
 #include <rtl/ref.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "dx_winstuff.hxx"
 #include "dx_gdiplususer.hxx"

@@ -34,7 +34,7 @@
 
 #include "cairo_spritecanvas.hxx"
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 
 /* Definition of CanvasFont class */

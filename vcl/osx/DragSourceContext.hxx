@@ -25,7 +25,7 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 // This class fires events to XDragSourceListener implementations.
 // Of that interface only dragDropEnd and dropActionChanged are called.

@@ -20,7 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTFIELDSMANAGER_HXX
 
 #include <IDocumentFieldsAccess.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <sal/types.h>
 
 class SwDoc;

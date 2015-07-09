@@ -33,7 +33,7 @@
 #include <fchrfmt.hxx>
 #include <tox.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 class SfxItemPool;
 class SvXMLAttrContainerItem;

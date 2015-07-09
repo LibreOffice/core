@@ -143,7 +143,7 @@
 
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>

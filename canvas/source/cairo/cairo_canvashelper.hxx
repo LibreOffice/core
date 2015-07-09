@@ -30,7 +30,7 @@
 
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <vcl/cairo.hxx>
 #include "cairo_surfaceprovider.hxx"

@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTCONTENTOPERATIONSMANAGER_HXX
 
 #include <IDocumentContentOperations.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <ndarr.hxx> //Only for lcl_RstTxtAttr
 
 class SwDoc;
