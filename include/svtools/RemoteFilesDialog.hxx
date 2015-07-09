@@ -110,8 +110,8 @@ public:
 
     virtual bool getShowState();
 
-    virtual Control* getControl( sal_Int16 _nControlId, bool _bLabelControl = false ) const SAL_OVERRIDE;
-    virtual void enableControl( sal_Int16 _nControlId, bool _bEnable );
+    virtual Control* getControl( sal_Int16 nControlId, bool bLabelControl = false ) const SAL_OVERRIDE;
+    virtual void enableControl( sal_Int16 nControlId, bool bEnable );
     virtual OUString getCurFilter( ) const;
 
 private:
@@ -130,8 +130,7 @@ private:
     ::com::sun::star::uno::Sequence< OUString > m_aBlackList;
     ::svt::IFilePickerListener* m_pFileNotifier;
 
-    VclPtr< PushButton > m_pOpen_btn;
-    VclPtr< PushButton > m_pSave_btn;
+    VclPtr< PushButton > m_pOk_btn;
     VclPtr< CancelButton > m_pCancel_btn;
     VclPtr< MenuButton > m_pAddService_btn;
     VclPtr< ListBox > m_pServices_lb;

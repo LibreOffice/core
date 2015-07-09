@@ -240,8 +240,6 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     , m_pFileView( NULL )
     , m_pContainer( NULL )
 {
-    get( m_pOpen_btn, "open" );
-    get( m_pSave_btn, "save" );
     get( m_pCancel_btn, "cancel" );
     get( m_pAddService_btn, "add_service_btn" );
     get( m_pServices_lb, "services_lb" );
@@ -254,23 +252,18 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_bIsUpdated = false;
     m_nCurrentFilter = LISTBOX_ENTRY_NOTFOUND;
 
-    m_pOpen_btn->Enable( false );
-    m_pSave_btn->Enable( false );
     m_pFilter_lb->Enable( false );
     m_pName_ed->Enable( false );
 
     if( m_eMode == REMOTEDLG_MODE_OPEN )
-    {
-        m_pSave_btn->Hide();
-        m_pOpen_btn->Show();
-    }
+        get( m_pOk_btn, "open" );
     else
-    {
-        m_pSave_btn->Show();
-        m_pOpen_btn->Hide();
-    }
+        get( m_pOk_btn, "save" );
 
-    m_pOpen_btn->SetClickHdl( LINK( this, RemoteFilesDialog, OkHdl ) );
+    m_pOk_btn->Show();
+    m_pOk_btn->Enable( false );
+
+    m_pOk_btn->SetClickHdl( LINK( this, RemoteFilesDialog, OkHdl ) );
 
     m_pPath = VclPtr<Breadcrumb>::Create( get< vcl::Window >( "breadcrumb_container" ) );
     m_pPath->set_hexpand( true );
@@ -365,8 +358,7 @@ void RemoteFilesDialog::dispose()
     m_pContainer.disposeAndClear();
     m_pPath.disposeAndClear();
 
-    m_pOpen_btn.clear();
-    m_pSave_btn.clear();
+    m_pOk_btn.clear();
     m_pCancel_btn.clear();
     m_pAddService_btn.clear();
     m_pServices_lb.clear();
@@ -670,11 +662,11 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
 
         m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DECODE_WITH_CHARSET ) );
 
-        m_pOpen_btn->Enable( true );
+        m_pOk_btn->Enable( true );
     }
     else
     {
-        m_pOpen_btn->Enable( false );
+        m_pOk_btn->Enable( false );
         m_sPath = "";
         m_pName_ed->SetText( "" );
     }
@@ -693,9 +685,9 @@ IMPL_LINK_NOARG( RemoteFilesDialog, FileNameModifyHdl )
     m_pFileView->SetNoSelection();
 
     if( !m_pName_ed->GetText().isEmpty() )
-        m_pOpen_btn->Enable( true );
+        m_pOk_btn->Enable( true );
     else
-        m_pOpen_btn->Enable( false );
+        m_pOk_btn->Enable( false );
 
     return 1;
 }
