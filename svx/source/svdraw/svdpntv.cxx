@@ -216,7 +216,7 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
 
     if(pOut)
     {
-        AddWindowToPaintView(pOut);
+        AddWindowToPaintView(pOut, 0);
     }
 
     // flag to visualize groups
@@ -457,10 +457,10 @@ void SdrPaintView::HideSdrPage()
     }
 }
 
-void SdrPaintView::AddWindowToPaintView(OutputDevice* pNewWin)
+void SdrPaintView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window *pWindow)
 {
     DBG_ASSERT(pNewWin, "SdrPaintView::AddWindowToPaintView: No OutputDevice(!)");
-    SdrPaintWindow* pNewPaintWindow = new SdrPaintWindow(*this, *pNewWin);
+    SdrPaintWindow* pNewPaintWindow = new SdrPaintWindow(*this, *pNewWin, pWindow);
     AppendPaintWindow(*pNewPaintWindow);
 
     if(mpPageView)

@@ -83,7 +83,7 @@ public:
     SdrObject*   CreateXFormsControl( const svx::OXFormsDescriptor &_rDesc );
 
     virtual void MarkListHasChanged() SAL_OVERRIDE;
-    virtual void AddWindowToPaintView(OutputDevice* pNewWin) SAL_OVERRIDE;
+    virtual void AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow) SAL_OVERRIDE;
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin) SAL_OVERRIDE;
 
     static void createControlLabelPair(

@@ -1667,9 +1667,9 @@ bool SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveH
 
 
 
-void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin)
+void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window *pWindow)
 {
-    SdrGlueEditView::AddWindowToPaintView(pNewWin);
+    SdrGlueEditView::AddWindowToPaintView(pNewWin, pWindow);
 
     if(mxTextEditObj.is() && !bTextEditOnlyOneView && pNewWin->GetOutDevType()==OUTDEV_WINDOW)
     {
