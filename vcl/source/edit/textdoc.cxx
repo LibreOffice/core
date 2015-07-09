@@ -154,7 +154,7 @@ TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt
 
 void TextCharAttribList::DeleteEmptyAttribs()
 {
-    maAttribs.erase_if(boost::mem_fn(&TextCharAttrib::IsEmpty));
+    maAttribs.erase_if(std::mem_fn(&TextCharAttrib::IsEmpty));
     mbHasEmptyAttribs = false;
 }
 

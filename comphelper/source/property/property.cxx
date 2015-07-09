@@ -34,7 +34,7 @@
 #include <com/sun/star/uno/genfunc.h>
 
 #include <algorithm>
-#include <boost/bind.hpp>
+#include <functional>
 
 
 namespace comphelper

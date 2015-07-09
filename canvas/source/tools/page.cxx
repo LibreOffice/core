@@ -34,7 +34,7 @@ namespace canvas
         {
             ::std::for_each( mpFragments.begin(),
                              mpFragments.end(),
-                             ::boost::mem_fn(&PageFragment::refresh));
+                             ::std::mem_fn(&PageFragment::refresh));
         }
     }
 

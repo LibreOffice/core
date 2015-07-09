@@ -29,7 +29,7 @@
 #include "unoview.hxx"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/utility.hpp>
 #include <vector>
 

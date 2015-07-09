@@ -32,6 +32,8 @@
 #include <ilstbox.hxx>
 #include <controldata.hxx>
 
+using namespace std::placeholders;
+
 static void lcl_GetSelectedEntries( ::std::set< sal_Int32 >& rSelectedPos, const OUString& rText, sal_Unicode cTokenSep, const ImplEntryList* pEntryList )
 {
     for (sal_Int32 n = comphelper::string::getTokenCount(rText, cTokenSep); n;)
@@ -153,7 +155,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
 
         mpBtn = VclPtr<ImplBtn>::Create( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( mpBtn );
-        mpBtn->buttonDownSignal.connect( boost::bind( &ComboBox::ImplClickButtonHandler, this, _1 ));
+        mpBtn->buttonDownSignal.connect( std::bind( &ComboBox::ImplClickButtonHandler, this, _1 ));
         mpBtn->Show();
 
         nEditStyle |= WB_NOBORDER;
@@ -185,7 +187,7 @@ void ComboBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mpImplLB->SetSelectHdl( LINK( this, ComboBox, ImplSelectHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ComboBox, ImplCancelHdl ) );
     mpImplLB->SetDoubleClickHdl( LINK( this, ComboBox, ImplDoubleClickHdl ) );
-    mpImplLB->userDrawSignal.connect( boost::bind( &ComboBox::ImplUserDrawHandler, this, _1 ) );
+    mpImplLB->userDrawSignal.connect( std::bind( &ComboBox::ImplUserDrawHandler, this, _1 ) );
     mpImplLB->SetSelectionChangedHdl( LINK( this, ComboBox, ImplSelectionChangedHdl ) );
     mpImplLB->SetListItemSelectHdl( LINK( this, ComboBox, ImplListItemSelectHdl ) );
     mpImplLB->Show();
@@ -232,7 +234,7 @@ void ComboBox::EnableAutocomplete( bool bEnable, bool bMatchCase )
     {
         if( !mAutocompleteConnection.connected())
             mAutocompleteConnection = mpSubEdit->autocompleteSignal.connect(
-                boost::bind( &ComboBox::ImplAutocompleteHandler, this, _1 ) );
+                std::bind( &ComboBox::ImplAutocompleteHandler, this, _1 ) );
     }
     else
         mAutocompleteConnection.disconnect();

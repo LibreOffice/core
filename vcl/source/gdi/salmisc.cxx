@@ -23,6 +23,8 @@
 #include <osl/diagnose.h>
 #include <memory>
 
+using namespace std::placeholders;
+
 #define IMPL_CASE_GET_FORMAT( Format )                          \
 case( BMP_FORMAT##Format ):                                 \
     pFncGetPixel = BitmapReadAccess::GetPixelFor##Format;       \

@@ -29,7 +29,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/logging/XLoggerPool.hpp>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -41,6 +41,7 @@
 namespace logging
 {
 
+    using namespace std::placeholders;
     using ::com::sun::star::logging::XLogger;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -175,9 +176,9 @@ namespace logging
             return;
 
         m_aHandlers.forEach< XLogHandler >(
-            ::boost::bind( &XLogHandler::publish, _1, ::boost::cref( _rRecord ) ) );
+            ::std::bind( &XLogHandler::publish, _1, ::std::cref( _rRecord ) ) );
         m_aHandlers.forEach< XLogHandler >(
-            ::boost::bind( &XLogHandler::flush, _1 ) );
+            ::std::bind( &XLogHandler::flush, _1 ) );
     }
 
     OUString SAL_CALL EventLogger::getName() throw (RuntimeException, std::exception)

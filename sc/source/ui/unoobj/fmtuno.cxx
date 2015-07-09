@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -231,7 +231,7 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
 
 ScTableConditionalFormat::~ScTableConditionalFormat()
 {
-    std::for_each(aEntries.begin(),aEntries.end(),boost::bind(&ScTableConditionalEntry::release,_1));
+    std::for_each(aEntries.begin(),aEntries.end(),std::bind(&ScTableConditionalEntry::release,_1));
 }
 
 void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry)
@@ -362,7 +362,7 @@ void SAL_CALL ScTableConditionalFormat::clear() throw(uno::RuntimeException, std
 {
     SolarMutexGuard aGuard;
     std::for_each(aEntries.begin(),aEntries.end(),
-                  boost::bind(&ScTableConditionalEntry::release,_1));
+                  std::bind(&ScTableConditionalEntry::release,_1));
 
     aEntries.clear();
 }

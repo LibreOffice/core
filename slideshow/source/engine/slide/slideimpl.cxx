@@ -64,12 +64,13 @@
 
 #include <o3tl/compat_functional.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <iterator>
 #include <algorithm>
 #include <functional>
 #include <iostream>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 
@@ -392,7 +393,7 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     // clone already existing views for slide bitmaps
     std::for_each( rViewContainer.begin(),
                    rViewContainer.end(),
-                   boost::bind( &SlideImpl::viewAdded,
+                   std::bind( &SlideImpl::viewAdded,
                                 this,
                                 _1 ));
 
@@ -466,7 +467,7 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
     {
         std::for_each(maContext.mrViewContainer.begin(),
                       maContext.mrViewContainer.end(),
-                      boost::mem_fn(&View::clearAll));
+                      std::mem_fn(&View::clearAll));
 
         std::for_each( maContext.mrViewContainer.begin(),
                        maContext.mrViewContainer.end(),
@@ -582,11 +583,11 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
     const VectorOfVectorOfSlideBitmaps::iterator aEnd( maSlideBitmaps.end() );
     if( (aIter=std::find_if( maSlideBitmaps.begin(),
                              aEnd,
-                             boost::bind(
+                             std::bind(
                                  std::equal_to<UnoViewSharedPtr>(),
                                  rView,
                                  // select view:
-                                 boost::bind(
+                                 std::bind(
                                      o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
                                      _1 )))) == aEnd )
     {
@@ -656,11 +657,11 @@ void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
     maSlideBitmaps.erase(
         std::remove_if( maSlideBitmaps.begin(),
                         aEnd,
-                        boost::bind(
+                        std::bind(
                             std::equal_to<UnoViewSharedPtr>(),
                             rView,
                             // select view:
-                            boost::bind(
+                            std::bind(
                                 o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
                                 _1 ))),
         aEnd );

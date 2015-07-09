@@ -28,8 +28,9 @@
 
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 
+using namespace std::placeholders;
 
 namespace canvas
 {
@@ -411,11 +412,11 @@ namespace canvas
         ::basegfx::B2DRange aTrueArea( rUpdateArea.maComponentList.begin()->second.getUpdateArea() );
         ::std::for_each( rUpdateArea.maComponentList.begin(),
                          rUpdateArea.maComponentList.end(),
-                         ::boost::bind( (void (basegfx::B2DRange::*)(const basegfx::B2DRange&))(
+                         ::std::bind( (void (basegfx::B2DRange::*)(const basegfx::B2DRange&))(
                                             &basegfx::B2DRange::expand),
                                         aTrueArea,
-                                        ::boost::bind( &SpriteInfo::getUpdateArea,
-                                                       ::boost::bind( ::o3tl::select2nd<AreaComponent>(),
+                                        ::std::bind( &SpriteInfo::getUpdateArea,
+                                                       ::std::bind( ::o3tl::select2nd<AreaComponent>(),
                                                                       _1 ) ) ) );
 
         const SpriteConnectedRanges::ComponentListType::const_iterator aEnd(
@@ -425,9 +426,9 @@ namespace canvas
         // update will not be opaque.
         return ::std::none_of( rUpdateArea.maComponentList.begin(),
                                 aEnd,
-                                ::boost::bind( &SpriteRedrawManager::isAreaUpdateNotOpaque,
+                                ::std::bind( &SpriteRedrawManager::isAreaUpdateNotOpaque,
                                                this,
-                                               ::boost::cref(aTrueArea),
+                                               ::std::cref(aTrueArea),
                                                _1 ) );
     }
 
@@ -442,8 +443,8 @@ namespace canvas
             rUpdateArea.maComponentList.end() );
         return ::std::any_of( rUpdateArea.maComponentList.begin(),
                                 aEnd,
-                                ::boost::bind( &SpriteInfo::needsUpdate,
-                                               ::boost::bind(
+                                ::std::bind( &SpriteInfo::needsUpdate,
+                                               ::std::bind(
                                                    ::o3tl::select2nd<SpriteConnectedRanges::ComponentType>(),
                                                    _1 ) ) );
     }
@@ -465,7 +466,7 @@ namespace canvas
         // much sense.
 
         // TODO(Q3): Once boost 1.33 is in, change back to for_each
-        // with ::boost::mem_fn. For the time being, explicit loop due
+        // with ::std::mem_fn. For the time being, explicit loop due
         // to cdecl declaration of all UNO methods.
         ListOfSprites::reverse_iterator aCurr( maSprites.rbegin() );
         ListOfSprites::reverse_iterator aEnd( maSprites.rend() );

@@ -47,10 +47,11 @@
 #include <vector>
 #include <map>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 
 
+using namespace std::placeholders;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::lang;
@@ -447,7 +448,7 @@ void TableDesignStyle::notifyModifyListener()
     if( pContainer )
     {
         EventObject aEvt( static_cast< OWeakObject * >( this ) );
-        pContainer->forEach<XModifyListener>( boost::bind( &XModifyListener::modified, _1, boost::cref( aEvt ) ) );
+        pContainer->forEach<XModifyListener>( std::bind( &XModifyListener::modified, _1, std::cref( aEvt ) ) );
     }
 }
 

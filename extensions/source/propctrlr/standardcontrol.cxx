@@ -48,14 +48,14 @@
 
 #include <cstdlib>
 #include <limits>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/scoped_ptr.hpp>
 
 
 namespace pcr
 {
 
-
+    using namespace std::placeholders;
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -464,9 +464,9 @@ namespace pcr
     {
         ActionEvent aEvent( *this, OUString( "clicked" ) );
         m_aActionListeners.forEach< XActionListener >(
-            boost::bind(
+            std::bind(
                 &XActionListener::actionPerformed,
-                _1, boost::cref(aEvent) ) );
+                _1, std::cref(aEvent) ) );
 
         return 0;
     }

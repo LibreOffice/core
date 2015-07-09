@@ -29,6 +29,8 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/settings.hxx>
 
+using namespace std::placeholders;
+
 typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
 SmElement::SmElement(SmNodePointer pNode, const OUString& aText, const OUString& aHelpText) :
@@ -675,7 +677,7 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
     mpElementsControl->SetBackground( Color( COL_WHITE ) );
     mpElementsControl->SetTextColor( Color( COL_BLACK ) );
     mpElementsControl->setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
-    mpElementsControl->selectedSignal.connect( boost::bind( &SmElementsDockingWindow::SelectClickHandler, this, _1 ) );
+    mpElementsControl->selectedSignal.connect( std::bind( &SmElementsDockingWindow::SelectClickHandler, this, _1 ) );
 }
 
 SmElementsDockingWindow::~SmElementsDockingWindow ()

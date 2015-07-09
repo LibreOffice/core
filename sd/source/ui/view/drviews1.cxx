@@ -80,7 +80,7 @@
 #include "ViewShellHint.hxx"
 
 #include <sfx2/request.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace com::sun::star;
 
@@ -786,13 +786,13 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
     if (mbIsInSwitchPage)
         return false;
     mbIsInSwitchPage = true;
-    comphelper::ScopeGuard aGuard (::boost::bind(LclResetFlag, ::boost::ref(mbIsInSwitchPage)));
+    comphelper::ScopeGuard aGuard (::std::bind(LclResetFlag, ::std::ref(mbIsInSwitchPage)));
 
     if (GetActiveWindow()->IsInPaint())
     {
         // Switching the current page while a Paint is being executed is
         // dangerous.  So, post it for later execution and return.
-        maAsynchronousSwitchPageCall.Post(::boost::bind(
+        maAsynchronousSwitchPageCall.Post(::std::bind(
             ::std::mem_fun(&DrawViewShell::SwitchPage),
             this,
             nSelectedPage));

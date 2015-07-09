@@ -24,9 +24,11 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include <boost/bind.hpp>
 #include <algorithm>
+#include <functional>
 #include <vector>
+
+using namespace std::placeholders;
 
 namespace basegfx
 {
@@ -80,9 +82,9 @@ namespace basegfx
             const std::vector<B2DRange>::const_iterator aEnd( maRanges.end() );
             return std::any_of( maRanges.begin(),
                                  aEnd,
-                                 boost::bind<bool>( boost::mem_fn( &B2DRange::overlaps ),
+                                 std::bind<bool>( std::mem_fn( &B2DRange::overlaps ),
                                                     _1,
-                                                    boost::cref(rRange) ) );
+                                                    std::cref(rRange) ) );
         }
 
         B2DPolyPolygon solveCrossovers() const

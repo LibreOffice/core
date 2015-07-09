@@ -30,9 +30,10 @@
 #include "slidechangebase.hxx"
 #include "tools.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <algorithm>
 
+using namespace std::placeholders;
 using namespace com::sun::star;
 
 namespace slideshow {
@@ -183,7 +184,7 @@ void SlideChangeBase::prefetch( const AnimatableShapeSharedPtr&,
     // init views and create slide bitmaps
     std::for_each( mrViewContainer.begin(),
                    mrViewContainer.end(),
-                   boost::bind( &SlideChangeBase::viewAdded,
+                   std::bind( &SlideChangeBase::viewAdded,
                                 this,
                                 _1 ));
 
@@ -416,11 +417,11 @@ void SlideChangeBase::viewRemoved( const UnoViewSharedPtr& rView )
         std::remove_if(
             maViewData.begin(),
             maViewData.end(),
-            boost::bind(
+            std::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
-                boost::bind( &ViewEntry::getView, _1 ))),
+                std::bind( &ViewEntry::getView, _1 ))),
         maViewData.end() );
 }
 
@@ -435,11 +436,11 @@ void SlideChangeBase::viewChanged( const UnoViewSharedPtr& rView )
         std::find_if(
             maViewData.begin(),
             maViewData.end(),
-            boost::bind(
+            std::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
-                boost::bind( &ViewEntry::getView, _1 ) )));
+                std::bind( &ViewEntry::getView, _1 ) )));
 
     OSL_ASSERT( aModifiedEntry != maViewData.end() );
     if( aModifiedEntry == maViewData.end() )

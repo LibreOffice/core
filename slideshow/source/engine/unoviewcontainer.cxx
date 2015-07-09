@@ -23,11 +23,12 @@
 #include <canvas/debug.hxx>
 #include <osl/diagnose.h>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <algorithm>
 
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 
@@ -48,10 +49,10 @@ namespace slideshow
             // already added?
             if( ::std::any_of( maViews.begin(),
                                maViews.end(),
-                               ::boost::bind(
+                               ::std::bind(
                                     ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
                                     rView->getUnoView(),
-                                    ::boost::bind(
+                                    ::std::bind(
                                         &UnoView::getUnoView,
                                         _1 ) ) ) )
             {
@@ -74,10 +75,10 @@ namespace slideshow
             // added in the first place?
             if( (aIter=::std::find_if( maViews.begin(),
                                        aEnd,
-                                       ::boost::bind(
+                                       ::std::bind(
                                            ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
-                                           ::boost::cref( xView ),
-                                           ::boost::bind(
+                                           ::std::cref( xView ),
+                                           ::std::bind(
                                                &UnoView::getUnoView,
                                                _1 ) ) ) ) == aEnd )
             {
@@ -89,10 +90,10 @@ namespace slideshow
                 ::std::count_if(
                     maViews.begin(),
                     aEnd,
-                    ::boost::bind(
+                    ::std::bind(
                         ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
-                        ::boost::cref( xView ),
-                        ::boost::bind(
+                        ::std::cref( xView ),
+                        ::std::bind(
                             &UnoView::getUnoView,
                             _1 ))) == 1,
                 "UnoViewContainer::removeView(): View was added multiple times" );
@@ -109,7 +110,7 @@ namespace slideshow
         {
             ::std::for_each( maViews.begin(),
                              maViews.end(),
-                             ::boost::mem_fn(&UnoView::_dispose) );
+                             ::std::mem_fn(&UnoView::_dispose) );
             maViews.clear();
         }
     }

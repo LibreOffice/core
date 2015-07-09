@@ -31,11 +31,12 @@
 #include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/weak_ptr.hpp>
 #include <math.h>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -827,7 +828,7 @@ void PresenterScrollBar::MousePressRepeater::Start (const PresenterScrollBar::Ar
 
         // Schedule repeated executions.
         mnMousePressRepeaterTaskId = PresenterTimer::ScheduleRepeatedTask (
-            ::boost::bind(&PresenterScrollBar::MousePressRepeater::Callback, shared_from_this(), _1),
+            ::std::bind(&PresenterScrollBar::MousePressRepeater::Callback, shared_from_this(), _1),
             500000000,
             250000000);
     }

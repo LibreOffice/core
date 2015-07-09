@@ -18,7 +18,7 @@
  */
 #include "TextCharacterSpacingPopup.hxx"
 #include "TextCharacterSpacingControl.hxx"
-#include <boost/bind.hpp>
+#include <functional>
 #include <unotools/viewoptions.hxx>
 
 namespace svx { namespace sidebar {
@@ -31,7 +31,7 @@ TextCharacterSpacingPopup::TextCharacterSpacingPopup (
         rControlCreator,
         OUString( "Character Spacing"))
 {
-    SetPopupModeEndHandler(::boost::bind(&TextCharacterSpacingPopup::PopupModeEndCallback, this));
+    SetPopupModeEndHandler(::std::bind(&TextCharacterSpacingPopup::PopupModeEndCallback, this));
 }
 
 TextCharacterSpacingPopup::~TextCharacterSpacingPopup()

@@ -22,13 +22,14 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/doublecheckedlocking.h>
 #include <osl/thread.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/function.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <set>
 #include <iterator>
 
 using namespace ::com::sun::star;
+using namespace std::placeholders;
 using namespace ::com::sun::star::uno;
 
 namespace sdext { namespace presenter {
@@ -417,7 +418,7 @@ void PresenterClockTimer::AddListener (const SharedListener& rListener)
     if (mnTimerTaskId==PresenterTimer::NotAValidTaskId)
     {
         mnTimerTaskId = PresenterTimer::ScheduleRepeatedTask(
-            ::boost::bind(&PresenterClockTimer::CheckCurrentTime, this, _1),
+            ::std::bind(&PresenterClockTimer::CheckCurrentTime, this, _1),
             0,
             250000000 /*ns*/);
     }
