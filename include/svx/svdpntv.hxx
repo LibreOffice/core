@@ -337,7 +337,7 @@ public:
     SdrPageView* GetSdrPageView() const { return mpPageView; }
 
     // Eine SdrView kann auf mehreren Fenstern gleichzeitig abgebiltet sein:
-    virtual void AddWindowToPaintView(OutputDevice* pNewWin);
+    virtual void AddWindowToPaintView(OutputDevice* pNewWin, vcl::Window* pWindow);
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
 
     void SetLayerVisible(const OUString& rName, bool bShow=true);

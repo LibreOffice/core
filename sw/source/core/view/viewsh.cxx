@@ -1261,7 +1261,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
                 if(!HasDrawView())
                     MakeDrawView();
                 SdrView* pDrawView = GetDrawView();
-                pDrawView->AddWindowToPaintView(pVout);
+                pDrawView->AddWindowToPaintView(pVout, 0);
 
                 // clear mpWin during DLPrePaint2 to get paint preparation for mpOut, but set it again
                 // immediately afterwards. There are many decisions in SW which imply that Printing
@@ -1670,7 +1670,7 @@ public:
     {
         m_pRef = pValue;
         if (pValue != m_pShell->GetWin() && m_pShell->Imp()->GetDrawView())
-            m_pShell->Imp()->GetDrawView()->AddWindowToPaintView(pValue);
+            m_pShell->Imp()->GetDrawView()->AddWindowToPaintView(pValue, m_pShell->GetWin());
     }
 
     ~RenderContextGuard()

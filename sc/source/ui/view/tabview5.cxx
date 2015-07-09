@@ -216,7 +216,7 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
             if (pGridWin[i])
             {
                 if ( SC_SPLIT_BOTTOMLEFT != (ScSplitPos)i )
-                    pDrawView->AddWindowToPaintView(pGridWin[i]);
+                    pDrawView->AddWindowToPaintView(pGridWin[i], 0);
             }
         pDrawView->RecalcScale();
         for (i=0; i<4; i++)
@@ -251,7 +251,7 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
 {
     if (pDrawView)
     {
-        pDrawView->AddWindowToPaintView(pWin);
+        pDrawView->AddWindowToPaintView(pWin, 0);
 
         // #114409#
         pWin->DrawLayerCreated();
