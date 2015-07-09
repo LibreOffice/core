@@ -402,11 +402,7 @@ namespace XSLT
                         m_tcontrol->terminate();
                         return !m_bError;
                     }
-#if OSL_DEBUG_LEVEL > 0
                 catch( const Exception& exc)
-#else
-                catch (const Exception&)
-#endif
                     {
                         // something went wrong
                         OSL_FAIL(OUStringToOString(exc.Message, RTL_TEXTENCODING_ASCII_US).getStr());

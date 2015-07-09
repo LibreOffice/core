@@ -47,11 +47,7 @@ void XMLSectionFootnoteConfigExport::exportXML(
     SvXMLExport& rExport,
     bool bEndnote,
     const vector<XMLPropertyState> *pProperties,
-    sal_uInt32
-    #ifdef DBG_UTIL
-    nIdx
-    #endif
-    ,
+    sal_uInt32 nIdx,
     const rtl::Reference<XMLPropertySetMapper> & rMapper)
 {
     // store and initialize the values

@@ -96,16 +96,10 @@
 #define OSL_TRACE(...) \
     SAL_DETAIL_INFO_IF_FORMAT(OSL_DEBUG_LEVEL > 0, "legacy.osl", __VA_ARGS__)
 
-#if OSL_DEBUG_LEVEL > 0
 #define OSL_ASSERT(c) \
     SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "OSL_ASSERT: %s", #c)
 #define OSL_ENSURE(c, m) SAL_DETAIL_WARN_IF_FORMAT(!(c), "legacy.osl", "%s", m)
 #define OSL_FAIL(m) SAL_DETAIL_WARN_IF_FORMAT(sal_True, "legacy.osl", "%s", m)
-#else
-#define OSL_ASSERT(c) ((void) 0)
-#define OSL_ENSURE(c, m) ((void) 0)
-#define OSL_FAIL(m) ((void) 0)
-#endif
 
 #define OSL_VERIFY(c) do { if (!(c)) OSL_ASSERT(0); } while (0)
 #define OSL_PRECOND(c, m)   OSL_ENSURE(c, m)
