@@ -14,7 +14,7 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "boost/bind.hpp"
+#include "functional"
 #include "boost/noncopyable.hpp"
 #include "osl/diagnose.h"
 #include "osl/diagnose.hxx"

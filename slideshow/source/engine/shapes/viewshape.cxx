@@ -47,9 +47,10 @@
 #include "viewshape.hxx"
 #include "tools.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace slideshow
@@ -748,10 +749,10 @@ namespace slideshow
             // already there?
             if( (aIter=::std::find_if( maRenderers.begin(),
                                        aEnd,
-                                       ::boost::bind(
+                                       ::std::bind(
                                            ::std::equal_to< ::cppcanvas::CanvasSharedPtr >(),
-                                           ::boost::cref( rDestinationCanvas ),
-                                           ::boost::bind(
+                                           ::std::cref( rDestinationCanvas ),
+                                           ::std::bind(
                                                &RendererCacheEntry::getDestinationCanvas,
                                                _1 ) ) ) ) == aEnd )
             {

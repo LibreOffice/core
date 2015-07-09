@@ -91,7 +91,7 @@
 #include <basic/sbx.hxx>
 #include <basic/sbxvar.hxx>
 #include <boost/assign/list_of.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>

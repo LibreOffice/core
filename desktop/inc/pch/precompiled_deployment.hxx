@@ -15,7 +15,7 @@
 */
 
 #include <algorithm>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/optional.hpp>
 #include <cassert>
 #include <com/sun/star/beans/Ambiguous.hpp>

@@ -58,7 +58,7 @@
 #include "stylesettings.hxx"
 #include <tools/urlobj.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 
 #include "helper/accessibilityclient.hxx"
@@ -686,7 +686,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( aMEvt, *this ) );
                 aEvent.PopupTrigger = sal_True;
 
-                Callback aCallback = ::boost::bind(
+                Callback aCallback = ::std::bind(
                     &MouseListenerMultiplexer::mousePressed,
                     &mpImpl->getMouseListeners(),
                     aEvent
@@ -702,7 +702,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
 
-                Callback aCallback = ::boost::bind(
+                Callback aCallback = ::std::bind(
                     pMouseEvt->IsEnterWindow() ? &MouseListenerMultiplexer::mouseEntered : &MouseListenerMultiplexer::mouseExited,
                     &mpImpl->getMouseListeners(),
                     aEvent
@@ -726,7 +726,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getMouseListeners().getLength() )
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *static_cast<MouseEvent*>(rVclWindowEvent.GetData()), *this ) );
-                Callback aCallback = ::boost::bind(
+                Callback aCallback = ::std::bind(
                     &MouseListenerMultiplexer::mousePressed,
                     &mpImpl->getMouseListeners(),
                     aEvent
@@ -740,7 +740,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getMouseListeners().getLength() )
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *static_cast<MouseEvent*>(rVclWindowEvent.GetData()), *this ) );
-                Callback aCallback = ::boost::bind(
+                Callback aCallback = ::std::bind(
                     &MouseListenerMultiplexer::mouseReleased,
                     &mpImpl->getMouseListeners(),
                     aEvent

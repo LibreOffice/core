@@ -29,7 +29,9 @@
 #include <vcl/settings.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
+
+using namespace std::placeholders;
 
 namespace svx { namespace sidebar {
 
@@ -44,13 +46,13 @@ GalleryControl::GalleryControl (
 
               this,
               WB_HSCROLL,
-              ::boost::bind(&GalleryControl::InitSettings, this))),
+              ::std::bind(&GalleryControl::InitSettings, this))),
       mpBrowser1(VclPtr<GalleryBrowser1>::Create(
 
               this,
               mpGallery,
-              ::boost::bind(&GalleryControl::GalleryKeyInput,this,_1,_2),
-              ::boost::bind(&GalleryControl::ThemeSelectionHasChanged, this))),
+              ::std::bind(&GalleryControl::GalleryKeyInput,this,_1,_2),
+              ::std::bind(&GalleryControl::ThemeSelectionHasChanged, this))),
       mpBrowser2(VclPtr<GalleryBrowser2>::Create(this, mpGallery)),
       maLastSize(GetOutputSizePixel()),
       mbIsInitialResize(true)

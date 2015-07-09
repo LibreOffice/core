@@ -134,9 +134,8 @@
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2isize.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/functional/hash.hpp>
-#include <boost/mem_fn.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <memory>

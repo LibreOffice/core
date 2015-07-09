@@ -19,7 +19,7 @@
 #include "vcl/settings.hxx"
 #include "vcl/svapp.hxx"
 #include <algorithm>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>

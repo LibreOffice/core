@@ -297,7 +297,7 @@ namespace oglcanvas
                   SpriteComparator());
         std::for_each(aSprites.begin(),
                       aSprites.end(),
-                      boost::mem_fn(&CanvasCustomSprite::renderSprite));
+                      std::mem_fn(&CanvasCustomSprite::renderSprite));
 
 
         // frame counter, other info

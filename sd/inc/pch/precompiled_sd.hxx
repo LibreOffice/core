@@ -67,7 +67,7 @@
 #include <basic/sberrors.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbx.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/function.hpp>
 #include <boost/limits.hpp>

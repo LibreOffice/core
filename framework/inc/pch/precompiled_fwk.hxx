@@ -16,7 +16,7 @@
 
 #include "officecfg/Office/Common.hxx"
 #include <algorithm>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>

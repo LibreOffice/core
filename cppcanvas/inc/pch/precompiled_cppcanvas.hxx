@@ -34,7 +34,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <memory>
 #include <boost/noncopyable.hpp>
 #include <canvas/canvastools.hxx>

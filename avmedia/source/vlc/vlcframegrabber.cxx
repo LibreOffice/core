@@ -1,5 +1,5 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-#include <boost/bind.hpp>
+#include <functional>
 #include <iostream>
 #include <osl/conditn.hxx>
 #include <vcl/graph.hxx>
@@ -56,7 +56,7 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString
     const rtl::OUString& fileName = utl::TempFile::CreateTempName();
     {
         wrapper::EventManager manager( mPlayer, mEventHandler );
-        manager.onPaused(boost::bind(&osl::Condition::set, &condition));
+        manager.onPaused(std::bind(&osl::Condition::set, &condition));
 
         if ( !mPlayer.play() )
         {

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/mem_fn.hpp>
 #include "page.hxx"
 
 namespace canvas
@@ -34,7 +33,7 @@ namespace canvas
         {
             ::std::for_each( mpFragments.begin(),
                              mpFragments.end(),
-                             ::boost::mem_fn(&PageFragment::refresh));
+                             ::std::mem_fn(&PageFragment::refresh));
         }
     }
 

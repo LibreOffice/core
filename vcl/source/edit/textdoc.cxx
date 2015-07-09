@@ -19,7 +19,6 @@
 
 #include <textdoc.hxx>
 #include <stdlib.h>
-#include <boost/mem_fn.hpp>
 #include <osl/diagnose.h>
 
 // compare function called by QuickSort
@@ -154,7 +153,7 @@ TextCharAttrib* TextCharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt
 
 void TextCharAttribList::DeleteEmptyAttribs()
 {
-    maAttribs.erase_if(boost::mem_fn(&TextCharAttrib::IsEmpty));
+    maAttribs.erase_if(std::mem_fn(&TextCharAttrib::IsEmpty));
     mbHasEmptyAttribs = false;
 }
 

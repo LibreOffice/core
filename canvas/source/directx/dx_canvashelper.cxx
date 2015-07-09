@@ -46,7 +46,6 @@
 
 #include <algorithm>
 
-
 using namespace ::com::sun::star;
 
 namespace dxcanvas
