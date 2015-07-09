@@ -1097,11 +1097,7 @@ void XMLShapeImportHelper::startPage( com::sun::star::uno::Reference< com::sun::
 }
 
 /** this method must be calling after the last shape is imported for the given page */
-void XMLShapeImportHelper::endPage( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >&
-#ifdef DBG_UTIL
-rShapes
-#endif
-)
+void XMLShapeImportHelper::endPage( com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes )
 {
     DBG_ASSERT( mpPageContext && (mpPageContext->mxShapes == rShapes), "wrong call to endPage(), no startPage called or wrong page" );
     if( NULL == mpPageContext )

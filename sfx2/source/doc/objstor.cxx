@@ -3223,10 +3223,8 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
     bool bSendNotification = false;
     uno::Reference< embed::XStorage > xOldStorageHolder;
 
-#ifdef DBG_UTIL
     // check for wrong creation of object container
     bool bHasContainer = ( pImp->mpObjectContainer != 0 );
-#endif
 
     if ( !xStorage.is() || xStorage == GetStorage() )
     {
@@ -3273,7 +3271,6 @@ bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >& xSt
     return bResult;
 }
 
-#if OSL_DEBUG_LEVEL > 0
 bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::XStorage >& xSource,
                                                    const uno::Reference< embed::XStorage >& xTarget )
 {
@@ -3365,15 +3362,12 @@ bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::XSto
 
     return true;
 }
-#endif
 
 bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorage >& xStorage )
 {
     bool bResult = false;
-#ifdef DBG_UTIL
     // check for wrong creation of object container
     bool bHasContainer = ( pImp->mpObjectContainer != 0 );
-#endif
     if ( xStorage.is() )
     {
         if ( pImp->mpObjectContainer )

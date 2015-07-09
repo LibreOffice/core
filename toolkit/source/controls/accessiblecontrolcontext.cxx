@@ -188,11 +188,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL OAccessibleControlContext::disposing( const EventObject&
-    #if OSL_DEBUG_LEVEL > 0
-    _rSource
-    #endif
-    ) throw ( RuntimeException, std::exception )
+    void SAL_CALL OAccessibleControlContext::disposing( const EventObject& _rSource ) throw ( RuntimeException, std::exception )
     {
         OSL_ENSURE( Reference< XPropertySet >( _rSource.Source, UNO_QUERY ).get() == m_xControlModel.get(),
             "OAccessibleControlContext::disposing: where did this come from?" );

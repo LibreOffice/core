@@ -442,10 +442,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     aNameDlg->GetName( aNewName );
                     if (aNewName != aPageName)
                     {
-#ifdef DBG_UTIL
-                        bool bResult =
-#endif
-                            RenameSlide( nPageId, aNewName );
+                        bool bResult = RenameSlide( nPageId, aNewName );
                         DBG_ASSERT( bResult, "Couldn't rename slide" );
                     }
                 }
