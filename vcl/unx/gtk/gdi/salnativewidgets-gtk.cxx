@@ -36,6 +36,8 @@
 #include <algorithm>
 #include <unordered_map>
 
+#include <boost/optional.hpp>
+
 #include "vcl/vclenum.hxx"
 #include <vcl/settings.hxx>
 #include "fontmanager.hxx"

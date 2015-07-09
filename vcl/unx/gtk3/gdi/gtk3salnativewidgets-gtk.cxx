@@ -20,6 +20,8 @@
 #include "gtk3cairotextrender.hxx"
 #include "cairo_gtk3_cairo.hxx"
 
+#include <boost/optional.hpp>
+
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpEntryStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpTextViewStyle = NULL;
