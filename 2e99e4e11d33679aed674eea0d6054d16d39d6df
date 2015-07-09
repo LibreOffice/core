@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_9b20914b",
+        "filename": "basegfx/source/range/b2drangeclipper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-09T06:00:19Z",
+      "side": 0,
+      "message": "Naive attempt to replace this construct with vanilla std::bind and std::ref was failing to compile on most recent clang++ with: [1].\n\n* [1] http://paste.openstack.org/show/356353/",
+      "range": {
+        "startLine": 500,
+        "startChar": 31,
+        "endLine": 504,
+        "endChar": 39
+      },
+      "revId": "2e99e4e11d33679aed674eea0d6054d16d39d6df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
