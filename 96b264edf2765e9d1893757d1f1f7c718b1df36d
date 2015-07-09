@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_fbebc5ae",
+        "filename": "basegfx/source/range/b2dpolyrange.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-09T09:25:45Z",
+      "side": 0,
+      "message": "This wasn\u0027t enough to remove it here. Build on Windows is still failing because of collision between placeholders that were imported in global namespace by boost and std on line 31 in the new version. There are two options to rectivy it:\n\n* 1. Find and remove offending include of bind.hpp\n* 2. Don use the directive \"using namespace std::placeholders;\" and use instead verbose std::placeholders::_1.\n\nI think that the way to go is 1., becasue 2. is unnecesary verbose. Thoughts?\n\n\n C:/cygwin/home/tdf/lode/jenkins/workspace/lo_gerrit_master/Gerrit/Gerrit\n  /Platform/Windows/basegfx/source/range/b2dpolyrange.cxx(86) : error C2872: \n  \u0027_1\u0027 : ambiguous symbol\n  could be \u0027C:/PROGRA~2/MICROS~4.0/VC/includefunctional(1382) : std::_Ph\u003c1\u003e std::placeholders::_1\u0027\n  or \u0027C:/cygwin/home/tdf/lode/jenkins/workspace/lo_gerrit_master/Gerrit/Gerrit\n  /Platform/Windows/workdir/UnpackedTarball/boostboost\n  /bind/placeholders.hpp(43) : boost::arg\u003c1\u003e `anonymous-namespace\u0027::_1\u0027",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 25
+      },
+      "revId": "96b264edf2765e9d1893757d1f1f7c718b1df36d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
