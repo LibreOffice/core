@@ -62,7 +62,7 @@
 #include <basegfx/tools/unotools.hxx>
 #include <basegfx/tools/zoomtools.hxx>
 #include <basic/sbxvar.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 #include <memory>
 #include <boost/scoped_ptr.hpp>

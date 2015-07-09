@@ -48,11 +48,12 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <algorithm>
 #include <vector>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace boost
@@ -352,7 +353,7 @@ void SAL_CALL EventMultiplexerListener::mousePressed(
     // might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( boost::bind( &EventMultiplexerImpl::mousePressed,
+            makeEvent( std::bind( &EventMultiplexerImpl::mousePressed,
                                     mpEventMultiplexer,
                                     e ),
                        "EventMultiplexerImpl::mousePressed") );
@@ -367,7 +368,7 @@ void SAL_CALL EventMultiplexerListener::mouseReleased(
     // this might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( boost::bind( &EventMultiplexerImpl::mouseReleased,
+            makeEvent( std::bind( &EventMultiplexerImpl::mouseReleased,
                                     mpEventMultiplexer,
                                     e ),
                        "EventMultiplexerImpl::mouseReleased") );
@@ -395,7 +396,7 @@ void SAL_CALL EventMultiplexerListener::mouseDragged(
     // might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( boost::bind( &EventMultiplexerImpl::mouseDragged,
+            makeEvent( std::bind( &EventMultiplexerImpl::mouseDragged,
                                     mpEventMultiplexer,
                                     e ),
                        "EventMultiplexerImpl::mouseDragged") );
@@ -410,7 +411,7 @@ void SAL_CALL EventMultiplexerListener::mouseMoved(
     // might not be the main thread!
     if( mpEventQueue )
         mpEventQueue->addEvent(
-            makeEvent( boost::bind( &EventMultiplexerImpl::mouseMoved,
+            makeEvent( std::bind( &EventMultiplexerImpl::mouseMoved,
                                     mpEventMultiplexer,
                                     e ),
                        "EventMultiplexerImpl::mouseMoved") );
@@ -424,8 +425,8 @@ bool EventMultiplexerImpl::notifyAllAnimationHandlers( ImplAnimationHandlers con
                                                        AnimationNodeSharedPtr const& rNode )
 {
     return rContainer.applyAll(
-        boost::bind( &AnimationEventHandler::handleAnimationEvent,
-                     _1, boost::cref(rNode) ) );
+        std::bind( &AnimationEventHandler::handleAnimationEvent,
+                     _1, std::cref(rNode) ) );
 }
 
 template <typename XSlideShowViewFunc>
@@ -458,10 +459,10 @@ UnoViewSharedPtr EventMultiplexerImpl::findUnoView(
     const UnoViewVector::const_iterator aEnd ( mrViewContainer.end() );
     if( (aIter=std::find_if( mrViewContainer.begin(),
                              aEnd,
-                             boost::bind(
+                             std::bind(
                                  std::equal_to<uno::Reference<presentation::XSlideShowView> >(),
-                                 boost::cref( xView ),
-                                 boost::bind( &UnoView::getUnoView, _1 )))) == aEnd )
+                                 std::cref( xView ),
+                                 std::bind( &UnoView::getUnoView, _1 )))) == aEnd )
     {
         OSL_FAIL("EventMultiplexer::findUnoView(): unexpected message source" );
         return UnoViewSharedPtr();
@@ -515,7 +516,7 @@ void EventMultiplexerImpl::tick()
 void EventMultiplexerImpl::scheduleTick()
 {
     EventSharedPtr pEvent(
-        makeDelay( boost::bind( &EventMultiplexerImpl::tick,
+        makeDelay( std::bind( &EventMultiplexerImpl::tick,
                                 this ),
                    mnTimeout,
                    "EventMultiplexerImpl::tick with delay"));
@@ -611,10 +612,10 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
     if( (aIter=::std::find_if(
              mrViewContainer.begin(),
              aEnd,
-             boost::bind( std::equal_to< uno::Reference<
+             std::bind( std::equal_to< uno::Reference<
                           presentation::XSlideShowView > >(),
-                          boost::cref( xView ),
-                          boost::bind( &UnoView::getUnoView, _1 ) ) ) ) == aEnd)
+                          std::cref( xView ),
+                          std::bind( &UnoView::getUnoView, _1 ) ) ) ) == aEnd)
     {
         ENSURE_OR_RETURN_FALSE(
             false, "EventMultiplexer::notifyHandlers(): "
@@ -637,9 +638,9 @@ bool EventMultiplexerImpl::notifyMouseHandlers(
     // one high-priority handler rejects the event
     // (i.e. returns false), try next handler.
     return rQueue.apply(
-        boost::bind(
+        std::bind(
             pHandlerMethod,
-            boost::bind(
+            std::bind(
                 &ImplMouseHandlers::container_type::value_type::getHandler,
                 _1 ),
             aEvent ));
@@ -709,9 +710,9 @@ bool EventMultiplexerImpl::notifyNextEffect()
     // high-priority handler rejects the event (i.e. returns false),
     // try next handler.
     return maNextEffectHandlers.apply(
-        boost::bind(
+        std::bind(
             &EventHandler::handleEvent,
-            boost::bind(
+            std::bind(
                 &ImplNextEffectHandlers::container_type::value_type::getHandler,
                 _1 )) );
 }
@@ -1012,10 +1013,10 @@ bool EventMultiplexer::notifyShapeListenerAdded(
     const uno::Reference<drawing::XShape>&                   xShape )
 {
     return mpImpl->maShapeListenerHandlers.applyAll(
-        boost::bind(&ShapeListenerEventHandler::listenerAdded,
+        std::bind(&ShapeListenerEventHandler::listenerAdded,
                     _1,
-                    boost::cref(xListener),
-                    boost::cref(xShape)) );
+                    std::cref(xListener),
+                    std::cref(xShape)) );
 }
 
 bool EventMultiplexer::notifyShapeListenerRemoved(
@@ -1023,10 +1024,10 @@ bool EventMultiplexer::notifyShapeListenerRemoved(
     const uno::Reference<drawing::XShape>&                   xShape )
 {
     return mpImpl->maShapeListenerHandlers.applyAll(
-        boost::bind(&ShapeListenerEventHandler::listenerRemoved,
+        std::bind(&ShapeListenerEventHandler::listenerRemoved,
                     _1,
-                    boost::cref(xListener),
-                    boost::cref(xShape)) );
+                    std::cref(xListener),
+                    std::cref(xShape)) );
 }
 
 bool EventMultiplexer::notifyShapeCursorChange(
@@ -1034,24 +1035,24 @@ bool EventMultiplexer::notifyShapeCursorChange(
     sal_Int16                               nPointerShape )
 {
     return mpImpl->maShapeCursorHandlers.applyAll(
-        boost::bind(&ShapeCursorEventHandler::cursorChanged,
+        std::bind(&ShapeCursorEventHandler::cursorChanged,
                     _1,
-                    boost::cref(xShape),
+                    std::cref(xShape),
                     nPointerShape));
 }
 
 bool EventMultiplexer::notifyUserPaintColor( RGBColor const& rUserColor )
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::bind(&UserPaintEventHandler::colorChanged,
+        std::bind(&UserPaintEventHandler::colorChanged,
                     _1,
-                    boost::cref(rUserColor)));
+                    std::cref(rUserColor)));
 }
 
 bool EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::bind(&UserPaintEventHandler::widthChanged,
+        std::bind(&UserPaintEventHandler::widthChanged,
             _1,
                     rUserStrokeWidth));
 }
@@ -1059,35 +1060,35 @@ bool EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
 bool EventMultiplexer::notifyUserPaintDisabled()
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::mem_fn(&UserPaintEventHandler::disable));
+        std::mem_fn(&UserPaintEventHandler::disable));
 }
 
 bool EventMultiplexer::notifySwitchPenMode(){
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::mem_fn(&UserPaintEventHandler::switchPenMode));
+        std::mem_fn(&UserPaintEventHandler::switchPenMode));
 }
 
 bool EventMultiplexer::notifySwitchEraserMode(){
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::mem_fn(&UserPaintEventHandler::switchEraserMode));
+        std::mem_fn(&UserPaintEventHandler::switchEraserMode));
 }
 
 //adding erasing all ink features with UserPaintOverlay
 bool EventMultiplexer::notifyEraseAllInk( bool const& rEraseAllInk )
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::bind(&UserPaintEventHandler::eraseAllInkChanged,
+        std::bind(&UserPaintEventHandler::eraseAllInkChanged,
                     _1,
-                    boost::cref(rEraseAllInk)));
+                    std::cref(rEraseAllInk)));
 }
 
 //adding erasing features with UserPaintOverlay
 bool EventMultiplexer::notifyEraseInkWidth( sal_Int32 rEraseInkSize )
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
-        boost::bind(&UserPaintEventHandler::eraseInkWidthChanged,
+        std::bind(&UserPaintEventHandler::eraseInkWidthChanged,
                     _1,
-                    boost::cref(rEraseInkSize)));
+                    std::cref(rEraseInkSize)));
 }
 
 bool EventMultiplexer::notifyNextEffect()
@@ -1098,13 +1099,13 @@ bool EventMultiplexer::notifyNextEffect()
 bool EventMultiplexer::notifySlideStartEvent()
 {
     return mpImpl->maSlideStartHandlers.applyAll(
-        boost::mem_fn(&EventHandler::handleEvent) );
+        std::mem_fn(&EventHandler::handleEvent) );
 }
 
 bool EventMultiplexer::notifySlideEndEvent()
 {
     return mpImpl->maSlideEndHandlers.applyAll(
-        boost::mem_fn(&EventHandler::handleEvent) );
+        std::mem_fn(&EventHandler::handleEvent) );
 }
 
 bool EventMultiplexer::notifyAnimationStart(
@@ -1124,7 +1125,7 @@ bool EventMultiplexer::notifyAnimationEnd(
 bool EventMultiplexer::notifySlideAnimationsEnd()
 {
     return mpImpl->maSlideAnimationsEndHandlers.applyAll(
-        boost::mem_fn(&EventHandler::handleEvent));
+        std::mem_fn(&EventHandler::handleEvent));
 }
 
 bool EventMultiplexer::notifyAudioStopped(
@@ -1146,7 +1147,7 @@ bool EventMultiplexer::notifyCommandStopAudio(
 bool EventMultiplexer::notifyPauseMode( bool bPauseShow )
 {
     return mpImpl->maPauseHandlers.applyAll(
-        boost::bind( &PauseEventHandler::handlePause,
+        std::bind( &PauseEventHandler::handlePause,
                      _1, bPauseShow ));
 }
 
@@ -1167,9 +1168,9 @@ bool EventMultiplexer::notifyViewAdded( const UnoViewSharedPtr& rView )
             mpImpl->mxListener.get() );
 
     return mpImpl->maViewHandlers.applyAll(
-        boost::bind( &ViewEventHandler::viewAdded,
+        std::bind( &ViewEventHandler::viewAdded,
                      _1,
-                     boost::cref(rView) ));
+                     std::cref(rView) ));
 }
 
 bool EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
@@ -1190,17 +1191,17 @@ bool EventMultiplexer::notifyViewRemoved( const UnoViewSharedPtr& rView )
             mpImpl->mxListener.get() );
 
     return mpImpl->maViewHandlers.applyAll(
-        boost::bind( &ViewEventHandler::viewRemoved,
+        std::bind( &ViewEventHandler::viewRemoved,
                      _1,
-                     boost::cref(rView) ));
+                     std::cref(rView) ));
 }
 
 bool EventMultiplexer::notifyViewChanged( const UnoViewSharedPtr& rView )
 {
     return mpImpl->maViewHandlers.applyAll(
-        boost::bind( &ViewEventHandler::viewChanged,
+        std::bind( &ViewEventHandler::viewChanged,
                      _1,
-                     boost::cref(rView) ));
+                     std::cref(rView) ));
 }
 
 bool EventMultiplexer::notifyViewChanged( const uno::Reference<presentation::XSlideShowView>& xView )
@@ -1216,7 +1217,7 @@ bool EventMultiplexer::notifyViewChanged( const uno::Reference<presentation::XSl
 bool EventMultiplexer::notifyViewsChanged()
 {
     return mpImpl->maViewHandlers.applyAll(
-        boost::mem_fn( &ViewEventHandler::viewsChanged ));
+        std::mem_fn( &ViewEventHandler::viewsChanged ));
 }
 
 bool EventMultiplexer::notifyViewClobbered(
@@ -1228,18 +1229,16 @@ bool EventMultiplexer::notifyViewClobbered(
         return false; // view not registered here
 
     return mpImpl->maViewRepaintHandlers.applyAll(
-        boost::bind( &ViewRepaintHandler::viewClobbered,
+        std::bind( &ViewRepaintHandler::viewClobbered,
                      _1,
-                     boost::cref(pView) ));
+                     std::cref(pView) ));
 }
 
 bool EventMultiplexer::notifyHyperlinkClicked(
     OUString const& hyperLink )
 {
     return mpImpl->maHyperlinkHandlers.apply(
-        boost::bind(&HyperlinkHandler::handleHyperlink,
-                    _1,
-                    boost::cref(hyperLink)) );
+        [&](PrioritizedHandlerEntry<HyperlinkHandler> const& pHandler) { return get_pointer(pHandler)->handleHyperlink(hyperLink); } );
 }
 
 } // namespace internal

@@ -675,7 +675,7 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
     mpElementsControl->SetBackground( Color( COL_WHITE ) );
     mpElementsControl->SetTextColor( Color( COL_BLACK ) );
     mpElementsControl->setElementSetId(RID_CATEGORY_UNARY_BINARY_OPERATORS);
-    mpElementsControl->selectedSignal.connect( boost::bind( &SmElementsDockingWindow::SelectClickHandler, this, _1 ) );
+    mpElementsControl->selectedSignal.connect( [this](SmElement* pElement) { this->SelectClickHandler(pElement); } );
 }
 
 SmElementsDockingWindow::~SmElementsDockingWindow ()

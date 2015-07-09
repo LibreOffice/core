@@ -23,9 +23,11 @@
 #include "osl/process.h"
 #include "osl/diagnose.hxx"
 #include "sal/log.hxx"
-#include "boost/bind.hpp"
+#include "functional"
 #include <algorithm>
 #include <vector>
+
+using namespace std::placeholders;
 
 namespace {
 
@@ -95,7 +97,7 @@ bool SAL_CALL osl_detail_ObjectRegistry_storeAddresses( char const* pName )
         return true;
     OStringVec::const_iterator const iEnd( rVec.end() );
     return std::find_if( rVec.begin(), iEnd,
-                         boost::bind( &isSubStr, pName, _1 ) ) != iEnd;
+                         std::bind( &isSubStr, pName, _1 ) ) != iEnd;
 }
 
 bool SAL_CALL osl_detail_ObjectRegistry_checkObjectCount(

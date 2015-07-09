@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/mem_fn.hpp>
 #include <vector>
 #include <algorithm>
 
@@ -125,12 +124,12 @@ namespace internal
         // any ViewUpdate-triggered updates?
         const bool bViewUpdatesNeeded(
             mpImpl->maUpdaters.apply(
-                boost::mem_fn(&ViewUpdate::needsUpdate)) );
+                std::mem_fn(&ViewUpdate::needsUpdate)) );
 
         if( bViewUpdatesNeeded )
         {
             mpImpl->maUpdaters.applyAll(
-                boost::mem_fn((bool (ViewUpdate::*)())&ViewUpdate::update) );
+                std::mem_fn((bool (ViewUpdate::*)())&ViewUpdate::update) );
         }
 
         if( bViewUpdatesNeeded ||
@@ -140,8 +139,8 @@ namespace internal
             std::for_each( mpImpl->mrViewContainer.begin(),
                            mpImpl->mrViewContainer.end(),
                            mpImpl->mbViewClobbered ?
-                           boost::mem_fn(&View::paintScreen) :
-                           boost::mem_fn(&View::updateScreen) );
+                           std::mem_fn(&View::paintScreen) :
+                           std::mem_fn(&View::updateScreen) );
         }
         else if( !mpImpl->maViewUpdateRequests.empty() )
         {
@@ -197,7 +196,7 @@ namespace internal
         // artifacts.
         std::for_each( mpImpl->mrViewContainer.begin(),
                        mpImpl->mrViewContainer.end(),
-                       boost::mem_fn(&View::updateScreen) );
+                       std::mem_fn(&View::updateScreen) );
     }
 
     void ScreenUpdater::lockUpdates()

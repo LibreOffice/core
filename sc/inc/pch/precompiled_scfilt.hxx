@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/checked_delete.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>

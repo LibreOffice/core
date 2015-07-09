@@ -26,8 +26,10 @@
 #include "model/SlsPageEnumerationProvider.hxx"
 
 #include <set>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/enable_shared_from_this.hpp>
+
+using namespace std::placeholders;
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -258,9 +260,9 @@ InsertAnimator::Implementation::RunContainer::const_iterator
     return std::find_if(
         maRuns.begin(),
         maRuns.end(),
-        ::boost::bind(
+        ::std::bind(
             ::std::equal_to<sal_Int32>(),
-            ::boost::bind(&PageObjectRun::mnRunIndex, _1),
+            ::std::bind(&PageObjectRun::mnRunIndex, _1),
             nRunIndex));
 }
 
@@ -396,12 +398,12 @@ void PageObjectRun::RestartAnimation()
     // Restart the animation.
     mrAnimatorAccess.AddRun(shared_from_this());
     mnAnimationId = mrAnimatorAccess.GetAnimator()->AddAnimation(
-        ::boost::ref(*this),
+        ::std::ref(*this),
         0,
         300,
-        ::boost::bind(
+        ::std::bind(
             &AnimatorAccess::RemoveRun,
-            ::boost::ref(mrAnimatorAccess),
+            ::std::ref(mrAnimatorAccess),
             shared_from_this()));
 }
 

@@ -29,7 +29,7 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include "delayevent.hxx"
 #include "usereventqueue.hxx"
@@ -42,7 +42,7 @@
 #include <functional>
 #include <algorithm>
 
-
+using namespace std::placeholders;
 using namespace com::sun::star;
 
 /* Implementation of UserEventQueue class */
@@ -148,8 +148,8 @@ public:
 
             // registered node found -> fire all events in the vector
             std::for_each( rVec.begin(), rVec.end(),
-                           boost::bind( &EventQueue::addEvent,
-                                        boost::ref( mrEventQueue ), _1 ) );
+                           std::bind( &EventQueue::addEvent,
+                                        std::ref( mrEventQueue ), _1 ) );
 
             rVec.clear();
         }
@@ -270,8 +270,8 @@ private:
                 // someone has registerered above for next effects
                 // (multiplexer prio=0) at the user event queue.
                 return mrEventQueue.addEventWhenQueueIsEmpty(
-                    makeEvent( boost::bind( &EventMultiplexer::notifyNextEffect,
-                                            boost::ref(mrEventMultiplexer) ),
+                    makeEvent( std::bind( &EventMultiplexer::notifyNextEffect,
+                                            std::ref(mrEventMultiplexer) ),
                                "EventMultiplexer::notifyNextEffect") );
             }
             else
@@ -641,8 +641,8 @@ void UserEventQueue::registerAnimationStartEvent(
     registerEvent( mpAnimationStartEventHandler,
                    rEvent,
                    xNode,
-                   boost::bind( &EventMultiplexer::addAnimationStartHandler,
-                                boost::ref( mrMultiplexer ), _1 ) );
+                   std::bind( &EventMultiplexer::addAnimationStartHandler,
+                                std::ref( mrMultiplexer ), _1 ) );
 }
 
 void UserEventQueue::registerAnimationEndEvent(
@@ -652,8 +652,8 @@ void UserEventQueue::registerAnimationEndEvent(
     registerEvent( mpAnimationEndEventHandler,
                    rEvent,
                    xNode,
-                   boost::bind( &EventMultiplexer::addAnimationEndHandler,
-                                boost::ref( mrMultiplexer ), _1 ) );
+                   std::bind( &EventMultiplexer::addAnimationEndHandler,
+                                std::ref( mrMultiplexer ), _1 ) );
 }
 
 void UserEventQueue::registerAudioStoppedEvent(
@@ -663,8 +663,8 @@ void UserEventQueue::registerAudioStoppedEvent(
     registerEvent( mpAudioStoppedEventHandler,
                    rEvent,
                    xNode,
-                   boost::bind( &EventMultiplexer::addAudioStoppedHandler,
-                                boost::ref( mrMultiplexer ), _1 ) );
+                   std::bind( &EventMultiplexer::addAudioStoppedHandler,
+                                std::ref( mrMultiplexer ), _1 ) );
 }
 
 void UserEventQueue::registerShapeClickEvent( const EventSharedPtr& rEvent,
@@ -788,8 +788,8 @@ void UserEventQueue::registerMouseEnterEvent( const EventSharedPtr& rEvent,
     registerEvent( mpMouseEnterHandler,
                    rEvent,
                    rShape,
-                   boost::bind( &EventMultiplexer::addMouseMoveHandler,
-                                boost::ref( mrMultiplexer ), _1,
+                   std::bind( &EventMultiplexer::addMouseMoveHandler,
+                                std::ref( mrMultiplexer ), _1,
                                 0.0 /* default prio */ ) );
 }
 
@@ -799,8 +799,8 @@ void UserEventQueue::registerMouseLeaveEvent( const EventSharedPtr& rEvent,
     registerEvent( mpMouseLeaveHandler,
                    rEvent,
                    rShape,
-                   boost::bind( &EventMultiplexer::addMouseMoveHandler,
-                                boost::ref( mrMultiplexer ), _1,
+                   std::bind( &EventMultiplexer::addMouseMoveHandler,
+                                std::ref( mrMultiplexer ), _1,
                                 0.0 /* default prio */ ) );
 }
 

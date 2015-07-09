@@ -25,8 +25,10 @@
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <algorithm>
+
+using namespace std::placeholders;
 
 namespace {
 
@@ -318,7 +320,8 @@ bool ScUserList::operator!=( const ScUserList& r ) const
 
 bool ScUserList::HasEntry( const OUString& rStr ) const
 {
-    return ::std::any_of(maData.begin(), maData.end(), ::boost::bind(&ScUserListData::GetString, _1) == rStr);
+    return ::std::any_of(maData.begin(), maData.end(),
+                         [&] (ScUserListData const& data) -> bool { return data.GetString() == rStr; } );
 }
 
 ScUserList::iterator ScUserList::begin()

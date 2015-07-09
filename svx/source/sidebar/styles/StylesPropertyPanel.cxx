@@ -1,5 +1,5 @@
 #include "StylesPropertyPanel.hxx"
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace css;
 using namespace css::uno;

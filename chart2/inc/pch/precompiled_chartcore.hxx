@@ -30,7 +30,7 @@
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/checked_delete.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>

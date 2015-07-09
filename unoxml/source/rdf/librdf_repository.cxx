@@ -29,7 +29,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/optional.hpp>
 
 #include <libxslt/security.h>
@@ -77,6 +77,8 @@
     librdf_QuerySelectResult:   an XEnumeration<sequence<XNode>>
 
  */
+
+using namespace std::placeholders;
 
 /// anonymous implementation namespace
 namespace {
@@ -1254,8 +1256,8 @@ throw (uno::RuntimeException, rdf::RepositoryException, std::exception)
     ::std::vector< uno::Reference<rdf::XURI> > ret;
     std::transform(m_NamedGraphs.begin(), m_NamedGraphs.end(),
         std::back_inserter(ret),
-        boost::bind(&rdf::XNamedGraph::getName,
-            boost::bind(&NamedGraphMap_t::value_type::second, _1)));
+        std::bind(&rdf::XNamedGraph::getName,
+            std::bind(&NamedGraphMap_t::value_type::second, _1)));
     return comphelper::containerToSequence(ret);
 }
 
@@ -1587,7 +1589,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         predicates;
     ::std::transform(i_rPredicates.begin(), i_rPredicates.end(),
         ::std::back_inserter(predicates),
-        ::boost::bind(&librdf_TypeConverter::extractResource_NoLock, _1));
+        ::std::bind(&librdf_TypeConverter::extractResource_NoLock, _1));
 
     removeStatementRDFa(i_xObject); // not atomic with insertion?
 

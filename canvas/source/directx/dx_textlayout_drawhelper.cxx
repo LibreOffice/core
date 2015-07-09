@@ -26,7 +26,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <memory>
-#include <boost/bind.hpp>
+#include <functional>
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
@@ -46,6 +46,7 @@
 
 class ::com::sun::star::rendering::XCanvasFont;
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 
@@ -79,7 +80,7 @@ namespace dxcanvas
 
         // issue an ReleaseHDC() when leaving the scope
         const ::comphelper::ScopeGuard aGuard(
-            boost::bind( &Gdiplus::Graphics::ReleaseHDC,
+            std::bind( &Gdiplus::Graphics::ReleaseHDC,
                          rGraphics.get(),
                          hdc ));
 

@@ -49,7 +49,7 @@
 
 #include <libxml/tree.h>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/shared_array.hpp>
 #include <boost/tuple/tuple.hpp>
 
@@ -74,6 +74,7 @@
  called reserved names.
  */
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace sfx2 {
@@ -893,9 +894,9 @@ throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
         getAllParts(*m_pImpl) );
     ::std::remove_copy_if(parts.begin(), parts.end(),
         ::std::back_inserter(ret),
-        ::boost::bind(
+        ::std::bind(
             ::std::logical_not<bool>(),
-            ::boost::bind(&isPartOfType, ::boost::ref(*m_pImpl), _1, i_xType) ));
+            ::std::bind(&isPartOfType, ::std::ref(*m_pImpl), _1, i_xType) ));
     return ::comphelper::containerToSequence(ret);
 }
 
@@ -1166,10 +1167,10 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     std::for_each(StgFiles.begin(), StgFiles.end(),
-        boost::bind(addContentOrStylesFileImpl, boost::ref(*m_pImpl), _1));
+        std::bind(addContentOrStylesFileImpl, std::ref(*m_pImpl), _1));
 
     std::for_each(MfstMetadataFiles.begin(), MfstMetadataFiles.end(),
-        boost::bind(importFile, boost::ref(*m_pImpl),
+        std::bind(importFile, std::ref(*m_pImpl),
             i_xStorage, baseURI, i_xHandler, _1));
 }
 

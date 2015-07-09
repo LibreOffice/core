@@ -14,7 +14,7 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "boost/bind.hpp"
+#include "functional"
 #include "com/sun/star/uno/Reference.hxx"
 #include "rtl/ref.hxx"
 #include <algorithm>
@@ -38,11 +38,10 @@
 #include <basegfx/tools/lerp.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2ivector.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/current_function.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/function.hpp>
-#include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>

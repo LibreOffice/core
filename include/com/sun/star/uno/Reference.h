@@ -555,7 +555,7 @@ public:
 };
 
 /// @cond INTERNAL
-/** Enables boost::mem_fn and boost::bind to recognize Reference.
+/** Enables std::mem_fn and std::bind to recognize Reference.
 */
 template <typename T>
 inline T * get_pointer( Reference<T> const& r )

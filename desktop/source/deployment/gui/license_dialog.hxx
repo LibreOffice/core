@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 namespace dp_gui {
 
