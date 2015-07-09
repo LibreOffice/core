@@ -50,7 +50,7 @@ $(eval $(call gb_Library_use_system_win32_libs,so_activex_x64,\
 ))
 
 $(eval $(call gb_Library_add_libs,so_activex_x64,\
-	$(ATL_LIB)/amd64/$(if $(filter 120,$(VCVER)),atls.lib,$(if $(MSVC_USE_DEBUG_RUNTIME),atlsd.lib,atls.lib)) \
+	$(ATL_LIB)/amd64/atls.lib \
 ))
 
 # vim:set noet sw=4 ts=4:

@@ -77,7 +77,7 @@ $(eval $(call gb_Library_use_system_win32_libs,UAccCOM,\
 ))
 
 $(eval $(call gb_Library_add_libs,UAccCOM,\
-	$(ATL_LIB)/$(if $(filter 120,$(VCVER)),atls.lib,$(if $(MSVC_USE_DEBUG_RUNTIME),atlsd.lib,atls.lib)) \
+	$(ATL_LIB)/atls.lib \
 ))
 
 # vim:set noet sw=4 ts=4:
