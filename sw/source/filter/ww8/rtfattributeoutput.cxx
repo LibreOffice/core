@@ -1547,6 +1547,9 @@ void RtfAttributeOutput::WriteHeaderFooter_Impl(const SwFrameFormat& rFormat, bo
     m_aRun = aRun;
 }
 
+namespace
+{
+
 void lcl_TextFrameShadow(std::vector< std::pair<OString, OString> >& rFlyProperties, const SwFrameFormat& rFrameFormat)
 {
     SvxShadowItem aShadowItem = rFrameFormat.GetShadow();
@@ -1628,6 +1631,8 @@ void lcl_TextFrameRelativeSize(std::vector< std::pair<OString, OString> >& rFlyP
         }
         rFlyProperties.push_back(std::make_pair("sizerelv", aRelation));
     }
+}
+
 }
 
 void RtfAttributeOutput::writeTextFrame(const sw::Frame& rFrame, bool bTextBox)

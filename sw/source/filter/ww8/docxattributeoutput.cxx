@@ -890,6 +890,9 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
     }
 }
 
+namespace
+{
+
 /// Outputs an item set, that contains the formatting of the paragraph marker.
 void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, const SfxItemSet& rParagraphMarkerProperties)
 {
@@ -919,6 +922,8 @@ void lcl_writeParagraphMarkerProperties(DocxAttributeOutput& rAttributeOutput, c
         }
         nWhichId = aIter.NextWhich();
     }
+}
+
 }
 
 void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMarkerProperties, const SwRedlineData* pRedlineData, const SwRedlineData* pRedlineParagraphMarkerDeleted, const SwRedlineData* pRedlineParagraphMarkerInserted)
@@ -3086,6 +3091,9 @@ void DocxAttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t /*
 {
 }
 
+namespace
+{
+
 /// Does the same as comphelper::string::padToLength(), but extends the start, not the end.
 OString lcl_padStartToLength(OString const & aString, sal_Int32 nLen, sal_Char cFill)
 {
@@ -3099,6 +3107,8 @@ OString lcl_padStartToLength(OString const & aString, sal_Int32 nLen, sal_Char c
     }
     else
         return aString;
+}
+
 }
 
 void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -3715,6 +3725,9 @@ sal_Int32 DocxStringGetToken(DocxStringTokenMap const * pMap, const OUString& rN
     return 0;
 }
 
+namespace
+{
+
 DocxStringTokenMap const aDefaultTokens[] = {
     {"defQFormat", XML_defQFormat},
     {"defUnhideWhenUsed", XML_defUnhideWhenUsed},
@@ -3734,6 +3747,8 @@ DocxStringTokenMap const aExceptionTokens[] = {
     {"qFormat", XML_qFormat},
     {0, 0}
 };
+
+}
 
 void DocxAttributeOutput::LatentStyles()
 {
@@ -3787,6 +3802,9 @@ void DocxAttributeOutput::LatentStyles()
     m_pSerializer->endElementNS(XML_w, XML_latentStyles);
 }
 
+namespace
+{
+
 /// Should the font size we have written out as a default one?
 bool lcl_isDefaultFontSize(const SvxFontHeightItem& rFontHeight, SwDoc* pDoc)
 {
@@ -3800,6 +3818,8 @@ bool lcl_isDefaultFontSize(const SvxFontHeightItem& rFontHeight, SwDoc* pDoc)
             return static_cast<const SvxFontHeightItem*>(pItem)->GetHeight() != rFontHeight.GetHeight();
     }
     return bRet;
+}
+
 }
 
 void DocxAttributeOutput::OutputDefaultItem(const SfxPoolItem& rHt)
@@ -5319,6 +5339,9 @@ void DocxAttributeOutput::EndStyleProperties( bool bParProp )
     }
 }
 
+namespace
+{
+
 void lcl_OutlineLevel(sax_fastparser::FSHelperPtr pSerializer, sal_uInt16 nLevel)
 {
     if (nLevel >= WW8ListManager::nMaxLevel)
@@ -5327,6 +5350,8 @@ void lcl_OutlineLevel(sax_fastparser::FSHelperPtr pSerializer, sal_uInt16 nLevel
     pSerializer->singleElementNS(XML_w, XML_outlineLvl,
             FSNS(XML_w, XML_val), OString::number(nLevel).getStr(),
             FSEND);
+}
+
 }
 
 void DocxAttributeOutput::OutlineNumbering(sal_uInt8 const nLvl)
