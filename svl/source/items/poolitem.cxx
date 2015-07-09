@@ -218,11 +218,7 @@ SfxVoidItem::SfxVoidItem( const SfxVoidItem& rCopy):
 }
 
 
-bool SfxVoidItem::operator==( const SfxPoolItem&
-#ifdef DBG_UTIL
-rCmp
-#endif
-) const
+bool SfxVoidItem::operator==( const SfxPoolItem& rCmp ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "unequal type" );
     return true;

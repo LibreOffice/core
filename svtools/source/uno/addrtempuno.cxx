@@ -179,30 +179,21 @@ namespace {
         {
             if (aVal.Name == "DataSource")
             {
-#if OSL_DEBUG_LEVEL > 0
-                bool bSuccess =
-#endif
-                aVal.Value >>= m_xDataSource;
+                bool bSuccess = aVal.Value >>= m_xDataSource;
                 OSL_ENSURE( bSuccess, "OAddressBookSourceDialogUno::implInitialize: invalid type for DataSource!" );
                 return;
             }
 
             if (aVal.Name == "DataSourceName")
             {
-#if OSL_DEBUG_LEVEL > 0
-                bool bSuccess =
-#endif
-                aVal.Value >>= m_sDataSourceName;
+                bool bSuccess = aVal.Value >>= m_sDataSourceName;
                 OSL_ENSURE( bSuccess, "OAddressBookSourceDialogUno::implInitialize: invalid type for DataSourceName!" );
                 return;
             }
 
             if (aVal.Name == "Command")
             {
-#if OSL_DEBUG_LEVEL > 0
-                bool bSuccess =
-#endif
-                aVal.Value >>= m_sTable;
+                bool bSuccess = aVal.Value >>= m_sTable;
                 OSL_ENSURE( bSuccess, "OAddressBookSourceDialogUno::implInitialize: invalid type for Command!" );
                 return;
             }

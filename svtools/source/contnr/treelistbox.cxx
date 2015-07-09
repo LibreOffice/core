@@ -580,21 +580,12 @@ bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox* pSource, sal_Int8 nActi
     3. target is a collapsed parent
         - entry is inserted at the end of the target childlist
 */
-#ifdef DBG_UTIL
 TriState SvTreeListBox::NotifyMoving(
     SvTreeListEntry*  pTarget,       // D&D dropping position in this->GetModel()
     SvTreeListEntry*  pEntry,        // entry that we want to move, from
                                  // GetSourceListBox()->GetModel()
     SvTreeListEntry*& rpNewParent,   // new target parent
     sal_uLong&        rNewChildPos)  // position in childlist of target parent
-#else
-TriState SvTreeListBox::NotifyMoving(
-    SvTreeListEntry*  pTarget,       // D&D dropping position in this->GetModel()
-    SvTreeListEntry*,                // entry that we want to move, from
-                                 // GetSourceListBox()->GetModel()
-    SvTreeListEntry*& rpNewParent,   // new target parent
-    sal_uLong&        rNewChildPos)  // position in childlist of target parent
-#endif
 {
     DBG_ASSERT(pEntry,"NotifyMoving:SoureEntry?");
     if( !pTarget )
