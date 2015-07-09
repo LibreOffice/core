@@ -127,7 +127,7 @@ class BibGeneralPage: public BibTabPage
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener >
                         xPosListener;
 
-    BibGeneralPageFocusListener maBibGeneralPageFocusListener;
+    rtl::Reference<BibGeneralPageFocusListener> mxBibGeneralPageFocusListener;
 
     BibDataManager*     pDatMan;
 
@@ -164,7 +164,7 @@ public:
 
     virtual bool                HandleShortCutKey( const KeyEvent& rKeyEvent ) SAL_OVERRIDE; // returns true, if key was handled
 
-    inline BibGeneralPageFocusListener& GetFocusListener() { return maBibGeneralPageFocusListener; }
+    inline rtl::Reference<BibGeneralPageFocusListener> GetFocusListener() { return mxBibGeneralPageFocusListener; }
 
     void focusGained(const css::awt::FocusEvent& rEvent) throw( css::uno::RuntimeException, std::exception );
     void focusLost(const css::awt::FocusEvent& rEvent) throw( css::uno::RuntimeException, std::exception );
