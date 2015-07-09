@@ -308,7 +308,12 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
                 {
                     OutlinerView* pOLV = pActiveOutliner->GetView(i);
 
-                    if(pOLV->GetWindow() == &rPaintWindow.GetOutputDevice() || GetModel()->isTiledRendering())
+                    // If rPaintWindow knows that the output device is a render
+                    // context and is aware of the underlying vcl::Window,
+                    // compare against that; that's how double-buffering can
+                    // still find the matching OutlinerView.
+                    OutputDevice* pOutputDevice = rPaintWindow.GetWindow() ? rPaintWindow.GetWindow() : &rPaintWindow.GetOutputDevice();
+                    if(pOLV->GetWindow() == pOutputDevice || GetModel()->isTiledRendering())
                     {
                         ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
                         return;
