@@ -370,6 +370,12 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
         pThisTab = maTabData[nTabNo];
     }
 
+    if (pDoc)
+    {
+        SCTAB nTableCount = pDoc->GetTableCount();
+        EnsureTabDataSize(nTableCount);
+    }
+
     CalcPPT();
 }
 
