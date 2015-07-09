@@ -401,7 +401,7 @@ static const XclFunctionInfo saFuncTable_Oox[] =
     { ocNetWorkdays_MS,     255,    3,  5,  V, { RO_E, VR, VR, RO, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "NETWORKDAYS.INTL" ) },
     { ocWorkday_MS,         NOID,   2,  4,  V, { VR, VR, VR, RO }, EXC_FUNCFLAG_IMPORTONLY, EXC_FUNCNAME( "WORKDAY.INTL" ) },
     { ocWorkday_MS,         255,    3,  5,  V, { RO_E, VR, VR, VR, RO }, EXC_FUNCFLAG_EXPORTONLY, EXC_FUNCNAME( "WORKDAY.INTL" ) },
-    EXC_FUNCENTRY_V_VR( ocCeil_ISO,         2,  2,  0,  "ISO.CEILING" )
+    EXC_FUNCENTRY_V_VR( ocCeil_ISO,         1,  2,  0,  "ISO.CEILING" )
 };
 
 #define EXC_FUNCENTRY_V_VR_IMPORT( opcode, minparam, maxparam, flags, asciiname ) \
@@ -486,8 +486,8 @@ static const XclFunctionInfo saFuncTable_2010[] =
     EXC_FUNCENTRY_V_RX( ocModalValue_Multi, 1, MX,  0,  "MODE.MULT" ),
     EXC_FUNCENTRY_V_VR( ocNegBinomDist_MS,  4,  4,  0,  "NEGBINOM.DIST" ),
     EXC_FUNCENTRY_V_VR( ocZTest_MS,         2,  3,  0,  "Z.TEST" ),
-    EXC_FUNCENTRY_V_VR( ocCeil_Precise,     2,  2,  0,  "CEILING.PRECISE" ),
-    EXC_FUNCENTRY_V_VR( ocFloor_Precise,    2,  2,  0,  "FLOOR.PRECISE" ),
+    EXC_FUNCENTRY_V_VR( ocCeil_Precise,     1,  2,  0,  "CEILING.PRECISE" ),
+    EXC_FUNCENTRY_V_VR( ocFloor_Precise,    1,  2,  0,  "FLOOR.PRECISE" ),
     EXC_FUNCENTRY_V_VR( ocErf_MS,           1,  1,  0,  "ERF.PRECISE" ),
     EXC_FUNCENTRY_V_VR( ocErfc_MS,          1,  1,  0,  "ERFC.PRECISE" ),
     EXC_FUNCENTRY_V_RX( ocAggregate,        3, MX,  0,  "AGGREGATE" ),

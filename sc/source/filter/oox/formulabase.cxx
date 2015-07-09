@@ -732,7 +732,7 @@ static const FunctionData saFuncTableOox[] =
     { "SUMIFS",                 "SUMIFS",               482,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS },
     { "AVERAGEIF",              "AVERAGEIF",            483,    NOID,   2,  3,  V, { RO, VR, RO }, FUNCFLAG_MACROCALL },
     { "AVERAGEIFS",             "AVERAGEIFS",           484,    NOID,   3,  MX, V, { RO, RO, VR }, FUNCFLAG_MACROCALL | FUNCFLAG_PARAMPAIRS },
-    { "COM.MICROSOFT.ISO.CEILING",  "ISO.CEILING",     NOID,    NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALL },
+    { "COM.MICROSOFT.ISO.CEILING",  "ISO.CEILING",     NOID,    NOID,   1,  2,  V, { VR }, FUNCFLAG_MACROCALL },
     { "COM.MICROSOFT.NETWORKDAYS.INTL", "NETWORKDAYS.INTL", NOID, NOID, 2,  4,  V, { VR, VR, VR, RX }, FUNCFLAG_MACROCALL },
     { "COM.MICROSOFT.WORKDAY.INTL",     "WORKDAY.INTL",     NOID, NOID, 2,  4,  V, { VR, VR, VR, RX }, FUNCFLAG_MACROCALL }
 };
@@ -809,8 +809,8 @@ static const FunctionData saFuncTable2010[] =
     { "COM.MICROSOFT.MODE.MULT",              "MODE.MULT",           NOID,   NOID,    1,  MX, V, { VA }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.NEGBINOM.DIST",          "NEGBINOM.DIST",       NOID,   NOID,    4,  4,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.Z.TEST",                 "Z.TEST",              NOID,   NOID,    2,  3,  V, { RX, VR }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.CEILING.PRECISE",        "CEILING.PRECISE",     NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
-    { "COM.MICROSOFT.FLOOR.PRECISE",          "FLOOR.PRECISE",       NOID,   NOID,    2,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.CEILING.PRECISE",        "CEILING.PRECISE",     NOID,   NOID,    1,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
+    { "COM.MICROSOFT.FLOOR.PRECISE",          "FLOOR.PRECISE",       NOID,   NOID,    1,  2,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.ERF.PRECISE",            "ERF.PRECISE",         NOID,   NOID,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.ERFC.PRECISE",           "ERFC.PRECISE",        NOID,   NOID,    1,  1,  V, { VR }, FUNCFLAG_MACROCALL_NEW },
     { "COM.MICROSOFT.AGGREGATE",              "AGGREGATE",           NOID,   NOID,    3,  MX, V, { VR, RO }, FUNCFLAG_MACROCALL_NEW }
