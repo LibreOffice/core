@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_dbd049cc",
+        "filename": "include/vcl/layout.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2015-07-09T11:29:08Z",
+      "side": 1,
+      "message": "what breaks if this piece is removed ?",
+      "revId": "26bb609b9ba8d23385e809f1f6afe3972fde99ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
