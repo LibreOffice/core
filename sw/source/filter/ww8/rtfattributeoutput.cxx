@@ -1490,7 +1490,7 @@ void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector< OUString >& rSta
         OString rName = OUStringToOString(*i, RTL_TEXTENCODING_UTF8);
 
         // Output the annotation mark
-        sal_uInt16 nId = m_nNextAnnotationMarkId++;
+        const sal_Int32 nId = m_nNextAnnotationMarkId++;
         m_rOpenedAnnotationMarksIds[rName] = nId;
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATRFSTART " ");
         m_aRun->append(OString::number(nId).getStr());
@@ -1503,10 +1503,10 @@ void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector< OUString >& rSta
         OString rName = OUStringToOString(*i, RTL_TEXTENCODING_UTF8);
 
         // Get the id of the annotation mark
-        std::map<OString, sal_uInt16>::iterator it = m_rOpenedAnnotationMarksIds.find(rName);
+        std::map<OString, sal_Int32>::iterator it = m_rOpenedAnnotationMarksIds.find(rName);
         if (it != m_rOpenedAnnotationMarksIds.end())
         {
-            sal_uInt16 nId = it->second;
+            const sal_Int32 nId = it->second;
             m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATRFEND " ");
             m_aRun->append(OString::number(nId).getStr());
             m_aRun->append('}');
@@ -3292,7 +3292,7 @@ void RtfAttributeOutput::PostitField(const SwField* pField)
     const SwPostItField& rPField = *static_cast<const SwPostItField*>(pField);
 
     OString aName = OUStringToOString(rPField.GetName(), RTL_TEXTENCODING_UTF8);
-    std::map<OString, sal_uInt16>::iterator it = m_rOpenedAnnotationMarksIds.find(aName);
+    std::map<OString, sal_Int32>::iterator it = m_rOpenedAnnotationMarksIds.find(aName);
     if (it != m_rOpenedAnnotationMarksIds.end())
     {
         // In case this field is inside annotation marks, we want to write the

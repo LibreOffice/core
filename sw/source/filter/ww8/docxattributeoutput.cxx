@@ -1315,7 +1315,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
         std::map< OString, sal_uInt16 >::iterator pPos = m_rOpenedBookmarksIds.find( rName );
         if ( pPos != m_rOpenedBookmarksIds.end(  ) )
         {
-            sal_uInt16 nId = ( *pPos ).second;
+            const sal_Int32 nId = ( *pPos ).second;
             m_pSerializer->singleElementNS( XML_w, XML_bookmarkEnd,
                 FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
                 FSEND );
@@ -1341,7 +1341,7 @@ void DocxAttributeOutput::DoWriteAnnotationMarks()
         */
         if ( m_rOpenedAnnotationMarksIds.end() == m_rOpenedAnnotationMarksIds.find( rName ) )
         {
-            sal_uInt16 nId = m_nNextAnnotationMarkId++;
+            const sal_Int32 nId = m_nNextAnnotationMarkId++;
             m_rOpenedAnnotationMarksIds[rName] = nId;
             m_pSerializer->singleElementNS( XML_w, XML_commentRangeStart,
                 FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
@@ -1358,10 +1358,10 @@ void DocxAttributeOutput::DoWriteAnnotationMarks()
         const OString& rName = *it;
 
         // Get the id of the annotation mark
-        std::map< OString, sal_uInt16 >::iterator pPos = m_rOpenedAnnotationMarksIds.find( rName );
+        std::map< OString, sal_Int32 >::iterator pPos = m_rOpenedAnnotationMarksIds.find( rName );
         if ( pPos != m_rOpenedAnnotationMarksIds.end(  ) )
         {
-            sal_uInt16 nId = ( *pPos ).second;
+            const sal_Int32 nId = ( *pPos ).second;
             m_pSerializer->singleElementNS( XML_w, XML_commentRangeEnd,
                 FSNS( XML_w, XML_id ), OString::number( nId ).getStr(  ),
                 FSEND );
@@ -6528,7 +6528,7 @@ void DocxAttributeOutput::PostitField( const SwField* pField )
     const SwPostItField* pPostItField = static_cast<const SwPostItField*>(pField);
     OString aName = OUStringToOString(pPostItField->GetName(), RTL_TEXTENCODING_UTF8);
     sal_Int32 nId = 0;
-    std::map< OString, sal_uInt16 >::iterator it = m_rOpenedAnnotationMarksIds.find(aName);
+    std::map< OString, sal_Int32 >::iterator it = m_rOpenedAnnotationMarksIds.find(aName);
     if (it != m_rOpenedAnnotationMarksIds.end())
         // If the postit field has an annotation mark associated, we already have an id.
         nId = it->second;
@@ -6547,7 +6547,7 @@ void DocxAttributeOutput::WritePostitFieldReference()
         // In case this file is inside annotation marks, we want to write the
         // comment reference after the annotation mark is closed, not here.
         OString idname = OUStringToOString(m_postitFields[m_postitFieldsMaxId].first->GetName(), RTL_TEXTENCODING_UTF8);
-        std::map< OString, sal_uInt16 >::iterator it = m_rOpenedAnnotationMarksIds.find( idname );
+        std::map< OString, sal_Int32 >::iterator it = m_rOpenedAnnotationMarksIds.find( idname );
         if ( it == m_rOpenedAnnotationMarksIds.end(  ) )
             m_pSerializer->singleElementNS( XML_w, XML_commentReference, FSNS( XML_w, XML_id ), idstr.getStr(), FSEND );
         ++m_postitFieldsMaxId;

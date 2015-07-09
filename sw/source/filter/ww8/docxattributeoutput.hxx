@@ -782,7 +782,7 @@ private:
     OString m_sLastOpenedBookmark;
 
     /// Maps of the annotation marks ids
-    std::map<OString, sal_uInt16> m_rOpenedAnnotationMarksIds;
+    std::map<OString, sal_Int32> m_rOpenedAnnotationMarksIds;
 
     /// Name of the last opened annotation mark.
     OString m_sLastOpenedAnnotationMark;

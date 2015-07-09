@@ -515,7 +515,7 @@ private:
     sal_Int32 m_nNextAnnotationMarkId;
     sal_Int32 m_nCurrentAnnotationMarkId;
     /// Maps annotation mark names to ID's.
-    std::map<OString, sal_uInt16> m_rOpenedAnnotationMarksIds;
+    std::map<OString, sal_Int32> m_rOpenedAnnotationMarksIds;
 
     /*
      * The current table helper.
