@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_7baa7572",
+        "filename": "sw/sdi/drlinesh.sdi",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-07-09T09:10:47Z",
+      "side": 1,
+      "message": "This name and uuid is already used in sw/sdi/drawsh.sdi.",
+      "revId": "348cb42b78d9db6d4caca5014788e47e5d0094b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_1bb6e1dc",
+        "filename": "sw/source/uibase/inc/drlinesh.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-07-09T09:10:47Z",
+      "side": 1,
+      "message": "Missing license header and emacs/vim modelines.",
+      "revId": "348cb42b78d9db6d4caca5014788e47e5d0094b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_9bcad14e",
+        "filename": "sw/source/uibase/shells/drlinesh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-07-09T09:10:47Z",
+      "side": 1,
+      "message": "using css::uno is asking for trouble, that will mean that if you write Reference, it may be an rtl::Reference or an uno::Reference. And you may not even notice the problem till you build on Windows, which has pch enabled by default. :-)",
+      "revId": "348cb42b78d9db6d4caca5014788e47e5d0094b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
