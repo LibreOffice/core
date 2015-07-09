@@ -18,32 +18,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:style="radio" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomObjects" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertGraphic"/>
+ <toolbar:toolbaritem xlink:href=".uno:Text" toolbar:style="radio" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:style="radio" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertToolbox" toolbar:style="radio dropdown" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater"/>
+ <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:XLineColor"/>
  <toolbar:toolbaritem xlink:href=".uno:FillColor"/>
  <toolbar:toolbaritem xlink:href=".uno:FillStyle" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:style="radio"/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowsToolbox" toolbar:style="radio dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:style="radio" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled" toolbar:style="radio" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:LineToolbox" toolbar:style="radio dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:ConnectorToolbox" toolbar:style="radio dropdown"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.rectangle" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="10104" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes.ellipse" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="10110" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowsToolbox" toolbar:style="radio dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineToolbox" toolbar:style="radio dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ConnectorToolbox" toolbar:style="radio dropdown"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:style="radio dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:style="radio dropdown"/>
  <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:style="radio dropdown"/>
