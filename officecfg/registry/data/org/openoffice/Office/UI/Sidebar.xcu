@@ -231,6 +231,26 @@
         </prop>
       </node>
 
+      <node oor:name="ChartDeck" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Chart</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="IconURL" oor:type="xs:string">
+          <value>private:graphicrepository/sfx2/res/symphony/sidebar-style-large.png</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>10</value>
+        </prop>
+      </node>
+
     </node>
     <node oor:name="PanelList">
 
@@ -1118,6 +1138,122 @@
           <value>true</value>
         </prop>
       </node>
+
+      <node oor:name="ChartElementsPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Elements</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartElementsPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ChartPanelFactory/ElementsPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+
+      <node oor:name="ChartAreaPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Area</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartAreaPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ChartPanelFactory/AreaPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>2</value>
+        </prop>
+      </node>
+
+      <node oor:name="ChartLinePanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Line</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartLinePanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ChartPanelFactory/LinePanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>3</value>
+        </prop>
+      </node>
+
+      <node oor:name="ChartCharacterPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Character</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartCharacterPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ChartPanelFactory/CharacterPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>4</value>
+        </prop>
+      </node>
+
+      <node oor:name="ChartAxisPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Axis</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartAxisPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, any, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ChartPanelFactory/AxisPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>5</value>
+        </prop>
+      </node>
+
     </node>
   </node>
 </oor:component-data>

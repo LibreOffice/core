@@ -46,7 +46,14 @@ Context::Context (
 sal_Int32 Context::EvaluateMatch (
     const Context& rOther) const
 {
-    const bool bApplicationNameIsAny (rOther.msApplication == AnyApplicationName);
+    bool bApplicationNameIsAny (rOther.msApplication == AnyApplicationName);
+
+    // special case for charts which use a whole own set of decks
+    if (msApplication == "com.sun.star.chart2.ChartDocument")
+    {
+        bApplicationNameIsAny = false;
+    }
+
     if (rOther.msApplication.equals(msApplication) || bApplicationNameIsAny)
     {
         // Application name matches.

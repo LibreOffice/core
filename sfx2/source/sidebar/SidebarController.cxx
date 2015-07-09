@@ -548,7 +548,6 @@ void SidebarController::CreateDeck(const ::rtl::OUString& rDeckId)
                 ::boost::bind(&SidebarController::RequestCloseDeck, this));
 
         mpResourceManager->SetDeckToDescriptor(rDeckId, aDeck);
-
     }
 
 }

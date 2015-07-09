@@ -86,12 +86,14 @@
                  com.sun.star.sheet.SpreadsheetDocument
                  com.sun.star.presentation.PresentationDocument
                  com.sun.star.drawing.DrawingDocument
+                 com.sun.star.chart2.ChartDocument
 
              Recognized shortcuts:
                  Writer
                  Calc
                  Impress
                  Draw
+                 Chart
 
              Shortcuts for multiple applications:
                  DrawImpress

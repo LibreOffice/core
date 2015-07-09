@@ -132,6 +132,20 @@
           <value>org.apache.openoffice.comp.sw.sidebar.SwPanelFactory</value>
         </prop>
       </node>
+      <node oor:name="ChartPanelFactory" oor:op="replace">
+        <prop oor:name="Type">
+          <value>toolpanel</value>
+        </prop>
+        <prop oor:name="Name">
+          <value>ChartPanelFactory</value>
+        </prop>
+        <prop oor:name="Module">
+          <value></value>
+        </prop>
+        <prop oor:name="FactoryImplementation">
+          <value>org.libreoffice.comp.chart2.sidebar.ChartPanelFactory</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>

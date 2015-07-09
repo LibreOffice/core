@@ -416,6 +416,8 @@ void ResourceManager::ReadContextList (
                 aApplications.push_back(EnumContext::Application_Draw);
             else if (sApplicationName == "Impress")
                 aApplications.push_back(EnumContext::Application_Impress);
+            else if (sApplicationName == "Chart")
+                aApplications.push_back(EnumContext::Application_Chart);
             else if (sApplicationName == "DrawImpress")
             {
                 // A special case among the special names:  it is

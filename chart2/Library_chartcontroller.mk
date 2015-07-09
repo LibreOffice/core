@@ -188,6 +188,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/main/UndoActions \
     chart2/source/controller/main/UndoCommandDispatch \
     chart2/source/controller/main/UndoGuard \
+    chart2/source/controller/sidebar/Chart2PanelFactory \
 ))
 
 # Runtime dependency for unit-tests
