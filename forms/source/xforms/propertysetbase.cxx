@@ -123,10 +123,8 @@ void PropertySetBase::initializePropertyValueCache( sal_Int32 nHandle )
     Any aCurrentValue;
     getFastPropertyValue( aCurrentValue, nHandle );
 
-#if OSL_DEBUG_LEVEL > 0
     ::std::pair< PropertyValueCache::iterator, bool > aInsertResult =
-#endif
-    m_aCache.insert( PropertyValueCache::value_type( nHandle, aCurrentValue ) );
+          m_aCache.insert( PropertyValueCache::value_type( nHandle, aCurrentValue ) );
     OSL_ENSURE( aInsertResult.second, "PropertySetBase::initializePropertyValueCache: already cached a value for this property!" );
 }
 

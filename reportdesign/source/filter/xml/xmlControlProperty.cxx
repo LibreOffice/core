@@ -198,9 +198,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
         case TypeClass_BOOLEAN:     // sal_Bool
         {
             bool bValue(false);
-        #if OSL_DEBUG_LEVEL > 0
             bool bSuccess =
-        #endif
                 ::sax::Converter::convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     OStringBuffer("OXMLControlProperty::convertString: could not convert \"").
@@ -213,9 +211,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
         case TypeClass_LONG:        // sal_Int32
             {   // it's a real int32/16 property
                 sal_Int32 nValue(0);
-        #if OSL_DEBUG_LEVEL > 0
                 bool bSuccess =
-        #endif
                     ::sax::Converter::convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
                         OStringBuffer("OXMLControlProperty::convertString: could not convert \"").
@@ -235,9 +231,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
         case TypeClass_DOUBLE:
         {
             double nValue = 0.0;
-        #if OSL_DEBUG_LEVEL > 0
             bool bSuccess =
-        #endif
                 ::sax::Converter::convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     OStringBuffer("OXMLControlProperty::convertString: could not convert \"").
@@ -266,10 +260,8 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                 {
                     // first extract the double
                     double nValue = 0;
-                #if OSL_DEBUG_LEVEL > 0
                     bool bSuccess =
-                #endif
-                    ::sax::Converter::convertDouble(nValue, _rReadCharacters);
+                        ::sax::Converter::convertDouble(nValue, _rReadCharacters);
                     OSL_ENSURE(bSuccess,
                             OStringBuffer("OPropertyImport::convertString: could not convert \"").
                         append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).

@@ -54,8 +54,10 @@ Cli_environment::~Cli_environment() ///< IDisposable Cli_environment::Dispose()
 
 Cli_environment::!Cli_environment() ///< Cli_environment::Finalize()
 {
+#if OSL_DEBUG_LEVEL >= 2
     OSL_ENSURE(_numRegisteredObjects == 0,
                "cli uno bridge: CLI environment contains unrevoked objects");
+#endif
 }
 
 System::Object^ Cli_environment::registerInterface(
