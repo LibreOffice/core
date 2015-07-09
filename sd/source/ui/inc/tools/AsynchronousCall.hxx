@@ -37,7 +37,7 @@ namespace sd { namespace tools {
 
     Use this class like this:
     aInstanceOfAsynchronousCall.Post(
-        ::boost::bind(
+        ::std::bind(
             ::std::mem_fun(&DrawViewShell::SwitchPage),
             pDrawViewShell,
             11));

@@ -34,7 +34,7 @@
 
 #include <basegfx/tools/canvastools.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <algorithm>
 
@@ -42,6 +42,7 @@
 #include "windowoutdevholder.hxx"
 
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace vclcanvas
@@ -67,16 +68,16 @@ namespace vclcanvas
         maPropHelper.addProperties(
             ::canvas::PropertySetHelper::MakeMap
             ("UnsafeScrolling",
-             boost::bind(&SpriteCanvasHelper::isUnsafeScrolling,
-                         boost::ref(maCanvasHelper)),
-             boost::bind(&SpriteCanvasHelper::enableUnsafeScrolling,
-                         boost::ref(maCanvasHelper),
+             std::bind(&SpriteCanvasHelper::isUnsafeScrolling,
+                         std::ref(maCanvasHelper)),
+             std::bind(&SpriteCanvasHelper::enableUnsafeScrolling,
+                         std::ref(maCanvasHelper),
                          _1))
             ("SpriteBounds",
-             boost::bind(&SpriteCanvasHelper::isSpriteBounds,
-                         boost::ref(maCanvasHelper)),
-             boost::bind(&SpriteCanvasHelper::enableSpriteBounds,
-                         boost::ref(maCanvasHelper),
+             std::bind(&SpriteCanvasHelper::isSpriteBounds,
+                         std::ref(maCanvasHelper)),
+             std::bind(&SpriteCanvasHelper::enableSpriteBounds,
+                         std::ref(maCanvasHelper),
                          _1)));
 
         VERBOSE_TRACE( "VCLSpriteCanvas::initialize called" );

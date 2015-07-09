@@ -20,7 +20,6 @@
 #include "winmtf.hxx"
 #include <osl/endian.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <boost/bind.hpp>
 #include <vcl/dibtools.hxx>
 #include <memory>
 
@@ -470,7 +469,7 @@ void EnhWMFReader::ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC)
 /**
  * Reads polygons from the stream.
  * The \<class T> parameter is for the type of the points (sal_uInt32 or sal_uInt16).
- * The \<class Drawer> parameter is a boost binding for the method that will draw the polygon.
+ * The \<class Drawer> parameter is a lambda binding for the method that will draw the polygon.
  * skipFirst: if the first point read is the 0th point or the 1st point in the array.
  * */
 template <class T, class Drawer>
@@ -686,21 +685,41 @@ bool EnhWMFReader::ReadEnhWMF()
             switch( nRecType )
             {
                 case EMR_POLYBEZIERTO :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), true);
+                    ReadAndDrawPolygon<sal_Int32>([](WinMtfOutput* out, Polygon& rPolygon, bool skipFirst, bool recordPath)
+                                                  {
+                                                      out->DrawPolyBezier(rPolygon, skipFirst, recordPath);
+                                                  },
+                                                  true);
                 break;
                 case EMR_POLYBEZIER :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), false);
+                    ReadAndDrawPolygon<sal_Int32>([](WinMtfOutput* out, Polygon& rPolygon, bool skipFirst, bool recordPath)
+                                                  {
+                                                      out->DrawPolyBezier(rPolygon, skipFirst, recordPath);
+                                                  }
+                                                  , false);
                 break;
 
                 case EMR_POLYGON :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolygon, _1, _2, _3, _4), false);
+                    ReadAndDrawPolygon<sal_Int32>([](WinMtfOutput* out, Polygon& rPolygon, bool skipFirst, bool recordPath)
+                                                  {
+                                                      out->DrawPolygon(rPolygon, skipFirst, recordPath);
+                                                  }
+                                                  , false);
                 break;
 
                 case EMR_POLYLINETO :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), true);
+                    ReadAndDrawPolygon<sal_Int32>([](WinMtfOutput* out, Polygon& rPolygon, bool skipFirst, bool recordPath)
+                                                  {
+                                                      out->DrawPolyLine(rPolygon, skipFirst, recordPath);
+                                                  }
+                                                  , true);
                 break;
                 case EMR_POLYLINE :
-                    ReadAndDrawPolygon<sal_Int32>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), false);
+                    ReadAndDrawPolygon<sal_Int32>([](WinMtfOutput* out, Polygon& rPolygon, bool skipFirst, bool recordPath)
+                                                  {
+                                                      out->DrawPolyLine(rPolygon, skipFirst, recordPath);
+                                                  }
+                                                  , false);
                 break;
 
                 case EMR_POLYPOLYLINE :
@@ -1511,21 +1530,41 @@ bool EnhWMFReader::ReadEnhWMF()
                 break;
 
                 case EMR_POLYBEZIERTO16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), true);
+                    ReadAndDrawPolygon<sal_Int16>([](WinMtfOutput* out, Polygon& rPolygon, bool skipFirst, bool recordPath)
+                                                  {
+                                                      out->DrawPolyBezier(rPolygon, skipFirst, recordPath);
+                                                  }
+                                                  , true);
                     break;
                 case EMR_POLYBEZIER16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyBezier, _1, _2, _3, _4), false);
+                    ReadAndDrawPolygon<sal_Int16>([](WinMtfOutput* out, Polygon& rPolygon, bool skipFirst, bool recordPath)
+                                                  {
+                                                      out->DrawPolyBezier(rPolygon, skipFirst, recordPath);
+                                                  }
+                                                  , false);
                 break;
 
                 case EMR_POLYGON16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolygon, _1, _2, _3, _4), false);
+                    ReadAndDrawPolygon<sal_Int16>([](WinMtfOutput* out, Polygon& rPolygon, bool skipFirst, bool recordPath)
+                                                  {
+                                                      out->DrawPolygon(rPolygon, skipFirst, recordPath);
+                                                  }
+                                                  , false);
                 break;
 
                 case EMR_POLYLINETO16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), true);
+                    ReadAndDrawPolygon<sal_Int16>([](WinMtfOutput* out, Polygon& rPolygon, bool skipFirst, bool recordPath)
+                                                  {
+                                                      out->DrawPolyLine(rPolygon, skipFirst, recordPath);
+                                                  }
+                                                  , true);
                     break;
                 case EMR_POLYLINE16 :
-                    ReadAndDrawPolygon<sal_Int16>(boost::bind(&WinMtfOutput::DrawPolyLine, _1, _2, _3, _4), false);
+                    ReadAndDrawPolygon<sal_Int16>([](WinMtfOutput* out, Polygon& rPolygon, bool skipFirst, bool recordPath)
+                                                  {
+                                                      out->DrawPolyLine(rPolygon, skipFirst, recordPath);
+                                                  }
+                                                  , false);
                 break;
 
                 case EMR_POLYPOLYLINE16 :

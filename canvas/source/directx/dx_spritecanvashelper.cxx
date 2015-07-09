@@ -28,7 +28,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/cast.hpp>
 
 #include "dx_spritecanvashelper.hxx"
@@ -42,6 +42,7 @@
 # endif
 #endif
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace dxcanvas
@@ -302,10 +303,10 @@ namespace dxcanvas
                                          ::basegfx::B2DRange( rDestRect ) );
         ::std::for_each( aUncoveredAreas.begin(),
                          aUncoveredAreas.end(),
-                         ::boost::bind( &repaintBackground,
+                         ::std::bind( &repaintBackground,
                                         _1,
-                                        ::boost::cref(maScrapRect),
-                                        ::boost::cref(mpBackBuffer) ) );
+                                        ::std::cref(maScrapRect),
+                                        ::std::cref(mpBackBuffer) ) );
 
         // TODO(E1): Use numeric_cast to catch overflow here
         ::basegfx::B2IRange aActualArea( 0, 0,

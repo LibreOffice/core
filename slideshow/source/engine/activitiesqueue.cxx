@@ -57,10 +57,10 @@ namespace slideshow
             {
                 std::for_each( maCurrentActivitiesWaiting.begin(),
                                maCurrentActivitiesWaiting.end(),
-                               boost::mem_fn( &Disposable::dispose ) );
+                               std::mem_fn( &Disposable::dispose ) );
                 std::for_each( maCurrentActivitiesReinsert.begin(),
                                maCurrentActivitiesReinsert.end(),
-                               boost::mem_fn( &Disposable::dispose ) );
+                               std::mem_fn( &Disposable::dispose ) );
             }
             catch (uno::Exception &)
             {
@@ -175,7 +175,7 @@ namespace slideshow
             // notify all dequeued activities from last round
             ::std::for_each( maDequeuedActivities.begin(),
                              maDequeuedActivities.end(),
-                             ::boost::mem_fn( &Activity::dequeued ) );
+                             ::std::mem_fn( &Activity::dequeued ) );
             maDequeuedActivities.clear();
         }
 
@@ -189,12 +189,12 @@ namespace slideshow
             // dequeue all entries:
             std::for_each( maCurrentActivitiesWaiting.begin(),
                            maCurrentActivitiesWaiting.end(),
-                           boost::mem_fn( &Activity::dequeued ) );
+                           std::mem_fn( &Activity::dequeued ) );
             ActivityQueue().swap( maCurrentActivitiesWaiting );
 
             std::for_each( maCurrentActivitiesReinsert.begin(),
                            maCurrentActivitiesReinsert.end(),
-                           boost::mem_fn( &Activity::dequeued ) );
+                           std::mem_fn( &Activity::dequeued ) );
             ActivityQueue().swap( maCurrentActivitiesReinsert );
         }
     }

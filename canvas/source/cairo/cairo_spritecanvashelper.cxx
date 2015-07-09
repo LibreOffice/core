@@ -29,12 +29,13 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/cast.hpp>
 
 #include "cairo_spritecanvashelper.hxx"
 #include "cairo_canvascustomsprite.hxx"
 
+using namespace std::placeholders;
 using namespace ::cairo;
 using namespace ::com::sun::star;
 
@@ -244,9 +245,9 @@ namespace cairocanvas
             // repaint all active sprites on top of background into
             // VDev.
             mpRedrawManager->forEachSprite(
-                ::boost::bind(
+                ::std::bind(
                     &spriteRedraw,
-                    boost::cref(pCompositingCairo),
+                    std::cref(pCompositingCairo),
                     _1 ) );
 
             // flush to screen
@@ -332,9 +333,9 @@ namespace cairocanvas
             // repaint all affected sprites directly to output device
             ::std::for_each( rUpdateArea.maComponentList.begin(),
                              rUpdateArea.maComponentList.end(),
-                             ::boost::bind(
+                             ::std::bind(
                                  &spriteRedrawStub3,
-                                 boost::cref(pCompositingCairo),
+                                 std::cref(pCompositingCairo),
                                  _1 ) );
         }
         else
@@ -390,9 +391,9 @@ namespace cairocanvas
             // sprite
             ::std::for_each( aUnscrollableAreas.begin(),
                              aUnscrollableAreas.end(),
-                             ::boost::bind( &opaqueUpdateSpriteArea,
-                                            ::boost::cref(aFirst->second.getSprite()),
-                                            boost::cref(pCompositingCairo),
+                             ::std::bind( &opaqueUpdateSpriteArea,
+                                            ::std::cref(aFirst->second.getSprite()),
+                                            std::cref(pCompositingCairo),
                                             _1 ) );
         }
 
@@ -405,8 +406,8 @@ namespace cairocanvas
                                          ::basegfx::B2DRange( rDestRect ) );
         ::std::for_each( aUncoveredAreas.begin(),
                          aUncoveredAreas.end(),
-                         ::boost::bind( &repaintBackground,
-                                        boost::cref(pCompositingCairo),
+                         ::std::bind( &repaintBackground,
+                                        std::cref(pCompositingCairo),
                                         mpOwningSpriteCanvas->getBufferSurface(),
                                         _1 ) );
 
@@ -447,9 +448,9 @@ namespace cairocanvas
         // repaint all affected sprites directly to output device
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
-                         ::boost::bind(
+                         ::std::bind(
                              &spriteRedrawStub,
-                             boost::cref(pCompositingCairo),
+                             std::cref(pCompositingCairo),
                              _1 ) );
 
         // flush to screen
@@ -516,8 +517,8 @@ namespace cairocanvas
         // VDev.
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
-                         ::boost::bind( &spriteRedrawStub2,
-                                        boost::cref(pCompositingCairo),
+                         ::std::bind( &spriteRedrawStub2,
+                                        std::cref(pCompositingCairo),
                                         _1 ) );
 
         // flush to screen

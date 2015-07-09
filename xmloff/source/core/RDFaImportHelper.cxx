@@ -30,7 +30,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/iterator_adaptors.hpp>
 #ifndef BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_ // from iterator_adaptors.hpp
 // N.B.: the check for the header guard _of a specific version of boost_
@@ -44,6 +44,7 @@
 #include <functional>
 #include <algorithm>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace xmloff {
@@ -313,7 +314,7 @@ RDFaInserter::MakeResource( OUString const & i_rResource)
 }
 
 /** i wrote this because c++ implementations cannot agree on which variant
-    of boost::bind and std::mem_fun_ref applied to Reference::is compiles */
+    of std::bind and std::mem_fun_ref applied to Reference::is compiles */
 class ref_is_null :
     public ::std::unary_function<bool, const uno::Reference<rdf::XURI> & >
 {
@@ -344,17 +345,17 @@ void RDFaInserter::InsertRDFaEntry(
     ::std::remove_copy_if(
         ::boost::make_transform_iterator(
             i_rEntry.m_xRDFaAttributes->m_Properties.begin(),
-            ::boost::bind(&RDFaInserter::MakeURI, this, _1)),
+            ::std::bind(&RDFaInserter::MakeURI, this, _1)),
         // argh, this must be the same type :(
         ::boost::make_transform_iterator(
             i_rEntry.m_xRDFaAttributes->m_Properties.end(),
-            ::boost::bind(&RDFaInserter::MakeURI, this, _1)),
+            ::std::bind(&RDFaInserter::MakeURI, this, _1)),
         ::std::back_inserter(predicates),
         ref_is_null() );
         // compiles only on wntmsci12
-//        ::boost::bind( ::std::logical_not<sal_Bool>(), ::boost::bind<sal_Bool>(&uno::Reference<rdf::XURI>::is, _1)));
+//        ::std::bind( ::std::logical_not<sal_Bool>(), ::std::bind<sal_Bool>(&uno::Reference<rdf::XURI>::is, _1)));
         // compiles on unxsoli4, wntsci12, but not unxlngi6
-//        ::boost::bind( ::std::logical_not<sal_Bool>(), ::boost::bind<sal_Bool, com::sun::star::uno::Reference<rdf::XURI> >(&uno::Reference<rdf::XURI>::is, _1)));
+//        ::std::bind( ::std::logical_not<sal_Bool>(), ::std::bind<sal_Bool, com::sun::star::uno::Reference<rdf::XURI> >(&uno::Reference<rdf::XURI>::is, _1)));
         // compiles on unxsoli4, unxlngi6, but not wntsci12
 //        ::std::not1( ::std::mem_fun_ref(&uno::Reference<rdf::XURI>::is)) );
 
@@ -468,7 +469,7 @@ void RDFaImportHelper::InsertRDFa(
     if (!xRepository.is()) return;
     RDFaInserter inserter(GetImport().GetComponentContext(), xRepository);
     ::std::for_each(m_RDFaEntries.begin(), m_RDFaEntries.end(),
-        ::boost::bind(&RDFaInserter::InsertRDFaEntry, &inserter, _1));
+        ::std::bind(&RDFaInserter::InsertRDFaEntry, &inserter, _1));
 }
 
 } // namespace xmloff

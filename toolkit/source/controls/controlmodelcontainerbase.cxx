@@ -53,7 +53,7 @@
 #include "grid/gridcontrol.hxx"
 #include <toolkit/controls/tabpagecontainer.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <map>
 #include <algorithm>
@@ -66,6 +66,7 @@
 #include "helper/unopropertyarrayhelper.hxx"
 #include "controlmodelcontainerbase_internal.hxx"
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -287,7 +288,7 @@ void SAL_CALL ControlModelContainerBase::dispose(  ) throw(RuntimeException, std
     ::std::transform(
         maModels.begin(), maModels.end(),               // source range
         aChildModels.begin(),                           // target location
-        ::boost::bind( &UnoControlModelHolder::first, _1 ) // operation to apply -> select the XControlModel part
+        ::std::bind( &UnoControlModelHolder::first, _1 ) // operation to apply -> select the XControlModel part
     );
 
     // now dispose
@@ -541,7 +542,7 @@ Sequence< OUString > ControlModelContainerBase::getElementNames() throw(RuntimeE
     ::std::transform(
         maModels.begin(), maModels.end(),               // source range
         aNames.getArray(),                              // target range
-        ::boost::bind( &UnoControlModelHolder::second, _1 ) // operator to apply: select the second element (the name)
+        ::std::bind( &UnoControlModelHolder::second, _1 ) // operator to apply: select the second element (the name)
     );
 
     return aNames;
@@ -751,7 +752,7 @@ Sequence< Reference< XControlModel > > SAL_CALL ControlModelContainerBase::getCo
     ::std::transform(
             aSortedModels.begin(), aSortedModels.end(),
             ::std::copy( aUnindexedModels.begin(), aUnindexedModels.end(), aReturn.getArray() ),
-            ::boost::bind( &MapIndexToModel::value_type::second, _1 )
+            ::std::bind( &MapIndexToModel::value_type::second, _1 )
         );
 
     return aReturn;

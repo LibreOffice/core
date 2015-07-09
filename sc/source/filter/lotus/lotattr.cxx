@@ -19,7 +19,7 @@
 
 #include "lotattr.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -90,7 +90,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     MakeHash( rAttr, nRefHash );
 
     boost::ptr_vector<ENTRY>::const_iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
-                                                                 boost::bind(&ENTRY::nHash0,_1) == nRefHash);
+                                                                 std::bind(&ENTRY::nHash0,_1) == nRefHash);
 
     if (iter != aEntries.end())
         return *(iter->pPattAttr);

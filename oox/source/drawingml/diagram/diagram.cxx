@@ -18,7 +18,7 @@
  */
 
 #include <functional>
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -41,6 +41,7 @@
 #include <iostream>
 #include <fstream>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace oox { namespace drawingml {
@@ -76,10 +77,10 @@ void DiagramData::dump()
 {
     OSL_TRACE("Dgm: DiagramData # of cnx: %zu", maConnections.size() );
     std::for_each( maConnections.begin(), maConnections.end(),
-                  boost::bind( &dgm::Connection::dump, _1 ) );
+                  std::bind( &dgm::Connection::dump, _1 ) );
     OSL_TRACE("Dgm: DiagramData # of pt: %zu", maPoints.size() );
     std::for_each( maPoints.begin(), maPoints.end(),
-                  boost::bind( &dgm::Point::dump, _1 ) );
+                  std::bind( &dgm::Point::dump, _1 ) );
 }
 
 void Diagram::setData( const DiagramDataPtr & pData)

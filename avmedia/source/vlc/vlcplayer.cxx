@@ -1,4 +1,4 @@
-#include <boost/bind.hpp>
+#include <functional>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -8,6 +8,7 @@
 #include "vlcframegrabber.hxx"
 #include "wrapper/Instance.hxx"
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace avmedia {
@@ -111,7 +112,7 @@ void SAL_CALL VLCPlayer::setPlaybackLoop( sal_Bool bSet ) throw ( ::com::sun::st
     mPlaybackLoop = bSet;
 
     if ( bSet )
-        mEventManager.onEndReached(boost::bind(&VLCPlayer::replay, this));
+        mEventManager.onEndReached(std::bind(&VLCPlayer::replay, this));
     else
         mEventManager.onEndReached();
 }
