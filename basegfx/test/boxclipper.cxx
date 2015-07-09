@@ -35,10 +35,11 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <comphelper/random.hxx>
 
-#include <boost/bind.hpp>
-
 #include <boxclipper.hxx>
 
+#include <functional>
+
+using namespace std::placeholders;
 using namespace ::basegfx;
 
 namespace basegfx2d
@@ -168,10 +169,10 @@ public:
             OUString::createFromAscii(randomSvg), false, 0);
         std::for_each(randomPoly.begin(),
                       randomPoly.end(),
-                      boost::bind(
+                      std::bind(
              &B2DPolyRange::appendElement,
-                          boost::ref(aRandomIntersections),
-                          boost::bind(
+                          std::ref(aRandomIntersections),
+                          std::bind(
                  &B2DPolygon::getB2DRange,
                               _1),
                           B2VectorOrientation::Negative,
@@ -223,12 +224,12 @@ public:
         // now, sort all polygons with increasing 0th point
         std::sort(aRes.begin(),
                   aRes.end(),
-                  boost::bind(
+                  std::bind(
                       &compare,
-                      boost::bind(
+                      std::bind(
                           &B2DPolygon::getB2DPoint,
                           _1,0),
-                      boost::bind(
+                      std::bind(
                           &B2DPolygon::getB2DPoint,
                           _2,0)));
 
