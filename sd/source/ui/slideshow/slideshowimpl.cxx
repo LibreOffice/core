@@ -79,12 +79,13 @@
 #include "customshowlist.hxx"
 #include "unopage.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 
 using ::cppu::OInterfaceContainerHelper;
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationListener;
 using ::com::sun::star::awt::XWindow;
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -3464,7 +3465,7 @@ void SAL_CALL SlideShowListenerProxy::beginEvent( const Reference< XAnimationNod
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::beginEvent, _1,  boost::cref(xNode) ));
+        maListeners.forEach<XSlideShowListener>( std::bind( &XAnimationListener::beginEvent, _1,  std::cref(xNode) ));
 }
 
 void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode >& xNode ) throw (RuntimeException, std::exception)
@@ -3472,7 +3473,7 @@ void SAL_CALL SlideShowListenerProxy::endEvent( const Reference< XAnimationNode 
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::endEvent, _1, boost::cref(xNode) ));
+        maListeners.forEach<XSlideShowListener>( std::bind( &XAnimationListener::endEvent, _1, std::cref(xNode) ));
 }
 
 void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >& xNode, ::sal_Int32 nRepeat ) throw (RuntimeException, std::exception)
@@ -3480,7 +3481,7 @@ void SAL_CALL SlideShowListenerProxy::repeat( const Reference< XAnimationNode >&
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::bind( &XAnimationListener::repeat, _1,  boost::cref(xNode), boost::cref(nRepeat) ));
+        maListeners.forEach<XSlideShowListener>( std::bind( &XAnimationListener::repeat, _1,  std::cref(xNode), std::cref(nRepeat) ));
 }
 
 // ::com::sun::star::presentation::XSlideShowListener:
@@ -3490,7 +3491,7 @@ void SAL_CALL SlideShowListenerProxy::paused(  ) throw (::com::sun::star::uno::R
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::paused ) );
+        maListeners.forEach<XSlideShowListener>( std::mem_fn( &XSlideShowListener::paused ) );
 }
 
 void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -3498,7 +3499,7 @@ void SAL_CALL SlideShowListenerProxy::resumed(  ) throw (::com::sun::star::uno::
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::resumed ) );
+        maListeners.forEach<XSlideShowListener>( std::mem_fn( &XSlideShowListener::resumed ) );
 }
 
 void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeException, std::exception)
@@ -3506,7 +3507,7 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionStarted( ) throw (RuntimeEx
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionStarted ) );
+        maListeners.forEach<XSlideShowListener>( std::mem_fn( &XSlideShowListener::slideTransitionStarted ) );
 }
 
 void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -3514,7 +3515,7 @@ void SAL_CALL SlideShowListenerProxy::slideTransitionEnded( ) throw (::com::sun:
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideTransitionEnded ) );
+        maListeners.forEach<XSlideShowListener>( std::mem_fn( &XSlideShowListener::slideTransitionEnded ) );
 }
 
 void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -3522,7 +3523,7 @@ void SAL_CALL SlideShowListenerProxy::slideAnimationsEnded(  ) throw (::com::sun
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if( maListeners.getLength() >= 0 )
-        maListeners.forEach<XSlideShowListener>( boost::mem_fn( &XSlideShowListener::slideAnimationsEnded ) );
+        maListeners.forEach<XSlideShowListener>( std::mem_fn( &XSlideShowListener::slideAnimationsEnded ) );
 }
 
 void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeException, std::exception)
@@ -3532,7 +3533,7 @@ void SlideShowListenerProxy::slideEnded(sal_Bool bReverse) throw (RuntimeExcepti
 
         if( maListeners.getLength() >= 0 )
             maListeners.forEach<XSlideShowListener>(
-                boost::bind( &XSlideShowListener::slideEnded, _1, bReverse) );
+                std::bind( &XSlideShowListener::slideEnded, _1, bReverse) );
     }
 
     {
@@ -3548,7 +3549,7 @@ void SlideShowListenerProxy::hyperLinkClicked( OUString const& aHyperLink ) thro
         ::osl::MutexGuard aGuard( m_aMutex );
 
         if( maListeners.getLength() >= 0 )
-            maListeners.forEach<XSlideShowListener>( boost::bind( &XSlideShowListener::hyperLinkClicked, _1, boost::cref(aHyperLink) ));
+            maListeners.forEach<XSlideShowListener>( std::bind( &XSlideShowListener::hyperLinkClicked, _1, std::cref(aHyperLink) ));
     }
 
     {

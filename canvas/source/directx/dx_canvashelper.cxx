@@ -46,7 +46,7 @@
 
 #include <algorithm>
 
-
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace dxcanvas

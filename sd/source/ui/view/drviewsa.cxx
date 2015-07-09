@@ -68,7 +68,7 @@
 #include "annotationmanager.hxx"
 #include "DrawController.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -114,7 +114,7 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
     , mbIsLayerModeActive(false)
     , mbIsInSwitchPage(false)
     , mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
-          ::boost::bind(&DrawViewShell::GetSidebarContextName, this),
+          ::std::bind(&DrawViewShell::GetSidebarContextName, this),
           uno::Reference<frame::XController>(&rViewShellBase.GetDrawController()),
           sfx2::sidebar::EnumContext::Context_Default))
 {

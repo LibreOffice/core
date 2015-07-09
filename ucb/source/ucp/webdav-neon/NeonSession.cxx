@@ -70,8 +70,9 @@ extern "C" {
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
-#include <boost/bind.hpp>
+#include <functional>
 
+using namespace std::placeholders;
 using namespace com::sun::star;
 using namespace webdav_ucp;
 
@@ -148,7 +149,7 @@ static bool noKeepAlive( const uno::Sequence< beans::NamedValue >& rFlags )
     const sal_Int32          nLen(rFlags.getLength());
     const beans::NamedValue* pValue(
         std::find_if(pAry,pAry+nLen,
-                     boost::bind(comphelper::TNamedValueEqualFunctor(),
+                     std::bind(comphelper::TNamedValueEqualFunctor(),
                                  _1,
                                  OUString("KeepAlive"))));
     if ( pValue != pAry+nLen && !pValue->Value.get<sal_Bool>() )

@@ -26,13 +26,14 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <algorithm>
 
 #include <o3tl/compat_functional.hxx>
 
 #include "layermanager.hxx"
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace boost
@@ -100,7 +101,7 @@ namespace slideshow
             // init views
             std::for_each( mrViews.begin(),
                            mrViews.end(),
-                           ::boost::bind(&LayerManager::viewAdded,
+                           ::std::bind(&LayerManager::viewAdded,
                                          this,
                                          _1) );
         }
@@ -115,14 +116,14 @@ namespace slideshow
             {
                 std::for_each(mrViews.begin(),
                               mrViews.end(),
-                              boost::mem_fn(&View::clearAll));
+                              std::mem_fn(&View::clearAll));
 
                 // force update of whole slide area
                 std::for_each( maLayers.begin(),
                                maLayers.end(),
-                               boost::bind( &Layer::addUpdateRange,
+                               std::bind( &Layer::addUpdateRange,
                                             _1,
-                                            boost::cref(maPageBounds) ));
+                                            std::cref(maPageBounds) ));
             }
             else
             {
@@ -130,7 +131,7 @@ namespace slideshow
                 // is there, already
                 std::for_each( maLayers.begin(),
                                maLayers.end(),
-                               boost::mem_fn( &Layer::clearUpdateRanges ));
+                               std::mem_fn( &Layer::clearUpdateRanges ));
             }
 
             updateShapeLayers( bSlideBackgoundPainted );
@@ -152,8 +153,8 @@ namespace slideshow
                 // sprites
                 std::for_each(maAllShapes.begin(),
                               maAllShapes.end(),
-                              boost::bind( &Shape::clearAllViewLayers,
-                                           boost::bind( o3tl::select1st<LayerShapeMap::value_type>(),
+                              std::bind( &Shape::clearAllViewLayers,
+                                           std::bind( o3tl::select1st<LayerShapeMap::value_type>(),
                                                         _1 )));
 
                 for (LayerShapeMap::iterator
@@ -191,11 +192,11 @@ namespace slideshow
 
             // add View to all registered shapes
             manageViews(
-                boost::bind(&Layer::addView,
+                std::bind(&Layer::addView,
                             _1,
-                            boost::cref(rView)),
+                            std::cref(rView)),
                 // repaint on view add
-                boost::bind(&Shape::addViewLayer,
+                std::bind(&Shape::addViewLayer,
                             _1,
                             _2,
                             true) );
@@ -204,9 +205,9 @@ namespace slideshow
             // maAllShapes, issue addView again for good measure
             std::for_each( maLayers.begin(),
                            maLayers.end(),
-                           boost::bind( &Layer::addView,
+                           std::bind( &Layer::addView,
                                         _1,
-                                        boost::cref(rView) ));
+                                        std::cref(rView) ));
         }
 
         void LayerManager::viewRemoved( const UnoViewSharedPtr& rView )
@@ -218,10 +219,10 @@ namespace slideshow
 
             // remove View from all registered shapes
             manageViews(
-                boost::bind(&Layer::removeView,
+                std::bind(&Layer::removeView,
                             _1,
-                            boost::cref(rView)),
-                boost::bind(&Shape::removeViewLayer,
+                            std::cref(rView)),
+                std::bind(&Shape::removeViewLayer,
                             _1,
                             _2) );
 
@@ -229,9 +230,9 @@ namespace slideshow
             // maAllShapes, issue removeView again for good measure
             std::for_each( maLayers.begin(),
                            maLayers.end(),
-                           boost::bind( &Layer::removeView,
+                           std::bind( &Layer::removeView,
                                         _1,
-                                        boost::cref(rView) ));
+                                        std::cref(rView) ));
         }
 
         void LayerManager::viewChanged( const UnoViewSharedPtr& rView )
@@ -255,15 +256,15 @@ namespace slideshow
             // clear view area
             ::std::for_each( mrViews.begin(),
                              mrViews.end(),
-                             ::boost::mem_fn(&View::clearAll) );
+                             ::std::mem_fn(&View::clearAll) );
 
             // TODO(F3): resize and repaint all layers
 
             // render all shapes
             std::for_each( maAllShapes.begin(),
                            maAllShapes.end(),
-                           boost::bind(&Shape::render,
-                               boost::bind( ::o3tl::select1st<LayerShapeMap::value_type>(), _1)) );
+                           std::bind(&Shape::render,
+                               std::bind( ::o3tl::select1st<LayerShapeMap::value_type>(), _1)) );
         }
 
         void LayerManager::addShape( const ShapeSharedPtr& rShape )
@@ -490,7 +491,7 @@ namespace slideshow
 
             return std::any_of( maLayers.begin(),
                                 maLayers.end(),
-                                boost::mem_fn(&Layer::isUpdatePending) );
+                                std::mem_fn(&Layer::isUpdatePending) );
         }
 
         bool LayerManager::updateSprites()
@@ -550,7 +551,7 @@ namespace slideshow
             // any non-sprite update areas left?
             if( std::none_of( maLayers.begin(),
                               maLayers.end(),
-                              boost::mem_fn( &Layer::isUpdatePending ) ) )
+                              std::mem_fn( &Layer::isUpdatePending ) ) )
                 return bRet; // nope, done.
 
             // update each shape on each layer, that has
@@ -759,8 +760,8 @@ namespace slideshow
             // newly created layer.
             ::std::for_each( mrViews.begin(),
                              mrViews.end(),
-                             boost::bind( &Layer::addView,
-                                          boost::cref(pLayer),
+                             std::bind( &Layer::addView,
+                                          std::cref(pLayer),
                                           _1 ));
 
             return pLayer;

@@ -24,7 +24,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <editeng/outliner.hxx>
 #include <editeng/eeitem.hxx>
@@ -60,6 +60,7 @@ using ::osl::MutexGuard;
 using ::osl::ClearableMutexGuard;
 using ::cppu::OInterfaceContainerHelper;
 using ::com::sun::star::table::BorderLine;
+using namespace std::placeholders;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -835,7 +836,7 @@ void SdStyleSheet::notifyModifyListener()
     if( pContainer )
     {
         EventObject aEvt( static_cast< OWeakObject * >( this ) );
-        pContainer->forEach<XModifyListener>( boost::bind( &XModifyListener::modified, _1, boost::cref( aEvt ) ) );
+        pContainer->forEach<XModifyListener>( std::bind( &XModifyListener::modified, _1, std::cref( aEvt ) ) );
     }
 }
 

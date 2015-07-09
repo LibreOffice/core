@@ -33,7 +33,7 @@
 #include <com/sun/star/util/Color.hpp>
 #include <algorithm>
 #include <vector>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 
 using namespace ::com::sun::star;
@@ -365,7 +365,7 @@ void PresenterHelpView::ReadHelpStrings()
         UNO_QUERY);
     PresenterConfigurationAccess::ForAll(
         xStrings,
-        ::boost::bind(&PresenterHelpView::ProcessString, this, _2));
+        ::std::bind(&PresenterHelpView::ProcessString, this, _2));
 }
 
 void PresenterHelpView::ProcessString (

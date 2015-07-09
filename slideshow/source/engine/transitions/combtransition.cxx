@@ -28,8 +28,9 @@
 
 #include "combtransition.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 
+using namespace std::placeholders;
 
 namespace slideshow {
 namespace internal {
@@ -172,7 +173,7 @@ bool CombTransition::operator()( double t )
 {
     std::for_each( beginViews(),
                    endViews(),
-                   boost::bind( &CombTransition::renderComb,
+                   std::bind( &CombTransition::renderComb,
                                 this,
                                 t,
                                 _1 ));

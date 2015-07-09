@@ -35,7 +35,7 @@
 #include "delayevent.hxx"
 #include "framerate.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/optional.hpp>
 #include <algorithm>
 
@@ -450,7 +450,7 @@ AnimationBaseNode::fillCommonParameters() const
     EventSharedPtr pEndEvent;
     if (pSelf) {
         pEndEvent = makeEvent(
-            boost::bind( &AnimationNode::deactivate, pSelf ),
+            std::bind( &AnimationNode::deactivate, pSelf ),
             "AnimationBaseNode::deactivate");
     }
 

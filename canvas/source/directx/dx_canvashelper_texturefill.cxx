@@ -42,10 +42,10 @@
 #include "dx_impltools.hxx"
 
 #include <boost/scoped_ptr.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/tuple/tuple.hpp>
 
-
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace dxcanvas
@@ -579,7 +579,7 @@ namespace dxcanvas
                     std::transform(&rValues.maColors[0],
                                    &rValues.maColors[0]+rValues.maColors.getLength(),
                                    aColors.begin(),
-                                   boost::bind(
+                                   std::bind(
                                        (Gdiplus::ARGB (*)( const uno::Sequence< double >& ))(
                                            &tools::sequenceToArgb),
                                        _1));

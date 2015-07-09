@@ -35,7 +35,7 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace css;
 using namespace css::uno;

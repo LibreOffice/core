@@ -35,13 +35,14 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <vector>
 #include <utility>
 #include <o3tl/compat_functional.hxx>
 #include <algorithm>
 
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -327,9 +328,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     CacheVector::iterator aMatch;
     if( (aMatch=std::find_if(m_aCachedImplementations.begin(),
                              aEnd,
-                             boost::bind(&OUString::equals,
-                                         boost::cref(serviceName),
-                                         boost::bind(
+                             std::bind(&OUString::equals,
+                                         std::cref(serviceName),
+                                         std::bind(
                                              o3tl::select1st<CachePair>(),
                                              _1)))) != aEnd )
     {
@@ -343,9 +344,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     AvailVector::const_iterator aAvailImplsMatch;
     if( (aAvailImplsMatch=std::find_if(m_aAvailableImplementations.begin(),
                                        aAvailEnd,
-                                       boost::bind(&OUString::equals,
-                                                   boost::cref(serviceName),
-                                                   boost::bind(
+                                       std::bind(&OUString::equals,
+                                                   std::cref(serviceName),
+                                                   std::bind(
                                                        o3tl::select1st<AvailPair>(),
                                                        _1)))) == aAvailEnd )
     {
@@ -356,9 +357,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     AvailVector::const_iterator aAAImplsMatch;
     if( (aAAImplsMatch=std::find_if(m_aAAImplementations.begin(),
                                     aAAEnd,
-                                    boost::bind(&OUString::equals,
-                                                boost::cref(serviceName),
-                                                boost::bind(
+                                    std::bind(&OUString::equals,
+                                                std::cref(serviceName),
+                                                std::bind(
                                                     o3tl::select1st<AvailPair>(),
                                                     _1)))) == aAAEnd )
     {
@@ -369,9 +370,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     AvailVector::const_iterator aAccelImplsMatch;
     if( (aAccelImplsMatch=std::find_if(m_aAcceleratedImplementations.begin(),
                                        aAccelEnd,
-                                       boost::bind(&OUString::equals,
-                                                   boost::cref(serviceName),
-                                                   boost::bind(
+                                       std::bind(&OUString::equals,
+                                                   std::cref(serviceName),
+                                                   std::bind(
                                                        o3tl::select1st<AvailPair>(),
                                                        _1)))) == aAccelEnd )
     {
@@ -403,9 +404,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         const bool bIsAcceleratedImpl(
             std::any_of(pFirstAccelImpl,
                          pEndAccelImpl,
-                         boost::bind(&OUString::equals,
-                                     boost::cref(aCurrName),
-                                     boost::bind(
+                         std::bind(&OUString::equals,
+                                     std::cref(aCurrName),
+                                     std::bind(
                                          &OUString::trim,
                                          _1))) );
 
@@ -414,9 +415,9 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         const bool bIsAAImpl(
             std::any_of(pFirstAAImpl,
                          pEndAAImpl,
-                         boost::bind(&OUString::equals,
-                                     boost::cref(aCurrName),
-                                     boost::bind(
+                         std::bind(&OUString::equals,
+                                     std::cref(aCurrName),
+                                     std::bind(
                                          &OUString::trim,
                                          _1))) );
 

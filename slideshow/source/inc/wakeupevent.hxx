@@ -24,7 +24,7 @@
 #include "event.hxx"
 #include "activitiesqueue.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 
 namespace slideshow {

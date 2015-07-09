@@ -39,7 +39,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 using namespace css;
 using namespace css::uno;

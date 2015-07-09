@@ -30,7 +30,7 @@
 
 #include <basegfx/numeric/ftools.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <cmath>
 #include <algorithm>
@@ -45,6 +45,7 @@
 #include "viewbackgroundshape.hxx"
 
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 
@@ -172,11 +173,11 @@ namespace slideshow
             // already added?
             if( ::std::any_of( maViewShapes.begin(),
                                maViewShapes.end(),
-                               ::boost::bind<bool>(
+                               ::std::bind<bool>(
                                     ::std::equal_to< ViewLayerSharedPtr >(),
-                                    ::boost::bind( &ViewBackgroundShape::getViewLayer,
+                                    ::std::bind( &ViewBackgroundShape::getViewLayer,
                                                    _1 ),
-                                    ::boost::cref( rNewLayer ) ) ) )
+                                    ::std::cref( rNewLayer ) ) ) )
             {
                 // yes, nothing to do
                 return;
@@ -198,22 +199,22 @@ namespace slideshow
 
             OSL_ENSURE( ::std::count_if(maViewShapes.begin(),
                                         aEnd,
-                                        ::boost::bind<bool>(
+                                        ::std::bind<bool>(
                                             ::std::equal_to< ViewLayerSharedPtr >(),
-                                            ::boost::bind( &ViewBackgroundShape::getViewLayer,
+                                            ::std::bind( &ViewBackgroundShape::getViewLayer,
                                                            _1 ),
-                                            ::boost::cref( rLayer ) ) ) < 2,
+                                            ::std::cref( rLayer ) ) ) < 2,
                         "BackgroundShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
             ViewBackgroundShapeVector::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewShapes.begin(),
                                          aEnd,
-                                         ::boost::bind<bool>(
+                                         ::std::bind<bool>(
                                              ::std::equal_to< ViewLayerSharedPtr >(),
-                                             ::boost::bind( &ViewBackgroundShape::getViewLayer,
+                                             ::std::bind( &ViewBackgroundShape::getViewLayer,
                                                             _1 ),
-                                             ::boost::cref( rLayer ) ) )) == aEnd )
+                                             ::std::cref( rLayer ) ) )) == aEnd )
             {
                 // view layer seemingly was not added, failed
                 return false;
@@ -283,9 +284,9 @@ namespace slideshow
             // redraw all view shapes, by calling their render() method
             if( ::std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
-                                 ::boost::bind( &ViewBackgroundShape::render,
+                                 ::std::bind( &ViewBackgroundShape::render,
                                                 _1,
-                                                ::boost::cref( mpMtf ) ) )
+                                                ::std::cref( mpMtf ) ) )
                 != static_cast<ViewBackgroundShapeVector::difference_type>(maViewShapes.size()) )
             {
                 // at least one of the ViewBackgroundShape::render() calls did return

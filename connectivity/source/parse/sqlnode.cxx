@@ -53,12 +53,13 @@
 #include <connectivity/dbmetadata.hxx>
 #include <tools/diagnose_ex.h>
 #include <string.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/scoped_ptr.hpp>
 #include <algorithm>
 #include <functional>
 #include <rtl/ustrbuf.hxx>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
@@ -716,7 +717,7 @@ void OSQLParseNode::impl_parseTableRangeNodeToString_throw(OUStringBuffer& rStri
 
     // rString += " ";
     ::std::for_each(m_aChildren.begin(),m_aChildren.end(),
-        boost::bind( &OSQLParseNode::impl_parseNodeToString_throw, _1, boost::ref( rString ), boost::cref( rParam ), false ));
+        std::bind( &OSQLParseNode::impl_parseNodeToString_throw, _1, std::ref( rString ), std::cref( rParam ), false ));
 }
 
 

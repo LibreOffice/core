@@ -21,7 +21,7 @@
 
 #include "excimp8.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
@@ -867,7 +867,7 @@ void XclImpAutoFilterBuffer::AddExtractPos( const ScRange& rRange )
 void XclImpAutoFilterBuffer::Apply()
 {
     std::for_each(maFilters.begin(),maFilters.end(),
-        boost::bind(&XclImpAutoFilterData::Apply,_1));
+        std::bind(&XclImpAutoFilterData::Apply,_1));
 }
 
 XclImpAutoFilterData* XclImpAutoFilterBuffer::GetByTab( SCTAB nTab )

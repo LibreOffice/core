@@ -65,9 +65,10 @@
 #include "gdimtftools.hxx"
 #include "drawinglayeranimation.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <math.h>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 
@@ -171,15 +172,15 @@ namespace slideshow
             ViewShape::RenderArgs renderArgs( getViewRenderArgs() );
             if( ::std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
-                                 ::boost::bind<bool>(
-                                     ::boost::mem_fn( &ViewShape::update ), // though _theoretically_,
+                                 ::std::bind<bool>(
+                                     ::std::mem_fn( &ViewShape::update ), // though _theoretically_,
                                                                              // bind should eat this even
                                                                              // with _1 being a shared_ptr,
                                                                              // it does _not_ for MSVC without
                                                                              // the extra mem_fn. WTF.
                                      _1,
-                                     ::boost::cref( mpCurrMtf ),
-                                     ::boost::cref( renderArgs ),
+                                     ::std::cref( mpCurrMtf ),
+                                     ::std::cref( renderArgs ),
                                      nUpdateFlags,
                                      isVisible() ) )
                 != static_cast<ViewShapeVector::difference_type>(maViewShapes.size()) )
@@ -322,7 +323,7 @@ namespace slideshow
 
                         // restore old transformation when leaving the scope
                         const ::comphelper::ScopeGuard aGuard(
-                            boost::bind( &::cppcanvas::Canvas::setTransformation,
+                            std::bind( &::cppcanvas::Canvas::setTransformation,
                                          pDestinationCanvas, aOldTransform ) );
 
 
@@ -331,7 +332,7 @@ namespace slideshow
 
                         ::basegfx::B2DRange aTotalBounds;
 
-                        // cannot use ::boost::bind, ::basegfx::B2DRange::expand()
+                        // cannot use ::std::bind, ::basegfx::B2DRange::expand()
                         // is overloaded.
                         VectorOfDocTreeNodes::const_iterator        aCurr( rSubsets.begin() );
                         const VectorOfDocTreeNodes::const_iterator  aEnd( rSubsets.end() );
@@ -583,7 +584,7 @@ namespace slideshow
                     pShape->maAnimationFrames.begin(),
                     pShape->maAnimationFrames.end(),
                     std::back_insert_iterator< std::vector<double> >( aTimeout ),
-                    boost::mem_fn(&MtfAnimationFrame::getDuration) );
+                    std::mem_fn(&MtfAnimationFrame::getDuration) );
 
                 WakeupEventSharedPtr pWakeupEvent(
                     new WakeupEvent( rContext.mrEventQueue.getTimer(),
@@ -635,11 +636,11 @@ namespace slideshow
             // already added?
             if( ::std::any_of( maViewShapes.begin(),
                                maViewShapes.end(),
-                               ::boost::bind<bool>(
+                               ::std::bind<bool>(
                                     ::std::equal_to< ViewLayerSharedPtr >(),
-                                    ::boost::bind( &ViewShape::getViewLayer,
+                                    ::std::bind( &ViewShape::getViewLayer,
                                                    _1 ),
-                                    ::boost::cref( rNewLayer ) ) ))
+                                    ::std::cref( rNewLayer ) ) ))
             {
                 // yes, nothing to do
                 return;
@@ -672,22 +673,22 @@ namespace slideshow
 
             OSL_ENSURE( ::std::count_if(maViewShapes.begin(),
                                         aEnd,
-                                        ::boost::bind<bool>(
+                                        ::std::bind<bool>(
                                             ::std::equal_to< ViewLayerSharedPtr >(),
-                                            ::boost::bind( &ViewShape::getViewLayer,
+                                            ::std::bind( &ViewShape::getViewLayer,
                                                            _1 ),
-                                            ::boost::cref( rLayer ) ) ) < 2,
+                                            ::std::cref( rLayer ) ) ) < 2,
                         "DrawShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
             ViewShapeVector::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewShapes.begin(),
                                          aEnd,
-                                         ::boost::bind<bool>(
+                                         ::std::bind<bool>(
                                              ::std::equal_to< ViewLayerSharedPtr >(),
-                                             ::boost::bind( &ViewShape::getViewLayer,
+                                             ::std::bind( &ViewShape::getViewLayer,
                                                             _1 ),
-                                             ::boost::cref( rLayer ) ) )) == aEnd )
+                                             ::std::cref( rLayer ) ) )) == aEnd )
             {
                 // view layer seemingly was not added, failed
                 return false;
@@ -752,7 +753,7 @@ namespace slideshow
         {
             /** Functor expanding AA border for each passed ViewShape
 
-                Could not use ::boost::bind here, since
+                Could not use ::std::bind here, since
                 B2DRange::expand is overloaded (which yields one or
                 the other template type deduction ambiguous)
              */
@@ -1000,9 +1001,9 @@ namespace slideshow
                     pCanvas->setTransformation( aTransform /* empty */ );
 
                     comphelper::ScopeGuard const resetOldTransformation(
-                        boost::bind( &cppcanvas::Canvas::setTransformation,
+                        std::bind( &cppcanvas::Canvas::setTransformation,
                                      pCanvas.get(),
-                                     boost::cref(aOldTransform) ));
+                                     std::cref(aOldTransform) ));
 
                     aTransform.scale( maBounds.getWidth(),
                                       maBounds.getHeight() );
@@ -1063,7 +1064,7 @@ namespace slideshow
                 // We're now entering animation mode
                 ::std::for_each( maViewShapes.begin(),
                                  maViewShapes.end(),
-                                 ::boost::mem_fn( &ViewShape::enterAnimationMode ) );
+                                 ::std::mem_fn( &ViewShape::enterAnimationMode ) );
             }
 
             ++mnIsAnimatedCount;
@@ -1082,7 +1083,7 @@ namespace slideshow
                 // we're now leaving animation mode
                 ::std::for_each( maViewShapes.begin(),
                                  maViewShapes.end(),
-                                 ::boost::mem_fn( &ViewShape::leaveAnimationMode ) );
+                                 ::std::mem_fn( &ViewShape::leaveAnimationMode ) );
             }
         }
 

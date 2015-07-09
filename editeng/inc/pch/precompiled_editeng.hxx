@@ -21,7 +21,7 @@
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/ref.hpp>
