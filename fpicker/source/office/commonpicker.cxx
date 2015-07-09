@@ -459,10 +459,8 @@ namespace svt
                 continue;
             }
 
-#ifdef DBG_UTIL
             bool bKnownSetting =
-#endif
-            implHandleInitializationArgument( sSettingName, aSettingValue );
+                implHandleInitializationArgument( sSettingName, aSettingValue );
             DBG_ASSERT( bKnownSetting,
                 (   OString( "OCommonPicker::initialize: unknown argument \"" )
                 +=  OString( sSettingName.getStr(), sSettingName.getLength(), osl_getThreadTextEncoding() )

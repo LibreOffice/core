@@ -141,10 +141,7 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
 
     // SwXTextRange -> PaM
     SwUnoInternalPaM aPaM(*pDoc);
-#if OSL_DEBUG_LEVEL > 0
-    bool bSuccess =
-#endif
-        ::sw::XTextRangeToSwPaM(aPaM, rRange);
+    bool bSuccess = ::sw::XTextRangeToSwPaM(aPaM, rRange);
     OSL_ENSURE(bSuccess, "illegal range");
 
     // PaM -> Index
@@ -160,10 +157,7 @@ XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos, SwDoc & rDoc)
     if (NULL == pIndex)
     {
         SwUnoInternalPaM aUnoPaM(rDoc);
-#if OSL_DEBUG_LEVEL > 0
-        bool bSuccess =
-#endif
-            ::sw::XTextRangeToSwPaM(aUnoPaM, xRange);
+        bool bSuccess = ::sw::XTextRangeToSwPaM(aUnoPaM, xRange);
         OSL_ENSURE(bSuccess, "illegal range");
 
         rPos = *aUnoPaM.GetPoint();

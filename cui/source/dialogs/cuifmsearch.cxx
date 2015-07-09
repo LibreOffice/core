@@ -528,10 +528,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     FmSearchContext fmscContext;
     fmscContext.nContext = nContext;
 
-#ifdef DBG_UTIL
-    sal_uInt32 nResult =
-#endif
-    m_lnkContextSupplier.Call(&fmscContext);
+    sal_uInt32 nResult = m_lnkContextSupplier.Call(&fmscContext);
     DBG_ASSERT(nResult > 0, "FmSearchDialog::InitContext : ContextSupplier didn't give me any controls !");
 
     // put the field names into the respective listbox

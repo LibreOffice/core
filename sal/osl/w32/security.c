@@ -100,10 +100,7 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
     sal_Unicode*    strUser;
     sal_Unicode*    strDomain = _wcsdup(rtl_uString_getStr(strUserName));
     HANDLE  hUserToken;
-
-    #if OSL_DEBUG_LEVEL > 0
-        LUID luid;
-    #endif
+    LUID luid;
 
     if (NULL != (strUser = wcschr(strDomain, L'/')))
         *strUser++ = L'\0';

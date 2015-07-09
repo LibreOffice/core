@@ -253,7 +253,6 @@ bool implMakeAbsoluteURL(OUString & _rsPathOrURL)
     return bURL && implEnsureAbsolute(_rsPathOrURL);
 }
 
-#if OSL_DEBUG_LEVEL > 0
 static
 PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
 {
@@ -263,8 +262,6 @@ PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
 
     return implCheckStatusOfURL(_sURL,aDirItem);
 }
-
-#endif
 
 static
 PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
