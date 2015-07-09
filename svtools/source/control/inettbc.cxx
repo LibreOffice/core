@@ -62,6 +62,7 @@
 #include <vector>
 #include <algorithm>
 
+using namespace std::placeholders;
 using namespace ::ucbhelper;
 using namespace ::utl;
 using namespace ::com::sun::star;
@@ -893,7 +894,7 @@ void SvtURLBox::Init(bool bSetDefaultHelpID)
 
     SetText( OUString() );
 
-    GetSubEdit()->autocompleteSignal.connect( boost::bind( &SvtURLBox::AutoCompleteHandler, this, _1 ) );
+    GetSubEdit()->autocompleteSignal.connect( std::bind( &SvtURLBox::AutoCompleteHandler, this, _1 ) );
     UpdatePicklistForSmartProtocol_Impl();
 
     EnableAutoSize(GetStyle() & WB_AUTOSIZE);

@@ -37,10 +37,11 @@
 
 #include <canvas/canvastools.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #define SERVICE_NAME "com.sun.star.rendering.SimpleCanvas"
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace canvas;
 
@@ -96,7 +97,7 @@ namespace
         explicit SimpleRenderState( uno::Reference<rendering::XGraphicDevice> const& xDevice ) :
             m_aPenColor( &color2Sequence),
             m_aFillColor( &color2Sequence ),
-            m_aRectClip( boost::bind( &rect2Poly,
+            m_aRectClip( std::bind( &rect2Poly,
                                       xDevice,
                                       _1 )),
             m_aTransformation()
@@ -161,8 +162,8 @@ namespace
                           const uno::Reference< uno::XComponentContext >&  ) :
             SimpleCanvasBase( m_aMutex ),
             mxCanvas( grabCanvas(aArguments) ),
-            maFont(boost::bind( &rendering::XCanvas::createFont,
-                                boost::cref(mxCanvas),
+            maFont(std::bind( &rendering::XCanvas::createFont,
+                                std::cref(mxCanvas),
                                 _1,
                                 uno::Sequence< beans::PropertyValue >(),
                                 geometry::Matrix2D() )),

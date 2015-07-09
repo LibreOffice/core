@@ -71,7 +71,7 @@ namespace slideshow
              */
             struct lessThanArea
             {
-                // make functor adaptable (to boost::bind)
+                // make functor adaptable (to std::bind)
                 typedef bool result_type;
 
                 bool operator()(const boost::shared_ptr< HyperlinkArea >& rLHS,

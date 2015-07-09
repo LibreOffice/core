@@ -54,7 +54,7 @@
 #include <vcl/settings.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/function.hpp>
 
 #include <vcl/group.hxx>
@@ -588,7 +588,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 aEvent.Source = static_cast<cppu::OWeakObject*>(this);
                 aEvent.ActionCommand = maActionCommand;
 
-                Callback aCallback = ::boost::bind(
+                Callback aCallback = ::std::bind(
                     &ActionListenerMultiplexer::actionPerformed,
                     &maActionListeners,
                     aEvent

@@ -33,7 +33,7 @@
 #include <editeng/lineitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <svx/sidebar/PopupContainer.hxx>
 #include "CellLineStyleControl.hxx"
 #include "CellLineStylePopup.hxx"
@@ -41,6 +41,7 @@
 #include "CellBorderStyleControl.hxx"
 #include "CellBorderStylePopup.hxx"
 
+using namespace std::placeholders;
 using namespace css;
 using namespace css::uno;
 
@@ -195,7 +196,7 @@ IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, p
             mpCellBorderStylePopup.reset(
                 new CellBorderStylePopup(
                     this,
-                    ::boost::bind(&CellAppearancePropertyPanel::CreateCellBorderStylePopupControl, this, _1)));
+                    ::std::bind(&CellAppearancePropertyPanel::CreateCellBorderStylePopupControl, this, _1)));
         }
 
         if(mpCellBorderStylePopup.get())
@@ -217,7 +218,7 @@ IMPL_LINK_TYPED(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pT
             mpCellLineStylePopup.reset(
                 new CellLineStylePopup(
                     this,
-                    ::boost::bind(&CellAppearancePropertyPanel::CreateCellLineStylePopupControl, this, _1)));
+                    ::std::bind(&CellAppearancePropertyPanel::CreateCellLineStylePopupControl, this, _1)));
         }
 
         if(mpCellLineStylePopup.get())

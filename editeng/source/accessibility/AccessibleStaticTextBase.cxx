@@ -943,7 +943,7 @@ namespace accessibility
             {
                 const beans::PropertyValue* pItr = aSeq.getConstArray();
                 const beans::PropertyValue* pEnd  = pItr + aSeq.getLength();
-                const beans::PropertyValue* pFind = ::std::find_if( pItr, pEnd, ::std::bind2nd( PropertyValueEqualFunctor(), boost::cref( *aItr ) ) );
+                const beans::PropertyValue* pFind = ::std::find_if( pItr, pEnd, ::std::bind2nd( PropertyValueEqualFunctor(), std::cref( *aItr ) ) );
                 if ( pFind != pEnd )
                 {
                     aIntersectionVec.push_back( *pFind );
@@ -981,7 +981,7 @@ namespace accessibility
         {
             const beans::PropertyValue* pItr = aIntersectionSeq.getConstArray();
             const beans::PropertyValue* pEnd  = pItr + aIntersectionSeq.getLength();
-            bool bNone = ::std::none_of( pItr, pEnd, ::std::bind2nd( PropertyValueEqualFunctor(), boost::cref( pDefAttr[i] ) ) );
+            bool bNone = ::std::none_of( pItr, pEnd, ::std::bind2nd( PropertyValueEqualFunctor(), std::cref( pDefAttr[i] ) ) );
             if ( bNone && pDefAttr[i].Handle != 0)
             {
                 aDiffVec.push_back( pDefAttr[i] );

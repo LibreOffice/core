@@ -51,7 +51,7 @@
 #include "dp_extensionmanager.hxx"
 #include "dp_commandenvironments.hxx"
 #include "dp_properties.hxx"
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <list>
 #include <algorithm>
@@ -65,6 +65,7 @@ namespace uno = com::sun::star::uno;
 namespace beans = com::sun::star::beans;
 namespace util = com::sun::star::util;
 
+using namespace std::placeholders;
 using ::com::sun::star::uno::Reference;
 
 namespace {
@@ -1496,7 +1497,7 @@ void ExtensionManager::fireModified()
         cppu::UnoType<util::XModifyListener>::get() );
     if (pContainer != 0) {
         pContainer->forEach<util::XModifyListener>(
-            boost::bind(&util::XModifyListener::modified, _1,
+            std::bind(&util::XModifyListener::modified, _1,
                         lang::EventObject(static_cast<OWeakObject *>(this))) );
     }
 }
