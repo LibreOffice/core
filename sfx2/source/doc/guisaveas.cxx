@@ -544,6 +544,9 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( Sf
 
 uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl( sal_Int8 nStoreMode )
 {
+    if ( nStoreMode == SAVEASREMOTE_REQUESTED )
+        nStoreMode = SAVEAS_REQUESTED;
+
     uno::Sequence< beans::PropertyValue > aFilterProps;
 
     SfxFilterFlags nMust = getMustFlags( nStoreMode );
@@ -882,6 +885,9 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                             const OUString& rStandardDir,
                                             const ::com::sun::star::uno::Sequence< OUString >& rBlackList)
 {
+    if ( nStoreMode == SAVEASREMOTE_REQUESTED )
+        nStoreMode = SAVEAS_REQUESTED;
+
     bool bUseFilterOptions = false;
 
     ::comphelper::SequenceAsHashMap::const_iterator aOverwriteIter =
@@ -1396,7 +1402,15 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
     bool bSetStandardName = false; // can be set only for SaveAs
 
     // parse the slot name
+    bool bRemote = false;
     sal_Int8 nStoreMode = getStoreModeFromSlotName( aSlotName );
+
+    if ( nStoreMode == SAVEASREMOTE_REQUESTED )
+    {
+        nStoreMode = SAVEAS_REQUESTED;
+        bRemote = true;
+    }
+
     sal_Int8 nStatusSave = STATUS_NO_ACTION;
 
     ::comphelper::SequenceAsHashMap::const_iterator aSaveACopyIter =
@@ -1551,7 +1565,7 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
     {
         sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG;
 
-        if( nStoreMode == SAVEASREMOTE_REQUESTED )
+        if( bRemote )
         {
             nDialog = SFX2_IMPL_DIALOG_REMOTE;
         }

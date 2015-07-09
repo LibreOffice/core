@@ -561,7 +561,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             {
                 SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, GetTitle() ); // ???
 
-                if ( nId == SID_SAVEASDOC )
+                if ( nId == SID_SAVEASDOC || nId == SID_SAVEASREMOTE )
                 {
                     // in case of plugin mode the SaveAs operation means SaveTo
                     SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pViewOnlyItem, SfxBoolItem, SID_VIEWONLY, false );
@@ -726,7 +726,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 nErrorCode = ( lErr != ERRCODE_IO_ABORT ) && ( nErrorCode == ERRCODE_NONE ) ? nErrorCode : lErr;
             }
 
-            if ( nId == SID_SAVEASDOC  && nErrorCode == ERRCODE_NONE )
+            if ( ( nId == SID_SAVEASDOC || nId == SID_SAVEASREMOTE ) && nErrorCode == ERRCODE_NONE )
             {
                 SfxBoolItem const * saveTo = static_cast<SfxBoolItem const *>(
                     rReq.GetArg(SID_SAVETO, false, TYPE(SfxBoolItem)));
