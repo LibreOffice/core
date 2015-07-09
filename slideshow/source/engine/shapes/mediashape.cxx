@@ -32,10 +32,11 @@
 #include "shape.hxx"
 #include "tools.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <algorithm>
 
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 
@@ -127,7 +128,7 @@ namespace slideshow
             // resize all ViewShapes
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),
-                             ::boost::bind(
+                             ::std::bind(
                                  &ViewMediaShape::resize,
                                  _1,
                                  getBounds()) );
@@ -159,21 +160,21 @@ namespace slideshow
 
             OSL_ENSURE( ::std::count_if(maViewMediaShapes.begin(),
                                         aEnd,
-                                        ::boost::bind<bool>(
+                                        ::std::bind<bool>(
                                             ::std::equal_to< ViewLayerSharedPtr >(),
-                                            ::boost::bind( &ViewMediaShape::getViewLayer, _1 ),
-                                            ::boost::cref( rLayer ) ) ) < 2,
+                                            ::std::bind( &ViewMediaShape::getViewLayer, _1 ),
+                                            ::std::cref( rLayer ) ) ) < 2,
                         "MediaShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
             ViewMediaShapeVector::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewMediaShapes.begin(),
                                          aEnd,
-                                         ::boost::bind<bool>(
+                                         ::std::bind<bool>(
                                              ::std::equal_to< ViewLayerSharedPtr >(),
-                                             ::boost::bind( &ViewMediaShape::getViewLayer,
+                                             ::std::bind( &ViewMediaShape::getViewLayer,
                                                             _1 ),
-                                             ::boost::cref( rLayer ) ) )) == aEnd )
+                                             ::std::cref( rLayer ) ) )) == aEnd )
             {
                 // view layer seemingly was not added, failed
                 return false;
@@ -200,10 +201,10 @@ namespace slideshow
             // redraw all view shapes, by calling their update() method
             if( ::std::count_if( maViewMediaShapes.begin(),
                                  maViewMediaShapes.end(),
-                                 ::boost::bind<bool>(
-                                     ::boost::mem_fn( &ViewMediaShape::render ),
+                                 ::std::bind<bool>(
+                                     ::std::mem_fn( &ViewMediaShape::render ),
                                      _1,
-                                     ::boost::cref( rCurrBounds ) ) )
+                                     ::std::cref( rCurrBounds ) ) )
                 != static_cast<ViewMediaShapeVector::difference_type>(maViewMediaShapes.size()) )
             {
                 // at least one of the ViewShape::update() calls did return
@@ -220,7 +221,7 @@ namespace slideshow
         {
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),
-                             ::boost::mem_fn( &ViewMediaShape::startMedia ) );
+                             ::std::mem_fn( &ViewMediaShape::startMedia ) );
 
             mbIsPlaying = true;
 
@@ -233,7 +234,7 @@ namespace slideshow
         {
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),
-                             ::boost::mem_fn( &ViewMediaShape::endMedia ) );
+                             ::std::mem_fn( &ViewMediaShape::endMedia ) );
 
             mbIsPlaying = false;
 
@@ -246,7 +247,7 @@ namespace slideshow
         {
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),
-                             ::boost::mem_fn( &ViewMediaShape::pauseMedia ) );
+                             ::std::mem_fn( &ViewMediaShape::pauseMedia ) );
 
             mbIsPlaying = false;
 
@@ -266,8 +267,8 @@ namespace slideshow
         {
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),
-                             ::boost::bind( &ViewMediaShape::setMediaTime,
-                                            _1, boost::cref(fTime)) );
+                             ::std::bind( &ViewMediaShape::setMediaTime,
+                                            _1, std::cref(fTime)) );
         }
 
 

@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/bind.hpp>
-
 #include "officecfg/Office/Common.hxx"
 
 #include "vcl/print.hxx"
@@ -79,7 +77,7 @@ AquaSalInfoPrinter::AquaSalInfoPrinter( const SalPrinterQueueInfo& i_rQueue ) :
 
     const int nWidth = 100, nHeight = 100;
     maContextMemory.reset( static_cast<sal_uInt8*>( rtl_allocateMemory( nWidth * 4 * nHeight ) ),
-                           boost::bind( rtl_freeMemory, _1 ) );
+                           [](void* p) { rtl_freeMemory(p); } );
 
     if( maContextMemory )
     {

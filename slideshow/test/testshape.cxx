@@ -35,9 +35,10 @@
 
 #include <o3tl/compat_functional.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 namespace target = slideshow::internal;
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 // our test shape subject
@@ -130,9 +131,9 @@ private:
         if( std::none_of(
                 maViewLayers.begin(),
                 maViewLayers.end(),
-                boost::bind( std::equal_to< target::ViewLayerSharedPtr >(),
-                             boost::cref( rNewLayer ),
-                             boost::bind( o3tl::select1st<ViewVector::value_type>(),
+                std::bind( std::equal_to< target::ViewLayerSharedPtr >(),
+                             std::cref( rNewLayer ),
+                             std::bind( o3tl::select1st<ViewVector::value_type>(),
                                           _1 ))) )
             throw std::exception();
 
@@ -140,9 +141,9 @@ private:
             std::remove_if(
                 maViewLayers.begin(),
                 maViewLayers.end(),
-                boost::bind( std::equal_to< target::ViewLayerSharedPtr >(),
-                             boost::cref( rNewLayer ),
-                             boost::bind( o3tl::select1st<ViewVector::value_type>(),
+                std::bind( std::equal_to< target::ViewLayerSharedPtr >(),
+                             std::cref( rNewLayer ),
+                             std::bind( o3tl::select1st<ViewVector::value_type>(),
                                           _1 ))));
         return true;
     }

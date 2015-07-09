@@ -106,7 +106,7 @@ namespace sw { namespace mark
             virtual void SetChecked(bool checked) =0;
     };
 
-    // Apple llvm-g++ 4.2.1 with _GLIBCXX_DEBUG won't eat boost::bind for this
+    // Apple llvm-g++ 4.2.1 with _GLIBCXX_DEBUG won't eat std::bind for this
     // Neither will MSVC 2008 with _DEBUG
     struct CompareIMarkStartsAfter
     {

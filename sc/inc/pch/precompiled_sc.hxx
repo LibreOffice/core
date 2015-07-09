@@ -35,7 +35,7 @@
 #include <basic/sbx.hxx>
 #include <basic/sbxcore.hxx>
 #include <basic/sbxobj.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/checked_delete.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/noncopyable.hpp>

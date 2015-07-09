@@ -33,8 +33,9 @@
 #include "TextUnderlinePopup.hxx"
 #include <svx/sidebar/PopupContainer.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
+using namespace std::placeholders;
 using namespace css;
 using namespace css::uno;
 
@@ -89,8 +90,8 @@ TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Ref
         maUnderlineControl  (SID_ATTR_CHAR_UNDERLINE,   *pBindings, *this, OUString("Underline"),    rxFrame),
         maSpacingControl    (SID_ATTR_CHAR_KERNING,     *pBindings, *this, OUString("Spacing"),      rxFrame),
 
-        maCharSpacePopup(this, ::boost::bind(&TextPropertyPanel::CreateCharacterSpacingControl, this, _1)),
-        maUnderlinePopup(this, ::boost::bind(&TextPropertyPanel::CreateUnderlinePopupControl, this, _1)),
+        maCharSpacePopup(this, ::std::bind(&TextPropertyPanel::CreateCharacterSpacingControl, this, _1)),
+        maUnderlinePopup(this, ::std::bind(&TextPropertyPanel::CreateUnderlinePopupControl, this, _1)),
         maContext(),
         mpBindings(pBindings)
 {

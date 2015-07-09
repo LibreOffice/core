@@ -41,8 +41,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-#include <boost/bind.hpp>
-
 #include "helpids.hrc"
 #include <svx/svdundo.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -396,7 +394,7 @@ void OViewsWindow::Copy()
     uno::Sequence< beans::NamedValue > aAllreadyCopiedObjects;
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
         [&aAllreadyCopiedObjects] (TSectionsMap::value_type sectionPtr) {
-            sectionPtr->getReportSection().Copy(boost::ref(aAllreadyCopiedObjects));
+            sectionPtr->getReportSection().Copy(std::ref(aAllreadyCopiedObjects));
         });
 
     OReportExchange* pCopy = new OReportExchange(aAllreadyCopiedObjects);

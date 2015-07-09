@@ -31,10 +31,11 @@
 #include "viewappletshape.hxx"
 #include "tools.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <algorithm>
 
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 
@@ -150,7 +151,7 @@ namespace slideshow
             // resize all ViewShapes
             ::std::for_each( maViewAppletShapes.begin(),
                              maViewAppletShapes.end(),
-                             ::boost::bind(
+                             ::std::bind(
                                  &ViewAppletShape::resize,
                                  _1,
                                  AppletShape::getBounds()) );
@@ -193,21 +194,21 @@ namespace slideshow
 
             OSL_ENSURE( ::std::count_if(maViewAppletShapes.begin(),
                                         aEnd,
-                                        ::boost::bind<bool>(
+                                        ::std::bind<bool>(
                                             ::std::equal_to< ViewLayerSharedPtr >(),
-                                            ::boost::bind( &ViewAppletShape::getViewLayer, _1 ),
-                                            ::boost::cref( rLayer ) ) ) < 2,
+                                            ::std::bind( &ViewAppletShape::getViewLayer, _1 ),
+                                            ::std::cref( rLayer ) ) ) < 2,
                         "AppletShape::removeViewLayer(): Duplicate ViewLayer entries!" );
 
             ViewAppletShapeVector::iterator aIter;
 
             if( (aIter=::std::remove_if( maViewAppletShapes.begin(),
                                          aEnd,
-                                         ::boost::bind<bool>(
+                                         ::std::bind<bool>(
                                              ::std::equal_to< ViewLayerSharedPtr >(),
-                                             ::boost::bind( &ViewAppletShape::getViewLayer,
+                                             ::std::bind( &ViewAppletShape::getViewLayer,
                                                             _1 ),
-                                             ::boost::cref( rLayer ) ) )) == aEnd )
+                                             ::std::cref( rLayer ) ) )) == aEnd )
             {
                 // view layer seemingly was not added, failed
                 return false;
@@ -234,10 +235,10 @@ namespace slideshow
             // redraw all view shapes, by calling their update() method
             if( ::std::count_if( maViewAppletShapes.begin(),
                                  maViewAppletShapes.end(),
-                                 ::boost::bind<bool>(
-                                     ::boost::mem_fn( &ViewAppletShape::render ),
+                                 ::std::bind<bool>(
+                                     ::std::mem_fn( &ViewAppletShape::render ),
                                      _1,
-                                     ::boost::cref( rCurrBounds ) ) )
+                                     ::std::cref( rCurrBounds ) ) )
                 != static_cast<ViewAppletShapeVector::difference_type>(maViewAppletShapes.size()) )
             {
                 // at least one of the ViewShape::update() calls did return
@@ -254,7 +255,7 @@ namespace slideshow
         {
             ::std::for_each( maViewAppletShapes.begin(),
                              maViewAppletShapes.end(),
-                             ::boost::bind( &ViewAppletShape::startApplet,
+                             ::std::bind( &ViewAppletShape::startApplet,
                                             _1,
                                             getBounds()) );
             mbIsPlaying = true;
@@ -268,7 +269,7 @@ namespace slideshow
         {
             ::std::for_each( maViewAppletShapes.begin(),
                              maViewAppletShapes.end(),
-                             ::boost::mem_fn( &ViewAppletShape::endApplet ) );
+                             ::std::mem_fn( &ViewAppletShape::endApplet ) );
 
             mbIsPlaying = false;
 

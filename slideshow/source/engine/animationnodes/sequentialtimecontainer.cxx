@@ -27,7 +27,7 @@
 #include "sequentialtimecontainer.hxx"
 #include "tools.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <algorithm>
 
 namespace slideshow {
@@ -51,7 +51,7 @@ void SequentialTimeContainer::activate_st()
         // deactivate ASAP:
         scheduleDeactivationEvent(
             makeEvent(
-                 boost::bind< void >( boost::mem_fn( &AnimationNode::deactivate ), getSelf() ),
+                 std::bind< void >( std::mem_fn( &AnimationNode::deactivate ), getSelf() ),
                  "SequentialTimeContainer::deactivate") );
     }
     else // use default
@@ -79,7 +79,7 @@ void SequentialTimeContainer::skipEffect(
         getContext().mrEventQueue.forceEmpty();
         getContext().mrEventQueue.addEvent(
             makeEvent(
-                boost::bind<void>( boost::mem_fn( &AnimationNode::deactivate ), pChildNode ),
+                std::bind<void>( std::mem_fn( &AnimationNode::deactivate ), pChildNode ),
                 "SequentialTimeContainer::deactivate, skipEffect with delay") );
     }
     else
@@ -99,7 +99,7 @@ bool SequentialTimeContainer::resolveChild(
 
         // event that will deactivate the resolved/running child:
         mpCurrentSkipEvent = makeEvent(
-            boost::bind( &SequentialTimeContainer::skipEffect,
+            std::bind( &SequentialTimeContainer::skipEffect,
                          boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
                          pChildNode ),
             "SequentialTimeContainer::skipEffect, resolveChild");

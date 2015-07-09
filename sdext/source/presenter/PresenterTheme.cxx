@@ -31,9 +31,10 @@
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <osl/diagnose.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <map>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::std;
@@ -386,7 +387,7 @@ bool PresenterTheme::ConvertToColor (
         "Presenter/Themes/" + mpTheme->msConfigurationNodeName + "/ViewStyles")))
     {
         pConfiguration->GoToChild(
-            ::boost::bind(&PresenterConfigurationAccess::IsStringPropertyEqual,
+            ::std::bind(&PresenterConfigurationAccess::IsStringPropertyEqual,
                 rsStyleName,
                 OUString("StyleName"),
                 _2));
@@ -656,8 +657,8 @@ void PresenterTheme::Theme::Read (
         UNO_QUERY);
     PresenterConfigurationAccess::ForAll(
         xFontNode,
-        ::boost::bind(&PresenterTheme::Theme::ProcessFont,
-            this, ::boost::ref(rReadContext), _1, _2));
+        ::std::bind(&PresenterTheme::Theme::ProcessFont,
+            this, ::std::ref(rReadContext), _1, _2));
 }
 
 SharedPaneStyle PresenterTheme::Theme::GetPaneStyle (const OUString& rsStyleName) const
@@ -866,8 +867,8 @@ void PaneStyleContainer::Read (
         PresenterConfigurationAccess::ForAll(
             xPaneStyleList,
             aProperties,
-            ::boost::bind(&PaneStyleContainer::ProcessPaneStyle,
-                this, ::boost::ref(rReadContext), _1, _2));
+            ::std::bind(&PaneStyleContainer::ProcessPaneStyle,
+                this, ::std::ref(rReadContext), _1, _2));
     }
 }
 
@@ -996,8 +997,8 @@ void ViewStyleContainer::Read (
     {
         PresenterConfigurationAccess::ForAll(
             xViewStyleList,
-            ::boost::bind(&ViewStyleContainer::ProcessViewStyle,
-                this, ::boost::ref(rReadContext), _2));
+            ::std::bind(&ViewStyleContainer::ProcessViewStyle,
+                this, ::std::ref(rReadContext), _2));
     }
 }
 
@@ -1109,8 +1110,8 @@ void StyleAssociationContainer::Read (
         PresenterConfigurationAccess::ForAll(
             xStyleAssociationList,
             aProperties,
-            ::boost::bind(&StyleAssociationContainer::ProcessStyleAssociation,
-                this, ::boost::ref(rReadContext), _1, _2));
+            ::std::bind(&StyleAssociationContainer::ProcessStyleAssociation,
+                this, ::std::ref(rReadContext), _1, _2));
     }
 }
 

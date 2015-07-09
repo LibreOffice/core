@@ -27,10 +27,11 @@
 
 #include "shapemanagerimpl.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <o3tl/compat_functional.hxx>
 
+using namespace std::placeholders;
 using namespace com::sun::star;
 
 namespace slideshow {
@@ -69,22 +70,22 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
         uno::Reference<presentation::XShapeEventListener> xDummyListener;
         std::for_each( mrGlobalListenersMap.begin(),
                        mrGlobalListenersMap.end(),
-                       boost::bind( &ShapeManagerImpl::listenerAdded,
+                       std::bind( &ShapeManagerImpl::listenerAdded,
                                     this,
-                                    boost::cref(xDummyListener),
-                                    boost::bind(
+                                    std::cref(xDummyListener),
+                                    std::bind(
                                         o3tl::select1st<ShapeEventListenerMap::value_type>(),
                                         _1 )));
 
         // clone cursor map
         std::for_each( mrGlobalCursorMap.begin(),
                        mrGlobalCursorMap.end(),
-                       boost::bind( &ShapeManagerImpl::cursorChanged,
+                       std::bind( &ShapeManagerImpl::cursorChanged,
                                     this,
-                                    boost::bind(
+                                    std::bind(
                                         o3tl::select1st<ShapeCursorMap::value_type>(),
                                         _1 ),
-                                    boost::bind(
+                                    std::bind(
                                         o3tl::select2nd<ShapeCursorMap::value_type>(),
                                         _1 )));
 
@@ -168,10 +169,7 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
 
             // DON'T do anything with /this/ after this point!
             pCont->forEach<presentation::XShapeEventListener>(
-                boost::bind( &presentation::XShapeEventListener::click,
-                             _1,
-                             boost::cref(xShape),
-                             boost::cref(e) ));
+                [&](uno::Reference<presentation::XShapeEventListener> const& rxListener) { rxListener->click(xShape, e); } );
 
             return true; // handled this event
         }
@@ -437,13 +435,13 @@ void ShapeManagerImpl::removeIntrinsicAnimationHandler( const IntrinsicAnimation
 bool ShapeManagerImpl::notifyIntrinsicAnimationsEnabled()
 {
     return maIntrinsicAnimationEventHandlers.applyAll(
-        boost::mem_fn(&IntrinsicAnimationEventHandler::enableAnimations));
+        std::mem_fn(&IntrinsicAnimationEventHandler::enableAnimations));
 }
 
 bool ShapeManagerImpl::notifyIntrinsicAnimationsDisabled()
 {
     return maIntrinsicAnimationEventHandlers.applyAll(
-        boost::mem_fn(&IntrinsicAnimationEventHandler::disableAnimations));
+        std::mem_fn(&IntrinsicAnimationEventHandler::disableAnimations));
 }
 
 

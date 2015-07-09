@@ -41,8 +41,9 @@
 #include <vcl/wrkwin.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -198,7 +199,7 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
             ::std::find_if(
                 mpViewShellContainer->begin(),
                 mpViewShellContainer->end(),
-                ::boost::bind(&ViewDescriptor::CompareView, _1, rxView)));
+                ::std::bind(&ViewDescriptor::CompareView, _1, rxView)));
         if (iViewShell != mpViewShellContainer->end())
         {
             ::boost::shared_ptr<ViewShell> pViewShell ((*iViewShell)->mpViewShell);

@@ -31,7 +31,7 @@
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/iterator_adaptors.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_set.hpp>

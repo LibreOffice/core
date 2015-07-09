@@ -24,9 +24,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 #include <algorithm>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -146,9 +147,9 @@ void ResourceFactoryManager::RemoveFactoryForReference(
         std::remove_if(
             maFactoryPatternList.begin(),
             maFactoryPatternList.end(),
-            ::boost::bind(
+            ::std::bind(
                 std::equal_to<Reference<XResourceFactory> >(),
-                ::boost::bind(&FactoryPatternList::value_type::second, _1),
+                ::std::bind(&FactoryPatternList::value_type::second, _1),
                 rxFactory)));
     if (iNewEnd != maFactoryPatternList.end())
         maFactoryPatternList.erase(iNewEnd, maFactoryPatternList.end());

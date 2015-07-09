@@ -84,7 +84,7 @@
 #include <osl/diagnose.h>
 #include <tools/errcode.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <algorithm>
 #include <functional>
@@ -93,6 +93,7 @@
 #include <svtools/grfmgr.hxx>
 #include <tools/urlobj.hxx>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -1540,7 +1541,7 @@ void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (Clo
         // allow listeners to veto
         lang::EventObject aEvent( *this );
         m_aCloseListener.forEach< XCloseListener >(
-            boost::bind( &XCloseListener::queryClosing, _1, boost::cref( aEvent ), boost::cref( _bDeliverOwnership ) ) );
+            [&] (Reference<XCloseListener> const& rxListener) { rxListener->queryClosing(aEvent, _bDeliverOwnership); } );
 
         // notify that we're going to unload
         m_aEventNotifier.notifyDocumentEvent( "OnPrepareUnload" );
@@ -1805,7 +1806,7 @@ void ODatabaseDocument::impl_notifyStorageChange_nolck_nothrow( const Reference<
     Reference< XInterface > xMe( *this );
 
     m_aStorageListeners.forEach< XStorageChangeListener >(
-        boost::bind( &XStorageChangeListener::notifyStorageChange, _1, boost::cref( xMe ), boost::cref( _rxNewRootStorage ) ) );
+        [&] (Reference<XStorageChangeListener>const& rxListener) { rxListener->notifyStorageChange(xMe, _rxNewRootStorage); } );
 }
 
 void ODatabaseDocument::disposing()

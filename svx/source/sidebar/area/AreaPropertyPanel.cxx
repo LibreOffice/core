@@ -39,8 +39,9 @@
 #include <vcl/toolbox.hxx>
 #include <svtools/toolbarmenu.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 
+using namespace std::placeholders;
 using namespace css;
 using namespace css::uno;
 using ::sfx2::sidebar::Theme;
@@ -94,7 +95,7 @@ AreaPropertyPanel::AreaPropertyPanel(
       maImgRadial(SVX_RES(IMG_RADIAL)),
       maImgSquare(SVX_RES(IMG_SQUARE)),
       maImgLinear(SVX_RES(IMG_LINEAR)),
-      maTrGrPopup(this, ::boost::bind(&AreaPropertyPanel::CreateTransparencyGradientControl, this, _1)),
+      maTrGrPopup(this, ::std::bind(&AreaPropertyPanel::CreateTransparencyGradientControl, this, _1)),
       mpFloatTransparenceItem(),
       mpTransparanceItem(),
       mxFrame(rxFrame),
