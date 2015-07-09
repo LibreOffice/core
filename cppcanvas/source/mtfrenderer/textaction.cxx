@@ -43,14 +43,15 @@
 #include <canvas/canvastools.hxx>
 
 #include <memory>
-#include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
+#include <functional>
 
 #include "textaction.hxx"
 #include "outdevstate.hxx"
 #include "mtftools.hxx"
 
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace cppcanvas
@@ -364,7 +365,7 @@ namespace cppcanvas
                 ::std::transform( pOffsets + rSubset.mnSubsetBegin,
                                   pOffsets + rSubset.mnSubsetEnd,
                                   pAdaptedOffsets,
-                                  ::boost::bind( ::std::minus<double>(),
+                                  ::std::bind( ::std::minus<double>(),
                                                  _1,
                                                  nMinPos ) );
 

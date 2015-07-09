@@ -18,11 +18,13 @@
  */
 
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <basegfx/polygon/b2dpolygontriangulator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include "surfaceproxy.hxx"
+
+using namespace std::placeholders;
 
 namespace canvas
 {
@@ -90,7 +92,7 @@ namespace canvas
     {
         ::std::for_each( maSurfaceList.begin(),
                          maSurfaceList.end(),
-                         ::boost::mem_fn(&Surface::setColorBufferDirty));
+                         ::std::mem_fn(&Surface::setColorBufferDirty));
     }
 
 
@@ -103,11 +105,11 @@ namespace canvas
     {
         ::std::for_each( maSurfaceList.begin(),
                          maSurfaceList.end(),
-                         ::boost::bind( &Surface::draw,
+                         ::std::bind( &Surface::draw,
                                         _1,
                                         fAlpha,
-                                        ::boost::cref(rPos),
-                                        ::boost::cref(rTransform)));
+                                        ::std::cref(rPos),
+                                        ::std::cref(rTransform)));
 
         return true;
     }
@@ -123,12 +125,12 @@ namespace canvas
     {
         ::std::for_each( maSurfaceList.begin(),
                          maSurfaceList.end(),
-                         ::boost::bind(&Surface::drawRectangularArea,
+                         ::std::bind(&Surface::drawRectangularArea,
                                        _1,
                                        fAlpha,
-                                       ::boost::cref(rPos),
-                                       ::boost::cref(rArea),
-                                       ::boost::cref(rTransform)));
+                                       ::std::cref(rPos),
+                                       ::std::cref(rArea),
+                                       ::std::cref(rTransform)));
 
         return true;
     }
@@ -160,12 +162,12 @@ namespace canvas
 
         ::std::for_each( maSurfaceList.begin(),
                          maSurfaceList.end(),
-                         ::boost::bind(&Surface::drawWithClip,
+                         ::std::bind(&Surface::drawWithClip,
                                        _1,
                                        fAlpha,
-                                       ::boost::cref(rPos),
-                                       ::boost::cref(rTriangulatedPolygon),
-                                       ::boost::cref(rTransform)));
+                                       ::std::cref(rPos),
+                                       ::std::cref(rTriangulatedPolygon),
+                                       ::std::cref(rTransform)));
 
         return true;
     }

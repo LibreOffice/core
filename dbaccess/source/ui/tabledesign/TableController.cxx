@@ -67,8 +67,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/layout.hxx>
 
-#include <boost/mem_fn.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <algorithm>
 #include <functional>
@@ -78,6 +77,7 @@ extern "C" void SAL_CALL createRegistryInfo_OTableControl()
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OTableController > aAutoRegistration;
 }
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -198,7 +198,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             if ( aReturn.bEnabled )
             {
                 aReturn.bEnabled = ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
-                                                 ::boost::mem_fn(&OTableRow::isValid));
+                                                 ::std::mem_fn(&OTableRow::isValid));
             }
             break;
         case ID_BROWSER_SAVEASDOC:
@@ -206,7 +206,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             if ( aReturn.bEnabled )
             {
                 aReturn.bEnabled = ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
-                                                 ::boost::mem_fn(&OTableRow::isValid));
+                                                 ::std::mem_fn(&OTableRow::isValid));
             }
             break;
 
@@ -229,7 +229,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             if ( aReturn.bEnabled )
             {
                 aReturn.bEnabled = ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
-                                                 ::boost::mem_fn(&OTableRow::isValid));
+                                                 ::std::mem_fn(&OTableRow::isValid));
             }
             break;
         default:
@@ -557,7 +557,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
     if ( isModified() )
     {
         if ( ::std::any_of(m_vRowList.begin(),m_vRowList.end(),
-                           ::boost::mem_fn(&OTableRow::isValid)) )
+                           ::std::mem_fn(&OTableRow::isValid)) )
         {
             ScopedVclPtrInstance<MessageDialog> aQry(getView(), "TableDesignSaveModifiedDialog",
                                                      "dbaccess/ui/tabledesignsavemodifieddialog.ui");
@@ -1380,7 +1380,7 @@ void OTableController::assignTable()
                     setEditable( xMeta.is() && !xMeta->isReadOnly() && (isAlterAllowed() || isDropAllowed() || isAddAllowed()) );
                     if(!isEditable())
                     {
-                        ::std::for_each(m_vRowList.begin(),m_vRowList.end(),boost::bind( &OTableRow::SetReadOnly, _1, true));
+                        ::std::for_each(m_vRowList.begin(),m_vRowList.end(),std::bind( &OTableRow::SetReadOnly, _1, true));
                     }
                     m_bNew = false;
                     // be notified when the table is in disposing

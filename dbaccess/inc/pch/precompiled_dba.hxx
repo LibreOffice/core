@@ -21,7 +21,7 @@
 #include <algorithm>
 #include <basic/basmgr.hxx>
 #include <bitset>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>

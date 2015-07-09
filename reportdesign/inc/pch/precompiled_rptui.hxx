@@ -15,8 +15,7 @@
 */
 
 #include <algorithm>
-#include <boost/bind.hpp>
-#include <boost/mem_fn.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>

@@ -29,7 +29,6 @@
 #include <boost/spirit/include/classic_utility.hpp>
 #include <boost/spirit/include/classic_error_handling.hpp>
 #include <boost/spirit/include/classic_file_iterator.hpp>
-#include <boost/bind.hpp>
 #include <string.h>
 
 #include <rtl/strbuf.hxx>
@@ -134,74 +133,104 @@ public:
         {
             PDFGrammar<iteratorT>* pSelf = const_cast< PDFGrammar<iteratorT>* >( &rSelf );
 
-            // workaround workshop compiler: comment_p doesn't work
-            // comment     = comment_p("%")[boost::bind(&PDFGrammar::pushComment, pSelf, _1, _2 )];
-            comment     = lexeme_d[ (ch_p('%') >> *(~ch_p('\r') & ~ch_p('\n')) >> eol_p)[boost::bind(&PDFGrammar::pushComment, pSelf, _1, _2 )] ];
+            // Define lambdas that are used in semantic actions below.
+            // Note, that we need explicit variables, as C+11/C++14
+            // doesn't support nested index operator:
+            // str_p("foo")[[&]() { bar->baz(); }] // doesn't compile
+            // instead:
+            // auto lambda = [&]() { bar->baz(); }
+            // str_p("foo")[lambda]
+            // OTOH std::bind work as well in Linux and Mac Os X, but not on Windows:
+            // http://ci.libreoffice.org/job/lo_gerrit_master/4083/Gerrit=Gerrit,Platform=Windows/console
 
-            boolean     = (str_p("true") | str_p("false"))[boost::bind(&PDFGrammar::pushBool, pSelf, _1, _2)];
+            auto push_back_action_uint = [pSelf] (unsigned int i) { pSelf->push_back_action_uint(i); };
+            auto assign_action_double  = [pSelf] (double d) { pSelf->assign_action_double(d); };
+            auto pushComment           = [pSelf] (iteratorT first, iteratorT last) { pSelf->pushComment(first, last); };
+            auto pushBool              = [pSelf] (iteratorT first, iteratorT last) { pSelf->pushBool(first, last); };
+            auto emitStream            = [pSelf] (iteratorT first, iteratorT last) { pSelf->emitStream(first, last); };
+            auto pushName              = [pSelf] (iteratorT first, iteratorT last) { pSelf->pushName(first, last); };
+            auto pushString            = [pSelf] (iteratorT first, iteratorT last) { pSelf->pushString(first, last); };
+            auto pushNull              = [pSelf] (iteratorT first, iteratorT last) { pSelf->pushNull(first, last); };
+            auto pushObjectRef         = [pSelf] (iteratorT first, iteratorT last) { pSelf->pushObjectRef(first, last); };
+            auto pushDouble            = [pSelf] (iteratorT first, iteratorT last) { pSelf->pushDouble(first, last); };
+            auto beginDict             = [pSelf] (iteratorT first, iteratorT last) { pSelf->beginDict(first, last); };
+            auto endDict               = [pSelf] (iteratorT first, iteratorT last) { pSelf->endDict(first, last); };
+            auto beginArray            = [pSelf] (iteratorT first, iteratorT last) { pSelf->beginArray(first, last); };
+            auto endArray              = [pSelf] (iteratorT first, iteratorT last) { pSelf->endArray(first, last); };
+            auto beginObject           = [pSelf] (iteratorT first, iteratorT last) { pSelf->beginObject(first, last); };
+            auto endObject             = [pSelf] (iteratorT first, iteratorT last) { pSelf->endObject(first, last); };
+            auto beginTrailer          = [pSelf] (iteratorT first, iteratorT last) { pSelf->beginTrailer(first, last); };
+            auto endTrailer            = [pSelf] (iteratorT first, iteratorT last) { pSelf->endTrailer(first, last); };
+            auto haveFile              = [pSelf] (iteratorT first, iteratorT last) { pSelf->haveFile(first, last); };
+
+            // workaround workshop compiler: comment_p doesn't work
+            // comment     = comment_p("%")[std::bind(&PDFGrammar::pushComment, pSelf, _1, _2 )];
+            comment     = lexeme_d[ (ch_p('%') >> *(~ch_p('\r') & ~ch_p('\n')) >> eol_p)[pushComment] ];
+
+            boolean     = (str_p("true") | str_p("false"))[pushBool];
 
             // workaround workshop compiler: confix_p doesn't work
-            //stream      = confix_p( "stream", *anychar_p, "endstream" )[boost::bind(&PDFGrammar::emitStream, pSelf, _1, _2 )];
-            stream      = (str_p("stream") >> *(anychar_p - str_p("endstream")) >> str_p("endstream"))[boost::bind(&PDFGrammar::emitStream, pSelf, _1, _2 )];
+            //stream      = confix_p( "stream", *anychar_p, "endstream" )[std::bind(&PDFGrammar::emitStream, pSelf, _1, _2 )];
+            stream      = (str_p("stream") >> *(anychar_p - str_p("endstream")) >> str_p("endstream"))[emitStream];
 
             name        = lexeme_d[
                             ch_p('/')
                             >> (*(anychar_p-chset_p("\t\n\f\r ()<>[]{}/%")-ch_p('\0')))
-                               [boost::bind(&PDFGrammar::pushName, pSelf, _1, _2)] ];
+                               [pushName] ];
 
             // workaround workshop compiler: confix_p doesn't work
             //stringtype  = ( confix_p("(",*anychar_p, ")") |
             //                confix_p("<",*xdigit_p,  ">") )
-            //              [boost::bind(&PDFGrammar::pushString,pSelf, _1, _2)];
+            //              [std::bind(&PDFGrammar::pushString,pSelf, _1, _2)];
 
             stringtype  = ( ( ch_p('(') >> functor_parser<pdf_string_parser>() >> ch_p(')') ) |
                             ( ch_p('<') >> *xdigit_p >> ch_p('>') ) )
-                          [boost::bind(&PDFGrammar::pushString,pSelf, _1, _2)];
+                          [pushString];
 
-            null_object = str_p( "null" )[boost::bind(&PDFGrammar::pushNull, pSelf, _1, _2)];
+            null_object = str_p( "null" )[pushNull];
 
             #ifdef USE_ASSIGN_ACTOR
             objectref   = ( uint_p[push_back_a(pSelf->m_aUIntStack)]
                             >> uint_p[push_back_a(pSelf->m_aUIntStack)]
                             >> ch_p('R')
                             >> eps_p
-                          )[boost::bind(&PDFGrammar::pushObjectRef, pSelf, _1, _2)];
+                          )[pushObjectRef];
             #else
-            objectref   = ( uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
-                            >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
+            objectref   = ( uint_p[push_back_action_uint]
+                            >> uint_p[push_back_action_uint]
                             >> ch_p('R')
                             >> eps_p
-                          )[boost::bind(&PDFGrammar::pushObjectRef, pSelf, _1, _2)];
+                          )[pushObjectRef];
             #endif
 
             #ifdef USE_ASSIGN_ACTOR
             simple_type = objectref | name |
                           ( real_p[assign_a(pSelf->m_fDouble)] >> eps_p )
-                          [boost::bind(&PDFGrammar::pushDouble, pSelf, _1, _2)]
+                          [pushDouble]
                           | stringtype | boolean | null_object;
             #else
             simple_type = objectref | name |
-                          ( real_p[boost::bind(&PDFGrammar::assign_action_double, pSelf, _1)] >> eps_p )
-                          [boost::bind(&PDFGrammar::pushDouble, pSelf, _1, _2)]
+                          ( real_p[assign_action_double] >> eps_p )
+                          [pushDouble]
                           | stringtype | boolean | null_object;
             #endif
 
-            dict_begin  = str_p( "<<" )[boost::bind(&PDFGrammar::beginDict, pSelf, _1, _2)];
-            dict_end    = str_p( ">>" )[boost::bind(&PDFGrammar::endDict, pSelf, _1, _2)];
+            dict_begin  = str_p( "<<" )[beginDict];
+            dict_end    = str_p( ">>" )[endDict];
 
-            array_begin = str_p("[")[boost::bind(&PDFGrammar::beginArray,pSelf, _1, _2)];
-            array_end   = str_p("]")[boost::bind(&PDFGrammar::endArray,pSelf, _1, _2)];
+            array_begin = str_p("[")[beginArray];
+            array_end   = str_p("]")[endArray];
 
             #ifdef USE_ASSIGN_ACTOR
             object_begin= uint_p[push_back_a(pSelf->m_aUIntStack)]
                           >> uint_p[push_back_a(pSelf->m_aUIntStack)]
-                          >> str_p("obj" )[boost::bind(&PDFGrammar::beginObject, pSelf, _1, _2)];
+                          >> str_p("obj" )[beginObject];
             #else
-            object_begin= uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
-                          >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
-                          >> str_p("obj" )[boost::bind(&PDFGrammar::beginObject, pSelf, _1, _2)];
+            object_begin= uint_p[push_back_action_uint]
+                          >> uint_p[push_back_action_uint]
+                          >> str_p("obj" )[beginObject];
             #endif
-            object_end  = str_p( "endobj" )[boost::bind(&PDFGrammar::endObject, pSelf, _1, _2)];
+            object_end  = str_p( "endobj" )[endObject];
 
             xref        = str_p( "xref" ) >> uint_p >> uint_p
                           >> lexeme_d[
@@ -221,31 +250,31 @@ public:
                           >> !stream
                           >> object_end;
 
-            trailer     = str_p( "trailer" )[boost::bind(&PDFGrammar::beginTrailer,pSelf,_1,_2)]
+            trailer     = str_p( "trailer" )[beginTrailer]
                           >> *dict_element
                           >> str_p("startxref")
                           >> uint_p
-                          >> str_p("%%EOF")[boost::bind(&PDFGrammar::endTrailer,pSelf,_1,_2)];
+                          >> str_p("%%EOF")[endTrailer];
 
             #ifdef USE_ASSIGN_ACTOR
             pdfrule     = ! (lexeme_d[
                                 str_p( "%PDF-" )
-                                >> uint_p[push_back_a(pSelf->m_aUIntStack)]
+                                >> uint_p[push_back_action_uint]
                                 >> ch_p('.')
                                 >> uint_p[push_back_a(pSelf->m_aUIntStack)]
                                 >> *((~ch_p('\r') & ~ch_p('\n')))
                                 >> eol_p
-                             ])[boost::bind(&PDFGrammar::haveFile,pSelf, _1, _2)]
+                             ])[haveFile]
                           >> *( comment | object | ( xref >> trailer ) );
             #else
             pdfrule     = ! (lexeme_d[
                                 str_p( "%PDF-" )
-                                >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
+                                >> uint_p[push_back_action_uint]
                                 >> ch_p('.')
-                                >> uint_p[boost::bind(&PDFGrammar::push_back_action_uint, pSelf, _1)]
+                                >> uint_p[push_back_action_uint]
                                 >> *((~ch_p('\r') & ~ch_p('\n')))
                                 >> eol_p
-                             ])[boost::bind(&PDFGrammar::haveFile,pSelf, _1, _2)]
+                             ])[haveFile]
                           >> *( comment | object | ( xref >> trailer ) );
             #endif
         }

@@ -47,7 +47,6 @@
 #include <vector>
 #include <map>
 
-#include <boost/bind.hpp>
 
 
 
@@ -447,7 +446,8 @@ void TableDesignStyle::notifyModifyListener()
     if( pContainer )
     {
         EventObject aEvt( static_cast< OWeakObject * >( this ) );
-        pContainer->forEach<XModifyListener>( boost::bind( &XModifyListener::modified, _1, boost::cref( aEvt ) ) );
+        pContainer->forEach<XModifyListener>(
+            [&] (Reference<XModifyListener> const& rxListener) { rxListener->modified(aEvt); } );
     }
 }
 

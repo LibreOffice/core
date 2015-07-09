@@ -38,11 +38,12 @@
 #include "screenupdater.hxx"
 #include "vieweventhandler.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 #include "slide.hxx"
 #include "cursormanager.hxx"
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace slideshow
@@ -80,7 +81,7 @@ namespace slideshow
             {
                 std::for_each( rViews.begin(),
                                rViews.end(),
-                               boost::bind( &PaintOverlayHandler::viewAdded,
+                               std::bind( &PaintOverlayHandler::viewAdded,
                                             this,
                                             _1 ));
                 drawPolygons();

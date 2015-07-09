@@ -19,8 +19,6 @@
 
 #include "lotattr.hxx"
 
-#include <boost/bind.hpp>
-
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/justifyitem.hxx>
@@ -89,8 +87,8 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     sal_uInt32  nRefHash;
     MakeHash( rAttr, nRefHash );
 
-    boost::ptr_vector<ENTRY>::const_iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
-                                                                 boost::bind(&ENTRY::nHash0,_1) == nRefHash);
+    boost::ptr_vector<ENTRY>::const_iterator iter = std::find_if(aEntries.begin(), aEntries.end(),
+        [nRefHash](ENTRY const& entry) { return entry == nRefHash; });
 
     if (iter != aEntries.end())
         return *(iter->pPattAttr);

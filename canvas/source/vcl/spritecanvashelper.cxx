@@ -31,12 +31,13 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/cast.hpp>
 
 #include "spritecanvashelper.hxx"
 #include "canvascustomsprite.hxx"
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 #define FPS_BOUNDS Rectangle(0,0,130,90)
@@ -323,9 +324,9 @@ namespace vclcanvas
             // repaint all active sprites on top of background into
             // VDev.
             mpRedrawManager->forEachSprite(
-                ::boost::bind(
+                ::std::bind(
                     &spriteRedraw,
-                    ::boost::ref( *maVDev.get() ),
+                    ::std::ref( *maVDev.get() ),
                     _1 ) );
 
             // flush to screen
@@ -437,9 +438,9 @@ namespace vclcanvas
             // repaint all affected sprites directly to output device
             ::std::for_each( rUpdateArea.maComponentList.begin(),
                              rUpdateArea.maComponentList.end(),
-                             ::boost::bind(
+                             ::std::bind(
                                  &spriteRedrawStub3,
-                                 ::boost::ref( rOutDev ),
+                                 ::std::ref( rOutDev ),
                                  _1 ) );
         }
         else
@@ -463,9 +464,9 @@ namespace vclcanvas
             rOutDev.Push( PushFlags::CLIPREGION );
             ::std::for_each( aUnscrollableAreas.begin(),
                              aUnscrollableAreas.end(),
-                             ::boost::bind( &opaqueUpdateSpriteArea,
-                                            ::boost::cref(aFirst->second.getSprite()),
-                                            ::boost::ref(rOutDev),
+                             ::std::bind( &opaqueUpdateSpriteArea,
+                                            ::std::cref(aFirst->second.getSprite()),
+                                            ::std::ref(rOutDev),
                                             _1 ) );
             rOutDev.Pop();
         }
@@ -479,9 +480,9 @@ namespace vclcanvas
                                          ::basegfx::B2DRange( rDestRect ) );
         ::std::for_each( aUncoveredAreas.begin(),
                          aUncoveredAreas.end(),
-                         ::boost::bind( &repaintBackground,
-                                        ::boost::ref(rOutDev),
-                                        ::boost::ref(rBackOutDev),
+                         ::std::bind( &repaintBackground,
+                                        ::std::ref(rOutDev),
+                                        ::std::ref(rBackOutDev),
                                         _1 ) );
     }
 
@@ -505,9 +506,9 @@ namespace vclcanvas
         // repaint all affected sprites directly to output device
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
-                         ::boost::bind(
+                         ::std::bind(
                              &spriteRedrawStub,
-                             ::boost::ref( rOutDev ),
+                             ::std::ref( rOutDev ),
                              _1 ) );
     }
 
@@ -582,8 +583,8 @@ namespace vclcanvas
         // VDev.
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
-                         ::boost::bind( &spriteRedrawStub2,
-                                        ::boost::ref( *maVDev.get() ),
+                         ::std::bind( &spriteRedrawStub2,
+                                        ::std::ref( *maVDev.get() ),
                                         vcl::unotools::b2DPointFromPoint(
                                             aOutputPosition),
                                         _1 ) );
@@ -675,9 +676,9 @@ namespace vclcanvas
             double nPixel(0.0);
 
             // accumulate pixel count for each sprite into fCount
-            mpRedrawManager->forEachSprite( ::boost::bind(
+            mpRedrawManager->forEachSprite( ::std::bind(
                                                 makeAdder(nPixel,1.0),
-                                                ::boost::bind(
+                                                ::std::bind(
                                                     &calcNumPixel,
                                                     _1 ) ) );
 

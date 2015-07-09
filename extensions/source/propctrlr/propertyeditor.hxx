@@ -25,7 +25,6 @@
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <vcl/tabctrl.hxx>
 #include <vcl/vclptr.hxx>
-#include <boost/mem_fn.hpp>
 #include <map>
 
 namespace pcr

@@ -123,9 +123,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
-#include <boost/bind.hpp>
-#include <boost/mem_fn.hpp>
-#include <boost/noncopyable.hpp>
 #include <boost/noncopyable.hpp>
 
 //  page styles
@@ -191,6 +188,7 @@
 
 namespace reportdesign
 {
+    using namespace std::placeholders;
     using namespace com::sun::star;
     using namespace comphelper;
     using namespace rptui;
@@ -1091,7 +1089,7 @@ void SAL_CALL OReportDefinition::close( sal_Bool _bDeliverOwnership ) throw (uti
     lang::EventObject aEvt( static_cast< ::cppu::OWeakObject* >( this ) );
     aGuard.clear();
     m_pImpl->m_aCloseListener.forEach<util::XCloseListener>(
-        ::boost::bind(&util::XCloseListener::queryClosing,_1,boost::cref(aEvt),boost::cref(_bDeliverOwnership)));
+        [&]( uno::Reference< util::XCloseListener > const& rxListener) { rxListener->queryClosing(aEvt, _bDeliverOwnership); });
     aGuard.reset();
 
 
@@ -1490,7 +1488,10 @@ void SAL_CALL OReportDefinition::switchToStorage( const uno::Reference< embed::X
     }
     // notify our container listeners
     m_pImpl->m_aStorageChangeListeners.forEach<document::XStorageChangeListener>(
-            ::boost::bind(&document::XStorageChangeListener::notifyStorageChange,_1,static_cast<OWeakObject*>(this),boost::cref(_xStorage)));
+        [this, &_xStorage](uno::Reference<document::XStorageChangeListener> const& rxListener)
+        {
+            rxListener->notifyStorageChange(static_cast<OWeakObject*>(this), _xStorage);
+        });
 }
 
 uno::Reference< embed::XStorage > SAL_CALL OReportDefinition::getDocumentStorage(  ) throw (io::IOException, uno::Exception, uno::RuntimeException, std::exception)

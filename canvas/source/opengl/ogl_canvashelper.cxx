@@ -36,11 +36,12 @@
 
 #include <GL/glew.h>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <memory>
 
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace oglcanvas
@@ -422,7 +423,7 @@ namespace oglcanvas
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
-            rAct.maFunction = ::boost::bind(&lcl_drawPoint,
+            rAct.maFunction = ::std::bind(&lcl_drawPoint,
                                             _1,_2,_3,_4,_5,
                                             aPoint);
         }
@@ -440,7 +441,7 @@ namespace oglcanvas
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
-            rAct.maFunction = ::boost::bind(&lcl_drawLine,
+            rAct.maFunction = ::std::bind(&lcl_drawLine,
                                             _1,_2,_3,_4,_5,
                                             aStartPoint,aEndPoint);
         }
@@ -460,7 +461,7 @@ namespace oglcanvas
             setupGraphicsState( rAct, viewState, renderState );
 
             // TODO(F2): subdivide&render whole curve
-            rAct.maFunction = ::boost::bind(&lcl_drawLine,
+            rAct.maFunction = ::std::bind(&lcl_drawLine,
                                             _1,_2,_3,_4,_5,
                                             geometry::RealPoint2D(
                                                 aBezierSegment.Px,
@@ -613,7 +614,7 @@ namespace oglcanvas
                     const ::canvas::ParametricPolyPolygon::Values& rValues(
                         pGradient->getValues() );
 
-                    rAct.maFunction = ::boost::bind(&lcl_fillGradientPolyPolygon,
+                    rAct.maFunction = ::std::bind(&lcl_fillGradientPolyPolygon,
                                                     _1,_2,_3,_4,
                                                     rValues,
                                                     textures[0],
@@ -656,7 +657,7 @@ namespace oglcanvas
                                 aPixelData,
                                 canvas::tools::getStdColorSpace()));
 
-                        rAct.maFunction = ::boost::bind(&lcl_fillTexturedPolyPolygon,
+                        rAct.maFunction = ::std::bind(&lcl_fillTexturedPolyPolygon,
                                                         _1,_2,_3,_4,
                                                         textures[0],
                                                         aSize,
@@ -804,7 +805,7 @@ namespace oglcanvas
                 // own copy, for thread safety
                 std::for_each(rAct.maPolyPolys.begin(),
                               rAct.maPolyPolys.end(),
-                              ::boost::mem_fn(&::basegfx::B2DPolyPolygon::makeUnique));
+                              ::std::mem_fn(&::basegfx::B2DPolyPolygon::makeUnique));
 
                 rAct.maFunction = &lcl_fillPolyPolygon;
             }
@@ -835,7 +836,7 @@ namespace oglcanvas
                 Action& rAct=mpRecordedActions->back();
 
                 setupGraphicsState( rAct, viewState, renderState );
-                rAct.maFunction = ::boost::bind(&lcl_drawOwnBitmap,
+                rAct.maFunction = ::std::bind(&lcl_drawOwnBitmap,
                                                 _1,_2,_3,_4,_5,
                                                 *pOwnBitmap);
             }
@@ -864,7 +865,7 @@ namespace oglcanvas
                     Action& rAct=mpRecordedActions->back();
 
                     setupGraphicsState( rAct, viewState, renderState );
-                    rAct.maFunction = ::boost::bind(&lcl_drawGenericBitmap,
+                    rAct.maFunction = ::std::bind(&lcl_drawGenericBitmap,
                                                     _1,_2,_3,_4,_5,
                                                     aSize, aARGBBytes,
                                                     rtl_crc32(0,

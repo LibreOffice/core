@@ -26,8 +26,7 @@
 #include <algorithm>
 #include <basic/sbuno.hxx>
 #include <basic/sbx.hxx>
-#include <boost/bind.hpp>
-#include <boost/mem_fn.hpp>
+#include <functional>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <memory>

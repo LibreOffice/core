@@ -18,7 +18,6 @@
  */
 
 
-#include <boost/mem_fn.hpp>
 #include "pagemanager.hxx"
 
 namespace canvas
@@ -189,7 +188,7 @@ namespace canvas
     {
         ::std::for_each( maPages.begin(),
                          maPages.end(),
-                         ::boost::mem_fn(&Page::validate));
+                         ::std::mem_fn(&Page::validate));
     }
 
 

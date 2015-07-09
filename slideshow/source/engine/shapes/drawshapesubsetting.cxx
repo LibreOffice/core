@@ -32,12 +32,13 @@
 #include "drawshapesubsetting.hxx"
 #include "drawshape.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <algorithm>
 #include <functional>
 #include <limits>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 
@@ -411,7 +412,7 @@ namespace slideshow
             // determine new subset range
             ::std::for_each( maSubsetShapes.begin(),
                              maSubsetShapes.end(),
-                             ::boost::bind(&DrawShapeSubsetting::updateSubsetBounds,
+                             ::std::bind(&DrawShapeSubsetting::updateSubsetBounds,
                                            this,
                                            _1 ) );
 

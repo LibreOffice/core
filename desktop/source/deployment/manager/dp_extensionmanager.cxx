@@ -51,7 +51,6 @@
 #include "dp_extensionmanager.hxx"
 #include "dp_commandenvironments.hxx"
 #include "dp_properties.hxx"
-#include <boost/bind.hpp>
 
 #include <list>
 #include <algorithm>
@@ -1496,8 +1495,10 @@ void ExtensionManager::fireModified()
         cppu::UnoType<util::XModifyListener>::get() );
     if (pContainer != 0) {
         pContainer->forEach<util::XModifyListener>(
-            boost::bind(&util::XModifyListener::modified, _1,
-                        lang::EventObject(static_cast<OWeakObject *>(this))) );
+            [this](const Reference<util::XModifyListener>& rxListener)
+            {
+                rxListener->modified( lang::EventObject(static_cast<OWeakObject *>(this)) );
+            });
     }
 }
 

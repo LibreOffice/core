@@ -73,7 +73,6 @@
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <boost/bind.hpp>
 
 namespace sd { namespace slidesorter { namespace controller {
 

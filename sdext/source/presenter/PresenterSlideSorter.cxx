@@ -44,8 +44,9 @@
 #include <com/sun/star/util/Color.hpp>
 #include <algorithm>
 #include <math.h>
-#include <boost/bind.hpp>
+#include <functional>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -305,7 +306,7 @@ PresenterSlideSorter::PresenterSlideSorter (
                 rxContext,
                 mxWindow,
                 mpPresenterController->GetPaintManager(),
-                ::boost::bind(&PresenterSlideSorter::SetVerticalOffset,this,_1)));
+                ::std::bind(&PresenterSlideSorter::SetVerticalOffset,this,_1)));
 
         mpCloseButton = PresenterButton::Create(
             rxContext,
@@ -1057,7 +1058,7 @@ void PresenterSlideSorter::Paint (const awt::Rectangle& rUpdateBox)
         PresenterGeometryHelper::ConvertRectangle(mpLayout->maBoundingBox)))
     {
         mpLayout->ForAllVisibleSlides(
-            ::boost::bind(&PresenterSlideSorter::PaintPreview, this, mxCanvas, rUpdateBox, _1));
+            ::std::bind(&PresenterSlideSorter::PaintPreview, this, mxCanvas, rUpdateBox, _1));
     }
 
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);

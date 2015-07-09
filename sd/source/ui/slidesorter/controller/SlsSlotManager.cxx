@@ -87,9 +87,10 @@
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <vcl/svapp.hxx>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/scoped_ptr.hpp>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;
@@ -1144,9 +1145,9 @@ void SlotManager::DuplicateSelectedSlides (SfxRequest& rRequest)
     ::std::for_each (
         aPagesToSelect.begin(),
         aPagesToSelect.end(),
-        ::boost::bind(
+        ::std::bind(
             static_cast<void (PageSelector::*)(const SdPage*)>(&PageSelector::SelectPage),
-            ::boost::ref(rSelector),
+            ::std::ref(rSelector),
             _1));
 }
 

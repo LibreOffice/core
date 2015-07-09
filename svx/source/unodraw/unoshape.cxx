@@ -92,7 +92,7 @@
 #include "svx/lathe3d.hxx"
 #include "svx/extrud3d.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/scoped_ptr.hpp>
 #include <vcl/wmf.hxx>
 
@@ -1832,7 +1832,7 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
 
     // make sure mbIsMultiPropertyCall and mpImpl->mpItemSet are
     // reseted even when an exception is thrown
-    const ::comphelper::ScopeGuard aGuard( boost::bind( &SvxShape::endSetPropertyValues, this ) );
+    const ::comphelper::ScopeGuard aGuard( std::bind( &SvxShape::endSetPropertyValues, this ) );
 
     mbIsMultiPropertyCall = true;
 

@@ -12,7 +12,6 @@
 #include <svx/xtable.hxx>
 #include <svtools/valueset.hxx>
 #include <unotools/pathoptions.hxx>
-#include <boost/bind.hpp>
 #include <svx/xattr.hxx>
 #include <svx/svddef.hxx>
 #include <svx/sdooitm.hxx>

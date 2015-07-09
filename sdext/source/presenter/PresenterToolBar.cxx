@@ -49,8 +49,9 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <boost/bind.hpp>
+#include <functional>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
@@ -654,7 +655,7 @@ void PresenterToolBar::CreateControls (
         {
             PresenterConfigurationAccess::ForAll(
                 xEntries,
-                ::boost::bind(&PresenterToolBar::ProcessEntry, this, _2, ::boost::ref(aContext)));
+                ::std::bind(&PresenterToolBar::ProcessEntry, this, _2, ::std::ref(aContext)));
         }
     }
 }

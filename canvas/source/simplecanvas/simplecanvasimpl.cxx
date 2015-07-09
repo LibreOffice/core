@@ -37,8 +37,6 @@
 
 #include <canvas/canvastools.hxx>
 
-#include <boost/bind.hpp>
-
 #define SERVICE_NAME "com.sun.star.rendering.SimpleCanvas"
 
 using namespace ::com::sun::star;
@@ -90,15 +88,13 @@ namespace
                          decltype(&color2Sequence)>                   m_aFillColor;
         o3tl::LazyUpdate<geometry::RealRectangle2D,
                          uno::Reference< rendering::XPolyPolygon2D >,
-                         boost::function1<uno::Reference<rendering::XPolyPolygon2D>, geometry::RealRectangle2D> > m_aRectClip;
+                         std::function< uno::Reference<rendering::XPolyPolygon2D> (const geometry::RealRectangle2D) > > m_aRectClip;
         geometry::AffineMatrix2D                                      m_aTransformation;
 
         explicit SimpleRenderState( uno::Reference<rendering::XGraphicDevice> const& xDevice ) :
             m_aPenColor( &color2Sequence),
             m_aFillColor( &color2Sequence ),
-            m_aRectClip( boost::bind( &rect2Poly,
-                                      xDevice,
-                                      _1 )),
+            m_aRectClip([&](const geometry::RealRectangle2D& rect) { return rect2Poly(xDevice, rect); }),
             m_aTransformation()
         {
             tools::setIdentityAffineMatrix2D( m_aTransformation );
@@ -161,11 +157,12 @@ namespace
                           const uno::Reference< uno::XComponentContext >&  ) :
             SimpleCanvasBase( m_aMutex ),
             mxCanvas( grabCanvas(aArguments) ),
-            maFont(boost::bind( &rendering::XCanvas::createFont,
-                                boost::cref(mxCanvas),
-                                _1,
-                                uno::Sequence< beans::PropertyValue >(),
-                                geometry::Matrix2D() )),
+            maFont([&](const rendering::FontRequest& request)
+                   {
+                       return mxCanvas->createFont(request,
+                                                   uno::Sequence< beans::PropertyValue >(),
+                                                   geometry::Matrix2D());
+                   }),
             maViewState(),
             maRenderState( mxCanvas->getDevice() )
         {
@@ -367,7 +364,7 @@ namespace
         typedef o3tl::LazyUpdate<
             rendering::FontRequest,
             uno::Reference< rendering::XCanvasFont >,
-            boost::function1<uno::Reference<rendering::XCanvasFont>, rendering::FontRequest> > SimpleFont;
+            std::function<uno::Reference<rendering::XCanvasFont> (rendering::FontRequest)> > SimpleFont;
 
         uno::Reference<rendering::XCanvas> mxCanvas;
         SimpleFont                         maFont;

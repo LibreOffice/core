@@ -53,7 +53,7 @@
 #include <com/sun/star/presentation/XSlideShow.hpp>
 
 #include <boost/noncopyable.hpp>
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/weak_ptr.hpp>
 
 #include <vector>
@@ -1087,10 +1087,10 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
     // notify view change. Don't call EventMultiplexer directly, this
     // might not be the main thread!
     mrEventQueue.addEvent(
-        makeEvent( boost::bind( (bool (EventMultiplexer::*)(
+        makeEvent( std::bind( (bool (EventMultiplexer::*)(
                                      const uno::Reference<presentation::XSlideShowView>&))
                                 &EventMultiplexer::notifyViewChanged,
-                                boost::ref(mrEventMultiplexer), mxView ),
+                                std::ref(mrEventMultiplexer), mxView ),
                    "EventMultiplexer::notifyViewChanged"));
 }
 
@@ -1105,8 +1105,8 @@ void SlideView::windowPaint( const awt::PaintEvent& /*e*/ )
     // notify view clobbering. Don't call EventMultiplexer directly,
     // this might not be the main thread!
     mrEventQueue.addEvent(
-        makeEvent( boost::bind( &EventMultiplexer::notifyViewClobbered,
-                                boost::ref(mrEventMultiplexer), mxView ),
+        makeEvent( std::bind( &EventMultiplexer::notifyViewClobbered,
+                                std::ref(mrEventMultiplexer), mxView ),
                    "EventMultiplexer::notifyViewClobbered") );
 }
 

@@ -38,11 +38,12 @@
 #include "nodetools.hxx"
 #include "generateevent.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <vector>
 #include <algorithm>
 #include <iterator>
 
+using namespace std::placeholders;
 using namespace ::com::sun::star;
 
 namespace slideshow {
@@ -464,7 +465,7 @@ bool BaseNode::resolve()
         uno::Any const aBegin( mxAnimationNode->getBegin() );
         if (aBegin.hasValue()) {
             mpCurrentEvent = generateEvent(
-                aBegin, boost::bind( &AnimationNode::activate, mpSelf ),
+                aBegin, std::bind( &AnimationNode::activate, mpSelf ),
                 maContext, mnStartDelay );
         }
         else {
@@ -475,7 +476,7 @@ bool BaseNode::resolve()
             // schedule delayed activation event. Take iterate node
             // timeout into account
             mpCurrentEvent = makeDelay(
-                boost::bind( &AnimationNode::activate, mpSelf ),
+                std::bind( &AnimationNode::activate, mpSelf ),
                 mnStartDelay,
                 "AnimationNode::activate with delay");
             maContext.mrEventQueue.addEvent( mpCurrentEvent );
@@ -546,7 +547,7 @@ void BaseNode::scheduleDeactivationEvent( EventSharedPtr const& pEvent )
         // TODO(F2): Handle end time attribute, too
         mpCurrentEvent = generateEvent(
             mxAnimationNode->getDuration(),
-            boost::bind( &AnimationNode::deactivate, mpSelf ),
+            std::bind( &AnimationNode::deactivate, mpSelf ),
             maContext, 0.0 );
     }
 }
@@ -627,8 +628,8 @@ void BaseNode::notifyEndListeners() const
     // notify all listeners
     std::for_each( maDeactivatingListeners.begin(),
                    maDeactivatingListeners.end(),
-                   boost::bind( &AnimationNode::notifyDeactivating, _1,
-                                boost::cref(mpSelf) ) );
+                   std::bind( &AnimationNode::notifyDeactivating, _1,
+                                std::cref(mpSelf) ) );
 
     // notify state change
     maContext.mrEventMultiplexer.notifyAnimationEnd( mpSelf );

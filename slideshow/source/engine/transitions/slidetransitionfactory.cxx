@@ -46,7 +46,7 @@
 #include "combtransition.hxx"
 #include "tools.hxx"
 
-#include <boost/bind.hpp>
+#include <functional>
 
 
 /***************************************************
@@ -55,6 +55,7 @@
  ***                                             ***
  ***************************************************/
 
+using namespace std::placeholders;
 using namespace com::sun::star;
 
 namespace slideshow {
@@ -192,7 +193,7 @@ public:
     {
         std::for_each(maTransitions.begin(),
                       maTransitions.end(),
-                      boost::bind( &TransitionViewPair::update,
+                      std::bind( &TransitionViewPair::update,
                                    _1, t) );
         return true;
     }
