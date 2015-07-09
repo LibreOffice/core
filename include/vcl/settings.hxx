@@ -31,8 +31,12 @@
 #include <unotools/syslocale.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <boost/optional.hpp>
 #include <memory>
+
+namespace boost
+{
+    template<typename T> class optional;
+}
 
 class CollatorWrapper;
 class LocaleDataWrapper;
