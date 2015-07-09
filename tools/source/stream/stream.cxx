@@ -1623,7 +1623,9 @@ bool SvStream::SetStreamSize(sal_uInt64 const nSize)
     SetBufferSize( 0 );
     SetSize( nSize );
     SetBufferSize( nBuf );
+#ifdef DBG_UTIL
     DBG_ASSERT(Tell()==nFPos,"SetStreamSize failed");
+#endif
     return (nError == 0);
 }
 

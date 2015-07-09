@@ -281,9 +281,11 @@ sal_uInt32 SvPersistStream::WriteDummyLen()
     sal_uInt32 n0 = 0;
     WriteUInt32( n0 ); // Because of Sun sp
     // Don't assert on stream error
+#ifdef DBG_UTIL
     DBG_ASSERT( GetError() != SVSTREAM_OK
                   || (sizeof( sal_uInt32 ) == Tell() -nPos),
                 "No 4 byte as length parameter" );
+#endif
     return Tell();
 }
 

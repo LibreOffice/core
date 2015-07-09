@@ -93,10 +93,8 @@ Any PropertyConversion::convertString( const ::com::sun::star::uno::Type& _rExpe
         case TypeClass_BOOLEAN:     // sal_Bool
         {
             bool bValue;
-        #if OSL_DEBUG_LEVEL > 0
             bool bSuccess =
-        #endif
-            ::sax::Converter::convertBool(bValue, _rReadCharacters);
+                ::sax::Converter::convertBool(bValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     OStringBuffer("PropertyConversion::convertString: could not convert \"").
                 append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
@@ -109,10 +107,8 @@ Any PropertyConversion::convertString( const ::com::sun::star::uno::Type& _rExpe
             if (!_pEnumMap)
             {   // it's a real int32/16 property
                 sal_Int32 nValue(0);
-        #if OSL_DEBUG_LEVEL > 0
                 bool bSuccess =
-        #endif
-                ::sax::Converter::convertNumber(nValue, _rReadCharacters);
+                    ::sax::Converter::convertNumber(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
                         OStringBuffer("PropertyConversion::convertString: could not convert \"").
                     append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
@@ -149,10 +145,8 @@ Any PropertyConversion::convertString( const ::com::sun::star::uno::Type& _rExpe
         case TypeClass_DOUBLE:
         {
             double nValue;
-        #if OSL_DEBUG_LEVEL > 0
             bool bSuccess =
-        #endif
-            ::sax::Converter::convertDouble(nValue, _rReadCharacters);
+                ::sax::Converter::convertDouble(nValue, _rReadCharacters);
             OSL_ENSURE(bSuccess,
                     OStringBuffer("PropertyConversion::convertString: could not convert \"").
                 append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
@@ -177,10 +171,8 @@ Any PropertyConversion::convertString( const ::com::sun::star::uno::Type& _rExpe
             {
                 // first extract the double
                 double nValue = 0;
-            #if OSL_DEBUG_LEVEL > 0
                 bool bSuccess =
-            #endif
-                ::sax::Converter::convertDouble(nValue, _rReadCharacters);
+                    ::sax::Converter::convertDouble(nValue, _rReadCharacters);
                 OSL_ENSURE(bSuccess,
                         OStringBuffer("PropertyConversion::convertString: could not convert \"").
                     append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
@@ -315,11 +307,7 @@ bool OPropertyImport::encounteredAttribute(const OUString& _rAttributeName) cons
     return m_aEncounteredAttributes.end() != m_aEncounteredAttributes.find(_rAttributeName);
 }
 
-void OPropertyImport::Characters(const OUString&
-#if OSL_DEBUG_LEVEL > 0
-_rChars
-#endif
-)
+void OPropertyImport::Characters(const OUString& _rChars )
 {
     // ignore them (should be whitespaces only)
     OSL_ENSURE(_rChars.trim().isEmpty(), "OPropertyImport::Characters: non-whitespace characters!");
