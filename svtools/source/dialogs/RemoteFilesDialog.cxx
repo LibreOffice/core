@@ -505,6 +505,9 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
             m_pFilter_lb->Enable( true );
             m_pName_ed->Enable( true );
             m_pContainer->Enable( true );
+
+            if( !m_pName_ed->GetText().isEmpty() )
+                m_pOk_btn->Enable( true );
         }
     }
 
