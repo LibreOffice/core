@@ -491,12 +491,11 @@ void XclExpPaletteImpl::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
-    rStyleSheet->startElement( XML_colors, FSEND );
-    rStyleSheet->startElement( XML_indexedColors, FSEND );
+    rStyleSheet->startElement( XML_colors );
+    rStyleSheet->startElement( XML_indexedColors );
     for( XclPaletteColorVec::const_iterator aIt = maPalette.begin(), aEnd = maPalette.end(); aIt != aEnd; ++aIt )
         rStyleSheet->singleElement( XML_rgbColor,
-                XML_rgb,    XclXmlUtils::ToOString( aIt->maColor ).getStr(),
-                FSEND );
+                {{XML_rgb,    XclXmlUtils::ToOString( aIt->maColor ).getStr()}} );
     rStyleSheet->endElement( XML_indexedColors );
     rStyleSheet->endElement( XML_colors );
 }
@@ -985,7 +984,7 @@ bool XclExpFont::Equals( const XclFontData& rFontData, sal_uInt32 nHash ) const
 void XclExpFont::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
-    rStyleSheet->startElement( XML_font, FSEND );
+    rStyleSheet->startElement( XML_font );
     XclXmlUtils::WriteFontData( rStyleSheet, maData, XML_name );
     // OOXTODO: XML_scheme; //scheme/@val values: "major", "minor", "none"
     rStyleSheet->endElement( XML_font );
@@ -1075,7 +1074,7 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
         return;
 
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
-    rStyleSheet->startElement(XML_font, FSEND);
+    rStyleSheet->startElement(XML_font);
 
     if (maDxfData.pFontAttr)
     {
@@ -1085,8 +1084,7 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
         if (!aFontName.isEmpty())
         {
             rStyleSheet->singleElement(XML_name,
-                    XML_val, XclXmlUtils::ToOString(aFontName).getStr(),
-                    FSEND);
+                    {{XML_val, XclXmlUtils::ToOString(aFontName).getStr()}});
         }
 
         rtl_TextEncoding eTextEnc = (*maDxfData.pFontAttr)->GetCharSet();
@@ -1094,8 +1092,7 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
         if (nExcelCharSet)
         {
             rStyleSheet->singleElement(XML_charset,
-                    XML_val, OString::number(nExcelCharSet).getStr(),
-                    FSEND);
+                    {{XML_val, OString::number(nExcelCharSet).getStr()}});
         }
 
         FontFamily eFamily = (*maDxfData.pFontAttr)->GetFamily();
@@ -1103,24 +1100,21 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
         if (pVal)
         {
             rStyleSheet->singleElement(XML_family,
-                    XML_val, pVal,
-                    FSEND);
+                    {{XML_val, pVal}});
         }
     }
 
     if (maDxfData.eWeight)
     {
         rStyleSheet->singleElement(XML_b,
-                XML_val, XclXmlUtils::ToPsz10(maDxfData.eWeight.get() != WEIGHT_NORMAL),
-                FSEND);
+                {{XML_val, XclXmlUtils::ToPsz10(maDxfData.eWeight.get() != WEIGHT_NORMAL)}});
     }
 
     if (maDxfData.eItalic)
     {
         bool bItalic = (maDxfData.eItalic.get() == ITALIC_OBLIQUE) || (maDxfData.eItalic.get() == ITALIC_NORMAL);
         rStyleSheet->singleElement(XML_i,
-                XML_val, XclXmlUtils::ToPsz10(bItalic),
-                FSEND);
+                {{XML_val, XclXmlUtils::ToPsz10(bItalic)}});
     }
 
     if (maDxfData.eStrike)
@@ -1131,37 +1125,32 @@ void XclExpDxfFont::SaveXml(XclExpXmlStream& rStrm)
             (maDxfData.eStrike.get() == STRIKEOUT_X);
 
         rStyleSheet->singleElement(XML_strike,
-                XML_val, XclXmlUtils::ToPsz10(bStrikeout),
-                FSEND);
+                {{XML_val, XclXmlUtils::ToPsz10(bStrikeout)}});
     }
 
     if (maDxfData.bOutline)
     {
         rStyleSheet->singleElement(XML_outline,
-                XML_val, XclXmlUtils::ToPsz10(maDxfData.bOutline.get()),
-                FSEND);
+                {{XML_val, XclXmlUtils::ToPsz10(maDxfData.bOutline.get())}});
     }
 
     if (maDxfData.bShadow)
     {
         rStyleSheet->singleElement(XML_shadow,
-                XML_val, XclXmlUtils::ToPsz10(maDxfData.bShadow.get()),
-                FSEND);
+                {{XML_val, XclXmlUtils::ToPsz10(maDxfData.bShadow.get())}});
     }
 
     if (maDxfData.aColor)
     {
         rStyleSheet->singleElement(XML_color,
-                XML_rgb, XclXmlUtils::ToOString(maDxfData.aColor.get()).getStr(),
-                FSEND);
+                {{XML_rgb, XclXmlUtils::ToOString(maDxfData.aColor.get()).getStr()}});
     }
 
     if (maDxfData.eUnder)
     {
         const char* pVal = getUnderlineOOXValue(maDxfData.eUnder.get());
         rStyleSheet->singleElement(XML_u,
-                XML_val, pVal,
-                FSEND);
+                {{XML_val, pVal}});
     }
 
     rStyleSheet->endElement(XML_font);
@@ -1270,8 +1259,7 @@ void XclExpFontBuffer::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_fonts,
-            XML_count,  OString::number(  maFontList.GetSize() ).getStr(),
-            FSEND );
+            {{XML_count,  OString::number(  maFontList.GetSize() ).getStr()}} );
 
     maFontList.SaveXml( rStrm );
 
@@ -1350,9 +1338,8 @@ void XclExpNumFmt::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->singleElement( XML_numFmt,
-            XML_numFmtId,   OString::number( mnXclNumFmt ).getStr(),
-            XML_formatCode, OUStringToOString(maNumFmtString, RTL_TEXTENCODING_UTF8).getStr(),
-            FSEND );
+            {{XML_numFmtId,   OString::number( mnXclNumFmt ).getStr()},
+             {XML_formatCode, OUStringToOString(maNumFmtString, RTL_TEXTENCODING_UTF8).getStr()}} );
 }
 
 XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
@@ -1416,8 +1403,7 @@ void XclExpNumFmtBuffer::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_numFmts,
-            XML_count,  OString::number(  maFormatMap.size() ).getStr(),
-            FSEND );
+            {{XML_count,  OString::number(  maFormatMap.size() ).getStr()}} );
     for( XclExpNumFmtVec::iterator aIt = maFormatMap.begin(), aEnd = maFormatMap.end(); aIt != aEnd; ++aIt )
     {
         aIt->SaveXml( rStrm );
@@ -1515,9 +1501,8 @@ void XclExpCellProt::FillToXF3( sal_uInt16& rnProt ) const
 void XclExpCellProt::SaveXml( XclExpXmlStream& rStrm ) const
 {
     rStrm.GetCurrentStream()->singleElement( XML_protection,
-            XML_locked,     XclXmlUtils::ToPsz( mbLocked ),
-            XML_hidden,     XclXmlUtils::ToPsz( mbHidden ),
-            FSEND );
+            {{XML_locked,     XclXmlUtils::ToPsz( mbLocked )},
+             {XML_hidden,     XclXmlUtils::ToPsz( mbHidden )}} );
 }
 
 bool XclExpCellAlign::FillFromItemSet(
@@ -1664,16 +1649,15 @@ static const char* ToVerticalAlignment( sal_uInt8 nVerAlign )
 void XclExpCellAlign::SaveXml( XclExpXmlStream& rStrm ) const
 {
     rStrm.GetCurrentStream()->singleElement( XML_alignment,
-            XML_horizontal,         ToHorizontalAlignment( mnHorAlign ),
-            XML_vertical,           ToVerticalAlignment( mnVerAlign ),
-            XML_textRotation,       OString::number(  mnRotation ).getStr(),
-            XML_wrapText,           XclXmlUtils::ToPsz( mbLineBreak ),
-            XML_indent,             OString::number(  mnIndent ).getStr(),
+            {{XML_horizontal,         ToHorizontalAlignment( mnHorAlign )},
+             {XML_vertical,           ToVerticalAlignment( mnVerAlign )},
+             {XML_textRotation,       OString::number(  mnRotation ).getStr()},
+             {XML_wrapText,           XclXmlUtils::ToPsz( mbLineBreak )},
+             {XML_indent,             OString::number(  mnIndent ).getStr()},
             // OOXTODO: XML_relativeIndent,     mnIndent?
             // OOXTODO: XML_justifyLastLine,
-            XML_shrinkToFit,        XclXmlUtils::ToPsz( mbShrink ),
+             {XML_shrinkToFit,        XclXmlUtils::ToPsz( mbShrink )}} );
             // OOXTODO: XML_readingOrder,
-            FSEND );
 }
 
 namespace {
@@ -1887,19 +1871,16 @@ static void lcl_WriteBorder( XclExpXmlStream& rStrm, sal_Int32 nElement, sal_uIn
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     if( nLineStyle == EXC_LINE_NONE )
-        rStyleSheet->singleElement( nElement, FSEND );
+        rStyleSheet->singleElement( nElement );
     else if( rColor == Color( 0, 0, 0, 0 ) )
         rStyleSheet->singleElement( nElement,
-                XML_style,  ToLineStyle( nLineStyle ),
-                FSEND );
+                {{XML_style,  ToLineStyle( nLineStyle )}} );
     else
     {
         rStyleSheet->startElement( nElement,
-                XML_style,  ToLineStyle( nLineStyle ),
-                FSEND );
+                {{XML_style,  ToLineStyle( nLineStyle )}} );
         rStyleSheet->singleElement( XML_color,
-                XML_rgb,    XclXmlUtils::ToOString( rColor ).getStr(),
-                FSEND );
+                {{XML_rgb,    XclXmlUtils::ToOString( rColor ).getStr()}} );
         rStyleSheet->endElement( nElement );
     }
 }
@@ -1911,10 +1892,9 @@ void XclExpCellBorder::SaveXml( XclExpXmlStream& rStrm ) const
     XclExpPalette& rPalette = rStrm.GetRoot().GetPalette();
 
     rStyleSheet->startElement( XML_border,
-            XML_diagonalUp,     XclXmlUtils::ToPsz( mbDiagBLtoTR ),
-            XML_diagonalDown,   XclXmlUtils::ToPsz( mbDiagTLtoBR ),
+            {{XML_diagonalUp,     XclXmlUtils::ToPsz( mbDiagBLtoTR )},
+             {XML_diagonalDown,   XclXmlUtils::ToPsz( mbDiagTLtoBR )}} );
             // OOXTODO: XML_outline,
-            FSEND );
     lcl_WriteBorder( rStrm, XML_left,       mnLeftLine,     rPalette.GetColor( mnLeftColor ) );
     lcl_WriteBorder( rStrm, XML_right,      mnRightLine,    rPalette.GetColor( mnRightColor ) );
     lcl_WriteBorder( rStrm, XML_top,        mnTopLine,      rPalette.GetColor( mnTopColor ) );
@@ -1997,8 +1977,7 @@ static const char* ToPatternType( sal_uInt8 nPattern )
 void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
-    rStyleSheet->startElement( XML_fill,
-            FSEND );
+    rStyleSheet->startElement( XML_fill );
 
     // OOXTODO: XML_gradientFill
 
@@ -2006,19 +1985,15 @@ void XclExpCellArea::SaveXml( XclExpXmlStream& rStrm ) const
 
     if( mnPattern == EXC_PATT_NONE || ( mnForeColor == 0 && mnBackColor == 0 ) )
         rStyleSheet->singleElement( XML_patternFill,
-                XML_patternType,    ToPatternType( mnPattern ),
-                FSEND );
+                {{XML_patternType,    ToPatternType( mnPattern )}} );
     else
     {
         rStyleSheet->startElement( XML_patternFill,
-                XML_patternType,    ToPatternType( mnPattern ),
-                FSEND );
+                {{XML_patternType,    ToPatternType( mnPattern )}} );
         rStyleSheet->singleElement( XML_fgColor,
-                XML_rgb,    XclXmlUtils::ToOString( rPalette.GetColor( mnForeColor ) ).getStr(),
-                FSEND );
+                {{XML_rgb,    XclXmlUtils::ToOString( rPalette.GetColor( mnForeColor ) ).getStr()}} );
         rStyleSheet->singleElement( XML_bgColor,
-                XML_rgb,    XclXmlUtils::ToOString( rPalette.GetColor( mnBackColor ) ).getStr(),
-                FSEND );
+                {{XML_rgb,    XclXmlUtils::ToOString( rPalette.GetColor( mnBackColor ) ).getStr()}} );
         rStyleSheet->endElement( XML_patternFill );
     }
 
@@ -2039,13 +2014,10 @@ bool XclExpColor::FillFromItemSet( const SfxItemSet& rItemSet )
 void XclExpColor::SaveXml( XclExpXmlStream& rStrm ) const
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
-    rStyleSheet->startElement( XML_fill,
-            FSEND );
-    rStyleSheet->startElement( XML_patternFill,
-            FSEND );
+    rStyleSheet->startElement( XML_fill );
+    rStyleSheet->startElement( XML_patternFill );
     rStyleSheet->singleElement( XML_bgColor,
-            XML_rgb, XclXmlUtils::ToOString(maColor).getStr(),
-            FSEND );
+            {{XML_rgb, XclXmlUtils::ToOString(maColor).getStr()}} );
 
     rStyleSheet->endElement( XML_patternFill );
     rStyleSheet->endElement( XML_fill );
@@ -2256,20 +2228,19 @@ void XclExpXF::SaveXml( XclExpXmlStream& rStrm )
     }
 
     rStyleSheet->startElement( XML_xf,
-            XML_numFmtId,           OString::number(  mnXclNumFmt ).getStr(),
-            XML_fontId,             OString::number(  mnXclFont ).getStr(),
-            XML_fillId,             OString::number(  mnFillId ).getStr(),
-            XML_borderId,           OString::number(  mnBorderId ).getStr(),
-            XML_xfId,               IsStyleXF() ? NULL : OString::number( nXfId ).getStr(),
+            {{XML_numFmtId,           OString::number(  mnXclNumFmt ).getStr()},
+             {XML_fontId,             OString::number(  mnXclFont ).getStr()},
+             {XML_fillId,             OString::number(  mnFillId ).getStr()},
+             {XML_borderId,           OString::number(  mnBorderId ).getStr()},
+             {XML_xfId,               IsStyleXF() ? NULL : OString::number( nXfId ).getStr()},
             // OOXTODO: XML_quotePrefix,
             // OOXTODO: XML_pivotButton,
             // OOXTODO: XML_applyNumberFormat,  ;
-            XML_applyFont,          XclXmlUtils::ToPsz( mbFontUsed ),
+             {XML_applyFont,          XclXmlUtils::ToPsz( mbFontUsed )},
             // OOXTODO: XML_applyFill,
-            XML_applyBorder,        XclXmlUtils::ToPsz( mbBorderUsed ),
-            XML_applyAlignment,     XclXmlUtils::ToPsz( mbAlignUsed ),
-            XML_applyProtection,    XclXmlUtils::ToPsz( mbProtUsed ),
-            FSEND );
+             {XML_applyBorder,        XclXmlUtils::ToPsz( mbBorderUsed )},
+             {XML_applyAlignment,     XclXmlUtils::ToPsz( mbAlignUsed )},
+             {XML_applyProtection,    XclXmlUtils::ToPsz( mbProtUsed )}} );
     if( mbAlignUsed )
         maAlignment.SaveXml( rStrm );
     else if ( pStyleXF )
@@ -2372,15 +2343,14 @@ void XclExpStyle::SaveXml( XclExpXmlStream& rStrm )
     // get the style index associated with index into sortedlist
     nXFId = rStrm.GetRoot().GetXFBuffer().GetXmlStyleIndex( nXFId );
     rStrm.GetCurrentStream()->singleElement( XML_cellStyle,
-            XML_name,           sName.getStr(),
-            XML_xfId,           OString::number( nXFId ).getStr(),
+            {{XML_name,           sName.getStr()},
+             {XML_xfId,           OString::number( nXFId ).getStr()},
 // builtinId of 54 or above is invalid according to OpenXML SDK validator.
 #define CELL_STYLE_MAX_BUILTIN_ID 54
-                                             XML_builtinId, OString::number( std::min( static_cast<sal_Int32>( CELL_STYLE_MAX_BUILTIN_ID - 1 ), static_cast <sal_Int32>( mnStyleId ) ) ).getStr(),
+             {XML_builtinId, OString::number( std::min( static_cast<sal_Int32>( CELL_STYLE_MAX_BUILTIN_ID - 1 ), static_cast <sal_Int32>( mnStyleId ) ) ).getStr()},
             // OOXTODO: XML_iLevel,
             // OOXTODO: XML_hidden,
-            XML_customBuiltin,  XclXmlUtils::ToPsz( ! IsBuiltIn() ),
-            FSEND );
+             {XML_customBuiltin,  XclXmlUtils::ToPsz( ! IsBuiltIn() )}} );
     // OOXTODO: XML_extLst
 }
 
@@ -2654,8 +2624,7 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
 
     rStyleSheet->startElement( XML_fills,
-            XML_count,  OString::number(  maFills.size() ).getStr(),
-            FSEND );
+            {{XML_count,  OString::number(  maFills.size() ).getStr()}} );
     for( XclExpFillList::iterator aIt = maFills.begin(), aEnd = maFills.end();
             aIt != aEnd; ++aIt )
     {
@@ -2664,8 +2633,7 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
     rStyleSheet->endElement( XML_fills );
 
     rStyleSheet->startElement( XML_borders,
-            XML_count,  OString::number(  maBorders.size() ).getStr(),
-            FSEND );
+            {{XML_count,  OString::number(  maBorders.size() ).getStr()}} );
     for( XclExpBorderList::iterator aIt = maBorders.begin(), aEnd = maBorders.end();
             aIt != aEnd; ++aIt )
     {
@@ -2680,8 +2648,7 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
     if( nStyles > 0 )
     {
         rStyleSheet->startElement( XML_cellStyleXfs,
-                XML_count,  OString::number( nStyles ).getStr(),
-                FSEND );
+                {{XML_count,  OString::number( nStyles ).getStr()}} );
         size_t nXFCount = maSortedXFList.GetSize();
         for( size_t i = 0; i < nXFCount; ++i )
         {
@@ -2696,8 +2663,7 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
     if( nCells > 0 )
     {
         rStyleSheet->startElement( XML_cellXfs,
-                XML_count,  OString::number( nCells ).getStr(),
-                FSEND );
+                {{XML_count,  OString::number( nCells ).getStr()}} );
         size_t nXFCount = maSortedXFList.GetSize();
         for( size_t i = 0; i < nXFCount; ++i )
         {
@@ -2711,8 +2677,7 @@ void XclExpXFBuffer::SaveXml( XclExpXmlStream& rStrm )
 
     // save all STYLE records
     rStyleSheet->startElement( XML_cellStyles,
-            XML_count,  OString::number(  maStyleList.GetSize() ).getStr(),
-            FSEND );
+            {{XML_count,  OString::number(  maStyleList.GetSize() ).getStr()}} );
     maStyleList.SaveXml( rStrm );
     rStyleSheet->endElement( XML_cellStyles );
 }
@@ -3115,8 +3080,7 @@ void XclExpDxfs::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
     rStyleSheet->startElement( XML_dxfs,
-            XML_count, OString::number(maDxf.size()).getStr(),
-            FSEND );
+            {{XML_count, OString::number(maDxf.size()).getStr()}} );
 
     for ( DxfContainer::iterator itr = maDxf.begin(); itr != maDxf.end(); ++itr )
     {
@@ -3145,7 +3109,7 @@ XclExpDxf::~XclExpDxf()
 void XclExpDxf::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStyleSheet = rStrm.GetCurrentStream();
-    rStyleSheet->startElement( XML_dxf, FSEND );
+    rStyleSheet->startElement( XML_dxf );
 
     if (mpFont)
         mpFont->SaveXml(rStrm);
@@ -3178,8 +3142,7 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
     rStrm.PushStream( aStyleSheet );
 
     aStyleSheet->startElement( XML_styleSheet,
-            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-            FSEND );
+            {{XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}} );
 
     CreateRecord( EXC_ID_FORMATLIST )->SaveXml( rStrm );
     CreateRecord( EXC_ID_FONTLIST )->SaveXml( rStrm );

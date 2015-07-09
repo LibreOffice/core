@@ -40,44 +40,28 @@ FastSerializerHelper::~FastSerializerHelper()
     delete mpSerializer;
 }
 
-void FastSerializerHelper::startElementInternal(sal_Int32 elementTokenId, ...)
+void FastSerializerHelper::startElement(
+    sal_Int32 elementTokenId, std::initializer_list<sax::Attr> attrs)
 {
-    va_list args;
-    va_start( args, elementTokenId );
     TokenValueList& rAttrList = mpSerializer->getTokenValueList();
-
-    while (true)
-    {
-        sal_Int32 nName = va_arg(args, sal_Int32);
-        if (nName == FSEND_internal)
-            break;
-        const char* pValue = va_arg(args, const char*);
-        if (pValue)
-            rAttrList.push_back(TokenValue(nName, pValue));
+    for (auto const & attr: attrs) {
+        if (attr.value != nullptr) {
+            rAttrList.push_back(TokenValue(attr.id, attr.value));
+        }
     }
-
     mpSerializer->startFastElement(elementTokenId);
-    va_end( args );
 }
 
-void FastSerializerHelper::singleElementInternal(sal_Int32 elementTokenId, ...)
+void FastSerializerHelper::singleElement(
+    sal_Int32 elementTokenId, std::initializer_list<sax::Attr> attrs)
 {
-    va_list args;
-    va_start( args, elementTokenId );
     TokenValueList& rAttrList = mpSerializer->getTokenValueList();
-
-    while (true)
-    {
-        sal_Int32 nName = va_arg(args, sal_Int32);
-        if (nName == FSEND_internal)
-            break;
-        const char* pValue = va_arg(args, const char*);
-        if  (pValue)
-            rAttrList.push_back(TokenValue(nName, pValue));
+    for (auto const & attr: attrs) {
+        if (attr.value != nullptr) {
+            rAttrList.push_back(TokenValue(attr.id, attr.value));
+        }
     }
-
     mpSerializer->singleFastElement(elementTokenId);
-    va_end( args );
 }
 
 void FastSerializerHelper::endElement(sal_Int32 elementTokenId)
