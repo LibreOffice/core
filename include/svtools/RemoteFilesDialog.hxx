@@ -121,6 +121,7 @@ private:
     SvtRemoteDlgType m_eType;
     bool m_bMultiselection;
     bool m_bIsUpdated;
+    bool m_bIsConnected;
     Image m_aFolderImage;
 
     OUString m_sPath;
@@ -151,6 +152,8 @@ private:
     int GetSelectedServicePos();
 
     FileViewResult OpenURL( OUString sURL );
+
+    void EnableControls();
 
     DECL_LINK ( AddServiceHdl, void * );
     DECL_LINK ( SelectServiceHdl, void * );

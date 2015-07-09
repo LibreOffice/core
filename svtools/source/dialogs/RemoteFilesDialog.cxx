@@ -250,6 +250,7 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_eType = ( nBits & WB_PATH ) ? REMOTEDLG_TYPE_PATHDLG : REMOTEDLG_TYPE_FILEDLG;
     m_bMultiselection = ( nBits & SFXWB_MULTISELECTION ) ? true : false;
     m_bIsUpdated = false;
+    m_bIsConnected = false;
     m_nCurrentFilter = LISTBOX_ENTRY_NOTFOUND;
 
     m_pFilter_lb->Enable( false );
@@ -442,8 +443,8 @@ void RemoteFilesDialog::FillServicesListbox()
 
     if( m_pServices_lb->GetEntryCount() > 0 )
         m_pServices_lb->SelectEntryPos( 0 );
-    else
-        m_pServices_lb->Enable( false );
+
+    EnableControls();
 }
 
 int RemoteFilesDialog::GetSelectedServicePos()
@@ -502,16 +503,40 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
         {
             m_pPath->SetURL( sURL );
             m_pTreeView->SetTreePath( sURL );
-            m_pFilter_lb->Enable( true );
-            m_pName_ed->Enable( true );
-            m_pContainer->Enable( true );
 
-            if( !m_pName_ed->GetText().isEmpty() )
-                m_pOk_btn->Enable( true );
+            m_bIsConnected = true;
+            EnableControls();
         }
     }
 
     return eResult;
+}
+
+void RemoteFilesDialog::EnableControls()
+{
+    if( m_pServices_lb->GetEntryCount() > 0 )
+        m_pServices_lb->Enable( true );
+    else
+        m_pServices_lb->Enable( false );
+
+    if( m_bIsConnected )
+    {
+        m_pFilter_lb->Enable( true );
+        m_pName_ed->Enable( true );
+        m_pContainer->Enable( true );
+
+        if( !m_pName_ed->GetText().isEmpty() )
+            m_pOk_btn->Enable( true );
+        else
+            m_pOk_btn->Enable( false );
+    }
+    else
+    {
+        m_pFilter_lb->Enable( false );
+        m_pName_ed->Enable( false );
+        m_pContainer->Enable( false );
+        m_pOk_btn->Enable( false );
+    }
 }
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
@@ -525,7 +550,6 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
         {
             ServicePtr newService = aDlg->GetPlace();
             m_aServices.push_back( newService );
-            m_pServices_lb->Enable( true );
 
             OUString sPrefix = lcl_GetServiceType( newService );
 
@@ -536,6 +560,8 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
             m_pServices_lb->SelectEntryPos( m_pServices_lb->GetEntryCount() - 1 );
 
             m_bIsUpdated = true;
+
+            EnableControls();
       break;
         }
         case RET_CANCEL :
@@ -625,12 +651,13 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
             else
             {
                 m_pServices_lb->SetNoSelection();
-                m_pServices_lb->Enable( false );
             }
 
             m_bIsUpdated = true;
         }
     }
+
+    EnableControls();
 }
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
@@ -664,15 +691,14 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
         m_sPath = pData->maURL;
 
         m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DECODE_WITH_CHARSET ) );
-
-        m_pOk_btn->Enable( true );
     }
     else
     {
-        m_pOk_btn->Enable( false );
         m_sPath = "";
         m_pName_ed->SetText( "" );
     }
+
+    EnableControls();
 
     return 1;
 }
@@ -686,11 +712,7 @@ IMPL_LINK_NOARG( RemoteFilesDialog, FileNameGetFocusHdl )
 IMPL_LINK_NOARG( RemoteFilesDialog, FileNameModifyHdl )
 {
     m_pFileView->SetNoSelection();
-
-    if( !m_pName_ed->GetText().isEmpty() )
-        m_pOk_btn->Enable( true );
-    else
-        m_pOk_btn->Enable( false );
+    EnableControls();
 
     return 1;
 }
