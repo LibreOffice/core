@@ -168,7 +168,7 @@ void BibPosListener::disposing(const lang::EventObject& /*Source*/) throw( uno::
 BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
     BibTabPage(pParent, "GeneralPage", "modules/sbibliography/ui/generalpage.ui"),
     sErrorPrefix(BIB_RESSTR(ST_ERROR_PREFIX)),
-    maBibGeneralPageFocusListener(this),
+    mxBibGeneralPageFocusListener(new BibGeneralPageFocusListener(this)),
     pDatMan(pMan)
 {
     get(pIdentifierFT, "shortname");
@@ -387,6 +387,7 @@ void BibGeneralPage::dispose()
     pCustom4FT.clear();
     pCustom5FT.clear();
     for (auto & a: aFixedTexts) a.clear();
+    mxBibGeneralPageFocusListener.clear();
     BibTabPage::dispose();
 }
 
@@ -397,7 +398,7 @@ void BibGeneralPage::RemoveListeners()
         if(aControls[i].is())
         {
             uno::Reference< awt::XWindow > xCtrWin(aControls[i], uno::UNO_QUERY );
-            xCtrWin->removeFocusListener( &maBibGeneralPageFocusListener );
+            xCtrWin->removeFocusListener( mxBibGeneralPageFocusListener.get() );
             aControls[i] = 0;
         }
     }
@@ -488,7 +489,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                     // Peer as Child to the FrameWindow
                     xCtrlContnr->addControl(rName, xControl);
                     uno::Reference< awt::XWindow >  xCtrWin(xControl, UNO_QUERY );
-                    xCtrWin->addFocusListener( &maBibGeneralPageFocusListener );
+                    xCtrWin->addFocusListener( mxBibGeneralPageFocusListener.get() );
                     rIndex = -1;    // -> implies, that not found
                     for(sal_uInt16 i = 0; i < FIELD_COUNT; i++)
                         if(!aControls[i].is())

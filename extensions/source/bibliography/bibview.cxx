@@ -66,7 +66,7 @@ namespace bib
 
     void BibView::dispose()
     {
-        BibGeneralPage* pGeneralPage = m_pGeneralPage;
+        VclPtr<BibGeneralPage> pGeneralPage = m_pGeneralPage;
         m_pGeneralPage.clear();
 
         pGeneralPage->CommitActiveControl();
@@ -102,6 +102,7 @@ namespace bib
             m_aFormControlContainer.disconnectForm();
 
         pGeneralPage->RemoveListeners();
+        pGeneralPage.disposeAndClear();
         m_xGeneralPage = NULL;
         BibWindow::dispose();
     }
@@ -116,11 +117,12 @@ namespace bib
         {
             m_pGeneralPage->Hide();
             m_pGeneralPage->RemoveListeners();
+            m_pGeneralPage.disposeAndClear();
             m_xGeneralPage = 0;
         }
 
         m_pGeneralPage = VclPtr<BibGeneralPage>::Create( this, m_pDatMan );
-        m_xGeneralPage = &m_pGeneralPage->GetFocusListener();
+        m_xGeneralPage = m_pGeneralPage->GetFocusListener().get();
         m_pGeneralPage->Show();
 
         if( HasFocus() )
