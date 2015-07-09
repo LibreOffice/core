@@ -1253,7 +1253,9 @@ void FilterCache::impl_validateAndOptimize()
                 "filter configuration: " + sLogOut,
                 css::uno::Reference< css::uno::XInterface >(),
                 sLogOut);
+#if OSL_DEBUG_LEVEL > 0
     OSL_ENSURE(!nWarnings, OUStringToOString(sLogOut,RTL_TEXTENCODING_UTF8).getStr());
+#endif
 
     // <- SAFE
 }

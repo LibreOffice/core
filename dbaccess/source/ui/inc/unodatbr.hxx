@@ -434,10 +434,8 @@ namespace dbaui
             void* _pTreeListUserData    // in reality a DBTreeListUserData*, but we do not know this class here...
         );
 
-#if OSL_DEBUG_LEVEL > 0
         // checks whether the given tree entry denotes a data source
         bool impl_isDataSourceEntry( SvTreeListEntry* _pEntry ) const;
-#endif
 
         /// retrieves the data source URL/name for the given entry representing a data source
         OUString  getDataSourceAcessor( SvTreeListEntry* _pDataSourceEntry ) const;

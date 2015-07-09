@@ -1951,9 +1951,7 @@ double ScInterpreter::GetHypGeomDist( double x, double n, double M, double N )
         fCDenomVarLower = N - n - 2.0*(M - x) + 1.0;
     }
 
-#if OSL_DEBUG_LEVEL > 0
     double fCNumLower = N - n - fCNumVarUpper;
-#endif
     double fCDenomUpper = N - n - M + x + 1.0 - fCDenomVarLower;
 
     double fDNumVarLower = n - M;

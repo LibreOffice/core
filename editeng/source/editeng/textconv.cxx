@@ -396,8 +396,10 @@ void TextConvWrapper::ReplaceUnit(
 
         if (pNewUnitLanguage)
         {
+#ifdef DBG_UTIL
             DBG_ASSERT(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ),
                     "similar language should not be changed!");
+#endif
             SetLanguageAndFont( aNewSel, *pNewUnitLanguage, EE_CHAR_LANGUAGE_CJK,
                                           GetTargetFont(), EE_CHAR_FONTINFO_CJK );
         }

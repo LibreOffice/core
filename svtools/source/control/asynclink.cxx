@@ -33,11 +33,7 @@ void AsynchronLink::CreateMutex()
     if( !_pMutex ) _pMutex = new osl::Mutex;
 }
 
-void AsynchronLink::Call( void* pObj, bool
-#ifdef DBG_UTIL
-bAllowDoubles
-#endif
-, bool bUseTimer )
+void AsynchronLink::Call( void* pObj, bool bAllowDoubles, bool bUseTimer )
 {
 #ifdef DBG_UTIL
     if ( bUseTimer || !_bInCall )

@@ -785,10 +785,7 @@ void SdrUndoInsertObj::Undo()
     {
         ImplUnmarkObject( pObj );
 
-#ifdef DBG_UTIL
-        SdrObject* pChkObj=
-#endif
-        pObjList->RemoveObject(nOrdNum);
+        SdrObject* pChkObj= pObjList->RemoveObject(nOrdNum);
         DBG_ASSERT(pChkObj==pObj,"UndoInsertObj: RemoveObjNum!=pObj");
     }
 }
@@ -1327,10 +1324,7 @@ void SdrUndoNewLayer::Undo()
 {
     DBG_ASSERT(!bItsMine,"SdrUndoNewLayer::Undo(): Layer already belongs to UndoAction.");
     bItsMine=true;
-#ifdef DBG_UTIL
-    SdrLayer* pCmpLayer=
-#endif
-    pLayerAdmin->RemoveLayer(nNum);
+    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNum);
     DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoNewLayer::Undo(): Removed layer is != pLayer.");
 }
 
@@ -1359,10 +1353,7 @@ void SdrUndoDelLayer::Redo()
 {
     DBG_ASSERT(!bItsMine,"SdrUndoDelLayer::Undo(): Layer already belongs to UndoAction.");
     bItsMine=true;
-#ifdef DBG_UTIL
-    SdrLayer* pCmpLayer=
-#endif
-    pLayerAdmin->RemoveLayer(nNum);
+    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNum);
     DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoDelLayer::Redo(): Removed layer is != pLayer.");
 }
 
@@ -1375,20 +1366,14 @@ OUString SdrUndoDelLayer::GetComment() const
 
 void SdrUndoMoveLayer::Undo()
 {
-#ifdef DBG_UTIL
-    SdrLayer* pCmpLayer=
-#endif
-    pLayerAdmin->RemoveLayer(nNeuPos);
+    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNeuPos);
     DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoMoveLayer::Undo(): Removed layer is != pLayer.");
     pLayerAdmin->InsertLayer(pLayer,nNum);
 }
 
 void SdrUndoMoveLayer::Redo()
 {
-#ifdef DBG_UTIL
-    SdrLayer* pCmpLayer=
-#endif
-    pLayerAdmin->RemoveLayer(nNum);
+    SdrLayer* pCmpLayer= pLayerAdmin->RemoveLayer(nNum);
     DBG_ASSERT(pCmpLayer==pLayer,"SdrUndoMoveLayer::Redo(): Removed layer is != pLayer.");
     pLayerAdmin->InsertLayer(pLayer,nNeuPos);
 }
