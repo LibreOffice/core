@@ -133,7 +133,7 @@ public:
 private:
     XclExpRecordRef mxEntry;
     OString maId;
-    const char* pType;
+    sax_fastparser::AttrValue pType;
     sal_Int32 mnPriority;
 };
 

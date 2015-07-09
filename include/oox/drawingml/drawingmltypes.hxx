@@ -32,6 +32,8 @@
 #include <oox/dllapi.h>
 #include <oox/helper/helper.hxx>
 
+namespace sax_fastparser { class AttrValue; }
+
 namespace oox {
 namespace drawingml {
 
@@ -135,10 +137,10 @@ sal_Int16 GetParaAdjust( sal_Int32 nAlign );
 ::com::sun::star::drawing::TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken );
 
 // Converts a TextVerticalAdjust item to string value appearing in ooxml
-OOX_DLLPUBLIC const char* GetTextVerticalAdjust( ::com::sun::star::drawing::TextVerticalAdjust eAdjust );
+OOX_DLLPUBLIC sax_fastparser::AttrValue GetTextVerticalAdjust( ::com::sun::star::drawing::TextVerticalAdjust eAdjust );
 
 // Converts a Hatch object to an ooxml pattern.
-const char* GetHatchPattern( const ::com::sun::star::drawing::Hatch& rHatch );
+sax_fastparser::AttrValue GetHatchPattern( const ::com::sun::star::drawing::Hatch& rHatch );
 
 
 

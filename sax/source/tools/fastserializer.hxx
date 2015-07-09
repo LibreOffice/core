@@ -27,19 +27,12 @@
 #include <sax/fshelper.hxx>
 #include <CachedOutputStream.hxx>
 
+#include <initializer_list>
 #include <stack>
 #include <map>
 #include <boost/shared_ptr.hpp>
 
 namespace sax_fastparser {
-
-struct TokenValue
-{
-    sal_Int32   nToken;
-    const char *pValue;
-    TokenValue(sal_Int32 _nToken, const char *_pValue) : nToken(_nToken), pValue(_pValue) {}
-};
-typedef std::vector<TokenValue> TokenValueList;
 
 /// Receives notification of sax document events to write into an XOutputStream.
 class FastSaxSerializer
@@ -52,8 +45,6 @@ public:
     ~FastSaxSerializer();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > getOutputStream();
-    /// called by FSHelper to put data in for writeTokenValueList
-    TokenValueList& getTokenValueList() { return maTokenValues; }
 
     /** called by the parser when parsing of an XML stream is started.
      */
@@ -80,7 +71,7 @@ public:
             from the element.
 
     */
-    void startFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList = NULL );
+    void startFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList, std::initializer_list<Attr> const * attrs );
 
     /** receives notification of the end of an known element.
         @see startFastElement
@@ -104,7 +95,7 @@ public:
             from the element.
 
     */
-    void singleFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList = NULL );
+    void singleFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList, std::initializer_list<Attr> const * attrs );
 
     // C++ helpers
     void writeId( ::sal_Int32 Element );
@@ -222,13 +213,12 @@ private:
     // but then we couldn't get the rtl_String* member :-(
     rtl_String *mpDoubleStr;
     sal_Int32 mnDoubleStrCapacity;
-    TokenValueList maTokenValues;
 
 #ifdef DBG_UTIL
     ::std::stack<sal_Int32> m_DebugStartedElements;
 #endif
 
-    void writeTokenValueList();
+    void writeAttributes(std::initializer_list<Attr> attrs);
     void writeFastAttributeList(FastAttributeList& rAttrList);
 
     /** Forward the call to the output stream, or write to the stack.

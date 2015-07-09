@@ -392,7 +392,7 @@ protected:
         xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
         xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(aXPath.getStr()), pXmlXpathCtx);
         xmlNodeSetPtr pXmlNodes = pXmlXpathObj->nodesetval;
-        CPPUNIT_ASSERT_EQUAL_MESSAGE("parsing dump failed", 1, xmlXPathNodeSetGetLength(pXmlNodes));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("parsing dump failed, " + aXPath + ", " + aAttribute).getStr(), 1, xmlXPathNodeSetGetLength(pXmlNodes));
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
         OUString aRet;
         if (aAttribute.getLength())

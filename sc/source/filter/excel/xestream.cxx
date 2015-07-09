@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdarg.h>
+#include <sal/config.h>
+
+#include <cassert>
 #include <stdio.h>
 #include <string.h>
 #include <utility>
@@ -664,7 +666,7 @@ static const char* lcl_GetErrorString( sal_uInt16 nScErrCode )
     }
 }
 
-void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsType, OUString& rsValue )
+void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, sax_fastparser::AttrValue& rsType, OUString& rsValue )
 {
     sc::FormulaResultValue aResValue = rCell.GetResult();
 
@@ -828,21 +830,29 @@ OUString XclXmlUtils::ToOUString( const XclExpString& s )
     return ToOUString( s.GetUnicodeBuffer() );
 }
 
-const char* XclXmlUtils::ToPsz( bool b )
+sax_fastparser::AttrValue XclXmlUtils::ToPsz( bool b )
 {
-    return b ? "true" : "false";
+    if (b) {
+        return "true";
+    } else {
+        return "false";
+    }
 }
 
-const char* XclXmlUtils::ToPsz10( bool b )
+sax_fastparser::AttrValue XclXmlUtils::ToPsz10( bool b )
 {
     // xlsx seems to use "1" or "0" for boolean values.  I wonder it ever uses
     // the "true" "false" variant.
-    return b ? "1" : "0";
+    if (b) {
+        return "1";
+    } else {
+        return "0";
+    }
 }
 
 sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int32 nValue )
 {
-    pStream->startElement( nElement, FSEND );
+    pStream->startElement( nElement );
     pStream->write( nValue );
     pStream->endElement( nElement );
 
@@ -851,7 +861,7 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperP
 
 sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, sal_Int64 nValue )
 {
-    pStream->startElement( nElement, FSEND );
+    pStream->startElement( nElement );
     pStream->write( nValue );
     pStream->endElement( nElement );
 
@@ -860,23 +870,22 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperP
 
 sax_fastparser::FSHelperPtr XclXmlUtils::WriteElement( sax_fastparser::FSHelperPtr pStream, sal_Int32 nElement, const char* sValue )
 {
-    pStream->startElement( nElement, FSEND );
+    pStream->startElement( nElement );
     pStream->write( sValue );
     pStream->endElement( nElement );
 
     return pStream;
 }
 
-static void lcl_WriteValue( sax_fastparser::FSHelperPtr& rStream, sal_Int32 nElement, const char* pValue )
+static void lcl_WriteValue( sax_fastparser::FSHelperPtr& rStream, sal_Int32 nElement, sax_fastparser::AttrValue const & pValue )
 {
     if( !pValue )
         return;
     rStream->singleElement( nElement,
-            XML_val, pValue,
-            FSEND );
+            {{XML_val, pValue}} );
 }
 
-static const char* lcl_GetUnderlineStyle( FontUnderline eUnderline, bool& bHaveUnderline )
+static sax_fastparser::AttrValue lcl_GetUnderlineStyle( FontUnderline eUnderline, bool& bHaveUnderline )
 {
     bHaveUnderline = true;
     switch( eUnderline )
@@ -890,7 +899,7 @@ static const char* lcl_GetUnderlineStyle( FontUnderline eUnderline, bool& bHaveU
     }
 }
 
-static const char* lcl_ToVerticalAlignmentRun( SvxEscapement eEscapement, bool& bHaveAlignment )
+static sax_fastparser::AttrValue lcl_ToVerticalAlignmentRun( SvxEscapement eEscapement, bool& bHaveAlignment )
 {
     bHaveAlignment = true;
     switch( eEscapement )
@@ -905,8 +914,8 @@ static const char* lcl_ToVerticalAlignmentRun( SvxEscapement eEscapement, bool& 
 sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelperPtr pStream, const XclFontData& rFontData, sal_Int32 nFontId )
 {
     bool bHaveUnderline, bHaveVertAlign;
-    const char* pUnderline = lcl_GetUnderlineStyle( rFontData.GetScUnderline(), bHaveUnderline );
-    const char* pVertAlign = lcl_ToVerticalAlignmentRun( rFontData.GetScEscapement(), bHaveVertAlign );
+    auto pUnderline = lcl_GetUnderlineStyle( rFontData.GetScUnderline(), bHaveUnderline );
+    auto pVertAlign = lcl_ToVerticalAlignmentRun( rFontData.GetScEscapement(), bHaveVertAlign );
 
     lcl_WriteValue( pStream, XML_b,          rFontData.mnWeight > 400 ? XclXmlUtils::ToPsz( rFontData.mnWeight > 400 ) : NULL );
     lcl_WriteValue( pStream, XML_i,          rFontData.mbItalic ? XclXmlUtils::ToPsz( rFontData.mbItalic ) : NULL );
@@ -915,20 +924,19 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     // OOXTODO: lcl_WriteValue( rStream, XML_extend, );      // compatibility setting
     lcl_WriteValue( pStream, XML_outline,    rFontData.mbOutline ? XclXmlUtils::ToPsz( rFontData.mbOutline ) : NULL );
     lcl_WriteValue( pStream, XML_shadow,     rFontData.mbShadow ? XclXmlUtils::ToPsz( rFontData.mbShadow ) : NULL );
-    lcl_WriteValue( pStream, XML_u,          bHaveUnderline ? pUnderline : NULL );
-    lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : NULL );
-    lcl_WriteValue( pStream, XML_sz,         OString::number( (double) (rFontData.mnHeight / 20.0) ).getStr() );  // Twips->Pt
+    lcl_WriteValue( pStream, XML_u,          bHaveUnderline ? pUnderline : sax_fastparser::AttrValue() );
+    lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : sax_fastparser::AttrValue() );
+    lcl_WriteValue( pStream, XML_sz,         OString::number( (double) (rFontData.mnHeight / 20.0) ) );  // Twips->Pt
     if( rFontData.maColor != Color( 0xFF, 0xFF, 0xFF, 0xFF ) )
         pStream->singleElement( XML_color,
                 // OOXTODO: XML_auto,       bool
                 // OOXTODO: XML_indexed,    uint
-                XML_rgb,    XclXmlUtils::ToOString( rFontData.maColor ).getStr(),
+                {{XML_rgb,    XclXmlUtils::ToOString( rFontData.maColor )}} );
                 // OOXTODO: XML_theme,      index into <clrScheme/>
                 // OOXTODO: XML_tint,       double
-                FSEND );
-    lcl_WriteValue( pStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ).getStr() );
-    lcl_WriteValue( pStream, XML_family,     OString::number(  rFontData.mnFamily ).getStr() );
-    lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::number(  rFontData.mnCharSet ).getStr() : NULL );
+    lcl_WriteValue( pStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ) );
+    lcl_WriteValue( pStream, XML_family,     OString::number(  rFontData.mnFamily ) );
+    lcl_WriteValue( pStream, XML_charset,    rFontData.mnCharSet != 0 ? OString::number(  rFontData.mnCharSet ) : sax_fastparser::AttrValue() );
 
     return pStream;
 }
@@ -968,29 +976,20 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::GetStreamForPath( const OUString& s
     return maOpenedStreamMap[ sPath ].second;
 }
 
-sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteAttributesInternal( sal_Int32 nAttribute, ... )
+sax_fastparser::FSHelperPtr& XclExpXmlStream::WriteAttributes(
+    std::initializer_list<sax_fastparser::Attr> attrs)
 {
     sax_fastparser::FSHelperPtr& rStream = GetCurrentStream();
-
-    va_list args;
-    va_start( args, nAttribute );
-    do {
-        const char* pValue = va_arg( args, const char* );
-        if( pValue )
-        {
+    for (auto const & attr: attrs) {
+        if (attr.value) {
+            assert(attr.value.getLength() != -1);
             rStream->write( " " )
-                ->writeId( nAttribute )
+                ->writeId( attr.id )
                 ->write( "=\"" )
-                ->writeEscaped( OUString(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8) )
+                ->writeEscaped( OUString(attr.value.getString(), attr.value.getLength(), RTL_TEXTENCODING_UTF8) )
                 ->write( "\"" );
         }
-
-        nAttribute = va_arg( args, sal_Int32 );
-        if( nAttribute == FSEND_internal )
-            break;
-    } while( true );
-    va_end( args );
-
+    }
     return rStream;
 }
 sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (

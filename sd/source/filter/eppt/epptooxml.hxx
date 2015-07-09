@@ -80,9 +80,9 @@ public:
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE { return oox::drawingml::table::TableStyleListPtr(); }
     virtual oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE { return NULL; }
 
-    static const char* GetSideDirection( sal_uInt8 nDirection );
-    static const char* GetCornerDirection( sal_uInt8 nDirection );
-    static const char* Get8Direction( sal_uInt8 nDirection );
+    static sax_fastparser::AttrValue GetSideDirection( sal_uInt8 nDirection );
+    static sax_fastparser::AttrValue GetCornerDirection( sal_uInt8 nDirection );
+    static sax_fastparser::AttrValue Get8Direction( sal_uInt8 nDirection );
     static       int   GetPPTXLayoutId( int nOffset );
 
 protected:
@@ -103,7 +103,7 @@ protected:
     static void WriteAnimateTo( ::sax_fastparser::FSHelperPtr pFS, const css::uno::Any& rValue, const OUString& rAttributeName );
     static void WriteAnimateValues( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimate >& rXAnimate );
     static void WriteAnimationCondition( ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Any& rAny, bool bWriteEvent, bool bMainSeqChild );
-    static void WriteAnimationCondition( ::sax_fastparser::FSHelperPtr pFS, const char* pDelay, const char* pEvent, double fDelay, bool bHasFDelay );
+    static void WriteAnimationCondition( ::sax_fastparser::FSHelperPtr pFS, sax_fastparser::AttrValue const & pDelay, sax_fastparser::AttrValue const & pEvent, double fDelay, bool bHasFDelay );
     void WriteAnimations( ::sax_fastparser::FSHelperPtr pFS );
     static void WriteAnimationAttributeName( ::sax_fastparser::FSHelperPtr pFS, const OUString& rAttributeName );
     void WriteAnimationNode( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, bool bMainSeqChild );

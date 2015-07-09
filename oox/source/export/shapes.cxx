@@ -104,7 +104,7 @@ using ::css::sheet::XSpreadsheetDocument;
 using ::oox::core::XmlFilterBase;
 using ::sax_fastparser::FSHelperPtr;
 
-#define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ )).getStr()
+#define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ ))
 
 namespace oox { namespace drawingml {
 
@@ -210,7 +210,7 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, bool bCl
     SAL_INFO("oox.shape", "write open bezier shape");
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
+    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
 
     tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     Rectangle aRect( aPolyPolygon.GetBoundRect() );
@@ -224,13 +224,12 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, bool bCl
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX)
     {
-        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
+        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr );
         pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                              XML_id, I32S( GetNewShapeID( xShape ) ),
-                              XML_name, IDS( Freeform ),
-                              FSEND );
+                              {{XML_id, I32S( GetNewShapeID( xShape ) )},
+                               {XML_name, IDS( Freeform )}} );
     }
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
+    pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr );
     if (GetDocumentType() != DOCUMENT_DOCX)
     {
         WriteNonVisualProperties( xShape );
@@ -238,7 +237,7 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, bool bCl
     }
 
     // visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_spPr );
     WriteTransformation( aRect, XML_a );
     WritePolyPolygon( aPolyPolygon );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
@@ -274,13 +273,13 @@ ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape
     bool bToplevel = !m_xParent.is();
     if (!bToplevel)
         mnXmlNamespace = XML_wpg;
-    pFS->startElementNS(mnXmlNamespace, (bToplevel ? XML_wgp : XML_grpSp), FSEND);
+    pFS->startElementNS(mnXmlNamespace, (bToplevel ? XML_wgp : XML_grpSp));
 
     // non visual properties
-    pFS->singleElementNS(mnXmlNamespace, XML_cNvGrpSpPr, FSEND);
+    pFS->singleElementNS(mnXmlNamespace, XML_cNvGrpSpPr);
 
     // visual properties
-    pFS->startElementNS(mnXmlNamespace, XML_grpSpPr, FSEND);
+    pFS->startElementNS(mnXmlNamespace, XML_grpSpPr);
     WriteShapeTransformation(xShape, XML_a);
     pFS->endElementNS(mnXmlNamespace, XML_grpSpPr);
 
@@ -399,7 +398,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
     SdrObjCustomShape* pShape = static_cast<SdrObjCustomShape*>( GetSdrObjectFromXShape( xShape ) );
     bool bIsDefaultObject = EscherPropertyContainer::IsDefaultObject( pShape, eShapeType );
-    const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry( USS( sShapeType ) );
+    OString sPresetShape = msfilter::util::GetOOXMLPresetGeometry( USS( sShapeType ).getStr() );
     SAL_INFO("oox.shape", "custom shape type: " << sShapeType << " ==> " << sPresetShape);
     Sequence< PropertyValue > aGeometrySeq;
     sal_Int32 nAdjustmentValuesIndex = -1;
@@ -442,7 +441,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     }
 
     FSHelperPtr pFS = GetFS();
-    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
+    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
 
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX)
@@ -452,12 +451,11 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
         {
             mAny >>= isVisible;
         }
-        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
+        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr );
         pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
-                XML_id, I32S( GetNewShapeID( xShape ) ),
-                XML_name, IDS( CustomShape ),
-                XML_hidden, isVisible ? NULL : "1",
-                FSEND );
+                {{XML_id, I32S( GetNewShapeID( xShape ) )},
+                 {XML_name, IDS( CustomShape )},
+                 {XML_hidden, isVisible ? sax_fastparser::AttrValue() : "1"}} );
 
         if( GETA( URL ) )
         {
@@ -471,20 +469,19 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
                         mpURLTransformer->isExternalURL(sURL));
 
                 mpFS->singleElementNS( XML_a, XML_hlinkClick,
-                        FSNS( XML_r,XML_id ), USS( sRelId ),
-                        FSEND );
+                        {{FSNS( XML_r,XML_id ), USS( sRelId )}} );
             }
         }
         pFS->endElementNS(mnXmlNamespace, XML_cNvPr);
-        pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
+        pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr );
         WriteNonVisualProperties( xShape );
         pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
     }
     else
-        pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, FSEND);
+        pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
 
     // visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_spPr );
     // moon is flipped in MSO, and mso-spt89 (right up arrow) is mapped to leftUpArrow
     if ( sShapeType == "moon" || sShapeType == "mso-spt89" )
         WriteShapeTransformation( xShape, XML_a, !bFlipH, bFlipV, false);
@@ -537,7 +534,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
-    pFS->startElementNS( mnXmlNamespace, XML_style, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_style );
     WriteShapeStyle( rXPropSet );
     pFS->endElementNS( mnXmlNamespace, XML_style );
 
@@ -555,27 +552,26 @@ ShapeExport& ShapeExport::WriteEllipseShape( Reference< XShape > xShape )
 
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
+    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
 
     // TODO: arc, section, cut, connector
 
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX)
     {
-        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
+        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr );
         pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                XML_id, I32S( GetNewShapeID( xShape ) ),
-                XML_name, IDS( Ellipse ),
-                FSEND );
-        pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
+                {{XML_id, I32S( GetNewShapeID( xShape ) )},
+                 {XML_name, IDS( Ellipse )}} );
+        pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr );
         WriteNonVisualProperties( xShape );
         pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
     }
     else
-        pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr, FSEND);
+        pFS->singleElementNS(mnXmlNamespace, XML_cNvSpPr);
 
     // visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_spPr );
     WriteShapeTransformation( xShape, XML_a, false, false, false);
     WritePresetShape( "ellipse" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
@@ -634,13 +630,12 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
     FSHelperPtr pFS = GetFS();
 
     if (GetDocumentType() != DOCUMENT_DOCX)
-        pFS->startElementNS( mnXmlNamespace, XML_pic, FSEND );
+        pFS->startElementNS( mnXmlNamespace, XML_pic );
     else
         pFS->startElementNS( mnXmlNamespace, XML_pic,
-                             FSNS(XML_xmlns, XML_pic), "http://schemas.openxmlformats.org/drawingml/2006/picture",
-                             FSEND );
+                             {{FSNS(XML_xmlns, XML_pic), "http://schemas.openxmlformats.org/drawingml/2006/picture"}} );
 
-    pFS->startElementNS( mnXmlNamespace, XML_nvPicPr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_nvPicPr );
 
     OUString sName, sDescr;
     bool bHaveName, bHaveDesc;
@@ -651,21 +646,19 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
         mAny >>= sDescr;
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                          XML_id,     I32S( GetNewShapeID( xShape ) ),
-                          XML_name,   bHaveName ? USS( sName ) : OString( "Picture " + OString::number( mnPictureIdMax++ )).getStr(),
-                          XML_descr,  bHaveDesc ? USS( sDescr ) : NULL,
-                          FSEND );
+                          {{XML_id,     I32S( GetNewShapeID( xShape ) )},
+                           {XML_name,   bHaveName ? USS( sName ) : OString( "Picture " + OString::number( mnPictureIdMax++ )).getStr()},
+                           {XML_descr,  bHaveDesc ? USS( sDescr ) : sax_fastparser::AttrValue()}} );
     // OOXTODO: //cNvPr children: XML_extLst, XML_hlinkClick, XML_hlinkHover
 
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvPicPr,
+    pFS->singleElementNS( mnXmlNamespace, XML_cNvPicPr );
                           // OOXTODO: XML_preferRelativeSize
-                          FSEND );
 
     WriteNonVisualProperties( xShape );
 
     pFS->endElementNS( mnXmlNamespace, XML_nvPicPr );
 
-    pFS->startElementNS( mnXmlNamespace, XML_blipFill, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_blipFill );
 
     WriteBlip( xShapeProps, sGraphicURL, false, pGraphic );
 
@@ -678,12 +671,12 @@ void ShapeExport::WriteGraphicObjectShapePart( Reference< XShape > xShape, const
         mAny >>= bStretch;
 
     if ( pGraphic || bStretch )
-        pFS->singleElementNS( XML_a, XML_stretch, FSEND );
+        pFS->singleElementNS( XML_a, XML_stretch );
 
     pFS->endElementNS( mnXmlNamespace, XML_blipFill );
 
     // visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_spPr );
     WriteShapeTransformation( xShape, XML_a, false, false, false);
     WritePresetShape( "rect" );
     // graphic object can come with the frame (bnc#654525)
@@ -706,7 +699,7 @@ ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
 
     FSHelperPtr pFS = GetFS();
 
-    const char* sGeometry = "line";
+    auto sGeometry = sax_fastparser::AttrValue("line");
     Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
     Reference< XPropertyState > rXPropState( xShape, UNO_QUERY );
     awt::Point aStartPoint, aEndPoint;
@@ -755,23 +748,22 @@ ShapeExport& ShapeExport::WriteConnectorShape( Reference< XShape > xShape )
         aRect.setHeight( aStartPoint.Y - aEndPoint.Y );
     }
 
-    pFS->startElementNS( mnXmlNamespace, XML_cxnSp, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_cxnSp );
 
     // non visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_nvCxnSpPr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_nvCxnSpPr );
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                          XML_id, I32S( GetNewShapeID( xShape ) ),
-                          XML_name, IDS( Line ),
-                          FSEND );
+                          {{XML_id, I32S( GetNewShapeID( xShape ) )},
+                           {XML_name, IDS( Line )}} );
     // non visual connector shape drawing properties
-    pFS->startElementNS( mnXmlNamespace, XML_cNvCxnSpPr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_cNvCxnSpPr );
     WriteConnectorConnections( aConnectorEntry, GetShapeID( rXShapeA ), GetShapeID( rXShapeB ) );
     pFS->endElementNS( mnXmlNamespace, XML_cNvCxnSpPr );
-    pFS->singleElementNS( mnXmlNamespace, XML_nvPr, FSEND );
+    pFS->singleElementNS( mnXmlNamespace, XML_nvPr );
     pFS->endElementNS( mnXmlNamespace, XML_nvCxnSpPr );
 
     // visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_spPr );
     WriteTransformation( aRect, XML_a, bFlipH, bFlipV );
     // TODO: write adjustments (ppt export doesn't work well there either)
     WritePresetShape( sGeometry );
@@ -797,7 +789,7 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
 
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
+    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
 
     tools::PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     if( aPolyPolygon.Count() == 1 && aPolyPolygon[ 0 ].GetSize() == 2)
@@ -811,13 +803,12 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX)
     {
-        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
+        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr );
         pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                              XML_id, I32S( GetNewShapeID( xShape ) ),
-                              XML_name, IDS( Line ),
-                              FSEND );
+                              {{XML_id, I32S( GetNewShapeID( xShape ) )},
+                               {XML_name, IDS( Line )}} );
     }
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
+    pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr );
     if (GetDocumentType() != DOCUMENT_DOCX)
     {
         WriteNonVisualProperties( xShape );
@@ -825,7 +816,7 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
     }
 
     // visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_spPr );
     WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, true);
     WritePresetShape( "line" );
     Reference< XPropertySet > xShapeProps( xShape, UNO_QUERY );
@@ -834,7 +825,7 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     //write style
-    pFS->startElementNS( mnXmlNamespace, XML_style, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_style );
     WriteShapeStyle( xShapeProps );
     pFS->endElementNS( mnXmlNamespace, XML_style );
 
@@ -846,12 +837,11 @@ ShapeExport& ShapeExport::WriteLineShape( Reference< XShape > xShape )
     return *this;
 }
 
-ShapeExport& ShapeExport::WriteNonVisualDrawingProperties( Reference< XShape > xShape, const char* pName )
+ShapeExport& ShapeExport::WriteNonVisualDrawingProperties( Reference< XShape > xShape, sax_fastparser::AttrValue const & pName )
 {
     GetFS()->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                              XML_id, I32S( GetNewShapeID( xShape ) ),
-                              XML_name, pName,
-                              FSEND );
+                              {{XML_id, I32S( GetNewShapeID( xShape ) )},
+                               {XML_name, pName}} );
 
     return *this;
 }
@@ -868,7 +858,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
+    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
 
     sal_Int32 nRadius = 0;
 
@@ -885,18 +875,17 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 
     // non visual shape properties
     if (GetDocumentType() == DOCUMENT_DOCX)
-        pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
-    pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
+        pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr );
+    pFS->startElementNS( mnXmlNamespace, XML_nvSpPr );
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                          XML_id, I32S( GetNewShapeID( xShape ) ),
-                          XML_name, IDS( Rectangle ),
-                          FSEND );
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, FSEND );
+                          {{XML_id, I32S( GetNewShapeID( xShape ) )},
+                           {XML_name, IDS( Rectangle )}} );
+    pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr );
     WriteNonVisualProperties( xShape );
     pFS->endElementNS( mnXmlNamespace, XML_nvSpPr );
 
     // visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_spPr );
     WriteShapeTransformation( xShape, XML_a, false, false, false);
     WritePresetShape( "rect" );
     Reference< XPropertySet > xProps( xShape, UNO_QUERY );
@@ -962,7 +951,7 @@ ShapeExport& ShapeExport::WriteShape( Reference< XShape > xShape )
 {
     OUString sShapeType = xShape->getShapeType();
     SAL_INFO("oox.shape", "write shape: " << sShapeType);
-    NameToConvertMapType::const_iterator aConverter = lcl_GetConverters(GetDocumentType()).find( USS( sShapeType ) );
+    NameToConvertMapType::const_iterator aConverter = lcl_GetConverters(GetDocumentType()).find( USS( sShapeType ).getStr() );
     if( aConverter == lcl_GetConverters(GetDocumentType()).end() )
     {
         SAL_INFO("oox.shape", "unknown shape");
@@ -995,14 +984,14 @@ ShapeExport& ShapeExport::WriteTextBox( Reference< XInterface > xIface, sal_Int3
     {
         FSHelperPtr pFS = GetFS();
 
-        pFS->startElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx), FSEND );
+        pFS->startElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx) );
         WriteText( xIface, m_presetWarp, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX), /*bText=*/true );
         pFS->endElementNS( nXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_txBody : XML_txbx) );
         if (GetDocumentType() == DOCUMENT_DOCX)
             WriteText( xIface, m_presetWarp, /*bBodyPr=*/true, /*bText=*/false, /*nXmlNamespace=*/nXmlNamespace );
     }
     else if (GetDocumentType() == DOCUMENT_DOCX)
-        mpFS->singleElementNS(nXmlNamespace, XML_bodyPr, FSEND);
+        mpFS->singleElementNS(nXmlNamespace, XML_bodyPr);
 
     return *this;
 }
@@ -1014,20 +1003,20 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
     Reference< XTable > xTable;
     Reference< XPropertySet > xPropSet( rXShape, UNO_QUERY );
 
-    mpFS->startElementNS( XML_a, XML_graphic, FSEND );
-    mpFS->startElementNS( XML_a, XML_graphicData, XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/table", FSEND );
+    mpFS->startElementNS( XML_a, XML_graphic );
+    mpFS->startElementNS( XML_a, XML_graphicData, {{XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/table"}} );
 
     if ( xPropSet.is() && ( xPropSet->getPropertyValue( "Model" ) >>= xTable ) )
     {
-        mpFS->startElementNS( XML_a, XML_tbl, FSEND );
-        mpFS->singleElementNS( XML_a, XML_tblPr, FSEND );
+        mpFS->startElementNS( XML_a, XML_tbl );
+        mpFS->singleElementNS( XML_a, XML_tblPr );
 
         Reference< container::XIndexAccess > xColumns( xTable->getColumns(), UNO_QUERY_THROW );
         Reference< container::XIndexAccess > xRows( xTable->getRows(), UNO_QUERY_THROW );
         sal_uInt16 nRowCount = static_cast< sal_uInt16 >( xRows->getCount() );
         sal_uInt16 nColumnCount = static_cast< sal_uInt16 >( xColumns->getCount() );
 
-        mpFS->startElementNS( XML_a, XML_tblGrid, FSEND );
+        mpFS->startElementNS( XML_a, XML_tblGrid );
 
         for ( sal_Int32 x = 0; x < nColumnCount; x++ )
         {
@@ -1035,7 +1024,7 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
             sal_Int32 nWidth(0);
             xColPropSet->getPropertyValue( "Width" ) >>= nWidth;
 
-            mpFS->singleElementNS( XML_a, XML_gridCol, XML_w, I64S(oox::drawingml::convertHmmToEmu(nWidth)), FSEND );
+            mpFS->singleElementNS( XML_a, XML_gridCol, {{XML_w, I64S(oox::drawingml::convertHmmToEmu(nWidth))}} );
         }
 
         mpFS->endElementNS( XML_a, XML_tblGrid );
@@ -1051,7 +1040,7 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
 
             xRowPropSet->getPropertyValue( "Height" ) >>= nRowHeight;
 
-            mpFS->startElementNS( XML_a, XML_tr, XML_h, I64S( oox::drawingml::convertHmmToEmu( nRowHeight ) ), FSEND );
+            mpFS->startElementNS( XML_a, XML_tr, {{XML_h, I64S( oox::drawingml::convertHmmToEmu( nRowHeight ) )}} );
             for( sal_Int32 nColumn = 0; nColumn < nColumnCount; nColumn++ )
             {
                 Reference< XMergeableCell > xCell( xTable->getCellByPosition( nColumn, nRow ),
@@ -1064,10 +1053,9 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
                 if(xCell->getColumnSpan() > 1 && xCell->getRowSpan() > 1)
                 {
                     // having both : horizontal and vertical merge
-                    mpFS->startElementNS(XML_a, XML_tc, XML_gridSpan,
-                                         I32S(xCell->getColumnSpan()),
-                                         XML_rowSpan, I32S(xCell->getRowSpan()),
-                                         FSEND);
+                    mpFS->startElementNS(XML_a, XML_tc, {{XML_gridSpan,
+                                         I32S(xCell->getColumnSpan())},
+                                         {XML_rowSpan, I32S(xCell->getRowSpan())}});
                     // since, XMergeableCell doesn't have the information about
                     // cell having hMerge or vMerge.
                     // So, Populating the merged cell map in-order to use it to
@@ -1087,8 +1075,8 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
                 else if(xCell->getColumnSpan() > 1)
                 {
                     // having : horizontal merge
-                    mpFS->startElementNS(XML_a, XML_tc, XML_gridSpan,
-                                         I32S(xCell->getColumnSpan()), FSEND);
+                    mpFS->startElementNS(XML_a, XML_tc, {{XML_gridSpan,
+                                         I32S(xCell->getColumnSpan())}});
                     for(sal_Int32 columnIndex = nColumn; columnIndex < xCell->getColumnSpan(); ++columnIndex) {
                         sal_Int32 transposeIndexForMergeCell = (nRow*nColumnCount) + columnIndex;
                         mergedCellMap[transposeIndexForMergeCell] =
@@ -1098,8 +1086,8 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
                 else if(xCell->getRowSpan() > 1)
                 {
                     // having : vertical merge
-                    mpFS->startElementNS(XML_a, XML_tc, XML_rowSpan,
-                                         I32S(xCell->getRowSpan()), FSEND);
+                    mpFS->startElementNS(XML_a, XML_tc, {{XML_rowSpan,
+                                         I32S(xCell->getRowSpan())}});
 
                     for(sal_Int32 rowIndex = nRow; rowIndex < xCell->getRowSpan(); ++rowIndex) {
                         sal_Int32 transposeIndexForMergeCell = (rowIndex*nColumnCount) + nColumn;
@@ -1114,7 +1102,7 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
                     if(!xCell->isMerged())
                     {
                         // independent cell
-                        mpFS->startElementNS( XML_a, XML_tc, FSEND );
+                        mpFS->startElementNS( XML_a, XML_tc );
                     }
                     else
                     {
@@ -1135,15 +1123,14 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
                                 {
                                     // vMerge and has gridSpan
                                     mpFS->startElementNS( XML_a, XML_tc,
-                                                          XML_vMerge, I32S(1),
-                                                          XML_gridSpan, I32S(xCell->getColumnSpan()),
-                                                          FSEND );
+                                                          {{XML_vMerge, I32S(1)},
+                                                           {XML_gridSpan, I32S(xCell->getColumnSpan())}} );
                                 }
                                 else
                                 {
                                     // only vMerge
                                     mpFS->startElementNS( XML_a, XML_tc,
-                                                          XML_vMerge, I32S(1), FSEND );
+                                                          {{XML_vMerge, I32S(1)}} );
                                 }
                             }
                             else if(nRow == parentRowIndex)
@@ -1153,24 +1140,22 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
                                 {
                                     // hMerge and has rowspan
                                     mpFS->startElementNS( XML_a, XML_tc,
-                                                          XML_hMerge, I32S(1),
-                                                          XML_rowSpan, I32S(xCell->getRowSpan()),
-                                                          FSEND );
+                                                          {{XML_hMerge, I32S(1)},
+                                                           {XML_rowSpan, I32S(xCell->getRowSpan())}} );
                                 }
                                 else
                                 {
                                     // only hMerge
                                     mpFS->startElementNS( XML_a, XML_tc,
-                                                          XML_hMerge, I32S(1), FSEND );
+                                                          {{XML_hMerge, I32S(1)}} );
                                 }
                             }
                             else
                             {
                                 // has hMerge and vMerge
                                 mpFS->startElementNS( XML_a, XML_tc,
-                                                      XML_vMerge, I32S(1),
-                                                      XML_hMerge, I32S(1),
-                                                      FSEND );
+                                                      {{XML_vMerge, I32S(1)},
+                                                       {XML_hMerge, I32S(1)}} );
                             }
                         }
                         else
@@ -1210,9 +1195,8 @@ void ShapeExport::WriteTableCellProperties(Reference< XPropertySet> xCellPropSet
     aRightMargin >>= nRightMargin;
 
     mpFS->startElementNS( XML_a, XML_tcPr,
-    XML_marL, nLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nLeftMargin ) ) : NULL,
-    XML_marR, nRightMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nRightMargin ) ): NULL,
-    FSEND );
+        {{XML_marL, nLeftMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nLeftMargin ) ) : sax_fastparser::AttrValue()},
+         {XML_marR, nRightMargin > 0 ? I32S( oox::drawingml::convertHmmToEmu( nRightMargin ) ): sax_fastparser::AttrValue()}} );
 
     // Write background fill for table cell.
     // TODO
@@ -1238,7 +1222,7 @@ void ShapeExport::WriteTableCellBorders(Reference< XPropertySet> xCellPropSet)
 
     if(nLeftBorder > 0)
     {
-        mpFS->startElementNS( XML_a, XML_lnL, XML_w, I32S(nLeftBorder), FSEND );
+        mpFS->startElementNS( XML_a, XML_lnL, {{XML_w, I32S(nLeftBorder)}} );
         DrawingML::WriteSolidFill(aLeftBorderColor);
         mpFS->endElementNS( XML_a, XML_lnL );
     }
@@ -1252,7 +1236,7 @@ void ShapeExport::WriteTableCellBorders(Reference< XPropertySet> xCellPropSet)
 
     if(nRightBorder > 0)
     {
-        mpFS->startElementNS( XML_a, XML_lnR, XML_w, I32S(nRightBorder), FSEND);
+        mpFS->startElementNS( XML_a, XML_lnR, {{XML_w, I32S(nRightBorder)}} );
         DrawingML::WriteSolidFill(aRightBorderColor);
         mpFS->endElementNS( XML_a, XML_lnR);
     }
@@ -1266,7 +1250,7 @@ void ShapeExport::WriteTableCellBorders(Reference< XPropertySet> xCellPropSet)
 
     if(nTopBorder > 0)
     {
-        mpFS->startElementNS( XML_a, XML_lnT, XML_w, I32S(nTopBorder), FSEND);
+        mpFS->startElementNS( XML_a, XML_lnT, {{XML_w, I32S(nTopBorder)}} );
         DrawingML::WriteSolidFill(aTopBorderColor);
         mpFS->endElementNS( XML_a, XML_lnT);
     }
@@ -1280,7 +1264,7 @@ void ShapeExport::WriteTableCellBorders(Reference< XPropertySet> xCellPropSet)
 
     if(nBottomBorder > 0)
     {
-        mpFS->startElementNS( XML_a, XML_lnB, XML_w, I32S(nBottomBorder), FSEND);
+        mpFS->startElementNS( XML_a, XML_lnB, {{XML_w, I32S(nBottomBorder)}} );
         DrawingML::WriteSolidFill(aBottomBorderColor);
         mpFS->endElementNS( XML_a, XML_lnB);
     }
@@ -1292,21 +1276,18 @@ ShapeExport& ShapeExport::WriteTableShape( Reference< XShape > xShape )
 
     OSL_TRACE("write table shape");
 
-    pFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_graphicFrame );
 
-    pFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
 
     pFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                          XML_id,     I32S( GetNewShapeID( xShape ) ),
-                          XML_name,   IDS(Table),
-                          FSEND );
+                          {{XML_id,     I32S( GetNewShapeID( xShape ) )},
+                           {XML_name,   IDS(Table)}} );
 
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr,
-                          FSEND );
+    pFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr );
 
     if( GetDocumentType() == DOCUMENT_PPTX )
-        pFS->singleElementNS( mnXmlNamespace, XML_nvPr,
-                          FSEND );
+        pFS->singleElementNS( mnXmlNamespace, XML_nvPr );
     pFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
 
     WriteShapeTransformation( xShape, mnXmlNamespace, false);
@@ -1321,15 +1302,15 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
 {
     FSHelperPtr pFS = GetFS();
 
-    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp), FSEND );
+    pFS->startElementNS( mnXmlNamespace, (GetDocumentType() != DOCUMENT_DOCX ? XML_sp : XML_wsp) );
 
     // non visual shape properties
     if (GetDocumentType() != DOCUMENT_DOCX)
     {
-        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
+        pFS->startElementNS( mnXmlNamespace, XML_nvSpPr );
         WriteNonVisualDrawingProperties( xShape, IDS( TextShape ) );
     }
-    pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, XML_txBox, "1", FSEND );
+    pFS->singleElementNS( mnXmlNamespace, XML_cNvSpPr, {{XML_txBox, "1"}} );
     if (GetDocumentType() != DOCUMENT_DOCX)
     {
         WriteNonVisualProperties( xShape );
@@ -1337,7 +1318,7 @@ ShapeExport& ShapeExport::WriteTextShape( Reference< XShape > xShape )
     }
 
     // visual shape properties
-    pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
+    pFS->startElementNS( mnXmlNamespace, XML_spPr );
     WriteShapeTransformation( xShape, XML_a, false, false, false);
     WritePresetShape( "rect" );
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, UNO_QUERY);
@@ -1455,47 +1436,41 @@ ShapeExport& ShapeExport::WriteOLE2Shape( Reference< XShape > xShape )
                                                         .makeStringAndClear() );
                         }
 
-                        mpFS->startElementNS( mnXmlNamespace, XML_graphicFrame, FSEND );
+                        mpFS->startElementNS( mnXmlNamespace, XML_graphicFrame );
 
-                        mpFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr, FSEND );
+                        mpFS->startElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
 
                         mpFS->singleElementNS( mnXmlNamespace, XML_cNvPr,
-                                               XML_id,     I32S( GetNewShapeID( xShape ) ),
-                                               XML_name,   IDS(Object),
-                                               FSEND );
+                                               {{XML_id,     I32S( GetNewShapeID( xShape ) )},
+                                                {XML_name,   IDS(Object)}} );
 
-                        mpFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr,
-                                               FSEND );
+                        mpFS->singleElementNS( mnXmlNamespace, XML_cNvGraphicFramePr );
 
                         if( GetDocumentType() == DOCUMENT_PPTX )
-                            mpFS->singleElementNS( mnXmlNamespace, XML_nvPr,
-                                                   FSEND );
+                            mpFS->singleElementNS( mnXmlNamespace, XML_nvPr );
                         mpFS->endElementNS( mnXmlNamespace, XML_nvGraphicFramePr );
 
                         WriteShapeTransformation( xShape, mnXmlNamespace );
 
-                        mpFS->startElementNS( XML_a, XML_graphic, FSEND );
+                        mpFS->startElementNS( XML_a, XML_graphic );
                         mpFS->startElementNS( XML_a, XML_graphicData,
-                                              XML_uri, "http://schemas.openxmlformats.org/presentationml/2006/ole",
-                                              FSEND );
+                                              {{XML_uri, "http://schemas.openxmlformats.org/presentationml/2006/ole"}} );
                         if( bSpreadSheet )
                         {
                             mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
-                                              XML_name, "Spreadsheet",
-                                              FSNS(XML_r, XML_id), USS( sRelId ),
-                                              FSEND );
+                                              {{XML_name, "Spreadsheet"},
+                                               {FSNS(XML_r, XML_id), USS( sRelId )}} );
                         }
                         else
                         {
                             mpFS->startElementNS( mnXmlNamespace, XML_oleObj,
-                                              XML_name, "Document",
-                                              FSNS(XML_r, XML_id), USS( sRelId ),
+                                              {{XML_name, "Document"},
+                                               {FSNS(XML_r, XML_id), USS( sRelId )},
                                               // The spec says that this is a required attribute, but PowerPoint can only handle an empty value.
-                                              XML_spid, "",
-                                              FSEND );
+                                               {XML_spid, ""}} );
                         }
 
-                        mpFS->singleElementNS( mnXmlNamespace, XML_embed, FSEND );
+                        mpFS->singleElementNS( mnXmlNamespace, XML_embed );
 
                         // pic element
                         SdrObject* pSdrOLE2( GetSdrObjectFromXShape( xShape ) );

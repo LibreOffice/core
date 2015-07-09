@@ -300,19 +300,18 @@ void XclExpName::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_comment, "",
             // OOXTODO: XML_customMenu, "",
             // OOXTODO: XML_description, "",
-            XML_function, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
+            {{XML_function, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) )},
             // OOXTODO: XML_functionGroupId, "",
             // OOXTODO: XML_help, "",
-            XML_hidden, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) ),
-            XML_localSheetId, mnScTab == SCTAB_GLOBAL ? NULL : OString::number( mnScTab ).getStr(),
-            XML_name, XclXmlUtils::ToOString( maOrigName ).getStr(),
+             {XML_hidden, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_HIDDEN ) )},
+             {XML_localSheetId, mnScTab == SCTAB_GLOBAL ? sax_fastparser::AttrValue() : OString::number( mnScTab )},
+             {XML_name, XclXmlUtils::ToOString( maOrigName )},
             // OOXTODO: XML_publishToServer, "",
             // OOXTODO: XML_shortcutKey, "",
             // OOXTODO: XML_statusBar, "",
-            XML_vbProcedure, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) ),
+             {XML_vbProcedure, XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_NAME_VB ) )}} );
             // OOXTODO: XML_workbookParameter, "",
             // OOXTODO: XML_xlm, "",
-            FSEND );
     rWorkbook->writeEscaped( msSymbol );
     rWorkbook->endElement( XML_definedName );
 }
@@ -456,7 +455,7 @@ void XclExpNameManagerImpl::SaveXml( XclExpXmlStream& rStrm )
     if( maNameList.IsEmpty() )
         return;
     sax_fastparser::FSHelperPtr& rWorkbook = rStrm.GetCurrentStream();
-    rWorkbook->startElement( XML_definedNames, FSEND );
+    rWorkbook->startElement( XML_definedNames );
     maNameList.SaveXml( rStrm );
     rWorkbook->endElement( XML_definedNames );
 }

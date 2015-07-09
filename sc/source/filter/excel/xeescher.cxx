@@ -109,7 +109,7 @@ using namespace oox;
 #if 1//def XLSX_OOXML_FUTURE
 // these function are only used within that context
 // Static Function Helpers
-static const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
+static sax_fastparser::AttrValue ToHorizAlign( SdrTextHorzAdjust eAdjust )
 {
     switch( eAdjust )
     {
@@ -125,7 +125,7 @@ static const char *ToHorizAlign( SdrTextHorzAdjust eAdjust )
     }
 }
 
-static const char *ToVertAlign( SdrTextVertAdjust eAdjust )
+static sax_fastparser::AttrValue ToVertAlign( SdrTextVertAdjust eAdjust )
 {
     switch( eAdjust )
     {
@@ -143,16 +143,16 @@ static const char *ToVertAlign( SdrTextVertAdjust eAdjust )
 
 static void lcl_WriteAnchorVertex( sax_fastparser::FSHelperPtr rComments, Rectangle &aRect )
 {
-    rComments->startElement( FSNS( XML_xdr, XML_col ), FSEND );
+    rComments->startElement( FSNS( XML_xdr, XML_col ) );
     rComments->writeEscaped( OUString::number( aRect.Left() ) );
     rComments->endElement( FSNS( XML_xdr, XML_col ) );
-    rComments->startElement( FSNS( XML_xdr, XML_colOff ), FSEND );
+    rComments->startElement( FSNS( XML_xdr, XML_colOff ) );
     rComments->writeEscaped( OUString::number( aRect.Top() ) );
     rComments->endElement( FSNS( XML_xdr, XML_colOff ) );
-    rComments->startElement( FSNS( XML_xdr, XML_row ), FSEND );
+    rComments->startElement( FSNS( XML_xdr, XML_row ) );
     rComments->writeEscaped( OUString::number( aRect.Right() ) );
     rComments->endElement( FSNS( XML_xdr, XML_row ) );
-    rComments->startElement( FSNS( XML_xdr, XML_rowOff ), FSEND );
+    rComments->startElement( FSNS( XML_xdr, XML_rowOff ) );
     rComments->writeEscaped( OUString::number( aRect.Bottom() ) );
     rComments->endElement( FSNS( XML_xdr, XML_rowOff ) );
 }
@@ -406,8 +406,7 @@ void XclExpImgData::SaveXml( XclExpXmlStream& rStrm )
     DrawingML aDML( pWorksheet, &rStrm, DrawingML::DOCUMENT_XLSX );
     OUString rId = aDML.WriteImage( maGraphic );
     pWorksheet->singleElement( XML_picture,
-            FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( rId ).getStr(),
-            FSEND );
+            {{FSNS( XML_r, XML_id ),  XclXmlUtils::ToOString( rId )}} );
 }
 
 XclExpControlHelper::XclExpControlHelper( const XclExpRoot& rRoot ) :
@@ -1088,8 +1087,7 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
 
     // FIXME: two cell? it seems the two cell anchor is incorrect.
     pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
-            XML_editAs, "oneCell",
-            FSEND );
+            {{XML_editAs, "oneCell"}} );
     Reference< XPropertySet > xPropSet( mxShape, UNO_QUERY );
     if (xPropSet.is())
     {
@@ -1102,10 +1100,9 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
         // TODO: get the correcto chart number
     }
 
-    pDrawing->singleElement( FSNS( XML_xdr, XML_clientData),
+    pDrawing->singleElement( FSNS( XML_xdr, XML_clientData) );
             // OOXTODO: XML_fLocksWithSheet
             // OOXTODO: XML_fPrintsWithSheet
-            FSEND );
     pDrawing->endElement( FSNS( XML_xdr, XML_twoCellAnchor ) );
 }
 
@@ -1241,11 +1238,10 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr rComments = rStrm.GetCurrentStream();
 
     rComments->startElement( XML_comment,
-            XML_ref,        XclXmlUtils::ToOString( maScPos ).getStr(),
-            XML_authorId,   OString::number( nAuthorId ).getStr(),
+            {{XML_ref,        XclXmlUtils::ToOString( maScPos )},
+             {XML_authorId,   OString::number( nAuthorId )}} );
             // OOXTODO: XML_guid,
-            FSEND );
-    rComments->startElement( XML_text, FSEND );
+    rComments->startElement( XML_text );
     // OOXTODO: phoneticPr, rPh, r
     if( mpNoteContents )
         mpNoteContents->WriteXml( rStrm );
@@ -1258,32 +1254,30 @@ void XclExpNote::WriteXml( sal_Int32 nAuthorId, XclExpXmlStream& rStrm )
 #if 1//def XLSX_OOXML_FUTURE
     if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )
     {
-        rComments->startElement( FSNS( XML_mc, XML_AlternateContent ), FSEND );
-        rComments->startElement( FSNS( XML_mc, XML_Choice ), XML_Requires, "v2", FSEND );
+        rComments->startElement( FSNS( XML_mc, XML_AlternateContent ) );
+        rComments->startElement( FSNS( XML_mc, XML_Choice ), {{XML_Requires, "v2"}} );
         rComments->startElement( XML_commentPr,
-                XML_autoFill,       XclXmlUtils::ToPsz( mbAutoFill ),
-                XML_autoScale,      XclXmlUtils::ToPsz( mbAutoScale ),
-                XML_colHidden,      XclXmlUtils::ToPsz( mbColHidden ),
-                XML_locked,         XclXmlUtils::ToPsz( mbLocked ),
-                XML_rowHidden,      XclXmlUtils::ToPsz( mbRowHidden ),
-                XML_textHAlign,     ToHorizAlign( meTHA ),
-                XML_textVAlign,     ToVertAlign( meTVA ) ,
-                FSEND );
+                {{XML_autoFill,       XclXmlUtils::ToPsz( mbAutoFill )},
+                 {XML_autoScale,      XclXmlUtils::ToPsz( mbAutoScale )},
+                 {XML_colHidden,      XclXmlUtils::ToPsz( mbColHidden )},
+                 {XML_locked,         XclXmlUtils::ToPsz( mbLocked )},
+                 {XML_rowHidden,      XclXmlUtils::ToPsz( mbRowHidden )},
+                 {XML_textHAlign,     ToHorizAlign( meTHA )},
+                 {XML_textVAlign,     ToVertAlign( meTVA )}} );
         rComments->startElement( XML_anchor,
-                XML_moveWithCells, "false",
-                XML_sizeWithCells, "false",
-                FSEND );
-        rComments->startElement( FSNS( XML_xdr, XML_from ), FSEND );
+                {{XML_moveWithCells, "false"},
+                 {XML_sizeWithCells, "false"}} );
+        rComments->startElement( FSNS( XML_xdr, XML_from ) );
         lcl_WriteAnchorVertex( rComments, maCommentFrom );
         rComments->endElement( FSNS( XML_xdr, XML_from ) );
-        rComments->startElement( FSNS( XML_xdr, XML_to ), FSEND );
+        rComments->startElement( FSNS( XML_xdr, XML_to ) );
         lcl_WriteAnchorVertex( rComments, maCommentTo );
         rComments->endElement( FSNS( XML_xdr, XML_to ) );
         rComments->endElement( XML_anchor );
         rComments->endElement( XML_commentPr );
 
         rComments->endElement( FSNS( XML_mc, XML_Choice ) );
-        rComments->startElement( FSNS( XML_mc, XML_Fallback ), FSEND );
+        rComments->startElement( FSNS( XML_mc, XML_Fallback ) );
         // Any fallback code ?
         rComments->endElement( FSNS( XML_mc, XML_Fallback ) );
         rComments->endElement( FSNS( XML_mc, XML_AlternateContent ) );
@@ -1384,19 +1378,17 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
 
     if( rStrm.getVersion() == oox::core::ISOIEC_29500_2008 )
         rComments->startElement( XML_comments,
-            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-            FSNS( XML_xmlns, XML_mc ), "http://schemas.openxmlformats.org/markup-compatibility/2006",
-            FSNS( XML_xmlns, XML_xdr ), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
-            FSNS( XML_xmlns, XML_v2 ), "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2",
-            FSNS( XML_mc, XML_Ignorable ), "v2",
-            FSEND );
+            {{XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main"},
+             {FSNS( XML_xmlns, XML_mc ), "http://schemas.openxmlformats.org/markup-compatibility/2006"},
+             {FSNS( XML_xmlns, XML_xdr ), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"},
+             {FSNS( XML_xmlns, XML_v2 ), "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2"},
+             {FSNS( XML_mc, XML_Ignorable ), "v2"}} );
     else
         rComments->startElement( XML_comments,
-            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-            FSNS( XML_xmlns, XML_xdr ), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
-            FSEND );
+            {{XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main"},
+             {FSNS( XML_xmlns, XML_xdr ), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"}} );
 
-    rComments->startElement( XML_authors, FSEND );
+    rComments->startElement( XML_authors );
 
     typedef std::set< OUString, OUStringLess > Authors;
     Authors aAuthors;
@@ -1409,13 +1401,13 @@ void XclExpComments::SaveXml( XclExpXmlStream& rStrm )
 
     for( Authors::const_iterator b = aAuthors.begin(), e = aAuthors.end(); b != e; ++b )
     {
-        rComments->startElement( XML_author, FSEND );
+        rComments->startElement( XML_author );
         rComments->writeEscaped( *b );
         rComments->endElement( XML_author );
     }
 
     rComments->endElement( XML_authors );
-    rComments->startElement( XML_commentList, FSEND );
+    rComments->startElement( XML_commentList );
 
     Authors::const_iterator aAuthorsBegin = aAuthors.begin();
     for( size_t i = 0; i < nNotes; ++i )

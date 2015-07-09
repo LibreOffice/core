@@ -50,18 +50,17 @@ void XclExpWindow1::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->singleElement( XML_workbookView,
             // OOXTODO: XML_visibility, // ST_visibilty
             // OOXTODO: XML_minimized,  // bool
-            XML_showHorizontalScroll,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_HOR_SCROLLBAR ) ),
-            XML_showVerticalScroll,     XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_VER_SCROLLBAR ) ),
-            XML_showSheetTabs,          XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_TABBAR ) ),
-            XML_xWindow,                "0",
-            XML_yWindow,                "0",
-            XML_windowWidth,            OString::number( 0x4000 ).getStr(),
-            XML_windowHeight,           OString::number( 0x2000 ).getStr(),
-            XML_tabRatio,               OString::number( mnTabBarSize ).getStr(),
-            XML_firstSheet,             OString::number( rTabInfo.GetFirstVisXclTab() ).getStr(),
-            XML_activeTab,              OString::number( rTabInfo.GetDisplayedXclTab() ).getStr(),
+            {{XML_showHorizontalScroll,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_HOR_SCROLLBAR ) )},
+             {XML_showVerticalScroll,     XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_VER_SCROLLBAR ) )},
+             {XML_showSheetTabs,          XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_TABBAR ) )},
+             {XML_xWindow,                "0"},
+             {XML_yWindow,                "0"},
+             {XML_windowWidth,            OString::number( 0x4000 )},
+             {XML_windowHeight,           OString::number( 0x2000 )},
+             {XML_tabRatio,               OString::number( mnTabBarSize )},
+             {XML_firstSheet,             OString::number( rTabInfo.GetFirstVisXclTab() )},
+             {XML_activeTab,              OString::number( rTabInfo.GetDisplayedXclTab() )}} );
             // OOXTODO: XML_autoFilterDateGrouping,     // bool; AUTOFILTER12? 87Eh
-            FSEND );
 }
 
 void XclExpWindow1::WriteBody( XclExpStream& rStrm )
@@ -165,7 +164,7 @@ XclExpPane::XclExpPane( const XclTabViewData& rData ) :
     OSL_ENSURE( rData.IsSplit(), "XclExpPane::XclExpPane - no PANE record for unsplit view" );
 }
 
-static const char* lcl_GetActivePane( sal_uInt8 nActivePane )
+static sax_fastparser::AttrValue lcl_GetActivePane( sal_uInt8 nActivePane )
 {
     switch( nActivePane )
     {
@@ -180,12 +179,11 @@ static const char* lcl_GetActivePane( sal_uInt8 nActivePane )
 void XclExpPane::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.GetCurrentStream()->singleElement( XML_pane,
-            XML_xSplit,         OString::number( mnSplitX ).getStr(),
-            XML_ySplit,         OString::number( mnSplitY ).getStr(),
-            XML_topLeftCell,    XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), maSecondXclPos ).getStr(),
-            XML_activePane,     lcl_GetActivePane( mnActivePane ),
-            XML_state,          mbFrozenPanes ? "frozen" : "split",
-            FSEND );
+            {{XML_xSplit,         OString::number( mnSplitX )},
+             {XML_ySplit,         OString::number( mnSplitY )},
+             {XML_topLeftCell,    XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), maSecondXclPos ).toString()},
+             {XML_activePane,     lcl_GetActivePane( mnActivePane )},
+             {XML_state,          mbFrozenPanes ? sax_fastparser::AttrValue("frozen") : sax_fastparser::AttrValue("split")}} );
 }
 
 void XclExpPane::WriteBody( XclExpStream& rStrm )
@@ -224,11 +222,10 @@ XclExpSelection::XclExpSelection( const XclTabViewData& rData, sal_uInt8 nPane )
 void XclExpSelection::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.GetCurrentStream()->singleElement( XML_selection,
-            XML_pane,           lcl_GetActivePane( mnPane ),
-            XML_activeCell,     XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), maSelData.maXclCursor ).getStr(),
-            XML_activeCellId,   OString::number(  maSelData.mnCursorIdx ).getStr(),
-            XML_sqref,          XclXmlUtils::ToOString( maSelData.maXclSelection ).getStr(),
-            FSEND );
+            {{XML_pane,           lcl_GetActivePane( mnPane )},
+             {XML_activeCell,     XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), maSelData.maXclCursor ).toString()},
+             {XML_activeCellId,   OString::number(  maSelData.mnCursorIdx )},
+             {XML_sqref,          XclXmlUtils::ToOString( maSelData.maXclSelection )}} );
 }
 
 void XclExpSelection::WriteBody( XclExpStream& rStrm )
@@ -402,39 +399,38 @@ static void lcl_WriteSelection( XclExpXmlStream& rStrm, const XclTabViewData& rD
         XclExpSelection( rData, nPane ).SaveXml( rStrm );
 }
 
-static OString lcl_GetZoom( sal_uInt16 nZoom )
+static sax_fastparser::AttrValue lcl_GetZoom( sal_uInt16 nZoom )
 {
     if( nZoom )
         return OString::number( nZoom );
-    return OString( "100" );
+    return "100";
 }
 
 void XclExpTabViewSettings::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-    rWorksheet->startElement( XML_sheetViews, FSEND );
+    rWorksheet->startElement( XML_sheetViews );
     rWorksheet->startElement( XML_sheetView,
-            XML_windowProtection,           XclXmlUtils::ToPsz( maData.mbFrozenPanes ),
-            XML_showFormulas,               XclXmlUtils::ToPsz( maData.mbShowFormulas ),
-            XML_showGridLines,              XclXmlUtils::ToPsz( maData.mbShowGrid ),
-            XML_showRowColHeaders,          XclXmlUtils::ToPsz( maData.mbShowHeadings ),
-            XML_showZeros,                  XclXmlUtils::ToPsz( maData.mbShowZeros ),
-            XML_rightToLeft,                XclXmlUtils::ToPsz( maData.mbMirrored ),
-            XML_tabSelected,                XclXmlUtils::ToPsz( maData.mbSelected ),
+            {{XML_windowProtection,           XclXmlUtils::ToPsz( maData.mbFrozenPanes )},
+             {XML_showFormulas,               XclXmlUtils::ToPsz( maData.mbShowFormulas )},
+             {XML_showGridLines,              XclXmlUtils::ToPsz( maData.mbShowGrid )},
+             {XML_showRowColHeaders,          XclXmlUtils::ToPsz( maData.mbShowHeadings )},
+             {XML_showZeros,                  XclXmlUtils::ToPsz( maData.mbShowZeros )},
+             {XML_rightToLeft,                XclXmlUtils::ToPsz( maData.mbMirrored )},
+             {XML_tabSelected,                XclXmlUtils::ToPsz( maData.mbSelected )},
             // OOXTODO: XML_showRuler,
-            XML_showOutlineSymbols,         XclXmlUtils::ToPsz( maData.mbShowOutline ),
-            XML_defaultGridColor,           mnGridColorId == XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT ) ? "true" : "false",
+             {XML_showOutlineSymbols,         XclXmlUtils::ToPsz( maData.mbShowOutline )},
+             {XML_defaultGridColor,           mnGridColorId == XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT ) ? sax_fastparser::AttrValue("true") : sax_fastparser::AttrValue("false")},
             // OOXTODO: XML_showWhiteSpace,
-            XML_view,                       maData.mbPageMode ? "pageBreakPreview" : "normal",  // OOXTODO: pageLayout
-            XML_topLeftCell,                XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), maData.maFirstXclPos ).getStr(),
-            XML_colorId,                    OString::number(  rStrm.GetRoot().GetPalette().GetColorIndex( mnGridColorId ) ).getStr(),
-            XML_zoomScale,                  lcl_GetZoom( maData.mnCurrentZoom ).getStr(),
-            XML_zoomScaleNormal,            lcl_GetZoom( maData.mnNormalZoom ).getStr(),
+             {XML_view,                       maData.mbPageMode ? sax_fastparser::AttrValue("pageBreakPreview") : sax_fastparser::AttrValue("normal")},  // OOXTODO: pageLayout
+             {XML_topLeftCell,                XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), maData.maFirstXclPos ).toString()},
+             {XML_colorId,                    OString::number(  rStrm.GetRoot().GetPalette().GetColorIndex( mnGridColorId ) )},
+             {XML_zoomScale,                  lcl_GetZoom( maData.mnCurrentZoom )},
+             {XML_zoomScaleNormal,            lcl_GetZoom( maData.mnNormalZoom )},
             // OOXTODO: XML_zoomScaleSheetLayoutView,
-            XML_zoomScalePageLayoutView,    lcl_GetZoom( maData.mnPageZoom ).getStr(),
-            XML_workbookViewId,             "0",    // OOXTODO? 0-based index of document(xl/workbook.xml)/workbook/bookviews/workbookView
+             {XML_zoomScalePageLayoutView,    lcl_GetZoom( maData.mnPageZoom )},
+             {XML_workbookViewId,             "0"}} ); // OOXTODO? 0-based index of document(xl/workbook.xml)/workbook/bookviews/workbookView
                                                     //          should always be 0, as we only generate 1 such element.
-            FSEND );
     if( maData.IsSplit() )
     {
         XclExpPane aPane( maData );

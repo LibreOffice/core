@@ -23,6 +23,7 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <osl/diagnose.h>
+#include <sax/fshelper.hxx>
 #include <sax/tools/converter.hxx>
 #include "oox/token/tokens.hxx"
 
@@ -202,9 +203,9 @@ TextVerticalAdjust GetTextVerticalAdjust( sal_Int32 nToken )
     return aVertAdjust;
 }
 
-const char* GetTextVerticalAdjust( TextVerticalAdjust eAdjust )
+sax_fastparser::AttrValue GetTextVerticalAdjust( TextVerticalAdjust eAdjust )
 {
-    const char* sVerticalAdjust = 0;
+    sax_fastparser::AttrValue sVerticalAdjust;
     switch( eAdjust )
     {
         case TextVerticalAdjust_BOTTOM:
@@ -246,9 +247,9 @@ TabAlign GetTabAlign( sal_Int32 aToken )
     return nEnum;
 }
 
-const char* GetHatchPattern( const drawing::Hatch& rHatch )
+sax_fastparser::AttrValue GetHatchPattern( const drawing::Hatch& rHatch )
 {
-    const char* sPattern = 0;
+    sax_fastparser::AttrValue sPattern;
     const sal_Int32 nAngle = rHatch.Angle > 1800 ? rHatch.Angle - 1800 : rHatch.Angle;
     // Angle ~ 0° (horizontal)
     if( (nAngle >= 0 && nAngle < 225) || nAngle >= 1575 )

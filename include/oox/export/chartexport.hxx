@@ -184,7 +184,7 @@ private:
         const css::uno::Reference< css::beans::XPropertySet >& xMajorGrid,
         const css::uno::Reference< css::beans::XPropertySet >& xMinorGrid,
         sal_Int32 nAxisType,
-        const char* sAxisPos,
+        sax_fastparser::AttrValue const & sAxisPos,
         const AxisIdPair& rAxisIdPair );
     void exportAxesId( sal_Int32 nAttachedAxis );
     void exportView3D();

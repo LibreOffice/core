@@ -113,7 +113,7 @@ public:
     ShapeExport&
                         WriteLineShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     ShapeExport&
-                        WriteNonVisualDrawingProperties( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, const char* sName );
+                        WriteNonVisualDrawingProperties( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, sax_fastparser::AttrValue const & sName );
     virtual ShapeExport&
                         WriteNonVisualProperties( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     ShapeExport&

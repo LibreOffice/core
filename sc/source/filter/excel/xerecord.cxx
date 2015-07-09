@@ -78,7 +78,7 @@ void XclExpXmlStartElementRecord::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
     // TODO: no generic way to add attributes here, but it appears to
     // not be needed yet
-    rStream->startElement( mnElement, FSEND );
+    rStream->startElement( mnElement );
 }
 
 XclExpXmlEndElementRecord::XclExpXmlEndElementRecord( sal_Int32 nElement )
@@ -158,8 +158,7 @@ void XclExpValueRecord<double>::SaveXml( XclExpXmlStream& rStrm )
     if( mnAttribute == -1 )
         return;
     rStrm.WriteAttributes(
-        mnAttribute,    OString::number( maValue ).getStr(),
-        FSEND );
+        {{mnAttribute,    OString::number( maValue )}} );
 }
 
 void XclExpBoolRecord::WriteBody( XclExpStream& rStrm )
@@ -174,8 +173,7 @@ void XclExpBoolRecord::SaveXml( XclExpXmlStream& rStrm )
 
     rStrm.WriteAttributes(
             // HACK: HIDEOBJ (excdoc.cxx) should be its own object to handle XML_showObjects
-            mnAttribute, mnAttribute == XML_showObjects ? "all" : XclXmlUtils::ToPsz( mbValue ),
-            FSEND );
+            {{mnAttribute, mnAttribute == XML_showObjects ? "all" : XclXmlUtils::ToPsz( mbValue )}} );
 }
 
 XclExpDummyRecord::XclExpDummyRecord( sal_uInt16 nRecId, const void* pRecData, sal_Size nRecSize ) :

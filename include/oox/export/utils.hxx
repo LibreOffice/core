@@ -20,11 +20,11 @@
 #ifndef INCLUDED_OOX_EXPORT_UTILS_HXX
 #define INCLUDED_OOX_EXPORT_UTILS_HXX
 
-#define I32S(x) OString::number( (sal_Int32) x ).getStr()
-#define I64S(x) OString::number( (sal_Int64) x ).getStr()
-#define IS(x) OString::number( x ).getStr()
+#define I32S(x) OString::number( (sal_Int32) x )
+#define I64S(x) OString::number( (sal_Int64) x )
+#define IS(x) OString::number( x )
 #define BS(x) (x ? "1":"0")
-#define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 ).getStr()
+#define USS(x) OUStringToOString( x, RTL_TEXTENCODING_UTF8 )
 
 #ifndef DBG
 #  if OSL_DEBUG_LEVEL > 0

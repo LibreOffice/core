@@ -40,44 +40,16 @@ FastSerializerHelper::~FastSerializerHelper()
     delete mpSerializer;
 }
 
-void FastSerializerHelper::startElementInternal(sal_Int32 elementTokenId, ...)
+void FastSerializerHelper::startElement(
+    sal_Int32 elementTokenId, std::initializer_list<Attr> attrs)
 {
-    va_list args;
-    va_start( args, elementTokenId );
-    TokenValueList& rAttrList = mpSerializer->getTokenValueList();
-
-    while (true)
-    {
-        sal_Int32 nName = va_arg(args, sal_Int32);
-        if (nName == FSEND_internal)
-            break;
-        const char* pValue = va_arg(args, const char*);
-        if (pValue)
-            rAttrList.push_back(TokenValue(nName, pValue));
-    }
-
-    mpSerializer->startFastElement(elementTokenId);
-    va_end( args );
+    mpSerializer->startFastElement(elementTokenId, nullptr, &attrs);
 }
 
-void FastSerializerHelper::singleElementInternal(sal_Int32 elementTokenId, ...)
+void FastSerializerHelper::singleElement(
+    sal_Int32 elementTokenId, std::initializer_list<Attr> attrs)
 {
-    va_list args;
-    va_start( args, elementTokenId );
-    TokenValueList& rAttrList = mpSerializer->getTokenValueList();
-
-    while (true)
-    {
-        sal_Int32 nName = va_arg(args, sal_Int32);
-        if (nName == FSEND_internal)
-            break;
-        const char* pValue = va_arg(args, const char*);
-        if  (pValue)
-            rAttrList.push_back(TokenValue(nName, pValue));
-    }
-
-    mpSerializer->singleFastElement(elementTokenId);
-    va_end( args );
+    mpSerializer->singleFastElement(elementTokenId, nullptr, &attrs);
 }
 
 void FastSerializerHelper::endElement(sal_Int32 elementTokenId)
@@ -89,14 +61,14 @@ void FastSerializerHelper::startElement(sal_Int32 elementTokenId, XFastAttribute
 {
     FastAttributeList* pAttrList = dynamic_cast< FastAttributeList* >(xAttrList.get());
     assert(pAttrList);
-    mpSerializer->startFastElement(elementTokenId, pAttrList);
+    mpSerializer->startFastElement(elementTokenId, pAttrList, nullptr);
 }
 
 void FastSerializerHelper::singleElement(sal_Int32 elementTokenId, XFastAttributeListRef xAttrList)
 {
     FastAttributeList* pAttrList = dynamic_cast< FastAttributeList* >(xAttrList.get());
     assert(pAttrList);
-    mpSerializer->singleFastElement(elementTokenId, pAttrList);
+    mpSerializer->singleFastElement(elementTokenId, pAttrList, nullptr);
 }
 
 FastSerializerHelper* FastSerializerHelper::write(const char* value)

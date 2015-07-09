@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 
+#include <cassert>
 #include <string.h>
 
 #if OSL_DEBUG_LEVEL > 0
@@ -187,8 +188,10 @@ namespace sax_fastparser {
     }
 #endif
 
-    void FastSaxSerializer::startFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList )
+    void FastSaxSerializer::startFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList, std::initializer_list<Attr> const * attrs )
     {
+        assert((pAttrList == nullptr) != (attrs == nullptr));
+
         if ( !mbMarkStackEmpty )
         {
             maCachedOutputStream.flush();
@@ -208,7 +211,7 @@ namespace sax_fastparser {
         if (pAttrList)
             writeFastAttributeList(*pAttrList);
         else
-            writeTokenValueList();
+            writeAttributes(*attrs);
 
         writeBytes(sClosingBracket, N_CHARS(sClosingBracket));
     }
@@ -249,8 +252,10 @@ namespace sax_fastparser {
         writeBytes(sClosingBracket, N_CHARS(sClosingBracket));
     }
 
-    void FastSaxSerializer::singleFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList )
+    void FastSaxSerializer::singleFastElement( ::sal_Int32 Element, FastAttributeList* pAttrList, std::initializer_list<Attr> const * attrs )
     {
+        assert((pAttrList == nullptr) != (attrs == nullptr));
+
         if ( !mbMarkStackEmpty )
         {
             maCachedOutputStream.flush();
@@ -263,7 +268,7 @@ namespace sax_fastparser {
         if (pAttrList)
             writeFastAttributeList(*pAttrList);
         else
-            writeTokenValueList();
+            writeAttributes(*attrs);
 
         writeBytes(sSlashAndClosingBracket, N_CHARS(sSlashAndClosingBracket));
     }
@@ -273,32 +278,27 @@ namespace sax_fastparser {
         return maCachedOutputStream.getOutputStream();
     }
 
-    void FastSaxSerializer::writeTokenValueList()
+    void FastSaxSerializer::writeAttributes(std::initializer_list<Attr> attrs)
     {
 #ifdef DBG_UTIL
         ::std::set<OString> DebugAttributes;
 #endif
-        for (size_t j = 0; j < maTokenValues.size(); j++)
+        for (auto const & attr: attrs)
         {
-            writeBytes(sSpace, N_CHARS(sSpace));
-
-            sal_Int32 nToken = maTokenValues[j].nToken;
-            writeId(nToken);
-
 #ifdef DBG_UTIL
             // Well-formedness constraint: Unique Att Spec
-            OString const nameId(getId(nToken));
+            OString const nameId(getId(attr.id));
             assert(DebugAttributes.find(nameId) == DebugAttributes.end());
             DebugAttributes.insert(nameId);
 #endif
-
-            writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
-
-            write(maTokenValues[j].pValue, -1, true);
-
-            writeBytes(sQuote, N_CHARS(sQuote));
+            if (attr.value) {
+                writeBytes(sSpace, N_CHARS(sSpace));
+                writeId(attr.id);
+                writeBytes(sEqualSignAndQuote, N_CHARS(sEqualSignAndQuote));
+                write(attr.value.getString(), attr.value.getLength(), true);
+                writeBytes(sQuote, N_CHARS(sQuote));
+            }
         }
-        maTokenValues.clear();
     }
 
     void FastSaxSerializer::writeFastAttributeList(FastAttributeList& rAttrList)

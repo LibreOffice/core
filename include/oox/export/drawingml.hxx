@@ -104,7 +104,7 @@ protected:
     bool GetPropertyAndState( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet,
                   ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState > rXPropState,
                   const OUString& aName, ::com::sun::star::beans::PropertyState& eState );
-    const char* GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, bool& bIsField );
+    sax_fastparser::AttrValue GetFieldType( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun, bool& bIsField );
 
 
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
@@ -175,8 +175,8 @@ public:
     void WriteRun( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > rRun );
     void WriteRunProperties( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rRun, bool bIsField, sal_Int32 nElement = XML_rPr );
 
-    void WritePresetShape( const char* pShape );
-    void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const ::com::sun::star::beans::PropertyValue& rProp );
+    void WritePresetShape( sax_fastparser::AttrValue const & pShape );
+    void WritePresetShape( OString const & pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const ::com::sun::star::beans::PropertyValue& rProp );
     void WriteCustomGeometry( css::uno::Reference<css::drawing::XShape> rXShape );
     void WritePolyPolygon( const tools::PolyPolygon& rPolyPolygon );
     void WriteFill( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet );
@@ -196,7 +196,7 @@ public:
 
     static sal_uInt32 ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
 
-    static const char* GetAlignment( sal_Int32 nAlignment );
+    static sax_fastparser::AttrValue GetAlignment( sal_Int32 nAlignment );
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,

@@ -539,7 +539,7 @@ OUString XmlFilterBase::addRelation( const Reference< XOutputStream >& rOutputSt
 static void
 writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const OUString& sValue )
 {
-    pDoc->startElement( nXmlElement, FSEND );
+    pDoc->startElement( nXmlElement );
     pDoc->writeEscaped( sValue );
     pDoc->endElement( nXmlElement );
 }
@@ -547,7 +547,7 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const OUString& sValue )
 static void
 writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const sal_Int32 nValue )
 {
-    pDoc->startElement( nXmlElement, FSEND );
+    pDoc->startElement( nXmlElement );
     pDoc->write( nValue );
     pDoc->endElement( nXmlElement );
 }
@@ -559,11 +559,10 @@ writeElement( FSHelperPtr pDoc, sal_Int32 nXmlElement, const util::DateTime& rTi
         return;
 
     if ( ( nXmlElement >> 16 ) != XML_dcterms )
-        pDoc->startElement( nXmlElement, FSEND );
+        pDoc->startElement( nXmlElement );
     else
         pDoc->startElement( nXmlElement,
-                FSNS( XML_xsi, XML_type ), "dcterms:W3CDTF",
-                FSEND );
+                {{FSNS( XML_xsi, XML_type ), "dcterms:W3CDTF"}} );
 
     char pStr[200];
     snprintf( pStr, sizeof( pStr ), "%d-%02d-%02dT%02d:%02d:%02dZ",
@@ -616,12 +615,11 @@ writeCoreProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xPro
             "docProps/core.xml",
             "application/vnd.openxmlformats-package.core-properties+xml" );
     pCoreProps->startElementNS( XML_cp, XML_coreProperties,
-            FSNS( XML_xmlns, XML_cp ),          "http://schemas.openxmlformats.org/package/2006/metadata/core-properties",
-            FSNS( XML_xmlns, XML_dc ),          "http://purl.org/dc/elements/1.1/",
-            FSNS( XML_xmlns, XML_dcterms ),     "http://purl.org/dc/terms/",
-            FSNS( XML_xmlns, XML_dcmitype ),    "http://purl.org/dc/dcmitype/",
-            FSNS( XML_xmlns, XML_xsi ),         "http://www.w3.org/2001/XMLSchema-instance",
-            FSEND );
+            {{FSNS( XML_xmlns, XML_cp ),          "http://schemas.openxmlformats.org/package/2006/metadata/core-properties"},
+             {FSNS( XML_xmlns, XML_dc ),          "http://purl.org/dc/elements/1.1/"},
+             {FSNS( XML_xmlns, XML_dcterms ),     "http://purl.org/dc/terms/"},
+             {FSNS( XML_xmlns, XML_dcmitype ),    "http://purl.org/dc/dcmitype/"},
+             {FSNS( XML_xmlns, XML_xsi ),         "http://www.w3.org/2001/XMLSchema-instance"}} );
 
 #ifdef OOXTODO
     writeElement( pCoreProps, FSNS( XML_cp, XML_category ),         "category" );
@@ -659,9 +657,8 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
             "docProps/app.xml",
             "application/vnd.openxmlformats-officedocument.extended-properties+xml" );
     pAppProps->startElement( XML_Properties,
-            XML_xmlns,                  "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties",
-            FSNS( XML_xmlns, XML_vt ),  "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes",
-            FSEND );
+            {{XML_xmlns,                  "http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"},
+             {FSNS( XML_xmlns, XML_vt ),  "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"}} );
 
     writeElement( pAppProps, XML_Template,              xProperties->getTemplateName() );
 #ifdef OOXTODO
@@ -735,9 +732,8 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
             "docProps/custom.xml",
             "application/vnd.openxmlformats-officedocument.custom-properties+xml" );
     pAppProps->startElement( XML_Properties,
-            XML_xmlns,                  "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties",
-            FSNS( XML_xmlns, XML_vt ),  "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes",
-            FSEND );
+            {{XML_xmlns,                  "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties"},
+             {FSNS( XML_xmlns, XML_vt ),  "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"}} );
 
     for ( sal_Int32 n = 0; n < nbCustomProperties; ++n )
     {
@@ -746,10 +742,9 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
             OString aName = OUStringToOString( aprop[n].Name, RTL_TEXTENCODING_ASCII_US );
             // pid starts from 2 not from 1 as MS supports pid from 2
             pAppProps->startElement( XML_property ,
-                XML_fmtid,  "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}",
-                XML_pid,    OString::number(n + 2),
-                XML_name,   aName,
-                FSEND);
+                {{XML_fmtid,  "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}"},
+                 {XML_pid,    OString::number(n + 2)},
+                 {XML_name,   aName}} );
 
             switch ( ( aprop[n].Value ).getValueTypeClass() )
             {

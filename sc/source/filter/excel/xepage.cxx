@@ -56,7 +56,7 @@ void XclExpHeaderFooter::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     sal_Int32 nElement = GetRecId() == EXC_ID_HEADER ?  XML_oddHeader : XML_oddFooter;
-    rWorksheet->startElement( nElement, FSEND );
+    rWorksheet->startElement( nElement );
     rWorksheet->writeEscaped( maHdrString );
     rWorksheet->endElement( nElement );
 }
@@ -102,11 +102,11 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
     pAttrList->add( XML_fitToHeight,        OString::number(  mrData.mnFitToHeight ).getStr() );
     pAttrList->add( XML_pageOrder,          mrData.mbPrintInRows ? "overThenDown" : "downThenOver" );
     pAttrList->add( XML_orientation,        mrData.mbPortrait ? "portrait" : "landscape" );   // OOXTODO: "default"?
-    pAttrList->add( XML_usePrinterDefaults, XclXmlUtils::ToPsz( !mrData.mbValid ) );
-    pAttrList->add( XML_blackAndWhite,      XclXmlUtils::ToPsz( mrData.mbBlackWhite ) );
-    pAttrList->add( XML_draft,              XclXmlUtils::ToPsz( mrData.mbDraftQuality ) );
+    pAttrList->add( XML_usePrinterDefaults, XclXmlUtils::ToPsz( !mrData.mbValid ).getString() );
+    pAttrList->add( XML_blackAndWhite,      XclXmlUtils::ToPsz( mrData.mbBlackWhite ).getString() );
+    pAttrList->add( XML_draft,              XclXmlUtils::ToPsz( mrData.mbDraftQuality ).getString() );
     pAttrList->add( XML_cellComments,       mrData.mbPrintNotes ? "atEnd" : "none" );         // OOXTODO: "asDisplayed"?
-    pAttrList->add( XML_useFirstPageNumber, XclXmlUtils::ToPsz( mrData.mbManualStart ) );
+    pAttrList->add( XML_useFirstPageNumber, XclXmlUtils::ToPsz( mrData.mbManualStart ).getString() );
     // OOXTODO: XML_errors, // == displayed|blank|dash|NA
     pAttrList->add( XML_horizontalDpi,      OString::number(  mrData.mnHorPrintRes ).getStr() );
     pAttrList->add( XML_verticalDpi,        OString::number(  mrData.mnVerPrintRes ).getStr() );
@@ -186,18 +186,16 @@ void XclExpPageBreaks::SaveXml( XclExpXmlStream& rStrm )
     sax_fastparser::FSHelperPtr& pWorksheet = rStrm.GetCurrentStream();
     OString sNumPageBreaks = OString::number(  mrPageBreaks.size() );
     pWorksheet->startElement( nElement,
-            XML_count,              sNumPageBreaks.getStr(),
-            XML_manualBreakCount,   sNumPageBreaks.getStr(),
-            FSEND );
+            {{XML_count,              sNumPageBreaks},
+             {XML_manualBreakCount,   sNumPageBreaks}} );
     for( ScfUInt16Vec::const_iterator aIt = mrPageBreaks.begin(), aEnd = mrPageBreaks.end(); aIt != aEnd; ++aIt )
     {
         pWorksheet->singleElement( XML_brk,
-                XML_id,     OString::number(  *aIt ).getStr(),
-                XML_man,    "true",
-                XML_max,    OString::number(  mnMaxPos ).getStr(),
-                XML_min,    "0",
+                {{XML_id,     OString::number(  *aIt )},
+                 {XML_man,    "true"},
+                 {XML_max,    OString::number(  mnMaxPos )},
+                 {XML_min,    "0"}} );
                 // OOXTODO: XML_pt, "",
-                FSEND );
     }
     pWorksheet->endElement( nElement );
 }
@@ -347,10 +345,9 @@ void XclExpXmlStartHeaderFooterElementRecord::SaveXml(XclExpXmlStream& rStrm)
     sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
     rStream->startElement( mnElement,
             // OOXTODO: XML_alignWithMargins,
-            XML_differentFirst,     "false",    // OOXTODO
-            XML_differentOddEven,   "false",    // OOXTODO
+            {{XML_differentFirst,     "false"},    // OOXTODO
+             {XML_differentOddEven,   "false"}} ); // OOXTODO
             // OOXTODO: XML_scaleWithDoc
-            FSEND );
 }
 
 void XclExpPageSettings::Save( XclExpStream& rStrm )

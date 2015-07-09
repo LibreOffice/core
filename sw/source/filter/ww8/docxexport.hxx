@@ -217,7 +217,7 @@ private:
     virtual void WriteNumbering() SAL_OVERRIDE;
 
     /// Write reference to a header/foorter + the actual xml containing the text.
-    void WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, const char* pType );
+    void WriteHeaderFooter( const SwFormat& rFormat, bool bHeader, sax_fastparser::AttrValue const & pType );
 
     /// Write word/fontTable.xml.
     void WriteFonts();
