@@ -1489,22 +1489,12 @@ Any ImplIntrospectionAccess::getMaterial() throw(RuntimeException, std::exceptio
     return maInspectedObject;
 }
 
-// Hilfs-Funktion zur LowerCase-Wandlung eines OUString
-OUString toLower( const OUString& aUStr )
-{
-    // Tabelle fuer XExactName pflegen
-    OUString aOWStr( aUStr.getStr() );
-    OUString aOWLowerStr = aOWStr.toAsciiLowerCase();
-    OUString aLowerUStr( aOWLowerStr.getStr() );
-    return aLowerUStr;
-}
-
 // Methoden von XExactName
 OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName ) throw( RuntimeException, std::exception )
 {
     OUString aRetStr;
     LowerToExactNameMap::iterator aIt =
-        mpStaticImpl->maLowerToExactNameMap.find( toLower( rApproximateName ) );
+        mpStaticImpl->maLowerToExactNameMap.find( rApproximateName.toAsciiLowerCase() );
     if( !( aIt == mpStaticImpl->maLowerToExactNameMap.end() ) )
         aRetStr = (*aIt).second;
     return aRetStr;
@@ -1898,7 +1888,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                     rPropNameMap[ aPropName ] = rPropCount;
 
                     // Tabelle fuer XExactName pflegen
-                    rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
+                    rLowerToExactNameMap[ aPropName.toAsciiLowerCase() ] = aPropName;
                 }
                 else
                 {
@@ -1989,7 +1979,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         rPropNameMap[ aPropName ] = rPropCount;
 
                         // Tabelle fuer XExactName pflegen
-                        rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
+                        rLowerToExactNameMap[ aPropName.toAsciiLowerCase() ] = aPropName;
 
                         // Field merken
                         IntrospectionAccessStatic_Impl::checkInterfaceArraySize( pAccess->aInterfaceSeq1,
@@ -2169,7 +2159,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             rPropNameMap[ aPropName ] = rPropCount;
 
                             // Tabelle fuer XExactName pflegen
-                            rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
+                            rLowerToExactNameMap[ aPropName.toAsciiLowerCase() ] = aPropName;
 
                             // get-Methode merken
                             IntrospectionAccessStatic_Impl::checkInterfaceArraySize( pAccess->aInterfaceSeq1,
@@ -2359,7 +2349,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                             rPropNameMap[ aPropName ] = rPropCount;
 
                             // Tabelle fuer XExactName pflegen
-                            rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
+                            rLowerToExactNameMap[ aPropName.toAsciiLowerCase() ] = aPropName;
 
                             // set-Methode merken
                             IntrospectionAccessStatic_Impl::checkInterfaceArraySize( pAccess->aInterfaceSeq2,
@@ -2421,7 +2411,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                 rMethodNameMap[ aMethName2 ] = iAllExportedMethod;
 
                                 // Tabelle fuer XExactName pflegen
-                                rLowerToExactNameMap[ toLower( aMethName2 ) ] = aMethName2;
+                                rLowerToExactNameMap[ aMethName2.toAsciiLowerCase() ] = aMethName2;
                             }
                             else
                             {
@@ -2580,7 +2570,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
             rPropNameMap[ aPropName ] = rPropCount;
 
             // Tabelle fuer XExactName pflegen
-            rLowerToExactNameMap[ toLower( aPropName ) ] = aPropName;
+            rLowerToExactNameMap[ aPropName.toAsciiLowerCase() ] = aPropName;
 
             // Field merken
             IntrospectionAccessStatic_Impl::checkInterfaceArraySize( pAccess->aInterfaceSeq1,
