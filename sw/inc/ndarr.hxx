@@ -23,7 +23,7 @@
 #include <vector>
 #include <memory>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 

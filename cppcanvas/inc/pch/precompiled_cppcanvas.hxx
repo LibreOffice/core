@@ -36,7 +36,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <boost/bind.hpp>
 #include <memory>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <canvas/canvastools.hxx>
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>

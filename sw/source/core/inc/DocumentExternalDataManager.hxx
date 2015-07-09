@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTEXTERNALDATAMANAGER_HXX
 
 #include <IDocumentExternalData.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <sal/types.h>
 
 namespace sw {

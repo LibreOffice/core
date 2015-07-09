@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <iterator>
-#include <boost/utility.hpp>
-
 #include <oox/drawingml/fillproperties.hxx>
+
+#include <iterator>
+#include <boost/next_prior.hpp>
+
 #include <drawingml/graphicproperties.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

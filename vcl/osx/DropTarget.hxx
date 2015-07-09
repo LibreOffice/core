@@ -34,7 +34,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <premac.h>
 #import <Cocoa/Cocoa.h>

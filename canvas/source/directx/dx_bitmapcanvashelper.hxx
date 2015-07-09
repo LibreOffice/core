@@ -32,7 +32,7 @@
 #include "dx_impltools.hxx"
 #include "dx_canvashelper.hxx"
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 
 namespace dxcanvas

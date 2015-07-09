@@ -32,7 +32,7 @@
 
 #include <tools/ref.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace vcl { class Window; }
 class SfxFilter;

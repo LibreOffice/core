@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGDOCUMENT_HXX
 #define INCLUDED_SVGIO_INC_SVGIO_SVGREADER_SVGDOCUMENT_HXX
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <svgio/svgreader/svgnode.hxx>
 #include <unordered_map>
 

@@ -20,7 +20,7 @@
 #define INCLUDED_SLIDESHOW_SOURCE_INC_LISTENERCONTAINER_HXX
 
 #include <osl/mutex.hxx>
-#include <boost/utility.hpp>
+#include <boost/next_prior.hpp>
 #include <algorithm>
 #include <vector>
 

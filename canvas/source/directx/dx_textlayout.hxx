@@ -29,7 +29,7 @@
 
 #include <basegfx/vector/b2isize.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "dx_canvasfont.hxx"
 #include "dx_ibitmap.hxx"

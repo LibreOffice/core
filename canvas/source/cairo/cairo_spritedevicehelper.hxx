@@ -24,7 +24,7 @@
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBufferController.hpp>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <vcl/window.hxx>
 #include <vcl/bitmap.hxx>

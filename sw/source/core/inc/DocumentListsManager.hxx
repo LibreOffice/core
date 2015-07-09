@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTLISTSMANAGER_HXX
 
 #include <IDocumentListsAccess.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <unordered_map>
 
 class SwList;

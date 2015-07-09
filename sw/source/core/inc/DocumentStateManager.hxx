@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTSTATEMANAGER_HXX
 
 #include <IDocumentState.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 class SwDoc;
 

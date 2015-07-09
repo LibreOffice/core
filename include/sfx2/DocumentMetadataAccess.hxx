@@ -30,7 +30,7 @@
 
 #include <cppuhelper/implbase1.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <memory>
 

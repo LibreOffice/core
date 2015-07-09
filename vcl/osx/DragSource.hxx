@@ -30,7 +30,7 @@
 #include <osl/thread.h>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <premac.h>
 #import <Cocoa/Cocoa.h>

@@ -30,7 +30,7 @@
 
 #include <o3tl/vector_pool.hxx>
 #include <boost/bind.hpp>
-#include <boost/utility.hpp>
+#include <boost/next_prior.hpp>
 
 #include <algorithm>
 #include <deque>

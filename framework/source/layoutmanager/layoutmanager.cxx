@@ -80,7 +80,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <algorithm>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 //      using namespace
 using namespace ::com::sun::star;

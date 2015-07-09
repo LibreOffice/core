@@ -15,7 +15,7 @@
 #include <rtl/ref.hxx>
 #include <canvas/elapsedtime.hxx>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include "ogl_buffercontext.hxx"

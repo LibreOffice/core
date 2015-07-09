@@ -18,7 +18,7 @@
 #include <boost/bind.hpp>
 #include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>

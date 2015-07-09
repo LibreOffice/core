@@ -24,7 +24,7 @@
 #include <com/sun/star/awt/Point.hpp>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <vcl/vclptr.hxx>
 

@@ -30,7 +30,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/tools/canvastools.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include "cachedprimitivebase.hxx"
 #include "bitmapaction.hxx"
 #include "outdevstate.hxx"

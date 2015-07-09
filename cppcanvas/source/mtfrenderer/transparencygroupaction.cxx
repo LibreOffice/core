@@ -49,7 +49,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/tools/canvastools.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "transparencygroupaction.hxx"
 #include "outdevstate.hxx"

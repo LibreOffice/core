@@ -126,7 +126,7 @@
 #include <boost/bind.hpp>
 #include <boost/mem_fn.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 //  page styles
 #define SC_UNO_PAGE_LEFTBORDER      "LeftBorder"

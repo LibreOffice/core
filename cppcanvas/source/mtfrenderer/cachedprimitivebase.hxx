@@ -24,7 +24,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 
 #include <cppcanvas/canvas.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "action.hxx"
 

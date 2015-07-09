@@ -36,7 +36,7 @@
 #include "spritecanvas.hxx"
 #include "impltools.hxx"
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 
 /* Definition of CanvasFont class */

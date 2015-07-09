@@ -28,7 +28,7 @@
 #include <cppcanvas/spritecanvas.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "gdimtftools.hxx"
 #include "viewlayer.hxx"

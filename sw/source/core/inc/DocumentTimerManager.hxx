@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTTIMERMANAGER_HXX
 
 #include <IDocumentTimerAccess.hxx>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <vcl/idle.hxx>
 #include <sal/types.h>

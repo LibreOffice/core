@@ -44,7 +44,7 @@
 
 #include <memory>
 #include <boost/bind.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "textaction.hxx"
 #include "outdevstate.hxx"

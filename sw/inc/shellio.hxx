@@ -20,7 +20,7 @@
 #define INCLUDED_SW_INC_SHELLIO_HXX
 
 #include <memory>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XStorage.hpp>

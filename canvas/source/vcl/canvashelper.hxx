@@ -31,7 +31,7 @@
 #include "cachedbitmap.hxx"
 #include "outdevprovider.hxx"
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 
 namespace vclcanvas
