@@ -494,7 +494,12 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
 
     if( m_pFileView )
     {
-        OUString sFilter = GetCurFilter();
+        OUString sFilter = FILEDIALOG_FILTER_ALL;
+
+        if( m_nCurrentFilter != LISTBOX_ENTRY_NOTFOUND )
+        {
+            sFilter = m_aFilters[m_nCurrentFilter].second;
+        }
 
         m_pFileView->EndInplaceEditing( false );
         eResult = m_pFileView->Initialize( sURL, sFilter, NULL, GetBlackList() );
@@ -791,9 +796,12 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
     bool bFileDlg = ( m_eType == REMOTEDLG_TYPE_FILEDLG );
     bool bSelected = ( m_pFileView->GetSelectionCount() > 0 );
 
+    if( !sCurrentPath.endsWith( OUString( "/" ) ) )
+        sCurrentPath += OUString( "/" );
+
     if( !bSelected )
     {
-        m_sPath = sCurrentPath + "/" + INetURLObject::encode( sName, INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL );
+        m_sPath = sCurrentPath + INetURLObject::encode( sName, INetURLObject::PART_FPATH, INetURLObject::ENCODE_ALL );
     }
     else
     {
@@ -826,14 +834,11 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
 
     if ( !bExists )
     {
-        // TODO
-
-        return 0;
+        if( m_eMode == REMOTEDLG_MODE_OPEN )
+            return 0;
     }
 
-    if( bExists )
-        EndDialog( RET_OK );
-
+    EndDialog( RET_OK );
     return 1;
 }
 
@@ -899,11 +904,7 @@ OUString RemoteFilesDialog::GetCurFilter() const
 
     if( m_nCurrentFilter != LISTBOX_ENTRY_NOTFOUND )
     {
-        sFilter = m_aFilters[m_nCurrentFilter].second;
-    }
-    else
-    {
-        sFilter = FILEDIALOG_FILTER_ALL;
+        sFilter = m_aFilters[m_nCurrentFilter].first;
     }
 
     return sFilter;
@@ -967,12 +968,22 @@ std::vector<OUString> RemoteFilesDialog::GetPathList() const
 
 bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
 {
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XInteractionHandler > xInteractionHandler(
-                    InteractionHandler::createWithParent( xContext, 0 ), UNO_QUERY_THROW );
-    Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
-    ::ucbhelper::Content aContent( rURL, xEnv, xContext );
-    return aContent.isFolder();
+    try
+    {
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        Reference< XInteractionHandler > xInteractionHandler(
+                        InteractionHandler::createWithParent( xContext, 0 ), UNO_QUERY_THROW );
+        Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
+        ::ucbhelper::Content aContent( rURL, xEnv, xContext );
+
+        return aContent.isFolder();
+    }
+    catch( const Exception& )
+    {
+        // a content doesn't exist
+    }
+
+    return false;
 }
 
 sal_Int32 RemoteFilesDialog::getTargetColorDepth()
