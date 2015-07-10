@@ -34,6 +34,7 @@
 #include <cfgid.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/unique_disposing_ptr.hxx>
 #include <comphelper/processfactory.hxx>
@@ -85,10 +86,12 @@ SwDLL::SwDLL()
     if ( *ppShlPtr )
         return;
 
-    SvtModuleOptions aOpt;
+    std::unique_ptr<SvtModuleOptions> xOpt;
+    if (!utl::ConfigManager::IsAvoidConfig())
+        xOpt.reset(new SvtModuleOptions);
     SfxObjectFactory* pDocFact = 0;
     SfxObjectFactory* pGlobDocFact = 0;
-    if ( aOpt.IsWriter() )
+    if (xOpt && xOpt->IsWriter())
     {
         pDocFact = &SwDocShell::Factory();
         pGlobDocFact = &SwGlobalDocShell::Factory();
@@ -101,7 +104,7 @@ SwDLL::SwDLL()
 
     pWDocFact->SetDocumentServiceName(OUString("com.sun.star.text.WebDocument"));
 
-    if ( aOpt.IsWriter() )
+    if (xOpt && xOpt->IsWriter())
     {
         pGlobDocFact->SetDocumentServiceName(OUString("com.sun.star.text.GlobalDocument"));
         pDocFact->SetDocumentServiceName(OUString("com.sun.star.text.TextDocument"));
@@ -138,17 +141,23 @@ SwDLL::SwDLL()
     RegisterControls();
 #endif
 
-    // replace SvxAutocorrect with SwAutocorrect
-    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
-    const SvxAutoCorrect* pOld = rACfg.GetAutoCorrect();
-    rACfg.SetAutoCorrect(new SwAutoCorrect( *pOld ));
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        // replace SvxAutocorrect with SwAutocorrect
+        SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+        const SvxAutoCorrect* pOld = rACfg.GetAutoCorrect();
+        rACfg.SetAutoCorrect(new SwAutoCorrect( *pOld ));
+    }
 }
 
 SwDLL::~SwDLL()
 {
-    // fdo#86494 SwAutoCorrect must be deleted before _FinitCore
-    SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
-    rACfg.SetAutoCorrect(0); // delete SwAutoCorrect before exit handlers
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        // fdo#86494 SwAutoCorrect must be deleted before _FinitCore
+        SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
+        rACfg.SetAutoCorrect(0); // delete SwAutoCorrect before exit handlers
+    }
 
     // Pool has to be deleted before statics are
     SW_MOD()->RemoveAttrPool();

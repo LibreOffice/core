@@ -40,6 +40,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -139,6 +140,9 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponent
 
 void JobExecutor::initListeners()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
+
     // read the list of all currently registered events inside configuration.
     // e.g. "/org.openoffice.Office.Jobs/Events/<event name>"
     // We need it later to check if an incoming event request can be executed successfully

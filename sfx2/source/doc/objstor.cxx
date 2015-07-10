@@ -73,6 +73,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
 #include <svtools/sfxecode.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/securityoptions.hxx>
 #include <cppuhelper/weak.hxx>
 #include <unotools/streamwrap.hxx>
@@ -368,8 +369,17 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                     const_cast<SfxObjectShell*>( this )->SetError( ERRCODE_IO_GENERAL, OUString( OSL_LOG_PREFIX  ) );
                 }
 
-                SvtSaveOptions aSaveOpt;
-                SvtSaveOptions::ODFDefaultVersion nDefVersion = aSaveOpt.GetODFDefaultVersion();
+                SvtSaveOptions::ODFDefaultVersion nDefVersion = SvtSaveOptions::ODFVER_012;
+                bool bUseSHA1InODF12 = false;
+                bool bUseBlowfishInODF12 = false;
+
+                if (!utl::ConfigManager::IsAvoidConfig())
+                {
+                    SvtSaveOptions aSaveOpt;
+                    nDefVersion = aSaveOpt.GetODFDefaultVersion();
+                    bUseSHA1InODF12 = aSaveOpt.IsUseSHA1InODF12();
+                    bUseBlowfishInODF12 = aSaveOpt.IsUseBlowfishInODF12();
+                }
 
                 uno::Sequence< beans::NamedValue > aEncryptionAlgs( 3 );
                 aEncryptionAlgs[0].Name = "StartKeyGenerationAlgorithm";
@@ -391,12 +401,12 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                     {
                     }
 
-                    if ( !aSaveOpt.IsUseSHA1InODF12() && nDefVersion != SvtSaveOptions::ODFVER_012_EXT_COMPAT )
+                    if ( !bUseSHA1InODF12 && nDefVersion != SvtSaveOptions::ODFVER_012_EXT_COMPAT )
                     {
                         aEncryptionAlgs[0].Value <<= xml::crypto::DigestID::SHA256;
                         aEncryptionAlgs[2].Value <<= xml::crypto::DigestID::SHA256_1K;
                     }
-                    if ( !aSaveOpt.IsUseBlowfishInODF12() && nDefVersion != SvtSaveOptions::ODFVER_012_EXT_COMPAT )
+                    if ( !bUseBlowfishInODF12 && nDefVersion != SvtSaveOptions::ODFVER_012_EXT_COMPAT )
                         aEncryptionAlgs[1].Value <<= xml::crypto::CipherID::AES_CBC_W3C_PADDING;
                 }
 
@@ -533,7 +543,8 @@ bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
             aArgs[nLength].Name = "Title";
             aArgs[nLength].Value <<= OUString( GetTitle( SFX_TITLE_DETECT ) );
             xModel->attachResource( OUString(), aArgs );
-            impl_addToModelCollection(xModel);
+            if (!utl::ConfigManager::IsAvoidConfig())
+                impl_addToModelCollection(xModel);
         }
 
         SetInitialized_Impl( true );
@@ -542,8 +553,6 @@ bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 
     return false;
 }
-
-
 
 bool SfxObjectShell::ImportFromGeneratedStream_Impl(
                     const uno::Reference< io::XStream >& xStream,
@@ -3115,7 +3124,8 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 
             SetupStorage( pImp->m_xDocStorage, SOFFICE_FILEFORMAT_CURRENT, false );
             pImp->m_bCreateTempStor = false;
-            SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
+            if (!utl::ConfigManager::IsAvoidConfig())
+                SfxGetpApp()->NotifyEvent( SfxEventHint( SFX_EVENT_STORAGECHANGED, GlobalEventConfig::GetEventName(GlobalEventId::STORAGECHANGED), this ) );
         }
         catch( uno::Exception& )
         {

@@ -26,6 +26,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 
+#include <unotools/configmgr.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/random.h>
 #include <rtl/ustring.hxx>
@@ -124,9 +125,9 @@
 #endif
 
 #include <svx/hlnkitem.hxx>
+#include "swdll.hxx"
 #include "WW8Sttbf.hxx"
 #include "WW8FibData.hxx"
-
 #include <unordered_set>
 #include <memory>
 
@@ -4829,6 +4830,9 @@ bool WW8Customizations::Import( SwDocShell* pShell )
 
 bool SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const uno::Reference< container::XNameContainer >& xPrjNameCache )
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return true;
+
     SvtPathOptions aPathOpt;
     OUString aAddinPath = aPathOpt.GetAddinPath();
     uno::Sequence< OUString > sGlobalTemplates;
@@ -5141,9 +5145,12 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             }
 
 #if HAVE_FEATURE_SCRIPTING
-            BasicManager *pBasicMan = m_pDocShell->GetBasicManager();
-            if (pBasicMan)
-                pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+            if (!utl::ConfigManager::IsAvoidConfig())
+            {
+                BasicManager *pBasicMan = m_pDocShell->GetBasicManager();
+                if (pBasicMan)
+                    pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+            }
 #endif
             BasicProjImportHelper aBasicImporter( *m_pDocShell );
             // Import vba via oox filter
@@ -6039,6 +6046,35 @@ sal_uLong SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
 extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOC()
 {
     return new WW8Reader();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rURL)
+{
+    Reader *pReader = ImportDOC();
+
+    SvFileStream aFileStream(rURL, StreamMode::READ);
+    tools::SvRef<SotStorage> xStorage = new SotStorage(aFileStream);
+
+    pReader->pStrm = &aFileStream;
+    pReader->pStg = xStorage.get();
+
+    SwGlobals::ensure();
+
+    SfxObjectShellLock xDocSh(new SwDocShell(SfxObjectCreateMode::INTERNAL));
+    xDocSh->DoInitNew(0);
+    SwDoc *pD =  static_cast<SwDocShell*>((&xDocSh))->GetDoc();
+
+    SwNodeIndex aIdx(
+        *pD->GetNodes().GetEndOfContent().StartOfSectionNode(), 1);
+    if( !aIdx.GetNode().IsTextNode() )
+    {
+        pD->GetNodes().GoNext( &aIdx );
+    }
+    SwPaM aPaM( aIdx );
+    aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
+    bool bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
+    delete pReader;
+    return bRet;
 }
 
 sal_uLong WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize )

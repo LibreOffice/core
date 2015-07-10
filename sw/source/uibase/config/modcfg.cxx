@@ -31,6 +31,7 @@
 #include <itabenum.hxx>
 #include <modcfg.hxx>
 #include <fldupde.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <caption.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -1084,10 +1085,13 @@ void SwInsertConfig::Load()
         }
         else if (nProp == INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST)
         {
-            //#i61007#  initialize caption order, right now only HUNGARIAN seems to need a different order
-            SvtSysLocaleOptions aSysLocaleOptions;
-            OUString sLang = aSysLocaleOptions.GetLocaleConfigString();
-            bCaptionOrderNumberingFirst = sLang.startsWith( "hu" );
+            if (!utl::ConfigManager::IsAvoidConfig())
+            {
+                //#i61007#  initialize caption order, right now only HUNGARIAN seems to need a different order
+                SvtSysLocaleOptions aSysLocaleOptions;
+                OUString sLang = aSysLocaleOptions.GetLocaleConfigString();
+                bCaptionOrderNumberingFirst = sLang.startsWith( "hu" );
+            }
         }
 
     }

@@ -635,7 +635,7 @@ bool XPMReader::ImplGetString()
 
 // - ImportXPM -
 
-bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
+VCL_DLLPUBLIC bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
 {
     XPMReader*  pXPMReader = static_cast<XPMReader*>(rGraphic.GetContext());
     ReadState   eReadState;

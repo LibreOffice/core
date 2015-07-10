@@ -64,6 +64,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	xrmex \
 	$(if $(filter-out ANDROID IOS WNT,$(OS)), \
         svdemo \
+        fftester \
         svptest \
         svpclient \
         pixelctl ) \

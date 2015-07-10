@@ -28,6 +28,7 @@
 
 #include <svtools/soerr.hxx>
 #include <svtools/svtools.hrc>
+#include <unotools/configmgr.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/localisationoptions.hxx>
 #include <svl/intitem.hxx>
@@ -219,9 +220,12 @@ bool SfxApplication::Initialize_Impl()
     Help::EnableContextHelp();
     Help::EnableExtHelp();
 
-    SvtLocalisationOptions aLocalisation;
-    Application::EnableAutoMnemonic ( aLocalisation.IsAutoMnemonic() );
-    Application::SetDialogScaleX    ( (short)(aLocalisation.GetDialogScale()) );
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        SvtLocalisationOptions aLocalisation;
+        Application::EnableAutoMnemonic ( aLocalisation.IsAutoMnemonic() );
+        Application::SetDialogScaleX    ( (short)(aLocalisation.GetDialogScale()) );
+    }
 
     pAppData_Impl->m_pToolsErrorHdl = new SfxErrorHandler(
         RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
@@ -237,9 +241,13 @@ bool SfxApplication::Initialize_Impl()
     pAppData_Impl->m_pSbxErrorHdl = new SfxErrorHandler(
         RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END, pAppData_Impl->pBasicResMgr );
 #endif
-    //ensure instantiation of listener that manages the internal recently-used
-    //list
-    SfxPickList::ensure();
+
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        //ensure instantiation of listener that manages the internal recently-used
+        //list
+        SfxPickList::ensure();
+    }
 
     DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
     pAppData_Impl->pAppDispat = new SfxDispatcher(static_cast<SfxDispatcher*>(nullptr));

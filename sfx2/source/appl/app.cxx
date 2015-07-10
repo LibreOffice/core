@@ -42,6 +42,7 @@
 #include <svtools/ehdl.hxx>
 
 #include <svl/svdde.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -165,11 +166,11 @@ SfxApplication* SfxApplication::GetOrCreate()
         ::framework::SetActivateToolPanel( &SfxViewFrame::ActivateToolPanel );
 #if HAVE_FEATURE_DESKTOP
         Application::SetHelp( pSfxHelp );
-        if ( SvtHelpOptions().IsHelpTips() )
+        if (!utl::ConfigManager::IsAvoidConfig() && SvtHelpOptions().IsHelpTips())
             Help::EnableQuickHelp();
         else
             Help::DisableQuickHelp();
-        if ( SvtHelpOptions().IsHelpTips() && SvtHelpOptions().IsExtendedHelp() )
+        if (!utl::ConfigManager::IsAvoidConfig() && SvtHelpOptions().IsHelpTips() && SvtHelpOptions().IsExtendedHelp())
             Help::EnableBalloonHelp();
         else
             Help::DisableBalloonHelp();
@@ -182,7 +183,8 @@ SfxApplication::SfxApplication()
     : pAppData_Impl( 0 )
 {
     SetName( OUString("StarOffice") );
-    SvtViewOptions::AcquireOptions();
+    if (!utl::ConfigManager::IsAvoidConfig())
+        SvtViewOptions::AcquireOptions();
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->m_xImeStatusWindow->init();
@@ -230,7 +232,8 @@ SfxApplication::~SfxApplication()
 #endif
 
     // delete global options
-    SvtViewOptions::ReleaseOptions();
+    if (!utl::ConfigManager::IsAvoidConfig())
+        SvtViewOptions::ReleaseOptions();
 
     if ( !pAppData_Impl->bDowning )
         Deinitialize();

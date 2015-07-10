@@ -67,7 +67,7 @@ public:
 
 #endif // _XBMPRIVATE
 
-bool ImportXBM( SvStream& rStream, Graphic& rGraphic );
+VCL_DLLPUBLIC bool ImportXBM( SvStream& rStream, Graphic& rGraphic );
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_IXBM_XBMREAD_HXX
 

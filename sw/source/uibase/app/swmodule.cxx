@@ -113,6 +113,7 @@
 #include <svx/rubydialog.hxx>
 #include <svtools/colorcfg.hxx>
 
+#include <unotools/configmgr.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include <avmedia/mediaplayer.hxx>
@@ -188,10 +189,13 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     StartListening( *SfxGetpApp() );
 
-    // OD 14.02.2003 #107424# - init color configuration
-    // member <pColorConfig> is created and the color configuration is applied
-    // at the view options.
-    GetColorConfig();
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        // init color configuration
+        // member <pColorConfig> is created and the color configuration is applied
+        // at the view options.
+        GetColorConfig();
+    }
 }
 uno::Reference< scanner::XScannerManager2 >
 SwModule::GetScannerManager()
@@ -228,13 +232,13 @@ void SwDLL::RegisterFactories()
 {
     // These Id's must not be changed. Through these Id's the View (resume Documentview)
     // is created by Sfx.
-    if ( SvtModuleOptions().IsWriter() )
+    if (!utl::ConfigManager::IsAvoidConfig() && SvtModuleOptions().IsWriter())
         SwView::RegisterFactory         ( 2 );
 
 #if HAVE_FEATURE_DESKTOP
     SwWebView::RegisterFactory        ( 5 );
 
-    if ( SvtModuleOptions().IsWriter() )
+    if (!utl::ConfigManager::IsAvoidConfig() && SvtModuleOptions().IsWriter())
     {
         SwSrcView::RegisterFactory      ( 6 );
         SwPagePreview::RegisterFactory  ( 7 );

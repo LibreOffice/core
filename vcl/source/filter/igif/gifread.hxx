@@ -112,7 +112,7 @@ public:
 
 #endif // _GIFPRIVATE
 
-bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
+VCL_DLLPUBLIC bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_IGIF_GIFREAD_HXX
 

@@ -802,7 +802,7 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
     return eReadState;
 }
 
-bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
+VCL_DLLPUBLIC bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
 {
     GIFReader*  pGIFReader = static_cast<GIFReader*>(rGraphic.GetContext());
     SvStreamEndian nOldFormat = rStm.GetEndian();

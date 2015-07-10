@@ -187,9 +187,12 @@ protected:
 #define SW_STREAM_READER    1
 #define SW_STORAGE_READER   2
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rUrl);
+
 class SW_DLLPUBLIC Reader
 {
     friend class SwReader;
+    friend bool TestImportDOC(const OUString &rUrl);
     SwDoc* pTemplate;
     OUString aTemplateNm;
 
