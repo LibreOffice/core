@@ -175,9 +175,10 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         mePageKindOnLoad = pFrameView->GetPageKindOnLoad();
         mnSelectedPage = pFrameView->GetSelectedPage();
         mnSelectedPageOnLoad = pFrameView->GetSelectedPageOnLoad();
-        meStandardEditMode = pFrameView->GetViewShEditMode(PK_STANDARD);
-        meNotesEditMode = pFrameView->GetViewShEditMode(PK_NOTES);
-        meHandoutEditMode = pFrameView->GetViewShEditMode(PK_HANDOUT);
+        meEditMode = pFrameView->GetViewShEditMode();
+        // meStandardEditMode = pFrameView->GetViewShEditMode(PK_STANDARD);
+        // meNotesEditMode = pFrameView->GetViewShEditMode(PK_NOTES);
+        // meHandoutEditMode = pFrameView->GetViewShEditMode(PK_HANDOUT);
         SetViewShEditModeOnLoad(pFrameView->GetViewShEditModeOnLoad());
         mbLayerMode = pFrameView->IsLayerMode();
         mbQuickEdit = pFrameView->IsQuickEdit();
@@ -209,9 +210,10 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         mePageKindOnLoad = PK_STANDARD;
         mnSelectedPage = 0;
         mnSelectedPageOnLoad = 0;
-        meStandardEditMode = EM_PAGE;
-        meNotesEditMode = EM_PAGE;
-        meHandoutEditMode = EM_MASTERPAGE;
+        meEditMode = EM_PAGE;
+        // meStandardEditMode = EM_PAGE;
+        // meNotesEditMode = EM_PAGE;
+        // meHandoutEditMode = EM_MASTERPAGE;
         SetViewShEditModeOnLoad(EM_PAGE);
         mbLayerMode = false;
         SetEliminatePolyPoints(false);
@@ -317,43 +319,17 @@ void FrameView::Update(SdOptions* pOptions)
 /**
  * Set EditMode (Page or MasterPage) of working mode
  */
-void FrameView::SetViewShEditMode(EditMode eMode, PageKind eKind)
+void FrameView::SetViewShEditMode(EditMode eMode)
 {
-    if (eKind == PK_STANDARD)
-    {
-        meStandardEditMode = eMode;
-    }
-    else if (eKind == PK_NOTES)
-    {
-        meNotesEditMode = eMode;
-    }
-    else if (eKind == PK_HANDOUT)
-    {
-        meHandoutEditMode = eMode;
-    }
+    meEditMode = eMode;
 }
 
 /**
  * Return EditMode (Page or MasterPage) of working mode
  */
-EditMode FrameView::GetViewShEditMode(PageKind eKind)
+EditMode FrameView::GetViewShEditMode()
 {
-    EditMode eMode = EM_PAGE;
-
-    if (eKind == PK_STANDARD)
-    {
-        eMode = meStandardEditMode;
-    }
-    else if (eKind == PK_NOTES)
-    {
-        eMode = meNotesEditMode;
-    }
-    else if (eKind == PK_HANDOUT)
-    {
-        eMode = meHandoutEditMode;
-    }
-
-    return eMode;
+    return meEditMode;
 }
 
 void FrameView::SetViewShEditModeOnLoad (EditMode eMode)
@@ -445,9 +421,10 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     aUserData.addValue( sUNO_View_IsClickChangeRotation, makeAny( IsClickChangeRotation() ) );
 
     aUserData.addValue( sUNO_View_SlidesPerRow, makeAny( (sal_Int16)GetSlidesPerRow() ) );
-    aUserData.addValue( sUNO_View_EditModeStandard, makeAny( (sal_Int32)GetViewShEditMode( PK_STANDARD ) ) );
-    aUserData.addValue( sUNO_View_EditModeNotes, makeAny( (sal_Int32)GetViewShEditMode( PK_NOTES ) ) );
-    aUserData.addValue( sUNO_View_EditModeHandout, makeAny( (sal_Int32)GetViewShEditMode( PK_HANDOUT ) ) );
+    aUserData.addValue( sUNO_View_EditMode, makeAny( (sal_Int32)GetViewShEditMode() ) );
+    // aUserData.addValue( sUNO_View_EditModeStandard, makeAny( (sal_Int32)GetViewShEditMode( PK_STANDARD ) ) );
+    // aUserData.addValue( sUNO_View_EditModeNotes, makeAny( (sal_Int32)GetViewShEditMode( PK_NOTES ) ) );
+    // aUserData.addValue( sUNO_View_EditModeHandout, makeAny( (sal_Int32)GetViewShEditMode( PK_HANDOUT ) ) );
 
     {
         const Rectangle aVisArea = GetVisArea();
@@ -655,31 +632,25 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
                     SetSlidesPerRow( (sal_uInt16)nInt16 );
                 }
             }
+            else if ( pValue->Name == sUNO_View_EditMode )
+            {
+                if( pValue->Value >>= nInt32 )
+                {
+                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
+                    if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
+                        SetViewShEditMode( (EditMode)nInt32 );
+                }
+            }
+            // This one is kept for compatibility. Old value read from sUNO_View_EditModeStandard
+            // is used. New value will be written into sUNO_View_EditMode.
+            // Values from sUNO_View_EditModeNotes and sUNO_View_EditModeHangout will be ignored.
             else if ( pValue->Name == sUNO_View_EditModeStandard )
             {
                 if( pValue->Value >>= nInt32 )
                 {
                     SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
                     if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
-                        SetViewShEditMode( (EditMode)nInt32, PK_STANDARD );
-                }
-            }
-            else if ( pValue->Name == sUNO_View_EditModeNotes )
-            {
-                if( pValue->Value >>= nInt32 )
-                {
-                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
-                        SetViewShEditMode( (EditMode)nInt32, PK_NOTES );
-                }
-            }
-            else if ( pValue->Name == sUNO_View_EditModeHandout )
-            {
-                if( pValue->Value >>= nInt32 )
-                {
-                    SdDrawDocument* pDoc = dynamic_cast< SdDrawDocument* >( GetModel() );
-                    if( pDoc && pDoc->GetDocSh() && ( SfxObjectCreateMode::EMBEDDED == pDoc->GetDocSh()->GetCreateMode() ) )
-                        SetViewShEditMode( (EditMode)nInt32, PK_HANDOUT );
+                        SetViewShEditMode( (EditMode)nInt32 );
                 }
             }
             else if ( pValue->Name == sUNO_View_VisibleAreaTop )
@@ -906,13 +877,7 @@ void FrameView::ReadUserDataSequence ( const css::uno::Sequence < css::beans::Pr
             }
         }
 
-        switch (GetPageKindOnLoad())
-        {
-            case PK_STANDARD: SetViewShEditModeOnLoad(meStandardEditMode); break;
-            case PK_NOTES: SetViewShEditModeOnLoad(meNotesEditMode); break;
-            case PK_HANDOUT: SetViewShEditModeOnLoad(meHandoutEditMode); break;
-            default: SetViewShEditModeOnLoad(EM_PAGE); break;
-        }
+        SetViewShEditModeOnLoad(EM_PAGE);
 
         const Fraction aSnapGridWidthX( aSnapGridWidthXNum, aSnapGridWidthXDom );
         const Fraction aSnapGridWidthY( aSnapGridWidthYNum, aSnapGridWidthYDom );

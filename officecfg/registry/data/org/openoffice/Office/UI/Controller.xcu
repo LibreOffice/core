@@ -530,6 +530,17 @@
           <value>com.sun.star.comp.sd.SlideLayoutController</value>
         </prop>
       </node>
+      <node oor:name="DisplayMode" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DisplayMode</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.presentation.PresentationDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.sd.DisplayModeController</value>
+        </prop>
+      </node>
       <node oor:name="InsertPage" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:InsertPage</value>

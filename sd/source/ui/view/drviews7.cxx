@@ -748,9 +748,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         **********************************************************************/
         rSet.Put(SfxBoolItem(SID_PAGEMODE, true));
         rSet.Put(SfxBoolItem(SID_MASTERPAGE, false));
-        rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, false));
-        rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, false));
-        rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, false));
+        rSet.Put(SfxBoolItem(SID_SLIDE_MASTER_MODE, false));
+        rSet.Put(SfxBoolItem(SID_NOTES_MASTER_MODE, false));
+        rSet.Put(SfxBoolItem(SID_HANDOUT_MASTER_MODE, false));
 
         rSet.DisableItem (SID_INSERT_MASTER_PAGE);
         rSet.DisableItem (SID_DELETE_MASTER_PAGE);
@@ -767,22 +767,22 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         **********************************************************************/
         if (mePageKind == PK_STANDARD)
         {
-            rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, true));
-            rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, false));
-            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, false));
+            rSet.Put(SfxBoolItem(SID_SLIDE_MASTER_MODE, true));
+            rSet.Put(SfxBoolItem(SID_NOTES_MASTER_MODE, false));
+            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTER_MODE, false));
 
         }
         else if (mePageKind == PK_NOTES)
         {
-            rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, false));
-            rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, true));
-            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, false));
+            rSet.Put(SfxBoolItem(SID_SLIDE_MASTER_MODE, false));
+            rSet.Put(SfxBoolItem(SID_NOTES_MASTER_MODE, true));
+            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTER_MODE, false));
         }
         else if (mePageKind == PK_HANDOUT)
         {
-            rSet.Put(SfxBoolItem(SID_SLIDE_MASTERPAGE, false));
-            rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, false));
-            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, true));
+            rSet.Put(SfxBoolItem(SID_SLIDE_MASTER_MODE, false));
+            rSet.Put(SfxBoolItem(SID_NOTES_MASTER_MODE, false));
+            rSet.Put(SfxBoolItem(SID_HANDOUT_MASTER_MODE, true));
         }
     }
 
@@ -1556,25 +1556,27 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
 {
     //DrawView
-    rSet.Put(SfxBoolItem(SID_DIAMODE, false));
-    rSet.Put(SfxBoolItem(SID_OUTLINEMODE, false));
+    rSet.Put(SfxBoolItem(SID_SLIDE_SORTER_MODE, false));
+    rSet.Put(SfxBoolItem(SID_OUTLINE_MODE, false));
+    rSet.Put(SfxBoolItem(SID_SLIDE_MASTER_MODE, false));
+    rSet.Put(SfxBoolItem(SID_NOTES_MASTER_MODE, false));
     if (mePageKind == PK_NOTES)
     {
         rSet.Put(SfxBoolItem(SID_DRAWINGMODE, false));
-        rSet.Put(SfxBoolItem(SID_NOTESMODE, true));
-        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, false));
+        rSet.Put(SfxBoolItem(SID_NOTES_MODE, true));
+        rSet.Put(SfxBoolItem(SID_HANDOUT_MASTER_MODE, false));
     }
     else if (mePageKind == PK_HANDOUT)
     {
         rSet.Put(SfxBoolItem(SID_DRAWINGMODE, false));
-        rSet.Put(SfxBoolItem(SID_NOTESMODE, false));
-        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, true));
+        rSet.Put(SfxBoolItem(SID_NOTES_MODE, false));
+        rSet.Put(SfxBoolItem(SID_HANDOUT_MASTER_MODE, true));
     }
     else
     {
         rSet.Put(SfxBoolItem(SID_DRAWINGMODE, true));
-        rSet.Put(SfxBoolItem(SID_NOTESMODE, false));
-        rSet.Put(SfxBoolItem(SID_HANDOUTMODE, false));
+        rSet.Put(SfxBoolItem(SID_NOTES_MODE, false));
+        rSet.Put(SfxBoolItem(SID_HANDOUT_MASTER_MODE, false));
     }
 
     // Removed [GetDocSh()->GetCurrentFunction() ||] from the following
@@ -1591,33 +1593,45 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
             rSet.DisableItem( SID_DRAWINGMODE );
         }
 
-        rSet.ClearItem( SID_NOTESMODE );
-        rSet.DisableItem( SID_NOTESMODE );
+        rSet.ClearItem( SID_NOTES_MODE );
+        rSet.DisableItem( SID_NOTES_MODE );
 
-        rSet.ClearItem( SID_HANDOUTMODE );
-        rSet.DisableItem( SID_HANDOUTMODE );
+        rSet.ClearItem( SID_HANDOUT_MASTER_MODE );
+        rSet.DisableItem( SID_HANDOUT_MASTER_MODE );
 
-        rSet.ClearItem( SID_OUTLINEMODE );
-        rSet.DisableItem( SID_OUTLINEMODE );
+        rSet.ClearItem( SID_OUTLINE_MODE );
+        rSet.DisableItem( SID_OUTLINE_MODE );
 
-        rSet.ClearItem( SID_DIAMODE );
-        rSet.DisableItem( SID_DIAMODE );
+        rSet.ClearItem( SID_SLIDE_MASTER_MODE );
+        rSet.DisableItem( SID_SLIDE_MASTER_MODE );
+
+        rSet.ClearItem( SID_NOTES_MASTER_MODE );
+        rSet.DisableItem( SID_NOTES_MASTER_MODE );
+
+        rSet.ClearItem( SID_SLIDE_SORTER_MODE );
+        rSet.DisableItem( SID_SLIDE_SORTER_MODE );
     }
 
     if (GetDocSh()->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
     {
         // Outplace-Edit: do not allow switch
-        rSet.ClearItem( SID_OUTLINEMODE );
-        rSet.DisableItem( SID_OUTLINEMODE );
+        rSet.ClearItem( SID_OUTLINE_MODE );
+        rSet.DisableItem( SID_OUTLINE_MODE );
 
-        rSet.ClearItem( SID_DIAMODE );
-        rSet.DisableItem( SID_DIAMODE );
+        rSet.ClearItem( SID_SLIDE_SORTER_MODE );
+        rSet.DisableItem( SID_SLIDE_SORTER_MODE );
 
-        rSet.ClearItem( SID_NOTESMODE );
-        rSet.DisableItem( SID_NOTESMODE );
+        rSet.ClearItem( SID_NOTES_MODE );
+        rSet.DisableItem( SID_NOTES_MODE );
 
-        rSet.ClearItem( SID_HANDOUTMODE );
-        rSet.DisableItem( SID_HANDOUTMODE );
+        rSet.ClearItem( SID_HANDOUT_MASTER_MODE );
+        rSet.DisableItem( SID_HANDOUT_MASTER_MODE );
+
+        rSet.ClearItem( SID_SLIDE_MASTER_MODE );
+        rSet.DisableItem( SID_SLIDE_MASTER_MODE );
+
+        rSet.ClearItem( SID_NOTES_MASTER_MODE );
+        rSet.DisableItem( SID_NOTES_MASTER_MODE );
     }
 
     svx::ExtrusionBar::getState( mpDrawView, rSet );
