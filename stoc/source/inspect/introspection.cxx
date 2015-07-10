@@ -197,7 +197,6 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
 
     // Flags which indicate if various interfaces are present
     bool mbFastPropSet;
-    bool mbPropertySet;
     bool mbElementAccess;
     bool mbNameAccess;
     bool mbNameContainer;
@@ -270,7 +269,6 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
     maPropertyConceptSeq.realloc( ARRAY_SIZE_STEP );
 
     mbFastPropSet = false;
-    mbPropertySet = false;
     mbElementAccess = false;
     mbNameAccess = false;
     mbNameContainer = false;
@@ -1499,55 +1497,6 @@ OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName
     return aRetStr;
 }
 
-struct ClassKey {
-    ClassKey(
-        css::uno::Reference<css::beans::XPropertySetInfo> const & theProperties,
-        css::uno::Reference<css::reflection::XIdlClass> const &
-            theImplementation,
-        css::uno::Sequence< css::uno::Reference<css::reflection::XIdlClass> >
-            const & theClasses):
-        properties(theProperties), implementation(theImplementation),
-        classes(theClasses)
-    {}
-
-    css::uno::Reference<css::beans::XPropertySetInfo> properties;
-    css::uno::Reference<css::reflection::XIdlClass> implementation;
-    css::uno::Sequence< css::uno::Reference<css::reflection::XIdlClass> >
-        classes;
-};
-
-struct ClassKeyLess {
-    bool operator ()(ClassKey const & key1, ClassKey const & key2) const {
-        if (key1.properties.get() < key2.properties.get()) {
-            return true;
-        }
-        if (key1.properties.get() > key2.properties.get()) {
-            return false;
-        }
-        if (key1.implementation.get() < key2.implementation.get()) {
-            return true;
-        }
-        if (key1.implementation.get() > key2.implementation.get()) {
-            return false;
-        }
-        if (key1.classes.getLength() < key2.classes.getLength()) {
-            return true;
-        }
-        if (key1.classes.getLength() > key2.classes.getLength()) {
-            return false;
-        }
-        for (sal_Int32 i = 0; i != key1.classes.getLength(); ++i) {
-            if (key1.classes[i].get() < key2.classes[i].get()) {
-                return true;
-            }
-            if (key1.classes[i].get() > key2.classes[i].get()) {
-                return false;
-            }
-        }
-        return false;
-    }
-};
-
 struct TypeKey {
     TypeKey(
         css::uno::Reference<css::beans::XPropertySetInfo> const & theProperties,
@@ -1653,7 +1602,6 @@ private:
     virtual void SAL_CALL disposing() SAL_OVERRIDE {
         osl::MutexGuard g(m_aMutex);
         reflection_.clear();
-        classCache_.clear();
         typeCache_.clear();
     }
 
@@ -1679,7 +1627,6 @@ private:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     css::uno::Reference<css::reflection::XIdlReflection> reflection_;
-    Cache<ClassKey, ClassKeyLess> classCache_;
     Cache<TypeKey, TypeKeyLess> typeCache_;
 };
 
@@ -1731,10 +1678,8 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     Sequence< Reference<XIdlClass> >    SupportedClassSeq;
     Sequence< Type >                    SupportedTypesSeq;
     Reference<XTypeProvider>            xTypeProvider;
-    Reference<XIdlClass>                xImplClass;
     Reference<XPropertySetInfo>            xPropSetInfo;
     Reference<XPropertySet>                xPropSet;
-    bool                                bHasPropertySet = false;
 
     // Look for interfaces XTypeProvider and PropertySet
     if( eType == TypeClass_INTERFACE )
@@ -1746,66 +1691,46 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
             sal_Int32 nTypeCount = SupportedTypesSeq.getLength();
             if( nTypeCount )
             {
-                SupportedClassSeq.realloc( nTypeCount );
-                Reference<XIdlClass>* pClasses = SupportedClassSeq.getArray();
-
                 const Type* pTypes = SupportedTypesSeq.getConstArray();
                 for( sal_Int32 i = 0 ; i < nTypeCount ; i++ )
                 {
-                    OUString typeName( pTypes[i].getTypeName() );
-                    pClasses[i] = reflection->forName( typeName );
-                    if( !bHasPropertySet && typeName == "com.sun.star.beans.XPropertySet" )
-                        bHasPropertySet = true;
+                    if( pTypes[i].getTypeName() == "com.sun.star.beans.XPropertySet" )
+                    {
+                        xPropSet = Reference<XPropertySet>::query( x );
+                        break;
+                    }
                 }
-                // TODO: Caching!
             }
         } else {
             SAL_WARN(
                 "stoc",
                 "object of type \"" << aToInspectObj.getValueTypeName()
                     << "\" lacks XTypeProvider");
-            xImplClass = reflection->forName(aToInspectObj.getValueTypeName());
-            SupportedClassSeq.realloc(1);
-            SupportedClassSeq[0] = xImplClass;
+            SupportedTypesSeq = Sequence<Type>(&aToInspectObj.getValueType(), 1);
+            xPropSet = Reference<XPropertySet>::query( x );
         }
 
-        if ( bHasPropertySet )
-            xPropSet = Reference<XPropertySet>::query( x );
         // Now try to get the PropertySetInfo
         if( xPropSet.is() )
             xPropSetInfo = xPropSet->getPropertySetInfo();
+
     } else {
-        xImplClass = reflection->forName(aToInspectObj.getValueTypeName());
+        SupportedTypesSeq = Sequence<Type>(&aToInspectObj.getValueType(), 1);
     }
 
-    if (xTypeProvider.is()) {
-        TypeKey key(xPropSetInfo, SupportedTypesSeq);
-
+    {
         osl::MutexGuard g(m_aMutex);
         if (rBHelper.bDisposed || rBHelper.bInDispose) {
             throw css::lang::DisposedException(
                 getImplementationName(), static_cast<OWeakObject *>(this));
         }
+        TypeKey key(xPropSetInfo, SupportedTypesSeq);
         pAccess = typeCache_.find(key);
         if (pAccess.is()) {
             return new ImplIntrospectionAccess(aToInspectObj, pAccess);
         }
         pAccess = new IntrospectionAccessStatic_Impl(reflection);
         typeCache_.insert(key, pAccess);
-    } else if (xImplClass.is()) {
-        ClassKey key(xPropSetInfo, xImplClass, SupportedClassSeq);
-
-        osl::MutexGuard g(m_aMutex);
-        if (rBHelper.bDisposed || rBHelper.bInDispose) {
-            throw css::lang::DisposedException(
-                getImplementationName(), static_cast<OWeakObject *>(this));
-        }
-        pAccess = classCache_.find(key);
-        if (pAccess.is()) {
-            return new ImplIntrospectionAccess(aToInspectObj, pAccess);
-        }
-        pAccess = new IntrospectionAccessStatic_Impl(reflection);
-        classCache_.insert(key, pAccess);
     }
 
     // No access cached -> create new
@@ -1815,11 +1740,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
     sal_Int16* pMapTypeArray;
     sal_Int32* pPropertyConceptArray;
     sal_Int32 i;
-
-    if( !pAccess.is() )
-        pAccess = new IntrospectionAccessStatic_Impl( reflection );
-
-    pAccess->mbPropertySet = bHasPropertySet;
 
     // References to important data from pAccess
     sal_Int32& rPropCount = pAccess->mnPropCount;
@@ -1839,6 +1759,17 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
     if( eType == TypeClass_INTERFACE )
     {
+        sal_Int32 nTypeCount = SupportedTypesSeq.getLength();
+        if( nTypeCount )
+        {
+            SupportedClassSeq.realloc( nTypeCount );
+            Reference<XIdlClass>* pClasses = SupportedClassSeq.getArray();
+
+            const Type* pTypes = SupportedTypesSeq.getConstArray();
+            for( i = 0 ; i < nTypeCount ; i++ )
+                pClasses[i] = reflection->forName( pTypes[i].getTypeName() );
+        }
+
         // First look for particular interfaces that are of particular
         // importance to the introspection
 
