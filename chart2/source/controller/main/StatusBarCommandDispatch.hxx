@@ -21,7 +21,7 @@
 
 #include "CommandDispatch.hxx"
 #include "ObjectIdentifier.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
@@ -36,7 +36,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::ImplInheritanceHelper1<
+typedef ::cppu::ImplInheritanceHelper<
         CommandDispatch,
         ::com::sun::star::view::XSelectionChangeListener >
     StatusBarCommandDispatch_Base;

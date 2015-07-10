@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_RANGESELECTIONLISTENER_HXX
 
 #include "ControllerLockGuard.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XRangeSelectionListener.hpp>
 
@@ -38,7 +38,7 @@ protected:
 };
 
 class RangeSelectionListener : public
-    ::cppu::WeakImplHelper1<
+    ::cppu::WeakImplHelper<
         ::com::sun::star::sheet::XRangeSelectionListener >
 {
 public:

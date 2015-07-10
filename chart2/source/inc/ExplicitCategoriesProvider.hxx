@@ -19,8 +19,6 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_EXPLICITCATEGORIESPROVIDER_HXX
 #define INCLUDED_CHART2_SOURCE_INC_EXPLICITCATEGORIESPROVIDER_HXX
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 #include "charttoolsdllapi.hxx"

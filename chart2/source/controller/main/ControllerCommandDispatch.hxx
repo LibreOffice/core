@@ -23,7 +23,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -40,7 +40,7 @@ struct ControllerState;
 
 // #i63017# : need to implement the XSelectionChangeListener in order
 // to update the ControllerState when the selection changes.
-typedef ::cppu::ImplInheritanceHelper1<
+typedef ::cppu::ImplInheritanceHelper<
         CommandDispatch,
         ::com::sun::star::view::XSelectionChangeListener >
     ControllerCommandDispatch_Base;

@@ -21,7 +21,7 @@
 
 #include "MutexContainer.hxx"
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -34,7 +34,7 @@ namespace chart
 
 namespace impl
 {
-typedef cppu::WeakImplHelper2<
+typedef cppu::WeakImplHelper<
         ::com::sun::star::chart2::data::XLabeledDataSequence2,
         ::com::sun::star::lang::XServiceInfo >
     LabeledDataSequence_Base;

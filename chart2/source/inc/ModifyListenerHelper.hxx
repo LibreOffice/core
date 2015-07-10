@@ -24,8 +24,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include "MutexContainer.hxx"
@@ -53,7 +52,7 @@ OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::uti
  */
 class ModifyEventForwarder :
         public MutexContainer,
-        public ::cppu::WeakComponentImplHelper2<
+        public ::cppu::WeakComponentImplHelper<
             ::com::sun::star::util::XModifyBroadcaster,
             ::com::sun::star::util::XModifyListener >
 {

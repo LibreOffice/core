@@ -19,14 +19,14 @@
 #ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_LINEAR3DTRANSFORMATION_HXX
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_LINEAR3DTRANSFORMATION_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/chart2/XTransformation.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 
 namespace chart
 {
 
-class Linear3DTransformation : public ::cppu::WeakImplHelper1<
+class Linear3DTransformation : public ::cppu::WeakImplHelper<
     ::com::sun::star::chart2::XTransformation
     >
 {

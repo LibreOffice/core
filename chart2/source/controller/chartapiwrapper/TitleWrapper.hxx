@@ -23,7 +23,7 @@
 #include "ReferenceSizePropertyProvider.hxx"
 #include "Chart2ModelContact.hxx"
 #include "TitleHelper.hxx"
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -39,7 +39,7 @@ namespace chart
 namespace wrapper
 {
 
-class TitleWrapper : public ::cppu::ImplInheritanceHelper3<
+class TitleWrapper : public ::cppu::ImplInheritanceHelper<
                       WrappedPropertySet
                     , com::sun::star::drawing::XShape
                     , com::sun::star::lang::XComponent

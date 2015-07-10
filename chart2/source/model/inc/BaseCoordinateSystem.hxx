@@ -21,7 +21,7 @@
 
 #include "OPropertySet.hxx"
 #include "MutexContainer.hxx"
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -38,7 +38,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper6
+typedef ::cppu::WeakImplHelper
     < ::com::sun::star::lang::XServiceInfo,
       ::com::sun::star::chart2::XCoordinateSystem,
       ::com::sun::star::chart2::XChartTypeContainer,

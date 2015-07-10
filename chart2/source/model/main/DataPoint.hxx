@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_MAIN_DATAPOINT_HXX
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/container/XChild.hpp>
@@ -36,7 +36,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper5<
+typedef ::cppu::WeakImplHelper<
         ::com::sun::star::container::XChild,
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::util::XModifyBroadcaster,

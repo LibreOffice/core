@@ -19,14 +19,14 @@
 
 #include "ModifyListenerCallBack.hxx"
 #include "MutexContainer.hxx"
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
 namespace chart {
 
-typedef ::cppu::WeakComponentImplHelper1<
+typedef ::cppu::WeakComponentImplHelper<
         ::com::sun::star::util::XModifyListener >
     ModifyListenerCallBack_Base;
 

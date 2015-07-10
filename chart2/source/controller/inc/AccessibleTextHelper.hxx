@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_INC_ACCESSIBLETEXTHELPER_HXX
 
 #include "MutexContainer.hxx"
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
@@ -37,7 +37,7 @@ class DrawViewWrapper;
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::accessibility::XAccessibleContext >
     AccessibleTextHelper_Base;

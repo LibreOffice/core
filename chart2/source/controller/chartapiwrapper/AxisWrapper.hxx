@@ -21,7 +21,7 @@
 
 #include "WrappedPropertySet.hxx"
 #include "ReferenceSizePropertyProvider.hxx"
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/chart/XAxis.hpp>
@@ -41,7 +41,7 @@ namespace wrapper
 {
 class Chart2ModelContact;
 
-class AxisWrapper : public ::cppu::ImplInheritanceHelper5<
+class AxisWrapper : public ::cppu::ImplInheritanceHelper<
                       WrappedPropertySet
                     , com::sun::star::chart::XAxis
                     , com::sun::star::drawing::XShape

@@ -25,7 +25,7 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -44,7 +44,7 @@ namespace wrapper
 class Chart2ModelContact;
 
 class UpDownBarWrapper : public MutexContainer
-                       , public ::cppu::WeakImplHelper6
+                       , public ::cppu::WeakImplHelper
                         < ::com::sun::star::lang::XComponent
                         , ::com::sun::star::lang::XServiceInfo
                         , ::com::sun::star::beans::XPropertySet

@@ -28,7 +28,7 @@
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/eventlisteneradapter.hxx>
 #include <comphelper/uno3.hxx>
@@ -43,7 +43,7 @@ namespace wrapper
 
 class Chart2ModelContact;
 
-class ChartDocumentWrapper_Base : public ::cppu::ImplInheritanceHelper5
+class ChartDocumentWrapper_Base : public ::cppu::ImplInheritanceHelper
                                 < WrappedPropertySet
                                 , ::com::sun::star::chart::XChartDocument
                                 , ::com::sun::star::drawing::XDrawPageSupplier

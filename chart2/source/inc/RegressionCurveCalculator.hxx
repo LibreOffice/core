@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_INC_REGRESSIONCURVECALCULATOR_HXX
 #define INCLUDED_CHART2_SOURCE_INC_REGRESSIONCURVECALCULATOR_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
@@ -28,7 +28,7 @@ namespace chart
 {
 
 class RegressionCurveCalculator : public
-    cppu::WeakImplHelper1< com::sun::star::chart2::XRegressionCurveCalculator >
+    cppu::WeakImplHelper< com::sun::star::chart2::XRegressionCurveCalculator >
 {
 public:
     RegressionCurveCalculator();

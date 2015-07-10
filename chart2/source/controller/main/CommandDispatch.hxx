@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_MAIN_COMMANDDISPATCH_HXX
 
 #include "MutexContainer.hxx"
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -34,7 +34,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
         ::com::sun::star::frame::XDispatch,
         ::com::sun::star::util::XModifyListener >
     CommandDispatch_Base;

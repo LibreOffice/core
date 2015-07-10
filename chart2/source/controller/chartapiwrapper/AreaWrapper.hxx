@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_AREAWRAPPER_HXX
 
 #include "WrappedPropertySet.hxx"
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -39,7 +39,7 @@ namespace wrapper
 
 class Chart2ModelContact;
 
-class AreaWrapper : public ::cppu::ImplInheritanceHelper3<
+class AreaWrapper : public ::cppu::ImplInheritanceHelper<
                       WrappedPropertySet
                     , com::sun::star::drawing::XShape
                     , com::sun::star::lang::XComponent

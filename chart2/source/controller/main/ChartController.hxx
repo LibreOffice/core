@@ -27,7 +27,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
 
-#include <cppuhelper/implbase12.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/document/XUndoManager.hpp>
@@ -124,7 +124,7 @@ class DrawModelWrapper;
 class DrawViewWrapper;
 class ReferenceSizeProvider;
 
-class ChartController   : public ::cppu::WeakImplHelper12 <
+class ChartController   : public ::cppu::WeakImplHelper<
          ::com::sun::star::frame::XController   //comprehends XComponent (required interface)
         ,::com::sun::star::frame::XDispatchProvider     //(required interface)
         ,::com::sun::star::view::XSelectionSupplier     //(optional interface)
