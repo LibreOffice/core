@@ -120,13 +120,17 @@ String STR_UNDO_BEZCLOSE
 {
     Text [ en-US ] = "Close Polygon" ;
 };
-String STR_SLIDE_MODE
+String STR_SLIDE_SORTER_MODE
 {
     Text [ en-US ] = "Slide Sorter" ;
 };
-String STR_DRAW_MODE
+String STR_NORMAL_MODE
 {
     Text [ en-US ] = "Normal" ;
+};
+String STR_SLIDE_MASTER_MODE
+{
+    Text [ en-US ] = "Slide Master" ;
 };
 String STR_OUTLINE_MODE
 {
@@ -136,7 +140,11 @@ String STR_NOTES_MODE
 {
     Text [ en-US ] = "Notes" ;
 };
-String STR_HANDOUT_MODE
+String STR_NOTES_MASTER_MODE
+{
+    Text [ en-US ] = "Notes Master" ;
+};
+String STR_HANDOUT_MASTER_MODE
 {
     Text [ en-US ] = "Handout" ;
 };
@@ -234,7 +242,14 @@ String STR_AUTOLAYOUT_HANDOUT9
 {
     Text [ en-US ] = "Nine Slides" ;
 };
-
+String STR_DISPLAYMODE_EDITMODES
+{
+    Text [ en-US ] = "Edit Modes" ;
+};
+String STR_DISPLAYMODE_MASTERMODES
+{
+    Text [ en-US ] = "Master Modes" ;
+};
 String STR_AUTOLAYOUT_NOTES
 {
     Text [ en-US ] = "Notes" ;

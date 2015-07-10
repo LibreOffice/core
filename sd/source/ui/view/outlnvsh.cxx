@@ -538,10 +538,12 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         break;
 
         case SID_DRAWINGMODE:
-        case SID_NOTESMODE:
-        case SID_HANDOUTMODE:
-        case SID_DIAMODE:
-        case SID_OUTLINEMODE:
+        case SID_SLIDE_MASTER_MODE:
+        case SID_NOTES_MODE:
+        case SID_NOTES_MASTER_MODE:
+        case SID_HANDOUT_MASTER_MODE:
+        case SID_SLIDE_SORTER_MODE:
+        case SID_OUTLINE_MODE:
             framework::FrameworkHelper::Instance(GetViewShellBase())->HandleModeChangeSlot(
                 nSlot,
                 rReq);
@@ -724,11 +726,13 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 {
     ViewShell::GetMenuState(rSet);
 
-    rSet.Put(SfxBoolItem(SID_DIAMODE, false));
+    rSet.Put(SfxBoolItem(SID_SLIDE_SORTER_MODE, false));
     rSet.Put(SfxBoolItem(SID_DRAWINGMODE, false));
-    rSet.Put(SfxBoolItem(SID_OUTLINEMODE, true));
-    rSet.Put(SfxBoolItem(SID_NOTESMODE, false));
-    rSet.Put(SfxBoolItem(SID_HANDOUTMODE, false));
+    rSet.Put(SfxBoolItem(SID_SLIDE_MASTER_MODE, false));
+    rSet.Put(SfxBoolItem(SID_OUTLINE_MODE, true));
+    rSet.Put(SfxBoolItem(SID_NOTES_MODE, false));
+    rSet.Put(SfxBoolItem(SID_NOTES_MASTER_MODE, false));
+    rSet.Put(SfxBoolItem(SID_HANDOUT_MASTER_MODE, false));
 
     if (!mpZoomList->IsNextPossible())
     {

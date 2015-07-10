@@ -277,7 +277,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         nSelectedPage = pView->GetSelectedPage();
     }
 
-    EditMode eNewEditMode = pView->GetViewShEditMode(mePageKind);
+    EditMode eNewEditMode = pView->GetViewShEditMode(/*mePageKind*/);
     bool bNewLayerMode = pView->IsLayerMode();
 
     if(IsLayerModeActive() && bNewLayerMode)
@@ -355,7 +355,7 @@ void DrawViewShell::WriteFrameViewData()
         mpFrameView->SetSelectedPage( maTabControl->GetCurPageId() - 1 );
     }
 
-    mpFrameView->SetViewShEditMode(meEditMode, mePageKind);
+    mpFrameView->SetViewShEditMode(meEditMode);
     mpFrameView->SetLayerMode(IsLayerModeActive());
 
     SdrPageView* pPageView = mpDrawView->GetSdrPageView();
@@ -478,15 +478,15 @@ void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans
 
         if (mePageKind == PK_NOTES)
         {
-            SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetHelpId( CMD_SID_NOTESMODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_NOTESMODE );
+            SetHelpId( SID_NOTES_MODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_NOTES_MODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_NOTES_MODE );
         }
         else if (mePageKind == PK_HANDOUT)
         {
-            SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMODE );
-            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMODE );
+            SetHelpId( SID_HANDOUT_MASTER_MODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_HANDOUT_MASTER_MODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUT_MASTER_MODE );
         }
         else
         {
@@ -518,7 +518,6 @@ void DrawViewShell::ReadUserDataSequence ( const css::uno::Sequence < css::beans
 
         SetZoomRect(aVisArea);
     }
-
     ChangeEditMode (meEditMode, ! IsLayerModeActive());
     ResetActualLayer();
 }
