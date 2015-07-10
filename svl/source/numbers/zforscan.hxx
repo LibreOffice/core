@@ -144,6 +144,9 @@ public:
 
     SvNumberFormatter* GetNumberformatter() { return pFormatter; } // Access to formatter (for zformat.cxx)
 
+    /// Get type scanned (so far).
+    short GetScannedType() const { return eScannedType; }
+
 private: // Private section
     NfKeywordTable sKeyword;                    // Syntax keywords
     Color StandardColor[NF_MAX_DEFAULT_COLORS]; // Standard color array

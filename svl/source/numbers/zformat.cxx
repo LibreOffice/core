@@ -943,6 +943,22 @@ SvNumberformat::SvNumberformat(OUString& rString,
                             sBuff.insert(nPos, ";");
                             nPos++;
                         }
+                        else
+                        {
+                            // The last subformat. If it is a trailing text
+                            // format the omitted subformats act like they were
+                            // not specified and "inherited" the first format,
+                            // e.g.  0;@  behaves like  0;-0;0;@
+                            if (pSc->GetScannedType() == css::util::NumberFormat::TEXT)
+                            {
+                                // Reset conditions, reverting any set above.
+                                if (nIndex == 1)
+                                    eOp1 = NUMBERFORMAT_OP_NO;
+                                else if (nIndex == 2)
+                                    eOp2 = NUMBERFORMAT_OP_NO;
+                                nIndex = 3;
+                            }
+                        }
                         NumFor[nIndex].Enlarge(nAnz);
                         pSc->CopyInfo(&(NumFor[nIndex].Info()), nAnz);
                         // type check

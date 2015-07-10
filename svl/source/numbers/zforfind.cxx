@@ -3222,7 +3222,16 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         }
         if ( nMatchedAllStrings )
         {
-            eScannedType = eSetType;
+            // A type DEFINED means that no category could be assigned to the
+            // overall format because of mixed type subformats. Use the scan
+            // matched subformat's type if any.
+            short eForType = eSetType;
+            if ((eForType == css::util::NumberFormat::UNDEFINED || eForType == css::util::NumberFormat::DEFINED) && pFormat)
+                eForType = pFormat->GetNumForInfoScannedType( nStringScanNumFor);
+            if (eForType != css::util::NumberFormat::UNDEFINED && eForType != css::util::NumberFormat::DEFINED)
+                eScannedType = eForType;
+            else
+                eScannedType = css::util::NumberFormat::NUMBER;
         }
         else if ( bDidMatch )
         {
@@ -3250,7 +3259,15 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         }
         if ( nMatchedAllStrings )
         {
-            eScannedType = eSetType;
+            // A type DEFINED means that no category could be assigned to the
+            // overall format because of mixed type subformats. Do not override
+            // the scanned type in this case. Otherwise in IsNumberFormat() the
+            // first numeric particle would be accepted as number.
+            short eForType = eSetType;
+            if ((eForType == css::util::NumberFormat::UNDEFINED || eForType == css::util::NumberFormat::DEFINED) && pFormat)
+                eForType = pFormat->GetNumForInfoScannedType( nStringScanNumFor);
+            if (eForType != css::util::NumberFormat::UNDEFINED && eForType != css::util::NumberFormat::DEFINED)
+                eScannedType = eForType;
         }
         else if ( bWasReturn )
         {

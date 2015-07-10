@@ -277,6 +277,12 @@ public:
             return false;
         }
 
+    /** Get the scanned type of the specified subformat. */
+    short GetNumForInfoScannedType( sal_uInt16 nNumFor ) const
+    {
+        return (nNumFor < 4) ? NumFor[nNumFor].Info().eScannedType : css::util::NumberFormat::UNDEFINED;
+    }
+
     // Whether the second subformat code is really for negative numbers
     // or another limit set.
     bool IsSecondSubformatRealNegative() const
