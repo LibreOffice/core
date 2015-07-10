@@ -18,6 +18,8 @@
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <vcl/vclptr.hxx>
+
+#include <memory>
 #include <map>
 #include <set>
 #include <stack>
@@ -26,7 +28,6 @@
 #  //some problem with MacOSX and a check define
 #  undef check
 #endif
-#include <boost/ptr_container/ptr_map.hpp>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -124,7 +125,7 @@ private:
     VclBuilder(const VclBuilder&) SAL_DELETED_FUNCTION;
     VclBuilder& operator=(const VclBuilder&) SAL_DELETED_FUNCTION;
 
-    typedef boost::ptr_map<OUString, osl::Module> ModuleMap;
+    typedef std::map<OUString, std::unique_ptr<osl::Module>> ModuleMap;
 
     //We store these until the builder is deleted, that way we can use the
     //ui-previewer on custom widgets and guarantee the modules they are from
