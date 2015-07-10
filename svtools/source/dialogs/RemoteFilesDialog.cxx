@@ -687,17 +687,24 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
 IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
 {
     SvTreeListEntry* pEntry = m_pFileView->FirstSelected();
-    SvtContentEntry* pData = static_cast< SvtContentEntry* >( pEntry->GetUserData() );
 
-    if( pData->mbIsFolder )
+    if( pEntry )
     {
-        OUString sURL = m_pFileView->GetCurrentURL();
+        SvtContentEntry* pData = static_cast< SvtContentEntry* >( pEntry->GetUserData() );
 
-        OpenURL( sURL );
-    }
-    else
-    {
-        EndDialog( RET_OK );
+        if( pData )
+        {
+            if( pData->mbIsFolder )
+            {
+                OUString sURL = m_pFileView->GetCurrentURL();
+
+                OpenURL( sURL );
+            }
+            else
+            {
+                EndDialog( RET_OK );
+            }
+        }
     }
 
     return 1;
