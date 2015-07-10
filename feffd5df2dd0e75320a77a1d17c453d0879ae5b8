@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_c9c963ae",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 472,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-10T22:53:32Z",
+      "side": 1,
+      "message": "May b change it to lambda?",
+      "range": {
+        "startLine": 472,
+        "startChar": 38,
+        "endLine": 472,
+        "endChar": 44
+      },
+      "revId": "feffd5df2dd0e75320a77a1d17c453d0879ae5b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
