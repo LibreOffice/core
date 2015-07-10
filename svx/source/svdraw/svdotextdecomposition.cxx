@@ -1411,6 +1411,37 @@ void SdrTextObj::impGetScrollTextTiming(drawinglayer::animation::AnimationEntryL
     }
 }
 
+void SdrTextObj::impHandleChainingEventsDuringDecomposition(SdrOutliner &rOutliner) const
+{
+    GetTextChain()->SetNilChainingEvent(this, true);
+
+    TextChainFlow aTxtChainFlow(const_cast<SdrTextObj*>(this));
+    bool bIsOverflow;
+
+    aTxtChainFlow.CheckForFlowEvents(&rOutliner);
+
+    if (aTxtChainFlow.IsUnderflow() && !IsInEditMode())
+    {
+        // underflow-induced overflow
+        aTxtChainFlow.ExecuteUnderflow(&rOutliner);
+        bIsOverflow = aTxtChainFlow.IsOverflow();
+    } else {
+        // standard overflow (no underlow before)
+        bIsOverflow = aTxtChainFlow.IsOverflow();
+    }
+
+    if (bIsOverflow && !IsInEditMode()) {
+        // Initialize Chaining Outliner
+        SdrOutliner &rChainingOutl = pModel->GetChainingOutliner(this);
+        ImpInitDrawOutliner( rChainingOutl );
+        rChainingOutl.SetUpdateMode(true);
+        // We must pass the chaining outliner otherwise we would mess up decomposition
+        aTxtChainFlow.ExecuteOverflow(&rOutliner, &rChainingOutl);
+    }
+
+    GetTextChain()->SetNilChainingEvent(this, false);
+}
+
 void SdrTextObj::impDecomposeChainedTextPrimitive(
         drawinglayer::primitive2d::Primitive2DSequence& rTarget,
         const drawinglayer::primitive2d::SdrChainedTextPrimitive2D& rSdrChainedTextPrimitive,
@@ -1474,36 +1505,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
 
     /* Begin overflow/underflow handling */
 
-     // any parameter in the constructor?
-     // We need the outliner we get the overflow info from as well as
-     //  the outliner for "drawing" (e.g. a drawing or chaining outliner)
-     // maybe the latter ones can be passed at the time of overflow and such
-    GetTextChain()->SetNilChainingEvent(this, true);
-    TextChainFlow aTxtChainFlow(const_cast<SdrTextObj*>(this));
-    bool bIsOverflow;
-
-    aTxtChainFlow.CheckForFlowEvents(&rOutliner);
-
-    if (aTxtChainFlow.IsUnderflow() && !IsInEditMode())
-    {
-        // underflow-induced overflow
-        aTxtChainFlow.ExecuteUnderflow(&rOutliner);
-        bIsOverflow = aTxtChainFlow.IsOverflow();
-    } else {
-        // standard overflow (no underlow before)
-        bIsOverflow = aTxtChainFlow.IsOverflow();
-    }
-
-    if (bIsOverflow && !IsInEditMode()) {
-        // Initialize Chaining Outliner
-        SdrOutliner &rChainingOutl = pModel->GetChainingOutliner(this);
-        ImpInitDrawOutliner( rChainingOutl );
-        rChainingOutl.SetUpdateMode(true);
-        // We must pass the chaining outliner otherwise we would mess up decomposition
-        aTxtChainFlow.ExecuteOverflow(&rOutliner, &rChainingOutl);
-    }
-
-    GetTextChain()->SetNilChainingEvent(this, false);
+    impHandleChainingEventsDuringDecomposition(rOutliner);
 
     /* End overflow/underflow handling */
 
