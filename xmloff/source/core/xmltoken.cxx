@@ -3248,8 +3248,8 @@ namespace xmloff { namespace token {
         TOKEN( "external-data", XML_EXTERNALDATA),
 
         TOKEN( "exponent-interval",               XML_EXPONENT_INTERVAL ),
-        TOKEN( "exponent-sign",                   XML_EXPONENT_SIGN ),
-        TOKEN( "min-decimal-digits",              XML_MIN_DECIMAL_DIGITS ),
+        TOKEN( "forced-exponent-sign",            XML_FORCED_EXPONENT_SIGN ),
+        TOKEN( "min-decimal-places",              XML_MIN_DECIMAL_PLACES ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
