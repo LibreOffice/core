@@ -124,6 +124,8 @@ void MapReturn(long r3, long r4, double dret, typelib_TypeDescriptionReference* 
                 if (pReturnType->pType->nSize > 8)
                     pRegisters[1] = r4;
             }
+#else
+    (void)r4;
 #endif
     default:
             break;
@@ -185,45 +187,29 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
 
     //  fill registers
     __asm__ __volatile__ (
-                "ld   3,  0(%0)\n\t"
-                "ld   4,  8(%0)\n\t"
-                "ld   5, 16(%0)\n\t"
-                "ld   6, 24(%0)\n\t"
-                "ld   7, 32(%0)\n\t"
-                "ld   8, 40(%0)\n\t"
-                "ld   9, 48(%0)\n\t"
-                "ld  10, 56(%0)\n\t"
-                "lfd  1,  0(%1)\n\t"
-                "lfd  2,  8(%1)\n\t"
-                "lfd  3, 16(%1)\n\t"
-                "lfd  4, 24(%1)\n\t"
-                "lfd  5, 32(%1)\n\t"
-                "lfd  6, 40(%1)\n\t"
-                "lfd  7, 48(%1)\n\t"
-                "lfd  8, 56(%1)\n\t"
-                "lfd  9, 64(%1)\n\t"
-                "lfd 10, 72(%1)\n\t"
-                "lfd 11, 80(%1)\n\t"
-                "lfd 12, 88(%1)\n\t"
-                "lfd 13, 96(%1)\n\t"
-                : : "r" (pGPR), "r" (pFPR)
-              : "r0", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10",
-                  "fr1", "fr2", "fr3", "fr4", "fr5", "fr6", "fr7", "fr8", "fr9",
-                  "fr10", "fr11", "fr12", "fr13"
+                "lfd  1,  0(%0)\n\t"
+                "lfd  2,  8(%0)\n\t"
+                "lfd  3, 16(%0)\n\t"
+                "lfd  4, 24(%0)\n\t"
+                "lfd  5, 32(%0)\n\t"
+                "lfd  6, 40(%0)\n\t"
+                "lfd  7, 48(%0)\n\t"
+                "lfd  8, 56(%0)\n\t"
+                "lfd  9, 64(%0)\n\t"
+                "lfd 10, 72(%0)\n\t"
+                "lfd 11, 80(%0)\n\t"
+                "lfd 12, 88(%0)\n\t"
+                "lfd 13, 96(%0)\n\t"
+                : : "r" (pFPR)
+              : "fr1", "fr2", "fr3", "fr4", "fr5", "fr6", "fr7", "fr8", "fr9",
+                "fr10", "fr11", "fr12", "fr13"
     );
 
     // tell gcc that r3 to r11 are not available to it for doing the TOC and exception munge on the func call
     register sal_uInt64 r3 asm("r3");
     register sal_uInt64 r4 asm("r4");
-    register sal_uInt64 r5 asm("r5");
-    register sal_uInt64 r6 asm("r6");
-    register sal_uInt64 r7 asm("r7");
-    register sal_uInt64 r8 asm("r8");
-    register sal_uInt64 r9 asm("r9");
-    register sal_uInt64 r10 asm("r10");
-    register sal_uInt64 r11 asm("r11");
 
-    (*pFunc)(r3, r4, r5, r6, r7, r8, r9, r10);
+    (*pFunc)(pGPR[0], pGPR[1], pGPR[2], pGPR[3], pGPR[4], pGPR[5], pGPR[6], pGPR[7]);
 
     // get return value
     __asm__ __volatile__ (
@@ -375,7 +361,6 @@ static void cpp_call(
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
-//          uno_copyAndConvertData( pCppArgs[nPos] = alloca( 8 ), pUnoArgs[nPos], pParamTypeDescr,
             uno_copyAndConvertData( pCppArgs[nPos] = pStack, pUnoArgs[nPos], pParamTypeDescr,
                                     pThis->getBridge()->getUno2Cpp() );
                 switch (pParamTypeDescr->eTypeClass)
@@ -383,7 +368,7 @@ static void cpp_call(
                         case typelib_TypeClass_HYPER:
                         case typelib_TypeClass_UNSIGNED_HYPER:
 #if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
+                                fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
 #endif
                                 INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
@@ -391,7 +376,7 @@ static void cpp_call(
                         case typelib_TypeClass_UNSIGNED_LONG:
                         case typelib_TypeClass_ENUM:
 #if OSL_DEBUG_LEVEL > 2
-                fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
+                                fprintf(stderr, "long is %x\n", pCppArgs[nPos]);
 #endif
                                 INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
@@ -406,9 +391,11 @@ static void cpp_call(
                                 break;
                         case typelib_TypeClass_FLOAT:
                                 INSERT_FLOAT( pCppArgs[nPos], nFPR, pFPR, pStack, bOverflow );
-                break;
+                                break;
                         case typelib_TypeClass_DOUBLE:
                                 INSERT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, pStack, bOverflow );
+                                break;
+                        default:
                                 break;
                         }
 
