@@ -42,10 +42,12 @@ namespace sd {
 
 static sal_uInt16 SidArraySpell[] = {
             SID_DRAWINGMODE,
-            SID_OUTLINEMODE,
-            SID_DIAMODE,
-            SID_NOTESMODE,
-            SID_HANDOUTMODE,
+            SID_ACTIVATE_SLIDEMASTER_MODE,
+            SID_ACTIVATE_OUTLINE_MODE,
+            SID_ACTIVATE_SLIDE_SORTER_MODE,
+            SID_ACTIVATE_NOTES_MODE,
+            SID_ACTIVATE_NOTESMASTER_MODE,
+            SID_ACTIVATE_HANDOUTMASTER_MODE,
             0 };
 
 TYPEINIT1( FuSearch, FuPoor );

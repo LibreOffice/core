@@ -128,6 +128,10 @@ String STR_DRAW_MODE
 {
     Text [ en-US ] = "Normal" ;
 };
+String STR_DRAW_MASTER_MODE
+{
+    Text [ en-US ] = "Slide Master" ;
+};
 String STR_OUTLINE_MODE
 {
     Text [ en-US ] = "Outline" ;
@@ -136,9 +140,13 @@ String STR_NOTES_MODE
 {
     Text [ en-US ] = "Notes" ;
 };
-String STR_HANDOUT_MODE
+String STR_NOTES_MASTER_MODE
 {
-    Text [ en-US ] = "Handout" ;
+    Text [ en-US ] = "Notes Master" ;
+};
+String STR_HANDOUT_MASTER_MODE
+{
+    Text [ en-US ] = "Handout Master" ;
 };
 
 String STR_AUTOLAYOUT_NONE
@@ -234,7 +242,42 @@ String STR_AUTOLAYOUT_HANDOUT9
 {
     Text [ en-US ] = "Nine Slides" ;
 };
-
+String STR_DISPLAYMODE_SLIDE
+{
+    Text [ en-US ] = "Normal" ;
+};
+String STR_DISPLAYMODE_OUTLINE
+{
+    Text [ en-US ] = "Outline" ;
+};
+String STR_DISPLAYMODE_NOTES
+{
+    Text [ en-US ] = "Notes" ;
+};
+String STR_DISPLAYMODE_SLIDE_SORTER
+{
+    Text [ en-US ] = "Slide Sorter" ;
+};
+String STR_DISPLAYMODE_SLIDE_MASTER
+{
+    Text [ en-US ] = "Slide Master" ;
+};
+String STR_DISPLAYMODE_NOTES_MASTER
+{
+    Text [ en-US ] = "Notes Master" ;
+};
+String STR_DISPLAYMODE_HANDOUT_MASTER
+{
+    Text [ en-US ] = "Handout" ;
+};
+String STR_DISPLAYMODE_EDITMODES
+{
+    Text [ en-US ] = "Edit Modes" ;
+};
+String STR_DISPLAYMODE_MASTERMODES
+{
+    Text [ en-US ] = "Master Modes" ;
+};
 String STR_AUTOLAYOUT_NOTES
 {
     Text [ en-US ] = "Notes" ;

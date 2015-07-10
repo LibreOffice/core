@@ -139,9 +139,10 @@ const char sUNO_View_PreviewDrawMode[] = "PreviewDrawMode";
 const char sUNO_View_IsShowPreviewInPageMode[] = "IsShowPreviewInPageMode";
 const char sUNO_View_IsShowPreviewInMasterPageMode[] = "IsShowPreviewInMasterPageMode";
 const char sUNO_View_SetShowPreviewInOutlineMode[] = "SetShowPreviewInOutlineMode";
-const char sUNO_View_EditModeStandard[] = "EditModeStandard";
-const char sUNO_View_EditModeNotes[] = "EditModeNotes";
-const char sUNO_View_EditModeHandout[] = "EditModeHandout";
+const char sUNO_View_EditMode[] = "EditMode";
+const char sUNO_View_EditModeStandard[] = "EditModeStandard";   // To be deprecated
+// const char sUNO_View_EditModeNotes[] = "EditModeNotes";
+// const char sUNO_View_EditModeHandout[] = "EditModeHandout";
 const char sUNO_View_VisArea[] = "VisArea";
 
 const char sUNO_View_GridIsVisible[] = "GridIsVisible";
