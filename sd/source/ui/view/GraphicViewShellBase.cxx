@@ -73,10 +73,12 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
     {
         case SID_NOTES_WINDOW:
         case SID_SLIDE_SORTER_MULTI_PANE_GUI:
-        case SID_DIAMODE:
-        case SID_OUTLINEMODE:
-        case SID_NOTESMODE:
-        case SID_HANDOUTMODE:
+        case SID_ACTIVATE_SLIDE_SORTER_MODE:
+        case SID_ACTIVATE_SLIDEMASTER_MODE:
+        case SID_ACTIVATE_OUTLINE_MODE:
+        case SID_ACTIVATE_NOTES_MODE:
+        case SID_ACTIVATE_NOTESMASTER_MODE:
+        case SID_ACTIVATE_HANDOUTMASTER_MODE:
             // Prevent some Impress-only slots from being executed.
             rRequest.Cancel();
             break;

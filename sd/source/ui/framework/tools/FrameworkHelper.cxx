@@ -526,13 +526,15 @@ void FrameworkHelper::HandleModeChangeSlot (
     if ( ! mxConfigurationController.is())
         return;
 
-    switch (nSlotId)
+/*    switch (nSlotId)
     {
         case SID_DRAWINGMODE:
-        case SID_NOTESMODE:
-        case SID_HANDOUTMODE:
-        case SID_DIAMODE:
-        case SID_OUTLINEMODE:
+        case SID_ACTIVATE_NOTES_MODE:
+        case SID_ACTIVATE_OUTLINE_MODE:
+        case SID_ACTIVATE_SLIDE_SORTER_MODE:
+        case SID_ACTIVATE_SLIDEMASTER_MODE:
+        case SID_ACTIVATE_NOTESMASTER_MODE:
+        case SID_ACTIVATE_HANDOUTMASTER_MODE:
         {
             const SfxItemSet* pRequestArguments = rRequest.GetArgs();
             if (pRequestArguments)
@@ -547,7 +549,7 @@ void FrameworkHelper::HandleModeChangeSlot (
         }
         break;
     }
-
+*/
     try
     {
         if ( ! mxConfigurationController.is())
@@ -558,59 +560,70 @@ void FrameworkHelper::HandleModeChangeSlot (
         Reference<XView> xView (GetView(xPaneId));
         ::boost::shared_ptr<ViewShell> pCenterViewShell (GetViewShell(xView));
 
+        // Compute requested view
         OUString sRequestedView;
         if (bIsActive)
         {
             switch (nSlotId)
             {
-                case SID_NORMAL_MULTI_PANE_GUI:
+                // draw
                 case SID_DRAWINGMODE:
+                // impress
+                case SID_NORMAL_MULTI_PANE_GUI:
+                case SID_ACTIVATE_SLIDEMASTER_MODE:
                     sRequestedView = FrameworkHelper::msImpressViewURL;
                     break;
 
-                case SID_NOTESMODE:
+                case SID_ACTIVATE_NOTES_MODE:
+                case SID_ACTIVATE_NOTESMASTER_MODE:
                     sRequestedView = FrameworkHelper::msNotesViewURL;
                 break;
 
-                case SID_HANDOUTMODE:
+                case SID_ACTIVATE_HANDOUTMASTER_MODE:
                     sRequestedView = FrameworkHelper::msHandoutViewURL;
                     break;
 
                 case SID_SLIDE_SORTER_MULTI_PANE_GUI:
-                case SID_DIAMODE:
+                case SID_ACTIVATE_SLIDE_SORTER_MODE:
                     sRequestedView = FrameworkHelper::msSlideSorterURL;
                     break;
 
-                case SID_OUTLINEMODE:
+                case SID_ACTIVATE_OUTLINE_MODE:
                     sRequestedView = FrameworkHelper::msOutlineViewURL;
                     break;
             }
         }
 
-        if (xView.is()
-            && xView->getResourceId()->getResourceURL().equals(sRequestedView))
-        {
-            // We do not have to switch the view shell but maybe the edit mode
-            // has changed.
-            DrawViewShell* pDrawViewShell
-                = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
-            if (pDrawViewShell != NULL)
-            {
-                pCenterViewShell->Broadcast (
-                    ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
+        // Compute requested mode
+        EditMode eEMode = EM_PAGE;
+        if (nSlotId == SID_ACTIVATE_SLIDEMASTER_MODE
+            || nSlotId == SID_ACTIVATE_NOTESMASTER_MODE
+            || nSlotId == SID_ACTIVATE_HANDOUTMASTER_MODE)
+            eEMode = EM_MASTERPAGE;
+        // Ensure we have the expected view shell
+        if (!(xView.is() && xView->getResourceId()->getResourceURL().equals(sRequestedView)))
 
-                pDrawViewShell->ChangeEditMode (
-                    EM_PAGE, pDrawViewShell->IsLayerModeActive());
-
-                pCenterViewShell->Broadcast (
-                    ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
-            }
-        }
-        else
         {
             mxConfigurationController->requestResourceActivation(
                 CreateResourceId(sRequestedView, msCenterPaneURL),
                 ResourceActivationMode_REPLACE);
+        }
+
+        // Ensure we have the expected edit mode
+        // The check is only for DrawViewShell as OutlineViewShell
+        // and SlideSorterViewShell have no master mode
+        DrawViewShell* pDrawViewShell
+            = dynamic_cast<DrawViewShell*>(pCenterViewShell.get());
+        if (pDrawViewShell != NULL)
+        {
+            pCenterViewShell->Broadcast (
+                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
+
+            pDrawViewShell->ChangeEditMode (
+                eEMode, pDrawViewShell->IsLayerModeActive());
+
+            pCenterViewShell->Broadcast (
+                ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
         }
     }
     catch (RuntimeException&)
