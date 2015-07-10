@@ -274,7 +274,7 @@ enum SvXMLStyleAttrTokens
 enum SvXMLStyleElemAttrTokens
 {
     XML_TOK_ELEM_ATTR_DECIMAL_PLACES,
-    XML_TOK_ELEM_ATTR_MIN_DECIMAL_DIGITS,
+    XML_TOK_ELEM_ATTR_MIN_DECIMAL_PLACES,
     XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS,
     XML_TOK_ELEM_ATTR_GROUPING,
     XML_TOK_ELEM_ATTR_DISPLAY_FACTOR,
@@ -282,7 +282,7 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_DENOMINATOR_VALUE,
     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS,
     XML_TOK_ELEM_ATTR_EXPONENT_INTERVAL,
-    XML_TOK_ELEM_ATTR_EXPONENT_SIGN,
+    XML_TOK_ELEM_ATTR_FORCED_EXPONENT_SIGN,
     XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS,
     XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS,
     XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG,
@@ -572,7 +572,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
         {
             //  attributes for an element within a style
             { XML_NAMESPACE_NUMBER, XML_DECIMAL_PLACES,          XML_TOK_ELEM_ATTR_DECIMAL_PLACES       },
-            { XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_DIGITS,      XML_TOK_ELEM_ATTR_MIN_DECIMAL_DIGITS   },
+            { XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_PLACES,      XML_TOK_ELEM_ATTR_MIN_DECIMAL_PLACES   },
             { XML_NAMESPACE_NUMBER, XML_MIN_INTEGER_DIGITS,      XML_TOK_ELEM_ATTR_MIN_INTEGER_DIGITS   },
             { XML_NAMESPACE_NUMBER, XML_GROUPING,                XML_TOK_ELEM_ATTR_GROUPING             },
             { XML_NAMESPACE_NUMBER, XML_DISPLAY_FACTOR,          XML_TOK_ELEM_ATTR_DISPLAY_FACTOR       },
@@ -581,7 +581,7 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
             { XML_NAMESPACE_NUMBER, XML_MIN_EXPONENT_DIGITS,     XML_TOK_ELEM_ATTR_MIN_EXPONENT_DIGITS  },
             { XML_NAMESPACE_LO_EXT, XML_EXPONENT_INTERVAL,       XML_TOK_ELEM_ATTR_EXPONENT_INTERVAL    },
             { XML_NAMESPACE_NUMBER, XML_EXPONENT_INTERVAL,       XML_TOK_ELEM_ATTR_EXPONENT_INTERVAL    },
-            { XML_NAMESPACE_LO_EXT, XML_EXPONENT_SIGN,           XML_TOK_ELEM_ATTR_EXPONENT_SIGN        },
+            { XML_NAMESPACE_LO_EXT, XML_FORCED_EXPONENT_SIGN,    XML_TOK_ELEM_ATTR_FORCED_EXPONENT_SIGN },
             { XML_NAMESPACE_NUMBER, XML_MIN_NUMERATOR_DIGITS,    XML_TOK_ELEM_ATTR_MIN_NUMERATOR_DIGITS },
             { XML_NAMESPACE_NUMBER, XML_MIN_DENOMINATOR_DIGITS,  XML_TOK_ELEM_ATTR_MIN_DENOMINATOR_DIGITS },
             { XML_NAMESPACE_NUMBER, XML_RFC_LANGUAGE_TAG,        XML_TOK_ELEM_ATTR_RFC_LANGUAGE_TAG     },
@@ -948,7 +948,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nDecimals = std::min<sal_Int32>(nAttrVal, MAX_SECOND_DIGITS);
                 break;
-            case XML_TOK_ELEM_ATTR_MIN_DECIMAL_DIGITS:
+            case XML_TOK_ELEM_ATTR_MIN_DECIMAL_PLACES:
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nMinDecimalDigits = nAttrVal;
                 break;
@@ -978,7 +978,7 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if (::sax::Converter::convertNumber( nAttrVal, sValue, 0 ))
                     aNumInfo.nExpInterval = nAttrVal;
                 break;
-            case XML_TOK_ELEM_ATTR_EXPONENT_SIGN:
+            case XML_TOK_ELEM_ATTR_FORCED_EXPONENT_SIGN:
                 if (::sax::Converter::convertBool( bAttrBool, sValue ))
                     aNumInfo.bExpSign = bAttrBool;
                 break;
