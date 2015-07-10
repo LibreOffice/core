@@ -55,7 +55,8 @@ class PropertySetInfo :
     com::sun::star::uno::Sequence< com::sun::star::beans::Property >*
                                 m_pProps;
     osl::Mutex                  m_aMutex;
-    ContentImplHelper*          m_pContent;
+    css::uno::Reference<ContentImplHelper>
+                                m_xContent;
 
 private:
     bool queryProperty( const OUString& rName,
@@ -121,7 +122,8 @@ class CommandProcessorInfo :
     com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >*
                                 m_pCommands;
     osl::Mutex                  m_aMutex;
-    ContentImplHelper*          m_pContent;
+    css::uno::Reference<ContentImplHelper>
+                               m_xContent;
 
 private:
     bool queryCommand( const OUString& rName,

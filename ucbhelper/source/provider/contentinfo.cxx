@@ -47,7 +47,7 @@ PropertySetInfo::PropertySetInfo(
     ContentImplHelper* pContent )
 : m_xEnv( rxEnv ),
   m_pProps( 0 ),
-  m_pContent( pContent )
+  m_xContent( pContent )
 {
 }
 
@@ -110,7 +110,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
             try
             {
                 uno::Sequence< beans::Property > aProps
-                    = m_pContent->getProperties( m_xEnv );
+                    = m_xContent->getProperties( m_xEnv );
                 m_pProps = new uno::Sequence< beans::Property >( aProps );
             }
             catch ( uno::RuntimeException const & )
@@ -127,7 +127,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 
 
             uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
-                xSet ( m_pContent->getAdditionalPropertySet( false ) );
+                xSet ( m_xContent->getAdditionalPropertySet( false ) );
 
             if ( xSet.is() )
             {
@@ -230,7 +230,7 @@ CommandProcessorInfo::CommandProcessorInfo(
     ContentImplHelper* pContent )
 : m_xEnv( rxEnv ),
   m_pCommands( 0 ),
-  m_pContent( pContent )
+  m_xContent( pContent )
 {
 }
 
@@ -299,7 +299,7 @@ CommandProcessorInfo::getCommands()
             try
             {
                 uno::Sequence< com::sun::star::ucb::CommandInfo > aCmds
-                    = m_pContent->getCommands( m_xEnv );
+                    = m_xContent->getCommands( m_xEnv );
                 m_pCommands
                     = new uno::Sequence< com::sun::star::ucb::CommandInfo >(
                         aCmds );

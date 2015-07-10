@@ -203,10 +203,10 @@ namespace ucbhelper
 
 struct InteractionContinuation_Impl
 {
-    InteractionRequest * m_pRequest;
+    css::uno::Reference<InteractionRequest> m_xRequest;
 
     explicit InteractionContinuation_Impl( InteractionRequest * pRequest )
-    : m_pRequest( pRequest ) {}
+    : m_xRequest( pRequest ) {}
 };
 
 }
@@ -228,7 +228,7 @@ InteractionContinuation::~InteractionContinuation()
 
 void InteractionContinuation::recordSelection()
 {
-    m_pImpl->m_pRequest->setSelection( this );
+    m_pImpl->m_xRequest->setSelection( this );
 }
 
 
