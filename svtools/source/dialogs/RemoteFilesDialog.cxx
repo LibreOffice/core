@@ -92,10 +92,6 @@ public:
                 if( sPath == sNodeUrl )
                 {
                     Select( pEntry );
-
-                    if( !IsExpanded( pEntry ) )
-                        Expand( pEntry );
-
                     end = true;
                 }
                 else if( sPath.startsWith( sNodeUrl ) )
