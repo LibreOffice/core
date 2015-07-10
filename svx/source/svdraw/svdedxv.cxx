@@ -505,7 +505,7 @@ IMPL_LINK_NOARG(SdrObjEditView,ImpChainingEventHdl)
             }
 
             // We prevent to trigger further handling of overflow/underflow for pTextObj
-            pTextChain->SetNilChainingEvent(pTextObj, true);
+            pTextChain->SetNilChainingEvent(pTextObj, true); // XXX
 
             // Save previous selection pos // NOTE: It must be done to have the right CursorEvent in KeyInput
             pTextChain->SetPreChainingSel(pTextObj, pOLV->GetSelection());

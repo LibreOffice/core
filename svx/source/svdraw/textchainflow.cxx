@@ -137,6 +137,7 @@ bool TextChainFlow::IsUnderflow() const
 // XXX:Would it be possible to unify undeflow and its possibly following overrflow?
 void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 {
+    //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);
     // making whole text
     OutlinerParaObject *pNewText = impGetMergedUnderflowParaObject(pOutl);
 
@@ -146,12 +147,15 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 
     mpTargetLink->NbcSetOutlinerParaObject(pNewText);
 
+    //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
+
     // Check for new overflow
     CheckForFlowEvents(pOutl);
 }
 
 void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pOverflOutl)
 {
+    //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);
     // Leave only non overflowing text
     impLeaveOnlyNonOverflowingText(pNonOverflOutl);
 
@@ -160,6 +164,7 @@ void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pO
     {
         impMoveChainedTextToNextLink(pOverflOutl);
     }
+    //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
 }
 
 void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)

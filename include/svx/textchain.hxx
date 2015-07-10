@@ -53,15 +53,15 @@
     a##PropName = (PropDefault);
 
 #define DECL_CHAIN_PROP_INTERFACE(PropName, PropType) \
-    PropType Get##PropName (SdrTextObj *); \
-    void Set##PropName (SdrTextObj *, PropType);
+    PropType Get##PropName (const SdrTextObj *); \
+    void Set##PropName (const SdrTextObj *, PropType);
 
 #define IMPL_CHAIN_PROP_INTERFACE(PropName, PropType) \
-    PropType TextChain::Get##PropName (SdrTextObj *pTarget) { \
+    PropType TextChain::Get##PropName (const SdrTextObj *pTarget) { \
         ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget); \
         return pLinkProperties->a##PropName; \
     } \
-    void TextChain::Set##PropName (SdrTextObj *pTarget, PropType aPropParam) \
+    void TextChain::Set##PropName (const SdrTextObj *pTarget, PropType aPropParam) \
     { \
         ImpChainLinkProperties *pLinkProperties = GetLinkProperties(pTarget); \
         pLinkProperties->a##PropName = aPropParam; \
@@ -139,8 +139,8 @@ class TextChain {
     bool IsLinkInChain(SdrTextObj *) const;
     SdrTextObj *GetNextLink(SdrTextObj *) const;
 
-    ChainLinkId GetId(SdrTextObj *) const;
-    ImpChainLinkProperties *GetLinkProperties(SdrTextObj *);
+    ChainLinkId GetId(const SdrTextObj *) const;
+    ImpChainLinkProperties *GetLinkProperties(const SdrTextObj *);
 
     // Specific Link Properties
     DECL_CHAIN_PROP_INTERFACE(CursorEvent, CursorChainingEvent)
