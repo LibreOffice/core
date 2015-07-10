@@ -1322,7 +1322,11 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     short eType = pFormat->GetType() & ~css::util::NumberFormat::DEFINED;
     if (eType == 0)
     {
-        eType = css::util::NumberFormat::DEFINED;
+        // Mixed types in subformats, use first.
+        /* XXX we could choose a subformat according to fOutNumber and
+         * subformat conditions, but they may exist to suppress 0 or negative
+         * numbers so wouldn't be a safe bet. */
+        eType = pFormat->GetNumForInfoScannedType(0);
     }
 
     sal_uInt16 nOldPrec = pFormatScanner->GetStandardPrec();
