@@ -69,9 +69,10 @@
     // FREE
 #define SID_CONVERT_TO_3D_LATHE             (SID_SD_START+8)
 #define SID_DRAWINGMODE                     (SID_SD_START+9)
-#define SID_OUTLINEMODE                     (SID_SD_START+10)
-#define SID_DIAMODE                         (SID_SD_START+11)
-    // FREE
+#define SID_OUTLINE_MODE                    (SID_SD_START+10)
+#define SID_SLIDE_SORTER_MODE               (SID_SD_START+11)
+#define SID_DISPLAY_MODE                    (SID_SD_START+12)
+#define SID_TOGGLE_TABBAR_VISIBILITY        (SID_SD_START+13)
 #define SID_INSERTPAGE                      (SID_SD_START+14)
 #define SID_INSERTFILE                      (SID_SD_START+15)
 #define SID_INSERTSYMBOL                    (SID_SD_START+16)
@@ -123,18 +124,18 @@
 #define SID_ANIMATION_OBJECTS               (SID_SD_START+62)
 #define SID_ANIMATION_EFFECTS               (SID_SD_START+63)
 #define SID_PRESENTATION_LAYOUT             (SID_SD_START+64)
-// In svxids.hrc: SID_BEZIER_CONVERT            (SID_SD_START+65)
-// In svxids.hrc: SID_BEZIER_EDGE               (SID_SD_START+66)
-// In svxids.hrc: SID_BEZIER_SYMMTR             (SID_SD_START+67)
+// In svxids.hrc: SID_BEZIER_CONVERT        (SID_SD_START+65)
+// In svxids.hrc: SID_BEZIER_EDGE           (SID_SD_START+66)
+// In svxids.hrc: SID_BEZIER_SYMMTR         (SID_SD_START+67)
 #define SID_PRESENTATION_TEMPLATES          (SID_SD_START+68)
-#define SID_NOTESMODE                       (SID_SD_START+69)
-#define SID_HANDOUTMODE                     (SID_SD_START+70)
+#define SID_NOTES_MODE                      (SID_SD_START+69)
+#define SID_HANDOUT_MASTER_MODE             (SID_SD_START+70)
 #define SID_LINEEND_POLYGON                 (SID_SD_START+71)
     // FREE
 #define SID_GRAPHIC_EXPORT                  (SID_SD_START+73)
 #define SID_SWITCH_POINTEDIT                (SID_SD_START+74)
     // FREE
-// In svxids.hrc: SID_TEXTEDIT                  (SID_SD_START+76)
+// In svxids.hrc: SID_TEXTEDIT              (SID_SD_START+76)
 #define SID_SET_SNAPITEM                    (SID_SD_START+77)
     // FREE
 #define SID_DELETE_PAGE                     (SID_SD_START+80)
@@ -388,9 +389,9 @@
 #define SID_SUMMARY_PAGE                    (SID_SD_START+344)
 #define SID_LEAVE_ALL_GROUPS                (SID_SD_START+345)
     // FREE
-#define SID_SLIDE_MASTERPAGE                (SID_SD_START+348)
+#define SID_SLIDE_MASTER_MODE               (SID_SD_START+348)
 #define SID_HANDOUT_MASTERPAGE              (SID_SD_START+349)
-#define SID_NOTES_MASTERPAGE                (SID_SD_START+350)
+#define SID_NOTES_MASTER_MODE               (SID_SD_START+350)
     // FREE
 #define SID_INSERTPAGE_QUICK                (SID_SD_START+352)
     // FREE

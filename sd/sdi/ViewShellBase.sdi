@@ -52,30 +52,50 @@ interface ViewShellBaseView
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
+    SID_TOGGLE_TABBAR_VISIBILITY
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_DISPLAY_MODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
     SID_DRAWINGMODE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_DIAMODE
+    SID_SLIDE_SORTER_MODE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_OUTLINEMODE
+    SID_OUTLINE_MODE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_NOTESMODE
+    SID_NOTES_MODE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_HANDOUTMODE
+    SID_HANDOUT_MASTER_MODE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
+    ]
+    SID_SLIDE_MASTER_MODE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_NOTES_MASTER_MODE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
     ]
     SID_WIN_FULLSCREEN
     [

@@ -103,8 +103,8 @@ public:
     /** can be used to get the page that was selected on last save of this document */
     sal_uInt16 GetSelectedPageOnLoad () const { return mnSelectedPageOnLoad; }
 
-    void SetViewShEditMode(EditMode eMode, PageKind eKind);
-    EditMode GetViewShEditMode (PageKind eKind);
+    void SetViewShEditMode(EditMode eMode);
+    EditMode GetViewShEditMode ();
 
     /** Remember the edit mode of the main view shell at the time when the
         document is loaded.
@@ -184,9 +184,10 @@ private:
     sal_uInt16          mnSelectedPage;
     PageKind            mePageKindOnLoad;
     sal_uInt16          mnSelectedPageOnLoad;
-    EditMode            meStandardEditMode; ///< edit mode in drawing mode (Page/MasterPage)
-    EditMode            meNotesEditMode;    ///< edit mode in notes mode (Page/MasterPage)
-    EditMode            meHandoutEditMode;  ///< edit mode in handout mode (Page/MasterPage)
+    EditMode            meEditMode; ///< edit mode in drawing mode (Page/MasterPage)
+    // EditMode            meStandardEditMode; ///< edit mode in drawing mode (Page/MasterPage)
+    // EditMode            meNotesEditMode;    ///< edit mode in notes mode (Page/MasterPage)
+    // EditMode            meHandoutEditMode;  ///< edit mode in handout mode (Page/MasterPage)
     EditMode            meEditModeOnLoad;
     bool                mbLayerMode;        ///< layer on/off
     bool                mbQuickEdit;        ///< QuickEdit on/off
