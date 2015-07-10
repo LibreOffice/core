@@ -52,8 +52,6 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::svt;
 
-#define XMLNUM_MAX_PARTS    3
-
 struct LessuInt32
 {
     bool operator() (const sal_uInt32 rValue1, const sal_uInt32 rValue2) const
@@ -1644,11 +1642,23 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         if ( rFormat.HasTextFormat() )
         {
             //  4th part is for text -> make an "all other numbers" condition for the 3rd part
-            //  by reversing the 2nd condition
+            //  by reversing the 2nd condition.
+            //  For a trailing text format like  0;@  that has no conditions
+            //  use a "less or equal than biggest" condition for the number
+            //  part, ODF can't store subformats (style maps) without
+            //  conditions.
 
             SvNumberformatLimitOps eOp3 = NUMBERFORMAT_OP_NO;
             double fLimit3 = fLimit2;
-            switch ( eOp2 )
+            sal_uInt16 nLastPart = 2;
+            SvNumberformatLimitOps eOpLast = eOp2;
+            if (eOp2 == NUMBERFORMAT_OP_NO)
+            {
+                eOpLast = eOp1;
+                fLimit3 = fLimit1;
+                nLastPart = (eOp1 == NUMBERFORMAT_OP_NO) ? 0 : 1;
+            }
+            switch ( eOpLast )
             {
                 case NUMBERFORMAT_OP_EQ: eOp3 = NUMBERFORMAT_OP_NE; break;
                 case NUMBERFORMAT_OP_NE: eOp3 = NUMBERFORMAT_OP_EQ; break;
@@ -1656,8 +1666,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NUMBERFORMAT_OP_LE: eOp3 = NUMBERFORMAT_OP_GT; break;
                 case NUMBERFORMAT_OP_GT: eOp3 = NUMBERFORMAT_OP_LE; break;
                 case NUMBERFORMAT_OP_GE: eOp3 = NUMBERFORMAT_OP_LT; break;
-                default:
-                    break;
+                case NUMBERFORMAT_OP_NO: eOp3 = NUMBERFORMAT_OP_LE;
+                                         fLimit3 = ::std::numeric_limits<double>::max(); break;
             }
 
             if ( fLimit1 == fLimit2 &&
@@ -1670,7 +1680,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 eOp3 = NUMBERFORMAT_OP_EQ;
             }
 
-            WriteMapElement_Impl( eOp3, fLimit3, nKey, 2 );
+            WriteMapElement_Impl( eOp3, fLimit3, nKey, nLastPart );
         }
     }
 }
@@ -1679,11 +1689,17 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
 void SvXMLNumFmtExport::ExportFormat_Impl( const SvNumberformat& rFormat, sal_uInt32 nKey )
 {
+    const sal_uInt16 XMLNUM_MAX_PARTS = 4;
+    bool bParts[XMLNUM_MAX_PARTS] = { false, false, false, false };
     sal_uInt16 nUsedParts = 0;
-    sal_uInt16 nPart;
-    for (nPart=0; nPart<XMLNUM_MAX_PARTS; nPart++)
-        if (rFormat.GetNumForType( nPart, 0, false ) != 0)
-            nUsedParts = nPart+1;
+    for (sal_uInt16 nPart=0; nPart<XMLNUM_MAX_PARTS; ++nPart)
+    {
+        if (rFormat.GetNumForInfoScannedType( nPart) != css::util::NumberFormat::UNDEFINED)
+        {
+            bParts[nPart] = true;
+            nUsedParts = nPart + 1;
+        }
+    }
 
     SvNumberformatLimitOps eOp1, eOp2;
     double fLimit1, fLimit2;
@@ -1691,17 +1707,32 @@ void SvXMLNumFmtExport::ExportFormat_Impl( const SvNumberformat& rFormat, sal_uI
 
     //  if conditions are set, even empty formats must be written
 
-    if ( eOp1 != NUMBERFORMAT_OP_NO && nUsedParts < 2 )
-        nUsedParts = 2;
-    if ( eOp2 != NUMBERFORMAT_OP_NO && nUsedParts < 3 )
-        nUsedParts = 3;
-    if ( rFormat.HasTextFormat() && nUsedParts < 4 )
-        nUsedParts = 4;
-
-    for (nPart=0; nPart<nUsedParts; nPart++)
+    if ( eOp1 != NUMBERFORMAT_OP_NO )
     {
-        bool bDefault = ( nPart+1 == nUsedParts );          // last = default
-        ExportPart_Impl( rFormat, nKey, nPart, bDefault );
+        bParts[1] = true;
+        if (nUsedParts < 2)
+            nUsedParts = 2;
+    }
+    if ( eOp2 != NUMBERFORMAT_OP_NO )
+    {
+        bParts[2] = true;
+        if (nUsedParts < 3)
+            nUsedParts = 3;
+    }
+    if ( rFormat.HasTextFormat() )
+    {
+        bParts[3] = true;
+        if (nUsedParts < 4)
+            nUsedParts = 4;
+    }
+
+    for (sal_uInt16 nPart=0; nPart<XMLNUM_MAX_PARTS; ++nPart)
+    {
+        if (bParts[nPart])
+        {
+            bool bDefault = ( nPart+1 == nUsedParts );          // last = default
+            ExportPart_Impl( rFormat, nKey, nPart, bDefault );
+        }
     }
 }
 
