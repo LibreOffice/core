@@ -1735,14 +1735,19 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                 }
                 break;
             }
-            nPos += nRSize * 2;
-             if ( nPos <= nEnd )
-                 pStm->Seek( nPos );
-             else
-             {
-                 pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                 bRet = false;
-             }
+
+            const sal_uInt32 nAvailableBytes = nEnd - nPos;
+            const sal_uInt32 nMaxPossibleRecordSize = nAvailableBytes/2;
+            if (nRSize <= nMaxPossibleRecordSize)
+            {
+                nPos += nRSize * 2;
+                pStm->Seek( nPos );
+            }
+            else
+            {
+                pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                bRet = false;
+            }
         }
     }
     else
