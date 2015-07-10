@@ -769,7 +769,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
             token ++;
         }
 
-        if( token < vec.size() && vec[token] == "(" )
+        if( token < vec.size() && vec[token] != "(" )
         {
             // it is a table or a function name
             OStringBuffer buf(128);
