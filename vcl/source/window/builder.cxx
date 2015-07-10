@@ -1751,7 +1751,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
 #else
                 pModule->loadRelative(&thisModule, sModule);
 #endif
-                aI = m_aModuleMap.insert(sModule, pModule).first;
+                aI = m_aModuleMap.insert(std::make_pair(sModule, std::unique_ptr<osl::Module>(pModule))).first;
             }
             customMakeWidget pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
 #else
