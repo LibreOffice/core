@@ -20,9 +20,7 @@
 #ifndef INCLUDED_VCL_COMBOBOX_HXX
 #define INCLUDED_VCL_COMBOBOX_HXX
 
-#include <boost/signals2/connection.hpp>
 #include <vcl/dllapi.h>
-#include <vcl/ctrl.hxx>
 #include <vcl/combobox.h>
 #include <vcl/edit.hxx>
 
@@ -35,45 +33,8 @@ class ImplBtn;
 class VCL_DLLPUBLIC ComboBox : public Edit
 {
 private:
-    VclPtr<Edit>                mpSubEdit;
-    VclPtr<ImplListBox>         mpImplLB;
-    VclPtr<ImplBtn>             mpBtn;
-    VclPtr<ImplListBoxFloatingWindow>  mpFloatWin;
-    sal_uInt16                  mnDDHeight;
-    sal_Unicode                 mcMultiSep;
-    bool                        mbDDAutoSize        : 1;
-    bool                        mbSyntheticModify   : 1;
-    bool                        mbMatchCase         : 1;
-    sal_Int32                   m_nMaxWidthChars;
-    Link<>                      maSelectHdl;
-    Link<>                      maDoubleClickHdl;
-    boost::signals2::scoped_connection mAutocompleteConnection;
-
-    struct ComboBoxBounds
-    {
-        Point aSubEditPos;
-        Size aSubEditSize;
-
-        Point aButtonPos;
-        Size aButtonSize;
-    };
-
-private:
-    SAL_DLLPRIVATE void     ImplInitComboBoxData();
-    SAL_DLLPRIVATE void     ImplUpdateFloatSelection();
-    SAL_DLLPRIVATE ComboBoxBounds calcComboBoxDropDownComponentBounds(
-        const Size &rOutSize, const Size &rBorderOutSize) const;
-
-    DECL_DLLPRIVATE_LINK(   ImplSelectHdl, void* );
-    DECL_DLLPRIVATE_LINK(   ImplCancelHdl, void* );
-    DECL_DLLPRIVATE_LINK(   ImplDoubleClickHdl, void* );
-    DECL_DLLPRIVATE_LINK(   ImplPopupModeEndHdl, void* );
-    DECL_DLLPRIVATE_LINK(   ImplSelectionChangedHdl, void* );
-    DECL_DLLPRIVATE_LINK(   ImplListItemSelectHdl , void* );
-
-    SAL_DLLPRIVATE void ImplClickButtonHandler( ImplBtn* );
-    SAL_DLLPRIVATE void ImplUserDrawHandler( UserDrawEvent* );
-    SAL_DLLPRIVATE void ImplAutocompleteHandler( Edit* );
+    struct Impl;
+    std::unique_ptr<Impl> m_pImpl;
 
 protected:
     using Window::ImplInit;
@@ -84,7 +45,7 @@ protected:
     SAL_DLLPRIVATE long     getMaxWidthScrollBarAndDownButton() const;
 
 protected:
-    bool            IsDropDownBox() const { return mpFloatWin != nullptr; }
+    bool            IsDropDownBox() const;
 
     virtual void    FillLayoutData() const SAL_OVERRIDE;
 
@@ -120,7 +81,7 @@ public:
     sal_uInt16      GetDropDownLineCount() const;
 
     void            EnableAutoSize( bool bAuto );
-    bool            IsAutoSizeEnabled() const               { return mbDDAutoSize; }
+    bool            IsAutoSizeEnabled() const;
 
     void            EnableDDAutoWidth( bool b );
 
@@ -160,13 +121,13 @@ public:
 
     void            EnableMultiSelection( bool bMulti );
     bool            IsMultiSelectionEnabled() const;
-    void            SetMultiSelectionSeparator( sal_Unicode cSep ) { mcMultiSep = cSep; }
-    sal_Unicode     GetMultiSelectionSeparator() const { return mcMultiSep; }
+    void            SetMultiSelectionSeparator( sal_Unicode cSep );
+    sal_Unicode     GetMultiSelectionSeparator() const;
 
-    void            SetSelectHdl( const Link<>& rLink )     { maSelectHdl = rLink; }
-    const Link<>&   GetSelectHdl() const                    { return maSelectHdl; }
-    void            SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
-    const Link<>&   GetDoubleClickHdl() const               { return maDoubleClickHdl; }
+    void            SetSelectHdl(const Link<>& rLink);
+    const Link<>&   GetSelectHdl() const;
+    void            SetDoubleClickHdl(const Link<>& rLink);
+    const Link<>&   GetDoubleClickHdl() const;
 
     Size            CalcMinimumSize() const SAL_OVERRIDE;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
@@ -216,7 +177,7 @@ public:
     using Control::GetIndexForPoint;
     long GetIndexForPoint( const Point& rPoint, sal_Int32 & rPos ) const;
 
-    sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
+    sal_Int32 getMaxWidthChars() const;
     void setMaxWidthChars(sal_Int32 nWidth);
 
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
