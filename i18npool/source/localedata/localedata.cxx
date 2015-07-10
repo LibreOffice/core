@@ -35,7 +35,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star;
 
 typedef sal_Unicode**   (SAL_CALL * MyFunc_Type)( sal_Int16&);
-typedef sal_Unicode***  (SAL_CALL * MyFunc_Type2)( sal_Int16&, sal_Int16& );
+typedef sal_Unicode const *** (SAL_CALL * MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode const **** (SAL_CALL * MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
 typedef sal_Unicode const * const * (SAL_CALL * MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
 
@@ -1268,7 +1268,7 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale ) thro
         // invoke function
         sal_Int16 nStyles;
         sal_Int16 nAttributes;
-        sal_Unicode*** p0 = func( nStyles, nAttributes );
+        sal_Unicode const *** p0 = func( nStyles, nAttributes );
 
         // allocate memory for nAttributes attributes for each of the nStyles styles.
         Sequence< Sequence<beans::PropertyValue> > pv( nStyles );
@@ -1276,11 +1276,11 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale ) thro
             pv[i] = Sequence<beans::PropertyValue>( nAttributes );
         }
 
-        sal_Unicode*** pStyle = p0;
+        sal_Unicode const *** pStyle = p0;
         for( i=0;  i<nStyles;  i++ ) {
-            sal_Unicode** pAttribute = pStyle[i];
+            sal_Unicode const ** pAttribute = pStyle[i];
             for( int j=0;  j<nAttributes;  j++ ) { // prefix, numberingtype, ...
-                sal_Unicode* pString = pAttribute[j];
+                sal_Unicode const * pString = pAttribute[j];
                 beans::PropertyValue& rVal = pv[i][j];
                 OUString sVal;
                 if( pString ) {
