@@ -18,6 +18,7 @@
  */
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>

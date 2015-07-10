@@ -43,6 +43,8 @@
 #include <unotools/mediadescriptor.hxx>
 #include <tools/zcodec.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 using namespace ::svgi;
 

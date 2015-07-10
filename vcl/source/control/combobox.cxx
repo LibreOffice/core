@@ -284,8 +284,12 @@ void ComboBox::EnableAutocomplete( bool bEnable, bool bMatchCase )
     if ( bEnable )
     {
         if( !m_pImpl->m_AutocompleteConnection.connected())
-            m_pImpl->m_AutocompleteConnection = m_pImpl->m_pSubEdit->autocompleteSignal.connect(
-                boost::bind( &ComboBox::Impl::ImplAutocompleteHandler, m_pImpl.get(), _1 ) );
+        {
+            m_pImpl->m_pSubEdit->SignalConnectAutocomplete(
+                &m_pImpl->m_AutocompleteConnection,
+                [this] (Edit *const pEdit) { m_pImpl->ImplAutocompleteHandler(pEdit); }
+                );
+        }
     }
     else
         m_pImpl->m_AutocompleteConnection.disconnect();

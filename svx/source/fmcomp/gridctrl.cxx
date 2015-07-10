@@ -56,6 +56,8 @@
 
 #include <comphelper/property.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 #include <algorithm>
 #include <cstdlib>
 #include <map>

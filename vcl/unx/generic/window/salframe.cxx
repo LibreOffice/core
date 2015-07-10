@@ -70,6 +70,8 @@
 #include "svids.hrc"
 #include "impbmp.hxx"
 
+#include <boost/optional.hpp>
+
 #include <algorithm>
 
 #ifndef Button6

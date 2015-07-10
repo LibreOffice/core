@@ -65,6 +65,9 @@
 #include <pptatom.hxx>
 #include "pptin.hxx"
 #include "randomnode.hxx"
+
+#include <boost/scoped_ptr.hpp>
+
 #include <algorithm>
 
 using ::std::map;

@@ -15,6 +15,8 @@
 
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
