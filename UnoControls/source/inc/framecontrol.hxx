@@ -211,10 +211,10 @@ private:
 private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >        m_xFrame;
-    OUString                                        m_sComponentURL;
+    OUString                                                                    m_sComponentURL;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_seqLoaderArguments;
-    ::cppu::OMultiTypeInterfaceContainerHelper      m_aInterfaceContainer;
-    OConnectionPointContainerHelper                 m_aConnectionPointContainer;
+    ::cppu::OMultiTypeInterfaceContainerHelper                                  m_aInterfaceContainer;
+    css::uno::Reference<OConnectionPointContainerHelper>                        m_aConnectionPointContainer;
 
 };  // class FrameControl
 

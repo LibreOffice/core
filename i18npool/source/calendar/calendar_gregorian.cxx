@@ -130,10 +130,12 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #define ERROR RuntimeException()
 
 Calendar_gregorian::Calendar_gregorian()
+    : mxNatNum(new NativeNumberSupplierService)
 {
     init(NULL);
 }
 Calendar_gregorian::Calendar_gregorian(const Era *_earArray)
+    : mxNatNum(new NativeNumberSupplierService)
 {
     init(_earArray);
 }
@@ -1180,7 +1182,7 @@ Calendar_gregorian::getDisplayStringImpl( sal_Int32 nCalendarDisplayCode, sal_In
         }
         sal_Int16 nNatNum = NatNumForCalendar(aLocale, nCalendarDisplayCode, nNativeNumberMode, value);
         if (nNatNum > 0)
-            return aNatNum.getNativeNumberString(aOUStr, aLocale, nNatNum);
+            return mxNatNum->getNativeNumberString(aOUStr, aLocale, nNatNum);
     }
     return aOUStr;
 }
