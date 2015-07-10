@@ -82,8 +82,10 @@ privateSnippetExecutor:
 
 .Lfinish:
         ld	$ra,152($sp)
+        .cfi_restore 31
         jr	$ra
         daddiu	$sp,$sp,160
+        .cfi_def_cfa_offset 0
 
         .set	reorder
         .end	privateSnippetExecutor
