@@ -697,7 +697,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                     {
                         fLimit2 = fNumber;
                     }
-                    if ( sBuff[nPos] == ']' )
+                    if ( nPos < sBuff.getLength() && sBuff[nPos] == ']' )
                     {
                         nPos++;
                     }
