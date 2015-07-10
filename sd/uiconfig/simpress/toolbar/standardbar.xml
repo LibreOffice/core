@@ -41,6 +41,9 @@
  <toolbar:toolbaritem xlink:href=".uno:Undo"/>
  <toolbar:toolbaritem xlink:href=".uno:Redo"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:DisplayMode" toolbar:style="dropdownonly"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleTabBarVisibility" toolbar:visible="false"/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellDialog"/>
  <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:visible="false"/>
