@@ -22,7 +22,7 @@
 #include "ModifyListenerHelper.hxx"
 #include "OPropertySet.hxx"
 #include "MutexContainer.hxx"
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -34,7 +34,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper5<
+typedef ::cppu::WeakImplHelper<
     ::com::sun::star::chart2::XTitle,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::util::XCloneable,

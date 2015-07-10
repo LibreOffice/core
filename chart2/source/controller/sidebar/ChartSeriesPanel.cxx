@@ -99,7 +99,7 @@ sal_Int32 getDataLabelPlacement(css::uno::Reference<css::frame::XModel> xModel,
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
 
     if (!xSeries.is())
-        return false;
+        return 0;
 
     css::uno::Any aAny = xSeries->getPropertyValue("LabelPlacement");
     if (!aAny.hasValue())

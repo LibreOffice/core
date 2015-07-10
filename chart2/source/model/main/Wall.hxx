@@ -27,7 +27,7 @@
 #include <cppuhelper/weak.hxx>
 
 #include "ModifyListenerHelper.hxx"
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace chart
@@ -35,7 +35,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper<
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::util::XModifyBroadcaster,
         ::com::sun::star::util::XModifyListener >

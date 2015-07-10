@@ -27,7 +27,7 @@
 
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <utility>
@@ -46,7 +46,7 @@ namespace impl
 {
 
 typedef ::cppu::BaseMutex                                                           UndoElement_MBase;
-typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::document::XUndoAction > UndoElement_TBase;
+typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::document::XUndoAction > UndoElement_TBase;
 
 class UndoElement   :public UndoElement_MBase
                     ,public UndoElement_TBase
@@ -89,7 +89,7 @@ private:
 };
 
 typedef ::cppu::BaseMutex                                                           ShapeUndoElement_MBase;
-typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::document::XUndoAction > ShapeUndoElement_TBase;
+typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::document::XUndoAction > ShapeUndoElement_TBase;
 class ShapeUndoElement  :public ShapeUndoElement_MBase
                         ,public ShapeUndoElement_TBase
 {

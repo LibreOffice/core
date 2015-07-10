@@ -24,6 +24,7 @@
 #include "AxisIndexDefines.hxx"
 #include "AxisHelper.hxx"
 #include "ChartTypeHelper.hxx"
+#include <cppuhelper/implbase.hxx>
 
 namespace chart
 {
@@ -31,7 +32,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
-class TextualDataProvider : public ::cppu::WeakImplHelper1<
+class TextualDataProvider : public ::cppu::WeakImplHelper<
         ::com::sun::star::chart2::data::XTextualDataSequence
         >
 {

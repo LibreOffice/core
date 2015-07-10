@@ -24,7 +24,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include "MutexContainer.hxx"
 #include "OPropertySet.hxx"
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "ModifyListenerHelper.hxx"
 #include <comphelper/uno3.hxx>
@@ -34,7 +34,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper4<
+typedef ::cppu::WeakImplHelper<
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::util::XModifyBroadcaster,
         ::com::sun::star::util::XModifyListener,

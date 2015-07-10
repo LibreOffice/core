@@ -21,7 +21,7 @@
 
 #include "AccessibleBase.hxx"
 #include "MutexContainer.hxx"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -46,7 +46,7 @@ class ExplicitValueProvider;
 
 namespace impl
 {
-typedef ::cppu::ImplInheritanceHelper2<
+typedef ::cppu::ImplInheritanceHelper<
         ::chart::AccessibleBase,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::view::XSelectionChangeListener >

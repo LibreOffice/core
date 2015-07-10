@@ -23,14 +23,14 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace chart
 {
 
 class DataSource : public
-    ::cppu::WeakImplHelper3<
+    ::cppu::WeakImplHelper<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::chart2::data::XDataSource,
         ::com::sun::star::chart2::data::XDataSink >

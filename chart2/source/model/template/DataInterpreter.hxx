@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_DATAINTERPRETER_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_DATAINTERPRETER_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/chart2/XDataInterpreter.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -27,7 +27,7 @@
 namespace chart
 {
 
-class DataInterpreter : public ::cppu::WeakImplHelper2<
+class DataInterpreter : public ::cppu::WeakImplHelper<
         ::com::sun::star::chart2::XDataInterpreter,
         ::com::sun::star::lang::XServiceInfo >
 {

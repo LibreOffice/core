@@ -33,7 +33,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 // helper classes
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <osl/mutex.hxx>
 
@@ -49,7 +49,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper8<
+typedef ::cppu::WeakImplHelper<
         ::com::sun::star::chart2::XDataSeries,
         ::com::sun::star::chart2::data::XDataSink,
         ::com::sun::star::chart2::data::XDataSource,

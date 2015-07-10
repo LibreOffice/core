@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CHART2_WORKBENCH_ADDIN_SAMPLEADDIN_HXX
 #define INCLUDED_CHART2_WORKBENCH_ADDIN_SAMPLEADDIN_HXX
 
-#include <cppuhelper/implbase9.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/chart/XDiagram.hpp>
@@ -39,7 +39,7 @@ com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
     SampleAddIn_CreateInstance(
         const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& );
 
-class SampleAddIn : public cppu::WeakImplHelper9<
+class SampleAddIn : public cppu::WeakImplHelper<
     com::sun::star::lang::XInitialization,
     com::sun::star::chart::XDiagram,
     com::sun::star::chart::XAxisXSupplier,

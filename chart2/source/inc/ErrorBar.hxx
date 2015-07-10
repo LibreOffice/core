@@ -24,7 +24,7 @@
 #include "charttoolsdllapi.hxx"
 #include "LineProperties.hxx"
 
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -47,7 +47,7 @@ OOO_DLLPUBLIC_CHARTTOOLS    ::com::sun::star::uno::Reference< ::com::sun::star::
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper8<
+typedef ::cppu::WeakImplHelper<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::util::XModifyBroadcaster,

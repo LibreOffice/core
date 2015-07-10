@@ -30,7 +30,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XTransformation.hpp>
 
-#include <cppuhelper/implbase1.hxx>
 #include <vector>
 
 namespace chart

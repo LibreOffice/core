@@ -24,7 +24,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace chart
 {
@@ -43,7 +43,7 @@ namespace chart
  */
 template< class Listener >
     class WeakListenerAdapter : public
-    ::cppu::WeakImplHelper1< Listener >
+    ::cppu::WeakImplHelper< Listener >
 {
 public:
     explicit WeakListenerAdapter( const ::com::sun::star::uno::Reference< Listener > & xListener ) :

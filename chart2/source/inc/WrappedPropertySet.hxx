@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/Property.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/propshlp.hxx>
 
 #include <algorithm>
@@ -38,7 +38,7 @@ namespace chart
 
 class OOO_DLLPUBLIC_CHARTTOOLS WrappedPropertySet :
                            public MutexContainer
-                         , public ::cppu::WeakImplHelper4
+                         , public ::cppu::WeakImplHelper
                          < ::com::sun::star::beans::XPropertySet
                          , ::com::sun::star::beans::XMultiPropertySet
                          , ::com::sun::star::beans::XPropertyState

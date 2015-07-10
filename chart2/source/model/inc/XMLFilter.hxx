@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_INC_XMLFILTER_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_INC_XMLFILTER_HXX
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -51,7 +51,7 @@ namespace chart
 {
 
 class XMLFilter : public
-    ::cppu::WeakImplHelper4<
+    ::cppu::WeakImplHelper<
         ::com::sun::star::document::XFilter,
         ::com::sun::star::document::XExporter,
         ::com::sun::star::document::XImporter,

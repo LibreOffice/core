@@ -23,12 +23,12 @@
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace chart
 {
 
-class ChartFrameLoader : public ::cppu::WeakImplHelper2<
+class ChartFrameLoader : public ::cppu::WeakImplHelper<
          ::com::sun::star::frame::XSynchronousFrameLoader
          , ::com::sun::star::lang::XServiceInfo
             //comprehends XComponent (required interface)

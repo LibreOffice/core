@@ -38,7 +38,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/InlineContainer.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <editeng/unoprnms.hxx>
 #include <fstream>

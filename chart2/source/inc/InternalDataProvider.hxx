@@ -31,7 +31,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <cppuhelper/implbase7.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "CachedDataSequence.hxx"
 
@@ -43,7 +43,7 @@ namespace chart
 namespace impl
 {
 
-typedef ::cppu::WeakImplHelper7<
+typedef ::cppu::WeakImplHelper<
         ::com::sun::star::chart2::XInternalDataProvider,
         ::com::sun::star::chart2::data::XRangeXMLConversion,
         ::com::sun::star::chart2::XAnyDescriptionAccess,

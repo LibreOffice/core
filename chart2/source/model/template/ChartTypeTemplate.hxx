@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_CHARTTYPETEMPLATE_HXX
 #define INCLUDED_CHART2_SOURCE_MODEL_TEMPLATE_CHARTTYPETEMPLATE_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "DataInterpreter.hxx"
 #include "StackMode.hxx"
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -69,7 +69,7 @@ namespace chart
 
     * create an XLegend via the global service factory, set it at the diagram.
  */
-class ChartTypeTemplate : public ::cppu::WeakImplHelper2<
+class ChartTypeTemplate : public ::cppu::WeakImplHelper<
         ::com::sun::star::chart2::XChartTypeTemplate,
         ::com::sun::star::lang::XServiceName >
 {

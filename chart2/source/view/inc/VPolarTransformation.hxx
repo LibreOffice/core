@@ -20,13 +20,13 @@
 #define INCLUDED_CHART2_SOURCE_VIEW_INC_VPOLARTRANSFORMATION_HXX
 
 #include "PlottingPositionHelper.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/chart2/XTransformation.hpp>
 
 namespace chart
 {
 
-class VPolarTransformation : public ::cppu::WeakImplHelper1<
+class VPolarTransformation : public ::cppu::WeakImplHelper<
     ::com::sun::star::chart2::XTransformation
     >
 {

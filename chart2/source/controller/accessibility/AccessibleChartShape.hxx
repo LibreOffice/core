@@ -22,7 +22,7 @@
 #include "AccessibleBase.hxx"
 
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 
 namespace accessibility
@@ -35,7 +35,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::ImplInheritanceHelper1<
+typedef ::cppu::ImplInheritanceHelper<
     AccessibleBase,
     ::com::sun::star::accessibility::XAccessibleExtendedComponent > AccessibleChartShape_Base;
 }

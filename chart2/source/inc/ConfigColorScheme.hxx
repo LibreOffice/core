@@ -21,7 +21,7 @@
 
 #include "ConfigItemListener.hxx"
 #include "charttoolsdllapi.hxx"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/chart2/XColorScheme.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -43,7 +43,7 @@ class ChartConfigItem;
 
 class ConfigColorScheme :
     public ConfigItemListener,
-    public ::cppu::WeakImplHelper2<
+    public ::cppu::WeakImplHelper<
         ::com::sun::star::chart2::XColorScheme,
         ::com::sun::star::lang::XServiceInfo >
 {

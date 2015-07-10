@@ -21,7 +21,7 @@
 
 #include "WrappedPropertySet.hxx"
 #include "ReferenceSizePropertyProvider.hxx"
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -41,7 +41,7 @@ namespace wrapper
 
 class Chart2ModelContact;
 
-class LegendWrapper : public ::cppu::ImplInheritanceHelper3<
+class LegendWrapper : public ::cppu::ImplInheritanceHelper<
                       WrappedPropertySet
                     , com::sun::star::drawing::XShape
                     , com::sun::star::lang::XComponent

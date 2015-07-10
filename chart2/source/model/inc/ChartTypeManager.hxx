@@ -21,7 +21,7 @@
 
 #include "OPropertySet.hxx"
 #include "MutexContainer.hxx"
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -33,7 +33,7 @@ namespace chart
 {
 
 class ChartTypeManager :
-        public ::cppu::WeakImplHelper3<
+        public ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         ::com::sun::star::lang::XMultiServiceFactory,
         ::com::sun::star::chart2::XChartTypeManager >

@@ -32,7 +32,7 @@
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 
@@ -59,7 +59,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::ImplInheritanceHelper1<
+typedef ::cppu::ImplInheritanceHelper<
         AccessibleBase,
         ::com::sun::star::accessibility::XAccessibleExtendedComponent
         > AccessibleChartElement_Base;

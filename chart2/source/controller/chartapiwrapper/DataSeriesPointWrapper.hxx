@@ -21,7 +21,7 @@
 
 #include "WrappedPropertySet.hxx"
 #include "ReferenceSizePropertyProvider.hxx"
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -42,7 +42,7 @@ namespace wrapper
 
 class Chart2ModelContact;
 
-class DataSeriesPointWrapper : public ::cppu::ImplInheritanceHelper4<
+class DataSeriesPointWrapper : public ::cppu::ImplInheritanceHelper<
                                           WrappedPropertySet
                                         , com::sun::star::lang::XServiceInfo
                                         , com::sun::star::lang::XInitialization

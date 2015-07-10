@@ -25,7 +25,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/gen.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <editeng/unoprnms.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -77,7 +77,7 @@ void TextCache::insertBitmap(const TextCacheKey& rKey, const BitmapEx& rBitmap)
     maCache.insert(std::pair<TextCacheKey, BitmapEx>(rKey, rBitmap));
 }
 
-class DummyPropertySetInfo : public cppu::WeakImplHelper1<
+class DummyPropertySetInfo : public cppu::WeakImplHelper<
                                 com::sun::star::beans::XPropertySetInfo >
 {
 public:

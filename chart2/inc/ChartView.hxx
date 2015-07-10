@@ -21,7 +21,7 @@
 
 #include "ChartModel.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
-#include <cppuhelper/implbase10.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <svl/lstner.hxx>
@@ -88,7 +88,7 @@ struct TimeBasedInfo
  * The View is not responsible to handle single user events (that is instead
  * done by the ChartWindow).
  */
-class ChartView : public ::cppu::WeakImplHelper10<
+class ChartView : public ::cppu::WeakImplHelper<
     ::com::sun::star::lang::XInitialization
         ,::com::sun::star::lang::XServiceInfo
         ,::com::sun::star::datatransfer::XTransferable

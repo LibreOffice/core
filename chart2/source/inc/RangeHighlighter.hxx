@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_INC_RANGEHIGHLIGHTER_HXX
 
 #include "MutexContainer.hxx"
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -37,7 +37,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
         ::com::sun::star::chart2::data::XRangeHighlighter,
         ::com::sun::star::view::XSelectionChangeListener
     >
