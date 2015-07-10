@@ -69,7 +69,7 @@ private:
     OutputDevice&                                       mrOutputDevice;
 
     /// In case mrOutputDevice is a buffer for a vcl::Window, this is the window.
-    vcl::Window*                                        mpWindow;
+    VclPtr<vcl::Window>                                 mpWindow;
 
     // the SdrPaintView this window belongs to
     SdrPaintView&                                       mrPaintView;
