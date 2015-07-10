@@ -517,7 +517,6 @@
 #include <formula/formulahelper.hxx>
 #include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
-#include <formula/random.hxx>
 #include <formula/token.hxx>
 #include <formula/vectortoken.hxx>
 #include <functional>
