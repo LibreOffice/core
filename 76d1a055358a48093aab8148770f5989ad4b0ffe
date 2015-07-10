@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_7e1d83bc",
+        "filename": "bin/replace-boost-bind-with-std-bind.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-10T08:47:28Z",
+      "side": 1,
+      "message": "This approach is generally wrong and only works, when files don\u0027t have blanks. The corret way is to use find -print0 | xargs -0 idiom:\n\n  find . -name \\*.txt -print0 | xargs -0 sh -c \u0027for file in \"$@\"; do grep -q foo \"$file\" || continue; sed -i bak \"s/foo/bar/g\" \"$file\"; done\u0027 sh",
+      "revId": "76d1a055358a48093aab8148770f5989ad4b0ffe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
