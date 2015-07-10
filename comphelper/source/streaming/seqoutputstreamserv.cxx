@@ -26,7 +26,7 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 namespace {
 
 class SequenceOutputStreamService:
-    public cppu::WeakImplHelper2<lang::XServiceInfo, io::XSequenceOutputStream>,
+    public cppu::WeakImplHelper<lang::XServiceInfo, io::XSequenceOutputStream>,
     private boost::noncopyable
 {
 public:

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_COMPHELPER_WEAKEVENTLISTENER_HXX
 #define INCLUDED_COMPHELPER_WEAKEVENTLISTENER_HXX
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/XWeak.hpp>
 #include <cppuhelper/weakref.hxx>
@@ -97,7 +97,7 @@ namespace comphelper
         as this can't be done in a generic way</p>
     */
     class OWeakListenerAdapter
-            :public ::cppu::WeakComponentImplHelper1 < LISTENER >
+            :public ::cppu::WeakComponentImplHelper< LISTENER >
             ,public OWeakListenerAdapterBase
     {
     protected:
@@ -158,7 +158,7 @@ namespace comphelper
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XWeak >& _rxListener,
         const ::com::sun::star::uno::Reference< BROADCASTER >& _rxBroadcaster
     )
-        : ::cppu::WeakComponentImplHelper1< LISTENER >( m_aMutex )
+        : ::cppu::WeakComponentImplHelper< LISTENER >( m_aMutex )
         , OWeakListenerAdapterBase( _rxListener, _rxBroadcaster )
     {
     }

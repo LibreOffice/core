@@ -177,10 +177,7 @@
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/interfacecontainer.hxx>

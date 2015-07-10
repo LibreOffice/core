@@ -25,7 +25,7 @@
 #include <map>
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 namespace comphelper
@@ -47,7 +47,7 @@ class PropertyMapImpl;
 /** this class implements a XPropertySetInfo that is initialized with arrays of PropertyMapEntry.
     It is used by the class PropertySetHelper.
 */
-class COMPHELPER_DLLPUBLIC PropertySetInfo : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
+class COMPHELPER_DLLPUBLIC PropertySetInfo : public ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertySetInfo >
 {
 private:
     PropertyMapImpl* mpMap;

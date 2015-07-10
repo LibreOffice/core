@@ -25,14 +25,14 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #define SIMPLELOGRING_SIZE 256
 
 namespace comphelper
 {
 
-class OSimpleLogRing : public ::cppu::WeakImplHelper3< ::com::sun::star::logging::XSimpleLogRing,
+class OSimpleLogRing : public ::cppu::WeakImplHelper< ::com::sun::star::logging::XSimpleLogRing,
                                                            ::com::sun::star::lang::XInitialization,
                                                            ::com::sun::star::lang::XServiceInfo >
 {

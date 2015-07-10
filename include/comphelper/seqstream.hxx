@@ -25,8 +25,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 namespace comphelper
@@ -39,7 +38,7 @@ namespace comphelper
 
 
 class COMPHELPER_DLLPUBLIC SequenceInputStream
-: public ::cppu::WeakImplHelper2< ::com::sun::star::io::XInputStream, ::com::sun::star::io::XSeekable >
+: public ::cppu::WeakImplHelper< ::com::sun::star::io::XInputStream, ::com::sun::star::io::XSeekable >
 {
     ::osl::Mutex    m_aMutex;
     css::uno::Sequence<sal_Int8> m_aData;
@@ -74,7 +73,7 @@ public:
 private:
     inline sal_Int32 avail();
 };
-typedef ::cppu::WeakImplHelper1< ::com::sun::star::io::XOutputStream > OSequenceOutputStream_Base;
+typedef ::cppu::WeakImplHelper< ::com::sun::star::io::XOutputStream > OSequenceOutputStream_Base;
 
 class COMPHELPER_DLLPUBLIC OSequenceOutputStream : public OSequenceOutputStream_Base
 {

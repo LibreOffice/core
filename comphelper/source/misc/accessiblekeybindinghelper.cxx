@@ -20,7 +20,6 @@
 #include <comphelper/accessiblekeybindinghelper.hxx>
 
 
-
 namespace comphelper
 {
 
@@ -41,7 +40,7 @@ namespace comphelper
 
 
     OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper( const OAccessibleKeyBindingHelper& rHelper )
-        : cppu::WeakImplHelper1<XAccessibleKeyBinding>( rHelper )
+        : cppu::WeakImplHelper<XAccessibleKeyBinding>( rHelper )
         , m_aKeyBindings( rHelper.m_aKeyBindings )
     {
     }

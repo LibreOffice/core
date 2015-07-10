@@ -29,10 +29,9 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
-#include <cppuhelper/compbase3.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
@@ -235,7 +234,7 @@ namespace comphelper
 
     //= OAccessibleContextWrapper
 
-    typedef ::cppu::WeakComponentImplHelper2<    ::com::sun::star::accessibility::XAccessibleEventBroadcaster
+    typedef ::cppu::WeakComponentImplHelper<    ::com::sun::star::accessibility::XAccessibleEventBroadcaster
                                             ,   ::com::sun::star::accessibility::XAccessibleContext
                                             >   OAccessibleContextWrapper_CBase;
 
@@ -318,8 +317,8 @@ namespace comphelper
                         >   AccessibleMap;
                         // TODO: think about if we should hold these objects weak
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::lang::XEventListener
-                                    >   OWrappedAccessibleChildrenManager_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::lang::XEventListener
+                                  >   OWrappedAccessibleChildrenManager_Base;
     /** manages wrapping XAccessible's to XAccessible's
     */
     class COMPHELPER_DLLPUBLIC OWrappedAccessibleChildrenManager : public OWrappedAccessibleChildrenManager_Base

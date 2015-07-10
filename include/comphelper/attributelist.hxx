@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_ATTRIBUTELIST_HXX
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 
@@ -30,7 +30,7 @@ namespace comphelper
 
 struct AttributeList_Impl;
 
-class COMPHELPER_DLLPUBLIC AttributeList : public ::cppu::WeakImplHelper1
+class COMPHELPER_DLLPUBLIC AttributeList : public ::cppu::WeakImplHelper
 <
     ::com::sun::star::xml::sax::XAttributeList
 >

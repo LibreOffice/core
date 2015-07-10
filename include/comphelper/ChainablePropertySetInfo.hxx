@@ -22,7 +22,7 @@
 
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <comphelper/PropertyInfoHash.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 /*
@@ -34,7 +34,7 @@
 namespace comphelper
 {
     class COMPHELPER_DLLPUBLIC ChainablePropertySetInfo:
-        public ::cppu::WeakImplHelper1<
+        public ::cppu::WeakImplHelper<
         ::com::sun::star::beans::XPropertySetInfo >
     {
     public:
