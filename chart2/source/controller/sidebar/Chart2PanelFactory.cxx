@@ -29,6 +29,8 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
+#include "ChartElementsPanel.hxx"
+
 using namespace css;
 using namespace css::uno;
 using ::rtl::OUString;
@@ -78,9 +80,9 @@ Reference<ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
 
         sal_Int32 nMinimumSize = -1;
         VclPtr<vcl::Window> pPanel;
+        if (rsResourceURL.endsWith("/ElementsPanel"))
+            pPanel = ChartElementsPanel::Create( pParentWindow, xFrame, pBindings );
         /*
-        if (rsResourceURL.endsWith("/AlignmentPropertyPanel"))
-            pPanel = AlignmentPropertyPanel::Create( pParentWindow, xFrame, pBindings );
         else if (rsResourceURL.endsWith("/CellAppearancePropertyPanel"))
             pPanel = CellAppearancePropertyPanel::Create( pParentWindow, xFrame, pBindings );
         else if (rsResourceURL.endsWith("/NumberFormatPropertyPanel"))
