@@ -284,12 +284,7 @@ void SAL_CALL OToolboxController::execute( sal_Int16 KeyModifier ) throw (uno::R
 
 sal_Bool SAL_CALL OToolboxController::opensSubToolbar() throw (uno::RuntimeException, std::exception)
 {
-    return ( m_nSlotId == SID_DRAWTBX_CS_BASIC ||
-             m_nSlotId == SID_DRAWTBX_CS_SYMBOL ||
-             m_nSlotId == SID_DRAWTBX_CS_ARROW ||
-             m_nSlotId == SID_DRAWTBX_CS_FLOWCHART ||
-             m_nSlotId == SID_DRAWTBX_CS_CALLOUT ||
-             m_nSlotId == SID_DRAWTBX_CS_STAR );
+    return ( m_nSlotId != SID_ATTR_CHAR_FONT );
 }
 
 OUString SAL_CALL OToolboxController::getSubToolbarName() throw (uno::RuntimeException, std::exception)
