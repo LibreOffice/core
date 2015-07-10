@@ -307,6 +307,12 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     long testPPCAlignment( [in] hyper l1, [in] hyper l2, [in] long i1, [in] hyper l3, [in] long i2 );
 
     /**
+     * PPC64 Alignment test
+     */
+    long testPPC64Alignment( [in] double d1, [in] double d2, [in] double d3, [in] long i1 );
+
+
+    /**
      * VFP ABI (armhf) doubles test
      */
     double testTenDoubles( [in] double d1, [in] double d2, [in] double d3, [in] double d4, [in] double d5, [in] double d6, [in] double d7, [in] double d8, [in] double d9, [in] double d10 );
