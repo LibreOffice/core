@@ -943,7 +943,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                             sBuff.insert(nPos, ";");
                             nPos++;
                         }
-                        else
+                        else if (nIndex > 0)
                         {
                             // The last subformat. If it is a trailing text
                             // format the omitted subformats act like they were
