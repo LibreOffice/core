@@ -1566,8 +1566,8 @@ void SdrTextObj::SetToBeChained(bool bToBeChained)
 
 TextChain *SdrTextObj::GetTextChain() const
 {
-    if (!IsChainable())
-        return NULL;
+    //if (!IsChainable())
+    //    return NULL;
 
     return pModel->GetTextChain();
 }
@@ -1984,11 +1984,23 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
     }
 }
 
+bool SdrTextObj::IsChainable() const
+{
+    if (!GetName().startsWith("Chainable")) {
+        fprintf(stderr, "[CHAINABLE?] %p is _not_ chainable\n", this);
+        return false;
+    }
+
+    // Check that no overflow is going on
+    if (!GetTextChain() || GetTextChain()->GetNilChainingEvent(this))
+        return false;
+
+    return true;
+
+}
+
 void SdrTextObj::onChainingEvent()
 {
-    if (!IsChainable() || GetNextLinkInChain() == NULL)
-        return;
-
     if (!pEdtOutl)
         return;
 
@@ -2073,16 +2085,7 @@ SdrTextObj* SdrTextObj::GetNextLinkInChain() const
     /* FIXME(matteocam) return mpNextInChain; */
     SdrTextObj *pNextTextObj = NULL;
 
-    // Check that no overflow is going on // XXX: This should be moved in IsChainable
-    if (GetTextChain()->GetNilChainingEvent(this))
-        return NULL;
-
     if ( pPage && pPage->GetObjCount() > 1) {
-
-        if (!GetName().startsWith("Chainable")) {
-            fprintf(stderr, "[CHAINABLE?] %p is _not_ chainable\n", this);
-            return NULL;
-        }
 
         sal_uInt32 nextIndex = (GetOrdNum()+1);
 

@@ -367,7 +367,7 @@ public:
     // Chaining
     bool IsToBeChained() const;
     SdrTextObj *GetNextLinkInChain() const;
-    bool IsChainable() const { return GetNextLinkInChain() != NULL; }
+    bool IsChainable() const;
     void SetPreventChainable();
     bool GetPreventChainable() const;
     TextChain *GetTextChain() const;

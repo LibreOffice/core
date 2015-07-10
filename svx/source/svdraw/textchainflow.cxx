@@ -145,7 +145,13 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
     if (!mpTargetLink->GetPreventChainable())
         mpNextLink->NbcSetOutlinerParaObject(pOutl->GetEmptyParaObject());
 
+    // We store the size since NbcSetOutlinerParaObject can change it
+    Size aOldSize = pOutl->GetMaxAutoPaperSize();
+
     mpTargetLink->NbcSetOutlinerParaObject(pNewText);
+
+    pOutl->SetMaxAutoPaperSize(aOldSize);
+    pOutl->SetText(*pNewText);
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
 
