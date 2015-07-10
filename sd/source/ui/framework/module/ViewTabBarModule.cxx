@@ -156,7 +156,7 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
             aImpressViewButton.ResourceId = FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msImpressViewURL,
                 xAnchor);
-            aImpressViewButton.ButtonLabel = SD_RESSTR(STR_DRAW_MODE);
+            aImpressViewButton.ButtonLabel = SD_RESSTR(STR_NORMAL_MODE);
             if ( ! xBar->hasTabBarButton(aImpressViewButton))
                 xBar->addTabBarButtonAfter(aImpressViewButton, aEmptyButton);
 
@@ -180,7 +180,7 @@ void ViewTabBarModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
             aHandoutViewButton.ResourceId = FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msHandoutViewURL,
                 xAnchor);
-            aHandoutViewButton.ButtonLabel = SD_RESSTR(STR_HANDOUT_MODE);
+            aHandoutViewButton.ButtonLabel = SD_RESSTR(STR_HANDOUT_MASTER_MODE);
             if ( ! xBar->hasTabBarButton(aHandoutViewButton))
                 xBar->addTabBarButtonAfter(aHandoutViewButton, aNotesViewButton);
         }

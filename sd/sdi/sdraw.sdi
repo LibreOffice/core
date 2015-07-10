@@ -1932,8 +1932,7 @@ SfxVoidItem DeSelect SID_UNSELECT
     GroupId = GID_EDIT;
 ]
 
-SfxBoolItem DiaMode SID_DIAMODE
-
+SfxBoolItem DiaMode SID_SLIDE_SORTER_MODE
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -2944,7 +2943,7 @@ SfxVoidItem HandoutMasterPage SID_HANDOUT_MASTERPAGE
     GroupId = GID_VIEW;
 ]
 
-SfxBoolItem HandoutMode SID_HANDOUTMODE
+SfxBoolItem HandoutMode SID_HANDOUT_MASTER_MODE
 
 [
     /* flags: */
@@ -4160,6 +4159,56 @@ SfxUInt32Item AssignLayout SID_ASSIGN_LAYOUT
     GroupId = GID_MODIFY;
 ]
 
+
+SfxBoolItem ToggleTabBarVisibility SID_TOGGLE_TABBAR_VISIBILITY
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
+
+SfxVoidItem DisplayMode SID_DISPLAY_MODE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW;
+]
+
 SfxVoidItem ModifyPresentationObject SID_PRESENTATIONOBJECT
 ()
 [
@@ -4463,8 +4512,8 @@ SfxBoolItem NewRouting SID_CONNECTION_NEW_ROUTING
     GroupId = GID_DRAWING;
 ]
 
-SfxVoidItem NotesMasterPage SID_NOTES_MASTERPAGE
-(SfxBoolItem Isactive ID_VAL_ISACTIVE)
+SfxVoidItem NotesMasterPage SID_NOTES_MASTER_MODE
+()
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -4479,10 +4528,7 @@ SfxVoidItem NotesMasterPage SID_NOTES_MASTERPAGE
     RecordPerSet;
     Synchron;
 
-    /* status: */
-    SlotType = SfxBoolItem
-
-    /* config: */
+     /* config: */
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
@@ -4490,7 +4536,7 @@ SfxVoidItem NotesMasterPage SID_NOTES_MASTERPAGE
     GroupId = GID_VIEW;
 ]
 
-SfxBoolItem NotesMode SID_NOTESMODE
+SfxVoidItem NotesMode SID_NOTES_MODE
 
 [
     /* flags: */
@@ -4592,7 +4638,7 @@ SfxVoidItem OriginalSize SID_ORIGINAL_SIZE
     GroupId = GID_MODIFY;
 ]
 
-SfxBoolItem OutlineMode SID_OUTLINEMODE
+SfxVoidItem OutlineMode SID_OUTLINE_MODE
 
 [
     /* flags: */
@@ -5615,8 +5661,8 @@ SfxBoolItem SlideChangeWindow SID_SLIDE_TRANSITIONS_PANEL
     GroupId = GID_MODIFY;
 ]
 
-SfxVoidItem SlideMasterPage SID_SLIDE_MASTERPAGE
-(SfxBoolItem Isactive ID_VAL_ISACTIVE)
+SfxVoidItem SlideMasterPage SID_SLIDE_MASTER_MODE
+()
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -5630,9 +5676,6 @@ SfxVoidItem SlideMasterPage SID_SLIDE_MASTERPAGE
     RecordAbsolute = FALSE,
     RecordPerSet;
     Synchron;
-
-    /* status: */
-    SlotType = SfxBoolItem
 
     /* config: */
     AccelConfig = TRUE,

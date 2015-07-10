@@ -103,6 +103,10 @@
       constructor="com_sun_star_comp_sd_SlideLayoutController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="com.sun.star.comp.sd.DisplayModeController"
+      constructor="com_sun_star_comp_sd_DisplayModeController_get_implementation">
+    <service name="com.sun.star.frame.ToolbarController"/>
+  </implementation>
   <implementation name="sd::RandomAnimationNode"
       constructor="RandomAnimationNode_get_implementation">
     <service name="com.sun.star.comp.sd.RandomAnimationNode"/>
