@@ -1394,9 +1394,13 @@ void WMFReader::ReadWMF()
                         }
                     }
                 }
-                nPos += nRecSize * 2;
-                if ( nPos <= nEndPos )
-                    pWMF->Seek( nPos  );
+                const sal_uInt32 nAvailableBytes = nEndPos - nPos;
+                const sal_uInt32 nMaxPossibleRecordSize = nAvailableBytes/2;
+                if (nRecSize <= nMaxPossibleRecordSize)
+                {
+                    nPos += nRecSize * 2;
+                    pWMF->Seek(nPos);
+                }
                 else
                     pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
             }
