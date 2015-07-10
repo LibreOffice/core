@@ -23,7 +23,7 @@
 #include <comphelper/comphelperdllapi.h>
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace comphelper {
 
@@ -42,7 +42,7 @@ enum DocPasswordRequestType
 
 
 class COMPHELPER_DLLPUBLIC SimplePasswordRequest :
-        public cppu::WeakImplHelper1<css::task::XInteractionRequest>
+        public cppu::WeakImplHelper<css::task::XInteractionRequest>
 {
 public:
     explicit    SimplePasswordRequest( com::sun::star::task::PasswordRequestMode eMode );
@@ -69,7 +69,7 @@ private:
     string for a document.
  */
 class COMPHELPER_DLLPUBLIC DocPasswordRequest :
-        public cppu::WeakImplHelper1<css::task::XInteractionRequest>
+        public cppu::WeakImplHelper<css::task::XInteractionRequest>
 {
 public:
     explicit            DocPasswordRequest(

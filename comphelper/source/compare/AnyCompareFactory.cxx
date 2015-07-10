@@ -25,8 +25,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -39,7 +38,7 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
 
-class AnyCompare : public ::cppu::WeakImplHelper1< XAnyCompare >
+class AnyCompare : public ::cppu::WeakImplHelper< XAnyCompare >
 {
     Reference< XCollator > m_xCollator;
 
@@ -54,7 +53,7 @@ public:
     virtual sal_Int16 SAL_CALL compare( const Any& any1, const Any& any2 ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class AnyCompareFactory : public cppu::WeakImplHelper3< XAnyCompareFactory, XInitialization, XServiceInfo >
+class AnyCompareFactory : public cppu::WeakImplHelper< XAnyCompareFactory, XInitialization, XServiceInfo >
 {
     Reference< XAnyCompare >            m_xAnyCompare;
     Reference< XComponentContext >      m_xContext;

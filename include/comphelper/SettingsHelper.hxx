@@ -24,11 +24,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/ChainablePropertySet.hxx>
 #include <comphelper/solarmutex.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace comphelper
 {
-    typedef  cppu::WeakImplHelper3
+    typedef  cppu::WeakImplHelper
     <
         ::com::sun::star::beans::XPropertySet,
         ::com::sun::star::beans::XMultiPropertySet,

@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_PROPMULTIPLEX_HXX
 
 #include <comphelper/propstate.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 
@@ -70,7 +70,7 @@ namespace comphelper
     //= OPropertyChangeMultiplexer
 
     /// multiplexer for property changes
-    class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer   :public cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
+    class COMPHELPER_DLLPUBLIC OPropertyChangeMultiplexer   :public cppu::WeakImplHelper< ::com::sun::star::beans::XPropertyChangeListener>
     {
         friend class OPropertyChangeListener;
          ::com::sun::star::uno::Sequence< OUString >     m_aProperties;

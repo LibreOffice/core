@@ -22,7 +22,7 @@
 #include <map>
 
 #include <comphelper/namecontainer.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
@@ -37,7 +37,7 @@ namespace comphelper
     };
 
     /** this is the base helper class for NameContainer thats also declared in this header. */
-    class NameContainer : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XNameContainer >, private NameContainerImpl
+    class NameContainer : public ::cppu::WeakImplHelper< ::com::sun::star::container::XNameContainer >, private NameContainerImpl
     {
     public:
         explicit NameContainer( ::com::sun::star::uno::Type aType );

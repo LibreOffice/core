@@ -26,12 +26,12 @@
 #include <com/sun/star/awt/XCallback.hpp>
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace comphelper
 {
 
-class OOfficeRestartManager : public ::cppu::WeakImplHelper3< ::com::sun::star::task::XRestartManager
+class OOfficeRestartManager : public ::cppu::WeakImplHelper< ::com::sun::star::task::XRestartManager
                                                             , ::com::sun::star::awt::XCallback
                                                             , ::com::sun::star::lang::XServiceInfo >
 {

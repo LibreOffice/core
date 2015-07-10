@@ -24,6 +24,7 @@
 #include <com/sun/star/task/PasswordRequest.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionPassword2.hpp>
+#include <cppuhelper/implbase.hxx>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Type;
@@ -45,7 +46,7 @@ namespace comphelper {
 
 
 
-class AbortContinuation : public ::cppu::WeakImplHelper1< XInteractionAbort >
+class AbortContinuation : public ::cppu::WeakImplHelper< XInteractionAbort >
 {
 public:
     virtual void SAL_CALL select() throw( RuntimeException, std::exception ) SAL_OVERRIDE {}
@@ -53,7 +54,7 @@ public:
 
 
 
-class PasswordContinuation : public ::cppu::WeakImplHelper1< XInteractionPassword2 >
+class PasswordContinuation : public ::cppu::WeakImplHelper< XInteractionPassword2 >
 {
 public:
     inline explicit     PasswordContinuation() : mbReadOnly( false ), mbSelected( false ) {}

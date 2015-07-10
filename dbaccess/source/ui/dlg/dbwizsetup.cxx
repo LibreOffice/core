@@ -77,6 +77,7 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <connectivity/DriversConfig.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace dbaui
 {
@@ -878,8 +879,8 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 
     namespace
     {
-        typedef ::cppu::WeakImplHelper1 <   XTerminateListener
-                                        >   AsyncLoader_Base;
+        typedef ::cppu::WeakImplHelper <   XTerminateListener
+                                       >   AsyncLoader_Base;
         class AsyncLoader : public AsyncLoader_Base
         {
         private:

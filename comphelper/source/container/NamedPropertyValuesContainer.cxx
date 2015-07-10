@@ -24,7 +24,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <map>
@@ -34,7 +34,7 @@ using namespace com::sun::star;
 
 typedef std::map< OUString, uno::Sequence<beans::PropertyValue> > NamedPropertyValues;
 
-class NamedPropertyValuesContainer : public cppu::WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
+class NamedPropertyValuesContainer : public cppu::WeakImplHelper< container::XNameContainer, lang::XServiceInfo >
 {
 public:
     NamedPropertyValuesContainer() throw();

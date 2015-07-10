@@ -22,7 +22,7 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/file.hxx>
 #include <comphelper/comphelperdllapi.h>
 
@@ -32,7 +32,7 @@ namespace comphelper
 // FmUnoIOStream,
 // Stream to read and write data, based on File
 
-class COMPHELPER_DLLPUBLIC OSLInputStreamWrapper : public ::cppu::WeakImplHelper1<css::io::XInputStream>
+class COMPHELPER_DLLPUBLIC OSLInputStreamWrapper : public ::cppu::WeakImplHelper<css::io::XInputStream>
 {
     ::osl::Mutex    m_aMutex;
     ::osl::File*    m_pFile;
@@ -53,7 +53,7 @@ public:
 // FmUnoOutStream,
 // data sink for the files
 
-class OSLOutputStreamWrapper : public ::cppu::WeakImplHelper1<css::io::XOutputStream>
+class OSLOutputStreamWrapper : public ::cppu::WeakImplHelper<css::io::XOutputStream>
 {
 public:
     COMPHELPER_DLLPUBLIC OSLOutputStreamWrapper(::osl::File& _rFile);

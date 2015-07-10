@@ -22,6 +22,7 @@
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/interaction.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class FilterOptionsContinuation : public comphelper::OInteraction< ::com::sun::star::document::XInteractionFilterOptions >
 {
@@ -32,7 +33,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getFilterOptions(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class RequestFilterOptions : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class RequestFilterOptions : public ::cppu::WeakImplHelper< ::com::sun::star::task::XInteractionRequest >
 {
     ::com::sun::star::uno::Any m_aRequest;
 

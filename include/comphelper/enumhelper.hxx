@@ -25,8 +25,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
 
@@ -43,8 +42,8 @@ struct OEnumerationLock
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
 class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
-                         , public ::cppu::WeakImplHelper2< css::container::XEnumeration ,
-                                                           css::lang::XEventListener    >
+                         , public ::cppu::WeakImplHelper< css::container::XEnumeration ,
+                                                          css::lang::XEventListener    >
 {
     css::uno::Sequence< OUString >                m_aNames;
     sal_Int32                                           m_nPos;
@@ -72,8 +71,8 @@ private:
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
 class COMPHELPER_DLLPUBLIC OEnumerationByIndex : private OEnumerationLock
-                          , public ::cppu::WeakImplHelper2< css::container::XEnumeration ,
-                                                            css::lang::XEventListener    >
+                          , public ::cppu::WeakImplHelper< css::container::XEnumeration ,
+                                                           css::lang::XEventListener    >
 {
     sal_Int32                                         m_nPos;
     css::uno::Reference< css::container::XIndexAccess > m_xAccess;
@@ -99,7 +98,7 @@ private:
 
 */
 class COMPHELPER_DLLPUBLIC OAnyEnumeration : private OEnumerationLock
-                                           , public  ::cppu::WeakImplHelper1< css::container::XEnumeration >
+                                           , public  ::cppu::WeakImplHelper< css::container::XEnumeration >
 {
     sal_Int32                         m_nPos;
     css::uno::Sequence< css::uno::Any > m_lItems;

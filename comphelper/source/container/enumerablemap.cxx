@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/compbase3.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -286,8 +286,8 @@ namespace comphelper
     };
 
 
-    typedef ::cppu::WeakImplHelper1 <   XEnumeration
-                                    >   MapEnumeration_Base;
+    typedef ::cppu::WeakImplHelper <   XEnumeration
+                                   >   MapEnumeration_Base;
     class MapEnumeration :public ComponentBase
                          ,public MapEnumeration_Base
     {

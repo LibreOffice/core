@@ -59,6 +59,7 @@
 #include <tools/config.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -1707,7 +1708,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
 }
 
 
-class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper1< task::XInteractionRequest >
+class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper< task::XInteractionRequest >
 {
     uno::Any m_aRequest;
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > m_lContinuations;
@@ -1777,7 +1778,7 @@ com::sun::star::uno::Reference < task::XInteractionRequest > RequestPackageRepar
 }
 
 
-class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper1< task::XInteractionRequest >
+class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper< task::XInteractionRequest >
 {
     uno::Any m_aRequest;
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > m_lContinuations;

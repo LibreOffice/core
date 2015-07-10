@@ -10,7 +10,7 @@
 #ifndef INCLUDED_COMPHELPER_UNIQUE_DISPOSING_PTR_HXX
 #define INCLUDED_COMPHELPER_UNIQUE_DISPOSING_PTR_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -66,7 +66,7 @@ public:
         reset();
     }
 private:
-    class TerminateListener : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XTerminateListener >
+    class TerminateListener : public ::cppu::WeakImplHelper< ::com::sun::star::frame::XTerminateListener >
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xComponent;

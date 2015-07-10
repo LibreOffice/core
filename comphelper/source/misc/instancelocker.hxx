@@ -30,8 +30,7 @@
 #include <com/sun/star/embed/Actions.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 
@@ -39,7 +38,7 @@ class OLockListener;
 
 // the service is implemented as a wrapper to be able to die by refcount
 // the disposing mechanics is required for java related scenarios
-class OInstanceLocker : public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XComponent,
+class OInstanceLocker : public ::cppu::WeakImplHelper< ::com::sun::star::lang::XComponent,
                                                         ::com::sun::star::lang::XInitialization,
                                                         ::com::sun::star::lang::XServiceInfo >
 {
@@ -83,7 +82,7 @@ public:
 };
 
 
-class OLockListener : public ::cppu::WeakImplHelper2< ::com::sun::star::util::XCloseListener,
+class OLockListener : public ::cppu::WeakImplHelper< ::com::sun::star::util::XCloseListener,
                                                     ::com::sun::star::frame::XTerminateListener >
 {
     ::osl::Mutex m_aMutex;

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicedecl.hxx>
 
 #include <com/sun/star/deployment/UpdateInformationProvider.hpp>
@@ -59,7 +59,7 @@ namespace xml = com::sun::star::xml ;
 namespace dp_info {
 
 class PackageInformationProvider :
-        public ::cppu::WeakImplHelper1< deployment::XPackageInformationProvider >
+        public ::cppu::WeakImplHelper< deployment::XPackageInformationProvider >
 
 {
     public:

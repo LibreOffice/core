@@ -18,7 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/i18n/CharType.hpp>
 
 #include "cppunit/TestAssert.h"
@@ -88,7 +88,7 @@ void TestString::testIsdigitAsciiString()
 
 using namespace ::com::sun::star;
 
-class testCollator : public cppu::WeakImplHelper1< i18n::XCollator >
+class testCollator : public cppu::WeakImplHelper< i18n::XCollator >
 {
 public:
     virtual sal_Int32 SAL_CALL compareSubstring(
@@ -123,7 +123,7 @@ public:
 
 #define IS_DIGIT(CHAR) (((CHAR) >= 48) && ((CHAR <= 57)))
 
-class testBreakIterator : public cppu::WeakImplHelper1< i18n::XBreakIterator >
+class testBreakIterator : public cppu::WeakImplHelper< i18n::XBreakIterator >
 {
 public:
     virtual sal_Int32 SAL_CALL nextCharacters( const OUString&, sal_Int32,
