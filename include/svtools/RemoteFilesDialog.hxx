@@ -153,6 +153,8 @@ private:
 
     FileViewResult OpenURL( OUString sURL );
 
+    void AddFileExtension();
+
     void EnableControls();
 
     DECL_LINK ( AddServiceHdl, void * );

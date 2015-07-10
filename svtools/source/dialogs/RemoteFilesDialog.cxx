@@ -517,6 +517,23 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
     return eResult;
 }
 
+void RemoteFilesDialog::AddFileExtension()
+{
+    if( m_nCurrentFilter != LISTBOX_ENTRY_NOTFOUND )
+    {
+        OUString sExt = m_aFilters[m_nCurrentFilter].second;
+        OUString sFileName = m_pName_ed->GetText();
+
+        sal_Int32 nDotPos = sFileName.lastIndexOf( '.' );
+
+        if ( nDotPos == -1 )
+        {
+            sFileName += sExt.copy( 1 ); // without '*'
+            m_pName_ed->SetText( sFileName );
+        }
+    }
+}
+
 void RemoteFilesDialog::EnableControls()
 {
     if( m_pServices_lb->GetEntryCount() > 0 )
@@ -787,6 +804,10 @@ IMPL_LINK ( RemoteFilesDialog, SelectBreadcrumbHdl, Breadcrumb*, pPtr )
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
 {
+    // auto extension
+    if( m_eMode == REMOTEDLG_MODE_SAVE )
+        AddFileExtension();
+
     // check if file/path exists
 
     OUString sCurrentPath = m_pFileView->GetViewURL();
