@@ -150,8 +150,10 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 
     mpTargetLink->NbcSetOutlinerParaObject(pNewText);
 
+    // Restore size and set new text
     pOutl->SetMaxAutoPaperSize(aOldSize);
     pOutl->SetText(*pNewText);
+    pOutl->SetMaxAutoPaperSize(Size(pOutl->GetMaxAutoPaperSize().Width(), pOutl->GetTextHeight()));
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
 
