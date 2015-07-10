@@ -26,14 +26,14 @@
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.h>
 
 #include <string.h>
 #include <vector>
 
 using ::cppu::OWeakObject;
-using ::cppu::WeakImplHelper4;
+using ::cppu::WeakImplHelper;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -42,7 +42,7 @@ using namespace ::osl;
 namespace comphelper
 {
 
-class UNOMemoryStream : public WeakImplHelper4 < XStream, XSeekableInputStream, XOutputStream, XTruncate >
+class UNOMemoryStream : public WeakImplHelper< XStream, XSeekableInputStream, XOutputStream, XTruncate >
 {
 public:
     UNOMemoryStream();

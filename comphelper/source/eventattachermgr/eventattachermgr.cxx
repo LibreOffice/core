@@ -40,8 +40,7 @@
 #include <com/sun/star/script/XScriptListener.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <deque>
 #include <algorithm>
@@ -76,7 +75,7 @@ struct AttacherIndex_Impl
 
 
 class ImplEventAttacherManager
-    : public WeakImplHelper2< XEventAttacherManager, XPersistObject >
+    : public WeakImplHelper< XEventAttacherManager, XPersistObject >
 {
     friend class AttacherAllListener_Impl;
     ::std::deque< AttacherIndex_Impl >  aIndex;
@@ -143,7 +142,7 @@ private:
 
 // Implementation of an EventAttacher-subclass 'AllListeners', which
 // only passes individual events of the general AllListeners.
-class AttacherAllListener_Impl : public WeakImplHelper1< XAllListener >
+class AttacherAllListener_Impl : public WeakImplHelper< XAllListener >
 {
     ImplEventAttacherManager*           mpManager;
     Reference< XEventAttacherManager >  xManager;

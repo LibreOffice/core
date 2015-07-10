@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
@@ -33,7 +33,7 @@ using namespace com::sun::star;
 
 typedef std::vector < uno::Sequence< beans::PropertyValue > > IndexedPropertyValues;
 
-class IndexedPropertyValuesContainer : public cppu::WeakImplHelper2< container::XIndexContainer, lang::XServiceInfo >
+class IndexedPropertyValuesContainer : public cppu::WeakImplHelper< container::XIndexContainer, lang::XServiceInfo >
 {
 public:
     IndexedPropertyValuesContainer() throw();

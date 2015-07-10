@@ -20,7 +20,7 @@
 #define INCLUDED_COMPHELPER_SERVICEDECL_HXX
 
 #include <comphelper/comphelperdllapi.h>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <uno/environment.h>
@@ -48,7 +48,7 @@ typedef ::boost::function3<
     The declaration can be done in various ways, the (simplest) form is
 
     <pre>
-    class MyClass : public cppu::WeakImplHelper2<XInterface1, XInterface2> {
+    class MyClass : public cppu::WeakImplHelper<XInterface1, XInterface2> {
     public:
         MyClass( uno::Reference<uno::XComponentContext> const& xContext )
         [...]
@@ -66,7 +66,7 @@ typedef ::boost::function3<
     context:
 
     <pre>
-    class MyClass : public cppu::WeakImplHelper2<XInterface1, XInterface2> {
+    class MyClass : public cppu::WeakImplHelper<XInterface1, XInterface2> {
     public:
         MyClass( uno::Sequence<uno::Any> const& args,
                  uno::Reference<uno:XComponentContext> const& xContext )
@@ -182,9 +182,9 @@ private:
 };
 
 template <typename ImplT>
-class ServiceImpl : public OwnServiceImpl< ::cppu::ImplInheritanceHelper1<ImplT,css::lang::XServiceInfo> >
+class ServiceImpl : public OwnServiceImpl< ::cppu::ImplInheritanceHelper<ImplT,css::lang::XServiceInfo> >
 {
-typedef OwnServiceImpl< ::cppu::ImplInheritanceHelper1<ImplT,css::lang::XServiceInfo> > ServiceImpl_BASE;
+typedef OwnServiceImpl< ::cppu::ImplInheritanceHelper<ImplT,css::lang::XServiceInfo> > ServiceImpl_BASE;
 public:
     ServiceImpl(
         ServiceDecl const& rServiceDecl,

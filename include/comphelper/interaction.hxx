@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_INTERACTION_HXX
 
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
@@ -63,7 +63,7 @@ namespace comphelper
     */
     template <class INTERACTION>
     class OInteraction
-            :public ::cppu::WeakImplHelper1< INTERACTION >
+            :public ::cppu::WeakImplHelper< INTERACTION >
             ,public OInteractionSelect
     {
     public:
@@ -126,8 +126,8 @@ namespace comphelper
 
     //= OInteractionRequest
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionRequest
-                                    >   OInteractionRequest_Base;
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::task::XInteractionRequest
+                                   >   OInteractionRequest_Base;
     /** implements an interaction request (com.sun.star.task::XInteractionRequest)<p/>
         at run time, you can freely add any interaction continuation objects
     */

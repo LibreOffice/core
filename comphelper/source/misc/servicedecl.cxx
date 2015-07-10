@@ -22,7 +22,7 @@
 #include <osl/diagnose.h>
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <vector>
@@ -33,7 +33,7 @@ namespace comphelper {
 namespace service_decl {
 
 class ServiceDecl::Factory :
-        public cppu::WeakImplHelper2<lang::XSingleComponentFactory,
+        public cppu::WeakImplHelper<lang::XSingleComponentFactory,
                                      lang::XServiceInfo>,
         private boost::noncopyable
 {

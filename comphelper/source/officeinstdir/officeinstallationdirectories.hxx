@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_SOURCE_OFFICEINSTDIR_OFFICEINSTALLATIONDIRECTORIES_HXX
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -31,7 +31,7 @@ namespace comphelper {
 
 
 
-typedef cppu::WeakImplHelper2<
+typedef cppu::WeakImplHelper<
             com::sun::star::util::XOfficeInstallationDirectories,
             com::sun::star::lang::XServiceInfo > UnoImplBase;
 

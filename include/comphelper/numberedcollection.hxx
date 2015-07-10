@@ -29,7 +29,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <boost/functional/hash.hpp>
 #include <unordered_map>
 #include <vector>
@@ -46,7 +46,7 @@ namespace comphelper{
     @threadsafe
  */
 class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
-                                              , public  ::cppu::WeakImplHelper1< css::frame::XUntitledNumbers >
+                                              , public  ::cppu::WeakImplHelper< css::frame::XUntitledNumbers >
 {
 
     // types, const

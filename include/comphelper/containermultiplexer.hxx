@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_CONTAINERMULTIPLEXER_HXX
 
 #include <com/sun/star/container/XContainer.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
 
@@ -71,7 +71,7 @@ namespace comphelper
     //= OContainerListenerAdapter
 
     class COMPHELPER_DLLPUBLIC OContainerListenerAdapter
-            :public cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener >
+            :public cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener >
     {
         friend class OContainerListener;
 

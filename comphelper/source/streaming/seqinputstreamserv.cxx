@@ -26,7 +26,7 @@
 #include <osl/mutex.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 namespace {
 
 class SequenceInputStreamService:
-    public ::cppu::WeakImplHelper3<
+    public ::cppu::WeakImplHelper<
         lang::XServiceInfo,
         io::XSeekableInputStream,
         lang::XInitialization>,

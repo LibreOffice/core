@@ -21,7 +21,7 @@
 #define INCLUDED_COMPHELPER_ACCESSIBLEKEYBINDINGHELPER_HXX
 
 #include <com/sun/star/accessibility/XAccessibleKeyBinding.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 
 #include <vector>
@@ -37,8 +37,8 @@ namespace comphelper
     // OAccessibleKeyBindingHelper
 
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::accessibility::XAccessibleKeyBinding
-                                    >   OAccessibleKeyBindingHelper_Base;
+    typedef ::cppu::WeakImplHelper <   ::com::sun::star::accessibility::XAccessibleKeyBinding
+                                   >   OAccessibleKeyBindingHelper_Base;
 
     /** a helper class for implementing an accessible keybinding
      */

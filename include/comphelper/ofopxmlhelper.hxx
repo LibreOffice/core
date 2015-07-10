@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
 
 
@@ -32,7 +32,7 @@ namespace comphelper
 {
 
 // this helper class is designed to allow to parse ContentType- and Relationship-related information from OfficeOpenXML format
-class COMPHELPER_DLLPUBLIC OFOPXMLHelper : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::XDocumentHandler >
+class COMPHELPER_DLLPUBLIC OFOPXMLHelper : public cppu::WeakImplHelper< com::sun::star::xml::sax::XDocumentHandler >
 {
     sal_uInt16 m_nFormat; // which format to parse
 
