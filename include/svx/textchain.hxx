@@ -114,7 +114,6 @@ class ImpChainLinkProperties
 
     ImpChainLinkProperties() {
         INIT_CHAIN_PROP(NilChainingEvent, false)
-        INIT_CHAIN_PROP(JustHandledUnderflow, false)
         INIT_CHAIN_PROP(CursorEvent, CursorChainingEvent::NULL_EVENT)
         INIT_CHAIN_PROP(PreChainingSel, ESelection(0,0,0,0));
         INIT_CHAIN_PROP(PostChainingSel, ESelection(0,0,0,0));
@@ -123,7 +122,6 @@ class ImpChainLinkProperties
     private:
     // NOTE: Remember to set default value in contructor when adding field
     DECL_CHAIN_PROP(NilChainingEvent, bool)
-    DECL_CHAIN_PROP(JustHandledUnderflow, bool)
     DECL_CHAIN_PROP(CursorEvent, CursorChainingEvent)
     DECL_CHAIN_PROP(PreChainingSel, ESelection)
     DECL_CHAIN_PROP(PostChainingSel, ESelection)
@@ -147,7 +145,6 @@ class TextChain {
     // Specific Link Properties
     DECL_CHAIN_PROP_INTERFACE(CursorEvent, CursorChainingEvent)
     DECL_CHAIN_PROP_INTERFACE(NilChainingEvent, bool)
-    DECL_CHAIN_PROP_INTERFACE(JustHandledUnderflow, bool)
     DECL_CHAIN_PROP_INTERFACE(PreChainingSel, ESelection)
     DECL_CHAIN_PROP_INTERFACE(PostChainingSel, ESelection)
 
