@@ -16,6 +16,8 @@
 
 #include <boost/optional.hpp>
 
+#include <boost/optional.hpp>
+
 using namespace com::sun::star;
 using namespace oox;
 
