@@ -1666,7 +1666,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     xStrm = aDataHelper.GetInputStream(nId, "");
                     if (xStrm.is())
                     {
-                        SfxMedium* pClipboardMedium = new SfxMedium();
+                        std::unique_ptr<SfxMedium> pClipboardMedium(new SfxMedium());
                         pClipboardMedium->GetItemSet(); //generate initial itemset, not sure if necessary
                         const SfxFilter* pMathFilter =
                             SfxFilter::GetFilterByName(MATHML_XML);
@@ -1674,7 +1674,6 @@ void SmViewShell::Execute(SfxRequest& rReq)
                         pClipboardMedium->setStreamToLoadFrom(xStrm, true /*bIsReadOnly*/);
                         InsertFrom(*pClipboardMedium);
                         GetDoc()->UpdateText();
-                        delete pClipboardMedium;
                     }
                 }
                 else
@@ -1685,13 +1684,13 @@ void SmViewShell::Execute(SfxRequest& rReq)
                         ::rtl::OUString aString;
                         if (aDataHelper.GetString( nId, aString))
                         {
-                            SfxMedium* pClipboardMedium = new SfxMedium();
+                            std::unique_ptr<SfxMedium> pClipboardMedium(new SfxMedium());
                             pClipboardMedium->GetItemSet(); //generates initial itemset, not sure if necessary
                             const SfxFilter* pMathFilter =
                                 SfxFilter::GetFilterByName(MATHML_XML);
                             pClipboardMedium->SetFilter(pMathFilter);
 
-                            SvMemoryStream * pStrm;
+                            std::unique_ptr<SvMemoryStream> pStrm;
                             // The text to be imported might asserts encoding like 'encoding="utf-8"' but FORMAT_STRING is UTF-16.
                             // Force encoding to UTF-16, if encoding exists.
                             bool bForceUTF16 = false;
@@ -1709,18 +1708,16 @@ void SmViewShell::Execute(SfxRequest& rReq)
                             if ( bForceUTF16 )
                             {
                                 OUString aNewString = aString.replaceAt( nPosL,nPosU-nPosL,"UTF-16");
-                                pStrm = new SvMemoryStream( const_cast<sal_Unicode *>(aNewString.getStr()), aNewString.getLength() * sizeof(sal_Unicode), StreamMode::READ);
+                                pStrm.reset(new SvMemoryStream( const_cast<sal_Unicode *>(aNewString.getStr()), aNewString.getLength() * sizeof(sal_Unicode), StreamMode::READ));
                             }
                             else
                             {
-                                pStrm = new SvMemoryStream( const_cast<sal_Unicode *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode), StreamMode::READ);
+                                pStrm.reset(new SvMemoryStream( const_cast<sal_Unicode *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode), StreamMode::READ));
                             }
                             uno::Reference<io::XInputStream> xStrm2( new ::utl::OInputStreamWrapper(*pStrm) );
                             pClipboardMedium->setStreamToLoadFrom(xStrm2, true /*bIsReadOnly*/);
                             InsertFrom(*pClipboardMedium);
                             GetDoc()->UpdateText();
-                            delete pClipboardMedium;
-                            delete pStrm;
                         }
                     }
                 }
