@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_INC_CACHEDDATASEQUENCE_HXX
 
 // helper classes
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -44,7 +44,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper7<
+typedef ::cppu::WeakComponentImplHelper<
     ::com::sun::star::chart2::data::XDataSequence,
     ::com::sun::star::chart2::data::XNumericalDataSequence,
     ::com::sun::star::chart2::data::XTextualDataSequence,

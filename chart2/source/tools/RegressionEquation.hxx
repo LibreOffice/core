@@ -30,7 +30,7 @@
 #include "OPropertySet.hxx"
 #include "ModifyListenerHelper.hxx"
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 namespace chart
@@ -38,7 +38,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper5<
+typedef ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::util::XModifyBroadcaster,

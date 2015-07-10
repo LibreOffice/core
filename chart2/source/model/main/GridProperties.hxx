@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_MODEL_MAIN_GRIDPROPERTIES_HXX
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -37,7 +37,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper4<
+typedef ::cppu::WeakImplHelper<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::util::XCloneable,
         ::com::sun::star::util::XModifyBroadcaster,

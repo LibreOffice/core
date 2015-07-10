@@ -32,7 +32,7 @@
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 
@@ -79,7 +79,7 @@ struct AccessibleElementInfo
 
 namespace impl
 {
-typedef ::cppu::WeakComponentImplHelper6<
+typedef ::cppu::WeakComponentImplHelper<
         ::com::sun::star::accessibility::XAccessible,
         ::com::sun::star::accessibility::XAccessibleContext,
         ::com::sun::star::accessibility::XAccessibleComponent,

@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "charttoolsdllapi.hxx"
 
 #include <map>
@@ -37,7 +37,7 @@ OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::con
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper3<
+typedef ::cppu::WeakImplHelper<
         ::com::sun::star::container::XNameContainer,
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::util::XCloneable >

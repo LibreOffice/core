@@ -95,7 +95,7 @@ uno::Reference< util::XModifyListener > createModifyEventForwarder()
 }
 
 ModifyEventForwarder::ModifyEventForwarder() :
-        ::cppu::WeakComponentImplHelper2<
+        ::cppu::WeakComponentImplHelper<
         ::com::sun::star::util::XModifyBroadcaster,
         ::com::sun::star::util::XModifyListener >( m_aMutex ),
         m_aModifyListeners( m_aMutex )

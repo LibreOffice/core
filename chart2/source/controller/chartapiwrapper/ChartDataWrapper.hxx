@@ -20,7 +20,7 @@
 #define INCLUDED_CHART2_SOURCE_CONTROLLER_CHARTAPIWRAPPER_CHARTDATAWRAPPER_HXX
 
 #include "MutexContainer.hxx"
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart/XDateCategories.hpp>
@@ -40,7 +40,7 @@ class Chart2ModelContact;
 struct lcl_Operator;
 
 class ChartDataWrapper : public MutexContainer, public
-    ::cppu::WeakImplHelper5<
+    ::cppu::WeakImplHelper<
     com::sun::star::chart2::XAnyDescriptionAccess,
     com::sun::star::chart::XDateCategories,
     com::sun::star::lang::XServiceInfo,

@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace chart
 {
@@ -32,7 +32,7 @@ namespace chart
 */
 
 class LogarithmicScaling :
-        public ::cppu::WeakImplHelper3 <
+        public ::cppu::WeakImplHelper<
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::lang::XServiceInfo
@@ -83,7 +83,7 @@ private:
 };
 
 class ExponentialScaling :
-        public ::cppu::WeakImplHelper3 <
+        public ::cppu::WeakImplHelper<
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::lang::XServiceInfo
@@ -133,7 +133,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
 };
 
-class LinearScaling : public ::cppu::WeakImplHelper3 <
+class LinearScaling : public ::cppu::WeakImplHelper<
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::lang::XServiceInfo
@@ -184,7 +184,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_xContext;
 };
 
-class PowerScaling : public ::cppu::WeakImplHelper3 <
+class PowerScaling : public ::cppu::WeakImplHelper<
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::lang::XServiceInfo

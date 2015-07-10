@@ -23,7 +23,7 @@
 #include "OPropertySet.hxx"
 #include "ModifyListenerHelper.hxx"
 
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
@@ -38,7 +38,7 @@ namespace chart
 
 namespace impl
 {
-typedef ::cppu::WeakImplHelper6<
+typedef ::cppu::WeakImplHelper<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::chart2::XRegressionCurve,
