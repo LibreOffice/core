@@ -570,7 +570,7 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
 
     if ( nMinDecimals >= 0 )   // negative = automatic
     {
-        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_DIGITS,
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_PLACES,
                               OUString::number( nMinDecimals ) );
     }
 
@@ -651,7 +651,7 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
 
     if ( nMinDecimals >= 0 )   // negative = automatic
     {
-        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_DIGITS,
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_MIN_DECIMAL_PLACES,
                               OUString::number( nMinDecimals ) );
     }
 
@@ -692,11 +692,11 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
     //  exponent sign
     if ( bExpSign )
     {
-        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_EXPONENT_SIGN, XML_TRUE );
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_FORCED_EXPONENT_SIGN, XML_TRUE );
     }
     else
     {
-        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_EXPONENT_SIGN, XML_FALSE );
+        rExport.AddAttribute( XML_NAMESPACE_LO_EXT, XML_FORCED_EXPONENT_SIGN, XML_FALSE );
     }
 
     SvXMLElementExport aElem( rExport,
