@@ -16,6 +16,29 @@
       "revId": "76d1a055358a48093aab8148770f5989ad4b0ffe",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_3e7e2be5",
+        "filename": "extensions/source/logging/logger.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-10T08:50:05Z",
+      "side": 1,
+      "message": "According to failed Jenkins build, overloaded function type cannot be induced here \u003d\u003e replace with lambda.",
+      "range": {
+        "startLine": 178,
+        "startChar": 8,
+        "endLine": 181,
+        "endChar": 53
+      },
+      "revId": "76d1a055358a48093aab8148770f5989ad4b0ffe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
