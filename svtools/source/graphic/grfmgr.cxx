@@ -28,6 +28,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/metaact.hxx>
@@ -184,14 +185,25 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const OSt
             {
                 if( !mpGlobalMgr )
                 {
-                    mpGlobalMgr = new GraphicManager(
-                        (officecfg::Office::Common::Cache::GraphicManager::
-                         TotalCacheSize::get()),
-                        (officecfg::Office::Common::Cache::GraphicManager::
-                         ObjectCacheSize::get()));
-                    mpGlobalMgr->SetCacheTimeout(
-                        officecfg::Office::Common::Cache::GraphicManager::
-                        ObjectReleaseTime::get());
+                    if (!utl::ConfigManager::IsAvoidConfig())
+                    {
+                        mpGlobalMgr = new GraphicManager(
+                            (officecfg::Office::Common::Cache::GraphicManager::
+                             TotalCacheSize::get()),
+                            (officecfg::Office::Common::Cache::GraphicManager::
+                             ObjectCacheSize::get()));
+                        mpGlobalMgr->SetCacheTimeout(
+                            officecfg::Office::Common::Cache::GraphicManager::
+                            ObjectReleaseTime::get());
+                    }
+                    else
+                    {
+                        mpGlobalMgr = new GraphicManager(
+                            20000,
+                            20000);
+                        mpGlobalMgr->SetCacheTimeout(
+                            20000);
+                    }
                 }
 
                 mpMgr = mpGlobalMgr;

@@ -204,4 +204,16 @@ void utl::ConfigManager::doStoreConfigItems() {
     }
 }
 
+static bool bIsAvoidConfig = false;
+
+bool utl::ConfigManager::IsAvoidConfig()
+{
+    return bIsAvoidConfig;
+}
+
+void utl::ConfigManager::EnableAvoidConfig()
+{
+    bIsAvoidConfig = true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

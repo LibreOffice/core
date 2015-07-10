@@ -73,6 +73,12 @@ public:
 
     SAL_DLLPRIVATE void registerConfigItem(utl::ConfigItem * item);
 
+    // Avoid using the config layer and rely on defaults
+    // which is only useful for special test tool targets
+    // where start-up speed is of the essence
+    static bool IsAvoidConfig();
+    static void EnableAvoidConfig();
+
 private:
 
     ConfigManager(const ConfigManager&) SAL_DELETED_FUNCTION;

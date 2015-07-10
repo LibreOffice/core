@@ -45,9 +45,11 @@
 #include <svx/xflgrit.hxx>
 #include <svx/svdoole2.hxx>
 #include <svl/itempool.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <i18nlangtag/lang.h>
 #include <unotools/syslocale.hxx>
+#include <unotools/configmgr.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -74,9 +76,11 @@ SdrGlobalData::SdrGlobalData() :
     pResMgr(NULL),
     nExchangeFormat(0)
 {
-
-    svx::ExtrusionBar::RegisterInterface();
-    svx::FontworkBar::RegisterInterface();
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        svx::ExtrusionBar::RegisterInterface();
+        svx::FontworkBar::RegisterInterface();
+    }
 }
 
 const SvtSysLocale*         SdrGlobalData::GetSysLocale()
@@ -104,7 +108,10 @@ SdrGlobalData & GetSdrGlobalData() {
 
 OLEObjCache::OLEObjCache()
 {
-    nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
+    if (!utl::ConfigManager::IsAvoidConfig())
+        nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
+    else
+        nSize = 100;
     pTimer = new AutoTimer();
     Link<Timer *, void> aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
 

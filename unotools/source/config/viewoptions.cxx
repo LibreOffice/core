@@ -149,6 +149,9 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const OUString& sList )
         ,   m_nWriteCount( 0     )
         #endif
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
+
     try
     {
         m_xRoot = css::uno::Reference< css::container::XNameAccess >(

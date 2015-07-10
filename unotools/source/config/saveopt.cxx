@@ -567,9 +567,18 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
         }
     }
 
-    bAutoSave = officecfg::Office::Recovery::AutoSave::Enabled::get();
-    nAutoSaveTime = officecfg::Office::Recovery::AutoSave::TimeIntervall::get();
-    bUserAutoSave = officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get();
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        bAutoSave = officecfg::Office::Recovery::AutoSave::Enabled::get();
+        nAutoSaveTime = officecfg::Office::Recovery::AutoSave::TimeIntervall::get();
+        bUserAutoSave = officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get();
+    }
+    else
+    {
+        bAutoSave = false;
+        nAutoSaveTime = 0;
+        bUserAutoSave = false;
+    }
 }
 
 SvtSaveOptions_Impl::~SvtSaveOptions_Impl()

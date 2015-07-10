@@ -56,6 +56,7 @@
 #include <SwUndoPageDesc.hxx>
 #include <pagedeschint.hxx>
 #include <tgrditem.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <boost/scoped_ptr.hpp>
@@ -92,7 +93,7 @@ static void lcl_DefaultPageFormat( sal_uInt16 nPoolFormatId,
         nMinRight = nMinTop = nMinBottom = GetMetricVal( CM_1 );
         nMinLeft = nMinRight * 2;
     }
-    else if( MEASURE_METRIC == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum() )
+    else if (!utl::ConfigManager::IsAvoidConfig() && MEASURE_METRIC == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum() )
     {
         nMinTop = nMinBottom = nMinLeft = nMinRight = 1134; // 2 centimetres
     }

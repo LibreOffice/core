@@ -19,6 +19,7 @@
 
 #include <svx/svxids.hrc>
 #include <tools/stream.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sot/storage.hxx>
 #include <svl/intitem.hxx>
@@ -45,6 +46,8 @@ using namespace com::sun::star;
 
 const OUString GetPalettePath()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return OUString();
     SvtPathOptions aPathOpt;
     return aPathOpt.GetPalettePath();
 }
