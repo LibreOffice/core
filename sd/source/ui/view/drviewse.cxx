@@ -56,6 +56,7 @@
 #include <tools/urlobj.hxx>
 #include <svl/slstitm.hxx>
 #include <sfx2/ipclient.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svl/urihelper.hxx>
@@ -964,15 +965,18 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
-        case SID_NOTESMODE:
-        case SID_HANDOUTMODE:
+        case SID_NOTES_MODE:
+        case SID_SLIDE_MASTER_MODE:
+        case SID_NOTES_MASTER_MODE:
+        case SID_HANDOUT_MASTER_MODE:
+
             // AutoLayouts have to be ready.
             GetDoc()->StopWorkStartupDelay();
             // Fall through to following case statements.
 
         case SID_DRAWINGMODE:
-        case SID_DIAMODE:
-        case SID_OUTLINEMODE:
+        case SID_SLIDE_SORTER_MODE:
+        case SID_OUTLINE_MODE:
             // Let the sub-shell manager handle the slot handling.
             framework::FrameworkHelper::Instance(GetViewShellBase())->HandleModeChangeSlot(
                 nSId,
@@ -981,9 +985,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             break;
 
         case SID_MASTERPAGE:          // BASIC
-        case SID_SLIDE_MASTERPAGE:    // BASIC
-        case SID_NOTES_MASTERPAGE:    // BASIC
-        case SID_HANDOUT_MASTERPAGE:  // BASIC
         {
             // AutoLayouts needs to be finished
             GetDoc()->StopWorkStartupDelay();
@@ -999,70 +1000,32 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_START));
 
-            if (nSId == SID_MASTERPAGE                                       ||
-                (nSId == SID_SLIDE_MASTERPAGE   && mePageKind == PK_STANDARD) ||
-                (nSId == SID_NOTES_MASTERPAGE   && mePageKind == PK_NOTES)    ||
-                (nSId == SID_HANDOUT_MASTERPAGE && mePageKind == PK_HANDOUT))
+            // Is there a page with the AutoLayout "Title"?
+            bool bFound = false;
+            sal_uInt16 i = 0;
+            sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
+
+            while (i < nCount && !bFound)
             {
-                if (nSId == SID_SLIDE_MASTERPAGE)
+                SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
+
+                if (nSId == SID_SLIDE_MASTER_MODE && pPage->GetAutoLayout() != AUTOLAYOUT_TITLE)
                 {
-                    // Is there a page with the AutoLayout "Title"?
-                    bool bFound = false;
-                    sal_uInt16 i = 0;
-                    sal_uInt16 nCount = GetDoc()->GetSdPageCount(PK_STANDARD);
-
-                    while (i < nCount && !bFound)
-                    {
-                        SdPage* pPage = GetDoc()->GetSdPage(i, PK_STANDARD);
-
-                        if (nSId == SID_SLIDE_MASTERPAGE && pPage->GetAutoLayout() != AUTOLAYOUT_TITLE)
-                        {
-                            bFound = true;
-                            SwitchPage((pPage->GetPageNum() - 1) / 2);
-                        }
-
-                        i++;
-                    }
+                    bFound = true;
+                    SwitchPage((pPage->GetPageNum() - 1) / 2);
                 }
 
-                // turn on default layer of MasterPage
-                mpDrawView->SetActiveLayer( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
-
-                ChangeEditMode(EM_MASTERPAGE, mbIsLayerModeActive);
-
-                if(HasCurrentFunction(SID_BEZIER_EDIT))
-                    GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+                i++;
             }
-            else
-            {
-                // Switch to requested ViewShell.
-                ::OUString sRequestedView;
-                PageKind ePageKind;
-                switch (nSId)
-                {
-                    case SID_SLIDE_MASTERPAGE:
-                    default:
-                        sRequestedView = framework::FrameworkHelper::msImpressViewURL;
-                        ePageKind = PK_STANDARD;
-                        break;
 
-                    case SID_NOTES_MASTERPAGE:
-                        sRequestedView = framework::FrameworkHelper::msNotesViewURL;
-                        ePageKind = PK_NOTES;
-                        break;
+            // turn on default layer of MasterPage
+            mpDrawView->SetActiveLayer( SD_RESSTR(STR_LAYER_BCKGRNDOBJ) );
 
-                    case SID_HANDOUT_MASTERPAGE:
-                        sRequestedView = framework::FrameworkHelper::msHandoutViewURL;
-                        ePageKind = PK_HANDOUT;
-                        break;
-                }
+            ChangeEditMode(EM_MASTERPAGE, mbIsLayerModeActive);
 
-                mpFrameView->SetViewShEditMode(EM_MASTERPAGE, ePageKind);
-                mpFrameView->SetLayerMode(mbIsLayerModeActive);
-                framework::FrameworkHelper::Instance(GetViewShellBase())->RequestView(
-                    sRequestedView,
-                    framework::FrameworkHelper::msCenterPaneURL);
-            }
+            if(HasCurrentFunction(SID_BEZIER_EDIT))
+                GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
+
             Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
 

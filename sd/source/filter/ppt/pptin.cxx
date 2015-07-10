@@ -1277,7 +1277,7 @@ bool ImplSdPPTImport::Import()
                 }
                 pFrameView->SetPageKind( ePageKind );
                 pFrameView->SetSelectedPage( nSelectedPage );
-                pFrameView->SetViewShEditMode( eEditMode, ePageKind );
+                pFrameView->SetViewShEditMode( eEditMode );
             }
         }
         DffRecordHeader aCustomShowHeader;

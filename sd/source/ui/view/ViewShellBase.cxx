@@ -157,6 +157,9 @@ public:
     */
     void ShowViewTabBar (bool bShow);
 
+    void SetUserWantsTabBar(bool inValue);
+    inline bool GetUserWantsTabBar() { return mbUserWantsTabBar; }
+
     /** Common code of ViewShellBase::OuterResizePixel() and
         ViewShellBase::InnerResizePixel().
     */
@@ -187,7 +190,8 @@ public:
 
 private:
     ViewShellBase& mrBase;
-
+    bool mbUserWantsTabBar;
+    bool mbTabBarShouldBeVisible;
     /** Hold a reference to the page cache manager of the slide sorter in
         order to ensure that it stays alive while the ViewShellBase is
         alive.
@@ -364,6 +368,8 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
         if (pFrameView != nullptr)
             pFrameView->SetViewShellTypeOnLoad(pViewShell->GetShellType());
     }
+    // Hide the TabBar
+    mpImpl->SetUserWantsTabBar(false);
 }
 
 std::shared_ptr<ViewShellManager> ViewShellBase::GetViewShellManager() const
@@ -630,13 +636,23 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
 
-        case SID_NORMAL_MULTI_PANE_GUI:
-        case SID_SLIDE_SORTER_MULTI_PANE_GUI:
+        case SID_TOGGLE_TABBAR_VISIBILITY:
+            mpImpl->SetUserWantsTabBar(!mpImpl->GetUserWantsTabBar());
+            rRequest.Done();
+            break;
+
+        // draw
         case SID_DRAWINGMODE:
-        case SID_DIAMODE:
-        case SID_OUTLINEMODE:
-        case SID_NOTESMODE:
-        case SID_HANDOUTMODE:
+        // impress normal
+        case SID_NORMAL_MULTI_PANE_GUI:
+        case SID_NOTES_MODE:
+        case SID_OUTLINE_MODE:
+        case SID_SLIDE_SORTER_MULTI_PANE_GUI:
+        case SID_SLIDE_SORTER_MODE:
+        // impress master
+        case SID_SLIDE_MASTER_MODE:
+        case SID_NOTES_MASTER_MODE:
+        case SID_HANDOUT_MASTER_MODE:
             framework::FrameworkHelper::Instance(*this)->HandleModeChangeSlot(nSlotId, rRequest);
             break;
 
@@ -833,8 +849,7 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
 
 void ViewShellBase::ShowUIControls (bool bVisible)
 {
-    if (mpImpl->mpViewTabBar.is())
-        mpImpl->mpViewTabBar->GetTabControl()->Show(bVisible);
+    mpImpl->ShowViewTabBar(bVisible);
 
     ViewShell* pMainViewShell = GetMainViewShell().get();
     if (pMainViewShell != nullptr)
@@ -1015,6 +1030,8 @@ ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
       mpEventMultiplexer(),
       mpFormShellManager(),
       mrBase(rBase),
+      mbUserWantsTabBar(false),
+      mbTabBarShouldBeVisible(true),
       mpPageCacheManager(slidesorter::cache::PageCacheManager::Instance())
 {
 }
@@ -1041,9 +1058,11 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot()
         if (pFrameView != nullptr)
         {
             // Set view shell, edit mode, and page kind.
+            // pFrameView->SetViewShEditMode(
+            //     pFrameView->GetViewShEditModeOnLoad(),
+            //     pFrameView->GetPageKindOnLoad());
             pFrameView->SetViewShEditMode(
-                pFrameView->GetViewShEditModeOnLoad(),
-                pFrameView->GetPageKindOnLoad());
+                pFrameView->GetViewShEditModeOnLoad() );
             pFrameView->SetPageKind(
                 pFrameView->GetPageKindOnLoad());
             std::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(mrBase));
@@ -1055,8 +1074,18 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot()
     }
 }
 
+void ViewShellBase::Implementation::SetUserWantsTabBar(bool inValue)
+{
+    mbUserWantsTabBar = inValue;
+    // Call ShowViewTabBar to refresh the TabBar visibility
+    ShowViewTabBar(mbTabBarShouldBeVisible);
+}
+
 void ViewShellBase::Implementation::ShowViewTabBar (bool bShow)
 {
+    mbTabBarShouldBeVisible = bShow;
+    bShow = bShow && mbUserWantsTabBar;
+
     if (mpViewTabBar.is()
         && mpViewTabBar->GetTabControl()->IsVisible() != bShow)
     {
@@ -1194,6 +1223,8 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
             ::comphelper::getProcessComponentContext() );
         SfxWhichIter aSetIterator (rSet);
         sal_uInt16 nItemId (aSetIterator.FirstWhich());
+
+        FrameView *pFrameView;
         while (nItemId > 0)
         {
             bool bState (false);
@@ -1205,49 +1236,62 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     case SID_LEFT_PANE_IMPRESS:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msLeftImpressPaneURL);
+                        bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_LEFT_PANE_DRAW:
                         xResourceId = ResourceId::create(
                             xContext, FrameworkHelper::msLeftDrawPaneURL);
+                        bState = xConfiguration->hasResource(xResourceId);
                         break;
 
                     case SID_NORMAL_MULTI_PANE_GUI:
-                        xResourceId = ResourceId::createWithAnchorURL(
-                            xContext,
-                            FrameworkHelper::msImpressViewURL,
-                            FrameworkHelper::msCenterPaneURL);
+                        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
+                        bState = pFrameView->GetViewShEditMode() == EM_PAGE
+                            && pFrameView->GetPageKind() == PK_STANDARD;
                         break;
 
+                    case SID_SLIDE_MASTER_MODE:
+                        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
+                        bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
+                            && pFrameView->GetPageKind() == PK_STANDARD;
+
                     case SID_SLIDE_SORTER_MULTI_PANE_GUI:
-                    case SID_DIAMODE:
+                    case SID_SLIDE_SORTER_MODE:
                         xResourceId = ResourceId::createWithAnchorURL(
                             xContext,
                             FrameworkHelper::msSlideSorterURL,
                             FrameworkHelper::msCenterPaneURL);
+                        bState = xConfiguration->hasResource(xResourceId);
                         break;
 
-                    case SID_OUTLINEMODE:
+                    case SID_OUTLINE_MODE:
                         xResourceId = ResourceId::createWithAnchorURL(
                             xContext,
                             FrameworkHelper::msOutlineViewURL,
                             FrameworkHelper::msCenterPaneURL);
+                        bState = xConfiguration->hasResource(xResourceId);
                         break;
 
-                    case SID_HANDOUTMODE:
-                        // There is only the master page mode for the handout
-                        // view so ignore the master page flag.
-                        xResourceId = ResourceId::createWithAnchorURL(
-                            xContext,
-                            FrameworkHelper::msHandoutViewURL,
-                            FrameworkHelper::msCenterPaneURL);
+                    case SID_HANDOUT_MASTER_MODE:
+                        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
+                        bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
+                            && pFrameView->GetPageKind() == PK_HANDOUT;
                         break;
 
-                    case SID_NOTESMODE:
-                        xResourceId = ResourceId::createWithAnchorURL(
-                            xContext,
-                            FrameworkHelper::msNotesViewURL,
-                            FrameworkHelper::msCenterPaneURL);
+                    case SID_NOTES_MODE:
+                        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
+                        bState = pFrameView->GetViewShEditMode() == EM_PAGE
+                            && pFrameView->GetPageKind() == PK_NOTES;
+                        break;
+
+                    case SID_NOTES_MASTER_MODE:
+                        pFrameView = mrBase.GetMainViewShell()->GetFrameView();
+                        bState = pFrameView->GetViewShEditMode() == EM_MASTERPAGE
+                            && pFrameView->GetPageKind() == PK_NOTES;
+
+                    case SID_TOGGLE_TABBAR_VISIBILITY:
+                        bState = GetUserWantsTabBar();
                         break;
 
                     default:
@@ -1267,7 +1311,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
             switch (nItemId)
             {
                 case SID_NORMAL_MULTI_PANE_GUI:
-                case SID_NOTESMODE:
+                case SID_NOTES_MODE:
                 {
                     // Determine the master page mode.
                     ViewShell* pCenterViewShell = FrameworkHelper::Instance(mrBase)->GetViewShell(
@@ -1285,7 +1329,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     break;
                 }
 
-                case SID_HANDOUTMODE:
+                case SID_HANDOUT_MASTER_MODE:
                     // There is only the master page mode for the handout
                     // view so ignore the master page flag.
                     break;
