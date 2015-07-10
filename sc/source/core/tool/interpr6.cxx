@@ -660,23 +660,36 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if ( nGlobalError )
                         nGlobalError = 0;
                 }
-                else if ( eFunc == ifSUM && !mnSubTotalFlags )
+                else if ( ( eFunc == ifSUM || eFunc == ifCOUNT ) && !mnSubTotalFlags )
                 {
                     sc::ColumnSpanSet aSet( false );
                     aSet.set( aRange, true );
 
-                    FuncSum aAction;
-                    aSet.executeColumnAction( *pDok, aAction, fMem );
-                    sal_uInt16 nErr = aAction.getError();
-                    if ( nErr )
+                    if ( eFunc == ifSUM )
                     {
-                        SetError( nErr );
-                        return fRes;
-                    }
-                    fRes += aAction.getSum();
+                        FuncSum aAction;
+                        aSet.executeColumnAction( *pDok, aAction, fMem );
+                        sal_uInt16 nErr = aAction.getError();
+                        if ( nErr )
+                        {
+                            SetError( nErr );
+                            return fRes;
+                        }
+                        fRes += aAction.getSum();
 
-                    // Get the number format of the last iterated cell.
-                    nFuncFmtIndex = aAction.getNumberFormat();
+                        // Get the number format of the last iterated cell.
+                        nFuncFmtIndex = aAction.getNumberFormat();
+                    }
+                    else
+                    {
+                        FuncCount aAction;
+                        aSet.executeColumnAction(*pDok, aAction);
+                        nCount += aAction.getCount();
+
+                        // Get the number format of the last iterated cell.
+                        nFuncFmtIndex = aAction.getNumberFormat();
+                    }
+
                     nFuncFmtType = pDok->GetFormatTable()->GetType( nFuncFmtIndex );
                 }
                 else
@@ -848,154 +861,7 @@ void ScInterpreter::ScAverage( bool bTextAsZero )
 
 void ScInterpreter::ScCount()
 {
-    if ( mnSubTotalFlags )
-        PushDouble( IterateParameters( ifCOUNT ) );
-    else
-    {
-        short nParamCount = GetByte();
-        sal_uLong nCount = 0;
-        ScAddress aAdr;
-        ScRange aRange;
-        size_t nRefInList = 0;
-        if (nGlobalError)
-            nGlobalError = 0;
-
-        while (nParamCount-- > 0)
-        {
-            switch (GetRawStackType())
-            {
-                case svString:
-                {
-                    OUString aStr = PopString().getString();
-                    // Only check if string can be converted to number, no
-                    // error propagation.
-                    sal_uInt16 nErr = nGlobalError;
-                    nGlobalError = 0;
-                    ConvertStringToValue( aStr );
-                    if (!nGlobalError)
-                        ++nCount;
-                    nGlobalError = nErr;
-                }
-                break;
-                case svDouble    :
-                    GetDouble();
-                    nCount++;
-                    nFuncFmtType = css::util::NumberFormat::NUMBER;
-                    break;
-                case svExternalSingleRef:
-                {
-                    ScExternalRefCache::TokenRef pToken;
-                    ScExternalRefCache::CellFormat aFmt;
-                    PopExternalSingleRef(pToken, &aFmt);
-                    if (nGlobalError)
-                    {
-                        nGlobalError = 0;
-                        break;
-                    }
-
-                    if (!pToken)
-                        break;
-
-                    StackVar eType = pToken->GetType();
-                    if (eType == formula::svDouble)
-                    {
-                        nCount++;
-                        if (aFmt.mbIsSet)
-                        {
-                            nFuncFmtType = aFmt.mnType;
-                            nFuncFmtIndex = aFmt.mnIndex;
-                        }
-
-                        if (nGlobalError)
-                        {
-                            nGlobalError = 0;
-                            nCount--;
-                        }
-                    }
-                }
-                break;
-                case svSingleRef :
-                {
-                    PopSingleRef( aAdr );
-                    if (nGlobalError)
-                    {
-                        nGlobalError = 0;
-                        break;
-                    }
-                    ScRefCellValue aCell;
-                    aCell.assign(*pDok, aAdr);
-                    if (!aCell.isEmpty())
-                    {
-                        if (aCell.hasNumeric())
-                        {
-                            nCount++;
-                            CurFmtToFuncFmt();
-                            if (nGlobalError)
-                            {
-                                nGlobalError = 0;
-                                nCount--;
-                            }
-                        }
-                    }
-                }
-                break;
-                case svDoubleRef :
-                case svRefList :
-                {
-                    PopDoubleRef( aRange, nParamCount, nRefInList);
-                    if (nGlobalError)
-                    {
-                        nGlobalError = 0;
-                        break;
-                    }
-
-                    sc::ColumnSpanSet aSet(false);
-                    aSet.set(aRange, true);
-
-                    FuncCount aAction;
-                    aSet.executeColumnAction(*pDok, aAction);
-                    nCount += aAction.getCount();
-
-                    // Get the number format of the last iterated cell.
-                    nFuncFmtIndex = aAction.getNumberFormat();
-                    nFuncFmtType = pDok->GetFormatTable()->GetType(nFuncFmtIndex);
-                }
-                break;
-                case svExternalDoubleRef:
-                {
-                    ScMatrixRef pMat;
-                    PopExternalDoubleRef(pMat);
-                    if (nGlobalError)
-                        break;
-
-                    double fMem = 0.0, fRes = 0.0;
-                    IterateMatrix(pMat, ifCOUNT, false, nCount, nFuncFmtType, fRes, fMem );
-                }
-                break;
-                case svMatrix :
-                {
-                    ScMatrixRef pMat = PopMatrix();
-                    double fMem = 0.0, fRes = 0.0;
-                    IterateMatrix(pMat, ifCOUNT, false, nCount, nFuncFmtType, fRes, fMem );
-                }
-                break;
-                case svError:
-                {
-                    PopError();
-                    nGlobalError = 0;
-                }
-                break;
-                default :
-                    while (nParamCount-- > 0)
-                        PopError();
-                    SetError(errIllegalParameter);
-            }
-        }
-
-        nFuncFmtType = css::util::NumberFormat::NUMBER;
-
-        PushDouble(nCount);
-    }
+    PushDouble( IterateParameters( ifCOUNT ) );
 }
 
 void ScInterpreter::ScCount2()
