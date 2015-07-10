@@ -220,6 +220,8 @@ public:
         { return rStruct; }
     virtual sal_Int32 SAL_CALL testPPCAlignment( sal_Int64, sal_Int64, sal_Int32, sal_Int64, sal_Int32 i2 ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return i2; }
+    virtual sal_Int32 SAL_CALL testPPC64Alignment( double , double , double , sal_Int32 i1 ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        { return i1; }
     virtual double SAL_CALL testTenDoubles( double d1, double d2, double d3, double d4, double d5, double d6, double d7, double d8, double d9, double d10 ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
         { return d1 + d2 + d3 + d4 + d5 + d6 + d7 + d8 + d9 + d10; }
     virtual sal_Bool SAL_CALL getBool() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE

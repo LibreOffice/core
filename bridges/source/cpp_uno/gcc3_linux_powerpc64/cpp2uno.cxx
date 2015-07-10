@@ -133,6 +133,12 @@ static typelib_TypeClass cpp2uno_call(
                         }
                         pCppArgs[nPos] = pUnoArgs[nPos] = fpreg++;
                         nf++;
+
+                        if (ng < ppc64::MAX_GPR_REGS)
+                        {
+                            ng++;
+                            gpreg++;
+                        }
                     }
                     else
                     {
