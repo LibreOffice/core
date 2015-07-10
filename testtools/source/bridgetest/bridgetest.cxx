@@ -529,6 +529,10 @@ static bool performTest(
                 bRet &= check(i2 == 0xBEAF, "ppc-style alignment test");
             }
             {
+                sal_Int32 i1 = xLBT->testPPC64Alignment(1.0, 2.0, 3.0, 0xBEAF);
+                bRet &= check(i1 == 0xBEAF, "ppc64-style alignment test");
+            }
+            {
                 double d1 = xLBT->testTenDoubles(0.1, 0.2, 0.3, 0.4, 0.5,
                     0.6, 0.7, 0.8, 0.9, 1.0);
                 bRet &= check(d1 == 5.5, "armhf doubles test");
