@@ -131,28 +131,31 @@ bool SwDoc::IsUsed( const SwNumRule& rRule )
     return bUsed;
 }
 
+const OUString* SwDoc::GetDocPattern(size_t const nPos) const
+{
+    if (nPos >= m_PatternNames.size())
+        return nullptr;
+    return &m_PatternNames[nPos];
+}
+
 // Look for the style name's position. If it doesn't exist,
 // insert a anew
-sal_uInt16 SwDoc::SetDocPattern( const OUString& rPatternName )
+size_t SwDoc::SetDocPattern(const OUString& rPatternName)
 {
     OSL_ENSURE( !rPatternName.isEmpty(), "no Document style name" );
 
-    size_t nNewPos = maPatternNms.size();
-    for(size_t n = 0; n < maPatternNms.size(); ++n)
-        if( boost::is_null(maPatternNms.begin() + n) )
-        {
-            if( nNewPos == maPatternNms.size() )
-                nNewPos = n;
-        }
-        else if( rPatternName == maPatternNms[n] )
-            return n;
-
-    if( nNewPos < maPatternNms.size() )
-        maPatternNms.erase(maPatternNms.begin() + nNewPos);   // Free space again
-
-    maPatternNms.insert(maPatternNms.begin() + nNewPos, new OUString(rPatternName));
-    getIDocumentState().SetModified();
-    return nNewPos;
+    auto const iter(
+        std::find(m_PatternNames.begin(), m_PatternNames.end(), rPatternName));
+    if (iter != m_PatternNames.end())
+    {
+        return std::distance(m_PatternNames.begin(), iter);
+    }
+    else
+    {
+        m_PatternNames.push_back(rPatternName);
+        getIDocumentState().SetModified();
+        return m_PatternNames.size() - 1;
+    }
 }
 
 sal_uInt16 GetPoolParent( sal_uInt16 nId )

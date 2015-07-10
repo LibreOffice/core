@@ -263,7 +263,7 @@ class SW_DLLPUBLIC SwDoc :
     Idle       maOLEModifiedIdle;      //< Timer for update modified OLE-Objects
     SwDBData    maDBData;                //< database descriptor
     OUString    msTOIAutoMarkURL;        //< URL of table of index AutoMark file
-    boost::ptr_vector< boost::nullable<OUString> > maPatternNms;          // Array for names of document-templates
+    std::vector<OUString> m_PatternNames; //< Array for names of document-templates
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
         mxXForms;                        //< container with XForms models
     mutable com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > m_xGCIterator;
@@ -907,17 +907,10 @@ public:
     static bool IsUsed( const SwNumRule& );
 
     // Set name of newly loaded document template.
-    sal_uInt16 SetDocPattern( const OUString& rPatternName );
+    size_t SetDocPattern(const OUString& rPatternName);
 
     // @return name of document template. Can be 0!
-    const OUString* GetDocPattern( sal_uInt16 nPos ) const
-    {
-        if(nPos >= maPatternNms.size())
-            return NULL;
-        if(boost::is_null(maPatternNms.begin() + nPos))
-            return NULL;
-        return &(maPatternNms[nPos]);
-    }
+    const OUString* GetDocPattern(size_t nPos) const;
 
     // Query / connect current document with glossary document.
     void SetGlossaryDoc( SwDoc* pDoc ) { mpGlossaryDoc = pDoc; }
