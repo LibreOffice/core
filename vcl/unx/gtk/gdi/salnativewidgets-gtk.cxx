@@ -3192,6 +3192,15 @@ bool GtkSalGraphics::NWPaintGTKToolbar(
     return true;
 }
 
+/// Converts a VCL Rectangle to a GdkRectangle.
+static void lcl_rectangleToGdkRectangle(const Rectangle& rRectangle, GdkRectangle& rGdkRectangle)
+{
+    rGdkRectangle.x = rRectangle.Left();
+    rGdkRectangle.y = rRectangle.Top();
+    rGdkRectangle.width = rRectangle.GetWidth();
+    rGdkRectangle.height = rRectangle.GetHeight();
+}
+
 bool GtkSalGraphics::NWPaintGTKMenubar(
             GdkDrawable* gdkDrawable,
             ControlType, ControlPart nPart,
@@ -3226,10 +3235,7 @@ bool GtkSalGraphics::NWPaintGTKMenubar(
 
     for( clipList::const_iterator it = rClipList.begin(); it != rClipList.end(); ++it )
     {
-        clipRect.x = it->Left();
-        clipRect.y = it->Top();
-        clipRect.width = it->GetWidth();
-        clipRect.height = it->GetHeight();
+        lcl_rectangleToGdkRectangle(*it, clipRect);
 
         // handle Menubar
         if( nPart == PART_ENTIRE_CONTROL )
@@ -3249,6 +3255,10 @@ bool GtkSalGraphics::NWPaintGTKMenubar(
                                 GTK_WIDGET(m_pWindow),
                                 "base",
                                 x, y, w, h );
+
+            // Do the conversion again, in case clipRect has been modified.
+            lcl_rectangleToGdkRectangle(*it, clipRect);
+
             gtk_paint_box( gWidgetData[m_nXScreen].gMenubarWidget->style,
                            gdkDrawable,
                            stateType,
