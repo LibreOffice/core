@@ -17,8 +17,6 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/childwin.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 /** SfxChildWindow for positioning the InfoBar in the view.
   */
 class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow

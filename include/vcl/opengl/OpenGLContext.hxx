@@ -52,11 +52,11 @@ class NSOpenGLView;
 #endif
 
 #include <vcl/dllapi.h>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>
 #include <vcl/syschild.hxx>
 
+#include <map>
 #include <set>
 
 class OpenGLFramebuffer;
