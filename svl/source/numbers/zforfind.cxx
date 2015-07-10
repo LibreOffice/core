@@ -3221,7 +3221,16 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         }
         if ( nMatchedAllStrings )
         {
-            eScannedType = eSetType;
+            // A type DEFINED means that no category could be assigned to the
+            // overall format because of mixed type subformats. Use the scan
+            // matched subformat's type if any.
+            short eForType = eSetType;
+            if ((eForType == NUMBERFORMAT_UNDEFINED || eForType == NUMBERFORMAT_DEFINED) && pFormat)
+                eForType = pFormat->GetNumForInfoScannedType( nStringScanNumFor);
+            if (eForType != NUMBERFORMAT_UNDEFINED && eForType != NUMBERFORMAT_DEFINED)
+                eScannedType = eForType;
+            else
+                eScannedType = NUMBERFORMAT_NUMBER;
         }
         else if ( bDidMatch )
         {
@@ -3249,7 +3258,15 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         }
         if ( nMatchedAllStrings )
         {
-            eScannedType = eSetType;
+            // A type DEFINED means that no category could be assigned to the
+            // overall format because of mixed type subformats. Do not override
+            // the scanned type in this case. Otherwise in IsNumberFormat() the
+            // first numeric particle would be accepted as number.
+            short eForType = eSetType;
+            if ((eForType == NUMBERFORMAT_UNDEFINED || eForType == NUMBERFORMAT_DEFINED) && pFormat)
+                eForType = pFormat->GetNumForInfoScannedType( nStringScanNumFor);
+            if (eForType != NUMBERFORMAT_UNDEFINED && eForType != NUMBERFORMAT_DEFINED)
+                eScannedType = eForType;
         }
         else if ( bWasReturn )
         {
