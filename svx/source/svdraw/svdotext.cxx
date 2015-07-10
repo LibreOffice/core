@@ -2073,10 +2073,6 @@ SdrTextObj* SdrTextObj::GetNextLinkInChain() const
     /* FIXME(matteocam) return mpNextInChain; */
     SdrTextObj *pNextTextObj = NULL;
 
-    // Check that no overflow is going on // XXX: This should be moved in IsChainable
-    if (GetTextChain()->GetNilChainingEvent(this))
-        return NULL;
-
     if ( pPage && pPage->GetObjCount() > 1) {
 
         if (!GetName().startsWith("Chainable")) {

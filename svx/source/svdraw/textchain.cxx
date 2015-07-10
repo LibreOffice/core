@@ -67,7 +67,7 @@ bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj* /* pPrevLink */, SdrT
 }
 
 
-ImpChainLinkProperties *TextChain::GetLinkProperties(const SdrTextObj *pLink)
+ImpChainLinkProperties *TextChain::GetLinkProperties(SdrTextObj *pLink)
 {
     // if the guy does not already have properties in the map make them
     ChainLinkId aLinkId = GetId(pLink);
@@ -78,7 +78,7 @@ ImpChainLinkProperties *TextChain::GetLinkProperties(const SdrTextObj *pLink)
     return maLinkPropertiesMap[aLinkId];
 }
 
-ChainLinkId TextChain::GetId(const SdrTextObj *pLink) const
+ChainLinkId TextChain::GetId(SdrTextObj *pLink) const
 {
     return pLink->GetName();
 }

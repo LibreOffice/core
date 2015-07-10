@@ -1478,7 +1478,6 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
      // We need the outliner we get the overflow info from as well as
      //  the outliner for "drawing" (e.g. a drawing or chaining outliner)
      // maybe the latter ones can be passed at the time of overflow and such
-    GetTextChain()->SetNilChainingEvent(this, true);
     TextChainFlow aTxtChainFlow(const_cast<SdrTextObj*>(this));
     bool bIsOverflow;
 
@@ -1502,8 +1501,6 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
         // We must pass the chaining outliner otherwise we would mess up decomposition
         aTxtChainFlow.ExecuteOverflow(&rOutliner, &rChainingOutl);
     }
-
-    GetTextChain()->SetNilChainingEvent(this, false);
 
     /* End overflow/underflow handling */
 
