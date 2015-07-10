@@ -30,7 +30,6 @@
 
 #include <limits.h>
 #include <vector>
-#include <boost/ptr_container/ptr_map.hpp>
 
 enum class SvListAction
 {
@@ -243,23 +242,8 @@ class SVT_DLLPUBLIC SvListView
 {
     friend class SvTreeList;
 
-    typedef boost::ptr_map<SvTreeListEntry*, SvViewDataEntry> SvDataTable;
-
-    sal_uLong           nVisibleCount;
-    sal_uLong           nSelectionCount;
-    bool                bVisPositionsValid;
-
-    SVT_DLLPRIVATE void InitTable();
-    SVT_DLLPRIVATE void RemoveViewData( SvTreeListEntry* pParent );
-
-    SvDataTable maDataTable;  // Mapping SvTreeListEntry -> ViewData
-
-    void                ActionMoving( SvTreeListEntry* pEntry,SvTreeListEntry* pTargetPrnt,sal_uLong nChildPos);
-    void                ActionMoved( SvTreeListEntry* pEntry,SvTreeListEntry* pTargetPrnt,sal_uLong nChildPos);
-    void                ActionInserted( SvTreeListEntry* pEntry );
-    void                ActionInsertedTree( SvTreeListEntry* pEntry );
-    void                ActionRemoving( SvTreeListEntry* pEntry );
-    void                ActionClear();
+    struct Impl;
+    std::unique_ptr<Impl> m_pImpl;
 
 protected:
     SvTreeList* pModel;
@@ -306,8 +290,7 @@ public:
     SvTreeListEntry*        PrevVisible( SvTreeListEntry* pEntry, sal_uInt16& rDelta ) const
     { return pModel->PrevVisible(this,pEntry,rDelta); }
 
-    sal_uLong           GetSelectionCount() const
-    { return nSelectionCount; }
+    sal_uLong           GetSelectionCount() const;
 
     SvTreeListEntry* FirstSelected() const
     { return pModel->FirstSelected(this); }
@@ -350,8 +333,7 @@ public:
     void                SetEntryFocus( SvTreeListEntry* pEntry, bool bFocus );
     const SvViewDataEntry*         GetViewData( const SvTreeListEntry* pEntry ) const;
     SvViewDataEntry*         GetViewData( SvTreeListEntry* pEntry );
-    bool                HasViewData() const
-    { return maDataTable.size() > 1; }  // There's always a ROOT
+    bool                HasViewData() const;
 
     virtual SvViewDataEntry* CreateViewData( SvTreeListEntry* pEntry );
     virtual void        InitViewData( SvViewDataEntry*, SvTreeListEntry* pEntry );
