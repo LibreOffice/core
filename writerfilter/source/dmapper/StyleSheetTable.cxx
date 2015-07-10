@@ -891,26 +891,20 @@ void PropValVector::Insert(const beans::PropertyValue& rVal)
     }
     m_aValues.push_back(rVal);
 }
+
 uno::Sequence< uno::Any > PropValVector::getValues()
 {
-    uno::Sequence< uno::Any > aRet( m_aValues.size() );
-    uno::Any* pValues = aRet.getArray();
-    sal_Int32 nVal = 0;
-    auto aIt = m_aValues.begin();
-    while (aIt != m_aValues.end())
-    {
-        pValues[nVal++] = aIt->Value;
-        ++aIt;
-    }
-    return aRet;
+    std::vector<uno::Any> aRet;
+    std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet), [](const beans::PropertyValue& rValue) { return rValue.Value; });
+    return comphelper::containerToSequence(aRet);
 }
+
 uno::Sequence< OUString > PropValVector::getNames()
 {
     std::vector<OUString> aRet;
     std::transform(m_aValues.begin(), m_aValues.end(), std::back_inserter(aRet), [](const beans::PropertyValue& rValue) { return rValue.Name; });
     return comphelper::containerToSequence(aRet);
 }
-
 
 void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 {
