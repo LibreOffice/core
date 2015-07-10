@@ -229,16 +229,20 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
 
 // The value in %xmm register is already prepared to be retrieved as a float,
 // thus we treat float and double the same
-#define INSERT_FLOAT( pSV, nr, pFPR, pDS, bOverflow ) \
-        if ( nr < ppc64::MAX_SSE_REGS ) \
+#define INSERT_FLOAT( pSV, nr, pFPR, nGPR, pDS, bOverflow ) \
+        if ( nGPR < ppc64::MAX_GPR_REGS ) \
+                ++nGPR;                   \
+        if ( nr < ppc64::MAX_SSE_REGS )   \
                 pFPR[nr++] = *reinterpret_cast<float *>( pSV ); \
         else \
             bOverflow = true; \
         if (bOverflow) \
                 *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV ); // verbatim!
 
-#define INSERT_DOUBLE( pSV, nr, pFPR, pDS, bOverflow ) \
-        if ( nr < ppc64::MAX_SSE_REGS ) \
+#define INSERT_DOUBLE( pSV, nr, pFPR, nGPR, pDS, bOverflow ) \
+        if ( nGPR < ppc64::MAX_GPR_REGS ) \
+                ++nGPR;                   \
+        if ( nr < ppc64::MAX_SSE_REGS )   \
                 pFPR[nr++] = *reinterpret_cast<double *>( pSV ); \
         else \
             bOverflow = true; \
@@ -390,10 +394,10 @@ static void cpp_call(
                                 INSERT_INT8( pCppArgs[nPos], nGPR, pGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_FLOAT:
-                                INSERT_FLOAT( pCppArgs[nPos], nFPR, pFPR, pStack, bOverflow );
+                                INSERT_FLOAT( pCppArgs[nPos], nFPR, pFPR, nGPR, pStack, bOverflow );
                                 break;
                         case typelib_TypeClass_DOUBLE:
-                                INSERT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, pStack, bOverflow );
+                                INSERT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, nGPR, pStack, bOverflow );
                                 break;
                         default:
                                 break;
