@@ -643,7 +643,13 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
 
                     m_aServices[nPos] = pEditedService;
                     m_pServices_lb->RemoveEntry( nSelected );
-                    m_pServices_lb->InsertEntry( pEditedService->GetName(), nSelected );
+
+                    OUString sPrefix = lcl_GetServiceType( pEditedService );
+
+                    if(!sPrefix.isEmpty())
+                        sPrefix += ": ";
+
+                    m_pServices_lb->InsertEntry( sPrefix + pEditedService->GetName(), nSelected );
                     m_pServices_lb->SelectEntryPos( nSelected );
 
                     m_bIsUpdated = true;
