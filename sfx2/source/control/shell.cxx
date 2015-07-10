@@ -28,7 +28,7 @@
 #include "itemdel.hxx"
 #include <svtools/asynclink.hxx>
 #include <basic/sbx.hxx>
-
+#include <unotools/configmgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/bindings.hxx>
@@ -223,9 +223,11 @@ void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
     // a supported scenario (/me thinks it is not), then we would need to notify all such clients instances.
 
     pUndoMgr = pNewUndoMgr;
-    if ( pUndoMgr )
+    if (pUndoMgr && !utl::ConfigManager::IsAvoidConfig())
+    {
         pUndoMgr->SetMaxUndoActionCount(
             officecfg::Office::Common::Undo::Steps::get());
+    }
 }
 
 SfxRepeatTarget* SfxShell::GetRepeatTarget() const

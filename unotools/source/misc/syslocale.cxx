@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <sal/log.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/processfactory.hxx>
@@ -54,7 +55,13 @@ private:
 
 SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
 {
-    pLocaleData = new LocaleDataWrapper( aSysLocaleOptions.GetRealLanguageTag() );
+    if (utl::ConfigManager::IsAvoidConfig())
+    {
+        pLocaleData = NULL;
+        return;
+    }
+
+    pLocaleData = new LocaleDataWrapper(aSysLocaleOptions.GetRealLanguageTag());
     setDateAcceptancePatternsConfig();
 
     // listen for further changes
@@ -114,6 +121,9 @@ void SvtSysLocale_Impl::setDateAcceptancePatternsConfig()
 
 SvtSysLocale::SvtSysLocale()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
+
     MutexGuard aGuard( GetMutex() );
     if ( !pImpl )
         pImpl = new SvtSysLocale_Impl;

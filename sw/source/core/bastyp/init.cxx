@@ -123,6 +123,7 @@
 #include <tools/globname.hxx>
 #include <tox.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -740,9 +741,16 @@ void _InitCore()
 
     pGlobalOLEExcludeList = new std::vector<SvGlobalName*>;
 
-    const SvxSwAutoFormatFlags& rAFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
-    SwDoc::mpACmpltWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        const SvxSwAutoFormatFlags& rAFlags = SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags();
+        SwDoc::mpACmpltWords = new SwAutoCompleteWord( rAFlags.nAutoCmpltListLen,
                                             rAFlags.nAutoCmpltWordLen );
+    }
+    else
+    {
+        SwDoc::mpACmpltWords = new SwAutoCompleteWord( 0, 0 );
+    }
 }
 
 void _FinitCore()
@@ -855,7 +863,9 @@ void SwCalendarWrapper::LoadDefaultCalendar( sal_uInt16 eLang )
 
 LanguageType GetAppLanguage()
 {
-    return Application::GetSettings().GetLanguageTag().getLanguageType();
+    if (!utl::ConfigManager::IsAvoidConfig())
+        return Application::GetSettings().GetLanguageTag().getLanguageType();
+    return LANGUAGE_ENGLISH_US;
 }
 
 const LanguageTag& GetAppLanguageTag()

@@ -42,6 +42,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <tools/mapunit.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <editeng/unonrule.hxx>
 
@@ -99,8 +100,10 @@ SvxNumberType::~SvxNumberType()
 
 OUString SvxNumberType::GetNumStr( sal_uLong nNo ) const
 {
-    const LanguageTag& rLang = Application::GetSettings().GetLanguageTag();
-    return GetNumStr( nNo, rLang.getLocale() );
+    LanguageTag aLang = utl::ConfigManager::IsAvoidConfig() ?
+        LanguageTag("en-US") :
+        Application::GetSettings().GetLanguageTag();
+    return GetNumStr( nNo, aLang.getLocale() );
 }
 
 OUString SvxNumberType::GetNumStr( sal_uLong nNo, const css::lang::Locale& rLocale ) const

@@ -464,8 +464,8 @@ private:
 
     LanguageType        eDefLanguage;
 
-    OnDemandLocaleDataWrapper       xLocaleDataWrapper;
-    OnDemandTransliterationWrapper  xTransliterationWrapper;
+    OnDemandLocaleDataWrapper*       pLocaleDataWrapper;
+    OnDemandTransliterationWrapper*  pTransliterationWrapper;
 
     // For Formatting / Update ....
     boost::ptr_vector<DeletedNodeInfo> aDeletedNodes;

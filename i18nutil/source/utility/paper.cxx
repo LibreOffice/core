@@ -30,6 +30,7 @@
 
 #include <utility>
 #include <cstdlib>
+#include <unotools/configmgr.hxx>
 
 #ifdef UNX
 #include <stdio.h>
@@ -207,6 +208,9 @@ long PaperInfo::sloppyFitPageDimension(long nDimension)
 
 PaperInfo PaperInfo::getSystemDefaultPaper()
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return PaperInfo(PAPER_A4);
+
     OUString aLocaleStr = officecfg::Setup::L10N::ooSetupSystemLocale::get();
 
 #ifdef UNX

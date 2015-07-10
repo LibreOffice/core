@@ -29,6 +29,7 @@
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/lckbitem.hxx>
@@ -1213,6 +1214,8 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
 
 void SwDocShell::SetModified( bool bSet )
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
     SfxObjectShell::SetModified( bSet );
     if( IsEnableSetModified())
     {

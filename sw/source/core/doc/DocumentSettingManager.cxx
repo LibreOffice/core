@@ -26,6 +26,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
 #include <unotools/compatibility.hxx>
+#include <unotools/configmgr.hxx>
 #include <drawdoc.hxx>
 #include <swmodule.hxx>
 #include <linkenum.hxx>
@@ -92,19 +93,36 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     // Note: Any non-hidden compatibility flag should obtain its default
     // by asking SvtCompatibilityOptions, see below.
 
-    const SvtCompatibilityOptions aOptions;
-    mbParaSpaceMax                      = aOptions.IsAddSpacing();
-    mbParaSpaceMaxAtPages               = aOptions.IsAddSpacingAtPages();
-    mbTabCompat                         = !aOptions.IsUseOurTabStops();
-    mbUseVirtualDevice                  = !aOptions.IsUsePrtDevice();
-    mbAddExternalLeading                = !aOptions.IsNoExtLeading();
-    mbOldLineSpacing                    = aOptions.IsUseLineSpacing();
-    mbAddParaSpacingToTableCells        = aOptions.IsAddTableSpacing();
-    mbUseFormerObjectPos                = aOptions.IsUseObjectPositioning();
-    mbUseFormerTextWrapping             = aOptions.IsUseOurTextWrapping();
-    mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        const SvtCompatibilityOptions aOptions;
+        mbParaSpaceMax                      = aOptions.IsAddSpacing();
+        mbParaSpaceMaxAtPages               = aOptions.IsAddSpacingAtPages();
+        mbTabCompat                         = !aOptions.IsUseOurTabStops();
+        mbUseVirtualDevice                  = !aOptions.IsUsePrtDevice();
+        mbAddExternalLeading                = !aOptions.IsNoExtLeading();
+        mbOldLineSpacing                    = aOptions.IsUseLineSpacing();
+        mbAddParaSpacingToTableCells        = aOptions.IsAddTableSpacing();
+        mbUseFormerObjectPos                = aOptions.IsUseObjectPositioning();
+        mbUseFormerTextWrapping             = aOptions.IsUseOurTextWrapping();
+        mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
 
-    mbDoNotJustifyLinesWithManualBreak      = !aOptions.IsExpandWordSpace();
+        mbDoNotJustifyLinesWithManualBreak      = !aOptions.IsExpandWordSpace();
+    }
+    else
+    {
+        mbParaSpaceMax                      = false;
+        mbParaSpaceMaxAtPages               = false;
+        mbTabCompat                         = true;
+        mbUseVirtualDevice                  = true;
+        mbAddExternalLeading                = true;
+        mbOldLineSpacing                    = false;
+        mbAddParaSpacingToTableCells        = false;
+        mbUseFormerObjectPos                = false;
+        mbUseFormerTextWrapping             = false;
+        mbConsiderWrapOnObjPos              = false;
+        mbDoNotJustifyLinesWithManualBreak  = true;
+    }
 
     // COMPATIBILITY FLAGS END
 

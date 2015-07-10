@@ -36,6 +36,7 @@ $(eval $(call gb_Library_add_defs,i18nutil,\
 ))
 
 $(eval $(call gb_Library_use_libraries,i18nutil,\
+	utl \
 	i18nlangtag \
 	comphelper \
 	cppu \

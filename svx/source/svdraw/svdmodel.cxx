@@ -31,6 +31,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/configmgr.hxx>
 
 #include <svl/whiter.hxx>
 #include <svx/xit.hxx>
@@ -174,9 +175,12 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 
     mbDisableTextEditUsesCommonUndoManager = false;
 
-    mnCharCompressType =
-        officecfg::Office::Common::AsianLayout::CompressCharacterDistance::
-        get();
+    if (!utl::ConfigManager::IsAvoidConfig())
+        mnCharCompressType =
+            officecfg::Office::Common::AsianLayout::CompressCharacterDistance::
+            get();
+    else
+        mnCharCompressType = 0;
 
 #ifdef OSL_LITENDIAN
     nStreamNumberFormat=SvStreamEndian::LITTLE;
@@ -714,7 +718,11 @@ void SdrModel::SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt 
     SvxFontItem aSvxFontItem( EE_CHAR_FONTINFO) ;
     SvxFontItem aSvxFontItemCJK(EE_CHAR_FONTINFO_CJK);
     SvxFontItem aSvxFontItemCTL(EE_CHAR_FONTINFO_CTL);
-    sal_uInt16 nLanguage(Application::GetSettings().GetLanguageTag().getLanguageType());
+    sal_uInt16 nLanguage;
+    if (!utl::ConfigManager::IsAvoidConfig())
+        nLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
+    else
+        nLanguage = LANGUAGE_ENGLISH_US;
 
     // get DEFAULTFONT_LATIN_TEXT and set at pool as dynamic default
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT, nLanguage, GetDefaultFontFlags::OnlyOne, 0));
