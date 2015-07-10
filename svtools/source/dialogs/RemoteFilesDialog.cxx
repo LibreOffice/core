@@ -196,6 +196,9 @@ class FileViewContainer : public vcl::Window
 
     void changeFocus( bool bReverse )
     {
+        if( !m_pFileView || !m_pTreeView )
+            return;
+
         if( !bReverse && m_nCurrentFocus < 4 )
         {
             m_pFocusWidgets[++m_nCurrentFocus]->SetFakeFocus( true );
@@ -210,6 +213,9 @@ class FileViewContainer : public vcl::Window
 
     virtual void GetFocus() SAL_OVERRIDE
     {
+        if( !m_pFileView || !m_pTreeView )
+            return;
+
         m_nCurrentFocus = 1;
         m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus( true );
         m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
@@ -353,10 +359,10 @@ void RemoteFilesDialog::dispose()
         batch->commit();
     }
 
+    m_pContainer.disposeAndClear(); // container must be first!
     m_pTreeView.disposeAndClear();
     m_pFileView.disposeAndClear();
     m_pSplitter.disposeAndClear();
-    m_pContainer.disposeAndClear();
     m_pPath.disposeAndClear();
 
     m_pOk_btn.clear();
