@@ -2129,10 +2129,10 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
         if ( aConditions.isEmpty() && aMyConditions.size() == 1 && sRealCond == ">=0" )
             bDefaultCond = true;
 
-        if ( nType == XML_TOK_STYLES_TEXT_STYLE && nIndex == 2 )
+        if ( nType == XML_TOK_STYLES_TEXT_STYLE && static_cast<size_t>(nIndex) == aMyConditions.size() - 1 )
         {
-            //  The third condition in a number format with a text part can only be
-            //  "all other numbers", the condition string must be empty.
+            //  The last condition in a number format with a text part can only
+            //  be "all other numbers", the condition string must be empty.
             bDefaultCond = true;
         }
 
