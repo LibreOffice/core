@@ -485,9 +485,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         Invalidate( SID_MASTERPAGE );
         Invalidate( SID_DELETE_MASTER_PAGE );
         Invalidate( SID_DELETE_PAGE );
-        Invalidate( SID_SLIDE_MASTERPAGE );
-        Invalidate( SID_NOTES_MASTERPAGE );
-        Invalidate( SID_HANDOUT_MASTERPAGE );
+        Invalidate( SID_SLIDE_MASTER_MODE );
+        Invalidate( SID_NOTES_MASTER_MODE );
+        Invalidate( SID_HANDOUT_MASTER_MODE );
         InvalidateWindows();
 
         SetContextName(GetSidebarContextName());
