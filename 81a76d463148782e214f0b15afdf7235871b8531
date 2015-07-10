@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_3e8dcb31",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1084,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-07-10T05:54:44Z",
+      "side": 1,
+      "message": "Yes, I see my mistake now.\nCorrected.",
+      "parentUuid": "1a54edaf_9e415f3c",
+      "range": {
+        "startLine": 1084,
+        "startChar": 41,
+        "endLine": 1084,
+        "endChar": 63
+      },
+      "revId": "81a76d463148782e214f0b15afdf7235871b8531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_3e794b94",
         "filename": "sc/source/ui/app/inputhdl.cxx",
         "patchSetId": 2
@@ -76,6 +100,24 @@
       "writtenOn": "2015-07-09T17:12:44Z",
       "side": 1,
       "message": "Note that in formula expressions within a literal string a \" double quote is escaped by doubling it, so two consecutive double quotes do not end the string, like \"ab\"\"cd\" is one quoted string.",
+      "revId": "81a76d463148782e214f0b15afdf7235871b8531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_de8117fd",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-07-10T05:54:44Z",
+      "side": 1,
+      "message": "I think a double quote within a string is no problem. \nIf the cursor position is after the first of the two quotes in a double quote, the algorithm assumes (incorrectly) that we\u0027re not within quotes, but there is no formula to be suggested, so no problem. And after the second quote the algorithm assumes correctly that we\u0027re within quotes.",
+      "parentUuid": "1a54edaf_3e794b94",
       "revId": "81a76d463148782e214f0b15afdf7235871b8531",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
