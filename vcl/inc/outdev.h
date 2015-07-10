@@ -55,12 +55,11 @@ public:
 class ImplGetDevSizeList
 {
 private:
-    OUString            maFontName;
     std::vector<int>    maSizeList;
 
 public:
-                        ImplGetDevSizeList( const OUString& rFontName )
-                        : maFontName( rFontName ) { maSizeList.reserve( 32 ); }
+                        ImplGetDevSizeList()
+                        { maSizeList.reserve( 32 ); }
     void                Add( int nHeight )      { maSizeList.push_back( nHeight ); }
     int                 Count() const           { return maSizeList.size(); }
     int                 Get( int nIndex ) const { return maSizeList[ nIndex ]; }
