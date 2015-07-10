@@ -69,6 +69,7 @@
 #include <sfx2/sfxhelp.hxx>
 #include <basic/basmgr.hxx>
 #include <svtools/svtools.hrc>
+#include <unotools/configmgr.hxx>
 #include "sorgitm.hxx"
 #include "appbaslib.hxx"
 #include <basic/basicmanagerrepository.hxx>
@@ -99,17 +100,19 @@ BasicManager* SfxApplication::GetBasicManager()
 #if !HAVE_FEATURE_SCRIPTING
     return 0;
 #else
+    if (utl::ConfigManager::IsAvoidConfig())
+        return 0;
     return BasicManagerRepository::getApplicationBasicManager( true );
 #endif
 }
-
-
 
 XLibraryContainer * SfxApplication::GetDialogContainer()
 {
 #if !HAVE_FEATURE_SCRIPTING
     return NULL;
 #else
+    if (utl::ConfigManager::IsAvoidConfig())
+        return NULL;
     if ( !pAppData_Impl->pBasicManager->isValid() )
         GetBasicManager();
     return pAppData_Impl->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::DIALOGS );
@@ -123,6 +126,8 @@ XLibraryContainer * SfxApplication::GetBasicContainer()
 #if !HAVE_FEATURE_SCRIPTING
     return NULL;
 #else
+    if (utl::ConfigManager::IsAvoidConfig())
+        return NULL;
     if ( !pAppData_Impl->pBasicManager->isValid() )
         GetBasicManager();
     return pAppData_Impl->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::SCRIPTS );
@@ -134,6 +139,8 @@ StarBASIC* SfxApplication::GetBasic()
 #if !HAVE_FEATURE_SCRIPTING
     return 0;
 #else
+    if (utl::ConfigManager::IsAvoidConfig())
+        return 0;
     return GetBasicManager()->GetLib(0);
 #endif
 }

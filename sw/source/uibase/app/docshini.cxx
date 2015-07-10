@@ -25,6 +25,7 @@
 #include <sot/storage.hxx>
 #include <svl/zforlist.hxx>
 #include <svtools/ctrltool.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/lingucfg.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
@@ -117,23 +118,26 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             SwTransferable::InitOle( this, *m_pDoc );
 
         // set forbidden characters if necessary
-        SvxAsianConfig aAsian;
-        Sequence<lang::Locale> aLocales =  aAsian.GetStartEndCharLocales();
-        if(aLocales.getLength())
+        if (!utl::ConfigManager::IsAvoidConfig())
         {
-            const lang::Locale* pLocales = aLocales.getConstArray();
-            for(sal_Int32 i = 0; i < aLocales.getLength(); i++)
+            SvxAsianConfig aAsian;
+            Sequence<lang::Locale> aLocales =  aAsian.GetStartEndCharLocales();
+            if (aLocales.getLength())
             {
-                ForbiddenCharacters aForbidden;
-                aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine);
-                LanguageType  eLang = LanguageTag::convertToLanguageType(pLocales[i]);
-                m_pDoc->getIDocumentSettingAccess().setForbiddenCharacters( eLang, aForbidden);
+                const lang::Locale* pLocales = aLocales.getConstArray();
+                for(sal_Int32 i = 0; i < aLocales.getLength(); i++)
+                {
+                    ForbiddenCharacters aForbidden;
+                    aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine);
+                    LanguageType  eLang = LanguageTag::convertToLanguageType(pLocales[i]);
+                    m_pDoc->getIDocumentSettingAccess().setForbiddenCharacters( eLang, aForbidden);
+                }
             }
-        }
-        m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION,
+            m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION,
                   !aAsian.IsKerningWesternTextOnly());
-        m_pDoc->getIDocumentSettingAccess().setCharacterCompressionType(static_cast<SwCharCompressType>(aAsian.GetCharDistanceCompression()));
-        m_pDoc->getIDocumentDeviceAccess().setPrintData(*SW_MOD()->GetPrtOptions(bWeb));
+            m_pDoc->getIDocumentSettingAccess().setCharacterCompressionType(static_cast<SwCharCompressType>(aAsian.GetCharDistanceCompression()));
+            m_pDoc->getIDocumentDeviceAccess().setPrintData(*SW_MOD()->GetPrtOptions(bWeb));
+        }
 
         SubInitNew();
 
@@ -651,7 +655,8 @@ void SwDocShell::SubInitNew()
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;
 
-    SvtLinguConfig().GetOptions( aLinguOpt );
+    if (!utl::ConfigManager::IsAvoidConfig())
+        SvtLinguConfig().GetOptions(aLinguOpt);
 
     sal_Int16   nVal = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN),
                 eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),

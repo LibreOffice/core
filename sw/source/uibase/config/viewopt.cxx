@@ -35,6 +35,7 @@
 #include <crstate.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/accessibilityoptions.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 
 #include <editeng/acorrcfg.hxx>
@@ -193,13 +194,13 @@ SwViewOption::SwViewOption() :
         VIEWOPT_2_GRFKEEPZOOM |
         VIEWOPT_2_ANY_RULER;
 
-    if(MEASURE_METRIC != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
+    if (!utl::ConfigManager::IsAvoidConfig() && MEASURE_METRIC != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
         aSnapSize.Width() = aSnapSize.Height() = 720;   // 1/2"
     else
         aSnapSize.Width() = aSnapSize.Height() = 567;   // 1 cm
     nDivisionX = nDivisionY = 1;
 
-    bSelectionInReadonly = SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();
+    bSelectionInReadonly = !utl::ConfigManager::IsAvoidConfig() ? SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly() : false;
 
     bIdle = true;
 

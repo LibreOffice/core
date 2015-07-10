@@ -27,7 +27,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, GraphicFilterImportFlags nImportFlags );
+VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, GraphicFilterImportFlags nImportFlags );
 
 bool ExportJPEG(SvStream& rOutputStream,
                     const Graphic& rGraphic,

@@ -20,6 +20,7 @@
 #include <fontcfg.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <vcl/outdev.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/lingucfg.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -92,7 +93,8 @@ SwStdFontConfig::SwStdFontConfig() :
 {
     SvtLinguOptions aLinguOpt;
 
-    SvtLinguConfig().GetOptions( aLinguOpt );
+    if (!utl::ConfigManager::IsAvoidConfig())
+        SvtLinguConfig().GetOptions( aLinguOpt );
 
     sal_Int16   eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN),
                 eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),
@@ -171,7 +173,8 @@ bool SwStdFontConfig::IsFontDefault(sal_uInt16 nFontType) const
     bool bSame = false;
     SvtLinguOptions aLinguOpt;
 
-    SvtLinguConfig().GetOptions( aLinguOpt );
+    if (!utl::ConfigManager::IsAvoidConfig())
+        SvtLinguConfig().GetOptions(aLinguOpt);
 
     sal_Int16   eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN),
                 eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),
@@ -284,7 +287,8 @@ void SwStdFontConfig::ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight )
     if( nFontType < DEF_FONT_COUNT && nDefaultFontHeight[nFontType] != nHeight)
     {
         SvtLinguOptions aLinguOpt;
-        SvtLinguConfig().GetOptions( aLinguOpt );
+        if (!utl::ConfigManager::IsAvoidConfig())
+            SvtLinguConfig().GetOptions( aLinguOpt );
 
         sal_Int16 eWestern = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN),
                   eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),

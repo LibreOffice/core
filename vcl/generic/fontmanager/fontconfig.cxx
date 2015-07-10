@@ -44,7 +44,8 @@ using namespace psp;
 #include <cstdio>
 #include <cstdarg>
 
-#include "unotools/atom.hxx"
+#include <unotools/atom.hxx>
+#include <unotools/configmgr.hxx>
 
 #include "osl/module.h"
 #include "osl/thread.h"
@@ -475,6 +476,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
 
     FcFontSet* pFSet = rWrapper.getFontSet();
+    const bool bMinimalFontset = utl::ConfigManager::IsAvoidConfig();
     if( pFSet )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -495,6 +497,8 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
 
             FcResult eFileRes         = FcPatternGetString(pFSet->fonts[i], FC_FILE, 0, &file);
             FcResult eFamilyRes       = rWrapper.LocalizedElementFromPattern( pFSet->fonts[i], &family, FC_FAMILY, FC_FAMILYLANG );
+            if (bMinimalFontset && strncmp((char*)family, "Liberation", strlen("Liberation")))
+                continue;
             FcResult eStyleRes        = rWrapper.LocalizedElementFromPattern( pFSet->fonts[i], &style, FC_STYLE, FC_STYLELANG );
             FcResult eSlantRes        = FcPatternGetInteger(pFSet->fonts[i], FC_SLANT, 0, &slant);
             FcResult eWeightRes       = FcPatternGetInteger(pFSet->fonts[i], FC_WEIGHT, 0, &weight);

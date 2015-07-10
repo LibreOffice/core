@@ -387,6 +387,8 @@ Mutex& GlobalEventConfig::GetOwnStaticMutex()
 
 OUString GlobalEventConfig::GetEventName( GlobalEventId nIndex )
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+        return OUString();
     return GlobalEventConfig().m_pImpl->GetEventName( nIndex );
 }
 

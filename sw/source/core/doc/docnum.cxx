@@ -655,6 +655,7 @@ static SwTextNode* lcl_FindOutlineNum( const SwOutlineNodes& rOutlNds, OUString&
                 SwNumberTree::tNumberVector aLevelVal = rNdNum.GetNumberVector();
                 // now compare with the one searched for
                 bool bEqual = true;
+                nLevel = std::min<int>(nLevel, MAXLEVEL);
                 for( int n = 0; n < nLevel; ++n )
                 {
                     if ( aLevelVal[n] != nLevelVal[n] )

@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/confignode.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/configpaths.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svl/poolitem.hxx>
@@ -199,7 +200,9 @@ ColorConfig_Impl::ColorConfig_Impl(bool bEditMode) :
         uno::Sequence < OUString > aNames(1);
         EnableNotification( aNames );
     }
-    Load(OUString());
+
+    if (!utl::ConfigManager::IsAvoidConfig())
+        Load(OUString());
 
     ImplUpdateApplicationSettings();
 

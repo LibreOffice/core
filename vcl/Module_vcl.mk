@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
 				Executable_mtfdemo ))) \
     $(if $(filter-out ANDROID IOS WNT,$(OS)), \
         Executable_svdemo \
+        Executable_fftester \
         Executable_svptest \
         Executable_svpclient) \
 ))

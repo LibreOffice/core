@@ -18,6 +18,7 @@
  */
 
 #include <tools/stream.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/syslocale.hxx>
 
 #include "swtypes.hxx"
@@ -57,6 +58,11 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
     pWebColorConfig(bWeb ? new SwWebColorConfig(*this) : 0),
     bApplyCharUnit(false)
 {
+    if (utl::ConfigManager::IsAvoidConfig())
+    {
+        eHScrollMetric = eVScrollMetric = eUserMetric = FUNIT_CM;
+        return;
+    }
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
     eHScrollMetric = eVScrollMetric = eUserMetric;

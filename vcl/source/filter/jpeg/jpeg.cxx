@@ -25,7 +25,7 @@
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/graphicfilter.hxx>
 
-bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, GraphicFilterImportFlags nImportFlags )
+VCL_DLLPUBLIC bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, GraphicFilterImportFlags nImportFlags )
 {
     ReadState   eReadState;
     bool        bReturn = true;

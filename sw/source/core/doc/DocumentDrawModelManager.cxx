@@ -46,6 +46,7 @@
 #include <svl/smplhint.hxx>
 #include <svl/srchitem.hxx>
 #include <tools/link.hxx>
+#include <unotools/configmgr.hxx>
 
 class SdrOutliner;
 class XSpellChecker1;
@@ -136,13 +137,16 @@ void DocumentDrawModelManager::InitDrawModel()
     SdrPage* pMasterPage = mpDrawModel->AllocPage( false );
     mpDrawModel->InsertPage( pMasterPage );
     SAL_INFO( "sw.doc", "after create DrawDocument" );
-    SAL_INFO( "sw.doc", "before create Spellchecker/Hyphenator" );
     SdrOutliner& rOutliner = mpDrawModel->GetDrawOutliner();
-    ::com::sun::star::uno::Reference< com::sun::star::linguistic2::XSpellChecker1 > xSpell = ::GetSpellChecker();
-    rOutliner.SetSpeller( xSpell );
-    ::com::sun::star::uno::Reference< com::sun::star::linguistic2::XHyphenator > xHyphenator( ::GetHyphenator() );
-    rOutliner.SetHyphenator( xHyphenator );
-    SAL_INFO( "sw.doc", "after create Spellchecker/Hyphenator" );
+    if (!utl::ConfigManager::IsAvoidConfig())
+    {
+        SAL_INFO( "sw.doc", "before create Spellchecker/Hyphenator" );
+        ::com::sun::star::uno::Reference< com::sun::star::linguistic2::XSpellChecker1 > xSpell = ::GetSpellChecker();
+        rOutliner.SetSpeller( xSpell );
+        ::com::sun::star::uno::Reference< com::sun::star::linguistic2::XHyphenator > xHyphenator( ::GetHyphenator() );
+        rOutliner.SetHyphenator( xHyphenator );
+        SAL_INFO( "sw.doc", "after create Spellchecker/Hyphenator" );
+    }
     m_rDoc.SetCalcFieldValueHdl(&rOutliner);
     m_rDoc.SetCalcFieldValueHdl(&mpDrawModel->GetHitTestOutliner());
 

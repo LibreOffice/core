@@ -45,6 +45,7 @@
 #include <basic/sbstar.hxx>
 #include <svl/stritem.hxx>
 #include <basic/sbx.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/eventcfg.hxx>
 
 #include <sfx2/objsh.hxx>
@@ -798,18 +799,21 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
 #if HAVE_FEATURE_SCRIPTING
-    try
+    if (!utl::ConfigManager::IsAvoidConfig())
     {
-        if ( !pImp->m_bNoBasicCapabilities )
-            return lcl_getOrCreateLibraryContainer( true, pImp->xBasicLibraries, GetModel() );
+        try
+        {
+            if ( !pImp->m_bNoBasicCapabilities )
+                return lcl_getOrCreateLibraryContainer( true, pImp->xBasicLibraries, GetModel() );
 
-        BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
-        if ( pBasMgr )
-            return pBasMgr->GetScriptLibraryContainer().get();
-    }
-    catch (const css::ucb::ContentCreationException& e)
-    {
-        SAL_WARN("sfx.doc", "caught exception " << e.Message);
+            BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
+            if ( pBasMgr )
+                return pBasMgr->GetScriptLibraryContainer().get();
+        }
+        catch (const css::ucb::ContentCreationException& e)
+        {
+            SAL_WARN("sfx.doc", "caught exception " << e.Message);
+        }
     }
     SAL_WARN("sfx.doc", "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?");
 #endif
@@ -1152,6 +1156,8 @@ SfxObjectShell* SfxObjectShell::GetShellFromComponent( const Reference<lang::XCo
 void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
 {
     pImp->bInitialized = true;
+    if (utl::ConfigManager::IsAvoidConfig())
+        return;
     if ( i_fromInitNew )
     {
         SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
