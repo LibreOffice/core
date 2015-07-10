@@ -893,7 +893,8 @@ void SvtURLBox::Init(bool bSetDefaultHelpID)
 
     SetText( OUString() );
 
-    GetSubEdit()->autocompleteSignal.connect( boost::bind( &SvtURLBox::AutoCompleteHandler, this, _1 ) );
+    GetSubEdit()->SignalConnectAutocomplete(nullptr,
+        [this] (Edit *const pEdit) { this->AutoCompleteHandler(pEdit); } );
     UpdatePicklistForSmartProtocol_Impl();
 
     EnableAutoSize(GetStyle() & WB_AUTOSIZE);

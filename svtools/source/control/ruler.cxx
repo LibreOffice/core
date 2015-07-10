@@ -29,6 +29,8 @@
 #include <svtools/svtools.hrc>
 #include <svtools/colorcfg.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 #include <vector>
 
 using namespace std;

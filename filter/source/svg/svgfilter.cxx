@@ -50,6 +50,8 @@
 #include "svgfilter.hxx"
 #include "svgwriter.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 namespace

@@ -63,6 +63,8 @@
 #include <vcl/outdev.hxx>
 #include <osl/mutex.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 
 namespace svx
 {

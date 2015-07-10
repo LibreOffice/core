@@ -24,6 +24,8 @@
 #include <vcl/gdimetafiletools.hxx>
 #include <comphelper/scopeguard.hxx>
 
+#include <boost/bind.hpp>
+
 bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem, WMF_EXTERNALHEADER *pExtHeader )
 {
     sal_uInt32 nMetaType;

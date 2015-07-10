@@ -53,6 +53,8 @@
 #include "graphhelp.hxx"
 #include "doc.hrc"
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace css;
 
 SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, ConvertDataFormat nFormat )

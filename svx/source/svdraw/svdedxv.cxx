@@ -60,6 +60,9 @@
 #include <sdr/overlay/overlaytools.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+
+#include <boost/scoped_ptr.hpp>
+
 #include <memory>
 
 

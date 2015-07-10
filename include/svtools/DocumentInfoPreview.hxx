@@ -29,6 +29,8 @@
 #include <tools/wintypes.hxx>
 #include <vcl/window.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 class SvtDocInfoTable_Impl;
 
 namespace com { namespace sun { namespace star {

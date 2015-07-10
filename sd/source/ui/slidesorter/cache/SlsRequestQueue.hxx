@@ -27,6 +27,9 @@
 #include <osl/mutex.hxx>
 #include <svx/sdrpageuser.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
+
 namespace sd { namespace slidesorter { namespace cache {
 
 class RequestData;

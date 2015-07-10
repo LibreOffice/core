@@ -50,6 +50,8 @@
 #include <swtable.hxx>
 #include <fmtfsize.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 // A SwMultiPortion is not a simple portion,

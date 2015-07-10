@@ -35,6 +35,8 @@
 #include "ViewShell.hxx"
 #include "OutlineViewShell.hxx"
 
+#include <boost/scoped_ptr.hpp>
+
 #include <stdio.h>
 
 namespace sd {

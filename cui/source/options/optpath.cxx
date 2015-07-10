@@ -51,6 +51,8 @@
 #include "optHeaderTabListbox.hxx"
 #include <vcl/help.hxx>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
