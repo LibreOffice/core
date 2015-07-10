@@ -258,6 +258,9 @@ IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
     m_xCurrentDetails->show(true);
 
     SetSizePixel(GetOptimalSize());
+
+    EditHdl(NULL);
+
     return 0;
 }
 
