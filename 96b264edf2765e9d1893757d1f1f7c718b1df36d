@@ -70,6 +70,30 @@
       "revId": "96b264edf2765e9d1893757d1f1f7c718b1df36d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_7e9ca369",
+        "filename": "basegfx/source/range/b2dpolyrange.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-10T05:16:02Z",
+      "side": 0,
+      "message": "Thanks. Removed. Replacement with lambdas: Would it make sense to do it in two steps:\n\n* 1. replace boost::bind with std::bind\n* 2. replace std::bind with lambda",
+      "parentUuid": "1a54edaf_9b02d13d",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 25
+      },
+      "revId": "96b264edf2765e9d1893757d1f1f7c718b1df36d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
