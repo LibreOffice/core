@@ -1502,48 +1502,21 @@ OUString ImplIntrospectionAccess::getExactName( const OUString& rApproximateName
 
 struct ClassKey {
     ClassKey(
-        css::uno::Reference<css::beans::XPropertySetInfo> const & theProperties,
         css::uno::Reference<css::reflection::XIdlClass> const &
-            theImplementation,
-        css::uno::Sequence< css::uno::Reference<css::reflection::XIdlClass> >
-            const & theClasses):
-        properties(theProperties), implementation(theImplementation),
-        classes(theClasses)
+            theImplementation):
+        implementation(theImplementation)
     {}
 
-    css::uno::Reference<css::beans::XPropertySetInfo> properties;
     css::uno::Reference<css::reflection::XIdlClass> implementation;
-    css::uno::Sequence< css::uno::Reference<css::reflection::XIdlClass> >
-        classes;
 };
 
 struct ClassKeyLess {
     bool operator ()(ClassKey const & key1, ClassKey const & key2) const {
-        if (key1.properties.get() < key2.properties.get()) {
-            return true;
-        }
-        if (key1.properties.get() > key2.properties.get()) {
-            return false;
-        }
         if (key1.implementation.get() < key2.implementation.get()) {
             return true;
         }
         if (key1.implementation.get() > key2.implementation.get()) {
             return false;
-        }
-        if (key1.classes.getLength() < key2.classes.getLength()) {
-            return true;
-        }
-        if (key1.classes.getLength() > key2.classes.getLength()) {
-            return false;
-        }
-        for (sal_Int32 i = 0; i != key1.classes.getLength(); ++i) {
-            if (key1.classes[i].get() < key2.classes[i].get()) {
-                return true;
-            }
-            if (key1.classes[i].get() > key2.classes[i].get()) {
-                return false;
-            }
         }
         return false;
     }
@@ -1747,18 +1720,10 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
             sal_Int32 nTypeCount = SupportedTypesSeq.getLength();
             if( nTypeCount )
             {
-                SupportedClassSeq.realloc( nTypeCount );
-                Reference<XIdlClass>* pClasses = SupportedClassSeq.getArray();
-
                 const Type* pTypes = SupportedTypesSeq.getConstArray();
-                for( sal_Int32 i = 0 ; i < nTypeCount ; i++ )
-                {
-                    OUString typeName( pTypes[i].getTypeName() );
-                    pClasses[i] = reflection->forName( typeName );
-                    if( !bHasPropertySet && typeName == "com.sun.star.beans.XPropertySet" )
+                for( sal_Int32 i = 0 ; i < nTypeCount && !bHasPropertySet ; i++ )
+                    if( pTypes[i].getTypeName() == "com.sun.star.beans.XPropertySet" )
                         bHasPropertySet = true;
-                }
-                // TODO: Caching!
             }
         } else {
             SAL_WARN(
@@ -1794,7 +1759,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         pAccess = new IntrospectionAccessStatic_Impl(reflection);
         typeCache_.insert(key, pAccess);
     } else if (xImplClass.is()) {
-        ClassKey key(xPropSetInfo, xImplClass, SupportedClassSeq);
+        ClassKey key(xImplClass);
 
         osl::MutexGuard g(m_aMutex);
         if (rBHelper.bDisposed || rBHelper.bInDispose) {
@@ -1807,6 +1772,17 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
         }
         pAccess = new IntrospectionAccessStatic_Impl(reflection);
         classCache_.insert(key, pAccess);
+    }
+
+    sal_Int32 nTypeCount = SupportedTypesSeq.getLength();
+    if( nTypeCount )
+    {
+        SupportedClassSeq.realloc( nTypeCount );
+        Reference<XIdlClass>* pClasses = SupportedClassSeq.getArray();
+
+        const Type* pTypes = SupportedTypesSeq.getConstArray();
+        for( sal_Int32 i = 0 ; i < nTypeCount ; i++ )
+            pClasses[i] = reflection->forName( pTypes[i].getTypeName() );
     }
 
     // Kein Access gecached -> neu anlegen
