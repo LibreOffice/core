@@ -377,6 +377,11 @@ namespace cmis
             else
             {
                 // Silently fail as the user cancelled the authentication
+                ucbhelper::cancelCommandExecution(
+                                    ucb::IOErrorCode_ABORT,
+                                    uno::Sequence< uno::Any >( 0 ),
+                                    xEnv,
+                                    OUString( ) );
                 throw uno::RuntimeException( );
             }
         }
