@@ -153,7 +153,6 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
     // Restore size and set new text
     pOutl->SetMaxAutoPaperSize(aOldSize);
     pOutl->SetText(*pNewText);
-    pOutl->SetMaxAutoPaperSize(Size(pOutl->GetMaxAutoPaperSize().Width(), pOutl->GetTextHeight()));
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
 
@@ -172,6 +171,7 @@ void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pO
     {
         impMoveChainedTextToNextLink(pOverflOutl);
     }
+
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
 }
 
@@ -182,6 +182,8 @@ void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
     pNonOverflOutl->SetText(*pNewText);
 
     mpTargetLink->NbcSetOutlinerParaObject(pNewText);
+    pNonOverflOutl->SetPaperSize(Size(pNonOverflOutl->GetPaperSize().Width(),
+                                      pNonOverflOutl->GetTextHeight()));
 
 }
 
