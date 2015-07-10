@@ -36,6 +36,7 @@
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/vclptr.hxx>
+#include <vcl/slider.hxx>
 #include <svl/intitem.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -109,11 +110,16 @@ private:
     VclPtr<FixedText>                                          mpColorTextFT;
     VclPtr<SvxFillTypeBox>                                     mpLbFillType;
     VclPtr<SvxFillAttrBox>                                     mpLbFillAttr;
+    VclPtr<ColorLB>                                            mpLbFillGradFrom;
+    VclPtr<ColorLB>                                            mpLbFillGradTo;
     VclPtr<ToolBox>                                            mpToolBoxColor; // for new color picker
     VclPtr<FixedText>                                          mpTrspTextFT;
     VclPtr<ListBox>                                            mpLBTransType;
     VclPtr<MetricField>                                        mpMTRTransparent;
+    VclPtr<Slider>                                             mpSldTransparent;
     VclPtr<ToolBox>                                            mpBTNGradient;
+    VclPtr<MetricField>                                        mpMTRAngle;
+    VclPtr<ListBox>                                            mpGradientStyle;
 
     ::boost::scoped_ptr< XFillStyleItem >               mpStyleItem;
     ::boost::scoped_ptr< XFillColorItem >               mpColorItem;
@@ -151,12 +157,14 @@ private:
     DECL_LINK(SelectFillAttrHdl, ListBox* );
     DECL_LINK(ChangeTrgrTypeHdl_Impl, void*);
     DECL_LINK(ModifyTransparentHdl_Impl, void*);
+    DECL_LINK(ModifyTransSliderHdl, void*);
 
     // for transparency gradient
     VclPtr<PopupControl> CreateTransparencyGradientControl (PopupContainer* pParent);
     DECL_LINK_TYPED( ClickTrGrHdl_Impl, ToolBox*, void );
 
     static void SetupIcons();
+    void SetTransparency(sal_uInt32 nVal);
     void Initialize();
     void Update();
     void ImpUpdateTransparencies();
