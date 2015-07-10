@@ -983,7 +983,7 @@ ImplGetDevFontList* PhysicalFontCollection::GetDevFontList() const
 
 ImplGetDevSizeList* PhysicalFontCollection::GetDevSizeList( const OUString& rFontName ) const
 {
-    ImplGetDevSizeList* pGetDevSizeList = new ImplGetDevSizeList( rFontName );
+    ImplGetDevSizeList* pGetDevSizeList = new ImplGetDevSizeList;
 
     PhysicalFontFamily* pFontFamily = FindFontFamily( rFontName );
     if( pFontFamily != NULL )
