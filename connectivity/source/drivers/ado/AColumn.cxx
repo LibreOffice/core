@@ -215,16 +215,10 @@ void OAdoColumn::fillPropertyValues()
         else if ( eType == adVarBinary && ADOS::isJetEngine(m_pConnection->getEngineType()) )
         {
             ::comphelper::UStringMixEqual aCase(sal_False);
-            OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
-                                                            pTypeInfoMap->end(),
-                                                            ::o3tl::compose1(
-                                                            ::std::bind2nd(aCase, OUString("VarBinary")),
-                                                                ::o3tl::compose1(
-                                                                    ::std::mem_fun(&OExtendedTypeInfo::getDBName),
-                                                                    ::o3tl::select2nd<OTypeInfoMap::value_type>())
-                                                                )
-
-                                                    );
+            OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(), pTypeInfoMap->end(),
+                [&aCase] (OTypeInfoMap::value_type typeInfo) {
+                    return aCase(typeInfo.second->getDBName(), OUString("VarBinary"));
+                });
 
             if ( aFind != pTypeInfoMap->end() ) // change column type if necessary
             {
