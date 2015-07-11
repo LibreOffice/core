@@ -562,8 +562,7 @@ void SvtMatchContext_Impl::doExecute()
     aURLs.clear();
 
     // check for input
-    sal_uInt16 nTextLen = aText.getLength();
-    if ( !nTextLen )
+    if ( aText.isEmpty() )
         return;
 
     if( aText.indexOf( '*' ) != -1 || aText.indexOf( '?' ) != -1 )
