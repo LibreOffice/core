@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_89728b7b",
+        "filename": "jvmfwk/plugins/sunmajor/pluginlib/sunjavaplugin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-11T05:41:22Z",
+      "side": 1,
+      "message": "Don\u0027t use C-Style cast and use static_cast\u003csize_t\u003e instead?",
+      "revId": "9b1afb3e5da8fa3454b453cb2f3ddeee69f8cdd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
