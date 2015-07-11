@@ -35,6 +35,8 @@
 
 #include <config_vclplug.h>
 
+#include <boost/optional.hpp>
+
 #if ENABLE_TDE
 #define QPushButton_String      "TQPushButton"
 #define QRadioButton_String     "TQRadioButton"
