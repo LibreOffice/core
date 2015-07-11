@@ -900,6 +900,7 @@ void GraphicCache::AddGraphicObject(
                         if( !bInserted )
                         {
                             maGraphicCache.push_back( new GraphicCacheEntry( rObj ) );
+                            maGraphicCache.back()->AddGraphicObjectReference( rObj, rSubstitute );
                             bInserted = true;
                         }
                     }
@@ -920,7 +921,10 @@ void GraphicCache::AddGraphicObject(
     }
 
     if( !bInserted )
+    {
         maGraphicCache.push_back( new GraphicCacheEntry( rObj ) );
+        maGraphicCache.back()->AddGraphicObjectReference( rObj, rSubstitute );
+    }
 }
 
 void GraphicCache::ReleaseGraphicObject( const GraphicObject& rObj )
