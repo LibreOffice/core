@@ -79,7 +79,7 @@ private:
     vcl::Region    aSrcClipRegion;
     WMFWriterAttrStackMember * pAttrStack;
 
-    sal_uInt32    eSrcHorTextAlign;
+    sal_uInt16    eSrcHorTextAlign;
 
     // actual attribute in destination metafile:
     Color     aDstLineColor;
@@ -90,7 +90,7 @@ private:
     FontAlign eDstTextAlign;
     vcl::Font aDstFont;
 
-    sal_uInt32    eDstHorTextAlign;
+    sal_uInt16    eDstHorTextAlign;
 
     bool      bDstIsClipping; // ???: not taken into account at the moment
     vcl::Region    aDstClipRegion; // ???: not taken into account at the moment
@@ -164,7 +164,7 @@ private:
     void WMFRecord_SetStretchBltMode();
     void WMFRecord_SetPixel(const Point & rPoint, const Color & rColor);
     void WMFRecord_SetROP2(RasterOp eROP);
-    void WMFRecord_SetTextAlign(FontAlign eFontAlign, sal_uInt32 eHorTextAlign);
+    void WMFRecord_SetTextAlign(FontAlign eFontAlign, sal_uInt16 eHorTextAlign);
     void WMFRecord_SetTextColor(const Color & rColor);
     void WMFRecord_SetWindowExt(const Size & rSize);
     void WMFRecord_SetWindowOrg(const Point & rPoint);
