@@ -1074,10 +1074,11 @@ OString GraphicCache::GetUniqueID( const GraphicObject& rObj ) const
 
     // ensure that the entry is correctly initialized (it has to be read at least once)
     if( pEntry && pEntry->GetID().IsEmpty() )
+    {
         pEntry->TryToSwapIn();
-
-    // do another call to ImplGetCacheEntry in case of modified entry list
-    pEntry = const_cast<GraphicCache*>(this)->ImplGetCacheEntry( rObj );
+        // do another call to ImplGetCacheEntry in case of modified entry list
+        pEntry = const_cast<GraphicCache*>(this)->ImplGetCacheEntry( rObj );
+    }
 
     if( pEntry )
         aRet = pEntry->GetID().GetIDString();
