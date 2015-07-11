@@ -336,9 +336,12 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getFiles()
 
     KUrl::List urls = _dialog->selectedUrls();
     uno::Sequence< OUString > seq( urls.size());
-    int i = 0;
-    foreach( const KUrl& url, urls )
-        seq[ i++ ]= toOUString( url.url());
+    // multiselection doesn't really work
+    // so just retrieve the first url
+    if (seq.getLength() > 1)
+        seq.realloc(1);
+    if (seq.getLength() == 1)
+        seq[0] = urls.front();
     return seq;
 }
 
