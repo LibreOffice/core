@@ -1291,7 +1291,8 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         all_libs = set(self.gbuildparser.libs) | set(self.gbuildparser.exes)
         for lib in all_libs:
             self._log("\nlibrary : %s, loc=%s" % (lib.short_name(), lib.location))
-            lib_folder = os.path.basename(lib.location)
+            lib_name = os.path.basename(lib.location)
+            lib_folder = os.path.relpath(lib.location, self.base_folder)
 
             def lopath(path):
                 return os.path.relpath(path, lib.location)
@@ -1336,7 +1337,8 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                     'sources' : set(sources_list),
                     'headers' : set(headers_list),
                     'includepath' : set(includepath_list),
-                    'loc' : lib.location
+                    'loc' : lib.location,
+                    'name' : lib_name
                 }
 
     def emit(self):
@@ -1356,13 +1358,14 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             headers_list = sorted(self.data_libs[lib_folder]['headers'])
             includepath_list = sorted(self.data_libs[lib_folder]['includepath'])
             lib_loc = self.data_libs[lib_folder]['loc']
+            lib_name = self.data_libs[lib_folder]['name']
             
             sources = " \\\n".join(sources_list)
             headers = " \\\n".join(headers_list)
             includepath = " \\\n".join(includepath_list)
             
             # create .pro file
-            qt_pro_file = '%s/%s.pro' % (lib_loc, lib_folder)
+            qt_pro_file = '%s/%s.pro' % (lib_loc, lib_name)
             try:
                 content = QtCreatorIntegrationGenerator.pro_template % {'sources' : sources, 'headers' : headers, 'includepath' : includepath}
                 mode = 'w+'
@@ -1378,7 +1381,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 print("\n\n", file=sys.stderr)
             
             # create .pro.user file
-            qt_pro_user_file = '%s/%s.pro.user' % (lib_loc, lib_folder)
+            qt_pro_user_file = '%s/%s.pro.user' % (lib_loc, lib_name)
             try:
                 with open(qt_pro_user_file, mode) as fprouser:
                     fprouser.write(self.generate_pro_user_content(lib_folder))
