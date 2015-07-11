@@ -55,7 +55,7 @@ BaseControl::BaseControl( const Reference< XComponentContext >& rxContext )
     : IMPL_MutexContainer       (                       )
     , OComponentHelper          ( m_aMutex              )
     , m_xComponentContext       ( rxContext              )
-    , m_pMultiplexer            ( DEFAULT_PMULTIPLEXER  )
+    , m_xMultiplexerHelper      ( DEFAULT_PMULTIPLEXER  )
     , m_nX                      ( DEFAULT_X             )
     , m_nY                      ( DEFAULT_Y             )
     , m_nWidth                  ( DEFAULT_WIDTH         )
@@ -220,10 +220,10 @@ void SAL_CALL BaseControl::dispose() throw( RuntimeException, std::exception )
     // Ready for multithreading
     MutexGuard aGuard( m_aMutex );
 
-    if ( m_pMultiplexer != NULL )
+    if ( m_xMultiplexerHelper.is() )
     {
         // to all other paint, focus, etc.
-        m_pMultiplexer->disposeAndClear();
+        m_xMultiplexerHelper->disposeAndClear();
     }
 
     // set the service manager to disposed
@@ -292,9 +292,9 @@ void SAL_CALL BaseControl::createPeer(  const   Reference< XToolkit >&      xToo
 
         if ( m_xPeerWindow.is() )
         {
-            if ( m_pMultiplexer != NULL )
+            if ( m_xMultiplexerHelper.is() )
             {
-                m_pMultiplexer->setPeer( m_xPeerWindow );
+                m_xMultiplexerHelper->setPeer( m_xPeerWindow );
             }
 
             // create new referenz to xgraphics for painting on a peer
@@ -773,10 +773,10 @@ void BaseControl::impl_releasePeer()
         m_xPeerWindow.clear();
         m_xPeer.clear();
 
-        if ( m_pMultiplexer != NULL )
+        if ( m_xMultiplexerHelper.is() )
         {
             // take changes on multiplexer
-            m_pMultiplexer->setPeer( Reference< XWindow >() );
+            m_xMultiplexerHelper->setPeer( Reference< XWindow >() );
         }
     }
 }
@@ -785,13 +785,13 @@ void BaseControl::impl_releasePeer()
 
 OMRCListenerMultiplexerHelper* BaseControl::impl_getMultiplexer()
 {
-    if ( m_pMultiplexer == NULL )
+    if ( !m_xMultiplexerHelper.is() )
     {
-        m_pMultiplexer = new OMRCListenerMultiplexerHelper( static_cast<XWindow*>(this), m_xPeerWindow );
-        m_xMultiplexer = Reference< XInterface >( static_cast<OWeakObject*>(m_pMultiplexer), UNO_QUERY );
+        m_xMultiplexerHelper = new OMRCListenerMultiplexerHelper( static_cast<XWindow*>(this), m_xPeerWindow );
+        m_xMultiplexer = Reference< XInterface >( static_cast<OWeakObject*>(m_xMultiplexerHelper.get()), UNO_QUERY );
     }
 
-    return m_pMultiplexer;
+    return m_xMultiplexerHelper.get();
 }
 
 } // namespace unocontrols

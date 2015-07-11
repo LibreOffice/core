@@ -581,7 +581,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xComponentContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xDelegator;
-    OMRCListenerMultiplexerHelper*                  m_pMultiplexer;   // multiplex events
+    ::com::sun::star::uno::Reference< OMRCListenerMultiplexerHelper >                   m_xMultiplexerHelper;   // multiplex events
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xMultiplexer;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >              m_xPeer;

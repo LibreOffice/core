@@ -40,7 +40,7 @@ OConnectionPointHelper::OConnectionPointHelper(
     Type                                aType
 )   : m_aSharedMutex                ( aMutex                    )
     , m_oContainerWeakReference     ( pContainerImplementation  )
-    , m_pContainerImplementation    ( pContainerImplementation  )
+    , m_xContainerImplementation    ( pContainerImplementation  )
     , m_aInterfaceType              ( aType                     )
 {
 }
@@ -154,7 +154,7 @@ void SAL_CALL OConnectionPointHelper::advise( const Reference< XInterface >& xLi
         throw RuntimeException();
     }
     // Forward it to OConnectionPointHelperContainer!
-    m_pContainerImplementation->advise( m_aInterfaceType, xListener );
+    m_xContainerImplementation->advise( m_aInterfaceType, xListener );
     // Don't forget this!
     impl_UnlockContainer();
 }
@@ -173,7 +173,7 @@ void SAL_CALL OConnectionPointHelper::unadvise( const Reference< XInterface >& x
 
     }
     // Forward it to OConnectionPointHelperContainer!
-    m_pContainerImplementation->unadvise( m_aInterfaceType, xListener );
+    m_xContainerImplementation->unadvise( m_aInterfaceType, xListener );
     // Don't forget this!
     impl_UnlockContainer();
 }
@@ -193,7 +193,7 @@ Sequence< Reference< XInterface > > SAL_CALL OConnectionPointHelper::getConnecti
     // Set default return value, if method failed.
     Sequence< Reference< XInterface > > seqReturnConnections = Sequence< Reference< XInterface > >();
     // Get reference to private member of OConnectionPointHelperContainer!
-    OMultiTypeInterfaceContainerHelper& aSharedContainer = m_pContainerImplementation->impl_getMultiTypeContainer();
+    OMultiTypeInterfaceContainerHelper& aSharedContainer = m_xContainerImplementation->impl_getMultiTypeContainer();
     // Get pointer to specialized container which hold all interfaces of searched type.
     OInterfaceContainerHelper* pSpecialContainer = aSharedContainer.getContainer( m_aInterfaceType );
     // Get elements of searched type, if somelse exist.
