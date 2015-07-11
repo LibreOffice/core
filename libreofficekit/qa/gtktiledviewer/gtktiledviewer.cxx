@@ -370,6 +370,11 @@ static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
     }
 }
 
+static void removeChildrenFromStatusbar(GtkWidget* children, gpointer)
+{
+    gtk_container_remove(GTK_CONTAINER(pStatusBar), children);
+}
+
 static void populatePartModeSelector( GtkComboBoxText* pSelector )
 {
     gtk_combo_box_text_append_text( pSelector, "Standard" );
@@ -577,8 +582,10 @@ int main( int argc, char* argv[] )
     g_signal_connect(pDocView, "load-changed", G_CALLBACK(loadChanged), pProgressBar);
 
     pStatusBar = gtk_statusbar_new ();
+    gtk_container_forall(GTK_CONTAINER(pStatusBar), removeChildrenFromStatusbar, NULL);
     gtk_container_add (GTK_CONTAINER(pVBox), pStatusBar);
     gtk_container_add (GTK_CONTAINER(pStatusBar), pProgressBar);
+    gtk_widget_set_hexpand(pProgressBar, true);
 
     gtk_widget_show_all( pWindow );
     // Hide the findbar by default.
