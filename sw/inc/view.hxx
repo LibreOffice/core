@@ -132,13 +132,13 @@ struct SwApplyTemplate
     int eType;
     sal_uInt16 nColor;
     SwFormatClipboard* m_pFormatClipboard;
-    bool bUndo;
+    size_t nUndo;     //< The initial undo stack depth.
 
     SwApplyTemplate() :
         eType(0),
         nColor(0),
         m_pFormatClipboard(0),
-        bUndo(false)
+        nUndo(0)
     {
         aColl.pTextColl = 0;
     }

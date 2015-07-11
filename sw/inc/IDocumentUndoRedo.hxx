@@ -193,6 +193,10 @@ public:
     */
     virtual bool IsUndoNodes(SwNodes const& rNodes) const = 0;
 
+    /** Get the number of Undo actions.
+    */
+    virtual size_t GetUndoActionCount(const bool bCurrentLevel = true) const = 0;
+
 protected:
     virtual ~IDocumentUndoRedo() {};
 };
