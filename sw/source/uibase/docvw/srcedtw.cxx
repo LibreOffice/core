@@ -47,19 +47,24 @@
 #include <helpid.h>
 #include <deque>
 
-struct SwTextPortion
+namespace
+{
+
+struct TextPortion
 {
     sal_uInt16 nLine;
     sal_uInt16 nStart, nEnd;
     svtools::ColorConfigEntry eType;
 };
 
+}
+
 #define MAX_SYNTAX_HIGHLIGHT 20
 #define MAX_HIGHLIGHTTIME 200
 
-typedef std::deque<SwTextPortion> SwTextPortions;
+typedef std::deque<TextPortion> TextPortions;
 
-static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
+static void lcl_Highlight(const OUString& rSource, TextPortions& aPortionList)
 {
     const sal_Unicode cOpenBracket = '<';
     const sal_Unicode cCloseBracket= '>';
@@ -77,7 +82,7 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
     sal_uInt16 nOffset = 0;         // Offset of nActPos to '<'
     sal_uInt16 nPortStart = USHRT_MAX;  // for the TextPortion
     sal_uInt16 nPortEnd  =  0;
-    SwTextPortion aText;
+    TextPortion aText;
     while(nActPos < nStrLen)
     {
         svtools::ColorConfigEntry eFoundType = svtools::HTMLUNKNOWN;
@@ -179,7 +184,7 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
 
                 if(bFound ||(eFoundType == svtools::HTMLCOMMENT))
                 {
-                    SwTextPortion aTextPortion;
+                    TextPortion aTextPortion;
                     aTextPortion.nLine = 0;
                     aTextPortion.nStart = nPortStart + 1;
                     aTextPortion.nEnd = nPortEnd;
@@ -679,14 +684,14 @@ void SwSrcEditWindow::DoDelayedSyntaxHighlight( sal_uInt16 nPara )
 
 void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineOff )
 {
-    SwTextPortions aPortionList;
+    TextPortions aPortionList;
     lcl_Highlight(rSource, aPortionList);
 
     size_t nCount = aPortionList.size();
     if ( !nCount )
         return;
 
-    SwTextPortion& rLast = aPortionList[nCount-1];
+    TextPortion& rLast = aPortionList[nCount-1];
     if ( rLast.nStart > rLast.nEnd )    // Only until Bug from MD is resolved
     {
         nCount--;
@@ -703,7 +708,7 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
 
         for ( size_t i = 0; i < nCount; i++ )
         {
-            SwTextPortion& r = aPortionList[i];
+            TextPortion& r = aPortionList[i];
             SAL_WARN_IF(
                 r.nLine != aPortionList[0].nLine, "sw.level2",
                 "multiple lines after all?");
@@ -724,7 +729,7 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
 
     for ( size_t i = 0; i < aPortionList.size(); i++ )
     {
-        SwTextPortion& r = aPortionList[i];
+        TextPortion& r = aPortionList[i];
         if ( r.nStart > r.nEnd )    // only until Bug from MD is resolved
             continue;
         if(r.eType !=  svtools::HTMLSGML    &&
