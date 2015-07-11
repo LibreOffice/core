@@ -153,6 +153,10 @@ void VclFiltersTest::testCVEs()
     testDir(OUString(),
         getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/xbm/"),
         OUString());
+
+    testDir(OUString(),
+        getURLFromSrc("/vcl/qa/cppunit/graphicfilter/data/xpm/"),
+        OUString());
 #endif
 }
 
