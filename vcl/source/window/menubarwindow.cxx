@@ -134,6 +134,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     bIgnoreFirstMove = true;
     bStayActive = false;
     SetMBWHideAccel(true);
+    SetMBWMenuKey(false);
 
     ResMgr* pResMgr = ImplGetResMgr();
 
