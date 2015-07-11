@@ -3315,18 +3315,10 @@ public:
     GraphicObject*  pGraphicObject;
     sal_Int8        nGraphicTransparency; //contains a percentage value which is
                                           //copied to the GraphicObject when necessary
-    Link<>          aDoneLink;
     SvStream*       pStream;
 
     SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ), nGraphicTransparency(0), pStream(0) {}
 };
-
-
-
-void SvxBrushItem::SetDoneLink( const Link<>& rLink )
-{
-    pImpl->aDoneLink = rLink;
-}
 
 
 

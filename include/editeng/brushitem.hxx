@@ -95,8 +95,6 @@ public:
     Color&          GetColor()                      { return aColor; }
     void            SetColor( const Color& rCol)    { aColor = rCol; }
 
-    void                SetDoneLink( const Link<>& rLink );
-
     SvxGraphicPosition  GetGraphicPos() const       { return eGraphicPos; }
 
     void                PurgeMedium() const;

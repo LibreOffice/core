@@ -1382,7 +1382,7 @@ void OutlineView::ResetLinks() const
     mrOutliner.SetStatusEventHdl(aEmptyLink);
     mrOutliner.SetRemovingPagesHdl(aEmptyLink);
     mrOutliner.SetIndentingPagesHdl(aEmptyLink);
-    mrOutliner.SetDrawPortionHdl(aEmptyLink);
+    mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
     mrOutliner.SetBeginPasteOrDropHdl(aEmptyLink);
     mrOutliner.SetEndPasteOrDropHdl(aEmptyLink);
 }

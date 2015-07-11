@@ -1836,8 +1836,6 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, vcl::RenderContext *pOu
         pOut->IntersectClipRegion( rOut.SVRect() );
     }
 
-    // No Link here, we want to load the graphic synchronously!
-    const_cast<SvxBrushItem&>(rBrush).SetDoneLink( Link<>() );
     GraphicObject *pGrf = const_cast<GraphicObject*>(rBrush.GetGraphicObject());
 
     // Outsource drawing of background with a background color
@@ -1985,11 +1983,7 @@ void DrawGraphic(
                  rSh.GetOut()->GetOutDevType() == OUTDEV_PRINTER )
             {
                 pBrush->PurgeMedium();
-                const_cast<SvxBrushItem*>(pBrush)->SetDoneLink( Link<>() );
             }
-            else
-                const_cast<SvxBrushItem*>(pBrush)->SetDoneLink( LINK(
-                                    rSh.GetDoc(), SwDoc, BackgroundDone ) );
             OUString referer;
             SfxObjectShell * sh = rSh.GetDoc()->GetPersist();
             if (sh != 0 && sh->HasName()) {
