@@ -588,7 +588,7 @@ static void do_msvcr_magic(rtl_uString *jvm_dll)
         if (sections->VirtualAddress <= importsVA &&
             importsVA < sections->VirtualAddress + sections->SizeOfRawData)
         {
-            VAtoPhys = sections->PointerToRawData - sections->VirtualAddress;
+            VAtoPhys = (size_t)sections->PointerToRawData - (size_t)sections->VirtualAddress;
             break;
         }
         ++sections;
