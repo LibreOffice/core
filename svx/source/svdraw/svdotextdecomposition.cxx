@@ -89,9 +89,9 @@ namespace
         // BlockText (see there)
         basegfx::B2DRange                                           maClipRange;
 
-        DECL_LINK(decomposeContourTextPrimitive, DrawPortionInfo* );
-        DECL_LINK(decomposeBlockTextPrimitive, DrawPortionInfo* );
-        DECL_LINK(decomposeStretchTextPrimitive, DrawPortionInfo* );
+        DECL_LINK_TYPED(decomposeContourTextPrimitive, DrawPortionInfo*, void);
+        DECL_LINK_TYPED(decomposeBlockTextPrimitive, DrawPortionInfo*, void);
+        DECL_LINK_TYPED(decomposeStretchTextPrimitive, DrawPortionInfo*, void);
 
         DECL_LINK(decomposeContourBulletPrimitive, DrawBulletInfo* );
         DECL_LINK(decomposeBlockBulletPrimitive, DrawBulletInfo* );
@@ -126,7 +126,7 @@ namespace
             mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decomposeContourTextPrimitive));
             mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeContourBulletPrimitive));
             mrOutliner.StripPortions();
-            mrOutliner.SetDrawPortionHdl(Link<>());
+            mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
             mrOutliner.SetDrawBulletHdl(Link<>());
         }
 
@@ -141,7 +141,7 @@ namespace
             mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decomposeBlockTextPrimitive));
             mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeBlockBulletPrimitive));
             mrOutliner.StripPortions();
-            mrOutliner.SetDrawPortionHdl(Link<>());
+            mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
             mrOutliner.SetDrawBulletHdl(Link<>());
         }
 
@@ -152,7 +152,7 @@ namespace
             mrOutliner.SetDrawPortionHdl(LINK(this, impTextBreakupHandler, decomposeStretchTextPrimitive));
             mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeStretchBulletPrimitive));
             mrOutliner.StripPortions();
-            mrOutliner.SetDrawPortionHdl(Link<>());
+            mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
             mrOutliner.SetDrawBulletHdl(Link<>());
         }
 
@@ -557,7 +557,7 @@ namespace
         maTextPortionPrimitives.push_back(pNewPrimitive);
     }
 
-    IMPL_LINK(impTextBreakupHandler, decomposeContourTextPrimitive, DrawPortionInfo*, pInfo)
+    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeContourTextPrimitive, DrawPortionInfo*, pInfo, void)
     {
         // for contour text, ignore (clip away) all portions which are below
         // the visible area given by maScale
@@ -565,11 +565,9 @@ namespace
         {
             impHandleDrawPortionInfo(*pInfo);
         }
-
-        return 0;
     }
 
-    IMPL_LINK(impTextBreakupHandler, decomposeBlockTextPrimitive, DrawPortionInfo*, pInfo)
+    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeBlockTextPrimitive, DrawPortionInfo*, pInfo, void)
     {
         if(pInfo)
         {
@@ -583,7 +581,7 @@ namespace
 
                 if(!maClipRange.isInside(aStartPosition))
                 {
-                    return 0;
+                    return;
                 }
 
                 // Start position is inside. Get TextBoundRect and TopLeft next
@@ -597,7 +595,7 @@ namespace
 
                 if(!maClipRange.isInside(aTopLeft))
                 {
-                    return 0;
+                    return;
                 }
 
                 // TopLeft is inside. Get BottomRight and check
@@ -605,25 +603,21 @@ namespace
 
                 if(!maClipRange.isInside(aBottomRight))
                 {
-                    return 0;
+                    return;
                 }
 
                 // all inside, clip was successful
             }
             impHandleDrawPortionInfo(*pInfo);
         }
-
-        return 0;
     }
 
-    IMPL_LINK(impTextBreakupHandler, decomposeStretchTextPrimitive, DrawPortionInfo*, pInfo)
+    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeStretchTextPrimitive, DrawPortionInfo*, pInfo, void)
     {
         if(pInfo)
         {
             impHandleDrawPortionInfo(*pInfo);
         }
-
-        return 0;
     }
 
     IMPL_LINK(impTextBreakupHandler, decomposeContourBulletPrimitive, DrawBulletInfo*, pInfo)
