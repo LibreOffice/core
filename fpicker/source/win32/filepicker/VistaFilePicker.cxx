@@ -261,7 +261,11 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getFiles()
 
     m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
 
-    const  css::uno::Sequence< OUString > lFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES, css::uno::Sequence< OUString >());
+    css::uno::Sequence< OUString > lFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES, css::uno::Sequence< OUString >());
+    // multiselection doesn't really work
+    // so just retrieve the first url
+    if (lFiles.getLength() > 1)
+        lFiles.realloc(1);
     m_lLastFiles = lFiles;
     return lFiles;
 }
