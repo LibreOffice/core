@@ -315,7 +315,6 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
             }
 
             SvxBrushItem* pBrushItem = new SvxBrushItem(*it, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
-            pBrushItem->SetDoneLink(LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
             pInfo->pBrushItem = pBrushItem;
@@ -408,7 +407,6 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
             SdrObject::Free(pObj);
 
             SvxBrushItem* pBrushItem = new SvxBrushItem(Graphic(aMeta), GPOS_AREA, SID_ATTR_BRUSH);
-            pBrushItem->SetDoneLink(LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
 
             SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
             pInfo->pBrushItem = pBrushItem;

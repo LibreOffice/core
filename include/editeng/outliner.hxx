@@ -589,7 +589,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 
     Paragraph*          pHdlParagraph;
     sal_Int32           mnFirstSelPage;
-    Link<>              aDrawPortionHdl;
+    Link<DrawPortionInfo*,void> aDrawPortionHdl;
     Link<>              aDrawBulletHdl;
     Link<>              aExpandHdl;
     Link<>              aParaInsertedHdl;
@@ -796,8 +796,8 @@ public:
     void            SetFieldClickedHdl(const Link<>& rLink ) { aFieldClickedHdl= rLink; }
     Link<>          GetFieldClickedHdl() const { return aFieldClickedHdl; }
 
-    void            SetDrawPortionHdl(const Link<>& rLink){aDrawPortionHdl=rLink;}
-    Link<>          GetDrawPortionHdl() const { return aDrawPortionHdl; }
+    void            SetDrawPortionHdl(const Link<DrawPortionInfo*,void>& rLink){aDrawPortionHdl=rLink;}
+    Link<DrawPortionInfo*,void> GetDrawPortionHdl() const { return aDrawPortionHdl; }
 
     void            SetDrawBulletHdl(const Link<>& rLink){aDrawBulletHdl=rLink;}
     Link<>          GetDrawBulletHdl() const { return aDrawBulletHdl; }
