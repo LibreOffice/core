@@ -1167,7 +1167,9 @@ Sequence<sal_Int8> OResultSet::impl_getBookmark(  ) throw( SQLException,  Runtim
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     TBookmarkPosMap::iterator aFind = ::std::find_if(m_aPosToBookmarks.begin(),m_aPosToBookmarks.end(),
-        ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Int32>(),m_nRowPos),::o3tl::select2nd<TBookmarkPosMap::value_type>()));
+        [this] (TBookmarkPosMap::value_type bookmarkPos) {
+            return bookmarkPos.second == m_nRowPos;
+        });
 
     if ( aFind == m_aPosToBookmarks.end() )
     {

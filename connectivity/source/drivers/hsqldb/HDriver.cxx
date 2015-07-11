@@ -583,9 +583,11 @@ namespace connectivity
             if ( xStorage.is() )
             {
                 OUString sKey = StorageContainer::getRegisteredKey(xStorage);
-                TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::o3tl::compose1(
-                                ::std::bind2nd(::std::equal_to< OUString >(),sKey)
-                                ,::o3tl::compose1(::o3tl::select1st<TWeakConnectionPair>(),::o3tl::select2nd< TWeakPair >())));
+                TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),
+                    [&sKey] (TWeakPairVector::value_type conn) {
+                        return conn.second.first == sKey;
+                    });
+
                 if ( i != m_aConnections.end() )
                     shutdownConnection(i);
             }
@@ -637,9 +639,11 @@ namespace connectivity
         OUString sKey = StorageContainer::getRegisteredKey(xStorage);
         if ( !sKey.isEmpty() )
         {
-            TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),::o3tl::compose1(
-                            ::std::bind2nd(::std::equal_to< OUString >(),sKey)
-                            ,::o3tl::compose1(::o3tl::select1st<TWeakConnectionPair>(),::o3tl::select2nd< TWeakPair >())));
+            TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(), m_aConnections.end(),
+                [&sKey] (TWeakPairVector::value_type conn) {
+                    return conn.second.first == sKey;
+                });
+
             OSL_ENSURE( i != m_aConnections.end(), "ODriverDelegator::preCommit: they're committing a storage which I do not know!" );
             if ( i != m_aConnections.end() )
             {

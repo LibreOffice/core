@@ -598,15 +598,11 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
     {
         ::comphelper::UStringMixEqual aCase(sal_False);
         // search for typeinfo where the typename is equal _sTypeName
-        OTypeInfoMap::const_iterator aFind = ::std::find_if(_rTypeInfo.begin(),
-                                                            _rTypeInfo.end(),
-                                                            ::o3tl::compose1(
-                                                                ::std::bind2nd(aCase, _sTypeName),
-                                                                ::o3tl::compose1(
-                                                                    ::std::mem_fun(&OExtendedTypeInfo::getDBName),
-                                                                    ::o3tl::select2nd<OTypeInfoMap::value_type>())
-                                                                )
-                                                            );
+        OTypeInfoMap::const_iterator aFind = ::std::find_if(_rTypeInfo.begin(), _rTypeInfo.end(),
+            [&aCase, &_sTypeName] (OTypeInfoMap::value_type typeInfo) {
+                return aCase(typeInfo.second->getDBName(), _sTypeName);
+            });
+
         if(aFind != _rTypeInfo.end())
             pTypeInfo = aFind->second;
     }

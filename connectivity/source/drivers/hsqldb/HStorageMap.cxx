@@ -171,10 +171,11 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                                        ::o3tl::compose1(
-                                            ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
-                                            ,::o3tl::compose1(::o3tl::select1st<TStorageURLPair>(),::o3tl::compose1(::o3tl::select1st<TStorages::mapped_type>(),::o3tl::select2nd<TStorages::value_type>())))
-                    );
+                [&_xStorage] (TStorages::value_type storage) {
+                    // TStoragePair (second) -> TStorageURLPair (first) -> uno::Reference<XStorage> (first)
+                    return storage.second.first.first == _xStorage;
+                });
+
             if ( aFind == rMap.end() )
             {
                 aFind = rMap.insert(TStorages::value_type(lcl_getNextCount(),TStorages::mapped_type(TStorageURLPair(_xStorage,_sURL),TStreamMap()))).first;
@@ -202,10 +203,11 @@ namespace connectivity
             TStorages& rMap = lcl_getStorageMap();
             // check if the storage is already in our map
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
-                                        ::o3tl::compose1(
-                                            ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
-                                            ,::o3tl::compose1(::o3tl::select1st<TStorageURLPair>(),::o3tl::compose1(::o3tl::select1st<TStorages::mapped_type>(),::o3tl::select2nd<TStorages::value_type>())))
-                    );
+                [&_xStorage] (TStorages::value_type storage) {
+                    // TStoragePair (second) -> TStorageURLPair (first) -> uno::Reference<XStorage> (first)
+                    return storage.second.first.first == _xStorage;
+                });
+
             if ( aFind != rMap.end() )
                 sKey = aFind->first;
             return sKey;
