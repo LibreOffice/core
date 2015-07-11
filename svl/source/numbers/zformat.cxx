@@ -893,7 +893,8 @@ SvNumberformat::SvNumberformat(OUString& rString,
                 }
                 if (sStr.isEmpty())
                 {
-                    // empty sub format
+                    // Empty sub format.
+                    NumFor[nIndex].Info().eScannedType = css::util::NumberFormat::EMPTY;
                 }
                 else
                 {
@@ -2202,7 +2203,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
         *ppColor = NumFor[nIx].GetColor();
         const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
         const sal_uInt16 nAnz = NumFor[nIx].GetCount();
-        if (nAnz == 0 && rInfo.eScannedType == css::util::NumberFormat::UNDEFINED)
+        if (nAnz == 0 && rInfo.eScannedType == css::util::NumberFormat::EMPTY)
         {
             return false; // Empty => nothing
         }
@@ -4722,7 +4723,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
                     eOp1 == NUMBERFORMAT_OP_GE && fLimit1 == 0.0 &&
                     eOp2 == NUMBERFORMAT_OP_NO && fLimit2 == 0.0 );
     // with 3 or more subformats [>0];[<0];[=0] is implied if no condition specified,
-    // note that subformats may be empty (;;;) and NumFor[2].GetnAnz()>0 is not checked.
+    // note that subformats may be empty (;;;) and NumFor[2].GetCount()>0 is not checked.
     bDefault[2] = ( !bDefault[0] && !bDefault[1] &&
                     eOp1 == NUMBERFORMAT_OP_GT && fLimit1 == 0.0 &&
                     eOp2 == NUMBERFORMAT_OP_LT && fLimit2 == 0.0 );
@@ -4762,7 +4763,7 @@ OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
     int nSub = 0; // subformats delimited so far
     for ( int n=0; n<4; n++ )
     {
-        if ( n > 0 )
+        if ( n > 0 && NumFor[n].Info().eScannedType != css::util::NumberFormat::UNDEFINED )
         {
             nSem++;
         }

@@ -93,6 +93,12 @@ published constants NumberFormat
      */
     const short UNDEFINED = 2048;
 
+
+    /** @internal is used to flag an empty sub format.
+        @since LibreOffice 5.1
+     */
+    const short EMPTY = 4096;
+
 };
 
 

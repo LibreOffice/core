@@ -1006,9 +1006,6 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
     // #101606# An empty subformat is a valid number-style resulting in an
     // empty display string for the condition of the subformat.
-    if ( nFmtType == css::util::NumberFormat::UNDEFINED && rFormat.GetNumForType( nPart,
-                0, false ) == 0 )
-        nFmtType = 0;
 
     XMLTokenEnum eType = XML_TOKEN_INVALID;
     switch ( nFmtType )
@@ -1016,6 +1013,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         // type is 0 if a format contains no recognized elements
         // (like text only) - this is handled as a number-style.
         case 0:
+        case css::util::NumberFormat::EMPTY:
         case css::util::NumberFormat::NUMBER:
         case css::util::NumberFormat::SCIENTIFIC:
         case css::util::NumberFormat::FRACTION:
