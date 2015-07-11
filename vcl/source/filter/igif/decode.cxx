@@ -197,6 +197,8 @@ bool GIFLZWDecompressor::ProcessOneCode()
         pE = pTable + nCode;
         do
         {
+            if (pOutBufData == pOutBuf) //can't go back past start
+                return false;
             nOutBufDataLen++;
             *(--pOutBufData) = pE->nData;
             pE = pE->pPrev;
