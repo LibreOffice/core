@@ -77,6 +77,7 @@
 #include <wrtsh.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <textboxhelper.hxx>
 #include <dcontact.hxx>
 #include <fldbas.hxx>
@@ -4707,15 +4708,15 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 if( rSh.IsSelection() && !rSh.HasReadonlySel() )
                 {
-                    if(nId == RES_CHRATR_BACKGROUND)
+                    m_pApplyTempl->nUndo =
+                        std::min(m_pApplyTempl->nUndo, rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount());
+                    if (nId == RES_CHRATR_BACKGROUND)
                         rSh.SetAttrItem( SvxBrushItem( SwEditWin::m_aWaterCanTextBackColor, nId ) );
                     else
                         rSh.SetAttrItem( SvxColorItem( SwEditWin::m_aWaterCanTextColor, nId ) );
                     rSh.UnSetVisCrsr();
                     rSh.EnterStdMode();
                     rSh.SetVisCrsr(aDocPt);
-
-                    m_pApplyTempl->bUndo = true;
                     bCallBase = false;
                     m_aTemplateIdle.Stop();
                 }
@@ -4736,7 +4737,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                          & eSelection ) && !rSh.HasReadonlySel() )
                     {
                         rSh.SetTextFormatColl( m_pApplyTempl->aColl.pTextColl );
-                        m_pApplyTempl->bUndo = true;
+                        m_pApplyTempl->nUndo =
+                            std::min(m_pApplyTempl->nUndo, rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount());
                         bCallBase = false;
                         if ( m_pApplyTempl->aColl.pTextColl )
                             aStyleName = m_pApplyTempl->aColl.pTextColl->GetName();
@@ -4750,7 +4752,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         rSh.UnSetVisCrsr();
                         rSh.EnterStdMode();
                         rSh.SetVisCrsr(aDocPt);
-                        m_pApplyTempl->bUndo = true;
+                        m_pApplyTempl->nUndo =
+                            std::min(m_pApplyTempl->nUndo, rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount());
                         bCallBase = false;
                         if ( m_pApplyTempl->aColl.pCharFormat )
                             aStyleName = m_pApplyTempl->aColl.pCharFormat->GetName();
@@ -4762,7 +4765,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     if(PTR_CAST(SwFlyFrameFormat, pFormat))
                     {
                         rSh.SetFrameFormat( m_pApplyTempl->aColl.pFrameFormat, false, &aDocPt );
-                        m_pApplyTempl->bUndo = true;
+                        m_pApplyTempl->nUndo =
+                            std::min(m_pApplyTempl->nUndo, rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount());
                         bCallBase = false;
                         if( m_pApplyTempl->aColl.pFrameFormat )
                             aStyleName = m_pApplyTempl->aColl.pFrameFormat->GetName();
@@ -4774,6 +4778,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     rSh.ChgCurPageDesc( *m_pApplyTempl->aColl.pPageDesc );
                     if ( m_pApplyTempl->aColl.pPageDesc )
                         aStyleName = m_pApplyTempl->aColl.pPageDesc->GetName();
+                    m_pApplyTempl->nUndo =
+                        std::min(m_pApplyTempl->nUndo, rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount());
                     bCallBase = false;
                     break;
                 case SFX_STYLE_FAMILY_PSEUDO:
@@ -4783,7 +4789,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                            false,
                                            m_pApplyTempl->aColl.pNumRule->GetDefaultListId() );
                         bCallBase = false;
-                        m_pApplyTempl->bUndo = true;
+                        m_pApplyTempl->nUndo =
+                            std::min(m_pApplyTempl->nUndo, rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount());
                         if( m_pApplyTempl->aColl.pNumRule )
                             aStyleName = m_pApplyTempl->aColl.pNumRule->GetName();
                     }
@@ -4849,14 +4856,16 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     if(rTempl.m_pFormatClipboard)
     {
         m_pApplyTempl = new SwApplyTemplate( rTempl );
-              SetPointer( PointerStyle::Fill );//@todo #i20119# maybe better a new brush pointer here in future
-              rSh.NoEdit( false );
-              bIdle = rSh.GetViewOptions()->IsIdle();
-              rSh.GetViewOptions()->SetIdle( false );
+        m_pApplyTempl->nUndo = rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount();
+        SetPointer( PointerStyle::Fill );//@todo #i20119# maybe better a new brush pointer here in future
+        rSh.NoEdit( false );
+        bIdle = rSh.GetViewOptions()->IsIdle();
+        rSh.GetViewOptions()->SetIdle( false );
     }
     else if(rTempl.nColor)
     {
         m_pApplyTempl = new SwApplyTemplate( rTempl );
+        m_pApplyTempl->nUndo = rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount();
         SetPointer( PointerStyle::Fill );
         rSh.NoEdit( false );
         bIdle = rSh.GetViewOptions()->IsIdle();
@@ -4865,6 +4874,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     else if( rTempl.eType )
     {
         m_pApplyTempl = new SwApplyTemplate( rTempl );
+        m_pApplyTempl->nUndo = rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount();
         SetPointer( PointerStyle::Fill  );
         rSh.NoEdit( false );
         bIdle = rSh.GetViewOptions()->IsIdle();
@@ -5192,8 +5202,11 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     else if ( !m_rView.ExecSpellPopup( aDocPos ) )
                         SfxDispatcher::ExecutePopup( 0, this, &aPixPos);
                 }
-                else if (m_pApplyTempl->bUndo)
+                else if (m_pApplyTempl->nUndo < rSh.GetDoc()->GetIDocumentUndoRedo().GetUndoActionCount())
+                {
+                    // Undo until we reach the point when we entered this context.
                     rSh.Do(SwWrtShell::UNDO);
+                }
                 bCallBase = false;
             }
     }
