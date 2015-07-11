@@ -263,6 +263,9 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getFiles()
 
     const  css::uno::Sequence< OUString > lFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES, css::uno::Sequence< OUString >());
     m_lLastFiles = lFiles;
+    // multiselection doesn't really work
+    // so just retrieve the first url
+    m_lLastFiles.realloc(1);
     return lFiles;
 }
 

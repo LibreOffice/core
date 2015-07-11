@@ -96,9 +96,8 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
                 <li>Multi-selection is enabled:
                 If only one file is selected, the first entry
                 of the sequence contains the complete path/filename in URL format.
-                If multiple files are selected, the first entry of the sequence contains
-                the path in URL format, and the other entries contains the names of the selected
-                files without path information.</li>
+                If multiple files are selected, only the first entry is retrieved with
+                the path in URL format.</li>
             </ol>
 
             <br/>
