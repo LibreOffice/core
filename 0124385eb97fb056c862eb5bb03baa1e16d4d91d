@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_c95723c9",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-11T05:20:33Z",
+      "side": 1,
+      "message": "May be revert this?",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 88,
+        "endChar": 32
+      },
+      "revId": "0124385eb97fb056c862eb5bb03baa1e16d4d91d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
