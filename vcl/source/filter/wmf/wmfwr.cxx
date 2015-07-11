@@ -613,31 +613,30 @@ void WMFWriter::WMFRecord_Pie(const Rectangle & rRect, const Point & rStartPt, c
 
 void WMFWriter::WMFRecord_Polygon(const Polygon & rPoly)
 {
-    sal_uInt16 nSize,i;
-
     Polygon aSimplePoly;
     if ( rPoly.HasFlags() )
         rPoly.AdaptiveSubdivide( aSimplePoly );
     else
         aSimplePoly = rPoly;
-    nSize = aSimplePoly.GetSize();
-    WriteRecordHeader(((sal_uLong)nSize)*2+4,W_META_POLYGON);
+    const sal_uInt16 nSize = aSimplePoly.GetSize();
+    WriteRecordHeader(static_cast<sal_uInt32>(nSize)*2+4,W_META_POLYGON);
     pWMF->WriteUInt16( nSize );
-    for (i=0; i<nSize; i++) WritePointXY(aSimplePoly.GetPoint(i));
+    for (sal_uInt16 i=0; i<nSize; ++i)
+        WritePointXY(aSimplePoly.GetPoint(i));
 }
 
 void WMFWriter::WMFRecord_PolyLine(const Polygon & rPoly)
 {
-    sal_uInt16 nSize,i;
     Polygon aSimplePoly;
     if ( rPoly.HasFlags() )
         rPoly.AdaptiveSubdivide( aSimplePoly );
     else
         aSimplePoly = rPoly;
-    nSize=aSimplePoly.GetSize();
-    WriteRecordHeader(((sal_uLong)nSize)*2+4,W_META_POLYLINE);
+    const sal_uInt16 nSize = aSimplePoly.GetSize();
+    WriteRecordHeader(static_cast<sal_uInt32>(nSize)*2+4,W_META_POLYLINE);
     pWMF->WriteUInt16( nSize );
-    for (i=0; i<nSize; i++) WritePointXY(aSimplePoly.GetPoint(i));
+    for (sal_uInt16 i=0; i<nSize; ++i)
+        WritePointXY(aSimplePoly.GetPoint(i));
 }
 
 void WMFWriter::WMFRecord_PolyPolygon(const tools::PolyPolygon & rPolyPoly)
@@ -1198,20 +1197,17 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaStretchTextAction* pA = static_cast<const MetaStretchTextAction *>(pMA);
                     OUString aTemp = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
-                    sal_uInt16 nLen,i;
-                    sal_Int32 nNormSize;
-
                     pVirDev->SetFont( aSrcFont );
-                    nLen = aTemp.getLength();
+                    const sal_Int32 nLen = aTemp.getLength();
                     std::unique_ptr<long[]> pDXAry(nLen ? new long[ nLen ] : NULL);
-                    nNormSize = pVirDev->GetTextArray( aTemp, pDXAry.get() );
+                    const sal_Int32 nNormSize = pVirDev->GetTextArray( aTemp, pDXAry.get() );
                     if (nLen && nNormSize == 0)
                     {
                         OSL_FAIL("Impossible div by 0 action: MetaStretchTextAction!");
                     }
                     else
                     {
-                        for ( i = 0; i < ( nLen - 1 ); i++ )
+                        for ( sal_Int32 i = 0; i < ( nLen - 1 ); i++ )
                             pDXAry[ i ] = pDXAry[ i ] * (sal_Int32)pA->GetWidth() / nNormSize;
                         if ( ( nLen <= 1 ) || ( (sal_Int32)pA->GetWidth() == nNormSize ) )
                             pDXAry.reset();
