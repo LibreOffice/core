@@ -71,6 +71,7 @@ public:
     virtual void AppendUndo(SwUndo *const pUndo) SAL_OVERRIDE;
     virtual void ClearRedo() SAL_OVERRIDE;
     virtual bool IsUndoNodes(SwNodes const& rNodes) const SAL_OVERRIDE;
+    virtual size_t GetUndoActionCount(const bool bCurrentLevel = true) const SAL_OVERRIDE;
 
     // ::svl::IUndoManager
     virtual void AddUndoAction(SfxUndoAction *pAction,
