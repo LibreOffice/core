@@ -79,6 +79,11 @@ bool UndoManager::IsUndoNodes(SwNodes const& rNodes) const
     return & rNodes == m_xUndoNodes.get();
 }
 
+size_t UndoManager::GetUndoActionCount(const bool bCurrentLevel) const
+{
+    return SdrUndoManager::GetUndoActionCount(bCurrentLevel);
+}
+
 void UndoManager::DoUndo(bool const bDoUndo)
 {
     if(!isTextEditActive())
