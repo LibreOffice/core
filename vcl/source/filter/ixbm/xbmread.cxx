@@ -315,7 +315,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
             }
         }
 
-        if( bStatus )
+        if (bStatus && pAcc1)
         {
             Bitmap aBlackBmp( Size( pAcc1->Width(), pAcc1->Height() ), 1 );
 
