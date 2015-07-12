@@ -81,8 +81,8 @@ gboolean                       lok_doc_view_get_edit               (LOKDocView* 
 
 /// Posts the .uno: command to the LibreOfficeKit.
 void                           lok_doc_view_post_command           (LOKDocView* pDocView,
-                                                                    const char* pCommand,
-                                                                    const char* pArguments);
+                                                                    const gchar* pCommand,
+                                                                    const gchar* pArguments);
 
 float                          lok_doc_view_pixel_to_twip          (LOKDocView* pDocView,
                                                                     float fInput);

@@ -134,6 +134,16 @@ enum
     PROP_CAN_ZOOM_OUT
 };
 
+enum
+{
+    LOK_LOAD_DOC,
+    LOK_POST_COMMAND,
+    LOK_SET_EDIT,
+    LOK_SET_PARTMODE,
+    LOK_SET_PART,
+    LOK_POST_KEY
+};
+
 static guint doc_view_signals[LAST_SIGNAL] = { 0 };
 
 static void lok_doc_view_initable_iface_init (GInitableIface *iface);
@@ -150,6 +160,7 @@ G_DEFINE_TYPE_WITH_CODE (LOKDocView, lok_doc_view, GTK_TYPE_DRAWING_AREA,
 #pragma GCC diagnostic pop
 #endif
 
+static GThreadPool* lokThreadPool;
 
 struct CallbackData
 {
@@ -161,6 +172,40 @@ struct CallbackData
         : m_nType(nType),
           m_aPayload(rPayload),
           m_pDocView(pDocView) {}
+};
+
+struct LOEvent
+{
+    int m_nType;
+    const gchar* m_pCommand;
+    const gchar* m_pArguments;
+    gchar* m_pPath;
+    gboolean m_bEdit;
+    int m_nPartMode;
+    int m_nPart;
+    int m_nKeyEvent;
+    int m_nCharCode;
+    int m_nKeyCode;
+
+    LOEvent(int type)
+        : m_nType(type) {}
+
+    LOEvent(int type, const gchar* pCommand, const gchar* pArguments)
+        : m_nType(type),
+          m_pCommand(pCommand),
+          m_pArguments(pArguments) {}
+
+    LOEvent(int type, const gchar* pPath)
+        : m_nType(type)
+    {
+        m_pPath = g_strdup(pPath);
+    }
+
+    LOEvent(int type, int nKeyEvent, int nCharCode, int nKeyCode)
+        : m_nType(type),
+          m_nKeyEvent(nKeyEvent),
+          m_nCharCode(nCharCode),
+          m_nKeyCode(nKeyCode) {}
 };
 
 static void
@@ -225,6 +270,20 @@ isEmptyRectangle(const GdkRectangle& rRectangle)
     return rRectangle.x == 0 && rRectangle.y == 0 && rRectangle.width == 0 && rRectangle.height == 0;
 }
 
+static void
+postKeyEventInThread(gpointer data)
+{
+    GTask* task = G_TASK(data);
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
+    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+
+    priv->m_pDocument->pClass->postKeyEvent(priv->m_pDocument,
+                                            pLOEvent->m_nKeyEvent,
+                                            pLOEvent->m_nCharCode,
+                                            pLOEvent->m_nKeyCode);
+}
+
 static gboolean
 signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
 {
@@ -281,10 +340,23 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
     if (pEvent->state & GDK_SHIFT_MASK)
         nKeyCode |= KEY_SHIFT;
 
+
     if (pEvent->type == GDK_KEY_RELEASE)
-        priv->m_pDocument->pClass->postKeyEvent(priv->m_pDocument, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
+    {
+        GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+        LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
+        g_task_set_task_data(task, pLOEvent, g_free);
+        g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+        g_object_unref(task);
+    }
     else
-        priv->m_pDocument->pClass->postKeyEvent(priv->m_pDocument, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
+    {
+        GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+        LOEvent* pLOEvent = new LOEvent(LOK_POST_KEY, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
+        g_task_set_task_data(task, pLOEvent, g_free);
+        g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+        g_object_unref(task);
+    }
 
     return FALSE;
 }
@@ -1013,6 +1085,143 @@ lok_doc_view_signal_motion (GtkWidget* pWidget, GdkEventMotion* pEvent)
     return FALSE;
 }
 
+static void
+lok_doc_view_open_document_in_thread (gpointer data)
+{
+    GTask* task = G_TASK(data);
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
+    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+
+    if ( priv->m_pDocument )
+    {
+        priv->m_pDocument->pClass->destroy( priv->m_pDocument );
+        priv->m_pDocument = 0;
+    }
+
+    priv->m_pOffice->pClass->registerCallback(priv->m_pOffice, globalCallbackWorker, pDocView);
+    priv->m_pDocument = priv->m_pOffice->pClass->documentLoad( priv->m_pOffice, priv->m_aDocPath );
+    if ( !priv->m_pDocument )
+    {
+        // FIXME: should have a GError parameter and populate it.
+        char *pError = priv->m_pOffice->pClass->getError( priv->m_pOffice );
+        fprintf( stderr, "Error opening document '%s'\n", pError );
+        g_task_return_new_error(task, 0, 0, pError);
+    }
+    else
+    {
+        priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument);
+        priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pDocView);
+        priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
+        g_timeout_add(600, handleTimeout, pDocView);
+
+        float zoom = priv->m_fZoom;
+        long nDocumentWidthTwips = priv->m_nDocumentWidthTwips;
+        long nDocumentHeightTwips = priv->m_nDocumentHeightTwips;
+        long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips, zoom);
+        long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips, zoom);
+        // Total number of columns in this document.
+        guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
+
+
+        priv->m_aTileBuffer = TileBuffer(priv->m_pDocument,
+                                         nColumns);
+        gtk_widget_set_size_request(GTK_WIDGET(pDocView),
+                                    nDocumentWidthPixels,
+                                    nDocumentHeightPixels);
+        gtk_widget_set_can_focus(GTK_WIDGET(pDocView), TRUE);
+        gtk_widget_grab_focus(GTK_WIDGET(pDocView));
+        g_task_return_boolean (task, true);
+    }
+}
+
+static void
+lok_doc_view_set_part_in_thread(gpointer data)
+{
+    GTask* task = G_TASK(data);
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
+    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+    int nPart = pLOEvent->m_nPart;
+
+    priv->m_pDocument->pClass->setPart( priv->m_pDocument, nPart );
+}
+
+static void
+lok_doc_view_set_partmode_in_thread(gpointer data)
+{
+    GTask* task = G_TASK(data);
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
+    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+    int nPartMode = pLOEvent->m_nPartMode;
+
+    priv->m_pDocument->pClass->setPartMode( priv->m_pDocument, nPartMode );
+}
+
+static void
+lok_doc_view_set_edit_in_thread(gpointer data)
+{
+    GTask* task = G_TASK(data);
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
+    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+    gboolean bWasEdit = priv->m_bEdit;
+    gboolean bEdit = pLOEvent->m_bEdit;
+
+    if (!priv->m_bEdit && bEdit)
+        g_info("lok_doc_view_set_edit: entering edit mode");
+    else if (priv->m_bEdit && !bEdit)
+    {
+        g_info("lok_doc_view_set_edit: leaving edit mode");
+        priv->m_pDocument->pClass->resetSelection(priv->m_pDocument);
+    }
+    priv->m_bEdit = bEdit;
+    g_signal_emit(pDocView, doc_view_signals[EDIT_CHANGED], 0, bWasEdit);
+    gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+}
+
+static void
+lok_doc_view_post_command_in_thread (gpointer data)
+{
+    GTask* task = G_TASK(data);
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
+    LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+
+    priv->m_pDocument->pClass->postUnoCommand(priv->m_pDocument, pLOEvent->m_pCommand, pLOEvent->m_pArguments);
+}
+
+static void
+lokThreadFunc(gpointer data, gpointer /*user_data*/)
+{
+    GTask* task = G_TASK(data);
+    LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+
+    switch (pLOEvent->m_nType)
+    {
+    case LOK_LOAD_DOC:
+        lok_doc_view_open_document_in_thread (task);
+        break;
+    case LOK_POST_COMMAND:
+        lok_doc_view_post_command_in_thread (task);
+        break;
+    case LOK_SET_EDIT:
+        lok_doc_view_set_edit_in_thread(task);
+        break;
+    case LOK_SET_PART:
+        lok_doc_view_set_part_in_thread(task);
+        break;
+    case LOK_SET_PARTMODE:
+        lok_doc_view_set_partmode_in_thread(task);
+        break;
+    case LOK_POST_KEY:
+        postKeyEventInThread(task);
+        break;
+    }
+
+    g_object_unref(task);
+}
+
 static void lok_doc_view_init (LOKDocView* pDocView)
 {
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
@@ -1392,6 +1601,12 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      g_cclosure_marshal_VOID__STRING,
                      G_TYPE_NONE, 1,
                      G_TYPE_STRING);
+
+    lokThreadPool = g_thread_pool_new(lokThreadFunc,
+                                      NULL,
+                                      1,
+                                      FALSE,
+                                      NULL);
 }
 
 /**
@@ -1423,60 +1638,13 @@ lok_doc_view_open_document_finish (LOKDocView* pDocView, GAsyncResult* res, GErr
     GTask* task = G_TASK(res);
 
     g_return_val_if_fail(g_task_is_valid(res, pDocView), false);
-    //FIXME: make source_tag workx
+    //FIXME: make source_tag work
     //g_return_val_if_fail(g_task_get_source_tag(task) == lok_doc_view_open_document, NULL);
     g_return_val_if_fail(error == NULL || *error == NULL, false);
 
     return g_task_propagate_boolean(task, error);
 }
 
-static void
-lok_doc_view_open_document_func (GTask* task, gpointer source_object, gpointer /*task_data*/, GCancellable* /*cancellable*/)
-{
-    LOKDocView* pDocView = LOK_DOC_VIEW(source_object);
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
-
-    if ( priv->m_pDocument )
-    {
-        priv->m_pDocument->pClass->destroy( priv->m_pDocument );
-        priv->m_pDocument = 0;
-    }
-
-    priv->m_pOffice->pClass->registerCallback(priv->m_pOffice, globalCallbackWorker, pDocView);
-    priv->m_pDocument = priv->m_pOffice->pClass->documentLoad( priv->m_pOffice, priv->m_aDocPath );
-    if ( !priv->m_pDocument )
-    {
-        // FIXME: should have a GError parameter and populate it.
-        char *pError = priv->m_pOffice->pClass->getError( priv->m_pOffice );
-        fprintf( stderr, "Error opening document '%s'\n", pError );
-        g_task_return_new_error(task, 0, 0, pError);
-    }
-    else
-    {
-        priv->m_pDocument->pClass->initializeForRendering(priv->m_pDocument);
-        priv->m_pDocument->pClass->registerCallback(priv->m_pDocument, callbackWorker, pDocView);
-        priv->m_pDocument->pClass->getDocumentSize(priv->m_pDocument, &priv->m_nDocumentWidthTwips, &priv->m_nDocumentHeightTwips);
-        g_timeout_add(600, handleTimeout, pDocView);
-
-        float zoom = priv->m_fZoom;
-        long nDocumentWidthTwips = priv->m_nDocumentWidthTwips;
-        long nDocumentHeightTwips = priv->m_nDocumentHeightTwips;
-        long nDocumentWidthPixels = twipToPixel(nDocumentWidthTwips, zoom);
-        long nDocumentHeightPixels = twipToPixel(nDocumentHeightTwips, zoom);
-        // Total number of columns in this document.
-        guint nColumns = ceil((double)nDocumentWidthPixels / nTileSizePixels);
-
-
-        priv->m_aTileBuffer = TileBuffer(priv->m_pDocument,
-                                         nColumns);
-        gtk_widget_set_size_request(GTK_WIDGET(pDocView),
-                                    nDocumentWidthPixels,
-                                    nDocumentHeightPixels);
-        gtk_widget_set_can_focus(GTK_WIDGET(pDocView), TRUE);
-        gtk_widget_grab_focus(GTK_WIDGET(pDocView));
-        g_task_return_boolean (task, true);
-    }
-}
 
 /**
  * lok_doc_view_open_document:
@@ -1492,15 +1660,13 @@ lok_doc_view_open_document (LOKDocView* pDocView,
                             GAsyncReadyCallback callback,
                             gpointer userdata)
 {
-    GTask *task;
+    GTask* task = g_task_new(pDocView, cancellable, callback, userdata);
+    LOEvent* pLOEvent = new LOEvent(LOK_LOAD_DOC, pPath);
     LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
     priv->m_aDocPath = g_strdup(pPath);
+    g_task_set_task_data(task, pLOEvent, g_free);
 
-    task = g_task_new(pDocView, cancellable, callback, userdata);
-    // FIXME: Use source_tag to check the task.
-    //g_task_set_source_tag(task, lok_doc_view_open_document);
-
-    g_task_run_in_thread(task, lok_doc_view_open_document_func);
+    g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
     g_object_unref(task);
 }
 
@@ -1572,8 +1738,13 @@ lok_doc_view_get_part (LOKDocView* pDocView)
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_part (LOKDocView* pDocView, int nPart)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
-    priv->m_pDocument->pClass->setPart( priv->m_pDocument, nPart );
+    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    LOEvent* pLOEvent = new LOEvent(LOK_SET_PART);
+    pLOEvent->m_nPart = nPart;
+    g_task_set_task_data(task, pLOEvent, g_free);
+
+    g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+    g_object_unref(task);
 }
 
 SAL_DLLPUBLIC_EXPORT char*
@@ -1587,8 +1758,13 @@ SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_partmode(LOKDocView* pDocView,
                           int nPartMode)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
-    priv->m_pDocument->pClass->setPartMode( priv->m_pDocument, nPartMode );
+    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    LOEvent* pLOEvent = new LOEvent(LOK_SET_PARTMODE);
+    pLOEvent->m_nPartMode = nPartMode;
+    g_task_set_task_data(task, pLOEvent, g_free);
+
+    g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+    g_object_unref(task);
 }
 
 SAL_DLLPUBLIC_EXPORT void
@@ -1610,19 +1786,13 @@ SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_set_edit(LOKDocView* pDocView,
                       gboolean bEdit)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
-    gboolean bWasEdit = priv->m_bEdit;
+    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    LOEvent* pLOEvent = new LOEvent(LOK_SET_EDIT);
+    pLOEvent->m_bEdit = bEdit;
+    g_task_set_task_data(task, pLOEvent, g_free);
 
-    if (!priv->m_bEdit && bEdit)
-        g_info("lok_doc_view_set_edit: entering edit mode");
-    else if (priv->m_bEdit && !bEdit)
-    {
-        g_info("lok_doc_view_set_edit: leaving edit mode");
-        priv->m_pDocument->pClass->resetSelection(priv->m_pDocument);
-    }
-    priv->m_bEdit = bEdit;
-    g_signal_emit(pDocView, doc_view_signals[EDIT_CHANGED], 0, bWasEdit);
-    gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+    g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+    g_object_unref(task);
 }
 
 /**
@@ -1648,11 +1818,16 @@ lok_doc_view_get_edit (LOKDocView* pDocView)
 */
 SAL_DLLPUBLIC_EXPORT void
 lok_doc_view_post_command (LOKDocView* pDocView,
-                           const char* pCommand,
-                           const char* pArguments)
+                           const gchar* pCommand,
+                           const gchar* pArguments)
 {
-    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
-    priv->m_pDocument->pClass->postUnoCommand(priv->m_pDocument, pCommand, pArguments);
+
+    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
+    LOEvent* pLOEvent = new LOEvent(LOK_POST_COMMAND, pCommand, pArguments);
+    g_task_set_task_data(task, pLOEvent, g_free);
+
+    g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
+    g_object_unref(task);
 }
 
 /**
