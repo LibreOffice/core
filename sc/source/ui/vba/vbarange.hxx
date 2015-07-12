@@ -141,7 +141,7 @@ public:
     static css::uno::Reference< ov::excel::XRange > getRangeObjectForName(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const OUString& sRangeName, ScDocShell* pDocSh,
-        formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1  ) throw ( css::uno::RuntimeException );
+        formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1  ) throw ( css::uno::RuntimeException, std::exception );
 
     static css::uno::Reference< ov::excel::XRange > CellsHelper(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
