@@ -2678,7 +2678,7 @@ ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2 ) throw (uno::Ru
     return Range( Cell1, Cell2, false );
 }
 uno::Reference< excel::XRange >
-ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseInpuRangeTab ) throw (uno::RuntimeException)
+ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseInpuRangeTab ) throw (uno::RuntimeException, std::exception)
 
 {
     uno::Reference< table::XCellRange > xCellRange = mxRange;
