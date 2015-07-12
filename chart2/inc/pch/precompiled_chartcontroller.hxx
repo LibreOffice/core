@@ -270,7 +270,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/svxgrahicitem.hxx>
 #include <svx/tabline.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unomodel.hxx>

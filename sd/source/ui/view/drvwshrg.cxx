@@ -29,7 +29,6 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <svx/f3dchild.hxx>
-#include <svx/tbxcustomshapes.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/hyperdlg.hxx>

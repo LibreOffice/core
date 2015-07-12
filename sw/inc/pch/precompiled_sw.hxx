@@ -953,7 +953,6 @@
 #include <svx/tbxalign.hxx>
 #include <svx/tbxcolor.hxx>
 #include <svx/tbxctl.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/unofill.hxx>

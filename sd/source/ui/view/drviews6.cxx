@@ -33,7 +33,6 @@
 #include "optsitem.hxx"
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <avmedia/mediaplayer.hxx>
 
 #include "app.hrc"

@@ -85,7 +85,6 @@
 #include <svx/SvxColorChildWindow.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/tbcontrl.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <svx/verttexttbxctrl.hxx>
 #include <svx/xmlsecctrl.hxx>
 #include <svx/zoomctrl.hxx>
@@ -176,13 +175,6 @@ void SdDLL::RegisterControllers()
     SdTbxControl::RegisterControl( SID_DRAWTBX_3D_OBJECTS, pMod );
     SdTbxControl::RegisterControl( SID_DRAWTBX_CONNECTORS, pMod );
     SdTbxControl::RegisterControl( SID_DRAWTBX_INSERT, pMod );
-
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_BASIC, pMod );
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_SYMBOL, pMod );
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_ARROW, pMod );
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_FLOWCHART, pMod );
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_CALLOUT, pMod );
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_STAR, pMod );
 
     SdTbxCtlDiaPages::RegisterControl( SID_PAGES_PER_ROW, pMod );
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );

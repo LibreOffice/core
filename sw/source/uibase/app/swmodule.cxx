@@ -47,7 +47,6 @@
 #include <svx/tbxcolor.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/lboxctrl.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
@@ -296,13 +295,6 @@ void SwDLL::RegisterControls()
     SwTbxFieldCtrl::RegisterControl(FN_INSERT_FIELD_CTRL, pMod );
     SwTbxAutoTextCtrl::RegisterControl(FN_GLOSSARY_DLG, pMod );
     svx::ParaLineSpacingPopup::RegisterControl(SID_ATTR_PARA_LINESPACE, pMod);
-
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_BASIC, pMod );
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_SYMBOL, pMod );
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_ARROW, pMod );
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_FLOWCHART, pMod );
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_CALLOUT, pMod );
-    SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_STAR, pMod );
 
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );

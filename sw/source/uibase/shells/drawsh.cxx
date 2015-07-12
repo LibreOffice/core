@@ -29,7 +29,6 @@
 #include <svl/srchitem.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <uitool.hxx>
 #include <dcontact.hxx>
 #include <textboxhelper.hxx>
