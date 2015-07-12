@@ -55,7 +55,7 @@ sub search_bugs($$$$)
 #        print "   found $bug\n";
         # remove bug number from the comment; it will be added later a standardized way
         $bug_orig =~ s/\#/\\#/;
-        $line =~ s/(,\s)*[Rr](elated|esolve[ds]):?\s*$bug_orig\s*//;
+        $line =~ s/(,\s)*[Rr](elated|esolve[ds]):?\s*$bug_orig\s?:?\s*//;
         $line =~ s/\s*-\s*$bug_orig\s*//;
         $line =~ s/\(?$bug_orig\)?\s*[:,-]?\s*//;
 
