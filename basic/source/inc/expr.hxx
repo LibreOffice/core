@@ -105,6 +105,8 @@ class SbiExprNode {                  // operators (and operands)
     SbiToken     eTok;
     bool  bError;                   // true: error
     void  FoldConstants(SbiParser*);
+    void  FoldConstantsBinaryNode(SbiParser*);
+    void  FoldConstantsUnaryNode(SbiParser*);
     void  CollectBits();            // converting numbers to strings
     bool  IsOperand()
         { return eNodeType != SbxNODE && eNodeType != SbxTYPEOF && eNodeType != SbxNEW; }
@@ -131,6 +133,10 @@ public:
         { return eNodeType == SbxSTRVAL || eNodeType == SbxNUMVAL; }
     bool IsIntConst();
     bool IsVariable();
+    bool  IsUnary()
+        { return pLeft && !pRight; }
+    bool  IsBinary()
+        { return pLeft && pRight; }
 
     SbiExprNode* GetWithParent()            { return pWithParent; }
     void SetWithParent( SbiExprNode* p )    { pWithParent = p; }
