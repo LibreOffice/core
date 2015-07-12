@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_2917d7a4",
+        "filename": "avmedia/source/vlc/vlcframegrabber.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-12T05:14:21Z",
+      "side": 1,
+      "message": "Not used.",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 34
+      },
+      "revId": "768924787edbd23aa5cbbd6dc89435031b75a2b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_c90ba37c",
+        "filename": "avmedia/source/vlc/vlcplayer.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-12T05:14:21Z",
+      "side": 1,
+      "message": "Not used.",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 34
+      },
+      "revId": "768924787edbd23aa5cbbd6dc89435031b75a2b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_e910dfaa",
+        "filename": "canvas/source/directx/dx_canvashelper.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-12T05:14:21Z",
+      "side": 1,
+      "message": "Bad rebase? Not used.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 34
+      },
+      "revId": "768924787edbd23aa5cbbd6dc89435031b75a2b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_89260b15",
+        "filename": "canvas/source/directx/dx_textlayout_drawhelper.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-12T05:14:21Z",
+      "side": 1,
+      "message": "Not used.",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 49,
+        "endChar": 34
+      },
+      "revId": "768924787edbd23aa5cbbd6dc89435031b75a2b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_a923c704",
+        "filename": "canvas/source/directx/dx_winstuff.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-12T05:14:21Z",
+      "side": 1,
+      "message": "After migration to std::mem_fn() get_pointer() shouldn\u0027t be needed any more, as std::mem_fn() isn\u0027t aware of it.",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 171,
+        "endChar": 5
+      },
+      "revId": "768924787edbd23aa5cbbd6dc89435031b75a2b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_492013f8",
+        "filename": "comphelper/source/property/property.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-12T05:14:21Z",
+      "side": 1,
+      "message": "Not used?",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 37,
+        "endChar": 21
+      },
+      "revId": "768924787edbd23aa5cbbd6dc89435031b75a2b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
