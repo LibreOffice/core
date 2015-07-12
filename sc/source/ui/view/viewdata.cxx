@@ -1017,7 +1017,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
                 long nRight = pView->GetGridWidth(eHWhich) - aPixRect.Right();
                 nSizeXPix = aPixRect.GetWidth() + 2 * std::min( nLeft, nRight );
             }
-            else if ( bGrowToLeft )
+            else if ( bGrowBackwards )
                 nSizeXPix = aPixRect.Right();   // space that's available in the window when growing to the left
             else
                 nSizeXPix = pView->GetGridWidth(eHWhich) - aPixRect.Left();
