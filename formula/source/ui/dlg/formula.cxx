@@ -90,7 +90,7 @@ namespace formula
         void            UpdateTokenArray( const OUString& rStrExp);
         OUString        RepairFormula(const OUString& aFormula);
         void            FillDialog(bool nFlag=true);
-        void            EditNextFunc( bool bForward, sal_Int32 nFStart=NOT_FOUND );
+        bool            EditNextFunc( bool bForward, sal_Int32 nFStart=NOT_FOUND );
         void            EditThisFunc(sal_Int32 nFStart);
 
         void            StoreFormEditData(FormEditData* pEditData);
@@ -198,6 +198,7 @@ namespace formula
         OString    aOldUnique;
         OString    aActivWinId;
         bool            bIsShutDown;
+        bool            bMakingTree; //in method of constructing tree
 
         vcl::Font       aFntBold;
         vcl::Font       aFntLight;
@@ -243,6 +244,7 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
     aTxtEnd         ( ModuleRes( STR_END ) ),
     m_aFormulaHelper(_pFunctionMgr),
     bIsShutDown     (false),
+    bMakingTree     (false),
     nEdFocus        (0),
     pFuncDesc       (NULL),
     nArgs           (0)
@@ -600,6 +602,8 @@ void FormulaDlg_Impl::UpdateValues()
     if ( CalcValue( pFuncDesc->getFormula( m_aArguments ), aStrResult ) )
         m_pWndResult->SetText( aStrResult );
 
+    if (bMakingTree) return;
+
     aStrResult.clear();
     if ( CalcValue(m_pHelper->getCurrentFormula(), aStrResult ) )
         m_pWndFormResult->SetText( aStrResult );
@@ -674,6 +678,7 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,Fo
             {
                 SvTreeListEntry* pEntry;
 
+                bool bCalcSubformula = false;
                 OUString aTest=_pTree->GetEntryText(pParent);
 
                 if(aTest==aResult &&
@@ -688,6 +693,12 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,Fo
                     {
                         pEntry=_pTree->InsertEntry(aResult,pParent,STRUCT_ERROR,0,_pToken);
                     }
+
+                    else if ( eOp<ocAdd || eOp>ocNegSub ) // not ideal coding
+                    {
+                        bCalcSubformula = true;
+                        pEntry=_pTree->InsertEntry(aResult,pParent,STRUCT_FOLDER,0,_pToken);
+                    }
                     else
                     {
                         pEntry=_pTree->InsertEntry(aResult,pParent,STRUCT_FOLDER,0,_pToken);
@@ -695,6 +706,33 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,Fo
                 }
 
                 MakeTree(_pTree,pEntry,m_pTokenArray->PrevRPN(),nParas);
+
+                if (bCalcSubformula)
+                {
+                    OUString aStr;
+                    OUString aEquals(" = ");
+
+                    if (!bMakingTree)
+                    { // gets the last subformula result
+                        bMakingTree = true;
+                        EditThisFunc(0);
+                        while ( EditNextFunc(true) ) {}
+                    }
+                    else
+                    { // gets subsequent subformula results (from the back)
+                        const IFunctionDescription* pDesc =pFuncPage->GetFuncDesc( pFuncPage->GetFunction() );
+                        if(pDesc==pFuncDesc || !pFuncPage->IsVisible())
+                        {
+//                             EditNextFunc(false);
+                        }
+                    }
+
+                    if ( CalcValue( pFuncDesc->getFormula( m_aArguments ), aStr ) )
+                        m_pWndResult->SetText( aStr );
+                    aStr = m_pWndResult->GetText();
+                    pStructPage->GetTlbStruct()->SetEntryText(pEntry,aResult + aEquals + aStr);
+                }
+
                 --Count;
                 m_pTokenArray->NextRPN();
                 MakeTree(_pTree,pParent,m_pTokenArray->PrevRPN(),Count);
@@ -709,7 +747,8 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,Fo
                 {
                     OUString aCellResult;
                     OUString aEquals(" = ");
-                    if (CalcValue( "=" + aResult, aCellResult) && aCellResult != aResult) // cell is a formula, print subformula
+                    CalcValue( "=" + aResult, aCellResult);
+                    if (aCellResult != aResult) // cell is a formula, print subformula
                         _pTree->InsertEntry(aResult + aEquals + aCellResult,pParent,STRUCT_END,0,_pToken);
                     else
                         _pTree->InsertEntry(aResult,pParent,STRUCT_END,0,_pToken);
@@ -737,6 +776,7 @@ void FormulaDlg_Impl::fillTree(IStructHelper* _pTree)
     if( pToken != NULL)
     {
         MakeTree(_pTree,NULL,pToken,1);
+        bMakingTree = false;
     }
 }
 void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
@@ -1136,11 +1176,11 @@ void FormulaDlg_Impl::EditThisFunc(sal_Int32 nFStart)
     }
 }
 
-void FormulaDlg_Impl::EditNextFunc( bool bForward, sal_Int32 nFStart )
+bool FormulaDlg_Impl::EditNextFunc( bool bForward, sal_Int32 nFStart )
 {
     FormEditData* pData = m_pHelper->getFormEditData();
     if (!pData)
-        return;
+        return false;
 
     OUString aFormula = m_pHelper->getCurrentFormula();
 
@@ -1173,6 +1213,8 @@ void FormulaDlg_Impl::EditNextFunc( bool bForward, sal_Int32 nFStart )
         sal_Int32 PrivStart, PrivEnd;
         SetData(nFStart, nNextFStart, nNextFEnd, PrivStart, PrivEnd);
     }
+
+    return bFound;
 }
 
 void FormulaDlg_Impl::SaveArg( sal_uInt16 nEd )

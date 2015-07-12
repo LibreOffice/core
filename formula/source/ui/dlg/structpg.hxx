@@ -100,6 +100,8 @@ public:
     virtual OUString            GetEntryText(SvTreeListEntry* pEntry) const SAL_OVERRIDE;
 
     void            SetSelectionHdl( const Link<>& rLink ) { aSelLink = rLink; }
+
+    StructListBox*  GetTlbStruct() const { return m_pTlbStruct; }
 };
 
 } // formula
