@@ -2140,48 +2140,46 @@ VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
     return pRet;
 }
 
-IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
+IMPL_LINK_TYPED( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void )
 {
     //TODO: Merge with ScFieldEditEngine!
-    if (pInfo)
+    if (!pInfo)
+        return;
+
+    const SvxFieldItem& rField = pInfo->GetField();
+    const SvxFieldData* pField = rField.GetField();
+
+    if (pField && pField->ISA(SvxURLField))
     {
-        const SvxFieldItem& rField = pInfo->GetField();
-        const SvxFieldData* pField = rField.GetField();
+        // URLField
+        const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);
+        OUString aURL = pURLField->GetURL();
 
-        if (pField && pField->ISA(SvxURLField))
+        switch ( pURLField->GetFormat() )
         {
-            // URLField
-            const SvxURLField* pURLField = static_cast<const SvxURLField*>(pField);
-            OUString aURL = pURLField->GetURL();
-
-            switch ( pURLField->GetFormat() )
+            case SVXURLFORMAT_APPDEFAULT: //TODO: Settable in the App?
+            case SVXURLFORMAT_REPR:
             {
-                case SVXURLFORMAT_APPDEFAULT: //TODO: Settable in the App?
-                case SVXURLFORMAT_REPR:
-                {
-                    pInfo->SetRepresentation( pURLField->GetRepresentation() );
-                }
-                break;
-
-                case SVXURLFORMAT_URL:
-                {
-                    pInfo->SetRepresentation( aURL );
-                }
-                break;
+                pInfo->SetRepresentation( pURLField->GetRepresentation() );
             }
+            break;
 
-            svtools::ColorConfigEntry eEntry =
-                INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svtools::LINKSVISITED : svtools::LINKS;
-            pInfo->SetTextColor( GetColorConfig().GetColorValue(eEntry).nColor );
+            case SVXURLFORMAT_URL:
+            {
+                pInfo->SetRepresentation( aURL );
+            }
+            break;
         }
-        else
-        {
-            OSL_FAIL("Unknown Field");
-            pInfo->SetRepresentation(OUString('?'));
-        }
+
+        svtools::ColorConfigEntry eEntry =
+            INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svtools::LINKSVISITED : svtools::LINKS;
+        pInfo->SetTextColor( GetColorConfig().GetColorValue(eEntry).nColor );
     }
-
-    return 0;
+    else
+    {
+        OSL_FAIL("Unknown Field");
+        pInfo->SetRepresentation(OUString('?'));
+    }
 }
 
 bool ScModule::RegisterRefWindow( sal_uInt16 nSlotId, vcl::Window *pWnd )

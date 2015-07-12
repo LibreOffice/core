@@ -93,9 +93,9 @@ namespace
         DECL_LINK_TYPED(decomposeBlockTextPrimitive, DrawPortionInfo*, void);
         DECL_LINK_TYPED(decomposeStretchTextPrimitive, DrawPortionInfo*, void);
 
-        DECL_LINK(decomposeContourBulletPrimitive, DrawBulletInfo* );
-        DECL_LINK(decomposeBlockBulletPrimitive, DrawBulletInfo* );
-        DECL_LINK(decomposeStretchBulletPrimitive, DrawBulletInfo* );
+        DECL_LINK_TYPED(decomposeContourBulletPrimitive, DrawBulletInfo*, void);
+        DECL_LINK_TYPED(decomposeBlockBulletPrimitive, DrawBulletInfo*, void);
+        DECL_LINK_TYPED(decomposeStretchBulletPrimitive, DrawBulletInfo*, void);
 
         static bool impIsUnderlineAbove(const vcl::Font& rFont);
         void impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo);
@@ -127,7 +127,7 @@ namespace
             mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeContourBulletPrimitive));
             mrOutliner.StripPortions();
             mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
-            mrOutliner.SetDrawBulletHdl(Link<>());
+            mrOutliner.SetDrawBulletHdl(Link<DrawBulletInfo*,void>());
         }
 
         void decomposeBlockTextPrimitive(
@@ -142,7 +142,7 @@ namespace
             mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeBlockBulletPrimitive));
             mrOutliner.StripPortions();
             mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
-            mrOutliner.SetDrawBulletHdl(Link<>());
+            mrOutliner.SetDrawBulletHdl(Link<DrawBulletInfo*,void>());
         }
 
         void decomposeStretchTextPrimitive(const basegfx::B2DHomMatrix& rNewTransformA, const basegfx::B2DHomMatrix& rNewTransformB)
@@ -153,7 +153,7 @@ namespace
             mrOutliner.SetDrawBulletHdl(LINK(this, impTextBreakupHandler, decomposeStretchBulletPrimitive));
             mrOutliner.StripPortions();
             mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
-            mrOutliner.SetDrawBulletHdl(Link<>());
+            mrOutliner.SetDrawBulletHdl(Link<DrawBulletInfo*,void>());
         }
 
         drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequence();
@@ -620,34 +620,28 @@ namespace
         }
     }
 
-    IMPL_LINK(impTextBreakupHandler, decomposeContourBulletPrimitive, DrawBulletInfo*, pInfo)
+    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeContourBulletPrimitive, DrawBulletInfo*, pInfo, void)
     {
         if(pInfo)
         {
             impHandleDrawBulletInfo(*pInfo);
         }
-
-        return 0;
     }
 
-    IMPL_LINK(impTextBreakupHandler, decomposeBlockBulletPrimitive, DrawBulletInfo*, pInfo)
+    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeBlockBulletPrimitive, DrawBulletInfo*, pInfo, void)
     {
         if(pInfo)
         {
             impHandleDrawBulletInfo(*pInfo);
         }
-
-        return 0;
     }
 
-    IMPL_LINK(impTextBreakupHandler, decomposeStretchBulletPrimitive, DrawBulletInfo*, pInfo)
+    IMPL_LINK_TYPED(impTextBreakupHandler, decomposeStretchBulletPrimitive, DrawBulletInfo*, pInfo, void)
     {
         if(pInfo)
         {
             impHandleDrawBulletInfo(*pInfo);
         }
-
-        return 0;
     }
 
     drawinglayer::primitive2d::Primitive2DSequence impTextBreakupHandler::getPrimitive2DSequence()

@@ -95,17 +95,17 @@ public:
     void Paint (const Rectangle& rRect, ::sd::Window* pWin);
 
                     // Callbacks fuer LINKs
-    DECL_LINK( ParagraphInsertedHdl, Outliner * );
-    DECL_LINK( ParagraphRemovingHdl, Outliner * );
-    DECL_LINK( DepthChangedHdl, Outliner * );
+    DECL_LINK_TYPED( ParagraphInsertedHdl, Outliner *, void );
+    DECL_LINK_TYPED( ParagraphRemovingHdl, Outliner *, void );
+    DECL_LINK_TYPED( DepthChangedHdl, Outliner *, void );
     DECL_LINK( StatusEventHdl, void * );
-    DECL_LINK( BeginMovingHdl, Outliner * );
-    DECL_LINK( EndMovingHdl, Outliner * );
-    DECL_LINK(RemovingPagesHdl, void *);
-    DECL_LINK( IndentingPagesHdl, OutlinerView * );
+    DECL_LINK_TYPED( BeginMovingHdl, Outliner *, void );
+    DECL_LINK_TYPED( EndMovingHdl, Outliner *, void );
+    DECL_LINK_TYPED( RemovingPagesHdl, OutlinerView *, bool );
+    DECL_LINK_TYPED( IndentingPagesHdl, OutlinerView *, long );
     DECL_LINK( BeginDropHdl, void * );
     DECL_LINK( EndDropHdl, void * );
-    DECL_LINK( PaintingFirstLineHdl, PaintFirstLineInfo* );
+    DECL_LINK_TYPED( PaintingFirstLineHdl, PaintFirstLineInfo*, void );
 
     sal_uLong         GetPaperWidth() { return mnPaperWidth;}
 

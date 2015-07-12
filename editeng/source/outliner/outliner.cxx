@@ -807,7 +807,6 @@ bool Outliner::Expand( Paragraph* pPara )
         pHdlParagraph = pPara;
         bIsExpanding = true;
         pParaList->Expand( pPara );
-        ExpandHdl();
         InvalidateBullet(pParaList->GetAbsPos(pPara));
         if( bUndo )
         {
@@ -839,7 +838,6 @@ bool Outliner::Collapse( Paragraph* pPara )
         pHdlParagraph = pPara;
         bIsExpanding = false;
         pParaList->Collapse( pPara );
-        ExpandHdl();
         InvalidateBullet(pParaList->GetAbsPos(pPara));
         if( bUndo )
         {
@@ -1663,11 +1661,6 @@ Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bRetu
     return aBulletArea;
 }
 
-void Outliner::ExpandHdl()
-{
-    aExpandHdl.Call( this );
-}
-
 EBulletInfo Outliner::GetBulletInfo( sal_Int32 nPara )
 {
     EBulletInfo aInfo;
@@ -1803,7 +1796,7 @@ IMPL_LINK_NOARG(Outliner, BeginMovingParagraphsHdl)
 {
 
     if( !IsInUndo() )
-        GetBeginMovingHdl().Call( this );
+        aBeginMovingHdl.Call( this );
 
     return 0;
 }
@@ -2056,13 +2049,13 @@ void Outliner::SetEndDropHdl( const Link<>& rLink )
 }
 
 /** sets a link that is called before a drop or paste operation. */
-void Outliner::SetBeginPasteOrDropHdl( const Link<>& rLink )
+void Outliner::SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos*,void>& rLink )
 {
     maBeginPasteOrDropHdl = rLink;
 }
 
 /** sets a link that is called after a drop or paste operation. */
-void Outliner::SetEndPasteOrDropHdl( const Link<>& rLink )
+void Outliner::SetEndPasteOrDropHdl( const Link<PasteOrDropInfos*,void>& rLink )
 {
     maEndPasteOrDropHdl = rLink;
 }

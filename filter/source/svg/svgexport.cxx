@@ -2128,7 +2128,7 @@ OUString SVGFilter::implGetInterfaceName( const Reference< XInterface >& rxIf )
 
 
 
-IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
+IMPL_LINK_TYPED( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo, void )
 {
     bool bFieldProcessed = false;
     if( pInfo && mbPresentation )
@@ -2146,7 +2146,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                 if( !mCreateOjectsCurrentMasterPage.is() )
                 {
                     OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
-                    return 0;
+                    return;
                 }
                 bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
 
@@ -2365,7 +2365,8 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
 
         }
     }
-    return ( bFieldProcessed ? 0 : maOldFieldHdl.Call( pInfo ) );
+    if (!bFieldProcessed)
+        maOldFieldHdl.Call( pInfo );
 }
 
 

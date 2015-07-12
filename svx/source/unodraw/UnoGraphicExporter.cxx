@@ -162,7 +162,7 @@ namespace {
 
         VclPtr<VirtualDevice> CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const;
 
-        DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
+        DECL_LINK_TYPED( CalcFieldValueHdl, EditFieldInfo*, void );
 
         void ParseSettings( const Sequence< PropertyValue >& aDescriptor, ExportSettings& rSettings );
         bool GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, bool bVectorType );
@@ -174,7 +174,7 @@ namespace {
 
         SvxDrawPage*        mpUnoPage;
 
-        Link<>              maOldCalcFieldValueHdl;
+        Link<EditFieldInfo*,void> maOldCalcFieldValueHdl;
         sal_Int32           mnPageNumber;
         SdrPage*            mpCurrentPage;
         SdrModel*           mpDoc;
@@ -339,7 +339,7 @@ GraphicExporter::~GraphicExporter()
 {
 }
 
-IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
+IMPL_LINK_TYPED(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 {
     if( pInfo )
     {
@@ -378,17 +378,15 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
                 pInfo->SetRepresentation( aPageNumValue );
 
-                return 0;
+                return;
             }
         }
     }
 
-    long nRet = maOldCalcFieldValueHdl.Call( pInfo );
+    maOldCalcFieldValueHdl.Call( pInfo );
 
     if( pInfo && mpCurrentPage )
         pInfo->SetSdrPage( 0 );
-
-    return nRet;
 }
 
 /** creates an virtual device for the given page

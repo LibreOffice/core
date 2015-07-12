@@ -131,7 +131,7 @@ public:
 
     DECL_LINK_TYPED( IdleHandler, Timer*, void ); // Timer instead of idle
     DECL_LINK_TYPED( SpellTimerHdl, Idle*, void );
-    DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
+    DECL_LINK_TYPED( CalcFieldValueHdl, EditFieldInfo*, void );
 
     void                Execute( SfxRequest& rReq );
     void                GetState( SfxItemSet& rSet );

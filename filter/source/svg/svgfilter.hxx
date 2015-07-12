@@ -244,8 +244,8 @@ private:
     XDrawPageSequence                   mSelectedPages;
     XDrawPageSequence                   mMasterPageTargets;
 
-    Link<>                              maOldFieldHdl;
-    Link<>                              maNewFieldHdl;
+    Link<EditFieldInfo*,void>           maOldFieldHdl;
+    Link<EditFieldInfo*,void>           maNewFieldHdl;
 
     bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
 
@@ -290,7 +290,7 @@ private:
     static Any                      implSafeGetPagePropSet( const OUString & sPropertyName,
                                                                 const Reference< XPropertySet > & rxPropSet,
                                                                 const Reference< XPropertySetInfo > & rxPropSetInfo );
-                                        DECL_LINK( CalcFieldHdl, EditFieldInfo* );
+    DECL_LINK_TYPED( CalcFieldHdl, EditFieldInfo*, void );
 
     static bool isStreamGZip(css::uno::Reference<css::io::XInputStream> xInput);
     static bool isStreamSvg(css::uno::Reference<css::io::XInputStream> xInput);
