@@ -71,7 +71,10 @@ ShadowPropertyPanel::ShadowPropertyPanel(
     maShadowXDistanceController(SID_ATTR_SHADOW_XDISTANCE, *pBindings, *this),
     maShadowYDistanceController(SID_ATTR_SHADOW_YDISTANCE, *pBindings, *this),
     mxFrame(rxFrame),
-    mpBindings(pBindings)
+    mpBindings(pBindings),
+    nX(0),
+    nY(0),
+    nXY(0)
 {
     get(mpShowShadow,"SHOW_SHADOW");
     get(mpFTAngle,"angle");
