@@ -101,12 +101,10 @@
 #include <config_folders.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/queryinterface.hxx>

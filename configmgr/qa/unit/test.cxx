@@ -42,7 +42,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.h>
 #include <osl/thread.hxx>
@@ -111,7 +111,7 @@ private:
 };
 
 class RecursiveTest:
-    public cppu::WeakImplHelper1< css::beans::XPropertyChangeListener >
+    public cppu::WeakImplHelper< css::beans::XPropertyChangeListener >
 {
 public:
     RecursiveTest(Test const & theTest, int count, bool * destroyed);

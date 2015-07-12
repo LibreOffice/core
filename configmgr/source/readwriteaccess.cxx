@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/ChangesSet.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
@@ -43,7 +43,7 @@ namespace configmgr { namespace read_write_access {
 namespace {
 
 class Service:
-    public cppu::WeakImplHelper3<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::lang::XInitialization,
         css::configuration::XReadWriteAccess >
 {

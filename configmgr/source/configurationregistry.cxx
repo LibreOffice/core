@@ -48,8 +48,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <cppu/unotype.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
@@ -68,7 +67,7 @@ namespace configmgr { namespace configuration_registry {
 namespace {
 
 class Service:
-    public cppu::WeakImplHelper3<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::registry::XSimpleRegistry,
         css::util::XFlushable >
 {
@@ -152,7 +151,7 @@ private:
 };
 
 class RegistryKey:
-    public cppu::WeakImplHelper1< css::registry::XRegistryKey >
+    public cppu::WeakImplHelper< css::registry::XRegistryKey >
 {
 public:
     RegistryKey(Service & service, css::uno::Any const & value):
