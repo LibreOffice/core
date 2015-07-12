@@ -145,7 +145,7 @@ css::uno::Sequence<OUString> ChartPanelFactory::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
 org_libreoffice_comp_chart2_sidebar_ChartPanelFactory(css::uno::XComponentContext*, css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new chart::sidebar::ChartPanelFactory());
+    return cppu::acquire(new ::chart::sidebar::ChartPanelFactory());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
