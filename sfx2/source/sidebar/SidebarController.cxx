@@ -221,16 +221,11 @@ void SAL_CALL SidebarController::disposing()
             aDeck.disposeAndClear();
     }
 
-    SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(mxFrame->getController()));
-    if (iEntry != maSidebarControllerContainer.end())
-        maSidebarControllerContainer.erase(iEntry);
+    uno::Reference<css::frame::XController> xController = mxFrame->getController();
+    if (!xController.is())
+        xController = mxCurrentController;
 
-    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
-        css::ui::ContextChangeEventMultiplexer::get(
-            ::comphelper::getProcessComponentContext()));
-    if (xMultiplexer.is())
-        xMultiplexer->removeAllContextChangeEventListeners(
-            static_cast<css::ui::XContextChangeEventListener*>(this));
+    unregisterSidebarForFrame(this, xController);
 
     if (mxReadOnlyModeDispatch.is())
         mxReadOnlyModeDispatch->removeStatusListener(this, Tools::GetURL(gsReadOnlyCommandName));
