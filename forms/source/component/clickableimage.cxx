@@ -31,6 +31,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/ActionEvent.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/GraphicObject.hpp>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -62,6 +64,7 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::form::submission;
+    using namespace ::com::sun::star::graphic;
     using ::com::sun::star::awt::MouseEvent;
     using ::com::sun::star::task::XInteractionHandler;
 
@@ -451,6 +454,7 @@ namespace frm
             const OUString& rDefault )
         :OControlModel( _rxFactory, _rUnoControlModelTypeName, rDefault )
         ,OPropertyChangeListener(m_aMutex)
+        ,m_xGraphicObject()
         ,m_pMedium(NULL)
         ,m_pProducer( NULL )
         ,m_bDispatchUrlInternal(false)
@@ -465,6 +469,7 @@ namespace frm
     OClickableImageBaseModel::OClickableImageBaseModel( const OClickableImageBaseModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
         :OControlModel( _pOriginal, _rxFactory )
         ,OPropertyChangeListener( m_aMutex )
+        ,m_xGraphicObject( _pOriginal->m_xGraphicObject )
         ,m_pMedium( NULL )
         ,m_pProducer( NULL )
         ,m_bDispatchUrlInternal(false)
@@ -497,6 +502,7 @@ namespace frm
     void OClickableImageBaseModel::implConstruct()
     {
         m_pProducer = new ImageProducer;
+        m_pProducer->SetDoneHdl( LINK( this, OClickableImageBaseModel, OnImageImportDone ) );
         osl_atomic_increment( &m_refCount );
         {
             m_xProducer = m_pProducer;
@@ -849,6 +855,21 @@ namespace frm
             default:
                 return OControlModel::getPropertyDefaultByHandle(nHandle);
         }
+    }
+
+    IMPL_LINK( OClickableImageBaseModel, OnImageImportDone, Graphic*, i_pGraphic )
+    {
+        const Reference< XGraphic > xGraphic( i_pGraphic != NULL ? Graphic(i_pGraphic->GetBitmapEx()).GetXGraphic() : NULL );
+        if ( !xGraphic.is() )
+        {
+            m_xGraphicObject.clear();
+        }
+        else
+        {
+            m_xGraphicObject = GraphicObject::create( m_xContext );
+            m_xGraphicObject->setGraphic( xGraphic );
+        }
+        return 1L;
     }
 
 
