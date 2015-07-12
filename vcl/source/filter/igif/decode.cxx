@@ -193,6 +193,9 @@ bool GIFLZWDecompressor::ProcessOneCode()
 
         nOldCode = nCode;
 
+        if (nCode > 4096)
+            return false;
+
         // write character(/-sequence) of code nCode in the output buffer:
         pE = pTable + nCode;
         do
