@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_a9ff4733",
+        "filename": "fpicker/source/win32/filepicker/VistaFilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-07-12T14:15:08Z",
+      "side": 1,
+      "message": "what if lFiles contains nothing? Now m_lastFiles has an empty slot?\nAlso, now you have lFiles and m_lLastFiles containing different things. Is that OK?",
+      "revId": "fb16118b4d2396a370303dd0cfa612d3700dd34d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_89028b3d",
+        "filename": "vcl/unx/kde4/KDE4FilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 342,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-07-12T14:15:08Z",
+      "side": 1,
+      "message": "the code looks wrong now because seq is initalised to the size of urls, but only the first element is copied.\n\nAlso, drop the for loop",
+      "revId": "fb16118b4d2396a370303dd0cfa612d3700dd34d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
