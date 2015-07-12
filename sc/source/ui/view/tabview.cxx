@@ -315,7 +315,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     bool bVOutline   = bOutlMode && lcl_HasRowOutline(aViewData);
 
     if ( aViewData.GetDocShell()->IsPreview() )
-        bHScroll = bVScroll = bTabControl = bHeaders = bOutlMode = bHOutline = bVOutline = false;
+        bHScroll = bVScroll = bTabControl = bHeaders = bHOutline = bVOutline = false;
 
     long nBarX = 0;
     long nBarY = 0;
@@ -1457,7 +1457,7 @@ void ScTabView::UpdateShow()
     bool bShowV = ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
 
     if ( aViewData.GetDocShell()->IsPreview() )
-        bHScrollMode = bVScrollMode = bTabMode = bHeader = bOutlMode = bHOutline = bVOutline = false;
+        bHScrollMode = bVScrollMode = bTabMode = bHeader = bHOutline = bVOutline = false;
 
         //  Windows anlegen
 
