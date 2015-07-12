@@ -54,14 +54,13 @@ OUString getHashKeyFromStrings( const OUString& aCommandURL, const OUString& aMo
 
 //  XInterface, XTypeProvider
 
-ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( const Reference< XComponentContext >& rxContext, const OUString& _sRoot,bool _bAskValue ) :
+ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( const Reference< XComponentContext >& rxContext, const OUString& _sRoot ) :
     m_aPropCommand( "Command" ),
     m_aPropModule( "Module" ),
     m_aPropController( "Controller" ),
     m_aPropValue( "Value" ),
     m_sRoot(_sRoot),
-    m_bConfigAccessInitialized( false ),
-    m_bAskValue(_bAskValue)
+    m_bConfigAccessInitialized( false )
 {
     m_xConfigProvider = configuration::theDefaultProvider::get( rxContext );
 }
@@ -276,8 +275,7 @@ bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any& aEl
             xPropertySet->getPropertyValue( m_aPropCommand ) >>= aCommand;
             xPropertySet->getPropertyValue( m_aPropModule ) >>= aModule;
             xPropertySet->getPropertyValue( m_aPropController ) >>= aServiceSpecifier;
-            if ( m_bAskValue )
-                xPropertySet->getPropertyValue( m_aPropValue ) >>= aValue;
+            xPropertySet->getPropertyValue( m_aPropValue ) >>= aValue;
         }
         catch ( const com::sun::star::beans::UnknownPropertyException& )
         {

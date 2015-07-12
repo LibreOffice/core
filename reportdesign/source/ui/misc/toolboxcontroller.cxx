@@ -39,7 +39,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <svx/tbcontrl.hxx>
 #include <editeng/colritem.hxx>
-#include <svx/tbxcustomshapes.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 
@@ -140,37 +139,7 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
                 break;
             }
         }
-        if ( m_aCommandURL == ".uno:BasicShapes" )
-        {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:BasicShapes"),sal_True));
-            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_BASIC,m_nToolBoxId,*pToolBox);
-        }
-        else if ( m_aCommandURL == ".uno:SymbolShapes" )
-        {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:SymbolShapes"),sal_True));
-            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_SYMBOL,m_nToolBoxId,*pToolBox);
-        }
-        else if ( m_aCommandURL == ".uno:ArrowShapes" )
-        {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:ArrowShapes"),sal_True));
-            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_ARROW,m_nToolBoxId,*pToolBox);
-        }
-        else if ( m_aCommandURL == ".uno:FlowChartShapes" )
-        {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:FlowChartShapes"),sal_True));
-            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_FLOWCHART,m_nToolBoxId,*pToolBox);
-        }
-        else if ( m_aCommandURL == ".uno:CalloutShapes" )
-        {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:CalloutShapes"),sal_True));
-            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_CALLOUT,m_nToolBoxId,*pToolBox);
-        }
-        else if ( m_aCommandURL == ".uno:StarShapes" )
-        {
-            m_aStates.insert(TCommandState::value_type(OUString(".uno:StarShapes"),sal_True));
-            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_STAR,m_nToolBoxId,*pToolBox);
-        }
-        else if ( m_aCommandURL == ".uno:CharFontName" )
+        if ( m_aCommandURL == ".uno:CharFontName" )
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:CharFontName"),sal_True));
             m_pToolbarController = new SvxFontNameToolBoxControl/*SvxStyleToolBoxControl*/(m_nSlotId = SID_ATTR_CHAR_FONT,m_nToolBoxId,*pToolBox);
@@ -208,9 +177,6 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
         if ( m_pToolbarController.is() )
         {
             // All other status events will be processed here
-            bool bSetCheckmark      = false;
-            bool bCheckmark         = false;
-            //m_pToolbarController->GetToolBox().Enable(Event.IsEnabled);
             ToolBox& rTb = m_pToolbarController->GetToolBox();
             for ( sal_uInt16 i = 0; i < rTb.GetItemCount(); i++ )
             {
@@ -223,20 +189,6 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
                 {
                     // Enable/disable item
                     rTb.EnableItem( nId, Event.IsEnabled );
-
-                    // Checkmark
-                    if ( Event.State >>= bCheckmark )
-                        bSetCheckmark = true;
-
-                    if ( bSetCheckmark )
-                        rTb.CheckItem( nId, bCheckmark );
-                    else
-                    {
-                        OUString aItemText;
-
-                        if ( Event.State >>= aItemText )
-                            rTb.SetItemText( nId, aItemText );
-                    }
                 }
             }
 
@@ -289,21 +241,11 @@ sal_Bool SAL_CALL OToolboxController::opensSubToolbar() throw (uno::RuntimeExcep
 
 OUString SAL_CALL OToolboxController::getSubToolbarName() throw (uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aSolarMutexGuard;
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if ( m_pToolbarController.is() )
-        return m_pToolbarController->getSubToolbarName();
     return OUString();
 }
 
-void SAL_CALL OToolboxController::functionSelected( const OUString& rCommand ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OToolboxController::functionSelected( const OUString& /*rCommand*/ ) throw (uno::RuntimeException, std::exception)
 {
-    SolarMutexGuard aSolarMutexGuard;
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if ( m_pToolbarController.is() )
-    {
-        m_pToolbarController->functionSelected(m_aCommandURL = rCommand);
-    }
 }
 
 void SAL_CALL OToolboxController::updateImage(  ) throw (uno::RuntimeException, std::exception)

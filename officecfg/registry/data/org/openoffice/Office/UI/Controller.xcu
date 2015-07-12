@@ -341,70 +341,88 @@
           <value>com.sun.star.comp.chart.ElementSelectorToolbarController</value>
         </prop>
       </node>
-      <node oor:name="com.sun.star.chart2.BasicShapesToolbarController" oor:op="replace">
+      <node oor:name="BasicShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:BasicShapes</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.chart2.ChartDocument</value>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>basicshapes;.uno:BasicShapes.diamond</value>
         </prop>
       </node>
-      <node oor:name="com.sun.star.chart2.SymbolShapesToolbarController" oor:op="replace">
+      <node oor:name="SymbolShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:SymbolShapes</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.chart2.ChartDocument</value>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>symbolshapes;.uno:SymbolShapes.smiley</value>
         </prop>
       </node>
-      <node oor:name="com.sun.star.chart2.ArrowShapesToolbarController" oor:op="replace">
+      <node oor:name="ArrowShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ArrowShapes</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.chart2.ChartDocument</value>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>arrowshapes;.uno:ArrowShapes.left-right-arrow</value>
         </prop>
       </node>
-      <node oor:name="com.sun.star.chart2.FlowChartShapesToolbarController" oor:op="replace">
+      <node oor:name="FlowChartShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:FlowChartShapes</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.chart2.ChartDocument</value>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>flowchartshapes;.uno:FlowChartShapes.flowchart-internal-storage</value>
         </prop>
       </node>
-      <node oor:name="com.sun.star.chart2.CalloutShapesToolbarController" oor:op="replace">
+      <node oor:name="CalloutShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:CalloutShapes</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.chart2.ChartDocument</value>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>calloutshapes;.uno:CalloutShapes.round-rectangular-callout</value>
         </prop>
       </node>
-      <node oor:name="com.sun.star.chart2.StarShapesToolbarController" oor:op="replace">
+      <node oor:name="StarShapesToolbarController" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:StarShapes</value>
         </prop>
         <prop oor:name="Module">
-          <value>com.sun.star.chart2.ChartDocument</value>
+          <value/>
         </prop>
         <prop oor:name="Controller">
-          <value>com.sun.star.comp.chart2.ShapeToolbarController</value>
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>starshapes;.uno:StarShapes.star5</value>
         </prop>
       </node>
       <node oor:name="com.sun.star.svx.FindTextToolboxController" oor:op="replace">
@@ -509,72 +527,6 @@
       <node oor:name="c6" oor:op="replace" install:module="reportbuilder">
         <prop oor:name="Command">
           <value>.uno:Color</value>
-        </prop>
-        <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.report.ReportToolboxController</value>
-        </prop>
-      </node>
-      <node oor:name="c7" oor:op="replace" install:module="reportbuilder">
-        <prop oor:name="Command">
-          <value>.uno:BasicShapes</value>
-        </prop>
-        <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.report.ReportToolboxController</value>
-        </prop>
-      </node>
-      <node oor:name="c8" oor:op="replace" install:module="reportbuilder">
-        <prop oor:name="Command">
-          <value>.uno:SymbolShapes</value>
-        </prop>
-        <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.report.ReportToolboxController</value>
-        </prop>
-      </node>
-      <node oor:name="c9" oor:op="replace" install:module="reportbuilder">
-        <prop oor:name="Command">
-          <value>.uno:ArrowShapes</value>
-        </prop>
-        <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.report.ReportToolboxController</value>
-        </prop>
-      </node>
-      <node oor:name="c10" oor:op="replace" install:module="reportbuilder">
-        <prop oor:name="Command">
-          <value>.uno:FlowChartShapes</value>
-        </prop>
-        <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.report.ReportToolboxController</value>
-        </prop>
-      </node>
-      <node oor:name="c11" oor:op="replace" install:module="reportbuilder">
-        <prop oor:name="Command">
-          <value>.uno:CalloutShapes</value>
-        </prop>
-        <prop oor:name="Module">
-          <value>com.sun.star.report.ReportDefinition</value>
-        </prop>
-        <prop oor:name="Controller">
-          <value>com.sun.star.report.ReportToolboxController</value>
-        </prop>
-      </node>
-      <node oor:name="c12" oor:op="replace" install:module="reportbuilder">
-        <prop oor:name="Command">
-          <value>.uno:StarShapes</value>
         </prop>
         <prop oor:name="Module">
           <value>com.sun.star.report.ReportDefinition</value>

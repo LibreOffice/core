@@ -814,7 +814,6 @@
 #include <svx/tbxalign.hxx>
 #include <svx/tbxcolor.hxx>
 #include <svx/tbxctl.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <svx/txenctab.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>

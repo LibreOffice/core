@@ -34,7 +34,6 @@
 #include <avmedia/mediatoolbox.hxx>
 #include <comphelper/types.hxx>
 #include <svx/fontworkgallery.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
 
 #include <svtools/parhtml.hxx>
@@ -161,12 +160,6 @@ void ScDLL::Init()
 
     // SvxToolboxController
     SvxTbxCtlDraw                   ::RegisterControl(SID_INSERT_DRAW,          pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_BASIC,     pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_SYMBOL,    pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_ARROW,     pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_FLOWCHART, pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_CALLOUT,   pMod);
-    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_STAR,      pMod);
     SvxTbxCtlAlign                  ::RegisterControl(SID_OBJECT_ALIGN,         pMod);
     SvxFillToolBoxControl           ::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl      ::RegisterControl(0, pMod);

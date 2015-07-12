@@ -257,7 +257,6 @@
 #include <svx/svxdlg.hxx>
 #include <svx/tbcontrl.hxx>
 #include <svx/tbxcolorupdate.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
