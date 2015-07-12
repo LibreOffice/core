@@ -489,7 +489,7 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerStatusEventHdl,EditStatus*,pEditStat)
     return 0;
 }
 
-IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
+IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,void)
 {
     bool bOk=false;
     OUString& rStr=pFI->GetRepresentation();
@@ -513,15 +513,14 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
         }
     }
     Outliner& rDrawOutl=pMod->GetDrawOutliner(pTextObj);
-    Link<> aDrawOutlLink=rDrawOutl.GetCalcFieldValueHdl();
+    Link<EditFieldInfo*,void> aDrawOutlLink=rDrawOutl.GetCalcFieldValueHdl();
     if (!bOk && aDrawOutlLink.IsSet()) {
         aDrawOutlLink.Call(pFI);
         bOk = !rStr.isEmpty();
     }
     if (!bOk && aOldCalcFieldValueLink.IsSet()) {
-        return aOldCalcFieldValueLink.Call(pFI);
+        aOldCalcFieldValueLink.Call(pFI);
     }
-    return 0;
 }
 
 IMPL_LINK(SdrObjEditView, EndTextEditHdl, SdrUndoManager*, /*pUndoManager*/)
@@ -633,7 +632,7 @@ bool SdrObjEditView::SdrBeginTextEdit(
         // FieldHdl has to be set by SdrBeginTextEdit, because this call an UpdateFields
         pTextEditOutliner->SetCalcFieldValueHdl(LINK(this,SdrObjEditView,ImpOutlinerCalcFieldValueHdl));
         pTextEditOutliner->SetBeginPasteOrDropHdl(LINK(this,SdrObjEditView,BeginPasteOrDropHdl));
-        pTextEditOutliner->SetEndPasteOrDropHdl(LINK(this,SdrObjEditView, EndPasteOrDropHdl));
+        pTextEditOutliner->SetEndPasteOrDropHdl(LINK(this,SdrObjEditView,EndPasteOrDropHdl));
 
         // It is just necessary to make the visualized page known. Set it.
         pTextEditOutliner->setVisualizedPage(pPV->GetPage());
@@ -782,8 +781,8 @@ bool SdrObjEditView::SdrBeginTextEdit(
         else
         {
             pTextEditOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
-            pTextEditOutliner->SetBeginPasteOrDropHdl(Link<>());
-            pTextEditOutliner->SetEndPasteOrDropHdl(Link<>());
+            pTextEditOutliner->SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
+            pTextEditOutliner->SetEndPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
         }
     }
     if (pTextEditOutliner != NULL)
@@ -915,8 +914,8 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
             // Set old CalcFieldValue-Handler again, this
             // has to happen before Obj::EndTextEdit(), as this does UpdateFields().
             pTEOutliner->SetCalcFieldValueHdl(aOldCalcFieldValueLink);
-            pTEOutliner->SetBeginPasteOrDropHdl(Link<>());
-            pTEOutliner->SetEndPasteOrDropHdl(Link<>());
+            pTEOutliner->SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
+            pTEOutliner->SetEndPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
 
             const bool bUndo = IsUndoEnabled();
             if( bUndo )
@@ -1873,16 +1872,14 @@ void SdrObjEditView::MarkListHasChanged()
     }
 }
 
-IMPL_LINK( SdrObjEditView, EndPasteOrDropHdl, PasteOrDropInfos*, pInfos )
+IMPL_LINK_TYPED( SdrObjEditView, EndPasteOrDropHdl, PasteOrDropInfos*, pInfos, void )
 {
     OnEndPasteOrDrop( pInfos );
-    return 0;
 }
 
-IMPL_LINK( SdrObjEditView, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfos )
+IMPL_LINK_TYPED( SdrObjEditView, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfos, void )
 {
     OnBeginPasteOrDrop( pInfos );
-    return 0;
 }
 
 void SdrObjEditView::OnBeginPasteOrDrop( PasteOrDropInfos* )

@@ -74,7 +74,7 @@ protected:
 
     Rectangle                   aTextEditArea;
     Rectangle                   aMinTextEditArea;
-    Link<>                      aOldCalcFieldValueLink; // for call the old handler
+    Link<EditFieldInfo*,void>   aOldCalcFieldValueLink; // for call the old handler
     Point                       aMacroDownPos;
 
     sal_uInt16                  nMacroTol;
@@ -116,7 +116,7 @@ protected:
 
     // handler for AutoGrowing text with active Outliner
     DECL_LINK(ImpOutlinerStatusEventHdl,EditStatus*);
-    DECL_LINK(ImpOutlinerCalcFieldValueHdl,EditFieldInfo*);
+    DECL_LINK_TYPED(ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,void);
 
     // link for EndTextEditHdl
     DECL_LINK(EndTextEditHdl, SdrUndoManager*);
@@ -124,8 +124,8 @@ protected:
     void ImpMacroUp(const Point& rUpPos);
     void ImpMacroDown(const Point& rDownPos);
 
-       DECL_LINK( BeginPasteOrDropHdl, PasteOrDropInfos* );
-    DECL_LINK( EndPasteOrDropHdl, PasteOrDropInfos* );
+    DECL_LINK_TYPED( BeginPasteOrDropHdl, PasteOrDropInfos*, void );
+    DECL_LINK_TYPED( EndPasteOrDropHdl, PasteOrDropInfos*, void );
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView

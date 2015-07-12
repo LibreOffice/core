@@ -363,7 +363,7 @@ Paragraph* OutlineView::GetNextTitle(const Paragraph* pPara)
 /**
  * Handler for inserting pages (paragraphs)
  */
-IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
+IMPL_LINK_TYPED( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner, void )
 {
     // we get calls to this handler during binary insert of drag and drop contents but
     // we ignore it here and handle it later in OnEndPasteOrDrop()
@@ -384,8 +384,6 @@ IMPL_LINK( OutlineView, ParagraphInsertedHdl, ::Outliner *, pOutliner )
             InsertSlideForParagraph( pPara );
         }
     }
-
-    return 0;
 }
 
 /** creates and inserts an empty slide for the given paragraph */
@@ -505,7 +503,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 /**
  * Handler for deleting pages (paragraphs)
  */
-IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
+IMPL_LINK_TYPED( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner, void )
 {
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::ParagraphRemovingHdl(), model change without undo?!" );
 
@@ -556,15 +554,13 @@ IMPL_LINK( OutlineView, ParagraphRemovingHdl, ::Outliner *, pOutliner )
         }
         pOutliner->UpdateFields();
     }
-
-    return 0;
 }
 
 /**
  * Handler for changing the indentation depth of paragraphs (requires inserting
  * or deleting of pages in some cases)
  */
-IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
+IMPL_LINK_TYPED( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner, void )
 {
     DBG_ASSERT( isRecordingUndo(), "sd::OutlineView::DepthChangedHdl(), no undo for model change?!" );
 
@@ -773,8 +769,6 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
             }
         }
     }
-
-    return 0;
 }
 
 /**
@@ -821,7 +815,7 @@ IMPL_LINK_NOARG(OutlineView, EndDropHdl)
 /**
  * Handler for the start of a paragraph movement
  */
-IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
+IMPL_LINK_TYPED( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner, void )
 {
     OutlineViewPageChangesGuard aGuard(this);
 
@@ -857,14 +851,12 @@ IMPL_LINK( OutlineView, BeginMovingHdl, ::Outliner *, pOutliner )
         }
         pPara = pOutliner->GetParagraph( ++nParaPos );
     }
-
-    return 0;
 }
 
 /**
  * Handler for the end of a paragraph movement
  */
-IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
+IMPL_LINK_TYPED( OutlineView, EndMovingHdl, ::Outliner *, pOutliner, void )
 {
     OutlineViewPageChangesGuard aGuard(this);
 
@@ -924,8 +916,6 @@ IMPL_LINK( OutlineView, EndMovingHdl, ::Outliner *, pOutliner )
 
     maSelectedParas.clear();
     maOldParaOrder.clear();
-
-    return 0;
 }
 
 /**
@@ -1181,7 +1171,7 @@ void OutlineView::FillOutliner()
 /**
  * Handler for deleting of level 0 paragraphs (pages): Warning
  */
-IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl)
+IMPL_LINK_NOARG_TYPED(OutlineView, RemovingPagesHdl, OutlinerView*, bool)
 {
     sal_Int32 nNumOfPages = mrOutliner.GetSelPageCount();
 
@@ -1198,13 +1188,13 @@ IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl)
     }
     mrOutliner.UpdateFields();
 
-    return 1;
+    return true;
 }
 
 /**
  * Handler for indenting level 0 paragraphs (pages): Warning
  */
-IMPL_LINK( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView )
+IMPL_LINK_TYPED( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView, long )
 {
     return RemovingPagesHdl(pOutlinerView);
 }
@@ -1374,17 +1364,17 @@ void OutlineView::SetLinks()
 void OutlineView::ResetLinks() const
 {
     Link<> aEmptyLink;
-    mrOutliner.SetParaInsertedHdl(aEmptyLink);
-    mrOutliner.SetParaRemovingHdl(aEmptyLink);
-    mrOutliner.SetDepthChangedHdl(aEmptyLink);
-    mrOutliner.SetBeginMovingHdl(aEmptyLink);
-    mrOutliner.SetEndMovingHdl(aEmptyLink);
+    mrOutliner.SetParaInsertedHdl(Link<::Outliner*,void>());
+    mrOutliner.SetParaRemovingHdl(Link<::Outliner*,void>());
+    mrOutliner.SetDepthChangedHdl(Link<::Outliner*,void>());
+    mrOutliner.SetBeginMovingHdl(Link<::Outliner*,void>());
+    mrOutliner.SetEndMovingHdl(Link<::Outliner*,void>());
     mrOutliner.SetStatusEventHdl(aEmptyLink);
-    mrOutliner.SetRemovingPagesHdl(aEmptyLink);
-    mrOutliner.SetIndentingPagesHdl(aEmptyLink);
+    mrOutliner.SetRemovingPagesHdl(Link<OutlinerView*,bool>());
+    mrOutliner.SetIndentingPagesHdl(Link<OutlinerView*,long>());
     mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
-    mrOutliner.SetBeginPasteOrDropHdl(aEmptyLink);
-    mrOutliner.SetEndPasteOrDropHdl(aEmptyLink);
+    mrOutliner.SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
+    mrOutliner.SetEndPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
 }
 
 sal_Int8 OutlineView::AcceptDrop( const AcceptDropEvent&, DropTargetHelper&, ::sd::Window*, sal_uInt16, sal_uInt16)
@@ -1659,94 +1649,92 @@ void OutlineView::TryToMergeUndoActions()
     }
 }
 
-IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
+IMPL_LINK_TYPED(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo, void)
 {
-    if( pInfo )
+    if( !pInfo )
+        return;
+
+    Paragraph* pPara = mrOutliner.GetParagraph( pInfo->mnPara );
+    EditEngine& rEditEngine = const_cast< EditEngine& >( mrOutliner.GetEditEngine() );
+
+    Size aImageSize( pInfo->mpOutDev->PixelToLogic( maSlideImage.GetSizePixel()  ) );
+    Size aOffset( 100, 100 );
+
+    // paint slide number
+    if( pPara && ::Outliner::HasParaFlag(pPara,ParaFlag::ISPAGE) )
     {
-        Paragraph* pPara = mrOutliner.GetParagraph( pInfo->mnPara );
-        EditEngine& rEditEngine = const_cast< EditEngine& >( mrOutliner.GetEditEngine() );
-
-        Size aImageSize( pInfo->mpOutDev->PixelToLogic( maSlideImage.GetSizePixel()  ) );
-        Size aOffset( 100, 100 );
-
-        // paint slide number
-        if( pPara && ::Outliner::HasParaFlag(pPara,ParaFlag::ISPAGE) )
+        long nPage = 0; // todo, printing??
+        for ( sal_Int32 n = 0; n <= pInfo->mnPara; n++ )
         {
-            long nPage = 0; // todo, printing??
-            for ( sal_Int32 n = 0; n <= pInfo->mnPara; n++ )
-            {
-                Paragraph* p = mrOutliner.GetParagraph( n );
-                if ( ::Outliner::HasParaFlag(p,ParaFlag::ISPAGE) )
-                    nPage++;
-            }
-
-            long nBulletHeight = (long)mrOutliner.GetLineHeight( pInfo->mnPara );
-            long nFontHeight = 0;
-            if ( !rEditEngine.IsFlatMode() )
-            {
-                nFontHeight = nBulletHeight / 5;
-            }
-            else
-            {
-                nFontHeight = (nBulletHeight * 10) / 25;
-            }
-
-            Size aFontSz( 0, nFontHeight );
-
-            Size aOutSize( 2000, nBulletHeight );
-
-            const float fImageHeight = ((float)aOutSize.Height() * (float)4) / (float)7;
-            if (aImageSize.Width() != 0)
-            {
-                const float fImageRatio  = (float)aImageSize.Height() / (float)aImageSize.Width();
-                aImageSize.Width() = (long)( fImageRatio * fImageHeight );
-            }
-            aImageSize.Height() = (long)( fImageHeight );
-
-            Point aImagePos( pInfo->mrStartPos );
-            aImagePos.X() += aOutSize.Width() - aImageSize.Width() - aOffset.Width() ;
-            aImagePos.Y() += (aOutSize.Height() - aImageSize.Height()) / 2;
-
-            pInfo->mpOutDev->DrawImage( aImagePos, aImageSize, maSlideImage );
-
-            const bool bVertical = mrOutliner.IsVertical();
-            const bool bRightToLeftPara = rEditEngine.IsRightToLeft( pInfo->mnPara );
-
-            LanguageType eLang = rEditEngine.GetDefaultLanguage();
-
-            Point aTextPos( aImagePos.X() - aOffset.Width(), pInfo->mrStartPos.Y() );
-            vcl::Font aNewFont( OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, GetDefaultFontFlags::NONE ) );
-            aNewFont.SetSize( aFontSz );
-            aNewFont.SetVertical( bVertical );
-            aNewFont.SetOrientation( bVertical ? 2700 : 0 );
-            aNewFont.SetColor( COL_AUTO );
-            pInfo->mpOutDev->SetFont( aNewFont );
-            OUString aPageText = OUString::number( nPage );
-            Size aTextSz;
-            aTextSz.Width() = pInfo->mpOutDev->GetTextWidth( aPageText );
-            aTextSz.Height() = pInfo->mpOutDev->GetTextHeight();
-            if ( !bVertical )
-            {
-                aTextPos.Y() += (aOutSize.Height() - aTextSz.Height()) / 2;
-                if ( !bRightToLeftPara )
-                {
-                    aTextPos.X() -= aTextSz.Width();
-                }
-                else
-                {
-                    aTextPos.X() += aTextSz.Width();
-                }
-            }
-            else
-            {
-                aTextPos.Y() -= aTextSz.Width();
-                aTextPos.X() += nBulletHeight / 2;
-            }
-            pInfo->mpOutDev->DrawText( aTextPos, aPageText );
+            Paragraph* p = mrOutliner.GetParagraph( n );
+            if ( ::Outliner::HasParaFlag(p,ParaFlag::ISPAGE) )
+                nPage++;
         }
-    }
 
-    return 0;
+        long nBulletHeight = (long)mrOutliner.GetLineHeight( pInfo->mnPara );
+        long nFontHeight = 0;
+        if ( !rEditEngine.IsFlatMode() )
+        {
+            nFontHeight = nBulletHeight / 5;
+        }
+        else
+        {
+            nFontHeight = (nBulletHeight * 10) / 25;
+        }
+
+        Size aFontSz( 0, nFontHeight );
+
+        Size aOutSize( 2000, nBulletHeight );
+
+        const float fImageHeight = ((float)aOutSize.Height() * (float)4) / (float)7;
+        if (aImageSize.Width() != 0)
+        {
+            const float fImageRatio  = (float)aImageSize.Height() / (float)aImageSize.Width();
+            aImageSize.Width() = (long)( fImageRatio * fImageHeight );
+        }
+        aImageSize.Height() = (long)( fImageHeight );
+
+        Point aImagePos( pInfo->mrStartPos );
+        aImagePos.X() += aOutSize.Width() - aImageSize.Width() - aOffset.Width() ;
+        aImagePos.Y() += (aOutSize.Height() - aImageSize.Height()) / 2;
+
+        pInfo->mpOutDev->DrawImage( aImagePos, aImageSize, maSlideImage );
+
+        const bool bVertical = mrOutliner.IsVertical();
+        const bool bRightToLeftPara = rEditEngine.IsRightToLeft( pInfo->mnPara );
+
+        LanguageType eLang = rEditEngine.GetDefaultLanguage();
+
+        Point aTextPos( aImagePos.X() - aOffset.Width(), pInfo->mrStartPos.Y() );
+        vcl::Font aNewFont( OutputDevice::GetDefaultFont( DefaultFontType::SANS_UNICODE, eLang, GetDefaultFontFlags::NONE ) );
+        aNewFont.SetSize( aFontSz );
+        aNewFont.SetVertical( bVertical );
+        aNewFont.SetOrientation( bVertical ? 2700 : 0 );
+        aNewFont.SetColor( COL_AUTO );
+        pInfo->mpOutDev->SetFont( aNewFont );
+        OUString aPageText = OUString::number( nPage );
+        Size aTextSz;
+        aTextSz.Width() = pInfo->mpOutDev->GetTextWidth( aPageText );
+        aTextSz.Height() = pInfo->mpOutDev->GetTextHeight();
+        if ( !bVertical )
+        {
+            aTextPos.Y() += (aOutSize.Height() - aTextSz.Height()) / 2;
+            if ( !bRightToLeftPara )
+            {
+                aTextPos.X() -= aTextSz.Width();
+            }
+            else
+            {
+                aTextPos.X() += aTextSz.Width();
+            }
+        }
+        else
+        {
+            aTextPos.Y() -= aTextSz.Width();
+            aTextPos.X() += nBulletHeight / 2;
+        }
+        pInfo->mpOutDev->DrawText( aTextPos, aPageText );
+    }
 }
 
 void OutlineView::UpdateParagraph( sal_Int32 nPara )

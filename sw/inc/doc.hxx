@@ -600,7 +600,7 @@ public:
 
     // INextInterface here
     DECL_LINK(BackgroundDone, SvxBrushItem *);
-    DECL_LINK(CalcFieldValueHdl, EditFieldInfo*);
+    DECL_LINK_TYPED(CalcFieldValueHdl, EditFieldInfo*, void);
 
     // OLE ???
     bool IsOLEPrtNotifyPending() const  { return mbOLEPrtNotifyPending; }

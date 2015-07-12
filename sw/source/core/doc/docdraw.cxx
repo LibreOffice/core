@@ -522,76 +522,74 @@ void SwDoc::SetCalcFieldValueHdl(Outliner* pOutliner)
 }
 
 /// Recognise fields/URLs in the Outliner and set how they are displayed.
-IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
+IMPL_LINK_TYPED(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 {
-    if (pInfo)
+    if (!pInfo)
+        return;
+
+    const SvxFieldItem& rField = pInfo->GetField();
+    const SvxFieldData* pField = rField.GetField();
+
+    if (pField && pField->ISA(SvxDateField))
     {
-        const SvxFieldItem& rField = pInfo->GetField();
-        const SvxFieldData* pField = rField.GetField();
-
-        if (pField && pField->ISA(SvxDateField))
-        {
-            // Date field
-            pInfo->SetRepresentation(
-                static_cast<const SvxDateField*>( pField)->GetFormatted(
-                        *GetNumberFormatter( true ), LANGUAGE_SYSTEM) );
-        }
-        else if (pField && pField->ISA(SvxURLField))
-        {
-            // URL field
-            switch ( static_cast<const SvxURLField*>( pField)->GetFormat() )
-            {
-                case SVXURLFORMAT_APPDEFAULT: //!!! Can be set in App???
-                case SVXURLFORMAT_REPR:
-                {
-                    pInfo->SetRepresentation(
-                        static_cast<const SvxURLField*>(pField)->GetRepresentation());
-                }
-                break;
-
-                case SVXURLFORMAT_URL:
-                {
-                    pInfo->SetRepresentation(
-                        static_cast<const SvxURLField*>(pField)->GetURL());
-                }
-                break;
-            }
-
-            sal_uInt16 nChrFormat;
-
-            if (IsVisitedURL(static_cast<const SvxURLField*>(pField)->GetURL()))
-                nChrFormat = RES_POOLCHR_INET_VISIT;
-            else
-                nChrFormat = RES_POOLCHR_INET_NORMAL;
-
-            SwFormat *pFormat = getIDocumentStylePoolAccess().GetCharFormatFromPool(nChrFormat);
-
-            Color aColor(COL_LIGHTBLUE);
-            if (pFormat)
-                aColor = pFormat->GetColor().GetValue();
-
-            pInfo->SetTextColor(aColor);
-        }
-        else if (pField && pField->ISA(SdrMeasureField))
-        {
-            // Measure field
-            pInfo->ClearFieldColor();
-        }
-        else if ( pField && pField->ISA(SvxExtTimeField))
-        {
-            // Time field
-            pInfo->SetRepresentation(
-                static_cast<const SvxExtTimeField*>( pField)->GetFormatted(
-                        *GetNumberFormatter( true ), LANGUAGE_SYSTEM) );
-        }
-        else
-        {
-            OSL_FAIL("unknown field command");
-            pInfo->SetRepresentation( OUString( '?' ) );
-        }
+        // Date field
+        pInfo->SetRepresentation(
+            static_cast<const SvxDateField*>( pField)->GetFormatted(
+                    *GetNumberFormatter( true ), LANGUAGE_SYSTEM) );
     }
+    else if (pField && pField->ISA(SvxURLField))
+    {
+        // URL field
+        switch ( static_cast<const SvxURLField*>( pField)->GetFormat() )
+        {
+            case SVXURLFORMAT_APPDEFAULT: //!!! Can be set in App???
+            case SVXURLFORMAT_REPR:
+            {
+                pInfo->SetRepresentation(
+                    static_cast<const SvxURLField*>(pField)->GetRepresentation());
+            }
+            break;
 
-    return 0;
+            case SVXURLFORMAT_URL:
+            {
+                pInfo->SetRepresentation(
+                    static_cast<const SvxURLField*>(pField)->GetURL());
+            }
+            break;
+        }
+
+        sal_uInt16 nChrFormat;
+
+        if (IsVisitedURL(static_cast<const SvxURLField*>(pField)->GetURL()))
+            nChrFormat = RES_POOLCHR_INET_VISIT;
+        else
+            nChrFormat = RES_POOLCHR_INET_NORMAL;
+
+        SwFormat *pFormat = getIDocumentStylePoolAccess().GetCharFormatFromPool(nChrFormat);
+
+        Color aColor(COL_LIGHTBLUE);
+        if (pFormat)
+            aColor = pFormat->GetColor().GetValue();
+
+        pInfo->SetTextColor(aColor);
+    }
+    else if (pField && pField->ISA(SdrMeasureField))
+    {
+        // Measure field
+        pInfo->ClearFieldColor();
+    }
+    else if ( pField && pField->ISA(SvxExtTimeField))
+    {
+        // Time field
+        pInfo->SetRepresentation(
+            static_cast<const SvxExtTimeField*>( pField)->GetFormatted(
+                    *GetNumberFormatter( true ), LANGUAGE_SYSTEM) );
+    }
+    else
+    {
+        OSL_FAIL("unknown field command");
+        pInfo->SetRepresentation( OUString( '?' ) );
+    }
 }
 
 // #i62875#

@@ -1075,7 +1075,7 @@ void View::onAccessibilityOptionsChanged()
     }
 }
 
-IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner *, pOutliner )
+IMPL_LINK_TYPED( View, OnParagraphInsertedHdl, ::Outliner *, pOutliner, void )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
     SdrObject* pObj = GetTextEditObject();
@@ -1086,13 +1086,12 @@ IMPL_LINK( View, OnParagraphInsertedHdl, ::Outliner *, pOutliner )
         if( pPage )
             pPage->onParagraphInserted( pOutliner, pPara, pObj );
     }
-    return 0;
 }
 
 /**
  * Handler for the deletion of the pages (paragraphs).
  */
-IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner )
+IMPL_LINK_TYPED( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner, void )
 {
     Paragraph* pPara = pOutliner->GetHdlParagraph();
     SdrObject* pObj = GetTextEditObject();
@@ -1103,7 +1102,6 @@ IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner )
         if( pPage )
             pPage->onParagraphRemoving( pOutliner, pPara, pObj );
     }
-    return 0;
 }
 
 bool View::isRecordingUndo() const

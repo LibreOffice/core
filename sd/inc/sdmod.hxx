@@ -80,7 +80,7 @@ class SdModule : public SfxModule, public SfxListener
 public:
                             TYPEINFO_OVERRIDE();
                             SFX_DECL_INTERFACE(SD_IF_SDAPP)
-                            DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
+                            DECL_LINK_TYPED( CalcFieldValueHdl, EditFieldInfo*, void );
 
 private:
     /// SfxInterface initializer.

@@ -142,268 +142,265 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
 /**
  * Link for CalcFieldValue of Outliners
  */
-IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
+IMPL_LINK_TYPED(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo, void)
 {
-    if (pInfo)
+    if (!pInfo)
+        return;
+
+    const SvxFieldData* pField = pInfo->GetField().GetField();
+    ::sd::DrawDocShell*     pDocShell = NULL;
+    SdDrawDocument* pDoc = 0;
+
+    SdrOutliner* pSdrOutliner = dynamic_cast< SdrOutliner* >( pInfo->GetOutliner() );
+    if( pSdrOutliner )
     {
-        const SvxFieldData* pField = pInfo->GetField().GetField();
-        ::sd::DrawDocShell*     pDocShell = NULL;
-        SdDrawDocument* pDoc = 0;
+        const SdrTextObj* pTextObj = pSdrOutliner->GetTextObj();
 
-        SdrOutliner* pSdrOutliner = dynamic_cast< SdrOutliner* >( pInfo->GetOutliner() );
-        if( pSdrOutliner )
+        if( pTextObj )
+            pDoc = dynamic_cast< SdDrawDocument* >( pTextObj->GetModel() );
+
+        if( pDoc )
+            pDocShell = pDoc->GetDocSh();
+    }
+
+    if( !pDocShell )
+        pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
+
+    const SvxDateField* pDateField = 0;
+    const SvxExtTimeField* pExtTimeField = 0;
+    const SvxExtFileField* pExtFileField = 0;
+    const SvxAuthorField* pAuthorField = 0;
+    const SvxURLField* pURLField = 0;
+
+    if( (pDateField = dynamic_cast< const SvxDateField* >(pField)) != 0 )
+    {
+        LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
+        pInfo->SetRepresentation( pDateField->GetFormatted( *GetNumberFormatter(), eLang ) );
+    }
+    else if( (pExtTimeField = dynamic_cast< const SvxExtTimeField *>(pField)) != 0 )
+    {
+        LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
+        pInfo->SetRepresentation( pExtTimeField->GetFormatted( *GetNumberFormatter(), eLang ) );
+    }
+    else if( (pExtFileField = dynamic_cast< const SvxExtFileField * >(pField)) != 0 )
+    {
+        if( pDocShell && (pExtFileField->GetType() != SVXFILETYPE_FIX) )
         {
-            const SdrTextObj* pTextObj = pSdrOutliner->GetTextObj();
-
-            if( pTextObj )
-                pDoc = dynamic_cast< SdDrawDocument* >( pTextObj->GetModel() );
-
-            if( pDoc )
-                pDocShell = pDoc->GetDocSh();
-        }
-
-        if( !pDocShell )
-            pDocShell = dynamic_cast< ::sd::DrawDocShell *>( SfxObjectShell::Current() );
-
-        const SvxDateField* pDateField = 0;
-        const SvxExtTimeField* pExtTimeField = 0;
-        const SvxExtFileField* pExtFileField = 0;
-        const SvxAuthorField* pAuthorField = 0;
-        const SvxURLField* pURLField = 0;
-
-        if( (pDateField = dynamic_cast< const SvxDateField* >(pField)) != 0 )
-        {
-            LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
-            pInfo->SetRepresentation( pDateField->GetFormatted( *GetNumberFormatter(), eLang ) );
-        }
-        else if( (pExtTimeField = dynamic_cast< const SvxExtTimeField *>(pField)) != 0 )
-        {
-            LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
-            pInfo->SetRepresentation( pExtTimeField->GetFormatted( *GetNumberFormatter(), eLang ) );
-        }
-        else if( (pExtFileField = dynamic_cast< const SvxExtFileField * >(pField)) != 0 )
-        {
-            if( pDocShell && (pExtFileField->GetType() != SVXFILETYPE_FIX) )
-            {
-                OUString aName;
-                if( pDocShell->HasName() )
-                    aName = pDocShell->GetMedium()->GetName();
-                else
-                    aName = pDocShell->GetName();
-
-                const_cast< SvxExtFileField* >(pExtFileField)->SetFile( aName );
-            }
-            pInfo->SetRepresentation( pExtFileField->GetFormatted() );
-
-        }
-        else if( (pAuthorField = dynamic_cast< const SvxAuthorField* >( pField )) != 0  )
-        {
-            if( pAuthorField->GetType() != SVXAUTHORTYPE_FIX )
-            {
-                SvtUserOptions aUserOptions;
-                SvxAuthorField aAuthorField(
-                        aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID(),
-                        pAuthorField->GetType(), pAuthorField->GetFormat() );
-
-                *(const_cast< SvxAuthorField* >(pAuthorField)) = aAuthorField;
-            }
-            pInfo->SetRepresentation( pAuthorField->GetFormatted() );
-
-        }
-        else if( dynamic_cast< const SvxPageField*  >(pField) )
-        {
-            OUString aRepresentation(" ");
-
-            ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
-            if(pViewSh == NULL)
-            {
-                ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
-                if(pBase)
-                    pViewSh = pBase->GetMainViewShell().get();
-            }
-            if( !pDoc && pViewSh )
-                pDoc = pViewSh->GetDoc();
-
-            bool bMasterView;
-            SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
-
-            if( pPage && pDoc && !bMasterView )
-            {
-                int nPgNum;
-
-                if( (pPage->GetPageKind() == PK_HANDOUT) && pViewSh )
-                {
-                    nPgNum = pViewSh->GetPrintedHandoutPageNum();
-                }
-                else
-                {
-                    nPgNum = (pPage->GetPageNum() - 1) / 2 + 1;
-                }
-                aRepresentation = pDoc->CreatePageNumValue((sal_uInt16)nPgNum);
-            }
+            OUString aName;
+            if( pDocShell->HasName() )
+                aName = pDocShell->GetMedium()->GetName();
             else
-                aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_NUMBER).toString();
+                aName = pDocShell->GetName();
 
-            pInfo->SetRepresentation( aRepresentation );
+            const_cast< SvxExtFileField* >(pExtFileField)->SetFile( aName );
         }
+        pInfo->SetRepresentation( pExtFileField->GetFormatted() );
 
-        else if( dynamic_cast< const SvxPageTitleField*  >(pField) )
+    }
+    else if( (pAuthorField = dynamic_cast< const SvxAuthorField* >( pField )) != 0  )
+    {
+        if( pAuthorField->GetType() != SVXAUTHORTYPE_FIX )
         {
-            OUString aRepresentation(" ");
+            SvtUserOptions aUserOptions;
+            SvxAuthorField aAuthorField(
+                    aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID(),
+                    pAuthorField->GetType(), pAuthorField->GetFormat() );
 
-            ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
-            if(pViewSh == NULL)
+            *(const_cast< SvxAuthorField* >(pAuthorField)) = aAuthorField;
+        }
+        pInfo->SetRepresentation( pAuthorField->GetFormatted() );
+
+    }
+    else if( dynamic_cast< const SvxPageField*  >(pField) )
+    {
+        OUString aRepresentation(" ");
+
+        ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
+        if(pViewSh == NULL)
+        {
+            ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
+            if(pBase)
+                pViewSh = pBase->GetMainViewShell().get();
+        }
+        if( !pDoc && pViewSh )
+            pDoc = pViewSh->GetDoc();
+
+        bool bMasterView;
+        SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
+
+        if( pPage && pDoc && !bMasterView )
+        {
+            int nPgNum;
+
+            if( (pPage->GetPageKind() == PK_HANDOUT) && pViewSh )
             {
-                ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
-                if(pBase)
-                    pViewSh = pBase->GetMainViewShell().get();
-            }
-            if( !pDoc && pViewSh )
-                pDoc = pViewSh->GetDoc();
-
-            bool bMasterView;
-            SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
-
-            if( pPage && pDoc && !bMasterView )
-            {
-                aRepresentation = pPage->GetName();
+                nPgNum = pViewSh->GetPrintedHandoutPageNum();
             }
             else
             {
-                DocumentType eDocType = pDoc ? pDoc->GetDocumentType() : DOCUMENT_TYPE_IMPRESS;
-                aRepresentation = ( ( eDocType == DOCUMENT_TYPE_IMPRESS )
-                                    ? SdResId(STR_FIELD_PLACEHOLDER_SLIDENAME).toString()
-                                    : SdResId(STR_FIELD_PLACEHOLDER_PAGENAME).toString() );
+                nPgNum = (pPage->GetPageNum() - 1) / 2 + 1;
             }
-
-            pInfo->SetRepresentation( aRepresentation );
+            aRepresentation = pDoc->CreatePageNumValue((sal_uInt16)nPgNum);
         }
-        else if( dynamic_cast< const SvxPagesField*  >(pField) )
+        else
+            aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_NUMBER).toString();
+
+        pInfo->SetRepresentation( aRepresentation );
+    }
+
+    else if( dynamic_cast< const SvxPageTitleField*  >(pField) )
+    {
+        OUString aRepresentation(" ");
+
+        ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
+        if(pViewSh == NULL)
         {
-            OUString aRepresentation(" ");
-
-            ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
-            if(pViewSh == NULL)
-            {
-                ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
-                if(pBase)
-                    pViewSh = pBase->GetMainViewShell().get();
-            }
-            if( !pDoc && pViewSh )
-                pDoc = pViewSh->GetDoc();
-
-            bool bMasterView;
-            SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
-
-            sal_uInt16 nPageCount = 0;
-
-            if( !bMasterView )
-            {
-                if( pPage && (pPage->GetPageKind() == PK_HANDOUT) && pViewSh )
-                {
-                    nPageCount = pViewSh->GetPrintedHandoutPageCount();
-                }
-                else if( pDoc )
-                {
-                    nPageCount = (sal_uInt16)pDoc->GetActiveSdPageCount();
-                }
-            }
-
-            if( nPageCount > 0 )
-                aRepresentation = pDoc->CreatePageNumValue(nPageCount);
-            else
-                aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_COUNT).toString();
-
-            pInfo->SetRepresentation( aRepresentation );
+            ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
+            if(pBase)
+                pViewSh = pBase->GetMainViewShell().get();
         }
-        else if( (pURLField = dynamic_cast< const SvxURLField* >(pField)) != 0 )
+        if( !pDoc && pViewSh )
+            pDoc = pViewSh->GetDoc();
+
+        bool bMasterView;
+        SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
+
+        if( pPage && pDoc && !bMasterView )
         {
-            switch ( pURLField->GetFormat() )
-            {
-                case SVXURLFORMAT_APPDEFAULT: //!!! adjustable at App???
-                case SVXURLFORMAT_REPR:
-                    pInfo->SetRepresentation( pURLField->GetRepresentation() );
-                    break;
-
-                case SVXURLFORMAT_URL:
-                    pInfo->SetRepresentation( pURLField->GetURL() );
-                    break;
-            }
-
-            OUString aURL = pURLField->GetURL();
-
-            svtools::ColorConfig aConfig;
-            svtools::ColorConfigEntry eEntry =
-                INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svtools::LINKSVISITED : svtools::LINKS;
-            pInfo->SetTextColor( aConfig.GetColorValue(eEntry).nColor );
-        }
-        else if ( dynamic_cast< const SdrMeasureField* >(pField))
-        {
-            pInfo->ClearFieldColor();
+            aRepresentation = pPage->GetName();
         }
         else
         {
-            OUString aRepresentation;
+            aRepresentation = ( ( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+                                ? SdResId(STR_FIELD_PLACEHOLDER_SLIDENAME).toString()
+                                : SdResId(STR_FIELD_PLACEHOLDER_PAGENAME).toString() );
+        }
 
-            bool bHeaderField = dynamic_cast< const SvxHeaderField* >( pField ) != 0;
-            bool bFooterField = !bHeaderField && (dynamic_cast< const SvxFooterField* >( pField ) != 0 );
-            bool bDateTimeField = !bHeaderField && !bFooterField && (dynamic_cast< const SvxDateTimeField* >( pField ) != 0);
+        pInfo->SetRepresentation( aRepresentation );
+    }
+    else if( dynamic_cast< const SvxPagesField*  >(pField) )
+    {
+        OUString aRepresentation(" ");
 
-            if( bHeaderField || bFooterField || bDateTimeField )
+        ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
+        if(pViewSh == NULL)
+        {
+            ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
+            if(pBase)
+                pViewSh = pBase->GetMainViewShell().get();
+        }
+        if( !pDoc && pViewSh )
+            pDoc = pViewSh->GetDoc();
+
+        bool bMasterView;
+        SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
+
+        sal_uInt16 nPageCount = 0;
+
+        if( !bMasterView )
+        {
+            if( pPage && (pPage->GetPageKind() == PK_HANDOUT) && pViewSh )
             {
-                sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
-                bool bMasterView = false;
-                SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
+                nPageCount = pViewSh->GetPrintedHandoutPageCount();
+            }
+            else if( pDoc )
+            {
+                nPageCount = (sal_uInt16)pDoc->GetActiveSdPageCount();
+            }
+        }
 
-                if( (pPage == NULL) || bMasterView )
-                {
-                    if( bHeaderField )
-                        aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_HEADER).toString();
-                    else if (bFooterField )
-                        aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_FOOTER).toString();
-                    else if (bDateTimeField )
-                        aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_DATETIME).toString();
-                }
-                else
-                {
-                    const sd::HeaderFooterSettings &rSettings = pPage->getHeaderFooterSettings();
+        if( nPageCount > 0 )
+            aRepresentation = pDoc->CreatePageNumValue(nPageCount);
+        else
+            aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_COUNT).toString();
 
-                    if( bHeaderField )
-                    {
-                        aRepresentation = rSettings.maHeaderText;
-                    }
-                    else if( bFooterField )
-                    {
-                        aRepresentation = rSettings.maFooterText;
-                    }
-                    else if( bDateTimeField )
-                    {
-                        if( rSettings.mbDateTimeIsFixed )
-                        {
-                            aRepresentation = rSettings.maDateTimeText;
-                        }
-                        else
-                        {
-                            Date aDate( Date::SYSTEM );
-                            tools::Time aTime( tools::Time::SYSTEM );
-                            LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
-                            aRepresentation = SvxDateTimeField::GetFormatted( aDate, aTime, (SvxDateFormat)rSettings.meDateTimeFormat, *GetNumberFormatter(), eLang );
-                        }
-                    }
-                }
+        pInfo->SetRepresentation( aRepresentation );
+    }
+    else if( (pURLField = dynamic_cast< const SvxURLField* >(pField)) != 0 )
+    {
+        switch ( pURLField->GetFormat() )
+        {
+            case SVXURLFORMAT_APPDEFAULT: //!!! adjustable at App???
+            case SVXURLFORMAT_REPR:
+                pInfo->SetRepresentation( pURLField->GetRepresentation() );
+                break;
+
+            case SVXURLFORMAT_URL:
+                pInfo->SetRepresentation( pURLField->GetURL() );
+                break;
+        }
+
+        OUString aURL = pURLField->GetURL();
+
+        svtools::ColorConfig aConfig;
+        svtools::ColorConfigEntry eEntry =
+            INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svtools::LINKSVISITED : svtools::LINKS;
+        pInfo->SetTextColor( aConfig.GetColorValue(eEntry).nColor );
+    }
+    else if ( dynamic_cast< const SdrMeasureField* >(pField))
+    {
+        pInfo->ClearFieldColor();
+    }
+    else
+    {
+        OUString aRepresentation;
+
+        bool bHeaderField = dynamic_cast< const SvxHeaderField* >( pField ) != 0;
+        bool bFooterField = !bHeaderField && (dynamic_cast< const SvxFooterField* >( pField ) != 0 );
+        bool bDateTimeField = !bHeaderField && !bFooterField && (dynamic_cast< const SvxDateTimeField* >( pField ) != 0);
+
+        if( bHeaderField || bFooterField || bDateTimeField )
+        {
+            sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
+            bool bMasterView = false;
+            SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
+
+            if( (pPage == NULL) || bMasterView )
+            {
+                if( bHeaderField )
+                    aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_HEADER).toString();
+                else if (bFooterField )
+                    aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_FOOTER).toString();
+                else if (bDateTimeField )
+                    aRepresentation = SdResId(STR_FIELD_PLACEHOLDER_DATETIME).toString();
             }
             else
             {
-                OSL_FAIL("sd::SdModule::CalcFieldValueHdl(), unknown field type!");
+                const sd::HeaderFooterSettings &rSettings = pPage->getHeaderFooterSettings();
+
+                if( bHeaderField )
+                {
+                    aRepresentation = rSettings.maHeaderText;
+                }
+                else if( bFooterField )
+                {
+                    aRepresentation = rSettings.maFooterText;
+                }
+                else if( bDateTimeField )
+                {
+                    if( rSettings.mbDateTimeIsFixed )
+                    {
+                        aRepresentation = rSettings.maDateTimeText;
+                    }
+                    else
+                    {
+                        Date aDate( Date::SYSTEM );
+                        tools::Time aTime( tools::Time::SYSTEM );
+                        LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
+                        aRepresentation = SvxDateTimeField::GetFormatted( aDate, aTime, (SvxDateFormat)rSettings.meDateTimeFormat, *GetNumberFormatter(), eLang );
+                    }
+                }
             }
-
-            if( aRepresentation.isEmpty() )                // TODO: Edit engine doesn't handle empty fields?
-                aRepresentation = " ";
-            pInfo->SetRepresentation( aRepresentation );
         }
-    }
+        else
+        {
+            OSL_FAIL("sd::SdModule::CalcFieldValueHdl(), unknown field type!");
+        }
 
-    return 0;
+        if( aRepresentation.isEmpty() )                // TODO: Edit engine doesn't handle empty fields?
+            aRepresentation = " ";
+        pInfo->SetRepresentation( aRepresentation );
+    }
 }
 
 /**
