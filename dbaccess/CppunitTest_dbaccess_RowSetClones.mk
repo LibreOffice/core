@@ -17,6 +17,10 @@ $(eval $(call gb_CppunitTest_use_externals,dbaccess_RowSetClones,\
     boost_headers \
 ))
 
+$(eval $(call gb_CppunitTest_use_jars,dbaccess_RowSetClones, \
+    sdbc_hsqldb \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,dbaccess_RowSetClones, \
     basegfx \
     comphelper \
