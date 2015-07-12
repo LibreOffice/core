@@ -1441,7 +1441,7 @@ bool EnhWMFReader::ReadEnhWMF()
                     DBG_ASSERT( ( nOptions & ( ETO_PDY | ETO_GLYPH_INDEX ) ) == 0, "SJ: ETO_PDY || ETO_GLYPH_INDEX in EMF" );
 
                     Point aPos( ptlReferenceX, ptlReferenceY );
-                    if ( nLen && nLen < static_cast<sal_Int32>( SAL_MAX_UINT32 / sizeof(sal_Int32) ) )
+                    if ( nLen > 0 && nLen < static_cast<sal_Int32>( SAL_MAX_UINT32 / sizeof(sal_Int32) ) )
                     {
                         if ( offDx && (( nCurPos + offDx + nLen * 4 ) <= nNextPos ) )
                         {
