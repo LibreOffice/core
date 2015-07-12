@@ -52,8 +52,9 @@ struct PrinterInfo : JobData
     OUString             m_aFeatures;
     bool                 m_bPapersizeFromSetup;
 
-    PrinterInfo() :
-            JobData()
+    PrinterInfo()
+        : JobData()
+        , m_bPapersizeFromSetup(false)
     {}
 };
 
