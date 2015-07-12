@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <cstddef>
 #include <new>
 #include <ostream>
 #include <string.h>
@@ -254,6 +255,10 @@ public:
             *end = '\0';
         }
     }
+#endif
+
+#ifdef LIBO_INTERNAL_ONLY
+    OString(std::nullptr_t) = delete;
 #endif
 
     /**
