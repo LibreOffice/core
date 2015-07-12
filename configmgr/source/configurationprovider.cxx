@@ -45,9 +45,9 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
@@ -81,7 +81,7 @@ void badNodePath() {
 }
 
 typedef
-    cppu::WeakComponentImplHelper5<
+    cppu::WeakComponentImplHelper<
         css::lang::XServiceInfo, css::lang::XMultiServiceFactory,
         css::util::XRefreshable, css::util::XFlushable,
         css::lang::XLocalizable >
@@ -369,7 +369,7 @@ void Service::flushModifications() const {
 }
 
 class Factory:
-    public cppu::WeakImplHelper2<
+    public cppu::WeakImplHelper<
         css::lang::XSingleComponentFactory, css::lang::XServiceInfo >
 {
 public:

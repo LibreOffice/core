@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
@@ -41,7 +41,7 @@ namespace configmgr { namespace read_only_access {
 namespace {
 
 class Service:
-    public cppu::WeakImplHelper3<
+    public cppu::WeakImplHelper<
         css::lang::XServiceInfo, css::lang::XInitialization,
         css::container::XHierarchicalNameAccess >
 {
