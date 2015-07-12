@@ -46,7 +46,7 @@ class ConfigurationAccess_ControllerFactory : // interfaces
                                                     public  ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener>
 {
 public:
-                    ConfigurationAccess_ControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const OUString& _sRoot,bool _bAskValue = false );
+                    ConfigurationAccess_ControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const OUString& _sRoot );
     virtual       ~ConfigurationAccess_ControllerFactory();
 
     void          readConfigurationData();
@@ -56,7 +56,6 @@ public:
     OUString getValueFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const;
     void          addServiceToCommandModule( const OUString& rCommandURL, const OUString& rModule, const OUString& rServiceSpecifier );
     void          removeServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule );
-    inline bool   hasValue() const { return m_bAskValue; }
 
     // container.XContainerListener
     virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -98,7 +97,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xConfigAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xConfigAccessListener;
     bool                          m_bConfigAccessInitialized;
-    bool                              m_bAskValue;
 };
 
 } // namespace framework

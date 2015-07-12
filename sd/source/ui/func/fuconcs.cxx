@@ -43,7 +43,6 @@
 #include <editeng/adjustitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/sdasitm.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/sdtagitm.hxx>
 

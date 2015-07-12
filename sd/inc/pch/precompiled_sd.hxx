@@ -753,7 +753,6 @@
 #include <svx/sxmsuitm.hxx>
 #include <svx/tabline.hxx>
 #include <svx/tbcontrl.hxx>
-#include <svx/tbxcustomshapes.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/unofill.hxx>
 #include <svx/unomodel.hxx>
