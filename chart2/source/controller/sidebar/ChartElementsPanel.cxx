@@ -133,16 +133,11 @@ void ChartElementsPanel::HandleContextChange(
 }
 
 void ChartElementsPanel::NotifyItemUpdate(
-    sal_uInt16 nSID,
+    sal_uInt16 /*nSID*/,
     SfxItemState /*eState*/,
     const SfxPoolItem* /*pState*/,
     const bool )
 {
-    switch(nSID)
-    {
-        default:
-        ;
-    }
 }
 
 }} // end of namespace ::chart::sidebar
