@@ -63,7 +63,16 @@ struct ComboBox::Impl
     Link<>              m_DoubleClickHdl;
     boost::signals2::scoped_connection m_AutocompleteConnection;
 
-    Impl(ComboBox & rThis) : m_rThis(rThis) {}
+    Impl(ComboBox & rThis)
+        : m_rThis(rThis)
+        , m_nDDHeight(0)
+        , m_cMultiSep(0)
+        , m_isDDAutoSize(false)
+        , m_isSyntheticModify(false)
+        , m_isMatchCase(false)
+        , m_nMaxWidthChars(0)
+    {
+    }
 
     void ImplInitComboBoxData();
     void ImplUpdateFloatSelection();
