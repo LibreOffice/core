@@ -663,7 +663,7 @@ bool EnhWMFReader::ReadEnhWMF()
 
             SAL_INFO("vcl.emf", "\tGDI comment, length: " << length);
 
-            if( pWMF->good() && length >= 4 ) {
+            if( pWMF->good() && length >= 4 && length <= pWMF->remainingSize() ) {
                 sal_uInt32 id;
 
                 pWMF->ReadUInt32( id );
