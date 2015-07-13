@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#undef OSL_DEBUG_LEVEL
-
-
-#include <osl/diagnose.h>
-
 #include "internal/basereader.hxx"
 
 #include "internal/xml_parser.hxx"
@@ -81,11 +76,11 @@ void CBaseReader::Initialize( const std::string& ContentName)
     }
     catch(std::exception& ex)
     {
-        OSL_ENSURE( false, ex.what() );
+        // OSL_ENSURE( false, ex.what() );
     }
     catch(...)
     {
-        OSL_ENSURE(false, "Unknown error");
+        // OSL_ENSURE(false, "Unknown error");
     }
 }
 

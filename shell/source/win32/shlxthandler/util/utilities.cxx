@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#undef OSL_DEBUG_LEVEL
-
-
-#include <osl/diagnose.h>
-
 #include "internal/config.hxx"
 #include "internal/utilities.hxx"
 
@@ -97,7 +92,7 @@ std::wstring GetResString(int ResId)
     int rc = LoadStringW( GetModuleHandleW(MODULE_NAME), ResId, szResStr, sizeof(szResStr) );
 
     OutputDebugStringFormat( "GetResString: read %d chars\n", rc );
-    OSL_ENSURE(rc, "String resource not found");
+    // OSL_ENSURE(rc, "String resource not found");
 
     return std::wstring(szResStr);
 }

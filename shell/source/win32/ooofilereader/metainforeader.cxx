@@ -17,11 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#undef OSL_DEBUG_LEVEL
-
-
-#include <osl/diagnose.h>
-
 #include "internal/metainforeader.hxx"
 #include "dummytag.hxx"
 #include "simpletag.hxx"
@@ -60,11 +55,11 @@ CBaseReader( DocumentName )
     }
     catch(xml_parser_exception& ex)
     {
-        OSL_ENSURE(false, ex.what());
+        // OSL_ENSURE(false, ex.what());
     }
     catch(...)
     {
-        OSL_ENSURE(false, "Unknown error");
+        // OSL_ENSURE(false, "Unknown error");
     }
 }
 
@@ -97,11 +92,11 @@ try
     }
     catch(xml_parser_exception& ex)
     {
-        OSL_ENSURE(false, ex.what());
+        // OSL_ENSURE(false, ex.what());
     }
     catch(...)
     {
-        OSL_ENSURE(false, "Unknown error");
+        // OSL_ENSURE(false, "Unknown error");
     }
 
 }
