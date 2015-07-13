@@ -365,6 +365,17 @@ void Test::createInstance(
         expImpl = "com.sun.star.svtools.OfficeFolderPicker";
         expServs = {"com.sun.star.ui.dialogs.OfficeFolderPicker"};
 #endif
+    } else if (expImpl == "com.sun.star.comp.Calc.SpreadsheetDocument") {
+        expImpl = "ScModelObj";
+    } else if (expImpl == "com.sun.star.comp.Draw.DrawingDocument"
+               || expImpl == "com.sun.star.comp.Draw.PresentationDocument")
+    {
+        expImpl = "SdXImpressDocument";
+    } else if (expImpl == "com.sun.star.comp.Writer.GlobalDocument"
+               || expImpl == "com.sun.star.comp.Writer.TextDocument"
+               || expImpl == "com.sun.star.comp.Writer.WebDocument")
+    {
+        expImpl = "SwXTextDocument";
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         (OString(
