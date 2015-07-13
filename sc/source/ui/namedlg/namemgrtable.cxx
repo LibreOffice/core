@@ -45,7 +45,7 @@ ScRangeManagerTable::ScRangeManagerTable( SvSimpleTableContainer& rParent, boost
     SetTabs( &aStaticTabs[0], MAP_PIXEL );
 
     OUString aNameStr(ScGlobal::GetRscString(STR_HEADER_NAME));
-    OUString aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE));
+    OUString aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE_OR_EXPR));
     OUString aScopeStr(ScGlobal::GetRscString(STR_HEADER_SCOPE));
 
     HeaderBar& rHeaderBar = GetTheHeaderBar();

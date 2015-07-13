@@ -1772,7 +1772,7 @@ Resource RID_GLOBSTR
     {
         Text [en-US] = "Name";
     };
-    String STR_HEADER_RANGE
+    String STR_HEADER_RANGE_OR_EXPR
     {
         Text [en-US] = "Range or formula expression";
     };
@@ -1803,6 +1803,10 @@ Resource RID_GLOBSTR
     String STR_CLOSE_WITH_UNSAVED_REFS
     {
         Text [ en-US ] = "This Document is referenced by another document and not yet saved. Closing it without saving will result in data loss.";
+    };
+    String STR_HEADER_RANGE
+    {
+        Text [en-US] = "Range";
     };
     String STR_HEADER_COND
     {
