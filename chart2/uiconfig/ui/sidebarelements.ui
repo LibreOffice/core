@@ -90,7 +90,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="checkbuttonx_axis_title">
+              <object class="GtkCheckButton" id="checkbutton_x_axis_title">
                 <property name="label" translatable="yes">X-axis title</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -131,7 +131,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="checkbuttony_y_axis_title">
+              <object class="GtkCheckButton" id="checkbutton_y_axis_title">
                 <property name="label" translatable="yes">Y-axis title</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
