@@ -102,6 +102,9 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
             return; // probably was deleted - avoid doing anything
     }
 
+    if (nWhich != RES_TITLE_CHANGED || nWhich != RES_DESCRIPTION_CHANGED)
+        return;
+
     const SwNoTextNode *pNd = GetNoTextNode();
     OSL_ENSURE( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
     switch( nWhich )
