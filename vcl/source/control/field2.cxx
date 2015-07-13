@@ -1117,14 +1117,8 @@ bool DateFormatter::ImplDateReformat( const OUString& rStr, OUString& rOutStr, c
 
     if ( GetErrorHdl().IsSet() && (aDate != aTempDate) )
     {
-        maCorrectedDate = aTempDate;
         if( !GetErrorHdl().Call( this ) )
-        {
-            maCorrectedDate = Date( Date::SYSTEM );
             return false;
-        }
-        else
-            maCorrectedDate = Date( Date::SYSTEM );
     }
 
     rOutStr = ImplGetDateAsText( aTempDate, rSettings );
@@ -1418,7 +1412,6 @@ DateFormatter::DateFormatter() :
     maLastDate( 0 ),
     maMin( 1, 1, 1900 ),
     maMax( 31, 12, 2200 ),
-    maCorrectedDate( Date::SYSTEM ),
     mbEnforceValidValue( true )
 {
     ImplInit();
@@ -2169,14 +2162,8 @@ bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
 
     if ( GetErrorHdl().IsSet() && (aTime != aTempTime) )
     {
-        maCorrectedTime = aTempTime;
         if ( !GetErrorHdl().Call( this ) )
-        {
-            maCorrectedTime = tools::Time( tools::Time::SYSTEM );
             return false;
-        }
-        else
-            maCorrectedTime = tools::Time( tools::Time::SYSTEM );
     }
 
     bool bSecond = false;
@@ -2311,7 +2298,6 @@ TimeFormatter::TimeFormatter() :
     maLastTime( 0, 0 ),
     maMin( 0, 0 ),
     maMax( 23, 59, 59, 999999999 ),
-    maCorrectedTime( tools::Time::SYSTEM ),
     mbEnforceValidValue( true ),
     maFieldTime( 0, 0 )
 {

@@ -307,7 +307,6 @@ private:
     Date                    maLastDate;
     Date                    maMin;
     Date                    maMax;
-    Date                    maCorrectedDate;
     bool                    mbLongFormat;
     bool                    mbShowDateCentury;
     sal_uInt16                  mnDateFormat;
@@ -400,7 +399,6 @@ private:
     tools::Time             maLastTime;
     tools::Time             maMin;
     tools::Time             maMax;
-    tools::Time             maCorrectedTime;
     TimeFieldFormat         meFormat;
     sal_uInt16              mnTimeFormat;
     bool                    mbDuration;
