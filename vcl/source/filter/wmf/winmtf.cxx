@@ -1294,18 +1294,22 @@ void WinMtfOutput::DrawPolyLine( Polygon& rPolygon, bool bTo, bool bRecordPath )
 {
     UpdateClipRegion();
 
-    ImplMap( rPolygon );
-    if ( bTo )
+    sal_uInt16 nPoints = rPolygon.GetSize();
+    if (nPoints >= 1)
     {
-        rPolygon[ 0 ] = maActPos;
-        maActPos = rPolygon[ rPolygon.GetSize() - 1 ];
-    }
-    if ( bRecordPath )
-        aPathObj.AddPolyLine( rPolygon );
-    else
-    {
-        UpdateLineStyle();
-        mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
+        ImplMap( rPolygon );
+        if ( bTo )
+        {
+            rPolygon[ 0 ] = maActPos;
+            maActPos = rPolygon[ rPolygon.GetSize() - 1 ];
+        }
+        if ( bRecordPath )
+            aPathObj.AddPolyLine( rPolygon );
+        else
+        {
+            UpdateLineStyle();
+            mpGDIMetaFile->AddAction( new MetaPolyLineAction( rPolygon, maLineStyle.aLineInfo ) );
+        }
     }
 }
 
