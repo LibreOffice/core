@@ -2143,9 +2143,9 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
         }
         EditTextObject *pTObj = pEditEngine->CreateTextObject(aNonOverflowingTextSelection);
 
-        sal_Int32 nLastLine = GetLineCount(nOverflowingPara)-1;
+        //sal_Int32 nLastLine = GetLineCount(nOverflowingPara)-1;
         bool bLastParaInterrupted =
-            pEditEngine->GetOverflowingLineNum() < nLastLine;
+            pEditEngine->GetOverflowingLineNum() > 0;
 
         return new NonOverflowingText(pTObj, bLastParaInterrupted);
     }
