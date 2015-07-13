@@ -89,6 +89,8 @@ class EDITENG_DLLPUBLIC OFlowChainedText {
         ESelection GetInsertionPointSel() const;
         ESelection GetOverflowPointSel() const;
 
+        bool IsLastParaInterrupted() const;
+
     protected:
         void impSetOutlinerToEmptyTxt(Outliner *);
 

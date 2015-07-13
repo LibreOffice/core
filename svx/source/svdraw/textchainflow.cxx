@@ -40,6 +40,8 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
 
     maCursorEvent = CursorChainingEvent::NULL_EVENT;
     mbPossiblyCursorOut = false;
+
+    mbMustMergeParaAmongLinks = false;
 }
 
 
@@ -99,6 +101,14 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 
     // To check whether an overflow is underflow induced or not (useful in cursor checking)
     mbOFisUFinduced = bUnderflow;
+
+    // Save old state and update new
+    mbMustMergeParaAmongLinks = GetTextChain()->GetIsPartOfLastParaInNextLink(mpTargetLink);
+
+    if (bOverflow)
+        GetTextChain()->SetIsPartOfLastParaInNextLink(mpTargetLink, mpOverflChText->IsLastParaInterrupted());
+    else // Overflows determine merging or not. If no OF, just merge everything next time.
+        GetTextChain()->SetIsPartOfLastParaInNextLink(mpTargetLink, true);
 
 }
 

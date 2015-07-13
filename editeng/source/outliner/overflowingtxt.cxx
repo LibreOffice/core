@@ -144,6 +144,12 @@ OutlinerParaObject *OFlowChainedText::CreateNonOverflowingParaObject(Outliner *p
     return mpNonOverflowingTxt->ToParaObject(pOutliner);
 }
 
+bool OFlowChainedText::IsLastParaInterrupted() const
+{
+    return mpNonOverflowingTxt->IsLastParaInterrupted();
+}
+
+
 // classes UFlowChainedText
 
 UFlowChainedText::UFlowChainedText(Outliner *pOutl)
