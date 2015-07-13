@@ -121,6 +121,24 @@
       "revId": "81a76d463148782e214f0b15afdf7235871b8531",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_44c47a3f",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1086,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-13T13:20:15Z",
+      "side": 1,
+      "message": "Hmm.. true, it indeed doesn\u0027t matter here :)",
+      "parentUuid": "1a54edaf_de8117fd",
+      "revId": "81a76d463148782e214f0b15afdf7235871b8531",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
