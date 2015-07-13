@@ -3710,7 +3710,7 @@ void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
     ReadGDIMetaFile( aMemStm, aMtf );
 
     const Reference< XDocumentHandler > xDocumentHandler( rxDocHandler );
-    boost::scoped_ptr<SVGExport> pWriter(new SVGExport( mxContext, xDocumentHandler, maFilterData ));
+    Reference<SVGExport> pWriter(new SVGExport( mxContext, xDocumentHandler, maFilterData ));
     pWriter->writeMtf( aMtf );
 }
 

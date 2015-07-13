@@ -31,25 +31,25 @@ OUString SAL_CALL
 ignoreKana::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException, std::exception)
 {
-    hiraganaToKatakana t1;
-    return t1.transliterate(inStr, startPos, nCount, offset);
+    Reference< hiraganaToKatakana > t1(new hiraganaToKatakana);
+    return t1->transliterate(inStr, startPos, nCount, offset);
 }
 
 Sequence< OUString > SAL_CALL
 ignoreKana::transliterateRange( const OUString& str1, const OUString& str2 )
   throw(RuntimeException, std::exception)
 {
-    hiraganaToKatakana t1;
-    katakanaToHiragana t2;
+    Reference< hiraganaToKatakana > t1(new hiraganaToKatakana);
+    Reference< katakanaToHiragana > t2(new katakanaToHiragana);
 
-    return transliteration_Ignore::transliterateRange(str1, str2, t1, t2);
+    return transliteration_Ignore::transliterateRange(str1, str2, *t1.get(), *t2.get());
 }
 
 sal_Unicode SAL_CALL
 ignoreKana::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException, std::exception)
 {
-    hiraganaToKatakana t1;
-    return t1.transliterateChar2Char(inChar);
+    Reference< hiraganaToKatakana > t1(new hiraganaToKatakana);
+    return t1->transliterateChar2Char(inChar);
 }
 
 } } } }

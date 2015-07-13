@@ -5660,27 +5660,27 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
     //! wenn es schon ein ScFilterDescriptor ist, direkt per getImplementation?
 
     ScDocShell* pDocSh = GetDocShell();
-    ScFilterDescriptor aImpl(pDocSh);
+    uno::Reference<ScFilterDescriptor> xImpl(new ScFilterDescriptor(pDocSh));
     uno::Reference< sheet::XSheetFilterDescriptor2 > xDescriptor2( xDescriptor, uno::UNO_QUERY );
     if ( xDescriptor2.is() )
     {
-        aImpl.setFilterFields2( xDescriptor2->getFilterFields2() );
+        xImpl->setFilterFields2( xDescriptor2->getFilterFields2() );
     }
     else
     {
-        aImpl.setFilterFields( xDescriptor->getFilterFields() );
+        xImpl->setFilterFields( xDescriptor->getFilterFields() );
     }
     //  Rest sind jetzt Properties...
 
     uno::Reference<beans::XPropertySet> xPropSet( xDescriptor, uno::UNO_QUERY );
     if (xPropSet.is())
-        lcl_CopyProperties( aImpl, *xPropSet.get() );
+        lcl_CopyProperties( *xImpl.get(), *xPropSet.get() );
 
     //  ausfuehren...
 
     if (pDocSh)
     {
-        ScQueryParam aParam = aImpl.GetParam();
+        ScQueryParam aParam = xImpl->GetParam();
         //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
         SCCOLROW nFieldStart = aParam.bByRow ?
             static_cast<SCCOLROW>(aRange.aStart.Col()) :

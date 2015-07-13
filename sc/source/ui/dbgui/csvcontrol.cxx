@@ -300,7 +300,7 @@ ScMoveMode ScCsvControl::GetVertDirection( sal_uInt16 nCode, bool bHomeEnd )
 
 ScCsvControl::XAccessibleRef ScCsvControl::CreateAccessible()
 {
-    mxAccessible = ImplCreateAccessible();
+    mxAccessible = ImplCreateAccessible().get();
     return XAccessibleRef(mxAccessible.get());
 }
 

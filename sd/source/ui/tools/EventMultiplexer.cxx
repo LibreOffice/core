@@ -174,12 +174,6 @@ EventMultiplexer::~EventMultiplexer()
     try
     {
         mpImpl->dispose();
-        // Now we call release twice.  One decreases the use count of the
-        // implementation object (if all goes well to zero and thus deletes
-        // it.)  The other releases the unique_ptr and prevents the
-        // implementation object from being deleted a second time.
-        mpImpl->release();
-        mpImpl.release();
     }
     catch (const RuntimeException&)
     {

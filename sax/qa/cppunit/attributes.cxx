@@ -34,44 +34,44 @@ public:
 
 void AttributesTest::test()
 {
-    sax_fastparser::FastAttributeList aAttributeList( NULL );
-    aAttributeList.add(1, "1");
-    aAttributeList.add(2, OString("2"));
+    uno::Reference<sax_fastparser::FastAttributeList> xAttributeList( new sax_fastparser::FastAttributeList(NULL) );
+    xAttributeList->add(1, "1");
+    xAttributeList->add(2, OString("2"));
 
     // We can't test getValueToken() and getOptionalValueToken()
     // without XFastTokenHandler :-(
     // Uncomment to get segmantation fault:
-    // aAttributeList.getOptionalValueToken(1, 0);
-    // aAttributeList.getValueToken(2);
+    // xAttributeList->getOptionalValueToken(1, 0);
+    // xAttributeList->getValueToken(2);
 
-    CPPUNIT_ASSERT( aAttributeList.hasAttribute(1) );
-    CPPUNIT_ASSERT( !aAttributeList.hasAttribute(3) );
+    CPPUNIT_ASSERT( xAttributeList->hasAttribute(1) );
+    CPPUNIT_ASSERT( !xAttributeList->hasAttribute(3) );
 
-    CPPUNIT_ASSERT_EQUAL( aAttributeList.getOptionalValue(2), OUString("2") );
-    CPPUNIT_ASSERT_EQUAL( aAttributeList.getOptionalValue(3), OUString() );
+    CPPUNIT_ASSERT_EQUAL( xAttributeList->getOptionalValue(2), OUString("2") );
+    CPPUNIT_ASSERT_EQUAL( xAttributeList->getOptionalValue(3), OUString() );
 
-    CPPUNIT_ASSERT_EQUAL( aAttributeList.getValue(1), OUString("1") );
+    CPPUNIT_ASSERT_EQUAL( xAttributeList->getValue(1), OUString("1") );
     mbException = false;
 
-    try { aAttributeList.getValue(3); }
+    try { xAttributeList->getValue(3); }
     catch (const sax::SAXException& )
     {
         mbException = true;
     }
     CPPUNIT_ASSERT( mbException );
 
-    aAttributeList.addUnknown("a", "a");
-    aAttributeList.addUnknown("b", "b", "b");
-    aAttributeList.addUnknown("c", "c");
-    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 3, aAttributeList.getUnknownAttributes().getLength() );
+    xAttributeList->addUnknown("a", "a");
+    xAttributeList->addUnknown("b", "b", "b");
+    xAttributeList->addUnknown("c", "c");
+    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 3, xAttributeList->getUnknownAttributes().getLength() );
 
-    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 2, aAttributeList.getFastAttributes().getLength() );
+    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 2, xAttributeList->getFastAttributes().getLength() );
 
-    aAttributeList.clear();
-    CPPUNIT_ASSERT( !aAttributeList.hasAttribute(1) );
-    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 0, aAttributeList.getFastAttributes().getLength() );
-    aAttributeList.addUnknown("c", "c");
-    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 1, aAttributeList.getUnknownAttributes().getLength() );
+    xAttributeList->clear();
+    CPPUNIT_ASSERT( !xAttributeList->hasAttribute(1) );
+    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 0, xAttributeList->getFastAttributes().getLength() );
+    xAttributeList->addUnknown("c", "c");
+    CPPUNIT_ASSERT_EQUAL( (sal_Int32) 1, xAttributeList->getUnknownAttributes().getLength() );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( AttributesTest );

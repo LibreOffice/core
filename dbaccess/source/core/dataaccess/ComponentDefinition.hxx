@@ -88,7 +88,7 @@ class OComponentDefinition  :public OContentHelper
     OComponentDefinition();
 
 protected:
-    ::std::unique_ptr< OColumns >     m_pColumns;
+    css::uno::Reference< OColumns >     m_xColumns;
     rtl::Reference<OColumnPropertyListener> m_xColumnPropertyListener;
     bool                        m_bTable;
 
