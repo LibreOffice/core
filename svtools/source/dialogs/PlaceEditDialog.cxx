@@ -20,6 +20,7 @@ using namespace com::sun::star::uno;
 PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     : ModalDialog(pParent, "PlaceEditDialog", "svt/ui/placeedit.ui")
     , m_xCurrentDetails()
+    , m_nCurrentType( 0 )
 {
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
@@ -249,11 +250,22 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl )
 
 IMPL_LINK_NOARG( PlaceEditDialog, SelectTypeHdl )
 {
+    if ( m_pLBServerType->GetSelectEntry() == "--------------------" )
+    {
+        if( !m_pLBServerType->IsTravelSelect() )
+            m_pLBServerType->SelectEntryPos( m_nCurrentType );
+        else
+            m_pLBServerType->SetNoSelection();
+
+        return 0;
+    }
+
     if (m_xCurrentDetails.get())
         m_xCurrentDetails->show(false);
 
     sal_uInt16 nPos = m_pLBServerType->GetSelectEntryPos( );
     m_xCurrentDetails = m_aDetailsContainers[nPos];
+    m_nCurrentType = nPos;
 
     m_xCurrentDetails->show(true);
 

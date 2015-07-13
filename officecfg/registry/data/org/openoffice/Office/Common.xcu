@@ -573,6 +573,7 @@
         <it>https://www.googleapis.com/drive/v2</it>
         <it>https://apis.live.net/v5.0</it>
         <it>https://api.alfresco.com/cmis/versions/1.0/atom/</it>
+        <it></it>
         <it>http://&lt;host:port&gt;/alfresco/cmisatom</it>
         <it>http://&lt;host&gt;/p8cmis/wsdl</it>
         <it>https://apps.lotuslive.com/files/basic/cmis/my/servicedoc</it>
@@ -583,6 +584,7 @@
         <it>http://&lt;host&gt;/_vti_bin/CMISSoapwsdl.aspx</it>
         <it>http://&lt;host&gt;/_api/Web</it>
         <it>http://&lt;host&gt;/</it>
+        <it></it>
       </value>
     </prop>
     <prop oor:name="CmisServersNames">
@@ -590,6 +592,7 @@
         <it>Google Drive</it>
         <it>OneDrive</it>
         <it>Alfresco Cloud</it>
+        <it>--------------------</it>
         <it>Alfresco 4</it>
         <it>IBM FileNet P8</it>
         <it>Lotus Live Files</it>
@@ -600,6 +603,7 @@
         <it>SharePoint 2010</it>
         <it>SharePoint 2013</it>
         <it>Other CMIS</it>
+        <it>--------------------</it>
       </value>
     </prop>
   </node>

@@ -51,6 +51,8 @@ private :
       */
     std::vector< std::shared_ptr< DetailsContainer > > m_aDetailsContainers;
 
+    unsigned int m_nCurrentType;
+
 public :
 
      PlaceEditDialog( vcl::Window* pParent);
