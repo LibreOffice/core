@@ -991,30 +991,6 @@ void SwView::Execute(SfxRequest &rReq)
             m_pShell->ExecuteSlot(rReq);
         }
         break;
-        case FN_INSERT_CTRL:
-        case FN_INSERT_OBJ_CTRL:
-        {
-            if(pArgs && SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem))
-            {
-                const sal_uInt16 nValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-                switch ( nSlot )
-                {
-                    case FN_INSERT_CTRL:
-                    {
-                        bool bWeb = 0 != PTR_CAST(SwWebView, this);
-                        if(bWeb)
-                            SwView::m_nWebInsertCtrlState = nValue;
-                        else
-                            SwView::m_nInsertCtrlState = nValue;
-                    }
-                    break;
-                    case FN_INSERT_OBJ_CTRL:    SwView::m_nInsertObjectCtrlState = nValue  ;break;
-                }
-
-            }
-            GetViewFrame()->GetBindings().Invalidate( nSlot );
-        }
-        break;
 #if defined WNT || defined UNX
         case SID_TWAIN_SELECT:
         case SID_TWAIN_TRANSFER:

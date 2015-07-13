@@ -176,6 +176,48 @@
       </node>
     </node>
     <node oor:name="ToolBar">
+      <node oor:name="InsertControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertCtrl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertbar;.uno:InsertGraphic</value>
+        </prop>
+      </node>
+      <node oor:name="InsertObjectControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertObjCtrl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertobjectbar;.uno:InsertObject</value>
+        </prop>
+      </node>
+      <node oor:name="InsertCellControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsCellsCtrl</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sheet.SpreadsheetDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertcellsbar;.uno:InsertCellsDown</value>
+        </prop>
+      </node>
       <node oor:name="c1" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:DBNewForm</value>

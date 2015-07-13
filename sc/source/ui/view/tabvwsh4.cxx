@@ -102,11 +102,6 @@ extern SfxViewShell* pScActiveViewShell;            // global.cxx
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
-sal_uInt16 ScTabViewShell::nInsertCtrlState = SID_INSERT_GRAPHIC;
-sal_uInt16 ScTabViewShell::nInsCellsCtrlState = 0;
-
 void ScTabViewShell::Activate(bool bMDI)
 {
     SfxViewShell::Activate(bMDI);
@@ -1828,36 +1823,6 @@ ScNavigatorSettings* ScTabViewShell::GetNavigatorSettings()
     if( !pNavSettings )
         pNavSettings = new ScNavigatorSettings;
     return pNavSettings;
-}
-
-void ScTabViewShell::ExecTbx( SfxRequest& rReq )
-{
-    const SfxItemSet* pReqArgs = rReq.GetArgs();
-    sal_uInt16 nSlot = rReq.GetSlot();
-    const SfxPoolItem* pItem = NULL;
-    if ( pReqArgs )
-        pReqArgs->GetItemState( nSlot, true, &pItem );
-
-    switch ( nSlot )
-    {
-        case SID_TBXCTL_INSERT:
-            if ( pItem )
-                nInsertCtrlState = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-            break;
-        case SID_TBXCTL_INSCELLS:
-            if ( pItem )
-                nInsCellsCtrlState = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
-            break;
-        default:
-            OSL_FAIL("Slot im Wald");
-    }
-    GetViewFrame()->GetBindings().Invalidate( nSlot );
-}
-
-void ScTabViewShell::GetTbxState( SfxItemSet& rSet )
-{
-    rSet.Put( SfxUInt16Item( SID_TBXCTL_INSERT,   nInsertCtrlState ) );
-    rSet.Put( SfxUInt16Item( SID_TBXCTL_INSCELLS, nInsCellsCtrlState ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

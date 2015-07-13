@@ -3931,7 +3931,7 @@ SfxVoidItem InputLineMatrix FID_INPUTLINE_MATRIX
 ]
 
 
-SfxUInt16Item InsCellsCtrl SID_TBXCTL_INSCELLS
+SfxVoidItem InsCellsCtrl SID_TBXCTL_INSCELLS
 
 [
     /* flags: */
@@ -4209,7 +4209,7 @@ SfxVoidItem InsertContents FID_INS_CELL_CONTENTS
 ]
 
 
-SfxUInt16Item InsertCtrl SID_TBXCTL_INSERT
+SfxVoidItem InsertCtrl SID_TBXCTL_INSERT
 
 [
     /* flags: */

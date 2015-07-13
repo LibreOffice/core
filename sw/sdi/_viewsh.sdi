@@ -531,10 +531,8 @@ interface BaseTextEditView
     ]
     FN_INSERT_CTRL
     [
-        ExecMethod = Execute ;
-        StateMethod = GetState ;
         Export = FALSE;
-   ]
+    ]
 
     SID_ATTR_DEFTABSTOP
     [

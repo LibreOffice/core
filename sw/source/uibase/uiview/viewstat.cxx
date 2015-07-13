@@ -191,41 +191,11 @@ void SwView::GetState(SfxItemSet &rSet)
                     rSet.DisableItem(nWhich);
             }
             break;
-            case FN_INSERT_CTRL:
-            {
-                SfxImageItem aImgItem(nWhich, bWeb ? SwView::m_nWebInsertCtrlState : SwView::m_nInsertCtrlState);
-                SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( GetViewFrame() );
-                const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
-                if(pSlot && pSlot->IsMode( SfxSlotMode::IMAGEROTATION ))
-                {
-                    if(m_pWrtShell->IsInVerticalText())
-                        aImgItem.SetRotation(2700);
-                    if(m_pWrtShell->IsInRightToLeftText())
-                        aImgItem.SetMirrored(true);
-                }
-                rSet.Put(aImgItem);
-            }
-            break;
-
             case FN_INSERT_OBJ_CTRL:
                 if( bWeb
                     || m_pWrtShell->CrsrInsideInputField() )
                 {
                     rSet.DisableItem(nWhich);
-                }
-                else
-                {
-                    SfxImageItem aImgItem(nWhich, SwView::m_nInsertObjectCtrlState);
-                    SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( GetViewFrame() );
-                    const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
-                    if(pSlot && pSlot->IsMode( SfxSlotMode::IMAGEROTATION ))
-                    {
-                        if (m_pWrtShell->IsInVerticalText())
-                            aImgItem.SetRotation(2700);
-                        if (m_pWrtShell->IsInRightToLeftText())
-                            aImgItem.SetMirrored(true);
-                    }
-                    rSet.Put(aImgItem);
                 }
                 break;
 

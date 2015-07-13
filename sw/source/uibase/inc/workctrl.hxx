@@ -52,26 +52,6 @@ class SwView;
 #define NID_TABLE_FORMULA_ERROR     20019
 #define NID_COUNT  20
 
-class SwTbxInsertCtrl : public SfxToolBoxControl
-{
-    sal_uInt16                  nLastSlotId;
-
-    virtual void            Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
-
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    SwTbxInsertCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SwTbxInsertCtrl();
-
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
-    virtual void                StateChanged( sal_uInt16 nSID,
-                                              SfxItemState eState,
-                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
-
-    virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-};
-
 class SwTbxAutoTextCtrl : public SfxToolBoxControl
 {
     PopupMenu*              pPopup;

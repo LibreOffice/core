@@ -128,10 +128,6 @@ bool bDocSzUpdated = true;
 
 SvxSearchItem*  SwView::m_pSrchItem   = 0;
 
-sal_uInt16          SwView::m_nInsertCtrlState        = FN_INSERT_TABLE;
-sal_uInt16          SwView::m_nWebInsertCtrlState     = FN_INSERT_TABLE;
-sal_uInt16          SwView::m_nInsertObjectCtrlState  = SID_INSERT_DIAGRAM;
-
 bool            SwView::m_bExtra      = false;
 bool            SwView::m_bFound      = false;
 bool            SwView::m_bJustOpened = false;

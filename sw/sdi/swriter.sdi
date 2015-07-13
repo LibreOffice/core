@@ -3710,7 +3710,7 @@ SfxStringItem InsertSection FN_INSERT_REGION
     GroupId = GID_INSERT;
 ]
 
-SfxImageItem InsertCtrl FN_INSERT_CTRL
+SfxVoidItem InsertCtrl FN_INSERT_CTRL
 
 [
     /* flags: */
@@ -4133,7 +4133,7 @@ SfxVoidItem InsertNeutralParagraph FN_NUM_BULLET_NONUM
     GroupId = GID_ENUMERATION;
 ]
 
-SfxImageItem InsertObjCtrl FN_INSERT_OBJ_CTRL
+SfxVoidItem InsertObjCtrl FN_INSERT_OBJ_CTRL
 
 [
     /* flags: */

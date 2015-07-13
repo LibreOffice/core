@@ -92,9 +92,6 @@ enum ObjectSelectionType
 class ScTabViewShell: public SfxViewShell, public ScDBFunc
 {
 private:
-    static sal_uInt16           nInsertCtrlState;
-    static sal_uInt16           nInsCellsCtrlState;
-
     SvxHtmlOptions          aHTMLOpt;
     ObjectSelectionType     eCurOST;
     sal_uInt16                  nDrawSfxId;
@@ -275,9 +272,6 @@ public:
 
     void            ExecImageMap( SfxRequest& rReq );
     void            GetImageMapState( SfxItemSet& rSet );
-
-    void            ExecTbx( SfxRequest& rReq );
-    static void     GetTbxState( SfxItemSet& rSet );
 
     void            ExecuteSave( SfxRequest& rReq );
     void            GetSaveState( SfxItemSet& rSet );

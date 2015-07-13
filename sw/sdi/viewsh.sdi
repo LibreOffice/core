@@ -46,7 +46,6 @@ interface TextEditView : BaseTextEditView
      // Slots, which are not needed in the WebDocShell
     FN_INSERT_OBJ_CTRL
     [
-        ExecMethod = Execute ;
         StateMethod = GetState ;
         Export = FALSE ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";

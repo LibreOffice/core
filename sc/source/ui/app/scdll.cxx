@@ -85,7 +85,6 @@
 #include <svx/lboxctrl.hxx>
 #include <svx/verttexttbxctrl.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
-#include "tbinsert.hxx"
 #include "tbzoomsliderctrl.hxx"
 #include <svx/zoomsliderctrl.hxx>
 
@@ -154,8 +153,6 @@ void ScDLL::Init()
     SfxRecentFilesToolBoxControl::RegisterControl(SID_OPEN_CALC, pMod);
 
     // Own Controller
-    ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSERT, pMod);
-    ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSCELLS, pMod);
     ScZoomSliderControl ::RegisterControl(SID_PREVIEW_SCALINGFACTOR, pMod);
 
     // SvxToolboxController
