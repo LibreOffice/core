@@ -561,7 +561,7 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
                 SdrBeginTextEdit(pNextLink);
                 // OutlinerView has changed, so we update the pointer
                 pOLV = GetTextEditOutlinerView();
-                //pOLV->SetSelection(pTextChain->GetPostChainingSel(pTextObj)); // XXX
+                pOLV->SetSelection(pTextChain->GetPostChainingSel(pTextObj)); // XXX
 
                 break;
             case CursorChainingEvent::TO_PREV_LINK:
