@@ -57,12 +57,10 @@ public:
     const OUString&     GetMessText() const { return maMessText; }
 
     void                SetImage( const Image& rImage ) { maImage = rImage; }
-    const Image&        GetImage() const { return maImage; }
 
     void                SetCheckBoxText( const OUString& rText ) { maCheckBoxText = rText;}
-    const OUString&     GetCheckBoxText() const { return maCheckBoxText;}
     void                SetCheckBoxState( bool bCheck );
-    bool            GetCheckBoxState() const;
+    bool                GetCheckBoxState() const;
 
     virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 };

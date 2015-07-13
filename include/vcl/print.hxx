@@ -62,18 +62,14 @@ class VCL_DLLPUBLIC PrinterPage
 {
     GDIMetaFile*    mpMtf;
     JobSetup        maJobSetup;
-    bool          mbNewJobSetup;
 
 public:
 
     PrinterPage() : mpMtf( new GDIMetaFile() ) {}
-    PrinterPage( GDIMetaFile* pMtf, bool bNewJobSetup, const JobSetup& rSetup ) :
-           mpMtf( pMtf ), maJobSetup( rSetup ), mbNewJobSetup( bNewJobSetup ) {}
+    PrinterPage( GDIMetaFile* pMtf, const JobSetup& rSetup ) :
+           mpMtf( pMtf ), maJobSetup( rSetup ) {}
     ~PrinterPage() { delete mpMtf; }
 
-    GDIMetaFile*    GetGDIMetaFile() const { return mpMtf; }
-    const JobSetup& GetJobSetup() const { return maJobSetup; }
-    bool            IsNewJobSetup() const { return mbNewJobSetup; }
 };
 
 
@@ -267,9 +263,6 @@ public:
     virtual Bitmap              GetBitmap( const Point& rSrcPt, const Size& rSize ) const SAL_OVERRIDE;
 
 protected:
-
-    void                        SetSelfAsQueuePrinter( bool bQueuePrinter ) { mbIsQueuePrinter = bQueuePrinter; }
-    bool                        IsQueuePrinter() const { return mbIsQueuePrinter; }
     virtual void                DrawDeviceMask ( const Bitmap& rMask, const Color& rMaskColor,
                                             const Point& rDestPt, const Size& rDestSize,
                                             const Point& rSrcPtPixel, const Size& rSrcSizePixel ) SAL_OVERRIDE;
@@ -305,12 +298,9 @@ public:
     static const QueueInfo*     GetQueueInfo( const OUString& rPrinterName, bool bStatusUpdate );
     static OUString             GetDefaultPrinterName();
 
-    void                        Error();
-
     const OUString&             GetName() const             { return maPrinterName; }
     const OUString&             GetDriverName() const       { return maDriver; }
     bool                        IsDefPrinter() const        { return mbDefPrinter; }
-    void                        SetDefPrinter(bool bDef)    {  mbDefPrinter = bDef; }
     bool                        IsDisplayPrinter() const    { return mpDisplayDev != nullptr; }
     bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
@@ -366,15 +356,7 @@ public:
 
     bool                        IsPrinting() const { return mbPrinting; }
 
-    const OUString&             GetCurJobName() const { return maJobName; }
-    sal_uInt16                  GetCurPage() const { return mnCurPage; }
     bool                        IsJobActive() const { return mbJobActive; }
-
-    sal_uLong                   GetError() const { return ERRCODE_TOERROR(mnError); }
-    sal_uLong                   GetErrorCode() const { return mnError; }
-
-    void                        SetErrorHdl( const Link<>& rLink ) { maErrorHdl = rLink; }
-    const Link<>&               GetErrorHdl() const { return maErrorHdl; }
 
     /** checks the printer list and updates it necessary
     *

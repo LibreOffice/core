@@ -93,13 +93,6 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
         */
         inline void         SetClickHdl( const Link<>& rLink ) { m_aClickHdl = rLink; }
 
-        /** returns m_aClickHdl.
-
-            @return
-                m_aClickHdl
-        */
-        inline const Link<>& GetClickHdl() const { return m_aClickHdl; }
-
         // ::FixedHyperbaseLink
 
         /** sets the URL of the hyperlink and uses it as tooltip. */

@@ -226,7 +226,6 @@ private:
 
     DECL_DLLPRIVATE_LINK(          ImplCallExecuteCustomMenu, void* );
     DECL_DLLPRIVATE_LINK_TYPED(    ImplUpdateHdl, Idle*, void );
-    DECL_DLLPRIVATE_LINK(          ImplResetAutoSizeTriesHdl, void* );
     DECL_DLLPRIVATE_LINK(          ImplCustomMenuListener, VclMenuEvent* );
     DECL_DLLPRIVATE_LINK_TYPED(    ImplDropdownLongClickHdl, Timer*, void );
 

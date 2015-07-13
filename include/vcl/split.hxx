@@ -86,13 +86,11 @@ public:
 
     void                SetDragRectPixel( const Rectangle& rDragRect,
                                           vcl::Window* pRefWin = NULL );
-    const Rectangle&    GetDragRectPixel() const { return maDragRect; }
-    vcl::Window*        GetDragWindow() const { return mpRefWin; }
 
     void                SetSplitPosPixel( long nPos );
     long                GetSplitPosPixel() const { return mnSplitPos; }
 
-    bool                 IsHorizontal() const { return mbHorzSplit; }
+    bool                IsHorizontal() const { return mbHorzSplit; }
     void                SetHorizontal(bool bNew);
 
     // set the stepsize of the splitter for cursor movement
@@ -100,11 +98,8 @@ public:
     void                SetKeyboardStepSize( long nStepSize );
 
     void                SetStartSplitHdl( const Link<>& rLink ) { maStartSplitHdl = rLink; }
-    const Link<>&       GetStartSplitHdl() const { return maStartSplitHdl; }
     void                SetSplitHdl( const Link<>& rLink ) { maSplitHdl = rLink; }
     void                SetEndSplitHdl( const Link<>& rLink ) { maEndSplitHdl = rLink; }
-    const Link<>&       GetEndSplitHdl() const { return maEndSplitHdl; }
-    const Link<>&       GetSplitHdl() const { return maSplitHdl; }
 };
 
 #endif // INCLUDED_VCL_SPLIT_HXX
