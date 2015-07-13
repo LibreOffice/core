@@ -54,18 +54,63 @@ OutlinerParaObject *impGetJuxtaposedParaObject(Outliner *pOutl,
     return pPObj;
 }
 
+// In a deep merge parts of text are not only juxtaposed but the last and first para become the same
 OutlinerParaObject *impGetDeeplyMergedParaObject(Outliner *pOutl,
                                                OutlinerParaObject *pPObj1,
                                                OutlinerParaObject *pPObj2)
-{ // XXX: For now just the same
-
+{
     assert(pOutl && pPObj1 &&  pPObj2);
 
-    pOutl->SetText(*pPObj1);
-    pOutl->AddText(*pPObj2);
-    OutlinerParaObject *pPObj = pOutl->CreateParaObject();
+    const EditTextObject rTObj1 = pPObj1->GetTextObject();
+    const EditTextObject rTObj2 = pPObj2->GetTextObject();
+    sal_Int32 nParaCount1 = rTObj1.GetParagraphCount();
 
-    return pPObj;
+    // If no paras in the first text, just use second text
+    if (nParaCount1 == 0) {
+        pOutl->SetText(*pPObj2);
+        return pOutl->CreateParaObject();
+    }
+
+
+    sal_Int32 nLastPara1 = nParaCount1 - 1;
+
+    // If last para of first text is empty, discard it and just juxtapose
+    if (rTObj1.GetText(nLastPara1) == "" && nParaCount1 >= 2) {
+        pOutl->SetText(*pPObj1);
+        return impGetJuxtaposedParaObject(
+                pOutl,
+                pOutl->CreateParaObject(0, nLastPara1 - 1),
+                pPObj2);
+    }
+
+    /* --- Standard procedure: when pPObj1 is 'fine' --- */
+
+
+    // Cut first para of second object
+    OUString aFirstParaTxt2 = rTObj2.GetText(0);
+
+    // Prepare remainder for text 2
+    OutlinerParaObject *pRemainderPObj2 = NULL;
+    if (rTObj2.GetParagraphCount() > 1) {
+        pOutl->SetText(*pPObj2);
+        pRemainderPObj2 = pOutl->CreateParaObject(1); // from second para on
+    } else { // No text to append
+        pRemainderPObj2 = NULL;
+    }
+
+    // Set first object as text
+    pOutl->SetText(*pPObj1);
+
+    // Merges LastPara(pPObj1) with FirstPara(pPObj2)
+    Paragraph *pLastPara1 = pOutl->GetParagraph(nLastPara1);
+    OUString aLastParaTxt1 = pOutl->GetText(pLastPara1);
+    pOutl->SetText(aLastParaTxt1 + aFirstParaTxt2, pLastPara1); // XXX: This way it screws up attributes!
+
+    // add the remainder of the second text
+    if (pRemainderPObj2)
+        pOutl->AddText(*pRemainderPObj2);
+
+    return pOutl->CreateParaObject();
 }
 
 // class OverflowingText
