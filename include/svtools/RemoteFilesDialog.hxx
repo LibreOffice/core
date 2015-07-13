@@ -122,7 +122,6 @@ private:
     bool m_bMultiselection;
     bool m_bIsUpdated;
     bool m_bIsConnected;
-    Image m_aFolderImage;
 
     OUString m_sPath;
     OUString m_sStdDir;

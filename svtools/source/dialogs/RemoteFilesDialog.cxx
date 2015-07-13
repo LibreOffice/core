@@ -16,15 +16,20 @@ private:
     Reference< XCommandEnvironment > m_xEnv;
     ::osl::Mutex m_aMutex;
     Sequence< OUString > m_aBlackList;
+    Image m_aFolderImage;
 
 public:
     FolderTree( vcl::Window* pParent, WinBits nBits )
-        : SvTreeListBox( pParent, nBits )
+        : SvTreeListBox( pParent, nBits | WB_SORT | WB_TABSTOP )
+        , m_aFolderImage( SvtResId( IMG_SVT_FOLDER ) )
     {
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         Reference< XInteractionHandler > xInteractionHandler(
                     InteractionHandler::createWithParent( xContext, 0 ), UNO_QUERY_THROW );
         m_xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
+
+        SetDefaultCollapsedEntryBmp( m_aFolderImage );
+        SetDefaultExpandedEntryBmp( m_aFolderImage );
     }
 
     virtual void RequestingChildren( SvTreeListEntry* pEntry )
@@ -237,7 +242,6 @@ class FileViewContainer : public vcl::Window
 RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     : SvtFileDialog_Base( pParent, "RemoteFilesDialog", "svt/ui/remotefilesdialog.ui" )
     , m_context( comphelper::getProcessComponentContext() )
-    , m_aFolderImage( SvtResId( IMG_SVT_FOLDER ) )
     , m_pSplitter( NULL )
     , m_pFileView( NULL )
     , m_pContainer( NULL )
@@ -293,14 +297,12 @@ RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     m_pSplitter->SetSplitHdl( LINK( this, RemoteFilesDialog, SplitHdl ) );
     m_pSplitter->Show();
 
-    m_pTreeView = VclPtr< FolderTree >::Create( m_pContainer, WB_BORDER | WB_SORT | WB_TABSTOP );
+    m_pTreeView = VclPtr< FolderTree >::Create( m_pContainer, WB_BORDER );
     Size aSize( 100, 200 );
     m_pTreeView->set_height_request( aSize.Height() );
     m_pTreeView->set_width_request( aSize.Width() );
     m_pTreeView->SetSizePixel( aSize );
     m_pTreeView->Show();
-    m_pTreeView->SetDefaultCollapsedEntryBmp( m_aFolderImage );
-    m_pTreeView->SetDefaultExpandedEntryBmp( m_aFolderImage );
 
     m_pTreeView->SetSelectHdl( LINK( this, RemoteFilesDialog, TreeSelectHdl ) );
 
