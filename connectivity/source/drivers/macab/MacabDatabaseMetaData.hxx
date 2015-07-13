@@ -22,7 +22,7 @@
 
 #include "MacabConnection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
@@ -32,7 +32,7 @@ namespace connectivity
         //************ Class: MacabDatabaseMetaData
 
 
-        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData> MacabDatabaseMetaData_BASE;
+        typedef ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XDatabaseMetaData> MacabDatabaseMetaData_BASE;
 
         class MacabDatabaseMetaData : public MacabDatabaseMetaData_BASE
         {

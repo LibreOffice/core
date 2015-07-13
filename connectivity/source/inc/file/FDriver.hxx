@@ -23,7 +23,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <connectivity/CommonTools.hxx>
 #include "file/filedllapi.hxx"
 
@@ -31,9 +31,9 @@ namespace connectivity
 {
     namespace file
     {
-        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XDriver,
-                                                    ::com::sun::star::lang::XServiceInfo,
-                                                    ::com::sun::star::sdbcx::XDataDefinitionSupplier> ODriver_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XDriver,
+                                                   ::com::sun::star::lang::XServiceInfo,
+                                                   ::com::sun::star::sdbcx::XDataDefinitionSupplier> ODriver_BASE;
 
         class OOO_DLLPUBLIC_FILE SAL_NO_VTABLE OFileDriver : public ODriver_BASE
         {

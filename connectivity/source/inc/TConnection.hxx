@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include "propertyids.hxx"
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/dbtoolsdllapi.hxx>
@@ -33,11 +33,11 @@
 
 namespace connectivity
 {
-    typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XConnection,
-                                                ::com::sun::star::sdbc::XWarningsSupplier,
-                                                ::com::sun::star::lang::XServiceInfo,
-                                                ::com::sun::star::lang::XUnoTunnel
-                                            > OMetaConnection_BASE;
+    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XConnection,
+                                               ::com::sun::star::sdbc::XWarningsSupplier,
+                                               ::com::sun::star::lang::XServiceInfo,
+                                               ::com::sun::star::lang::XUnoTunnel
+                                           > OMetaConnection_BASE;
 
     typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >  TConditions;
 

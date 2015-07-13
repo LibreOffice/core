@@ -28,7 +28,7 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -47,9 +47,9 @@ namespace connectivity
     {
         class OResultSet;
         class OFileTable;
-        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::util::XCancellable,
-                                                    ::com::sun::star::sdbc::XCloseable> OStatement_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XWarningsSupplier,
+                                                   ::com::sun::star::util::XCancellable,
+                                                   ::com::sun::star::sdbc::XCloseable> OStatement_BASE;
 
 
         //************ Class: java.sql.Statement

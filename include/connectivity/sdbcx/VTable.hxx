@@ -27,7 +27,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <comphelper/IdPropArrayHelper.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/container/XNamed.hpp>
@@ -45,10 +45,10 @@ namespace connectivity
         class OTable;
         class OCollection;
 
-        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbcx::XColumnsSupplier,
-                                                    ::com::sun::star::sdbcx::XKeysSupplier,
-                                                    ::com::sun::star::container::XNamed,
-                                                    ::com::sun::star::lang::XServiceInfo> OTableDescriptor_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbcx::XColumnsSupplier,
+                                                   ::com::sun::star::sdbcx::XKeysSupplier,
+                                                   ::com::sun::star::container::XNamed,
+                                                   ::com::sun::star::lang::XServiceInfo> OTableDescriptor_BASE;
 
         typedef ::cppu::ImplHelper4<                ::com::sun::star::sdbcx::XDataDescriptorFactory,
                                                     ::com::sun::star::sdbcx::XIndexesSupplier,

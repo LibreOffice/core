@@ -36,7 +36,7 @@
 
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_ARRAY_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_ARRAY_HXX
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/sdbc/XArray.hpp>
 
 #include "pq_connection.hxx"
@@ -44,7 +44,7 @@
 namespace pq_sdbc_driver
 {
 
-class Array : public cppu::WeakImplHelper1< com::sun::star::sdbc::XArray >
+class Array : public cppu::WeakImplHelper< com::sun::star::sdbc::XArray >
 {
     com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_data;
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > m_owner;

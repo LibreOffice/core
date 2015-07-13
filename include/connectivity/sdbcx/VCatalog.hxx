@@ -27,7 +27,7 @@
 #include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/OSubComponent.hxx>
@@ -45,11 +45,11 @@ namespace connectivity
         // other drivers can be derived their catalog from this class when they want to support sdbcx
         // it holds already tables, views, groups and users
 
-        typedef ::cppu::WeakComponentImplHelper5< ::com::sun::star::sdbcx::XTablesSupplier,
-                                                  ::com::sun::star::sdbcx::XViewsSupplier,
-                                                  ::com::sun::star::sdbcx::XUsersSupplier,
-                                                  ::com::sun::star::sdbcx::XGroupsSupplier,
-                                                  ::com::sun::star::lang::XServiceInfo> OCatalog_BASE;
+        typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::sdbcx::XTablesSupplier,
+                                                 ::com::sun::star::sdbcx::XViewsSupplier,
+                                                 ::com::sun::star::sdbcx::XUsersSupplier,
+                                                 ::com::sun::star::sdbcx::XGroupsSupplier,
+                                                 ::com::sun::star::lang::XServiceInfo> OCatalog_BASE;
 
 
         class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE OCatalog :

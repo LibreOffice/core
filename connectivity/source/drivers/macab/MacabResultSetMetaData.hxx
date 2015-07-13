@@ -23,7 +23,7 @@
 #include "MacabConnection.hxx"
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <connectivity/dbexception.hxx>
 #include <rtl/ref.hxx>
 
@@ -34,7 +34,7 @@ namespace connectivity
         /*
         **  MacabResultSetMetaData
         */
-        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>   MacabResultSetMetaData_BASE;
+        typedef ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XResultSetMetaData>   MacabResultSetMetaData_BASE;
 
         class MacabResultSetMetaData : public MacabResultSetMetaData_BASE
         {

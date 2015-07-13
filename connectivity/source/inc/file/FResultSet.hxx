@@ -29,7 +29,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#include <cppuhelper/compbase12.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "file/FStatement.hxx"
 #include <connectivity/CommonTools.hxx>
@@ -47,18 +47,18 @@ namespace connectivity
 {
     namespace file
     {
-        typedef ::cppu::WeakComponentImplHelper12<  ::com::sun::star::sdbc::XResultSet,
-                                                    ::com::sun::star::sdbc::XRow,
-                                                    ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                                    ::com::sun::star::util::XCancellable,
-                                                    ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::sdbc::XResultSetUpdate,
-                                                    ::com::sun::star::sdbc::XRowUpdate,
-                                                    ::com::sun::star::sdbc::XCloseable,
-                                                    ::com::sun::star::sdbc::XColumnLocate,
-                                                    ::com::sun::star::lang::XServiceInfo,
-                                                    ::com::sun::star::lang::XEventListener,
-                                                    ::com::sun::star::lang::XUnoTunnel> OResultSet_BASE;
+        typedef ::cppu::WeakComponentImplHelper<  ::com::sun::star::sdbc::XResultSet,
+                                                  ::com::sun::star::sdbc::XRow,
+                                                  ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                                  ::com::sun::star::util::XCancellable,
+                                                  ::com::sun::star::sdbc::XWarningsSupplier,
+                                                  ::com::sun::star::sdbc::XResultSetUpdate,
+                                                  ::com::sun::star::sdbc::XRowUpdate,
+                                                  ::com::sun::star::sdbc::XCloseable,
+                                                  ::com::sun::star::sdbc::XColumnLocate,
+                                                  ::com::sun::star::lang::XServiceInfo,
+                                                  ::com::sun::star::lang::XEventListener,
+                                                  ::com::sun::star::lang::XUnoTunnel> OResultSet_BASE;
 
         class OOO_DLLPUBLIC_FILE OResultSet :
                             public  comphelper::OBaseMutex,

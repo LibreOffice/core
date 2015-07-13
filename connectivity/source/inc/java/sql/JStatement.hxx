@@ -28,7 +28,7 @@
 #include <com/sun/star/util/XCancellable.hpp>
 #include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
 #include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/OSubComponent.hxx>
@@ -41,12 +41,12 @@
 namespace connectivity
 {
 
-        typedef ::cppu::WeakComponentImplHelper6<       ::com::sun::star::sdbc::XStatement,
-                                                        ::com::sun::star::sdbc::XWarningsSupplier,
-                                                        ::com::sun::star::util::XCancellable,
-                                                        ::com::sun::star::sdbc::XCloseable,
-                                                        ::com::sun::star::sdbc::XGeneratedResultSet,
-                                                        ::com::sun::star::sdbc::XMultipleResults> java_sql_Statement_BASE;
+        typedef ::cppu::WeakComponentImplHelper<       ::com::sun::star::sdbc::XStatement,
+                                                       ::com::sun::star::sdbc::XWarningsSupplier,
+                                                       ::com::sun::star::util::XCancellable,
+                                                       ::com::sun::star::sdbc::XCloseable,
+                                                       ::com::sun::star::sdbc::XGeneratedResultSet,
+                                                       ::com::sun::star::sdbc::XMultipleResults> java_sql_Statement_BASE;
 
     //************ Class: java.sql.Statement
 

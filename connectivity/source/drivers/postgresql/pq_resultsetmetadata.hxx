@@ -43,7 +43,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace pq_sdbc_driver
 {
@@ -65,7 +65,7 @@ typedef std::vector< ColDesc > ColDescVector;
 
 
 class ResultSetMetaData :
-        public ::cppu::WeakImplHelper1 < com::sun::star::sdbc::XResultSetMetaData >
+        public ::cppu::WeakImplHelper< com::sun::star::sdbc::XResultSetMetaData >
 {
     ::rtl::Reference< RefCountedMutex > m_refMutex;
     ConnectionSettings **m_ppSettings;

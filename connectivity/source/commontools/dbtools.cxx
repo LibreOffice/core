@@ -77,7 +77,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
-
+#include <cppuhelper/implbase.hxx>
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 #include <connectivity/OSubComponent.hxx>
@@ -1642,7 +1642,7 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
 
 namespace
 {
-    class OParameterWrapper : public ::cppu::WeakImplHelper1< XIndexAccess >
+    class OParameterWrapper : public ::cppu::WeakImplHelper< XIndexAccess >
     {
         ::std::vector<bool, std::allocator<bool> >       m_aSet;
         Reference<XIndexAccess> m_xSource;

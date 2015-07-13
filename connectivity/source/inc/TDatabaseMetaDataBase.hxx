@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_TDATABASEMETADATABASE_HXX
 
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include "FDatabaseMetaDataResultSet.hxx"
@@ -33,8 +33,8 @@ namespace connectivity
         typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >  TConditions;
         class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataBase :
                                         public  comphelper::OBaseMutex,
-                                        public ::cppu::WeakImplHelper2< ::com::sun::star::sdbc::XDatabaseMetaData2,
-                                                                        ::com::sun::star::lang::XEventListener>
+                                        public ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XDatabaseMetaData2,
+                                                                       ::com::sun::star::lang::XEventListener>
         {
         private:
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aConnectionInfo;

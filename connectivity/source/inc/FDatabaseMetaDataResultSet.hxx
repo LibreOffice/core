@@ -35,7 +35,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/propertycontainer.hxx>
@@ -46,15 +46,15 @@
 
 namespace connectivity
 {
-    typedef ::cppu::WeakComponentImplHelper9<   ::com::sun::star::sdbc::XResultSet,
-                                                ::com::sun::star::sdbc::XRow,
-                                                ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                                ::com::sun::star::util::XCancellable,
-                                                ::com::sun::star::sdbc::XWarningsSupplier,
-                                                ::com::sun::star::sdbc::XCloseable,
-                                                ::com::sun::star::lang::XInitialization,
-                                                ::com::sun::star::lang::XServiceInfo,
-                                                ::com::sun::star::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
+    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XResultSet,
+                                               ::com::sun::star::sdbc::XRow,
+                                               ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                               ::com::sun::star::util::XCancellable,
+                                               ::com::sun::star::sdbc::XWarningsSupplier,
+                                               ::com::sun::star::sdbc::XCloseable,
+                                               ::com::sun::star::lang::XInitialization,
+                                               ::com::sun::star::lang::XServiceInfo,
+                                               ::com::sun::star::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
 
     //  typedef ORefVector<ORowSetValue>    ORow;
     //  typedef ORefVector<ORow>            ORows;

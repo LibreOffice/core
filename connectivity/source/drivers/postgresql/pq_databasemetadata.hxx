@@ -40,13 +40,13 @@
 #include "pq_connection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace pq_sdbc_driver
 {
 
 class DatabaseMetaData :
-        public ::cppu::WeakImplHelper1 < com::sun::star::sdbc::XDatabaseMetaData >
+        public ::cppu::WeakImplHelper< com::sun::star::sdbc::XDatabaseMetaData >
 {
     ::rtl::Reference< RefCountedMutex > m_refMutex;
     ConnectionSettings *m_pSettings;

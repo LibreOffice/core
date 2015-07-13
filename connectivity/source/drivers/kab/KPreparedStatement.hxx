@@ -25,17 +25,17 @@
 #include <connectivity/FValue.hxx>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
     namespace kab
     {
-        typedef ::cppu::ImplInheritanceHelper4< KabCommonStatement,
-                                                ::com::sun::star::sdbc::XPreparedStatement,
-                                                ::com::sun::star::sdbc::XParameters,
-                                                ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                                ::com::sun::star::lang::XServiceInfo> KabPreparedStatement_BASE;
+        typedef ::cppu::ImplInheritanceHelper< KabCommonStatement,
+                                               ::com::sun::star::sdbc::XPreparedStatement,
+                                               ::com::sun::star::sdbc::XParameters,
+                                               ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                               ::com::sun::star::lang::XServiceInfo> KabPreparedStatement_BASE;
 
         class KabPreparedStatement : public  KabPreparedStatement_BASE
         {

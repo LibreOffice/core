@@ -37,6 +37,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATEMENT_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_STATEMENT_HXX
 #include <cppuhelper/propshlp.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/component.hxx>
 
 #include <libpq-fe.h>
@@ -61,13 +62,13 @@ static const sal_Int32 STATEMENT_RESULT_SET_TYPE = 8;
 
 #define STATEMENT_SIZE 9
 
-typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::sdbc::XStatement,
-                                            ::com::sun::star::sdbc::XCloseable,
-                                            ::com::sun::star::sdbc::XWarningsSupplier,
-                                            ::com::sun::star::sdbc::XMultipleResults,
-                                            ::com::sun::star::sdbc::XGeneratedResultSet,
-                                            ::com::sun::star::sdbc::XResultSetMetaDataSupplier
-                                            > Statement_BASE;
+typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XStatement,
+                                           ::com::sun::star::sdbc::XCloseable,
+                                           ::com::sun::star::sdbc::XWarningsSupplier,
+                                           ::com::sun::star::sdbc::XMultipleResults,
+                                           ::com::sun::star::sdbc::XGeneratedResultSet,
+                                           ::com::sun::star::sdbc::XResultSetMetaDataSupplier
+                                           > Statement_BASE;
 
 class Statement : public Statement_BASE,
                   public cppu::OPropertySetHelper

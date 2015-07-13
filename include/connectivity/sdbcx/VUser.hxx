@@ -24,7 +24,7 @@
 #include <com/sun/star/sdbcx/XUser.hpp>
 #include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
 #include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <connectivity/sdbcx/VCollection.hxx>
@@ -39,10 +39,10 @@ namespace connectivity
     {
         typedef OCollection OGroups;
 
-        typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::sdbcx::XUser,
-                                                  ::com::sun::star::sdbcx::XGroupsSupplier,
-                                                  ::com::sun::star::container::XNamed,
-                                                  ::com::sun::star::lang::XServiceInfo> OUser_BASE;
+        typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::sdbcx::XUser,
+                                                 ::com::sun::star::sdbcx::XGroupsSupplier,
+                                                 ::com::sun::star::container::XNamed,
+                                                 ::com::sun::star::lang::XServiceInfo> OUser_BASE;
 
         class OOO_DLLPUBLIC_DBTOOLS OUser :
                         public comphelper::OBaseMutex,

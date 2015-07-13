@@ -22,7 +22,7 @@
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include "java/lang/Object.hxx"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <comphelper/logging.hxx>
@@ -31,7 +31,7 @@ namespace connectivity
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL java_sql_Driver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
 
-    class java_sql_Driver : public ::cppu::WeakImplHelper2< ::com::sun::star::sdbc::XDriver,::com::sun::star::lang::XServiceInfo>
+    class java_sql_Driver : public ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XDriver,::com::sun::star::lang::XServiceInfo>
     {
         css::uno::Reference<css::uno::XComponentContext> m_aContext;
         ::comphelper::ResourceBasedEventLogger  m_aLogger;

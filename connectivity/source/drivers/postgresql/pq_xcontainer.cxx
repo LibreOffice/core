@@ -40,7 +40,7 @@
 #include <com/sun/star/sdbc/XParameters.hpp>
 
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "pq_xcontainer.hxx"
 #include "pq_statics.hxx"
@@ -235,7 +235,7 @@ sal_Int32 Container::getCount()
 }
 
 
-class ContainerEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
+class ContainerEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
     com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_vec;
     sal_Int32 m_index;

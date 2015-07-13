@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <salhelper/timer.hxx>
 #include <rtl/ref.hxx>
@@ -59,7 +59,7 @@ namespace connectivity
     // OConnectionPool - the one-instance service for PooledConnections
     // manages the active connections and the connections in the pool
 
-    typedef ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>  OConnectionPool_Base;
+    typedef ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertyChangeListener>  OConnectionPool_Base;
 
     // typedef for the interanl structure
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPooledConnection> > TPooledConnections;

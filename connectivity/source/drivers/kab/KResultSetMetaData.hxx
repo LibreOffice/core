@@ -22,7 +22,7 @@
 
 #include <connectivity/CommonTools.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 namespace connectivity
@@ -32,7 +32,7 @@ namespace connectivity
         /*
         **  KabResultSetMetaData
         */
-        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>   KabResultSetMetaData_BASE;
+        typedef ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XResultSetMetaData>   KabResultSetMetaData_BASE;
 
         class KabResultSetMetaData : public KabResultSetMetaData_BASE
         {

@@ -39,8 +39,7 @@
 
 #include <osl/mutex.hxx>
 
-#include <cppuhelper/compbase2.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -60,11 +59,11 @@ namespace pq_sdbc_driver
 
 struct MutexHolder { osl::Mutex m_mutex; };
 // use this to switch off sdbc support !
-// typedef cppu::WeakComponentImplHelper2<
+// typedef cppu::WeakComponentImplHelper<
 //     com::sun::star::sdbc::XDriver,
 //     com::sun::star::lang::XServiceInfo
 //     > DriverBase ;
-typedef cppu::WeakComponentImplHelper3<
+typedef cppu::WeakComponentImplHelper<
     com::sun::star::sdbc::XDriver,
     com::sun::star::lang::XServiceInfo,
     com::sun::star::sdbcx::XDataDefinitionSupplier > DriverBase ;

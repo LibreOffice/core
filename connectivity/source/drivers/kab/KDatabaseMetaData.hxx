@@ -22,7 +22,7 @@
 
 #include "KConnection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
@@ -32,7 +32,7 @@ namespace connectivity
         //************ Class: KabDatabaseMetaData
 
 
-        typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData> KabDatabaseMetaData_BASE;
+        typedef ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XDatabaseMetaData> KabDatabaseMetaData_BASE;
 
         class KabDatabaseMetaData : public KabDatabaseMetaData_BASE
         {

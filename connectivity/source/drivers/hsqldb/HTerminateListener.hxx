@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_HSQLDB_HTERMINATELISTENER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_HSQLDB_HTERMINATELISTENER_HXX
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 
 
@@ -30,7 +30,7 @@ namespace connectivity
     namespace hsqldb
     {
         class ODriverDelegator;
-        class OConnectionController : public ::cppu::WeakImplHelper1<
+        class OConnectionController : public ::cppu::WeakImplHelper<
                                                     ::com::sun::star::frame::XTerminateListener >
         {
             ODriverDelegator* m_pDriver;

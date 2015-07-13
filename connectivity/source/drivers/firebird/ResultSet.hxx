@@ -26,7 +26,7 @@
 
 #include <connectivity/FValue.hxx>
 #include <connectivity/OSubComponent.hxx>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 
@@ -50,16 +50,16 @@ namespace connectivity
         /*
         **  OResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper7<       ::com::sun::star::sdbc::XResultSet,
-                                                        ::com::sun::star::sdbc::XRow,
-                                                        ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                                        ::com::sun::star::util::XCancellable,
+        typedef ::cppu::WeakComponentImplHelper<       ::com::sun::star::sdbc::XResultSet,
+                                                       ::com::sun::star::sdbc::XRow,
+                                                       ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                                       ::com::sun::star::util::XCancellable,
 #if 0
-                                                        ::com::sun::star::sdbc::XWarningsSupplier,
+                                                       ::com::sun::star::sdbc::XWarningsSupplier,
 #endif
-                                                        ::com::sun::star::sdbc::XCloseable,
-                                                        ::com::sun::star::sdbc::XColumnLocate,
-                                                        ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
+                                                       ::com::sun::star::sdbc::XCloseable,
+                                                       ::com::sun::star::sdbc::XColumnLocate,
+                                                       ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
 
         /**
          * This ResultSet does not deal with the management of the SQLDA

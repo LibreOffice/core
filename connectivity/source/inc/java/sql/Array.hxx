@@ -21,7 +21,7 @@
 
 #include "java/lang/Object.hxx"
 #include <com/sun/star/sdbc/XArray.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
@@ -30,7 +30,7 @@ namespace connectivity
     //************ Class: java.sql.SQLWarning
 
     class java_sql_Array :  public java_lang_Object,
-                                                        public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XArray>
+                                                        public ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XArray>
     {
     protected:
     // Static data for the class

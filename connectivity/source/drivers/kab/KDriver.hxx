@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/module.h>
 
 namespace connectivity
@@ -130,9 +130,9 @@ namespace connectivity
 
         // = KabDriver
 
-        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XDriver,
-                                                    ::com::sun::star::lang::XServiceInfo,
-                                                    ::com::sun::star::frame::XTerminateListener > KDriver_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XDriver,
+                                                   ::com::sun::star::lang::XServiceInfo,
+                                                   ::com::sun::star::frame::XTerminateListener > KDriver_BASE;
         class KabDriver : public KDriver_BASE
         {
         protected:

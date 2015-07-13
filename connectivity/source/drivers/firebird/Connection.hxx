@@ -28,7 +28,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/OSubComponent.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <map>
 #include <OTypeInfo.hxx>
@@ -52,11 +52,11 @@ namespace connectivity
     namespace firebird
     {
 
-        typedef ::cppu::WeakComponentImplHelper4< ::com::sun::star::document::XDocumentEventListener,
-                                                  ::com::sun::star::lang::XServiceInfo,
-                                                  ::com::sun::star::sdbc::XConnection,
-                                                  ::com::sun::star::sdbc::XWarningsSupplier
-                                                > Connection_BASE;
+        typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::document::XDocumentEventListener,
+                                                 ::com::sun::star::lang::XServiceInfo,
+                                                 ::com::sun::star::sdbc::XConnection,
+                                                 ::com::sun::star::sdbc::XWarningsSupplier
+                                               > Connection_BASE;
 
         class OStatementCommonBase;
         class FirebirdDriver;

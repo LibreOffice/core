@@ -31,7 +31,7 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#include <cppuhelper/compbase12.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <tools/gen.hxx>
 #include "MStatement.hxx"
@@ -49,18 +49,18 @@ namespace connectivity
         /*
         **  java_sql_ResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
-                                                        ::com::sun::star::sdbc::XRow,
-                                                        ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                                        ::com::sun::star::util::XCancellable,
-                                                        ::com::sun::star::sdbc::XWarningsSupplier,
-                                                        ::com::sun::star::sdbc::XCloseable,
-                                                        ::com::sun::star::sdbc::XColumnLocate,
-                                                        ::com::sun::star::sdbc::XResultSetUpdate,
-                                                        ::com::sun::star::sdbc::XRowUpdate,
-                                                        ::com::sun::star::sdbcx::XRowLocate,
-                                                        ::com::sun::star::sdbcx::XDeleteRows,
-                                                        ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
+        typedef ::cppu::WeakComponentImplHelper<      ::com::sun::star::sdbc::XResultSet,
+                                                      ::com::sun::star::sdbc::XRow,
+                                                      ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                                      ::com::sun::star::util::XCancellable,
+                                                      ::com::sun::star::sdbc::XWarningsSupplier,
+                                                      ::com::sun::star::sdbc::XCloseable,
+                                                      ::com::sun::star::sdbc::XColumnLocate,
+                                                      ::com::sun::star::sdbc::XResultSetUpdate,
+                                                      ::com::sun::star::sdbc::XRowUpdate,
+                                                      ::com::sun::star::sdbcx::XRowLocate,
+                                                      ::com::sun::star::sdbcx::XDeleteRows,
+                                                      ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
 
 
         typedef sal_Int64 TVoidPtr;

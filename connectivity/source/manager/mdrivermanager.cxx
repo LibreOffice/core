@@ -27,7 +27,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <osl/diagnose.h>
@@ -56,7 +56,7 @@ void throwNoSuchElementException() throw(NoSuchElementException)
     throw NoSuchElementException();
 }
 
-class ODriverEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
+class ODriverEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
     friend class OSDBCDriverManager;
 

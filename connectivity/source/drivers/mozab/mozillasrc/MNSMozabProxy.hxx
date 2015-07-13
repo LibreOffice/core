@@ -23,7 +23,7 @@
 #include <osl/thread.hxx>
 
 #include "MNSInclude.hxx"
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/mozilla/XCodeProxy.hpp>
 #include <com/sun/star/mozilla/XProxyRunner.hpp>
 
@@ -69,7 +69,7 @@ namespace connectivity
                     }
         };
         typedef RunArgs RunArgs;
-        typedef ::cppu::WeakImplHelper1< ::com::sun::star::mozilla::XCodeProxy > MNSMozabProxy_BASE;
+        typedef ::cppu::WeakImplHelper< ::com::sun::star::mozilla::XCodeProxy > MNSMozabProxy_BASE;
 
 
     class MNSMozabProxy : public MNSMozabProxy_BASE

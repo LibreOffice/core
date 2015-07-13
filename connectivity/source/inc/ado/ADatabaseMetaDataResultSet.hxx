@@ -29,7 +29,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "ado/AStatement.hxx"
 #include <comphelper/broadcasthelper.hxx>
@@ -42,13 +42,13 @@ namespace connectivity
         /*
         **  java_sql_ResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper7<   ::com::sun::star::sdbc::XResultSet,
-                                                    ::com::sun::star::sdbc::XRow,
-                                                    ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                                    ::com::sun::star::util::XCancellable,
-                                                    ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::sdbc::XCloseable,
-                                                    ::com::sun::star::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XResultSet,
+                                                   ::com::sun::star::sdbc::XRow,
+                                                   ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                                   ::com::sun::star::util::XCancellable,
+                                                   ::com::sun::star::sdbc::XWarningsSupplier,
+                                                   ::com::sun::star::sdbc::XCloseable,
+                                                   ::com::sun::star::sdbc::XColumnLocate> ODatabaseMetaDataResultSet_BASE;
 
         class ODatabaseMetaDataResultSet :  public comphelper::OBaseMutex,
                                     public  ODatabaseMetaDataResultSet_BASE,

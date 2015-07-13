@@ -25,7 +25,7 @@
 #include <ibase.h>
 
 #include <connectivity/OSubComponent.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <list>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -42,10 +42,10 @@ namespace connectivity
     namespace firebird
     {
 
-        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::util::XCancellable,
-                                                    ::com::sun::star::sdbc::XCloseable,
-                                                    ::com::sun::star::sdbc::XMultipleResults> OStatementCommonBase_Base;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XWarningsSupplier,
+                                                   ::com::sun::star::util::XCancellable,
+                                                   ::com::sun::star::sdbc::XCloseable,
+                                                   ::com::sun::star::sdbc::XMultipleResults> OStatementCommonBase_Base;
 
         class OStatementCommonBase  :   public  OStatementCommonBase_Base,
                                         public  ::cppu::OPropertySetHelper,

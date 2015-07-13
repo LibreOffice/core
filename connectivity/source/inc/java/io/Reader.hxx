@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_IO_READER_HXX
 
 #include "java/lang/Object.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <boost/optional.hpp>
 
@@ -31,7 +31,7 @@ namespace connectivity
     //************ Class: java.io.InputStream
 
     class java_io_Reader : public java_lang_Object,
-                                public ::cppu::WeakImplHelper1< ::com::sun::star::io::XInputStream>
+                                public ::cppu::WeakImplHelper< ::com::sun::star::io::XInputStream>
     {
     protected:
     // static Data for the Class

@@ -20,12 +20,12 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNSTERMINATELISTENER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNSTERMINATELISTENER_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 //class to implement the XTerminateListener interface
-class MNSTerminateListener : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XTerminateListener >
+class MNSTerminateListener : public ::cppu::WeakImplHelper< ::com::sun::star::frame::XTerminateListener >
 {
 
 private:

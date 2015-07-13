@@ -21,7 +21,7 @@
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/module.h>
 
 
@@ -31,8 +31,8 @@ namespace connectivity
 {
     namespace mozab
     {
-        typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::mozilla::XMozillaBootstrap,
-                                                    ::com::sun::star::lang::XServiceInfo > OMozillaBootstrap_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::mozilla::XMozillaBootstrap,
+                                                   ::com::sun::star::lang::XServiceInfo > OMozillaBootstrap_BASE;
         class ProfileAccess;
         class ProfileManager;
         class MozillaBootstrap : public OMozillaBootstrap_BASE

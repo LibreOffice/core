@@ -23,7 +23,7 @@
 
 #include <map>
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverManager2.hpp>
@@ -47,11 +47,11 @@ namespace connectivity
     // OPoolCollection - the one-instance service for PooledConnections
     // manages the active connections and the connections in the pool
 
-    typedef ::cppu::WeakImplHelper4<    ::com::sun::star::sdbc::XConnectionPool,
-                                        ::com::sun::star::lang::XServiceInfo,
-                                        ::com::sun::star::frame::XTerminateListener,
-                                        ::com::sun::star::beans::XPropertyChangeListener
-                                        >   OPoolCollection_Base;
+    typedef ::cppu::WeakImplHelper<    ::com::sun::star::sdbc::XConnectionPool,
+                                       ::com::sun::star::lang::XServiceInfo,
+                                       ::com::sun::star::frame::XTerminateListener,
+                                       ::com::sun::star::beans::XPropertyChangeListener
+                                       >   OPoolCollection_Base;
 
     /// OPoolCollection: control the whole connection pooling for oo
     class OPoolCollection : public OPoolCollection_Base
