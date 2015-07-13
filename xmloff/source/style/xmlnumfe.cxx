@@ -1664,8 +1664,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NUMBERFORMAT_OP_LE: eOp3 = NUMBERFORMAT_OP_GT; break;
                 case NUMBERFORMAT_OP_GT: eOp3 = NUMBERFORMAT_OP_LE; break;
                 case NUMBERFORMAT_OP_GE: eOp3 = NUMBERFORMAT_OP_LT; break;
-                case NUMBERFORMAT_OP_NO: eOp3 = NUMBERFORMAT_OP_LE;
-                                         fLimit3 = ::std::numeric_limits<double>::max(); break;
+                case NUMBERFORMAT_OP_NO: eOp3 = NUMBERFORMAT_OP_LE; fLimit3 = DBL_MAX; break;
             }
 
             if ( fLimit1 == fLimit2 &&
