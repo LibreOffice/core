@@ -11,13 +11,15 @@
 #define INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
 
 #include <svtools/foldertree.hxx>
-#include <svtools/svtdllapi.h>
 #include <svtools/place.hxx>
 #include <svtools/PlaceEditDialog.hxx>
 #include <svtools/breadcrumb.hxx>
 #include <svtools/fileview.hxx>
 
+#include <tools/resid.hxx>
+
 #include <vcl/button.hxx>
+#include <vcl/fpicker.hrc>
 #include <vcl/menubtn.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/vclptr.hxx>
@@ -30,7 +32,8 @@
 
 #include <vector>
 
-#include "../../../fpicker/source/office/fpdialogbase.hxx"
+#include "fpdialogbase.hxx"
+#include "fpsofficeResMgr.hxx"
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
@@ -53,7 +56,7 @@ typedef ::com::sun::star::uno::Sequence< OUString >  OUStringList;
 
 class FileViewContainer;
 
-class SVT_DLLPUBLIC RemoteFilesDialog : public SvtFileDialog_Base
+class RemoteFilesDialog : public SvtFileDialog_Base
 {
 public:
     RemoteFilesDialog( vcl::Window* pParent, WinBits nBits );

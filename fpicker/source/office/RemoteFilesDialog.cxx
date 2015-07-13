@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svtools/RemoteFilesDialog.hxx>
+#include "RemoteFilesDialog.hxx"
 
 class FileViewContainer : public vcl::Window
 {
@@ -757,7 +757,15 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
         bExists = false;
     }
 
-    if ( !bExists )
+    if ( bExists )
+    {
+        OUString sMsg = ResId( STR_SVT_ALREADYEXISTOVERWRITE, *ResMgrHolder::getOrCreate() );
+        sMsg = sMsg.replaceFirst( "$filename$", sName );
+        ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO );
+        if( aBox->Execute() != RET_YES )
+            return 0;
+    }
+    else
     {
         if( m_eMode == REMOTEDLG_MODE_OPEN )
             return 0;

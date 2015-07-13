@@ -139,7 +139,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/dialogs/mcvmath \
     svtools/source/dialogs/PlaceEditDialog \
     svtools/source/dialogs/prnsetup \
-    svtools/source/dialogs/RemoteFilesDialog \
     svtools/source/dialogs/restartdialog \
     svtools/source/dialogs/roadmapwizard \
     svtools/source/dialogs/ServerDetailsControls \

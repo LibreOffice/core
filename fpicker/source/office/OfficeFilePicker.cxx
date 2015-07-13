@@ -20,7 +20,7 @@
 
 #include "OfficeFilePicker.hxx"
 #include "iodlg.hxx"
-#include <svtools/RemoteFilesDialog.hxx>
+#include "RemoteFilesDialog.hxx"
 
 #include <list>
 #include <functional>
