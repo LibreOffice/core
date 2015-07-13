@@ -57,8 +57,7 @@ class SvtFileDialogFilter_Impl;
 class SvtExpFileDlg_Impl;
 class CustomContainer;
 
-class SvtFileDialog : //public ModalDialog, public ::svt::IFilePickerController,
-public SvtFileDialog_Base
+class SvtFileDialog : public SvtFileDialog_Base
 {
 private:
     VclPtr<CheckBox>                   _pCbReadOnly;
