@@ -75,7 +75,6 @@ public:
 
     void                ImplStop();
     void                ImplSetWheelMode( sal_uLong nWheelMode );
-    sal_uLong               ImplGetWheelMode() const { return mnWheelMode; }
 };
 
 #endif // INCLUDED_VCL_SOURCE_WINDOW_SCRWND_HXX

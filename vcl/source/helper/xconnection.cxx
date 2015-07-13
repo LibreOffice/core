@@ -124,23 +124,4 @@ bool DisplayConnection::dispatchEvent( void* pData, int nBytes )
     return false;
 }
 
-bool DisplayConnection::dispatchErrorEvent( void* pData, int nBytes )
-{
-    SolarMutexReleaser aRel;
-
-    Sequence< sal_Int8 > aSeq( static_cast<sal_Int8*>(pData), nBytes );
-    Any aEvent;
-    aEvent <<= aSeq;
-    ::std::list< css::uno::Reference< XEventHandler > > handlers;
-    {
-        MutexGuard aGuard( m_aMutex );
-        handlers = m_aErrorHandlers;
-    }
-    for( ::std::list< css::uno::Reference< XEventHandler > >::const_iterator it = handlers.begin(); it != handlers.end(); ++it )
-        if( (*it)->handleEvent( aEvent ) )
-            return true;
-
-    return false;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,6 +40,7 @@ TODO need to handle places where the code takes the address of a method, that ne
      as a use-site.
 TODO deal with free functions and static methods
 TODO track instantiations of template class constructor methods
+TODO track instantiation of overridden methods when a template class is instantiated
 */
 
 namespace {

@@ -385,11 +385,6 @@ void Control::SetShowAccelerator(bool bVal)
     mbShowAccelerator = bVal;
 };
 
-bool Control::GetShowAccelerator() const
-{
-    return mbShowAccelerator;
-}
-
 ControlLayoutData::~ControlLayoutData()
 {
     if( m_pParent )

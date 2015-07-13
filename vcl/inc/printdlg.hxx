@@ -132,8 +132,6 @@ namespace vcl
             /// border around each page
             VclPtr<CheckBox>                        mpBorderCB;
 
-            void setupLayout();
-
             NUpTabPage( VclBuilder* );
 
             void initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& );

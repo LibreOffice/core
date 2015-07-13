@@ -96,16 +96,11 @@ public:
     void            Slide();
     void            EndSlide();
 
-    void            EnableDrag( bool bEnable = true )
-                        { mbFullDrag = bEnable; }
-    bool            IsDragEnabled() const { return mbFullDrag; }
-
     void            SetRangeMin(long nNewRange);
     long            GetRangeMin() const { return mnMinRange; }
     void            SetRangeMax(long nNewRange);
     long            GetRangeMax() const { return mnMaxRange; }
     void            SetRange( const Range& rRange );
-    Range           GetRange() const { return Range( GetRangeMin(), GetRangeMax() ); }
     void            SetThumbPos( long nThumbPos );
     long            GetThumbPos() const { return mnThumbPos; }
     void            SetLineSize( long nNewSize ) { mnLineSize = nNewSize; }
@@ -113,16 +108,12 @@ public:
     void            SetPageSize( long nNewSize ) { mnPageSize = nNewSize; }
     long            GetPageSize() const { return mnPageSize; }
 
-    long            GetDelta() const { return mnDelta; }
-
     Size            CalcWindowSizePixel();
 
     void            SetLinkedField(VclPtr<NumericField> pField);
 
     void            SetSlideHdl( const Link<>& rLink ) { maSlideHdl = rLink; }
-    const Link<>&   GetSlideHdl() const { return maSlideHdl;    }
     void            SetEndSlideHdl( const Link<>& rLink ) { maEndSlideHdl = rLink; }
-    const Link<>&     GetEndSlideHdl() const { return maEndSlideHdl; }
 };
 
 #endif // INCLUDED_VCL_SLIDER_HXX
