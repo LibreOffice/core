@@ -1251,10 +1251,10 @@ void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
     DBG_ASSERT(pParaList->GetParagraphCount()==pEditEngine->GetParagraphCount(),"ImpTextPasted failed");
 }
 
-long Outliner::IndentingPagesHdl( OutlinerView* pView )
+bool Outliner::IndentingPagesHdl( OutlinerView* pView )
 {
     if( !aIndentingPagesHdl.IsSet() )
-        return 1;
+        return true;
     return aIndentingPagesHdl.Call( pView );
 }
 

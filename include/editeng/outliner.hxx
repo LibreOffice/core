@@ -596,7 +596,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     Link<Outliner*,void>           aDepthChangedHdl;
     Link<Outliner*,void>           aBeginMovingHdl;
     Link<Outliner*,void>           aEndMovingHdl;
-    Link<OutlinerView*,long>       aIndentingPagesHdl;
+    Link<OutlinerView*,bool>       aIndentingPagesHdl;
     Link<OutlinerView*,bool>       aRemovingPagesHdl;
     Link<EditFieldInfo*,void>      aFieldClickedHdl;
     Link<EditFieldInfo*,void>      aCalcFieldValueHdl;
@@ -775,9 +775,8 @@ public:
     bool            RemovingPagesHdl( OutlinerView* );
     void            SetRemovingPagesHdl(const Link<OutlinerView*,bool>& rLink){aRemovingPagesHdl=rLink;}
     Link<OutlinerView*,bool> GetRemovingPagesHdl() const { return aRemovingPagesHdl; }
-    long            IndentingPagesHdl( OutlinerView* );
-    void            SetIndentingPagesHdl(const Link<OutlinerView*,long>& rLink){aIndentingPagesHdl=rLink;}
-    Link<OutlinerView*,long> GetIndentingPagesHdl() const { return aIndentingPagesHdl; }
+    bool            IndentingPagesHdl( OutlinerView* );
+    void            SetIndentingPagesHdl(const Link<OutlinerView*,bool>& rLink){aIndentingPagesHdl=rLink;}
     // valid only in the two upper handlers
     sal_Int32       GetSelPageCount() const { return nDepthChangedHdlPrevDepth; }
 

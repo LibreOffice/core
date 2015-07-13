@@ -1194,9 +1194,9 @@ IMPL_LINK_NOARG_TYPED(OutlineView, RemovingPagesHdl, OutlinerView*, bool)
 /**
  * Handler for indenting level 0 paragraphs (pages): Warning
  */
-IMPL_LINK_TYPED( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView, long )
+IMPL_LINK_TYPED( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView, bool )
 {
-    return RemovingPagesHdl(pOutlinerView) ? 1 : 0;
+    return RemovingPagesHdl(pOutlinerView);
 }
 
 /** returns the first slide that is selected in the outliner or where
@@ -1371,7 +1371,7 @@ void OutlineView::ResetLinks() const
     mrOutliner.SetEndMovingHdl(Link<::Outliner*,void>());
     mrOutliner.SetStatusEventHdl(aEmptyLink);
     mrOutliner.SetRemovingPagesHdl(Link<OutlinerView*,bool>());
-    mrOutliner.SetIndentingPagesHdl(Link<OutlinerView*,long>());
+    mrOutliner.SetIndentingPagesHdl(Link<OutlinerView*,bool>());
     mrOutliner.SetDrawPortionHdl(Link<DrawPortionInfo*,void>());
     mrOutliner.SetBeginPasteOrDropHdl(Link<PasteOrDropInfos*,void>());
     mrOutliner.SetEndPasteOrDropHdl(Link<PasteOrDropInfos*,void>());

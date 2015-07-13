@@ -102,7 +102,7 @@ public:
     DECL_LINK_TYPED( BeginMovingHdl, Outliner *, void );
     DECL_LINK_TYPED( EndMovingHdl, Outliner *, void );
     DECL_LINK_TYPED( RemovingPagesHdl, OutlinerView *, bool );
-    DECL_LINK_TYPED( IndentingPagesHdl, OutlinerView *, long );
+    DECL_LINK_TYPED( IndentingPagesHdl, OutlinerView *, bool );
     DECL_LINK( BeginDropHdl, void * );
     DECL_LINK( EndDropHdl, void * );
     DECL_LINK_TYPED( PaintingFirstLineHdl, PaintFirstLineInfo*, void );
