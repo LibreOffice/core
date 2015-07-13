@@ -92,6 +92,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/contnr/DocumentInfoPreview \
     svtools/source/contnr/contentenumeration \
     svtools/source/contnr/fileview \
+    svtools/source/contnr/foldertree \
     svtools/source/contnr/imivctl1 \
     svtools/source/contnr/imivctl2 \
     svtools/source/contnr/ivctrl \

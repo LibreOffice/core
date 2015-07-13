@@ -10,18 +10,15 @@
 #ifndef INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
 #define INCLUDED_SVTOOLS_REMOTEFILESDIALOG_HXX
 
+#include <svtools/foldertree.hxx>
 #include <svtools/svtdllapi.h>
 #include <svtools/place.hxx>
 #include <svtools/PlaceEditDialog.hxx>
-#include <svtools/svtools.hrc>
-#include <svtools/svtresid.hxx>
 #include <svtools/breadcrumb.hxx>
 #include <svtools/fileview.hxx>
-#include <svtools/treelistentry.hxx>
 
 #include <vcl/button.hxx>
 #include <vcl/menubtn.hxx>
-#include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/vclptr.hxx>
 #include <vcl/split.hxx>
@@ -30,11 +27,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#include <com/sun/star/ucb/XProgressHandler.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/task/InteractionHandler.hpp>
-#include <ucbhelper/commandenvironment.hxx>
 
 #include <vector>
 
@@ -42,11 +34,7 @@
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::ui::dialogs;
-using namespace ::comphelper;
-using namespace ::svt;
 
 enum SvtRemoteDlgMode
 {
@@ -64,8 +52,6 @@ typedef std::shared_ptr< Place > ServicePtr;
 typedef ::com::sun::star::uno::Sequence< OUString >  OUStringList;
 
 class FileViewContainer;
-class Breadcrumb;
-class FolderTree;
 
 class SVT_DLLPUBLIC RemoteFilesDialog : public SvtFileDialog_Base
 {
