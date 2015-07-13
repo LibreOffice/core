@@ -333,12 +333,9 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getFiles()
         SalYieldMutexReleaser release;
         return Q_EMIT getFilesSignal();
     }
-
-    KUrl::List urls = _dialog->selectedUrls();
-    uno::Sequence< OUString > seq( urls.size());
-    int i = 0;
-    foreach( const KUrl& url, urls )
-        seq[ i++ ]= toOUString( url.url());
+    uno::Sequence< OUString > seq = getSelectedFiles();
+    if (seq.getLength() > 1)
+        seq.realloc(1);
     return seq;
 }
 
@@ -349,8 +346,12 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getSelectedFiles()
         SalYieldMutexReleaser release;
         return Q_EMIT getSelectedFilesSignal();
     }
-
-    return getFiles();
+    KUrl::List urls = _dialog->selectedUrls();
+    uno::Sequence< OUString > seq( urls.size());
+    int i = 0;
+    foreach( const KUrl& url, urls )
+        seq[ i++ ]= toOUString( url.url());
+    return seq;
 }
 
 void SAL_CALL KDE4FilePicker::appendFilter( const OUString &title, const OUString &filter )
