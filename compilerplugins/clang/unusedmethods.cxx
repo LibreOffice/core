@@ -33,7 +33,6 @@ to auto-remove the method declarations
 Note that the actual process may involve a fair amount of undoing, hand editing, and general messing around
 to get it to work :-)
 
-TODO ignore calls from a method to itself, so we can eliminate unused recursive methods
 TODO deal with calls to superclass/member constructors from other constructors, so
      we can find unused constructors
 TODO need to handle places where the code takes the address of a method, that needs to count
@@ -139,7 +138,7 @@ static bool isStandardStuff(const std::string& s)
 }
 
 // prevent recursive templates from blowing up the stack
-static std::set<std::string> traversedTemplateFunctionSet;
+static std::set<std::string> traversedFunctionSet;
 
 bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 {
@@ -150,14 +149,12 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
     if (calleeFunctionDecl == nullptr) {
         return true;
     }
-    // if we see a call to a templated function, it effectively creates new code,
-    // so we need to examine it's interior to see if it, in turn, calls anything else
-    if (calleeFunctionDecl->getTemplatedKind() != FunctionDecl::TemplatedKind::TK_NonTemplate
-        || calleeFunctionDecl->isFunctionTemplateSpecialization())
-    {
-        if (traversedTemplateFunctionSet.insert(calleeFunctionDecl->getQualifiedNameAsString()).second)
-            TraverseFunctionDecl(calleeFunctionDecl);
-    }
+    // if we see a call to a function, it may effectively create new code,
+    // if the function is templated. However, if we are inside a template function,
+    // calling another function on the same template, the same problem occurs.
+    // Rather than tracking all of that, just traverse anything we have not already traversed.
+    if (traversedFunctionSet.insert(calleeFunctionDecl->getQualifiedNameAsString()).second)
+        TraverseFunctionDecl(calleeFunctionDecl);
 
     CXXMethodDecl* calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(calleeFunctionDecl);
     if (calleeMethodDecl == nullptr) {

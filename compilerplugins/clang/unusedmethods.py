@@ -29,7 +29,6 @@ exclusionSet = set([
     "void comphelper::IEventProcessor::release()",
     "void SotMutexHolder::acquire()",
     "void SotMutexHolder::release()",
-    "class Rectangle ComboBox::GetDropDownPosSizePixel() const"
     # only used by Windows build
     "_Bool basegfx::B2ITuple::equalZero() const",
     "class basegfx::B2DPolyPolygon basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const",
@@ -47,7 +46,7 @@ exclusionSet = set([
     "int PhysicalFontFace::GetWidth() const",
     "void PhysicalFontFace::SetBitmapSize(int,int)",
     "_Bool SalObject::IsEraseBackgroundEnabled()",
-    # instantiated from a template in VCL, not sure why it is not being picked up
+    # instantiated from templates, not sure why it is not being picked up
     "class basegfx::B2DPolygon OutputDevice::PixelToLogic(const class basegfx::B2DPolygon &,const class MapMode &) const",
     # only used by OSX build
     "void StyleSettings::SetHideDisabledMenuItems(_Bool)",
