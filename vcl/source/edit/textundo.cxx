@@ -108,7 +108,6 @@ bool TextUndoManager::Redo()
 void TextUndoManager::UndoRedoStart()
 {
     DBG_ASSERT( GetView(), "Undo/Redo: Active View?" );
-    (void) this; // avoid loplugin:staticmethods
 }
 
 void TextUndoManager::UndoRedoEnd()
