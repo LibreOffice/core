@@ -20,17 +20,7 @@
 #ifndef INCLUDED_SVX_GRFFLT_HXX
 #define INCLUDED_SVX_GRFFLT_HXX
 
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
-#include <vcl/timer.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/group.hxx>
-#include <vcl/salbtype.hxx>
 #include <svtools/grfmgr.hxx>
-#include <svx/graphctl.hxx>
-#include <svx/dlgctrl.hxx>
-#include <svx/rectenum.hxx>
 #include <svx/svxdllapi.h>
 
 
