@@ -134,7 +134,7 @@ public:
 
 protected:
     /** Creates a new accessible object. */
-    virtual ScAccessibleCsvControl* ImplCreateAccessible() SAL_OVERRIDE;
+    virtual rtl::Reference<ScAccessibleCsvControl> ImplCreateAccessible() SAL_OVERRIDE;
 };
 
 #endif

@@ -45,7 +45,7 @@ public:
 class ParserTest: public test::BootstrapFixture
 {
     InputSource maInput;
-    sax_fastparser::FastSaxParser maParser;
+    uno::Reference< sax_fastparser::FastSaxParser > mxParser;
     uno::Reference< XFastDocumentHandler > mxDocumentHandler;
     uno::Reference< DummyTokenHandler > mxTokenHandler;
 
@@ -67,7 +67,8 @@ void ParserTest::setUp()
 {
     test::BootstrapFixture::setUp();
     mxTokenHandler.set( new DummyTokenHandler() );
-    maParser.setTokenHandler( mxTokenHandler );
+    mxParser.set( new sax_fastparser::FastSaxParser() );
+    mxParser->setTokenHandler( mxTokenHandler.get() );
 }
 
 void ParserTest::tearDown()
@@ -89,13 +90,13 @@ uno::Reference< io::XInputStream > ParserTest::createStream(const OString& sInpu
 void ParserTest::parse()
 {
     maInput.aInputStream = createStream("<a>...<b />..</a>");
-    maParser.parseStream( maInput );
+    mxParser->parseStream( maInput );
 
     maInput.aInputStream = createStream("<b></a>");
     bool bException = false;
     try
     {
-        maParser.parseStream( maInput );
+        mxParser->parseStream( maInput );
     }
     catch (const SAXParseException &)
     {

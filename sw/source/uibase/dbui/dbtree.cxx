@@ -494,14 +494,14 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
         if( !sColumnName.isEmpty() )
         {
             // drag database field
-            svx::OColumnTransferable aColTransfer(
+            uno::Reference< svx::OColumnTransferable > xColTransfer( new svx::OColumnTransferable(
                             sDBName,
                             OUString(),
                             sdb::CommandType::TABLE,
                             sTableName,
                             sColumnName,
-                            (ColumnTransferFormatFlags::FIELD_DESCRIPTOR|ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) );
-            aColTransfer.addDataToContainer( pContainer );
+                            (ColumnTransferFormatFlags::FIELD_DESCRIPTOR|ColumnTransferFormatFlags::COLUMN_DESCRIPTOR) ) );
+            xColTransfer->addDataToContainer( pContainer );
         }
 
         sDBName += "." + sTableName;

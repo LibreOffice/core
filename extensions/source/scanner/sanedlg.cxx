@@ -906,8 +906,8 @@ void SaneDlg::AcquirePreview()
     else
         mrSane.SetOptionValue( nOption, true );
 
-    BitmapTransporter aTransporter;
-    if( ! mrSane.Start( aTransporter ) )
+    Reference<BitmapTransporter> xTransporter(new BitmapTransporter);
+    if( ! mrSane.Start( *xTransporter.get() ) )
     {
         ScopedVclPtrInstance< MessageDialog > aErrorBox(this, SaneResId(STR_ERROR_SCAN));
         aErrorBox->Execute();
@@ -915,11 +915,11 @@ void SaneDlg::AcquirePreview()
     else
     {
 #if OSL_DEBUG_LEVEL > 1
-        aTransporter.getStream().Seek( STREAM_SEEK_TO_END );
-        fprintf( stderr, "Previewbitmapstream contains %d bytes\n", (int)aTransporter.getStream().Tell() );
+        xTransporter->getStream().Seek( STREAM_SEEK_TO_END );
+        fprintf( stderr, "Previewbitmapstream contains %d bytes\n", (int)xTransporter->getStream().Tell() );
 #endif
-        aTransporter.getStream().Seek( STREAM_SEEK_TO_BEGIN );
-        mpPreview->SetBitmap(aTransporter.getStream());
+        xTransporter->getStream().Seek( STREAM_SEEK_TO_BEGIN );
+        mpPreview->SetBitmap(xTransporter->getStream());
     }
 
     SetAdjustedNumericalValue( "resolution", fResl );

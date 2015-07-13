@@ -521,8 +521,8 @@ namespace cmis
                     aParentUrl.removeSegment( );
                     OUString sParentUrl = aParentUrl.GetMainURL( INetURLObject::NO_DECODE );
 
-                    Content aParent( m_xContext, m_pProvider, new ucbhelper::ContentIdentifier( sParentUrl ) );
-                    libcmis::FolderPtr pParentFolder = boost::dynamic_pointer_cast< libcmis::Folder >( aParent.getObject( xEnv ) );
+                    uno::Reference<Content> xParent( new Content(m_xContext, m_pProvider, new ucbhelper::ContentIdentifier( sParentUrl )) );
+                    libcmis::FolderPtr pParentFolder = boost::dynamic_pointer_cast< libcmis::Folder >( xParent->getObject( xEnv ) );
                     if ( pParentFolder )
                     {
                         vector< libcmis::ObjectPtr > children = pParentFolder->getChildren( );

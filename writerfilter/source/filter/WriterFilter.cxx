@@ -159,8 +159,8 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
         try
         {
             // use the oox.core.FilterDetect implementation to extract the decrypted ZIP package
-            ::oox::core::FilterDetect aDetector(m_xContext);
-            xInputStream = aDetector.extractUnencryptedPackage(aMediaDesc);
+            uno::Reference<::oox::core::FilterDetect> xDetector(new ::oox::core::FilterDetect(m_xContext));
+            xInputStream = xDetector->extractUnencryptedPackage(aMediaDesc);
         }
         catch (uno::Exception&)
         {

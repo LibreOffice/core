@@ -426,7 +426,7 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
     uno::Reference<xml::sax::XDocumentHandler> const xHandler(
             xWriter, uno::UNO_QUERY);
 
-    StoredChapterNumberingExport exp(xContext, rFileName, xWriter);
+    uno::Reference<StoredChapterNumberingExport> exp(new StoredChapterNumberingExport(xContext, rFileName, xWriter));
 
     // if style name contains a space then name != display-name
     // ... and the import needs to map from name to display-name then!
@@ -452,7 +452,7 @@ void ExportStoredChapterNumberingRules(SwChapterNumRules & rRules,
 
     try
     {
-        exp.ExportRules(charStyles, numRules);
+        exp->ExportRules(charStyles, numRules);
     }
     catch (uno::Exception const& e)
     {

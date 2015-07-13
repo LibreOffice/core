@@ -86,7 +86,7 @@ namespace drawinglayer
         Primitive2DSequence SdrMeasurePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const
         {
             Primitive2DSequence aRetval;
-            boost::scoped_ptr<SdrBlockTextPrimitive2D> pBlockText;
+            css::uno::Reference<SdrBlockTextPrimitive2D> xBlockText;
             basegfx::B2DRange aTextRange;
             double fTextX((getStart().getX() + getEnd().getX()) * 0.5);
             double fTextY((getStart().getX() + getEnd().getX()) * 0.5);
@@ -125,7 +125,7 @@ namespace drawinglayer
                 }
 
                 // create primitive and get text range
-                pBlockText.reset(new SdrBlockTextPrimitive2D(
+                xBlockText = new SdrBlockTextPrimitive2D(
                     &rTextAttribute.getSdrText(),
                     rTextAttribute.getOutlinerParaObject(),
                     aTextMatrix,
@@ -135,9 +135,9 @@ namespace drawinglayer
                     false,
                     false,
                     false,
-                    false));
+                    false);
 
-                aTextRange = pBlockText->getB2DRange(aViewInformation);
+                aTextRange = xBlockText->getB2DRange(aViewInformation);
             }
 
             // prepare line attribute and result
@@ -401,7 +401,7 @@ namespace drawinglayer
                 aRetval = Primitive2DSequence(&xHiddenLines, 1);
             }
 
-            if(pBlockText)
+            if(xBlockText.is())
             {
                 // create transformation to text primitive end position
                 basegfx::B2DHomMatrix aChange;
@@ -419,9 +419,9 @@ namespace drawinglayer
                 aChange *= aObjectMatrix;
 
                 // apply to existing text primitive
-                SdrTextPrimitive2D* pNewBlockText = pBlockText->createTransformedClone(aChange);
+                SdrTextPrimitive2D* pNewBlockText = xBlockText->createTransformedClone(aChange);
                 OSL_ENSURE(pNewBlockText, "SdrMeasurePrimitive2D::create2DDecomposition: Could not create transformed clone of text primitive (!)");
-                pBlockText.reset();
+                xBlockText.clear();
 
                 // add to local primitives
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, Primitive2DReference(pNewBlockText));

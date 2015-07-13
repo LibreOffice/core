@@ -110,112 +110,112 @@ void Test::testUnoTextFields()
 {
     {
         // DATE
-        SvxUnoTextField aField(text::textfield::Type::DATE);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::DATE));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.DateTime");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // URL
-        SvxUnoTextField aField(text::textfield::Type::URL);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::URL));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.URL");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // PAGE
-        SvxUnoTextField aField(text::textfield::Type::PAGE);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::PAGE));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.PageNumber");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // PAGES
-        SvxUnoTextField aField(text::textfield::Type::PAGES);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::PAGES));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.PageCount");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // TIME
-        SvxUnoTextField aField(text::textfield::Type::TIME);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::TIME));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.DateTime");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // FILE
-        SvxUnoTextField aField(text::textfield::Type::DOCINFO_TITLE);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::DOCINFO_TITLE));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.docinfo.Title");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // TABLE
-        SvxUnoTextField aField(text::textfield::Type::TABLE);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::TABLE));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.SheetName");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // EXTENDED TIME
-        SvxUnoTextField aField(text::textfield::Type::EXTENDED_TIME);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::EXTENDED_TIME));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.DateTime");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // EXTENDED FILE
-        SvxUnoTextField aField(text::textfield::Type::EXTENDED_FILE);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::EXTENDED_FILE));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.FileName");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // AUTHOR
-        SvxUnoTextField aField(text::textfield::Type::AUTHOR);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::AUTHOR));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.Author");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // MEASURE
-        SvxUnoTextField aField(text::textfield::Type::MEASURE);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::MEASURE));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.Measure");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // PRESENTATION HEADER
-        SvxUnoTextField aField(text::textfield::Type::PRESENTATION_HEADER);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::PRESENTATION_HEADER));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.presentation.textfield.Header");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // PRESENTATION FOOTER
-        SvxUnoTextField aField(text::textfield::Type::PRESENTATION_FOOTER);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::PRESENTATION_FOOTER));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.presentation.textfield.Footer");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }
 
     {
         // PRESENTATION DATE TIME
-        SvxUnoTextField aField(text::textfield::Type::PRESENTATION_DATE_TIME);
-        uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
+        uno::Reference<SvxUnoTextField> xField(new SvxUnoTextField(text::textfield::Type::PRESENTATION_DATE_TIME));
+        uno::Sequence<OUString> aSvcs = xField->getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.presentation.textfield.DateTime");
         CPPUNIT_ASSERT_MESSAGE("expected service is not present.", bGood);
     }

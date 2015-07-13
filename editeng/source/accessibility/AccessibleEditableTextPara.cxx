@@ -1612,11 +1612,11 @@ namespace accessibility
 //                  SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
 //                      ImplGetSvxCharAndParaPropertiesMap() );
                     // MT IA2 TODO: Check if this is the correct replacement for ImplGetSvxCharAndParaPropertiesMap
-                    SvxAccessibleTextPropertySet aPropSet( &GetEditSource(), ImplGetSvxTextPortionSvxPropertySet() );
+                    uno::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(), ImplGetSvxTextPortionSvxPropertySet() ) );
 
-                    aPropSet.SetSelection( MakeSelection( 0, GetTextLen() ) );
-                    rRes.Value = aPropSet._getPropertyValue( rRes.Name, mnParagraphIndex );
-                    rRes.State = aPropSet._getPropertyState( rRes.Name, mnParagraphIndex );
+                    xPropSet->SetSelection( MakeSelection( 0, GetTextLen() ) );
+                    rRes.Value = xPropSet->_getPropertyValue( rRes.Name, mnParagraphIndex );
+                    rRes.State = xPropSet->_getPropertyState( rRes.Name, mnParagraphIndex );
                     rRes.Handle = -1;
                 }
                 continue;
@@ -1635,10 +1635,10 @@ namespace accessibility
                 else
                 {
                     // MT IA2 TODO: Check if this is the correct replacement for ImplGetSvxCharAndParaPropertiesMap
-                    SvxAccessibleTextPropertySet aPropSet( &GetEditSource(), ImplGetSvxTextPortionSvxPropertySet() );
-                    aPropSet.SetSelection( MakeSelection( 0, GetTextLen() ) );
-                    rRes.Value = aPropSet._getPropertyValue( rRes.Name, mnParagraphIndex );
-                    rRes.State = aPropSet._getPropertyState( rRes.Name, mnParagraphIndex );
+                    uno::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(), ImplGetSvxTextPortionSvxPropertySet() ) );
+                    xPropSet->SetSelection( MakeSelection( 0, GetTextLen() ) );
+                    rRes.Value = xPropSet->_getPropertyValue( rRes.Name, mnParagraphIndex );
+                    rRes.State = xPropSet->_getPropertyState( rRes.Name, mnParagraphIndex );
                     rRes.Handle = -1;
                 }
                 continue;
@@ -2416,13 +2416,13 @@ namespace accessibility
 
             // do the indices span the whole paragraph? Then use the outliner map
             // TODO: hold it as a member?
-            SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
+            uno::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(),
                                                    0 == nStartIndex &&
                                                    rCacheTF.GetTextLen(nPara) == nEndIndex ?
                                                    ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() :
-                                                   ImplGetSvxTextPortionSvxPropertySet() );
+                                                   ImplGetSvxTextPortionSvxPropertySet() ) );
 
-            aPropSet.SetSelection( MakeSelection(nStartIndex, nEndIndex) );
+            xPropSet->SetSelection( MakeSelection(nStartIndex, nEndIndex) );
 
             // convert from PropertyValue to Any
             sal_Int32 i, nLength( aAttributeSet.getLength() );
@@ -2431,7 +2431,7 @@ namespace accessibility
             {
                 try
                 {
-                    aPropSet.setPropertyValue(pPropArray->Name, pPropArray->Value);
+                    xPropSet->setPropertyValue(pPropArray->Name, pPropArray->Value);
                 }
                 catch (const uno::Exception&)
                 {
@@ -2481,10 +2481,10 @@ namespace accessibility
 
         // get XPropertySetInfo for paragraph attributes and
         // character attributes that span all the paragraphs text.
-        SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
-                ImplGetSvxCharAndParaPropertiesSet() );
-        aPropSet.SetSelection( MakeSelection( 0, GetTextLen() ) );
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo = aPropSet.getPropertySetInfo();
+        uno::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(),
+                ImplGetSvxCharAndParaPropertiesSet() ) );
+        xPropSet->SetSelection( MakeSelection( 0, GetTextLen() ) );
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
         if (!xPropSetInfo.is())
             throw uno::RuntimeException("Cannot query XPropertySetInfo",
                         uno::Reference< uno::XInterface >
@@ -2530,7 +2530,7 @@ namespace accessibility
             // calling implementation functions:
             // _getPropertyState and _getPropertyValue (see below) to provide
             // the proper paragraph number when retrieving paragraph attributes
-            PropertyState eState = aPropSet._getPropertyState( pProperties->Name, mnParagraphIndex );
+            PropertyState eState = xPropSet->_getPropertyState( pProperties->Name, mnParagraphIndex );
             if ( eState == PropertyState_AMBIGUOUS_VALUE )
             {
                 OSL_FAIL( "ambiguous property value encountered" );
@@ -2543,7 +2543,7 @@ namespace accessibility
             {
                 pOutSequence->Name      = pProperties->Name;
                 pOutSequence->Handle    = pProperties->Handle;
-                pOutSequence->Value     = aPropSet._getPropertyValue( pProperties->Name, mnParagraphIndex );
+                pOutSequence->Value     = xPropSet->_getPropertyValue( pProperties->Name, mnParagraphIndex );
                 pOutSequence->State     = PropertyState_DEFAULT_VALUE;
 
                 ++pOutSequence;
@@ -2583,10 +2583,10 @@ namespace accessibility
         else
             CheckPosition(nIndex);
 
-        SvxAccessibleTextPropertySet aPropSet( &GetEditSource(),
-                                               ImplGetSvxCharAndParaPropertiesSet() );
-        aPropSet.SetSelection( MakeSelection( nIndex ) );
-        uno::Reference< beans::XPropertySetInfo > xPropSetInfo = aPropSet.getPropertySetInfo();
+        uno::Reference< SvxAccessibleTextPropertySet > xPropSet( new SvxAccessibleTextPropertySet( &GetEditSource(),
+                                               ImplGetSvxCharAndParaPropertiesSet() ) );
+        xPropSet->SetSelection( MakeSelection( nIndex ) );
+        uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
         if (!xPropSetInfo.is())
             throw uno::RuntimeException("Cannot query XPropertySetInfo",
                                         uno::Reference< uno::XInterface >
@@ -2630,12 +2630,12 @@ namespace accessibility
         for (sal_Int32 i = 0;  i < nLength;  ++i)
         {
             // calling 'regular' functions that will operate on the selection
-            PropertyState eState = aPropSet.getPropertyState( pProperties->Name );
+            PropertyState eState = xPropSet->getPropertyState( pProperties->Name );
             if (eState == PropertyState_DIRECT_VALUE)
             {
                 pOutSequence->Name      = pProperties->Name;
                 pOutSequence->Handle    = pProperties->Handle;
-                pOutSequence->Value     = aPropSet.getPropertyValue( pProperties->Name );
+                pOutSequence->Value     = xPropSet->getPropertyValue( pProperties->Name );
                 pOutSequence->State     = eState;
 
                 ++pOutSequence;

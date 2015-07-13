@@ -42,7 +42,7 @@ OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
 #endif
     , mpDocument( pDocument )
     , mnXNoteId( nXNoteId )
-    , mpContextHandler()
+    , mxContextHandler()
 {
 }
 
@@ -119,20 +119,19 @@ throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 #endif
 }
 
-OOXMLFastContextHandler::Pointer_t
+uno::Reference< OOXMLFastContextHandler >
 OOXMLFastDocumentHandler::getContextHandler() const
 {
-    if (mpContextHandler == OOXMLFastContextHandler::Pointer_t())
+    if (!mxContextHandler.is())
     {
-        mpContextHandler.reset
-        (new OOXMLFastContextHandler(m_xContext));
-        mpContextHandler->setStream(mpStream);
-        mpContextHandler->setDocument(mpDocument);
-        mpContextHandler->setXNoteId(mnXNoteId);
-        mpContextHandler->setForwardEvents(true);
+        mxContextHandler = new OOXMLFastContextHandler(m_xContext);
+        mxContextHandler->setStream(mpStream);
+        mxContextHandler->setDocument(mpDocument);
+        mxContextHandler->setXNoteId(mnXNoteId);
+        mxContextHandler->setForwardEvents(true);
     }
 
-    return mpContextHandler;
+    return mxContextHandler;
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL

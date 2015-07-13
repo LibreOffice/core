@@ -50,7 +50,7 @@ private:
     UUIInteractionHelper * m_pImpl;
 
     UUIInteractionRequestStringResolver(UUIInteractionRequestStringResolver &) SAL_DELETED_FUNCTION;
-    void operator =(UUIInteractionRequestStringResolver) SAL_DELETED_FUNCTION;
+    void operator =(UUIInteractionRequestStringResolver&) SAL_DELETED_FUNCTION;
 
     explicit UUIInteractionRequestStringResolver(
         com::sun::star::uno::Reference<

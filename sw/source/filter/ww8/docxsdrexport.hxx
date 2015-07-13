@@ -63,9 +63,9 @@ public:
     const Size* getFlyFrameSize();
     bool getTextFrameSyntax();
     bool getDMLTextFrameSyntax();
-    std::unique_ptr<sax_fastparser::FastAttributeList>& getFlyAttrList();
+    css::uno::Reference<sax_fastparser::FastAttributeList>& getFlyAttrList();
     /// Attributes of the next v:textbox element.
-    std::unique_ptr<sax_fastparser::FastAttributeList>& getTextboxAttrList();
+    css::uno::Reference<sax_fastparser::FastAttributeList>& getTextboxAttrList();
     OStringBuffer& getTextFrameStyle();
     /// Same, as DocxAttributeOutput::m_bBtLr, but for textframe rotation.
     bool getFrameBtLr();
@@ -77,12 +77,12 @@ public:
     bool IsDMLAndVMLDrawingOpen();
     bool IsParagraphHasDrawing();
     void setParagraphHasDrawing(bool bParagraphHasDrawing);
-    std::unique_ptr<sax_fastparser::FastAttributeList>& getFlyFillAttrList();
+    css::uno::Reference<sax_fastparser::FastAttributeList>& getFlyFillAttrList();
     sax_fastparser::FastAttributeList* getFlyWrapAttrList();
     void setFlyWrapAttrList(sax_fastparser::FastAttributeList* pAttrList);
     /// Attributes of <wps:bodyPr>, used during DML export of text frames.
     sax_fastparser::FastAttributeList* getBodyPrAttrList();
-    std::unique_ptr<sax_fastparser::FastAttributeList>& getDashLineStyle();
+    css::uno::Reference<sax_fastparser::FastAttributeList>& getDashLineStyle();
 
     void startDMLAnchorInline(const SwFrameFormat* pFrameFormat, const Size& rSize);
     void endDMLAnchorInline(const SwFrameFormat* pFrameFormat);

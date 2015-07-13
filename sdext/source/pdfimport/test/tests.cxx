@@ -468,14 +468,14 @@ namespace
 
         void testOdfDrawExport()
         {
-            pdfi::PDFIRawAdaptor aAdaptor( OUString(), getComponentContext() );
-            aAdaptor.setTreeVisitorFactory( createDrawTreeVisitorFactory() );
+            uno::Reference<pdfi::PDFIRawAdaptor> xAdaptor( new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()) );
+            xAdaptor->setTreeVisitorFactory( createDrawTreeVisitorFactory() );
 
             OUString tempFileURL;
             CPPUNIT_ASSERT( osl::File::createTempFile( NULL, NULL, &tempFileURL ) == osl::File::E_None );
             osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                                   aAdaptor.odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
+                                   xAdaptor->odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                                         new OutputWrap(tempFileURL),
                                                         NULL ));
             osl::File::remove( tempFileURL );
@@ -483,14 +483,14 @@ namespace
 
         void testOdfWriterExport()
         {
-            pdfi::PDFIRawAdaptor aAdaptor( OUString(), getComponentContext() );
-            aAdaptor.setTreeVisitorFactory( createWriterTreeVisitorFactory() );
+            uno::Reference<pdfi::PDFIRawAdaptor> xAdaptor( new pdfi::PDFIRawAdaptor(OUString(), getComponentContext()) );
+            xAdaptor->setTreeVisitorFactory( createWriterTreeVisitorFactory() );
 
             OUString tempFileURL;
             CPPUNIT_ASSERT( osl::File::createTempFile( NULL, NULL, &tempFileURL ) == osl::File::E_None );
             osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
-                                   aAdaptor.odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
+                                   xAdaptor->odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                                         new OutputWrap(tempFileURL),
                                                         NULL ));
             osl::File::remove( tempFileURL );

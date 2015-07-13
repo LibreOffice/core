@@ -22,6 +22,7 @@
 
 #include <svl/lstner.hxx>
 #include <tools/link.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <set>
 #include <memory>
@@ -204,7 +205,7 @@ public:
 
 private:
     class Implementation;
-    ::std::unique_ptr<Implementation> mpImpl;
+    css::uno::Reference<Implementation> mpImpl;
 };
 
 } } // end of namespace ::sd::tools

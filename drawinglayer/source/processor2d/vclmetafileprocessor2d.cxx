@@ -1165,11 +1165,11 @@ namespace drawinglayer
                         // per polygon. If there are more, split the polygon in half and call recursively
                         basegfx::B2DPolygon aLeft, aRight;
                         splitLinePolygon(rBasePolygon, aLeft, aRight);
-                        const primitive2d::PolygonHairlinePrimitive2D aPLeft(aLeft, rHairlinePrimitive.getBColor());
-                        const primitive2d::PolygonHairlinePrimitive2D aPRight(aRight, rHairlinePrimitive.getBColor());
+                        uno::Reference< primitive2d::PolygonHairlinePrimitive2D > xPLeft(new primitive2d::PolygonHairlinePrimitive2D(aLeft, rHairlinePrimitive.getBColor()));
+                        uno::Reference< primitive2d::PolygonHairlinePrimitive2D > xPRight(new primitive2d::PolygonHairlinePrimitive2D(aRight, rHairlinePrimitive.getBColor()));
 
-                        processBasePrimitive2D(aPLeft);
-                        processBasePrimitive2D(aPRight);
+                        processBasePrimitive2D(*xPLeft.get());
+                        processBasePrimitive2D(*xPRight.get());
                     }
                     else
                     {
@@ -1213,13 +1213,13 @@ namespace drawinglayer
                         // per polygon. If there are more, split the polygon in half and call recursively
                         basegfx::B2DPolygon aLeft, aRight;
                         splitLinePolygon(rBasePolygon, aLeft, aRight);
-                        const primitive2d::PolygonStrokePrimitive2D aPLeft(
-                            aLeft, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute());
-                        const primitive2d::PolygonStrokePrimitive2D aPRight(
-                            aRight, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute());
+                        uno::Reference< primitive2d::PolygonStrokePrimitive2D > xPLeft(new primitive2d::PolygonStrokePrimitive2D(
+                            aLeft, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute()));
+                        uno::Reference< primitive2d::PolygonStrokePrimitive2D > xPRight(new primitive2d::PolygonStrokePrimitive2D(
+                            aRight, rStrokePrimitive.getLineAttribute(), rStrokePrimitive.getStrokeAttribute()));
 
-                        processBasePrimitive2D(aPLeft);
-                        processBasePrimitive2D(aPRight);
+                        processBasePrimitive2D(*xPLeft.get());
+                        processBasePrimitive2D(*xPRight.get());
                     }
                     else
                     {
@@ -1294,21 +1294,21 @@ namespace drawinglayer
                         basegfx::B2DPolygon aLeft, aRight;
                         splitLinePolygon(rBasePolygon, aLeft, aRight);
                         const attribute::LineStartEndAttribute aEmpty;
-                        const primitive2d::PolygonStrokeArrowPrimitive2D aPLeft(
+                        uno::Reference< primitive2d::PolygonStrokeArrowPrimitive2D > xPLeft(new primitive2d::PolygonStrokeArrowPrimitive2D(
                             aLeft,
                             rStrokeArrowPrimitive.getLineAttribute(),
                             rStrokeArrowPrimitive.getStrokeAttribute(),
                             rStrokeArrowPrimitive.getStart(),
-                            aEmpty);
-                        const primitive2d::PolygonStrokeArrowPrimitive2D aPRight(
+                            aEmpty));
+                        uno::Reference< primitive2d::PolygonStrokeArrowPrimitive2D > xPRight(new primitive2d::PolygonStrokeArrowPrimitive2D(
                             aRight,
                             rStrokeArrowPrimitive.getLineAttribute(),
                             rStrokeArrowPrimitive.getStrokeAttribute(),
                             aEmpty,
-                            rStrokeArrowPrimitive.getEnd());
+                            rStrokeArrowPrimitive.getEnd()));
 
-                        processBasePrimitive2D(aPLeft);
-                        processBasePrimitive2D(aPRight);
+                        processBasePrimitive2D(*xPLeft.get());
+                        processBasePrimitive2D(*xPRight.get());
                     }
                     else
                     {
@@ -1372,11 +1372,11 @@ namespace drawinglayer
                     {
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. If there are more use the splitted polygon and call recursively
-                        const primitive2d::PolyPolygonGraphicPrimitive2D aSplitted(
+                        uno::Reference< primitive2d::PolyPolygonGraphicPrimitive2D > xSplitted(new primitive2d::PolyPolygonGraphicPrimitive2D(
                             aLocalPolyPolygon,
-                            rBitmapCandidate.getFillGraphic());
+                            rBitmapCandidate.getFillGraphic()));
 
-                        processBasePrimitive2D(aSplitted);
+                        processBasePrimitive2D(*xSplitted.get());
                     }
                     else
                     {

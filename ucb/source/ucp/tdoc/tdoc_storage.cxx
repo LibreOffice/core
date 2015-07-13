@@ -181,7 +181,7 @@ StorageElementFactory::createStorage( const OUString & rUri,
         bool bWritable = ( ( eMode == READ_WRITE_NOCREATE )
                             || ( eMode == READ_WRITE_CREATE ) );
 
-        std::unique_ptr< Storage > xElement(
+        uno::Reference< Storage > xElement(
             new Storage( m_xContext, this, aUriKey, xParentStorage, xStorage ) );
 
         aIt = m_aMap.insert(
@@ -190,7 +190,6 @@ StorageElementFactory::createStorage( const OUString & rUri,
                 xElement.get() ) ).first;
 
         aIt->second->m_aContainerIt = aIt;
-        xElement.release();
         return aIt->second;
     }
     else if ( osl_atomic_increment( &aIt->second->m_refCount ) > 1 )
