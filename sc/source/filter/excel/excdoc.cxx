@@ -881,6 +881,19 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     if (rCaches.HasCaches())
         rCaches.SaveXml(rStrm);
 
+    const ScCalcConfig& rCalcConfig = GetDoc().GetCalcConfig();
+
+    // write if it has been read|imported or explicitly changed
+    // or if ref syntax isn't what would be native for our file format
+    // i.e. ExcelA1 in this case
+    if ( rCalcConfig.mbHasStringRefSyntax ||
+         (rCalcConfig.meStringRefAddressSyntax != formula::FormulaGrammar::CONV_XL_A1) )
+    {
+        XclExtLstRef xExtLst( new XclExtLst( GetRoot()  ) );
+        xExtLst->AddRecord( XclExpExtRef( new XclExpExtCalcPr( GetRoot(), rCalcConfig.meStringRefAddressSyntax ))  );
+        xExtLst->SaveXml(rStrm);
+    }
+
     rWorkbook->endElement( XML_workbook );
     rWorkbook.reset();
 }
