@@ -222,7 +222,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
     {
         sal_uInt16 nLen = 0;
         rIStream.ReadUInt16( nLen );
-        if ( !nLen )
+        if (nLen <= 4)
             return rIStream;
 
         sal_uInt16 nSystem = 0;
