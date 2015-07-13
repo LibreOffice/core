@@ -219,9 +219,6 @@ namespace vcl
         OUString                           maPrintText;
         OUString                           maDefPrtText;
 
-        Size                                    maDetailsCollapsedSize;
-        Size                                    maDetailsExpandedSize;
-
         bool                                mbShowLayoutPage;
 
         Size getJobPageSize();
