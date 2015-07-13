@@ -79,7 +79,7 @@ OutlinerParaObject *impGetDeeplyMergedParaObject(Outliner *pOutl,
         pOutl->SetText(*pPObj1);
         return impGetJuxtaposedParaObject(
                 pOutl,
-                pOutl->CreateParaObject(0, nParaCount - 1),
+                pOutl->CreateParaObject(0, nParaCount1 - 1),
                 pPObj2);
     }
 
