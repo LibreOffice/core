@@ -50,7 +50,6 @@ $(eval $(call gb_Library_add_exception_objects,avmediavlc,\
     avmedia/source/vlc/wrapper/Player \
     avmedia/source/vlc/wrapper/EventManager \
     avmedia/source/vlc/wrapper/EventHandler \
-    avmedia/source/vlc/wrapper/ThreadsafeQueue \
     avmedia/source/vlc/wrapper/Common \
 ))
 
