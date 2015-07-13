@@ -370,7 +370,6 @@ namespace basegfx
                 OSL_ENSURE( isSweepLineEnteringRect ||
                             mpLeadingRightEdge == &rActiveEdge,
                             "ImplPolygon::intersect(): sweep initial own edge hit: wrong leading edge" );
-                (void) this; // avoid loplugin:staticmethods
             }
 
             void handleFinalOwnRightEdge(ActiveEdge& rActiveEdge)
