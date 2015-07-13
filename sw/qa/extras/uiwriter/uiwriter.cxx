@@ -59,6 +59,8 @@
 #include "com/sun/star/i18n/TransliterationModulesExtra.hpp"
 #include "com/sun/star/sdbcx/XTablesSupplier.hpp"
 #include "com/sun/star/text/XParagraphCursor.hpp"
+#include "com/sun/star/util/XPropertyReplace.hpp"
+#include "com/sun/star/awt/FontStrikeout.hpp"
 #include "com/sun/star/beans/PropertyAttribute.hpp"
 #include "com/sun/star/text/XTextField.hpp"
 #include <osl/file.hxx>
@@ -107,6 +109,7 @@ public:
     void testdelofTableRedlines();
     void testTdf81995();
     void testExportToPicture();
+    void testTextSearch();
     void testTdf69282();
     void testTdf69282WithMirror();
     void testSearchWithTransliterate();
@@ -162,6 +165,7 @@ public:
     CPPUNIT_TEST(testdelofTableRedlines);
     CPPUNIT_TEST(testTdf81995);
     CPPUNIT_TEST(testExportToPicture);
+    CPPUNIT_TEST(testTextSearch);
     CPPUNIT_TEST(testTdf69282);
     CPPUNIT_TEST(testTdf69282WithMirror);
     CPPUNIT_TEST(testSearchWithTransliterate);
@@ -1101,6 +1105,85 @@ void SwUiWriterTest::testExportToPicture()
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, tmpFile.getSize(val));
     CPPUNIT_ASSERT(val > 100);
     aTempFile.EnableKillingFile();
+}
+
+void SwUiWriterTest::testTextSearch()
+{
+    // Create a new empty Writer document
+    SwDoc* pDoc = createDoc();
+    SwPaM* pCrsr = pDoc->GetEditShell()->GetCrsr();
+    IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
+    // Insert some text
+    rIDCO.InsertString(*pCrsr, "Hello World This is a test");
+    // Use cursor to select part of text
+    for (int i = 0; i < 10; i++) {
+        pCrsr->Move(fnMoveBackward);
+    }
+    pCrsr->SetMark();
+    for(int i = 0; i < 4; i++) {
+        pCrsr->Move(fnMoveBackward);
+    }
+    //Checking that the proper selection is made
+    CPPUNIT_ASSERT_EQUAL(OUString("This"), pCrsr->GetText());
+    // Apply a "Bold" attribute to selection
+    SvxWeightItem aWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+    rIDCO.InsertPoolItem(*pCrsr, aWeightItem);
+    //making another selection of text
+    for (int i = 0; i < 7; i++) {
+        pCrsr->Move(fnMoveBackward);
+    }
+    pCrsr->SetMark();
+    for(int i = 0; i < 5; i++) {
+        pCrsr->Move(fnMoveBackward);
+    }
+    //Checking that the proper selection is made
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello"), pCrsr->GetText());
+    // Apply a "Bold" attribute to selection
+    rIDCO.InsertPoolItem(*pCrsr, aWeightItem);
+    //Performing Search Operation and also covering the UNO coverage for setProperty
+    uno::Reference<util::XSearchable> xSearch(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XSearchDescriptor> xSearchDes(xSearch->createSearchDescriptor(), uno::UNO_QUERY);
+    uno::Reference<util::XPropertyReplace> xProp(xSearchDes, uno::UNO_QUERY);
+    //setting some properties
+    uno::Sequence<beans::PropertyValue> aDescriptor =
+    {
+        beans::PropertyValue("CharWeight", sal_Int32(0), uno::makeAny(float(com::sun::star::awt::FontWeight::BOLD)), beans::PropertyState_DIRECT_VALUE)
+    };
+    xProp->setSearchAttributes(aDescriptor);
+    //receiving the defined properties and asserting them with expected values, covering UNO
+    uno::Sequence<beans::PropertyValue> aPropVal2(xProp->getSearchAttributes());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aPropVal2.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("CharWeight"), aPropVal2[0].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(com::sun::star::awt::FontWeight::BOLD)), aPropVal2[0].Value);
+    //specifying the search attributes
+    uno::Reference<beans::XPropertySet> xPropSet(xSearchDes, uno::UNO_QUERY_THROW);
+    xPropSet->setPropertyValue(OUString("SearchWords"), uno::makeAny(sal_Bool(true)));
+    xPropSet->setPropertyValue(OUString("SearchCaseSensitive"), uno::makeAny(sal_Bool(true)));
+    //this will search all the BOLD words
+    uno::Reference<container::XIndexAccess> xIndex(xSearch->findAll(xSearchDes));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndex->getCount());
+    //Replacing the searched string via XReplaceable
+    uno::Reference<util::XReplaceable> xReplace(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XReplaceDescriptor> xReplaceDes(xReplace->createReplaceDescriptor(), uno::UNO_QUERY);
+    uno::Reference<util::XPropertyReplace> xProp2(xReplaceDes, uno::UNO_QUERY);
+    xProp2->setReplaceAttributes(aDescriptor);
+    //checking that the proper attributes are there or not
+    uno::Sequence<beans::PropertyValue> aRepProp(xProp2->getReplaceAttributes());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aRepProp.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("CharWeight"), aRepProp[0].Name);
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(com::sun::star::awt::FontWeight::BOLD)), aRepProp[0].Value);
+    //setting strings for replacement
+    xReplaceDes->setSearchString("test");
+    xReplaceDes->setReplaceString("task");
+    //checking the replaceString
+    CPPUNIT_ASSERT_EQUAL(OUString("task"), xReplaceDes->getReplaceString());
+    //this will replace *normal*test to *bold*task
+    sal_Int32 ReplaceCount = xReplace->replaceAll(xReplaceDes);
+    //There should be only 1 replacement since there is only one occurrence of "test" in the document
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), ReplaceCount);
+    //Now performing search again for BOLD words, count should be 3 due to replacement
+    uno::Reference<container::XIndexAccess> xIndex2(xReplace->findAll(xSearchDes));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndex2->getCount());
 }
 
 void SwUiWriterTest::testTdf69282()
