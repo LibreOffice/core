@@ -28,6 +28,7 @@ IMPL_CHAIN_PROP_INTERFACE(CursorEvent, CursorChainingEvent)
 IMPL_CHAIN_PROP_INTERFACE(NilChainingEvent, bool)
 IMPL_CHAIN_PROP_INTERFACE(PreChainingSel, ESelection)
 IMPL_CHAIN_PROP_INTERFACE(PostChainingSel, ESelection)
+IMPL_CHAIN_PROP_INTERFACE(IsPartOfLastParaInNextLink, bool)
 
 /* End Definition of Properties Interface */
 
@@ -58,14 +59,6 @@ SdrTextObj *TextChain::GetNextLink(SdrTextObj *) const
 {
     return NULL; // XXX: To be changed. It'd be a mess to implement now
 }
-
-
-bool TextChain::GetLinksHaveMergeableFirstPara(SdrTextObj* /* pPrevLink */, SdrTextObj* /* pNextLink */)
-{
-    // XXX
-    return false;
-}
-
 
 ImpChainLinkProperties *TextChain::GetLinkProperties(const SdrTextObj *pLink)
 {
