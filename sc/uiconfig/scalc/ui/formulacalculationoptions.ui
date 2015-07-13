@@ -86,6 +86,7 @@
                           <item id="1">Calc A1</item>
                           <item id="2">Excel A1</item>
                           <item id="3">Excel R1C1</item>
+                          <item id="4">Calc A1 | Excel A1</item>
                         </items>
                       </object>
                       <packing>

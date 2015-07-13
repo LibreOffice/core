@@ -511,6 +511,7 @@
 #define SC_UNO_INTEROPGRABBAG           "InteropGrabBag"
 #define SC_UNO_RECORDCHANGES            "RecordChanges"
 #define SC_UNO_ISRECORDCHANGESPROTECTED "IsRecordChangesProtected"
+#define SC_UNO_SYNTAXSTRINGREF          "SyntaxStringRef"
 
 
 //  document properties from FormModel

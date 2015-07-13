@@ -43,7 +43,11 @@ public:
 
         CONV_LOTUS_A1,      /* external? 3d? A1.B2 <placeholder/> */
 
-        CONV_LAST   /* for loops, must always be last */
+        CONV_LAST,   /* for loops, must always be last */
+
+        // not a real address convention, a special case for INDIRECT function interpretation
+        // only -> try using CONV_OOO, failing that CONV_XL_A1
+        CONV_A1_XL_A1
     };
 
     //! CONV_UNSPECIFIED is a negative value!

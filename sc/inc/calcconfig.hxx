@@ -43,6 +43,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     formula::FormulaGrammar::AddressConvention meStringRefAddressSyntax;
     StringConversion meStringConversion;
     bool mbEmptyStringAsZero:1;
+    bool mbHasStringRefSyntax:1;
 
     bool mbOpenCLSubsetOnly:1;
     bool mbOpenCLAutoSelect:1;
@@ -59,6 +60,7 @@ struct SC_DLLPUBLIC ScCalcConfig
 
     void reset();
     void MergeDocumentSpecific( const ScCalcConfig& r );
+    void SetStringRefSyntax( formula::FormulaGrammar::AddressConvention eConv );
 
     bool operator== (const ScCalcConfig& r) const;
     bool operator!= (const ScCalcConfig& r) const;
