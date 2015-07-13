@@ -141,7 +141,7 @@ namespace
       sal_uInt32 nREG)
   {
     // Should not happen, but...
-    static_assert( MAX_GP_REGS == MAX_FP_REGS );
+    static_assert(MAX_GP_REGS == MAX_FP_REGS, "must be the same size");
     if ( nREG > MAX_GP_REGS )
         nREG = MAX_GP_REGS;
 
@@ -266,7 +266,7 @@ namespace
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    assert( pReturnTypeDescr, "### expected return type description!" );
+    assert(pReturnTypeDescr);
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
