@@ -44,18 +44,18 @@ SwVbaWindow::SwVbaWindow(
 void
 SwVbaWindow::Activate() throw (css::uno::RuntimeException, std::exception)
 {
-    SwVbaDocument document( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
+    uno::Reference<SwVbaDocument> document( new SwVbaDocument(uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel) );
 
-    document.Activate();
+    document->Activate();
 }
 
 void
 SwVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& RouteDocument ) throw (uno::RuntimeException, std::exception)
 {
     // FIXME: it is incorrect when there are more than 1 windows
-    SwVbaDocument document( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
+    uno::Reference<SwVbaDocument> document( new SwVbaDocument(uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel) );
     uno::Any FileName;
-    document.Close(SaveChanges, FileName, RouteDocument );
+    document->Close(SaveChanges, FileName, RouteDocument );
 }
 
 uno::Any SAL_CALL
@@ -69,8 +69,8 @@ void SAL_CALL SwVbaWindow::setView( const uno::Any& _view ) throw (uno::RuntimeE
     sal_Int32 nType = 0;
     if( _view >>= nType )
     {
-        SwVbaView view( this,  mxContext, m_xModel );
-        view.setType( nType );
+        uno::Reference<SwVbaView> view( new SwVbaView(this,  mxContext, m_xModel) );
+        view->setType( nType );
     }
 }
 

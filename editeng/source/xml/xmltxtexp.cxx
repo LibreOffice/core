@@ -429,9 +429,9 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 
             // SvxXMLTextExportComponent aExporter( &rEditEngine, rSel, aName, xHandler );
             uno::Reference< xml::sax::XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
-            SvxXMLTextExportComponent aExporter( xContext, &rEditEngine, rSel, aName, xHandler );
+            uno::Reference< SvxXMLTextExportComponent > xExporter( new SvxXMLTextExportComponent( xContext, &rEditEngine, rSel, aName, xHandler ) );
 
-            aExporter.exportDoc();
+            xExporter->exportDoc();
 
 /* testcode
             aMedium.Commit();

@@ -29,8 +29,8 @@ OUString SAL_CALL
 ignoreSize_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException, std::exception)
 {
-    smallToLarge_ja_JP t1;
-    return t1.transliterate(inStr, startPos, nCount, offset);
+    Reference< smallToLarge_ja_JP > t1(new smallToLarge_ja_JP);
+    return t1->transliterate(inStr, startPos, nCount, offset);
 }
 
 
@@ -38,17 +38,17 @@ Sequence< OUString > SAL_CALL
 ignoreSize_ja_JP::transliterateRange( const OUString& str1, const OUString& str2 )
   throw(RuntimeException, std::exception)
 {
-    smallToLarge_ja_JP t1;
-    largeToSmall_ja_JP t2;
+    Reference< smallToLarge_ja_JP > t1(new smallToLarge_ja_JP);
+    Reference< largeToSmall_ja_JP > t2(new largeToSmall_ja_JP);
 
-    return transliteration_Ignore::transliterateRange(str1, str2, t1, t2);
+    return transliteration_Ignore::transliterateRange(str1, str2, *t1.get(), *t2.get());
 }
 
 sal_Unicode SAL_CALL
 ignoreSize_ja_JP::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException, std::exception)
 {
-    smallToLarge_ja_JP t1;
-    return t1.transliterateChar2Char(inChar);
+    Reference< smallToLarge_ja_JP > t1(new smallToLarge_ja_JP);
+    return t1->transliterateChar2Char(inChar);
 }
 
 } } } }

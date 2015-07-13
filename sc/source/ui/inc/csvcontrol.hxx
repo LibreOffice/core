@@ -385,7 +385,7 @@ public:
 
 protected:
     /** Derived classes create a new accessible object here. */
-    virtual ScAccessibleCsvControl* ImplCreateAccessible() = 0;
+    virtual css::uno::Reference<ScAccessibleCsvControl> ImplCreateAccessible() = 0;
 };
 
 #endif

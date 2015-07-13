@@ -426,7 +426,7 @@ ScCsvTableBox::XAccessibleRef ScCsvTableBox::CreateAccessible()
     return Control::CreateAccessible();
 }
 
-ScAccessibleCsvControl* ScCsvTableBox::ImplCreateAccessible()
+css::uno::Reference<ScAccessibleCsvControl> ScCsvTableBox::ImplCreateAccessible()
 {
     return NULL;    // not used, see CreateAccessible()
 }

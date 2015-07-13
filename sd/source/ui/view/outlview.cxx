@@ -1196,7 +1196,7 @@ IMPL_LINK_NOARG_TYPED(OutlineView, RemovingPagesHdl, OutlinerView*, bool)
  */
 IMPL_LINK_TYPED( OutlineView, IndentingPagesHdl, OutlinerView *, pOutlinerView, long )
 {
-    return RemovingPagesHdl(pOutlinerView);
+    return RemovingPagesHdl(pOutlinerView) ? 1 : 0;
 }
 
 /** returns the first slide that is selected in the outliner or where

@@ -326,7 +326,7 @@ private:
     // accessibility ----------------------------------------------------------
 protected:
     /** Creates a new accessible object. */
-    virtual ScAccessibleCsvControl* ImplCreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference<ScAccessibleCsvControl> ImplCreateAccessible() SAL_OVERRIDE;
 };
 
 #endif
