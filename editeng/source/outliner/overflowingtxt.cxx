@@ -219,10 +219,13 @@ OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOut
     if (mpOverflowingTxt == NULL || pTextToBeMerged == NULL)
         return NULL;
 
-    if (mbIsDeepMerge)
+    if (mbIsDeepMerge) {
+        fprintf(stderr, "[TEXTCHAINFLOW - OF] Deep merging paras\n" );
         return mpOverflowingTxt->GetJuxtaposedParaObject(pOutliner, pTextToBeMerged );
-    else
+    } else {
+        fprintf(stderr, "[TEXTCHAINFLOW - OF] Juxtaposing paras\n" );
         return mpOverflowingTxt->GetDeeplyMergedParaObject(pOutliner, pTextToBeMerged );
+    }
 }
 
 
@@ -254,9 +257,11 @@ OutlinerParaObject *UFlowChainedText::CreateMergedUnderflowParaObject(Outliner *
     OutlinerParaObject *pCurText = mpUnderflowPObj;
 
     if (mbIsDeepMerge) {
+        fprintf(stderr, "[TEXTCHAINFLOW - UF] Deep merging paras\n" );
         pNewText = impGetDeeplyMergedParaObject(pOutl, pCurText, pNextLinkWholeText);
     } else {
         // NewTextForCurBox = Txt(CurBox) ++ Txt(NextBox)
+        fprintf(stderr, "[TEXTCHAINFLOW - UF] Juxtaposing paras\n" );
         pNewText = impGetJuxtaposedParaObject(pOutl, pCurText, pNextLinkWholeText);
     }
 
