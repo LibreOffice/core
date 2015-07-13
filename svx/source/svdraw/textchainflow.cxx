@@ -21,12 +21,15 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
 #include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <editeng/overflowingtxt.hxx>
 #include <svx/textchainflow.hxx>
 
 TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
     : mpTargetLink(pChainTarget)
 {
+    fprintf(stderr, "[TEXTCHAINFLOW] Creating a new TextChainFlow\n");
+
     mpTextChain = mpTargetLink->GetTextChain();
     mpNextLink = mpTargetLink->GetNextLinkInChain();
     bCheckedFlowEvents = false;
@@ -196,6 +199,9 @@ void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pO
 void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
     OutlinerParaObject *pNewText = impGetNonOverflowingParaObject(pNonOverflOutl);
+
+    fprintf(stderr, "[TEXTCHAINFLOW - OF] SOURCE box set to %d paras \n", pNewText->GetTextObject().GetParagraphCount());
+
     // adds it to current outliner anyway (useful in static decomposition)
     pNonOverflOutl->SetText(*pNewText);
 
@@ -214,6 +220,7 @@ void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
     }
 
     OutlinerParaObject *pNewText = impGetOverflowingParaObject(pOverflOutl);
+    fprintf(stderr, "[TEXTCHAINFLOW - OF] DEST box set to %d paras \n", pNewText->GetTextObject().GetParagraphCount());
     if (pNewText)
         mpNextLink->NbcSetOutlinerParaObject(pNewText);
 }
