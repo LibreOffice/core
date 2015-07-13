@@ -1728,9 +1728,9 @@ bool EnhWMFReader::ReadHeader()
 
     pWMF->ReadInt32(nRecordCount);
 
-    if (nRecordCount == 0)
+    if (nRecordCount <= 0)
     {
-        SAL_WARN("vcl.emf", "EMF\t\tEMF Header object shows record counter as 0! This shouldn't "
+        SAL_WARN("vcl.emf", "EMF\t\tEMF Header object shows record counter as <= 0! This shouldn't "
                             "be possible... indicator of possible file corruption?");
         return false;
     }
