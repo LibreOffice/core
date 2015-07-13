@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <connectivity/CommonTools.hxx>
@@ -40,7 +40,7 @@ namespace connectivity
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
 
-        typedef ::cppu::WeakComponentImplHelper5<   ::com::sun::star::sdbc::XDriver
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XDriver
                                         ,::com::sun::star::sdbcx::XDataDefinitionSupplier
                                         , ::com::sun::star::lang::XServiceInfo
                                         , ::com::sun::star::sdbcx::XCreateCatalog

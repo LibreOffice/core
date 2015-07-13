@@ -27,18 +27,18 @@
 #include <connectivity/sqlparse.hxx>
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
-#include <cppuhelper/compbase4.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 
 namespace connectivity
 {
     namespace macab
     {
-        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XStatement,
-                                                    ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::util::XCancellable,
-                                                    ::com::sun::star::sdbc::XCloseable> MacabCommonStatement_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XStatement,
+                                                   ::com::sun::star::sdbc::XWarningsSupplier,
+                                                   ::com::sun::star::util::XCancellable,
+                                                   ::com::sun::star::sdbc::XCloseable> MacabCommonStatement_BASE;
 
 
         // Class MacabCommonStatement
@@ -148,7 +148,7 @@ namespace connectivity
 
         // Class MacabStatement
 
-        typedef ::cppu::ImplInheritanceHelper1<
+        typedef ::cppu::ImplInheritanceHelper<
                 MacabCommonStatement, ::com::sun::star::lang::XServiceInfo > MacabStatement_BASE;
 
         class MacabStatement : public MacabStatement_BASE

@@ -25,6 +25,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -52,7 +53,7 @@ using namespace ::com::sun::star::lang;
 namespace
 {
     /// helper class for column property change events which holds the OComponentDefinition weak
-typedef ::cppu::WeakImplHelper1 < XContainerListener > OTableContainerListener_BASE;
+typedef ::cppu::WeakImplHelper< XContainerListener > OTableContainerListener_BASE;
 class OTableContainerListener:
     public OTableContainerListener_BASE, private boost::noncopyable
 {

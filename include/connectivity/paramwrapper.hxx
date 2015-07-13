@@ -32,7 +32,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <memory>
 #include <vector>
@@ -128,9 +128,9 @@ namespace param
 
     //= ParameterWrapperContainer
 
-    typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::container::XIndexAccess
-                                                ,   ::com::sun::star::container::XEnumerationAccess
-                                                >   ParameterWrapperContainer_Base;
+    typedef ::cppu::WeakComponentImplHelper    <   ::com::sun::star::container::XIndexAccess
+                                               ,   ::com::sun::star::container::XEnumerationAccess
+                                               >   ParameterWrapperContainer_Base;
 
     /// class for the parameter event @see approveParameter
     class OOO_DLLPUBLIC_DBTOOLS ParameterWrapperContainer :

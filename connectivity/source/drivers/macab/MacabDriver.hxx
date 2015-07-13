@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <osl/module.h>
 
 // the address book driver's version
@@ -104,9 +104,9 @@ namespace connectivity
 
         // = MacabDriver
 
-        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XDriver,
-                                                    ::com::sun::star::lang::XServiceInfo,
-                                                    ::com::sun::star::frame::XTerminateListener > MacabDriver_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XDriver,
+                                                   ::com::sun::star::lang::XServiceInfo,
+                                                   ::com::sun::star::frame::XTerminateListener > MacabDriver_BASE;
         class MacabDriver : public MacabDriver_BASE
         {
         protected:

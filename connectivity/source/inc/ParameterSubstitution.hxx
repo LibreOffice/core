@@ -25,13 +25,13 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
-    typedef ::cppu::WeakImplHelper3< ::com::sun::star::util::XStringSubstitution
-                                    ,::com::sun::star::lang::XServiceInfo
-                                    ,::com::sun::star::lang::XInitialization > ParameterSubstitution_BASE;
+    typedef ::cppu::WeakImplHelper< ::com::sun::star::util::XStringSubstitution
+                                   ,::com::sun::star::lang::XServiceInfo
+                                   ,::com::sun::star::lang::XInitialization > ParameterSubstitution_BASE;
     class ParameterSubstitution : public ParameterSubstitution_BASE
     {
         ::osl::Mutex                                                                    m_aMutex;

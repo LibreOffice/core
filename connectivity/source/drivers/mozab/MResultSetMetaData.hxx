@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MRESULTSETMETADATA_HXX
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vector>
 #include <rtl/ref.hxx>
 #include "MConnection.hxx"
@@ -34,7 +34,7 @@ namespace connectivity
 
         //************ Class: ResultSetMetaData
 
-        typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
+        typedef ::cppu::WeakImplHelper<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
         class OResultSetMetaData :  public  OResultSetMetaData_BASE
         {

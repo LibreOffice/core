@@ -26,18 +26,18 @@
 #include <connectivity/sqlparse.hxx>
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
-#include <cppuhelper/compbase4.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 
 namespace connectivity
 {
     namespace kab
     {
-        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbc::XStatement,
-                                                    ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::util::XCancellable,
-                                                    ::com::sun::star::sdbc::XCloseable> KabCommonStatement_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XStatement,
+                                                   ::com::sun::star::sdbc::XWarningsSupplier,
+                                                   ::com::sun::star::util::XCancellable,
+                                                   ::com::sun::star::sdbc::XCloseable> KabCommonStatement_BASE;
 
 
         // Class KabCommonStatement
@@ -142,7 +142,7 @@ namespace connectivity
 
         // Class KabStatement
 
-        typedef ::cppu::ImplInheritanceHelper1<
+        typedef ::cppu::ImplInheritanceHelper<
                 KabCommonStatement, ::com::sun::star::lang::XServiceInfo > KabStatement_BASE;
 
         class KabStatement : public KabStatement_BASE

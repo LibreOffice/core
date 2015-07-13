@@ -22,7 +22,7 @@
 
 #include "java/lang/Object.hxx"
 #include <com/sun/star/sdbc/XBlob.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
@@ -31,7 +31,7 @@ namespace connectivity
     //************ Class: java.sql.SQLWarning
 
     class java_sql_Blob :   public java_lang_Object,
-                            public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XBlob>
+                            public ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XBlob>
     {
     protected:
     // Static data for the class

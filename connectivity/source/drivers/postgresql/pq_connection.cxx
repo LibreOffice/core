@@ -57,7 +57,7 @@
 #include <osl/module.h>
 
 #include <cppuhelper/implementationentry.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/script/Converter.hpp>
@@ -103,7 +103,7 @@ namespace pq_sdbc_driver
 
 
 // Helper class for statement lifetime management
-class ClosableReference : public cppu::WeakImplHelper1< com::sun::star::uno::XReference >
+class ClosableReference : public cppu::WeakImplHelper< com::sun::star::uno::XReference >
 {
     Connection *m_conn;
     ::rtl::ByteSequence m_id;

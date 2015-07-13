@@ -25,7 +25,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
@@ -47,9 +47,9 @@ namespace connectivity
         // OHsqlConnection - wraps all methods to the real connection from the driver
         // but when disposed it doesn't dispose the real connection
 
-        typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::util::XFlushable
-                                                ,   ::com::sun::star::sdb::application::XTableUIProvider
-                                                >   OHsqlConnection_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::util::XFlushable
+                                               ,   ::com::sun::star::sdb::application::XTableUIProvider
+                                               >   OHsqlConnection_BASE;
 
         class OHsqlConnection   :public ::comphelper::OBaseMutex
                                 ,public OHsqlConnection_BASE

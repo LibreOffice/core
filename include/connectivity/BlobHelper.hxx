@@ -21,11 +21,11 @@
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/sdbc/XBlob.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
-    class OOO_DLLPUBLIC_DBTOOLS BlobHelper : public ::cppu::WeakImplHelper1< com::sun::star::sdbc::XBlob >
+    class OOO_DLLPUBLIC_DBTOOLS BlobHelper : public ::cppu::WeakImplHelper< com::sun::star::sdbc::XBlob >
     {
         ::com::sun::star::uno::Sequence< sal_Int8 > m_aValue;
     public:

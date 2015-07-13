@@ -55,7 +55,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <boost/functional/hash.hpp>
 
 #include <libpq-fe.h>
@@ -129,7 +129,7 @@ struct ConnectionSettings
 };
 
 
-typedef cppu::WeakComponentImplHelper6<
+typedef cppu::WeakComponentImplHelper<
     com::sun::star::sdbc::XConnection,
     com::sun::star::sdbc::XWarningsSupplier,
     com::sun::star::lang::XInitialization,

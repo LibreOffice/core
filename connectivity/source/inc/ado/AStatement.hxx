@@ -27,7 +27,7 @@
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
-#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
@@ -40,11 +40,11 @@ namespace connectivity
 {
     namespace ado
     {
-        typedef ::cppu::WeakComponentImplHelper5<   ::com::sun::star::sdbc::XStatement,
-                                                    ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::util::XCancellable,
-                                                    ::com::sun::star::sdbc::XCloseable,
-                                                    ::com::sun::star::sdbc::XMultipleResults> OStatement_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XStatement,
+                                                   ::com::sun::star::sdbc::XWarningsSupplier,
+                                                   ::com::sun::star::util::XCancellable,
+                                                   ::com::sun::star::sdbc::XCloseable,
+                                                   ::com::sun::star::sdbc::XMultipleResults> OStatement_BASE;
 
 
         //************ Class: java.sql.Statement

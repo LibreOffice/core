@@ -29,7 +29,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <comphelper/broadcasthelper.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <shell/kde_headers.h>
 
 namespace KABC
@@ -46,7 +46,7 @@ namespace connectivity
     namespace kab
     {
 
-        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XConnection,
+        typedef ::cppu::WeakComponentImplHelper<::com::sun::star::sdbc::XConnection,
                                                 ::com::sun::star::sdbc::XWarningsSupplier,
                                                 ::com::sun::star::lang::XServiceInfo
                                             > OMetaConnection_BASE;

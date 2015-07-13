@@ -29,7 +29,7 @@
 #include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
 #include "odbc/OFunctions.hxx"
@@ -44,12 +44,12 @@ namespace connectivity
     namespace odbc
     {
 
-        typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::sdbc::XStatement,
-                                                    ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::util::XCancellable,
-                                                    ::com::sun::star::sdbc::XCloseable,
-                                                    ::com::sun::star::sdbc::XGeneratedResultSet,
-                                                    ::com::sun::star::sdbc::XMultipleResults> OStatement_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XStatement,
+                                                   ::com::sun::star::sdbc::XWarningsSupplier,
+                                                   ::com::sun::star::util::XCancellable,
+                                                   ::com::sun::star::sdbc::XCloseable,
+                                                   ::com::sun::star::sdbc::XGeneratedResultSet,
+                                                   ::com::sun::star::sdbc::XMultipleResults> OStatement_BASE;
 
         class OResultSet;
 

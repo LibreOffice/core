@@ -42,7 +42,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "pq_xcolumns.hxx"
 #include "pq_xcolumn.hxx"
@@ -232,7 +232,7 @@ OUString columnMetaData2SDBCX(
 }
 
 
-// class CommentChanger : public cppu::WeakImplHelper1< XPropertyChangeListener >
+// class CommentChanger : public cppu::WeakImplHelper< XPropertyChangeListener >
 // {
 //     ::rtl::Reference< RefCountedMutex > m_refMutex;
 //     ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection > m_connection;

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZPOOLEDCONNECTION_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZPOOLEDCONNECTION_HXX
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/sdbc/XPooledConnection.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <comphelper/broadcasthelper.hxx>
@@ -32,8 +32,8 @@ namespace connectivity
     // OPooledConnection -
     // allows to pool a real connection
 
-    typedef ::cppu::WeakComponentImplHelper2<    ::com::sun::star::sdbc::XPooledConnection
-                                                ,::com::sun::star::lang::XEventListener>    OPooledConnection_Base;
+    typedef ::cppu::WeakComponentImplHelper<    ::com::sun::star::sdbc::XPooledConnection
+                                               ,::com::sun::star::lang::XEventListener>    OPooledConnection_Base;
 
     class OPooledConnection : public ::comphelper::OBaseMutex
                              ,public OPooledConnection_Base

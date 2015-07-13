@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ADATABASEMETADATARESULTSETMETADATA_HXX
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <vector>
 #include "ado/Awrapado.hxx"
 #include "ado/ADatabaseMetaDataResultSet.hxx"
@@ -34,7 +34,7 @@ namespace connectivity
 
         //************ Class: ResultSetMetaData
 
-                typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   ODatabaseMetaResultSetMetaData_BASE;
+                typedef ::cppu::WeakImplHelper<        ::com::sun::star::sdbc::XResultSetMetaData>   ODatabaseMetaResultSetMetaData_BASE;
 
         class ODatabaseMetaDataResultSetMetaData :  public  ODatabaseMetaResultSetMetaData_BASE
         {

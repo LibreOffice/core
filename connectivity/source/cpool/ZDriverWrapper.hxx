@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZDRIVERWRAPPER_HXX
 
 #include <com/sun/star/sdbc/XDriver.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 
@@ -32,8 +32,8 @@ namespace connectivity
 
     class OConnectionPool;
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::sdbc::XDriver
-                                    >   ODriverWrapper_BASE;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::sdbc::XDriver
+                                  >   ODriverWrapper_BASE;
 
     class ODriverWrapper : public ODriverWrapper_BASE
     {

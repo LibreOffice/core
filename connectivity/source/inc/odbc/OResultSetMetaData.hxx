@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ORESULTSETMETADATA_HXX
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "odbc/OFunctions.hxx"
 #include "odbc/odbcbasedllapi.hxx"
 #include <vector>
@@ -34,7 +34,7 @@ namespace connectivity
 
         //************ Class: ResultSetMetaData
 
-        typedef ::cppu::WeakImplHelper1<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
+        typedef ::cppu::WeakImplHelper<        ::com::sun::star::sdbc::XResultSetMetaData>   OResultSetMetaData_BASE;
 
         class OOO_DLLPUBLIC_ODBCBASE OResultSetMetaData :
             public  OResultSetMetaData_BASE

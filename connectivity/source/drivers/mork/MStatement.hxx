@@ -26,7 +26,7 @@
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <comphelper/proparrhlp.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/uno3.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <list>
@@ -47,9 +47,9 @@ namespace connectivity
     {
         class OResultSet;
 
-        typedef ::cppu::WeakComponentImplHelper3<   ::com::sun::star::sdbc::XStatement,
-                                                    ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::sdbc::XCloseable> OCommonStatement_IBASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XStatement,
+                                                   ::com::sun::star::sdbc::XWarningsSupplier,
+                                                   ::com::sun::star::sdbc::XCloseable> OCommonStatement_IBASE;
 
 
         //************ Class: OCommonStatement

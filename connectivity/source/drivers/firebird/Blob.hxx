@@ -12,7 +12,7 @@
 
 #include <ibase.h>
 
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/XBlob.hpp>
@@ -21,8 +21,8 @@ namespace connectivity
 {
     namespace firebird
     {
-        typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::sdbc::XBlob,
-                                                  ::com::sun::star::io::XInputStream >
+        typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::sdbc::XBlob,
+                                                 ::com::sun::star::io::XInputStream >
             Blob_BASE;
 
         class Blob :

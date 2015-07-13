@@ -29,7 +29,7 @@
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#include <cppuhelper/compbase12.hxx>
+#include <cppuhelper/compbase.hxx>
 
 namespace connectivity
 {
@@ -38,18 +38,18 @@ namespace connectivity
         /*
         **  MacabResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper12<      ::com::sun::star::sdbc::XResultSet,
-                                                        ::com::sun::star::sdbc::XRow,
-                                                        ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                                        ::com::sun::star::util::XCancellable,
-                                                        ::com::sun::star::sdbc::XWarningsSupplier,
-                                                        ::com::sun::star::sdbc::XResultSetUpdate,
-                                                        ::com::sun::star::sdbc::XRowUpdate,
-                                                        ::com::sun::star::sdbcx::XRowLocate,
-                                                        ::com::sun::star::sdbcx::XDeleteRows,
-                                                        ::com::sun::star::sdbc::XCloseable,
-                                                        ::com::sun::star::sdbc::XColumnLocate,
-                                                        ::com::sun::star::lang::XServiceInfo> MacabResultSet_BASE;
+        typedef ::cppu::WeakComponentImplHelper<      ::com::sun::star::sdbc::XResultSet,
+                                                      ::com::sun::star::sdbc::XRow,
+                                                      ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                                      ::com::sun::star::util::XCancellable,
+                                                      ::com::sun::star::sdbc::XWarningsSupplier,
+                                                      ::com::sun::star::sdbc::XResultSetUpdate,
+                                                      ::com::sun::star::sdbc::XRowUpdate,
+                                                      ::com::sun::star::sdbcx::XRowLocate,
+                                                      ::com::sun::star::sdbcx::XDeleteRows,
+                                                      ::com::sun::star::sdbc::XCloseable,
+                                                      ::com::sun::star::sdbc::XColumnLocate,
+                                                      ::com::sun::star::lang::XServiceInfo> MacabResultSet_BASE;
         class MacabRecords;
 
         class MacabResultSet : public   comphelper::OBaseMutex,

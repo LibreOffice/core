@@ -47,7 +47,7 @@
 
 #include <com/sun/star/util/XRefreshable.hpp>
 
-#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <unordered_map>
 #include <vector>
@@ -94,7 +94,7 @@ typedef std::unordered_map
    ::std::equal_to< OUString >
 > String2IntMap;
 
-typedef ::cppu::WeakComponentImplHelper8
+typedef ::cppu::WeakComponentImplHelper
 <
     com::sun::star::container::XNameAccess,
     com::sun::star::container::XIndexAccess,

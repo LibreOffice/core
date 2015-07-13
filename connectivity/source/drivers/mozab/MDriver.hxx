@@ -23,7 +23,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <osl/module.h>
 
@@ -41,8 +41,8 @@ namespace connectivity
         typedef const void* (SAL_CALL * OGetSdbcScheme_Function)( short );
 
 
-        typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::sdbc::XDriver,
-                                                    ::com::sun::star::lang::XServiceInfo > ODriver_BASE;
+        typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbc::XDriver,
+                                                   ::com::sun::star::lang::XServiceInfo > ODriver_BASE;
 
         enum EDriverType
         {

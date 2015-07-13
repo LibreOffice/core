@@ -36,16 +36,13 @@
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 #include "pq_driver.hxx"
 
 using osl::MutexGuard;
-
-using cppu::WeakComponentImplHelper2;
 
 using com::sun::star::lang::XSingleComponentFactory;
 using com::sun::star::lang::XServiceInfo;
@@ -184,7 +181,7 @@ Reference< XInterface > DriverCreateInstance( const Reference < XComponentContex
 
 class OOneInstanceComponentFactory :
     public MutexHolder,
-    public WeakComponentImplHelper2< XSingleComponentFactory, XServiceInfo >
+    public cppu::WeakComponentImplHelper< XSingleComponentFactory, XServiceInfo >
 {
 public:
     OOneInstanceComponentFactory(
@@ -192,7 +189,7 @@ public:
         cppu::ComponentFactoryFunc fptr,
         const Sequence< OUString > & serviceNames,
         const Reference< XComponentContext > & defaultContext) :
-        WeakComponentImplHelper2< XSingleComponentFactory, XServiceInfo >( this->m_mutex ),
+        cppu::WeakComponentImplHelper< XSingleComponentFactory, XServiceInfo >( this->m_mutex ),
         m_create( fptr ),
         m_serviceNames( serviceNames ),
         m_implName( rImplementationName_ ),

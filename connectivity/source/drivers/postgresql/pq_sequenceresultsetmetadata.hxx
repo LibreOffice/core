@@ -37,7 +37,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_SEQUENCERESULTSETMETADATA_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_SEQUENCERESULTSETMETADATA_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 
 #include "pq_connection.hxx"
@@ -46,7 +46,7 @@
 namespace pq_sdbc_driver
 {
     class SequenceResultSetMetaData :
-        public ::cppu::WeakImplHelper1 < com::sun::star::sdbc::XResultSetMetaData >
+        public ::cppu::WeakImplHelper< com::sun::star::sdbc::XResultSetMetaData >
     {
         ::rtl::Reference< RefCountedMutex > m_refMutex;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > m_origin;

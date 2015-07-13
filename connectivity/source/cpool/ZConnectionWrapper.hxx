@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZCONNECTIONWRAPPER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZCONNECTIONWRAPPER_HXX
 
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
@@ -33,8 +33,8 @@ namespace connectivity
     // OConnectionWeakWrapper - wraps all methods to the real connection from the driver
     // but when disposed it doesn't dispose the real connection
 
-    typedef ::cppu::WeakComponentImplHelper1<       ::com::sun::star::sdbc::XConnection
-                                            > OConnectionWeakWrapper_BASE;
+    typedef ::cppu::WeakComponentImplHelper<       ::com::sun::star::sdbc::XConnection
+                                           > OConnectionWeakWrapper_BASE;
 
     class OConnectionWeakWrapper :   public ::comphelper::OBaseMutex
                                 ,public OConnectionWeakWrapper_BASE

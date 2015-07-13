@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -47,7 +47,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL
 create(css::uno::Reference< css::uno::XComponentContext > const &);
 
 class MorkDriver:
-    public cppu::WeakImplHelper2< css::lang::XServiceInfo, css::sdbc::XDriver >,
+    public cppu::WeakImplHelper< css::lang::XServiceInfo, css::sdbc::XDriver >,
     private boost::noncopyable
 {
 public:

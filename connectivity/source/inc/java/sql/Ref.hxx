@@ -22,7 +22,7 @@
 
 #include "java/lang/Object.hxx"
 #include <com/sun/star/sdbc/XRef.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace connectivity
 {
@@ -30,7 +30,7 @@ namespace connectivity
     //************ Class: java.sql.Ref
 
     class java_sql_Ref :    public java_lang_Object,
-                            public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XRef>
+                            public ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XRef>
     {
     protected:
     // Static data for the class

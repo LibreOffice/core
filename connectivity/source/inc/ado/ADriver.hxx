@@ -23,7 +23,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <connectivity/CommonTools.hxx>
 
 namespace com { namespace sun { namespace star { namespace lang {
@@ -37,9 +37,9 @@ namespace connectivity
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL ODriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
 
-                typedef ::cppu::WeakComponentImplHelper3< ::com::sun::star::sdbc::XDriver,
-                                                                                                  ::com::sun::star::sdbcx::XDataDefinitionSupplier,
-                                                                                                  ::com::sun::star::lang::XServiceInfo
+                typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::sdbc::XDriver,
+                                                         ::com::sun::star::sdbcx::XDataDefinitionSupplier,
+                                                         ::com::sun::star::lang::XServiceInfo
                                                   > ODriver_BASE;
         class ODriver : public ODriver_BASE
         {
