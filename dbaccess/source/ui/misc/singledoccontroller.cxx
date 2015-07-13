@@ -54,10 +54,10 @@ namespace dbaui
     // OSingleDocumentController_Data
     struct OSingleDocumentController_Data
     {
-        ::boost::scoped_ptr< UndoManager >  m_pUndoManager;
+        Reference< UndoManager >  m_xUndoManager;
 
         OSingleDocumentController_Data( ::cppu::OWeakObject& i_parent, ::osl::Mutex& i_mutex )
-            :m_pUndoManager( new UndoManager( i_parent, i_mutex ) )
+            :m_xUndoManager( new UndoManager( i_parent, i_mutex ) )
         {
         }
     };
@@ -77,7 +77,7 @@ namespace dbaui
     {
         OSingleDocumentController_Base::disposing();
         ClearUndoManager();
-        m_pData->m_pUndoManager->disposing();
+        m_pData->m_xUndoManager->disposing();
     }
 
     void SAL_CALL OSingleDocumentController::disposing( const EventObject& i_event ) throw( RuntimeException, std::exception )
@@ -93,7 +93,7 @@ namespace dbaui
 
     SfxUndoManager& OSingleDocumentController::GetUndoManager() const
     {
-        return m_pData->m_pUndoManager->GetSfxUndoManager();
+        return m_pData->m_xUndoManager->GetSfxUndoManager();
     }
 
     void OSingleDocumentController::addUndoActionAndInvalidate(SfxUndoAction *_pAction)
@@ -111,7 +111,7 @@ namespace dbaui
 
     Reference< XUndoManager > SAL_CALL OSingleDocumentController::getUndoManager(  ) throw (RuntimeException, std::exception)
     {
-        return m_pData->m_pUndoManager.get();
+        return m_pData->m_xUndoManager.get();
     }
 
     FeatureState OSingleDocumentController::GetState(sal_uInt16 _nId) const

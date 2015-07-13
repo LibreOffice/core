@@ -516,9 +516,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 #include <txtatr.hxx>
 #include <fmtmeta.hxx>
 #include <docsh.hxx>
+#include <cppuhelper/weak.hxx>
 
-class SwXMetaText
-    : public SwXText
+class SwXMetaText : public cppu::OWeakObject, public SwXText
 {
 private:
     SwXMeta & m_rMeta;
@@ -541,10 +541,8 @@ public:
     void Invalidate() { SwXText::Invalidate(); };
 
     // XInterface
-    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE
-        { assert(false); }
-    virtual void SAL_CALL release() throw() SAL_OVERRIDE
-        { assert(false); }
+    virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { cppu::OWeakObject::acquire(); }
+    virtual void SAL_CALL release() throw() SAL_OVERRIDE { cppu::OWeakObject::release(); }
 
     // XTypeProvider
     virtual uno::Sequence< sal_Int8 > SAL_CALL
@@ -649,7 +647,7 @@ public:
     bool m_bIsDisposed;
     bool m_bIsDescriptor;
     uno::Reference<text::XText> m_xParentText;
-    SwXMetaText m_Text;
+    uno::Reference<SwXMetaText> m_xText;
 
     Impl(   SwXMeta & rThis, SwDoc & rDoc,
             ::sw::Meta * const pMeta,
@@ -661,7 +659,7 @@ public:
         , m_bIsDisposed( false )
         , m_bIsDescriptor(0 == pMeta)
         , m_xParentText(xParentText)
-        , m_Text(rDoc, rThis)
+        , m_xText(new SwXMetaText(rDoc, rThis))
     {
     }
 
@@ -692,7 +690,7 @@ void SwXMeta::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     }
 
     m_bIsDisposed = true;
-    m_Text.Invalidate();
+    m_xText->Invalidate();
     uno::Reference<uno::XInterface> const xThis(m_wThis);
     if (!xThis.is())
     {   // fdo#72695: if UNO object is already dead, don't revive it with event
@@ -954,7 +952,7 @@ SwXMeta::dispose() throw (uno::RuntimeException, std::exception)
         lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(*this));
         m_pImpl->m_EventListeners.disposeAndClear(ev);
         m_pImpl->m_bIsDisposed = true;
-        m_pImpl->m_Text.Invalidate();
+        m_pImpl->m_xText->Invalidate();
     }
     else if (!m_pImpl->m_bIsDisposed)
     {
@@ -1116,28 +1114,28 @@ uno::Reference< text::XTextRange > SAL_CALL
 SwXMeta::getStart() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    return m_pImpl->m_Text.getStart();
+    return m_pImpl->m_xText->getStart();
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
 SwXMeta::getEnd() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    return m_pImpl->m_Text.getEnd();
+    return m_pImpl->m_xText->getEnd();
 }
 
 OUString SAL_CALL
 SwXMeta::getString() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    return m_pImpl->m_Text.getString();
+    return m_pImpl->m_xText->getString();
 }
 
 void SAL_CALL
 SwXMeta::setString(const OUString& rString) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    return m_pImpl->m_Text.setString(rString);
+    return m_pImpl->m_xText->setString(rString);
 }
 
 // XSimpleText
@@ -1145,7 +1143,7 @@ uno::Reference< text::XTextCursor > SAL_CALL
 SwXMeta::createTextCursor() throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    return m_pImpl->m_Text.createTextCursor();
+    return m_pImpl->m_xText->createTextCursor();
 }
 
 uno::Reference< text::XTextCursor > SAL_CALL
@@ -1154,7 +1152,7 @@ SwXMeta::createTextCursorByRange(
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    return m_pImpl->m_Text.createTextCursorByRange(xTextPosition);
+    return m_pImpl->m_xText->createTextCursorByRange(xTextPosition);
 }
 
 void SAL_CALL
@@ -1163,7 +1161,7 @@ SwXMeta::insertString(const uno::Reference<text::XTextRange> & xRange,
 throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    return m_pImpl->m_Text.insertString(xRange, rString, bAbsorb);
+    return m_pImpl->m_xText->insertString(xRange, rString, bAbsorb);
 }
 
 void SAL_CALL
@@ -1172,7 +1170,7 @@ SwXMeta::insertControlCharacter(const uno::Reference<text::XTextRange> & xRange,
 throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    return m_pImpl->m_Text.insertControlCharacter(xRange, nControlCharacter,
+    return m_pImpl->m_xText->insertControlCharacter(xRange, nControlCharacter,
                 bAbsorb);
 }
 
@@ -1183,7 +1181,7 @@ SwXMeta::insertTextContent( const uno::Reference<text::XTextRange> & xRange,
 throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    return m_pImpl->m_Text.insertTextContent(xRange, xContent, bAbsorb);
+    return m_pImpl->m_xText->insertTextContent(xRange, xContent, bAbsorb);
 }
 
 void SAL_CALL
@@ -1192,7 +1190,7 @@ SwXMeta::removeTextContent(
     throw (container::NoSuchElementException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
-    return m_pImpl->m_Text.removeTextContent(xContent);
+    return m_pImpl->m_xText->removeTextContent(xContent);
 }
 
 // XChild

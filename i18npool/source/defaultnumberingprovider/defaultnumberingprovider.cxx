@@ -858,8 +858,8 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
       }
 
         if (natNum) {
-            NativeNumberSupplierService sNatNum;
-            result += sNatNum.getNativeNumberString(OUString::number( number ), locale, natNum);
+            uno::Reference<NativeNumberSupplierService> xNatNum(new NativeNumberSupplierService);
+            result += xNatNum->getNativeNumberString(OUString::number( number ), locale, natNum);
         } else if (tableSize) {
             if ( number > tableSize && !recycleSymbol)
                 result += OUString::number( number);

@@ -97,8 +97,8 @@ private:
 #endif
     OOXMLDocumentImpl* mpDocument;
     sal_Int32 mnXNoteId;
-    mutable std::shared_ptr<OOXMLFastContextHandler> mpContextHandler;
-    std::shared_ptr<OOXMLFastContextHandler> getContextHandler() const;
+    mutable css::uno::Reference<OOXMLFastContextHandler> mxContextHandler;
+    css::uno::Reference<OOXMLFastContextHandler> getContextHandler() const;
 };
 }}
 

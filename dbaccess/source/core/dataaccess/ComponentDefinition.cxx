@@ -191,8 +191,9 @@ Reference< XInterface > OComponentDefinition::Create( const Reference< XComponen
 void SAL_CALL OComponentDefinition::disposing()
 {
     OContentHelper::disposing();
-    if ( m_pColumns.get() )
-        m_pColumns->disposing();
+    if ( m_xColumns.is() )
+        m_xColumns->disposing();
+    m_xColumns.clear();
     m_xColumnPropertyListener->clear();
     m_xColumnPropertyListener.clear();
 }
@@ -227,7 +228,7 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OContentHelper::rBHelper.bDisposed);
 
-    if ( !m_pColumns.get() )
+    if ( !m_xColumns.is() )
     {
         ::std::vector< OUString> aNames;
 
@@ -239,10 +240,10 @@ Reference< XNameAccess> OComponentDefinition::getColumns() throw (RuntimeExcepti
         for ( ; aIter != aEnd; ++aIter )
             aNames.push_back( aIter->first );
 
-        m_pColumns.reset( new OColumns( *this, m_aMutex, true, aNames, this, NULL, true, false, false ) );
-        m_pColumns->setParent( *this );
+        m_xColumns = new OColumns( *this, m_aMutex, true, aNames, this, NULL, true, false, false );
+        m_xColumns->setParent( *this );
     }
-    return m_pColumns.get();
+    return m_xColumns.get();
 }
 
 OColumn* OComponentDefinition::createColumn(const OUString& _rName) const
