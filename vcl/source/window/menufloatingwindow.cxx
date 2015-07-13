@@ -1116,9 +1116,9 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             if (pData && accel)
             {
                 Menu *men = pMenu;
-                while (!men->IsMenuBar())
+                while (men && !men->IsMenuBar())
                     men = men->pStartedFrom;
-                bConsume = (static_cast<MenuBarWindow*>(men->pWindow.get()))->GetMBWMenuKey();
+                bConsume = !men || (static_cast<MenuBarWindow*>(men->pWindow.get()))->GetMBWMenuKey();
             }
             if (bConsume)
             {
