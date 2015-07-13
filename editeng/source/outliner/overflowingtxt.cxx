@@ -26,7 +26,7 @@
 #include <editeng/editobj.hxx>
 
 
-// Helper function for *OverflowingText classes
+/* Helper functions for *OverflowingText classes  */
 
 ESelection getLastPositionSel(const EditTextObject *pTObj)
 {
@@ -38,6 +38,34 @@ ESelection getLastPositionSel(const EditTextObject *pTObj)
     ESelection aEndPos(nLastPara, nLen, nLastPara, nLen);
 
     return aEndPos;
+}
+
+// Put a para next to each other in the same OutlinerParaObject
+OutlinerParaObject *impGetJuxtaposedParaObject(Outliner *pOutl,
+                                               OutlinerParaObject *pPObj1,
+                                               OutlinerParaObject *pPObj2)
+{
+    assert(pOutl && pPObj1 &&  pPObj2);
+
+    pOutl->SetText(*pPObj1);
+    pOutl->AddText(*pPObj2);
+    OutlinerParaObject *pPObj = pOutl->CreateParaObject();
+
+    return pPObj;
+}
+
+OutlinerParaObject *impGetDeeplyMergedParaObject(Outliner *pOutl,
+                                               OutlinerParaObject *pPObj1,
+                                               OutlinerParaObject *pPObj2)
+{ // XXX: For now just the same
+
+    assert(pOutl && pPObj1 &&  pPObj2);
+
+    pOutl->SetText(*pPObj1);
+    pOutl->AddText(*pPObj2);
+    OutlinerParaObject *pPObj = pOutl->CreateParaObject();
+
+    return pPObj;
 }
 
 // class OverflowingText
@@ -89,24 +117,35 @@ OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, Ou
         return NULL;
     }
 
-    // Simply Juxtaposing; no within-para merging
     OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
     // the OutlinerParaObject constr. at the prev line gives no valid outliner mode, so we set it
     pOverflowingPObj->SetOutlinerMode(pOutl->GetOutlinerMode());
 
-    /* Actual Text Setting */
-    pOutl->SetText(*pOverflowingPObj);
+    // Simply Juxtaposing; no within-para merging
+    return impGetJuxtaposedParaObject(pOutl, pOverflowingPObj, pNextPObj);
+}
 
-    // Set selection position between new and old text
-    //maInsertionPointSel = impGetEndSelection(pOutl);  // XXX: Maybe setting in the constructor is just right
+OutlinerParaObject *OverflowingText::impMakeOverflowingParaObject(Outliner *pOutliner)
+{
+    if (mpContentTextObj == NULL) {
+        fprintf(stderr, "[Chaining] OverflowingText's mpContentTextObj is NULL!\n");
+        return NULL;
+    }
 
-    pOutl->AddText(*pNextPObj);
+    // Simply Juxtaposing; no within-para merging
+    OutlinerParaObject *pOverflowingPObj = new OutlinerParaObject(*mpContentTextObj);
+    // the OutlinerParaObject constr. at the prev line gives no valid outliner mode, so we set it
+    pOverflowingPObj->SetOutlinerMode(pOutliner->GetOutlinerMode());
 
-    // End Text Setting
+    return pOverflowingPObj;
+}
 
-    OutlinerParaObject *pPObj = pOutl->CreateParaObject();
-    //pPObj->SetOutlinerMode(pOutl->GetOutlinerMode());
-    return pPObj;
+
+OutlinerParaObject *OverflowingText::GetDeeplyMergedParaObject(Outliner *pOutliner, OutlinerParaObject *pNextPObj)
+{
+    OutlinerParaObject *pOverflowingPObj = impMakeOverflowingParaObject(pOutliner);
+
+    return impGetDeeplyMergedParaObject(pOutliner, pOverflowingPObj, pNextPObj);
 }
 
 // class OFlowChainedText
@@ -135,8 +174,12 @@ OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOut
     if (mpOverflowingTxt == NULL || pTextToBeMerged == NULL)
         return NULL;
 
-    return mpOverflowingTxt->GetJuxtaposedParaObject(pOutliner, pTextToBeMerged );
+    if (mbIsDeepMerge)
+        return mpOverflowingTxt->GetJuxtaposedParaObject(pOutliner, pTextToBeMerged );
+    else
+        return mpOverflowingTxt->GetDeeplyMergedParaObject(pOutliner, pTextToBeMerged );
 }
+
 
 OutlinerParaObject *OFlowChainedText::CreateNonOverflowingParaObject(Outliner *pOutliner)
 {
@@ -162,12 +205,15 @@ UFlowChainedText::UFlowChainedText(Outliner *pOutl, bool bIsDeepMerge)
 
 OutlinerParaObject *UFlowChainedText::CreateMergedUnderflowParaObject(Outliner *pOutl, OutlinerParaObject *pNextLinkWholeText)
 {
+    OutlinerParaObject *pNewText = NULL;
     OutlinerParaObject *pCurText = mpUnderflowPObj;
 
-    // NewTextForCurBox = Txt(CurBox) ++ Txt(NextBox)
-    pOutl->SetText(*pCurText);
-    pOutl->AddText(*pNextLinkWholeText);
-    OutlinerParaObject *pNewText = pOutl->CreateParaObject();
+    if (mbIsDeepMerge) {
+        pNewText = impGetDeeplyMergedParaObject(pOutl, pCurText, pNextLinkWholeText);
+    } else {
+        // NewTextForCurBox = Txt(CurBox) ++ Txt(NextBox)
+        pNewText = impGetJuxtaposedParaObject(pOutl, pCurText, pNextLinkWholeText);
+    }
 
     return pNewText;
 

@@ -42,6 +42,7 @@ class OverflowingText
 
 public:
         OutlinerParaObject *GetJuxtaposedParaObject(Outliner *, OutlinerParaObject *);
+        OutlinerParaObject *GetDeeplyMergedParaObject(Outliner *, OutlinerParaObject *);
         ESelection GetInsertionPointSel() const;
 
         //OUString GetHeadingLines() const;
@@ -52,6 +53,8 @@ private:
     friend class Outliner;
     // Constructor
     OverflowingText(EditTextObject *pTObj);
+
+    OutlinerParaObject *impMakeOverflowingParaObject(Outliner *pOutliner);
 
     const EditTextObject *mpContentTextObj;
 };
