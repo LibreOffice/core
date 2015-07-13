@@ -46,6 +46,12 @@
 
 #include <vcl/svapp.hxx>
 
+#if GTK_CHECK_VERSION(3,10,0)
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#endif
+#endif
+
 using namespace vcl_sal;
 
 /***************************************************************
@@ -87,6 +93,19 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay ) :
 #else
     m_bX11Display = true;
 #endif
+
+#if GTK_CHECK_VERSION(3,10,0)
+#ifdef GDK_WINDOWING_X11
+    if (m_bX11Display)
+    {
+        if (!getenv("GDK_SCALE"))
+        {
+            gdk_x11_display_set_window_scale(m_pGdkDisplay, 1);
+        }
+    }
+#endif
+#endif
+
 }
 
 GtkSalDisplay::~GtkSalDisplay()

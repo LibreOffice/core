@@ -2100,4 +2100,22 @@ cairo_t* GtkSalGraphics::getCairoContext() const
     return mpFrame->getCairoContext();
 }
 
+void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
+{
+    GdkScreen* pScreen = gtk_widget_get_screen(mpWindow);
+    double fResolution = -1.0;
+    g_object_get(pScreen, "resolution", &fResolution, nullptr);
+
+    int nScaleFactor = 1;
+
+#if GTK_CHECK_VERSION(3, 10, 0)
+    nScaleFactor = gdk_window_get_scale_factor(widget_get_window(mpWindow));
+#endif
+
+    if (fResolution > 0.0)
+        rDPIX = rDPIY = sal_Int32(fResolution * nScaleFactor);
+    else
+        rDPIX = rDPIY = 96;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

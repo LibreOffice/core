@@ -61,6 +61,7 @@ public:
 
     cairo_t* getCairoContext() const;
 
+    virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) SAL_OVERRIDE;
 private:
     GtkWidget       *mpWindow;
     static GtkStyleContext *mpButtonStyle;
