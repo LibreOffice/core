@@ -87,21 +87,8 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
 
         @returns
         <p> The complete path of the file or directory currently selected
-            in URL format. There are two different cases:
-            <ol>
-                <li>Multi-selection is disabled:
-                The first and only entry of the sequence contains the complete
-                path/filename in URL format.</li>
-
-                <li>Multi-selection is enabled:
-                If only one file is selected, the first entry
-                of the sequence contains the complete path/filename in URL format.
-                If multiple files are selected, only the first entry is retrieved with
-                the path in URL format.</li>
-            </ol>
-
+            in URL format. This always returns only the first entry of the sequence.
             <br/>
-
             <p><strong>Notes for the implementation of a FileSave dialog:</strong>If there exists
             a checkbox "Automatic File Extension" which is checked and a valid filter is currently selected
             the dialog may automatically add an extension to the selected file name.</p>
