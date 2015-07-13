@@ -335,8 +335,13 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
     long nFiles = [files count];
     SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
 
-    uno::Sequence< rtl::OUString > aSelectedFiles(nFiles > 1 ? nFiles + 1 : nFiles);
+    // multiselection doesn't really work
+    // so just retrieve the first url
+    if (nFiles > 1)
+        nFiles = 1;
 
+    uno::Sequence< rtl::OUString > aSelectedFiles(nFiles);
+    
     for(long nIndex = 0; nIndex < nFiles; nIndex += 1)
     {
         NSURL *url = [files objectAtIndex:nIndex];
@@ -365,23 +370,10 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
 
         OSL_TRACE("handling %s", [[url description] UTF8String]);
         InfoType info = FULLPATH;
-        if (nFiles > 1) {
-            //just get the file's name (only in OpenDialog)
-            info = FILENAME;
-        }
+
         OUString sFileOrDirURL = [url OUStringForInfo:info];
 
-        //get the directory information, only on the first file processed
-        if (nIndex == 0) {
-            OUString sDirectoryURL = [url OUStringForInfo:PATHWITHOUTLASTCOMPONENT];
-
-            if (nFiles > 1) {
-                aSelectedFiles[0] = OUString(sDirectoryURL);
-            }
-        }
-
-        short nSequenceIndex = nFiles > 1 ? nIndex + 1 : nIndex;
-        aSelectedFiles[nSequenceIndex] = sFileOrDirURL;
+        aSelectedFiles[nIndex] = sFileOrDirURL;
 
         OSL_TRACE("Returned file in getFiles: \"%s\".", OUStringToOString(sFileOrDirURL, RTL_TEXTENCODING_UTF8).getStr());
     }
