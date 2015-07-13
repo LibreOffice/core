@@ -12,9 +12,13 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <unordered_map>
+
 #include <vcl/bitmap.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/virdev.hxx>
 
+#include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graphicfilter.hxx>
 
@@ -27,10 +31,12 @@ class BitmapTest : public CppUnit::TestFixture
 {
     void testConvert();
     void testScale();
+    void testCRC();
 
     CPPUNIT_TEST_SUITE(BitmapTest);
     CPPUNIT_TEST(testConvert);
     CPPUNIT_TEST(testScale);
+    CPPUNIT_TEST(testCRC);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -127,6 +133,60 @@ void BitmapTest::testScale()
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         rFilter.compressAsPNG(aBitmap24Bit, aStream, 9);
     }
+}
+
+typedef std::unordered_map<sal_uInt64, const char *> CRCHash;
+
+void checkAndInsert(CRCHash &rHash, sal_uInt64 nCRC, const char *pLocation)
+{
+    auto it = rHash.find(nCRC);
+    if (it != rHash.end()) {
+        OStringBuffer aBuf("CRC collision between ");
+        aBuf.append(pLocation);
+        aBuf.append(" and ");
+        aBuf.append(it->second);
+        aBuf.append(" hash is 0x");
+        aBuf.append((sal_Int64)nCRC, 16);
+        CPPUNIT_FAIL(aBuf.toString().getStr());
+    }
+    rHash[nCRC] = pLocation;
+}
+
+void checkAndInsert(CRCHash &rHash, Bitmap rBmp, const char *pLocation)
+{
+    checkAndInsert(rHash, rBmp.GetChecksum(), pLocation);
+}
+
+Bitmap getAsBitmap(VclPtr<OutputDevice> pOut)
+{
+    return pOut->GetBitmap(Point(), pOut->GetOutputSizePixel());
+}
+
+void BitmapTest::testCRC()
+{
+    CRCHash aCRCs;
+
+    Bitmap aBitmap(Size(1023,759), 24, 0);
+    aBitmap.Erase(COL_BLACK);
+    checkAndInsert(aCRCs, aBitmap, "black bitmap");
+    aBitmap.Invert();
+    checkAndInsert(aCRCs, aBitmap, "white bitmap");
+
+    ScopedVclPtrInstance<VirtualDevice> aVDev;
+    aVDev->SetBackground(Wallpaper(COL_WHITE));
+    aVDev->SetOutputSizePixel(Size(1023, 759));
+
+#if 0 // disabled for now - it breaks on OS/X and Windows
+    Bitmap aWhiteCheck = getAsBitmap(aVDev);
+    CPPUNIT_ASSERT(aCRCs.find(aWhiteCheck.GetChecksum()) != aCRCs.end());
+#endif
+
+    // a 1x1 black & white checkerboard
+    aVDev->DrawCheckered(Point(), aVDev->GetOutputSizePixel(), 1, 1);
+    Bitmap aChecker = getAsBitmap(aVDev);
+    checkAndInsert(aCRCs, aChecker, "checkerboard");
+    aChecker.Invert();
+    checkAndInsert(aCRCs, aChecker, "inverted checkerboard");
 }
 
 } // namespace
