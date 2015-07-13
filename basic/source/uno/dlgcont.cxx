@@ -401,7 +401,7 @@ Reference< css::resource::XStringResourcePersistence >
 void SfxDialogLibraryContainer::onNewRootStorage()
 {
     // the library container is not modified, go through the libraries and check whether they are modified
-    Sequence< OUString > aNames = maNameContainer.getElementNames();
+    Sequence< OUString > aNames = maNameContainer->getElementNames();
     const OUString* pNames = aNames.getConstArray();
     sal_Int32 nNameCount = aNames.getLength();
 

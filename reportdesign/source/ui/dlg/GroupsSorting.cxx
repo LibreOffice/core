@@ -107,7 +107,7 @@ class OFieldExpressionControl : public ::svt::EditBrowseBox
     ImplSVEvent *                   m_nDeleteEvent;
     VclPtr<OGroupsSortingDialog>    m_pParent;
     bool                            m_bIgnoreEvent;
-    OFieldExpressionControlContainerListener aContainerListener;
+    css::uno::Reference<OFieldExpressionControlContainerListener> aContainerListener;
 
     bool SaveModified(bool _bAppend);
 
@@ -205,7 +205,7 @@ OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentD
     ,m_nDeleteEvent(0)
     ,m_pParent(_pParentDialog)
     ,m_bIgnoreEvent(false)
-    ,aContainerListener(this)
+    ,aContainerListener(new OFieldExpressionControlContainerListener(this))
 {
     SetBorderStyle(WindowBorderStyle::MONO);
 }
@@ -219,9 +219,8 @@ OFieldExpressionControl::~OFieldExpressionControl()
 
 void OFieldExpressionControl::dispose()
 {
-    aContainerListener.WeakImplHelper1::acquire();
     uno::Reference< report::XGroups > xGroups = m_pParent->getGroups();
-    xGroups->removeContainerListener(&aContainerListener);
+    xGroups->removeContainerListener(aContainerListener.get());
 
     // delete events from queue
     if( m_nPasteEvent )
@@ -408,7 +407,7 @@ void OFieldExpressionControl::lateInit()
         if( m_pParent->isReadOnly() )
             nMode |= BrowserMode::HIDECURSOR;
         SetMode(nMode);
-        xGroups->addContainerListener(&aContainerListener);
+        xGroups->addContainerListener(aContainerListener.get());
     }
     else
         // not the first call
