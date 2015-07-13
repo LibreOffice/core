@@ -341,7 +341,7 @@ uno::Sequence< OUString > SAL_CALL KDE4FilePicker::getFiles()
     if (seq.getLength() > 1)
         seq.realloc(1);
     if (seq.getLength() == 1)
-        seq[0] = urls.front();
+        seq[0] = toOUString(urls.front().url());
     return seq;
 }
 
