@@ -227,7 +227,7 @@ private:
     Reference<XElementAccess>           _xElementAccess;
 
 
-    Reference<XExactName>               _xENDirect, _xENIntrospection, _xENNameAccess;
+    Reference<XExactName>               _xENDirect, _xENIntrospection;
 };
 
 
@@ -275,7 +275,7 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
         // Ivocation does not support XExactName, if direct object supports
         // XInvocation, but not XExactName.
         if ((_xDirect.is() && _xENDirect.is()) ||
-            (!_xDirect.is() && (_xENIntrospection.is() || _xENNameAccess.is())))
+            (!_xDirect.is() && _xENIntrospection.is()))
         {
             return makeAny( Reference< XExactName >( (static_cast< XExactName* >(this)) ) );
         }
@@ -390,37 +390,15 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
             if( _xIntrospectionAccess.is() )
             {
 
-                _xElementAccess = Reference<XElementAccess>::query(
-                      _xIntrospectionAccess->queryAdapter(
-                                 cppu::UnoType<XElementAccess>::get()) );
-
-                _xEnumerationAccess = Reference<XEnumerationAccess>::query(
-                           _xIntrospectionAccess->queryAdapter(
-                                cppu::UnoType<XEnumerationAccess>::get()) );
-
-                _xIndexAccess = Reference<XIndexAccess>::query(
-                       _xIntrospectionAccess->queryAdapter(
-                                cppu::UnoType<XIndexAccess>::get()) );
-
-                _xIndexContainer = Reference<XIndexContainer>::query(
-                     _xIntrospectionAccess->queryAdapter(
-                                cppu::UnoType<XIndexContainer>::get()) );
-
-                _xNameAccess = Reference<XNameAccess>::query(
-                     _xIntrospectionAccess->queryAdapter(
-                                cppu::UnoType<XNameAccess>::get()) );
-
-                _xNameContainer = Reference<XNameContainer>::query(
-                           _xIntrospectionAccess->queryAdapter(
-                               cppu::UnoType<XNameContainer>::get()) );
-
-                _xPropertySet = Reference<XPropertySet>::query(
-                           _xIntrospectionAccess->queryAdapter(
-                               cppu::UnoType<XPropertySet>::get()) );
+                _xElementAccess = Reference<XElementAccess>::query( _xIntrospectionAccess );
+                _xEnumerationAccess = Reference<XEnumerationAccess>::query( _xIntrospectionAccess );
+                _xIndexAccess = Reference<XIndexAccess>::query( _xIntrospectionAccess );
+                _xIndexContainer = Reference<XIndexContainer>::query( _xIntrospectionAccess );
+                _xNameAccess = Reference<XNameAccess>::query( _xIntrospectionAccess );
+                _xNameContainer = Reference<XNameContainer>::query( _xIntrospectionAccess );
+                _xPropertySet = Reference<XPropertySet>::query( _xIntrospectionAccess );
 
                 _xENIntrospection = Reference<XExactName>::query( _xIntrospectionAccess );
-                if (_xNameAccess.is())
-                    _xENNameAccess = Reference<XExactName>::query( _xNameAccess );
             }
         }
         /* only once !!!
@@ -450,8 +428,6 @@ OUString Invocation_Impl::getExactName( const OUString& rApproximateName )
     OUString aRet;
     if (_xENIntrospection.is())
         aRet = _xENIntrospection->getExactName( rApproximateName );
-    if (aRet.isEmpty() && _xENNameAccess.is())
-        aRet = _xENNameAccess->getExactName( rApproximateName );
     return aRet;
 }
 
@@ -990,7 +966,7 @@ Sequence< Type > SAL_CALL Invocation_Impl::getTypes() throw( RuntimeException, s
         // Ivocation does not support XExactName, if direct object supports
         // XInvocation, but not XExactName.
         if ((_xDirect.is() && _xENDirect.is()) ||
-            (!_xDirect.is() && (_xENIntrospection.is() || _xENNameAccess.is())))
+            (!_xDirect.is() && _xENIntrospection.is()))
         {
             pTypes[ n++ ] = cppu::UnoType<XExactName>::get();
         }
