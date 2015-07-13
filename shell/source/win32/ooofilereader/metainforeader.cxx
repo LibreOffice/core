@@ -53,7 +53,7 @@ CBaseReader( DocumentName )
 
         Initialize( META_CONTENT_NAME );
     }
-    catch(xml_parser_exception& ex)
+    catch(xml_parser_exception&)
     {
         // OSL_ENSURE(false, ex.what());
     }
@@ -90,7 +90,7 @@ try
 
         Initialize( META_CONTENT_NAME );
     }
-    catch(xml_parser_exception& ex)
+    catch(xml_parser_exception&)
     {
         // OSL_ENSURE(false, ex.what());
     }

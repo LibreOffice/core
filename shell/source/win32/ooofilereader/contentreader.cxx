@@ -34,7 +34,7 @@ CBaseReader( DocumentName )
         m_DefaultLocale = DocumentLocale;
         Initialize( DOC_CONTENT_NAME );
     }
-    catch(xml_parser_exception& ex)
+    catch(xml_parser_exception&)
     {
         // OSL_ENSURE(false, ex.what());
     }
@@ -52,7 +52,7 @@ try
         m_DefaultLocale = DocumentLocale;
         Initialize( DOC_CONTENT_NAME );
     }
-    catch(xml_parser_exception& ex)
+    catch(xml_parser_exception&)
     {
         // OSL_ENSURE(false, ex.what());
     }
