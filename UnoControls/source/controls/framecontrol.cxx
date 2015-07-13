@@ -47,11 +47,11 @@ namespace unocontrols{
 //  construct/destruct
 
 FrameControl::FrameControl( const Reference< XComponentContext >& rxContext)
-    : BaseControl                   ( rxContext                                                                             )
-    , OBroadcastHelper              ( m_aMutex                                                                              )
-    , OPropertySetHelper            ( *(static_cast< OBroadcastHelper * >(this))  )
-    , m_aInterfaceContainer         ( m_aMutex                                                                              )
-    , m_aConnectionPointContainer   ( m_aMutex                                                                              )
+    : BaseControl                   ( rxContext                                     )
+    , OBroadcastHelper              ( m_aMutex                                      )
+    , OPropertySetHelper            ( *(static_cast< OBroadcastHelper * >(this))    )
+    , m_aInterfaceContainer         ( m_aMutex                                      )
+    , m_aConnectionPointContainer   ( new OConnectionPointContainerHelper(m_aMutex) )
 {
 }
 
@@ -233,7 +233,7 @@ Reference< XGraphics > SAL_CALL FrameControl::getGraphics() throw( RuntimeExcept
 Sequence< Type > SAL_CALL FrameControl::getConnectionPointTypes() throw( RuntimeException, std::exception )
 {
     // Forwarded to helper class
-    return m_aConnectionPointContainer.getConnectionPointTypes();
+    return m_aConnectionPointContainer->getConnectionPointTypes();
 }
 
 //  XConnectionPointContainer
@@ -241,7 +241,7 @@ Sequence< Type > SAL_CALL FrameControl::getConnectionPointTypes() throw( Runtime
 Reference< XConnectionPoint > SAL_CALL FrameControl::queryConnectionPoint( const Type& aType ) throw( RuntimeException, std::exception )
 {
     // Forwarded to helper class
-    return m_aConnectionPointContainer.queryConnectionPoint( aType );
+    return m_aConnectionPointContainer->queryConnectionPoint( aType );
 }
 
 //  XConnectionPointContainer
@@ -250,7 +250,7 @@ void SAL_CALL FrameControl::advise( const   Type&                       aType   
                                     const   Reference< XInterface >&    xListener   ) throw( RuntimeException, std::exception )
 {
     // Forwarded to helper class
-    m_aConnectionPointContainer.advise( aType, xListener );
+    m_aConnectionPointContainer->advise( aType, xListener );
 }
 
 //  XConnectionPointContainer
@@ -259,7 +259,7 @@ void SAL_CALL FrameControl::unadvise(   const   Type&                       aTyp
                                         const   Reference< XInterface >&    xListener   ) throw( RuntimeException, std::exception )
 {
     // Forwarded to helper class
-    m_aConnectionPointContainer.unadvise( aType, xListener );
+    m_aConnectionPointContainer->unadvise( aType, xListener );
 }
 
 //  impl but public method to register service

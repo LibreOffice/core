@@ -490,7 +490,7 @@ ODatabaseSource::ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pI
             :ModelDependentComponent( _pImpl )
             ,ODatabaseSource_Base( getMutex() )
             ,OPropertySetHelper( ODatabaseSource_Base::rBHelper )
-            ,m_aBookmarks( *this, getMutex() )
+            ,m_xBookmarks( new OBookmarkContainer( *this, getMutex() ) )
             ,m_aFlushListeners( getMutex() )
 {
     // some kind of default
@@ -1199,7 +1199,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
 Reference< XNameAccess > SAL_CALL ODatabaseSource::getBookmarks(  ) throw (RuntimeException, std::exception)
 {
     ModelMethodGuard aGuard( *this );
-    return static_cast< XNameContainer* >(&m_aBookmarks);
+    return static_cast< XNameContainer* >(m_xBookmarks.get());
 }
 
 Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(RuntimeException, std::exception)

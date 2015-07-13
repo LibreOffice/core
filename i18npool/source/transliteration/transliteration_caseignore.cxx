@@ -59,16 +59,16 @@ Transliteration_caseignore::transliterateRange( const OUString& str1, const OUSt
     if (str1.getLength() != 1 || str2.getLength() != 1)
         throw RuntimeException();
 
-    static Transliteration_u2l u2l;
-    static Transliteration_l2u l2u;
+    static Reference< Transliteration_u2l > u2l(new Transliteration_u2l);
+    static Reference< Transliteration_l2u > l2u(new Transliteration_l2u);
 
-    u2l.loadModule((TransliterationModules)0, aLocale);
-    l2u.loadModule((TransliterationModules)0, aLocale);
+    u2l->loadModule((TransliterationModules)0, aLocale);
+    l2u->loadModule((TransliterationModules)0, aLocale);
 
-    OUString l1 = u2l.transliterateString2String(str1, 0, str1.getLength());
-    OUString u1 = l2u.transliterateString2String(str1, 0, str1.getLength());
-    OUString l2 = u2l.transliterateString2String(str2, 0, str2.getLength());
-    OUString u2 = l2u.transliterateString2String(str2, 0, str2.getLength());
+    OUString l1 = u2l->transliterateString2String(str1, 0, str1.getLength());
+    OUString u1 = l2u->transliterateString2String(str1, 0, str1.getLength());
+    OUString l2 = u2l->transliterateString2String(str2, 0, str2.getLength());
+    OUString u2 = l2u->transliterateString2String(str2, 0, str2.getLength());
 
     if ((l1 == u1) && (l2 == u2)) {
         Sequence< OUString > r(2);

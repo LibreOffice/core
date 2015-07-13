@@ -1357,11 +1357,11 @@ void ScCsvGrid::ImplDrawTrackingRect( sal_uInt32 nColIndex )
 
 // accessibility ==============================================================
 
-ScAccessibleCsvControl* ScCsvGrid::ImplCreateAccessible()
+rtl::Reference<ScAccessibleCsvControl> ScCsvGrid::ImplCreateAccessible()
 {
-    std::unique_ptr<ScAccessibleCsvControl> pControl(new ScAccessibleCsvGrid( *this ));
+    rtl::Reference<ScAccessibleCsvControl> pControl(new ScAccessibleCsvGrid( *this ));
     pControl->Init();
-    return pControl.release();
+    return pControl;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

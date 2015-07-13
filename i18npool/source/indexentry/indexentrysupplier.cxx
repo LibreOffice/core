@@ -116,14 +116,14 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
             rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
         return xIES;
     else {
-        LocaleDataImpl ld;
+        uno::Reference<LocaleDataImpl> ld(new LocaleDataImpl);
         aLocale = rLocale;
         if (rSortAlgorithm.isEmpty())
-            aSortAlgorithm = ld.getDefaultIndexAlgorithm( rLocale );
+            aSortAlgorithm = ld->getDefaultIndexAlgorithm( rLocale );
         else
             aSortAlgorithm = rSortAlgorithm;
 
-        OUString module = ld.getIndexModuleByAlgorithm(rLocale, aSortAlgorithm);
+        OUString module = ld->getIndexModuleByAlgorithm(rLocale, aSortAlgorithm);
         if (!module.isEmpty() && createLocaleSpecificIndexEntrySupplier(module))
             return xIES;
 

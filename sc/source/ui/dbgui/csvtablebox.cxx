@@ -22,6 +22,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 #include "editutil.hxx"
+#include "AccessibleCsvControl.hxx"
 
 ScCsvTableBox::ScCsvTableBox( vcl::Window* pParent, WinBits nBits ) :
     ScCsvControl( pParent, maData, nBits ),
@@ -426,9 +427,9 @@ ScCsvTableBox::XAccessibleRef ScCsvTableBox::CreateAccessible()
     return Control::CreateAccessible();
 }
 
-ScAccessibleCsvControl* ScCsvTableBox::ImplCreateAccessible()
+rtl::Reference<ScAccessibleCsvControl> ScCsvTableBox::ImplCreateAccessible()
 {
-    return NULL;    // not used, see CreateAccessible()
+    return rtl::Reference<ScAccessibleCsvControl>();    // not used, see CreateAccessible()
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

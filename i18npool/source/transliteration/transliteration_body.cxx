@@ -269,9 +269,9 @@ static OUString transliterate_titlecase_Impl(
     if (!aText.isEmpty())
     {
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        CharacterClassificationImpl aCharClassImpl( xContext );
+        Reference< CharacterClassificationImpl > xCharClassImpl( new CharacterClassificationImpl( xContext ) );
 
-        // because aCharClassImpl.toTitle does not handle ligatures or Beta but will raise
+        // because xCharClassImpl.toTitle does not handle ligatures or Beta but will raise
         // an exception we need to handle the first chara manually...
 
         // we don't want to change surrogates by accident, thuse we use proper code point iteration
@@ -279,16 +279,16 @@ static OUString transliterate_titlecase_Impl(
         sal_uInt32 cFirstChar = aText.iterateCodePoints( &nPos );
         OUString aResolvedLigature( &cFirstChar, 1 );
         // toUpper can be used to properly resolve ligatures and characters like Beta
-        aResolvedLigature = aCharClassImpl.toUpper( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
+        aResolvedLigature = xCharClassImpl->toUpper( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
         // since toTitle will leave all-uppercase text unchanged we first need to
         // use toLower to bring possible 2nd and following chars in lowercase
-        aResolvedLigature = aCharClassImpl.toLower( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
+        aResolvedLigature = xCharClassImpl->toLower( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
         sal_Int32 nResolvedLen = aResolvedLigature.getLength();
 
         // now we can properly use toTitle to get the expected result for the resolved string.
         // The rest of the text should just become lowercase.
-        aRes = aCharClassImpl.toTitle( aResolvedLigature, 0, nResolvedLen, rLocale );
-        aRes += aCharClassImpl.toLower( aText, 1, aText.getLength() - 1, rLocale );
+        aRes = xCharClassImpl->toTitle( aResolvedLigature, 0, nResolvedLen, rLocale );
+        aRes += xCharClassImpl->toLower( aText, 1, aText.getLength() - 1, rLocale );
         offset.realloc( aRes.getLength() );
 
         sal_Int32 *pOffset = offset.getArray();

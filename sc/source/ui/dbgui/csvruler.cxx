@@ -654,7 +654,7 @@ void ScCsvRuler::ImplSetMousePointer( sal_Int32 nPos )
 
 // accessibility ==============================================================
 
-ScAccessibleCsvControl* ScCsvRuler::ImplCreateAccessible()
+rtl::Reference<ScAccessibleCsvControl> ScCsvRuler::ImplCreateAccessible()
 {
     return new ScAccessibleCsvRuler( *this );
 }
