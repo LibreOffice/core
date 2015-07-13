@@ -63,6 +63,6 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 		   $(MAKE) firebird_embedded \
 		$(if $(filter MACOSX,$(OS)),&& $(PERL) \
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
-			$(gb_Package_SOURCEDIR_firebird)/gen/firebird/lib/libfbembed.dylib.2.5.2) \
+			$(gb_Package_SOURCEDIR_firebird)/gen/firebird/lib/libfbembed.dylib.2.5.4) \
 	)
 # vim: set noet sw=4 ts=4:

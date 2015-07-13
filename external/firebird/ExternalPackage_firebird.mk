@@ -14,9 +14,9 @@ $(eval $(call gb_ExternalPackage_use_external_project,firebird,firebird))
 ifeq ($(OS)-$(COM),WNT-MSC)
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/ifbembed.dll,gen/firebird/bin/ifbembed.dll))
 else ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbembed.dylib,gen/firebird/lib/libfbembed.dylib.2.5.2))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbembed.dylib,gen/firebird/lib/libfbembed.dylib.2.5.4))
 else ifeq ($(DISABLE_DYNLOADING),)
-$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5.2))
+$(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/libfbembed.so.2.5,gen/firebird/lib/libfbembed.so.2.5.4))
 endif
 
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_SHARE_FOLDER)/firebird/firebird.msg,gen/firebird/firebird.msg))

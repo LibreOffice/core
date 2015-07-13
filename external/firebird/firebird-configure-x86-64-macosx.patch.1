@@ -1,0 +1,20 @@
+--- firebird.org/configure	2015-03-27 16:00:42.000000000 +0200
++++ firebird/configure	2015-06-09 15:33:26.000000000 +0300
+@@ -2373,7 +2373,7 @@
+     ;;
+ 
+   i*86-*-darwin* | i*86_*-darwin*)
+-    MAKEFILE_PREFIX=darwin_i386
++    MAKEFILE_PREFIX=darwin_x86_64
+     MAKEFILE_POSTFIX=darwin
+     PLATFORM=DARWIN
+     INSTALL_PREFIX=darwin
+@@ -2386,7 +2386,7 @@
+     EDITLINE_FLG=Y
+     SHRLIB_EXT=dylib
+     ICU_PLATFORM=MacOSX
+-    CPU_TYPE=i386
++    CPU_TYPE=x86_64
+     ;;
+ 
+   powerpc-*-darwin*)
