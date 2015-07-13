@@ -351,9 +351,9 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 
             Reference< XDocumentHandler > xHandler( xWriter, uno::UNO_QUERY );
 
-            XMLVersionListExport aExp( xContext, rVersions, sVerName, xHandler );
+            Reference< XMLVersionListExport > xExp( new XMLVersionListExport( xContext, rVersions, sVerName, xHandler ) );
 
-            aExp.exportDoc( ::xmloff::token::XML_VERSION );
+            xExp->exportDoc( ::xmloff::token::XML_VERSION );
 
             xVerStream = uno::Reference< io::XStream >(); // use refcounting for now to dispose
         }

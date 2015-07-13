@@ -1028,12 +1028,12 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         {
                             if( aAny.hasValue() )
                             {
-                                pLib->maNameContainer.replaceByName( aElementName, aAny );
+                                pLib->maNameContainer->replaceByName( aElementName, aAny );
                             }
                         }
                         else
                         {
-                            pLib->maNameContainer.insertByName( aElementName, aAny );
+                            pLib->maNameContainer->insertByName( aElementName, aAny );
                         }
                     }
                 }
@@ -1142,12 +1142,12 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                 {
                                     if( aAny.hasValue() )
                                     {
-                                        pLib->maNameContainer.replaceByName( aElementName, aAny );
+                                        pLib->maNameContainer->replaceByName( aElementName, aAny );
                                     }
                                 }
                                 else
                                 {
-                                    pLib->maNameContainer.insertByName( aElementName, aAny );
+                                    pLib->maNameContainer->insertByName( aElementName, aAny );
                                 }
                             }
                         }

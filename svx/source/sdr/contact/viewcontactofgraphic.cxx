@@ -268,7 +268,7 @@ namespace sdr
                         aScale, fShearX, fRotate, aTranslate));
 
                     // directly create temp SdrBlockTextPrimitive2D
-                    drawinglayer::primitive2d::SdrBlockTextPrimitive2D aBlockTextPrimitive(
+                    css::uno::Reference< drawinglayer::primitive2d::SdrBlockTextPrimitive2D > xBlockTextPrimitive(new drawinglayer::primitive2d::SdrBlockTextPrimitive2D(
                         pSdrText,
                         *pOPO,
                         aTextRangeTransform,
@@ -278,7 +278,7 @@ namespace sdr
                         false,
                         false,
                         false,
-                        false);
+                        false));
 
                     // decompose immediately with neutral ViewInformation. This will
                     // layout the text to more simple TextPrimitives from drawinglayer
@@ -286,7 +286,7 @@ namespace sdr
 
                     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
                         xRetval,
-                        aBlockTextPrimitive.get2DDecomposition(aViewInformation2D));
+                        xBlockTextPrimitive->get2DDecomposition(aViewInformation2D));
                 }
             }
 

@@ -92,12 +92,12 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         trans->setMappingType(MappingTypeToTitle, rLocale);
         rtl_uString* pStr = rtl_uString_alloc(nCount);
         sal_Unicode* out = pStr->buffer;
-        BreakIteratorImpl brk(m_xContext);
-        Boundary bdy = brk.getWordBoundary(Text, nPos, rLocale,
+        Reference< BreakIteratorImpl > xBrk(new BreakIteratorImpl(m_xContext));
+        Boundary bdy = xBrk->getWordBoundary(Text, nPos, rLocale,
                     WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
         for (sal_Int32 i = nPos; i < nCount + nPos; i++, out++) {
             if (i >= bdy.endPos)
-                bdy = brk.nextWord(Text, bdy.endPos, rLocale,
+                bdy = xBrk->nextWord(Text, bdy.endPos, rLocale,
                             WordType::ANYWORD_IGNOREWHITESPACES);
             *out = (i == bdy.startPos) ?
                 trans->transliterateChar2Char(Text[i]) : Text[i];

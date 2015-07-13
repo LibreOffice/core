@@ -3359,9 +3359,9 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
         }
     }
 
-    unique_ptr<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, m_xDataProvider, pTokensNew.release(), m_bIncludeHiddenCells));
+    uno::Reference<ScChart2DataSequence> p(new ScChart2DataSequence(m_pDocument, m_xDataProvider, pTokensNew.release(), m_bIncludeHiddenCells));
     p->CopyData(*this);
-    Reference< util::XCloneable > xClone(p.release());
+    Reference< util::XCloneable > xClone(p);
 
     return xClone;
 }
