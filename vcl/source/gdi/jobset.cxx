@@ -222,7 +222,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
     {
         sal_uInt16 nLen = 0;
         rIStream.ReadUInt16( nLen );
-        if ( !nLen )
+        if (nLen <= 4)
             return rIStream;
 
         sal_uInt16 nSystem = 0;
@@ -236,7 +236,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
         }
         sal_Size nFirstPos = rIStream.Tell();
         std::unique_ptr<char[]> pTempBuf(new char[nRead]);
-        rIStream.Read(pTempBuf.get(),  nRead);
+        rIStream.Read(pTempBuf.get(), nRead);
         if (nRead >= sizeof(ImplOldJobSetupData))
         {
             ImplOldJobSetupData* pData = reinterpret_cast<ImplOldJobSetupData*>(pTempBuf.get());
