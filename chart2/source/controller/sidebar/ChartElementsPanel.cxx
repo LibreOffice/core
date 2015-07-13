@@ -63,8 +63,6 @@ ChartElementsPanel::ChartElementsPanel(
     get(mpCBGridHorizontal,  "checkbutton_gridline_horizontal");
     get(mpCBShowLabel,  "checkbutton_label");
     get(mpCBTrendline,  "checkbutton_trendline");
-
-    Initialize();
 }
 
 ChartElementsPanel::~ChartElementsPanel()
@@ -93,10 +91,6 @@ void ChartElementsPanel::dispose()
     mpCBTrendline.clear();
 
     PanelLayout::dispose();
-}
-
-void ChartElementsPanel::Initialize()
-{
 }
 
 VclPtr<vcl::Window> ChartElementsPanel::Create (

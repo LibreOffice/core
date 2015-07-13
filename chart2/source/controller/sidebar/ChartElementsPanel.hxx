@@ -88,8 +88,6 @@ private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
-
-    void Initialize();
 };
 
 } } // end of namespace ::chart::sidebar

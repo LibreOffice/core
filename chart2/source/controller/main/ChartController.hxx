@@ -153,7 +153,7 @@ public:
                ::com::sun::star::uno::XComponentContext > const & xContext);
     virtual ~ChartController();
 
-    OUString GetContextName();
+    static OUString GetContextName();
 
     // ::com::sun::star::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
