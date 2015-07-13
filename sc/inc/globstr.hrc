@@ -700,7 +700,9 @@
 
 #define STR_TABLE_COUNT                 535
 
-#define SC_GLOBSTR_STR_COUNT            536     /**< the count of permanently resident strings */
+#define STR_HEADER_RANGE_OR_EXPR        536
+
+#define SC_GLOBSTR_STR_COUNT            537     /**< the count of permanently resident strings */
 
 #endif
 
