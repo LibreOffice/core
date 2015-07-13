@@ -47,3 +47,5 @@ const char* Common::LastErrorMessage()
 }
 }
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

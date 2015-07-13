@@ -73,3 +73,5 @@ public:
 }
 
 #endif // INCLUDED_AVMEDIA_SOURCE_VLC_VLCWINDOW_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
