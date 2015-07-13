@@ -1683,11 +1683,6 @@ bool Printer::SetCopyCount( sal_uInt16 nCopy, bool bCollate )
     return true;
 }
 
-void Printer::Error()
-{
-    maErrorHdl.Call( this );
-}
-
 sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
 {
     sal_uLong nVCLError;

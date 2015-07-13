@@ -185,7 +185,6 @@ public:
 
     vcl::Font       GetUnzoomedControlPointFont() const;
     void            SetShowAccelerator (bool val);
-    bool            GetShowAccelerator (void) const;
 };
 
 #endif // INCLUDED_VCL_CTRL_HXX

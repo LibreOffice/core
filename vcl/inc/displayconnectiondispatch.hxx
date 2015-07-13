@@ -33,8 +33,6 @@ class DisplayConnectionDispatch:
 public:
     virtual bool dispatchEvent(void * pData, int nBytes) = 0;
 
-    virtual bool dispatchErrorEvent(void * pData, int nBytes) = 0;
-
 protected:
     virtual ~DisplayConnectionDispatch() {}
 };

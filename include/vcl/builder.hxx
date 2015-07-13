@@ -70,8 +70,6 @@ public:
 
     vcl::Window*    get_widget_root();
 
-    PopupMenu*      get_menu(PopupMenu*& ret, const OString& sID);
-
     //sID may not exist
     PopupMenu*      get_menu(const OString& sID);
 
@@ -432,13 +430,7 @@ inline T* VclBuilder::get(const OString& sID)
     return static_cast<T*>(w);
 }
 
-inline PopupMenu* VclBuilder::get_menu(PopupMenu*& ret, const OString& sID)
-{
-    ret = get_menu(sID);
-    SAL_WARN_IF(!ret, "vcl.layout", "menu \"" << sID.getStr() << "\" not found in .ui");
-    assert(ret);
-    return ret;
-}
+
 
 //helper baseclass to ease retro fitting dialogs/tabpages that load a resource
 //to load a .ui file instead

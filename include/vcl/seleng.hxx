@@ -121,7 +121,6 @@ public:
     // when the mouse is outside the area
     void                SetVisibleArea( const Rectangle& rNewArea )
                             { aArea = rNewArea; }
-    const Rectangle&    GetVisibleArea() const { return aArea; }
 
     void                SetAddMode( bool);
     bool                IsAddMode() const;

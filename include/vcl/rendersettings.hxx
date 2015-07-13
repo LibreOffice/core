@@ -28,8 +28,6 @@ public:
 
     virtual ~RenderSettings()
     {}
-
-    void Apply(vcl::RenderContext& rRenderContext);
 };
 
 }

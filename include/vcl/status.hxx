@@ -189,22 +189,10 @@ public:
 
     void                SetText( const OUString& rText ) SAL_OVERRIDE;
 
-    void                SetHelpText( const OUString& rText )
-                            { Window::SetHelpText( rText ); }
-    const OUString&    GetHelpText() const
-                            { return Window::GetHelpText(); }
-
-    void                SetHelpId( const OString& rId )
-                            { Window::SetHelpId( rId ); }
-    const OString&      GetHelpId() const
-                            { return Window::GetHelpId(); }
-
     Size                CalcWindowSizePixel() const;
 
     void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
-    const Link<>&       GetClickHdl() const { return maClickHdl; }
     void                SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
-    const Link<>&       GetDoubleClickHdl() const { return maDoubleClickHdl; }
 
     using Window::SetAccessibleName;
     void                SetAccessibleName( sal_uInt16 nItemId, const OUString& rName );

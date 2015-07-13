@@ -135,11 +135,9 @@ public:
     sal_uInt16          GetPageId( const OString& rName ) const;
 
     void                SetCurPageId( sal_uInt16 nPageId );
-    sal_uInt16              GetCurPageId() const;
+    sal_uInt16          GetCurPageId() const;
 
     void                SelectTabPage( sal_uInt16 nPageId );
-
-    void                SetMaxPageWidth( long nMaxWidth ) { mnMaxPageWidth = nMaxWidth; }
 
     void                SetTabPage( sal_uInt16 nPageId, TabPage* pPage );
     TabPage*            GetTabPage( sal_uInt16 nPageId ) const;

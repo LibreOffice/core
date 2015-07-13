@@ -83,7 +83,6 @@ public:
 
     const AllSettings&      GetFieldSettings() const;
 
-    void                    SetErrorHdl( const Link<>& rLink )  { maErrorLink = rLink; }
     const Link<>&           GetErrorHdl() const                 { return maErrorLink; }
 
     void                    SetEmptyFieldValue();
@@ -127,12 +126,10 @@ public:
     const OString& GetEditMask() const { return m_aEditMask; }
     const OUString&        GetLiteralMask() const  { return maLiteralMask; }
 
-    void                    SetFormatFlags( sal_uInt16 nFlags ) { mnFormatFlags = nFlags; }
     sal_uInt16              GetFormatFlags() const { return mnFormatFlags; }
 
     void                    SetString( const OUString& rStr );
     OUString                GetString() const;
-    bool                IsStringModified() const { return !(GetString() == maFieldString ); }
 };
 
 
@@ -209,7 +206,6 @@ public:
     virtual sal_Int64       GetValue() const;
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const;
     bool                    IsValueModified() const;
-    sal_Int64               GetCorrectedValue() const { return mnCorrectedValue; }
 
     sal_Int64               Normalize( sal_Int64 nValue ) const;
     sal_Int64               Denormalize( sal_Int64 nValue ) const;
@@ -267,11 +263,9 @@ public:
     virtual sal_Int64       GetValue( FieldUnit eOutUnit ) const;
     virtual sal_Int64       GetValue() const SAL_OVERRIDE;
     virtual OUString        CreateFieldText( sal_Int64 nValue ) const SAL_OVERRIDE;
-    using NumericFormatter::GetCorrectedValue;
     sal_Int64               GetCorrectedValue( FieldUnit eOutUnit ) const;
 
     void                    SetCustomConvertHdl( const Link<>& rLink ) { maCustomConvertLink = rLink; }
-    const Link<>&           GetCustomConvertHdl() const { return maCustomConvertLink; }
 };
 
 
@@ -371,7 +365,6 @@ public:
     Date                    GetDate() const;
     void                    SetEmptyDate();
     bool                    IsEmptyDate() const;
-    Date                    GetCorrectedDate() const { return maCorrectedDate; }
 
     void                    ResetLastDate() { maLastDate = Date( 0, 0, 0 ); }
 
@@ -456,7 +449,6 @@ public:
     tools::Time             GetTime() const;
     void                    SetEmptyTime() { FormatterBase::SetEmptyFieldValue(); }
     bool                    IsEmptyTime() const { return FormatterBase::IsEmptyFieldValue(); }
-    tools::Time             GetCorrectedTime() const { return maCorrectedTime; }
 
     static tools::Time      GetInvalidTime() { return tools::Time( 99, 99, 99 ); }
 

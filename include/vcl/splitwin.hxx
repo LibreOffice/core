@@ -109,7 +109,6 @@ private:
     SAL_DLLPRIVATE void ImplDrawFadeOut(vcl::RenderContext& rRenderContext, bool bInPaint);
     SAL_DLLPRIVATE void ImplNewAlign();
     SAL_DLLPRIVATE void ImplDrawGrip(vcl::RenderContext& rRenderContext, const Rectangle& rRect, bool bHorz, bool bLeft);
-    SAL_DLLPRIVATE void ImplDrawFadeArrow(vcl::RenderContext& rRenderContext, const Point& rPt, bool bHorz, bool bLeft);
     SAL_DLLPRIVATE void ImplStartSplit( const MouseEvent& rMEvt );
 
     SAL_DLLPRIVATE void ImplDrawBorder(vcl::RenderContext& rRenderContext);
@@ -177,51 +176,31 @@ public:
     /** Return the current size limits for the specified item.
     */
     long                GetItemSize( sal_uInt16 nId, SplitWindowItemFlags nBits ) const;
-    sal_uInt16              GetSet( sal_uInt16 nId ) const;
-    sal_uInt16              GetItemId( vcl::Window* pWindow ) const;
-    sal_uInt16              GetItemId( const Point& rPos ) const;
-    sal_uInt16              GetItemPos( sal_uInt16 nId, sal_uInt16 nSetId = 0 ) const;
-    sal_uInt16              GetItemId( sal_uInt16 nPos, sal_uInt16 nSetId = 0 ) const;
-    sal_uInt16              GetItemCount( sal_uInt16 nSetId = 0 ) const;
+    sal_uInt16          GetSet( sal_uInt16 nId ) const;
+    sal_uInt16          GetItemId( vcl::Window* pWindow ) const;
+    sal_uInt16          GetItemId( const Point& rPos ) const;
+    sal_uInt16          GetItemPos( sal_uInt16 nId, sal_uInt16 nSetId = 0 ) const;
+    sal_uInt16          GetItemId( sal_uInt16 nPos, sal_uInt16 nSetId = 0 ) const;
+    sal_uInt16          GetItemCount( sal_uInt16 nSetId = 0 ) const;
     bool                IsItemValid( sal_uInt16 nId ) const;
 
-    bool                IsNoAlign() const { return mbNoAlign; }
     void                SetAlign( WindowAlign eNewAlign = WINDOWALIGN_TOP );
     WindowAlign         GetAlign() const { return meAlign; }
     bool                IsHorizontal() const { return mbHorz; }
 
-    bool                IsSplitting() const { return IsTracking(); }
-
     void                SetMaxSizePixel( long nNewMaxSize ) { mnMaxSize = nNewMaxSize; }
-    long                GetMaxSizePixel() const { return mnMaxSize; }
 
     Size                CalcLayoutSizePixel( const Size& aNewSize );
 
     void                ShowAutoHideButton( bool bShow = true );
     bool                IsAutoHideButtonVisible() const { return mbAutoHide; }
     void                ShowFadeInHideButton( bool bShow = true );
-    void                ShowFadeInButton( bool bShow = true ) { ShowFadeInHideButton( bShow ); }
-    bool                IsFadeInButtonVisible() const { return mbFadeIn; }
     void                ShowFadeOutButton( bool bShow = true );
-    bool                IsFadeOutButtonVisible() const { return mbFadeOut; }
     long                GetFadeInSize() const;
     bool                IsFadeNoButtonMode() const { return mbFadeNoButtonMode; }
 
     void                SetAutoHideState( bool bAutoHide );
-    bool                GetAutoHideState() const { return mbAutoHideIn; }
-
-    void                SetStartSplitHdl( const Link<>& rLink ) { maStartSplitHdl = rLink; }
-    const Link<>&       GetStartSplitHdl() const { return maStartSplitHdl; }
     void                SetSplitHdl( const Link<>& rLink ) { maSplitHdl = rLink; }
-    const Link<>&       GetSplitHdl() const { return maSplitHdl; }
-    void                SetSplitResizeHdl( const Link<>& rLink ) { maSplitResizeHdl = rLink; }
-    const Link<>&       GetSplitResizeHdl() const { return maSplitResizeHdl; }
-    void                SetAutoHideHdl( const Link<>& rLink ) { maAutoHideHdl = rLink; }
-    const Link<>&       GetAutoHideHdl() const { return maAutoHideHdl; }
-    void                SetFadeInHdl( const Link<>& rLink ) { maFadeInHdl = rLink; }
-    const Link<>&       GetFadeInHdl() const { return maFadeInHdl; }
-    void                SetFadeOutHdl( const Link<>& rLink ) { maFadeOutHdl = rLink; }
-    const Link<>&       GetFadeOutHdl() const { return maFadeOutHdl; }
 };
 
 #endif // INCLUDED_VCL_SPLITWIN_HXX

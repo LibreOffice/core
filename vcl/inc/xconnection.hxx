@@ -47,7 +47,6 @@ namespace vcl {
         void terminate();
 
         virtual bool dispatchEvent( void* pData, int nBytes ) SAL_OVERRIDE;
-        virtual bool dispatchErrorEvent( void* pData, int nBytes ) SAL_OVERRIDE;
 
         // XDisplayConnection
         virtual void SAL_CALL addEventHandler( const ::com::sun::star::uno::Any& window, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler, sal_Int32 eventMask ) throw(std::exception) SAL_OVERRIDE;

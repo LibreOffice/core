@@ -13,18 +13,6 @@
 namespace vcl
 {
 
-void RenderSettings::Apply(vcl::RenderContext& rRenderContext)
-{
-    if (maOutDevState.mnFlags & PushFlags::LINECOLOR)
-        rRenderContext.SetLineColor(*maOutDevState.mpLineColor);
-    if (maOutDevState.mnFlags & PushFlags::FILLCOLOR)
-        rRenderContext.SetFillColor(*maOutDevState.mpFillColor);
-    if (maOutDevState.mnFlags & PushFlags::FONT)
-        rRenderContext.SetFont(*maOutDevState.mpFont);
-    if (mpBackground)
-        rRenderContext.SetBackground(Wallpaper(*mpBackground.get()));
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

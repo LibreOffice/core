@@ -129,11 +129,6 @@ private:
     sal_uInt16          mnInitSize;
     sal_uInt16          mnGrowSize;
 
-    SAL_DLLPRIVATE void    ImplInitBitmapEx( const OUString& rUserImageName,
-                                             const ::std::vector< OUString >& rImageNames,
-                                             const OUString& rSymbolsStyle,
-                                             BitmapEx& rBmpEx,
-                                             const Color* pMaskColor ) const;
     SAL_DLLPRIVATE void    ImplInit( sal_uInt16 nItems, const Size &rSize );
     SAL_DLLPRIVATE sal_uInt16  ImplGetImageId( const OUString& rImageName ) const;
 };

@@ -60,7 +60,6 @@ private:
     SAL_DLLPRIVATE void             ImplDestroyWrappers();
 
 protected:
-    ::osl::Mutex& GetMutex() { return maMutex; }
 
     SAL_DLLPRIVATE utl::TransliterationWrapper&    ImplGetTransliterationWrapper() const;
     SAL_DLLPRIVATE LocaleDataWrapper&              ImplGetLocaleDataWrapper() const;
