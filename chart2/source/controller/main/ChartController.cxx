@@ -376,9 +376,11 @@ void SAL_CALL ChartController::attachFrame(
 
     mpSelectionChangeHandler->Connect();
 
+    /*
     uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getModel());
     sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
     sfx2::sidebar::SidebarController::registerSidebarForFrame(pSidebar, this);
+    */
 
     if(m_xFrame.is()) //what happens, if we do have a Frame already??
     {
@@ -747,12 +749,14 @@ void SAL_CALL ChartController::dispose()
 {
     mpSelectionChangeHandler->Disconnect();
 
+    /*
     if (getModel().is())
     {
         uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getModel());
         sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
         sfx2::sidebar::SidebarController::unregisterSidebarForFrame(pSidebar, this);
     }
+    */
 
     try
     {
