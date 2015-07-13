@@ -336,12 +336,12 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
     m_bIsFirstParagraph = false;
 }
 
-static void lcl_deleteAndResetTheLists( std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren, std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs, OUString& rSdtPrAlias)
+static void lcl_deleteAndResetTheLists( uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren, uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs, OUString& rSdtPrAlias)
 {
-    if( pSdtPrTokenChildren )
-        pSdtPrTokenChildren.reset(0);
-    if( pSdtPrDataBindingAttrs )
-        pSdtPrDataBindingAttrs.reset(0);
+    if( pSdtPrTokenChildren.is() )
+        pSdtPrTokenChildren.clear();
+    if( pSdtPrDataBindingAttrs.is() )
+        pSdtPrDataBindingAttrs.clear();
     if (!rSdtPrAlias.isEmpty())
         rSdtPrAlias.clear();
 }
@@ -605,13 +605,13 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 }
 
 void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
-                                         std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
-                                         std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrTokenAttributes,
-                                         std::unique_ptr<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
+                                         uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenChildren,
+                                         uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrTokenAttributes,
+                                         uno::Reference<sax_fastparser::FastAttributeList>& pSdtPrDataBindingAttrs,
                                          OUString& rSdtPrAlias,
                                          bool bPara )
 {
-    if( nSdtPrToken > 0 || pSdtPrDataBindingAttrs )
+    if( nSdtPrToken > 0 || pSdtPrDataBindingAttrs.is() )
     {
         // sdt start mark
         m_pSerializer->mark(Tag_WriteSdtBlock);
@@ -621,13 +621,14 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
         // output sdt properties
         m_pSerializer->startElementNS( XML_w, XML_sdtPr, FSEND );
 
-        if( nSdtPrToken > 0 && pSdtPrTokenChildren )
+        if( nSdtPrToken > 0 && pSdtPrTokenChildren.is() )
         {
-            if (!pSdtPrTokenAttributes)
+            if (!pSdtPrTokenAttributes.is())
                 m_pSerializer->startElement( nSdtPrToken, FSEND );
             else
             {
-                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.release());
+                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes);
+                pSdtPrTokenAttributes.clear();
                 m_pSerializer->startElement(nSdtPrToken, xAttrList);
             }
 
@@ -644,11 +645,12 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
         }
         else if( (nSdtPrToken > 0) && nSdtPrToken != FSNS( XML_w, XML_id ) && !(m_bRunTextIsOn && m_rExport.SdrExporter().IsParagraphHasDrawing()))
         {
-            if (!pSdtPrTokenAttributes)
+            if (!pSdtPrTokenAttributes.is())
                 m_pSerializer->singleElement( nSdtPrToken, FSEND );
             else
             {
-                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes.release());
+                XFastAttributeListRef xAttrList(pSdtPrTokenAttributes);
+                pSdtPrTokenAttributes.clear();
                 m_pSerializer->singleElement(nSdtPrToken, xAttrList);
             }
         }
@@ -659,9 +661,10 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                                           OString::number(comphelper::rng::uniform_int_distribution(0, std::numeric_limits<int>::max())),
                                           FSEND);
 
-        if(( pSdtPrDataBindingAttrs ) && !m_rExport.SdrExporter().IsParagraphHasDrawing())
+        if( pSdtPrDataBindingAttrs.is() && !m_rExport.SdrExporter().IsParagraphHasDrawing())
         {
-            XFastAttributeListRef xAttrList( pSdtPrDataBindingAttrs.release() );
+            XFastAttributeListRef xAttrList( pSdtPrDataBindingAttrs );
+            pSdtPrDataBindingAttrs.clear();
             m_pSerializer->singleElementNS( XML_w, XML_dataBinding, xAttrList );
         }
 
@@ -693,9 +696,8 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
 
         // clear sdt status
         nSdtPrToken = 0;
-        pSdtPrTokenChildren.reset(0);
-        if( pSdtPrDataBindingAttrs )
-            pSdtPrDataBindingAttrs.reset(0);
+        pSdtPrTokenChildren.clear();
+        pSdtPrDataBindingAttrs.clear();
         rSdtPrAlias.clear();
     }
 }
@@ -831,7 +833,7 @@ void DocxAttributeOutput::StartParagraphProperties()
 
 void DocxAttributeOutput::InitCollectedParagraphProperties()
 {
-    m_pParagraphSpacingAttrList.reset(0);
+    m_pParagraphSpacingAttrList.clear();
 
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
@@ -886,23 +888,26 @@ void DocxAttributeOutput::InitCollectedParagraphProperties()
 
 void DocxAttributeOutput::WriteCollectedParagraphProperties()
 {
-    if ( m_rExport.SdrExporter().getFlyAttrList() )
+    if ( m_rExport.SdrExporter().getFlyAttrList().is() )
     {
-        XFastAttributeListRef xAttrList( m_rExport.SdrExporter().getFlyAttrList().release() );
+        XFastAttributeListRef xAttrList( m_rExport.SdrExporter().getFlyAttrList() );
+        m_rExport.SdrExporter().getFlyAttrList().clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_framePr, xAttrList );
     }
 
-    if ( m_pParagraphSpacingAttrList )
+    if ( m_pParagraphSpacingAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pParagraphSpacingAttrList.release() );
+        XFastAttributeListRef xAttrList( m_pParagraphSpacingAttrList );
+        m_pParagraphSpacingAttrList.clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_spacing, xAttrList );
     }
 
-    if ( m_pBackgroundAttrList )
+    if ( m_pBackgroundAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pBackgroundAttrList.release() );
+        XFastAttributeListRef xAttrList( m_pBackgroundAttrList );
+        m_pBackgroundAttrList.clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_shd, xAttrList );
     }
@@ -970,9 +975,12 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     // to the DOCX when the function 'WriteCollectedRunProperties' gets called.
     // So we need to store the current status of these lists, so that we can revert back to them when
     // we are done exporting the redline attributes.
-    std::unique_ptr<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList.release());
-    std::unique_ptr<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList.release());
-    std::unique_ptr<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList.release());
+    uno::Reference<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList);
+    m_pFontsAttrList.clear();
+    uno::Reference<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList);
+    m_pEastAsianLayoutAttrList.clear();
+    uno::Reference<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList);
+    m_pCharLangAttrList.clear();
 
     lcl_writeParagraphMarkerProperties(*this, rParagraphMarkerProperties);
 
@@ -980,9 +988,9 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     WriteCollectedRunProperties();
 
     // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
-    m_pFontsAttrList.reset(pFontsAttrList_Original.release());
-    m_pEastAsianLayoutAttrList.reset(pEastAsianLayoutAttrList_Original.release());
-    m_pCharLangAttrList.reset(pCharLangAttrList_Original.release());
+    m_pFontsAttrList = pFontsAttrList_Original;
+    m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original;
+    m_pCharLangAttrList = pCharLangAttrList_Original;
 
     if ( pRedlineParagraphMarkerDeleted )
     {
@@ -1069,7 +1077,7 @@ void DocxAttributeOutput::EndRun()
 {
     int nFieldsInPrevHyperlink = m_nFieldsInHyperlink;
     // Reset m_nFieldsInHyperlink if a new hyperlink is about to start
-    if ( m_pHyperlinkAttrList )
+    if ( m_pHyperlinkAttrList.is() )
     {
         m_nFieldsInHyperlink = 0;
     }
@@ -1093,7 +1101,7 @@ void DocxAttributeOutput::EndRun()
             if (m_startedHyperlink)
                 ++m_nFieldsInHyperlink;
 
-            if ( m_pHyperlinkAttrList )
+            if ( m_pHyperlinkAttrList.is() )
             {
                 m_nFieldsInHyperlink++;
             }
@@ -1163,9 +1171,10 @@ void DocxAttributeOutput::EndRun()
     }
 
     // Start the hyperlink after the fields separators or we would generate invalid file
-    if ( m_pHyperlinkAttrList )
+    if ( m_pHyperlinkAttrList.is() )
     {
-        XFastAttributeListRef xAttrList ( m_pHyperlinkAttrList.release() );
+        XFastAttributeListRef xAttrList ( m_pHyperlinkAttrList );
+        m_pHyperlinkAttrList.clear();
 
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
         m_startedHyperlink = true;
@@ -1214,7 +1223,7 @@ void DocxAttributeOutput::EndRun()
     }
 
     m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-    if(GetExport().m_bTabInTOC && m_pHyperlinkAttrList)
+    if(GetExport().m_bTabInTOC && m_pHyperlinkAttrList.is())
     {
         RunText(OUString("\t")) ;
     }
@@ -1232,7 +1241,7 @@ void DocxAttributeOutput::EndRun()
     // (so on export sdt blocks are never nested ATM)
     if ( !m_bAnchorLinkedToNode && !m_bStartedCharSdt )
     {
-        std::unique_ptr<sax_fastparser::FastAttributeList> pRunSdtPrTokenAttributes;
+        uno::Reference<sax_fastparser::FastAttributeList> pRunSdtPrTokenAttributes;
         WriteSdtBlock( m_nRunSdtPrToken, m_pRunSdtPrTokenChildren, pRunSdtPrTokenAttributes, m_pRunSdtPrDataBindingAttrs, m_aRunSdtPrAlias, /*bPara=*/false );
     }
     else
@@ -1661,7 +1670,7 @@ void DocxAttributeOutput::StartRunProperties()
 
     m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
 
-    if(GetExport().m_bHideTabLeaderAndPageNumbers && m_pHyperlinkAttrList )
+    if(GetExport().m_bHideTabLeaderAndPageNumbers && m_pHyperlinkAttrList.is() )
     {
         m_pSerializer->singleElementNS( XML_w, XML_webHidden, FSEND );
     }
@@ -1922,28 +1931,32 @@ void lclProcessRecursiveGrabBag(sal_Int32 aElementId, const css::uno::Sequence<c
 void DocxAttributeOutput::WriteCollectedRunProperties()
 {
     // Write all differed properties
-    if ( m_pFontsAttrList )
+    if ( m_pFontsAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pFontsAttrList.release() );
+        XFastAttributeListRef xAttrList( m_pFontsAttrList );
+        m_pFontsAttrList.clear();
         m_pSerializer->singleElementNS( XML_w, XML_rFonts, xAttrList );
     }
 
-    if ( m_pColorAttrList )
+    if ( m_pColorAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pColorAttrList.release() );
+        XFastAttributeListRef xAttrList( m_pColorAttrList );
+        m_pColorAttrList.clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_color, xAttrList );
     }
 
-    if ( m_pEastAsianLayoutAttrList )
+    if ( m_pEastAsianLayoutAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pEastAsianLayoutAttrList.release() );
+        XFastAttributeListRef xAttrList( m_pEastAsianLayoutAttrList );
+        m_pEastAsianLayoutAttrList.clear();
         m_pSerializer->singleElementNS( XML_w, XML_eastAsianLayout, xAttrList );
     }
 
-    if ( m_pCharLangAttrList )
+    if ( m_pCharLangAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pCharLangAttrList.release() );
+        XFastAttributeListRef xAttrList( m_pCharLangAttrList );
+        m_pCharLangAttrList.clear();
         m_pSerializer->singleElementNS( XML_w, XML_lang, xAttrList );
     }
 
@@ -2268,7 +2281,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
     else
     {
         // Output a hyperlink XML element
-        m_pHyperlinkAttrList.reset(FastSerializerHelper::createAttrList());
+        m_pHyperlinkAttrList = FastSerializerHelper::createAttrList();
 
         if ( !bBookmarkOnly )
         {
@@ -2382,9 +2395,12 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // to the DOCX when the function 'WriteCollectedRunProperties' gets called.
                     // So we need to store the current status of these lists, so that we can revert back to them when
                     // we are done exporting the redline attributes.
-                    std::unique_ptr<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList.release());
-                    std::unique_ptr<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList.release());
-                    std::unique_ptr<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList.release());
+                    uno::Reference<sax_fastparser::FastAttributeList> pFontsAttrList_Original(m_pFontsAttrList);
+                    m_pFontsAttrList.clear();
+                    uno::Reference<sax_fastparser::FastAttributeList> pEastAsianLayoutAttrList_Original(m_pEastAsianLayoutAttrList);
+                    m_pEastAsianLayoutAttrList.clear();
+                    uno::Reference<sax_fastparser::FastAttributeList> pCharLangAttrList_Original(m_pCharLangAttrList);
+                    m_pCharLangAttrList.clear();
 
                     // Output the redline item set
                     m_rExport.OutputItemSet( *pChangesSet, false, true, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF );
@@ -2393,9 +2409,9 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     WriteCollectedRunProperties();
 
                     // Revert back the original values that were stored in 'm_pFontsAttrList', 'm_pEastAsianLayoutAttrList', 'm_pCharLangAttrList'
-                    m_pFontsAttrList.reset(pFontsAttrList_Original.release());
-                    m_pEastAsianLayoutAttrList.reset(pEastAsianLayoutAttrList_Original.release());
-                    m_pCharLangAttrList.reset(pCharLangAttrList_Original.release());
+                    m_pFontsAttrList = pFontsAttrList_Original;
+                    m_pEastAsianLayoutAttrList = pEastAsianLayoutAttrList_Original;
+                    m_pCharLangAttrList = pCharLangAttrList_Original;
 
                     m_pSerializer->endElementNS( XML_w, XML_rPr );
 
@@ -2435,8 +2451,10 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     // to the DOCX when the function 'WriteCollectedParagraphProperties' gets called.
                     // So we need to store the current status of these lists, so that we can revert back to them when
                     // we are done exporting the redline attributes.
-                    std::unique_ptr<sax_fastparser::FastAttributeList> pFlyAttrList_Original(m_rExport.SdrExporter().getFlyAttrList().release());
-                    std::unique_ptr<sax_fastparser::FastAttributeList> pParagraphSpacingAttrList_Original(m_pParagraphSpacingAttrList.release());
+                    uno::Reference<sax_fastparser::FastAttributeList> pFlyAttrList_Original(m_rExport.SdrExporter().getFlyAttrList());
+                    m_rExport.SdrExporter().getFlyAttrList().clear();
+                    uno::Reference<sax_fastparser::FastAttributeList> pParagraphSpacingAttrList_Original(m_pParagraphSpacingAttrList);
+                    m_pParagraphSpacingAttrList.clear();
 
                     // Output the redline item set
                     m_rExport.OutputItemSet( *pChangesSet, true, false, i18n::ScriptType::LATIN, m_rExport.m_bExportModeRTF );
@@ -2445,8 +2463,8 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                     WriteCollectedParagraphProperties();
 
                     // Revert back the original values that were stored in 'm_rExport.SdrExporter().getFlyAttrList()', 'm_pParagraphSpacingAttrList'
-                    m_rExport.SdrExporter().getFlyAttrList().reset(pFlyAttrList_Original.release());
-                    m_pParagraphSpacingAttrList.reset(pParagraphSpacingAttrList_Original.release());
+                    m_rExport.SdrExporter().getFlyAttrList() = pFlyAttrList_Original;
+                    m_pParagraphSpacingAttrList = pParagraphSpacingAttrList_Original;
 
                     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
@@ -3452,7 +3470,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
     }
     else
     {
-        std::unique_ptr<sax_fastparser::FastAttributeList> pAttrList;
+        css::uno::Reference<sax_fastparser::FastAttributeList> pAttrList;
 
         for( aGrabBagElement = aGrabBag.begin(); aGrabBagElement != aGrabBag.end(); ++aGrabBagElement )
         {
@@ -3479,7 +3497,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
             else if( aGrabBagElement->first == "val")
                 AddToAttrList( pAttrList, FSNS( XML_w, XML_val ), sValue.getStr() );
         }
-        m_pSerializer->singleElementNS( XML_w, XML_shd, XFastAttributeListRef( pAttrList.release() ) );
+        m_pSerializer->singleElementNS( XML_w, XML_shd, pAttrList );
     }
 }
 
@@ -5487,9 +5505,10 @@ void DocxAttributeOutput::StartSection()
 void DocxAttributeOutput::EndSection()
 {
     // Write the section properties
-    if ( m_pSectionSpacingAttrList )
+    if ( m_pSectionSpacingAttrList.is() )
     {
-        XFastAttributeListRef xAttrList( m_pSectionSpacingAttrList.release() );
+        XFastAttributeListRef xAttrList( m_pSectionSpacingAttrList );
+        m_pSectionSpacingAttrList.clear();
 
         m_pSerializer->singleElementNS( XML_w, XML_pgMar, xAttrList );
     }
@@ -6126,7 +6145,7 @@ void DocxAttributeOutput::CharColor( const SvxColorItem& rColor )
     aColorString = msfilter::util::ConvertColor( aColor );
 
     const char* pExistingValue(NULL);
-    if (m_pColorAttrList && m_pColorAttrList->getAsChar(FSNS(XML_w, XML_val), pExistingValue))
+    if (m_pColorAttrList.is() && m_pColorAttrList->getAsChar(FSNS(XML_w, XML_val), pExistingValue))
     {
         assert(aColorString.equalsL(pExistingValue, rtl_str_getLength(pExistingValue)));
         return;
@@ -7630,16 +7649,16 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
         OString sOriginalFill = OUStringToOString(
                 m_sOriginalBackgroundColor, RTL_TEXTENCODING_UTF8 );
 
-        if( !m_pBackgroundAttrList )
+        if( !m_pBackgroundAttrList.is() )
         {
-            m_pBackgroundAttrList.reset(FastSerializerHelper::createAttrList());
+            m_pBackgroundAttrList = FastSerializerHelper::createAttrList();
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
         }
         else if ( sOriginalFill != sColor )
         {
             // fill was modified during edition, theme fill attribute must be dropped
-            m_pBackgroundAttrList.reset(FastSerializerHelper::createAttrList());
+            m_pBackgroundAttrList = FastSerializerHelper::createAttrList();
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
         }
@@ -8100,7 +8119,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                     m_nParagraphSdtPrToken = FSNS( XML_w, XML_group );
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text")
                     m_nParagraphSdtPrToken = FSNS(XML_w, XML_text);
-                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && !m_pParagraphSdtPrDataBindingAttrs)
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && !m_pParagraphSdtPrDataBindingAttrs.is())
                 {
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
@@ -8203,25 +8222,25 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
     OUString sOriginalValue;
     for ( std::map< OUString, com::sun::star::uno::Any >::const_iterator i = rMap.begin(); i != rMap.end(); ++i )
     {
-        if ( m_pFontsAttrList && i->first == "CharThemeFontNameCs" )
+        if ( m_pFontsAttrList.is() && i->first == "CharThemeFontNameCs" )
         {
             if ( i->second >>= sOriginalValue )
                 bWriteCSTheme =
                         ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_cs ) ) == sOriginalValue );
         }
-        else if ( m_pFontsAttrList && i->first == "CharThemeFontNameAscii" )
+        else if ( m_pFontsAttrList.is() && i->first == "CharThemeFontNameAscii" )
         {
             if ( i->second >>= sOriginalValue )
                 bWriteAsciiTheme =
                         ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_ascii ) ) == sOriginalValue );
         }
-        else if ( m_pFontsAttrList && i->first == "CharThemeFontNameEastAsia" )
+        else if ( m_pFontsAttrList.is() && i->first == "CharThemeFontNameEastAsia" )
         {
             if ( i->second >>= sOriginalValue )
                 bWriteEastAsiaTheme =
                         ( m_pFontsAttrList->getOptionalValue( FSNS( XML_w, XML_eastAsia ) ) == sOriginalValue );
         }
-        else if ( m_pColorAttrList && i->first == "CharThemeOriginalColor" )
+        else if ( m_pColorAttrList.is() && i->first == "CharThemeOriginalColor" )
         {
             if ( i->second >>= sOriginalValue )
                 bWriteThemeFontColor =
@@ -8335,7 +8354,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                                            OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                 }
-                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && !m_pRunSdtPrDataBindingAttrs)
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && !m_pRunSdtPrDataBindingAttrs.is())
                 {
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
@@ -8362,7 +8381,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                         SAL_WARN("sw.ww8", "DocxAttributeOutput::CharGrabBag: unexpected sdt alias value");
                 }
                 //do not overwrite the parent node.
-                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text" && !m_pRunSdtPrTokenChildren)
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_text" && !m_pRunSdtPrTokenChildren.is())
                     m_nRunSdtPrToken = FSNS( XML_w, XML_text );
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id" && m_nRunSdtPrToken == 0)
                     // only write id token as a marker if no other exist
@@ -8512,6 +8531,29 @@ void DocxAttributeOutput::AddToAttrList( std::unique_ptr<sax_fastparser::FastAtt
     }
     va_end( args );
 }
+
+void DocxAttributeOutput::AddToAttrList( uno::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrName, const sal_Char* sAttrValue )
+{
+    AddToAttrList( pAttrList, 1, nAttrName, sAttrValue );
+}
+
+void DocxAttributeOutput::AddToAttrList( uno::Reference<sax_fastparser::FastAttributeList>& pAttrList, sal_Int32 nAttrs, ... )
+{
+    if( !pAttrList.is() )
+        pAttrList = FastSerializerHelper::createAttrList();
+
+    va_list args;
+    va_start( args, nAttrs );
+    for( sal_Int32 i = 0; i<nAttrs; i++)
+    {
+        sal_Int32 nName = va_arg( args, sal_Int32 );
+        const char* pValue = va_arg( args, const char* );
+        if( pValue )
+            pAttrList->add( nName, pValue );
+    }
+    va_end( args );
+}
+
 void DocxAttributeOutput::SetStartedParaSdt(bool bStartedParaSdt)
 {
     m_bStartedParaSdt = bStartedParaSdt;

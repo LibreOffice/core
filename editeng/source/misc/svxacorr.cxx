@@ -2091,9 +2091,9 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                 xWriter->setOutputStream(xOut);
 
                 uno::Reference < xml::sax::XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
-                SvXMLExceptionListExport aExp( xContext, rLst, sStrmName, xHandler );
+                uno::Reference< SvXMLExceptionListExport > xExp( new SvXMLExceptionListExport( xContext, rLst, sStrmName, xHandler ) );
 
-                aExp.exportDoc( XML_BLOCK_LIST );
+                xExp->exportDoc( XML_BLOCK_LIST );
 
                 xStrm->Commit();
                 if( xStrm->GetError() == SVSTREAM_OK )
@@ -2462,9 +2462,9 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
             xWriter->setOutputStream(xOut);
 
             uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
-            SvXMLAutoCorrectExport aExp( xContext, pAutocorr_List, sStrmName, xHandler );
+            uno::Reference< SvXMLAutoCorrectExport > xExp( new SvXMLAutoCorrectExport( xContext, pAutocorr_List, sStrmName, xHandler ) );
 
-            aExp.exportDoc( XML_BLOCK_LIST );
+            xExp->exportDoc( XML_BLOCK_LIST );
 
             refList->Commit();
             bRet = SVSTREAM_OK == refList->GetError();

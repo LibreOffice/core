@@ -1910,17 +1910,17 @@ void SAL_CALL ScModelObj::consolidate(
     //  die Daten in ein ScConsolidationDescriptor Objekt zu kopieren:
     //! wenn es schon ein ScConsolidationDescriptor ist, direkt per getImplementation?
 
-    ScConsolidationDescriptor aImpl;
-    aImpl.setFunction( xDescriptor->getFunction() );
-    aImpl.setSources( xDescriptor->getSources() );
-    aImpl.setStartOutputPosition( xDescriptor->getStartOutputPosition() );
-    aImpl.setUseColumnHeaders( xDescriptor->getUseColumnHeaders() );
-    aImpl.setUseRowHeaders( xDescriptor->getUseRowHeaders() );
-    aImpl.setInsertLinks( xDescriptor->getInsertLinks() );
+    uno::Reference< ScConsolidationDescriptor > xImpl(new ScConsolidationDescriptor);
+    xImpl->setFunction( xDescriptor->getFunction() );
+    xImpl->setSources( xDescriptor->getSources() );
+    xImpl->setStartOutputPosition( xDescriptor->getStartOutputPosition() );
+    xImpl->setUseColumnHeaders( xDescriptor->getUseColumnHeaders() );
+    xImpl->setUseRowHeaders( xDescriptor->getUseRowHeaders() );
+    xImpl->setInsertLinks( xDescriptor->getInsertLinks() );
 
     if (pDocShell)
     {
-        const ScConsolidateParam& rParam = aImpl.GetParam();
+        const ScConsolidateParam& rParam = xImpl->GetParam();
         pDocShell->DoConsolidate( rParam, true );
         pDocShell->GetDocument().SetConsolidateDlgData( &rParam );
     }

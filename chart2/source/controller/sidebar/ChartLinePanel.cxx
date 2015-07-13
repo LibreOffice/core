@@ -80,24 +80,6 @@ css::uno::Any getLineDash(
     return css::uno::Any();
 }
 
-class PreventUpdate
-{
-public:
-    PreventUpdate(bool& bUpdate):
-        mbUpdate(bUpdate)
-    {
-        mbUpdate = false;
-    }
-
-    ~PreventUpdate()
-    {
-        mbUpdate = true;
-    }
-
-private:
-    bool& mbUpdate;
-};
-
 }
 
 VclPtr<vcl::Window> ChartLinePanel::Create(

@@ -231,7 +231,7 @@ protected:
     ::osl::Mutex        maMutex;
     ModifiableHelper    maModifiable;
 
-    NameContainer maNameContainer;
+    css::uno::Reference<NameContainer> maNameContainer;
     bool    mbOldInfoFormat;
     bool    mbOasis2OOoFormat;
 
@@ -560,11 +560,11 @@ class SfxLibrary
     friend class SfxDialogLibraryContainer;
     friend class SfxScriptLibraryContainer;
 
-    css::uno::Reference< css::uno::XComponentContext >       mxContext;
-    css::uno::Reference< css::ucb::XSimpleFileAccess3 >      mxSFI;
+    css::uno::Reference< css::uno::XComponentContext >    mxContext;
+    css::uno::Reference< css::ucb::XSimpleFileAccess3 >   mxSFI;
 
-    ModifiableHelper&   mrModifiable;
-    NameContainer       maNameContainer;
+    ModifiableHelper&                                     mrModifiable;
+    css::uno::Reference<NameContainer>                    maNameContainer;
 
     bool mbLoaded;
     bool mbIsModified;

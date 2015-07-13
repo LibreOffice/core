@@ -131,18 +131,18 @@ struct DocxSdrExport::Impl
     const Size* m_pFlyFrameSize;
     bool m_bTextFrameSyntax;
     bool m_bDMLTextFrameSyntax;
-    std::unique_ptr<sax_fastparser::FastAttributeList> m_pFlyAttrList;
-    std::unique_ptr<sax_fastparser::FastAttributeList> m_pTextboxAttrList;
+    uno::Reference<sax_fastparser::FastAttributeList> m_pFlyAttrList;
+    uno::Reference<sax_fastparser::FastAttributeList> m_pTextboxAttrList;
     OStringBuffer m_aTextFrameStyle;
     bool m_bFrameBtLr;
     bool m_bDrawingOpen;
     bool m_bParagraphSdtOpen;
     bool m_bParagraphHasDrawing; ///Flag for checking drawing in a paragraph.
     bool m_bFlyFrameGraphic;
-    std::unique_ptr<sax_fastparser::FastAttributeList> m_pFlyFillAttrList;
+    css::uno::Reference<sax_fastparser::FastAttributeList> m_pFlyFillAttrList;
     sax_fastparser::FastAttributeList* m_pFlyWrapAttrList;
     sax_fastparser::FastAttributeList* m_pBodyPrAttrList;
-    std::unique_ptr<sax_fastparser::FastAttributeList> m_pDashLineStyleAttr;
+    css::uno::Reference<sax_fastparser::FastAttributeList> m_pDashLineStyleAttr;
     bool m_bDMLAndVMLDrawingOpen;
     /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
     std::set<const SwFrameFormat*> m_aTextBoxes;
@@ -211,12 +211,12 @@ bool DocxSdrExport::getDMLTextFrameSyntax()
     return m_pImpl->m_bDMLTextFrameSyntax;
 }
 
-std::unique_ptr<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyAttrList()
+uno::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyAttrList()
 {
     return m_pImpl->m_pFlyAttrList;
 }
 
-std::unique_ptr<sax_fastparser::FastAttributeList>& DocxSdrExport::getTextboxAttrList()
+uno::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getTextboxAttrList()
 {
     return m_pImpl->m_pTextboxAttrList;
 }
@@ -256,7 +256,7 @@ void DocxSdrExport::setParagraphHasDrawing(bool bParagraphHasDrawing)
     m_pImpl->m_bParagraphHasDrawing = bParagraphHasDrawing;
 }
 
-std::unique_ptr<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyFillAttrList()
+uno::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getFlyFillAttrList()
 {
     return m_pImpl->m_pFlyFillAttrList;
 }
@@ -271,7 +271,7 @@ sax_fastparser::FastAttributeList* DocxSdrExport::getBodyPrAttrList()
     return m_pImpl->m_pBodyPrAttrList;
 }
 
-std::unique_ptr<sax_fastparser::FastAttributeList>& DocxSdrExport::getDashLineStyle()
+uno::Reference<sax_fastparser::FastAttributeList>& DocxSdrExport::getDashLineStyle()
 {
     return m_pImpl->m_pDashLineStyleAttr;
 }
@@ -1640,8 +1640,8 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
     m_pImpl->m_pFlyFrameSize = &aSize;
 
     m_pImpl->m_bTextFrameSyntax = true;
-    m_pImpl->m_pFlyAttrList.reset(sax_fastparser::FastSerializerHelper::createAttrList());
-    m_pImpl->m_pTextboxAttrList.reset(sax_fastparser::FastSerializerHelper::createAttrList());
+    m_pImpl->m_pFlyAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
+    m_pImpl->m_pTextboxAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
     m_pImpl->m_aTextFrameStyle = "position:absolute";
     if (!bTextBoxOnly)
     {
@@ -1658,9 +1658,11 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
         if (!sAnchorId.isEmpty())
             m_pImpl->m_pFlyAttrList->addNS(XML_w14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
     }
-    sax_fastparser::XFastAttributeListRef xFlyAttrList(m_pImpl->m_pFlyAttrList.release());
+    sax_fastparser::XFastAttributeListRef xFlyAttrList(m_pImpl->m_pFlyAttrList.get());
+    m_pImpl->m_pFlyAttrList.clear();
     m_pImpl->m_bFrameBtLr = m_pImpl->checkFrameBtlr(m_pImpl->m_rExport.m_pDoc->GetNodes()[nStt], /*bDML=*/false);
-    sax_fastparser::XFastAttributeListRef xTextboxAttrList(m_pImpl->m_pTextboxAttrList.release());
+    sax_fastparser::XFastAttributeListRef xTextboxAttrList(m_pImpl->m_pTextboxAttrList.get());
+    m_pImpl->m_pTextboxAttrList.clear();
     m_pImpl->m_bTextFrameSyntax = false;
     m_pImpl->m_pFlyFrameSize = 0;
     m_pImpl->m_rExport.m_pParentFrame = NULL;
@@ -1670,14 +1672,16 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
         pFS->startElementNS(XML_w, XML_pict, FSEND);
         pFS->startElementNS(XML_v, XML_rect, xFlyAttrList);
         m_pImpl->textFrameShadow(rFrameFormat);
-        if (m_pImpl->m_pFlyFillAttrList)
+        if (m_pImpl->m_pFlyFillAttrList.is())
         {
-            sax_fastparser::XFastAttributeListRef xFlyFillAttrList(m_pImpl->m_pFlyFillAttrList.release());
+            sax_fastparser::XFastAttributeListRef xFlyFillAttrList(m_pImpl->m_pFlyFillAttrList.get());
+            m_pImpl->m_pFlyFillAttrList.clear();
             pFS->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
         }
-        if (m_pImpl->m_pDashLineStyleAttr)
+        if (m_pImpl->m_pDashLineStyleAttr.is())
         {
-            sax_fastparser::XFastAttributeListRef xDashLineStyleAttr(m_pImpl->m_pDashLineStyleAttr.release());
+            sax_fastparser::XFastAttributeListRef xDashLineStyleAttr(m_pImpl->m_pDashLineStyleAttr.get());
+            m_pImpl->m_pDashLineStyleAttr.clear();
             pFS->singleElementNS(XML_v, XML_stroke, xDashLineStyleAttr);
         }
         pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
@@ -1717,7 +1721,7 @@ bool DocxSdrExport::Impl::checkFrameBtlr(SwNode* pStartNode, bool bDML)
     if (bDML)
         assert(m_pBodyPrAttrList);
     else
-        assert(m_pTextboxAttrList);
+        assert(m_pTextboxAttrList.is());
 
     if (!pStartNode->IsTextNode())
         return false;
