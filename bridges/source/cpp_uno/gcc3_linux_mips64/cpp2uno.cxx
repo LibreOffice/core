@@ -544,7 +544,7 @@ namespace
 
   unsigned char *  codeSnippet( unsigned char * code,
       sal_Int32 functionIndex, sal_Int32 vtableOffset,
-      bool bHasHiddenParam) SAL_THROW(())
+      bool bHasHiddenParam )
   {
 #ifdef BRDEBUG
      fprintf(stderr,"in codeSnippet functionIndex is %d\n", functionIndex);
