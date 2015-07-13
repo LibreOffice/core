@@ -41,7 +41,6 @@ TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
     maCursorEvent = CursorChainingEvent::NULL_EVENT;
     mbPossiblyCursorOut = false;
 
-    mbMustMergeParaAmongLinks = false;
 }
 
 
@@ -90,11 +89,26 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
         pFlowOutl->SetUpdateMode(bOldUpdateMode);
     }
 
+    // Get old state on whether to merge para-s or not
+    // NOTE: We handle UF/OF using the _old_ state. The new one is simply saved
+    bool bMustMergeParaAmongLinks = GetTextChain()->GetIsPartOfLastParaInNextLink(mpTargetLink);
+
     // Set (Non)OverflowingTxt here (if any)
-    mpOverflChText = bOverflow ? new OFlowChainedText(pFlowOutl) : NULL;
+    mpOverflChText = bOverflow ? new OFlowChainedText(pFlowOutl, bMustMergeParaAmongLinks) : NULL;
 
     // Set current underflowing text (if any)
-    mpUnderflChText = bUnderflow ? new UFlowChainedText(pFlowOutl) : NULL;
+    mpUnderflChText = bUnderflow ? new UFlowChainedText(pFlowOutl, bMustMergeParaAmongLinks) : NULL;
+
+    // update new state on paragraph merging
+    if (bOverflow) {
+        GetTextChain()->SetIsPartOfLastParaInNextLink(
+                          mpTargetLink,
+                          mpOverflChText->IsLastParaInterrupted());
+    } else { // Overflows determine merging or not. If no OF, just merge everything next time.
+        GetTextChain()->SetIsPartOfLastParaInNextLink(
+                          mpTargetLink,
+                          true);
+    }
 
     // NOTE: Must be called after mp*ChText abd b*flow have been set but before mbOFisUFinduced is reset
     impUpdateCursorInfo();
@@ -102,13 +116,7 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
     // To check whether an overflow is underflow induced or not (useful in cursor checking)
     mbOFisUFinduced = bUnderflow;
 
-    // Save old state and update new
-    mbMustMergeParaAmongLinks = GetTextChain()->GetIsPartOfLastParaInNextLink(mpTargetLink);
 
-    if (bOverflow)
-        GetTextChain()->SetIsPartOfLastParaInNextLink(mpTargetLink, mpOverflChText->IsLastParaInterrupted());
-    else // Overflows determine merging or not. If no OF, just merge everything next time.
-        GetTextChain()->SetIsPartOfLastParaInNextLink(mpTargetLink, true);
 
 }
 
@@ -212,7 +220,7 @@ void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
 
 OutlinerParaObject *TextChainFlow::impGetNonOverflowingParaObject(SdrOutliner *pOutliner)
 {
-    return mpOverflChText->CreateNonOverflowingParaObject(pOutliner);
+        return mpOverflChText->CreateNonOverflowingParaObject(pOutliner);
 }
 
 SdrTextObj *TextChainFlow::GetLinkTarget() const
@@ -227,13 +235,13 @@ SdrTextObj *TextChainFlow::GetNextLink() const
 
 OutlinerParaObject *TextChainFlow::impGetOverflowingParaObject(SdrOutliner *pOutliner)
 {
-    return mpOverflChText->CreateOverflowingParaObject(pOutliner, mpNextLink->GetOutlinerParaObject());
+    return mpOverflChText->CreateOverflowingParaObject(pOutliner,
+                                                      mpNextLink->GetOutlinerParaObject());
 }
 
 OutlinerParaObject *TextChainFlow::impGetMergedUnderflowParaObject(SdrOutliner *pOutliner)
 {
-    // Should check whether to merge paragraphs or not
-    return mpUnderflChText->CreateMergedUnderflowParaObject(pOutliner, mpNextLink->GetOutlinerParaObject());
+        return mpUnderflChText->CreateMergedUnderflowParaObject(pOutliner, mpNextLink->GetOutlinerParaObject());
 }
 
 TextChain *TextChainFlow::GetTextChain() const

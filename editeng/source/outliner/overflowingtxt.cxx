@@ -111,10 +111,12 @@ OutlinerParaObject *OverflowingText::GetJuxtaposedParaObject(Outliner *pOutl, Ou
 
 // class OFlowChainedText
 
-OFlowChainedText::OFlowChainedText(Outliner *pOutl)
+OFlowChainedText::OFlowChainedText(Outliner *pOutl, bool bIsDeepMerge)
 {
     mpOverflowingTxt = pOutl->GetOverflowingText();
     mpNonOverflowingTxt = pOutl->GetNonOverflowingText();
+
+    mbIsDeepMerge = bIsDeepMerge;
 }
 
 ESelection OFlowChainedText::GetInsertionPointSel() const
@@ -129,7 +131,7 @@ ESelection OFlowChainedText::GetOverflowPointSel() const
 
 OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOutliner, OutlinerParaObject *pTextToBeMerged)
 {
-    // Just return the roughly merged paras fpr now
+    // Just return the roughly merged paras for now
     if (mpOverflowingTxt == NULL || pTextToBeMerged == NULL)
         return NULL;
 
@@ -152,9 +154,10 @@ bool OFlowChainedText::IsLastParaInterrupted() const
 
 // classes UFlowChainedText
 
-UFlowChainedText::UFlowChainedText(Outliner *pOutl)
+UFlowChainedText::UFlowChainedText(Outliner *pOutl, bool bIsDeepMerge)
 {
     mpUnderflowPObj = pOutl->CreateParaObject();
+    mbIsDeepMerge = bIsDeepMerge;
 }
 
 OutlinerParaObject *UFlowChainedText::CreateMergedUnderflowParaObject(Outliner *pOutl, OutlinerParaObject *pNextLinkWholeText)

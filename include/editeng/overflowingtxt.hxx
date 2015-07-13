@@ -81,7 +81,7 @@ private:
 
 class EDITENG_DLLPUBLIC OFlowChainedText {
     public:
-        OFlowChainedText(Outliner *);
+        OFlowChainedText(Outliner *, bool );
 
         OutlinerParaObject *CreateOverflowingParaObject(Outliner *, OutlinerParaObject *);
         OutlinerParaObject *CreateNonOverflowingParaObject(Outliner *);
@@ -99,18 +99,22 @@ class EDITENG_DLLPUBLIC OFlowChainedText {
         NonOverflowingText *mpNonOverflowingTxt;
         OverflowingText *mpOverflowingTxt;
 
+        bool mbIsDeepMerge;
+
 };
 
 // UFlowChainedText is a simpler class than OFlowChainedText: it almost only joins para-objects
 class EDITENG_DLLPUBLIC UFlowChainedText {
     public:
-        UFlowChainedText(Outliner *);
+        UFlowChainedText(Outliner *, bool);
 
         OutlinerParaObject *CreateMergedUnderflowParaObject(Outliner *, OutlinerParaObject *);
     protected:
 
     private:
         OutlinerParaObject *mpUnderflowPObj;
+
+        bool mbIsDeepMerge;
 };
 
 #endif
