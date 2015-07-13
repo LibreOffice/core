@@ -348,6 +348,7 @@ uno::Sequence< OUString > ChartController::getSupportedServiceNames_Static()
     return aSNS;
 }
 
+/*
 namespace {
 
 uno::Reference<ui::XSidebar> getSidebarFromModel(uno::Reference<frame::XModel> xModel)
@@ -362,6 +363,7 @@ uno::Reference<ui::XSidebar> getSidebarFromModel(uno::Reference<frame::XModel> x
 }
 
 }
+*/
 
 // XController
 
