@@ -109,12 +109,12 @@ namespace {
 // Conservatively forbid what is either not an XML Char (including lone
 // surrogates, even though they should not appear in well-formed UNO OUString
 // instances anyway), or is a slash (as it causes problems in path syntax):
-bool isValidName(OUString const & name) {
+bool isValidName(OUString const & name, bool setMember) {
     for (sal_Int32 i = 0; i != name.getLength();) {
         sal_uInt32 c = name.iterateCodePoints(&i);
         if ((c < 0x20 && !(c == 0x09 || c == 0x0A || c == 0x0D))
             || rtl::isHighSurrogate(c) || rtl::isLowSurrogate(c) || c == 0xFFFE
-            || c == 0xFFFF || c == '/')
+            || c == 0xFFFF || (!setMember && c == '/'))
         {
             return false;
         }
@@ -669,7 +669,7 @@ void Access::setName(OUString const & aName)
                         if (node->getMandatory() == Data::NO_LAYER &&
                             !(other.is() && other->isFinalized()))
                         {
-                            if (!isValidName(aName)) {
+                            if (!isValidName(aName, true)) {
                                 throw css::uno::RuntimeException(
                                     "invalid element name " + aName);
                             }
@@ -1188,7 +1188,7 @@ void Access::insertByName(
         Modifications localMods;
         switch (getNode()->kind()) {
         case Node::KIND_LOCALIZED_PROPERTY:
-            if (!isValidName(aName)) {
+            if (!isValidName(aName, false)) {
                 throw css::lang::IllegalArgumentException(
                     aName, static_cast<cppu::OWeakObject *>(this), 0);
             }
@@ -1196,7 +1196,7 @@ void Access::insertByName(
             break;
         case Node::KIND_GROUP:
             {
-                if (!isValidName(aName)) {
+                if (!isValidName(aName, false)) {
                     throw css::lang::IllegalArgumentException(
                         aName, static_cast<cppu::OWeakObject *>(this), 0);
                 }
@@ -1212,7 +1212,7 @@ void Access::insertByName(
             break;
         case Node::KIND_SET:
             {
-                if (!isValidName(aName)) {
+                if (!isValidName(aName, true)) {
                     throw css::lang::IllegalArgumentException(
                         aName, static_cast<cppu::OWeakObject *>(this), 0);
                 }

@@ -315,8 +315,9 @@ void Test::testInsertSetMember() {
     } catch (css::lang::IllegalArgumentException &) {}
     try {
         access->insertByName("a/b", css::uno::makeAny(member));
-        CPPUNIT_FAIL("expected IllegalArgumentException");
-    } catch (css::lang::IllegalArgumentException &) {}
+    } catch (css::lang::IllegalArgumentException &) {
+        CPPUNIT_FAIL("unexpected IllegalArgumentException");
+    }
     css::uno::Reference<css::util::XChangesBatch>(
         access, css::uno::UNO_QUERY_THROW)->commitChanges();
     css::uno::Reference<css::lang::XComponent>(
