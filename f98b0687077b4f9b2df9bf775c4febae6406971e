@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_c43aaae7",
+        "filename": "vcl/source/filter/igif/decode.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-13T15:41:39Z",
+      "side": 1,
+      "message": "Shouldn\u0027t that be \u003e\u003d4096 instead? Seeing that also GIFLZWDecompressor::AddToTable() checks (nTableSize \u003c 4096).",
+      "range": {
+        "startLine": 196,
+        "startChar": 18,
+        "endLine": 196,
+        "endChar": 19
+      },
+      "revId": "f98b0687077b4f9b2df9bf775c4febae6406971e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
