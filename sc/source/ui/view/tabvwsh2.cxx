@@ -434,6 +434,18 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
             case SID_OBJECT_SELECT:     // wichtig fuer den ollen Control-Controller
                 rSet.Put( SfxBoolItem( nWhich, nDrawSfxId == SID_OBJECT_SELECT && IsDrawSelMode() ) );
                 break;
+
+            case SID_DRAWTBX_CS_BASIC:
+            case SID_DRAWTBX_CS_SYMBOL:
+            case SID_DRAWTBX_CS_ARROW:
+            case SID_DRAWTBX_CS_FLOWCHART:
+            case SID_DRAWTBX_CS_CALLOUT:
+            case SID_DRAWTBX_CS_STAR:
+            {
+                bool bCurrentActive = (nDrawSfxId == nWhich) && (aCurrShapeEnumCommand[ nWhich - SID_DRAWTBX_CS_BASIC ] == sDrawCustom);
+                rSet.Put( SfxBoolItem( nWhich, bCurrentActive ) );
+            }
+            break;
         }
         nWhich = aIter.NextWhich();
     }

@@ -550,7 +550,10 @@ void SwView::GetDrawState(SfxItemSet &rSet)
             if ( bWeb )
                 rSet.DisableItem( nWhich );
             else
-                rSet.Put(SfxStringItem(nWhich, m_aCurrShapeEnumCommand[ nWhich - SID_DRAWTBX_CS_BASIC ] ));
+            {
+                bool bCurrentActive = (m_nDrawSfxId == nWhich) && (m_aCurrShapeEnumCommand[ nWhich - SID_DRAWTBX_CS_BASIC ] == m_sDrawCustom);
+                rSet.Put( SfxBoolItem( nWhich, bCurrentActive ) );
+            }
         }
         break;
 
