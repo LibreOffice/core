@@ -55,10 +55,16 @@ ESelection OverflowingText::GetInsertionPointSel() const
 
 // class NonOverflowingText
 
-NonOverflowingText::NonOverflowingText(const EditTextObject *pTObj)
-    : mpContentTextObj(pTObj->Clone())
+NonOverflowingText::NonOverflowingText(const EditTextObject *pTObj,  bool bLastParaInterrupted)
+    : mpContentTextObj(pTObj->Clone()),
+      mbLastParaInterrupted(bLastParaInterrupted)
 {
      // XXX: may have to delete pTObj
+}
+
+bool NonOverflowingText::IsLastParaInterrupted() const
+{
+    return mbLastParaInterrupted;
 }
 
 

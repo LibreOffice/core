@@ -60,13 +60,15 @@ class NonOverflowingText {
 public:
     OutlinerParaObject *ToParaObject(Outliner *) const;
     ESelection GetOverflowPointSel() const;
+    bool IsLastParaInterrupted() const;
 
 private:
         // Constructor
-        NonOverflowingText(const EditTextObject *pTObj);
+        NonOverflowingText(const EditTextObject *pTObj, bool bLastParaInterrupted);
 
         friend class Outliner;
         const EditTextObject *mpContentTextObj;
+        const bool mbLastParaInterrupted;
 };
 
 

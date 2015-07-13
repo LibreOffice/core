@@ -2113,7 +2113,8 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
     {
         ESelection aEmptySel(0,0,0,0);
         EditTextObject *pTObj = pEditEngine->CreateTextObject(aEmptySel);
-        return new NonOverflowingText(pTObj);
+        bool bLastParaInterrupted = true; // Last Para was interrupted since everything overflew
+        return new NonOverflowingText(pTObj, bLastParaInterrupted);
     } else { // Get the lines that of the overflowing para fit in the box
 
         sal_Int32 nOverflowingPara = nCount;
@@ -2141,7 +2142,12 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
                 ESelection(nStartPara, nStartPos, nOverflowingPara, nLen);
         }
         EditTextObject *pTObj = pEditEngine->CreateTextObject(aNonOverflowingTextSelection);
-        return new NonOverflowingText(pTObj);
+
+        sal_Int32 nLastLine = GetLineCount(nOverflowingPara)-1;
+        bool bLastParaInterrupted =
+            pEditEngine->GetOverflowingLineNum() < nLastLine;
+
+        return new NonOverflowingText(pTObj, bLastParaInterrupted);
     }
 }
 
