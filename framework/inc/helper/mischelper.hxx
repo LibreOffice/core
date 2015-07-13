@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ui/XContextChangeEventListener.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -36,6 +37,7 @@
 #include <rtl/ustring.hxx>
 #include <fwidllapi.h>
 
+#include <functional>
 #include <set>
 
 namespace framework
@@ -303,6 +305,16 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper1<com::sun::star:
 
         }
 };
+
+FWI_DLLPUBLIC css::uno::Reference<css::ui::XContextChangeEventListener>
+GetFirstListenerWith_Impl(
+    css::uno::Reference<css::uno::XInterface> const& xEventFocus,
+    std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const& rPredicate);
+
+FWI_DLLPUBLIC extern auto (*g_pGetMultiplexerListener)(
+    css::uno::Reference<css::uno::XInterface> const&,
+    std::function<bool (css::uno::Reference<css::ui::XContextChangeEventListener> const&)> const&)
+    -> css::uno::Reference<css::ui::XContextChangeEventListener>;
 
 } // namespace framework
 

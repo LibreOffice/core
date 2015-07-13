@@ -21,8 +21,6 @@
 
 #include <sal/config.h>
 
-#include <map>
-
 #include <sfx2/sidebar/AsynchronousCall.hxx>
 #include <sfx2/sidebar/Context.hxx>
 #include <sfx2/sidebar/FocusManager.hxx>
@@ -43,8 +41,6 @@
 #include <boost/optional.hpp>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/weakref.hxx>
-
 
 
 namespace
@@ -161,11 +157,6 @@ public:
     void notifyDeckTitle(const OUString& targetDeckId);
 
 private:
-    typedef ::std::map<
-        const css::uno::Reference<css::frame::XController>,
-        css::uno::WeakReference<SidebarController>
-    > SidebarControllerContainer;
-    static SidebarControllerContainer maSidebarControllerContainer;
 
     VclPtr<Deck> mpCurrentDeck;
     VclPtr<SidebarDockingWindow> mpParentWindow;

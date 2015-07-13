@@ -18,6 +18,8 @@
  */
 
 #include <framework/sfxhelperfunctions.hxx>
+#include <framework/ContextChangeEventMultiplexerTunnel.hxx>
+#include <helper/mischelper.hxx>
 
 #include <tools/diagnose_ex.h>
 
@@ -161,6 +163,14 @@ void SAL_CALL ActivateToolPanel( const ::com::sun::star::uno::Reference< ::com::
 
     ENSURE_OR_RETURN_VOID( pActivator, "framework::ActivateToolPanel: no activator function!" );
     (*pActivator)( i_rFrame, i_rPanelURL );
+}
+
+using namespace ::com::sun::star;
+uno::Reference<ui::XContextChangeEventListener> GetFirstListenerWith(
+    uno::Reference<uno::XInterface> const& xEventFocus,
+    std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const& rPredicate)
+{
+    return GetFirstListenerWith_Impl(xEventFocus, rPredicate);
 }
 
 }

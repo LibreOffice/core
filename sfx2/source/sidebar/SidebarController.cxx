@@ -35,6 +35,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/titledockwin.hxx>
 #include "sfxlocal.hrc"
+#include <framework/ContextChangeEventMultiplexerTunnel.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/fixed.hxx>
 #include "splitwin.hxx"
@@ -70,8 +71,6 @@ namespace
 }
 
 namespace sfx2 { namespace sidebar {
-
-SidebarController::SidebarControllerContainer SidebarController::maSidebarControllerContainer;
 
 namespace {
     enum MenuId
@@ -150,15 +149,13 @@ SidebarController::~SidebarController()
 SidebarController* SidebarController::GetSidebarControllerForFrame (
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
-    SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(rxFrame->getController()));
-    if (iEntry == maSidebarControllerContainer.end())
-        return NULL;
+    uno::Reference<ui::XContextChangeEventListener> const xListener(
+        framework::GetFirstListenerWith(rxFrame->getController(),
+            [] (uno::Reference<uno::XInterface> const& xRef)
+            { return nullptr != dynamic_cast<SidebarController*>(xRef.get()); }
+        ));
 
-    css::uno::Reference<XInterface> xController (iEntry->second.get());
-    if ( ! xController.is())
-        return NULL;
-
-    return dynamic_cast<SidebarController*>(xController.get());
+    return dynamic_cast<SidebarController*>(xListener.get());
 }
 
 void SidebarController::registerSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xController)
@@ -171,20 +168,10 @@ void SidebarController::registerSidebarForFrame(SidebarController* pController, 
         xMultiplexer->addContextChangeEventListener(
             static_cast<css::ui::XContextChangeEventListener*>(pController),
             xController);
-
-    WeakReference<SidebarController> xWeakController (pController);
-    maSidebarControllerContainer.insert(
-        SidebarControllerContainer::value_type(
-            xController,
-            xWeakController));
 }
 
 void SidebarController::unregisterSidebarForFrame(SidebarController* pController, css::uno::Reference<css::frame::XController> xController)
 {
-    SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(xController));
-    if (iEntry != maSidebarControllerContainer.end())
-        maSidebarControllerContainer.erase(iEntry);
-
     css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));

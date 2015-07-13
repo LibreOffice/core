@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <helper/mischelper.hxx>
+
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -88,7 +90,6 @@ public:
         const css::lang::EventObject& rEvent)
         throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
 
-private:
     typedef ::std::vector<cssu::Reference<css::ui::XContextChangeEventListener> > ListenerContainer;
     class FocusDescriptor
     {
@@ -359,6 +360,50 @@ struct Instance {
 struct Singleton:
     public rtl::Static<Instance, Singleton>
 {};
+
+}
+
+namespace framework {
+
+// right now we assume there's one matching listener
+uno::Reference<ui::XContextChangeEventListener> GetFirstListenerWith_ImplImpl(
+    uno::Reference<uno::XInterface> const& xEventFocus,
+    std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const& rPredicate)
+{
+    assert(xEventFocus.is()); // in current usage it's a bug if the XController is null here
+    uno::Reference<ui::XContextChangeEventListener> xRet;
+
+    ContextChangeEventMultiplexer *const pMultiplexer(
+        dynamic_cast<ContextChangeEventMultiplexer *>(Singleton::get().instance.get()));
+    assert(pMultiplexer);
+
+    ContextChangeEventMultiplexer::FocusDescriptor const*const pFocusDescriptor(
+        pMultiplexer->GetFocusDescriptor(xEventFocus, false));
+    if (!pFocusDescriptor)
+        return xRet;
+
+    for (auto & xListener : pFocusDescriptor->maListeners)
+    {
+        if (rPredicate(xListener))
+        {
+            assert(!xRet.is()); // generalize this if it is used for more than 1:1 mapping?
+            xRet = xListener;
+        }
+    }
+    return xRet;
+}
+
+namespace {
+
+struct Hook
+{
+    Hook() { g_pGetMultiplexerListener = &GetFirstListenerWith_ImplImpl; }
+    ~Hook() { g_pGetMultiplexerListener = nullptr; }
+};
+
+static Hook g_hook;
+
+}
 
 }
 

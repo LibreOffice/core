@@ -212,6 +212,21 @@ void FillLangItems( std::set< OUString > &rLangItems,
     }
 }
 
+auto (*g_pGetMultiplexerListener)(
+    uno::Reference<uno::XInterface> const&,
+    std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const&)
+    -> uno::Reference<ui::XContextChangeEventListener> = nullptr;
+
+uno::Reference<ui::XContextChangeEventListener>
+GetFirstListenerWith_Impl(
+    uno::Reference<uno::XInterface> const& xEventFocus,
+    std::function<bool (uno::Reference<ui::XContextChangeEventListener> const&)> const& rPredicate)
+{
+    assert(g_pGetMultiplexerListener != nullptr); // should not be called too early, nor too late
+    return g_pGetMultiplexerListener(xEventFocus, rPredicate);
+}
+
+
 } // namespace framework
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
