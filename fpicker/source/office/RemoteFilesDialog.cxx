@@ -227,10 +227,7 @@ void RemoteFilesDialog::dispose()
 
     std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create( m_context ) );
 
-    Sequence< OUString > lastService( 1 );
-    lastService[0] = m_sLastServiceUrl;
-
-    officecfg::Office::Common::Misc::FilePickerLastService::set( lastService, batch );
+    officecfg::Office::Common::Misc::FilePickerLastService::set( m_sLastServiceUrl, batch );
 
     if( m_bIsUpdated )
     {
@@ -324,10 +321,8 @@ void RemoteFilesDialog::FillServicesListbox()
 
     unsigned int nPos = 0;
     unsigned int i = 0;
-    Sequence< OUString > lastService( officecfg::Office::Common::Misc::FilePickerLastService::get( m_context ) );
 
-    if( lastService.getLength() > 0 )
-        m_sLastServiceUrl = lastService[0];
+    m_sLastServiceUrl = officecfg::Office::Common::Misc::FilePickerLastService::get( m_context );
 
     for( sal_Int32 nPlace = 0; nPlace < placesUrlsList.getLength() && nPlace < placesNamesList.getLength(); ++nPlace )
     {
