@@ -2165,7 +2165,7 @@
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
             <desc>Specifies whether to generate a thumbnail image and place it inside the
-	      the odf archive file, which makes it possible to see a preview of the document.</desc>
+            the odf archive file, which makes it possible to see a preview of the document.</desc>
             <label>Store a preview of this document</label>
           </info>
           <value>true</value>
@@ -6633,6 +6633,17 @@
           </info>
         </prop>
       </group>
+    </group>
+    <group oor:name="StylesAndFormatting">
+      <info>
+        <desc>Contains settings for Styles and Formatting.</desc>
+      </info>
+      <prop oor:name="Preview" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+           <desc>Specifies if the styles and formatting preview is enabled.</desc>
+        </info>
+        <value>true</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>
