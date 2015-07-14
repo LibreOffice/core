@@ -127,18 +127,16 @@ void TextChainFlow::impUpdateCursorInfo()
 
     mbPossiblyCursorOut = bOverflow;
 
-    if (mbPossiblyCursorOut && !mbOFisUFinduced) { // if this is false, mpOverflChText might be NULL
-        maOverflowPosSel = ESelection(mpOverflChText->GetOverflowPointSel());
-        // After the chaining event the cursor is where the text from the source box merged with the rest
-        maPostChainingSel = ESelection(mpOverflChText->GetInsertionPointSel());
-    } else if(mbPossiblyCursorOut && mbOFisUFinduced) {
+    if(mbPossiblyCursorOut ) {
         maOverflowPosSel = ESelection(mpOverflChText->GetOverflowPointSel());
         ESelection aSelAtUFTime = GetTextChain()->GetPreChainingSel(GetLinkTarget());
         // Might be an invalid selection if the cursor at UF time was before
-        //   the (UF-induced) Overflowing point but we don't use it in that case
+        //   the (possibly UF-induced) Overflowing point but we don't use it in that case
         maPostChainingSel = ESelection(aSelAtUFTime.nStartPara-maOverflowPosSel.nStartPara,
                                        aSelAtUFTime.nStartPos-maOverflowPosSel.nStartPos );
     }
+
+    // XXX: It may not be necessary anymore to keep this method separated from EditingTextChainFlow::impBroadcastCursorInfo
 }
 
 void TextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
