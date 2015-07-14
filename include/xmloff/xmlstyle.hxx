@@ -116,9 +116,6 @@ public:
     const OUString&  GetParentName() const { return maParentName; }
     const OUString&  GetFollow() const { return maFollow; }
 
-    const OUString&  GetHelpFile() const { return maHelpFile; }
-    sal_uInt32  GetHelpId() const { return mnHelpId; }
-
     sal_uInt16 GetFamily() const { return mnFamily; }
 
     bool IsValid() const { return mbValid; }

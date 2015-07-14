@@ -30,9 +30,6 @@ class SvXMLExport;
 
 class XMLChartPropHdlFactory : public XMLPropertyHandlerFactory
 {
-private:
-    const XMLPropertyHandler* GetShapePropertyHandler( sal_Int32 nType ) const;
-
 public:
     virtual ~XMLChartPropHdlFactory();
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const SAL_OVERRIDE;
@@ -80,8 +77,6 @@ public:
     XMLChartExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper,
                                   SvXMLExport& rExport );
     virtual ~XMLChartExportPropertyMapper();
-
-    void setAdaptPercentage( bool bNewValue );
 
     void setChartDoc( com::sun::star::uno::Reference<
             com::sun::star::chart2::XChartDocument > xChartDoc );

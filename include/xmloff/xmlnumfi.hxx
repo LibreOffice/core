@@ -183,11 +183,9 @@ public:
     sal_Int32 CreateAndInsert( com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >& xFormatsSupplier );
     sal_uInt16 GetType() const                      { return nType; }   // SvXMLStylesTokens
 
-    bool IsFromSystem() const                   { return bFromSystem; }
     bool HasLongDoW() const                     { return bHasLongDoW; }
     void SetHasLongDoW(bool bSet)               { bHasLongDoW = bSet; }
     bool HasEra() const                         { return bHasEra; }
-    void SetHasEra(bool bSet)                   { bHasEra = bSet; }
 
     void UpdateCalendar( const OUString& rNewCalendar );
 

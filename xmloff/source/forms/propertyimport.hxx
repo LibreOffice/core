@@ -117,12 +117,6 @@ namespace xmloff
         */
         bool    encounteredAttribute(const OUString& _rAttributeName) const;
 
-        /** determine if the element imported by the object had an given attribute.
-            <p>Please be aware of the fact that the name given must be a local name, i.e. not contain a namespace.
-            All form relevant attributes are in the same namespace, so this would be an redundant information.</p>
-        */
-        bool    encounteredAttribute(const sal_Char* _pAttributeName) const { return encounteredAttribute(OUString::createFromAscii(_pAttributeName)); }
-
         /** enables the tracking of the encountered attributes
             <p>The tracking will raise the import costs a little bit, but it's cheaper than
             derived classes tracking this themself.</p>

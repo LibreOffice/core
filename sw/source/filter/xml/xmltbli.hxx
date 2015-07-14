@@ -186,9 +186,6 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextContent > GetXTextContent() const SAL_OVERRIDE;
-
     void SetHasSubTables( bool bNew ) { bHasSubTables = bNew; }
 };
 

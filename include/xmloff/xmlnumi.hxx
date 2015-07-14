@@ -78,9 +78,6 @@ public:
     const ::com::sun::star::uno::Reference <
         ::com::sun::star::container::XIndexReplace >& GetNumRules() const
         { return xNumRules; }
-    bool IsOutline() const { return bOutline; }
-    bool IsConsecutive() const { return bConsecutive; }
-    sal_Int32 GetLevels() const { return nLevels; }
 
     static ::com::sun::star::uno::Reference <
         ::com::sun::star::container::XIndexReplace >

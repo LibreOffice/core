@@ -191,8 +191,6 @@ class SdXMLImport: public SvXMLImport
     SvXMLTokenMap*              mpDrawPageElemTokenMap;
     SvXMLTokenMap*              mpPresentationPlaceholderAttrTokenMap;
 
-    sal_uInt16                  mnStyleFamilyMask;
-
     sal_Int32                   mnNewPageCount;
     sal_Int32                   mnNewMasterPageCount;
 
@@ -251,9 +249,7 @@ public:
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     // Styles and AutoStyles contexts
-    const SdXMLMasterStylesContext* GetMasterStylesContext() const { return mpMasterStylesContext; }
 
-    sal_uInt16 GetStyleFamilyMask() const { return mnStyleFamilyMask; }
     bool IsStylesOnlyMode() const { return !mbLoadDoc; }
 
     const SvXMLTokenMap& GetDocElemTokenMap();

@@ -60,10 +60,6 @@ public:
                             const ::std::vector< XMLPropertyState >* pProperties = 0,
                             sal_uInt32 nIdx = 0
                             ) const SAL_OVERRIDE;
-
-    inline XMLBackgroundImageExport& GetBackgroundImageExport()
-                                { return aBackgroundImageExport; }
-
 };
 
 #endif

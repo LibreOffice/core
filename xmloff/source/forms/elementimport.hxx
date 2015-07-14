@@ -163,10 +163,6 @@ namespace xmloff
         void implApplyGenericProperties();
         void implApplySpecificProperties();
 
-        /** sets the style properties which have been read for the element (if any)
-        */
-        void implSetStyleProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject );
-
         PropertyGroups::const_iterator impl_matchPropertyGroup( const PropertyGroups& i_propertyGroups ) const;
 
         virtual OUString determineDefaultServiceName() const;

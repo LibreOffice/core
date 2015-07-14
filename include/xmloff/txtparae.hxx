@@ -424,11 +424,6 @@ protected:
         const enum ::xmloff::token::XMLTokenEnum pElements[],
         bool bAutoStyles);
 
-    void exportIndexMark(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet> & rPropSet,
-        bool bAutoStyles);
-
     void exportSoftPageBreak(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
@@ -475,12 +470,6 @@ protected:
         const XMLTextNumRuleInfo& rOldList,
         const XMLTextNumRuleInfo& rNewList,
         bool bAutoStyles );
-
-    /// export a redline text portion
-    void exportChange(
-        const ::com::sun::star::uno::Reference <
-            ::com::sun::star::beans::XPropertySet > & rPropSet,
-        bool bAutoStyle);
 
     /// export a ruby
     void exportRuby(

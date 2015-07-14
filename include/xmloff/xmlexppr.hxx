@@ -130,24 +130,6 @@ public:
     bool Equals( const ::std::vector< XMLPropertyState >& aProperties1,
                      const ::std::vector< XMLPropertyState >& aProperties2 ) const;
 
-    /** fills the given attribute list with the items in the given set
-     */
-    void exportXML(
-           SvXMLAttributeList& rAttrList,
-           const ::std::vector< XMLPropertyState >& rProperties,
-           const SvXMLUnitConverter& rUnitConverter,
-           const SvXMLNamespaceMap& rNamespaceMap,
-           SvXmlExportFlags nFlags = SvXmlExportFlags::NONE ) const;
-    /** like above but only properties whose property map index is within the
-        specified range are exported */
-    void exportXML(
-           SvXMLAttributeList& rAttrList,
-           const ::std::vector< XMLPropertyState >& rProperties,
-           const SvXMLUnitConverter& rUnitConverter,
-           const SvXMLNamespaceMap& rNamespaceMap,
-           sal_Int32 nPropMapStartIdx, sal_Int32 nPropMapEndIdx,
-           SvXmlExportFlags nFlags = SvXmlExportFlags::NONE ) const;
-
     void exportXML(
             SvXMLExport& rExport,
             const ::std::vector< XMLPropertyState >& rProperties,

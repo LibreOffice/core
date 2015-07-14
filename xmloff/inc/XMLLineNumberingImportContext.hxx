@@ -109,10 +109,6 @@ protected:
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
-
-    void ProcessAttribute(
-        const OUString& sLocalName,
-        const OUString& sValue);
 };
 
 #endif

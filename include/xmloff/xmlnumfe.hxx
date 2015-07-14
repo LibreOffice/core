@@ -126,9 +126,6 @@ public:
 
     /// obtain number format with system languange for a given key
     sal_uInt32 ForceSystemLanguage( sal_uInt32 nKey );
-
-    /// determine whether number format uses system language
-    bool IsSystemLanguage( sal_uInt32 nKey );
 };
 
 #endif

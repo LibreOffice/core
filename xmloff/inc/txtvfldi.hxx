@@ -204,10 +204,6 @@ protected:
     // various accessor methods:
     inline OUString GetName()    { return sName; }
     inline bool IsStringValue()     { return aValueHelper.IsStringValue();}
-    inline bool IsNameOK()          { return bNameOK; }
-    inline bool IsFormulaOK()       { return bFormulaOK; }
-    inline bool IsDescriptionOK()   { return bDescriptionOK; }
-    inline bool IsDisplayOK()       { return bDisplayOK; }
 };
 
 

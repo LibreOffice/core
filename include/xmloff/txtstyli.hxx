@@ -78,8 +78,6 @@ public:
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    bool IsAutoUpdate() const { return bAutoUpdate; }
-
     const OUString& GetListStyle() const { return sListStyleName; }
     // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
     bool IsListStyleSet() const
