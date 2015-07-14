@@ -329,7 +329,7 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
         xImp->aObjBars[n].nResId = 0;
 
-    GenLink aGenLink( LINK(this, SfxDispatcher, PostMsgHandler) );
+    Link<> aGenLink( LINK(this, SfxDispatcher, PostMsgHandler) );
 
     xImp->xPoster = new SfxHintPoster(aGenLink);
 

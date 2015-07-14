@@ -42,7 +42,6 @@ class WorkWindow;
 class ISfxTemplateCommon;
 class BasicManager;
 class DdeService;
-class GenLink;
 class PrinterDialog;
 class Point;
 class Rectangle;

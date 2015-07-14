@@ -17,35 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sfx2/hintpost.hxx>
 
 #include "arrdecl.hxx"
-#include <sfx2/hintpost.hxx>
 #include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
 
 
-
-SfxHintPoster::SfxHintPoster( const GenLink& rLink ):
-    aLink(rLink)
+SfxHintPoster::SfxHintPoster(const Link<>& rLink)
+    : m_Link(rLink)
 {
 }
-
-
-
 
 SfxHintPoster::~SfxHintPoster()
 {
 }
-
-
 
 void SfxHintPoster::Post( SfxHint* pHintToPost )
 {
     Application::PostUserEvent( ( LINK(this, SfxHintPoster, DoEvent_Impl) ), pHintToPost );
     AddFirstRef();
 }
-
-
 
 IMPL_LINK( SfxHintPoster, DoEvent_Impl, SfxHint *, pPostedHint )
 {
@@ -56,14 +48,12 @@ IMPL_LINK( SfxHintPoster, DoEvent_Impl, SfxHint *, pPostedHint )
 
 void SfxHintPoster::Event( SfxHint* pPostedHint )
 {
-    aLink.Call( pPostedHint );
+    m_Link.Call( pPostedHint );
 }
 
-
-
-void SfxHintPoster::SetEventHdl( const GenLink& rLink )
+void SfxHintPoster::SetEventHdl(const Link<>& rLink)
 {
-    aLink = rLink;
+    m_Link = rLink;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

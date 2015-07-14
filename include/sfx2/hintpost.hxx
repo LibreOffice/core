@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SFX2_HINTPOST_HXX
 #define INCLUDED_SFX2_HINTPOST_HXX
 
-#include <sfx2/genlink.hxx>
+#include <tools/link.hxx>
 #include <tools/ref.hxx>
 
 
@@ -34,13 +34,13 @@ class SfxHint;
 
     The instances are held via Ref-Count until a possibly sent
     event has arrived.  If the target dies before delivery,
-    the connection must be severed with SetEventHdl(GenLink()).
+    the connection must be severed with SetEventHdl(Link()).
 */
 class SfxHintPoster : public SvRefBase
 {
-    GenLink         aLink;
-
 private:
+    Link<> m_Link;
+
                     DECL_LINK( DoEvent_Impl, SfxHint * );
 
 protected:
@@ -48,10 +48,10 @@ protected:
     void            Event( SfxHint* pPostedHint );
 
 public:
-                    SfxHintPoster( const GenLink& rLink );
+                    SfxHintPoster(const Link<>& rLink);
 
     void            Post( SfxHint* pHint = 0 );
-    void            SetEventHdl( const GenLink& rLink );
+    void            SetEventHdl(const Link<>& rLink);
 };
 
 typedef tools::SvRef<SfxHintPoster> SfxHintPosterRef;
