@@ -529,7 +529,7 @@ Components::Components(
             parseModificationLayer(url);
         }
 #ifdef WNT
-        else if ( type == "winreg" )
+        else if (type == "winreg" || type == "winuserreg")
         {
             if (!url.isEmpty()) {
                 SAL_WARN(
@@ -537,8 +537,10 @@ Components::Components(
                     "winreg URL is not empty, URL handling is not implemented for winreg");
             }
             OUString aTempFileURL;
-            if ( dumpWindowsRegistry(&aTempFileURL) )
-            {
+            WinRegType eType = WinRegType::LOCAL_MACHINE;
+            if (type == "winuserreg")
+                eType = WinRegType::CURRENT_USER;
+            if (dumpWindowsRegistry(&aTempFileURL, eType)) {
                 parseFileLeniently(&parseXcuFile, aTempFileURL, layer, data_, 0, 0, 0);
                 layer++;
                 osl::File::remove(aTempFileURL);
