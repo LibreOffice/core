@@ -249,7 +249,8 @@ void Window::AddEventListener( const Link<>& rEventListener )
 
 void Window::RemoveEventListener( const Link<>& rEventListener )
 {
-    mpWindowImpl->maEventListeners.removeListener( rEventListener );
+    if (mpWindowImpl)
+        mpWindowImpl->maEventListeners.removeListener( rEventListener );
 }
 
 void Window::AddChildEventListener( const Link<>& rEventListener )
@@ -259,7 +260,8 @@ void Window::AddChildEventListener( const Link<>& rEventListener )
 
 void Window::RemoveChildEventListener( const Link<>& rEventListener )
 {
-    mpWindowImpl->maChildEventListeners.removeListener( rEventListener );
+    if (mpWindowImpl)
+        mpWindowImpl->maChildEventListeners.removeListener( rEventListener );
 }
 
 ImplSVEvent * Window::PostUserEvent( const Link<>& rLink, void* pCaller, bool bReferenceLink )
