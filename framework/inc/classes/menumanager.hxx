@@ -81,7 +81,6 @@ class MenuManager : public ::cppu::WeakImplHelper1< css::frame::XStatusListener 
 
     private:
         void UpdateSpecialFileMenu( Menu* pMenu );
-        void UpdateSpecialWindowMenu( Menu* pMenu );
         void ClearMenuDispatch(const css::lang::EventObject& Source = css::lang::EventObject(),bool _bRemoveOnly = true);
         void SetHdl();
         void AddMenu(PopupMenu* _pPopupMenu,const OUString& _sItemCommand,sal_uInt16 _nItemId,bool _bDelete,bool _bDeleteChildren);

@@ -55,10 +55,6 @@ class FWE_DLLPUBLIC AddonPopupMenu : public AddonMenu
         static bool        IsCommandURLPrefix( const OUString& aCmdURL );
 
         void               SetCommandURL( const OUString& aCmdURL ) { m_aCommandURL = aCmdURL; }
-        const OUString&    GetCommandURL() const { return m_aCommandURL; }
-
-    protected:
-        void Initialize( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAddonPopupMenuDefinition );
 
     private:
         AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );

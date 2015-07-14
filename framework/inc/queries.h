@@ -89,35 +89,6 @@ class QueryBuilder
             resetAll();
         }
 
-        // returns full query as copy of internal set values
-
-        OUString getQuery()
-        {
-            OUStringBuffer sCopy( m_sParams );
-            sCopy.insert( 0, m_sBase );
-            return sCopy.makeStringAndClear();
-        }
-
-        // set new or change existing base query part
-
-        void setBase( const OUString& sBase )
-        {
-            m_sBase = sBase;
-        }
-
-        // add new parameter (with optional value) to param list
-
-        void addParam( const OUString& sParam, const OUString& sValue = OUString() )
-        {
-            m_sParams.append( SEPARATOR_QUERYPARAM );
-            m_sParams.append( sParam               );
-            if( sValue.getLength() > 0 )
-            {
-                m_sParams.append( SEPARATOR_QUERYPARAMVALUE );
-                m_sParams.append( sValue                    );
-            }
-        }
-
         // forget all setted params and start with empty ones
         // Attention: base of query isn't changed!
 
@@ -311,22 +282,6 @@ class QueryAnalyzer
                 }
             }
         }
-
-        // return type of query. User can decide then, which action should be started.
-        // For faster work we converted query string into corresponding enum value!
-
-        EQuery getQueryType() const { return m_eQuery; }
-
-        // access to additional parameter values
-        // Methods return default of really set values!
-
-        sal_uInt32 getIFlags       () const { return m_nIFlags; }
-        sal_uInt32 getEFlags       () const { return m_nEFlags; }
-        ESortProp  getSortProp     () const { return m_eSortProp; }
-        bool       getDescending   () const { return m_bDescending; }
-        bool       getCaseSensitive() const { return m_bCaseSensitive; }
-        bool       getUseOrder     () const { return m_bUseOrder; }
-        bool       getDefaultFirst () const { return m_bDefaultFirst; }
 
         // this method checks if given string match any supported query.
         // (ignore additional parameters!)

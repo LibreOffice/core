@@ -109,7 +109,6 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_nLockCount( 0 )
         , m_bActive( false )
         , m_bInplaceMenuSet( false )
-        , m_bDockingInProgress( false )
         , m_bMenuVisible( true )
         , m_bComponentAttached( false )
         , m_bDoLayout( false )

@@ -204,24 +204,18 @@ namespace framework
 
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_findElement( const OUString& aName );
 
-            void implts_writeNewStateData( const OUString& aName, const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >& xWindow );
             bool implts_readWindowStateData( const OUString& rName, UIElement& rElementData );
             void implts_writeWindowStateData( const OUString& rName, const UIElement& rElementData );
-            void implts_setElementData( UIElement& rUIElement, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindow >& rDockWindow );
-            void implts_sortUIElements();
             void implts_destroyElements();
             void implts_toggleFloatingUIElementsVisibility( bool bActive );
             void implts_reparentChildWindows();
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createDockingWindow( const OUString& aElementName );
 
             bool implts_isEmbeddedLayoutManager() const;
-            sal_Int16 implts_getCurrentSymbolsSize();
-            sal_Int16 implts_getCurrentSymbolsStyle();
             ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > implts_createElement( const OUString& aName );
 
             // layouting methods
             bool implts_resizeContainerWindow( const ::com::sun::star::awt::Size& rContainerSize, const ::com::sun::star::awt::Point& rComponentPos );
-            ::Size  implts_getTopBottomDockingAreaSizes();
             ::Size  implts_getContainerWindowOutputSize();
 
             void implts_setDockingAreaWindowSizes( const css::awt::Rectangle& rBorderSpace );
@@ -255,8 +249,6 @@ namespace framework
             void    implts_setCurrentUIVisibility( bool bShow );
             void    implts_notifyListeners(short nEvent, const css::uno::Any& rInfoParam);
 
-            DECL_LINK( OptionsChanged, void* );
-
             //  OPropertySetHelper
 
             virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( com::sun::star::uno::Any&        aConvertedValue ,
@@ -282,7 +274,6 @@ namespace framework
             sal_Int32                                                                   m_nLockCount;
             bool                                                                        m_bActive;
             bool                                                                        m_bInplaceMenuSet;
-            bool                                                                        m_bDockingInProgress;
             bool                                                                        m_bMenuVisible;
             bool                                                                        m_bComponentAttached;
             bool                                                                        m_bDoLayout;

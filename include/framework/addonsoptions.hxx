@@ -113,15 +113,6 @@ class FWE_DLLPUBLIC AddonsOptions
         ~AddonsOptions();
 
         /*-****************************************************************************************************
-            @short      clears completely the addons menu
-            @descr      Call this methods to clear the addons menu
-                        To fill it again use AppendItem().
-            @param      "eMenu" select right menu to clear.
-        *//*-*****************************************************************************************************/
-
-        void Clear();
-
-        /*-****************************************************************************************************
             @short      returns if an addons menu is available
             @descr      Call to retrieve if a addons menu is available
 

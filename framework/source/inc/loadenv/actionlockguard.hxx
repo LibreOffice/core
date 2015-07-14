@@ -134,17 +134,6 @@ class ActionLockGuard
                 xLock->removeActionLock();
         }
 
-        /** @short  lock the internal wrapped resource, if its not already done. */
-        void lock()
-        {
-            osl::MutexGuard g(m_mutex);
-            if (!m_bActionLocked && m_xActionLock.is())
-            {
-                m_xActionLock->addActionLock();
-                m_bActionLocked = m_xActionLock->isActionLocked();
-            }
-        }
-
         /** @short  unlock the internal wrapped resource, if its not already done. */
         void unlock()
         {
