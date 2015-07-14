@@ -537,13 +537,16 @@ Components::Components(
             ++layer; //TODO: overflow
 #endif
 #if defined WNT
-        } else if (type == "winreg") {
+        } else if (type == "winreg" || type == "winuserreg") {
             if (!url.isEmpty()) {
                 throw css::uno::RuntimeException(
                     "CONFIGURATION_LAYERS: non-empty \"winreg\" URL");
             }
             OUString aTempFileURL;
-            if (dumpWindowsRegistry(&aTempFileURL)) {
+            WinRegType eType = WinRegType::LOCAL_MACHINE;
+            if (type == "winuserreg")
+                eType = WinRegType::CURRENT_USER;
+            if (dumpWindowsRegistry(&aTempFileURL, eType)) {
                 parseFileLeniently(&parseXcuFile, aTempFileURL, layer, 0, 0, 0);
                 osl::File::remove(aTempFileURL);
             }
