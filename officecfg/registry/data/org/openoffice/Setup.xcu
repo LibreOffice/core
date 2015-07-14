@@ -898,6 +898,7 @@
                 <it>/org.openoffice.Office.Common/Misc/UseSystemPrintDialog</it>
                 <it>/org.openoffice.Office.Common/Misc/FilePickerPlacesNames</it>
                 <it>/org.openoffice.Office.Common/Misc/FilePickerPlacesUrls</it>
+                <it>/org.openoffice.Office.Common/Misc/FilePickerLastService</it>
                 <it>/org.openoffice.Office.Common/ODF</it>
                 <it>/org.openoffice.Office.Common/Passwords</it>
                 <it>/org.openoffice.Office.Common/Path</it>

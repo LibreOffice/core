@@ -568,6 +568,9 @@
     <prop oor:name="FilePickerPlacesNames">
       <value/>
     </prop>
+    <prop oor:name="FilePickerLastService">
+      <value/>
+    </prop>
     <prop oor:name="CmisServersUrls">
       <value>
         <it>https://www.googleapis.com/drive/v2</it>

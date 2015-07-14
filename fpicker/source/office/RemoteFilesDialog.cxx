@@ -225,6 +225,13 @@ void RemoteFilesDialog::dispose()
 {
     m_pFileView->SetSelectHdl( Link<>() );
 
+    std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create( m_context ) );
+
+    Sequence< OUString > lastService( 1 );
+    lastService[0] = m_sLastServiceUrl;
+
+    officecfg::Office::Common::Misc::FilePickerLastService::set( lastService, batch );
+
     if( m_bIsUpdated )
     {
         Sequence< OUString > placesUrlsList( m_aServices.size() );
@@ -238,11 +245,11 @@ void RemoteFilesDialog::dispose()
             ++i;
         }
 
-        std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create( m_context ) );
         officecfg::Office::Common::Misc::FilePickerPlacesUrls::set( placesUrlsList, batch );
         officecfg::Office::Common::Misc::FilePickerPlacesNames::set( placesNamesList, batch );
-        batch->commit();
     }
+
+    batch->commit();
 
     m_pContainer.disposeAndClear(); // container must be first!
     m_pTreeView.disposeAndClear();
@@ -315,6 +322,13 @@ void RemoteFilesDialog::FillServicesListbox()
     Sequence< OUString > placesUrlsList( officecfg::Office::Common::Misc::FilePickerPlacesUrls::get( m_context ) );
     Sequence< OUString > placesNamesList( officecfg::Office::Common::Misc::FilePickerPlacesNames::get( m_context ) );
 
+    unsigned int nPos = 0;
+    unsigned int i = 0;
+    Sequence< OUString > lastService( officecfg::Office::Common::Misc::FilePickerLastService::get( m_context ) );
+
+    if( lastService.getLength() > 0 )
+        m_sLastServiceUrl = lastService[0];
+
     for( sal_Int32 nPlace = 0; nPlace < placesUrlsList.getLength() && nPlace < placesNamesList.getLength(); ++nPlace )
     {
         ServicePtr pService( new Place( placesNamesList[nPlace], placesUrlsList[nPlace], true ) );
@@ -328,12 +342,19 @@ void RemoteFilesDialog::FillServicesListbox()
             if( !sPrefix.isEmpty() )
                  sPrefix += ": ";
 
+            if( placesUrlsList[nPlace] == m_sLastServiceUrl )
+                nPos = i;
+
             m_pServices_lb->InsertEntry( sPrefix + placesNamesList[nPlace] );
+
+            i++;
         }
     }
 
     if( m_pServices_lb->GetEntryCount() > 0 )
-        m_pServices_lb->SelectEntryPos( 0 );
+    {
+        m_pServices_lb->SelectEntryPos( nPos );
+    }
 
     EnableControls();
 }
@@ -507,6 +528,8 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectServiceHdl )
             m_pTreeView->Expand( pRoot );
 
             m_pName_ed->GrabFocus();
+
+            m_sLastServiceUrl = sURL;
         }
     }
 
