@@ -2050,7 +2050,7 @@ RTLFUNC(CDateFromIso)
     if ( rPar.Count() == 2 )
     {
         OUString aStr = rPar.Get(1)->GetOUString();
-        sal_Int16 iMonthStart = aStr.getLength() - 4;
+        const sal_Int32 iMonthStart = aStr.getLength() - 4;
         OUString aYearStr  = aStr.copy( 0, iMonthStart );
         OUString aMonthStr = aStr.copy( iMonthStart, 2 );
         OUString aDayStr   = aStr.copy( iMonthStart+2, 2 );
@@ -3836,9 +3836,9 @@ OUString getBasicTypeName( SbxDataType eType )
         "Decimal",          // SbxDECIMAL
     };
 
-    int nPos = ((int)eType) & 0x0FFF;
-    sal_uInt16 nTypeNameCount = sizeof( pTypeNames ) / sizeof( char* );
-    if ( nPos < 0 || nPos >= nTypeNameCount )
+    size_t nPos = static_cast<size_t>(eType) & 0x0FFF;
+    const size_t nTypeNameCount = SAL_N_ELEMENTS( pTypeNames );
+    if ( nPos >= nTypeNameCount )
     {
         nPos = nTypeNameCount - 1;
     }
@@ -3989,7 +3989,7 @@ RTLFUNC(DDEInitiate)
     }
     else
     {
-        rPar.Get(0)->PutInteger( (int)nChannel );
+        rPar.Get(0)->PutInteger( static_cast<sal_Int16>(nChannel) );
     }
 }
 
