@@ -118,9 +118,6 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 
     // To check whether an overflow is underflow induced or not (useful in cursor checking)
     mbOFisUFinduced = bUnderflow;
-
-
-
 }
 
 void TextChainFlow::impUpdateCursorInfo()
@@ -128,11 +125,19 @@ void TextChainFlow::impUpdateCursorInfo()
     // XXX: Maybe we can get rid of mbOFisUFinduced by not allowing handling of more than one event by the same TextChainFlow
     // if this is not an OF triggered during an UF
 
-    mbPossiblyCursorOut = bOverflow /* && !mbOFisUFinduced */; // XXX: Not sure we need !mbOFisUFinduced
-    if (mbPossiblyCursorOut) { // if this is false, mpOverflChText might be NULL
+    mbPossiblyCursorOut = bOverflow;
+
+    if (mbPossiblyCursorOut && !mbOFisUFinduced) { // if this is false, mpOverflChText might be NULL
         maOverflowPosSel = ESelection(mpOverflChText->GetOverflowPointSel());
         // After the chaining event the cursor is where the text from the source box merged with the rest
         maPostChainingSel = ESelection(mpOverflChText->GetInsertionPointSel());
+    } else if(mbPossiblyCursorOut && mbOFisUFinduced) {
+        maOverflowPosSel = ESelection(mpOverflChText->GetOverflowPointSel());
+        ESelection aSelAtUFTime = GetTextChain()->GetPreChainingSel(GetLinkTarget());
+        // Might be an invalid selection if the cursor at UF time was before
+        //   the (UF-induced) Overflowing point but we don't use it in that case
+        maPostChainingSel = ESelection(aSelAtUFTime.nStartPara-maOverflowPosSel.nStartPara,
+                                       aSelAtUFTime.nStartPos-maOverflowPosSel.nStartPos );
     }
 }
 
