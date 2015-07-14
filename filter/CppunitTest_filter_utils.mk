@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_externals,filter_utils, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_utils, \
+	tl \
 	comphelper \
 	unotest \
 	cppuhelper \
