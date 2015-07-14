@@ -5828,7 +5828,7 @@
           <desc>List of names of the places the user bookmarked in the file picker dialog.</desc>
         </info>
       </prop>
-      <prop oor:name="FilePickerLastService" oor:type="oor:string-list" oor:nillable="false">
+      <prop oor:name="FilePickerLastService" oor:type="xs:string" oor:nillable="false">
         <info>
           <desc>URL of the last used service in the remote file picker.</desc>
         </info>
