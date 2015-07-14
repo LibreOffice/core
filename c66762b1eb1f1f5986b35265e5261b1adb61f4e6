@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_6f52afdf",
+        "filename": "sdext/source/pdfimport/pdfparse/pdfparse.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-14T06:37:15Z",
+      "side": 1,
+      "message": "This is the same bug, that happens in other places in the code and was fixed in MSVC 2015: [1].\n\n* [1] http://connect.microsoft.com/VisualStudio/feedbackdetail/view/981289/std-bind-operator-is-not-const-in-some-cases-where-it-should-be",
+      "revId": "c66762b1eb1f1f5986b35265e5261b1adb61f4e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
