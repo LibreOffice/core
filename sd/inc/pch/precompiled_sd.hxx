@@ -707,7 +707,6 @@
 #include <svx/sidebar/SelectionAnalyzer.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/subtoolboxcontrol.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svddrgmt.hxx>

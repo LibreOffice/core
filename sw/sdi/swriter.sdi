@@ -5954,7 +5954,7 @@ SfxBoolItem OnlineAutoFormat FN_AUTOFORMAT_AUTO
     GroupId = GID_FORMAT;
 ]
 
-SfxUInt16Item OptimizeTable FN_OPTIMIZE_TABLE
+SfxVoidItem OptimizeTable FN_OPTIMIZE_TABLE
 
 [
     /* flags: */

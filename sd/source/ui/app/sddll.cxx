@@ -81,7 +81,6 @@
 #include <svx/modctrl.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/subtoolboxcontrol.hxx>
 #include <svx/SvxColorChildWindow.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/tbcontrl.hxx>
@@ -262,7 +261,6 @@ void SdDLL::RegisterControllers()
     SvxFrameLineStyleToolBoxControl::RegisterControl(SID_FRAME_LINESTYLE, pMod );
     SvxColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
-    SvxSubToolBoxControl::RegisterControl(SID_OPTIMIZE_TABLE, pMod);
 }
 
 void SdDLL::Init()

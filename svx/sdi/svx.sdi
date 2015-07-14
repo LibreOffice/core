@@ -15154,7 +15154,7 @@ SfxVoidItem SplitCell SID_TABLE_SPLIT_CELLS
     GroupId = GID_TABLE;
 ]
 
-SfxUInt16Item OptimizeTable SID_OPTIMIZE_TABLE
+SfxVoidItem OptimizeTable SID_OPTIMIZE_TABLE
 
 [
     /* flags: */

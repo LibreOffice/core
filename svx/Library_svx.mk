@@ -225,7 +225,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/tbxctrls/layctrl \
     svx/source/tbxctrls/lboxctrl \
     svx/source/tbxctrls/linectrl \
-    svx/source/tbxctrls/subtoolboxcontrol \
     svx/source/tbxctrls/tbunocontroller \
     svx/source/tbxctrls/tbunosearchcontrollers \
     svx/source/tbxctrls/tbxalign \

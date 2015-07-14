@@ -94,7 +94,6 @@
 #include <tmplctrl.hxx>
 #include <viewlayoutctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
-#include <tblctrl.hxx>
 #include <zoomctrl.hxx>
 #include <wordcountctrl.hxx>
 #include <workctrl.hxx>
@@ -341,8 +340,6 @@ void SwDLL::RegisterControls()
     SwViewLayoutControl::RegisterControl( SID_ATTR_VIEWLAYOUT, pMod );
     SvxModifyControl::RegisterControl( SID_DOC_MODIFIED, pMod );
     SvxZoomSliderControl::RegisterControl( SID_ATTR_ZOOMSLIDER, pMod );
-
-    SwTableOptimizeCtrl::RegisterControl(FN_OPTIMIZE_TABLE, pMod);
 
     SvxIMapDlgChildWindow::RegisterChildWindow( false, pMod );
     SvxSearchDialogWrapper::RegisterChildWindow( false, pMod );
