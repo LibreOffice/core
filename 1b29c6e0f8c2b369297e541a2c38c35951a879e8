@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_4f0333b9",
+        "filename": "vcl/source/filter/wmf/enhwmf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1445,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-07-14T08:26:32Z",
+      "side": 1,
+      "message": "I think it would be better to use \u003c, because 0-length strings are not allowed. But this is covered by later checks anyway.",
+      "revId": "1b29c6e0f8c2b369297e541a2c38c35951a879e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
