@@ -150,6 +150,7 @@ protected:
     bool            mbBrowseMode : 1;
     bool            mbBookView : 1;      // View mode for page preview.
     bool            mbViewLayoutBookMode : 1; // Book view mode for edit view.
+    bool            mbHideWhitespaceMode : 1; // Hide header, footer, and pagebreak.
     bool        bShowPlaceHolderFields : 1; // Only used in printing!
     mutable bool    bIdle;
 
@@ -393,6 +394,8 @@ public:
     void   SetViewLayoutBookMode( bool bNew ) { mbViewLayoutBookMode = bNew; }
     sal_uInt16 GetViewLayoutColumns() const { return mnViewLayoutColumns; }
     void   SetViewLayoutColumns( sal_uInt16 nNew ) { mnViewLayoutColumns = nNew; }
+    bool   IsHideWhitespaceMode() const { return mbHideWhitespaceMode; }
+    void   SetHideWhitespaceMode( bool bMode ) { mbHideWhitespaceMode = bMode; }
 
 #ifdef DBG_UTIL
     // Correspond to statements in ui/config/cfgvw.src.
