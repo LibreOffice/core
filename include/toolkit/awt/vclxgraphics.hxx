@@ -84,8 +84,6 @@ public:
     void            SetOutputDevice( OutputDevice* pOutDev );
     OutputDevice*   GetOutputDevice() const { return mpOutputDevice; }
 
-    const vcl::Font&  GetFont() const { return maFont; }
-
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void                                        SAL_CALL acquire() throw() SAL_OVERRIDE  { OWeakObject::acquire(); }

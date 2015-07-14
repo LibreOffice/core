@@ -42,9 +42,8 @@ private:
     const bool  m_bWHWND;
 
 protected:
-      ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar> mxMenuBar;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar> mxMenuBar;
 
-    bool isSystemDependentWindowPeer() const { return m_bWHWND; }
 
     virtual vcl::Window* GetWindowImpl() = 0;
     virtual ::cppu::OInterfaceContainerHelper& GetTopWindowListenersImpl() = 0;

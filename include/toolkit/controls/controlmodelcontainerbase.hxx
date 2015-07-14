@@ -216,7 +216,6 @@ typedef ::cppu::AggImplInheritanceHelper3   < UnoControlContainer
 
 class ControlContainerBase : public ContainerControl_IBase
 {
-    ::Size ImplGetSizePixel( const ::Size& inSize );
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
     bool                                                                        mbSizeModified;

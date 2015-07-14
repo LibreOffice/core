@@ -1055,8 +1055,6 @@ public:
 protected:
     virtual void        ImplSetPeerProperty( const OUString& rPropName, const ::com::sun::star::uno::Any& rVal ) SAL_OVERRIDE;
     virtual void        updateFromModel() SAL_OVERRIDE;
-    ActionListenerMultiplexer&  getActionListeners();
-    ItemListenerMultiplexer&    getItemListeners();
 
 };
 
