@@ -50,6 +50,10 @@ MACOS_SDK_DIR=$(SDK_PATH)
 PATCH_FILES+=nss_macosx.patch
 .ENDIF # "$(OS)"=="MACOSX"
 
+.IF "$(OS)"=="FREEBSD"
+PATCH_FILES+=nss_freebsd.patch
+.ENDIF
+
 .IF "$(debug)" != ""
 .ELSE
 BUILD_OPT=1

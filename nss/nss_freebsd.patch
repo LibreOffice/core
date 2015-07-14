@@ -1,0 +1,14 @@
+--- misc/nss-3.14.4/mozilla/security/coreconf/FreeBSD.mk	2012-05-03 09:42:51.000000000 +0000
++++ misc/build/nss-3.14.4/mozilla/security/coreconf/FreeBSD.mk	2015-07-13 23:42:44.915864000 +0000
+@@ -5,9 +5,8 @@
+ 
+ include $(CORE_DEPTH)/coreconf/UNIX.mk
+ 
+-DEFAULT_COMPILER	= gcc
+-CC			= gcc
+-CCC			= g++
++DEFAULT_COMPILER	= $(CC)
++CCC			= $(CXX)
+ RANLIB			= ranlib
+ 
+ CPU_ARCH		= $(OS_TEST)
