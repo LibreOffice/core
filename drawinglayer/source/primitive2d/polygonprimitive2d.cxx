@@ -107,7 +107,7 @@ namespace drawinglayer
 
                 aDash.push_back(fLogicDashLength);
                 aDash.push_back(fLogicDashLength);
-                basegfx::tools::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA, &aDashedPolyPolyB, 2.0 * fLogicDashLength);
+                basegfx::tools::applyLineDashing(getB2DPolygon(), aDash, &aDashedPolyPolyA, &aDashedPolyPolyB, 2.0 * fLogicDashLength, &rViewInformation.getViewport());
 
                 // prepare return value
                 Primitive2DSequence aRetval(2);
@@ -223,7 +223,7 @@ namespace drawinglayer
 
     namespace primitive2d
     {
-        Primitive2DSequence PolygonStrokePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolygonStrokePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             if(getB2DPolygon().count())
             {
@@ -241,7 +241,8 @@ namespace drawinglayer
                     // apply LineStyle
                     basegfx::tools::applyLineDashing(
                         aB2DPolygon, getStrokeAttribute().getDotDashArray(),
-                        &aHairLinePolyPolygon, 0, getStrokeAttribute().getFullDotDashLen());
+                        &aHairLinePolyPolygon, 0, getStrokeAttribute().getFullDotDashLen(),
+                        &rViewInformation.getViewport());
                 }
 
                 const sal_uInt32 nCount(aHairLinePolyPolygon.count());

@@ -1154,9 +1154,11 @@ namespace drawinglayer
                 else
                 {
                     // else apply LineStyle
-                    basegfx::tools::applyLineDashing(rPolygonStrokeCandidate.getB2DPolygon(),
+                    basegfx::tools::applyLineDashing(
+                        rPolygonStrokeCandidate.getB2DPolygon(),
                         rStrokeAttribute.getDotDashArray(),
-                        &aHairlinePolyPolygon, 0, rStrokeAttribute.getFullDotDashLen());
+                        &aHairlinePolyPolygon, 0, rStrokeAttribute.getFullDotDashLen(),
+                        &getViewInformation2D().getViewport());
                 }
 
                 const sal_uInt32 nCount(aHairlinePolyPolygon.count());

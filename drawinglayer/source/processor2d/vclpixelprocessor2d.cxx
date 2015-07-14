@@ -207,7 +207,8 @@ namespace drawinglayer
                     rSource.getStrokeAttribute().getDotDashArray(),
                     &aHairLinePolyPolygon,
                     0,
-                    rSource.getStrokeAttribute().getFullDotDashLen());
+                    rSource.getStrokeAttribute().getFullDotDashLen(),
+                    &getViewInformation2D().getViewport());
             }
 
             if(!aHairLinePolyPolygon.count())

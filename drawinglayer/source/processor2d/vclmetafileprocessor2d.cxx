@@ -1247,7 +1247,8 @@ namespace drawinglayer
                             {
                                 basegfx::tools::applyLineDashing(
                                     rBasePolygon, rStroke.getDotDashArray(),
-                                    &aHairLinePolyPolygon, 0, rStroke.getFullDotDashLen());
+                                    &aHairLinePolyPolygon, 0, rStroke.getFullDotDashLen(),
+                                    &getViewInformation2D().getViewport());
                             }
 
                             const basegfx::BColor aHairlineColor(maBColorModifierStack.getModifiedColor(rLine.getColor()));

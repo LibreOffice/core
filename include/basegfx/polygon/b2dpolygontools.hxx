@@ -196,7 +196,8 @@ namespace basegfx
             const ::std::vector<double>& rDotDashArray,
             B2DPolyPolygon* pLineTarget,
             B2DPolyPolygon* pGapTarget = 0,
-            double fFullDashDotLen = 0.0);
+            double fFullDashDotLen = 0.0,
+            const basegfx::B2DRange* pViewRange = 0);
 
         // test if point is inside epsilon-range around an edge defined
         // by the two given points. Can be used for HitTesting. The epsilon-range

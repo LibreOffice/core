@@ -260,7 +260,7 @@ namespace basegfx
             return fabs(getSignedArea(rCandidate));
         }
 
-        void applyLineDashing(const B2DPolyPolygon& rCandidate, const ::std::vector<double>& rDotDashArray, B2DPolyPolygon* pLineTarget, B2DPolyPolygon* pGapTarget, double fFullDashDotLen)
+        void applyLineDashing(const B2DPolyPolygon& rCandidate, const ::std::vector<double>& rDotDashArray, B2DPolyPolygon* pLineTarget, B2DPolyPolygon* pGapTarget, double fFullDashDotLen, const basegfx::B2DRange* pViewRange)
         {
             if(0.0 == fFullDashDotLen && rDotDashArray.size())
             {
@@ -281,7 +281,7 @@ namespace basegfx
                         rDotDashArray,
                         pLineTarget ? &aLineTarget : 0,
                         pGapTarget ? &aGapTarget : 0,
-                        fFullDashDotLen);
+                        fFullDashDotLen, pViewRange);
 
                     if(pLineTarget)
                     {

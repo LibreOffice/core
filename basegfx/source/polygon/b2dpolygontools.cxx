@@ -1189,7 +1189,7 @@ namespace basegfx
             return false;
         }
 
-        void applyLineDashing(const B2DPolygon& rCandidate, const ::std::vector<double>& rDotDashArray, B2DPolyPolygon* pLineTarget, B2DPolyPolygon* pGapTarget, double fDotDashLength)
+        void applyLineDashing(const B2DPolygon& rCandidate, const ::std::vector<double>& rDotDashArray, B2DPolyPolygon* pLineTarget, B2DPolyPolygon* pGapTarget, double fDotDashLength, const basegfx::B2DRange* pViewRange)
         {
             const sal_uInt32 nPointCount(rCandidate.count());
             const sal_uInt32 nDotDashCount(rDotDashArray.size());
@@ -1308,7 +1308,6 @@ namespace basegfx
                     {
                         // simple edge
                         const double fEdgeLength(aCurrentEdge.getEdgeLength());
-
                         if(!fTools::equalZero(fEdgeLength))
                         {
                             while(fTools::less(fDotDashMovingLength, fEdgeLength))
@@ -1324,7 +1323,8 @@ namespace basegfx
                                         aSnippet.append(interpolate(aCurrentEdge.getStartPoint(), aCurrentEdge.getEndPoint(), fLastDotDashMovingLength / fEdgeLength));
                                     }
 
-                                    aSnippet.append(interpolate(aCurrentEdge.getStartPoint(), aCurrentEdge.getEndPoint(), fDotDashMovingLength / fEdgeLength));
+                                    B2DTuple aPoint = interpolate(aCurrentEdge.getStartPoint(), aCurrentEdge.getEndPoint(), fDotDashMovingLength / fEdgeLength);
+                                    aSnippet.append(aPoint);
 
                                     if(bHandleLine)
                                     {
@@ -1336,6 +1336,13 @@ namespace basegfx
                                     }
 
                                     aSnippet.clear();
+
+                                    //tdf#63955 if we leave the viewport, just stop making dashes
+                                    if (pViewRange && (aPoint.getX() > pViewRange->getMaxX() ||
+                                                       aPoint.getY() > pViewRange->getMaxY()))
+                                    {
+                                        break;
+                                    }
                                 }
 
                                 // prepare next DotDashArray step and flip line/gap flag
