@@ -49,13 +49,13 @@ namespace svt
 
     struct DialogController_Data
     {
-        vcl::Window&                     rInstigator;
-        ::std::vector< VclPtr<vcl::Window> >    aConcernedWindows;
+        VclPtr<vcl::Window>                  xInstigator;
+        ::std::vector< VclPtr<vcl::Window> > aConcernedWindows;
         PWindowEventFilter          pEventFilter;
         PWindowOperator             pOperator;
 
-        DialogController_Data( vcl::Window& _rInstigator, const PWindowEventFilter _pEventFilter, const PWindowOperator _pOperator )
-            :rInstigator( _rInstigator )
+        DialogController_Data( vcl::Window& _xInstigator, const PWindowEventFilter _pEventFilter, const PWindowOperator _pOperator )
+            :xInstigator( &_xInstigator )
             ,pEventFilter( _pEventFilter )
             ,pOperator( _pOperator )
         {
@@ -66,14 +66,14 @@ namespace svt
     //= DialogController
 
 
-    DialogController::DialogController( vcl::Window& _rInstigator, const PWindowEventFilter& _pEventFilter,
+    DialogController::DialogController( vcl::Window& _xInstigator, const PWindowEventFilter& _pEventFilter,
             const PWindowOperator& _pOperator )
-        :m_pImpl( new DialogController_Data( _rInstigator, _pEventFilter, _pOperator ) )
+        :m_pImpl( new DialogController_Data( _xInstigator, _pEventFilter, _pOperator ) )
     {
         DBG_ASSERT( m_pImpl->pEventFilter.get() && m_pImpl->pOperator.get(),
             "DialogController::DialogController: invalid filter and/or operator!" );
 
-        m_pImpl->rInstigator.AddEventListener( LINK( this, DialogController, OnWindowEvent ) );
+        m_pImpl->xInstigator->AddEventListener( LINK( this, DialogController, OnWindowEvent ) );
     }
 
 
@@ -85,7 +85,9 @@ namespace svt
 
     void DialogController::reset()
     {
-        m_pImpl->rInstigator.RemoveEventListener( LINK( this, DialogController, OnWindowEvent ) );
+        if (m_pImpl->xInstigator)
+            m_pImpl->xInstigator->RemoveEventListener( LINK( this, DialogController, OnWindowEvent ) );
+        m_pImpl->xInstigator.clear();
         m_pImpl->aConcernedWindows.clear();
         m_pImpl->pEventFilter.reset();
         m_pImpl->pOperator.reset();
