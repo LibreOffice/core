@@ -98,35 +98,6 @@ void SfxScriptLibraryContainer::setLibraryPassword( const OUString& rLibraryName
     catch(const NoSuchElementException& ) {}
 }
 
-OUString SfxScriptLibraryContainer::getLibraryPassword( const OUString& rLibraryName )
-{
-    SfxLibrary* pImplLib = getImplLib( rLibraryName );
-    OUString aPassword;
-    if( pImplLib->mbPasswordVerified )
-    {
-        aPassword = pImplLib->maPassword;
-    }
-    return aPassword;
-}
-
-void SfxScriptLibraryContainer::clearLibraryPassword( const OUString& rLibraryName )
-{
-    try
-    {
-        SfxLibrary* pImplLib = getImplLib( rLibraryName );
-        pImplLib->mbDoc50Password = false;
-        pImplLib->mbPasswordProtected = false;
-        pImplLib->maPassword.clear();
-    }
-    catch(const NoSuchElementException& ) {}
-}
-
-bool SfxScriptLibraryContainer::hasLibraryPassword( const OUString& rLibraryName )
-{
-    SfxLibrary* pImplLib = getImplLib( rLibraryName );
-    return pImplLib->mbPasswordProtected;
-}
-
 // Ctor for service
 SfxScriptLibraryContainer::SfxScriptLibraryContainer()
     :maScriptLanguage( "StarBasic"  )

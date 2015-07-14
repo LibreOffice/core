@@ -122,7 +122,6 @@ public:
     virtual void SetType( SbxDataType );
     const OUString& GetName();
     SbiSymScope GetScope() const;
-    sal_uInt16 GetProcId() const{ return nProcId;   }
     sal_uInt32 GetAddr() const  { return nChain;    }
     sal_uInt16 GetId() const    { return nId;       }
     sal_uInt16 GetTypeId() const{ return nTypeId;   }

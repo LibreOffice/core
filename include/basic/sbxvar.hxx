@@ -113,24 +113,14 @@ public:
 
     bool IsInteger()    const { return GetType() == SbxINTEGER   ; }
     bool IsLong()       const { return GetType() == SbxLONG      ; }
-    bool IsSingle()     const { return GetType() == SbxSINGLE    ; }
     bool IsDouble()     const { return GetType() == SbxDOUBLE    ; }
     bool IsString()     const { return GetType() == SbxSTRING    ; }
-    bool IsDate()       const { return GetType() == SbxDATE      ; }
     bool IsCurrency()   const { return GetType() == SbxCURRENCY  ; }
     bool IsObject()     const { return GetType() == SbxOBJECT    ; }
-    bool IsDataObject() const { return GetType() == SbxDATAOBJECT; }
     bool IsBool()       const { return GetType() == SbxBOOL      ; }
     bool IsErr()        const { return GetType() == SbxERROR     ; }
     bool IsEmpty()      const { return GetType() == SbxEMPTY     ; }
     bool IsNull()       const { return GetType() == SbxNULL      ; }
-    bool IsChar()       const { return GetType() == SbxCHAR      ; }
-    bool IsByte()       const { return GetType() == SbxBYTE      ; }
-    bool IsUShort()     const { return GetType() == SbxUSHORT    ; }
-    bool IsULong()      const { return GetType() == SbxULONG     ; }
-    bool IsInt()        const { return GetType() == SbxINT       ; }
-    bool IsUInt()       const { return GetType() == SbxUINT      ; }
-    bool IspChar()      const { return GetType() == SbxLPSTR     ; }
     bool IsNumeric() const;
     bool IsNumericRTL() const;  // #41692 Interface for Basic
     bool ImpIsNumeric( bool bOnlyIntntl ) const;    // Implementation
@@ -143,8 +133,6 @@ public:
     bool Get( SbxValues& ) const;
     const SbxValues& GetValues_Impl() const { return aData; }
     bool Put( const SbxValues& );
-
-    inline SbxValues& data() { return aData; }
 
     sal_Unicode GetChar() const;
     sal_Int16   GetInteger() const;
