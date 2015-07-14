@@ -162,7 +162,6 @@ private:
 
 protected:
     virtual bool                Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    void                        EnableInternet( bool bInternet );
 
     // originally from VclFileDialog
     Link<>                      _aOKHdl;
@@ -229,7 +228,6 @@ public:
 
     inline SvtFileView*         GetView() const;
 
-    void                        DisableSaveLastDirectory();
     void                        InitSize();
     void                        UpdateControls( const OUString& rURL );
     void                        EnableAutocompletion( bool _bEnable = true );
@@ -260,12 +258,6 @@ public:
     inline void                 SetDefaultExt( const OUString& rExt );
     inline void                 EraseDefaultExt( sal_Int32 _nIndex = 0 );
     inline const OUString&      GetDefaultExt() const;
-    inline void                 SetOKHdl( const Link<>& rLink );
-    inline const Link<>&        GetOKHdl() const;
-    inline void                 SetFileSelectHdl( const Link<>& rLink );
-    inline const Link<>&        GetFileSelectHdl() const;
-    inline void                 SetFilterSelectHdl( const Link<>& rLink );
-    inline const Link<>&        GetFilterSelectHdl() const;
 
     inline Image                GetButtonImage( sal_uInt16 _nButtonId ) const { return m_aImages.GetImage( _nButtonId ); }
 
@@ -368,65 +360,10 @@ inline const OUString& SvtFileDialog::GetDefaultExt() const
 }
 
 
-
-inline void SvtFileDialog::SetOKHdl
-(
-    const Link<>& rLink
-)
-{
-    _aOKHdl = rLink;
-}
-
-
-
-inline const Link<>& SvtFileDialog::GetOKHdl() const
-{
-    return _aOKHdl;
-}
-
-
-
-inline void SvtFileDialog::SetFileSelectHdl
-(
-    const Link<>& rLink
-)
-{
-    _aFileSelectHdl = rLink;
-}
-
-
-
-inline const Link<>& SvtFileDialog::GetFileSelectHdl() const
-{
-    return _aFileSelectHdl;
-}
-
-
-
-inline void SvtFileDialog::SetFilterSelectHdl
-(
-    const Link<>& rLink
-)
-{
-    _aFilterSelectHdl = rLink;
-}
-
-
-
-inline const Link<>& SvtFileDialog::GetFilterSelectHdl() const
-{
-    return _aFilterSelectHdl;
-}
-
-
-
 inline SvtFileView* SvtFileDialog::GetView() const
 {
     return _pFileView;
 }
-
-
-
 
 
 #define FILE_SELECTION_CHANGED  1
