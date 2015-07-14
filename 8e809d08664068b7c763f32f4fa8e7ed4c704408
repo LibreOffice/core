@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_2ff35775",
+        "filename": "sc/source/ui/inc/csvcontrol.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 388,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-14T15:22:20Z",
+      "side": 1,
+      "message": "css::uno::Reference\u003cT\u003e where T is not a class representing a UNOIDL interface type, but rather a C++ class implementing one or more such interface, is somewhat problematic, as the definitions of some of the Reference\u003cT\u003e member functions use T::static_type(), and there is no css::uno::Type corresponding to T (and T::static_type may be ambiguous if T implements multiple interfaces); use rtl::Reference\u003cT\u003e instead",
+      "revId": "8e809d08664068b7c763f32f4fa8e7ed4c704408",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
