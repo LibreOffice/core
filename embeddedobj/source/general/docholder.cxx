@@ -684,8 +684,8 @@ bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLay
     if ( xContainerLM.is() )
     {
         // the LM of the embedded frame and its current DockingAreaAcceptor
-           uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
-           uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > xDocAreaAcc;
+        uno::Reference< ::com::sun::star::frame::XLayoutManager > xOwnLM;
+        uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > xDocAreaAcc;
 
         try
         {
@@ -727,7 +727,7 @@ bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLay
 
                     xOwnLM->unlock();
                     bLock = true;
-                       bResult = true;
+                    bResult = true;
 
                     // TODO/LATER: The following action should be done only if the window is not hidden
                     // otherwise the activation must fail, unfortunately currently it is not possible
