@@ -414,19 +414,6 @@ private:
     void impl_detectTypeAndFilter()
         throw(LoadEnvException, css::uno::RuntimeException, std::exception);
 
-    /** @short  tries to ask user for it's filter decision in case
-                normal detection failed.
-
-        @descr  We use a may existing interaction handler to do so.
-
-        @return [string]
-                the type selected by the user.
-
-        @attention  Internally we update the member m_lMediaDescriptor!
-     */
-    OUString impl_askUserForTypeAndFilterIfAllowed()
-        throw(LoadEnvException, css::uno::RuntimeException);
-
     /** @short  tries to use ContentHandler objects for loading.
 
         @descr  It searches for a suitable content handler object, registered

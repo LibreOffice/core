@@ -104,21 +104,16 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
     private:
         OUString getErrorLineString();
 
-        class StatusBarHashMap : public std::unordered_map<OUString             ,
-                                                           StatusBar_XML_Entry            ,
+        class StatusBarHashMap : public std::unordered_map<OUString,
+                                                           StatusBar_XML_Entry,
                                                            OUStringHash,
                                                            std::equal_to< OUString > >
         {
-            public:
-                inline void free()
-                {
-                    StatusBarHashMap().swap( *this );// get rid of reserved capacity
-                }
         };
 
-        bool                                                                            m_bStatusBarStartFound;
-        bool                                                                            m_bStatusBarEndFound;
-        bool                                                                            m_bStatusBarItemStartFound;
+        bool                                                                                m_bStatusBarStartFound;
+        bool                                                                                m_bStatusBarEndFound;
+        bool                                                                                m_bStatusBarItemStartFound;
         StatusBarHashMap                                                                    m_aStatusBarMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_aStatusBarItems;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >            m_xLocator;

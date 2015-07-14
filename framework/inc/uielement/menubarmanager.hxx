@@ -191,9 +191,6 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         };
 
         void             RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuShortCuts );
-        void             CreatePicklistArguments(
-                            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsList,
-                            const MenuItemHandler* );
         void             CheckAndAddMenuExtension( Menu* pMenu );
         static void      impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                                   const ::com::sun::star::uno::Sequence< OUString >& rCommands,

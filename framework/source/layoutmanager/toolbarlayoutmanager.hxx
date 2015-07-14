@@ -112,7 +112,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         void refreshToolbarsVisibility( bool bAutomaticToolbars );
         void setFloatingToolbarsVisibility( bool bVisible );
         void setVisible(bool bVisible);
-        bool isVisible() { return m_bVisible; }
 
         // docking and further functions
         bool dockToolbar( const OUString& rResourceURL, ::com::sun::star::ui::DockingArea eDockingArea, const ::com::sun::star::awt::Point& aPos );
@@ -214,7 +213,6 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
                                                                     const ::Size& rContainerSize );
         void             implts_setLayoutDirty();
         void             implts_setLayoutInProgress( bool bInProgress = true );
-        bool             implts_isLayoutInProgress() const { return m_bLayoutInProgress; }
 
         // lookup/container methods
 

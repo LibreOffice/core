@@ -47,7 +47,6 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
         FWK_DECLARE_XTYPEPROVIDER
 
         MenuBarManager* GetMenuBarManager() const { return static_cast< MenuBarManager* >( m_xMenuBarManager.get() ); }
-        void            InvalidatePopupControllerCache() { m_bRefreshPopupControllerCache = true; }
 
         // XComponent
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

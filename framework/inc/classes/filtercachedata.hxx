@@ -77,8 +77,6 @@ struct FileType
         inline               FileType   (   const   FileType&   rCopy   ) { impl_copy( rCopy );         }
         inline              ~FileType   (                               ) { impl_clear();               }
         inline FileType&    operator=   (   const   FileType&   rCopy   ) { return impl_copy( rCopy );  }
-        inline void         free        (                               ) { impl_clear();               }
-
 
     private:
 
@@ -137,8 +135,6 @@ struct Filter
         inline           Filter     (   const   Filter& rCopy   ) { impl_copy( rCopy );         }
         inline          ~Filter     (                           ) { impl_clear();               }
         inline Filter&  operator=   (   const   Filter& rCopy   ) { return impl_copy( rCopy );  }
-        inline void     free        (                           ) { impl_clear();               }
-
 
     private:
 
@@ -205,8 +201,6 @@ struct Detector
         inline               Detector   (   const   Detector&   rCopy   ) { impl_copy( rCopy );         }
         inline              ~Detector   (                               ) { impl_clear();               }
         inline Detector&    operator=   (   const   Detector&   rCopy   ) { return impl_copy( rCopy );  }
-        inline void         free        (                               ) { impl_clear();               }
-
 
     private:
 
@@ -246,8 +240,6 @@ struct Loader
         inline           Loader     (   const   Loader& rCopy   ) { impl_copy( rCopy );         }
         inline          ~Loader     (                           ) { impl_clear();               }
         inline Loader&  operator=   (   const   Loader& rCopy   ) { return impl_copy( rCopy );  }
-        inline void     free        (                           ) { impl_clear();               }
-
 
     private:
 
@@ -289,8 +281,6 @@ struct ContentHandler
         inline                   ContentHandler( const ContentHandler& rCopy  ) { impl_copy( rCopy );         }
         inline                  ~ContentHandler(                              ) { impl_clear();               }
         inline ContentHandler&   operator=     ( const ContentHandler& rCopy  ) { return impl_copy( rCopy );  }
-        inline void              free          (                              ) { impl_clear();               }
-
 
     private:
 
@@ -358,49 +348,11 @@ class SetNodeHash : public std::unordered_map< OUString                    ,
 // It's an optimism to find registered services faster!
 // The preferred hash maps file extensions to preferred types to find these ones faster.
 
-class PerformanceHash   :   public  std::unordered_map< OUString                     ,
-                                                        OUStringList                        ,
-                                                        OUStringHash                    ,
+class PerformanceHash   :   public  std::unordered_map< OUString,
+                                                        OUStringList,
+                                                        OUStringHash,
                                                         std::equal_to< OUString >  >
 {
-    public:
-
-        //  try to free all used memory REALLY!
-
-        inline void free()
-        {
-            PerformanceHash().swap( *this ); // get rid of reserved capacity
-        }
-
-        //  normally a complete string must match our hash key values ...
-        //  But sometimes we need a search by using these key values as pattern!
-        //  The in/out parameter "pStepper" is used to return a pointer to found element in hash ...
-        //  and could be used for further searches again, which should be started at next element!
-        //  We stop search at the end of hash. You can start it again by setting it to the begin by himself.
-
-        inline bool findPatternKey( const OUString& sSearchValue ,
-                                              const_iterator&  pStepper     )
-        {
-            bool bFound = false;
-
-            // If this is the forst call - start search on first element.
-            // Otherwise start search on further elements!
-            if( pStepper != begin() )
-            {
-                ++pStepper;
-            }
-
-            while( pStepper != end() && !bFound )
-            {
-                bFound = Wildcard::match( sSearchValue, pStepper->first );
-                // If element was found - break loop by setting right return value
-                // and don't change "pStepper". He must point to found element!
-                // Otherwise step to next one.
-                if( !bFound )
-                    ++pStepper;
-            }
-            return bFound;
-        }
 };
 
 // Define easy usable types
@@ -447,45 +399,6 @@ class DataContainer
     public:
 
         DataContainer();
-
-        void        startListener();
-        void        stopListener ();
-
-        bool        isModified();
-
-        void        free();
-
-        bool isValidOrRepairable       () const;
-        bool validateAndRepair         ();
-        bool validateAndRepairTypes    ();
-        bool validateAndRepairFilter   ();
-        bool validateAndRepairDetectors();
-        bool validateAndRepairLoader   ();
-        bool validateAndRepairHandler  ();
-
-        bool existsType           ( const OUString& sName );
-        bool existsFilter         ( const OUString& sName );
-        bool existsDetector       ( const OUString& sName );
-        bool existsLoader         ( const OUString& sName );
-        bool existsContentHandler ( const OUString& sName );
-
-        void addType              ( const FileType&        aType    , bool bSetModified );
-        void addFilter            ( const Filter&          aFilter  , bool bSetModified );
-        void addDetector          ( const Detector&        aDetector, bool bSetModified );
-        void addLoader            ( const Loader&          aLoader  , bool bSetModified );
-        void addContentHandler    ( const ContentHandler&  aHandler , bool bSetModified );
-
-        void replaceType          ( const FileType&        aType    , bool bSetModified );
-        void replaceFilter        ( const Filter&          aFilter  , bool bSetModified );
-        void replaceDetector      ( const Detector&        aDetector, bool bSetModified );
-        void replaceLoader        ( const Loader&          aLoader  , bool bSetModified );
-        void replaceContentHandler( const ContentHandler&  aHandler , bool bSetModified );
-
-        void removeType           ( const OUString& sName    , bool bSetModified );
-        void removeFilter         ( const OUString& sName    , bool bSetModified );
-        void removeDetector       ( const OUString& sName    , bool bSetModified );
-        void removeLoader         ( const OUString& sName    , bool bSetModified );
-        void removeContentHandler ( const OUString& sName    , bool bSetModified );
 
         static void             convertFileTypeToPropertySequence          ( const FileType&                                           aSource         ,
                                                                                    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    ,
@@ -572,11 +485,6 @@ class FilterCFGAccess : public ::utl::ConfigItem
                                                             ConfigItemMode   nMode    = DEFAULT_FILTERCACHE_MODE    ); // open configuration
         virtual                     ~FilterCFGAccess(                                                               );
 
-        void                        read            (       DataContainer&   rData                                  ,
-                                                            DataContainer::ECFGType         eType                   ); // read values from configuration into given struct
-        void                        write           (       DataContainer&   rData                                  ,
-                                                            DataContainer::ECFGType         eType                   ); // write values from given struct to configuration
-
         static   OUString    encodeTypeData  ( const FileType&        aType                                  ); // build own formatted string of type properties
         static   void               decodeTypeData  ( const OUString& sData                                  ,
                                                             FileType&        aType                                  );
@@ -586,29 +494,7 @@ class FilterCFGAccess : public ::utl::ConfigItem
         static   OUString    encodeStringList( const OUStringList&    lList                                  ); // build own formatted string of OUStringList
         static   OUStringList       decodeStringList( const OUString& sValue                                 );
 
-        void             setProductName                             (       OUStringHashMap&                                       lUINames        );
-        void             resetProductName                           (       OUStringHashMap&                                       lUINames        );
-
-    //  internal helper
-
     private:
-        void impl_initKeyCounts        (                                            );    // set right key counts, which are used at reading/writing of set node properties
-        void impl_removeNodes          (       OUStringList&        rChangesList    ,     // helper to remove list of set nodes
-                                         const OUString&     sTemplateType   ,
-                                         const OUString&     sSetName        );
-
-        void impl_loadTypes            ( DataContainer&             rData           );    // helper to load configuration parts
-        void impl_loadFilters          ( DataContainer&             rData           );
-        void impl_loadDetectors        ( DataContainer&             rData           );
-        void impl_loadLoaders          ( DataContainer&             rData           );
-        void impl_loadContentHandlers  ( DataContainer&             rData           );
-        void impl_loadDefaults         ( DataContainer&             rData           );
-
-        void impl_saveTypes            ( DataContainer&             rData           );    // helper to save configuration parts
-        void impl_saveFilters          ( DataContainer&             rData           );
-        void impl_saveDetectors        ( DataContainer&             rData           );
-        void impl_saveLoaders          ( DataContainer&             rData           );
-        void impl_saveContentHandlers  ( DataContainer&             rData           );
 
     //  debug checks
 

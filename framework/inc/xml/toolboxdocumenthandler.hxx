@@ -109,16 +109,11 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
     private:
         OUString getErrorLineString();
 
-        class ToolBoxHashMap : public std::unordered_map<OUString                 ,
-                                                         ToolBox_XML_Entry               ,
+        class ToolBoxHashMap : public std::unordered_map<OUString,
+                                                         ToolBox_XML_Entry,
                                                          OUStringHash,
                                                          std::equal_to< OUString >  >
         {
-            public:
-                inline void free()
-                {
-                    ToolBoxHashMap().swap( *this );// get rid of reserved capacity
-                }
         };
 
         bool                                                                        m_bToolBarStartFound : 1;

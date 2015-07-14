@@ -158,7 +158,6 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
         void impl_appendComponentTitle (      OUStringBuffer&                       sTitle    ,
                                         const css::uno::Reference< css::uno::XInterface >& xComponent);
         void impl_appendProductName (OUStringBuffer& sTitle);
-        void impl_appendProductExtension (OUStringBuffer& sTitle);
         void impl_appendModuleName (OUStringBuffer& sTitle);
         void impl_appendDebugVersion (OUStringBuffer& sTitle);
 

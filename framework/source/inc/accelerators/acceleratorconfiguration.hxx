@@ -212,33 +212,6 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
         */
         void impl_ts_save(const css::uno::Reference< css::io::XOutputStream >& xStream);
 
-        /** @short  try to locate and open a sub storage.
-
-        @descr  It search at the root storage for the specified
-        sub storage. If it exists - it will be opened.
-        By default this method tries to open the storage
-        for reading. But the calli can request a writeable
-        storage.
-
-        @param  xRooStorage
-        used to locate the sub storage.
-
-        @param  sSubStorage
-        relativ path of the sub storage.
-
-        @param  bOutStream
-        force open of the sub storage in
-        write mode - instead of read mode, which
-        is the default.
-
-        @return [XInterface]
-        will be a css::io::XInpoutStream or a css::io::XOutputStream.
-        Depends from the parameter bWriteable!
-        */
-        css::uno::Reference< css::uno::XInterface > impl_ts_openSubStorage(const css::uno::Reference< css::embed::XStorage >& xRootStorage,
-            const OUString&                             sSubStorage ,
-            bool                                        bOutStream  );
-
         /** @short  returns a reference to one of our internal cache members.
 
         @descr  We implement the copy-on-write pattern. Doing so
