@@ -32,6 +32,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
+#include <officecfg/Office/Common.hxx>
 
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/app.hxx>
@@ -526,8 +527,11 @@ StyleTreeListBox_Impl::StyleTreeListBox_Impl(SfxCommonTemplateDialog_Impl* pPare
 
 void StyleTreeListBox_Impl::Recalc()
 {
-    SetEntryHeight(32 * GetDPIScaleFactor());
-    RecalcViewData();
+    if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
+    {
+        SetEntryHeight(32 * GetDPIScaleFactor());
+        RecalcViewData();
+    }
 }
 
 /** Internal structure for the establishment of the hierarchical view */
@@ -638,9 +642,11 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
 {
     SvTreeListEntry* pTreeListEntry = pBox->InsertEntry(pEntry->getName(), pParent);
 
-    StyleLBoxString* pStyleLBoxString = new StyleLBoxString(pTreeListEntry, 0, pEntry->getName(), eStyleFamily);
-
-    pTreeListEntry->ReplaceItem(pStyleLBoxString, 1);
+    if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
+    {
+        StyleLBoxString* pStyleLBoxString = new StyleLBoxString(pTreeListEntry, 0, pEntry->getName(), eStyleFamily);
+        pTreeListEntry->ReplaceItem(pStyleLBoxString, 1);
+    }
 
     pBox->GetModel()->InvalidateEntry(pTreeListEntry);
 
@@ -1242,8 +1248,11 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                 for(nPos = 0; nPos < nCount; ++nPos)
                 {
                     SvTreeListEntry* pTreeListEntry = aFmtLb->InsertEntry(aStrings[nPos], 0, false, nPos);
-                    StyleLBoxString* pStyleLBoxString = new StyleLBoxString(pTreeListEntry, 0, aStrings[nPos], eFam);
-                    pTreeListEntry->ReplaceItem(pStyleLBoxString, 1);
+                    if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
+                    {
+                        StyleLBoxString* pStyleLBoxString = new StyleLBoxString(pTreeListEntry, 0, aStrings[nPos], eFam);
+                        pTreeListEntry->ReplaceItem(pStyleLBoxString, 1);
+                    }
                     aFmtLb->GetModel()->InvalidateEntry(pTreeListEntry);
                 }
                 aFmtLb->Recalc();
