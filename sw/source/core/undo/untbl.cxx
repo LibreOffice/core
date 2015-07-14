@@ -993,8 +993,9 @@ void _SaveTable::CreateNew( SwTable& rTable, bool bCreateFrms,
         pFormat->SetInCache( false );
     }
 
-    // SwTableBox must have a format
-    SwTableBox aParent( static_cast<SwTableBoxFormat*>(pFormat), rTable.GetTabLines().size(), 0 );
+    // SwTableBox must have a format - the SwTableBox takes ownership of it
+    SwTableBoxFormat *const pNewFormat(pFormat->GetDoc()->MakeTableBoxFormat());
+    SwTableBox aParent(pNewFormat, rTable.GetTabLines().size(), 0);
 
     // fill FrameFormats with defaults (0)
     pFormat = 0;
