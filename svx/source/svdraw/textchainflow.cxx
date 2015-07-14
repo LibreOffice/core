@@ -128,7 +128,7 @@ void TextChainFlow::impUpdateCursorInfo()
     // XXX: Maybe we can get rid of mbOFisUFinduced by not allowing handling of more than one event by the same TextChainFlow
     // if this is not an OF triggered during an UF
 
-    mbPossiblyCursorOut = bOverflow && !mbOFisUFinduced;
+    mbPossiblyCursorOut = bOverflow /* && !mbOFisUFinduced */; // XXX: Not sure we need !mbOFisUFinduced
     if (mbPossiblyCursorOut) { // if this is false, mpOverflChText might be NULL
         maOverflowPosSel = ESelection(mpOverflChText->GetOverflowPointSel());
         // After the chaining event the cursor is where the text from the source box merged with the rest
@@ -206,6 +206,7 @@ void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
     pNonOverflOutl->SetText(*pNewText);
 
     mpTargetLink->NbcSetOutlinerParaObject(pNewText);
+    // For some reason the paper size is lost after last instruction, so we set it.
     pNonOverflOutl->SetPaperSize(Size(pNonOverflOutl->GetPaperSize().Width(),
                                       pNonOverflOutl->GetTextHeight()));
 
