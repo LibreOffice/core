@@ -673,7 +673,8 @@ void SwPageFrm::PrepareHeader()
     const SwFormatHeader &rH = static_cast<SwFrameFormat*>(GetRegisteredIn())->GetHeader();
 
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    const bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
+    const bool bOn = !(pSh && (pSh->GetViewOptions()->getBrowseMode() ||
+                               pSh->GetViewOptions()->IsHideWhitespaceMode()));
 
     if ( bOn && rH.IsActive() )
     {   //Implant header, but remove first, if already present
@@ -715,7 +716,8 @@ void SwPageFrm::PrepareFooter()
         pLay = static_cast<SwLayoutFrm*>(pLay->GetNext());
 
     const SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    const bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
+    const bool bOn = !(pSh && (pSh->GetViewOptions()->getBrowseMode() ||
+                               pSh->GetViewOptions()->IsHideWhitespaceMode()));
 
     if ( bOn && rF.IsActive() )
     {   //Implant footer, but remove first, if already present
