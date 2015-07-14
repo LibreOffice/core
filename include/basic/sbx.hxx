@@ -86,8 +86,6 @@ public:
     sal_uInt32          GetHelpId() const               { return nHelpId;   }
 
     void                SetComment( const OUString& r )   { aComment = r; }
-    void                SetHelpFile( const OUString& r )  { aHelpFile = r; }
-    void                SetHelpId( sal_uInt32 nId )         { nHelpId = nId; }
 };
 
 class BASIC_DLLPUBLIC SbxHint : public SfxSimpleHint
@@ -254,7 +252,6 @@ public:
     SbxStdCollection( const SbxStdCollection& );
     SbxStdCollection& operator=( const SbxStdCollection& );
     virtual void Insert( SbxVariable* ) SAL_OVERRIDE;
-    const OUString& GetElementClass() const { return aElemClass; }
 };
 
 #ifndef SBX_ARRAY_DECL_DEFINED

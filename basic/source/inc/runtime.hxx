@@ -346,7 +346,7 @@ class SbiRuntime
     void StepLE(),      StepGE(),       StepIDIV(),     StepAND();
     void StepOR(),      StepXOR(),      StepEQV(),      StepIMP();
     void StepNOT(),     StepCAT(),      StepLIKE(),     StepIS();
-    void StepCLONE(),   StepOLDBASED(), StepARGC();
+    void StepARGC();
     void StepARGV(),    StepINPUT(),    StepLINPUT(),   StepSTOP();
     void StepGET(),     StepSET(),  StepVBASET(),   StepPUT(),      StepPUTC();
     void StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, bool bDefaultHandling = false );
@@ -399,12 +399,10 @@ public:
     void FatalError( SbError );                 // error handling = standard, set error
     void FatalError( SbError, const OUString& );  // error handling = standard, set error
     static sal_Int32 translateErrorToVba( SbError nError, OUString& rMsg );
-    void DumpPCode();
     bool Step();                    // single step (one opcode)
     void Stop()            { bRun = false;   }
     void block()     { bBlocked = true; }
     void unblock()   { bBlocked = false; }
-    SbMethod* GetMethod()  { return pMeth;   }
     SbModule* GetModule()  { return pMod;    }
     sal_uInt16 GetDebugFlags() { return nFlags;  }
     void SetDebugFlags( sal_uInt16 nFl ) { nFlags = nFl;  }

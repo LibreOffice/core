@@ -164,14 +164,12 @@ class SbUnoMethod : public SbxMethod
     SbUnoMethod* pNext;
 
     bool mbInvocation;       // Method is based on invocation
-    bool mbDirectInvocation; // Method should be used with XDirectInvocation interface
 
 public:
     TYPEINFO_OVERRIDE();
 
     SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > xUnoMethod_,
-        bool bInvocation,
-        bool bDirect = false );
+        bool bInvocation );
     virtual ~SbUnoMethod();
     virtual SbxInfo* GetInfo() SAL_OVERRIDE;
 
@@ -179,8 +177,6 @@ public:
 
     bool isInvocationBased()
         { return mbInvocation; }
-    bool needsDirectInvocation()
-        { return mbDirectInvocation; }
 };
 
 

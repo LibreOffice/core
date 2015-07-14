@@ -74,7 +74,6 @@ public:
     inline bool         CanRead() const;
     inline bool         CanWrite() const;
     inline bool         IsModified() const;
-    inline bool         IsConst() const;
     inline bool         IsHidden() const;
     inline bool         IsVisible() const;
 
@@ -90,7 +89,6 @@ public:
     static void     Skip( SvStream& );
     bool            Store( SvStream& );
     virtual bool    LoadCompleted();
-    bool            StoreCompleted();
 
     static SbxError GetError();
     static void SetError( SbxError );
@@ -133,9 +131,6 @@ inline bool SbxBase::CanWrite() const
 
 inline bool SbxBase::IsModified() const
 { return IsSet( SBX_MODIFIED ); }
-
-inline bool SbxBase::IsConst() const
-{ return IsSet( SBX_CONST ); }
 
 inline bool SbxBase::IsHidden() const
 { return IsSet( SBX_HIDDEN ); }

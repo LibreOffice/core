@@ -2537,12 +2537,10 @@ SbUnoMethod::SbUnoMethod
     const OUString& aName_,
     SbxDataType eSbxType,
     Reference< XIdlMethod > xUnoMethod_,
-    bool bInvocation,
-    bool bDirect
+    bool bInvocation
 )
     : SbxMethod( aName_, eSbxType )
     , mbInvocation( bInvocation )
-    , mbDirectInvocation( bDirect )
 {
     m_xUnoMethod = xUnoMethod_;
     pParamInfoSeq = NULL;
@@ -2760,7 +2758,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
                     Reference< XDirectInvocation > xDirectInvoke( mxInvocation, UNO_QUERY );
                     if ( xDirectInvoke.is() && xDirectInvoke->hasMember( aUName ) )
                     {
-                        SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod, true, true );
+                        SbxVariableRef xMethRef = new SbUnoMethod( aUName, SbxVARIANT, xDummyMethod, true );
                         QuickInsert( static_cast<SbxVariable*>(xMethRef) );
                         pRes = xMethRef;
                     }
