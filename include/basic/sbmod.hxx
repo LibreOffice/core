@@ -104,7 +104,6 @@ public:
 
     const OUString&  GetSource() const;
     const OUString&  GetSource32() const { return aOUSource;}
-    const OUString&  GetComment() const { return aComment; }
     void             SetSource32( const OUString& r );
 
     bool Compile();
@@ -120,7 +119,6 @@ public:
     // Store only image, no source (needed for new password protection)
     bool     StoreBinaryData( SvStream& );
     bool     StoreBinaryData( SvStream&, sal_uInt16 nVer );
-    bool     LoadBinaryData( SvStream&, sal_uInt16 nVer );
     bool     LoadBinaryData( SvStream& );
     bool     ExceedsLegacyModuleSize();
     void     fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;

@@ -145,7 +145,6 @@ public:
     const OUString& GetString()     { return aStrVal; }
     short GetNumber()               { return (short)nVal; }
     SbiExprList* GetParameters()    { return aVar.pPar; }
-    SbiExprListVector* GetMoreParameters()  { return aVar.pvMorePar; }
 
     void Optimize(SbiParser*);                // tree matching
 
@@ -192,19 +191,15 @@ public:
     void SetBased()                 { bBased = true;              }
     bool IsBased()                  { return bBased;              }
     void SetByVal()                 { bByVal = true;              }
-    bool IsByVal()                  { return bByVal;              }
     bool IsBracket()                { return bBracket;            }
     bool IsValid()                  { return pExpr->IsValid();    }
-    bool IsConstant()               { return pExpr->IsConstant(); }
     bool IsVariable()               { return pExpr->IsVariable(); }
     bool IsLvalue()                 { return pExpr->IsLvalue();   }
     bool IsIntConstant()            { return pExpr->IsIntConst(); }
     const OUString& GetString()     { return pExpr->GetString();  }
-    SbiSymDef* GetVar()             { return pExpr->GetVar();     }
     SbiSymDef* GetRealVar()         { return pExpr->GetRealVar(); }
     SbiExprNode* GetExprNode()      { return pExpr; }
     SbxDataType GetType()           { return pExpr->GetType();    }
-    void SetType( SbxDataType eType){ pExpr->eType = eType;       }
     void Gen( RecursiveMode eRecMode = UNDEFINED );
 };
 
@@ -249,7 +244,6 @@ class SbiDimList : public SbiExprList {
     bool  bConst;                   // true: everything integer constants
 public:
     SbiDimList( SbiParser* );         // parsing Ctor
-    bool  IsConstant()              { return bConst; }
 };
 
 #endif

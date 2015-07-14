@@ -57,12 +57,6 @@ public:
             BasicError( sal_uInt64 nId, BasicErrorReason nR, const OUString& rErrStr );
 
     sal_uInt64 GetErrorId() const                  { return nErrorId; }
-    BasicErrorReason  GetReason() const            { return nReason; }
-    OUString    GetErrorStr()                      { return aErrStr; }
-
-    void    SetErrorId( sal_uInt64 n )             { nErrorId = n; }
-    void    SetReason( BasicErrorReason n )        { nReason = n; }
-    void    SetErrorStr( const OUString& rStr)     { aErrStr = rStr; }
 };
 
 class ErrorManager;
@@ -75,9 +69,6 @@ class BASIC_DLLPUBLIC OldBasicPassword
 {
 public:
     virtual void     setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword ) = 0;
-    virtual OUString getLibraryPassword( const OUString& rLibraryName ) = 0;
-    virtual void     clearLibraryPassword( const OUString& rLibraryName ) = 0;
-    virtual bool     hasLibraryPassword( const OUString& rLibraryName ) = 0;
 
 protected:
     ~OldBasicPassword() {}
@@ -130,7 +121,6 @@ private:
     BASIC_DLLPRIVATE void Init();
 
 protected:
-    bool            ImpLoadLibrary( BasicLibInfo* pLibInfo ) const;
     bool            ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, bool bInfosOnly = false );
     void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
     void            ImpMgrNotLoaded(  const OUString& rStorageName  );

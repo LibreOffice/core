@@ -57,7 +57,6 @@ public:
     SbxArray*  GetStatics();
     void       ClearStatics();
     SbModule*  GetModule()                { return pMod;        }
-    sal_uInt32 GetId() const              { return nStart;      }
     sal_uInt16 GetDebugFlags()            { return nDebugFlags; }
     void       SetDebugFlags( sal_uInt16 n )  { nDebugFlags = n;    }
     void       GetLineRange( sal_uInt16&, sal_uInt16& );
