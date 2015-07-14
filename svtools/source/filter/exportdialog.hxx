@@ -109,13 +109,10 @@ private:
     OUString            ms8BitColorPalette;
     OUString            ms24BitColor;
 
-    Size                maDialogSize;
-
     FilterConfigItem*   mpOptionsItem;
     FilterConfigItem*   mpFilterOptionsItem;
 
     OUString            maExt;
-    OUString            maEstimatedSizeText;
     sal_Int16           mnFormat;
     sal_Int32           mnMaxFilesizeForRealtimePreview;
 

@@ -60,8 +60,6 @@ private:
     OUString        maButtonText;
     bool            mbOpenDlg;
 
-    Link<>          maDialogCreatedHdl;
-
     FileControlMode             mnFlags;
     FileControlMode_Internal    mnInternalFlags;
 
