@@ -179,10 +179,6 @@ public:
     */
     bool                                        hasMoreElements() const { return ( m_pCurrent != NULL ); }
 
-    /** returns the type of the current element in the exception chain
-    */
-    SQLExceptionInfo::TYPE                      currentType() const { return m_eCurrentType; }
-
     /** retrieves the current element in the chain, or <NULL/> if the chain has been completely
         traveled.
     */

@@ -62,7 +62,6 @@ namespace connectivity
             virtual ~ODescriptor();
 
             bool     isNew()  const         { return m_bNew;    }
-            bool     getNew() const         { return m_bNew;    }
             void     setNew(bool _bNew);
 
             bool     isCaseSensitive() const { return m_aCase.isCaseSensitive(); }

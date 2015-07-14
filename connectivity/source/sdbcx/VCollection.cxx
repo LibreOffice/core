@@ -63,11 +63,6 @@ namespace
         {
         }
 
-        virtual void reserve(size_t nLength) SAL_OVERRIDE
-        {
-            m_aElements.reserve(nLength);
-        }
-
         virtual bool exists(const OUString& _sName ) SAL_OVERRIDE
         {
             return m_aNameMap.find(_sName) != m_aNameMap.end();

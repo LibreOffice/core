@@ -92,13 +92,6 @@ namespace connectivity
         */
         ::rtl::Reference<OKeySet> CreateKeySet();
 
-
-
-        // look at the name
-        bool IsFrozen() const { return m_bFrozen; }
-        // returns the current size of the keyvalues
-        size_t Count()   const { return m_aKeyValues.size(); }
-
         inline const ::std::vector<OKeyType>& getKeyType() const { return m_aKeyType; }
         inline TAscendingOrder getAscending(::std::vector<TAscendingOrder>::size_type _nPos) const { return m_aAscending[_nPos]; }
 

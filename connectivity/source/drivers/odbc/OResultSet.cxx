@@ -1765,11 +1765,6 @@ sal_Int32 OResultSet::getDriverPos() const
     return nValue ? nValue : m_nRowPos;
 }
 
-bool OResultSet::deletedVisible() const
-{
-    return false;
-}
-
 bool OResultSet::isRowDeleted() const
 {
     return m_pRowStatusArray[0] == SQL_ROW_DELETED;
