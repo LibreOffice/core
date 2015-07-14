@@ -1157,8 +1157,8 @@ void SwUiWriterTest::testTextSearch()
     CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(com::sun::star::awt::FontWeight::BOLD)), aPropVal2[0].Value);
     //specifying the search attributes
     uno::Reference<beans::XPropertySet> xPropSet(xSearchDes, uno::UNO_QUERY_THROW);
-    xPropSet->setPropertyValue(OUString("SearchWords"), uno::makeAny(sal_Bool(true)));
-    xPropSet->setPropertyValue(OUString("SearchCaseSensitive"), uno::makeAny(sal_Bool(true)));
+    xPropSet->setPropertyValue(OUString("SearchWords"), uno::makeAny(true));
+    xPropSet->setPropertyValue(OUString("SearchCaseSensitive"), uno::makeAny(true));
     //this will search all the BOLD words
     uno::Reference<container::XIndexAccess> xIndex(xSearch->findAll(xSearchDes));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndex->getCount());
