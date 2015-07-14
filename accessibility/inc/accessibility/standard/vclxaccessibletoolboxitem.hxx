@@ -83,9 +83,7 @@ public:
     void                SetFocus( bool _bFocus );
     inline bool         HasFocus() const { return m_bHasFocus; }
     void                SetChecked( bool _bCheck );
-    inline bool         IsChecked() const { return m_bIsChecked; }
     void                SetIndeterminate( bool _bIndeterminate );
-    inline bool         IsIndeterminate() const { return m_bIndeterminate; }
     inline void         ReleaseToolBox() { m_pToolBox = NULL; }
     void                NameChanged();
     void                SetChild( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xChild );

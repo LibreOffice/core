@@ -55,7 +55,6 @@ public:
     {
     }
 
-    const OUString&   GetTitle() const                    { return m_aTitle; }
     const OUString&   GetServer() const                   { return m_aServer; }
     const OUString&   GetAccount() const                  { return m_aAccount; }
     const OUString&   GetUserName() const                 { return m_aUserName; }
@@ -90,12 +89,8 @@ public:
                     { m_aPasswordToModify = aPassword; }
     void            SetRecommendToOpenReadonly( bool bVal )
                     { m_bRecommendToOpenReadonly = bVal; }
-    void            SetPath( const OUString& aPath )
-                    { m_aPath = aPath; }
     void            SetErrorText( const OUString& aErrorText )
                     { m_aErrorText = aErrorText; }
-    void            SetFlags( sal_uInt8 nFlags )
-                    { m_nFlags = nFlags; }
 
     inline void     SetCanRememberPassword( bool bSet );
     inline void     SetIsRememberPassword( bool bSet );

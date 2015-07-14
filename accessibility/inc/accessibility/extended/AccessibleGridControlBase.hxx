@@ -271,9 +271,6 @@ protected:
     /** Changes the name of the object (flat assignment, no notify).
         @attention  This method requires a locked mutex. */
     inline void implSetName( const OUString& rName );
-    /** Changes the description of the object (flat assignment, no notify).
-        @attention  This method requires a locked mutex. */
-    inline void implSetDescription( const OUString& rDescription );
 
     /** Locks all mutex's and calculates the bounding box relative to the
         parent window.
@@ -368,13 +365,6 @@ inline void AccessibleGridControlBase::implSetName(
 {
     m_aName = rName;
 }
-
-inline void AccessibleGridControlBase::implSetDescription(
-        const OUString& rDescription )
-{
-    m_aDescription = rDescription;
-}
-
 
 
 } // namespace accessibility
