@@ -866,7 +866,7 @@ namespace frm
         }
         else
         {
-            m_xGraphicObject = GraphicObject::create( m_xContext );
+            m_xGraphicObject = css::graphic::GraphicObject::create( m_xContext );
             m_xGraphicObject->setGraphic( xGraphic );
         }
         return 1L;
