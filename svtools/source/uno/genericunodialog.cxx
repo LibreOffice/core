@@ -313,6 +313,7 @@ void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
 
 void OGenericUnoDialog::destroyDialog()
 {
+    SolarMutexGuard aSolarGuard;
     m_pDialog.disposeAndClear();
 }
 
