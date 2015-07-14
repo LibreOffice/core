@@ -1298,8 +1298,13 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 return os.path.relpath(path, lib.location)
                 
             sources_list = []
-            headers_list = []
             includepath_list = []
+            # The explicit headers list is not mandatory :
+            # QtCreator just needs 'include_path_list' to find all headers files.
+            # But files listed in 'header_list' will be shown
+            # in a specific "Headers" folder in QtCreator's Project panel.
+            # We will list here only headers files of current lib.
+            headers_list = []
             for file_ in lib.cxxobjects:
                 # the file has no extension : search it
                 # self._log("\n    file : %s" % file_)
@@ -1312,20 +1317,18 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 if ext:
                     headers_list.append(lopath(file_+ext))
             
-            # List all headers
+            # List all include paths
             for hdir in lib.include:
-                # except from "workdir" folder
-                if "workdir" not in hdir:
+                hf_lopath = lopath(hdir)
+                includepath_list.append(hf_lopath)
+
+            # List headers files from current lib
+            for hdir in lib.include:
+                if hdir.startswith(lib.location):
                     for hf in os.listdir(hdir):
                         if hf.endswith(('.h', '.hxx', '.hpp', '.hrc')):
                             hf_lopath = lopath(os.path.join(hdir, hf))
                             headers_list.append(hf_lopath)
-            
-            # We also need to have a list of include paths
-            for header in headers_list:
-                header_path = os.path.dirname(header)
-                if header_path not in includepath_list:
-                    includepath_list.append(header_path)
             
             # All datas are prepared, store them for the lib.
             if lib_folder in self.data_libs:
