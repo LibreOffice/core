@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_8f5e0b44",
+        "filename": "configmgr/source/components.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-07-14T20:44:04Z",
+      "side": 1,
+      "message": "how about, instead of adding a new type \"winuserreg\", finally making use of the dormant \"url\" part of \"winreg\", supporting values \"current_machine\" and \"local_user\", say?  (for backwards compatibility, we could either assume that the existing \"winreg:\" would only ever have occurred in LO\u0027s own fundamental ini-file, and would now be replaced by \"winreg:current_machine\" there, or else that an empty \"uri\" part would be treated the same as \"current_machine\")",
+      "revId": "097292feab4fc3c064983e1dd08ac4bebe1fe216",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
