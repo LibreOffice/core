@@ -1352,6 +1352,74 @@ bool HasTextBoxContent(sal_uInt32 nShapeType)
     }
 }
 
+namespace
+{
+
+// Scheme means pattern of chromatic values.
+// [2,2,1] -> red and green are approximately equal and blue is the dominant color (e.g. blue)
+// [1,1,1] -> all chromatic values are approximately equal (e.g. white, gray, black)
+static void CalculateScheme(const BitmapColor& rBitmapColor, std::vector<int> &vScheme, sal_uInt16 nVariance)
+{
+    vScheme.resize(3,1);
+    if( rBitmapColor.GetRed() > rBitmapColor.GetGreen() + nVariance )
+        ++vScheme[0];
+    if( rBitmapColor.GetRed() > rBitmapColor.GetBlue() + nVariance )
+        ++vScheme[0];
+    if( rBitmapColor.GetGreen() > rBitmapColor.GetRed() + nVariance )
+        ++vScheme[1];
+    if( rBitmapColor.GetGreen() > rBitmapColor.GetBlue() + nVariance )
+        ++vScheme[1];
+    if( rBitmapColor.GetBlue() > rBitmapColor.GetRed() + nVariance )
+        ++vScheme[2];
+    if( rBitmapColor.GetBlue() > rBitmapColor.GetGreen() + nVariance )
+        ++vScheme[2];
+}
+
+static bool HasSimilarScheme(const BitmapColor& rBitmapColor1, const BitmapColor& rBitmapColor2, sal_uInt16 nVariance)
+{
+    std::vector<int> vScheme1, vScheme2;
+    CalculateScheme(rBitmapColor1, vScheme1, nVariance);
+    CalculateScheme(rBitmapColor2, vScheme2, nVariance);
+    for( int i = 0; i < 3; ++i )
+    {
+        if( vScheme1[i] != vScheme2[i] )
+            return false;
+    }
+    return true;
+}
+
+// Find the best match in the color palette using scheme of the input color
+static sal_uInt16 GetBestIndex(const BitmapPalette& rPalette, const BitmapColor& rBitmapColor)
+{
+    sal_uInt16 nReturn = 0;
+    bool bFound = false;
+    sal_uLong nLastErr = 3 * 255 + 1;
+
+    // Prefer those colors which have similar scheme as the input
+    // Allow bigger and bigger variance of the schemes until we find
+    // a color in the palette with similar scheme.
+    for( sal_uInt16 nVariance = 0; nVariance <= 255; ++nVariance )
+    {
+        for( sal_uInt16 i = 0; i < rPalette.GetEntryCount(); ++i )
+        {
+            if( HasSimilarScheme(rBitmapColor, rPalette[i], nVariance) )
+            {
+                sal_uLong nActErr = rBitmapColor.GetColorError( rPalette[i] );
+                if( nActErr < nLastErr )
+                {
+                    nLastErr = nActErr;
+                    nReturn = i;
+                    bFound = true;
+                }
+            }
+        }
+        if( bFound )
+            return nReturn;
+    }
+    return nReturn;
+}
+}
+
 sal_uInt8 TransColToIco( const Color& rCol )
 {
     sal_uInt8 nCol = 0;      // ->Auto
@@ -1386,7 +1454,7 @@ sal_uInt8 TransColToIco( const Color& rCol )
         for( sal_uInt16 i = 0; i < 16; ++i )
             aBmpPal[i] = Color( aColArr[ i ] );
 
-        nCol = static_cast< sal_uInt8 >(aBmpPal.GetBestIndex( rCol ) + 1);
+        nCol = static_cast< sal_uInt8 >(GetBestIndex(aBmpPal, rCol) + 1);
         break;
     }
     return nCol;
