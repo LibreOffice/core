@@ -777,11 +777,14 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
 
     if ( bExists )
     {
-        OUString sMsg = ResId( STR_SVT_ALREADYEXISTOVERWRITE, *ResMgrHolder::getOrCreate() );
-        sMsg = sMsg.replaceFirst( "$filename$", sName );
-        ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO );
-        if( aBox->Execute() != RET_YES )
-            return 0;
+        if( m_eMode == REMOTEDLG_MODE_SAVE )
+        {
+            OUString sMsg = ResId( STR_SVT_ALREADYEXISTOVERWRITE, *ResMgrHolder::getOrCreate() );
+            sMsg = sMsg.replaceFirst( "$filename$", sName );
+            ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO );
+            if( aBox->Execute() != RET_YES )
+                return 0;
+        }
     }
     else
     {
