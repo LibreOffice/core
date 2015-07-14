@@ -1299,6 +1299,19 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             sources_list = []
             headers_list = []
             includepath_list = []
+            
+            # predefine include paths with paths to generated headers
+            generated_headers = ['./workdir/UnoApiHeadersTarget/offapi/normal',
+                                './workdir/UnoApiHeadersTarget/udkapi/normal',
+                                './workdir/UnoApiHeadersTarget/bridgetest/normal',
+                                './workdir/UnoApiHeadersTarget/oovbaapi/normal',
+                                './workdir/UnoApiHeadersTarget/scaddins/comprehensive',
+                                './workdir/UnoApiHeadersTarget/cppuhelper/comprehensive',
+                            ]
+            for generated_header in generated_headers:
+                header_path = lopath(os.path.join(self.base_folder, generated_header))
+                includepath_list.append(header_path)
+
             for file_ in lib.cxxobjects:
                 # the file has no extension : search it
                 # self._log("\n    file : %s" % file_)
