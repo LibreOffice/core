@@ -68,6 +68,7 @@ static const struct osl_file_error_entry errtable[] = {
   {  ERROR_BROKEN_PIPE,            osl_File_E_PIPE     },  /* 109 */
   {  ERROR_DISK_FULL,              osl_File_E_NOSPC    },  /* 112 */
   {  ERROR_INVALID_TARGET_HANDLE,  osl_File_E_BADF     },  /* 114 */
+  {  ERROR_INVALID_NAME,           osl_File_E_NOENT    },  /* 123 */
   {  ERROR_INVALID_HANDLE,         osl_File_E_INVAL    },  /* 124 */
   {  ERROR_WAIT_NO_CHILDREN,       osl_File_E_CHILD    },  /* 128 */
   {  ERROR_CHILD_NOT_COMPLETE,     osl_File_E_CHILD    },  /* 129 */
@@ -82,6 +83,7 @@ static const struct osl_file_error_entry errtable[] = {
   {  ERROR_ALREADY_EXISTS,         osl_File_E_EXIST    },  /* 183 */
   {  ERROR_FILENAME_EXCED_RANGE,   osl_File_E_NOENT    },  /* 206 */
   {  ERROR_NESTING_NOT_ALLOWED,    osl_File_E_AGAIN    },  /* 215 */
+  {  ERROR_FILE_CHECKED_OUT,       osl_File_E_ACCES    },  /* 220 */
   {  ERROR_DIRECTORY,              osl_File_E_NOENT    },  /* 267 */
   {  ERROR_NOT_ENOUGH_QUOTA,       osl_File_E_NOMEM    },  /* 1816 */
   {  ERROR_UNEXP_NET_ERR,          osl_File_E_NETWORK  }   /* 59 */
