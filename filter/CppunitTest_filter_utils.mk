@@ -14,6 +14,10 @@ $(eval $(call gb_CppunitTest_use_ure,filter_utils))
 
 $(eval $(call gb_CppunitTest_use_configuration,filter_utils))
 
+$(eval $(call gb_CppunitTest_use_externals,filter_utils, \
+    boost_headers \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,filter_utils, \
 	comphelper \
 	unotest \
