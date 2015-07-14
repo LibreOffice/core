@@ -1206,7 +1206,7 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
         unsigned int x;
         for( int y = rRawBitmap.mnHeight; --y >= 0 ; )
         {
-            for( x = 0; x < static_cast<unsigned int>(rBitmapFT.width); ++x )
+            for( x = 0; x < rBitmapFT.width; ++x )
                 *(pDest++) = *(pSrc++);
             for(; x < rRawBitmap.mnScanlineSize; ++x )
                 *(pDest++) = 0;
@@ -1218,7 +1218,7 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
         for( int y = rRawBitmap.mnHeight; --y >= 0 ; )
         {
             unsigned char nSrc = 0;
-            for( x = 0; x < static_cast<unsigned int>(rBitmapFT.width); ++x, nSrc+=nSrc )
+            for( x = 0; x < rBitmapFT.width; ++x, nSrc+=nSrc )
             {
                 if( (x & 7) == 0 )
                     nSrc = *(pSrc++);
