@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_0f79bbfc",
+        "filename": "basegfx/source/polygon/b2dpolygontools.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1340,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2015-07-14T13:59:01Z",
+      "side": 1,
+      "message": "Hmm. What about when the line is stroked? Might need some safety margin here. Also, probably better use isInside(aPoint) here, generally minX/minY can shave off another significant part of the view",
+      "revId": "2afebfa28cb56db056bf8485bebf3ad212f72374",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
