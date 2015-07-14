@@ -450,7 +450,7 @@ css::uno::Sequence< OUString > SubToolBarController::getSupportedServiceNames()
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_SubToolBarController_get_implementation(
     css::uno::XComponentContext*,
-    css::uno::Sequence<css::uno::Any>& rxArgs )
+    css::uno::Sequence<css::uno::Any> const & rxArgs )
 {
     return cppu::acquire( new SubToolBarController( rxArgs ) );
 }
