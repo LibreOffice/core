@@ -49,7 +49,6 @@ public:
                     VCLXRegion();
                     virtual ~VCLXRegion();
 
-    void            SetRegion( const vcl::Region& rRegion )  { maRegion = rRegion; }
     const vcl::Region&   GetRegion() const                   { return maRegion; }
 
     // ::com::sun::star::uno::XInterface

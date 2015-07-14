@@ -31,13 +31,9 @@ namespace toolkit
     public:
         virtual ~ScrollableInterface() {}
         virtual void    SetScrollWidth( long nWidth ) = 0;
-        virtual long    GetScrollWidth() = 0;
         virtual void    SetScrollHeight( long nHeight ) = 0;
-        virtual long    GetScrollHeight() = 0;
         virtual void    SetScrollLeft( long nLeft ) = 0;
-        virtual long    GetScrollLeft() = 0;
         virtual void    SetScrollTop( long Top ) = 0;
-        virtual long    GetScrollTop() = 0;
     };
 
   template < class T >
@@ -61,13 +57,9 @@ namespace toolkit
         virtual ~ScrollableWrapper();
         virtual void dispose() SAL_OVERRIDE;
         virtual void    SetScrollWidth( long nWidth ) SAL_OVERRIDE;
-        virtual long    GetScrollWidth() SAL_OVERRIDE { return maScrollArea.Width(); }
         virtual void    SetScrollHeight( long nHeight ) SAL_OVERRIDE;
-        virtual long    GetScrollHeight() SAL_OVERRIDE { return maScrollArea.Height(); }
         virtual void    SetScrollLeft( long nLeft ) SAL_OVERRIDE;
-        virtual long    GetScrollLeft() SAL_OVERRIDE { return mnScrollPos.X(); }
         virtual void    SetScrollTop( long Top ) SAL_OVERRIDE;
-        virtual long    GetScrollTop() SAL_OVERRIDE { return mnScrollPos.Y() ; }
 
         void setScrollVisibility( ScrollBarVisibility rState );
         DECL_LINK( ScrollBarHdl, ScrollBar* );
