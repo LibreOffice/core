@@ -387,7 +387,6 @@ namespace connectivity
         void        setTypeKind(sal_Int32 _eType);
 
         // before calling one of this methods, be sure that the value is not null
-        void*           getValue()  const               { OSL_ENSURE(m_bBound,"Value is not bound!");return m_aValue.m_pValue;              }
         bool            getBool()   const;
 
         sal_Int8        getInt8()   const;

@@ -52,7 +52,6 @@ namespace connectivity
         {
             m_aKeys.push_back(_aValueRef);
         }
-        inline void setValue(sal_Int32 nVal) { m_nValue = nVal; }
 
         OUString getKeyString(::std::vector<ORowSetValueDecoratorRef>::size_type i) const
         {

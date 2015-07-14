@@ -47,9 +47,6 @@ namespace connectivity
         bool        m_Searchable;
         bool        m_Currency;
         bool        m_Signed;
-        bool        m_ReadOnly;
-        bool        m_Writable;
-        bool        m_DefinitelyWritable;
 
     public:
         OColumn()
@@ -64,9 +61,6 @@ namespace connectivity
             , m_Searchable(true)
             , m_Currency(false)
             , m_Signed(false)
-            , m_ReadOnly(true)
-            , m_Writable(false)
-            , m_DefinitelyWritable(false)
             {}
 
         OColumn(const OUString &_aTableName,
@@ -83,9 +77,6 @@ namespace connectivity
                 bool        _aSearchable=true,
                 bool        _aCurrency=false,
                 bool        _aSigned=false,
-                bool        _aReadOnly=true,
-                bool        _aWritable=false,
-                bool        _aDefinitelyWritable=false,
 
                 const OUString &_aColumnLabel = OUString(),
                 const OUString &_aColumnTypeName = OUString(),
@@ -106,10 +97,7 @@ namespace connectivity
             m_CaseSensitive(_aCaseSensitive),
             m_Searchable(_aSearchable),
             m_Currency(_aCurrency),
-            m_Signed(_aSigned),
-            m_ReadOnly(_aReadOnly),
-            m_Writable(_aWritable),
-            m_DefinitelyWritable(_aDefinitelyWritable)
+            m_Signed(_aSigned)
         {
             if(m_ColumnLabel.isEmpty())
                 m_ColumnLabel = _aColumnName;
@@ -129,9 +117,6 @@ namespace connectivity
         bool isSearchable()                 const { return m_Searchable; }
         bool isCurrency()                   const { return m_Currency; }
         bool isSigned()                     const { return m_Signed; }
-        bool isReadOnly()                   const { return m_ReadOnly; }
-        bool isWritable()                   const { return m_Writable; }
-        bool isDefinitelyWritable()         const { return m_DefinitelyWritable; }
 
         sal_Int32 isNullable()                  const { return m_Nullable; }
         sal_Int32 getColumnDisplaySize()        const { return m_ColumnDisplaySize; }
@@ -141,9 +126,7 @@ namespace connectivity
 
         const OUString& getColumnLabel()         const { return m_ColumnLabel; }
         const OUString& getColumnName()          const { return m_ColumnName; }
-        const OUString& getSchemaName()          const { return m_SchemaName; }
         const OUString& getTableName()           const { return m_TableName; }
-        const OUString& getCatalogName()         const { return m_CatalogName; }
         const OUString& getColumnTypeName()      const { return m_ColumnTypeName; }
         const OUString& getColumnServiceName()   const { return m_ColumnServiceName; }
 

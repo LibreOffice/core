@@ -25,6 +25,9 @@ exclusionSet = set([
     "_Bool unoidl::detail::SourceProviderInterfaceTypeEntityPad::addDirectMember(int,void *,struct unoidl::detail::SourceProviderScannerData *,const class rtl::OUString &)",
     "_Bool unoidl::detail::SourceProviderInterfaceTypeEntityPad::addOptionalBaseMembers(int,void *,struct unoidl::detail::SourceProviderScannerData *,const class rtl::OUString &,const class rtl::Reference<class unoidl::InterfaceTypeEntity> &)",
     "void unoidl::detail::SourceProviderScannerData::setSource(const void *,unsigned long)",
+    "enum connectivity::IParseContext::InternationalKeyCode connectivity::IParseContext::getIntlKeyCode(const class rtl::OString &) const",
+    "void connectivity::OSQLParser::error(const char *)",
+    "void connectivity::OSQLParseNode::insert(unsigned int,class connectivity::OSQLParseNode *)"
     # TODO track instantiations of template class constructors
     "void comphelper::IEventProcessor::release()",
     "void SotMutexHolder::acquire()",
