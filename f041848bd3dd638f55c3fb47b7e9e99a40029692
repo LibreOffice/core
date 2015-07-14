@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_ef453f17",
+        "filename": "xmloff/source/core/RDFaExportHelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-14T06:25:17Z",
+      "side": 1,
+      "message": "This doesn\u0027t compil either:\n\n  error C3848: expression having type \u0027const std::_Bind\u003ctrue ...\n\n\nAnd was fixed in MSVC 2015: [1]\n\n* [1] https://connect.microsoft.com/VisualStudio/feedback/details/1476618/std-bind-result-is-not-callable-when-const-qualified",
+      "range": {
+        "startLine": 174,
+        "startChar": 20,
+        "endLine": 174,
+        "endChar": 66
+      },
+      "revId": "f041848bd3dd638f55c3fb47b7e9e99a40029692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
