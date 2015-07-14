@@ -74,7 +74,6 @@ public:
     bool  IsCompatible()            { return bCompatible; }
     void  SetCompatible( bool b )   { bCompatible = b; }        // #118206
     bool  IsVBASupportOn()          { return bVBASupportOn; }
-    void  SetVBASupportOn( bool b ) { bVBASupportOn = b; }
     bool  WhiteSpace()              { return bSpaces; }
     sal_Int32 GetErrors()           { return nErrors; }
     sal_Int32 GetLine()             { return nLine;   }

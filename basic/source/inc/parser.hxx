@@ -99,9 +99,7 @@ public:
 
     void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo = NULL );  // let or call
     void ErrorStmnt();              // ERROR n
-    void NotImp();                  // not implemented
     void BadBlock();                // LOOP/WEND/NEXT
-    void BadSyntax();               // wrong SbiToken
     void NoIf();                    // ELSE/ELSE IF without IF
     void Assign();                  // LET
     void Attribute();

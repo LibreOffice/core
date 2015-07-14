@@ -102,9 +102,6 @@ public:
     virtual void    Remove( SbxVariable* ) SAL_OVERRIDE;
     virtual void    Clear() SAL_OVERRIDE;
 
-    BasicLibInfo*   GetLibInfo()                    { return pLibInfo;  }
-    void            SetLibInfo( BasicLibInfo* p )   { pLibInfo = p;     }
-
     // Compiler-Interface
     SbModule*       MakeModule( const OUString& rName, const OUString& rSrc );
     SbModule*       MakeModule32( const OUString& rName, const OUString& rSrc );
@@ -150,12 +147,8 @@ public:
 
     static Link<StarBASIC*,bool> GetGlobalErrorHdl();
     static void     SetGlobalErrorHdl( const Link<StarBASIC*,bool>& rNewHdl );
-    Link<StarBASIC*,bool> GetErrorHdl() const { return aErrorHdl; }
-    void            SetErrorHdl( const Link<StarBASIC*,bool>& r ) { aErrorHdl = r; }
 
     static void     SetGlobalBreakHdl( const Link<StarBASIC*,sal_uInt16>& rNewHdl );
-    Link<StarBASIC*,sal_uInt16> GetBreakHdl() const { return aBreakHdl; }
-    void            SetBreakHdl( const Link<StarBASIC*,sal_uInt16>& r ) { aBreakHdl = r; }
 
     SbxArrayRef     getUnoListeners();
 

@@ -138,11 +138,6 @@ class MacroSnippet
 
     bool HasError() { return mbError; }
 
-    void ResetError()
-    {
-        StarBASIC::SetGlobalErrorHdl( Link<StarBASIC*,bool>() );
-        mbError = false;
-    }
 };
 
 IMPL_LINK_TYPED( MacroSnippet, BasicErrorHdl, StarBASIC *, /*pBasic*/, bool)

@@ -86,7 +86,6 @@ public:
 
     const char* GetCode() const     { return pCode;     }
     sal_uInt32  GetCodeSize() const { return nCodeSize; }
-    OUString&   GetSource32()  { return aOUSource; }
     sal_uInt16  GetBase() const     { return nDimBase;  }
     OUString    GetString( short nId ) const;
     const SbxObject* FindType (const OUString& aTypeName) const;

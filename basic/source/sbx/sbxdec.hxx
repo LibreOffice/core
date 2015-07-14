@@ -90,8 +90,6 @@ public:
     bool getULong( sal_uInt32& rVal );
     bool getSingle( float& rVal );
     bool getDouble( double& rVal );
-    bool getInt( int& rVal );
-    bool getUInt( unsigned int& rVal );
     bool getString( OUString& rString );
 
     bool operator -= ( const SbxDecimal &r );
