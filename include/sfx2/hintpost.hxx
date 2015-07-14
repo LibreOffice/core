@@ -23,25 +23,20 @@
 #include <tools/ref.hxx>
 
 
-
 class SfxHint;
 
+/**  [Description]
 
+    This class allows sending unique events via VCL's
+    Application::PostUserEvent().  When the User-Event is dispatched,
+    the handler <Event()> is called, which calls the Link provided with
+    SetEventHdl().
 
-class SfxHintPoster: public SvRefBase
-
-/*  [Description]
-
-    With instances of this class unique events per PostUserEvent can be sent
-    using the StarView-application. If the User-Event is triggered often,
-    the handler <Event()> is called, the base implementation with the
-    <SetEventHdl()> line is making these link calls.
-
-    The instance are held via Ref-Count at least as long as a possible sent
-    event has not arrived yet. Should be killed before the goal, before the
-    connection is SetEventHdl (GenLink ()) .
+    The instances are held via Ref-Count until a possibly sent
+    event has arrived.  If the target dies before delivery,
+    the connection must be severed with SetEventHdl(GenLink()).
 */
-
+class SfxHintPoster : public SvRefBase
 {
     GenLink         aLink;
 
@@ -58,8 +53,6 @@ public:
     void            Post( SfxHint* pHint = 0 );
     void            SetEventHdl( const GenLink& rLink );
 };
-
-
 
 typedef tools::SvRef<SfxHintPoster> SfxHintPosterRef;
 
