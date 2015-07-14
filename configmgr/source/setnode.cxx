@@ -107,10 +107,6 @@ Node::Kind SetNode::kind() const {
     return KIND_SET;
 }
 
-void SetNode::clear() {
-    members_.clear();
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

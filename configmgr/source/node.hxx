@@ -58,7 +58,6 @@ protected:
     Node(const Node & other);
 
     virtual ~Node();
-    virtual void clear();
 
     int layer_;
     int finalized_;

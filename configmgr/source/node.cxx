@@ -77,8 +77,6 @@ Node::Node(const Node & other):
 
 Node::~Node() {}
 
-void Node::clear() {}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

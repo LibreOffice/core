@@ -61,8 +61,6 @@ private:
 
     virtual Kind kind() const SAL_OVERRIDE;
 
-    virtual void clear() SAL_OVERRIDE;
-
     OUString defaultTemplateName_;
     std::vector< OUString > additionalTemplateNames_;
     NodeMap members_;

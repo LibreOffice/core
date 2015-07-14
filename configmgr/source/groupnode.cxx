@@ -71,10 +71,6 @@ Node::Kind GroupNode::kind() const {
     return KIND_GROUP;
 }
 
-void GroupNode::clear() {
-    members_.clear();
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
