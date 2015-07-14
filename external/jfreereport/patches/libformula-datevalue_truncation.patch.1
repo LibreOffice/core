@@ -1,0 +1,29 @@
+diff -ur jfreereport_libformula.org/source/org/pentaho/reporting/libraries/formula/function/datetime/DateValueFunction.java jfreereport_libformula/source/org/pentaho/reporting/libraries/formula/function/datetime/DateValueFunction.java
+--- jfreereport_libformula.org/source/org/pentaho/reporting/libraries/formula/function/datetime/DateValueFunction.java	2010-06-01 17:15:50.000000000 +0200
++++ jfreereport_libformula/source/org/pentaho/reporting/libraries/formula/function/datetime/DateValueFunction.java	2015-07-14 17:24:42.503895240 +0200
+@@ -18,6 +18,7 @@
+ package org.pentaho.reporting.libraries.formula.function.datetime;
+ 
+ import java.util.Date;
++import java.util.Calendar;
+ 
+ import org.pentaho.reporting.libraries.formula.EvaluationException;
+ import org.pentaho.reporting.libraries.formula.FormulaContext;
+@@ -28,6 +29,7 @@
+ import org.pentaho.reporting.libraries.formula.typing.Type;
+ import org.pentaho.reporting.libraries.formula.typing.TypeRegistry;
+ import org.pentaho.reporting.libraries.formula.typing.coretypes.DateTimeType;
++import org.pentaho.reporting.libraries.formula.util.DateUtil;
+ 
+ /**
+  * This function returns
+@@ -61,7 +63,8 @@
+     final Object value = parameters.getValue(0);
+ 
+     final Date date1 = typeRegistry.convertToDate(type, value);
+-    return new TypeValuePair(DateTimeType.DATE_TYPE, date1);
++    final Date date  = DateUtil.normalizeDate(date1, DateTimeType.DATE_TYPE);
+ 
++    return new TypeValuePair(DateTimeType.DATE_TYPE, date);
+   }
+ }
