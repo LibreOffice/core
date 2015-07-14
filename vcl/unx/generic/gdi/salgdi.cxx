@@ -278,6 +278,14 @@ bool X11SalGraphics::GetDitherPixmap( SalColor nSalColor )
 
 void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // const
 {
+    char* pForceDpi;
+    if ((pForceDpi = getenv("SAL_FORCEDPI")))
+    {
+        OString sForceDPI(pForceDpi);
+        rDPIX = rDPIY = sForceDPI.toInt32();
+        return;
+    }
+
     const SalDisplay *pDisplay = GetDisplay();
     if (!pDisplay)
     {

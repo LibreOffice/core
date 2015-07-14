@@ -2102,6 +2102,14 @@ cairo_t* GtkSalGraphics::getCairoContext() const
 
 void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
 {
+    char* pForceDpi;
+    if ((pForceDpi = getenv("SAL_FORCEDPI")))
+    {
+        OString sForceDPI(pForceDpi);
+        rDPIX = rDPIY = sForceDPI.toInt32();
+        return;
+    }
+
     GdkScreen* pScreen = gtk_widget_get_screen(mpWindow);
     double fResolution = -1.0;
     g_object_get(pScreen, "resolution", &fResolution, nullptr);
