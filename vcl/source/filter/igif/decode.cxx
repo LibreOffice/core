@@ -109,11 +109,9 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
 
 bool GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData )
 {
-    GIFLZWTableEntry* pE;
-
     if( nTableSize < 4096 )
     {
-        pE = pTable + nTableSize;
+        GIFLZWTableEntry* pE = pTable + nTableSize;
         pE->pPrev = pTable + nPrevCode;
         pE->pFirst = pE->pPrev->pFirst;
         GIFLZWTableEntry *pEntry = pTable[nCodeFirstData].pFirst;
@@ -130,7 +128,6 @@ bool GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirst
 
 bool GIFLZWDecompressor::ProcessOneCode()
 {
-    GIFLZWTableEntry*   pE;
     sal_uInt16              nCode;
     bool                bRet = false;
     bool                bEndOfBlock = false;
@@ -193,11 +190,11 @@ bool GIFLZWDecompressor::ProcessOneCode()
 
         nOldCode = nCode;
 
-        if (nCode > 4096)
+        if (nCode >= 4096)
             return false;
 
         // write character(/-sequence) of code nCode in the output buffer:
-        pE = pTable + nCode;
+        GIFLZWTableEntry* pE = pTable + nCode;
         do
         {
             if (pOutBufData == pOutBuf) //can't go back past start
