@@ -122,22 +122,6 @@ void SAL_CALL MacrosMenuController::statusChanged( const FeatureStateEvent& ) th
     }
 }
 
-// XMenuListener
-void MacrosMenuController::impl_select(const Reference< XDispatch >& /*_xDispatch*/,const ::com::sun::star::util::URL& aTargetURL)
-{
-    // need to requery, since we handle more than one type of Command
-    // if we don't do this only .uno:ScriptOrganizer commands are executed
-    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-    Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
-    if( xDispatch.is() )
-    {
-        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
-        pExecuteInfo->xDispatch     = xDispatch;
-        pExecuteInfo->aTargetURL    = aTargetURL;
-        Application::PostUserEvent( LINK(0, MacrosMenuController , ExecuteHdl_Impl), pExecuteInfo );
-    }
-}
-
 IMPL_STATIC_LINK( MacrosMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
    try

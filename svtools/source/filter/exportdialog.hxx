@@ -150,7 +150,6 @@ private:
                         DECL_LINK( UpdateHdlMtfSizeY,void* p );
                         DECL_LINK( UpdateHdlNfResolution,void* p );
                         DECL_LINK( SbCompressionUpdateHdl,void* p );
-                        DECL_LINK( NfCompressionUpdateHdlX,void* p );
 
                         DECL_LINK( OK, void* p );
 

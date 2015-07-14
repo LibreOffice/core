@@ -93,7 +93,6 @@ public:
 
     sal_Int32 getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getAccessibleChild( sal_Int32 index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    void selectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
     bool HasCheck() const
     {
@@ -204,8 +203,6 @@ class ToolbarMenuEntryAcc : public ::comphelper::OBaseMutex,
 public:
     explicit ToolbarMenuEntryAcc( ToolbarMenuEntry* pParent );
     virtual ~ToolbarMenuEntryAcc();
-
-    bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
     // XAccessible
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

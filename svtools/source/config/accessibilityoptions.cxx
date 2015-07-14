@@ -95,8 +95,6 @@ public:
     void        SetIsAutomaticFontColor(bool bSet);
     void        SetHelpTipSeconds(sal_Int16 nSet);
     void        SetSelectionInReadonly(bool bSet);
-
-    bool        IsModified() const { return bIsModified; };
 };
 
 // initialization of static members --------------------------------------
@@ -613,12 +611,6 @@ void SvtAccessibilityOptions::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-
-
-bool SvtAccessibilityOptions::IsModified() const
-{
-    return sm_pSingleImplConfig->IsModified();
-}
 
 bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const
 {

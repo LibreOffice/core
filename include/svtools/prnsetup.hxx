@@ -54,7 +54,6 @@ private:
     SVT_DLLPRIVATE void         ImplSetInfo();
 
                     DECL_DLLPRIVATE_LINK( ImplPropertiesHdl, void* );
-                    DECL_DLLPRIVATE_LINK( ImplOptionsHdl, void* );
                     DECL_DLLPRIVATE_LINK( ImplChangePrinterHdl, void* );
                     DECL_DLLPRIVATE_LINK_TYPED( ImplStatusHdl, Timer*, void );
 

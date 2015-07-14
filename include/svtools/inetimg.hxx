@@ -35,16 +35,6 @@ class INetImage
     OUString        aAlternateText;
     Size            aSizePixel;
 
-protected:
-    OUString        CopyExchange() const;
-    void            PasteExchange( const OUString& rString );
-
-    void            SetImageURL( const OUString& rS )     { aImageURL = rS; }
-    void            SetTargetURL( const OUString& rS )    { aTargetURL = rS; }
-    void            SetTargetFrame( const OUString& rS )  { aTargetFrame = rS; }
-    void            SetAlternateText( const OUString& rS ){ aAlternateText = rS; }
-    void            SetSizePixel( const Size& rSize )   { aSizePixel = rSize; }
-
 public:
                     INetImage(
                         const OUString& rImageURL,
@@ -64,8 +54,6 @@ public:
     const OUString& GetImageURL() const { return aImageURL; }
     const OUString& GetTargetURL() const { return aTargetURL; }
     const OUString& GetTargetFrame() const { return aTargetFrame; }
-    const OUString& GetAlternateText() const { return aAlternateText; }
-    const Size&     GetSizePixel() const { return aSizePixel; }
 
     // Im-/Export
     bool Write( SvStream& rOStm, SotClipboardFormatId nFormat ) const;

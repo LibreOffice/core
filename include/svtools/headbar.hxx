@@ -313,9 +313,7 @@ public:
     void                Clear();
 
     void                SetOffset( long nNewOffset = 0 );
-    long                GetOffset() const { return mnOffset; }
     inline void         SetDragSize( long nNewSize = 0 ) { mnDragSize = nNewSize; }
-    long                GetDragSize() const { return mnDragSize; }
 
     sal_uInt16          GetItemCount() const;
     sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
@@ -324,9 +322,7 @@ public:
     Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
     sal_uInt16          GetCurItemId() const { return mnCurItemId; }
     long                GetDragPos() const { return mnDragPos; }
-    sal_uInt16          GetItemDragPos() const { return mnItemDragPos; }
     bool                IsItemMode() const { return mbItemMode; }
-    bool                IsItemDrag() const { return mbItemDrag; }
 
     void                SetItemSize( sal_uInt16 nItemId, long nNewSize );
     long                GetItemSize( sal_uInt16 nItemId ) const;
@@ -341,23 +337,15 @@ public:
 
     Size                CalcWindowSizePixel() const;
 
-    inline void             SetHelpText( const OUString& rText )    { Window::SetHelpText( rText ); }
-    inline const OUString&  GetHelpText() const                     { return Window::GetHelpText(); }
-    inline void             SetHelpId( const OString& rId )    { Window::SetHelpId( rId ); }
-    inline const OString& GetHelpId() const                    { return Window::GetHelpId(); }
+    inline void         SetHelpId( const OString& rId )    { Window::SetHelpId( rId ); }
+
 
     inline void         SetStartDragHdl( const Link<>& rLink )      { maStartDragHdl = rLink; }
-    inline const Link<>& GetStartDragHdl() const                    { return maStartDragHdl; }
     inline void         SetDragHdl( const Link<>& rLink )           { maDragHdl = rLink; }
-    inline const Link<>& GetDragHdl() const                         { return maDragHdl; }
     inline void         SetEndDragHdl( const Link<>& rLink )        { maEndDragHdl = rLink; }
-    inline const Link<>& GetEndDragHdl() const                      { return maEndDragHdl; }
     inline void         SetSelectHdl( const Link<>& rLink )         { maSelectHdl = rLink; }
-    inline const Link<>& GetSelectHdl() const                       { return maSelectHdl; }
     inline void         SetDoubleClickHdl( const Link<>& rLink )    { maDoubleClickHdl = rLink; }
-    inline const Link<>& GetDoubleClickHdl() const                  { return maDoubleClickHdl; }
     inline void         SetCreateAccessibleHdl( const Link<>& rLink ) { maCreateAccessibleHdl = rLink; }
-    inline const Link<>& GetCreateAccessibleHdl() const             { return maCreateAccessibleHdl; }
 
     inline bool         IsDragable() const                          { return mbDragable; }
 

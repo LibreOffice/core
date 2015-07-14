@@ -87,13 +87,6 @@ void GenericEditImplementation< EDIT >::ReplaceSelected( const OUString& _rStr )
 
 
 template <class EDIT>
-void GenericEditImplementation< EDIT >::DeleteSelected()
-{
-    m_rEdit.DeleteSelected();
-}
-
-
-template <class EDIT>
 OUString GenericEditImplementation< EDIT >::GetSelected( LineEnd ) const
 {
     return m_rEdit.GetSelected( );

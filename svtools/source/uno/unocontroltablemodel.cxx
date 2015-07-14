@@ -206,15 +206,6 @@ namespace svt { namespace table
     }
 
 
-    bool UnoControlTableModel::isCellEditable( ColPos col, RowPos row ) const
-    {
-        DBG_CHECK_ME();
-        (void)col;
-        (void)row;
-        return false;
-    }
-
-
     PColumnModel UnoControlTableModel::getColumnModel( ColPos column )
     {
         DBG_CHECK_ME();

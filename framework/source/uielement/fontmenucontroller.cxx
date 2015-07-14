@@ -147,14 +147,6 @@ void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event 
 }
 
 // XMenuListener
-void FontMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
-{
-    Sequence<PropertyValue>      aArgs;
-    OSL_ENSURE(_xDispatch.is(),"FontMenuController::impl_select: No dispatch");
-    if ( _xDispatch.is() )
-        _xDispatch->dispatch( aTargetURL, aArgs );
-}
-
 void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
 {
     osl::MutexGuard aLock( m_aMutex );

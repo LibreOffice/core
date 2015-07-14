@@ -81,15 +81,12 @@ public:
     long                    Width();
     long                    Height();
     void                    SetLink( const Link<>& rLink) { aLink=rLink; }
-    const Link<>&           GetLink() const { return aLink; }
     bool                    IsRadio();
     // as buttons are not derived from LinkHdl
     void                    CallLink();
 
     void                    StoreButtonState( SvTreeListEntry* pEntry, SvItemStateFlags nItemFlags );
     static SvButtonState    ConvertToButtonState( SvItemStateFlags nItemFlags );
-
-    SvButtonState           GetActButtonState() const { return eState; }
 
     SvTreeListEntry*        GetActEntry() const;
 
@@ -217,10 +214,6 @@ public:
 
     // Check whether this button can be modified via UI
     bool CheckModification() const;
-    SvLBoxButtonData* GetButtonData() const
-    {
-        return pData;
-    }
 };
 
 inline void SvLBoxButton::SetStateChecked()
@@ -276,7 +269,6 @@ public:
 
 
     bool SetModeImages(const Image& rBitmap1, const Image& rBitmap2);
-    void  GetModeImages(Image& rBitmap1, Image& rBitmap2) const;
 
     inline void SetBitmap1(const Image& rImage);
     inline void SetBitmap2(const Image& rImage);

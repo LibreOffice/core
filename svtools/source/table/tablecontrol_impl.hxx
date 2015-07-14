@@ -51,7 +51,6 @@ namespace svt { namespace table
         long getStart() const { return nStartPixel; }
         long getEnd() const { return nEndPixel; }
 
-        void setEnd( long const i_end ) { nEndPixel = i_end; }
         void move( long const i_offset ) { nStartPixel += i_offset; nEndPixel += i_offset; }
 
         long getWidth() const { return nEndPixel - nStartPixel; }
@@ -146,7 +145,6 @@ namespace svt { namespace table
         inline  const PTableInputHandler&   getInputHandler() const { return m_pInputHandler; }
 
         inline  RowPos  getCurRow() const           { return m_nCurRow; }
-        inline  void    setCurRow( RowPos i_curRow ){ m_nCurRow = i_curRow; }
 
         RowPos  getAnchor() const { return m_nAnchor; }
         void    setAnchor( RowPos const i_anchor ) { m_nAnchor = i_anchor; }
@@ -248,7 +246,6 @@ namespace svt { namespace table
         */
         bool        markAllRowsAsSelected();
 
-        void        setSelectHandler( Link<> const & i_selectHandler ) { m_aSelectHdl = i_selectHandler; }
         Link<> const& getSelectHandler() const { return m_aSelectHdl; }
 
         void commitAccessibleEvent( sal_Int16 const i_eventID, const com::sun::star::uno::Any& i_newValue, const com::sun::star::uno::Any& i_oldValue );

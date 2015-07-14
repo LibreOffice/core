@@ -95,14 +95,6 @@ bool BrowseBox::IsDropFormatSupported( SotClipboardFormatId _nFormat )
 }
 
 
-
-bool BrowseBox::IsDropFormatSupported( SotClipboardFormatId _nFormat ) const
-{
-    return const_cast< BrowseBox* >( this )->IsDropFormatSupported( _nFormat );
-}
-
-
-
 bool BrowseBox::IsDropFormatSupported( const DataFlavor& _rFlavor )
 {
     if ( static_cast< BrowserDataWin* >( pDataWin.get() )->bCallingDropCallback )
@@ -110,14 +102,6 @@ bool BrowseBox::IsDropFormatSupported( const DataFlavor& _rFlavor )
 
     return DropTargetHelper::IsDropFormatSupported( _rFlavor );
 }
-
-
-
-bool BrowseBox::IsDropFormatSupported( const DataFlavor& _rFlavor ) const
-{
-    return const_cast< BrowseBox* >( this )->IsDropFormatSupported( _rFlavor );
-}
-
 
 
 void BrowseBox::Command( const CommandEvent& rEvt )

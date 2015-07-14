@@ -402,10 +402,8 @@ protected:
                     GetDataFlavors() const;
 
     bool            IsDropFormatSupported( SotClipboardFormatId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
-    bool            IsDropFormatSupported( SotClipboardFormatId nFormat ) const;
 
     bool            IsDropFormatSupported( const css::datatransfer::DataFlavor& _rFlavor );        // need this because the base class' IsDropFormatSupported is not const ...
-    bool            IsDropFormatSupported( const css::datatransfer::DataFlavor& _rFlavor ) const;
 
 private:
     void*           implGetDataFlavors() const;
@@ -471,11 +469,9 @@ public:
     const vcl::Font& GetFont() const { return pDataWin->GetFont(); }
     void            SetTitleFont( const vcl::Font& rNewFont )
                         { Control::SetFont( rNewFont ); }
-    const vcl::Font& GetTitleFont() const { return Control::GetFont(); }
 
     // color for line painting
     void            SetGridLineColor(const Color& rColor) {aGridLineColor = rColor;}
-    const Color&    GetGridLineColor() const {return aGridLineColor;}
 
     // inserting, changing, removing and freezing of columns
     void            InsertHandleColumn( sal_uLong nWidth );
@@ -486,7 +482,6 @@ public:
     void            SetColumnWidth( sal_uInt16 nColumnId, sal_uLong nWidth );
     void            SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos );
     void            FreezeColumn( sal_uInt16 nColumnId, bool bFreeze = true );
-    void            UnfreezeColumns();
     void            RemoveColumn( sal_uInt16 nColumnId );
     void            RemoveColumns();
 
@@ -494,7 +489,6 @@ public:
     void            SetDataRowHeight( long nPixel );
     long            GetDataRowHeight() const;
     void            SetTitleLines( sal_uInt16 nLines );
-    sal_uInt16      GetTitleLines() const { return nTitleLines; }
     long            GetTitleHeight() const;
 
     // access to dynamic values of cursor row
@@ -506,7 +500,6 @@ public:
     bool            IsFrozen( sal_uInt16 nColumnId ) const;
 
     // movement of visible area
-    void            ResetScroll();
     long            ScrollColumns( long nColumns );
     long            ScrollRows( long nRows );
     bool            MakeFieldVisible( long nRow, sal_uInt16 nColId, bool bComplete = false );
@@ -569,8 +562,6 @@ public:
     BrowserMode     GetMode( ) const { return m_nCurrentMode; }
 
     void            SetCursorColor(const Color& _rCol);
-    Color           GetCursorColor() const { return m_aCursorColor; }
-    void            ResetSelecting() { bSelecting = false; }
 
     /** specifies that the user is allowed to interactively change the height of a row,
         by simply dragging an arbitrary row separator.
@@ -799,7 +790,6 @@ public:
     virtual sal_Int32               GetCurrRow() const SAL_OVERRIDE;
     virtual sal_uInt16              GetCurrColumn() const SAL_OVERRIDE;
     virtual bool                    HasRowHeader() const SAL_OVERRIDE;
-    virtual bool                    IsCellFocusable() const SAL_OVERRIDE;
     virtual bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) SAL_OVERRIDE;
     virtual void                    SelectColumn( sal_uInt16 _nColumn, bool _bSelect = true ) SAL_OVERRIDE;
     virtual bool                    IsColumnSelected( long _nColumn ) const SAL_OVERRIDE;

@@ -67,7 +67,6 @@ namespace framework
 
         private:
             virtual void impl_setPopupMenu() SAL_OVERRIDE;
-            virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL) SAL_OVERRIDE;
             enum Mode
             {
                 MODE_SetLanguageSelectionMenu,

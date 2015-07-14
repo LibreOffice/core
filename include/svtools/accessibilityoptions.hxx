@@ -56,8 +56,6 @@ public:
     void        SetSelectionInReadonly(bool bSet);
     void        SetAutoDetectSystemHC(bool bSet);
 
-    bool        IsModified() const;
-
     //SfxListener:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     void        SetVCLSettings();

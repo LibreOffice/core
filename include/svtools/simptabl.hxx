@@ -119,18 +119,9 @@ public:
 
     CommandEvent    GetCommandEvent()const { return aCEvt;}
     inline bool     IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }
-
     void            SetCommandHdl( const Link<>& rLink ) { aCommandLink = rLink; }
-    const Link<>&   GetCommandHdl() const { return aCommandLink; }
 
     void            SetHeaderBarClickHdl( const Link<>& rLink ) { aHeaderBarClickLink = rLink; }
-    const Link<>&   GetHeaderBarClickHdl() const { return aHeaderBarClickLink; }
-
-    void            SetHeaderBarDblClickHdl( const Link<>& rLink ) { aHeaderBarDblClickLink = rLink; }
-    const Link<>&   GetHeaderBarDblClickHdl() const { return aHeaderBarDblClickLink; }
-
-    void            SetHeaderBarHelpId(const OString& rHelpId) { aHeaderBar->SetHelpId(rHelpId); }
-
     HeaderBar&      GetTheHeaderBar() { return *aHeaderBar.get(); }
 };
 

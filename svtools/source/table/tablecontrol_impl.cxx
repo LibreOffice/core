@@ -112,12 +112,6 @@ namespace svt { namespace table
         {
             return false;
         }
-        virtual bool                isCellEditable( ColPos col, RowPos row ) const SAL_OVERRIDE
-        {
-            (void)col;
-            (void)row;
-            return false;
-        }
         virtual PColumnModel        getColumnModel( ColPos column ) SAL_OVERRIDE
         {
             OSL_FAIL( "EmptyTableModel::getColumnModel: invalid call!" );

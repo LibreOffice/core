@@ -35,10 +35,6 @@ class SvResizeHelper
 public:
     SvResizeHelper();
 
-    void SetResizeable(bool b)
-    {
-        bResizeable = b;
-    }
     short GetGrab() const
     {
         return nGrab;
@@ -47,26 +43,9 @@ public:
     {
         aBorder = rBorderP;
     }
-    const Size& GetBorderPixel() const
-    {
-        return aBorder;
-    }
-    const Rectangle& GetOuterRectPixel() const
-    {
-        return aOuter;
-    }
     void SetOuterRectPixel(const Rectangle& rRect)
     {
         aOuter = rRect;
-    }
-    Rectangle GetInnerRectPixel() const
-    {
-        Rectangle aRect( aOuter );
-        aRect.Top()    += aBorder.Height();
-        aRect.Left()   += aBorder.Width();
-        aRect.Bottom() -= aBorder.Height();
-        aRect.Right()  -= aBorder.Width();
-        return aRect;
     }
                 // Clockwise, start at upper left
 
@@ -108,9 +87,6 @@ public:
     virtual void    Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle & ) SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-
-    void    QueryObjAreaPixel( Rectangle & );
-    void    RequestObjAreaPixel( const Rectangle & );
 };
 
 #endif // INCLUDED_SVTOOLS_SOURCE_HATCHWINDOW_IPWIN_HXX

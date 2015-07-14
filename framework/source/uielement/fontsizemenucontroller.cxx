@@ -278,15 +278,6 @@ void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Ev
     }
 }
 
-// XMenuListener
-void FontSizeMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
-{
-    Sequence<PropertyValue>      aArgs;
-    OSL_ENSURE(_xDispatch.is(),"FontSizeMenuController::impl_select: No dispatch");
-    if ( _xDispatch.is() )
-        _xDispatch->dispatch( aTargetURL, aArgs );
-}
-
 // XPopupMenuController
 void FontSizeMenuController::impl_setPopupMenu()
 {

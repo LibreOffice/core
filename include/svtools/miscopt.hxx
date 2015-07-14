@@ -83,9 +83,6 @@ class SVT_DLLPUBLIC SvtMiscOptions: public utl::detail::Options
         sal_Int16   GetToolboxStyle() const;
         void        SetToolboxStyle( sal_Int16 nStyle );
 
-        bool        IsModifyByPrinting() const;
-        void        SetModifyByPrinting(bool bSet );
-
         bool        UseSystemPrintDialog() const;
         void        SetUseSystemPrintDialog( bool bSet );
 

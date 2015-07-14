@@ -144,13 +144,11 @@ public:
     SvLBoxTabFlags nFlags;
 
     void    SetUserData( void* pPtr ) { pUserData = pPtr; }
-    void*   GetUserData() const { return pUserData; }
     bool    IsDynamic() const { return bool(nFlags & SvLBoxTabFlags::DYNAMIC); }
     void    SetPos( long nNewPos) { nPos = nNewPos; }
     long    GetPos() const { return nPos; }
     long    CalcOffset( long nItemLength, long nTabWidth );
     bool    IsEditable() const { return bool(nFlags & SvLBoxTabFlags::EDITABLE); }
-    bool    IsPushable() const { return bool(nFlags & SvLBoxTabFlags::PUSHABLE); }
 };
 
 // *********************************************************************
@@ -330,7 +328,6 @@ protected:
     SvInplaceEdit2*  pEdCtrl;
     void            EditText( const OUString&, const Rectangle&,const Selection&);
     void            EditText( const OUString&, const Rectangle&,const Selection&, bool bMulti);
-    void            EditTextMultiLine( const OUString&, const Rectangle&,const Selection&);
     void            CancelTextEditing();
     bool            EditingCanceled() const;
     bool            IsEmptyTextAllowed() const;
@@ -485,16 +482,13 @@ public:
     const Link<>&   GetDoubleClickHdl() const { return aDoubleClickHdl; }
     void            SetExpandingHdl(const Link<>& rNewHdl){aExpandingHdl=rNewHdl;}
     void            SetExpandedHdl(const Link<>& rNewHdl){aExpandedHdl=rNewHdl;}
-    const Link<>&   GetExpandingHdl() const { return aExpandingHdl; }
 
     virtual void    ExpandedHdl();
     virtual bool    ExpandingHdl();
     virtual void    SelectHdl();
     virtual void    DeselectHdl();
     virtual bool    DoubleClickHdl();
-    bool            IsTravelSelect() const { return bool(nImpFlags&SvTreeListBoxFlags::IS_TRAVELSELECT);}
     SvTreeListEntry*    GetHdlEntry() const { return pHdlEntry; }
-    SvLBoxItem*     GetHdlItem() const;
 
     // Is called for an Entry that gets expanded with the Flag
     // ENTRYFLAG_CHILDREN_ON_DEMAND set.
@@ -511,7 +505,6 @@ public:
     virtual bool        NotifyAcceptDrop( SvTreeListEntry* );
 
     void            SetDragOptions( sal_Int8 nOptions ) { nDragOptions = nOptions; }
-    sal_Int8        GetDragOptions() const { return nDragOptions; }
 
     static SvTreeListBox*    GetSourceView();
 
@@ -595,7 +588,6 @@ protected:
     // Recalculate all tabs depending on TreeListStyle and Bitmap sizes
     // Is called automatically when inserting/changing Bitmaps, changing the Model etc.
     virtual void    SetTabs();
-    void            SetTabs_Impl();
     void            AddTab( long nPos, SvLBoxTabFlags nFlags=SvLBoxTabFlags::ADJUST_LEFT,
                         void* pUserData = 0 );
     sal_uInt16      TabCount() const { return aTabs.size(); }
@@ -611,7 +603,6 @@ protected:
     virtual void    NotifyEndScroll();
     virtual void    NotifyScrolled();
     void            SetScrolledHdl( const Link<>& rLink ) { aScrolledHdl = rLink; }
-    const Link<>&   GetScrolledHdl() const { return aScrolledHdl; }
     long            GetXOffset() const { return GetMapMode().GetOrigin().X(); }
 
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
@@ -814,7 +805,6 @@ public:
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
     void SetAlternatingRowColors( const bool bEnable );
-    bool IsAlternatingRowColors() const { return mbAlternatingRowColors; }
 };
 
 #define SV_LBOX_DD_FORMAT "SV_LBOX_DD_FORMAT"

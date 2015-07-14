@@ -107,7 +107,6 @@ public:
     SvTLEntryFlags GetFlags() const { return nEntryFlags;}
     void SetFlags( SvTLEntryFlags nFlags );
 
-    bool GetIsMarked() const { return bIsMarked; }
     void SetMarked( bool IsMarked ) { bIsMarked = IsMarked; }
 
     void SetBackColor( const Color& aColor ) { maBackColor = aColor; }

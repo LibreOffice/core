@@ -55,10 +55,6 @@ namespace svt { namespace table
         virtual bool    KeyInput        ( ITableControl& _rControl, const KeyEvent& rKEvt ) = 0;
         virtual bool    GetFocus        ( ITableControl& _rControl ) = 0;
         virtual bool    LoseFocus       ( ITableControl& _rControl ) = 0;
-        virtual bool    RequestHelp     ( ITableControl& _rControl, const HelpEvent& rHEvt ) = 0;
-        virtual bool    Command         ( ITableControl& _rControl, const CommandEvent& rCEvt ) = 0;
-        virtual bool    PreNotify       ( ITableControl& _rControl, NotifyEvent& rNEvt ) = 0;
-        virtual bool    Notify          ( ITableControl& _rControl, NotifyEvent& rNEvt ) = 0;
 
         virtual ~ITableInputHandler() { }
     };

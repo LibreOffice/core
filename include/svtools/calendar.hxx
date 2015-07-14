@@ -283,80 +283,33 @@ public:
     void            DoubleClick();
     void            Select();
 
-    const CalendarWrapper& GetCalendarWrapper() const { return maCalendarWrapper; }
-
     void            SelectDate( const Date& rDate, bool bSelect = true );
     void            SetNoSelection();
     bool            IsDateSelected( const Date& rDate ) const;
     Date            GetFirstSelectedDate() const;
     void            EnableCallEverySelect( bool bEvery = true ) { mbAllSel = bEvery; }
-    bool            IsCallEverySelectEnabled() const { return mbAllSel; }
 
-    sal_uInt16      GetRequestYear() const { return mnRequestYear; }
     void            SetCurDate( const Date& rNewDate );
-    Date            GetCurDate() const { return maCurDate; }
     void            SetFirstDate( const Date& rNewFirstDate );
     Date            GetFirstDate() const { return maFirstDate; }
     Date            GetLastDate() const { return GetFirstDate() + mnDayCount; }
-    sal_uLong       GetDayCount() const { return mnDayCount; }
     Date            GetFirstMonth() const;
     Date            GetLastMonth() const;
     sal_uInt16      GetMonthCount() const;
     bool            GetDate( const Point& rPos, Date& rDate ) const;
     Rectangle       GetDateRect( const Date& rDate ) const;
 
-    long            GetCurMonthPerLine() const { return mnMonthPerLine; }
-    long            GetCurLines() const { return mnLines; }
-
-    const Color&    GetStandardColor() const;
-    const Color&    GetSaturdayColor() const;
-    const Color&    GetSundayColor() const;
-
     void            StartSelection();
     void            EndSelection();
 
     bool            IsTravelSelect() const { return mbTravelSelect; }
-    bool            IsScrollDateRangeChanged() const { return mbScrollDateRange; }
-    bool            IsSelectLeft() const { return mbSelLeft; }
 
     Size            CalcWindowSizePixel( long nCalcMonthPerLine = 1,
                                          long nCalcLines = 1 ) const;
 
-    void            SetSelectionChangingHdl( const Link<>& rLink ) { maSelectionChangingHdl = rLink; }
-    const Link<>&   GetSelectionChangingHdl() const { return maSelectionChangingHdl; }
-    void            SetDateRangeChangedHdl( const Link<>& rLink ) { maDateRangeChangedHdl = rLink; }
-    const Link<>&   GetDateRangeChangedHdl() const { return maDateRangeChangedHdl; }
-    void            SetRequestDateInfoHdl( const Link<>& rLink ) { maRequestDateInfoHdl = rLink; }
-    const Link<>&   GetRequestDateInfoHdl() const { return maRequestDateInfoHdl; }
-    void            SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
-    const Link<>&   GetDoubleClickHdl() const { return maDoubleClickHdl; }
     void            SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
-    const Link<>&   GetSelectHdl() const { return maSelectHdl; }
 };
 
-inline const Color& Calendar::GetStandardColor() const
-{
-    if ( mpStandardColor )
-        return *mpStandardColor;
-    else
-        return GetFont().GetColor();
-}
-
-inline const Color& Calendar::GetSaturdayColor() const
-{
-    if ( mpSaturdayColor )
-        return *mpSaturdayColor;
-    else
-        return GetFont().GetColor();
-}
-
-inline const Color& Calendar::GetSundayColor() const
-{
-    if ( mpSundayColor )
-        return *mpSundayColor;
-    else
-        return GetFont().GetColor();
-}
 
 /*************************************************************************
 
@@ -428,19 +381,8 @@ public:
     VclPtr<Calendar>    CreateCalendar( vcl::Window* pParent );
     Calendar*           GetCalendar();
 
-    void                SetDefaultDate( const Date& rDate ) { maDefaultDate = rDate; }
-    Date                GetDefaultDate() const { return maDefaultDate; }
-
     void                EnableToday( bool bToday = true ) { mbToday = bToday; }
-    bool                IsTodayEnabled() const { return mbToday; }
     void                EnableNone( bool bNone = true ) { mbNone = bNone; }
-    bool                IsNoneEnabled() const { return mbNone; }
-
-    void                SetCalendarStyle( WinBits nStyle ) { mnCalendarStyle = nStyle; }
-    WinBits             GetCalendarStyle() const { return mnCalendarStyle; }
-
-    void                SetSelectHdl( const Link<>& rLink ) { maSelectHdl = rLink; }
-    const Link<>&       GetSelectHdl() const { return maSelectHdl; }
 
 protected:
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

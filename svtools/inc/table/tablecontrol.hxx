@@ -106,32 +106,6 @@ namespace svt { namespace table
         */
         bool    GoTo( ColPos _nColumnPos, RowPos _nRow);
 
-        /** moves the active cell to the given column, by keeping the active row
-
-            @return
-                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
-                failure conditions include some other instance vetoing the move,
-                or impossibility to execute the move at all (for instance because
-                of invalid coordinates).
-        */
-        inline  bool    GoToColumn( ColPos _nColumn )
-        {
-            return GoTo( _nColumn, GetCurrentRow() );
-        }
-
-        /** moves the active cell to the given row, by keeping the active column
-
-            @return
-                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
-                failure conditions include some other instance vetoing the move,
-                or impossibility to execute the move at all (for instance because
-                of invalid coordinates).
-        */
-        bool    GoToRow( RowPos _nRow )
-        {
-            return GoTo( GetCurrentColumn(), _nRow );
-        }
-
         SVT_DLLPRIVATE virtual void Resize() SAL_OVERRIDE;
         void    Select();
 
@@ -173,7 +147,6 @@ namespace svt { namespace table
         virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint ) SAL_OVERRIDE;
         virtual long GetRowCount() const SAL_OVERRIDE;
         virtual long GetColumnCount() const SAL_OVERRIDE;
-        virtual bool HasRowHeader() const SAL_OVERRIDE;
         virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint ) SAL_OVERRIDE;
         virtual Rectangle calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) SAL_OVERRIDE;
         virtual Rectangle calcHeaderCellRect( bool _bIsColumnBar, sal_Int32 nPos) SAL_OVERRIDE;
@@ -186,7 +159,6 @@ namespace svt { namespace table
         virtual OUString GetRowName(sal_Int32 _nIndex) const SAL_OVERRIDE;
         virtual OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const SAL_OVERRIDE;
         virtual OUString GetColumnName( sal_Int32 _nIndex ) const SAL_OVERRIDE;
-        virtual css::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const SAL_OVERRIDE;
         virtual bool HasRowHeader() SAL_OVERRIDE;
         virtual bool HasColHeader() SAL_OVERRIDE;
         virtual OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const SAL_OVERRIDE;

@@ -68,8 +68,6 @@ public:
     void operator=( const Link<>& rLink ) { _aLink = rLink; }
     void Call( void* pObj, bool bAllowDoubles = false, bool bUseTimer = false );
     void ClearPendingCall( );
-    bool IsSet() const { return _aLink.IsSet(); }
-    Link<> GetLink() const { return _aLink; }
 };
 
 }

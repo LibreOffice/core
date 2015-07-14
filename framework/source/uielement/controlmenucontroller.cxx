@@ -219,7 +219,6 @@ public:
 
 private:
     virtual void impl_setPopupMenu() SAL_OVERRIDE;
-    virtual void impl_select(const uno::Reference< frame::XDispatch >& _xDispatch,const util::URL& aURL) SAL_OVERRIDE;
 
     class UrlToDispatchMap : public std::unordered_map< OUString,
                                                         uno::Reference< frame::XDispatch >,
@@ -361,18 +360,6 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
 }
 
 // XMenuListener
-void ControlMenuController::impl_select(const Reference< XDispatch >& /*_xDispatch*/,const ::com::sun::star::util::URL& aURL)
-{
-    UrlToDispatchMap::iterator pIter = m_aURLToDispatchMap.find( aURL.Complete );
-    if ( pIter != m_aURLToDispatchMap.end() )
-    {
-        Sequence<PropertyValue>      aArgs;
-        Reference< XDispatch > xDispatch = pIter->second;
-        if ( xDispatch.is() )
-            xDispatch->dispatch( aURL, aArgs );
-    }
-}
-
 void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
 {
     osl::ResettableMutexGuard aLock( m_aMutex );

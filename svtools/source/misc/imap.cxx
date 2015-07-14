@@ -353,14 +353,6 @@ sal_uLong IMapCircleObject::GetRadius( bool bPixelCoords ) const
     return nNewRadius;
 }
 
-Rectangle IMapCircleObject::GetBoundRect() const
-{
-    long nWidth = nRadius << 1;
-
-    return Rectangle( Point(  aCenter.X() - nRadius, aCenter.Y() - nRadius ),
-                      Size( nWidth, nWidth ) );
-}
-
 void IMapCircleObject::Scale( const Fraction& rFracX, const Fraction& rFracY )
 {
     Fraction aAverage( rFracX );

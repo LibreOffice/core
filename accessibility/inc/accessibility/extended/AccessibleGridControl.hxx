@@ -227,24 +227,6 @@ protected:
     {
         return isContextAlive();
     }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        getTableHeader( ::svt::table::AccessibleTableControlObjType _eObjType ) SAL_OVERRIDE
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccessible;
-        AccessibleGridControl* pContext( getContext() );
-        if ( pContext )
-            xAccessible = pContext->getHeaderBar( _eObjType );
-        return xAccessible;
-    }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        getTable() SAL_OVERRIDE
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccessible;
-        AccessibleGridControl* pContext( getContext() );
-        if ( pContext )
-            xAccessible = pContext->getTable();
-        return xAccessible;
-    }
     virtual void commitCellEvent( sal_Int16 nEventId,
          const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue ) SAL_OVERRIDE
     {

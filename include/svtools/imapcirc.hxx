@@ -57,9 +57,6 @@ public:
     Point               GetCenter( bool bPixelCoords = true ) const;
     sal_uLong           GetRadius( bool bPixelCoords = true ) const;
 
-    // returns the BoundRect of the circle object in 1/100mm
-    virtual Rectangle   GetBoundRect() const SAL_OVERRIDE;
-
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;

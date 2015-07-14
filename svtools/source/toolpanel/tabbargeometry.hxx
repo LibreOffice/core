@@ -64,10 +64,7 @@ namespace svt
                         const TabAlignment i_eTargetAlignment
                     ) const;
 
-
         Size        getReferenceSize() const { return m_aReference.GetSize(); }
-        const Rectangle&
-                    getReference() const { return m_aReference; }
 
     private:
         // the normalized reference area

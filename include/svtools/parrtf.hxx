@@ -64,15 +64,10 @@ protected:
     rtl_TextEncoding GetCodeSet() const             { return eCodeSet; }
     void SetEncoding( rtl_TextEncoding eEnc );
 
-    rtl_TextEncoding GetUNICodeSet() const          { return eUNICodeSet; }
-    void SetUNICodeSet( rtl_TextEncoding eSet )     { eUNICodeSet = eSet; }
-
 public:
     SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize = 3 );
 
     virtual SvParserState CallParser() SAL_OVERRIDE;   // Aufruf des Parsers
-
-    int GetOpenBrakets() const { return nOpenBrakets; }
 
     // fuers asynchrone lesen aus dem SvStream
     virtual void Continue( int nToken ) SAL_OVERRIDE;

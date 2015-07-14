@@ -164,8 +164,6 @@ public:
 
     FontList*               Clone() const;
 
-    OutputDevice*           GetDevice() const { return mpDev; }
-    OutputDevice*           GetDevice2() const { return mpDev2; }
     OUString                GetFontMapText( const vcl::FontInfo& rInfo ) const;
 
     const OUString&         GetNormalStr() const { return maNormal; }

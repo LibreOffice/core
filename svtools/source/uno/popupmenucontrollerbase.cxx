@@ -111,14 +111,6 @@ void SAL_CALL PopupMenuControllerBase::itemHighlighted( const awt::MenuEvent& ) 
 {
 }
 
-void PopupMenuControllerBase::impl_select(const Reference< XDispatch >& _xDispatch,const URL& aURL)
-{
-    Sequence<PropertyValue>      aArgs;
-    OSL_ENSURE(_xDispatch.is(),"PopupMenuControllerBase::impl_select: No dispatch");
-    if ( _xDispatch.is() )
-        _xDispatch->dispatch( aURL, aArgs );
-}
-
 void SAL_CALL PopupMenuControllerBase::itemSelected( const awt::MenuEvent& rEvent ) throw (RuntimeException, std::exception)
 {
     throwIfDisposed();

@@ -320,42 +320,27 @@ public:
 
     size_t          GetItemCount() const;
     size_t          GetItemPos( sal_uInt16 nItemId ) const;
-    sal_uInt16          GetItemId( size_t nPos ) const;
-    sal_uInt16          GetItemId( const Point& rPos ) const;
+    sal_uInt16      GetItemId( size_t nPos ) const;
+    sal_uInt16      GetItemId( const Point& rPos ) const;
     Rectangle       GetItemRect( sal_uInt16 nItemId ) const;
-
     void            EnableFullItemMode( bool bFullMode = true );
-    bool IsFullItemModeEnabled() const
-    {
-        return mbFullMode;
-    }
+
     void            SetColCount( sal_uInt16 nNewCols = 1 );
-    sal_uInt16 GetColCount() const
+    sal_uInt16      GetColCount() const
     {
         return mnUserCols;
     }
     void            SetLineCount( sal_uInt16 nNewLines = 0 );
-    sal_uInt16 GetLineCount() const
+    sal_uInt16      GetLineCount() const
     {
         return mnUserVisLines;
     }
-    void SetItemWidth( long nItemWidth = 0 );
-    long GetItemWidth() const
-    {
-        return mnUserItemWidth;
-    }
-    void SetItemHeight( long nLineHeight = 0 );
-    long GetItemHeight() const
-    {
-        return mnUserItemHeight;
-    }
-    sal_uInt16          GetFirstLine() const
-    {
-        return mnFirstLine;
-    }
+    void           SetItemWidth( long nItemWidth = 0 );
 
-    void SelectItem( sal_uInt16 nItemId );
-    sal_uInt16 GetSelectItemId() const
+    void           SetItemHeight( long nLineHeight = 0 );
+
+    void           SelectItem( sal_uInt16 nItemId );
+    sal_uInt16     GetSelectItemId() const
     {
         return mnSelItemId;
     }
@@ -382,20 +367,12 @@ public:
     {
         SetColor(Color(COL_TRANSPARENT));
     }
-    Color           GetColor() const
-    {
-        return maColor;
-    }
     bool            IsColor() const
     {
         return maColor.GetTransparency() == 0;
     }
 
     void            SetExtraSpacing( sal_uInt16 nNewSpacing );
-    sal_uInt16      GetExtraSpacing()
-    {
-        return mnSpacing;
-    }
 
     void            Format(vcl::RenderContext& rRenderContext);
     void            SetFormat(bool bFormat = true);
@@ -413,17 +390,9 @@ public:
     {
         maSelectHdl = rLink;
     }
-    const Link<>&   GetSelectHdl() const
-    {
-        return maSelectHdl;
-    }
     void            SetDoubleClickHdl(const Link<>& rLink)
     {
         maDoubleClickHdl = rLink;
-    }
-    const Link<>&   GetDoubleClickHdl() const
-    {
-        return maDoubleClickHdl;
     }
 
     void            SetHighlightHdl(const Link<>& rLink);

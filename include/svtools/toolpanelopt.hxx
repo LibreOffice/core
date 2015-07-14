@@ -65,8 +65,6 @@ class SVT_DLLPUBLIC SvtToolPanelOptions: public utl::detail::Options
         void SetVisibleHandoutView( bool bVisible );
         bool GetVisibleSlideSorterView() const;
         void SetVisibleSlideSorterView( bool bVisible );
-        bool GetVisibleDrawView() const;
-        void SetVisibleDrawView( bool bVisible );
 
 
     private:

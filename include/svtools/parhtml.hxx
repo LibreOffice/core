@@ -167,14 +167,11 @@ public:
 
     bool IsNewDoc() const       { return bNewDoc; }
     bool IsInHeader() const     { return bIsInHeader; }
-    bool IsInBody() const       { return bIsInBody; }
     bool IsReadListing() const  { return bReadListing; }
     bool IsReadXMP() const      { return bReadXMP; }
     bool IsReadPRE() const      { return bReadPRE; }
     bool IsReadScript() const   { return bReadScript; }
     bool IsReadStyle() const    { return bReadStyle; }
-
-    void SetReadNextChar()      { bReadNextChar = true; }
 
     // start PRE-/LISTING or XMP mode or filter tags respectively
     inline void StartPRE( bool bRestart=false );
@@ -199,10 +196,6 @@ public:
     // NextToken is called. If you implement own loops or call
     // NextToken yourself, you should call this method beforehand.
     int FilterToken( int nToken );
-
-    // end scanning of a script (should only be called right after
-    // reading of a <SCRIPT>)
-    void EndScanScript() { bReadScript = false; }
 
     void ReadRawData( const OUString &rEndToken ) { aEndToken = rEndToken; }
 

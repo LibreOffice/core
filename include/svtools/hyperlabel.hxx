@@ -70,13 +70,8 @@ namespace svt
         void                SetInteractive( bool _bInteractive );
 
         void                SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
-        const Link<>&       GetClickHdl() const { return maClickHdl; }
 
         Size                CalcMinimumSize( long nMaxWidth = 0 ) const;
-
-    private:
-
-        DECL_LINK(ImplClickHdl, HyperLabel*);
 
     private:
         using FixedText::CalcMinimumSize;

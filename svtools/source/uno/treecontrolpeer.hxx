@@ -123,7 +123,6 @@ private:
     bool onEditingEntry( UnoTreeListEntry* pEntry );
     bool onEditedEntry( UnoTreeListEntry* pEntry, const OUString& rNewText );
 
-    void eraseTree( UnoTreeListBoxImpl& rTree );
     void fillTree( UnoTreeListBoxImpl& rTree, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModel >& xDataModel );
     void addNode( UnoTreeListBoxImpl& rTree, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& xNode, UnoTreeListEntry* pParentEntry );
 

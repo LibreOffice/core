@@ -49,10 +49,6 @@ namespace svt { namespace table
         {
             m_aSelectHdl = rLink;
         }
-        inline const Link<>& GetSelectHdl() const
-        {
-            return m_aSelectHdl;
-        }
 
         // Window overridables
         virtual void        Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) SAL_OVERRIDE;

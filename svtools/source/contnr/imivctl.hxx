@@ -305,10 +305,6 @@ class SvxIconChoiceCtrl_Impl
                         {
                             return (ePositionMode == IcnViewPositionModeAutoArrange);
                         }
-    bool                IsAutoAdjust() const
-                        {
-                            return (ePositionMode == IcnViewPositionModeAutoAdjust);
-                        }
     void                DocRectChanged() { aDocRectChangedIdle.Start(); }
     void                VisRectChanged() { aVisRectChangedIdle.Start(); }
     void                SetOrigin( const Point& );
@@ -433,8 +429,6 @@ public:
 
     // recalculates all BoundingRects if bMustRecalcBoundingRects == true
     void                CheckBoundingRects() { if (bBoundRectsDirty) RecalcAllBoundingRectsSmart(); }
-    // recalculates all invalidated BoundingRects
-    void                ShowTargetEmphasis( SvxIconChoiceCtrlEntry* pEntry, bool bShow );
     void                Command( const CommandEvent& rCEvt );
     void                ToTop( SvxIconChoiceCtrlEntry* );
 
@@ -471,7 +465,6 @@ public:
                             SvxIconChoiceCtrlEntry* pEntry = 0
                         );
 #endif
-    void                EnableEntryEditing( bool bEnable ) { bEntryEditingEnabled = bEnable; }
     bool                IsEntryEditingEnabled() const { return bEntryEditingEnabled; }
     bool                IsEntryEditing() const { return (pCurEditedEntry!=0); }
     void                EditEntry( SvxIconChoiceCtrlEntry* pEntry );
@@ -486,13 +479,8 @@ public:
                                 return aEntries[ nPos ];
                             }
     SvxIconChoiceCtrlEntry* GetFirstSelectedEntry() const;
-    SvxIconChoiceCtrlEntry* GetHdlEntry() const { return pHdlEntry; }
-    void                SetHdlEntry( SvxIconChoiceCtrlEntry* pEntry ) { pHdlEntry = pEntry; }
-
     SvxIconChoiceCtrlTextMode GetEntryTextModeSmart( const SvxIconChoiceCtrlEntry* pEntry ) const;
     void                SetSelectionMode( SelectionMode eMode ) { eSelectionMode=eMode; }
-    SelectionMode       GetSelectionMode() const { return eSelectionMode; }
-    bool                AreEntriesMoved() const { return ((nFlags & F_MOVED_ENTRIES) != 0); }
     void                SetEntriesMoved( bool bMoved )
                         {
                             if( bMoved )
@@ -501,18 +489,14 @@ public:
                                 nFlags &= ~(F_MOVED_ENTRIES);
                         }
     sal_Int32           GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
-    void                SetEntryImageSize( const Size& rSize ) { aImageSize = rSize; }
     void                InitSettings();
     Rectangle           GetOutputRect() const;
 
-    bool                ArePredecessorsSet() const { return (pHead != 0); }
-    SvxIconChoiceCtrlEntry* GetPredecessorHead() const { return pHead; }
     void                SetEntryPredecessor(SvxIconChoiceCtrlEntry* pEntry,SvxIconChoiceCtrlEntry* pPredecessor);
     // only delivers valid results when in AutoArrange mode!
     SvxIconChoiceCtrlEntry* FindEntryPredecessor( SvxIconChoiceCtrlEntry* pEntry, const Point& );
 
     void                SetPositionMode( SvxIconChoiceCtrlPositionMode );
-    SvxIconChoiceCtrlPositionMode GetPositionMode() const { return ePositionMode;}
 
     void                SetColumn( sal_uInt16 nIndex, const SvxIconChoiceCtrlColumnInfo& );
     const SvxIconChoiceCtrlColumnInfo* GetColumn( sal_uInt16 nIndex ) const;
@@ -525,7 +509,6 @@ public:
                             bool bKeepHighlightFlags = false
                         );
     void                DrawHighlightFrame(vcl::RenderContext& rRenderContext, const Rectangle& rBmpRect, bool bHide);
-    void                StopSelectTimer() { aCallSelectHdlIdle.Stop(); }
 
     void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
 

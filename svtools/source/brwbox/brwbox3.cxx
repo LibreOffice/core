@@ -455,11 +455,6 @@ bool BrowseBox::HasRowHeader() const
     return ( GetColumnId( 0 ) == HandleColumnId ); // HandleColumn == RowHeader
 }
 
-bool BrowseBox::IsCellFocusable() const
-{
-    return true;
-}
-
 bool BrowseBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 {
     return GoToRowColumnId( _nRow, GetColumnId( _nColumn ) );

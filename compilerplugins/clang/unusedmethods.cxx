@@ -44,7 +44,7 @@ TODO track instantiation of overridden methods when a template class is instanti
 
 namespace {
 
-// try to limit the volumninous output a little
+// try to limit the voluminous output a little
 static std::set<std::string> callSet;
 static std::set<std::string> definitionSet;
 
