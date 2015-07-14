@@ -85,11 +85,6 @@ namespace connectivity
                 sal_Int32 _nPos the logical position
         */
         void        deletePosition(sal_Int32 _nPos);
-        /**
-            getLastPosition returns the last position
-            @return the last position
-        */
-        inline sal_Int32    getLastPosition() const { return m_aBookmarksPositions.size(); }
         inline void SetDeletedVisible(bool _bDeletedVisible) { m_bDeletedVisible = _bDeletedVisible; }
     };
 }

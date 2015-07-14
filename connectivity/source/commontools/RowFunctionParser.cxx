@@ -69,15 +69,6 @@ public:
     virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const SAL_OVERRIDE
     {
     }
-    virtual ExpressionFunct getType() const SAL_OVERRIDE
-    {
-        return FUNC_CONST;
-    }
-    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ ) SAL_OVERRIDE
-    {
-        ODatabaseMetaDataResultSet::ORow aRet;
-        return aRet;
-    }
 };
 
 
@@ -127,15 +118,6 @@ public:
             default:
                 break;
         }
-    }
-    virtual ExpressionFunct getType() const SAL_OVERRIDE
-    {
-        return meFunct;
-    }
-    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ ) SAL_OVERRIDE
-    {
-        ODatabaseMetaDataResultSet::ORow aRet;
-        return aRet;
     }
 };
 
@@ -243,12 +225,10 @@ public:
     */
 class UnaryFunctionExpression : public ExpressionNode
 {
-    const ExpressionFunct   meFunct;
     ExpressionNodeSharedPtr mpArg;
 
 public:
-    UnaryFunctionExpression( const ExpressionFunct eFunct, const ExpressionNodeSharedPtr& rArg ) :
-        meFunct( eFunct ),
+    UnaryFunctionExpression( const ExpressionNodeSharedPtr& rArg ) :
         mpArg( rArg )
     {
     }
@@ -258,15 +238,6 @@ public:
     }
     virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const SAL_OVERRIDE
     {
-    }
-    virtual ExpressionFunct getType() const SAL_OVERRIDE
-    {
-        return meFunct;
-    }
-    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ ) SAL_OVERRIDE
-    {
-        ODatabaseMetaDataResultSet::ORow aRet;
-        return aRet;
     }
 };
 
@@ -294,7 +265,7 @@ public :
         ExpressionNodeSharedPtr pArg( rNodeStack.top() );
         rNodeStack.pop();
 
-        rNodeStack.push( ExpressionNodeSharedPtr( new UnaryFunctionExpression( meFunct, pArg ) ) );
+        rNodeStack.push( ExpressionNodeSharedPtr( new UnaryFunctionExpression( pArg ) ) );
     }
 };
 

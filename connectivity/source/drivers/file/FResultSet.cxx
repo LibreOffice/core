@@ -1622,11 +1622,6 @@ sal_Int32 OResultSet::getDriverPos() const
     return (m_aRow->get())[0]->getValue();
 }
 
-bool OResultSet::deletedVisible() const
-{
-    return m_bShowDeleted;
-}
-
 bool OResultSet::isRowDeleted() const
 {
     return m_aRow->isDeleted();

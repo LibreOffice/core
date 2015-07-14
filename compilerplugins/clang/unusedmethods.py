@@ -25,6 +25,9 @@ exclusionSet = set([
     "_Bool unoidl::detail::SourceProviderInterfaceTypeEntityPad::addDirectMember(int,void *,struct unoidl::detail::SourceProviderScannerData *,const class rtl::OUString &)",
     "_Bool unoidl::detail::SourceProviderInterfaceTypeEntityPad::addOptionalBaseMembers(int,void *,struct unoidl::detail::SourceProviderScannerData *,const class rtl::OUString &,const class rtl::Reference<class unoidl::InterfaceTypeEntity> &)",
     "void unoidl::detail::SourceProviderScannerData::setSource(const void *,unsigned long)",
+    "enum connectivity::IParseContext::InternationalKeyCode connectivity::IParseContext::getIntlKeyCode(const class rtl::OString &) const",
+    "void connectivity::OSQLParser::error(const char *)",
+    "void connectivity::OSQLParseNode::insert(unsigned int,class connectivity::OSQLParseNode *)"
     # TODO track instantiations of template class constructors
     "void comphelper::IEventProcessor::release()",
     "void SotMutexHolder::acquire()",
@@ -46,6 +49,11 @@ exclusionSet = set([
     "int PhysicalFontFace::GetWidth() const",
     "void PhysicalFontFace::SetBitmapSize(int,int)",
     "_Bool SalObject::IsEraseBackgroundEnabled()",
+    "const class rtl::OUString & connectivity::OColumn::getCatalogName() const",
+    "const class rtl::OUString & connectivity::OColumn::getSchemaName() const",
+    "_Bool connectivity::OColumn::isDefinitelyWritable() const",
+    "_Bool connectivity::OColumn::isReadOnly() const",
+    "_Bool connectivity::OColumn::isWritable() const",
     # instantiated from templates, not sure why it is not being picked up
     "class basegfx::B2DPolygon OutputDevice::PixelToLogic(const class basegfx::B2DPolygon &,const class MapMode &) const",
     # only used by OSX build
