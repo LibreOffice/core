@@ -370,13 +370,13 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 
             bool bOk = false;
             if ( xContainerLM.is() )
-                   bOk = m_pDocHolder->HideUI( xContainerLM );
+                bOk = m_pDocHolder->HideUI( xContainerLM );
 
             if ( bOk )
             {
                 m_nObjectState = nNextState;
                 m_pDocHolder->ResizeHatchWindow();
-                   xInplaceClient->deactivatedUI();
+                xInplaceClient->deactivatedUI();
             }
             else
                 throw embed::WrongStateException(); //TODO: can't activate UI
