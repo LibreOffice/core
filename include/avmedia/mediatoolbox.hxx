@@ -27,10 +27,6 @@
 namespace avmedia
 {
 
-
-// - SvxGrafFilterToolBoxControl -
-
-
 class MediaItem;
 
 class AVMEDIA_DLLPUBLIC MediaToolBoxControl : public SfxToolBoxControl

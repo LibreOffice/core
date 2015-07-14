@@ -5561,7 +5561,7 @@ SfxVoidItem GraphicFilterSolarize SID_GRFFILTER_SOLARIZE
 ]
 
 
-TbxImageItem GraphicFilterToolbox SID_GRFFILTER
+SfxVoidItem GraphicFilterToolbox SID_GRFFILTER
 
 [
     /* flags: */

@@ -423,32 +423,6 @@ void ImplGrafModeControl::Update( const SfxPoolItem* pItem )
         SetNoSelection();
 }
 
-SFX_IMPL_TOOLBOX_CONTROL( SvxGrafFilterToolBoxControl, TbxImageItem );
-
-SvxGrafFilterToolBoxControl::SvxGrafFilterToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx )
-{
-    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-    rTbx.Invalidate();
-}
-
-SvxGrafFilterToolBoxControl::~SvxGrafFilterToolBoxControl()
-{
-}
-
-void SvxGrafFilterToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* )
-{
-    GetToolBox().EnableItem( GetId(), ( eState != SfxItemState::DISABLED ) );
-}
-
-VclPtr<SfxPopupWindow> SvxGrafFilterToolBoxControl::CreatePopupWindow()
-{
-    OUString aSubTbxResName( "private:resource/toolbar/graffilterbar" );
-    createAndPositionSubToolBar( aSubTbxResName );
-
-    return NULL;
-}
-
 SvxGrafToolBoxControl::SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {

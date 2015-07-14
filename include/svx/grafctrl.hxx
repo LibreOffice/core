@@ -40,23 +40,6 @@ public:
 };
 
 
-// - SvxGrafFilterToolBoxControl -
-
-
-class SVX_DLLPUBLIC SvxGrafFilterToolBoxControl : public SfxToolBoxControl
-{
-public:
-
-                                SFX_DECL_TOOLBOX_CONTROL();
-
-                                SvxGrafFilterToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-                                virtual ~SvxGrafFilterToolBoxControl();
-
-    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
-};
-
-
 // - SvxGrafToolBoxControl -
 
 
