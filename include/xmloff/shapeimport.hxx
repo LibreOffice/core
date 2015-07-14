@@ -195,7 +195,6 @@ public:
     sal_Int32 GetDiffuseColor() { return maDiffuseColor; }
     const ::basegfx::B3DVector& GetDirection() { return maDirection; }
     bool GetEnabled() { return mbEnabled; }
-    bool GetSpecular() { return mbSpecular; }
 };
 
 

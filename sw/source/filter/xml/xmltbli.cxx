@@ -2907,9 +2907,4 @@ void SwXMLTableContext::EndElement()
     }
 }
 
-Reference < XTextContent > SwXMLTableContext::GetXTextContent() const
-{
-    return xTextContent;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

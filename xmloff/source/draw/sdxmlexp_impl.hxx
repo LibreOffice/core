@@ -82,7 +82,6 @@ class SdXMLExport : public SvXMLExport
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocDrawPages;
     sal_Int32                   mnDocMasterPageCount;
     sal_Int32                   mnDocDrawPageCount;
-    sal_uInt32                  mnShapeStyleInfoIndex;
     sal_uInt32                  mnObjectCount;
 
     // temporary infos
@@ -115,8 +114,6 @@ class SdXMLExport : public SvXMLExport
     SdXMLFormatMap  maUsedTimeStyles;           // this is a vector with the used formatings for time fields
 
     bool                    mbIsDraw;
-    bool                    mbFamilyGraphicUsed;
-    bool                    mbFamilyPresentationUsed;
 
     const OUString         msZIndex;
     const OUString         msEmptyPres;
@@ -135,7 +132,6 @@ class SdXMLExport : public SvXMLExport
 
     ImpXMLEXPPageMasterInfo* ImpGetOrCreatePageMasterInfo( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xMasterPage );
     void ImpPrepPageMasterInfos();
-    void ImpPrepDrawMasterInfos();
     void ImpWritePageMasterInfos();
     void ImpPrepAutoLayoutInfos();
     HeaderFooterPageSettingsImpl ImpPrepDrawPageHeaderFooterDecls( const com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >& xDrawPage );
@@ -181,17 +177,11 @@ public:
     virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // get factories and mappers
-    XMLSdPropHdlFactory* GetSdPropHdlFactory() const { return mpSdPropHdlFactory; }
     XMLShapeExportPropertyMapper* GetPropertySetMapper() const { return mpPropertySetMapper; }
     XMLPageExportPropertyMapper* GetPresPagePropsMapper() const { return mpPresPagePropsMapper; }
 
     bool IsDraw() const { return mbIsDraw; }
     bool IsImpress() const { return !mbIsDraw; }
-
-    bool IsFamilyGraphicUsed() const { return mbFamilyGraphicUsed; }
-    void SetFamilyGraphicUsed() { mbFamilyGraphicUsed = true; }
-    bool IsFamilyPresentationUsed() const { return mbFamilyPresentationUsed; }
-    void SetFamilyPresentationUsed() { mbFamilyPresentationUsed = true; }
 
     virtual void addDataStyle(const sal_Int32 nNumberFormat, bool bTimeFormat = false ) SAL_OVERRIDE;
     virtual void exportDataStyles() SAL_OVERRIDE;

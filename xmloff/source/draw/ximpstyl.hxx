@@ -88,7 +88,6 @@ public:
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
 
-    const OUString& GetName() const { return msName; }
     const SdXMLPageMasterStyleContext* GetPageMasterStyle() const { return mpPageMasterStyle; }
 };
 
@@ -118,8 +117,6 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    const OUString& GetPageMasterName() const { return msPageMasterName; }
-    const OUString& GetEncodedName() const { return msName; }
     const OUString& GetDisplayName() const { return msDisplayName; }
 
 };
@@ -148,9 +145,6 @@ public:
 
     const OUString& GetName() const { return msName; }
     sal_Int32 GetX() const { return mnX; }
-    sal_Int32 GetY() const { return mnY; }
-    sal_Int32 GetWidth() const { return mnWidth; }
-    sal_Int32 GetHeight() const { return mnHeight; }
 };
 typedef ::std::vector< SdXMLPresentationPlaceholderContext* > ImpPlaceholderList;
 
@@ -259,8 +253,6 @@ public:
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
-
-    const ImpMasterPageList& GetMasterPageList() const { return maMasterPageList; }
 };
 
 // <pres:header-decl>, <pres:footer-decl> and <pres:date-time-decl>

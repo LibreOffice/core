@@ -43,9 +43,6 @@ protected:
     OUString               maUseDateTimeDeclName;
     OUString               msNavOrder;
 
-    void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)
-        { mxShapes = rNew; }
-
     /** sets the page style on this page */
     void SetStyle( OUString& rStyleName );
 

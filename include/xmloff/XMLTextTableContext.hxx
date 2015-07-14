@@ -40,9 +40,6 @@ public:
             sal_uInt16 nPrfx,
             const OUString& rLName );
     virtual ~XMLTextTableContext();
-
-    virtual ::com::sun::star::uno::Reference <
-            ::com::sun::star::text::XTextContent > GetXTextContent() const = 0;
 };
 
 #endif

@@ -36,7 +36,6 @@ protected:
     ::std::vector< XMLPropertyState > &rProperties;
     XMLPropertyState aProp;
 
-    bool IsInsert() const { return bInsert; }
     void SetInsert( bool bIns ) { bInsert = bIns; }
 
 public:

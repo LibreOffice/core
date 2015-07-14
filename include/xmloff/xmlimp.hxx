@@ -413,9 +413,6 @@ public:
     void SetError( sal_Int32 nId, const OUString& rMsg1,
                                   const OUString& rMsg2 );
 
-    /** return current error flags */
-    SvXMLErrorFlags GetErrorFlags()  { return mnErrorFlags; }
-
     virtual void DisposingModel();
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();

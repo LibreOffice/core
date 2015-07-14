@@ -407,10 +407,6 @@ public:
     // Get document handler. This methods are not const, because the
     // reference allowes modifications through the handler.
     const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & GetDocHandler() { return mxHandler; }
-    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > & GetExtDocHandler()
-    {
-        return mxExtHandler;
-    }
 
     // Get original URL.
     const OUString& GetOrigFileName() const { return msOrigFileName; }

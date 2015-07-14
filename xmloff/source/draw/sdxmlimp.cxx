@@ -299,7 +299,6 @@ SdXMLImport::SdXMLImport(
     mpDrawPageAttrTokenMap(0L),
     mpDrawPageElemTokenMap(0L),
     mpPresentationPlaceholderAttrTokenMap(0L),
-    mnStyleFamilyMask(0),
     mnNewPageCount(0L),
     mnNewMasterPageCount(0L),
     mbIsDraw(bIsDraw),

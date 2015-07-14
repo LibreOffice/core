@@ -530,8 +530,6 @@ public:
 
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue ) SAL_OVERRIDE;
-
-    const OUString& getMimeType() const { return maMimeType; }
 };
 
 // draw:floating-frame

@@ -54,8 +54,6 @@ public:
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
 
-    bool IsAutoUpdate() const { return bAutoUpdate; }
-
     virtual void CreateAndInsert( bool bOverwrite ) SAL_OVERRIDE;
 
     virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;

@@ -87,11 +87,6 @@ public:
     {
         return msNumRulesName;
     }
-    inline const ::com::sun::star::uno::Reference <
-        ::com::sun::star::container::XIndexReplace >& GetNumRules() const
-    {
-        return mxNumRules;
-    }
     inline sal_Int16 GetListLevelStartValue() const
     {
         return mnListLevelStartValue;

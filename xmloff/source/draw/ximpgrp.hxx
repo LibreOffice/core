@@ -34,10 +34,6 @@ class SdXMLGroupShapeContext : public SdXMLShapeContext
     // the shape group this group is working on
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxChildren;
 
-protected:
-    void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)
-        { mxShapes = rNew; }
-
 public:
     TYPEINFO_OVERRIDE();
 
@@ -52,11 +48,6 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
-
-    const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& GetLocalShapesContext() const
-        { return mxShapes; }
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& GetLocalShapesContext()
-        { return mxShapes; }
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMPGRP_HXX

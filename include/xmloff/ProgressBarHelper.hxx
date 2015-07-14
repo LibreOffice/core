@@ -48,7 +48,6 @@ public:
                                 const bool bStrict);
             ~ProgressBarHelper();
 
-            void SetText(OUString& rText) { if (xStatusIndicator.is()) xStatusIndicator->setText(rText); }
             void SetRange(sal_Int32 nVal) { nRange = nVal; }
             void SetReference(sal_Int32 nVal) { nReference = nVal; }
             void SetValue(sal_Int32 nValue);

@@ -35,13 +35,6 @@ class SdXML3DSceneShapeContext : public SdXMLShapeContext, public SdXML3DSceneAt
     // this is the scene at the same time
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxChildren;
 
-    const SdXMLImport& GetSdImport() const { return static_cast<const SdXMLImport&>(GetImport()); }
-    SdXMLImport& GetSdImport() { return static_cast<SdXMLImport&>(GetImport()); }
-
-protected:
-    void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)
-        { mxChildren = rNew; }
-
 public:
     TYPEINFO_OVERRIDE();
 
@@ -60,11 +53,6 @@ public:
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
-
-    const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& GetLocalShapesContext() const
-        { return mxShapes; }
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& GetLocalShapesContext()
-        { return mxShapes; }
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_DRAW_XIMP3DSCENE_HXX

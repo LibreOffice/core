@@ -67,9 +67,7 @@ public:
     // We don't use virtual methods to differ between the sub classes,
     // because this seems to be to expensive if compared to inline methods.
     sal_uInt8 GetType() const { return nType; }
-    bool IsStyle() { return XML_HINT_STYLE==nType; }
     bool IsReference() { return XML_HINT_REFERENCE==nType; }
-    bool IsHyperlink() { return XML_HINT_HYPERLINK==nType; }
     bool IsIndexMark() { return XML_HINT_INDEX_MARK==nType; }
 };
 
