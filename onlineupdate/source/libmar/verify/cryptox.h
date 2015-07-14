@@ -57,7 +57,7 @@ CryptoX_Result NSS_VerifySignature(VFYContext * const *ctx ,
 #define CryptoX_FreeCertificate(cert) \
   CERT_DestroyCertificate(*cert)
 
-#elif XP_MACOSX
+#elif MACOSX
 
 #define CryptoX_InvalidHandleValue NULL
 #define CryptoX_ProviderHandle void*
@@ -104,7 +104,7 @@ void CryptoMac_FreePublicKey(CryptoX_PublicKey* aPublicKey);
   CryptoMac_FreePublicKey(aPublicKey)
 #define CryptoX_FreeCertificate(aCertificate)
 
-#elif defined(XP_WIN)
+#elif defined(WNT)
 
 #include <windows.h>
 #include <wincrypt.h>

@@ -9,6 +9,15 @@
 
 $(eval $(call gb_Executable_Executable,updater))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Executable_set_include,updater,\
+	-I$(SRCDIR)/onlineupdate/source/update/src \
+	-I$(SRCDIR)/onlineupdate/source/update/inc \
+	-I$(SRCDIR)/onlineupdate/source/update/common \
+	-I$(SRCDIR)/onlineupdate/source/update/updater/xpcom/glue \
+	$$(INCLUDE) \
+))
+else
 $(eval $(call gb_Executable_set_include,updater,\
 	-I$(SRCDIR)/onlineupdate/source/update/src \
 	-I$(SRCDIR)/onlineupdate/source/update/inc \
@@ -17,22 +26,36 @@ $(eval $(call gb_Executable_set_include,updater,\
 	-lpthread \
 	$$(INCLUDE) \
 ))
+endif
 
+ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_libs,updater,\
-    -lX11 \
-    -lXext \
-    -lXrender \
-    -lSM \
-    -lICE \
+	Ws2_32.lib \
+	Gdi32.lib \
+	Comctl32.lib \
+	Shell32.lib \
+	Shlwapi.lib \
 ))
+else
+$(eval $(call gb_Executable_add_libs,updater,\
+	-lX11 \
+	-lXext \
+	-lXrender \
+	-lSM \
+	-lICE \
+	$(GTK3_LIBS) \
+))
+endif
 
+ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_cxxflags,updater,\
-    $$(GTK3_CFLAGS) \
+	/Zc:wchar_t \
 ))
-
-$(eval $(call gb_Executable_add_libs,updater,\
-    $(GTK3_LIBS) \
+else
+$(eval $(call gb_Executable_add_cxxflags,updater,\
+	$$(GTK3_CFLAGS) \
 ))
+endif
 
 $(eval $(call gb_Executable_use_externals,updater,\
 	gtk \

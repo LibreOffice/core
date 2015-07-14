@@ -53,7 +53,7 @@ MOZ_STATIC_ASSERT(sizeof(BLOCKSIZE) < \
 /* The mar program is compiled as a host bin so we don't have access to NSPR at
    runtime.  For that reason we use ntohl, htonl, and define HOST_TO_NETWORK64
    instead of the NSPR equivalents. */
-#ifdef XP_WIN
+#ifdef WNT
 #include <winsock2.h>
 #define ftello _ftelli64
 #define fseeko _fseeki64

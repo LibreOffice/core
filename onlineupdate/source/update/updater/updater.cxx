@@ -1802,7 +1802,7 @@ PatchIfFile::Finish(int status)
 //-----------------------------------------------------------------------------
 
 #ifdef WNT
-#include "nsWindowsRestart.cpp"
+#include "nsWindowsRestart.cxx"
 #include "nsWindowsHelpers.h"
 #include "uachelper.h"
 #include "pathhash.h"

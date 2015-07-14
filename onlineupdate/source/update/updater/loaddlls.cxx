@@ -5,6 +5,9 @@
 
 
 #ifdef WNT
+#ifndef UNICODE
+#define UNICODE
+#endif
 #include <windows.h>
 
 // Delayed load libraries are loaded when the first symbol is used.
