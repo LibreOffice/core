@@ -81,6 +81,7 @@ endif
 $(eval $(call gb_Module_add_check_targets,filter,\
     CppunitTest_filter_xslt \
     CppunitTest_filter_priority \
+    CppunitTest_filter_utils \
 ))
 
 ifneq ($(DISABLE_CVE_TESTS),TRUE)

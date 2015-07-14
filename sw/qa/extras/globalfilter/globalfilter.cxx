@@ -606,7 +606,7 @@ void Test::testCharBackgroundToHighlighting()
         mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/globalfilter/data/char_background.odt"),
                                       "com.sun.star.text.TextDocument");
 
-        const OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
+        OString sFailedMessage = OString("Failed on filter: ") + aFilterNames[nFilter];
 
 
         SvtFilterOptions& rOpt = SvtFilterOptions::Get();
@@ -627,7 +627,7 @@ void Test::testCharBackgroundToHighlighting()
 
         // Check highlight color
         const uno::Reference< text::XTextRange > xPara = getParagraph(1);
-        for( int nRun = 1; nRun <= 20; ++nRun )
+        for( int nRun = 1; nRun <= 19; ++nRun )
         {
             const uno::Reference<beans::XPropertySet> xRun(getRun(xPara,nRun), uno::UNO_QUERY);
             sal_Int32 nHighlightColor = 0;
@@ -644,17 +644,17 @@ void Test::testCharBackgroundToHighlighting()
                 case 9: nHighlightColor = 0x008000; break; //dark green
                 case 10: nHighlightColor = 0x800080; break; //dark magenta
                 case 11: nHighlightColor = 0x000080; break; //dark blue
-                case 12: nHighlightColor = 0x000000; break; //black
-                case 13: nHighlightColor = 0x808000; break; //dark yellow
-                case 14: nHighlightColor = 0x808080; break; //dark gray
-                case 15: nHighlightColor = 0x000000; break; //white
-                case 16: nHighlightColor = 0xff0000; break; //red
-                case 17: nHighlightColor = 0xC0C0C0; break; //light gray
-                case 18: nHighlightColor = 0x800000; break; //dark red
-                case 19: nHighlightColor = 0x008080; break; //dark cyan
-                case 20: nHighlightColor = 0xffffff; break; //white
+                case 12: nHighlightColor = 0x808000; break; //dark yellow
+                case 13: nHighlightColor = 0x808080; break; //dark gray
+                case 14: nHighlightColor = 0x000000; break; //black
+                case 15: nHighlightColor = 0xff0000; break; //red
+                case 16: nHighlightColor = 0xC0C0C0; break; //light gray
+                case 17: nHighlightColor = 0x800000; break; //dark red
+                case 18: nHighlightColor = 0x808080; break; //dark gray
+                case 19: nHighlightColor = 0xffff00; break; //yellow
             }
-            CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), nHighlightColor, getProperty<sal_Int32>(xRun,"CharHighlight"));
+            const OString sMessage = sFailedMessage +". Index of run with unmatched color: " + OString::number(nRun);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(sMessage.getStr(), nHighlightColor, getProperty<sal_Int32>(xRun,"CharHighlight"));
         }
     }
 }
