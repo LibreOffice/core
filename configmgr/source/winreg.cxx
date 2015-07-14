@@ -188,10 +188,11 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, oslFileHandle aFileHan
 }
 }
 
-bool dumpWindowsRegistry(OUString* pFileURL)
+bool dumpWindowsRegistry(OUString* pFileURL, WinRegType eType)
 {
     HKEY hKey;
-    if(RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Policies\\LibreOffice", 0, KEY_READ, &hKey) != ERROR_SUCCESS)
+    HKEY hDomain = eType == LOCAL_MACHINE ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER;
+    if(RegOpenKeyExW(hDomain, L"SOFTWARE\\Policies\\LibreOffice", 0, KEY_READ, &hKey) != ERROR_SUCCESS)
     {
         SAL_INFO(
             "configmgr",
