@@ -1499,8 +1499,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
                 aNewPos.X() -= aOutSz.Width() - 1;
             aClipRect.SetPos( aNewPos );
 
-            if (pView == pCurView)
-                pView->GetWindow()->Invalidate( aClipRect );
+            pView->GetWindow()->Invalidate( aClipRect );
         }
     }
 
