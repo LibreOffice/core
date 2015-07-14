@@ -53,8 +53,6 @@ private:
 
     virtual Kind kind() const SAL_OVERRIDE;
 
-    virtual void clear() SAL_OVERRIDE;
-
     bool extensible_;
     NodeMap members_;
     OUString templateName_;

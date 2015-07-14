@@ -59,10 +59,6 @@ Node::Kind LocalizedPropertyNode::kind() const {
     return KIND_LOCALIZED_PROPERTY;
 }
 
-void LocalizedPropertyNode::clear() {
-    members_.clear();
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
