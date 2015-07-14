@@ -1068,6 +1068,7 @@ void _SaveTable::CreateNew( SwTable& rTable, bool bCreateFrms,
     }
 
     aParent.GetTabLines().erase( aParent.GetTabLines().begin(), aParent.GetTabLines().begin() + n );
+    assert(aParent.GetTabLines().empty());
 
     if( bCreateFrms )
         aTmpBox.MakeFrms( rTable );
