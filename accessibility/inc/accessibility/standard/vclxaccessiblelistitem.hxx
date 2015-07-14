@@ -116,8 +116,6 @@ public:
     inline bool         IsSelected() const { return m_bSelected; }
     void                    SetSelected( bool _bSelected );
     void                    SetVisible( bool _bVisible );
-    inline bool             DecrementIndexInParent() { OSL_ENSURE(m_nIndexInParent != 0,"Invalid call!");--m_nIndexInParent; return true;}
-    inline bool             IncrementIndexInParent() { ++m_nIndexInParent; return true;}
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

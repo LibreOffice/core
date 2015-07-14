@@ -81,11 +81,6 @@ public:
         return m_aComboListBox.GetWindowExtentsRelative( pRelativeWindow );
     }
 
-    virtual bool            IsActive() const SAL_OVERRIDE
-    {
-        return m_aComboListBox.IsActive();
-    }
-
     virtual bool            IsEnabled() const SAL_OVERRIDE
     {
         return m_aComboListBox.IsEnabled();
