@@ -1492,4 +1492,6 @@ main/winenv.set*
 
 main/ooxml/source/framework/OOXMLViewer/.settings/org.eclipse.jdt.core.prefs
 main/ooxml/source/framework/SchemaParser/.settings/org.eclipse.jdt.core.prefs
+main/ooxml/source/framework/JavaOOXMLParser/.settings/org.eclipse.jdt.core.prefs
+main/ooxml/source/framework/JavaPartManager/.settings/org.eclipse.jdt.core.prefs
 
