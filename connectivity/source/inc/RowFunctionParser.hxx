@@ -66,15 +66,6 @@ public:
     virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const = 0;
 
     virtual void fill(const ODatabaseMetaDataResultSet::ORow& _aRow ) const = 0;
-
-    /** Operator to retrieve the type of expression node
-    */
-    virtual ExpressionFunct getType() const = 0;
-
-    /** Operator to retrieve the ms version of expression
-    */
-    virtual ODatabaseMetaDataResultSet::ORow fillNode(
-        std::vector< RowEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags ) = 0;
 };
 typedef ::boost::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;
 

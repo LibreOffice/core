@@ -36,7 +36,6 @@ namespace connectivity
         inline void setAutoRetrievingStatement(const OUString& _sStmt)   { m_sGeneratedValueStatement = _sStmt; }
     public:
         inline bool                 isAutoRetrievingEnabled()       const { return m_bAutoRetrievingEnabled; }
-        inline const OUString&   getAutoRetrievingStatement()    const { return m_sGeneratedValueStatement; }
 
         /** transform the statement to query for auto generated values
             @param  _sInsertStatement

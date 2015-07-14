@@ -299,7 +299,6 @@ namespace connectivity
             // IResultSetHelper
             virtual bool move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData) SAL_OVERRIDE;
             virtual sal_Int32 getDriverPos() const SAL_OVERRIDE;
-            virtual bool deletedVisible() const SAL_OVERRIDE;
             virtual bool isRowDeleted() const SAL_OVERRIDE;
         };
 

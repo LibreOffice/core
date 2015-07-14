@@ -42,7 +42,6 @@ namespace connectivity
     public:
         virtual bool move(Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData) = 0;
         virtual sal_Int32 getDriverPos() const = 0;
-        virtual bool deletedVisible() const = 0;
         virtual bool isRowDeleted() const = 0;
 
     protected:

@@ -45,7 +45,6 @@ namespace connectivity
                 ::osl::Mutex& _rMutex,
                 const TStringVector& _rVector
                 );
-        inline OTableHelper* getTable() const { return m_pTable; }
 
         static void cloneDescriptorColumns(
             const sdbcx::ObjectType& _rSourceDescriptor,

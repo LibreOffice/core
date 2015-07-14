@@ -64,7 +64,6 @@ namespace connectivity
         {
         public:
             virtual ~IObjectCollection();
-            virtual void reserve(size_t nLength) = 0;
             virtual bool exists(const OUString& _sName ) = 0;
             virtual bool empty() = 0;
             virtual void swapAll() = 0;
@@ -160,14 +159,6 @@ namespace connectivity
             /**  insert a new element into the collection
             */
             void insertElement(const OUString& _sElementName,const ObjectType& _xElement);
-
-            /** return the name of element at index _nIndex
-            */
-            inline OUString getElementName(sal_Int32 _nIndex)
-            {
-                return m_pElements->findColumnAtIndex(_nIndex);
-            }
-
 
             /** return the object, if not existent it creates it.
                 @param  _nIndex
