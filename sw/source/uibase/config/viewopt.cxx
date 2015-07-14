@@ -81,6 +81,7 @@ bool SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && mbFormView == rOpt.IsFormView()
             && mbBrowseMode == rOpt.getBrowseMode()
             && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
+            && mbHideWhitespaceMode == rOpt.mbHideWhitespaceMode
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
             && bIdle == rOpt.bIdle
 #ifdef DBG_UTIL
@@ -234,6 +235,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
+    mbHideWhitespaceMode = rVOpt.mbHideWhitespaceMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;
 
@@ -274,6 +276,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     mbBookView      = rVOpt.mbBookView;
     mbBrowseMode    = rVOpt.mbBrowseMode;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
+    mbHideWhitespaceMode = rVOpt.mbHideWhitespaceMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
     bIdle           = rVOpt.bIdle;
 
