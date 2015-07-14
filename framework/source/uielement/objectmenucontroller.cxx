@@ -88,7 +88,6 @@ public:
 
 private:
     void fillPopupMenu( const css::uno::Sequence< css::embed::VerbDescriptor >& rVerbCommandSeq, css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
-    virtual void impl_select(const css::uno::Reference< css::frame::XDispatch >& _xDispatch,const css::util::URL& aURL) SAL_OVERRIDE;
 
     css::uno::Reference< css::frame::XDispatch >  m_xObjectUpdateDispatch;
 };
@@ -159,15 +158,6 @@ void SAL_CALL ObjectMenuController::statusChanged( const FeatureStateEvent& Even
         if ( m_xPopupMenu.is() )
             fillPopupMenu( aVerbCommandSeq, m_xPopupMenu );
     }
-}
-
-// XMenuListener
-void ObjectMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
-{
-    Sequence<PropertyValue>      aArgs;
-    OSL_ENSURE(_xDispatch.is(),"ObjectMenuController::impl_select: No dispatch");
-    if ( _xDispatch.is() )
-        _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
 }

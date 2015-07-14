@@ -216,7 +216,6 @@ public:
     void    ParentDestroyed();
 
     void    FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
-    bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
 
     static ValueItemAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
 

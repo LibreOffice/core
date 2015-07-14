@@ -140,8 +140,6 @@ public:
 
     void                InsertView( SvListView* );
     void                RemoveView( SvListView* );
-    sal_uLong           GetViewCount() const
-    { return aViewList.size(); }
 
     SvListView*         GetView( sal_uLong nPos ) const
     { return ( nPos < aViewList.size() ) ? aViewList[ nPos ] : NULL; }
@@ -180,7 +178,6 @@ public:
 
     // Creates ChildList if needed
     sal_uLong           Move( SvTreeListEntry* pSource, SvTreeListEntry* pTargetParent, sal_uLong nListPos);
-    void                Copy( SvTreeListEntry* pSource, SvTreeListEntry* pTarget );
     sal_uLong           Copy( SvTreeListEntry* pSource, SvTreeListEntry* pTargetParent, sal_uLong nListPos);
 
     bool Remove( const SvTreeListEntry* pEntry );
@@ -233,7 +230,6 @@ public:
     SvSortMode          GetSortMode() const { return eSortMode; }
     sal_Int32           Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const;
     void                SetCompareHdl( const Link<>& rLink ) { aCompareLink = rLink; }
-    const Link<>&       GetCompareHdl() const { return aCompareLink; }
     void                Resort();
     void                Reverse();
 };

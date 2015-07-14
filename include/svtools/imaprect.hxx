@@ -55,9 +55,6 @@ public:
 
     Rectangle           GetRectangle( bool bPixelCoords = true ) const;
 
-    // returns the BoundRect of the rectangle object in 1/100mm
-    virtual Rectangle   GetBoundRect() const SAL_OVERRIDE { return aRect; }
-
     void                Scale( const Fraction& rFractX, const Fraction& rFracY );
 
     using IMapObject::IsEqual;

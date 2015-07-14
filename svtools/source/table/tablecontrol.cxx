@@ -408,14 +408,6 @@ namespace svt { namespace table
     }
 
 
-    ::com::sun::star::uno::Any TableControl::GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos ) const
-    {
-        Any aCellContent;
-        GetModel()->getCellContent( _nColPos, _nRowPos, aCellContent );
-        return aCellContent;
-    }
-
-
     OUString TableControl::GetAccessibleCellText( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
     {
         return m_pImpl->getCellContentAsString( _nRowPos, _nColPos );
@@ -579,12 +571,6 @@ namespace svt { namespace table
     long TableControl::GetColumnCount() const
     {
         return GetModel()->getColumnCount();
-    }
-
-
-    bool TableControl::HasRowHeader() const
-    {
-        return GetModel()->hasRowHeaders();
     }
 
 

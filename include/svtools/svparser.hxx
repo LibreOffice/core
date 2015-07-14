@@ -95,7 +95,6 @@ protected:
     // methods for Token stack
     int SkipToken( short nCnt = -1 );       // "skip" n Tokens back
     TokenStackType* GetStackPtr( short nCnt );
-    inline sal_uInt8 GetStackPos() const;
 
     // scan the next token:
     //  work off Token stack and call _GetNextToken() if necessary.
@@ -138,23 +137,17 @@ public:
     Link<> GetAsynchCallLink() const
         { return LINK( const_cast<SvParser*>(this), SvParser, NewDataRead ); }
 
-    long CallAsyncCallLink() { return NewDataRead( 0 ); }
-
     // for asynchronous reading from the SvStream
     void SaveState( int nToken );
     void RestoreState();
     virtual void Continue( int nToken );
 
-    inline void SetDownloadingFile( bool bSet ) { bDownloadingFile = bSet; }
     inline bool IsDownloadingFile() const { return bDownloadingFile; }
 
     // Set/get source encoding. The UCS2BEncoding flag is valid if source
     // encoding is UCS2. It specifies a big endian encoding.
     void SetSrcEncoding( rtl_TextEncoding eSrcEnc );
     rtl_TextEncoding GetSrcEncoding() const { return eSrcEnc; }
-
-    void SetSrcUCS2BEncoding( bool bSet ) { bUCS2BSrcEnc = bSet; }
-    bool IsSrcUCS2BEncoding() const { return bUCS2BSrcEnc; }
 
     // May the character set be switched to UCS/2, if a BOM
     // is in the first two characters of the stream?
@@ -185,9 +178,6 @@ inline sal_uLong SvParser::SetLineNr( sal_uLong nlNum )
 
 inline sal_uLong SvParser::SetLinePos( sal_uLong nlPos )
 {   sal_uLong nlOld = nlLinePos; nlLinePos = nlPos; return nlOld; }
-
-inline sal_uInt8 SvParser::GetStackPos() const
-{   return nTokenStackPos; }
 
 inline sal_uInt16 SvParser::GetCharSize() const
 {
@@ -235,9 +225,6 @@ public:
     */
     const OUString& GetKey() const { return m_aKey; }
     const OUString& GetValue() const { return m_aValue; }
-
-    void SetKey   (const OUString &rKey  ) { m_aKey = rKey; }
-    void SetValue (const OUString &rValue) { m_aValue = rValue; }
 };
 
 /*========================================================================

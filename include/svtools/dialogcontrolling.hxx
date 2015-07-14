@@ -112,7 +112,6 @@ namespace svt
         void    reset();
 
     private:
-        void    impl_Init();
         void    impl_updateAll( const VclWindowEvent& _rTriggerEvent );
         void    impl_update( const VclWindowEvent& _rTriggerEvent, vcl::Window& _rWindow );
 

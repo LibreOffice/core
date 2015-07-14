@@ -85,23 +85,8 @@ public:
 
     void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, DrawFlags nFlags ) SAL_OVERRIDE;
 
-    void            SetOpenDialog( bool bOpen )     { mbOpenDlg = bOpen; }
-    bool            IsOpenDialog() const            { return mbOpenDlg; }
-
     void            SetText( const OUString& rStr ) SAL_OVERRIDE;
     OUString        GetText() const SAL_OVERRIDE;
-    OUString        GetSelectedText() const         { return maEdit->GetSelected(); }
-
-    void            SetSelection( const Selection& rSelection ) { maEdit->SetSelection( rSelection ); }
-    Selection       GetSelection() const                        { return maEdit->GetSelection(); }
-
-    void            SetReadOnly( bool bReadOnly = true )    { maEdit->SetReadOnly( bReadOnly ); }
-    bool            IsReadOnly() const                      { return maEdit->IsReadOnly(); }
-
-
-    //use this to manipulate the dialog bevore executing it:
-    void            SetDialogCreatedHdl( const Link<>& rLink ) { maDialogCreatedHdl = rLink; }
-    const Link<>&   GetDialogCreatedHdl() const { return maDialogCreatedHdl; }
 
     void            SetEditModifyHdl( const Link<>& rLink );
 };

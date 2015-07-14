@@ -112,8 +112,6 @@ public:
     double  GetValue();
     // The default implementation uses a formatter, if available
 
-    void    GetColor() const;
-
     void    SetTextValue(const OUString& rText);
     // The String is transformed to a double (with a formatter) and SetValue is called afterwards
 
@@ -202,7 +200,6 @@ public:
     // red), the text is painted with that color automatically.
     // The color used is the same as returned by GetLastOutputColor()
     void    SetAutoColor(bool _bAutomatic);
-    bool    GetAutoColor() const { return m_bAutoColor; }
 
     /** enables handling of not-a-number value.
 
@@ -219,7 +216,6 @@ public:
         return NaN in subsequent calls.
     */
     void    EnableNotANumber( bool _bEnable );
-    bool    IsNotANumberEnabled( ) const { return m_bEnableNaN; }
 
     /** When being set to true, the strings in the field are formatted using the
         InputLine format.  That's also what you get in Calc when you edit a cell

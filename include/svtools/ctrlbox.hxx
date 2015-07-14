@@ -160,21 +160,20 @@ public:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
     using ListBox::InsertEntry;
-    sal_Int32   InsertEntry( const OUString& rStr,
+    sal_Int32       InsertEntry( const OUString& rStr,
                                  sal_Int32  nPos = LISTBOX_APPEND );
-    sal_Int32   InsertEntry( const Color& rColor, const OUString& rStr,
+    sal_Int32       InsertEntry( const Color& rColor, const OUString& rStr,
                                  sal_Int32  nPos = LISTBOX_APPEND );
     void            InsertAutomaticEntryColor(const Color &rAutoColorValue);
     bool            IsAutomaticSelected() { return !GetSelectEntryPos(); }
     using ListBox::RemoveEntry;
-    void    RemoveEntry( sal_Int32  nPos );
-    void    Clear();
+    void            RemoveEntry( sal_Int32  nPos );
+    void            Clear();
     void            CopyEntries( const ColorListBox& rBox );
 
     using ListBox::GetEntryPos;
-    sal_Int32   GetEntryPos( const Color& rColor ) const;
-    Color   GetEntryColor( sal_Int32  nPos ) const;
-    Size            GetImageSize() const { return aImageSize; }
+    sal_Int32       GetEntryPos( const Color& rColor ) const;
+    Color           GetEntryColor( sal_Int32  nPos ) const;
 
     void            SelectEntry( const OUString& rStr, bool bSelect = true )
                         { ListBox::SelectEntry( rStr, bSelect ); }
@@ -197,9 +196,6 @@ public:
 private:
                     ColorListBox( const ColorListBox& ) SAL_DELETED_FUNCTION;
     ColorListBox&   operator =( const ColorListBox& ) SAL_DELETED_FUNCTION;
-
-    void            SetEntryData( sal_Int32  nPos, void* pNewData );
-    void*           GetEntryData( sal_Int32  nPos ) const;
 };
 
 inline void ColorListBox::SelectEntry( const Color& rColor, bool bSelect )
@@ -328,29 +324,15 @@ public:
                         ColorDistFunc pColorDistFn = &sameDistColor);
 
     using ListBox::GetEntryPos;
-    sal_Int32  GetEntryPos( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const;
-    sal_uInt16          GetEntryStyle( sal_Int32  nPos ) const;
+    sal_Int32       GetEntryPos( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const;
+    sal_uInt16      GetEntryStyle( sal_Int32  nPos ) const;
 
-    void            SelectEntry( const OUString& rStr, bool bSelect = true ) { ListBox::SelectEntry( rStr, bSelect ); }
-    void SelectEntry( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID, bool bSelect = true );
-    sal_uInt16          GetSelectEntryStyle( sal_Int32  nSelIndex = 0 ) const;
-    bool            IsEntrySelected(const OUString& rStr) const
-    {
-        return ListBox::IsEntrySelected(rStr);
-    }
-    bool IsEntrySelected( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const
-    {
-        sal_Int32  nPos = GetEntryPos( nStyle );
-        if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-            return IsEntryPosSelected( nPos );
-        else
-            return false;
-    }
+    void            SelectEntry( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID, bool bSelect = true );
+    sal_uInt16      GetSelectEntryStyle( sal_Int32  nSelIndex = 0 ) const;
 
     inline void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
-    inline FieldUnit    GetUnit() const { return eUnit; }
+
     inline void     SetSourceUnit( FieldUnit eNewUnit ) { eSourceUnit = eNewUnit; }
-    inline FieldUnit    GetSourceUnit() const { return eSourceUnit; }
 
     void            SetColor( const Color& rColor );
     Color           GetColor() const { return aColor; }
@@ -365,8 +347,6 @@ protected:
 private:
                     LineListBox( const LineListBox& ) SAL_DELETED_FUNCTION;
     LineListBox&    operator =( const LineListBox& ) SAL_DELETED_FUNCTION;
-    void            SetEntryData( sal_Int32  nPos, void* pNewData );
-    void*           GetEntryData( sal_Int32  nPos ) const;
 };
 
 inline void LineListBox::SetColor( const Color& rColor )
@@ -417,7 +397,6 @@ public:
     void            Fill( const FontList* pList );
 
     void            EnableWYSIWYG( bool bEnable = true );
-    bool            IsWYSIWYGEnabled() const { return mbWYSIWYG; }
 
 private:
     void            InitFontMRUEntriesFile();

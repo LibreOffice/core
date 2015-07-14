@@ -721,11 +721,6 @@ bool SvHeaderTabListBox::HasRowHeader() const
     return false;
 }
 
-bool SvHeaderTabListBox::IsCellFocusable() const
-{
-    return IsCellFocusEnabled();
-}
-
 bool SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 {
     bool bRet = IsCellFocusEnabled();

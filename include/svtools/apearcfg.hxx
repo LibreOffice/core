@@ -77,7 +77,6 @@ public:
 
     void        SetApplicationDefaults ( Application* pApp );
 
-    void        SetMenuMouseFollow(bool bSet) {bMenuMouseFollow = bSet; SetModified();}
     bool        IsMenuMouseFollow() const{return bMenuMouseFollow;}
 
 #if defined( UNX )

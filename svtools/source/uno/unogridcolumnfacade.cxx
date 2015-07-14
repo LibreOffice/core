@@ -234,36 +234,6 @@ namespace svt { namespace table
     }
 
 
-    Any UnoGridColumnFacade::getID() const
-    {
-        Any aID;
-        ENSURE_OR_RETURN( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!", aID );
-        try
-        {
-            aID = m_xGridColumn->getIdentifier();
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return aID;
-    }
-
-
-    void UnoGridColumnFacade::setID( const Any& i_ID )
-    {
-        ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
-        try
-        {
-            m_xGridColumn->setIdentifier( i_ID );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    }
-
-
     OUString UnoGridColumnFacade::getName() const
     {
         OUString sName;
@@ -277,20 +247,6 @@ namespace svt { namespace table
             DBG_UNHANDLED_EXCEPTION();
         }
         return sName;
-    }
-
-
-    void UnoGridColumnFacade::setName( const OUString& _rName )
-    {
-        ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
-        try
-        {
-            m_xGridColumn->setTitle( _rName );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
     }
 
 
@@ -310,20 +266,6 @@ namespace svt { namespace table
     }
 
 
-    void UnoGridColumnFacade::setHelpText( const OUString& i_helpText )
-    {
-        ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
-        try
-        {
-            m_xGridColumn->setHelpText( i_helpText );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    }
-
-
     bool UnoGridColumnFacade::isResizable() const
     {
         ENSURE_OR_RETURN( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!", false );
@@ -331,24 +273,10 @@ namespace svt { namespace table
     }
 
 
-    void UnoGridColumnFacade::setResizable( bool i_resizable )
-    {
-        ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
-        lcl_set( m_xGridColumn, &XGridColumn::setResizeable, i_resizable );
-    }
-
-
     sal_Int32 UnoGridColumnFacade::getFlexibility() const
     {
         ENSURE_OR_RETURN( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!", 1 );
         return lcl_get( m_xGridColumn, &XGridColumn::getFlexibility );
-    }
-
-
-    void UnoGridColumnFacade::setFlexibility( sal_Int32 const i_flexibility )
-    {
-        ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
-        lcl_set( m_xGridColumn, &XGridColumn::setFlexibility, i_flexibility );
     }
 
 
@@ -373,13 +301,6 @@ namespace svt { namespace table
     }
 
 
-    void UnoGridColumnFacade::setMinWidth( TableMetrics _nMinWidth )
-    {
-        ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
-        lcl_set( m_xGridColumn, &XGridColumn::setMinWidth, _nMinWidth );
-    }
-
-
     TableMetrics UnoGridColumnFacade::getMaxWidth() const
     {
         ENSURE_OR_RETURN( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!", 0 );
@@ -387,24 +308,10 @@ namespace svt { namespace table
     }
 
 
-    void UnoGridColumnFacade::setMaxWidth( TableMetrics _nMaxWidth )
-    {
-        ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
-        lcl_set( m_xGridColumn, &XGridColumn::setMinWidth, _nMaxWidth );
-    }
-
-
     ::com::sun::star::style::HorizontalAlignment UnoGridColumnFacade::getHorizontalAlign()
     {
         ENSURE_OR_RETURN( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!", HorizontalAlignment_LEFT );
         return lcl_get( m_xGridColumn, &XGridColumn::getHorizontalAlign );
-    }
-
-
-    void UnoGridColumnFacade::setHorizontalAlign( com::sun::star::style::HorizontalAlignment _align )
-    {
-        ENSURE_OR_RETURN_VOID( m_xGridColumn.is(), "UnoGridColumnFacade: already disposed!" );
-        lcl_set( m_xGridColumn, &XGridColumn::setHorizontalAlign, _align );
     }
 
 

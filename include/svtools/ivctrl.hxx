@@ -121,7 +121,6 @@ public:
                             SvxIconChoiceCtrlEntry( const OUString& rText, const Image& rImage, SvxIconViewFlags nFlags = SvxIconViewFlags::NONE );
                             ~SvxIconChoiceCtrlEntry () {}
 
-    void                    SetImage ( const Image& rImage ) { aImage = rImage; }
     Image                   GetImage () const { return aImage; }
     void                    SetText ( const OUString& rText ) { aText = rText; }
     OUString                GetText () const { return aText; }
@@ -131,23 +130,14 @@ public:
     void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
     void*                   GetUserData () { return pUserData; }
 
-    const Rectangle &       GetBoundRect() const { return aRect; }
-
-    void                    SetFocus ( bool bSet )
-                                     { nFlags = ( bSet ? nFlags | SvxIconViewFlags::FOCUSED : nFlags & ~SvxIconViewFlags::FOCUSED ); }
-
     SvxIconChoiceCtrlTextMode   GetTextMode() const { return eTextMode; }
     SvxIconViewFlags        GetFlags() const { return nFlags; }
     bool                    IsSelected() const { return bool(nFlags & SvxIconViewFlags::SELECTED); }
     bool                    IsFocused() const { return bool(nFlags & SvxIconViewFlags::FOCUSED); }
-    bool                    IsInUse() const { return bool(nFlags & SvxIconViewFlags::IN_USE); }
     bool                    IsCursored() const { return bool(nFlags & SvxIconViewFlags::CURSORED); }
     bool                    IsDropTarget() const { return bool(nFlags & SvxIconViewFlags::DROP_TARGET); }
     bool                    IsBlockingEmphasis() const { return bool(nFlags & SvxIconViewFlags::BLOCK_EMPHASIS); }
     bool                    IsPosLocked() const { return bool(nFlags & SvxIconViewFlags::POS_LOCKED); }
-    // Only set at AutoArrange. The head of the list is accessible via SvxIconChoiceCtrl::GetPredecessorHead
-    SvxIconChoiceCtrlEntry*         GetSuccessor() const { return pflink; }
-    SvxIconChoiceCtrlEntry*         GetPredecessor() const { return pblink; }
 };
 
 enum SvxIconChoiceCtrlColumnAlign
@@ -171,17 +161,8 @@ public:
                                 nWidth( nWd ), eAlignment( eAlign ), nSubItem( nSub ) {}
                             SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& );
 
-    void                    SetText( const OUString& rText ) { aColText = rText; }
-    void                    SetImage( const Image& rImg ) { aColImage = rImg; }
     void                    SetWidth( long nWd ) { nWidth = nWd; }
-    void                    SetAlignment( SvxIconChoiceCtrlColumnAlign eAlign ) { eAlignment = eAlign; }
-    void                    SetSubItem( sal_uInt16 nSub) { nSubItem = nSub; }
-
-    const OUString&         GetText() const { return aColText; }
-    const Image&            GetImage() const { return aColImage; }
     long                    GetWidth() const { return nWidth; }
-    SvxIconChoiceCtrlColumnAlign    GetAlignment() const { return eAlignment; }
-    sal_uInt16                  GetSubItem() const { return nSubItem; }
 };
 
 
@@ -326,7 +307,6 @@ public:
     void                    SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
 #endif
 
-    void                SetFontColorToBackground ( bool bDo = true ) { _bAutoFontColor = bDo; }
     bool                AutoFontColor () { return _bAutoFontColor; }
 
     Point               GetPixelPos( const Point& rPosLogic ) const;

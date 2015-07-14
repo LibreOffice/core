@@ -79,19 +79,11 @@ public:
 
     Fix(long bits, Bits): x(bits) {}
 
-    void            SetInternVal( long nVal ) { x=nVal; }
-    long            GetInternVal() const { return x; }
-
     void            operator+= ( const Fix& a ) { x+=a.x; }
     void            operator-= ( const Fix& a ) { x-=a.x; }
     void            operator*= ( const Fix& a ) { x=(x*a.x+FIX_ADD)>>FIX_POST; }
     void            operator/= ( const Fix& a ) { x=(x<<FIX_POST)/a.x; }
     friend Fix      operator-  ( const Fix& a );
-
-    void            MultBig( const Fix& a )
-                        { x=((((a.x+FIX_A2)>>FIX_P2)*x+FIX_A3)>>FIX_P3); }
-    void            DivBig( const Fix& a )
-                        { x=((x<<FIX_P3)/a.x)<<FIX_P2; }
 
     friend bool     operator> ( const Fix& a, const Fix& b ) { return a.x > b.x; }
     friend bool     operator< ( const Fix& a, const Fix& b ) { return a.x < b.x; }
@@ -122,11 +114,7 @@ public:
                     FixCpx( Fix a )        : r( a ), i() {}
                     FixCpx( Fix a, Fix b ) : r( a ), i( b ) {}
 
-    Fix&            GetReal() { return r; }
-    Fix&            GetImag() { return i; }
-
     void            operator*= ( const FixCpx& ra );
-    void            MultBig( const FixCpx& ra, const FixCpx& rb );
 
     friend FixCpx   operator+ ( const FixCpx& a, const FixCpx& b );
     friend FixCpx   operator- ( const FixCpx& a, const FixCpx& b );

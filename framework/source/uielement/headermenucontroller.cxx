@@ -210,14 +210,6 @@ void SAL_CALL HeaderMenuController::statusChanged( const FeatureStateEvent& Even
 }
 
 // XMenuListener
-void HeaderMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
-{
-    Sequence<PropertyValue>      aArgs;
-    OSL_ENSURE(_xDispatch.is(),"HeaderMenuController::impl_select: No dispatch");
-    if ( _xDispatch.is() )
-        _xDispatch->dispatch( aTargetURL, aArgs );
-}
-
 void SAL_CALL HeaderMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     osl::ResettableMutexGuard aLock( m_aMutex );

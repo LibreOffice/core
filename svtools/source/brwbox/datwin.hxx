@@ -82,7 +82,6 @@ public:
     sal_uInt16          GetId() const { return _nId; }
 
     sal_uLong           Width() { return _nWidth; }
-    Image&              GetImage() { return _aImage; }
     OUString&           Title() { return _aTitle; }
 
     bool                IsFrozen() const { return _bFrozen; }
@@ -161,7 +160,6 @@ public:
 
 
     BrowseEvent     CreateBrowseEvent( const Point& rPosPixel );
-    void            Repaint();
     BrowseBox*      GetParent() const
                          { return static_cast<BrowseBox*>( Window::GetParent() ); }
     const OUString& GetRealRowCount() const { return aRealRowCount; }
@@ -181,15 +179,6 @@ protected:
     void            StartRowDividerDrag( const Point& _rStartPos );
     bool            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent );
 };
-
-
-
-inline void BrowserDataWin::Repaint()
-{
-    if ( GetUpdateMode() )
-        Update();
-    Invalidate(Rectangle(Point(), GetOutputSizePixel()));
-}
 
 
 

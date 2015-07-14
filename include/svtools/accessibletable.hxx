@@ -62,8 +62,6 @@ public:
     virtual sal_Int32               GetCurrentRow() const = 0;
     /** @return  The position of the current column. */
     virtual sal_Int32               GetCurrentColumn() const = 0;
-    /** Creates and returns the accessible object of the whole GridControl. */
-    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible()= 0;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessibleControl( sal_Int32 _nIndex )= 0;
     virtual OUString GetAccessibleObjectName(AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const= 0;
     virtual bool    GoToCell( sal_Int32 _nColumnPos, sal_Int32 _nRow )= 0;
@@ -95,7 +93,6 @@ public:
     virtual bool ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )= 0;
     virtual long GetRowCount() const= 0;
     virtual long GetColumnCount() const= 0;
-    virtual bool HasRowHeader() const= 0;
     virtual bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint )= 0;
     virtual Rectangle calcHeaderRect( bool _bIsColumnBar, bool _bOnScreen = true ) = 0;
     virtual Rectangle calcHeaderCellRect( bool _bColHeader, sal_Int32 _nPos ) = 0;
@@ -108,7 +105,6 @@ public:
     virtual OUString GetRowName(sal_Int32 _nIndex) const = 0;
     virtual OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
     virtual OUString GetColumnName( sal_Int32 _nIndex ) const = 0;
-    virtual css::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
     virtual OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
 
     virtual sal_Int32 GetSelectedRowCount() const = 0;
@@ -145,16 +141,6 @@ public:
         @return  <TRUE/>, if the object is not disposed or disposing.
     */
     virtual bool isAlive() const = 0;
-
-    /** returns the accessible object for the row or the column header bar
-    */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        getTableHeader( ::svt::table::AccessibleTableControlObjType _eObjType ) = 0;
-
-    /** returns the accessible object for the table representation
-    */
-    virtual css::uno::Reference< css::accessibility::XAccessible >
-        getTable() = 0;
 
     /** commits the event at all listeners of the cell
          @param nEventId

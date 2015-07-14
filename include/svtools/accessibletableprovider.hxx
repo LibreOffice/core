@@ -69,8 +69,6 @@ public:
 
     /** @return  <TRUE/>, if the object has a row header. */
     virtual bool                    HasRowHeader() const = 0; //GetColumnId
-    /** @return  <TRUE/>, if the object can focus a cell. */
-    virtual bool                    IsCellFocusable() const = 0;
     virtual bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
 
     virtual void                    SetNoSelection() = 0;

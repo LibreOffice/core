@@ -95,8 +95,6 @@ public:
     void                Write ( SvStream& rOStm, const OUString& rBaseURL ) const;
     void                Read( SvStream& rIStm, const OUString& rBaseURL );
 
-    virtual Rectangle   GetBoundRect() const = 0;
-
     const OUString&     GetURL() const { return aURL; }
     void                SetURL( const OUString& rURL ) { aURL = rURL; }
 
@@ -120,25 +118,7 @@ public:
     // IMap-Events
     inline const SvxMacroTableDtor& GetMacroTable() const { return aEventList;}
     inline void SetMacroTable( const SvxMacroTableDtor& rTbl ) { aEventList = rTbl; }
-
-    inline const SvxMacro&  GetEvent( sal_uInt16 nEvent ) const;
-    inline bool             HasEvent( sal_uInt16 nEvent ) const;
-           void             SetEvent( sal_uInt16 nEvent, const SvxMacro& );
-    inline bool             DelEvent( sal_uInt16 nEvent );
 };
-
-inline bool IMapObject::HasEvent( sal_uInt16 nEvent ) const
-{
-    return aEventList.IsKeyValid( nEvent );
-}
-inline const SvxMacro& IMapObject::GetEvent( sal_uInt16 nEvent ) const
-{
-    return *(aEventList.Get( nEvent ));
-}
-inline bool IMapObject::DelEvent( sal_uInt16 nEvent )
-{
-    return aEventList.Erase( nEvent );
-}
 
 #endif
 

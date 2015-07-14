@@ -50,10 +50,6 @@ namespace svt { namespace table
         virtual bool    KeyInput        ( ITableControl& _rControl, const KeyEvent& rKEvt ) SAL_OVERRIDE;
         virtual bool    GetFocus        ( ITableControl& _rControl ) SAL_OVERRIDE;
         virtual bool    LoseFocus       ( ITableControl& _rControl ) SAL_OVERRIDE;
-        virtual bool    RequestHelp     ( ITableControl& _rControl, const HelpEvent& rHEvt ) SAL_OVERRIDE;
-        virtual bool    Command         ( ITableControl& _rControl, const CommandEvent& rCEvt ) SAL_OVERRIDE;
-        virtual bool    PreNotify       ( ITableControl& _rControl, NotifyEvent& rNEvt ) SAL_OVERRIDE;
-        virtual bool    Notify          ( ITableControl& _rControl, NotifyEvent& rNEvt ) SAL_OVERRIDE;
     };
 
 

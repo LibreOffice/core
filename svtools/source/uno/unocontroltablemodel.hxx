@@ -62,7 +62,6 @@ namespace svt { namespace table
         virtual TableSize                       getRowCount() const SAL_OVERRIDE;
         virtual bool                            hasColumnHeaders() const SAL_OVERRIDE;
         virtual bool                            hasRowHeaders() const SAL_OVERRIDE;
-        virtual bool                            isCellEditable( ColPos col, RowPos row ) const SAL_OVERRIDE;
         virtual PColumnModel                    getColumnModel( ColPos column ) SAL_OVERRIDE;
         virtual PTableRenderer                  getRenderer() const SAL_OVERRIDE;
         virtual PTableInputHandler              getInputHandler() const SAL_OVERRIDE;

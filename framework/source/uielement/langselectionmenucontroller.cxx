@@ -128,38 +128,6 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
     }
 }
 
-// XMenuListener
-void LanguageSelectionMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
-{
-    Reference< XDispatch > xDispatch = _xDispatch;
-
-    if ( aTargetURL.Complete == m_aMenuCommandURL_Font )
-    {   //open format/character dialog for current selection
-        xDispatch = m_xMenuDispatch_Font;
-    }
-    else if ( aTargetURL.Complete == m_aMenuCommandURL_Lang )
-    {   //open language tab-page in tools/options dialog
-        xDispatch = m_xMenuDispatch_Lang;
-    }
-    else if ( aTargetURL.Complete == m_aMenuCommandURL_CharDlgForParagraph )
-    {   //open format/character dialog for current selection
-        xDispatch = m_xMenuDispatch_CharDlgForParagraph;
-    }
-
-    if ( !xDispatch.is() )
-    {
-        Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
-        if ( xDispatchProvider.is() )
-            xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
-    }
-
-    if ( xDispatch.is() )
-    {
-        Sequence<PropertyValue>      aArgs;
-        xDispatch->dispatch( aTargetURL, aArgs );
-    }
-}
-
 // XPopupMenuController
 void LanguageSelectionMenuController::impl_setPopupMenu()
 {

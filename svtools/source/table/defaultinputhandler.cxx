@@ -197,41 +197,6 @@ namespace svt { namespace table
     }
 
 
-    bool DefaultInputHandler::RequestHelp( ITableControl& _rControl, const HelpEvent& _rHEvt )
-    {
-        (void)_rControl;
-        (void)_rHEvt;
-        // TODO
-        return false;
-    }
-
-
-    bool DefaultInputHandler::Command( ITableControl& _rControl, const CommandEvent& _rCEvt )
-    {
-        (void)_rControl;
-        (void)_rCEvt;
-        // TODO
-        return false;
-    }
-
-
-    bool DefaultInputHandler::PreNotify( ITableControl& _rControl, NotifyEvent& _rNEvt )
-    {
-        (void)_rControl;
-        (void)_rNEvt;
-        // TODO
-        return false;
-    }
-
-
-    bool DefaultInputHandler::Notify( ITableControl& _rControl, NotifyEvent& _rNEvt )
-    {
-        (void)_rControl;
-        (void)_rNEvt;
-        // TODO
-        return false;
-    }
-
 } } // namespace svt::table
 
 

@@ -62,7 +62,6 @@ namespace framework
 
         private:
             virtual void impl_setPopupMenu() SAL_OVERRIDE;
-            virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL) SAL_OVERRIDE;
             void setCurHeight( long nHeight, com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             OUString retrievePrinterName( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );

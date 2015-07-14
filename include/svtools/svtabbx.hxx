@@ -186,7 +186,6 @@ public:
     /** @return  <TRUE/>, if the object has a row header. */
     virtual bool                    HasRowHeader() const SAL_OVERRIDE; //GetColumnId
     /** @return  <TRUE/>, if the object can focus a cell. */
-    virtual bool                    IsCellFocusable() const SAL_OVERRIDE;
     virtual bool                    GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn ) SAL_OVERRIDE;
 
     virtual void                    SetNoSelection() SAL_OVERRIDE;

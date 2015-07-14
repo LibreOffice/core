@@ -165,32 +165,6 @@ namespace svt { namespace table
     class SAL_NO_VTABLE IColumnModel
     {
     public:
-        /** retrieves the ID of the column
-
-            The semantics of a column id is not defined. It's up to the
-            implementor of the ->IColumnModel, respectively the ->ITableModel
-            which provides the column models, to define such a semantics.
-
-            @return
-                the ID of the column. May be 0 if the table which the column
-                belongs to does not need and support column ids.
-
-            @see setID
-        */
-        virtual ::com::sun::star::uno::Any
-                            getID() const = 0;
-
-        /** sets a new column ID
-
-            @return
-                <TRUE/> if setting the new ID was successful. A possible error
-                conditions is if you try to set an ID which is already used
-                by another column within the same table.
-
-            @see getID
-        */
-        virtual void        setID( const ::com::sun::star::uno::Any& _nID ) = 0;
-
         /** returns the name of the column
 
             Column names should be human-readable, but not necessarily unique
@@ -200,19 +174,9 @@ namespace svt { namespace table
         */
         virtual OUString      getName() const = 0;
 
-        /** sets a new name for the column
-
-            @see getName
-        */
-        virtual void        setName( const OUString& _rName ) = 0;
-
         /** retrieves the help text to be displayed for the column.
         */
         virtual OUString      getHelpText() const = 0;
-
-        /** sets a new the help text to be displayed for the column.
-        */
-        virtual void        setHelpText( const OUString& i_helpText ) = 0;
 
         /** determines whether the column can be interactively resized
 
@@ -222,14 +186,6 @@ namespace svt { namespace table
         */
         virtual bool        isResizable() const = 0;
 
-        /** declares the column as resizable or fixed in width
-
-            @see getMinWidth
-            @see getMaxWidth
-            @see getWidth
-        */
-        virtual void        setResizable( bool _bResizable ) = 0;
-
         /** denotes the relative flexibility of the column
 
             This flexibility is taken into account when a table control auto-resizes its columns, because the available
@@ -238,12 +194,6 @@ namespace svt { namespace table
             A value of 0 means the column is not auto-resized at all.
         */
         virtual sal_Int32   getFlexibility() const = 0;
-
-        /** sets a new flexibility value for the column
-
-            @see getFlexibility
-        */
-        virtual void        setFlexibility( sal_Int32 const i_flexibility ) = 0;
 
         /** returns the width of the column, in app-font units
 
@@ -273,14 +223,6 @@ namespace svt { namespace table
         */
         virtual TableMetrics    getMinWidth() const = 0;
 
-        /** sets the minimum width of the column, in app-font units
-
-            @see getMinWidth
-            @see setMaxWidth
-            @see setWidth
-        */
-        virtual void            setMinWidth( TableMetrics _nMinWidth ) = 0;
-
         /** returns the maximum width of the column, in app-font units, or 0 if the column
             does not have a minimal width
 
@@ -290,21 +232,9 @@ namespace svt { namespace table
         */
         virtual TableMetrics    getMaxWidth() const = 0;
 
-        /** sets the maximum width of the column, in app-font units
-
-            @see getMaxWidth
-            @see setMinWidth
-            @see setWidth
-        */
-        virtual void            setMaxWidth( TableMetrics _nMaxWidth ) = 0;
-
         /** retrieves the horizontal alignment to be used for content in this cell
         */
         virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign() = 0;
-
-        /** sets a new the horizontal alignment to be used for content in this cell
-        */
-        virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign) = 0;
 
         /// deletes the column model instance
         virtual ~IColumnModel() { }
@@ -344,13 +274,6 @@ namespace svt { namespace table
             @see IColumnRenderer
         */
         virtual bool        hasRowHeaders() const = 0;
-
-        /** determines whether the given cell is editable
-
-            @see ICellEditor
-            @todo
-        */
-        virtual bool        isCellEditable( ColPos col, RowPos row ) const = 0;
 
         /** returns a model for a certain column
 

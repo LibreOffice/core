@@ -140,7 +140,6 @@ namespace svt
         virtual void                SetSelection( const Selection& _rSelection ) = 0;
 
         virtual void                ReplaceSelected( const OUString& _rStr ) = 0;
-        virtual void                DeleteSelected() = 0;
         virtual OUString            GetSelected( LineEnd aSeparator ) const = 0;
 
         virtual void                SetModified() = 0;
@@ -176,7 +175,6 @@ namespace svt
         virtual void                SetSelection( const Selection& _rSelection ) SAL_OVERRIDE;
 
         virtual void                ReplaceSelected( const OUString& _rStr ) SAL_OVERRIDE;
-        virtual void                DeleteSelected() SAL_OVERRIDE;
         virtual OUString            GetSelected( LineEnd aSeparator ) const SAL_OVERRIDE;
 
         virtual void                SetModified() SAL_OVERRIDE;
@@ -297,10 +295,8 @@ namespace svt
         virtual void Resize() SAL_OVERRIDE;
 
         void SetClickHdl(const Link<>& rHdl) {m_aClickLink = rHdl;}
-        const Link<>& GetClickHdl() const {return m_aClickLink;}
 
         void SetModifyHdl(const Link<>& rHdl) {m_aModifyLink = rHdl;}
-        const Link<>& GetModifyHdl() const {return m_aModifyLink;}
 
         CheckBox&   GetBox() {return *pBox;};
 
@@ -501,9 +497,7 @@ namespace svt
     protected:
         VclPtr<BrowserHeader>  pHeader;
 
-        bool isGetCellFocusPending() const { return nStartEvent != 0; }
         void cancelGetCellFocus() { if (nStartEvent) Application::RemoveUserEvent(nStartEvent); nStartEvent = 0; }
-        void forceGetCellFocus() { cancelGetCellFocus(); LINK(this, EditBrowseBox, StartEditHdl).Call(nullptr); }
 
         BrowserMouseEventPtr& getMouseEvent() { return aMouseEvent; }
 

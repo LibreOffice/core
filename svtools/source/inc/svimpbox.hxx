@@ -209,7 +209,6 @@ private:
 
     void                BeginScroll();
     void                EndScroll();
-    bool InScroll() const { return (nFlags & F_IN_SCROLLING) != 0; }
     Rectangle           GetVisibleArea() const;
     bool EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPos, long nLine);
     void                InitScrollBarBox();
@@ -248,7 +247,6 @@ public:
     void                Clear();
     void                SetStyle( WinBits i_nWinStyle );
     void                SetExtendedWindowBits( ExtendedWinBits _nBits );
-    ExtendedWinBits     GetExtendedWindowBits() const { return nExtendedWinBits; }
     void                SetModel( SvTreeList* pModel ) { pTree = pModel;}
 
     void                EntryInserted( SvTreeListEntry*);

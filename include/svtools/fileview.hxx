@@ -92,7 +92,6 @@ public:
     void                    SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
     virtual void            SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE;
     void                    SetSortColumn( bool bValue ) { bSortColumn = bValue; }
-    bool                    GetSortColumn() { return bSortColumn; }
 
     /** initialize the view with the content of a folder given by URL, and apply an immediate filter
 

@@ -209,7 +209,6 @@ private:
                                 const GraphicObject* pCopyObj = NULL
                             );
     void                    SVT_DLLPRIVATE ImplAutoSwapIn();
-    bool                    SVT_DLLPRIVATE ImplIsAutoSwapped() const { return mbAutoSwapped; }
     bool                    SVT_DLLPRIVATE ImplGetCropParams(
                                 OutputDevice* pOut,
                                 Point& rPt,
@@ -343,7 +342,6 @@ public:
     bool                    HasSwapStreamHdl() const { return( mpSwapStreamHdl != NULL && mpSwapStreamHdl->IsSet() ); }
     void                    SetSwapStreamHdl();
     void                    SetSwapStreamHdl(const Link<>& rHdl);
-    sal_uLong               GetSwapOutTimeout() const { return( mpSwapOutTimer ? mpSwapOutTimer->GetTimeout() : 0 ); }
 
     void                    FireSwapInRequest();
     void                    FireSwapOutRequest();
@@ -414,7 +412,6 @@ public:
     const MapMode&          GetPrefMapMode() const { return maPrefMapMode; }
     sal_uLong               GetSizeBytes() const { return mnSizeBytes; }
     bool                    IsTransparent() const { return mbTransparent; }
-    bool                    IsAlpha() const { return mbAlpha; }
     bool                    IsAnimated() const { return mbAnimated; }
     bool                    IsEPS() const { return mbEPS; }
 

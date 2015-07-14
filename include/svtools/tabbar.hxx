@@ -315,8 +315,6 @@ class SVT_DLLPUBLIC TabBar : public vcl::Window
 private:
     std::unique_ptr<TabBar_Impl> mpImpl;
 
-    ImplTabBarList* mpItemList;
-
     OUString        maEditText;
     Color           maSelColor;
     Color           maSelTextColor;
@@ -419,7 +417,6 @@ public:
 
     Color           GetTabBgColor( sal_uInt16 nPageId ) const;
     void            SetTabBgColor( sal_uInt16 nPageId, const Color& aTabBgColor );
-    bool            IsDefaultTabBgColor( sal_uInt16 nPageId );
 
     void            Clear();
 
@@ -440,22 +437,15 @@ public:
     sal_uInt16      GetCurPageId() const { return mnCurPageId; }
 
     void            SetFirstPageId( sal_uInt16 nPageId );
-    sal_uInt16      GetFirstPageId() const { return GetPageId( mnFirstPos ); }
     void            MakeVisible( sal_uInt16 nPageId );
 
     void            SelectPage( sal_uInt16 nPageId, bool bSelect = true );
     sal_uInt16      GetSelectPageCount() const;
     bool            IsPageSelected( sal_uInt16 nPageId ) const;
 
-    void            EnableAutoMaxPageWidth( bool bEnable = true ) { mbAutoMaxWidth = bEnable; }
-    bool            IsAutoMaxPageWidthEnabled() const { return mbAutoMaxWidth; }
     void            SetMaxPageWidth( long nMaxWidth );
-    long            GetMaxPageWidth() const { return mnMaxPageWidth; }
-    void            ResetMaxPageWidth() { SetMaxPageWidth( 0 ); }
-    bool            IsMaxPageWidth() const { return mnMaxPageWidth != 0; }
 
     void            EnableEditMode( bool bEnable = true ) { mbAutoEditMode = bEnable; }
-    bool            IsEditModeEnabled() const { return mbAutoEditMode; }
     bool            StartEditMode( sal_uInt16 nPageId );
     void            EndEditMode( bool bCancel = false );
     void            SetEditText( const OUString& rText ) { maEditText = rText; }
@@ -485,12 +475,6 @@ public:
     void            HideDropPos();
     bool            SwitchPage( const Point& rPos );
     void            EndSwitchPage();
-    bool            IsInSwitching() { return mbInSwitching; }
-
-    const Color&    GetSelectColor() const { return maSelColor; }
-    bool            IsSelectColor() const { return mbSelColor; }
-    const Color&    GetSelectTextColor() const { return maSelTextColor; }
-    bool            IsSelectTextColor() const { return mbSelTextColor; }
 
     void            SetPageText( sal_uInt16 nPageId, const OUString& rText );
     OUString        GetPageText( sal_uInt16 nPageId ) const;

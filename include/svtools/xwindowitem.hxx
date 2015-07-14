@@ -47,7 +47,6 @@ public:
     virtual bool operator == ( const SfxPoolItem& rAttr ) const SAL_OVERRIDE;
 
     vcl::Window *        GetWindowPtr() const    { return VCLUnoHelper::GetWindow( m_xWin ); }
-    com::sun::star::uno::Reference< com::sun::star::awt::XWindow >  GetXWindow() const  { return m_xWin; }
 };
 
 

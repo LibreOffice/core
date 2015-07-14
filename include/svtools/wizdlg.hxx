@@ -268,22 +268,15 @@ public:
     void                RemoveButton( Button* pButton );
 
     void                SetPrevButton( PushButton* pButton ) { mpPrevBtn = pButton; }
-    PushButton*         GetPrevButton() const { return mpPrevBtn; }
     void                SetNextButton( PushButton* pButton ) { mpNextBtn = pButton; }
-    PushButton*         GetNextButton() const { return mpNextBtn; }
 
     void                SetViewWindow( vcl::Window* pWindow ) { mpViewWindow = pWindow; }
-    vcl::Window*        GetViewWindow() const { return mpViewWindow; }
     void                SetViewAlign( WindowAlign eAlign ) { meViewAlign = eAlign; }
-    WindowAlign         GetViewAlign() const { return meViewAlign; }
 
     void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
     const Size&         GetPageSizePixel() const { return maPageSize; }
 
     void                SetActivatePageHdl( const Link<>& rLink ) { maActivateHdl = rLink; }
-    const Link<>&       GetActivatePageHdl() const { return maActivateHdl; }
-    void                SetDeactivatePageHdl( const Link<>& rLink ) { maDeactivateHdl = rLink; }
-    const Link<>&       GetDeactivatePageHdl() const { return maDeactivateHdl; }
 };
 
 #endif // INCLUDED_SVTOOLS_WIZDLG_HXX

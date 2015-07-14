@@ -733,11 +733,9 @@ public:
 
     void            Activate() SAL_OVERRIDE;
     void            Deactivate() SAL_OVERRIDE;
-    bool            IsActive() const { return mbActive; }
 
     void            SetWinPos( long nOff = 0, long nWidth = 0 );
     long            GetWinOffset() const { return mnWinOff; }
-    long            GetWinWidth() const { return mnWinWidth; }
     void            SetPagePos( long nOff = 0, long nWidth = 0 );
     long            GetPageOffset() const;
     void            SetBorderPos( long nOff = 0 );
@@ -747,16 +745,10 @@ public:
     void            SetUnit( FieldUnit eNewUnit );
     FieldUnit       GetUnit() const { return meUnit; }
     void            SetZoom( const Fraction& rNewZoom );
-    Fraction        GetZoom() const { return maZoom; }
 
     void            SetSourceUnit( MapUnit eNewUnit ) { meSourceUnit = eNewUnit; }
-    MapUnit         GetSourceUnit() const { return meSourceUnit; }
 
     void            SetExtraType( RulerExtra eNewExtraType, sal_uInt16 nStyle = 0 );
-    RulerExtra      GetExtraType() const { return meExtraType; }
-    sal_uInt16      GetExtraStyle()  const { return mnExtraStyle; }
-    sal_uInt16      GetExtraClicks() const { return mnExtraClicks; }
-    sal_uInt16      GetExtraModifier() const { return mnExtraModifier; }
 
     bool            StartDocDrag( const MouseEvent& rMEvt,
                                   RulerType eDragType = RULER_TYPE_DONTKNOW );
@@ -771,7 +763,6 @@ public:
     void            CancelDrag();
     long            GetClickPos() const { return mnDragPos; }
     RulerType       GetClickType() const { return meDragType; }
-    sal_uInt16      GetClickAryPos() const { return mnDragAryPos; }
 
     RulerSelection  GetHoverSelection() const { return maHoverSelection; }
 
@@ -794,8 +785,6 @@ public:
     void            SetIndents( sal_uInt32 n = 0, const RulerIndent* pIndentAry = NULL );
 
     void            SetTabs( sal_uInt32 n = 0, const RulerTab* pTabAry = NULL );
-    sal_uInt32      GetTabCount() const;
-    const RulerTab* GetTabs() const;
 
     static void     DrawTab(vcl::RenderContext& rRenderContext, const Color &rFillColor,
                             const Point& rPos, sal_uInt16 nStyle);
@@ -803,18 +792,8 @@ public:
     void            SetStyle( WinBits nStyle );
     WinBits         GetStyle() const { return mnWinStyle; }
 
-    void            SetStartDragHdl( const Link<>& rLink ) { maStartDragHdl = rLink; }
     const Link<>&   GetStartDragHdl() const { return maStartDragHdl; }
-    void            SetDragHdl( const Link<>& rLink ) { maDragHdl = rLink; }
-    const Link<>&   GetDragHdl() const { return maDragHdl; }
-    void            SetEndDragHdl( const Link<>& rLink ) { maEndDragHdl = rLink; }
-    const Link<>&   GetEndDragHdl() const { return maEndDragHdl; }
-    void            SetClickHdl( const Link<>& rLink ) { maClickHdl = rLink; }
-    const Link<>&   GetClickHdl() const { return maClickHdl; }
     void            SetDoubleClickHdl( const Link<>& rLink ) { maDoubleClickHdl = rLink; }
-    const Link<>&   GetDoubleClickHdl() const { return maDoubleClickHdl; }
-    void            SetExtraDownHdl( const Link<>& rLink ) { maExtraDownHdl = rLink; }
-    const Link<>&   GetExtraDownHdl() const { return maExtraDownHdl; }
 
     void            SetTextRTL(bool bRTL);
     bool            GetTextRTL();
