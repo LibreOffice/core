@@ -13,7 +13,9 @@
 
 namespace configmgr {
 
-bool dumpWindowsRegistry(OUString* pFileURL);
+enum WinRegType { LOCAL_MACHINE, CURRENT_USER };
+
+bool dumpWindowsRegistry(OUString* pFileURL, WinRegType eType);
 
 }
 
