@@ -6,6 +6,9 @@
 
 #ifdef WNT
 #include <stdio.h>
+#ifndef UNICODE
+#define UNICODE
+#endif
 #include <windows.h>
 #include <commctrl.h>
 #include <process.h>

@@ -8,14 +8,14 @@
 #include "nss_secutil.h"
 
 #include "prprf.h"
-#ifdef XP_WIN
+#ifdef WNT
 #include <io.h>
 #else
 #include <unistd.h>
 #endif
 
 static char consoleName[] =  {
-#ifdef XP_UNIX
+#ifdef UNIX
   "/dev/tty"
 #else
   "CON:"

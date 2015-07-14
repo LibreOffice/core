@@ -11,7 +11,6 @@
 #include "archivereader.h"
 #include "errors.h"
 #ifdef WNT
-#include "nsAlgorithm.h" // Needed by nsVersionComparator.cpp
 #include "updatehelper.h"
 #endif
 

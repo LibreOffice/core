@@ -12,7 +12,7 @@
 #include "mar_private.h"
 #include "mar.h"
 
-#ifdef XP_WIN
+#ifdef WNT
 #include <io.h>
 #include <direct.h>
 #endif
@@ -25,7 +25,7 @@ static int mar_ensure_parent_dir(const char *path)
   {
     *slash = '\0';
     mar_ensure_parent_dir(path);
-#ifdef XP_WIN
+#ifdef WNT
     _mkdir(path);
 #else
     mkdir(path, 0755);
@@ -43,7 +43,7 @@ static int mar_test_callback(MarFile *mar, const MarItem *item, void *unused) {
   if (mar_ensure_parent_dir(item->name))
     return -1;
 
-#ifdef XP_WIN
+#ifdef WNT
   fd = _open(item->name, _O_BINARY|_O_CREAT|_O_TRUNC|_O_WRONLY, item->flags);
 #else
   fd = creat(item->name, item->flags);

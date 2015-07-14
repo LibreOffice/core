@@ -10,7 +10,7 @@
 #include "mar.h"
 #include "mar_cmdline.h"
 
-#ifdef XP_WIN
+#ifdef WNT
 #include <windows.h>
 #include <direct.h>
 #define chdir _chdir
@@ -23,7 +23,7 @@
 #define MAR_CHANNEL_ID "LOOnlineUpdater" /* Dummy value; replace or
                                             remove in the future */
 
-#if !defined(NO_SIGN_VERIFY) && (!defined(XP_WIN) || defined(MAR_NSS))
+#if !defined(NO_SIGN_VERIFY) && (!defined(WNT) || defined(MAR_NSS))
 #include "cert.h"
 #include "pk11pub.h"
 int NSSInitCryptoContext(const char *NSSConfigDir);
@@ -66,7 +66,7 @@ static void print_usage() {
          "signed_input_archive.mar base_64_encoded_signature_file "
          "changed_signed_output.mar\n");
   printf("(i) is the index of the certificate to extract\n");
-#if defined(XP_MACOSX) || (defined(XP_WIN) && !defined(MAR_NSS))
+#if defined(MACOSX) || (defined(WNT) && !defined(MAR_NSS))
   printf("Verify a MAR file:\n");
   printf("  mar [-C workingDir] -D DERFilePath -v signed_archive.mar\n");
   printf("At most %d signature certificate DER files are specified by "
@@ -131,17 +131,17 @@ int main(int argc, char **argv) {
   uint32_t fileSizes[MAX_SIGNATURES];
   const uint8_t* certBuffers[MAX_SIGNATURES];
   char* DERFilePaths[MAX_SIGNATURES];
-#if (!defined(XP_WIN) && !defined(XP_MACOSX)) || defined(MAR_NSS)
+#if (!defined(WNT) && !defined(MACOSX)) || defined(MAR_NSS)
   CERTCertificate* certs[MAX_SIGNATURES];
 #endif
 #endif
 
   memset((void*)certNames, 0, sizeof(certNames));
-#if defined(XP_WIN) && !defined(MAR_NSS) && !defined(NO_SIGN_VERIFY)
+#if defined(WNT) && !defined(MAR_NSS) && !defined(NO_SIGN_VERIFY)
   memset((void*)certBuffers, 0, sizeof(certBuffers));
 #endif
-#if !defined(NO_SIGN_VERIFY) && ((!defined(MAR_NSS) && defined(XP_WIN)) || \
-                                 defined(XP_MACOSX))
+#if !defined(NO_SIGN_VERIFY) && ((!defined(MAR_NSS) && defined(WNT)) || \
+                                 defined(MACOSX))
   memset(DERFilePaths, 0, sizeof(DERFilePaths));
   memset(fileSizes, 0, sizeof(fileSizes));
 #endif
@@ -170,8 +170,8 @@ int main(int argc, char **argv) {
       argv += 2;
       argc -= 2;
     }
-#if !defined(NO_SIGN_VERIFY) && ((!defined(MAR_NSS) && defined(XP_WIN)) || \
-                                 defined(XP_MACOSX))
+#if !defined(NO_SIGN_VERIFY) && ((!defined(MAR_NSS) && defined(WNT)) || \
+                                 defined(MACOSX))
     /* -D DERFilePath, also matches -D[index] DERFilePath
        We allow an index for verifying to be symmetric
        with the import and export command line arguments. */
@@ -329,7 +329,7 @@ int main(int argc, char **argv) {
       return -1;
     }
 
-#if (!defined(XP_WIN) && !defined(XP_MACOSX)) || defined(MAR_NSS)
+#if (!defined(WNT) && !defined(MACOSX)) || defined(MAR_NSS)
     if (!NSSConfigDir || certCount == 0) {
       print_usage();
       return -1;
@@ -343,7 +343,7 @@ int main(int argc, char **argv) {
 
     rv = 0;
     for (k = 0; k < certCount; ++k) {
-#if (defined(XP_WIN) || defined(XP_MACOSX)) && !defined(MAR_NSS)
+#if (defined(WNT) || defined(MACOSX)) && !defined(MAR_NSS)
       rv = mar_read_entire_file(DERFilePaths[k], MAR_MAX_CERT_SIZE,
                                 &certBuffers[k], &fileSizes[k]);
 #else
@@ -380,7 +380,7 @@ int main(int argc, char **argv) {
       }
     }
     for (k = 0; k < certCount; ++k) {
-#if (defined(XP_WIN) || defined(XP_MACOSX)) && !defined(MAR_NSS)
+#if (defined(WNT) || defined(MACOSX)) && !defined(MAR_NSS)
       free((void*)certBuffers[k]);
 #else
       /* certBuffers[k] is owned by certs[k] so don't free it */

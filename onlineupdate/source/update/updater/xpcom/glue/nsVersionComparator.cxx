@@ -11,7 +11,18 @@
 #include <stdint.h>
 #if defined(WNT) && !defined(UPDATER_NO_STRING_GLUE_STL)
 #include <wchar.h>
-#include "nsStringGlue.h"
+#include <stdint.h>
+#include "mozilla/Char16.h"
+#endif
+
+#ifdef WNT
+// from Mozilla's nsAlgorithm.h
+template <class T>
+inline const T&
+XPCOM_MIN(const T& aA, const T& aB)
+{
+  return aB < aA ? aB : aA;
+}
 #endif
 
 struct VersionPart
@@ -301,14 +312,14 @@ namespace mozilla {
 
 #ifdef WNT
 int32_t
-CompareVersions(const char16_t* aStrA, const char16_t* aStrB)
+CompareVersions(const wchar_t* aStrA, const wchar_t* aStrB)
 {
-  wchar_t* A2 = wcsdup(char16ptr_t(aStrA));
+  wchar_t* A2 = wcsdup(aStrA);
   if (!A2) {
     return 1;
   }
 
-  wchar_t* B2 = wcsdup(char16ptr_t(aStrB));
+  wchar_t* B2 = wcsdup(aStrB);
   if (!B2) {
     free(A2);
     return 1;

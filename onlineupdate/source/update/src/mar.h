@@ -69,7 +69,7 @@ typedef int (* MarItemCallback)(MarFile *mar, const MarItem *item, void *data);
  */
 MarFile *mar_open(const char *path);
 
-#ifdef XP_WIN
+#ifdef WNT
 MarFile *mar_wopen(const wchar_t *path);
 #endif
 

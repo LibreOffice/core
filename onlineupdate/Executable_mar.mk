@@ -17,6 +17,13 @@ $(eval $(call gb_Executable_set_include,mar,\
 	$$(INCLUDE) \
 ))
 
+ifeq ($(OS),WNT)
+$(eval $(call gb_Executable_add_libs,mar,\
+    ws2_32.lib \
+    Crypt32.lib \
+))
+endif
+
 $(eval $(call gb_Executable_use_externals,mar,nss3))
 
 $(eval $(call gb_Executable_add_cobjects,mar,\

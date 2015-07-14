@@ -13,7 +13,7 @@
 #include "mar_cmdline.h"
 #include "mar.h"
 
-#ifdef XP_WIN
+#ifdef WNT
 #include <winsock2.h>
 #else
 #include <netinet/in.h>

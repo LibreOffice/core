@@ -12,7 +12,9 @@
 #include <assert.h>
 #if defined(WNT) && !defined(UPDATER_NO_STRING_GLUE_STL)
 #include <wchar.h>
-#include "nsStringGlue.h"
+#include <stdint.h>
+#include "mozilla/Char16.h"
+
 #endif
 
 /**
@@ -45,7 +47,7 @@ namespace mozilla {
 int32_t CompareVersions(const char* aStrA, const char* aStrB);
 
 #ifdef WNT
-int32_t CompareVersions(const char16_t* aStrA, const char16_t* aStrB);
+int32_t CompareVersions(const wchar_t* aStrA, const wchar_t* aStrB);
 #endif
 
 struct Version
@@ -121,13 +123,13 @@ private:
 #ifdef WNT
 struct VersionW
 {
-  VersionW(const char16_t* aVersionStringW)
+  VersionW(const wchar_t* aVersionStringW)
   {
     versionContentW =
-      reinterpret_cast<char16_t*>(wcsdup(char16ptr_t(aVersionStringW)));
+      reinterpret_cast<wchar_t*>(wcsdup(aVersionStringW));
   }
 
-  const char16_t* ReadContentW() const
+  const wchar_t* ReadContentW() const
   {
     return versionContentW;
   }
@@ -163,7 +165,7 @@ struct VersionW
   }
 
 private:
-  char16_t* versionContentW;
+  wchar_t* versionContentW;
 };
 #endif
 

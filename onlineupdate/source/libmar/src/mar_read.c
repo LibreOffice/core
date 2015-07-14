@@ -11,7 +11,7 @@
 #include "mar_private.h"
 #include "mar.h"
 
-#ifdef XP_WIN
+#ifdef WNT
 #include <winsock2.h>
 #else
 #include <netinet/in.h>
@@ -177,7 +177,7 @@ MarFile *mar_open(const char *path) {
   return mar_fpopen(fp);
 }
 
-#ifdef XP_WIN
+#ifdef WNT
 MarFile *mar_wopen(const wchar_t *path) {
   FILE *fp;
 
