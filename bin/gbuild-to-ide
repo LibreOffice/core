@@ -1285,9 +1285,9 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         return ""
         
     def build_data_libs(self):
-        
+
         self.data_libs = {}
-        
+
         all_libs = set(self.gbuildparser.libs) | set(self.gbuildparser.exes)
         for lib in all_libs:
             self._log("\nlibrary : %s, loc=%s" % (lib.short_name(), lib.location))
@@ -1295,22 +1295,23 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
             def lopath(path):
                 return os.path.relpath(path, lib.location)
-                
+
             sources_list = []
             headers_list = []
             includepath_list = []
+
             for file_ in lib.cxxobjects:
                 # the file has no extension : search it
                 # self._log("\n    file : %s" % file_)
                 ext = self.get_source_extension(file_)
                 if ext:
                     sources_list.append(lopath(file_+ext))
-                
+
                 # few cxxobject files have a header beside
                 ext = self.get_header_extension(file_)
                 if ext:
                     headers_list.append(lopath(file_+ext))
-            
+
             # List all headers
             for hdir in lib.include:
                 # except from "workdir" folder
@@ -1319,13 +1320,17 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                         if hf.endswith(('.h', '.hxx', '.hpp', '.hrc')):
                             hf_lopath = lopath(os.path.join(hdir, hf))
                             headers_list.append(hf_lopath)
-            
+                else:
+                    # for 'workdir' subfolders, just add them as include paths
+                    hf_lopath = lopath(hdir)
+                    includepath_list.append(hf_lopath)
+
             # We also need to have a list of include paths
             for header in headers_list:
                 header_path = os.path.dirname(header)
                 if header_path not in includepath_list:
                     includepath_list.append(header_path)
-            
+
             # All datas are prepared, store them for the lib.
             if lib_folder in self.data_libs:
                 self.data_libs[lib_folder]['sources'] |= set(sources_list)
