@@ -98,6 +98,8 @@ private:
     css::uno::Reference<css::util::XModifyListener> mxListener;
 
     void Initialize();
+
+    DECL_LINK(CheckBoxHdl, CheckBox*);
 };
 
 } } // end of namespace ::chart::sidebar
