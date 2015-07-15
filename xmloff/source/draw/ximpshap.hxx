@@ -20,6 +20,8 @@
 #ifndef INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
 #define INCLUDED_XMLOFF_SOURCE_DRAW_XIMPSHAP_HXX
 
+#include <config_features.h>
+
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/container/XIdentifierContainer.hpp>
