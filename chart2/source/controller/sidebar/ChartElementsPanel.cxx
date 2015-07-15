@@ -136,6 +136,18 @@ bool isLegendVisible(css::uno::Reference<css::frame::XModel> xModel)
     return false;
 }
 
+void setLegendVisible(css::uno::Reference<css::frame::XModel> xModel, bool bVisible)
+{
+    ChartModel* pModel = getChartModel(xModel);
+    if (!pModel)
+        return;
+
+    if (bVisible)
+        LegendHelper::showLegend(*pModel, comphelper::getProcessComponentContext());
+    else
+        LegendHelper::hideLegend(*pModel);
+}
+
 bool isTitleVisisble(css::uno::Reference<css::frame::XModel> xModel, TitleHelper::eTitleType eTitle)
 {
     return TitleHelper::getTitle(eTitle, xModel).is();
@@ -402,6 +414,8 @@ IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)
         setAxisVisible(mxModel, AxisType::Y_SECOND, bChecked);
     else if (pCheckBox == mpCB2ndYAxisTitle.get())
         setTitleVisible(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE, bChecked);
+    else if (pCheckBox == mpCBLegend.get())
+        setLegendVisible(mxModel, bChecked);
 
     return 0;
 }
