@@ -221,10 +221,10 @@ OutlinerParaObject *OFlowChainedText::CreateOverflowingParaObject(Outliner *pOut
 
     if (mbIsDeepMerge) {
         fprintf(stderr, "[TEXTCHAINFLOW - OF] Deep merging paras\n" );
-        return mpOverflowingTxt->GetJuxtaposedParaObject(pOutliner, pTextToBeMerged );
+        return mpOverflowingTxt->GetDeeplyMergedParaObject(pOutliner, pTextToBeMerged );
     } else {
         fprintf(stderr, "[TEXTCHAINFLOW - OF] Juxtaposing paras\n" );
-        return mpOverflowingTxt->GetDeeplyMergedParaObject(pOutliner, pTextToBeMerged );
+        return mpOverflowingTxt->GetJuxtaposedParaObject(pOutliner, pTextToBeMerged );
     }
 }
 
