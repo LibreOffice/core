@@ -305,78 +305,11 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
-    SolarMutexGuard aGuard;
-
-#if HAVE_FEATURE_MACOSX_SANDBOX
-    static NSUserDefaults *userDefaults;
-    static bool triedUserDefaults = false;
-
-    if (!triedUserDefaults)
-    {
-        userDefaults = [NSUserDefaults standardUserDefaults];
-        triedUserDefaults = true;
-    }
-#endif
-
-    // OSL_TRACE("starting work");
-    /*
-     * If more than one file is selected in an OpenDialog, then the first result
-     * is the directory and the remaining results contain just the files' names
-     * without the basedir path.
-     */
-    NSArray *files = nil;
-    if (m_nDialogType == NAVIGATIONSERVICES_OPEN) {
-        files = [(NSOpenPanel*)m_pDialog URLs];
-    }
-    else if (m_nDialogType == NAVIGATIONSERVICES_SAVE) {
-        files = [NSArray arrayWithObjects:[m_pDialog URL], nil];
-    }
-
-    long nFiles = [files count];
-    SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
-
-    // multiselection doesn't really work
+    uno::Sequence< rtl::OUString > aSelectedFiles = getSelectedFiles();
+    // multiselection doesn't really work with getFiles
     // so just retrieve the first url
-    if (nFiles > 1)
-        nFiles = 1;
-
-    uno::Sequence< rtl::OUString > aSelectedFiles(nFiles);
-    
-    for(long nIndex = 0; nIndex < nFiles; nIndex += 1)
-    {
-        NSURL *url = [files objectAtIndex:nIndex];
-
-#if HAVE_FEATURE_MACOSX_SANDBOX
-        if (userDefaults != NULL &&
-            [url respondsToSelector:@selector(bookmarkDataWithOptions:includingResourceValuesForKeys:relativeToURL:error:)])
-        {
-            // In the case of "Save As" when the user has input a new
-            // file name, this call will return nil, as bookmarks can
-            // (naturally) only be created for existing file system
-            // objects. In that case, code at a much lower level, in
-            // sal, takes care of creating a bookmark when a new file
-            // has been created outside the sandbox.
-            NSData *data = [url bookmarkDataWithOptions:NSURLBookmarkCreationWithSecurityScope
-                         includingResourceValuesForKeys:nil
-                                          relativeToURL:nil
-                                                  error:nil];
-            if (data != NULL)
-            {
-                [userDefaults setObject:data
-                                 forKey:[@"bookmarkFor:" stringByAppendingString:[url absoluteString]]];
-            }
-        }
-#endif
-
-        OSL_TRACE("handling %s", [[url description] UTF8String]);
-        InfoType info = FULLPATH;
-
-        OUString sFileOrDirURL = [url OUStringForInfo:info];
-
-        aSelectedFiles[nIndex] = sFileOrDirURL;
-
-        OSL_TRACE("Returned file in getFiles: \"%s\".", OUStringToOString(sFileOrDirURL, RTL_TEXTENCODING_UTF8).getStr());
-    }
+    if (aSelectedFiles.getLength() > 1)
+        aSelectedFiles.realloc(1);
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
     return aSelectedFiles;
