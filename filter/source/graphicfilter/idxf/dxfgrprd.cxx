@@ -86,8 +86,7 @@ OString DXFReadLine(SvStream& rIStm)
 
 void DXFSkipLine(SvStream& rIStm)
 {
-    while (!rIStm.GetError())   // !!! do not check for EOF
-                                // !!! because we read blockwise
+    while (rIStm.good())
     {
         char  buf[256 + 1];
         sal_uInt16 nLen = (sal_uInt16)rIStm.Read(buf, sizeof(buf) - 1);
