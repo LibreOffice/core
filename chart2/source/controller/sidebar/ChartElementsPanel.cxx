@@ -32,11 +32,57 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 
+#include "LegendHelper.hxx"
+#include "TitleHelper.hxx"
+
+#include "ChartModel.hxx"
+
 using namespace css;
 using namespace css::uno;
 using ::sfx2::sidebar::Theme;
 
 namespace chart { namespace sidebar {
+
+namespace {
+
+ChartModel* getChartModel(css::uno::Reference<css::frame::XModel> xModel)
+{
+    ChartModel* pModel = dynamic_cast<ChartModel*>(xModel.get());
+
+    return pModel;
+}
+
+bool isLegendVisible(css::uno::Reference<css::frame::XModel> xModel)
+{
+    ChartModel* pModel = getChartModel(xModel);
+    if (!pModel)
+        return false;
+
+    Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend(*pModel), uno::UNO_QUERY );
+    if( xLegendProp.is())
+    {
+        try
+        {
+            bool bShow = false;
+            if( xLegendProp->getPropertyValue( "Show") >>= bShow )
+            {
+                return bShow;
+            }
+        }
+        catch(const uno::Exception &)
+        {
+        }
+    }
+
+    return false;
+}
+
+bool isTitleVisisble(css::uno::Reference<css::frame::XModel> xModel, TitleHelper::eTitleType eTitle)
+{
+    return TitleHelper::getTitle(eTitle, xModel).is();
+}
+
+}
 
 ChartElementsPanel::ChartElementsPanel(
     vcl::Window* pParent,
@@ -132,6 +178,7 @@ VclPtr<vcl::Window> ChartElementsPanel::Create (
 void ChartElementsPanel::DataChanged(
     const DataChangedEvent& )
 {
+    updateData();
 }
 
 void ChartElementsPanel::HandleContextChange(
@@ -144,6 +191,7 @@ void ChartElementsPanel::HandleContextChange(
     }
 
     maContext = rContext;
+    updateData();
 }
 
 void ChartElementsPanel::NotifyItemUpdate(
