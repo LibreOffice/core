@@ -233,7 +233,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     if( getExportFlags() & (SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT))
     {
-        //Auf die Korrektheit der OrdNums sind wir schon angewiesen.
+        //We depend on the correctness of OrdNums.
         SwDrawModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         if( pModel )
             pModel->GetPage( 0 )->RecalcObjOrdNums();

@@ -69,7 +69,7 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
 #if OSL_DEBUG_LEVEL > 0
     // style:parent-style-name="..." (if its not the default only)
     const SwFormat* pParent = rFormat.DerivedFrom();
-    // Parent-Namen nur uebernehmen, wenn kein Default
+    // Only adopt parent name, if it's not the default
     OSL_ENSURE( !pParent || pParent->IsDefault(), "unexpected parent" );
 
     OSL_ENSURE( USHRT_MAX == rFormat.GetPoolFormatId(), "pool ids arent'supported" );
