@@ -1,0 +1,63 @@
+diff -ru boost.orig/boost/signals2/connection.hpp boost/boost/signals2/connection.hpp
+--- foo/misc/boost.orig/boost/signals2/connection.hpp	2015-07-09 20:06:58.000000000 +0200
++++ foo/misc/boost/boost/signals2/connection.hpp	2015-07-19 21:54:54.491994554 +0200
+@@ -68,12 +68,12 @@
+           nolock_disconnect(local_lock);
+         }
+         template<typename Mutex>
+-        void nolock_disconnect(garbage_collecting_lock<Mutex> &lock) const
++        void nolock_disconnect(garbage_collecting_lock<Mutex> &lock_) const
+         {
+           if(_connected)
+           {
+             _connected = false;
+-            dec_slot_refcount(lock);
++            dec_slot_refcount(lock_);
+           }
+         }
+         virtual bool connected() const = 0;
+@@ -118,12 +118,12 @@
+         // shared_ptr to the slot in the garbage collecting lock,
+         // which will destroy the slot only after it unlocks.
+         template<typename Mutex>
+-        void dec_slot_refcount(garbage_collecting_lock<Mutex> &lock) const
++        void dec_slot_refcount(garbage_collecting_lock<Mutex> &lock_arg) const
+         {
+           BOOST_ASSERT(m_slot_refcount != 0);
+           if(--m_slot_refcount == 0)
+           {
+-            lock.add_trash(release_slot());
++            lock_arg.add_trash(release_slot());
+           }
+         }
+ 
+@@ -155,17 +155,17 @@
+         const GroupKey& group_key() const {return _group_key;}
+         void set_group_key(const GroupKey &key) {_group_key = key;}
+         template<typename M>
+-        void disconnect_expired_slot(garbage_collecting_lock<M> &lock)
++        void disconnect_expired_slot(garbage_collecting_lock<M> &lock_arg)
+         {
+           if(!m_slot) return;
+           bool expired = slot().expired();
+           if(expired == true)
+           {
+-            nolock_disconnect(lock);
++            nolock_disconnect(lock_arg);
+           }
+         }
+         template<typename M, typename OutputIterator>
+-        void nolock_grab_tracked_objects(garbage_collecting_lock<M> &lock,
++        void nolock_grab_tracked_objects(garbage_collecting_lock<M> &lock_arg,
+           OutputIterator inserter) const
+         {
+           if(!m_slot) return;
+@@ -184,7 +184,7 @@
+             );
+             if(apply_visitor(detail::expired_weak_ptr_visitor(), *it))
+             {
+-              nolock_disconnect(lock);
++              nolock_disconnect(lock_arg);
+               return;
+             }
+             *inserter++ = locked_object;

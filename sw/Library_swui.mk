@@ -40,6 +40,14 @@ $(eval $(call gb_Library_use_custom_headers,swui,\
 
 $(eval $(call gb_Library_use_sdk_api,swui))
 
+# https://svn.boost.org/trac/boost/ticket/11203
+# workaround for broken boost::none for MSVC
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_defs,swui,\
+	-DBOOST_OPTIONAL_USE_OLD_DEFINITION_OF_NONE \
+))
+endif
+
 ifneq ($(SYSTEM_LIBXML),)
 $(eval $(call gb_Library_add_cxxflags,swui,\
 	$(LIBXML_CFLAGS) \

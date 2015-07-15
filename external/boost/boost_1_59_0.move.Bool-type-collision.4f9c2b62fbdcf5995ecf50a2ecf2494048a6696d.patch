@@ -1,0 +1,21 @@
+diff -ru boost.orig/boost/move/detail/meta_utils.hpp boost/boost/move/detail/meta_utils.hpp
+--- foo/misc/boost.orig/boost/move/detail/meta_utils.hpp	2015-07-19 14:16:13.764836630 +0200
++++ foo/misc/boost/boost/move/detail/meta_utils.hpp	2015-07-19 21:04:15.960985030 +0200
+@@ -347,7 +347,7 @@
+ //                         and_
+ //
+ //////////////////////////////////////////////////////////////////////////////
+-template<bool Bool, class B = true_, class C = true_, class D = true_>
++template<bool, class B = true_, class C = true_, class D = true_>
+ struct and_impl
+    : and_impl<B::value, C, D>
+ {};
+@@ -374,7 +374,7 @@
+ //                            or_
+ //
+ //////////////////////////////////////////////////////////////////////////////
+-template<bool Bool, class B = false_, class C = false_, class D = false_>
++template<bool, class B = false_, class C = false_, class D = false_>
+ struct or_impl
+    : or_impl<B::value, C, D>
+ {};
