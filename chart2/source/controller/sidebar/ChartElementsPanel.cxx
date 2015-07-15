@@ -21,6 +21,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "ChartElementsPanel.hxx"
+#include "ChartController.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/imagemgr.hxx>
@@ -40,11 +41,13 @@ namespace chart { namespace sidebar {
 ChartElementsPanel::ChartElementsPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings)
+    SfxBindings* pBindings,
+    ChartController* pController)
   : PanelLayout(pParent, "ChartElementsPanel", "modules/schart/ui/sidebarelements.ui", rxFrame),
     mxFrame(rxFrame),
     maContext(),
-    mpBindings(pBindings)
+    mpBindings(pBindings),
+    mxModel(pController->getModel())
 {
     get(mpCBTitle,  "checkbutton_title");
     get(mpCBSubtitle,  "checkbutton_subtitle");
@@ -93,10 +96,27 @@ void ChartElementsPanel::dispose()
     PanelLayout::dispose();
 }
 
+void ChartElementsPanel::Initialize()
+{
+    updateData();
+}
+
+void ChartElementsPanel::updateData()
+{
+    mpCBLegend->Check(isLegendVisible(mxModel));
+    mpCBTitle->Check(isTitleVisisble(mxModel, TitleHelper::MAIN_TITLE));
+    mpCBSubtitle->Check(isTitleVisisble(mxModel, TitleHelper::SUB_TITLE));
+    mpCBXAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::X_AXIS_TITLE));
+    mpCBYAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::Y_AXIS_TITLE));
+    mpCBZAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::Z_AXIS_TITLE));
+    mpCB2ndXAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::SECONDARY_X_AXIS_TITLE));
+    mpCB2ndYAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE));
+}
+
 VclPtr<vcl::Window> ChartElementsPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings)
+    SfxBindings* pBindings, ChartController* pController)
 {
     if (pParent == NULL)
         throw lang::IllegalArgumentException("no parent Window given to ChartElementsPanel::Create", NULL, 0);
@@ -106,7 +126,7 @@ VclPtr<vcl::Window> ChartElementsPanel::Create (
         throw lang::IllegalArgumentException("no SfxBindings given to ChartElementsPanel::Create", NULL, 2);
 
     return  VclPtr<ChartElementsPanel>::Create(
-                        pParent, rxFrame, pBindings);
+                        pParent, rxFrame, pBindings, pController);
 }
 
 void ChartElementsPanel::DataChanged(

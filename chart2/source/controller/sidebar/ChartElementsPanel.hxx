@@ -28,7 +28,11 @@ class FixedText;
 class ListBox;
 class NumericField;
 
-namespace chart { namespace sidebar {
+namespace chart {
+
+class ChartController;
+
+namespace sidebar {
 
 class ChartElementsPanel : public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
@@ -38,7 +42,7 @@ public:
     static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
+        SfxBindings* pBindings, ChartController* pController);
 
     virtual void DataChanged(
         const DataChangedEvent& rEvent) SAL_OVERRIDE;
@@ -58,7 +62,7 @@ public:
     ChartElementsPanel(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
+        SfxBindings* pBindings, ChartController* pController);
     virtual ~ChartElementsPanel();
     virtual void dispose() SAL_OVERRIDE;
 private:
@@ -88,6 +92,10 @@ private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
+
+    css::uno::Reference<css::frame::XModel> mxModel;
+
+    void Initialize();
 };
 
 } } // end of namespace ::chart::sidebar

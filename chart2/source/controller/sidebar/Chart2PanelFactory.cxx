@@ -30,8 +30,8 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include "ChartElementsPanel.hxx"
+#include "ChartController.hxx"
 
-using namespace css;
 using namespace css::uno;
 using ::rtl::OUString;
 
@@ -46,23 +46,24 @@ ChartPanelFactory::~ChartPanelFactory()
 {
 }
 
-Reference<ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
+Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
     const ::rtl::OUString& rsResourceURL,
     const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
     throw(
-        container::NoSuchElementException,
-        lang::IllegalArgumentException,
+        css::container::NoSuchElementException,
+        css::lang::IllegalArgumentException,
         RuntimeException, std::exception)
 {
-    Reference<ui::XUIElement> xElement;
+    Reference<css::ui::XUIElement> xElement;
 
     try
     {
         const ::comphelper::NamedValueCollection aArguments (rArguments);
-        Reference<frame::XFrame> xFrame (aArguments.getOrDefault("Frame", Reference<frame::XFrame>()));
-        Reference<awt::XWindow> xParentWindow (aArguments.getOrDefault("ParentWindow", Reference<awt::XWindow>()));
+        Reference<css::frame::XFrame> xFrame (aArguments.getOrDefault("Frame", Reference<css::frame::XFrame>()));
+        Reference<css::awt::XWindow> xParentWindow (aArguments.getOrDefault("ParentWindow", Reference<css::awt::XWindow>()));
         const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
         SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
+        Reference<css::frame::XController> xController (aArguments.getOrDefault("Controller", Reference<css::frame::XController>()));
 
         vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
         if ( ! xParentWindow.is() || pParentWindow==NULL)
@@ -77,11 +78,21 @@ Reference<ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
             throw RuntimeException(
                 "PanelFactory::createUIElement called without SfxBindings",
                 NULL);
+        if (!xController.is())
+            throw RuntimeException(
+                "ChartPanelFactory::createUIElement called without Controller",
+                NULL);
+
+        ChartController* pController = dynamic_cast<ChartController*>(xController.get());
+        if (!pController)
+            throw RuntimeException(
+                "ChartPanelFactory::createUIElement called without valid ChartController",
+                NULL);
 
         sal_Int32 nMinimumSize = -1;
         VclPtr<vcl::Window> pPanel;
         if (rsResourceURL.endsWith("/ElementsPanel"))
-            pPanel = ChartElementsPanel::Create( pParentWindow, xFrame, pBindings );
+            pPanel = ChartElementsPanel::Create( pParentWindow, xFrame, pBindings, pController );
         /*
         else if (rsResourceURL.endsWith("/CellAppearancePropertyPanel"))
             pPanel = CellAppearancePropertyPanel::Create( pParentWindow, xFrame, pBindings );
@@ -104,17 +115,17 @@ Reference<ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
                 rsResourceURL,
                 xFrame,
                 pPanel,
-                ui::LayoutSize(nMinimumSize,-1,-1));
+                css::ui::LayoutSize(nMinimumSize,-1,-1));
     }
-    catch (const uno::RuntimeException &)
+    catch (const css::uno::RuntimeException &)
     {
         throw;
     }
-    catch (const uno::Exception& e)
+    catch (const css::uno::Exception& e)
     {
-        throw lang::WrappedTargetRuntimeException(
+        throw css::lang::WrappedTargetRuntimeException(
             OUString("ChartPanelFactory::createUIElement exception"),
-            0, uno::makeAny(e));
+            0, css::uno::makeAny(e));
     }
 
     return xElement;
