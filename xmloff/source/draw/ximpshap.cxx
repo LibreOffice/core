@@ -1855,8 +1855,8 @@ bool SvXMLImport::needFixPositionAfterZ() const
        ( ( ( nUPD == 641 ) || ( nUPD == 645 ) || ( nUPD == 680 ) || ( nUPD == 300 ) ||
            ( nUPD == 310 ) || ( nUPD == 320 ) || ( nUPD == 330 ) || ( nUPD == 340 ) ||
            ( nUPD == 350 && nBuildId < 202 ) )
-       || ( getGeneratorVersion() >= SvXMLImport::AOO_40x     // test if AOO 4.x
-         && getGeneratorVersion() < SvXMLImport::AOO_4x ) ) )
+       || (getGeneratorVersion() == SvXMLImport::AOO_40x))) // test if AOO 4.0.x
+           // apparently bug was fixed in AOO by i#123433 f15874d8f976f3874bdbcb53429eeefa65c28841
     {
         bWrongPositionAfterZ = true;
     }
