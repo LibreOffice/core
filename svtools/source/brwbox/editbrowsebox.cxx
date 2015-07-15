@@ -482,19 +482,9 @@ namespace svt
 
     void EditBrowseBox::MouseButtonDown(const BrowserMouseEvent& rEvt)
     {
-        sal_uInt16  nColPos = GetColumnPos( rEvt.GetColumnId() );
-        long    nRow    = rEvt.GetRow();
-
         // absorb double clicks
         if (rEvt.GetClicks() > 1 && rEvt.GetRow() >= 0)
             return;
-
-        // change to a new position
-        if (IsEditing() && (nColPos != nEditCol || nRow != nEditRow) && (nColPos != BROWSER_INVALIDID) && (nRow < GetRowCount()))
-        {
-            CellControllerRef aCellController(Controller());
-            HideAndDisable(aCellController);
-        }
 
         // we are about to leave the current cell. If there is a "this cell has been modified" notification
         // pending (asynchronously), this may be deadly -> do it synchronously
