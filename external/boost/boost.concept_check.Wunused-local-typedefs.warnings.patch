@@ -1,13 +1,14 @@
---- misc/boost_1_44_0/boost/concept/detail/general.hpp
-+++ misc/build/boost_1_44_0/boost/concept/detail/general.hpp
-@@ -68,7 +68,9 @@
+diff -ur boost.orig/boost/concept/detail/general.hpp boost/boost/concept/detail/general.hpp
+--- foo/misc/boost.orig/boost/concept/detail/general.hpp        2015-04-01 19:28:04.000000000 +0200
++++ foo/misc/boost/boost/concept/detail/general.hpp     2015-07-16 08:11:49.347971538 +0200
+@@ -76,7 +76,8 @@
  #  define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )             \
      typedef ::boost::concepts::detail::instantiate<          \
      &::boost::concepts::requirement_<ModelFnPtr>::failed>    \
--      BOOST_PP_CAT(boost_concept_check,__LINE__)
-+      BOOST_PP_CAT(boost_concept_check,__LINE__); \
-+    void BOOST_PP_CAT(boost_concept_check_dummy,__LINE__)(BOOST_PP_CAT(boost_concept_check,__LINE__) *)
-+        // silence -Werror=unused-local-typedefs (GCC 4.8)
+-      BOOST_PP_CAT(boost_concept_check,__LINE__)             \
++      BOOST_PP_CAT(boost_concept_check,__LINE__);           \
++    void BOOST_PP_CAT(boost_concept_check_dummy,__LINE__)(BOOST_PP_CAT(boost_concept_check,__LINE__) *) \
+       BOOST_CONCEPT_UNUSED_TYPEDEF
  
  }}
  
