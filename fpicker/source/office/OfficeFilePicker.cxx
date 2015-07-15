@@ -591,7 +591,7 @@ OUString SAL_CALL SvtFilePicker::getDisplayDirectory() throw( RuntimeException, 
         return m_aDisplayDirectory;
 }
 
-Sequence< OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL SvtFilePicker::getSelectedFiles() throw( RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -602,31 +602,25 @@ Sequence< OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeException,
         return aEmpty;
     }
 
-    // if there is more than one path we have to return the path to the
-    // files first and then the list of the selected entries
-
     std::vector<OUString> aPathList(getDialog()->GetPathList());
     size_t nCount = aPathList.size();
-    size_t nTotal = nCount > 1 ? nCount+1: nCount;
 
-    Sequence< OUString > aPath( nTotal );
+    Sequence< OUString > aFiles(nCount);
 
-    if ( nCount == 1 )
-        aPath[0] = aPathList[0];
-    else if ( nCount > 1 )
+    for(size_t i = 0; i < aPathList.size(); ++i)
     {
-        INetURLObject aObj(aPathList[0]);
-        aObj.removeSegment();
-        aPath[0] = aObj.GetMainURL( INetURLObject::NO_DECODE );
-
-        for(size_t i = 0; i < aPathList.size(); ++i)
-        {
-            aObj.SetURL(aPathList[i]);
-            aPath[i + 1] = aObj.getName();
-        }
+        aFiles[i] = aPathList[i];
     }
 
-    return aPath;
+    return aFiles;
+}
+
+Sequence< OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeException, std::exception )
+{
+    Sequence< OUString > aFiles = getSelectedFiles();
+    if (aFiles.getLength() > 1)
+        aFiles.realloc(1);
+    return aFiles;
 }
 
 

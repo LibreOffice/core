@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
@@ -46,7 +45,6 @@ protected:
 };
 
 typedef ::cppu::WeakComponentImplHelper <
-            ::com::sun::star::ui::dialogs::XFilePicker2,
             ::com::sun::star::ui::dialogs::XFilePicker3,
             ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
             ::com::sun::star::ui::dialogs::XFilePreview,
@@ -97,7 +95,7 @@ public:
     // XFilePicker2 functions
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XFilterManager functions
 

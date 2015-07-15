@@ -119,6 +119,7 @@ public:
     virtual void SAL_CALL           setDisplayDirectory( const OUString& aDirectory ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual OUString SAL_CALL    getDisplayDirectory() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
     // XFilePickerControlAccess functions
