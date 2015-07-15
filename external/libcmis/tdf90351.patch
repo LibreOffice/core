@@ -14,8 +14,8 @@ response to tell us.
 
 diff --git a/src/libcmis/atom-document.cxx b/src/libcmis/atom-document.cxx
 index b7f28b3..49cfd45 100644
---- src/libcmis/atom-document.cxx
-+++ src/libcmis/atom-document.cxx
+--- a/src/libcmis/atom-document.cxx
++++ b/src/libcmis/atom-document.cxx
 @@ -280,7 +280,7 @@ libcmis::DocumentPtr AtomDocument::checkOut( ) throw ( libcmis::Exception )
      if ( NULL == doc )
          throw libcmis::Exception( "Failed to parse object infos" );
@@ -36,8 +36,8 @@ index b7f28b3..49cfd45 100644
          refreshImpl( doc );
 diff --git a/src/libcmis/atom-folder.cxx b/src/libcmis/atom-folder.cxx
 index 7947883..55ac2a9 100644
---- src/libcmis/atom-folder.cxx
-+++ src/libcmis/atom-folder.cxx
+--- a/src/libcmis/atom-folder.cxx
++++ b/src/libcmis/atom-folder.cxx
 @@ -170,7 +170,7 @@ libcmis::FolderPtr AtomFolder::createFolder( const PropertyPtrMap& properties )
      if ( NULL == doc )
          throw libcmis::Exception( "Failed to parse object infos" );
@@ -58,8 +58,8 @@ index 7947883..55ac2a9 100644
      libcmis::DocumentPtr newDocument = boost::dynamic_pointer_cast< libcmis::Document >( created );
 diff --git a/src/libcmis/atom-session.cxx b/src/libcmis/atom-session.cxx
 index ffa93a7..e470884 100644
---- src/libcmis/atom-session.cxx
-+++ src/libcmis/atom-session.cxx
+--- a/src/libcmis/atom-session.cxx
++++ b/src/libcmis/atom-session.cxx
 @@ -201,7 +201,7 @@ bool AtomPubSession::setRepository( string repositoryId )
      return found;
  }
@@ -85,8 +85,8 @@ index ffa93a7..e470884 100644
                  }
 diff --git a/src/libcmis/atom-session.hxx b/src/libcmis/atom-session.hxx
 index c887b6d..953aa17 100644
---- src/libcmis/atom-session.hxx
-+++ src/libcmis/atom-session.hxx
+--- a/src/libcmis/atom-session.hxx
++++ b/src/libcmis/atom-session.hxx
 @@ -37,6 +37,7 @@ class AtomPubSession : public BaseSession
          AtomRepositoryPtr m_repository;
  
