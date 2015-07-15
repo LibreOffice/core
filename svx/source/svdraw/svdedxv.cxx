@@ -1298,13 +1298,24 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
         SdrOutliner *pOutl = GetTextEditOutliner();
         sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
 
-        if (eFunc ==  KeyFuncType::DONTKNOW && nCode == KEY_RIGHT && aCurSel.nEndPara == nLastPara) {
+        SdrTextObj* pTextObj = NULL;
+        if (mxTextEditObj.is())
+            pTextObj= dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
+
+        // XXX: Add check for last position in the para
+        if (pTextObj && pTextObj->IsChainable() && pTextObj->GetNextLinkInChain() &&
+            eFunc ==  KeyFuncType::DONTKNOW && nCode == KEY_RIGHT && aCurSel.nEndPara == nLastPara) {
             fprintf(stderr, "[CHAIN - CURSOR] Trying to move to next box\n" );
+
+            // Move to next box
+            SdrEndTextEdit();
+            SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
+            SdrBeginTextEdit(pNextLink);
 
             // XXX: Careful with the checks below for pWin and co. You should do them here I guess.
             return true;
         } else
-        // Old code from here
+        // FIXME(matteocam): Old code from here
         if (pTextEditOutlinerView->PostKeyEvent(rKEvt, pWin))
         {
             if( pMod )
