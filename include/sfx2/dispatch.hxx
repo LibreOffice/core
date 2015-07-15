@@ -172,13 +172,11 @@ public:
                                        sal_uInt16 nCount = 0, const sal_uInt16 *pSIDs = 0 );
 
     void                HideUI( bool bHide = true );
-    void                ShowObjectBar(sal_uInt16 nId, SfxShell *pShell=0) const;
     sal_uInt32          GetObjectBarId( sal_uInt16 nPos ) const;
 
     SfxItemState        QueryState( sal_uInt16 nSID, const SfxPoolItem* &rpState );
     SfxItemState        QueryState( sal_uInt16 nSID, ::com::sun::star::uno::Any& rAny );
 
-    ::com::sun::star::frame::XDispatch*          GetDispatchInterface( const OUString& );
     void                SetDisableFlags( sal_uInt32 nFlags );
     sal_uInt32          GetDisableFlags() const;
 

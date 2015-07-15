@@ -52,7 +52,6 @@ public:
     {   return new SfxRefItem( *this ); }
     virtual bool             operator==( const SfxPoolItem& rL) const SAL_OVERRIDE
     {   return static_cast<const SfxRefItem&>(rL).maRef == maRef; }
-    const tools::SvRef<SvRefBase>&      GetValue() const { return maRef; }
 };
 
 class SfxFrameWindow
@@ -64,10 +63,6 @@ public:
                 {}
 
     virtual     ~SfxFrameWindow()  {}
-    vcl::Window*     GetWindow() const
-                { return pWindow; }
-    void        SetWindow( vcl::Window *pWin )
-                { pWindow = pWin; }
 };
 
 typedef sal_uIntPtr (*SfxDetectFilter)( SfxMedium& rMedium, const SfxFilter **, SfxFilterFlags nMust, SfxFilterFlags nDont );

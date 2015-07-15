@@ -120,8 +120,6 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
     DECL_DLLPRIVATE_LINK_TYPED( GlobalBasicErrorHdl_Impl, StarBASIC*, bool );
 
     static SfxApplication*      Create();
-    void                        SettingsChange( sal_uInt16, const AppSettings & );
-    void                        Quit();
     void                        Deinitialize();
 
 public:

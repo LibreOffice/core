@@ -114,10 +114,8 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         static OUString GetUrlDescription( const OUString& aUrl );
 
         void SetVeto( bool bVeto )  { m_bVeto = bVeto;}
-        bool GetVeto()              { return m_bVeto; }
 
         void                    StartFileDialog();
-        sfx2::FileDialogHelper* GetFileDialog() const { return m_pFileDlg; }
         DECL_LINK(DialogClosedHdl_Impl, sfx2::FileDialogHelper*);
 
         static bool IsQuickstarterInstalled();

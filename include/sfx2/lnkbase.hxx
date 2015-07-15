@@ -155,7 +155,6 @@ public:
     bool            IsSynchron() const          { return bSynchron; }
     void            SetSynchron( bool bFlag )   { bSynchron = bFlag; }
 
-    bool            IsUseCache() const          { return bUseCache; }
     void            SetUseCache( bool bFlag )   { bUseCache = bFlag; }
 
     void            setStreamToLoadFrom(

@@ -69,11 +69,6 @@ SfxChildWinFactArr_Impl::iterator SfxChildWinFactArr_Impl::begin()
     return maData.begin();
 }
 
-SfxChildWinFactArr_Impl::const_iterator SfxChildWinFactArr_Impl::begin() const
-{
-    return maData.begin();
-}
-
 SfxFrameArr_Impl::iterator SfxFrameArr_Impl::begin()
 {
     return maData.begin();

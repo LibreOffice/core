@@ -169,7 +169,6 @@ public:
     css::uno::Reference< css::embed::XStorage > GetOutputStorage();
     void                ResetError();
     SAL_WARN_UNUSED_RESULT bool  UsesCache() const;
-    void                SetUsesCache( bool );
     SAL_WARN_UNUSED_RESULT bool  IsExpired() const;
     void                SetName( const OUString& rName, bool bSetOrigURL = false );
     SAL_WARN_UNUSED_RESULT bool  IsAllowedForExternalBrowser() const;
@@ -233,7 +232,6 @@ public:
 
     SAL_DLLPRIVATE void SetLongName(const OUString &rName);
     SAL_DLLPRIVATE const OUString & GetLongName() const;
-    SAL_DLLPRIVATE ErrCode CheckOpenMode_Impl( bool bSilent, bool bAllowRO = true );
     SAL_DLLPRIVATE bool IsPreview_Impl();
     SAL_DLLPRIVATE void ClearBackup_Impl();
     SAL_DLLPRIVATE void Done_Impl( ErrCode );

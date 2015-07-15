@@ -108,13 +108,12 @@ public:
     void        setAutoloadEnabled(bool i_val) { m_isAutoloadEnabled = i_val; }
     sal_Int32   getAutoloadDelay() const { return m_AutoloadDelay; }
     void        setAutoloadDelay(sal_Int32 i_val) { m_AutoloadDelay = i_val; }
-    OUString getAutoloadURL() const { return m_AutoloadURL; }
+    OUString    getAutoloadURL() const { return m_AutoloadURL; }
     void        setAutoloadURL(const OUString& i_val) { m_AutoloadURL = i_val; }
-    OUString getDefaultTarget() const { return m_DefaultTarget; }
+    OUString    getDefaultTarget() const { return m_DefaultTarget; }
     void        setDefaultTarget(const OUString& i_val) { m_DefaultTarget = i_val; }
-    OUString getTemplateName() const { return m_TemplateName; }
-    void        setTemplateName(const OUString& i_val) { m_TemplateName = i_val; }
-    OUString getAuthor() const { return m_Author; }
+    OUString    getTemplateName() const { return m_TemplateName; }
+    OUString    getAuthor() const { return m_Author; }
     void        setAuthor(const OUString& i_val) { m_Author = i_val; }
 
     ::com::sun::star::util::DateTime
@@ -298,37 +297,25 @@ public:
 
 class CustomPropertiesDateField : public DateField
 {
-private:
-    CustomPropertyLine* m_pLine;
-
 public:
     ::boost::optional<sal_Int16> m_TZ;
 
-    CustomPropertiesDateField(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine)
+    CustomPropertiesDateField(vcl::Window* pParent, WinBits nStyle)
         : DateField(pParent, nStyle)
-        , m_pLine(pLine)
     {
     }
-
-    CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
 
 class CustomPropertiesTimeField : public TimeField
 {
-private:
-    CustomPropertyLine*             m_pLine;
-
 public:
     bool m_isUTC;
 
-    CustomPropertiesTimeField(vcl::Window* pParent, WinBits nStyle, CustomPropertyLine* pLine)
+    CustomPropertiesTimeField(vcl::Window* pParent, WinBits nStyle)
         : TimeField(pParent, nStyle)
-        , m_pLine(pLine)
         , m_isUTC(false)
     {
     }
-
-    CustomPropertyLine*      GetLine() const { return m_pLine; }
 };
 
 class CustomPropertiesDurationField : public Edit
@@ -471,7 +458,6 @@ public:
                         GetCustomProperties() const;
     void                SetRemovedHdl( const Link<>& rLink ) { m_aRemovedHdl = rLink; }
 
-    void                InitRemoveButton(const ScrollBar &rScrollBar);
     void                updateLineWidth();
 };
 

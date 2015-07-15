@@ -1899,18 +1899,6 @@ OUString SfxObjectShell_Impl::getDocumentLocation() const
     return sLocation;
 }
 
-uno::Reference< embed::XStorage > SfxObjectShell_Impl::getZipStorageToSign()
-{
-    Reference < embed::XStorage > xStore;
-
-    SfxMedium* pMedium( rDocShell.GetMedium() );
-    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getLastCommitDocumentStorage: no medium!" );
-    if ( pMedium )
-        xStore = pMedium->GetZipStorageToSign_Impl();
-
-    return xStore;
-}
-
 bool SfxObjectShell_Impl::documentStorageHasMacros() const
 {
     return ::sfx2::DocumentMacroMode::storageHasMacros( m_xDocStorage );

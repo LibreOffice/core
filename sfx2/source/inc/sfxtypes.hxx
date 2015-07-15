@@ -79,7 +79,6 @@ struct StringList_Impl : private Resource
         : Resource( rErrIdP ), aResId(nId, *rErrIdP.GetResMgr()) {}
     ~StringList_Impl() { FreeResource(); }
 
-    OUString GetString() { return aResId.toString(); }
     operator bool()      { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
 
 };

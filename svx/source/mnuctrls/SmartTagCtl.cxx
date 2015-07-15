@@ -196,10 +196,4 @@ SvxSmartTagsControl::~SvxSmartTagsControl()
 
 
 
-PopupMenu* SvxSmartTagsControl::GetPopup() const
-{
-    return mpMenu;
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

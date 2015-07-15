@@ -81,7 +81,6 @@ public:
     bool IsAlienFormat() const { return bool(nFormatType & SfxFilterFlags::ALIEN); }
     bool CanImport() const { return bool(nFormatType & SfxFilterFlags::IMPORT); }
     bool CanExport() const { return bool(nFormatType & SfxFilterFlags::EXPORT); }
-    bool IsInternal() const { return bool(nFormatType & SfxFilterFlags::INTERNAL); }
     SfxFilterFlags  GetFilterFlags() const  { return nFormatType; }
     const OUString& GetFilterName() const { return maFilterName; }
     const OUString& GetMimeType() const { return aMimeType; }
@@ -91,13 +90,11 @@ public:
     SotClipboardFormatId GetFormat() const { return lFormat; }
     const OUString& GetTypeName() const { return aTypeName; }
     const OUString& GetUIName() const { return aUIName; }
-    sal_uInt16          GetDocIconId() const { return nDocIcon; }
     const OUString& GetUserData() const { return aUserData; }
     const OUString& GetDefaultTemplate() const { return aDefaultTemplate; }
     void            SetDefaultTemplate( const OUString& rStr ) { aDefaultTemplate = rStr; }
     bool            UsesStorage() const { return GetFormat() != SotClipboardFormatId::NONE; }
     void SetURLPattern( const OUString& rStr );
-    OUString GetURLPattern() const { return aPattern; }
     void            SetUIName( const OUString& rName ) { aUIName = rName; }
     void            SetVersion( sal_uIntPtr nVersionP ) { nVersion = nVersionP; }
     sal_uIntPtr           GetVersion() const { return nVersion; }

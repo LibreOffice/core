@@ -192,7 +192,6 @@ public:
     SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
 
     OKButton*           GetOKButton() const { return pOKBtn; }
-    CancelButton*       GetCancelButton() const { return pCancelBtn; }
 
 protected:
     GetTabPageRanges    fnGetRanges;

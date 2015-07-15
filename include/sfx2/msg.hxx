@@ -127,8 +127,6 @@ struct SfxType0
 
     const TypeId&   Type() const
                     { return aTypeId; }
-    SfxPoolItem*    CreateItem() const
-                    { return static_cast<SfxPoolItem*>(aTypeId()); }
 };
 
 #define SFX_DECL_TYPE(n)    struct SfxType##n                   \
@@ -246,7 +244,6 @@ public:
 
     SfxSlotKind         GetKind() const;
     sal_uInt16          GetSlotId() const;
-    sal_uIntPtr         GetHelpId() const;
     SfxSlotMode         GetMode() const;
     bool                IsMode( SfxSlotMode nMode ) const;
     sal_uInt16          GetGroupId() const;
@@ -277,15 +274,6 @@ inline sal_uInt16 SfxSlot::GetSlotId() const
 {
     return nSlotId;
 }
-
-// returns the help-id of the slot
-
-inline sal_uIntPtr SfxSlot::GetHelpId() const
-{
-    return nHelpId;
-}
-
-
 
 // returns  a bitfield with flags
 

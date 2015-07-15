@@ -1318,24 +1318,6 @@ void SfxPopupWindow::StartCascading()
 
 
 
-VclPtr<SfxPopupWindow> SfxPopupWindow::Clone() const
-
-/*  [Description]
-
-    This method must be overridden to show this Popup also in the
-    Presentation-mode. It is called when a Show() would be meaningless
-    since the parent is no presentation window.
-    When create a new window the bew Top-Window will be used automatically,
-    so that the Parent becomes the presentation window and that the new
-    Popup therefore becomes visible.
-*/
-
-{
-    return 0;
-}
-
-
-
 void SfxPopupWindow::StateChanged(
     sal_uInt16 /*nSID*/,
     SfxItemState eState,

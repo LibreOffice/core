@@ -90,7 +90,6 @@ public:
     virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const SAL_OVERRIDE;
 
     const SfxEventNamesList& GetEvents() const { return aEventsList;}
-    void SetEvents( const SfxEventNamesList& rList ) { aEventsList = rList; }
     void                    AddEvent( const OUString&, const OUString&, sal_uInt16 );
 };
 

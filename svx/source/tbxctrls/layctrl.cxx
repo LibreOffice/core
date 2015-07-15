@@ -54,7 +54,6 @@ private:
     long                nLine;
     bool                bInitialKeyInput;
     bool                m_bMod1;
-    ToolBox&            rTbx;
     Reference< XFrame > mxFrame;
     OUString       maCommand;
 
@@ -76,7 +75,6 @@ public:
                             TableWindow( sal_uInt16                 nSlotId,
                                          const OUString&            rCmd,
                                          const OUString&            rText,
-                                         ToolBox&                   rParentTbx,
                                          const Reference< XFrame >& rFrame );
                             virtual ~TableWindow();
     virtual void            dispose() SAL_OVERRIDE;
@@ -86,7 +84,6 @@ public:
     virtual void            MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) SAL_OVERRIDE;
     virtual void            PopupModeEnd() SAL_OVERRIDE;
-    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
 
 private:
     void                    Update( long nNewCol, long nNewLine );
@@ -108,14 +105,13 @@ IMPL_LINK_NOARG(TableWindow, SelectHdl)
 
 
 TableWindow::TableWindow( sal_uInt16 nSlotId, const OUString& rCmd, const OUString& rText,
-                          ToolBox& rParentTbx, const Reference< XFrame >& rFrame )
+                          const Reference< XFrame >& rFrame )
     : SfxPopupWindow( nSlotId, rFrame, WinBits( WB_STDPOPUP ) )
     , aTableButton( VclPtr<PushButton>::Create(this) )
     , nCol( 0 )
     , nLine( 0 )
     , bInitialKeyInput(false)
     , m_bMod1(false)
-    , rTbx(rParentTbx)
     , mxFrame( rFrame )
     , maCommand( rCmd )
     , mnTablePosX(2)
@@ -165,13 +161,6 @@ void TableWindow::dispose()
     aTableButton.disposeAndClear();
     SfxPopupWindow::dispose();
 }
-
-VclPtr<SfxPopupWindow> TableWindow::Clone() const
-{
-    return VclPtr<TableWindow>::Create( GetId(), maCommand, GetText(), rTbx, mxFrame );
-}
-
-
 
 void TableWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -421,13 +410,12 @@ private:
     long                nTextHeight;
     bool                bInitialKeyInput;
     bool                m_bMod1;
-    ToolBox&            rTbx;
     Reference< XFrame > mxFrame;
     OUString            maCommand;
 
     void UpdateSize_Impl( long nNewCol );
 public:
-                            ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUString &rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame );
+                            ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUString &rText, const Reference< XFrame >& rFrame );
 
     void                    KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -435,16 +423,14 @@ public:
     virtual void            MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void            Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& ) SAL_OVERRIDE;
     virtual void            PopupModeEnd() SAL_OVERRIDE;
-    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
 };
 
 
 
-ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUString& rText, ToolBox& rParentTbx, const Reference< XFrame >& rFrame ) :
+ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUString& rText, const Reference< XFrame >& rFrame ) :
     SfxPopupWindow( nId, rFrame, WB_STDPOPUP ),
     bInitialKeyInput(true),
     m_bMod1(false),
-    rTbx(rParentTbx),
     mxFrame(rFrame),
     maCommand( rCmd )
 {
@@ -473,13 +459,6 @@ ColumnsWindow::ColumnsWindow( sal_uInt16 nId, const OUString& rCmd, const OUStri
     nMX = aLogicSize.Width();
     SetOutputSizePixel( Size( nMX*nWidth-1, aLogicSize.Height()+nTextHeight ) );
     StartCascading();
-}
-
-
-
-VclPtr<SfxPopupWindow> ColumnsWindow::Clone() const
-{
-    return VclPtr<ColumnsWindow>::Create( GetId(), maCommand, GetText(), rTbx, mxFrame );
 }
 
 
@@ -737,7 +716,7 @@ VclPtr<SfxPopupWindow> SvxTableToolBoxControl::CreatePopupWindow()
     if ( bEnabled )
     {
         ToolBox& rTbx = GetToolBox();
-        VclPtr<TableWindow> pWin = VclPtr<TableWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), rTbx, m_xFrame );
+        VclPtr<TableWindow> pWin = VclPtr<TableWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), m_xFrame );
         pWin->StartPopupMode( &rTbx, FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoKeyClose );
         SetPopupWindow( pWin );
         return pWin;
@@ -784,7 +763,7 @@ VclPtr<SfxPopupWindow> SvxColumnsToolBoxControl::CreatePopupWindow()
     ColumnsWindow* pWin = 0;
     if(bEnabled)
     {
-            pWin = VclPtr<ColumnsWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), GetToolBox(), m_xFrame );
+            pWin = VclPtr<ColumnsWindow>::Create( GetSlotId(), m_aCommandURL, GetToolBox().GetItemText( GetId() ), m_xFrame );
             pWin->StartPopupMode( &GetToolBox(),
                                   FloatWinPopupFlags::GrabFocus|FloatWinPopupFlags::NoKeyClose );
             SetPopupWindow( pWin );

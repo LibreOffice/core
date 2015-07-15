@@ -34,7 +34,6 @@ public:
     BitSet();
     BitSet( const BitSet& rOrig );
     ~BitSet();
-    sal_uInt16 Count() const;
     BitSet& operator=( const BitSet& rOrig );
     BitSet& operator=( sal_uInt16 nBit );
     BitSet operator|( const BitSet& rSet ) const;
@@ -61,12 +60,6 @@ public:
 inline bool BitSet::operator!() const
 {
     return nCount == 0;
-}
-
-// returns the number of bits in the bitset
-inline sal_uInt16 BitSet::Count() const
-{
-    return nCount;
 }
 
 // creates the union of two bitset

@@ -84,27 +84,18 @@ public:
 class SfxNamedHint : public SfxHint
 {
     OUString            _aEventName;
-    SfxObjectShell*     _pObjShell;
     OUString            _aArgs;
 
 public:
                         SfxNamedHint( const OUString& rName,
-                                      const OUString& rArgs,
-                                      SfxObjectShell *pObj = 0  )
+                                      const OUString& rArgs  )
                         :   _aEventName( rName ),
-                            _pObjShell( pObj),
                             _aArgs( rArgs )
                         {}
 
-                        SfxNamedHint( const OUString& rName,
-                                      SfxObjectShell *pObj = 0 )
-                        :   _aEventName( rName ),
-                            _pObjShell( pObj )
+                        SfxNamedHint( const OUString& rName )
+                        :   _aEventName( rName )
                         {}
-
-    const OUString&     GetArgs() const { return _aArgs;}
-    const OUString&     GetName() const { return _aEventName; }
-    SfxObjectShell*     GetObjShell() const { return _pObjShell; }
 };
 
 class Printer;

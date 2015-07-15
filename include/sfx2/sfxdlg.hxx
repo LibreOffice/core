@@ -118,7 +118,6 @@ class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialog
 public:
                                         virtual ~SfxAbstractDialogFactory();    // needed for export of vtable
     static SfxAbstractDialogFactory*    Create();
-    virtual VclAbstractDialog*          CreateSfxDialog( vcl::Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) = 0;
     virtual VclAbstractDialog*          CreateFrameDialog( vcl::Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, sal_uInt32 nResId, const rtl::OUString& rParameter ) = 0;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
