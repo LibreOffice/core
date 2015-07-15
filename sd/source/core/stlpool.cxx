@@ -1127,7 +1127,10 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
         case HID_PSEUDOSHEET_SUBTITLE :
         {
             // Subtitle template
-            SvxNumRule* pDefaultRule = static_cast<const SvxNumBulletItem*>( rSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET))->GetNumRule();
+            SvxNumBulletItem const*const pItem(
+                static_cast<const SvxNumBulletItem*>(
+                    rSet.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET)));
+            SvxNumRule *const pDefaultRule = (pItem) ? pItem->GetNumRule() : nullptr;
             DBG_ASSERT( pDefaultRule, "Where is my default template? [CL]" );
 
             if(pDefaultRule)

@@ -219,8 +219,11 @@ Any SAL_CALL SwXTextDefaults::getPropertyDefault( const OUString& rPropertyName 
         throw UnknownPropertyException( "Unknown property: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     Any aRet;
     SfxItemPool& rSet (m_pDoc->GetAttrPool());
-    const SfxPoolItem *pItem = rSet.GetPoolDefaultItem ( pMap->nWID );
-    pItem->QueryValue( aRet, pMap->nMemberId );
+    SfxPoolItem const*const pItem = rSet.GetPoolDefaultItem(pMap->nWID);
+    if (pItem)
+    {
+        pItem->QueryValue( aRet, pMap->nMemberId );
+    }
     return aRet;
 }
 
