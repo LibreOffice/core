@@ -40,6 +40,30 @@ namespace sdr
         {
         }
 
+        static sal_uInt32 ensureGeometry(basegfx::B2DPolyPolygon& rUnitPolyPolygon)
+        {
+            sal_uInt32 nPolyCount(rUnitPolyPolygon.count());
+            sal_uInt32 nPointCount(0);
+
+            for(sal_uInt32 a(0); a < nPolyCount; a++)
+            {
+                nPointCount += rUnitPolyPolygon.getB2DPolygon(a).count();
+            }
+
+            if(!nPointCount)
+            {
+                OSL_FAIL("PolyPolygon object without geometry detected, this should not be created (!)");
+                basegfx::B2DPolygon aFallbackLine;
+                aFallbackLine.append(basegfx::B2DPoint(0.0, 0.0));
+                aFallbackLine.append(basegfx::B2DPoint(1000.0, 1000.0));
+                rUnitPolyPolygon = basegfx::B2DPolyPolygon(aFallbackLine);
+
+                nPolyCount = 1;
+            }
+
+            return nPolyCount;
+        }
+
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrPathObj::createViewIndependentPrimitive2DSequence() const
         {
             const SfxItemSet& rItemSet = GetPathObj().GetMergedItemSet();
@@ -54,24 +78,7 @@ namespace sdr
             // to current zoom so as objects relative position to grid
             // appears stable
             aUnitPolyPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
-            sal_uInt32 nPolyCount(aUnitPolyPolygon.count());
-            sal_uInt32 nPointCount(0);
-
-            for(sal_uInt32 a(0); a < nPolyCount; a++)
-            {
-                nPointCount += aUnitPolyPolygon.getB2DPolygon(a).count();
-            }
-
-            if(!nPointCount)
-            {
-                OSL_FAIL("PolyPolygon object without geometry detected, this should not be created (!)");
-                basegfx::B2DPolygon aFallbackLine;
-                aFallbackLine.append(basegfx::B2DPoint(0.0, 0.0));
-                aFallbackLine.append(basegfx::B2DPoint(1000.0, 1000.0));
-                aUnitPolyPolygon = basegfx::B2DPolyPolygon(aFallbackLine);
-
-                nPolyCount = 1;
-            }
+            sal_uInt32 nPolyCount(ensureGeometry(aUnitPolyPolygon));
 
             // prepare object transformation and unit polygon (direct model data)
             basegfx::B2DHomMatrix aObjectMatrix;
