@@ -50,7 +50,7 @@ typedef ::com::sun::star::uno::Sequence< OUString >  OUStringList;   // can be t
 
 // class SvtFilePicker ---------------------------------------------------
 
-typedef ::cppu::ImplHelper5 <   ::com::sun::star::ui::dialogs::XFilePicker3
+typedef ::cppu::ImplHelper6 <   ::com::sun::star::ui::dialogs::XFilePicker3
                             ,   ::com::sun::star::ui::dialogs::XFilePickerControlAccess
                             ,   ::com::sun::star::ui::dialogs::XFilePreview
                             ,   ::com::sun::star::lang::XServiceInfo
@@ -118,6 +118,7 @@ public:
     virtual void SAL_CALL           setDefaultName( const OUString& aName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL           setDisplayDirectory( const OUString& aDirectory ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual OUString SAL_CALL    getDisplayDirectory() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
