@@ -15,29 +15,6 @@ namespace svx
 {
 
 sfx2::StylePreviewRenderer* CommonStyleManager::CreateStylePreviewRenderer(
-                                            OutputDevice& rOutputDev, OUString const & rName,
-                                            SfxStyleFamily eFamily, long nMaxHeight)
-{
-    SfxStyleSheetBasePool* pPool = mrShell.GetStyleSheetPool();
-    if (!pPool)
-        return nullptr;
-
-    pPool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL);
-    SfxStyleSheetBase* pStyle = nullptr;
-    pStyle = pPool->First();
-
-    while (pStyle)
-    {
-        if (rName == pStyle->GetName())
-            return CreateStylePreviewRenderer(rOutputDev, pStyle, nMaxHeight);
-
-        pStyle = pPool->Next();
-    }
-
-    return nullptr;
-}
-
-sfx2::StylePreviewRenderer* CommonStyleManager::CreateStylePreviewRenderer(
                                             OutputDevice& rOutputDev, SfxStyleSheetBase* pStyle,
                                             long nMaxHeight)
 {

@@ -35,9 +35,7 @@ public:
     virtual ~StyleManager()
     {}
 
-    virtual StylePreviewRenderer* CreateStylePreviewRenderer(
-                    OutputDevice& rOutputDev, OUString const & rName,
-                    SfxStyleFamily eFamily, long nMaxHeight = 32) = 0;
+    SfxStyleSheetBase* Search(const OUString& rStyleName, SfxStyleFamily eFamily);
 
     virtual StylePreviewRenderer* CreateStylePreviewRenderer(
                     OutputDevice& rOutputDev, SfxStyleSheetBase* pStyle,

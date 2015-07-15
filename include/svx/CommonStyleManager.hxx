@@ -30,10 +30,6 @@ public:
     {}
 
     virtual sfx2::StylePreviewRenderer* CreateStylePreviewRenderer(
-                                            OutputDevice& rOutputDev, OUString const & rName,
-                                            SfxStyleFamily eFamily, long nMaxHeight = 32) SAL_OVERRIDE;
-
-    virtual sfx2::StylePreviewRenderer* CreateStylePreviewRenderer(
                                             OutputDevice& rOutputDev, SfxStyleSheetBase* pStyle,
                                             long nMaxHeight = 32) SAL_OVERRIDE;
 };
