@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_eab8cde7",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-15T12:49:40Z",
+      "side": 1,
+      "message": "I\u0027m getting build failure in officecfg, because those two commands are duplicated (commit 4739ec8b10b8a95e47d7036780eb953a7e11d245\n)",
+      "revId": "50e3b080495b88ccb8302b6e0e72df903e6c0782",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
