@@ -48,7 +48,6 @@ typedef ::com::sun::star::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // c
 typedef cppu::WeakComponentImplHelper<
         ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
         ::com::sun::star::ui::dialogs::XFilePreview,
-        ::com::sun::star::ui::dialogs::XFilePicker2,
         ::com::sun::star::ui::dialogs::XFilePicker3,
         ::com::sun::star::lang::XInitialization
         > SalGtkFilePicker_Base;

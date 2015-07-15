@@ -22,7 +22,7 @@
 
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/util/XCancellable.idl>
-#include <com/sun/star/ui/dialogs/XFilePicker.idl>
+#include <com/sun/star/ui/dialogs/XFilePicker2.idl>
 #include <com/sun/star/ui/dialogs/XFilePickerNotifier.idl>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.idl>
 #include <com/sun/star/ui/dialogs/XFilterManager.idl>
@@ -40,7 +40,7 @@ module com { module sun { module star { module ui { module dialogs {
 */
 published interface XFilePicker3
 {
-    interface XFilePicker;
+    interface XFilePicker2;
 
     /** Provides the ability to request notifications about changes.
     */
