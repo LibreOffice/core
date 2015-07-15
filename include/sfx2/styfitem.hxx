@@ -49,9 +49,7 @@ public:
                     SfxStyleFamilyItem( const ResId &rId );
                     ~SfxStyleFamilyItem();
 
-    const Bitmap&   GetBitmap() const { return aBitmap; }
     const OUString& GetText() const { return aText; }
-    const OUString& GetHelpText() const { return aHelpText; }
     SfxStyleFamily  GetFamily() const { return (SfxStyleFamily)nFamily; }
     const SfxStyleFilter& GetFilterList() const { return aFilterList; }
     const Image&    GetImage() const { return aImage; }

@@ -67,8 +67,6 @@ public:
 
     void                    SetValueSet( SvxZoomEnableFlags nValues ) { nValueSet = nValues; }
     SvxZoomEnableFlags      GetValueSet() const { return nValueSet; }
-    bool                    IsValueAllowed( SvxZoomEnableFlags nValue ) const
-                            { return bool( nValue & nValueSet ); }
 
     SvxZoomType             GetType() const { return eType; }
     void                    SetType( SvxZoomType eNewType ) { eType = eNewType; }

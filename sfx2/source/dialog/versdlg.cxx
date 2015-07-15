@@ -462,7 +462,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     }
     else if (pButton == m_pCmisButton)
     {
-        VclPtrInstance< SfxCmisVersionsDialog > pDlg(pViewFrame, false);
+        VclPtrInstance< SfxCmisVersionsDialog > pDlg(pViewFrame);
         pDlg->Execute();
     }
 
@@ -531,11 +531,10 @@ IMPL_LINK(SfxViewVersionDialog_Impl, ButtonHdl, Button*, pButton)
     return 0L;
 }
 
-SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame, bool bIsSaveVersionOnClose )
+SfxCmisVersionsDialog::SfxCmisVersionsDialog ( SfxViewFrame* pVwFrame )
     : SfxModalDialog(NULL, "VersionsCmisDialog", "sfx/ui/versionscmis.ui")
     , pViewFrame(pVwFrame)
     , m_pTable(NULL)
-    , m_bIsSaveVersionOnClose(bIsSaveVersionOnClose)
 {
     get(m_pOpenButton, "open");
     get(m_pViewButton, "show");

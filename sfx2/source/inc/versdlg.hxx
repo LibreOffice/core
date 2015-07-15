@@ -97,15 +97,11 @@ class SfxCmisVersionsDialog : public SfxModalDialog
     VclPtr<PushButton>                 m_pCompareButton;
     SfxViewFrame*               pViewFrame;
     SfxVersionTableDtor*        m_pTable;
-    bool                        m_bIsSaveVersionOnClose;
 
-    DECL_LINK(DClickHdl_Impl, void *);
-    DECL_LINK(SelectHdl_Impl, void *);
-    DECL_LINK(                  ButtonHdl_Impl, Button* );
     void                        LoadVersions();
 
 public:
-                                SfxCmisVersionsDialog ( SfxViewFrame* pFrame, bool );
+                                SfxCmisVersionsDialog ( SfxViewFrame* pFrame );
     virtual                     ~SfxCmisVersionsDialog ();
     virtual void                dispose() SAL_OVERRIDE;
 };

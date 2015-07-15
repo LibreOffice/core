@@ -626,7 +626,6 @@ class SfxCmisPropertiesPage : public SfxTabPage
 private:
     CmisPropertiesControl m_pPropertiesCtrl;
     using TabPage::DeactivatePage;
-    DECL_LINK(UpdateHdl, void *);
 
 protected:
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;

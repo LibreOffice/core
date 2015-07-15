@@ -263,10 +263,7 @@ sal_uInt16 SfxPopupMenuManager::Execute( const Point& rPos, vcl::Window* pWindow
 
 SfxMenuManager::SfxMenuManager( Menu* pMenuArg, SfxBindings &rBindings )
 :   pMenu(0),
-    pOldMenu(0),
-    pBindings(&rBindings),
-    pResMgr(NULL),
-    nType(0)
+    pBindings(&rBindings)
 {
     bAddClipboardFuncs = false;
     SfxVirtualMenu* pVMenu = new SfxVirtualMenu( pMenuArg, false, rBindings, true, true );

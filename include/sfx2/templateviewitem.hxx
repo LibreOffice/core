@@ -24,17 +24,7 @@ public:
 
     const OUString& getPath () const { return maPath; }
 
-    void setAuthor (const OUString &rAuthor) { maAuthor = rAuthor; }
-
-    const OUString& getAuthor () const { return maAuthor; }
-
-    void setKeywords (const OUString &rKeywords) { maKeywords = rKeywords; }
-
-    const OUString& getKeywords () const { return maKeywords; }
-
     void setSubTitle (const OUString &rTitle) { maSubTitle = rTitle; }
-
-    const OUString& getSubTitle () const { return maSubTitle; }
 
     virtual void calculateItemsPosition (const long nThumbnailHeight, const long nDisplayHeight,
                                          const long nPadding, sal_uInt32 nMaxTextLength,

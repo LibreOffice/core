@@ -64,8 +64,6 @@ class SfxPickList : public SfxListener
         static SfxPickList& Get();
         static void ensure() { Get(); }
 
-        sal_uInt32          GetAllowedMenuSize() { return m_nAllowedMenuSize; }
-        sal_uInt32          GetNumOfEntries() const { return m_aPicklistVector.size(); }
         void                CreateMenuEntries( Menu* pMenu );
         static void         ExecuteMenuEntry( sal_uInt16 nId );
         static void         ExecuteEntry( sal_uInt32 nIndex );

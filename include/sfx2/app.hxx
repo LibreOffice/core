@@ -219,8 +219,6 @@ public:
     SAL_DLLPRIVATE void         MiscState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void         PropExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         PropState_Impl(SfxItemSet &);
-    SAL_DLLPRIVATE void         INetExecute_Impl(SfxRequest &);
-    SAL_DLLPRIVATE void         INetState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void         OfaExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         OfaState_Impl(SfxItemSet &);
 

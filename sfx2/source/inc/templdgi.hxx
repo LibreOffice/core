@@ -231,10 +231,6 @@ protected:
     }
     virtual void LoadedFamilies()
     {}
-    void Update()
-    {
-        UpdateStyles_Impl(UPDATE_FAMILY_LIST);
-    }
 
     void InvalidateBindings();
     virtual void InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pItem ) = 0;
@@ -331,29 +327,6 @@ public:
     SfxObjectShell* GetObjectShell() const
     {
         return pCurObjShell;
-    }
-
-    inline bool CanEdit() const
-    {
-        return bCanEdit;
-    }
-    inline bool CanDel() const
-    {
-        return bCanDel;
-    }
-    inline bool CanNew() const
-    {
-        return bCanNew;
-    }
-
-    inline bool CanHide() const
-    {
-        return bCanHide;
-    }
-
-    inline bool CanShow() const
-    {
-        return bCanShow;
     }
 
     // normally for derivates from SvTreeListBoxes, but in this case the dialog handles context menus

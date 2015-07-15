@@ -41,8 +41,6 @@ private:
 
     SAL_DLLPRIVATE void operator =(SfxPrinter &) SAL_DELETED_FUNCTION;
 
-    SAL_DLLPRIVATE void UpdateFonts_Impl();
-
 public:
                             SfxPrinter( SfxItemSet *pTheOptions );
                             SfxPrinter( SfxItemSet *pTheOptions,
@@ -58,14 +56,10 @@ public:
     static VclPtr<SfxPrinter> Create( SvStream &rStream, SfxItemSet *pOptions );
     SvStream&               Store( SvStream &rStream ) const;
 
-    const JobSetup&         GetOrigJobSetup() const { return aOrigJobSetup; }
-    void                    SetOrigJobSetup( const JobSetup &rNewJobSetup );
-
     const SfxItemSet&       GetOptions() const { return *pOptions; }
     void                    SetOptions( const SfxItemSet &rNewOptions );
 
     bool                    IsKnown() const { return bKnown; }
-    bool                    IsOriginal() const { return bKnown; }
 };
 
 #endif

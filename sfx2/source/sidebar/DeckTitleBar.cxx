@@ -92,11 +92,6 @@ sidebar::Paint DeckTitleBar::GetBackgroundPaint()
     return Theme::GetPaint(Theme::Paint_DeckTitleBarBackground);
 }
 
-Color DeckTitleBar::GetTextColor()
-{
-    return Theme::GetColor(Theme::Color_DeckTitleFont);
-}
-
 void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 {
     if (nItemIndex == mnCloserItemIndex && maCloserAction)

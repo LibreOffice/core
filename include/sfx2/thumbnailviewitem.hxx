@@ -119,10 +119,6 @@ public:
                                          const long nPadding, sal_uInt32 nMaxTextLength,
                                          const ThumbnailItemAttributes *pAttrs);
 
-    const Point& getTextPos () const { return maTextPos; }
-
-    const Point& getPrev1Pos () const { return maPrev1Pos; }
-
     void setSelectClickHdl (const Link<> &link);
 
     virtual void Paint (drawinglayer::processor2d::BaseProcessor2D *pProcessor,

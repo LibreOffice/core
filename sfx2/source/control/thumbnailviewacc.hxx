@@ -185,8 +185,6 @@ public:
 
     void    ParentDestroyed();
 
-    bool    HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
-
     static ThumbnailViewItemAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
 
 public:

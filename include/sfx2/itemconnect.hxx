@@ -180,9 +180,6 @@ class SFX2_DLLPUBLIC ItemConnectionBase
 public:
     virtual             ~ItemConnectionBase();
 
-    /** Returns the flags passed in the constructor. */
-    inline ItemConnFlags GetFlags() const { return mnFlags; }
-
     /** Returns true if this connection is active. */
     bool                IsActive() const;
 

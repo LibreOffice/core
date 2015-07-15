@@ -219,7 +219,6 @@ public:
     inline sal_Int32    GetPropType() const { return mnPropType; }
 
 protected:
-    inline void         SetPropId( sal_Int32 nPropId ) { mnPropId = nPropId; }
     inline void         SetPropType( sal_Int32 nPropType ) { mnPropType = nPropType; }
 
 private:

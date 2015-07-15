@@ -71,7 +71,6 @@ public:
 
     bool                    QueryClose();
     virtual void            FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
-    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > ForgetFrame();
 };
 
 #endif

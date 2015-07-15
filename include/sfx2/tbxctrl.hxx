@@ -343,7 +343,6 @@ protected:
     virtual void            Click() SAL_OVERRIDE;
     virtual void            Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
-                            DECL_LINK( Activate, Menu * );
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
                             SfxAddonsToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );

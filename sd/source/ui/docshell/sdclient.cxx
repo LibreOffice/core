@@ -189,19 +189,6 @@ void Client::ViewChanged()
     }
 }
 
-/**
- * Scroll object into visible area.
- */
-void Client::MakeVisible()
-{
-    if (mpViewShell->ISA(DrawViewShell))
-    {
-        static_cast<DrawViewShell*>(mpViewShell)->MakeVisible(
-            pSdrOle2Obj->GetLogicRect(),
-            *mpViewShell->GetActiveWindow());
-    }
-}
-
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

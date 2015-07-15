@@ -207,16 +207,10 @@ public:
 
     sal_uInt16 getNextItemId () const;
 
-    long GetItemWidth() const { return mnItemWidth; }
-
-    long GetItemHeight() const { return mnItemHeight; }
-
     void setItemMaxTextLength (sal_uInt32 nLength);
 
     void setItemDimensions (long ItemWidth, long ThumbnailHeight,
                             long DisplayHeight, int itemPadding);
-
-    sal_uInt16 GetFirstLine() const { return mnFirstLine; }
 
     void SelectItem( sal_uInt16 nItemId );
 
@@ -290,7 +284,6 @@ protected:
 
     SFX2_DLLPRIVATE void         ImplInitScrollBar();
     SFX2_DLLPRIVATE void         ImplDeleteItems();
-    SFX2_DLLPRIVATE void         ImplDraw();
     SFX2_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint ) const;
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetItem( size_t nPos );
     SFX2_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;

@@ -92,7 +92,6 @@ friend class SfxViewFrame;
 
     SAL_DLLPRIVATE void Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, bool bRecord );
     SAL_DLLPRIVATE void _Update_Impl( bool,bool,bool,SfxWorkWindow*);
-    SAL_DLLPRIVATE void CollectTools_Impl(SfxWorkWindow*);
 
 protected:
 friend class SfxBindings;
@@ -196,7 +195,6 @@ public:
     SAL_DLLPRIVATE void DoActivate_Impl( bool bMDI, SfxViewFrame* pOld );
     SAL_DLLPRIVATE void DoDeactivate_Impl( bool bMDI, SfxViewFrame* pNew );
     SAL_DLLPRIVATE void InvalidateBindings_Impl(bool);
-    SAL_DLLPRIVATE sal_uInt16 GetNextToolBox_Impl( sal_uInt16 nPos, sal_uInt16 nType, OUString *pStr );
 };
 
 #endif

@@ -168,11 +168,8 @@ public:
     css::uno::Reference< css::embed::XStorage > GetStorage( bool bCreateTempIfNo = true );
     css::uno::Reference< css::embed::XStorage > GetOutputStorage();
     void                ResetError();
-    SAL_WARN_UNUSED_RESULT bool  UsesCache() const;
     SAL_WARN_UNUSED_RESULT bool  IsExpired() const;
     void                SetName( const OUString& rName, bool bSetOrigURL = false );
-    SAL_WARN_UNUSED_RESULT bool  IsAllowedForExternalBrowser() const;
-    SAL_WARN_UNUSED_RESULT long GetFileVersion() const;
 
     const css::uno::Sequence < css::util::RevisionTag >&
                         GetVersionList( bool _bNoReload = false );
@@ -206,7 +203,6 @@ public:
     // the storage that will be returned by the medium on GetStorage request
     SAL_DLLPRIVATE void SetStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xNewStorage );
 
-    SAL_DLLPRIVATE css::uno::Reference< css::io::XInputStream > GetInputStream_Impl();
     SAL_DLLPRIVATE void CloseAndReleaseStreams_Impl();
     SAL_DLLPRIVATE sal_uInt16 AddVersion_Impl( css::util::RevisionTag& rVersion );
     SAL_DLLPRIVATE bool TransferVersionList_Impl( SfxMedium& rMedium );
@@ -215,9 +211,6 @@ public:
 
     SAL_DLLPRIVATE void SetExpired_Impl( const DateTime& rDateTime );
     SAL_DLLPRIVATE SvKeyValueIterator* GetHeaderAttributes_Impl();
-
-    // Diese Protokolle liefern MIME Typen
-    SAL_DLLPRIVATE bool SupportsMIME_Impl() const;
 
     SAL_DLLPRIVATE void Init_Impl();
     SAL_DLLPRIVATE void ForceSynchronStream_Impl( bool bSynchron );
@@ -234,7 +227,6 @@ public:
     SAL_DLLPRIVATE const OUString & GetLongName() const;
     SAL_DLLPRIVATE bool IsPreview_Impl();
     SAL_DLLPRIVATE void ClearBackup_Impl();
-    SAL_DLLPRIVATE void Done_Impl( ErrCode );
     SAL_DLLPRIVATE void SetPhysicalName_Impl(const OUString& rName);
     SAL_DLLPRIVATE void CanDisposeStorage_Impl( bool bDisposeStorage );
     SAL_DLLPRIVATE bool WillDisposeStorageOnClose_Impl();

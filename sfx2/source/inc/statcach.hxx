@@ -92,7 +92,6 @@ public:
     void                    Dispatch( const SfxItemSet* pSet, bool bForceSynchron = false );
     bool                    IsControllerDirty() const
                             { return bCtrlDirty; }
-    SfxPoolItem*            GetItem() const { return pLastItem; }
     void                    ClearCache();
 
     void                    SetState( SfxItemState, const SfxPoolItem*, bool bMaybeDirty=false );

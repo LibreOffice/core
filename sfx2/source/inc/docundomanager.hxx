@@ -54,13 +54,9 @@ protected:
     void acquireModel()  { m_rModel.acquire(); }
     void releaseModel()  { m_rModel.release(); }
 
-    bool isDisposed() const {   return m_rModel.IsDisposed();   }
-
 protected:
     const SfxBaseModel& getBaseModel() const { return m_rModel; }
           SfxBaseModel& getBaseModel()       { return m_rModel; }
-
-          ::osl::Mutex&  getMutex()          { return m_rModel.getMutex(); }
 
 private:
     SfxBaseModel&   m_rModel;
@@ -89,11 +85,6 @@ public:
     }
     ~SfxModelGuard()
     {
-    }
-
-    void reset()
-    {
-        m_aGuard.reset();
     }
 
     void clear()

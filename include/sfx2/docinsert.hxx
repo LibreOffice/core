@@ -58,9 +58,6 @@ public:
     void                    StartExecuteModal( const Link<>& _rDialogClosedLink );
     SfxMedium*              CreateMedium();
     SfxMediumList*          CreateMediumList();
-
-    inline ErrCode          GetError() const { return m_nError; }
-    inline OUString         GetFilter() const { return m_sFilter; }
 };
 
 } // namespace sfx2

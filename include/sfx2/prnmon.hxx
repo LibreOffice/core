@@ -47,11 +47,9 @@ public:
     virtual                 ~SfxPrintOptionsDialog();
     virtual void            dispose() SAL_OVERRIDE;
 
-    bool                    Construct();
     virtual short           Execute() SAL_OVERRIDE;
     virtual bool            Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    SfxTabPage*             GetTabPage() const { return pPage; }
     const SfxItemSet&       GetOptions() const { return *pOptions; }
     void                    DisableHelp();
 };
