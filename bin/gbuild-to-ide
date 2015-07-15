@@ -1301,16 +1301,16 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             includepath_list = []
             
             # predefine include paths with paths to generated headers
-            generated_headers = ['./workdir/UnoApiHeadersTarget/offapi/normal',
-                                './workdir/UnoApiHeadersTarget/udkapi/normal',
-                                './workdir/UnoApiHeadersTarget/bridgetest/normal',
-                                './workdir/UnoApiHeadersTarget/oovbaapi/normal',
-                                './workdir/UnoApiHeadersTarget/scaddins/comprehensive',
-                                './workdir/UnoApiHeadersTarget/cppuhelper/comprehensive',
-                            ]
-            for generated_header in generated_headers:
-                header_path = lopath(os.path.join(self.base_folder, generated_header))
-                includepath_list.append(header_path)
+            # generated_headers = ['./workdir/UnoApiHeadersTarget/offapi/normal',
+            #                    './workdir/UnoApiHeadersTarget/udkapi/normal',
+            #                    './workdir/UnoApiHeadersTarget/bridgetest/normal',
+            #                    './workdir/UnoApiHeadersTarget/oovbaapi/normal',
+            #                    './workdir/UnoApiHeadersTarget/scaddins/comprehensive',
+            #                    './workdir/UnoApiHeadersTarget/cppuhelper/comprehensive',
+            #                ]
+            # for generated_header in generated_headers:
+            #    header_path = lopath(os.path.join(self.base_folder, generated_header))
+            #    includepath_list.append(header_path)
 
             for file_ in lib.cxxobjects:
                 # the file has no extension : search it
@@ -1323,7 +1323,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                 ext = self.get_header_extension(file_)
                 if ext:
                     headers_list.append(lopath(file_+ext))
-            
+             
             # List all headers
             for hdir in lib.include:
                 # except from "workdir" folder
@@ -1332,7 +1332,11 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                         if hf.endswith(('.h', '.hxx', '.hpp', '.hrc')):
                             hf_lopath = lopath(os.path.join(hdir, hf))
                             headers_list.append(hf_lopath)
-            
+                else:
+                    # for 'workdir' subfolders, just add them as include paths
+                    hf_lopath = lopath(hdir)
+                    includepath_list.append(hf_lopath)
+
             # We also need to have a list of include paths
             for header in headers_list:
                 header_path = os.path.dirname(header)
