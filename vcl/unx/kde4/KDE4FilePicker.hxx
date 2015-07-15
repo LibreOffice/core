@@ -23,7 +23,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -42,8 +41,7 @@ class QWidget;
 class QLayout;
 
 typedef ::cppu::WeakComponentImplHelper
-<   ::com::sun::star::ui::dialogs::XFilePicker2
-,   ::com::sun::star::ui::dialogs::XFilePicker3
+<   ::com::sun::star::ui::dialogs::XFilePicker3
 ,   ::com::sun::star::ui::dialogs::XFilePickerControlAccess
 // TODO ::com::sun::star::ui::dialogs::XFilePreview
 ,   ::com::sun::star::lang::XInitialization

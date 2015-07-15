@@ -256,12 +256,7 @@ OUString SAL_CALL VistaFilePicker::getDisplayDirectory()
 css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getFiles()
     throw(css::uno::RuntimeException)
 {
-    RequestRef rRequest(new Request());
-    rRequest->setRequest (VistaFilePickerImpl::E_GET_SELECTED_FILES);
-
-    m_aAsyncExecute.triggerRequestThreadAware(rRequest, AsyncRequests::BLOCKED);
-
-    css::uno::Sequence< OUString > lFiles = rRequest->getArgumentOrDefault(PROP_SELECTED_FILES, css::uno::Sequence< OUString >());
+    css::uno::Sequence< OUString > lFiles = getSelectedFiles();
     // multiselection doesn't really work
     // so just retrieve the first url
     if (lFiles.getLength() > 1)
@@ -272,7 +267,7 @@ css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getFiles()
 
 
 css::uno::Sequence< OUString > SAL_CALL VistaFilePicker::getSelectedFiles()
-    throw(css::uno::RuntimeException)
+    throw(css::uno::RuntimeException, std::exception)
 {
     RequestRef rRequest(new Request());
     rRequest->setRequest (VistaFilePickerImpl::E_GET_SELECTED_FILES);
