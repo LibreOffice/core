@@ -1172,18 +1172,35 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
 
 void OS2METReader::ReadPolygons()
 {
-    sal_uInt32 i,j,nNumPolys, nNumPoints;
     tools::PolyPolygon aPolyPoly;
     Polygon aPoly;
     Point aPoint;
-    sal_uInt8 nFlags;
 
-    pOS2MET->ReadUChar( nFlags ).ReadUInt32( nNumPolys );
-    for (i=0; i<nNumPolys; i++) {
-        pOS2MET->ReadUInt32( nNumPoints );
+    sal_uInt8 nFlags(0);
+    sal_uInt32 nNumPolys(0);
+    pOS2MET->ReadUChar(nFlags).ReadUInt32(nNumPolys);
+
+    if (nNumPolys > SAL_MAX_UINT16)
+    {
+        pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
+        ErrorCode=11;
+        return;
+    }
+
+    for (sal_uInt32 i=0; i<nNumPolys; ++i)
+    {
+        sal_uInt32 nNumPoints(0);
+        pOS2MET->ReadUInt32(nNumPoints);
+        if (nNumPoints > (i == 0) ? SAL_MAX_UINT16-1 : SAL_MAX_UINT16)
+        {
+            pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
+            ErrorCode=11;
+            return;
+        }
         if (i==0) nNumPoints++;
         aPoly.SetSize((short)nNumPoints);
-        for (j=0; j<nNumPoints; j++) {
+        for (sal_uInt32 j=0; j<nNumPoints; ++j)
+        {
             if (i==0 && j==0) aPoint=aAttr.aCurPos;
             else aPoint=ReadPoint();
             aPoly.SetPoint(aPoint,(short)j);
