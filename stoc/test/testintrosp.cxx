@@ -183,7 +183,7 @@ class ImplPropertySetInfo : public ImplPropertySetInfoHelper
       Reference< XMultiServiceFactory > mxMgr;
 
 public:
-    ImplPropertySetInfo( const Reference< XMultiServiceFactory > & xMgr )
+    explicit ImplPropertySetInfo( const Reference< XMultiServiceFactory > & xMgr )
         : mxMgr( xMgr ) {}
 
     // Methods of XPropertySetInfo
@@ -303,7 +303,7 @@ class ImplIntroTest : public ImplIntroTestHelper
     void Init();
 
 public:
-    ImplIntroTest( const Reference< XMultiServiceFactory > & xMgr )
+    explicit ImplIntroTest( const Reference< XMultiServiceFactory > & xMgr )
         : mxMgr( xMgr )
     {
         Init();

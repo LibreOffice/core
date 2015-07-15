@@ -60,7 +60,7 @@ class OFSStreamContainer : public cppu::OWeakObject,
     ::cppu::OTypeCollection* m_pTypeCollection;
 
 public:
-    OFSStreamContainer( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xStream );
+    explicit OFSStreamContainer( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream >& xStream );
     virtual ~OFSStreamContainer();
 
     // XInterface

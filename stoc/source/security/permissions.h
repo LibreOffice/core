@@ -51,7 +51,7 @@ public:
 class AllPermission : public Permission
 {
 public:
-    inline AllPermission(
+    explicit AllPermission(
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() )
         : Permission( ALL, next )
         {}
@@ -70,7 +70,7 @@ public:
     inline PermissionCollection( PermissionCollection const & collection )
         : m_head( collection.m_head )
         {}
-    inline PermissionCollection( ::rtl::Reference< Permission > const & single )
+    explicit PermissionCollection( ::rtl::Reference< Permission > const & single )
         : m_head( single )
         {}
     PermissionCollection(

@@ -37,7 +37,7 @@ struct SvListView::Impl
     sal_uLong   m_nSelectionCount;
     bool        m_bVisPositionsValid;
 
-    Impl(SvListView & rThis)
+    explicit Impl(SvListView & rThis)
         : m_rThis(rThis)
         , m_nVisibleCount(0)
         , m_nSelectionCount(0)

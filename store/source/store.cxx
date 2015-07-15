@@ -41,7 +41,7 @@ template<class store_handle_type>
 class OStoreHandle : public rtl::Reference<store_handle_type>
 {
 public:
-    OStoreHandle (store_handle_type * pHandle)
+    explicit OStoreHandle (store_handle_type * pHandle)
         : rtl::Reference<store_handle_type> (pHandle)
     {}
 

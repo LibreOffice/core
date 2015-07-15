@@ -63,7 +63,7 @@ struct ComboBox::Impl
     Link<>              m_DoubleClickHdl;
     boost::signals2::scoped_connection m_AutocompleteConnection;
 
-    Impl(ComboBox & rThis)
+    explicit Impl(ComboBox & rThis)
         : m_rThis(rThis)
         , m_nDDHeight(0)
         , m_cMultiSep(0)

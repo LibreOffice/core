@@ -211,7 +211,7 @@ class SwDataSourceRemovedListener : public cppu::WeakImplHelper<sdb::XDatabaseRe
     SwDBManager* m_pDBManager;
 
 public:
-    SwDataSourceRemovedListener(SwDBManager& rDBManager);
+    explicit SwDataSourceRemovedListener(SwDBManager& rDBManager);
     virtual ~SwDataSourceRemovedListener();
     virtual void SAL_CALL registeredDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL revokedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;

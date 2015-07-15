@@ -71,7 +71,7 @@ protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
-    FilePolicy( Reference< XComponentContext > const & xComponentContext );
+    explicit FilePolicy( Reference< XComponentContext > const & xComponentContext );
     virtual ~FilePolicy();
 
     // XPolicy impl

@@ -46,7 +46,7 @@ class OFSInputStreamContainer : public cppu::WeakImplHelper2 < ::com::sun::star:
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
 
 public:
-    OFSInputStreamContainer( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xStream );
+    explicit OFSInputStreamContainer( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >& xStream );
 
     virtual ~OFSInputStreamContainer();
 

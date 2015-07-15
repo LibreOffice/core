@@ -51,7 +51,7 @@ public:
     mutable uno::Sequence< beans::Property > m_aPropSeq;
 
     SfxItemPropertyMap_Impl(){}
-    SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl* pSource );
+    explicit SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl* pSource );
 };
 
 SfxItemPropertyMap_Impl::SfxItemPropertyMap_Impl( const SfxItemPropertyMap_Impl* pSource )

@@ -154,7 +154,7 @@ typedef std::unordered_set
 class ServiceEnumeration_Impl : public WeakImplHelper1< XEnumeration >
 {
 public:
-    ServiceEnumeration_Impl( const Sequence< Reference<XInterface > > & rFactories )
+    explicit ServiceEnumeration_Impl( const Sequence< Reference<XInterface > > & rFactories )
         : aFactories( rFactories )
         , nIt( 0 )
         {}
@@ -195,7 +195,7 @@ class PropertySetInfo_Impl : public WeakImplHelper1< beans::XPropertySetInfo >
     Sequence< beans::Property > m_properties;
 
 public:
-    inline PropertySetInfo_Impl( Sequence< beans::Property > const & properties )
+    explicit PropertySetInfo_Impl( Sequence< beans::Property > const & properties )
         : m_properties( properties )
         {}
 
@@ -246,7 +246,7 @@ sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
 class ImplementationEnumeration_Impl : public WeakImplHelper1< XEnumeration >
 {
 public:
-    ImplementationEnumeration_Impl( const HashSet_Ref & rImplementationMap )
+    explicit ImplementationEnumeration_Impl( const HashSet_Ref & rImplementationMap )
         : aImplementationMap( rImplementationMap )
         , aIt( aImplementationMap.begin() )
         {}
@@ -320,7 +320,7 @@ private:
     WeakReference<XSet > xSMgr;
 
 public:
-    OServiceManager_Listener( const Reference<XSet > & rSMgr )
+    explicit OServiceManager_Listener( const Reference<XSet > & rSMgr )
         : xSMgr( rSMgr )
         {}
 
@@ -369,7 +369,7 @@ class OServiceManager
     , public t_OServiceManager_impl
 {
 public:
-    OServiceManager( Reference< XComponentContext > const & xContext );
+    explicit OServiceManager( Reference< XComponentContext > const & xContext );
     virtual ~OServiceManager();
 
     // XInitialization
@@ -512,7 +512,7 @@ protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
-    OServiceManagerWrapper(
+    explicit OServiceManagerWrapper(
         Reference< XComponentContext > const & xContext );
     virtual ~OServiceManagerWrapper();
 
@@ -1308,7 +1308,7 @@ void OServiceManager::remove( const Any & Element )
 class ORegistryServiceManager : public OServiceManager
 {
 public:
-    ORegistryServiceManager( Reference< XComponentContext > const & xContext );
+    explicit ORegistryServiceManager( Reference< XComponentContext > const & xContext );
     virtual ~ORegistryServiceManager();
 
     // XInitialization

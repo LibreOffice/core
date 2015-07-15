@@ -46,7 +46,7 @@ namespace svgio
 
         protected:
         public:
-            XSvgParser(
+            explicit XSvgParser(
                 uno::Reference< uno::XComponentContext > const & context);
             virtual ~XSvgParser();
 
