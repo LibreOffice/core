@@ -117,7 +117,7 @@ class ImpChainLinkProperties
         INIT_CHAIN_PROP(CursorEvent, CursorChainingEvent::NULL_EVENT)
         INIT_CHAIN_PROP(PreChainingSel, ESelection(0,0,0,0));
         INIT_CHAIN_PROP(PostChainingSel, ESelection(0,0,0,0));
-        INIT_CHAIN_PROP(IsPartOfLastParaInNextLink, false)
+        INIT_CHAIN_PROP(IsPartOfLastParaInNextLink, false) // XXX: Should come from file
     }
 
     private:
