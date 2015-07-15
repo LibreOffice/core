@@ -83,6 +83,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles(  )
         throw( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles(  )
+        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     // XFilterManager functions
 
     virtual void SAL_CALL appendFilter( const OUString& aTitle, const OUString& aFilter )
