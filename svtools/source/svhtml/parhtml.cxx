@@ -2092,9 +2092,10 @@ rtl_TextEncoding HTMLParser::GetEncodingByMIME( const OUString& rMime )
     INetContentTypeParameterList aParameters;
     if (INetContentTypes::parse(rMime, sType, sSubType, &aParameters))
     {
-        const INetContentTypeParameter * pCharset = aParameters.find("charset");
-        if (pCharset != 0)
+        auto const iter = aParameters.find("charset");
+        if (iter != aParameters.end())
         {
+            const INetContentTypeParameter * pCharset = &iter->second;
             OString sValue(OUStringToOString(pCharset->m_sValue, RTL_TEXTENCODING_ASCII_US));
             return GetExtendedCompatibilityTextEncoding( rtl_getTextEncodingFromMimeCharset( sValue.getStr() ) );
         }

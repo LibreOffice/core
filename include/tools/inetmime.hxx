@@ -19,8 +19,6 @@
 #ifndef INCLUDED_TOOLS_INETMIME_HXX
 #define INCLUDED_TOOLS_INETMIME_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <tools/toolsdllapi.h>
 #include <rtl/alloc.h>
 #include <rtl/character.hxx>
@@ -31,10 +29,80 @@
 #include <tools/debug.hxx>
 #include <tools/errcode.hxx>
 
+#include <unordered_map>
+
 class DateTime;
-class INetContentTypeParameterList;
 class INetMIMECharsetList_Impl;
 class INetMIMEOutputSink;
+
+struct INetContentTypeParameter
+{
+    /** The name of the attribute, in US-ASCII encoding and converted to lower
+        case.  If a parameter value is split as described in RFC 2231, there
+        will only be one item for the complete parameter, with the attribute
+        name lacking any section suffix.
+     */
+    const OString m_sAttribute;
+
+    /** The optional character set specification (see RFC 2231), in US-ASCII
+        encoding and converted to lower case.
+     */
+    const OString m_sCharset;
+
+    /** The optional language specification (see RFC 2231), in US-ASCII
+        encoding and converted to lower case.
+     */
+    const OString m_sLanguage;
+
+    /** The attribute value.  If the value is a quoted-string, it is
+        'unpacked.'  If a character set is specified, and the value can be
+        converted to Unicode, this is done.  Also, if no character set is
+        specified, it is first tried to convert the value from UTF-8 encoding
+        to Unicode, and if that doesn't work (because the value is not in
+        UTF-8 encoding), it is converted from ISO-8859-1 encoding to Unicode
+        (which will always work).  But if a character set is specified and the
+        value cannot be converted from that character set to Unicode, special
+        action is taken to produce a value that can possibly be transformed
+        back into its original form:  Any 8-bit character from a non-encoded
+        part of the original value is directly converted to Unicode
+        (effectively handling it as if it was ISO-8859-1 encoded), and any
+        8-bit character from an encoded part of the original value is mapped
+        to the range U+F800..U+F8FF at the top of the Corporate Use Subarea
+        within Unicode's Private Use Area (effectively adding 0xF800 to the
+        character's numeric value).
+     */
+    const OUString m_sValue;
+
+    /** This is true if the value is successfully converted to Unicode, and
+        false if the value is a special mixture of ISO-LATIN-1 characters and
+        characters from Unicode's Private Use Area.
+     */
+    const bool m_bConverted;
+
+    INetContentTypeParameter(const OString& rTheAttribute,
+        const OString& rTheCharset, const OString& rTheLanguage,
+        const OUString& rTheValue, bool bTheConverted)
+    : m_sAttribute(rTheAttribute)
+    , m_sCharset(rTheCharset)
+    , m_sLanguage(rTheLanguage)
+    , m_sValue(rTheValue)
+    , m_bConverted(bTheConverted)
+    {
+    }
+};
+
+struct OString_equalsIgnoreAsciiCase
+{
+    bool operator()(const OString& r1, const OString& r2) const
+    {
+        return r1.equalsIgnoreAsciiCase(r2);
+    }
+};
+
+// the key is the m_sAttribute again
+typedef std::unordered_map<OString, INetContentTypeParameter, OStringHash,
+            OString_equalsIgnoreAsciiCase> INetContentTypeParameterList;
+
 
 class TOOLS_DLLPUBLIC INetMIME
 {
@@ -934,80 +1002,6 @@ inline bool INetMIMEEncodedWordOutputSink::flush()
     finish(true);
     return m_ePrevCoding != CODING_NONE;
 }
-
-struct INetContentTypeParameter
-{
-    /** The name of the attribute, in US-ASCII encoding and converted to lower
-        case.  If a parameter value is split as described in RFC 2231, there
-        will only be one item for the complete parameter, with the attribute
-        name lacking any section suffix.
-     */
-    const OString m_sAttribute;
-
-    /** The optional character set specification (see RFC 2231), in US-ASCII
-        encoding and converted to lower case.
-     */
-    const OString m_sCharset;
-
-    /** The optional language specification (see RFC 2231), in US-ASCII
-        encoding and converted to lower case.
-     */
-    const OString m_sLanguage;
-
-    /** The attribute value.  If the value is a quoted-string, it is
-        'unpacked.'  If a character set is specified, and the value can be
-        converted to Unicode, this is done.  Also, if no character set is
-        specified, it is first tried to convert the value from UTF-8 encoding
-        to Unicode, and if that doesn't work (because the value is not in
-        UTF-8 encoding), it is converted from ISO-8859-1 encoding to Unicode
-        (which will always work).  But if a character set is specified and the
-        value cannot be converted from that character set to Unicode, special
-        action is taken to produce a value that can possibly be transformed
-        back into its original form:  Any 8-bit character from a non-encoded
-        part of the original value is directly converted to Unicode
-        (effectively handling it as if it was ISO-8859-1 encoded), and any
-        8-bit character from an encoded part of the original value is mapped
-        to the range U+F800..U+F8FF at the top of the Corporate Use Subarea
-        within Unicode's Private Use Area (effectively adding 0xF800 to the
-        character's numeric value).
-     */
-    const OUString m_sValue;
-
-    /** This is true if the value is successfully converted to Unicode, and
-        false if the value is a special mixture of ISO-LATIN-1 characters and
-        characters from Unicode's Private Use Area.
-     */
-    const bool m_bConverted;
-
-    INetContentTypeParameter(const OString& rTheAttribute,
-        const OString& rTheCharset, const OString& rTheLanguage,
-        const OUString& rTheValue, bool bTheConverted)
-    : m_sAttribute(rTheAttribute)
-    , m_sCharset(rTheCharset)
-    , m_sLanguage(rTheLanguage)
-    , m_sValue(rTheValue)
-    , m_bConverted(bTheConverted)
-    {
-    }
-};
-
-class TOOLS_DLLPUBLIC INetContentTypeParameterList
-{
-public:
-
-    void Clear();
-
-    void Append(INetContentTypeParameter *pParameter)
-    {
-        maEntries.push_back(pParameter);
-    }
-
-    const INetContentTypeParameter * find(const OString& rAttribute) const;
-
-private:
-
-    boost::ptr_vector<INetContentTypeParameter> maEntries;
-};
 
 #endif
 
