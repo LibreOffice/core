@@ -335,6 +335,12 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getProcessInfo(
     @param strFile [out] the string that receives the executable file path.
     @return osl_Process_E_None or does not return.
     @see osl_executeProcess
+
+    Ideally this will return the true executable file path as a file:
+    URL, but actually in case something else happens to have been
+    passed as argv[0] to osl_setCommandArgs(), it will return that
+    either as a file URL, or as such in case it doesn't look like an
+    absolute pathname.
 */
 SAL_DLLPUBLIC oslProcessError SAL_CALL osl_getExecutableFile(
         rtl_uString **strFile);
