@@ -1,0 +1,12 @@
+diff -ru boost.orig/boost/property_tree/detail/json_parser/narrow_encoding.hpp boost/boost/property_tree/detail/json_parser/narrow_encoding.hpp
+--- foo/misc/boost.orig/boost/property_tree/detail/json_parser/narrow_encoding.hpp	2015-07-07 14:20:48.000000000 +0200
++++ foo/misc/boost/boost/property_tree/detail/json_parser/narrow_encoding.hpp	2015-07-19 11:55:28.268931551 +0200
+@@ -68,7 +68,7 @@
+         }
+ 
+         char to_internal_trivial(char c) const {
+-            assert(c <= 0x7f);
++	  //assert(c <= 0x7f);
+             return c;
+         }
+ 

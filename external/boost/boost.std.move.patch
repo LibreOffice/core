@@ -1,15 +1,16 @@
---- foo/foo/foo/boost/config/compiler/clang.hpp
-+++ foo/foo/foo/boost/config/compiler/clang.hpp
+diff -ru boost.orig/boost/config/compiler/clang.hpp boost/boost/config/compiler/clang.hpp
+--- foo/misc/boost.orig/boost/config/compiler/clang.hpp	2015-05-07 19:11:52.000000000 +0200
++++ foo/misc/boost/boost/config/compiler/clang.hpp	2015-07-18 22:40:56.304941957 +0200
 @@ -10,6 +10,8 @@
  
  #define BOOST_HAS_PRAGMA_ONCE
  
 +#include <utility>
 +
- #if !__has_feature(cxx_exceptions) && !defined(BOOST_NO_EXCEPTIONS)
- #  define BOOST_NO_EXCEPTIONS
- #endif
-@@ -128,7 +130,7 @@
+ // Detecting `-fms-extension` compiler flag assuming that _MSC_VER defined when that flag is used.
+ #if defined (_MSC_VER) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 4))
+ #   define BOOST_HAS_PRAGMA_DETECT_MISMATCH
+@@ -161,7 +163,7 @@
  #  define BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
  #endif
  

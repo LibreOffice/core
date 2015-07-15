@@ -1,0 +1,14 @@
+diff -ru boost.orig/boost/move/unique_ptr.hpp boost/boost/move/unique_ptr.hpp
+--- foo/misc/boost.orig/boost/move/unique_ptr.hpp	2015-07-19 13:02:01.788886667 +0200
++++ foo/misc/boost/boost/move/unique_ptr.hpp	2015-07-19 13:02:34.385886300 +0200
+@@ -105,8 +105,8 @@
+    {}
+ 
+    template <class U>
+-   unique_ptr_data(P p, BOOST_FWD_REF(U) d) BOOST_NOEXCEPT
+-      : m_p(p), d(::boost::forward<U>(d))
++   unique_ptr_data(P p, BOOST_FWD_REF(U) d_) BOOST_NOEXCEPT
++      : m_p(p), d(::boost::forward<U>(d_))
+    {}
+ 
+    del_ref deleter()       { return d; }

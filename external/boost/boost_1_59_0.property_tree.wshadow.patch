@@ -1,0 +1,83 @@
+diff -ru boost.orig/boost/property_tree/detail/json_parser/parser.hpp boost/boost/property_tree/detail/json_parser/parser.hpp
+--- foo/misc/boost.orig/boost/property_tree/detail/json_parser/parser.hpp	2015-07-07 14:20:48.000000000 +0200
++++ foo/misc/boost/boost/property_tree/detail/json_parser/parser.hpp	2015-07-19 12:36:35.481903821 +0200
+@@ -22,12 +22,12 @@
+             code_unit;
+         typedef bool (Encoding::*encoding_predicate)(code_unit c) const;
+ 
+-        explicit source(Encoding& encoding) : encoding(encoding) {}
++        explicit source(Encoding& encoding_) : encoding(encoding_) {}
+ 
+         template <typename Range>
+-        void set_input(const std::string& filename, const Range& r)
++        void set_input(const std::string& filename_, const Range& r)
+         {
+-            this->filename = filename;
++            this->filename = filename_;
+             cur = r.begin();
+             end = r.end();
+             line = 1;
+@@ -107,9 +107,9 @@
+     class number_callback_adapter
+     {
+     public:
+-        number_callback_adapter(Callbacks& callbacks, Encoding& encoding,
+-                                Iterator& cur)
+-            : callbacks(callbacks), encoding(encoding), first(cur), cur(cur)
++        number_callback_adapter(Callbacks& callbacks_, Encoding& encoding_,
++                                Iterator& cur_)
++            : callbacks(callbacks_), encoding(encoding_), first(cur_), cur(cur_)
+         {}
+ 
+         void operator ()(typename Encoding::external_char) {}
+@@ -132,9 +132,9 @@
+                                   std::input_iterator_tag>
+     {
+     public:
+-        number_callback_adapter(Callbacks& callbacks, Encoding& encoding,
++        number_callback_adapter(Callbacks& callbacks_, Encoding& encoding_,
+                                 Iterator&)
+-            : callbacks(callbacks), encoding(encoding), first(true)
++            : callbacks(callbacks_), encoding(encoding_), first(true)
+         {}
+ 
+         void operator ()(typename Encoding::external_char c) {
+@@ -162,10 +162,10 @@
+     class string_callback_adapter
+     {
+     public:
+-        string_callback_adapter(Callbacks& callbacks, Encoding& encoding,
+-                                Iterator& cur)
+-            : callbacks(callbacks), encoding(encoding), cur(cur),
+-              run_begin(cur)
++        string_callback_adapter(Callbacks& callbacks_, Encoding& encoding_,
++                                Iterator& cur_)
++            : callbacks(callbacks_), encoding(encoding_), cur(cur_),
++              run_begin(cur_)
+         {}
+ 
+         void start_run() {
+@@ -195,9 +195,9 @@
+                                   std::input_iterator_tag>
+     {
+     public:
+-        string_callback_adapter(Callbacks& callbacks, Encoding& encoding,
+-                                Iterator& cur)
+-            : callbacks(callbacks), encoding(encoding), cur(cur)
++        string_callback_adapter(Callbacks& callbacks_, Encoding& encoding_,
++                                Iterator& cur_)
++            : callbacks(callbacks_), encoding(encoding_), cur(cur_)
+         {}
+ 
+         void start_run() {}
+@@ -232,8 +232,8 @@
+ 		typedef typename source::code_unit code_unit;
+ 
+ 	public:
+-		parser(Callbacks& callbacks, Encoding& encoding)
+-			: callbacks(callbacks), encoding(encoding), src(encoding)
++		parser(Callbacks& callbacks_, Encoding& encoding_)
++			: callbacks(callbacks_), encoding(encoding_), src(encoding_)
+ 		{}
+ 
+ 		template <typename Range>

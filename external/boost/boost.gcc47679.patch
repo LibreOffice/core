@@ -1,24 +1,34 @@
---- misc/boost_1_44_0/boost/utility/compare_pointees.hpp	2011-02-10 16:39:05.960176555 +0000
-+++ misc/build/boost_1_44_0/boost/utility/compare_pointees.hpp	2011-02-10 16:40:59.091423279 +0000
-@@ -29,7 +29,11 @@
- inline
- bool equal_pointees ( OptionalPointee const& x, OptionalPointee const& y )
- {
--  return (!x) != (!y) ? false : ( !x ? true : (*x) == (*y) ) ;
-+  if (!x && !y)
-+    return true;
-+  if (!x || !y)
-+    return false;
-+  return (*x) == (*y);
- }
+diff -ru boost.orig/boost/optional/optional.hpp boost/boost/optional/optional.hpp
+--- foo/misc/boost.orig/boost/optional/optional.hpp	2015-07-18 11:27:36.168127029 +0200
++++ foo/misc/boost/boost/optional/optional.hpp	2015-07-18 20:36:13.777997833 +0200
+@@ -53,6 +53,8 @@
  
- template<class OptionalPointee>
---- misc/boost_1_44_0/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2011-03-02 12:22:47.222870106 +0000
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2011-03-02 12:22:47.222870106 +0000
-@@ -219,6 +219,20 @@
+ #include <boost/optional/optional_fwd.hpp>
+ 
++#include <string.h>
++
+ #if (defined BOOST_NO_CXX11_RVALUE_REFERENCES) || (defined BOOST_OPTIONAL_CONFIG_NO_RVALUE_REFERENCES)
+ #define BOOST_OPTIONAL_DETAIL_NO_RVALUE_REFERENCES
+ #endif
+@@ -134,6 +136,11 @@
+ 
+   public:
+ 
++    aligned_storage()
++    {
++      memset(&dummy_, 0, sizeof(dummy_));
++    }
++
+ #if defined(BOOST_OPTIONAL_DETAIL_USE_ATTRIBUTE_MAY_ALIAS)
+     void const* address() const { return &dummy_; }
+     void      * address()       { return &dummy_; }
+diff -ru boost.orig/boost/spirit/home/classic/core/primitives/impl/numerics.ipp boost/boost/spirit/home/classic/core/primitives/impl/numerics.ipp
+--- foo/misc/boost.orig/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2015-07-18 11:27:36.169127029 +0200
++++ foo/misc/boost/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2015-07-18 20:34:32.110998976 +0200
+@@ -218,6 +218,19 @@
+                 }
              }
          };
- 
 +        template <int Radix>
 +        struct negative_accumulate<unsigned char, Radix>
 +        {
@@ -32,30 +42,22 @@
 +                return true;
 +            }
 +        };
-+
+ 
          template <int MaxDigits>
          inline bool allow_more_digits(std::size_t i)
-         {
---- misc/boost_1_44_0/boost/optional/optional.hpp	2011-04-05 13:19:01.223587256 +0100
-+++ misc/build/boost_1_44_0/boost/optional/optional.hpp	2011-04-05 13:19:01.223587256 +0100
-@@ -31,6 +31,8 @@
+diff -ru boost.orig/boost/utility/compare_pointees.hpp boost/boost/utility/compare_pointees.hpp
+--- foo/misc/boost.orig/boost/utility/compare_pointees.hpp	2015-02-27 07:26:11.000000000 +0100
++++ foo/misc/boost/boost/utility/compare_pointees.hpp	2015-07-18 20:20:41.388988458 +0200
+@@ -29,7 +29,11 @@
+ inline
+ bool equal_pointees ( OptionalPointee const& x, OptionalPointee const& y )
+ {
+-  return (!x) != (!y) ? false : ( !x ? true : (*x) == (*y) ) ;
++  if (!x && !y)
++    return true;
++  if (!x || !y)
++    return false;
++  return (*x) == (*y);
+ }
  
- #include <boost/optional/optional_fwd.hpp>
- 
-+#include <string.h>
-+
- #if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
- // VC6.0 has the following bug:
- //   When a templated assignment operator exist, an implicit conversion
-@@ -114,6 +116,11 @@
- 
-   public:
- 
-+    aligned_storage()
-+    {
-+      memset(&dummy_, 0, sizeof(dummy_));
-+    }
-+
- #if defined(BOOST_OPTIONAL_DETAIL_USE_ATTRIBUTE_MAY_ALIAS)
-     void const* address() const { return &dummy_; }
-     void      * address()       { return &dummy_; }
+ template<class OptionalPointee>

@@ -1,6 +1,7 @@
---- foo/foo/foo/boost/config/auto_link.hpp
-+++ foo/foo/foo/boost/config/auto_link.hpp
-@@ -357,37 +357,6 @@
+diff -ru boost.orig/boost/config/auto_link.hpp boost/boost/config/auto_link.hpp
+--- foo/misc/boost.orig/boost/config/auto_link.hpp	2015-05-07 19:11:52.000000000 +0200
++++ foo/misc/boost/boost/config/auto_link.hpp	2015-07-18 22:34:14.371946475 +0200
+@@ -367,42 +367,6 @@
  #  define BOOST_LIB_PREFIX "lib"
  #endif
  
@@ -23,6 +24,11 @@
 -#  pragma comment(lib, BOOST_STRINGIZE(BOOST_LIB_NAME) ".lib")
 -#  ifdef BOOST_LIB_DIAGNOSTIC
 -#     pragma message ("Linking to lib file: " BOOST_STRINGIZE(BOOST_LIB_NAME) ".lib")
+-#  endif
+-#elif defined(BOOST_LIB_BUILDID)
+-#  pragma comment(lib, BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION "-" BOOST_STRINGIZE(BOOST_LIB_BUILDID) ".lib")
+-#  ifdef BOOST_LIB_DIAGNOSTIC
+-#     pragma message ("Linking to lib file: " BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION "-" BOOST_STRINGIZE(BOOST_LIB_BUILDID) ".lib")
 -#  endif
 -#else
 -#  pragma comment(lib, BOOST_LIB_PREFIX BOOST_STRINGIZE(BOOST_LIB_NAME) "-" BOOST_LIB_TOOLSET BOOST_LIB_THREAD_OPT BOOST_LIB_RT_OPT "-" BOOST_LIB_VERSION ".lib")

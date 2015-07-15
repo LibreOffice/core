@@ -1,0 +1,12 @@
+diff -ru boost.orig/boost/rational.hpp boost/boost/rational.hpp
+--- foo/misc/boost.orig/boost/rational.hpp	2015-01-29 15:06:21.000000000 +0100
++++ foo/misc/boost/boost/rational.hpp	2015-07-19 12:45:44.193897654 +0200
+@@ -110,7 +110,7 @@
+ {
+ public:
+     explicit bad_rational() : std::domain_error("bad rational: zero denominator") {}
+-    explicit bad_rational( char const *what ) : std::domain_error( what ) {}
++    explicit bad_rational( char const *what_ ) : std::domain_error( what_ ) {}
+ };
+ 
+ template <typename IntType>

@@ -1,6 +1,7 @@
---- misc/boost_1_44_0/boost/bind/bind.hpp	2009-11-30 21:30:22.000000000 +0100
-+++ misc/build/boost_1_44_0/boost/bind/bind.hpp	2012-01-20 12:44:07.111316403 +0100
-@@ -143,7 +143,7 @@
+diff -ru boost.orig/boost/bind/bind.hpp boost/boost/bind/bind.hpp
+--- foo/misc/boost.orig/boost/bind/bind.hpp	2015-05-04 00:08:08.000000000 +0200
++++ foo/misc/boost/boost/bind/bind.hpp	2015-07-16 22:47:55.972950054 +0200
+@@ -145,7 +145,7 @@
  
  template<class F> struct unwrapper
  {
@@ -9,7 +10,7 @@
      {
          return f;
      }
-@@ -226,7 +226,7 @@
+@@ -228,7 +228,7 @@
  
      A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
  
@@ -18,7 +19,7 @@
  
      template<class T> T & operator[] ( _bi::value<T> & v ) const { return v.get(); }
  
-@@ -238,22 +238,22 @@
+@@ -240,22 +240,22 @@
  
      template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
  
@@ -45,9 +46,14 @@
      {
          unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_]);
      }
-@@ -285,8 +285,8 @@
-     A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
-     A2 operator[] (boost::arg<2>) const { return base_type::a2_; }
+@@ -284,11 +284,11 @@
+ 
+     list2( A1 a1, A2 a2 ): base_type( a1, a2 ) {}
+ 
+-    A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2>) const { return base_type::a2_; }
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1>) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2>) const { return base_type::a2_; }
  
 -    A1 operator[] (boost::arg<1> (*) ()) const { return base_type::a1_; }
 -    A2 operator[] (boost::arg<2> (*) ()) const { return base_type::a2_; }
@@ -56,7 +62,7 @@
  
      template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
  
-@@ -298,22 +298,22 @@
+@@ -300,42 +300,42 @@
  
      template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
  
@@ -83,7 +89,52 @@
      {
          unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_]);
      }
-@@ -377,7 +377,7 @@
+ 
+-    template<class A> bool operator()( type<bool>, logical_and & /*f*/, A & a, int )
++    template<class A> bool operator()( type<bool>, logical_and & /*f*/, A & a,  __attribute__ ((unused)) int )
+     {
+         return a[ base_type::a1_ ] && a[ base_type::a2_ ];
+     }
+ 
+-    template<class A> bool operator()( type<bool>, logical_and const & /*f*/, A & a, int ) const
++    template<class A> bool operator()( type<bool>, logical_and const & /*f*/, A & a,  __attribute__ ((unused)) int ) const
+     {
+         return a[ base_type::a1_ ] && a[ base_type::a2_ ];
+     }
+ 
+-    template<class A> bool operator()( type<bool>, logical_or & /*f*/, A & a, int )
++    template<class A> bool operator()( type<bool>, logical_or & /*f*/, A & a,  __attribute__ ((unused)) int )
+     {
+         return a[ base_type::a1_ ] || a[ base_type::a2_ ];
+     }
+ 
+-    template<class A> bool operator()( type<bool>, logical_or const & /*f*/, A & a, int ) const
++    template<class A> bool operator()( type<bool>, logical_or const & /*f*/, A & a,  __attribute__ ((unused)) int ) const
+     {
+         return a[ base_type::a1_ ] || a[ base_type::a2_ ];
+     }
+@@ -361,13 +361,13 @@
+ 
+     list3( A1 a1, A2 a2, A3 a3 ): base_type( a1, a2, a3 ) {}
+ 
+-    A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2>) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3>) const { return base_type::a3_; }
+-
+-    A1 operator[] (boost::arg<1> (*) ()) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2> (*) ()) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3> (*) ()) const { return base_type::a3_; }
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1>) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2>) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3>) const { return base_type::a3_; }
++
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1> (*) ()) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2> (*) ()) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3> (*) ()) const { return base_type::a3_; }
+ 
+     template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
+ 
+@@ -379,22 +379,22 @@
  
      template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
  
@@ -92,7 +143,10 @@
      {
          return unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_]);
      }
-@@ -387,12 +387,12 @@
+ 
+-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
++    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, __attribute__ ((unused)) long) const
+     {
          return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_]);
      }
  
@@ -107,14 +161,24 @@
      {
          unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_]);
      }
-@@ -427,10 +427,10 @@
-     A3 operator[] (boost::arg<3>) const { return base_type::a3_; }
-     A4 operator[] (boost::arg<4>) const { return base_type::a4_; }
+@@ -424,15 +424,15 @@
  
+     list4( A1 a1, A2 a2, A3 a3, A4 a4 ): base_type( a1, a2, a3, a4 ) {}
+ 
+-    A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2>) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3>) const { return base_type::a3_; }
+-    A4 operator[] (boost::arg<4>) const { return base_type::a4_; }
+-
 -    A1 operator[] (boost::arg<1> (*) ()) const { return base_type::a1_; }
 -    A2 operator[] (boost::arg<2> (*) ()) const { return base_type::a2_; }
 -    A3 operator[] (boost::arg<3> (*) ()) const { return base_type::a3_; }
 -    A4 operator[] (boost::arg<4> (*) ()) const { return base_type::a4_; }
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1>) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2>) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3>) const { return base_type::a3_; }
++    A4 operator[] (__attribute__ ((unused)) boost::arg<4>) const { return base_type::a4_; }
++
 +    A1 operator[] (__attribute__ ((unused)) boost::arg<1> (*) ()) const { return base_type::a1_; }
 +    A2 operator[] (__attribute__ ((unused)) boost::arg<2> (*) ()) const { return base_type::a2_; }
 +    A3 operator[] (__attribute__ ((unused)) boost::arg<3> (*) ()) const { return base_type::a3_; }
@@ -122,7 +186,7 @@
  
      template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
  
-@@ -442,7 +442,7 @@
+@@ -444,22 +444,22 @@
  
      template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
  
@@ -131,7 +195,10 @@
      {
          return unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_]);
      }
-@@ -452,7 +452,7 @@
+ 
+-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
++    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, __attribute__ ((unused)) long) const
+     {
          return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_]);
      }
  
@@ -140,7 +207,30 @@
      {
          unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_]);
      }
-@@ -510,7 +510,7 @@
+ 
+-    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
++    template<class F, class A> void operator()(type<void>, F const & f, A & a, __attribute__ ((unused)) int) const
+     {
+         unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_]);
+     }
+@@ -490,11 +490,11 @@
+ 
+     list5( A1 a1, A2 a2, A3 a3, A4 a4, A5 a5 ): base_type( a1, a2, a3, a4, a5 ) {}
+ 
+-    A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2>) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3>) const { return base_type::a3_; }
+-    A4 operator[] (boost::arg<4>) const { return base_type::a4_; }
+-    A5 operator[] (boost::arg<5>) const { return base_type::a5_; }
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1>) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2>) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3>) const { return base_type::a3_; }
++    A4 operator[] (__attribute__ ((unused)) boost::arg<4>) const { return base_type::a4_; }
++    A5 operator[] (__attribute__ ((unused)) boost::arg<5>) const { return base_type::a5_; }
+ 
+     A1 operator[] (boost::arg<1> (*) ()) const { return base_type::a1_; }
+     A2 operator[] (boost::arg<2> (*) ()) const { return base_type::a2_; }
+@@ -512,12 +512,12 @@
  
      template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
  
@@ -149,26 +239,285 @@
      {
          return unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_]);
      }
-@@ -520,7 +520,7 @@
+ 
+-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
++    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, __attribute__ ((unused)) long) const
+     {
          return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_]);
      }
- 
--    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
-+    template<class F, class A> void operator()(type<void>, F & f, A & a, __attribute__ ((unused)) int)
-     {
+@@ -527,7 +527,7 @@
          unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_]);
      }
-@@ -591,7 +591,7 @@
+ 
+-    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
++    template<class F, class A> void operator()(type<void>, F const & f, A & a, __attribute__ ((unused)) int) const
+     {
+         unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_]);
+     }
+@@ -559,19 +559,19 @@
+ 
+     list6( A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6 ): base_type( a1, a2, a3, a4, a5, a6 ) {}
+ 
+-    A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2>) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3>) const { return base_type::a3_; }
+-    A4 operator[] (boost::arg<4>) const { return base_type::a4_; }
+-    A5 operator[] (boost::arg<5>) const { return base_type::a5_; }
+-    A6 operator[] (boost::arg<6>) const { return base_type::a6_; }
+-
+-    A1 operator[] (boost::arg<1> (*) ()) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2> (*) ()) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3> (*) ()) const { return base_type::a3_; }
+-    A4 operator[] (boost::arg<4> (*) ()) const { return base_type::a4_; }
+-    A5 operator[] (boost::arg<5> (*) ()) const { return base_type::a5_; }
+-    A6 operator[] (boost::arg<6> (*) ()) const { return base_type::a6_; }
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1>) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2>) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3>) const { return base_type::a3_; }
++    A4 operator[] (__attribute__ ((unused)) boost::arg<4>) const { return base_type::a4_; }
++    A5 operator[] (__attribute__ ((unused)) boost::arg<5>) const { return base_type::a5_; }
++    A6 operator[] (__attribute__ ((unused)) boost::arg<6>) const { return base_type::a6_; }
++
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1> (*) ()) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2> (*) ()) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3> (*) ()) const { return base_type::a3_; }
++    A4 operator[] (__attribute__ ((unused)) boost::arg<4> (*) ()) const { return base_type::a4_; }
++    A5 operator[] (__attribute__ ((unused)) boost::arg<5> (*) ()) const { return base_type::a5_; }
++    A6 operator[] (__attribute__ ((unused)) boost::arg<6> (*) ()) const { return base_type::a6_; }
+ 
+     template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
+ 
+@@ -583,12 +583,12 @@
+ 
+     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+ 
+-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
++    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, __attribute__ ((unused)) long)
+     {
+         return unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_]);
+     }
+ 
+-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
++    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, __attribute__ ((unused)) long) const
+     {
          return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_]);
+     }
+@@ -598,7 +598,7 @@
+         unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_]);
+     }
+ 
+-    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
++    template<class F, class A> void operator()(type<void>, F const & f, A & a, __attribute__ ((unused)) int) const
+     {
+         unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_]);
+     }
+@@ -631,21 +631,21 @@
+ 
+     list7( A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7 ): base_type( a1, a2, a3, a4, a5, a6, a7 ) {}
+ 
+-    A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2>) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3>) const { return base_type::a3_; }
+-    A4 operator[] (boost::arg<4>) const { return base_type::a4_; }
+-    A5 operator[] (boost::arg<5>) const { return base_type::a5_; }
+-    A6 operator[] (boost::arg<6>) const { return base_type::a6_; }
+-    A7 operator[] (boost::arg<7>) const { return base_type::a7_; }
+-
+-    A1 operator[] (boost::arg<1> (*) ()) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2> (*) ()) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3> (*) ()) const { return base_type::a3_; }
+-    A4 operator[] (boost::arg<4> (*) ()) const { return base_type::a4_; }
+-    A5 operator[] (boost::arg<5> (*) ()) const { return base_type::a5_; }
+-    A6 operator[] (boost::arg<6> (*) ()) const { return base_type::a6_; }
+-    A7 operator[] (boost::arg<7> (*) ()) const { return base_type::a7_; }
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1>) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2>) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3>) const { return base_type::a3_; }
++    A4 operator[] (__attribute__ ((unused)) boost::arg<4>) const { return base_type::a4_; }
++    A5 operator[] (__attribute__ ((unused)) boost::arg<5>) const { return base_type::a5_; }
++    A6 operator[] (__attribute__ ((unused)) boost::arg<6>) const { return base_type::a6_; }
++    A7 operator[] (__attribute__ ((unused)) boost::arg<7>) const { return base_type::a7_; }
++
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1> (*) ()) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2> (*) ()) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3> (*) ()) const { return base_type::a3_; }
++    A4 operator[] (__attribute__ ((unused)) boost::arg<4> (*) ()) const { return base_type::a4_; }
++    A5 operator[] (__attribute__ ((unused)) boost::arg<5> (*) ()) const { return base_type::a5_; }
++    A6 operator[] (__attribute__ ((unused)) boost::arg<6> (*) ()) const { return base_type::a6_; }
++    A7 operator[] (__attribute__ ((unused)) boost::arg<7> (*) ()) const { return base_type::a7_; }
+ 
+     template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
+ 
+@@ -657,22 +657,22 @@
+ 
+     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+ 
+-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
++    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, __attribute__ ((unused)) long)
+     {
+         return unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_]);
+     }
+ 
+-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
++    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, __attribute__ ((unused)) long) const
+     {
+         return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_]);
      }
  
 -    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
 +    template<class F, class A> void operator()(type<void>, F & f, A & a, __attribute__ ((unused)) int)
      {
-         unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_]);
+         unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_]);
      }
---- misc/boost_1_44_0/boost/bind/mem_fn.hpp	2009-03-02 17:15:40.000000000 +0100
-+++ misc/build/boost_1_44_0/boost/bind/mem_fn.hpp	2012-01-20 12:44:07.112316398 +0100
+ 
+-    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
++    template<class F, class A> void operator()(type<void>, F const & f, A & a, __attribute__ ((unused)) int) const
+     {
+         unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_]);
+     }
+@@ -706,23 +706,23 @@
+ 
+     list8( A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8 ): base_type( a1, a2, a3, a4, a5, a6, a7, a8 ) {}
+ 
+-    A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2>) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3>) const { return base_type::a3_; }
+-    A4 operator[] (boost::arg<4>) const { return base_type::a4_; }
+-    A5 operator[] (boost::arg<5>) const { return base_type::a5_; }
+-    A6 operator[] (boost::arg<6>) const { return base_type::a6_; }
+-    A7 operator[] (boost::arg<7>) const { return base_type::a7_; }
+-    A8 operator[] (boost::arg<8>) const { return base_type::a8_; }
+-
+-    A1 operator[] (boost::arg<1> (*) ()) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2> (*) ()) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3> (*) ()) const { return base_type::a3_; }
+-    A4 operator[] (boost::arg<4> (*) ()) const { return base_type::a4_; }
+-    A5 operator[] (boost::arg<5> (*) ()) const { return base_type::a5_; }
+-    A6 operator[] (boost::arg<6> (*) ()) const { return base_type::a6_; }
+-    A7 operator[] (boost::arg<7> (*) ()) const { return base_type::a7_; }
+-    A8 operator[] (boost::arg<8> (*) ()) const { return base_type::a8_; }
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1>) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2>) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3>) const { return base_type::a3_; }
++    A4 operator[] (__attribute__ ((unused)) boost::arg<4>) const { return base_type::a4_; }
++    A5 operator[] (__attribute__ ((unused)) boost::arg<5>) const { return base_type::a5_; }
++    A6 operator[] (__attribute__ ((unused)) boost::arg<6>) const { return base_type::a6_; }
++    A7 operator[] (__attribute__ ((unused)) boost::arg<7>) const { return base_type::a7_; }
++    A8 operator[] (__attribute__ ((unused)) boost::arg<8>) const { return base_type::a8_; }
++
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1> (*) ()) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2> (*) ()) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3> (*) ()) const { return base_type::a3_; }
++    A4 operator[] (__attribute__ ((unused)) boost::arg<4> (*) ()) const { return base_type::a4_; }
++    A5 operator[] (__attribute__ ((unused)) boost::arg<5> (*) ()) const { return base_type::a5_; }
++    A6 operator[] (__attribute__ ((unused)) boost::arg<6> (*) ()) const { return base_type::a6_; }
++    A7 operator[] (__attribute__ ((unused)) boost::arg<7> (*) ()) const { return base_type::a7_; }
++    A8 operator[] (__attribute__ ((unused)) boost::arg<8> (*) ()) const { return base_type::a8_; }
+ 
+     template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
+ 
+@@ -734,22 +734,22 @@
+ 
+     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+ 
+-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
++    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, __attribute__ ((unused)) long)
+     {
+         return unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_], a[base_type::a8_]);
+     }
+ 
+-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
++    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, __attribute__ ((unused)) long) const
+     {
+         return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_], a[base_type::a8_]);
+     }
+ 
+-    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
++    template<class F, class A> void operator()(type<void>, F & f, A & a, __attribute__ ((unused)) int)
+     {
+         unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_], a[base_type::a8_]);
+     }
+ 
+-    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
++    template<class F, class A> void operator()(type<void>, F const & f, A & a, __attribute__ ((unused)) int) const
+     {
+         unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_], a[base_type::a8_]);
+     }
+@@ -784,25 +784,25 @@
+ 
+     list9( A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9 ): base_type( a1, a2, a3, a4, a5, a6, a7, a8, a9 ) {}
+ 
+-    A1 operator[] (boost::arg<1>) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2>) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3>) const { return base_type::a3_; }
+-    A4 operator[] (boost::arg<4>) const { return base_type::a4_; }
+-    A5 operator[] (boost::arg<5>) const { return base_type::a5_; }
+-    A6 operator[] (boost::arg<6>) const { return base_type::a6_; }
+-    A7 operator[] (boost::arg<7>) const { return base_type::a7_; }
+-    A8 operator[] (boost::arg<8>) const { return base_type::a8_; }
+-    A9 operator[] (boost::arg<9>) const { return base_type::a9_; }
+-
+-    A1 operator[] (boost::arg<1> (*) ()) const { return base_type::a1_; }
+-    A2 operator[] (boost::arg<2> (*) ()) const { return base_type::a2_; }
+-    A3 operator[] (boost::arg<3> (*) ()) const { return base_type::a3_; }
+-    A4 operator[] (boost::arg<4> (*) ()) const { return base_type::a4_; }
+-    A5 operator[] (boost::arg<5> (*) ()) const { return base_type::a5_; }
+-    A6 operator[] (boost::arg<6> (*) ()) const { return base_type::a6_; }
+-    A7 operator[] (boost::arg<7> (*) ()) const { return base_type::a7_; }
+-    A8 operator[] (boost::arg<8> (*) ()) const { return base_type::a8_; }
+-    A9 operator[] (boost::arg<9> (*) ()) const { return base_type::a9_; }
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1>) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2>) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3>) const { return base_type::a3_; }
++    A4 operator[] (__attribute__ ((unused)) boost::arg<4>) const { return base_type::a4_; }
++    A5 operator[] (__attribute__ ((unused)) boost::arg<5>) const { return base_type::a5_; }
++    A6 operator[] (__attribute__ ((unused)) boost::arg<6>) const { return base_type::a6_; }
++    A7 operator[] (__attribute__ ((unused)) boost::arg<7>) const { return base_type::a7_; }
++    A8 operator[] (__attribute__ ((unused)) boost::arg<8>) const { return base_type::a8_; }
++    A9 operator[] (__attribute__ ((unused)) boost::arg<9>) const { return base_type::a9_; }
++
++    A1 operator[] (__attribute__ ((unused)) boost::arg<1> (*) ()) const { return base_type::a1_; }
++    A2 operator[] (__attribute__ ((unused)) boost::arg<2> (*) ()) const { return base_type::a2_; }
++    A3 operator[] (__attribute__ ((unused)) boost::arg<3> (*) ()) const { return base_type::a3_; }
++    A4 operator[] (__attribute__ ((unused)) boost::arg<4> (*) ()) const { return base_type::a4_; }
++    A5 operator[] (__attribute__ ((unused)) boost::arg<5> (*) ()) const { return base_type::a5_; }
++    A6 operator[] (__attribute__ ((unused)) boost::arg<6> (*) ()) const { return base_type::a6_; }
++    A7 operator[] (__attribute__ ((unused)) boost::arg<7> (*) ()) const { return base_type::a7_; }
++    A8 operator[] (__attribute__ ((unused)) boost::arg<8> (*) ()) const { return base_type::a8_; }
++    A9 operator[] (__attribute__ ((unused)) boost::arg<9> (*) ()) const { return base_type::a9_; }
+ 
+     template<class T> T & operator[] (_bi::value<T> & v) const { return v.get(); }
+ 
+@@ -814,22 +814,22 @@
+ 
+     template<class R, class F, class L> typename result_traits<R, F>::type operator[] (bind_t<R, F, L> const & b) const { return b.eval(*this); }
+ 
+-    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
++    template<class R, class F, class A> R operator()(type<R>, F & f, A & a, __attribute__ ((unused)) long)
+     {
+         return unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_], a[base_type::a8_], a[base_type::a9_]);
+     }
+ 
+-    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
++    template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, __attribute__ ((unused)) long) const
+     {
+         return unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_], a[base_type::a8_], a[base_type::a9_]);
+     }
+ 
+-    template<class F, class A> void operator()(type<void>, F & f, A & a, int)
++    template<class F, class A> void operator()(type<void>, F & f, A & a, __attribute__ ((unused)) int)
+     {
+         unwrapper<F>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_], a[base_type::a8_], a[base_type::a9_]);
+     }
+ 
+-    template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
++    template<class F, class A> void operator()(type<void>, F const & f, A & a, __attribute__ ((unused)) int) const
+     {
+         unwrapper<F const>::unwrap(f, 0)(a[base_type::a1_], a[base_type::a2_], a[base_type::a3_], a[base_type::a4_], a[base_type::a5_], a[base_type::a6_], a[base_type::a7_], a[base_type::a8_], a[base_type::a9_]);
+     }
+diff -ru boost.orig/boost/bind/mem_fn.hpp boost/boost/bind/mem_fn.hpp
+--- foo/misc/boost.orig/boost/bind/mem_fn.hpp	2015-05-04 00:08:08.000000000 +0200
++++ foo/misc/boost/boost/bind/mem_fn.hpp	2015-07-16 21:54:24.695986146 +0200
 @@ -328,7 +328,7 @@
          return (u.*f_);
      }
@@ -178,8 +527,9 @@
      {
          return (get_pointer(u)->*f_);
      }
---- misc/boost_1_44_0/boost/bind/mem_fn_template.hpp	2009-12-03 18:44:37.000000000 +0100
-+++ misc/build/boost_1_44_0/boost/bind/mem_fn_template.hpp	2012-01-20 12:44:07.112316398 +0100
+diff -ru boost.orig/boost/bind/mem_fn_template.hpp boost/boost/bind/mem_fn_template.hpp
+--- foo/misc/boost.orig/boost/bind/mem_fn_template.hpp	2015-05-04 00:08:08.000000000 +0200
++++ foo/misc/boost/boost/bind/mem_fn_template.hpp	2015-07-16 21:58:25.008983445 +0200
 @@ -35,7 +35,7 @@
          BOOST_MEM_FN_RETURN (u.*f_)();
      }
@@ -231,15 +581,6 @@
      {
          BOOST_MEM_FN_RETURN (get_pointer(u)->*f_)(b1, b2);
      }
-@@ -330,7 +330,7 @@
-         BOOST_MEM_FN_RETURN (u.*f_)(b1, b2);
-     }
- 
--    template<class U, class B1, class B2> R call(U & u, void const *, B1 & b1, B2 & b2) const
-+    template<class U, class B1, class B2> R call(U & u, __attribute__ ((unused)) void const *, B1 & b1, B2 & b2) const
-     {
-         BOOST_MEM_FN_RETURN (get_pointer(u)->*f_)(b1, b2);
-     }
 @@ -379,7 +379,7 @@
          BOOST_MEM_FN_RETURN (u.*f_)(b1, b2, b3);
      }
@@ -267,9 +608,10 @@
      {
          BOOST_MEM_FN_RETURN (get_pointer(u)->*f_)(b1, b2, b3, b4);
      }
---- misc/boost_1_44_0/boost/detail/dynamic_bitset.hpp	2008-10-21 20:13:59.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/detail/dynamic_bitset.hpp	2012-01-20 12:44:07.113316394 +0100
-@@ -100,8 +100,8 @@
+diff -ru boost.orig/boost/detail/dynamic_bitset.hpp boost/boost/detail/dynamic_bitset.hpp
+--- foo/misc/boost.orig/boost/detail/dynamic_bitset.hpp	2015-06-04 07:43:44.000000000 +0200
++++ foo/misc/boost/boost/detail/dynamic_bitset.hpp	2015-07-16 21:59:20.786982818 +0200
+@@ -104,8 +104,8 @@
  
       template <typename Iterator>
       inline std::size_t do_count(Iterator first, std::size_t length,
@@ -280,9 +622,10 @@
       {
           std::size_t num = 0;
           if (length)
---- misc/boost_1_44_0/boost/foreach.hpp	2010-07-30 22:26:40.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/foreach.hpp	2012-01-20 12:44:07.114316390 +0100
-@@ -610,7 +610,7 @@
+diff -ru boost.orig/boost/foreach.hpp boost/boost/foreach.hpp
+--- foo/misc/boost.orig/boost/foreach.hpp	2015-03-04 21:36:38.000000000 +0100
++++ foo/misc/boost/boost/foreach.hpp	2015-07-16 22:01:53.617981100 +0200
+@@ -633,7 +633,7 @@
  }
  
  template<typename T>
@@ -291,7 +634,7 @@
  {
      // Cannot seem to get sunpro to handle addressof() with array types.
      #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
-@@ -641,7 +641,7 @@
+@@ -665,7 +665,7 @@
  
  template<typename T, typename C>
  inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
@@ -300,25 +643,7 @@
  {
      typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
      typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iterator;
-@@ -678,7 +678,7 @@
- 
- template<typename T, typename C>
- inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
--end(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
-+end(auto_any_t col, __attribute__ ((unused)) type2type<T, C> *, __attribute__ ((unused)) boost::mpl::false_ *) // lvalue
- {
-     typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
-     typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iterator;
-@@ -707,7 +707,7 @@
- // done
- //
- template<typename T, typename C>
--inline bool done(auto_any_t cur, auto_any_t end, type2type<T, C> *)
-+inline bool done(auto_any_t cur, auto_any_t end, __attribute__ ((unused)) type2type<T, C> *)
- {
-     typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iter_t;
-     return auto_any_cast<iter_t, boost::mpl::false_>(cur) == auto_any_cast<iter_t, boost::mpl::false_>(end);
-@@ -725,7 +725,7 @@
+@@ -754,7 +754,7 @@
  // next
  //
  template<typename T, typename C>
@@ -327,7 +652,7 @@
  {
      typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iter_t;
      ++auto_any_cast<iter_t, boost::mpl::false_>(cur);
-@@ -736,7 +736,7 @@
+@@ -765,7 +765,7 @@
  //
  template<typename T, typename C>
  inline BOOST_DEDUCED_TYPENAME foreach_reference<T, C>::type
@@ -336,9 +661,19 @@
  {
      typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iter_t;
      return *auto_any_cast<iter_t, boost::mpl::false_>(cur);
---- misc/boost_1_44_0/boost/function/function_template.hpp	2009-07-09 01:23:52.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/function/function_template.hpp	2012-01-20 15:29:25.217770399 +0100
-@@ -711,7 +711,7 @@
+@@ -784,7 +784,7 @@
+ 
+ template<typename T, typename C>
+ inline auto_any<BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type>
+-rbegin(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
++rbegin(auto_any_t col, __attribute__ ((unused)) type2type<T, C> *, __attribute__ ((unused))  boost::mpl::false_ *) // lvalue
+ {
+     typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
+     typedef BOOST_DEDUCED_TYPENAME foreach_reverse_iterator<T, C>::type iterator;
+diff -ru boost.orig/boost/function/function_template.hpp boost/boost/function/function_template.hpp
+--- foo/misc/boost.orig/boost/function/function_template.hpp	2015-01-18 18:32:44.000000000 +0100
++++ foo/misc/boost/boost/function/function_template.hpp	2015-07-16 22:03:43.157979869 +0200
+@@ -717,7 +717,7 @@
      template<typename Functor>
      BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f
  #ifndef BOOST_NO_SFINAE
@@ -347,7 +682,7 @@
                              (boost::type_traits::ice_not<
                               (is_integral<Functor>::value)>::value),
                                          int>::type = 0
-@@ -724,7 +724,7 @@
+@@ -730,7 +730,7 @@
      template<typename Functor,typename Allocator>
      BOOST_FUNCTION_FUNCTION(Functor BOOST_FUNCTION_TARGET_FIX(const &) f, Allocator a
  #ifndef BOOST_NO_SFINAE
@@ -356,7 +691,7 @@
                              (boost::type_traits::ice_not<
                               (is_integral<Functor>::value)>::value),
                                          int>::type = 0
-@@ -1055,7 +1055,7 @@
+@@ -1068,7 +1068,7 @@
    template<typename Functor>
    function(Functor f
  #ifndef BOOST_NO_SFINAE
@@ -365,7 +700,7 @@
                              (boost::type_traits::ice_not<
                            (is_integral<Functor>::value)>::value),
                         int>::type = 0
-@@ -1067,7 +1067,7 @@
+@@ -1080,7 +1080,7 @@
    template<typename Functor,typename Allocator>
    function(Functor f, Allocator a
  #ifndef BOOST_NO_SFINAE
@@ -374,8 +709,9 @@
                              (boost::type_traits::ice_not<
                            (is_integral<Functor>::value)>::value),
                         int>::type = 0
---- misc/boost_1_44_0/boost/iterator/reverse_iterator.hpp	2004-08-12 19:13:07.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/iterator/reverse_iterator.hpp	2012-01-20 12:44:07.122316355 +0100
+diff -ru boost.orig/boost/iterator/reverse_iterator.hpp boost/boost/iterator/reverse_iterator.hpp
+--- foo/misc/boost.orig/boost/iterator/reverse_iterator.hpp	2014-09-06 19:18:28.000000000 +0200
++++ foo/misc/boost/boost/iterator/reverse_iterator.hpp	2015-07-16 22:04:18.012979478 +0200
 @@ -34,7 +34,7 @@
        template<class OtherIterator>
        reverse_iterator(
@@ -385,9 +721,10 @@
            )
            : super_t(r.base())
        {}
---- misc/boost_1_44_0/boost/optional/optional.hpp	2012-01-20 15:24:32.364576113 +0100
-+++ misc/build/boost_1_44_0/boost/optional/optional.hpp	2012-01-20 12:44:07.123316351 +0100
-@@ -365,7 +365,7 @@
+diff -ru boost.orig/boost/optional/optional.hpp boost/boost/optional/optional.hpp
+--- foo/misc/boost.orig/boost/optional/optional.hpp	2015-07-09 00:01:02.000000000 +0200
++++ foo/misc/boost/boost/optional/optional.hpp	2015-07-16 22:06:21.657978088 +0200
+@@ -634,7 +634,7 @@
      // Converting constructions of optional<T> from optional<U> uses this function with
      // 'Expr' being of type 'U' and relying on a converting constructor of T from U.
      template<class Expr>
@@ -396,7 +733,7 @@
       {
         new (m_storage.address()) internal_type(expr) ;
         m_initialized = true ;
-@@ -376,7 +376,7 @@
+@@ -645,7 +645,7 @@
      // Converting assignments of optional<T> from optional<U> uses this function with
      // 'Expr' being of type 'U' and relying on a converting assignment of T from U.
      template<class Expr>
@@ -405,13 +742,13 @@
       {
         assign_value(expr, is_reference_predicate());
       }
-@@ -846,12 +846,12 @@
+@@ -1424,17 +1424,17 @@
  
  template<class T>
  inline
--bool operator == ( none_t , optional<T> const& y )
-+bool operator == ( __attribute__ ((unused)) none_t , optional<T> const& y )
- { return equal_pointees(optional<T>() ,y); }
+-bool operator == ( none_t , optional<T> const& y ) BOOST_NOEXCEPT
++bool operator == ( __attribute__ ((unused)) none_t , optional<T> const& y ) BOOST_NOEXCEPT
+ { return !y; }
  
  template<class T>
  inline
@@ -420,8 +757,39 @@
  { return less_pointees(optional<T>() ,y); }
  
  template<class T>
---- misc/boost_1_44_0/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp	2012-01-20 12:44:07.124316347 +0100
+ inline
+-bool operator != ( none_t, optional<T> const& y ) BOOST_NOEXCEPT
++bool operator != ( __attribute__ ((unused)) none_t, optional<T> const& y ) BOOST_NOEXCEPT
+ { return bool(y); }
+ 
+ template<class T>
+diff -ru boost.orig/boost/ptr_container/detail/default_deleter.hpp boost/boost/ptr_container/detail/default_deleter.hpp
+--- foo/misc/boost.orig/boost/ptr_container/detail/default_deleter.hpp	2015-01-25 20:27:11.000000000 +0100
++++ foo/misc/boost/boost/ptr_container/detail/default_deleter.hpp	2015-07-16 22:45:54.427951420 +0200
+@@ -61,7 +61,7 @@
+ { 
+     default_deleter() { }
+     template<typename TT>
+-    default_deleter(default_deleter<TT> tt) { }
++    default_deleter(__attribute__ ((unused)) default_deleter<TT> tt) { }
+ };
+ 
+ } } } // End namespaces ptr_container_detail, move_ptrs, boost.
+diff -ru boost.orig/boost/ptr_container/ptr_sequence_adapter.hpp boost/boost/ptr_container/ptr_sequence_adapter.hpp
+--- foo/misc/boost.orig/boost/ptr_container/ptr_sequence_adapter.hpp	2015-07-16 08:47:41.786947347 +0200
++++ foo/misc/boost/boost/ptr_container/ptr_sequence_adapter.hpp	2015-07-16 22:46:28.137951041 +0200
+@@ -664,7 +664,7 @@
+             
+         }
+ 
+-        void range_check_impl( iterator first, iterator last, 
++        void range_check_impl( __attribute__ ((unused)) iterator first, __attribute__ ((unused)) iterator last, 
+                                std::bidirectional_iterator_tag )
+         { /* do nothing */ }
+ 
+diff -ru boost.orig/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp boost/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp
+--- foo/misc/boost.orig/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/actor/ref_const_ref_actor.hpp	2015-07-16 22:07:32.910977287 +0200
 @@ -63,8 +63,8 @@
  
          template<typename IteratorT>
@@ -433,25 +801,9 @@
              ) const
          {
              this->act(ref,value_ref); // defined in ActionT
---- misc/boost_1_44_0/boost/spirit/home/classic/core/composite/no_actions.hpp
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/composite/no_actions.hpp
-@@ -38,10 +38,10 @@
-     template<typename ActorT, typename AttrT, typename IteratorT>
-     void
-     do_action(
--        ActorT const&       actor,
--        AttrT&              val,
--        IteratorT const&    first,
--        IteratorT const&    last) const
-+        __attribute__ ((unused)) ActorT const&       actor,
-+        __attribute__ ((unused)) AttrT&              val,
-+        __attribute__ ((unused)) IteratorT const&    first,
-+        __attribute__ ((unused)) IteratorT const&    last) const
-     {}
- };
- 
---- misc/boost_1_44_0/boost/spirit/home/classic/core/composite/impl/directives.ipp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/composite/impl/directives.ipp	2012-01-20 12:44:07.124316347 +0100
+diff -ru boost.orig/boost/spirit/home/classic/core/composite/impl/directives.ipp boost/boost/spirit/home/classic/core/composite/impl/directives.ipp
+--- foo/misc/boost.orig/boost/spirit/home/classic/core/composite/impl/directives.ipp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/core/composite/impl/directives.ipp	2015-07-16 22:12:36.614973874 +0200
 @@ -41,7 +41,7 @@
          contiguous_parser_parse(
              ST const& s,
@@ -488,9 +840,28 @@
          {
              typedef scanner_policies<
                  inhibit_case_iteration_policy<
---- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp
-@@ -83,7 +83,7 @@
+diff -ru boost.orig/boost/spirit/home/classic/core/composite/no_actions.hpp boost/boost/spirit/home/classic/core/composite/no_actions.hpp
+--- foo/misc/boost.orig/boost/spirit/home/classic/core/composite/no_actions.hpp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/core/composite/no_actions.hpp	2015-07-16 22:08:22.699976727 +0200
+@@ -38,10 +38,10 @@
+     template<typename ActorT, typename AttrT, typename IteratorT>
+     void
+     do_action(
+-        ActorT const&       actor,
+-        AttrT&              val,
+-        IteratorT const&    first,
+-        IteratorT const&    last) const
++        __attribute__ ((unused)) ActorT const&       actor,
++        __attribute__ ((unused)) AttrT&              val,
++        __attribute__ ((unused)) IteratorT const&    first,
++        __attribute__ ((unused)) IteratorT const&    last) const
+     {}
+ };
+ 
+diff -ru boost.orig/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp boost/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp
+--- foo/misc/boost.orig/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/core/non_terminal/impl/grammar.ipp	2015-07-16 22:13:57.708972962 +0200
+@@ -69,7 +69,7 @@
          {   // Does _not_ copy the helpers member !
          }
  
@@ -499,8 +870,9 @@
          {   // Does _not_ copy the helpers member !
              return *this;
          }
---- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/parser_context.hpp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/parser_context.hpp	2012-01-20 12:44:07.124316347 +0100
+diff -ru boost.orig/boost/spirit/home/classic/core/non_terminal/parser_context.hpp boost/boost/spirit/home/classic/core/non_terminal/parser_context.hpp
+--- foo/misc/boost.orig/boost/spirit/home/classic/core/non_terminal/parser_context.hpp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/core/non_terminal/parser_context.hpp	2015-07-16 22:17:08.977970813 +0200
 @@ -51,15 +51,15 @@
          typedef parser_context_linker<parser_context<AttrT> > context_linker_t;
  
@@ -516,13 +888,14 @@
          template <typename ResultT, typename ParserT, typename ScannerT>
          ResultT&
 -        post_parse(ResultT& hit, ParserT const&, ScannerT const&)
-+        post_parse(ResultT& hit, __attribute__ ((unused)) ParserT const&, __attribute__ ((unused)) ScannerT const&)
++        post_parse(__attribute__ ((unused)) ResultT& hit, __attribute__ ((unused)) ParserT const&, __attribute__ ((unused)) ScannerT const&)
          { return hit; }
      };
  
---- misc/boost_1_44_0/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2012-01-20 15:24:32.364576113 +0100
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2012-01-20 12:44:07.125316343 +0100
-@@ -240,7 +240,7 @@
+diff -ru boost.orig/boost/spirit/home/classic/core/primitives/impl/numerics.ipp boost/boost/spirit/home/classic/core/primitives/impl/numerics.ipp
+--- foo/misc/boost.orig/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/core/primitives/impl/numerics.ipp	2015-07-16 22:17:53.303970314 +0200
+@@ -226,7 +226,7 @@
          }
  
          template <>
@@ -531,8 +904,9 @@
          {
              return true;
          }
---- misc/boost_1_44_0/boost/spirit/home/classic/core/primitives/primitives.hpp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/primitives/primitives.hpp	2012-01-20 12:44:07.125316343 +0100
+diff -ru boost.orig/boost/spirit/home/classic/core/primitives/primitives.hpp boost/boost/spirit/home/classic/core/primitives/primitives.hpp
+--- foo/misc/boost.orig/boost/spirit/home/classic/core/primitives/primitives.hpp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/core/primitives/primitives.hpp	2015-07-16 22:18:27.942969925 +0200
 @@ -316,7 +316,7 @@
          anychar_parser() {}
  
@@ -542,8 +916,9 @@
          {
              return true;
          }
---- misc/boost_1_44_0/boost/spirit/home/classic/core/scanner/impl/skipper.ipp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/scanner/impl/skipper.ipp	2012-01-20 12:44:07.125316343 +0100
+diff -ru boost.orig/boost/spirit/home/classic/core/scanner/impl/skipper.ipp boost/boost/spirit/home/classic/core/scanner/impl/skipper.ipp
+--- foo/misc/boost.orig/boost/spirit/home/classic/core/scanner/impl/skipper.ipp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/core/scanner/impl/skipper.ipp	2015-07-16 22:19:06.409969493 +0200
 @@ -122,7 +122,7 @@
                  IteratorT const&    first_,
                  IteratorT const&    last,
@@ -553,8 +928,9 @@
              {
                  typedef skipper_iteration_policy<> iter_policy_t;
                  typedef scanner_policies<iter_policy_t> scanner_policies_t;
---- misc/boost_1_44_0/boost/spirit/home/classic/core/scanner/scanner.hpp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/scanner/scanner.hpp	2012-01-20 12:44:07.126316338 +0100
+diff -ru boost.orig/boost/spirit/home/classic/core/scanner/scanner.hpp boost/boost/spirit/home/classic/core/scanner/scanner.hpp
+--- foo/misc/boost.orig/boost/spirit/home/classic/core/scanner/scanner.hpp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/core/scanner/scanner.hpp	2015-07-16 22:20:18.232968685 +0200
 @@ -82,18 +82,18 @@
          create_match(
              std::size_t         length,
@@ -591,8 +967,9 @@
          {
              actor(val);
          }
---- misc/boost_1_44_0/boost/spirit/home/classic/core/scanner/skipper.hpp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/scanner/skipper.hpp	2012-01-20 12:44:07.126316338 +0100
+diff -ru boost.orig/boost/spirit/home/classic/core/scanner/skipper.hpp boost/boost/spirit/home/classic/core/scanner/skipper.hpp
+--- foo/misc/boost.orig/boost/spirit/home/classic/core/scanner/skipper.hpp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/core/scanner/skipper.hpp	2015-07-16 22:20:47.695968354 +0200
 @@ -82,7 +82,7 @@
  
          template <typename ScannerT>
@@ -602,8 +979,9 @@
      };
  
      ///////////////////////////////////////////////////////////////////////////
---- misc/boost_1_44_0/boost/spirit/home/classic/meta/impl/refactoring.ipp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/meta/impl/refactoring.ipp	2012-01-20 12:44:07.126316338 +0100
+diff -ru boost.orig/boost/spirit/home/classic/meta/impl/refactoring.ipp boost/boost/spirit/home/classic/meta/impl/refactoring.ipp
+--- foo/misc/boost.orig/boost/spirit/home/classic/meta/impl/refactoring.ipp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/meta/impl/refactoring.ipp	2015-07-16 22:23:33.840966487 +0200
 @@ -92,7 +92,7 @@
  
          template <typename ParserT, typename ScannerT, typename BinaryT>
@@ -640,38 +1018,52 @@
          {
              return action.parse(scan);
          }
---- misc/boost_1_44_0/boost/spirit/home/classic/utility/impl/chset.ipp
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/impl/chset.ipp
-@@ -129,7 +129,7 @@
+diff -ru boost.orig/boost/spirit/home/classic/phoenix/tuples.hpp boost/boost/spirit/home/classic/phoenix/tuples.hpp
+--- foo/misc/boost.orig/boost/spirit/home/classic/phoenix/tuples.hpp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/phoenix/tuples.hpp	2015-07-16 22:35:37.780958351 +0200
+@@ -207,7 +207,7 @@
+     typedef nil_t& rtype;
+     typedef nil_t const& crtype;
+ 
+-    static nil_t    get(TupleT const& t)    { return nil_t(); }
++    static nil_t    get(__attribute__ ((unused)) TupleT const& t)    { return nil_t(); }
+ };
+ 
+ //////////////////////////////////
+diff -ru boost.orig/boost/spirit/home/classic/utility/impl/chset.ipp boost/boost/spirit/home/classic/utility/impl/chset.ipp
+--- foo/misc/boost.orig/boost/spirit/home/classic/utility/impl/chset.ipp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/utility/impl/chset.ipp	2015-07-16 22:29:45.156962314 +0200
+@@ -97,7 +97,7 @@
  }
  
  template <typename CharT>
--inline chset<CharT>::chset(nothing_parser arg_)
-+inline chset<CharT>::chset(__attribute__ ((unused)) nothing_parser arg_)
+-inline chset<CharT>::chset(nothing_parser /*arg_*/)
++inline chset<CharT>::chset(__attribute__ ((unused)) nothing_parser /*arg_*/)
  : ptr(new basic_chset<CharT>()) {}
  
  template <typename CharT>
-@@ -182,7 +182,7 @@
+@@ -146,7 +146,7 @@
  
  template <typename CharT>
  inline chset<CharT>&
--chset<CharT>::operator=(anychar_parser rhs)
-+chset<CharT>::operator=(__attribute__ ((unused)) anychar_parser rhs)
+-chset<CharT>::operator=(anychar_parser /*rhs*/)
++chset<CharT>::operator=(__attribute__ ((unused)) anychar_parser /*rhs*/)
  {
      utility::impl::detach_clear(ptr);
      ptr->set(
-@@ -194,7 +194,7 @@
+@@ -158,7 +158,7 @@
  
  template <typename CharT>
  inline chset<CharT>&
--chset<CharT>::operator=(nothing_parser rhs)
-+chset<CharT>::operator=(__attribute__ ((unused)) nothing_parser rhs)
+-chset<CharT>::operator=(nothing_parser /*rhs*/)
++chset<CharT>::operator=(__attribute__ ((unused)) nothing_parser /*rhs*/)
  {
      utility::impl::detach_clear(ptr);
      return *this;
---- misc/boost_1_44_0/boost/spirit/home/classic/utility/impl/chset_operators.ipp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/impl/chset_operators.ipp	2012-01-20 12:44:07.127316333 +0100
-@@ -576,7 +576,7 @@
+diff -ru boost.orig/boost/spirit/home/classic/utility/impl/chset_operators.ipp boost/boost/spirit/home/classic/utility/impl/chset_operators.ipp
+--- foo/misc/boost.orig/boost/spirit/home/classic/utility/impl/chset_operators.ipp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/utility/impl/chset_operators.ipp	2015-07-16 22:31:03.363961435 +0200
+@@ -502,7 +502,7 @@
  //////////////////////////////////
  template <typename CharT>
  inline chset<CharT>
@@ -680,8 +1072,9 @@
  {
      return ~b;
  }
---- misc/boost_1_44_0/boost/spirit/home/classic/utility/impl/lists.ipp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/impl/lists.ipp	2012-01-20 12:44:07.127316333 +0100
+diff -ru boost.orig/boost/spirit/home/classic/utility/impl/lists.ipp boost/boost/spirit/home/classic/utility/impl/lists.ipp
+--- foo/misc/boost.orig/boost/spirit/home/classic/utility/impl/lists.ipp	2015-05-17 14:17:51.000000000 +0200
++++ foo/misc/boost/boost/spirit/home/classic/utility/impl/lists.ipp	2015-07-16 22:34:55.728958823 +0200
 @@ -64,8 +64,8 @@
              typename ItemT, typename DelimT
          >
@@ -704,42 +1097,34 @@
          {
              return (
                      (item - delim)
---- misc/boost_1_44_0/boost/spirit/home/classic/phoenix/tuples.hpp
-+++ misc/build/boost_1_44_0/boost/spirit/home/classic/phoenix/tuples.hpp
-@@ -211,7 +211,7 @@
-     typedef nil_t& rtype;
-     typedef nil_t const& crtype;
- 
--    static nil_t    get(TupleT const& t)    { return nil_t(); }
-+    static nil_t    get(__attribute__ ((unused)) TupleT const& t)    { return nil_t(); }
- };
- 
- //////////////////////////////////
---- misc/boost_1_44_0/boost/throw_exception.hpp	2010-07-03 23:32:02.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/throw_exception.hpp	2012-01-20 12:44:07.127316333 +0100
-@@ -49,7 +49,7 @@
+diff -ru boost.orig/boost/throw_exception.hpp boost/boost/throw_exception.hpp
+--- foo/misc/boost.orig/boost/throw_exception.hpp	2014-06-08 22:17:48.000000000 +0200
++++ foo/misc/boost/boost/throw_exception.hpp	2015-07-16 22:36:06.940958023 +0200
+@@ -57,7 +57,7 @@
  
  #else
  
 -inline void throw_exception_assert_compatibility( std::exception const & ) { }
 +inline void throw_exception_assert_compatibility( __attribute__ ((unused)) std::exception const & ) { }
  
- template<class E> BOOST_ATTRIBUTE_NORETURN inline void throw_exception( E const & e )
+ template<class E> BOOST_NORETURN inline void throw_exception( E const & e )
  {
---- misc/boost_1_44_0/boost/utility/addressof.hpp	2009-05-16 20:15:17.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/utility/addressof.hpp	2012-01-20 12:44:07.128316328 +0100
-@@ -34,7 +34,7 @@
+diff -ru boost.orig/boost/type_index/stl_type_index.hpp boost/boost/type_index/stl_type_index.hpp
+--- foo/misc/boost.orig/boost/type_index/stl_type_index.hpp	2015-06-21 22:16:46.000000000 +0200
++++ foo/misc/boost/boost/type_index/stl_type_index.hpp	2015-07-16 22:55:42.886944806 +0200
+@@ -174,7 +174,7 @@
  
- template<class T> struct addressof_impl
- {
--    static inline T * f( T & v, long )
-+    static inline T * f( T & v, __attribute__ ((unused)) long )
-     {
-         return reinterpret_cast<T*>(
-             &const_cast<char&>(reinterpret_cast<const volatile char &>(v)));
---- misc/boost_1_44_0/boost/variant/detail/visitation_impl.hpp	2010-06-10 17:32:07.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/variant/detail/visitation_impl.hpp	2012-01-20 12:44:07.128316328 +0100
-@@ -121,7 +121,7 @@
+ 
+ inline std::size_t stl_type_index::hash_code() const BOOST_NOEXCEPT {
+-#if _MSC_VER > 1600 || (__GNUC__ == 4 && __GNUC_MINOR__ > 5 && defined(__GXX_EXPERIMENTAL_CXX0X__))
++#if (defined(_MSC_VER) && _MSC_VER > 1600) || (__GNUC__ == 4 && __GNUC_MINOR__ > 5 && defined(__GXX_EXPERIMENTAL_CXX0X__))
+     return data_->hash_code();
+ #else
+     return boost::hash_range(raw_name(), raw_name() + std::strlen(raw_name()));
+diff -ru boost.orig/boost/variant/detail/visitation_impl.hpp boost/boost/variant/detail/visitation_impl.hpp
+--- foo/misc/boost.orig/boost/variant/detail/visitation_impl.hpp	2015-06-25 23:53:21.000000000 +0200
++++ foo/misc/boost/boost/variant/detail/visitation_impl.hpp	2015-07-16 22:40:41.528954937 +0200
+@@ -105,7 +105,7 @@
  inline
      BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
  visitation_impl_invoke_impl(
@@ -748,25 +1133,7 @@
      , mpl::true_// never_uses_backup
      )
  {
-@@ -158,7 +158,7 @@
- visitation_impl_invoke(
-       int internal_which, Visitor& visitor, VoidPtrCV storage, T* t
-     , NoBackupFlag
--    , int
-+    , __attribute__ ((unused)) int
-     )
- {
-     typedef typename mpl::or_<
-@@ -176,7 +176,7 @@
- template <typename Visitor, typename VoidPtrCV, typename NBF>
- inline
-     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
--visitation_impl_invoke(int, Visitor&, VoidPtrCV, apply_visitor_unrolled*, NBF, long)
-+visitation_impl_invoke(__attribute__ ((unused)) int, __attribute__ ((unused)) Visitor&, VoidPtrCV, __attribute__ ((unused)) apply_visitor_unrolled*, NBF, __attribute__ ((unused)) long)
- {
-     // should never be here at runtime:
-     BOOST_ASSERT(false);
-@@ -198,9 +198,9 @@
+@@ -181,9 +181,9 @@
  inline
      BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(typename Visitor::result_type)
  visitation_impl(
@@ -777,8 +1144,8 @@
 +    , NBF, __attribute__ ((unused)) W* = 0, __attribute__ ((unused)) S* = 0
      )
  {
-     // should never be here at runtime:
-@@ -221,7 +221,7 @@
+     // should never be here at runtime!
+@@ -203,7 +203,7 @@
      , Visitor& visitor, VoidPtrCV storage
      , mpl::false_ // is_apply_visitor_unrolled
      , NoBackupFlag no_backup_flag
@@ -787,29 +1154,31 @@
      )
  {
      // Typedef apply_visitor_unrolled steps and associated types...
---- misc/boost_1_44_0/boost/variant/get.hpp	2005-08-25 18:27:28.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/variant/get.hpp	2012-01-20 12:44:07.129316324 +0100
-@@ -85,7 +85,7 @@
+diff -ru boost.orig/boost/variant/get.hpp boost/boost/variant/get.hpp
+--- foo/misc/boost.orig/boost/variant/get.hpp	2015-06-25 23:53:21.000000000 +0200
++++ foo/misc/boost/boost/variant/get.hpp	2015-07-16 22:41:42.159954255 +0200
+@@ -80,7 +80,7 @@
      }
  
      template <typename U>
--    pointer operator()(const U&) const
-+    pointer operator()(__attribute__ ((unused)) const U&) const
+-    pointer operator()(const U&) const BOOST_NOEXCEPT
++    pointer operator()(__attribute__ ((unused)) const U&) const BOOST_NOEXCEPT
      {
          return static_cast<pointer>(0);
      }
---- misc/boost_1_44_0/boost/variant/variant.hpp	2010-06-10 17:32:07.000000000 +0200
-+++ misc/build/boost_1_44_0/boost/variant/variant.hpp	2012-01-20 12:44:07.129316324 +0100
-@@ -290,7 +290,7 @@
+diff -ru boost.orig/boost/variant/variant.hpp boost/boost/variant/variant.hpp
+--- foo/misc/boost.orig/boost/variant/variant.hpp	2015-06-25 23:53:21.000000000 +0200
++++ foo/misc/boost/boost/variant/variant.hpp	2015-07-16 22:44:37.631952283 +0200
+@@ -312,7 +312,7 @@
  
      template <typename T>
          BOOST_VARIANT_AUX_RETURN_VOID_TYPE
--    internal_visit(T& operand, int) const
-+    internal_visit(T& operand, __attribute__ ((unused)) int) const
+-    internal_visit(T& operand, int) const BOOST_NOEXCEPT
++    internal_visit(T& operand, __attribute__ ((unused)) int) const BOOST_NOEXCEPT
      {
-         operand.~T();
+         operand.~T(); // must be noexcept
  
-@@ -404,7 +404,7 @@
+@@ -392,7 +392,7 @@
  
      template <typename T>
          BOOST_VARIANT_AUX_RETURN_VOID_TYPE
@@ -818,7 +1187,7 @@
      {
          new(storage_) T(operand);
          BOOST_VARIANT_AUX_RETURN_VOID;
-@@ -454,7 +454,7 @@
+@@ -539,7 +539,7 @@
  
      template <typename T>
          BOOST_VARIANT_AUX_RETURN_VOID_TYPE
@@ -827,7 +1196,7 @@
      {
          // NOTE TO USER :
          // Compile error here indicates one of variant's bounded types does
-@@ -502,7 +502,7 @@
+@@ -585,7 +585,7 @@
      }
  
      template <typename U>
@@ -836,81 +1205,3 @@
      {
          return false;
      }
-@@ -827,7 +827,7 @@
- public: // internal visitor interfaces
- 
-     template <typename T>
--    result_type internal_visit(T& operand, int)
-+    result_type internal_visit(T& operand, __attribute__ ((unused)) int)
-     {
-         return visitor_(operand);
-     }
-@@ -1225,7 +1225,7 @@
-     public: // internal visitor interfaces (below)
- 
-         template <typename T>
--        int internal_visit(T& operand, int) const
-+        int internal_visit(T& operand, __attribute__ ((unused)) int) const
-         {
-             // NOTE TO USER :
-             // Compile error here indicates one of the source variant's types 
-@@ -1288,7 +1288,7 @@
-     template <typename T>
-     void convert_construct(
-           T& operand
--        , int
-+        , __attribute__ ((unused)) int
-         , mpl::false_ = mpl::false_() // is_foreign_variant
-         )
-     {
-@@ -1308,7 +1308,7 @@
-     template <typename Variant>
-     void convert_construct(
-           Variant& operand
--        , long
-+        , __attribute__ ((unused)) long
-         , mpl::true_// is_foreign_variant
-         )
-     {
-@@ -1348,7 +1348,7 @@
-     template <BOOST_VARIANT_ENUM_PARAMS(typename U)>
-     void convert_construct(
-           boost::variant<BOOST_VARIANT_ENUM_PARAMS(U)>& operand
--        , long
-+        , __attribute__ ((unused)) long
-         )
-     {
-         convert_construct_variant(operand);
-@@ -1553,7 +1553,7 @@
- 
-         template <typename RhsT>
-             BOOST_VARIANT_AUX_RETURN_VOID_TYPE
--        internal_visit(const RhsT& rhs_content, int)
-+        internal_visit(const RhsT& rhs_content, __attribute__ ((unused)) int)
-         {
-             typedef typename has_nothrow_copy<RhsT>::type
-                 nothrow_copy;
---- misc/boost_1_44_0/boost/ptr_container/detail/default_deleter.hpp
-+++ misc/build/boost_1_44_0/boost/ptr_container/detail/default_deleter.hpp
-@@ -61,7 +61,7 @@
- { 
-     default_deleter() { }
-     template<typename TT>
--    default_deleter(default_deleter<TT> tt) { }
-+    default_deleter(__attribute__ ((unused)) default_deleter<TT> tt) { }
- };
- 
- } } } // End namespaces ptr_container_detail, move_ptrs, boost.
---- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp
-+++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp
-@@ -664,8 +664,8 @@
-             
-         }
- 
--        void range_check_impl( iterator first, iterator last, 
--                               std::bidirectional_iterator_tag )
-+        void range_check_impl( __attribute__ ((unused)) iterator first, __attribute__ ((unused)) iterator last, 
-+                               std::bidirectional_iterator_tag )
-         { /* do nothing */ }
- 
-         void range_check_impl( iterator first, iterator last,

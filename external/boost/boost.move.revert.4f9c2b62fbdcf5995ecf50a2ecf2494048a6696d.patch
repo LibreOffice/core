@@ -1,0 +1,29 @@
+commit 3d27feb4e13b9b75c82c757f1c4a4aa72f66e9d6
+Author: David Ostrovsky <david@ostrovsky.org>
+Date:   Sun Jul 19 13:37:10 2015 +0200
+    Partially revert 4f9c2b62fbdcf5995ecf50a2ecf2494048a6696d
+    Revert "-> Added new meta-utils that were duplicated in Container & Intrusive."
+    
+    This reverts commit 4f9c2b62fbdcf5995ecf50a2ecf2494048a6696d.
+
+diff --git a/include/boost/move/core.hpp b/include/boost/move/core.hpp
+index 55486e6..d22a07d 100644
+diff -ru boost.orig/boost/move/detail/meta_utils.hpp boost/boost/move/detail/meta_utils.hpp
+--- foo/misc/boost.orig/boost/move/detail/meta_utils.hpp	2015-06-10 17:58:10.000000000 +0200
++++ foo/misc/boost/boost/move/detail/meta_utils.hpp	2015-07-19 13:50:45.477853807 +0200
+@@ -342,6 +342,7 @@
+    : disable_if< is_convertible<T, U>, R>
+ {};
+ 
++#if 0
+ //////////////////////////////////////////////////////////////////////////////
+ //
+ //                         and_
+@@ -432,6 +433,7 @@
+ struct disable_if_or
+    : disable_if_c< or_<A, B, C, D>::value, R>
+ {};
++#endif
+ 
+ //////////////////////////////////////////////////////////////////////////////
+ //
