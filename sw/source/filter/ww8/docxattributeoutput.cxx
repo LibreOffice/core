@@ -4814,6 +4814,12 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
         sFileExtension = "doc";
     }
+    else if( sProgID == "Excel.Chart.8" )
+    {
+        sMediaType = "application/vnd.ms-excel";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        sFileExtension = "xls";
+    }
     else
     {
         sMediaType = "application/vnd.openxmlformats-officedocument.oleObject";
