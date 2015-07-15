@@ -57,6 +57,7 @@ KDECommandEvent::KDECommandEvent( const QString &qCommand, QStringList *pStringL
         { "getDirectory",      GetDirectory },
         { "setDirectory",      SetDirectory },
         { "getFiles",          GetFiles },
+        { "getSelectedFiles",  GetSelectedFiles },
         { "setTitle",          SetTitle },
         { "setType",           SetType },
         { "setDefaultName",    SetDefaultName },
