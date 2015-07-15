@@ -116,7 +116,7 @@ private:
 
 // class SvxFillAttrBox --------------------------------------------------
 
-class SvxFillAttrBox : public FillAttrLB
+class SVX_DLLPUBLIC SvxFillAttrBox : public FillAttrLB
 {
 public:
     SvxFillAttrBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
