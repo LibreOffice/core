@@ -28,7 +28,7 @@
 TextChainFlow::TextChainFlow(SdrTextObj *pChainTarget)
     : mpTargetLink(pChainTarget)
 {
-    fprintf(stderr, "[TEXTCHAINFLOW] Creating a new TextChainFlow\n");
+    fprintf(stderr, "\n[TEXTCHAINFLOW] Creating a new TextChainFlow\n");
 
     mpTextChain = mpTargetLink->GetTextChain();
     mpNextLink = mpTargetLink->GetNextLinkInChain();

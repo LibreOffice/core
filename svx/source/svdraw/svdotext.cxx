@@ -1987,7 +1987,7 @@ void SdrTextObj::onEditOutlinerStatusEvent( EditStatus* pEditStatus )
 bool SdrTextObj::IsChainable() const
 {
     if (!GetName().startsWith("Chainable")) {
-        fprintf(stderr, "[CHAINABLE?] %p is _not_ chainable\n", this);
+        //fprintf(stderr, "[CHAINABLE?] %p is _not_ chainable\n", this);
         return false;
     }
 
