@@ -55,6 +55,15 @@ enum class GridType
     HOR_MINOR
 };
 
+enum class AxisType
+{
+    X_MAIN,
+    Y_MAIN,
+    Z_MAIN,
+    X_SECOND,
+    Y_SECOND
+};
+
 class ChartSidebarModifyListener : public cppu::WeakImplHelper1<css::util::XModifyListener>
 {
 public:
@@ -148,6 +157,26 @@ bool isGridVisible(css::uno::Reference<css::frame::XModel> xModel, GridType eTyp
     return false;
 }
 
+bool isAxisVisible(css::uno::Reference<css::frame::XModel> xModel, AxisType eType)
+{
+    Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
+    if(xDiagram.is())
+    {
+        sal_Int32 nDimensionIndex = 0;
+        if (eType == AxisType::Y_MAIN || eType == AxisType::Y_SECOND)
+            nDimensionIndex = 1;
+        else if (eType == AxisType::Z_MAIN)
+            nDimensionIndex = 2;
+
+        bool bMajor = !(eType == AxisType::X_SECOND || eType == AxisType::Y_SECOND);
+
+        bool bHasAxis = AxisHelper::isAxisShown(nDimensionIndex, bMajor, xDiagram);
+        return bHasAxis;
+    }
+    return false;
+
+}
+
 }
 
 ChartElementsPanel::ChartElementsPanel(
@@ -233,6 +262,11 @@ void ChartElementsPanel::updateData()
     mpCB2ndYAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE));
     mpCBGridVertical->Check(isGridVisible(mxModel, GridType::VERT_MAJOR));
     mpCBGridHorizontal->Check(isGridVisible(mxModel, GridType::HOR_MAJOR));
+    mpCBXAxis->Check(isAxisVisible(mxModel, AxisType::X_MAIN));
+    mpCBYAxis->Check(isAxisVisible(mxModel, AxisType::Y_MAIN));
+    mpCBZAxis->Check(isAxisVisible(mxModel, AxisType::Z_MAIN));
+    mpCB2ndXAxis->Check(isAxisVisible(mxModel, AxisType::X_SECOND));
+    mpCB2ndYAxis->Check(isAxisVisible(mxModel, AxisType::Y_SECOND));
 }
 
 VclPtr<vcl::Window> ChartElementsPanel::Create (
