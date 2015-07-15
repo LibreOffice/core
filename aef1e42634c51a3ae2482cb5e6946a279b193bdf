@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_0a3769b1",
+        "filename": "external/boost/UnpackedTarball_boost.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-15T10:35:27Z",
+      "side": 1,
+      "message": "i hope you should be able to remove every patch with \"fixed upstream\" without an issue",
+      "revId": "aef1e42634c51a3ae2482cb5e6946a279b193bdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
