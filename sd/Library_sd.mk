@@ -174,7 +174,7 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/accessibility/AccessibleSlideSorterView \
 	sd/source/ui/accessibility/AccessibleViewForwarder \
 	sd/source/ui/accessibility/SdShapeTypes \
-	sd/source/ui/animations/CustomAnimationCreateDialog \
+    sd/source/ui/animations/CategoryListBox \
 	sd/source/ui/animations/CustomAnimationDialog \
 	sd/source/ui/animations/CustomAnimationList \
 	sd/source/ui/animations/CustomAnimationPane \
