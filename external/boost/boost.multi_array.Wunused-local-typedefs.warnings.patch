@@ -1,5 +1,6 @@
---- misc/boost_1_44_0/boost/multi_array/concept_checks.hpp
-+++ misc/build/boost_1_44_0/boost/multi_array/concept_checks.hpp
+diff -ru boost.orig/boost/multi_array/concept_checks.hpp boost/boost/multi_array/concept_checks.hpp
+--- foo/misc/boost.orig/boost/multi_array/concept_checks.hpp	2015-07-18 21:20:26.353996242 +0200
++++ foo/misc/boost/boost/multi_array/concept_checks.hpp	2015-07-18 21:21:05.202995805 +0200
 @@ -39,8 +39,6 @@
  
      template <typename Array, typename IdxGen, typename Call_Type>
