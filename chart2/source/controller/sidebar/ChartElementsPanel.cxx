@@ -271,8 +271,8 @@ ChartElementsPanel::ChartElementsPanel(
     get(mpCBLegend,  "checkbutton_legend");
     get(mpCBGridVertical,  "checkbutton_gridline_vertical");
     get(mpCBGridHorizontal,  "checkbutton_gridline_horizontal");
-    get(mpCBShowLabel,  "checkbutton_label");
-    get(mpCBTrendline,  "checkbutton_trendline");
+
+    Initialize();
 }
 
 ChartElementsPanel::~ChartElementsPanel()
@@ -300,8 +300,6 @@ void ChartElementsPanel::dispose()
     mpCBLegend.clear();
     mpCBGridVertical.clear();
     mpCBGridHorizontal.clear();
-    mpCBShowLabel.clear();
-    mpCBTrendline.clear();
 
     PanelLayout::dispose();
 }
