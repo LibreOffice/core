@@ -3640,44 +3640,41 @@ bool SfxMedium::SwitchDocumentToFile( const OUString& aURL )
         uno::Reference< embed::XStorage > xStorage = GetStorage();
         uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY );
 
-        if ( xOptStorage.is() )
+        // TODO/LATER: reuse the pImp->pTempFile if it already exists
+        CanDisposeStorage_Impl( false );
+        Close();
+        SetPhysicalName_Impl( OUString() );
+        SetName( aURL );
+
+        // open the temporary file based document
+        GetMedium_Impl();
+        LockOrigFileOnDemand( false, false );
+        CreateTempFile( true );
+        GetMedium_Impl();
+
+        if ( pImp->xStream.is() )
         {
-            // TODO/LATER: reuse the pImp->pTempFile if it already exists
-            CanDisposeStorage_Impl( false );
+            try
+            {
+                uno::Reference< io::XTruncate > xTruncate( pImp->xStream, uno::UNO_QUERY_THROW );
+                if ( xTruncate.is() )
+                    xTruncate->truncate();
+                if ( xOptStorage.is() )
+                    xOptStorage->writeAndAttachToStream( pImp->xStream );
+                pImp->xStorage = xStorage;
+                bResult = true;
+            }
+            catch( const uno::Exception& )
+            {}
+        }
+
+        if ( !bResult )
+        {
             Close();
             SetPhysicalName_Impl( OUString() );
-            SetName( aURL );
-
-            // open the temporary file based document
+            SetName( aOrigURL );
             GetMedium_Impl();
-            LockOrigFileOnDemand( false, false );
-            CreateTempFile( true );
-            GetMedium_Impl();
-
-            if ( pImp->xStream.is() )
-            {
-                try
-                {
-                    uno::Reference< io::XTruncate > xTruncate( pImp->xStream, uno::UNO_QUERY_THROW );
-                    if ( xTruncate.is() )
-                        xTruncate->truncate();
-
-                    xOptStorage->writeAndAttachToStream( pImp->xStream );
-                    pImp->xStorage = xStorage;
-                    bResult = true;
-                }
-                catch( const uno::Exception& )
-                {}
-            }
-
-            if ( !bResult )
-            {
-                Close();
-                SetPhysicalName_Impl( OUString() );
-                SetName( aOrigURL );
-                GetMedium_Impl();
-                pImp->xStorage = xStorage;
-            }
+            pImp->xStorage = xStorage;
         }
     }
 
