@@ -144,7 +144,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     virtual sal_Int16 getCurrentMacroExecMode() const SAL_OVERRIDE;
     virtual bool setCurrentMacroExecMode( sal_uInt16 nMacroMode ) SAL_OVERRIDE;
     virtual OUString getDocumentLocation() const SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getZipStorageToSign() SAL_OVERRIDE;
     virtual bool documentStorageHasMacros() const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const SAL_OVERRIDE;
     virtual SignatureState getScriptingSignatureState() SAL_OVERRIDE;

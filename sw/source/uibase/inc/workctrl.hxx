@@ -129,7 +129,6 @@ public:
 
     static OUString         GetQuickHelpText(bool bNext);
 
-    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
     void                GrabFocus() { m_pToolBox->GrabFocus(); }
 };
 

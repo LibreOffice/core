@@ -74,7 +74,6 @@ public:
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 
-    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
     void SetSelectedHdl( const Link<>& rLink ) { maSelectedLink = rLink; }
 };
 

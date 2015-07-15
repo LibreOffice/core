@@ -138,7 +138,6 @@ public:
                             virtual ~SfxPopupWindow();
     virtual void            dispose() SAL_OVERRIDE;
 
-    virtual VclPtr<SfxPopupWindow> Clone() const;
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void                    StartCascading();
@@ -349,8 +348,6 @@ public:
                             SFX_DECL_TOOLBOX_CONTROL();
                             SfxAddonsToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
                             virtual ~SfxAddonsToolBoxControl_Impl();
-
-                            void RefreshMenuImages( Menu* pMenu );
 };
 
 #endif

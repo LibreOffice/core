@@ -47,10 +47,6 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    OUString                  GetComment() const
-                                { return aCommentText; }
-    void                    SetComment( const OUString& r )
-                                { aCommentText = r; }
     OUString                GetMethod() const
                                 { return aMethodName; }
     void                    SetMethod( const OUString& r )

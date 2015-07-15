@@ -180,14 +180,8 @@ public:
     void                SetAlignment(SfxChildAlignment eAlign);
     Size                GetSizePixel() const
                         { return pWindow->GetSizePixel(); }
-    void                SetPosSizePixel(const Point& rPoint, const Size& rSize)
-                        { pWindow->SetPosSizePixel(rPoint, rSize); }
-    Point               GetPosPixel()
-                        { return pWindow->GetPosPixel(); }
     virtual void        Hide();
     virtual void        Show( ShowFlags nFlags );
-    SfxChildWindowFlags GetFlags() const
-                        { return GetInfo().nFlags; }
     bool                CanGetFocus() const;
     sal_uInt16          GetPosition();
     sal_uInt16          GetType()

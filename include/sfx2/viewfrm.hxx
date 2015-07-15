@@ -160,8 +160,6 @@ public:
                             { return GetFrame().GetTopFrame(); }
     void                    GetTargetList( TargetList& rList ) const
                             { GetFrame().GetTargetList( rList ); }
-    void                    CancelTransfers()
-                            { GetFrame().CancelTransfers(); }
 
     void                    SetModalMode( bool );
     bool                    IsInModalMode() const;
@@ -317,7 +315,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
-    const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& GetVerbList() const { return aVerbs; }
 };
 
 #endif

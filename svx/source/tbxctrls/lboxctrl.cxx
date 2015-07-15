@@ -66,7 +66,6 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     // SfxPopupWindow
-    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
     virtual void                PopupModeEnd() SAL_OVERRIDE;
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
@@ -107,11 +106,6 @@ void SvxPopupWindowListBox::dispose()
 {
     m_pListBox.clear();
     SfxPopupWindow::dispose();
-}
-
-VclPtr<SfxPopupWindow> SvxPopupWindowListBox::Clone() const
-{
-    return VclPtr<SvxPopupWindowListBox>::Create( GetId(), maCommandURL, nTbxId, rToolBox );
 }
 
 void SvxPopupWindowListBox::PopupModeEnd()

@@ -56,9 +56,6 @@ public:
                                 SfxUnoControllerItem( SfxControllerItem*, SfxBindings&, const OUString& );
                                 virtual ~SfxUnoControllerItem();
 
-    const ::com::sun::star::util::URL&                  GetCommand() const
-                                { return aCommand; }
-
     // XStatusListener
     virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 

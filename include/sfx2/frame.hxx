@@ -149,9 +149,6 @@ public:
     SAL_DLLPRIVATE SfxFrame* GetContainingDocFrame_Impl( SfxFrame* pSelf );
     void                UpdateDescriptor( SfxObjectShell *pDoc );
     void                Resize();
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
-                        GetComponent() const;
-    void                ReleaseComponent();
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
                         GetFrameInterface() const;
     void                Appear();
@@ -238,8 +235,6 @@ public:
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
-
-    bool                    FrameKilled() const { return &wFrame != pFrame; }
 
     SfxFrame*               GetFrame() const
                             { return wFrame; }

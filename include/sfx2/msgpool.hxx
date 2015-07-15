@@ -60,7 +60,6 @@ public:
     const SfxSlot*      FirstSlot();
     const SfxSlot*      NextSlot();
     const SfxSlot*      GetSlot( sal_uInt16 nId );
-    const SfxSlot*      GetUnoSlot( sal_uInt16 nId );
     const SfxSlot*      GetUnoSlot( const OUString& rUnoName );
     TypeId              GetSlotType( sal_uInt16 nSlotId ) const;
 };

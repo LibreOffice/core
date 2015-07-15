@@ -35,8 +35,6 @@ to get it to work :-)
 
 TODO deal with calls to superclass/member constructors from other constructors, so
      we can find unused constructors
-TODO need to handle places where the code takes the address of a method, that needs to count
-     as a use-site.
 TODO deal with free functions and static methods
 TODO track instantiations of template class constructor methods
 TODO track instantiation of overridden methods when a template class is instantiated
@@ -142,9 +140,12 @@ static std::set<std::string> traversedFunctionSet;
 
 bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 {
-    if (ignoreLocation(expr)) {
+    // I don't use the normal ignoreLocation() here, because I __want__ to include files that are
+    // compiled in the $WORKDIR since they may refer to normal code
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( expr->getLocStart() );
+    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
         return true;
-    }
+
     FunctionDecl* calleeFunctionDecl = expr->getDirectCallee();
     if (calleeFunctionDecl == nullptr) {
         return true;
@@ -166,9 +167,12 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 
 bool UnusedMethods::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
 {
-    if (ignoreLocation(functionDecl)) {
+    // I don't use the normal ignoreLocation() here, because I __want__ to include files that are
+    // compiled in the $WORKDIR since they may refer to normal code
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( functionDecl->getLocStart() );
+    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
         return true;
-    }
+
     functionDecl = functionDecl->getCanonicalDecl();
     // ignore method overrides, since the call will show up as being directed to the root method
     if (functionDecl->size_overridden_methods() != 0 || functionDecl->hasAttr<OverrideAttr>()) {
@@ -203,14 +207,17 @@ bool UnusedMethods::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
 // this catches places that take the address of a method
 bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 {
-    if (ignoreLocation(declRefExpr)) {
+    // I don't use the normal ignoreLocation() here, because I __want__ to include files that are
+    // compiled in the $WORKDIR since they may refer to normal code
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( declRefExpr->getLocStart() );
+    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
         return true;
-    }
+
     const Decl* functionDecl = declRefExpr->getDecl();
     if (!isa<CXXMethodDecl>(functionDecl)) {
         return true;
     }
-    logCallToRootMethods(dyn_cast<CXXMethodDecl>(functionDecl));
+    logCallToRootMethods(dyn_cast<CXXMethodDecl>(functionDecl)->getCanonicalDecl());
     return true;
 }
 

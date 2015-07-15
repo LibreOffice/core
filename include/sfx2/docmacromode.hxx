@@ -102,21 +102,6 @@ namespace sfx2
         virtual OUString
                     getDocumentLocation() const = 0;
 
-        /** returns a zip-storage based on the last committed version of the document,
-            for readonly access
-
-            The storage is intended to be used for signing. An implementation is
-            allowed to return <NULL/> here if and only if the document
-            does not support signing the script storages.
-
-            @todo
-                UNOize this, too. Once we have a getDocumentModel, we should be able to
-                obtain the "last commit" storage via UNO API, provided it's an
-                XStorageBasedDocument.
-        */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
-                    getZipStorageToSign() = 0;
-
         /** checks whether the document's storage contains sub storages with macros or scripts
 
             A default implementation of this method will simply cann DocumentMacroMode::storageHasMacros

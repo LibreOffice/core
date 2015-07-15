@@ -52,8 +52,6 @@ private:
 
 protected:
     SfxChildAlignment   CalcAlignment(const Point& rPos, Rectangle& rRect );
-    void                CalcSplitPosition(const Point rPos, Rectangle& rRect,
-                            SfxChildAlignment eAlign);
     virtual Size        CalcDockingSize(SfxChildAlignment);
     virtual SfxChildAlignment
                         CheckAlignment(SfxChildAlignment,SfxChildAlignment);

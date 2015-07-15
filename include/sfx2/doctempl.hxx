@@ -55,8 +55,6 @@ public:
                         SfxDocumentTemplates(const SfxDocumentTemplates &);
                         ~SfxDocumentTemplates();
 
-    bool                IsConstructed() { return pImp != NULL; }
-
     const SfxDocumentTemplates &operator=(const SfxDocumentTemplates &);
 
     void                ReInitFromComponent();

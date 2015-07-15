@@ -291,14 +291,6 @@ SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxB
 
 
 
-PopupMenu* SfxMenuControl::GetPopup () const
-{
-    if (GetPopupMenu())
-        return static_cast<PopupMenu*>(GetPopupMenu()->GetSVMenu());
-    else
-        return 0;
-}
-
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const OUString& rCmd,
         sal_uInt16 nId, Menu& rMenu, const OUString& sItemText,
         SfxBindings& rBindings, SfxVirtualMenu* pVirt)

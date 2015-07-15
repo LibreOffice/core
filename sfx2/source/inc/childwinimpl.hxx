@@ -54,7 +54,6 @@ public:
     void erase( iterator it );
 
     iterator begin();
-    const_iterator begin() const;
 };
 
 class SfxFrameArr_Impl

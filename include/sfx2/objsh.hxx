@@ -461,14 +461,12 @@ public:
     // Transfer IFace
     void                        AbortImport();
     bool                        IsAbortingImport() const;
-    bool                        IsReloading() const;
     void                        FinishedLoading( SfxLoadedFlags nWhich = SfxLoadedFlags::ALL );
     void                        TemplateDisconnectionAfterLoad();
     bool                        IsLoading() const;
     bool                        IsLoadingFinished() const;
     void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, bool bReload = true );
     bool                        IsAutoLoadLocked() const;
-    void                        NotifyReloadAvailable();
 
     // Misc
     bool                        IsPreview() const;
@@ -498,10 +496,6 @@ public:
 
     // Contents
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool();
-    void                     SetStyleSheetPool(SfxStyleSheetBasePool *pBasePool )
-    {
-        pStyleSheetPool = pBasePool;
-    }
 
     virtual void                LoadStyles(SfxObjectShell &rSource);
 
@@ -519,9 +513,6 @@ public:
     StarBASIC*                  GetBasic() const;
 
     virtual std::set<Color>     GetDocColors();
-
-    void                        ReadNote( INote * );
-    void                        UpdateNote( INote * );
 
                                 // Documents, for which to format the view size
 
@@ -838,9 +829,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
-    SfxObjectShell*         GetObjectShell() const
-                            { return pObjSh; }
-
 };
 
 #endif
