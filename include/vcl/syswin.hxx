@@ -82,11 +82,19 @@ private:
     sal_uInt32          mnState;
 
 public:
-                WindowStateData()
-                {
-                    mnValidMask = mnX = mnY = mnWidth = mnHeight = mnState = 0;
-                    mnMaximizedX = mnMaximizedY = mnMaximizedWidth = mnMaximizedHeight = 0;
-                }
+    WindowStateData()
+        : mnValidMask(0)
+        , mnX(0)
+        , mnY(0)
+        , mnWidth(0)
+        , mnHeight(0)
+        , mnMaximizedX(0)
+        , mnMaximizedY(0)
+        , mnMaximizedWidth(0)
+        , mnMaximizedHeight(0)
+        , mnState(0)
+    {
+    }
 
     void        SetMask( sal_uInt32 nValidMask ) { mnValidMask = nValidMask; }
     sal_uInt32  GetMask() const { return mnValidMask; }
