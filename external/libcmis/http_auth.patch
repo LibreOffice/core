@@ -1,0 +1,26 @@
+From eca14219ea6f63ae10630ee5b4e246eb77db3ccd Mon Sep 17 00:00:00 2001
+From: Vasily Melenchuk <vasily.melenchuk@cib.de>
+Date: Wed, 15 Jul 2015 11:54:52 +0200
+Subject: [PATCH] do not require password to be not empty to use http
+ authentication credentials
+
+---
+ src/libcmis/http-session.cxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libcmis/http-session.cxx b/src/libcmis/http-session.cxx
+index 49ff258..d3122ea 100644
+--- a/src/libcmis/http-session.cxx
++++ b/src/libcmis/http-session.cxx
+@@ -522,7 +522,7 @@ void HttpSession::httpRunRequest( string url, vector< string > headers, bool red
+         headers_slist = curl_slist_append( headers_slist,
+                                            m_oauth2Handler->getHttpHeader( ).c_str( ) );
+     }
+-    else if ( !getUsername().empty() && !getPassword().empty() )
++    else if ( !getUsername().empty() )
+     {
+         curl_easy_setopt( m_curlHandle, CURLOPT_HTTPAUTH, m_authMethod );
+ #if LIBCURL_VERSION_VALUE >= 0x071301
+-- 
+1.9.5.msysgit.0
+
