@@ -55,6 +55,44 @@ enum class GridType
     HOR_MINOR
 };
 
+class ChartSidebarModifyListener : public cppu::WeakImplHelper1<css::util::XModifyListener>
+{
+public:
+
+    ChartSidebarModifyListener(ChartElementsPanel* pParent);
+    virtual ~ChartSidebarModifyListener();
+
+    virtual void SAL_CALL modified(const css::lang::EventObject& rEvent)
+        throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
+
+    virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
+        throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
+
+private:
+    ChartElementsPanel* mpParent;
+};
+
+ChartSidebarModifyListener::ChartSidebarModifyListener(ChartElementsPanel* pParent):
+    mpParent(pParent)
+{
+}
+
+ChartSidebarModifyListener::~ChartSidebarModifyListener()
+{
+}
+
+void ChartSidebarModifyListener::modified(const css::lang::EventObject& /*rEvent*/)
+        throw (::css::uno::RuntimeException, ::std::exception)
+{
+    mpParent->updateData();
+}
+
+void ChartSidebarModifyListener::disposing(const css::lang::EventObject& /*rEvent*/)
+        throw (::css::uno::RuntimeException, ::std::exception)
+{
+    mpParent->modelInvalid();
+}
+
 ChartModel* getChartModel(css::uno::Reference<css::frame::XModel> xModel)
 {
     ChartModel* pModel = dynamic_cast<ChartModel*>(xModel.get());
@@ -121,7 +159,8 @@ ChartElementsPanel::ChartElementsPanel(
     mxFrame(rxFrame),
     maContext(),
     mpBindings(pBindings),
-    mxModel(pController->getModel())
+    mxModel(pController->getModel()),
+    mxListener(new ChartSidebarModifyListener(this))
 {
     get(mpCBTitle,  "checkbutton_title");
     get(mpCBSubtitle,  "checkbutton_subtitle");
@@ -149,6 +188,9 @@ ChartElementsPanel::~ChartElementsPanel()
 
 void ChartElementsPanel::dispose()
 {
+
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcaster->removeModifyListener(mxListener);
     mpCBTitle.clear();
     mpCBSubtitle.clear();
     mpCBXAxis.clear();
@@ -172,11 +214,15 @@ void ChartElementsPanel::dispose()
 
 void ChartElementsPanel::Initialize()
 {
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcaster->addModifyListener(mxListener);
     updateData();
 }
 
 void ChartElementsPanel::updateData()
 {
+    SolarMutexGuard aGuard;
+
     mpCBLegend->Check(isLegendVisible(mxModel));
     mpCBTitle->Check(isTitleVisisble(mxModel, TitleHelper::MAIN_TITLE));
     mpCBSubtitle->Check(isTitleVisisble(mxModel, TitleHelper::SUB_TITLE));
@@ -230,6 +276,11 @@ void ChartElementsPanel::NotifyItemUpdate(
     const SfxPoolItem* /*pState*/,
     const bool )
 {
+}
+
+void ChartElementsPanel::modelInvalid()
+{
+
 }
 
 }} // end of namespace ::chart::sidebar
