@@ -408,11 +408,6 @@ SdXMLExport::SdXMLExport(
     mpPropertySetMapper(0L),
     mpPresPagePropsMapper(0L),
     mbIsDraw(bIsDraw),
-    msZIndex( GetXMLToken(XML_ZINDEX) ),
-    msEmptyPres( "IsEmptyPresentationObject" ),
-    msModel( "Model" ),
-    msStartShape( "StartShape" ),
-    msEndShape( "EndShape" ),
     msPageLayoutNames( "PageLayoutNames" )
 {
 

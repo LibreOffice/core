@@ -195,8 +195,6 @@ XMLChartPropertySetMapper::~XMLChartPropertySetMapper()
 XMLChartExportPropertyMapper::XMLChartExportPropertyMapper( const rtl::Reference< XMLPropertySetMapper >& rMapper,
                                                             SvXMLExport& rExport) :
         SvXMLExportPropertyMapper( rMapper ),
-        msTrue( GetXMLToken( XML_TRUE )),
-        msFalse( GetXMLToken( XML_FALSE )),
         mrExport( rExport )
 {
     // chain draw properties

@@ -115,11 +115,6 @@ class SdXMLExport : public SvXMLExport
 
     bool                    mbIsDraw;
 
-    const OUString         msZIndex;
-    const OUString         msEmptyPres;
-    const OUString         msModel;
-    const OUString         msStartShape;
-    const OUString         msEndShape;
     const OUString         msPageLayoutNames;
 
     virtual void _ExportStyles(bool bUsed) SAL_OVERRIDE;

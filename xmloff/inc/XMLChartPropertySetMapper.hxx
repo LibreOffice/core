@@ -45,9 +45,6 @@ public:
 class XMLChartExportPropertyMapper : public SvXMLExportPropertyMapper
 {
 private:
-    const OUString msTrue;
-    const OUString msFalse;
-
     SvXMLExport& mrExport;
     com::sun::star::uno::Reference< com::sun::star::chart2::XChartDocument > mxChartDoc;
 
