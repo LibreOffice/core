@@ -600,8 +600,7 @@ namespace svgio
             maPosition(), // computed below
             mnRotationIndex(0),
             mbLengthAdjust(rSvgTextPositions.getLengthAdjust()),
-            mbAbsoluteX(false),
-            mbAbsoluteY(false)
+            mbAbsoluteX(false)
         {
             // get TextLength if provided
             if(rSvgTextPositions.getTextLength().isSet())

@@ -101,7 +101,6 @@ namespace svgio
             /// bitfield
             bool                        mbLengthAdjust : 1; // true = spacing, false = spacingAndGlyphs
             bool                        mbAbsoluteX : 1;
-            bool                        mbAbsoluteY : 1;
 
         public:
             SvgTextPosition(
@@ -112,11 +111,9 @@ namespace svgio
             // data read access
             const SvgTextPosition* getParent() const { return mpParent; }
             const ::std::vector< double >& getX() const { return maX; }
-            const ::std::vector< double >& getY() const { return maY; }
             double getTextLength() const { return mfTextLength; }
             bool getLengthAdjust() const { return mbLengthAdjust; }
             bool getAbsoluteX() const { return mbAbsoluteX; }
-            bool getAbsoluteY() const { return mbAbsoluteY; }
 
             // get/set absolute, current, advancing position
             const basegfx::B2DPoint& getPosition() const { return maPosition; }

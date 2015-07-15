@@ -64,11 +64,9 @@ namespace svgio
             void setStartOffset(const SvgNumber& rStartOffset = SvgNumber()) { maStartOffset = rStartOffset; }
 
             /// Method content
-            bool getMethod() const { return mbMethod; }
             void setMethod(bool bNew) { mbMethod = bNew; }
 
             /// Spacing content
-            bool getSpacing() const { return mbSpacing; }
             void setSpacing(bool bNew) { mbSpacing = bNew; }
         };
     } // end of namespace svgreader

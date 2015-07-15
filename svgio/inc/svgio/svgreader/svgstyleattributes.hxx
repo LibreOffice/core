@@ -335,7 +335,6 @@ namespace svgio
 
             /// fill rule content
             FillRule getFillRule() const;
-            void setFillRule(const FillRule aFillRule = FillRule_notset) { maFillRule = aFillRule; }
 
             /// fill StrokeDasharray content
             const SvgNumberVector& getStrokeDasharray() const;
@@ -382,7 +381,6 @@ namespace svgio
             void setFontStyle(const FontStyle aFontStyle = FontStyle_notset) { maFontStyle = aFontStyle; }
 
             /// FontVariant content
-            FontVariant getFontVariant() const;
             void setFontVariant(const FontVariant aFontVariant = FontVariant_notset) { maFontVariant = aFontVariant; }
 
             /// FontWeight content
@@ -427,26 +425,21 @@ namespace svgio
 
             // ClipPathXLink content
             const OUString getClipPathXLink() const { return maClipPathXLink; }
-            void setClipPathXLink(const OUString& rNew) { maClipPathXLink = rNew; }
 
             // MaskXLink content
             const OUString getMaskXLink() const { return maMaskXLink; }
-            void setMaskXLink(const OUString& rNew) { maMaskXLink = rNew; }
 
             // MarkerStartXLink content
             OUString getMarkerStartXLink() const;
             const SvgMarkerNode* accessMarkerStartXLink() const;
-            void setMarkerStartXLink(const OUString& rNew) { maMarkerStartXLink = rNew; }
 
             // MarkerMidXLink content
             OUString getMarkerMidXLink() const;
             const SvgMarkerNode* accessMarkerMidXLink() const;
-            void setMarkerMidXLink(const OUString& rNew) { maMarkerMidXLink = rNew; }
 
             // MarkerEndXLink content
             OUString getMarkerEndXLink() const;
             const SvgMarkerNode* accessMarkerEndXLink() const;
-            void setMarkerEndXLink(const OUString& rNew) { maMarkerEndXLink = rNew; }
 
             // BaselineShift
             void setBaselineShift(const BaselineShift aBaselineShift = BaselineShift_Baseline) { maBaselineShift = aBaselineShift; }
