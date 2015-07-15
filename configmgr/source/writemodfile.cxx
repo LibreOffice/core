@@ -35,6 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <xmlreader/span.hxx>
@@ -73,18 +74,7 @@ OString convertToUtf8(
     return s;
 }
 
-struct TempFile {
-    OUString url;
-    oslFileHandle handle;
-    bool closed;
-
-    TempFile(): handle(0), closed(false) {}
-
-    ~TempFile();
-private:
-    TempFile(const TempFile&) SAL_DELETED_FUNCTION;
-    TempFile& operator=(const TempFile&) SAL_DELETED_FUNCTION;
-};
+} // anonymous namespace
 
 TempFile::~TempFile() {
     if (handle != 0) {
@@ -103,21 +93,66 @@ TempFile::~TempFile() {
     }
 }
 
-void writeData_(oslFileHandle handle, char const * begin, sal_Int32 length) {
-    assert(length >= 0);
-    sal_uInt64 n;
-    if ((osl_writeFile(handle, begin, static_cast< sal_uInt32 >(length), &n) !=
-         osl_File_E_None) ||
-        n != static_cast< sal_uInt32 >(length))
-    {
-        throw css::uno::RuntimeException(
-            "write failure");
-    }
+oslFileError TempFile::closeWithoutUnlink() {
+    flush();
+    oslFileError e = osl_closeFile(handle);
+    handle = 0;
+    closed = true;
+    return e;
 }
 
-void writeValueContent_(oslFileHandle, bool) SAL_DELETED_FUNCTION;
+void TempFile::closeAndRename(const OUString &_url) {
+    oslFileError e = flush();
+    if (e != osl_File_E_None) {
+        throw css::uno::RuntimeException(
+            "cannot write to " + url);
+    }
+    e = osl_closeFile(handle);
+    closed = true;
+    if (e != osl_File_E_None) {
+        throw css::uno::RuntimeException(
+            "cannot close " + url);
+    }
+    if (osl::File::move(url, _url) != osl::FileBase::E_None) {
+        throw css::uno::RuntimeException(
+            "cannot move " + url);
+    }
+    handle = 0;
+}
+
+oslFileError TempFile::flush() {
+    oslFileError e = osl_File_E_None;
+    if (!buffer.isEmpty()) {
+        sal_uInt64 nBytesWritten = 0;
+        e = osl_writeFile(handle, buffer.getStr(),
+                          static_cast< sal_uInt32 >(buffer.getLength()),
+                          &nBytesWritten);
+        if (nBytesWritten != static_cast< sal_uInt32 >(buffer.getLength())) {
+            // queue up any error / exception until close.
+            buffer.remove(0, static_cast< sal_Int32 >( nBytesWritten ) );
+        } else {
+            buffer.setLength(0);
+        }
+    }
+    return e;
+}
+
+void TempFile::writeString(char const *begin, sal_Int32 length) {
+    buffer.append(begin, length);
+    if (buffer.getLength() > 0x10000)
+        flush();
+}
+
+namespace {
+
+void writeData_(TempFile &handle, char const * begin, sal_Int32 length) {
+    assert(length >= 0);
+    handle.writeString(begin, length);
+}
+
+void writeValueContent_(TempFile &, bool) SAL_DELETED_FUNCTION;
     // silence lopluign:salbool
-void writeValueContent_(oslFileHandle handle, sal_Bool value) {
+void writeValueContent_(TempFile &handle, sal_Bool value) {
     if (value) {
         writeData_(handle, RTL_CONSTASCII_STRINGPARAM("true"));
     } else {
@@ -125,28 +160,28 @@ void writeValueContent_(oslFileHandle handle, sal_Bool value) {
     }
 }
 
-void writeValueContent_(oslFileHandle handle, sal_Int16 value) {
+void writeValueContent_(TempFile &handle, sal_Int16 value) {
     writeData(handle, OString::number(value));
 }
 
-void writeValueContent_(oslFileHandle handle, sal_Int32 value) {
+void writeValueContent_(TempFile &handle, sal_Int32 value) {
     writeData(handle, OString::number(value));
 }
 
-void writeValueContent_(oslFileHandle handle, sal_Int64 value) {
+void writeValueContent_(TempFile &handle, sal_Int64 value) {
     writeData(handle, OString::number(value));
 }
 
-void writeValueContent_(oslFileHandle handle, double value) {
+void writeValueContent_(TempFile &handle, double value) {
     writeData(handle, OString::number(value));
 }
 
-void writeValueContent_(oslFileHandle handle, const OUString& value) {
+void writeValueContent_(TempFile &handle, const OUString& value) {
     writeValueContent(handle, value);
 }
 
 void writeValueContent_(
-    oslFileHandle handle, css::uno::Sequence< sal_Int8 > const & value)
+    TempFile &handle, css::uno::Sequence< sal_Int8 > const & value)
 {
     for (sal_Int32 i = 0; i < value.getLength(); ++i) {
         static char const hexDigit[16] = {
@@ -158,7 +193,7 @@ void writeValueContent_(
 }
 
 template< typename T > void writeSingleValue(
-    oslFileHandle handle, css::uno::Any const & value)
+    TempFile &handle, css::uno::Any const & value)
 {
     writeData_(handle, RTL_CONSTASCII_STRINGPARAM(">"));
     T val = T();
@@ -168,7 +203,7 @@ template< typename T > void writeSingleValue(
 }
 
 template< typename T > void writeListValue(
-    oslFileHandle handle, css::uno::Any const & value)
+    TempFile &handle, css::uno::Any const & value)
 {
     writeData_(handle, RTL_CONSTASCII_STRINGPARAM(">"));
     css::uno::Sequence< T > val;
@@ -183,7 +218,7 @@ template< typename T > void writeListValue(
 }
 
 template< typename T > void writeItemListValue(
-    oslFileHandle handle, css::uno::Any const & value)
+    TempFile &handle, css::uno::Any const & value)
 {
     writeData_(handle, RTL_CONSTASCII_STRINGPARAM(">"));
     css::uno::Sequence< T > val;
@@ -196,7 +231,7 @@ template< typename T > void writeItemListValue(
     writeData_(handle, RTL_CONSTASCII_STRINGPARAM("</value>"));
 }
 
-void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
+void writeValue(TempFile &handle, Type type, css::uno::Any const & value) {
     switch (type) {
     case TYPE_BOOLEAN:
         writeSingleValue< sal_Bool >(handle, value);
@@ -246,7 +281,7 @@ void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
 }
 
 void writeNode(
-    Components & components, oslFileHandle handle,
+    Components & components, TempFile &handle,
     rtl::Reference< Node > const & parent, OUString const & name,
     rtl::Reference< Node > const & node)
 {
@@ -364,7 +399,7 @@ void writeNode(
 }
 
 void writeModifications(
-    Components & components, oslFileHandle handle,
+    Components & components, TempFile &handle,
     OUString const & parentPathRepresentation,
     rtl::Reference< Node > const & parent, OUString const & nodeName,
     rtl::Reference< Node > const & node,
@@ -435,11 +470,11 @@ void writeModifications(
 
 }
 
-void writeData(oslFileHandle handle, OString const & text) {
+void writeData(TempFile &handle, OString const & text) {
     writeData_(handle, text.getStr(), text.getLength());
 }
 
-void writeAttributeValue(oslFileHandle handle, OUString const & value) {
+void writeAttributeValue(TempFile &handle, OUString const & value) {
     sal_Int32 i = 0;
     sal_Int32 j = i;
     for (; j < value.getLength(); ++j) {
@@ -484,7 +519,7 @@ void writeAttributeValue(oslFileHandle handle, OUString const & value) {
     writeData(handle, convertToUtf8(value, i, j - i));
 }
 
-void writeValueContent(oslFileHandle handle, OUString const & value) {
+void writeValueContent(TempFile &handle, OUString const & value) {
     sal_Int32 i = 0;
     sal_Int32 j = i;
     for (; j < value.getLength(); ++j) {
@@ -557,7 +592,7 @@ void writeModFile(
             "cannot create temporary file in " + dir);
     }
     writeData_(
-        tmp.handle,
+        tmp,
         RTL_CONSTASCII_STRINGPARAM(
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<oor:items"
             " xmlns:oor=\"http://openoffice.org/2001/registry\""
@@ -571,22 +606,12 @@ void writeModFile(
          j != data.modifications.getRoot().children.end(); ++j)
     {
         writeModifications(
-            components, tmp.handle, "", rtl::Reference< Node >(), j->first,
+            components, tmp, "", rtl::Reference< Node >(), j->first,
             data.getComponents().findNode(Data::NO_LAYER, j->first),
             j->second);
     }
-    writeData_(tmp.handle, RTL_CONSTASCII_STRINGPARAM("</oor:items>\n"));
-    oslFileError e = osl_closeFile(tmp.handle);
-    tmp.closed = true;
-    if (e != osl_File_E_None) {
-        throw css::uno::RuntimeException(
-            "cannot close " + tmp.url);
-    }
-    if (osl::File::move(tmp.url, url) != osl::FileBase::E_None) {
-        throw css::uno::RuntimeException(
-            "cannot move " + tmp.url);
-    }
-    tmp.handle = 0;
+    writeData_(tmp, RTL_CONSTASCII_STRINGPARAM("</oor:items>\n"));
+    tmp.closeAndRename(url);
 }
 
 }
