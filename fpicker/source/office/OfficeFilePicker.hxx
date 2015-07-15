@@ -19,9 +19,10 @@
 #ifndef INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX
 #define INCLUDED_FPICKER_SOURCE_OFFICE_OFFICEFILEPICKER_HXX
 
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase6.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
+#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
@@ -50,9 +51,10 @@ typedef ::com::sun::star::uno::Sequence< OUString >  OUStringList;   // can be t
 
 // class SvtFilePicker ---------------------------------------------------
 
-typedef ::cppu::ImplHelper5 <   ::com::sun::star::ui::dialogs::XFilePicker3
+typedef ::cppu::ImplHelper6 <   ::com::sun::star::ui::dialogs::XFilePicker3
                             ,   ::com::sun::star::ui::dialogs::XFilePickerControlAccess
                             ,   ::com::sun::star::ui::dialogs::XFilePreview
+                            ,   ::com::sun::star::ui::dialogs::XFilePicker2
                             ,   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::ui::dialogs::XAsynchronousExecutableDialog
                             >   SvtFilePicker_Base;
@@ -118,6 +120,7 @@ public:
     virtual void SAL_CALL           setDefaultName( const OUString& aName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL           setDisplayDirectory( const OUString& aDirectory ) throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual OUString SAL_CALL    getDisplayDirectory() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 
