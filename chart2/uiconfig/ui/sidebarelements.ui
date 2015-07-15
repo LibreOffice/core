@@ -333,8 +333,7 @@
           <object class="GtkLabel" id="label_grid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Gridlines
-</property>
+            <property name="label" translatable="yes">Gridlines</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -347,8 +346,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkCheckButton" id="checkbutton_gridline_vertical">
-                <property name="label" translatable="yes">Vertical</property>
+              <object class="GtkCheckButton" id="checkbutton_gridline_vertical_major">
+                <property name="label" translatable="yes">Vertical Major</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -362,12 +361,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="comboboxtext2">
+              <object class="GtkCheckButton" id="checkbutton_gridline_vertical_minor">
+                <property name="label" translatable="yes">Vertical minor</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <items>
-                  <item translatable="yes">major</item>
-                </items>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -387,8 +387,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkCheckButton" id="checkbutton_gridline_horizontal">
-                <property name="label" translatable="yes">Horizontal</property>
+              <object class="GtkCheckButton" id="checkbutton_gridline_horizontal_major">
+                <property name="label" translatable="yes">Horizontal Major</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -403,12 +403,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="comboboxtext3">
+              <object class="GtkCheckButton" id="checkbutton_gridline_horizontal_minor">
+                <property name="label" translatable="yes">Horizontal major</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <items>
-                  <item translatable="yes">major</item>
-                </items>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -421,98 +422,6 @@
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">13</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label_data">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Data</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">14</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box10">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_label">
-                <property name="label" translatable="yes">Show label</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="comboboxtext4">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <items>
-                  <item translatable="yes">above</item>
-                </items>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">15</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box11">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_trendline">
-                <property name="label" translatable="yes">Trendline</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="comboboxtext5">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <items>
-                  <item translatable="yes">linear</item>
-                </items>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">16</property>
           </packing>
         </child>
       </object>

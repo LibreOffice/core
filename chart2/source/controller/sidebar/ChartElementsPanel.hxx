@@ -85,8 +85,10 @@ private:
     VclPtr<CheckBox> mpCB2ndYAxis;
     VclPtr<CheckBox> mpCB2ndYAxisTitle;
     VclPtr<CheckBox> mpCBLegend;
-    VclPtr<CheckBox> mpCBGridVertical;
-    VclPtr<CheckBox> mpCBGridHorizontal;
+    VclPtr<CheckBox> mpCBGridVerticalMajor;
+    VclPtr<CheckBox> mpCBGridHorizontalMajor;
+    VclPtr<CheckBox> mpCBGridVerticalMinor;
+    VclPtr<CheckBox> mpCBGridHorizontalMinor;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
