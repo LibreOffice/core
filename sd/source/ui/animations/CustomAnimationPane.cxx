@@ -40,7 +40,6 @@
 #include "STLPropertySet.hxx"
 #include "CustomAnimationPane.hxx"
 #include "CustomAnimationDialog.hxx"
-#include "CustomAnimationCreateDialog.hxx"
 #include "CustomAnimation.hrc"
 #include "CustomAnimationList.hxx"
 #include "createcustomanimationpanel.hxx"
@@ -67,6 +66,7 @@
 #include "undoanim.hxx"
 #include "optsitem.hxx"
 #include "sddll.hxx"
+#include "sdmod.hxx"
 #include "framework/FrameworkHelper.hxx"
 
 #include "EventMultiplexer.hxx"
@@ -76,6 +76,8 @@
 #include "drawdoc.hxx"
 #include "app.hrc"
 
+#include <svx/svdetc.hxx>
+#include <svx/svdstr.hrc>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -101,6 +103,11 @@ using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::text::XText;
 using ::sd::framework::FrameworkHelper;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Exception;
 
 namespace sd {
 
@@ -151,13 +158,14 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     mrBase( rBase ),
     mpCustomAnimationPresets(nullptr),
     mnPropertyType( nPropertyTypeNone ),
+    mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND ),
+    mnPolygonPathPos( LISTBOX_ENTRY_NOTFOUND ),
+    mnFreeformPathPos( LISTBOX_ENTRY_NOTFOUND ),
     maLateInitTimer()
 {
     // load resources
     get(mpPBAddEffect, "add_effect");
-    get(mpPBChangeEffect, "change_effect");
     get(mpPBRemoveEffect, "remove_effect");
-
     get(mpFTEffect, "effect_label");
 
     get(mpFTStart, "start_effect");
@@ -169,11 +177,18 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
 
     get(mpFTSpeed, "effect_speed");
     get(mpCBSpeed, "effect_speed_list");
-
+    get(mpFTCategory, "categorylabel");
+    get(mpLBCategory, "categorylb");
+    get(mpFTAnimation, "effectlabel");
+    get(mpLBAnimation, "effect_list");
+    mpLBAnimation->SetSelectHdl(LINK(this, CustomAnimationPane, AnimationSelectHdl));
     get(mpCustomAnimationList, "custom_animation_list");
     mpCustomAnimationList->setController( dynamic_cast<ICustomAnimationListController*> ( this ) );
     mpCustomAnimationList->set_width_request(mpCustomAnimationList->approximate_char_width() * 16);
-    mpCustomAnimationList->set_height_request(mpCustomAnimationList->GetTextHeight() * 16);
+    mpCustomAnimationList->set_height_request(mpCustomAnimationList->GetTextHeight() * 8);
+
+    mpLBAnimation->set_width_request(mpLBAnimation->approximate_char_width() * 16);
+    mpLBAnimation->set_height_request(mpLBAnimation->GetTextHeight() * 8);
 
     get(mpPBMoveUp, "move_up");
     get(mpPBMoveDown, "move_down");
@@ -185,7 +200,6 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     fillDurationComboBox( mpCBSpeed );
 
     mpPBAddEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
-    mpPBChangeEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpPBRemoveEffect->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpLBStart->SetSelectHdl( LINK( this, CustomAnimationPane, implControlListBoxHdl ) );
     mpCBSpeed->SetSelectHdl( LINK( this, CustomAnimationPane, implControlListBoxHdl ) );
@@ -194,6 +208,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     mpPBMoveDown->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpPBPlay->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
+    mpLBCategory->SetSelectHdl( LINK(this, CustomAnimationPane, UpdateAnimationLB) );
 
     maStrModify = mpFTEffect->GetText();
 
@@ -216,7 +231,6 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     maLateInitTimer.SetTimeout(100);
     maLateInitTimer.SetTimeoutHdl(LINK(this, CustomAnimationPane, lateInitCallback));
     maLateInitTimer.Start();
-
     UpdateLook();
 }
 
@@ -238,7 +252,6 @@ void CustomAnimationPane::dispose()
         (*aIter)->Dispose();
 
     mpPBAddEffect.clear();
-    mpPBChangeEffect.clear();
     mpPBRemoveEffect.clear();
     mpFTEffect.clear();
     mpFTStart.clear();
@@ -254,7 +267,36 @@ void CustomAnimationPane::dispose()
     mpPBMoveDown.clear();
     mpPBPlay.clear();
     mpCBAutoPreview.clear();
+    mpFTCategory.clear();
+    mpLBCategory.clear();
+    mpFTAnimation.clear();
+    mpLBAnimation.clear();
+
     PanelLayout::dispose();
+}
+
+PathKind CustomAnimationPane::getCreatePathKind() const
+{
+    PathKind eKind = PathKind::NONE;
+
+    if( mpLBAnimation->GetSelectEntryCount() == 1 )
+    {
+        const sal_Int32 nPos = mpLBAnimation->GetSelectEntryPos();
+        if( nPos == mnCurvePathPos )
+        {
+            eKind = PathKind::CURVE;
+        }
+        else if( nPos == mnPolygonPathPos )
+        {
+            eKind = PathKind::POLYGON;
+        }
+        else if( nPos == mnFreeformPathPos )
+        {
+            eKind = PathKind::FREEFORM;
+        }
+    }
+
+    return eKind;
 }
 
 void CustomAnimationPane::addUndo()
@@ -481,13 +523,17 @@ void CustomAnimationPane::updateControls()
     if( !mxView.is() )
     {
         mpPBAddEffect->Enable( false );
-        mpPBChangeEffect->Enable( false );
         mpPBRemoveEffect->Enable( false );
         mpFTStart->Enable( false );
         mpLBStart->Enable( false );
         mpPBPropertyMore->Enable( false );
         mpLBProperty->Enable( false );
         mpFTProperty->Enable( false );
+        mpFTCategory->Disable();
+        mpLBCategory->Disable();
+        mpFTAnimation->Disable();
+        mpLBAnimation->Disable();
+        mpLBAnimation->Clear();
         mpCustomAnimationList->clear();
         return;
     }
@@ -495,11 +541,26 @@ void CustomAnimationPane::updateControls()
     const int nSelectionCount = maListSelection.size();
 
     mpPBAddEffect->Enable( maViewSelection.hasValue() );
-    mpPBChangeEffect->Enable( nSelectionCount);
     mpPBRemoveEffect->Enable(nSelectionCount);
+    if(maViewSelection.hasValue() && (nSelectionCount == 1))
+    {
+        mpFTAnimation->Enable();
+        mpLBAnimation->Enable();
+        fillAnimationLB();
+    }
+    else
+    {
+        mpFTAnimation->Disable();
+        mpLBAnimation->Disable();
+        mpLBAnimation->Clear();
+    }
+
+    mpLBCategory->Enable(maViewSelection.hasValue() && (nSelectionCount == 1));
+    mpFTCategory->Enable(maViewSelection.hasValue() && (nSelectionCount == 1));
 
     mpFTStart->Enable(nSelectionCount > 0);
     mpLBStart->Enable(nSelectionCount > 0);
+    mpLBProperty->Enable(nSelectionCount > 0);
     mpPBPropertyMore->Enable(nSelectionCount > 0);
 
     mpFTProperty->SetText( maStrProperty );
@@ -566,6 +627,42 @@ void CustomAnimationPane::updateControls()
             mpLBProperty->Enable( false );
             mpPBPropertyMore->Enable( false );
         }
+        sal_uInt32 nCategoryPos = LISTBOX_ENTRY_NOTFOUND;
+        switch(pEffect->getPresetClass())
+        {
+            case EffectPresetClass::MOTIONPATH: nCategoryPos = 0; break;
+            case EffectPresetClass::EMPHASIS: nCategoryPos = 1; break;
+            case EffectPresetClass::ENTRANCE: nCategoryPos = 2; break;
+            case EffectPresetClass::EXIT: nCategoryPos = 3; break;
+            default:
+                break;
+        }
+        switch(pEffect->getCommand())
+        {
+            case EffectCommands::TOGGLEPAUSE:
+            case EffectCommands::STOP:
+            case EffectCommands::PLAY:
+                nCategoryPos = 4; break;
+            default:
+            break;
+        }
+        mpLBCategory->SelectEntryPos(nCategoryPos);
+        fillAnimationLB();
+        OUString rsPresetId = pEffect->getPresetId();
+        sal_Int32 nAnimationPos = mpLBAnimation->GetEntryCount();
+        while( nAnimationPos-- )
+        {
+            void* pEntryData = mpLBAnimation->GetEntryData( nAnimationPos );
+            if( pEntryData )
+            {
+                CustomAnimationPresetPtr& pPtr = *static_cast< CustomAnimationPresetPtr* >(pEntryData);
+                if( pPtr.get() && pPtr->getPresetId() == rsPresetId )
+                {
+                    mpLBAnimation->SelectEntryPos( nAnimationPos );
+                    break;
+                }
+            }
+        }
 
         sal_uInt16 nPos = 0xffff;
 
@@ -613,7 +710,6 @@ void CustomAnimationPane::updateControls()
         mpPBPropertyMore->Enable( false );
         mpFTSpeed->Enable(false);
         mpCBSpeed->Enable(false);
-        mpLBStart->SetNoSelection();
         mpCBSpeed->SetNoSelection();
         mpFTEffect->SetText( maStrModify );
     }
@@ -822,7 +918,7 @@ void CustomAnimationPane::onContextMenu( sal_uInt16 nSelectedPopupEntry )
         onRemove();
         break;
     case CM_CREATE:
-        if( maViewSelection.hasValue() ) onChange( true );
+        if( maViewSelection.hasValue() ) onChange();
         break;
     }
 
@@ -1672,164 +1768,161 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
     return false;
 }
 
-void CustomAnimationPane::onChange( bool bCreate )
+void CustomAnimationPane::animationChange()
 {
-    bool bHasText = true;
-
-    // first create vector of targets for dialog preview
-    std::vector< Any > aTargets;
-    OUString sPresetId;
-    double fDuration = 2.0f;
-
-    if( bCreate )
+    if( maListSelection.size() == 1 )
     {
-        // gather shapes from the selection
-        Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
-        maViewSelection = xSel->getSelection();
+        CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
+        const double fDuration = (*pPreset)->getDuration();
+        CustomAnimationPresetPtr pDescriptor(*pPreset);
+        MainSequenceRebuildGuard aGuard( mpMainSequence );
 
-        if( maViewSelection.getValueType() == cppu::UnoType<XShapes>::get())
-        {
-            Reference< XIndexAccess > xShapes;
-            maViewSelection >>= xShapes;
-
-            sal_Int32 nCount = xShapes->getCount();
-            sal_Int32 nIndex;
-            for( nIndex = 0; nIndex < nCount; nIndex++ )
-            {
-                Any aTarget( xShapes->getByIndex( nIndex ) );
-                aTargets.push_back( aTarget );
-                if( bHasText )
-                {
-                    Reference< XText > xText;
-                    aTarget >>= xText;
-                    if( !xText.is() || xText->getString().isEmpty() )
-                        bHasText = false;
-                }
-            }
-        }
-        else if ( maViewSelection.getValueType() == cppu::UnoType<XShape>::get())
-        {
-            aTargets.push_back( maViewSelection );
-            Reference< XText > xText;
-            maViewSelection >>= xText;
-            if( !xText.is() || xText->getString().isEmpty() )
-                bHasText = false;
-        }
-        else if ( maViewSelection.getValueType() == cppu::UnoType<XTextCursor>::get())
-        {
-            Reference< XShape > xShape;
-            std::list< sal_Int16 > aParaList;
-            if( getTextSelection( maViewSelection, xShape, aParaList ) )
-            {
-                ParagraphTarget aParaTarget;
-                aParaTarget.Shape = xShape;
-
-                std::list< sal_Int16 >::iterator aIter( aParaList.begin() );
-                for( ; aIter != aParaList.end(); ++aIter )
-                {
-                    aParaTarget.Paragraph = (*aIter);
-                    aTargets.push_back( makeAny( aParaTarget ) );
-                   }
-            }
-        }
-        else
-        {
-            OSL_FAIL("sd::CustomAnimationPane::onChange(), unknown view selection!" );
-            return;
-        }
-    }
-    else
-    {
         // get selected effect
         EffectSequence::iterator aIter( maListSelection.begin() );
         const EffectSequence::iterator aEnd( maListSelection.end() );
         while( aIter != aEnd )
         {
-            if( !bHasText || !(*aIter)->hasText() )
-                bHasText = false;
+            CustomAnimationEffectPtr pEffect = (*aIter++);
 
-            if( sPresetId.isEmpty() )
+            EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
+            if( !pEffectSequence )
+                pEffectSequence = mpMainSequence.get();
+
+            pEffectSequence->replace( pEffect, pDescriptor, fDuration );
+        }
+        onPreview(true);
+    }
+
+}
+
+void CustomAnimationPane::onChange()
+{
+    bool bHasText = true;
+
+    // first create vector of targets for dialog preview
+    std::vector< Any > aTargets;
+
+    // gather shapes from the selection
+    Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
+    maViewSelection = xSel->getSelection();
+
+    if( maViewSelection.getValueType() == cppu::UnoType<XShapes>::get())
+    {
+        Reference< XIndexAccess > xShapes;
+        maViewSelection >>= xShapes;
+
+        sal_Int32 nCount = xShapes->getCount();
+        sal_Int32 nIndex;
+        for( nIndex = 0; nIndex < nCount; nIndex++ )
+        {
+            Any aTarget( xShapes->getByIndex( nIndex ) );
+            aTargets.push_back( aTarget );
+            if( bHasText )
             {
-                sPresetId = (*aIter)->getPresetId();
-                fDuration = (*aIter)->getDuration();
+                Reference< XText > xText;
+                aTarget >>= xText;
+                if( !xText.is() || xText->getString().isEmpty() )
+                    bHasText = false;
             }
+        }
+    }
+    else if ( maViewSelection.getValueType() == cppu::UnoType<XShape>::get())
+    {
+        aTargets.push_back( maViewSelection );
+        Reference< XText > xText;
+        maViewSelection >>= xText;
+        if( !xText.is() || xText->getString().isEmpty() )
+            bHasText = false;
+    }
+    else if ( maViewSelection.getValueType() == cppu::UnoType<XTextCursor>::get())
+    {
+        Reference< XShape > xShape;
+        std::list< sal_Int16 > aParaList;
+        if( getTextSelection( maViewSelection, xShape, aParaList ) )
+        {
+            ParagraphTarget aParaTarget;
+            aParaTarget.Shape = xShape;
 
-            aTargets.push_back( (*aIter++)->getTarget() );
+            std::list< sal_Int16 >::iterator aIter( aParaList.begin() );                for( ; aIter != aParaList.end(); ++aIter )
+            for( ; aIter != aParaList.end(); ++aIter )
+            {
+                aParaTarget.Paragraph = (*aIter);
+                aTargets.push_back( makeAny( aParaTarget ) );
+            }
+        }
+    }
+    else
+    {
+        OSL_FAIL("sd::CustomAnimationPane::onChange(), unknown view selection!" );
+        return;
+    }
+
+    CustomAnimationPresetPtr pDescriptor;
+    mpFTCategory->Enable();
+    mpLBCategory->Enable();
+    mpFTAnimation->Enable();
+    mpLBAnimation->Enable();
+    mpLBCategory->SelectEntryPos(1);
+    fillAnimationLB();
+    void* pEntryData = mpLBAnimation->GetSelectEntryData();
+    if( pEntryData )
+        pDescriptor = *static_cast< CustomAnimationPresetPtr* >( pEntryData );
+
+    const double fDuration = pDescriptor->getDuration();
+    sal_uInt32 nPos = LISTBOX_ENTRY_NOTFOUND;
+    if( fDuration == 5.0 )
+        nPos = 0;
+    else if( fDuration == 3.0 )
+        nPos = 1;
+    else if( fDuration == 2.0 )
+        nPos = 2;
+    else if( fDuration == 1.0 )
+        nPos = 3;
+    else if( fDuration == 0.5 )
+        nPos = 4;
+    mpCBSpeed->SelectEntryPos( nPos );
+    bool bHasSpeed = pDescriptor->getDuration() > 0.001;
+    mpCBSpeed->Enable( bHasSpeed );
+    mpFTSpeed->Enable( bHasSpeed );
+
+    if( pDescriptor.get() )
+    {
+        {
+            mpCustomAnimationList->SelectAll( false );
+
+            // gather shapes from the selection
+            std::vector< Any >::iterator aIter( aTargets.begin() );
+            const std::vector< Any >::iterator aEnd( aTargets.end() );
+            bool bFirst = true;
+            for( ; aIter != aEnd; ++aIter )
+            {
+                CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
+
+                // if only one shape with text and no fill or outline is selected, animate only by first level paragraphs
+                if( bHasText && (aTargets.size() == 1) )
+                {
+                    Reference< XShape > xShape( (*aIter), UNO_QUERY );
+                    if( xShape.is() && !hasVisibleShape( xShape ) )
+                    {
+                        mpMainSequence->createTextGroup( pCreated, 1, -1.0, false, false );
+                    }
+                }
+
+                if( bFirst )
+                    bFirst = false;
+                else
+                    pCreated->setNodeType( EffectNodeType::WITH_PREVIOUS );
+
+                if( pCreated.get() )
+                    mpCustomAnimationList->select( pCreated );
+            }
         }
     }
 
-    {
-        ScopedVclPtrInstance< CustomAnimationCreateDialog > pDlg( this, this, aTargets, bHasText, sPresetId, fDuration );
-        if( pDlg->Execute() )
-        {
-            addUndo();
-            fDuration = pDlg->getSelectedDuration();
-            CustomAnimationPresetPtr pDescriptor = pDlg->getSelectedPreset();
-            if( pDescriptor.get() )
-            {
-                if( bCreate )
-                {
-                    mpCustomAnimationList->SelectAll( false );
-
-                    // gather shapes from the selection
-                    std::vector< Any >::iterator aIter( aTargets.begin() );
-                    const std::vector< Any >::iterator aEnd( aTargets.end() );
-                    bool bFirst = true;
-                    for( ; aIter != aEnd; ++aIter )
-                    {
-                        CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
-
-                        // if only one shape with text and no fill or outline is selected, animate only by first level paragraphs
-                        if( bHasText && (aTargets.size() == 1) )
-                        {
-                            Reference< XShape > xShape( (*aIter), UNO_QUERY );
-                            if( xShape.is() && !hasVisibleShape( xShape ) )
-                            {
-                                mpMainSequence->createTextGroup( pCreated, 1, -1.0, false, false );
-                            }
-                        }
-
-                        if( bFirst )
-                            bFirst = false;
-                        else
-                            pCreated->setNodeType( EffectNodeType::WITH_PREVIOUS );
-
-                        if( pCreated.get() )
-                            mpCustomAnimationList->select( pCreated );
-                    }
-                }
-                else
-                {
-                    MainSequenceRebuildGuard aGuard( mpMainSequence );
-
-                    // get selected effect
-                    EffectSequence::iterator aIter( maListSelection.begin() );
-                    const EffectSequence::iterator aEnd( maListSelection.end() );
-                    while( aIter != aEnd )
-                    {
-                        CustomAnimationEffectPtr pEffect = (*aIter++);
-
-                        EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
-                        if( !pEffectSequence )
-                            pEffectSequence = mpMainSequence.get();
-
-                        pEffectSequence->replace( pEffect, pDescriptor, fDuration );
-                    }
-                }
-            }
-            else
-            {
-                PathKind eKind = pDlg->getCreatePathKind();
-                if( eKind != PathKind::NONE )
-                    createPath( eKind, aTargets, fDuration );
-            }
-            mrBase.GetDocShell()->SetModified();
-        }
-    } // dispose pDlg
+    mrBase.GetDocShell()->SetModified();
 
     updateControls();
 
-    // stop running preview from dialog
     SlideShow::Stop( mrBase );
 }
 
@@ -1987,17 +2080,9 @@ void CustomAnimationPane::onChangeSpeed()
 
         MainSequenceRebuildGuard aGuard( mpMainSequence );
 
-        double fDuration;
-
-        switch( mpCBSpeed->GetSelectEntryPos() )
-        {
-        case 0: fDuration = 5.0; break;
-        case 1: fDuration = 3.0; break;
-        case 2: fDuration = 2.0; break;
-        case 3: fDuration = 1.0; break;
-        case 4: fDuration = 0.5; break;
-        default:
-            return;
+        double fDuration = getDuration();
+        if(fDuration == 0) {
+             return;
         }
 
         // change selected effect
@@ -2017,11 +2102,126 @@ void CustomAnimationPane::onChangeSpeed()
     }
 }
 
+float CustomAnimationPane::getDuration()
+{
+    sal_uInt16 nPos= mpCBSpeed->GetSelectEntryPos();
+    float fDuration = 0;
+    switch( nPos )
+    {
+    case 0: fDuration = 5.0; break;
+    case 1: fDuration = 3.0; break;
+    case 2: fDuration = 2.0; break;
+    case 3: fDuration = 1.0; break;
+    case 4: fDuration = 0.5; break;
+    }
+    return fDuration;
+}
+
 /// this link is called when the property box is modified by the user
 IMPL_LINK_NOARG_TYPED(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
 {
     onChangeProperty();
 }
+
+IMPL_LINK_NOARG_TYPED(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
+{
+    CustomAnimationPresetPtr* pPreset = static_cast< CustomAnimationPresetPtr* >(mpLBAnimation->GetSelectEntryData());
+    const double fDuration = (*pPreset)->getDuration();
+    sal_uInt32 nPos = LISTBOX_ENTRY_NOTFOUND;
+    if( fDuration == 5.0 )
+        nPos = 0;
+    else if( fDuration == 3.0 )
+        nPos = 1;
+    else if( fDuration == 2.0 )
+        nPos = 2;
+    else if( fDuration == 1.0 )
+        nPos = 3;
+    else if( fDuration == 0.5 )
+        nPos = 4;
+    mpCBSpeed->SelectEntryPos( nPos );
+    bool bHasSpeed = (*pPreset)->getDuration() > 0.001;
+    mpCBSpeed->Enable( bHasSpeed );
+    mpFTSpeed->Enable( bHasSpeed );
+    MainSequenceRebuildGuard aGuard( mpMainSequence );
+
+    // get selected effect
+    EffectSequence::iterator aIter( maListSelection.begin() );
+    const EffectSequence::iterator aEnd( maListSelection.end() );
+    while( aIter != aEnd )
+    {
+        CustomAnimationEffectPtr pEffect = (*aIter++);
+
+        EffectSequenceHelper* pEffectSequence = pEffect->getEffectSequence();
+        if( !pEffectSequence )
+            pEffectSequence = mpMainSequence.get();
+
+        pEffectSequence->replace( pEffect, *pPreset, fDuration );
+    }
+    onPreview(true);
+}
+
+IMPL_LINK_NOARG_TYPED(CustomAnimationPane, UpdateAnimationLB, ListBox&, void)
+{
+    fillAnimationLB();
+}
+
+void CustomAnimationPane::fillAnimationLB()
+{
+    PresetCategoryList rCategoryList;
+    sal_uInt16 nPosition = mpLBCategory->GetSelectEntryPos();
+    const CustomAnimationPresets& rPresets (getPresets());
+    switch(nPosition)
+    {
+        case 0:rCategoryList = rPresets.getMotionPathsPresets();break;
+        case 1:rCategoryList = rPresets.getEmphasisPresets();break;
+        case 2:rCategoryList = rPresets.getEntrancePresets();break;
+        case 3:rCategoryList = rPresets.getExitPresets();break;
+        case 4:rCategoryList = rPresets.getMiscPresets();break;
+    }
+
+    sal_uInt32 nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
+
+    if(nPosition == 0)
+    {
+        OUString sMotionPathLabel( SD_RESSTR( STR_CUSTOMANIMATION_USERPATH ) );
+        mpLBAnimation->InsertCategory( sMotionPathLabel );
+        mnCurvePathPos = mpLBAnimation->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulCOMBLINE) );
+        mnPolygonPathPos = mpLBAnimation->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulPOLY) );
+        mnFreeformPathPos = mpLBAnimation->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulFREELINE) );
+
+    }
+    PresetCategoryList::const_iterator aCategoryIter( rCategoryList.begin() );
+    const PresetCategoryList::const_iterator aCategoryEnd( rCategoryList.end() );
+    mpLBAnimation->Clear();
+    while(aCategoryIter != aCategoryEnd)
+    {
+        PresetCategoryPtr pCategory( *aCategoryIter++ );
+        if( pCategory.get() )
+        {
+            mpLBAnimation->InsertCategory( pCategory->maLabel );
+
+            std::vector< CustomAnimationPresetPtr > aSortedVector(pCategory->maEffects.size());
+            std::copy( pCategory->maEffects.begin(), pCategory->maEffects.end(), aSortedVector.begin() );
+
+            std::vector< CustomAnimationPresetPtr >::const_iterator aIter( aSortedVector.begin() );
+            const std::vector< CustomAnimationPresetPtr >::const_iterator aEnd( aSortedVector.end() );
+            while( aIter != aEnd )
+            {
+                CustomAnimationPresetPtr pDescriptor = (*aIter++);
+                if( pDescriptor.get() && !pDescriptor->isTextOnly() )
+                {
+                    sal_Int32 nPos = mpLBAnimation->InsertEntry( pDescriptor->getLabel() );
+                    mpLBAnimation->SetEntryData( nPos, static_cast<void*>( new CustomAnimationPresetPtr( pDescriptor ) ) );
+
+                    if( nFirstEffect == LISTBOX_ENTRY_NOTFOUND )
+                        nFirstEffect = nPos;
+                }
+            }
+        }
+    }
+    mpLBAnimation->SelectEntryPos(nFirstEffect);
+}
+
 
 IMPL_LINK_TYPED( CustomAnimationPane, implClickHdl, Button*, pBtn, void )
 {
@@ -2036,9 +2236,10 @@ IMPL_LINK_TYPED( CustomAnimationPane, implControlListBoxHdl, ListBox&, rListBox,
 void CustomAnimationPane::implControlHdl(Control* pControl )
 {
     if( pControl == mpPBAddEffect )
-        onChange(true);
-    else if( pControl == mpPBChangeEffect )
-        onChange(false);
+    {
+        onChange();
+        onPreview(true);
+    }
     else if( pControl == mpPBRemoveEffect )
         onRemove();
     else if( pControl == mpLBStart )
