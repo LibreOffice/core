@@ -16956,8 +16956,12 @@ module com {
       void setCurrentFilter([in] string aTitle) raises (::com::sun::star::lang::IllegalArgumentException);
       string getCurrentFilter();
      };
-     published interface XFilePicker3 {
+     published interface XFilePicker2 {
       interface ::com::sun::star::ui::dialogs::XFilePicker;
+      sequence< string > getSelectedFiles();
+     };
+     published interface XFilePicker3 {
+      interface ::com::sun::star::ui::dialogs::XFilePicker2;
       interface ::com::sun::star::ui::dialogs::XFilePickerNotifier;
       interface ::com::sun::star::ui::dialogs::XFilterManager;
       interface ::com::sun::star::ui::dialogs::XFilterGroupManager;
