@@ -1,6 +1,7 @@
---- misc/boost_1_44_0/boost/multi_array/concept_checks.hpp
-+++ misc/build/boost_1_44_0/boost/multi_array/concept_checks.hpp
-@@ -56,6 +56,13 @@
+diff -ru boost.orig/boost/multi_array/concept_checks.hpp boost/boost/multi_array/concept_checks.hpp
+--- foo/misc/boost.orig/boost/multi_array/concept_checks.hpp	2014-04-23 17:36:51.000000000 +0200
++++ foo/misc/boost/boost/multi_array/concept_checks.hpp	2015-07-18 20:58:17.222982959 +0200
+@@ -58,6 +58,13 @@
  
  } // namespace detail
  
@@ -14,7 +15,7 @@
  
    template <typename Array, std::size_t NumDims >
    struct ConstMultiArrayConcept
-@@ -117,6 +124,9 @@
+@@ -119,6 +126,9 @@
      index_range range;
    };
  
