@@ -28,11 +28,10 @@
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include "CustomAnimationPreset.hxx"
 #include "CustomAnimationList.hxx"
-#include "CustomAnimationCreateDialog.hxx"
-
+#include "CategoryListBox.hxx"
 #include "motionpathtag.hxx"
 #include "misc/scopelock.hxx"
-
+#include "CustomAnimationPreset.hxx"
 #include <vector>
 
 class PushButton;
@@ -41,6 +40,8 @@ class FixedText;
 class ListBox;
 class ComboBox;
 class CheckBox;
+
+enum class PathKind { NONE, CURVE, POLYGON, FREEFORM };
 
 namespace com { namespace sun { namespace star { namespace animations {
     class XAnimationNode;
@@ -70,6 +71,7 @@ public:
     void onSelectionChanged();
     void onChangeCurrentPage();
     void onChange( bool bCreate );
+    void animationChange();
     void onRemove();
     void onChangeStart();
     void onChangeStart( sal_Int16 nNodeType );
@@ -79,7 +81,7 @@ public:
     // methods
     void preview( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode );
     void remove( CustomAnimationEffectPtr& pEffect );
-
+    PathKind getCreatePathKind() const;
     // Control
     virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
@@ -93,7 +95,7 @@ public:
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
 
     void addUndo();
-
+    float getDuration();
     void updatePathFromMotionPathTag( const rtl::Reference< MotionPathTag >& xTag );
 
 private:
@@ -115,11 +117,14 @@ private:
     static ::com::sun::star::uno::Any getProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect );
     bool setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const ::com::sun::star::uno::Any& rValue );
     void UpdateLook();
+    void fillAnimationLB();
 
     DECL_LINK( implControlHdl, Control* );
     DECL_LINK(implPropertyHdl, void *);
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
     DECL_LINK_TYPED(lateInitCallback, Timer *, void);
+    DECL_LINK(UpdateAnimationLB, void*);
+    DECL_LINK(AnimationSelectHdl, void*);
 
 private:
     ViewShellBase& mrBase;
@@ -143,11 +148,16 @@ private:
     VclPtr<PushButton> mpPBMoveDown;
     VclPtr<PushButton> mpPBPlay;
     VclPtr<CheckBox>   mpCBAutoPreview;
+    VclPtr<ListBox>    mpLBCategory;
+    VclPtr<CategoryListBox> mpLBAnimation;
 
     OUString    maStrModify;
     OUString    maStrProperty;
 
     sal_Int32   mnPropertyType;
+    sal_Int32   mnCurvePathPos;
+    sal_Int32   mnPolygonPathPos;
+    sal_Int32   mnFreeformPathPos;
 
     Size        maMinSize;
 

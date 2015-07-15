@@ -3,6 +3,11 @@
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">sfx2/res/symphony/sidebar-property-small.png</property>
+  </object>
   <object class="GtkImage" id="image_add">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -13,7 +18,6 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">cmd/sc_editdoc.png</property>
-    <property name="icon_size">2</property>
   </object>
   <object class="GtkImage" id="image_down">
     <property name="visible">True</property>
@@ -70,6 +74,7 @@
           <object class="GtkBox" id="box2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">center</property>
             <child>
               <object class="GtkButton" id="add_effect">
                 <property name="visible">True</property>
@@ -103,10 +108,8 @@
             <child>
               <object class="GtkButton" id="change_effect">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_markup" translatable="yes">Modify Effect</property>
                 <property name="image">image_change</property>
               </object>
               <packing>
@@ -145,19 +148,69 @@
                 <property name="position">4</property>
               </packing>
             </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="grid2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="row_spacing">6</property>
+            <property name="column_spacing">6</property>
             <child>
-              <object class="GtkButton" id="play">
+              <object class="GtkLabel" id="categorylabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="receives_default">True</property>
-                <property name="has_tooltip">True</property>
-                <property name="tooltip_text" translatable="yes">Preview Effect</property>
-                <property name="image">image_play</property>
+                <property name="label" translatable="yes">Category:</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">5</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="effectlabel">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Effect:</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="categorylb">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="popup_fixed_width">False</property>
+                <items>
+                  <item translatable="yes">Motion Paths</item>
+                  <item translatable="yes">Emphasis</item>
+                  <item translatable="yes">Entrance</item>
+                  <item translatable="yes">Exit</item>
+                  <item translatable="yes">Misc Effects</item>
+                </items>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="sdlo-CategoryListBox" id="effect_list">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
               </packing>
             </child>
           </object>
@@ -261,11 +314,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="more_properties">
-                    <property name="label" translatable="yes">_Options...</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_underline">True</property>
+                    <property name="image">image1</property>
+                    <property name="always_show_image">True</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -293,7 +346,6 @@
             </child>
             <child type="label">
               <object class="GtkLabel" id="effect_label">
-                <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="xalign">0</property>
@@ -311,14 +363,69 @@
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="auto_preview">
-            <property name="label" translatable="yes">Automatic pre_view</property>
+          <object class="GtkBox" id="box3">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="use_underline">True</property>
-            <property name="xalign">0</property>
-            <property name="draw_indicator">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkSeparator" id="separator1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">6</property>
+                <property name="margin_right">6</property>
+                <property name="spacing">18</property>
+                <child>
+                  <object class="GtkCheckButton" id="auto_preview">
+                    <property name="label" translatable="yes">Automatic Preview</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="play">
+                    <property name="label" translatable="yes">Play</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="receives_default">True</property>
+                    <property name="has_tooltip">True</property>
+                    <property name="tooltip_text" translatable="yes">Preview Effect</property>
+                    <property name="image">image_play</property>
+                    <property name="image_position">right</property>
+                    <property name="always_show_image">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
