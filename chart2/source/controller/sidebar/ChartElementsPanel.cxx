@@ -183,6 +183,26 @@ bool isGridVisible(css::uno::Reference<css::frame::XModel> xModel, GridType eTyp
     return false;
 }
 
+void setGridVisible(css::uno::Reference<css::frame::XModel> xModel, GridType eType, bool bVisible)
+{
+    Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
+    if(xDiagram.is())
+    {
+        sal_Int32 nDimensionIndex = 0;
+        if (eType == GridType::HOR_MAJOR || eType == GridType::HOR_MINOR)
+            nDimensionIndex = 1;
+        sal_Int32 nCooSysIndex = 0;
+
+        bool bMajor = (eType == GridType::HOR_MAJOR || eType == GridType::VERT_MAJOR);
+
+        if (bVisible)
+            AxisHelper::showGrid(nDimensionIndex, nCooSysIndex, bMajor,
+                    xDiagram, comphelper::getProcessComponentContext());
+        else
+            AxisHelper::hideGrid(nDimensionIndex, nCooSysIndex, bMajor, xDiagram);
+    }
+}
+
 bool isAxisVisible(css::uno::Reference<css::frame::XModel> xModel, AxisType eType)
 {
     Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
@@ -416,6 +436,10 @@ IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)
         setTitleVisible(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE, bChecked);
     else if (pCheckBox == mpCBLegend.get())
         setLegendVisible(mxModel, bChecked);
+    else if (pCheckBox == mpCBGridVertical.get())
+        setGridVisible(mxModel, GridType::VERT_MAJOR, bChecked);
+    else if (pCheckBox == mpCBGridHorizontal.get())
+        setGridVisible(mxModel, GridType::HOR_MAJOR, bChecked);
 
     return 0;
 }
