@@ -37,6 +37,7 @@
 #include "TitleHelper.hxx"
 #include "ChartModelHelper.hxx"
 #include "AxisHelper.hxx"
+#include "DiagramHelper.hxx"
 
 #include "ChartModel.hxx"
 
@@ -287,6 +288,8 @@ void ChartElementsPanel::Initialize()
 
 void ChartElementsPanel::updateData()
 {
+    Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(mxModel));
+    sal_Int32 nDimension = DiagramHelper::getDimension(xDiagram);
     SolarMutexGuard aGuard;
 
     mpCBLegend->Check(isLegendVisible(mxModel));
@@ -304,6 +307,12 @@ void ChartElementsPanel::updateData()
     mpCBZAxis->Check(isAxisVisible(mxModel, AxisType::Z_MAIN));
     mpCB2ndXAxis->Check(isAxisVisible(mxModel, AxisType::X_SECOND));
     mpCB2ndYAxis->Check(isAxisVisible(mxModel, AxisType::Y_SECOND));
+
+    if (nDimension != 3)
+    {
+        mpCBZAxis->Disable();
+        mpCBZAxisTitle->Disable();
+    }
 }
 
 VclPtr<vcl::Window> ChartElementsPanel::Create (
