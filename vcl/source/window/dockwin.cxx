@@ -381,7 +381,7 @@ void DockingWindow::ImplLoadRes( const ResId& rResId )
 {
     Window::ImplLoadRes( rResId );
 
-    sal_uLong  nMask = ReadLongRes();
+    const sal_uInt32 nMask = ReadLongRes();
 
     if ( (RSC_DOCKINGWINDOW_XYMAPMODE | RSC_DOCKINGWINDOW_X |
           RSC_DOCKINGWINDOW_Y) & nMask )

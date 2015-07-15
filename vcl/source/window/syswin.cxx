@@ -435,7 +435,7 @@ const Size& SystemWindow::GetMaxOutputSizePixel() const
 static void ImplWindowStateFromStr(WindowStateData& rData,
     const OString& rStr)
 {
-    sal_uLong       nValidMask  = 0;
+    sal_uInt32 nValidMask = 0;
     sal_Int32 nIndex      = 0;
     OString aTokenStr;
 
@@ -548,7 +548,7 @@ static void ImplWindowStateFromStr(WindowStateData& rData,
 
 static OString ImplWindowStateToStr(const WindowStateData& rData)
 {
-    sal_uLong nValidMask = rData.GetMask();
+    const sal_uInt32 nValidMask = rData.GetMask();
     if ( !nValidMask )
         return OString();
 
@@ -647,7 +647,7 @@ void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, lo
 
 void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 {
-    sal_uLong nValidMask = rData.GetMask();
+    const sal_uInt32 nValidMask = rData.GetMask();
     if ( !nValidMask )
         return;
 
@@ -660,7 +660,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 
     if ( pWindow->mpWindowImpl->mbFrame )
     {
-        sal_uLong           nState      = rData.GetState();
+        const sal_uInt32 nState     = rData.GetState();
         SalFrameState   aState;
         aState.mnMask               = rData.GetMask();
         aState.mnX                  = rData.GetX();
@@ -789,7 +789,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         // 91625 - ignore Minimize
         if ( nValidMask & WINDOWSTATE_MASK_STATE )
         {
-            sal_uLong nState = rData.GetState();
+            const sal_uInt32 nState = rData.GetState();
             if ( nState & WINDOWSTATE_STATE_ROLLUP )
                 RollUp();
             else
@@ -800,7 +800,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 
 void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
 {
-    sal_uLong nValidMask = rData.GetMask();
+    sal_uInt32 nValidMask = rData.GetMask();
     if ( !nValidMask )
         return;
 
@@ -862,12 +862,12 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
     {
         Point   aPos = GetPosPixel();
         Size    aSize = GetSizePixel();
-        sal_uLong   nState = 0;
+        sal_uInt32 nState = 0;
 
         if ( IsRollUp() )
         {
             aSize.Height() += maOrgSize.Height();
-            nState |= WINDOWSTATE_STATE_ROLLUP;
+            nState = WINDOWSTATE_STATE_ROLLUP;
         }
 
         if ( nValidMask & WINDOWSTATE_MASK_X )
@@ -893,7 +893,7 @@ void SystemWindow::SetWindowState(const OString& rStr)
     SetWindowStateData( aData );
 }
 
-OString SystemWindow::GetWindowState( sal_uLong nMask ) const
+OString SystemWindow::GetWindowState( sal_uInt32 nMask ) const
 {
     WindowStateData aData;
     aData.SetMask( nMask );
