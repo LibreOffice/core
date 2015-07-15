@@ -112,6 +112,9 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getFiles(  )
         throw( css::uno::RuntimeException );
 
+    virtual css::uno::Sequence< OUString > SAL_CALL getSelectedFiles(  )
+        throw( css::uno::RuntimeException, std::exception );
+
 
     // XFilePicker2 functions
 

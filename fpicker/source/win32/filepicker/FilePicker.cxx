@@ -372,7 +372,7 @@ uno::Sequence<OUString> SAL_CALL CFilePicker::getFiles() throw(uno::RuntimeExcep
 
 
 
-uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::RuntimeException)
+uno::Sequence< OUString > SAL_CALL CFilePicker::getSelectedFiles() throw (uno::RuntimeException, std::exception)
 {
     OSL_ASSERT(0 != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
