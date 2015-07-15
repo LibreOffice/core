@@ -33,6 +33,7 @@
 #include <com/sun/star/form/submission/XSubmission.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <cppuhelper/implbase3.hxx>
 
 
@@ -64,6 +65,8 @@ namespace frm
 
         // ImageProducer stuff
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xProducer;
+        // Store the image in a graphic object to make it accesible via graphic cache using graphic ID.
+        ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > m_xGraphicObject;
         SfxMedium*                              m_pMedium;     // Download medium
         ImageProducer*                          m_pProducer;
         bool                                m_bDispatchUrlInternal; // property: is not allowed to set : 1
@@ -143,6 +146,8 @@ namespace frm
 
         // to be called from within the cloning-ctor of your derived class
         void implInitializeImageURL( );
+
+        DECL_LINK( OnImageImportDone, ::Graphic* );
     };
 
     class ImageModelMethodGuard : public ::osl::MutexGuard
