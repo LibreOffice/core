@@ -291,9 +291,7 @@ OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
                                                             sal_Bool    bWithPassword   ) throw( css::uno::RuntimeException, std::exception )
 {
     // Safe impossible cases.
-    if  (( aURL.Complete.isEmpty()                      )   ||
-            (( bWithPassword            !=  sal_True    )   &&
-             ( bWithPassword            !=  sal_False   )       ) )
+    if  ( aURL.Complete.isEmpty() )
     {
         return OUString();
     }
