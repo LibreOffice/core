@@ -405,6 +405,9 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_FILL_COLOR: sName = "FillColor"; break;
             case PROP_SNAP_TO_GRID: sName = "SnapToGrid"; break;
             case PROP_GRID_SNAP_TO_CHARS: sName = "GridSnapToChars"; break;
+            case PROP_RUBY_STYLE: sName = "RubyCharStyleName"; break;
+            case PROP_RUBY_TEXT: sName = "RubyText"; break;
+            case PROP_RUBY_ADJUST: sName = "RubyAdjust"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));
