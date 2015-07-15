@@ -67,10 +67,6 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 private:
     //ui controls
-    VclPtr<ListBox>                                mpLbCategory;
-    VclPtr<ToolBox>                                mpTBCategory;
-    VclPtr<NumericField>                           mpEdDecimals;
-    VclPtr<NumericField>                           mpEdLeadZeroes;
     VclPtr<CheckBox> mpCBTitle;
     VclPtr<CheckBox> mpCBSubtitle;
     VclPtr<CheckBox> mpCBXAxis;
