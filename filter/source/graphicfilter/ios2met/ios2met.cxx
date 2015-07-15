@@ -1192,13 +1192,15 @@ void OS2METReader::ReadPolygons()
     {
         sal_uInt32 nNumPoints(0);
         pOS2MET->ReadUInt32(nNumPoints);
-        if (nNumPoints > (i == 0) ? SAL_MAX_UINT16-1 : SAL_MAX_UINT16)
+        sal_uInt32 nLimit = SAL_MAX_UINT16;
+        if (i==0) --nLimit;
+        if (nNumPoints > nLimit)
         {
             pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
             ErrorCode=11;
             return;
         }
-        if (i==0) nNumPoints++;
+        if (i==0) ++nNumPoints;
         aPoly.SetSize((short)nNumPoints);
         for (sal_uInt32 j=0; j<nNumPoints; ++j)
         {
