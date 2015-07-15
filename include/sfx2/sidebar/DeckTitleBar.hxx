@@ -38,7 +38,6 @@ protected:
     virtual Rectangle GetTitleArea(const Rectangle& rTitleBarBox) SAL_OVERRIDE;
     virtual void PaintDecoration(vcl::RenderContext& rRenderContext, const Rectangle& rTitleBarBox) SAL_OVERRIDE;
     virtual sidebar::Paint GetBackgroundPaint() SAL_OVERRIDE;
-    virtual Color GetTextColor() SAL_OVERRIDE;
     virtual void HandleToolBoxItemClick(const sal_uInt16 nItemIndex) SAL_OVERRIDE;
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 

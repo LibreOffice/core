@@ -221,8 +221,6 @@ private:
     bool                bHasExchangeSupport;
     TabPageImpl*        pImpl;
 
-    SAL_DLLPRIVATE void SetInputSet( const SfxItemSet* pNew ) { pSet = pNew; }
-
 protected:
     SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet);
 

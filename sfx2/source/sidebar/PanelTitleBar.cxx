@@ -136,11 +136,6 @@ Paint PanelTitleBar::GetBackgroundPaint()
     return Theme::GetPaint(Theme::Paint_PanelTitleBarBackground);
 }
 
-Color PanelTitleBar::GetTextColor()
-{
-    return Theme::GetColor(Theme::Color_PanelTitleFont);
-}
-
 void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 {
     if (nItemIndex == mnMenuItemIndex)

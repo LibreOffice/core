@@ -62,7 +62,6 @@ protected:
     virtual void PaintDecoration (vcl::RenderContext& rRenderContext, const Rectangle& rTitleBarBox) = 0;
     void PaintFocus(vcl::RenderContext& rRenderContext, const Rectangle& rFocusBox);
     virtual sidebar::Paint GetBackgroundPaint() = 0;
-    virtual Color GetTextColor() = 0;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 

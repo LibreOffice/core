@@ -92,8 +92,6 @@ public:
     const INetURLObject&    GetURL() const
                             { return aURL; }
     void                    SetURL( const OUString& rURL );
-    const INetURLObject&    GetActualURL() const
-                            { return aActualURL; }
     void                    SetActualURL( const INetURLObject& rURL );
     void                    SetActualURL( const OUString& rURL );
     void                    SetReadOnly( bool bSet ) { bReadOnly = bSet;}
@@ -102,20 +100,6 @@ public:
     bool                    IsEditable() const;
 
                             // Size
-    void                    SetWidth( long n )
-                            { nWidth = n; }
-    void                    SetWidthPercent( long n )
-                            { nWidth = n; eSizeSelector = SIZE_PERCENT; }
-    void                    SetWidthRel( long n )
-                            { nWidth = n; eSizeSelector = SIZE_REL; }
-    void                    SetWidthAbs( long n )
-                            { nWidth = n; eSizeSelector = SIZE_ABS; }
-    long                    GetWidth() const
-                            { return nWidth; }
-    SizeSelector            GetSizeSelector() const
-                            { return eSizeSelector; }
-    bool                    IsResizable() const
-                            { return bResizeHorizontal && bResizeVertical; }
     void                    SetResizable( bool bRes )
                             { bResizeHorizontal = bResizeVertical = bRes; }
 
@@ -152,17 +136,6 @@ public:
                             { return (nHasBorder & BORDER_SET) != 0; }
     void                    ResetBorder()
                             { nHasBorder = 0; }
-
-    bool                    HasUI() const
-                            { return bHasUI; }
-    void                    SetHasUI( bool bOn )
-                            { bHasUI = bOn; }
-
-                            // Attribute for Splitwindow
-    sal_uInt16                  GetItemId() const
-                            { return nItemId; }
-    void                    SetItemId( sal_uInt16 nId )
-                            { nItemId = nId; }
 
                             // Copy for example for Views
     SfxFrameDescriptor*     Clone( bool bWithIds = true ) const;
@@ -246,11 +219,6 @@ public:
                                             OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
     virtual SfxPoolItem*                Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
-
-    const SfxFrameProperties&           GetProperties() const
-                                        { return aProperties; }
-    void                                SetProperties( const SfxFrameProperties& rProp )
-                                        { aProperties = rProp; }
 };
 
 #endif // INCLUDED_SFX2_FRMDESCR_HXX

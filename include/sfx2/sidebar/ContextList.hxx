@@ -55,8 +55,6 @@ public:
         const bool bIsInitiallyVisible,
         const ::rtl::OUString& rsMenuCommand);
 
-    sal_Int32 GetCount();
-
 private:
     ::std::vector<Entry> maEntries;
 

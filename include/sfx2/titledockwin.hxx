@@ -61,7 +61,6 @@ namespace sfx2
         }
 
         void        SetEndDockingHdl( const Link<>& i_rEndDockingHdl ) { m_aEndDockingHdl = i_rEndDockingHdl; }
-        const Link<>& GetEndDockingHdl() const { return m_aEndDockingHdl; }
 
         /** resets the toolbox. Upon return, the only item in the toolbox is the closer.
         */
@@ -75,9 +74,6 @@ namespace sfx2
         */
         vcl::Window&       GetContentWindow()          { return *m_aContentWindow.get(); }
         const vcl::Window& GetContentWindow() const    { return *m_aContentWindow.get(); }
-
-        ToolBox&        GetToolBox()        { return *m_aToolbox.get(); }
-        const ToolBox&  GetToolBox() const  { return *m_aToolbox.get(); }
 
         /** Return the border that is painted around the inner window as
             decoration.

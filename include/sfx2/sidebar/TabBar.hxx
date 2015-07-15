@@ -84,12 +84,6 @@ public:
         const ResourceManager::DeckContextDescriptorContainer& rDecks);
     void HighlightDeck (const ::rtl::OUString& rsDeckId);
     void RemoveDeckHighlight ();
-    void AddPopupMenuEntries (
-        PopupMenu& rMenu,
-        const sal_Int32 nFirstIndex);
-    void AddCustomizationMenuEntries (
-        PopupMenu& rMenu,
-        const sal_Int32 nFirstIndex);
     const ::rtl::OUString GetDeckIdForIndex (const sal_Int32 nIndex) const;
     void ToggleHideFlag (const sal_Int32 nIndex);
     void RestoreHideFlags();
@@ -120,8 +114,6 @@ private:
     void Layout();
     void UpdateButtonIcons();
 
-    ::boost::shared_ptr<PopupMenu> CreatePopupMenu() const;
-    void ShowPopupMenu() const;
     DECL_LINK(OnToolboxClicked, void*);
 
     SidebarController* pParentSidebarController;

@@ -1012,11 +1012,6 @@ void SfxInPlaceClient::ViewChanged()
     // dummy implementation
 }
 
-void SfxInPlaceClient::MakeVisible()
-{
-    // dummy implementation
-}
-
 void SfxInPlaceClient::FormatChanged()
 {
     // dummy implementation

@@ -128,8 +128,6 @@ namespace sfx2
         sal_Int16               implDoExecute();
         void                    implStartExecute();
 
-        void                    correctVirtualDialogType();
-
         void                    setControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId );
 
         bool                CheckFilterOptionsCapability( const SfxFilter* _pFilter );
@@ -150,7 +148,6 @@ namespace sfx2
                                                       const SfxFilter*                    pFilter  );
 
         DECL_LINK_TYPED(TimeOutHdl_Impl, Idle *, void);
-        DECL_LINK( HandleEvent, FileDialogHelper* );
         DECL_LINK( InitControls, void* );
 
     public:

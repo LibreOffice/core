@@ -146,7 +146,6 @@ public:
     sal_uInt32          GetFrameType() const;
     static void         GetDefaultTargetList( TargetList& );
     void                GetTargetList( TargetList& ) const;
-    SAL_DLLPRIVATE SfxFrame* GetContainingDocFrame_Impl( SfxFrame* pSelf );
     void                UpdateDescriptor( SfxObjectShell *pDoc );
     void                Resize();
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
@@ -172,7 +171,6 @@ public:
     // Methods for accessing the current set
     SAL_DLLPRIVATE SfxFrameDescriptor* GetDescriptor() const;
 
-    SAL_DLLPRIVATE void Lock_Impl( bool bLock );
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl() const;
     SAL_DLLPRIVATE bool IsAutoLoadLocked_Impl() const;
 
@@ -180,9 +178,6 @@ public:
     SAL_DLLPRIVATE static void RemoveTopFrame_Impl( SfxFrame* pFrame );
     SAL_DLLPRIVATE void SetOwnsBindings_Impl( bool bSet );
     SAL_DLLPRIVATE bool OwnsBindings_Impl() const;
-    SAL_DLLPRIVATE void InvalidateUnoControllers_Impl();
-    SAL_DLLPRIVATE void RegisterUnoController_Impl( SfxUnoControllerItem* );
-    SAL_DLLPRIVATE void ReleaseUnoController_Impl( SfxUnoControllerItem* );
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl() const;
     SAL_DLLPRIVATE void SetToolSpaceBorderPixel_Impl( const SvBorder& );
     SAL_DLLPRIVATE Rectangle GetTopOuterRectPixel_Impl() const;

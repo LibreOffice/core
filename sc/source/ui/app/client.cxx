@@ -242,16 +242,4 @@ void ScClient::ViewChanged()
     }
 }
 
-void ScClient::MakeVisible()
-{
-    SdrOle2Obj* pDrawObj = GetDrawObj();
-    if (pDrawObj)
-    {
-        SfxViewShell* pSfxViewSh = GetViewShell();
-        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
-        if (pViewSh)
-            pViewSh->ScrollToObject( pDrawObj );
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

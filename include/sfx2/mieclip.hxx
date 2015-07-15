@@ -38,15 +38,7 @@ public:
     MSE40HTMLClipFormatObj() : pStrm(0)         {}
     ~MSE40HTMLClipFormatObj();
 
-//JP 31.01.2001: old interfaces
-    SAL_DLLPRIVATE bool GetData( SotDataObject& );
-    SAL_DLLPRIVATE bool GetData( SvData& );
-//JP 31.01.2001: the new one
     SvStream* IsValid( SvStream& );
-
-    const SvStream* GetStream() const       { return pStrm; }
-          SvStream* GetStream()             { return pStrm; }
-    const OUString& GetBaseURL() const      { return sBaseURL; }
 };
 
 

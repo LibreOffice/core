@@ -47,10 +47,7 @@ class SfxMenuManager
 friend class SfxPopupMenuManager;
 
     SfxVirtualMenu*         pMenu;     // the actual Menu
-    SfxVirtualMenu*         pOldMenu;       // only while reconfiguring
     SfxBindings*            pBindings;
-    ResMgr*                 pResMgr;
-    sal_uInt32              nType;
     bool                    bAddClipboardFuncs : 1;
 
     void                    Construct( SfxVirtualMenu& rMenu );
@@ -58,20 +55,12 @@ friend class SfxPopupMenuManager;
 protected:
                             SfxMenuManager( Menu*, SfxBindings& );
                             ~SfxMenuManager();
-    sal_uInt16                  GetItemPos( sal_uInt16 nId );
-    sal_uInt32              GetType() { return nType; }
 public:
 
     DECL_LINK( Select, Menu* );
 
     SfxVirtualMenu*         GetMenu() const
                             { return pMenu; }
-
-    SfxBindings&            GetBindings() { return *pBindings; }
-    const SfxBindings&      GetBindings() const { return *pBindings; }
-    void                    SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
-    ResMgr*                 GetResMgr() const { return pResMgr; }
-    void                    SetPopupMenu( sal_uInt16 nId, PopupMenu *pMenu );
 };
 
 

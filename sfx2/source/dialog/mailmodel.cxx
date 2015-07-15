@@ -656,9 +656,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 SfxMailModel::SfxMailModel() :
     mpToList    ( NULL ),
     mpCcList    ( NULL ),
-    mpBccList   ( NULL ),
-    mePriority  ( PRIO_NORMAL ),
-    mbLoadDone  ( true )
+    mpBccList   ( NULL )
 {
 }
 

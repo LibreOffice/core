@@ -44,7 +44,6 @@ class SFX2_DLLPUBLIC NotifyBrokenPackage
 public:
     NotifyBrokenPackage( const OUString& aName );
     ~NotifyBrokenPackage();
-    bool    isAborted();
     com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
 };
 

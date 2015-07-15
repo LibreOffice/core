@@ -36,7 +36,6 @@ private:
     virtual void    ObjectAreaChanged() SAL_OVERRIDE;
     virtual void    RequestNewObjectArea( Rectangle& ) SAL_OVERRIDE;
     virtual void    ViewChanged() SAL_OVERRIDE;
-    virtual void    MakeVisible() SAL_OVERRIDE;
 
 public:
                     ScClient( ScTabViewShell* pViewShell, vcl::Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj );

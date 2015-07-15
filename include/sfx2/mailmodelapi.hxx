@@ -75,9 +75,6 @@ private:
     AddressList_Impl*   mpBccList;
     OUString            maFromAddress;
     OUString            maSubject;
-    MailPriority        mePriority;
-
-    bool                mbLoadDone;
 
     static SaveResult   ShowFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMGR,
                                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel,
@@ -86,8 +83,6 @@ private:
                                                  bool bModified,
                                                  sal_Int32& rNumArgs,
                                                  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
-
-    DECL_LINK( DoneHdl, void* );
 
 public:
     enum SendMailResult
@@ -101,9 +96,7 @@ public:
     ~SfxMailModel();
 
     void                AddAddress( const OUString& rAddress, AddressRole eRole );
-    void                SetFromAddress( const OUString& rAddress )    { maFromAddress = rAddress; }
     void                SetSubject( const OUString& rSubject )        { maSubject = rSubject; }
-    void                SetPriority( MailPriority ePrio )           { mePriority = ePrio; }
 
     /** attaches a document to the current attachment list, can be called more than once.
     *   at the moment there will be a dialog for export executed for every model which is going to be attached.

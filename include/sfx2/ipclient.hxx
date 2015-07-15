@@ -55,9 +55,6 @@ friend class SfxInPlaceClient_Impl;
     // notify the client that an active object has changed its VisualAreaSize
     SAL_DLLPRIVATE virtual void ViewChanged();
 
-    // an object wants to become visible
-    SAL_DLLPRIVATE virtual void MakeVisible();
-
 public:
                         SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window* pDraw, sal_Int64 nAspect = com::sun::star::embed::Aspects::MSOLE_CONTENT );
     virtual             ~SfxInPlaceClient();
@@ -67,7 +64,6 @@ public:
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject() const;
     void                SetObject( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& rObject );
     void                SetObjectState( sal_Int32 );
-    Size                GetObjectVisAreaSize() const;
     bool                IsObjectUIActive() const;
     bool                IsObjectInPlaceActive() const;
     void                DeactivateObject();

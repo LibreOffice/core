@@ -153,12 +153,6 @@ void SwOleClient::ViewChanged()
     rSh.LockView( false );
 }
 
-void SwOleClient::MakeVisible()
-{
-    const SwWrtShell &rSh  = static_cast<SwView*>(GetViewShell())->GetWrtShell();
-    rSh.MakeObjVisible( GetObject() );
-}
-
 void SwOleClient::FormatChanged()
 {
     const uno::Reference < embed::XEmbeddedObject >& xObj( GetObject() );

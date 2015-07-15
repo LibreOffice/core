@@ -162,8 +162,6 @@ protected:
 
     void SetViewShell_Impl( SfxViewShell* pView );
     SAL_DLLPRIVATE void Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId );
-    SAL_DLLPRIVATE SfxShellObject* GetShellObj_Impl() const;
-    SAL_DLLPRIVATE void SetShellObj_Impl( SfxShellObject* pObj );
     static void HandleOpenXmlFilterSettings(SfxRequest &);
 
 public:

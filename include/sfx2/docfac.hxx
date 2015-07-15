@@ -46,7 +46,6 @@ private:
     const char*             pShortName;
     SfxObjectFactory_Impl*  pImpl;      // Additional Data
     SfxObjectShellFlags     nFlags;
-    SAL_DLLPRIVATE void Construct();
 
 public:
     SfxObjectFactory( const SvGlobalName &rName, SfxObjectShellFlags nFlags, const char* pShortName );

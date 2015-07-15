@@ -37,7 +37,6 @@ public:
                             _pSlot = pSlot;
                         }
     const SfxSlot*      GetSlot() const;
-    void                Invalidate() { _pSlot = 0; }
 };
 
 inline SfxSlotServer::SfxSlotServer( const SfxSlot &rSlot, sal_uInt16 nShell ):

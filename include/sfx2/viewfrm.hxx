@@ -198,8 +198,6 @@ public:
     SAL_DLLPRIVATE SfxViewFrame* GetParentViewFrame_Impl() const;
     SAL_DLLPRIVATE void ForceOuterResize_Impl(bool bOn=true);
     SAL_DLLPRIVATE bool IsResizeInToOut_Impl() const;
-    SAL_DLLPRIVATE bool IsAdjustPosSizePixelLocked_Impl() const
-                            { return nAdjustPosPixelLock != 0; }
     SAL_DLLPRIVATE void UpdateDocument_Impl();
 
     SAL_DLLPRIVATE void LockObjectShell_Impl(bool bLock=true);

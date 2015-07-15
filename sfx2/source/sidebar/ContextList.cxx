@@ -85,11 +85,6 @@ void ContextList::AddContextDescription (
     maEntries.back().msMenuCommand = rsMenuCommand;
 }
 
-sal_Int32 ContextList::GetCount()
-{
-    return maEntries.size();
-}
-
 } } // end of namespace sfx2::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

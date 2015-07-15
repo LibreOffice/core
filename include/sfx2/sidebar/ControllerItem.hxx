@@ -134,8 +134,6 @@ private:
     css::uno::Reference<css::frame::XFrame> mxFrame;
     css::uno::Reference<css::lang::XComponent> mxFrameActionListener;
     const ::rtl::OUString msCommandName;
-
-    void SetupCommandURL (const sal_Char* sCommandName);
 };
 
 } } // end of namespace sfx2::sidebar

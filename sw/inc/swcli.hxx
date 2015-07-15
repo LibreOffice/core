@@ -35,7 +35,6 @@ class SwOleClient : public SfxInPlaceClient
     virtual void ObjectAreaChanged() SAL_OVERRIDE;
     virtual void RequestNewObjectArea( Rectangle& ) SAL_OVERRIDE;
     virtual void ViewChanged() SAL_OVERRIDE;
-    virtual void MakeVisible() SAL_OVERRIDE;
 
 public:
     SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& );

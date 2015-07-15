@@ -159,10 +159,6 @@ protected:
 private:
     SfxChildWindowContext*      pContext;        // With context-sensitive ChildWindows:
                                                  // Annother window in pWindow
-    SAL_DLLPRIVATE SfxChildWindowContext*
-                        GetContext() const
-                        { return pContext; }
-
     SAL_DLLPRIVATE void ClearWorkwin();
 
 protected:

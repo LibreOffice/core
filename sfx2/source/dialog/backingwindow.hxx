@@ -95,8 +95,6 @@ class BackingWindow : public vcl::Window, public VclBuilderContainer
 
     void setupButton(PushButton* pButton);
     void setupButton(MenuButton* pButton);
-    //Template Manager
-    void OnTemplateOpen();
 
     void dispatchURL(const OUString& i_rURL,
                      const OUString& i_rTarget = OUString("_default"),

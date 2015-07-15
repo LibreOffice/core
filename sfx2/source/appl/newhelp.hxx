@@ -336,12 +336,11 @@ public:
     void                AddBookmarks( const OUString& rTitle, const OUString& rURL );
     bool                IsValidFactory( const OUString& _rFactory );
     inline OUString     GetActiveFactoryTitle() const { return m_pActiveLB->GetSelectEntry(); }
-    inline void         UpdateTabControl() { m_pTabCtrl->Invalidate(); }
     void                ClearSearchPage();
     void                GrabFocusBack();
-    bool            HasFocusOnEdit() const;
+    bool                HasFocusOnEdit() const;
     OUString            GetSearchText() const;
-    bool            IsFullWordSearch() const;
+    bool                IsFullWordSearch() const;
     void                OpenKeyword( const OUString& rKeyword );
     void                SelectExecutableEntry();
     inline bool         WasCursorLeftOrRight();
@@ -537,8 +536,6 @@ public:
                             ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow > xWin );
     inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
                         getTextFrame() const { return pTextWin->getFrame(); }
-    inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchResultListener >
-                        getOpenListener() const { return xOpenListener; }
 
     void                SetFactory( const OUString& rFactory );
     void                SetHelpURL( const OUString& rURL );
@@ -547,15 +544,14 @@ public:
 
     void                UpdateToolbox();
     inline void         OpenKeyword( const OUString& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
-    inline OUString     GetFactory() const { return pIndexWin->GetFactory(); }
 
-    bool            HasHistoryPredecessor() const;      // forward to interceptor
-    bool            HasHistorySuccessor() const;        // forward to interceptor
+    bool                HasHistoryPredecessor() const;      // forward to interceptor
+    bool                HasHistorySuccessor() const;        // forward to interceptor
 
     void                openDone(const OUString& sURL    ,
                                        bool         bSuccess);
 
-    static OUString  buildHelpURL(const OUString& sFactory        ,
+    static OUString     buildHelpURL(const OUString& sFactory        ,
                                          const OUString& sContent        ,
                                          const OUString& sAnchor         ,
                                                bool         bUseQuestionMark);

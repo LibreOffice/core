@@ -193,7 +193,6 @@ public:
     SAL_DLLPRIVATE void DeleteControllers_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl()  { return pDispatcher; }
     SAL_DLLPRIVATE void ClearCache_Impl( sal_uInt16 nSlotId );
-    SAL_DLLPRIVATE bool IsInUpdate_Impl() const{ return IsInUpdate(); }
     SAL_DLLPRIVATE void RegisterInternal_Impl( SfxControllerItem& rBinding );
     SAL_DLLPRIVATE void Register_Impl( SfxControllerItem& rBinding, bool );
     SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl() const;
