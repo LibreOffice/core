@@ -43,6 +43,7 @@ $(eval $(call gb_Library_use_sdk_api,sw))
 
 $(eval $(call gb_Library_add_defs,sw,\
     -DSW_DLLIMPLEMENTATION \
+	$(if $(filter $(COM),MSC),-DBOOST_OPTIONAL_USE_OLD_DEFINITION_OF_NONE) \
 	-DSWUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,swui))\" \
 ))
 
