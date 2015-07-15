@@ -321,7 +321,10 @@ uno::Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry
     SfxItemPool* pPool = getModelPool( true );
     const sal_uInt16 nWhich = pPool->GetWhich( (sal_uInt16)pEntry->mnHandle );
     const SfxPoolItem *pItem = pPool->GetPoolDefaultItem ( nWhich );
-    pItem->QueryValue( aAny, pEntry->mnMemberId );
+    if (pItem)
+    {
+        pItem->QueryValue( aAny, pEntry->mnMemberId );
+    }
 
     return aAny;
 }
