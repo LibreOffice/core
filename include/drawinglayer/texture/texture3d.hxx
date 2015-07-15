@@ -142,9 +142,6 @@ namespace drawinglayer
             virtual ~GeoTexSvxMultiHatch();
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const SAL_OVERRIDE;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const SAL_OVERRIDE;
-
-            // dada access
-            bool getFillBackground() const { return mbFillBackground; }
         };
     } // end of namespace texture
 } // end of namespace drawinglayer

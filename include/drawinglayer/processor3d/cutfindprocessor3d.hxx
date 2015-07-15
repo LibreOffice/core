@@ -70,12 +70,6 @@ namespace drawinglayer
                 const basegfx::B3DPoint& rBack,
                 bool bAnyHit);
 
-            /// data write access
-            void setUseInvisiblePrimitiveContent(bool bNew)
-            {
-                if((bool)mbUseInvisiblePrimitiveContent != bNew) mbUseInvisiblePrimitiveContent = bNew;
-            }
-
             /// data read access
             const ::std::vector< basegfx::B3DPoint >& getCutPoints() const { return maResult; }
             bool getAnyHit() const { return mbAnyHit; }

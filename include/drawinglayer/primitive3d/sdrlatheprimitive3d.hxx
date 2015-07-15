@@ -75,18 +75,6 @@ namespace drawinglayer
             const Slice3DVector& getSlices() const;
 
         protected:
-            /// local helpers
-            void impCreateOutlines(
-                const geometry::ViewInformation3D& rViewInformation,
-                const basegfx::B3DPolygon& rLoopA,
-                const basegfx::B3DPolygon& rLoopB,
-                basegfx::B3DPolyPolygon& rTarget) const;
-
-            bool impHasCutWith(
-                const basegfx::B2DPolygon& rPoly,
-                const basegfx::B2DPoint& rStart,
-                const basegfx::B2DPoint& rEnd) const;
-
             /// local decomposition.
             virtual Primitive3DSequence create3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const SAL_OVERRIDE;
 

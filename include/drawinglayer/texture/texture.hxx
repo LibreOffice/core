@@ -97,10 +97,6 @@ namespace drawinglayer
             virtual void appendTransformationsAndColors(
                 std::vector< B2DHomMatrixAndBColor >& rEntries,
                 basegfx::BColor& rOuterColor) = 0;
-
-            // data access
-            const basegfx::BColor& getStart() const { return maStart; }
-            const basegfx::BColor& getEnd() const { return maEnd; }
         };
     } // end of namespace texture
 } // end of namespace drawinglayer

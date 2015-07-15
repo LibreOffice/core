@@ -83,17 +83,10 @@ namespace drawinglayer
                 bool bTiledRendering);
             virtual ~HitTestProcessor2D();
 
-            /// data write access
-            void setUseInvisiblePrimitiveContent(bool bNew)
-            {
-                if((bool)mbUseInvisiblePrimitiveContent != bNew) mbUseInvisiblePrimitiveContent = bNew;
-            }
-
             /// data read access
             const basegfx::B2DPoint& getDiscreteHitPosition() const { return maDiscreteHitPosition; }
             double getDiscreteHitTolerance() const { return mfDiscreteHitTolerance; }
             bool getHit() const { return mbHit; }
-            bool getHitToleranceUsed() const { return mbHitToleranceUsed; }
             bool getUseInvisiblePrimitiveContent() const { return mbUseInvisiblePrimitiveContent;}
             bool getHitTextOnly() const { return mbHitTextOnly; }
         };

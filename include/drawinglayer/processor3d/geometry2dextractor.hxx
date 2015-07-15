@@ -65,7 +65,6 @@ namespace drawinglayer
             // data read access
             const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
-            const basegfx::BColorModifierStack& getBColorModifierStack() const { return maBColorModifierStack; }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer
