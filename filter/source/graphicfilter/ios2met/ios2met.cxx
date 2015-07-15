@@ -208,7 +208,7 @@ enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 struct OSPalette {
     OSPalette * pSucc;
     sal_uInt32 * p0RGB; // May be NULL!
-    sal_uInt16 nSize;
+    size_t nSize;
 };
 
 struct OSArea {
@@ -733,12 +733,13 @@ void OS2METReader::SetPalette0RGB(sal_uInt16 nIndex, sal_uLong nCol)
     }
     if (pPaletteStack->p0RGB==NULL || nIndex>=pPaletteStack->nSize) {
         sal_uInt32 * pOld0RGB=pPaletteStack->p0RGB;
-        sal_uInt16 i,nOldSize=pPaletteStack->nSize;
+        size_t nOldSize = pPaletteStack->nSize;
         if (pOld0RGB==NULL) nOldSize=0;
         pPaletteStack->nSize=2*(nIndex+1);
         if (pPaletteStack->nSize<256) pPaletteStack->nSize=256;
         pPaletteStack->p0RGB = new sal_uInt32[pPaletteStack->nSize];
-        for (i=0; i<pPaletteStack->nSize; i++) {
+        for (size_t i=0; i < pPaletteStack->nSize; ++i)
+        {
             if (i<nOldSize) pPaletteStack->p0RGB[i]=pOld0RGB[i];
             else if (i==0) pPaletteStack->p0RGB[i]=0x00ffffff;
             else pPaletteStack->p0RGB[i]=0;
