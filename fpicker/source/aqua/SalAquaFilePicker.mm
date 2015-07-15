@@ -305,6 +305,20 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
+    uno::Sequence< rtl::OUString > aSelectedFiles = getSelectedFiles();
+    // multiselection doesn't really work with getFiles
+    // so just retrieve the first url
+    if (aSelectedFiles.getLength() > 1)
+        aSelectedFiles.realloc(1);
+
+    DBG_PRINT_EXIT(CLASS_NAME, __func__);
+    return aSelectedFiles;
+}
+
+uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getSelectedFiles() throw( uno::RuntimeException, std::exception )
+{
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__);
+
     SolarMutexGuard aGuard;
 
 #if HAVE_FEATURE_MACOSX_SANDBOX
@@ -319,11 +333,6 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
 #endif
 
     // OSL_TRACE("starting work");
-    /*
-     * If more than one file is selected in an OpenDialog, then the first result
-     * is the directory and the remaining results contain just the files' names
-     * without the basedir path.
-     */
     NSArray *files = nil;
     if (m_nDialogType == NAVIGATIONSERVICES_OPEN) {
         files = [(NSOpenPanel*)m_pDialog URLs];
@@ -334,11 +343,6 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
 
     long nFiles = [files count];
     SAL_INFO("fpicker.aqua", "# of items: " << nFiles);
-
-    // multiselection doesn't really work
-    // so just retrieve the first url
-    if (nFiles > 1)
-        nFiles = 1;
 
     uno::Sequence< rtl::OUString > aSelectedFiles(nFiles);
     
