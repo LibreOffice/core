@@ -34,6 +34,8 @@
 
 #include "LegendHelper.hxx"
 #include "TitleHelper.hxx"
+#include "ChartModelHelper.hxx"
+#include "AxisHelper.hxx"
 
 #include "ChartModel.hxx"
 
@@ -44,6 +46,14 @@ using ::sfx2::sidebar::Theme;
 namespace chart { namespace sidebar {
 
 namespace {
+
+enum class GridType
+{
+    VERT_MAJOR,
+    VERT_MINOR,
+    HOR_MAJOR,
+    HOR_MINOR
+};
 
 ChartModel* getChartModel(css::uno::Reference<css::frame::XModel> xModel)
 {
@@ -80,6 +90,24 @@ bool isLegendVisible(css::uno::Reference<css::frame::XModel> xModel)
 bool isTitleVisisble(css::uno::Reference<css::frame::XModel> xModel, TitleHelper::eTitleType eTitle)
 {
     return TitleHelper::getTitle(eTitle, xModel).is();
+}
+
+bool isGridVisible(css::uno::Reference<css::frame::XModel> xModel, GridType eType)
+{
+    Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
+    if(xDiagram.is())
+    {
+        sal_Int32 nDimensionIndex = 0;
+        if (eType == GridType::HOR_MAJOR || eType == GridType::HOR_MINOR)
+            nDimensionIndex = 1;
+        sal_Int32 nCooSysIndex = 0;
+
+        bool bMajor = (eType == GridType::HOR_MAJOR || eType == GridType::VERT_MAJOR);
+
+        bool bHasGrid = AxisHelper::isGridShown(nDimensionIndex, nCooSysIndex, bMajor, xDiagram);
+        return bHasGrid;
+    }
+    return false;
 }
 
 }
@@ -157,6 +185,8 @@ void ChartElementsPanel::updateData()
     mpCBZAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::Z_AXIS_TITLE));
     mpCB2ndXAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::SECONDARY_X_AXIS_TITLE));
     mpCB2ndYAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE));
+    mpCBGridVertical->Check(isGridVisible(mxModel, GridType::VERT_MAJOR));
+    mpCBGridHorizontal->Check(isGridVisible(mxModel, GridType::HOR_MAJOR));
 }
 
 VclPtr<vcl::Window> ChartElementsPanel::Create (
