@@ -39,6 +39,7 @@
 #include "CustomAnimationCreateDialog.hxx"
 #include "CustomAnimation.hrc"
 #include "CustomAnimationPane.hxx"
+#include "CategoryListBox.hxx"
 #include "optsitem.hxx"
 #include "sddll.hxx"
 #include "sdmod.hxx"
@@ -62,101 +63,6 @@ const int EMPHASIS = 1;
 const int EXIT = 2;
 const int MOTIONPATH = 3;
 const int MISCEFFECTS = 4;
-
-class CategoryListBox : public ListBox
-{
-public:
-    CategoryListBox( vcl::Window* pParent );
-    virtual ~CategoryListBox();
-
-    virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-
-    sal_Int32           InsertCategory( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
-
-    void            SetDoubleClickLink( const Link<>& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
-
-    DECL_LINK(implDoubleClickHdl, void *);
-
-private:
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
-
-    Link<>          maDoubleClickHdl;
-};
-
-CategoryListBox::CategoryListBox( vcl::Window* pParent )
-: ListBox( pParent, WB_TABSTOP | WB_BORDER )
-{
-    EnableUserDraw( true );
-    SetDoubleClickHdl( LINK( this, CategoryListBox, implDoubleClickHdl ) );
-}
-
-VCL_BUILDER_FACTORY(CategoryListBox)
-
-CategoryListBox::~CategoryListBox()
-{
-}
-
-sal_Int32  CategoryListBox::InsertCategory( const OUString& rStr, sal_Int32  nPos /* = LISTBOX_APPEND */ )
-{
-    sal_Int32  n = ListBox::InsertEntry( rStr, nPos );
-    if( n != LISTBOX_ENTRY_NOTFOUND )
-        ListBox::SetEntryFlags( n, ListBox::GetEntryFlags(n) | ListBoxEntryFlags::DisableSelection );
-
-    return n;
-}
-
-void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
-{
-    const sal_uInt16 nItem = rUDEvt.GetItemId();
-
-    if( ListBox::GetEntryFlags(nItem) & ListBoxEntryFlags::DisableSelection )
-    {
-        Rectangle aOutRect( rUDEvt.GetRect() );
-        vcl::RenderContext* pDev = rUDEvt.GetRenderContext();
-
-        // fill the background
-        Color aColor (GetSettings().GetStyleSettings().GetDialogColor());
-
-        pDev->SetFillColor (aColor);
-        pDev->SetLineColor ();
-        pDev->DrawRect(aOutRect);
-
-        // Erase the four corner pixels to make the rectangle appear rounded.
-        pDev->SetLineColor( GetSettings().GetStyleSettings().GetWindowColor());
-        pDev->DrawPixel( aOutRect.TopLeft());
-        pDev->DrawPixel( Point(aOutRect.Right(), aOutRect.Top()));
-        pDev->DrawPixel( Point(aOutRect.Left(), aOutRect.Bottom()));
-        pDev->DrawPixel( Point(aOutRect.Right(), aOutRect.Bottom()));
-
-        // draw the category title
-        pDev->DrawText (aOutRect, GetEntry(nItem), DrawTextFlags::Center );
-    }
-    else
-    {
-        DrawEntry( rUDEvt, true, true );
-    }
-}
-
-IMPL_LINK_NOARG(CategoryListBox, implDoubleClickHdl)
-{
-    CaptureMouse();
-    return 0;
-}
-
-void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    ReleaseMouse();
-    if( rMEvt.IsLeft() && (rMEvt.GetClicks() == 2) )
-    {
-        if( maDoubleClickHdl.IsSet() )
-            maDoubleClickHdl.Call( this );
-    }
-    else
-    {
-        ListBox::MouseButtonUp( rMEvt );
-    }
-}
-
 class CustomAnimationCreateTabPage : public TabPage
 {
 public:
