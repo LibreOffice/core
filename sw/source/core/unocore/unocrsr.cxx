@@ -57,17 +57,6 @@ SwUnoCrsr::~SwUnoCrsr()
     }
 }
 
-std::shared_ptr<SwUnoCrsr> SwUnoTableCrsr::Clone() const
-{
-    auto pNewCrsr(GetDoc()->CreateUnoCrsr(*GetPoint(), true));
-    if(HasMark())
-    {
-        pNewCrsr->SetMark();
-        *pNewCrsr->GetMark() = *GetMark();
-    }
-    return pNewCrsr;
-}
-
 bool SwUnoCrsr::IsReadOnlyAvailable() const
 {
     return true;

@@ -95,8 +95,6 @@ public:
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS )) SAL_OVERRIDE;
 
-    std::shared_ptr<SwUnoCrsr> Clone() const;
-
     void MakeBoxSels();
 
           SwCursor& GetSelRing()            { return m_aTableSel; }
