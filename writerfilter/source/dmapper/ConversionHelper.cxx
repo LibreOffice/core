@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/text/RubyAdjust.hpp>
 #include <editeng/borderline.hxx>
 #include <ooxml/resourceids.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -421,6 +422,31 @@ sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t)
     if( _t < 0 )
         return 0;
     return convertTwipToMM100( _t );
+}
+
+sal_Int16 convertRubyAlign( sal_Int32 nIntValue )
+{
+    sal_Int16 rubyAdjust = text::RubyAdjust_LEFT;
+    switch( nIntValue )
+    {
+        case NS_ooxml::LN_Value_ST_RubyAlign_center:
+        case NS_ooxml::LN_Value_ST_RubyAlign_rightVertical:
+            rubyAdjust = text::RubyAdjust_CENTER;
+            break;
+        case NS_ooxml::LN_Value_ST_RubyAlign_distributeLetter:
+            rubyAdjust = text::RubyAdjust_BLOCK;
+            break;
+        case NS_ooxml::LN_Value_ST_RubyAlign_distributeSpace:
+            rubyAdjust = text::RubyAdjust_INDENT_BLOCK;
+            break;
+        case NS_ooxml::LN_Value_ST_RubyAlign_left:
+            rubyAdjust = text::RubyAdjust_LEFT;
+            break;
+        case NS_ooxml::LN_Value_ST_RubyAlign_right:
+            rubyAdjust = text::RubyAdjust_RIGHT;
+            break;
+    }
+    return rubyAdjust;
 }
 
 sal_Int16 convertTableJustification( sal_Int32 nIntValue )

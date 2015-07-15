@@ -267,6 +267,24 @@ struct AnnotationPosition
     css::uno::Reference<css::text::XTextRange> m_xEnd;
 };
 
+struct RubyInfo
+{
+    OUString    sRubyText;
+    OUString    sRubyStyle;
+    sal_uInt32  nSprmId;
+    sal_uInt32  nRubyAlign;
+    sal_uInt32  nHps;
+    sal_uInt32  nHpsBaseText;
+
+    RubyInfo():
+        nSprmId(0),
+        nRubyAlign(0),
+        nHps(0),
+        nHpsBaseText(0)
+    {
+    }
+};
+
 struct LineNumberSettings
 {
     bool        bIsOn;
@@ -399,6 +417,7 @@ private:
     bool                            m_bIsInFootnoteProperties;
     bool                            m_bIsCustomFtnMark;
 
+    RubyInfo                        m_aRubyInfo;
     //registered frame properties
     std::vector<css::beans::PropertyValue> m_aFrameProperties;
     css::uno::Reference<css::text::XTextRange> m_xFrameStartRange;
@@ -488,6 +507,14 @@ public:
     void RemoveLastParagraph( );
     void SetIsLastParagraphInSection( bool bIsLast );
     bool GetIsLastParagraphInSection() { return m_bIsLastParaInSection;}
+    void SetRubySprmId( sal_uInt32 nSprmId) { m_aRubyInfo.nSprmId = nSprmId ; }
+    void SetRubyText( OUString &sText,OUString &sStyle) {
+        m_aRubyInfo.sRubyText = sText;
+        m_aRubyInfo.sRubyStyle = sStyle;
+    }
+    const RubyInfo & GetRubyInfo() const { return m_aRubyInfo;}
+    void SetRubyInfo(const RubyInfo & rInfo) { m_aRubyInfo = rInfo;}
+
     void SetIsLastSectionGroup( bool bIsLast );
     bool GetIsLastSectionGroup() { return m_bIsLastSectionGroup;}
     void SetIsFirstParagraphInSection( bool bIsFirst );
@@ -620,6 +647,7 @@ public:
     void SetFieldLocked();
     //collect the pieces of the command
     void AppendFieldCommand(OUString& rPartOfCommand);
+    void handleRubyEQField( FieldContextPtr pContext);
     void handleFieldAsk
         (FieldContextPtr pContext,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,

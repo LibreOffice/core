@@ -2929,6 +2929,79 @@ void DomainMapper_Impl::handleFieldAsk
     }
 }
 
+
+void  DomainMapper_Impl::handleRubyEQField( FieldContextPtr pContext)
+{
+    const OUString & rCommand(pContext->GetCommand());
+    sal_Int32 nIndex = 0, nEnd = 0;
+    OUString aToken ,sFont;
+    RubyInfo aInfo ;
+    nIndex = rCommand.indexOf("\\* jc" );
+    if (nIndex != -1)
+    {
+        nIndex += 5;
+        sal_uInt32  nJc = rCommand.getToken(0, ' ',nIndex).toInt32();
+        const   sal_Int32   aRubyAlignValues[] =
+        {
+            NS_ooxml::LN_Value_ST_RubyAlign_center,
+            NS_ooxml::LN_Value_ST_RubyAlign_distributeLetter,
+            NS_ooxml::LN_Value_ST_RubyAlign_distributeSpace,
+            NS_ooxml::LN_Value_ST_RubyAlign_left,
+            NS_ooxml::LN_Value_ST_RubyAlign_right,
+            NS_ooxml::LN_Value_ST_RubyAlign_rightVertical,
+        };
+        aInfo.nRubyAlign = aRubyAlignValues[(nJc<SAL_N_ELEMENTS(aRubyAlignValues))?nJc:0];
+    }
+
+    nIndex = rCommand.indexOf("\\* \"Font:" );
+    if (nIndex != -1)
+    {
+        nIndex += 9;
+        aToken = rCommand.getToken(0, '"',nIndex);
+        sFont = aToken;
+    }
+    nIndex = rCommand.indexOf("\\* hps" );
+    if (nIndex != -1)
+    {
+        nIndex += 6;
+        aInfo.nHps = rCommand.getToken(0, ' ',nIndex).toInt32();
+    }
+
+    nIndex = rCommand.indexOf("\\o");
+    if (nIndex != -1 && (nIndex = rCommand.indexOf('(', nIndex)) != -1 && (nEnd = rCommand.lastIndexOf(')'))!=-1 && nEnd > nIndex)
+    {
+        OUString sRubyParts = rCommand.copy(nIndex+1,nEnd-nIndex-1);
+        nIndex = 0;
+        OUString sPart1 = sRubyParts.getToken(0, ',', nIndex);
+        OUString sPart2 = sRubyParts.getToken(0, ',', nIndex);
+        if ((nIndex = sPart1.indexOf('(', 0)) != -1 && (nEnd = sPart1.lastIndexOf(')'))!=-1 )
+        {
+            aInfo.sRubyText = sPart1.copy(nIndex+1,nEnd-nIndex-1);
+        }
+
+        PropertyMapPtr pRubyContext(new PropertyMap());
+        pRubyContext->InsertProps(GetTopContext());
+        if (aInfo.nHps > 0)
+        {
+            double fVal = double(aInfo.nHps) / 2.;
+            uno::Any aVal = uno::makeAny( fVal );
+
+            pRubyContext->Insert(PROP_CHAR_HEIGHT, aVal);
+            pRubyContext->Insert(PROP_CHAR_HEIGHT_ASIAN, aVal);
+        }
+        PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(pRubyContext->GetPropertyValues());
+        aInfo.sRubyStyle = m_rDMapper.getOrCreateCharStyle(aProps);
+        PropertyMapPtr pCharContext(new PropertyMap());
+        if (m_pLastCharacterContext.get())
+            pCharContext->InsertProps(m_pLastCharacterContext);
+        pCharContext->InsertProps(pContext->getProperties());
+        pCharContext->Insert(PROP_RUBY_TEXT, uno::makeAny( aInfo.sRubyText ) );
+        pCharContext->Insert(PROP_RUBY_ADJUST, uno::makeAny(ConversionHelper::convertRubyAlign(aInfo.nRubyAlign)));
+        pCharContext->Insert(PROP_RUBY_STYLE, uno::makeAny(aInfo.sRubyStyle));
+        appendTextPortion(sPart2, pCharContext);
+    }
+}
+
 void DomainMapper_Impl::handleAutoNum
     (FieldContextPtr pContext,
     uno::Reference< uno::XInterface > & xFieldInterface,
@@ -3676,6 +3749,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                                         appendTextPortion(aContent, pCharContext);
                                     }
                                 }
+                            }
+                            else if (aCommand.startsWith("\\* jc"))
+                            {
+                                handleRubyEQField(pContext);
                             }
                         }
                     }

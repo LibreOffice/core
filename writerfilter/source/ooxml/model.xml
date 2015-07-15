@@ -13706,9 +13706,19 @@
           <ref name="CT_OnOff"/>
         </element>
       </define>
+      <define name="ST_RubyAlign">
+        <choice>
+          <value>center</value>
+          <value>distributeLetter</value>
+          <value>distributeSpace</value>
+          <value>left</value>
+          <value>right</value>
+          <value>rightVertical</value>
+        </choice>
+      </define>
       <define name="CT_RubyAlign">
         <attribute name="val">
-          <data type="string"/>
+          <ref name="ST_RubyAlign"/>
         </attribute>
       </define>
       <define name="CT_RubyPr">
@@ -17900,6 +17910,7 @@
     </resource>
     <resource name="CT_R" resource="Stream">
       <action name="start" action="startCharacterGroup"/>
+      <action name="start" action="sendPropertiesWithId" tokenid="ooxml:EG_RubyContent_r" sendtokenid="ooxml:EG_RubyContent_r"/>
     </resource>
     <resource name="ST_Hint" resource="List">
       <value tokenid="ooxml:Value_ST_Hint_default">default</value>
@@ -17997,9 +18008,38 @@
       <action name="start" action="sendPropertiesWithId" sendtokenid="ooxml:paratrackchange"/>
       <action name="start" action="clearProps"/>
     </resource>
+    <resource name="ST_RubyAlign" resource="List">
+      <value tokenid="ooxml:Value_ST_RubyAlign_center">center</value>
+      <value tokenid="ooxml:Value_ST_RubyAlign_distributeLetter">distributeLetter</value>
+      <value tokenid="ooxml:Value_ST_RubyAlign_distributeSpace">distributeSpace</value>
+      <value tokenid="ooxml:Value_ST_RubyAlign_left">left</value>
+      <value tokenid="ooxml:Value_ST_RubyAlign_right">right</value>
+      <value tokenid="ooxml:Value_ST_RubyAlign_rightVertical">rightVertical</value>
+    </resource>
     <resource name="CT_RubyAlign" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_RubyAlign_val" action="setValue"/>
-      <action name="start" action="setDefaultStringValue"/>
+    </resource>
+    <resource name="CT_RubyPr" resource="Properties">
+        <element name="rubyAlign" tokenid="ooxml:CT_RubyPr_rubyAlign"/>
+        <element name="hps" tokenid="ooxml:CT_RubyPr_hps"/>
+        <element name="hpsRaise" tokenid="ooxml:CT_RubyPr_hpsRaise"/>
+        <element name="hpsBaseText" tokenid="ooxml:CT_RubyPr_hpsBaseText"/>
+        <element name="lid" tokenid="ooxml:CT_RubyPr_lid"/>
+        <element name="dirty" tokenid="ooxml:CT_RubyPr_dirty"/>
+        <action name="start" action="sendPropertiesWithId" tokenid="ooxml:CT_RubyPr" sendtokenid="ooxml:CT_RubyPr"/>
+    </resource>
+    <resource name="CT_Ruby" resource="Stream">
+        <element name="rubyPr" tokenid="ooxml:CT_RubyPr"/>
+        <element name="rt" tokenid="ooxml:CT_Ruby_rt"/>
+        <element name="rubyBase" tokenid="ooxml:CT_Ruby_rubyBase"/>
+        <action name="start" action="sendPropertiesWithId" tokenid="ooxml:EG_RunInnerContent_ruby" sendtokenid="ooxml:EG_RunInnerContent_ruby"/>
+    </resource>
+    <resource name="CT_RubyContent" resource="Stream">
+      <action name="start" action="sendPropertiesWithId" tokenid="ooxml:CT_Ruby_rt" sendtokenid="ooxml:CT_Ruby_rt"/>
+      <action name="start" action="sendPropertiesWithId" tokenid="ooxml:CT_Ruby_rubyBase" sendtokenid="ooxml:CT_Ruby_rubyBase"/>
+    </resource>
+    <resource name="EG_RubyContent" resource="Stream">
+      <element name="r" tokenid="ooxml:EG_RubyContent_r"/>
     </resource>
     <resource name="CT_Lock" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Lock_val" action="setValue"/>
