@@ -62,6 +62,10 @@ void PpmFilterTest::testCVEs()
     testDir(OUString(),
         getURLFromSrc("/filter/qa/cppunit/data/ppm/"),
         OUString());
+
+    testDir(OUString(),
+        getURLFromSrc("/filter/qa/cppunit/data/pbm/"),
+        OUString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PpmFilterTest);
