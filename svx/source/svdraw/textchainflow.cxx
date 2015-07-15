@@ -111,6 +111,7 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
 
     // update new state on paragraph merging
     if (bOverflow) {
+        fprintf(stderr, "[DEEPMERGE] Setting deepMerge to %d\n", mpOverflChText->IsLastParaInterrupted());
         GetTextChain()->SetIsPartOfLastParaInNextLink(
                           mpTargetLink,
                           mpOverflChText->IsLastParaInterrupted());
