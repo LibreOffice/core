@@ -96,6 +96,7 @@ private:
     css::uno::Reference<css::frame::XModel> mxModel;
 
     void Initialize();
+    void updateData();
 };
 
 } } // end of namespace ::chart::sidebar
