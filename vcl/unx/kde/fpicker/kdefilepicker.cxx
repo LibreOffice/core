@@ -330,6 +330,37 @@ void KDEFileDialog::customEvent( QCustomEvent *pEvent )
                     {
                         KURL::List qList( selectedURLs() );
                         for ( KURL::List::const_iterator it = qList.begin(); it != qList.end(); ++it )
+                        {
+                            appendURL( qString, (*it) );
+                            break; // we just want the first element
+                        }
+                    }
+                    else
+                    {
+                        // we have to return the selected files anyway
+                        const KFileItemList *pItems = ops->selectedItems();
+                        for ( KFileItemListIterator it( *pItems ); it.current(); ++it )
+                        {
+                            appendURL( qString, (*it)->url() );
+                            break; // we just want the first element
+                        }
+                    }
+
+                    sendCommand( qString );
+                    setCanNotifySelection( true );
+                }
+                break;
+            case KDECommandEvent::GetSelectedFiles:
+                {
+                    QString qString;
+                    qString.reserve( 1024 );
+
+                    qString.append( "files" );
+
+                    if ( result() == QDialog::Accepted )
+                    {
+                        KURL::List qList( selectedURLs() );
+                        for ( KURL::List::const_iterator it = qList.begin(); it != qList.end(); ++it )
                             appendURL( qString, (*it) );
                     }
                     else

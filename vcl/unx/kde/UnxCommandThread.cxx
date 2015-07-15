@@ -100,34 +100,29 @@ OUString SAL_CALL UnxFilePickerCommandThread::getDirectory()
     return m_aGetDirectory;
 }
 
-uno::Sequence< OUString > SAL_CALL UnxFilePickerCommandThread::getFiles()
+uno::Sequence< OUString > SAL_CALL UnxFilePickerCommandThread::getSelectedFiles()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     sal_Int32 nSize = m_aGetFiles.size();
-    uno::Sequence< OUString > aFiles( ( nSize > 1 )? nSize + 1: nSize );
+    uno::Sequence< OUString > aFiles( nSize );
 
-    if ( nSize == 1 )
-        aFiles[0] = m_aGetFiles.front();
-    else if ( nSize > 1 )
+    size_t nIdx = 0;
+    for ( ::std::list< OUString >::const_iterator it = m_aGetFiles.begin();
+       it != m_aGetFiles.end(); ++it, ++nIdx )
     {
-        // First entry in the sequence must be the dirname, the others are the
-        // filenames, so we have to rearrange the list...
-
-        OUString aFront = m_aGetFiles.front();
-        sal_Int32 nLastSlash = aFront.lastIndexOf( '/' );
-
-        aFiles[0] = ( nLastSlash >= 0 )? aFront.copy( 0, nLastSlash ): OUString();
-        ++nLastSlash;
-
-        sal_Int32 nIdx = 1;
-        for ( ::std::list< OUString >::const_iterator it = m_aGetFiles.begin();
-                it != m_aGetFiles.end(); ++it, ++nIdx )
-        {
-            sal_Int32 nLength = (*it).getLength() - nLastSlash;
-            aFiles[nIdx] = ( nLength >= 0 )? (*it).copy( nLastSlash, nLength ): OUString();
-        }
+        aFiles[nIdx] = *it;
     }
+
+    return aFiles;
+}
+uno::Sequence< OUString > SAL_CALL UnxFilePickerCommandThread::getFiles()
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    uno::Sequence< OUString > aFiles = getSelectedFiles();
+    if (aFiles.getLength() > 1)
+        aFiles.realloc(1); // we just want the first entry here
 
     return aFiles;
 }

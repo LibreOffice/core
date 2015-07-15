@@ -109,6 +109,7 @@ public:
     OUString SAL_CALL    getDirectory();
 
     ::osl::Condition& SAL_CALL  getFilesCondition() { return m_aGetFilesCondition; }
+    ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles();
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL getFiles();
 
     ::osl::Condition& SAL_CALL  getValueCondition() { return m_aGetValueCondition; }

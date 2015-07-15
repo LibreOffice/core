@@ -60,6 +60,7 @@ public:
         SetDirectory,
 
         GetFiles,
+        GetSelectedFiles,
 
         SetTitle,
         SetType,
