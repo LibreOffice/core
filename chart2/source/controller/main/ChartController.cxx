@@ -348,22 +348,32 @@ uno::Sequence< OUString > ChartController::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-/*
 namespace {
 
 uno::Reference<ui::XSidebar> getSidebarFromModel(uno::Reference<frame::XModel> xModel)
 {
     uno::Reference<container::XChild> xChild(xModel, uno::UNO_QUERY);
-    uno::Reference<frame::XModel> xParent (xChild->getParent(), uno::UNO_QUERY_THROW);
+    if (!xChild.is())
+        return NULL;
+
+    uno::Reference<frame::XModel> xParent (xChild->getParent(), uno::UNO_QUERY);
+    if (!xParent.is())
+        return NULL;
+
     uno::Reference<frame::XController2> xController(xParent->getCurrentController(), uno::UNO_QUERY);
+    if (!xController.is())
+        return NULL;
+
     uno::Reference<ui::XSidebarProvider> xSidebarProvider (xController->getSidebar(), uno::UNO_QUERY);
+    if (!xSidebarProvider.is())
+        return NULL;
+
     uno::Reference<ui::XSidebar> xSidebar(xSidebarProvider->getSidebar(), uno::UNO_QUERY);
 
     return xSidebar;
 }
 
 }
-*/
 
 // XController
 
@@ -378,11 +388,12 @@ void SAL_CALL ChartController::attachFrame(
 
     mpSelectionChangeHandler->Connect();
 
-    /*
     uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getModel());
-    sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
-    sfx2::sidebar::SidebarController::registerSidebarForFrame(pSidebar, this);
-    */
+    if (xSidebar.is())
+    {
+        sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
+        sfx2::sidebar::SidebarController::registerSidebarForFrame(pSidebar, this);
+    }
 
     if(m_xFrame.is()) //what happens, if we do have a Frame already??
     {
@@ -750,14 +761,15 @@ void SAL_CALL ChartController::dispose()
 {
     mpSelectionChangeHandler->Disconnect();
 
-    /*
     if (getModel().is())
     {
         uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getModel());
-        sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
-        sfx2::sidebar::SidebarController::unregisterSidebarForFrame(pSidebar, this);
+        if (xSidebar.is())
+        {
+            sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
+            sfx2::sidebar::SidebarController::unregisterSidebarForFrame(pSidebar, this);
+        }
     }
-    */
 
     try
     {
