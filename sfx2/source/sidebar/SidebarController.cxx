@@ -802,6 +802,7 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
             {
                 aCreationArguments.put("Module", makeAny(aModule));
             }
+            aCreationArguments.put("Controller", makeAny(mxCurrentController));
         }
 
         aCreationArguments.put("ApplicationName", makeAny(rContext.msApplication));
