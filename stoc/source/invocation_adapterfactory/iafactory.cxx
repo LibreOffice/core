@@ -100,7 +100,7 @@ public:
     Mutex m_mutex;
     t_ptr_map m_receiver2adapters;
 
-    FactoryImpl( Reference< XComponentContext > const & xContext );
+    explicit FactoryImpl( Reference< XComponentContext > const & xContext );
     virtual ~FactoryImpl();
 
     // XServiceInfo

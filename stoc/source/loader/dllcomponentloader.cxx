@@ -58,7 +58,7 @@ class DllComponentLoader
                               XServiceInfo >
 {
 public:
-    DllComponentLoader( const Reference<XComponentContext> & xCtx );
+    explicit DllComponentLoader( const Reference<XComponentContext> & xCtx );
     virtual ~DllComponentLoader();
 
     // XServiceInfo

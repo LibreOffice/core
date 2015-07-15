@@ -1199,7 +1199,7 @@ class ImplementationRegistration
     : public WeakImplHelper3< XImplementationRegistration2, XServiceInfo, XInitialization >
 {
 public:
-    ImplementationRegistration( const Reference < XComponentContext > & rSMgr );
+    explicit ImplementationRegistration( const Reference < XComponentContext > & rSMgr );
     virtual ~ImplementationRegistration();
 
     // XServiceInfo

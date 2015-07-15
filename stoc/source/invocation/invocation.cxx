@@ -1051,7 +1051,7 @@ class InvocationService
     : public WeakImplHelper2< XSingleServiceFactory, XServiceInfo >
 {
 public:
-    InvocationService( const Reference<XComponentContext> & xCtx );
+    explicit InvocationService( const Reference<XComponentContext> & xCtx );
     virtual ~InvocationService();
 
     // XServiceInfo

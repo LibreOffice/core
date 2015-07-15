@@ -188,8 +188,11 @@ class acc_Policy
     PermissionCollection m_permissions;
 
 public:
-    inline acc_Policy(
-        PermissionCollection const & permissions );
+    explicit acc_Policy(
+        PermissionCollection const & permissions )
+        : m_permissions( permissions )
+    {}
+
     virtual ~acc_Policy();
 
     // XAccessControlContext impl
@@ -197,11 +200,6 @@ public:
         Any const & perm )
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
-inline acc_Policy::acc_Policy(
-    PermissionCollection const & permissions )
-    : m_permissions( permissions )
-{}
 
 acc_Policy::~acc_Policy()
 {}
@@ -292,13 +290,11 @@ class cc_reset
 {
     void * m_cc;
 public:
-    inline cc_reset( void * cc )
+    explicit cc_reset( void * cc )
         : m_cc( cc ) {}
     inline ~cc_reset()
         { ::uno_setCurrentContext( m_cc, s_envType.pData, 0 ); }
 };
-
-
 
 struct MutexHolder
 {
@@ -343,7 +339,7 @@ protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
-    AccessController( Reference< XComponentContext > const & xComponentContext );
+    explicit AccessController( Reference< XComponentContext > const & xComponentContext );
     virtual ~AccessController();
 
     //  XInitialization impl

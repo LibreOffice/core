@@ -111,7 +111,7 @@ public:
     uno_Interface * mapToUno( const css::uno::Any & rObj, typelib_InterfaceTypeDescription * pTo ) throw(css::uno::RuntimeException);
 
     // ctor/ dtor
-    IdlReflectionServiceImpl( const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit IdlReflectionServiceImpl( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~IdlReflectionServiceImpl();
 
     // XInterface

@@ -233,7 +233,7 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
         sal_Int32 iNextIndex );
 
 public:
-    IntrospectionAccessStatic_Impl( Reference< XIdlReflection > xCoreReflection_ );
+    explicit IntrospectionAccessStatic_Impl( Reference< XIdlReflection > xCoreReflection_ );
     virtual ~IntrospectionAccessStatic_Impl()
     {
         delete[] mpOrgPropertyHandleArray;
