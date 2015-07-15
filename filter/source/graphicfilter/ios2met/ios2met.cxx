@@ -2257,7 +2257,6 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
 void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
 {
     sal_uLong nPos, nMaxPos;
-    sal_uInt16 nLen;
     sal_uInt8 nByte, nTripType, nTripType2;
     OSFont * pF=new OSFont;
     pF->pSucc=pFontList; pFontList=pF;
@@ -2269,7 +2268,13 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
     nMaxPos=nPos+(sal_uLong)nFieldSize;
     pOS2MET->SeekRel(2); nPos+=2;
     while (nPos<nMaxPos && pOS2MET->GetError()==0) {
-        pOS2MET->ReadUChar( nByte ); nLen =((sal_uInt16)nByte) & 0x00ff;
+        pOS2MET->ReadUChar( nByte );
+        sal_uInt16 nLen = ((sal_uInt16)nByte) & 0x00ff;
+        if (nLen == 0)
+        {
+            pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
+            ErrorCode=4;
+        }
         pOS2MET->ReadUChar( nTripType );
         switch (nTripType) {
             case 0x02:
@@ -2321,7 +2326,8 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
                 break;
             }
         }
-        nPos+=nLen; pOS2MET->Seek(nPos);
+        nPos+=nLen;
+        pOS2MET->Seek(nPos);
     }
 }
 
