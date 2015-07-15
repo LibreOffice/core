@@ -31,6 +31,7 @@
 #include <vcl/toolbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "LegendHelper.hxx"
 #include "TitleHelper.hxx"
@@ -174,7 +175,26 @@ bool isAxisVisible(css::uno::Reference<css::frame::XModel> xModel, AxisType eTyp
         return bHasAxis;
     }
     return false;
+}
 
+void setAxisVisible(css::uno::Reference<css::frame::XModel> xModel, AxisType eType, bool bVisible)
+{
+    Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
+    if(xDiagram.is())
+    {
+        sal_Int32 nDimensionIndex = 0;
+        if (eType == AxisType::Y_MAIN || eType == AxisType::Y_SECOND)
+            nDimensionIndex = 1;
+        else if (eType == AxisType::Z_MAIN)
+            nDimensionIndex = 2;
+
+        bool bMajor = !(eType == AxisType::X_SECOND || eType == AxisType::Y_SECOND);
+
+        if (bVisible)
+            AxisHelper::showAxis(nDimensionIndex, bMajor, xDiagram, comphelper::getProcessComponentContext());
+        else
+            AxisHelper::hideAxis(nDimensionIndex, bMajor, xDiagram);
+    }
 }
 
 }
@@ -246,6 +266,23 @@ void ChartElementsPanel::Initialize()
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->addModifyListener(mxListener);
     updateData();
+
+    Link<> aLink = LINK(this, ChartElementsPanel, CheckBoxHdl);
+    mpCBTitle->SetClickHdl(aLink);
+    mpCBSubtitle->SetClickHdl(aLink);
+    mpCBXAxis->SetClickHdl(aLink);
+    mpCBXAxisTitle->SetClickHdl(aLink);
+    mpCBYAxis->SetClickHdl(aLink);
+    mpCBYAxisTitle->SetClickHdl(aLink);
+    mpCBZAxis->SetClickHdl(aLink);
+    mpCBZAxisTitle->SetClickHdl(aLink);
+    mpCB2ndXAxis->SetClickHdl(aLink);
+    mpCB2ndXAxisTitle->SetClickHdl(aLink);
+    mpCB2ndYAxis->SetClickHdl(aLink);
+    mpCB2ndYAxisTitle->SetClickHdl(aLink);
+    mpCBLegend->SetClickHdl(aLink);
+    mpCBGridVertical->SetClickHdl(aLink);
+    mpCBGridHorizontal->SetClickHdl(aLink);
 }
 
 void ChartElementsPanel::updateData()
@@ -315,6 +352,24 @@ void ChartElementsPanel::NotifyItemUpdate(
 void ChartElementsPanel::modelInvalid()
 {
 
+}
+
+IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)
+{
+    bool bChecked = pCheckBox->IsChecked();
+    if (pCheckBox == mpCBTitle.get())
+    {
+    }
+    else if (pCheckBox == mpCBXAxis.get())
+        setAxisVisible(mxModel, AxisType::X_MAIN, bChecked);
+    else if (pCheckBox == mpCBYAxis.get())
+        setAxisVisible(mxModel, AxisType::Y_MAIN, bChecked);
+    else if (pCheckBox == mpCB2ndXAxis.get())
+        setAxisVisible(mxModel, AxisType::X_SECOND, bChecked);
+    else if (pCheckBox == mpCB2ndYAxis.get())
+        setAxisVisible(mxModel, AxisType::Y_SECOND, bChecked);
+
+    return 0;
 }
 
 }} // end of namespace ::chart::sidebar
