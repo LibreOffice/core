@@ -109,18 +109,6 @@ void TextChainFlow::impCheckForFlowEvents(SdrOutliner *pFlowOutl, SdrOutliner *p
                       new UFlowChainedText(pFlowOutl, bMustMergeParaAmongLinks) :
                       NULL;
 
-    // update new state on paragraph merging
-    if (bOverflow) {
-        fprintf(stderr, "[DEEPMERGE] Setting deepMerge to %d\n", mpOverflChText->IsLastParaInterrupted());
-        GetTextChain()->SetIsPartOfLastParaInNextLink(
-                          mpTargetLink,
-                          mpOverflChText->IsLastParaInterrupted());
-    } /* else { // Overflows determine merging or not. If no OF, just merge everything next time.
-        GetTextChain()->SetIsPartOfLastParaInNextLink(
-                          mpTargetLink,
-                          true);
-    } */
-
     // NOTE: Must be called after mp*ChText abd b*flow have been set but before mbOFisUFinduced is reset
     impUpdateCursorInfo();
 
@@ -235,6 +223,12 @@ void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
     fprintf(stderr, "[TEXTCHAINFLOW - OF] DEST box set to %d paras \n", pNewText->GetTextObject().GetParagraphCount());
     if (pNewText)
         mpNextLink->NbcSetOutlinerParaObject(pNewText);
+
+    // Set Deep Merge status
+    fprintf(stderr, "[DEEPMERGE] Setting deepMerge to %d\n", mpOverflChText->IsLastParaInterrupted());
+    GetTextChain()->SetIsPartOfLastParaInNextLink(
+                          mpTargetLink,
+                          mpOverflChText->IsLastParaInterrupted());
 }
 
 OutlinerParaObject *TextChainFlow::impGetNonOverflowingParaObject(SdrOutliner *pOutliner)
