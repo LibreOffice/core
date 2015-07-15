@@ -379,6 +379,9 @@ OUString getPropertyName( PropertyIds eId )
         case PROP_FILL_COLOR: sName = "FillColor"; break;
         case PROP_SNAP_TO_GRID: sName = "SnapToGrid"; break;
         case PROP_GRID_SNAP_TO_CHARS: sName = "GridSnapToChars"; break;
+        case PROP_RUBY_STYLE: sName = "RubyCharStyleName"; break;
+        case PROP_RUBY_TEXT: sName = "RubyText"; break;
+        case PROP_RUBY_ADJUST: sName = "RubyAdjust"; break;
     }
     assert(sName.getLength()>0);
     return sName;
