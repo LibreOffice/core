@@ -20,11 +20,12 @@
 
 #include <sdr/contact/viewcontactofsdrpathobj.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/svdpage.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
 #include <sdr/primitive2d/sdrpathprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-
 
 
 namespace sdr
@@ -82,13 +83,40 @@ namespace sdr
 
             // prepare object transformation and unit polygon (direct model data)
             basegfx::B2DHomMatrix aObjectMatrix;
-            const bool bIsLine(
+            bool bIsLine(
                 !aUnitPolyPolygon.areControlPointsUsed()
                 && 1 == nPolyCount
                 && 2 == aUnitPolyPolygon.getB2DPolygon(0).count());
 
             if(bIsLine)
             {
+                const SdrPage* pPage = GetPathObj().GetPage();
+                if (pPage)
+                {
+                    //tdf#63955 if we have an extremely long line then clip it
+                    //to a very generous range of -1 page width/height vs +1
+                    //page width/height to avoid oom and massive churn
+                    //generating a huge polygon chain to cover the length in
+                    //applyLineDashing if this line is dashed
+                    double fPageWidth = pPage->GetWdt();
+                    double fPageHeight = pPage->GetHgt();
+                    basegfx::B2DRange aClipRange(-fPageWidth, -fPageHeight,
+                                                 fPageWidth*2, fPageHeight*2);
+                    aUnitPolyPolygon = basegfx::tools::clipPolyPolygonOnRange(aUnitPolyPolygon,
+                                                                       aClipRange, true, true);
+                    nPolyCount = ensureGeometry(aUnitPolyPolygon);
+
+                    // re-check that we have't been clipped out to oblivion
+                    bIsLine =
+                        !aUnitPolyPolygon.areControlPointsUsed()
+                        && 1 == nPolyCount
+                        && 2 == aUnitPolyPolygon.getB2DPolygon(0).count();
+                }
+            }
+
+            if(bIsLine)
+            {
+
                 // special handling for single line mode (2 points)
                 const basegfx::B2DPolygon aSubPolygon(aUnitPolyPolygon.getB2DPolygon(0));
                 const basegfx::B2DPoint aStart(aSubPolygon.getB2DPoint(0));
