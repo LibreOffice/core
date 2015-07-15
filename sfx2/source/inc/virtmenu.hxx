@@ -87,49 +87,21 @@ public:
     void            EnableItem( sal_uInt16 nItemId, bool bEnable );
     void            SetItemText( sal_uInt16 nItemId, const OUString& rText );
 
-    sal_uInt16          GetItemCount() const;
     Menu*           GetSVMenu() const { return pSVMenu;}
     SfxMenuControl& operator[]( sal_uInt16 nPos ) const;
 
-    sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
-
-    SfxVirtualMenu* GetParentMenu() const { return pParent; }
-    void            SetParentMenu( SfxVirtualMenu* pNewParent )
-                    { pParent = pNewParent; }
-
     void            SetPopupMenu( sal_uInt16 nId, PopupMenu *pMenu );
-    bool            IsFromResource() const
-                    { return bResCtor; }
     void            InitPopup(sal_uInt16 nPos, bool bOLE = true);
     void            InitializeHelp();
-    void            SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
-    ResMgr*         GetResMgr() { return pResMgr; }
 
     DECL_LINK( Select, Menu * );
 };
 
 
 
-// return the number of virtual items in this menu
-
-inline sal_uInt16 SfxVirtualMenu::GetItemCount() const
-{
-    return nCount;
-}
-
-
-
 inline SfxMenuControl& SfxVirtualMenu::operator[]( sal_uInt16 nPos ) const
 {
     return *(pItems+nPos);
-}
-
-
-// returns the item id at position nPos in the menu (or 0 if sep.)
-
-inline sal_uInt16 SfxVirtualMenu::GetItemId( sal_uInt16 nPos ) const
-{
-    return pItems ? pItems[nPos].GetId() : 0;
 }
 
 

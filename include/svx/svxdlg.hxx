@@ -423,7 +423,6 @@ public:
                                                                  SdrModel* pModel,
                                                                  const SdrObject* pObj = NULL,
                                                                  bool bHasObj = true )=0;
-    virtual VclAbstractDialog*              CreateSfxDialog( vcl::Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) SAL_OVERRIDE = 0;
     virtual SfxAbstractDialog*              CreateSfxDialog( vcl::Window* pParent,
                                                                         const SfxItemSet& rAttr,
                                                                         const SdrView* pView,

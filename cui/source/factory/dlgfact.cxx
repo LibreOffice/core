@@ -984,12 +984,6 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( vcl::Window* pPa
     return 0;
 }
 
-// dialogs that use SfxBindings
-VclAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( vcl::Window* /*pParent*/, const SfxBindings&, sal_uInt32 )
-{
-    return 0;
-}
-
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
     vcl::Window* pParent, const Reference< frame::XFrame >& rxFrame,
     sal_uInt32 nResId, const OUString& rParameter )

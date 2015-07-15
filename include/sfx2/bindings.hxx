@@ -153,7 +153,6 @@ public:
     void             SetState( const SfxItemSet &rSet );
     void             SetState( const SfxPoolItem &rItem );
     void             Invalidate( sal_uInt16 nId, bool bWithItem, bool bWithMsg=false);
-    void             Invalidate( sal_uInt16 nId, bool bWithMsg);
     bool             IsInUpdate() const;
     void             SetVisibleState( sal_uInt16 nId, bool bShow );
 
@@ -180,7 +179,6 @@ public:
     void             SetActiveFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & rFrame );
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetActiveFrame() const;
                      // Reconfig
-    bool             IsInRegistrations() const;
     sal_uInt16           EnterRegistrations(const char *pFile = 0, int nLine = 0);
     void             LeaveRegistrations( sal_uInt16 nLevel = USHRT_MAX, const char *pFile = 0, int nLine = 0 );
     void             Register( SfxControllerItem& rBinding );
@@ -226,28 +224,7 @@ public:
 
 
 
-inline bool SfxBindings::IsInRegistrations() const
 
-/*  [Description]
-
-    Determines whether the <SfxContollerItems> SfxBindings instance is
-    registered or unregistered, i.e. <SfxBindings::EnterRegistrations()>
-    calls that have not been closed by <SfxBindings::LeaveRegistrations()>.
-
-    [Return value]
-
-    int                 sal_True
-                        The SfxBindings instance is currently in
-                        Registration-Mode. No status updates .
-
-    int sal_False
-                        The SfxBindings instance is the normal mode.
-                        Status updates can be done.
-*/
-
-{
-    return 0 != nRegLevel;
-}
 
 
 

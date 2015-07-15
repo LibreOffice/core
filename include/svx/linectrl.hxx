@@ -124,7 +124,6 @@ public:
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
 };
 
 

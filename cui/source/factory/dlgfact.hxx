@@ -503,7 +503,6 @@ class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
 public:
     virtual VclAbstractDialog*          CreateVclDialog( vcl::Window* pParent, sal_uInt32 nResId ) SAL_OVERRIDE;
-    virtual VclAbstractDialog*          CreateSfxDialog( vcl::Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) SAL_OVERRIDE;
 
     virtual SfxAbstractDialog*          CreateSfxDialog( vcl::Window* pParent,
                                             const SfxItemSet& rAttr,

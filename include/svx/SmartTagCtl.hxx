@@ -69,7 +69,6 @@ public:
     SvxSmartTagsControl( sal_uInt16 nId, Menu&, SfxBindings& );
     virtual ~SvxSmartTagsControl();
 
-    virtual PopupMenu*  GetPopup() const SAL_OVERRIDE;
     SFX_DECL_MENU_CONTROL();
 };
 

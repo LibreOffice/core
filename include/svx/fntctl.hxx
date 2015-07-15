@@ -46,8 +46,6 @@ public:
     SvxFontMenuControl( sal_uInt16 nId, Menu&, SfxBindings& );
     virtual ~SvxFontMenuControl();
 
-    virtual PopupMenu*  GetPopup() const SAL_OVERRIDE;
-
     SFX_DECL_MENU_CONTROL();
 };
 

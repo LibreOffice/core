@@ -45,9 +45,6 @@ public:
     SfxHelp();
     virtual ~SfxHelp();
 
-    inline void             SetTicket( const OUString& rTicket )  { aTicket = rTicket; }
-    inline void             SetUser( const OUString& rUser )      { aUser = rUser; }
-
     virtual OUString        GetHelpText( const OUString&, const vcl::Window* pWindow ) SAL_OVERRIDE;
 
     static OUString         CreateHelpURL( const OUString& aCommandURL, const OUString& rModuleName );

@@ -320,13 +320,6 @@ void SvxLineEndWindow::implInit()
     aLineEndSet->Show();
 }
 
-VclPtr<SfxPopupWindow> SvxLineEndWindow::Clone() const
-{
-    return VclPtr<SvxLineEndWindow>::Create( GetId(), mxFrame, GetText() );
-}
-
-
-
 SvxLineEndWindow::~SvxLineEndWindow()
 {
     disposeOnce();

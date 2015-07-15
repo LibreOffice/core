@@ -152,18 +152,4 @@ SvxFontMenuControl::~SvxFontMenuControl()
     delete pMenu;
 }
 
-
-
-/*  [Beschreibung]
-
-    Gibt das Men"u zur"uck
-*/
-
-PopupMenu* SvxFontMenuControl::GetPopup() const
-{
-    return pMenu;
-}
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

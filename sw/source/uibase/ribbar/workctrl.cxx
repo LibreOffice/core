@@ -373,11 +373,6 @@ void SwScrollNaviPopup::ApplyImageList()
     }
 }
 
-VclPtr<SfxPopupWindow> SwScrollNaviPopup::Clone() const
-{
-    return VclPtr<SwScrollNaviPopup>::Create( GetId(), GetFrame(), GetParent() );
-}
-
 IMPL_LINK_TYPED(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet, void)
 {
     sal_uInt16 nSet = pSet->GetCurItemId();

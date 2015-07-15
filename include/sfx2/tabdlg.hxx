@@ -145,19 +145,9 @@ public:
                                     GetTabPageRanges pRangesFunc,   // can be 0
                                     bool bItemsOnDemand = false,
                                     sal_uInt16 nPos = TAB_APPEND);
-    void                AddTabPage( sal_uInt16 nId,
-                                    const Bitmap &rRiderBitmap,
-                                    CreateTabPage pCreateFunc,      // != 0
-                                    GetTabPageRanges pRangesFunc,   // can be 0
-                                    bool bItemsOnDemand = false,
-                                    sal_uInt16 nPos = TAB_APPEND);
 
     void                AddTabPage( sal_uInt16 nId,
                                     const OUString &rRiderText,
-                                    bool bItemsOnDemand = false,
-                                    sal_uInt16 nPos = TAB_APPEND);
-    void                AddTabPage( sal_uInt16 nId,
-                                    const Bitmap &rRiderBitmap,
                                     bool bItemsOnDemand = false,
                                     sal_uInt16 nPos = TAB_APPEND);
 
@@ -198,8 +188,6 @@ public:
     PushButton&         GetOKButton() { return *m_pOKBtn; }
     const CancelButton& GetCancelButton() const { return *m_pCancelBtn; }
     CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
-    const HelpButton&   GetHelpButton() const { return *m_pHelpBtn; }
-    HelpButton&         GetHelpButton() { return *m_pHelpBtn; }
 
     const PushButton*   GetUserButton() const { return m_pUserBtn; }
     PushButton*         GetUserButton() { return m_pUserBtn; }
@@ -212,7 +200,6 @@ public:
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
     SfxItemSet*         GetExampleSet() { return pExampleSet; }
-    SfxViewFrame*       GetViewFrame() const { return pFrame; }
 
     void                SetApplyHandler(const Link<>& _rHdl);
 
@@ -239,9 +226,7 @@ private:
 protected:
     SfxTabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet);
 
-    sal_uInt16              GetSlot( sal_uInt16 nWhich ) const
-                            { return pSet->GetPool()->GetSlotId( nWhich ); }
-    sal_uInt16              GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
+    sal_uInt16          GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
                             { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }
     const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep = true );
     SfxTabDialog*       GetTabDialog() const;

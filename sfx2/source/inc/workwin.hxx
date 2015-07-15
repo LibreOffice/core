@@ -166,8 +166,6 @@ struct SfxObjectBarList_Impl
 
     SfxObjectBar_Impl       operator[] ( sal_uInt16 n )
                             { return aArr[n]; }
-    SfxObjectBar_Impl       Actual()
-                            { return aArr[nAct]; }
 };
 
 #define SFX_SPLITWINDOWS_LEFT   0
@@ -292,7 +290,6 @@ public:
     bool                    IsAutoHideMode( const SfxSplitWindow *pSplit );
     void                    EndAutoShow_Impl( Point aPos );
     void                    SetFullScreen_Impl( bool bSet ) { bIsFullScreen = bSet; }
-    bool                    IsFullScreen_Impl() const { return bIsFullScreen; }
 
     // Methods for Objectbars
     virtual void            UpdateObjectBars_Impl();
@@ -302,8 +299,6 @@ public:
     bool                    KnowsObjectBar_Impl( sal_uInt16 nPos ) const;
     bool                    IsVisible_Impl();
     void                    MakeVisible_Impl( bool );
-    void                    SetObjectBarVisibility_Impl( sal_uInt16 nVis );
-    bool                    IsContainer_Impl() const;
     void                    Lock_Impl( bool );
 
     // Methods for ChildWindows

@@ -62,7 +62,6 @@ public:
 
     OUString                GetTitle() const;
     SfxVirtualMenu*         GetPopupMenu() const;
-    virtual PopupMenu*      GetPopup() const;
 
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                           const SfxPoolItem* pState ) SAL_OVERRIDE;

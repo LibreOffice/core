@@ -91,10 +91,6 @@ public:
 
 private:
     void    impl_releaseContainers();
-
-    bool    impl_getContainer(
-                ContainerType _eType,
-                ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer >& _out_rxContainer );
 };
 
 #endif // INCLUDED_SFX2_SOURCE_INC_APPBASLIB_HXX

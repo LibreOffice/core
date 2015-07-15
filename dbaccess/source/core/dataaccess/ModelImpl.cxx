@@ -1311,13 +1311,6 @@ OUString ODatabaseModelImpl::getDocumentLocation() const
     // this folder is considered to be secure. So, the document URL needs to be used to decide about the security.
 }
 
-Reference< XStorage > ODatabaseModelImpl::getZipStorageToSign()
-{
-    // we do not support signing the scripting storages, so we're allowed to
-    // return <NULL/> here.
-    return Reference< XStorage >();
-}
-
 ODatabaseModelImpl::EmbeddedMacros ODatabaseModelImpl::determineEmbeddedMacros()
 {
     if ( !m_aEmbeddedMacros )

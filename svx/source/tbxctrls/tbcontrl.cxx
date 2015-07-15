@@ -265,7 +265,6 @@ public:
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
@@ -287,7 +286,6 @@ public:
     SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, vcl::Window* pParentWindow );
     virtual ~SvxLineWindow_Impl() { disposeOnce(); }
     virtual void dispose() SAL_OVERRIDE { m_aLineStyleLb.disposeAndClear(); SfxPopupWindow::dispose(); }
-    virtual VclPtr<SfxPopupWindow> Clone() const SAL_OVERRIDE;
 };
 
 class SvxStyleToolBoxControl;
@@ -1336,11 +1334,6 @@ void SvxColorWindow_Impl::KeyInput( const KeyEvent& rKEvt )
     mpColorSet->KeyInput(rKEvt);
 }
 
-VclPtr<SfxPopupWindow> SvxColorWindow_Impl::Clone() const
-{
-    return VclPtr<SvxColorWindow_Impl>::Create( maCommand, mrPaletteManager, mrBorderColorStatus, theSlotId, GetFrame(), GetText(), GetParent() );
-}
-
 IMPL_LINK(SvxColorWindow_Impl, SelectHdl, SvxColorValueSet*, pColorSet)
 {
     Color aColor = pColorSet->GetItemColor( pColorSet->GetSelectItemId() );
@@ -1623,12 +1616,6 @@ void SvxFrameWindow_Impl::dispose()
     SfxPopupWindow::dispose();
 }
 
-VclPtr<SfxPopupWindow> SvxFrameWindow_Impl::Clone() const
-{
-    //! HACK: How do I get the Paragraph mode?
-    return VclPtr<SvxFrameWindow_Impl>::Create( GetId(), GetFrame(), GetParent() );
-}
-
 vcl::Window* SvxFrameWindow_Impl::GetPreferredKeyInputWindow()
 {
     return aFrameSet.get();
@@ -1892,11 +1879,6 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     SetHelpId( HID_POPUP_LINE );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME_STYLE) );
     m_aLineStyleLb->Show();
-}
-
-VclPtr<SfxPopupWindow> SvxLineWindow_Impl::Clone() const
-{
-    return VclPtr<SvxLineWindow_Impl>::Create( GetId(), GetFrame(), GetParent() );
 }
 
 IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
