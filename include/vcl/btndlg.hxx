@@ -20,10 +20,12 @@
 #ifndef INCLUDED_VCL_BTNDLG_HXX
 #define INCLUDED_VCL_BTNDLG_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <vcl/dllapi.h>
 #include <vcl/dialog.hxx>
 #include <o3tl/typed_flags_set.hxx>
+
+#include <vector>
+#include <memory>
 
 struct ImplBtnDlgItem;
 class PushButton;
@@ -81,7 +83,7 @@ private:
                         ButtonDialog& operator=( const ButtonDialog& ) SAL_DELETED_FUNCTION;
 
 private:
-    boost::ptr_vector<ImplBtnDlgItem> maItemList;
+    std::vector<std::unique_ptr<ImplBtnDlgItem>> m_ItemList;
     Size                maPageSize;
     Size                maCtrlSize;
     long                mnButtonSize;

@@ -24,8 +24,6 @@
 #include <vcl/button.hxx>
 #include <vcl/btndlg.hxx>
 
-typedef boost::ptr_vector<ImplBtnDlgItem>::iterator btn_iterator;
-typedef boost::ptr_vector<ImplBtnDlgItem>::const_iterator btn_const_iterator;
 
 struct ImplBtnDlgItem
 {
@@ -64,12 +62,12 @@ ButtonDialog::~ButtonDialog()
 
 void ButtonDialog::dispose()
 {
-    for ( btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+    for (auto & it : m_ItemList)
     {
         if ( it->mbOwnButton )
             it->mpPushButton.disposeAndClear();
     }
-    maItemList.clear();
+    m_ItemList.clear();
     Dialog::dispose();
 }
 
@@ -97,7 +95,7 @@ VclPtr<PushButton> ButtonDialog::ImplCreatePushButton( ButtonDialogFlags nBtnFla
 
 ImplBtnDlgItem* ButtonDialog::ImplGetItem( sal_uInt16 nId ) const
 {
-    for ( btn_const_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+    for (auto & it : m_ItemList)
     {
         if (it->mnId == nId)
             return const_cast<ImplBtnDlgItem*>(&(*it));
@@ -116,7 +114,7 @@ long ButtonDialog::ImplGetButtonSize()
     long nSepSize = 0;
     maCtrlSize = Size( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
 
-    for ( btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+    for (auto & it : m_ItemList)
     {
         nSepSize += nLastSepSize;
 
@@ -140,7 +138,7 @@ long ButtonDialog::ImplGetButtonSize()
             nLastSepSize = IMPL_SEP_BUTTON_Y;
     }
 
-    long nButtonCount = maItemList.size();
+    size_t const nButtonCount = m_ItemList.size();
 
     if ( GetStyle() & WB_HORZ )
         mnButtonSize  = nSepSize + (nButtonCount*maCtrlSize.Width());
@@ -192,7 +190,7 @@ void ButtonDialog::ImplPosControls()
     }
 
     // Arrange PushButtons
-    for ( btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+    for (auto & it : m_ItemList)
     {
         if ( GetStyle() & WB_HORZ )
             nX += it->mnSepSize;
@@ -215,7 +213,7 @@ void ButtonDialog::ImplPosControls()
 
 IMPL_LINK( ButtonDialog, ImplClickHdl, PushButton*, pBtn )
 {
-    for ( btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+    for (auto & it : m_ItemList)
     {
         if ( it->mpPushButton == pBtn )
         {
@@ -237,7 +235,7 @@ void ButtonDialog::StateChanged( StateChangedType nType )
     if ( nType == StateChangedType::InitShow )
     {
         ImplPosControls();
-        for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+        for (auto & it : m_ItemList)
         {
             if ( it->mpPushButton && it->mbOwnButton )
                 it->mpPushButton->SetZOrder(0, ZOrderFlags::Last);
@@ -246,7 +244,7 @@ void ButtonDialog::StateChanged( StateChangedType nType )
         // Set focus on default button.
         if ( mnFocusButtonId != BUTTONDIALOG_BUTTON_NOTFOUND )
         {
-            for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+            for (auto & it : m_ItemList)
             {
                 if (it->mnId == mnFocusButtonId )
                 {
@@ -277,7 +275,7 @@ void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
                               ButtonDialogFlags nBtnFlags, long nSepPixel )
 {
     // PageItem anlegen
-    ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
+    std::unique_ptr<ImplBtnDlgItem> pItem(new ImplBtnDlgItem);
     pItem->mnId             = nId;
     pItem->mbOwnButton      = true;
     pItem->mnSepSize        = nSepPixel;
@@ -286,7 +284,7 @@ void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
     if (!rText.isEmpty())
         pItem->mpPushButton->SetText( rText );
 
-    maItemList.push_back(pItem);
+    m_ItemList.push_back(std::move(pItem));
 
     if ( nBtnFlags & ButtonDialogFlags::Focus )
         mnFocusButtonId = nId;
@@ -298,7 +296,7 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
                               ButtonDialogFlags nBtnFlags, long nSepPixel )
 {
     // PageItem anlegen
-    ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
+    std::unique_ptr<ImplBtnDlgItem> pItem(new ImplBtnDlgItem);
     pItem->mnId             = nId;
     pItem->mbOwnButton      = true;
     pItem->mnSepSize        = nSepPixel;
@@ -322,23 +320,24 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
     if ( nBtnFlags & ButtonDialogFlags::Focus )
         mnFocusButtonId = nId;
 
-    maItemList.push_back(pItem);
+    m_ItemList.push_back(std::move(pItem));
 
     mbFormat = true;
 }
 
 void ButtonDialog::RemoveButton( sal_uInt16 nId )
 {
-    for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+    for (std::vector<std::unique_ptr<ImplBtnDlgItem>>::iterator it
+            = m_ItemList.begin(); it != m_ItemList.end(); ++it)
     {
-        if (it->mnId == nId)
+        if ((*it)->mnId == nId)
         {
-            it->mpPushButton->Hide();
-            if (it->mbOwnButton)
-                it->mpPushButton.disposeAndClear();
+            (*it)->mpPushButton->Hide();
+            if ((*it)->mbOwnButton)
+                (*it)->mpPushButton.disposeAndClear();
             else
-                it->mpPushButton.clear();
-            maItemList.erase(it);
+                (*it)->mpPushButton.clear();
+            m_ItemList.erase(it);
             return;
         }
     }
@@ -348,21 +347,21 @@ void ButtonDialog::RemoveButton( sal_uInt16 nId )
 
 void ButtonDialog::Clear()
 {
-    for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
+    for (auto & it : m_ItemList)
     {
         it->mpPushButton->Hide();
         if (it->mbOwnButton)
             it->mpPushButton.disposeAndClear();
     }
 
-    maItemList.clear();
+    m_ItemList.clear();
     mbFormat = true;
 }
 
 sal_uInt16 ButtonDialog::GetButtonId( sal_uInt16 nButton ) const
 {
-    if ( nButton < maItemList.size() )
-        return maItemList[nButton].mnId;
+    if ( nButton < m_ItemList.size() )
+        return m_ItemList[nButton]->mnId;
     else
         return BUTTONDIALOG_BUTTON_NOTFOUND;
 }
