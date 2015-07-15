@@ -27,12 +27,11 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ustring.hxx>
 
@@ -44,8 +43,7 @@ namespace vista{
 // types
 
 
-typedef ::cppu::WeakComponentImplHelper6<
-                css::ui::dialogs::XFilePicker2,
+typedef ::cppu::WeakComponentImplHelper5<
                 css::ui::dialogs::XFilePicker3,
                 css::ui::dialogs::XFilePickerControlAccess,
                 css::ui::dialogs::XFilePreview,
@@ -112,12 +110,9 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getFiles(  )
         throw( css::uno::RuntimeException );
 
-
     // XFilePicker2 functions
-
-
     virtual css::uno::Sequence< OUString > SAL_CALL getSelectedFiles(  )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
 
     // XFilterManager functions
