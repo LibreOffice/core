@@ -1288,6 +1288,23 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
 {
     if(pTextEditOutlinerView)
     {
+        // XXX: Find a clean way to do this (even cleaner than the code commented below)
+        // if( pTextEditOutlinerView->IsKeyEventPushingOutOfPage(rKevt, pWin)
+        //       pWin = HandleKeyPushingOutOfBox(rKevt);
+        KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
+        sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+        ESelection aCurSel = pTextEditOutlinerView->GetSelection();
+
+        SdrOutliner *pOutl = GetTextEditOutliner();
+        sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
+
+        if (eFunc ==  KeyFuncType::DONTKNOW && nCode == KEY_RIGHT && aCurSel.nEndPara == nLastPara) {
+            fprintf(stderr, "[CHAIN - CURSOR] Trying to move to next box\n" );
+
+            // XXX: Careful with the checks below for pWin and co. You should do them here I guess.
+            return true;
+        } else
+        // Old code from here
         if (pTextEditOutlinerView->PostKeyEvent(rKEvt, pWin))
         {
             if( pMod )
