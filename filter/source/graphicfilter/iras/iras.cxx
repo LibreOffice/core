@@ -54,7 +54,7 @@ private:
 
     bool                ImplReadBody(BitmapWriteAccess * pAcc);
     bool                ImplReadHeader();
-    sal_uInt8               ImplGetByte();
+    sal_uInt8           ImplGetByte();
 
 public:
                         RASReader(SvStream &rRAS);
@@ -174,13 +174,11 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     return mbStatus;
 }
 
-
-
 bool RASReader::ImplReadHeader()
 {
     m_rRAS.ReadInt32(mnWidth).ReadInt32(mnHeight).ReadInt32(mnDepth).ReadInt32(mnImageDatSize).ReadInt32(mnType).ReadInt32(mnColorMapType).ReadInt32(mnColorMapSize);
 
-    if ( mnWidth <= 0 || mnHeight <= 0 || mnImageDatSize <= 0 )
+    if (mnWidth <= 0 || mnHeight <= 0 || mnImageDatSize <= 0 || !m_rRAS.good())
         mbStatus = false;
 
     switch ( mnDepth )
@@ -222,7 +220,7 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
     switch ( mnDstBitsPerPix )
     {
         case 1 :
-            for ( y = 0; y < mnHeight; y++ )
+            for (y = 0; y < mnHeight && mbStatus; ++y)
             {
                 for ( x = 0; x < mnWidth; x++ )
                 {
@@ -233,11 +231,13 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                             nDat >> ( ( x & 7 ) ^ 7 )) );
                 }
                 if (!( ( x - 1 ) & 0x8 ) ) ImplGetByte();       // WORD ALIGNMENT ???
+                if (!m_rRAS.good())
+                    mbStatus = false;
             }
             break;
 
         case 8 :
-            for ( y = 0; y < mnHeight; y++ )
+            for (y = 0; y < mnHeight && mbStatus; ++y)
             {
                 for ( x = 0; x < mnWidth; x++ )
                 {
@@ -245,6 +245,8 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                     pAcc->SetPixelIndex( y, x, nDat );
                 }
                 if ( x & 1 ) ImplGetByte();                     // WORD ALIGNMENT ???
+                if (!m_rRAS.good())
+                    mbStatus = false;
             }
             break;
 
@@ -253,7 +255,7 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
             {
 
                 case 24 :
-                    for ( y = 0; y < mnHeight; y++ )
+                    for (y = 0; y < mnHeight && mbStatus; ++y)
                     {
                         for ( x = 0; x < mnWidth; x++ )
                         {
@@ -272,11 +274,13 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                             pAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                         if ( x & 1 ) ImplGetByte();                     // WORD ALIGNMENT ???
+                        if (!m_rRAS.good())
+                            mbStatus = false;
                     }
                     break;
 
                 case 32 :
-                    for ( y = 0; y < mnHeight; y++ )
+                    for (y = 0; y < mnHeight && mbStatus; ++y)
                     {
                         for ( x = 0; x < mnWidth; x++ )
                         {
@@ -295,6 +299,8 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
                             }
                             pAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
                         }
+                        if (!m_rRAS.good())
+                            mbStatus = false;
                     }
                     break;
             }
@@ -306,8 +312,6 @@ bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
     }
     return mbStatus;
 }
-
-
 
 sal_uInt8 RASReader::ImplGetByte()
 {
