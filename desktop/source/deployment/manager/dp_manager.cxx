@@ -971,9 +971,8 @@ Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage_(
         INetContentTypeParameterList params;
         if (INetContentTypes::parse( data.mediaType, type, subType, &params ))
         {
-            INetContentTypeParameter const * param = params.find(
-                OString("platform") );
-            if (param != 0 && !platform_fits( param->m_sValue ))
+            auto const iter = params.find(OString("platform"));
+            if (iter != params.end() && !platform_fits(iter->second.m_sValue))
                 throw lang::IllegalArgumentException(
                     getResourceString(RID_STR_NO_SUCH_PACKAGE) + id,
                     static_cast<OWeakObject *>(this),

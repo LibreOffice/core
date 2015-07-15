@@ -257,7 +257,7 @@ bool parseParameters(ParameterList const & rInput,
                      INetContentTypeParameterList * pOutput)
 {
     if (pOutput)
-        pOutput->Clear();
+        pOutput->clear();
 
     Parameter * pPrev = 0;
     for (Parameter * p = rInput.m_pList; p; p = p->m_pNext)
@@ -335,11 +335,14 @@ bool parseParameters(ParameterList const & rInput,
                         break;
                 };
             }
-            pOutput->Append(new INetContentTypeParameter(p->m_aAttribute,
+            auto const ret = pOutput->insert(std::make_pair(p->m_aAttribute,
+                                    INetContentTypeParameter(p->m_aAttribute,
                                                              p->m_aCharset,
                                                              p->m_aLanguage,
                                                              aValue,
-                                                             !bBadEncoding));
+                                                             !bBadEncoding)));
+            SAL_INFO_IF(!ret.second, "tools",
+                "INetMIME: dropping duplicate parameter: " << p->m_aAttribute);
             p = pNext;
         }
     return true;
@@ -3736,26 +3739,6 @@ INetMIMEEncodedWordOutputSink::WriteUInt32(sal_uInt32 nChar)
         *m_pBufferEnd++ = sal_Unicode(nChar);
     }
     return *this;
-}
-
-//  INetContentTypeParameterList
-
-void INetContentTypeParameterList::Clear()
-{
-    maEntries.clear();
-}
-
-const INetContentTypeParameter *
-INetContentTypeParameterList::find(const OString& rAttribute) const
-{
-    boost::ptr_vector<INetContentTypeParameter>::const_iterator iter;
-    for (iter = maEntries.begin(); iter != maEntries.end(); ++iter)
-    {
-        if (iter->m_sAttribute.equalsIgnoreAsciiCase(rAttribute))
-            return &(*iter);
-    }
-
-    return NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
