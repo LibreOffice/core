@@ -481,7 +481,7 @@ void ImpEditEngine::FormatDoc()
 
     //FIXME(matteocam)
 
-    CallChainingEventHdl(); // For chaining
+    //CallChainingEventHdl(); // For chaining
 
     LeaveBlockNotifications();
 }

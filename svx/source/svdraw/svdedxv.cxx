@@ -547,11 +547,12 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
     OutlinerView* pOLV = GetTextEditOutlinerView();
 
     TextChain *pTextChain = pTextObj->GetTextChain();
+    ESelection aNewSel = pTextChain->GetPostChainingSel(pTextObj);
 
     switch ( pTextChain->GetCursorEvent(pTextObj) ) {
 
             case CursorChainingEvent::UNCHANGED:
-                // Set same selection as before the chainging
+                // Set same selection as before the chaining
                 // We need an explicit set because the Outliner is messed up
                 //    after text transfer and otherwise it brings us at arbitrary positions.
                 pOLV->SetSelection(pTextChain->GetPreChainingSel(pTextObj));
@@ -561,8 +562,7 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
                 SdrBeginTextEdit(pNextLink);
                 // OutlinerView has changed, so we update the pointer
                 pOLV = GetTextEditOutlinerView();
-                pOLV->SetSelection(pTextChain->GetPostChainingSel(pTextObj)); // XXX
-
+                pOLV->SetSelection(aNewSel); // XXX
                 break;
             case CursorChainingEvent::TO_PREV_LINK:
                 // XXX: To be handled
@@ -1296,14 +1296,17 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
                     pMod->SetChanged( true );
             }
 
+            // FIXME(matteocam)
+            ImpChainingEventHdl(NULL);
+            ImpMoveCursorAfterChainingEvent();
+
             if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
 #ifdef DBG_UTIL
             if (pItemBrowser!=nullptr) pItemBrowser->SetDirty();
 #endif
             ImpMakeTextCursorAreaVisible();
 
-            // FIXME(matteocam)
-            ImpMoveCursorAfterChainingEvent();
+
 
             return true;
         }
