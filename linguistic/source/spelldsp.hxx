@@ -116,7 +116,6 @@ public:
     // LinguDispatcher
     virtual void SetServiceList( const ::com::sun::star::lang::Locale &rLocale, const ::com::sun::star::uno::Sequence< OUString > &rSvcImplNames ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > GetServiceList( const ::com::sun::star::lang::Locale &rLocale ) const SAL_OVERRIDE;
-    virtual DspType GetDspType() const SAL_OVERRIDE;
 
     void    FlushSpellCache();
 
