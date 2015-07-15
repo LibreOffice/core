@@ -311,7 +311,7 @@ SbError marshal(
             case SbxDOUBLE:
             case SbxBOOL:
             case SbxBYTE:
-                add(blob, variable->data(), 8, offset);
+                add(blob, variable->GetValues_Impl(), 8, offset);
                 break;
             case SbxSTRING:
                 {
