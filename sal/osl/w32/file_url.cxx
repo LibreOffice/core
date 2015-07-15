@@ -26,6 +26,7 @@
 #include "file_error.h"
 
 #include "rtl/alloc.h"
+#include <rtl/ustring.hxx>
 #include "osl/diagnose.h"
 #include "osl/file.h"
 #include "osl/mutex.h"
@@ -699,7 +700,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
         strUTF8->length != strURL->length &&
         0 == rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( strURL->buffer, strURL->length, "file:\\\\", 7 )
         , "sal.osl"
-        ,"osl_getSystemPathFromFileURL: \"" << strURL << "\" is not encoded !!!");
+        ,"osl_getSystemPathFromFileURL: \"" << rtl::OUString(strURL) << "\" is not encoded !!!");
 
     bValidEncoded = _osl_decodeURL( strUTF8, &strDecodedURL );
 
@@ -796,7 +797,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
         }
         else
           SAL_INFO_IF(nError, "sal.osl",
-              "osl_getSystemPathFromFileURL: \"" << strURL << "\" is not an absolute FileURL");
+              "osl_getSystemPathFromFileURL: \"" << rtl::OUString(strURL) << "\" is not an absolute FileURL");
 
     }
 
@@ -810,7 +811,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
         rtl_uString_release( strTempPath );
 
     SAL_INFO_IF(nError, "sal.osl",
-        "osl_getSystemPathFromFileURL: \"" << strURL << "\" is not a FileURL");
+        "osl_getSystemPathFromFileURL: \"" << rtl::OUString(strURL) << "\" is not a FileURL");
 
     return nError;
 }
@@ -916,7 +917,7 @@ oslFileError _osl_getFileURLFromSystemPath( rtl_uString* strPath, rtl_uString** 
         rtl_uString_release( strTempURL );
 
     SAL_INFO_IF(nError, "sal.osl",
-        "osl_getFileURLFromSystemPath: \"" << strPath << "\" is not a systemPath");
+        "osl_getFileURLFromSystemPath: \"" << rtl::OUString(strPath) << "\" is not a systemPath");
     return nError;
 }
 
