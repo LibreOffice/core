@@ -172,12 +172,15 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
 
     get(mpFTSpeed, "effect_speed");
     get(mpCBSpeed, "effect_speed_list");
+    get(mpLBCategory, "categorylb");
+    get(mpLBAnimation, "effect_list");
 
     get(mpCustomAnimationList, "custom_animation_list");
     mpCustomAnimationList->setController( dynamic_cast<ICustomAnimationListController*> ( this ) );
     mpCustomAnimationList->set_width_request(mpCustomAnimationList->approximate_char_width() * 16);
-    mpCustomAnimationList->set_height_request(mpCustomAnimationList->GetTextHeight() * 16);
-
+    mpCustomAnimationList->set_height_request(mpCustomAnimationList->GetTextHeight() * 8);
+    mpLBAnimation->set_width_request(mpLBAnimation->approximate_char_width() * 16);
+    mpLBAnimation->set_height_request(mpLBAnimation->GetTextHeight() * 8);
     get(mpPBMoveUp, "move_up");
     get(mpPBMoveDown, "move_down");
     get(mpPBPlay, "play");
@@ -197,7 +200,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     mpPBMoveDown->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpPBPlay->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
     mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implControlHdl ) );
-
+    mpLBCategory->SetSelectHdl( LINK(this, CustomAnimationPane, UpdateAnimationLB) );
     maStrModify = mpFTEffect->GetText();
 
     // get current controller and initialize listeners
@@ -257,6 +260,8 @@ void CustomAnimationPane::dispose()
     mpPBMoveDown.clear();
     mpPBPlay.clear();
     mpCBAutoPreview.clear();
+    mpLBCategory.clear();
+    mpLBAnimation.clear();
     PanelLayout::dispose();
 }
 
@@ -2017,6 +2022,51 @@ void CustomAnimationPane::onChangeSpeed()
 IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl)
 {
     onChangeProperty();
+    return 0;
+}
+
+IMPL_LINK_NOARG(CustomAnimationPane, UpdateAnimationLB)
+{
+    PresetCategoryList rCategoryList;
+    sal_uInt16 nPosition = mpLBCategory->GetSelectEntryPos();
+    const CustomAnimationPresets& rPresets (getPresets());
+    switch(nPosition)
+    {
+        case 0:rCategoryList = rPresets.getMotionPathsPresets();break;
+        case 1:rCategoryList = rPresets.getEmphasisPresets();break;
+        case 2:rCategoryList = rPresets.getEntrancePresets();break;
+        case 3:rCategoryList = rPresets.getExitPresets();break;
+        case 4:rCategoryList = rPresets.getMiscPresets();break;
+    }
+    PresetCategoryList::const_iterator aCategoryIter( rCategoryList.begin() );
+    const PresetCategoryList::const_iterator aCategoryEnd( rCategoryList.end() );
+    mpLBAnimation->Clear();
+    while(aCategoryIter != aCategoryEnd)
+    {
+        PresetCategoryPtr pCategory( *aCategoryIter++ );
+        if( pCategory.get() )
+        {
+            mpLBAnimation->InsertCategory( pCategory->maLabel );
+
+            std::vector< CustomAnimationPresetPtr > aSortedVector(pCategory->maEffects.size());
+            std::copy( pCategory->maEffects.begin(), pCategory->maEffects.end(), aSortedVector.begin() );
+            //ImplStlEffectCategorySortHelper aSortHelper;
+            //std::sort( aSortedVector.begin(), aSortedVector.end(), aSortHelper );
+
+            std::vector< CustomAnimationPresetPtr >::const_iterator aIter( aSortedVector.begin() );
+            const std::vector< CustomAnimationPresetPtr >::const_iterator aEnd( aSortedVector.end() );
+            while( aIter != aEnd )
+            {
+                CustomAnimationPresetPtr pDescriptor = (*aIter++);
+                if( pDescriptor.get() && !pDescriptor->isTextOnly() )
+                {
+                    sal_Int32 nPos = mpLBAnimation->InsertEntry( pDescriptor->getLabel() );
+                    mpLBAnimation->SetEntryData( nPos, static_cast<void*>( new CustomAnimationPresetPtr( pDescriptor ) ) );
+
+                }
+            }
+        }
+    }
     return 0;
 }
 

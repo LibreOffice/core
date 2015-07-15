@@ -29,10 +29,10 @@
 #include "CustomAnimationPreset.hxx"
 #include "CustomAnimationList.hxx"
 #include "CustomAnimationCreateDialog.hxx"
-
+#include "CategoryListBox.hxx"
 #include "motionpathtag.hxx"
 #include "misc/scopelock.hxx"
-
+#include "CustomAnimationPreset.hxx"
 #include <vector>
 
 class PushButton;
@@ -120,6 +120,7 @@ private:
     DECL_LINK(implPropertyHdl, void *);
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
     DECL_LINK_TYPED(lateInitCallback, Timer *, void);
+    DECL_LINK(UpdateAnimationLB, void*);
 
 private:
     ViewShellBase& mrBase;
@@ -143,6 +144,8 @@ private:
     VclPtr<PushButton> mpPBMoveDown;
     VclPtr<PushButton> mpPBPlay;
     VclPtr<CheckBox>   mpCBAutoPreview;
+    VclPtr<ListBox>    mpLBCategory;
+    VclPtr<CategoryListBox> mpLBAnimation;
 
     OUString    maStrModify;
     OUString    maStrProperty;
