@@ -27,9 +27,27 @@ namespace configmgr {
 class Components;
 struct Data;
 
-void writeData(oslFileHandle handle, OString const & text);
-void writeAttributeValue(oslFileHandle handle, OUString const & value);
-void writeValueContent(oslFileHandle handle, OUString const & value);
+struct TempFile {
+    OUString url;
+    oslFileHandle handle;
+    bool closed;
+    OStringBuffer buffer;
+
+    TempFile(): handle(0), closed(false) {}
+    ~TempFile();
+    void closeAndRename(const OUString &url);
+    oslFileError flush();
+    oslFileError closeWithoutUnlink();
+    void writeString(char const *begin, sal_Int32 length);
+
+private:
+    TempFile(const TempFile&) SAL_DELETED_FUNCTION;
+    TempFile& operator=(const TempFile&) SAL_DELETED_FUNCTION;
+};
+
+void writeData(TempFile &handle, OString const & text);
+void writeAttributeValue(TempFile &handle, OUString const & value);
+void writeValueContent(TempFile &handle, OUString const & value);
 
 void writeModFile(
     Components & components, OUString const & url, Data const & data);

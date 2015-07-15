@@ -70,7 +70,7 @@ namespace {
 //     </node>
 // </item>
 
-void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, oslFileHandle aFileHandle)
+void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, TempFile &aFileHandle)
 {
     HKEY hCurKey;
 
@@ -199,8 +199,8 @@ bool dumpWindowsRegistry(OUString* pFileURL)
         return false;
     }
 
-    oslFileHandle aFileHandle;
-    switch (osl::FileBase::createTempFile(0, &aFileHandle, pFileURL)) {
+    TempFile aFileHandle;
+    switch (osl::FileBase::createTempFile(0, &aFileHandle.handle, pFileURL)) {
     case osl::FileBase::E_None:
         break;
     case osl::FileBase::E_ACCES:
@@ -212,6 +212,7 @@ bool dumpWindowsRegistry(OUString* pFileURL)
         throw css::uno::RuntimeException(
             "cannot create temporary file");
     }
+    aFileHandle.url = *pFileURL;
     writeData(
         aFileHandle,
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<oor:items"
@@ -220,7 +221,7 @@ bool dumpWindowsRegistry(OUString* pFileURL)
             " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
     dumpWindowsRegistryKey(hKey, "", aFileHandle);
     writeData(aFileHandle, "</oor:items>");
-    oslFileError e = osl_closeFile(aFileHandle);
+    oslFileError e = aFileHandle.closeWithoutUnlink();
     if (e != osl_File_E_None)
         SAL_WARN("configmgr", "osl_closeFile failed with " << +e);
     RegCloseKey(hKey);
