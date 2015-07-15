@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_4a1a4119",
+        "filename": "fpicker/source/office/OfficeFilePicker.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 603,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2015-07-15T12:06:49Z",
+      "side": 1,
+      "message": "Looks great - thanks ! \u003d)",
+      "revId": "947a101305775125bb185d8292719400a9595736",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_aa1df510",
+        "filename": "fpicker/source/office/OfficeFilePicker.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2015-07-15T12:06:49Z",
+      "side": 1,
+      "message": "So - this is fun \u003d) I think that XFilePicker3 should really mandate XFilePicker2 - without which it is broken for multi-select anyway. Can we achieve that by tweaking the XFilePicker3 IDL instead ?",
+      "range": {
+        "startLine": 57,
+        "startChar": 54,
+        "endLine": 57,
+        "endChar": 61
+      },
+      "revId": "947a101305775125bb185d8292719400a9595736",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
