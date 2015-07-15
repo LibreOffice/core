@@ -180,7 +180,6 @@ namespace svgio
 
             /// data read access
             SvgAlign getSvgAlign() const { return maSvgAlign; }
-            bool isDefer() const { return mbDefer; }
             bool isMeetOrSlice() const { return mbMeetOrSlice; }
             bool isSet() const { return mbSet; }
 

@@ -67,11 +67,9 @@ namespace svgio
             void setY(const SvgNumber& rY = SvgNumber()) { maY = rY; }
 
             /// width content
-            const SvgNumber& getWidth() const { return maWidth; }
             void setWidth(const SvgNumber& rWidth = SvgNumber()) { maWidth = rWidth; }
 
             /// height content
-            const SvgNumber& getHeight() const { return maHeight; }
             void setHeight(const SvgNumber& rHeight = SvgNumber()) { maHeight = rHeight; }
         };
     } // end of namespace svgreader

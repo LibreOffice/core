@@ -94,7 +94,6 @@ namespace svgio
             void setHeight(const SvgNumber& rHeight = SvgNumber()) { maHeight = rHeight; }
 
             /// version content
-            const SvgNumber& getVersion() const { return maVersion; }
             void setVersion(const SvgNumber& rVersion = SvgNumber()) { maVersion = rVersion; }
         };
     } // end of namespace svgreader

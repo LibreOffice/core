@@ -61,7 +61,6 @@ namespace svgio
             void removeSvgNodeFromMapper(const OUString& rStr);
 
             /// find a node by its Id
-            bool hasSvgNodesById() const { return !maIdTokenMapperList.empty(); }
             const SvgNode* findSvgNodeById(const OUString& rStr) const;
 
             /// add/remove styles to mapper
