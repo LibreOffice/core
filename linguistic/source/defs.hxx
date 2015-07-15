@@ -56,11 +56,6 @@ struct LangSvcEntries
         aSvcImplNames[0] = rSvcImplName;
     }
 
-    bool    IsAlreadyWarned() const         { return bAlreadyWarned; }
-    void    SetAlreadyWarned( bool bVal )   { bAlreadyWarned = bVal; }
-    bool    IsDoWarnAgain() const           { return bDoWarnAgain; }
-    void    SetDoWarnAgain( bool bVal )     { bDoWarnAgain = bVal; }
-
     inline void Clear()
     {
         aSvcImplNames.realloc(0);
@@ -111,7 +106,6 @@ public:
 
     virtual void SetServiceList( const css::lang::Locale &rLocale, const css::uno::Sequence< OUString > &rSvcImplNames ) = 0;
     virtual css::uno::Sequence< OUString > GetServiceList( const css::lang::Locale &rLocale ) const = 0;
-    virtual DspType GetDspType() const = 0;
 
 protected:
     ~LinguDispatcher() {}

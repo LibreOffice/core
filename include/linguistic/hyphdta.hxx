@@ -69,12 +69,6 @@ public:
         isAlternativeSpelling()
             throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    OUString GetWord()           { return aWord; }
-    OUString GetHyphenatedWord() { return aHyphenatedWord; }
-    sal_Int16           GetLanguage()       { return nLanguage; }
-    void            SetWord( OUString &rTxt )            { aWord = rTxt; }
-    void            SetHyphenatedWord( OUString &rTxt )  { aHyphenatedWord = rTxt; }
-    void            SetLanguage( sal_Int16 nLang )                  { nLanguage = nLang; }
     static com::sun::star::uno::Reference <com::sun::star::linguistic2::XHyphenatedWord> LNG_DLLPUBLIC CreateHyphenatedWord(
         const OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
         const OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
@@ -114,11 +108,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL
         getHyphenationPositions()
             throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    OUString GetWord()       { return aWord; }
-    sal_Int16           GetLanguage()   { return nLanguage; }
-    void            SetWord( OUString &rTxt )    { aWord = rTxt; }
-    void            SetLanguage( sal_Int16 nLang )          { nLanguage = nLang; }
 
     static com::sun::star::uno::Reference < com::sun::star::linguistic2::XPossibleHyphens > LNG_DLLPUBLIC CreatePossibleHyphens
         (const OUString &rWord, sal_Int16 nLang,

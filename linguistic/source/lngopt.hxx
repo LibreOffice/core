@@ -61,9 +61,6 @@ public:
 
     const ::com::sun::star::uno::Sequence< OUString >
             GetActiveDics() const   { return pData->aActiveDics; }
-
-    const ::com::sun::star::uno::Sequence< OUString >
-            GetActiveConvDics() const   { return pData->aActiveConvDics; }
 };
 
 typedef cppu::OMultiTypeInterfaceContainerHelperVar<sal_Int32>

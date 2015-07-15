@@ -846,11 +846,6 @@ Sequence< OUString >
 }
 
 
-LinguDispatcher::DspType SpellCheckerDispatcher::GetDspType() const
-{
-    return DSP_SPELL;
-}
-
 void SpellCheckerDispatcher::FlushSpellCache()
 {
     if (pCache)

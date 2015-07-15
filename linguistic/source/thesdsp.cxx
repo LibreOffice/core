@@ -252,11 +252,4 @@ Sequence< OUString >
 }
 
 
-LinguDispatcher::DspType ThesaurusDispatcher::GetDspType() const
-{
-    return DSP_THES;
-}
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

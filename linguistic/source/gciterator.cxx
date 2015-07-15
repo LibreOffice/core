@@ -1132,14 +1132,6 @@ uno::Sequence< OUString > GrammarCheckingIterator::GetServiceList(
 }
 
 
-LinguDispatcher::DspType GrammarCheckingIterator::GetDspType() const
-{
-    return DSP_GRAMMAR;
-}
-
-
-
-
 static OUString GrammarCheckingIterator_getImplementationName() throw()
 {
     return OUString( "com.sun.star.lingu2.ProofreadingIterator" );
