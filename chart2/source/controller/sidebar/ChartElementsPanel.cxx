@@ -141,6 +141,18 @@ bool isTitleVisisble(css::uno::Reference<css::frame::XModel> xModel, TitleHelper
     return TitleHelper::getTitle(eTitle, xModel).is();
 }
 
+void setTitleVisible(css::uno::Reference<css::frame::XModel> xModel, TitleHelper::eTitleType eTitle, bool bVisible)
+{
+    if (bVisible)
+    {
+        TitleHelper::createTitle(eTitle, "Title", xModel, comphelper::getProcessComponentContext());
+    }
+    else
+    {
+        TitleHelper::removeTitle(eTitle, xModel);
+    }
+}
+
 bool isGridVisible(css::uno::Reference<css::frame::XModel> xModel, GridType eType)
 {
     Reference< chart2::XDiagram > xDiagram(ChartModelHelper::findDiagram(xModel));
@@ -367,16 +379,29 @@ IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)
 {
     bool bChecked = pCheckBox->IsChecked();
     if (pCheckBox == mpCBTitle.get())
-    {
-    }
+        setTitleVisible(mxModel, TitleHelper::MAIN_TITLE, bChecked);
+    else if (pCheckBox == mpCBSubtitle.get())
+        setTitleVisible(mxModel, TitleHelper::SUB_TITLE, bChecked);
     else if (pCheckBox == mpCBXAxis.get())
         setAxisVisible(mxModel, AxisType::X_MAIN, bChecked);
+    else if (pCheckBox == mpCBXAxisTitle.get())
+        setTitleVisible(mxModel, TitleHelper::X_AXIS_TITLE, bChecked);
     else if (pCheckBox == mpCBYAxis.get())
         setAxisVisible(mxModel, AxisType::Y_MAIN, bChecked);
+    else if (pCheckBox == mpCBYAxisTitle.get())
+        setTitleVisible(mxModel, TitleHelper::Y_AXIS_TITLE, bChecked);
+    else if (pCheckBox == mpCBZAxis.get())
+        setAxisVisible(mxModel, AxisType::Z_MAIN, bChecked);
+    else if (pCheckBox == mpCBZAxisTitle.get())
+        setTitleVisible(mxModel, TitleHelper::Z_AXIS_TITLE, bChecked);
     else if (pCheckBox == mpCB2ndXAxis.get())
         setAxisVisible(mxModel, AxisType::X_SECOND, bChecked);
+    else if (pCheckBox == mpCB2ndXAxisTitle.get())
+        setTitleVisible(mxModel, TitleHelper::SECONDARY_X_AXIS_TITLE, bChecked);
     else if (pCheckBox == mpCB2ndYAxis.get())
         setAxisVisible(mxModel, AxisType::Y_SECOND, bChecked);
+    else if (pCheckBox == mpCB2ndYAxisTitle.get())
+        setTitleVisible(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE, bChecked);
 
     return 0;
 }
