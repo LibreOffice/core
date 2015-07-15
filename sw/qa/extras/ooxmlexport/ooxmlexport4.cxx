@@ -797,7 +797,19 @@ DECLARE_OOXMLEXPORT_TEST(testSimpleSdts, "simple-sdts.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:picture", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:group", 1);
     assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:citation", 1);
+}
 
+DECLARE_OOXMLEXPORT_TEST(testEmbeddedExcelChart, "EmbeddedExcelChart.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc) // only test the export, not initial import
+       return;
+
+    assertXPath(pXmlDoc,
+        "/ContentType:Types/ContentType:Override[@PartName='/word/embeddings/oleObject1.xls']",
+        "ContentType",
+        "application/vnd.ms-excel");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf83227, "tdf83227.docx")
