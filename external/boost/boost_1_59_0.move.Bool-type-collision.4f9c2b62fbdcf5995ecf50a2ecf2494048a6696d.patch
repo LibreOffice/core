@@ -1,0 +1,44 @@
+This patch is needed to avoid type collision between Bool type
+defined in XLib with non used non class template parameter
+name introduced in this commit in move library:
+
+  4f9c2b62fbdcf5995ecf50a2ecf2494048a6696d.
+
+The obscure error message was issued on both Clang 3.8 and GCC 4.8.1:
+
+   In file included from /home/davido/projects/libo/include/prex.h:32:0,
+                 from /home/davido/projects/libo/include/vcl/opengl/OpenGLHelper.hxx:20,
+                 from /home/davido/projects/libo/vcl/source/opengl/OpenGLHelper.cxx:11:
+/home/davido/projects/libo/workdir/UnpackedTarball/boost/boost/move/detail/meta_utils.hpp:350:15: error: two or more data types in declaration of ‘parameter’
+ template<bool Bool, class B = true_, class C = true_, class D = true_>
+               ^
+In file included from /home/davido/projects/libo/workdir/UnpackedTarball/boost/boost/move/utility_core.hpp:30:0,
+                 from /home/davido/projects/libo/workdir/UnpackedTarball/boost/boost/move/utility.hpp:28,
+                 from /home/davido/projects/libo/workdir/UnpackedTarball/boost/boost/optional/optional.hpp:50,
+                 from /home/davido/projects/libo/workdir/UnpackedTarball/boost/boost/optional.hpp:15,
+                 from /home/davido/projects/libo/workdir/CustomTarget/officecfg/registry/officecfg/Office/Common.hxx:7,
+                 from /home/davido/projects/libo/vcl/source/opengl/OpenGLHelper.cxx:22:
+/home/davido/projects/libo/workdir/UnpackedTarball/boost/boost/move/detail/meta_utils.hpp:352:29: note: invalid template non-type parameter
+    : and_impl<B::value, C, D>
+
+diff -ru boost.orig/boost/move/detail/meta_utils.hpp boost/boost/move/detail/meta_utils.hpp
+--- foo/misc/boost.orig/boost/move/detail/meta_utils.hpp	2015-07-19 14:16:13.764836630 +0200
++++ foo/misc/boost/boost/move/detail/meta_utils.hpp	2015-07-19 21:04:15.960985030 +0200
+@@ -347,7 +347,7 @@
+ //                         and_
+ //
+ //////////////////////////////////////////////////////////////////////////////
+-template<bool Bool, class B = true_, class C = true_, class D = true_>
++template<bool, class B = true_, class C = true_, class D = true_>
+ struct and_impl
+    : and_impl<B::value, C, D>
+ {};
+@@ -374,7 +374,7 @@
+ //                            or_
+ //
+ //////////////////////////////////////////////////////////////////////////////
+-template<bool Bool, class B = false_, class C = false_, class D = false_>
++template<bool, class B = false_, class C = false_, class D = false_>
+ struct or_impl
+    : or_impl<B::value, C, D>
+ {};

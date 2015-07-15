@@ -1,0 +1,12 @@
+diff -ru boost.orig/boost/iostreams/filter/gzip.hpp boost/boost/iostreams/filter/gzip.hpp
+--- foo/misc/boost.orig/boost/iostreams/filter/gzip.hpp	2015-07-22 20:58:35.758990022 +0200
++++ foo/misc/boost/boost/iostreams/filter/gzip.hpp	2015-07-22 21:20:50.982997292 +0200
+@@ -279,7 +279,7 @@
+         boost::iostreams::put(next, static_cast<char>(0xFF & (n >> 24)));
+     }
+     template<typename Sink>
+-    static void write_long(long n, Sink& next, boost::mpl::false_)
++    static void write_long(long, Sink&, boost::mpl::false_)
+     {
+     }
+     template<typename Sink>

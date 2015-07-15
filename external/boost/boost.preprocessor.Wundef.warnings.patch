@@ -1,18 +1,32 @@
---- foo/foo/foo/boost/preprocessor/config/config.hpp
-+++ foo/foo/foo/boost/preprocessor/config/config.hpp
-@@ -90,7 +90,7 @@
- #            define BOOST_PP_VARIADICS 0
- #        endif
+diff -ur boost.orig/boost/preprocessor/config/config.hpp boost/boost/preprocessor/config/config.hpp
+--- foo/misc/boost.orig/boost/preprocessor/config/config.hpp	2015-03-28 09:19:20.000000000 +0100
++++ foo/misc/boost/boost/preprocessor/config/config.hpp	2015-07-16 07:47:54.969987660 +0200
+@@ -79,7 +79,7 @@
+ #        define BOOST_PP_VARIADICS 1
+ #        define BOOST_PP_VARIADICS_MSVC 1
  #    /* Wave (C/C++), GCC (C++) */
 -#    elif defined __WAVE__ && __WAVE_HAS_VARIADICS__ || defined __GNUC__ && __GXX_EXPERIMENTAL_CXX0X__
-+#    elif defined __WAVE__ && __WAVE_HAS_VARIADICS__ || defined __GNUC__ && defined __GXX_EXPERIMENTAL_CXX0X__ && __GXX_EXPERIMENTAL_CXX0X__
++#    elif defined __WAVE__ && __WAVE_HAS_VARIADICS__ || defined __GNUC__ && defined(__GXX_EXPERIMENTAL_CXX0X__) && __GXX_EXPERIMENTAL_CXX0X__
  #        define BOOST_PP_VARIADICS 1
  #    /* EDG-based (C/C++), GCC (C), and unknown (C/C++) */
  #    elif !defined __cplusplus && __STDC_VERSION__ >= 199901L || __cplusplus >= 201103L
---- foo/foo/foo/boost/preprocessor/tuple/elem.hpp
-+++ foo/foo/foo/boost/preprocessor/tuple/elem.hpp
-@@ -22,7 +22,7 @@
- # include <boost/preprocessor/variadic/elem.hpp>
+diff -ur boost.orig/boost/preprocessor/tuple/detail/is_single_return.hpp boost/boost/preprocessor/tuple/detail/is_single_return.hpp
+--- foo/misc/boost.orig/boost/preprocessor/tuple/detail/is_single_return.hpp	2015-03-28 09:19:20.000000000 +0100
++++ foo/misc/boost/boost/preprocessor/tuple/detail/is_single_return.hpp	2015-07-16 07:57:29.881981198 +0200
+@@ -16,7 +16,7 @@
+ #
+ # /* BOOST_PP_TUPLE_IS_SINGLE_RETURN */
+ #
+-# if BOOST_PP_VARIADICS && BOOST_PP_VARIADICS_MSVC
++# if BOOST_PP_VARIADICS && defined(BOOST_PP_VARIADICS_MSVC) && BOOST_PP_VARIADICS_MSVC
+ # include <boost/preprocessor/control/iif.hpp>
+ # include <boost/preprocessor/facilities/is_1.hpp>
+ # include <boost/preprocessor/tuple/size.hpp>
+diff -ur boost.orig/boost/preprocessor/tuple/elem.hpp boost/boost/preprocessor/tuple/elem.hpp
+--- foo/misc/boost.orig/boost/preprocessor/tuple/elem.hpp	2015-03-28 09:19:20.000000000 +0100
++++ foo/misc/boost/boost/preprocessor/tuple/elem.hpp	2015-07-16 07:49:08.509986833 +0200
+@@ -24,7 +24,7 @@
+ # include <boost/preprocessor/tuple/detail/is_single_return.hpp>
  #
  # if BOOST_PP_VARIADICS
 -#    if BOOST_PP_VARIADICS_MSVC
@@ -20,9 +34,30 @@
  #        define BOOST_PP_TUPLE_ELEM(...) BOOST_PP_TUPLE_ELEM_I(BOOST_PP_OVERLOAD(BOOST_PP_TUPLE_ELEM_O_, __VA_ARGS__), (__VA_ARGS__))
  #        define BOOST_PP_TUPLE_ELEM_I(m, args) BOOST_PP_TUPLE_ELEM_II(m, args)
  #        define BOOST_PP_TUPLE_ELEM_II(m, args) BOOST_PP_CAT(m ## args,)
---- foo/foo/foo/boost/preprocessor/tuple/rem.hpp
-+++ foo/foo/foo/boost/preprocessor/tuple/rem.hpp
-@@ -105,7 +105,7 @@
+diff -ur boost.orig/boost/preprocessor/tuple/rem.hpp boost/boost/preprocessor/tuple/rem.hpp
+--- foo/misc/boost.orig/boost/preprocessor/tuple/rem.hpp	2015-03-28 09:19:20.000000000 +0100
++++ foo/misc/boost/boost/preprocessor/tuple/rem.hpp	2015-07-16 07:59:19.084979971 +0200
+@@ -22,7 +22,7 @@
+ # /* BOOST_PP_REM */
+ #
+ # if BOOST_PP_VARIADICS
+-# 	 if BOOST_PP_VARIADICS_MSVC
++# 	 if defined(BOOST_PP_VARIADICS_MSVC) && BOOST_PP_VARIADICS_MSVC
+ 		/* To be used internally when __VA_ARGS__ could be empty ( or is a single element ) */
+ #    	define BOOST_PP_REM_CAT(...) BOOST_PP_CAT(__VA_ARGS__,)
+ # 	 endif
+@@ -36,8 +36,8 @@
+ /*
+   VC++8.0 cannot handle the variadic version of BOOST_PP_TUPLE_REM(size)
+ */
+-# if BOOST_PP_VARIADICS && !(BOOST_PP_VARIADICS_MSVC && _MSC_VER <= 1400)
+-# 	 if BOOST_PP_VARIADICS_MSVC
++# if BOOST_PP_VARIADICS && !(defined(BOOST_PP_VARIADICS_MSVC) && BOOST_PP_VARIADICS_MSVC && _MSC_VER <= 1400)
++# 	 if defined(BOOST_PP_VARIADICS_MSVC) && BOOST_PP_VARIADICS_MSVC
+ 		/* To be used internally when the size could be 0 ( or 1 ) */
+ #    	define BOOST_PP_TUPLE_REM_CAT(size) BOOST_PP_REM_CAT
+ # 	 endif
+@@ -120,7 +120,7 @@
  # /* BOOST_PP_TUPLE_REM_CTOR */
  #
  # if BOOST_PP_VARIADICS
@@ -31,9 +66,22 @@
  #        define BOOST_PP_TUPLE_REM_CTOR(...) BOOST_PP_TUPLE_REM_CTOR_I(BOOST_PP_OVERLOAD(BOOST_PP_TUPLE_REM_CTOR_O_, __VA_ARGS__), (__VA_ARGS__))
  #        define BOOST_PP_TUPLE_REM_CTOR_I(m, args) BOOST_PP_TUPLE_REM_CTOR_II(m, args)
  #        define BOOST_PP_TUPLE_REM_CTOR_II(m, args) BOOST_PP_CAT(m ## args,)
---- foo/foo/foo/boost/preprocessor/tuple/to_list.hpp
-+++ foo/foo/foo/boost/preprocessor/tuple/to_list.hpp
-@@ -23,7 +23,7 @@
+diff -ur boost.orig/boost/preprocessor/tuple/size.hpp boost/boost/preprocessor/tuple/size.hpp
+--- foo/misc/boost.orig/boost/preprocessor/tuple/size.hpp	2015-03-28 09:19:20.000000000 +0100
++++ foo/misc/boost/boost/preprocessor/tuple/size.hpp	2015-07-16 07:58:30.296980519 +0200
+@@ -18,7 +18,7 @@
+ # include <boost/preprocessor/variadic/size.hpp>
+ #
+ # if BOOST_PP_VARIADICS
+-#    if BOOST_PP_VARIADICS_MSVC
++#    if defined(BOOST_PP_VARIADICS_MSVC) && BOOST_PP_VARIADICS_MSVC
+ #        define BOOST_PP_TUPLE_SIZE(tuple) BOOST_PP_CAT(BOOST_PP_VARIADIC_SIZE tuple,)
+ #    else
+ #        define BOOST_PP_TUPLE_SIZE(tuple) BOOST_PP_VARIADIC_SIZE tuple
+diff -ur boost.orig/boost/preprocessor/tuple/to_list.hpp boost/boost/preprocessor/tuple/to_list.hpp
+--- foo/misc/boost.orig/boost/preprocessor/tuple/to_list.hpp	2015-03-28 09:19:20.000000000 +0100
++++ foo/misc/boost/boost/preprocessor/tuple/to_list.hpp	2015-07-16 07:51:25.693985291 +0200
+@@ -24,7 +24,7 @@
  # /* BOOST_PP_TUPLE_TO_LIST */
  #
  # if BOOST_PP_VARIADICS
@@ -42,8 +90,9 @@
  #        define BOOST_PP_TUPLE_TO_LIST(...) BOOST_PP_TUPLE_TO_LIST_I(BOOST_PP_OVERLOAD(BOOST_PP_TUPLE_TO_LIST_O_, __VA_ARGS__), (__VA_ARGS__))
  #        define BOOST_PP_TUPLE_TO_LIST_I(m, args) BOOST_PP_TUPLE_TO_LIST_II(m, args)
  #        define BOOST_PP_TUPLE_TO_LIST_II(m, args) BOOST_PP_CAT(m ## args,)
---- foo/foo/foo/boost/preprocessor/variadic/elem.hpp
-+++ foo/foo/foo/boost/preprocessor/variadic/elem.hpp
+diff -ur boost.orig/boost/preprocessor/variadic/elem.hpp boost/boost/preprocessor/variadic/elem.hpp
+--- foo/misc/boost.orig/boost/preprocessor/variadic/elem.hpp	2015-03-28 09:19:20.000000000 +0100
++++ foo/misc/boost/boost/preprocessor/variadic/elem.hpp	2015-07-16 07:54:03.513983517 +0200
 @@ -19,7 +19,7 @@
  # /* BOOST_PP_VARIADIC_ELEM */
  #
@@ -53,8 +102,9 @@
  #        define BOOST_PP_VARIADIC_ELEM(n, ...) BOOST_PP_VARIADIC_ELEM_I(n,__VA_ARGS__)
  #        define BOOST_PP_VARIADIC_ELEM_I(n, ...) BOOST_PP_CAT(BOOST_PP_CAT(BOOST_PP_VARIADIC_ELEM_, n)(__VA_ARGS__,),)
  #    else
---- foo/foo/foo/boost/preprocessor/variadic/size.hpp
-+++ foo/foo/foo/boost/preprocessor/variadic/size.hpp
+diff -ur boost.orig/boost/preprocessor/variadic/size.hpp boost/boost/preprocessor/variadic/size.hpp
+--- foo/misc/boost.orig/boost/preprocessor/variadic/size.hpp	2015-03-28 09:19:20.000000000 +0100
++++ foo/misc/boost/boost/preprocessor/variadic/size.hpp	2015-07-16 07:52:45.303984396 +0200
 @@ -19,7 +19,7 @@
  # /* BOOST_PP_VARIADIC_SIZE */
  #
@@ -64,3 +114,24 @@
  #        define BOOST_PP_VARIADIC_SIZE(...) BOOST_PP_CAT(BOOST_PP_VARIADIC_SIZE_I(__VA_ARGS__, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,),)
  #    else
  #        define BOOST_PP_VARIADIC_SIZE(...) BOOST_PP_VARIADIC_SIZE_I(__VA_ARGS__, 64, 63, 62, 61, 60, 59, 58, 57, 56, 55, 54, 53, 52, 51, 50, 49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,)
+diff -ur boost.orig/boost/tuple/detail/tuple_basic.hpp boost/boost/tuple/detail/tuple_basic.hpp
+--- foo/misc/boost.orig/boost/tuple/detail/tuple_basic.hpp	2014-05-12 01:27:34.000000000 +0200
++++ foo/misc/boost/boost/tuple/detail/tuple_basic.hpp	2015-07-16 08:00:29.269979182 +0200
+@@ -41,7 +41,7 @@
+ 
+ #include "boost/detail/workaround.hpp" // needed for BOOST_WORKAROUND
+ 
+-#if BOOST_GCC >= 40700
++#if defined(BOOST_GCC) && BOOST_GCC >= 40700
+ #pragma GCC diagnostic push
+ #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+ #endif
+@@ -979,7 +979,7 @@
+ } // end of namespace boost
+ 
+ 
+-#if BOOST_GCC >= 40700
++#if defined(BOOST_GCC) && BOOST_GCC >= 40700
+ #pragma GCC diagnostic pop
+ #endif
+ 
