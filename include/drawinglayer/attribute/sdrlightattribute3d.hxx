@@ -62,9 +62,6 @@ namespace drawinglayer
             // assignment operator
             Sdr3DLightAttribute& operator=(const Sdr3DLightAttribute& rCandidate);
 
-            // checks if the incarnation is default constructed
-            bool isDefault() const;
-
             // compare operator
             bool operator==(const Sdr3DLightAttribute& rCandidate) const;
 

@@ -77,7 +77,6 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const GraphicObject& getGraphicObject() const { return maGraphicObject; }
             const GraphicAttr& getGraphicAttr() const { return maGraphicAttr; }
-            bool isTransparent() const;
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;

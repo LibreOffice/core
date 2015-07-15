@@ -63,7 +63,6 @@ namespace drawinglayer
 
             /// allow read access to evtl. useful local parts
             const TextLayouterDevice& getTextLayouter() const { return maTextLayouter; }
-            const basegfx::tools::B2DHomMatrixBufferedOnDemandDecompose& getDecTrans() const { return maDecTrans; }
             const TextSimplePortionPrimitive2D& getSource() const { return mrSource; }
 
         public:

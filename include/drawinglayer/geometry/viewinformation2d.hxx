@@ -118,9 +118,6 @@ namespace drawinglayer
             /// destructor
             ~ViewInformation2D();
 
-            // checks if the incarnation is default constructed
-            bool isDefault() const;
-
             /// assignment operator
             ViewInformation2D& operator=(const ViewInformation2D& rCandidate);
 
