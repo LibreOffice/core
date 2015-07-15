@@ -712,11 +712,4 @@ Sequence< OUString >
 }
 
 
-LinguDispatcher::DspType HyphenatorDispatcher::GetDspType() const
-{
-    return DSP_HYPH;
-}
-
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

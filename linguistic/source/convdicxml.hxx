@@ -104,9 +104,8 @@ public:
         const com::sun::star::uno::Reference < com::sun::star::xml::sax::XAttributeList > &rxAttrList ) SAL_OVERRIDE;
 
     ConvDic *   GetDic()                    { return pDic; }
-    sal_Int16       GetLanguage() const         { return nLanguage; }
+    sal_Int16   GetLanguage() const         { return nLanguage; }
     sal_Int16   GetConversionType() const   { return nConversionType; }
-    bool    GetSuccess() const          { return bSuccess; }
 
     void        SetLanguage( sal_Int16 nLang )              { nLanguage = nLang; }
     void        SetConversionType( sal_Int16 nType )    { nConversionType = nType; }

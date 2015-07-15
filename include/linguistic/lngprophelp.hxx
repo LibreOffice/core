@@ -140,9 +140,6 @@ public:
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XInterface > &
             GetEvtObj() const       { return xMyEvtObj; }
-
-    bool    IsIgnoreControlCharacters() const   { return bResIsIgnoreControlCharacters; }
-    bool    IsUseDictionaryList() const         { return bResIsUseDictionaryList; }
 };
 
 
@@ -229,7 +226,6 @@ public:
 
     static sal_Int16 GetDefaultNumberOfSuggestions() { return 16; }
 
-    sal_Int16   GetMaxNumberOfSuggestions() const   { return nResMaxNumberOfSuggestions; }
     bool        IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
     bool        IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
     bool        IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
