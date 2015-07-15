@@ -20,12 +20,11 @@
 #ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_FILEPICKER_HXX
 #define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_FILEPICKER_HXX
 
-#include <cppuhelper/compbase6.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFilePicker2.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
@@ -45,8 +44,7 @@ protected:
     osl::Mutex  m_rbHelperMtx;
 };
 
-typedef ::cppu::WeakComponentImplHelper6 <
-            ::com::sun::star::ui::dialogs::XFilePicker2,
+typedef ::cppu::WeakComponentImplHelper5 <
             ::com::sun::star::ui::dialogs::XFilePicker3,
             ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
             ::com::sun::star::ui::dialogs::XFilePreview,
@@ -97,7 +95,7 @@ public:
     // XFilePicker2 functions
 
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedFiles(  )
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, std::exception);
 
     // XFilterManager functions
 
