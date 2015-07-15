@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_6a1dbdbc",
+        "filename": "sw/source/filter/xml/xmlfmte.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2015-07-15T17:55:03Z",
+      "side": 1,
+      "message": "Typo: adopt",
+      "revId": "d9e661d6ab2292b6baacd164b3aa89760d7a331a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
