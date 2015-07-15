@@ -1560,7 +1560,18 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             else
             {
                 bool bIgnore = false;
-                if (m_pImpl->m_bInTableStyleRunProps)
+                const   RubyInfo    &aInfo = m_pImpl->GetRubyInfo();
+                if (aInfo.nSprmId == NS_ooxml::LN_CT_Ruby_rt && aInfo.nHps > 0 )
+                {
+                    fVal = double(aInfo.nHps) / 2.;
+                    aVal = uno::makeAny( fVal );
+                }
+                else if (aInfo.nSprmId  == NS_ooxml::LN_CT_Ruby_rubyBase && aInfo.nHpsBaseText > 0 )
+                {
+                    fVal = double(aInfo.nHpsBaseText) / 2.;
+                    aVal = uno::makeAny( fVal );
+                }
+                else if (m_pImpl->m_bInTableStyleRunProps)
                 {
                     // If the default para style contains PROP_CHAR_HEIGHT, that should have priority over the table style.
                     StyleSheetEntryPtr pTable = m_pImpl->GetStyleSheetTable()->FindDefaultParaStyle();
@@ -2544,6 +2555,54 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         }
     }
     break;
+    case NS_ooxml::LN_EG_RunInnerContent_ruby:
+    {
+        RubyInfo    aInfo ;
+        m_pImpl->SetRubyInfo(aInfo);
+    }
+    case NS_ooxml::LN_CT_RubyPr:
+    case NS_ooxml::LN_CT_Ruby_rt:
+    case NS_ooxml::LN_CT_Ruby_rubyBase:
+    {
+        m_pImpl->SetRubySprmId(nSprmId);
+        if (nSprmId == NS_ooxml::LN_CT_RubyPr)
+        {
+            resolveSprmProps(*this, rSprm);
+        }
+    }
+    break;
+    case NS_ooxml::LN_EG_RubyContent_r:
+    {
+        const RubyInfo & aInfo = m_pImpl->GetRubyInfo();
+        if (aInfo.nSprmId == NS_ooxml::LN_CT_Ruby_rubyBase)
+        {
+            rContext->Insert(PROP_RUBY_TEXT, uno::makeAny(aInfo.sRubyText));
+            rContext->Insert(PROP_RUBY_STYLE, uno::makeAny(aInfo.sRubyStyle));
+            rContext->Insert(PROP_RUBY_ADJUST, uno::makeAny(ConversionHelper::convertRubyAlign(aInfo.nRubyAlign)));
+            m_pImpl->SetRubySprmId(0);
+        }
+    }
+    break;
+    case NS_ooxml::LN_CT_RubyPr_rubyAlign:
+    case NS_ooxml::LN_CT_RubyPr_hps:
+    case NS_ooxml::LN_CT_RubyPr_hpsBaseText:
+    {
+        RubyInfo    aInfo = m_pImpl->GetRubyInfo();
+        switch(nSprmId)
+        {
+            case NS_ooxml::LN_CT_RubyPr_rubyAlign:
+                aInfo.nRubyAlign = nIntValue;
+                break;
+            case NS_ooxml::LN_CT_RubyPr_hps:
+                aInfo.nHps= nIntValue;
+                break;
+            case NS_ooxml::LN_CT_RubyPr_hpsBaseText:
+                aInfo.nHpsBaseText = nIntValue;
+                break;
+        }
+        m_pImpl->SetRubyInfo(aInfo);
+    }
+    break;
     default:
         {
 #ifdef DEBUG_WRITERFILTER
@@ -2954,6 +3013,15 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     OUStringBuffer aBuffer = OUStringBuffer(sal::static_int_cast<int>(len));
     aBuffer.append( reinterpret_cast<const sal_Unicode *>(data_), len);
     sText = aBuffer.makeStringAndClear();
+    const RubyInfo & aInfo = m_pImpl->GetRubyInfo();
+    if (aInfo.nSprmId == NS_ooxml::LN_CT_Ruby_rt)
+    {
+        PropertyMapPtr pContext = m_pImpl->GetTopContext();
+        PropertyValueVector_t aProps = comphelper::sequenceToContainer< PropertyValueVector_t >(pContext->GetPropertyValues());
+        OUString sStyle = getOrCreateCharStyle(aProps);
+        m_pImpl->SetRubyText(sText,sStyle);
+        return;
+    }
 
     if (m_pImpl->isSdtEndDeferred())
     {
