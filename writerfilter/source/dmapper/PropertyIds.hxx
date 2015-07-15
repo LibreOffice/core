@@ -377,6 +377,9 @@ enum PropertyIds
         ,PROP_FILL_COLOR
         ,PROP_SNAP_TO_GRID
         ,PROP_GRID_SNAP_TO_CHARS
+        ,PROP_RUBY_STYLE
+        ,PROP_RUBY_TEXT
+        ,PROP_RUBY_ADJUST
     };
 
 //Returns the UNO string equivalent to eId.
