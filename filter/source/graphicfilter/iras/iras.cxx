@@ -44,12 +44,12 @@ private:
 
     bool                mbStatus;
     Bitmap              maBmp;
-    sal_uInt32          mnWidth, mnHeight;      // Bildausmass in Pixeln
-    sal_uInt16              mnDstBitsPerPix;
-    sal_uInt16              mnDstColors;
-    sal_uInt32          mnDepth, mnImageDatSize, mnType;
-    sal_uInt32          mnColorMapType, mnColorMapSize;
-    sal_uInt8               mnRepCount, mnRepVal;   // RLE Decoding
+    sal_Int32           mnWidth, mnHeight;      // Bildausmass in Pixeln
+    sal_uInt16          mnDstBitsPerPix;
+    sal_uInt16          mnDstColors;
+    sal_Int32           mnDepth, mnImageDatSize, mnType;
+    sal_Int32           mnColorMapType, mnColorMapSize;
+    sal_uInt8           mnRepCount, mnRepVal;   // RLE Decoding
     bool                mbPalette;
 
     bool                ImplReadBody(BitmapWriteAccess * pAcc);
@@ -178,9 +178,9 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
 
 bool RASReader::ImplReadHeader()
 {
-    m_rRAS.ReadUInt32( mnWidth ).ReadUInt32( mnHeight ).ReadUInt32( mnDepth ).ReadUInt32( mnImageDatSize ).        ReadUInt32( mnType ).ReadUInt32( mnColorMapType ).ReadUInt32( mnColorMapSize );
+    m_rRAS.ReadInt32(mnWidth).ReadInt32(mnHeight).ReadInt32(mnDepth).ReadInt32(mnImageDatSize).ReadInt32(mnType).ReadInt32(mnColorMapType).ReadInt32(mnColorMapSize);
 
-    if ( mnWidth == 0 || mnHeight == 0 )
+    if ( mnWidth <= 0 || mnHeight <= 0 || mnImageDatSize <= 0 )
         mbStatus = false;
 
     switch ( mnDepth )
@@ -216,7 +216,7 @@ bool RASReader::ImplReadHeader()
 
 bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
 {
-    sal_uLong   x, y;
+    sal_Int32 x, y;
     sal_uInt8   nDat = 0;
     sal_uInt8    nRed, nGreen, nBlue;
     switch ( mnDstBitsPerPix )
