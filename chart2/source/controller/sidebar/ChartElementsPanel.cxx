@@ -269,8 +269,10 @@ ChartElementsPanel::ChartElementsPanel(
     get(mpCB2ndYAxis,  "checkbutton_2nd_y_axis");
     get(mpCB2ndYAxisTitle,  "checkbutton_2nd_y_axis_title");
     get(mpCBLegend,  "checkbutton_legend");
-    get(mpCBGridVertical,  "checkbutton_gridline_vertical");
-    get(mpCBGridHorizontal,  "checkbutton_gridline_horizontal");
+    get(mpCBGridVerticalMajor,  "checkbutton_gridline_vertical_major");
+    get(mpCBGridHorizontalMajor,  "checkbutton_gridline_horizontal_major");
+    get(mpCBGridVerticalMinor,  "checkbutton_gridline_vertical_minor");
+    get(mpCBGridHorizontalMinor,  "checkbutton_gridline_horizontal_minor");
 
     Initialize();
 }
@@ -298,8 +300,10 @@ void ChartElementsPanel::dispose()
     mpCB2ndYAxis.clear();
     mpCB2ndYAxisTitle.clear();
     mpCBLegend.clear();
-    mpCBGridVertical.clear();
-    mpCBGridHorizontal.clear();
+    mpCBGridVerticalMajor.clear();
+    mpCBGridHorizontalMajor.clear();
+    mpCBGridVerticalMinor.clear();
+    mpCBGridHorizontalMinor.clear();
 
     PanelLayout::dispose();
 }
@@ -324,8 +328,10 @@ void ChartElementsPanel::Initialize()
     mpCB2ndYAxis->SetClickHdl(aLink);
     mpCB2ndYAxisTitle->SetClickHdl(aLink);
     mpCBLegend->SetClickHdl(aLink);
-    mpCBGridVertical->SetClickHdl(aLink);
-    mpCBGridHorizontal->SetClickHdl(aLink);
+    mpCBGridVerticalMajor->SetClickHdl(aLink);
+    mpCBGridHorizontalMajor->SetClickHdl(aLink);
+    mpCBGridVerticalMinor->SetClickHdl(aLink);
+    mpCBGridHorizontalMinor->SetClickHdl(aLink);
 }
 
 void ChartElementsPanel::updateData()
@@ -342,8 +348,10 @@ void ChartElementsPanel::updateData()
     mpCBZAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::Z_AXIS_TITLE));
     mpCB2ndXAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::SECONDARY_X_AXIS_TITLE));
     mpCB2ndYAxisTitle->Check(isTitleVisisble(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE));
-    mpCBGridVertical->Check(isGridVisible(mxModel, GridType::VERT_MAJOR));
-    mpCBGridHorizontal->Check(isGridVisible(mxModel, GridType::HOR_MAJOR));
+    mpCBGridVerticalMajor->Check(isGridVisible(mxModel, GridType::VERT_MAJOR));
+    mpCBGridHorizontalMajor->Check(isGridVisible(mxModel, GridType::HOR_MAJOR));
+    mpCBGridVerticalMinor->Check(isGridVisible(mxModel, GridType::VERT_MINOR));
+    mpCBGridHorizontalMinor->Check(isGridVisible(mxModel, GridType::HOR_MINOR));
     mpCBXAxis->Check(isAxisVisible(mxModel, AxisType::X_MAIN));
     mpCBYAxis->Check(isAxisVisible(mxModel, AxisType::Y_MAIN));
     mpCBZAxis->Check(isAxisVisible(mxModel, AxisType::Z_MAIN));
@@ -434,10 +442,14 @@ IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)
         setTitleVisible(mxModel, TitleHelper::SECONDARY_Y_AXIS_TITLE, bChecked);
     else if (pCheckBox == mpCBLegend.get())
         setLegendVisible(mxModel, bChecked);
-    else if (pCheckBox == mpCBGridVertical.get())
+    else if (pCheckBox == mpCBGridVerticalMajor.get())
         setGridVisible(mxModel, GridType::VERT_MAJOR, bChecked);
-    else if (pCheckBox == mpCBGridHorizontal.get())
+    else if (pCheckBox == mpCBGridHorizontalMajor.get())
         setGridVisible(mxModel, GridType::HOR_MAJOR, bChecked);
+    else if (pCheckBox == mpCBGridVerticalMinor.get())
+        setGridVisible(mxModel, GridType::VERT_MINOR, bChecked);
+    else if (pCheckBox == mpCBGridHorizontalMinor.get())
+        setGridVisible(mxModel, GridType::HOR_MINOR, bChecked);
 
     return 0;
 }
