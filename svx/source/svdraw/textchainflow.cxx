@@ -204,7 +204,7 @@ void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
     // adds it to current outliner anyway (useful in static decomposition)
     pNonOverflOutl->SetText(*pNewText);
 
-    mpTargetLink->NbcSetOutlinerParaObject(pNewText);
+    mpTargetLink->SetOutlinerParaObject(pNewText);
     // For some reason the paper size is lost after last instruction, so we set it.
     pNonOverflOutl->SetPaperSize(Size(pNonOverflOutl->GetPaperSize().Width(),
                                       pNonOverflOutl->GetTextHeight()));
