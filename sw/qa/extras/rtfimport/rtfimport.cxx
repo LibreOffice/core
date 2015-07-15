@@ -22,6 +22,7 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
@@ -2235,6 +2236,22 @@ DECLARE_RTFIMPORT_TEST(mathtype, "mathtype.rtf")
 {
     OUString aFormula = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT(!aFormula.isEmpty());
+}
+
+DECLARE_RTFIMPORT_TEST(testTdf49073, "tdf49073.rtf")
+{
+    // test case for Asisan phontic guide ( ruby text.)
+    sal_Unicode aRuby[3] = {0x304D,0x3082,0x3093};
+    OUString sRuby = OUString(aRuby, SAL_N_ELEMENTS(aRuby));
+    CPPUNIT_ASSERT_EQUAL(sRuby,getProperty<OUString>(getParagraph(1)->getStart(), "RubyText"));
+    OUString sStyle = getProperty<OUString>( getParagraph(1)->getStart(), "RubyCharStyleName");
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("CharacterStyles")->getByName(sStyle), uno::UNO_QUERY );
+    CPPUNIT_ASSERT_EQUAL(5.f, getProperty<float>(xPropertySet, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_CENTER) ,getProperty<sal_Int16>(getParagraph(2)->getStart(),"RubyAdjust"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_BLOCK)  ,getProperty<sal_Int16>(getParagraph(3)->getStart(),"RubyAdjust"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_INDENT_BLOCK),getProperty<sal_Int16>(getParagraph(4)->getStart(),"RubyAdjust"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_LEFT)   ,getProperty<sal_Int16>(getParagraph(5)->getStart(),"RubyAdjust"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(text::RubyAdjust_RIGHT)  ,getProperty<sal_Int16>(getParagraph(6)->getStart(),"RubyAdjust"));
 }
 
 DECLARE_RTFIMPORT_TEST(testTdf86182, "tdf86182.rtf")
