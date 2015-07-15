@@ -22,7 +22,8 @@
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
-#include <boost/scoped_ptr.hpp>
+
+#include <com/sun/star/util/XModifyListener.hpp>
 
 class FixedText;
 class ListBox;
@@ -65,6 +66,10 @@ public:
         SfxBindings* pBindings, ChartController* pController);
     virtual ~ChartElementsPanel();
     virtual void dispose() SAL_OVERRIDE;
+
+    void updateData();
+    void modelInvalid();
+
 private:
     //ui controls
     VclPtr<CheckBox> mpCBTitle;
@@ -90,9 +95,9 @@ private:
     SfxBindings*                            mpBindings;
 
     css::uno::Reference<css::frame::XModel> mxModel;
+    css::uno::Reference<css::util::XModifyListener> mxListener;
 
     void Initialize();
-    void updateData();
 };
 
 } } // end of namespace ::chart::sidebar
