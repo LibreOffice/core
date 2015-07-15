@@ -179,7 +179,7 @@ bool PBMReader::ImplReadHeader()
     }
     while ( !bFinished )
     {
-        if ( mrPBM.GetError() )
+        if (!mrPBM.good())
             return false;
 
         mrPBM.ReadUChar( nDat );
