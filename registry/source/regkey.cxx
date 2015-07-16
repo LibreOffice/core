@@ -61,7 +61,7 @@ void REGISTRY_CALLTYPE releaseKey(RegKeyHandle hKey)
 sal_Bool REGISTRY_CALLTYPE isKeyReadOnly(RegKeyHandle hKey)
 {
     ORegKey* pKey = static_cast< ORegKey* >(hKey);
-    return (pKey != 0) ? pKey->isReadOnly() : sal_False;
+    return pKey != 0 && pKey->isReadOnly();
 }
 
 
