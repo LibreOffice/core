@@ -53,12 +53,6 @@ struct NodeContext
           mbIsIndependentSubset( true )
         {}
 
-    void dispose()
-    {
-        maContext.dispose();
-        mpMasterShapeSubset.reset();
-    }
-
     /// Context as passed to createAnimationNode()
     SlideShowContext                 maContext;
 

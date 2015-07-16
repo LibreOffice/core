@@ -68,10 +68,6 @@ namespace slideshow
                 NODETYPE_LOGICAL_CHARACTER_CELL=132
             };
 
-            // classificators for above text entity types
-            static bool isLogicalNodeType( NodeType eType ) { return eType > 127; }
-            static bool isFormattingNodeType( NodeType eType ) { return eType > 0 && eType < 128; }
-
             /** Create empty tree node
              */
             DocTreeNode() :
@@ -107,10 +103,7 @@ namespace slideshow
 
             sal_Int32           getStartIndex() const { return mnStartIndex; }
             sal_Int32           getEndIndex() const { return mnEndIndex; }
-            void                setStartIndex( sal_Int32 nIndex ) { mnStartIndex = nIndex; }
             void                setEndIndex( sal_Int32 nIndex ) { mnEndIndex = nIndex; }
-
-            NodeType            getType() const { return meType; }
 
             void                reset()
             {

@@ -296,28 +296,12 @@ public:
     */
     void pushTriangle(const glm::vec2& SlideLocation0,const glm::vec2& SlideLocation1,const glm::vec2& SlideLocation2);
 
-    /** clear all the vertices, normals, tex coordinates, and normals
-    */
-    void clearTriangles();
-
     /** guards against directly changing the vertices
 
         @return
         the list of vertices
     */
     const std::vector<glm::vec3>& getVertices() const {return Vertices;}
-
-    /** guards against directly changing the vertices
-    */
-    const std::vector<glm::vec3>& getNormals() const {return Normals;}
-
-    /** guards against directly changing the vertices
-
-        @return
-        the list of Texture Coordinates
-
-    */
-    const std::vector<glm::vec2>& getTexCoords() const {return TexCoords;}
 
     /** list of Operations to be performed on this primitive.These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
 

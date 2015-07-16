@@ -98,10 +98,6 @@ private:
         ::com::sun::star::awt::MouseEvent const& evt ) SAL_OVERRIDE;
     virtual bool handleMouseReleased(
         ::com::sun::star::awt::MouseEvent const& evt ) SAL_OVERRIDE;
-    virtual bool handleMouseEntered(
-        ::com::sun::star::awt::MouseEvent const& evt ) SAL_OVERRIDE;
-    virtual bool handleMouseExited(
-        ::com::sun::star::awt::MouseEvent const& evt ) SAL_OVERRIDE;
     virtual bool handleMouseDragged(
         ::com::sun::star::awt::MouseEvent const& evt ) SAL_OVERRIDE;
     virtual bool handleMouseMoved(
@@ -112,7 +108,6 @@ private:
 
 
     virtual bool update() SAL_OVERRIDE;
-    virtual bool update( ViewSharedPtr const& rView ) SAL_OVERRIDE;
     virtual bool needsUpdate() const SAL_OVERRIDE;
 
 
@@ -126,7 +121,6 @@ private:
         ::com::sun::star::uno::Reference<
            ::com::sun::star::drawing::XShape > const & xShape ) const SAL_OVERRIDE;
     virtual void addHyperlinkArea( const boost::shared_ptr<HyperlinkArea>& rArea ) SAL_OVERRIDE;
-    virtual void removeHyperlinkArea( const boost::shared_ptr<HyperlinkArea>& rArea ) SAL_OVERRIDE;
 
 
     // SubsettableShapeManager interface

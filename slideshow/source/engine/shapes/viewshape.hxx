@@ -277,16 +277,6 @@ namespace slideshow
                          const VectorOfDocTreeNodes&            rSubsets,
                          bool                                   bIsVisible ) const;
 
-            /** Calc sprite size in pixel
-
-                Converts user coordinate system to device pixel, and
-                adds antialiasing border.
-
-                @param rUserSize
-                Size of the sprite in user coordinate system (doc coordinates)
-             */
-            ::basegfx::B2DSize calcSpriteSizePixel( const ::basegfx::B2DSize& rUserSize ) const;
-
             enum{ MAX_RENDER_CACHE_ENTRIES=2 };
 
             /** Retrieve a valid iterator to renderer cache entry

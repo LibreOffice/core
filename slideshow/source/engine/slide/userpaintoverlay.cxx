@@ -296,29 +296,6 @@ namespace slideshow
                 return true;
             }
 
-            virtual bool handleMouseEntered( const awt::MouseEvent& e ) SAL_OVERRIDE
-            {
-                if( !mbActive )
-                    return false;
-
-                mbIsLastPointValid = true;
-                maLastPoint.setX( e.X );
-                maLastPoint.setY( e.Y );
-
-                return true;
-            }
-
-            virtual bool handleMouseExited( const awt::MouseEvent& ) SAL_OVERRIDE
-            {
-                if( !mbActive )
-                    return false;
-
-                mbIsLastPointValid = false;
-                mbIsLastMouseDownPosValid = false;
-
-                return true;
-            }
-
             virtual bool handleMouseDragged( const awt::MouseEvent& e ) SAL_OVERRIDE
             {
                 if( !mbActive )

@@ -35,9 +35,6 @@ to get it to work :-)
 
 TODO deal with calls to superclass/member constructors from other constructors, so
      we can find unused constructors
-TODO deal with free functions and static methods
-TODO track instantiations of template class constructor methods
-TODO track instantiation of overridden methods when a template class is instantiated
 */
 
 namespace {
@@ -71,18 +68,20 @@ public:
     }
 
     bool VisitCallExpr(CallExpr* );
-    bool VisitCXXMethodDecl( const CXXMethodDecl* decl );
+    bool VisitFunctionDecl( const FunctionDecl* decl );
     bool VisitDeclRefExpr( const DeclRefExpr* );
-    bool TraverseCXXMethodDecl(CXXMethodDecl * decl) { return RecursiveASTVisitor::TraverseCXXMethodDecl(decl); }
+    bool VisitCXXConstructExpr( const CXXConstructExpr* );
 };
 
-static std::string niceName(const CXXMethodDecl* functionDecl)
+static std::string niceName(const FunctionDecl* functionDecl)
 {
     std::string s =
         compat::getReturnType(*functionDecl).getCanonicalType().getAsString()
-        + " " + functionDecl->getParent()->getQualifiedNameAsString()
-        + "::" + functionDecl->getNameAsString()
-        + "(";
+        + " ";
+    if (isa<CXXMethodDecl>(functionDecl)) {
+        s += dyn_cast<CXXMethodDecl>(functionDecl)->getParent()->getQualifiedNameAsString() + "::";
+    }
+    s += functionDecl->getNameAsString() + "(";
     bool bFirst = true;
     for (const ParmVarDecl *pParmVarDecl : functionDecl->params()) {
         if (bFirst)
@@ -92,27 +91,30 @@ static std::string niceName(const CXXMethodDecl* functionDecl)
         s += pParmVarDecl->getType().getCanonicalType().getAsString();
     }
     s += ")";
-    if (functionDecl->isConst()) {
+    if (isa<CXXMethodDecl>(functionDecl) && dyn_cast<CXXMethodDecl>(functionDecl)->isConst()) {
         s += " const";
     }
     return s;
 }
 
-static void logCallToRootMethods(const CXXMethodDecl* decl)
+static void logCallToRootMethods(const FunctionDecl* functionDecl)
 {
-    // For virtual/overriding methods, we need to pretend we called the root method(s),
-    // so that they get marked as used.
-    decl = decl->getCanonicalDecl();
+    functionDecl = functionDecl->getCanonicalDecl();
     bool bPrinted = false;
-    for(CXXMethodDecl::method_iterator it = decl->begin_overridden_methods();
-        it != decl->end_overridden_methods(); ++it)
-    {
-        logCallToRootMethods(*it);
-        bPrinted = true;
+    if (isa<CXXMethodDecl>(functionDecl)) {
+        // For virtual/overriding methods, we need to pretend we called the root method(s),
+        // so that they get marked as used.
+        const CXXMethodDecl* methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
+        for(CXXMethodDecl::method_iterator it = methodDecl->begin_overridden_methods();
+            it != methodDecl->end_overridden_methods(); ++it)
+        {
+            logCallToRootMethods(*it);
+            bPrinted = true;
+        }
     }
     if (!bPrinted)
     {
-        std::string s = niceName(decl);
+        std::string s = niceName(functionDecl);
         callSet.insert(s);
     }
 }
@@ -154,18 +156,42 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
     // if the function is templated. However, if we are inside a template function,
     // calling another function on the same template, the same problem occurs.
     // Rather than tracking all of that, just traverse anything we have not already traversed.
-    if (traversedFunctionSet.insert(calleeFunctionDecl->getQualifiedNameAsString()).second)
+    if (traversedFunctionSet.insert(niceName(calleeFunctionDecl)).second)
         TraverseFunctionDecl(calleeFunctionDecl);
 
-    CXXMethodDecl* calleeMethodDecl = dyn_cast_or_null<CXXMethodDecl>(calleeFunctionDecl);
-    if (calleeMethodDecl == nullptr) {
-        return true;
-    }
-    logCallToRootMethods(calleeMethodDecl);
+    logCallToRootMethods(calleeFunctionDecl);
     return true;
 }
 
-bool UnusedMethods::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
+bool UnusedMethods::VisitCXXConstructExpr(const CXXConstructExpr* expr)
+{
+    // I don't use the normal ignoreLocation() here, because I __want__ to include files that are
+    // compiled in the $WORKDIR since they may refer to normal code
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( expr->getLocStart() );
+    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
+        return true;
+
+    const CXXConstructorDecl *consDecl = expr->getConstructor();
+    consDecl = consDecl->getCanonicalDecl();
+    if (consDecl->getTemplatedKind() == FunctionDecl::TemplatedKind::TK_NonTemplate
+        && !consDecl->isFunctionTemplateSpecialization()) {
+        return true;
+    }
+    // if we see a call to a constructor, it may effectively create a whole new class,
+    // if the constructor's class is templated.
+    if (!traversedFunctionSet.insert(niceName(consDecl)).second)
+        return true;
+
+    const CXXRecordDecl* parent = consDecl->getParent();
+    for( CXXRecordDecl::ctor_iterator it = parent->ctor_begin(); it != parent->ctor_end(); ++it)
+        TraverseCXXConstructorDecl(*it);
+    for( CXXRecordDecl::method_iterator it = parent->method_begin(); it != parent->method_end(); ++it)
+        TraverseCXXMethodDecl(*it);
+
+    return true;
+}
+
+bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
 {
     // I don't use the normal ignoreLocation() here, because I __want__ to include files that are
     // compiled in the $WORKDIR since they may refer to normal code
@@ -174,12 +200,10 @@ bool UnusedMethods::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
         return true;
 
     functionDecl = functionDecl->getCanonicalDecl();
+    const CXXMethodDecl* methodDecl = dyn_cast_or_null<CXXMethodDecl>(functionDecl);
+
     // ignore method overrides, since the call will show up as being directed to the root method
-    if (functionDecl->size_overridden_methods() != 0 || functionDecl->hasAttr<OverrideAttr>()) {
-        return true;
-    }
-    // ignore static's for now. Would require generalising this plugin a little
-    if (functionDecl->isStatic()) {
+    if (methodDecl && (methodDecl->size_overridden_methods() != 0 || methodDecl->hasAttr<OverrideAttr>())) {
         return true;
     }
     // ignore stuff that forms part of the stable URE interface
@@ -187,7 +211,7 @@ bool UnusedMethods::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
                               functionDecl->getNameInfo().getLoc()))) {
         return true;
     }
-    if (isStandardStuff(functionDecl->getParent()->getQualifiedNameAsString())) {
+    if (methodDecl && isStandardStuff(methodDecl->getParent()->getQualifiedNameAsString())) {
         return true;
     }
     if (isa<CXXDestructorDecl>(functionDecl)) {
@@ -196,7 +220,7 @@ bool UnusedMethods::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl )
     if (isa<CXXConstructorDecl>(functionDecl)) {
         return true;
     }
-    if (functionDecl->isDeleted()) {
+    if (methodDecl && methodDecl->isDeleted()) {
         return true;
     }
 
@@ -214,10 +238,10 @@ bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
         return true;
 
     const Decl* functionDecl = declRefExpr->getDecl();
-    if (!isa<CXXMethodDecl>(functionDecl)) {
+    if (!isa<FunctionDecl>(functionDecl)) {
         return true;
     }
-    logCallToRootMethods(dyn_cast<CXXMethodDecl>(functionDecl)->getCanonicalDecl());
+    logCallToRootMethods(dyn_cast<FunctionDecl>(functionDecl)->getCanonicalDecl());
     return true;
 }
 

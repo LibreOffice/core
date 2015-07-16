@@ -182,18 +182,6 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
     return false; // did not handle this event
 }
 
-bool ShapeManagerImpl::handleMouseEntered( const awt::MouseEvent& )
-{
-    // not used here
-    return false; // did not handle the event
-}
-
-bool ShapeManagerImpl::handleMouseExited( const awt::MouseEvent& )
-{
-    // not used here
-    return false; // did not handle the event
-}
-
 bool ShapeManagerImpl::handleMouseDragged( const awt::MouseEvent& )
 {
     // not used here
@@ -256,12 +244,6 @@ bool ShapeManagerImpl::update()
     return false;
 }
 
-bool ShapeManagerImpl::update( ViewSharedPtr const& /*rView*/ )
-{
-    // am not doing view-specific updates here.
-    return false;
-}
-
 bool ShapeManagerImpl::needsUpdate() const
 {
     if( mbEnabled && mpLayerManager )
@@ -299,11 +281,6 @@ ShapeSharedPtr ShapeManagerImpl::lookupShape( uno::Reference< drawing::XShape > 
 void ShapeManagerImpl::addHyperlinkArea( const HyperlinkAreaSharedPtr& rArea )
 {
     maHyperlinkShapes.insert(rArea);
-}
-
-void ShapeManagerImpl::removeHyperlinkArea( const HyperlinkAreaSharedPtr& rArea )
-{
-    maHyperlinkShapes.erase(rArea);
 }
 
 AttributableShapeSharedPtr ShapeManagerImpl::getSubsetShape( const AttributableShapeSharedPtr& rOrigShape,

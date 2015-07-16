@@ -45,13 +45,6 @@ public:
                                           EventMultiplexer&                            rEventMultiplexer,
                                           const UnoViewContainer&                      rViewContainer );
 
-    /** Shows the pointer symbol.
-     */
-    void show() { setVisible(true); }
-
-    /** Hides the pointer symbol.
-     */
-    void hide() { setVisible(false); }
     /** Use this method to update the pointer's position
     */
     void setVisible( const bool bVisible );

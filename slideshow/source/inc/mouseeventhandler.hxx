@@ -76,36 +76,6 @@ namespace slideshow
              */
             virtual bool handleMouseReleased( const ::com::sun::star::awt::MouseEvent& e ) = 0;
 
-            /** Handle a mouse entered the view event.
-
-                @param e
-                The mouse event that occurred. The x,y coordinates of
-                the event are already transformed back to user
-                coordinate space, taking the inverse transform of the
-                view in which the event occurred.
-
-                @return true, if this handler has successfully
-                processed the pause event. When this method returns
-                false, possibly other, less prioritized handlers are
-                called, too.
-             */
-            virtual bool handleMouseEntered( const ::com::sun::star::awt::MouseEvent& e ) = 0;
-
-            /** Handle a mouse exited the view event.
-
-                @param e
-                The mouse event that occurred. The x,y coordinates of
-                the event are already transformed back to user
-                coordinate space, taking the inverse transform of the
-                view in which the event occurred.
-
-                @return true, if this handler has successfully
-                processed the pause event. When this method returns
-                false, possibly other, less prioritized handlers are
-                called, too.
-             */
-            virtual bool handleMouseExited( const ::com::sun::star::awt::MouseEvent& e ) = 0;
-
             /** Handle a mouse was moved with a pressed button event.
 
                 @param e

@@ -34,7 +34,6 @@ struct EmptyBase
     {
         explicit EmptyClearableGuard(EmptyBase) {}
         static void clear() {}
-        static void reset() {}
     };
 
     typedef EmptyGuard           Guard;

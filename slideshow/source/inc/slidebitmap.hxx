@@ -64,7 +64,6 @@ namespace slideshow
 
             bool                draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const;
             ::basegfx::B2ISize  getSize() const;
-            ::basegfx::B2DPoint getOutputPos() const{return maOutputPos;}
             void                move( const ::basegfx::B2DPoint& rNewPos );
             void                clip( const ::basegfx::B2DPolyPolygon& rClipPoly );
 
