@@ -362,30 +362,24 @@ bool TempFile::IsValid() const
 OUString TempFile::GetFileName() const
 {
     OUString aTmp;
-    FileBase::getSystemPathFromFileURL( aName, aTmp );
+    FileBase::getSystemPathFromFileURL(aName, aTmp);
     return aTmp;
 }
 
 OUString TempFile::GetURL()
 {
-    if ( aURL.isEmpty() )
-    {
-        OUString const name(GetFileName());
-        LocalFileHelper::ConvertPhysicalNameToURL(name, aURL);
-        assert((name.isEmpty() || !aURL.isEmpty()) && "TempFile::GetURL failed: unit test is leaking temp files, add the ucpfile1 component!");
-    }
-
-    return aURL;
+    assert(!aName.isEmpty() && "TempFile::GetURL failed: unit test is leaking temp files, add the ucpfile1 component!");
+    return aName;
 }
 
 SvStream* TempFile::GetStream( StreamMode eMode )
 {
-    if ( !pStream )
+    if (!pStream)
     {
-        if ( !GetURL().isEmpty() )
-            pStream = UcbStreamHelper::CreateStream( aURL, eMode, true /* bFileExists */ );
+        if (!aName.isEmpty())
+            pStream = new SvFileStream(aName, eMode);
         else
-            pStream = new SvMemoryStream( NULL, 0, eMode );
+            pStream = new SvMemoryStream(NULL, 0, eMode);
     }
 
     return pStream;

@@ -45,7 +45,6 @@ namespace utl
 class UNOTOOLS_DLLPUBLIC TempFile
 {
     OUString    aName;
-    OUString    aURL;
     SvStream*   pStream;
     bool        bIsDirectory;
     bool        bKillingFileEnabled;
@@ -82,20 +81,14 @@ public:
     bool            IsValid() const;
 
                     /**
-                    Returns the "UCB compatible" URL of the tempfile object.
-                    If you want to have the "physical" file name, use the GetFileName() method of this object, because these
-                    method uses the UCB for the conversion, but never use any external conversion functions for URLs into
-                    "physical" names.
-                    If no UCP is available for the local file system, an empty URL is returned. In this case you can't access
-                    the file as a UCB content !
+                    Returns the URL of the tempfile object.
+                    If you want to have the system path file name, use the GetFileName() method of this object
                     */
     OUString        GetURL();
 
                     /**
-                    Returns the "physical" name of the tempfile in host notation ( should only be used for 3rd party code
-                    with file name interfaces ).
-                    If you want to have the URL, use the GetURL() method of this object, but never use any external
-                    conversion functions for "physical" names into URLs.
+                    Returns the system path name of the tempfile in host notation
+                    If you want to have the URL, use the GetURL() method of this object.
                     */
     OUString        GetFileName() const;
 
