@@ -2767,7 +2767,7 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
 
         Sequence< beans::PropertyValue > aArgs(1);
         aArgs[0].Name = "AutoSaveState";
-        aArgs[0].Value <<= bOn ? sal_True : sal_False;
+        aArgs[0].Value <<= bOn;
 
         uno::Reference< frame::XDispatch > xAutoSave = frame::theAutoRecovery::get(xContext);
         xAutoSave->dispatch(aURL, aArgs);

@@ -895,14 +895,14 @@ sal_Bool SAL_CALL SdStyleSheet::isUserDefined() throw(RuntimeException, std::exc
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
-    return IsUserDefined() ? sal_True : sal_False;
+    return IsUserDefined();
 }
 
 sal_Bool SAL_CALL SdStyleSheet::isInUse() throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
-    return IsUsed() ? sal_True : sal_False;
+    return IsUsed();
 }
 
 OUString SAL_CALL SdStyleSheet::getParentStyle() throw(RuntimeException, std::exception)

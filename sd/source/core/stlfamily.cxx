@@ -271,7 +271,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(Runtim
         {
             PresStyleMap& rStyleSheets = mpImpl->getStyleSheets();
             PresStyleMap::iterator iter( rStyleSheets.find(aName) );
-            return ( iter != rStyleSheets.end() ) ? sal_True : sal_False;
+            return iter != rStyleSheets.end();
         }
         else
         {

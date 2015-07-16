@@ -854,11 +854,11 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aProps.push_back( aValue );
 
     aValue.Name = "SlideSound";
-    aValue.Value <<= pPage3_SldSound->IsChecked() ? sal_True : sal_False;
+    aValue.Value <<= pPage3_SldSound->IsChecked();
     aProps.push_back( aValue );
 
     aValue.Name = "HiddenSlides";
-    aValue.Value <<= pPage3_HiddenSlides->IsChecked() ? sal_True : sal_False;
+    aValue.Value <<= pPage3_HiddenSlides->IsChecked();
     aProps.push_back( aValue );
 
     // Page 4

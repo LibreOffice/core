@@ -2664,7 +2664,7 @@ Type SAL_CALL SdNavigationOrderAccess::getElementType(  ) throw (RuntimeExceptio
 
 sal_Bool SAL_CALL SdNavigationOrderAccess::hasElements(  ) throw (RuntimeException, std::exception)
 {
-    return maShapes.empty() ? sal_False : sal_True;
+    return !maShapes.empty();
 }
 
 Any SdGenericDrawPage::getNavigationOrder()

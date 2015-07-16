@@ -999,7 +999,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
         OUString aString;
         if( rValue >>= aString )
         {
-            rValue <<= aString == "visible" ? sal_True : sal_False;
+            rValue <<= aString == "visible";
             bRet = true;
         }
     }
@@ -1687,7 +1687,7 @@ void AnimationImporter::importAnimateAttributeTargetContainer( const Atom* pAtom
 
                             if( nBits & 2 )
                             {
-                                xAnimate->setAccumulate( (nAccumulate == 0) ? sal_True : sal_False );
+                                xAnimate->setAccumulate( nAccumulate == 0 );
                             }
                         }
                     }

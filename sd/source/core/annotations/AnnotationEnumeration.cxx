@@ -65,7 +65,7 @@ AnnotationEnumeration::AnnotationEnumeration( const AnnotationVector& rAnnotatio
 // ::com::sun::star::office::XAnnotationEnumeration:
 sal_Bool SAL_CALL AnnotationEnumeration::hasMoreElements() throw (css::uno::RuntimeException, std::exception)
 {
-    return maIter != maAnnotations.end() ? sal_True : sal_False;
+    return maIter != maAnnotations.end();
 }
 
 css::uno::Reference< css::office::XAnnotation > SAL_CALL AnnotationEnumeration::nextElement() throw (css::uno::RuntimeException, css::container::NoSuchElementException, std::exception)

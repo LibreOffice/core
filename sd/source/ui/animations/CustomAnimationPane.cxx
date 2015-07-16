@@ -1075,7 +1075,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         }
 
         addValue( pSet, nHandleHasAfterEffect, makeAny( pEffect->hasAfterEffect() ) );
-        addValue( pSet, nHandleAfterEffectOnNextEffect, makeAny( pEffect->IsAfterEffectOnNext() ? sal_True : sal_False ) );
+        addValue( pSet, nHandleAfterEffectOnNextEffect, makeAny( pEffect->IsAfterEffectOnNext() ) );
         addValue( pSet, nHandleDimColor, pEffect->getDimColor() );
         addValue( pSet, nHandleIterateType, makeAny( pEffect->getIterateType() ) );
 

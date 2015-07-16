@@ -1350,7 +1350,7 @@ void createVisibilityOnOffNode(Reference< XTimeContainer >& rxParentContainer, S
     xAnimate->setAttributeName(OUString("Visibility"));
 
     // set attribute value
-    aAny <<= bVisible ? sal_True : sal_False;
+    aAny <<= bVisible;
     xAnimate->setTo(aAny);
 
     // ad set node to par node
