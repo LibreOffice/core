@@ -78,7 +78,6 @@ class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
 
     void ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const;
     void CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
-    void ApplyCustomShapeAdjustmentAttributes( SfxItemSet& rSet ) const;
     void ApplyCustomShapeGeometryAttributes( SvStream& rIn,
                                              SfxItemSet& rSet,
                                              const DffObjData& rObjData ) const;
@@ -288,10 +287,6 @@ struct SvxMSDffImportData
     SvxMSDffImportData()
         {}
     explicit SvxMSDffImportData( const Rectangle& rParentRect ) : aParentRect( rParentRect ) {}
-    void SetNewRect(sal_Int32 left, sal_Int32 top, sal_Int32 right, sal_Int32 bottom )
-        { aNewRect = Rectangle(left, top, right, bottom); }
-    bool HasParRect() const { return aParentRect.IsEmpty(); }
-    bool HasNewRect() const { return aNewRect.IsEmpty()   ; }
     bool empty() const { return aRecords.empty(); }
     size_t size() const { return aRecords.size(); }
     MSDffImportRecords::const_iterator begin() const { return aRecords.begin();  }
@@ -405,10 +400,8 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
     std::unique_ptr<SvxMSDffShapeInfos_ByTxBxComp> m_xShapeInfosByTxBxComp;
     std::unique_ptr<SvxMSDffShapeInfos_ById> m_xShapeInfosById;
     SvxMSDffShapeOrders*    pShapeOrders;
-    sal_uLong               nDefaultFontHeight;
     sal_uInt32              nOffsDgg;
     sal_uInt16              nBLIPCount;
-    sal_uInt16              nShapeCount;
     sal_uInt32              nGroupShapeFlags;
 
     void CheckTxBxStoryChain();
@@ -467,7 +460,6 @@ protected :
                                 sal_uLong nPosGroup,
                                 const unsigned long nDrawingContainerId );
 
-    bool ReadGraphic( SvStream& rSt, sal_uLong nIndex, Graphic& rGraphic ) const;
     SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& );
     // #i32596# - pass <nCalledByGroup> to method
     // Needed in Writer's Microsoft Word import to avoid import of OLE objects
@@ -587,7 +579,6 @@ public:
                      SdrModel* pSdrModel_           =  0,
                      long      nApplicationScale    =  0,
                      ColorData mnDefaultColor_      =  COL_DEFAULT,
-                     sal_uLong nDefaultFontHeight_  = 24,
                      SvStream* pStData2_            =  0,
                      bool bSkipImages               =  false );
 
@@ -646,15 +637,6 @@ public:
 
     bool GetShape(sal_uLong nId, SdrObject*& rpData, SvxMSDffImportData& rData);
 
-    /** Get count of managed BLIPs
-
-        @return Number of BLIPs in pStData (or rStCtrl), thus number of FBSEs in
-                the drawing group container. If 0 is returned this means that
-                the structure is ok but there are no BLIPs; if USHRT_MAX is
-                returned than there was an error: no correct Drawing File Format
-    */
-    sal_uInt16 GetBLIPCount() const{ return nBLIPCount; }
-
     SdrObject* ImportObj( SvStream& rSt,
                           void* pData,
                           Rectangle& rClientRect,
@@ -704,8 +686,6 @@ public:
                               SdrObject*    pObject) const;
 
     void RemoveFromShapeOrder( SdrObject* pObject ) const;
-
-    sal_uInt32  GetConvertFlags() const { return nSvxMSDffOLEConvFlags; }
 
     static SdrOle2Obj* CreateSdrOLEFromStorage( const OUString& rStorageName,
                                                 tools::SvRef<SotStorage>& rSrcStorage,

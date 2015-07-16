@@ -188,9 +188,6 @@ private:
     sal_uInt32 ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape);
     sal_uInt32 ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes);
 
-    void animateShape( ShapeAnimationInfo& rAnimInfo );
-    void animatePage( PageInfo* pPageInfo );
-
     bool getMetaFile( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >&xComponent, GDIMetaFile& rMtf, bool bOnlyBackground = false, bool bExportAsJPEG = false );
 
     Writer* mpWriter;

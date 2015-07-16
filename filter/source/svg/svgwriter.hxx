@@ -258,17 +258,6 @@ class SVGTextWriter
         mpTextEmbeddedBitmapMtf = pTextEmbeddedBitmapMtf;
     }
 
-    const Reference<XText>& getTextShape() const
-    {
-        return mrTextShape;
-    }
-
-
-    void setPlaceholderShapeFlag( bool bState )
-    {
-        mbIsPlaceholderShape = bState;
-    }
-
   private:
     void implMap( const Size& rSz, Size& rDstSz ) const;
     void implMap( const Point& rPt, Point& rDstPt ) const;
@@ -356,9 +345,6 @@ private:
     void                    ImplWriteText( const Point& rPos, const OUString& rText, const long* pDXArray, long nWidth, Color aTextColor, bool bApplyMapping );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz,
                                           bool bApplyMapping = true );
-
-    void                    ImplCheckFontAttributes();
-    void                    ImplCheckPaintAttributes();
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf,
                                               sal_uInt32 nWriteFlags,

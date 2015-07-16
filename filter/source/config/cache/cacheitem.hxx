@@ -121,23 +121,6 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 
 
 
-        /** @short  check, if the given properties dont exists
-                    at this item.
-
-            @descr  All properties are compared in its minimum.
-                    E.g: string lists => only the specified items
-                    are checked. Additional existing items are ignored.
-
-            @param  lProps
-                    contains all properties, which should be checked.
-
-            @return sal_True if all given properties dont exists
-                    at this item; sal_False otherwise.
-         */
-        bool excludeProps(const CacheItem& lProps) const;
-
-
-
         /** @short  because we know two UIName properties
                     (a list with all locales and the value
                     for the current locale only), we must be sure

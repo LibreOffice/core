@@ -152,14 +152,13 @@ public:
 class FontEntry
 {
 public:
-    sal_Int8*               pFontName;
+    sal_Int8*           pFontName;
     CharSetType         eCharSetType;
-    sal_Int8*               pCharSetValue;
-    sal_uInt32              nFontType;          // bit 0 = 1 -> Italic,
+    sal_Int8*           pCharSetValue;
+    sal_uInt32          nFontType;          // bit 0 = 1 -> Italic,
                                             // bit 1 = 1 -> Bold
 
                         FontEntry();
-    FontEntry*          Clone() { return new FontEntry( *this ); } ;
                         ~FontEntry();
 };
 

@@ -5526,7 +5526,6 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  SdrModel* pSdrModel_,// see SetModel() below
                                  long      nApplicationScale,
                                  ColorData mnDefaultColor_,
-                                 sal_uLong     nDefaultFontHeight_,
                                  SvStream* pStData2_,
                                  bool bSkipImages )
     :DffPropertyReader( *this ),
@@ -5534,10 +5533,8 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      pBLIPInfos( new SvxMSDffBLIPInfos  ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      pShapeOrders( new SvxMSDffShapeOrders ),
-     nDefaultFontHeight( nDefaultFontHeight_),
      nOffsDgg( nOffsDgg_ ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we fist check if the
-     nShapeCount( USHRT_MAX ),              // control stream has correct data
      nGroupShapeFlags(0),                   // ensure initialization here, as some corrupted
                                             // files may yield to this being unitialized
      maBaseURL( rBaseURL ),
@@ -5585,10 +5582,8 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
      pBLIPInfos(   new SvxMSDffBLIPInfos  ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      pShapeOrders( new SvxMSDffShapeOrders ),
-     nDefaultFontHeight( 24 ),
      nOffsDgg( 0 ),
      nBLIPCount(  USHRT_MAX ),              // initialize with error, since we first have to check
-     nShapeCount( USHRT_MAX ),              // whether the control stream contains the correct data
      nGroupShapeFlags(0),
      maBaseURL( rBaseURL ),
      mnCurMaxShapeId(0),

@@ -496,7 +496,6 @@ struct MSFILTER_DLLPUBLIC HeaderFooterEntry
     OUString            pPlaceholder[ 4 ];
     sal_uInt32          nAtom;
 
-    static sal_uInt32   GetMaskForInstance( sal_uInt32 nInstance );
     sal_uInt32          IsToDisplay( sal_uInt32 nInstance );
     sal_uInt32          NeedToImportInstance(
                             const sal_uInt32 nInstance,
@@ -587,8 +586,6 @@ protected:
     SvMemoryStream*         ImportExOleObjStg( sal_uInt32 nPersistPtr, sal_uInt32& nOleId ) const;
     SdrPage*                MakeBlancPage(bool bMaster) const;
     bool                    ReadFontCollection();
-    bool                    ForceFontCollection() const
-                            { return pFonts != nullptr || const_cast<SdrPowerPointImport*>(this)->ReadFontCollection(); }
     PptSlidePersistList*    GetPageList(PptPageKind ePageKind) const;
     sal_uInt32              GetAktPageId();
     sal_uInt32              GetMasterPageId(sal_uInt16 nPageNum, PptPageKind ePageKind) const;
@@ -604,8 +601,6 @@ public:
     virtual                 ~SdrPowerPointImport();
     sal_uInt16              GetPageCount( PptPageKind eKind = PPT_SLIDEPAGE ) const;
     void                    SetPageNum( sal_uInt16 nPageNum, PptPageKind = PPT_SLIDEPAGE );
-    sal_uInt16              GetPageNum() const { return nAktPageNum; }
-    PptPageKind             GetPageKind() const { return eAktPageKind; }
     Size                    GetPageSize() const;
     SdrObject*              ImportPageBackgroundObject(
                                 const SdrPage& rPage,
@@ -625,7 +620,6 @@ public:
     void                    ImportPage( SdrPage* pPage, const PptSlidePersistEntry* pMasterPersist = NULL );
     virtual bool            GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const SAL_OVERRIDE;
     virtual bool            SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const SAL_OVERRIDE;
-    const PptDocumentAtom&  GetDocumentAtom() const { return aDocAtom; }
     virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const SAL_OVERRIDE;
     SdrObject*              CreateTable(
                                 SdrObject* pGroupObject,
@@ -646,10 +640,6 @@ struct PPTTextCharacterStyleAtomInterpreter
 
                     PPTTextCharacterStyleAtomInterpreter();
                     ~PPTTextCharacterStyleAtomInterpreter();
-
-    bool            Read( SvStream& rIn, const DffRecordHeader& rRecHd );
-
-    sal_uInt32      GetColor( sal_uInt32 nDefault );
 };
 
 struct PPTTextParagraphStyleAtomInterpreter

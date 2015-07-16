@@ -950,10 +950,6 @@ public:
     static tools::PolyPolygon  GetPolyPolygon( const ::com::sun::star::uno::Any& rSource );
     static MSO_SPT      GetCustomShapeType(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
-                            sal_uInt32& nMirrorFlags
-                        );
-    static MSO_SPT      GetCustomShapeType(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & rXShape,
                             sal_uInt32& nMirrorFlags,
                             OUString& rShapeType,
                             bool bOOXML = false
@@ -991,7 +987,6 @@ public:
     sal_uInt32  PtGetOffsetByID( sal_uInt32 nID );
     sal_uInt32  PtReplace( sal_uInt32 nID, sal_uInt32 nOfs );
     sal_uInt32  PtReplaceOrInsert( sal_uInt32 nID, sal_uInt32 nOfs );
-    sal_uInt32  PtGetCount() const { return maPersistTable.size(); };
 
                 EscherPersistTable();
     virtual     ~EscherPersistTable();
@@ -1073,8 +1068,6 @@ public:
             { return pInteractionInfo; }
         EscherExClientAnchor_Base* GetClientAnchor() const
             { return pClientAnchor; }
-        EscherExClientRecord_Base* GetClientData() const
-            { return pClientData; }
         EscherExClientRecord_Base* GetClientTextbox() const
             { return pClientTextbox; }
 

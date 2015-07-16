@@ -527,7 +527,7 @@ Sttb::getStringAtIndex( sal_uInt32 index )
 
 SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr, bool bSkipImages )
     : SvxMSDffManager(*rRdr.m_pTableStream, rRdr.GetBaseURL(), rRdr.m_pWwFib->fcDggInfo,
-        rRdr.m_pDataStream, 0, 0, COL_WHITE, 12, rRdr.m_pStrm, bSkipImages),
+        rRdr.m_pDataStream, 0, 0, COL_WHITE, rRdr.m_pStrm, bSkipImages),
     rReader(rRdr), pFallbackStream(0)
 {
     SetSvxMSDffSettings( GetSvxMSDffSettings() );

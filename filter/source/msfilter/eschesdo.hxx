@@ -71,20 +71,18 @@ public:
     void                SetRect( const Rectangle& rRect )
                             { maRect = rRect; }
 
-    sal_Int32               GetAngle() const        { return mnAngle; }
+    sal_Int32           GetAngle() const        { return mnAngle; }
     void                SetAngle( sal_Int32 nVal )  { mnAngle = nVal; }
 
-    sal_uInt32              GetTextSize() const     { return mnTextSize; }
-
     bool                IsValid() const         { return mbValid; }
-    bool                IsPresObj() const       { return mbPresObj; }
+
     bool                IsEmptyPresObj() const  { return mbEmptyPresObj; }
-    sal_uInt32              GetShapeId() const      { return mnShapeId; }
+    sal_uInt32          GetShapeId() const      { return mnShapeId; }
     void                SetShapeId( sal_uInt32 nVal ) { mnShapeId = nVal; }
 
     const SdrObject*    GetSdrObject() const;
 
-    sal_uInt32              ImplGetText();
+    sal_uInt32          ImplGetText();
     bool                ImplHasText() const;
     bool GetOOXML() const { return mbOOXML;}
     void SetOOXML(bool bOOXML);
@@ -156,7 +154,6 @@ protected:
                                     ImplEESdrPageType ePageType, const bool bOOxmlExport = false );  // returns ShapeID
 
             static void         ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
-            bool                ImplGetText( ImplEESdrObject& rObj );
             void                ImplWriteAdditionalText(
                                                 ImplEESdrObject& rObj,
                                                 const Point& rTextRefPoint );
