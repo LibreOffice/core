@@ -36,6 +36,7 @@ class FileViewContainer : public vcl::Window
     virtual void dispose() SAL_OVERRIDE
     {
         m_pFileView.clear();
+        m_pTreeView.clear();
         m_pSplitter.clear();
         vcl::Window::dispose();
     }
@@ -248,10 +249,10 @@ void RemoteFilesDialog::dispose()
 
     batch->commit();
 
-    m_pContainer.disposeAndClear(); // container must be first!
     m_pTreeView.disposeAndClear();
     m_pFileView.disposeAndClear();
     m_pSplitter.disposeAndClear();
+    m_pContainer.disposeAndClear();
     m_pPath.disposeAndClear();
 
     m_pOk_btn.clear();
