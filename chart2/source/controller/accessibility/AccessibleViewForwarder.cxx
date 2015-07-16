@@ -40,11 +40,6 @@ AccessibleViewForwarder::~AccessibleViewForwarder()
 
 // ________ IAccessibleViewforwarder ________
 
-bool AccessibleViewForwarder::IsValid() const
-{
-    return true;
-}
-
 Rectangle AccessibleViewForwarder::GetVisibleArea() const
 {
     Rectangle aVisibleArea;
@@ -75,28 +70,6 @@ Size AccessibleViewForwarder::LogicToPixel( const Size& rSize ) const
     if ( m_pWindow )
     {
         aSize = m_pWindow->LogicToPixel( rSize, m_aMapMode );
-    }
-    return aSize;
-}
-
-Point AccessibleViewForwarder::PixelToLogic( const Point& rPoint ) const
-{
-    Point aPoint;
-    if ( m_pAccChartView && m_pWindow )
-    {
-        awt::Point aLocation = m_pAccChartView->getLocationOnScreen();
-        Point aTopLeft( aLocation.X, aLocation.Y );
-        aPoint = m_pWindow->PixelToLogic( rPoint - aTopLeft, m_aMapMode );
-    }
-    return aPoint;
-}
-
-Size AccessibleViewForwarder::PixelToLogic( const Size& rSize ) const
-{
-    Size aSize;
-    if ( m_pWindow )
-    {
-        aSize = m_pWindow->PixelToLogic( rSize, m_aMapMode );
     }
     return aSize;
 }

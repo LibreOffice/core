@@ -3115,11 +3115,6 @@ void SwAccessibleMap::FireEvents()
 
 }
 
-bool SwAccessibleMap::IsValid() const
-{
-    return true;
-}
-
 Rectangle SwAccessibleMap::GetVisibleArea() const
 {
     MapMode aSrc( MAP_TWIP );
@@ -3159,40 +3154,6 @@ Size SwAccessibleMap::LogicToPixel( const Size& rSize ) const
         MapMode aMapMode;
         GetMapMode( Point(0,0), aMapMode );
         aSize = GetShell()->GetWin()->LogicToPixel( aSize, aMapMode );
-    }
-
-    return aSize;
-}
-
-Point SwAccessibleMap::PixelToLogic( const Point& rPoint ) const
-{
-    Point aPoint;
-    vcl::Window *pWin = GetShell()->GetWin();
-    if( pWin )
-    {
-        aPoint = pWin->ScreenToOutputPixel( rPoint );
-        MapMode aMapMode;
-        GetMapMode( aPoint, aMapMode );
-        aPoint = pWin->PixelToLogic( aPoint, aMapMode );
-        MapMode aSrc( MAP_TWIP );
-        MapMode aDest( MAP_100TH_MM );
-        aPoint = OutputDevice::LogicToLogic( aPoint, aSrc, aDest );
-    }
-
-    return aPoint;
-}
-
-Size SwAccessibleMap::PixelToLogic( const Size& rSize ) const
-{
-    Size aSize;
-    if( GetShell()->GetWin() )
-    {
-        MapMode aMapMode;
-        GetMapMode( Point(0,0), aMapMode );
-        aSize = GetShell()->GetWin()->PixelToLogic( rSize, aMapMode );
-        MapMode aSrc( MAP_TWIP );
-        MapMode aDest( MAP_100TH_MM );
-        aSize = OutputDevice::LogicToLogic( aSize, aSrc, aDest );
     }
 
     return aSize;

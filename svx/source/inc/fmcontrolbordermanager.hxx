@@ -95,13 +95,6 @@ namespace svxform
             :xControl( _rxControl )
         {
         }
-        void clear()
-        {
-            BorderDescriptor::clear();
-            UnderlineDescriptor::clear();
-            xControl.clear();
-            sOriginalHelpText.clear();
-        }
     };
 
 

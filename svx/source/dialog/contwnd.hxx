@@ -45,8 +45,6 @@ protected:
     virtual void        Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
     virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 
-    void                CreatePolyPolygon();
-
 public:
 
     ContourWindow(vcl::Window* pParent, WinBits nBits);
@@ -55,14 +53,12 @@ public:
     const tools::PolyPolygon&  GetPolyPolygon();
 
     void                SetPipetteMode( const bool bPipette ) { bPipetteMode = bPipette; }
-    bool                IsPipetteMode() const { return bPipetteMode; }
     const Color&        GetPipetteColor() const { return aPipetteColor; }
 
     bool                IsClickValid() const { return bClickValid; }
     bool                IsContourChanged() const;
 
     void                SetWorkplaceMode( const bool bWorkplace ) { bWorkplaceMode = bWorkplace; }
-    bool                IsWorkplaceMode() const { return bWorkplaceMode; }
     const Rectangle&    GetWorkRect() const { return aWorkRect; }
 
     void                SetPipetteHdl( const Link<>& rLink ) { aPipetteLink = rLink; }

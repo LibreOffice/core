@@ -60,8 +60,6 @@ public:
     virtual void dispose() = 0;
 
     virtual void modelChanged( SdrModel* pNewModel ) = 0;
-    virtual void pageChanged( SdrPage* pNewPage ) = 0;
-    virtual void objectChanged( SdrObject* pNewObj ) = 0;
 
 protected:
     ~SvxShapeMaster() {}

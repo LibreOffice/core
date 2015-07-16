@@ -58,10 +58,6 @@ class SVX_DLLPRIVATE FmFormPageImpl
 
     bool        m_bFirstActivation;
     bool            m_bAttemptedFormCreation;
-    bool            m_bInFind;
-
-protected:
-    void Init();
 
 public:
     explicit FmFormPageImpl( FmFormPage& _rPage );
@@ -94,7 +90,6 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms>& getForms( bool _bForceCreate = true );
 
     void        SetFormsCreationHdl( const Link<>& _rFormsCreationHdl ) { m_aFormsCreationHdl = _rFormsCreationHdl; }
-    const Link<>& GetFormsCreationHdl() const { return m_aFormsCreationHdl; }
 
 protected:
     /** finds a form with a given data source signature

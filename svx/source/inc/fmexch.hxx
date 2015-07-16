@@ -186,7 +186,6 @@ namespace svxform
             // (es erfolgt KEINE Ueberpruefung, ob dadurch auch tatsaechlich nur hidden Controls bezeichnet werden, dass muss der
             // Aufrufer sicherstellen)
 
-        SvTreeListEntry*                focused() const { return m_pFocusEntry; }
         const ListBoxEntrySet&      selected() const { return m_aSelectedEntries; }
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                                     hiddenControls() const { return m_aHiddenControlModels; }

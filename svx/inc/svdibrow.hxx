@@ -91,9 +91,7 @@ public:
     const ImpItemListRow* GetAktChangeEntry() const { return pAktChangeEntry; }
     OUString GetNewEntryValue() const                 { return pEditControl->GetText(); }
     void SetEntryChangedHdl(const Link<>& rLink)    { aEntryChangedHdl=rLink; }
-    const Link<>& GetEntryChangedHdl() const        { return aEntryChangedHdl; }
     void SetSetDirtyHdl(const Link<>& rLink)        { aSetDirtyHdl=rLink; }
-    const Link<>& GetSetDirtyHdl() const            { return aSetDirtyHdl; }
 };
 
 #define WB_STDSIZEABLEDOCKWIN  (WB_STDDOCKWIN|WB_3DLOOK|WB_CLOSEABLE|WB_SIZEMOVE)
@@ -107,7 +105,6 @@ public:
     virtual void dispose() SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual void GetFocus() SAL_OVERRIDE;
-    void Clear()                                            { aBrowse->Clear(); }
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL) { aBrowse->SetAttributes(pAttr,p2ndSet); }
     _SdrItemBrowserControl *GetBrowserControl() { return aBrowse.get(); }
 };
@@ -126,10 +123,8 @@ private:
 public:
     SdrItemBrowser(SdrView& rView);
     void ForceParent();
-    void SetView(SdrView& rView) { pView=&rView; ForceParent(); SetDirty(); }
     void SetDirty();
     void Undirty();
-    void ForceUndirty() { if (bDirty) Undirty(); }
 };
 
 #endif // INCLUDED_SVX_INC_SVDIBROW_HXX

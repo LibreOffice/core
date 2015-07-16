@@ -206,8 +206,6 @@ public:
     void    SetLineColor( const Color& rCol ) { aLineColor = rCol; }
 
     sal_uInt16  GetLineCount() const { return nLines; }
-    Color   GetPixelColor() const { return aPixelColor; }
-    Color   GetBackgroundColor() const { return aBackgroundColor; }
 
     sal_uInt16  GetBitmapPixel( const sal_uInt16 nPixelNumber );
     sal_uInt16* GetBitmapPixelPtr() { return pPixel; }
@@ -289,7 +287,6 @@ public:
 
     void Append(const Size& rSize, const XBitmapEntry& rEntry);
     void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_Int32 nPos);
-    void SelectEntryByList(const XBitmapList* pList, const OUString& rStr);
 
 private:
     BitmapEx        maBitmapEx;
@@ -342,7 +339,6 @@ public:
 
     void Append(const XDashEntry& rEntry, const Bitmap& rBitmap );
     void Modify(const XDashEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
-    void SelectEntryByList(const XDashList* pList, const OUString& rStr, const XDash& rDash, sal_uInt16 nDist = 0);
 };
 
 

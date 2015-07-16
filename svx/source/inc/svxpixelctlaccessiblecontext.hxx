@@ -70,7 +70,6 @@ class SvxPixelCtlAccessibleChild :
 {
     SvxPixelCtl& mrParentWindow;
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxParent;
-       void IsValid() throw (::com::sun::star::uno::RuntimeException);
     bool m_bPixelColorOrBG;//Pixel Color Or BackGround Color
     Point maPoint;
     Rectangle*  mpBoundingBox;
@@ -235,19 +234,13 @@ public:
     void FireAccessibleEvent (short nEventId, const ::com::sun::star::uno::Any& rOld, const ::com::sun::star::uno::Any& rNew);
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    /// select child
-    void SelectChild( Point pos );
-    void SelectChild( long nIndex);
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
          CreateChild (long nIndex, Point mPoint);
-
 
     void LoseFocus();
 
     /// @returns true if it's disposed or in disposing
     inline bool IsAlive() const;
-    /// @returns true if it's not disposed and no in disposing
-    inline bool IsNotAlive() const;
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> m_xCurChild;
@@ -258,11 +251,6 @@ public:
 inline bool SvxPixelCtlAccessible::IsAlive() const
 {
     return !rBHelper.bDisposed && !rBHelper.bInDispose;
-}
-
-inline bool SvxPixelCtlAccessible::IsNotAlive() const
-{
-    return rBHelper.bDisposed || rBHelper.bInDispose;
 }
 
 inline bool SvxPixelCtlAccessibleChild::IsAlive() const

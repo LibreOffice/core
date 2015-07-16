@@ -84,7 +84,6 @@ public:
 
     virtual SdrObjUserData* Clone( SdrObject * ) const SAL_OVERRIDE { return new IMapUserData( *this ); }
 
-    void                    SetObject( const IMapObjectPtr& rIMapObj ) { mpObj = rIMapObj; }
     const IMapObjectPtr     GetObject() const { return mpObj; }
     void                    ReplaceObject( const IMapObjectPtr& pNewIMapObject ) { mpObj = pNewIMapObject; }
 };
@@ -101,7 +100,6 @@ class IMapWindow : public GraphCtrl, public DropTargetHelper
                         mxDocumentFrame;
 
                         DECL_LINK( MenuSelectHdl, Menu* );
-                        DECL_LINK( MouseTimerHdl, Timer* );
 
 protected:
 
@@ -119,10 +117,7 @@ protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
-    void                CreateImageMap();
     void                ReplaceImageMap( const ImageMap& rNewImageMap, bool bScaleToGraphic );
-
-    void                ClearTargetList();
 
     SdrObject*          CreateObj( const IMapObject* pIMapObj );
     static IMapObject*  GetIMapObj( const SdrObject* pSdrObj );
@@ -146,10 +141,8 @@ public:
     void                DoPropertyDialog();
 
     void                SetInfoLink( const Link<>& rLink ) { aInfoLink = rLink; }
-    const Link<>&       GetInfoLink() const { return aInfoLink; }
 
     void                SetTargetList( TargetList& rTargetList );
-    const TargetList&   GetTargetList() const { return aTargetList; }
 
     const NotifyInfo&   GetInfo() const { return aInfo; }
 

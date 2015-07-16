@@ -816,13 +816,6 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
 }
 
 // IAccessibleViewforwarder
-bool SvxGraphCtrlAccessibleContext::IsValid() const
-{
-    return true;
-}
-
-
-
 Rectangle SvxGraphCtrlAccessibleContext::GetVisibleArea() const
 {
     Rectangle aVisArea;
@@ -862,23 +855,5 @@ Size SvxGraphCtrlAccessibleContext::LogicToPixel (const Size& rSize) const
 }
 
 
-
-Point SvxGraphCtrlAccessibleContext::PixelToLogic (const Point& rPoint) const
-{
-    if( mpControl )
-        return mpControl->PixelToLogic (rPoint);
-    else
-        return rPoint;
-}
-
-
-
-Size SvxGraphCtrlAccessibleContext::PixelToLogic (const Size& rSize) const
-{
-    if( mpControl )
-        return mpControl->PixelToLogic (rSize);
-    else
-        return rSize;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

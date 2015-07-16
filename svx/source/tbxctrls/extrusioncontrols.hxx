@@ -59,7 +59,6 @@ private:
     const OUString msExtrusionProjection;
 
     DECL_LINK( SelectHdl, void * );
-    void            FillValueSet();
 
     void implSetDirection( sal_Int32 nSkew, bool bEnabled = true );
     void implSetProjection( sal_Int32 nProjection, bool bEnabled = true );

@@ -188,11 +188,7 @@ public:
     virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const SAL_OVERRIDE;
 
     virtual bool IsAutoGrowHeight() const SAL_OVERRIDE;
-    long GetMinTextFrameHeight() const;
-    long GetMaxTextFrameHeight() const;
     virtual bool IsAutoGrowWidth() const SAL_OVERRIDE;
-    long GetMinTextFrameWidth() const;
-    long GetMaxTextFrameWidth() const;
 
     virtual bool IsFontwork() const SAL_OVERRIDE;
 
@@ -256,8 +252,6 @@ public:
 
     virtual void NbcReformatText() SAL_OVERRIDE;
     virtual void ReformatText() SAL_OVERRIDE;
-
-    void SetTextEditOutliner(SdrOutliner* pOutl) { pEdtOutl=pOutl; }
 
     virtual bool IsVerticalWriting() const SAL_OVERRIDE;
     virtual void SetVerticalWriting(bool bVertical) SAL_OVERRIDE;

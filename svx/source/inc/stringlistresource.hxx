@@ -43,23 +43,6 @@ namespace svx
             _rStrings = m_aStrings;
         }
 
-
-        /** returns the OUString with a given local resource id
-
-            @param  _nResId
-                The resource id. It will not be checked if this id exists.
-
-            @return OUString
-                The string.
-        */
-        OUString getString( sal_uInt16 _nResId )
-        {
-            return ResId(_nResId, *m_pResMgr).toString();
-        }
-
-        size_t  size() const    { return m_aStrings.size(); }
-        bool    empty() const   { return m_aStrings.empty(); }
-
         const OUString& operator[]( size_t _index ) const { return m_aStrings[ _index ]; }
 
     private:

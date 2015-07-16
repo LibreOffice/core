@@ -46,9 +46,7 @@ public:
 
 private:
     DECL_LINK( DictionaryHdl, void* );
-    DECL_LINK( CommonTermsHdl, void* );
     DECL_LINK( OkHdl, void* );
-    void impl_UpdateVariantsCheckBox();
 
 private:
     VclPtr<RadioButton> m_pRB_To_Simplified;

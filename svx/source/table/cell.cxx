@@ -664,15 +664,6 @@ SfxStyleSheet* Cell::GetStyleSheet() const
         return 0;
 }
 
-
-
-const Rectangle& Cell::GetCurrentBoundRect() const
-{
-    return maCellRect;
-}
-
-
-
 void Cell::TakeTextAnchorRect(Rectangle& rAnchorRect) const
 {
     rAnchorRect.Left() = maCellRect.Left() + GetTextLeftDistance();

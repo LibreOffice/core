@@ -77,8 +77,6 @@ public:
     virtual bool queryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& aAny ) SAL_OVERRIDE;
     virtual void dispose() SAL_OVERRIDE;
     virtual void modelChanged( SdrModel* pNewModel ) SAL_OVERRIDE;
-    virtual void pageChanged( SdrPage* pNewPage ) SAL_OVERRIDE;
-    virtual void objectChanged( SdrObject* pNewObj ) SAL_OVERRIDE;
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

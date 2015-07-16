@@ -47,7 +47,6 @@ public:
     void Rearrange(XFillFloatTransparenceItem* pGradientItem);
     void InitStatus(XFillFloatTransparenceItem* pGradientItem);
     void ExecuteValueModify( sal_uInt8 nStartCol, sal_uInt8 nEndCol );
-    void SetControlState_Impl(css::awt::GradientStyle eXGS);
 
 private:
     VclPtr<FixedText>           maFtTrgrCenterX;

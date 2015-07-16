@@ -260,12 +260,9 @@ public:
 
     // IAccessibleViewForwarder
 
-    virtual bool IsValid() const SAL_OVERRIDE;
     virtual Rectangle GetVisibleArea() const SAL_OVERRIDE;
     virtual Point LogicToPixel (const Point& rPoint) const SAL_OVERRIDE;
     virtual Size LogicToPixel (const Size& rSize) const SAL_OVERRIDE;
-    virtual Point PixelToLogic (const Point& rPoint) const SAL_OVERRIDE;
-    virtual Size PixelToLogic (const Size& rSize) const SAL_OVERRIDE;
 
     // IAccessibleParent
     virtual bool ReplaceChild (

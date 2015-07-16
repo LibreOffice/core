@@ -491,12 +491,9 @@ public:
 
     ///=====  IAccessibleViewForwarder  ========================================
 
-    virtual bool IsValid() const SAL_OVERRIDE;
     virtual Rectangle GetVisibleArea() const SAL_OVERRIDE;
     virtual Point LogicToPixel (const Point& rPoint) const SAL_OVERRIDE;
     virtual Size LogicToPixel (const Size& rSize) const SAL_OVERRIDE;
-    virtual Point PixelToLogic (const Point& rPoint) const SAL_OVERRIDE;
-    virtual Size PixelToLogic (const Size& rSize) const SAL_OVERRIDE;
 
 private:
     ScPreviewShell*                     mpViewShell;
@@ -525,12 +522,6 @@ ScIAccessibleViewForwarder::~ScIAccessibleViewForwarder()
 }
 
 ///=====  IAccessibleViewForwarder  ========================================
-
-bool ScIAccessibleViewForwarder::IsValid() const
-{
-    SolarMutexGuard aGuard;
-    return mbValid;
-}
 
 Rectangle ScIAccessibleViewForwarder::GetVisibleArea() const
 {
@@ -569,29 +560,6 @@ Size ScIAccessibleViewForwarder::LogicToPixel (const Size& rSize) const
     vcl::Window* pWin = mpViewShell->GetWindow();
     if (pWin)
         aSize = pWin->LogicToPixel(rSize, maMapMode);
-    return aSize;
-}
-
-Point ScIAccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
-{
-    SolarMutexGuard aGuard;
-    Point aPoint;
-    vcl::Window* pWin = mpViewShell->GetWindow();
-    if (pWin && mpAccDoc)
-    {
-        Rectangle aRect(mpAccDoc->GetBoundingBoxOnScreen());
-        aPoint = pWin->PixelToLogic(rPoint - aRect.TopLeft(), maMapMode);
-    }
-    return aPoint;
-}
-
-Size ScIAccessibleViewForwarder::PixelToLogic (const Size& rSize) const
-{
-    SolarMutexGuard aGuard;
-    Size aSize;
-    vcl::Window* pWin = mpViewShell->GetWindow();
-    if (pWin)
-        aSize = pWin->PixelToLogic(rSize, maMapMode);
     return aSize;
 }
 

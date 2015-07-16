@@ -62,7 +62,6 @@ namespace drawinglayer
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
             double getCornerRadiusX() const { return mfCornerRadiusX; }
             double getCornerRadiusY() const { return mfCornerRadiusY; }
-            bool isCornerRadiusUsed() const { return (0.0 != mfCornerRadiusX || 0.0 != mfCornerRadiusY); }
             bool getForceFillForHitTest() const { return mbForceFillForHitTest; }
 
             // compare operator

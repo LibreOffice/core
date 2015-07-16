@@ -174,8 +174,6 @@ public:
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
 
     sal_uInt16 GetValueCount() const SAL_OVERRIDE { return CHSTYLE_COUNT; }
-    SvxChartStyle GetValue() const
-        { return (SvxChartStyle)SfxEnumItem::GetValue(); }
 };
 
 
@@ -207,8 +205,6 @@ public:
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
 
     sal_uInt16 GetValueCount() const SAL_OVERRIDE { return CHDESCR_COUNT; }
-    SvxChartDataDescr GetValue() const
-        { return (SvxChartDataDescr)SfxEnumItem::GetValue(); }
 };
 
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartTextOrderItem : public SfxEnumItem
@@ -242,8 +238,6 @@ public:
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const SAL_OVERRIDE;
 
     sal_uInt16 GetValueCount() const SAL_OVERRIDE { return CHTXTORDER_COUNT; }
-    SvxChartTextOrient GetValue() const
-        { return (SvxChartTextOrient)SfxEnumItem::GetValue(); }
 };
 
 class SVX_DLLPUBLIC SAL_WARN_UNUSED SvxChartKindErrorItem : public SfxEnumItem
@@ -308,7 +302,6 @@ public:
     virtual SvStream& Store(SvStream& rOut, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
 
     double GetValue() const { return fVal; }
-    void SetValue(double fNewVal) { fVal = fNewVal; }
 };
 
 #endif // INCLUDED_SVX_CHRTITEM_HXX

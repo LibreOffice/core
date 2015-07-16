@@ -49,13 +49,9 @@ public:
     void            SelectCharacter( sal_uInt32 cNew, bool bFocus = false );
     sal_UCS4        GetSelectCharacter() const;
 
-    Link<>          GetDoubleClickHdl() const { return aDoubleClkHdl; }
     void            SetDoubleClickHdl( const Link<>& rLink ) { aDoubleClkHdl = rLink; }
-    Link<>          GetSelectHdl() const { return aSelectHdl; }
     void            SetSelectHdl( const Link<>& rHdl ) { aSelectHdl = rHdl; }
-    Link<>          GetHighlightHdl() const { return aHighHdl; }
     void            SetHighlightHdl( const Link<>& rHdl ) { aHighHdl = rHdl; }
-    Link<>          GetPreSelectHdl() const { return aHighHdl; }
     void            SetPreSelectHdl( const Link<>& rHdl ) { aPreSelectHdl = rHdl; }
     static sal_uInt32& getSelectedChar();
     void            SetFont( const vcl::Font& rFont );

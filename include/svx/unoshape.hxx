@@ -185,7 +185,6 @@ public:
     void ChangeModel( SdrModel* pNewModel );
 
     void InvalidateSdrObject() { mpObj.reset( NULL ); };
-    const SvxItemPropertySet& GetPropertySet() { return *mpPropSet; }
     SdrObject* GetSdrObject() const {return mpObj.get();}
     void SetShapeType( const OUString& ShapeType ) { maShapeType = ShapeType; }
     ::com::sun::star::uno::Any GetBitmap( bool bMetaFile = false ) const

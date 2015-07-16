@@ -55,7 +55,6 @@ public:
     virtual void    dispose() SAL_OVERRIDE;
 
     void DisableDeleteQueryBox() { mbDisableQueryBox = true; }
-    void EnableBackgroundSelector(bool bNew) { mbEnableBackgroundSelector = bNew; }
 
     //UUUU
     virtual void PageCreated(const SfxAllItemSet&) SAL_OVERRIDE;

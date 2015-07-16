@@ -127,23 +127,12 @@ public:
     operator const css::uno::Reference< css::sdbcx::XColumnsSupplier>& () const   { return m_xColumnsSupplier; }
 
     const css::uno::Reference< css::beans::XPropertySet >&        getPropertySet() const      { return m_xPropertyAccess; }
-    const css::uno::Reference< css::sdbc::XResultSet >&           getResultSet() const        { return m_xMoveOperations; }
-    const css::uno::Reference< css::sdbcx::XRowLocate >&          getRowLocate() const        { return m_xBookmarkOperations; }
-    const css::uno::Reference< css::sdbcx::XColumnsSupplier >&    getColumnsSupplier() const  { return m_xColumnsSupplier; }
-
-    // the usual queryInterface
-    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) throw ( css::uno::RuntimeException )
-    { return m_xMoveOperations->queryInterface(type); }
 
     // css::uno::Reference< css::sdbcx::XRowLocate>
     css::uno::Any getBookmark()
         throw( css::sdbc::SQLException, css::uno::RuntimeException )
     { return m_xBookmarkOperations->getBookmark(); }
     bool moveToBookmark(const css::uno::Any& bookmark) throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->moveToBookmark(bookmark); }
-    bool moveRelativeToBookmark(const css::uno::Any& bookmark, sal_Int32 rows) throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->moveRelativeToBookmark(bookmark, rows); }
-    sal_Int32 compareBookmarks(const css::uno::Any& lhs, const css::uno::Any& rhs) const throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->compareBookmarks(lhs, rhs); }
-    bool hasOrderedBookmarks() const throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->hasOrderedBookmarks(); }
-    sal_Int32 hashBookmark(const css::uno::Any& bookmark) const throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->hashBookmark(bookmark); }
 
     // css::sdbc::XResultSet
     bool isBeforeFirst() const              { return m_xMoveOperations->isBeforeFirst(); }
@@ -159,10 +148,7 @@ public:
     bool previous()                         { return m_xMoveOperations->previous(); }
     bool next()                             { return m_xMoveOperations->next(); }
     void refreshRow()                       { m_xMoveOperations->refreshRow(); }
-    bool rowUpdated()                       { return m_xMoveOperations->rowUpdated(); }
-    bool rowInserted()                      { return m_xMoveOperations->rowInserted(); }
     bool rowDeleted()                       { return m_xMoveOperations->rowDeleted(); }
-    css::uno::Reference< css::uno::XInterface> getStatement()         { return m_xMoveOperations->getStatement(); }
     // css::sdbcx::XColumnsSupplier
     css::uno::Reference< css::container::XNameAccess> getColumns() const throw( css::uno::RuntimeException ) { return m_xColumnsSupplier->getColumns(); }
 private:

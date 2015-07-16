@@ -222,7 +222,6 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false)=0;
         virtual bool IsCustomized(sal_uInt16 nIndex)=0;
         static sal_uInt16 IsSingleLevel(sal_uInt16 nCurLevel);
-        const SfxItemSet* GetItems() { return pSet;}
         // store the attributes passed from pSet
         void SetItems(const SfxItemSet* pArg) { pSet = pArg;StoreBulCharFmtName_impl();StoreMapUnit_impl();}
     protected:

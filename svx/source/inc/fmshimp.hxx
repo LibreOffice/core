@@ -393,7 +393,6 @@ public:
 
     SAL_DLLPRIVATE bool hasForms() const {return m_xForms.is() && m_xForms->getCount() != 0;}
     SAL_DLLPRIVATE bool hasDatabaseBar() const {return m_bDatabaseBar;}
-    SAL_DLLPRIVATE bool canNavigate() const    {return m_xNavigationController.is();}
 
     SAL_DLLPRIVATE void ShowSelectionProperties( bool bShow );
     SAL_DLLPRIVATE bool IsPropBrwOpen() const;
