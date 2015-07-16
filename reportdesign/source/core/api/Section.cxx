@@ -458,7 +458,7 @@ uno::Type SAL_CALL OSection::getElementType(  ) throw (uno::RuntimeException, st
 sal_Bool SAL_CALL OSection::hasElements(  ) throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    return m_xDrawPage.is() ? m_xDrawPage->hasElements() : sal_False;
+    return m_xDrawPage.is() && m_xDrawPage->hasElements();
 }
 
 // XIndexAccess

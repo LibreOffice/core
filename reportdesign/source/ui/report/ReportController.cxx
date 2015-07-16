@@ -2762,7 +2762,7 @@ uno::Any SAL_CALL OReportController::getViewData() throw( uno::RuntimeException,
 
         Any aCommandState;
         if ( !!aFeatureState.bChecked )
-            aCommandState <<= (*aFeatureState.bChecked) ? sal_True : sal_False;
+            aCommandState <<= *aFeatureState.bChecked;
         else if ( aFeatureState.aValue.hasValue() )
             aCommandState = aFeatureState.aValue;
 
