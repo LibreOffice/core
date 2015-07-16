@@ -73,6 +73,8 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
+#include <boost/bind.hpp>
+
 // this is needed to properly destroy the unique_ptr to the AcceleratorExecute
 // object in the DTOR
 #include <svtools/acceleratorexecute.hxx>
@@ -114,8 +116,8 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     m_aDispatchContainer( m_xCC, this ),
     m_eDrawMode( CHARTDRAW_SELECT ),
     mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
-                &ChartController::GetContextName, this,
-                sfx2::sidebar::EnumContext::Context_Cell))
+            ::boost::bind(&ChartController::GetContextName, this),
+                this, sfx2::sidebar::EnumContext::Context_Cell))
 {
     m_aDoubleClickTimer.SetTimeoutHdl( LINK( this, ChartController, DoubleClickWaitingHdl ) );
 }
@@ -296,6 +298,30 @@ bool ChartController::TheModelRef::is() const
 
 OUString ChartController::GetContextName()
 {
+    uno::Any aAny = getSelection();
+    if (!aAny.hasValue())
+        return OUString("Chart");
+
+    OUString aCID;
+    aAny >>= aCID;
+
+    if (aCID.isEmpty())
+        return OUString("Chart");
+
+    ObjectType eObjectID = ObjectIdentifier::getObjectType(aCID);
+    switch (eObjectID)
+    {
+        case OBJECTTYPE_DATA_SERIES:
+            return OUString("Series");
+        break;
+        case OBJECTTYPE_DATA_ERRORS_X:
+        case OBJECTTYPE_DATA_ERRORS_Y:
+        case OBJECTTYPE_DATA_ERRORS_Z:
+            return OUString("ErrorBar");
+        default:
+        break;
+    }
+
     return OUString("Chart");
 }
 
