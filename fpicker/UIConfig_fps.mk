@@ -12,6 +12,7 @@ $(eval $(call gb_UIConfig_UIConfig,fps))
 $(eval $(call gb_UIConfig_add_uifiles,fps,\
 	fpicker/uiconfig/ui/explorerfiledialog \
 	fpicker/uiconfig/ui/foldernamedialog \
+	fpicker/uiconfig/ui/remotefilesdialog \
 ))
 
 # vim: set noet sw=4 ts=4:
