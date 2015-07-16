@@ -83,7 +83,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
             case XML_TOK_SUPPRESS_VERSION_COLUMNS:
                 try
                 {
-                    xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(sValue == s_sTRUE ? sal_True : sal_False));
+                    xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(sValue == s_sTRUE));
                     bFoundSuppressVersionColumns = true;
                 }
                 catch(const Exception&)
@@ -99,15 +99,15 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 break;
             case XML_TOK_IS_FIRST_ROW_HEADER_LINE:
                 aProperty.Name = INFO_TEXTFILEHEADER;
-                aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                aProperty.Value <<= (sValue == s_sTRUE);
                 break;
             case XML_TOK_SHOW_DELETED:
                 aProperty.Name = INFO_SHOWDELETEDROWS;
-                aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                aProperty.Value <<= (sValue == s_sTRUE);
                 break;
             case XML_TOK_IS_TABLE_NAME_LENGTH_LIMITED:
                 aProperty.Name = INFO_ALLOWLONGTABLENAMES;
-                aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                aProperty.Value <<= (sValue == s_sTRUE);
                 bFoundTableNameLengthLimited = true;
                 break;
             case XML_TOK_SYSTEM_DRIVER_SETTINGS:
@@ -115,21 +115,21 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 break;
             case XML_TOK_ENABLE_SQL92_CHECK:
                 aProperty.Name = PROPERTY_ENABLESQL92CHECK;
-                aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                aProperty.Value <<= (sValue == s_sTRUE);
                 break;
             case XML_TOK_APPEND_TABLE_ALIAS_NAME:
                 aProperty.Name = INFO_APPEND_TABLE_ALIAS;
-                aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                aProperty.Value <<= (sValue == s_sTRUE);
                 bFoundAppendTableAliasName = true;
                 break;
             case XML_TOK_PARAMETER_NAME_SUBSTITUTION:
                 aProperty.Name = INFO_PARAMETERNAMESUBST;
-                aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                aProperty.Value <<= (sValue == s_sTRUE);
                 bFoundParamNameSubstitution = true;
                 break;
             case XML_TOK_IGNORE_DRIVER_PRIVILEGES:
                 aProperty.Name = INFO_IGNOREDRIVER_PRIV;
-                aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                aProperty.Value <<= (sValue == s_sTRUE);
                 break;
             case XML_TOK_BOOLEAN_COMPARISON_MODE:
                 aProperty.Name = PROPERTY_BOOLEANCOMPARISONMODE;
@@ -144,7 +144,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 break;
             case XML_TOK_USE_CATALOG:
                 aProperty.Name = INFO_USECATALOG;
-                aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                aProperty.Value <<= (sValue == s_sTRUE);
                 break;
             case XML_TOK_BASE_DN:
                 aProperty.Name = INFO_CONN_LDAP_BASEDN;

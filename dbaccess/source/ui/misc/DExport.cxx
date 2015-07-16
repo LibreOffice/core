@@ -143,7 +143,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap,
                                  SvStream& _rInputStream)
-    :m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers() == sal_True)
+    :m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xContext(_rxContext)

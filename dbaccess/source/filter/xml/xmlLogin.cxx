@@ -78,7 +78,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                 case XML_TOK_IS_PASSWORD_REQUIRED:
                     try
                     {
-                        xDataSource->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED,makeAny((sValue == s_sTRUE ? sal_True : sal_False)));
+                        xDataSource->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED,makeAny(sValue == s_sTRUE));
                     }
                     catch(const Exception&)
                     {
@@ -91,7 +91,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                         bUserFound = true;
                         PropertyValue aProperty;
                         aProperty.Name = "UseSystemUser";
-                        aProperty.Value <<= (sValue == s_sTRUE ? sal_True : sal_False);
+                        aProperty.Value <<= (sValue == s_sTRUE);
                         rImport.addInfo(aProperty);
                     }
                     break;
