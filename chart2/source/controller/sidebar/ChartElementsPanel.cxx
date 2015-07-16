@@ -83,7 +83,7 @@ public:
         throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
 
 private:
-    ChartElementsPanel* mpParent;
+    VclPtr<ChartElementsPanel> mpParent;
 };
 
 ChartSidebarModifyListener::ChartSidebarModifyListener(ChartElementsPanel* pParent):
