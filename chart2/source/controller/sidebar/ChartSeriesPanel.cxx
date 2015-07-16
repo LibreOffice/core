@@ -22,6 +22,7 @@
 #include <sfx2/sidebar/ControlFactory.hxx>
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #include "ChartSeriesPanel.hxx"
 #include "ChartController.hxx"
@@ -39,6 +40,7 @@
 #include "ChartModel.hxx"
 #include "DataSeriesHelper.hxx"
 #include "RegressionCurveHelper.hxx"
+#include "StatisticsHelper.hxx"
 
 using namespace css;
 using namespace css::uno;
@@ -107,6 +109,39 @@ void setTrendlineVisible(css::uno::Reference<css::frame::XModel>
         RegressionCurveHelper::removeAllExceptMeanValueLine(
                 xRegressionCurveContainer );
 
+}
+
+bool isErrorBarVisible(css::uno::Reference<css::frame::XModel>
+        xModel, const OUString& rCID, bool bYError)
+{
+    css::uno::Reference< css::chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xSeries.is())
+        return false;
+
+    return StatisticsHelper::hasErrorBars(xSeries, bYError);
+}
+
+void setErrorBarVisible(css::uno::Reference<css::frame::XModel>
+        xModel, const OUString& rCID, bool bYError, bool bVisible)
+{
+    css::uno::Reference< css::chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xSeries.is())
+        return;
+
+    if (bVisible)
+    {
+                StatisticsHelper::addErrorBars( xSeries, comphelper::getProcessComponentContext(),
+                    css::chart::ErrorBarStyle::STANDARD_DEVIATION,
+                    bYError);
+    }
+    else
+    {
+        StatisticsHelper::removeErrorBars( xSeries, bYError );
+    }
 }
 
 }
@@ -181,6 +216,8 @@ void ChartSeriesPanel::updateData()
     SolarMutexGuard aGuard;
     mpCBLabel->Check(isDataLabelVisible(mxModel, aCID));
     mpCBTrendline->Check(isTrendlineVisible(mxModel, aCID));
+    mpCBXError->Check(isErrorBarVisible(mxModel, aCID, false));
+    mpCBYError->Check(isErrorBarVisible(mxModel, aCID, true));
 }
 
 VclPtr<vcl::Window> ChartSeriesPanel::Create (
@@ -245,6 +282,10 @@ IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, CheckBox*, pCheckBox)
         setDataLabelVisible(mxModel, aCID, bChecked);
     else if (pCheckBox == mpCBTrendline.get())
         setTrendlineVisible(mxModel, aCID, bChecked);
+    else if (pCheckBox == mpCBXError.get())
+        setErrorBarVisible(mxModel, aCID, false, bChecked);
+    else if (pCheckBox == mpCBYError.get())
+        setErrorBarVisible(mxModel, aCID, true, bChecked);
 
     return 0;
 }
