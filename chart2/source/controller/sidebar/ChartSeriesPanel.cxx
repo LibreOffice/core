@@ -24,6 +24,7 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 #include "ChartSeriesPanel.hxx"
 #include "ChartController.hxx"
@@ -74,6 +75,68 @@ void setDataLabelVisible(css::uno::Reference<css::frame::XModel> xModel, const O
         DataSeriesHelper::insertDataLabelsToSeriesAndAllPoints(xSeries);
     else
         DataSeriesHelper::deleteDataLabelsFromSeriesAndAllPoints(xSeries);
+}
+
+struct LabelPlacementMap
+{
+    sal_Int32 nPos;
+    sal_Int32 nApi;
+};
+
+LabelPlacementMap aLabelPlacementMap[] = {
+    { 0, css::chart::DataLabelPlacement::TOP },
+    { 1, css::chart::DataLabelPlacement::BOTTOM },
+    { 2, css::chart::DataLabelPlacement::CENTER },
+    { 3, css::chart::DataLabelPlacement::OUTSIDE },
+    { 4, css::chart::DataLabelPlacement::INSIDE  },
+    { 5, css::chart::DataLabelPlacement::NEAR_ORIGIN }
+};
+
+sal_Int32 getDataLabelPlacement(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rCID)
+{
+    css::uno::Reference< css::beans::XPropertySet > xSeries(
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xSeries.is())
+        return false;
+
+    css::uno::Any aAny = xSeries->getPropertyValue("LabelPlacement");
+    if (!aAny.hasValue())
+        return 0;
+
+    sal_Int32 nPlacement = 0;
+    aAny >>= nPlacement;
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aLabelPlacementMap); ++i)
+    {
+        if (aLabelPlacementMap[i].nApi == nPlacement)
+            return aLabelPlacementMap[i].nPos;
+    }
+
+    return 0;
+}
+
+void setDataLabelPlacement(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rCID, sal_Int32 nPos)
+{
+    css::uno::Reference< css::beans::XPropertySet > xSeries(
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xSeries.is())
+        return;
+
+    sal_Int32 nApi = 0;
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aLabelPlacementMap); ++i)
+    {
+        if (aLabelPlacementMap[i].nPos == nPos)
+        {
+            nApi = aLabelPlacementMap[i].nApi;
+            break;
+        }
+    }
+
+    xSeries->setPropertyValue("LabelPlacement", css::uno::makeAny(nApi));
 }
 
 bool isTrendlineVisible(css::uno::Reference<css::frame::XModel> xModel,
@@ -192,6 +255,8 @@ ChartSeriesPanel::ChartSeriesPanel(
     get(mpRBPrimaryAxis, "radiobutton_primary_axis");
     get(mpRBSecondaryAxis, "radiobutton_secondary_axis");
 
+    get(mpLBLabelPlacement, "comboboxtext_label");
+
     Initialize();
 }
 
@@ -213,6 +278,8 @@ void ChartSeriesPanel::dispose()
     mpRBPrimaryAxis.clear();
     mpRBSecondaryAxis.clear();
 
+    mpLBLabelPlacement.clear();
+
     PanelLayout::dispose();
 }
 
@@ -232,6 +299,8 @@ void ChartSeriesPanel::Initialize()
     aLink = LINK(this, ChartSeriesPanel, RadioBtnHdl);
     mpRBPrimaryAxis->SetToggleHdl(aLink);
     mpRBSecondaryAxis->SetToggleHdl(aLink);
+
+    mpLBLabelPlacement->SetSelectHdl(LINK(this, ChartSeriesPanel, ListBoxHdl));
 }
 
 void ChartSeriesPanel::updateData()
@@ -250,7 +319,8 @@ void ChartSeriesPanel::updateData()
     assert(eType == OBJECTTYPE_DATA_SERIES);
 #endif
     SolarMutexGuard aGuard;
-    mpCBLabel->Check(isDataLabelVisible(mxModel, aCID));
+    bool bLabelVisible = isDataLabelVisible(mxModel, aCID);
+    mpCBLabel->Check(bLabelVisible);
     mpCBTrendline->Check(isTrendlineVisible(mxModel, aCID));
     mpCBXError->Check(isErrorBarVisible(mxModel, aCID, false));
     mpCBYError->Check(isErrorBarVisible(mxModel, aCID, true));
@@ -258,6 +328,9 @@ void ChartSeriesPanel::updateData()
     bool bPrimaryAxis = isPrimaryAxis(mxModel, aCID);
     mpRBPrimaryAxis->Check(bPrimaryAxis);
     mpRBSecondaryAxis->Check(!bPrimaryAxis);
+
+    mpLBLabelPlacement->Enable(bLabelVisible);
+    mpLBLabelPlacement->SelectEntryPos(getDataLabelPlacement(mxModel, aCID));
 }
 
 VclPtr<vcl::Window> ChartSeriesPanel::Create (
@@ -349,6 +422,28 @@ IMPL_LINK_NOARG(ChartSeriesPanel, RadioBtnHdl)
     bool bChecked = mpRBPrimaryAxis->IsChecked();
 
     setAttachedAxisType(mxModel, aCID, bChecked);
+
+    return 0;
+}
+
+IMPL_LINK_NOARG(ChartSeriesPanel, ListBoxHdl)
+{
+    css::uno::Reference<css::frame::XController> xController(mxModel->getCurrentController());
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    if (!xSelectionSupplier.is())
+        return 0;
+
+    uno::Any aAny = xSelectionSupplier->getSelection();
+    assert(aAny.hasValue());
+    OUString aCID;
+    aAny >>= aCID;
+#ifdef DBG_UTIL
+    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+    assert(eType == OBJECTTYPE_DATA_SERIES);
+#endif
+
+    sal_Int32 nPos = mpLBLabelPlacement->GetSelectEntryPos();
+    setDataLabelPlacement(mxModel, aCID, nPos);
 
     return 0;
 }

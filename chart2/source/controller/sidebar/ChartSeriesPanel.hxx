@@ -83,6 +83,8 @@ private:
     VclPtr<RadioButton> mpRBPrimaryAxis;
     VclPtr<RadioButton> mpRBSecondaryAxis;
 
+    VclPtr<ListBox> mpLBLabelPlacement;
+
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
@@ -94,6 +96,7 @@ private:
 
     DECL_LINK(CheckBoxHdl, CheckBox*);
     DECL_LINK(RadioBtnHdl, void*);
+    DECL_LINK(ListBoxHdl, void*);
 };
 
 } } // end of namespace ::chart::sidebar
