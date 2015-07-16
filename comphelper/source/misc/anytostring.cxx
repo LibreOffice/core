@@ -251,7 +251,7 @@ void appendValue( OUStringBuffer & buf,
         break;
     }
     case typelib_TypeClass_BOOLEAN:
-        if (*static_cast< sal_Bool const * >(val) != sal_False)
+        if (*static_cast< sal_Bool const * >(val))
             buf.append( "true" );
         else
             buf.append( "false" );
