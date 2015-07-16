@@ -23,7 +23,7 @@ Breadcrumb::~Breadcrumb()
 
 void Breadcrumb::dispose()
 {
-    for( unsigned int i = 0; i < m_aLinks.size(); i++ )
+    for( std::vector<VclPtr<FixedHyperlink>>::size_type i = 0; i < m_aLinks.size(); i++ )
     {
         m_aSeparators[i].disposeAndClear();
         m_aLinks[i].disposeAndClear();
@@ -93,7 +93,7 @@ void Breadcrumb::SetURL( const OUString& rURL )
 
     // clear unused fields
 
-    for( unsigned int i = nSegments + 1; i < m_aLinks.size(); i++ )
+    for( std::vector<VclPtr<FixedHyperlink>>::size_type i = nSegments + 1; i < m_aLinks.size(); i++ )
     {
         if( bClear )
             m_aLinks[i]->SetText( "" );
