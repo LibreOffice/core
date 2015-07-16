@@ -69,7 +69,7 @@ static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, 
 
 
 // SecurityCount is the buffersize of the buffer in which we will parse for a number
-static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
+static long ImplGetNumber( sal_uInt8 **pBuf, sal_uInt32& nSecurityCount )
 {
     bool    bValid = true;
     bool    bNegative = false;
@@ -502,7 +502,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     if ( pDest )
     {
         pDest += 16;
-        int nCount = 4;
+        sal_uInt32 nCount = 4;
         long nNumber = ImplGetNumber( &pDest, nCount );
         if ( nCount && ( (sal_uInt32)nNumber < 10 ) )
         {
@@ -595,14 +595,16 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
         rStream.Seek( nPSStreamPos );
         sal_uInt8* pBuf = new sal_uInt8[ nPSSize ];
 
-        sal_uInt32  nBufStartPos = rStream.Tell();
-        sal_uInt32  nBytesRead = rStream.Read( pBuf, nPSSize );
+        sal_uInt32 nBufStartPos = rStream.Tell();
+        sal_uInt32 nBytesRead = rStream.Read( pBuf, nPSSize );
         if ( nBytesRead == nPSSize )
         {
-            int nSecurityCount = 32;
-            if ( !bHasPreview )     // if there is no tiff/wmf preview, we will parse for an preview in the eps prolog
+            sal_uInt32 nSecurityCount = 32;
+            // if there is no tiff/wmf preview, we will parse for an preview in
+            // the eps prolog
+            if (!bHasPreview && nBytesRead >= nSecurityCount)
             {
-                sal_uInt8* pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%BeginPreview:"), nBytesRead - 32, 15 );
+                sal_uInt8* pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%BeginPreview:"), nBytesRead - nSecurityCount, 15 );
                 if ( pDest  )
                 {
                     pDest += 15;
