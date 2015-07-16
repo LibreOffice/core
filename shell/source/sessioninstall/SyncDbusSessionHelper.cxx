@@ -177,7 +177,7 @@ void SyncDbusSessionHelper::InstallPrinterDrivers(
                          NULL, /* cancellable */
                          &error.getRef()),GVariantDeleter());
         if(result.get())
-            o_isInstalled = g_variant_get_boolean(g_variant_get_child_value(result.get(),0)) ? sal_True : sal_False;
+            o_isInstalled = bool(g_variant_get_boolean(g_variant_get_child_value(result.get(),0)));
     }
 }}
 
