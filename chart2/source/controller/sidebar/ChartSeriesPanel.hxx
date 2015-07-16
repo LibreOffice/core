@@ -23,6 +23,8 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
+#include "ChartSidebarModifyListener.hxx"
+
 #include <com/sun/star/util/XModifyListener.hpp>
 
 class FixedText;
@@ -37,7 +39,8 @@ namespace sidebar {
 
 class ChartSeriesPanel : public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
-    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
+    public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface,
+    public ChartSidebarModifyListenerParent
 {
 public:
     static VclPtr<vcl::Window> Create(
@@ -67,8 +70,8 @@ public:
     virtual ~ChartSeriesPanel();
     virtual void dispose() SAL_OVERRIDE;
 
-    void updateData();
-    void modelInvalid();
+    virtual void updateData() SAL_OVERRIDE;
+    virtual void modelInvalid() SAL_OVERRIDE;
 
 private:
     //ui controls

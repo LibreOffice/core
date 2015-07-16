@@ -120,7 +120,8 @@ ChartSeriesPanel::ChartSeriesPanel(
     mxFrame(rxFrame),
     maContext(),
     mpBindings(pBindings),
-    mxModel(pController->getModel())
+    mxModel(pController->getModel()),
+    mxListener(new ChartSidebarModifyListener(this))
 {
     get(mpCBLabel, "checkbutton_label");
     get(mpCBTrendline, "checkbutton_trendline");
@@ -137,12 +138,17 @@ ChartSeriesPanel::~ChartSeriesPanel()
 
 void ChartSeriesPanel::dispose()
 {
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcaster->removeModifyListener(mxListener);
 
     PanelLayout::dispose();
 }
 
 void ChartSeriesPanel::Initialize()
 {
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcaster->addModifyListener(mxListener);
+
     updateData();
 
     Link<> aLink = LINK(this, ChartSeriesPanel, CheckBoxHdl);
