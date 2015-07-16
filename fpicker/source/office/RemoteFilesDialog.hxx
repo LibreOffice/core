@@ -140,7 +140,7 @@ private:
     /* If failure returns < 0 */
     int GetSelectedServicePos();
 
-    FileViewResult OpenURL( OUString sURL );
+    FileViewResult OpenURL( OUString const & sURL );
 
     void AddFileExtension();
 

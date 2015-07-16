@@ -395,7 +395,7 @@ OUString RemoteFilesDialog::GetPath() const
     return m_sPath;
 }
 
-FileViewResult RemoteFilesDialog::OpenURL( OUString sURL )
+FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 {
     FileViewResult eResult = eFailure;
 
