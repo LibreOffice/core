@@ -127,7 +127,7 @@ public:
         const OUString& aName )
         throw( css::uno::RuntimeException ) SAL_OVERRIDE
     {
-        return hasItem( aName ) ? sal_True : sal_False;
+        return hasItem( aName );
     }
 };
 

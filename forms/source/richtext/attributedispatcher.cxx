@@ -68,7 +68,7 @@ namespace frm
     FeatureStateEvent OAttributeDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent( ORichTextFeatureDispatcher::buildStatusEvent() );
-        aEvent.IsEnabled = getEditView() ? !getEditView()->IsReadOnly() : sal_False;
+        aEvent.IsEnabled = getEditView() && !getEditView()->IsReadOnly();
 
         AttributeState aState;
         if ( m_pMasterDispatcher )

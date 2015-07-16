@@ -321,12 +321,12 @@ void SAL_CALL OControl::setDesignMode(sal_Bool bOn) throw ( RuntimeException, st
 
 sal_Bool SAL_CALL OControl::isDesignMode() throw ( RuntimeException, std::exception)
 {
-    return m_xControl.is() ? m_xControl->isDesignMode() : sal_True;
+    return !m_xControl.is() || m_xControl->isDesignMode();
 }
 
 sal_Bool SAL_CALL OControl::isTransparent() throw ( RuntimeException, std::exception)
 {
-    return m_xControl.is() ? m_xControl->isTransparent() : sal_True;
+    return !m_xControl.is() || m_xControl->isTransparent();
 }
 
 OBoundControl::OBoundControl( const Reference< XComponentContext >& _rxContext,
