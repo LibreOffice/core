@@ -980,7 +980,7 @@ OUString SmTextForwarder::GetText( const ESelection& rSel ) const
 SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    OSL_ENSURE( pEditEngine, "EditEngine missing" );
+    assert(pEditEngine && "EditEngine missing");
     if( rSel.nStartPara == rSel.nEndPara )
     {
         GetAttribsFlags nFlags = GetAttribsFlags::NONE;
@@ -1010,7 +1010,7 @@ SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, EditEngineAttrib
 SfxItemSet SmTextForwarder::GetParaAttribs( sal_Int32 nPara ) const
 {
     EditEngine *pEditEngine = rEditAcc.GetEditEngine();
-    OSL_ENSURE( pEditEngine, "EditEngine missing" );
+    assert(pEditEngine && "EditEngine missing");
 
     SfxItemSet aSet( pEditEngine->GetParaAttribs( nPara ) );
 
