@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_3e2ce649",
+        "filename": "external/boost/UnpackedTarball_boost.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-16T06:40:47Z",
+      "side": 1,
+      "message": "It claimed that this was fixed upstream. In fact there is new line in the affected file:\n\n  BOOST_PP_CAT(boost_concept_check,__LINE__) \\\n  BOOST_CONCEPT_UNUSED_TYPEDEF\n\nHowever the same patch is still needed. For exampe to get sal module compiled. What am I missing, or is this\n\n  # fixed upstream\n\ncomment not appropriate (or not sufficient) on this line?",
+      "revId": "1ae3019a272adf5774f987b769de2e7ee661e5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_5e31a2a1",
+        "filename": "external/boost/boost.concept_check.Wunused-local-typedefs.warnings.patch",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-07-16T06:40:47Z",
+      "side": 1,
+      "message": "Even though this line presents now, the hack on line 10 still seems to be needed.",
+      "range": {
+        "startLine": 11,
+        "startChar": 7,
+        "endLine": 11,
+        "endChar": 35
+      },
+      "revId": "1ae3019a272adf5774f987b769de2e7ee661e5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
