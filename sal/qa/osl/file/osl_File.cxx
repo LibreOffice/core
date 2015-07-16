@@ -2588,7 +2588,7 @@ namespace osl_File
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for isEndOfFile function: set the position to end, check if reach end",
-                                     sal_True == *pEOF );
+                                     *pEOF );
         }
 
         void isEndOfFile_002()
