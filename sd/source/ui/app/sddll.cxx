@@ -161,7 +161,6 @@ void SdDLL::RegisterControllers()
     SfxModule* pMod = SD_MOD();
 
     // ToolBoxControls registrieren
-    SdTbxControl::RegisterControl( SID_OBJECT_ALIGN, pMod );
     SdTbxControl::RegisterControl( SID_ZOOM_TOOLBOX, pMod );
     SdTbxControl::RegisterControl( SID_OBJECT_CHOOSE_MODE, pMod );
     SdTbxControl::RegisterControl( SID_POSITION, pMod );

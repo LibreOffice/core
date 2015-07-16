@@ -42,7 +42,6 @@
 #include <svx/layctrl.hxx>
 #include <svx/fontwork.hxx>
 #include <SwSpellDialogChildWindow.hxx>
-#include <svx/tbxalign.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/tbxcolor.hxx>
 #include <svx/clipboardctl.hxx>
@@ -286,7 +285,6 @@ void SwDLL::RegisterControls()
 
     SfxRecentFilesToolBoxControl::RegisterControl( FN_OPEN_FILE, pMod );
     SvxTbxCtlDraw::RegisterControl(SID_INSERT_DRAW, pMod );
-    SvxTbxCtlAlign::RegisterControl(SID_OBJECT_ALIGN, pMod );
     SwTbxAnchor::RegisterControl(FN_TOOL_ANCHOR, pMod );
     SwTbxFieldCtrl::RegisterControl(FN_INSERT_FIELD_CTRL, pMod );
     SwTbxAutoTextCtrl::RegisterControl(FN_GLOSSARY_DLG, pMod );

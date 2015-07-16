@@ -810,7 +810,6 @@
 #include <svx/sxcecitm.hxx>
 #include <svx/sxciaitm.hxx>
 #include <svx/tbcontrl.hxx>
-#include <svx/tbxalign.hxx>
 #include <svx/tbxcolor.hxx>
 #include <svx/tbxctl.hxx>
 #include <svx/txenctab.hxx>

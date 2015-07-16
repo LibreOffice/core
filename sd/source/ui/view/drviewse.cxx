@@ -728,7 +728,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         // execute slots of ToolboxController mapped
         case SID_OBJECT_CHOOSE_MODE:
         case SID_POSITION:
-        case SID_OBJECT_ALIGN:
         case SID_ZOOM_TOOLBOX:
         case SID_DRAWTBX_TEXT:
         case SID_DRAWTBX_RECTANGLES:

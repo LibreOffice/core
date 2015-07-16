@@ -66,7 +66,6 @@
 
 // Controls
 
-#include <svx/tbxalign.hxx>
 #include <svx/tbxctl.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/linectrl.hxx>
@@ -157,7 +156,6 @@ void ScDLL::Init()
 
     // SvxToolboxController
     SvxTbxCtlDraw                   ::RegisterControl(SID_INSERT_DRAW,          pMod);
-    SvxTbxCtlAlign                  ::RegisterControl(SID_OBJECT_ALIGN,         pMod);
     SvxFillToolBoxControl           ::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl      ::RegisterControl(0, pMod);
     SvxLineWidthToolBoxControl      ::RegisterControl(0, pMod);

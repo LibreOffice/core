@@ -1265,9 +1265,8 @@ interface DrawView
         StateMethod = GetMenuState ;
     ]
 
-    TbxImageItem ObjectAlign SID_OBJECT_ALIGN // ole : no, status : ?
+    SfxVoidItem ObjectAlign SID_OBJECT_ALIGN // ole : no, status : ?
     [
-        ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
         GroupId = GID_DOCUMENT ;
         Cachable , Export ;

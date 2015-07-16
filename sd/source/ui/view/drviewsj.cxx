@@ -227,6 +227,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
             if(pObj->ISA(E3dCompoundObject))
             {
+                rSet.DisableItem( SID_OBJECT_ALIGN );
                 rSet.DisableItem( SID_OBJECT_ALIGN_LEFT );
                 rSet.DisableItem( SID_OBJECT_ALIGN_CENTER );
                 rSet.DisableItem( SID_OBJECT_ALIGN_RIGHT );
@@ -414,6 +415,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
             if(bE3dCompoundObject)
             {
+                rSet.DisableItem( SID_OBJECT_ALIGN );
                 rSet.DisableItem( SID_OBJECT_ALIGN_LEFT );
                 rSet.DisableItem( SID_OBJECT_ALIGN_CENTER );
                 rSet.DisableItem( SID_OBJECT_ALIGN_RIGHT );
@@ -471,6 +473,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         rSet.DisableItem( SID_DELETE );
         rSet.DisableItem( SID_ATTR_TRANSFORM );
 
+        rSet.DisableItem( SID_OBJECT_ALIGN );
         rSet.DisableItem( SID_OBJECT_ALIGN_LEFT );
         rSet.DisableItem( SID_OBJECT_ALIGN_CENTER );
         rSet.DisableItem( SID_OBJECT_ALIGN_RIGHT );

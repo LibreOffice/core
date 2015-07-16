@@ -73,17 +73,6 @@ sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
         }
         break;
 
-        case SID_OBJECT_ALIGN_LEFT:
-        case SID_OBJECT_ALIGN_CENTER:
-        case SID_OBJECT_ALIGN_RIGHT:
-        case SID_OBJECT_ALIGN_UP:
-        case SID_OBJECT_ALIGN_MIDDLE:
-        case SID_OBJECT_ALIGN_DOWN:
-        {
-            nMappedSId = SID_OBJECT_ALIGN;
-        }
-        break;
-
         case SID_FRAME_TO_TOP:
         case SID_MOREFRONT:
         case SID_MOREBACK:
@@ -277,9 +266,6 @@ void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, bool bPermanent )
 
         nId = GetArrayId( SID_POSITION ) + 1;
         rSet.Put( TbxImageItem( SID_POSITION, mpSlotArray[nId] ) );
-
-        nId = GetArrayId( SID_OBJECT_ALIGN ) + 1;
-        rSet.Put( TbxImageItem( SID_OBJECT_ALIGN, mpSlotArray[nId] ) );
     }
     else
     {

@@ -292,8 +292,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         if( nSId != SID_ZOOM_TOOLBOX &&
             nSId != SID_DRAWTBX_INSERT &&
-            nSId != SID_POSITION &&
-            nSId != SID_OBJECT_ALIGN )
+            nSId != SID_POSITION )
         {
             if( nId != SID_OBJECT_CHOOSE_MODE )
                 rSet.Put( TbxImageItem( SID_OBJECT_CHOOSE_MODE, 0 ) );
@@ -1365,7 +1364,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         if( xSlideshow.is() && xSlideshow->isRunning() )
         {
-            rSet.ClearItem(SID_OBJECT_ALIGN);
             rSet.ClearItem(SID_ZOOM_TOOLBOX);
             rSet.ClearItem(SID_OBJECT_CHOOSE_MODE);
             rSet.ClearItem(SID_DRAWTBX_TEXT);
@@ -1379,7 +1377,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.ClearItem(SID_DRAWTBX_INSERT);
             rSet.ClearItem(SID_INSERTFILE);
             rSet.ClearItem(SID_OBJECT_ROTATE);
-            rSet.ClearItem(SID_OBJECT_ALIGN);
             rSet.ClearItem(SID_POSITION);
             rSet.ClearItem(SID_FM_CONFIG);
             rSet.ClearItem(SID_ANIMATION_EFFECTS);
@@ -1400,7 +1397,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem(SID_DRAWTBX_INSERT);
             rSet.DisableItem(SID_INSERTFILE);
             rSet.DisableItem(SID_OBJECT_ROTATE);
-            rSet.DisableItem(SID_OBJECT_ALIGN);
             rSet.DisableItem(SID_POSITION);
             rSet.DisableItem(SID_FM_CONFIG);
             rSet.DisableItem(SID_ANIMATION_EFFECTS);

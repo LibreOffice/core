@@ -62,10 +62,6 @@ VclPtr<SfxPopupWindow> SdTbxControl::CreatePopupWindow()
     OUStringBuffer aTbxResName( "private:resource/toolbar/" );
     switch( GetSlotId() )
     {
-        case SID_OBJECT_ALIGN:
-            aTbxResName.appendAscii( "alignmentbar" );
-            aToolBarResStr = aTbxResName.makeStringAndClear();
-        break;
         case SID_ZOOM_TOOLBOX:
             aTbxResName.appendAscii( "zoombar" );
             aToolBarResStr = aTbxResName.makeStringAndClear();
@@ -156,8 +152,7 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
 
                     if( nSId != SID_ZOOM_TOOLBOX &&
                         nSId != SID_DRAWTBX_INSERT &&
-                        nSId != SID_POSITION &&
-                        nSId != SID_OBJECT_ALIGN )
+                        nSId != SID_POSITION )
                     {
                         if( nSId != SID_OBJECT_CHOOSE_MODE &&
                             rTbx.IsItemChecked( SID_OBJECT_CHOOSE_MODE ) )
