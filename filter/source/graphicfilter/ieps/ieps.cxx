@@ -52,7 +52,7 @@ class FilterConfigItem;
 |*
 *************************************************************************/
 
-static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
+static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize )
 {
     while ( nComp-- >= nSize )
     {
@@ -71,7 +71,7 @@ static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLo
 
 
 // SecurityCount is the buffersize of the buffer in which we will parse for a number
-static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
+static long ImplGetNumber( sal_uInt8 **pBuf, sal_uInt32& nSecurityCount )
 {
     bool    bValid = true;
     bool    bNegative = false;
@@ -504,7 +504,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     if ( pDest )
     {
         pDest += 16;
-        int nCount = 4;
+        sal_uInt32 nCount = 4;
         long nNumber = ImplGetNumber( &pDest, nCount );
         if ( nCount && ( (sal_uInt32)nNumber < 10 ) )
         {
@@ -595,162 +595,163 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     {
         rStream.Seek( nPSStreamPos );
         sal_uInt8* pBuf = new sal_uInt8[ nPSSize ];
-        if ( pBuf )
-        {
-            sal_uInt32  nBufStartPos = rStream.Tell();
-            sal_uInt32  nBytesRead = rStream.Read( pBuf, nPSSize );
-            if ( nBytesRead == nPSSize )
-            {
-                int nSecurityCount = 32;
-                if ( !bHasPreview )     // if there is no tiff/wmf preview, we will parse for an preview in the eps prolog
-                {
-                    sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%BeginPreview:", nBytesRead - 32, 15 );
-                    if ( pDest  )
-                    {
-                        pDest += 15;
-                        long nWidth = ImplGetNumber( &pDest, nSecurityCount );
-                        long nHeight = ImplGetNumber( &pDest, nSecurityCount );
-                        long nBitDepth = ImplGetNumber( &pDest, nSecurityCount );
-                        long nScanLines = ImplGetNumber( &pDest, nSecurityCount );
-                        pDest = ImplSearchEntry( pDest, (sal_uInt8*)"%", 16, 1 );       // go to the first Scanline
-                        if ( nSecurityCount && pDest && nWidth && nHeight && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines )
-                        {
-                            rStream.Seek( nBufStartPos + ( pDest - pBuf ) );
 
-                            Bitmap aBitmap( Size( nWidth, nHeight ), 1 );
-                            BitmapWriteAccess* pAcc = aBitmap.AcquireWriteAccess();
-                            if ( pAcc )
+        sal_uInt32 nBufStartPos = rStream.Tell();
+        sal_uInt32 nBytesRead = rStream.Read( pBuf, nPSSize );
+        if ( nBytesRead == nPSSize )
+        {
+            sal_uInt32 nSecurityCount = 32;
+            // if there is no tiff/wmf preview, we will parse for an preview in
+            // the eps prolog
+            if (!bHasPreview && nBytesRead >= nSecurityCount)
+            {
+                sal_uInt8* pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%BeginPreview:"), nBytesRead - nSecurityCount, 15 );
+                if ( pDest  )
+                {
+                    pDest += 15;
+                    long nWidth = ImplGetNumber( &pDest, nSecurityCount );
+                    long nHeight = ImplGetNumber( &pDest, nSecurityCount );
+                    long nBitDepth = ImplGetNumber( &pDest, nSecurityCount );
+                    long nScanLines = ImplGetNumber( &pDest, nSecurityCount );
+                    pDest = ImplSearchEntry( pDest, (sal_uInt8*)"%", 16, 1 );       // go to the first Scanline
+                    if ( nSecurityCount && pDest && nWidth && nHeight && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines )
+                    {
+                        rStream.Seek( nBufStartPos + ( pDest - pBuf ) );
+
+                        Bitmap aBitmap( Size( nWidth, nHeight ), 1 );
+                        BitmapWriteAccess* pAcc = aBitmap.AcquireWriteAccess();
+                        if ( pAcc )
+                        {
+                            int  nBitsLeft;
+                            bool bIsValid = true;
+                            sal_uInt8 nDat = 0;
+                            char nByte;
+                            for ( long y = 0; bIsValid && ( y < nHeight ); y++ )
                             {
-                                int  nBitsLeft;
-                                bool bIsValid = true;
-                                sal_uInt8 nDat = 0;
-                                char nByte;
-                                for ( long y = 0; bIsValid && ( y < nHeight ); y++ )
+                                nBitsLeft = 0;
+                                for ( long x = 0; x < nWidth; x++ )
                                 {
-                                    nBitsLeft = 0;
-                                    for ( long x = 0; x < nWidth; x++ )
+                                    if ( --nBitsLeft < 0 )
                                     {
-                                        if ( --nBitsLeft < 0 )
+                                        while ( bIsValid && ( nBitsLeft != 7 ) )
                                         {
-                                            while ( bIsValid && ( nBitsLeft != 7 ) )
+                                            rStream.ReadChar( nByte );
+                                            switch ( nByte )
                                             {
-                                                rStream.ReadChar( nByte );
-                                                switch ( nByte )
+                                                case 0x0a :
+                                                    if ( --nScanLines < 0 )
+                                                        bIsValid = false;
+                                                case 0x09 :
+                                                case 0x0d :
+                                                case 0x20 :
+                                                case 0x25 :
+                                                break;
+                                                default:
                                                 {
-                                                    case 0x0a :
-                                                        if ( --nScanLines < 0 )
-                                                            bIsValid = false;
-                                                    case 0x09 :
-                                                    case 0x0d :
-                                                    case 0x20 :
-                                                    case 0x25 :
-                                                    break;
-                                                    default:
+                                                    if ( nByte >= '0' )
                                                     {
-                                                        if ( nByte >= '0' )
+                                                        if ( nByte > '9' )
                                                         {
-                                                            if ( nByte > '9' )
-                                                            {
-                                                                nByte &=~0x20;  // case none sensitive for hexadecimal values
-                                                                nByte -= ( 'A' - 10 );
-                                                                if ( nByte > 15 )
-                                                                    bIsValid = false;
-                                                            }
-                                                            else
-                                                                nByte -= '0';
-                                                            nBitsLeft += 4;
-                                                            nDat <<= 4;
-                                                            nDat |= ( nByte ^ 0xf ); // in epsi a zero bit represents white color
+                                                            nByte &=~0x20;  // case none sensitive for hexadecimal values
+                                                            nByte -= ( 'A' - 10 );
+                                                            if ( nByte > 15 )
+                                                                bIsValid = false;
                                                         }
                                                         else
-                                                            bIsValid = false;
+                                                            nByte -= '0';
+                                                        nBitsLeft += 4;
+                                                        nDat <<= 4;
+                                                        nDat |= ( nByte ^ 0xf ); // in epsi a zero bit represents white color
                                                     }
-                                                    break;
+                                                    else
+                                                        bIsValid = false;
                                                 }
+                                                break;
                                             }
                                         }
-                                        if ( nBitDepth == 1 )
-                                            pAcc->SetPixelIndex( y, x, static_cast<sal_uInt8>(nDat >> nBitsLeft) & 1 );
-                                        else
-                                        {
-                                            pAcc->SetPixelIndex( y, x, nDat ? 1 : 0 );  // nBitDepth == 8
-                                            nBitsLeft = 0;
-                                        }
+                                    }
+                                    if ( nBitDepth == 1 )
+                                        pAcc->SetPixelIndex( y, x, static_cast<sal_uInt8>(nDat >> nBitsLeft) & 1 );
+                                    else
+                                    {
+                                        pAcc->SetPixelIndex( y, x, nDat ? 1 : 0 );  // nBitDepth == 8
+                                        nBitsLeft = 0;
                                     }
                                 }
-                                if ( bIsValid )
-                                {
-                                    VirtualDevice   aVDev;
-                                    GDIMetaFile     aMtf;
-                                    Size            aSize;
-                                    aVDev.EnableOutput( false );
-                                    aMtf.Record( &aVDev );
-                                    aSize = aBitmap.GetPrefSize();
-                                    if( !aSize.Width() || !aSize.Height() )
-                                        aSize = Application::GetDefaultDevice()->PixelToLogic( aBitmap.GetSizePixel(), MAP_100TH_MM );
-                                    else
-                                        aSize = OutputDevice::LogicToLogic( aSize, aBitmap.GetPrefMapMode(), MAP_100TH_MM );
-                                    aVDev.DrawBitmap( Point(), aSize, aBitmap );
-                                    aMtf.Stop();
-                                    aMtf.WindStart();
-                                    aMtf.SetPrefMapMode( MAP_100TH_MM );
-                                    aMtf.SetPrefSize( aSize );
-                                    aGraphic = aMtf;
-                                    bHasPreview = bRetValue = true;
-                                }
-                                aBitmap.ReleaseAccess( pAcc );
                             }
+                            if ( bIsValid )
+                            {
+                                VirtualDevice   aVDev;
+                                GDIMetaFile     aMtf;
+                                Size            aSize;
+                                aVDev.EnableOutput( false );
+                                aMtf.Record( &aVDev );
+                                aSize = aBitmap.GetPrefSize();
+                                if( !aSize.Width() || !aSize.Height() )
+                                    aSize = Application::GetDefaultDevice()->PixelToLogic( aBitmap.GetSizePixel(), MAP_100TH_MM );
+                                else
+                                    aSize = OutputDevice::LogicToLogic( aSize, aBitmap.GetPrefMapMode(), MAP_100TH_MM );
+                                aVDev.DrawBitmap( Point(), aSize, aBitmap );
+                                aMtf.Stop();
+                                aMtf.WindStart();
+                                aMtf.SetPrefMapMode( MAP_100TH_MM );
+                                aMtf.SetPrefSize( aSize );
+                                aGraphic = aMtf;
+                                bHasPreview = bRetValue = true;
+                            }
+                            aBitmap.ReleaseAccess( pAcc );
                         }
-                    }
-                }
-
-                sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%BoundingBox:", nBytesRead, 14 );
-                if ( pDest )
-                {
-                    nSecurityCount = 100;
-                    long nNumb[4];
-                    nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
-                    pDest += 14;
-                    for ( int i = 0; ( i < 4 ) && nSecurityCount; i++ )
-                    {
-                        nNumb[ i ] = ImplGetNumber( &pDest, nSecurityCount );
-                    }
-                    if ( nSecurityCount)
-                    {
-                        bGraphicLinkCreated = true;
-                        GfxLink     aGfxLink( pBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, true ) ;
-                        GDIMetaFile aMtf;
-
-                        long nWidth =  nNumb[2] - nNumb[0] + 1;
-                        long nHeight = nNumb[3] - nNumb[1] + 1;
-
-                        // if there is no preview -> try with gs to make one
-                        if( !bHasPreview )
-                        {
-                            bHasPreview = RenderAsEMF(pBuf, nBytesRead, aGraphic);
-                            if (!bHasPreview)
-                                bHasPreview = RenderAsBMP(pBuf, nBytesRead, aGraphic);
-                        }
-
-                        // if there is no preview -> make a red box
-                        if( !bHasPreview )
-                        {
-                            MakePreview(pBuf, nBytesRead, nWidth, nHeight,
-                                aGraphic);
-                        }
-
-                        aMtf.AddAction( (MetaAction*)( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
-                                                                          aGfxLink, aGraphic.GetGDIMetaFile() ) ) );
-                        CreateMtfReplacementAction( aMtf, rStream, nOrigPos, nPSSize, nPosWMF, nSizeWMF, nPosTIFF, nSizeTIFF );
-                        aMtf.WindStart();
-                        aMtf.SetPrefMapMode( MAP_POINT );
-                        aMtf.SetPrefSize( Size( nWidth, nHeight ) );
-                        rGraphic = aMtf;
-                        bRetValue = true;
                     }
                 }
             }
+
+            sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%BoundingBox:", nBytesRead, 14 );
+            if ( pDest )
+            {
+                nSecurityCount = 100;
+                long nNumb[4];
+                nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
+                pDest += 14;
+                for ( int i = 0; ( i < 4 ) && nSecurityCount; i++ )
+                {
+                    nNumb[ i ] = ImplGetNumber( &pDest, nSecurityCount );
+                }
+                if ( nSecurityCount)
+                {
+                    bGraphicLinkCreated = true;
+                    GfxLink     aGfxLink( pBuf, nPSSize, GFX_LINK_TYPE_EPS_BUFFER, true ) ;
+                    GDIMetaFile aMtf;
+
+                    long nWidth =  nNumb[2] - nNumb[0] + 1;
+                    long nHeight = nNumb[3] - nNumb[1] + 1;
+
+                    // if there is no preview -> try with gs to make one
+                    if( !bHasPreview )
+                    {
+                        bHasPreview = RenderAsEMF(pBuf, nBytesRead, aGraphic);
+                        if (!bHasPreview)
+                            bHasPreview = RenderAsBMP(pBuf, nBytesRead, aGraphic);
+                    }
+
+                    // if there is no preview -> make a red box
+                    if( !bHasPreview )
+                    {
+                        MakePreview(pBuf, nBytesRead, nWidth, nHeight,
+                            aGraphic);
+                    }
+
+                    aMtf.AddAction( (MetaAction*)( new MetaEPSAction( Point(), Size( nWidth, nHeight ),
+                                                                      aGfxLink, aGraphic.GetGDIMetaFile() ) ) );
+                    CreateMtfReplacementAction( aMtf, rStream, nOrigPos, nPSSize, nPosWMF, nSizeWMF, nPosTIFF, nSizeTIFF );
+                    aMtf.WindStart();
+                    aMtf.SetPrefMapMode( MAP_POINT );
+                    aMtf.SetPrefSize( Size( nWidth, nHeight ) );
+                    rGraphic = aMtf;
+                    bRetValue = true;
+                }
+            }
         }
+
         if ( !bGraphicLinkCreated )
             delete[] pBuf;
     }
