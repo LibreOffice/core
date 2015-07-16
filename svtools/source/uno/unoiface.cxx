@@ -294,7 +294,7 @@ sal_Bool VCLXMultiLineEdit::isEditable() throw(::com::sun::star::uno::RuntimeExc
     SolarMutexGuard aGuard;
 
     VclPtr< MultiLineEdit > pMultiLineEdit = GetAs< MultiLineEdit >();
-    return ( pMultiLineEdit && !pMultiLineEdit->IsReadOnly() && pMultiLineEdit->IsEnabled() ) ? sal_True : sal_False;
+    return pMultiLineEdit && !pMultiLineEdit->IsReadOnly() && pMultiLineEdit->IsEnabled();
 }
 
 void VCLXMultiLineEdit::setEditable( sal_Bool bEditable ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -692,7 +692,7 @@ sal_Bool VCLXFileControl::isEditable() throw(::com::sun::star::uno::RuntimeExcep
     SolarMutexGuard aGuard;
 
     VclPtr< FileControl > pFileControl = GetAs< FileControl >();
-    return ( pFileControl && !pFileControl->GetEdit().IsReadOnly() && pFileControl->GetEdit().IsEnabled() ) ? sal_True : sal_False;
+    return pFileControl && !pFileControl->GetEdit().IsReadOnly() && pFileControl->GetEdit().IsEnabled();
 }
 
 void VCLXFileControl::setEditable( sal_Bool bEditable ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -1814,7 +1814,7 @@ sal_Bool SVTXNumericField::isStrictFormat() throw(::com::sun::star::uno::Runtime
     SolarMutexGuard aGuard;
 
     FormattedField* pField = GetAs< FormattedField >();
-    return pField ? pField->IsStrictFormat() : sal_False;
+    return pField && pField->IsStrictFormat();
 }
 
 void SVTXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
@@ -1980,7 +1980,7 @@ sal_Bool SVTXCurrencyField::isStrictFormat() throw(::com::sun::star::uno::Runtim
     SolarMutexGuard aGuard;
 
     FormattedField* pField = GetAs< FormattedField >();
-    return pField ? pField->IsStrictFormat() : sal_False;
+    return pField && pField->IsStrictFormat();
 }
 
 void SVTXCurrencyField::setProperty( const OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException, std::exception)

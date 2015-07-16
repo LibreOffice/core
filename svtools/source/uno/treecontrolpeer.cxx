@@ -778,7 +778,7 @@ sal_Bool SAL_CALL TreeControlPeer::isNodeExpanded( const Reference< XTreeNode >&
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     UnoTreeListEntry* pEntry = getEntry( xNode );
-    return ( pEntry && rTree.IsExpanded( pEntry ) ) ? sal_True : sal_False;
+    return pEntry && rTree.IsExpanded( pEntry );
 }
 
 
@@ -809,7 +809,7 @@ sal_Bool SAL_CALL TreeControlPeer::isNodeVisible( const Reference< XTreeNode >& 
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
     UnoTreeListEntry* pEntry = getEntry( xNode );
-    return ( pEntry && rTree.IsEntryVisible( pEntry ) ) ? sal_True : sal_False;
+    return pEntry && rTree.IsEntryVisible( pEntry );
 }
 
 
@@ -906,7 +906,7 @@ sal_Bool SAL_CALL TreeControlPeer::isEditing(  ) throw (RuntimeException, std::e
     SolarMutexGuard aGuard;
 
     UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
-    return rTree.IsEditingActive() ? sal_True : sal_False;
+    return rTree.IsEditingActive();
 }
 
 
@@ -1406,15 +1406,15 @@ Any TreeControlPeer::getProperty( const OUString& PropertyName ) throw(RuntimeEx
         case BASEPROPERTY_TREE_DATAMODEL:
             return Any( mxDataModel );
         case BASEPROPERTY_TREE_EDITABLE:
-            return Any( rTree.IsInplaceEditingEnabled() ? sal_True : sal_False );
+            return Any( rTree.IsInplaceEditingEnabled() );
         case BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING:
             return Any( sal_True ); // @todo
         case BASEPROPERTY_TREE_ROOTDISPLAYED:
             return Any( mbIsRootDisplayed );
         case BASEPROPERTY_TREE_SHOWSHANDLES:
-            return Any( (rTree.GetStyle() & WB_HASLINES) != 0 ? sal_True : sal_False );
+            return Any( (rTree.GetStyle() & WB_HASLINES) != 0 );
         case BASEPROPERTY_TREE_SHOWSROOTHANDLES:
-            return Any( (rTree.GetStyle() & WB_HASLINESATROOT) != 0 ? sal_True : sal_False );
+            return Any( (rTree.GetStyle() & WB_HASLINESATROOT) != 0 );
         }
     }
     return VCLXWindow::getProperty( PropertyName );
