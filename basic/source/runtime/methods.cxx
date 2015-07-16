@@ -921,16 +921,16 @@ RTLFUNC(InStr)
         }
 
         SbiInstance* pInst = GetSbData()->pInst;
-        int bTextMode;
+        bool bTextMode;
         bool bCompatibility = ( pInst && pInst->IsCompatibility() );
         if( bCompatibility )
         {
             SbiRuntime* pRT = pInst->pRun;
-            bTextMode = pRT ? pRT->IsImageFlag( SbiImageFlags::COMPARETEXT ) : sal_False;
+            bTextMode = pRT && pRT->IsImageFlag( SbiImageFlags::COMPARETEXT );
         }
         else
         {
-            bTextMode = 1;;
+            bTextMode = true;
         }
         if ( nArgCount == 4 )
         {
@@ -996,16 +996,16 @@ RTLFUNC(InStrRev)
         }
 
         SbiInstance* pInst = GetSbData()->pInst;
-        int bTextMode;
+        bool bTextMode;
         bool bCompatibility = ( pInst && pInst->IsCompatibility() );
         if( bCompatibility )
         {
             SbiRuntime* pRT = pInst->pRun;
-            bTextMode = pRT ? pRT->IsImageFlag( SbiImageFlags::COMPARETEXT ) : sal_False;
+            bTextMode = pRT && pRT->IsImageFlag( SbiImageFlags::COMPARETEXT );
         }
         else
         {
-            bTextMode = 1;;
+            bTextMode = true;
         }
         if ( nArgCount == 4 )
         {
@@ -1377,16 +1377,16 @@ RTLFUNC(Replace)
         }
 
         SbiInstance* pInst = GetSbData()->pInst;
-        int bTextMode;
+        bool bTextMode;
         bool bCompatibility = ( pInst && pInst->IsCompatibility() );
         if( bCompatibility )
         {
             SbiRuntime* pRT = pInst->pRun;
-            bTextMode = pRT ? pRT->IsImageFlag( SbiImageFlags::COMPARETEXT ) : sal_False;
+            bTextMode = pRT && pRT->IsImageFlag( SbiImageFlags::COMPARETEXT );
         }
         else
         {
-            bTextMode = 1;
+            bTextMode = true;
         }
         if ( nArgCount == 6 )
         {
