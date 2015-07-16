@@ -125,7 +125,7 @@ interface TableDraw
         Export = FALSE ;
          //     PseudoPrefix = SID_OBJECT_ALIGN;
         ExecMethod = ExecDrawFunc ;
-        StateMethod = NoState ;
+        StateMethod = GetDrawFuncState ;
         GroupId = GID_FORMAT ;
         FastCall , Cachable ;
         ToolBoxConfig ;

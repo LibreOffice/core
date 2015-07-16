@@ -164,6 +164,7 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         rSet.DisableItem( SID_OBJECT_ALIGN_UP );
         rSet.DisableItem( SID_OBJECT_ALIGN_MIDDLE );
         rSet.DisableItem( SID_OBJECT_ALIGN_DOWN );
+        rSet.DisableItem( SID_OBJECT_ALIGN );
 
         // pseudo slots for Format menu
         rSet.DisableItem( SID_ALIGN_ANY_LEFT );
