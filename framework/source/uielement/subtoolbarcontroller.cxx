@@ -137,7 +137,6 @@ void SubToolBarController::statusChanged( const css::frame::FeatureStateEvent& E
         TriState eTri = TRISTATE_FALSE;
 
         bool bValue;
-        OUString aStrValue;
         css::frame::status::ItemStatus aItemState;
         css::frame::status::Visibility aItemVisibility;
 
@@ -149,10 +148,6 @@ void SubToolBarController::statusChanged( const css::frame::FeatureStateEvent& E
             if ( bValue )
                 eTri = TRISTATE_TRUE;
             nItemBits |= ToolBoxItemBits::CHECKABLE;
-        }
-        else if ( Event.State >>= aStrValue )
-        {
-            pToolBox->SetItemText( nId, aStrValue );
         }
         else if ( Event.State >>= aItemState )
         {
