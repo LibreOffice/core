@@ -381,7 +381,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
 
                     if(pNeuObj)
                     {
-                        SdrInsertReason aReason(SDRREASON_VIEWCALL, pObj);
+                        SdrInsertReason aReason(SDRREASON_VIEWCALL);
                         pM->GetPageView()->GetObjList()->InsertObject(pNeuObj, pObj->GetOrdNum() + 1, &aReason);
                         if( bUndo )
                             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
@@ -537,46 +537,6 @@ SdrObjClosedKind SdrPolyEditView::GetMarkedObjectsClosedState() const
         return SDROBJCLOSED_CLOSED;
     }
 }
-
-void SdrPolyEditView::CloseMarkedObjects(bool bToggle, bool bOpen)
-{
-    if (AreObjectsMarked())
-    {
-        const bool bUndo = IsUndoEnabled();
-        if( bUndo )
-            BegUndo(ImpGetResStr(STR_EditShut),GetDescriptionOfMarkedPoints());
-
-        bool bChg=false;
-        const size_t nMarkCount=GetMarkedObjectCount();
-        for (size_t nm=0; nm<nMarkCount; ++nm)
-        {
-            SdrMark* pM=GetSdrMarkByIndex(nm);
-            SdrObject* pO=pM->GetMarkedSdrObj();
-            bool bClosed=pO->IsClosedObj();
-            if ((pO->IsPolyObj() && (bClosed==bOpen)) || bToggle)
-            {
-                if( bUndo )
-                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
-
-                SdrPathObj* pPathObj = dynamic_cast< SdrPathObj* >( pO );
-                if(pPathObj)
-                    pPathObj->ToggleClosed();
-                bChg=true;
-            }
-        }
-
-        if( bUndo )
-            EndUndo();
-
-        if (bChg)
-        {
-            UnmarkAllPoints();
-            MarkListHasChanged();
-        }
-    }
-}
-
-
 
 void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
 {

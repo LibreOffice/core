@@ -87,19 +87,12 @@ class SVX_DLLPUBLIC Viewport3D
     void SetVPD(double fNewVPD);
 
     const basegfx::B3DPoint&    GetVRP() const  { return aVRP; }
-    const basegfx::B3DVector&   GetVPN() const  { return aVPN; }
     const basegfx::B3DVector&   GetVUV() const  { return aVUV; }
-    const basegfx::B3DPoint&    GetPRP() const  { return aPRP; }
-    double  GetVPD() const          { return fVPD; }
-    double  GetNearClipDist() const { return fNearClipDist; }
-    double  GetFarClipDist() const  { return fFarClipDist; }
 
     void SetProjection(ProjectionType ePrj)
         { eProjection = ePrj; bTfValid = false; }
     ProjectionType GetProjection() const { return eProjection; }
 
-    void SetAspectMapping(AspectMapType eAsp)
-        { eAspectMapping = eAsp; bTfValid = false; }
     AspectMapType GetAspectMapping() { return eAspectMapping; }
 
     void SetViewWindow(double fX, double fY, double fW, double fH);

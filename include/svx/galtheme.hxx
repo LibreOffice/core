@@ -149,7 +149,6 @@ public:
     SAL_DLLPRIVATE const OUString& GetRealName() const;
 
     // used for building gallery themes during compilation:
-    SAL_DLLPRIVATE const OUString& GetDestDir() const { return m_aDestDir; }
     SAL_DLLPRIVATE void         SetDestDir(const OUString& rDestDir, bool bRelative = true)
                                 { m_aDestDir = rDestDir; m_bDestDirRelative = bRelative; }
 

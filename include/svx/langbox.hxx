@@ -111,7 +111,6 @@ protected:
     SVX_DLLPRIVATE virtual void         ImplSelectEntryPos( sal_Int32 nPos, bool bSelect ) = 0;
     SVX_DLLPRIVATE virtual bool         ImplIsEntryPosSelected( sal_Int32 nPos ) const = 0;
     SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryPos( const void* pData ) const = 0;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryCount() const = 0;
     SVX_DLLPRIVATE virtual void         ImplSetNoSelection() = 0;
     SVX_DLLPRIVATE virtual void         ImplHide() = 0;
     SVX_DLLPRIVATE virtual void         ImplDisable() = 0;
@@ -137,7 +136,6 @@ private:
     SVX_DLLPRIVATE virtual void         ImplSelectEntryPos( sal_Int32 nPos, bool bSelect ) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual bool         ImplIsEntryPosSelected( sal_Int32 nPos ) const SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryPos( const void* pData ) const SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryCount() const SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void         ImplSetNoSelection() SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void         ImplHide() SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void         ImplDisable() SAL_OVERRIDE;
@@ -177,7 +175,6 @@ private:
     SVX_DLLPRIVATE virtual void         ImplSelectEntryPos( sal_Int32 nPos, bool bSelect ) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual bool         ImplIsEntryPosSelected( sal_Int32 nPos ) const SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryPos( const void* pData ) const SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual sal_Int32    ImplGetEntryCount() const SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void         ImplSetNoSelection() SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void         ImplHide() SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual void         ImplDisable() SAL_OVERRIDE;

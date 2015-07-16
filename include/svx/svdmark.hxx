@@ -113,11 +113,6 @@ public:
         return mpPoints;
     }
 
-    const SdrUShortCont* GetMarkedLines() const
-    {
-        return mpLines;
-    }
-
     const SdrUShortCont* GetMarkedGluePoints() const
     {
         return mpGluePoints;
@@ -126,11 +121,6 @@ public:
     SdrUShortCont* GetMarkedPoints()
     {
         return mpPoints;
-    }
-
-    SdrUShortCont* GetMarkedLines()
-    {
-        return mpLines;
     }
 
     SdrUShortCont* GetMarkedGluePoints()
@@ -144,14 +134,6 @@ public:
             mpPoints = new SdrUShortCont;
 
         return mpPoints;
-    }
-
-    SdrUShortCont* ForceMarkedLines()
-    {
-        if(!mpLines)
-            mpLines = new SdrUShortCont;
-
-        return mpLines;
     }
 
     SdrUShortCont* ForceMarkedGluePoints()

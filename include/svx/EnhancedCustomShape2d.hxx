@@ -220,7 +220,6 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 
         SAL_DLLPRIVATE double   GetAdjustValueAsDouble( const sal_Int32 nIndex ) const;
         SAL_DLLPRIVATE double   GetEquationValueAsDouble( const sal_Int32 nIndex ) const;
-        SAL_DLLPRIVATE sal_Int32 GetAdjustValueAsInteger( const sal_Int32 nIndex, const sal_Int32 nDefault = 0 ) const;
 
         static OUString         GetEquation( const sal_uInt16 nFlags, sal_Int32 nPara1, sal_Int32 nPara2, sal_Int32 nPara3 );
 

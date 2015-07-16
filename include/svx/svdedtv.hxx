@@ -197,8 +197,6 @@ public:
     SdrLayer* InsertNewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
     // Delete a layer including all objects contained
     void      DeleteLayer(const OUString& rName);
-    // Move a layer (change sequence of layers)
-    void      MoveLayer(const OUString& rName, sal_uInt16 nNewPos);
 
     // Marked objects which are outside a page
     // are assigned to an other page; at the moment without undo!!!
@@ -209,7 +207,6 @@ public:
 
     // delete all marked objects
     void DeleteMarkedObj();
-    bool IsDeleteMarkedObjPossible() const { ForcePossibilities(); return bDeletePossible; }
 
     // Set a logical enclosing rectangle for all marked objects.
     // It is not guaranteed if this succeeds, as a horizontal
@@ -233,14 +230,9 @@ public:
     void SetAllMarkedRect(const Rectangle& rRect, bool bCopy=false) { SetMarkedObjRect(rRect,bCopy); }
     void MoveAllMarked(const Size& rSiz, bool bCopy=false) { MoveMarkedObj   (rSiz,bCopy); }
     void ResizeAllMarked(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false) { ResizeMarkedObj (rRef,xFact,yFact,bCopy); }
-    long GetAllMarkedRotate() const { return GetMarkedObjRotate(); }
     void RotateAllMarked(const Point& rRef, long nAngle, bool bCopy=false) { RotateMarkedObj(rRef,nAngle,bCopy); }
-    void MirrorAllMarked(const Point& rRef1, const Point& rRef2, bool bCopy=false) { MirrorMarkedObj(rRef1,rRef2,bCopy); }
     void MirrorAllMarkedHorizontal(bool bCopy=false) { MirrorMarkedObjHorizontal(bCopy); }
     void MirrorAllMarkedVertical(bool bCopy=false) { MirrorMarkedObjVertical(bCopy); }
-    long GetAllMarkedShear() const { return GetMarkedObjShear(); }
-    void ShearAllMarked(const Point& rRef, long nAngle, bool bVShear=false, bool bCopy=false) { ShearMarkedObj(rRef,nAngle,bVShear,bCopy); }
-    void CrookAllMarked(const Point& rRef, const Point& rRad, SdrCrookMode eMode, bool bVertical=false, bool bNoContortion=false, bool bCopy=false) { CrookMarkedObj(rRef,rRad,eMode,bVertical,bNoContortion,bCopy); }
     void CopyMarked() { CopyMarkedObj(); }
     bool IsMoveAllowed() const { ForcePossibilities(); return bMoveAllowed && !bMoveProtect; }
     bool IsResizeAllowed(bool bProp=false) const;
@@ -418,7 +410,6 @@ public:
     // in their Z-order (Writer).
     // Default setting is sal_False=swithed off.
     void SetVirtualObjectBundling(bool bOn) { bBundleVirtObj=bOn; }
-    bool IsVirtualObjectBundling() const { return bBundleVirtObj; }
 
     // override SdrMarkView, for internal use
     virtual void MarkListHasChanged() SAL_OVERRIDE;

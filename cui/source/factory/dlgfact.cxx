@@ -399,16 +399,6 @@ const SfxItemSet* AbstractSvxZoomDialog_Impl::GetOutputItemSet() const
     return pDlg->GetOutputItemSet();
 }
 
-void AbstractSpellDialog_Impl::SetLanguage( sal_uInt16 nLang )
-{
-    pDlg->SetLanguage(nLang);
-}
-
-bool AbstractSpellDialog_Impl::Close()
-{
-    return pDlg->Close();
-}
-
 void  AbstractSpellDialog_Impl::Invalidate()
 {
     pDlg->InvalidateDialog();
@@ -429,33 +419,9 @@ void AbstractSearchProgress_Impl::Update()
      pDlg->Update();
 }
 
-void AbstractSearchProgress_Impl::SetFileType( const OUString& rType )
-{
-     pDlg->SetFileType( rType );
-}
-
-void AbstractSearchProgress_Impl::SetDirectory( const INetURLObject& rURL )
-{
-     pDlg->SetDirectory( rURL );
-}
-PLinkStub   AbstractSearchProgress_Impl::GetLinkStubCleanUpHdl()
-{
-    return SearchProgress::LinkStubCleanUpHdl;
-}
-
 void AbstractTakeProgress_Impl::Update()
 {
      pDlg->Update();
-}
-
-void AbstractTakeProgress_Impl::SetFile( const INetURLObject& rURL )
-{
-     pDlg->SetFile( rURL );
-}
-
-PLinkStub   AbstractTakeProgress_Impl::GetLinkStubCleanUpHdl()
-{
-    return TakeProgress::LinkStubCleanUpHdl;
 }
 
 OUString AbstractTitleDialog_Impl::GetTitle() const
@@ -496,56 +462,6 @@ OUString AbstractURLDlg_Impl::GetTarget() const
 OUString AbstractURLDlg_Impl::GetName() const
 {
     return pDlg->GetName();
-}
-
-void AbstractSvxHlinkDlgMarkWnd_Impl::Hide()
-{
-    static_cast<vcl::Window*>(pDlg)->Hide();
-}
-
-void AbstractSvxHlinkDlgMarkWnd_Impl::SetSizePixel( const Size& rNewSize )
-{
-    pDlg->SetSizePixel( rNewSize );
-}
-
-Size AbstractSvxHlinkDlgMarkWnd_Impl::GetSizePixel() const
-{
-    return pDlg->GetSizePixel();
-}
-
-bool AbstractSvxHlinkDlgMarkWnd_Impl::IsVisible( ) const
-{
-    return static_cast<vcl::Window*>(pDlg)->IsVisible();
-}
-
-void AbstractSvxHlinkDlgMarkWnd_Impl::Invalidate( InvalidateFlags nFlags )
-{
-    static_cast<vcl::Window*>(pDlg)->Invalidate(nFlags);
-}
-
-bool AbstractSvxHlinkDlgMarkWnd_Impl::MoveTo( Point aNewPos )const
-{
-    return pDlg->MoveTo(aNewPos);
-}
-
-bool AbstractSvxHlinkDlgMarkWnd_Impl::ConnectToDialog( bool bDoit  )const
-{
-    return pDlg->ConnectToDialog(bDoit);
-}
-
-void AbstractSvxHlinkDlgMarkWnd_Impl::RefreshTree ( const OUString& aStrURL )
-{
-    pDlg->RefreshTree(aStrURL);
-}
-
-void AbstractSvxHlinkDlgMarkWnd_Impl::SelectEntry ( const OUString& aStrMark )
-{
-    pDlg->SelectEntry(aStrMark);
-}
-
-sal_uInt16 AbstractSvxHlinkDlgMarkWnd_Impl::SetError( sal_uInt16 nError)
-{
-    return pDlg->SetError(nError);
 }
 
 sal_uInt16 AbstractSvxSearchSimilarityDialog_Impl::GetOther()
@@ -738,11 +654,6 @@ void AbstractSvxObjectTitleDescDialog_Impl::GetDescription(OUString& rDescriptio
     pDlg->GetDescription(rDescription);
 }
 
-void AbstractSvxMessDialog_Impl::SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt )
-{
-    pDlg->SetButtonText( nBtnId, rNewTxt );
-}
-
 OUString AbstractSvxMultiPathDialog_Impl::GetPath() const
 {
     return pDlg->GetPath();
@@ -868,14 +779,6 @@ void AbstractSvxPostItDialog_Impl::DontChangeAuthor()
 void AbstractSvxPostItDialog_Impl::HideAuthor()
 {
     pDlg->HideAuthor();
-}
-void AbstractSvxPostItDialog_Impl::SetReadonlyPostIt(bool bDisable)
-{
-    pDlg->SetReadonlyPostIt( bDisable );
-}
-bool AbstractSvxPostItDialog_Impl::IsOkEnabled() const
-{
-    return pDlg->IsOkEnabled();
 }
 void AbstractSvxPostItDialog_Impl::SetNextHdl( const Link<>& rLink )
 {
@@ -1121,19 +1024,6 @@ VclAbstractRefreshableDialog * AbstractDialogFactory_Impl::CreateActualizeProgre
    return new VclAbstractRefreshableDialog_Impl( pDlg );
 }
 
-AbstractSearchProgress * AbstractDialogFactory_Impl::CreateSearchProgressDialog( vcl::Window* pParent,
-                                            const INetURLObject& rStartURL )
-{
-    SearchProgress* pDlg = VclPtr<SearchProgress>::Create( pParent, rStartURL);
-    return new AbstractSearchProgress_Impl( pDlg );
-}
-
-AbstractTakeProgress * AbstractDialogFactory_Impl::CreateTakeProgressDialog( vcl::Window* pParent )
-{
-    VclPtrInstance<TakeProgress> pDlg( pParent );
-    return new AbstractTakeProgress_Impl( pDlg );
-}
-
 VclAbstractDialog*
 AbstractDialogFactory_Impl::CreateScriptErrorDialog(
     vcl::Window* pParent, const ::com::sun::star::uno::Any& rException)
@@ -1200,23 +1090,6 @@ AbstractURLDlg * AbstractDialogFactory_Impl::CreateURLDialog( vcl::Window* pPare
     VclPtrInstance<URLDlg> pDlg( pParent, rURL, rAltText, rDescription,
                                  rTarget, rName, rTargetList);
     return new AbstractURLDlg_Impl( pDlg );
-}
-
-AbstractSvxHlinkDlgMarkWnd* AbstractDialogFactory_Impl::CreateSvxHlinkDlgMarkWndDialog( SvxHyperlinkTabPageBase* pParent, sal_uInt32 nResId )
-{
-    SvxHlinkDlgMarkWnd* pDlg=NULL;
-    switch ( nResId )
-    {
-        case RID_SVXFLOAT_HYPERLINK_MARKWND :
-            pDlg = VclPtr<SvxHlinkDlgMarkWnd>::Create ( pParent );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSvxHlinkDlgMarkWnd_Impl( pDlg );
-    return 0;
 }
 
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabItemDialog(vcl::Window* pParent,
@@ -1357,13 +1230,6 @@ AbstractSvxObjectNameDialog* AbstractDialogFactory_Impl::CreateSvxObjectNameDial
 AbstractSvxObjectTitleDescDialog* AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(vcl::Window* pParent, const OUString& rTitle, const OUString& rDescription)
 {
     return new AbstractSvxObjectTitleDescDialog_Impl(VclPtr<SvxObjectTitleDescDialog>::Create(pParent, rTitle, rDescription));
-}
-
-AbstractSvxMessDialog * AbstractDialogFactory_Impl::CreateSvxMessDialog( vcl::Window* pParent, sal_uInt32,
-                                    const OUString& rText, const OUString& rDesc, Image* pImg )
-{
-    VclPtrInstance<SvxMessDialog> pDlg( pParent, rText, rDesc, pImg );
-    return new AbstractSvxMessDialog_Impl( pDlg );
 }
 
 AbstractSvxMultiPathDialog * AbstractDialogFactory_Impl::CreateSvxMultiPathDialog(vcl::Window* pParent)
@@ -1641,11 +1507,6 @@ CreateTabPage AbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId 
     }
 
     return 0;
-}
-
-CreateSvxDistributePage AbstractDialogFactory_Impl::GetSvxDistributePageCreatorFunc()
-{
-    return SvxDistributePage::Create;
 }
 
 DialogGetRanges AbstractDialogFactory_Impl::GetDialogGetRangesFunc()

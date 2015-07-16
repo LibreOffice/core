@@ -56,12 +56,10 @@ public:
 
     SdrLayerID    GetID() const                               { return nID; }
     void          SetModel(SdrModel* pNewModel)               { pModel=pNewModel; }
-    SdrModel*     GetModel() const                            { return pModel; }
     // A SdrLayer should be considered the standard Layer. It shall then set the
     // appropriate country-specific name. SetName() sets the "StandardLayer" flag
     // and if necessary returns "Userdefined".
     void          SetStandardLayer(bool bStd = true);
-    bool          IsStandardLayer() const                     { return nType==1; }
 };
 
 // When Changing the layer data you currently have to set the Modify-Flag
@@ -82,26 +80,18 @@ protected:
     // verbraucht, so gibt's 'ne 0. Wer sicher gehen will, muss vorher
     // GetLayerCount()<SDRLAYER_MAXCOUNT abfragen, denn sonst sind alle
     // vergeben.
-    SdrLayerID           GetUniqueLayerID() const;
-    void                 Broadcast() const;
+    SdrLayerID         GetUniqueLayerID() const;
+    void               Broadcast() const;
 public:
     explicit SdrLayerAdmin(SdrLayerAdmin* pNewParent=NULL);
     SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin);
     ~SdrLayerAdmin();
     const SdrLayerAdmin& operator=(const SdrLayerAdmin& rSrcLayerAdmin);
-    bool             operator==(const SdrLayerAdmin& rCmpLayerAdmin) const;
-    bool             operator!=(const SdrLayerAdmin& rCmpLayerAdmin) const       { return !operator==(rCmpLayerAdmin); }
-    SdrLayerAdmin*       GetParent() const                                           { return pParent; }
-    void                 SetParent(SdrLayerAdmin* pNewParent)                        { pParent=pNewParent; }
-    void                 SetModel(SdrModel* pNewModel);
-    SdrModel*            GetModel() const                                            { return pModel; }
-    void                 InsertLayer(SdrLayer* pLayer)
-    {
-        aLayer.push_back(pLayer);
-        pLayer->SetModel(pModel);
-        Broadcast();
-    }
-    void                 InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos)
+    bool               operator==(const SdrLayerAdmin& rCmpLayerAdmin) const;
+    bool               operator!=(const SdrLayerAdmin& rCmpLayerAdmin) const       { return !operator==(rCmpLayerAdmin); }
+    void               SetParent(SdrLayerAdmin* pNewParent)                        { pParent=pNewParent; }
+    void               SetModel(SdrModel* pNewModel);
+    void               InsertLayer(SdrLayer* pLayer, sal_uInt16 nPos)
     {
         if(nPos==0xFFFF)
             aLayer.push_back(pLayer);
@@ -110,38 +100,29 @@ public:
         pLayer->SetModel(pModel);
         Broadcast();
     }
-    SdrLayer*            RemoveLayer(sal_uInt16 nPos);
+    SdrLayer*          RemoveLayer(sal_uInt16 nPos);
     // Delete the entire layer
     void               ClearLayer();
     // New layer is created and inserted
     SdrLayer*          NewLayer(const OUString& rName, sal_uInt16 nPos=0xFFFF);
-    void               DeleteLayer(SdrLayer* pLayer)
-    {
-        std::vector<SdrLayer*>::iterator it = std::find(aLayer.begin(), aLayer.end(), pLayer);
-        if( it == aLayer.end() )
-            return;
-        aLayer.erase(it);
-        delete pLayer;
-        Broadcast();
-    }
     // New layer, name is retrieved from the resource
     SdrLayer*          NewStandardLayer(sal_uInt16 nPos=0xFFFF);
 
     // Iterate over all layers
-    sal_uInt16             GetLayerCount() const                                         { return sal_uInt16(aLayer.size()); }
-    SdrLayer*          GetLayer(sal_uInt16 i)                                            { return aLayer[i]; }
-    const SdrLayer*    GetLayer(sal_uInt16 i) const                                      { return aLayer[i]; }
+    sal_uInt16         GetLayerCount() const                                         { return sal_uInt16(aLayer.size()); }
+    SdrLayer*          GetLayer(sal_uInt16 i)                                        { return aLayer[i]; }
+    const SdrLayer*    GetLayer(sal_uInt16 i) const                                  { return aLayer[i]; }
 
-    sal_uInt16             GetLayerPos(SdrLayer* pLayer) const;
+    sal_uInt16         GetLayerPos(SdrLayer* pLayer) const;
 
-    SdrLayer* GetLayer(const OUString& rName, bool bInherited);
-    const SdrLayer* GetLayer(const OUString& rName, bool bInherited) const;
-    SdrLayerID GetLayerID(const OUString& rName, bool bInherited) const;
-          SdrLayer*    GetLayerPerID(sal_uInt16 nID)                                     { return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayerPerID(nID)); }
+    SdrLayer*          GetLayer(const OUString& rName, bool bInherited);
+    const SdrLayer*    GetLayer(const OUString& rName, bool bInherited) const;
+    SdrLayerID         GetLayerID(const OUString& rName, bool bInherited) const;
+    SdrLayer*          GetLayerPerID(sal_uInt16 nID)                                     { return const_cast<SdrLayer*>(const_cast<const SdrLayerAdmin*>(this)->GetLayerPerID(nID)); }
     const SdrLayer*    GetLayerPerID(sal_uInt16 nID) const;
 
-    void SetControlLayerName(const OUString& rNewName);
-    const OUString& GetControlLayerName() const { return maControlLayerName; }
+    void               SetControlLayerName(const OUString& rNewName);
+    const OUString&    GetControlLayerName() const { return maControlLayerName; }
 };
 
 /*

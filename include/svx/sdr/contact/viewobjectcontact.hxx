@@ -94,9 +94,6 @@ public:
     // get the oebject's size range
     const basegfx::B2DRange& getObjectRange() const;
 
-    // A ViewObjectContact was deleted and shall be forgotten.
-    void RemoveViewObjectContact(ViewObjectContact& rVOContact);
-
     // React on changes of the object of this ViewContact
     virtual void ActionChanged();
 

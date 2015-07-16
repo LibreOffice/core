@@ -116,11 +116,6 @@ public:
     // React on changes of the object of this ViewContact
     virtual void ActionChanged();
 
-    // access to SdrObject and/or SdrPage. May return 0L like the default
-    // implementations do. Override as needed.
-    virtual SdrObject* TryToGetSdrObject() const;
-    virtual SdrPage* TryToGetSdrPage() const;
-
     // access to the local primitive. This will ensure that the primitive is
     // current in comparing the local one with a fresh created incarnation
     drawinglayer::primitive2d::Primitive2DSequence getViewIndependentPrimitive2DSequence() const;

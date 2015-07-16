@@ -214,7 +214,6 @@ public:
     void LogicToPagePos(Point& rPnt) const { rPnt-=aPgOrg; }
     void LogicToPagePos(Rectangle& rRect) const { rRect.Move(-aPgOrg.X(),-aPgOrg.Y()); }
     void PagePosToLogic(Point& rPnt) const { rPnt+=aPgOrg; }
-    void PagePosToLogic(Rectangle& rRect) const { rRect.Move(aPgOrg.X(),aPgOrg.Y()); }
 
     void SetVisibleLayers(const SetOfByte& rSet) { aLayerVisi=rSet; InvalidateAllWin(); }
     const SetOfByte& GetVisibleLayers() const { return aLayerVisi; }
@@ -229,7 +228,6 @@ public:
     void SetHelpLine(sal_uInt16 nNum, const SdrHelpLine& rNewHelpLine);
     void DeleteHelpLine(sal_uInt16 nNum);
     void InsertHelpLine(const SdrHelpLine& rHL, sal_uInt16 nNum=0xFFFF);
-    void MoveHelpLine(sal_uInt16 nNum, sal_uInt16 nNewNum) { aHelpLines.Move(nNum,nNewNum); }
 
     // Liefert sal_True, wenn Layer des Obj sichtbar und nicht gesperrt.
     // Beim Gruppenobjekt muss wenigstens ein Member sichtbar sein,

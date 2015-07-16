@@ -58,7 +58,6 @@ public:
     void PreparePreRenderDevice();
     void OutputPreRenderDevice(const vcl::Region& rExpandedRegion);
 
-    OutputDevice& GetOriginalOutputDevice() const { return mrOutputDevice; }
     OutputDevice& GetPreRenderDevice() { return *mpPreRenderDevice.get(); }
 };
 

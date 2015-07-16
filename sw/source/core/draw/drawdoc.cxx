@@ -126,12 +126,6 @@ uno::Reference<embed::XStorage> SwDrawModel::GetDocumentStorage() const
     return m_pDoc->GetDocStorage();
 }
 
-SdrLayerID SwDrawModel::GetControlExportLayerId( const SdrObject & ) const
-{
-    //for versions < 5.0, there was only Hell and Heaven
-    return static_cast<SdrLayerID>(m_pDoc->getIDocumentDrawModelAccess().GetHeavenId());
-}
-
 uno::Reference< uno::XInterface > SwDrawModel::createUnoModel()
 {
     uno::Reference< uno::XInterface > xModel;

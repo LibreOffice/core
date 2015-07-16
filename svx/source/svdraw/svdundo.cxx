@@ -716,13 +716,6 @@ void SdrUndoObjList::SetOwner(bool bNew)
 }
 
 
-void SdrUndoObjList::SetOrdNum(sal_uInt32 nOrdNum_)
-{
-    nOrdNum = nOrdNum_;
-}
-
-
-
 void SdrUndoRemoveObj::Undo()
 {
     // Trigger PageChangeCall

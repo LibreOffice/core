@@ -368,7 +368,6 @@ public:
     Point GetGridOffset() const { return aGridOffset; }
     void SetGridOffset( const Point& rGridOffset ){ aGridOffset = rGridOffset; }
 protected:
-    void ImpDeleteUserData();
     Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
 
     // for GetDragComment
@@ -444,13 +443,6 @@ public:
     void SetUserCall(SdrObjUserCall* pUser);
     SdrObjUserCall* GetUserCall() const { return pUserCall;}
     void SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundRect) const;
-
-    // Such a reference point is for instance:
-    // - a symbol's point that should snap to the raster when inserting the symbol
-    // - or an image's fix point within an animation object
-    virtual bool HasRefPoint() const;
-    virtual Point GetRefPoint() const;
-    virtual void SetRefPoint(const Point& rPnt);
 
     // #i68101#
     // An object may have a user-set Name (Get/SetName()), e.g SdrGrafObj, SdrObjGroup
@@ -789,9 +781,6 @@ public:
     void NbcRotateGluePoints(const Point& rRef, long nAngle, double sn, double cs);
     void NbcMirrorGluePoints(const Point& rRef1, const Point& rRef2);
     void NbcShearGluePoints (const Point& rRef, long nAngle, double tn, bool bVShear);
-
-    // is object an edge?
-    virtual bool IsEdge() const;
 
     // if bTail1 is true, line start, otherwise line end
     // if pObj is null disconnect

@@ -59,7 +59,6 @@ public:
     virtual SdrPathSmoothKind GetMarkedPointsSmooth() const = 0;
     virtual void SetMarkedPointsSmooth(SdrPathSmoothKind eKind) = 0;
 
-    virtual void CloseMarkedObjects(bool bToggle, bool bOpen ) = 0;
     virtual bool IsOpenCloseMarkedObjectsPossible() const = 0;
     virtual SdrObjClosedKind GetMarkedObjectsClosedState() const = 0;
 

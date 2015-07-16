@@ -115,7 +115,6 @@ public:
     static bool     Yank( sal_uIntPtr nFormat = SDR_ANYFORMAT );
 
     static bool     Paste( vcl::Window* pWin = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT );
-    bool            PasteClipboard( OutputDevice* pOut = NULL, sal_uIntPtr nFormat = SDR_ANYFORMAT, sal_uInt32 nOptions = 0 );
 };
 
 #endif // INCLUDED_SVX_SVDXCGV_HXX

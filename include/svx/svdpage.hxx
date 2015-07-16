@@ -63,14 +63,11 @@ enum SdrInsertReasonKind {
 };
 
 class SdrInsertReason {
-    const SdrObject* pRefObj;
     SdrInsertReasonKind eReason;
 public:
-    SdrInsertReason(): pRefObj(NULL),eReason(SDRREASON_UNKNOWN) {}
-    SdrInsertReason(SdrInsertReasonKind eR,const SdrObject* pO=NULL): pRefObj(pO),eReason(eR) {}
-    void SetReferenceObject(const SdrObject* pO)  { pRefObj=pO; }
-    const SdrObject* GetReferenceObject() const   { return pRefObj; }
-    void SetReason(SdrInsertReasonKind eR)        { eReason=eR; }
+    SdrInsertReason(): eReason(SDRREASON_UNKNOWN) {}
+    SdrInsertReason(SdrInsertReasonKind eR): eReason(eR) {}
+
     SdrInsertReasonKind GetReason() const         { return eReason; }
 };
 
@@ -113,10 +110,6 @@ public:
 
     virtual SdrObjList* Clone() const;
 
-    // !!! This method is only for people who know exactly what they do !!!
-
-    // #110094# This should not be needed (!)
-    void SetObjOrdNumsDirty()                           { bObjOrdNumsDirty=true; }
     void CopyObjects(const SdrObjList& rSrcList);
     /// clean up everything (without Undo)
     void    Clear();
@@ -313,8 +306,6 @@ class SdrPageGridFrame
 public:
     SdrPageGridFrame(const Rectangle& rPaper): aPaper(rPaper), aUserArea(rPaper) {}
     SdrPageGridFrame(const Rectangle& rPaper, const Rectangle& rUser): aPaper(rPaper), aUserArea(rUser) {}
-    void             SetPaperRect(const Rectangle& rPaper) { aPaper=rPaper; }
-    void             SetUserArea(const Rectangle& rUser)   { aUserArea=rUser; }
     const Rectangle& GetPaperRect() const                  { return aPaper; }
     const Rectangle& GetUserArea() const                   { return aUserArea; }
 };
@@ -332,25 +323,6 @@ public:
     void           Clear();
     sal_uInt16     GetCount() const                                    { return sal_uInt16(aList.size()); }
     void           Insert(const SdrPageGridFrame& rGF) { aList.push_back(new SdrPageGridFrame(rGF)); }
-    void           Insert(const SdrPageGridFrame& rGF, sal_uInt16 nPos)
-    {
-        if(nPos==0xFFFF)
-            aList.push_back(new SdrPageGridFrame(rGF));
-        else
-            aList.insert(aList.begin()+nPos,new SdrPageGridFrame(rGF));
-    }
-    void           Delete(sal_uInt16 nPos)
-    {
-        SdrPageGridFrame* p = aList[nPos];
-        aList.erase(aList.begin()+nPos);
-        delete p;
-    }
-    void           Move(sal_uInt16 nPos, sal_uInt16 nNewPos)
-    {
-        SdrPageGridFrame* p = aList[nPos];
-        aList.erase(aList.begin()+nPos);
-        aList.insert(aList.begin()+nNewPos,p);
-    }
     SdrPageGridFrame&       operator[](sal_uInt16 nPos)                    { return *GetObject(nPos); }
     const SdrPageGridFrame& operator[](sal_uInt16 nPos) const              { return *GetObject(nPos); }
 };
@@ -545,8 +517,6 @@ public:
     /// if pRect != null, then the pages that are intersected by this Rect,
     /// otherwise the visible pages
     virtual const SdrPageGridFrameList* GetGridFrameList(const SdrPageView* pPV, const Rectangle* pRect) const;
-    bool IsObjectsNotPersistent() const          { return mbObjectsNotPersistent; }
-    void SetObjectsNotPersistent(bool b)     { mbObjectsNotPersistent = b; }
 
     css::uno::Reference< css::uno::XInterface > getUnoPage();
 

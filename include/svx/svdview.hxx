@@ -129,9 +129,6 @@ struct SVX_DLLPUBLIC SdrViewEvent
 public:
     SdrViewEvent();
     ~SdrViewEvent();
-
-    // nEventKind is SdrMouseEventKind::BUTTONDOWN, SdrMouseEventKind::MOVE or SdrMouseEventKind::BUTTONUP
-    void SetMouseEvent(const MouseEvent& rMEvt, SdrMouseEventKind nEventKind);
 };
 
 // helper class for all D&D overlays
@@ -190,10 +187,8 @@ public:
     bool IsExtendedKeyInputDispatcherEnabled() const { return bNoExtendedKeyDispatcher; }
 
     void EnableExtendedCommandEventDispatcher(bool bOn) { bNoExtendedCommandDispatcher=!bOn; }
-    bool IsExtendedCommandEventDispatcherEnabled() const { return bNoExtendedCommandDispatcher; }
 
     void EnableTextEditOnObjectsWithoutTextIfTextTool(bool bOn) { bTextEditOnObjectsWithoutTextIfTextTool=bOn; }
-    bool IsEnableTextEditOnObjectsWithoutTextIfTextToolEnabled() const { return bTextEditOnObjectsWithoutTextIfTextTool; }
 
     void SetMasterPagePaintCaching(bool bOn);
     bool IsMasterPagePaintCaching() const { return mbMasterPagePaintCaching; }

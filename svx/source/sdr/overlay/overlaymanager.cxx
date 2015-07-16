@@ -261,12 +261,6 @@ namespace sdr
             // default has nothing to do
         }
 
-        // #i68597# part of content gets copied, react on it
-        void OverlayManager::copyArea(const Point& /*rDestPt*/, const Point& /*rSrcPt*/, const Size& /*rSrcSize*/)
-        {
-            // unbuffered versions do nothing here
-        }
-
         void OverlayManager::restoreBackground(const vcl::Region& /*rRegion*/) const
         {
             // unbuffered versions do nothing here

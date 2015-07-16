@@ -76,8 +76,6 @@ public:
     virtual void CancelSdrDrag() SAL_OVERRIDE;
     virtual bool EndSdrDrag(bool bCopy) SAL_OVERRIDE;
 
-    E3dView& Get3DView()  { return static_cast<E3dView&>(getSdrDragView());  }
-
     // for migration from XOR to overlay
     virtual void CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager) SAL_OVERRIDE;
 };

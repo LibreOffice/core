@@ -125,7 +125,6 @@ public:
     bool BegInsObjPoint(const Point& rPnt, bool bNewObj) { return ImpBegInsObjPoint(false, 0L, rPnt, bNewObj, 0L); }
     void MovInsObjPoint(const Point& rPnt) { MovDragObj(rPnt); }
     bool EndInsObjPoint(SdrCreateCmd eCmd);
-    void BrkInsObjPoint() { BrkDragObj(); }
     bool IsInsObjPoint() const { return mpCurrentSdrDragMethod && mbInsPolyPoint; }
 
     // For the app to manage the status. GetPreferredPointer() is
@@ -135,9 +134,6 @@ public:
 
     bool IsInsGluePointPossible() const;
     bool BegInsGluePoint(const Point& rPnt);
-    void MovInsGluePoint(const Point& rPnt) { MovDragObj(rPnt); }
-    bool EndInsGluePoint() { return EndDragObj(); }
-    void BrkInsGluePoint() { BrkDragObj(); }
     bool IsInsGluePoint() const { return mpCurrentSdrDragMethod && mbInsGluePoint; }
 
     // For the app to manage the status. GetPreferredPointer() is
@@ -156,7 +152,6 @@ public:
 
     // Hide the mouse when dragging polygon points or glue points.
     // Default=false
-    void SetMouseHideWhileDraggingPoints(bool bOn) { mbMouseHideWhileDraggingPoints = bOn; }
     bool IsMouseHideWhileDraggingPoints() const { return mbMouseHideWhileDraggingPoints; }
 
     // As a general rule, the contours of the selected objects
@@ -173,14 +168,12 @@ public:
     // NoDragPolys is (temporarily) activated implicitely.
     // PolyPolygons etc. are regarded as multiple objects respectively.
     // Default=100
-    void  SetDragXorPolyLimit(sal_uIntPtr nLimit) { mnDragXorPolyLimit=nLimit; }
     sal_uIntPtr GetDragXorPolyLimit() const { return mnDragXorPolyLimit; }
 
     // Like DragXorPolyLimit, but in respect to the total number of
     // all polygons. Default=500.
     // NoDragPolys is (temporarily) activated, if one of the limits
     // is exceeded.
-    void  SetDragXorPointLimit(sal_uIntPtr nPointCount) { mnDragXorPointLimit=nPointCount; }
     sal_uIntPtr GetDragXorPointLimit() const { return mnDragXorPointLimit; }
 
     void SetSolidDragging(bool bOn);
@@ -190,12 +183,10 @@ public:
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Stick Connectors to vertices
     // Default=true=Yes
-    void SetAutoVertexConnectors(bool bOn) { mbAutoVertexCon = bOn; }
     bool IsAutoVertexConnectors() const { return mbAutoVertexCon; }
 
     // Stick Connectors to Corners
     // Default=false=No
-    void SetAutoCornerConnectors(bool bOn) { mbAutoCornerCon = bOn; }
     bool IsAutoCornerConnectors() const { return mbAutoCornerCon; }
 
     // Dragging of connected objects (Nodes):
@@ -206,8 +197,6 @@ public:
     // dragging. This detailed depiction is only possible in MoveDrag.
     // Default value: 10
     bool IsDetailedEdgeDragging() const { return mbDetailedEdgeDragging; }
-
-    sal_uInt16 GetDetailedEdgeDraggingLimit() const { return mnDetailedEdgeDraggingLimit; }
 
     // EdgeDraggingLimit: If more than nEdgeObjCount edges are affected,
     // they are not shown in the interactive dragging.
@@ -232,11 +221,6 @@ public:
     // by the user!
     void SetMarkedHitMovesAlways(bool bOn) { mbMarkedHitMovesAlways = bOn; }
     bool IsMarkedHitMovesAlways() const { return mbMarkedHitMovesAlways; }
-
-    // Show the mirror image of the selected objects as Xor while dragging
-    // the mirror axis? Persistent. Not yet implemented. Default: true
-    void SetMirrRefDragObj(bool bOn) { mbMirrRefDragObj = bOn; }
-    bool IsMirrRefDragObj() const { return mbMirrRefDragObj; }
 
     bool IsOrthoDesired() const;
 

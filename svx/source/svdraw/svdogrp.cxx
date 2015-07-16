@@ -218,25 +218,6 @@ void SdrObjGroup::SetModel(SdrModel* pNewModel)
 }
 
 
-bool SdrObjGroup::HasRefPoint() const
-{
-    return bRefPoint;
-}
-
-
-Point SdrObjGroup::GetRefPoint() const
-{
-    return aRefPoint;
-}
-
-
-void SdrObjGroup::SetRefPoint(const Point& rPnt)
-{
-    bRefPoint=true;
-    aRefPoint=rPnt;
-}
-
-
 SdrObjList* SdrObjGroup::GetSubList() const
 {
     return pSub;

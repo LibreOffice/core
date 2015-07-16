@@ -623,17 +623,6 @@ sal_Int32 SvxLanguageComboBox::ImplGetEntryPos( const void* pData ) const
 }
 
 
-sal_Int32 SvxLanguageBox::ImplGetEntryCount() const
-{
-    return GetEntryCount();
-}
-
-sal_Int32 SvxLanguageComboBox::ImplGetEntryCount() const
-{
-    return GetEntryCount();
-}
-
-
 void SvxLanguageBox::ImplSetNoSelection()
 {
     SetNoSelection();

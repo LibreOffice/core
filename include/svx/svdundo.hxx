@@ -107,7 +107,6 @@ public:
     virtual bool CanSdrRepeat(SdrView& rView) const SAL_OVERRIDE;
     virtual void SdrRepeat(SdrView& rView) SAL_OVERRIDE;
     void SetRepeatFunction(SdrRepeatFunc eFunc) { eFunction=eFunc; }
-    SdrRepeatFunc GetRepeatFunction() const { return eFunction; }
 };
 
 /**
@@ -189,9 +188,6 @@ public:
     SdrUndoMoveObj(SdrObject& rNewObj, const Size& rDist): SdrUndoObj(rNewObj),aDistance(rDist) {}
     virtual ~SdrUndoMoveObj();
 
-    void SetDistance(const Size& rDist) { aDistance=rDist; }
-    const Size& GetDistance() const { return aDistance; }
-
     virtual void Undo() SAL_OVERRIDE;
     virtual void Redo() SAL_OVERRIDE;
 
@@ -247,13 +243,8 @@ protected:
     SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect = false);
     virtual ~SdrUndoObjList();
 
-    void SetView(SdrView* pView1, SdrPageView* pPageView1) { pView=pView1; pPageView=pPageView1; }
     bool IsOwner() { return bOwner; }
     void SetOwner(bool bNew);
-
-private:
-    sal_uInt32 GetOrdNum() const { return nOrdNum;}
-    void SetOrdNum(sal_uInt32 nOrdNum_);
 };
 
 /**

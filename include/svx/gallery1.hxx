@@ -115,7 +115,6 @@ private:
     SAL_DLLPRIVATE void         ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbIsReadOnly );
 
     GalleryThemeEntry*          ImplGetThemeEntry( const OUString& rThemeName );
-    SAL_DLLPRIVATE GalleryThemeEntry* ImplGetThemeEntry( sal_uIntPtr nThemeId );
 
     SAL_DLLPRIVATE GalleryTheme* ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry );
     SAL_DLLPRIVATE void         ImplDeleteCachedTheme( GalleryTheme* pTheme );
@@ -146,8 +145,6 @@ public:
 
     SAL_DLLPRIVATE const INetURLObject& GetUserURL() const { return aUserURL; }
     SAL_DLLPRIVATE const INetURLObject& GetRelativeURL() const { return aRelURL; }
-
-    SAL_DLLPRIVATE bool         IsMultiPath() const { return bMultiPath; }
 };
 
 #endif // INCLUDED_SVX_GALLERY1_HXX

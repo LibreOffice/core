@@ -160,13 +160,12 @@ public:
     GalleryBrowserMode  GetMode() const { return meMode; }
     void                SetMode( GalleryBrowserMode eMode );
 
-    vcl::Window*             GetViewWindow() const;
+    vcl::Window*        GetViewWindow() const;
 
     void                Travel( GalleryBrowserTravel eTravel );
 
     INetURLObject       GetURL() const;
     OUString            GetFilterName() const;
-    Graphic             GetGraphic() const;
 
     sal_Int8            AcceptDrop( DropTargetHelper& rTarget, const AcceptDropEvent& rEvt );
     sal_Int8            ExecuteDrop( DropTargetHelper& rTarget, const ExecuteDropEvent& rEvt );
@@ -176,7 +175,6 @@ public:
     bool                KeyInput( const KeyEvent& rEvt, vcl::Window* pWindow );
 
     static com::sun::star::uno::Reference< com::sun::star::frame::XFrame > GetFrame();
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > GetUNOContext() const { return m_xContext; }
     com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > GetURLTransformer() const { return m_xTransformer; }
 
     void Execute( sal_uInt16 nId );

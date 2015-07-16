@@ -153,7 +153,6 @@ public:
     bool ReportActions( sal_uIntPtr nActionCount );
     bool ReportInserts( sal_uIntPtr nInsertCount );
 
-    sal_uIntPtr GetSumActionCount() const { return nSumActionCount; };
     sal_uIntPtr GetSumCurAction() const { return nSumCurAction; };
     sal_uIntPtr GetObjCount() const { return nObjCount; };
     sal_uIntPtr GetCurObj() const { return nCurObj; };
@@ -183,7 +182,6 @@ public:
     const Link<>& GetLink(unsigned nNum) const { return *aList[nNum]; }
     void InsertLink(const Link<>& rLink, unsigned nPos=0xFFFF);
     void RemoveLink(const Link<>& rLink);
-    bool HasLink(const Link<>& rLink) const { return FindEntry(rLink)!=0xFFFF; }
 };
 
 SdrLinkList& ImpGetUserMakeObjHdl();
