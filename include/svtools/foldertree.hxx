@@ -44,7 +44,7 @@ private:
 public:
     FolderTree( vcl::Window* pParent, WinBits nBits );
 
-    virtual void RequestingChildren( SvTreeListEntry* pEntry );
+    virtual void RequestingChildren( SvTreeListEntry* pEntry ) SAL_OVERRIDE;
 
     void FillTreeEntry( SvTreeListEntry* pEntry );
     void SetTreePath( OUString const & sUrl );
