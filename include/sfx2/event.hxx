@@ -79,25 +79,6 @@ public:
                         { return xViewController; }
 };
 
-
-
-class SfxNamedHint : public SfxHint
-{
-    OUString            _aEventName;
-    OUString            _aArgs;
-
-public:
-                        SfxNamedHint( const OUString& rName,
-                                      const OUString& rArgs  )
-                        :   _aEventName( rName ),
-                            _aArgs( rArgs )
-                        {}
-
-                        SfxNamedHint( const OUString& rName )
-                        :   _aEventName( rName )
-                        {}
-};
-
 class Printer;
 
 class SfxPrintingHint : public SfxViewEventHint
