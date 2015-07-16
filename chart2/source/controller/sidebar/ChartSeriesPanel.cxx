@@ -21,6 +21,8 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 
+#include <com/sun/star/chart2/DataPointLabel.hpp>
+
 #include "ChartSeriesPanel.hxx"
 #include "ChartController.hxx"
 #include <sfx2/bindings.hxx>
@@ -35,12 +37,42 @@
 #include <comphelper/processfactory.hxx>
 
 #include "ChartModel.hxx"
+#include "DataSeriesHelper.hxx"
 
 using namespace css;
 using namespace css::uno;
 using ::sfx2::sidebar::Theme;
 
 namespace chart { namespace sidebar {
+
+namespace {
+
+bool isDataLabelVisible(css::uno::Reference<css::frame::XModel> xModel, const OUString& rCID)
+{
+    css::uno::Reference< css::chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xSeries.is())
+        return false;
+
+    return DataSeriesHelper::hasDataLabelsAtSeries(xSeries);
+}
+
+void setDataLabelVisible(css::uno::Reference<css::frame::XModel> xModel, const OUString& rCID, bool bVisible)
+{
+    css::uno::Reference< css::chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xSeries.is())
+        return;
+
+    if (bVisible)
+        DataSeriesHelper::insertDataLabelsToSeriesAndAllPoints(xSeries);
+    else
+        DataSeriesHelper::deleteDataLabelsFromSeriesAndAllPoints(xSeries);
+}
+
+}
 
 ChartSeriesPanel::ChartSeriesPanel(
     vcl::Window* pParent,
@@ -53,6 +85,11 @@ ChartSeriesPanel::ChartSeriesPanel(
     mpBindings(pBindings),
     mxModel(pController->getModel())
 {
+    get(mpCBLabel, "checkbutton_label");
+    get(mpCBTrendline, "checkbutton_trendline");
+    get(mpCBXError, "checkbutton_x_error");
+    get(mpCBYError, "checkbutton_y_error");
+
     Initialize();
 }
 
@@ -69,11 +106,32 @@ void ChartSeriesPanel::dispose()
 
 void ChartSeriesPanel::Initialize()
 {
+    updateData();
+
+    Link<> aLink = LINK(this, ChartSeriesPanel, CheckBoxHdl);
+    mpCBLabel->SetClickHdl(aLink);
+    mpCBTrendline->SetClickHdl(aLink);
+    mpCBXError->SetClickHdl(aLink);
+    mpCBYError->SetClickHdl(aLink);
 }
 
 void ChartSeriesPanel::updateData()
 {
+    css::uno::Reference<css::frame::XController> xController(mxModel->getCurrentController());
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    if (!xSelectionSupplier.is())
+        return;
+
+    uno::Any aAny = xSelectionSupplier->getSelection();
+    assert(aAny.hasValue());
+    OUString aCID;
+    aAny >>= aCID;
+#ifdef DBG_UTIL
+    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+    assert(eType == OBJECTTYPE_DATA_SERIES);
+#endif
     SolarMutexGuard aGuard;
+    mpCBLabel->Check(isDataLabelVisible(mxModel, aCID));
 }
 
 VclPtr<vcl::Window> ChartSeriesPanel::Create (
@@ -122,6 +180,28 @@ void ChartSeriesPanel::NotifyItemUpdate(
 void ChartSeriesPanel::modelInvalid()
 {
 
+}
+
+IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, CheckBox*, pCheckBox)
+{
+    bool bChecked = pCheckBox->IsChecked();
+    css::uno::Reference<css::frame::XController> xController(mxModel->getCurrentController());
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    if (!xSelectionSupplier.is())
+        return 0;
+
+    uno::Any aAny = xSelectionSupplier->getSelection();
+    assert(aAny.hasValue());
+    OUString aCID;
+    aAny >>= aCID;
+#ifdef DBG_UTIL
+    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+    assert(eType == OBJECTTYPE_DATA_SERIES);
+#endif
+    if (pCheckBox == mpCBLabel.get())
+        setDataLabelVisible(mxModel, aCID, bChecked);
+
+    return 0;
 }
 
 }} // end of namespace ::chart::sidebar

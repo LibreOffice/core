@@ -72,6 +72,10 @@ public:
 
 private:
     //ui controls
+    VclPtr<CheckBox> mpCBLabel;
+    VclPtr<CheckBox> mpCBTrendline;
+    VclPtr<CheckBox> mpCBXError;
+    VclPtr<CheckBox> mpCBYError;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
@@ -81,6 +85,8 @@ private:
     css::uno::Reference<css::util::XModifyListener> mxListener;
 
     void Initialize();
+
+    DECL_LINK(CheckBoxHdl, CheckBox*);
 };
 
 } } // end of namespace ::chart::sidebar
