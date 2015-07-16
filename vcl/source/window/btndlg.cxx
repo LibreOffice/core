@@ -98,7 +98,7 @@ ImplBtnDlgItem* ButtonDialog::ImplGetItem( sal_uInt16 nId ) const
     for (auto & it : m_ItemList)
     {
         if (it->mnId == nId)
-            return const_cast<ImplBtnDlgItem*>(&(*it));
+            return &(*it);
     }
 
     return NULL;
