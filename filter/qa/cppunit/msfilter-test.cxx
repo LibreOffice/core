@@ -20,18 +20,18 @@
 
 namespace {
 
-class UtilsTest
+class MSFilterTest
     : public test::BootstrapFixtureBase
 {
 public:
     void testTransColToIco();
 
-    CPPUNIT_TEST_SUITE(UtilsTest);
+    CPPUNIT_TEST_SUITE(MSFilterTest);
     CPPUNIT_TEST(testTransColToIco);
     CPPUNIT_TEST_SUITE_END();
 };
 
-void UtilsTest::testTransColToIco()
+void MSFilterTest::testTransColToIco()
 {
     const sal_uInt32 aStdCol[] = {
         0xeeeeee, 0xffff99, 0xff6600, 0xff3333, 0xff00cc, 0xff33ff, 0x9900ff, 0x6666ff, 0x00ccff, 0x66ffff, 0x33ff99, 0x99ff66, 0xccff00,
@@ -68,7 +68,7 @@ void UtilsTest::testTransColToIco()
 
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(UtilsTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(MSFilterTest);
 
 }
 

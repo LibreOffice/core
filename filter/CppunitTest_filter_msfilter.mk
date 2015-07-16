@@ -7,18 +7,18 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CppunitTest_CppunitTest,filter_utils))
+$(eval $(call gb_CppunitTest_CppunitTest,filter_msfilter))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,filter_utils))
-$(eval $(call gb_CppunitTest_use_ure,filter_utils))
+$(eval $(call gb_CppunitTest_use_sdk_api,filter_msfilter))
+$(eval $(call gb_CppunitTest_use_ure,filter_msfilter))
 
-$(eval $(call gb_CppunitTest_use_configuration,filter_utils))
+$(eval $(call gb_CppunitTest_use_configuration,filter_msfilter))
 
-$(eval $(call gb_CppunitTest_use_externals,filter_utils, \
+$(eval $(call gb_CppunitTest_use_externals,filter_msfilter, \
     boost_headers \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,filter_utils, \
+$(eval $(call gb_CppunitTest_use_libraries,filter_msfilter, \
 	tl \
 	comphelper \
 	unotest \
@@ -29,7 +29,7 @@ $(eval $(call gb_CppunitTest_use_libraries,filter_utils, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_use_components,filter_utils,\
+$(eval $(call gb_CppunitTest_use_components,filter_msfilter,\
 	configmgr/source/configmgr \
 	filter/source/config/cache/filterconfig1 \
 	framework/util/fwk \
@@ -39,8 +39,8 @@ $(eval $(call gb_CppunitTest_use_components,filter_utils,\
 	ucb/source/ucp/file/ucpfile1 \
 ))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,filter_utils, \
-	filter/qa/cppunit/utils-test \
+$(eval $(call gb_CppunitTest_add_exception_objects,filter_msfilter, \
+	filter/qa/cppunit/msfilter-test \
 ))
 
 # vim: set noet sw=4 ts=4:
