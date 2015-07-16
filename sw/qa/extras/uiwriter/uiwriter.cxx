@@ -113,6 +113,7 @@ public:
     void testTextSearch();
     void testTdf69282();
     void testTdf69282WithMirror();
+    void testUnoParagraph();
     void testSearchWithTransliterate();
     void testTdf80663();
     void testTdf90808();
@@ -170,6 +171,7 @@ public:
     CPPUNIT_TEST(testTextSearch);
     CPPUNIT_TEST(testTdf69282);
     CPPUNIT_TEST(testTdf69282WithMirror);
+    CPPUNIT_TEST(testUnoParagraph);
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTdf80663);
     CPPUNIT_TEST(testTdf90808);
@@ -1311,6 +1313,40 @@ void SwUiWriterTest::testTdf69282WithMirror()
     CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vFirstLeftFormatSpace.GetUpper());
     CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vFirstLeftFormatSpace.GetLower());
     xSourceDoc->dispose();
+}
+
+void SwUiWriterTest::testUnoParagraph()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    //Inserting some text content in the document
+    pWrtShell->Insert("This is initial text in paragraph one");
+    pWrtShell->SplitNode();
+    //Inserting second paragraph
+    pWrtShell->Insert("This is initial text in paragraph two");
+    //now testing the SwXParagraph
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xTextDocument->getText());
+    uno::Reference<container::XEnumerationAccess> xParaAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPara(xParaAccess->createEnumeration());
+    //getting first paragraph
+    uno::Reference<text::XTextContent> xFirstParaContent(xPara->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xFirstPara(xFirstParaContent, uno::UNO_QUERY);
+    //testing the initial text
+    CPPUNIT_ASSERT_EQUAL(OUString("This is initial text in paragraph one"), xFirstPara->getString());
+    //changing the text content in first paragraph
+    xFirstPara->setString("This is modified text in paragraph one");
+    //testing the changes
+    CPPUNIT_ASSERT_EQUAL(OUString("This is modified text in paragraph one"), xFirstPara->getString());
+    //getting second paragraph
+    uno::Reference<text::XTextContent> xSecondParaContent(xPara->nextElement(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xSecondPara(xSecondParaContent, uno::UNO_QUERY);
+    //testing the initial text
+    CPPUNIT_ASSERT_EQUAL(OUString("This is initial text in paragraph two"), xSecondPara->getString());
+    //changing the text content in second paragraph
+    xSecondPara->setString("This is modified text in paragraph two");
+    //testing the changes
+    CPPUNIT_ASSERT_EQUAL(OUString("This is modified text in paragraph two"), xSecondPara->getString());
 }
 
 void SwUiWriterTest::testSearchWithTransliterate()
