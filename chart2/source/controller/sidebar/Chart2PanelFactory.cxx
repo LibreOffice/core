@@ -30,6 +30,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include "ChartElementsPanel.hxx"
+#include "ChartSeriesPanel.hxx"
 #include "ChartController.hxx"
 
 using namespace css::uno;
@@ -93,6 +94,8 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
         VclPtr<vcl::Window> pPanel;
         if (rsResourceURL.endsWith("/ElementsPanel"))
             pPanel = ChartElementsPanel::Create( pParentWindow, xFrame, pBindings, pController );
+        else if (rsResourceURL.endsWith("/SeriesPanel"))
+            pPanel = ChartSeriesPanel::Create(pParentWindow, xFrame, pBindings, pController);
         /*
         else if (rsResourceURL.endsWith("/CellAppearancePropertyPanel"))
             pPanel = CellAppearancePropertyPanel::Create( pParentWindow, xFrame, pBindings );

@@ -43,6 +43,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/inserttitledlg \
 	chart2/uiconfig/ui/paradialog \
 	chart2/uiconfig/ui/sidebarelements \
+	chart2/uiconfig/ui/sidebarseries \
 	chart2/uiconfig/ui/smoothlinesdlg \
 	chart2/uiconfig/ui/steppedlinesdlg \
 	chart2/uiconfig/ui/titlerotationtabpage \
