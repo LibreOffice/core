@@ -179,7 +179,7 @@ void SFTreeListBox::Init( const OUString& language  )
         rootNode.set( xFac->createView(
             browse::BrowseNodeFactoryViewTypes::MACROORGANIZER ) );
 
-        if (  rootNode.is() && rootNode->hasChildNodes() == sal_True )
+        if (  rootNode.is() && rootNode->hasChildNodes() )
         {
             children = rootNode->getChildNodes();
         }
@@ -859,7 +859,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         // no children => ok to create Parcel1 or Script1 without checking
         try
         {
-            if( node->hasChildNodes() == sal_False )
+            if( !node->hasChildNodes() )
             {
                 aNewName = aNewStdName + OUString::number(i);
                 bValid = true;
@@ -1157,7 +1157,7 @@ OUString SvxScriptOrgDialog::getListOfChildren( Reference< browse::XBrowseNode >
 
     try
     {
-        if ( node->hasChildNodes() == sal_True )
+        if ( node->hasChildNodes() )
         {
             Sequence< Reference< browse::XBrowseNode > > children
                 = node->getChildNodes();
