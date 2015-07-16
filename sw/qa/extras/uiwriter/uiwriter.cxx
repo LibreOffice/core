@@ -37,6 +37,7 @@
 #include <unotbl.hxx>
 #include <pagedesc.hxx>
 #include "com/sun/star/text/XDefaultNumberingProvider.hpp"
+#include "com/sun/star/awt/FontUnderline.hpp"
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -117,6 +118,7 @@ public:
     void testTdf90808();
     void testTdf75137();
     void testTdf83798();
+    void testPropertyDefaults();
     void testTableBackgroundColor();
     void testTdf88899();
     void testTdf90362();
@@ -173,6 +175,7 @@ public:
     CPPUNIT_TEST(testTdf90808);
     CPPUNIT_TEST(testTdf75137);
     CPPUNIT_TEST(testTdf83798);
+    CPPUNIT_TEST(testPropertyDefaults);
     CPPUNIT_TEST(testTableBackgroundColor);
     CPPUNIT_TEST(testTdf88899);
     CPPUNIT_TEST(testTdf90362);
@@ -1528,6 +1531,53 @@ void SwUiWriterTest::testTdf83798()
     pCrsr->Move(fnMoveForward, fnGoContent);
     CPPUNIT_ASSERT_EQUAL(OUString("2.A"), pCrsr->GetText());
     pCrsr->DeleteMark();
+}
+
+void SwUiWriterTest::testPropertyDefaults()
+{
+    createDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
+    uno::Reference<uno::XInterface> xInterface(xFact->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(xInterface, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertyState> xPropState(xInterface, uno::UNO_QUERY);
+    //testing CharFontName from style::CharacterProperties
+    //getting property default
+    uno::Any aCharFontName = xPropState->getPropertyDefault(OUString("CharFontName"));
+    //asserting property default and defaults received from "css.text.Defaults" service
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharFontName")), aCharFontName);
+    //changing the default value
+    xPropSet->setPropertyValue(OUString("CharFontName"), uno::makeAny(OUString("Symbol")));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Symbol")), xPropSet->getPropertyValue(OUString("CharFontName")));
+    //resetting the value to default
+    xPropState->setPropertyToDefault(OUString("CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharFontName")), aCharFontName);
+    //testing CharHeight from style::CharacterProperties
+    //getting property default
+    uno::Any aCharHeight = xPropState->getPropertyDefault(OUString("CharHeight"));
+    //asserting property default and defaults received from "css.text.Defaults" service
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharHeight")), aCharHeight);
+    //changing the default value
+    xPropSet->setPropertyValue(OUString("CharHeight"), uno::makeAny(float(14)));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(14)), xPropSet->getPropertyValue(OUString("CharHeight")));
+    //resetting the value to default
+    xPropState->setPropertyToDefault(OUString("CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharHeight")), aCharHeight);
+    //testing CharWeight from style::CharacterProperties
+    uno::Any aCharWeight = xPropSet->getPropertyValue(OUString("CharWeight"));
+    //changing the default value
+    xPropSet->setPropertyValue(OUString("CharWeight"), uno::makeAny(float(awt::FontWeight::BOLD)));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(float(awt::FontWeight::BOLD)), xPropSet->getPropertyValue(OUString("CharWeight")));
+    //resetting the value to default
+    xPropState->setPropertyToDefault(OUString("CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharWeight")), aCharWeight);
+    //testing CharUnderline from style::CharacterProperties
+    uno::Any aCharUnderline = xPropSet->getPropertyValue(OUString("CharUnderline"));
+    //changing the default value
+    xPropSet->setPropertyValue(OUString("CharUnderline"), uno::makeAny(sal_Int16(awt::FontUnderline::SINGLE)));
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(sal_Int16(awt::FontUnderline::SINGLE)), xPropSet->getPropertyValue(OUString("CharUnderline")));
+    //resetting the value to default
+    xPropState->setPropertyToDefault(OUString("CharUnderline"));
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharUnderline")), aCharUnderline);
 }
 
 void SwUiWriterTest::testTableBackgroundColor()
