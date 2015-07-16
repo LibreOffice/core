@@ -161,7 +161,7 @@ static sal_uInt8 getStoreModeFromSlotName( const OUString& aSlotName )
     else if ( aSlotName == "SaveAs" )
         nResult = SAVEAS_REQUESTED;
     else if ( aSlotName == "SaveAsRemote" )
-        nResult = SAVEASREMOTE_REQUESTED;
+        nResult = static_cast<sal_uInt8>(SAVEASREMOTE_REQUESTED);
     else
         throw task::ErrorCodeIOException(
             ("getStoreModeFromSlotName(\"" + aSlotName
