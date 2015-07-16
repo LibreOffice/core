@@ -104,7 +104,6 @@ public:
 
     virtual SgaObjKind  GetObjKind() const SAL_OVERRIDE { return SGA_OBJ_SOUND; }
     virtual BitmapEx    GetThumbBmp() const SAL_OVERRIDE;
-    GalSoundType        GetSoundType() const { return eSoundType; }
 };
 
 class FmFormModel;

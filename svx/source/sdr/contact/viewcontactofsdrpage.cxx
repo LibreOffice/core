@@ -580,12 +580,6 @@ void ViewContactOfSdrPage::ActionChanged()
     maViewContactOfHelplinesFront.ActionChanged();
 }
 
-// override for acessing the SdrPage
-SdrPage* ViewContactOfSdrPage::TryToGetSdrPage() const
-{
-    return &GetSdrPage();
-}
-
 drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrPage::createViewIndependentPrimitive2DSequence() const
 {
     drawinglayer::primitive2d::Primitive2DSequence xRetval;

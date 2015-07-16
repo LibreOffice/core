@@ -73,7 +73,6 @@ public:
 
     // Alle markierten Polylines werden zu Polygonen, alle offenen
     // Bezierkurven zu geschlossenen.
-    void CloseMarkedObjects(bool bToggle=false, bool bOpen=false) SAL_OVERRIDE; // , long nOpenDistance=0);
     bool IsOpenCloseMarkedObjectsPossible() const SAL_OVERRIDE;
     SdrObjClosedKind GetMarkedObjectsClosedState() const SAL_OVERRIDE;
 

@@ -75,7 +75,6 @@ public:
     virtual SdrPathSmoothKind GetMarkedPointsSmooth() const SAL_OVERRIDE;
     virtual void SetMarkedPointsSmooth(SdrPathSmoothKind eKind) SAL_OVERRIDE;
 
-    virtual void CloseMarkedObjects(bool bToggle, bool bOpen ) SAL_OVERRIDE;
     virtual bool IsOpenCloseMarkedObjectsPossible() const SAL_OVERRIDE;
     virtual SdrObjClosedKind GetMarkedObjectsClosedState() const SAL_OVERRIDE;
 

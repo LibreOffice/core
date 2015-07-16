@@ -53,8 +53,6 @@ public:
 
     sal_Int8 GetType() const { return m_nType; }
     const rtl::OUString GetURL() const { return m_aURL; }
-    const rtl::OUString GetFilterName() const { return m_aFilterName; }
-    const com::sun::star::uno::Reference< com::sun::star::lang::XComponent > GetDrawing() const { return m_xDrawing; }
     const com::sun::star::uno::Reference< com::sun::star::graphic::XGraphic > GetGraphic() const { return m_xGraphic; }
 
     // pure virtual methods from SfxPoolItem

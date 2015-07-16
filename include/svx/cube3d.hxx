@@ -76,8 +76,6 @@ public:
     void SetPosIsCenter(bool bNew);
     bool GetPosIsCenter() const { return bPosIsCenter; }
 
-    sal_uInt16 GetSideFlags() { return nSideFlags; }
-
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
     virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;

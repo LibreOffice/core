@@ -2118,16 +2118,6 @@ ImageMap* ScDrawLayer::GetImageMapForObject(SdrObject* pObj)
     return NULL;
 }
 
-sal_Int32 ScDrawLayer::GetHyperlinkCount(SdrObject* pObj)
-{
-    sal_Int32 nHLCount = 0;
-    ScMacroInfo* pMacroInfo = GetMacroInfo(pObj, false);
-    if (pMacroInfo)
-        // MT IA2: GetHlink*( doesn't exist in DEV300 anymore...
-        nHLCount = 0; // pMacroInfo->GetHlink().getLength() > 0 ? 1 : 0;
-    return nHLCount;
-}
-
 void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)
 {
     OSL_ENSURE(!pGlobalDrawPersist,"Multiple SetGlobalDrawPersist");
@@ -2139,12 +2129,6 @@ void ScDrawLayer::SetChanged( bool bFlg /* = true */ )
     if ( bFlg && pDoc )
         pDoc->SetChartListenerCollectionNeedsUpdate( true );
     FmFormModel::SetChanged( bFlg );
-}
-
-SdrLayerID ScDrawLayer::GetControlExportLayerId( const SdrObject & ) const
-{
-    //  Layer for export of Form-Controls in Versions before 5.0 - always SC_LAYER_FRONT
-    return SC_LAYER_FRONT;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ScDrawLayer::createUnoModel()

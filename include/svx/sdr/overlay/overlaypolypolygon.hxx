@@ -46,7 +46,6 @@ namespace sdr
 
             // change geometry
             basegfx::B2DPolyPolygon getLinePolyPolygon() const { return maLinePolyPolygon; }
-            void setLinePolyPolygon(const basegfx::B2DPolyPolygon& rNew);
 
             // react on stripe definition change
             virtual void stripeDefinitionHasChanged() SAL_OVERRIDE;

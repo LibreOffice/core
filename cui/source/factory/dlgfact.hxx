@@ -196,8 +196,6 @@ class AbstractSpellDialog_Impl : public AbstractSpellDialog
 {
  public:
     DECL_ABSTDLG_BASE(AbstractSpellDialog_Impl, svx::SpellDialog)
-    virtual void        SetLanguage( sal_uInt16 nLang ) SAL_OVERRIDE;
-    virtual bool        Close() SAL_OVERRIDE;
     virtual void        Invalidate() SAL_OVERRIDE;
     virtual vcl::Window*     GetWindow() SAL_OVERRIDE;
     virtual SfxBindings& GetBindings() SAL_OVERRIDE;
@@ -208,9 +206,6 @@ class AbstractSearchProgress_Impl : public AbstractSearchProgress
 {
     DECL_ABSTDLG_BASE(AbstractSearchProgress_Impl,SearchProgress)
     virtual void        Update() SAL_OVERRIDE ;
-    virtual void        SetFileType( const OUString& rType ) SAL_OVERRIDE ;
-    virtual void        SetDirectory( const INetURLObject& rURL ) SAL_OVERRIDE ;
-    virtual PLinkStub   GetLinkStubCleanUpHdl() SAL_OVERRIDE ;
 
 };
 
@@ -219,8 +214,6 @@ class AbstractTakeProgress_Impl : public AbstractTakeProgress
 {
     DECL_ABSTDLG_BASE(AbstractTakeProgress_Impl,TakeProgress)
     virtual void        Update() SAL_OVERRIDE ;
-    virtual void        SetFile( const INetURLObject& rURL ) SAL_OVERRIDE ;
-    virtual PLinkStub   GetLinkStubCleanUpHdl() SAL_OVERRIDE ;
 
 };
 
@@ -266,16 +259,6 @@ class SvxHlinkDlgMarkWnd;
 class AbstractSvxHlinkDlgMarkWnd_Impl : public AbstractSvxHlinkDlgMarkWnd
 {
     DECL_ABSTDLG_BASE(AbstractSvxHlinkDlgMarkWnd_Impl,SvxHlinkDlgMarkWnd)
-    virtual void                Hide() SAL_OVERRIDE;
-    virtual bool                IsVisible() const SAL_OVERRIDE ;
-    virtual void                Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) SAL_OVERRIDE;
-    virtual void                SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
-    virtual Size                GetSizePixel() const SAL_OVERRIDE;
-    virtual bool                MoveTo( Point aNewPos ) const SAL_OVERRIDE;
-    virtual bool                ConnectToDialog( bool bDoit = true ) const SAL_OVERRIDE;
-    virtual void                RefreshTree ( const OUString& aStrURL ) SAL_OVERRIDE;
-    virtual void                SelectEntry ( const OUString& aStrMark ) SAL_OVERRIDE;
-    virtual sal_uInt16          SetError( sal_uInt16 nError) SAL_OVERRIDE ;
 
 };
 
@@ -377,7 +360,6 @@ class SvxMessDialog;
 class AbstractSvxMessDialog_Impl :public AbstractSvxMessDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxMessDialog_Impl,SvxMessDialog)
-    virtual void    SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt ) SAL_OVERRIDE;
 };
 
 class SvxMultiPathDialog;
@@ -474,8 +456,6 @@ class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
     virtual void                ShowLastAuthor(const OUString& rAuthor, const OUString& rDate) SAL_OVERRIDE ;
     virtual void                DontChangeAuthor() SAL_OVERRIDE ;
     virtual void                HideAuthor() SAL_OVERRIDE ;
-    virtual void                SetReadonlyPostIt(bool bDisable) SAL_OVERRIDE ;
-    virtual bool                IsOkEnabled() const SAL_OVERRIDE;
     virtual vcl::Window *            GetWindow() SAL_OVERRIDE;
 private:
     Link<> aNextHdl;
@@ -581,9 +561,6 @@ public:
                             svx::SpellDialogChildWindow* pSpellChildWindow ) SAL_OVERRIDE;
 
     virtual VclAbstractRefreshableDialog * CreateActualizeProgressDialog( vcl::Window* pParent, GalleryTheme* pThm ) SAL_OVERRIDE;
-    virtual AbstractSearchProgress * CreateSearchProgressDialog( vcl::Window* pParent,
-                                            const INetURLObject& rStartURL) SAL_OVERRIDE;
-    virtual AbstractTakeProgress * CreateTakeProgressDialog( vcl::Window* pParent ) SAL_OVERRIDE;
     virtual AbstractTitleDialog * CreateTitleDialog( vcl::Window* pParent,
                                              const OUString& rOldText) SAL_OVERRIDE;
     virtual AbstractGalleryIdDialog * CreateGalleryIdDialog( vcl::Window* pParent,
@@ -595,7 +572,6 @@ public:
                                             const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
                                             const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList ) SAL_OVERRIDE;
-    virtual AbstractSvxHlinkDlgMarkWnd* CreateSvxHlinkDlgMarkWndDialog( SvxHyperlinkTabPageBase* pParent, sal_uInt32 nResId ) SAL_OVERRIDE;
 
     virtual VclAbstractDialog*      CreateSvxSearchAttributeDialog( vcl::Window* pParent,
                                             SearchAttrItemList& rLst,
@@ -621,9 +597,6 @@ public:
     virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(vcl::Window* pParent, const OUString& rName ) SAL_OVERRIDE;
     virtual AbstractSvxObjectTitleDescDialog* CreateSvxObjectTitleDescDialog(vcl::Window* pParent, const OUString& rTitle, const OUString& rDescription) SAL_OVERRIDE;
 
-    virtual AbstractSvxMessDialog *         CreateSvxMessDialog( vcl::Window* pParent, sal_uInt32 nResId,
-                                                const OUString& rText, const OUString& rDesc,
-                                                Image* pImg = NULL ) SAL_OVERRIDE;
     virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog(vcl::Window* pParent) SAL_OVERRIDE;
     virtual AbstractSvxMultiPathDialog *    CreateSvxPathSelectDialog(vcl::Window* pParent) SAL_OVERRIDE;
     virtual AbstractSvxHpLinkDlg *          CreateSvxHpLinkDlg (vcl::Window* pParent,
@@ -662,7 +635,6 @@ public:
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) SAL_OVERRIDE;
-    virtual CreateSvxDistributePage     GetSvxDistributePageCreatorFunc() SAL_OVERRIDE;
 
     virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual DialogGetRanges             GetDialogGetRangesFunc() SAL_OVERRIDE;

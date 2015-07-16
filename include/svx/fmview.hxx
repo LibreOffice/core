@@ -151,7 +151,6 @@ public:
     SVX_DLLPRIVATE bool checkUnMarkAll(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xSource);
 
 private:
-    SVX_DLLPRIVATE void AdjustMarks(const SdrMarkList& rMarkList);
     SVX_DLLPRIVATE FmFormObj* getMarkedGrid() const;
  protected:
     using E3dView::SetMoveOutside;

@@ -258,9 +258,6 @@ protected:
     void ImpSetGlueVisible2(bool bOn) { if (bGlueVisible2!=bOn) { bGlueVisible2=bOn; if (!bGlueVisible && !bGlueVisible3 && !bGlueVisible4) GlueInvalidate(); } }
     void ImpSetGlueVisible3(bool bOn) { if (bGlueVisible3!=bOn) { bGlueVisible3=bOn; if (!bGlueVisible && !bGlueVisible2 && !bGlueVisible4) GlueInvalidate(); } }
     void ImpSetGlueVisible4(bool bOn) { if (bGlueVisible4!=bOn) { bGlueVisible4=bOn; if (!bGlueVisible && !bGlueVisible2 && !bGlueVisible3) GlueInvalidate(); } }
-    bool ImpIsGlueVisible2() const { return bGlueVisible2; }
-    bool ImpIsGlueVisible3() const { return bGlueVisible3; }
-    bool ImpIsGlueVisible4() const { return bGlueVisible4; }
 
 public:
     bool ImpIsGlueVisible() { return bGlueVisible || bGlueVisible2 || bGlueVisible3 || bGlueVisible4; }
@@ -268,10 +265,6 @@ protected:
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
     void GlueInvalidate() const;
-
-    void ShowEncirclement(OutputDevice* pOut);
-    void HideEncirclement(OutputDevice* pOut);
-    void DrawEncirclement(OutputDevice* pOut) const;
 
     // ModelHasChanged wird gerufen, sobald nach beliebig vielen HINT_OBJCHG
     // das System wieder idle ist (StarView-Timer). Wer diese Methode ueberlaed,
@@ -308,17 +301,14 @@ public:
     // Pixelwerten logische Werte berechnen kann.
     void SetActualWin(const OutputDevice* pWin);
     void SetMinMoveDistancePixel(sal_uInt16 nVal) { nMinMovPix=nVal; TheresNewMapMode(); }
-    sal_uInt16 GetMinMoveDistancePixel() const { return (sal_uInt16)nMinMovPix; }
     void SetHitTolerancePixel(sal_uInt16 nVal) { nHitTolPix=nVal; TheresNewMapMode(); }
     sal_uInt16 GetHitTolerancePixel() const { return (sal_uInt16)nHitTolPix; }
 
     // data read access on logic HitTolerance and MinMoveTolerance
     sal_uInt16 getHitTolLog() const { return nHitTolLog; }
-    sal_uInt16 getMinMovLog() const { return nMinMovLog; }
 
     // Flag zur Visualisierung von Gruppen abfragen/testen
     bool DoVisualizeEnteredGroup() const { return bVisualizeEnteredGroup; }
-    void SetVisualizeEnteredGroup(bool bNew) { bVisualizeEnteredGroup = bNew; }
 
     // Am DragStatus laesst sich beispielsweise erfragen, welche
     // entfernung bereits gedraggd wurde, etc.
@@ -392,7 +382,6 @@ public:
     bool IsGridFront() const { return bGridFront  ; }               // Rastergitter ueber die Objekte druebermalen oder dahinter
     bool IsHlplVisible() const { return bHlplVisible; }             // Hilfslinien der Seiten malen oder nicht
     bool IsHlplFront() const { return bHlplFront  ; }               // Hilfslinie ueber die Objekte druebermalen oder dahinter
-    bool IsGlueVisible() const { return bGlueVisible; }             // Konnektoren der objekte sichtbar oder nicht
     Color GetGridColor() const { return maGridColor;}
     void SetPageVisible(bool bOn = true) { bPageVisible=bOn; InvalidateAllWin(); }
     void SetPageBorderVisible(bool bOn = true) { bPageBorderVisible=bOn; InvalidateAllWin(); }
@@ -454,10 +443,6 @@ public:
     void SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool bReplaceAll);
     void MergeNotPersistDefaultAttr(SfxItemSet& rAttr, bool bOnlyHardAttr) const;
 
-    // use this mode as mode to draw all internal GraphicManager objects with
-    GraphicManagerDrawFlags GetGraphicManagerDrawMode() const { return nGraphicManagerDrawMode; }
-    void SetGraphicManagerDrawMode( GraphicManagerDrawFlags nMode ) { nGraphicManagerDrawMode = nMode; }
-
     // SwapIn (z.B. von Grafiken) asynchron durchfuehren. Also nicht
     // beim Paint sofort nachladen, sondern dort das Nachladen anstossen.
     // Nach Abschluss des Nachladens wird das Objekt dann angezeigt.
@@ -491,7 +476,6 @@ public:
     void SetAnimationEnabled( bool bEnable=true );
 
     // set/unset pause state for animations
-    bool IsAnimationPause() const { return bAnimationPause; }
     void SetAnimationPause( bool bSet );
 
     // Verhalten beim Starten von Animation im Paint-Handler:
@@ -499,7 +483,6 @@ public:
     // 2. Nur die Ersatzdarstellung der Animation zeichnen ( SDR_ANIMATION_DONT_ANIMATE )
     // 3. Nicht starten und nichts ersatzweise ausgeben ( SDR_ANIMATION_DISABLE )
     void SetAnimationMode( const SdrAnimationMode eMode );
-    SdrAnimationMode GetAnimationMode() const { return eAnimationMode; }
 
     // bei bShow=sal_False wird der Browser destruiert
 #ifdef DBG_UTIL

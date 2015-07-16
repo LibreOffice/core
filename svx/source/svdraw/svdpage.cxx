@@ -746,7 +746,7 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
             for( size_t i=0; i<nCount; ++i )
             {
                 SdrObject* pObj = pSrcLst->RemoveObject(0);
-                SdrInsertReason aReason(SDRREASON_VIEWCALL, pUngroupGroup);
+                SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 InsertObject(pObj, nInsertPos, &aReason);
                 ++nInsertPos;
             }

@@ -109,7 +109,6 @@ public:
     const Fraction& GetSnapGridWidthY() const { return aSnapWdtY; }
 
     void SetSnapMagnetic(const Size& rSiz) { if (rSiz!=aMagnSiz) { aMagnSiz=rSiz; } }
-    const Size& GetSnapMagnetic() const { return aMagnSiz; }
     void SetSnapMagneticPixel(sal_uInt16 nPix) { nMagnSizPix=nPix; }
     sal_uInt16 GetSnapMagneticPixel() const { return nMagnSizPix; }
 
@@ -145,21 +144,6 @@ public:
     // persistent, Default=FALSE.
     void SetMoveSnapOnlyTopLeft(bool bOn) { bMoveSnapOnlyTopLeft=bOn; }
     bool IsMoveSnapOnlyTopLeft() const { return bMoveSnapOnlyTopLeft; }
-
-    // auxiliary lines fixed (not moveable)
-    // persistent, Default=FALSE.
-    bool IsHlplFixed() const { return bHlplFixed; }
-    void SetHlplFixed(bool bOn) { bHlplFixed=bOn; }
-
-    bool IsMoveMFrmSnap() const { return bMoveMFrmSnap; } // Fang des LogFram aller markierten Objekte
-    bool IsMoveOFrmSnap() const { return bMoveOFrmSnap; } // Fang aller LogFram der markierten Objekte
-    bool IsMoveOPntSnap() const { return bMoveOPntSnap; } // Fang ausgepraegter Punkte der markierten Objekte
-    bool IsMoveOConSnap() const { return bMoveOConSnap; } // Fang der Konnektoren der markierten Objekte
-
-    void SetMoveMFrmSnap(bool bOn) { bMoveMFrmSnap=bOn; }
-    void SetMoveOFrmSnap(bool bOn) { bMoveOFrmSnap=bOn; }
-    void SetMoveOPntSnap(bool bOn) { bMoveOPntSnap=bOn; }
-    void SetMoveOConSnap(bool bOn) { bMoveOConSnap=bOn; }
 
     // #114409#-1 Migrate PageOrigin
     bool BegSetPageOrg(const Point& rPnt);

@@ -59,9 +59,6 @@ public:
     virtual void SetObjList(SdrObjList* pNewObjList) SAL_OVERRIDE;
     virtual void SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
     virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
-    virtual bool HasRefPoint() const SAL_OVERRIDE;
-    virtual Point GetRefPoint() const SAL_OVERRIDE;
-    virtual void SetRefPoint(const Point& rPnt) SAL_OVERRIDE;
     virtual SdrObjList* GetSubList() const SAL_OVERRIDE;
 
     virtual const Rectangle& GetCurrentBoundRect() const SAL_OVERRIDE;

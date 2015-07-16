@@ -92,9 +92,6 @@ namespace sdr
             // check if asynchronious graphis loading is allowed. Default is sal_False.
             virtual bool IsAsynchronGraphicsLoadingAllowed() const SAL_OVERRIDE;
 
-            // check if buffering of MasterPages is allowed. Default is sal_False.
-            virtual bool IsMasterPageBufferingAllowed() const SAL_OVERRIDE;
-
             // print? Default is false
             virtual bool isOutputToPrinter() const SAL_OVERRIDE;
 

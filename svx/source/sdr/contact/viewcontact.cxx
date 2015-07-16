@@ -223,12 +223,6 @@ SdrObject* ViewContact::TryToGetSdrObject() const
     return 0L;
 }
 
-SdrPage* ViewContact::TryToGetSdrPage() const
-{
-    return 0L;
-}
-
-
 // primitive stuff
 
 drawinglayer::primitive2d::Primitive2DSequence ViewContact::createViewIndependentPrimitive2DSequence() const

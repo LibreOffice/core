@@ -63,7 +63,6 @@ public:
     virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) SAL_OVERRIDE;
     virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) SAL_OVERRIDE;
 
-    virtual SdrLayerID      GetControlExportLayerId( const SdrObject& rObj ) const;
     SfxObjectShell*         GetObjectShell() const { return m_pObjShell; }
     void                    SetObjectShell( SfxObjectShell* pShell );
 

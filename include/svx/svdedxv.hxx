@@ -198,7 +198,6 @@ public:
     virtual SdrPageView* GetTextEditPageView() const SAL_OVERRIDE;
 
     // Current window of the outliners.
-    vcl::Window* GetTextEditWin() const { return pTextEditWin; }
     void SetTextEditWin(vcl::Window* pWin);
 
     // Now at this outliner, events can be send, attributes can be set,
@@ -236,7 +235,6 @@ public:
 
     // Persistent. Default TRUE. SvDraw evaluates the flag e.g. at SdrView::GetPreferredPointer().
     // Has only effect, if the document has draw-objects with macrofunctionality (SdrObject::HasMacro()==sal_True).
-    void SetMacroMode(bool bOn) { bMacroMode=bOn; }
     bool IsMacroMode() const { return bMacroMode; }
     bool BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin);
     bool BegMacroObj(const Point& rPnt, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin) { return BegMacroObj(rPnt,-2,pObj,pPV,pWin); }
@@ -244,7 +242,6 @@ public:
     void BrkMacroObj();
     bool EndMacroObj();
     bool IsMacroObj() const { return pMacroObj!=NULL; }
-    bool IsMacroObjDown() const { return bMacroDown; }
 
     /** fills the given any with a XTextCursor for the current text selection.
         Leaves the any untouched if there currently is no text selected */

@@ -102,7 +102,6 @@ public:
     void PointsToBezier(sal_uInt16 nFirst);
 
     // transformations
-    void Translate(const Point& rTrans);
     void Scale(double fSx, double fSy);
     void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);
 

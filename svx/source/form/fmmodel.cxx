@@ -169,12 +169,6 @@ SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
 }
 
 
-SdrLayerID FmFormModel::GetControlExportLayerId( const SdrObject& rObj ) const
-{
-    return rObj.GetLayer();
-}
-
-
 void FmFormModel::implSetOpenInDesignMode( bool _bOpenDesignMode, bool _bForce )
 {
     if( ( _bOpenDesignMode != m_bOpenInDesignMode ) || _bForce )

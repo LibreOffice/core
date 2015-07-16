@@ -905,22 +905,7 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
 
     return fNumber;
 }
-sal_Int32 EnhancedCustomShape2d::GetAdjustValueAsInteger( const sal_Int32 nIndex, const sal_Int32 nDefault ) const
-{
-    sal_Int32 nNumber = nDefault;
-    if ( nIndex < seqAdjustmentValues.getLength() )
-    {
-        if ( seqAdjustmentValues[ nIndex ].Value.getValueTypeClass() == TypeClass_DOUBLE )
-        {
-            double fNumber = 0;
-            seqAdjustmentValues[ nIndex ].Value >>= fNumber;
-            nNumber = (sal_Int32)fNumber;
-        }
-        else
-            seqAdjustmentValues[ nIndex ].Value >>= nNumber;
-    }
-    return nNumber;
-}
+
 bool EnhancedCustomShape2d::SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex )
 {
     bool bRetValue = false;

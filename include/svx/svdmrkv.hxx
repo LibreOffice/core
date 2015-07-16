@@ -207,15 +207,10 @@ public:
     // The interface might maybe be changed in the future because of Ortho-Drag
     void SetDragMode(SdrDragMode eMode);
     SdrDragMode GetDragMode() const { return meDragMode; }
-    bool ChkDragMode(SdrDragMode eMode) const;
     void SetFrameHandles(bool bOn);
     bool IsFrameHandles() const { return mbForceFrameHandles; }
 
     sal_uIntPtr GetMarkableObjCount() const;
-
-    // Limit. Exceeding the limit causes an implicite switch to FrameHandles. default=50.
-    void SetFrameHandlesLimit(sal_uInt16 nCount) { mnFrameHandlesLimit=nCount; }
-    sal_uInt16 GetFrameHandlesLimit() const { return mnFrameHandlesLimit; }
 
     void SetEditMode(SdrViewEditMode eMode);
     SdrViewEditMode GetEditMode() const { return meEditMode; }
@@ -340,11 +335,9 @@ public:
     // Mark all points within this rectangular alle Punkte (View coordinates)
     bool MarkPoints(const Rectangle& rRect, bool bUnmark=false) { return MarkPoints(&rRect,bUnmark); }
     bool UnmarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,true); }
-    bool UnMarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,true); }
     bool IsPointMarked(const SdrHdl& rHdl) const { ForceUndirtyMrkPnt(); return rHdl.IsSelected(); }
     bool MarkAllPoints() { return MarkPoints(NULL,false); }
     bool UnmarkAllPoints() { return MarkPoints(NULL,true); }
-    bool UnMarkAllPoints() { return MarkPoints(NULL,true); }
 
     // Selects the first marked point (P1) which is hit by rPnt
     // and from there it searches the first non-marked point(P2).
@@ -374,7 +367,6 @@ public:
     // Are Handles visible during TextEdit (in double size)?
     // Persistent, default=FALSE
     void SetMarkHdlWhenTextEdit(bool bOn) { mbMarkHdlWhenTextEdit=bOn; }
-    bool IsMarkHdlWhenTextEdit() const { return mbMarkHdlWhenTextEdit; }
 
     bool HasMarkableGluePoints() const;
     bool HasMarkedGluePoints() const;
@@ -401,8 +393,6 @@ public:
     static bool IsGluePoint(const SdrHdl& rHdl) { return rHdl.GetKind()==HDL_GLUE; }
 
     // Mark all points within this rectangular (View coordinates)
-    bool MarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,false); }
-    bool UnmarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,true); }
     bool MarkAllGluePoints() { return MarkGluePoints(NULL,false); }
     bool UnmarkAllGluePoints() { return MarkGluePoints(NULL,true); }
 
@@ -435,7 +425,6 @@ public:
     const Rectangle& GetMarkedGluePointsRect() const; // Enclosing rectangle of all marked glue points
     const Rectangle& GetAllMarkedRect() const { return GetMarkedObjRect(); }
     Rectangle GetAllMarkedBoundRect() const { return GetMarkedObjBoundRect(); }
-    const Rectangle& GetAllMarkedPointsRect() const  { return GetMarkedPointsRect(); }
     Point GetGridOffset() const;
 
     // Will be always called, if the list of marked objects might be changed.
@@ -451,10 +440,6 @@ public:
     // separately. The method returns sal_True, if at least one group was entered.
     bool EnterMarkedGroup();
 
-    // Get the center point of the last Crook-Dragging. Den kann man
-    // bei einem anschliessenden Rotate sinnvoll als Drehmittelpunkt setzen.
-    const Point& GetLastCrookCenter() const { return maLastCrookCenter; }
-
     // Is set by DragView automatically when finishing a Crook-Drag.
     void SetLastCrookCenter(const Point& rPt) { maLastCrookCenter=rPt; }
 
@@ -465,7 +450,6 @@ public:
     // End point of the axis of reflextion
     const Point& GetRef2() const { return maRef1; }
     void SetRef2(const Point& rPt);
-    void UnmarkObj(SdrObject* pObj);
 };
 
 

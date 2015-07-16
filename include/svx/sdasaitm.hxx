@@ -29,12 +29,6 @@ class SdrCustomShapeAdjustmentValue
     sal_uInt32  nValue;
 
     friend class SdrCustomShapeAdjustmentItem;
-
-    public :
-
-        void        SetValue( sal_Int32 nVal ) { nValue = nVal; };
-        sal_Int32   GetValue() const { return nValue; };
-
 };
 
 class SdrCustomShapeAdjustmentItem : public SfxPoolItem

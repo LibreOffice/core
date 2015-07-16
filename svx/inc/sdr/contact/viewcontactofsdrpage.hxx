@@ -204,9 +204,6 @@ public:
     // React on changes of the object of this ViewContact
     virtual void ActionChanged() SAL_OVERRIDE;
 
-    // override for acessing the SdrPage
-    virtual SdrPage* TryToGetSdrPage() const SAL_OVERRIDE;
-
 protected:
     // This method is responsible for creating the graphical visualisation data
     // ONLY based on model data

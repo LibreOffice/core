@@ -225,15 +225,6 @@ private:
     sal_uInt32                                          mnUniqueCommentID;
 
 public:
-    // create a new, unique comment ID
-    sal_uInt32 GetNextUniqueCommentID();
-
-    // for export
-    sal_uInt32 GetUniqueCommentID() const { return mnUniqueCommentID; }
-
-    // for import
-    void SetUniqueCommentID(sal_uInt32 nNewID) { if(nNewID != mnUniqueCommentID) { mnUniqueCommentID = nNewID; } }
-
     sal_uInt16          nStarDrawPreviewMasterPageNum;
     SvxForbiddenCharactersTable* mpForbiddenCharactersTable;
     SdrSwapGraphicsMode nSwapGraphicsMode;
@@ -374,7 +365,6 @@ public:
     void                 SetLinkManager( sfx2::LinkManager* pLinkMgr ) { pLinkManager = pLinkMgr; }
 
     ::comphelper::IEmbeddedHelper*     GetPersist() const               { return m_pEmbeddedHelper; }
-    void                 ClearPersist()                                 { m_pEmbeddedHelper = 0; }
     void                 SetPersist( ::comphelper::IEmbeddedHelper *p ) { m_pEmbeddedHelper = p; }
 
     // Unit for the symbol coordination
@@ -409,11 +399,6 @@ public:
     const Fraction&  GetUIScale() const                         { return aUIScale; }
     // Setting both simultaneously performs a little better
     void             SetUIUnit(FieldUnit eUnit, const Fraction& rScale);
-
-    const Fraction&  GetUIUnitFact() const                      { return aUIUnitFact; }
-    const OUString&  GetUIUnitStr() const                       { return aUIUnitStr; }
-    int              GetUIUnitKomma() const                     { return nUIUnitKomma; }
-    bool             IsUIOnlyKomma() const                      { return bUIOnlyKomma; }
 
     static void      TakeUnitStr(FieldUnit eUnit, OUString& rStr);
     void             TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars = false, sal_Int32 nNumDigits = -1) const;
@@ -453,30 +438,6 @@ public:
     bool IsChanged() const { return mbChanged; }
     virtual void SetChanged(bool bFlg = true);
 
-    // PageNotValid means that the model carries objects which are
-    // anchored on a Page but the Page is invalid. This mark is needed for
-    // Clipboard/Drag&Drop.
-    bool            IsPageNotValid() const                     { return bPageNotValid; }
-    void            SetPageNotValid(bool bJa = true)           { bPageNotValid=bJa; }
-
-    // Setting this flag to sal_True, graphic objects are saved
-    // portably. Meta files will eventually implicitly changed, i.e. during save.
-    // Default=FALSE. Flag is not persistent.
-    bool            IsSavePortable() const                     { return bSavePortable; }
-    void            SetSavePortable(bool bJa = true)           { bSavePortable=bJa; }
-
-    // If you set this flag to sal_True, the
-    // pixel objects will be saved (heavily) compressed.
-    // Default=FALSE. Flag is not persistent.
-    bool            IsSaveCompressed() const                   { return bSaveCompressed; }
-    void            SetSaveCompressed(bool bJa = true)         { bSaveCompressed=bJa; }
-
-    // If true, graphic objects with set Native-Link
-    // native will be saved.
-    // Default=FALSE. Flag is not persistent.
-    bool            IsSaveNative() const                       { return bSaveNative; }
-    void            SetSaveNative(bool bJa = true)             { bSaveNative=bJa; }
-
     // If set to sal_True, graphics from graphics objects will:
     // - not be loaded immediately when loading a document,
     //   but only once they are needed (e.g. displayed).
@@ -489,16 +450,6 @@ public:
     SdrSwapGraphicsMode GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
 
     bool            IsSaveOLEPreview() const          { return bSaveOLEPreview; }
-    void            SetSaveOLEPreview( bool bSet) { bSaveOLEPreview = bSet; }
-
-    // To accelerate the screen output of Bitmaps (especially rotated ones)
-    // they will be cached. The existence of that cache can be toggled with this
-    // flag. During the next Paint an image will be remembered or freed.
-    // If a Bitmap object is placed in Undo its Cache for this object is turned off
-    // immediately to save memory.
-    // Default=Cache activated. Flag is not persistent.
-    bool            IsBitmapCaching() const                     { return !bNoBitmapCaching; }
-    void            SetBitmapCaching(bool bJa = true)           { bNoBitmapCaching=!bJa; }
 
     // Text frames without filling can be select with a mouse click by default (sal_False).
     // With this flag set to true you can hit them only in the area in which text is to be
@@ -554,7 +505,6 @@ public:
     void EndUndo();                       // close Undo group
     void AddUndo(SdrUndoAction* pUndo);
     sal_uInt16 GetUndoBracketLevel() const                       { return nUndoLevel; }
-    const SdrUndoGroup* GetAktUndoGroup() const              { return pAktUndoGroup; }
     // only after the first BegUndo or before the last EndUndo:
     void SetUndoComment(const OUString& rComment);
     void SetUndoComment(const OUString& rComment, const OUString& rObjDescr);
@@ -562,7 +512,6 @@ public:
     // The Undo management is only done if not NotifyUndoAction-Handler is set.
     // Default is 16. Minimal MaxUndoActionCount is 1!
     void  SetMaxUndoActionCount(sal_uIntPtr nCount);
-    sal_uIntPtr GetMaxUndoActionCount() const { return nMaxUndoCount; }
     void  ClearUndoBuffer();
 
     bool HasUndoActions() const;
@@ -577,7 +526,6 @@ public:
     // When calling the handler ownership is transferred;
     // The UndoAction belongs to the Handler, not the SdrModel.
     void        SetNotifyUndoActionHdl(const Link<>& rLink)  { aUndoLink=rLink; }
-    const Link<>& GetNotifyUndoActionHdl() const             { return aUndoLink; }
 
     /** application can set its own undo manager, BegUndo, EndUndo and AddUndoAction
         calls are routed to this interface if given */
@@ -592,19 +540,6 @@ public:
     /** returns the models undo factory. This must be used to create
         undo actions for this model. */
     SdrUndoFactory& GetSdrUndoFactory() const;
-
-    // You can set a handler which will be called multiple times while
-    // streaming and which estimates the progress of the function.
-    // The handler needs to have this signature:
-    //   void class::IOProgressHdl(const USHORT& nPercent);
-    // The first call of the handler will be with 0. The last call with 100.
-    // In between there will at most be 99 calls with 1..99.
-    // You can thus initialise the progres bar with 0 and close it on 100.
-    // Mind that the handler will also be called if the App serves Draw data in the
-    // office wide Draw-Exchange-Format because that happens through streaming into
-    // a MemoryStream.
-    void        SetIOProgressHdl(const Link<>& rLink)        { aIOProgressLink=rLink; }
-    const Link<>& GetIOProgressHdl() const                   { return aIOProgressLink; }
 
     // Accessor methods for Palettes, Lists and Tabeles
     // FIXME: this badly needs re-factoring ...
@@ -669,7 +604,6 @@ public:
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
 
     virtual ImageMap* GetImageMapForObject(SdrObject*){return NULL;};
-    virtual sal_Int32 GetHyperlinkCount(SdrObject*){return 0;}
 
     /** enables (true) or disables (false) recording of undo actions
         If undo actions are added while undo is disabled, they are deleted.

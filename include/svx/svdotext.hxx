@@ -370,7 +370,6 @@ public:
     virtual sal_Int32 CheckTextHit(const Point& rPnt) const;
 
     void SetDisableAutoWidthOnDragging(bool bOn) { bDisableAutoWidthOnDragging=bOn; }
-    bool IsDisableAutoWidthOnDragging() { return bDisableAutoWidthOnDragging; }
     void NbcSetText(const OUString& rStr);
     void SetText(const OUString& rStr);
     void NbcSetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat);

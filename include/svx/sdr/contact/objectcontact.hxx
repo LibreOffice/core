@@ -155,9 +155,6 @@ public:
     ViewObjectContactRedirector* GetViewObjectContactRedirector() const {  return mpViewObjectContactRedirector; }
     void SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew);
 
-    // check if buffering of MasterPages is allowed. Default is sal_False.
-    virtual bool IsMasterPageBufferingAllowed() const;
-
     // print? Default is false
     virtual bool isOutputToPrinter() const;
 

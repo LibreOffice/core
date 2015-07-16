@@ -41,9 +41,6 @@ public:
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::embed::XStorage> GetDocumentStorage() const SAL_OVERRIDE;
 
-    /// For saving of rectangles as control-replacement for versions < 5.0.
-    virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const SAL_OVERRIDE;
-
 protected:
     /// override of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() SAL_OVERRIDE;

@@ -1167,11 +1167,6 @@ void MotionPathTag::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
     }
 }
 
-void MotionPathTag::CloseMarkedObjects(bool /*bToggle*/, bool /*bOpen*/ )
-{
-    // not supported for motion path
-}
-
 bool MotionPathTag::IsOpenCloseMarkedObjectsPossible() const
 {
     // not supported for motion path

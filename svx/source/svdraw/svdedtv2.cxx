@@ -1128,7 +1128,7 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
         {
             SdrPathObj* pPath = new SdrPathObj(OBJ_PATHFILL, aMergePolyPolygonA);
             ImpCopyAttributes(pAttrObj, pPath);
-            SdrInsertReason aReason(SDRREASON_VIEWCALL, pAttrObj);
+            SdrInsertReason aReason(SDRREASON_VIEWCALL);
             pInsOL->InsertObject(pPath, nInsPos, &aReason);
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
@@ -1358,7 +1358,7 @@ void SdrEditView::CombineMarkedObjects(bool bNoPolyPoly)
             pPath->SetMergedItem(XLineStyleItem(drawing::LineStyle_SOLID));
         }
 
-        SdrInsertReason aReason(SDRREASON_VIEWCALL,pAttrObj);
+        SdrInsertReason aReason(SDRREASON_VIEWCALL);
         pInsOL->InsertObject(pPath,nInsPos,&aReason);
         if( bUndo )
             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath));
@@ -1512,7 +1512,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                 SdrPathObj* pPath = new SdrPathObj((SdrObjKind)pSrcPath->GetObjIdentifier(), basegfx::B2DPolyPolygon(rCandidate));
                 ImpCopyAttributes(pSrcPath, pPath);
                 pLast = pPath;
-                SdrInsertReason aReason(SDRREASON_VIEWCALL, pSrcPath);
+                SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 rOL.InsertObject(pPath, rPos, &aReason);
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, true));
@@ -1547,7 +1547,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     SdrPathObj* pPath = new SdrPathObj(eKind, basegfx::B2DPolyPolygon(aNewPolygon));
                     ImpCopyAttributes(pSrcPath, pPath);
                     pLast = pPath;
-                    SdrInsertReason aReason(SDRREASON_VIEWCALL, pSrcPath);
+                    SdrInsertReason aReason(SDRREASON_VIEWCALL);
                     rOL.InsertObject(pPath, rPos, &aReason);
                     if( bUndo )
                         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pPath, true));
@@ -1583,7 +1583,7 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                     }
                 }
 
-                SdrInsertReason aReason(SDRREASON_VIEWCALL, pCustomShape);
+                SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 rOL.InsertObject(pCandidate, rPos, &aReason);
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pCandidate, true));
@@ -1793,7 +1793,7 @@ void SdrEditView::GroupMarked(const SdrObject* pUserGrp)
             {
                 aNewMark.InsertEntry(SdrMark(pGrp,pPV));
                 const size_t nAnz=pDstLst->GetObjCount();
-                SdrInsertReason aReason(SDRREASON_VIEWCALL,pRefObj);
+                SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 pAktLst->InsertObject(pGrp,nInsPos,&aReason);
                 if( bUndo )
                 {
@@ -1869,7 +1869,7 @@ void SdrEditView::UnGroupMarked()
             for (size_t no=0; no<nAnz; ++no)
             {
                 SdrObject* pObj=pSrcLst->RemoveObject(0);
-                SdrInsertReason aReason(SDRREASON_VIEWCALL,pGrp);
+                SdrInsertReason aReason(SDRREASON_VIEWCALL);
                 pDstLst->InsertObject(pObj,nDstCnt,&aReason);
                 if( bUndo )
                     AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoInsertObject(*pObj,true));
