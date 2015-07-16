@@ -109,7 +109,7 @@ class FileViewContainer : public vcl::Window
         m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
     }
 
-    virtual bool Notify( NotifyEvent& rNEvt )
+    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE
     {
         if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {

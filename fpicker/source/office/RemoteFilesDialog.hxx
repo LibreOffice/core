@@ -69,39 +69,39 @@ public:
 
     // SvtFileDialog_Base
 
-    virtual SvtFileView* GetView();
+    virtual SvtFileView* GetView() SAL_OVERRIDE;
 
-    virtual void SetHasFilename( bool );
-    virtual void SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList );
-    virtual const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const;
-    virtual void SetStandardDir( const OUString& rStdDir );
-    virtual const OUString& GetStandardDir() const;
-    virtual void SetPath( const OUString& rNewURL );
-    virtual const OUString& GetPath();
-    virtual std::vector<OUString> GetPathList() const;
-    virtual bool ContentIsFolder( const OUString& rURL );
+    virtual void SetHasFilename( bool ) SAL_OVERRIDE;
+    virtual void SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) SAL_OVERRIDE;
+    virtual const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const SAL_OVERRIDE;
+    virtual void SetStandardDir( const OUString& rStdDir ) SAL_OVERRIDE;
+    virtual const OUString& GetStandardDir() const SAL_OVERRIDE;
+    virtual void SetPath( const OUString& rNewURL ) SAL_OVERRIDE;
+    virtual const OUString& GetPath() SAL_OVERRIDE;
+    virtual std::vector<OUString> GetPathList() const SAL_OVERRIDE;
+    virtual bool ContentIsFolder( const OUString& rURL ) SAL_OVERRIDE;
 
-    virtual void AddFilter( const OUString& rFilter, const OUString& rType );
+    virtual void AddFilter( const OUString& rFilter, const OUString& rType ) SAL_OVERRIDE;
     virtual void AddFilterGroup( const OUString& _rFilter,
-                                const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters );
-    virtual OUString GetCurFilter() const;
-    virtual void SetCurFilter( const OUString& rFilter );
+                                const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters ) SAL_OVERRIDE;
+    virtual OUString GetCurFilter() const SAL_OVERRIDE;
+    virtual void SetCurFilter( const OUString& rFilter ) SAL_OVERRIDE;
 
-    virtual void SetFileCallback( ::svt::IFilePickerListener *pNotifier );
+    virtual void SetFileCallback( ::svt::IFilePickerListener *pNotifier ) SAL_OVERRIDE;
 
-    virtual void EnableAutocompletion( bool );
+    virtual void EnableAutocompletion( bool ) SAL_OVERRIDE;
 
-    virtual sal_Int32 getTargetColorDepth();
-    virtual sal_Int32 getAvailableWidth();
-    virtual sal_Int32 getAvailableHeight();
+    virtual sal_Int32 getTargetColorDepth() SAL_OVERRIDE;
+    virtual sal_Int32 getAvailableWidth() SAL_OVERRIDE;
+    virtual sal_Int32 getAvailableHeight() SAL_OVERRIDE;
 
-    virtual void setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage );
+    virtual void setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage ) SAL_OVERRIDE;
 
-    virtual bool getShowState();
+    virtual bool getShowState() SAL_OVERRIDE;
 
     virtual Control* getControl( sal_Int16 nControlId, bool bLabelControl = false ) const SAL_OVERRIDE;
-    virtual void enableControl( sal_Int16 nControlId, bool bEnable );
-    virtual OUString getCurFilter( ) const;
+    virtual void enableControl( sal_Int16 nControlId, bool bEnable ) SAL_OVERRIDE;
+    virtual OUString getCurFilter( ) const SAL_OVERRIDE;
 
 private:
     ::com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_context;

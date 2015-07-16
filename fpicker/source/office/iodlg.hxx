@@ -180,21 +180,21 @@ public:
             void                FileSelect();
             void                FilterSelect();
 
-    void                        SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList );
-    const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const;
-    void                        SetStandardDir( const OUString& rStdDir );
-    const OUString&             GetStandardDir() const;
-    std::vector<OUString>       GetPathList() const;        // for MultiSelection
+    void                        SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList ) SAL_OVERRIDE;
+    const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const SAL_OVERRIDE;
+    void                        SetStandardDir( const OUString& rStdDir ) SAL_OVERRIDE;
+    const OUString&             GetStandardDir() const SAL_OVERRIDE;
+    std::vector<OUString>       GetPathList() const SAL_OVERRIDE;        // for MultiSelection
 
             void                AddFilter( const OUString& rFilter,
-                                           const OUString& rType );
+                                           const OUString& rType ) SAL_OVERRIDE;
 
             void                AddFilterGroup(
                                   const OUString& _rFilter,
-                                  const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters );
+                                  const com::sun::star::uno::Sequence< com::sun::star::beans::StringPair >& rFilters ) SAL_OVERRIDE;
 
-            void                SetCurFilter( const OUString& rFilter );
-            OUString            GetCurFilter() const;
+            void                SetCurFilter( const OUString& rFilter ) SAL_OVERRIDE;
+            OUString            GetCurFilter() const SAL_OVERRIDE;
             sal_uInt16          GetFilterCount() const;
             const OUString&     GetFilterName( sal_uInt16 nPos ) const;
 
@@ -204,19 +204,19 @@ public:
     void                        PrevLevel_Impl();
     void                        OpenURL_Impl( const OUString& rURL );
 
-    SvtFileView*                GetView();
+    SvtFileView*                GetView() SAL_OVERRIDE;
 
     void                        InitSize();
     void                        UpdateControls( const OUString& rURL );
-    void                        EnableAutocompletion( bool _bEnable = true );
+    void                        EnableAutocompletion( bool _bEnable = true ) SAL_OVERRIDE;
 
-    void                        SetFileCallback( ::svt::IFilePickerListener *pNotifier ) { _pFileNotifier = pNotifier; }
+    void                        SetFileCallback( ::svt::IFilePickerListener *pNotifier ) SAL_OVERRIDE { _pFileNotifier = pNotifier; }
 
-    sal_Int32                   getTargetColorDepth();
-    sal_Int32                   getAvailableWidth();
-    sal_Int32                   getAvailableHeight();
-    void                        setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage );
-    bool                        getShowState();
+    sal_Int32                   getTargetColorDepth() SAL_OVERRIDE;
+    sal_Int32                   getAvailableWidth() SAL_OVERRIDE;
+    sal_Int32                   getAvailableHeight() SAL_OVERRIDE;
+    void                        setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage ) SAL_OVERRIDE;
+    bool                        getShowState() SAL_OVERRIDE;
     bool                        isAutoExtensionEnabled();
 
     OUString                    getCurrentFileText( ) const;
@@ -230,16 +230,16 @@ public:
     static void                 displayIOException( const OUString& _rURL, ::com::sun::star::ucb::IOErrorCode _eCode );
 
     // inline
-    inline void                 SetPath( const OUString& rNewURL );
-    inline void                 SetHasFilename( bool bHasFilename );
-    inline const OUString&      GetPath();
+    inline void                 SetPath( const OUString& rNewURL ) SAL_OVERRIDE;
+    inline void                 SetHasFilename( bool bHasFilename ) SAL_OVERRIDE;
+    inline const OUString&      GetPath() SAL_OVERRIDE;
     inline void                 SetDefaultExt( const OUString& rExt );
     inline void                 EraseDefaultExt( sal_Int32 _nIndex = 0 );
     inline const OUString&      GetDefaultExt() const;
 
     inline Image                GetButtonImage( sal_uInt16 _nButtonId ) const { return m_aImages.GetImage( _nButtonId ); }
 
-    bool                        ContentIsFolder( const OUString& rURL ) { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
+    bool                        ContentIsFolder( const OUString& rURL ) SAL_OVERRIDE { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
     bool                        ContentHasParentFolder( const OUString& rURL );
     bool                        ContentCanMakeFolder( const OUString& rURL );
     bool                        ContentGetTitle( const OUString& rURL, OUString& rTitle );
