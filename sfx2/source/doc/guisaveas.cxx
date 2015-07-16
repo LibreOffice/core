@@ -147,9 +147,9 @@ static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
 }
 
 
-static sal_uInt8 getStoreModeFromSlotName( const OUString& aSlotName )
+static sal_Int8 getStoreModeFromSlotName( const OUString& aSlotName )
 {
-    sal_uInt8 nResult = 0;
+    sal_Int8 nResult = 0;
     if ( aSlotName == "ExportTo" )
         nResult = EXPORT_REQUESTED;
     else if ( aSlotName == "ExportToPDF" )
@@ -161,7 +161,7 @@ static sal_uInt8 getStoreModeFromSlotName( const OUString& aSlotName )
     else if ( aSlotName == "SaveAs" )
         nResult = SAVEAS_REQUESTED;
     else if ( aSlotName == "SaveAsRemote" )
-        nResult = static_cast<sal_uInt8>(SAVEASREMOTE_REQUESTED);
+        nResult = SAVEASREMOTE_REQUESTED;
     else
         throw task::ErrorCodeIOException(
             ("getStoreModeFromSlotName(\"" + aSlotName
