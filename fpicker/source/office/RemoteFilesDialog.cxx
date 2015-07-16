@@ -17,7 +17,7 @@ class FileViewContainer : public vcl::Window
     VclPtr< Splitter > m_pSplitter;
 
     int m_nCurrentFocus;
-    vcl::Window* m_pFocusWidgets[4];
+    VclPtr<vcl::Window> m_pFocusWidgets[4];
 
     public:
     FileViewContainer( vcl::Window *pParent )
