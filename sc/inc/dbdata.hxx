@@ -128,6 +128,10 @@ public:
     void        GetSortParam(ScSortParam& rSortParam) const;
     void        SetSortParam(const ScSortParam& rSortParam);
 
+    /** Remember some more settings of ScSortParam, only to be called at
+        anonymous DB ranges as it at least overwrites bHasHeader. */
+    void        UpdateFromSortParam( const ScSortParam& rSortParam );
+
     SC_DLLPUBLIC void       GetQueryParam(ScQueryParam& rQueryParam) const;
     SC_DLLPUBLIC void       SetQueryParam(const ScQueryParam& rQueryParam);
     SC_DLLPUBLIC bool       GetAdvancedQuerySource(ScRange& rSource) const;
@@ -228,6 +232,7 @@ public:
         ScDBData* getByRange(const ScRange& rRange);
         void insert(ScDBData* p);
         bool empty() const;
+        bool has( const ScDBData* p ) const;
         bool operator== (const AnonDBs& r) const;
     };
 

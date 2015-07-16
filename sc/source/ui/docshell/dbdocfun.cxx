@@ -574,6 +574,9 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     }
 
     pDBData->SetSortParam(rSortParam);
+    // Remember additional settings on anonymous database ranges.
+    if (pDBData == rDoc.GetAnonymousDBData( nTab) || rDoc.GetDBCollection()->getAnonDBs().has( pDBData))
+        pDBData->UpdateFromSortParam( rSortParam);
 
     if (nStartRow <= aLocalParam.nRow2)
     {
