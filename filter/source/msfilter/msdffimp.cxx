@@ -2153,12 +2153,10 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 sal_uInt16 nNumElemMemVert = 0;
                 rIn.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
             }
-            bool bImport = false;
-            if (nElemSizeVert == 8 || nElemSizeVert == 4)
-            {
-                //sanity check that the stream is long enough to fulfill nNumElem * nElemSize;
-                bImport = rIn.remainingSize() / nElemSizeVert >= nNumElemVert;
-            }
+            if (nElemSizeVert != 8)
+                nElemSizeVert = 4;
+            //sanity check that the stream is long enough to fulfill nNumElem * nElemSize;
+            bool bImport = rIn.remainingSize() / nElemSizeVert >= nNumElemVert;
             if (bImport)
             {
                 aCoordinates.realloc( nNumElemVert );
