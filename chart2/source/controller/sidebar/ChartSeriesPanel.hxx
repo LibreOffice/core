@@ -80,6 +80,9 @@ private:
     VclPtr<CheckBox> mpCBXError;
     VclPtr<CheckBox> mpCBYError;
 
+    VclPtr<RadioButton> mpRBPrimaryAxis;
+    VclPtr<RadioButton> mpRBSecondaryAxis;
+
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
@@ -90,6 +93,7 @@ private:
     void Initialize();
 
     DECL_LINK(CheckBoxHdl, CheckBox*);
+    DECL_LINK(RadioBtnHdl, void*);
 };
 
 } } // end of namespace ::chart::sidebar

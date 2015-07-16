@@ -23,6 +23,7 @@
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "ChartSeriesPanel.hxx"
 #include "ChartController.hxx"
@@ -144,6 +145,31 @@ void setErrorBarVisible(css::uno::Reference<css::frame::XModel>
     }
 }
 
+bool isPrimaryAxis(css::uno::Reference<css::frame::XModel>
+        xModel, const OUString& rCID)
+{
+    css::uno::Reference< css::chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xSeries.is())
+        return true;
+
+    return DataSeriesHelper::getAttachedAxisIndex(xSeries) == 0;
+}
+
+void setAttachedAxisType(css::uno::Reference<css::frame::XModel>
+        xModel, const OUString& rCID, bool bPrimary)
+{
+    css::uno::Reference< css::beans::XPropertySet > xSeries(
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xSeries.is())
+        return;
+
+    sal_Int32 nIndex = bPrimary ? 0 : 1;
+    xSeries->setPropertyValue("AttachedAxisIndex", css::uno::makeAny(nIndex));
+}
+
 }
 
 ChartSeriesPanel::ChartSeriesPanel(
@@ -163,6 +189,9 @@ ChartSeriesPanel::ChartSeriesPanel(
     get(mpCBXError, "checkbutton_x_error");
     get(mpCBYError, "checkbutton_y_error");
 
+    get(mpRBPrimaryAxis, "radiobutton_primary_axis");
+    get(mpRBSecondaryAxis, "radiobutton_secondary_axis");
+
     Initialize();
 }
 
@@ -181,6 +210,9 @@ void ChartSeriesPanel::dispose()
     mpCBXError.clear();
     mpCBYError.clear();
 
+    mpRBPrimaryAxis.clear();
+    mpRBSecondaryAxis.clear();
+
     PanelLayout::dispose();
 }
 
@@ -196,6 +228,10 @@ void ChartSeriesPanel::Initialize()
     mpCBTrendline->SetClickHdl(aLink);
     mpCBXError->SetClickHdl(aLink);
     mpCBYError->SetClickHdl(aLink);
+
+    aLink = LINK(this, ChartSeriesPanel, RadioBtnHdl);
+    mpRBPrimaryAxis->SetToggleHdl(aLink);
+    mpRBSecondaryAxis->SetToggleHdl(aLink);
 }
 
 void ChartSeriesPanel::updateData()
@@ -218,6 +254,10 @@ void ChartSeriesPanel::updateData()
     mpCBTrendline->Check(isTrendlineVisible(mxModel, aCID));
     mpCBXError->Check(isErrorBarVisible(mxModel, aCID, false));
     mpCBYError->Check(isErrorBarVisible(mxModel, aCID, true));
+
+    bool bPrimaryAxis = isPrimaryAxis(mxModel, aCID);
+    mpRBPrimaryAxis->Check(bPrimaryAxis);
+    mpRBSecondaryAxis->Check(!bPrimaryAxis);
 }
 
 VclPtr<vcl::Window> ChartSeriesPanel::Create (
@@ -286,6 +326,29 @@ IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, CheckBox*, pCheckBox)
         setErrorBarVisible(mxModel, aCID, false, bChecked);
     else if (pCheckBox == mpCBYError.get())
         setErrorBarVisible(mxModel, aCID, true, bChecked);
+
+    return 0;
+}
+
+IMPL_LINK_NOARG(ChartSeriesPanel, RadioBtnHdl)
+{
+    css::uno::Reference<css::frame::XController> xController(mxModel->getCurrentController());
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    if (!xSelectionSupplier.is())
+        return 0;
+
+    uno::Any aAny = xSelectionSupplier->getSelection();
+    assert(aAny.hasValue());
+    OUString aCID;
+    aAny >>= aCID;
+#ifdef DBG_UTIL
+    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+    assert(eType == OBJECTTYPE_DATA_SERIES);
+#endif
+
+    bool bChecked = mpRBPrimaryAxis->IsChecked();
+
+    setAttachedAxisType(mxModel, aCID, bChecked);
 
     return 0;
 }
