@@ -191,8 +191,6 @@ class UpdateRequiredDialog : public ModalDialog,
     bool                 m_bProgressChanged;
     bool                 m_bStartProgress;
     bool                 m_bStopProgress;
-    bool                 m_bUpdateWarning;
-    bool                 m_bDisableWarning;
     bool                 m_bHasLockedEntries;
     long                 m_nProgress;
     Idle                 m_aIdle;
@@ -230,15 +228,9 @@ public:
     virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
                                       bool bLicenseMissing = false ) SAL_OVERRIDE;
     bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage, bool bEnable );
-    bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
     virtual void    prepareChecking() SAL_OVERRIDE;
     virtual void    checkEntries() SAL_OVERRIDE;
-
-    ::com::sun::star::uno::Sequence< OUString > raiseAddPicker();
-
-    bool            installForAllUsers( bool &bInstallForAll ) const;
-    bool            installExtensionWarn( const OUString &rExtensionURL ) const;
 };
 
 

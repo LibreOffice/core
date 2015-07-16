@@ -112,8 +112,6 @@ class Desktop : public Application
             return m_aBootstrapStatus;
         }
 
-        static bool            isCrashReporterEnabled();
-
         // first-start (ever) related methods
         static bool             CheckExtensionDependencies();
 
@@ -133,13 +131,11 @@ class Desktop : public Application
         static void             CreateTemporaryDirectory();
         static void             RemoveTemporaryDirectory();
 
-        bool                    InitializeInstallation( const OUString& rAppFilename );
         static bool             InitializeConfiguration();
         static void             FlushConfiguration();
         static bool             InitializeQuickstartMode( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         static void             HandleBootstrapPathErrors( ::utl::Bootstrap::Status, const OUString& aMsg );
-        void                    StartSetup( const OUString& aParameters );
 
         // Create a error message depending on bootstrap failure code and an optional file url
         static OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
