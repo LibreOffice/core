@@ -408,6 +408,10 @@ void ChartElementsPanel::updateData()
     mpLBLegendPosition->SelectEntryPos(getLegendPos(mxModel));
 }
 
+void ChartElementsPanel::modelInvalid()
+{
+}
+
 VclPtr<vcl::Window> ChartElementsPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
