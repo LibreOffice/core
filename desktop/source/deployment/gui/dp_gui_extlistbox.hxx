@@ -158,7 +158,6 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     long GetTotalHeight() const;
     void SetupScrollBar();
     void DrawRow(vcl::RenderContext& rRenderContext, const Rectangle& rRect, const TEntry_Impl& rEntry);
-    bool HandleTabKey( bool bReverse );
     bool HandleCursorKey( sal_uInt16 nKeyCode );
     bool FindEntryPos( const TEntry_Impl& rEntry, long nStart, long nEnd, long &nFound );
     void DeleteRemoved();
@@ -205,9 +204,7 @@ public:
     void prepareChecking();
     void checkEntries();
 
-    TheExtensionManager* getExtensionManager() const { return m_pManager; }
     void setExtensionManager(TheExtensionManager* pManager) { m_pManager = pManager; }
-
 
     //These functions are used for automatic testing
 

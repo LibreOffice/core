@@ -336,19 +336,6 @@ protected:
     static void deleteTempFolder(
         OUString const & folderUrl);
 
-    OUString getSharedRegistrationDataURL(
-        css::uno::Reference<css::deployment::XPackage> const & extension,
-        css::uno::Reference<css::deployment::XPackage> const & item);
-
-    /* The backends must implement this function, which is called
-       from XPackageRegistry::packageRemoved (also implemented here).
-       This ensure that the backends clean up their registration data
-       when an extension was removed.
-    */
-//    virtual void deleteDbEntry( OUString const & url) = 0;
-
-
-
 public:
     struct StrRegisteringPackage : public ::dp_misc::StaticResourceString<
         StrRegisteringPackage, RID_STR_REGISTERING_PACKAGE> {};

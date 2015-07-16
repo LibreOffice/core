@@ -73,7 +73,6 @@ public:
     {}
 
     virtual ~SelectedPackage();
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> getPackage() const { return m_xPackage; }
 
 private:
     SelectedPackage(SelectedPackage &) SAL_DELETED_FUNCTION;

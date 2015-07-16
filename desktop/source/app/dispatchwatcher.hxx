@@ -41,11 +41,6 @@ namespace desktop
 
 class DispatchWatcherHashMap : public std::unordered_map< OUString, sal_Int32, OUStringHash, std::equal_to< OUString >  >
 {
-    public:
-        inline void free()
-        {
-            DispatchWatcherHashMap().swap( *this ); // get rid of reserved capacity
-        }
 };
 
 class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XDispatchResultListener >
