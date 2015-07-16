@@ -113,6 +113,7 @@ public:
     void testTdf69282();
     void testTdf69282WithMirror();
     void testSearchWithTransliterate();
+    void testPropertyDefaults();
     void testTdf90808();
     void testTdf75137();
     void testTdf83798();
@@ -168,6 +169,7 @@ public:
     CPPUNIT_TEST(testTdf69282);
     CPPUNIT_TEST(testTdf69282WithMirror);
     CPPUNIT_TEST(testSearchWithTransliterate);
+    CPPUNIT_TEST(testPropertyDefaults);
     CPPUNIT_TEST(testTdf90808);
     CPPUNIT_TEST(testTdf75137);
     CPPUNIT_TEST(testTdf83798);
@@ -1340,6 +1342,27 @@ void SwUiWriterTest::testSearchWithTransliterate()
     pShellCrsr = pWrtShell->getShellCrsr(true);
     CPPUNIT_ASSERT_EQUAL(OUString("paragraph"),pShellCrsr->GetText());
     CPPUNIT_ASSERT_EQUAL(1,(int)case2);
+}
+
+void SwUiWriterTest::testPropertyDefaults()
+{
+    createDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFact(mxComponent, uno::UNO_QUERY);
+    uno::Reference<uno::XInterface> xInterface(xFact->createInstance("com.sun.star.text.Defaults"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropSet(xInterface, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertyState> xPropState(xInterface, uno::UNO_QUERY);
+    //testing CharFontName from style::CharacterProperties
+    //getting property default
+    uno::Any aCharFontName = xPropState->getPropertyDefault(OUString("CharFontName"));
+    //asserting property default and defaults received from "css.text.Defaults" service
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharFontName")), aCharFontName);
+    //changing the default value
+    xPropSet->setPropertyValue(OUString("CharFontName"), uno::makeAny(OUString("Symbol")));
+    //asserting the changes to ensure that value is modified properly
+    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Symbol")), xPropSet->getPropertyValue(OUString("CharFontName")));
+    //resetting the value to default and asserting the new value with the expected default value
+    xPropState->setPropertyToDefault(OUString("CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(xPropSet->getPropertyValue(OUString("CharFontName")), aCharFontName);
 }
 
 void SwUiWriterTest::testTdf90808()
