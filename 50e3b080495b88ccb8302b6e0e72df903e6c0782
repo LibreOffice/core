@@ -16,6 +16,57 @@
       "revId": "50e3b080495b88ccb8302b6e0e72df903e6c0782",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_fefdee6e",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-16T12:31:42Z",
+      "side": 1,
+      "message": "copy\u0027n\u0027paste error? :)",
+      "revId": "50e3b080495b88ccb8302b6e0e72df903e6c0782",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_be2536c3",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-16T12:31:42Z",
+      "side": 1,
+      "message": "XFillHatchItem has wrong m_aValue \"Hatching\" instead of e.g. \"Black 90 degrees\" (it looks as if it came from some other listbox?). Also aHatch is not initialized, it always has eStyle \u003d com::sun::star::drawing::HatchStyle_SINGLE (default value?) instead of the correct value",
+      "revId": "50e3b080495b88ccb8302b6e0e72df903e6c0782",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_be7776d3",
+        "filename": "sd/source/ui/sidebar/SlideBackground.src",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-16T12:31:42Z",
+      "side": 1,
+      "message": "LibreOffice wants to eventually phase .src/.hrc files out, if possible move those strings to .ui file",
+      "revId": "50e3b080495b88ccb8302b6e0e72df903e6c0782",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
