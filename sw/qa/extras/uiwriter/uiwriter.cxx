@@ -108,6 +108,7 @@ public:
     void testExportToPicture();
     void testTdf69282();
     void testTdf69282WithMirror();
+    void testUnoParagraph();
     void testSearchWithTransliterate();
     void testTdf80663();
     void testTdf90808();
@@ -162,6 +163,7 @@ public:
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testTdf69282);
     CPPUNIT_TEST(testTdf69282WithMirror);
+    CPPUNIT_TEST(testUnoParagraph);
     CPPUNIT_TEST(testSearchWithTransliterate);
     CPPUNIT_TEST(testTdf80663);
     CPPUNIT_TEST(testTdf90808);
@@ -1196,6 +1198,28 @@ void SwUiWriterTest::testTdf69282WithMirror()
     CPPUNIT_ASSERT_EQUAL(verticalSpace.GetUpper(), vFirstLeftFormatSpace.GetUpper());
     CPPUNIT_ASSERT_EQUAL(verticalSpace.GetLower(), vFirstLeftFormatSpace.GetLower());
     xSourceDoc->dispose();
+}
+
+void SwUiWriterTest::testUnoParagraph()
+{
+    //Creating a new Doc and adding text into it
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is paragraph one");
+    pWrtShell->SplitNode();
+    aIdx = SwNodeIndex(pDoc->GetNodes().GetEndOfContent(), -1);
+    aPaM = SwPaM(aIdx);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is paragraph two");
+    //getting the text content via SwXParagraph
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xTextDocument->getText(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("This is paragraph one\nThis is paragraph two"), xTextRange->getString());
+    //changing the complete text content in the Doc
+    xTextRange->setString(OUString("Hello World! This is the new text"));
+    //asserting the changes
+    CPPUNIT_ASSERT_EQUAL(OUString("Hello World! This is the new text"), xTextRange->getString());
 }
 
 void SwUiWriterTest::testSearchWithTransliterate()
