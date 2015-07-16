@@ -132,21 +132,28 @@ void StyleLBoxString::Paint(
 
     if (pStyleManager)
     {
-        std::unique_ptr<sfx2::StylePreviewRenderer> pStylePreviewRenderer(pStyleManager->CreateStylePreviewRenderer(rRenderContext, GetText(), meStyleFamily, 32 * rRenderContext.GetDPIScaleFactor()));
+        SfxStyleSheetBase* pStyleSheet = pStyleManager->Search(GetText(), meStyleFamily);
 
-        if (pStylePreviewRenderer)
+        if (pStyleSheet)
         {
-            if (pStylePreviewRenderer->recalculate())
-            {
-                mpViewData->maSize = pStylePreviewRenderer->getRenderSize();
-            }
-            else
-            {
-                SvLBoxString::InitViewData( &rDevice, const_cast<SvTreeListEntry*>(&rEntry), mpViewData);
-            }
+            sal_Int32 nSize = 32 * rRenderContext.GetDPIScaleFactor();
+            std::unique_ptr<sfx2::StylePreviewRenderer> pStylePreviewRenderer(
+                pStyleManager->CreateStylePreviewRenderer(rRenderContext, pStyleSheet, nSize));
 
-            Rectangle aPaintRectangle = pView->GetPaintRectangle();
-            bPainted = pStylePreviewRenderer->render(aPaintRectangle);
+            if (pStylePreviewRenderer)
+            {
+                if (pStylePreviewRenderer->recalculate())
+                {
+                    mpViewData->maSize = pStylePreviewRenderer->getRenderSize();
+                }
+                else
+                {
+                    SvLBoxString::InitViewData( &rDevice, const_cast<SvTreeListEntry*>(&rEntry), mpViewData);
+                }
+
+                Rectangle aPaintRectangle = pView->GetPaintRectangle();
+                bPainted = pStylePreviewRenderer->render(aPaintRectangle);
+            }
         }
     }
 
