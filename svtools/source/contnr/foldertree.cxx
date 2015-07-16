@@ -50,7 +50,7 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
 
             if ( SUCCESS == eResult )
             {
-                for( unsigned int i = 0; i < aContent.size(); i++ )
+                for( std::vector<SortingData_Impl *>::size_type i = 0; i < aContent.size(); i++ )
                 {
                     if( aContent[i]->mbIsFolder )
                     {
