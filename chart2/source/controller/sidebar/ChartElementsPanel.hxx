@@ -68,7 +68,6 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     void updateData();
-    void modelInvalid();
 
 private:
     //ui controls

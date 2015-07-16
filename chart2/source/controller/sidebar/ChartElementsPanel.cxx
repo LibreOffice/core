@@ -103,9 +103,7 @@ void ChartSidebarModifyListener::modified(const css::lang::EventObject& /*rEvent
 
 void ChartSidebarModifyListener::disposing(const css::lang::EventObject& /*rEvent*/)
         throw (::css::uno::RuntimeException, ::std::exception)
-{
-    mpParent->modelInvalid();
-}
+{}
 
 ChartModel* getChartModel(css::uno::Reference<css::frame::XModel> xModel)
 {
@@ -486,11 +484,6 @@ void ChartElementsPanel::NotifyItemUpdate(
     const SfxPoolItem* /*pState*/,
     const bool )
 {
-}
-
-void ChartElementsPanel::modelInvalid()
-{
-
 }
 
 IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)
