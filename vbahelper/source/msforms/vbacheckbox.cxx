@@ -53,7 +53,7 @@ ScVbaCheckbox::getValue() throw (css::uno::RuntimeException, std::exception)
 //    return uno::makeAny( nValue );
 // I must be missing something MSO says value should be -1 if selected, 0 if not
 // selected
-    return uno::makeAny( ( nValue == -1 ) ? sal_True : sal_False );
+    return uno::makeAny( nValue == -1 );
 }
 
 void SAL_CALL
