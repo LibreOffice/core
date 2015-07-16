@@ -569,7 +569,7 @@ bool SvtLinguConfigItem::LoadOptions( const uno::Sequence< OUString > &rProperyN
         for (sal_Int32 i = 0;  i < nProps;  ++i)
         {
             const uno::Any &rVal = pValue[i];
-            sal_Int32 nPropertyHandle;
+            sal_Int32 nPropertyHandle(0);
             GetHdlByName( nPropertyHandle, pProperyNames[i], true );
             switch ( nPropertyHandle )
             {
