@@ -577,7 +577,7 @@ Type SAL_CALL XoNavigationOrderAccess::getElementType(  ) throw (RuntimeExceptio
 
 sal_Bool SAL_CALL XoNavigationOrderAccess::hasElements(  ) throw (RuntimeException, std::exception)
 {
-    return maShapes.empty() ? sal_False : sal_True;
+    return !maShapes.empty();
 }
 
 void SdXMLGenericPageContext::SetNavigationOrder()

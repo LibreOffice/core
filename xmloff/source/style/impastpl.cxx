@@ -106,7 +106,7 @@ data2string(void *data,
     case typelib_TypeClass_VOID:
         break;
     case typelib_TypeClass_BOOLEAN:
-        result.append((*static_cast<const sal_Bool*>(data) == sal_False ) ? OUString("false") : OUString("true"));
+        result.append(*static_cast<const sal_Bool*>(data) ? OUString("true") : OUString("false"));
         break;
     case typelib_TypeClass_BYTE:
         result.append(OUString::number((*static_cast<const sal_Int8*>(data))));
