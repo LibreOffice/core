@@ -15,4 +15,1160 @@
   <block-list:block block-list:abbreviated-name="1/2" block-list:name="½"/>
   <block-list:block block-list:abbreviated-name="1/4" block-list:name="¼"/>
   <block-list:block block-list:abbreviated-name="3/4" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":_0:" block-list:name="₀"/>
+  <block-list:block block-list:abbreviated-name=":^0:" block-list:name="⁰"/>
+  <block-list:block block-list:abbreviated-name=":100:" block-list:name="💯"/>
+  <block-list:block block-list:abbreviated-name=":10:30:" block-list:name="🕥"/>
+  <block-list:block block-list:abbreviated-name=":10:" block-list:name="🕙"/>
+  <block-list:block block-list:abbreviated-name=":11:30:" block-list:name="🕦"/>
+  <block-list:block block-list:abbreviated-name=":11:" block-list:name="🕚"/>
+  <block-list:block block-list:abbreviated-name=":12:30:" block-list:name="🕧"/>
+  <block-list:block block-list:abbreviated-name=":12:" block-list:name="🕛"/>
+  <block-list:block block-list:abbreviated-name=":1/2:" block-list:name="½"/>
+  <block-list:block block-list:abbreviated-name=":1:30:" block-list:name="🕜"/>
+  <block-list:block block-list:abbreviated-name=":1/3:" block-list:name="⅓"/>
+  <block-list:block block-list:abbreviated-name=":1/4:" block-list:name="¼"/>
+  <block-list:block block-list:abbreviated-name=":1/8:" block-list:name="⅛"/>
+  <block-list:block block-list:abbreviated-name=":_1:" block-list:name="₁"/>
+  <block-list:block block-list:abbreviated-name=":1:" block-list:name="🕐"/>
+  <block-list:block block-list:abbreviated-name=":^1:" block-list:name="¹"/>
+  <block-list:block block-list:abbreviated-name=":2:30:" block-list:name="🕝"/>
+  <block-list:block block-list:abbreviated-name=":2/3:" block-list:name="⅔"/>
+  <block-list:block block-list:abbreviated-name=":_2:" block-list:name="₂"/>
+  <block-list:block block-list:abbreviated-name=":!2:" block-list:name="❗"/>
+  <block-list:block block-list:abbreviated-name=":?2:" block-list:name="❔"/>
+  <block-list:block block-list:abbreviated-name=":2:" block-list:name="🕑"/>
+  <block-list:block block-list:abbreviated-name=":^2:" block-list:name="²"/>
+  <block-list:block block-list:abbreviated-name=":3:30:" block-list:name="🕞"/>
+  <block-list:block block-list:abbreviated-name=":3/4:" block-list:name="¾"/>
+  <block-list:block block-list:abbreviated-name=":3/8:" block-list:name="⅜"/>
+  <block-list:block block-list:abbreviated-name=":_3:" block-list:name="₃"/>
+  <block-list:block block-list:abbreviated-name=":3:" block-list:name="🕒"/>
+  <block-list:block block-list:abbreviated-name=":^3:" block-list:name="³"/>
+  <block-list:block block-list:abbreviated-name=":4:30:" block-list:name="🕟"/>
+  <block-list:block block-list:abbreviated-name=":_4:" block-list:name="₄"/>
+  <block-list:block block-list:abbreviated-name=":4:" block-list:name="🕓"/>
+  <block-list:block block-list:abbreviated-name=":^4:" block-list:name="⁴"/>
+  <block-list:block block-list:abbreviated-name=":5:30:" block-list:name="🕠"/>
+  <block-list:block block-list:abbreviated-name=":5/8:" block-list:name="⅝"/>
+  <block-list:block block-list:abbreviated-name=":_5:" block-list:name="₅"/>
+  <block-list:block block-list:abbreviated-name=":5:" block-list:name="🕔"/>
+  <block-list:block block-list:abbreviated-name=":^5:" block-list:name="⁵"/>
+  <block-list:block block-list:abbreviated-name=":6:30:" block-list:name="🕡"/>
+  <block-list:block block-list:abbreviated-name=":_6:" block-list:name="₆"/>
+  <block-list:block block-list:abbreviated-name=":6:" block-list:name="🕕"/>
+  <block-list:block block-list:abbreviated-name=":^6:" block-list:name="⁶"/>
+  <block-list:block block-list:abbreviated-name=":7:30:" block-list:name="🕢"/>
+  <block-list:block block-list:abbreviated-name=":7/8:" block-list:name="⅞"/>
+  <block-list:block block-list:abbreviated-name=":_7:" block-list:name="₇"/>
+  <block-list:block block-list:abbreviated-name=":7:" block-list:name="🕖"/>
+  <block-list:block block-list:abbreviated-name=":^7:" block-list:name="⁷"/>
+  <block-list:block block-list:abbreviated-name=":8:30:" block-list:name="🕣"/>
+  <block-list:block block-list:abbreviated-name=":_8:" block-list:name="₈"/>
+  <block-list:block block-list:abbreviated-name=":8:" block-list:name="🕗"/>
+  <block-list:block block-list:abbreviated-name=":^8:" block-list:name="⁸"/>
+  <block-list:block block-list:abbreviated-name=":9:30:" block-list:name="🕤"/>
+  <block-list:block block-list:abbreviated-name=":_9:" block-list:name="₉"/>
+  <block-list:block block-list:abbreviated-name=":9:" block-list:name="🕘"/>
+  <block-list:block block-list:abbreviated-name=":^9:" block-list:name="⁹"/>
+  <block-list:block block-list:abbreviated-name=":aalto:" block-list:name="👋"/>
+  <block-list:block block-list:abbreviated-name=":ääni:" block-list:name="🔉"/>
+  <block-list:block block-list:abbreviated-name=":ääretön:" block-list:name="∞"/>
+  <block-list:block block-list:abbreviated-name=":abc:" block-list:name="🔤"/>
+  <block-list:block block-list:abbreviated-name=":^a:" block-list:name="ᵃ"/>
+  <block-list:block block-list:abbreviated-name=":_a:" block-list:name="ₐ"/>
+  <block-list:block block-list:abbreviated-name=":^A:" block-list:name="ᴬ"/>
+  <block-list:block block-list:abbreviated-name=":Adi Shakti:" block-list:name="☬"/>
+  <block-list:block block-list:abbreviated-name=":ajanotto:" block-list:name="⏱"/>
+  <block-list:block block-list:abbreviated-name=":ajastinkello:" block-list:name="⏲"/>
+  <block-list:block block-list:abbreviated-name=":ajatuskupla:" block-list:name="💭"/>
+  <block-list:block block-list:abbreviated-name=":akku:" block-list:name="🔋"/>
+  <block-list:block block-list:abbreviated-name=":alaikäinen:" block-list:name="🔞"/>
+  <block-list:block block-list:abbreviated-name=":alas2:" block-list:name="👇"/>
+  <block-list:block block-list:abbreviated-name=":alas:" block-list:name="☟"/>
+  <block-list:block block-list:abbreviated-name=":alembic:" block-list:name="⚗"/>
+  <block-list:block block-list:abbreviated-name=":alennusmerkki:" block-list:name="♭"/>
+  <block-list:block block-list:abbreviated-name=":^alfa:" block-list:name="ᵅ"/>
+  <block-list:block block-list:abbreviated-name=":alfa:" block-list:name="α"/>
+  <block-list:block block-list:abbreviated-name=":Alfa:" block-list:name="Α"/>
+  <block-list:block block-list:abbreviated-name=":aloittelija:" block-list:name="🔰"/>
+  <block-list:block block-list:abbreviated-name=":ambulanssi:" block-list:name="🚑"/>
+  <block-list:block block-list:abbreviated-name=":amerikkalainen jalkapallo:" block-list:name="🏈"/>
+  <block-list:block block-list:abbreviated-name=":ananas:" block-list:name="🍍"/>
+  <block-list:block block-list:abbreviated-name=":ankh:" block-list:name="☥"/>
+  <block-list:block block-list:abbreviated-name=":ankkuri:" block-list:name="⚓"/>
+  <block-list:block block-list:abbreviated-name=":apilanlehti:" block-list:name="🍀"/>
+  <block-list:block block-list:abbreviated-name=":apina2:" block-list:name="🐵"/>
+  <block-list:block block-list:abbreviated-name=":apina:" block-list:name="🐒"/>
+  <block-list:block block-list:abbreviated-name=":asema:" block-list:name="🚉"/>
+  <block-list:block block-list:abbreviated-name=":ässä:" block-list:name="🂡"/>
+  <block-list:block block-list:abbreviated-name=":aste:" block-list:name="°"/>
+  <block-list:block block-list:abbreviated-name=":atomi:" block-list:name="⚛"/>
+  <block-list:block block-list:abbreviated-name=":auringonkukka:" block-list:name="🌻"/>
+  <block-list:block block-list:abbreviated-name=":auringonlasku:" block-list:name="🌆"/>
+  <block-list:block block-list:abbreviated-name=":auringonnousu2:" block-list:name="🌄"/>
+  <block-list:block block-list:abbreviated-name=":auringonnousu3:" block-list:name="🌇"/>
+  <block-list:block block-list:abbreviated-name=":auringonnousu:" block-list:name="🌅"/>
+  <block-list:block block-list:abbreviated-name=":Aurinko2:" block-list:name="☼"/>
+  <block-list:block block-list:abbreviated-name=":aurinko:" block-list:name="🌞"/>
+  <block-list:block block-list:abbreviated-name=":Aurinko:" block-list:name="☉"/>
+  <block-list:block block-list:abbreviated-name=":aurinkoinen:" block-list:name="☀"/>
+  <block-list:block block-list:abbreviated-name=":aurinkolasit:" block-list:name="😎"/>
+  <block-list:block block-list:abbreviated-name=":auto2:" block-list:name="🚘"/>
+  <block-list:block block-list:abbreviated-name=":auto3:" block-list:name="🚙"/>
+  <block-list:block block-list:abbreviated-name=":auto:" block-list:name="🚗"/>
+  <block-list:block block-list:abbreviated-name=":avaa lukitus:" block-list:name="🔓"/>
+  <block-list:block block-list:abbreviated-name=":avain:" block-list:name="🔑"/>
+  <block-list:block block-list:abbreviated-name=":avioero:" block-list:name="⚮"/>
+  <block-list:block block-list:abbreviated-name=":avioliitto:" block-list:name="⚭"/>
+  <block-list:block block-list:abbreviated-name=":avoimet kädet:" block-list:name="👐"/>
+  <block-list:block block-list:abbreviated-name=":avoin suu:" block-list:name="😮"/>
+  <block-list:block block-list:abbreviated-name=":baht:" block-list:name="฿"/>
+  <block-list:block block-list:abbreviated-name=":bambu:" block-list:name="🎍"/>
+  <block-list:block block-list:abbreviated-name=":banaani:" block-list:name="🍌"/>
+  <block-list:block block-list:abbreviated-name=":bataatti:" block-list:name="🍠"/>
+  <block-list:block block-list:abbreviated-name=":^b:" block-list:name="ᵇ"/>
+  <block-list:block block-list:abbreviated-name=":^B:" block-list:name="ᴮ"/>
+  <block-list:block block-list:abbreviated-name=":^beeta:" block-list:name="ᵝ"/>
+  <block-list:block block-list:abbreviated-name=":_beeta:" block-list:name="ᵦ"/>
+  <block-list:block block-list:abbreviated-name=":beeta:" block-list:name="β"/>
+  <block-list:block block-list:abbreviated-name=":Beeta:" block-list:name="Β"/>
+  <block-list:block block-list:abbreviated-name=":bikinit:" block-list:name="👙"/>
+  <block-list:block block-list:abbreviated-name=":biljardi:" block-list:name="🎱"/>
+  <block-list:block block-list:abbreviated-name=":^=:" block-list:name="⁼"/>
+  <block-list:block block-list:abbreviated-name=":^-:" block-list:name="⁻"/>
+  <block-list:block block-list:abbreviated-name=":^(:" block-list:name="⁽"/>
+  <block-list:block block-list:abbreviated-name=":^):" block-list:name="⁾"/>
+  <block-list:block block-list:abbreviated-name=":^+:" block-list:name="⁺"/>
+  <block-list:block block-list:abbreviated-name=":~:" block-list:name="≈"/>
+  <block-list:block block-list:abbreviated-name=":_=:" block-list:name="₌"/>
+  <block-list:block block-list:abbreviated-name=":_-:" block-list:name="₋"/>
+  <block-list:block block-list:abbreviated-name=":_(:" block-list:name="₍"/>
+  <block-list:block block-list:abbreviated-name=":_):" block-list:name="₎"/>
+  <block-list:block block-list:abbreviated-name=":_+:" block-list:name="₊"/>
+  <block-list:block block-list:abbreviated-name=":---:" block-list:name="—"/>
+  <block-list:block block-list:abbreviated-name=":--:" block-list:name="–"/>
+  <block-list:block block-list:abbreviated-name=":-:" block-list:name="−"/>
+  <block-list:block block-list:abbreviated-name=":-+:" block-list:name="∓"/>
+  <block-list:block block-list:abbreviated-name=":!:" block-list:name="❕"/>
+  <block-list:block block-list:abbreviated-name=":!!:" block-list:name="‼"/>
+  <block-list:block block-list:abbreviated-name=":!?:" block-list:name="⁉"/>
+  <block-list:block block-list:abbreviated-name=":?:" block-list:name="❓"/>
+  <block-list:block block-list:abbreviated-name=":/:" block-list:name="∕"/>
+  <block-list:block block-list:abbreviated-name=":':" block-list:name="’"/>
+  <block-list:block block-list:abbreviated-name=":\\:" block-list:name="∖"/>
+  <block-list:block block-list:abbreviated-name=":+-:" block-list:name="±"/>
+  <block-list:block block-list:abbreviated-name=":…:" block-list:name="…"/>
+  <block-list:block block-list:abbreviated-name=":bussi2:" block-list:name="🚍"/>
+  <block-list:block block-list:abbreviated-name=":bussi:" block-list:name="🚌"/>
+  <block-list:block block-list:abbreviated-name=":bussipysäkki:" block-list:name="🚏"/>
+  <block-list:block block-list:abbreviated-name=":caduceus:" block-list:name="☤"/>
+  <block-list:block block-list:abbreviated-name=":^c:" block-list:name="ᶜ"/>
+  <block-list:block block-list:abbreviated-name=":^C:" block-list:name="ᴰ"/>
+  <block-list:block block-list:abbreviated-name=":cd:" block-list:name="💿"/>
+  <block-list:block block-list:abbreviated-name=":cocktail:" block-list:name="🍸"/>
+  <block-list:block block-list:abbreviated-name=":curry:" block-list:name="🍛"/>
+  <block-list:block block-list:abbreviated-name=":daavidintähti:" block-list:name="✡"/>
+  <block-list:block block-list:abbreviated-name=":dango:" block-list:name="🍡"/>
+  <block-list:block block-list:abbreviated-name=":^d:" block-list:name="ᵈ"/>
+  <block-list:block block-list:abbreviated-name=":delfiini:" block-list:name="🐬"/>
+  <block-list:block block-list:abbreviated-name=":^delta:" block-list:name="ᵟ"/>
+  <block-list:block block-list:abbreviated-name=":delta:" block-list:name="δ"/>
+  <block-list:block block-list:abbreviated-name=":Delta:" block-list:name="Δ"/>
+  <block-list:block block-list:abbreviated-name=":dollari2:" block-list:name="💵"/>
+  <block-list:block block-list:abbreviated-name=":domino:" block-list:name="🁠"/>
+  <block-list:block block-list:abbreviated-name=":donitsi:" block-list:name="🍩"/>
+  <block-list:block block-list:abbreviated-name=":dvd:" block-list:name="📀"/>
+  <block-list:block block-list:abbreviated-name=":E2:" block-list:name="⇒"/>
+  <block-list:block block-list:abbreviated-name=":^e:" block-list:name="ᵉ"/>
+  <block-list:block block-list:abbreviated-name=":_e:" block-list:name="ₑ"/>
+  <block-list:block block-list:abbreviated-name=":^E:" block-list:name="ᴱ"/>
+  <block-list:block block-list:abbreviated-name=":E:" block-list:name="→"/>
+  <block-list:block block-list:abbreviated-name=":eeta:" block-list:name="η"/>
+  <block-list:block block-list:abbreviated-name=":Eeta:" block-list:name="Η"/>
+  <block-list:block block-list:abbreviated-name=":ei:" block-list:name="¬"/>
+  <block-list:block block-list:abbreviated-name=":ei huvittunut:" block-list:name="😒"/>
+  <block-list:block block-list:abbreviated-name=":ei hyvä:" block-list:name="🙅"/>
+  <block-list:block block-list:abbreviated-name=":ei jaa:" block-list:name="∤"/>
+  <block-list:block block-list:abbreviated-name=":ei jalankulkijoita:" block-list:name="🚷"/>
+  <block-list:block block-list:abbreviated-name=":ei kännyköitä:" block-list:name="📵"/>
+  <block-list:block block-list:abbreviated-name=":ei kuulu:" block-list:name="∉"/>
+  <block-list:block block-list:abbreviated-name=":ei ole olemassa:" block-list:name="∄"/>
+  <block-list:block block-list:abbreviated-name=":ei osajoukko:" block-list:name="⊄"/>
+  <block-list:block block-list:abbreviated-name=":ei pääsyä:" block-list:name="⛔"/>
+  <block-list:block block-list:abbreviated-name=":ei polkupyöriä:" block-list:name="🚳"/>
+  <block-list:block block-list:abbreviated-name=":ei soittokelloa:" block-list:name="🔕"/>
+  <block-list:block block-list:abbreviated-name=":ei suuta:" block-list:name="😶"/>
+  <block-list:block block-list:abbreviated-name=":ei yhdensuuntainen:" block-list:name="∦"/>
+  <block-list:block block-list:abbreviated-name=":ei ylijoukko:" block-list:name="⊅"/>
+  <block-list:block block-list:abbreviated-name=":elefantti:" block-list:name="🐘"/>
+  <block-list:block block-list:abbreviated-name=":ellipsi:" block-list:name="⬭"/>
+  <block-list:block block-list:abbreviated-name=":elokuva:" block-list:name="🎦"/>
+  <block-list:block block-list:abbreviated-name=":elokuvakamera:" block-list:name="🎥"/>
+  <block-list:block block-list:abbreviated-name=":enkeli:" block-list:name="👼"/>
+  <block-list:block block-list:abbreviated-name=":ensimmäinen neljännes:" block-list:name="🌓"/>
+  <block-list:block block-list:abbreviated-name=":^epsilon:" block-list:name="ᵋ"/>
+  <block-list:block block-list:abbreviated-name=":epsilon:" block-list:name="ε"/>
+  <block-list:block block-list:abbreviated-name=":Epsilon:" block-list:name="Ε"/>
+  <block-list:block block-list:abbreviated-name=":erisuuri:" block-list:name="≠"/>
+  <block-list:block block-list:abbreviated-name=":etana:" block-list:name="🐌"/>
+  <block-list:block block-list:abbreviated-name=":euro2:" block-list:name="💶"/>
+  <block-list:block block-list:abbreviated-name=":euro:" block-list:name="€"/>
+  <block-list:block block-list:abbreviated-name=":eväsrasia:" block-list:name="🍱"/>
+  <block-list:block block-list:abbreviated-name=":EW2:" block-list:name="⇔"/>
+  <block-list:block block-list:abbreviated-name=":EW:" block-list:name="↔"/>
+  <block-list:block block-list:abbreviated-name=":faksi:" block-list:name="📠"/>
+  <block-list:block block-list:abbreviated-name=":farkut:" block-list:name="👖"/>
+  <block-list:block block-list:abbreviated-name=":Farsi:" block-list:name="☫"/>
+  <block-list:block block-list:abbreviated-name=":^f:" block-list:name="ᶠ"/>
+  <block-list:block block-list:abbreviated-name=":ff:" block-list:name="ﬀ"/>
+  <block-list:block block-list:abbreviated-name=":ffi:" block-list:name="ﬃ"/>
+  <block-list:block block-list:abbreviated-name=":ffl:" block-list:name="ﬄ"/>
+  <block-list:block block-list:abbreviated-name=":fi:" block-list:name="ﬁ"/>
+  <block-list:block block-list:abbreviated-name=":^fii:" block-list:name="ᵠ"/>
+  <block-list:block block-list:abbreviated-name=":_fii:" block-list:name="ᵩ"/>
+  <block-list:block block-list:abbreviated-name=":^Fii:" block-list:name="ᶲ"/>
+  <block-list:block block-list:abbreviated-name=":fii:" block-list:name="φ"/>
+  <block-list:block block-list:abbreviated-name=":Fii:" block-list:name="Φ"/>
+  <block-list:block block-list:abbreviated-name=":fl:" block-list:name="ﬂ"/>
+  <block-list:block block-list:abbreviated-name=":Fuji:" block-list:name="🗻"/>
+  <block-list:block block-list:abbreviated-name=":^gamma:" block-list:name="ᵞ"/>
+  <block-list:block block-list:abbreviated-name=":_gamma:" block-list:name="ᵧ"/>
+  <block-list:block block-list:abbreviated-name=":gamma:" block-list:name="γ"/>
+  <block-list:block block-list:abbreviated-name=":Gamma:" block-list:name="Γ"/>
+  <block-list:block block-list:abbreviated-name=":^g:" block-list:name="ᵍ"/>
+  <block-list:block block-list:abbreviated-name=":^G:" block-list:name="ᴳ"/>
+  <block-list:block block-list:abbreviated-name=":golf:" block-list:name="⛳"/>
+  <block-list:block block-list:abbreviated-name=":&gt;=:" block-list:name="≥"/>
+  <block-list:block block-list:abbreviated-name=":&gt;&gt;:" block-list:name="≫"/>
+  <block-list:block block-list:abbreviated-name=":häät:" block-list:name="💒"/>
+  <block-list:block block-list:abbreviated-name=":hakku:" block-list:name="⛏"/>
+  <block-list:block block-list:abbreviated-name=":hakulaite:" block-list:name="📟"/>
+  <block-list:block block-list:abbreviated-name=":halloween:" block-list:name="🎃"/>
+  <block-list:block block-list:abbreviated-name=":hämillään:" block-list:name="😖"/>
+  <block-list:block block-list:abbreviated-name=":hämmästynyt:" block-list:name="😲"/>
+  <block-list:block block-list:abbreviated-name=":hämmentynyt:" block-list:name="😕"/>
+  <block-list:block block-list:abbreviated-name=":hampurilainen:" block-list:name="🍔"/>
+  <block-list:block block-list:abbreviated-name=":hamsteri:" block-list:name="🐹"/>
+  <block-list:block block-list:abbreviated-name=":härkä:" block-list:name="🐂"/>
+  <block-list:block block-list:abbreviated-name=":Härkä:" block-list:name="♉"/>
+  <block-list:block block-list:abbreviated-name=":hattu2:" block-list:name="👲"/>
+  <block-list:block block-list:abbreviated-name=":hattu:" block-list:name="👒"/>
+  <block-list:block block-list:abbreviated-name=":^h:" block-list:name="ʰ"/>
+  <block-list:block block-list:abbreviated-name=":_h:" block-list:name="ₕ"/>
+  <block-list:block block-list:abbreviated-name=":^H:" block-list:name="ᴴ"/>
+  <block-list:block block-list:abbreviated-name=":hedelmäpeli:" block-list:name="🎰"/>
+  <block-list:block block-list:abbreviated-name=":hehkulamppu:" block-list:name="💡"/>
+  <block-list:block block-list:abbreviated-name=":helikopteri:" block-list:name="🚁"/>
+  <block-list:block block-list:abbreviated-name=":helpottunut:" block-list:name="😌"/>
+  <block-list:block block-list:abbreviated-name=":herätyskello:" block-list:name="⏰"/>
+  <block-list:block block-list:abbreviated-name=":hertta2:" block-list:name="♡"/>
+  <block-list:block block-list:abbreviated-name=":hertta:" block-list:name="♥"/>
+  <block-list:block block-list:abbreviated-name=":hevonen2:" block-list:name="🐴"/>
+  <block-list:block block-list:abbreviated-name=":hevonen:" block-list:name="🐎"/>
+  <block-list:block block-list:abbreviated-name=":hevoskilpailu:" block-list:name="🏇"/>
+  <block-list:block block-list:abbreviated-name=":hieronta:" block-list:name="💆"/>
+  <block-list:block block-list:abbreviated-name=":hiihtäjä:" block-list:name="⛷"/>
+  <block-list:block block-list:abbreviated-name=":hiihto:" block-list:name="🎿"/>
+  <block-list:block block-list:abbreviated-name=":hiiri2:" block-list:name="🐭"/>
+  <block-list:block block-list:abbreviated-name=":hiiri:" block-list:name="🐁"/>
+  <block-list:block block-list:abbreviated-name=":hiki:" block-list:name="😓"/>
+  <block-list:block block-list:abbreviated-name=":hikinen hymy:" block-list:name="😅"/>
+  <block-list:block block-list:abbreviated-name=":hikipisarat:" block-list:name="💦"/>
+  <block-list:block block-list:abbreviated-name=":hipsu:" block-list:name="′"/>
+  <block-list:block block-list:abbreviated-name=":hiustenleikkuu:" block-list:name="💇"/>
+  <block-list:block block-list:abbreviated-name=":hotelli2:" block-list:name="🏩"/>
+  <block-list:block block-list:abbreviated-name=":hotelli:" block-list:name="🏨"/>
+  <block-list:block block-list:abbreviated-name=":höyryveturi:" block-list:name="🚂"/>
+  <block-list:block block-list:abbreviated-name=":hryvnia:" block-list:name="₴"/>
+  <block-list:block block-list:abbreviated-name=":huimaantunut:" block-list:name="💫"/>
+  <block-list:block block-list:abbreviated-name=":huimaus:" block-list:name="😵"/>
+  <block-list:block block-list:abbreviated-name=":hunaja:" block-list:name="🍯"/>
+  <block-list:block block-list:abbreviated-name=":huolestunut:" block-list:name="😟"/>
+  <block-list:block block-list:abbreviated-name=":huomaa:" block-list:name="☡"/>
+  <block-list:block block-list:abbreviated-name=":huulipuna:" block-list:name="💄"/>
+  <block-list:block block-list:abbreviated-name=":huutava kissa:" block-list:name="🙀"/>
+  <block-list:block block-list:abbreviated-name=":huuto:" block-list:name="😱"/>
+  <block-list:block block-list:abbreviated-name=":hymiö:" block-list:name="😃"/>
+  <block-list:block block-list:abbreviated-name=":hymiö kissa:" block-list:name="😺"/>
+  <block-list:block block-list:abbreviated-name=":hymy2:" block-list:name="☻"/>
+  <block-list:block block-list:abbreviated-name=":hymy:" block-list:name="☺"/>
+  <block-list:block block-list:abbreviated-name=":hymyilevä kissa:" block-list:name="😸"/>
+  <block-list:block block-list:abbreviated-name=":hymyilevä pikkupiru:" block-list:name="😈"/>
+  <block-list:block block-list:abbreviated-name=":hyssyttelevä:" block-list:name="😯"/>
+  <block-list:block block-list:abbreviated-name=":^i:" block-list:name="ⁱ"/>
+  <block-list:block block-list:abbreviated-name=":_i:" block-list:name="ᵢ"/>
+  <block-list:block block-list:abbreviated-name=":^I:" block-list:name="ᴵ"/>
+  <block-list:block block-list:abbreviated-name=":ihminen kurtistaa:" block-list:name="🙍"/>
+  <block-list:block block-list:abbreviated-name=":ihminen murjottaa:" block-list:name="🙎"/>
+  <block-list:block block-list:abbreviated-name=":ilmapallo:" block-list:name="🎈"/>
+  <block-list:block block-list:abbreviated-name=":ilmaraitiotie:" block-list:name="🚡"/>
+  <block-list:block block-list:abbreviated-name=":ilmeetön:" block-list:name="😑"/>
+  <block-list:block block-list:abbreviated-name=":ilo:" block-list:name="😂"/>
+  <block-list:block block-list:abbreviated-name=":iloinen kissa:" block-list:name="😹"/>
+  <block-list:block block-list:abbreviated-name=":ilotulitus:" block-list:name="🎆"/>
+  <block-list:block block-list:abbreviated-name=":integraali2:" block-list:name="∬"/>
+  <block-list:block block-list:abbreviated-name=":integraali3:" block-list:name="∭"/>
+  <block-list:block block-list:abbreviated-name=":integraali4:" block-list:name="∮"/>
+  <block-list:block block-list:abbreviated-name=":integraali5:" block-list:name="∰"/>
+  <block-list:block block-list:abbreviated-name=":integraali:" block-list:name="∫"/>
+  <block-list:block block-list:abbreviated-name=":^ioota:" block-list:name="ᶥ"/>
+  <block-list:block block-list:abbreviated-name=":ioota:" block-list:name="ι"/>
+  <block-list:block block-list:abbreviated-name=":Ioota:" block-list:name="Ι"/>
+  <block-list:block block-list:abbreviated-name=":irvistävä:" block-list:name="😬"/>
+  <block-list:block block-list:abbreviated-name=":iso ympyrä:" block-list:name="◯"/>
+  <block-list:block block-list:abbreviated-name=":istuin:" block-list:name="💺"/>
+  <block-list:block block-list:abbreviated-name=":itkevä kissa:" block-list:name="😿"/>
+  <block-list:block block-list:abbreviated-name=":itku:" block-list:name="😢"/>
+  <block-list:block block-list:abbreviated-name=":jäätelö2:" block-list:name="🍨"/>
+  <block-list:block block-list:abbreviated-name=":jäätelöannos:" block-list:name="🍧"/>
+  <block-list:block block-list:abbreviated-name=":jäätelö:" block-list:name="🍦"/>
+  <block-list:block block-list:abbreviated-name=":ja:" block-list:name="∧"/>
+  <block-list:block block-list:abbreviated-name=":jakaa:" block-list:name="∣"/>
+  <block-list:block block-list:abbreviated-name=":jakoavain:" block-list:name="🔧"/>
+  <block-list:block block-list:abbreviated-name=":jalanjäljet:" block-list:name="👣"/>
+  <block-list:block block-list:abbreviated-name=":jalkapallo:" block-list:name="⚽"/>
+  <block-list:block block-list:abbreviated-name=":jalokivi:" block-list:name="💎"/>
+  <block-list:block block-list:abbreviated-name=":jänis2:" block-list:name="🐰"/>
+  <block-list:block block-list:abbreviated-name=":jänis:" block-list:name="🐇"/>
+  <block-list:block block-list:abbreviated-name=":jänönkorvat:" block-list:name="👯"/>
+  <block-list:block block-list:abbreviated-name=":Japani:" block-list:name="🗾"/>
+  <block-list:block block-list:abbreviated-name=":jätkä:" block-list:name="🂫"/>
+  <block-list:block block-list:abbreviated-name=":^j:" block-list:name="ʲ"/>
+  <block-list:block block-list:abbreviated-name=":_j:" block-list:name="ⱼ"/>
+  <block-list:block block-list:abbreviated-name=":^J:" block-list:name="ᴶ"/>
+  <block-list:block block-list:abbreviated-name=":jeni2:" block-list:name="💴"/>
+  <block-list:block block-list:abbreviated-name=":jeni:" block-list:name="¥"/>
+  <block-list:block block-list:abbreviated-name=":jin jang:" block-list:name="☯"/>
+  <block-list:block block-list:abbreviated-name=":jokeri:" block-list:name="🃏"/>
+  <block-list:block block-list:abbreviated-name=":joulu:" block-list:name="🎄"/>
+  <block-list:block block-list:abbreviated-name=":joulupukki:" block-list:name="🎅"/>
+  <block-list:block block-list:abbreviated-name=":Jousimies:" block-list:name="♐"/>
+  <block-list:block block-list:abbreviated-name=":juhla:" block-list:name="🎉"/>
+  <block-list:block block-list:abbreviated-name=":juhlinta:" block-list:name="🙌"/>
+  <block-list:block block-list:abbreviated-name=":juna2:" block-list:name="🚄"/>
+  <block-list:block block-list:abbreviated-name=":juna3:" block-list:name="🚅"/>
+  <block-list:block block-list:abbreviated-name=":juna:" block-list:name="🚆"/>
+  <block-list:block block-list:abbreviated-name=":junanvaunu:" block-list:name="🚃"/>
+  <block-list:block block-list:abbreviated-name=":juoksija:" block-list:name="🏃"/>
+  <block-list:block block-list:abbreviated-name=":juomakelpoinen vesi:" block-list:name="🚰"/>
+  <block-list:block block-list:abbreviated-name=":juomakelvoton vesi:" block-list:name="🚱"/>
+  <block-list:block block-list:abbreviated-name=":Jupiter:" block-list:name="♃"/>
+  <block-list:block block-list:abbreviated-name=":käänteinen ei kuulu:" block-list:name="∌"/>
+  <block-list:block block-list:abbreviated-name=":käänteinen kuuluu:" block-list:name="∋"/>
+  <block-list:block block-list:abbreviated-name=":käärme:" block-list:name="🐍"/>
+  <block-list:block block-list:abbreviated-name=":käärmeenkantaja:" block-list:name="⛎"/>
+  <block-list:block block-list:abbreviated-name=":käärö:" block-list:name="📜"/>
+  <block-list:block block-list:abbreviated-name=":kaavio2:" block-list:name="📈"/>
+  <block-list:block block-list:abbreviated-name=":kaavio3:" block-list:name="📉"/>
+  <block-list:block block-list:abbreviated-name=":kaavio4:" block-list:name="📊"/>
+  <block-list:block block-list:abbreviated-name=":kaavio:" block-list:name="💹"/>
+  <block-list:block block-list:abbreviated-name=":kahdeksasosanuotti:" block-list:name="𝅘𝅥𝅮"/>
+  <block-list:block block-list:abbreviated-name=":kahdeksasosatauko:" block-list:name="𝄾"/>
+  <block-list:block block-list:abbreviated-name=":kahvaristi:" block-list:name="☩"/>
+  <block-list:block block-list:abbreviated-name=":kahvi:" block-list:name="☕"/>
+  <block-list:block block-list:abbreviated-name=":kaikille:" block-list:name="∀"/>
+  <block-list:block block-list:abbreviated-name=":kaiutin2:" block-list:name="🔈"/>
+  <block-list:block block-list:abbreviated-name=":kaiutin:" block-list:name="📢"/>
+  <block-list:block block-list:abbreviated-name=":kakka:" block-list:name="💩"/>
+  <block-list:block block-list:abbreviated-name=":kakku:" block-list:name="🍰"/>
+  <block-list:block block-list:abbreviated-name=":kaksi sydäntä:" block-list:name="💕"/>
+  <block-list:block block-list:abbreviated-name=":Kaksoset:" block-list:name="♊"/>
+  <block-list:block block-list:abbreviated-name=":kaktus:" block-list:name="🌵"/>
+  <block-list:block block-list:abbreviated-name=":kala2:" block-list:name="🐠"/>
+  <block-list:block block-list:abbreviated-name=":kala3:" block-list:name="🐡"/>
+  <block-list:block block-list:abbreviated-name=":kala:" block-list:name="🐟"/>
+  <block-list:block block-list:abbreviated-name=":kalakakku:" block-list:name="🍥"/>
+  <block-list:block block-list:abbreviated-name=":kalastus:" block-list:name="🎣"/>
+  <block-list:block block-list:abbreviated-name=":Kalat:" block-list:name="♓"/>
+  <block-list:block block-list:abbreviated-name=":kalenteri2:" block-list:name="📆"/>
+  <block-list:block block-list:abbreviated-name=":kalenteri:" block-list:name="📅"/>
+  <block-list:block block-list:abbreviated-name=":kameli2:" block-list:name="🐫"/>
+  <block-list:block block-list:abbreviated-name=":kameli:" block-list:name="🐪"/>
+  <block-list:block block-list:abbreviated-name=":kamera:" block-list:name="📷"/>
+  <block-list:block block-list:abbreviated-name=":kana:" block-list:name="🐔"/>
+  <block-list:block block-list:abbreviated-name=":kananjalka:" block-list:name="🍗"/>
+  <block-list:block block-list:abbreviated-name=":kananmuna:" block-list:name="🍳"/>
+  <block-list:block block-list:abbreviated-name=":kännykkä:" block-list:name="📱"/>
+  <block-list:block block-list:abbreviated-name=":kännykkä kiinni:" block-list:name="📴"/>
+  <block-list:block block-list:abbreviated-name=":kansio2:" block-list:name="📂"/>
+  <block-list:block block-list:abbreviated-name=":kansio:" block-list:name="📁"/>
+  <block-list:block block-list:abbreviated-name=":kappa:" block-list:name="κ"/>
+  <block-list:block block-list:abbreviated-name=":Kappa:" block-list:name="Κ"/>
+  <block-list:block block-list:abbreviated-name=":karhu:" block-list:name="🐻"/>
+  <block-list:block block-list:abbreviated-name=":karkki:" block-list:name="🍬"/>
+  <block-list:block block-list:abbreviated-name=":karusellihevonen:" block-list:name="🎠"/>
+  <block-list:block block-list:abbreviated-name=":käsi:" block-list:name="✋"/>
+  <block-list:block block-list:abbreviated-name=":käsilaukku:" block-list:name="👜"/>
+  <block-list:block block-list:abbreviated-name=":kastanja:" block-list:name="🌰"/>
+  <block-list:block block-list:abbreviated-name=":kasvava kuunsirppi:" block-list:name="🌒"/>
+  <block-list:block block-list:abbreviated-name=":kasvava lähes täysi kuu:" block-list:name="🌔"/>
+  <block-list:block block-list:abbreviated-name=":kasvava sydän:" block-list:name="💗"/>
+  <block-list:block block-list:abbreviated-name=":katso ei ilkeä:" block-list:name="🙈"/>
+  <block-list:block block-list:abbreviated-name=":kaukoputki:" block-list:name="🔭"/>
+  <block-list:block block-list:abbreviated-name=":kauppa2:" block-list:name="🏬"/>
+  <block-list:block block-list:abbreviated-name=":kauppa:" block-list:name="🏪"/>
+  <block-list:block block-list:abbreviated-name=":Kauris:" block-list:name="♑"/>
+  <block-list:block block-list:abbreviated-name=":kävelemässä:" block-list:name="🚶"/>
+  <block-list:block block-list:abbreviated-name=":käyristynyt sivu:" block-list:name="📃"/>
+  <block-list:block block-list:abbreviated-name=":^k:" block-list:name="ᵏ"/>
+  <block-list:block block-list:abbreviated-name=":_k:" block-list:name="ₖ"/>
+  <block-list:block block-list:abbreviated-name=":^K:" block-list:name="ᴷ"/>
+  <block-list:block block-list:abbreviated-name=":keilailu:" block-list:name="🎳"/>
+  <block-list:block block-list:abbreviated-name=":keksi:" block-list:name="🍪"/>
+  <block-list:block block-list:abbreviated-name=":kello:" block-list:name="⌚"/>
+  <block-list:block block-list:abbreviated-name=":kenkä2:" block-list:name="👟"/>
+  <block-list:block block-list:abbreviated-name=":kenkä3:" block-list:name="👠"/>
+  <block-list:block block-list:abbreviated-name=":kenkä:" block-list:name="👞"/>
+  <block-list:block block-list:abbreviated-name=":kertomerkki2:" block-list:name="✖"/>
+  <block-list:block block-list:abbreviated-name=":keskikokoinen neliö2:" block-list:name="◼"/>
+  <block-list:block block-list:abbreviated-name=":keskikokoinen neliö:" block-list:name="◻"/>
+  <block-list:block block-list:abbreviated-name=":keskikokoinen tähti:" block-list:name="⭐"/>
+  <block-list:block block-list:abbreviated-name=":kestopaperi:" block-list:name="♾"/>
+  <block-list:block block-list:abbreviated-name=":ketjut:" block-list:name="⛓"/>
+  <block-list:block block-list:abbreviated-name=":kevyt raide:" block-list:name="🚈"/>
+  <block-list:block block-list:abbreviated-name=":^khii:" block-list:name="ᵡ"/>
+  <block-list:block block-list:abbreviated-name=":_khii:" block-list:name="ᵪ"/>
+  <block-list:block block-list:abbreviated-name=":khii:" block-list:name="χ"/>
+  <block-list:block block-list:abbreviated-name=":Khii:" block-list:name="Χ"/>
+  <block-list:block block-list:abbreviated-name=":kieli2:" block-list:name="😛"/>
+  <block-list:block block-list:abbreviated-name=":kieli3:" block-list:name="😜"/>
+  <block-list:block block-list:abbreviated-name=":kieli4:" block-list:name="😝"/>
+  <block-list:block block-list:abbreviated-name=":kieli:" block-list:name="👅"/>
+  <block-list:block block-list:abbreviated-name=":kierrätys2:" block-list:name="♻"/>
+  <block-list:block block-list:abbreviated-name=":kierrätys:" block-list:name="♲"/>
+  <block-list:block block-list:abbreviated-name=":kierrätyspaperi:" block-list:name="♼"/>
+  <block-list:block block-list:abbreviated-name=":kiinanruusu:" block-list:name="🌺"/>
+  <block-list:block block-list:abbreviated-name=":kilpi:" block-list:name="⛨"/>
+  <block-list:block block-list:abbreviated-name=":kilpikonna:" block-list:name="🐢"/>
+  <block-list:block block-list:abbreviated-name=":kimono:" block-list:name="👘"/>
+  <block-list:block block-list:abbreviated-name=":kirja2:" block-list:name="📖"/>
+  <block-list:block block-list:abbreviated-name=":kirja:" block-list:name="📕"/>
+  <block-list:block block-list:abbreviated-name=":kirjanmerkki2:" block-list:name="🔖"/>
+  <block-list:block block-list:abbreviated-name=":kirjanmerkki:" block-list:name="📑"/>
+  <block-list:block block-list:abbreviated-name=":kirjat:" block-list:name="📚"/>
+  <block-list:block block-list:abbreviated-name=":kirjekuori2:" block-list:name="📨"/>
+  <block-list:block block-list:abbreviated-name=":kirjekuori3:" block-list:name="📩"/>
+  <block-list:block block-list:abbreviated-name=":kirjekuori:" block-list:name="✉"/>
+  <block-list:block block-list:abbreviated-name=":kirjoitus:" block-list:name="✍"/>
+  <block-list:block block-list:abbreviated-name=":kirkkaus2:" block-list:name="🔆"/>
+  <block-list:block block-list:abbreviated-name=":kirkkaus:" block-list:name="🔅"/>
+  <block-list:block block-list:abbreviated-name=":kirkko:" block-list:name="⛪"/>
+  <block-list:block block-list:abbreviated-name=":kirsikankukka:" block-list:name="🌸"/>
+  <block-list:block block-list:abbreviated-name=":kirsikat:" block-list:name="🍒"/>
+  <block-list:block block-list:abbreviated-name=":kissa2:" block-list:name="🐱"/>
+  <block-list:block block-list:abbreviated-name=":kissa:" block-list:name="🐈"/>
+  <block-list:block block-list:abbreviated-name=":kitara:" block-list:name="🎸"/>
+  <block-list:block block-list:abbreviated-name=":klaffitaulu:" block-list:name="🎬"/>
+  <block-list:block block-list:abbreviated-name=":koala:" block-list:name="🐨"/>
+  <block-list:block block-list:abbreviated-name=":koira2:" block-list:name="🐶"/>
+  <block-list:block block-list:abbreviated-name=":koira:" block-list:name="🐕"/>
+  <block-list:block block-list:abbreviated-name=":kokonuotti:" block-list:name="𝅝"/>
+  <block-list:block block-list:abbreviated-name=":kokotauko:" block-list:name="𝄻"/>
+  <block-list:block block-list:abbreviated-name=":kolmikärki:" block-list:name="🔱"/>
+  <block-list:block block-list:abbreviated-name=":kolmio2:" block-list:name="▲"/>
+  <block-list:block block-list:abbreviated-name=":kolmio:" block-list:name="△"/>
+  <block-list:block block-list:abbreviated-name=":kolmiolippu:" block-list:name="🚩"/>
+  <block-list:block block-list:abbreviated-name=":komeetta:" block-list:name="☄"/>
+  <block-list:block block-list:abbreviated-name=":konfettipallo:" block-list:name="🎊"/>
+  <block-list:block block-list:abbreviated-name=":koripallo:" block-list:name="🏀"/>
+  <block-list:block block-list:abbreviated-name=":korkeajännite:" block-list:name="⚡"/>
+  <block-list:block block-list:abbreviated-name=":kortisto:" block-list:name="📇"/>
+  <block-list:block block-list:abbreviated-name=":korva:" block-list:name="👂"/>
+  <block-list:block block-list:abbreviated-name=":koulu:" block-list:name="🏫"/>
+  <block-list:block block-list:abbreviated-name=":koulureppu:" block-list:name="🎒"/>
+  <block-list:block block-list:abbreviated-name=":kova ääni:" block-list:name="🔊"/>
+  <block-list:block block-list:abbreviated-name=":Krapu:" block-list:name="♋"/>
+  <block-list:block block-list:abbreviated-name=":kreikkalainen risti2:" block-list:name="✙"/>
+  <block-list:block block-list:abbreviated-name=":kreikkalainen risti:" block-list:name="✚"/>
+  <block-list:block block-list:abbreviated-name=":kristallipallo:" block-list:name="🔮"/>
+  <block-list:block block-list:abbreviated-name=":kristusmonogrammi:" block-list:name="☧"/>
+  <block-list:block block-list:abbreviated-name=":krokotiili:" block-list:name="🐊"/>
+  <block-list:block block-list:abbreviated-name=":kruunu:" block-list:name="👑"/>
+  <block-list:block block-list:abbreviated-name=":ksii:" block-list:name="ξ"/>
+  <block-list:block block-list:abbreviated-name=":Ksii:" block-list:name="Ξ"/>
+  <block-list:block block-list:abbreviated-name=":kukinto:" block-list:name="🌼"/>
+  <block-list:block block-list:abbreviated-name=":kukka:" block-list:name="⚘"/>
+  <block-list:block block-list:abbreviated-name=":kukkakimppu:" block-list:name="💐"/>
+  <block-list:block block-list:abbreviated-name=":kukkaro:" block-list:name="👛"/>
+  <block-list:block block-list:abbreviated-name=":kukko:" block-list:name="🐓"/>
+  <block-list:block block-list:abbreviated-name=":kulma2:" block-list:name="∡"/>
+  <block-list:block block-list:abbreviated-name=":kulma:" block-list:name="∠"/>
+  <block-list:block block-list:abbreviated-name=":kumarrus:" block-list:name="🙇"/>
+  <block-list:block block-list:abbreviated-name=":kummitus:" block-list:name="👻"/>
+  <block-list:block block-list:abbreviated-name=":kuningas:" block-list:name="🂮"/>
+  <block-list:block block-list:abbreviated-name=":kuningatar:" block-list:name="🂭"/>
+  <block-list:block block-list:abbreviated-name=":kuorma-auto2:" block-list:name="🚚"/>
+  <block-list:block block-list:abbreviated-name=":kuorma-auto:" block-list:name="⛟"/>
+  <block-list:block block-list:abbreviated-name=":kurtistus:" block-list:name="😦"/>
+  <block-list:block block-list:abbreviated-name=":kuu2:" block-list:name="🌜"/>
+  <block-list:block block-list:abbreviated-name=":Kuu2:" block-list:name="☾"/>
+  <block-list:block block-list:abbreviated-name=":kuu:" block-list:name="🌛"/>
+  <block-list:block block-list:abbreviated-name=":Kuu:" block-list:name="☽"/>
+  <block-list:block block-list:abbreviated-name=":kuudestoistaosanuotti:" block-list:name="𝅘𝅥𝅯"/>
+  <block-list:block block-list:abbreviated-name=":kuu ja riisiä:" block-list:name="🎑"/>
+  <block-list:block block-list:abbreviated-name=":kuule ei ilkeä:" block-list:name="🙉"/>
+  <block-list:block block-list:abbreviated-name=":kuulokkeet:" block-list:name="🎧"/>
+  <block-list:block block-list:abbreviated-name=":kuuluu:" block-list:name="∈"/>
+  <block-list:block block-list:abbreviated-name=":kuumat lähteet:" block-list:name="♨"/>
+  <block-list:block block-list:abbreviated-name=":kuunsirppi:" block-list:name="🌙"/>
+  <block-list:block block-list:abbreviated-name=":kuusikulmio2:" block-list:name="⬢"/>
+  <block-list:block block-list:abbreviated-name=":kuusikulmio:" block-list:name="⬡"/>
+  <block-list:block block-list:abbreviated-name=":kuutiojuuri:" block-list:name="∛"/>
+  <block-list:block block-list:abbreviated-name=":kyllä:" block-list:name="👍"/>
+  <block-list:block block-list:abbreviated-name=":kylmä hiki:" block-list:name="😰"/>
+  <block-list:block block-list:abbreviated-name=":kylpyamme:" block-list:name="🛁"/>
+  <block-list:block block-list:abbreviated-name=":kylpy:" block-list:name="🛀"/>
+  <block-list:block block-list:abbreviated-name=":kymmenestuhannesosa:" block-list:name="‱"/>
+  <block-list:block block-list:abbreviated-name=":kynänterä2:" block-list:name="✒"/>
+  <block-list:block block-list:abbreviated-name=":kynänterä:" block-list:name="✑"/>
+  <block-list:block block-list:abbreviated-name=":kynsilakka:" block-list:name="💅"/>
+  <block-list:block block-list:abbreviated-name=":kypärä:" block-list:name="⛑"/>
+  <block-list:block block-list:abbreviated-name=":lääketieteellinen:" block-list:name="⚕"/>
+  <block-list:block block-list:abbreviated-name=":lahja:" block-list:name="🎁"/>
+  <block-list:block block-list:abbreviated-name=":lahja sydän:" block-list:name="💝"/>
+  <block-list:block block-list:abbreviated-name=":lähtevä lokero:" block-list:name="📤"/>
+  <block-list:block block-list:abbreviated-name=":laiva:" block-list:name="🚢"/>
+  <block-list:block block-list:abbreviated-name=":lambda:" block-list:name="λ"/>
+  <block-list:block block-list:abbreviated-name=":Lambda:" block-list:name="Λ"/>
+  <block-list:block block-list:abbreviated-name=":lammas:" block-list:name="🐑"/>
+  <block-list:block block-list:abbreviated-name=":lapset ylittävät:" block-list:name="🚸"/>
+  <block-list:block block-list:abbreviated-name=":laput oksassa:" block-list:name="🎋"/>
+  <block-list:block block-list:abbreviated-name=":latinalainen risti:" block-list:name="✝"/>
+  <block-list:block block-list:abbreviated-name=":lautta:" block-list:name="⛴"/>
+  <block-list:block block-list:abbreviated-name=":^l:" block-list:name="ˡ"/>
+  <block-list:block block-list:abbreviated-name=":_l:" block-list:name="ₗ"/>
+  <block-list:block block-list:abbreviated-name=":^L:" block-list:name="ᴸ"/>
+  <block-list:block block-list:abbreviated-name=":lehmä2:" block-list:name="🐮"/>
+  <block-list:block block-list:abbreviated-name=":lehmä:" block-list:name="🐄"/>
+  <block-list:block block-list:abbreviated-name=":lehti2:" block-list:name="🍂"/>
+  <block-list:block block-list:abbreviated-name=":lehti3:" block-list:name="🍃"/>
+  <block-list:block block-list:abbreviated-name=":Leijona:" block-list:name="♌"/>
+  <block-list:block block-list:abbreviated-name=":leikepöytä:" block-list:name="📋"/>
+  <block-list:block block-list:abbreviated-name=":leikkaus:" block-list:name="∩"/>
+  <block-list:block block-list:abbreviated-name=":leipä:" block-list:name="🍞"/>
+  <block-list:block block-list:abbreviated-name=":lentokone:" block-list:name="✈"/>
+  <block-list:block block-list:abbreviated-name=":leopardi:" block-list:name="🐆"/>
+  <block-list:block block-list:abbreviated-name=":leppäkerttu:" block-list:name="🐞"/>
+  <block-list:block block-list:abbreviated-name=":levyke:" block-list:name="💾"/>
+  <block-list:block block-list:abbreviated-name=":liha:" block-list:name="🍖"/>
+  <block-list:block block-list:abbreviated-name=":lihas:" block-list:name="💪"/>
+  <block-list:block block-list:abbreviated-name=":liikennevalo2:" block-list:name="🚦"/>
+  <block-list:block block-list:abbreviated-name=":liikennevalo:" block-list:name="🚥"/>
+  <block-list:block block-list:abbreviated-name=":liira:" block-list:name="₤"/>
+  <block-list:block block-list:abbreviated-name=":lilja:" block-list:name="⚜"/>
+  <block-list:block block-list:abbreviated-name=":linkki:" block-list:name="🔗"/>
+  <block-list:block block-list:abbreviated-name=":linna2:" block-list:name="🏯"/>
+  <block-list:block block-list:abbreviated-name=":linna:" block-list:name="🏰"/>
+  <block-list:block block-list:abbreviated-name=":Linnunrata:" block-list:name="🌌"/>
+  <block-list:block block-list:abbreviated-name=":lintu:" block-list:name="🐦"/>
+  <block-list:block block-list:abbreviated-name=":lippu2:" block-list:name="⚑"/>
+  <block-list:block block-list:abbreviated-name=":lippu3:" block-list:name="🏁"/>
+  <block-list:block block-list:abbreviated-name=":lippu:" block-list:name="⚐"/>
+  <block-list:block block-list:abbreviated-name=":liput2:" block-list:name="🎏"/>
+  <block-list:block block-list:abbreviated-name=":liput:" block-list:name="🎌"/>
+  <block-list:block block-list:abbreviated-name=":lohikäärme2:" block-list:name="🐲"/>
+  <block-list:block block-list:abbreviated-name=":lohikäärme:" block-list:name="🐉"/>
+  <block-list:block block-list:abbreviated-name=":Lothringenin risti:" block-list:name="☨"/>
+  <block-list:block block-list:abbreviated-name=":&lt;=:" block-list:name="≤"/>
+  <block-list:block block-list:abbreviated-name=":&lt;&lt;:" block-list:name="≪"/>
+  <block-list:block block-list:abbreviated-name=":luistin:" block-list:name="⛸"/>
+  <block-list:block block-list:abbreviated-name=":luisuva auto:" block-list:name="⛐"/>
+  <block-list:block block-list:abbreviated-name=":lukko2:" block-list:name="🔏"/>
+  <block-list:block block-list:abbreviated-name=":lukko3:" block-list:name="🔐"/>
+  <block-list:block block-list:abbreviated-name=":lukko:" block-list:name="🔒"/>
+  <block-list:block block-list:abbreviated-name=":lumihiutale:" block-list:name="❄"/>
+  <block-list:block block-list:abbreviated-name=":lumilautailija:" block-list:name="🏂"/>
+  <block-list:block block-list:abbreviated-name=":lumiukko2:" block-list:name="⛄"/>
+  <block-list:block block-list:abbreviated-name=":lumiukko:" block-list:name="☃"/>
+  <block-list:block block-list:abbreviated-name=":luottokortti:" block-list:name="💳"/>
+  <block-list:block block-list:abbreviated-name=":lyhty:" block-list:name="🏮"/>
+  <block-list:block block-list:abbreviated-name=":lyijykynä2:" block-list:name="✏"/>
+  <block-list:block block-list:abbreviated-name=":lyijykynä3:" block-list:name="✐"/>
+  <block-list:block block-list:abbreviated-name=":lyijykynä:" block-list:name="✎"/>
+  <block-list:block block-list:abbreviated-name=":Maa:" block-list:name="♁"/>
+  <block-list:block block-list:abbreviated-name=":maailmanpyörä:" block-list:name="🎡"/>
+  <block-list:block block-list:abbreviated-name=":maapallo2:" block-list:name="🌎"/>
+  <block-list:block block-list:abbreviated-name=":maapallo3:" block-list:name="🌏"/>
+  <block-list:block block-list:abbreviated-name=":maapallo4:" block-list:name="🌐"/>
+  <block-list:block block-list:abbreviated-name=":maapallo:" block-list:name="🌍"/>
+  <block-list:block block-list:abbreviated-name=":mahjong:" block-list:name="🀄"/>
+  <block-list:block block-list:abbreviated-name=":maissi:" block-list:name="🌽"/>
+  <block-list:block block-list:abbreviated-name=":maltalainen risti:" block-list:name="✠"/>
+  <block-list:block block-list:abbreviated-name=":mandariini:" block-list:name="🍊"/>
+  <block-list:block block-list:abbreviated-name=":mansikka:" block-list:name="🍓"/>
+  <block-list:block block-list:abbreviated-name=":mänty:" block-list:name="🌲"/>
+  <block-list:block block-list:abbreviated-name=":maski:" block-list:name="😷"/>
+  <block-list:block block-list:abbreviated-name=":matkatavarat:" block-list:name="🛄"/>
+  <block-list:block block-list:abbreviated-name=":^m:" block-list:name="ᵐ"/>
+  <block-list:block block-list:abbreviated-name=":_m:" block-list:name="ₘ"/>
+  <block-list:block block-list:abbreviated-name=":^M:" block-list:name="ᴹ"/>
+  <block-list:block block-list:abbreviated-name=":md:" block-list:name="💽"/>
+  <block-list:block block-list:abbreviated-name=":mega:" block-list:name="📣"/>
+  <block-list:block block-list:abbreviated-name=":mehiläinen:" block-list:name="🐝"/>
+  <block-list:block block-list:abbreviated-name=":meloni:" block-list:name="🍈"/>
+  <block-list:block block-list:abbreviated-name=":Merkurius:" block-list:name="☿"/>
+  <block-list:block block-list:abbreviated-name=":metro:" block-list:name="🚇"/>
+  <block-list:block block-list:abbreviated-name=":miehet:" block-list:name="🚹"/>
+  <block-list:block block-list:abbreviated-name=":miekat:" block-list:name="⚔"/>
+  <block-list:block block-list:abbreviated-name=":mies:" block-list:name="👨"/>
+  <block-list:block block-list:abbreviated-name=":mietteliäs:" block-list:name="😔"/>
+  <block-list:block block-list:abbreviated-name=":mikrofoni:" block-list:name="🎤"/>
+  <block-list:block block-list:abbreviated-name=":mikroskooppi:" block-list:name="🔬"/>
+  <block-list:block block-list:abbreviated-name=":minibussi:" block-list:name="🚐"/>
+  <block-list:block block-list:abbreviated-name=":morsian:" block-list:name="👰"/>
+  <block-list:block block-list:abbreviated-name=":mot:" block-list:name="∎"/>
+  <block-list:block block-list:abbreviated-name=":muistio:" block-list:name="📝"/>
+  <block-list:block block-list:abbreviated-name=":muistivihko2:" block-list:name="📔"/>
+  <block-list:block block-list:abbreviated-name=":muistivihko:" block-list:name="📓"/>
+  <block-list:block block-list:abbreviated-name=":munakoiso:" block-list:name="🍆"/>
+  <block-list:block block-list:abbreviated-name=":murjottava kissa:" block-list:name="😾"/>
+  <block-list:block block-list:abbreviated-name=":musiikki2:" block-list:name="🎵"/>
+  <block-list:block block-list:abbreviated-name=":musiikki:" block-list:name="🎶"/>
+  <block-list:block block-list:abbreviated-name=":musta kuningas:" block-list:name="♚"/>
+  <block-list:block block-list:abbreviated-name=":musta kuningatar:" block-list:name="♛"/>
+  <block-list:block block-list:abbreviated-name=":musta lähetti:" block-list:name="♝"/>
+  <block-list:block block-list:abbreviated-name=":musta ratsu:" block-list:name="♞"/>
+  <block-list:block block-list:abbreviated-name=":musta sotilas:" block-list:name="♟"/>
+  <block-list:block block-list:abbreviated-name=":musta torni:" block-list:name="♜"/>
+  <block-list:block block-list:abbreviated-name=":musta ympyrä:" block-list:name="⚫"/>
+  <block-list:block block-list:abbreviated-name=":mustekala:" block-list:name="🐙"/>
+  <block-list:block block-list:abbreviated-name=":mutru:" block-list:name="☹"/>
+  <block-list:block block-list:abbreviated-name=":mutteri ja pultti:" block-list:name="🔩"/>
+  <block-list:block block-list:abbreviated-name=":muukalainen2:" block-list:name="👾"/>
+  <block-list:block block-list:abbreviated-name=":muukalainen:" block-list:name="👽"/>
+  <block-list:block block-list:abbreviated-name=":muurahainen:" block-list:name="🐜"/>
+  <block-list:block block-list:abbreviated-name=":myrkky:" block-list:name="☠"/>
+  <block-list:block block-list:abbreviated-name=":myrsky:" block-list:name="☈"/>
+  <block-list:block block-list:abbreviated-name=":myy:" block-list:name="μ"/>
+  <block-list:block block-list:abbreviated-name=":Myy:" block-list:name="Μ"/>
+  <block-list:block block-list:abbreviated-name=":N2:" block-list:name="⇑"/>
+  <block-list:block block-list:abbreviated-name=":naaras:" block-list:name="♀"/>
+  <block-list:block block-list:abbreviated-name=":nainen:" block-list:name="👩"/>
+  <block-list:block block-list:abbreviated-name=":naiset:" block-list:name="🚺"/>
+  <block-list:block block-list:abbreviated-name=":nami:" block-list:name="😋"/>
+  <block-list:block block-list:abbreviated-name=":napakymppi:" block-list:name="🎯"/>
+  <block-list:block block-list:abbreviated-name=":näppäimistö:" block-list:name="⌨"/>
+  <block-list:block block-list:abbreviated-name=":nauha:" block-list:name="🎀"/>
+  <block-list:block block-list:abbreviated-name=":nauru:" block-list:name="😆"/>
+  <block-list:block block-list:abbreviated-name=":^n:" block-list:name="ⁿ"/>
+  <block-list:block block-list:abbreviated-name=":_n:" block-list:name="ₙ"/>
+  <block-list:block block-list:abbreviated-name=":^N:" block-list:name="ᴺ"/>
+  <block-list:block block-list:abbreviated-name=":N:" block-list:name="↑"/>
+  <block-list:block block-list:abbreviated-name=":NE2:" block-list:name="⇗"/>
+  <block-list:block block-list:abbreviated-name=":NE:" block-list:name="↗"/>
+  <block-list:block block-list:abbreviated-name=":Neitsyt:" block-list:name="♍"/>
+  <block-list:block block-list:abbreviated-name=":neliö2:" block-list:name="■"/>
+  <block-list:block block-list:abbreviated-name=":neliö:" block-list:name="□"/>
+  <block-list:block block-list:abbreviated-name=":neliöjuuri:" block-list:name="√"/>
+  <block-list:block block-list:abbreviated-name=":neljännesnuotti:" block-list:name="𝅘𝅥"/>
+  <block-list:block block-list:abbreviated-name=":neljännestauko:" block-list:name="𝄽"/>
+  <block-list:block block-list:abbreviated-name=":neljäs juuri:" block-list:name="∜"/>
+  <block-list:block block-list:abbreviated-name=":nenä:" block-list:name="👃"/>
+  <block-list:block block-list:abbreviated-name=":Neptunus:" block-list:name="♆"/>
+  <block-list:block block-list:abbreviated-name=":neutraalit kasvot:" block-list:name="😐"/>
+  <block-list:block block-list:abbreviated-name=":nimi:" block-list:name="📛"/>
+  <block-list:block block-list:abbreviated-name=":nopat:" block-list:name="🎲"/>
+  <block-list:block block-list:abbreviated-name=":noppa1:" block-list:name="⚀"/>
+  <block-list:block block-list:abbreviated-name=":noppa2:" block-list:name="⚁"/>
+  <block-list:block block-list:abbreviated-name=":noppa3:" block-list:name="⚂"/>
+  <block-list:block block-list:abbreviated-name=":noppa4:" block-list:name="⚃"/>
+  <block-list:block block-list:abbreviated-name=":noppa5:" block-list:name="⚄"/>
+  <block-list:block block-list:abbreviated-name=":noppa6:" block-list:name="⚅"/>
+  <block-list:block block-list:abbreviated-name=":NS2:" block-list:name="⇕"/>
+  <block-list:block block-list:abbreviated-name=":NS:" block-list:name="↕"/>
+  <block-list:block block-list:abbreviated-name=":nuket:" block-list:name="🎎"/>
+  <block-list:block block-list:abbreviated-name=":nukkuva:" block-list:name="😴"/>
+  <block-list:block block-list:abbreviated-name=":nuotit2:" block-list:name="♬"/>
+  <block-list:block block-list:abbreviated-name=":nuotit:" block-list:name="♫"/>
+  <block-list:block block-list:abbreviated-name=":nuotti2:" block-list:name="♪"/>
+  <block-list:block block-list:abbreviated-name=":nuottiavain:" block-list:name="𝄞"/>
+  <block-list:block block-list:abbreviated-name=":nuotti:" block-list:name="♩"/>
+  <block-list:block block-list:abbreviated-name=":nuppineula:" block-list:name="📌"/>
+  <block-list:block block-list:abbreviated-name=":NW2:" block-list:name="⇖"/>
+  <block-list:block block-list:abbreviated-name=":NW:" block-list:name="↖"/>
+  <block-list:block block-list:abbreviated-name=":nyrkki2:" block-list:name="👊"/>
+  <block-list:block block-list:abbreviated-name=":nyrkki:" block-list:name="✊"/>
+  <block-list:block block-list:abbreviated-name=":nyy:" block-list:name="ν"/>
+  <block-list:block block-list:abbreviated-name=":Nyy:" block-list:name="Ν"/>
+  <block-list:block block-list:abbreviated-name=":^o:" block-list:name="ᵒ"/>
+  <block-list:block block-list:abbreviated-name=":_o:" block-list:name="ₒ"/>
+  <block-list:block block-list:abbreviated-name=":^O:" block-list:name="ᴼ"/>
+  <block-list:block block-list:abbreviated-name=":oden:" block-list:name="🍢"/>
+  <block-list:block block-list:abbreviated-name=":oikea2:" block-list:name="👉"/>
+  <block-list:block block-list:abbreviated-name=":oikea3:" block-list:name="☛"/>
+  <block-list:block block-list:abbreviated-name=":oikea:" block-list:name="☞"/>
+  <block-list:block block-list:abbreviated-name=":Oinas:" block-list:name="♈"/>
+  <block-list:block block-list:abbreviated-name=":ok2:" block-list:name="🙆"/>
+  <block-list:block block-list:abbreviated-name=":ok:" block-list:name="👌"/>
+  <block-list:block block-list:abbreviated-name=":olut2:" block-list:name="🍻"/>
+  <block-list:block block-list:abbreviated-name=":olut:" block-list:name="🍺"/>
+  <block-list:block block-list:abbreviated-name=":omena:" block-list:name="🍎"/>
+  <block-list:block block-list:abbreviated-name=":omikron:" block-list:name="ο"/>
+  <block-list:block block-list:abbreviated-name=":Omikron:" block-list:name="Ο"/>
+  <block-list:block block-list:abbreviated-name=":onnellisuus:" block-list:name="🙋"/>
+  <block-list:block block-list:abbreviated-name=":on olemassa:" block-list:name="∃"/>
+  <block-list:block block-list:abbreviated-name=":oomega:" block-list:name="ω"/>
+  <block-list:block block-list:abbreviated-name=":Oomega:" block-list:name="Ω"/>
+  <block-list:block block-list:abbreviated-name=":ortodoksiristi:" block-list:name="☦"/>
+  <block-list:block block-list:abbreviated-name=":osa:" block-list:name="§"/>
+  <block-list:block block-list:abbreviated-name=":osajoukko:" block-list:name="⊂"/>
+  <block-list:block block-list:abbreviated-name=":osittaisderivaatta:" block-list:name="∂"/>
+  <block-list:block block-list:abbreviated-name=":ötökkä:" block-list:name="🐛"/>
+  <block-list:block block-list:abbreviated-name=":ovi:" block-list:name="🚪"/>
+  <block-list:block block-list:abbreviated-name=":pääkallo:" block-list:name="💀"/>
+  <block-list:block block-list:abbreviated-name=":päärynä:" block-list:name="🍐"/>
+  <block-list:block block-list:abbreviated-name=":pääsy kielletty:" block-list:name="🚫"/>
+  <block-list:block block-list:abbreviated-name=":pääsylippu:" block-list:name="🎫"/>
+  <block-list:block block-list:abbreviated-name=":painike2:" block-list:name="🔲"/>
+  <block-list:block block-list:abbreviated-name=":painike:" block-list:name="🔳"/>
+  <block-list:block block-list:abbreviated-name=":paistettu katkarapu:" block-list:name="🍤"/>
+  <block-list:block block-list:abbreviated-name=":paita2:" block-list:name="🎽"/>
+  <block-list:block block-list:abbreviated-name=":paita:" block-list:name="👕"/>
+  <block-list:block block-list:abbreviated-name=":paketti:" block-list:name="📦"/>
+  <block-list:block block-list:abbreviated-name=":palautusmerkki:" block-list:name="♮"/>
+  <block-list:block block-list:abbreviated-name=":pallo2:" block-list:name="‣"/>
+  <block-list:block block-list:abbreviated-name=":pallo3:" block-list:name="◦"/>
+  <block-list:block block-list:abbreviated-name=":pallo:" block-list:name="•"/>
+  <block-list:block block-list:abbreviated-name=":pallon pelaaja:" block-list:name="⛹"/>
+  <block-list:block block-list:abbreviated-name=":palmu:" block-list:name="🌴"/>
+  <block-list:block block-list:abbreviated-name=":paloauto:" block-list:name="🚒"/>
+  <block-list:block block-list:abbreviated-name=":panda:" block-list:name="🐼"/>
+  <block-list:block block-list:abbreviated-name=":pankkiautomaatti:" block-list:name="🏧"/>
+  <block-list:block block-list:abbreviated-name=":pankki:" block-list:name="🏦"/>
+  <block-list:block block-list:abbreviated-name=":paperiliitin:" block-list:name="📎"/>
+  <block-list:block block-list:abbreviated-name=":pariskunta2:" block-list:name="👬"/>
+  <block-list:block block-list:abbreviated-name=":pariskunta3:" block-list:name="👭"/>
+  <block-list:block block-list:abbreviated-name=":pariskunta4:" block-list:name="💑"/>
+  <block-list:block block-list:abbreviated-name=":pariskunta:" block-list:name="👫"/>
+  <block-list:block block-list:abbreviated-name=":parkuva:" block-list:name="😭"/>
+  <block-list:block block-list:abbreviated-name=":parturi:" block-list:name="💈"/>
+  <block-list:block block-list:abbreviated-name=":passi:" block-list:name="🛂"/>
+  <block-list:block block-list:abbreviated-name=":pässi:" block-list:name="🐏"/>
+  <block-list:block block-list:abbreviated-name=":pata2:" block-list:name="♤"/>
+  <block-list:block block-list:abbreviated-name=":pata:" block-list:name="♠"/>
+  <block-list:block block-list:abbreviated-name=":patsas:" block-list:name="🗿"/>
+  <block-list:block block-list:abbreviated-name=":^p:" block-list:name="ᵖ"/>
+  <block-list:block block-list:abbreviated-name=":_p:" block-list:name="ₚ"/>
+  <block-list:block block-list:abbreviated-name=":^P:" block-list:name="ᴾ"/>
+  <block-list:block block-list:abbreviated-name=":peikko:" block-list:name="👺"/>
+  <block-list:block block-list:abbreviated-name=":pelikortit:" block-list:name="🎴"/>
+  <block-list:block block-list:abbreviated-name=":pelokas:" block-list:name="😨"/>
+  <block-list:block block-list:abbreviated-name=":pentagrammi:" block-list:name="⛤"/>
+  <block-list:block block-list:abbreviated-name=":perhe:" block-list:name="👪"/>
+  <block-list:block block-list:abbreviated-name=":persikka:" block-list:name="🍑"/>
+  <block-list:block block-list:abbreviated-name=":pesäpallo:" block-list:name="⚾"/>
+  <block-list:block block-list:abbreviated-name=":peso:" block-list:name="₱"/>
+  <block-list:block block-list:abbreviated-name=":pettynyt:" block-list:name="😞"/>
+  <block-list:block block-list:abbreviated-name=":pettynyt helpottunut:" block-list:name="😥"/>
+  <block-list:block block-list:abbreviated-name=":piano:" block-list:name="🎹"/>
+  <block-list:block block-list:abbreviated-name=":pienempi neliö2:" block-list:name="◾"/>
+  <block-list:block block-list:abbreviated-name=":pienempi neliö:" block-list:name="◽"/>
+  <block-list:block block-list:abbreviated-name=":pienenevä kuunsirppi:" block-list:name="🌘"/>
+  <block-list:block block-list:abbreviated-name=":pienenevä lähes täysi kuu:" block-list:name="🌖"/>
+  <block-list:block block-list:abbreviated-name=":pieni käänteinen kuuluu:" block-list:name="∍"/>
+  <block-list:block block-list:abbreviated-name=":pieni kuuluu:" block-list:name="∊"/>
+  <block-list:block block-list:abbreviated-name=":pieni neliö2:" block-list:name="▪"/>
+  <block-list:block block-list:abbreviated-name=":pieni neliö:" block-list:name="▫"/>
+  <block-list:block block-list:abbreviated-name=":pieni tähti2:" block-list:name="⭑"/>
+  <block-list:block block-list:abbreviated-name=":pieni tähti:" block-list:name="⭒"/>
+  <block-list:block block-list:abbreviated-name=":pii:" block-list:name="π"/>
+  <block-list:block block-list:abbreviated-name=":Pii:" block-list:name="Π"/>
+  <block-list:block block-list:abbreviated-name=":pikavene:" block-list:name="🚤"/>
+  <block-list:block block-list:abbreviated-name=":pikkupiru:" block-list:name="👿"/>
+  <block-list:block block-list:abbreviated-name=":pilleri:" block-list:name="💊"/>
+  <block-list:block block-list:abbreviated-name=":pilvi2:" block-list:name="⛅"/>
+  <block-list:block block-list:abbreviated-name=":pilvi3:" block-list:name="⛈"/>
+  <block-list:block block-list:abbreviated-name=":pilvi:" block-list:name="☁"/>
+  <block-list:block block-list:abbreviated-name=":pingviini:" block-list:name="🐧"/>
+  <block-list:block block-list:abbreviated-name=":pisara:" block-list:name="💧"/>
+  <block-list:block block-list:abbreviated-name=":piste keskellä:" block-list:name="·"/>
+  <block-list:block block-list:abbreviated-name=":pistooli:" block-list:name="🔫"/>
+  <block-list:block block-list:abbreviated-name=":pizza:" block-list:name="🍕"/>
+  <block-list:block block-list:abbreviated-name=":Pluto:" block-list:name="♇"/>
+  <block-list:block block-list:abbreviated-name=":poika:" block-list:name="👦"/>
+  <block-list:block block-list:abbreviated-name=":pokaali:" block-list:name="🏆"/>
+  <block-list:block block-list:abbreviated-name=":poliisiauto2:" block-list:name="🚔"/>
+  <block-list:block block-list:abbreviated-name=":poliisiauto:" block-list:name="🚓"/>
+  <block-list:block block-list:abbreviated-name=":poliisimies:" block-list:name="👮"/>
+  <block-list:block block-list:abbreviated-name=":polkupyörä:" block-list:name="🚲"/>
+  <block-list:block block-list:abbreviated-name=":polttoainepumppu:" block-list:name="⛽"/>
+  <block-list:block block-list:abbreviated-name=":pommi:" block-list:name="💣"/>
+  <block-list:block block-list:abbreviated-name=":postilaatikko2:" block-list:name="📫"/>
+  <block-list:block block-list:abbreviated-name=":postilaatikko3:" block-list:name="📬"/>
+  <block-list:block block-list:abbreviated-name=":postilaatikko4:" block-list:name="📭"/>
+  <block-list:block block-list:abbreviated-name=":postilaatikko5:" block-list:name="📮"/>
+  <block-list:block block-list:abbreviated-name=":postilaatikko:" block-list:name="📪"/>
+  <block-list:block block-list:abbreviated-name=":postitoimisto2:" block-list:name="🏣"/>
+  <block-list:block block-list:abbreviated-name=":postitoimisto:" block-list:name="🏤"/>
+  <block-list:block block-list:abbreviated-name=":prinsessa:" block-list:name="👸"/>
+  <block-list:block block-list:abbreviated-name=":promille:" block-list:name="‰"/>
+  <block-list:block block-list:abbreviated-name=":psii:" block-list:name="ψ"/>
+  <block-list:block block-list:abbreviated-name=":Psii:" block-list:name="Ψ"/>
+  <block-list:block block-list:abbreviated-name=":puhekupla:" block-list:name="💬"/>
+  <block-list:block block-list:abbreviated-name=":puhelin2:" block-list:name="☏"/>
+  <block-list:block block-list:abbreviated-name=":puhelin:" block-list:name="☎"/>
+  <block-list:block block-list:abbreviated-name=":puhu ei ilkeä:" block-list:name="🙊"/>
+  <block-list:block block-list:abbreviated-name=":puku:" block-list:name="👗"/>
+  <block-list:block block-list:abbreviated-name=":punastuminen:" block-list:name="😊"/>
+  <block-list:block block-list:abbreviated-name=":punastunut:" block-list:name="😳"/>
+  <block-list:block block-list:abbreviated-name=":punta2:" block-list:name="💷"/>
+  <block-list:block block-list:abbreviated-name=":punta:" block-list:name="£"/>
+  <block-list:block block-list:abbreviated-name=":puolinuotti:" block-list:name="𝅗𝅥"/>
+  <block-list:block block-list:abbreviated-name=":puolisuunnikas:" block-list:name="⏢"/>
+  <block-list:block block-list:abbreviated-name=":puolitauko:" block-list:name="𝄼"/>
+  <block-list:block block-list:abbreviated-name=":purjevene:" block-list:name="⛵"/>
+  <block-list:block block-list:abbreviated-name=":pussi:" block-list:name="👝"/>
+  <block-list:block block-list:abbreviated-name=":puu:" block-list:name="🌳"/>
+  <block-list:block block-list:abbreviated-name=":puukko:" block-list:name="🔪"/>
+  <block-list:block block-list:abbreviated-name=":pyöräilijä2:" block-list:name="🚵"/>
+  <block-list:block block-list:abbreviated-name=":pyöräilijä:" block-list:name="🚴"/>
+  <block-list:block block-list:abbreviated-name=":pyörätuoli:" block-list:name="♿"/>
+  <block-list:block block-list:abbreviated-name=":pyöreä nuppineula:" block-list:name="📍"/>
+  <block-list:block block-list:abbreviated-name=":pyörivät sydämet:" block-list:name="💞"/>
+  <block-list:block block-list:abbreviated-name=":pyörivä valo:" block-list:name="🚨"/>
+  <block-list:block block-list:abbreviated-name=":pyrähdys:" block-list:name="💨"/>
+  <block-list:block block-list:abbreviated-name=":raakalainen:" block-list:name="👹"/>
+  <block-list:block block-list:abbreviated-name=":radioaktiivinen:" block-list:name="☢"/>
+  <block-list:block block-list:abbreviated-name=":radio:" block-list:name="📻"/>
+  <block-list:block block-list:abbreviated-name=":radiopainike:" block-list:name="🔘"/>
+  <block-list:block block-list:abbreviated-name=":raha:" block-list:name="💸"/>
+  <block-list:block block-list:abbreviated-name=":rahasäkki:" block-list:name="💰"/>
+  <block-list:block block-list:abbreviated-name=":räiske:" block-list:name="❇"/>
+  <block-list:block block-list:abbreviated-name=":räiskeet:" block-list:name="✨"/>
+  <block-list:block block-list:abbreviated-name=":räiskyjä:" block-list:name="🎇"/>
+  <block-list:block block-list:abbreviated-name=":raitiovaunu2:" block-list:name="🚋"/>
+  <block-list:block block-list:abbreviated-name=":raitiovaunu:" block-list:name="🚊"/>
+  <block-list:block block-list:abbreviated-name=":raivo:" block-list:name="😡"/>
+  <block-list:block block-list:abbreviated-name=":rakennustyömaa:" block-list:name="🚧"/>
+  <block-list:block block-list:abbreviated-name=":raketti:" block-list:name="🚀"/>
+  <block-list:block block-list:abbreviated-name=":rakkaus:" block-list:name="💘"/>
+  <block-list:block block-list:abbreviated-name=":rakkauskirje:" block-list:name="💌"/>
+  <block-list:block block-list:abbreviated-name=":ramen:" block-list:name="🍜"/>
+  <block-list:block block-list:abbreviated-name=":ranskalaiset:" block-list:name="🍟"/>
+  <block-list:block block-list:abbreviated-name=":raskas dollarimerkki:" block-list:name="💲"/>
+  <block-list:block block-list:abbreviated-name=":ratas:" block-list:name="⚙"/>
+  <block-list:block block-list:abbreviated-name=":rauha:" block-list:name="☮"/>
+  <block-list:block block-list:abbreviated-name=":ravintola:" block-list:name="🍴"/>
+  <block-list:block block-list:abbreviated-name=":^r:" block-list:name="ʳ"/>
+  <block-list:block block-list:abbreviated-name=":_r:" block-list:name="ᵣ"/>
+  <block-list:block block-list:abbreviated-name=":^R:" block-list:name="ᴿ"/>
+  <block-list:block block-list:abbreviated-name=":rekisteröity:" block-list:name="®"/>
+  <block-list:block block-list:abbreviated-name=":rekka:" block-list:name="🚛"/>
+  <block-list:block block-list:abbreviated-name=":_rhoo:" block-list:name="ᵨ"/>
+  <block-list:block block-list:abbreviated-name=":rhoo:" block-list:name="ρ"/>
+  <block-list:block block-list:abbreviated-name=":Rhoo:" block-list:name="Ρ"/>
+  <block-list:block block-list:abbreviated-name=":riemuvoitto:" block-list:name="😤"/>
+  <block-list:block block-list:abbreviated-name=":riisi:" block-list:name="🍚"/>
+  <block-list:block block-list:abbreviated-name=":riisikeksi:" block-list:name="🍘"/>
+  <block-list:block block-list:abbreviated-name=":riisipallo:" block-list:name="🍙"/>
+  <block-list:block block-list:abbreviated-name=":rintakuva:" block-list:name="👤"/>
+  <block-list:block block-list:abbreviated-name=":rintakuvat:" block-list:name="👥"/>
+  <block-list:block block-list:abbreviated-name=":risti2:" block-list:name="‡"/>
+  <block-list:block block-list:abbreviated-name=":risti:" block-list:name="†"/>
+  <block-list:block block-list:abbreviated-name=":roskat:" block-list:name="🚮"/>
+  <block-list:block block-list:abbreviated-name=":roskaus kielletty:" block-list:name="🚯"/>
+  <block-list:block block-list:abbreviated-name=":rotta:" block-list:name="🐀"/>
+  <block-list:block block-list:abbreviated-name=":rugby-pallo:" block-list:name="🏉"/>
+  <block-list:block block-list:abbreviated-name=":ruisku:" block-list:name="💉"/>
+  <block-list:block block-list:abbreviated-name=":rukoilu:" block-list:name="🙏"/>
+  <block-list:block block-list:abbreviated-name=":rupia:" block-list:name="₹"/>
+  <block-list:block block-list:abbreviated-name=":ruumisarkku:" block-list:name="⚰"/>
+  <block-list:block block-list:abbreviated-name=":ruusu:" block-list:name="🌹"/>
+  <block-list:block block-list:abbreviated-name=":ruutu2:" block-list:name="♢"/>
+  <block-list:block block-list:abbreviated-name=":ruutu:" block-list:name="♦"/>
+  <block-list:block block-list:abbreviated-name=":rypäleet:" block-list:name="🍇"/>
+  <block-list:block block-list:abbreviated-name=":S2:" block-list:name="⇓"/>
+  <block-list:block block-list:abbreviated-name=":saapas:" block-list:name="👢"/>
+  <block-list:block block-list:abbreviated-name=":sade2:" block-list:name="⛆"/>
+  <block-list:block block-list:abbreviated-name=":sade:" block-list:name="☔"/>
+  <block-list:block block-list:abbreviated-name=":sähköbussi:" block-list:name="🚎"/>
+  <block-list:block block-list:abbreviated-name=":sähköposti:" block-list:name="📧"/>
+  <block-list:block block-list:abbreviated-name=":säihkyvä sydän:" block-list:name="💖"/>
+  <block-list:block block-list:abbreviated-name=":sairaala:" block-list:name="🏥"/>
+  <block-list:block block-list:abbreviated-name=":sake:" block-list:name="🍶"/>
+  <block-list:block block-list:abbreviated-name=":sakset2:" block-list:name="✄"/>
+  <block-list:block block-list:abbreviated-name=":sakset3:" block-list:name="✁"/>
+  <block-list:block block-list:abbreviated-name=":sakset4:" block-list:name="✃"/>
+  <block-list:block block-list:abbreviated-name=":sakset:" block-list:name="✂"/>
+  <block-list:block block-list:abbreviated-name=":saksofoni:" block-list:name="🎷"/>
+  <block-list:block block-list:abbreviated-name=":salama:" block-list:name="☇"/>
+  <block-list:block block-list:abbreviated-name=":salkku:" block-list:name="💼"/>
+  <block-list:block block-list:abbreviated-name=":salmiakki:" block-list:name="◊"/>
+  <block-list:block block-list:abbreviated-name=":sammakko:" block-list:name="🐸"/>
+  <block-list:block block-list:abbreviated-name=":sandaali:" block-list:name="👡"/>
+  <block-list:block block-list:abbreviated-name=":sanomalehti:" block-list:name="📰"/>
+  <block-list:block block-list:abbreviated-name=":särkynyt sydän:" block-list:name="💔"/>
+  <block-list:block block-list:abbreviated-name=":sateenkaari:" block-list:name="🌈"/>
+  <block-list:block block-list:abbreviated-name=":sateenvarjo2:" block-list:name="🌂"/>
+  <block-list:block block-list:abbreviated-name=":sateenvarjo3:" block-list:name="⛱"/>
+  <block-list:block block-list:abbreviated-name=":sateenvarjo:" block-list:name="☂"/>
+  <block-list:block block-list:abbreviated-name=":satelliitti:" block-list:name="📡"/>
+  <block-list:block block-list:abbreviated-name=":Saturnus:" block-list:name="♄"/>
+  <block-list:block block-list:abbreviated-name=":sauva:" block-list:name="⚚"/>
+  <block-list:block block-list:abbreviated-name=":^s:" block-list:name="ˢ"/>
+  <block-list:block block-list:abbreviated-name=":_s:" block-list:name="ₛ"/>
+  <block-list:block block-list:abbreviated-name=":S:" block-list:name="↓"/>
+  <block-list:block block-list:abbreviated-name=":SE2:" block-list:name="⇘"/>
+  <block-list:block block-list:abbreviated-name=":SE:" block-list:name="↘"/>
+  <block-list:block block-list:abbreviated-name=":sekeli:" block-list:name="₪"/>
+  <block-list:block block-list:abbreviated-name=":sentti:" block-list:name="¢"/>
+  <block-list:block block-list:abbreviated-name=":siankärsä:" block-list:name="🐽"/>
+  <block-list:block block-list:abbreviated-name=":sieni:" block-list:name="🍄"/>
+  <block-list:block block-list:abbreviated-name=":sigma2:" block-list:name="ς"/>
+  <block-list:block block-list:abbreviated-name=":sigma:" block-list:name="σ"/>
+  <block-list:block block-list:abbreviated-name=":Sigma:" block-list:name="Σ"/>
+  <block-list:block block-list:abbreviated-name=":signaalin vahvuus:" block-list:name="📶"/>
+  <block-list:block block-list:abbreviated-name=":sika2:" block-list:name="🐷"/>
+  <block-list:block block-list:abbreviated-name=":sika:" block-list:name="🐖"/>
+  <block-list:block block-list:abbreviated-name=":silmälasit:" block-list:name="👓"/>
+  <block-list:block block-list:abbreviated-name=":silmänisku:" block-list:name="😉"/>
+  <block-list:block block-list:abbreviated-name=":silmät:" block-list:name="👀"/>
+  <block-list:block block-list:abbreviated-name=":silmukka2:" block-list:name="➿"/>
+  <block-list:block block-list:abbreviated-name=":silmukka:" block-list:name="➰"/>
+  <block-list:block block-list:abbreviated-name=":silta:" block-list:name="🌉"/>
+  <block-list:block block-list:abbreviated-name=":simpukka:" block-list:name="🐚"/>
+  <block-list:block block-list:abbreviated-name=":sinnikäs:" block-list:name="😣"/>
+  <block-list:block block-list:abbreviated-name=":sirkusteltta:" block-list:name="🎪"/>
+  <block-list:block block-list:abbreviated-name=":sitruuna:" block-list:name="🍋"/>
+  <block-list:block block-list:abbreviated-name=":sivu ylöspäin:" block-list:name="📄"/>
+  <block-list:block block-list:abbreviated-name=":Skorpioni:" block-list:name="♏"/>
+  <block-list:block block-list:abbreviated-name=":soitto:" block-list:name="📲"/>
+  <block-list:block block-list:abbreviated-name=":soittokello:" block-list:name="🔔"/>
+  <block-list:block block-list:abbreviated-name=":solmio:" block-list:name="👔"/>
+  <block-list:block block-list:abbreviated-name=":söpöys:" block-list:name="💠"/>
+  <block-list:block block-list:abbreviated-name=":sormus:" block-list:name="💍"/>
+  <block-list:block block-list:abbreviated-name=":soutuvene:" block-list:name="🚣"/>
+  <block-list:block block-list:abbreviated-name=":spagetti:" block-list:name="🍝"/>
+  <block-list:block block-list:abbreviated-name=":suihku:" block-list:name="🚿"/>
+  <block-list:block block-list:abbreviated-name=":suihkulähde:" block-list:name="⛲"/>
+  <block-list:block block-list:abbreviated-name=":suklaa:" block-list:name="🍫"/>
+  <block-list:block block-list:abbreviated-name=":summa:" block-list:name="∑"/>
+  <block-list:block block-list:abbreviated-name=":sumu:" block-list:name="🌁"/>
+  <block-list:block block-list:abbreviated-name=":suorakulmainen kolmio:" block-list:name="⊿"/>
+  <block-list:block block-list:abbreviated-name=":suorakulmio2:" block-list:name="▬"/>
+  <block-list:block block-list:abbreviated-name=":suorakulmio:" block-list:name="▭"/>
+  <block-list:block block-list:abbreviated-name=":surfaaja:" block-list:name="🏄"/>
+  <block-list:block block-list:abbreviated-name=":sushi:" block-list:name="🍣"/>
+  <block-list:block block-list:abbreviated-name=":susi:" block-list:name="🐺"/>
+  <block-list:block block-list:abbreviated-name=":suu:" block-list:name="👄"/>
+  <block-list:block block-list:abbreviated-name=":suudelma2:" block-list:name="💏"/>
+  <block-list:block block-list:abbreviated-name=":suudelma:" block-list:name="💋"/>
+  <block-list:block block-list:abbreviated-name=":suunnikas2:" block-list:name="▰"/>
+  <block-list:block block-list:abbreviated-name=":suunnikas:" block-list:name="▱"/>
+  <block-list:block block-list:abbreviated-name=":suurennuslasi2:" block-list:name="🔎"/>
+  <block-list:block block-list:abbreviated-name=":suurennuslasi:" block-list:name="🔍"/>
+  <block-list:block block-list:abbreviated-name=":suuri neliö2:" block-list:name="⬛"/>
+  <block-list:block block-list:abbreviated-name=":suuri neliö:" block-list:name="⬜"/>
+  <block-list:block block-list:abbreviated-name=":suuri ympyrä2:" block-list:name="⬤"/>
+  <block-list:block block-list:abbreviated-name=":suutelu2:" block-list:name="😘"/>
+  <block-list:block block-list:abbreviated-name=":suutelu3:" block-list:name="😙"/>
+  <block-list:block block-list:abbreviated-name=":suutelu4:" block-list:name="😚"/>
+  <block-list:block block-list:abbreviated-name=":suutelu:" block-list:name="😗"/>
+  <block-list:block block-list:abbreviated-name=":suutelu kissa:" block-list:name="😽"/>
+  <block-list:block block-list:abbreviated-name=":SW2:" block-list:name="⇙"/>
+  <block-list:block block-list:abbreviated-name=":SW:" block-list:name="↙"/>
+  <block-list:block block-list:abbreviated-name=":sydämenlyönti:" block-list:name="💓"/>
+  <block-list:block block-list:abbreviated-name=":sydämet silminä:" block-list:name="😍"/>
+  <block-list:block block-list:abbreviated-name=":sydämet silminä kissa:" block-list:name="😻"/>
+  <block-list:block block-list:abbreviated-name=":sydän:" block-list:name="❤"/>
+  <block-list:block block-list:abbreviated-name=":sydänkoristelu:" block-list:name="💟"/>
+  <block-list:block block-list:abbreviated-name=":sykloni:" block-list:name="🌀"/>
+  <block-list:block block-list:abbreviated-name=":syntymäpäivä:" block-list:name="🎂"/>
+  <block-list:block block-list:abbreviated-name=":tähti2:" block-list:name="☆"/>
+  <block-list:block block-list:abbreviated-name=":tähti3:" block-list:name="🌟"/>
+  <block-list:block block-list:abbreviated-name=":tähti4:" block-list:name="🌠"/>
+  <block-list:block block-list:abbreviated-name=":tähti:" block-list:name="★"/>
+  <block-list:block block-list:abbreviated-name=":tähti ja sirppi:" block-list:name="☪"/>
+  <block-list:block block-list:abbreviated-name=":tai:" block-list:name="∨"/>
+  <block-list:block block-list:abbreviated-name=":taide:" block-list:name="🎨"/>
+  <block-list:block block-list:abbreviated-name=":taimi:" block-list:name="🌱"/>
+  <block-list:block block-list:abbreviated-name=":taksi2:" block-list:name="🚖"/>
+  <block-list:block block-list:abbreviated-name=":taksi:" block-list:name="🚕"/>
+  <block-list:block block-list:abbreviated-name=":talo2:" block-list:name="🏡"/>
+  <block-list:block block-list:abbreviated-name=":talo:" block-list:name="🏠"/>
+  <block-list:block block-list:abbreviated-name=":tanssija:" block-list:name="💃"/>
+  <block-list:block block-list:abbreviated-name=":taputus:" block-list:name="👏"/>
+  <block-list:block block-list:abbreviated-name=":tarkastusmerkki2:" block-list:name="✔"/>
+  <block-list:block block-list:abbreviated-name=":tarkastusmerkki3:" block-list:name="✅"/>
+  <block-list:block block-list:abbreviated-name=":tarkastusmerkki:" block-list:name="✓"/>
+  <block-list:block block-list:abbreviated-name=":tartuntavaara:" block-list:name="☣"/>
+  <block-list:block block-list:abbreviated-name=":taskulamppu:" block-list:name="🔦"/>
+  <block-list:block block-list:abbreviated-name=":tassunjäljet:" block-list:name="🐾"/>
+  <block-list:block block-list:abbreviated-name=":tau:" block-list:name="τ"/>
+  <block-list:block block-list:abbreviated-name=":Tau:" block-list:name="Τ"/>
+  <block-list:block block-list:abbreviated-name=":täysikuu2:" block-list:name="🌝"/>
+  <block-list:block block-list:abbreviated-name=":täysikuu:" block-list:name="🌕"/>
+  <block-list:block block-list:abbreviated-name=":^t:" block-list:name="ᵗ"/>
+  <block-list:block block-list:abbreviated-name=":_t:" block-list:name="ₜ"/>
+  <block-list:block block-list:abbreviated-name=":^T:" block-list:name="ᵀ"/>
+  <block-list:block block-list:abbreviated-name=":teatteri:" block-list:name="🎭"/>
+  <block-list:block block-list:abbreviated-name=":tee:" block-list:name="🍵"/>
+  <block-list:block block-list:abbreviated-name=":tehdas:" block-list:name="🏭"/>
+  <block-list:block block-list:abbreviated-name=":tekijänoikeus:" block-list:name="©"/>
+  <block-list:block block-list:abbreviated-name=":teltta:" block-list:name="⛺"/>
+  <block-list:block block-list:abbreviated-name=":tennis:" block-list:name="🎾"/>
+  <block-list:block block-list:abbreviated-name=":^theeta:" block-list:name="ᶿ"/>
+  <block-list:block block-list:abbreviated-name=":theeta:" block-list:name="θ"/>
+  <block-list:block block-list:abbreviated-name=":Theeta:" block-list:name="Θ"/>
+  <block-list:block block-list:abbreviated-name=":tietoja2:" block-list:name="💁"/>
+  <block-list:block block-list:abbreviated-name=":tietoja:" block-list:name="ℹ"/>
+  <block-list:block block-list:abbreviated-name=":tietokone:" block-list:name="💻"/>
+  <block-list:block block-list:abbreviated-name=":tiikeri2:" block-list:name="🐯"/>
+  <block-list:block block-list:abbreviated-name=":tiikeri:" block-list:name="🐅"/>
+  <block-list:block block-list:abbreviated-name=":tiimalasi2:" block-list:name="⏳"/>
+  <block-list:block block-list:abbreviated-name=":tiimalasi:" block-list:name="⌛"/>
+  <block-list:block block-list:abbreviated-name=":tikkari:" block-list:name="🍭"/>
+  <block-list:block block-list:abbreviated-name=":tilikirja:" block-list:name="📒"/>
+  <block-list:block block-list:abbreviated-name=":tipu2:" block-list:name="🐤"/>
+  <block-list:block block-list:abbreviated-name=":tipu3:" block-list:name="🐥"/>
+  <block-list:block block-list:abbreviated-name=":tipu:" block-list:name="🐣"/>
+  <block-list:block block-list:abbreviated-name=":tm:" block-list:name="™"/>
+  <block-list:block block-list:abbreviated-name=":toimisto:" block-list:name="🏢"/>
+  <block-list:block block-list:abbreviated-name=":tomaatti:" block-list:name="🍅"/>
+  <block-list:block block-list:abbreviated-name=":töpseli:" block-list:name="🔌"/>
+  <block-list:block block-list:abbreviated-name=":törmäys:" block-list:name="💥"/>
+  <block-list:block block-list:abbreviated-name=":torni:" block-list:name="🗼"/>
+  <block-list:block block-list:abbreviated-name=":torvi:" block-list:name="📯"/>
+  <block-list:block block-list:abbreviated-name=":traktori:" block-list:name="🚜"/>
+  <block-list:block block-list:abbreviated-name=":trooppinen drinkki:" block-list:name="🍹"/>
+  <block-list:block block-list:abbreviated-name=":trumpetti:" block-list:name="🎺"/>
+  <block-list:block block-list:abbreviated-name=":tuhkauurna:" block-list:name="⚱"/>
+  <block-list:block block-list:abbreviated-name=":tuleva lokero:" block-list:name="📥"/>
+  <block-list:block block-list:abbreviated-name=":tuli:" block-list:name="🔥"/>
+  <block-list:block block-list:abbreviated-name=":tulivuori:" block-list:name="🌋"/>
+  <block-list:block block-list:abbreviated-name=":tulli:" block-list:name="🛃"/>
+  <block-list:block block-list:abbreviated-name=":tulo:" block-list:name="∏"/>
+  <block-list:block block-list:abbreviated-name=":tulppaani:" block-list:name="🌷"/>
+  <block-list:block block-list:abbreviated-name=":tupakointi:" block-list:name="🚬"/>
+  <block-list:block block-list:abbreviated-name=":tupakointi kielletty:" block-list:name="🚭"/>
+  <block-list:block block-list:abbreviated-name=":tupla-alennusmerkki:" block-list:name="𝄫"/>
+  <block-list:block block-list:abbreviated-name=":tuplaylennysmerkki:" block-list:name="𝄪"/>
+  <block-list:block block-list:abbreviated-name=":turbaani:" block-list:name="👳"/>
+  <block-list:block block-list:abbreviated-name=":Turkin liira:" block-list:name="₺"/>
+  <block-list:block block-list:abbreviated-name=":tuskainen:" block-list:name="😧"/>
+  <block-list:block block-list:abbreviated-name=":tuulikello:" block-list:name="🎐"/>
+  <block-list:block block-list:abbreviated-name=":tuuma:" block-list:name="″"/>
+  <block-list:block block-list:abbreviated-name=":tv:" block-list:name="📺"/>
+  <block-list:block block-list:abbreviated-name=":tyhjä joukko:" block-list:name="∅"/>
+  <block-list:block block-list:abbreviated-name=":työläinen:" block-list:name="👷"/>
+  <block-list:block block-list:abbreviated-name=":tyttö:" block-list:name="👧"/>
+  <block-list:block block-list:abbreviated-name=":^u:" block-list:name="ᵘ"/>
+  <block-list:block block-list:abbreviated-name=":_u:" block-list:name="ᵤ"/>
+  <block-list:block block-list:abbreviated-name=":^U:" block-list:name="ᵁ"/>
+  <block-list:block block-list:abbreviated-name=":uimari:" block-list:name="🏊"/>
+  <block-list:block block-list:abbreviated-name=":uninen:" block-list:name="😪"/>
+  <block-list:block block-list:abbreviated-name=":unioni:" block-list:name="∪"/>
+  <block-list:block block-list:abbreviated-name=":unohdetut matkatavarat:" block-list:name="🛅"/>
+  <block-list:block block-list:abbreviated-name=":Uranus:" block-list:name="♅"/>
+  <block-list:block block-list:abbreviated-name=":uros:" block-list:name="♂"/>
+  <block-list:block block-list:abbreviated-name=":uupunut:" block-list:name="😩"/>
+  <block-list:block block-list:abbreviated-name=":uusikuu2:" block-list:name="🌚"/>
+  <block-list:block block-list:abbreviated-name=":uusikuu:" block-list:name="🌑"/>
+  <block-list:block block-list:abbreviated-name=":vaahteranlehti:" block-list:name="🍁"/>
+  <block-list:block block-list:abbreviated-name=":vaaka:" block-list:name="⚖"/>
+  <block-list:block block-list:abbreviated-name=":Vaaka:" block-list:name="♎"/>
+  <block-list:block block-list:abbreviated-name=":vaalea tukka:" block-list:name="👱"/>
+  <block-list:block block-list:abbreviated-name=":vaatteet:" block-list:name="👚"/>
+  <block-list:block block-list:abbreviated-name=":vaijerihissi:" block-list:name="🚠"/>
+  <block-list:block block-list:abbreviated-name=":vaijerirata:" block-list:name="🚟"/>
+  <block-list:block block-list:abbreviated-name=":vaimenna:" block-list:name="🔇"/>
+  <block-list:block block-list:abbreviated-name=":valas2:" block-list:name="🐋"/>
+  <block-list:block block-list:abbreviated-name=":valas:" block-list:name="🐳"/>
+  <block-list:block block-list:abbreviated-name=":valintaruutu2:" block-list:name="☑"/>
+  <block-list:block block-list:abbreviated-name=":valintaruutu3:" block-list:name="☒"/>
+  <block-list:block block-list:abbreviated-name=":valintaruutu:" block-list:name="☐"/>
+  <block-list:block block-list:abbreviated-name=":valkoinen kukka:" block-list:name="💮"/>
+  <block-list:block block-list:abbreviated-name=":valkoinen kuningas:" block-list:name="♔"/>
+  <block-list:block block-list:abbreviated-name=":valkoinen kuningatar:" block-list:name="♕"/>
+  <block-list:block block-list:abbreviated-name=":valkoinen lähetti:" block-list:name="♗"/>
+  <block-list:block block-list:abbreviated-name=":valkoinen ratsu:" block-list:name="♘"/>
+  <block-list:block block-list:abbreviated-name=":valkoinen sotilas:" block-list:name="♙"/>
+  <block-list:block block-list:abbreviated-name=":valkoinen torni:" block-list:name="♖"/>
+  <block-list:block block-list:abbreviated-name=":valkoinen ympyrä:" block-list:name="⚪"/>
+  <block-list:block block-list:abbreviated-name=":valmistuminen:" block-list:name="🎓"/>
+  <block-list:block block-list:abbreviated-name=":valtameri:" block-list:name="🌊"/>
+  <block-list:block block-list:abbreviated-name=":valuutanvaihto:" block-list:name="💱"/>
+  <block-list:block block-list:abbreviated-name=":vanhempi mies:" block-list:name="👴"/>
+  <block-list:block block-list:abbreviated-name=":vanhempi nainen:" block-list:name="👵"/>
+  <block-list:block block-list:abbreviated-name=":vanukas:" block-list:name="🍮"/>
+  <block-list:block block-list:abbreviated-name=":vapaus:" block-list:name="🗽"/>
+  <block-list:block block-list:abbreviated-name=":värinätila:" block-list:name="📳"/>
+  <block-list:block block-list:abbreviated-name=":varoitus:" block-list:name="⚠"/>
+  <block-list:block block-list:abbreviated-name=":vartija:" block-list:name="💂"/>
+  <block-list:block block-list:abbreviated-name=":vasara:" block-list:name="🔨"/>
+  <block-list:block block-list:abbreviated-name=":vasara ja hakku:" block-list:name="⚒"/>
+  <block-list:block block-list:abbreviated-name=":vasara ja sirppi:" block-list:name="☭"/>
+  <block-list:block block-list:abbreviated-name=":vasen2:" block-list:name="👈"/>
+  <block-list:block block-list:abbreviated-name=":vasen3:" block-list:name="☚"/>
+  <block-list:block block-list:abbreviated-name=":vasen:" block-list:name="☜"/>
+  <block-list:block block-list:abbreviated-name=":vastaanotin:" block-list:name="📞"/>
+  <block-list:block block-list:abbreviated-name=":väsynyt kasvo:" block-list:name="😫"/>
+  <block-list:block block-list:abbreviated-name=":vauva2:" block-list:name="🚼"/>
+  <block-list:block block-list:abbreviated-name=":vauva:" block-list:name="👶"/>
+  <block-list:block block-list:abbreviated-name=":vauvan pullo:" block-list:name="🍼"/>
+  <block-list:block block-list:abbreviated-name=":^v:" block-list:name="ᵛ"/>
+  <block-list:block block-list:abbreviated-name=":_v:" block-list:name="ᵥ"/>
+  <block-list:block block-list:abbreviated-name=":^V:" block-list:name="ⱽ"/>
+  <block-list:block block-list:abbreviated-name=":vesimeloni:" block-list:name="🍉"/>
+  <block-list:block block-list:abbreviated-name=":Vesimies:" block-list:name="♒"/>
+  <block-list:block block-list:abbreviated-name=":vesipuhveli:" block-list:name="🐃"/>
+  <block-list:block block-list:abbreviated-name=":vessa2:" block-list:name="🚽"/>
+  <block-list:block block-list:abbreviated-name=":vessa3:" block-list:name="🚾"/>
+  <block-list:block block-list:abbreviated-name=":vessa:" block-list:name="🚻"/>
+  <block-list:block block-list:abbreviated-name=":vhs:" block-list:name="📼"/>
+  <block-list:block block-list:abbreviated-name=":viaton:" block-list:name="😇"/>
+  <block-list:block block-list:abbreviated-name=":videokamera:" block-list:name="📹"/>
+  <block-list:block block-list:abbreviated-name=":videopeli:" block-list:name="🎮"/>
+  <block-list:block block-list:abbreviated-name=":viha:" block-list:name="💢"/>
+  <block-list:block block-list:abbreviated-name=":vihainen:" block-list:name="😠"/>
+  <block-list:block block-list:abbreviated-name=":vihreä omena:" block-list:name="🍏"/>
+  <block-list:block block-list:abbreviated-name=":viimeinen neljännes:" block-list:name="🌗"/>
+  <block-list:block block-list:abbreviated-name=":viinilasi:" block-list:name="🍷"/>
+  <block-list:block block-list:abbreviated-name=":viisikulmio2:" block-list:name="⬟"/>
+  <block-list:block block-list:abbreviated-name=":viisikulmio:" block-list:name="⬠"/>
+  <block-list:block block-list:abbreviated-name=":viivain2:" block-list:name="📐"/>
+  <block-list:block block-list:abbreviated-name=":viivain:" block-list:name="📏"/>
+  <block-list:block block-list:abbreviated-name=":vilja:" block-list:name="🌾"/>
+  <block-list:block block-list:abbreviated-name=":villakoira:" block-list:name="🐩"/>
+  <block-list:block block-list:abbreviated-name=":villisika:" block-list:name="🐗"/>
+  <block-list:block block-list:abbreviated-name=":vinoristi:" block-list:name="☓"/>
+  <block-list:block block-list:abbreviated-name=":virne:" block-list:name="😏"/>
+  <block-list:block block-list:abbreviated-name=":virne kissa:" block-list:name="😼"/>
+  <block-list:block block-list:abbreviated-name=":virnistys2:" block-list:name="😁"/>
+  <block-list:block block-list:abbreviated-name=":virnistys:" block-list:name="😀"/>
+  <block-list:block block-list:abbreviated-name=":viulu:" block-list:name="🎻"/>
+  <block-list:block block-list:abbreviated-name=":voitto:" block-list:name="✌"/>
+  <block-list:block block-list:abbreviated-name=":vuohi:" block-list:name="🐐"/>
+  <block-list:block block-list:abbreviated-name=":vuori:" block-list:name="⛰"/>
+  <block-list:block block-list:abbreviated-name=":vuoristorata:" block-list:name="🎢"/>
+  <block-list:block block-list:abbreviated-name=":vuoristorautatie:" block-list:name="🚞"/>
+  <block-list:block block-list:abbreviated-name=":W2:" block-list:name="⇐"/>
+  <block-list:block block-list:abbreviated-name=":^w:" block-list:name="ʷ"/>
+  <block-list:block block-list:abbreviated-name=":^W:" block-list:name="ᵂ"/>
+  <block-list:block block-list:abbreviated-name=":W:" block-list:name="←"/>
+  <block-list:block block-list:abbreviated-name=":won:" block-list:name="₩"/>
+  <block-list:block block-list:abbreviated-name=":x2:" block-list:name="❌"/>
+  <block-list:block block-list:abbreviated-name=":x3:" block-list:name="❎"/>
+  <block-list:block block-list:abbreviated-name=":^x:" block-list:name="ˣ"/>
+  <block-list:block block-list:abbreviated-name=":_x:" block-list:name="ₓ"/>
+  <block-list:block block-list:abbreviated-name=":x:" block-list:name="×"/>
+  <block-list:block block-list:abbreviated-name=":^y:" block-list:name="ʸ"/>
+  <block-list:block block-list:abbreviated-name=":yhdensuuntainen:" block-list:name="∥"/>
+  <block-list:block block-list:abbreviated-name=":yksiraide:" block-list:name="🚝"/>
+  <block-list:block block-list:abbreviated-name=":ylähattu:" block-list:name="🎩"/>
+  <block-list:block block-list:abbreviated-name=":ylennysmerkki:" block-list:name="♯"/>
+  <block-list:block block-list:abbreviated-name=":ylijoukko:" block-list:name="⊃"/>
+  <block-list:block block-list:abbreviated-name=":ylös2:" block-list:name="👆"/>
+  <block-list:block block-list:abbreviated-name=":ylös:" block-list:name="☝"/>
+  <block-list:block block-list:abbreviated-name=":ympyrä2:" block-list:name="●"/>
+  <block-list:block block-list:abbreviated-name=":ympyrä:" block-list:name="○"/>
+  <block-list:block block-list:abbreviated-name=":yö:" block-list:name="🌃"/>
+  <block-list:block block-list:abbreviated-name=":ypsilon:" block-list:name="υ"/>
+  <block-list:block block-list:abbreviated-name=":Ypsilon:" block-list:name="Υ"/>
+  <block-list:block block-list:abbreviated-name=":yrtti:" block-list:name="🌿"/>
+  <block-list:block block-list:abbreviated-name=":^z:" block-list:name="ᶻ"/>
+  <block-list:block block-list:abbreviated-name=":zeeta:" block-list:name="ζ"/>
+  <block-list:block block-list:abbreviated-name=":Zeeta:" block-list:name="Ζ"/>
+  <block-list:block block-list:abbreviated-name=":zzz:" block-list:name="💤"/>
 </block-list:block-list>
