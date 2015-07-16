@@ -438,7 +438,7 @@ UpdateCheckConfig::storeUpdateFound( const UpdateInfo& rInfo, const OUString& aC
         uno::makeAny(rInfo.BuildId),
         uno::makeAny(rInfo.Description),
         uno::makeAny(rInfo.Sources[0].URL),
-        uno::makeAny(rInfo.Sources[0].IsDirect ? sal_True : sal_False),
+        uno::makeAny(rInfo.Sources[0].IsDirect),
         uno::makeAny(getReleaseNote(rInfo, 1, autoDownloadEnabled) ),
         uno::makeAny(getReleaseNote(rInfo, 2, autoDownloadEnabled) ),
         uno::makeAny(getReleaseNote(rInfo, 3, autoDownloadEnabled) ),
@@ -596,7 +596,7 @@ UpdateCheckConfig::commitChanges()
                 {
                     sal_Bool bEnabled = sal_False;
                     aChangesSet[i].Element >>= bEnabled;
-                    m_rListener->autoCheckStatusChanged(sal_True == bEnabled);
+                    m_rListener->autoCheckStatusChanged(bEnabled);
                 }
                 else if( aString.endsWith(CHECK_INTERVAL "']") )
                 {
