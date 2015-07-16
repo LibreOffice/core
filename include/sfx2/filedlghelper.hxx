@@ -140,7 +140,7 @@ public:
     void                    SetTitle( const OUString&  rNewTitle );
     OUString                GetPath() const;
 
-    /** @deprected: Don't use this method to retrieve the selected files
+    /** @deprecated: Don't use this method to retrieve the selected files
         There are file picker which can provide multiple selected file which belong
         to different folders. As this method always provides the root folder for all selected
         files this cannot work.
