@@ -82,7 +82,6 @@ public:
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
-    void            SetHTMLMode(bool bSet) {bHTMLMode = bSet;}
     void            SetNumberingSettings(
         const css::uno::Sequence<
                   css::uno::Sequence<css::beans::PropertyValue> >& aNum,
@@ -105,11 +104,6 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 
 protected:
         DECL_LINK_TYPED(FormatHdl_Impl, Idle *, void);
-
-    void            SetGrfNotFound(bool bSet) {bGrfNotFound = bSet;}
-    bool            IsGrfNotFound()const {return bGrfNotFound;}
-
-    Idle&          GetFormatIdle() {return aFormatIdle;}
 
 public:
     SvxBmpNumValueSet(vcl::Window* pParent, WinBits nWinBits = WB_TABSTOP);

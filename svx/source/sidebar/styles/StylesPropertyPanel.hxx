@@ -25,26 +25,13 @@ public:
 
     static VclPtr<vcl::Window> Create (
         vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual void DataChanged( const DataChangedEvent& rEvent ) SAL_OVERRIDE;
 
-    virtual void NotifyItemUpdate(
-    const sal_uInt16 nSId,
-    const SfxItemState eState,
-    const SfxPoolItem* pState,
-    const bool bIsEnabled); //SAL_OVERRIDE;
-
     StylesPropertyPanel(
         vcl::Window* pParent,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings);
-    SfxBindings* GetBindings() { return mpBindings; }
-
-private:
-    SfxBindings* mpBindings;
-    //more controls will be added later
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 
 } } //end of namespace svx::sidebar

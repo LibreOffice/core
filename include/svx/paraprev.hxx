@@ -106,51 +106,9 @@ public:
     {
         aSize = aNew;
     }
-
-    short GetFirstLineOfst() const
-    {
-        return nFirstLineOfst;
-    }
-    long GetLeftMargin() const
-    {
-        return nLeftMargin;
-    }
-    long GetRightMargin() const
-    {
-        return nRightMargin;
-    }
-    sal_uInt16 GetUpper() const
-    {
-        return nUpper;
-    }
-    sal_uInt16 GetLower() const
-    {
-        return nLower;
-    }
-    SvxAdjust GetAdjust() const
-    {
-        return eAdjust;
-    }
-    SvxPrevLineSpace GetLineEnum() const
-    {
-        return eLine;
-    }
-    sal_uInt16 GetLineValue() const
-    {
-        return nLineVal;
-    }
     OUString GetText() const SAL_OVERRIDE
     {
         return aText;
-    }
-    Size GetSize() const
-    {
-        return aSize;
-    }
-
-    void Draw(vcl::RenderContext& rRenderContext, bool bAll)
-    {
-        DrawParagraph(rRenderContext, bAll);
     }
 };
 

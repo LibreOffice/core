@@ -76,7 +76,6 @@ public:
     OutlinerParaObject* GetEditOutlinerParaObject() const;
     SVX_DLLPRIVATE void SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
     SVX_DLLPRIVATE virtual SfxStyleSheet* GetStyleSheet() const SAL_OVERRIDE;
-    SVX_DLLPRIVATE virtual const Rectangle& GetCurrentBoundRect() const;
     SVX_DLLPRIVATE virtual void TakeTextAnchorRect(Rectangle& rAnchorRect) const;
 
     SVX_DLLPRIVATE virtual const SfxItemSet& GetItemSet() const SAL_OVERRIDE;

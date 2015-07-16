@@ -57,7 +57,6 @@ public:
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
-    void Reset();
     virtual void SetObjectType(SvxPreviewObjectType nType);
     SvxPreviewObjectType GetObjectType() const { return mnObjectType; }
     SfxItemSet Get3DAttributes() const;
@@ -113,8 +112,6 @@ public:
     virtual void SetObjectType(SvxPreviewObjectType nType) SAL_OVERRIDE;
 
     // register user callback
-    void SetUserInteractiveChangeCallback(Link<> aNew) { maUserInteractiveChangeCallback = aNew; }
-    void SetUserSelectionChangeCallback(Link<> aNew) { maUserSelectionChangeCallback = aNew; }
     void SetChangeCallback(Link<> aNew) { maChangeCallback = aNew; }
     void SetSelectionChangeCallback(Link<> aNew) { maSelectionChangeCallback = aNew; }
 

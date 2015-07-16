@@ -70,7 +70,6 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
                :m_rPage( _rPage )
                ,m_bFirstActivation( true )
                ,m_bAttemptedFormCreation( false )
-               ,m_bInFind( false )
 {
 }
 

@@ -108,9 +108,6 @@ public:
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    void            SetSlotIDs( sal_uInt16 nLeft, sal_uInt16 nRight )
-                        { nLeftSlot = nLeft; nRightSlot = nRight; }
-
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
 

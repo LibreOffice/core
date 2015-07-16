@@ -100,7 +100,6 @@ public:
     SvxFillTypeBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
 
     void            Selected() { bSelect = true; }
-    bool            IsRelease() { return bRelease;}
 
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -120,8 +119,6 @@ class SVX_DLLPUBLIC SvxFillAttrBox : public FillAttrLB
 {
 public:
     SvxFillAttrBox( vcl::Window* pParent, WinBits nBits = WB_BORDER | WB_DROPDOWN | WB_AUTOHSCROLL );
-
-    bool            IsRelease() { return bRelease;}
 
 protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

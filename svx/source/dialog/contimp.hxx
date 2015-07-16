@@ -104,12 +104,11 @@ public:
     void                SetExecState( bool bEnable );
 
     void                SetGraphic( const Graphic& rGraphic );
-    void                SetGraphicLinked( bool bLinked ) { bGraphicLinked = bLinked; }
     const Graphic&      GetGraphic() const { return aGraphic; }
     bool                IsGraphicChanged() const { return nGrfChanged > 0UL; }
 
     void                SetPolyPolygon( const tools::PolyPolygon& rPolyPoly );
-    tools::PolyPolygon         GetPolyPolygon( bool bRescaleToGraphic = true );
+    tools::PolyPolygon  GetPolyPolygon( bool bRescaleToGraphic = true );
 
     void                SetEditingObject( void* pObj ) { pCheckObj = pObj; }
     const void*         GetEditingObject() const { return pCheckObj; }

@@ -55,9 +55,7 @@ public:
     void SetPixelSize( const Size& rSize )              { aArraySize  = rSize;  bGraphicDirty = true; }
     void SetBackgroundColor( const Color& rColor )      { aBckgrColor = rColor; bGraphicDirty = true; }
 
-    XBitmapType             GetBitmapType() const       { return eType; }
     Bitmap                  GetBitmap() const;
-    Color                   GetPixelColor() const       { return aPixelColor; }
     Color                   GetBackgroundColor() const  { return aBckgrColor; }
 };
 

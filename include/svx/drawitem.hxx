@@ -51,7 +51,6 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     XColorListRef           GetColorList() const { return pColorList; }
-    void                    SetColorList( const XColorListRef &pTable ) { pColorList = pTable; }
 };
 
 //  SvxGradientListItem
@@ -77,8 +76,6 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     XGradientListRef        GetGradientList() const { return pGradientList; }
-    void                    SetGradientList( XGradientListRef pList ) {
-                                    pGradientList = pList; }
 };
 
 
@@ -107,8 +104,6 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     XHatchListRef           GetHatchList() const { return pHatchList; }
-    void                    SetHatchList( XHatchListRef pList ) {
-                                    pHatchList = pList; }
 };
 
 
@@ -138,8 +133,6 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     XBitmapListRef          GetBitmapList() const { return pBitmapList; }
-    void                    SetBitmapList( XBitmapListRef pList ) {
-                                    pBitmapList = pList; }
 };
 
 
@@ -197,8 +190,6 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) SAL_OVERRIDE;
 
     XLineEndListRef         GetLineEndList() const { return pLineEndList; }
-    void                    SetLineEndList( XLineEndListRef pList ) {
-                                    pLineEndList = pList; }
 };
 
 

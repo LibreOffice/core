@@ -55,11 +55,6 @@ AccessibleViewForwarder::~AccessibleViewForwarder()
     // empty
 }
 
-bool AccessibleViewForwarder::IsValid() const
-{
-    return true;
-}
-
 Rectangle AccessibleViewForwarder::GetVisibleArea() const
 {
     Rectangle aVisibleArea;
@@ -99,36 +94,6 @@ Size AccessibleViewForwarder::LogicToPixel (const Size& rSize) const
         SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
         OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
         return rOutDev.LogicToPixel (rSize);
-    }
-    else
-        return Size();
-}
-
-/** First subtract the window origin to make the point coordinates relative
-    to the window and then transform them into internal coordinates.
-*/
-Point AccessibleViewForwarder::PixelToLogic (const Point& rPoint) const
-{
-    OSL_ASSERT (mpView != NULL);
-    if((sal_uInt32)mnWindowId < mpView->PaintWindowCount())
-    {
-        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
-        OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-        Rectangle aBBox (static_cast<vcl::Window&>(rOutDev).GetWindowExtentsRelative(0L));
-        return rOutDev.PixelToLogic (rPoint - aBBox.TopLeft());
-    }
-    else
-        return Point();
-}
-
-Size AccessibleViewForwarder::PixelToLogic (const Size& rSize) const
-{
-    OSL_ASSERT (mpView != NULL);
-    if((sal_uInt32)mnWindowId < mpView->PaintWindowCount())
-    {
-        SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow((sal_uInt32)mnWindowId);
-        OutputDevice& rOutDev = pPaintWindow->GetOutputDevice();
-        return rOutDev.PixelToLogic (rSize);
     }
     else
         return Size();

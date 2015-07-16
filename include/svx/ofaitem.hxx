@@ -38,7 +38,6 @@ public:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
     void*                    GetValue() const { return pPtr; }
-    void                     SetValue( void* pNewPtr ) { pPtr = pNewPtr; }
 };
 
 // class OfaRefItem - for ref counting items

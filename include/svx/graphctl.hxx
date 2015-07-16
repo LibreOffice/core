@@ -85,7 +85,6 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     void                SetWinStyle( WinBits nWinBits );
-    WinBits             GetWinStyle() const { return nWinStyle; }
 
     void                SetGraphic( const Graphic& rGraphic, bool bNewModel = true );
     const Graphic&      GetGraphic() const { return aGraphic; }
@@ -94,13 +93,11 @@ public:
     const Point&        GetMousePos() const { return aMousePos; }
 
     void                SetEditMode( const bool bEditMode );
-    bool                IsEditMode() const { return bEditMode; }
 
     void                SetPolyEditMode( const sal_uInt16 nPolyEdit );
     sal_uInt16          GetPolyEditMode() const { return nPolyEdit; }
 
     void                SetObjKind( const SdrObjKind eObjKind );
-    SdrObjKind          GetObjKind() const { return eObjKind; }
 
     SdrModel*           GetSdrModel() const { return pModel; }
     SdrView*            GetSdrView() const { return pView; }
@@ -108,16 +105,10 @@ public:
     bool                IsChanged() const { return bSdrMode && pModel->IsChanged(); }
 
     void                SetMousePosLink( const Link<>& rLink ) { aMousePosLink = rLink; }
-    const Link<>&       GetMousePosLink() const { return aMousePosLink; }
 
     void                SetGraphSizeLink( const Link<>& rLink ) { aGraphSizeLink = rLink; }
-    const Link<>&       GetGraphSizeLink() const { return aGraphSizeLink; }
-
-    void                SetMarkObjLink( const Link<>& rLink ) { aMarkObjLink = rLink; }
-    const Link<>&       GetMarkObjLink() const { return aMarkObjLink; }
 
     void                SetUpdateLink( const Link<>& rLink ) { aUpdateLink = rLink; }
-    const Link<>&       GetUpdateLink() const { return aUpdateLink; }
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 };

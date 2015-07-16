@@ -390,8 +390,6 @@ public:
 
     void RemoveRows(bool bNewCursor);
 
-    void InvalidateStatus();
-
     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& getNumberFormatter() const {return m_xFormatter;}
 
     // the data source
@@ -508,7 +506,6 @@ public:
     void        copyCellText(sal_Int32 _nRow, sal_Int16 _nColId);
 
     // selectin listener handling
-    FmGridListener*             getGridListener() const { return m_pGridListener; }
     void                        setGridListener( FmGridListener* _pListener ) { m_pGridListener = _pListener; }
 
     // helper class to grant access to selected methods from within the DbCellControl class
@@ -578,8 +575,6 @@ protected:
     const DbGridRowRef& GetEmptyRow() const { return m_xEmptyRow;   }
     const DbGridRowRef& GetSeekRow() const  { return m_xSeekRow;    }
     const DbGridRowRef& GetPaintRow() const { return m_xPaintRow;   }
-    CursorWrapper* GetSeekCursor() const    { return m_pSeekCursor; }
-
 
     void ConnectToFields();
     void DisconnectFromFields();
@@ -588,7 +583,6 @@ protected:
         // calls AdjustRows or AdjustDataSource, synchron if the caller is running in the solar thread, else asynchron
 
 protected:
-    void Construct();
     void ImplInitWindow( const InitWindowFacet _eInitWhat );
     DECL_LINK(OnDelete, void*);
 

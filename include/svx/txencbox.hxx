@@ -84,9 +84,6 @@ public:
      */
     void                FillWithMimeAndSelectBest();
 
-    const SvxTextEncodingTable*     GetTextEncodingTable() const
-                            { return m_pEncTable; }
-
     void                InsertTextEncoding( const rtl_TextEncoding nEnc,
                             sal_Int32  nPos = LISTBOX_APPEND );
 
@@ -98,8 +95,6 @@ public:
                             bool bSelect = true );
 
     rtl_TextEncoding    GetSelectTextEncoding() const;
-
-    const OUString&     GetSelectTextString() const;
 };
 
 #endif

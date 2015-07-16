@@ -72,8 +72,6 @@ public:
 
     /** Enables or disables the dial control and all dependent windows. */
     void                Enable( bool bEnable = true );
-    /** Disables the dial control and all dependent windows. */
-    inline void         Disable() { Enable( false ); }
 
     /** Shows or hides the dial control and all dependent windows. */
     void                Show( bool bShow = true );

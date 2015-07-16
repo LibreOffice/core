@@ -180,7 +180,6 @@ public:
     FmFilterItems* GetCurrentItems() const {return m_pCurrentItems;}
     void SetCurrentItems(FmFilterItems* pCurrent);
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & GetControllers() const {return m_xControllers;}
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & GetCurrentController() const {return m_xController;}
     void SetCurrentController(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > & xController);
 
@@ -214,7 +213,6 @@ public:
     FmFormItem* getFormItem() const { return m_pFormItem; }
 
     void setFormItem( FmFormItem* _pItem ) { m_pFormItem = _pItem; }
-    void addSelectedItem( FmFilterItem* _pItem) { m_aDraggedEntries.push_back(_pItem); }
 
 protected:
     virtual void AddSupportedFormats() SAL_OVERRIDE;
@@ -283,7 +281,6 @@ protected:
     void Remove(FmFilterData* pItem);
 
     DECL_LINK(OnRemove, SvTreeListEntry*);
-    DECL_LINK(OnEdited, SvTreeListEntry*);
     DECL_LINK_TYPED(OnDropActionTimer, Timer*, void);
 
 private:

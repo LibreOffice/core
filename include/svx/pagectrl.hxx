@@ -104,16 +104,6 @@ public:
     {
         return maPageFillAttributes;
     }
-
-    void SetWidth(long nWidth)
-    {
-        aSize.Width() = nWidth;
-    }
-    void SetHeight(long nHeight)
-    {
-        aSize.Height() = nHeight;
-    }
-
     void SetSize(const Size& rSize)
     {
         aSize = rSize;
@@ -134,8 +124,6 @@ public:
     long GetLeft() const { return nLeft; }
     long GetRight() const { return nRight; }
 
-    const SvxBoxItem& GetBorder() const;
-
     void SetHdLeft(long nNew) { nHdLeft = nNew; }
     void SetHdRight(long nNew) { nHdRight = nNew; }
     void SetHdDist(long nNew) { nHdDist = nNew; }
@@ -146,8 +134,6 @@ public:
     long GetHdRight() const { return nHdRight; }
     long GetHdDist() const { return nHdDist; }
     long GetHdHeight() const { return nHdHeight; }
-
-    const SvxBoxItem&   GetHdBorder() const { return *pHdBorder; }
 
     void SetFtLeft(long nNew) { nFtLeft = nNew; }
     void SetFtRight(long nNew) { nFtRight = nNew; }
@@ -160,22 +146,14 @@ public:
     long GetFtDist() const { return nFtDist; }
     long GetFtHeight() const { return nFtHeight; }
 
-    const SvxBoxItem& GetFtBorder() const { return *pFtBorder; }
-
     void SetUsage(sal_uInt16 eU) { eUsage = eU; }
     sal_uInt16 GetUsage() const { return eUsage; }
 
     void SetHeader( bool bNew ) { bHeader = bNew; }
-    bool GetHeader() const { return bHeader;}
     void SetFooter( bool bNew ) { bFooter = bNew; }
-    bool GetFooter() const { return bFooter;}
-
     void SetTable( bool bNew ) { bTable = bNew; }
-    bool GetTable() const { return bTable;}
     void SetHorz( bool bNew ) { bHorz = bNew; }
-    bool GetHorz() const { return bHorz;}
     void SetVert( bool bNew ) { bVert = bNew; }
-    bool GetVert() const { return bVert;}
 
     void EnableFrameDirection(bool bEnable);
     //uses enum SvxFrameDirection

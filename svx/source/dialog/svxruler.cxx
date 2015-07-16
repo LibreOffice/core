@@ -1283,23 +1283,6 @@ inline long SvxRuler::GetFrameLeft() const
             Ruler::GetNullOffset();
 }
 
-inline void SvxRuler::SetFrameLeft(long lFrameLeft)
-{
-    /* Set Left margin in Pixels */
-    bool bProtectColumns =
-                mxRulerImpl->aProtectItem.IsSizeProtected() ||
-                mxRulerImpl->aProtectItem.IsPosProtected();
-    if(bAppSetNullOffset)
-    {
-        SetMargin1(lFrameLeft - ConvertSizePixel(lLogicNullOffset),
-                   bProtectColumns ? 0 : RULER_MARGIN_SIZEABLE);
-    }
-    else
-    {
-        Ruler::SetNullOffset(lFrameLeft);
-    }
-}
-
 long SvxRuler::GetFirstLineIndent() const
 {
     /* Get First-line indent in pixels */

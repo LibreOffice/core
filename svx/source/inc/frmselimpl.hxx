@@ -62,7 +62,6 @@ public:
 
     inline void SetUIColorPrim( const Color& rColor ) {maUIStyle.SetColorPrim( rColor ); }
     inline void SetUIColorSecn( const Color& rColor ) {maUIStyle.SetColorSecn( rColor ); }
-    inline void SetUIColorGap( bool bUseIt, const Color& rColor ) {maUIStyle.SetColorGap(bUseIt, rColor);}
     inline const frame::Style& GetUIStyle() const { return maUIStyle; }
 
     inline void ClearFocusArea() { maFocusArea.Clear(); }
@@ -164,8 +163,6 @@ struct FrameSelectorImpl : public Resource
     void                InitGlobalGeometry();
     /** Initializes coordinates of all frame borders. */
     void                InitBorderGeometry();
-    /** Initializes click areas of all enabled frame borders. */
-    void                InitClickAreas();
     /** Draws the entire control into the internal virtual device. */
     void                InitVirtualDevice();
     /** call this to recalculate based on parent size */

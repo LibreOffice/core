@@ -90,12 +90,6 @@ namespace drawinglayer
                 bool bCloseSegment,
                 bool bCloseUsingCenter);
 
-            // data access
-            double getStartAngle() const { return mfStartAngle; }
-            double getEndAngle() const { return mfEndAngle; }
-            bool getCloseSegment() const { return mbCloseSegment; }
-            bool getCloseUsingCenter() const { return mbCloseUsingCenter; }
-
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const SAL_OVERRIDE;
 

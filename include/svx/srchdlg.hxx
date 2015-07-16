@@ -133,11 +133,6 @@ public:
     const SearchAttrItemList*   GetReplaceItemList() const
                                     { return pReplaceList; }
 
-    inline bool     HasSearchAttributes() const;
-    inline bool     HasReplaceAttributes() const;
-
-    PushButton&     GetReplaceBtn() { return *m_pReplaceBtn; }
-
     sal_Int32       GetTransliterationFlags() const;
 
     void SetDocWin( vcl::Window* pDocWin ) { mpDocWin = pDocWin; }
@@ -266,18 +261,6 @@ private:
 
     void            ApplyTransliterationFlags_Impl( sal_Int32 nSettings );
 };
-
-inline bool SvxSearchDialog::HasSearchAttributes() const
-{
-    bool bLen = !m_pSearchAttrText->GetText().isEmpty();
-    return ( m_pSearchAttrText->IsEnabled() && bLen );
-}
-
-inline bool SvxSearchDialog::HasReplaceAttributes() const
-{
-    bool bLen = !m_pReplaceAttrText->GetText().isEmpty();
-    return ( m_pReplaceAttrText->IsEnabled() && bLen );
-}
 
 #endif
 

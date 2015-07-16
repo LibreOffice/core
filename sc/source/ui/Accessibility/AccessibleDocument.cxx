@@ -2105,13 +2105,6 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 ///=====  IAccessibleViewForwarder  ========================================
 
-bool ScAccessibleDocument::IsValid() const
-{
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    return (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose);
-}
-
 Rectangle ScAccessibleDocument::GetVisibleArea_Impl() const
 {
     Rectangle aVisRect(GetBoundingBox());
@@ -2160,31 +2153,6 @@ Size ScAccessibleDocument::LogicToPixel (const Size& rSize) const
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
     if (pWin)
         aSize = pWin->LogicToPixel(rSize, pWin->GetDrawMapMode());
-    return aSize;
-}
-
-Point ScAccessibleDocument::PixelToLogic (const Point& rPoint) const
-{
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    Point aPoint;
-    ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
-    if (pWin)
-    {
-        aPoint -= pWin->GetWindowExtentsRelative(NULL).TopLeft();
-        aPoint = pWin->PixelToLogic(rPoint, pWin->GetDrawMapMode());
-    }
-    return aPoint;
-}
-
-Size ScAccessibleDocument::PixelToLogic (const Size& rSize) const
-{
-    SolarMutexGuard aGuard;
-    IsObjectValid();
-    Size aSize;
-    ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
-    if (pWin)
-        aSize = pWin->PixelToLogic(rSize, pWin->GetDrawMapMode());
     return aSize;
 }
 

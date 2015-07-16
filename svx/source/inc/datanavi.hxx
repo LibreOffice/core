@@ -303,7 +303,6 @@ namespace svxform
         bool                        DoMenuAction( sal_uInt16 _nMenuID );
         void                        EnableMenuItems( Menu* _pMenu );
 
-        inline SvTreeListEntry*     GetSelectedItem() const { return m_pItemList->FirstSelected(); }
         inline const OUString&      GetInstanceName() const { return m_sInstanceName; }
         inline const OUString&      GetInstanceURL() const { return m_sInstanceURL; }
         inline bool                 GetLinkOnce() const { return m_bLinkOnce; }
@@ -644,13 +643,6 @@ namespace svxform
         virtual ~AddInstanceDialog();
         virtual void dispose() SAL_OVERRIDE;
 
-        void SetRenameMode()
-        {
-            m_pURLFT->Disable();
-            m_pURLED->Disable();
-            m_pFilePickerBtn->Disable();
-            m_pLinkInstanceCB->Disable();
-        }
         OUString         GetName() const { return m_pNameED->GetText(); }
         void             SetName( const OUString& _rName ) { m_pNameED->SetText( _rName );}
         OUString         GetURL() const { return m_pURLED->GetText(); }

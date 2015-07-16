@@ -96,8 +96,6 @@ public:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) SAL_OVERRIDE;
 
-    FmFieldWinData* GetData()  const {return pData;}
-
     void UpdateContent(FmFormShell*);
     void UpdateContent(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > &);
     void FillInfo( SfxChildWinInfo& rInfo ) const SAL_OVERRIDE;

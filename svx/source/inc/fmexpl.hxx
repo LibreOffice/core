@@ -250,13 +250,6 @@ public:
     FmFormData( const FmFormData& rFormData );
     virtual ~FmFormData();
 
-    void SetForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm )
-    {
-        m_xForm = xForm;
-        m_xContainer.set(m_xForm, css::uno::UNO_QUERY);
-        newObject( m_xForm );
-    }
-
     const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& GetFormIface() const { return m_xForm; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& GetContainer() const { return m_xContainer; }
 
@@ -351,7 +344,6 @@ namespace svxform
         ImageList                   m_aNormalImages;
 
         void UpdateContent( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForms >& xForms );
-        FmControlData* CreateControlData( ::com::sun::star::form::XFormComponent* pFormComponent );
 
         void InsertForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm, sal_uInt32 nRelPos);
         void RemoveForm(FmFormData* pFormData);
@@ -442,8 +434,6 @@ namespace svxform
         bool            m_bInitialUpdate        : 1;   // bin ich das erste Mal im UpdateContent ?
         bool            m_bKeyboardCut          : 1;
 
-
-        void            UpdateContent();
         FmControlData*  NewControl( const OUString& rServiceName, SvTreeListEntry* pParentEntry, bool bEditName = true );
         void            NewForm( SvTreeListEntry* pParentEntry );
         SvTreeListEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=TREELIST_APPEND );

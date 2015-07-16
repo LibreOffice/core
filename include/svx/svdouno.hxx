@@ -128,7 +128,6 @@ public:
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _inout_ControlContainer
         ) const;
 
-    const OUString& GetUnoControlModelTypeName() const { return aUnoControlTypeName; }
     const OUString& GetUnoControlTypeName() const { return aUnoControlTypeName; }
 
     virtual void SetUnoControlModel( const ::com::sun::star::uno::Reference< com::sun::star::awt::XControlModel >& xModel );

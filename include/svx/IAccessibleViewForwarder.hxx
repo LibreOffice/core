@@ -54,14 +54,6 @@ class IAccessibleViewForwarder
 public:
     virtual ~IAccessibleViewForwarder(){};
 
-    /** This method informs you about the state of the forwarder.  Do not
-        use it when the returned value is <false/>.
-
-        @return
-            Return <true/> if the view forwarder is valid and <false/> else.
-     */
-    virtual bool IsValid() const = 0;
-
     /** Returns the area of the underlying document that is visible in the
     * corresponding window.
 
@@ -95,28 +87,6 @@ public:
      */
     virtual Size LogicToPixel (const Size& rSize) const = 0;
 
-    /** Transform the specified point from absolute screen coordinates to
-        internal coordinates (100th of mm).
-
-        @param rPoint
-            Point in screen coordinates relative to the upper left corner of
-            the (current) screen.
-
-        @return
-            The same point but in internal coordinates (100th of mm).
-     */
-    virtual Point PixelToLogic (const Point& rPoint) const = 0;
-
-    /** Transform the specified size from screen coordinates to internal
-        coordinates (100th of mm).
-
-        @param rSize
-            Size in screen coordinates.
-
-        @return
-            The same size but in internal coordinates (100th of mm).
-     */
-    virtual Size PixelToLogic (const Size& rSize) const = 0;
 };
 
 } // end of namespace accessibility

@@ -210,7 +210,6 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     void ApplyObject();
 
     long GetFrameLeft() const;
-    void SetFrameLeft(long);
 
     long GetLeftMin() const;
     long GetRightMax() const;
@@ -218,9 +217,6 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     DECL_LINK( TabMenuSelect, Menu * );
     DECL_LINK( MenuSelect, Menu * );
     void PrepareProportional_Impl(RulerType);
-
-    sal_uInt16 GetNextVisible(sal_uInt16 nColumn);
-    sal_uInt16 GetPrevVisible(sal_uInt16 nColumn);
 
     enum UpdateType
     {
@@ -268,28 +264,12 @@ public:
     virtual ~SvxRuler();
     virtual void dispose() SAL_OVERRIDE;
 
-    void SetMinFrameSize(long lSize);
-    long GetMinFrameSize() const ;
-
-    SvxRulerSupportFlags GetRulerFlags() const
-    {
-        return nFlags;
-    }
-
     void SetDefTabDist(long);
 
     // set/get NullOffset in logic units
     void SetNullOffsetLogic(long lOff = 0);
-    long GetNullOffsetLogic() const
-    {
-        return lAppNullOffset;
-    }
 
     void SetActive(bool bOn = true);
-    bool IsActive() const
-    {
-        return bActive;
-    }
 
     void ForceUpdate()
     {

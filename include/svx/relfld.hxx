@@ -44,7 +44,6 @@ public:
 
     void            EnableRelativeMode( sal_uInt16 nMin = 50, sal_uInt16 nMax = 150,
                                         sal_uInt16 nStep = 5 );
-    bool            IsRelativeMode() const { return bRelativeMode; }
     void            SetRelative( bool bRelative = false );
     bool            IsRelative() const { return bRelative; }
     void            EnableNegativeMode() {bNegativeEnabled = true;}

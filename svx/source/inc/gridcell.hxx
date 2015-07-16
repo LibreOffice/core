@@ -126,13 +126,9 @@ public:
     sal_uInt16  GetId() const {return m_nId;}
     bool    IsReadOnly() const {return m_bReadOnly;}
     bool    IsAutoValue() const {return m_bAutoValue;}
-    bool    IsUpdating() const {return m_bInSave;}
     sal_Int16   GetAlignment() const {return m_nAlign;}
-    sal_Int16   GetType() const {return m_nFieldType;}
     sal_Int16   GetFieldPos() const {return m_nFieldPos; }
     bool    IsNumeric() const {return m_bNumeric;}
-    bool    IsDateTime() const {return m_bDateTime;}
-    bool    IsObject() const {return m_bObject;}
     bool    IsHidden() const {return m_bHidden;}
     sal_Int32   GetKey() const {return m_nFormatKey;}
     const   ::svt::CellControllerRef& GetController() const {return m_bLocked ? s_xEmptyController : m_xController;}
@@ -705,7 +701,6 @@ public:
     void SetText(const OUString& rText);
 
     void SetCommitHdl( const Link<>& rLink ) { m_aCommitLink = rLink; }
-    const Link<>& GetCommitHdl() const { return m_aCommitLink; }
 
 protected:
 

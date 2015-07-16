@@ -181,8 +181,6 @@ namespace svx
         */
         void        dispose();
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations >&
-                    getFormOperations() const { return m_xFormOperations; }
     protected:
         /// dtor
         virtual ~FormControllerHelper();
@@ -208,10 +206,6 @@ namespace svx
         bool    impl_operateForm_nothrow( const FormOperation _eWhat ) const
         {
             return impl_operateForm_nothrow( _eWhat, 0, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >() );
-        }
-        bool    impl_operateForm_nothrow( const sal_Int16 _nFeature ) const
-        {
-            return impl_operateForm_nothrow( EXECUTE, _nFeature, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >() );
         }
 
     private:

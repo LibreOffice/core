@@ -49,10 +49,6 @@ namespace svx
         /** determines whether the toolbox is currently visible
         */
         bool        isToolboxVisible() const;
-
-        /** forces that the toolbox is docked
-        */
-        inline void forceDocking() { m_bDocking = true; }
     };
 
 

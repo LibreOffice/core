@@ -148,7 +148,6 @@ public:
     void                GetUpdateData( sal_uInt32* pDelArray, const sal_uInt32 nSize );
 
     void                SetCurNumFmtKey( sal_uInt32 nNew )  { nCurFormatKey = nNew; }
-    void                SetCurLanguage( LanguageType eNew ) { eCurLanguage = eNew; }
     sal_uInt32          GetCurNumFmtKey() const             { return nCurFormatKey; }
     LanguageType        GetCurLanguage() const              { return eCurLanguage; }
 
@@ -178,7 +177,6 @@ public:
                             OUString const& rFmtString);
 
     void                SetUseStarFormat( bool bUse ) { bUseStarFormat = bUse; }
-    bool                IsUseStarFormat() { return bUseStarFormat; }
 private:
     static const double     DEFAULT_NUMVALUE;
 

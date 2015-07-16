@@ -140,9 +140,6 @@ public:
     bool                IsBorderSelected( FrameBorderType eBorder ) const;
     /** Selects or deselects the specified frame border. */
     void                SelectBorder( FrameBorderType eBorder, bool bSelect = true );
-    /** Deselects the specified frame border. */
-    inline void         DeselectBorder( FrameBorderType eBorder ) { SelectBorder( eBorder, false ); }
-
     /** Returns true, if any of the enabled frame borders is selected. */
     bool                IsAnyBorderSelected() const;
     /** Selects or deselects all frame borders. */

@@ -52,7 +52,6 @@ private:
     SVX_DLLPRIVATE void Reconnect_Impl();
     SVX_DLLPRIVATE void AddListeners_Impl();
     SVX_DLLPRIVATE void RemoveListeners_Impl();
-    SVX_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::datatransfer::XTransferable > GetTransferable_Impl() const;
     SVX_DLLPRIVATE void GetObjRef_Impl();
     SVX_DLLPRIVATE void SetGraphic_Impl(const Graphic* pGrf);
 

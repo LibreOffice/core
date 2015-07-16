@@ -1739,12 +1739,4 @@ void SdXShape::modelChanged( SdrModel* pNewModel )
     }
 }
 
-void SdXShape::pageChanged( SdrPage*  )
-{
-}
-
-void SdXShape::objectChanged( SdrObject*  )
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

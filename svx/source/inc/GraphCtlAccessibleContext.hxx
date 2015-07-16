@@ -155,12 +155,9 @@ public:
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // IAccessibleViewforwarder
-    virtual bool IsValid() const SAL_OVERRIDE;
     virtual Rectangle GetVisibleArea() const SAL_OVERRIDE;
     virtual Point LogicToPixel (const Point& rPoint) const SAL_OVERRIDE;
     virtual Size LogicToPixel (const Size& rSize) const SAL_OVERRIDE;
-    virtual Point PixelToLogic (const Point& rPoint) const SAL_OVERRIDE;
-    virtual Size PixelToLogic (const Size& rSize) const SAL_OVERRIDE;
 
 protected:
     void checkChildIndexOnSelection( long nIndexOfChild ) throw (::com::sun::star::lang::IndexOutOfBoundsException );

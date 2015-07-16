@@ -112,8 +112,6 @@ public:
     bool isRowHeader();
     bool isColumnHeader();
     sdr::table::SdrTableObj* GetTableObj() { return dynamic_cast< sdr::table::SdrTableObj* >( mxTableObj.get() ); }
-    //declare event notification method
-    void NotifySelection( const CellPos& firstPos, const CellPos& lastPos, const CellPos& newPos );
 private:
     SvxTableController(SvxTableController &) SAL_DELETED_FUNCTION;
     void operator =(SvxTableController &) SAL_DELETED_FUNCTION;
@@ -128,7 +126,6 @@ private:
     SVX_DLLPRIVATE bool PasteObject( SdrTableObj* pPasteTableObj );
 
     SVX_DLLPRIVATE bool checkTableObject();
-    SVX_DLLPRIVATE bool updateTableObject();
     SVX_DLLPRIVATE const CellPos& getSelectionStart();
     SVX_DLLPRIVATE void setSelectionStart( const CellPos& rPos );
     SVX_DLLPRIVATE const CellPos& getSelectionEnd();

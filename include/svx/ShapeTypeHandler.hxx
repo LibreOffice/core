@@ -123,20 +123,6 @@ public:
             const AccessibleShapeInfo& rShapeInfo,
             const AccessibleShapeTreeInfo& rShapeTreeInfo) const;
 
-    /** Compatibility function.
-    */
-    AccessibleShape*
-        CreateAccessibleObject (
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::drawing::XShape>& rxShape,
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rxParent,
-            const AccessibleShapeTreeInfo& rShapeTreeInfo) const
-    {
-        AccessibleShapeInfo aShapeInfo(rxShape, rxParent);
-        return CreateAccessibleObject (aShapeInfo, rShapeTreeInfo);
-    }
-
     /**  Add new shape types to the internal tables.  Each new shape type is
          described by one shape type descriptor.  See
          ShapeTypeDescriptor for more details.

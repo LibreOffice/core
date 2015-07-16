@@ -56,13 +56,6 @@ namespace svxform
         */
         SVX_DLLPUBLIC bool    isToolboxVisible( sal_uInt16 _nSlotId ) const;
 
-        /** ensures that a given toolbox is visible
-        */
-        inline void showToolbox( sal_uInt16 _SlotId ) const
-        {
-            if ( !isToolboxVisible( _SlotId ) )
-                toggleToolbox( _SlotId );
-        }
     };
 
 }
