@@ -209,7 +209,7 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeTIF, "fdo77476.docx")
     if (!pXmlDoc)
        return;
 
-    assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@ContentType='image/tif']", "PartName", "/word/media/image1.tif");
+    assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@ContentType='image/tiff']", "PartName", "/word/media/image1.tif");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
