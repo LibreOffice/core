@@ -29,8 +29,6 @@ class SfxHelp_Impl;
 class SfxFrame;
 class SFX2_DLLPUBLIC SfxHelp : public Help
 {
-    OUString        aTicket;        // for Plugins
-    OUString        aUser;
     bool            bIsDebug;
     SfxHelp_Impl*   pImp;
 

@@ -39,8 +39,6 @@ public:
 private:
 
     OUString maPath;
-    OUString maAuthor;
-    OUString maKeywords;
     OUString maSubTitle;
 
     Point maSubTitlePos;
