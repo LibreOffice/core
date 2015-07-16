@@ -50,7 +50,6 @@ public:
     virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
     virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const SAL_OVERRIDE;
 
-    inline rtl_TextEncoding&    GetCharSet() { return eFrom; }
     inline rtl_TextEncoding     GetCharSet() const { return eFrom; }
 
     inline SvxCharSetColorItem& operator=(const SvxCharSetColorItem& rColor)

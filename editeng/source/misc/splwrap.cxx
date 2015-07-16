@@ -277,23 +277,6 @@ bool SvxSpellWrapper::SpellContinue()
     return false;
 }
 
-void SvxSpellWrapper::AutoCorrect( const OUString&, const OUString& )
-{
-}
-
-void SvxSpellWrapper::ScrollArea()
-{   // Set Scroll area
-}
-
-void SvxSpellWrapper::ChangeWord( const OUString&, const sal_uInt16 )
-{   // Insert Word
-}
-
-void SvxSpellWrapper::ChangeThesWord( const OUString& )
-{
-    // replace word due to Thesaurus.
-}
-
 void SvxSpellWrapper::ReplaceAll( const OUString &, sal_Int16 )
 {   // Replace Word from the Replace list
 }

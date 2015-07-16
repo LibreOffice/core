@@ -166,15 +166,11 @@ class AbstractThesaurusDialog_Impl : public AbstractThesaurusDialog
 {
     DECL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl,SvxThesaurusDialog)
     virtual OUString    GetWord() SAL_OVERRIDE;
-    virtual sal_uInt16  GetLanguage() const SAL_OVERRIDE;
-    virtual vcl::Window*     GetWindow() SAL_OVERRIDE;
 };
 
 class AbstractHyphenWordDialog_Impl: public AbstractHyphenWordDialog
 {
     DECL_ABSTDLG_BASE(AbstractHyphenWordDialog_Impl,SvxHyphenWordDialog)
-    virtual void    SelLeft() SAL_OVERRIDE;
-    virtual void    SelRight() SAL_OVERRIDE;
     virtual vcl::Window* GetWindow() SAL_OVERRIDE;
 };
 

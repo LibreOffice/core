@@ -125,16 +125,12 @@ public:
             EditStatus()                { nStatusBits = EditStatusFlags::NONE; nControlBits = EEControlBits::NONE; nPrevPara = -1; }
 
     void    Clear()                     { nStatusBits = EditStatusFlags::NONE; }
-    void    SetControlBits( EEControlBits nMask, bool bOn )
-                { SetFlags( nControlBits, nMask, bOn ); }
 
     EditStatusFlags  GetStatusWord() const       { return nStatusBits; }
     EditStatusFlags& GetStatusWord()             { return nStatusBits; }
 
-    EEControlBits  GetControlWord() const      { return nControlBits; }
     EEControlBits& GetControlWord()            { return nControlBits; }
 
-    sal_Int32   GetPrevParagraph() const    { return nPrevPara; }
     sal_Int32&  GetPrevParagraph()          { return nPrevPara; }
 };
 

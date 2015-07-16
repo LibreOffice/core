@@ -99,16 +99,6 @@ namespace accessibility
         return maChildren.end();
     }
 
-    AccessibleParaManager::VectorOfChildren::const_iterator AccessibleParaManager::begin() const
-    {
-        return maChildren.begin();
-    }
-
-    AccessibleParaManager::VectorOfChildren::const_iterator AccessibleParaManager::end() const
-    {
-        return maChildren.end();
-    }
-
     void AccessibleParaManager::FireEvent( sal_Int32 nPara,
                                            const sal_Int16 nEventId,
                                            const uno::Any& rNewValue,

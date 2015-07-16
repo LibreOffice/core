@@ -169,8 +169,6 @@ namespace accessibility
         // iterators
         VectorOfChildren::iterator begin();
         VectorOfChildren::iterator end();
-        VectorOfChildren::const_iterator begin() const;
-        VectorOfChildren::const_iterator end() const;
 
         /// Set focus to given child
         void SetFocus( sal_Int32 nChild );

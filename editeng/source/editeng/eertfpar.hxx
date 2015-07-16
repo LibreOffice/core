@@ -101,15 +101,9 @@ public:
 
     virtual SvParserState   CallParser() SAL_OVERRIDE;
 
-
-    void        SetDestCharSet( rtl_TextEncoding eCharSet )  { eDestCharSet = eCharSet; }
-    rtl_TextEncoding
-                GetDestCharSet() const              { return eDestCharSet; }
-
-    sal_uInt16      GetDefTab() const                   { return nDefTab; }
     vcl::Font       GetDefFont()                        { return GetFont( nDefFont ); }
 
-    EditPaM     GetCurPaM() const                   { return aCurSel.Max(); }
+    EditPaM         GetCurPaM() const                   { return aCurSel.Max(); }
 };
 
 typedef tools::SvRef<EditRTFParser> EditRTFParserRef;

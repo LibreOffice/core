@@ -118,7 +118,6 @@ public:
     bool            IsInsertMode() const;
     void            SetInsertMode( bool bInsert );
 
-    void            ReplaceSelected( const OUString& rStr );
     OUString        GetSelected();
     void            DeleteSelected();
 
@@ -205,14 +204,11 @@ public:
 
     // for text conversion
     void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
-    bool            HasConvertibleTextPortion( LanguageType nLang );
 
     void            TransliterateText( sal_Int32 nTransliterationMode );
 
     bool            IsCursorAtWrongSpelledWord( bool bMarkIfWrong = false );
     bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    bool            IsShapeParaFocusable();
-    bool            WrongSpelledBreakPara(sal_Int32 nPara, sal_Int32& nStartIndex, sal_Int32& nEndIndex, sal_Int32 nIndex);
     void            ExecuteSpellPopup( const Point& rPosPixel, Link<>* pCallBack = 0 );
 
     void                InsertField( const SvxFieldItem& rFld );

@@ -105,14 +105,10 @@ public:
     bool IsSaveRelNet() const           { return bNetRel; }
     void SetSaveRelNet( bool bSet )     { bNetRel = bSet; aSwConfig.SetModified();}
 
-    bool IsAutoTextPreview() const {return bAutoTextPreview;}
-    void SetAutoTextPreview(bool bSet) {bAutoTextPreview = bSet; aSwConfig.SetModified();}
-
     bool IsAutoTextTip() const          { return bAutoTextTip; }
     void SetAutoTextTip(bool bSet )     { bAutoTextTip = bSet;aSwConfig.SetModified();}
 
     bool IsSearchInAllCategories() const        { return bSearchInAllCategories;}
-    void SetSearchInAllCategories(bool bSet )   { bSearchInAllCategories = bSet; aSwConfig.SetModified(); }
 
     SvxAutoCorrCfg();
     virtual ~SvxAutoCorrCfg();

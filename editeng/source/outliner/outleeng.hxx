@@ -73,7 +73,6 @@ public:
     virtual bool        ConvertNextDocument() SAL_OVERRIDE;
 
     virtual void        FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos ) SAL_OVERRIDE;
-    virtual void        FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos ) SAL_OVERRIDE;
     virtual OUString    CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor ) SAL_OVERRIDE;
 
     virtual Rectangle   GetBulletArea( sal_Int32 nPara ) SAL_OVERRIDE;

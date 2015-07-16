@@ -830,23 +830,6 @@ void SvxTabStop::fillDecimal() const
 }
 
 
-OUString SvxTabStop::GetValueString() const
-{
-    OUString aStr = "("
-        + OUString::number(nTabPos)
-        + ", "
-        + EE_RESSTR(RID_SVXITEMS_TAB_ADJUST_BEGIN + (sal_uInt16)eAdjustment)
-        + ", ["
-        + EE_RESSTR(RID_SVXITEMS_TAB_DECIMAL_CHAR)
-        + OUString(GetDecimal())
-        + "], , ["
-        + EE_RESSTR(RID_SVXITEMS_TAB_FILL_CHAR)
-        + OUString(cFill)
-        + "])";
-
-    return aStr;
-}
-
 // class SvxTabStopItem --------------------------------------------------
 
 SvxTabStopItem::SvxTabStopItem( sal_uInt16 _nWhich ) :

@@ -144,42 +144,12 @@ bool EditSpellWrapper::SpellMore()
     return bMore;
 }
 
-void EditSpellWrapper::ScrollArea()
-{
-    // No further action needed ...
-    // Except for, that the area is to be scrolled in the center, and not stand
-    // still anywhere.
-}
-
 void EditSpellWrapper::ReplaceAll( const OUString &rNewText,
             sal_Int16 )
 {
     // Is called when the word is in ReplaceList of the spell checker
     pEditView->InsertText( rNewText );
     CheckSpellTo();
-}
-
-void EditSpellWrapper::ChangeWord( const OUString& rNewWord,
-            const sal_uInt16 )
-{
-    // Will be called when Word Button Change
-    // or internally by me ChangeAll
-
-    // If there is a dot Punkt after the word, this dot will be stripped away.
-    // If '"' => PreStripped.
-    OUString aNewWord( rNewWord );
-    pEditView->InsertText( aNewWord );
-    CheckSpellTo();
-}
-
-void EditSpellWrapper::ChangeThesWord( const OUString& rNewWord )
-{
-    pEditView->InsertText( rNewWord );
-    CheckSpellTo();
-}
-
-void EditSpellWrapper::AutoCorrect( const OUString&, const OUString& )
-{
 }
 
 void EditSpellWrapper::CheckSpellTo()

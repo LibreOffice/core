@@ -67,7 +67,6 @@ public:
     void            Collapse( Paragraph* pParent );
 
     void            SetVisibleStateChangedHdl( const Link<>& rLink ) { aVisibleStateChangedHdl = rLink; }
-    Link<>          GetVisibleStateChangedHdl() const { return aVisibleStateChangedHdl; }
 
 private:
 

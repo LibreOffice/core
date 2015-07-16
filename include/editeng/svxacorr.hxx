@@ -220,8 +220,6 @@ public:
     bool PutText( const OUString& rShort, const OUString& rLong );
     //  - Text with attribution (only the SWG - SWG format!)
     bool PutText( const OUString& rShort, SfxObjectShell& );
-    //  - Deleting an entry
-    bool DeleteText( const OUString& rShort );
     //  - Make combined changes in one pass
     bool MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries, std::vector<SvxAutocorrWord>& aDeleteEntries );
 };
@@ -335,9 +333,6 @@ public:
     SvxAutocorrWordList* LoadAutocorrWordList(
                                     LanguageType eLang = LANGUAGE_SYSTEM )
         { return _GetLanguageList( eLang ).LoadAutocorrWordList(); }
-    const SvxAutocorrWordList* GetAutocorrWordList(
-                                    LanguageType eLang = LANGUAGE_SYSTEM )
-        { return _GetLanguageList( eLang ).GetAutocorrWordList(); }
 
     // Save word substitutions:
     //      Save these directly in the storage. The word list is updated

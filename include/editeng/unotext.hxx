@@ -401,7 +401,6 @@ protected:
 public:
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextBase )
 
-    ESelection InsertField( const SvxFieldItem& rField ) throw();
     static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getStaticTypes() throw();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > createTextCursorBySelection( const ESelection& rSel );

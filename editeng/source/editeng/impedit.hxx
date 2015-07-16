@@ -305,7 +305,6 @@ public:
     void            Paste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, bool bUseSpecial = false );
 
     void            SetVisDocStartPos( const Point& rPos ) { aVisDocStartPos = rPos; }
-    const Point&    GetVisDocStartPos() const { return aVisDocStartPos; }
 
     long            GetVisDocLeft() const { return aVisDocStartPos.X(); }
     long            GetVisDocTop() const { return aVisDocStartPos.Y(); }
@@ -325,10 +324,8 @@ public:
     EESelectionMode GetSelectionMode() const    { return eSelectionMode; }
     void            SetSelectionMode( EESelectionMode eMode );
 
-    inline void     SetPointer( const Pointer& rPointer );
     inline const Pointer&   GetPointer();
 
-    inline void     SetCursor( const vcl::Cursor& rCursor );
     inline vcl::Cursor*     GetCursor();
 
     void            AddDragAndDropListeners();
@@ -339,9 +336,9 @@ public:
 //  For the Selection Engine...
     void            CreateAnchor();
     void            DeselectAll();
-    bool        SetCursorAtPoint( const Point& rPointPixel );
-    bool        IsSelectionAtPoint( const Point& rPosPixel );
-    bool        IsInSelection( const EditPaM& rPaM );
+    bool            SetCursorAtPoint( const Point& rPointPixel );
+    bool            IsSelectionAtPoint( const Point& rPosPixel );
+    bool            IsInSelection( const EditPaM& rPaM );
 
 
     void            SetAnchorMode( EVAnchorMode eMode );
@@ -349,14 +346,12 @@ public:
     void            CalcAnchorPoint();
     void            RecalcOutputArea();
 
-    void            ShowCursor( bool bGotoCursor, bool bForceVisCursor, bool test );
     void            ShowCursor( bool bGotoCursor, bool bForceVisCursor, sal_uInt16 nShowCursorFlags = 0 );
     Pair            Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck = RGCHK_NEG );
 
     void        SetInsertMode( bool bInsert );
     bool        IsInsertMode() const            { return !( nControl & EVControlBits::OVERWRITE ); }
 
-    void        EnablePaste( bool bEnable )     { SetFlags( nControl, EVControlBits::ENABLEPASTE, bEnable ); }
     bool        IsPasteEnabled() const          { return bool( nControl & EVControlBits::ENABLEPASTE ); }
 
     bool        DoSingleLinePaste() const       { return bool( nControl & EVControlBits::SINGLELINEPASTE ); }
@@ -547,11 +542,9 @@ private:
 
     EditPaM             Clear();
     EditPaM             RemoveText();
-    EditPaM             RemoveText( EditSelection aEditSelection );
-    bool            CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY );
+    bool                CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY );
     void                CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uInt32 nStartPosY );
-    bool            FinishCreateLines( ParaPortion* pParaPortion );
-    void                CalcCharPositions( ParaPortion* pParaPortion );
+    bool                FinishCreateLines( ParaPortion* pParaPortion );
     void                CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rStartPos /*, sal_Bool bCreateBlockPortions */ );
     void                RecalcTextPortion( ParaPortion* pParaPortion, sal_Int32 nStartPos, sal_Int32 nNewChars );
     sal_Int32           SplitTextPortion( ParaPortion* pParaPortion, sal_Int32 nPos,  EditLine* pCurLine = 0 );
@@ -634,13 +627,12 @@ private:
     sal_uInt32          WriteBin(SvStream& rOutput, const EditSelection& rSel, bool bStoreUnicode = false);
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,
-                        std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList );
-    bool            WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,
-                        std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList );
-    sal_Int32               LogicToTwips( sal_Int32 n );
+                            std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList );
+    bool                WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,
+                            std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList );
+    sal_Int32           LogicToTwips( sal_Int32 n );
 
     inline short        GetXValue( short nXValue ) const;
-    inline sal_uInt16   GetXValue( sal_uInt16 nXValue ) const;
     inline long         GetXValue( long nXValue ) const;
 
     inline short        GetYValue( short nYValue ) const;
@@ -917,8 +909,6 @@ public:
     void                SetDefaultLanguage( LanguageType eLang ) { eDefLanguage = eLang; }
     LanguageType        GetDefaultLanguage() const { return eDefLanguage; }
 
-
-    LanguageType        GetLanguage( const EditSelection &rSelection ) const;
     LanguageType        GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos = NULL ) const;
     ::com::sun::star::lang::Locale GetLocale( const EditPaM& rPaM ) const;
 
@@ -988,7 +978,6 @@ public:
     void                SetCharStretching( sal_uInt16 nX, sal_uInt16 nY );
     inline void         GetCharStretching( sal_uInt16& rX, sal_uInt16& rY ) const;
 
-    void                SetBigTextObjectStart( sal_Int32 nStartAtPortionCount )    { nBigTextObjectStart = nStartAtPortionCount; }
     sal_Int32           GetBigTextObjectStart() const                               { return nBigTextObjectStart; }
 
     inline EditEngine*  GetEditEnginePtr() const    { return pEditEngine; }
@@ -1147,13 +1136,7 @@ inline short ImpEditEngine::GetXValue( short nXValue ) const
     return (short) ((long)nXValue*nStretchX/100);
 }
 
-inline sal_uInt16 ImpEditEngine::GetXValue( sal_uInt16 nXValue ) const
-{
-    if ( !aStatus.DoStretch() || ( nStretchX == 100 ) )
-        return nXValue;
 
-    return (sal_uInt16) ((long)nXValue*nStretchX/100);
-}
 
 inline long ImpEditEngine::GetXValue( long nXValue ) const
 {
@@ -1179,12 +1162,6 @@ inline sal_uInt16 ImpEditEngine::GetYValue( sal_uInt16 nYValue ) const
     return (sal_uInt16) ((long)nYValue*nStretchY/100);
 }
 
-inline void ImpEditView::SetPointer( const Pointer& rPointer )
-{
-    delete pPointer;
-    pPointer = new Pointer( rPointer );
-}
-
 inline const Pointer& ImpEditView::GetPointer()
 {
     if ( !pPointer )
@@ -1205,12 +1182,6 @@ inline const Pointer& ImpEditView::GetPointer()
     }
 
     return *pPointer;
-}
-
-inline void ImpEditView::SetCursor( const vcl::Cursor& rCursor )
-{
-    delete pCursor;
-    pCursor = new vcl::Cursor( rCursor );
 }
 
 inline vcl::Cursor* ImpEditView::GetCursor()

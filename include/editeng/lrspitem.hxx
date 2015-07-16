@@ -106,11 +106,6 @@ public:
     inline bool IsExplicitZeroMarginValLeft()  const { return bExplicitZeroMarginValLeft; }
     inline void SetExplicitZeroMarginValRight( const bool eR ) { bExplicitZeroMarginValRight = eR; }
     inline void SetExplicitZeroMarginValLeft( const bool eL ) { bExplicitZeroMarginValLeft = eL; }
-    // Query/Setting the percentage values
-    inline void SetPropLeft( const sal_uInt16 nProp = 100 )
-                    { nPropLeftMargin = nProp; }
-    inline void SetPropRight( const sal_uInt16 nProp = 100 )
-                    { nPropRightMargin = nProp;}
     inline sal_uInt16 GetPropLeft()  const { return nPropLeftMargin; }
     inline sal_uInt16 GetPropRight() const { return nPropRightMargin;}
 

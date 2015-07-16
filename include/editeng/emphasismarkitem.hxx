@@ -64,8 +64,6 @@ public:
     // enum cast
     FontEmphasisMark        GetEmphasisMark() const
                                 { return (FontEmphasisMark)GetValue(); }
-    void                    SetEmphasisMark( FontEmphasisMark eNew )
-                                { SetValue( (sal_uInt16)eNew ); }
 };
 
 #endif // INCLUDED_EDITENG_EMPHASISMARKITEM_HXX

@@ -41,15 +41,11 @@ class AbstractThesaurusDialog : public VclAbstractDialog
 {
 public:
     virtual OUString    GetWord() = 0;
-    virtual sal_uInt16  GetLanguage() const = 0;
-    virtual vcl::Window*     GetWindow() = 0;
 };
 
 class AbstractHyphenWordDialog : public VclAbstractDialog
 {
 public:
-    virtual void    SelLeft() = 0;
-    virtual void    SelRight() = 0;
     virtual vcl::Window* GetWindow() = 0;
 };
 

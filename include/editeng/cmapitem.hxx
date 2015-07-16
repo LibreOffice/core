@@ -65,8 +65,6 @@ public:
     // enum cast
     SvxCaseMap              GetCaseMap() const
                                 { return (SvxCaseMap)GetValue(); }
-    void                    SetCaseMap( SvxCaseMap eNew )
-                                { SetValue( (sal_uInt16)eNew ); }
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 };
