@@ -127,7 +127,7 @@ class CmisDetailsContainer : public DetailsContainer
         VclPtr<Edit>       m_pEDRoot;
 
     public:
-        CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString sBinding );
+        CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString const & sBinding );
         virtual ~CmisDetailsContainer( ) { };
 
         virtual void show( bool bShow = true ) SAL_OVERRIDE;

@@ -248,7 +248,7 @@ bool SmbDetailsContainer::setUrl( const INetURLObject& rUrl )
     return bSuccess;
 }
 
-CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString sBinding ) :
+CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString const & sBinding ) :
     DetailsContainer( pBuilder, "CmisDetails" ),
     m_sUsername( ),
     m_xCmdEnv( ),
