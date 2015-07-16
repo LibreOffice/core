@@ -366,22 +366,13 @@ public:
                                 SvxAuthorType eType = SVXAUTHORTYPE_VAR,
                                 SvxAuthorFormat eFormat = SVXAUTHORFORMAT_FULLNAME );
 
-    OUString           GetName() const { return aName; }
-    void                    SetName( const OUString& rString ) { aName = rString; }
-
-    OUString           GetFirstName() const { return aFirstName; }
-    void                    SetFirstName( const OUString& rString ) { aFirstName = rString; }
-
-    OUString           GetShortName() const { return aShortName; }
-    void                    SetShortName( const OUString& rString ) { aShortName = rString; }
-
     SvxAuthorType           GetType() const { return eType; }
     void                    SetType( SvxAuthorType eTp ) { eType = eTp; }
 
     SvxAuthorFormat         GetFormat() const { return eFormat; }
     void                    SetFormat( SvxAuthorFormat eFmt ) { eFormat = eFmt; }
 
-    OUString           GetFormatted() const;
+    OUString                GetFormatted() const;
 
     virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
     virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;

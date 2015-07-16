@@ -342,26 +342,6 @@ OUString AbstractThesaurusDialog_Impl::GetWord()
     return pDlg->GetWord();
 };
 
-sal_uInt16 AbstractThesaurusDialog_Impl::GetLanguage() const
-{
-    return pDlg->GetLanguage();
-};
-
-vcl::Window* AbstractThesaurusDialog_Impl::GetWindow()
-{
-    return pDlg;
-}
-
-void AbstractHyphenWordDialog_Impl::SelLeft()
-{
-    pDlg->SelLeft();
-}
-
-void AbstractHyphenWordDialog_Impl::SelRight()
-{
-    pDlg->SelRight();
-}
-
 vcl::Window* AbstractHyphenWordDialog_Impl::GetWindow()
 {
     return pDlg;

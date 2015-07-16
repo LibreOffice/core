@@ -67,8 +67,6 @@ public:
     // enum cast
     FontWeight              GetWeight() const
                                 { return (FontWeight)GetValue(); }
-    void                    SetWeight( FontWeight eNew )
-                                { SetValue( (sal_uInt16)eNew ); }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };

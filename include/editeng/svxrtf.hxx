@@ -217,7 +217,6 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     void _ClearStyleAttr( SvxRTFItemStackType& rStkType );
 
     // Sets all the attributes that are different from the current
-    void SetAttrSet( SfxItemSet& rAttrSet, SvxPosition& rSttPos );
     void SetAttrSet( SvxRTFItemStackType &rSet );
     void SetDefault( int nToken, int nValue );
 
@@ -285,31 +284,15 @@ protected:
                     bool bReadNewDoc = true );
     virtual ~SvxRTFParser();
 
-    bool IsNewDoc() const               { return bNewDoc; }
     void SetNewDoc( bool bFlag )        { bNewDoc = bFlag; }
-    bool IsNewGroup() const             { return bNewGroup; }
-    void SetNewGroup( bool bFlag )      { bNewGroup = bFlag; }
     bool IsChkStyleAttr() const         { return bChkStyleAttr; }
     void SetChkStyleAttr( bool bFlag )  { bChkStyleAttr = bFlag; }
     bool IsCalcValue() const            { return bCalcValue; }
     void SetCalcValue( bool bFlag )     { bCalcValue = bFlag; }
-    bool IsPardTokenRead() const        { return bPardTokenRead; }
-    void SetPardTokenRead( bool bFlag ) { bPardTokenRead = bFlag; }
-    bool IsReadDocInfo() const          { return bReadDocInfo; }
-    void SetReadDocInfo( bool bFlag )   { bReadDocInfo = bFlag; }
 
     // Query/Set the current insert position
-    SvxPosition& GetInsPos() const      { return *pInsPos; }
     void SetInsPos( const SvxPosition& rNew );
-
-    long GetVersionNo() const           { return nVersionNo; }
-
     SvxRTFStyleTbl& GetStyleTbl()               { return aStyleTbl; }
-    SvxRTFItemStack& GetAttrStack()             { return aAttrStack; }
-    SvxRTFColorTbl& GetColorTbl()               { return aColorTbl; }
-    SvxRTFFontTbl& GetFontTbl()                 { return aFontTbl; }
-
-    const OUString& GetBaseURL() const          { return sBaseURL; }
 
 public:
 
@@ -325,7 +308,6 @@ public:
     void SetAttrPool( SfxItemPool* pNewPool )   { pAttrPool = pNewPool; }
     // to set different WhichIds for a different pool.
     RTFPardAttrMapIds& GetPardMap() { return aPardMap; }
-    RTFPlainAttrMapIds& GetPlainMap() { return aPlainMap; }
     // to be able to assign them from the outside as for example table cells
     void ReadBorderAttr( int nToken, SfxItemSet& rSet, bool bTableDef=false );
     void ReadBackgroundAttr( int nToken, SfxItemSet& rSet, bool bTableDef=false  );

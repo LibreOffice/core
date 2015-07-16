@@ -34,13 +34,6 @@ public:
     void    TurnOffFlags( EEControlBits nFlags )
                 { nControlBits &= ~nFlags; }
 
-    void    TurnOnStatusBits( EditStatusFlags nBits )
-                { nStatusBits |= nBits; }
-
-    void    TurnOffStatusBits( EditStatusFlags nBits )
-                { nStatusBits &= ~nBits; }
-
-
     bool    UseCharAttribs() const
                 { return bool( nControlBits & EEControlBits::USECHARATTRIBS ); }
 

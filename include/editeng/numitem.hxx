@@ -287,7 +287,6 @@ public:
     OUString                MakeNumString( const SvxNodeNum&, bool bInclStrings = true ) const;
 
     SvxNumRuleType          GetNumRuleType() const { return eNumberingType; }
-    void                    SetNumRuleType( const SvxNumRuleType& rType ) { eNumberingType = rType; }
 
     bool                    UnLinkGraphics();
 };
@@ -326,12 +325,6 @@ public:
 
     sal_uInt8 GetLevel() const                  { return nMyLevel; }
     void SetLevel( sal_uInt8 nVal )             { nMyLevel = nVal; }
-
-    bool IsStart() const                        { return bStartNum; }
-    void SetStart( bool bFlag = true )          { bStartNum = bFlag; }
-
-    sal_uInt16 GetSetValue() const              { return nSetValue; }
-    void SetSetValue( sal_uInt16 nVal )         { nSetValue = nVal; }
 
     const sal_uInt16* GetLevelVal() const       { return nLevelVal; }
           sal_uInt16* GetLevelVal()             { return nLevelVal; }

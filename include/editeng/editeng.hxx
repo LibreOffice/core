@@ -214,8 +214,6 @@ public:
 
     void            SetUpdateMode( bool bUpdate );
     bool            GetUpdateMode() const;
-    void            SetUpdateModeForAcc( bool bUp);
-    bool            GetUpdateModeForAcc( ) const;
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
@@ -499,7 +497,6 @@ public:
     virtual OUString  GetUndoComment( sal_uInt16 nUndoId ) const;
     virtual bool    SpellNextDocument();
     virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
-    virtual void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
 
     // override this if access to bullet information needs to be provided

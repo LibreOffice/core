@@ -64,13 +64,6 @@ public:
             return *this;
         }
 
-    void SetWidth( sal_uInt16 nNewWidth, const sal_uInt16 nNewProp = 100 )
-        {
-            DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
-            nWidth = sal_uInt16(( (sal_uInt32)nNewWidth * nNewProp ) / 100 );
-            nProp = nNewProp;
-        }
-
     sal_uInt16 GetWidth() const { return nWidth; }
 
     void SetWidthValue( sal_uInt16 nNewWidth )

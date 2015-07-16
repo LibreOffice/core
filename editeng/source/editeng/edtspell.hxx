@@ -51,10 +51,6 @@ protected:
     virtual void            SpellEnd() SAL_OVERRIDE;
     virtual bool            SpellMore() SAL_OVERRIDE;
     virtual bool            HasOtherCnt() SAL_OVERRIDE;
-    virtual void            ScrollArea() SAL_OVERRIDE;
-    virtual void            ChangeWord( const OUString& rNewWord, const sal_uInt16 nLang ) SAL_OVERRIDE;
-    virtual void            ChangeThesWord( const OUString& rNewWord ) SAL_OVERRIDE;
-    virtual void            AutoCorrect( const OUString& rOldWord, const OUString& rNewWord ) SAL_OVERRIDE;
 
 public:
     EditSpellWrapper( vcl::Window* pWin,

@@ -53,8 +53,6 @@ public:
 
     static const SfxPoolItem* GetItemOfScriptSet( const SfxItemSet& rSet,
                                                     sal_uInt16 nWhich );
-    inline const SfxPoolItem* GetItemOfScriptSet( sal_uInt16 _nWhich ) const
-    { return SvxScriptSetItem::GetItemOfScriptSet( GetItemSet(), _nWhich ); }
 
     static const SfxPoolItem* GetItemOfScript( sal_uInt16 nSlotId, const SfxItemSet& rSet, SvtScriptType nScript );
 
@@ -68,9 +66,6 @@ public:
 
     static void GetSlotIds( sal_uInt16 nSlotId, sal_uInt16& rLatin, sal_uInt16& rAsian,
                                             sal_uInt16& rComplex );
-    inline void GetSlotIds( sal_uInt16& rLatin, sal_uInt16& rAsian,
-                                sal_uInt16& rComplex ) const
-    { GetSlotIds( Which(), rLatin, rAsian, rComplex ); }
 };
 
 #endif

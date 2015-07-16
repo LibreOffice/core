@@ -173,7 +173,6 @@ struct ParaRange
             ParaRange( sal_Int32 nS, sal_Int32 nE ) { nStartPara = nS, nEndPara = nE; }
 
     void    Adjust();
-    sal_Int32  Len() const { return 1 + ( ( nEndPara > nStartPara ) ? (nEndPara-nStartPara) : (nStartPara-nEndPara) ); }
 };
 
 inline void ParaRange::Adjust()
@@ -408,7 +407,6 @@ public:
     bool                mbEndOfParagraph : 1;
     bool                mbEndOfBullet : 1;
 
-    sal_uInt8 GetBiDiLevel() const { return mnBiDiLevel; }
     bool IsRTL() const { return mnBiDiLevel % 2 == 1; }
 
     DrawPortionInfo(
@@ -537,7 +535,6 @@ public:
     sal_Int32       GetPara() const { return nPara; }
     sal_Int32       GetPos() const { return nPos; }
 
-    bool            IsSimpleClick() const { return bSimpleClick; }
     void            SetSimpleClick( bool bSimple ) { bSimpleClick = bSimple; }
 
     const OUString&     GetRepresentation() const                { return aRepresentation; }
@@ -638,18 +635,12 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 
     void                    ImplBlockInsertionCallbacks( bool b );
 
-    void                ImplCheckStyleSheet( sal_Int32 nPara, bool bReplaceExistingStyle );
-    void                ImpRecalcBulletIndent( sal_Int32 nPara );
-
-    const SvxBulletItem& ImpGetBullet( sal_Int32 nPara, sal_uInt16& );
     void        ImpFilterIndents( sal_Int32 nFirstPara, sal_Int32 nLastPara );
     bool        ImpConvertEdtToOut( sal_Int32 nPara, EditView* pView = 0 );
 
     void        ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount );
-    long        ImpCalcMaxBulletWidth( sal_Int32 nPara, const SvxBulletItem& rBullet );
     vcl::Font   ImpCalcBulletFont( sal_Int32 nPara ) const;
     Rectangle   ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bReturnPaperPos );
-    long        ImpGetTextIndent( sal_Int32 nPara );
     bool        ImpCanIndentSelectedPages( OutlinerView* pCurView );
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView );
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 nFirstPage, sal_Int32 nPages );
@@ -733,7 +724,6 @@ public:
     sal_Int32       GetParagraphCount() const;
     Paragraph*      GetParagraph( sal_Int32 nAbsPos ) const;
 
-    bool            HasParent( Paragraph* pParagraph ) const;
     bool            HasChildren( Paragraph* pParagraph ) const;
     sal_Int32       GetChildCount( Paragraph* pParent ) const;
     bool            IsExpanded( Paragraph* pPara ) const;
@@ -756,7 +746,6 @@ public:
     bool            IsModified() const;
 
     Paragraph*      GetHdlParagraph() const { return pHdlParagraph; }
-    bool            IsExpanding() const { return bIsExpanding; }
 
     void            ParagraphInsertedHdl();
     void            SetParaInsertedHdl(const Link<Outliner*,void>& rLink){aParaInsertedHdl=rLink;}
@@ -774,29 +763,19 @@ public:
 
     bool            RemovingPagesHdl( OutlinerView* );
     void            SetRemovingPagesHdl(const Link<OutlinerView*,bool>& rLink){aRemovingPagesHdl=rLink;}
-    Link<OutlinerView*,bool> GetRemovingPagesHdl() const { return aRemovingPagesHdl; }
     bool            IndentingPagesHdl( OutlinerView* );
     void            SetIndentingPagesHdl(const Link<OutlinerView*,bool>& rLink){aIndentingPagesHdl=rLink;}
     // valid only in the two upper handlers
     sal_Int32       GetSelPageCount() const { return nDepthChangedHdlPrevDepth; }
 
-    // valid only in the two upper handlers
-    sal_Int32       GetFirstSelPage() const { return mnFirstSelPage; }
-
     void            SetCalcFieldValueHdl(const Link<EditFieldInfo*,void>& rLink ) { aCalcFieldValueHdl= rLink; }
     Link<EditFieldInfo*,void> GetCalcFieldValueHdl() const { return aCalcFieldValueHdl; }
 
-    void            SetFieldClickedHdl(const Link<EditFieldInfo*,void>& rLink ) { aFieldClickedHdl= rLink; }
-    Link<EditFieldInfo*,void> GetFieldClickedHdl() const { return aFieldClickedHdl; }
-
     void            SetDrawPortionHdl(const Link<DrawPortionInfo*,void>& rLink){aDrawPortionHdl=rLink;}
-    Link<DrawPortionInfo*,void> GetDrawPortionHdl() const { return aDrawPortionHdl; }
 
     void            SetDrawBulletHdl(const Link<DrawBulletInfo*,void>& rLink){aDrawBulletHdl=rLink;}
-    Link<DrawBulletInfo*,void> GetDrawBulletHdl() const { return aDrawBulletHdl; }
 
     void            SetPaintFirstLineHdl(const Link<PaintFirstLineInfo*,void>& rLink) { maPaintFirstLineHdl = rLink; }
-    Link<PaintFirstLineInfo*,void> GetPaintFirstLineHdl() const { return maPaintFirstLineHdl; }
 
     void            SetModifyHdl( const Link<>& rLink );
     Link<>          GetModifyHdl() const;
@@ -813,7 +792,6 @@ public:
     void            SetPaperSize( const Size& rSize );
 
     void            SetFirstPageNumber( sal_Int32 n )  { nFirstPage = n; }
-    sal_Int32       GetFirstPageNumber() const      { return nFirstPage; }
 
     void            SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
     void            SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);
@@ -985,11 +963,9 @@ public:
 
     /** sets a link that is called before a drop or paste operation. */
     void            SetBeginPasteOrDropHdl( const Link<PasteOrDropInfos*,void>& rLink );
-    Link<PasteOrDropInfos*,void> GetBeginPasteOrDropHdl() const { return maBeginPasteOrDropHdl; }
 
     /** sets a link that is called after a drop or paste operation. */
     void            SetEndPasteOrDropHdl( const Link<PasteOrDropInfos*,void>& rLink );
-    Link<PasteOrDropInfos*,void> GetEndPasteOrDropHdl() const { return maEndPasteOrDropHdl; }
 
     sal_Int16 GetNumberingStartValue( sal_Int32 nPara );
     void SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStartValue );

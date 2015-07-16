@@ -176,11 +176,6 @@ void OutlinerEditEng::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara,
     pOwner->FieldClicked( rField, nPara, nPos );
 }
 
-void OutlinerEditEng::FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
-{
-    pOwner->FieldSelected( rField, nPara, nPos );
-}
-
 OUString OutlinerEditEng::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     return pOwner->CalcFieldValue( rField, nPara, nPos, rpTxtColor, rpFldColor );

@@ -60,8 +60,7 @@ public:
     void ClearAllUsrAny();
 
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > getPropertySetInfo() const;
-    const SfxItemPropertyMapEntry* getPropertyMapEntries() const {return _pMap;}
-    const SfxItemPropertyMap& getPropertyMap()const { return m_aPropertyMap;}
+    const SfxItemPropertyMap& getPropertyMap() const { return m_aPropertyMap;}
     const SfxItemPropertySimpleEntry* getPropertyMapEntry(const OUString &rName) const;
 
     static com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > getPropertySetInfo( const SfxItemPropertyMapEntry* pMap );

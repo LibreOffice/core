@@ -61,11 +61,9 @@ public:
     virtual sal_uInt16       GetValueCount() const SAL_OVERRIDE;
 
     // MS VC4.0 messes things up
-    void             SetValue( sal_uInt16 nNewVal )
+    void                     SetValue( sal_uInt16 nNewVal )
                                 {SfxEnumItem::SetValue(nNewVal); }
-    SvxBreak             GetBreak() const { return SvxBreak( GetValue() ); }
-    void                     SetBreak( const SvxBreak eNew )
-                                { SetValue( (sal_uInt16)eNew ); }
+    SvxBreak                 GetBreak() const { return SvxBreak( GetValue() ); }
 };
 
 

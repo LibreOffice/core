@@ -198,7 +198,6 @@ public:
                     ~CharAttribList();
 
     void            DeleteEmptyAttribs(  SfxItemPool& rItemPool );
-    void            RemoveItemsFromPool( SfxItemPool* pItemPool );
 
     const EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const;
     EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos );
@@ -505,38 +504,37 @@ public:
                         { return ( ( nIndex >= nStart ) && ( bInclEnd ? ( nIndex <= nEnd ) : ( nIndex < nEnd ) ) ); }
 
     void            SetStart( sal_Int32 n )            { nStart = n; }
-    sal_Int32          GetStart() const                { return nStart; }
-    sal_Int32&         GetStart()                      { return nStart; }
+    sal_Int32       GetStart() const                { return nStart; }
+    sal_Int32&      GetStart()                      { return nStart; }
 
     void            SetEnd( sal_Int32 n )              { nEnd = n; }
-    sal_Int32          GetEnd() const                  { return nEnd; }
-    sal_Int32&         GetEnd()                        { return nEnd; }
+    sal_Int32       GetEnd() const                  { return nEnd; }
+    sal_Int32&      GetEnd()                        { return nEnd; }
 
     void            SetStartPortion( sal_Int32 n )     { nStartPortion = n; }
-    sal_Int32          GetStartPortion() const         { return nStartPortion; }
-    sal_Int32&         GetStartPortion()               { return nStartPortion; }
+    sal_Int32       GetStartPortion() const         { return nStartPortion; }
+    sal_Int32&      GetStartPortion()               { return nStartPortion; }
 
     void            SetEndPortion( sal_Int32 n )       { nEndPortion = n; }
-    sal_Int32          GetEndPortion() const           { return nEndPortion; }
-    sal_Int32&         GetEndPortion()                 { return nEndPortion; }
+    sal_Int32       GetEndPortion() const           { return nEndPortion; }
+    sal_Int32&      GetEndPortion()                 { return nEndPortion; }
 
     void            SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH = 0, sal_uInt16 nCrsrH = 0 );
-    sal_uInt16          GetHeight() const               { return nHeight; }
-    sal_uInt16          GetTxtHeight() const            { return nTxtHeight; }
-    sal_uInt16          GetCrsrHeight() const           { return nCrsrHeight; }
+    sal_uInt16      GetHeight() const               { return nHeight; }
+    sal_uInt16      GetTxtHeight() const            { return nTxtHeight; }
 
     void            SetTextWidth( long n )          { nTxtWidth = n; }
     long            GetTextWidth() const            { return nTxtWidth; }
 
     void            SetMaxAscent( sal_uInt16 n )        { nMaxAscent = n; }
-    sal_uInt16          GetMaxAscent() const            { return nMaxAscent; }
+    sal_uInt16      GetMaxAscent() const            { return nMaxAscent; }
 
     void            SetHangingPunctuation( bool b )     { bHangingPunctuation = b; }
     bool            IsHangingPunctuation() const        { return bHangingPunctuation; }
 
-    sal_Int32          GetLen() const                  { return nEnd - nStart; }
+    sal_Int32       GetLen() const                  { return nEnd - nStart; }
 
-    sal_uInt16          GetStartPosX() const            { return nStartPosX; }
+    sal_uInt16      GetStartPosX() const            { return nStartPosX; }
     void            SetStartPosX( long start );
     Size            CalcTextSize( ParaPortion& rParaPortion );
 
@@ -624,7 +622,7 @@ public:
     bool                MustRepaint() const         { return bForceRepaint; }
     void                SetMustRepaint( bool bRP )  { bForceRepaint = bRP; }
 
-    sal_uInt16              GetBulletX() const          { return nBulletX; }
+    sal_uInt16          GetBulletX() const          { return nBulletX; }
     void                SetBulletX( sal_uInt16 n )      { nBulletX = n; }
 
     void                MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff);
@@ -633,7 +631,7 @@ public:
     void                SetVisible( bool bVisible );
     bool                IsVisible() const { return bVisible; }
 
-    bool            IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0].GetLen() == 0; }
+    bool                IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0].GetLen() == 0; }
 
     long                GetHeight() const           { return ( bVisible ? nHeight : 0 ); }
     sal_Int32           GetFirstLineOffset() const  { return ( bVisible ? nFirstLineOffset : 0 ); }
@@ -752,7 +750,7 @@ private:
     Link<>          aModifyHdl;
 
     SvxFont         aDefFont;           //faster than ever from the pool!!
-    sal_uInt16          nDefTab;
+    sal_uInt16      nDefTab;
     bool            bIsVertical:1;
     bool            bIsFixedCellHeight:1;
 
@@ -772,13 +770,12 @@ public:
     void            SetModified( bool b );
 
     void            SetModifyHdl( const Link<>& rLink ) { aModifyHdl = rLink; }
-    Link<>          GetModifyHdl() const { return aModifyHdl; }
 
     void            CreateDefFont( bool bUseStyles );
     const SvxFont&  GetDefFont() { return aDefFont; }
 
     void            SetDefTab( sal_uInt16 nTab )    { nDefTab = nTab ? nTab : DEFTAB; }
-    sal_uInt16          GetDefTab() const           { return nDefTab; }
+    sal_uInt16      GetDefTab() const           { return nDefTab; }
 
     void            SetVertical( bool bVertical )   { bIsVertical = bVertical; }
     bool            IsVertical() const              { return bIsVertical; }

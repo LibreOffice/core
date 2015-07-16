@@ -373,9 +373,6 @@ namespace accessibility
 
         /// Our listeners (guarded by maMutex)
         int mnNotifierClientId;
-public:
-        void SetParagraphBackColorAccessible(const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > & ref)
-        { m_xAccInfo = ref ;}
 private:
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAccInfo;
 

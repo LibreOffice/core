@@ -74,9 +74,7 @@ public:
     bool IsSimple() const { return bSimple; }
     bool IsInner() const { return bInner; }
     bool IsVertical() const { return bVertical; }
-    bool HasBorder() const { return nRight || nLeft; }
     const tools::PolyPolygon& GetPolyPolygon() const { return *mpPolyPolygon; }
-    const tools::PolyPolygon* GetLinePolygon() const { return mpLinePolyPolygon; }
     const Rectangle& GetBoundRect()
         { return pBound ? static_cast< const Rectangle& >(*pBound) : _GetBoundRect(); }
     void SetUpper( sal_uInt16 nNew ){ nUpper = nNew; }

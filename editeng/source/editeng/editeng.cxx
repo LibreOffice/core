@@ -2547,10 +2547,6 @@ void EditEngine::FieldClicked( const SvxFieldItem&, sal_Int32, sal_Int32 )
 {
 }
 
-void EditEngine::FieldSelected( const SvxFieldItem&, sal_Int32, sal_Int32 )
-{
-}
-
 
 // ======================     Static Methods     =======================
 

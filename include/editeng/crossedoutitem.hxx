@@ -70,8 +70,6 @@ public:
     // enum cast
     FontStrikeout           GetStrikeout() const
                                 { return (FontStrikeout)GetValue(); }
-    void                    SetStrikeout( FontStrikeout eNew )
-                                { SetValue( (sal_uInt16)eNew ); }
 };
 
 #endif // INCLUDED_EDITENG_CROSSEDOUTITEM_HXX

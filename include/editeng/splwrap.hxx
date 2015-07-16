@@ -99,19 +99,9 @@ public:
     void            SpellDocument();        // Perform Spell Checking
     inline bool     IsStartDone(){ return bStartDone; }
     inline bool     IsEndDone(){ return bEndDone; }
-    inline bool     IsReverse(){ return bReverse; }
-    inline bool     IsDialog(){ return bDialog; } // SvxSpellCheckDialog OnScreen
     inline bool     IsHyphen(){ return bHyphen; } // Split instead of Spell check
     inline void     SetHyphen( const bool bNew = true ){ bHyphen = bNew; }
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XSpellChecker1 >
-                    GetXSpellChecker() { return xSpell; }
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XHyphenator >
-                    GetXHyphenator()    { return xHyph; }
     inline bool     IsAllRight()        { return bAllRight; }
-    inline vcl::Window*  GetWin() { return pWin; }
-    inline void     EnableAutoCorrect() { bAuto = true; }
 
 protected:
     ::com::sun::star::uno::Reference<
@@ -130,16 +120,9 @@ protected:
         ::com::sun::star::linguistic2::XDictionary >
                  GetAllRightDic();
     virtual void SpellEnd();                        // Finish area
-    virtual void ScrollArea();                      // Set ScrollArea
-    // Replace word
-    virtual void ChangeWord( const OUString& rNewWord, const sal_uInt16 nLang );
-    // Wort via Thesaurus ersetzen
-    virtual void ChangeThesWord( const OUString& rNewWord );
-    virtual void AutoCorrect( const OUString& rAktStr, const OUString& rNewStr );
     virtual void InsertHyphen( const sal_Int32 nPos ); // Insert hyphen
 
     void SetCurTextObj( SdrObject* pObj ) { mpTextObj = pObj; }
-    SdrObject* GetCurTextObj() { return mpTextObj; }
 };
 
 #endif

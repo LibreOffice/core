@@ -47,7 +47,6 @@ public:
     virtual SvxFieldData* Clone() const SAL_OVERRIDE;
     virtual bool operator==(const SvxFieldData&) const SAL_OVERRIDE;
     SdrMeasureFieldKind GetMeasureFieldKind() const { return eMeasureFieldKind; }
-    void SetMeasureFieldKind(SdrMeasureFieldKind eNewKind) { eMeasureFieldKind=eNewKind; }
 };
 
 

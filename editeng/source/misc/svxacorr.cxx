@@ -2653,46 +2653,6 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
     return bRet;
 }
 
-// Delete an entry
-bool SvxAutoCorrectLanguageLists::DeleteText( const OUString& rShort )
-{
-    // First get the current list!
-    GetAutocorrWordList();
-
-    MakeUserStorage_Impl();
-
-    tools::SvRef<SotStorage> xStg = new SotStorage( sUserAutoCorrFile, STREAM_READWRITE );
-    bool bRet = xStg.Is() && SVSTREAM_OK == xStg->GetError();
-    if( bRet )
-    {
-        SvxAutocorrWord aTmp( rShort, rShort );
-        SvxAutocorrWord *pFnd = pAutocorr_List->FindAndRemove( &aTmp );
-        if( pFnd )
-        {
-            if( !pFnd->IsTextOnly() )
-            {
-                OUString aName( rShort );
-                if (xStg->IsOLEStorage())
-                    aName = EncryptBlockName_Imp(aName);
-                else
-                    GeneratePackageName ( rShort, aName );
-                if( xStg->IsContained( aName ) )
-                {
-                    xStg->Remove( aName );
-                    bRet = xStg->Commit();
-                }
-
-            }
-            delete pFnd;
-            MakeBlocklist_Imp( *xStg );
-            xStg = 0;
-        }
-        else
-            bRet = false;
-    }
-    return bRet;
-}
-
 // Keep the list sorted ...
 struct CompareSvxAutocorrWordList
 {
