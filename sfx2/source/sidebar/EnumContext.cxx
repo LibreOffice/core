@@ -184,6 +184,7 @@ void EnumContext::ProvideContextContainers()
         AddContext(DrawPage);
         AddContext(DrawText);
         AddContext(EditCell);
+        AddContext(ErrorBar);
         AddContext(Form);
         AddContext(Frame);
         AddContext(Graphic);
@@ -195,10 +196,12 @@ void EnumContext::ProvideContextContainers()
         AddContext(OLE);
         AddContext(OutlineText);
         AddContext(Pivot);
+        AddContext(Series);
         AddContext(SlidesorterPage);
         AddContext(Table);
         AddContext(Text);
         AddContext(TextObject);
+        AddContext(Trendline);
 #undef AddContext
     }
 }

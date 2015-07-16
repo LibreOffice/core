@@ -1162,6 +1162,98 @@
         </prop>
       </node>
 
+      <node oor:name="ChartSeriesPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Data Series</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>SeriesPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, Series, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ChartPanelFactory/SeriesPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>2</value>
+        </prop>
+      </node>
+
+      <node oor:name="ChartTrendlinePanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Trnedline</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartTrendlinePanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, Trendline, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ChartPanelFactory/TrendlinePanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>3</value>
+        </prop>
+      </node>
+
+      <node oor:name="ChartErrorBarPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Error Bar</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartErrorBarPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, ErrorBar, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ChartPanelFactory/ErrorBarPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>4</value>
+        </prop>
+      </node>
+
+      <node oor:name="ChartAxisPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Axis</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>ChartAxisPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>ChartDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Chart, Axis, visible ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/ChartPanelFactory/AxisPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>5</value>
+        </prop>
+      </node>
+
       <node oor:name="ChartAreaPanel" oor:op="replace">
         <prop oor:name="Title" oor:type="xs:string">
           <value xml:lang="en-US">Area</value>
@@ -1181,7 +1273,7 @@
           <value>private:resource/toolpanel/ChartPanelFactory/AreaPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>2</value>
+          <value>6</value>
         </prop>
       </node>
 
@@ -1204,7 +1296,7 @@
           <value>private:resource/toolpanel/ChartPanelFactory/LinePanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>3</value>
+          <value>7</value>
         </prop>
       </node>
 
@@ -1227,30 +1319,7 @@
           <value>private:resource/toolpanel/ChartPanelFactory/CharacterPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>4</value>
-        </prop>
-      </node>
-
-      <node oor:name="ChartAxisPanel" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Axis</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>ChartAxisPanel</value>
-        </prop>
-        <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ChartDeck</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            Chart, any, visible ;
-          </value>
-        </prop>
-        <prop oor:name="ImplementationURL" oor:type="xs:string">
-          <value>private:resource/toolpanel/ChartPanelFactory/AxisPanel</value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>5</value>
+          <value>8</value>
         </prop>
       </node>
 

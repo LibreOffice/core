@@ -74,6 +74,7 @@ public:
         Context_DrawPage,
         Context_DrawText,
         Context_EditCell,
+        Context_ErrorBar,
         Context_Form,
         Context_Frame,
         Context_Graphic,
@@ -85,10 +86,12 @@ public:
         Context_OLE,
         Context_OutlineText,
         Context_Pivot,
+        Context_Series,
         Context_SlidesorterPage,
         Context_Table,
         Context_Text,
         Context_TextObject,
+        Context_Trendline,
 
         // Default context of an application.  Do we need this?
         Context_Default,

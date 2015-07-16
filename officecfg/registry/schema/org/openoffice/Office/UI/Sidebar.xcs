@@ -107,9 +107,9 @@
                  none
 
           2  Context name
-              Know context names are 3DObject, Annotation, Auditing, Cell, Chart, Draw, DrawPage, DrawText,
-              EditCell, Form, Frame, Graphic, HandoutPage, MasterPage, Media, Multiobj, OLE, OutlineText,
-              Pivot, SlidesorterPage, Table, Text, TextObject,
+              Know context names are 3DObject, Annotation, Auditing, Axis, Cell, Chart, Draw, DrawPage, DrawText,
+              EditCell, ErrorBar, Form, Frame, Graphic, HandoutPage, MasterPage, Media, Multiobj, OLE, OutlineText,
+              Pivot, Series, SlidesorterPage, Table, Text, TextObject, Trendline
               default
 
              Special values:
