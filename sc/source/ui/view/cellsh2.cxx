@@ -505,8 +505,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                     rOutParam.bHasHeader ) );
                                 rReq.AppendItem( SfxBoolItem( SID_SORT_CASESENS,
                                     rOutParam.bCaseSens ) );
-                            rReq.AppendItem( SfxBoolItem( SID_SORT_NATURALSORT,
-                                                rOutParam.bNaturalSort ) );
+                                rReq.AppendItem( SfxBoolItem( SID_SORT_NATURALSORT,
+                                            rOutParam.bNaturalSort ) );
                                 rReq.AppendItem( SfxBoolItem( SID_SORT_ATTRIBS,
                                     rOutParam.bIncludePattern ) );
                                 sal_uInt16 nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;
