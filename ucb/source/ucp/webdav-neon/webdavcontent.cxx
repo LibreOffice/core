@@ -2590,7 +2590,7 @@ void Content::transfer(
                                          xResAccess->getSessionFactory(),
                                          sourceURI.GetURI() );
 
-        if ( rArgs.MoveData == sal_True )
+        if ( rArgs.MoveData )
         {
             uno::Reference< ucb::XContentIdentifier > xId
                 = new ::ucbhelper::ContentIdentifier( rArgs.SourceURL );

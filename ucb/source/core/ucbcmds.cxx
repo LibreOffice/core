@@ -1483,7 +1483,7 @@ void globalTransfer_(
     //                            break;
 
                             case OVERWRITE:
-                                OSL_ENSURE( aArg.ReplaceExisting == sal_False,
+                                OSL_ENSURE( !aArg.ReplaceExisting,
                                             "Hu? ReplaceExisting already true?"
                                           );
                                 aArg.ReplaceExisting = sal_True;
