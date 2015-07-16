@@ -316,9 +316,9 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
                 uno::Reference< text::XParagraphCursor > xParagraphCursor( xTextCursor, uno::UNO_QUERY_THROW );
                 for( sal_Int32 i=0; i<nCount; i++ )
                 {
-                    if( ( eDirection == word::MOVE_UP ) && ( xParagraphCursor->gotoPreviousParagraph( bExpand ) == sal_False ) )
+                    if( ( eDirection == word::MOVE_UP ) && !xParagraphCursor->gotoPreviousParagraph( bExpand ) )
                         break;
-                    else if( ( eDirection == word::MOVE_DOWN ) && ( xParagraphCursor->gotoNextParagraph( bExpand ) == sal_False ) )
+                    else if( ( eDirection == word::MOVE_DOWN ) && !xParagraphCursor->gotoNextParagraph( bExpand ) )
                         break;
                 }
             }
@@ -331,9 +331,9 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
                 uno::Reference< text::XWordCursor > xWordCursor( xTextCursor, uno::UNO_QUERY_THROW );
                 for( sal_Int32 i=0; i<nCount; i++ )
                 {
-                    if( (eDirection == word::MOVE_LEFT ) && ( xWordCursor->gotoPreviousWord( bExpand ) == sal_False ) )
+                    if( (eDirection == word::MOVE_LEFT ) && !xWordCursor->gotoPreviousWord( bExpand ) )
                         break;
-                    else if( ( eDirection == word::MOVE_RIGHT ) && ( xWordCursor->gotoNextWord( bExpand ) == sal_False ) )
+                    else if( ( eDirection == word::MOVE_RIGHT ) && !xWordCursor->gotoNextWord( bExpand ) )
                         break;
                 }
             }
