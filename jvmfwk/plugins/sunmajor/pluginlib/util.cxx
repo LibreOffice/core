@@ -421,8 +421,8 @@ bool getJavaProps(const OUString & exePath,
     //next to the plugin, except on OS X where it is in ../Resources/java relative
     //to the plugin.
     OUString sThisLib;
-    if (osl_getModuleURLFromAddress(reinterpret_cast<void *>(&getJavaProps),
-                                    & sThisLib.pData) == sal_False)
+    if (!osl_getModuleURLFromAddress(reinterpret_cast<void *>(&getJavaProps),
+                                     & sThisLib.pData))
     {
         return false;
     }

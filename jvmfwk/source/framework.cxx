@@ -808,7 +808,7 @@ javaFrameworkError SAL_CALL jfw_setSelectedJRE(JavaInfo const *pInfo)
         if (errcode != JFW_E_NONE && errcode != JFW_E_INVALID_SETTINGS)
             return errcode;
 
-        if (jfw_areEqualJavaInfo(currentInfo, pInfo) == sal_False)
+        if (!jfw_areEqualJavaInfo(currentInfo, pInfo))
         {
             jfw::NodeJava node(jfw::NodeJava::USER);
             node.setJavaInfo(pInfo, false);
@@ -836,7 +836,7 @@ javaFrameworkError SAL_CALL jfw_setEnabled(sal_Bool bEnabled)
         if (jfw::getMode() == jfw::JFW_MODE_DIRECT)
             return JFW_E_DIRECT_MODE;
 
-        if (!g_bEnabledSwitchedOn && bEnabled == sal_True)
+        if (!g_bEnabledSwitchedOn && bEnabled)
         {
             //When the process started then Enabled was false.
             //This is first time enabled is set to true.

@@ -890,7 +890,7 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
     //contained within JAVA_HOME. Then the check for JAVA_HOME would return
     //true although the runtime library may not be loadable.
     //Or the JAVA_HOME directory of a deinstalled JRE left behind.
-    if (ret == JFW_PLUGIN_E_NONE && *exist == sal_True)
+    if (ret == JFW_PLUGIN_E_NONE && *exist)
     {
         OUString sRuntimeLib = getRuntimeLib(pInfo->arVendorData);
         JFW_TRACE2("Checking existence of Java runtime library");
