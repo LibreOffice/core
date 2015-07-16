@@ -442,13 +442,9 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) throw()
 
             mpCurrentPage.reset(pNewCurrentPage);
         }
-        catch (const uno::Exception&)
+        catch (const uno::Exception& e)
         {
-            OSL_FAIL(
-                OString("sd::SdUnoDrawView::FireSwitchCurrentPage(), exception caught: " +
-                    OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 )).getStr() );
+            SAL_WARN("sd", "sd::SdUnoDrawView::FireSwitchCurrentPage(), exception caught:  " << e.Message);
         }
     }
 }
