@@ -44,6 +44,7 @@
 
 #include "ChartModel.hxx"
 
+
 using namespace css;
 using namespace css::uno;
 using ::sfx2::sidebar::Theme;
@@ -68,42 +69,6 @@ enum class AxisType
     X_SECOND,
     Y_SECOND
 };
-
-class ChartSidebarModifyListener : public cppu::WeakImplHelper1<css::util::XModifyListener>
-{
-public:
-
-    ChartSidebarModifyListener(ChartElementsPanel* pParent);
-    virtual ~ChartSidebarModifyListener();
-
-    virtual void SAL_CALL modified(const css::lang::EventObject& rEvent)
-        throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
-
-    virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
-        throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
-
-private:
-    VclPtr<ChartElementsPanel> mpParent;
-};
-
-ChartSidebarModifyListener::ChartSidebarModifyListener(ChartElementsPanel* pParent):
-    mpParent(pParent)
-{
-}
-
-ChartSidebarModifyListener::~ChartSidebarModifyListener()
-{
-}
-
-void ChartSidebarModifyListener::modified(const css::lang::EventObject& /*rEvent*/)
-        throw (::css::uno::RuntimeException, ::std::exception)
-{
-    mpParent->updateData();
-}
-
-void ChartSidebarModifyListener::disposing(const css::lang::EventObject& /*rEvent*/)
-        throw (::css::uno::RuntimeException, ::std::exception)
-{}
 
 ChartModel* getChartModel(css::uno::Reference<css::frame::XModel> xModel)
 {
