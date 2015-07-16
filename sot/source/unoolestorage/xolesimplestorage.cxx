@@ -586,7 +586,7 @@ sal_Bool SAL_CALL OLESimpleStorage::hasByName( const OUString& aName )
         throw uno::RuntimeException(); // TODO:
     }
 
-    return bResult ? sal_True : sal_False;
+    return bResult;
 }
 
 
@@ -622,7 +622,7 @@ sal_Bool SAL_CALL OLESimpleStorage::hasElements()
         throw uno::RuntimeException(); // TODO:
     }
 
-    return aList.size() != 0 ? sal_True : sal_False;
+    return aList.size() != 0;
 }
 
 
