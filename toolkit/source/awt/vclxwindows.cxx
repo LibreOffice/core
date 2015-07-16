@@ -740,7 +740,7 @@ void VCLXImageControl::setProperty( const OUString& PropertyName, const ::com::s
             break;
 
         case BASEPROPERTY_SCALEIMAGE:
-            aProp <<= ( pImageControl && pImageControl->GetScaleMode() != ImageScaleMode::NONE ) ? sal_True : sal_False;
+            aProp <<= ( pImageControl && pImageControl->GetScaleMode() != ImageScaleMode::NONE );
             break;
 
         default:
@@ -1254,7 +1254,7 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
     SolarMutexGuard aGuard;
 
     VclPtr< RadioButton > pRadioButton = GetAs< RadioButton >();
-    return pRadioButton ? pRadioButton->IsChecked() : sal_False;
+    return pRadioButton && pRadioButton->IsChecked();
 }
 
 ::com::sun::star::awt::Size VCLXRadioButton::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -3923,7 +3923,7 @@ sal_Bool VCLXEdit::isEditable() throw(::com::sun::star::uno::RuntimeException, s
     SolarMutexGuard aGuard;
 
     VclPtr< Edit > pEdit = GetAs< Edit >();
-    return ( pEdit && !pEdit->IsReadOnly() && pEdit->IsEnabled() ) ? sal_True : sal_False;
+    return pEdit && !pEdit->IsReadOnly() && pEdit->IsEnabled();
 }
 
 void VCLXEdit::setEditable( sal_Bool bEditable ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -5042,7 +5042,7 @@ sal_Bool VCLXDateField::isLongFormat() throw(::com::sun::star::uno::RuntimeExcep
     SolarMutexGuard aGuard;
 
     VclPtr< DateField > pDateField = GetAs< DateField >();
-    return pDateField ? pDateField->IsLongFormat() : sal_False;
+    return pDateField && pDateField->IsLongFormat();
 }
 
 void VCLXDateField::setEmpty() throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -5067,7 +5067,7 @@ sal_Bool VCLXDateField::isEmpty() throw(::com::sun::star::uno::RuntimeException,
     SolarMutexGuard aGuard;
 
     VclPtr< DateField > pDateField = GetAs< DateField >();
-    return pDateField ? pDateField->IsEmptyDate() : sal_False;
+    return pDateField && pDateField->IsEmptyDate();
 }
 
 void VCLXDateField::setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException, std::exception)
@@ -5275,7 +5275,7 @@ sal_Bool VCLXTimeField::isEmpty() throw(::com::sun::star::uno::RuntimeException,
     SolarMutexGuard aGuard;
 
     VclPtr< TimeField > pTimeField = GetAs< TimeField >();
-    return pTimeField ? pTimeField->IsEmptyTime() : sal_False;
+    return pTimeField && pTimeField->IsEmptyTime();
 }
 
 void VCLXTimeField::setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException, std::exception)

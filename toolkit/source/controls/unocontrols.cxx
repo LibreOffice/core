@@ -1311,7 +1311,7 @@ sal_Bool UnoRadioButtonControl::getState() throw(uno::RuntimeException, std::exc
     sal_Int16 nState = 0;
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ) );
     aVal >>= nState;
-    return nState ? sal_True : sal_False;
+    return nState != 0;
 }
 
 void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(uno::RuntimeException, std::exception)

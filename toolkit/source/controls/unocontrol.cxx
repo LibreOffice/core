@@ -982,7 +982,7 @@ sal_Bool UnoControl::setGraphics( const Reference< XGraphics >& rDevice ) throw(
         mxGraphics = rDevice;
         xView.set(getPeer(), css::uno::UNO_QUERY);
     }
-    return xView.is() ? xView->setGraphics( rDevice ) : sal_True;
+    return !xView.is() || xView->setGraphics( rDevice );
 }
 
 Reference< XGraphics > UnoControl::getGraphics(  ) throw(RuntimeException, std::exception)

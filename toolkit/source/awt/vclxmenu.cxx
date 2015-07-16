@@ -390,7 +390,7 @@ throw(css::uno::RuntimeException, std::exception)
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    return mpMenu ? mpMenu->IsItemEnabled( nItemId ) : sal_False;
+    return mpMenu && mpMenu->IsItemEnabled( nItemId );
 }
 
 void VCLXMenu::setItemText(
@@ -522,7 +522,7 @@ throw(css::uno::RuntimeException, std::exception)
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    return mpMenu ? mpMenu->IsItemChecked( nItemId ) : sal_False;
+    return mpMenu && mpMenu->IsItemChecked( nItemId );
 }
 
 sal_Int16 VCLXMenu::execute(
