@@ -471,7 +471,11 @@ OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName )
         { "png", "image/png" },
         { "jpg", "image/jpeg" },
         { "tif", "image/tiff" },
-        { "svg", "image/svg+xml" }
+        { "svg", "image/svg+xml" },
+        { "wmf", "image/x-wmf" },
+        { "eps", "image/eps" },
+        { "bmp", "image/bmp" },
+        { "pct", "image/x-pict" }
     };
 
     OUString aMimeType;
