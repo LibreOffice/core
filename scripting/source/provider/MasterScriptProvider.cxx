@@ -267,8 +267,8 @@ throw ( provider::ScriptFrameworkErrorException,
     OUString langKey("language");
     OUString locKey("location");
 
-    if ( sfUri->hasParameter( langKey ) == sal_False ||
-         sfUri->hasParameter( locKey ) == sal_False ||
+    if ( !sfUri->hasParameter( langKey ) ||
+         !sfUri->hasParameter( locKey ) ||
          ( sfUri->getName().isEmpty()  ) )
     {
         OUString errorMsg = "Incorrect format for Script URI: ";

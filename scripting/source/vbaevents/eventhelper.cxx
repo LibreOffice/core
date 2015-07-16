@@ -491,7 +491,7 @@ public:
     virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     { return cppu::UnoType<OUString>::get(); }
     virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
-    { return ( ( m_hEvents.empty() ? sal_False : sal_True ) ); }
+    { return !m_hEvents.empty(); }
 private:
 
 typedef std::unordered_map< OUString, Any, OUStringHash,
