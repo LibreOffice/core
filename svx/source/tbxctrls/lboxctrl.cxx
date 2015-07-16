@@ -58,7 +58,6 @@ class SvxPopupWindowListBox: public SfxPopupWindow
     ToolBox &       rToolBox;
     bool            bUserSel;
     sal_uInt16      nTbxId;
-    OUString        maCommandURL;
 
 public:
     SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nTbxId, ToolBox& rTbx );
@@ -82,7 +81,6 @@ SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString&
     , rToolBox(rTbx)
     , bUserSel(false)
     , nTbxId(nId)
-    , maCommandURL(rCommandURL)
 {
     DBG_ASSERT( nSlotId == GetId(), "id mismatch" );
     get(m_pListBox, "treeview");
