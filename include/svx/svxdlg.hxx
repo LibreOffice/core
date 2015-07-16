@@ -69,13 +69,13 @@ public:
 
 class AbstractFmShowColsDialog : public VclAbstractDialog
 {
- public:
+public:
      virtual void SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols)= 0;
 };
 
 class AbstractSvxZoomDialog : public VclAbstractDialog
 {
- public:
+public:
     virtual void    SetLimits( sal_uInt16 nMin, sal_uInt16 nMax ) = 0;
     virtual void    HideButton( ZoomButtonId nBtnId )= 0;
     virtual const SfxItemSet*   GetOutputItemSet() const = 0 ;
@@ -83,9 +83,7 @@ class AbstractSvxZoomDialog : public VclAbstractDialog
 
 class AbstractSpellDialog : public VclAbstractDialog
 {
- public:
-    virtual void        SetLanguage( sal_uInt16 nLang ) = 0;
-    virtual bool        Close() = 0;
+public:
     virtual void        Invalidate() = 0;
     virtual vcl::Window*     GetWindow()  = 0;
     virtual SfxBindings& GetBindings() = 0;
@@ -95,17 +93,10 @@ typedef sal_IntPtr (*PLinkStub)( void*, void* );
 
 class AbstractSearchProgress :public VclAbstractRefreshableDialog
 {
-public:
-    virtual void    SetFileType( const OUString& rType ) = 0;
-    virtual void    SetDirectory( const INetURLObject& rURL ) = 0;
-    virtual PLinkStub   GetLinkStubCleanUpHdl() = 0;
 };
 
 class AbstractTakeProgress :public VclAbstractRefreshableDialog
 {
-public:
-    virtual void    SetFile( const INetURLObject& rURL ) = 0;
-    virtual PLinkStub   GetLinkStubCleanUpHdl() = 0;
 };
 
 class AbstractTitleDialog :public VclAbstractDialog
@@ -132,18 +123,6 @@ public:
 
 class AbstractSvxHlinkDlgMarkWnd :public VclAbstractDialog
 {
-public:
-    virtual bool    MoveTo ( Point aNewPos ) const = 0;
-    virtual bool    ConnectToDialog( bool bDoit = true ) const = 0;
-    virtual void    RefreshTree ( const OUString& aStrURL ) = 0;
-    virtual void    SelectEntry ( const OUString& aStrMark ) = 0;
-    virtual sal_uInt16  SetError( sal_uInt16 nError) = 0;
-    // in class Window
-    virtual void    SetSizePixel( const Size& rNewSize ) = 0;
-    virtual Size    GetSizePixel() const = 0;
-    virtual void    Hide() = 0;
-    virtual bool    IsVisible() const = 0;
-    virtual void    Invalidate( InvalidateFlags nFlags = InvalidateFlags::NONE ) = 0;
 };
 
 class AbstractSvxSearchSimilarityDialog :public VclAbstractDialog
@@ -201,8 +180,6 @@ public:
 
 class AbstractSvxMessDialog :public VclAbstractDialog
 {
-public:
-    virtual void    SetButtonText( sal_uInt16 nBtnId, const OUString& rNewTxt ) = 0;
 };
 
 class AbstractSvxMultiPathDialog : public VclAbstractDialog
@@ -263,8 +240,6 @@ public:
     virtual void                ShowLastAuthor(const OUString& rAuthor, const OUString& rDate) = 0;
     virtual void                DontChangeAuthor() = 0;
     virtual void                HideAuthor() = 0;
-    virtual void                SetReadonlyPostIt(bool bDisable) = 0;
-    virtual bool                IsOkEnabled() const  = 0;
     virtual vcl::Window *            GetWindow() = 0;
 };
 
@@ -323,9 +298,6 @@ public:
 
     virtual VclAbstractRefreshableDialog * CreateActualizeProgressDialog( vcl::Window* pParent,
                                             GalleryTheme* pThm ) = 0;
-    virtual AbstractSearchProgress * CreateSearchProgressDialog( vcl::Window* pParent,
-                                            const INetURLObject& rStartURL ) = 0;
-    virtual AbstractTakeProgress * CreateTakeProgressDialog( vcl::Window* pParent ) = 0;
     virtual AbstractTitleDialog * CreateTitleDialog( vcl::Window* pParent,
                                              const OUString& rOldText ) = 0;
     virtual AbstractGalleryIdDialog * CreateGalleryIdDialog( vcl::Window* pParent,
@@ -337,7 +309,6 @@ public:
                                             const OUString& rURL, const OUString& rAltText, const OUString& rDescription,
                                             const OUString& rTarget, const OUString& rName,
                                             TargetList& rTargetList ) = 0;
-    virtual AbstractSvxHlinkDlgMarkWnd* CreateSvxHlinkDlgMarkWndDialog( SvxHyperlinkTabPageBase* pParent, sal_uInt32 nResId ) =0;
 
     virtual SfxAbstractTabDialog* CreateTabItemDialog(vcl::Window* pParent,
                                             const SfxItemSet& rSet) = 0;
@@ -382,10 +353,6 @@ public:
     // #i68101#
     virtual AbstractSvxObjectNameDialog* CreateSvxObjectNameDialog(vcl::Window* pParent, const OUString& rName ) = 0;
     virtual AbstractSvxObjectTitleDescDialog* CreateSvxObjectTitleDescDialog(vcl::Window* pParent, const OUString& rTitle, const OUString& rDescription) = 0;
-
-    virtual AbstractSvxMessDialog *     CreateSvxMessDialog( vcl::Window* pParent, sal_uInt32 nResId,
-                                            const OUString& rText, const OUString& rDesc,
-                                            Image* pImg = NULL ) = 0;
 
     virtual AbstractSvxMultiPathDialog *    CreateSvxMultiPathDialog(vcl::Window* pParent) = 0 ;
     virtual AbstractSvxMultiPathDialog *    CreateSvxPathSelectDialog(vcl::Window* pParent) = 0 ;
@@ -438,7 +405,6 @@ public:
                                                                         bool bPrevNext = false) = 0;
     virtual VclAbstractDialog*          CreateSvxScriptOrgDialog( vcl::Window* pParent, const OUString& rLanguage ) SAL_OVERRIDE = 0;
 
-    virtual CreateSvxDistributePage     GetSvxDistributePageCreatorFunc() = 0;
     virtual DialogGetRanges             GetDialogGetRangesFunc() = 0;
 
     virtual AbstractScriptSelectorDialog*

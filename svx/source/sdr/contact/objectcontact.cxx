@@ -203,12 +203,6 @@ void ObjectContact::SetViewObjectContactRedirector(ViewObjectContactRedirector* 
     }
 }
 
-// check if buffering of MasterPages is allowed. Default is false.
-bool ObjectContact::IsMasterPageBufferingAllowed() const
-{
-    return false;
-}
-
 // print? Default is false
 bool ObjectContact::isOutputToPrinter() const
 {

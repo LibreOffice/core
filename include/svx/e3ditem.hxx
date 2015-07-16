@@ -46,10 +46,6 @@ public:
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     const basegfx::B3DVector&           GetValue() const { return aVal; }
-            void            SetValue( const basegfx::B3DVector& rNewVal ) {
-                                 DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
-                                 aVal = rNewVal;
-                             }
 
     virtual sal_uInt16 GetVersion (sal_uInt16 nFileFormatVersion) const SAL_OVERRIDE;
 };

@@ -173,7 +173,6 @@ protected:
     inline const Rectangle& GetMarkedRect() const;
     SdrPageView*       GetDragPV() const;
     SdrObject*         GetDragObj() const;
-    OutputDevice*      GetDragWin() const              { return getSdrDragView().pDragWin; }
     bool               IsDraggingPoints() const        { return getSdrDragView().IsDraggingPoints(); }
     bool               IsDraggingGluePoints() const    { return getSdrDragView().IsDraggingGluePoints(); }
 

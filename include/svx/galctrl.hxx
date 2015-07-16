@@ -67,8 +67,6 @@ private:
     // DragSourceHelper
     SVX_DLLPRIVATE virtual void     StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
 
-                        DECL_LINK( MenuSelectHdl, Menu* );
-
 public:
 
     GalleryPreview(vcl::Window* pParent,

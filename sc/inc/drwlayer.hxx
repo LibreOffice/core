@@ -115,8 +115,6 @@ public:
     virtual SdrModel* AllocModel() const SAL_OVERRIDE;
     virtual void    SetChanged( bool bFlg = true ) SAL_OVERRIDE;
 
-    virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const SAL_OVERRIDE;
-
     bool            HasObjects() const;
 
     bool            ScAddPage( SCTAB nTab );
@@ -209,7 +207,6 @@ public:
     static ScMacroInfo* GetMacroInfo( SdrObject* pObj, bool bCreate = false );
 
     virtual ImageMap* GetImageMapForObject(SdrObject* pObj) SAL_OVERRIDE;
-    virtual sal_Int32 GetHyperlinkCount(SdrObject* pObj) SAL_OVERRIDE;
 
 private:
     static SfxObjectShell* pGlobalDrawPersist;          // for AllocModel

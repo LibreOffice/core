@@ -639,20 +639,6 @@ void SdrObject::DelReference(SdrVirtObj& rVrtObj)
     RemoveListener(rVrtObj);
 }
 
-bool SdrObject::HasRefPoint() const
-{
-    return false;
-}
-
-Point SdrObject::GetRefPoint() const
-{
-    return GetCurrentBoundRect().Center();
-}
-
-void SdrObject::SetRefPoint(const Point& /*rPnt*/)
-{
-}
-
 bool SdrObject::IsGroupObject() const
 {
     return GetSubList()!=NULL;
@@ -2374,11 +2360,6 @@ void SdrObject::NbcShearGluePoints(const Point& rRef, long nAngle, double tn, bo
         SdrGluePointList* pGPL=ForceGluePointList();
         pGPL->Shear(rRef,nAngle,tn,bVShear,this);
     }
-}
-
-bool SdrObject::IsEdge() const
-{
-    return false;
 }
 
 void SdrObject::ConnectToNode(bool /*bTail1*/, SdrObject* /*pObj*/)

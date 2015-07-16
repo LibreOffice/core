@@ -453,11 +453,6 @@ SdrGluePointList* SdrEdgeObj::ForceGluePointList()
     return NULL; // no user defined glue points for connectors
 }
 
-bool SdrEdgeObj::IsEdge() const
-{
-    return true;
-}
-
 void SdrEdgeObj::ConnectToNode(bool bTail1, SdrObject* pObj)
 {
     SdrObjConnection& rCon=GetConnection(bTail1);

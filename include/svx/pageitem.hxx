@@ -97,7 +97,6 @@ public:
     void            SetNumType(SvxNumType eNum)         { eNumType = eNum;   }
 
     // name of the descriptor
-    const OUString& GetDescName() const                 { return aDescName;  }
     void            SetDescName(const OUString& rStr)     { aDescName = rStr;  }
 };
 

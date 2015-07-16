@@ -1313,15 +1313,7 @@ OUString GalleryBrowser2::GetFilterName() const
     return aFilterName;
 }
 
-Graphic GalleryBrowser2::GetGraphic() const
-{
-    Graphic aGraphic;
 
-    if( mpCurTheme && mnCurActionPos != 0xffffffff )
-        mpCurTheme->GetGraphic( mnCurActionPos, aGraphic );
-
-    return aGraphic;
-}
 
 IMPL_LINK_NOARG(GalleryBrowser2, SelectObjectHdl)
 {

@@ -235,7 +235,6 @@ public:
     const OUString& GetPath() const { return maPath; }
     void SetPath(const OUString& rString) { maPath = rString; }
 
-    bool IsDirty() const { return mbListDirty; }
     void SetDirty(bool bDirty = true) { mbListDirty = bDirty; }
 
     bool IsEmbedInDocument() const { return mbEmbedInDocument; }

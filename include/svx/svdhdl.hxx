@@ -280,11 +280,9 @@ public:
     Color GetColor() const { return aMarkerColor; }
     void SetColor(Color aNew, bool bCallLink = false);
 
-    const Size& GetSize() const { return aMarkerSize; }
     void SetSize(const Size& rNew);
 
     void SetColorChangeHdl(const Link<>& rLink) { aColorChangeHdl = rLink; }
-    const Link<>& GetColorChangeHdl() const { return aColorChangeHdl; }
 };
 
 

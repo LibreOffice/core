@@ -413,13 +413,6 @@ namespace sdr
             return rView.IsSwapAsynchron();
         }
 
-        // check if buffering of MasterPages is allowed. Default is sal_False.
-        bool ObjectContactOfPageView::IsMasterPageBufferingAllowed() const
-        {
-            SdrView& rView = GetPageWindow().GetPageView().GetView();
-            return rView.IsMasterPagePaintCaching();
-        }
-
         // print?
         bool ObjectContactOfPageView::isOutputToPrinter() const
         {

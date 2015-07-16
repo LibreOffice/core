@@ -85,7 +85,6 @@ public:
     virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
 
     void SetMeasureLayer(const OUString& rName) { aMeasureLayer=rName; }
-    const OUString& GetMeasureLayer() const { return aMeasureLayer; }
 
     // If the MeasureLayer is not set (empty string), then use the active layer for measuring.
     void SetEditMode(SdrViewEditMode eMode) { SdrDragView::SetEditMode(eMode); CheckEdgeMode(); }
@@ -127,7 +126,6 @@ public:
     // OBJ_TEXTEXT, OBJ_OUTLINERTEXT, OBJ_TITLETEXT, OBJ_CAPTION)
     // automatically start a TextEdit (SdrObjEditView: SdrBeginTextEdit)
     bool IsTextEditAfterCreate() const { return bAutoTextEdit; }
-    void SetTextEditAfterCreate(bool bOn) { bAutoTextEdit = bOn; }
 
     // Create a circle/rectangle/text frame with the first Point being
     // the center of the object instead of the upper-left corner.
@@ -142,17 +140,14 @@ public:
     // Object <= nAutoCloseDistPix pixels.
     // Default = TRUE.
     bool IsAutoClosePolys() const { return bAutoClosePolys; }
-    void SetAutoClosePolys(bool bOn) { bAutoClosePolys=bOn; }
 
     // Default = 5 Pixel
     sal_uInt16 GetAutoCloseDistPix() const { return sal_uInt16(nAutoCloseDistPix); }
-    void SetAutoCloseDistPix(sal_uInt16 nVal) { nAutoCloseDistPix=nVal; }
 
     // Setting for the minimum distantce in pixels between 2 bezier points when
     // creating a freehand line.
     // Default = 10 Pixel
     sal_uInt16 GetFreeHandMinDistPix() const { return sal_uInt16(nFreeHandMinDistPix); }
-    void SetFreeHandMinDistPix(sal_uInt16 nVal) { nFreeHandMinDistPix=nVal; }
 
     // FIXME: Whoever wants to keep the Create Interface for the PathObj which is
     // incompatible with the rest of the Create functionality of SvDraw, needs

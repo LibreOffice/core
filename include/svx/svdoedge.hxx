@@ -73,7 +73,6 @@ public:
     inline void SetConnectorId( sal_uInt16 nId ) { nConId = nId; };
 
     inline bool IsBestConnection() const { return bBestConn; };
-    inline bool IsBestVertex() const { return bBestVertex; };
     inline bool IsAutoVertex() const { return bAutoVertex; };
     inline sal_uInt16 GetConnectorId() const { return nConId; };
     inline SdrObject* GetObject() const { return pObj; }
@@ -228,7 +227,6 @@ public:
     virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const SAL_OVERRIDE;
     virtual const SdrGluePointList* GetGluePointList() const SAL_OVERRIDE;
     virtual SdrGluePointList* ForceGluePointList() SAL_OVERRIDE;
-    virtual bool IsEdge() const SAL_OVERRIDE;
 
     // bTail1=TRUE: Linienanfang, sonst LinienEnde
     // pObj=NULL: Disconnect

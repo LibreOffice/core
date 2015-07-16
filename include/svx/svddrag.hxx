@@ -90,7 +90,6 @@ public:
     const Point& GetPrev() const                     { return GetPoint(GetPointAnz()-(GetPointAnz()>=2 ? 2:1)); }
     Point& Prev()                                    { return Pnt(GetPointAnz()-(GetPointAnz()>=2 ? 2:1)); }
     const Point& GetPos0() const                     { return aPos0;  }
-    Point&       Pos0()                              { return aPos0;  }
     const Point& GetNow() const                      { return GetPoint(GetPointAnz()-1); }
     Point&       Now()                               { return Pnt(GetPointAnz()-1); }
     const Point& GetRealNow() const                  { return aRealNow; }
@@ -109,8 +108,7 @@ public:
     bool         IsMinMoved() const                  { return bMinMoved; }
     void         SetMinMoved()                       { bMinMoved=true; }
     void         ResetMinMoved()                     { bMinMoved=false; }
-    void         SetMinMove(sal_uInt16 nDist)            { nMinMov=nDist; if (nMinMov<1) nMinMov=1; }
-    sal_uInt16       GetMinMove() const                  { return nMinMov; }
+    void         SetMinMove(sal_uInt16 nDist)        { nMinMov=nDist; if (nMinMov<1) nMinMov=1; }
 
     bool         IsHorFixed() const                  { return bHorFixed; }
     void         SetHorFixed(bool bOn)               { bHorFixed=bOn; }

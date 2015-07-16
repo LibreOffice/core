@@ -428,13 +428,6 @@ namespace sdr
             ImpBufferTimerHandler(0);
         }
 
-        // #i68597# part of content gets copied, react on it
-        void OverlayManagerBuffered::copyArea(const Point& rDestPt, const Point& rSrcPt, const Size& rSrcSize)
-        {
-            // scroll local buffered area
-            mpBufferDevice->CopyArea(rDestPt, rSrcPt, rSrcSize);
-        }
-
         void OverlayManagerBuffered::restoreBackground(const vcl::Region& rRegion) const
         {
             // restore

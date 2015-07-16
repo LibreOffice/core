@@ -113,13 +113,12 @@ public:
     // from this object
     void ActionChildInserted(ViewContact& rChild);
 
-    // React on changes of the object of this ViewContact
-    virtual void ActionChanged();
-
-    // access to SdrObject and/or SdrPage. May return 0L like the default
+    // access to SdrObject. May return 0L like the default
     // implementations do. Override as needed.
     virtual SdrObject* TryToGetSdrObject() const;
-    virtual SdrPage* TryToGetSdrPage() const;
+
+    // React on changes of the object of this ViewContact
+    virtual void ActionChanged();
 
     // access to the local primitive. This will ensure that the primitive is
     // current in comparing the local one with a fresh created incarnation

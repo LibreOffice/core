@@ -89,7 +89,6 @@ public:
     bool         IsPercent() const                          { return !bNoPercent; }
     void         SetPercent(bool bOn)                   { bNoPercent  = !bOn; }
     // temp for transformations on the reference object
-    bool         IsReallyAbsolute() const                   { return bReallyAbsolute; }
     void         SetReallyAbsolute(bool bOn, const SdrObject& rObj);
 
     // #i38892#

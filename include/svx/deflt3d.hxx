@@ -74,48 +74,31 @@ public:
     // Getter/Setter for default values of all 3D objects
     // Compound object
     const Color& GetDefaultAmbientColor() { return aDefaultAmbientColor; }
-    void SetDefaultAmbientColor(const Color& rNew) { aDefaultAmbientColor = rNew; }
 
     bool GetDefaultCreateNormals() const { return bDefaultCreateNormals; }
-    void SetDefaultCreateNormals(const bool bNew) { bDefaultCreateNormals = bNew; }
     bool GetDefaultCreateTexture() const { return bDefaultCreateTexture; }
-    void SetDefaultCreateTexture(const bool bNew) { bDefaultCreateTexture = bNew; }
 
     // Cube object
     const basegfx::B3DPoint& GetDefaultCubePos() { return aDefaultCubePos; }
-    void SetDefaultCubePos(const basegfx::B3DPoint& rNew) { aDefaultCubePos = rNew; }
     const basegfx::B3DVector& GetDefaultCubeSize() { return aDefaultCubeSize; }
-    void SetDefaultCubeSize(const basegfx::B3DVector& rNew) { aDefaultCubeSize = rNew; }
     sal_uInt16 GetDefaultCubeSideFlags() const { return nDefaultCubeSideFlags; }
-    void SetDefaultCubeSideFlags(const sal_uInt16 nNew) { nDefaultCubeSideFlags = nNew; }
     bool GetDefaultCubePosIsCenter() const { return bDefaultCubePosIsCenter; }
-    void SetDefaultCubePosIsCenter(const bool bNew) { bDefaultCubePosIsCenter = bNew; }
 
     // Sphere object
     const basegfx::B3DPoint& GetDefaultSphereCenter() { return aDefaultSphereCenter; }
-    void SetDefaultSphereCenter(const basegfx::B3DPoint& rNew) { aDefaultSphereCenter = rNew; }
     const basegfx::B3DVector& GetDefaultSphereSize() { return aDefaultSphereSize; }
-    void SetDefaultSphereSize(const basegfx::B3DPoint& rNew) { aDefaultSphereSize = rNew; }
 
     // Lathe object
-    long GetDefaultLatheEndAngle() const { return nDefaultLatheEndAngle; }
-    void SetDefaultLatheEndAngle(const long nNew) { nDefaultLatheEndAngle = nNew; }
     bool GetDefaultLatheSmoothed() const { return bDefaultLatheSmoothed; }
-    void SetDefaultLatheSmoothed(const bool bNew) { bDefaultLatheSmoothed = bNew; }
     bool GetDefaultLatheSmoothFrontBack() const { return bDefaultLatheSmoothFrontBack; }
-    void SetDefaultLatheSmoothFrontBack(const bool bNew) { bDefaultLatheSmoothFrontBack = bNew; }
     bool GetDefaultLatheCharacterMode() const { return bDefaultLatheCharacterMode; }
     void SetDefaultLatheCharacterMode(const bool bNew) { bDefaultLatheCharacterMode = bNew; }
     bool GetDefaultLatheCloseFront() const { return bDefaultLatheCloseFront; }
-    void SetDefaultLatheCloseFront(const bool bNew) { bDefaultLatheCloseFront = bNew; }
     bool GetDefaultLatheCloseBack() const { return bDefaultLatheCloseBack; }
-    void SetDefaultLatheCloseBack(const bool bNew) { bDefaultLatheCloseBack = bNew; }
 
     // Extrude object
     bool GetDefaultExtrudeSmoothed() const { return bDefaultExtrudeSmoothed; }
-    void SetDefaultExtrudeSmoothed(const bool bNew) { bDefaultExtrudeSmoothed = bNew; }
     bool GetDefaultExtrudeSmoothFrontBack() const { return bDefaultExtrudeSmoothFrontBack; }
-    void SetDefaultExtrudeSmoothFrontBack(const bool bNew) { bDefaultExtrudeSmoothFrontBack = bNew; }
     bool GetDefaultExtrudeCharacterMode() const { return bDefaultExtrudeCharacterMode; }
     void SetDefaultExtrudeCharacterMode(const bool bNew) { bDefaultExtrudeCharacterMode = bNew; }
     bool GetDefaultExtrudeCloseFront() const { return bDefaultExtrudeCloseFront; }

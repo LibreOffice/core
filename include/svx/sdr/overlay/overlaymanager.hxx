@@ -104,9 +104,6 @@ namespace sdr
             // flush. Do buffered updates.
             virtual void flush();
 
-            // #i68597# part of content gets copied, react on it
-            virtual void copyArea(const Point& rDestPt, const Point& rSrcPt, const Size& rSrcSize);
-
             // restore part of background. Implemented form buffered versions only.
             virtual void restoreBackground(const vcl::Region& rRegion) const;
 
