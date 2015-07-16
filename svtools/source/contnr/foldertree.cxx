@@ -65,7 +65,7 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
     }
 }
 
-void FolderTree::SetTreePath( OUString sUrl )
+void FolderTree::SetTreePath( OUString const & sUrl )
 {
     INetURLObject aUrl( sUrl );
     aUrl.setFinalSlash();

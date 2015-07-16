@@ -47,7 +47,7 @@ public:
     virtual void RequestingChildren( SvTreeListEntry* pEntry );
 
     void FillTreeEntry( SvTreeListEntry* pEntry );
-    void SetTreePath( OUString sUrl );
+    void SetTreePath( OUString const & sUrl );
     void SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList );
 };
 
