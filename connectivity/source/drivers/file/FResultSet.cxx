@@ -418,7 +418,7 @@ sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException, st
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::FIRST,1,true) : sal_False;
+    return m_pTable && m_aSkipDeletedSet.skipDeleted(IResultSetHelper::FIRST,1,true);
 }
 
 
@@ -427,28 +427,28 @@ sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException, std
     // here I know definitely that I stand on the last record
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,true) : sal_False;
+    return m_pTable && m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,true);
 }
 
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::ABSOLUTE1,row,true) : sal_False;
+    return m_pTable && m_aSkipDeletedSet.skipDeleted(IResultSetHelper::ABSOLUTE1,row,true);
 }
 
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::RELATIVE1,row,true) : sal_False;
+    return m_pTable && m_aSkipDeletedSet.skipDeleted(IResultSetHelper::RELATIVE1,row,true);
 }
 
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::PRIOR,0,true) : sal_False;
+    return m_pTable && m_aSkipDeletedSet.skipDeleted(IResultSetHelper::PRIOR,0,true);
 }
 
 Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException, RuntimeException, std::exception)
@@ -502,7 +502,7 @@ sal_Bool SAL_CALL OResultSet::next(  ) throw(SQLException, RuntimeException, std
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::NEXT,1,true) : sal_False;
+    return m_pTable && m_aSkipDeletedSet.skipDeleted(IResultSetHelper::NEXT,1,true);
 }
 
 

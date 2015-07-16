@@ -94,7 +94,7 @@ sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark ) throw(
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = false;
 
-    return m_pTable ? Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),true) : sal_False;
+    return m_pTable && Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),true);
 }
 
 sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException, std::exception)

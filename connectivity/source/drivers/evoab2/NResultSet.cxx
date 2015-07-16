@@ -779,7 +779,7 @@ sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum ) throw(SQLE
         if ( getValue( getCur(), nFieldNumber, G_TYPE_BOOLEAN, &aValue, m_bWasNull ) )
             bResult = valueToBool( aValue );
     }
-    return bResult ? sal_True : sal_False;
+    return bResult;
 }
 
 sal_Int64 SAL_CALL OEvoabResultSet::getLong( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException, std::exception)
