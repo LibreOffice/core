@@ -212,7 +212,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
     checkColumnIndex(column);
 
     try {
-        return meta->isCurrency(column)? sal_True:sal_False;
+        return meta->isCurrency(column);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
     } catch (const sql::SQLException &e) {
@@ -228,7 +228,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     checkColumnIndex(column);
 
     try {
-        return meta->isAutoIncrement(column)? sal_True:sal_False;
+        return meta->isAutoIncrement(column);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
     } catch (const sql::SQLException &e) {
@@ -244,7 +244,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
     checkColumnIndex(column);
 
     try {
-        return meta->isSigned(column)? sal_True:sal_False;
+        return meta->isSigned(column);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
     } catch (const sql::SQLException &e) {
@@ -307,7 +307,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
     checkColumnIndex(column);
 
     try {
-        return meta->isSearchable(column)? sal_True:sal_False;
+        return meta->isSearchable(column);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
     } catch (const sql::SQLException &e) {
@@ -323,7 +323,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
     checkColumnIndex(column);
 
     try {
-        return meta->isReadOnly(column)? sal_True:sal_False;
+        return meta->isReadOnly(column);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
     } catch (const sql::SQLException &e) {
@@ -339,7 +339,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
     checkColumnIndex(column);
 
     try {
-        return meta->isDefinitelyWritable(column)? sal_True:sal_False;
+        return meta->isDefinitelyWritable(column);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
     } catch (const sql::SQLException &e) {
@@ -355,7 +355,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
     checkColumnIndex(column);
 
     try {
-        return meta->isWritable(column)? sal_True:sal_False;
+        return meta->isWritable(column);
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSetMetaData::getMetaData", *this);
     } catch (const sql::SQLException &e) {

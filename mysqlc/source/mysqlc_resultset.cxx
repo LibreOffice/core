@@ -189,7 +189,7 @@ sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 column)
 
     checkColumnIndex(column);
     try {
-        return m_result->getBoolean(column)? sal_True:sal_False;
+        return m_result->getBoolean(column);
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
@@ -523,7 +523,7 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        return m_result->isBeforeFirst()? sal_True:sal_False;
+        return m_result->isBeforeFirst();
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
@@ -538,7 +538,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        return m_result->isAfterLast()? sal_True:sal_False;
+        return m_result->isAfterLast();
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
@@ -568,7 +568,7 @@ sal_Bool SAL_CALL OResultSet::isLast()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        return m_result->isLast()? sal_True:sal_False;
+        return m_result->isLast();
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
@@ -625,7 +625,7 @@ sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException, std:
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        return m_result->first()? sal_True:sal_False;
+        return m_result->first();
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
@@ -640,7 +640,7 @@ sal_Bool SAL_CALL OResultSet::last()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        return m_result->last()? sal_True:sal_False;
+        return m_result->last();
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
@@ -655,7 +655,7 @@ sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 row)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        return m_result->absolute(row)? sal_True:sal_False;
+        return m_result->absolute(row);
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
@@ -670,7 +670,7 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        return m_result->relative(row)? sal_True:sal_False;
+        return m_result->relative(row);
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
@@ -685,7 +685,7 @@ sal_Bool SAL_CALL OResultSet::previous()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        return m_result->previous()? sal_True:sal_False;
+        return m_result->previous();
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
@@ -740,7 +740,7 @@ sal_Bool SAL_CALL OResultSet::next()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        return m_result->next()? sal_True:sal_False;
+        return m_result->next();
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
@@ -755,7 +755,7 @@ sal_Bool SAL_CALL OResultSet::wasNull()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     try {
-        return m_result->wasNull()? sal_True:sal_False;
+        return m_result->wasNull();
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }

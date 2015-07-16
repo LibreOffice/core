@@ -620,7 +620,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert(sal_Int32 /* fromType */, s
     OSL_TRACE("ODatabaseMetaData::supportsConvert");
     try {
         /* ToDo -> use supportsConvert( fromType, toType) */
-        return meta->supportsConvert()? sal_True:sal_False;
+        return meta->supportsConvert();
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::supportsConvert", *this);
     } catch (const sql::InvalidArgumentException &) {
@@ -979,7 +979,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsResultSetConcurrency(sal_Int32 setT
         return meta->supportsResultSetConcurrency(setType, concurrency==com::sun::star::sdbc::TransactionIsolation::READ_COMMITTED?
                                                     sql::TRANSACTION_READ_COMMITTED:
                                                     (concurrency == com::sun::star::sdbc::TransactionIsolation::SERIALIZABLE?
-                                                        sql::TRANSACTION_SERIALIZABLE:sql::TRANSACTION_SERIALIZABLE))? sal_True:sal_False;
+                                                        sql::TRANSACTION_SERIALIZABLE:sql::TRANSACTION_SERIALIZABLE));
     } catch (const sql::MethodNotImplementedException &) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("ODatabaseMetaData::supportsResultSetConcurrency", *this);
     } catch (const sql::InvalidArgumentException &) {

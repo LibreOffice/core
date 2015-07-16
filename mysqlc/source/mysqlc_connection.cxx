@@ -306,7 +306,7 @@ void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
     try {
-        m_settings.cppConnection->setAutoCommit(autoCommit == sal_True);
+        m_settings.cppConnection->setAutoCommit(autoCommit);
     } catch (const sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
     }
