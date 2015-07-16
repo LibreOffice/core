@@ -79,7 +79,7 @@ static OUString inv_getImplementationName()
     return OUString(IMPLNAME);
 }
 
-// TODO: Zentral implementieren
+// TODO: Implement centrally
 inline Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XIdlReflection > & xRefl )
 {
     return xRefl->forName( rType.getTypeName() );
@@ -115,7 +115,7 @@ public:
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId(  )
        throw( RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // Methoden von XMaterialHolder
+    // XMaterialHolder
     virtual Any         SAL_CALL getMaterial() throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInvocation
@@ -137,7 +137,7 @@ public:
     virtual InvocationInfo SAL_CALL getInfoForName( const OUString& aName, sal_Bool bExact )
         throw( IllegalArgumentException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    // All Access and Container methods are not thread save
+    // All Access and Container methods are not thread safe
     // XElementAccess
     virtual Type SAL_CALL getElementType() throw( RuntimeException, std::exception ) SAL_OVERRIDE
         { return _xElementAccess->getElementType(); }
@@ -260,7 +260,7 @@ Invocation_Impl::~Invocation_Impl() {}
 Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
     throw( RuntimeException, std::exception )
 {
-    // PropertySet-Implementation
+    // PropertySet implementation
     Any a = ::cppu::queryInterface( aType,
                                    (static_cast< XInvocation* >(this)),
                                    (static_cast< XMaterialHolder* >(this)),
@@ -331,9 +331,9 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
 
 Any Invocation_Impl::getMaterial() throw(RuntimeException, std::exception)
 {
-    // AB, 12.2.1999  Sicherstellen, dass das Material wenn moeglich
-    // aus der direkten Invocation bzw. von der Introspection geholt
-    // wird, da sonst Structs nicht korrekt behandelt werden
+    // AB, 12.2.1999  Make sure that the material is taken when possible
+    // from the direct Invocation of the Introspection, otherwise structs
+    // are not handled correctly
     Reference<XMaterialHolder> xMaterialHolder;
     if( _xDirect.is() )
     {
@@ -362,12 +362,12 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
         xObj = *static_cast<Reference<XInterface> const *>(rMaterial.getValue());
     _aMaterial = rMaterial;
 
-    // Ersteinmal alles ausserhalb des guards machen
+    // First do this outside the guard
     _xDirect = Reference<XInvocation>::query( xObj );
 
     if( _xDirect.is() )
     {
-        // Objekt direkt befragen
+        // Consult object directly
         _xElementAccess     = Reference<XElementAccess>::query( _xDirect );
         _xEnumerationAccess = Reference<XEnumerationAccess>::query( _xDirect );
         _xIndexAccess       = Reference<XIndexAccess>::query( _xDirect );
@@ -383,7 +383,7 @@ void Invocation_Impl::setMaterial( const Any& rMaterial )
     }
     else
     {
-        // Invocation ueber die Introspection machen
+        // Make Invocation on the Introspection
         if (xIntrospection.is())
         {
             _xIntrospectionAccess = xIntrospection->inspect( _aMaterial );
@@ -565,7 +565,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
                 else
                     throw RuntimeException( "no type converter service!" );
 
-                // bei Vorhandensein ersetzen, ansonsten einfuegen
+                // Replace if present, otherwise insert
                 if (_xNameContainer->hasByName( PropertyName ))
                     _xNameContainer->replaceByName( PropertyName, aConv );
                 else
@@ -675,7 +675,7 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
             }
             catch( CannotConvertException& rExc )
             {
-                rExc.ArgumentIndex = nPos;  // optionalen Parameter Index hinzufuegen
+                rExc.ArgumentIndex = nPos;  // Add optional parameter index
                 throw;
             }
         }
@@ -987,7 +987,7 @@ Sequence< Type > SAL_CALL Invocation_Impl::getTypes() throw( RuntimeException, s
         pTypes[ n++ ] = cppu::UnoType<XInvocation>::get();
         pTypes[ n++ ] = cppu::UnoType<XMaterialHolder>::get();
 
-        // Ivocation does not support XExactName, if direct object supports
+        // Invocation does not support XExactName if direct object supports
         // XInvocation, but not XExactName.
         if ((_xDirect.is() && _xENDirect.is()) ||
             (!_xDirect.is() && (_xENIntrospection.is() || _xENNameAccess.is())))
