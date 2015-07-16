@@ -203,7 +203,7 @@ ExtensionDescription::ExtensionDescription(
         Reference<css::xml::dom::XDocumentBuilder> xDocBuilder(
             css::xml::dom::DocumentBuilder::create(xContext) );
 
-        if (xDocBuilder->isNamespaceAware() == sal_False)
+        if (!xDocBuilder->isNamespaceAware())
         {
             throw css::uno::Exception(
                 "Service com.sun.star.xml.dom.DocumentBuilder is not namespace aware.", 0);
