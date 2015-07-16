@@ -78,9 +78,6 @@ private:
     bool isDependentSubsettedShape() const
         { return mpShapeSubset && !mbIsIndependentSubset; }
 
-    ShapeAttributeLayerHolder const & getAttributeLayerHolder() const
-        { return maAttributeLayerHolder; }
-
 private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XAnimate>     mxAnimateNode;

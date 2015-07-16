@@ -71,11 +71,7 @@ namespace slideshow
             // the following parrots STL container concept methods
             // ===================================================
 
-            std::size_t size() const { return maViews.size(); }
             bool empty() const { return maViews.empty(); }
-
-            void clear() { maViews.clear(); }
-
 
             UnoViewVector::iterator         begin() { return maViews.begin(); }
             UnoViewVector::const_iterator   begin() const { return maViews.begin(); }

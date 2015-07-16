@@ -120,8 +120,6 @@ public:
     // MouseEventHandler
     virtual bool handleMousePressed( awt::MouseEvent const & evt ) SAL_OVERRIDE;
     virtual bool handleMouseReleased( awt::MouseEvent const & evt ) SAL_OVERRIDE;
-    virtual bool handleMouseEntered( awt::MouseEvent const & evt ) SAL_OVERRIDE;
-    virtual bool handleMouseExited( awt::MouseEvent const & evt ) SAL_OVERRIDE;
     virtual bool handleMouseDragged( awt::MouseEvent const & evt ) SAL_OVERRIDE;
     virtual bool handleMouseMoved( awt::MouseEvent const & evt ) SAL_OVERRIDE;
 
@@ -538,18 +536,6 @@ bool RehearseTimingsActivity::MouseHandler::handleMouseReleased(
         if( !mbHasBeenClicked )
             return true; // consume event, else next slide (manual advance)
     }
-    return false;
-}
-
-bool RehearseTimingsActivity::MouseHandler::handleMouseEntered(
-    awt::MouseEvent const & /*evt*/ )
-{
-    return false;
-}
-
-bool RehearseTimingsActivity::MouseHandler::handleMouseExited(
-    awt::MouseEvent const & /*evt*/ )
-{
     return false;
 }
 

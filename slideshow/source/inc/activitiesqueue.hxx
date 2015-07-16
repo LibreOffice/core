@@ -86,13 +86,6 @@ namespace slideshow
             ::boost::shared_ptr< ::canvas::tools::ElapsedTime > const &
             getTimer() const { return mpTimer; }
 
-            /** returns number of all activities, waiting, reinserted and dequeued
-             */
-            std::size_t size() const
-            {
-                return maCurrentActivitiesWaiting.size() + maCurrentActivitiesReinsert.size() + maDequeuedActivities.size();
-            }
-
         private:
             ::boost::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
 

@@ -46,13 +46,6 @@ namespace slideshow
              */
             virtual bool update() = 0;
 
-            /** Perform the update action on given view only
-
-                @return true, if the update was performed
-                successfully, false otherwise.
-             */
-            virtual bool update( ViewSharedPtr const& rView ) = 0;
-
             /** Query whether updates are pending
 
                 @return true, if updates are pending. Calling update()

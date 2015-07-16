@@ -184,9 +184,6 @@ private:
     void addSprites( ViewEntry& rEntry );
     static void clearViewEntry( ViewEntry& rEntry );
 
-    ViewsVecT::iterator lookupView( UnoViewSharedPtr const & pView );
-    ViewsVecT::const_iterator lookupView( UnoViewSharedPtr const & pView ) const;
-
     SoundPlayerSharedPtr                mpSoundPlayer;
 
     EventMultiplexer&                   mrEventMultiplexer;

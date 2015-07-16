@@ -100,14 +100,6 @@ namespace slideshow
                 space coordinates.
              */
             virtual void addHyperlinkArea( const boost::shared_ptr<HyperlinkArea>& rArea ) = 0;
-
-            /** Unregister given shape as a hyperlink target
-
-                @param rArea
-                Hyperlink sensitive area. Will cease to participate in
-                hyperlink region lookup.
-             */
-            virtual void removeHyperlinkArea( const boost::shared_ptr<HyperlinkArea>& rArea ) = 0;
         };
 
         typedef ::boost::shared_ptr< ShapeManager > ShapeManagerSharedPtr;

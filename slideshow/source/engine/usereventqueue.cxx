@@ -65,8 +65,6 @@ class MouseEventHandler_ : public MouseEventHandler
 public:
     virtual bool handleMousePressed( awt::MouseEvent const& /*e*/ ) SAL_OVERRIDE { return false;}
     virtual bool handleMouseReleased( awt::MouseEvent const& /*e*/) SAL_OVERRIDE { return false;}
-    virtual bool handleMouseEntered( awt::MouseEvent const& /*e*/ ) SAL_OVERRIDE { return false;}
-    virtual bool handleMouseExited( awt::MouseEvent const& /*e*/ ) SAL_OVERRIDE { return false; }
     virtual bool handleMouseDragged( awt::MouseEvent const& /*e*/ ) SAL_OVERRIDE { return false;}
     virtual bool handleMouseMoved( awt::MouseEvent const& /*e*/ ) SAL_OVERRIDE { return false; }
 };
