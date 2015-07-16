@@ -141,6 +141,11 @@ void ChartSeriesPanel::dispose()
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
 
+    mpCBLabel.clear();
+    mpCBTrendline.clear();
+    mpCBXError.clear();
+    mpCBYError.clear();
+
     PanelLayout::dispose();
 }
 
