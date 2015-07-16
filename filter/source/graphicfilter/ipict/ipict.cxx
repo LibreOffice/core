@@ -1859,6 +1859,7 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
 
 void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 {
+    try {
     sal_uInt16          nOpcode;
     sal_uInt8           nOneByteOpcode;
     sal_uLong           nSize, nPercent, nLastPercent;
@@ -1950,6 +1951,10 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     pPict->SetEndian(nOrigNumberFormat);
 
     if (pPict->GetError()) pPict->Seek(nOrigPos);
+    } catch (...)
+    {
+        rStreamPict.SetError(SVSTREAM_FILEFORMAT_ERROR);
+    }
 }
 
 namespace pict {
