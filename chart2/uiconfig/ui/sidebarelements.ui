@@ -309,11 +309,15 @@
               </packing>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="comboboxtext1">
+              <object class="GtkComboBoxText" id="comboboxtext_legend">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <items>
-                  <item translatable="yes">bottom left</item>
+                  <item translatable="yes">Bottom</item>
+                  <item translatable="yes">Left</item>
+                  <item translatable="yes">Right</item>
+                  <item translatable="yes">Top</item>
+                  <item translatable="yes">Manual</item>
                 </items>
               </object>
               <packing>

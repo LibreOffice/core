@@ -90,6 +90,8 @@ private:
     VclPtr<CheckBox> mpCBGridVerticalMinor;
     VclPtr<CheckBox> mpCBGridHorizontalMinor;
 
+    VclPtr<ListBox> mpLBLegendPosition;
+
     css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
@@ -100,6 +102,7 @@ private:
     void Initialize();
 
     DECL_LINK(CheckBoxHdl, CheckBox*);
+    DECL_LINK(LegendPosHdl, void*);
 };
 
 } } // end of namespace ::chart::sidebar

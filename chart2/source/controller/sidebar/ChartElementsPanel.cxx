@@ -20,6 +20,9 @@
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
+#include <com/sun/star/chart2/LegendPosition.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
+
 #include "ChartElementsPanel.hxx"
 #include "ChartController.hxx"
 #include <sfx2/bindings.hxx>
@@ -242,6 +245,77 @@ void setAxisVisible(css::uno::Reference<css::frame::XModel> xModel, AxisType eTy
     }
 }
 
+sal_Int32 getLegendPos(css::uno::Reference<css::frame::XModel> xModel)
+{
+    ChartModel* pModel = getChartModel(xModel);
+    if (!pModel)
+        return 4;
+
+    Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend(*pModel), uno::UNO_QUERY );
+    if (!xLegendProp.is())
+        return 4;
+
+    chart2::LegendPosition eLegendPos = chart2::LegendPosition_CUSTOM;
+    xLegendProp->getPropertyValue("AnchorPosition") >>= eLegendPos;
+    switch(eLegendPos)
+    {
+        case chart2::LegendPosition_LINE_START:
+            return 1;
+        case chart2::LegendPosition_LINE_END:
+            return 2;
+        case chart2::LegendPosition_PAGE_START:
+            return 3;
+        case chart2::LegendPosition_PAGE_END:
+            return 0;
+        default:
+            return 4;
+    }
+}
+
+void setLegendPos(css::uno::Reference<css::frame::XModel> xModel, sal_Int32 nPos)
+{
+    ChartModel* pModel = getChartModel(xModel);
+    if (!pModel)
+        return;
+
+    Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend(*pModel), uno::UNO_QUERY );
+    if (!xLegendProp.is())
+        return;
+
+    chart2::LegendPosition eLegendPos = chart2::LegendPosition_CUSTOM;
+    css::chart::ChartLegendExpansion eExpansion = css::chart::ChartLegendExpansion_HIGH;
+    switch(nPos)
+    {
+        case 3:
+            eLegendPos = chart2::LegendPosition_PAGE_START;
+            eExpansion = css::chart::ChartLegendExpansion_WIDE;
+            break;
+        case 1:
+            eLegendPos = chart2::LegendPosition_LINE_START;
+            break;
+        case 2:
+            eLegendPos = chart2::LegendPosition_LINE_END;
+            break;
+        case 0:
+            eLegendPos = chart2::LegendPosition_PAGE_END;
+            eExpansion = css::chart::ChartLegendExpansion_WIDE;
+            break;
+        case 4:
+            eLegendPos = chart2::LegendPosition_CUSTOM;
+            break;
+        default:
+            assert(false);
+    }
+
+    xLegendProp->setPropertyValue("AnchorPosition", css::uno::makeAny(eLegendPos));
+    xLegendProp->setPropertyValue("Expansion", css::uno::makeAny(eExpansion));
+
+    if (eLegendPos != chart2::LegendPosition_CUSTOM)
+    {
+        xLegendProp->setPropertyValue("RelativePosition", uno::Any());
+    }
+}
+
 }
 
 ChartElementsPanel::ChartElementsPanel(
@@ -273,6 +347,8 @@ ChartElementsPanel::ChartElementsPanel(
     get(mpCBGridHorizontalMajor,  "checkbutton_gridline_horizontal_major");
     get(mpCBGridVerticalMinor,  "checkbutton_gridline_vertical_minor");
     get(mpCBGridHorizontalMinor,  "checkbutton_gridline_horizontal_minor");
+
+    get(mpLBLegendPosition, "comboboxtext_legend");
 
     Initialize();
 }
@@ -332,6 +408,8 @@ void ChartElementsPanel::Initialize()
     mpCBGridHorizontalMajor->SetClickHdl(aLink);
     mpCBGridVerticalMinor->SetClickHdl(aLink);
     mpCBGridHorizontalMinor->SetClickHdl(aLink);
+
+    mpLBLegendPosition->SetSelectHdl(LINK(this, ChartElementsPanel, LegendPosHdl));
 }
 
 void ChartElementsPanel::updateData()
@@ -363,6 +441,8 @@ void ChartElementsPanel::updateData()
         mpCBZAxis->Disable();
         mpCBZAxisTitle->Disable();
     }
+
+    mpLBLegendPosition->SelectEntryPos(getLegendPos(mxModel));
 }
 
 VclPtr<vcl::Window> ChartElementsPanel::Create (
@@ -451,6 +531,13 @@ IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)
     else if (pCheckBox == mpCBGridHorizontalMinor.get())
         setGridVisible(mxModel, GridType::HOR_MINOR, bChecked);
 
+    return 0;
+}
+
+IMPL_LINK_NOARG(ChartElementsPanel, LegendPosHdl)
+{
+    sal_Int32 nPos = mpLBLegendPosition->GetSelectEntryPos();
+    setLegendPos(mxModel, nPos);
     return 0;
 }
 
