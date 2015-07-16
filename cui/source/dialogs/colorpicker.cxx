@@ -25,7 +25,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <vcl/dialog.hxx>
@@ -1508,7 +1508,7 @@ void ColorPickerDialog::setColorComponent( sal_uInt16 nComp, double dValue )
     }
 }
 
-typedef ::cppu::WeakComponentImplHelper4< XServiceInfo, XExecutableDialog, XInitialization, XPropertyAccess > ColorPickerBase;
+typedef ::cppu::WeakComponentImplHelper< XServiceInfo, XExecutableDialog, XInitialization, XPropertyAccess > ColorPickerBase;
 
 class ColorPicker : protected ::comphelper::OBaseMutex,    // Struct for right initalization of mutex member! Must be first of baseclasses.
                     public ColorPickerBase
