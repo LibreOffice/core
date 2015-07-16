@@ -1190,8 +1190,6 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
     , m_bProgressChanged(false)
     , m_bStartProgress(false)
     , m_bStopProgress(false)
-    , m_bUpdateWarning(false)
-    , m_bDisableWarning(false)
     , m_bHasLockedEntries(false)
     , m_nProgress(0)
     , m_pManager(pManager)

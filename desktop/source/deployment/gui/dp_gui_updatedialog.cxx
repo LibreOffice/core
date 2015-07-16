@@ -508,8 +508,6 @@ UpdateDialog::UpdateDialog(
     m_thread(
         new UpdateDialog::Thread(
             context, *this, vExtensionList)),
-    m_nFirstLineDelta(0),
-    m_nOneLineMissing(0),
     m_nLastID(1),
     m_bModified( false )
     // TODO: check!

@@ -237,7 +237,6 @@ public:
     ~MigrationImpl();
     bool initializeMigration();
     bool doMigration();
-    OUString getOldVersionName();
 };
 }
 

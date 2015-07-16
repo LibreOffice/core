@@ -47,9 +47,6 @@ public:
     explicit ExtensionManager( css::uno::Reference< css::uno::XComponentContext >const& xContext);
     virtual     ~ExtensionManager();
 
-    static css::uno::Sequence< OUString > getServiceNames();
-    static OUString getImplName();
-
     void check();
     void fireModified();
 

@@ -158,7 +158,6 @@ private:
     bool showDescription( ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > const & aUpdateInfo);
     bool showDescription( const OUString& rDescription);
-    bool isReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) const;
 
     DECL_LINK(selectionHandler, void *);
     DECL_LINK(allHandler, void *);
@@ -206,8 +205,6 @@ private:
 
     Point   m_aFirstLinePos;
     Size    m_aFirstLineSize;
-    long    m_nFirstLineDelta;
-    long    m_nOneLineMissing;
     sal_uInt16  m_nLastID;
     bool    m_bModified;
 };
