@@ -208,12 +208,6 @@ void ChartSeriesPanel::DataChanged(
 void ChartSeriesPanel::HandleContextChange(
     const ::sfx2::sidebar::EnumContext& rContext)
 {
-    if(maContext == rContext)
-    {
-        // Nothing to do.
-        return;
-    }
-
     maContext = rContext;
     updateData();
 }
