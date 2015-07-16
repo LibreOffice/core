@@ -38,6 +38,7 @@
 
 #include "ChartModel.hxx"
 #include "DataSeriesHelper.hxx"
+#include "RegressionCurveHelper.hxx"
 
 using namespace css;
 using namespace css::uno;
@@ -70,6 +71,42 @@ void setDataLabelVisible(css::uno::Reference<css::frame::XModel> xModel, const O
         DataSeriesHelper::insertDataLabelsToSeriesAndAllPoints(xSeries);
     else
         DataSeriesHelper::deleteDataLabelsFromSeriesAndAllPoints(xSeries);
+}
+
+bool isTrendlineVisible(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rCID)
+{
+    css::uno::Reference< css::chart2::XRegressionCurveContainer > xRegressionCurveContainer(
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xRegressionCurveContainer.is())
+        return false;
+
+    return xRegressionCurveContainer->getRegressionCurves().getLength() != 0;
+}
+
+void setTrendlineVisible(css::uno::Reference<css::frame::XModel>
+        xModel, const OUString& rCID, bool bVisible)
+{
+    css::uno::Reference< css::chart2::XRegressionCurveContainer > xRegressionCurveContainer(
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xRegressionCurveContainer.is())
+        return;
+
+    if (bVisible)
+    {
+        /* code */
+        uno::Reference< chart2::XRegressionCurve > xCurve =
+            RegressionCurveHelper::addRegressionCurve(
+                    CHREGRESS_LINEAR,
+                    xRegressionCurveContainer,
+                    comphelper::getProcessComponentContext());
+    }
+    else
+        RegressionCurveHelper::removeAllExceptMeanValueLine(
+                xRegressionCurveContainer );
+
 }
 
 }
@@ -132,6 +169,7 @@ void ChartSeriesPanel::updateData()
 #endif
     SolarMutexGuard aGuard;
     mpCBLabel->Check(isDataLabelVisible(mxModel, aCID));
+    mpCBTrendline->Check(isTrendlineVisible(mxModel, aCID));
 }
 
 VclPtr<vcl::Window> ChartSeriesPanel::Create (
@@ -200,6 +238,8 @@ IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, CheckBox*, pCheckBox)
 #endif
     if (pCheckBox == mpCBLabel.get())
         setDataLabelVisible(mxModel, aCID, bChecked);
+    else if (pCheckBox == mpCBTrendline.get())
+        setTrendlineVisible(mxModel, aCID, bChecked);
 
     return 0;
 }
