@@ -1489,8 +1489,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException, std
             "librdf_Repository::queryAsk: "
             "query result is null or not boolean", *this);
     }
-    return librdf_query_results_get_boolean(pResults.get())
-        ? sal_True : sal_False;
+    return bool(librdf_query_results_get_boolean(pResults.get()));
 }
 
 // css::rdf::XDocumentRepository:
