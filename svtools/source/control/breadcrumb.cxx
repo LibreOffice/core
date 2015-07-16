@@ -149,7 +149,7 @@ void Breadcrumb::SetURL( const OUString& rURL )
         {
             unsigned int nIndex = nSegments + i;
 
-            if( m_aLinks[nIndex]->GetText() == "" )
+            if( m_aLinks[nIndex]->GetText().isEmpty() )
             {
                 bRight = false;
             }
