@@ -13,11 +13,11 @@
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <vcl/gdimtf.hxx>
 
-typedef cppu::WeakComponentImplHelper2<com::sun::star::rendering::XMtfRenderer, com::sun::star::beans::XFastPropertySet> MtfRendererBase;
+typedef cppu::WeakComponentImplHelper<com::sun::star::rendering::XMtfRenderer, com::sun::star::beans::XFastPropertySet> MtfRendererBase;
 
 class MtfRenderer : private cppu::BaseMutex, public MtfRendererBase
 {

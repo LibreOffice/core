@@ -30,7 +30,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -252,7 +252,7 @@ static Reference< XInterface > loadComponent(
 }
 
 class OInstanceProvider
-    : public WeakImplHelper1< XInstanceProvider >
+    : public WeakImplHelper< XInstanceProvider >
 {
     Reference< XComponentContext > _xContext;
 
@@ -348,7 +348,7 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
         "no such element \"" + rName + "\"!" );
 }
 
-struct ODisposingListener : public WeakImplHelper1< XEventListener >
+struct ODisposingListener : public WeakImplHelper< XEventListener >
 {
     Condition cDisposed;
 

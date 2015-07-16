@@ -10,12 +10,12 @@
 #ifndef INCLUDED_CUI_SOURCE_OPTIONS_PERSONASDOCHANDLER_HXX
 #define INCLUDED_CUI_SOURCE_OPTIONS_PERSONASDOCHANDLER_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <vector>
 
-class PersonasDocHandler : public ::cppu::WeakImplHelper1< css::xml::sax::XDocumentHandler >
+class PersonasDocHandler : public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
 private:
     std::vector<OUString> m_vLearnmoreURLs;
