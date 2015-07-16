@@ -1473,8 +1473,8 @@ void BackendImpl::PackageImpl::scanBundle(
         if (! INetContentTypes::parse( mediaType, type, subType, &params ))
             continue;
 
-        auto const iter = params.find("platform");
-        if (iter != params.end() && !platform_fits(iter->second.m_sValue))
+        INetContentTypeParameter const * param = params.find("platform");
+        if (param != 0 && !platform_fits( param->m_sValue ))
             continue;
         const OUString url( makeURL( packageRootURL, fullPath ) );
 
@@ -1483,15 +1483,14 @@ void BackendImpl::PackageImpl::scanBundle(
             subType.equalsIgnoreAsciiCase( "vnd.sun.star.package-bundle-description"))
         {
             // check locale:
-            auto const iterLocale = params.find("locale");
-            if (iterLocale == params.end())
-            {
+            param = params.find("locale");
+            if (param == 0) {
                 if (descrFile.isEmpty())
                     descrFile = url;
             }
             else {
                 // match best locale:
-                LanguageTag descrTag(iter->second.m_sValue);
+                LanguageTag descrTag( param->m_sValue);
                 if (officeLocale.getLanguage() == descrTag.getLanguage())
                 {
                     size_t nPenalty = nPenaltyMax;

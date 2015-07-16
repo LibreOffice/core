@@ -670,21 +670,21 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             {
                 // xxx todo: probe and evaluate component xml description
 
-                auto const iter = params.find(OString("platform"));
-                bool bPlatformFits(iter == params.end());
+                INetContentTypeParameter const * param = params.find(OString("platform"));
+                bool bPlatformFits(param == 0);
                 OUString aPlatform;
                 if (!bPlatformFits) // platform is specified, we have to check
                 {
-                    aPlatform = iter->second.m_sValue;
+                    aPlatform = param->m_sValue;
                     bPlatformFits = platform_fits(aPlatform);
                 }
                 // If the package is being removed, do not care whether
                 // platform fits. We won't be using it anyway.
                 if (bPlatformFits || bRemoved) {
-                    auto const iterType = params.find(OString("type"));
-                    if (iterType != params.end())
+                    param = params.find(OString("type"));
+                    if (param != 0)
                     {
-                        OUString const & value = iterType->second.m_sValue;
+                        OUString const & value = param->m_sValue;
                         if (value.equalsIgnoreAsciiCase("native")) {
                             if (bPlatformFits)
                                 return new BackendImpl::ComponentPackageImpl(
@@ -713,8 +713,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             }
             else if (subType.equalsIgnoreAsciiCase("vnd.sun.star.uno-components"))
             {
-                auto const iter = params.find(OString("platform"));
-                if (iter == params.end() || platform_fits(iter->second.m_sValue)) {
+                INetContentTypeParameter const * param = params.find(OString("platform"));
+                if (param == 0 || platform_fits( param->m_sValue )) {
                     return new BackendImpl::ComponentsPackageImpl(
                         this, url, name, m_xComponentsTypeInfo, bRemoved,
                         identifier);
@@ -722,9 +722,9 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             }
             else if (subType.equalsIgnoreAsciiCase( "vnd.sun.star.uno-typelibrary"))
             {
-                auto const iter = params.find(OString("type"));
-                if (iter != params.end()) {
-                    OUString const & value = iter->second.m_sValue;
+                INetContentTypeParameter const * param = params.find(OString("type"));
+                if (param != 0) {
+                    OUString const & value = param->m_sValue;
                     if (value.equalsIgnoreAsciiCase("RDB"))
                     {
                         return new BackendImpl::TypelibraryPackageImpl(
