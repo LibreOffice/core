@@ -222,7 +222,7 @@ jobject Bridge::call_uno(
                 java_arg.l = jo_arg.get();
                 map_to_uno(
                     jni, uno_args[ nPos ], java_arg, type, 0,
-                    false /* no assign */, sal_False != param.bOut,
+                    false /* no assign */, param.bOut,
                     true /* special wrapped integral types */ );
             }
             catch (...)

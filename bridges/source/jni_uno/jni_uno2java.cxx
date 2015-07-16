@@ -167,8 +167,8 @@ void Bridge::call_java(
                 jni, &java_args[ nPos ],
                 uno_args[ nPos ],
                 param.pTypeRef, 0,
-                sal_False != param.bIn /* convert uno value */,
-                sal_False != param.bOut /* build up array[ 1 ] */ );
+                param.bIn /* convert uno value */,
+                param.bOut /* build up array[ 1 ] */ );
         }
         catch (...)
         {
@@ -318,7 +318,7 @@ void Bridge::call_java(
                     map_to_uno(
                         jni, uno_args[ nPos ],
                         java_args[ nPos ], param.pTypeRef, 0,
-                        sal_False != param.bIn /* assign if inout */,
+                        param.bIn /* assign if inout */,
                         true /* out param */ );
                 }
                 catch (...)
