@@ -640,7 +640,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
     }
     else
     {
-        m_sPath = "";
+        m_sPath.clear();
         m_pName_ed->SetText( "" );
     }
 
@@ -739,8 +739,8 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
     bool bFileDlg = ( m_eType == REMOTEDLG_TYPE_FILEDLG );
     bool bSelected = ( m_pFileView->GetSelectionCount() > 0 );
 
-    if( !sCurrentPath.endsWith( OUString( "/" ) ) )
-        sCurrentPath += OUString( "/" );
+    if( !sCurrentPath.endsWith("/") )
+        sCurrentPath += "/";
 
     if( !bSelected )
     {
