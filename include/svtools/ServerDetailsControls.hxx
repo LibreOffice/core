@@ -130,7 +130,7 @@ class CmisDetailsContainer : public DetailsContainer
         CmisDetailsContainer( VclBuilderContainer* pBuilder, OUString sBinding );
         virtual ~CmisDetailsContainer( ) { };
 
-        virtual void show( bool bShow = true );
+        virtual void show( bool bShow = true ) SAL_OVERRIDE;
         virtual INetURLObject getUrl( ) SAL_OVERRIDE;
         virtual bool setUrl( const INetURLObject& rUrl ) SAL_OVERRIDE;
         virtual void setUsername( const OUString& rUsername ) SAL_OVERRIDE;
