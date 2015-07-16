@@ -971,7 +971,7 @@ OUString SAL_CALL FmXGridControl::getMode() throw( RuntimeException, std::except
 sal_Bool SAL_CALL FmXGridControl::supportsMode(const OUString& Mode) throw( RuntimeException, std::exception )
 {
     Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
-    return xPeer.is() ? xPeer->supportsMode(Mode) : sal_False;
+    return xPeer.is() && xPeer->supportsMode(Mode);
 }
 
 // helper class which prevents that in the peer's header the FmGridListener must be known

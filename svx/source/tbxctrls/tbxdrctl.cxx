@@ -63,7 +63,7 @@ void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
     Reference< XLayoutManager > xLayoutMgr = getLayoutManager();
     if ( xLayoutMgr.is() )
         GetToolBox().CheckItem(
-            GetId(), xLayoutMgr->isElementVisible( m_sToolboxName ) != sal_False );
+            GetId(), xLayoutMgr->isElementVisible( m_sToolboxName ) );
 }
 
 

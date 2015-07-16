@@ -3744,7 +3744,7 @@ sal_Bool SAL_CALL FmXEditCell::isEditable() throw( RuntimeException, std::except
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    return ( m_pEditImplementation && !m_pEditImplementation->IsReadOnly() && m_pEditImplementation->GetControl().IsEnabled() ) ? sal_True : sal_False;
+    return m_pEditImplementation && !m_pEditImplementation->IsReadOnly() && m_pEditImplementation->GetControl().IsEnabled();
 }
 
 

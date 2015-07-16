@@ -550,7 +550,7 @@ void SAL_CALL CellCursor::split( sal_Int32 nColumns, sal_Int32 nRows ) throw (No
 sal_Bool SAL_CALL CellCursor::isMergeable(  ) throw (RuntimeException, std::exception)
 {
     CellPos aStart, aEnd;
-    return GetMergedSelection( aStart, aEnd ) ? sal_True : sal_False;
+    return GetMergedSelection( aStart, aEnd );
 }
 
 

@@ -321,7 +321,7 @@ sal_Bool SAL_CALL TableDesignStyle::hasByName( const OUString& rName )  throw(Ru
     const CellStyleNameMap& rMap = getCellStyleNameMap();
 
     CellStyleNameMap::const_iterator iter = rMap.find( rName );
-    return ( iter != rMap.end() ) ? sal_True : sal_False;
+    return iter != rMap.end();
 }
 
 
@@ -563,7 +563,7 @@ sal_Bool SAL_CALL TableDesignFamily::hasElements() throw(RuntimeException, std::
 {
     SolarMutexGuard aGuard;
 
-    return maDesigns.empty() ? sal_False : sal_True;
+    return !maDesigns.empty();
 }
 
 

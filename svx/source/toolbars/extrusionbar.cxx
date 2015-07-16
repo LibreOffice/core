@@ -307,7 +307,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
             com::sun::star::beans::PropertyValue aPropValue;
             aPropValue.Name = sExtrusionColor;
-            aPropValue.Value <<= bAuto ? sal_False : sal_True;
+            aPropValue.Value <<= !bAuto;
             rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
 
             if( bAuto )
