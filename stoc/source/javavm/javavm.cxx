@@ -819,7 +819,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 sal_Bool bExist = sal_False;
                 if (JFW_E_NONE == jfw_existJRE(pJavaInfo, &bExist))
                 {
-                    if (bExist == sal_False
+                    if (!bExist
                         && ! (pJavaInfo->nRequirements & JFW_REQUIRE_NEEDRESTART))
                     {
                         info.clear();

@@ -285,8 +285,8 @@ bool AdapterImpl::coerce_assign(
         }
         else
         {
-            bool succ = (sal_False != ::uno_type_assignData(
-                             pDest, pType, ret.pData, ret.pType, 0, 0, 0 ));
+            bool succ = ::uno_type_assignData(
+                             pDest, pType, ret.pData, ret.pType, 0, 0, 0 );
             ::uno_any_destruct( &ret, 0 );
             OSL_ENSURE(
                 succ, "### conversion succeeded, but assignment failed!?" );
