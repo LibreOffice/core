@@ -315,9 +315,6 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
 
 ScDBData* ScDocShell::GetAnonymousDBData(const ScRange& rRange)
 {
-    bool bHasHeader = aDocument.HasColHeader(
-        rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab());
-
     ScDBCollection* pColl = aDocument.GetDBCollection();
     if (!pColl)
         return NULL;
@@ -326,7 +323,13 @@ ScDBData* ScDocShell::GetAnonymousDBData(const ScRange& rRange)
     if (!pData)
         return NULL;
 
-    pData->SetHeader(bHasHeader);
+    if (!pData->HasHeader())
+    {
+        bool bHasHeader = aDocument.HasColHeader(
+                rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rRange.aStart.Tab());
+        pData->SetHeader(bHasHeader);
+    }
+
     return pData;
 }
 
