@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_a148bb5c",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1388,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-16T15:28:19Z",
+      "side": 1,
+      "message": "any reason why there is no getPropertyValue and assert following the setPropertyValue?",
+      "revId": "c998b7a6ed858e570d650a1344377b550b3eab78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
