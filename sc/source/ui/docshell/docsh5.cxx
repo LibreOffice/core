@@ -236,6 +236,15 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
             SCROW nOldY2;
             SCTAB nOldTab;
             pNoNameData->GetArea( nOldTab, nOldX1, nOldY1, nOldX2, nOldY2 );
+
+            // If previously bHasHeader was set and the new range starts on the
+            // same row and intersects the old column range, then don't reset
+            // bHasHeader but assume that the new range still has headers, just
+            // some are empty or numeric.
+            if (!bHasHeader && pNoNameData->HasHeader() && nTab == nOldTab && nStartRow == nOldY1 &&
+                    nStartCol <= nOldY2 && nOldY1 <= nEndCol)
+                bHasHeader = true;
+
             DBAreaDeleted( nOldTab, nOldX1, nOldY1, nOldX2, nOldY2 );
 
             pNoNameData->SetSortParam( ScSortParam() );             // Parameter zuruecksetzen
