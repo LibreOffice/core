@@ -623,7 +623,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
     if (bool(bSuspend) == m_pData->m_bSuspendState)
        return sal_True;
 
-    if ( bSuspend == sal_True )
+    if ( bSuspend )
     {
         if ( !m_pData->m_pViewShell )
         {

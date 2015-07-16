@@ -1317,7 +1317,7 @@ sal_Bool SAL_CALL SfxBaseModel::isModified() throw(RuntimeException, std::except
 {
     SfxModelGuard aGuard( *this );
 
-    return m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->IsModified() : sal_False;
+    return m_pData->m_pObjectShell.Is() && m_pData->m_pObjectShell->IsModified();
 }
 
 
@@ -1480,7 +1480,7 @@ sal_Bool SAL_CALL SfxBaseModel::hasLocation() throw(RuntimeException, std::excep
 {
     SfxModelGuard aGuard( *this );
 
-    return m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->HasName() : sal_False;
+    return m_pData->m_pObjectShell.Is() && m_pData->m_pObjectShell->HasName();
 }
 
 
@@ -1511,7 +1511,7 @@ sal_Bool SAL_CALL SfxBaseModel::isReadonly() throw(RuntimeException, std::except
 {
     SfxModelGuard aGuard( *this );
 
-    return m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->IsReadOnly() : sal_True;
+    return !m_pData->m_pObjectShell.Is() || m_pData->m_pObjectShell->IsReadOnly();
 }
 
 
