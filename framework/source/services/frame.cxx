@@ -733,10 +733,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
         // If last active frame was active ...
         // but new one is not it ...
         // ... set it as active one.
-        if  (
-                ( eActiveState          ==  E_ACTIVE    )   &&
-                ( xFrame->isActive()    ==  sal_False   )
-            )
+        if ( eActiveState == E_ACTIVE && !xFrame->isActive() )
         {
             xFrame->activate();
         }

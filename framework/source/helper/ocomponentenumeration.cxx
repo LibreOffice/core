@@ -79,7 +79,7 @@ Any SAL_CALL OComponentEnumeration::nextElement() throw(    NoSuchElementExcepti
     SolarMutexGuard g;
 
     // If we have no elements or end of enumeration is arrived ...
-    if ( hasMoreElements() == sal_False )
+    if ( !hasMoreElements() )
     {
         // .. throw an exception!
         throw NoSuchElementException();
