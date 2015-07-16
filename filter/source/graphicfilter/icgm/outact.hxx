@@ -88,7 +88,6 @@ public:
     virtual void                DrawPolyPolygon( tools::PolyPolygon& ) {} ;
     virtual void                DrawText( ::com::sun::star::awt::Point&, ::com::sun::star::awt::Size&, char*, sal_uInt32, FinalFlag ) {} ;
     virtual void                AppendText( char*, sal_uInt32, FinalFlag ) {} ;
-    virtual sal_uInt32              DrawText( TextEntry*, NodeFrameSet&, sal_uInt32 ) { return 0; } ;
     virtual void                DrawChart(){} ;
 };
 
@@ -129,7 +128,6 @@ public:
     virtual void                DrawPolyPolygon( tools::PolyPolygon& ) SAL_OVERRIDE ;
     virtual void                DrawText( ::com::sun::star::awt::Point& TextRectPos, ::com::sun::star::awt::Size& TextRectSize, char* String, sal_uInt32 StringSize, FinalFlag ) SAL_OVERRIDE ;
     virtual void                AppendText( char* String, sal_uInt32 StringSize, FinalFlag ) SAL_OVERRIDE ;
-    virtual sal_uInt32              DrawText( TextEntry*, NodeFrameSet&, sal_uInt32 ) SAL_OVERRIDE ;
     virtual void                DrawChart() SAL_OVERRIDE;
 };
 

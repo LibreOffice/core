@@ -39,9 +39,6 @@ public:
     bool FillInfo( filter_info_impl* pInfo );
     void SetInfo(const filter_info_impl* pInfo);
 
-    static OUString decodeComment( const OUString& rComment );
-    static OUString encodeComment( const OUString& rComment );
-
     VclPtr<Edit>              m_pEDFilterName;
     VclPtr<ComboBox>          m_pCBApplication;
     VclPtr<Edit>              m_pEDInterfaceName;

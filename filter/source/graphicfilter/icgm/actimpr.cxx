@@ -913,14 +913,6 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
 }
 
 
-// nCount != 0 -> Append Text
-sal_uInt32 CGMImpressOutAct::DrawText( TextEntry* /*pTextEntry*/, NodeFrameSet& /*rNodeFrameSet*/, sal_uInt32 /*nObjCount*/ )
-{
-return 0;
-}
-
-
-
 void CGMImpressOutAct::DrawChart()
 {
 }

@@ -210,9 +210,6 @@ public:
     ~Sprite();
 
     void write( SvStream& out );
-
-    sal_uInt16 getId() const { return mnId; }
-
     void addTag( Tag* pNewTag );
 
 private:

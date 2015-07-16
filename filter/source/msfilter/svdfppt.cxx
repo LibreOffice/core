@@ -3022,18 +3022,7 @@ HeaderFooterEntry::~HeaderFooterEntry()
 {
 }
 
-sal_uInt32 HeaderFooterEntry::GetMaskForInstance( sal_uInt32 nInstance )
-{
-    sal_uInt32 nRet = 0;
-    switch ( nInstance )
-    {
-        case 0 : nRet = 0x07ffff; break;
-        case 1 : nRet = 0x100000; break;
-        case 2 : nRet = 0x200000; break;
-        case 3 : nRet = 0x080000; break;
-    }
-    return nRet;
-}
+
 
 sal_uInt32 HeaderFooterEntry::IsToDisplay( sal_uInt32 nInstance )
 {
@@ -4617,19 +4606,7 @@ PPTTextCharacterStyleAtomInterpreter::PPTTextCharacterStyleAtomInterpreter()
 {
 }
 
-bool PPTTextCharacterStyleAtomInterpreter::Read( SvStream& rIn, const DffRecordHeader& rRecHd )
-{
-    rRecHd.SeekToContent( rIn );
 
-    rIn.ReadUInt16( nFlags1 )
-       .ReadUInt16( nFlags2 )
-       .ReadUInt16( nFlags3 )
-       .ReadInt32( n1 )
-       .ReadUInt16( nFontHeight )
-       .ReadInt32( nFontColor );
-
-    return true;
-}
 
 PPTTextCharacterStyleAtomInterpreter::~PPTTextCharacterStyleAtomInterpreter()
 {

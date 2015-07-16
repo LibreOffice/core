@@ -346,12 +346,6 @@ public:
     void                GetDigestFromSalt( const sal_uInt8 pSaltData[16], sal_uInt8 pDigest[16] );
 
 private:
-    void                InitKeyImpl(
-                            const sal_uInt8 pKeyData[64],
-                            const sal_uInt8 pDocId[16] );
-
-
-private:
                         MSCodec_Std97( const MSCodec_Std97& ) SAL_DELETED_FUNCTION;
     MSCodec_Std97&      operator=( const MSCodec_Std97& ) SAL_DELETED_FUNCTION;
 

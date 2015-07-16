@@ -57,11 +57,8 @@ public:
                     delete pMtf;
                 pMtf = new GDIMetaFile( rMtf );
             }
-    Bitmap              *GetBitmap() const { return pBmp; }
-    GDIMetaFile         *GetMetaFile() const { return pMtf; }
     SotClipboardFormatId GetFormat() const { return nFormat; }
     void                 SetAspect( sal_uInt16 nAsp ) { nAspect = nAsp; }
-    sal_uLong            GetAdviseFlags() const { return nAdvFlags; }
     void                 SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }
     void                 SetSize( const Size & rSize ) { aSize = rSize; }
     void                 Write( SvStream & rStm );
