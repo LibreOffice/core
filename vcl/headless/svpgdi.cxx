@@ -107,7 +107,7 @@ namespace
         if (rBuffer->getScanlineFormat() != basebmp::Format::ThirtyTwoBitTcMaskBGRX)
             return false;
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
         basegfx::B2IVector size = rBuffer->getSize();
         sal_Int32 nStride = rBuffer->getScanlineStride();
         return (cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, size.getX()) == nStride);
@@ -141,7 +141,7 @@ bool SvpSalGraphics::drawAlphaRect(long nX, long nY, long nWidth, long nHeight, 
     bool bRet = false;
     (void)nX; (void)nY; (void)nWidth; (void)nHeight; (void)nTransparency;
 #if ENABLE_CAIRO_CANVAS
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
     if (m_bUseLineColor || !m_bUseFillColor)
         return bRet;
 
