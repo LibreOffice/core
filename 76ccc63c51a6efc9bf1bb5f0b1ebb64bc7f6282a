@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_5e1d2272",
+        "filename": "sc/source/ui/unoobj/confuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-16T12:49:21Z",
+      "side": 1,
+      "message": "I think it would be better to write a distinct value here, so if we came up with other syntax values like \"first try Calc then Excel\" reading such an older document\u0027s value wouldn\u0027t interfere with new convention numbers. E.g. use 9999 or some such ;)",
+      "revId": "76ccc63c51a6efc9bf1bb5f0b1ebb64bc7f6282a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
