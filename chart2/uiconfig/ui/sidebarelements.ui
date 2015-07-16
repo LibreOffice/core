@@ -5,27 +5,51 @@
   <object class="GtkGrid" id="ChartElementsPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="row_homogeneous">True</property>
-    <property name="column_homogeneous">True</property>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkGrid" id="container">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="border_width">6</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
+        <property name="resize_mode">immediate</property>
+        <property name="row_homogeneous">True</property>
+        <property name="column_homogeneous">True</property>
         <child>
-          <object class="GtkLabel" id="label_title">
+          <object class="GtkCheckButton" id="checkbutton_subtitle">
+            <property name="label" translatable="yes">Subtitle</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Title</property>
-            <property name="justify">right</property>
-            <property name="ellipsize">end</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="checkbutton_x_axis">
+            <property name="label" translatable="yes">X-Axis</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label_axes">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Axes</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
           </packing>
         </child>
         <child>
@@ -38,14 +62,27 @@
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkCheckButton" id="checkbutton_subtitle">
-            <property name="label" translatable="yes">Subtitle</property>
+          <object class="GtkLabel" id="label_title">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Title</property>
+            <property name="justify">right</property>
+            <property name="ellipsize">end</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="checkbutton_x_axis_title">
+            <property name="label" translatable="yes">X-axis title</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -53,379 +90,278 @@
             <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">3</property>
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label_axes">
+          <object class="GtkCheckButton" id="checkbutton_y_axis">
+            <property name="label" translatable="yes">Y-Axis</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Axes</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box2">
+          <object class="GtkCheckButton" id="checkbutton_y_axis_title">
+            <property name="label" translatable="yes">Y-axis title</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_x_axis">
-                <property name="label" translatable="yes">X-Axis</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_x_axis_title">
-                <property name="label" translatable="yes">X-axis title</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">4</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box3">
+          <object class="GtkCheckButton" id="checkbutton_z_axis">
+            <property name="label" translatable="yes">Z-Axis</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_y_axis">
-                <property name="label" translatable="yes">Y-Axis</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_y_axis_title">
-                <property name="label" translatable="yes">Y-axis title</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0.47999998927116394</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">5</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box4">
+          <object class="GtkCheckButton" id="checkbutton_z_axis_title">
+            <property name="label" translatable="yes">Z-axis title</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_z_axis">
-                <property name="label" translatable="yes">Z-Axis</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0.47999998927116394</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_z_axis_title">
-                <property name="label" translatable="yes">Z-axis title</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">6</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">5</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box5">
+          <object class="GtkCheckButton" id="checkbutton_2nd_x_axis_title">
+            <property name="label" translatable="yes">2nd X-axis title</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_2nd_x_axis">
-                <property name="label" translatable="yes">2nd X-Axis</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_2nd_x_axis_title">
-                <property name="label" translatable="yes">2nd X-axis title</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">7</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">6</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box6">
+          <object class="GtkCheckButton" id="checkbutton_2nd_x_axis">
+            <property name="label" translatable="yes">2nd X-Axis</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_2nd_y_axis">
-                <property name="label" translatable="yes">2nd Y-Axis</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0.54000002145767212</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_2nd_y_axis_title">
-                <property name="label" translatable="yes">2nd Y-axis title</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">8</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">6</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="checkbutton_2nd_y_axis">
+            <property name="label" translatable="yes">2nd Y-Axis</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0.54000002145767212</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">7</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="checkbutton_2nd_y_axis_title">
+            <property name="label" translatable="yes">2nd Y-axis title</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">7</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label_legend">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="xalign">0</property>
             <property name="label" translatable="yes">Legend</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">9</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">8</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box7">
+          <object class="GtkCheckButton" id="checkbutton_legend">
+            <property name="label" translatable="yes">Show</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_legend">
-                <property name="label" translatable="yes">Show</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="comboboxtext_legend">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <items>
-                  <item translatable="yes">Bottom</item>
-                  <item translatable="yes">Left</item>
-                  <item translatable="yes">Right</item>
-                  <item translatable="yes">Top</item>
-                  <item translatable="yes">Manual</item>
-                </items>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">10</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">9</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="comboboxtext_legend">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <items>
+              <item translatable="yes">Bottom</item>
+              <item translatable="yes">Left</item>
+              <item translatable="yes">Right</item>
+              <item translatable="yes">Top</item>
+              <item translatable="yes">Manual</item>
+            </items>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">9</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label_grid">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="xalign">0</property>
             <property name="label" translatable="yes">Gridlines</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">11</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">10</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box8">
+          <object class="GtkCheckButton" id="checkbutton_gridline_vertical_major">
+            <property name="label" translatable="yes">Vertical Major</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_gridline_vertical_major">
-                <property name="label" translatable="yes">Vertical Major</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_gridline_vertical_minor">
-                <property name="label" translatable="yes">Vertical minor</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">12</property>
+            <property name="left_attach">0</property>
+            <property name="top_attach">11</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box9">
+          <object class="GtkCheckButton" id="checkbutton_gridline_vertical_minor">
+            <property name="label" translatable="yes">Vertical minor</property>
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_gridline_horizontal_major">
-                <property name="label" translatable="yes">Horizontal Major</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="yalign">0.56000000238418579</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="checkbutton_gridline_horizontal_minor">
-                <property name="label" translatable="yes">Horizontal major</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">13</property>
+            <property name="left_attach">1</property>
+            <property name="top_attach">11</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="checkbutton_gridline_horizontal_major">
+            <property name="label" translatable="yes">Horizontal Major</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0.56000000238418579</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">12</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="checkbutton_gridline_horizontal_minor">
+            <property name="label" translatable="yes">Horizontal major</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="xalign">0</property>
+            <property name="draw_indicator">True</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">12</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">label</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">10</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">label</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">8</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">label</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">label</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
           </packing>
         </child>
       </object>
