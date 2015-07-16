@@ -50,7 +50,6 @@
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
-#include <svx/fontworkgallery.hxx>
 #include <svx/modctrl.hxx>
 #include <com/sun/star/scanner/ScannerManager.hpp>
 #include <com/sun/star/container/XSet.hpp>
@@ -294,7 +293,6 @@ void SwDLL::RegisterControls()
     svx::ParaLineSpacingPopup::RegisterControl(SID_ATTR_PARA_LINESPACE, pMod);
 
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
-    svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
 
     SfxSaveAsToolBoxControl::RegisterControl(SID_SAVEASDOC, pMod );
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );

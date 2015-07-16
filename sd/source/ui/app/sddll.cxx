@@ -69,7 +69,6 @@
 #include <svx/fntctl.hxx>
 #include <svx/fntszctl.hxx>
 #include <svx/fontwork.hxx>
-#include <svx/fontworkgallery.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/grafctrl.hxx>
@@ -250,7 +249,6 @@ void SdDLL::RegisterControllers()
     SvxClipBoardControl::RegisterControl( SID_PASTE_UNFORMATTED, pMod );
 
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
-    svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
     svx::ParaLineSpacingPopup::RegisterControl(SID_ATTR_PARA_LINESPACE, pMod);
 
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );

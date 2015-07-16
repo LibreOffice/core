@@ -411,6 +411,20 @@
           <value>com.sun.star.comp.svx.FontworkCharacterSpacingController</value>
         </prop>
       </node>
+      <node oor:name="FontworkShapeTypeControl" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:FontworkShapeType</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>fontworkshapetype</value>
+        </prop>
+      </node>
       <node oor:name="c3" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ChartElementSelector</value>

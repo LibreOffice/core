@@ -33,7 +33,6 @@
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>
 #include <comphelper/types.hxx>
-#include <svx/fontworkgallery.hxx>
 #include <svx/ParaLineSpacingPopup.hxx>
 
 #include <svtools/parhtml.hxx>
@@ -217,7 +216,6 @@ void ScDLL::Init()
 
     // CustomShape extrusion controller
     SvxColorToolBoxControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
-    svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
 
     // Child Windows
 

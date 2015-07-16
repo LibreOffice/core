@@ -260,36 +260,6 @@ IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl)
 
 
 
-SFX_IMPL_TOOLBOX_CONTROL( FontWorkShapeTypeControl, SfxStringItem );
-FontWorkShapeTypeControl::FontWorkShapeTypeControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx )
-: SfxToolBoxControl( nSlotId, nId, rTbx )
-{
-    rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-    rTbx.Invalidate();
-}
-
-
-
-FontWorkShapeTypeControl::~FontWorkShapeTypeControl()
-{
-}
-
-
-
-VclPtr<SfxPopupWindow> FontWorkShapeTypeControl::CreatePopupWindow()
-{
-    OUString aSubTbxResName( "private:resource/toolbar/fontworkshapetype" );
-    createAndPositionSubToolBar( aSubTbxResName );
-    return NULL;
-}
-
-
-
-void FontWorkShapeTypeControl::Select(sal_uInt16 /*nSelectModifier*/)
-{
-
-}
-
 class FontworkAlignmentWindow : public ToolbarMenu
 {
 public:

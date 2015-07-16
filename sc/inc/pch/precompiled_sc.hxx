@@ -731,7 +731,6 @@
 #include <svx/fntszctl.hxx>
 #include <svx/fontwork.hxx>
 #include <svx/fontworkbar.hxx>
-#include <svx/fontworkgallery.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
 #include <svx/framelinkarray.hxx>
 #include <svx/gallery.hxx>

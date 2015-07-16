@@ -48,17 +48,6 @@ class SfxBindings;
 namespace svx
 {
 
-class SVX_DLLPUBLIC SAL_WARN_UNUSED FontWorkShapeTypeControl : public SfxToolBoxControl
-{
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-    FontWorkShapeTypeControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~FontWorkShapeTypeControl();
-
-    virtual void                Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
-};
-
 class SAL_WARN_UNUSED FontworkCharacterSpacingDialog : public ModalDialog
 {
     VclPtr<MetricField> m_pMtrScale;
