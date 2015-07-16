@@ -23,7 +23,7 @@ namespace apitest {
         uno::Reference< sheet::XPrintAreas > xPrintAreas(init(), UNO_QUERY_THROW);
         xPrintAreas->setPrintTitleColumns(sal_True);
 
-        CPPUNIT_ASSERT_MESSAGE("Wrong attribution at PrintTitleColumns", xPrintAreas->getPrintTitleColumns() == sal_True);
+        CPPUNIT_ASSERT_MESSAGE("Wrong attribution at PrintTitleColumns", xPrintAreas->getPrintTitleColumns());
 
     }
 
@@ -32,7 +32,7 @@ namespace apitest {
         uno::Reference< sheet::XPrintAreas > xPrintAreas(init(), UNO_QUERY_THROW);
         xPrintAreas->setPrintTitleRows(sal_True);
 
-        CPPUNIT_ASSERT_MESSAGE("Wrong attribution at PrintTitleRows", xPrintAreas->getPrintTitleRows() == sal_True);
+        CPPUNIT_ASSERT_MESSAGE("Wrong attribution at PrintTitleRows", xPrintAreas->getPrintTitleRows());
     }
 
     // the rest is right now in progress...
