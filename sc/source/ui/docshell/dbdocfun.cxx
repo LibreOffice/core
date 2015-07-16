@@ -530,6 +530,9 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     }
 
     pDBData->SetSortParam(rSortParam);
+    // Remember additional settings on anonymous database ranges.
+    if (pDBData == pDoc->GetAnonymousDBData( nTab) || pDoc->GetDBCollection()->getAnonDBs().has( pDBData))
+        pDBData->UpdateFromSortParam( rSortParam);
 
     ScRange aDirtyRange(
         aLocalParam.nCol1, nStartRow, nTab,

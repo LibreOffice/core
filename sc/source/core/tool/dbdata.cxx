@@ -332,6 +332,11 @@ void ScDBData::SetSortParam( const ScSortParam& rSortParam )
     bByRow = rSortParam.bByRow;
 }
 
+void ScDBData::UpdateFromSortParam( const ScSortParam& rSortParam )
+{
+    bHasHeader = rSortParam.bHasHeader;
+}
+
 void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
 {
     rQueryParam = *mpQueryParam;
@@ -641,6 +646,17 @@ public:
     }
 };
 
+class FindByPointer : public unary_function<ScDBData, bool>
+{
+    const ScDBData* mpDBData;
+public:
+    FindByPointer(const ScDBData* pDBData) : mpDBData(pDBData) {}
+    bool operator() (const ScDBData& r) const
+    {
+        return &r == mpDBData;
+    }
+};
+
 }
 
 ScDBCollection::NamedDBs::NamedDBs(ScDBCollection& rParent, ScDocument& rDoc) :
@@ -789,6 +805,11 @@ void ScDBCollection::AnonDBs::insert(ScDBData* p)
 bool ScDBCollection::AnonDBs::empty() const
 {
     return maDBs.empty();
+}
+
+bool ScDBCollection::AnonDBs::has( const ScDBData* p ) const
+{
+    return find_if( maDBs.begin(), maDBs.end(), FindByPointer(p)) != maDBs.end();
 }
 
 bool ScDBCollection::AnonDBs::operator== (const AnonDBs& r) const
