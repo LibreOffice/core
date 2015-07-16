@@ -693,7 +693,7 @@ inline rtl_TextEncoding INetMIME::translateFromMIME(rtl_TextEncoding
 // static
 inline bool INetMIME::isMIMECharsetEncoding(rtl_TextEncoding eEncoding)
 {
-    return ( rtl_isOctetTextEncoding(eEncoding) == sal_True );
+    return rtl_isOctetTextEncoding(eEncoding);
 }
 
 // static
