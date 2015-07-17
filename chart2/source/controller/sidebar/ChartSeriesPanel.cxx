@@ -261,6 +261,25 @@ OUString getSeriesLabel(css::uno::Reference<css::frame::XModel> xModel, const OU
     return DataSeriesHelper::getDataSeriesLabel(xSeries, xChartType->getRoleOfSequenceForSeriesLabel());
 }
 
+OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
+{
+    css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    if (!xSelectionSupplier.is())
+        return OUString();
+
+    uno::Any aAny = xSelectionSupplier->getSelection();
+    assert(aAny.hasValue());
+    OUString aCID;
+    aAny >>= aCID;
+#ifdef DBG_UTIL
+    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
+    assert(eType == OBJECTTYPE_DATA_SERIES);
+#endif
+
+    return aCID;
+}
+
 }
 
 ChartSeriesPanel::ChartSeriesPanel(
@@ -334,19 +353,7 @@ void ChartSeriesPanel::Initialize()
 
 void ChartSeriesPanel::updateData()
 {
-    css::uno::Reference<css::frame::XController> xController(mxModel->getCurrentController());
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
-    if (!xSelectionSupplier.is())
-        return;
-
-    uno::Any aAny = xSelectionSupplier->getSelection();
-    assert(aAny.hasValue());
-    OUString aCID;
-    aAny >>= aCID;
-#ifdef DBG_UTIL
-    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
-    assert(eType == OBJECTTYPE_DATA_SERIES);
-#endif
+    OUString aCID = getCID(mxModel);
     SolarMutexGuard aGuard;
     bool bLabelVisible = isDataLabelVisible(mxModel, aCID);
     mpCBLabel->Check(bLabelVisible);
@@ -406,19 +413,7 @@ void ChartSeriesPanel::modelInvalid()
 IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, CheckBox*, pCheckBox)
 {
     bool bChecked = pCheckBox->IsChecked();
-    css::uno::Reference<css::frame::XController> xController(mxModel->getCurrentController());
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
-    if (!xSelectionSupplier.is())
-        return 0;
-
-    uno::Any aAny = xSelectionSupplier->getSelection();
-    assert(aAny.hasValue());
-    OUString aCID;
-    aAny >>= aCID;
-#ifdef DBG_UTIL
-    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
-    assert(eType == OBJECTTYPE_DATA_SERIES);
-#endif
+    OUString aCID = getCID(mxModel);
     if (pCheckBox == mpCBLabel.get())
         setDataLabelVisible(mxModel, aCID, bChecked);
     else if (pCheckBox == mpCBTrendline.get())
@@ -433,20 +428,7 @@ IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, CheckBox*, pCheckBox)
 
 IMPL_LINK_NOARG(ChartSeriesPanel, RadioBtnHdl)
 {
-    css::uno::Reference<css::frame::XController> xController(mxModel->getCurrentController());
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
-    if (!xSelectionSupplier.is())
-        return 0;
-
-    uno::Any aAny = xSelectionSupplier->getSelection();
-    assert(aAny.hasValue());
-    OUString aCID;
-    aAny >>= aCID;
-#ifdef DBG_UTIL
-    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
-    assert(eType == OBJECTTYPE_DATA_SERIES);
-#endif
-
+    OUString aCID = getCID(mxModel);
     bool bChecked = mpRBPrimaryAxis->IsChecked();
 
     setAttachedAxisType(mxModel, aCID, bChecked);
@@ -456,19 +438,7 @@ IMPL_LINK_NOARG(ChartSeriesPanel, RadioBtnHdl)
 
 IMPL_LINK_NOARG(ChartSeriesPanel, ListBoxHdl)
 {
-    css::uno::Reference<css::frame::XController> xController(mxModel->getCurrentController());
-    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
-    if (!xSelectionSupplier.is())
-        return 0;
-
-    uno::Any aAny = xSelectionSupplier->getSelection();
-    assert(aAny.hasValue());
-    OUString aCID;
-    aAny >>= aCID;
-#ifdef DBG_UTIL
-    ObjectType eType = ObjectIdentifier::getObjectType(aCID);
-    assert(eType == OBJECTTYPE_DATA_SERIES);
-#endif
+    OUString aCID = getCID(mxModel);
 
     sal_Int32 nPos = mpLBLabelPlacement->GetSelectEntryPos();
     setDataLabelPlacement(mxModel, aCID, nPos);
