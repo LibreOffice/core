@@ -783,7 +783,7 @@ namespace basegfx
             const B2DPolygon& rCandidate,
             double fHalfLineWidth,
             B2DLineJoin eJoin,
-            com::sun::star::drawing::LineCap eCap,
+            css::drawing::LineCap eCap,
             double fMaxAllowedAngle,
             double fMaxPartOfEdge,
             double fMiterMinimumAngle)
@@ -828,7 +828,7 @@ namespace basegfx
                 B2DPolyPolygon aRetval;
                 const bool bIsClosed(aCandidate.isClosed());
                 const sal_uInt32 nEdgeCount(bIsClosed ? nPointCount : nPointCount - 1);
-                const bool bLineCap(!bIsClosed && com::sun::star::drawing::LineCap_BUTT != eCap);
+                const bool bLineCap(!bIsClosed && css::drawing::LineCap_BUTT != eCap);
 
                 if(nEdgeCount)
                 {
@@ -926,10 +926,10 @@ namespace basegfx
                                 createAreaGeometryForEdge(
                                     aEdge,
                                     fHalfLineWidth,
-                                    bFirst && com::sun::star::drawing::LineCap_ROUND == eCap,
-                                    bLast && com::sun::star::drawing::LineCap_ROUND == eCap,
-                                    bFirst && com::sun::star::drawing::LineCap_SQUARE == eCap,
-                                    bLast && com::sun::star::drawing::LineCap_SQUARE == eCap));
+                                    bFirst && css::drawing::LineCap_ROUND == eCap,
+                                    bLast && css::drawing::LineCap_ROUND == eCap,
+                                    bFirst && css::drawing::LineCap_SQUARE == eCap,
+                                    bLast && css::drawing::LineCap_SQUARE == eCap));
                         }
                         else
                         {

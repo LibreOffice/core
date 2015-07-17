@@ -3306,10 +3306,10 @@ namespace basegfx
             return aRetval;
         }
 
-        // converters for com::sun::star::drawing::PointSequence
+        // converters for css::drawing::PointSequence
 
         B2DPolygon UnoPointSequenceToB2DPolygon(
-            const com::sun::star::drawing::PointSequence& rPointSequenceSource,
+            const css::drawing::PointSequence& rPointSequenceSource,
             bool bCheckClosed)
         {
             B2DPolygon aRetval;
@@ -3318,8 +3318,8 @@ namespace basegfx
             if(nLength)
             {
                 aRetval.reserve(nLength);
-                const com::sun::star::awt::Point* pArray = rPointSequenceSource.getConstArray();
-                const com::sun::star::awt::Point* pArrayEnd = pArray + rPointSequenceSource.getLength();
+                const css::awt::Point* pArray = rPointSequenceSource.getConstArray();
+                const css::awt::Point* pArrayEnd = pArray + rPointSequenceSource.getLength();
 
                 for(;pArray != pArrayEnd; pArray++)
                 {
@@ -3338,7 +3338,7 @@ namespace basegfx
 
         void B2DPolygonToUnoPointSequence(
             const B2DPolygon& rPolygon,
-            com::sun::star::drawing::PointSequence& rPointSequenceRetval)
+            css::drawing::PointSequence& rPointSequenceRetval)
         {
             B2DPolygon aPolygon(rPolygon);
 
@@ -3358,12 +3358,12 @@ namespace basegfx
                 const bool bIsClosed(aPolygon.isClosed());
 
                 rPointSequenceRetval.realloc(bIsClosed ? nPointCount + 1 : nPointCount);
-                com::sun::star::awt::Point* pSequence = rPointSequenceRetval.getArray();
+                css::awt::Point* pSequence = rPointSequenceRetval.getArray();
 
                 for(sal_uInt32 b(0); b < nPointCount; b++)
                 {
                     const B2DPoint aPoint(aPolygon.getB2DPoint(b));
-                    const com::sun::star::awt::Point aAPIPoint(fround(aPoint.getX()), fround(aPoint.getY()));
+                    const css::awt::Point aAPIPoint(fround(aPoint.getX()), fround(aPoint.getY()));
 
                     *pSequence = aAPIPoint;
                     pSequence++;
@@ -3381,12 +3381,12 @@ namespace basegfx
             }
         }
 
-        // converters for com::sun::star::drawing::PointSequence and
-        // com::sun::star::drawing::FlagSequence to B2DPolygon (curved polygons)
+        // converters for css::drawing::PointSequence and
+        // css::drawing::FlagSequence to B2DPolygon (curved polygons)
 
         B2DPolygon UnoPolygonBezierCoordsToB2DPolygon(
-            const com::sun::star::drawing::PointSequence& rPointSequenceSource,
-            const com::sun::star::drawing::FlagSequence& rFlagSequenceSource,
+            const css::drawing::PointSequence& rPointSequenceSource,
+            const css::drawing::FlagSequence& rFlagSequenceSource,
             bool bCheckClosed)
         {
             const sal_uInt32 nCount((sal_uInt32)rPointSequenceSource.getLength());
@@ -3395,17 +3395,17 @@ namespace basegfx
 
             // prepare new polygon
             B2DPolygon aRetval;
-            const com::sun::star::awt::Point* pPointSequence = rPointSequenceSource.getConstArray();
-            const com::sun::star::drawing::PolygonFlags* pFlagSequence = rFlagSequenceSource.getConstArray();
+            const css::awt::Point* pPointSequence = rPointSequenceSource.getConstArray();
+            const css::drawing::PolygonFlags* pFlagSequence = rFlagSequenceSource.getConstArray();
 
             // get first point and flag
             B2DPoint aNewCoordinatePair(pPointSequence->X, pPointSequence->Y); pPointSequence++;
-            com::sun::star::drawing::PolygonFlags ePolygonFlag(*pFlagSequence); pFlagSequence++;
+            css::drawing::PolygonFlags ePolygonFlag(*pFlagSequence); pFlagSequence++;
             B2DPoint aControlA;
             B2DPoint aControlB;
 
             // first point is not allowed to be a control point
-            OSL_ENSURE(com::sun::star::drawing::PolygonFlags_CONTROL != ePolygonFlag,
+            OSL_ENSURE(css::drawing::PolygonFlags_CONTROL != ePolygonFlag,
                 "UnoPolygonBezierCoordsToB2DPolygon: Start point is a control point, illegal input polygon (!)");
 
             // add first point as start point
@@ -3422,7 +3422,7 @@ namespace basegfx
                 ePolygonFlag = *pFlagSequence;
                 pPointSequence++; pFlagSequence++; b++;
 
-                if(b < nCount && com::sun::star::drawing::PolygonFlags_CONTROL == ePolygonFlag)
+                if(b < nCount && css::drawing::PolygonFlags_CONTROL == ePolygonFlag)
                 {
                     aControlA = aNewCoordinatePair;
                     bControlA = true;
@@ -3433,7 +3433,7 @@ namespace basegfx
                     pPointSequence++; pFlagSequence++; b++;
                 }
 
-                if(b < nCount && com::sun::star::drawing::PolygonFlags_CONTROL == ePolygonFlag)
+                if(b < nCount && css::drawing::PolygonFlags_CONTROL == ePolygonFlag)
                 {
                     aControlB = aNewCoordinatePair;
                     bControlB = true;
@@ -3446,7 +3446,7 @@ namespace basegfx
 
                 // two or no control points are consumed, another one would be an error.
                 // It's also an error if only one control point was read
-                SAL_WARN_IF(com::sun::star::drawing::PolygonFlags_CONTROL == ePolygonFlag || bControlA != bControlB,
+                SAL_WARN_IF(css::drawing::PolygonFlags_CONTROL == ePolygonFlag || bControlA != bControlB,
                     "basegfx", "UnoPolygonBezierCoordsToB2DPolygon: Illegal source polygon (!)");
 
                 // the previous writes used the B2DPolyPoygon -> tools::PolyPolygon converter
@@ -3489,8 +3489,8 @@ namespace basegfx
 
         void B2DPolygonToUnoPolygonBezierCoords(
             const B2DPolygon& rPolygon,
-            com::sun::star::drawing::PointSequence& rPointSequenceRetval,
-            com::sun::star::drawing::FlagSequence& rFlagSequenceRetval)
+            css::drawing::PointSequence& rPointSequenceRetval,
+            css::drawing::FlagSequence& rFlagSequenceRetval)
         {
             const sal_uInt32 nPointCount(rPolygon.count());
 
@@ -3508,8 +3508,8 @@ namespace basegfx
                     {
                         // prepare target data. The real needed number of target points (and flags)
                         // could only be calculated by using two loops, so use dynamic memory
-                        std::vector< com::sun::star::awt::Point > aCollectPoints;
-                        std::vector< com::sun::star::drawing::PolygonFlags > aCollectFlags;
+                        std::vector< css::awt::Point > aCollectPoints;
+                        std::vector< css::drawing::PolygonFlags > aCollectFlags;
 
                         // reserve maximum creatable points
                         const sal_uInt32 nMaxTargetCount((nLoopCount * 3) + 1);
@@ -3525,10 +3525,10 @@ namespace basegfx
                             // add current point (always) and remember StartPointIndex for evtl. later corrections
                             const sal_uInt32 nStartPointIndex(aCollectPoints.size());
                             aCollectPoints.push_back(
-                                com::sun::star::awt::Point(
+                                css::awt::Point(
                                     fround(aBezierSegment.getStartPoint().getX()),
                                     fround(aBezierSegment.getStartPoint().getY())));
-                            aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_NORMAL);
+                            aCollectFlags.push_back(css::drawing::PolygonFlags_NORMAL);
 
                             // prepare next segment
                             const sal_uInt32 nNextIndex((a + 1) % nPointCount);
@@ -3540,16 +3540,16 @@ namespace basegfx
                             {
                                 // if bezier is used, add always two control points due to the old schema
                                 aCollectPoints.push_back(
-                                    com::sun::star::awt::Point(
+                                    css::awt::Point(
                                         fround(aBezierSegment.getControlPointA().getX()),
                                         fround(aBezierSegment.getControlPointA().getY())));
-                                aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_CONTROL);
+                                aCollectFlags.push_back(css::drawing::PolygonFlags_CONTROL);
 
                                 aCollectPoints.push_back(
-                                    com::sun::star::awt::Point(
+                                    css::awt::Point(
                                         fround(aBezierSegment.getControlPointB().getX()),
                                         fround(aBezierSegment.getControlPointB().getY())));
-                                aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_CONTROL);
+                                aCollectFlags.push_back(css::drawing::PolygonFlags_CONTROL);
                             }
 
                             // test continuity with previous control point to set flag value
@@ -3559,11 +3559,11 @@ namespace basegfx
 
                                 if(B2VectorContinuity::C1 == eCont)
                                 {
-                                    aCollectFlags[nStartPointIndex] = com::sun::star::drawing::PolygonFlags_SMOOTH;
+                                    aCollectFlags[nStartPointIndex] = css::drawing::PolygonFlags_SMOOTH;
                                 }
                                 else if(B2VectorContinuity::C2 == eCont)
                                 {
-                                    aCollectFlags[nStartPointIndex] = com::sun::star::drawing::PolygonFlags_SYMMETRIC;
+                                    aCollectFlags[nStartPointIndex] = css::drawing::PolygonFlags_SYMMETRIC;
                                 }
                             }
 
@@ -3575,17 +3575,17 @@ namespace basegfx
                         {
                             // add first point again as closing point due to old definition
                             aCollectPoints.push_back(aCollectPoints[0]);
-                            aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_NORMAL);
+                            aCollectFlags.push_back(css::drawing::PolygonFlags_NORMAL);
                         }
                         else
                         {
                             // add last point as closing point
                             const B2DPoint aClosingPoint(rPolygon.getB2DPoint(nPointCount - 1L));
                             aCollectPoints.push_back(
-                                com::sun::star::awt::Point(
+                                css::awt::Point(
                                     fround(aClosingPoint.getX()),
                                     fround(aClosingPoint.getY())));
-                            aCollectFlags.push_back(com::sun::star::drawing::PolygonFlags_NORMAL);
+                            aCollectFlags.push_back(css::drawing::PolygonFlags_NORMAL);
                         }
 
                         // copy collected data to target arrays
@@ -3594,8 +3594,8 @@ namespace basegfx
 
                         rPointSequenceRetval.realloc((sal_Int32)nTargetCount);
                         rFlagSequenceRetval.realloc((sal_Int32)nTargetCount);
-                        com::sun::star::awt::Point* pPointSequence = rPointSequenceRetval.getArray();
-                        com::sun::star::drawing::PolygonFlags* pFlagSequence = rFlagSequenceRetval.getArray();
+                        css::awt::Point* pPointSequence = rPointSequenceRetval.getArray();
+                        css::drawing::PolygonFlags* pFlagSequence = rFlagSequenceRetval.getArray();
 
                         for(sal_uInt32 a(0); a < nTargetCount; a++)
                         {
@@ -3614,18 +3614,18 @@ namespace basegfx
                     rPointSequenceRetval.realloc((sal_Int32)nTargetCount);
                     rFlagSequenceRetval.realloc((sal_Int32)nTargetCount);
 
-                    com::sun::star::awt::Point* pPointSequence = rPointSequenceRetval.getArray();
-                    com::sun::star::drawing::PolygonFlags* pFlagSequence = rFlagSequenceRetval.getArray();
+                    css::awt::Point* pPointSequence = rPointSequenceRetval.getArray();
+                    css::drawing::PolygonFlags* pFlagSequence = rFlagSequenceRetval.getArray();
 
                     for(sal_uInt32 a(0); a < nPointCount; a++)
                     {
                         const B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
-                        const com::sun::star::awt::Point aAPIPoint(
+                        const css::awt::Point aAPIPoint(
                             fround(aB2DPoint.getX()),
                             fround(aB2DPoint.getY()));
 
                         *pPointSequence = aAPIPoint;
-                        *pFlagSequence = com::sun::star::drawing::PolygonFlags_NORMAL;
+                        *pFlagSequence = css::drawing::PolygonFlags_NORMAL;
                         pPointSequence++;
                         pFlagSequence++;
                     }
@@ -3634,7 +3634,7 @@ namespace basegfx
                     {
                         // add first point as closing point
                         *pPointSequence = *rPointSequenceRetval.getConstArray();
-                        *pFlagSequence = com::sun::star::drawing::PolygonFlags_NORMAL;
+                        *pFlagSequence = css::drawing::PolygonFlags_NORMAL;
                     }
                 }
             }

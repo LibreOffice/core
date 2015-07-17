@@ -482,9 +482,9 @@ namespace basegfx
             }
         }
 
-/// converters for com::sun::star::drawing::PolyPolygonShape3D
+/// converters for css::drawing::PolyPolygonShape3D
         B3DPolyPolygon UnoPolyPolygonShape3DToB3DPolyPolygon(
-            const com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygonShape3DSource,
+            const css::drawing::PolyPolygonShape3D& rPolyPolygonShape3DSource,
             bool bCheckClosed)
         {
             B3DPolyPolygon aRetval;
@@ -496,9 +496,9 @@ namespace basegfx
                     && nOuterSequenceCount == rPolyPolygonShape3DSource.SequenceZ.getLength(),
                     "UnoPolyPolygonShape3DToB3DPolygon: Not all double sequences have the same length (!)");
 
-                const com::sun::star::drawing::DoubleSequence* pInnerSequenceX = rPolyPolygonShape3DSource.SequenceX.getConstArray();
-                const com::sun::star::drawing::DoubleSequence* pInnerSequenceY = rPolyPolygonShape3DSource.SequenceY.getConstArray();
-                const com::sun::star::drawing::DoubleSequence* pInnerSequenceZ = rPolyPolygonShape3DSource.SequenceZ.getConstArray();
+                const css::drawing::DoubleSequence* pInnerSequenceX = rPolyPolygonShape3DSource.SequenceX.getConstArray();
+                const css::drawing::DoubleSequence* pInnerSequenceY = rPolyPolygonShape3DSource.SequenceY.getConstArray();
+                const css::drawing::DoubleSequence* pInnerSequenceZ = rPolyPolygonShape3DSource.SequenceZ.getConstArray();
 
                 for(sal_Int32 a(0); a < nOuterSequenceCount; a++)
                 {
@@ -537,7 +537,7 @@ namespace basegfx
 
         void B3DPolyPolygonToUnoPolyPolygonShape3D(
             const B3DPolyPolygon& rPolyPolygonSource,
-            com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygonShape3DRetval)
+            css::drawing::PolyPolygonShape3D& rPolyPolygonShape3DRetval)
         {
             const sal_uInt32 nPolygonCount(rPolyPolygonSource.count());
 
@@ -547,9 +547,9 @@ namespace basegfx
                 rPolyPolygonShape3DRetval.SequenceY.realloc(nPolygonCount);
                 rPolyPolygonShape3DRetval.SequenceZ.realloc(nPolygonCount);
 
-                com::sun::star::drawing::DoubleSequence* pOuterSequenceX = rPolyPolygonShape3DRetval.SequenceX.getArray();
-                com::sun::star::drawing::DoubleSequence* pOuterSequenceY = rPolyPolygonShape3DRetval.SequenceY.getArray();
-                com::sun::star::drawing::DoubleSequence* pOuterSequenceZ = rPolyPolygonShape3DRetval.SequenceZ.getArray();
+                css::drawing::DoubleSequence* pOuterSequenceX = rPolyPolygonShape3DRetval.SequenceX.getArray();
+                css::drawing::DoubleSequence* pOuterSequenceY = rPolyPolygonShape3DRetval.SequenceY.getArray();
+                css::drawing::DoubleSequence* pOuterSequenceZ = rPolyPolygonShape3DRetval.SequenceZ.getArray();
 
                 for(sal_uInt32 a(0); a < nPolygonCount; a++)
                 {
