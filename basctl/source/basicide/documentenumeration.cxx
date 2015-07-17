@@ -57,10 +57,10 @@ namespace basctl { namespace docs {
     // DocumentEnumeration_Data
     struct DocumentEnumeration_Data
     {
-        Reference< com::sun::star::uno::XComponentContext > aContext;
+        Reference< css::uno::XComponentContext > aContext;
         const IDocumentDescriptorFilter*    pFilter;
 
-        DocumentEnumeration_Data( Reference< com::sun::star::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter )
+        DocumentEnumeration_Data( Reference< css::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter )
             :aContext( _rContext )
             ,pFilter( _pFilter )
         {
@@ -68,7 +68,7 @@ namespace basctl { namespace docs {
     };
 
     // DocumentEnumeration
-    DocumentEnumeration::DocumentEnumeration( Reference< com::sun::star::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter )
+    DocumentEnumeration::DocumentEnumeration( Reference< css::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter )
         :m_pData( new DocumentEnumeration_Data( _rContext, _pFilter ) )
     {
     }

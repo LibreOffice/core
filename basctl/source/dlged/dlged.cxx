@@ -176,8 +176,8 @@ bool DlgEditor::RemarkDialog()
 
 DlgEditor::DlgEditor (
     vcl::Window& rWindow_, DialogWindowLayout& rLayout_,
-    com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel,
-    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> xDialogModel
+    css::uno::Reference<css::frame::XModel> const& xModel,
+    css::uno::Reference<css::container::XNameContainer> xDialogModel
 )
     :pHScroll(NULL)
     ,pVScroll(NULL)
@@ -363,7 +363,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
     pDlgEdForm->StartListening();
 
     // create controls
-    Reference< ::com::sun::star::container::XNameAccess > xNameAcc( m_xUnoControlDialogModel, UNO_QUERY );
+    Reference< css::container::XNameAccess > xNameAcc( m_xUnoControlDialogModel, UNO_QUERY );
     if ( xNameAcc.is() )
     {
         // get sequence of control names
@@ -381,7 +381,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
             // get tab index
             sal_Int16 nTabIndex = -1;
             Any aCtrl = xNameAcc->getByName( aName );
-            Reference< ::com::sun::star::beans::XPropertySet > xPSet;
+            Reference< css::beans::XPropertySet > xPSet;
                aCtrl >>= xPSet;
             if ( xPSet.is() )
                 xPSet->getPropertyValue( DLGED_PROP_TABINDEX ) >>= nTabIndex;
@@ -394,7 +394,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
         for ( IndexToNameMap::iterator aIt = aIndexToNameMap.begin(); aIt != aIndexToNameMap.end(); ++aIt )
         {
             Any aCtrl = xNameAcc->getByName( aIt->second );
-            Reference< ::com::sun::star::awt::XControlModel > xCtrlModel;
+            Reference< css::awt::XControlModel > xCtrlModel;
             aCtrl >>= xCtrlModel;
             DlgEdObj* pCtrlObj = new DlgEdObj();
             pCtrlObj->SetUnoControlModel( xCtrlModel );
@@ -905,7 +905,7 @@ void DlgEditor::Paste()
                 }
 
                 // get control models from clipboard dialog model
-                Reference< ::com::sun::star::container::XNameAccess > xNameAcc( xClipDialogModel, UNO_QUERY );
+                Reference< css::container::XNameAccess > xNameAcc( xClipDialogModel, UNO_QUERY );
                 if ( xNameAcc.is() )
                 {
                        Sequence< OUString > aNames = xNameAcc->getElementNames();
@@ -921,7 +921,7 @@ void DlgEditor::Paste()
                     for( sal_uInt32 n = 0; n < nCtrls; n++ )
                     {
                            Any aA = xNameAcc->getByName( pNames[n] );
-                        Reference< ::com::sun::star::awt::XControlModel > xCM;
+                        Reference< css::awt::XControlModel > xCM;
                            aA >>= xCM;
 
                         // clone the control model
@@ -1023,10 +1023,10 @@ void DlgEditor::Delete()
             }
 
             // remove control from dialog model
-            Reference< ::com::sun::star::container::XNameAccess > xNameAcc(pDlgEdObj->GetDlgEdForm()->GetUnoControlModel(), UNO_QUERY );
+            Reference< css::container::XNameAccess > xNameAcc(pDlgEdObj->GetDlgEdForm()->GetUnoControlModel(), UNO_QUERY );
             if ( xNameAcc.is() && xNameAcc->hasByName(aName) )
             {
-                Reference< ::com::sun::star::container::XNameContainer > xCont(xNameAcc, UNO_QUERY );
+                Reference< css::container::XNameContainer > xCont(xNameAcc, UNO_QUERY );
                 if ( xCont.is() )
                 {
                     if( xCont->hasByName( aName ) )

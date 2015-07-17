@@ -32,15 +32,14 @@ class DlgEditor;
 
 class LocalizationMgr
 {
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::resource::XStringResourceManager >  m_xStringResourceManager;
+    css::uno::Reference< css::resource::XStringResourceManager > m_xStringResourceManager;
 
     Shell*                                                      m_pShell;
 
     ScriptDocument                                              m_aDocument;
     OUString                                                    m_aLibName;
 
-    ::com::sun::star::lang::Locale                              m_aLocaleBeforeBasicStart;
+    css::lang::Locale                                           m_aLocaleBeforeBasicStart;
 
     enum HandleResourceMode
     {
@@ -53,10 +52,11 @@ class LocalizationMgr
         COPY_RESOURCES
     };
     static sal_Int32 implHandleControlResourceProperties(const css::uno::Any& rControlAny,
-            const OUString& aDialogName, const OUString& aCtrlName,
-            ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >
-            xStringResourceManager, ::com::sun::star::uno::Reference< ::com::sun::star::resource::
-            XStringResourceResolver > xSourceStringResolver, HandleResourceMode eMode );
+            const OUString& aDialogName,
+            const OUString& aCtrlName,
+            css::uno::Reference< css::resource::XStringResourceManager > xStringResourceManager,
+            css::uno::Reference< css::resource::XStringResourceResolver > xSourceStringResolver,
+            HandleResourceMode eMode );
 
     void enableResourceForAllLibraryDialogs()
     {
@@ -70,10 +70,9 @@ class LocalizationMgr
 
 public:
     LocalizationMgr(Shell*, ScriptDocument const&, OUString const& aLibName,
-        const ::com::sun::star::uno::Reference
-            < ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager );
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::resource::XStringResourceManager >getStringResourceManager()
+        const css::uno::Reference < css::resource::XStringResourceManager >& xStringResourceManager );
+
+    css::uno::Reference< css::resource::XStringResourceManager >getStringResourceManager()
     {
         return m_xStringResourceManager;
     }
@@ -82,11 +81,11 @@ public:
 
     void handleTranslationbar();
 
-    void handleAddLocales( const ::com::sun::star::uno::Sequence
-        < ::com::sun::star::lang::Locale >& aLocaleSeq );
+    void handleAddLocales( const css::uno::Sequence
+        < css::lang::Locale >& aLocaleSeq );
 
-    void handleRemoveLocales( const ::com::sun::star::uno::Sequence
-        < ::com::sun::star::lang::Locale >& aLocaleSeq );
+    void handleRemoveLocales( const css::uno::Sequence
+        < css::lang::Locale >& aLocaleSeq );
 
     void handleSetDefaultLocale(const css::lang::Locale& rLocale);
 
@@ -106,43 +105,42 @@ public:
         const css::uno::Any& rControlAny, const OUString& aCtrlName);
 
     static void setStringResourceAtDialog( const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aDlgName,
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
+        css::uno::Reference< css::container::XNameContainer > xDialogModel );
 
     static void renameStringResourceIDs( const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aDlgName,
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
+        css::uno::Reference< css::container::XNameContainer > xDialogModel );
 
     static void removeResourceForDialog( const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aDlgName,
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
+        css::uno::Reference< css::container::XNameContainer > xDialogModel );
 
-    static ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >
-        getStringResourceFromDialogLibrary( ::com::sun::star::uno::Reference
-            < ::com::sun::star::container::XNameContainer > xDialogLib );
+    static css::uno::Reference< css::resource::XStringResourceManager >
+        getStringResourceFromDialogLibrary( css::uno::Reference
+            < css::container::XNameContainer > xDialogLib );
 
     // Clipboard / Drag & Drop
     static void resetResourceForDialog(
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel,
-        ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager );
+        css::uno::Reference< css::container::XNameContainer > xDialogModel,
+        css::uno::Reference< css::resource::XStringResourceManager > xStringResourceManager );
 
     static void setResourceIDsForDialog(
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel,
-        ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager );
+        css::uno::Reference< css::container::XNameContainer > xDialogModel,
+        css::uno::Reference< css::resource::XStringResourceManager > xStringResourceManager );
 
     static void copyResourcesForPastedEditorObject( DlgEditor* pEditor,
         const css::uno::Any& rControlAny, const OUString& aCtrlName,
-        ::com::sun::star::uno::Reference< ::com::sun::star::resource::
-        XStringResourceResolver > xSourceStringResolver );
+        css::uno::Reference< css::resource::XStringResourceResolver > xSourceStringResolver );
 
     static void copyResourceForDroppedDialog(
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel,
+        css::uno::Reference< css::container::XNameContainer > xDialogModel,
         const OUString& aDialogName,
-        ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager,
-        ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > xSourceStringResolver );
+        css::uno::Reference< css::resource::XStringResourceManager > xStringResourceManager,
+        css::uno::Reference< css::resource::XStringResourceResolver > xSourceStringResolver );
 
     static void copyResourceForDialog(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xDialogModel,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::resource::
+        const css::uno::Reference< css::container::XNameContainer >& xDialogModel,
+        const css::uno::Reference< css::resource::
             XStringResourceResolver >& xSourceStringResolver,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::resource::
+        const css::uno::Reference< css::resource::
             XStringResourceManager >& xTargetStringResourceManager );
 };
 

@@ -75,7 +75,7 @@ void LocalizationMgr::handleTranslationbar ()
         ( m_pShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     if ( xFrameProps.is() )
     {
-        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        Reference< css::frame::XLayoutManager > xLayoutManager;
         uno::Any a = xFrameProps->getPropertyValue( aLayoutManagerName );
         a >>= xLayoutManager;
         if ( xLayoutManager.is() )

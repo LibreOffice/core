@@ -34,7 +34,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
 Renderable::Renderable (BaseWindow* pWin)
-: cppu::WeakComponentImplHelper< com::sun::star::view::XRenderable >( maMutex )
+: cppu::WeakComponentImplHelper< css::view::XRenderable >( maMutex )
 , mpWindow( pWin )
 {
     ResStringArray aStrings( IDEResId( RID_PRINTDLG_STRLIST )  );

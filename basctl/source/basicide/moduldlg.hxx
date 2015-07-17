@@ -240,7 +240,7 @@ protected:
     void                NewLib();
     void                InsertLib();
     void                implExportLib( const OUString& aLibName, const OUString& aTargetURL,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
+                                       const css::uno::Reference< css::task::XInteractionHandler >& Handler );
     void                Export();
     void                ExportAsPackage( const OUString& aLibName );
     void                ExportAsBasic( const OUString& aLibName );
@@ -248,7 +248,7 @@ protected:
     void                FillListBox();
     void                InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                SetCurLib();
-    SvTreeListEntry*        ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos );
+    SvTreeListEntry*    ImpInsertLibEntry( const OUString& rLibName, sal_uLong nPos );
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual void        DeactivatePage() SAL_OVERRIDE;
 

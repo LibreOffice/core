@@ -30,28 +30,28 @@ namespace basctl
 // DlgEdTransferableImpl
 
 
-typedef ::cppu::WeakImplHelper< ::com::sun::star::datatransfer::XTransferable, ::com::sun::star::datatransfer::clipboard::XClipboardOwner > DlgEdTransferableHelper;
+typedef ::cppu::WeakImplHelper< css::datatransfer::XTransferable, css::datatransfer::clipboard::XClipboardOwner > DlgEdTransferableHelper;
 
 class DlgEdTransferableImpl : public DlgEdTransferableHelper
 {
 private:
-    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > m_SeqFlavors;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_SeqData;
+    css::uno::Sequence< css::datatransfer::DataFlavor > m_SeqFlavors;
+    css::uno::Sequence< css::uno::Any > m_SeqData;
 
 protected:
-    static bool compareDataFlavors( const ::com::sun::star::datatransfer::DataFlavor& lFlavor, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    static bool compareDataFlavors( const css::datatransfer::DataFlavor& lFlavor, const css::datatransfer::DataFlavor& rFlavor );
 
 public:
-    DlgEdTransferableImpl( const ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >& aSeqFlavors, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aSeqData );
+    DlgEdTransferableImpl( const css::uno::Sequence< css::datatransfer::DataFlavor >& aSeqFlavors, const css::uno::Sequence< css::uno::Any >& aSeqData );
     virtual ~DlgEdTransferableImpl();
 
     // XTransferable
-    virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) throw(css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XClipboardOwner
-    virtual void SAL_CALL lostOwnership( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& xClipboard, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL lostOwnership( const css::uno::Reference< css::datatransfer::clipboard::XClipboard >& xClipboard, const css::uno::Reference< css::datatransfer::XTransferable >& xTrans ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 } // namespace basctl

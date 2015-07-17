@@ -33,7 +33,7 @@ class DlgEdObj;
 // DlgEdPropListenerImpl
 
 
-typedef ::cppu::WeakImplHelper< ::com::sun::star::beans::XPropertyChangeListener > PropertyChangeListenerHelper;
+typedef ::cppu::WeakImplHelper< css::beans::XPropertyChangeListener > PropertyChangeListenerHelper;
 
 class DlgEdPropListenerImpl: public PropertyChangeListenerHelper
 {
@@ -45,10 +45,10 @@ public:
     virtual ~DlgEdPropListenerImpl();
 
     // XEventListener
-    virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
@@ -56,7 +56,7 @@ public:
 // DlgEdEvtContListenerImpl
 
 
-typedef ::cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener > ContainerListenerHelper;
+typedef ::cppu::WeakImplHelper< css::container::XContainerListener > ContainerListenerHelper;
 
 class DlgEdEvtContListenerImpl: public ContainerListenerHelper
 {
@@ -68,12 +68,12 @@ public:
     virtual ~DlgEdEvtContListenerImpl();
 
     // XEventListener
-    virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XContainerListener
-    virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 } // namespace basctl

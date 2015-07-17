@@ -95,7 +95,7 @@ namespace basctl
             @param _rxDocument
                 the document. Must not be <NULL/>.
         */
-        explicit    ScriptDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
+        explicit    ScriptDocument( const css::uno::Reference< css::frame::XModel >& _rxDocument );
 
         /// copy constructor
                     ScriptDocument( const ScriptDocument& _rSource );
@@ -205,7 +205,7 @@ namespace basctl
             Must not be used when the instance operates on the application-wide
             Basic/Dialog libraries.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        css::uno::Reference< css::frame::XModel >
                     getDocument() const;
 
         /** returns the UNO component representing the document which the instance operates on
@@ -213,14 +213,14 @@ namespace basctl
             May be used when the instance operates on the application-wide
             Basic/Dialog libraries, in this case it returns <NULL/>.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        css::uno::Reference< css::frame::XModel >
                     getDocumentOrNull() const;
 
         /** returns the Basic or Dialog library container of the document
 
             If the document is not valid, <NULL/> is returned.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
+        css::uno::Reference< css::script::XLibraryContainer >
                     getLibraryContainer( LibraryContainerType _eType ) const;
 
         /** determines whether there exists a library of the given type, with the given name
@@ -239,7 +239,7 @@ namespace basctl
             @throws NoSuchElementException
                 if there is no script library with the given name
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+        css::uno::Reference< css::container::XNameContainer >
                     getLibrary( LibraryContainerType _eType, const OUString& _rLibName, bool _bLoadLibrary ) const;
 
         /** creates a script or dialog library in the document, or returns an existing one
@@ -247,12 +247,12 @@ namespace basctl
             If <code>_rLibName</code> denotes an existing library which does not need to be created,
             then this library will automatically be loaded, and then returned.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
+        css::uno::Reference< css::container::XNameContainer >
                     getOrCreateLibrary( LibraryContainerType _eType, const OUString& _rLibName ) const;
 
         /** returns the names of the modules in a given script or dialog library of the document
         */
-        ::com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
                     getObjectNames( LibraryContainerType _eType, const OUString& _rLibName ) const;
 
         /** retrieves a name for a newly to be created module or dialog
@@ -264,7 +264,7 @@ namespace basctl
         void        loadLibraryIfExists( LibraryContainerType _eType, const OUString& _rLibrary );
 
         /// retrieves the (combined) names of all script and dialog libraries
-        ::com::sun::star::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
                     getLibraryNames() const;
 
         /** removes a given script module from the document
@@ -366,7 +366,7 @@ namespace basctl
         bool        getDialog(
                         const OUString& _rLibName,
                         const OUString& _rDialogName,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& _out_rDialogProvider
+                        css::uno::Reference< css::io::XInputStreamProvider >& _out_rDialogProvider
                     ) const;
 
         /** renames a dialog
@@ -385,7 +385,7 @@ namespace basctl
                         const OUString& _rLibName,
                         const OUString& _rOldName,
                         const OUString& _rNewName,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxExistingDialogModel
+                        const css::uno::Reference< css::container::XNameContainer >& _rxExistingDialogModel
                     ) const;
 
         /** create a dialog
@@ -401,7 +401,7 @@ namespace basctl
         bool        createDialog(
                         const OUString& _rLibName,
                         const OUString& _rDialogName,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& _out_rDialogProvider
+                        css::uno::Reference< css::io::XInputStreamProvider >& _out_rDialogProvider
                     ) const;
 
         /** inserts a given dialog into a given library
@@ -420,7 +420,7 @@ namespace basctl
         bool        insertDialog(
                         const OUString& _rLibName,
                         const OUString& _rDialogName,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& _rDialogProvider
+                        const css::uno::Reference< css::io::XInputStreamProvider >& _rDialogProvider
                     ) const;
 
         /** determines whether the document is read-only
@@ -458,7 +458,7 @@ namespace basctl
                 <code>isApplication</code> returns <FALSE/>
         */
         bool        saveDocument(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >& _rxStatusIndicator
+                        const css::uno::Reference< css::task::XStatusIndicator >& _rxStatusIndicator
                     ) const;
 
         /// returns the location of a library given by name

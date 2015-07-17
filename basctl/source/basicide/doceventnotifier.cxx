@@ -196,7 +196,7 @@ namespace basctl
                 xBroadcaster.set( m_xModel, UNO_QUERY_THROW );
             else
             {
-                Reference< com::sun::star::uno::XComponentContext > aContext(
+                Reference< css::uno::XComponentContext > aContext(
                     comphelper::getProcessComponentContext() );
                 xBroadcaster = theGlobalEventBroadcaster::get(aContext);
             }

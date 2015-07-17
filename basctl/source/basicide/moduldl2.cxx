@@ -80,7 +80,7 @@ public:
     {
     }
 
-    virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& rRequest ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& rRequest ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         if ( m_xHandler.is() )
         {

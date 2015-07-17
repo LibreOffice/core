@@ -72,21 +72,21 @@ friend class CodeCompleteListBox;
 private:
     class ChangesListener;
 
-    boost::scoped_ptr<ExtTextView> pEditView;
+    boost::scoped_ptr<ExtTextView>   pEditView;
     boost::scoped_ptr<ExtTextEngine> pEditEngine;
-    ModulWindow&    rModulWindow;
+    ModulWindow&                     rModulWindow;
 
     rtl::Reference< ChangesListener > listener_;
-    osl::Mutex mutex_;
-    com::sun::star::uno::Reference< com::sun::star::beans::XMultiPropertySet >
-        notifier_;
+    osl::Mutex                        mutex_;
+    css::uno::Reference< css::beans::XMultiPropertySet >
+                                      notifier_;
 
     long            nCurTextWidth;
 
     SyntaxHighlighter   aHighlighter;
-    Idle            aSyntaxIdle;
+    Idle                aSyntaxIdle;
     typedef std::set<sal_uInt16> SyntaxLineSet;
-    SyntaxLineSet   aSyntaxLineTable;
+    SyntaxLineSet       aSyntaxLineTable;
     DECL_LINK_TYPED(SyntaxTimerHdl, Idle *, void);
 
     // progress bar
@@ -105,9 +105,7 @@ private:
     bool            bDoSyntaxHighlight;
     bool            bDelayHighlight;
 
-    virtual
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-    GetComponentInterface(bool bCreate = true) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::awt::XWindowPeer > GetComponentInterface(bool bCreate = true) SAL_OVERRIDE;
     CodeCompleteDataCache aCodeCompleteCache;
     VclPtr<CodeCompleteWindow> pCodeCompleteWnd;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number

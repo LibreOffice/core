@@ -45,13 +45,13 @@ class PropBrw : public DockingWindow, public SfxListener, public SfxBroadcaster
 private:
     bool        m_bInitialStateChange;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 >
+    css::uno::Reference< css::frame::XFrame2 >
                     m_xMeAsFrame;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+    css::uno::Reference< css::beans::XPropertySet >
                     m_xBrowserController;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
+    css::uno::Reference< css::awt::XWindow >
                     m_xBrowserComponentWindow;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    css::uno::Reference< css::frame::XModel >
                     m_xContextDocument;
 
 protected:
@@ -59,18 +59,16 @@ protected:
     virtual void Resize() SAL_OVERRIDE;
     virtual bool Close() SAL_OVERRIDE;
 
-    typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> > InterfaceArray;
+    typedef std::vector< css::uno::Reference< css::uno::XInterface> > InterfaceArray;
 
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
+    static css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >
         CreateMultiSelectionSequence( const SdrMarkList& _rMarkList );
-    void implSetNewObjectSequence( const ::com::sun::star::uno::Sequence
-        < ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rObjectSeq );
+    void implSetNewObjectSequence( const css::uno::Sequence
+        < css::uno::Reference< css::uno::XInterface > >& _rObjectSeq );
 
-    void implSetNewObject(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
+    void implSetNewObject( const css::uno::Reference< css::beans::XPropertySet >& _rxObject);
 
-    static OUString GetHeadlineName(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
+    static OUString GetHeadlineName( const css::uno::Reference< css::beans::XPropertySet >& _rxObject);
 
 public:
     explicit PropBrw (DialogWindowLayout&);
@@ -83,7 +81,7 @@ public:
     SdrView*        GetCurView() const { return pView; }
 
 private:
-    void    ImplUpdate( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument, SdrView* pView );
+    void    ImplUpdate( const css::uno::Reference< css::frame::XModel >& _rxContextDocument, SdrView* pView );
     void    ImplDestroyController();
     void    ImplReCreateController();
 };

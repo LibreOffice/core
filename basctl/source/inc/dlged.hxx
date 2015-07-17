@@ -114,14 +114,14 @@ private:
     DlgEdPage*          pDlgEdPage;  // never nullptr
     boost::scoped_ptr<DlgEdView> pDlgEdView; // never nullptr
     DlgEdForm*          pDlgEdForm; // never nullptr
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >     m_xUnoControlDialogModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xControlContainer;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xSupplier;
+    css::uno::Reference< css::container::XNameContainer >     m_xUnoControlDialogModel;
+    css::uno::Reference< css::awt::XControlContainer >        m_xControlContainer;
+    css::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
+    css::uno::Sequence< css::datatransfer::DataFlavor >       m_ClipboardDataFlavorsResource;
+    css::uno::Reference< css::util::XNumberFormatsSupplier >  m_xSupplier;
     boost::scoped_ptr<DlgEdFactory> pObjFac; // never nullptr
-    vcl::Window&             rWindow; // DialogWindow
-    boost::scoped_ptr<DlgEdFunc> pFunc;
+    vcl::Window&                    rWindow; // DialogWindow
+    boost::scoped_ptr<DlgEdFunc>    pFunc;
     DialogWindowLayout& rLayout;
     Mode                eMode;
     sal_uInt16          eActObj;
@@ -134,13 +134,13 @@ private:
     bool                bDialogModelChanged;
     Idle                aMarkIdle;
     long                mnPaintGuard;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
+    css::uno::Reference< css::frame::XModel > m_xDocument;
 
 public:
     DlgEditor (
         vcl::Window&, DialogWindowLayout&,
-        com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& xModel,
-        com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> xDialogModel
+        css::uno::Reference<css::frame::XModel> const& xModel,
+        css::uno::Reference<css::container::XNameContainer> xDialogModel
     );
     virtual ~DlgEditor();
 
@@ -150,7 +150,7 @@ public:
         @see GetWindow
         @see SetWindow
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >
+    css::uno::Reference< css::awt::XControlContainer >
                     GetWindowControlContainer();
 
     void            SetScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll );
@@ -160,12 +160,12 @@ public:
     void            DoScroll( ScrollBar* pActScroll );
     void            UpdateScrollBars();
 
-    void            SetDialog (com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> xUnoControlDialogModel);
+    void            SetDialog (css::uno::Reference<css::container::XNameContainer> xUnoControlDialogModel);
     void            ResetDialog ();
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const
+    css::uno::Reference< css::container::XNameContainer > GetDialog() const
                         {return m_xUnoControlDialogModel;}
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > const & GetNumberFormatsSupplier();
+    css::uno::Reference< css::util::XNumberFormatsSupplier > const & GetNumberFormatsSupplier();
 
     DlgEdModel&     GetModel()      const { return *pDlgEdModel; }
     DlgEdView&      GetView()       const { return *pDlgEdView; }
