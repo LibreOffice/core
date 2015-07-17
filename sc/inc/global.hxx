@@ -408,9 +408,10 @@ enum ScAnchorType                   // anchor of a character object
 
 enum ScGetDBMode
 {
-    SC_DB_MAKE,     // create "untitled" (if necessary)
-    SC_DB_IMPORT,   // create "Importx" (if necessary)
-    SC_DB_OLD       // don't create
+    SC_DB_MAKE,         ///< create "untitled" (if necessary)
+    SC_DB_AUTOFILTER,   ///< force use of sheet-local instead of document global anonymous range
+    SC_DB_IMPORT,       ///< create "Importx" (if necessary)
+    SC_DB_OLD           ///< don't create
 };
 
 /// For ScDBFunc::GetDBData()

@@ -319,6 +319,7 @@ private:
     ScScriptTypeData*   pScriptTypeData;
     ScRefreshTimerControl* pRefreshTimerControl;
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharacters;
+    ScDBData*           mpAnonymousDBData;
 
     ScFieldEditEngine*  pCacheFieldEditEngine;
 
@@ -611,6 +612,13 @@ public:
 
     SC_DLLPUBLIC void SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData);
     SC_DLLPUBLIC ScDBData* GetAnonymousDBData(SCTAB nTab);
+
+    /** One document global anonymous database range for temporary operations,
+        used if the corresponding sheet-local anonymous database range is
+        already used with AutoFilter and range differs. Not stored in document
+        files. */
+    SC_DLLPUBLIC void SetAnonymousDBData(ScDBData* pDBData);
+    SC_DLLPUBLIC ScDBData* GetAnonymousDBData();
 
     SC_DLLPUBLIC SCTAB GetTableCount() const;
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }

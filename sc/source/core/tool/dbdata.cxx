@@ -945,6 +945,8 @@ const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab
     if (pData)
         return pData;
 
+    // Do NOT check for the document global temporary anonymous db range here.
+
     return NULL;
 }
 
@@ -967,6 +969,8 @@ ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool
     if (pData)
         return const_cast<ScDBData*>(pData);
 
+    // Do NOT check for the document global temporary anonymous db range here.
+
     return NULL;
 }
 
@@ -986,7 +990,17 @@ const ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1
             return pNoNameData;
 
     // Lastly, check the global anonymous db ranges.
-    return maAnonDBs.findByRange(aRange);
+    const ScDBData* pData = maAnonDBs.findByRange(aRange);
+    if (pData)
+        return pData;
+
+    // As a last resort, check for the document global temporary anonymous db range.
+    pNoNameData = pDoc->GetAnonymousDBData();
+    if (pNoNameData)
+        if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
+            return pNoNameData;
+
+    return NULL;
 }
 
 ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
@@ -1008,6 +1022,12 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     const ScDBData* pData = getAnonDBs().findByRange(aRange);
     if (pData)
         return const_cast<ScDBData*>(pData);
+
+    // As a last resort, check for the document global temporary anonymous db range.
+    pNoNameData = pDoc->GetAnonymousDBData();
+    if (pNoNameData)
+        if (pNoNameData->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
+            return pNoNameData;
 
     return NULL;
 }

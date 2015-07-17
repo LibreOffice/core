@@ -302,6 +302,17 @@ void ScDocument::SetAnonymousDBData(SCTAB nTab, ScDBData* pDBData)
         maTabs[nTab]->SetAnonymousDBData(pDBData);
 }
 
+void ScDocument::SetAnonymousDBData( ScDBData* pDBData )
+{
+    delete mpAnonymousDBData;
+    mpAnonymousDBData = pDBData;
+}
+
+ScDBData* ScDocument::GetAnonymousDBData()
+{
+    return mpAnonymousDBData;
+}
+
 bool ScDocument::ValidTabName( const OUString& rName )
 {
     if (rName.isEmpty())

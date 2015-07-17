@@ -287,7 +287,7 @@ void ScDBFunc::ToggleAutoFilter()
 
     ScQueryParam    aParam;
     ScDocument*     pDoc    = GetViewData().GetDocument();
-    ScDBData*       pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+    ScDBData*       pDBData = GetDBData(false, SC_DB_AUTOFILTER, SC_DBSEL_ROW_DOWN);
 
     pDBData->SetByRow( true );              //! undo, retrieve beforehand ??
     pDBData->GetQueryParam( aParam );

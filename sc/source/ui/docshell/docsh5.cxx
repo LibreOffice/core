@@ -145,7 +145,7 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         if (!bSelected)
         {
             bUseThis = true;
-            if ( bIsNoName && eMode == SC_DB_MAKE )
+            if ( bIsNoName && (eMode == SC_DB_MAKE || eMode == SC_DB_AUTOFILTER) )
             {
                 // If nothing marked or only one row marked, adapt
                 // "unbenannt"/"unnamed" to contiguous area.
@@ -222,6 +222,20 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
         ScDBData* pNoNameData = aDocument.GetAnonymousDBData(nTab);
         if ( eMode != SC_DB_IMPORT && pNoNameData)
         {
+            // Do not reset AutoFilter range during temporary operations on
+            // other ranges, use the document global temporary anonymous range
+            // instead. But, if AutoFilter is to be toggled then do use the
+            // sheet-local DB range.
+            if (eMode != SC_DB_AUTOFILTER && pNoNameData->HasAutoFilter())
+            {
+                pNoNameData = aDocument.GetAnonymousDBData();
+                if (!pNoNameData)
+                {
+                    pNoNameData = new ScDBData( STR_DB_LOCAL_NONAME,
+                            nTab, nStartCol, nStartRow, nEndCol, nEndRow, true, bHasHeader);
+                    aDocument.SetAnonymousDBData( pNoNameData);
+                }
+            }
 
             if ( !pOldAutoDBRange )
             {

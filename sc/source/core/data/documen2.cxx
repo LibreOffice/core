@@ -156,6 +156,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         pUnoRefUndoList( NULL ),
         pChangeViewSettings( NULL ),
         pScriptTypeData( NULL ),
+        mpAnonymousDBData( NULL ),
         pCacheFieldEditEngine( NULL ),
         pViewOptions( NULL ),
         pDocOptions( NULL ),
@@ -427,6 +428,7 @@ ScDocument::~ScDocument()
     pVirtualDevice_100th_mm.disposeAndClear();
 
     delete pDPCollection;
+    delete mpAnonymousDBData;
 
     // delete the EditEngine before destroying the xPoolHelper
     delete pCacheFieldEditEngine;
