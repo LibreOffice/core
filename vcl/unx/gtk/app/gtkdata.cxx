@@ -52,7 +52,7 @@
 # endif
 #else
 # define GDK_WINDOWING_X11
-# define GDK_IS_X11_DISPLAY(foo) true
+# define GDK_IS_X11_DISPLAY(foo) (true)
 #endif
 
 using namespace vcl_sal;

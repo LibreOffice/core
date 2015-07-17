@@ -105,6 +105,12 @@
 #define IS_WIDGET_MAPPED   GTK_WIDGET_MAPPED
 #endif
 
+#if !GTK_CHECK_VERSION(3,10,0)
+#define GDK_WINDOWING_X11
+#define GDK_IS_X11_DISPLAY(foo) (true)
+#endif
+
+
 using namespace com::sun::star;
 
 int GtkSalFrame::m_nFloats = 0;
@@ -1093,7 +1099,10 @@ void GtkSalFrame::InitCommon()
     m_nHudAwarenessId   = 0;
 
     gtk_widget_set_app_paintable( m_pWindow, TRUE );
-    gtk_widget_set_double_buffered( m_pWindow, FALSE );
+    /*non-X11 displays won't show anything at all without double-buffering
+      enabled*/
+    if (GDK_IS_X11_DISPLAY(getGdkDisplay()))
+        gtk_widget_set_double_buffered( m_pWindow, FALSE );
     gtk_widget_set_redraw_on_allocate( m_pWindow, FALSE );
 
     gtk_widget_add_events( m_pWindow,
