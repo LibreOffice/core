@@ -1210,9 +1210,19 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
         }
         while( nOffset );
 
+        std::vector<sal_uInt32> aSeenIfds;
+
         for ( sal_uInt32 nNextIfd = nFirstIfd; nNextIfd && bStatus; )
         {
-            pTIFF->Seek( nOrigPos + nNextIfd );
+            if (std::find(aSeenIfds.begin(), aSeenIfds.end(), nNextIfd) != aSeenIfds.end())
+            {
+                SAL_WARN("filter.tiff", "Parsing error: " << nNextIfd <<
+                         " already processed, format loop");
+                bStatus = false;
+                break;
+            }
+            pTIFF->Seek(nOrigPos + nNextIfd);
+            aSeenIfds.push_back(nNextIfd);
             {
                 bByteSwap = false;
 
