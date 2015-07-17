@@ -26,7 +26,7 @@
 #include <com/sun/star/frame/XController.hpp>
 
 #include <comphelper/sharedmutex.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -37,8 +37,8 @@ namespace dbaui
     class OApplicationController;
 
     // SubComponentManager
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
-                                    >   SubComponentManager_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::beans::XPropertyChangeListener
+                                  >   SubComponentManager_Base;
     class SubComponentManager : public SubComponentManager_Base
     {
     public:

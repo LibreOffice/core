@@ -26,7 +26,7 @@
 #include <vector>
 
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -43,14 +43,14 @@ namespace dbaccess
 
 // OBookmarkContainer -    base class of collections of database definition
 //                         documents
-typedef ::cppu::WeakImplHelper6 <
-                                    ::com::sun::star::container::XIndexAccess
-                                ,   ::com::sun::star::container::XNameContainer
-                                ,   ::com::sun::star::container::XEnumerationAccess
-                                ,   ::com::sun::star::container::XContainer
-                                ,   ::com::sun::star::lang::XServiceInfo
-                                ,   ::com::sun::star::container::XChild
-                                >   OBookmarkContainer_Base;
+typedef ::cppu::WeakImplHelper<
+                                  ::com::sun::star::container::XIndexAccess
+                              ,   ::com::sun::star::container::XNameContainer
+                              ,   ::com::sun::star::container::XEnumerationAccess
+                              ,   ::com::sun::star::container::XContainer
+                              ,   ::com::sun::star::lang::XServiceInfo
+                              ,   ::com::sun::star::container::XChild
+                              >   OBookmarkContainer_Base;
 
 class OBookmarkContainer
             :public OBookmarkContainer_Base

@@ -33,8 +33,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/uno3.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 namespace dbaccess
@@ -67,8 +66,8 @@ namespace dbaccess
     // DataAccessDescriptor
     typedef ::comphelper::OMutexAndBroadcastHelper  DataAccessDescriptor_MutexBase;
 
-    typedef ::cppu::WeakImplHelper1             <   XServiceInfo
-                                                >   DataAccessDescriptor_TypeBase;
+    typedef ::cppu::WeakImplHelper<   XServiceInfo
+                                  >   DataAccessDescriptor_TypeBase;
 
     typedef ::comphelper::OPropertyContainer        DataAccessDescriptor_PropertyBase;
 
@@ -213,9 +212,9 @@ namespace dbaccess
     }
 
     // DataAccessDescriptorFactory
-    typedef ::cppu::WeakImplHelper2 <   XServiceInfo
-                                    ,   XDataAccessDescriptorFactory
-                                    >   DataAccessDescriptorFactory_Base;
+    typedef ::cppu::WeakImplHelper<   XServiceInfo
+                                  ,   XDataAccessDescriptorFactory
+                                  >   DataAccessDescriptorFactory_Base;
     class DataAccessDescriptorFactory : public DataAccessDescriptorFactory_Base
     {
     public:

@@ -54,7 +54,7 @@
 #include <comphelper/sharedmutex.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/dbexception.hxx>
-#include <cppuhelper/compbase11.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <boost/optional.hpp>
@@ -188,18 +188,18 @@ namespace dbaui
 
     typedef ::comphelper::SharedMutexBase   OGenericUnoController_MBASE;
 
-    typedef ::cppu::WeakComponentImplHelper11   <   ::com::sun::star::frame::XDispatch
-                                                ,   ::com::sun::star::frame::XDispatchProviderInterceptor
-                                                ,   ::com::sun::star::util::XModifyListener
-                                                ,   ::com::sun::star::frame::XFrameActionListener
-                                                ,   ::com::sun::star::lang::XInitialization
-                                                ,   ::com::sun::star::lang::XServiceInfo
-                                                ,   ::com::sun::star::frame::XDispatchInformationProvider
-                                                ,   ::com::sun::star::frame::XController2
-                                                ,   ::com::sun::star::frame::XTitle
-                                                ,   ::com::sun::star::frame::XTitleChangeBroadcaster
-                                                ,   ::com::sun::star::awt::XUserInputInterception
-                                                >   OGenericUnoController_Base;
+    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::frame::XDispatch
+                                           ,   ::com::sun::star::frame::XDispatchProviderInterceptor
+                                           ,   ::com::sun::star::util::XModifyListener
+                                           ,   ::com::sun::star::frame::XFrameActionListener
+                                           ,   ::com::sun::star::lang::XInitialization
+                                           ,   ::com::sun::star::lang::XServiceInfo
+                                           ,   ::com::sun::star::frame::XDispatchInformationProvider
+                                           ,   ::com::sun::star::frame::XController2
+                                           ,   ::com::sun::star::frame::XTitle
+                                           ,   ::com::sun::star::frame::XTitleChangeBroadcaster
+                                           ,   ::com::sun::star::awt::XUserInputInterception
+                                           >   OGenericUnoController_Base;
 
     struct OGenericUnoController_Data;
 

@@ -42,7 +42,7 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -61,7 +61,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace dbaui;
 
-class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceInfo>
+class DBContentLoader : public ::cppu::WeakImplHelper< XFrameLoader, XServiceInfo>
 {
 private:
     OUString                     m_aURL;

@@ -23,7 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 #include <vector>
@@ -32,8 +32,8 @@ namespace dbaccess
 {
 
     // OPropertyForward
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
-                                    >   OPropertyForward_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::beans::XPropertyChangeListener
+                                  >   OPropertyForward_Base;
     class OPropertyForward  :public ::comphelper::OBaseMutex
                             ,public OPropertyForward_Base
     {

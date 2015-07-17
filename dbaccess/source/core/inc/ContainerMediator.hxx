@@ -26,7 +26,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 #include <map>
@@ -37,7 +37,7 @@ namespace dbaccess
     class OPropertyForward;
 
     class OContainerMediator :   public ::comphelper::OBaseMutex
-                                ,public ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener >
+                                ,public ::cppu::WeakImplHelper< ::com::sun::star::container::XContainerListener >
     {
     private:
         typedef ::rtl::Reference< OPropertyForward >                TPropertyForward;

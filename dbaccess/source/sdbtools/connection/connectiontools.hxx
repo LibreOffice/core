@@ -29,16 +29,16 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace sdbtools
 {
 
     // ConnectionTools
-    typedef ::cppu::WeakImplHelper3 <   ::com::sun::star::sdb::tools::XConnectionTools
-                                    ,   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::lang::XInitialization
-                                    >   ConnectionTools_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::sdb::tools::XConnectionTools
+                                  ,   ::com::sun::star::lang::XServiceInfo
+                                  ,   ::com::sun::star::lang::XInitialization
+                                  >   ConnectionTools_Base;
     /** implements the com::sun::star::sdb::tools::XConnectionTools functionality
     */
     class ConnectionTools   :public ConnectionTools_Base

@@ -39,12 +39,12 @@
 #include <cppuhelper/propshlp.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <osl/diagnose.h>
-#include <cppuhelper/compbase11.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
 namespace dbaccess
 {
-    typedef ::cppu::WeakComponentImplHelper11< css::sdbc::XWarningsSupplier,
+    typedef ::cppu::WeakComponentImplHelper< css::sdbc::XWarningsSupplier,
                                               css::sdbc::XResultSet,
                                               css::sdbc::XResultSetMetaDataSupplier,
                                               css::sdbc::XRow,

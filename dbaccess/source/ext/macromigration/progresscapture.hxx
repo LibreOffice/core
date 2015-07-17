@@ -22,7 +22,7 @@
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -32,8 +32,8 @@ namespace dbmm
     class IMigrationProgress;
 
     // ProgressCapture
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XStatusIndicator
-                                    >   ProgressCapture_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::task::XStatusIndicator
+                                  >   ProgressCapture_Base;
 
     struct ProgressCapture_Data;
 

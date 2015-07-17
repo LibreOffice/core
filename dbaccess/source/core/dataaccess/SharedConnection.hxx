@@ -22,7 +22,7 @@
 #include "connectivity/ConnectionWrapper.hxx"
 #include <cppuhelper/component.hxx>
 #include <connectivity/CommonTools.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
@@ -40,8 +40,8 @@ namespace dbaccess
     // All methods will be forwarded with exception of the set methods, which are not allowed
     // to be called on shared connections. Instances of this class will be created when the
     // datasource is asked for not isolated connection.
-    typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::sdbc::XConnection
-                                            > OSharedConnection_BASE;
+    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::sdbc::XConnection
+                                           > OSharedConnection_BASE;
     typedef ::connectivity::OConnectionWrapper  OSharedConnection_BASE2;
 
     class OSharedConnection :   public ::comphelper::OBaseMutex

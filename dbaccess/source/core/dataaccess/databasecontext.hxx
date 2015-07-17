@@ -42,7 +42,7 @@
 #include <com/sun/star/uno/XAggregation.hpp>
 
 #include <basic/basicmanagerrepository.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -63,10 +63,10 @@ class DatabaseDocumentLoader;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseContext_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper3    <   ::com::sun::star::lang::XServiceInfo
-                                            ,   ::com::sun::star::sdb::XDatabaseContext
-                                            ,   ::com::sun::star::lang::XUnoTunnel
-                                            >   DatabaseAccessContext_Base;
+typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::lang::XServiceInfo
+                                       ,   ::com::sun::star::sdb::XDatabaseContext
+                                       ,   ::com::sun::star::lang::XUnoTunnel
+                                       >   DatabaseAccessContext_Base;
 
 class ODatabaseContext  :public DatabaseAccessContext_Base
                         ,public ::basic::BasicManagerCreationListener

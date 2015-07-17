@@ -22,14 +22,14 @@
 
 #include <com/sun/star/util/XVeto.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace dbaccess
 {
 
     // Veto
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::util::XVeto
-                                    >   Veto_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::util::XVeto
+                                  >   Veto_Base;
     /** implements ::com::sun::star::util::XVeto
     */
     class Veto : public Veto_Base

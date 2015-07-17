@@ -89,8 +89,9 @@
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mimeconfighelper.hxx>
@@ -157,7 +158,7 @@ namespace dbaccess
     }
 
     // OEmbedObjectHolder
-    typedef ::cppu::WeakComponentImplHelper1<   embed::XStateChangeListener > TEmbedObjectHolder;
+    typedef ::cppu::WeakComponentImplHelper<   embed::XStateChangeListener > TEmbedObjectHolder;
     class OEmbedObjectHolder :   public ::comphelper::OBaseMutex
                                 ,public TEmbedObjectHolder
     {
@@ -219,8 +220,8 @@ namespace dbaccess
     }
 
     // OEmbeddedClientHelper
-    typedef ::cppu::WeakImplHelper1 <   XEmbeddedClient
-                                    >   EmbeddedClientHelper_BASE;
+    typedef ::cppu::WeakImplHelper<   XEmbeddedClient
+                                  >   EmbeddedClientHelper_BASE;
     class OEmbeddedClientHelper : public EmbeddedClientHelper_BASE
     {
         ODocumentDefinition* m_pClient;
@@ -276,8 +277,8 @@ namespace dbaccess
     };
 
     // LifetimeCoupler
-    typedef ::cppu::WeakImplHelper1 <   css::lang::XEventListener
-                                    >   LifetimeCoupler_Base;
+    typedef ::cppu::WeakImplHelper<   css::lang::XEventListener
+                                  >   LifetimeCoupler_Base;
     /** helper class which couples the lifetime of a component to the lifetime
         of another component
 

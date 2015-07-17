@@ -28,7 +28,7 @@
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/util/URL.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vcl/help.hxx>
 #include <dbaccess/IController.hxx>
@@ -521,8 +521,8 @@ namespace
         }
     }
     // SelectionSupplier
-    typedef ::cppu::WeakImplHelper1 <   XSelectionSupplier
-                                    >   SelectionSupplier_Base;
+    typedef ::cppu::WeakImplHelper<   XSelectionSupplier
+                                  >   SelectionSupplier_Base;
     class SelectionSupplier : public SelectionSupplier_Base
     {
     public:

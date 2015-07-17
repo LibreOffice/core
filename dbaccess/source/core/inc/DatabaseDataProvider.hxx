@@ -30,7 +30,7 @@
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/container/XChild.hpp>
 
-#include "cppuhelper/compbase4.hxx"
+#include <cppuhelper/compbase.hxx>
 #include "cppuhelper/basemutex.hxx"
 #include "cppuhelper/propertysetmixin.hxx"
 #include <cppuhelper/implementationentry.hxx>
@@ -44,10 +44,10 @@
 namespace dbaccess
 {
 
-typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::chart2::data::XDatabaseDataProvider
-                                          , ::com::sun::star::container::XChild
-                                          , ::com::sun::star::chart::XComplexDescriptionAccess
-                                          , ::com::sun::star::lang::XServiceInfo > TDatabaseDataProvider;
+typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::chart2::data::XDatabaseDataProvider
+                                         , ::com::sun::star::container::XChild
+                                         , ::com::sun::star::chart::XComplexDescriptionAccess
+                                         , ::com::sun::star::lang::XServiceInfo > TDatabaseDataProvider;
 
 class DatabaseDataProvider: private ::cppu::BaseMutex,
                             public TDatabaseDataProvider,

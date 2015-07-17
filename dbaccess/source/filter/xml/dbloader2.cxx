@@ -58,7 +58,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/types.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <sfx2/docfile.hxx>
@@ -92,7 +92,7 @@ using ::com::sun::star::sdb::application::NamedDatabaseObject;
 namespace dbaxml
 {
 
-class DBTypeDetection : public ::cppu::WeakImplHelper2< XExtendedFilterDetection, XServiceInfo>
+class DBTypeDetection : public ::cppu::WeakImplHelper< XExtendedFilterDetection, XServiceInfo>
 {
     const Reference< XComponentContext >  m_aContext;
 
@@ -223,7 +223,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBTypeDetection()
 namespace dbaxml
 {
 
-class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceInfo>
+class DBContentLoader : public ::cppu::WeakImplHelper< XFrameLoader, XServiceInfo>
 {
 private:
     const Reference< XComponentContext >  m_aContext;

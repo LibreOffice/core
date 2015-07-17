@@ -33,7 +33,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/compbase11.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/embed/XTransactionListener.hpp>
 #include "apitools.hxx"
 #include "bookmarkcontainer.hxx"
@@ -58,18 +58,18 @@ namespace dbaccess
 class OSharedConnectionManager;
 
 // ODatabaseSource
-typedef ::cppu::WeakComponentImplHelper11   <   ::com::sun::star::lang::XServiceInfo
-                                            ,   ::com::sun::star::sdbc::XDataSource
-                                            ,   ::com::sun::star::sdb::XBookmarksSupplier
-                                            ,   ::com::sun::star::sdb::XQueryDefinitionsSupplier
-                                            ,   ::com::sun::star::sdb::XCompletedConnection
-                                            ,   ::com::sun::star::container::XContainerListener
-                                            ,   ::com::sun::star::sdbc::XIsolatedConnection
-                                            ,   ::com::sun::star::sdbcx::XTablesSupplier
-                                            ,   ::com::sun::star::util::XFlushable
-                                            ,   ::com::sun::star::util::XFlushListener
-                                            ,   ::com::sun::star::sdb::XDocumentDataSource
-                                            >   ODatabaseSource_Base;
+typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::lang::XServiceInfo
+                                       ,   ::com::sun::star::sdbc::XDataSource
+                                       ,   ::com::sun::star::sdb::XBookmarksSupplier
+                                       ,   ::com::sun::star::sdb::XQueryDefinitionsSupplier
+                                       ,   ::com::sun::star::sdb::XCompletedConnection
+                                       ,   ::com::sun::star::container::XContainerListener
+                                       ,   ::com::sun::star::sdbc::XIsolatedConnection
+                                       ,   ::com::sun::star::sdbcx::XTablesSupplier
+                                       ,   ::com::sun::star::util::XFlushable
+                                       ,   ::com::sun::star::util::XFlushListener
+                                       ,   ::com::sun::star::sdb::XDocumentDataSource
+                                       >   ODatabaseSource_Base;
 
 class ODatabaseSource   :public ModelDependentComponent // must be first
                         ,public ODatabaseSource_Base

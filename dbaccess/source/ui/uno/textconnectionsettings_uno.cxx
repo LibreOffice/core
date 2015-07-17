@@ -32,7 +32,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <svtools/genericunodialog.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace dbaui
 {
@@ -56,15 +56,15 @@ namespace dbaui
     // OTextConnectionSettingsDialog
 
     class OTextConnectionSettingsDialog;
-    typedef ::cppu::ImplInheritanceHelper1  <   ODatabaseAdministrationDialog
-                                            ,   ::com::sun::star::sdb::XTextConnectionSettings
-                                            >   OTextConnectionSettingsDialog_BASE;
+    typedef ::cppu::ImplInheritanceHelper<   ODatabaseAdministrationDialog
+                                         ,   ::com::sun::star::sdb::XTextConnectionSettings
+                                         >   OTextConnectionSettingsDialog_BASE;
     typedef ::comphelper::OPropertyArrayUsageHelper< OTextConnectionSettingsDialog >    OTextConnectionSettingsDialog_PBASE;
 
     class OTextConnectionSettingsDialog
             :public OTextConnectionSettingsDialog_BASE
             ,public OTextConnectionSettingsDialog_PBASE
-            ,public ::cppu::WeakImplHelper1< com::sun::star::sdb::XTextConnectionSettings >
+            ,public ::cppu::WeakImplHelper< com::sun::star::sdb::XTextConnectionSettings >
     {
         OModuleClient   m_aModuleClient;
         PropertyValues  m_aPropertyValues;

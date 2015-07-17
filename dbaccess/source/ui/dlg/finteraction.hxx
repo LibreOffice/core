@@ -20,15 +20,15 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_DLG_FINTERACTION_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_DLG_FINTERACTION_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 namespace dbaui
 {
 
     // OFilePickerInteractionHandler
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::task::XInteractionHandler
-                                    >   OFilePickerInteractionHandler_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::task::XInteractionHandler
+                                  >   OFilePickerInteractionHandler_Base;
 
     /** a InteractionHandler implementation which extends another handler with some customizability
     */

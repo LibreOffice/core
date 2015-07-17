@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include "apitools.hxx"
 #include "datasettings.hxx"
@@ -42,15 +42,15 @@
 
 namespace dbaccess
 {
-    typedef ::cppu::WeakComponentImplHelper9<   ::com::sun::star::sdbcx::XColumnsSupplier,
-                                                ::com::sun::star::sdbcx::XKeysSupplier,
-                                                ::com::sun::star::container::XNamed,
-                                                ::com::sun::star::lang::XServiceInfo,
-                                                ::com::sun::star::sdbcx::XDataDescriptorFactory,
-                                                ::com::sun::star::sdbcx::XIndexesSupplier,
-                                                ::com::sun::star::sdbcx::XRename,
-                                                ::com::sun::star::lang::XUnoTunnel,
-                                                ::com::sun::star::sdbcx::XAlterTable> OTableDescriptor_BASE;
+    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::sdbcx::XColumnsSupplier,
+                                               ::com::sun::star::sdbcx::XKeysSupplier,
+                                               ::com::sun::star::container::XNamed,
+                                               ::com::sun::star::lang::XServiceInfo,
+                                               ::com::sun::star::sdbcx::XDataDescriptorFactory,
+                                               ::com::sun::star::sdbcx::XIndexesSupplier,
+                                               ::com::sun::star::sdbcx::XRename,
+                                               ::com::sun::star::lang::XUnoTunnel,
+                                               ::com::sun::star::sdbcx::XAlterTable> OTableDescriptor_BASE;
     // OTables
     class ODBTableDecorator;
     typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTableDecorator >  ODBTableDecorator_PROP;

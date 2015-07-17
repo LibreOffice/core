@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 #include <map>
@@ -38,8 +38,8 @@ namespace dbaccess
     // DocumentEvents
     struct DocumentEvents_Data;
 
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::container::XNameReplace
-                                    >   DocumentEvents_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::container::XNameReplace
+                                  >   DocumentEvents_Base;
 
     class DocumentEvents    :public DocumentEvents_Base
                             ,public ::boost::noncopyable

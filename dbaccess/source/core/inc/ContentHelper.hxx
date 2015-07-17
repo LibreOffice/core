@@ -31,7 +31,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/compbase9.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/beans/Property.hpp>
@@ -80,16 +80,16 @@ namespace dbaccess
     typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString>
         PropertyChangeListenerContainer;
     typedef ::comphelper::OBaseMutex    OContentHelper_MBASE;
-    typedef ::cppu::WeakComponentImplHelper9    <   ::com::sun::star::ucb::XContent
-                                                ,   ::com::sun::star::ucb::XCommandProcessor
-                                                ,   ::com::sun::star::lang::XServiceInfo
-                                                ,   ::com::sun::star::beans::XPropertiesChangeNotifier
-                                                ,   ::com::sun::star::beans::XPropertyContainer
-                                                ,   ::com::sun::star::lang::XInitialization
-                                                ,   ::com::sun::star::lang::XUnoTunnel
-                                                ,   ::com::sun::star::container::XChild
-                                                ,   ::com::sun::star::sdbcx::XRename
-                                                >   OContentHelper_COMPBASE;
+    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::ucb::XContent
+                                           ,   ::com::sun::star::ucb::XCommandProcessor
+                                           ,   ::com::sun::star::lang::XServiceInfo
+                                           ,   ::com::sun::star::beans::XPropertiesChangeNotifier
+                                           ,   ::com::sun::star::beans::XPropertyContainer
+                                           ,   ::com::sun::star::lang::XInitialization
+                                           ,   ::com::sun::star::lang::XUnoTunnel
+                                           ,   ::com::sun::star::container::XChild
+                                           ,   ::com::sun::star::sdbcx::XRename
+                                           >   OContentHelper_COMPBASE;
 
     class OContentHelper :   public OContentHelper_MBASE
                             ,public OContentHelper_COMPBASE

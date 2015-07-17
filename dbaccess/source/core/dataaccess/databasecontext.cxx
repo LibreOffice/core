@@ -54,7 +54,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -92,8 +92,8 @@ using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING_PATH;
 namespace dbaccess
 {
 
-        typedef ::cppu::WeakImplHelper1 <   XTerminateListener
-                                        >   DatabaseDocumentLoader_Base;
+        typedef ::cppu::WeakImplHelper<   XTerminateListener
+                                      >   DatabaseDocumentLoader_Base;
         class DatabaseDocumentLoader : public DatabaseDocumentLoader_Base
         {
         private:

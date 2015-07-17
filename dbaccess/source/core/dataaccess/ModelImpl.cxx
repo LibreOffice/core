@@ -48,6 +48,7 @@
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/digest.h>
 #include <sfx2/signaturestate.hxx>
@@ -108,8 +109,8 @@ bool VosMutexFacade::tryToAcquire()
 }
 
 // DocumentStorageAccess
-class DocumentStorageAccess : public ::cppu::WeakImplHelper2<   XDocumentSubStorageSupplier
-                                                            ,   XTransactionListener >
+class DocumentStorageAccess : public ::cppu::WeakImplHelper<   XDocumentSubStorageSupplier
+                                                           ,   XTransactionListener >
 {
     typedef ::std::map< OUString, Reference< XStorage > >    NamedStorages;
 

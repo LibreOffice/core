@@ -27,14 +27,14 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 namespace dbaccess
 {
 
     // SubComponentLoader
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XWindowListener
-                                    >   SubComponentLoader_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::awt::XWindowListener
+                                  >   SubComponentLoader_Base;
     struct SubComponentLoader_Data;
     /** is a helper class which loads/opens a given sub component as soon as the main application
         window becomes visible.
