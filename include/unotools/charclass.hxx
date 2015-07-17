@@ -90,27 +90,6 @@ public:
     /// get current Locale
     const LanguageTag& getLanguageTag() const;
 
-    /// isdigit() on ascii values
-    SAL_DEPRECATED("Use rtl::isAsciiDigit instead")
-    static inline bool isAsciiDigit( sal_Unicode c )
-    {
-        return rtl::isAsciiDigit( c );
-    }
-
-    /// isalpha() on ascii values
-    SAL_DEPRECATED("Use rtl::isAsciiAlpha instead")
-    static inline bool isAsciiAlpha( sal_Unicode c )
-    {
-        return rtl::isAsciiAlpha( c );
-    }
-
-    /// isalnum() on ascii values
-    SAL_DEPRECATED("Use rtl::isAsciiAlphanumeric instead")
-    static inline bool isAsciiAlphaNumeric( sal_Unicode c )
-    {
-        return rtl::isAsciiAlphanumeric( c );
-    }
-
     /// isdigit() on ascii values of entire string
     static bool isAsciiNumeric( const OUString& rStr );
 
