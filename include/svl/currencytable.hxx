@@ -20,7 +20,12 @@ class SVL_DLLPUBLIC NfCurrencyTable
 {
     typedef std::vector<std::unique_ptr<NfCurrencyEntry>> DataType;
     DataType maData;
+
+    NfCurrencyTable(NfCurrencyTable const&) = delete;
+    void operator=(NfCurrencyTable const&) = delete;
+
 public:
+    NfCurrencyTable() {}
     typedef DataType::iterator iterator;
     typedef DataType::const_iterator const_iterator;
 
