@@ -79,9 +79,7 @@ public:
     void    SetBottom(double bottom);
 
     double  GetLeft();
-    double  GetRight();
     double  GetTop();
-    double  GetBottom();
 
     void    ToXml(IXFStream *pStrm);
 
@@ -125,19 +123,9 @@ inline double   XFMargins::GetLeft()
     return m_fLeft;
 }
 
-inline double   XFMargins::GetRight()
-{
-    return m_fRight;
-}
-
 inline double   XFMargins::GetTop()
 {
     return m_fTop;
-}
-
-inline double   XFMargins::GetBottom()
-{
-    return m_fBottom;
 }
 
 #endif

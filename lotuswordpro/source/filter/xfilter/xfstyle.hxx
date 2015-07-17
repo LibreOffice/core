@@ -100,11 +100,6 @@ public:
     virtual enumXFStyle     GetStyleFamily() SAL_OVERRIDE;
 
     /**
-     * @descr   set style family.
-     */
-    virtual void            SetStyleFamily(enumXFStyle family) SAL_OVERRIDE;
-
-    /**
      * @descr   decide whether two style are equal.
      */
     virtual bool             Equal(IXFStyle *pStyle) SAL_OVERRIDE;

@@ -100,12 +100,9 @@ public:
     static sal_uInt32 DiskSize() { return sizeof(sal_uInt32) + sizeof(sal_uInt16); } // sizeof(m_nLow) + sizeof(m_nHigh)
     sal_uInt32 DiskSizeIndexed() const;
     bool IsNull() const;
-    bool IsCompressed();
 
     sal_uInt32 GetLow() const ;
     sal_uInt16 GetHigh() const ;
-    void SetLow(sal_uInt32 nl);
-    void SetHigh(sal_uInt16 nh);
 
     bool operator == (const LwpObjectID &Other) const;
     bool operator != (const LwpObjectID &Other) const;
@@ -128,26 +125,16 @@ inline bool LwpObjectID::operator != (const LwpObjectID &Other) const
     return (m_nHigh != Other.m_nHigh) || (m_nLow != Other.m_nLow);
 }
 
-inline bool LwpObjectID::IsCompressed()
-{
-    return m_bIsCompressed;
-}
 inline sal_uInt32 LwpObjectID::GetLow() const
 {
     return m_nLow;
 }
+
 inline sal_uInt16 LwpObjectID::GetHigh() const
 {
     return m_nHigh;
 }
-inline void LwpObjectID::SetLow(sal_uInt32 nl)
-{
-    m_nLow=nl;
-}
-inline void LwpObjectID::SetHigh(sal_uInt16 nh)
-{
-    m_nHigh = nh;
-}
+
 inline size_t LwpObjectID::HashCode() const
 {
     return static_cast<size_t>(

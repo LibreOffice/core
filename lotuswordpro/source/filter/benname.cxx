@@ -63,25 +63,16 @@ CBenNamedObject::CBenNamedObject(pLtcBenContainer pContainer,
     : CBenObject(pContainer, ObjectID, pPrevObject)
     , csName(sName)
     , cNameListElmt(pPrevNamedObjectListElmt)
-    , cPos(0)
 {
     cNameListElmt.SetNamedObject(this);
 }
 
-bool CBenNamedObject::IsNamedObject()
-{ return true; }
-
 bool CBenNamedObject::IsPropertyName()
-{ return false; }
-
-bool CBenNamedObject::IsTypeName()
 { return false; }
 
 bool CBenPropertyName::IsPropertyName()
 { return true; }
 
-bool CBenTypeName::IsTypeName()
-{ return true; }
 } // end namespace OpenStormBento
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

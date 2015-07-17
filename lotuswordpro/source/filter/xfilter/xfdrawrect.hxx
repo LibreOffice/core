@@ -75,12 +75,6 @@ public:
 
     void    SetSize(double width, double height);
 
-    void    SetWidth(double width);
-
-    void    SetHeight(double height);
-
-    void    SetCornerRadius(double fCornerRadius);
-
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
@@ -90,21 +84,6 @@ private:
 inline void XFDrawRect::SetSize(double width, double height)
 {
     m_aRect.SetSize(width,height);
-}
-
-inline void XFDrawRect::SetWidth(double width)
-{
-    m_aRect.SetWidth(width);
-}
-
-inline void XFDrawRect::SetHeight(double height)
-{
-    m_aRect.SetHeight(height);
-}
-
-inline void XFDrawRect::SetCornerRadius(double fCornerRadius)
-{
-    m_fCornerRadius = fCornerRadius;
 }
 
 #endif

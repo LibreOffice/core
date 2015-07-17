@@ -104,10 +104,6 @@ public:
      */
     void    AddTextEntry(const OUString& sSpan, const OUString& styleName = "");
 
-    /**
-     * @descr   clear all index template parts.
-     */
-    void    Clear();
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
@@ -224,11 +220,6 @@ inline void XFIndexTemplate::AddTextEntry(const OUString& sText, const OUString&
     AddEntry(enumXFIndexTemplateSpan, styleName);
 
     m_aTextEntries[nLen] = sText;
-}
-
-inline void XFIndexTemplate::Clear()
-{
-    m_aEntries.clear();
 }
 
 inline void XFIndex::SetIndexType(enumXFIndex type)

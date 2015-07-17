@@ -113,17 +113,17 @@ public:
 
     static OUString GetSuffix() { return OUString(); }
 
-    inline OUString GetNumberingName();
+    ;
 
-    inline LwpPara* GetNumberingPara();
+    ;
 
     bool HasName();
 
     static OUString GetNumCharByStyleID(LwpFribParaNumber* pParaNumber);
 
-    static inline bool IsPosCumulative(sal_uInt16 nHideLevels);
+    ;
     inline bool IsLesserLevel(sal_uInt16 nPos);
-    inline bool IsNewSection(sal_uInt16 nPos);
+    ;
 
     LwpPara* GetBulletPara();
 
@@ -160,27 +160,9 @@ inline OUString LwpSilverBullet::GetBulletStyleName() const
 {
     return m_strStyleName;
 }
-
-inline OUString LwpSilverBullet::GetNumberingName()
-{
-    return GetName().str();
-}
-inline LwpPara* LwpSilverBullet::GetNumberingPara()
-{
-    return m_pBulletPara;
-}
-inline bool LwpSilverBullet::IsPosCumulative(sal_uInt16 nHideLevels)
-{
-    sal_uInt16 AttrMask = ~nHideLevels;
-    return ((AttrMask & (AttrMask - 1)) != 0);
-}
 inline bool LwpSilverBullet::IsLesserLevel(sal_uInt16 nPos)
 {
     return ((m_pResetPositionFlags[nPos] & LESSERLEVEL) != 0);
-}
-inline bool LwpSilverBullet::IsNewSection(sal_uInt16 nPos)
-{
-    return ((m_pResetPositionFlags[nPos] & NEWSECTION) != 0);
 }
 
 #endif

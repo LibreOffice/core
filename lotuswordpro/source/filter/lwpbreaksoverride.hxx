@@ -127,7 +127,6 @@ public:
     void OverrideKeepWithPrevious(bool bVal);
     void OverrideUseNextStyle(bool bVal);
 
-    inline LwpAtomHolder* GetNextStyle();
     //end add
 
 protected:
@@ -238,11 +237,6 @@ inline void LwpBreaksOverride::RevertKeepWithPrevious()
 inline void LwpBreaksOverride::RevertUseNextStyle()
 {
     LwpOverride::Override(BO_USENEXTSTYLE, STATE_STYLE);
-}
-
-inline LwpAtomHolder* LwpBreaksOverride::GetNextStyle()
-{
-    return m_pNextStyle;
 }
 
 #endif

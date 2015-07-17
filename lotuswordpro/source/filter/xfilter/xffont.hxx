@@ -187,19 +187,9 @@ public:
     void    SetUnderline(enumXFUnderline underline,bool wordByWord=false);
 
     /**
-     * @descr   Set underline color.
-     */
-    void    SetUnderlineColor(XFColor color=XFColor(128,128,0));
-
-    /**
      * @descr   Set crossout.
      */
     void    SetCrossout(enumXFCrossout cross,bool wordByWord=false);
-
-    /**
-     * @descr   Set font relief.
-     */
-    void    SetRelief(enumXFRelief relief);
 
     /**
      * @descr   Set font transform type,pls refer to enumXFTransform.
@@ -207,39 +197,9 @@ public:
     void    SetTransform(enumXFTransform transform);
 
     /**
-     * @descr   Set font emphasize effect.
-     */
-    void    SetEmphasize(enumXFEmphasize emphasize, bool top = true);
-
-    /**
-     * @descr   Set outline effect.
-     */
-    void    SetOutline(bool outline);
-
-    /**
-     * @descr   Set font shadow.
-     */
-    void    SetShadow(bool shadow);
-
-    /**
-     * @descr   Set font blink effect.
-     */
-    void    SetBlink(bool blink);
-
-    /**
      * @descr   Set upper script or lower script.
      */
     void    SetPosition(bool bUpperScript = true, sal_Int16 pos = 33, sal_Int16 scale = 58);
-
-    /**
-     * @descr   Set space between chars in percent.
-     */
-    void    SetCharSpace(sal_Int16 space);
-
-    /**
-     * @descr   Set char width scale in percent.
-     */
-    void    SetWidthScale(sal_Int16 widthScale);
 
     /**
      * @descr   Set font color.
@@ -257,8 +217,6 @@ public:
 
     sal_Int16 GetFontSize();
     XFColor GetColor();
-
-    sal_uInt32  GetFlag(){ return m_nFlag; }
 
     void    ToXml(IXFStream *pStrm);
 
@@ -396,49 +354,17 @@ inline void XFFont::SetUnderline(enumXFUnderline underline, bool wordByWord)
     m_nFlag |= XFFONT_FLAG_UNDERLINE;
 }
 
-inline void XFFont::SetUnderlineColor(XFColor color)
-{
-    m_aUnderlineColor = color;
-    m_nFlag |= XFFONT_FLAG_UNDERLINECOLOR;
-}
-
 inline void XFFont::SetCrossout(enumXFCrossout cross, bool wordByWord)
 {
     m_eCrossout = cross;
     m_bWordByWord = wordByWord;
     m_nFlag |= XFFONT_FLAG_CROSSOUT;
 }
-inline void XFFont::SetRelief(enumXFRelief relief)
-{
-    m_eRelief = relief;
-    m_nFlag |= XFFONT_FLAG_RELIEF;
-}
+
 inline void XFFont::SetTransform(enumXFTransform transform)
 {
     m_eTransform = transform;
     m_nFlag |= XFFONT_FLAG_TRANSFORM;
-}
-
-inline void XFFont::SetEmphasize(enumXFEmphasize emphasize, bool top)
-{
-    m_eEmphasize = emphasize;
-    m_bEmphasizeTop = top;
-    m_nFlag |= XFFONT_FLAG_EMPHASIZE;
-}
-inline void XFFont::SetOutline(bool outline)
-{
-    m_bOutline = outline;
-    m_nFlag |= XFFONT_FLAG_OUTLINE;
-}
-inline void XFFont::SetShadow(bool shadow)
-{
-    m_bShadow = shadow;
-    m_nFlag |= XFFONT_FLAG_SHADOW;
-}
-inline void XFFont::SetBlink(bool blink)
-{
-    m_bBlink = blink;
-    m_nFlag |= XFFONT_FLAG_BLINK;
 }
 
 inline void XFFont::SetPosition(bool bUpperScript, sal_Int16 pos, sal_Int16 scale)
@@ -458,18 +384,6 @@ inline void XFFont::SetPosition(bool bUpperScript, sal_Int16 pos, sal_Int16 scal
         if( m_nPosition >0 )
             m_nPosition = -m_nPosition;
     }
-}
-
-inline void XFFont::SetCharSpace(sal_Int16 space)
-{
-    m_nFlag |= XFFONT_FLAG_CHARSPACE;
-    m_fCharSpace = space;
-}
-
-inline void XFFont::SetWidthScale(sal_Int16 widthScale)
-{
-    m_nFlag |= XFFONT_FLAG_WIDTHSCALE;
-    m_nWidthScale = widthScale;
 }
 
 inline void XFFont::SetColor(XFColor& color)

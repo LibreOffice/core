@@ -81,13 +81,9 @@ public:
 
     void    SetShadow(enumXFShadowPos pos, double offset = 0.18, XFColor color=XFColor(128,128,0) );
 
-    void    SetMargins(double left=-1, double right=-1, double top=-1, double bottom=-1);
-
     void    SetBackColor(XFColor& color);
 
     void    SetBackImage(XFBGImage *pImage);
-
-    void    SetBreaks(enumXFBreaks breaks);
 
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
@@ -127,26 +123,9 @@ inline void XFTableStyle::SetShadow(enumXFShadowPos pos, double offset, XFColor 
     m_aShadow.SetPosition(pos);
 }
 
-inline void XFTableStyle::SetMargins(double left, double right, double top, double bottom)
-{
-    if( left != -1 )
-        m_aMargins.SetLeft(left);
-    if( right != -1 )
-        m_aMargins.SetRight(right);
-    if( top != -1 )
-        m_aMargins.SetTop(top);
-    if( bottom != -1 )
-        m_aMargins.SetBottom(bottom);
-}
-
 inline void XFTableStyle::SetBackColor(XFColor& color)
 {
     m_aBackColor = color;
-}
-
-inline void XFTableStyle::SetBreaks(enumXFBreaks breaks)
-{
-    m_aBreaks.SetBreakType(breaks);
 }
 
 #endif

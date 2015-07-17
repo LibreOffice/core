@@ -82,8 +82,6 @@ public:
 
     void    ToXml(IXFStream *pStrm);
 
-    enumLHType GetType();
-
     friend bool operator==(XFLineHeight& indent1, XFLineHeight& indent2);
     friend bool operator!=(XFLineHeight& indent1, XFLineHeight& indent2);
 private:
@@ -120,11 +118,6 @@ inline void XFLineHeight::Reset()
 {
     m_eType = enumLHNone;
     m_Value.m_fValue = 0;
-}
-
-inline enumLHType XFLineHeight::GetType()
-{
-    return m_eType;
 }
 
 inline void XFLineHeight::ToXml(IXFStream *pStrm)

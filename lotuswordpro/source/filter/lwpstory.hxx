@@ -106,7 +106,6 @@ public:
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     virtual void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
     void XFConvertFrameInPage(XFContentContainer* pCont);
-    inline LwpDLVListHeadTail& GetParaList();
     inline LwpObjectID& GetFirstPara();
     inline LwpObjectID& GetLastPara();
      XFContentContainer* GetXFContent();
@@ -139,10 +138,6 @@ public:
     OUString RegisterFirstFribStyle();
 };
 
-LwpDLVListHeadTail& LwpStory::GetParaList()
-{
-    return m_ParaList;
-}
 LwpObjectID& LwpStory::GetFirstPara()
 {
     return m_ParaList.GetHead();

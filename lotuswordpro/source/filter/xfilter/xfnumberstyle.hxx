@@ -73,10 +73,6 @@ public:
 public:
     void    SetDecimalDigits(sal_Int32 decimal);
 
-    void    SetMinInteger(sal_Int32 integer);
-
-    void    SetMinExponent(sal_Int32 exponent);
-
     void    SetGroup(bool group = true);
 
     void    SetColor(const XFColor& color);
@@ -89,8 +85,6 @@ public:
     void    SetNegativeStyle(const OUString& prefix, const OUString& suffix, const XFColor& color=XFColor(255,0,0));
 
     void    SetNumberType(enumXFNumberType type);
-
-    void    SetCurrencySymbol(bool post, const OUString& symbol, bool bShowSpace=false);
 
     virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
@@ -132,16 +126,6 @@ inline void XFNumberStyle::SetDecimalDigits(sal_Int32 decimal)
     m_nDecimalDigits = decimal;
 }
 
-inline void XFNumberStyle::SetMinInteger(sal_Int32 integer)
-{
-    m_nMinInteger = integer;
-}
-
-inline void XFNumberStyle::SetMinExponent(sal_Int32 exponent)
-{
-    m_nMinExponent = exponent;
-}
-
 inline void XFNumberStyle::SetNegativeStyle(const OUString& prefix, const OUString& suffix, const XFColor& color)
 {
     m_bRedIfNegative = true;
@@ -175,19 +159,7 @@ inline void XFNumberStyle::SetSurfix(const OUString& surfix)
     m_strSuffix = surfix;
 }
 
-inline void XFNumberStyle::SetCurrencySymbol(bool post, const OUString& symbol, bool bShowSpace)
-{
-    m_bCurrencySymbolPost = post;
-    m_strCurrencySymbol = symbol;
 
-    if( bShowSpace )
-    {
-        if( post )
-            m_strCurrencySymbol = " " + m_strCurrencySymbol;
-        else
-            m_strCurrencySymbol += " ";
-    }
-}
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

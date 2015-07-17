@@ -93,11 +93,6 @@ public:
     virtual enumXFStyle GetStyleFamily() = 0;
 
     /**
-     * @descr:  Set the style family,not quite useful.
-     */
-    virtual void    SetStyleFamily(enumXFStyle family) = 0;
-
-    /**
      * @descr:  Compare wheather two style object are the same.Used only by XFStyleManager.
      * @param:  pStyle the style to be compared.
      * @return: return sal_True if equals,else sal_False.

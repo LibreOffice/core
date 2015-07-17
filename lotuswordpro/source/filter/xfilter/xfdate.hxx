@@ -73,15 +73,6 @@ public:
 
     virtual ~XFDate();
 
-public:
-    void    SetDate(XFDateTime& dt);
-
-    void    SetDate(const OUString& date);
-
-    void    SetText(OUString& text);
-
-    void    SetFixed(bool fixed = true);
-
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
@@ -91,29 +82,6 @@ private:
     OUString   m_strDate;
     bool    m_bValued;
 };
-
-inline  void XFDate::SetDate(XFDateTime& dt)
-{
-    m_aDateTime = dt;
-    m_strDate = DateTimeToOUString(m_aDateTime);
-    m_bValued = true;
-}
-
-inline void XFDate::SetDate(const OUString& date)
-{
-    m_strDate = date;
-    m_bValued = true;
-}
-
-inline  void XFDate::SetText(OUString& text)
-{
-    m_strText = text;
-}
-
-inline  void XFDate::SetFixed(bool fixed)
-{
-    m_bFixed = fixed;
-}
 
 class XFDateStart : public XFDate
 {

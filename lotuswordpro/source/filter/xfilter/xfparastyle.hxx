@@ -129,10 +129,6 @@ public:
     void    SetIndent(double indent );
 
     /**
-     * @descr   Set line number style.
-     */
-    void    SetLineNumber(bool show, sal_Int32 restart=1);
-    /**
      * @descr   Set the pading of the paragraph.This is the distance
                 between the border and the top of the text.
      * @param   indent value of the padding.
@@ -151,16 +147,6 @@ public:
      * @param   eAlign alignment type,left,right,center or justify.
      */
     void    SetAlignType(enumXFAlignType eAlign);
-
-    enumXFAlignType GetAlighType();
-
-    /**
-     * @descr   Set last line alignment property of the paragraph.
-     * @param   eAlign alignment type,left,right,center or justify.
-                eJustSingleWord If chars of the last-line'word should be
-                stretched.
-     */
-    void    SetLastLineAlign(enumXFAlignType align,bool bJustSingleWord = false);
 
     /**
      * @descr   Set the shadow of the paragraph.there is 4 positions, you
@@ -211,11 +197,6 @@ public:
     void    SetBreaks(enumXFBreaks breaks);
 
     /**
-     * @descr   For paragraph numbering.
-     */
-    void    SetPageNumber(sal_Int32 num);
-
-    /**
      * @descr   Add a tab style.
      */
     void    AddTabStyle(enumXFTab type, double len, sal_Unicode leader = '*', sal_Unicode delimiter='.');
@@ -224,14 +205,6 @@ public:
      * @descr   for para style copy operator,sometimes you may need to override tab styles.
      */
     void    ClearTabStyles();
-
-    /**
-     * descr    set the paragraph to be in the same page with the next paragraph.
-     *          If that can't be insured,the paragraph will start with a new page.
-     */
-    void    SetKeepWithNext(bool keepWithNext);
-
-    sal_uInt32 GetFlag(){ return m_nFlag; }
 
     XFMargins& GetMargins(){return m_aMargin;}
 
@@ -281,18 +254,6 @@ inline void XFParaStyle::SetBreaks(enumXFBreaks breaks)
     m_aBreaks.SetBreakType(breaks);
 }
 
-inline void XFParaStyle::SetPageNumber(sal_Int32 num)
-{
-    assert(num>0);
-    m_nPageNumber = num;
-}
-
-inline void XFParaStyle::SetLineNumber(bool show, sal_Int32 restart)
-{
-    m_bNumberLines = show;
-    m_nLineNumberRestart = restart;
-}
-
 inline void XFParaStyle::SetPadding(double left, double right, double top, double bottom)
 {
     m_aPadding.SetLeft(left);
@@ -315,17 +276,6 @@ inline void XFParaStyle::SetAlignType(enumXFAlignType eAlign)
     m_eAlignType = eAlign;
 }
 
-inline void XFParaStyle::SetLastLineAlign(enumXFAlignType align, bool   bJustSingleWord)
-{
-    m_eLastLineAlign = align;
-    m_bJustSingleWord = bJustSingleWord;
-}
-
-inline void XFParaStyle::SetKeepWithNext(bool keep)
-{
-    m_bKeepWithNext = keep;
-}
-
 inline void XFParaStyle::ClearTabStyles()
 {
     m_aTabs.Reset();
@@ -336,10 +286,6 @@ inline  OUString XFParaStyle::GetMasterPage()
     return m_strMasterPage;
 }
 
-inline enumXFAlignType XFParaStyle::GetAlighType()
-{
-    return m_eAlignType;
-}
 
 class XFDefaultParaStyle : public XFStyle
 {

@@ -75,12 +75,6 @@ public:
         m_aPoints.push_back( XFPoint(x,y) );
     }
 
-    void AddPoint(const XFPoint& pt)
-    {
-        assert(pt.GetX()>=0&&pt.GetY()>=0);
-        m_aPoints.push_back(pt);
-    }
-
     XFRect  CalcViewBox();
 
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;

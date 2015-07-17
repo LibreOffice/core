@@ -83,12 +83,6 @@ public:
 
     void    AddHeaderRow(XFRow *pRow);
 
-    void    SetDefaultCellStyle(const OUString& style);
-
-    void    SetDefaultRowStyle(const OUString& style);
-
-    void    SetDefaultColStyle(const OUString& style);
-
 public:
     void    SetOwnerCell(XFCell *pCell);
 
@@ -101,8 +95,6 @@ public:
     sal_Int32   GetColumnCount();
 
     bool    IsSubTable();
-
-    void        Normalize();
 
     enumXFContent   GetContentType() SAL_OVERRIDE;
 
@@ -139,21 +131,6 @@ inline void XFTable::SetOwnerCell(XFCell *pCell)
 inline bool XFTable::IsSubTable()
 {
     return m_bSubTable;
-}
-
-inline void XFTable::SetDefaultCellStyle(const OUString& style)
-{
-    m_strDefCellStyle = style;
-}
-
-inline void XFTable::SetDefaultRowStyle(const OUString& style)
-{
-    m_strDefRowStyle = style;
-}
-
-inline void XFTable::SetDefaultColStyle(const OUString& style)
-{
-    m_strDefColStyle = style;
 }
 
 #endif

@@ -124,11 +124,6 @@ public:
      */
     void    SetBackImage(XFBGImage *pImage);
 
-    /**
-     * @descr   Set cell value to warp if it's content is too long to be placed in an single cell.
-     */
-    void    SetWrapText(bool wrap);
-
     virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
     virtual bool Equal(IXFStyle *pStyle) SAL_OVERRIDE;
@@ -163,10 +158,6 @@ inline void XFCellStyle::SetDataStyle(const OUString& style)
     m_strDataStyle = style;
 }
 
-inline void XFCellStyle::SetWrapText(bool wrap)
-{
-    m_bWrapText = wrap;
-}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

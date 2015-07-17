@@ -56,6 +56,7 @@ exclusionSet = set([
     "_Bool connectivity::OColumn::isWritable() const",
     # instantiated from templates, not sure why it is not being picked up
     "class basegfx::B2DPolygon OutputDevice::PixelToLogic(const class basegfx::B2DPolygon &,const class MapMode &) const",
+    "type-parameter-0-0 * detail::cloner::clone(type-parameter-0-0 *const)",
     # only used by OSX build
     "void StyleSettings::SetHideDisabledMenuItems(_Bool)",
     ])

@@ -83,8 +83,6 @@ public:
     void ParseSection(LwpFrib* pFrib);
     XFSection* CreateXFSection();
 
-    bool IsNewSection(){return m_bNewSection;}
-    OUString GetSectionStyleName(){return m_SectionStyleName;}
     OUString GetStyleName(){ return m_StyleName;}
     OUString GetFillerPageStyleName(){ return m_FillerPageStyleName;}
     bool IsNextPageType();
@@ -93,7 +91,7 @@ private:
     bool IsNeedSection();
 
 private:
-    bool m_bNewSection;
+    bool     m_bNewSection;
     OUString m_FillerPageStyleName;
     OUString m_SectionStyleName;
     OUString m_StyleName; //master page style name

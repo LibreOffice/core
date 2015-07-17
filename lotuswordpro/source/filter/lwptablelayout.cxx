@@ -1472,21 +1472,6 @@ void LwpTableHeadingLayout::GetStartEndRow(sal_uInt16& nStartRow, sal_uInt16& nE
     nStartRow = cStartRow;
     nEndRow = cEndRow;
 }
-/**
- * @short   get first row heading layout of table heading
- * @param
- * @return LwpRowHeadingLayout * - pointer to first row heading layout of table heading
- */
-LwpRowHeadingLayout * LwpTableHeadingLayout::GetFirstRowHeadingLayout()
-{
-    LwpObjectID& rID = GetChildHead();
-    if(!rID.IsNull())
-    {
-        LwpRowHeadingLayout * pHeadingRow = dynamic_cast<LwpRowHeadingLayout *>(rID.obj().get());
-        return pHeadingRow;
-    }
-    return NULL;
-}
 
 LwpSuperParallelColumnLayout::LwpSuperParallelColumnLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm):LwpSuperTableLayout(objHdr, pStrm)
 {

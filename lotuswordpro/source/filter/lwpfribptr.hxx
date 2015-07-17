@@ -78,18 +78,15 @@ public:
     ~LwpFribPtr();
     void ReadPara(LwpObjectStream* pObjStrm);
 private:
-//  void ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo);
     LwpFrib* m_pFribs;
     XFParagraph* m_pXFPara;//for parse ,add by 1-17 //Current XFPara used for frib parsing
     LwpPara* m_pPara;//for get foundry, add by 1-17
     static void ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen);
 public:
-//  String GetText();
     void XFConvert();
     void SetXFPara(XFParagraph* Para){m_pXFPara = Para;}
     XFParagraph* GetXFPara(){return m_pXFPara;}
     void SetPara(LwpPara* para){m_pPara=para;}
-    LwpPara* GetPara(){return m_pPara;}
     void RegisterStyle();
     void FindLayouts();// for register pagelayout, add by , 02/20/2005
     LwpFrib* GetFribs(){return m_pFribs;}

@@ -80,26 +80,6 @@ public:
 
     void Read(LwpObjectStream* pStrm) SAL_OVERRIDE;
 
-    inline LwpBorderStuff* GetBorderStuff();
-    inline LwpMargins* GetMargins();
-    inline sal_Int32 GetAboveWidth() const;
-    inline sal_Int32 GetBelowWidth() const;
-
-    inline bool IsBorderStuffOverridden();
-    inline bool IsMarginsOverridden();
-    inline bool IsAboveWidthOverridden();
-    inline bool IsBelowWidthOverridden();
-
-    inline void OverrideBorderStuff(LwpBorderStuff* pOther);
-    inline void OverrideMargins(LwpMargins* pOther);
-    inline void OverrideAboveWidth(sal_Int32 nNewWidth);
-    inline void OverrideBelowWidth(sal_uInt32 nNewWidth);
-
-    inline void RevertBorderStuff();
-    inline void RevertMargins();
-    inline void RevertAboveWidth();
-    inline void RevertBelowWidth();
-
 protected:
     LwpCharacterBorderOverride(LwpCharacterBorderOverride const& rOther);
 
@@ -120,84 +100,6 @@ private:
         PBO_BELOW       = 0x80
     };
 };
-
-inline LwpMargins* LwpCharacterBorderOverride::GetMargins()
-{
-    return m_pMargins;
-}
-
-inline LwpBorderStuff* LwpCharacterBorderOverride::GetBorderStuff()
-{
-    return m_pBorderStuff;
-}
-
-inline sal_Int32 LwpCharacterBorderOverride::GetAboveWidth() const
-{
-    return m_nAboveWidth;
-}
-
-inline sal_Int32 LwpCharacterBorderOverride::GetBelowWidth() const
-{
-    return m_nBelowWidth;
-}
-
-inline bool LwpCharacterBorderOverride::IsBorderStuffOverridden()
-{
-    return ((m_nOverride & PBO_STUFF) != 0);
-}
-
-inline bool LwpCharacterBorderOverride::IsMarginsOverridden()
-{
-    return ((m_nOverride & PBO_MARGINS) != 0);
-}
-
-inline bool LwpCharacterBorderOverride::IsAboveWidthOverridden()
-{
-    return ((m_nOverride & PBO_ABOVE) != 0);
-}
-
-inline bool LwpCharacterBorderOverride::IsBelowWidthOverridden()
-{
-    return ((m_nOverride & PBO_BELOW) != 0);
-}
-
-inline void LwpCharacterBorderOverride::OverrideBorderStuff(LwpBorderStuff* pOther)
-{
-    m_pBorderStuff = pOther;
-    LwpOverride::Override(PBO_STUFF, STATE_ON);
-}
-inline void LwpCharacterBorderOverride::OverrideMargins(LwpMargins* pOther)
-{
-    m_pMargins = pOther;
-    LwpOverride::Override(PBO_MARGINS, STATE_ON);
-}
-inline void LwpCharacterBorderOverride::OverrideAboveWidth(sal_Int32 nNewWidth)
-{
-    m_nAboveWidth = nNewWidth;
-    LwpOverride::Override(PBO_ABOVE, STATE_ON);
-}
-inline void LwpCharacterBorderOverride::OverrideBelowWidth(sal_uInt32 nNewWidth)
-{
-    m_nBelowWidth = nNewWidth;
-    LwpOverride::Override(PBO_BELOW, STATE_ON);
-}
-
-inline void LwpCharacterBorderOverride::RevertBorderStuff()
-{
-    LwpOverride::Override(PBO_STUFF, STATE_STYLE);
-}
-inline void LwpCharacterBorderOverride::RevertMargins()
-{
-    LwpOverride::Override(PBO_MARGINS, STATE_STYLE);
-}
-inline void LwpCharacterBorderOverride::RevertAboveWidth()
-{
-    LwpOverride::Override(PBO_ABOVE, STATE_STYLE);
-}
-inline void LwpCharacterBorderOverride::RevertBelowWidth()
-{
-    LwpOverride::Override(PBO_BELOW, STATE_STYLE);
-}
 
 #endif
 

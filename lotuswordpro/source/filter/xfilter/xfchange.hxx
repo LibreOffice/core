@@ -85,7 +85,6 @@ public:
     virtual ~XFChangeRegion(){}
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
     void SetChangeID(const OUString& sID){m_sID=sID;}
-    OUString GetChangeID(){return m_sID;}
     void SetEditor(const OUString& sEditor){m_sEditor=sEditor;}
 protected:
     OUString m_sID;
@@ -114,8 +113,6 @@ public:
     XFChange(){}
     virtual ~XFChange(){}
     void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
-    void SetChangeID(const OUString& sID){m_sID=sID;}
-    OUString GetChangeID(){return m_sID;}
 private:
     OUString m_sID;
 };
@@ -127,7 +124,6 @@ public:
     virtual ~XFChangeStart(){}
     void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
     void SetChangeID(const OUString& sID){m_sID=sID;}
-    OUString GetChangeID(){return m_sID;}
 private:
     OUString m_sID;
 };
@@ -139,7 +135,6 @@ public:
     virtual ~XFChangeEnd(){}
     void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
     void SetChangeID(const OUString& sID){m_sID=sID;}
-    OUString GetChangeID(){return m_sID;}
 private:
     OUString m_sID;
 };

@@ -69,15 +69,12 @@ class LwpSLVList
 public:
     LwpSLVList(){}
     explicit LwpSLVList(LwpObjectStream* pStrm){Read(pStrm);}
-public:
     void Read(LwpObjectStream* pStrm)
     {
         m_NextID.ReadIndexed(pStrm);
         if( LwpFileHeader::m_nFileRevision < 0x0006 )
             pStrm->SkipExtra();
     }
-    LwpObjectID& GetNext(){return m_NextID;}
-public:
 private:
     LwpObjectID     m_NextID;
 };

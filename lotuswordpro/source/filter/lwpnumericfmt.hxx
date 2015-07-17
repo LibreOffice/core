@@ -78,7 +78,6 @@ public:
     void QuickRead(LwpObjectStream* pStrm);
     OUString GetPrefix(){ return cPrefix.str();}
     OUString GetSuffix(){ return cSuffix.str();}
-    bool IsBlack(){ return (cColor.GetBlue()==0 && cColor.GetGreen()==0 && cColor.GetRed()==0);}
     bool IsDefaultPrefix(){ return !(cSubFlags&SF_OVER_PREFIX); }
     bool IsDefaultSuffix(){ return !(cSubFlags&SF_OVER_SUFFIX); }
     LwpColor GetColor();
@@ -255,7 +254,6 @@ public:
     sal_uInt16 GetDecimalPlaces();
     bool IsDecimalPlacesOverridden();
     bool IsNegativeOverridden();
-    bool IsZeroOverridden();
     XFStyle* Convert();
 
 private:
@@ -295,12 +293,6 @@ inline bool
 LwpNumericFormat::IsNegativeOverridden()
 {
     return (cFlags & NF_OVER_NEGATIVE) != 0;
-}
-
-inline bool
-LwpNumericFormat::IsZeroOverridden()
-{
-    return (cFlags & NF_OVER_ZERO) != 0;
 }
 
 #include "lwppiece.hxx"

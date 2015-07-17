@@ -70,10 +70,6 @@ public:
 
     void    SetText(const OUString& text);
 
-    void    SetName(const OUString& name);
-
-    void    SetTargetFrame(const OUString& frame="_self");
-
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
@@ -91,16 +87,6 @@ inline XFHyperlink::XFHyperlink()
 inline void XFHyperlink::SetHRef(const OUString& href)
 {
     m_strHRef = href;
-}
-
-inline void XFHyperlink::SetName(const OUString& name)
-{
-    m_strName = name;
-}
-
-inline void XFHyperlink::SetTargetFrame(const OUString& frame)
-{
-    m_strFrame = frame;
 }
 
 inline void XFHyperlink::SetText(const OUString& text)

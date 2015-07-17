@@ -75,12 +75,6 @@ public: // Methods
     explicit CUtListElmt(pCUtListElmt pPrev) { InsertAfter(pPrev); }
     explicit CUtListElmt(pCUtList pList);
     virtual ~CUtListElmt();
-    void Remove()
-    {
-        cpPrev->cpNext = cpNext;
-        cpNext->cpPrev = cpPrev;
-        cpNext = NULL;
-    }
     bool OnList() { return cpNext != NULL; }
     void MakeNotOnList() { cpNext = NULL; } // Same as Remove but doesn't
                                             // patch up list
@@ -122,8 +116,6 @@ public: // Methods
     pCUtListElmt GetLast() { return cDummyElmt.GetPrev(); }
     CUtListElmt& GetTerminating() { return cDummyElmt; }
     pCUtListElmt GetNextOrNULL(pCUtListElmt pCurr);
-    bool IsEmpty() { return GetFirst() == &GetTerminating(); };
-    bool ContainsAtLeastTwoItems() { return GetFirst() != GetLast(); };
 
     void Destroy();
 

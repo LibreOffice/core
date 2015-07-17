@@ -96,10 +96,7 @@ public:
 
     inline static double ConvertFromUnits(const sal_Int32& nUnits);
     inline static double ConvertToMetric(const double& fInch);
-    inline static double ConvertFromMetric(const double& fCM);
     inline static double ConvertFromUnitsToMetric(const sal_Int32& nUnits);
-
-    inline static sal_Int32 ConvertToUnits(const double& fInch);
 
     inline static bool IsOddNumber(sal_uInt16& nNumber);
     inline static bool IsEvenNumber(sal_uInt16& nNumber);
@@ -120,18 +117,10 @@ inline double LwpTools::ConvertToMetric(const double& fInch)
 {
     return fInch*CM_PER_INCH;
 }
-inline double LwpTools::ConvertFromMetric(const double& fCM)
-{
-    return fCM/CM_PER_INCH;
-}
 inline double LwpTools::ConvertFromUnitsToMetric(const sal_Int32& nUnits)
 {
     double fInch = ConvertFromUnits(nUnits);
     return ConvertToMetric(fInch);
-}
-inline sal_Int32 LwpTools::ConvertToUnits(const double& fInch)
-{
-    return (sal_Int32)fInch*UNITS_PER_INCH;
 }
 inline bool LwpTools::IsOddNumber(sal_uInt16& nNumber)
 {

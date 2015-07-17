@@ -84,11 +84,6 @@ public:
 
 public:
     /**
-     * @descr   Set style name for drawing text.
-     */
-    void    SetTextStyleName(const OUString& style);
-
-    /**
      * @descr   Set drawing object rotate.
      */
     void SetRotate(double degree, const XFPoint& rRotatePoint=XFPoint(0,0))
@@ -98,61 +93,21 @@ public:
         m_aRotatePoint = rRotatePoint;
     }
 
-    /**
-     * @descr   Set drawing object scale.
-     */
-    void    SetScale(double cx, double cy);
-
-    /**
-     * @descr   Set drawing object skew.
-     */
-    void    SetSkewX(double cx);
-
-    /**
-     * @descr   Set drawing object y skew.
-     */
-    void    SetSkewY(double cy);
-
     void    ContentToXml(IXFStream *pStrm);
 
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 protected:
     XFContentContainer  m_aContents;
-    OUString   m_strTextStyle;
-    double  m_fRotate;
-    XFPoint m_aRotatePoint;
-    double  m_fScaleX;
-    double  m_fScaleY;
-    double  m_fSkewX;
-    double  m_fSkewY;
-
+    OUString        m_strTextStyle;
+    double          m_fRotate;
+    XFPoint         m_aRotatePoint;
+    double          m_fScaleX;
+    double          m_fScaleY;
+    double          m_fSkewX;
+    double          m_fSkewY;
     unsigned int    m_nFlag;
 };
-
-inline void XFDrawObject::SetTextStyleName(const OUString& style)
-{
-    m_strTextStyle = style;
-}
-
-inline void XFDrawObject::SetScale(double cx, double cy)
-{
-    m_nFlag |= XFDRAWOBJECT_FLAG_SCALE;
-    m_fScaleX = cx;
-    m_fScaleY = cy;
-}
-
-inline void XFDrawObject::SetSkewX(double cx)
-{
-    m_nFlag |= XFDRAWOBJECT_FLAG_SKEWX;
-    m_fSkewX = cx*2*PI/360;
-}
-
-inline void XFDrawObject::SetSkewY(double cy)
-{
-    m_nFlag |= XFDRAWOBJECT_FLAG_SKEWY;
-    m_fSkewY = cy*2*PI/360;
-}
 
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

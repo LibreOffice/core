@@ -196,7 +196,6 @@ protected:
     LwpObjectID m_Head;
 public:
     void Read(LwpObjectStream *pStrm);
-    LwpObjectID& GetHeadID() { return m_Head;}
     LwpOrderedObject* Enumerate(LwpOrderedObject* pLast);
 protected:
     LwpListList* GetNextActiveListList(LwpListList* pLast);

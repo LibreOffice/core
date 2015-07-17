@@ -137,11 +137,6 @@ public:
     void    SetMinHeight(double minHeight);
 
     /**
-     * @descr   Set frame max-height.
-     */
-    void    SetMaxHeight(double minHeight);
-
-    /**
      * @descr   Set frame position.
      */
     void    SetPosition(double x, double y, double width, double height);
@@ -229,13 +224,6 @@ inline void XFFrame::SetMinHeight(double minHeight)
     m_fMinHeight = minHeight;
     m_nFlag |= XFFRAME_FLAG_MINHEIGHT;
     m_nFlag &= XFFRAME_FLAG_MINHEIGHT;
-}
-
-inline void XFFrame::SetMaxHeight(double maxHeight)
-{
-    m_fMaxHeight = maxHeight;
-    m_nFlag |= XFFRAME_FLAG_MAXHEIGHT;
-    m_nFlag &= XFFRAME_FLAG_MAXHEIGHT;
 }
 
 inline void XFFrame::SetPosition(double x, double y, double width, double height)

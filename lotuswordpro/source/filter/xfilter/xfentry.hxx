@@ -83,24 +83,9 @@ public:
     void    SetStringValue(const OUString& value);
 
     /**
-     * @descr   Set display string.
-     */
-    void    SetStringDisplay(const OUString& display);
-
-    /**
-     * @descr   Set entry name.
-     */
-    void    SetEntryName(const OUString& name);
-
-    /**
      * @descr   Set entry key. The keys is available only for enumXFEntryAlphabetical.
      */
     void    SetKey(const OUString& key1, const OUString& key2="");
-
-    /**
-     * @descr   Set whether it's a main entry. This is available only for enumXFEntryAlphabetical.
-     */
-    void    SetMainEntry(bool main);
 
     /**
      * @descr   Set outline level. This is available for enumXFEntryTOC and enumXFEntryUserIndex.
@@ -130,25 +115,10 @@ inline void XFEntry::SetStringValue(const OUString& value)
     m_strValue = value;
 }
 
-inline void XFEntry::SetStringDisplay(const OUString& display)
-{
-    m_strDisplay = display;
-}
-
-inline void XFEntry::SetEntryName(const OUString& name)
-{
-    m_strName = name;
-}
-
 inline void XFEntry::SetKey(const OUString& key1, const OUString& key2)
 {
     m_strKey1 = key1;
     m_strKey2 = key2;
-}
-
-inline void XFEntry::SetMainEntry(bool main)
-{
-    m_bMainEntry = main;
 }
 
 inline void XFEntry::SetOutlineLevel(sal_Int32 level)

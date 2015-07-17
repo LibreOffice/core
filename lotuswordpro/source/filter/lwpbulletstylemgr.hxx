@@ -90,12 +90,7 @@ public:
     inline void SetContinueFlag(bool bFlag);
     XFContentContainer* AddBulletList(XFContentContainer* pCont, bool bIsOrdered,
         const OUString& rStyleName, sal_Int16 nLevel, bool bIsBulletSkiped);
-    inline void SetCurrentPos(sal_uInt16 nNewPos);
     inline void SetCurrentSilverBullet(const LwpObjectID& rNewID);
-    inline LwpObjectID GetCurrentSilverBullet();
-    inline sal_uInt16 GetCurrentPos() const;
-    inline void SetCurrentNumOver(const LwpNumberingOverride& rOther);
-    inline LwpNumberingOverride* GetCurrentNumOver();
 
 private:
     typedef std::pair<boost::shared_ptr<LwpBulletOverride>, LwpObjectID> OverridePair;
@@ -107,8 +102,6 @@ private:
     bool m_bIsBulletSkipped;
     LwpObjectID m_aCurrentNumberingID;
     boost::scoped_ptr<LwpNumberingOverride> m_pCurrentNumOverride;
-    sal_uInt16 m_nCurrentPos;
-
 };
 
 inline void LwpBulletStyleMgr::SetFoundry(LwpFoundry* pFoundry)
@@ -119,33 +112,9 @@ inline void LwpBulletStyleMgr::SetContinueFlag(bool bFlag)
 {
     m_bContinue = bFlag;
 }
-
-inline void LwpBulletStyleMgr::SetCurrentPos(sal_uInt16 nNewPos)
-{
-    m_nCurrentPos = nNewPos;
-}
 inline void LwpBulletStyleMgr::SetCurrentSilverBullet(const LwpObjectID& rNewID)
 {
     m_aCurrentNumberingID = rNewID;
-}
-
-inline LwpObjectID LwpBulletStyleMgr::GetCurrentSilverBullet()
-{
-    return m_aCurrentNumberingID;
-}
-
-inline sal_uInt16 LwpBulletStyleMgr::GetCurrentPos() const
-{
-    return m_nCurrentPos;
-}
-
-inline void LwpBulletStyleMgr::SetCurrentNumOver(const LwpNumberingOverride& rOther)
-{
-    m_pCurrentNumOverride.reset(rOther.clone());
-}
-inline LwpNumberingOverride* LwpBulletStyleMgr::GetCurrentNumOver()
-{
-    return m_pCurrentNumOverride.get();
 }
 
 #endif

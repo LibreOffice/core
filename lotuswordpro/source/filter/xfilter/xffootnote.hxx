@@ -75,8 +75,6 @@ public:
     XFFootNote();
 
 public:
-    void    SetLabel(sal_Unicode label);
-
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
@@ -89,14 +87,7 @@ inline XFFootNote::XFFootNote()
     m_strID = XFGlobal::GenNoteName();
 }
 
-inline void XFFootNote::SetLabel(sal_Unicode label)
-{
-    sal_Unicode     chs[2];
-    chs[0] = label;
-    chs[1] = 0;
 
-    m_strLabel = OUString(chs);
-}
 
 inline void XFFootNote::ToXml(IXFStream *pStrm)
 {

@@ -105,9 +105,7 @@ public:
     double QuickReadDouble(bool *pFailure=NULL);
 
     OUString QuickReadStringPtr();
-    void QuickReadStringWithMax(unsigned char * pString, sal_uInt16 MaxLen);
 
-public:
     void ReadComplete();
     LwpSvStream *GetStream();
 private:

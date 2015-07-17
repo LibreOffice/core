@@ -133,31 +133,7 @@ void Lwp9Reader::ReadIndex()
  *      This function is  replaced by the read on demand model
  *      Reserverd for future use
 */
-void Lwp9Reader::DumpAllObjects()
-{
-    sal_Int64 nFileSize = GetFileSize();
-    sal_Int64 nFilePos = m_pDocStream->Tell();
 
-    while(true)
-    {
-        LwpObjectHeader objHdr;
-        objHdr.Read(*m_pDocStream);
-        nFilePos = m_pDocStream->Tell();
-        //Stop when reaching the index object
-        if(objHdr.GetTag() >= VO_ROOTLEAFOBJINDEX)
-        {
-            break;
-        }
-        //Stop when the length exceeds the file length
-        if(nFilePos + objHdr.GetSize() > nFileSize)
-        {
-            assert(false);
-            break;
-        }
-        m_pObjMgr->CreateObject(objHdr.GetTag(), objHdr);
-        m_pDocStream->Seek(nFilePos+objHdr.GetSize());
-    }
-}
 
 /**
  * @descr   Get file size

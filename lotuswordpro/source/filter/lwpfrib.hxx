@@ -111,8 +111,6 @@ protected:
 public:
     bool m_ModFlag;
     OUString GetStyleName(){return m_StyleName;}//add by  1-10
-//  void SetStyle(LwpFoundry* pFoundry);
-    bool IsModified(){return m_ModFlag;}
     void SetModifiers(ModifierInfo* pModifiers);
     ModifierInfo* GetModifiers(){return m_pModifiers;}
     virtual void RegisterStyle(LwpFoundry* pFoundry);
@@ -127,7 +125,6 @@ public:
         REV_INSERT =0,
         REV_DELETE = 1,
     };
-    LwpPara* GetMyPara(){return m_pPara;}
 private:
     static void ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo);
 protected:

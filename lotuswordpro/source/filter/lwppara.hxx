@@ -157,7 +157,6 @@ public:
     LwpPara* GetParent();
     LwpObjectID& GetStoryID();
     LwpStory* GetStory();
-    LwpBreaksOverride* GetBreaks();
 
     LwpParaStyle* GetParaStyle();
     XFParaStyle* GetXFParaStyle();
@@ -166,7 +165,6 @@ public:
     LwpNumberingOverride* GetParaNumbering();
 
     inline LwpSilverBullet* GetSilverBullet();
-    inline LwpObjectID GetSilverBulletID();
     OUString GetBulletChar() const;
     sal_uInt32 GetBulletFontID() const;
     sal_uInt16 GetLevel() const;
@@ -179,7 +177,6 @@ public:
     void GatherDropcapInfo();
     OUString GetBulletStyleName() const;
     void SetBelowSpacing(double value);
-    void SetBulletStyleName(const OUString& rNewName);
     void SetBulletFlag(bool bFlag);
     void SetIndent(LwpIndentOverride* pIndentOverride);
     void SetFirstFrib(const OUString& Content,sal_uInt32 FontID);
@@ -189,7 +186,6 @@ public:
     void SetDropcapLines(sal_uInt16 number);
     void SetDropcapChars(sal_uInt32 chars);
     void SetDropcapLayout(LwpDropcapLayout* pLayout);
-    bool IsHasDropcap();
 
     XFContentContainer* GetXFContainer();
     void AddXFContent(XFContent* pCont);
@@ -205,7 +201,6 @@ public:
     bool IsInCell();
 
     void SetAllText(const OUString& sText);
-    OUString GetStyleName(){return m_StyleName;}
 
 protected:
     sal_uInt32  m_nOrdinal; // Ordinal number of this paragraph
@@ -299,10 +294,6 @@ inline LwpSilverBullet* LwpPara::GetSilverBullet()
 {
     return m_pSilverBullet;
 }
-inline LwpObjectID LwpPara::GetSilverBulletID()
-{
-    return m_aSilverBulletID;
-}
 inline OUString LwpPara::GetBulletChar() const
 {
     return m_Content;
@@ -315,10 +306,6 @@ inline sal_uInt16 LwpPara::GetLevel() const
 {
     return m_nLevel;
 }
-inline void LwpPara::SetBulletStyleName(const OUString& rNewName)
-{
-    m_aBulletStyleName = rNewName;
-}
 inline void LwpPara::SetBulletFlag(bool bFlag)
 {
     m_bHasBullet = bFlag;
@@ -330,10 +317,6 @@ inline bool LwpPara::GetBulletFlag() const
 inline LwpFribPtr& LwpPara::GetFribs()
 {
     return m_Fribs;
-}
-inline LwpBreaksOverride* LwpPara::GetBreaks()
-{
-    return m_pBreaks;
 }
 inline XFContentContainer* LwpPara::GetXFContainer()
 {
@@ -370,11 +353,6 @@ inline LwpStory* LwpPara::GetStory()
     if (m_Story.obj().is())
         return dynamic_cast<LwpStory*>(m_Story.obj().get());
     return NULL;
-}
-
-inline bool LwpPara::IsHasDropcap()
-{
-    return m_bHasDropcap;
 }
 inline void LwpPara::SetParaDropcap(bool bFlag)
 {

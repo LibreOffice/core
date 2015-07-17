@@ -112,15 +112,9 @@ public:
     virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     sal_uInt16 GetScaleMode(){return m_nScaleMode;}
     sal_uInt32 GetScalePercentage(){return m_nScalePercentage;}
-    void SetScalePercentage(sal_uInt32 nVal){m_nScalePercentage = nVal;}
     sal_Int32 GetScaleWidth(){return m_nScaleWidth;}
-    void SetScaleWidth(sal_Int32 nVal){m_nScaleWidth = nVal;}
     sal_Int32 GetScaleHeight(){return m_nScaleHeight;}
-    void SetScaleHeight(sal_Int32 nVal){m_nScaleHeight = nVal;}
-    sal_uInt16 GetContentRotation(){return m_nContentRotation;}
-    void SetContentRotation(sal_uInt16 nVal){m_nContentRotation = nVal;}
     sal_uInt16 GetPlacement(){return m_nPlacement;}
-    void SetPlacement(sal_uInt16 nVal){m_nPlacement = nVal;}
     inline LwpPoint& GetOffset() {return m_Offset;}
 protected:
     virtual void Read() SAL_OVERRIDE;
@@ -218,9 +212,7 @@ public:
     ~LwpColumnInfo();
     void Read(LwpObjectStream *pStrm);
     inline double GetWidth(){return LwpTools::ConvertFromUnitsToMetric(m_nWidth);}
-    inline void SetWidth(sal_Int32 w){m_nWidth = w;}
     inline double GetGap(){return LwpTools::ConvertFromUnitsToMetric(m_nGap);}
-    inline void SetGap(sal_Int32 g){m_nGap = g;}
 private:
     sal_Int32 m_nWidth;
     sal_Int32 m_nGap;
@@ -338,11 +330,6 @@ public:
     LwpLayoutRelativityGuts();
     void Read(LwpObjectStream *pStrm);
     sal_uInt8 GetRelativeType(){ return m_nRelType;}
-    sal_uInt8 GetRelativeFromWhere(){ return m_nRelFromWhere;}
-    LwpPoint GetRelativeDistance(){ return m_RelDistance;}
-    sal_uInt8 GetTetherType(){ return m_nTether;}
-    sal_uInt8 GetTetherWhere(){ return m_nTetherWhere;}
-public:
     enum RelativeType
     {
         LAY_PARENT_RELATIVE = 1,

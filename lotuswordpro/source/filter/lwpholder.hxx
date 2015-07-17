@@ -124,7 +124,6 @@ public:
     LwpListList(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     void Read() SAL_OVERRIDE;
     LwpObjectID& GetHead(){ return m_HeadTail.GetHead();}
-    LwpObjectID& GetTail(){ return m_HeadTail.GetTail();}
 protected:
     LwpDLVListHeadTail m_HeadTail;
 private:

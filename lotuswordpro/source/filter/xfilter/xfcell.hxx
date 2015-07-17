@@ -132,21 +132,6 @@ public:
     OUString   GetCellName();
 
     /**
-     * @descr   Return cell column id.
-     */
-    sal_Int32   GetCol();
-
-    /**
-     * @descr   return cell'owner row.
-     */
-    XFRow*      GetOwnerRow();
-
-    /**
-     * @descr   If cell has a sub-table, return it, else return NULL.
-     */
-    XFTable*    GetSubTable();
-
-    /**
      * @descr   return cell column span property.
      */
     sal_Int32   GetColSpaned();
@@ -157,15 +142,15 @@ public:
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
-    XFRow       *m_pOwnerRow;
-    XFTable     *m_pSubTable;
-    sal_Int32   m_nCol;
-    sal_Int32   m_nColSpaned;
-    sal_Int32   m_nRepeated;
+    XFRow          *m_pOwnerRow;
+    XFTable        *m_pSubTable;
+    sal_Int32       m_nCol;
+    sal_Int32       m_nColSpaned;
+    sal_Int32       m_nRepeated;
     enumXFValueType m_eValueType;
-    OUString   m_strValue;
-    OUString   m_strFormula;
-    bool    m_bProtect;
+    OUString        m_strValue;
+    OUString        m_strFormula;
+    bool            m_bProtect;
 };
 
 inline void XFCell::SetColumnSpaned(sal_Int32 num)
@@ -196,21 +181,6 @@ inline void XFCell::SetCol(sal_Int32 col)
 inline void XFCell::SetOwnerRow(XFRow *pRow)
 {
     m_pOwnerRow = pRow;
-}
-
-inline sal_Int32    XFCell::GetCol()
-{
-    return m_nCol;
-}
-
-inline XFRow*   XFCell::GetOwnerRow()
-{
-    return m_pOwnerRow;
-}
-
-inline XFTable* XFCell::GetSubTable()
-{
-    return m_pSubTable;
 }
 
 inline sal_Int32 XFCell::GetColSpaned()

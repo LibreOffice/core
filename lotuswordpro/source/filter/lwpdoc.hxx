@@ -138,7 +138,6 @@ public:
 
     inline bool IsChildDoc();
     inline bool HonorProtection();
-    inline LwpObjectID& GetContentList();
     inline LwpObjectID& GetDocData();
     inline LwpObjectID& GetSocket();
 
@@ -185,10 +184,6 @@ inline bool LwpDocument::IsChildDoc()
 inline bool LwpDocument::HonorProtection()
 {
     return (m_nPersistentFlags & DOC_PROTECTED) != 0;
-}
-inline LwpObjectID& LwpDocument::GetContentList()
-{
-    return m_pFoundry->GetContentManager().GetContentList();
 }
 inline LwpObjectID& LwpDocument::GetSocket()
 {

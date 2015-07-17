@@ -215,15 +215,13 @@ public:
     LwpRubyMarker* GetMarker();
     void ConvertContentText();
     LwpStory* GetContentStory();
-    sal_uInt8 GetPosition(){return m_nPlacement;}
-    sal_uInt8 GetAlignment(){return m_nAlignment;}
     void RegisterStyle() SAL_OVERRIDE;
     enum{
-    LEFT = 4,
-    RIGHT = 5,
-    CENTER = 2,
-    TOP = 1,
-    BOTTOM = 3
+        LEFT = 4,
+        RIGHT = 5,
+        CENTER = 2,
+        TOP = 1,
+        BOTTOM = 3
     };
 protected:
     void Read() SAL_OVERRIDE;

@@ -68,23 +68,11 @@ public:
     XFFootnoteConfig();
 
 public:
-    void    SetBodyStyle(const OUString& style);
-
-    void    SetCitationStyle(const OUString& style);
-
-    void    SetDefaultStyle(const OUString& style);
-
     void    SetMasterPage(const OUString& masterPage);
-
-    void    SetNumberFormat(const OUString& numberFormat);
 
     void    SetStartValue(sal_Int32 value=0);
 
     void    SetRestartOnPage();
-
-    void    SetRestartOnChapter();
-
-    void    SetInsertInPage(bool page=true);
 
     void    SetNumPrefix(const OUString& numprefix);
 
@@ -125,29 +113,9 @@ inline XFFootnoteConfig::XFFootnoteConfig()
     m_bIsFootnote = true;
 }
 
-inline void XFFootnoteConfig::SetBodyStyle(const OUString& style)
-{
-    m_strBodyStyle = style;
-}
-
-inline void XFFootnoteConfig::SetCitationStyle(const OUString& style)
-{
-    m_strCitationStyle = style;
-}
-
-inline void XFFootnoteConfig::SetDefaultStyle(const OUString& style)
-{
-    m_strDefaultStyle = style;
-}
-
 inline void XFFootnoteConfig::SetMasterPage(const OUString& masterPage)
 {
     m_strMasterPage = masterPage;
-}
-
-inline void XFFootnoteConfig::SetNumberFormat(const OUString& numberFormat)
-{
-    m_strNumFmt = numberFormat;
 }
 
 inline void XFFootnoteConfig::SetStartValue(sal_Int32 value)
@@ -160,16 +128,6 @@ inline void XFFootnoteConfig::SetStartValue(sal_Int32 value)
 inline void XFFootnoteConfig::SetRestartOnPage()
 {
     m_nRestartType = 0;
-}
-
-inline void XFFootnoteConfig::SetRestartOnChapter()
-{
-    m_nRestartType = 1;
-}
-
-inline void XFFootnoteConfig::SetInsertInPage(bool page)
-{
-    m_bInsertInPage = page;
 }
 
 inline void XFFootnoteConfig::SetNumPrefix(const OUString& numprefix)

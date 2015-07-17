@@ -84,11 +84,6 @@ public:
 
 public:
     /**
-     * @descr   Set drawing wrap type.
-     */
-    void    SetWrapType(enumXFWrap wrap, sal_Int32 nParagraphs = 0);
-
-    /**
      * @descr   Set drawing object border line.
      */
     void    SetLineStyle(double width, XFColor color = XFColor(0,0,0), sal_Int32 transparency = 0);
@@ -137,12 +132,6 @@ private:
     bool m_bArrowStartCenter;
     bool m_bArrowEndCenter;
 };
-
-inline void XFDrawStyle::SetWrapType(enumXFWrap wrap, sal_Int32 nParagraphs)
-{
-    m_eWrap = wrap;
-    m_nWrapLines = nParagraphs;
-}
 
 inline void XFDrawStyle::SetArrowStart(const OUString& start, double size, bool center)
 {

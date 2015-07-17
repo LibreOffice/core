@@ -79,7 +79,6 @@ LwpBulletStyleMgr::LwpBulletStyleMgr()
     , m_pBulletList(NULL)
     , m_bContinue(true)
     , m_bIsBulletSkipped(false)
-    , m_nCurrentPos(0xFF)
 {
 }
 

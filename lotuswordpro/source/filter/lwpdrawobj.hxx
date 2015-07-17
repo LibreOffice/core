@@ -139,12 +139,6 @@ public:
      * @descr   set the type to the draw object.
      */
     inline void SetObjectType(DrawObjectType eType) { m_eType = eType; }
-
-    /**
-     * @descr   get the type of the draw object.
-     * @return  the type of the object.
-     */
-    inline  DrawObjectType GetObjectType() const { return m_eType; }
 };
 
 /**

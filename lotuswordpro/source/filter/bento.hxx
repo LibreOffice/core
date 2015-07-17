@@ -220,7 +220,6 @@ public: // Internal methods
     BenError SeekToPosition(BenContainerPos Pos);
     BenError SeekFromEnd(long Offset);
 
-    BenObjectID GetNextAvailObjectID() { return cNextAvailObjectID; }
     void SetNextAvailObjectID(BenObjectID ID) { cNextAvailObjectID = ID; }
     CUtList& GetObjects() { return cObjects; }
     CUtList& GetNamedObjects() { return cNamedObjects; }
@@ -230,10 +229,6 @@ public: // Internal methods
     BenError CreateGraphicStream(SvStream * &pStream,  const char *pObjectName);
 
     BenError GetSize(sal_uLong * pLength);
-    LwpSvStream * GetStream()
-    {
-        return cpStream;
-    };
 private: // Data
     CUtOwningList cObjects;
     CUtList cNamedObjects;
@@ -247,9 +242,7 @@ class CBenObject : public CBenIDListElmt
 public:
     pCBenProperty UseProperty(BenObjectID PropertyID);
     pCBenValue UseValue(BenObjectID PropertyID);
-    virtual bool IsNamedObject();
     pLtcBenContainer GetContainer() { return cpContainer; }
-    BenObjectID GetObjectID() { return GetID(); }
 public: // Internal methods
     CBenObject(pLtcBenContainer pContainer, BenObjectID ObjectID,
       pCUtListElmt pPrev) : CBenIDListElmt(ObjectID, pPrev)
@@ -289,7 +282,6 @@ public: // Internal methods
         cpProperty = pProperty;
         cpReferencedList = NULL;
     }
-    BenObjectID GetTypeNameID() { return GetID(); }
     inline pCBenValueSegment GetNextValueSegment(pCBenValueSegment
       pCurrValueSegment);
     inline pLtcBenContainer GetContainer();
@@ -321,25 +313,9 @@ public: // Internal methods
         cpObject = pObject;
         cValue.SetProperty(this);
     }
-
-BenObjectID GetPropertyNameID() { return GetID(); }
-
 private: // Data
     pCBenObject cpObject;
     CBenValue cValue;
-};
-
-// In our implementation, reference is always just the object ID for the
-// object referenced (but you shouldn't assume that)
-#define BEN_REFERENCE_SIZE 4
-
-class CBenReference
-{
-public: // Methods
-    BenByte * GetData() { return cData; }
-
-private: // Data
-    BenByte cData[BEN_REFERENCE_SIZE];
 };
 
 class CBenValueSegment : public CUtListElmt
@@ -359,15 +335,9 @@ public: // Internal methods
     CBenValueSegment(const void  * pImmData, unsigned short Size)
       { cpValue = NULL; cImmediate = true;
       UtHugeMemcpy(cImmData, pImmData, Size); cSize = Size; }
-    bool IsLast()
-    {
-        return cpValue == NULL || cpValue->GetValueSegments().GetLast() ==
-          this;
-    }
     bool IsImmediate() { return cImmediate; }
     BenContainerPos GetPosition() { return cPos; }
     unsigned long GetSize() { return cSize; }
-    void SetSize(unsigned long Size) { cSize = Size; }
     BenByte * GetImmediateData() { return cImmData; }
 
 private: // Data
@@ -391,27 +361,18 @@ inline pLtcBenContainer CBenValue::GetContainer()
 class CBenNamedObject : public CBenObject
 {
 public: // Methods
-    virtual bool IsNamedObject() SAL_OVERRIDE;
     virtual bool IsPropertyName();
-    virtual bool IsTypeName();
 
 public: // Internal methods
     CBenNamedObject(pLtcBenContainer pContainer, BenObjectID ObjectID,
     pCBenObject pPrevObject, const char * sName,
     pCUtListElmt pPrevNamedObjectListElmt);
-    const char * GetName() { return csName.data(); }
 
     const char * GetNameCStr() { return csName.c_str(); }
-
-    void SetPosition(BenContainerPos Pos) { cPos = Pos; }
-    BenContainerPos GetPosition() { return cPos; }
-    size_t GetLength() { return csName.length()+ 1; }
-    CBenNamedObjectListElmt& GetNameListElmt() { return cNameListElmt; }
 
 private: // Data
     std::string csName;
     CBenNamedObjectListElmt cNameListElmt;
-    BenContainerPos cPos;
 };
 
 class CBenPropertyName : public CBenNamedObject
@@ -433,7 +394,6 @@ public: // Internal methods
     pCUtListElmt pPrevNamedObjectListElmt) :
     CBenNamedObject(pContainer, ObjectID, pPrevObject, sName,
     pPrevNamedObjectListElmt) { ; }
-    virtual bool IsTypeName() SAL_OVERRIDE;
 };
 
 } // end namespace OpenStormBento

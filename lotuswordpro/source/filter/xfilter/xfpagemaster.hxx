@@ -89,8 +89,6 @@ public:
 
     void    SetPageUsage(enumXFPageUsage usage);
 
-    void    SetPrintOrient(bool bUseWidth=true);
-
     void    SetBorders(XFBorders *pBorders);
 
     void    SetShadow(XFShadow *pShadow);
@@ -150,11 +148,6 @@ private:
 inline void XFPageMaster::SetPageUsage(enumXFPageUsage usage)
 {
     this->m_eUsage = usage;
-}
-
-inline void XFPageMaster::SetPrintOrient(bool bUseWidth)
-{
-    m_bPrintOrient = bUseWidth;
 }
 
 inline void XFPageMaster::SetTextDir(enumXFTextDir dir)

@@ -141,11 +141,6 @@ public:
      */
     void    SetYPosType(enumXFFrameYPos pos, enumXFFrameYRel rel);
 
-    /**
-     * @descr   Set frame background.
-     */
-    void    SetBackGround(bool bBackground);
-
     void SetTransparency(sal_Int16 nTransparency);
 
     virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
@@ -233,11 +228,6 @@ inline void XFFrameStyle::SetYPosType(enumXFFrameYPos pos, enumXFFrameYRel rel)
 {
     m_eYPos = pos;
     m_eYRel = rel;
-}
-
-inline void XFFrameStyle::SetBackGround(bool bBackground)
-{
-    m_bBackground = bBackground;
 }
 
 inline void XFFrameStyle::SetTransparency(sal_Int16 nTransparency)

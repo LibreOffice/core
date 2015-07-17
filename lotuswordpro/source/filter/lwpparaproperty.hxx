@@ -93,7 +93,6 @@ public:
     virtual ~LwpParaProperty(){}
     virtual sal_uInt32  GetType() = 0;
     inline  LwpParaProperty* GetNext();
-    inline  LwpParaProperty* GetPrevious();
 
     static LwpParaProperty* ReadPropertyList(LwpObjectStream* pFile,rtl::Reference<LwpObject> const & Whole);
 
@@ -102,11 +101,6 @@ public:
 inline LwpParaProperty* LwpParaProperty::GetNext()
 {
     return static_cast<LwpParaProperty*>(LwpDLList::GetNext());
-}
-
-inline LwpParaProperty* LwpParaProperty::GetPrevious()
-{
-    return static_cast<LwpParaProperty*>(LwpDLList::GetPrevious());
 }
 
 //align/indent/spacing

@@ -53,15 +53,11 @@
  *
  *
  ************************************************************************/
+
 #include "first.hxx"
+
 namespace OpenStormBento
 {
-
-bool
-CBenObject::IsNamedObject()
-{
-    return false;
-}
 
 pCBenProperty
 CBenObject::UseProperty(BenObjectID PropertyID)

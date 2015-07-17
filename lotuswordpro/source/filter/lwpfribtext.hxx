@@ -105,8 +105,6 @@ public:
 
     inline sal_uInt16 GetNumberChar() const;
 
-    inline sal_uInt16 GetLevel() const;
-
     inline sal_uInt16 GetStart() const;
 
 private:
@@ -122,10 +120,6 @@ inline sal_uInt16 LwpFribParaNumber::GetStyleID() const
 inline sal_uInt16 LwpFribParaNumber::GetNumberChar() const
 {
     return m_nNumberChar;
-}
-inline sal_uInt16 LwpFribParaNumber::GetLevel() const
-{
-    return m_nLevel;
 }
 inline sal_uInt16 LwpFribParaNumber::GetStart() const
 {

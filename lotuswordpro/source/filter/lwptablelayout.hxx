@@ -221,7 +221,6 @@ public:
     virtual ~LwpTableHeadingLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_TABLE_HEADING_LAYOUT;}
     void GetStartEndRow(sal_uInt16& nStartRow, sal_uInt16& nEndRow);
-    LwpRowHeadingLayout * GetFirstRowHeadingLayout();
 protected:
     void Read() SAL_OVERRIDE;
     sal_uInt16 cStartRow;

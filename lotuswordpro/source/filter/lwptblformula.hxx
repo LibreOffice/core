@@ -198,8 +198,6 @@ class LwpFormulaInfo : public LwpCellList
 {
 public:
     LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    bool IsFormula() SAL_OVERRIDE {return true;}
-    void SetRow(sal_uInt16 nRow){ m_nFormulaRow = nRow;}
     OUString Convert(LwpTableLayout* pCellsMap);
     void Convert(XFCell * pCell, LwpTableLayout* pCellsMap) SAL_OVERRIDE;
 protected:

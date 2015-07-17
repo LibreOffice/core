@@ -74,17 +74,9 @@ public:
 
     void    SetNumberIncrement(sal_Int32 increment);
 
-    void    SetSeparator(sal_Int32 increment, const OUString& separator);
-
-    void    SetNumberFormat(const OUString& numfmt = "1");
-
-    void    SetTextStyle(const OUString& style);
-
     void    SetRestartOnPage(bool restart = true);
 
     void    SetCountEmptyLines(bool empty = true);
-
-    void    SetCountFrameLines(bool frame = true);
 
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
@@ -127,22 +119,6 @@ inline void XFLineNumberConfig::SetNumberIncrement(sal_Int32 increment)
     m_nIncrement = increment;
 }
 
-inline void XFLineNumberConfig::SetSeparator(sal_Int32 increment, const OUString& separator)
-{
-    m_nSepIncrement = increment;
-    m_strSeparator = separator;
-}
-
-inline void XFLineNumberConfig::SetNumberFormat(const OUString& numfmt)
-{
-    m_strNumFmt = numfmt;
-}
-
-inline void XFLineNumberConfig::SetTextStyle(const OUString& style)
-{
-    m_strTextStyle = style;
-}
-
 inline void XFLineNumberConfig::SetRestartOnPage(bool restart)
 {
     m_bRestartOnPage = restart;
@@ -151,11 +127,6 @@ inline void XFLineNumberConfig::SetRestartOnPage(bool restart)
 inline void XFLineNumberConfig::SetCountEmptyLines(bool empty)
 {
     m_bCountEmptyLines = empty;
-}
-
-inline void XFLineNumberConfig::SetCountFrameLines(bool frame)
-{
-    m_bCountFrameLines = frame;
 }
 
 inline void XFLineNumberConfig::ToXml(IXFStream *pStrm)

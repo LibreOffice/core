@@ -107,7 +107,6 @@ private:
 
     void XFConvertEquation(XFContentContainer* pCont);
 
-    void ParseChart(IXFStream* pOutputStream);
     bool IsGrafFormatValid();
     // add by , 03/25/2005
     std::vector< rtl::Reference<XFFrame> > m_vXFDrawObjects;
@@ -131,7 +130,6 @@ public:
     void GetGrafOrgSize(double& rWidth, double& rHeight) SAL_OVERRIDE;
     // end add
 
-    OUString GetWatermarkName(){ return m_WatermarkName;}
     sal_Int16 IsLinked(){ return m_bIsLinked;}
     OUString GetLinkedFilePath(){ return m_LinkedFilePath;}
 };

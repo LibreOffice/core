@@ -73,21 +73,7 @@ public:
 
     void    SetContrast(sal_Int32 contrast);
 
-    void    SetGamma(sal_Int32 gamma);
-
-    void    SetTransparent(sal_Int32 transparent);
-
-    void    SetAdjustRed(sal_Int32 red);
-
-    void    SetAdjustGreen(sal_Int32 green);
-
-    void    SetAdjustBlue(sal_Int32 blue);
-
     void    SetClip(double left, double right, double top, double bottom);
-
-    void    SetFlip(bool hori, bool vert);
-
-    void    SetColorMode(enumXFColorMode mode);
 
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
@@ -118,43 +104,12 @@ inline void XFImageStyle::SetContrast(sal_Int32 contrast)
     m_nContrast = contrast;
 }
 
-inline void XFImageStyle::SetGamma(sal_Int32 gamma)
-{
-    m_nGamma = gamma;
-}
-
-inline void XFImageStyle::SetTransparent(sal_Int32 transparent)
-{
-    m_nTransparent = transparent;
-}
-
-inline void XFImageStyle::SetAdjustRed(sal_Int32 red)
-{
-    m_nAdjustRed = red;
-}
-
-inline void XFImageStyle::SetAdjustGreen(sal_Int32 green)
-{
-    m_nAdjustGreen = green;
-}
-
-inline void XFImageStyle::SetAdjustBlue(sal_Int32 blue)
-{
-    m_nAdjustBlue = blue;
-}
-
 inline void XFImageStyle::SetClip(double left, double right, double top, double bottom)
 {
     m_fClipLeft = left;
     m_fClipRight = right;
     m_fClipTop = top;
     m_fClipBottom = bottom;
-}
-
-inline void XFImageStyle::SetFlip(bool hori, bool vert)
-{
-    m_bHoriFlip = hori;
-    m_bVertFlip = vert;
 }
 
 #endif

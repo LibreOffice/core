@@ -78,8 +78,6 @@ public:
 
     void    SetMinRowHeight(double height);
 
-    void    SetBackColor(XFColor& color);
-
     virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
@@ -101,10 +99,6 @@ inline void XFRowStyle::SetMinRowHeight(double height)
     m_fMinHeight = height;
 }
 
-inline void XFRowStyle::SetBackColor(XFColor& color)
-{
-    m_aBackColor = color;
-}
 inline double XFRowStyle::GetRowHeight()
 {
     if (m_fMinHeight > FLOAT_MIN)

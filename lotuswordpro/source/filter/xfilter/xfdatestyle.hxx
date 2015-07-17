@@ -87,15 +87,6 @@ public:
     virtual ~XFDateStyle();
 
 public:
-
-    void    SetFixed(bool fixed);
-
-    void    SetLanguage(const OUString& lang);
-
-    void    SetCountry(const OUString& country);
-
-    void    SetAutoOrder(bool bAutoOrder);
-
     void    AddYear( bool bLongFmt = true );
 
     void    AddMonth( bool bLongFmt = true, bool bTexture = false  );
@@ -104,11 +95,7 @@ public:
 
     void    AddWeekDay( bool bLongFmt = true );
 
-    void    AddYearWeek();
-
     void    AddEra(bool bLongFmt = false);
-
-    void    AddQuarter(bool bLongFmt = false);
 
     void    AddHour( bool bLongFmt = true );
 
@@ -135,26 +122,6 @@ private:
 inline void XFDatePart::SetTexture(bool bTexture)
 {
     m_bTexture = bTexture;
-}
-
-inline void XFDateStyle::SetFixed(bool fixed)
-{
-    m_bFixed = fixed;
-}
-
-inline void XFDateStyle::SetLanguage(const OUString& lang)
-{
-    m_strLanguage = lang;
-}
-
-inline void XFDateStyle::SetCountry(const OUString& country)
-{
-    m_strCountry = country;
-}
-
-inline void XFDateStyle::SetAutoOrder(bool bAutoOrder)
-{
-    m_bAutoOrder = bAutoOrder;
 }
 
 inline void XFDateStyle::AddYear( bool bLongFmt )
@@ -190,25 +157,10 @@ inline void XFDateStyle::AddWeekDay( bool bLongFmt )
     m_aParts.AddStyle(part);
 }
 
-inline void XFDateStyle::AddYearWeek()
-{
-    XFDatePart  *part = new XFDatePart();
-    part->SetPartType(enumXFDateYearWeek);
-    m_aParts.AddStyle(part);
-}
-
 inline void XFDateStyle::AddEra(bool bLongFmt)
 {
     XFDatePart  *part = new XFDatePart();
     part->SetPartType(enumXFDateEra);
-    part->SetLongFmt(bLongFmt);
-    m_aParts.AddStyle(part);
-}
-
-inline void XFDateStyle::AddQuarter(bool bLongFmt)
-{
-    XFDatePart  *part = new XFDatePart();
-    part->SetPartType(enumXFDateQuarter);
     part->SetLongFmt(bLongFmt);
     m_aParts.AddStyle(part);
 }

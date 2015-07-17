@@ -95,10 +95,7 @@ class LwpSection : public LwpOrderedObject
 public:
     LwpSection(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpSection();
-    inline sal_uInt16 GetFlags();
     inline LwpPageLayout* GetPageLayout();
-    inline LwpColor& GetColor();
-    inline LwpAtomHolder& GetAtomHolder();
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     OUString GetSectionName(){return m_AtomHolder.str();}
 
@@ -113,39 +110,12 @@ private:
 };
 
 /**
- * @descr Get flags value
- *
- */
-inline sal_uInt16 LwpSection::GetFlags()
-{
-    return m_Flags;
-}
-
-/**
  * @descr Get page layout pointer
  *
  */
 inline LwpPageLayout* LwpSection::GetPageLayout()
 {
     return dynamic_cast<LwpPageLayout*>(m_PageLayout.obj().get());
-}
-
-/**
- * @descr get section tab color
- *
- */
-inline LwpColor& LwpSection::GetColor()
-{
-    return m_Color;
-}
-
-/**
- * @descr get section atom holder pointer
- *
- */
-inline LwpAtomHolder& LwpSection::GetAtomHolder()
-{
-    return m_AtomHolder;
 }
 
 class LwpIndexSection : public LwpSection

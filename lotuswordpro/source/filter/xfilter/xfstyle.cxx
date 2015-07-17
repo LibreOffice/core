@@ -93,11 +93,6 @@ enumXFStyle XFStyle::GetStyleFamily()
     return enumXFStyleUnknown;
 }
 
-void    XFStyle::SetStyleFamily(enumXFStyle family)
-{
-    m_enumFamily = family;
-}
-
 bool    XFStyle::Equal(IXFStyle * /*pStyle*/)
 {
     return false;

@@ -68,50 +68,29 @@ class XFFontWorkStyle
 public:
     XFFontWorkStyle() :
         m_nButtonForm(-1),
-        m_bHideForm(true),
-        m_fDistance(-0.10),
         m_eStyleType(enumXFFWOff),
-        m_eAdjustType(enumXFFWAdjustAutosize),
-        m_eShadowType(enumXFFWShadowNone)
+        m_eAdjustType(enumXFFWAdjustAutosize)
         {}
 
     ~XFFontWorkStyle(){}
 
     inline void SetButtonForm(sal_Int8 nIndex);
-    inline void SetHideForm(bool bHide);
-    inline void SetFWDistance(double fDist);
     inline void SetFWStyleType(enumXFFWStyle eStyle);
     inline void SetFWAdjustType(enumXFFWAdjust eAdjust);
-    inline void SetFWShadowType(enumXFFWShadow eShadow);
 
     inline sal_Int8 GetButtonForm() const;
-    inline double GetFWDistance() const;
     inline enumXFFWStyle GetStyleType() const;
     inline enumXFFWAdjust GetAdjustType() const;
-    inline enumXFFWShadow GetShadowType() const;
 
 private:
     sal_Int8 m_nButtonForm;
-    bool m_bHideForm;
-    double m_fDistance;
     enumXFFWStyle m_eStyleType;
     enumXFFWAdjust m_eAdjustType;
-    enumXFFWShadow m_eShadowType;
 };
 
 inline void XFFontWorkStyle::SetButtonForm(sal_Int8 nIndex)
 {
     m_nButtonForm = nIndex;
-}
-
-inline void XFFontWorkStyle::SetHideForm(bool bHide)
-{
-    m_bHideForm = bHide;
-}
-
-inline void XFFontWorkStyle::SetFWDistance(double fDist)
-{
-    m_fDistance = fDist;
 }
 
 inline void XFFontWorkStyle::SetFWStyleType(enumXFFWStyle eStyle)
@@ -124,18 +103,9 @@ inline void XFFontWorkStyle::SetFWAdjustType(enumXFFWAdjust eAdjust)
     m_eAdjustType = eAdjust;
 }
 
-inline void XFFontWorkStyle::SetFWShadowType(enumXFFWShadow eShadow)
-{
-    m_eShadowType = eShadow;
-}
-
 inline sal_Int8 XFFontWorkStyle::GetButtonForm() const
 {
     return m_nButtonForm;
-}
-inline double XFFontWorkStyle::GetFWDistance() const
-{
-    return m_fDistance;
 }
 
 inline enumXFFWStyle XFFontWorkStyle::GetStyleType() const
@@ -145,10 +115,6 @@ inline enumXFFWStyle XFFontWorkStyle::GetStyleType() const
 inline enumXFFWAdjust XFFontWorkStyle::GetAdjustType() const
 {
     return m_eAdjustType;
-}
-inline enumXFFWShadow XFFontWorkStyle::GetShadowType() const
-{
-    return m_eShadowType;
 }
 
 #endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTWORKSTYLE_HXX

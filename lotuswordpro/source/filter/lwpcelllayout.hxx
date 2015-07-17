@@ -137,8 +137,6 @@ protected:
     OUString m_CellStyleNames[enumCellBorderTopLimit];
 
     OUString m_NumfmtName;//Add to support number color
-private:
-    LwpCellList* GetCellList(LwpFoundry* pFoundry, LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt8 nCol);
 };
 
 /**
@@ -176,14 +174,12 @@ public:
     sal_uInt8 GetNumcols(){return m_nRealcolspan;}
     virtual void SetCellMap() SAL_OVERRIDE;
     void SetNumrows(sal_uInt16 nVal){m_nRealrowspan = nVal;}
-    void SetNumcols(sal_uInt8 nVal){m_nRealcolspan = nVal;}
 protected:
     void Read() SAL_OVERRIDE;
     virtual sal_uInt16 GetBelowRowID(sal_uInt16 nRow) SAL_OVERRIDE {return nRow + m_nRealrowspan; };
     virtual LwpCellBorderType GetCellBorderType(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout) SAL_OVERRIDE;
     sal_uInt16  cnumrows;
-    sal_uInt8       cnumcols;
-//  sal_Bool m_bSplitFlag;
+    sal_uInt8   cnumcols;
     sal_uInt16  m_nRealrowspan;
     sal_uInt8   m_nRealcolspan;
 };

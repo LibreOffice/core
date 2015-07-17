@@ -98,7 +98,6 @@ public:
     inline sal_uInt32 GetPosition();
     inline TabType GetTabType();
     inline LeaderType GetLeaderType();
-    inline RelativeType GetRelativeType();
     inline sal_uInt16 GetAlignChar();
 
 protected:
@@ -122,10 +121,6 @@ inline LwpTab::TabType LwpTab::GetTabType()
 inline LwpTab::LeaderType LwpTab::GetLeaderType()
 {
     return (LwpTab::LeaderType)m_nLeader;
-}
-inline LwpTab::RelativeType LwpTab::GetRelativeType()
-{
-    return (LwpTab::RelativeType)m_nRelativeType;
 }
 
 inline sal_uInt16 LwpTab::GetAlignChar()

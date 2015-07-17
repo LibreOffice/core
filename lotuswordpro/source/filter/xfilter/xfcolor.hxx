@@ -94,21 +94,6 @@ public:
     }
 
     /**
-     * @descr   return red part of the color.
-     */
-    sal_uInt8   GetRed() const{ return m_nRed; }
-
-    /**
-     * @descr   return green part of the color.
-     */
-    sal_uInt8   GetGreen() const{ return m_nGreen; }
-
-    /**
-     * @descr   return blue part of the color.
-     */
-    sal_uInt8   GetBlue() const{ return m_nBlue; }
-
-    /**
      * @descr   helper function to assert whether a color is valid.
      */
     bool    IsValid() const{ return m_bValid;}
