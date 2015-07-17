@@ -75,17 +75,11 @@ private :
     bool                bHasExchangeSupport;
     VclPtr<IconChoiceDialog>   pDialog;
 
-    void                SetDialog( IconChoiceDialog* pNew ) { pDialog = pNew; }
-    IconChoiceDialog*   GetDialog() const { return pDialog; }
-
-    void                SetInputSet( const SfxItemSet* pNew ) { pSet = pNew; }
-
     void                ImplInitSettings();
 
 protected :
     IconChoicePage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet );
 
-    sal_uInt16          GetSlot( sal_uInt16 nWhich ) const  { return pSet->GetPool()->GetSlotId( nWhich ); }
     sal_uInt16          GetWhich( sal_uInt16 nSlot ) const  { return pSet->GetPool()->GetWhich( nSlot ); }
 
 public :
@@ -111,7 +105,6 @@ public :
 
     virtual void        ActivatePage( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
-    void                SetUserData(const OUString& rString)  { aUserString = rString; }
     OUString            GetUserData() { return aUserString; }
     virtual bool        QueryClose();
 
@@ -166,7 +159,6 @@ protected :
 
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
     static SfxItemSet*      CreateInputItemSet( sal_uInt16 nId );
-    inline SfxItemSet*      GetInputSetImpl() { return const_cast<SfxItemSet*>(pSet); }
     inline IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
                                 { return ( GetPageData (nPageId)->pPage ? GetPageData (nPageId)->pPage.get() : NULL); }
     static void             RefreshInputSet();
@@ -192,13 +184,12 @@ public :
         bool bItemsOnDemand = false, sal_uLong nPos = TREELIST_APPEND );
 
     void                SetCurPageId( sal_uInt16 nId ) { mnCurrentPageId = nId; FocusOnIcon( nId ); }
-    sal_uInt16              GetCurPageId() const       { return mnCurrentPageId; }
+    sal_uInt16          GetCurPageId() const       { return mnCurrentPageId; }
     void                ShowPage( sal_uInt16 nId );
 
     /// gives via map converted local slots if applicable
     const sal_uInt16*   GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
-    const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
     const OKButton&     GetOKButton() const { return *m_pOKBtn; }
     OKButton&           GetOKButton() { return *m_pOKBtn; }
@@ -206,14 +197,10 @@ public :
     PushButton&         GetApplyButton() { return *m_pApplyBtn; }
     const CancelButton& GetCancelButton() const { return *m_pCancelBtn; }
     CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
-    const HelpButton&   GetHelpButton() const { return *m_pHelpBtn; }
-    HelpButton&         GetHelpButton() { return *m_pHelpBtn; }
 
     short               Execute() SAL_OVERRIDE;
     void                Start( bool bShow = true );
-    bool            QueryClose();
-
-    const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
+    bool                QueryClose();
 
     void                SetCtrlStyle();
 };

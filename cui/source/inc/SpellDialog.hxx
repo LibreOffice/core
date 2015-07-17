@@ -221,7 +221,6 @@ public:
     virtual ~SpellDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    void            SetLanguage( sal_uInt16 nLang );
     virtual bool    Close() SAL_OVERRIDE;
 
     void            InvalidateDialog();

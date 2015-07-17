@@ -144,7 +144,6 @@ class OfaTreeOptionsDialog : public SfxModalDialog
 {
 private:
     SvTreeListEntry*    pCurrentPageEntry;
-    bool hasTreePendingLayout() const;
 
     VclPtr<OKButton>       pOkPB;
     VclPtr<PushButton>     pBackPB;

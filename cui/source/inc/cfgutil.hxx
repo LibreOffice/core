@@ -98,7 +98,6 @@ typedef boost::ptr_vector<SfxGroupInfo_Impl> SfxGroupInfoArr_Impl;
 class SfxConfigFunctionListBox : public SvTreeListBox
 {
     friend class SfxConfigGroupListBox;
-    SvTreeListEntry*     pCurEntry;
     SfxGroupInfoArr_Impl aArr;
     SfxStylesInfo_Impl*  pStylesInfo;
 
@@ -111,7 +110,6 @@ public:
 
     void          ClearAll();
     using Window::GetHelpText;
-    OUString      GetHelpText( SvTreeListEntry *pEntry );
     OUString      GetCurCommand();
     OUString      GetCurLabel();
     OUString      GetSelectedScriptURI();
@@ -166,7 +164,6 @@ public:
                              bool bEventMode);
     void                SetFunctionListBox( SfxConfigFunctionListBox *pBox )
                         { pFunctionListBox = pBox; }
-    void                Open( SvTreeListEntry*, bool );
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
     void                SelectMacro( const OUString&, const OUString& );

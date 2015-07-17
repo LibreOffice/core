@@ -131,9 +131,6 @@ public:
                             virtual ~SpellLanguageAttrib();
 
     LanguageType            GetLanguage() const {return m_eLanguage;}
-    void                    SetLanguage(LanguageType eLang)
-                                        {m_eLanguage = eLang;}
-
 
     virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
     virtual TextAttrib*     Clone() const SAL_OVERRIDE;
@@ -152,10 +149,6 @@ public:
                             SpellBackgroundAttrib(const Color& rCol);
                             SpellBackgroundAttrib( const SpellBackgroundAttrib& rAttr );
                             virtual ~SpellBackgroundAttrib();
-
-    const   Color&          GetColor() const { return m_aBackgroundColor;}
-    void                    SetColor( const Color& rNewCol ){m_aBackgroundColor = rNewCol;}
-
 
     virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
     virtual TextAttrib*     Clone() const SAL_OVERRIDE;

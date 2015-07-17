@@ -74,8 +74,6 @@ public:
     {
         m_pAccelConfigPage = pAccelConfigPage;
     }
-
-    void ReplaceEntry( sal_uInt16 nPos, const OUString &rStr );
 };
 
 // class SfxAcceleratorConfigPage ----------------------------------------

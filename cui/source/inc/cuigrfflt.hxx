@@ -198,7 +198,6 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     virtual Graphic GetFilteredGraphic( const Graphic& rGraphic, double fScaleX, double fScaleY ) SAL_OVERRIDE;
-    RECT_POINT      GetLightSource() const { return mpCtlLight->GetActualRP(); }
 };
 
 #endif

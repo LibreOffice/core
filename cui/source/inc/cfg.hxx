@@ -166,8 +166,6 @@ private:
     static void SetDefaultData( MenuSaveInData* pData ) {pDefaultData = pData;}
     static MenuSaveInData* GetDefaultData() { return pDefaultData; }
 
-    void        Apply( bool bDefault );
-
     void        Apply(
         SvxConfigEntry* pRootEntry,
         com::sun::star::uno::Reference<
@@ -258,19 +256,13 @@ public:
     ~SvxConfigEntry();
 
     const OUString&      GetCommand() const { return aCommand; }
-    void    SetCommand( const OUString& rCmd ) { aCommand = rCmd; }
 
     const OUString&      GetName() const { return aLabel; }
-    void    SetName( const OUString& rStr ) { aLabel = rStr; bStrEdited = true; }
-    bool    HasChangedName() const { return bStrEdited; }
+    void                 SetName( const OUString& rStr ) { aLabel = rStr; bStrEdited = true; }
+    bool                 HasChangedName() const { return bStrEdited; }
 
-    const OUString&      GetHelpText() ;
-    void    SetHelpText( const OUString& rStr ) { aHelpText = rStr; }
+    const OUString&      GetHelpText();
 
-    const OUString&      GetHelpURL() const { return aHelpURL; }
-    void    SetHelpURL( const OUString& rStr ) { aHelpURL = rStr; }
-
-    void    SetPopup( bool bOn = true ) { bPopUp = bOn; }
     bool    IsPopup() const { return bPopUp; }
 
     void    SetUserDefined( bool bOn = true ) { bIsUserDefined = bOn; }
@@ -281,7 +273,6 @@ public:
 
     SvxEntries* GetEntries() const { return mpEntries; }
     void    SetEntries( SvxEntries* entries ) { mpEntries = entries; }
-    bool    HasEntries() const { return mpEntries != NULL; }
 
     void    SetMain( bool bValue = true ) { bIsMain = bValue; }
     bool    IsMain() { return bIsMain; }
@@ -352,9 +343,6 @@ private:
 
     DECL_LINK(  SelectSaveInLocation, ListBox * );
     DECL_LINK(  AsyncInfoMsg, OUString* );
-
-    bool        SwapEntryData( SvTreeListEntry* pSourceEntry, SvTreeListEntry* pTargetEntry );
-    void        AlignControls();
 
 protected:
 
@@ -524,7 +512,6 @@ public:
     virtual void dispose() SAL_OVERRIDE;
 
     SvxEntries*     GetEntries() { return mpEntries;}
-    void            SetEntries( SvxEntries* );
     SvxConfigEntry* GetSelectedEntry();
 };
 
@@ -549,9 +536,6 @@ public:
     SvxToolbarEntriesListBox(vcl::Window* pParent, SvxToolbarConfigPage* pPg);
     virtual ~SvxToolbarEntriesListBox();
     virtual void dispose() SAL_OVERRIDE;
-
-    Size            GetCheckBoxPixelSize() const
-        { return m_aCheckBoxImageSizePixel; }
 
     virtual TriState NotifyMoving(
         SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong& ) SAL_OVERRIDE;
@@ -678,11 +662,6 @@ public:
     OUString GetName()
     {
         return m_pEdtName->GetText();
-    }
-
-    void SetEditHelpId( const OString& aHelpId)
-    {
-        m_pEdtName->SetHelpId(aHelpId);
     }
 };
 

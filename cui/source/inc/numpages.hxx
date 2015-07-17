@@ -55,17 +55,11 @@ class SvxNumberingPreview : public vcl::Window
 
         void    SetNumRule(const SvxNumRule* pNum)
                     {pActNum = pNum; Invalidate();};
-        void    SetPageWidth(long nPgWidth)
-                                {nPageWidth = nPgWidth;}
-        void    SetOutlineNames(const OUString* pNames)
-                        {pOutlineNames = pNames;}
         void    SetPositionMode()
                         { bPosition = true;}
         void    SetLevel(sal_uInt16 nSet) {nActLevel = nSet;}
 
 };
-
-
 
 struct SvxNumSettings_Impl
 {
@@ -118,8 +112,6 @@ public:
     virtual sfxpg       DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-
-    void                SetNumCharFmtName(const OUString& rName){sNumCharFmtName = rName;}
 };
 
 
@@ -248,8 +240,6 @@ public:
     virtual sfxpg       DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-
-    void                SetNumCharFmtName(const OUString& rName){sNumCharFmtName = rName;}
 };
 
 

@@ -54,7 +54,6 @@ namespace svx
         // the validator link gets a pointer to a String, and should return 0 if the string is not
         // acceptable
         void    setNameValidator( const Link<>& _rValidator ) { m_aNameValidator = _rValidator; }
-        Link<>  getNameValidator( ) const { return m_aNameValidator; }
 
         void    setLink( const  OUString& _rName, const   OUString& _rURL );
         void    getLink(        OUString& _rName,         OUString& _rURL ) const;

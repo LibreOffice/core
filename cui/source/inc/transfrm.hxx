@@ -117,7 +117,6 @@ private:
 
     SfxMapUnit          mePoolUnit;
     FieldUnit           meDlgUnit;
-    MapUnit             meMapUnit;
     TriState            mnProtectSizeState;
     bool                mbPageDisabled;
     bool                mbProtectDisabled;
@@ -141,8 +140,6 @@ private:
     DECL_LINK( ChangeHeightHdl, void * );
     DECL_LINK( ClickSizeProtectHdl, void * );
     DECL_LINK( ClickAutoHdl, void * );
-
-    void        SetMaxSize( Rectangle aRect );
 
 public:
     SvxPositionSizeTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );

@@ -51,10 +51,8 @@ public:
     static const sal_uInt16*      GetRanges();
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
-    Link<>              GetPrevHdl() const { return aPrevHdlLink; }
     void                SetPrevHdl( const Link<>& rLink )
                             { aPrevHdlLink = rLink; }
-    Link<>              GetNextHdl() const { return aNextHdlLink; }
     void                SetNextHdl( const Link<>& rLink )
                             { aNextHdlLink = rLink; }
 
@@ -75,16 +73,6 @@ public:
     void HideAuthor()
     {
         m_pInsertAuthor->Hide();
-    }
-    void SetReadonlyPostIt(bool bDisable)
-    {
-        m_pOKBtn->Enable( !bDisable );
-        m_pEditED->SetReadOnly( bDisable );
-        m_pAuthorBtn->Enable( !bDisable );
-    }
-    bool IsOkEnabled() const
-    {
-        return m_pOKBtn->IsEnabled();
     }
 
 private:

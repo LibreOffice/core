@@ -100,18 +100,6 @@ void SvxDistributePage::dispose()
 }
 
 
-/*************************************************************************
-|*
-|* create the tabpage
-|*
-\************************************************************************/
-
-VclPtr<SfxTabPage> SvxDistributePage::Create(vcl::Window* pWindow, const SfxItemSet& rAttrs,
-    SvxDistributeHorizontal eHor, SvxDistributeVertical eVer)
-{
-    return VclPtr<SvxDistributePage>::Create(pWindow, rAttrs, eHor, eVer);
-}
-
 void SvxDistributePage::PointChanged(vcl::Window* /*pWindow*/, RECT_POINT /*eRP*/)
 {
 }

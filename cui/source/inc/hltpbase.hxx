@@ -149,7 +149,6 @@ protected:
 
     void ShowMarkWnd ();
     void HideMarkWnd ()           { static_cast<vcl::Window*>(mpMarkWnd)->Hide(); }
-    void InvalidateMarkWnd ()     { static_cast<vcl::Window*>(mpMarkWnd)->Invalidate(); }
 
     SfxDispatcher* GetDispatcher() const;
 

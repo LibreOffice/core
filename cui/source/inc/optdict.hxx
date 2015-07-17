@@ -145,10 +145,6 @@ private:
     void            RemoveDictEntry(SvTreeListEntry* pEntry);
     sal_uLong       GetLBInsertPos(const OUString &rDicWord);
 
-protected:
-
-//    virtual void    Paint( const Rectangle& rRect );
-
 public:
     SvxEditDictionaryDialog( vcl::Window* pParent,
             const OUString& rName,
@@ -156,8 +152,6 @@ public:
                 ::com::sun::star::linguistic2::XSpellChecker1> &xSpl );
     virtual ~SvxEditDictionaryDialog();
     virtual void dispose() SAL_OVERRIDE;
-
-    sal_uInt16 GetSelectedDict() {return pAllDictsLB->GetSelectEntryPos();}
 };
 
 #endif

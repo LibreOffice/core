@@ -61,9 +61,6 @@ public:
 
     void                        AddEvent( const OUString & rEventName, sal_uInt16 nEventId );
 
-    const SvxMacroTableDtor&    GetMacroTable() const;
-    void                        SetMacroTable( const SvxMacroTableDtor& rTbl );
-
     void                        ScriptChanged();
     virtual void                PageCreated (const SfxAllItemSet& aSet) SAL_OVERRIDE;
     using TabPage::ActivatePage; // FIXME WTF is this nonsense?
@@ -76,16 +73,6 @@ public:
 
     bool                        IsReadOnly() const SAL_OVERRIDE;
 };
-
-inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTable() const
-{
-    return aTbl;
-}
-
-inline void _SfxMacroTabPage::SetMacroTable( const SvxMacroTableDtor& rTbl )
-{
-    aTbl = rTbl;
-}
 
 class SfxMacroTabPage : public _SfxMacroTabPage
 {

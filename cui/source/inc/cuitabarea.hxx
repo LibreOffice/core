@@ -86,18 +86,15 @@ public:
                             { mpNewGradientList = pGrdLst; }
     XGradientListRef       GetNewGradientList() const
                             { return mpNewGradientList; }
-    const XGradientListRef GetGradientList() const { return mpGradientList; }
 
     void                 SetNewHatchingList( XHatchListRef pHtchLst)
                             { mpNewHatchingList = pHtchLst; }
     XHatchListRef          GetNewHatchingList() const
                             { return mpNewHatchingList; }
-    const XHatchListRef    GetHatchingList() const { return mpHatchingList; }
 
     void                 SetNewBitmapList( XBitmapListRef pBmpLst)
                             { mpNewBitmapList = pBmpLst; }
     XBitmapListRef         GetNewBitmapList() const { return mpNewBitmapList; }
-    const XBitmapListRef   GetBitmapList() const { return mpBitmapList; }
 };
 
 /************************************************************************/
@@ -374,7 +371,6 @@ public:
     void    SetAreaTP( bool* pIn ) { pbAreaTP = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorListState = pIn; }
     virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
-    void    DisablePage( bool bIn ) { bDisable = bIn; }
 };
 
 /************************************************************************/

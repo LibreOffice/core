@@ -41,8 +41,6 @@ private:
 
     DECL_LINK (ClickNewHdl_Impl          , void * );
 
-    Image GetImage( sal_uInt16 nId );
-
 protected:
     void FillDlgFields(const OUString& rStrURL) SAL_OVERRIDE;
     void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,

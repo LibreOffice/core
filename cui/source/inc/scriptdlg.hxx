@@ -66,7 +66,6 @@ private:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, OUString& docName );
 
 protected:
-    void                    ExpandTree( SvTreeListEntry* pRootEntry );
     virtual void            RequestingChildren( SvTreeListEntry* pParent ) SAL_OVERRIDE;
     virtual void            ExpandedHdl() SAL_OVERRIDE;
     virtual bool            ExpandingHdl() SAL_OVERRIDE;
@@ -126,7 +125,6 @@ public:
     virtual         ~SFEntry() {}
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > GetNode() { return nodes ;}
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModel() { return model ;};
-    sal_uInt8           GetType() const                     { return nType; }
     bool            isLoaded() const                    { return loaded; }
     void            setLoaded()                         { loaded=true; }
 };

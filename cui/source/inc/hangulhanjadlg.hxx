@@ -311,7 +311,6 @@ namespace svx
 
         void            SetEditText( Edit& _rEdit, sal_uInt16 _nEntryNum );
         void            EditModify( Edit* _pEdit, sal_uInt8 _nEntryOffset );
-        void            EditFocusLost( Edit* _pEdit, sal_uInt8 _nEntryOffset );
 
         bool            DeleteEntryFromDictionary( const OUString& rEntry, const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XConversionDictionary >& xDict );
 

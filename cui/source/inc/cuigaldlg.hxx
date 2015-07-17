@@ -233,7 +233,6 @@ public:
     virtual void        dispose() SAL_OVERRIDE;
 
     void                SetXChgData( ExchangeData* pData );
-    const ExchangeData* GetXChgData() const { return pData; }
 
     static VclPtr<SfxTabPage>  Create( vcl::Window* pParent, const SfxItemSet* rSet );
 };

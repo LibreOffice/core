@@ -162,7 +162,6 @@ public:
     void    Init(bool bShowSlots, const ::com::sun::star::uno::Reference
                     < ::com::sun::star::frame::XFrame >& xFrame);
 
-    void    Open( SvTreeListEntry*, bool );
     void    ClearAll();
     void    GroupSelected();
 

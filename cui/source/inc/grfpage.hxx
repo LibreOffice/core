@@ -39,15 +39,12 @@ public:
     virtual void Resize() SAL_OVERRIDE;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
 
-    void SetTopLeft( const Point& rNew )    { aTopLeft = rNew; }
     void SetTop( long nVal )                { aTopLeft.X() = nVal; }
     void SetBottom( long nVal )             { aBottomRight.X() = nVal; }
     void SetLeft( long nVal )               { aTopLeft.Y() = nVal; }
     void SetRight( long nVal)               { aBottomRight.Y() = nVal; }
-    void SetBottomRight(const Point& rNew ) { aBottomRight = rNew; }
     void SetFrameSize( const Size& rSz );
     void SetGraphic( const Graphic& rGrf )  { aGrf = rGrf; }
-    const Graphic& GetGraphic() const       { return aGrf; }
 };
 
 class SvxGrfCropPage : public SfxTabPage

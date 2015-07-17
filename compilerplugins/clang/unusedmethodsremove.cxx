@@ -121,10 +121,15 @@ bool UnusedMethodsRemove::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl 
     if(!(found < mmappedData + mmapFilesize)) {
         return true;
     }
-    // sometimes the declaration has a semicolon just after it, and it's much neater to remove that too.
     SourceRange replaceRange(functionDecl->getSourceRange());
+    // sometimes the declaration has a semicolon just after it, and it's much neater to remove that too.
     if (rewriter->getRewrittenText(SourceRange(replaceRange.getEnd(), replaceRange.getEnd().getLocWithOffset(1))) == ";") {
         replaceRange.setEnd(replaceRange.getEnd().getLocWithOffset(1));
+    }
+    // remove leading spaces
+    while (rewriter->getRewrittenText(SourceRange(replaceRange.getBegin().getLocWithOffset(-1), replaceRange.getBegin())) == " ")
+    {
+        replaceRange.setBegin(replaceRange.getBegin().getLocWithOffset(-1));
     }
     if (!replaceText(replaceRange, "")) {
         report(

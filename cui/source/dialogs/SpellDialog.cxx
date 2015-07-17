@@ -819,17 +819,6 @@ IMPL_LINK(SpellDialog, LanguageSelectHdl, SvxLanguageBox*, pBox)
 }
 
 
-void SpellDialog::SetLanguage( sal_uInt16 nLang )
-/*
-    Description:
-    If the language has been changed in thesaurus,
-    it must be changed here, too.
-*/
-{
-    SetTitle_Impl( nLang );
-    m_pLanguageLB->SelectLanguage( nLang );
-}
-
 void SpellDialog::SetTitle_Impl(LanguageType nLang)
 {
     OUString sTitle = rParent.HasGrammarChecking() ? m_sTitleSpellingGrammar : m_sTitleSpelling;

@@ -86,8 +86,6 @@ class SvBaseLinksDlg : public ModalDialog
     OUString&       Autolink()      { return aStrAutolink; }
     OUString&       Manuallink()    { return aStrManuallink; }
     OUString&       Brokenlink()    { return aStrBrokenlink; }
-    OUString&       Graphiclink()   { return aStrGraphiclink; }
-    OUString&       Buttonclose()   { return aStrButtonclose; }
     OUString&       Closelinkmsg()  { return aStrCloselinkmsg; }
     OUString&       CloselinkmsgMulti() { return aStrCloselinkmsgMulti; }
     OUString&       Waitinglink()   { return aStrWaitinglink; }

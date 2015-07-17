@@ -47,8 +47,6 @@ public:
     virtual ~SvxDistributePage();
     virtual void dispose() SAL_OVERRIDE;
 
-    static VclPtr<SfxTabPage> Create(vcl::Window*, const SfxItemSet&,
-        SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
     virtual bool FillItemSet(SfxItemSet*) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet*) SAL_OVERRIDE;
     virtual void PointChanged(vcl::Window* pWindow, RECT_POINT eRP) SAL_OVERRIDE;

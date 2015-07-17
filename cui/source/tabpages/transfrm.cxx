@@ -611,7 +611,6 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage(vcl::Window* pParent, const SfxIt
     , mrOutAttrs(rInAttrs)
     , mpView(NULL)
     , meDlgUnit(FUNIT_NONE)
-    , meMapUnit(MAP_100TH_MM)
     , mnProtectSizeState(TRISTATE_FALSE)
     , mbPageDisabled(false)
     , mbProtectDisabled(false)

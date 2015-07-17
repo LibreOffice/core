@@ -84,8 +84,6 @@ public:
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet * ) SAL_OVERRIDE;
-
-    void         Construct();
 };
 
 /*************************************************************************
