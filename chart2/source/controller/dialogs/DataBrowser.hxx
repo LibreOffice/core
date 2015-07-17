@@ -129,8 +129,6 @@ public:
 
     void SetCursorMovedHdl( const Link<DataBrowser*,void>& rLink );
 
-    void SetCellModifiedHdl( const Link<DataBrowser*,void>& rLink );
-
     /// confirms all pending changes to be ready to be closed
     bool EndEditing();
 

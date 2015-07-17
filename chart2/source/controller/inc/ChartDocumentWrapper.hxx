@@ -73,11 +73,6 @@ public:
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new ChartDocumentWrapper( xContext ));
-    }
 
     void setAddIn( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable >& xAddIn );
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable > getAddIn() const { return m_xAddIn;}

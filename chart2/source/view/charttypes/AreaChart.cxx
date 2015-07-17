@@ -149,16 +149,6 @@ drawing::Direction3D AreaChart::getPreferredDiagramAspectRatio() const
     return aRet;
 }
 
-bool AreaChart::keepAspectRatio() const
-{
-    if( m_nDimension == 2 )
-    {
-        if( !m_bSymbol )
-            return false;
-    }
-    return true;
-}
-
 void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
     if( m_bArea && pSeries )

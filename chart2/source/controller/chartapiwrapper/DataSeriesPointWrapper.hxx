@@ -125,15 +125,6 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDataPointProperties();
 
 private:
-
-    void SAL_CALL getStatisticsPropertyValue
-        ( ::com::sun::star::uno::Any& rValue,
-          sal_Int32 nHandle ) const;
-
-    void SAL_CALL setStatisticsPropertyValue_NoBroadcast(
-        sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
-        throw (::com::sun::star::uno::Exception);
-
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     ::cppu::OInterfaceContainerHelper           m_aEventListenerContainer;
 

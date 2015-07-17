@@ -52,13 +52,6 @@ public:
                         ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~PageBackground();
 
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new PageBackground( xContext ));
-    }
-
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()
             throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

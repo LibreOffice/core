@@ -61,11 +61,6 @@ public:
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new ChartFrameLoader( xContext ));
-    }
 
     // ::com::sun::star::frame::XFrameLoader
 

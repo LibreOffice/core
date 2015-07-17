@@ -89,15 +89,7 @@ public:
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new ErrorBar( xContext ));
-    }
-
-     // XPropertySet
-
+    // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
@@ -156,14 +148,6 @@ protected:
     // ____ XDataSource ____
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // ____ XChild ____
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent()
-        throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setParent(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent )
-        throw (::com::sun::star::lang::NoSupportException,
-               ::com::sun::star::uno::RuntimeException);
 
 private:
     ::com::sun::star::uno::Reference<

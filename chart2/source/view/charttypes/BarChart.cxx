@@ -130,11 +130,6 @@ drawing::Direction3D BarChart::getPreferredDiagramAspectRatio() const
     return aRet;
 }
 
-bool BarChart::keepAspectRatio() const
-{
-    return true;
-}
-
 awt::Point BarChart::getLabelScreenPositionAndAlignment(
                      LabelAlignment& rAlignment, sal_Int32 nLabelPlacement
                      , double fScaledX, double fScaledLowerYValue, double fScaledUpperYValue, double fScaledZ

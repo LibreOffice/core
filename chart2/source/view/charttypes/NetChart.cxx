@@ -116,11 +116,6 @@ drawing::Direction3D NetChart::getPreferredDiagramAspectRatio() const
     return drawing::Direction3D(1,1,1);
 }
 
-bool NetChart::keepAspectRatio() const
-{
-    return true;
-}
-
 void NetChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
     VSeriesPlotter::addSeries( pSeries, zSlot, xSlot, ySlot );

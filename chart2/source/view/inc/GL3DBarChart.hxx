@@ -98,7 +98,6 @@ private:
     void moveToCorner();
     void moveToDefault();
     glm::vec3 getCornerPosition(sal_Int8 nCornerId);
-    void updateTimer();
     void updateScreenText();
     void updateRenderFPS();
     void updateDataUpdateFPS();

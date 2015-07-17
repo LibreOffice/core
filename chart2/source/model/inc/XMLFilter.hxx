@@ -62,12 +62,6 @@ public:
                             ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~XMLFilter();
 
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new XMLFilter( xContext ));
-    }
     /// XServiceInfo declarations
     virtual OUString SAL_CALL getImplementationName()
             throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -102,7 +96,6 @@ protected:
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    inline OUString getDocumentHandler() const { return m_sDocumentHandler; }
     inline void setDocumentHandler(const OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
 
     virtual OUString getMediaType(bool _bOasis);
@@ -181,12 +174,6 @@ public:
                             ::com::sun::star::uno::XComponentContext > const & _xContext )
                             :XMLFilter(_xContext)
     {}
-    /// establish methods for factory instatiation
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL   create(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext) throw(::com::sun::star::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new XMLReportFilterHelper( xContext ));
-    }
     static OUString getImplementationName_Static()
     {
         return OUString( "com.sun.star.comp.chart2.report.XMLFilter" );

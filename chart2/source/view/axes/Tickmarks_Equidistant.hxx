@@ -42,8 +42,6 @@ public:
     virtual TickInfo*   firstInfo() SAL_OVERRIDE;
     virtual TickInfo*   nextInfo() SAL_OVERRIDE;
 
-    sal_Int32   getCurrentDepth() const { return m_nCurrentDepth; }
-
 private: //methods
     sal_Int32   getIntervalCount( sal_Int32 nDepth );
     bool        isAtLastPartTick();

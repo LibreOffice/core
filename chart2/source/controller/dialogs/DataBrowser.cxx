@@ -752,11 +752,6 @@ void DataBrowser::CursorMoved()
         m_aCursorMovedHdlLink.Call( this );
 }
 
-void DataBrowser::SetCellModifiedHdl( const Link<DataBrowser*,void>& rLink )
-{
-    m_aCellModifiedLink = rLink;
-}
-
 void DataBrowser::MouseButtonDown( const BrowserMouseEvent& rEvt )
 {
     if( !m_bDataValid )

@@ -445,21 +445,6 @@ uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL E
     return ContainerHelper::ContainerToSequence( m_aDataSequences );
 }
 
-// ____ XChild ____
-uno::Reference< uno::XInterface > SAL_CALL ErrorBar::getParent()
-    throw (uno::RuntimeException)
-{
-    return m_xParent;
-}
-
-void SAL_CALL ErrorBar::setParent(
-    const uno::Reference< uno::XInterface >& Parent )
-    throw (lang::NoSupportException,
-           uno::RuntimeException)
-{
-    m_xParent.set( Parent );
-}
-
 uno::Sequence< OUString > ErrorBar::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aServices( 2 );

@@ -623,32 +623,7 @@ int OpenGLRender::RenderRectangleShape(bool bBorder, bool bFill)
     return 0;
 }
 
-int OpenGLRender::CreateTextTexture(::rtl::OUString const &textValue, vcl::Font aFont, long , awt::Point aPos, awt::Size aSize, long rotation)
-{
-    ScopedVclPtrInstance< VirtualDevice > pDevice(*Application::GetDefaultDevice(), 0, 0);
-    pDevice->Erase();
-    Rectangle aRect;
-    pDevice->SetFont(aFont);
-    pDevice->GetTextBoundRect(aRect, textValue);
-    int screenWidth = (aRect.BottomRight().X() + 3) & ~3;
-    int screenHeight = (aRect.BottomRight().Y() + 3) & ~3;
-    pDevice->SetOutputSizePixel(Size(screenWidth * 3, screenHeight));
-    pDevice->SetBackground(Wallpaper(COL_TRANSPARENT));
-    pDevice->DrawText(Point(0, 0), textValue);
-    int bmpWidth = (aRect.Right() - aRect.Left() + 3) & ~3;
-    int bmpHeight = (aRect.Bottom() - aRect.Top() + 3) & ~3;
-    BitmapEx aBitmap = BitmapEx(pDevice->GetBitmapEx(aRect.TopLeft(), Size(bmpWidth, bmpHeight)));
 
-    sal_Int32 nXPos = aPos.X;
-    sal_Int32 nYPos = aPos.Y;
-    ::basegfx::B2DHomMatrix aM;
-    aM.rotate( -rotation*F_PI/180.0 );//#i78696#->#i80521#
-    aM.translate( nXPos, nYPos );
-    drawing::HomogenMatrix3 aTrans = chart::B2DHomMatrixToHomogenMatrix3(aM);
-    aTrans.Line1.Column1 = 20 * bmpWidth;
-    aTrans.Line2.Column2 = 20 * bmpHeight;
-    return CreateTextTexture(aBitmap,aPos,aSize,rotation,aTrans);
-}
 
 int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&, const awt::Size& aSize, long rotation,
         const drawing::HomogenMatrix3& rTrans)

@@ -46,12 +46,6 @@ public:
     LogarithmicScaling( double fBase = 10.0 );
     virtual ~LogarithmicScaling();
 
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new LogarithmicScaling( xContext ));
-    }
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
             throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -97,12 +91,6 @@ public:
     explicit ExponentialScaling( double fBase = 10.0 );
     virtual ~ExponentialScaling();
 
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new ExponentialScaling( xContext ));
-    }
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
             throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -148,12 +136,6 @@ public:
     LinearScaling( double fSlope = 1.0, double fOffset = 0.0 );
     virtual ~LinearScaling();
 
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new LinearScaling( xContext ));
-    }
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
             throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -198,12 +180,6 @@ public:
     explicit PowerScaling( double fExponent = 10.0 );
     virtual ~PowerScaling();
 
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new PowerScaling( xContext ));
-    }
     /// declare XServiceInfo methods
     virtual OUString SAL_CALL getImplementationName()
             throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

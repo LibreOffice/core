@@ -56,11 +56,6 @@ public:
     ::com::sun::star::uno::Any         getNormalsPolygon() const;
     static ::com::sun::star::uno::Any  getTexturePolygon( short nRotatedTexture ); //0 to 7 are the different possibilities
 
-    ::com::sun::star::drawing::Position3D GetPosition1() const { return m_aPoint1; }
-    ::com::sun::star::drawing::Position3D GetPosition2() const { return m_aPoint2; }
-    ::com::sun::star::drawing::Position3D GetPosition3() const { return m_aPoint3; }
-    ::com::sun::star::drawing::Position3D GetPosition4() const { return m_aPoint4; }
-
 private:
     ::com::sun::star::drawing::Position3D m_aPoint1;
     ::com::sun::star::drawing::Position3D m_aPoint2;

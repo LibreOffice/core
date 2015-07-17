@@ -53,8 +53,6 @@ public:
 
     virtual void render();
 
-    OpenGL3DRenderer* getRender();
-
 protected:
     OpenGL3DRenderer* mpRenderer;
     sal_uInt32 mnUniqueId;
@@ -93,8 +91,6 @@ class Text : public Renderable3DObject
 public:
     Text(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, sal_uInt32 nId);
     virtual void render() SAL_OVERRIDE;
-
-    Size getSize() const { return maText.maSize;}
 
     void setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight);
 

@@ -165,12 +165,6 @@ public:
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new MeanValueRegressionCurve( xContext ));
-    }
 };
 
 class LinearRegressionCurve : public RegressionCurveModel
@@ -197,12 +191,6 @@ public:
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new LinearRegressionCurve( xContext ));
-    }
 };
 
 class LogarithmicRegressionCurve : public RegressionCurveModel
@@ -229,12 +217,6 @@ public:
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new LogarithmicRegressionCurve( xContext ));
-    }
 };
 
 class ExponentialRegressionCurve : public RegressionCurveModel
@@ -261,12 +243,6 @@ public:
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new ExponentialRegressionCurve( xContext ));
-    }
 };
 
 class PotentialRegressionCurve : public RegressionCurveModel
@@ -293,12 +269,6 @@ public:
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new PotentialRegressionCurve( xContext ));
-    }
 };
 
 class PolynomialRegressionCurve : public RegressionCurveModel
@@ -325,12 +295,6 @@ public:
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new PolynomialRegressionCurve( xContext ));
-    }
 };
 
 class MovingAverageRegressionCurve : public RegressionCurveModel
@@ -357,12 +321,6 @@ public:
 
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
-    /// establish methods for factory instatiation
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL create( css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        throw(css::uno::Exception)
-    {
-        return static_cast<cppu::OWeakObject *>(new MovingAverageRegressionCurve( xContext ));
-    }
 };
 
 } //  namespace chart

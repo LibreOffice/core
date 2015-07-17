@@ -262,11 +262,6 @@ drawing::Direction3D VSeriesPlotter::getPreferredDiagramAspectRatio() const
     return aRet;
 }
 
-bool VSeriesPlotter::keepAspectRatio() const
-{
-    return true;
-}
-
 void VSeriesPlotter::releaseShapes()
 {
     ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();

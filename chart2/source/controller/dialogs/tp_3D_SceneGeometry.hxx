@@ -58,7 +58,6 @@ public:
     DECL_LINK( RightAngledAxesToggled, void* );
 
 private:
-    void fillDialogAnglesFromModel() const;
     void applyAnglesToModel();
     void applyPerspectiveToModel();
 
