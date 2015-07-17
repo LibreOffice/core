@@ -25,7 +25,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 typedef ::cppu::ImplHelper1<
-    ::com::sun::star::accessibility::XAccessible
+    css::accessibility::XAccessible
     > VCLXAccessible_BASE;
 
 
@@ -41,8 +41,7 @@ class VCLXAccessibleTextField :
 {
 public:
     VCLXAccessibleTextField (VCLXWindow* pVCLXindow,
-                             const ::com::sun::star::uno::Reference<
-                                 ::com::sun::star::accessibility::XAccessible >& _xParent);
+                             const css::uno::Reference< css::accessibility::XAccessible >& _xParent);
 
     // XInterface
     DECLARE_XINTERFACE()
@@ -51,29 +50,29 @@ public:
     DECLARE_XTYPEPROVIDER()
 
     // XAccessible
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
+    css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleContext
     sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 i)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     sal_Int16 SAL_CALL getAccessibleRole()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleParent(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // Return text field specific services.
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
+    virtual css::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     virtual ~VCLXAccessibleTextField();
@@ -87,8 +86,7 @@ private:
     /** We need to save the accessible parent to return it in <type>getAccessibleParent()</type>,
         because this method of the base class returns the wrong parent.
     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >  m_xParent;
+    css::uno::Reference< css::accessibility::XAccessible >  m_xParent;
 };
 
 #endif

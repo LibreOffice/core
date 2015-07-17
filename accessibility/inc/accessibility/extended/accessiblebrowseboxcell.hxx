@@ -50,13 +50,13 @@ namespace accessibility
         virtual Rectangle implGetBoundingBoxOnScreen() SAL_OVERRIDE;
 
         // XAccessibleComponent
-        virtual void SAL_CALL grabFocus() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL grabFocus() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     protected:
         AccessibleBrowseBoxCell(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             ::svt::IAccessibleTableProvider& _rBrowseBox,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+            const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos,
             ::svt::AccessibleBrowseBoxObjType _eType = ::svt::BBTYPE_TABLECELL

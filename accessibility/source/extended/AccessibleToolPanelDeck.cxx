@@ -62,7 +62,7 @@ namespace accessibility
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
 
-    typedef ::com::sun::star::awt::Point        UnoPoint;
+    typedef css::awt::Point        UnoPoint;
 
     // AccessibleToolPanelDeck_Impl - declaration
     class AccessibleToolPanelDeck_Impl  :public ::boost::noncopyable

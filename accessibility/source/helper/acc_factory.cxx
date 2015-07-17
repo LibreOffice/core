@@ -90,127 +90,127 @@ public:
     AccessibleFactory();
 
     // ::toolkit::IAccessibleFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXButton* _pXWindow ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXCheckBox* _pXWindow ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXRadioButton* _pXWindow ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXListBox* _pXWindow ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXFixedText* _pXWindow ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXFixedHyperlink* _pXWindow ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXScrollBar* _pXWindow ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXEdit* _pXWindow ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXComboBox* _pXWindow ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXToolBox* _pXWindow ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXWindow* _pXWindow ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         createAccessible( Menu* _pMenu, bool _bIsMenuBar ) SAL_OVERRIDE;
 
     // ::svt::IAccessibleFactory
     virtual IAccessibleTabListBox*
         createAccessibleTabListBox(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
             SvHeaderTabListBox& rBox
         ) const SAL_OVERRIDE;
 
     virtual IAccessibleBrowseBox*
         createAccessibleBrowseBox(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             IAccessibleTableProvider& _rBrowseBox
         ) const SAL_OVERRIDE;
 
     virtual IAccessibleTableControl*
         createAccessibleTableControl(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             IAccessibleTable& _rTable
         ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         createAccessibleIconChoiceCtrl(
             SvtIconChoiceCtrl& _rIconCtrl,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent
+            const css::uno::Reference< css::accessibility::XAccessible >& _xParent
         ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         createAccessibleTabBar(
             TabBar& _rTabBar
         ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleTextWindowContext(
             VCLXWindow* pVclXWindow, TextEngine& rEngine, TextView& rView
         ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         createAccessibleTreeListBox(
             SvTreeListBox& _rListBox,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _xParent
+            const css::uno::Reference< css::accessibility::XAccessible >& _xParent
         ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         createAccessibleBrowseBoxHeaderBar(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
             IAccessibleTableProvider& _rOwningTable,
             AccessibleBrowseBoxObjType _eObjType
         ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         createAccessibleBrowseBoxTableCell(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             IAccessibleTableProvider& _rBrowseBox,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+            const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
             sal_Int32 _nRowId,
             sal_uInt16 _nColId,
             sal_Int32 _nOffset
         ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         createAccessibleBrowseBoxHeaderCell(
             sal_Int32 _nColumnRowId,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
             IAccessibleTableProvider& _rBrowseBox,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+            const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
             AccessibleBrowseBoxObjType  _eObjType
         ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         createAccessibleCheckBoxCell(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             IAccessibleTableProvider& _rBrowseBox,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+            const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos,
             const TriState& _eState,
             bool _bIsTriState
         ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         createEditBrowseBoxTableCellAccess(
-            const ::com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible >& _rxParent,
-            const ::com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible >& _rxControlAccessible,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _rxFocusWindow,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxControlAccessible,
+            const css::uno::Reference< css::awt::XWindow >& _rxFocusWindow,
             IAccessibleTableProvider& _rBrowseBox,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos
         ) const SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleToolPanelDeck(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& i_rAccessibleParent,
             ::svt::ToolPanelDeck& i_rPanelDeck
         ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleToolPanelTabBar(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& i_rAccessibleParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& i_rAccessibleParent,
             ::svt::IToolPanelDeck& i_rPanelDeck,
             ::svt::PanelTabBar& i_rTabBar
         ) SAL_OVERRIDE;

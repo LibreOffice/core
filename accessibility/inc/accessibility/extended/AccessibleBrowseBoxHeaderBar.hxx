@@ -31,8 +31,7 @@ namespace accessibility {
 
 
 
-typedef ::cppu::ImplHelper1<
-            ::com::sun::star::accessibility::XAccessibleSelection >
+typedef ::cppu::ImplHelper1< css::accessibility::XAccessibleSelection >
         AccessibleBrowseBoxHeaderBarImplHelper;
 
 /** This class represents the accessible object of a header bar of a BrowseBox
@@ -47,8 +46,7 @@ public:
     /** @param eObjType  One of the two allowed types BBTYPE_ROWHEADERBAR or
                          BBTYPE_COLUMNHEADERBAR. */
     AccessibleBrowseBoxHeaderBar(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >& rxParent,
+        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         ::svt::IAccessibleTableProvider&                  rBrowseBox,
         ::svt::AccessibleBrowseBoxObjType  eObjType );
 
@@ -61,129 +59,122 @@ public:
     /** @return
         The XAccessible interface of the specified child.
     */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int32 nChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The index of this object among the parent's children. */
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL
+    getAccessibleIndexInParent()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleComponent ---------------------------------------------------
 
     /** @return  The accessible child rendered under the given point. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL
-    getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+    getAccessibleAtPoint( const css::awt::Point& rPoint )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Grabs the focus to (the current cell of) the data table. */
     virtual void SAL_CALL grabFocus()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleTable -------------------------------------------------------
 
     /** @return  The description text of the specified row. */
     virtual OUString SAL_CALL
     getAccessibleRowDescription( sal_Int32 nRow )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The description text of the specified column. */
-    virtual OUString SAL_CALL
-    getAccessibleColumnDescription( sal_Int32 nColumn )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getAccessibleColumnDescription( sal_Int32 nColumn )
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The XAccessibleTable interface of the row header bar. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
     getAccessibleRowHeaders()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The XAccessibleTable interface of the column header bar. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleTable > SAL_CALL
     getAccessibleColumnHeaders()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  An index list of completely selected rows. */
-    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual css::uno::Sequence< sal_Int32 > SAL_CALL
     getSelectedAccessibleRows()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  An index list of completely selected columns. */
-    virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
+    virtual css::uno::Sequence< sal_Int32 > SAL_CALL
     getSelectedAccessibleColumns()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  <TRUE/>, if the specified row is completely selected. */
     virtual sal_Bool SAL_CALL isAccessibleRowSelected( sal_Int32 nRow )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  <TRUE/>, if the specified column is completely selected. */
     virtual sal_Bool SAL_CALL isAccessibleColumnSelected( sal_Int32 nColumn )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return The XAccessible interface of the cell object at the specified
                 cell position. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  <TRUE/>, if the specified cell is selected. */
     virtual sal_Bool SAL_CALL isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleSelection ---------------------------------------------------
 
     /** Selects the specified child (row or column of the table). */
     virtual void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  <TRUE/>, if the specified child (row/column) is selected. */
     virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Clears the complete selection. */
     virtual void SAL_CALL clearAccessibleSelection()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Selects all children or first, if multiselection is not supported. */
     virtual void SAL_CALL selectAllAccessibleChildren()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The number of selected rows/columns. */
     virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The specified selected row/column. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Removes the specified row/column from the selection. */
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XInterface -------------------------------------------------------------
 
     /** Queries for a new interface. */
-    ::com::sun::star::uno::Any SAL_CALL queryInterface(
-            const ::com::sun::star::uno::Type& rType )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Aquires the object (calls acquire() on base class). */
     virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
@@ -195,11 +186,11 @@ public:
 
     /** @return  The name of this class. */
     virtual OUString SAL_CALL getImplementationName()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  An unique implementation ID. */
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 protected:
     // internal virtual methods -----------------------------------------------
@@ -229,8 +220,7 @@ protected:
         depending on object type.
         @attention  This method requires locked mutex's and a living object.
         @return  The XAccessible interface of the specified column/row. */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    css::uno::Reference< css::accessibility::XAccessible >
     implGetChild( sal_Int32 nRow, sal_uInt16 nColumnPos );
 
     /** @attention  This method requires locked mutex's and a living object.
@@ -238,13 +228,13 @@ protected:
         @throws <type>IndexOutOfBoundsException</type>
         If the specified index is invalid. */
     sal_Int32 implGetChildIndexFromSelectedIndex( sal_Int32 nSelectedChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
+        throw ( css::lang::IndexOutOfBoundsException );
 
     /** @attention  This method requires locked mutex's and a living object.
         @throws <type>IndexOutOfBoundsException</type>
         If the specified row/column index (depending on type) is invalid. */
     void ensureIsValidHeaderIndex( sal_Int32 nIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
+        throw ( css::lang::IndexOutOfBoundsException );
 };
 
 // inlines --------------------------------------------------------------------

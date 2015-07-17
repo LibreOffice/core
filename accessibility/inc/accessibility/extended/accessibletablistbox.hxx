@@ -33,7 +33,7 @@ namespace accessibility {
 
 class AccessibleBrowseBoxTable;
 
-typedef ::cppu::ImplHelper1  <   ::com::sun::star::accessibility::XAccessible
+typedef ::cppu::ImplHelper1  <   css::accessibility::XAccessible
                             >   AccessibleTabListBox_Base;
 
 /** !!! */
@@ -50,7 +50,7 @@ public:
         @param rxParent  XAccessible interface of the parent object.
         @param rBox  The HeaderTabListBox control. */
     AccessibleTabListBox(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
+        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
         SvHeaderTabListBox& rBox );
 
 public:
@@ -63,26 +63,25 @@ public:
 
     /** @return  The count of visible children. */
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The XAccessible interface of the specified child. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int32 nChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleContext
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // IAccessibleTabListBox
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getMyself() SAL_OVERRIDE
     {
         return this;
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar() SAL_OVERRIDE
     {
         return AccessibleBrowseBox::getHeaderBar( svt::BBTYPE_COLUMNHEADERBAR );

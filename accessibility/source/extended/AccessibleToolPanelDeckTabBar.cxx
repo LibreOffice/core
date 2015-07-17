@@ -62,7 +62,7 @@ namespace accessibility
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
 
-    typedef ::com::sun::star::awt::Point        UnoPoint;
+    typedef css::awt::Point        UnoPoint;
 
     // AccessibleWrapper
     typedef ::cppu::WeakImplHelper< XAccessible > AccessibleWrapper_Base;

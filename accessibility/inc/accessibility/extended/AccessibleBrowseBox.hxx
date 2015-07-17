@@ -41,8 +41,8 @@ class AccessibleBrowseBox : public AccessibleBrowseBoxBase
 
 protected:
     AccessibleBrowseBox(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxCreator,
+        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+        const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator,
         ::svt::IAccessibleTableProvider& _rBrowseBox
     );
 
@@ -53,7 +53,7 @@ protected:
         <p>To be called only once, and only if in the ctor NULL was passed.</p>
     */
     void    setCreator(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxCreator
+        const css::uno::Reference< css::accessibility::XAccessible >& _rxCreator
     );
 
     /** Cleans up members. */
@@ -65,32 +65,28 @@ protected:
 
     /** @return  The count of visible children. */
     virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The XAccessible interface of the specified child. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible > SAL_CALL
     getAccessibleChild( sal_Int32 nChildIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-
-    /** @return  The role of this object (a table). */
-//    virtual sal_Int16 SAL_CALL getAccessibleRole()
-//        throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( css::lang::IndexOutOfBoundsException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleComponent ---------------------------------------------------
 
     /** @return
             The accessible child rendered under the given point.
     */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL
-    getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<
+        css::accessibility::XAccessible > SAL_CALL
+    getAccessibleAtPoint( const css::awt::Point& rPoint )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Grabs the focus to the BrowseBox. */
     virtual void SAL_CALL grabFocus()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XServiceInfo -----------------------------------------------------------
 
@@ -98,7 +94,7 @@ protected:
             The name of this class.
     */
     virtual OUString SAL_CALL getImplementationName()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 public:
     // helper functions
@@ -111,8 +107,8 @@ public:
             the old value
     */
     void commitHeaderBarEvent(sal_Int16 nEventId,
-            const ::com::sun::star::uno::Any& rNewValue,
-            const ::com::sun::star::uno::Any& rOldValue,bool _bColumnHeaderBar = true);
+            const css::uno::Any& rNewValue,
+            const css::uno::Any& rOldValue,bool _bColumnHeaderBar = true);
 
     // helper functions
     /** commitTableEvent commit the event at all listeners of the table
@@ -124,13 +120,13 @@ public:
             the old value
     */
     void commitTableEvent(sal_Int16 nEventId,
-            const ::com::sun::star::uno::Any& rNewValue,
-            const ::com::sun::star::uno::Any& rOldValue);
+            const css::uno::Any& rNewValue,
+            const css::uno::Any& rOldValue);
 
     /** returns the accessible object for the row or the column header bar
     */
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    inline css::uno::Reference<
+        css::accessibility::XAccessible >
         getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType )
         {
             return implGetHeaderBar(_eObjType);
@@ -138,8 +134,8 @@ public:
 
     /** returns the accessible object for the table representation
     */
-    inline ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    inline css::uno::Reference<
+        css::accessibility::XAccessible >
         getTable( )
         {
             return implGetTable();
@@ -160,22 +156,22 @@ protected:
     /** This method creates (once) and returns the accessible data table child.
         @attention  This method requires locked mutex's and a living object.
         @return  The XAccessible interface of the data table. */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > implGetTable();
+    css::uno::Reference<
+        css::accessibility::XAccessible > implGetTable();
 
     /** This method creates (once) and returns the specified header bar.
         @attention  This method requires locked mutex's and a living object.
         @return  The XAccessible interface of the header bar. */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    css::uno::Reference<
+        css::accessibility::XAccessible >
         implGetHeaderBar( ::svt::AccessibleBrowseBoxObjType eObjType );
 
     /** This method returns one of the children that are always present:
         Data table, row and column header bar or corner control.
         @attention  This method requires locked mutex's and a living object.
         @return  The XAccessible interface of the specified child. */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
+    css::uno::Reference<
+        css::accessibility::XAccessible >
     implGetFixedChild( sal_Int32 nChildIndex );
 
     /** This method creates and returns an accessible table.
@@ -193,7 +189,7 @@ private:
     <p>The instance holds its XAccessibleContext with a hard reference, while
     the context holds this instance weak.</p>
 */
-typedef ::cppu::WeakImplHelper<   ::com::sun::star::accessibility::XAccessible
+typedef ::cppu::WeakImplHelper<   css::accessibility::XAccessible
                               >   AccessibleBrowseBoxAccess_Base;
 
 class AccessibleBrowseBoxAccess :public AccessibleBrowseBoxAccess_Base
@@ -201,18 +197,18 @@ class AccessibleBrowseBoxAccess :public AccessibleBrowseBoxAccess_Base
 {
 private:
     ::osl::Mutex                m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    css::uno::Reference< css::accessibility::XAccessible >
                                         m_xParent;
     ::svt::IAccessibleTableProvider&    m_rBrowseBox;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+    css::uno::Reference< css::accessibility::XAccessibleContext >
                                 m_xContext;
     AccessibleBrowseBox*        m_pContext;
                                     // note that this pointer is valid as long as m_xContext is valid!
 
 public:
     AccessibleBrowseBoxAccess(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
+        const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
         ::svt::IAccessibleTableProvider& _rBrowseBox
     );
 
@@ -227,11 +223,11 @@ protected:
     virtual ~AccessibleBrowseBoxAccess();
 
     // XAccessible
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-        SAL_CALL getAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext >
+        SAL_CALL getAccessibleContext() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // IAccessibleBrowseBox
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getMyself() SAL_OVERRIDE
     {
         return this;
@@ -241,40 +237,40 @@ protected:
     {
         return isContextAlive();
     }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) SAL_OVERRIDE
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccessible;
+        css::uno::Reference< css::accessibility::XAccessible > xAccessible;
         AccessibleBrowseBox* pContext( getContext() );
         if ( pContext )
             xAccessible = pContext->getHeaderBar( _eObjType );
         return xAccessible;
     }
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    virtual css::uno::Reference< css::accessibility::XAccessible >
         getTable() SAL_OVERRIDE
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAccessible;
+        css::uno::Reference< css::accessibility::XAccessible > xAccessible;
         AccessibleBrowseBox* pContext( getContext() );
         if ( pContext )
             xAccessible = pContext->getTable();
         return xAccessible;
     }
-    virtual void commitHeaderBarEvent( sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue,
-        const ::com::sun::star::uno::Any& rOldValue, bool _bColumnHeaderBar ) SAL_OVERRIDE
+    virtual void commitHeaderBarEvent( sal_Int16 nEventId, const css::uno::Any& rNewValue,
+        const css::uno::Any& rOldValue, bool _bColumnHeaderBar ) SAL_OVERRIDE
     {
         AccessibleBrowseBox* pContext( getContext() );
         if ( pContext )
             pContext->commitHeaderBarEvent( nEventId, rNewValue, rOldValue, _bColumnHeaderBar );
     }
     virtual void commitTableEvent( sal_Int16 nEventId,
-        const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue ) SAL_OVERRIDE
+        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) SAL_OVERRIDE
     {
         AccessibleBrowseBox* pContext( getContext() );
         if ( pContext )
             pContext->commitTableEvent( nEventId, rNewValue, rOldValue );
     }
     virtual void commitEvent( sal_Int16 nEventId,
-        const ::com::sun::star::uno::Any& rNewValue, const ::com::sun::star::uno::Any& rOldValue ) SAL_OVERRIDE
+        const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) SAL_OVERRIDE
     {
         AccessibleBrowseBox* pContext( getContext() );
         if ( pContext )

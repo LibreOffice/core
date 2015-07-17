@@ -32,7 +32,7 @@ namespace accessibility
 AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnRowId,
                                   const Reference< XAccessible >& rxParent,
                                   IAccessibleTableProvider&                  rBrowseBox,
-                                  const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+                                  const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                                   AccessibleBrowseBoxObjType  eObjType)
 : BrowseBoxAccessibleElement(rxParent,
                           rBrowseBox,
@@ -99,7 +99,7 @@ Reference<XAccessible > SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChi
 
 /** Grabs the focus to the column header. */
 void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
-    throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
@@ -114,7 +114,7 @@ void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
         The name of this class.
 */
 OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
-    throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell" );
 }

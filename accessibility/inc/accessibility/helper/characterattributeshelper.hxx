@@ -34,7 +34,7 @@ class CharacterAttributesHelper
 {
 private:
 
-    typedef ::std::map< OUString, ::com::sun::star::uno::Any > AttributeMap;
+    typedef ::std::map< OUString, css::uno::Any > AttributeMap;
 
     AttributeMap    m_aAttributeMap;
 
@@ -43,8 +43,8 @@ public:
     CharacterAttributesHelper( const vcl::Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor );
     ~CharacterAttributesHelper();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetCharacterAttributes();
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetCharacterAttributes( const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes );
+    css::uno::Sequence< css::beans::PropertyValue > GetCharacterAttributes();
+    css::uno::Sequence< css::beans::PropertyValue > GetCharacterAttributes( const css::uno::Sequence< OUString >& aRequestedAttributes );
 };
 
 #endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_HELPER_CHARACTERATTRIBUTESHELPER_HXX
