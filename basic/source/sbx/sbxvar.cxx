@@ -228,7 +228,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     // Request parameter-information (not for objects)
     const_cast<SbxVariable*>(this)->GetInfo();
     // Append nothing, if it is a simple property (no empty brackets)
-    if( !pInfo || ( pInfo->aParams.empty() && GetClass() == SbxCLASS_PROPERTY ))
+    if (!pInfo || (pInfo->m_Params.empty() && GetClass() == SbxCLASS_PROPERTY))
     {
         return maName;
     }
@@ -249,10 +249,11 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     }
     aTmp += "(";
 
-    for(SbxParams::const_iterator i = pInfo->aParams.begin(); i != pInfo->aParams.end(); ++i)
+    for (SbxParams::const_iterator iter = pInfo->m_Params.begin(); iter != pInfo->m_Params.end(); ++iter)
     {
+        auto const& i = *iter;
         int nt = i->eType & 0x0FFF;
-        if( i != pInfo->aParams.begin() )
+        if (iter != pInfo->m_Params.begin())
         {
             aTmp += ",";
         }
@@ -639,11 +640,12 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
 
 ////////////////////////////// SbxInfo
 
-SbxInfo::SbxInfo() : aHelpFile(), nHelpId( 0 ), aParams()
+SbxInfo::SbxInfo()
+        : aHelpFile(), nHelpId(0)
 {}
 
 SbxInfo::SbxInfo( const OUString& r, sal_uInt32 n )
-       : aHelpFile( r ), nHelpId( n ), aParams()
+       : aHelpFile( r ), nHelpId( n )
 {}
 
 ////////////////////////////// SbxAlias

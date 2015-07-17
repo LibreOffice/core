@@ -31,8 +31,8 @@
 #include <basic/sbxmeth.hxx>
 #include <basic/basicdllapi.h>
 
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
+#include <memory>
 
 class SvStream;
 class SbxBase;
@@ -59,7 +59,7 @@ struct SbxParamInfo
     ~SbxParamInfo() {}
 };
 
-typedef boost::ptr_vector<SbxParamInfo> SbxParams;
+typedef std::vector<std::unique_ptr<SbxParamInfo>> SbxParams;
 
 class BASIC_DLLPUBLIC SbxInfo : public SvRefBase
 {
@@ -69,7 +69,7 @@ class BASIC_DLLPUBLIC SbxInfo : public SvRefBase
     OUString        aComment;
     OUString        aHelpFile;
     sal_uInt32      nHelpId;
-    SbxParams       aParams;
+    SbxParams       m_Params;
 
 protected:
     bool LoadData( SvStream&, sal_uInt16 );

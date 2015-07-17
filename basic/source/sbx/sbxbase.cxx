@@ -328,20 +328,20 @@ SbxInfo::~SbxInfo()
 
 void SbxInfo::AddParam(const OUString& rName, SbxDataType eType, SbxFlagBits nFlags)
 {
-    aParams.push_back(new SbxParamInfo(rName, eType, nFlags));
+    m_Params.push_back(std::unique_ptr<SbxParamInfo>(new SbxParamInfo(rName, eType, nFlags)));
 }
 
 const SbxParamInfo* SbxInfo::GetParam( sal_uInt16 n ) const
 {
-    if( n < 1 || n > aParams.size() )
+    if (n < 1 || n > m_Params.size())
         return NULL;
     else
-        return &(aParams[n - 1]);
+        return m_Params[n - 1].get();
 }
 
 bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
 {
-    aParams.clear();
+    m_Params.clear();
     sal_uInt16 nParam;
     aComment = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
         RTL_TEXTENCODING_ASCII_US);
@@ -359,7 +359,7 @@ bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         if( nVer > 1 )
             rStrm.ReadUInt32( nUserData );
         AddParam( aName, (SbxDataType) nType, nFlags );
-        SbxParamInfo& p(aParams.back());
+        SbxParamInfo& p(*m_Params.back());
         p.nUserData = nUserData;
     }
     return true;
@@ -371,8 +371,8 @@ bool SbxInfo::StoreData( SvStream& rStrm ) const
         RTL_TEXTENCODING_ASCII_US );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, aHelpFile,
         RTL_TEXTENCODING_ASCII_US);
-    rStrm.WriteUInt32( nHelpId ).WriteUInt16( aParams.size() );
-    for(SbxParams::const_iterator i = aParams.begin(); i != aParams.end(); ++i)
+    rStrm.WriteUInt32( nHelpId ).WriteUInt16( m_Params.size() );
+    for (auto const& i : m_Params)
     {
         write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, i->aName,
             RTL_TEXTENCODING_ASCII_US);
