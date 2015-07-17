@@ -83,6 +83,8 @@ private:
 
     VclPtr<ListBox> mpLBLabelPlacement;
 
+    VclPtr<FixedText> mpFTSeriesName;
+
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
     css::uno::Reference<css::frame::XModel> mxModel;

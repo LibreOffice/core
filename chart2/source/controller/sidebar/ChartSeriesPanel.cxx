@@ -25,6 +25,10 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
 #include "ChartSeriesPanel.hxx"
 #include "ChartController.hxx"
@@ -233,6 +237,30 @@ void setAttachedAxisType(css::uno::Reference<css::frame::XModel>
     xSeries->setPropertyValue("AttachedAxisIndex", css::uno::makeAny(nIndex));
 }
 
+css::uno::Reference<css::chart2::XChartType> getChartType(
+        css::uno::Reference<css::frame::XModel> xModel)
+{
+    css::uno::Reference<css::chart2::XChartDocument> xChartDoc (xModel, css::uno::UNO_QUERY);
+    css::uno::Reference<css::chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    css::uno::Reference< css::chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, UNO_QUERY_THROW );
+    css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > xCooSysSequence( xCooSysContainer->getCoordinateSystems());
+    css::uno::Reference< css::chart2::XChartTypeContainer > xChartTypeContainer( xCooSysSequence[0], UNO_QUERY_THROW );
+    css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > > xChartTypeSequence( xChartTypeContainer->getChartTypes() );
+    return xChartTypeSequence[0];
+}
+
+OUString getSeriesLabel(css::uno::Reference<css::frame::XModel> xModel, const OUString& rCID)
+{
+    css::uno::Reference< css::chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+
+    if (!xSeries.is())
+        return OUString();
+
+    css::uno::Reference<css::chart2::XChartType> xChartType = getChartType(xModel);
+    return DataSeriesHelper::getDataSeriesLabel(xSeries, xChartType->getRoleOfSequenceForSeriesLabel());
+}
+
 }
 
 ChartSeriesPanel::ChartSeriesPanel(
@@ -253,6 +281,8 @@ ChartSeriesPanel::ChartSeriesPanel(
     get(mpRBSecondaryAxis, "radiobutton_secondary_axis");
 
     get(mpLBLabelPlacement, "comboboxtext_label");
+
+    get(mpFTSeriesName, "label_series_name");
 
     Initialize();
 }
@@ -276,6 +306,8 @@ void ChartSeriesPanel::dispose()
     mpRBSecondaryAxis.clear();
 
     mpLBLabelPlacement.clear();
+
+    mpFTSeriesName.clear();
 
     PanelLayout::dispose();
 }
@@ -328,6 +360,8 @@ void ChartSeriesPanel::updateData()
 
     mpLBLabelPlacement->Enable(bLabelVisible);
     mpLBLabelPlacement->SelectEntryPos(getDataLabelPlacement(mxModel, aCID));
+
+    mpFTSeriesName->SetText(getSeriesLabel(mxModel, aCID));
 }
 
 VclPtr<vcl::Window> ChartSeriesPanel::Create (
