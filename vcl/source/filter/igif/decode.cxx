@@ -63,13 +63,13 @@ GIFLZWDecompressor::~GIFLZWDecompressor()
     delete[] pTable;
 }
 
-HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
+Scanline GIFLZWDecompressor::DecompressBlock( Scanline pSrc, sal_uInt8 cBufSize,
                                             sal_uLong& rCount, bool& rEOI )
 {
     sal_uLong   nTargetSize = 4096;
     sal_uLong   nCount = 0;
-    HPBYTE  pTarget = static_cast<HPBYTE>(rtl_allocateMemory( nTargetSize ));
-    HPBYTE  pTmpTarget = pTarget;
+    Scanline    pTarget = static_cast<Scanline>(rtl_allocateMemory( nTargetSize ));
+    Scanline    pTmpTarget = pTarget;
 
     nBlockBufSize = cBufSize;
     nBlockBufPos = 0;
@@ -83,7 +83,7 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
         {
             sal_uLong   nNewSize = nTargetSize << 1;
             sal_uLong   nOffset = pTmpTarget - pTarget;
-            HPBYTE  pTmp = static_cast<HPBYTE>(rtl_allocateMemory( nNewSize ));
+            Scanline  pTmp = static_cast<Scanline>(rtl_allocateMemory( nNewSize ));
 
             memcpy( pTmp, pTarget, nTargetSize );
             rtl_freeMemory( pTarget );

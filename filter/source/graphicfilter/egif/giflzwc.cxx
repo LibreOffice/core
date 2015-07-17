@@ -172,7 +172,7 @@ void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
 
 
 
-void GIFLZWCompressor::Compress( HPBYTE pSrc, sal_uLong nSize )
+void GIFLZWCompressor::Compress( Scanline pSrc, sal_uLong nSize )
 {
     if( pIDOS )
     {

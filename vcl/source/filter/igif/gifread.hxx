@@ -57,7 +57,7 @@ class GIFReader : public GraphicReader
     BitmapPalette       aGPalette;
     BitmapPalette       aLPalette;
     SvStream&           rIStm;
-    HPBYTE              pSrcBuf;
+    Scanline            pSrcBuf;
     GIFLZWDecompressor* pDecomp;
     BitmapWriteAccess*  pAcc8;
     BitmapWriteAccess*  pAcc1;
@@ -97,7 +97,7 @@ class GIFReader : public GraphicReader
     bool                ReadExtension();
     bool                ReadLocalHeader();
     sal_uLong           ReadNextBlock();
-    void                FillImages( HPBYTE pBytes, sal_uLong nCount );
+    void                FillImages( Scanline pBytes, sal_uLong nCount );
     void                CreateNewBitmaps();
     bool                ProcessGIF();
 

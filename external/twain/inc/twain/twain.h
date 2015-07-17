@@ -2042,7 +2042,7 @@ typedef struct {
 #endif
 
 
-typedef BYTE TW_HUGE * HPBYTE;
+typedef BYTE TW_HUGE * Scanline;
 typedef void TW_HUGE * HPVOID;
 
 typedef unsigned char     TW_STR1024[1026],   FAR *pTW_STR1026, FAR *pTW_STR1024;

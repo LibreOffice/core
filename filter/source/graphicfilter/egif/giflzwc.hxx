@@ -48,7 +48,7 @@ public:
                                 ~GIFLZWCompressor();
 
     void                        StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize );
-    void                        Compress( HPBYTE pSrc, sal_uLong nSize );
+    void                        Compress( Scanline pSrc, sal_uLong nSize );
     void                        EndCompression();
 };
 
