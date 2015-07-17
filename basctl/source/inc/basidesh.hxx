@@ -88,7 +88,7 @@ private:
     bool                m_bAppBasicModified;
     DocumentEventNotifier m_aNotifier;
     friend class ContainerListenerImpl;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xLibListener;
+    css::uno::Reference< css::container::XContainerListener > m_xLibListener;
 
     void                Init();
     void                InitTabBar();
@@ -173,7 +173,7 @@ public:
 
     svl::IUndoManager*  GetUndoManager() SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::view::XRenderable > GetRenderable() SAL_OVERRIDE;
 
     // virtual sal_uInt16           Print( SfxProgress &rProgress, sal_Bool bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*     GetPrinter( bool bCreate ) SAL_OVERRIDE;
@@ -204,11 +204,11 @@ public:
     // For Dialog Drag&Drop in Dialog Organizer:
     // (defined in moduldlg.cxx)
     static void CopyDialogResources(
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& io_xISP,
+        css::uno::Reference< css::io::XInputStreamProvider >& io_xISP,
         const ScriptDocument& rSourceDoc, const OUString& rSourceLibName, const ScriptDocument& rDestDoc,
         const OUString& rDestLibName, const OUString& rDlgName );
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+    virtual css::uno::Reference< css::frame::XModel >
                         GetCurrentDocument() const SAL_OVERRIDE;
 
     void UpdateObjectCatalog () { aObjectCatalog->UpdateEntries(); }

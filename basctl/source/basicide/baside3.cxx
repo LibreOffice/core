@@ -1034,7 +1034,7 @@ bool implImportDialog( vcl::Window* pWin, const OUString& rCurPath, const Script
             }
 
             // Resource?
-            ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
+            css::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
             Reference< task::XInteractionHandler > xDummyHandler;
             bool bReadOnly = true;
             Reference< XStringResourceWithLocation > xImportStringResource =
@@ -1360,9 +1360,9 @@ void DialogWindow::InitSettings(bool bFont, bool bForeground, bool bBackground)
         SetBackground( rStyleSettings.GetFieldColor() );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > DialogWindow::CreateAccessible()
+css::uno::Reference< css::accessibility::XAccessible > DialogWindow::CreateAccessible()
 {
-    return static_cast<com::sun::star::accessibility::XAccessible*>(new AccessibleDialogWindow( this ));
+    return static_cast<css::accessibility::XAccessible*>(new AccessibleDialogWindow( this ));
 }
 
 char const* DialogWindow::GetHid () const

@@ -31,7 +31,7 @@ namespace basctl
 using namespace ::com::sun::star;
 
 
-DlgEdFactory::DlgEdFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel ) : mxModel( xModel )
+DlgEdFactory::DlgEdFactory( const css::uno::Reference< css::frame::XModel >& xModel ) : mxModel( xModel )
 {
     SdrObjFactory::InsertMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
 }
@@ -168,7 +168,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                     if (xPSet.is())
                     {
                         uno::Any aValue;
-                        aValue <<= (sal_Int32) ::com::sun::star::awt::ScrollBarOrientation::VERTICAL;
+                        aValue <<= (sal_Int32) css::awt::ScrollBarOrientation::VERTICAL;
                         xPSet->setPropertyValue( DLGED_PROP_ORIENTATION, aValue );
                     }
                  }

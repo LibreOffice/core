@@ -77,7 +77,7 @@ private:
     OUString        aCurText;
     bool            bIgnoreSelect;
     bool            bFillBox;
-    com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+    css::uno::Reference< css::frame::XFrame > m_xFrame;
 
     static void     ReleaseFocus();
     void            InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation );
@@ -94,7 +94,7 @@ protected:
 
 public:
                     LibBox( vcl::Window* pParent,
-                                 const com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+                            const css::uno::Reference< css::frame::XFrame >& rFrame );
     virtual         ~LibBox();
     virtual void    dispose() SAL_OVERRIDE;
 

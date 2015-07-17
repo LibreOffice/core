@@ -1061,7 +1061,7 @@ void Shell::ManageToolbars()
         ( GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     if ( xFrameProps.is() )
     {
-        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        Reference< css::frame::XLayoutManager > xLayoutManager;
         uno::Any a = xFrameProps->getPropertyValue( "LayoutManager" );
         a >>= xLayoutManager;
         if ( xLayoutManager.is() )

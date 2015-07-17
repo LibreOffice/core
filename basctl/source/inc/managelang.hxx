@@ -35,19 +35,19 @@ class LocalizationMgr;
 struct LanguageEntry
 {
     OUString                        m_sLanguage;
-    ::com::sun::star::lang::Locale  m_aLocale;
+    css::lang::Locale               m_aLocale;
     bool                            m_bIsDefault;
 
     LanguageEntry( const OUString& _rLanguage,
-                   const ::com::sun::star::lang::Locale& _rLocale,
+                   const css::lang::Locale& _rLocale,
                    bool _bIsDefault ) :
         m_sLanguage( _rLanguage ),
         m_aLocale( _rLocale ),
         m_bIsDefault( _bIsDefault ) {}
 };
 
-extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
-                             const ::com::sun::star::lang::Locale& rLocaleRight );
+extern bool localesAreEqual( const css::lang::Locale& rLocaleLeft,
+                             const css::lang::Locale& rLocaleRight );
 
 class ManageLanguageDialog : public ModalDialog
 {
@@ -96,7 +96,7 @@ public:
     virtual ~SetDefaultLanguageDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >   GetLocales() const;
+    css::uno::Sequence< css::lang::Locale >   GetLocales() const;
 };
 
 } // namespace basctl

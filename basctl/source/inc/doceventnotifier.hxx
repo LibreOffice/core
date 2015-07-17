@@ -62,7 +62,7 @@ namespace basctl
 
         /** creates a notifier instance which notifies about events at a single document
         */
-        DocumentEventNotifier (DocumentEventListener&, com::sun::star::uno::Reference<com::sun::star::frame::XModel> const& rxDocument);
+        DocumentEventNotifier (DocumentEventListener&, css::uno::Reference<css::frame::XModel> const& rxDocument);
 
         ~DocumentEventNotifier();
 

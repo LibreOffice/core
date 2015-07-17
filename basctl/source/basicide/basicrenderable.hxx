@@ -30,7 +30,7 @@ namespace basctl
 class BaseWindow;
 
 class Renderable :
-    public cppu::WeakComponentImplHelper< com::sun::star::view::XRenderable >,
+    public cppu::WeakComponentImplHelper< css::view::XRenderable >,
     public vcl::PrinterOptionsHelper
 {
     VclPtr<BaseWindow>  mpWindow;
@@ -43,21 +43,21 @@ public:
 
     // XRenderable
     virtual sal_Int32 SAL_CALL getRendererCount (
-        const com::sun::star::uno::Any& aSelection,
-        const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue >& xOptions)
-        throw (com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Any& aSelection,
+        const css::uno::Sequence<css::beans::PropertyValue >& xOptions)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> SAL_CALL getRenderer (
+    virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getRenderer (
         sal_Int32 nRenderer,
-        const com::sun::star::uno::Any& rSelection,
-        const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rxOptions)
-        throw (com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Any& rSelection,
+        const css::uno::Sequence<css::beans::PropertyValue>& rxOptions)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL render (
         sal_Int32 nRenderer,
-        const com::sun::star::uno::Any& rSelection,
-        const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rxOptions)
-        throw (com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Any& rSelection,
+        const css::uno::Sequence<css::beans::PropertyValue>& rxOptions)
+        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

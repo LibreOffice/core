@@ -33,9 +33,9 @@ namespace basctl
 
 class DlgEdFactory
 {
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
+    const css::uno::Reference< css::frame::XModel > mxModel;
 public:
-    DlgEdFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    DlgEdFactory( const css::uno::Reference< css::frame::XModel >& xModel );
     ~DlgEdFactory();
 
     DECL_LINK( MakeObject, SdrObjFactory * );

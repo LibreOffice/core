@@ -78,13 +78,13 @@ protected:
     void                InitSettings(bool bFont, bool bForeground, bool bBackground);
 
 public:
-    DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, const OUString& aLibName, const OUString& aName, com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel);
+    DialogWindow (DialogWindowLayout* pParent, ScriptDocument const& rDocument, const OUString& aLibName, const OUString& aName, css::uno::Reference<css::container::XNameContainer> const& xDialogModel);
     DialogWindow( DialogWindow* pCurView ); // never implemented
 
     virtual void        ExecuteCommand( SfxRequest& rReq ) SAL_OVERRIDE;
     virtual void        GetState( SfxItemSet& ) SAL_OVERRIDE;
     DlgEditor&          GetEditor() const   { return *pEditor; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const;
+    css::uno::Reference< css::container::XNameContainer > GetDialog() const;
     DlgEdModel&         GetModel() const;
     DlgEdPage&          GetPage() const;
     DlgEdView&          GetView() const;
@@ -112,7 +112,7 @@ public:
     virtual void        Activating () SAL_OVERRIDE;
     virtual void        Deactivating () SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     virtual char const* GetHid () const SAL_OVERRIDE;
     virtual ItemType GetType () const SAL_OVERRIDE;

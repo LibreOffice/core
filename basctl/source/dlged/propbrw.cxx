@@ -163,8 +163,8 @@ void PropBrw::ImplReCreateController()
         if ( m_xBrowserComponentWindow.is() )
         {
             m_xBrowserComponentWindow->setPosSize(aPropWinPos.X(), aPropWinPos.Y(), aPropWinSize.Width(), aPropWinSize.Height(),
-                ::com::sun::star::awt::PosSize::WIDTH | ::com::sun::star::awt::PosSize::HEIGHT |
-                ::com::sun::star::awt::PosSize::X | ::com::sun::star::awt::PosSize::Y);
+                css::awt::PosSize::WIDTH | css::awt::PosSize::HEIGHT |
+                css::awt::PosSize::X | css::awt::PosSize::Y);
             m_xBrowserComponentWindow->setVisible(true);
         }
     }
@@ -433,7 +433,7 @@ void PropBrw::Resize()
     if (m_xBrowserComponentWindow.is())
     {
         m_xBrowserComponentWindow->setPosSize(0, 0, aPropWinSize.Width(), aPropWinSize.Height(),
-            ::com::sun::star::awt::PosSize::WIDTH | ::com::sun::star::awt::PosSize::HEIGHT);
+            css::awt::PosSize::WIDTH | css::awt::PosSize::HEIGHT);
     }
 }
 

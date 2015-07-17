@@ -59,9 +59,9 @@ namespace basctl
 
     // libraries
 
-    ::com::sun::star::uno::Sequence< OUString > GetMergedLibraryNames(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xModLibContainer,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xDlgLibContainer );
+    css::uno::Sequence< OUString > GetMergedLibraryNames(
+        const css::uno::Reference< css::script::XLibraryContainer >& xModLibContainer,
+        const css::uno::Reference< css::script::XLibraryContainer >& xDlgLibContainer );
 
     /** renames a module
 
@@ -74,10 +74,10 @@ namespace basctl
     // new methods for macros
 
     OUString        ChooseMacro(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxLimitToDocument,
+        const css::uno::Reference< css::frame::XModel >& rxLimitToDocument,
         bool bChooseOnly, const OUString& rMacroDesc );
 
-    ::com::sun::star::uno::Sequence< OUString > GetMethodNames(
+    css::uno::Sequence< OUString > GetMethodNames(
         const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )
         throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
 

@@ -49,10 +49,10 @@ class DlgEdObj: public SdrUnoObj
     friend class DlgEdForm;
 
 private:
-    bool        bIsListening;
+    bool            bIsListening;
     DlgEdForm*      pDlgEdForm;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>  m_xContainerListener;
+    css::uno::Reference< css::beans::XPropertyChangeListener> m_xPropertyChangeListener;
+    css::uno::Reference< css::container::XContainerListener>  m_xContainerListener;
 
 private:
     DlgEditor& GetDialogEditor ();
@@ -60,7 +60,7 @@ private:
 protected:
     DlgEdObj();
     DlgEdObj(const OUString& rModelName,
-             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
+             const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac);
 
     virtual void NbcMove( const Size& rSize ) SAL_OVERRIDE;
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
@@ -114,22 +114,22 @@ public:
     virtual void SetRectFromProps();
     virtual void SetPropsFromRect();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > GetControl() const;
+    css::uno::Reference< css::awt::XControl > GetControl() const;
 
-    virtual void PositionAndSizeChange( const ::com::sun::star::beans::PropertyChangeEvent& evt );
-    void SAL_CALL NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(css::container::NoSuchElementException, css::uno::RuntimeException);
-    void SAL_CALL TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+    virtual void PositionAndSizeChange( const css::beans::PropertyChangeEvent& evt );
+    void SAL_CALL NameChange( const  css::beans::PropertyChangeEvent& evt ) throw(css::container::NoSuchElementException, css::uno::RuntimeException);
+    void SAL_CALL TabIndexChange( const  css::beans::PropertyChangeEvent& evt ) throw( css::uno::RuntimeException);
 
     // PropertyChangeListener
     void SAL_CALL _propertyChange(const css::beans::PropertyChangeEvent& evt) throw (css::uno::RuntimeException, std::exception);
 
     // ContainerListener
-    void SAL_CALL _elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL _elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL _elementInserted( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException);
+    void SAL_CALL _elementReplaced( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException);
+    void SAL_CALL _elementRemoved( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException);
 
     virtual void SetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
-    bool MakeDataAware( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    bool MakeDataAware( const css::uno::Reference< css::frame::XModel >& xModel );
 };
 
 
@@ -146,7 +146,7 @@ private:
     DlgEditor& rDlgEditor;
     ::std::vector<DlgEdObj*> pChildren;
 
-    mutable ::boost::optional< ::com::sun::star::awt::DeviceInfo >   mpDeviceInfo;
+    mutable ::boost::optional< css::awt::DeviceInfo >   mpDeviceInfo;
 
 private:
     explicit DlgEdForm (DlgEditor&);
@@ -172,14 +172,14 @@ public:
     virtual void SetRectFromProps() SAL_OVERRIDE;
     virtual void SetPropsFromRect() SAL_OVERRIDE;
 
-    virtual void PositionAndSizeChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) SAL_OVERRIDE;
+    virtual void PositionAndSizeChange( const css::beans::PropertyChangeEvent& evt ) SAL_OVERRIDE;
 
     void UpdateTabIndices();
     void UpdateTabOrder();
     void UpdateGroups();
     void UpdateTabOrderAndGroups();
 
-    ::com::sun::star::awt::DeviceInfo getDeviceInfo() const;
+    css::awt::DeviceInfo getDeviceInfo() const;
 
 private:
     void    ImplInvalidateDeviceInfo();

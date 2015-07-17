@@ -70,7 +70,7 @@ DlgEdObj::DlgEdObj()
 }
 
 DlgEdObj::DlgEdObj(const OUString& rModelName,
-                   const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac)
+                   const css::uno::Reference< css::lang::XMultiServiceFactory >& rxSFac)
           :SdrUnoObj(rModelName, rxSFac, false)
           ,bIsListening(false)
           ,pDlgEdForm( NULL )
@@ -453,7 +453,7 @@ void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
     SetRectFromProps();
 }
 
-void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (css::container::NoSuchElementException, css::uno::RuntimeException)
+void SAL_CALL DlgEdObj::NameChange( const  css::beans::PropertyChangeEvent& evt ) throw (css::container::NoSuchElementException, css::uno::RuntimeException)
 {
     // get old name
     OUString aOldName;
@@ -1124,7 +1124,7 @@ void DlgEdObj::EndListening(bool bRemoveListener)
     }
 }
 
-void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception)
 {
     if (isListening())
     {
@@ -1180,7 +1180,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
     }
 }
 
-void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::ContainerEvent& ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL DlgEdObj::_elementInserted(const css::container::ContainerEvent& ) throw(css::uno::RuntimeException)
 {
     if (isListening())
     {
@@ -1189,7 +1189,7 @@ void SAL_CALL DlgEdObj::_elementInserted(const ::com::sun::star::container::Cont
     }
 }
 
-void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::ContainerEvent& ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL DlgEdObj::_elementReplaced(const css::container::ContainerEvent& ) throw(css::uno::RuntimeException)
 {
     if (isListening())
     {
@@ -1198,7 +1198,7 @@ void SAL_CALL DlgEdObj::_elementReplaced(const ::com::sun::star::container::Cont
     }
 }
 
-void SAL_CALL DlgEdObj::_elementRemoved(const ::com::sun::star::container::ContainerEvent& ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL DlgEdObj::_elementRemoved(const css::container::ContainerEvent& ) throw(css::uno::RuntimeException)
 {
     if (isListening())
     {
@@ -1436,7 +1436,7 @@ void DlgEdForm::UpdateTabIndices()
         (*aIter)->EndListening( false );
     }
 
-    Reference< ::com::sun::star::container::XNameAccess > xNameAcc( GetUnoControlModel() , UNO_QUERY );
+    Reference< css::container::XNameAccess > xNameAcc( GetUnoControlModel() , UNO_QUERY );
     if ( xNameAcc.is() )
     {
         // get sequence of control names
@@ -1454,7 +1454,7 @@ void DlgEdForm::UpdateTabIndices()
             // get tab index
             sal_Int16 nTabIndex = -1;
             Any aCtrl = xNameAcc->getByName( aName );
-            Reference< ::com::sun::star::beans::XPropertySet > xPSet;
+            Reference< css::beans::XPropertySet > xPSet;
                aCtrl >>= xPSet;
             if ( xPSet.is() )
                 xPSet->getPropertyValue( DLGED_PROP_TABINDEX ) >>= nTabIndex;
