@@ -71,6 +71,9 @@ class BASIC_DLLPUBLIC SbxInfo : public SvRefBase
     sal_uInt32      nHelpId;
     SbxParams       m_Params;
 
+    SbxInfo(SbxInfo const&) = delete;
+    void operator=(SbxInfo const&) = delete;
+
 protected:
     bool LoadData( SvStream&, sal_uInt16 );
     bool StoreData( SvStream& ) const;
