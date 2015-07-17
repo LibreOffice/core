@@ -26,10 +26,10 @@ struct GIFLZWTableEntry;
 
 class GIFLZWDecompressor
 {
-    GIFLZWTableEntry*   pTable;
-    HPBYTE              pOutBuf;
-    HPBYTE              pOutBufData;
-    HPBYTE              pBlockBuf;
+    GIFLZWTableEntry*       pTable;
+    sal_uInt8*              pOutBuf;
+    sal_uInt8*              pOutBufData;
+    sal_uInt8*              pBlockBuf;
     sal_uLong               nInputBitsBuf;
     sal_uInt16              nTableSize;
     sal_uInt16              nClearCode;
@@ -38,7 +38,7 @@ class GIFLZWDecompressor
     sal_uInt16              nOldCode;
     sal_uInt16              nOutBufDataLen;
     sal_uInt16              nInputBitsBufSize;
-    bool                bEOIFound;
+    bool                    bEOIFound;
     sal_uInt8               nDataSize;
     sal_uInt8               nBlockBufSize;
     sal_uInt8               nBlockBufPos;
@@ -51,7 +51,7 @@ public:
     explicit GIFLZWDecompressor( sal_uInt8 cDataSize );
                         ~GIFLZWDecompressor();
 
-    HPBYTE              DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize, sal_uLong& rCount, bool& rEOI );
+    sal_uInt8*          DecompressBlock( sal_uInt8* pSrc, sal_uInt8 cBufSize, sal_uLong& rCount, bool& rEOI );
 };
 
 #endif
