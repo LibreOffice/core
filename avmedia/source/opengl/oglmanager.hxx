@@ -22,19 +22,19 @@ class OGLManager : public ::cppu::WeakImplHelper< com::sun::star::media::XManage
 {
 public:
 
-    explicit OGLManager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rMgr );
+    explicit OGLManager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rMgr );
     virtual ~OGLManager();
 
     // XManager
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > SAL_CALL createPlayer( const OUString& rURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const OUString& rURL ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xMgr;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xMgr;
 };
 
 } // namespace ogl

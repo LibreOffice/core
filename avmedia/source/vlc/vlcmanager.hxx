@@ -28,26 +28,26 @@
 namespace avmedia {
 namespace vlc {
 
-class Manager : public ::cppu::WeakImplHelper< ::com::sun::star::media::XManager,
-                                               ::com::sun::star::lang::XServiceInfo >
+class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
+                                               css::lang::XServiceInfo >
 {
     std::unique_ptr<wrapper::Instance> mInstance;
     wrapper::EventHandler mEventHandler;
 public:
-    explicit Manager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
+    explicit Manager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
     virtual ~Manager();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > SAL_CALL createPlayer( const rtl::OUString& aURL ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const rtl::OUString& aURL ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    rtl::OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    sal_Bool SAL_CALL supportsService( const rtl::OUString& serviceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    rtl::OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    sal_Bool SAL_CALL supportsService( const rtl::OUString& serviceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
-    ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >  mPlayer;
-    rtl::OUString mURL;
-    bool m_is_vlc_found;
+    css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
+    css::uno::Reference< css::media::XPlayer >             mPlayer;
+    rtl::OUString                                          mURL;
+    bool                                                   m_is_vlc_found;
 };
 
 }

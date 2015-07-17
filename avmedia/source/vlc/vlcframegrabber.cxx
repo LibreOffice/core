@@ -67,7 +67,7 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString
 }
 
 ::uno::Reference< css::graphic::XGraphic > SAL_CALL VLCFrameGrabber::grabFrame( double fMediaTime )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+        throw ( css::uno::RuntimeException, std::exception )
 {
     osl::Condition condition;
 
@@ -114,19 +114,19 @@ VLCFrameGrabber::VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString
     return Graphic( bitmap ).GetXGraphic();
 }
 
-::rtl::OUString SAL_CALL VLCFrameGrabber::getImplementationName() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+::rtl::OUString SAL_CALL VLCFrameGrabber::getImplementationName() throw ( css::uno::RuntimeException, std::exception )
 {
     return AVMEDIA_VLC_GRABBER_IMPLEMENTATIONNAME;
 }
 
 sal_Bool SAL_CALL VLCFrameGrabber::supportsService( const ::rtl::OUString& serviceName )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+        throw ( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, serviceName);
 }
 
 ::uno::Sequence< ::rtl::OUString > SAL_CALL VLCFrameGrabber::getSupportedServiceNames()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+        throw ( css::uno::RuntimeException, std::exception )
 {
     ::uno::Sequence< OUString > aRet(1);
     aRet[0] = AVMEDIA_VLC_GRABBER_SERVICENAME;

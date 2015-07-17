@@ -165,7 +165,7 @@ SoundHandler::~SoundHandler()
 }
 
 /*-************************************************************************************************************
-    @interface  ::com::sun::star::frame::XDispatch
+    @interface  css::frame::XDispatch
 
     @short      try to load audio file
     @descr      This method try to load given audio file by URL and play it. We use vcl/Sound class to do that.
@@ -242,7 +242,7 @@ void SAL_CALL SoundHandler::dispatch( const css::util::URL&                     
 }
 
 /*-************************************************************************************************************
-    @interface  ::com::sun::star::document::XExtendedFilterDetection
+    @interface  css::document::XExtendedFilterDetection
 
     @short      try to detect file (given as argument included in "lDescriptor")
     @descr      We try to detect, if given file could be handled by this class and is a well known one.
@@ -338,9 +338,9 @@ IMPL_LINK_NOARG_TYPED(SoundHandler, implts_PlayerNotify, Idle *, void)
 } // namespace framework
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_framework_SoundHandler_get_implementation(::com::sun::star::uno::XComponentContext*,
-                                                            ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_framework_SoundHandler_get_implementation(css::uno::XComponentContext*,
+                                                            css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new avmedia::SoundHandler);
 }

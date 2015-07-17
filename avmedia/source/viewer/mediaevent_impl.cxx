@@ -51,15 +51,15 @@ void MediaEventListenersImpl::cleanUp()
 
 
 
-void SAL_CALL MediaEventListenersImpl::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL MediaEventListenersImpl::disposing( const css::lang::EventObject& /* Source */ )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 
 
-void SAL_CALL MediaEventListenersImpl::keyPressed( const ::com::sun::star::awt::KeyEvent& e )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL MediaEventListenersImpl::keyPressed( const css::awt::KeyEvent& e )
+    throw (css::uno::RuntimeException, std::exception)
 {
     const ::osl::MutexGuard aGuard( maMutex );
     const SolarMutexGuard aAppGuard;
@@ -78,8 +78,8 @@ void SAL_CALL MediaEventListenersImpl::keyPressed( const ::com::sun::star::awt::
 
 
 
-void SAL_CALL MediaEventListenersImpl::keyReleased( const ::com::sun::star::awt::KeyEvent& e )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL MediaEventListenersImpl::keyReleased( const css::awt::KeyEvent& e )
+    throw (css::uno::RuntimeException, std::exception)
 {
     const ::osl::MutexGuard aGuard( maMutex );
     const SolarMutexGuard aAppGuard;
@@ -97,8 +97,8 @@ void SAL_CALL MediaEventListenersImpl::keyReleased( const ::com::sun::star::awt:
 
 
 
-void SAL_CALL MediaEventListenersImpl::mousePressed( const ::com::sun::star::awt::MouseEvent& e )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL MediaEventListenersImpl::mousePressed( const css::awt::MouseEvent& e )
+    throw (css::uno::RuntimeException, std::exception)
 {
     const ::osl::MutexGuard aGuard( maMutex );
     const SolarMutexGuard aAppGuard;
@@ -118,8 +118,8 @@ void SAL_CALL MediaEventListenersImpl::mousePressed( const ::com::sun::star::awt
 
 // ----------------------------------------------gvd-----------------------
 
-void SAL_CALL MediaEventListenersImpl::mouseReleased( const ::com::sun::star::awt::MouseEvent& e )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL MediaEventListenersImpl::mouseReleased( const css::awt::MouseEvent& e )
+    throw (css::uno::RuntimeException, std::exception)
 {
     const ::osl::MutexGuard aGuard( maMutex );
     const SolarMutexGuard aAppGuard;
@@ -139,8 +139,8 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const ::com::sun::star::aw
 
 
 
-void SAL_CALL MediaEventListenersImpl::mouseEntered( const ::com::sun::star::awt::MouseEvent& /* e */ )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL MediaEventListenersImpl::mouseEntered( const css::awt::MouseEvent& /* e */ )
+    throw (css::uno::RuntimeException, std::exception)
 {
     const ::osl::MutexGuard aGuard( maMutex );
     const SolarMutexGuard aAppGuard;
@@ -152,8 +152,8 @@ void SAL_CALL MediaEventListenersImpl::mouseEntered( const ::com::sun::star::awt
 
 
 
-void SAL_CALL MediaEventListenersImpl::mouseExited( const ::com::sun::star::awt::MouseEvent& /* e */ )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL MediaEventListenersImpl::mouseExited( const css::awt::MouseEvent& /* e */ )
+    throw (css::uno::RuntimeException, std::exception)
 {
     const ::osl::MutexGuard aGuard( maMutex );
     const SolarMutexGuard aAppGuard;
@@ -165,23 +165,8 @@ void SAL_CALL MediaEventListenersImpl::mouseExited( const ::com::sun::star::awt:
 
 
 
-void SAL_CALL MediaEventListenersImpl::mouseDragged( const ::com::sun::star::awt::MouseEvent& e )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
-{
-    const ::osl::MutexGuard aGuard( maMutex );
-    const SolarMutexGuard aAppGuard;
-
-    if( mpNotifyWindow )
-    {
-        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), 0, MouseEventModifiers::NONE, e.Buttons, e.Modifiers );
-        Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEMOVE, reinterpret_cast< vcl::Window* >( mpNotifyWindow.get() ), &aVCLMouseEvt );
-    }
-}
-
-
-
-void SAL_CALL MediaEventListenersImpl::mouseMoved( const ::com::sun::star::awt::MouseEvent& e )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL MediaEventListenersImpl::mouseDragged( const css::awt::MouseEvent& e )
+    throw (css::uno::RuntimeException, std::exception)
 {
     const ::osl::MutexGuard aGuard( maMutex );
     const SolarMutexGuard aAppGuard;
@@ -195,15 +180,30 @@ void SAL_CALL MediaEventListenersImpl::mouseMoved( const ::com::sun::star::awt::
 
 
 
-void SAL_CALL MediaEventListenersImpl::focusGained( const ::com::sun::star::awt::FocusEvent& /* e */ )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL MediaEventListenersImpl::mouseMoved( const css::awt::MouseEvent& e )
+    throw (css::uno::RuntimeException, std::exception)
+{
+    const ::osl::MutexGuard aGuard( maMutex );
+    const SolarMutexGuard aAppGuard;
+
+    if( mpNotifyWindow )
+    {
+        MouseEvent aVCLMouseEvt( Point( e.X, e.Y ), 0, MouseEventModifiers::NONE, e.Buttons, e.Modifiers );
+        Application::PostMouseEvent( VCLEVENT_WINDOW_MOUSEMOVE, reinterpret_cast< vcl::Window* >( mpNotifyWindow.get() ), &aVCLMouseEvt );
+    }
+}
+
+
+
+void SAL_CALL MediaEventListenersImpl::focusGained( const css::awt::FocusEvent& /* e */ )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 
 
-void SAL_CALL MediaEventListenersImpl::focusLost( const ::com::sun::star::awt::FocusEvent& /* e */ )
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL MediaEventListenersImpl::focusLost( const css::awt::FocusEvent& /* e */ )
+    throw (css::uno::RuntimeException, std::exception)
 {
 }
 

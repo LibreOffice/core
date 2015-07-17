@@ -23,7 +23,7 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput);
 #endif
 
 bool AVMEDIA_DLLPUBLIC Embed3DModel(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& xModel,
+    const css::uno::Reference< css::frame::XModel>& xModel,
     const OUString& rSourceURL, OUString& o_rEmbeddedURL);
 
 bool AVMEDIA_DLLPUBLIC IsModel(const OUString& rMimeType);

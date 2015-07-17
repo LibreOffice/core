@@ -341,7 +341,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
 
 uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber(  )
-    throw (::com::sun::star::uno::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
   uno::Reference< media::XFrameGrabber > xRet;
   OSL_TRACE ("Player::createFrameGrabber");

@@ -31,28 +31,28 @@ namespace avmedia { namespace macavf {
 // - FrameGrabber -
 // ----------------
 
-class FrameGrabber : public ::cppu::WeakImplHelper< ::com::sun::star::media::XFrameGrabber,
-                                                    ::com::sun::star::lang::XServiceInfo >
+class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
+                                                    css::lang::XServiceInfo >
 {
 public:
 
-    explicit FrameGrabber( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+    explicit FrameGrabber( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
     virtual  ~FrameGrabber();
 
     bool    create( const ::rtl::OUString& rURL );
     bool    create( AVAsset* pMovie );
 
     // XFrameGrabber
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    mxMgr;
+    css::uno::Reference< css::lang::XMultiServiceFactory >    mxMgr;
 
     AVAssetImageGenerator* mpImageGen;
 };

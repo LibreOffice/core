@@ -30,24 +30,24 @@
 
 namespace avmedia { namespace win {
 
-class Manager : public ::cppu::WeakImplHelper< ::com::sun::star::media::XManager,
-                                               ::com::sun::star::lang::XServiceInfo >
+class Manager : public ::cppu::WeakImplHelper< css::media::XManager,
+                                               css::lang::XServiceInfo >
 {
 public:
 
-    explicit Manager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
+    explicit Manager( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
     ~Manager();
 
     // XManager
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > SAL_CALL createPlayer( const OUString& aURL ) throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::media::XPlayer > SAL_CALL createPlayer( const OUString& aURL ) throw (css::uno::RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException);
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMgr;
+    css::uno::Reference< css::lang::XMultiServiceFactory > mxMgr;
 };
 
 } // namespace win
