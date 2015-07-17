@@ -27,7 +27,6 @@
 #include <basdoc.hxx>
 #include <basicbox.hxx>
 #include <editeng/sizeitem.hxx>
-#include <tbxctl.hxx>
 #include <iderdll2.hxx>
 #include <basidectrlr.hxx>
 #include <localizationmgr.hxx>
@@ -167,7 +166,6 @@ Shell::Shell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell */ ) :
 
 void Shell::Init()
 {
-    TbxControls::RegisterControl( SID_CHOOSE_CONTROLS );
     SvxPosSizeStatusBarControl::RegisterControl();
     SvxInsertStatusBarControl::RegisterControl();
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE );

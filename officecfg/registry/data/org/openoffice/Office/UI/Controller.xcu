@@ -187,6 +187,20 @@
       </node>
     </node>
     <node oor:name="ToolBar">
+      <node oor:name="BasicControlsToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ChooseControls</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.script.BasicIDE</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertcontrolsbar</value>
+        </prop>
+      </node>
       <node oor:name="AlignmentControl" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ObjectAlign</value>
