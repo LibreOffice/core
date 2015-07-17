@@ -17,8 +17,7 @@
 
 namespace avmedia { namespace ogl {
 
-class OGLManager : public ::cppu::WeakImplHelper< com::sun::star::media::XManager,
-                                                  com::sun::star::lang::XServiceInfo >
+class OGLManager : public ::cppu::WeakImplHelper< css::media::XManager, css::lang::XServiceInfo >
 {
 public:
 

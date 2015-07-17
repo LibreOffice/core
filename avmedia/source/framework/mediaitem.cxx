@@ -137,7 +137,7 @@ bool MediaItem::GetPresentation( SfxItemPresentation,
     return false;
 }
 
-bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
+bool MediaItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
     uno::Sequence< uno::Any > aSeq( 10 );
 
@@ -157,7 +157,7 @@ bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
     return true;
 }
 
-bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
+bool MediaItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 {
     uno::Sequence< uno::Any >   aSeq;
     bool                        bRet = false;
