@@ -46,7 +46,7 @@ public:
     static VclPtr<vcl::Window> Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings, ChartController* pController);
+        ChartController* pController);
 
     virtual void DataChanged(
         const DataChangedEvent& rEvent) SAL_OVERRIDE;
@@ -60,13 +60,11 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) SAL_OVERRIDE;
 
-    SfxBindings* GetBindings() { return mpBindings;}
-
     // constructor/destuctor
     ChartSeriesPanel(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        SfxBindings* pBindings, ChartController* pController);
+        ChartController* pController);
     virtual ~ChartSeriesPanel();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -86,8 +84,6 @@ private:
     VclPtr<ListBox> mpLBLabelPlacement;
 
     css::uno::Reference<css::frame::XFrame> mxFrame;
-    ::sfx2::sidebar::EnumContext            maContext;
-    SfxBindings*                            mpBindings;
 
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;

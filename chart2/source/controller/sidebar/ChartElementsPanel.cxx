@@ -284,12 +284,10 @@ void setLegendPos(css::uno::Reference<css::frame::XModel> xModel, sal_Int32 nPos
 ChartElementsPanel::ChartElementsPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings,
     ChartController* pController)
   : PanelLayout(pParent, "ChartElementsPanel", "modules/schart/ui/sidebarelements.ui", rxFrame),
     mxFrame(rxFrame),
     maContext(),
-    mpBindings(pBindings),
     mxModel(pController->getModel()),
     mxListener(new ChartSidebarModifyListener(this))
 {
@@ -408,24 +406,17 @@ void ChartElementsPanel::updateData()
     mpLBLegendPosition->SelectEntryPos(getLegendPos(mxModel));
 }
 
-void ChartElementsPanel::modelInvalid()
-{
-}
-
 VclPtr<vcl::Window> ChartElementsPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings, ChartController* pController)
+    ChartController* pController)
 {
     if (pParent == NULL)
         throw lang::IllegalArgumentException("no parent Window given to ChartElementsPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
         throw lang::IllegalArgumentException("no XFrame given to ChartElementsPanel::Create", NULL, 1);
-    if (pBindings == NULL)
-        throw lang::IllegalArgumentException("no SfxBindings given to ChartElementsPanel::Create", NULL, 2);
-
     return  VclPtr<ChartElementsPanel>::Create(
-                        pParent, rxFrame, pBindings, pController);
+                        pParent, rxFrame, pController);
 }
 
 void ChartElementsPanel::DataChanged(
@@ -453,6 +444,11 @@ void ChartElementsPanel::NotifyItemUpdate(
     const SfxPoolItem* /*pState*/,
     const bool )
 {
+}
+
+void ChartElementsPanel::modelInvalid()
+{
+
 }
 
 IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)

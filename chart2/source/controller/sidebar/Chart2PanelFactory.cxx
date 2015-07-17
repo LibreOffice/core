@@ -62,8 +62,6 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
         const ::comphelper::NamedValueCollection aArguments (rArguments);
         Reference<css::frame::XFrame> xFrame (aArguments.getOrDefault("Frame", Reference<css::frame::XFrame>()));
         Reference<css::awt::XWindow> xParentWindow (aArguments.getOrDefault("ParentWindow", Reference<css::awt::XWindow>()));
-        const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));
-        SfxBindings* pBindings = reinterpret_cast<SfxBindings*>(nBindingsValue);
         Reference<css::frame::XController> xController (aArguments.getOrDefault("Controller", Reference<css::frame::XController>()));
 
         vcl::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
@@ -74,10 +72,6 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
         if ( ! xFrame.is())
             throw RuntimeException(
                 "PanelFactory::createUIElement called without Frame",
-                NULL);
-        if (pBindings == NULL)
-            throw RuntimeException(
-                "PanelFactory::createUIElement called without SfxBindings",
                 NULL);
         if (!xController.is())
             throw RuntimeException(
@@ -93,25 +87,9 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
         sal_Int32 nMinimumSize = -1;
         VclPtr<vcl::Window> pPanel;
         if (rsResourceURL.endsWith("/ElementsPanel"))
-            pPanel = ChartElementsPanel::Create( pParentWindow, xFrame, pBindings, pController );
+            pPanel = ChartElementsPanel::Create( pParentWindow, xFrame, pController );
         else if (rsResourceURL.endsWith("/SeriesPanel"))
-            pPanel = ChartSeriesPanel::Create(pParentWindow, xFrame, pBindings, pController);
-        /*
-        else if (rsResourceURL.endsWith("/CellAppearancePropertyPanel"))
-            pPanel = CellAppearancePropertyPanel::Create( pParentWindow, xFrame, pBindings );
-        else if (rsResourceURL.endsWith("/NumberFormatPropertyPanel"))
-            pPanel = NumberFormatPropertyPanel::Create( pParentWindow, xFrame, pBindings );
-        else if (rsResourceURL.endsWith("/NavigatorPanel"))
-        {
-            pPanel = VclPtr<ScNavigatorDlg>::Create(pBindings, nullptr, pParentWindow, false);
-            nMinimumSize = 0;
-        }
-        else if (rsResourceURL.endsWith("/FunctionsPanel"))
-        {
-            pPanel = VclPtr<ScFunctionDockWin>::Create(pBindings, nullptr, pParentWindow, ScResId(FID_FUNCTION_BOX));
-            nMinimumSize = 0;
-        }
-        */
+            pPanel = ChartSeriesPanel::Create(pParentWindow, xFrame, pController);
 
         if (pPanel)
             xElement = sfx2::sidebar::SidebarPanelBase::Create(

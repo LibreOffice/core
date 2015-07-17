@@ -238,12 +238,9 @@ void setAttachedAxisType(css::uno::Reference<css::frame::XModel>
 ChartSeriesPanel::ChartSeriesPanel(
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings,
     ChartController* pController)
   : PanelLayout(pParent, "ChartSeriesPanel", "modules/schart/ui/sidebarseries.ui", rxFrame),
     mxFrame(rxFrame),
-    maContext(),
-    mpBindings(pBindings),
     mxModel(pController->getModel()),
     mxListener(new ChartSidebarModifyListener(this))
 {
@@ -336,17 +333,15 @@ void ChartSeriesPanel::updateData()
 VclPtr<vcl::Window> ChartSeriesPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
-    SfxBindings* pBindings, ChartController* pController)
+    ChartController* pController)
 {
     if (pParent == NULL)
         throw lang::IllegalArgumentException("no parent Window given to ChartSeriesPanel::Create", NULL, 0);
     if ( ! rxFrame.is())
         throw lang::IllegalArgumentException("no XFrame given to ChartSeriesPanel::Create", NULL, 1);
-    if (pBindings == NULL)
-        throw lang::IllegalArgumentException("no SfxBindings given to ChartSeriesPanel::Create", NULL, 2);
 
     return  VclPtr<ChartSeriesPanel>::Create(
-                        pParent, rxFrame, pBindings, pController);
+                        pParent, rxFrame, pController);
 }
 
 void ChartSeriesPanel::DataChanged(
@@ -356,9 +351,8 @@ void ChartSeriesPanel::DataChanged(
 }
 
 void ChartSeriesPanel::HandleContextChange(
-    const ::sfx2::sidebar::EnumContext& rContext)
+    const ::sfx2::sidebar::EnumContext& )
 {
-    maContext = rContext;
     updateData();
 }
 
