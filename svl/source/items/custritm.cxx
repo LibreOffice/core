@@ -37,17 +37,6 @@ bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 }
 
 // virtual
-int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
-{
-    OSL_FAIL("CntUnencodedStringItem::Compare(): No international");
-    DBG_ASSERT(rWith.ISA(CntUnencodedStringItem),
-                "CntUnencodedStringItem::Compare(): Bad type");
-    sal_Int32 nCmp = m_aValue.compareTo(
-        static_cast< CntUnencodedStringItem const * >(&rWith)->m_aValue);
-    return (nCmp == 0) ? 0 : (nCmp < 0) ? -1 : 1;
-}
-
-// virtual
 bool CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
                                         SfxMapUnit, OUString & rText,
                                         const IntlWrapper *) const

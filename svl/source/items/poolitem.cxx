@@ -123,12 +123,6 @@ SfxPoolItem::~SfxPoolItem()
 }
 
 
-int SfxPoolItem::Compare( const SfxPoolItem& ) const
-{
-    return 0;
-}
-
-
 bool SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 {
     return rCmp.Type() == Type();

@@ -49,8 +49,6 @@ public:
 
     void SetValue( const OUString& rNewVal );
 
-    using SfxPoolItem::Compare;
-
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,

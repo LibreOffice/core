@@ -59,18 +59,6 @@ bool SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
 }
 
 // virtual
-int SfxInt16Item::Compare(const SfxPoolItem & rWith) const
-{
-    DBG_ASSERT(SfxPoolItem::operator ==(rWith), "unequal type");
-    return (static_cast< const SfxInt16Item * >(&rWith))->m_nValue
-             < m_nValue ?
-            -1 :
-           (static_cast< const SfxInt16Item * >(&rWith))->m_nValue
-             == m_nValue ?
-            0 : 1;
-}
-
-// virtual
 bool SfxInt16Item::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
                                                   OUString & rText,

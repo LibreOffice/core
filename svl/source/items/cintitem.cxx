@@ -33,17 +33,6 @@ bool CntByteItem::operator ==(const SfxPoolItem & rItem) const
 }
 
 // virtual
-int CntByteItem::Compare(const SfxPoolItem & rWith) const
-{
-    DBG_ASSERT(rWith.ISA(CntByteItem), "CntByteItem::Compare(): Bad type");
-    return (static_cast< const CntByteItem * >(&rWith))->m_nValue < m_nValue ?
-            -1 :
-           (static_cast< const CntByteItem * >(&rWith))->m_nValue
-             == m_nValue ?
-            0 : 1;
-}
-
-// virtual
 bool CntByteItem::GetPresentation(SfxItemPresentation,
                                                  SfxMapUnit, SfxMapUnit,
                                                  OUString & rText,
@@ -113,19 +102,6 @@ bool CntUInt16Item::operator ==(const SfxPoolItem & rItem) const
                "CntUInt16Item::operator ==(): Bad type");
     return m_nValue == (static_cast< const CntUInt16Item * >(&rItem))->
                         m_nValue;
-}
-
-// virtual
-int CntUInt16Item::Compare(const SfxPoolItem & rWith) const
-{
-    DBG_ASSERT(rWith.ISA(CntUInt16Item),
-               "CntUInt16Item::Compare(): Bad type");
-    return (static_cast< const CntUInt16Item * >(&rWith))->m_nValue
-             < m_nValue ?
-            -1 :
-           (static_cast< const CntUInt16Item * >(&rWith))->m_nValue
-             == m_nValue ?
-            0 : 1;
 }
 
 // virtual
@@ -200,18 +176,6 @@ bool CntInt32Item::operator ==(const SfxPoolItem & rItem) const
 }
 
 // virtual
-int CntInt32Item::Compare(const SfxPoolItem & rWith) const
-{
-    DBG_ASSERT(rWith.ISA(CntInt32Item), "CntInt32Item::Compare(): Bad type");
-    return (static_cast< const CntInt32Item * >(&rWith))->m_nValue
-             < m_nValue ?
-            -1 :
-           (static_cast< const CntInt32Item * >(&rWith))->m_nValue
-             == m_nValue ?
-            0 : 1;
-}
-
-// virtual
 bool CntInt32Item::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
                                                   OUString & rText,
@@ -279,19 +243,6 @@ bool CntUInt32Item::operator ==(const SfxPoolItem & rItem) const
                "CntUInt32Item::operator ==(): Bad type");
     return m_nValue == (static_cast< const CntUInt32Item * >(&rItem))->
                         m_nValue;
-}
-
-// virtual
-int CntUInt32Item::Compare(const SfxPoolItem & rWith) const
-{
-    DBG_ASSERT(rWith.ISA(CntUInt32Item),
-               "CntUInt32Item::operator ==(): Bad type");
-    return (static_cast< const CntUInt32Item * >(&rWith))->m_nValue
-             < m_nValue ?
-            -1 :
-           (static_cast< const CntUInt32Item * >(&rWith))->m_nValue
-             == m_nValue ?
-            0 : 1;
 }
 
 // virtual
