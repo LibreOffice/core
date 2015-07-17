@@ -1181,10 +1181,19 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
     {
         sal_uInt32 nOffset = nFirstIfd;
 
+        std::vector<sal_uInt32> aSeenOffsets;
         // calculate length of TIFF file
         do
         {
-            pTIFF->Seek( nOrigPos + nOffset );
+            if (std::find(aSeenOffsets.begin(), aSeenOffsets.end(), nOffset) != aSeenOffsets.end())
+            {
+                SAL_WARN("filter.tiff", "Parsing error: " << nOffset <<
+                         " already processed, format loop");
+                bStatus = false;
+                break;
+            }
+            pTIFF->Seek(nOrigPos + nOffset);
+            aSeenOffsets.push_back(nOffset);
 
             if( pTIFF->GetError() )
             {
