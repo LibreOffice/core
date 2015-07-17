@@ -2020,6 +2020,10 @@ class FilterEntriesHandler
             fVal = rtl::math::approxFloor(fVal);
             mbHasDates = true;
             bDate = true;
+            // Convert string representation to ISO 8601 date to eliminate
+            // locale dependent behaviour later when filtering for dates.
+            sal_uInt32 nIndex = pFormatter->GetFormatIndex( NF_DATE_DIN_YYYYMMDD);
+            pFormatter->GetInputLineString( fVal, nIndex, aStr);
         }
         // maybe extend ScTypedStrData enum is also an option here
         mrStrings.push_back(ScTypedStrData(aStr, fVal, ScTypedStrData::Value,bDate));
