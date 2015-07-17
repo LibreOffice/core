@@ -38,38 +38,37 @@ namespace anim
 
     /** pushes the given node to the given vector and recursivly calls itself for each child node.
     */
-    inline void create_deep_vector( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode,
-                                std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > >& rVector )
+    inline void create_deep_vector( const css::uno::Reference< css::animations::XAnimationNode >& xNode,
+                                std::vector< css::uno::Reference< css::animations::XAnimationNode > >& rVector )
     {
         rVector.push_back( xNode );
 
         try
         {
             // get an XEnumerationAccess to the children
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess >
-                  xEnumerationAccess( xNode,
-                                      ::com::sun::star::uno::UNO_QUERY );
+            css::uno::Reference< css::container::XEnumerationAccess >
+                  xEnumerationAccess( xNode, css::uno::UNO_QUERY );
 
             if( xEnumerationAccess.is() )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >
+                css::uno::Reference< css::container::XEnumeration >
                       xEnumeration( xEnumerationAccess->createEnumeration(),
-                                    ::com::sun::star::uno::UNO_QUERY );
+                                    css::uno::UNO_QUERY );
 
                 if( xEnumeration.is() )
                 {
                     while( xEnumeration->hasMoreElements() )
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >
+                        css::uno::Reference< css::animations::XAnimationNode >
                             xChildNode( xEnumeration->nextElement(),
-                                        ::com::sun::star::uno::UNO_QUERY_THROW );
+                                        css::uno::UNO_QUERY_THROW );
 
                         create_deep_vector( xChildNode, rVector );
                     }
                 }
             }
         }
-        catch( ::com::sun::star::uno::Exception& )
+        catch( css::uno::Exception& )
         {
         }
     }

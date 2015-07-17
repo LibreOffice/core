@@ -31,8 +31,8 @@ namespace avmedia { namespace gstreamer {
 // - FrameGrabber -
 
 
-typedef ::cppu::WeakImplHelper< ::com::sun::star::media::XFrameGrabber,
-                                ::com::sun::star::lang::XServiceInfo > FrameGrabber_BASE;
+typedef ::cppu::WeakImplHelper< css::media::XFrameGrabber,
+                                css::lang::XServiceInfo > FrameGrabber_BASE;
 
 class FrameGrabber : public FrameGrabber_BASE, private boost::noncopyable
 {
@@ -45,12 +45,12 @@ public:
     virtual ~FrameGrabber();
 
     // XFrameGrabber
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     explicit FrameGrabber( const OUString &aURL );

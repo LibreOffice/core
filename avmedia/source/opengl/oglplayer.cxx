@@ -184,7 +184,7 @@ void SAL_CALL OGLPlayer::setMediaTime( double fTime ) throw ( uno::RuntimeExcept
     gltf_animation_set_time(m_pHandle, fTime);
 }
 
-double SAL_CALL OGLPlayer::getMediaTime() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+double SAL_CALL OGLPlayer::getMediaTime() throw ( css::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     assert(m_pHandle);
@@ -338,7 +338,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
 }
 
 OUString SAL_CALL OGLPlayer::getImplementationName()
-     throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+     throw ( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.avmedia.Player_OpenGL");
 }

@@ -346,11 +346,11 @@ void MediaControl::implUpdateToolboxes()
 
             switch( maItem.getZoom() )
             {
-                case( ::com::sun::star::media::ZoomLevel_ZOOM_1_TO_2 ): nSelectEntryPos = AVMEDIA_ZOOMLEVEL_50; break;
-                case( ::com::sun::star::media::ZoomLevel_ORIGINAL ): nSelectEntryPos = AVMEDIA_ZOOMLEVEL_100; break;
-                case( ::com::sun::star::media::ZoomLevel_ZOOM_2_TO_1 ): nSelectEntryPos = AVMEDIA_ZOOMLEVEL_200; break;
-                case( ::com::sun::star::media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT ): nSelectEntryPos = AVMEDIA_ZOOMLEVEL_FIT; break;
-                case( ::com::sun::star::media::ZoomLevel_FIT_TO_WINDOW ): nSelectEntryPos = AVMEDIA_ZOOMLEVEL_SCALED; break;
+                case( css::media::ZoomLevel_ZOOM_1_TO_2 ): nSelectEntryPos = AVMEDIA_ZOOMLEVEL_50; break;
+                case( css::media::ZoomLevel_ORIGINAL ): nSelectEntryPos = AVMEDIA_ZOOMLEVEL_100; break;
+                case( css::media::ZoomLevel_ZOOM_2_TO_1 ): nSelectEntryPos = AVMEDIA_ZOOMLEVEL_200; break;
+                case( css::media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT ): nSelectEntryPos = AVMEDIA_ZOOMLEVEL_FIT; break;
+                case( css::media::ZoomLevel_FIT_TO_WINDOW ): nSelectEntryPos = AVMEDIA_ZOOMLEVEL_SCALED; break;
 
                 default: nSelectEntryPos = AVMEDIA_ZOOMLEVEL_INVALID; break;
             }
@@ -571,17 +571,17 @@ IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox*, p )
     if( p )
     {
         MediaItem aExecItem;
-        ::com::sun::star::media::ZoomLevel eLevel;
+        css::media::ZoomLevel eLevel;
 
         switch( p->GetSelectEntryPos() )
         {
-            case( AVMEDIA_ZOOMLEVEL_50 ): eLevel = ::com::sun::star::media::ZoomLevel_ZOOM_1_TO_2; break;
-            case( AVMEDIA_ZOOMLEVEL_100 ): eLevel = ::com::sun::star::media::ZoomLevel_ORIGINAL; break;
-            case( AVMEDIA_ZOOMLEVEL_200 ): eLevel = ::com::sun::star::media::ZoomLevel_ZOOM_2_TO_1; break;
-            case( AVMEDIA_ZOOMLEVEL_FIT ): eLevel = ::com::sun::star::media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT; break;
-            case( AVMEDIA_ZOOMLEVEL_SCALED ): eLevel = ::com::sun::star::media::ZoomLevel_FIT_TO_WINDOW; break;
+            case( AVMEDIA_ZOOMLEVEL_50 ): eLevel = css::media::ZoomLevel_ZOOM_1_TO_2; break;
+            case( AVMEDIA_ZOOMLEVEL_100 ): eLevel = css::media::ZoomLevel_ORIGINAL; break;
+            case( AVMEDIA_ZOOMLEVEL_200 ): eLevel = css::media::ZoomLevel_ZOOM_2_TO_1; break;
+            case( AVMEDIA_ZOOMLEVEL_FIT ): eLevel = css::media::ZoomLevel_FIT_TO_WINDOW_FIXED_ASPECT; break;
+            case( AVMEDIA_ZOOMLEVEL_SCALED ): eLevel = css::media::ZoomLevel_FIT_TO_WINDOW; break;
 
-            default: eLevel = ::com::sun::star::media::ZoomLevel_NOT_AVAILABLE; break;
+            default: eLevel = css::media::ZoomLevel_NOT_AVAILABLE; break;
         }
 
         aExecItem.setZoom( eLevel );

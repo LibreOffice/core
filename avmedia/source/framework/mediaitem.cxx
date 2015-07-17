@@ -59,7 +59,7 @@ struct MediaItem::Impl
     sal_Int16               m_nVolumeDB;
     bool                    m_bLoop;
     bool                    m_bMute;
-    ::com::sun::star::media::ZoomLevel m_eZoom;
+    css::media::ZoomLevel m_eZoom;
 
     explicit Impl(AVMediaSetMask nMaskSet)
         : m_nMaskSet( nMaskSet )
@@ -69,7 +69,7 @@ struct MediaItem::Impl
         , m_nVolumeDB( 0 )
         , m_bLoop( false )
         , m_bMute( false )
-        , m_eZoom( ::com::sun::star::media::ZoomLevel_NOT_AVAILABLE )
+        , m_eZoom( css::media::ZoomLevel_NOT_AVAILABLE )
     {
     }
     Impl(Impl const& rOther)
@@ -322,13 +322,13 @@ sal_Int16 MediaItem::getVolumeDB() const
     return m_pImpl->m_nVolumeDB;
 }
 
-void MediaItem::setZoom( ::com::sun::star::media::ZoomLevel eZoom )
+void MediaItem::setZoom( css::media::ZoomLevel eZoom )
 {
     m_pImpl->m_eZoom = eZoom;
     m_pImpl->m_nMaskSet |= AVMediaSetMask::ZOOM;
 }
 
-::com::sun::star::media::ZoomLevel MediaItem::getZoom() const
+css::media::ZoomLevel MediaItem::getZoom() const
 {
     return m_pImpl->m_eZoom;
 }

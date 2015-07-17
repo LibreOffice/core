@@ -32,28 +32,28 @@ namespace avmedia { namespace win {
 // - FrameGrabber -
 
 
-class FrameGrabber : public ::cppu::WeakImplHelper< ::com::sun::star::media::XFrameGrabber,
-                                                    ::com::sun::star::lang::XServiceInfo >
+class FrameGrabber : public ::cppu::WeakImplHelper< css::media::XFrameGrabber,
+                                                    css::lang::XServiceInfo >
 {
 public:
 
-    explicit FrameGrabber( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMgr );
+    explicit FrameGrabber( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
     ~FrameGrabber();
 
     bool    create( const OUString& rURL );
 
     // XFrameGrabber
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (::com::sun::star::uno::RuntimeException);
+    virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime ) throw (css::uno::RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException);
 
 private:
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    mxMgr;
-    OUString                                                                            maURL;
+    css::uno::Reference< css::lang::XMultiServiceFactory >    mxMgr;
+    OUString                                                  maURL;
 
     IMediaDet* implCreateMediaDet( const OUString& rURL ) const;
 };

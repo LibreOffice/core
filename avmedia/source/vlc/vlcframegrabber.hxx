@@ -29,8 +29,8 @@
 namespace avmedia {
 namespace vlc {
 
-typedef ::cppu::WeakImplHelper< ::com::sun::star::media::XFrameGrabber,
-                                ::com::sun::star::lang::XServiceInfo > FrameGrabber_BASE;
+typedef ::cppu::WeakImplHelper< css::media::XFrameGrabber,
+                                css::lang::XServiceInfo > FrameGrabber_BASE;
 
 class VLCFrameGrabber : public FrameGrabber_BASE
 {
@@ -41,15 +41,15 @@ class VLCFrameGrabber : public FrameGrabber_BASE
 public:
     VLCFrameGrabber( wrapper::EventHandler& eh, const rtl::OUString& url );
 
-    ::com::sun::star::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime )
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    css::uno::Reference< css::graphic::XGraphic > SAL_CALL grabFrame( double fMediaTime )
+            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     ::rtl::OUString SAL_CALL getImplementationName()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     sal_Bool SAL_CALL supportsService( const ::rtl::OUString& serviceName )
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
+            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 }
