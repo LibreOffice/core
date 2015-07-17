@@ -222,11 +222,6 @@ static CollatorWrapper& GetCollatorWrapper()
     return aCollWrp;
 }
 
-static void lcl_ClearTable(std::map<LanguageTag, std::unique_ptr<SvxAutoCorrectLanguageLists>>& rLangTable)
-{
-    rLangTable.clear();
-}
-
 bool SvxAutoCorrect::IsAutoCorrectChar( sal_Unicode cChar )
 {
     return  cChar == '\0' || cChar == '\t' || cChar == 0x0a ||
@@ -316,7 +311,6 @@ SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
 
 SvxAutoCorrect::~SvxAutoCorrect()
 {
-    lcl_ClearTable(*m_pLangTable);
     delete m_pLangTable;
     delete pCharClass;
 }
