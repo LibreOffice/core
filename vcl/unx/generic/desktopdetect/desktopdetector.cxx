@@ -321,53 +321,13 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             return DESKTOP_UNKNOWN;
     }
 
-    // get display to connect to
-    const char* pDisplayStr = getenv( "DISPLAY" );
-
     OUString plugin;
     rtl::Bootstrap::get("SAL_USE_VCLPLUGIN", plugin);
 
     if (plugin == "svp")
-        pDisplayStr = NULL;
-    else
-    {
-        int nParams = rtl_getAppCommandArgCount();
-        OUString aParam;
-        OString aBParm;
-        for( int i = 0; i < nParams; i++ )
-        {
-            rtl_getAppCommandArg( i, &aParam.pData );
-            if( i < nParams-1 && (aParam == "-display" || aParam == "--display" ) )
-            {
-                rtl_getAppCommandArg( i+1, &aParam.pData );
-                aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
-                pDisplayStr = aBParm.getStr();
-                break;
-            }
-        }
-    }
-
-    // no server at all
-    if( ! pDisplayStr || !*pDisplayStr )
-        return DESKTOP_NONE;
-
-    /* #i92121# workaround deadlocks in the X11 implementation
-    */
-    static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
-    /* #i90094#
-       from now on we know that an X connection will be
-       established, so protect X against itself
-    */
-    if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
-        XInitThreads();
-
-    Display* pDisplay = XOpenDisplay( pDisplayStr );
-    if( pDisplay == NULL )
         return DESKTOP_NONE;
 
     DesktopType ret;
-
-    XErrorHandler pOldHdl = XSetErrorHandler( autodect_error_handler );
 
     const char *pSession;
     OString aDesktopSession;
@@ -390,26 +350,68 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         ret = DESKTOP_MATE;
     else if ( aDesktopSession.equalsIgnoreAsciiCase( "xfce" ) )
         ret = DESKTOP_XFCE;
-
-    // these guys can be slower, with X property fetches,
-    // round-trips etc. and so are done later.
-    else if ( is_kde5_desktop( pDisplay ) )
-        ret = DESKTOP_KDE5;
-    else if ( is_kde4_desktop( pDisplay ) )
-        ret = DESKTOP_KDE4;
-    else if ( is_gnome_desktop( pDisplay ) )
-        ret = DESKTOP_GNOME;
-    else if ( is_kde_desktop( pDisplay ) )
-        ret = DESKTOP_KDE;
-    else if ( is_tde_desktop( pDisplay ) )
-        ret = DESKTOP_TDE;
     else
-        ret = DESKTOP_UNKNOWN;
+    {
+        // these guys can be slower, with X property fetches,
+        // round-trips etc. and so are done later.
 
-    // set the default handler again
-    XSetErrorHandler( pOldHdl );
+        // get display to connect to
+        const char* pDisplayStr = getenv( "DISPLAY" );
 
-    XCloseDisplay( pDisplay );
+        int nParams = rtl_getAppCommandArgCount();
+        OUString aParam;
+        OString aBParm;
+        for( int i = 0; i < nParams; i++ )
+        {
+            rtl_getAppCommandArg( i, &aParam.pData );
+            if( i < nParams-1 && (aParam == "-display" || aParam == "--display" ) )
+            {
+                rtl_getAppCommandArg( i+1, &aParam.pData );
+                aBParm = OUStringToOString( aParam, osl_getThreadTextEncoding() );
+                pDisplayStr = aBParm.getStr();
+                break;
+            }
+        }
+
+        // no server at all
+        if( ! pDisplayStr || !*pDisplayStr )
+            return DESKTOP_NONE;
+
+
+        /* #i92121# workaround deadlocks in the X11 implementation
+        */
+        static const char* pNoXInitThreads = getenv( "SAL_NO_XINITTHREADS" );
+        /* #i90094#
+           from now on we know that an X connection will be
+           established, so protect X against itself
+        */
+        if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
+            XInitThreads();
+
+        Display* pDisplay = XOpenDisplay( pDisplayStr );
+        if( pDisplay == NULL )
+            return DESKTOP_NONE;
+
+        XErrorHandler pOldHdl = XSetErrorHandler( autodect_error_handler );
+
+        if ( is_kde5_desktop( pDisplay ) )
+            ret = DESKTOP_KDE5;
+        else if ( is_kde4_desktop( pDisplay ) )
+            ret = DESKTOP_KDE4;
+        else if ( is_gnome_desktop( pDisplay ) )
+            ret = DESKTOP_GNOME;
+        else if ( is_kde_desktop( pDisplay ) )
+            ret = DESKTOP_KDE;
+        else if ( is_tde_desktop( pDisplay ) )
+            ret = DESKTOP_TDE;
+        else
+            ret = DESKTOP_UNKNOWN;
+
+        // set the default handler again
+        XSetErrorHandler( pOldHdl );
+
+        XCloseDisplay( pDisplay );
+    }
 
     return ret;
 }
