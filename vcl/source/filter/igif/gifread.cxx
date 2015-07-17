@@ -420,8 +420,8 @@ sal_uLong GIFReader::ReadNextBlock()
                     nRet = 3UL;
                 else
                 {
-                    bool    bEOI;
-                    HPBYTE  pTarget = pDecomp->DecompressBlock( pSrcBuf, cBlockSize, nRead, bEOI );
+                    bool       bEOI;
+                    sal_uInt8* pTarget = pDecomp->DecompressBlock( pSrcBuf, cBlockSize, nRead, bEOI );
 
                     nRet = ( bEOI ? 3 : 1 );
 
@@ -437,7 +437,7 @@ sal_uLong GIFReader::ReadNextBlock()
     return nRet;
 }
 
-void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
+void GIFReader::FillImages( sal_uInt8* pBytes, sal_uLong nCount )
 {
     for( sal_uLong i = 0UL; i < nCount; i++ )
     {
@@ -457,9 +457,9 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
                     // ( happens at the end of the image )
                     if( ( nMinY > nLastImageY ) && ( nLastImageY < ( nImageHeight - 1 ) ) )
                     {
-                        HPBYTE  pScanline8 = pAcc8->GetScanline( nYAcc );
+                        sal_uInt8*  pScanline8 = pAcc8->GetScanline( nYAcc );
                         sal_uLong   nSize8 = pAcc8->GetScanlineSize();
-                        HPBYTE  pScanline1 = 0;
+                        sal_uInt8*  pScanline1 = 0;
                         sal_uLong   nSize1 = 0;
 
                         if( bGCTransparent )
