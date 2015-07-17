@@ -16,12 +16,12 @@ NfCurrencyTable::iterator NfCurrencyTable::begin()
 
 NfCurrencyEntry& NfCurrencyTable::operator[] ( size_t i )
 {
-    return maData[i];
+    return *maData[i];
 }
 
 const NfCurrencyEntry& NfCurrencyTable::operator[] ( size_t i ) const
 {
-    return maData[i];
+    return *maData[i];
 }
 
 size_t NfCurrencyTable::size() const
@@ -29,9 +29,9 @@ size_t NfCurrencyTable::size() const
     return maData.size();
 }
 
-void NfCurrencyTable::insert( iterator it, NfCurrencyEntry* p )
+void NfCurrencyTable::insert(iterator it, std::unique_ptr<NfCurrencyEntry> p)
 {
-    maData.insert(it, p);
+    maData.insert(it, std::move(p));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

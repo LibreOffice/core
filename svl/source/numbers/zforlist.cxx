@@ -3615,11 +3615,12 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         aConfiguredCurrencyAbbrev, eConfiguredCurrencyLanguage );
     sal_uInt16 nSecondarySystemCurrencyPosition = 0;
     sal_uInt16 nMatchingSystemCurrencyPosition = 0;
-    NfCurrencyEntry* pEntry;
-
+    std::unique_ptr<NfCurrencyEntry> pEntry(
     // first entry is SYSTEM
-    pEntry = new NfCurrencyEntry( *pLocaleData, LANGUAGE_SYSTEM );
-    theCurrencyTable::get().insert( theCurrencyTable::get().begin(), pEntry );
+        new NfCurrencyEntry( *pLocaleData, LANGUAGE_SYSTEM ));
+
+    theCurrencyTable::get().insert(
+            theCurrencyTable::get().begin(), std::move(pEntry));
     sal_uInt16 nCurrencyPos = 1;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
@@ -3649,28 +3650,29 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         }
         if ( nDefault < nCurrencyCount )
         {
-            pEntry = new NfCurrencyEntry( pCurrencies[nDefault], *pLocaleData, eLang );
+            pEntry.reset(new NfCurrencyEntry(pCurrencies[nDefault], *pLocaleData, eLang));
         }
         else
-        {
-            pEntry = new NfCurrencyEntry( *pLocaleData, eLang );    // first or ShellsAndPebbles
+        {   // first or ShellsAndPebbles
+            pEntry.reset(new NfCurrencyEntry(*pLocaleData, eLang));
         }
         if (LocaleDataWrapper::areChecksEnabled())
         {
             lcl_CheckCurrencySymbolPosition( *pEntry );
         }
-        rCurrencyTable.insert( rCurrencyTable.begin() + nCurrencyPos++, pEntry );
         if ( !nSystemCurrencyPosition && !aConfiguredCurrencyAbbrev.isEmpty() &&
              pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev &&
              pEntry->GetLanguage() == eConfiguredCurrencyLanguage )
         {
-            nSystemCurrencyPosition = nCurrencyPos-1;
+            nSystemCurrencyPosition = nCurrencyPos;
         }
         if ( !nMatchingSystemCurrencyPosition &&
              pEntry->GetLanguage() == eSysLang )
         {
-            nMatchingSystemCurrencyPosition = nCurrencyPos-1;
+            nMatchingSystemCurrencyPosition = nCurrencyPos;
         }
+        rCurrencyTable.insert(
+                rCurrencyTable.begin() + nCurrencyPos++, std::move(pEntry));
         // all remaining currencies for each locale
         if ( nCurrencyCount > 1 )
         {
@@ -3679,12 +3681,14 @@ void SvNumberFormatter::ImpInitCurrencyTable()
             {
                 if (pCurrencies[nCurrency].LegacyOnly)
                 {
-                    pEntry = new NfCurrencyEntry( pCurrencies[nCurrency], *pLocaleData, eLang );
-                    rLegacyOnlyCurrencyTable.insert( rLegacyOnlyCurrencyTable.begin() + nLegacyOnlyCurrencyPos++, pEntry );
+                    pEntry.reset(new NfCurrencyEntry(pCurrencies[nCurrency], *pLocaleData, eLang));
+                    rLegacyOnlyCurrencyTable.insert(
+                        rLegacyOnlyCurrencyTable.begin() + nLegacyOnlyCurrencyPos++,
+                        std::move(pEntry));
                 }
                 else if ( nCurrency != nDefault )
                 {
-                    pEntry = new NfCurrencyEntry( pCurrencies[nCurrency], *pLocaleData, eLang );
+                    pEntry.reset(new NfCurrencyEntry(pCurrencies[nCurrency], *pLocaleData, eLang));
                     // no dupes
                     bool bInsert = true;
                     sal_uInt16 n = rCurrencyTable.size();
@@ -3699,23 +3703,24 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                     }
                     if ( !bInsert )
                     {
-                        delete pEntry;
+                        pEntry.reset();
                     }
                     else
                     {
-                        rCurrencyTable.insert( rCurrencyTable.begin() + nCurrencyPos++, pEntry );
                         if ( !nSecondarySystemCurrencyPosition &&
                              (!aConfiguredCurrencyAbbrev.isEmpty() ?
                               pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :
                               pEntry->GetLanguage() == eConfiguredCurrencyLanguage) )
                         {
-                            nSecondarySystemCurrencyPosition = nCurrencyPos-1;
+                            nSecondarySystemCurrencyPosition = nCurrencyPos;
                         }
                         if ( !nMatchingSystemCurrencyPosition &&
                              pEntry->GetLanguage() ==  eSysLang )
                         {
-                            nMatchingSystemCurrencyPosition = nCurrencyPos-1;
+                            nMatchingSystemCurrencyPosition = nCurrencyPos;
                         }
+                        rCurrencyTable.insert(
+                            rCurrencyTable.begin() + nCurrencyPos++, std::move(pEntry));
                     }
                 }
             }

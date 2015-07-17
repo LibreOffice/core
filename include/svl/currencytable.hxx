@@ -12,11 +12,13 @@
 
 #include <svl/svldllapi.h>
 #include <svl/zforlist.hxx>
-#include <boost/ptr_container/ptr_vector.hpp>
+
+#include <vector>
+#include <memory>
 
 class SVL_DLLPUBLIC NfCurrencyTable
 {
-    typedef boost::ptr_vector<NfCurrencyEntry> DataType;
+    typedef std::vector<std::unique_ptr<NfCurrencyEntry>> DataType;
     DataType maData;
 public:
     typedef DataType::iterator iterator;
@@ -29,7 +31,7 @@ public:
 
     size_t size() const;
 
-    void insert( iterator it, NfCurrencyEntry* p );
+    void insert(iterator it, std::unique_ptr<NfCurrencyEntry> p);
 };
 
 #endif
