@@ -47,7 +47,6 @@ public:
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const SAL_OVERRIDE;
-    virtual bool keepAspectRatio() const SAL_OVERRIDE;
     virtual bool shouldSnapRectToUsedArea() SAL_OVERRIDE;
 
     //MinimumAndMaximumSupplier

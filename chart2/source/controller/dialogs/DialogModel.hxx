@@ -183,8 +183,6 @@ private:
     TimerTriggeredControllerLock   m_aTimerTriggeredControllerLock;
 
 private:
-    void createBackup();
-
     void applyInterpretedData(
         const ::com::sun::star::chart2::InterpretedData & rNewData,
         const ::std::vector< ::com::sun::star::uno::Reference<

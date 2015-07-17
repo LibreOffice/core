@@ -67,10 +67,6 @@ public:
     SAL_DLLPRIVATE void lockControllers();
     SAL_DLLPRIVATE void unlockControllers();
 
-    /// tries to get an OutputDevice from the XParent of the model to use as reference device
-    SAL_DLLPRIVATE void attachParentReferenceDevice(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xChartModel );
-
     OutputDevice* getReferenceDevice() const;
 
     SfxItemPool&            GetItemPool();

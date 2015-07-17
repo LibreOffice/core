@@ -86,11 +86,6 @@ public:
                 ::com::sun::star::chart2::XChartDocument >& xChartDoc,
                 bool bWithCategories = true );
 
-        static void addRangeRepresentationsFromLabeledDataSequence(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::data::XLabeledDataSequence >& xLabeledDataSequence
-            ,  ::std::vector< OUString >& rOutRangeRepresentations );
-
         SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< OUString > getUsedDataRanges(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDiagram > & xDiagram );

@@ -46,46 +46,6 @@
 
 using namespace ::com::sun::star;
 
-namespace
-{
-// this code is copied from sfx2/source/doc/objembed.cxx
-SfxObjectShell * lcl_GetParentObjectShell( const uno::Reference< frame::XModel > & xModel )
-{
-    SfxObjectShell* pResult = NULL;
-
-    try
-    {
-        uno::Reference< container::XChild > xChildModel( xModel, uno::UNO_QUERY );
-        if ( xChildModel.is() )
-        {
-            uno::Reference< lang::XUnoTunnel > xParentTunnel( xChildModel->getParent(), uno::UNO_QUERY );
-            if ( xParentTunnel.is() )
-            {
-                SvGlobalName aSfxIdent( SFX_GLOBAL_CLASSID );
-                pResult = reinterpret_cast< SfxObjectShell * >(
-                    xParentTunnel->getSomething( uno::Sequence< sal_Int8 >( aSfxIdent.GetByteSequence() ) ) );
-            }
-        }
-    }
-    catch( const uno::Exception& )
-    {
-        // TODO: error handling
-    }
-
-    return pResult;
-}
-
-// this code is copied from sfx2/source/doc/objembed.cxx.  It is a workaround to
-// get the reference device (e.g. printer) fromthe parent document
-OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & xModel )
-{
-    SfxObjectShell * pParent = lcl_GetParentObjectShell( xModel );
-    if ( pParent )
-        return pParent->GetDocumentRefDev();
-    return NULL;
-}
-
-} // anonymous namespace
 
 namespace chart
 {
@@ -289,15 +249,6 @@ void DrawModelWrapper::unlockControllers()
     uno::Reference< frame::XModel > xDrawModel( this->getUnoModel() );
     if( xDrawModel.is())
         xDrawModel->unlockControllers();
-}
-
-void DrawModelWrapper::attachParentReferenceDevice( const uno::Reference< frame::XModel > & xChartModel )
-{
-    OutputDevice * pParentRefDev( lcl_GetParentRefDevice( xChartModel ));
-    if( pParentRefDev )
-    {
-        SetRefDevice( pParentRefDev );
-    }
 }
 
 OutputDevice* DrawModelWrapper::getReferenceDevice() const

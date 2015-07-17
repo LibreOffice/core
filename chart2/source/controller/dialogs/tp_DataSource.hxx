@@ -100,9 +100,6 @@ protected:
      */
     bool updateModelFromControl( Edit * pField = 0 );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelectionListener >
-        getSelectionRangeListener();
-
     /** @return </sal_True>, if the edit field contains a valid range entry. If no
         XCellRangesAccess can be obtained, </sal_False> is returned.
      */
@@ -144,7 +141,6 @@ private:
     DialogModel &               m_rDialogModel;
     VclPtr<Edit>                m_pCurrentRangeChoosingField;
     bool                        m_bIsDirty;
-    sal_Int32                   m_nLastChartTypeGroupIndex;
 
     VclPtr<Dialog>              m_pParentDialog;
     TabPageNotifiable *         m_pTabPageNotifiable;

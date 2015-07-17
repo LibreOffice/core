@@ -217,13 +217,6 @@ drawing::Direction3D PieChart::getPreferredDiagramAspectRatio() const
     return drawing::Direction3D(1,1,1);
 }
 
-bool PieChart::keepAspectRatio() const
-{
-    if( m_nDimension == 3 )
-        return false;
-    return true;
-}
-
 bool PieChart::shouldSnapRectToUsedArea()
 {
     return true;

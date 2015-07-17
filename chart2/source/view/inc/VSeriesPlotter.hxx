@@ -141,7 +141,6 @@ public:
     /** a value <= 0 for a directions means that this direction can be stretched arbitrary
     */
     virtual ::com::sun::star::drawing::Direction3D  getPreferredDiagramAspectRatio() const;
-    virtual bool keepAspectRatio() const;
 
     /** this enables you to handle series on the same x axis with different y axis
     the property AttachedAxisIndex at a dataseries indicates which value scale is to use
