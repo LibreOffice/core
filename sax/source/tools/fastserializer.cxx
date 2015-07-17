@@ -330,17 +330,17 @@ namespace sax_fastparser {
         }
     }
 
-    void FastSaxSerializer::mark( const Int32Sequence& aOrder )
+    void FastSaxSerializer::mark(sal_Int32 const nTag, const Int32Sequence& rOrder)
     {
-        if ( aOrder.hasElements() )
+        if (rOrder.hasElements())
         {
-            boost::shared_ptr< ForMerge > pSort( new ForSort( aOrder ) );
+            boost::shared_ptr< ForMerge > pSort( new ForSort(nTag, rOrder) );
             maMarkStack.push( pSort );
             maCachedOutputStream.setOutput( pSort );
         }
         else
         {
-            boost::shared_ptr< ForMerge > pMerge( new ForMerge( ) );
+            boost::shared_ptr< ForMerge > pMerge( new ForMerge(nTag) );
             maMarkStack.push( pMerge );
             maCachedOutputStream.setOutput( pMerge );
         }
@@ -401,12 +401,16 @@ namespace sax_fastparser {
     }
 #endif
 
-    void FastSaxSerializer::mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType )
+    void FastSaxSerializer::mergeTopMarks(
+        sal_Int32 const nTag, sax_fastparser::MergeMarksEnum const eMergeType)
     {
         SAL_WARN_IF(mbMarkStackEmpty, "sax", "Empty mark stack - nothing to merge");
+        assert(!mbMarkStackEmpty); // should never happen
         if ( mbMarkStackEmpty )
             return;
 
+        assert(maMarkStack.top()->m_Tag == nTag && "mark/merge tag mismatch!");
+        (void) nTag;
 #ifdef DBG_UTIL
         if (dynamic_cast<ForSort*>(maMarkStack.top().get()))
         {

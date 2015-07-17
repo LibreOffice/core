@@ -140,6 +140,24 @@ using namespace sw::util;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
 
+static const sal_Int32 Tag_StartParagraph_1 = 1;
+static const sal_Int32 Tag_StartParagraph_2 = 2;
+static const sal_Int32 Tag_WriteSdtBlock = 3;
+static const sal_Int32 Tag_StartParagraphProperties = 4;
+static const sal_Int32 Tag_InitCollectedParagraphProperties = 5;
+static const sal_Int32 Tag_StartRun_1 = 6;
+static const sal_Int32 Tag_StartRun_2 = 7;
+static const sal_Int32 Tag_StartRun_3 = 8;
+static const sal_Int32 Tag_EndRun_1 = 9;
+static const sal_Int32 Tag_EndRun_2 = 10;
+static const sal_Int32 Tag_StartRunProperties = 11;
+static const sal_Int32 Tag_InitCollectedRunProperties = 12;
+static const sal_Int32 Tag_Redline_1 = 13;
+static const sal_Int32 Tag_Redline_2 = 14;
+static const sal_Int32 Tag_TableDefinition = 15;
+static const sal_Int32 Tag_OutputFlyFrame = 16;
+static const sal_Int32 Tag_StartSection = 17;
+
 class FFDataWriterHelper
 {
     ::sax_fastparser::FSHelperPtr m_pSerializer;
@@ -303,13 +321,13 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
 
     // this mark is used to be able to enclose the paragraph inside a sdr tag.
     // We will only know if we have to do that later.
-    m_pSerializer->mark();
+    m_pSerializer->mark(Tag_StartParagraph_1);
 
     m_pSerializer->startElementNS( XML_w, XML_p, FSEND );
 
     // postpone the output of the run (we get it before the paragraph
     // properties, but must write it after them)
-    m_pSerializer->mark();
+    m_pSerializer->mark(Tag_StartParagraph_2);
 
     // no section break in this paragraph yet; can be set in SectionBreak()
     m_pSectionInfo.reset();
@@ -431,7 +449,7 @@ bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrameFormat& rFrameFormat)
 void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
     // write the paragraph properties + the run, already in the correct order
-    m_pSerializer->mergeTopMarks();
+    m_pSerializer->mergeTopMarks(Tag_StartParagraph_2);
     std::vector<  boost::shared_ptr <sw::Frame> > aFramePrTextbox;
     // Write the anchored frame if any
     // Word can't handle nested text boxes, so write them on the same level.
@@ -560,9 +578,9 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     m_rExport.SdrExporter().setParagraphHasDrawing( false );
     m_bRunTextIsOn = false;
     if(aFramePrTextbox.empty())
-        m_pSerializer->mergeTopMarks();
+        m_pSerializer->mergeTopMarks(Tag_StartParagraph_1);
     else
-        m_pSerializer->mergeTopMarks(sax_fastparser::MERGE_MARKS_IGNORE );
+        m_pSerializer->mergeTopMarks(Tag_StartParagraph_1, sax_fastparser::MERGE_MARKS_IGNORE);
 
     // Write framePr
     if(!aFramePrTextbox.empty())
@@ -596,7 +614,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
     if( nSdtPrToken > 0 || pSdtPrDataBindingAttrs )
     {
         // sdt start mark
-        m_pSerializer->mark();
+        m_pSerializer->mark(Tag_WriteSdtBlock);
 
         m_pSerializer->startElementNS( XML_w, XML_sdt, FSEND );
 
@@ -658,7 +676,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
         m_pSerializer->startElementNS( XML_w, XML_sdtContent, FSEND );
 
         // prepend the tags since the sdt start mark before the paragraph
-        m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
+        m_pSerializer->mergeTopMarks(Tag_WriteSdtBlock, sax_fastparser::MERGE_MARKS_PREPEND);
 
         // write the ending tags after the paragraph
         if (bPara)
@@ -797,7 +815,7 @@ void DocxAttributeOutput::SectionBreaks(const SwTextNode& rNode)
 
 void DocxAttributeOutput::StartParagraphProperties()
 {
-    m_pSerializer->mark( );
+    m_pSerializer->mark(Tag_StartParagraphProperties);
 
     m_pSerializer->startElementNS( XML_w, XML_pPr, FSEND );
 
@@ -863,7 +881,7 @@ void DocxAttributeOutput::InitCollectedParagraphProperties()
     for ( sal_Int32 i = 0; i < len; i++ )
         aSeqOrder[i] = aOrder[i];
 
-    m_pSerializer->mark( aSeqOrder );
+    m_pSerializer->mark(Tag_InitCollectedParagraphProperties, aSeqOrder);
 }
 
 void DocxAttributeOutput::WriteCollectedParagraphProperties()
@@ -940,7 +958,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     WriteCollectedParagraphProperties();
 
     // Merge the marks for the ordered elements
-    m_pSerializer->mergeTopMarks( );
+    m_pSerializer->mergeTopMarks(Tag_InitCollectedParagraphProperties);
 
     // Write 'Paragraph Mark' properties
     m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
@@ -978,7 +996,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
     }
 
     // mergeTopMarks() after paragraph mark properties child elements.
-    m_pSerializer->mergeTopMarks();
+    m_pSerializer->mergeTopMarks(Tag_InitCollectedRunProperties);
     m_pSerializer->endElementNS( XML_w, XML_rPr );
 
     if (!m_bWritingHeaderFooter && m_pCurrentFrame)
@@ -1005,7 +1023,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
 
     // merge the properties _before_ the run (strictly speaking, just
     // after the start of the paragraph)
-    m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
+    m_pSerializer->mergeTopMarks(Tag_StartParagraphProperties, sax_fastparser::MERGE_MARKS_PREPEND);
 }
 
 void DocxAttributeOutput::SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame )
@@ -1035,16 +1053,16 @@ void DocxAttributeOutput::StartRun( const SwRedlineData* pRedlineData, bool /*bS
     m_pRedlineData = pRedlineData;
 
     // this mark is used to be able to enclose the run inside a sdr tag.
-    m_pSerializer->mark();
+    m_pSerializer->mark(Tag_StartRun_1);
 
     // postpone the output of the start of a run (there are elements that need
     // to be written before the start of the run, but we learn which they are
     // _inside_ of the run)
-    m_pSerializer->mark(); // let's call it "postponed run start"
+    m_pSerializer->mark(Tag_StartRun_2); // let's call it "postponed run start"
 
     // postpone the output of the text (we get it before the run properties,
     // but must write it after them)
-    m_pSerializer->mark(); // let's call it "postponed text"
+    m_pSerializer->mark(Tag_StartRun_3); // let's call it "postponed text"
 }
 
 void DocxAttributeOutput::EndRun()
@@ -1084,11 +1102,11 @@ void DocxAttributeOutput::EndRun()
     }
 
     // write the run properties + the text, already in the correct order
-    m_pSerializer->mergeTopMarks(); // merges with "postponed text", see above
+    m_pSerializer->mergeTopMarks(Tag_StartRun_3); // merges with "postponed text", see above
 
     // level down, to be able to prepend the actual run start attribute (just
     // before "postponed run start")
-    m_pSerializer->mark(); // let's call it "actual run start"
+    m_pSerializer->mark(Tag_EndRun_1); // let's call it "actual run start"
     bool bCloseEarlierSDT = false;
 
     if (m_bEndCharSdt)
@@ -1200,10 +1218,10 @@ void DocxAttributeOutput::EndRun()
     {
         RunText(OUString("\t")) ;
     }
-    m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND ); // merges with "postponed run start", see above
+    m_pSerializer->mergeTopMarks(Tag_EndRun_1, sax_fastparser::MERGE_MARKS_PREPEND); // merges with "postponed run start", see above
 
     // write the run start + the run content
-    m_pSerializer->mergeTopMarks(); // merges the "actual run start"
+    m_pSerializer->mergeTopMarks(Tag_StartRun_2); // merges the "actual run start"
     // append the actual run end
     m_pSerializer->endElementNS( XML_w, XML_r );
 
@@ -1227,12 +1245,12 @@ void DocxAttributeOutput::EndRun()
 
     if (bCloseEarlierSDT)
     {
-        m_pSerializer->mark();
+        m_pSerializer->mark(Tag_EndRun_2);
         EndSdtBlock();
-        m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
+        m_pSerializer->mergeTopMarks(Tag_EndRun_2, sax_fastparser::MERGE_MARKS_PREPEND);
     }
 
-    m_pSerializer->mergeTopMarks();
+    m_pSerializer->mergeTopMarks(Tag_StartRun_1);
 
     for (std::vector<const SwOLENode*>::iterator it = m_aPostponedMaths.begin(); it != m_aPostponedMaths.end(); ++it)
         WritePostponedMath(*it);
@@ -1639,7 +1657,7 @@ void DocxAttributeOutput::StartRunProperties()
 {
     // postpone the output so that we can later [in EndRunProperties()]
     // prepend the properties before the text
-    m_pSerializer->mark();
+    m_pSerializer->mark(Tag_StartRunProperties);
 
     m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
 
@@ -1735,7 +1753,7 @@ void DocxAttributeOutput::InitCollectedRunProperties()
     for ( sal_Int32 i = 0; i < len; i++ )
         aSeqOrder[i] = aOrder[i];
 
-    m_pSerializer->mark( aSeqOrder );
+    m_pSerializer->mark(Tag_InitCollectedRunProperties, aSeqOrder);
 }
 
 namespace
@@ -1954,7 +1972,7 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     WriteCollectedRunProperties();
 
     // Merge the marks for the ordered elements
-    m_pSerializer->mergeTopMarks();
+    m_pSerializer->mergeTopMarks(Tag_InitCollectedRunProperties);
 
     m_pSerializer->endElementNS( XML_w, XML_rPr );
 
@@ -1975,7 +1993,7 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 
     // merge the properties _before_ the run text (strictly speaking, just
     // after the start of the run)
-    m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
+    m_pSerializer->mergeTopMarks(Tag_StartRunProperties, sax_fastparser::MERGE_MARKS_PREPEND);
 }
 
 void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
@@ -2357,7 +2375,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                 const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
                 if (pChangesSet)
                 {
-                    m_pSerializer->mark();
+                    m_pSerializer->mark(Tag_Redline_1);
 
                     m_pSerializer->startElementNS( XML_w, XML_rPr, FSEND );
 
@@ -2383,7 +2401,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     m_pSerializer->endElementNS( XML_w, XML_rPr );
 
-                    m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
+                    m_pSerializer->mergeTopMarks(Tag_Redline_1, sax_fastparser::MERGE_MARKS_PREPEND);
                 }
             }
         }
@@ -2410,7 +2428,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
                 const SfxItemSet *pChangesSet = pFormattingChanges->GetItemSet();
                 if (pChangesSet)
                 {
-                    m_pSerializer->mark();
+                    m_pSerializer->mark(Tag_Redline_2);
 
                     m_pSerializer->startElementNS( XML_w, XML_pPr, FSEND );
 
@@ -2434,7 +2452,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
-                    m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
+                    m_pSerializer->mergeTopMarks(Tag_Redline_2, sax_fastparser::MERGE_MARKS_PREPEND);
                 }
             }
         }
@@ -3145,7 +3163,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     for ( sal_Int32 i = 0; i < len; i++ )
         aSeqOrder[i] = aOrder[i];
 
-    m_pSerializer->mark( aSeqOrder );
+    m_pSerializer->mark(Tag_TableDefinition, aSeqOrder);
 
     long nPageSize = 0;
     const char* widthType = "dxa";
@@ -3364,7 +3382,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             FSEND );
 
     // Merge the marks for the ordered elements
-    m_pSerializer->mergeTopMarks( );
+    m_pSerializer->mergeTopMarks(Tag_TableDefinition);
 
     m_pSerializer->endElementNS( XML_w, XML_tblPr );
 
@@ -4876,7 +4894,7 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
 
 void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& rNdTopLeft )
 {
-    m_pSerializer->mark();
+    m_pSerializer->mark(Tag_OutputFlyFrame);
 
     switch ( rFrame.GetWriterType() )
     {
@@ -5006,7 +5024,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             break;
     }
 
-    m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_POSTPONE );
+    m_pSerializer->mergeTopMarks(Tag_OutputFlyFrame, sax_fastparser::MERGE_MARKS_POSTPONE);
 }
 
 bool DocxAttributeOutput::IsDiagram( const SdrObject* sdrObject )
@@ -5324,7 +5342,7 @@ void DocxAttributeOutput::EndStyleProperties( bool bParProp )
         WriteCollectedParagraphProperties();
 
         // Merge the marks for the ordered elements
-        m_pSerializer->mergeTopMarks( );
+        m_pSerializer->mergeTopMarks(Tag_InitCollectedParagraphProperties);
 
         m_pSerializer->endElementNS( XML_w, XML_pPr );
     }
@@ -5333,7 +5351,7 @@ void DocxAttributeOutput::EndStyleProperties( bool bParProp )
         WriteCollectedRunProperties();
 
         // Merge the marks for the ordered elements
-        m_pSerializer->mergeTopMarks();
+        m_pSerializer->mergeTopMarks(Tag_InitCollectedRunProperties);
 
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
@@ -5469,7 +5487,7 @@ void DocxAttributeOutput::StartSection()
     for ( sal_Int32 i = 0; i < len; i++ )
         aSeqOrder[i] = aOrder[i];
 
-    m_pSerializer->mark( aSeqOrder );
+    m_pSerializer->mark(Tag_StartSection, aSeqOrder);
     m_bHadSectPr = true;
 }
 
@@ -5484,7 +5502,7 @@ void DocxAttributeOutput::EndSection()
     }
 
     // Order the elements
-    m_pSerializer->mergeTopMarks( );
+    m_pSerializer->mergeTopMarks(Tag_StartSection);
 
     m_pSerializer->endElementNS( XML_w, XML_sectPr );
     m_bOpenedSectPr = false;

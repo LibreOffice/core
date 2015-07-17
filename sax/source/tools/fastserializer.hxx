@@ -127,8 +127,10 @@ public:
           p, r, mark(), t, [text], /t, mark(), rPr, [something], /rPr,
           mergeTopMarks( MERGE_MARKS_PREPEND ), mergeTopMarks( MERGE_MARKS_APPEND ), /r, /p
         and you are done.
+
+        @param nTag debugging aid to ensure mark and merge match in LIFO order
      */
-    void mark( const Int32Sequence& aOrder = Int32Sequence() );
+    void mark(sal_Int32 nTag, const Int32Sequence& rOrder = Int32Sequence());
 
     /** Merge 2 topmost marks.
 
@@ -143,9 +145,12 @@ public:
         When the MERGE_MARKS_POSTPONE is specified, the merge happens just
         before the next merge.
 
+        @param nTag debugging aid to ensure mark and merge match in LIFO order
+
         @see mark()
      */
-    void mergeTopMarks( sax_fastparser::MergeMarksEnum eMergeType = sax_fastparser::MERGE_MARKS_APPEND );
+    void mergeTopMarks(sal_Int32 nTag,
+        sax_fastparser::MergeMarksEnum eMergeType = sax_fastparser::MERGE_MARKS_APPEND);
 
 private:
     /** Helper class to cache data and write in chunks to XOutputStream or ForMerge::append.
@@ -161,6 +166,7 @@ private:
         Int8Sequence maPostponed;
 
     public:
+        sal_Int32 const m_Tag;
 #ifdef DBG_UTIL
         // pending close tags, followed by pending open tags
         ::std::deque<sal_Int32> m_DebugEndedElements;
@@ -170,7 +176,7 @@ private:
         ::std::deque<sal_Int32> m_DebugPostponedStartedElements;
 #endif
 
-        ForMerge() : maData(), maPostponed() {}
+        ForMerge(sal_Int32 const nTag) : m_Tag(nTag) {}
         virtual ~ForMerge() {}
 
         virtual void setCurrentElement( ::sal_Int32 /*nToken*/ ) {}
@@ -196,11 +202,11 @@ private:
         Int32Sequence maOrder;
 
     public:
-        ForSort( const Int32Sequence& aOrder ) :
-            ForMerge(),
-            maData(),
-            mnCurrentElement( 0 ),
-            maOrder( aOrder ) {}
+        ForSort(sal_Int32 const nTag, const Int32Sequence& rOrder)
+            : ForMerge(nTag)
+            , mnCurrentElement( 0 )
+            , maOrder( rOrder )
+        {}
 
         void setCurrentElement( ::sal_Int32 nToken ) SAL_OVERRIDE;
 

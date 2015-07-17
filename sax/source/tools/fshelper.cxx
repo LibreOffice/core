@@ -153,14 +153,16 @@ FastSerializerHelper* FastSerializerHelper::writeId(sal_Int32 tokenId)
     return mpSerializer->getOutputStream();
 }
 
-void FastSerializerHelper::mark( const Sequence< sal_Int32 >& aOrder )
+void FastSerializerHelper::mark(
+        sal_Int32 const nTag, const Sequence<sal_Int32>& rOrder)
 {
-    mpSerializer->mark( aOrder );
+    mpSerializer->mark(nTag, rOrder);
 }
 
-void FastSerializerHelper::mergeTopMarks( MergeMarksEnum eMergeType )
+void FastSerializerHelper::mergeTopMarks(
+        sal_Int32 const nTag, MergeMarksEnum const eMergeType)
 {
-    mpSerializer->mergeTopMarks( eMergeType );
+    mpSerializer->mergeTopMarks(nTag, eMergeType);
 }
 
 FastAttributeList * FastSerializerHelper::createAttrList()

@@ -137,9 +137,11 @@ public:
 
     static FastAttributeList *createAttrList();
 
-    void mark( const ::com::sun::star::uno::Sequence< sal_Int32 >& aOrder =
+    void mark(sal_Int32 nTag,
+            const ::com::sun::star::uno::Sequence< sal_Int32 >& rOrder =
             ::com::sun::star::uno::Sequence< sal_Int32 >() );
-    void mergeTopMarks( MergeMarksEnum eMergeType = MERGE_MARKS_APPEND );
+    void mergeTopMarks(sal_Int32 nTag,
+            MergeMarksEnum eMergeType = MERGE_MARKS_APPEND );
 
     /*
       Now create all the overloads in a typesafe way (i.e. without varargs) by creating a number of overloads

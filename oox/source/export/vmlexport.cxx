@@ -45,6 +45,9 @@ using namespace sax_fastparser;
 using namespace oox::vml;
 using namespace com::sun::star;
 
+static const sal_Int32 Tag_Container = 44444;
+static const sal_Int32 Tag_Commit = 44445;
+
 VMLExport::VMLExport( ::sax_fastparser::FSHelperPtr pSerializer, VMLTextExport* pTextExport )
     : EscherEx( EscherExGlobalRef(new EscherExGlobal(0)), 0, /*bOOXML=*/true )
     , m_pSerializer( pSerializer )
@@ -98,7 +101,7 @@ void VMLExport::OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance )
 
         // postpone the output so that we are able to write even the elements
         // that we learn inside Commit()
-        m_pSerializer->mark();
+        m_pSerializer->mark(Tag_Container);
     }
 }
 
@@ -109,7 +112,7 @@ void VMLExport::CloseContainer()
         // write the shape now when we have all the info
         sal_Int32 nShapeElement = StartShape();
 
-        m_pSerializer->mergeTopMarks();
+        m_pSerializer->mergeTopMarks(Tag_Container);
 
         EndShape( nShapeElement );
 
@@ -357,7 +360,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
 
     // postpone the output of the embedded elements so that they are written
     // inside the shapes
-    m_pSerializer->mark();
+    m_pSerializer->mark(Tag_Commit);
 
     // dimensions
     if ( m_nShapeType == ESCHER_ShpInst_Line )
@@ -860,7 +863,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
         }
     }
 
-    m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_POSTPONE );
+    m_pSerializer->mergeTopMarks(Tag_Commit, sax_fastparser::MERGE_MARKS_POSTPONE );
 }
 
 OString VMLExport::ShapeIdString( sal_uInt32 nId )
