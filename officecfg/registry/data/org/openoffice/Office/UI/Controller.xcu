@@ -201,6 +201,20 @@
           <value>insertcontrolsbar</value>
         </prop>
       </node>
+      <node oor:name="FormsControlsToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Config</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>formcontrols;.uno:Config</value>
+        </prop>
+      </node>
       <node oor:name="AlignmentControl" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ObjectAlign</value>

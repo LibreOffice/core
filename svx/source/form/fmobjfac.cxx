@@ -61,7 +61,6 @@ FmFormObjFactory::FmFormObjFactory()
 
 
         // Konfigurations-::com::sun::star::frame::Controller und NavigationBar registrieren
-        SvxFmTbxCtlConfig::RegisterControl( SID_FM_CONFIG );
         SvxFmTbxCtlAbsRec::RegisterControl( SID_FM_RECORD_ABSOLUTE );
         SvxFmTbxCtlRecText::RegisterControl( SID_FM_RECORD_TEXT );
         SvxFmTbxCtlRecFromText::RegisterControl( SID_FM_RECORD_FROM_TEXT );

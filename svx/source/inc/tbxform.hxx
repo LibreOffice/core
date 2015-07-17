@@ -41,26 +41,6 @@ protected:
 };
 
 
-class SvxFmTbxCtlConfig : public SfxToolBoxControl
-{
-private:
-    sal_uInt16 nLastSlot;
-
-protected:
-
-public:
-    SFX_DECL_TOOLBOX_CONTROL();
-
-    SvxFmTbxCtlConfig( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
-    virtual ~SvxFmTbxCtlConfig() {}
-
-    virtual void                Select( sal_uInt16 nSelectModifier ) SAL_OVERRIDE;
-    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                              const SfxPoolItem* pState ) SAL_OVERRIDE;
-    virtual VclPtr<SfxPopupWindow> CreatePopupWindow() SAL_OVERRIDE;
-};
-
-
 class FixedText;
 class SvxFmTbxCtlAbsRec : public SfxToolBoxControl
 {
