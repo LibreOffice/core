@@ -32,7 +32,7 @@
 #include <editeng/editengdllapi.h>
 
 #include <map>
-#include <boost/ptr_container/ptr_map.hpp>
+#include <memory>
 
 class CharClass;
 class SfxPoolItem;
@@ -233,7 +233,7 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
     SvxSwAutoFormatFlags aSwFlags;     // StarWriter AutoFormat Flags
 
     // all languages in a table
-    boost::ptr_map<LanguageTag, SvxAutoCorrectLanguageLists>* pLangTable;
+    std::map<LanguageTag, std::unique_ptr<SvxAutoCorrectLanguageLists>>* m_pLangTable;
     std::map<LanguageTag, long> aLastFileTable;
     CharClass* pCharClass;
 
