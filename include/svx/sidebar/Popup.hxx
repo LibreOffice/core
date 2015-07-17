@@ -39,7 +39,7 @@ namespace svx { namespace sidebar {
 */
 class SVX_DLLPUBLIC Popup
 {
-public :
+public:
     /** Create a Popup wrapper object.
         @param pParent
             Parent window of the PopupContainer, which in turn is the

@@ -39,11 +39,11 @@ class XMLSecurityContext_MSCryptImpl : public ::cppu::WeakImplHelper2<
     ::com::sun::star::xml::crypto::XXMLSecurityContext ,
     ::com::sun::star::lang::XServiceInfo >
 {
-    private :
+    private:
         //xmlSecKeysMngrPtr m_pKeysMngr ;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment ;
 
-    public :
+    public:
         XMLSecurityContext_MSCryptImpl();
         virtual ~XMLSecurityContext_MSCryptImpl();
 

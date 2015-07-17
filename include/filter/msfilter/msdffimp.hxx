@@ -359,7 +359,7 @@ enum DffSeekToContentMode
 
 class MSFILTER_DLLPUBLIC DffRecordManager : public DffRecordList
 {
-public :
+public:
         DffRecordList*   pCList;
 
         void             Clear();
@@ -407,7 +407,7 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
     void CheckTxBxStoryChain();
     void GetFidclData(sal_uInt32 nOffsDgg);
 
-protected :
+protected:
     typedef std::map<sal_uInt32, sal_uInt32> OffsetMap;
 
     OUString        maBaseURL;

@@ -31,7 +31,7 @@ namespace svx { namespace sidebar {
 class LineWidthPopup
     : public Popup
 {
-public :
+public:
     LineWidthPopup (
         vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);

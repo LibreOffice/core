@@ -719,7 +719,7 @@ class PPTExtParaProv
 {
     PPTBuGraEntryList   aBuGraList;
 
-public :
+public:
     bool                bStyles;
     bool                bGraphics;
     DffRecordManager    aExtendedPresRules;
@@ -1287,7 +1287,7 @@ class PPTConvertOCXControls : public SvxMSConvertOCXControls
     PptPageKind     ePageKind;
     const SdrPowerPointImport* mpPPTImporter;
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream > mxInStrm;
-public :
+public:
 
     PPTConvertOCXControls( const SdrPowerPointImport* pPPTImporter, com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& rxInStrm, const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rxModel, PptPageKind ePKind ) :
         SvxMSConvertOCXControls ( rxModel ),

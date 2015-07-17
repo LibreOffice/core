@@ -38,13 +38,13 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper2<
     ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ,
     ::com::sun::star::lang::XServiceInfo >
 {
-    private :
+    private:
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTemplate ;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::wrapper::XXMLElementWrapper > m_xTarget ;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
         ::com::sun::star::xml::crypto::SecurityOperationStatus m_nStatus;
 
-    public :
+    public:
         explicit XMLEncryptionTemplateImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
         virtual ~XMLEncryptionTemplateImpl() ;
 

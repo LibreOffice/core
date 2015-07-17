@@ -35,10 +35,10 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<
     ::com::sun::star::security::XCertificate ,
     ::com::sun::star::lang::XUnoTunnel >
 {
-    private :
+    private:
         CERTCertificate* m_pCert ;
 
-    public :
+    public:
         X509Certificate_NssImpl() ;
         virtual ~X509Certificate_NssImpl() ;
 

@@ -44,7 +44,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-private :
+private:
     // CharacterClassification Implementation
     com::sun::star::uno::Reference< XCharacterClassification > cclass;
 };

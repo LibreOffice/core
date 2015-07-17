@@ -55,7 +55,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper3<
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XUnoTunnel >
 {
-    private :
+    private:
         //crypto provider and key container
         HCRYPTPROV                          m_hProv ;
         LPCTSTR                             m_pszContainer ;
@@ -83,7 +83,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper3<
         //Service manager
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
 
-    public :
+    public:
         explicit SecurityEnvironment_MSCryptImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& aFactory ) ;
         virtual ~SecurityEnvironment_MSCryptImpl() ;
 

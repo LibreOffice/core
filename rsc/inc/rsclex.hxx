@@ -65,9 +65,9 @@ struct Node
 
 class ObjectStack
 {
-    private :
+    private:
         Node* pRoot;
-    public :
+    public:
 
         ObjectStack ()   { pRoot = NULL; }
 

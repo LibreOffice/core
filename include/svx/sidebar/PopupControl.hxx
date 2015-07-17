@@ -34,7 +34,7 @@ namespace svx { namespace sidebar {
 class SVX_DLLPUBLIC PopupControl
     : public Control
 {
-public :
+public:
     PopupControl (
         vcl::Window* pParent,
         const ResId& rResId);

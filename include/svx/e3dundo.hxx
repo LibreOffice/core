@@ -32,7 +32,7 @@
 class SAL_WARN_UNUSED E3dUndoAction : public SdrUndoAction
 {
 
-    protected :
+    protected:
         E3dObject *pMy3DObj;
 
     public:

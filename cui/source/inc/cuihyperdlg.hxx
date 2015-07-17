@@ -37,12 +37,12 @@
 class SvxHpLinkDlg;
 class SvxHlinkCtrl : public SfxControllerItem
 {
-private :
+private:
     VclPtr<SvxHpLinkDlg> pParent;
 
     SfxStatusForwarder aRdOnlyForwarder;
 
-public :
+public:
     SvxHlinkCtrl( sal_uInt16 nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg);
     virtual void dispose() SAL_OVERRIDE;
 

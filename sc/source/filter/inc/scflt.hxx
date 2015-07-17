@@ -614,7 +614,7 @@ private:
 //Range-Data
 class Sc10NameData : public ScDataObject
 {
-public :
+public:
     sal_Char            Name[32];
     sal_Char            Reference[64];
     sal_Char            Reserved[12];

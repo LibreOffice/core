@@ -37,7 +37,7 @@ class OptimizationStats
     };
     std::map < PPPOptimizerTokenEnum, css::uno::Any, Compare > maStats;
 
-    public :
+    public:
 
         OptimizationStats();
         ~OptimizationStats(){};

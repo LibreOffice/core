@@ -113,7 +113,7 @@ public:
 protected:
     Boundary result; // for word break iterator
 
-private :
+private:
 
     struct lookupTableItem {
         lookupTableItem(const com::sun::star::lang::Locale& _aLocale, com::sun::star::uno::Reference < XBreakIterator >& _xBI) : aLocale(_aLocale), xBI(_xBI) {};

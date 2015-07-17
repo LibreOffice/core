@@ -79,7 +79,7 @@ class XMLOFF_DLLPUBLIC XMLNumberFormatAttributesExportHelper
     const OUString msCurrencySymbol;
     const OUString msCurrencyAbbreviation;
     XMLNumberFormatSet  aNumberFormats;
-public :
+public:
     XMLNumberFormatAttributesExportHelper(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier);
     XMLNumberFormatAttributesExportHelper(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier,
                                             SvXMLExport& rExport );

@@ -35,7 +35,7 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
 {
             std::vector<SdrCustomShapeAdjustmentValue>  aAdjustmentValueList;
 
-    public :
+    public:
 
             TYPEINFO_OVERRIDE();
             SVX_DLLPUBLIC SdrCustomShapeAdjustmentItem();

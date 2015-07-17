@@ -40,14 +40,14 @@ class XMLSecurityContext_NssImpl : public ::cppu::WeakImplHelper2<
     ::com::sun::star::xml::crypto::XXMLSecurityContext ,
     ::com::sun::star::lang::XServiceInfo >
 {
-    private :
+    private:
         //xmlSecKeysMngrPtr m_pKeysMngr ;
         //::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment ;
         std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > > m_vSecurityEnvironments;
 
         sal_Int32 m_nDefaultEnvIndex;
 
-    public :
+    public:
         XMLSecurityContext_NssImpl() ;
         virtual ~XMLSecurityContext_NssImpl() ;
 

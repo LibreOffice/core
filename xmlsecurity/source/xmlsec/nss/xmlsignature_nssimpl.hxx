@@ -38,10 +38,10 @@ class XMLSignature_NssImpl : public ::cppu::WeakImplHelper2<
     ::com::sun::star::xml::crypto::XXMLSignature ,
     ::com::sun::star::lang::XServiceInfo >
 {
-    private :
+    private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
 
-    public :
+    public:
         explicit XMLSignature_NssImpl(const css::uno::Reference<css::lang::XMultiServiceFactory>& rFactory);
         virtual ~XMLSignature_NssImpl() ;
 

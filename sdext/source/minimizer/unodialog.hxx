@@ -60,7 +60,7 @@
 
 class UnoDialog
 {
-public :
+public:
 
     UnoDialog( const css::uno::Reference< css::uno::XComponentContext >& rxMSF, css::uno::Reference< css::frame::XFrame >& rxFrame );
     ~UnoDialog();

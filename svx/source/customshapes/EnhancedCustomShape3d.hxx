@@ -48,7 +48,7 @@ class EnhancedCustomShape3d
 
         const double* pMap;
 
-        public :
+        public:
 
                         Transformation2D( const SdrObject* pCustomShape, const Rectangle& rBoundRect, const double* pMap );
 
@@ -59,10 +59,10 @@ class EnhancedCustomShape3d
 
     friend class Transformation2D;
 
-    protected :
+    protected:
         static Rectangle CalculateNewSnapRect( const SdrObject* pCustomShape, const Rectangle& rSnapRect, const Rectangle& rBoundRect, const double* pMap );
 
-    public :
+    public:
         static SdrObject* Create3DObject( const SdrObject* pShape2d, const SdrObject* pCustomShape );
 };
 

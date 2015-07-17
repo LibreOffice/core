@@ -246,7 +246,7 @@ class UnaryFunctionFunctor
     const ExpressionFunct   meFunct;
     ParserContextSharedPtr  mpContext;
 
-public :
+public:
 
     UnaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
         meFunct( eFunct ),

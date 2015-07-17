@@ -67,7 +67,7 @@ class SingletonRef
 
     // member
 
-    private :
+    private:
 
         /** @short  pointer to the internal wrapped singleton. */
         static SingletonClass* m_pInstance;
@@ -78,7 +78,7 @@ class SingletonRef
 
     // interface
 
-    public :
+    public:
 
 
 
@@ -156,7 +156,7 @@ class SingletonRef
 
     // helper
 
-    private :
+    private:
 
 
 

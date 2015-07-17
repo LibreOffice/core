@@ -33,7 +33,7 @@
 class SanExtensionImpl : public ::cppu::WeakImplHelper1<
     ::com::sun::star::security::XSanExtension >
 {
-    private :
+    private:
         bool m_critical ;
         ::com::sun::star::uno::Sequence< sal_Int8 > m_xExtnId ;
         ::com::sun::star::uno::Sequence< sal_Int8 > m_xExtnValue ;
@@ -41,7 +41,7 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper1<
 
         static OString removeOIDFromString( const OString &oid);
 
-    public :
+    public:
         SanExtensionImpl() ;
         virtual ~SanExtensionImpl() ;
 

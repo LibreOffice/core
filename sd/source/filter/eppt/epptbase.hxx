@@ -86,7 +86,7 @@ enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3, LAYOUT = 4 };
 
 class PropValue
 {
-    protected :
+    protected:
 
         ::com::sun::star::uno::Any                              mAny;
 
@@ -97,7 +97,7 @@ class PropValue
         bool    ImplGetPropertyValue( const ::com::sun::star::uno::Reference
                         < ::com::sun::star::beans::XPropertySet > &, const OUString& );
 
-    public :
+    public:
 
         PropValue() {}
 
@@ -123,7 +123,7 @@ class PPTExBulletProvider
 {
     friend struct PPTExParaSheet;
 
-    protected :
+    protected:
 
         SvMemoryStream          aBuExPictureStream;
         SvMemoryStream          aBuExOutlineStream;
@@ -131,7 +131,7 @@ class PPTExBulletProvider
 
         EscherGraphicProvider*  pGraphicProv;
 
-    public :
+    public:
 
         sal_uInt16              GetId( const OString& rUniqueId, Size& rGraphicSize );
 
@@ -171,7 +171,7 @@ struct FontCollectionEntry
                             };
         ~FontCollectionEntry();
 
-    private :
+    private:
 
         FontCollectionEntry() {}
 
@@ -180,7 +180,7 @@ struct FontCollectionEntry
 
 class FontCollection
 {
-public :
+public:
 
     FontCollection();
 
@@ -306,7 +306,7 @@ struct PPTExParaSheet
 class PPTExStyleSheet
 {
 
-    public :
+    public:
 
                 PPTExCharSheet*     mpCharSheet[ PPTEX_STYLESHEETENTRYS ];
                 PPTExParaSheet*     mpParaSheet[ PPTEX_STYLESHEETENTRYS ];

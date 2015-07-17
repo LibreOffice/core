@@ -78,7 +78,7 @@ struct OptimizerSettings
 };
 class ConfigurationAccess
 {
-    public :
+    public:
 
         ConfigurationAccess( const css::uno::Reference< css::uno::XComponentContext >& rXFactory,
                                 OptimizerSettings* pDefaultSettings = NULL );
@@ -101,7 +101,7 @@ class ConfigurationAccess
         std::vector< OptimizerSettings >& GetOptimizerSettings() { return maSettings; };
         std::vector< OptimizerSettings >::iterator GetOptimizerSettingsByName( const OUString& rName );
 
-    private :
+    private:
 
         struct Compare
         {

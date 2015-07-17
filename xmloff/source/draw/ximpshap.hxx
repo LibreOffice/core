@@ -599,7 +599,7 @@ public:
 class SdXMLCustomShapeContext : public SdXMLShapeContext
 {
 
-protected :
+protected:
 
     OUString maCustomShapeEngine;
     OUString maCustomShapeData;

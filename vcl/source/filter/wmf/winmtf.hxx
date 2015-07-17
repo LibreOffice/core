@@ -241,7 +241,7 @@ class WinMtfClipPath
 {
     basegfx::tools::B2DClipState maClip;
 
-public :
+public:
     WinMtfClipPath(): maClip() {};
 
     void        setClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode );
