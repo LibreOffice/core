@@ -318,6 +318,8 @@ OUString ChartController::GetContextName()
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:
             return OUString("ErrorBar");
+        case OBJECTTYPE_AXIS:
+            return OUString("Axis");
         default:
         break;
     }

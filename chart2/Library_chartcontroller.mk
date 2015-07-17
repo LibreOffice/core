@@ -188,6 +188,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/main/UndoCommandDispatch \
     chart2/source/controller/main/UndoGuard \
     chart2/source/controller/sidebar/Chart2PanelFactory \
+    chart2/source/controller/sidebar/ChartAxisPanel \
     chart2/source/controller/sidebar/ChartElementsPanel \
     chart2/source/controller/sidebar/ChartSeriesPanel \
     chart2/source/controller/sidebar/ChartSidebarModifyListener \

@@ -32,6 +32,7 @@
 #include "ChartElementsPanel.hxx"
 #include "ChartSeriesPanel.hxx"
 #include "ChartController.hxx"
+#include "ChartAxisPanel.hxx"
 
 using namespace css::uno;
 using ::rtl::OUString;
@@ -90,6 +91,8 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
             pPanel = ChartElementsPanel::Create( pParentWindow, xFrame, pController );
         else if (rsResourceURL.endsWith("/SeriesPanel"))
             pPanel = ChartSeriesPanel::Create(pParentWindow, xFrame, pController);
+        else if (rsResourceURL.endsWith("/AxisPanel"))
+            pPanel = ChartAxisPanel::Create(pParentWindow, xFrame, pController);
 
         if (pPanel)
             xElement = sfx2::sidebar::SidebarPanelBase::Create(
