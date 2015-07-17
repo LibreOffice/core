@@ -16,6 +16,24 @@
       "revId": "76ccc63c51a6efc9bf1bb5f0b1ebb64bc7f6282a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_c16db733",
+        "filename": "sc/source/ui/unoobj/confuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-17T11:40:00Z",
+      "side": 1,
+      "message": "Er, ehm, do what I mean :) \n\nWhat I really meant to do here is what UI (calcoptionsdlg.cxx) does: if aConv is CONV_UNSPECIFIED, use the setting of formula syntax. I guess I should then make a special case for CONV_UNSPECIFIED, and for everything else (default) use this 9999 or other appropriate magic constant",
+      "parentUuid": "1a54edaf_5e1d2272",
+      "revId": "76ccc63c51a6efc9bf1bb5f0b1ebb64bc7f6282a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
