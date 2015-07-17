@@ -238,6 +238,9 @@ void ChartAxisPanel::updateData()
     SolarMutexGuard aGuard;
 
     mpCBShowLabel->Check(isLabelShown(mxModel, aCID));
+    mpCBReverse->Check(isReverse(mxModel, aCID));
+
+    mpLBLabelPos->SelectEntryPos(getLabelPosition(mxModel, aCID));
 }
 
 VclPtr<vcl::Window> ChartAxisPanel::Create (
