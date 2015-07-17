@@ -125,9 +125,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
 
                 OString sAsciiProgrammaticName( OUStringToOString( *pProgrammaticNames, RTL_TEXTENCODING_ASCII_US ) );
 
-            #if OSL_DEBUG_LEVEL > 0
                 bool bFound = false;
-            #endif
                 for (   AliasMap::iterator search = m_aAliasMap.begin();
                         ( search != m_aAliasMap.end() );
                         ++search
@@ -139,15 +137,13 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
                         m_aAliasMap.erase( search );
                         m_aAliasMap[ sAssignedAlias ] = entry;
 
-                    #if OSL_DEBUG_LEVEL > 0
                         bFound = true;
-                    #endif
 
                         break;
                     }
                 }
 
-                OSL_ENSURE( bFound, "OColumnAlias::setAlias: did not find a programmatic name which exists in the configuration!" );
+                OSL_ENSURE( bFound, "OColumnAlias::setAlias: did not find a programmatic name which exists in the configuration!" ); (void)bFound;
             }
         }
         catch( const Exception& )
