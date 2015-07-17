@@ -47,9 +47,12 @@
 #include <vcl/svapp.hxx>
 
 #if GTK_CHECK_VERSION(3,10,0)
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif
+# ifdef GDK_WINDOWING_X11
+#  include <gdk/gdkx.h>
+# endif
+#else
+# define GDK_WINDOWING_X11
+# define GDK_IS_X11_DISPLAY(foo) true
 #endif
 
 using namespace vcl_sal;
@@ -525,6 +528,7 @@ GtkData::GtkData( SalInstance *pInstance )
     m_aDispatchCondition = osl_createCondition();
 }
 
+#if defined(GDK_WINDOWING_X11)
 XIOErrorHandler aOrigXIOErrorHandler = NULL;
 
 extern "C" {
@@ -538,6 +542,7 @@ static int XIOErrorHdl(Display *)
 }
 
 }
+#endif
 
 GtkData::~GtkData()
 {
@@ -558,7 +563,10 @@ GtkData::~GtkData()
     osl_destroyCondition( m_aDispatchCondition );
     osl_releaseMutex( m_aDispatchMutex );
     osl_destroyMutex( m_aDispatchMutex );
-    XSetIOErrorHandler(aOrigXIOErrorHandler);
+#if defined(GDK_WINDOWING_X11)
+    if (GDK_IS_X11_DISPLAY(gdk_display_get_default()))
+        XSetIOErrorHandler(aOrigXIOErrorHandler);
+#endif
 }
 
 void GtkData::Dispose()
@@ -679,7 +687,6 @@ void GtkData::Init()
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
     gdk_error_trap_push();
-    aOrigXIOErrorHandler = XSetIOErrorHandler(XIOErrorHdl);
 
     for (i = 0; i < nParams; i++ )
         g_free( pCmdLineAry[i] );
@@ -708,6 +715,11 @@ void GtkData::Init()
         fflush( stderr );
         exit(0);
     }
+
+#if defined(GDK_WINDOWING_X11)
+    if (GDK_IS_X11_DISPLAY(pGdkDisp))
+        aOrigXIOErrorHandler = XSetIOErrorHandler(XIOErrorHdl);
+#endif
 
     /*
      * if a -display switch was used, we need
