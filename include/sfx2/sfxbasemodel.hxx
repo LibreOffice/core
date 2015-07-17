@@ -814,9 +814,7 @@ public:
 
     SAL_DLLPRIVATE bool impl_isDisposed() const ;
     bool IsInitialized() const;
-    bool IsDisposed() const { return impl_isDisposed(); }
     void MethodEntryCheck( const bool i_mustBeInitialized ) const;
-    ::osl::Mutex& getMutex() const { return m_aMutex; }
 
     css::uno::Reference < css::container::XIndexAccess > SAL_CALL getViewData() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL setViewData( const css::uno::Reference < css::container::XIndexAccess >& aData ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

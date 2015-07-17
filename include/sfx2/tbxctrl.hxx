@@ -273,7 +273,6 @@ public:
 class SfxDragToolBoxControl_Impl : public SfxToolBoxControl
 {
 public:
-                            SFX_DECL_TOOLBOX_CONTROL();
                             SfxDragToolBoxControl_Impl( sal_uInt16 nId, ToolBox& rBox );
     virtual VclPtr<vcl::Window> CreateItemWindow( vcl::Window *pParent ) SAL_OVERRIDE;
     virtual void            Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
@@ -319,11 +318,10 @@ protected:
 
 class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl
 {
-    protected:
+protected:
         virtual void Select(sal_uInt16 nSelectModifier ) SAL_OVERRIDE;
 
-    public:
-    SFX_DECL_TOOLBOX_CONTROL();
+public:
         SfxReloadToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
 };
 
@@ -346,7 +344,6 @@ protected:
     virtual void            Select(sal_uInt16 nSelectModifier) SAL_OVERRIDE;
     virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
 public:
-                            SFX_DECL_TOOLBOX_CONTROL();
                             SfxAddonsToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
                             virtual ~SfxAddonsToolBoxControl_Impl();
 };
