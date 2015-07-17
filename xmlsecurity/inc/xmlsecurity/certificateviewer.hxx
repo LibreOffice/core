@@ -71,10 +71,6 @@ public:
         const OUString& rUIXMLDescription, CertificateViewer* _pDlg );
     virtual ~CertificateViewerTP();
     virtual void dispose() SAL_OVERRIDE;
-    void SetTabDlg( CertificateViewer* _pTabDlg )
-    {
-        mpDlg = _pTabDlg;
-    }
 };
 
 class CertificateViewerGeneralTP : public CertificateViewerTP

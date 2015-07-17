@@ -480,11 +480,6 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
     return xcert ;
 }
 
-Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const OUString& issuerName, const OUString& serialNumber ) throw( SecurityException , RuntimeException ) {
-    Sequence< sal_Int8 > serial = numericStringToBigInteger( serialNumber ) ;
-    return getCertificate( issuerName, serial ) ;
-}
-
 Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl :: buildCertificatePath( const Reference< XCertificate >& begin ) throw( SecurityException , RuntimeException, std::exception ) {
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;

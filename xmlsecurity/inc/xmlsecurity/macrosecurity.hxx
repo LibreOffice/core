@@ -85,11 +85,6 @@ public:
     virtual ~MacroSecurityTP();
     virtual void dispose() SAL_OVERRIDE;
 
-    void SetTabDlg(MacroSecurity* pTabDlg)
-    {
-        mpDlg = pTabDlg;
-    }
-
     virtual void        ClosePage() = 0;
 };
 
