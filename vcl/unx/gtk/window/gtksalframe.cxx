@@ -106,7 +106,6 @@
 #endif
 
 #if !GTK_CHECK_VERSION(3,10,0)
-#define GDK_WINDOWING_X11
 #define GDK_IS_X11_DISPLAY(foo) (true)
 #endif
 
