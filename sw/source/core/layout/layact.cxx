@@ -65,22 +65,6 @@
 #define IS_INVAFLY (pPage->IsInvalidFly())
 
 // Save some typing work to avoid accessing destroyed pages.
-#if OSL_DEBUG_LEVEL > 1
-
-static void BreakPoint()
-{
-    return;
-}
-
-#define XCHECKPAGE \
-            {   if ( IsAgain() ) \
-                {   BreakPoint(); \
-                    if( bNoLoop ) \
-                        pLayoutAccess->GetLayouter()->EndLoopControl(); \
-                    return; \
-                } \
-            }
-#else
 #define XCHECKPAGE \
             {   if ( IsAgain() ) \
                 { \
@@ -89,7 +73,6 @@ static void BreakPoint()
                     return; \
                 } \
             }
-#endif
 
 #define RESCHEDULE \
     { \
