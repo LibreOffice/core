@@ -34,6 +34,24 @@
       "revId": "76ccc63c51a6efc9bf1bb5f0b1ebb64bc7f6282a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_94313bef",
+        "filename": "sc/source/ui/unoobj/confuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-17T21:25:21Z",
+      "side": 1,
+      "message": "Something like that ;)\n\nWhat I meant is that rDoc.GetAddressConvention() could be any AddressConvention value, most likely one of CONV_OOO, CONV_XL_A1 or CONV_XL_R1C1, which would result in identical values written to file as the handled cases and not denote \"use formula syntax\" CONV_UNSPECIFIED when reading. But if it wasn\u0027t one of those values then it would be unhandled now when reading and result in CONV_UNSPECIFIED, but may have another meaning in future. Hypothetically, I know ;)  Writing a distinct value for CONV_UNSPECIFIED prevents all that.\n\nActually for the writing part I\u0027d explicitly list all defined AddressConvention values as cases and not have an implicit default, that way when adding a convention the compiler reminds one to adapt the cases to the new value and explicitly add one or even do some mapping if necessary, i.e. if an enum was inserted. I\u0027d map CONV_ODF, CONV_XL_OOX, CONV_LOTUS_A1 and CONV_LAST to the same value as CONV_UNSPECIFIED, as they don\u0027t make sense as document\u0027s runtime formula syntax.\n\nHope that helps :)",
+      "parentUuid": "1a54edaf_c16db733",
+      "revId": "76ccc63c51a6efc9bf1bb5f0b1ebb64bc7f6282a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
