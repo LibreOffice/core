@@ -5123,7 +5123,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
     switch ( rCEvt.GetCommand() )
     {
     case CommandEventId::ContextMenu:
-    case CommandEventId::LongPress:
     {
             const sal_uInt16 nId = SwInputChild::GetChildWindowId();
             SwInputChild* pChildWin = static_cast<SwInputChild*>(GetView().GetViewFrame()->
@@ -5208,6 +5207,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             bCallBase = !m_rView.HandleWheelCommands( rCEvt );
             break;
 
+    case CommandEventId::LongPress:
     case CommandEventId::Swipe: //nothing yet
             break;
 
