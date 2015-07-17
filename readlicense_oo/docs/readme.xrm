@@ -143,7 +143,7 @@
 
 		<div id="Keyboard">
 			<h2 id="awe1" xml:lang="en-US">Shortcut Keys</h2>
-			<p id="w32e1" xml:lang="en-US">Only shortcut keys (key combinations) not used by the operating system can be used in ${PRODUCTNAME}. If a key combination in ${PRODUCTNAME} does not work as described in the ${PRODUCTNAME} Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in ${PRODUCTNAME}. For more information on this topic, refer to the ${PRODUCTNAME} Help or the Help documention of your operating system.</p>
+			<p id="w32e1" xml:lang="en-US">Only shortcut keys (key combinations) not used by the operating system can be used in ${PRODUCTNAME}. If a key combination in ${PRODUCTNAME} does not work as described in the ${PRODUCTNAME} Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in ${PRODUCTNAME}. For more information on this topic, refer to the ${PRODUCTNAME} Help or the Help documentation of your operating system.</p>
 			<div class="MAC" id="MACKeysBETA">
 				<p id="mackeys1" xml:lang="en-US">The application help of ${PRODUCTNAME} may use shortcut combinations for PC keyboards only.</p>
 			</div>

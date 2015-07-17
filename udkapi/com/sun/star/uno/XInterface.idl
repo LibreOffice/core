@@ -36,7 +36,7 @@
     <p> Deriving from this interface is mandatory for all UNO interfaces.
     <p> Each language binding (Java, C++, StarBasic, Python, ... ) may
     provide a different mapping of this interface, please look into the language
-    dependent documention.
+    dependent documentation.
 
     <p> The UNO object does not export the state of the reference count (acquire() and
         release() do not have return values). In general, also the UNO object itself
