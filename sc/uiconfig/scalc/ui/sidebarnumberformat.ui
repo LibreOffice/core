@@ -53,7 +53,6 @@
                 <child>
                   <object class="GtkToolButton" id="currency">
                     <property name="use_action_appearance">False</property>
-                    <property name="width_request">30</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="action_name">.uno:NumberFormatCurrency</property>
