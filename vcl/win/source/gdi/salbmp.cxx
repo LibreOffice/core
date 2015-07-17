@@ -51,7 +51,7 @@
 
 // - Inlines -
 
-inline void ImplSetPixel4( const HPBYTE pScanline, long nX, const BYTE cIndex )
+inline void ImplSetPixel4( const sal_uInt8* pScanline, long nX, const BYTE cIndex )
 {
     BYTE& rByte = pScanline[ nX >> 1 ];
 
@@ -951,11 +951,11 @@ void WinSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode 
 void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
                                      const Size& rSizePixel, bool bRLE4 )
 {
-    HPBYTE          pRLE = (HPBYTE) pSrcBuf;
-    HPBYTE          pDIB = (HPBYTE) pDstBuf;
-    HPBYTE          pRow = (HPBYTE) pDstBuf;
+    sal_uInt8*      pRLE = (sal_uInt8*) pSrcBuf;
+    sal_uInt8*      pDIB = (sal_uInt8*) pDstBuf;
+    sal_uInt8*      pRow = (sal_uInt8*) pDstBuf;
     sal_uLong           nWidthAl = AlignedWidth4Bytes( rSizePixel.Width() * ( bRLE4 ? 4UL : 8UL ) );
-    HPBYTE          pLast = pDIB + rSizePixel.Height() * nWidthAl - 1;
+    sal_uInt8*      pLast = pDIB + rSizePixel.Height() * nWidthAl - 1;
     sal_uLong           nCountByte;
     sal_uLong           nRunByte;
     sal_uLong           i;
