@@ -1295,26 +1295,44 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
         sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
         ESelection aCurSel = pTextEditOutlinerView->GetSelection();
 
-        SdrOutliner *pOutl = GetTextEditOutliner();
-        sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
+
 
         SdrTextObj* pTextObj = NULL;
         if (mxTextEditObj.is())
             pTextObj= dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
 
+        bool bHandled = false;
+
         // XXX: Add check for last position in the para
         if (pTextObj && pTextObj->IsChainable() && pTextObj->GetNextLinkInChain() &&
-            eFunc ==  KeyFuncType::DONTKNOW && nCode == KEY_RIGHT && aCurSel.nEndPara == nLastPara) {
-            fprintf(stderr, "[CHAIN - CURSOR] Trying to move to next box\n" );
+            eFunc ==  KeyFuncType::DONTKNOW)
+        {
+            SdrOutliner *pOutl = GetTextEditOutliner();
+            sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
+            OUString aLastParaText = pOutl->GetText(pOutl->GetParagraph(nLastPara));
+            sal_Int32 nLastParaLen = aLastParaText.getLength();
 
-            // Move to next box
-            SdrEndTextEdit();
-            SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
-            SdrBeginTextEdit(pNextLink);
+            if (nCode == KEY_RIGHT &&
+                aCurSel.nEndPara == nLastPara &&
+                aCurSel.nEndPos == nLastParaLen
+                )
+            {
+                fprintf(stderr, "[CHAIN - CURSOR] Trying to move to next box\n" );
+
+                // Move to next box
+                SdrEndTextEdit();
+                SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
+                SdrBeginTextEdit(pNextLink);
+                bHandled = true;
+            } // else if (...)
 
             // XXX: Careful with the checks below for pWin and co. You should do them here I guess.
+
+        }
+
+        if (bHandled)
             return true;
-        } else
+
         // FIXME(matteocam): Old code from here
         if (pTextEditOutlinerView->PostKeyEvent(rKEvt, pWin))
         {
