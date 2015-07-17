@@ -307,6 +307,8 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             return DESKTOP_KDE4;
         if ( aOver.equalsIgnoreAsciiCase( "gnome" ) )
             return DESKTOP_GNOME;
+        if ( aOver.equalsIgnoreAsciiCase( "gnome-wayland" ) )
+            return DESKTOP_GNOME;
         if ( aOver.equalsIgnoreAsciiCase( "unity" ) )
             return DESKTOP_UNITY;
         if ( aOver.equalsIgnoreAsciiCase( "xfce" ) )
@@ -381,6 +383,8 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
     if ( aCurrentDesktop.equalsIgnoreAsciiCase( "unity" ) )
         ret = DESKTOP_UNITY;
     else if ( aDesktopSession.equalsIgnoreAsciiCase( "gnome" ) )
+        ret = DESKTOP_GNOME;
+    else if ( aDesktopSession.equalsIgnoreAsciiCase( "gnome-wayland" ) )
         ret = DESKTOP_GNOME;
     else if ( aDesktopSession.equalsIgnoreAsciiCase( "mate" ) )
         ret = DESKTOP_MATE;
