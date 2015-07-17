@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype - OLE object
  */
-/*************************************************************************
- * Change History
- Feb 2005           Created
- ************************************************************************/
+
 #include <tools/stream.hxx>
 #include "lwpglobalmgr.hxx"
 #include "lwpoleobject.hxx"
@@ -76,17 +73,12 @@
  * @descr:   construction function
  * @param:  objHdr - object header, read before entering this function
  * @param: pStrm - file stream
- * @return:  None
- * @date:    2/22/2005
  */
 LwpGraphicOleObject::LwpGraphicOleObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpContent(objHdr, pStrm)
 {}
 /**
  * @descr:   Read GraphicOleObject part
- * @param:  None
- * @return:  None
- * @date:    2/22/2005
  */
 void LwpGraphicOleObject::Read()
 {
@@ -192,8 +184,6 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
  * @descr:   construction function
  * @param:  objHdr - object header, read before entering this function
  * @param: pStrm - file stream
- * @return:  None
- * @date:    2/22/2005
  */
 LwpOleObject::LwpOleObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpGraphicOleObject(objHdr, pStrm)
@@ -203,9 +193,6 @@ LwpOleObject::LwpOleObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
 }
 /**
  * @descr:   Read VO_OLEOBJECT record
- * @param:  None
- * @return:  None
- * @date:    2/22/2005
  */
 void LwpOleObject::Read()
 {
@@ -253,8 +240,6 @@ void LwpOleObject::Read()
  * @descr:   Parse VO_OLEOBJECT and dump to XML stream only on WIN32 platform
  * @param:  pOutputStream - stream to dump OLE object
  * @param:  pFrameLayout -  framlayout object used to dump OLE object
- * @return:  None
- * @date:    2/22/2005
  */
 void LwpOleObject::Parse(IXFStream* /*pOutputStream*/)
 {

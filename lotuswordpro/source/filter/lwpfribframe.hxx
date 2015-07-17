@@ -57,12 +57,10 @@
  * @file
  *  For LWP filter architecture prototype - footnote
  */
-/*************************************************************************
- * Change History
- Mar 2005       Created
- ************************************************************************/
+
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBFRAME_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBFRAME_HXX
+
 #include "lwpfrib.hxx"
 #include "lwplayout.hxx"
 #include "lwppara.hxx"

@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jun 2005           Created
- ************************************************************************/
+
 #include "xfchange.hxx"
 
 void XFChangeList::ToXml(IXFStream *pStrm)

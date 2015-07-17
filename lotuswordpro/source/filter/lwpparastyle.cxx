@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #include <boost/scoped_ptr.hpp>
 
@@ -176,7 +172,7 @@ void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
         LwpIndentOverride   *pIndent = dynamic_cast<LwpIndentOverride*>(pPiece->GetOverride());
         if( pIndent )
         {
-            if (!m_pBulletOverride->IsInValid())//Add by ,for remove bullet indent in named bullet style
+            if (!m_pBulletOverride->IsInValid())// for remove bullet indent in named bullet style
             {
                 boost::scoped_ptr<LwpIndentOverride> pNewIndent(pIndent->clone());
                 pNewIndent->SetMFirst(0);
@@ -448,7 +444,7 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
             return;
         pTotalIndent.reset(pIndent->clone());
 
-        //add by ,for bullet only
+        //for bullet only
         if (pPara)
         {
             if (pPara->GetBulletFlag())
@@ -461,7 +457,6 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
                 return;
             }
         }
-        //end add
         sal_uInt16 relative = pParentIndent->GetRelative();
 
         sal_Int32 Amount = pParentIndent->GetMAll();
@@ -481,19 +476,16 @@ void LwpParaStyle::ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpInden
     else
     {
         pTotalIndent.reset(pIndent->clone());
-        //add by
         if (pPara)
         {
             if (pPara->GetBulletFlag())
             {
-//              pParaStyle->SetIndent(LwpTools::ConvertFromUnits(pIndent->GetMAll()));
                 pParaStyle->SetMargins(LwpTools::ConvertToMetric(
                     LwpTools::ConvertFromUnits(pIndent->GetMAll())), pIndent->GetRight());
                 pPara->SetIndent(pTotalIndent.release());
                 return;
             }
         }
-        //end add
 
         pParaStyle->SetIndent(pIndent->GetFirst());
         pParaStyle->SetMargins(pIndent->GetLeft(), pIndent->GetRight());
@@ -552,7 +544,6 @@ void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpac
     switch(type)
     {
     case LwpSpacingCommonOverride::SPACING_DYNAMIC:
-//        above_val = LINE_HEIGHT*float(multiple)/65536L*100; //TO DO:  1-26
         break;
     case LwpSpacingCommonOverride::SPACING_LEADING:
         break;
@@ -570,7 +561,6 @@ void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpac
     switch(type)
     {
     case LwpSpacingCommonOverride::SPACING_DYNAMIC:
-//        below_val = LINE_HEIGHT*float(multiple)/65536L*100;//TO DO:  1-26
         break;
     case LwpSpacingCommonOverride::SPACING_LEADING:
         break;
@@ -595,13 +585,7 @@ void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpac
     }
     pParaStyle->SetMargins(-1,-1,above_val,below_val);
 }
-/**************************************************************************
- * @short:
- * @descr:
- * @param:
- * @param:
- * @return:
-**************************************************************************/
+
 void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRide)
 {
     LwpObjectID& rTabRackID = pTabOverRide->GetTabRackID();
@@ -765,13 +749,6 @@ LwpNumberingOverride* LwpParaStyle::GetNumberingOverride() const
     return NULL;
 }
 
-/**************************************************************************
- * @short:
- * @descr:
- * @param:
- * @param:
- * @return:
-**************************************************************************/
 LwpTabOverride* LwpParaStyle::GetTabOverride() const
 {
     if(m_TabStyle.obj() == NULL)

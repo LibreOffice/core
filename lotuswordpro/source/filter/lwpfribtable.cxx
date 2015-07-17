@@ -53,6 +53,7 @@
  *
  *
  ************************************************************************/
+
 #include "lwpfribtable.hxx"
 #include "lwppara.hxx"
 #include "lwptablelayout.hxx"
@@ -60,12 +61,10 @@
 #include "lwpglobalmgr.hxx"
 #include "xfilter/xfstylemanager.hxx"
 #include "xfilter/xfchange.hxx"
+
 /**
  * @short:   Read table frib
- * @param:
- * @param:
  */
-
 void LwpFribTable::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_objTable.ReadIndexed(pObjStrm);
@@ -106,7 +105,7 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
         && !pContainer->IsCell())
     {
         pXFContentContainer = m_pPara->GetXFContainer();
-        //delete the additional blank para, 06/28/2005
+        //delete the additional blank para
         XFParagraph* pCurrPara = m_pPara->GetFribs().GetXFPara();
         if(!pCurrPara->HasContents())
         {
@@ -115,7 +114,6 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
                 pXFContentContainer->RemoveLastContent();
             }
         }
-        //end,06/28/2005
     }
     else if( LwpLayoutRelativityGuts::LAY_PARA_RELATIVE == nType)
     {

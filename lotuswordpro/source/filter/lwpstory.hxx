@@ -59,13 +59,10 @@
         1. Word Pro object for paragraph list;
         2. the content of layout object
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTORY_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSTORY_HXX
+
 #include "lwpcontent.hxx"
 
 class LwpPageLayout;
@@ -131,7 +128,7 @@ public:
 
     LwpPara* GetLastParaOfPreviousStory();
 
-    OUString GetContentText(bool bAllText = false);//add by ,for CHB,05/5/25
+    OUString GetContentText(bool bAllText = false);
     inline void AddBullStyleName2List(const OUString& rStyleName, const sal_uInt8& nPos);
     bool IsBullStyleUsedBefore(const OUString& rStyleName, const sal_uInt8& nPos);
 

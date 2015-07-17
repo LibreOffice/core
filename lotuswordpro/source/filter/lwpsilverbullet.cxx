@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
+
 #include "lwpglobalmgr.hxx"
 #include "lwpsilverbullet.hxx"
 #include "lwpdoc.hxx"

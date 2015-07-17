@@ -59,7 +59,6 @@ namespace OpenStormBento
 {
 /**
 *   Value stream read function
-*   @date   07/05/2004
 *   @param  data pointer of bytes read
 *   @param  number of bytes to be read
 *   @return number of bytes read
@@ -79,7 +78,6 @@ sal_uLong   LtcUtBenValueStream::GetData( void* pData, sal_uLong nSize )
 }
  /**
 *   Value stream write function, not suppoted now
-*   @date   07/05/2004
 *   @param  pointer of saved buffer
 *   @param  size of buffer to be written
 *   @return number of bytes written into value stream
@@ -93,7 +91,6 @@ sal_uLong   LtcUtBenValueStream::PutData( const void* /*pData*/, sal_uLong nSize
 }
 /**
 *   Seek function of value stream
-*   @date   07/05/2004
 *   @param  position in value stream
 *   @return current position in value stream
 */
@@ -107,7 +104,6 @@ sal_uInt64  LtcUtBenValueStream::SeekPos(sal_uInt64 const nPos)
 }
 /**
 *   Set buffer size function
-*   @date   07/05/2004
 *   @param  size of buffer
 *   @return
 */
@@ -120,9 +116,6 @@ sal_uInt64  LtcUtBenValueStream::SeekPos(sal_uInt64 const nPos)
 }
 /**
 *   Flush data funciton, not supported now
-*   @date   07/05/2004
-*   @param
-*   @return
 */
 void    LtcUtBenValueStream::FlushData()
 {
@@ -135,9 +128,6 @@ void    LtcUtBenValueStream::FlushData()
 }
 /**
 *   Construction
-*   @date   07/05/2004
-*   @param  pointer to CBenValue object
-*   @return
 */
 LtcUtBenValueStream::LtcUtBenValueStream(pCBenValue pValue)
 {

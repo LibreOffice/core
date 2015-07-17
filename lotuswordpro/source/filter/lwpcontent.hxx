@@ -57,10 +57,6 @@
  * @file
  *  LwpContent, LwpHeadContent: base class for Word Pro content object
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCONTENT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPCONTENT_HXX

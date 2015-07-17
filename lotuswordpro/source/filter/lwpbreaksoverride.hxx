@@ -88,7 +88,6 @@ public:
 public:
     virtual void Read(LwpObjectStream *pStrm) SAL_OVERRIDE;
 
-    //add by , 01/28/2005
     void Override(LwpBreaksOverride* pOther);
 
     inline bool IsPageBreakBefore();
@@ -126,8 +125,6 @@ public:
     void OverrideKeepWithNext(bool bVal);
     void OverrideKeepWithPrevious(bool bVal);
     void OverrideUseNextStyle(bool bVal);
-
-    //end add
 
 protected:
     LwpBreaksOverride(LwpBreaksOverride const& rOther);

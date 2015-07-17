@@ -57,20 +57,14 @@
  * @file
  *  For LWP filter architecture prototype - footnote
  */
-/*************************************************************************
- * Change History
- Mar 2005       Created
- ************************************************************************/
+
 #include "lwpfribframe.hxx"
 #include "xfilter/xfstylemanager.hxx"
 #include "lwpglobalmgr.hxx"
 #include "xfilter/xfchange.hxx"
 /**
  * @short:   Read frame frib
- * @param:
- * @param:
  */
-
 void LwpFribFrame::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
     m_objLayout.ReadIndexed(pObjStrm);

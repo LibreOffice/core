@@ -382,6 +382,4 @@ void LwpParaBorderOverride::OverrideBetweenMargin(sal_uInt32 nNewMargin)
     LwpOverride::Override(PBO_BETWEENMARGIN, STATE_ON);
 }
 
-//end
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

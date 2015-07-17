@@ -57,10 +57,6 @@
  * @file
  *  LwpPara: Word Pro object for paragraph
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARA_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARA_HXX
@@ -190,7 +186,7 @@ public:
     XFContentContainer* GetXFContainer();
     void AddXFContent(XFContent* pCont);
     void SetXFContainer(XFContentContainer* pCont);
-    void FindLayouts();// for register pagelayout, add by , 02/20/2005
+    void FindLayouts();// for register pagelayout
     void RegisterTabStyle(XFParaStyle* pXFParaStyle);
 
     LwpBulletStyleMgr* GetBulletStyleMgr();
@@ -223,7 +219,7 @@ protected:
 
     OUString m_BefColumnBreakName;
     LwpIndentOverride* m_pIndentOverride;
-    OUString m_Content;//for silver bullet,get text of first frib, add by  2/1
+    OUString m_Content;//for silver bullet,get text of first frib
     sal_uInt32 m_FontID;//for silver bullet
     OUString m_AllText;//get all text in this paragraph
 
@@ -271,7 +267,7 @@ protected:
 private:
     virtual ~LwpPara();
 
-    static void OverrideAlignment(LwpAlignmentOverride* base,LwpAlignmentOverride* over,XFParaStyle* pOverStyle);//add by  1-24
+    static void OverrideAlignment(LwpAlignmentOverride* base,LwpAlignmentOverride* over,XFParaStyle* pOverStyle);
     void OverrideIndent(LwpIndentOverride* base,LwpIndentOverride* over,XFParaStyle* pOverStyle);
     void OverrideSpacing(LwpSpacingOverride* base,LwpSpacingOverride* over,XFParaStyle* pOverStyle);
     void OverrideParaBorder(LwpParaProperty* pProps, XFParaStyle* pOverStyle);

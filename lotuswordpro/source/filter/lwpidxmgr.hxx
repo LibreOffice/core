@@ -57,10 +57,6 @@
  * @file
  *  index manager, to maintain the map between object id and offset
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPIDXMGR_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPIDXMGR_HXX

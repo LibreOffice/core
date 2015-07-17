@@ -57,10 +57,7 @@
  * @file
  *  the class for VO_FrameLayout
  ************************************************************************/
-/*************************************************************************
- * Change History
-Mar 2005            Created
- ************************************************************************/
+
 #include "lwpframelayout.hxx"
 #include "lwppara.hxx"
 #include "xfilter/xfstylemanager.hxx"

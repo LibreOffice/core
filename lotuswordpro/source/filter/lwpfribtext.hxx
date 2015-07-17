@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
+
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBTEXT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBTEXT_HXX
 
@@ -135,9 +132,9 @@ public:
 
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
 
-    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;//add by ,05/5/27
+    void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;
 
-    void XFConvert(XFContentContainer* pXFPara);//add by ,05/5/27
+    void XFConvert(XFContentContainer* pXFPara);
 
     enum {
         FILENAME = 0x02,

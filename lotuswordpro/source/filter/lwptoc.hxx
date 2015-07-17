@@ -53,15 +53,12 @@
  *
  *
  ************************************************************************/
-/*************************************************************************
- * Change History
-April 2005          Created
- April 2005                 Modified - add LwpTocLevelData class
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTOC_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTOC_HXX
+
 #include "lwptablelayout.hxx"
+
 class XFIndex;
 class LwpFoundry;
 class LwpTocLevelData;

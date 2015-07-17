@@ -244,7 +244,7 @@ void LwpDocument::RegisterTextStyles()
             pParaStyle = dynamic_cast<LwpParaStyle*>(pParaStyle->GetNext().obj().get());
         }
     }
-    ChangeStyleName();//add by ,for click here block,05/5/26
+    ChangeStyleName();//for click here block
 }
 /**
  * @descr  Register all layouts styles (page master and master page)

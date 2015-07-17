@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Mar 2005           Created
- ************************************************************************/
+
 #include "lwphyperlinkmgr.hxx"
 
 LwpHyperlinkMgr::LwpHyperlinkMgr()

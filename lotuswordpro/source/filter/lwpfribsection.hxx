@@ -57,12 +57,10 @@
  * @file
  *  the class for section frib and process section and page layout
  ************************************************************************/
-/*************************************************************************
- * Change History
-Jan 2005        Created
- ************************************************************************/
+
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBSECTION_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBSECTION_HXX
+
 #include "lwpfrib.hxx"
 #include "lwppara.hxx"
 
@@ -114,9 +112,7 @@ public:
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     LwpSection * GetSection();
     void RegisterSectionStyle();
-    //Modified by Helen for XFConvert refactor
     void ParseSection();
-    //End of modification
     void SetSectionName();
 
     LwpPageLayout* GetPageLayout();

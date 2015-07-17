@@ -64,8 +64,6 @@
  *  2. VO_ROOTLEAFOBJINDEX is used when the file is so small that the number of objects is less than 256(?)
  *  VO_ROOTLEAFOBJINDEX contains directly the (object id, offset) map and time table.
 
- * Change History
- Jan 2005           Created
 **********************************************************************************************************************/
 
 #include "lwpidxmgr.hxx"

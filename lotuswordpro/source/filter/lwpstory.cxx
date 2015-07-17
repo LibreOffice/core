@@ -59,10 +59,7 @@
         1. Word Pro object for paragraph list;
         2. the content of layout object
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
+
 #include "lwpglobalmgr.hxx"
 #include "lwpstory.hxx"
 #include "xfilter/xfstylemanager.hxx"
@@ -93,11 +90,9 @@ void LwpStory::Read()
 
 #include "lwppara.hxx"
 #include "lwpobjfactory.hxx"
+
 /**************************************************************************
  * @descr:   Convert all the contents in current story
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 void LwpStory::XFConvert(XFContentContainer* pCont)
 {
@@ -174,9 +169,6 @@ void LwpStory::Parse(IXFStream* pOutputStream)
 /**************************************************************************
  * @descr:   Set current page layout. If pPageLayout is a mirror page layout,
              use odd child page layout as current page layout.
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 void LwpStory::SetCurrentLayout(LwpPageLayout *pPageLayout)
 {
@@ -200,9 +192,6 @@ void LwpStory::AddPageLayout(LwpPageLayout * pObject)
 }
 /**************************************************************************
  * @descr:   Get the next page layout relative to m_pCurrentLayout
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 LwpPageLayout* LwpStory::GetNextPageLayout()
 {
@@ -221,9 +210,6 @@ LwpPageLayout* LwpStory::GetNextPageLayout()
 }
 /**************************************************************************
  * @descr:   Sort the pagelayout according to their position
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 void LwpStory::SortPageLayout()
 {
@@ -277,9 +263,6 @@ void LwpStory::SortPageLayout()
 
 /**************************************************************************
  * @descr:  whether need create a new section and reset column in current page layout
- * @param:
- * @param:
- * @return:  sal_True if need create a new section
 **************************************************************************/
 bool LwpStory::IsNeedSection()
 {
@@ -329,9 +312,6 @@ bool LwpStory::IsNeedSection()
 }
 /**************************************************************************
  * @descr:  process frame which anchor type is to cell
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
 {
@@ -360,9 +340,6 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
 
 /**************************************************************************
  * @descr:  process frame which anchor type is to page
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
 {
@@ -386,9 +363,6 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
 }
 /**************************************************************************
  * @descr:  process frame which anchor type is to frame
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
 {
@@ -409,9 +383,6 @@ void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
 }
 /**************************************************************************
  * @descr:  process frame which anchor type is to page and the frame is contained by header or footer
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
 {
@@ -462,9 +433,6 @@ LwpPara* LwpStory::GetLastParaOfPreviousStory()
 }
 /**************************************************************************
  * @descr:  get text from story
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 OUString LwpStory::GetContentText(bool bAllText)
 {

@@ -169,7 +169,6 @@ LtcBenContainer::LtcBenContainer(LwpSvStream * pStream)
 
 /**
 *   Read buffer fro bento file with specified buffer
-*   @date   07/05/2004
 *   @param  buffer pointer
 *   @param  buffer size
 *   @param  number of bytes read
@@ -183,7 +182,6 @@ BenError LtcBenContainer::Read(void * pBuffer, unsigned long MaxSize,
 }
 /**
 *   Read buffer from bento file with specified size
-*   @date   07/05/2004
 *   @param  buffer pointer
 *   @param  number of bytes to be read
 *   @return BenError
@@ -200,7 +198,6 @@ BenError LtcBenContainer::ReadKnownSize(void * pBuffer, unsigned long Amt)
 }
 /**
 *   Seek to position from the beginning of the bento file
-*   @date   07/05/2004
 *   @param  position in container file from beginning
 *   @return BenError
 */
@@ -211,7 +208,6 @@ BenError LtcBenContainer::SeekToPosition(BenContainerPos Pos)
 }
 /**
 *   Seek to position compare to end of bento file
-*   @date   07/05/2004
 *   @param  position in container file from end
 *   @return BenError
 */
@@ -224,7 +220,6 @@ BenError LtcBenContainer::SeekFromEnd(long Offset)
 }
 /**
 *   Find the next value stream with property name
-*   @date   07/05/2004
 *   @param  string of property name
 *   @param  current value stream pointer with the property name
 *   @return next value stream pointer with the property names
@@ -260,7 +255,6 @@ LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const
 
 /**
 *   Find the unique value stream with property name
-*   @date   07/05/2004
 *   @param  string of property name
 *   @return the only value stream pointer with the property names
 */
@@ -270,7 +264,6 @@ LtcUtBenValueStream * LtcBenContainer::FindValueStreamWithPropertyName(const cha
 }
 /**
 *   <description>
-*   @date   07/05/2004
 *   @param  pointer to length of bento file
 *   @return BenError
 */
@@ -292,7 +285,6 @@ sal_uInt32 GetSvStreamSize(SvStream * pStream)
 
 /**
 *   Find hazily according to object ID
-*   @date   01/31/2005
 *   @param  pObjectname - format as "GrXX,XXXXXXXX" wherein XX is high part of object ID, and XXXXXXXX is low part
 *   @return the value stream pointers  with the property names
 */

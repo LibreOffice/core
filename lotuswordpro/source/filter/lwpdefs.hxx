@@ -57,10 +57,6 @@
  * @file
  *  definitions for all object types VO_TYPE
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDEFS_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDEFS_HXX
@@ -103,7 +99,6 @@ enum VO_TYPE
     VO_GRAPHIC = 41,
     VO_VERGTR = 205,
 
-    //  01/12/2005
     VO_PARASTYLE = 23,
     VO_CHARACTERSTYLE = 106,
     VO_SILVERBULLET = 127,
@@ -112,17 +107,14 @@ enum VO_TYPE
     VO_SPACINGPIECE = 199,
     VO_CHARBORDERPIECE = 202,
     VO_AMIKAKEPIECE = 203,
-    // end
 
-    // start
     VO_TABRACK = 38,
     VO_PARABORDERPIECE = 198,
     VO_BREAKSPIECE = 200,
     VO_NUMBERINGPIECE = 201,
     VO_TABPIECE = 204,
     VO_PARABACKGROUNDPIECE = 218,
-    // end
-    // 02/01/2005
+
     VO_SECTION = 136,
     VO_INDEXSECTION = 48,
     VO_HEADTAILHOLDER = 169,
@@ -131,7 +123,6 @@ enum VO_TYPE
     VO_POBJECTHOLDER = 133,
     //  added for OLE
     VO_OLEOBJECT = 54,
-    // end OLE
 
     //  added for table
     VO_TABLE =              17,
@@ -155,15 +146,12 @@ enum VO_TYPE
     VO_ROWHEADINGLAYOUT =   118,
     VO_TABLEHEADING =       209,
     VO_TABLEHINT        =   19,
-    // end table
 
-    //add by
     VO_DROPCAPLAYOUT = 217,
     VO_CHBLKMARKER  = 94,
     VO_PROPLIST = 165,
     VO_BOOKMARK = 64,
     VO_FIELDMARKER = 87,
-    //add end
 
     //for footnote
     VO_FOOTNOTE = 53,

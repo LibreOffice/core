@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #include <memory>
 
@@ -499,24 +495,15 @@ void LwpAmikakeOverride::Read(LwpObjectStream* pStrm)
     }
 }
 
-void LwpAlignmentOverride::Override(LwpAlignmentOverride* other)//add by  1-24
+void LwpAlignmentOverride::Override(LwpAlignmentOverride* other)
 {
     if (m_nOverride & AO_TYPE)
     {
         other->OverrideAlignment(m_nAlignType);
     }
-/*  if (m_nOverride & AO_POSITION)
-    {
-        Other->OverridePosition(GetPosition());
-    }
-    if (m_nOverride & AO_CHAR)
-    {
-        Other->OverrideAlignChar(GetAlignChar());
-    }
-*/
 }
 
-void LwpAlignmentOverride::OverrideAlignment(AlignType val)//add by  1-24
+void LwpAlignmentOverride::OverrideAlignment(AlignType val)
 {
     m_nAlignType = val;
     m_nOverride |= AO_TYPE;

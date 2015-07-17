@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOVERRIDE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOVERRIDE_HXX
@@ -298,8 +294,8 @@ public:
     };
 
     AlignType GetAlignType(){ return m_nAlignType; }
-    void Override(LwpAlignmentOverride* other);//add by  1-24
-    void OverrideAlignment(AlignType val);//add by  1-24
+    void Override(LwpAlignmentOverride* other);
+    void OverrideAlignment(AlignType val);
 
 protected:
     LwpAlignmentOverride(LwpAlignmentOverride const& rOther);

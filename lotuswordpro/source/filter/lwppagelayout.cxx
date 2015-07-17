@@ -53,10 +53,7 @@
  *
  *
  ************************************************************************/
-/*************************************************************************
- * Change History
-Mar 2005            Created
- ************************************************************************/
+
 #include "lwppagelayout.hxx"
 #include "lwplaypiece.hxx"
 #include "lwpfootnote.hxx"
@@ -1038,12 +1035,10 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
 
         pStory->SetFoundry(m_pFoundry);
         pStory->RegisterStyle();
-        //, 06/27/2005
         //register child layout style for framelayout,
         RegisterChildStyle();
-        //End
 
-        pChangeMgr->SetHeadFootChange(pFooter);//add by ,7/6
+        pChangeMgr->SetHeadFootChange(pFooter);
 
         pStory->XFConvert(pFooter);
 
@@ -1060,6 +1055,5 @@ void LwpFooterLayout::ParseWaterMark(XFFooterStyle * pFooterStyle)
         pFooterStyle->SetBackImage(pXFBGImage);
     }
 }
-//End by
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

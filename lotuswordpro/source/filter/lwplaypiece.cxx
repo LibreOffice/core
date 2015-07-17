@@ -407,12 +407,7 @@ void LwpLayoutShadow::Read()
 
 void LwpLayoutShadow::Parse(IXFStream* /*pOutputStream*/)
 {}
-/**************************************************************************
- * @descr: Constructor
- * @param:
- * @param:
- * @return:
-**************************************************************************/
+
 LwpLayoutRelativityGuts::LwpLayoutRelativityGuts()
 {
     m_nRelType = LAY_PARENT_RELATIVE;
@@ -425,9 +420,6 @@ LwpLayoutRelativityGuts::LwpLayoutRelativityGuts()
 }
 /**************************************************************************
  * @descr: Read LayoutRelativityGuts' information.
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 void LwpLayoutRelativityGuts::Read(LwpObjectStream *pStrm)
 {
@@ -445,22 +437,12 @@ void LwpLayoutRelativityGuts::Read(LwpObjectStream *pStrm)
         m_nFlags = 0;
     }
 }
-/**************************************************************************
- * @descr: Constructor
- * @param:
- * @param:
- * @return:
-**************************************************************************/
+
 LwpLayoutRelativity::LwpLayoutRelativity(LwpObjectHeader &objHdr, LwpSvStream *pStrm)
     : LwpVirtualPiece(objHdr, pStrm)
 {
 }
-/**************************************************************************
- * @descr: destructor
- * @param:
- * @param:
- * @return:
-**************************************************************************/
+
 LwpLayoutRelativity::~LwpLayoutRelativity()
 {
 }

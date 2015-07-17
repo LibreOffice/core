@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype - notes
  */
-/*************************************************************************
- * Change History
- May 2005       Created
- ************************************************************************/
+
 #include "lwpnotes.hxx"
 #include "lwppara.hxx"
 #include "xfilter/xfannotation.hxx"

@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype - table layouts
  */
-/*************************************************************************
- * Change History
- Mar 2005           Created
- ************************************************************************/
+
 #include "lwpglobalmgr.hxx"
 #include "lwptablelayout.hxx"
 #include "lwpfoundry.hxx"

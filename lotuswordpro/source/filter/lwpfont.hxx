@@ -60,10 +60,6 @@
  * LwpFontAttrEntry, LwpFontNameManager,LwpFontAttrManager,
  * LwpFontManager
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFONT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFONT_HXX

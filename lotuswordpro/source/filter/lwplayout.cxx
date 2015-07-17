@@ -57,11 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- Feb 2005           Process gemotry, margins
- ************************************************************************/
 
 #include "lwplayout.hxx"
 #include "lwpusewhen.hxx"
@@ -244,8 +239,6 @@ LwpUseWhen* LwpVirtualLayout::GetUseWhen()
 }
 /**
  * @descr:  Whether this layout is page layout or not
- * @param:
- * @return:
 */
 bool LwpVirtualLayout::IsPage()
 {
@@ -253,8 +246,6 @@ bool LwpVirtualLayout::IsPage()
 }
 /**
  * @descr:  Whether this layout is header layout or not
- * @param:
- * @return:
 */
 bool LwpVirtualLayout::IsHeader()
 {
@@ -262,8 +253,6 @@ bool LwpVirtualLayout::IsHeader()
 }
 /**
  * @descr:  Whether this layout is footer layout or not
- * @param:
- * @return:
 */
 bool LwpVirtualLayout::IsFooter()
 {
@@ -271,8 +260,6 @@ bool LwpVirtualLayout::IsFooter()
 }
 /**
  * @descr:  Whether this layout is frame layout or not
- * @param:
- * @return:
 */
 bool LwpVirtualLayout::IsFrame()
 {
@@ -281,8 +268,6 @@ bool LwpVirtualLayout::IsFrame()
 
 /**
  * @descr:  Whether this layout is cell layout or not
- * @param:
- * @return:
 */
 bool LwpVirtualLayout::IsCell()
 {
@@ -292,8 +277,6 @@ bool LwpVirtualLayout::IsCell()
 }
 /**
  * @descr:  Whether this layout is supertable layout or not
- * @param:
- * @return:
 */
 bool LwpVirtualLayout::IsSuperTable()
 {
@@ -301,8 +284,6 @@ bool LwpVirtualLayout::IsSuperTable()
 }
 /**
  * @descr:  Whether this layout is group layout or not
- * @param:
- * @return:
 */
 bool LwpVirtualLayout::IsGroupHead()
 {
@@ -310,8 +291,6 @@ bool LwpVirtualLayout::IsGroupHead()
 }
 /**
  * @descr:  get the relative type
- * @param:
- * @return:
 */
 sal_uInt8 LwpVirtualLayout::GetRelativeType()
 {
@@ -319,8 +298,6 @@ sal_uInt8 LwpVirtualLayout::GetRelativeType()
 }
 /**
  * @descr:  whether it is relative anchored layout
- * @param:
- * @return:
 */
 bool LwpVirtualLayout::IsRelativeAnchored()
 {
@@ -332,8 +309,6 @@ bool LwpVirtualLayout::IsRelativeAnchored()
 }
 /**
  * @descr:  whether it is MinimumHeight layout
- * @param:
- * @return:
 */
 bool LwpVirtualLayout::IsMinimumHeight()
 {
@@ -645,7 +620,6 @@ void LwpMiddleLayout::Read()
         m_LayExtBorderStuff.ReadIndexed(pStrm);
         pStrm->SkipExtra();
     }
-    //end
 }
 
 #include "lwplaypiece.hxx"
@@ -783,9 +757,6 @@ double LwpMiddleLayout::GetExtMarginsValue(const sal_uInt8 &nWhichSide)
 }
 /**
  * @descr:  Get the LwpBorderStuff object according to m_LayBorderStuff id.
- * @param:
- * @param:
- * @return:
 */
 LwpBorderStuff* LwpMiddleLayout::GetBorderStuff()
 {
@@ -804,9 +775,6 @@ LwpBorderStuff* LwpMiddleLayout::GetBorderStuff()
 
 /**
  * @descr:  Get LwpBackgroundStuff object according to m_LayBackgroundStuff id;
- * @param:
- * @param:
- * @return:
 */
 LwpBackgroundStuff* LwpMiddleLayout::GetBackgroundStuff()
 {
@@ -824,9 +792,6 @@ LwpBackgroundStuff* LwpMiddleLayout::GetBackgroundStuff()
 }
 /**
  * @descr:  create xfborder.
- * @param:
- * @param:
- * @return:
 */
 XFBorders* LwpMiddleLayout::GetXFBorders()
 {
@@ -853,9 +818,6 @@ XFBorders* LwpMiddleLayout::GetXFBorders()
 
 /**
  * @descr:  Get text direction settings.
- * @param:
- * @param:
- * @return:
 */
 enumXFTextDir LwpMiddleLayout::GetTextDirection()
 {
@@ -890,9 +852,6 @@ enumXFTextDir LwpMiddleLayout::GetTextDirection()
 }
 /**
  * @descr: Get back ground color.
- * @param:
- * @param:
- * @return:
 */
 LwpColor* LwpMiddleLayout::GetBackColor()
 {
@@ -910,9 +869,6 @@ LwpColor* LwpMiddleLayout::GetBackColor()
 
 /**
  * @descr:  Add back color settings into xfpagemaster.
- * @param:
- * @param:
- * @return:
 */
 LwpTabOverride* LwpMiddleLayout::GetTabOverride()
 {
@@ -935,9 +891,6 @@ LwpTabOverride* LwpMiddleLayout::GetTabOverride()
 
 /**
  * @descr:   Layscale for graphic & watermark
- * @param:
- * @param:
- * @return:
 */
 sal_uInt16 LwpMiddleLayout::GetScaleMode()
 {
@@ -1454,7 +1407,6 @@ bool LwpMiddleLayout::HasContent()
         return true;
     return false;
 }
-//End by
 
 LwpLayout::LwpLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm ) :
     LwpMiddleLayout(objHdr, pStrm), m_pUseWhen(new LwpUseWhen)
@@ -1831,9 +1783,6 @@ bool LwpLayout::IsUseOnPage()
 
 /**
  * @descr:  Get the LwpShadow object according to m_LayShadow id.
- * @param:
- * @param:
- * @return:
 */
 LwpShadow* LwpLayout::GetShadow()
 {
@@ -1852,9 +1801,6 @@ LwpShadow* LwpLayout::GetShadow()
 
 /**
  * @descr:  create xfshadow
- * @param:
- * @param:
- * @return:
 */
 XFShadow* LwpLayout::GetXFShadow()
 {
@@ -1971,7 +1917,6 @@ void LwpPlacableLayout::Read()
                     aPoint.Read(pStrm);
                     count--;
                 }
-                // end added by
             }
             pStrm->SkipExtra();
         }
@@ -1979,9 +1924,6 @@ void LwpPlacableLayout::Read()
 }
 /**
  * @descr:  get wrap type
- * @param:
- * @param:
- * @return:
 */
 sal_uInt8 LwpPlacableLayout::GetWrapType()
 {
@@ -1999,9 +1941,6 @@ sal_uInt8 LwpPlacableLayout::GetWrapType()
 }
 /**
  * @descr:  get LayoutRelativity
- * @param:
- * @param:
- * @return:
 */
 LwpLayoutRelativity* LwpPlacableLayout::GetRelativityPiece()
 {

@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #include <memory>
 
@@ -568,9 +564,6 @@ void LwpPara::FindLayouts()
 
 /**************************************************************************
  * @descr:  Get property according to the property type
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 LwpParaProperty* LwpPara::GetProperty(sal_uInt32 nPropType)
 {
@@ -589,9 +582,6 @@ LwpParaProperty* LwpPara::GetProperty(sal_uInt32 nPropType)
 
 /**************************************************************************
  * @descr:  Get local tab rack
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 LwpTabOverride* LwpPara::GetLocalTabOverride()
 {

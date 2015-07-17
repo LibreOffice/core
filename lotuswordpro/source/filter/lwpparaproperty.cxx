@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
+
 #include "lwpparaproperty.hxx"
 #include "lwpobjtags.hxx"
 #include "lwppara.hxx"
@@ -246,7 +243,6 @@ LwpParaNumberingProperty::LwpParaNumberingProperty(LwpObjectStream * pStrm)
     LwpNumberingPiece *pNumberingPiece = dynamic_cast<LwpNumberingPiece*>(aNumberingPiece.obj(VO_NUMBERINGPIECE).get());
     m_pNumberingOverride = pNumberingPiece ? dynamic_cast<LwpNumberingOverride*>(pNumberingPiece->GetOverride()) : NULL;
 }
-//end
 
 LwpParaTabRackProperty::LwpParaTabRackProperty(LwpObjectStream* pFile)
 {

@@ -108,19 +108,13 @@ private:
     void XFConvertEquation(XFContentContainer* pCont);
 
     bool IsGrafFormatValid();
-    // add by , 03/25/2005
     std::vector< rtl::Reference<XFFrame> > m_vXFDrawObjects;
-    // end add
 
 public:
-    //inline sal_uInt8* GetBuffer(){return m_DataBuffer;}
     void Read() SAL_OVERRIDE;
-    //Added by  for XFConvert refactor, 03/31/2005
     virtual void XFConvert (XFContentContainer* pCont) SAL_OVERRIDE;
-    //End of Add
     void RegisterStyle() SAL_OVERRIDE;
 
-    // add by , 03/25/2005
     void CreateDrawObjects();
     void CreateGrafObject();
     static void GetBentoNamebyID(LwpObjectID& rMyID, std::string& rName);
@@ -128,7 +122,6 @@ public:
     sal_uInt32 GetGrafData(sal_uInt8*& pGrafData);
     void GetGrafOrgSize(long& rWidth, long& rHeight) { rWidth = m_Cache.Width; rHeight = m_Cache.Height; }
     void GetGrafOrgSize(double& rWidth, double& rHeight) SAL_OVERRIDE;
-    // end add
 
     sal_Int16 IsLinked(){ return m_bIsLinked;}
     OUString GetLinkedFilePath(){ return m_LinkedFilePath;}

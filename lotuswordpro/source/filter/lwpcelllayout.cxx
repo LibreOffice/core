@@ -304,7 +304,6 @@ OUString LwpCellLayout::GetCellStyleName(sal_uInt16 nRow, sal_uInt16 nCol, LwpTa
 }
 /**
 *   Make the XFCell
-*   @date   03/26/2005
 *   @param  aTableID - ID of the table which this cell belongs to
 *   @param  bIsTopRow - whether current cell is top row
 *   @param  bIsRightCol - whether current cell is the rightest column
@@ -640,7 +639,6 @@ void LwpCellLayout::Read()
 
 /**
 *   Apply protect attribute to cell of table
-*   @date   04/04/2005
 *   @param  aTableID - ID of the table which the cell belongs to
 *   @param
 *   @return XFCell*

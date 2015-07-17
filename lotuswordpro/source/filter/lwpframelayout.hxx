@@ -57,10 +57,6 @@
  * @file
  *  the class for VO_FrameLayout
  ************************************************************************/
-/*************************************************************************
- * Change History
-Mar 2005            Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRAMELAYOUT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRAMELAYOUT_HXX
@@ -93,10 +89,8 @@ private:
     void ApplyTextDir(XFFrameStyle* pFrameStyle);
     void ApplyPosType(XFFrameStyle* pFrameStyle);
     void ApplyWatermark(XFFrameStyle* pFrameStyle);
-    // add by , 06/01/2005
     void ApplyPatternFill(XFFrameStyle* pFrameStyle);
     void ApplyBackGround(XFFrameStyle* pFrameStyle);
-    // end add
     void ParseAnchorType(XFFrame* pXFFrame);
     bool IsLeftWider();
 private:

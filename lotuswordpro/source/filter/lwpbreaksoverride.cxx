@@ -99,7 +99,6 @@ void    LwpBreaksOverride::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 
-//add by , 01/28/2005
 void LwpBreaksOverride::Override(LwpBreaksOverride* pOther)
 {
     if (m_nApply & BO_PAGEBEFORE)
@@ -281,6 +280,5 @@ void LwpBreaksOverride::OverrideUseNextStyle(bool bVal)
         LwpOverride::Override(BO_USENEXTSTYLE, STATE_OFF);
     }
 }
-//end add
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

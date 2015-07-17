@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- May 2005           Created
- ************************************************************************/
 
 #include "lwpfribmark.hxx"
 #include "lwptools.hxx"
@@ -83,8 +79,6 @@
 
 /**
  * @short:   Read hyperlink frib and Click here block
- * @param:
- * @param:
  */
 void LwpFribCHBlock::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
@@ -130,8 +124,6 @@ void LwpFribCHBlock::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
 }
 /**
  * @short:   register bookmark frib
- * @param:
- * @param:
  */
 void  LwpFribBookMark::RegisterStyle(LwpFoundry* pFoundry)
 {
@@ -185,8 +177,6 @@ LwpFribBookMark::LwpFribBookMark(LwpPara* pPara )
 
 /**
  * @short:   Read bookmark frib
- * @param:
- * @param:
  */
 void LwpFribBookMark::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {
@@ -195,8 +185,6 @@ void LwpFribBookMark::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 }
 /**
  * @short:   convert bookmark frib
- * @param:
- * @param:
  */
 void LwpFribBookMark::XFConvert(XFContentContainer* pXFPara)
 {
@@ -214,8 +202,6 @@ void LwpFribBookMark::XFConvert(XFContentContainer* pXFPara)
 
 /**
  * @short:   Read index entry frib
- * @param:
- * @param:
  */
 LwpFribField::LwpFribField( LwpPara* pPara )
     : LwpFrib(pPara)
@@ -1236,12 +1222,6 @@ void LwpFribField::ConvertDocFieldStart(XFContentContainer* pXFPara,LwpFieldMark
             pContent = new XFCharCountStart;
             break;
         }
-//      case LwpFieldMark::DOC_TOTALTIME:
-//      {
-//          pContent = new XFTotalEditTimeStart;
-//          pContent->SetStyleName(m_TimeStyle);
-//          break;
-//      }
     }
     if (pContent)
     {
@@ -1283,11 +1263,6 @@ void LwpFribField::ConvertDocFieldEnd(XFContentContainer* pXFPara,LwpFieldMark* 
             pContent = new XFCharCountEnd;
             break;
         }
-//      case LwpFieldMark::DOC_TOTALTIME:
-//      {
-//          pContent = new XFTotalEditTimeEnd;
-//          break;
-//      }
     }
     if (pContent)
     {
@@ -1336,7 +1311,7 @@ void LwpFribField::ConvertDateTimeStart(XFContentContainer* pXFPara,LwpFieldMark
     }
     if (pContent)
     {
-        if (m_ModFlag)//(m_pModifiers)
+        if (m_ModFlag)
         {
             XFTextSpanStart* pSpan = new XFTextSpanStart;
             pSpan->SetStyleName(GetStyleName());

@@ -58,10 +58,6 @@
  *  object stream header file
  *  stream for one LwpObject body data
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJSTRM_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJSTRM_HXX

@@ -53,11 +53,6 @@
  *
  *
  ************************************************************************/
-/*****************************************************************************
- * Change History
- * Mar 2005         revised for new processing procedure.
- * Jan 2005         created
- ****************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
@@ -83,12 +78,8 @@ public:
     LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphicObj);
     ~LwpSdwFileLoader();
 public:
-//  void LoadObjectList();
-//  void RegisterStyle();
 
-    // add by  ,03/25/2005
     void CreateDrawObjects(std::vector< rtl::Reference<XFFrame> >* pDrawObjVector);
-    // end add
 };
 
 #endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX

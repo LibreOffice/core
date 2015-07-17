@@ -57,10 +57,6 @@
  * @file
  *  kinds of holder classes header file
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHOLDER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPHOLDER_HXX

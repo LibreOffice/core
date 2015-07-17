@@ -53,10 +53,6 @@
  *
  *
  ************************************************************************/
-/*************************************************************************
- * Change History
-Mar 2005            Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGELAYOUT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPAGELAYOUT_HXX
@@ -79,14 +75,11 @@ protected:
     void Read() SAL_OVERRIDE;
     LwpHeaderLayout* GetHeaderLayout();
     LwpFooterLayout* GetFooterLayout();
-    //void RegisterChildStyle();
     void ParseGeometry(XFPageMaster* pm1);
     void ParseMargins(XFPageMaster* pm1);
     void ParseBorders(XFPageMaster* pm1);
-    // add by , 06/03/2005
     void ParsePatternFill(XFPageMaster* pm1);
     void ParseBackGround(XFPageMaster* pm1);
-    // end add
     void ParseBackColor(XFPageMaster* pm1);
     void ParseWaterMark(XFPageMaster* pm1);
     void ParseColumns(XFPageMaster* pm1);
@@ -129,14 +122,11 @@ protected:
     void ParseMargins( XFHeaderStyle* ph1 );
     void ParseBorder( XFHeaderStyle* ph1 );
     void ParseShadow( XFHeaderStyle* ph1 );
-    // add by , 06/03/2005
     void ParsePatternFill(XFHeaderStyle* ph1);
     void ParseBackGround(XFHeaderStyle* ph1);
-    // end add
     void ParseBackColor(XFHeaderStyle* ph1);
 
     void ParseWaterMark(XFHeaderStyle* ph1);
-    //End by
 private:
     sal_Int32 m_nBorderOffset;
 };
@@ -155,15 +145,12 @@ protected:
     void ParseMargins( XFFooterStyle* pFooterStyle );
     void ParseBorder( XFFooterStyle* pFooterStyle );
     void ParseShadow( XFFooterStyle* pFooterStyle );
-    // add by , 06/03/2005
     void ParsePatternFill(XFFooterStyle* pFooterStyle);
     void ParseBackGround(XFFooterStyle* pFooterStyle);
-    // end add
 
     void ParseBackColor(XFFooterStyle* pFooterStyle);
 
     void ParseWaterMark(XFFooterStyle* pFooterStyle);
-    //End by
 
 private:
     sal_Int32 m_nBorderOffset;

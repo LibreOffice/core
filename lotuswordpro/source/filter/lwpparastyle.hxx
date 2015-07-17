@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARASTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPPARASTYLE_HXX
@@ -85,10 +81,8 @@ public:
     void        Read() SAL_OVERRIDE;
 
     void        Apply(XFParaStyle *pStrm);
-    // 01/26/2005
     static void ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverride* pBorder);
     static void ApplyBreaks(XFParaStyle* pParaStyle, LwpBreaksOverride* pBreaks);
-    //end
     static void ApplyAlignment(XFParaStyle* pParaStyle, LwpAlignmentOverride* pAlign);
     static void ApplyIndent(LwpPara* pPara, XFParaStyle* pParaStyle, LwpIndentOverride* pIndent);
     static void ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpacingOverride* pSpacing);
@@ -97,7 +91,7 @@ public:
 
     void RegisterStyle() SAL_OVERRIDE;
 
-    LwpAlignmentOverride* GetAlignment();//add by  1-24
+    LwpAlignmentOverride* GetAlignment();
     LwpIndentOverride* GetIndent();
     LwpSpacingOverride* GetSpacing();
     LwpParaBorderOverride* GetParaBorder() const;
@@ -107,7 +101,6 @@ public:
     LwpNumberingOverride* GetNumberingOverride() const;
 public:
     static void ApplySubBorder(LwpBorderStuff* pBorderStuff, LwpBorderStuff::BorderType eType, XFBorders* pXFBorders);
-    //end
 
 private:
     //style IDs

@@ -134,7 +134,6 @@ void XFNumberStyle::ToXml(IXFStream *pStrm)
         ToXml_EndElement(pStrm);
         return;
     }
-    // END for Text content number format
 
     if( !m_bRedIfNegative )
     {
@@ -178,7 +177,6 @@ void XFNumberStyle::ToXml_StartElement(IXFStream *pStrm)
     {
         pStrm->StartElement( "number:text-content");
     }
-    // END for Text content number format
 
 }
 

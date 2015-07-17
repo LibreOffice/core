@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
+
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIB_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIB_HXX
 #include "lwpobjid.hxx"
@@ -75,9 +72,7 @@ struct ModifierInfo
     sal_uInt32 FontID;
     LwpObjectID CharStyleID;
     LwpTextLanguageOverride Language;
-    //add by , 02/22/2005
     LwpTextAttributeOverride aTxtAttrOverride;
-    //end add
     sal_uInt16 CodePage;
     bool HasCharStyle;
     bool HasLangOverride;
@@ -110,7 +105,7 @@ protected:
     OUString m_StyleName;
 public:
     bool m_ModFlag;
-    OUString GetStyleName(){return m_StyleName;}//add by  1-10
+    OUString GetStyleName(){return m_StyleName;}
     void SetModifiers(ModifierInfo* pModifiers);
     ModifierInfo* GetModifiers(){return m_pModifiers;}
     virtual void RegisterStyle(LwpFoundry* pFoundry);

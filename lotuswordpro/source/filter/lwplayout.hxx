@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUT_HXX
@@ -322,7 +318,6 @@ public:
 
     //Check whether there are contents in the layout
     virtual bool HasContent() SAL_OVERRIDE;
-    //End by
 
 protected:
     void Read() SAL_OVERRIDE;

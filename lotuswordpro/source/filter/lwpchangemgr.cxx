@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jun 2005           Created
- ************************************************************************/
+
 #include "lwpchangemgr.hxx"
 #include <rtl/ustring.hxx>
 #include "lwppara.hxx"

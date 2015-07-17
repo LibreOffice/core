@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
+
 #include "lwpfribbreaks.hxx"
 #include "lwpstory.hxx"
 #include "xfilter/xfstylemanager.hxx"

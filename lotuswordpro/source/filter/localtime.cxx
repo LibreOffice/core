@@ -56,7 +56,7 @@
 #include "localtime.hxx"
 #include <limits.h>
 #include <unicode/timezone.h>
-//End by
+
 const long DAY_SEC =24 * 60 * 60;
 const long YEAR_SEC = 365 * DAY_SEC;
 const long FOURYEAR_SEC = 4 * YEAR_SEC + DAY_SEC;

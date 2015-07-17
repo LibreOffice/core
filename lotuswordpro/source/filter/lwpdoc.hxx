@@ -57,11 +57,6 @@
  * @file
  *  LwpDocument header file
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- Jun 2005           Code cleaning by change some members to local variables in Read()
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDOC_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDOC_HXX

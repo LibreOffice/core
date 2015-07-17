@@ -53,11 +53,7 @@
  *
  *
  ************************************************************************/
-/*****************************************************************************
- * Change History
- * Mar 2005         revised for new processing procedure.
- * Jan 2005         created
- ****************************************************************************/
+
 #include "lwpsdwgrouploaderv0102.hxx"
 #include "lwpdrawobj.hxx"
 #include "lwptools.hxx"
@@ -406,6 +402,5 @@ XFFrame* LwpSdwGroupLoaderV0102::CreateDrawObject()
 
     return pRetObjct;
 }
-// end add
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -59,10 +59,7 @@
  * Does not find the difference between CVersionedQointer and
  * CVersionedGointer, so use one class
  ************************************************************************/
-/*************************************************************************
- * Change History
-Jun 2005        Created
- ************************************************************************/
+
 #include "lwpglobalmgr.hxx"
 #include "lwpverdocument.hxx"
 #include "lwplnopts.hxx"

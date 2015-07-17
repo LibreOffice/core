@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Mar 2005           Created
- ************************************************************************/
+
 #include "lwpfoundry.hxx"
 #include "lwpfilehdr.hxx"
 #include "lwpstory.hxx"

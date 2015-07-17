@@ -176,7 +176,7 @@ void Lwp9Reader::ParseDocument()
     m_pStream->GetAttrList()->Clear();
     m_pStream->StartElement( "office:body" );
 
-    //Parse change list, add by
+    //Parse change list
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
     LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
     pChangeMgr->ConvertAllChange(m_pStream);

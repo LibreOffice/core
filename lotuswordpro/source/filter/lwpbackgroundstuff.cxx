@@ -163,7 +163,6 @@ XFBGImage* LwpBackgroundStuff::GetFillPattern()
     pImageBuff = NULL;
 
     pXFBGImage->SetRepeate();
-    // end of add
 
     return pXFBGImage;
 }

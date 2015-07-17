@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype - row layouts
  */
-/*************************************************************************
- * Change History
- April 2005         Created
- ************************************************************************/
+
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPROWLAYOUT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPROWLAYOUT_HXX
 

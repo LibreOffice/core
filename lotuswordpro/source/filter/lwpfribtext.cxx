@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
+
 #include "lwpglobalmgr.hxx"
 #include "lwpfribtext.hxx"
 #include "lwpcharsetmgr.hxx"
@@ -159,8 +156,6 @@ void LwpFribDocVar::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 
 /**
  * @short:   register style for doc field (text style,date style)
- * @param:
- * @param:
  */
 void LwpFribDocVar::RegisterStyle(LwpFoundry* pFoundry)
 {
@@ -171,7 +166,6 @@ void LwpFribDocVar::RegisterStyle(LwpFoundry* pFoundry)
     case DATECREATED:
     case DATELASTREVISION:
     {
-//      m_TimeStyle = LwpTools::RegisterDefaultTimeStyle();
         RegisterDefaultTimeStyle();
     }
         break;
@@ -185,8 +179,6 @@ void LwpFribDocVar::RegisterStyle(LwpFoundry* pFoundry)
 
 /**
  * @short:   register default time style for doc field
- * @param:
- * @param:
  */
 void LwpFribDocVar::RegisterDefaultTimeStyle()
 {
@@ -218,8 +210,6 @@ void LwpFribDocVar::RegisterTotalTimeStyle()
 
 /**
  * @short:   convert the doc info field
- * @param:
- * @param:
  */
 void LwpFribDocVar::XFConvert(XFContentContainer* pXFPara)
 {
@@ -400,8 +390,6 @@ void LwpFribDocVar::XFConvert(XFContentContainer* pXFPara)
 }
 /**
  * @short:   Read unicode
- * @param:
- * @param:
  */
 void LwpFribUnicode::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
 {
@@ -435,8 +423,6 @@ void LwpFribUnicode::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
 
 /**
  * @short:   Read page number
- * @param:
- * @param:
  */
 void LwpFribPageNumber::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 {

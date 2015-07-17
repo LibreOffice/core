@@ -53,19 +53,15 @@
  *
  *
  ************************************************************************/
-/*****************************************************************************
- * Change History
- *  Mar 2005            Revised for lwpfilter
- ****************************************************************************/
 /**
  * @file
  * For LWP filter architecture prototype
  * Implementation file of SdwRectangle.
  */
+
 #include "lwpsdwrect.hxx"
 
 /**************************************************************************
- * @date:   11/19/2004
  * @short:  Default constructor
 **************************************************************************/
 SdwRectangle::SdwRectangle() : m_bRotated(false)
@@ -76,7 +72,6 @@ SdwRectangle::SdwRectangle() : m_bRotated(false)
     }
 }
 /**************************************************************************
- * @date:   11/19/2004
  * @short:  Constructor
  * @param:  aPt0~aPt3 four corner points of a rectangle.
 **************************************************************************/
@@ -95,7 +90,6 @@ SdwRectangle::SdwRectangle(const Point& rPt0, const Point& rPt1,
 }
 
 /**************************************************************************
- * @date:   12/15/2004
  * @short:  Copy constructor
 **************************************************************************/
 SdwRectangle::SdwRectangle(const SdwRectangle& rOther)
@@ -107,15 +101,10 @@ SdwRectangle::SdwRectangle(const SdwRectangle& rOther)
 
     m_bRotated  = rOther.IsRectRotated();
 }
-/**************************************************************************
- * @date:   11/19/2004
- * @short:  Destructor
-**************************************************************************/
 SdwRectangle::~SdwRectangle()
 {
 }
 /**************************************************************************
- * @date:   11/19/2004
  * @short:  Calculate and return center point of the rectangle.
  * @return: center point
 **************************************************************************/
@@ -127,7 +116,6 @@ Point SdwRectangle::GetRectCenter() const
     return Point(nX, nY);
 }
 /**************************************************************************
- * @date:   11/19/2004
  * @short:  Calculate width of the rectangle.
  * @return: rectangle width.
 **************************************************************************/
@@ -141,7 +129,6 @@ long SdwRectangle::GetWidth() const
     return (long)CalcDistBetween2Points(nX0, nY0, nX1, nY1);
 }
 /**************************************************************************
- * @date:   11/19/2004
  * @short:  Calculate height of the rectangle.
  * @return: rectangle height.
 **************************************************************************/
@@ -155,7 +142,6 @@ long SdwRectangle::GetHeight() const
     return (long)CalcDistBetween2Points(nX1, nY1, nX2, nY2);
 }
 /**************************************************************************
- * @date:   11/19/2004
  * @short:  Calculate coordinate of the original rectangle.
  * @return: a prz rectangle
 **************************************************************************/
@@ -179,7 +165,6 @@ Rectangle SdwRectangle::GetOriginalRect() const
     }
 }
 /**************************************************************************
- * @date:   11/19/2004
  * @short:  Calculate rotation angle of the rectangle.
  * @return: rotation angle.
 **************************************************************************/

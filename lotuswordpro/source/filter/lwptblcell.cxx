@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype - table cell numerics format
  */
-/*************************************************************************
- * Change History
- Mar 2005           Created
- ************************************************************************/
 
 #include "lwpoverride.hxx"
 #include "lwpobjid.hxx"

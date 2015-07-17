@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
+
 #include "lwpbulletstylemgr.hxx"
 #include "lwpdoc.hxx"
 #include "lwpstory.hxx"
@@ -303,7 +300,6 @@ XFContentContainer* LwpBulletStyleMgr::AddBulletList(
             theItem->SetIsHeader(true);
 
             theList->SetContinueNumber(true);
-            // end of add
         }
 
         if(nC == nLevel-1)

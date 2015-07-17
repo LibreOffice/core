@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDIVINFO_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDIVINFO_HXX
@@ -80,9 +76,7 @@ public:
     LwpDivInfo(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     LwpObjectID& GetInitialLayoutID() { return m_InitialLayoutID; }
     LwpObjectID& GetFillerPageTextID() { return m_FillerPageTextID; }
-    // add by  ,03/14/2004
     OUString GetDivName() { return m_Name.str(); }
-    // end add
 
     OUString GetClassName() { return m_ClassName.str(); }
     inline bool HasContents();

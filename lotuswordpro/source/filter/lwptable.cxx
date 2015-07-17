@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype - table object
  */
-/*************************************************************************
- * Change History
- Mar 2005           Created
- ************************************************************************/
 
  #include "lwptable.hxx"
 
@@ -81,12 +77,10 @@ void  LwpSuperTable::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-//Added by  for XFConvert refactor, 03/31/2005
 void LwpSuperTable::XFConvert(XFContentContainer* /*pCont*/)
 {
 }
 
-//End of Add
 /*****************************************************************************/
  LwpTable::LwpTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
      : LwpContent(objHdr, pStrm)

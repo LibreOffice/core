@@ -57,13 +57,10 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #include "lwpusrdicts.hxx"
 #include "lwpatomholder.hxx"
+
 LwpUserDictFiles::LwpUserDictFiles(LwpObjectStream *pStrm)
 {
     Read(pStrm);

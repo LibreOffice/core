@@ -57,70 +57,31 @@
  * @file
  *  For LWP filter architecture prototype - table cell numerics format
  */
-/*************************************************************************
- * Change History
- Mar 2005           Created
- ************************************************************************/
 
 #include "lwpnumericfmt.hxx"
 
 LwpCurrencyPool  LwpNumericFormat::m_aCurrencyInfo;
 
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
-*/
 OUString LwpCurrencyPool::GetCurrencySymbol(sal_uInt16 nFormat)
 {
     return m_aCurrencyInfo[nFormat].sSymbol;
 }
 
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
-*/
 bool LwpCurrencyPool::IsSymbolPost(sal_uInt16 nFormat)
 {
     return m_aCurrencyInfo[nFormat].bPost;
 }
 
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
-*/
 bool LwpCurrencyPool::IsShowSpace(sal_uInt16 nFormat)
 {
     return m_aCurrencyInfo[nFormat].bShowSpace;
 }
 
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
-*/
 XFStyle* LwpLayoutNumerics::Convert()
 {
     return cNumerics.Convert();
 }
 
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
-*/
 void LwpLayoutNumerics::Read()
 {
     LwpVirtualPiece::Read();
@@ -132,13 +93,6 @@ void LwpLayoutNumerics::Read()
     }
 }
 
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
-*/
 void LwpNumericFormatSubset::QuickRead(LwpObjectStream* pStrm)
 {
     cColor.Read(pStrm);
@@ -148,13 +102,6 @@ void LwpNumericFormatSubset::QuickRead(LwpObjectStream* pStrm)
 
     pStrm->SkipExtra();
 }
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return.
-*/
 LwpColor LwpNumericFormatSubset::GetColor()
 {
     if (cSubFlags&0x04)
@@ -183,10 +130,6 @@ LwpNumericFormat::LwpNumericFormat(LwpObjectStream * pStrm)
 }
 /**
 *   Read number format from wordpro file
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
 */
 void LwpNumericFormat::Read()
 {
@@ -205,13 +148,6 @@ void LwpNumericFormat::Read()
         pStrm->SkipExtra();
     }
 }
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return sal_Bool.
-*/
 bool LwpNumericFormat::IsCurrencyFormat(sal_uInt16 Format)
 {
     switch (Format)
@@ -267,13 +203,6 @@ bool LwpNumericFormat::IsCurrencyFormat(sal_uInt16 Format)
         return false;
     }
 }
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return.
-*/
 sal_uInt16
 LwpNumericFormat::GetDecimalPlaces()
 {
@@ -281,13 +210,6 @@ LwpNumericFormat::GetDecimalPlaces()
         return cDecimalPlaces;
     return GetDefaultDecimalPlaces(cFormat);
 }
-/**
-*   Make the currency string.
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
-*/
 void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& aPrefix, OUString& aSuffix, bool bNegtive)
 {
     aPrefix = aNumber.GetPrefix();
@@ -330,13 +252,6 @@ void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& 
         }
     }
 }
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
-*/
 void LwpNumericFormat::SetNumberType(XFNumberStyle* pStyle)
 {
     switch(cFormat)
@@ -373,10 +288,6 @@ void LwpNumericFormat::SetNumberType(XFNumberStyle* pStyle)
 }
 /**
 *   Make the xml content of number format
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return XFStyle*
 */
 XFStyle* LwpNumericFormat::Convert()
 {
@@ -455,9 +366,6 @@ XFStyle* LwpNumericFormat::Convert()
 /**
 *
 *   @descrption for SODC_2754
-*   @date   04/04/2006
-*   @param
-*   @param
 *   @return fix wrong encoding of POUND symbol
 */
 OUString    LwpNumericFormat::reencode(const OUString& sCode)
@@ -493,13 +401,6 @@ OUString    LwpNumericFormat::reencode(const OUString& sCode)
     return sCode;
 }
 
-/**
-*
-*   @date   03/26/2005
-*   @param
-*   @param
-*   @return
-*/
 sal_uInt16
 LwpNumericFormat::GetDefaultDecimalPlaces(sal_uInt16 Format)
 {

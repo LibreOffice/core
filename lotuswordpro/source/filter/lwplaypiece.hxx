@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 28 2005            Created
- ************************************************************************/
+
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYPIECE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYPIECE_HXX
 

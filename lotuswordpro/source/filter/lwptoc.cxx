@@ -57,12 +57,7 @@
  * @file
  *  For LWP filter architecture prototype - TOC related object
  */
-/*************************************************************************
- * Change History
- April 2005         Created
- April 2005         Modified
- April 2005                 Modified - add LwpTocLevelData class
- ************************************************************************/
+
 #include "lwptoc.hxx"
 #include "lwpfoundry.hxx"
 #include "lwpdoc.hxx"

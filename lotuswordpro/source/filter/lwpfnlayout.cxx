@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype - footnote layouts
  */
-/*************************************************************************
- * Change History
- Mar 2005           Created
- ************************************************************************/
 
 #include "lwpfnlayout.hxx"
 

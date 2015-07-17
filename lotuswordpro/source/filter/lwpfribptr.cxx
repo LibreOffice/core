@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #include "lwpfribptr.hxx"
 
@@ -132,7 +128,7 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
             {
                 pCurFrib->SetNext(pFrib);
             }
-            else//frist frib in the para,add by  2/1
+            else//frist frib in the para
             {
                 if (pFrib->GetType() == FRIB_TAG_TEXT)
                 {
@@ -425,9 +421,6 @@ void LwpFribPtr::FindLayouts()
 }
 /**************************************************************************
  * @descr:  Whether has a frib which type is nType
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 LwpFrib* LwpFribPtr::HasFrib(sal_uInt8 nType)
 {

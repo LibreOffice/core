@@ -53,11 +53,7 @@
  *
  *
  ************************************************************************/
-/*****************************************************************************
- * Change History
- * Mar 2005         revised for new processing procedure.
- * Jan 2005         created
- ****************************************************************************/
+
 #include "lwpsdwfileloader.hxx"
 #include "lwpsdwgrouploaderv0102.hxx"
 
@@ -73,7 +69,7 @@ LwpSdwFileLoader::LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphic
 LwpSdwFileLoader::~LwpSdwFileLoader()
 {
 }
-// add by  ,03/25/2005
+
 /**
  * @descr   entry of lwp-drawing objects.
  * @param   pDrawObjVector   a container which will contains the created drawing object of XF-Model.
@@ -100,5 +96,4 @@ void LwpSdwFileLoader::CreateDrawObjects(std::vector< rtl::Reference<XFFrame> >*
         }
     }
 }
-// end add
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

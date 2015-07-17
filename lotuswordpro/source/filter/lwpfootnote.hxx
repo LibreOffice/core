@@ -57,10 +57,7 @@
  * @file
  *  footnote
  */
-/*************************************************************************
- * Change History
- Mar 2005           Created
- ************************************************************************/
+
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFOOTNOTE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFOOTNOTE_HXX
 

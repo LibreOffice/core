@@ -59,10 +59,6 @@
  * Does not find the difference between CVersionedQointer and
  * CVersionedGointer, so use one class
  ************************************************************************/
-/*************************************************************************
- * Change History
-Jun 2005        Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVERDOCUMENT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPVERDOCUMENT_HXX

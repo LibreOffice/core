@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #include "lwppara.hxx"
 #include "lwpglobalmgr.hxx"
@@ -233,17 +229,15 @@ void LwpPara::Read()
         }
         m_nLevel = m_pObjStrm->QuickReaduInt16();
 
-        // test
         if (m_nLevel > 9)
         {
             m_nLevel = 9;
         }
-        // test ends
     }
     else
         m_nLevel = 0x0001;
 
-    m_Fribs.SetPara(this);//add by  2/1, for silver bullet
+    m_Fribs.SetPara(this);// for silver bullet
     m_Fribs.ReadPara(m_pObjStrm);
 
     m_pProps = LwpParaProperty::ReadPropertyList(m_pObjStrm,this);
@@ -438,42 +432,19 @@ void LwpPara::RegisterStyle()
             case PP_LOCAL_BULLET:
             {
                 pBulletProps = pProps;
-    //          OverrideParaBullet(pProps);
                 break;
             }
             case PP_LOCAL_NUMBERING:
             {
                 pNumberingProps = pProps;
-    //          OverrideParaNumbering(pProps);
                 break;
             }
-            //end
             case PP_LOCAL_TABRACK:
             {
-                //, 01/28/05
-                /*LwpTabOverride* pTabOverride=rParaStyle.GetTabOverride();
-                if(!pTabOverride)
-                {
-                    OverrideTab(NULL,static_cast<LwpParaTabRackProperty*>(pProps)->GetTab(),pOverStyle);
-                }
-                else
-                {
-                    OverrideTab(pTabOverride,static_cast<LwpParaTabRackProperty*>(pProps)->GetTab(),pOverStyle);
-                }*/
                 break;
             }
             case PP_LOCAL_BACKGROUND:
             {
-    /*          LwpBackgroundOverride aBackground;
-                if (!rParaStyle.GetBackground())
-                    OverrideBackground(NULL,static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground(),pOverStyle);
-                else
-                {
-                    aBackground = *(rParaStyle.GetaBackground());
-                    OverrideBackground(&aBackground,static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground(),pOverStyle);
-                }
-    */
-                // modified by , 06/03/2005
                 LwpBackgroundOverride* pBGOver = static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground();
                 if (pBGOver)
                 {
@@ -496,8 +467,7 @@ void LwpPara::RegisterStyle()
                         }
                     }
                 }
-                // end modified
-                        break;
+                break;
             }
             default:
                 break;
@@ -551,7 +521,6 @@ void LwpPara::RegisterStyle()
     OverrideParaBullet(pBulletProps);
     OverrideParaNumbering(pNumberingProps);
 
-    //add by
     //register bullet style
     LwpBulletStyleMgr* pBulletStyleMgr = this->GetBulletStyleMgr();
     if (pBulletStyleMgr)
@@ -740,7 +709,6 @@ void LwpPara::RegisterStyle()
             }
         }
     }
-    //end add
 
     if (noSpacing)
     {
@@ -816,9 +784,6 @@ XFSection* LwpPara::CreateXFSection()
 
 /**************************************************************************
  * @descr:  register tab style
- * @param:
- * @param:
- * @return:
 **************************************************************************/
 void LwpPara::RegisterTabStyle(XFParaStyle* pXFParaStyle)
 {
@@ -937,8 +902,7 @@ XFContentContainer* LwpPara::AddBulletList(XFContentContainer* pCont)
     if (m_pSilverBullet->HasName())
     {
         nLevel = m_pParaNumbering->GetPosition();
-        m_nLevel = nLevel;//add by ,for get para level
-//      m_aBulletStyleName = m_pSilverBullet->GetBulletStyleName();
+        m_nLevel = nLevel;//for get para level
     }
 
     return ( pBulletStyleMgr->AddBulletList(pCont, bOrdered, m_aBulletStyleName,

@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype - OLE object
  */
-/*************************************************************************
- * Change History
- Feb 2005           Created
- ************************************************************************/
+
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOLEOBJECT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOLEOBJECT_HXX
 

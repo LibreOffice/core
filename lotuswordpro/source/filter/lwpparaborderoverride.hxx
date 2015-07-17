@@ -132,7 +132,6 @@ public:
     inline void RevertRightWidth();
     inline void RevertBetweenMargin();
 
-    //end add
     friend class LwpParaBorderPiece;
 
 protected:

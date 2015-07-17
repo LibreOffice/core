@@ -82,9 +82,7 @@ public:
 
     LwpColor GetColor();
 
-    //add by , 01/26/2005
     inline LwpShadow& operator = (const LwpShadow& rOther);
-    //end add
 
 private:
     LwpColor        m_aColor;

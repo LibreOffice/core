@@ -57,12 +57,10 @@
  * @file
  *  For LWP filter architecture prototype - table layouts
  */
-/*************************************************************************
- * Change History
- Mar 2005           Created
- ************************************************************************/
+
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLELAYOUT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTABLELAYOUT_HXX
+
 #include <vector>
 #include <map>
 #include "lwplayout.hxx"
@@ -164,10 +162,8 @@ public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_SUPERTABLE_LAYOUT;}
     void RegisterNewStyle();
     // for table style
-    // add by , 06/03/2005
     void ApplyPatternFill(XFTableStyle* pTableStyle);
     void ApplyBackGround(XFTableStyle* pTableStyle);
-    // end add
 
     void ApplyBackColor(XFTableStyle *pTableStyle);
     void ApplyShadow(XFTableStyle *pTableStyle);

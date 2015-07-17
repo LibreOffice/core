@@ -58,10 +58,6 @@
  *  basic classes for Word Pro filter,
  *  PanoseNumber, Point
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBASETYPE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPBASETYPE_HXX

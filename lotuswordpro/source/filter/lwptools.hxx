@@ -57,10 +57,6 @@
  * @file
  *  to provide basic utilities for word pro filter
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTOOLS_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPTOOLS_HXX

@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBPTR_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPFRIBPTR_HXX
@@ -79,8 +75,8 @@ public:
     void ReadPara(LwpObjectStream* pObjStrm);
 private:
     LwpFrib* m_pFribs;
-    XFParagraph* m_pXFPara;//for parse ,add by 1-17 //Current XFPara used for frib parsing
-    LwpPara* m_pPara;//for get foundry, add by 1-17
+    XFParagraph* m_pXFPara;//Current XFPara used for frib parsing
+    LwpPara* m_pPara;//for get foundry
     static void ProcessDropcap(LwpStory* pStory,LwpFrib* pFrib,sal_uInt32 nLen);
 public:
     void XFConvert();
@@ -88,7 +84,7 @@ public:
     XFParagraph* GetXFPara(){return m_pXFPara;}
     void SetPara(LwpPara* para){m_pPara=para;}
     void RegisterStyle();
-    void FindLayouts();// for register pagelayout, add by , 02/20/2005
+    void FindLayouts();// for register pagelayout
     LwpFrib* GetFribs(){return m_pFribs;}
     LwpFrib* HasFrib(sal_uInt8 nType);
     bool ComparePagePosition(LwpVirtualLayout* pPreLayout, LwpVirtualLayout* pNextLayout);

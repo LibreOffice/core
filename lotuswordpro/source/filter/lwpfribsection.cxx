@@ -57,10 +57,7 @@
  * @file
  *  the class for section frib and process section and page layout
  ************************************************************************/
-/*************************************************************************
- * Change History
-Jan 2005        Created
- ************************************************************************/
+
 #include "lwpfribsection.hxx"
 #include "lwpfribbreaks.hxx"
 #include "lwpstory.hxx"
@@ -397,7 +394,7 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
     if(pContent)
     {
         LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID().obj().get() );
-        //delete the additional blank para, 06/28/2005
+        //delete the additional blank para
         XFParagraph* pCurrPara = rFribPtr.GetXFPara();
         if(!pCurrPara->HasContents())
         {
@@ -407,7 +404,6 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
                 pCurrContainer->RemoveLastContent();
             }
         }
-        //end,06/28/2005
         pStory->AddXFContent( pContent );
     }
     else

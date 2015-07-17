@@ -54,6 +54,7 @@
  *
  ************************************************************************/
 #include "first.hxx"
+
 namespace OpenStormBento
 {
 // changed to remove warning

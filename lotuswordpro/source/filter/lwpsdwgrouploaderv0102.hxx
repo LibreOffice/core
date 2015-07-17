@@ -53,11 +53,6 @@
  *
  *
  ************************************************************************/
-/*****************************************************************************
- * Change History
- * Mar 2005         revised for new processing procedure.
- * Jan 2005         created
- ****************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX
@@ -90,7 +85,6 @@ public:
     void BeginDrawObjects(std::vector< rtl::Reference<XFFrame> >* pDrawObjVector);
     XFDrawGroup* CreateDrawGroupObject();
     XFFrame* CreateDrawObject();
-    // end add
 };
 
 #endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX

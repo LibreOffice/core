@@ -57,10 +57,6 @@
  * @file
  *  list related class
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDLVLIST_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDLVLIST_HXX
@@ -105,9 +101,7 @@ protected:
     void Read() SAL_OVERRIDE;
     void ReadName(LwpObjectStream* pObjStrm);
 public:
-    // 01/17/2005
     LwpAtomHolder& GetName() { return m_Name; }
-    //end
     LwpObjectID& GetChildHead() { return m_ChildHead; }
     LwpObjectID& GetChildTail() { return m_ChildTail; }
     LwpObjectID& GetParent() { return m_Parent; }

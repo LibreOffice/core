@@ -57,10 +57,7 @@
  * @file
  *  For LWP filter architecture prototype - row layouts
  */
-/*************************************************************************
- * Change History
- April 2005         Created
- ************************************************************************/
+
 #include "lwprowlayout.hxx"
 #include "lwptable.hxx"
 #include "lwpglobalmgr.hxx"

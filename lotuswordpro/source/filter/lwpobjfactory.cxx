@@ -57,10 +57,6 @@
  * @file
  *  For LWP filter architecture prototype
  ************************************************************************/
-/*************************************************************************
- * Change History
- Jan 2005           Created
- ************************************************************************/
 
 #include "lwpobjfactory.hxx"
 #include "lwpdefs.hxx"
@@ -289,7 +285,6 @@ rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObj
             newObj = new LwpAmikakePiece(objHdr, m_pSvStream);
             break;
         }
-        // end
 
         case VO_HEADHOLDER:
         {
@@ -328,7 +323,7 @@ rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObj
             newObj = new LwpBackgroundPiece(objHdr, m_pSvStream);
             break;
         }
-        // end.
+
         case VO_SECTION:
         {
             newObj = new LwpSection(objHdr, m_pSvStream);
