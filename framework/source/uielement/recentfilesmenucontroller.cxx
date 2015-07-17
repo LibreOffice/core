@@ -60,7 +60,8 @@ class RecentFilesMenuController :  public svt::PopupMenuControllerBase
     using svt::PopupMenuControllerBase::disposing;
 
 public:
-    RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext );
+    RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext,
+                               const uno::Sequence< uno::Any >& args );
     virtual ~RecentFilesMenuController();
 
     // XServiceInfo
@@ -115,12 +116,25 @@ private:
 
     std::vector< RecentFile > m_aRecentFilesItems;
     bool                  m_bDisabled : 1;
+    bool m_bShowRemote;
 };
 
-RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext ) :
+RecentFilesMenuController::RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext,
+                                                      const uno::Sequence< uno::Any >& args ) :
     svt::PopupMenuControllerBase( xContext ),
-    m_bDisabled( false )
+    m_bDisabled( false ),
+    m_bShowRemote( false )
 {
+    css::beans::PropertyValue aPropValue;
+    for ( sal_Int32 i = 0; i < args.getLength(); ++i )
+    {
+        args[i] >>= aPropValue;
+        if ( aPropValue.Name == "ShowRemote" )
+        {
+            aPropValue.Value >>= m_bShowRemote;
+            break;
+        }
+    }
 }
 
 RecentFilesMenuController::~RecentFilesMenuController()
@@ -227,26 +241,30 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                                         FWK_RESSTR(STR_CLEAR_RECENT_FILES_HELP) );
 
             // Open remote menu entry
-            pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 2 ),
-                                       FWK_RESSTR(STR_OPEN_REMOTE) );
-            pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 2 ),
-                                           OUString( CMD_OPEN_REMOTE ) );
+            if ( m_bShowRemote )
+            {
+                pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 2 ),
+                                           FWK_RESSTR(STR_OPEN_REMOTE) );
+                pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 2 ),
+                                               OUString( CMD_OPEN_REMOTE ) );
+            }
         }
         else
         {
-            // No recent documents => insert "no document" string
-            pVCLPopupMenu->InsertItem( 1, FWK_RESSTR(STR_NODOCUMENT) );
-            // Do not disable it, otherwise the Toolbar controller and MenuButton
-            // will display SV_RESID_STRING_NOSELECTIONPOSSIBLE instead of STR_NODOCUMENT
-            pVCLPopupMenu->SetItemBits( 1, pVCLPopupMenu->GetItemBits( 1 ) | MenuItemBits::NOSELECT );
-
-            pVCLPopupMenu->InsertSeparator();
-
-            // Open remote menu entry
-            pVCLPopupMenu->InsertItem( sal_uInt16( 2 ),
-                                       FWK_RESSTR(STR_OPEN_REMOTE) );
-            pVCLPopupMenu->SetItemCommand( sal_uInt16( 2 ),
-                                           OUString( CMD_OPEN_REMOTE ) );
+            if ( m_bShowRemote )
+            {
+                // Open remote menu entry
+                pVCLPopupMenu->InsertItem( 1, FWK_RESSTR(STR_OPEN_REMOTE) );
+                pVCLPopupMenu->SetItemCommand( 1, CMD_OPEN_REMOTE );
+            }
+            else
+            {
+                // No recent documents => insert "no document" string
+                pVCLPopupMenu->InsertItem( 1, FWK_RESSTR(STR_NODOCUMENT) );
+                // Do not disable it, otherwise the Toolbar controller and MenuButton
+                // will display SV_RESID_STRING_NOSELECTIONPOSSIBLE instead of STR_NODOCUMENT
+                pVCLPopupMenu->SetItemBits( 1, pVCLPopupMenu->GetItemBits( 1 ) | MenuItemBits::NOSELECT );
+            }
         }
     }
 }
@@ -444,9 +462,9 @@ IMPL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile*, p
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_RecentFilesMenuController_get_implementation(
     css::uno::XComponentContext *context,
-    css::uno::Sequence<css::uno::Any> const &)
+    css::uno::Sequence<css::uno::Any> const &args)
 {
-    return cppu::acquire(new RecentFilesMenuController(context));
+    return cppu::acquire(new RecentFilesMenuController(context, args));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

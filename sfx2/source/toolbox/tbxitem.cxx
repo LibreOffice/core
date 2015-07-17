@@ -1153,6 +1153,10 @@ VclPtr<SfxPopupWindow> SfxRecentFilesToolBoxControl::CreatePopupWindow()
     aPropValue.Value <<= m_xFrame;
     aArgs[1] <<= aPropValue;
 
+    aPropValue.Name = "ShowRemote";
+    aPropValue.Value <<= true;
+    aArgs[2] <<= aPropValue;
+
     uno::Reference< frame::XPopupMenuController > xPopupController( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                 "com.sun.star.comp.framework.RecentFilesMenuController", aArgs, m_xContext ), UNO_QUERY );
 
@@ -1191,7 +1195,7 @@ VclPtr<SfxPopupWindow> SfxSaveAsToolBoxControl::CreatePopupWindow()
     sal_uInt16 nItemId = GetId();
     ::Rectangle aRect( rBox.GetItemRect( nItemId ) );
 
-    Sequence< Any > aArgs( 2 );
+    Sequence< Any > aArgs( 3 );
     PropertyValue aPropValue;
 
     aPropValue.Name = "CommandURL";
