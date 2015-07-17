@@ -298,9 +298,6 @@ private:
     void bindingModified();
 
 
-    /// register the event listeners for
-    void registerListeners();
-
     /// set MIPs defined by this binding on MIP item
     MIP getLocalMIP() const;
 
@@ -327,18 +324,6 @@ private:
 
     /// set a useful default binding ID (if none is set)
     void _checkBindingID();
-
-public:
-    /// for debugging purposes only: get the MIPs defined by this binding
-    const MIP* _getMIP();
-
-
-
-
-
-
-    // XValueBinding:
-
 
 public:
 

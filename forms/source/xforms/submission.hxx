@@ -153,21 +153,13 @@ public:
     com::sun::star::uno::Sequence< OUString > getIncludeNamespacePrefixes() const { return msIncludeNamespacePrefixes;}
     void setIncludeNamespacePrefixes( const com::sun::star::uno::Sequence< OUString >& );
 
-
     /** perform the submission
      * @returns if submission was successful */
     bool doSubmit( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler );
 
-
-    /// release the model (note: Binding is unusable without model)
-    void releaseModel();
-
-
     // helpers for UNO tunnel
     static com::sun::star::uno::Sequence<sal_Int8> getUnoTunnelID();
     static Submission* getSubmission( const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& );
-
-
 
 private:
 
@@ -178,9 +170,6 @@ private:
 
     /// get the model implementation
     xforms::Model* getModelImpl() const;
-    xforms::Model* getModelImpl( const com::sun::star::uno::Reference<com::sun::star::xforms::XModel>& xModel ) const;
-
-
 
 protected:
 

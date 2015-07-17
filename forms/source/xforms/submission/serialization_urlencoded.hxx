@@ -34,7 +34,6 @@ private:
     static bool is_unreserved(sal_Char);
     static void encode_and_append(const OUString& aString, OStringBuffer& aBuffer);
     void serialize_node(const css::uno::Reference< css::xml::dom::XNode >& aNode);
-    void serialize_nodeset();
 
 public:
     CSerializationURLEncoded();

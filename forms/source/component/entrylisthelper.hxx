@@ -65,8 +65,6 @@ namespace frm
         /// returns the current string item list
         inline const ::com::sun::star::uno::Sequence< OUString >&
                     getStringItemList() const { return m_aStringItems; }
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >&
-                    getExternalListEntrySource() const { return m_xListSource; }
 
         /// determines whether we actually have an external list source
         inline bool hasExternalListSource( ) const { return m_xListSource.is(); }

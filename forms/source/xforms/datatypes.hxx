@@ -67,11 +67,7 @@ namespace xforms
         bool            m_bPatternMatcherDirty;
 
     protected:
-
-        bool    isBasic() const         { return m_bIsBasic; }
         sal_Int16   getTypeClass() const    { return m_nTypeClass; }
-        const OUString&
-                    getName() const         { return m_sName; }
 
     private:
         OXSDDataType( const OXSDDataType& ) SAL_DELETED_FUNCTION;

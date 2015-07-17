@@ -436,8 +436,6 @@ public:
     // XCloneable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    inline void submitNBC( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt );
-
 protected:
     // OPropertySetAggregationHelper overridables
     virtual void forwardingPropertyValue( sal_Int32 _nHandle ) SAL_OVERRIDE;
@@ -541,11 +539,6 @@ private:
 protected:
     using OPropertySetHelper::getPropertyValues;
 };
-
-inline void ODatabaseForm::submitNBC(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt)
-{
-    submit_impl(Control, MouseEvt, false);
-}
 
 
 }   // namespace frm

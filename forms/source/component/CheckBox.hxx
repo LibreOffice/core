@@ -29,7 +29,6 @@ namespace frm
 class OCheckBoxModel    :public OReferenceValueComponent
 {
 protected:
-    sal_Int16   getState(const ::com::sun::star::uno::Any& rValue);
     bool        DbUseBool();
 
 public:

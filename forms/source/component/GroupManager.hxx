@@ -108,7 +108,6 @@ public:
 
     sal_Int32   GetPos() const { return m_nPos; }
     sal_Int16   GetTabIndex() const { return m_nTabIndex; }
-    OUString GetName() const { return m_aName; }
 };
 
 typedef std::vector<OGroupComp> OGroupCompArr;

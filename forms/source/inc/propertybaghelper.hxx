@@ -83,7 +83,6 @@ namespace frm
         inline bool convertDynamicFastPropertyValue( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rNewValue, ::com::sun::star::uno::Any& _out_rConvertedValue, ::com::sun::star::uno::Any& _out_rCurrentValue ) const;
         inline void setDynamicFastPropertyValue( sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue );
         inline void getDynamicPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _out_rValue ) const;
-        inline bool hasDynamicPropertyByName( const OUString& _rName ) const;
         inline bool hasDynamicPropertyByHandle( sal_Int32 _nHandle ) const;
 
     private:
@@ -135,13 +134,6 @@ namespace frm
     {
         m_aDynamicProperties.getPropertyDefaultByHandle( _nHandle, _out_rValue );
     }
-
-
-    inline bool PropertyBagHelper::hasDynamicPropertyByName( const OUString& _rName ) const
-    {
-        return m_aDynamicProperties.hasPropertyByName( _rName );
-    }
-
 
     inline bool PropertyBagHelper::hasDynamicPropertyByHandle( sal_Int32 _nHandle ) const
     {

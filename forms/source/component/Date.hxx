@@ -90,13 +90,6 @@ protected:
 
 protected:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-private:
-    /** translates the control value (the VCL-internal integer representation of a date) into
-        a UNO-Date.
-    */
-    void                    impl_translateControlValueToUNODate(
-                                ::com::sun::star::uno::Any& _rUNOValue ) const;
 };
 
 class ODateControl: public OBoundControl

@@ -71,12 +71,6 @@ protected:
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    /** sets the given value as new State at the aggregate
-        @precond
-            our mutex is acquired exactly once
-    */
-    void    setNewAggregateState( const ::com::sun::star::uno::Any& _rValue );
-
     void setControlSource();
 };
 

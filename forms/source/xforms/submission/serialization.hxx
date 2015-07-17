@@ -55,22 +55,6 @@ public:
     }
 
     /**
-    set the properties from the submission element
-    that control aspects of the serialization
-    each serialization may support individual properties
-    */
-    void setProperties(const css::uno::Sequence< css::beans::NamedValue >& props)
-    {
-        m_properties.clear();
-        OUString aValue;
-        for (sal_Int32 i=0; i<props.getLength(); i++)
-        {
-            if (props[i].Value >>= aValue)
-                m_properties.insert(PropMap::value_type(props[i].Name, aValue));
-        }
-    }
-
-    /**
     start the serialization process
     */
     virtual void serialize()=0;

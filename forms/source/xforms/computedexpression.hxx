@@ -88,12 +88,6 @@ public:
     /// set a new expression string
     void setExpression( const OUString& rExpression );
 
-    /// get the namespaces that are used to interpret the expression string
-    com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> getNamespaces() const;
-
-    /// set the namespaces that are used to interpret the expression string
-    void setNamespaces( const com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>& );
-
     /// do we have an actual expression?
     bool isEmptyExpression() const { return mbIsEmpty;}
 

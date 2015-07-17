@@ -30,7 +30,6 @@ private:
     css::uno::Reference< css::io::XPipe > m_xBuffer;
 
     void serialize_node(const css::uno::Reference< css::xml::dom::XNode >& aNode);
-    void serialize_nodeset();
 
 public:
     CSerializationAppXML();

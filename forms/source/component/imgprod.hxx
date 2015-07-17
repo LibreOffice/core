@@ -76,7 +76,6 @@ public:
     void            NewDataAvailable();
 
     void            SetDoneHdl( const Link<>& i_rHdl ) { maDoneHdl = i_rHdl; }
-    const Link<>&   GetDoneHdl() const { return maDoneHdl; }
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

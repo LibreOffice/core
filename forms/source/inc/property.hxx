@@ -83,9 +83,7 @@ private:
 public:
     PropertyInfoService() { }
 
-public:
     static sal_Int32            getPropertyId(const OUString& _rName);
-    static OUString      getPropertyName(sal_Int32 _nHandle);
 
 private:
     static void initialize();

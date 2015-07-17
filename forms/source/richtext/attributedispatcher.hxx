@@ -54,13 +54,9 @@ namespace frm
             IMultiAttributeDispatcher*          _pMasterDispatcher
         );
 
-        /// notifies a new attribute state
-        void    notifyAttributeState( const AttributeState& _rState );
-
     protected:
         virtual ~OAttributeDispatcher( );
 
-    protected:
         // XDispatch
         virtual void SAL_CALL dispatch( const ::com::sun::star::util::URL& URL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -75,13 +71,6 @@ namespace frm
 
         // own overridables
         virtual void    fillFeatureEventFromAttributeState( ::com::sun::star::frame::FeatureStateEvent& _rEvent, const AttributeState& _rState ) const;
-
-    protected:
-        /// notifies our feature state to one particular listener
-        void    notifyState(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxControl,
-                    const AttributeState& _rState
-                );
     };
 
 

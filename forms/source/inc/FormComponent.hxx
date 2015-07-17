@@ -664,9 +664,8 @@ protected:
                                         m_xColumn;
 
 protected:
-    inline const OUString&   getValuePropertyName( ) const       { return m_sValuePropertyName; }
-    inline sal_Int32                getValuePropertyAggHandle( ) const  { return m_nValuePropertyAggregateHandle; }
-    inline const OUString&   getControlSource( ) const           { return m_aControlSource; }
+    inline sal_Int32            getValuePropertyAggHandle( ) const  { return m_nValuePropertyAggregateHandle; }
+    inline const OUString&      getControlSource( ) const           { return m_aControlSource; }
     inline bool                 isRequired() const                  { return m_bRequired; }
     inline bool                 isLoaded() const                    { return m_bLoaded; }
 

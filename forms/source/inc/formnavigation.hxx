@@ -75,10 +75,6 @@ namespace frm
         sal_Int32           m_nConnectedFeatures;
 
     protected:
-        inline const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
-            getORB( ) const { return m_xORB; }
-
-    protected:
         OFormNavigationHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB );
         virtual ~OFormNavigationHelper();
 
