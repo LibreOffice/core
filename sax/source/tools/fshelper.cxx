@@ -160,7 +160,7 @@ void FastSerializerHelper::mark(
 }
 
 void FastSerializerHelper::mergeTopMarks(
-        sal_Int32 const nTag, MergeMarksEnum const eMergeType)
+        sal_Int32 const nTag, MergeMarks const eMergeType)
 {
     mpSerializer->mergeTopMarks(nTag, eMergeType);
 }

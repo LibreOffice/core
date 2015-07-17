@@ -60,7 +60,7 @@ const sal_Int32 FSEND_internal = -1; // same as XML_TOKEN_INVALID
 
 namespace sax_fastparser {
 
-enum MergeMarksEnum { MERGE_MARKS_APPEND = 0, MERGE_MARKS_PREPEND = 1, MERGE_MARKS_POSTPONE = 2, MERGE_MARKS_IGNORE = 3 };
+enum class MergeMarks { APPEND = 0, PREPEND = 1, POSTPONE = 2, IGNORE = 3 };
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList > XFastAttributeListRef;
 
@@ -141,7 +141,7 @@ public:
             const ::com::sun::star::uno::Sequence< sal_Int32 >& rOrder =
             ::com::sun::star::uno::Sequence< sal_Int32 >() );
     void mergeTopMarks(sal_Int32 nTag,
-            MergeMarksEnum eMergeType = MERGE_MARKS_APPEND );
+            MergeMarks eMergeType = MergeMarks::APPEND );
 
     /*
       Now create all the overloads in a typesafe way (i.e. without varargs) by creating a number of overloads

@@ -580,7 +580,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     if(aFramePrTextbox.empty())
         m_pSerializer->mergeTopMarks(Tag_StartParagraph_1);
     else
-        m_pSerializer->mergeTopMarks(Tag_StartParagraph_1, sax_fastparser::MERGE_MARKS_IGNORE);
+        m_pSerializer->mergeTopMarks(Tag_StartParagraph_1, sax_fastparser::MergeMarks::IGNORE);
 
     // Write framePr
     if(!aFramePrTextbox.empty())
@@ -676,7 +676,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
         m_pSerializer->startElementNS( XML_w, XML_sdtContent, FSEND );
 
         // prepend the tags since the sdt start mark before the paragraph
-        m_pSerializer->mergeTopMarks(Tag_WriteSdtBlock, sax_fastparser::MERGE_MARKS_PREPEND);
+        m_pSerializer->mergeTopMarks(Tag_WriteSdtBlock, sax_fastparser::MergeMarks::PREPEND);
 
         // write the ending tags after the paragraph
         if (bPara)
@@ -1023,7 +1023,7 @@ void DocxAttributeOutput::EndParagraphProperties(const SfxItemSet& rParagraphMar
 
     // merge the properties _before_ the run (strictly speaking, just
     // after the start of the paragraph)
-    m_pSerializer->mergeTopMarks(Tag_StartParagraphProperties, sax_fastparser::MERGE_MARKS_PREPEND);
+    m_pSerializer->mergeTopMarks(Tag_StartParagraphProperties, sax_fastparser::MergeMarks::PREPEND);
 }
 
 void DocxAttributeOutput::SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame )
@@ -1218,7 +1218,7 @@ void DocxAttributeOutput::EndRun()
     {
         RunText(OUString("\t")) ;
     }
-    m_pSerializer->mergeTopMarks(Tag_EndRun_1, sax_fastparser::MERGE_MARKS_PREPEND); // merges with "postponed run start", see above
+    m_pSerializer->mergeTopMarks(Tag_EndRun_1, sax_fastparser::MergeMarks::PREPEND); // merges with "postponed run start", see above
 
     // write the run start + the run content
     m_pSerializer->mergeTopMarks(Tag_StartRun_2); // merges the "actual run start"
@@ -1247,7 +1247,7 @@ void DocxAttributeOutput::EndRun()
     {
         m_pSerializer->mark(Tag_EndRun_2);
         EndSdtBlock();
-        m_pSerializer->mergeTopMarks(Tag_EndRun_2, sax_fastparser::MERGE_MARKS_PREPEND);
+        m_pSerializer->mergeTopMarks(Tag_EndRun_2, sax_fastparser::MergeMarks::PREPEND);
     }
 
     m_pSerializer->mergeTopMarks(Tag_StartRun_1);
@@ -1993,7 +1993,7 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
 
     // merge the properties _before_ the run text (strictly speaking, just
     // after the start of the run)
-    m_pSerializer->mergeTopMarks(Tag_StartRunProperties, sax_fastparser::MERGE_MARKS_PREPEND);
+    m_pSerializer->mergeTopMarks(Tag_StartRunProperties, sax_fastparser::MergeMarks::PREPEND);
 }
 
 void DocxAttributeOutput::GetSdtEndBefore(const SdrObject* pSdrObj)
@@ -2401,7 +2401,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     m_pSerializer->endElementNS( XML_w, XML_rPr );
 
-                    m_pSerializer->mergeTopMarks(Tag_Redline_1, sax_fastparser::MERGE_MARKS_PREPEND);
+                    m_pSerializer->mergeTopMarks(Tag_Redline_1, sax_fastparser::MergeMarks::PREPEND);
                 }
             }
         }
@@ -2452,7 +2452,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
                     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
-                    m_pSerializer->mergeTopMarks(Tag_Redline_2, sax_fastparser::MERGE_MARKS_PREPEND);
+                    m_pSerializer->mergeTopMarks(Tag_Redline_2, sax_fastparser::MergeMarks::PREPEND);
                 }
             }
         }
@@ -5024,7 +5024,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             break;
     }
 
-    m_pSerializer->mergeTopMarks(Tag_OutputFlyFrame, sax_fastparser::MERGE_MARKS_POSTPONE);
+    m_pSerializer->mergeTopMarks(Tag_OutputFlyFrame, sax_fastparser::MergeMarks::POSTPONE);
 }
 
 bool DocxAttributeOutput::IsDiagram( const SdrObject* sdrObject )

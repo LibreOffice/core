@@ -863,7 +863,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
         }
     }
 
-    m_pSerializer->mergeTopMarks(Tag_Commit, sax_fastparser::MERGE_MARKS_POSTPONE );
+    m_pSerializer->mergeTopMarks(Tag_Commit, sax_fastparser::MergeMarks::POSTPONE );
 }
 
 OString VMLExport::ShapeIdString( sal_uInt32 nId )

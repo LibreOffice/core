@@ -125,7 +125,7 @@ public:
           p, r, t, [text], /t, rPr, [something], /rPr, /r, /p,
         simply do
           p, r, mark(), t, [text], /t, mark(), rPr, [something], /rPr,
-          mergeTopMarks( MERGE_MARKS_PREPEND ), mergeTopMarks( MERGE_MARKS_APPEND ), /r, /p
+          mergeTopMarks( MergeMarks::PREPEND ), mergeTopMarks( MergeMarks::APPEND ), /r, /p
         and you are done.
 
         @param nTag debugging aid to ensure mark and merge match in LIFO order
@@ -142,7 +142,7 @@ public:
         Writes the result to the output stream if the mark stack becomes empty
         by the operation.
 
-        When the MERGE_MARKS_POSTPONE is specified, the merge happens just
+        When the MergeMarks::POSTPONE is specified, the merge happens just
         before the next merge.
 
         @param nTag debugging aid to ensure mark and merge match in LIFO order
@@ -150,7 +150,7 @@ public:
         @see mark()
      */
     void mergeTopMarks(sal_Int32 nTag,
-        sax_fastparser::MergeMarksEnum eMergeType = sax_fastparser::MERGE_MARKS_APPEND);
+        sax_fastparser::MergeMarks eMergeType = sax_fastparser::MergeMarks::APPEND);
 
 private:
     /** Helper class to cache data and write in chunks to XOutputStream or ForMerge::append.

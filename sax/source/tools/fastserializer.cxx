@@ -402,7 +402,7 @@ namespace sax_fastparser {
 #endif
 
     void FastSaxSerializer::mergeTopMarks(
-        sal_Int32 const nTag, sax_fastparser::MergeMarksEnum const eMergeType)
+        sal_Int32 const nTag, sax_fastparser::MergeMarks const eMergeType)
     {
         SAL_WARN_IF(mbMarkStackEmpty, "sax", "Empty mark stack - nothing to merge");
         assert(!mbMarkStackEmpty); // should never happen
@@ -428,7 +428,7 @@ namespace sax_fastparser {
         // flush, so that we get everything in getData()
         maCachedOutputStream.flush();
 
-        if ( maMarkStack.size() == 1  && eMergeType != MERGE_MARKS_IGNORE)
+        if (maMarkStack.size() == 1 && eMergeType != MergeMarks::IGNORE)
         {
 #ifdef DBG_UTIL
             while (!maMarkStack.top()->m_DebugEndedElements.empty())
@@ -460,14 +460,14 @@ namespace sax_fastparser {
 #ifdef DBG_UTIL
         switch (eMergeType)
         {
-            case MERGE_MARKS_APPEND:
+            case MergeMarks::APPEND:
                 lcl_DebugMergeAppend(
                     maMarkStack.top()->m_DebugEndedElements,
                     maMarkStack.top()->m_DebugStartedElements,
                     topDebugEndedElements,
                     topDebugStartedElements);
                 break;
-            case MERGE_MARKS_PREPEND:
+            case MergeMarks::PREPEND:
                 if (dynamic_cast<ForSort*>(maMarkStack.top().get())) // argh...
                 {
                     lcl_DebugMergeAppend(
@@ -485,14 +485,14 @@ namespace sax_fastparser {
                         maMarkStack.top()->m_DebugStartedElements);
                 }
                 break;
-            case MERGE_MARKS_POSTPONE:
+            case MergeMarks::POSTPONE:
                 lcl_DebugMergeAppend(
                     maMarkStack.top()->m_DebugPostponedEndedElements,
                     maMarkStack.top()->m_DebugPostponedStartedElements,
                     topDebugEndedElements,
                     topDebugStartedElements);
                 break;
-            case MERGE_MARKS_IGNORE:
+            case MergeMarks::IGNORE:
                 break;
         }
 #endif
@@ -508,10 +508,10 @@ namespace sax_fastparser {
 
         switch ( eMergeType )
         {
-            case MERGE_MARKS_APPEND:   maMarkStack.top()->append( aMerge );   break;
-            case MERGE_MARKS_PREPEND:  maMarkStack.top()->prepend( aMerge );  break;
-            case MERGE_MARKS_POSTPONE: maMarkStack.top()->postpone( aMerge ); break;
-            case MERGE_MARKS_IGNORE  :  break;
+            case MergeMarks::APPEND:   maMarkStack.top()->append( aMerge );   break;
+            case MergeMarks::PREPEND:  maMarkStack.top()->prepend( aMerge );  break;
+            case MergeMarks::POSTPONE: maMarkStack.top()->postpone( aMerge ); break;
+            case MergeMarks::IGNORE:   break;
 
         }
     }
