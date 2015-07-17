@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_01b66f8a",
+        "filename": "sd/source/ui/animations/CustomAnimationPane.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-17T13:33:00Z",
+      "side": 1,
+      "message": "addUndo() got lost :)",
+      "revId": "14909570595208d21921ff94a2ab2b44ad704a09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_81aa5f18",
+        "filename": "sd/source/ui/animations/CustomAnimationPane.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1841,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-17T13:33:00Z",
+      "side": 1,
+      "message": "This doesn\u0027t make much sense, with eKind being assigned PathKind::NONE few lines above",
+      "revId": "14909570595208d21921ff94a2ab2b44ad704a09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
