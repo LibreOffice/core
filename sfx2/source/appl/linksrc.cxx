@@ -93,7 +93,7 @@ SvLinkSource_Entry_Impl::~SvLinkSource_Entry_Impl()
 
 class SvLinkSource_Array_Impl
 {
-private :
+private:
     std::vector<SvLinkSource_Entry_Impl*> mvData;
 
 public:

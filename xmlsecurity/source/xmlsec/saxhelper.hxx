@@ -33,7 +33,7 @@
 */
 class SAXHelper
 {
-    private :
+    private:
         xmlParserCtxtPtr m_pParserCtxt ;
         xmlSAXHandlerPtr m_pSaxHandler ;
 

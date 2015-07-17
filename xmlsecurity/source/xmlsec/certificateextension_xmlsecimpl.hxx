@@ -31,12 +31,12 @@
 class CertificateExtension_XmlSecImpl : public ::cppu::WeakImplHelper1<
     ::com::sun::star::security::XCertificateExtension >
 {
-    private :
+    private:
         bool m_critical ;
         ::com::sun::star::uno::Sequence< sal_Int8 > m_xExtnId ;
         ::com::sun::star::uno::Sequence< sal_Int8 > m_xExtnValue ;
 
-    public :
+    public:
         CertificateExtension_XmlSecImpl() ;
         virtual ~CertificateExtension_XmlSecImpl() ;
 

@@ -83,7 +83,7 @@ public:
             throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 private:
     const sal_Char* implementationName;
-protected :
+protected:
 #ifndef DISABLE_DYNLOADING
     oslModule hModule;
     oslGenericFunction SAL_CALL getFunctionBySymbol(const sal_Char* func);
@@ -135,7 +135,7 @@ public:
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException, std::exception ) SAL_OVERRIDE;
 
-private :
+private:
         // Hangul/Hanja system dictionary
         com::sun::star::uno::Reference < com::sun::star::linguistic2::XConversionDictionary > xCD;
         // Hangul/Hanja user defined dictionary list
@@ -190,7 +190,7 @@ public:
             throw(  com::sun::star::uno::RuntimeException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::lang::NoSupportException, std::exception ) SAL_OVERRIDE;
-private :
+private:
         // user defined dictionary list
         com::sun::star::uno::Reference < com::sun::star::linguistic2::XConversionDictionaryList > xCDL;
         OUString SAL_CALL getWordConversion(const OUString& aText,

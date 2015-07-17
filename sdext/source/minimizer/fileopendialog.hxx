@@ -46,7 +46,7 @@ class FileOpenDialog
 
     std::vector< FilterEntry > aFilterEntryList;
 
-public :
+public:
         FileOpenDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
         ~FileOpenDialog();
 

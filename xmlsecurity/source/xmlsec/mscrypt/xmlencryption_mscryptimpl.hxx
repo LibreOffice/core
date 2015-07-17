@@ -38,10 +38,10 @@ class XMLEncryption_MSCryptImpl : public ::cppu::WeakImplHelper2<
     ::com::sun::star::xml::crypto::XXMLEncryption ,
     ::com::sun::star::lang::XServiceInfo >
 {
-    private :
+    private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
 
-    public :
+    public:
         explicit XMLEncryption_MSCryptImpl(const css::uno::Reference<css::lang::XMultiServiceFactory>& rFactory);
         virtual ~XMLEncryption_MSCryptImpl() ;
 

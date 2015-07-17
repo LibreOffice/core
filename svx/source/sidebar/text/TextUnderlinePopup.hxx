@@ -28,7 +28,7 @@ namespace svx { namespace sidebar {
 class TextUnderlinePopup
     : public Popup
 {
-public :
+public:
     TextUnderlinePopup (
         vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);

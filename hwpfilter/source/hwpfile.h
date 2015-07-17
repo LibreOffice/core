@@ -252,7 +252,7 @@ class DLLEXPORT HWPFile
           int getMaxSettedPage(){ return m_nMaxSettedPage; }
           void setMaxSettedPage(){ m_nMaxSettedPage = m_nCurrentPage; }
 
-    private :
+    private:
         int compareCharShape(CharShape *shape);
         int compareParaShape(ParaShape *shape);
 

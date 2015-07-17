@@ -71,7 +71,7 @@ private:
 
     static Orientation convertToOrientation(sal_Int32 value);
 
-public :
+public:
     Exif();
     virtual ~Exif();
 

@@ -49,7 +49,7 @@ private:
 
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPropSeq;
 
-    public :
+    public:
 
             TYPEINFO_OVERRIDE();
 
@@ -87,7 +87,7 @@ private:
 
 class SdrCustomShapeReplacementURLItem : public SfxStringItem
 {
-    public :
+    public:
             SdrCustomShapeReplacementURLItem();
 };
 

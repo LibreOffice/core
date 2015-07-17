@@ -69,7 +69,7 @@ class IconChoicePage : public TabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
-private :
+private:
     const SfxItemSet*   pSet;
     OUString            aUserString;
     bool                bHasExchangeSupport;
@@ -77,12 +77,12 @@ private :
 
     void                ImplInitSettings();
 
-protected :
+protected:
     IconChoicePage( vcl::Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet );
 
     sal_uInt16          GetWhich( sal_uInt16 nSlot ) const  { return pSet->GetPool()->GetWhich( nSlot ); }
 
-public :
+public:
     virtual ~IconChoicePage();
     virtual void        dispose() SAL_OVERRIDE;
 
@@ -114,7 +114,7 @@ public :
 
 class IconChoiceDialog : public ModalDialog
 {
-private :
+private:
     friend class IconChoicePage;
 
     ::std::vector< IconChoicePageData* > maPageList;
@@ -153,7 +153,7 @@ private :
 
     void                    FocusOnIcon ( sal_uInt16 nId );
 
-protected :
+protected:
     static void             ShowPageImpl ( IconChoicePageData* pData );
     static void             HidePageImpl ( IconChoicePageData* pData );
 
@@ -169,7 +169,7 @@ protected :
 
     short                   Ok();
 
-public :
+public:
 
     // the IconChoiceCtrl's could also be set in the Ctor
     IconChoiceDialog ( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription,

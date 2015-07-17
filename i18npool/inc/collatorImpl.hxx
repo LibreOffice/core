@@ -75,7 +75,7 @@ public:
 
 protected:
     lang::Locale nLocale;
-private :
+private:
     struct lookupTableItem {
         lang::Locale aLocale;
         OUString algorithm;

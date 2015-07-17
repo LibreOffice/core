@@ -119,7 +119,7 @@ class PortionObj : public PropStateValue
 
     friend class ParagraphObj;
 
-    protected :
+    protected:
 
         void            ImplClear();
         void            ImplConstruct( const PortionObj& rPortionObj );
@@ -128,7 +128,7 @@ class PortionObj : public PropStateValue
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
         void            ImplGetPortionValues( FontCollection& rFontCollection, bool bGetPropStateValue = false );
 
-    public :
+    public:
 
         ::com::sun::star::beans::PropertyState  meCharColor;
         ::com::sun::star::beans::PropertyState  meCharHeight;
@@ -181,7 +181,7 @@ class ParagraphObj : public PropStateValue, public SOParagraph
         MapMode         maMapModeSrc;
         MapMode         maMapModeDest;
 
-    protected :
+    protected:
 
         void            ImplConstruct( const ParagraphObj& rParagraphObj );
         void            ImplClear();
@@ -189,7 +189,7 @@ class ParagraphObj : public PropStateValue, public SOParagraph
         void            ImplGetParagraphValues( PPTExBulletProvider* pBuProv, bool bGetPropStateValue = false );
         void            ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int16 nDepth, bool bIsBullet, bool bGetPropStateValue = false );
 
-    public :
+    public:
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > maTabStop;
 
@@ -247,7 +247,7 @@ class TextObj
     boost::shared_ptr<ImplTextObj>    mpImplTextObj;
     void            ImplCalculateTextPositions();
 
-public :
+public:
     TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText > &
             rXText, int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rBuProv );
 

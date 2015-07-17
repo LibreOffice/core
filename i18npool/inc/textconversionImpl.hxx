@@ -78,7 +78,7 @@ public:
     com::sun::star::uno::Sequence< OUString > SAL_CALL
         getSupportedServiceNames()
             throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-private :
+private:
     com::sun::star::lang::Locale aLocale;
     com::sun::star::uno::Reference < com::sun::star::i18n::XExtendedTextConversion > xTC;
     com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;

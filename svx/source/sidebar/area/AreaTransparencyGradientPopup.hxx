@@ -32,7 +32,7 @@ namespace svx { namespace sidebar {
 class AreaTransparencyGradientPopup
     : public Popup
 {
-public :
+public:
     AreaTransparencyGradientPopup (
         vcl::Window* pParent,
         const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator);

@@ -41,10 +41,10 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper2<
     ::com::sun::star::security::XCertificate ,
     ::com::sun::star::lang::XUnoTunnel >
 {
-    private :
+    private:
         const CERT_CONTEXT* m_pCertContext ;
 
-    public :
+    public:
         X509Certificate_MSCryptImpl() ;
         virtual ~X509Certificate_MSCryptImpl() ;
 

@@ -33,7 +33,7 @@ class WinInetBackend : public ::cppu::WeakImplHelper2 <
         css::beans::XPropertySet,
         lang::XServiceInfo > {
 
-    public :
+    public:
 
         static WinInetBackend* createInstance();
 

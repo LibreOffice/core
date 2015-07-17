@@ -94,7 +94,7 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
 
     std::vector< PDFExtOutDevBookmarkEntry > maBookmarks;
 
-public :
+public:
 
     TYPEINFO_OVERRIDE();
     PDFExtOutDevData( const OutputDevice& rOutDev );

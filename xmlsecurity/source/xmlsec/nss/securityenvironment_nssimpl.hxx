@@ -50,7 +50,7 @@ class SecurityEnvironment_NssImpl : public ::cppu::WeakImplHelper3<
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XUnoTunnel >
 {
-private :
+private:
 
     std::list< PK11SlotInfo* > m_Slots;
     typedef std::list< PK11SlotInfo* >::const_iterator CIT_SLOTS;
@@ -63,7 +63,7 @@ private :
         std::list< SECKEYPrivateKey* >      m_tPriKeyList ;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager ;
 
-    public :
+    public:
         SecurityEnvironment_NssImpl();
         virtual ~SecurityEnvironment_NssImpl();
 

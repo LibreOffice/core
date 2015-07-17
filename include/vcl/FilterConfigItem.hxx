@@ -55,7 +55,7 @@ class VCL_DLLPUBLIC FilterConfigItem
                 ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rPropSeq,
                     const ::com::sun::star::beans::PropertyValue& rPropValue );
 
-public :
+public:
 
     FilterConfigItem( const OUString& rSubTree );
     FilterConfigItem( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pFilterData );

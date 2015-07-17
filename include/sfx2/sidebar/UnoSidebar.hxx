@@ -32,7 +32,7 @@
 class SfxUnoSidebar : public ::cppu::WeakImplHelper1< css::ui::XSidebarProvider >
 {
 
-private :
+private:
 
     const css::uno::Reference<css::frame::XFrame> xFrame;
     sfx2::sidebar::SidebarController* getSidebarController();

@@ -39,7 +39,7 @@ class ExSoundEntry
         OUString           ImplGetName() const;
         OUString           ImplGetExtension() const;
 
-    public :
+    public:
 
         bool                IsSameURL(const OUString& rURL) const;
         sal_uInt32              GetFileSize( ) const { return nFileSize; };

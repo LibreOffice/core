@@ -33,7 +33,7 @@ class LocaleBackend : public ::cppu::WeakImplHelper2 <
         css::beans::XPropertySet,
         lang::XServiceInfo > {
 
-    public :
+    public:
 
         static LocaleBackend* createInstance();
 

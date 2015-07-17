@@ -145,7 +145,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 
         SAL_DLLPRIVATE void     SetPathSize( sal_Int32 nIndex = 0 );
 
-    public :
+    public:
 
         struct SAL_DLLPRIVATE Handle
         {

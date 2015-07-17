@@ -399,7 +399,7 @@ Reference<XInputStream> ZipStorageImpl::createStream(const rtl::OUString &rPath)
 
 class WPXSvInputStreamImpl
 {
-public :
+public:
     explicit WPXSvInputStreamImpl(::com::sun::star::uno::Reference<
                          ::com::sun::star::io::XInputStream > xStream);
     ~WPXSvInputStreamImpl();

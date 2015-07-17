@@ -112,7 +112,7 @@ typedef ::cppu::WeakImplHelper4< awt::XTopWindowListener, awt::XWindowListener, 
 // This class is to process Workbook window related event
 class ScVbaEventListener : public ScVbaEventListener_BASE
 {
-public :
+public:
     ScVbaEventListener( ScVbaEventsHelper& rVbaEvents, const uno::Reference< frame::XModel >& rxModel, ScDocShell* pDocShell );
     virtual ~ScVbaEventListener();
 

@@ -35,7 +35,7 @@ namespace svx { namespace sidebar {
 */
 class SVX_DLLPUBLIC SelectionAnalyzer
 {
-public :
+public:
     static sfx2::sidebar::EnumContext::Context GetContextForSelection_SC (
         const SdrMarkList& rMarkList);
 

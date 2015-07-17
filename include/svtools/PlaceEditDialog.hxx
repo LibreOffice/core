@@ -28,7 +28,7 @@
 
 class SVT_DLLPUBLIC PlaceEditDialog : public ModalDialog
 {
-private :
+private:
     VclPtr<Edit>         m_pEDServerName;
     VclPtr<ListBox>      m_pLBServerType;
     std::shared_ptr< DetailsContainer > m_xCurrentDetails;
@@ -53,7 +53,7 @@ private :
 
     unsigned int m_nCurrentType;
 
-public :
+public:
 
      PlaceEditDialog( vcl::Window* pParent);
      PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Place> &rPlace );

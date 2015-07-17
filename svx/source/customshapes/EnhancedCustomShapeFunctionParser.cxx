@@ -844,7 +844,7 @@ class UnaryFunctionFunctor
     const ExpressionFunct   meFunct;
     ParserContextSharedPtr  mxContext;
 
-public :
+public:
 
     UnaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
         meFunct( eFunct ),
@@ -916,7 +916,7 @@ class IfFunctor
 {
     ParserContextSharedPtr  mxContext;
 
-public :
+public:
 
     explicit IfFunctor( const ParserContextSharedPtr& rContext ) :
         mxContext( rContext )

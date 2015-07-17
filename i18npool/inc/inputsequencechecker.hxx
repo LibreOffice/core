@@ -56,7 +56,7 @@ public:
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-private :
+private:
     const sal_Char *serviceName;
 
     struct lookupTableItem {

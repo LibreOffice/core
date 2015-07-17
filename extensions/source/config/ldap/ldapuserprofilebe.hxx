@@ -52,7 +52,7 @@ struct LdapProfileMutexHolder { osl::Mutex mMutex; };
   */
 class LdapUserProfileBe : private LdapProfileMutexHolder, public BackendBase
 {
-    public :
+    public:
 
         LdapUserProfileBe(const uno::Reference<uno::XComponentContext>& xContext);
         virtual ~LdapUserProfileBe() ;

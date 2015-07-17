@@ -26,7 +26,7 @@ namespace sc { namespace sidebar {
 
 class CellLineStylePopup : public svx::sidebar::Popup
 {
-public :
+public:
     CellLineStylePopup(
         vcl::Window* pParent,
         const ::boost::function<svx::sidebar::PopupControl*(svx::sidebar::PopupContainer*)>& rControlCreator);

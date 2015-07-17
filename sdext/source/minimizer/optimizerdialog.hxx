@@ -58,7 +58,7 @@
 
 class OptimizerDialog : public UnoDialog, public ConfigurationAccess
 {
-public :
+public:
 
     OptimizerDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext, css::uno::Reference< css::frame::XFrame >& rxFrame,
         css::uno::Reference< css::frame::XDispatch > rxStatusDispatcher );
@@ -70,7 +70,7 @@ public :
     sal_Int16               mnTabIndex;
     bool                mbIsReadonly;
 
-private :
+private:
     css::uno::Reference< css::frame::XFrame >         mxFrame;
 
     css::uno::Reference< css::uno::XInterface >       mxRoadmapControl;
@@ -104,7 +104,7 @@ private :
     void DeactivatePage( sal_Int16 nStep );
     void InsertRoadmapItem( const sal_Int32 nIndex, const bool bEnabled, const OUString& rLabel, const sal_Int32 nItemID );
 
-public :
+public:
 
     OptimizationStats maStats;
 

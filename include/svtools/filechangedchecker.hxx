@@ -23,7 +23,7 @@
  */
 class SVT_DLLPUBLIC FileChangedChecker
 {
-private :
+private:
     Idle                    mIdle;
     OUString            mFileName;
     TimeValue                mLastModTime;
@@ -32,7 +32,7 @@ private :
     bool SVT_DLLPRIVATE getCurrentModTime(TimeValue& o_rValue) const;
     DECL_LINK_TYPED(TimerHandler, Idle *, void);
 
-public :
+public:
     void resetTimer();
     bool hasFileChanged();
     FileChangedChecker(const OUString& rFilename, const ::boost::function0<void>& rCallback);

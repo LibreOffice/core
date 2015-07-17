@@ -44,7 +44,7 @@
 
 class InformationDialog : public UnoDialog, public ConfigurationAccess
 {
-public :
+public:
 
     InformationDialog( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
             css::uno::Reference< css::frame::XFrame >& rxFrame, const OUString& rSaveAsURL,
@@ -53,7 +53,7 @@ public :
 
     bool                execute();
 
-private :
+private:
 
     css::uno::Reference< css::frame::XFrame >         mxFrame;
     css::uno::Reference< css::io::XStream >           mxTempFile;

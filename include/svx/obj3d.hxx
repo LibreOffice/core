@@ -243,7 +243,7 @@ protected:
     // convert given basegfx::B3DPolyPolygon to screen coor
     basegfx::B2DPolyPolygon TransformToScreenCoor(const basegfx::B3DPolyPolygon& rCandidate);
 
-public :
+public:
     TYPEINFO_OVERRIDE();
 
     E3dCompoundObject();

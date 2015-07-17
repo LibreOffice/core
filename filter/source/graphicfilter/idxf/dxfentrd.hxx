@@ -325,7 +325,7 @@ class DXFLWPolyLineEntity : public DXFBasicEntity
 {
         sal_Int32   nIndex;
 
-    public :
+    public:
 
         sal_Int32   nCount;         // 90
         sal_Int32   nFlags;         // 70   1 = closed, 128 = plinegen
@@ -338,7 +338,7 @@ class DXFLWPolyLineEntity : public DXFBasicEntity
         DXFLWPolyLineEntity();
         virtual ~DXFLWPolyLineEntity();
 
-    protected :
+    protected:
 
         virtual void EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 
@@ -351,7 +351,7 @@ struct DXFEdgeType
     virtual ~DXFEdgeType(){};
     virtual bool EvaluateGroup( DXFGroupReader & /*rDGR*/ ){ return true; };
 
-    protected :
+    protected:
 
         DXFEdgeType( sal_Int32 EdgeType ):nEdgeType(EdgeType){};
 };
@@ -429,7 +429,7 @@ class DXFHatchEntity : public DXFBasicEntity
         bool    bIsInBoundaryPathContext;
         sal_Int32   nCurrentBoundaryPathIndex;
 
-    public :
+    public:
 
         DXFVector   aElevationPoint;
         sal_Int32   nFlags;                         // 70 (solid fill = 1, pattern fill = 0)
@@ -449,7 +449,7 @@ class DXFHatchEntity : public DXFBasicEntity
         DXFHatchEntity();
         virtual ~DXFHatchEntity();
 
-    protected :
+    protected:
 
         virtual void EvaluateGroup( DXFGroupReader & rDGR ) SAL_OVERRIDE;
 };

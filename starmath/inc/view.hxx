@@ -180,7 +180,7 @@ class SmCmdBoxWindow : public SfxDockingWindow
 
     DECL_LINK_TYPED(InitialFocusTimerHdl, Timer *, void);
 
-protected :
+protected:
 
     // Window
     virtual void    GetFocus() SAL_OVERRIDE;
