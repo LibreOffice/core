@@ -645,15 +645,15 @@ namespace basegfx
             return aRes;
         }
 
-        // converters for com::sun::star::drawing::PointSequence
+        // converters for css::drawing::PointSequence
 
         B2DPolyPolygon UnoPointSequenceSequenceToB2DPolyPolygon(
-            const com::sun::star::drawing::PointSequenceSequence& rPointSequenceSequenceSource,
+            const css::drawing::PointSequenceSequence& rPointSequenceSequenceSource,
             bool bCheckClosed)
         {
             B2DPolyPolygon aRetval;
-            const com::sun::star::drawing::PointSequence* pPointSequence = rPointSequenceSequenceSource.getConstArray();
-            const com::sun::star::drawing::PointSequence* pPointSeqEnd = pPointSequence + rPointSequenceSequenceSource.getLength();
+            const css::drawing::PointSequence* pPointSequence = rPointSequenceSequenceSource.getConstArray();
+            const css::drawing::PointSequence* pPointSeqEnd = pPointSequence + rPointSequenceSequenceSource.getLength();
 
             for(;pPointSequence != pPointSeqEnd; pPointSequence++)
             {
@@ -666,14 +666,14 @@ namespace basegfx
 
         void B2DPolyPolygonToUnoPointSequenceSequence(
             const B2DPolyPolygon& rPolyPolygon,
-            com::sun::star::drawing::PointSequenceSequence& rPointSequenceSequenceRetval)
+            css::drawing::PointSequenceSequence& rPointSequenceSequenceRetval)
         {
             const sal_uInt32 nCount(rPolyPolygon.count());
 
             if(nCount)
             {
                 rPointSequenceSequenceRetval.realloc(nCount);
-                com::sun::star::drawing::PointSequence* pPointSequence = rPointSequenceSequenceRetval.getArray();
+                css::drawing::PointSequence* pPointSequence = rPointSequenceSequenceRetval.getArray();
 
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {
@@ -689,10 +689,10 @@ namespace basegfx
             }
         }
 
-        // converters for com::sun::star::drawing::PolyPolygonBezierCoords (curved polygons)
+        // converters for css::drawing::PolyPolygonBezierCoords (curved polygons)
 
         B2DPolyPolygon UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
-            const com::sun::star::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource,
+            const css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource,
             bool bCheckClosed)
         {
             B2DPolyPolygon aRetval;
@@ -702,8 +702,8 @@ namespace basegfx
             {
                 OSL_ENSURE(nSequenceCount == (sal_uInt32)rPolyPolygonBezierCoordsSource.Flags.getLength(),
                     "UnoPolyPolygonBezierCoordsToB2DPolyPolygon: unequal number of Points and Flags (!)");
-                const com::sun::star::drawing::PointSequence* pPointSequence = rPolyPolygonBezierCoordsSource.Coordinates.getConstArray();
-                const com::sun::star::drawing::FlagSequence* pFlagSequence = rPolyPolygonBezierCoordsSource.Flags.getConstArray();
+                const css::drawing::PointSequence* pPointSequence = rPolyPolygonBezierCoordsSource.Coordinates.getConstArray();
+                const css::drawing::FlagSequence* pFlagSequence = rPolyPolygonBezierCoordsSource.Flags.getConstArray();
 
                 for(sal_uInt32 a(0); a < nSequenceCount; a++)
                 {
@@ -723,7 +723,7 @@ namespace basegfx
 
         void B2DPolyPolygonToUnoPolyPolygonBezierCoords(
             const B2DPolyPolygon& rPolyPolygon,
-            com::sun::star::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsRetval)
+            css::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsRetval)
         {
             const sal_uInt32 nCount(rPolyPolygon.count());
 
@@ -734,8 +734,8 @@ namespace basegfx
                 rPolyPolygonBezierCoordsRetval.Flags.realloc((sal_Int32)nCount);
 
                 // get pointers to arrays
-                com::sun::star::drawing::PointSequence* pPointSequence = rPolyPolygonBezierCoordsRetval.Coordinates.getArray();
-                com::sun::star::drawing::FlagSequence*  pFlagSequence = rPolyPolygonBezierCoordsRetval.Flags.getArray();
+                css::drawing::PointSequence* pPointSequence = rPolyPolygonBezierCoordsRetval.Coordinates.getArray();
+                css::drawing::FlagSequence*  pFlagSequence = rPolyPolygonBezierCoordsRetval.Flags.getArray();
 
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {

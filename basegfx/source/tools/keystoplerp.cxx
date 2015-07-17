@@ -50,7 +50,7 @@ namespace basegfx
             validateInput(maKeyStops);
         }
 
-        KeyStopLerp::KeyStopLerp( const ::com::sun::star::uno::Sequence<double>& rKeyStops ) :
+        KeyStopLerp::KeyStopLerp( const ::css::uno::Sequence<double>& rKeyStops ) :
             maKeyStops(rKeyStops.getLength()),
             mnLastIndex(0)
         {

@@ -334,7 +334,7 @@ namespace basegfx
             return output;
         }
 
-        ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const ::com::sun::star::geometry::AffineMatrix3D& input )
+        ::basegfx::B3DHomMatrix homMatrixFromAffineMatrix3D( const ::css::geometry::AffineMatrix3D& input )
         {
             ::basegfx::B3DHomMatrix output;
 
