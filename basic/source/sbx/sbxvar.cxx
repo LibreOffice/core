@@ -322,20 +322,19 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     return aToolString;
 }
 
-// Create a simple hashcode: the first six characters were evaluated.
+// Create a simple hashcode: the first six characters are evaluated.
 
 sal_uInt16 SbxVariable::MakeHashCode( const OUString& rName )
 {
     sal_uInt16 n = 0;
-    sal_Int32 i = 0;
-    sal_uInt16 nLen = rName.getLength();
+    sal_Int32 nLen = rName.getLength();
     if( nLen > 6 )
     {
         nLen = 6;
     }
-     while( nLen-- )
+    for( sal_Int32 i=0; i<nLen; ++i )
     {
-        sal_uInt8 c = (sal_uInt8)rName[i++];
+        sal_uInt8 c = static_cast<sal_uInt8>(rName[i]);
         // If we have a commen sigen break!!
         if( c >= 0x80 )
         {
