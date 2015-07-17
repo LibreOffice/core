@@ -230,7 +230,7 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
     nCount = 0;
     for ( ny = 0; ny < nHeight; ny++ )
     {
-        if (m_rPCX.GetError() || m_rPCX.IsEof())
+        if (!m_rPCX.good())
         {
             nStatus = false;
             break;
@@ -256,7 +256,7 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
                     nx--;
                     nCount--;
                 }
-                while ( nx > 0 )
+                while (nx > 0 && m_rPCX.good())
                 {
                     m_rPCX.ReadUChar( nDat );
                     if ( ( nDat & 0xc0 ) == 0xc0 )
