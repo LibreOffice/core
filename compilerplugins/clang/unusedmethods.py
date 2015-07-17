@@ -57,6 +57,7 @@ exclusionSet = set([
     # instantiated from templates, not sure why it is not being picked up
     "class basegfx::B2DPolygon OutputDevice::PixelToLogic(const class basegfx::B2DPolygon &,const class MapMode &) const",
     "type-parameter-0-0 * detail::cloner::clone(type-parameter-0-0 *const)",
+    "const class rtl::OUString writerperfect::DocumentHandlerFor::name()",
     # only used by OSX build
     "void StyleSettings::SetHideDisabledMenuItems(_Bool)",
     ])
@@ -87,20 +88,38 @@ for clazz in sorted(definitionSet - callSet - exclusionSet):
          or (clazz.find("::Type()") != -1)):
         continue
     # if this method is const, and there is a non-const variant of it, and the non-const variant is in use, then leave it alone
-    if (clazz.endswith(" const")
-        and clazz[6:len(clazz)-6] in definitionSet
-        and clazz[6:len(clazz)-6] in callSet):
-       continue
+    if (clazz.startswith("const ") and clazz.endswith(" const")):
+        clazz2 = clazz[6:len(clazz)-12]
+        if (clazz2 in callSet):
+           continue
+    elif (clazz.endswith(" const")):
+        clazz2 = clazz[:len(clazz)-6]
+        if (clazz2 in callSet):
+           continue
+    if (clazz.endswith(" const") and clazz.find("::iterator") != -1):
+        clazz2 = clazz.replace("::const_iterator", "::iterator")
+        clazz2 = clazz2[:len(clazz)-6] # strip off " const"
+        if (clazz2 in callSet):
+           continue
     # if this method is non-const, and there is a const variant of it, and the const variant is in use, then leave it alone
-    if ((not clazz.endswith(" const"))
-        and ("const " + clazz + " const") in definitionSet
-        and ("const " + clazz + " const") in callSet):
+    if ((not clazz.endswith(" const")) and ("const " + clazz + " const") in callSet):
        continue
+    if ((not clazz.endswith(" const")) and clazz.find("::iterator") != -1):
+        clazz2 = clazz.replace("::iterator", "::const_iterator") + " const"
+        if (clazz2 in callSet):
+           continue
     # There is lots of macro magic going on in /home/noel/libo4/include/sax/fshelper.hxx that should be using C++11 varag templates
     if clazz.startswith("void sax_fastparser::FastSerializerHelper::"):
        continue
     # used by Windows build
-    if clazz.find("DdeTopic::") != -1 or clazz.find("DdeData::") != -1 or clazz.find("DdeService::") != -1:
+    if (clazz.find("DdeTopic::") != -1 
+        or clazz.find("DdeData::") != -1
+        or clazz.find("DdeService::") != -1
+        or clazz.find("DdeTransaction::") != -1
+        or clazz.find("DdeConnection::") != -1
+        or clazz.find("DdeLink::") != -1
+        or clazz.find("DdeItem::") != -1
+        or clazz.find("DdeGetPutItem::") != -1):
        continue
     print clazz
 

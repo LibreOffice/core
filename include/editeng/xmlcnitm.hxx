@@ -41,8 +41,6 @@ public:
     virtual ~SvXMLAttrContainerItem();
 
     virtual bool operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    using SfxPoolItem::Compare;
-    virtual int Compare( const SfxPoolItem &rWith ) const SAL_OVERRIDE;
 
     virtual bool GetPresentation(
                                 SfxItemPresentation ePresentation,

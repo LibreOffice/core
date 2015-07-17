@@ -42,9 +42,6 @@ public:
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
-    using SfxPoolItem::Compare;
-    virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
-
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
@@ -94,9 +91,6 @@ public:
     virtual ~CntUInt16Item() {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
-
-    using SfxPoolItem::Compare;
-    virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
@@ -148,9 +142,6 @@ public:
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
 
-    using SfxPoolItem::Compare;
-    virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
-
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,
                                                 OUString & rText,
@@ -200,9 +191,6 @@ public:
     virtual ~CntUInt32Item() {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const SAL_OVERRIDE;
-
-    using SfxPoolItem::Compare;
-    virtual int Compare(const SfxPoolItem & rWith) const SAL_OVERRIDE;
 
     virtual bool GetPresentation(SfxItemPresentation,
                                                 SfxMapUnit, SfxMapUnit,

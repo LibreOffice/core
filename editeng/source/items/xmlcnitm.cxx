@@ -56,13 +56,6 @@ bool SvXMLAttrContainerItem::operator==( const SfxPoolItem& rItem ) const
     return *pImpl == *static_cast<const SvXMLAttrContainerItem&>(rItem).pImpl;
 }
 
-int SvXMLAttrContainerItem::Compare( const SfxPoolItem &/*rWith*/ ) const
-{
-    DBG_ASSERT( false, "not yet implemented" );
-
-    return 0;
-}
-
 bool SvXMLAttrContainerItem::GetPresentation(
                     SfxItemPresentation /*ePresentation*/,
                     SfxMapUnit /*eCoreMetric*/,

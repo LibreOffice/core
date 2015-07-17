@@ -169,7 +169,6 @@ public:
     virtual bool             operator==( const SfxPoolItem& ) const = 0;
     bool                     operator!=( const SfxPoolItem& rItem ) const
                              { return !(*this == rItem); }
-    virtual int              Compare( const SfxPoolItem &rWith ) const;
 
     /**  @return true if it has a valid string representation */
     virtual bool             GetPresentation( SfxItemPresentation ePresentation,

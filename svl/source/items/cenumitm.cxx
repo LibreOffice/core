@@ -165,14 +165,6 @@ bool SfxBoolItem::operator ==(const SfxPoolItem & rItem) const
 }
 
 // virtual
-int SfxBoolItem::Compare(const SfxPoolItem & rWith) const
-{
-    DBG_ASSERT(rWith.ISA(SfxBoolItem), "SfxBoolItem::Compare(): Bad type");
-    return (m_bValue == static_cast<SfxBoolItem const*>(&rWith)->m_bValue) ?
-               0 : m_bValue ? -1 : 1;
-}
-
-// virtual
 bool SfxBoolItem::GetPresentation(SfxItemPresentation,
                                                  SfxMapUnit, SfxMapUnit,
                                                  OUString & rText,

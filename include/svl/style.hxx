@@ -75,7 +75,6 @@ class SVL_DLLPUBLIC SfxStyleSheetBase : public comphelper::OWeakTypeObject
 {
 private:
     friend class SfxStyleSheetBasePool;
-    SVL_DLLPRIVATE static SfxStyleSheetBasePool& implGetStaticPool();
 
 protected:
     SfxStyleSheetBasePool*  pPool;          // related pool
@@ -217,8 +216,6 @@ protected:
 public:
                                 SfxStyleSheetBasePool( SfxItemPool& );
                                 SfxStyleSheetBasePool( const SfxStyleSheetBasePool& );
-
-    const OUString&             GetAppName() const { return aAppName;   }
 
     SfxItemPool&                GetPool() { return rPool;}
     const SfxItemPool&          GetPool() const { return rPool;}

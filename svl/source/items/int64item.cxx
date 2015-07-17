@@ -33,19 +33,6 @@ bool SfxInt64Item::operator== ( const SfxPoolItem& rItem ) const
     return mnValue == static_cast<const SfxInt64Item&>(rItem).mnValue;
 }
 
-int SfxInt64Item::Compare( const SfxPoolItem& r ) const
-{
-    sal_Int64 nOther = static_cast<const SfxInt64Item&>(r).mnValue;
-
-    if (mnValue < nOther)
-        return -1;
-
-    if (mnValue > nOther)
-        return 1;
-
-    return 0;
-}
-
 bool SfxInt64Item::GetPresentation(
     SfxItemPresentation, SfxMapUnit, SfxMapUnit, OUString& rText,
     const IntlWrapper* /*pIntlWrapper*/ ) const

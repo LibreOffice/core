@@ -124,12 +124,19 @@ static bool startsWith(const std::string& s, const char* other)
     return s.compare(0, strlen(other), other) == 0;
 }
 
-static bool isStandardStuff(const std::string& s)
+static bool isStandardStuff(const std::string& input)
 {
+    std::string s = input;
+    if (startsWith(s,"class "))
+        s = s.substr(6);
+    else if (startsWith(s,"struct "))
+        s = s.substr(7);
     // ignore UNO interface definitions, cannot change those
     return startsWith(s, "com::sun::star::")
           // ignore stuff in the C++ stdlib and boost
           || startsWith(s, "std::") || startsWith(s, "boost::") || startsWith(s, "class boost::") || startsWith(s, "__gnu_debug::")
+          // external library
+          || startsWith(s, "mdds::")
           // can't change our rtl layer
           || startsWith(s, "rtl::")
           // ignore anonymous namespace stuff, it is compilation-unit-local and the compiler will detect any
