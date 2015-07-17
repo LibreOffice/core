@@ -62,9 +62,6 @@ public:
     static SfxProgress*     GetActiveProgress( SfxObjectShell *pDocSh = 0 );
     static void             EnterLock();
     static void             LeaveLock();
-
-    DECL_DLLPRIVATE_STATIC_LINK( SfxProgress, SetStateHdl, PlugInLoadStatus* );
-    DECL_DLLPRIVATE_STATIC_LINK( SfxProgress, DefaultBindingProgress, SvProgressArg* );
 };
 
 #endif

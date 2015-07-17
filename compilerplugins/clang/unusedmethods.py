@@ -89,16 +89,16 @@ for clazz in sorted(definitionSet - callSet - exclusionSet):
         continue
     # if this method is const, and there is a non-const variant of it, and the non-const variant is in use, then leave it alone
     if (clazz.startswith("const ") and clazz.endswith(" const")):
-        clazz2 = clazz[6:len(clazz)-12]
+        clazz2 = clazz[6:len(clazz)-6]
         if (clazz2 in callSet):
            continue
     elif (clazz.endswith(" const")):
-        clazz2 = clazz[:len(clazz)-6]
+        clazz2 = clazz[:len(clazz)-6] # strip off " const"
         if (clazz2 in callSet):
            continue
     if (clazz.endswith(" const") and clazz.find("::iterator") != -1):
-        clazz2 = clazz.replace("::const_iterator", "::iterator")
-        clazz2 = clazz2[:len(clazz)-6] # strip off " const"
+        clazz2 = clazz[:len(clazz)-6] # strip off " const"
+        clazz2 = clazz2.replace("::const_iterator", "::iterator")
         if (clazz2 in callSet):
            continue
     # if this method is non-const, and there is a const variant of it, and the const variant is in use, then leave it alone
@@ -120,6 +120,10 @@ for clazz in sorted(definitionSet - callSet - exclusionSet):
         or clazz.find("DdeLink::") != -1
         or clazz.find("DdeItem::") != -1
         or clazz.find("DdeGetPutItem::") != -1):
+       continue
+    # the include/tools/rtti.hxx stuff
+    if (clazz.find("::StaticType()") != -1
+        or clazz.find("::IsOf(void *(*)(void))") != -1):
        continue
     print clazz
 
