@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_e1231304",
+        "filename": "filter/source/graphicfilter/itiff/itiff.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1217,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-07-17T11:30:27Z",
+      "side": 1,
+      "message": "I tend to use std::set for loop checks like this, because it allows to do both the insertion and the check with a single call...",
+      "revId": "8722995a301241d37d768d8af4eb8250ff252a71",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
