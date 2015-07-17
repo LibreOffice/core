@@ -89,9 +89,8 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleC
 // XInterface -------------------------------------------------------------
 
     /** Queries for a new interface. */
-    ::com::sun::star::uno::Any SAL_CALL AccessibleGridControlHeaderCell::queryInterface(
-            const ::com::sun::star::uno::Type& rType )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+    css::uno::Any SAL_CALL AccessibleGridControlHeaderCell::queryInterface( const css::uno::Type& rType )
+        throw ( css::uno::RuntimeException, std::exception )
     {
         Any aRet = AccessibleGridControlCell::queryInterface(rType);
         return aRet;
@@ -109,7 +108,7 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleC
         AccessibleGridControlCell::release();
     }
         /** @return  The XAccessibleContext interface of this object. */
-    Reference< com::sun::star::accessibility::XAccessibleContext > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleContext() throw ( RuntimeException, std::exception )
+    Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleContext() throw ( RuntimeException, std::exception )
     {
         ensureIsAlive();
         return this;
@@ -119,7 +118,7 @@ Reference<XAccessible > SAL_CALL AccessibleGridControlHeaderCell::getAccessibleC
 
 /** Grabs the focus to the column header. */
 void SAL_CALL AccessibleGridControlHeaderCell::grabFocus()
-    throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
 }
 
@@ -127,7 +126,7 @@ void SAL_CALL AccessibleGridControlHeaderCell::grabFocus()
         The name of this class.
 */
 OUString SAL_CALL AccessibleGridControlHeaderCell::getImplementationName()
-    throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+    throw ( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.accessibility.AccessibleGridControlHeaderCell" );
 }

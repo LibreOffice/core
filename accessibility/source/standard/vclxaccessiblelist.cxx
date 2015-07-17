@@ -42,12 +42,12 @@ using namespace ::accessibility;
 namespace
 {
     void checkSelection_Impl( sal_Int32 _nIndex, const IComboListBoxHelper& _rListBox, bool bSelected )
-        throw (::com::sun::star::lang::IndexOutOfBoundsException)
+        throw (css::lang::IndexOutOfBoundsException)
     {
         sal_Int32 nCount = bSelected ? (sal_Int32)_rListBox.GetSelectEntryCount()
                                      : (sal_Int32)_rListBox.GetEntryCount();
         if ( _nIndex < 0 || _nIndex >= nCount )
-            throw ::com::sun::star::lang::IndexOutOfBoundsException();
+            throw css::lang::IndexOutOfBoundsException();
     }
 }
 
@@ -295,7 +295,7 @@ void VCLXAccessibleList::UpdateSelection_Impl_Acc(bool bHasDropDownList)
     }
 }
 
-void VCLXAccessibleList::NotifyListItem(::com::sun::star::uno::Any& val)
+void VCLXAccessibleList::NotifyListItem(css::uno::Any& val)
 {
     Reference< XAccessible > xCurItem;
     val >>= xCurItem;
@@ -615,7 +615,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleParent(  )
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleIndexInParent()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if (m_nIndexInParent != DEFAULT_INDEX_IN_PARENT)
         return m_nIndexInParent;

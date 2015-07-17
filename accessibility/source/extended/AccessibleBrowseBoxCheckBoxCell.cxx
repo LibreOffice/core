@@ -30,7 +30,7 @@ namespace accessibility
 
     AccessibleCheckBoxCell::AccessibleCheckBoxCell(const Reference<XAccessible >& _rxParent,
                                 IAccessibleTableProvider& _rBrowseBox,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+                                const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
                                 sal_Int32 _nRowPos,
                                 sal_uInt16 _nColPos
                                 ,const TriState& _eState,
@@ -114,23 +114,23 @@ namespace accessibility
     }
 
     // XAccessibleContext
-    sal_Int32 SAL_CALL AccessibleCheckBoxCell::getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 SAL_CALL AccessibleCheckBoxCell::getAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception)
     {
         return 0;
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL AccessibleCheckBoxCell::getAccessibleChild( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
+    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL AccessibleCheckBoxCell::getAccessibleChild( sal_Int32 ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
     {
-        throw ::com::sun::star::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException();
     }
 
-    OUString SAL_CALL AccessibleCheckBoxCell::getImplementationName() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+    OUString SAL_CALL AccessibleCheckBoxCell::getImplementationName() throw ( css::uno::RuntimeException, std::exception )
     {
         return OUString( "com.sun.star.comp.svtools.TableCheckBoxCell" );
     }
 
     sal_Int32 SAL_CALL AccessibleCheckBoxCell::getAccessibleIndexInParent()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+            throw ( css::uno::RuntimeException, std::exception )
     {
         ::osl::MutexGuard aGuard( getOslMutex() );
 

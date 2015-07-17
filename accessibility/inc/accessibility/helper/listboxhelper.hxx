@@ -176,7 +176,7 @@ public:
         return m_aComboListBox.GetIndexForPoint( rPoint, nPos );
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >
+    css::uno::Reference< css::datatransfer::clipboard::XClipboard >
         GetClipboard() SAL_OVERRIDE
     {
         return m_aComboListBox.GetClipboard();

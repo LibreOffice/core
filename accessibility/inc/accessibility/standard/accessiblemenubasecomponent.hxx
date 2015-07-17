@@ -45,8 +45,8 @@ class AccessibleStateSetHelper;
 typedef ::comphelper::OAccessibleExtendedComponentHelper    AccessibleExtendedComponentHelper_BASE;
 
 typedef ::cppu::ImplHelper2<
-    ::com::sun::star::accessibility::XAccessible,
-    ::com::sun::star::lang::XServiceInfo > OAccessibleMenuBaseComponent_BASE;
+    css::accessibility::XAccessible,
+    css::lang::XServiceInfo > OAccessibleMenuBaseComponent_BASE;
 
 class OAccessibleMenuBaseComponent : public AccessibleExtendedComponentHelper_BASE,
                                      public OAccessibleMenuBaseComponent_BASE
@@ -59,7 +59,7 @@ private:
     VCLExternalSolarLock*   m_pExternalLock;
 
 protected:
-    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > AccessibleChildren;
+    typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
     AccessibleChildren      m_aAccessibleChildren;
     Menu*                   m_pMenu;
@@ -92,8 +92,8 @@ protected:
 
     sal_Int32               GetChildCount();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChild( sal_Int32 i );
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChildAt( const ::com::sun::star::awt::Point& rPoint );
+    css::uno::Reference< css::accessibility::XAccessible > GetChild( sal_Int32 i );
+    css::uno::Reference< css::accessibility::XAccessible > GetChildAt( const css::awt::Point& rPoint );
 
     void                    InsertChild( sal_Int32 i );
     void                    RemoveChild( sal_Int32 i );
@@ -110,11 +110,11 @@ protected:
     virtual void            Select();
     virtual void            DeSelect();
     virtual void            Click();
-    virtual bool        IsPopupMenuOpen();
+    virtual bool            IsPopupMenuOpen();
 
     DECL_LINK( MenuEventListener, VclSimpleEvent* );
 
-    void            ProcessMenuEvent( const VclMenuEvent& rVclMenuEvent );
+    void                    ProcessMenuEvent( const VclMenuEvent& rVclMenuEvent );
 
     virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) = 0;
 
@@ -134,13 +134,13 @@ public:
     DECLARE_XTYPEPROVIDER()
 
     // XServiceInfo
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessible
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleContext
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_ACCESSIBILITY_INC_ACCESSIBILITY_STANDARD_ACCESSIBLEMENUBASECOMPONENT_HXX

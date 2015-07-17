@@ -33,9 +33,9 @@ namespace accessibility
     using namespace ::svt;
 
     EditBrowseBoxTableCell::EditBrowseBoxTableCell(
-                const com::sun::star::uno::Reference< XAccessible >& _rxParent,
-                const com::sun::star::uno::Reference< XAccessible >& _rxOwningAccessible,
-                const com::sun::star::uno::Reference< XAccessibleContext >& _xControlChild,
+                const css::uno::Reference< XAccessible >& _rxParent,
+                const css::uno::Reference< XAccessible >& _rxOwningAccessible,
+                const css::uno::Reference< XAccessibleContext >& _xControlChild,
                 IAccessibleTableProvider& _rBrowseBox,
                 const Reference< XWindow >& _xFocusWindow,
                 sal_Int32 _nRowPos,
@@ -55,7 +55,7 @@ namespace accessibility
         }
     }
 
-    OUString SAL_CALL EditBrowseBoxTableCell::getImplementationName() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
+    OUString SAL_CALL EditBrowseBoxTableCell::getImplementationName() throw ( css::uno::RuntimeException, std::exception )
     {
         return OUString( "com.sun.star.comp.svtools.TableCellProxy" );
     }
@@ -126,7 +126,7 @@ namespace accessibility
         return baseGetAccessibleChildCount();
     }
 
-    Reference< XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         SolarMethodGuard aGuard( *this );
         return baseGetAccessibleChild( i );

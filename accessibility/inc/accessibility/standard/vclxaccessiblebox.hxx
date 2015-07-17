@@ -29,9 +29,9 @@
 
 
 typedef ::cppu::ImplHelper3<
-    ::com::sun::star::accessibility::XAccessible,
-    ::com::sun::star::accessibility::XAccessibleValue,
-    ::com::sun::star::accessibility::XAccessibleAction
+    css::accessibility::XAccessible,
+    css::accessibility::XAccessibleValue,
+    css::accessibility::XAccessibleAction
     > VCLXAccessibleBox_BASE;
 
 
@@ -62,9 +62,8 @@ public:
 
     // XAccessible
 
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
-            getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
+            getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleContext
 
@@ -73,48 +72,47 @@ public:
         boxes.
     */
     sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** For drop down list boxes the text field is a not editable
         <type>VCLXAccessibleTextField</type>, for combo boxes it is an
         editable <type>VLCAccessibleEdit</type>.
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
+    css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 i)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** The role is always <const
         scope="com::sun::star::accessibility">AccessibleRole::COMBO_BOX</const>.
     */
     sal_Int16 SAL_CALL getAccessibleRole()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     sal_Int32 SAL_CALL getAccessibleIndexInParent()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleAction
 
     /** There is one action for drop down boxes and none for others.
     */
     virtual sal_Int32 SAL_CALL getAccessibleActionCount()
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** The action for drop down boxes lets the user toggle the visibility of the
         popup menu.
     */
     virtual sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IndexOutOfBoundsException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** The returned string is associated with resource
         <const>RID_STR_ACC_ACTION_TOGGLEPOPUP</const>.
     */
     virtual OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
-        throw (::com::sun::star::lang::IndexOutOfBoundsException,
-            ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IndexOutOfBoundsException,
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /** No keybinding returned so far.
     */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleKeyBinding > SAL_CALL
+    virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL
             getAccessibleActionKeyBinding( sal_Int32 nIndex )
-                throw (::com::sun::star::lang::IndexOutOfBoundsException,
-                       ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+                throw (css::lang::IndexOutOfBoundsException,
+                       css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XComponent
 
@@ -125,18 +123,18 @@ public:
 
     // XAccessibleValue
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getCurrentValue( )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getCurrentValue( )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual sal_Bool SAL_CALL setCurrentValue(
-        const ::com::sun::star::uno::Any& aNumber )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Any& aNumber )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getMaximumValue(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getMaximumValue(  )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getMinimumValue(  )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getMinimumValue(  )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 protected:
     /** Specifies whether the box is a combo box or a list box.  List boxes
         have multi selection.
@@ -147,11 +145,11 @@ protected:
     bool m_bIsDropDownBox;
 
     /// The child that represents the text field if there is one.
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>
+    css::uno::Reference< css::accessibility::XAccessible>
         m_xText;
 
     /// The child that contains the items of this box.
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>
+    css::uno::Reference< css::accessibility::XAccessible>
         m_xList;
 
     /** This flag specifies whether an object has a text field as child

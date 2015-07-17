@@ -45,18 +45,15 @@ public:
     WeakReference< XAccessible >                                m_aCreator;
 
     /** The data table child. */
-    Reference<
-        ::com::sun::star::accessibility::XAccessible >          mxTable;
+    Reference< css::accessibility::XAccessible >                mxTable;
     AccessibleBrowseBoxTable*                                   m_pTable;
 
     /** The header bar for rows ("handle column"). */
-    Reference<
-        ::com::sun::star::accessibility::XAccessible >          mxRowHeaderBar;
+    Reference< css::accessibility::XAccessible >                mxRowHeaderBar;
     AccessibleBrowseBoxHeaderBar*                               m_pRowHeaderBar;
 
     /** The header bar for columns (first row of the table). */
-    Reference<
-        ::com::sun::star::accessibility::XAccessible >          mxColumnHeaderBar;
+    Reference< css::accessibility::XAccessible >                mxColumnHeaderBar;
     AccessibleBrowseBoxHeaderBar*                               m_pColumnHeaderBar;
 };
 

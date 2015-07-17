@@ -41,7 +41,7 @@ private:
 
 protected:
     // OCommonAccessibleComponent
-    virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+    virtual css::awt::Rectangle implGetBounds(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     // XComponent
     virtual void SAL_CALL   disposing() SAL_OVERRIDE;
@@ -51,8 +51,8 @@ public:
     virtual ~VCLXAccessibleTabPageWindow();
 
     // XAccessibleContext
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

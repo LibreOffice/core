@@ -43,10 +43,10 @@
 
 namespace
 {
-    void checkIndex_Impl( sal_Int32 _nIndex, const OUString& _sText ) throw (::com::sun::star::lang::IndexOutOfBoundsException)
+    void checkIndex_Impl( sal_Int32 _nIndex, const OUString& _sText ) throw (css::lang::IndexOutOfBoundsException)
     {
         if ( _nIndex < 0 || _nIndex > _sText.getLength() )
-            throw ::com::sun::star::lang::IndexOutOfBoundsException();
+            throw css::lang::IndexOutOfBoundsException();
     }
 }
 
@@ -113,8 +113,8 @@ void VCLXAccessibleListItem::SetVisible( bool _bVisible )
 }
 
 void VCLXAccessibleListItem::NotifyAccessibleEvent( sal_Int16 _nEventId,
-                                                    const ::com::sun::star::uno::Any& _aOldValue,
-                                                    const ::com::sun::star::uno::Any& _aNewValue )
+                                                    const css::uno::Any& _aOldValue,
+                                                    const css::uno::Any& _aNewValue )
 {
     AccessibleEventObject aEvt;
     aEvt.Source = *this;
@@ -536,7 +536,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, s
     return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
 }
 
-::com::sun::star::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -544,7 +544,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, s
     return OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
 }
 
-::com::sun::star::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -552,7 +552,7 @@ OUString SAL_CALL VCLXAccessibleListItem::getTextRange( sal_Int32 nStartIndex, s
     return OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
 }
 
-::com::sun::star::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL VCLXAccessibleListItem::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -630,7 +630,7 @@ void SAL_CALL VCLXAccessibleListItem::removeAccessibleEventListener( const Refer
 // initial implementation and has to be substituted by code that determines
 // the color that is actually used.
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getForeground()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return COL_BLACK;
 }
@@ -639,7 +639,7 @@ sal_Int32 SAL_CALL VCLXAccessibleListItem::getForeground()
 // initial implementation and has to be substituted by code that determines
 // the color that is actually used.
 sal_Int32 SAL_CALL VCLXAccessibleListItem::getBackground()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return COL_WHITE;
 }

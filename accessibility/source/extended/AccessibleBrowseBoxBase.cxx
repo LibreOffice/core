@@ -50,7 +50,7 @@ using namespace com::sun::star::accessibility::AccessibleStateType;
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
         const Reference< XAccessible >& rxParent,
         IAccessibleTableProvider&                      rBrowseBox,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
         AccessibleBrowseBoxObjType      eObjType ) :
     AccessibleBrowseBoxImplHelper( m_aMutex ),
     mxParent( rxParent ),
@@ -68,7 +68,7 @@ AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
         const Reference< XAccessible >& rxParent,
         IAccessibleTableProvider&                      rBrowseBox,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
         AccessibleBrowseBoxObjType      eObjType,
         const OUString&          rName,
         const OUString&          rDescription ) :
@@ -243,7 +243,7 @@ awt::Size SAL_CALL AccessibleBrowseBoxBase::getSize()
     return AWTSize( getBoundingBox().GetSize() );
 }
 
-void SAL_CALL AccessibleBrowseBoxBase::focusGained( const ::com::sun::star::awt::FocusEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleBrowseBoxBase::focusGained( const css::awt::FocusEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     com::sun::star::uno::Any aFocused;
     com::sun::star::uno::Any aEmpty;
@@ -253,7 +253,7 @@ void SAL_CALL AccessibleBrowseBoxBase::focusGained( const ::com::sun::star::awt:
 }
 
 
-void SAL_CALL AccessibleBrowseBoxBase::focusLost( const ::com::sun::star::awt::FocusEvent& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleBrowseBoxBase::focusLost( const css::awt::FocusEvent& ) throw (css::uno::RuntimeException, std::exception)
 {
     com::sun::star::uno::Any aFocused;
     com::sun::star::uno::Any aEmpty;
@@ -484,18 +484,18 @@ sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
     return nRole;
 }
 
-Reference<XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleAtPoint( const ::com::sun::star::awt::Point& )
+Reference<XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleAtPoint( const css::awt::Point& )
         throw ( uno::RuntimeException, std::exception )
 {
     return NULL;
 }
 
-void SAL_CALL AccessibleBrowseBoxBase::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleBrowseBoxBase::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
 {
     m_xFocusWindow = NULL;
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
@@ -521,7 +521,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun:
     return nColor;
 }
 
-sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );

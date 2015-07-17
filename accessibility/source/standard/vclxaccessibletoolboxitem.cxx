@@ -273,7 +273,7 @@ Any SAL_CALL VCLXAccessibleToolBoxItem::queryInterface( const Type& _rType ) thr
         && ( !m_pToolBox || m_pToolBox->GetButtonType() == ButtonType::SYMBOLONLY ) )
         return Any();
 
-    ::com::sun::star::uno::Any aReturn = AccessibleTextHelper_BASE::queryInterface( _rType );
+    css::uno::Any aReturn = AccessibleTextHelper_BASE::queryInterface( _rType );
     if ( !aReturn.hasValue() )
         aReturn = VCLXAccessibleToolBoxItem_BASE::queryInterface( _rType );
     return aReturn;
@@ -329,7 +329,7 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChildCount(  ) throw 
     return m_xChild.is() ? 1 : 0;
 }
 
-Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChild( sal_Int32 i ) throw (RuntimeException,  com::sun::star::lang::IndexOutOfBoundsException, std::exception)
+Reference< XAccessible > SAL_CALL VCLXAccessibleToolBoxItem::getAccessibleChild( sal_Int32 i ) throw (RuntimeException,  css::lang::IndexOutOfBoundsException, std::exception)
 {
     OContextEntryGuard aGuard( this );
 

@@ -23,33 +23,32 @@
 
 namespace accessibility
 {
-    class AccessibleGridControlHeaderCell : public AccessibleGridControlCell, public ::com::sun::star::accessibility::XAccessible
+    class AccessibleGridControlHeaderCell : public AccessibleGridControlCell, public css::accessibility::XAccessible
     {
         sal_Int32   m_nColumnRowId;
     public:
         AccessibleGridControlHeaderCell(sal_Int32 _nColumnRowId,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxParent,
+                        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
                         ::svt::table::IAccessibleTable& _rTable,
                         ::svt::table::AccessibleTableControlObjType  _eObjType);
         /** @return  The count of visible children. */
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /** @return  The XAccessible interface of the specified child. */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL
-            getAccessibleChild( sal_Int32 nChildIndex ) throw ( ::com::sun::star::lang::IndexOutOfBoundsException,::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+            getAccessibleChild( sal_Int32 nChildIndex ) throw ( css::lang::IndexOutOfBoundsException,css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /** @return  The index of this object among the parent's children. */
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /** Grabs the focus to the GridControl. */
-        virtual void SAL_CALL grabFocus() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL grabFocus() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XInterface
 
         /** Queries for a new interface. */
-        ::com::sun::star::uno::Any SAL_CALL queryInterface(
-                const ::com::sun::star::uno::Type& rType )
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
+            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /** Aquires the object (calls acquire() on base class). */
         virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
@@ -59,15 +58,14 @@ namespace accessibility
         // XAccessible
 
         /** @return  The XAccessibleContext interface of this object. */
-        virtual ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
         getAccessibleContext()
-            throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /** @return
                 The name of this class.
         */
-        virtual OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         /** Creates a new AccessibleStateSetHelper and fills it with states of the
             current object.

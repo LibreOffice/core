@@ -59,7 +59,7 @@ namespace accessibility
         virtual bool            IsInDropDown() const = 0;
         virtual Rectangle       GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const = 0;
         virtual long            GetIndexForPoint( const Point& rPoint, sal_Int32 & nPos ) const = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >
+        virtual css::uno::Reference< css::datatransfer::clipboard::XClipboard >
                                 GetClipboard() = 0;
     };
 }

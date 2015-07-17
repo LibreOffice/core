@@ -64,11 +64,11 @@ namespace accessibility {
 
 
 typedef ::cppu::WeakAggComponentImplHelper5<
-            ::com::sun::star::accessibility::XAccessibleContext,
-            ::com::sun::star::accessibility::XAccessibleComponent,
-            ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
-        ::com::sun::star::awt::XFocusListener,
-            ::com::sun::star::lang::XServiceInfo >
+            css::accessibility::XAccessibleContext,
+            css::accessibility::XAccessibleComponent,
+            css::accessibility::XAccessibleEventBroadcaster,
+            css::awt::XFocusListener,
+            css::lang::XServiceInfo >
         AccessibleBrowseBoxImplHelper;
 
 /** The BrowseBox accessible objects inherit from this base class. It
@@ -89,10 +89,10 @@ public:
         @param eNameText  The constant for the name text.
         @param eDescrText  The constant for the description text. */
     AccessibleBrowseBoxBase(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >& rxParent,
+        const css::uno::Reference<
+                  css::accessibility::XAccessible >& rxParent,
         ::svt::IAccessibleTableProvider&                  rBrowseBox,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
         ::svt::AccessibleBrowseBoxObjType  eObjType );
 
     /** Constructor sets specified name and description.
@@ -101,10 +101,10 @@ public:
         @param rName  The name of this object.
         @param rDescription  The description text of this object. */
     AccessibleBrowseBoxBase(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >& rxParent,
+        const css::uno::Reference<
+                  css::accessibility::XAccessible >& rxParent,
         ::svt::IAccessibleTableProvider&                  rBrowseBox,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
         ::svt::AccessibleBrowseBoxObjType  eObjType,
         const OUString&      rName,
         const OUString&      rDescription );
@@ -119,51 +119,45 @@ public:
     // XAccessibleContext -----------------------------------------------------
 
     /** @return  A reference to the parent accessible object. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL
-    getAccessibleParent()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible > SAL_CALL getAccessibleParent()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The index of this object among the parent's children. */
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
             The description of this object.
     */
     virtual OUString SAL_CALL getAccessibleDescription()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
             The name of this object.
     */
     virtual OUString SAL_CALL getAccessibleName()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
             The relation set (the BrowseBox does not have one).
     */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL
-    getAccessibleRelationSet()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The set of current states. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
-    getAccessibleStateSet()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The parent's locale. */
-    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale()
-        throw ( ::com::sun::star::accessibility::IllegalAccessibleComponentStateException,
-                ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::lang::Locale SAL_CALL getLocale()
+        throw ( css::accessibility::IllegalAccessibleComponentStateException,
+                css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
             The role of this object. Panel, ROWHEADER, COLUMNHEADER, TABLE, TABLE_CELL are supported.
     */
     virtual sal_Int16 SAL_CALL getAccessibleRole()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /*  Derived classes have to implement:
         -   getAccessibleChildCount,
@@ -176,34 +170,34 @@ public:
 
     /** @return
         <TRUE/>, if the point lies within the bounding box of this object. */
-    virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& rPoint )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& rPoint )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The bounding box of this object. */
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::awt::Rectangle SAL_CALL getBounds()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
         The upper left corner of the bounding box relative to the parent. */
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocation()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::awt::Point SAL_CALL getLocation()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return
         The upper left corner of the bounding box in screen coordinates. */
-    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::awt::Point SAL_CALL getLocationOnScreen()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  The size of the bounding box. */
-    virtual ::com::sun::star::awt::Size SAL_CALL getSize()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::awt::Size SAL_CALL getSize()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getForeground(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getBackground(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XFocusListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL focusGained( const css::awt::FocusEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL focusLost( const css::awt::FocusEvent& e ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /*  Derived classes have to implement:
         -   getAccessibleAt,
@@ -212,41 +206,36 @@ public:
     /** @return
             The accessible child rendered under the given point.
     */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > SAL_CALL
-    getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XAccessibleEventBroadcaster --------------------------------------------
 
     /** Adds a new event listener */
     virtual void SAL_CALL addAccessibleEventListener(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::accessibility::XAccessibleEventListener>& rxListener )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            const css::uno::Reference< css::accessibility::XAccessibleEventListener>& rxListener )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** Removes an event listener. */
     virtual void SAL_CALL removeAccessibleEventListener(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::accessibility::XAccessibleEventListener>& rxListener )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+            const css::uno::Reference< css::accessibility::XAccessibleEventListener>& rxListener )
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XTypeProvider ----------------------------------------------------------
 
     /** @return  An unique implementation ID. */
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XServiceInfo -----------------------------------------------------------
 
     /** @return  Whether the specified service is supported by this class. */
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /** @return  A list of all supported services. */
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /*  Derived classes have to implement:
         -   getImplementationName. */
@@ -264,9 +253,8 @@ public:
     /** Commits an event to all listeners. */
     void commitEvent(
             sal_Int16 nEventId,
-            const ::com::sun::star::uno::Any& rNewValue,
-
-    const ::com::sun::star::uno::Any& rOldValue );
+            const css::uno::Any& rNewValue,
+            const css::uno::Any& rOldValue );
     /** @return  <TRUE/>, if the object is not disposed or disposing. */
     bool isAlive() const;
 
@@ -301,7 +289,7 @@ protected:
 
     /** @throws <type>DisposedException</type>  If the object is not alive. */
     void ensureIsAlive() const
-        throw ( ::com::sun::star::lang::DisposedException );
+        throw ( css::lang::DisposedException );
 
     /** @return  The ::osl::Mutex member provided by the class OBaseMutex. */
     inline ::osl::Mutex& getOslMutex();
@@ -314,12 +302,12 @@ protected:
         parent window.
         @return  The bounding box (VCL rect.) relative to the parent object. */
     Rectangle getBoundingBox()
-        throw ( ::com::sun::star::lang::DisposedException );
+        throw ( css::lang::DisposedException );
     /** Locks all mutex's and calculates the bounding box in screen
         coordinates.
         @return  The bounding box (VCL rect.) in screen coordinates. */
     Rectangle getBoundingBoxOnScreen()
-        throw ( ::com::sun::star::lang::DisposedException );
+        throw ( css::lang::DisposedException );
 
     ::comphelper::AccessibleEventNotifier::TClientId getClientId() const { return m_aClientId; }
     void setClientId(::comphelper::AccessibleEventNotifier::TClientId _aNewClientId) { m_aClientId = _aNewClientId; }
@@ -335,14 +323,13 @@ protected:
     // members ----------------------------------------------------------------
 
     /** The parent accessible object. */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > mxParent;
+    css::uno::Reference< css::accessibility::XAccessible > mxParent;
     /** The VCL BrowseBox control. */
     ::svt::IAccessibleTableProvider* mpBrowseBox;
 
     /** This is the window which get all the nice focus events
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xFocusWindow;
+    css::uno::Reference< css::awt::XWindow > m_xFocusWindow;
 
 private:
     /** Localized name. */
@@ -360,7 +347,7 @@ private:
 // a version of AccessibleBrowseBoxBase which implements not only the XAccessibleContext,
 // but also the XAccessible
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessible
+typedef ::cppu::ImplHelper1 <   css::accessibility::XAccessible
                             >   BrowseBoxAccessibleElement_Base;
 
 class BrowseBoxAccessibleElement
@@ -381,10 +368,10 @@ protected:
         @param eDescrText  The constant for the description text.
     */
     BrowseBoxAccessibleElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >& rxParent,
+        const css::uno::Reference<
+                  css::accessibility::XAccessible >& rxParent,
         ::svt::IAccessibleTableProvider&                  rBrowseBox,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
         ::svt::AccessibleBrowseBoxObjType  eObjType );
 
     /** Constructor sets specified name and description.
@@ -395,10 +382,10 @@ protected:
         @param rDescription  The description text of this object.
     */
     BrowseBoxAccessibleElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >& rxParent,
+        const css::uno::Reference<
+                  css::accessibility::XAccessible >& rxParent,
         ::svt::IAccessibleTableProvider&                  rBrowseBox,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+        const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
         ::svt::AccessibleBrowseBoxObjType  eObjType,
         const OUString&      rName,
         const OUString&      rDescription );
@@ -416,10 +403,8 @@ protected:
     // XAccessible ------------------------------------------------------------
 
     /** @return  The XAccessibleContext interface of this object. */
-    virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL
-    getAccessibleContext()
-        throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext()
+        throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 

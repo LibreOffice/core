@@ -360,7 +360,7 @@ sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole() throw (RuntimeExceptio
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleIndexInParent()
-    throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if (m_nIndexInParent != DEFAULT_INDEX_IN_PARENT)
         return m_nIndexInParent;
@@ -390,7 +390,7 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
         if (nIndex<0 || nIndex>=getAccessibleActionCount())
-            throw ::com::sun::star::lang::IndexOutOfBoundsException(
+            throw css::lang::IndexOutOfBoundsException(
                 ("VCLXAccessibleBox::doAccessibleAction: index "
                  + OUString::number(nIndex) + " not among 0.."
                  + OUString::number(getAccessibleActionCount())),
@@ -427,7 +427,7 @@ OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 n
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     if (nIndex<0 || nIndex>=getAccessibleActionCount())
-        throw ::com::sun::star::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException();
 
     if (m_bIsDropDownBox)
         return TK_RES_STRING(RID_STR_ACC_ACTION_TOGGLEPOPUP);
@@ -443,7 +443,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleBox::getAccessibleActionKeyBind
     Reference< XAccessibleKeyBinding > xRet;
 
     if (nIndex<0 || nIndex>=getAccessibleActionCount())
-        throw ::com::sun::star::lang::IndexOutOfBoundsException();
+        throw css::lang::IndexOutOfBoundsException();
 
     // ... which key?
     return xRet;

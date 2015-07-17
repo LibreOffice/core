@@ -38,11 +38,11 @@ namespace accessibility
     {
     public:
         EditBrowseBoxTableCell(
-            const com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParent,
-            const com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxOwningAccessible,
-            const com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _xControlChild,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxOwningAccessible,
+            const css::uno::Reference< css::accessibility::XAccessibleContext >& _xControlChild,
             ::svt::IAccessibleTableProvider& _rBrowseBox,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xFocusWindow,
+            const css::uno::Reference< css::awt::XWindow >& _xFocusWindow,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos
         );
@@ -52,11 +52,11 @@ namespace accessibility
 
     protected:
         // XAccessibleComponent
-        virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-        virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual sal_Int32 SAL_CALL getForeground(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+        virtual sal_Int32 SAL_CALL getBackground(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // XInterface
         DECLARE_XINTERFACE( )
@@ -64,27 +64,27 @@ namespace accessibility
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleContext
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getAccessibleDescription(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getAccessibleName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        sal_Int16 SAL_CALL getAccessibleRole() throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        sal_Int16 SAL_CALL getAccessibleRole() throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     protected:
         // OComponentHelper
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         // XComponent/OComponentProxyAggregationHelper (needs to be disambiguated)
-        virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // OAccessibleContextWrapperHelper();
-        void notifyTranslatedEvent( const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     private:
         EditBrowseBoxTableCell( const EditBrowseBoxTableCell& ) SAL_DELETED_FUNCTION;
@@ -94,7 +94,7 @@ namespace accessibility
 
     // = EditBrowseBoxTableCell
 
-    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::accessibility::XAccessible
+    typedef ::cppu::WeakComponentImplHelper<   css::accessibility::XAccessible
                                            >   EditBrowseBoxTableCellAccess_Base;
     // XAccessible providing an EditBrowseBoxTableCell
     class EditBrowseBoxTableCellAccess
@@ -102,13 +102,13 @@ namespace accessibility
                         ,public EditBrowseBoxTableCellAccess_Base
     {
     protected:
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessibleContext >
+        css::uno::WeakReference< css::accessibility::XAccessibleContext >
                                             m_aContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        css::uno::Reference< css::accessibility::XAccessible >
                                             m_xParent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        css::uno::Reference< css::accessibility::XAccessible >
                                             m_xControlAccessible;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
+        css::uno::Reference< css::awt::XWindow >
                                             m_xFocusWindow;
         ::svt::IAccessibleTableProvider*    m_pBrowseBox;
         sal_Int32                           m_nRowPos;
@@ -116,9 +116,9 @@ namespace accessibility
 
     public:
         EditBrowseBoxTableCellAccess(
-            const ::com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible >& _rxParent,
-            const ::com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible >& _rxControlAccessible,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _rxFocusWindow,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxControlAccessible,
+            const css::uno::Reference< css::awt::XWindow >& _rxFocusWindow,
             ::svt::IAccessibleTableProvider& _rBrowseBox,
             sal_Int32 _nRowPos,
             sal_uInt16 _nColPos
@@ -128,7 +128,7 @@ namespace accessibility
         virtual ~EditBrowseBoxTableCellAccess();
 
         // XAccessible
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XComponent/OComponentHelper
         virtual void SAL_CALL disposing() SAL_OVERRIDE;

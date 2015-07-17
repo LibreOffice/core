@@ -328,7 +328,7 @@ sal_Bool SAL_CALL Paragraph::setCaretPosition(::sal_Int32 nIndex)
 
 // virtual
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
-Paragraph::getCharacterAttributes(::sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< OUString >& aRequestedAttributes)
+Paragraph::getCharacterAttributes(::sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes)
     throw (css::lang::IndexOutOfBoundsException,
            css::uno::RuntimeException, std::exception)
 {
@@ -426,21 +426,21 @@ OUString SAL_CALL Paragraph::getTextRange(::sal_Int32 nStartIndex,
 }
 
 // virtual
-::com::sun::star::accessibility::TextSegment SAL_CALL Paragraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return OCommonAccessibleText::getTextAtIndex(nIndex, aTextType);
 }
 
 // virtual
-::com::sun::star::accessibility::TextSegment SAL_CALL Paragraph::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL Paragraph::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return OCommonAccessibleText::getTextBeforeIndex(nIndex, aTextType);
 }
 
 // virtual
-::com::sun::star::accessibility::TextSegment SAL_CALL Paragraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL Paragraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return OCommonAccessibleText::getTextBehindIndex(nIndex, aTextType);

@@ -48,10 +48,10 @@ namespace
         sal_Int32 m_nIndexInParent;
     public:
         OToolBoxWindowItemContext(sal_Int32 _nIndexInParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxInnerAccessibleContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxOwningAccessible,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParentAccessible
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxInnerAccessibleContext,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxOwningAccessible,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParentAccessible
             ) : OAccessibleContextWrapper(
             _rxContext,
             _rxInnerAccessibleContext,
@@ -60,11 +60,11 @@ namespace
             ,m_nIndexInParent(_nIndexInParent)
         {
         }
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
 
 
-    sal_Int32 SAL_CALL OToolBoxWindowItemContext::getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    sal_Int32 SAL_CALL OToolBoxWindowItemContext::getAccessibleIndexInParent(  ) throw (css::uno::RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_nIndexInParent;
@@ -93,9 +93,9 @@ namespace
 
     public:
         OToolBoxWindowItem(sal_Int32 _nIndexInParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxInnerAccessible,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxParentAccessible
+            const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxInnerAccessible,
+            const css::uno::Reference< css::accessibility::XAccessible >& _rxParentAccessible
             ) : OAccessibleWrapper(
             _rxContext,
             _rxInnerAccessible,
@@ -111,7 +111,7 @@ namespace
 
         // OAccessibleWrapper
         virtual OAccessibleContextWrapper* createAccessibleContext(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >& _rxInnerContext
+                const css::uno::Reference< css::accessibility::XAccessibleContext >& _rxInnerContext
             ) SAL_OVERRIDE;
 
         // XUnoTunnel

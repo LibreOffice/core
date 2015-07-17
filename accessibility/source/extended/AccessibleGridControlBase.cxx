@@ -406,13 +406,13 @@ sal_Int16 SAL_CALL AccessibleGridControlBase::getAccessibleRole()
     return nRole;
 }
 
-Reference<XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint( const ::com::sun::star::awt::Point& )
+Reference<XAccessible > SAL_CALL AccessibleGridControlBase::getAccessibleAtPoint( const css::awt::Point& )
         throw ( uno::RuntimeException, std::exception )
 {
     return NULL;
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -437,7 +437,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::su
     return nColor;
 }
 
-sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL AccessibleGridControlBase::getBackground(  ) throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 

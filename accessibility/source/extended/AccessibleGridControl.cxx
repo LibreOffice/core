@@ -46,27 +46,23 @@ class AccessibleGridControl_Impl
 {
 public:
     /// the XAccessible which created the AccessibleGridControl
-    WeakReference< XAccessible >                                m_aCreator;
+    WeakReference< XAccessible >                    m_aCreator;
 
     /** The data table child. */
-    Reference<
-        ::com::sun::star::accessibility::XAccessible >          m_xTable;
-    AccessibleGridControlTable*             m_pTable;
+    Reference< css::accessibility::XAccessible >    m_xTable;
+    AccessibleGridControlTable*                     m_pTable;
 
     /** The header bar for rows. */
-    Reference<
-        ::com::sun::star::accessibility::XAccessible >          m_xRowHeaderBar;
-    AccessibleGridControlHeader*                m_pRowHeaderBar;
+    Reference< css::accessibility::XAccessible >    m_xRowHeaderBar;
+    AccessibleGridControlHeader*                    m_pRowHeaderBar;
 
     /** The header bar for columns (first row of the table). */
-    Reference<
-        ::com::sun::star::accessibility::XAccessible >          m_xColumnHeaderBar;
-    AccessibleGridControlHeader*                m_pColumnHeaderBar;
+    Reference< css::accessibility::XAccessible >    m_xColumnHeaderBar;
+    AccessibleGridControlHeader*                    m_pColumnHeaderBar;
 
     /** The table cell child. */
-    Reference<
-        ::com::sun::star::accessibility::XAccessible >          m_xCell;
-    AccessibleGridControlTableCell*             m_pCell;
+    Reference< css::accessibility::XAccessible >    m_xCell;
+    AccessibleGridControlTableCell*                 m_pCell;
 
 };
 
@@ -323,7 +319,7 @@ void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNew
         for(sal_Int32 i=0;i<nChildCount;i++)
         {
             Reference< XAccessible > xAccessible = getAccessibleChild(i);
-            com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessibleContext > xAccessibleChild = xAccessible->getAccessibleContext();
+            css::uno::Reference< css::accessibility::XAccessibleContext > xAccessibleChild = xAccessible->getAccessibleContext();
             if(m_xImpl->m_xTable == xAccessible)
             {
                 std::vector< AccessibleGridControlTableCell* >& rCells =
