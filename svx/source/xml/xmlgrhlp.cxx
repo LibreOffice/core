@@ -473,7 +473,7 @@ OUString SvXMLGraphicHelper::ImplGetGraphicMimeType( const OUString& rFileName )
         { "tif", "image/tiff" },
         { "svg", "image/svg+xml" },
         { "wmf", "image/x-wmf" },
-        { "eps", "image/eps" },
+        { "eps", "image/x-eps" },
         { "bmp", "image/bmp" },
         { "pct", "image/x-pict" }
     };
