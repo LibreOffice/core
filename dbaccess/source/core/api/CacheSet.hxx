@@ -29,14 +29,14 @@
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include "RowSetRow.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <list>
 namespace com{ namespace sun { namespace star{namespace sdbc{ class XParameters; } } } }
 
 namespace dbaccess
 {
-    class OCacheSet : public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XRow>
+    class OCacheSet : public ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XRow>
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xDriverSet;

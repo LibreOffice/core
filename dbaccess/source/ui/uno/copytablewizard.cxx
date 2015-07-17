@@ -63,7 +63,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svtools/genericunodialog.hxx>
 #include <tools/diagnose_ex.h>
@@ -141,9 +141,9 @@ namespace dbaui
 
     // CopyTableWizard
     typedef ::svt::OGenericUnoDialog        CopyTableWizard_DialogBase;
-    typedef ::cppu::ImplInheritanceHelper1  <   CopyTableWizard_DialogBase
-                                            ,   XCopyTableWizard
-                                            >   CopyTableWizard_Base;
+    typedef ::cppu::ImplInheritanceHelper<   CopyTableWizard_DialogBase
+                                         ,   XCopyTableWizard
+                                         >   CopyTableWizard_Base;
     class CopyTableWizard
             :public CopyTableWizard_Base
             ,public ::comphelper::OPropertyArrayUsageHelper< CopyTableWizard >

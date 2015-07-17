@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_UNO_DBINTERACTION_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_UNO_DBINTERACTION_HXX
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include "moduledbu.hxx"
 #include "apitools.hxx"
@@ -45,9 +45,9 @@ namespace dbaui
 {
 
     // BasicInteractionHandler
-    typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::task::XInteractionHandler2
-                                    >   BasicInteractionHandler_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::lang::XServiceInfo
+                                  ,   ::com::sun::star::task::XInteractionHandler2
+                                  >   BasicInteractionHandler_Base;
     /** implements an <type scope="com.sun.star.task">XInteractionHandler</type> for
         database related interaction requests.
         <p/>

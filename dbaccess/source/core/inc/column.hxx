@@ -46,8 +46,7 @@
 #include <connectivity/FValue.hxx>
 #include <connectivity/TColumnsHelper.hxx>
 #include <connectivity/sdbcx/IRefreshable.hxx>
-#include <cppuhelper/compbase2.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <osl/diagnose.h>
@@ -58,9 +57,9 @@ namespace dbaccess
 
     //  OColumn
 
-    typedef ::cppu::WeakComponentImplHelper2<   ::com::sun::star::lang::XServiceInfo,
-                                                ::com::sun::star::container::XNamed
-                                            >   OColumnBase;
+    typedef ::cppu::WeakComponentImplHelper<   ::com::sun::star::lang::XServiceInfo,
+                                               ::com::sun::star::container::XNamed
+                                           >   OColumnBase;
 
     class OColumn   :public comphelper::OBaseMutex
                     ,public OColumnBase

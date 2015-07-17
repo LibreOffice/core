@@ -24,7 +24,7 @@
 
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 class SfxUndoAction;
 class SfxUndoManager;
@@ -34,9 +34,9 @@ namespace dbaui
 
     // OSingleDocumentController
     struct OSingleDocumentController_Data;
-    typedef ::cppu::ImplInheritanceHelper1  <   DBSubComponentController
-                                            ,   ::com::sun::star::document::XUndoManagerSupplier
-                                            >   OSingleDocumentController_Base;
+    typedef ::cppu::ImplInheritanceHelper<   DBSubComponentController
+                                         ,   ::com::sun::star::document::XUndoManagerSupplier
+                                         >   OSingleDocumentController_Base;
     class OSingleDocumentController : public OSingleDocumentController_Base
     {
     protected:

@@ -27,7 +27,7 @@
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/diagnose_ex.h>
@@ -66,8 +66,8 @@ namespace dbaui
     using ::com::sun::star::awt::XWindow;
 
     // FrameWindowActivationListener
-    typedef ::cppu::WeakImplHelper1 <   XTopWindowListener
-                                    >   FrameWindowActivationListener_Base;
+    typedef ::cppu::WeakImplHelper<   XTopWindowListener
+                                  >   FrameWindowActivationListener_Base;
     class FrameWindowActivationListener : public FrameWindowActivationListener_Base
     {
     public:

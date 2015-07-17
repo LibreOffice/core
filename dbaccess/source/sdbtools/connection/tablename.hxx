@@ -24,7 +24,7 @@
 
 #include <com/sun/star/sdb/tools/XTableName.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -32,8 +32,8 @@ namespace sdbtools
 {
 
     // TableName
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::sdb::tools::XTableName
-                                    >   TableName_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::sdb::tools::XTableName
+                                  >   TableName_Base;
     struct TableName_Impl;
     /** default implementation for XTableName
     */

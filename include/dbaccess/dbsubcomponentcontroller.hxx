@@ -33,7 +33,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <connectivity/dbmetadata.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -47,10 +47,10 @@ namespace dbaui
 
     class DBSubComponentController;
 
-    typedef ::cppu::ImplInheritanceHelper2  <   OGenericUnoController
-                                            ,   ::com::sun::star::document::XScriptInvocationContext
-                                            ,   ::com::sun::star::util::XModifiable
-                                            >   DBSubComponentController_Base;
+    typedef ::cppu::ImplInheritanceHelper<   OGenericUnoController
+                                         ,   ::com::sun::star::document::XScriptInvocationContext
+                                         ,   ::com::sun::star::util::XModifiable
+                                         >   DBSubComponentController_Base;
 
     struct DBSubComponentController_Impl;
     class DBACCESS_DLLPUBLIC DBSubComponentController : public DBSubComponentController_Base

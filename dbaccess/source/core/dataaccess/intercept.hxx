@@ -21,7 +21,7 @@
 #define INCLUDED_DBACCESS_SOURCE_CORE_DATAACCESS_INTERCEPT_HXX
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
@@ -34,9 +34,9 @@ namespace dbaccess
 {
 
 
-class OInterceptor : public ::cppu::WeakImplHelper4< ::com::sun::star::frame::XDispatchProviderInterceptor,
-                                                       ::com::sun::star::frame::XInterceptorInfo,
-                                                       ::com::sun::star::frame::XDispatch,
+class OInterceptor : public ::cppu::WeakImplHelper< ::com::sun::star::frame::XDispatchProviderInterceptor,
+                                                    ::com::sun::star::frame::XInterceptorInfo,
+                                                    ::com::sun::star::frame::XDispatch,
                                                     ::com::sun::star::document::XDocumentEventListener>
 {
     DECL_LINK( OnDispatch, void* _aURL  );

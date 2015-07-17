@@ -35,11 +35,12 @@
 #include "QueryDesignView.hxx"
 #include <svl/smplhint.hxx>
 #include <vcl/settings.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace dbaui;
 
 class OSqlEdit::ChangesListener:
-    public cppu::WeakImplHelper1< css::beans::XPropertiesChangeListener >
+    public cppu::WeakImplHelper< css::beans::XPropertiesChangeListener >
 {
 public:
     ChangesListener(OSqlEdit & editor): editor_(editor) {}

@@ -55,6 +55,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implbase12.hxx>
 #include <cppuhelper/implbase10.hxx>
 #include "moduledbu.hxx"
@@ -63,20 +64,20 @@ namespace dbaui
 {
     // SbaXFormAdapter
 
-    typedef ::cppu::WeakImplHelper12<   ::com::sun::star::sdbc::XResultSetMetaDataSupplier
-                                    ,   ::com::sun::star::sdb::XResultSetAccess
-                                    ,   ::com::sun::star::sdbc::XResultSetUpdate
-                                    ,   ::com::sun::star::sdbc::XRowSet
-                                    ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
-                                    ,   ::com::sun::star::sdbcx::XRowLocate
-                                    ,   ::com::sun::star::sdbc::XRowUpdate
-                                    ,   ::com::sun::star::sdbc::XRow
-                                    ,   ::com::sun::star::sdbcx::XColumnsSupplier
-                                    ,   ::com::sun::star::sdbc::XColumnLocate
-                                    // --- stardiv::one::form::component::DatabaseForm ---
-                                    ,   ::com::sun::star::sdbc::XParameters
-                                    ,   ::com::sun::star::sdbcx::XDeleteRows
-                                    >   SbaXFormAdapter_BASE1;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::sdbc::XResultSetMetaDataSupplier
+                                  ,   ::com::sun::star::sdb::XResultSetAccess
+                                  ,   ::com::sun::star::sdbc::XResultSetUpdate
+                                  ,   ::com::sun::star::sdbc::XRowSet
+                                  ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
+                                  ,   ::com::sun::star::sdbcx::XRowLocate
+                                  ,   ::com::sun::star::sdbc::XRowUpdate
+                                  ,   ::com::sun::star::sdbc::XRow
+                                  ,   ::com::sun::star::sdbcx::XColumnsSupplier
+                                  ,   ::com::sun::star::sdbc::XColumnLocate
+                                  // --- stardiv::one::form::component::DatabaseForm ---
+                                  ,   ::com::sun::star::sdbc::XParameters
+                                  ,   ::com::sun::star::sdbcx::XDeleteRows
+                                  >   SbaXFormAdapter_BASE1;
     typedef ::cppu::ImplHelper12    <   ::com::sun::star::sdbc::XWarningsSupplier
                                     ,   ::com::sun::star::sdbc::XCloseable
                                     ,   ::com::sun::star::form::XLoadable

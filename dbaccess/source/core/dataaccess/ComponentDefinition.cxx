@@ -31,7 +31,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/property.hxx>
 #include "definitioncolumn.hxx"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
@@ -52,7 +52,7 @@ namespace dbaccess
 {
 
 /// helper class for column property change events which holds the OComponentDefinition weak
-typedef ::cppu::WeakImplHelper1 < XPropertyChangeListener > TColumnPropertyListener_BASE;
+typedef ::cppu::WeakImplHelper< XPropertyChangeListener > TColumnPropertyListener_BASE;
 class OColumnPropertyListener:
     public TColumnPropertyListener_BASE, private boost::noncopyable
 {

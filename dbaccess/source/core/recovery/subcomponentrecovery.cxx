@@ -34,6 +34,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #include <comphelper/namedvaluecollection.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmloff/XMLSettingsExportContext.hxx>
@@ -237,8 +238,8 @@ namespace dbaccess
     }
 
     // SettingsDocumentHandler
-    typedef ::cppu::WeakImplHelper1 <   XDocumentHandler
-                                    >   SettingsDocumentHandler_Base;
+    typedef ::cppu::WeakImplHelper<   XDocumentHandler
+                                  >   SettingsDocumentHandler_Base;
     class DBACCESS_DLLPRIVATE SettingsDocumentHandler : public SettingsDocumentHandler_Base
     {
     public:

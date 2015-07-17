@@ -50,6 +50,7 @@
 #include <com/sun/star/view/XPrintable.hpp>
 
 #include <comphelper/guarding.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/property.hxx>
@@ -95,7 +96,7 @@ namespace dbaccess
 {
 
 // FlushNotificationAdapter
-typedef ::cppu::WeakImplHelper1< XFlushListener > FlushNotificationAdapter_Base;
+typedef ::cppu::WeakImplHelper< XFlushListener > FlushNotificationAdapter_Base;
 /** helper class which implements a XFlushListener, and forwards all
     notification events to another XFlushListener
 
@@ -259,7 +260,7 @@ void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentic
 /** The class OSharedConnectionManager implements a structure to share connections.
     It owns the master connections which will be disposed when the last connection proxy is gone.
 */
-typedef ::cppu::WeakImplHelper1< XEventListener > OConnectionHelper_BASE;
+typedef ::cppu::WeakImplHelper< XEventListener > OConnectionHelper_BASE;
 // need to hold the digest
 struct TDigestHolder
 {

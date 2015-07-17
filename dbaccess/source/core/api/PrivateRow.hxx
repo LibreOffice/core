@@ -19,13 +19,13 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_CORE_API_PRIVATEROW_HXX
 #define INCLUDED_DBACCESS_SOURCE_CORE_API_PRIVATEROW_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include "RowSetRow.hxx"
 
 namespace dbaccess
 {
-    class OPrivateRow : public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XRow>
+    class OPrivateRow : public ::cppu::WeakImplHelper< ::com::sun::star::sdbc::XRow>
     {
         ORowSetValueVector::Vector m_aRow;
         sal_Int32 m_nPos;

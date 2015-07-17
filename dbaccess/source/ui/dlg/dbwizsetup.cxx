@@ -45,6 +45,7 @@
 #include <dbaccess/AsynchronousLink.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -878,8 +879,8 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 
     namespace
     {
-        typedef ::cppu::WeakImplHelper1 <   XTerminateListener
-                                        >   AsyncLoader_Base;
+        typedef ::cppu::WeakImplHelper<   XTerminateListener
+                                      >   AsyncLoader_Base;
         class AsyncLoader : public AsyncLoader_Base
         {
         private:

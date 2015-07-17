@@ -34,7 +34,7 @@
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <tools/stream.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 
@@ -48,7 +48,7 @@ namespace dbaui
 {
     // ODatabaseImportExport base class for import/export
     class ODatabaseExport;
-    typedef ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener> ODatabaseImportExport_BASE;
+    typedef ::cppu::WeakImplHelper< ::com::sun::star::lang::XEventListener> ODatabaseImportExport_BASE;
     class ODatabaseImportExport : public ODatabaseImportExport_BASE
     {
     private:

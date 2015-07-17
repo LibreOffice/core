@@ -24,7 +24,7 @@
 
 #include <com/sun/star/sdb/tools/XObjectNames.hpp>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <memory>
 
@@ -32,8 +32,8 @@ namespace sdbtools
 {
 
     // ObjectNames
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::sdb::tools::XObjectNames
-                                    >   ObjectNames_Base;
+    typedef ::cppu::WeakImplHelper<   ::com::sun::star::sdb::tools::XObjectNames
+                                  >   ObjectNames_Base;
     struct ObjectNames_Impl;
     /** default implementation for XObjectNames
     */
