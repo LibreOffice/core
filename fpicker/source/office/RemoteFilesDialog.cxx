@@ -581,21 +581,26 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
 
         if( nPos >= 0 )
         {
-            // TODO: Confirm dialog
+            OUString sMsg = ResId( STR_SVT_DELETESERVICE, *ResMgrHolder::getOrCreate() );
+            sMsg = sMsg.replaceFirst( "$servicename$", m_pServices_lb->GetSelectEntry() );
+            ScopedVclPtrInstance< MessageDialog > aBox( this, sMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO );
 
-            m_aServices.erase( m_aServices.begin() + nPos );
-            m_pServices_lb->RemoveEntry( nSelected );
-
-            if( m_pServices_lb->GetEntryCount() > 0 )
+            if( aBox->Execute() == RET_YES )
             {
-                m_pServices_lb->SelectEntryPos( 0 );
-            }
-            else
-            {
-                m_pServices_lb->SetNoSelection();
-            }
+                m_aServices.erase( m_aServices.begin() + nPos );
+                m_pServices_lb->RemoveEntry( nSelected );
 
-            m_bIsUpdated = true;
+                if( m_pServices_lb->GetEntryCount() > 0 )
+                {
+                    m_pServices_lb->SelectEntryPos( 0 );
+                }
+                else
+                {
+                    m_pServices_lb->SetNoSelection();
+                }
+
+                m_bIsUpdated = true;
+            }
         }
     }
 
