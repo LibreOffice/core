@@ -244,6 +244,8 @@ IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl)
 
     setShowPositiveError(mxModel, aCID, bPos);
     setShowNegativeError(mxModel, aCID, bNeg);
+
+    return 0;
 }
 
 }} // end of namespace ::chart::sidebar
