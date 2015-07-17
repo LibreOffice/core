@@ -140,7 +140,6 @@ void PlaceEditDialog::InitDetails( )
     bool bSkipOneDrive= OUString( ONEDRIVE_CLIENT_ID ).isEmpty() ||
                        OUString( ONEDRIVE_CLIENT_SECRET ).isEmpty();
 
-
     Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
     Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
 
@@ -182,6 +181,10 @@ void PlaceEditDialog::InitDetails( )
 
     // Set default to first value
     m_pLBServerType->SelectEntryPos( 0 );
+
+    if ( m_pLBServerType->GetSelectEntry() == "--------------------" )
+        m_pLBServerType->SelectEntryPos( 1 );
+
     SelectTypeHdl( m_pLBServerType );
 }
 
