@@ -326,8 +326,11 @@ SfxActionListBox::SfxActionListBox(SfxCommonTemplateDialog_Impl* pParent, WinBit
 
 void SfxActionListBox::Recalc()
 {
-    SetEntryHeight(32 * GetDPIScaleFactor());
-    RecalcViewData();
+    if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
+    {
+        SetEntryHeight(32 * GetDPIScaleFactor());
+        RecalcViewData();
+    }
 }
 
 PopupMenu* SfxActionListBox::CreateContextMenu()
