@@ -53,7 +53,7 @@ bool ScGridWindow::DrawMouseButtonDown(const MouseEvent& rMEvt)
         Point aLogicPos = PixelToLogic(rMEvt.GetPosPixel());
         if ( pDraw->IsDetectiveHit( aLogicPos ) )
         {
-            //  auf Detektiv-Pfeilen gar nichts (Doppelklick wird bei ButtonUp ausgewertet)
+            // nothing on detectiv arrows (dobble click is evaluated on ButtonUp)
             bRet = true;
         }
         else
@@ -131,7 +131,7 @@ void ScGridWindow::DrawEndAction()
     if (pDraw)
         pDraw->StopDragTimer();
 
-    //  ReleaseMouse beim Aufruf
+    //  ReleaseMouse on call
 }
 
 bool ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
@@ -143,7 +143,7 @@ bool ScGridWindow::DrawCommand(const CommandEvent& rCEvt)
         pDraw->SetWindow( this );
         sal_uInt8 nUsed = pDraw->Command( rCEvt );
         if( nUsed == SC_CMD_USED )
-            nButtonDown = 0;  // MouseButtonUp  wird verschluckt...
+            nButtonDown = 0;  // MouseButtonUp is swalloed...
         if( nUsed || pDrView->IsAction() )
             return true;
     }

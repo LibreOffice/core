@@ -231,7 +231,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
     }
     else
     {
-        OSL_FAIL("Da is ja garnix");
+        OSL_FAIL("Nothing here");
     }
 }
 
@@ -670,7 +670,7 @@ void ScGridWindow::UpdateDragRect( bool bShowRange, const Rectangle& rPosRect )
     UpdateDragRectOverlay();
 }
 
-//  Page-Break-Modus
+//  Page-Break Mode
 
 sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
                                     SCCOLROW* pBreak, SCCOLROW* pPrev )
@@ -696,7 +696,7 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
         Point aTL = pViewData->GetScrPos( nPosX, nPosY, eWhich );
         Point aBR = pViewData->GetScrPos( nPosX+1, nPosY+1, eWhich );
 
-        //  Horizontal mehr Toleranz als vertikal, weil mehr Platz ist
+        //  Horizontal more  tolerances as as for vertical, because there is more space
         if ( nMouseX <= aTL.X() + 4 )
         {
             bHori = true;
@@ -705,7 +705,7 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
         else if ( nMouseX >= aBR.X() - 6 )
         {
             bHori = true;
-            nHitX = nPosX+1;                    // linker Rand der naechsten Zelle
+            nHitX = nPosX+1;                    // left edge of the next cell
         }
         if ( nMouseY <= aTL.Y() + 2 )
         {
@@ -715,7 +715,7 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
         else if ( nMouseY >= aBR.Y() - 4 )
         {
             bVert = true;
-            nHitY = nPosY+1;                    // oberer Rand der naechsten Zelle
+            nHitY = nPosY+1;                    // upper edge of the next cell
         }
 
         if ( bHori || bVert )
@@ -757,7 +757,7 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
                 if (nFound)
                     aSource = aRange;
 
-                //  Umbrueche
+                //  breaks
 
                 if ( bVert && bInsideH && !nFound )
                 {
@@ -796,18 +796,18 @@ sal_uInt16 ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
     }
 
     if (pSource)
-        *pSource = aSource;     // Druckbereich
+        *pSource = aSource;     // print break
     if (pBreak)
-        *pBreak = nBreak;       // X/Y Position des verchobenen Seitenumbruchs
+        *pBreak = nBreak;       // X/Y position of the moved page break
     if (pPrev)
-        *pPrev = nPrev;         // X/Y Anfang der Seite, die am Umbruch zuende ist
+        *pPrev = nPrev;         // X/Y begining of the page, which is above the break
     return nFound;
 }
 
 void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
 {
-    //! Scrolling und Umschalten mit RFMouseMove zusammenfassen !
-    //! (Weginvertieren vor dem Scrolling ist anders)
+    //! Combine scrolling and switching with RFMouseMove !
+    //! (Inverting before scrolling is different)
 
     //  Scrolling
 
@@ -824,7 +824,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
         nDy = 1;
     if ( nDx != 0 || nDy != 0 )
     {
-        if ( bPagebreakDrawn )          // weginvertieren
+        if ( bPagebreakDrawn )          // invert
         {
             bPagebreakDrawn = false;
             UpdateDragRectOverlay();
@@ -835,7 +835,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
         bTimer = true;
     }
 
-    //  Umschalten bei Fixierung (damit Scrolling funktioniert)
+    // Switching when fixating (so Scrolling works)
 
     if ( eWhich == pViewData->GetActivePart() )     //??
     {
@@ -858,9 +858,9 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
             }
     }
 
-    //  ab hier neu
+    // from here new
 
-    //  gesucht wird eine Position zwischen den Zellen (vor nPosX / nPosY)
+    // Searching for a position between the cells (before nPosX / nPosY)
     SCsCOL nPosX;
     SCsROW nPosY;
     pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
@@ -927,23 +927,23 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
 
     if ( !bPagebreakDrawn || bUp || aDrawRange != aPagebreakDrag )
     {
-        //  zeichnen...
+        // draw...
 
         if ( bPagebreakDrawn )
         {
-            // weginvertieren
+            // invert
             bPagebreakDrawn = false;
         }
         aPagebreakDrag = aDrawRange;
         if ( !bUp && !bHide )
         {
-            // hininvertieren
+            // revert
             bPagebreakDrawn = true;
         }
         UpdateDragRectOverlay();
     }
 
-    //  bei ButtonUp die Aenderung ausfuehren
+    // when ButtonUp execute the changes
 
     if ( bUp )
     {
@@ -973,14 +973,14 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                         ScAddress aOldAddr( static_cast<SCCOL>(nPagebreakBreak), nPosY, nTab );
                         pViewFunc->DeletePageBreak( true, true, &aOldAddr, false );
                     }
-                    if ( !bHide && !bToEnd )    // am Ende nicht
+                    if ( !bHide && !bToEnd )    // not at the end
                     {
                         ScAddress aNewAddr( static_cast<SCCOL>(nNew), nPosY, nTab );
                         pViewFunc->InsertPageBreak( true, true, &aNewAddr, false );
                     }
                     if ( bGrow )
                     {
-                        //  vorigen Break auf hart, und Skalierung aendern
+                        // change last break to hard, and change scaleing
                         bool bManualBreak = (rDoc.HasColBreak(static_cast<SCCOL>(nPagebreakPrev), nTab) & BREAK_MANUAL);
                         if ( static_cast<SCCOL>(nPagebreakPrev) > aPagebreakSource.aStart.Col() && !bManualBreak )
                         {
@@ -1000,14 +1000,14 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                         ScAddress aOldAddr( nPosX, nPagebreakBreak, nTab );
                         pViewFunc->DeletePageBreak( false, true, &aOldAddr, false );
                     }
-                    if ( !bHide && !bToEnd )    // am Ende nicht
+                    if ( !bHide && !bToEnd )    // not at the end
                     {
                         ScAddress aNewAddr( nPosX, nNew, nTab );
                         pViewFunc->InsertPageBreak( false, true, &aNewAddr, false );
                     }
                     if ( bGrow )
                     {
-                        //  vorigen Break auf hart, und Skalierung aendern
+                        // change last break to hard, and change scaleing
                         bool bManualBreak = (rDoc.HasRowBreak(nPagebreakPrev, nTab) & BREAK_MANUAL);
                         if ( nPagebreakPrev > aPagebreakSource.aStart.Row() && !bManualBreak )
                         {
@@ -1026,7 +1026,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                     pDocSh->GetUndoManager()->LeaveListAction();
                 }
 
-                if (!bGrow)     // sonst in AdjustPrintZoom schon passiert
+                if (!bGrow)     // otherwise has already happened in AdjustPrintZoom
                 {
                     pViewFunc->UpdatePageBreakData( true );
                     pDocSh->SetDocumentModified();
@@ -1035,7 +1035,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
         }
         else if ( bHide || aPagebreakDrag != aPagebreakSource )
         {
-            //  Druckbereich setzen
+            // set print range
 
             OUString aNewRanges;
             sal_uInt16 nOldCount = rDoc.GetPrintRangeCount( nTab );
@@ -1067,10 +1067,10 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
         }
     }
 
-    //  Timer fuer Scrolling
+    //  Timer for Scrolling
 
     if (bTimer && !bUp)
-        pViewData->GetView()->SetTimer( this, rMEvt );          // Event wiederholen
+        pViewData->GetView()->SetTimer( this, rMEvt );          // repeat event
     else
         pViewData->GetView()->ResetTimer();
 }
