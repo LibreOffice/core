@@ -2158,12 +2158,9 @@ void DocxAttributeOutput::RawText(const OUString& /*rText*/, rtl_TextEncoding /*
 void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, const SwFormatRuby& rRuby )
 {
     OSL_TRACE("TODO DocxAttributeOutput::StartRuby( const SwTextNode& rNode, const SwFormatRuby& rRuby )" );
-    if (m_closeHyperlinkInThisRun)
-    {
-        EndRun(); // end hyperlink before starting ruby to avoid overlap
-        assert(!m_closeHyperlinkInThisRun);
-        assert(!m_closeHyperlinkInPreviousRun);
-    }
+    EndRun(); // end run before starting ruby to avoid nested runs, and overlap
+    assert(!m_closeHyperlinkInThisRun); // check that no hyperlink overlaps ruby
+    assert(!m_closeHyperlinkInPreviousRun);
     m_pSerializer->startElementNS( XML_w, XML_ruby, FSEND );
     m_pSerializer->startElementNS( XML_w, XML_rubyPr, FSEND );
     // hps
@@ -2228,6 +2225,7 @@ void DocxAttributeOutput::EndRuby()
     EndRun( );
     m_pSerializer->endElementNS( XML_w, XML_rubyBase );
     m_pSerializer->endElementNS( XML_w, XML_ruby );
+    StartRun(nullptr); // open Run again so OutputTextNode loop can close it
 }
 
 bool DocxAttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTarget, OUString* pLinkURL, OUString* pMark )
