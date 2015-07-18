@@ -1030,14 +1030,6 @@ void FuSelection::Activate()
     {
         case SID_OBJECT_ROTATE:
         {
-            // (mapped) Slot is explicitly set to rotate
-            if( mpViewShell->ISA(DrawViewShell) )
-            {
-                sal_uInt16* pSlotArray =
-                    static_cast<DrawViewShell*>(mpViewShell)->GetSlotArray();
-                pSlotArray[ 1 ] = SID_OBJECT_ROTATE;
-            }
-
             eMode = SDRDRAG_ROTATE;
 
             if ( mpView->GetDragMode() != eMode )

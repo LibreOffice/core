@@ -52,7 +52,7 @@
 namespace sd {
 
 /**
- * Returns the global/main ID, i.e. the ID, which is used to execute the toolbox
+ * Returns the ID of the group button, if it should be toggled.
  */
 sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
 {
@@ -73,28 +73,14 @@ sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
         }
         break;
 
-        case SID_FRAME_TO_TOP:
-        case SID_MOREFRONT:
-        case SID_MOREBACK:
-        case SID_FRAME_TO_BOTTOM:
         case SID_BEFORE_OBJ:
         case SID_BEHIND_OBJ:
-        case SID_REVERSE_ORDER:
         {
             nMappedSId = SID_POSITION;
         }
         break;
 
-        case SID_ZOOM_OUT:
-        case SID_ZOOM_IN:
-        case SID_SIZE_REAL:
         case SID_ZOOM_PANNING:
-        case SID_SIZE_PAGE:
-        case SID_SIZE_PAGE_WIDTH:
-        case SID_SIZE_ALL:
-        case SID_SIZE_OPTIMAL:
-        case SID_ZOOM_NEXT:
-        case SID_ZOOM_PREV:
         case SID_ZOOM_MODE:
         {
             nMappedSId = SID_ZOOM_TOOLBOX;
@@ -184,24 +170,6 @@ sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
         }
         break;
 
-        case SID_INSERT_DIAGRAM:
-        case SID_ATTR_TABLE:
-        case SID_INSERTFILE:
-        case SID_INSERT_GRAPHIC:
-        case SID_INSERT_AVMEDIA:
-        case SID_INSERTPAGE:
-        case SID_INSERT_MATH:
-        case SID_INSERT_FLOATINGFRAME:
-        case SID_INSERT_OBJECT:
-        case SID_INSERT_PLUGIN:
-        case SID_INSERT_SOUND:
-        case SID_INSERT_VIDEO:
-        case SID_INSERT_TABLE:
-        {
-            nMappedSId = SID_DRAWTBX_INSERT;
-        }
-        break;
-
         case SID_TOOL_CONNECTOR:
         case SID_CONNECTOR_ARROW_START:
         case SID_CONNECTOR_ARROW_END:
@@ -237,74 +205,6 @@ sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
     return nMappedSId;
 }
 
-/**
- * Fills the SlotArray in order to get the current mapping of the ToolboxSlots
- */
-void DrawViewShell::MapSlot( sal_uInt16 nSId )
-{
-    sal_uInt16 nMappedSId = GetIdBySubId( nSId );
-
-    if( nMappedSId > 0 )
-    {
-        sal_uInt16 nID = GetArrayId( nMappedSId ) + 1;
-        mpSlotArray[ nID ] = nSId;
-    }
-}
-
-/**
- * Allows a ImageMapping via SlotArray
- */
-void DrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, bool bPermanent )
-{
-    if( !bPermanent )
-    {
-        sal_uInt16 nId = GetArrayId( SID_ZOOM_TOOLBOX ) + 1;
-        rSet.Put( TbxImageItem( SID_ZOOM_TOOLBOX, mpSlotArray[nId] ) );
-
-        nId = GetArrayId( SID_DRAWTBX_INSERT ) + 1;
-        rSet.Put( TbxImageItem( SID_DRAWTBX_INSERT, mpSlotArray[nId] ) );
-
-        nId = GetArrayId( SID_POSITION ) + 1;
-        rSet.Put( TbxImageItem( SID_POSITION, mpSlotArray[nId] ) );
-    }
-    else
-    {
-        for( sal_uInt16 nId = 0; nId < SLOTARRAY_COUNT; nId += 2 )
-        {
-            rSet.Put( TbxImageItem( mpSlotArray[nId], mpSlotArray[nId+1] ) );
-        }
-    }
-}
-
-sal_uInt16 DrawViewShell::GetMappedSlot( sal_uInt16 nSId )
-{
-    sal_uInt16 nSlot = 0;
-    sal_uInt16 nId = GetArrayId( nSId );
-    if( nId != USHRT_MAX )
-        nSlot = mpSlotArray[ nId+1 ];
-
-    /* If the slot is mapped to itself, we have to return 0. Otherwise the slot
-       would be executed over and over again. The slot is initial available in
-       the array in order to show the image correct.  */
-    if( nSId == nSlot )
-        return 0;
-
-    return nSlot;
-}
-
-/**
- * @returns number of the main slot in the slot array
- */
-sal_uInt16 DrawViewShell::GetArrayId( sal_uInt16 nSId )
-{
-    for( sal_uInt16 i = 0; i < SLOTARRAY_COUNT; i += 2 )
-    {
-        if( mpSlotArray[ i ] == nSId )
-            return i;
-    }
-    OSL_FAIL( "Slot in array not found!" );
-    return USHRT_MAX;
-}
 
 void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )
 {

@@ -191,8 +191,6 @@ DrawViewShell::~DrawViewShell()
     mpView = mpDrawView = NULL;
 
     mpFrameView->Disconnect();
-    delete [] mpSlotArray;
-
     maTabControl.disposeAndClear();
 }
 
@@ -204,7 +202,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     mpActualPage = 0;
     mbMousePosFreezed = false;
     mbReadOnly = GetDocSh()->IsReadOnly();
-    mpSlotArray = 0;
     mpClipEvtLstnr = 0;
     mbPastePossible = false;
     mbIsLayerModeActive = false;
@@ -215,35 +212,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     mpFrameView->Connect();
 
     OSL_ASSERT (GetViewShell()!=NULL);
-
-    /* array for slot-/image mapping:
-       even entry: main-/toolbox slot
-       odd entry:  mapped slot
-       Attention: adjust GetIdBySubId() !!!
-       Do not change order (especial zoom) !!! */
-    mpSlotArray = new sal_uInt16[ SLOTARRAY_COUNT ];
-    mpSlotArray[ 0 ]  = SID_OBJECT_CHOOSE_MODE;
-    mpSlotArray[ 1 ]  = SID_OBJECT_ROTATE;
-    mpSlotArray[ 2 ]  = SID_ZOOM_TOOLBOX;
-    mpSlotArray[ 3 ]  = SID_ZOOM_TOOLBOX;
-    mpSlotArray[ 4 ]  = SID_DRAWTBX_TEXT;
-    mpSlotArray[ 5 ]  = SID_ATTR_CHAR;
-    mpSlotArray[ 6 ]  = SID_DRAWTBX_RECTANGLES;
-    mpSlotArray[ 7 ]  = SID_DRAW_RECT;
-    mpSlotArray[ 8 ]  = SID_DRAWTBX_ELLIPSES;
-    mpSlotArray[ 9 ]  = SID_DRAW_ELLIPSE;
-    mpSlotArray[ 10 ] = SID_DRAWTBX_LINES;
-    mpSlotArray[ 11 ] = SID_DRAW_FREELINE_NOFILL;
-    mpSlotArray[ 12 ] = SID_DRAWTBX_3D_OBJECTS;
-    mpSlotArray[ 13 ] = SID_3D_CUBE;
-    mpSlotArray[ 14 ] = SID_DRAWTBX_INSERT;
-    mpSlotArray[ 15 ] = SID_INSERT_DIAGRAM;
-    mpSlotArray[ 16 ] = SID_POSITION;
-    mpSlotArray[ 17 ] = SID_FRAME_TO_TOP;
-    mpSlotArray[ 18 ] = SID_DRAWTBX_CONNECTORS;
-    mpSlotArray[ 19 ] = SID_TOOL_CONNECTOR;
-    mpSlotArray[ 20 ] = SID_DRAWTBX_ARROWS;
-    mpSlotArray[ 21 ] = SID_LINE_ARROW_END;
 
     SetPool( &GetDoc()->GetPool() );
 

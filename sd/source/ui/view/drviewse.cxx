@@ -159,8 +159,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
             pFuText->SetPermanent(true);
             xFunc->ReceiveRequest( rReq );
 
-            MapSlot( nSId );
-
             Invalidate();
 
             Invalidate();
@@ -226,9 +224,6 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         rBind.Invalidate(nOldSId);
         rBind.Update(nOldSId);
     }
-
-    // map Slot (ToolboxImages/-Slots)
-    MapSlot( nSId );
 
     switch ( nSId )
     {
@@ -713,37 +708,12 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
     sal_uInt16 nSId = rReq.GetSlot();
 
-    // maybe we map the slot (ToolboxImages/-Slots)
-    MapSlot( nSId );
-
     switch ( nSId )
     {
         case SID_CLEAR_UNDO_STACK:
         {
             GetDocSh()->ClearUndoBuffer();
             rReq.Ignore ();
-        }
-        break;
-
-        // execute slots of ToolboxController mapped
-        case SID_OBJECT_CHOOSE_MODE:
-        case SID_POSITION:
-        case SID_ZOOM_TOOLBOX:
-        case SID_DRAWTBX_TEXT:
-        case SID_DRAWTBX_RECTANGLES:
-        case SID_DRAWTBX_ELLIPSES:
-        case SID_DRAWTBX_LINES:
-        case SID_DRAWTBX_ARROWS:
-        case SID_DRAWTBX_3D_OBJECTS:
-        case SID_DRAWTBX_CONNECTORS:
-        case SID_DRAWTBX_INSERT:
-        {
-            sal_uInt16 nMappedSlot = GetMappedSlot( nSId );
-            if( nMappedSlot > 0 )
-            {
-                SfxRequest aReq( nMappedSlot, SfxCallMode::SLOT, GetDoc()->GetItemPool() );
-                ExecuteSlot( aReq );
-            }
         }
         break;
 

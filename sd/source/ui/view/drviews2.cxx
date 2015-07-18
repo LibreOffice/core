@@ -206,9 +206,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
     sal_uInt16 nSId = rReq.GetSlot();
 
-    // Slot gets mapped (ToolboxImages/-Slots)
-    MapSlot( nSId );
-
     switch ( nSId )
     {
         case SID_OUTLINE_TEXT_AUTOFIT:
@@ -2946,8 +2943,6 @@ void DrawViewShell::ExecChar( SfxRequest &rReq )
     //modified end
 
     sal_uInt16 nSId = rReq.GetSlot();
-
-    MapSlot( nSId );
 
     switch ( nSId )
     {

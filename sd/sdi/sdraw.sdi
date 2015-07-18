@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-TbxImageItem AdvancedMode SID_OBJECT_CHOOSE_MODE
+SfxBoolItem AdvancedMode SID_OBJECT_CHOOSE_MODE
 
 [
     /* flags: */
@@ -196,7 +196,7 @@ SfxUInt16Item AnimatorState SID_ANIMATOR_STATE
     GroupId = GID_OPTIONS;
 ]
 
-TbxImageItem ArrowsToolbox SID_DRAWTBX_ARROWS
+SfxBoolItem ArrowsToolbox SID_DRAWTBX_ARROWS
 
 [
     /* flags: */
@@ -1292,7 +1292,7 @@ SfxBoolItem ConnectorLinesCircleStart SID_CONNECTOR_LINES_CIRCLE_START
     GroupId = GID_CONNECTOR;
 ]
 
-TbxImageItem ConnectorToolbox SID_DRAWTBX_CONNECTORS
+SfxBoolItem ConnectorToolbox SID_DRAWTBX_CONNECTORS
 
 [
     /* flags: */
@@ -2157,7 +2157,7 @@ SfxBoolItem CustomAnimationSchemes SID_CUSTOM_ANIMATION_SCHEMES_PANEL
     GroupId = GID_OPTIONS;
 ]
 
-TbxImageItem EllipseToolbox SID_DRAWTBX_ELLIPSES
+SfxBoolItem EllipseToolbox SID_DRAWTBX_ELLIPSES
 
 [
     /* flags: */
@@ -3482,7 +3482,7 @@ SfxVoidItem InsertTimeFieldVar SID_INSERT_FLD_TIME_VAR
     GroupId = GID_INSERT;
 ]
 
-TbxImageItem InsertToolbox SID_DRAWTBX_INSERT
+SfxVoidItem InsertToolbox SID_DRAWTBX_INSERT
 
 [
     /* flags: */
@@ -3889,7 +3889,7 @@ SfxVoidItem LineTo SID_LINETO
     GroupId = GID_DRAWING;
 ]
 
-TbxImageItem LineToolbox SID_DRAWTBX_LINES
+SfxBoolItem LineToolbox SID_DRAWTBX_LINES
 
 [
     /* flags: */
@@ -4516,7 +4516,7 @@ SfxBoolItem NotesMode SID_NOTESMODE
     GroupId = GID_VIEW;
 ]
 
-TbxImageItem ObjectPosition SID_POSITION
+SfxBoolItem ObjectPosition SID_POSITION
 
 [
     /* flags: */
@@ -4542,7 +4542,7 @@ TbxImageItem ObjectPosition SID_POSITION
     GroupId = GID_MODIFY;
 ]
 
-TbxImageItem Objects3DToolbox SID_DRAWTBX_3D_OBJECTS
+SfxBoolItem Objects3DToolbox SID_DRAWTBX_3D_OBJECTS
 
 [
     /* flags: */
@@ -5195,7 +5195,7 @@ SfxBoolItem QuickEdit SID_QUICKEDIT
     GroupId = GID_OPTIONS;
 ]
 
-TbxImageItem RectangleToolbox SID_DRAWTBX_RECTANGLES
+SfxBoolItem RectangleToolbox SID_DRAWTBX_RECTANGLES
 
 [
     /* flags: */
@@ -5994,7 +5994,7 @@ SfxBoolItem TextAutoFitToSize SID_OUTLINE_TEXT_AUTOFIT
     GroupId = GID_FORMAT;
 ]
 
-TbxImageItem TextToolbox SID_DRAWTBX_TEXT
+SfxBoolItem TextToolbox SID_DRAWTBX_TEXT
 
 [
     /* flags: */

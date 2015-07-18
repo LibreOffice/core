@@ -275,42 +275,14 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // State of SfxChild-Windows (Animator, Fontwork etc.)
     SetChildWindowState( rSet );
 
-    // map images of toolboxes (only zoom)
-    UpdateToolboxImages( rSet, false );
-
     if(HasCurrentFunction())
     {
         sal_uInt16 nSId = GetCurrentFunction()->GetSlotID();
+        sal_uInt16 nMainId = GetIdBySubId( nSId );
 
         rSet.Put( SfxBoolItem( nSId, true ) );
-
-        // will cause a uncheck of a simulated slot
-        sal_uInt16 nId = GetIdBySubId( nSId );
-
-        // map images of the toolboxes
-        UpdateToolboxImages( rSet );
-
-        if( nSId != SID_ZOOM_TOOLBOX &&
-            nSId != SID_DRAWTBX_INSERT &&
-            nSId != SID_POSITION )
-        {
-            if( nId != SID_OBJECT_CHOOSE_MODE )
-                rSet.Put( TbxImageItem( SID_OBJECT_CHOOSE_MODE, 0 ) );
-            if( nId != SID_DRAWTBX_TEXT )
-                rSet.Put( TbxImageItem( SID_DRAWTBX_TEXT, 0 ) );
-            if( nId != SID_DRAWTBX_RECTANGLES )
-                rSet.Put( TbxImageItem( SID_DRAWTBX_RECTANGLES, 0 ) );
-            if( nId != SID_DRAWTBX_ELLIPSES )
-                rSet.Put( TbxImageItem( SID_DRAWTBX_ELLIPSES, 0 ) );
-            if( nId != SID_DRAWTBX_LINES )
-                rSet.Put( TbxImageItem( SID_DRAWTBX_LINES, 0 ) );
-            if( nId != SID_DRAWTBX_ARROWS )
-                rSet.Put( TbxImageItem( SID_DRAWTBX_ARROWS, 0 ) );
-            if( nId != SID_DRAWTBX_3D_OBJECTS )
-                rSet.Put( TbxImageItem( SID_DRAWTBX_3D_OBJECTS, 0 ) );
-            if( nId != SID_DRAWTBX_CONNECTORS )
-                rSet.Put( TbxImageItem( SID_DRAWTBX_CONNECTORS, 0 ) );
-        }
+        if ( nMainId != 0 )
+            rSet.Put( SfxBoolItem( nMainId, true ) );
     }
 
     SdrPageView* pPageView = mpDrawView->GetSdrPageView();
@@ -1075,9 +1047,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             nCurrentSId = SID_ATTR_CHAR;
 
         rSet.Put( SfxBoolItem( nCurrentSId, true ) );
-
-        // Short version of UpdateToolboxImages()
-        rSet.Put( TbxImageItem( SID_DRAWTBX_TEXT, nCurrentSId ) );
+        rSet.Put( SfxBoolItem( SID_DRAWTBX_TEXT, true ) );
     }
 
     if ( GetDocSh()->IsReadOnly() )

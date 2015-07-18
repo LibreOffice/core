@@ -66,8 +66,6 @@ class DrawViewShell
       public SfxListener
 {
 public:
-    static const int SLOTARRAY_COUNT = 22;
-
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDDRAWVIEWSHELL)
 
@@ -303,8 +301,6 @@ public:
 
     bool IsLayerModeActive() const { return mbIsLayerModeActive;}
 
-    sal_uInt16*         GetSlotArray() const { return mpSlotArray; }
-
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
                                     ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer ) SAL_OVERRIDE;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
@@ -406,8 +402,6 @@ protected:
     bool            mbIsRulerDrag;
     sal_uLong           mnLockCount;
     bool            mbReadOnly;
-    sal_uInt16*         mpSlotArray;
-
     static bool     mbPipette;
 
                     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
@@ -428,11 +422,6 @@ protected:
                                bool bSize, bool bMargin, bool bScaleAll );
 
     static sal_uInt16 GetIdBySubId( sal_uInt16 nSId );
-    void            MapSlot( sal_uInt16 nSId );
-    void            UpdateToolboxImages( SfxItemSet &rSet, bool bPermanent = true );
-    sal_uInt16      GetMappedSlot( sal_uInt16 nSId );
-    sal_uInt16      GetArrayId( sal_uInt16 nSId );
-
     void            GetMenuStateSel(SfxItemSet& rSet);
 
 private:

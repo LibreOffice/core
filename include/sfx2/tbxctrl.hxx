@@ -27,6 +27,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -34,8 +35,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/awt/XDockableWindowListener.hpp>
-#include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 
 
@@ -164,9 +163,8 @@ public:
 
 struct SfxToolBoxControl_Impl;
 class SFX2_DLLPUBLIC SfxToolBoxControl:
-    public cppu::ImplInheritanceHelper2<
-        svt::ToolboxController, css::awt::XDockableWindowListener,
-        css::frame::XSubToolbarController>
+    public cppu::ImplInheritanceHelper<
+        svt::ToolboxController, css::frame::XSubToolbarController>
 {
 friend class SfxToolbox;
 friend class SfxPopupWindow;
@@ -191,8 +189,6 @@ protected:
     void                       SetPopupWindow( SfxPopupWindow* pWindow );
 
     // helper methods
-    void    createAndPositionSubToolBar( const OUString& rSubToolBarResName );
-    static ::Size  getPersistentFloatingSize( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const OUString& rSubToolBarResName );
     bool    hasBigImages() const;
 
 public:
@@ -225,15 +221,6 @@ public:
     virtual OUString SAL_CALL getSubToolbarName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL functionSelected( const OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL updateImage(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    //  XDockableWindowListener
-    virtual void SAL_CALL startDocking( const ::com::sun::star::awt::DockingEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::awt::DockingData SAL_CALL docking( const ::com::sun::star::awt::DockingEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL endDocking( const ::com::sun::star::awt::EndDockingEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL prepareToggleFloatingMode( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL toggleFloatingMode( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closed( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
                                SFX_DECL_TOOLBOX_CONTROL();

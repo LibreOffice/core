@@ -193,8 +193,6 @@ struct SfxToolBoxControl_Impl
     sal_uInt16              nSlotId;
     VclPtr<SfxPopupWindow>  mpFloatingWindow;
     VclPtr<SfxPopupWindow>  mpPopupWindow;
-    Reference< XUIElement > mxUIElement;
-
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
 };
 
@@ -239,12 +237,6 @@ SfxToolBoxControl::SfxToolBoxControl(
 
 SfxToolBoxControl::~SfxToolBoxControl()
 {
-    if ( pImpl->mxUIElement.is() )
-    {
-        Reference< XComponent > xComponent( pImpl->mxUIElement, UNO_QUERY );
-        xComponent->dispose();
-    }
-    pImpl->mxUIElement = 0;
     delete pImpl;
 }
 
@@ -277,18 +269,6 @@ void SAL_CALL SfxToolBoxControl::dispose() throw (::com::sun::star::uno::Runtime
     VclPtr< vcl::Window > pWindow = pImpl->pBox->GetItemWindow( pImpl->nTbxId );
     pImpl->pBox->SetItemWindow( pImpl->nTbxId, 0 );
     pWindow.disposeAndClear();
-
-    // Dispose an open sub toolbar. It's possible that we have an open
-    // sub toolbar while we get disposed. Therefore we have to dispose
-    // it now! Not doing so would result in a crash. The sub toolbar
-    // gets destroyed asynchronously and would access a non-existing
-    // parent toolbar!
-    if ( pImpl->mxUIElement.is() )
-    {
-        Reference< XComponent > xComponent( pImpl->mxUIElement, UNO_QUERY );
-        xComponent->dispose();
-    }
-    pImpl->mxUIElement = 0;
 
     // Delete my popup windows
     pImpl->mpFloatingWindow.disposeAndClear();
@@ -635,217 +615,10 @@ Reference< ::com::sun::star::awt::XWindow > SAL_CALL SfxToolBoxControl::createIt
     return VCLUnoHelper::GetInterface( CreateItemWindow( VCLUnoHelper::GetWindow( rParent )));
 }
 
-// XDockableWindowListener
-void SAL_CALL SfxToolBoxControl::startDocking( const ::com::sun::star::awt::DockingEvent& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
-{
-}
-::com::sun::star::awt::DockingData SAL_CALL SfxToolBoxControl::docking( const ::com::sun::star::awt::DockingEvent& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
-{
-    return ::com::sun::star::awt::DockingData();
-}
-
-void SAL_CALL SfxToolBoxControl::endDocking( const ::com::sun::star::awt::EndDockingEvent& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
-{
-}
-
-sal_Bool SAL_CALL SfxToolBoxControl::prepareToggleFloatingMode( const ::com::sun::star::lang::EventObject& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
-{
-    return sal_False;
-}
-
-void SAL_CALL SfxToolBoxControl::toggleFloatingMode( const ::com::sun::star::lang::EventObject& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
-{
-}
-
-void SAL_CALL SfxToolBoxControl::closed( const ::com::sun::star::lang::EventObject& )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
-{
-}
-
-void SAL_CALL SfxToolBoxControl::endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& aEvent )
-throw (::com::sun::star::uno::RuntimeException, std::exception)
-{
-    SolarMutexGuard aGuard;
-
-    OUString aSubToolBarResName;
-    if ( pImpl->mxUIElement.is() )
-    {
-        Reference< XPropertySet > xPropSet( pImpl->mxUIElement, UNO_QUERY );
-        if ( xPropSet.is() )
-        {
-            try
-            {
-                xPropSet->getPropertyValue("ResourceURL") >>= aSubToolBarResName;
-            }
-            catch ( com::sun::star::beans::UnknownPropertyException& )
-            {
-            }
-            catch ( com::sun::star::lang::WrappedTargetException& )
-            {
-            }
-        }
-
-        Reference< XComponent > xComponent( pImpl->mxUIElement, UNO_QUERY );
-        xComponent->dispose();
-    }
-    pImpl->mxUIElement = 0;
-
-    // if the toolbar was teared-off recreate it and place it at the given position
-    if( aEvent.bTearoff )
-    {
-        Reference< XUIElement >     xUIElement;
-        Reference< XLayoutManager > xLayoutManager = getLayoutManager();
-
-        if ( !xLayoutManager.is() )
-            return;
-
-        xLayoutManager->createElement( aSubToolBarResName );
-        xUIElement = xLayoutManager->getElement( aSubToolBarResName );
-        if ( xUIElement.is() )
-        {
-            Reference< ::com::sun::star::awt::XWindow > xParent = getFrameInterface()->getContainerWindow();
-
-            Reference< ::com::sun::star::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), UNO_QUERY );
-            Reference< ::com::sun::star::beans::XPropertySet > xProp( xUIElement, UNO_QUERY );
-            if ( xSubToolBar.is() && xProp.is() )
-            {
-                OUString aPersistentString( "Persistent" );
-                try
-                {
-                    vcl::Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
-                    if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
-                    {
-                        Any a;
-                        a = xProp->getPropertyValue( aPersistentString );
-                        xProp->setPropertyValue( aPersistentString, makeAny( sal_False ));
-
-                        xLayoutManager->hideElement( aSubToolBarResName );
-                        xLayoutManager->floatWindow( aSubToolBarResName );
-
-                        xLayoutManager->setElementPos( aSubToolBarResName, aEvent.FloatingPosition );
-                        xLayoutManager->showElement( aSubToolBarResName );
-
-                        xProp->setPropertyValue("Persistent", a );
-                    }
-                }
-                catch ( ::com::sun::star::uno::RuntimeException& )
-                {
-                    throw;
-                }
-                catch ( ::com::sun::star::uno::Exception& )
-                {
-                }
-            }
-        }
-    }
-}
-
-::Size  SfxToolBoxControl::getPersistentFloatingSize( const Reference< XFrame >& /*xFrame*/, const OUString& /*rSubToolBarResName*/ )
-{
-    ::Size  aToolboxSize;
-    return aToolboxSize;
-}
-
 bool SfxToolBoxControl::hasBigImages() const
 {
     return (GetToolBox().GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE);
 }
-
-void SfxToolBoxControl::createAndPositionSubToolBar( const OUString& rSubToolBarResName )
-{
-    SolarMutexGuard aGuard;
-
-    if ( pImpl->pBox )
-    {
-        static WeakReference< XUIElementFactoryManager > xWeakUIElementFactory;
-
-        sal_uInt16 nItemId = pImpl->pBox->GetDownItemId();
-
-        if ( !nItemId )
-            return;
-
-        // create element with factory
-        Reference< XFrame >                 xFrame          = getFrameInterface();
-        Reference< XUIElement >             xUIElement;
-        Reference< XUIElementFactoryManager >  xUIElementFactory;
-
-        xUIElementFactory = xWeakUIElementFactory;
-        if ( !xUIElementFactory.is() )
-        {
-            xUIElementFactory = theUIElementFactoryManager::get( m_xContext );
-            xWeakUIElementFactory = xUIElementFactory;
-        }
-
-        Sequence< PropertyValue > aPropSeq( 3 );
-        aPropSeq[0].Name = "Frame";
-        aPropSeq[0].Value <<= xFrame;
-        aPropSeq[1].Name = "Persistent";
-        aPropSeq[1].Value <<= sal_False;
-        aPropSeq[2].Name = "PopupMode";
-        aPropSeq[2].Value <<= sal_True;
-
-        try
-        {
-            xUIElement = xUIElementFactory->createUIElement( rSubToolBarResName, aPropSeq );
-        }
-        catch ( ::com::sun::star::container::NoSuchElementException& )
-        {
-        }
-        catch ( IllegalArgumentException& )
-        {
-        }
-
-        if ( xUIElement.is() )
-        {
-            Reference< ::com::sun::star::awt::XWindow > xParent = getFrameInterface()->getContainerWindow();
-
-            Reference< ::com::sun::star::awt::XWindow > xSubToolBar( xUIElement->getRealInterface(), UNO_QUERY );
-            if ( xSubToolBar.is() )
-            {
-                Reference< ::com::sun::star::awt::XDockableWindow > xDockWindow( xSubToolBar, UNO_QUERY );
-                xDockWindow->addDockableWindowListener( Reference< ::com::sun::star::awt::XDockableWindowListener >(
-                    static_cast< OWeakObject * >( this ), UNO_QUERY ));
-                xDockWindow->enableDocking( sal_True );
-
-                // keep refererence to UIElement to avoid its destruction
-                if ( pImpl->mxUIElement.is() )
-                {
-                    Reference< XComponent > xComponent( pImpl->mxUIElement, UNO_QUERY );
-                    xComponent->dispose();
-                }
-                pImpl->mxUIElement = xUIElement;
-
-                vcl::Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
-                ToolBox* pToolBar( 0 );
-                if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
-                    pToolBar = static_cast<ToolBox *>(pTbxWindow);
-
-                if ( pToolBar )
-                {
-                    vcl::Window*  pParentTbxWindow( pImpl->pBox );
-                    pToolBar->SetParent( pParentTbxWindow );
-                    ::Size aSize = getPersistentFloatingSize( xFrame, rSubToolBarResName );
-                    if ( aSize.Width() == 0 || aSize.Height() == 0 )
-                    {
-                        // calc and set size for popup mode
-                        aSize = pToolBar->CalcPopupWindowSizePixel();
-                    }
-                    pToolBar->SetSizePixel( aSize );
-
-                    // open subtoolbox in popup mode
-                    vcl::Window::GetDockingManager()->StartPopupMode( pImpl->pBox, pToolBar );
-                }
-            }
-        }
-    }
-}
-
-
 
 void SfxToolBoxControl::SetPopupWindow( SfxPopupWindow* pWindow )
 {

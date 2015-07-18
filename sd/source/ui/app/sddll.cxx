@@ -57,7 +57,6 @@
 #include "SlideSorterViewShellBase.hxx"
 #include "strmname.h"
 #include "SdShapeTypes.hxx"
-#include "tbx_ww.hxx"
 #include "TextObjectBar.hxx"
 #include "tmplctrl.hxx"
 
@@ -159,19 +158,6 @@ void SdDLL::RegisterInterfaces()
 void SdDLL::RegisterControllers()
 {
     SfxModule* pMod = SD_MOD();
-
-    // ToolBoxControls registrieren
-    SdTbxControl::RegisterControl( SID_ZOOM_TOOLBOX, pMod );
-    SdTbxControl::RegisterControl( SID_OBJECT_CHOOSE_MODE, pMod );
-    SdTbxControl::RegisterControl( SID_POSITION, pMod );
-    SdTbxControl::RegisterControl( SID_DRAWTBX_TEXT, pMod );
-    SdTbxControl::RegisterControl( SID_DRAWTBX_RECTANGLES, pMod );
-    SdTbxControl::RegisterControl( SID_DRAWTBX_ELLIPSES, pMod );
-    SdTbxControl::RegisterControl( SID_DRAWTBX_LINES, pMod );
-    SdTbxControl::RegisterControl( SID_DRAWTBX_ARROWS, pMod );
-    SdTbxControl::RegisterControl( SID_DRAWTBX_3D_OBJECTS, pMod );
-    SdTbxControl::RegisterControl( SID_DRAWTBX_CONNECTORS, pMod );
-    SdTbxControl::RegisterControl( SID_DRAWTBX_INSERT, pMod );
 
     SdTbxCtlDiaPages::RegisterControl( SID_PAGES_PER_ROW, pMod );
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );

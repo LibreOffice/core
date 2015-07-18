@@ -187,6 +187,160 @@
       </node>
     </node>
     <node oor:name="ToolBar">
+      <node oor:name="ZoomToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ZoomToolBox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>zoombar;.uno:ZoomPlus</value>
+        </prop>
+      </node>
+      <node oor:name="AdvancedModeToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:AdvancedMode</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>choosemodebar;.uno:ToggleObjectRotateMode</value>
+        </prop>
+      </node>
+      <node oor:name="ObjectPositionToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ObjectPosition</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>positionbar;.uno:BringToFront</value>
+        </prop>
+      </node>
+      <node oor:name="TextToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:TextToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>textbar;.uno:Text</value>
+        </prop>
+      </node>
+      <node oor:name="RectangleToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:RectangleToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>rectanglesbar;.uno:Rect</value>
+        </prop>
+      </node>
+      <node oor:name="EllipseToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:EllipseToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>ellipsesbar;.uno:Ellipse</value>
+        </prop>
+      </node>
+      <node oor:name="LineToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:LineToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>linesbar;.uno:Freeline_Unfilled</value>
+        </prop>
+      </node>
+      <node oor:name="ArrowsToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ArrowsToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>arrowsbar;.uno:LineArrowEnd</value>
+        </prop>
+      </node>
+      <node oor:name="Objects3DToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:Objects3DToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>3dobjectsbar;.uno:Cube</value>
+        </prop>
+      </node>
+      <node oor:name="ConnectorToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:ConnectorToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>connectorsbar;.uno:Connector</value>
+        </prop>
+      </node>
+      <node oor:name="InsertToolBox" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:InsertToolbox</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.SubToolBarController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>insertbar;.uno:InsertObjectChart</value>
+        </prop>
+      </node>
       <node oor:name="BasicControlsToolBox" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:ChooseControls</value>
