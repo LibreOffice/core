@@ -325,12 +325,16 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
         }
     }
 
-    if (
-        (xInteractionHandler.is()                                                                                       ) &&
-        (io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_INTERACTIONHANDLER()) == io_lMediaDescriptor.end())
-       )
+    if ( xInteractionHandler.is() )
     {
-        io_lMediaDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteractionHandler;
+        if( io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_INTERACTIONHANDLER()) == io_lMediaDescriptor.end() )
+        {
+            io_lMediaDescriptor[utl::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteractionHandler;
+        }
+        if( io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER()) == io_lMediaDescriptor.end() )
+        {
+            io_lMediaDescriptor[utl::MediaDescriptor::PROP_AUTHENTICATIONHANDLER()] <<= xInteractionHandler;
+        }
     }
 
     if (io_lMediaDescriptor.find(utl::MediaDescriptor::PROP_MACROEXECUTIONMODE()) == io_lMediaDescriptor.end())

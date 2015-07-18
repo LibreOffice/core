@@ -71,6 +71,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         static const OUString& PROP_HIDDEN();
         static const OUString& PROP_INPUTSTREAM();
         static const OUString& PROP_INTERACTIONHANDLER();
+        static const OUString& PROP_AUTHENTICATIONHANDLER();
         static const OUString& PROP_JUMPMARK();
         static const OUString& PROP_MACROEXECUTIONMODE();
         static const OUString& PROP_MEDIATYPE();

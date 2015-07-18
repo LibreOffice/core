@@ -153,7 +153,13 @@ const OUString& MediaDescriptor::PROP_INTERACTIONHANDLER()
     return sProp;
 }
 
-const OUString& MediaDescriptor::PROP_JUMPMARK()
+const OUString& MediaDescriptor::PROP_AUTHENTICATIONHANDLER()
+{
+    static const OUString sProp("AuthenticationHandler");
+    return sProp;
+}
+
+ const OUString& MediaDescriptor::PROP_JUMPMARK()
 {
     static const OUString sProp("JumpMark");
     return sProp;
@@ -601,7 +607,11 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
         MediaDescriptor::PROP_INTERACTIONHANDLER(),
         css::uno::Reference< css::task::XInteractionHandler >());
 
-    comphelper::StillReadWriteInteraction* pInteraction = new comphelper::StillReadWriteInteraction(xOrgInteraction);
+    css::uno::Reference< css::task::XInteractionHandler > xAuthenticationInteraction = getUnpackedValueOrDefault(
+        MediaDescriptor::PROP_AUTHENTICATIONHANDLER(),
+        css::uno::Reference< css::task::XInteractionHandler >());
+
+    comphelper::StillReadWriteInteraction* pInteraction = new comphelper::StillReadWriteInteraction(xOrgInteraction,xAuthenticationInteraction);
     css::uno::Reference< css::task::XInteractionHandler > xInteraction(static_cast< css::task::XInteractionHandler* >(pInteraction), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::ucb::XProgressHandler > xProgress;
@@ -676,7 +686,16 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
                         "unotools.misc",
                         "caught Exception \"" << e.Message
                             << "\" while opening <" << sURL << ">");
-                    return false;
+                    // If the protocol is webdav, then we need to treat the stream as readonly, even if the
+                    // operation was requested as read/write explicitly (the WebDAV UCB implementation is monodirectional
+                    // read or write not both at the same time).
+                    OUString aScheme;
+                    css::uno::Reference< css::ucb::XContentIdentifier > xContId(
+                        aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
+                    if ( xContId.is() )
+                        aScheme = xContId->getContentProviderScheme();
+                    if(!aScheme.equalsIgnoreAsciiCaseAscii( "http" ) && !aScheme.equalsIgnoreAsciiCaseAscii( "https" ))
+                        return false;
                 }
                 xStream.clear();
                 xInputStream.clear();
