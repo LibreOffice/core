@@ -2508,7 +2508,6 @@ sal_uInt16 SvxLanguageItem::GetValueCount() const
 {
     // #i50205# got rid of class International
     SAL_WARN( "editeng.items", "SvxLanguageItem::GetValueCount: supposed to return a count of what?");
-    // FIXME: previously returned LANGUAGE_COUNT from tools/intn.hxx which was wrong anyway.
     // Could be SvtLanguageTable::GetEntryCount() (all locales with resource string)?
     // Could be LocaleDataWrapper::getInstalledLanguageTypes() (all locales with locale data)?
     return 0;
