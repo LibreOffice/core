@@ -22,6 +22,7 @@
 #include <sfx2/sidebar/ControlFactory.hxx>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart/ErrorBarStyle.hpp>
 
 #include "ChartErrorBarPanel.hxx"
 #include "ChartController.hxx"
@@ -112,6 +113,107 @@ void setShowNegativeError(css::uno::Reference<css::frame::XModel> xModel,
     xPropSet->setPropertyValue("ShowNegativeError", css::uno::makeAny(bShow));
 }
 
+struct ErrorBarTypeMap
+{
+    sal_Int32 nPos;
+    sal_Int32 nApi;
+};
+
+ErrorBarTypeMap aErrorBarType[] = {
+    { 0, css::chart::ErrorBarStyle::ABSOLUTE },
+    { 1, css::chart::ErrorBarStyle::RELATIVE },
+    { 2, css::chart::ErrorBarStyle::FROM_DATA },
+    { 3, css::chart::ErrorBarStyle::STANDARD_DEVIATION },
+    { 4, css::chart::ErrorBarStyle::STANDARD_ERROR },
+    { 5, css::chart::ErrorBarStyle::VARIANCE},
+    { 6, css::chart::ErrorBarStyle::ERROR_MARGIN },
+};
+
+sal_Int32 getTypePos(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rCID)
+{
+    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+        getErrorBarPropSet(xModel, rCID);
+
+    if (!xPropSet.is())
+        return 0;
+
+    css::uno::Any aAny = xPropSet->getPropertyValue("ErrorBarStyle");
+
+    if (!aAny.hasValue())
+        return 0;
+
+    sal_Int32 nApi = 0;
+    aAny >>= nApi;
+
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aErrorBarType); ++i)
+    {
+        if (aErrorBarType[i].nApi == nApi)
+            return aErrorBarType[i].nPos;
+    }
+
+    return 0;
+}
+
+void setTypePos(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rCID, sal_Int32 nPos)
+{
+    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+        getErrorBarPropSet(xModel, rCID);
+
+    if (!xPropSet.is())
+        return;
+
+    sal_Int32 nApi = 0;
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aErrorBarType); ++i)
+    {
+        if (aErrorBarType[i].nPos == nPos)
+            nApi = aErrorBarType[i].nApi;
+    }
+
+    xPropSet->setPropertyValue("ErrorBarStyle", css::uno::makeAny(nApi));
+}
+
+double getValue(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rCID, bool bNeg)
+{
+    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+        getErrorBarPropSet(xModel, rCID);
+
+    if (!xPropSet.is())
+        return 0;
+
+    OUString aName = "PositiveError";
+    if (bNeg)
+        aName = "NegativeError";
+
+    css::uno::Any aAny = xPropSet->getPropertyValue(aName);
+
+    if (!aAny.hasValue())
+        return 0;
+
+    double nVal = 0;
+    aAny >>= nVal;
+
+    return nVal;
+}
+
+void setValue(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rCID, double nVal, bool bPos)
+{
+    css::uno::Reference<css::beans::XPropertySet> xPropSet =
+        getErrorBarPropSet(xModel, rCID);
+
+    if (!xPropSet.is())
+        return;
+
+    OUString aName = "PositiveError";
+    if (!bPos)
+        aName = "NegativeError";
+
+    xPropSet->setPropertyValue(aName, css::uno::makeAny(nVal));
+}
+
 OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
 {
     css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
@@ -149,6 +251,11 @@ ChartErrorBarPanel::ChartErrorBarPanel(
     get(mpRBPos, "radiobutton_positive");
     get(mpRBNeg, "radiobutton_negative");
 
+    get(mpLBType, "comboboxtext_type");
+
+    get(mpMFPos, "spinbutton_pos");
+    get(mpMFNeg, "spinbutton_neg");
+
     Initialize();
 }
 
@@ -166,6 +273,11 @@ void ChartErrorBarPanel::dispose()
     mpRBPos.clear();
     mpRBNeg.clear();
 
+    mpLBType.clear();
+
+    mpMFPos.clear();
+    mpMFNeg.clear();
+
     PanelLayout::dispose();
 }
 
@@ -180,6 +292,12 @@ void ChartErrorBarPanel::Initialize()
     mpRBPosAndNeg->SetToggleHdl(aLink);
     mpRBPos->SetToggleHdl(aLink);
     mpRBNeg->SetToggleHdl(aLink);
+
+    mpLBType->SetSelectHdl(LINK(this, ChartErrorBarPanel, ListBoxHdl));
+
+    aLink = LINK(this, ChartErrorBarPanel, NumericFieldHdl);
+    mpMFPos->SetModifyHdl(aLink);
+    mpMFNeg->SetModifyHdl(aLink);
 }
 
 void ChartErrorBarPanel::updateData()
@@ -196,6 +314,33 @@ void ChartErrorBarPanel::updateData()
         mpRBPos->Check(true);
     else if (bNeg)
         mpRBNeg->Check(true);
+
+    sal_Int32 nTypePos = getTypePos(mxModel, aCID);
+    mpLBType->SelectEntryPos(nTypePos);
+
+    if (nTypePos <= 1)
+    {
+        if (bPos)
+            mpMFPos->Enable();
+        else
+            mpMFPos->Disable();
+
+        if (bNeg)
+            mpMFNeg->Enable();
+        else
+            mpMFNeg->Disable();
+
+        double nValPos = getValue(mxModel, aCID, true);
+        double nValNeg = getValue(mxModel, aCID, false);
+
+        mpMFPos->SetValue(nValPos);
+        mpMFNeg->SetValue(nValNeg);
+    }
+    else
+    {
+        mpMFPos->Disable();
+        mpMFNeg->Disable();
+    }
 }
 
 VclPtr<vcl::Window> ChartErrorBarPanel::Create (
@@ -244,6 +389,28 @@ IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl)
 
     setShowPositiveError(mxModel, aCID, bPos);
     setShowNegativeError(mxModel, aCID, bNeg);
+
+    return 0;
+}
+
+IMPL_LINK_NOARG(ChartErrorBarPanel, ListBoxHdl)
+{
+    OUString aCID = getCID(mxModel);
+    sal_Int32 nPos = mpLBType->GetSelectEntryPos();
+
+    setTypePos(mxModel, aCID, nPos);
+
+    return 0;
+}
+
+IMPL_LINK(ChartErrorBarPanel, NumericFieldHdl, NumericField*, pMetricField)
+{
+    OUString aCID = getCID(mxModel);
+    double nVal = pMetricField->GetValue();
+    if (pMetricField == mpMFPos.get())
+        setValue(mxModel, aCID, nVal, true);
+    else if (pMetricField == mpMFNeg.get())
+        setValue(mxModel, aCID, nVal, false);
 
     return 0;
 }
