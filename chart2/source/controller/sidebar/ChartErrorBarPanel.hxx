@@ -22,6 +22,7 @@
 class FixedText;
 class ListBox;
 class NumericField;
+class MetricField;
 
 namespace chart {
 
@@ -69,6 +70,11 @@ private:
     VclPtr<RadioButton> mpRBPos;
     VclPtr<RadioButton> mpRBNeg;
 
+    VclPtr<ListBox> mpLBType;
+
+    VclPtr<NumericField> mpMFPos;
+    VclPtr<NumericField> mpMFNeg;
+
     css::uno::Reference<css::frame::XFrame> mxFrame;
 
     css::uno::Reference<css::frame::XModel> mxModel;
@@ -77,6 +83,8 @@ private:
     void Initialize();
 
     DECL_LINK(RadioBtnHdl, void*);
+    DECL_LINK(ListBoxHdl, void*);
+    DECL_LINK(NumericFieldHdl, NumericField*);
 };
 
 } } // end of namespace ::chart::sidebar
