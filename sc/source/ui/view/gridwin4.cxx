@@ -71,9 +71,9 @@ static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
     if ( rRect.Top()    < rVisible.Top()-1 )    rRect.Top()    = rVisible.Top()-1;
     if ( rRect.Bottom() > rVisible.Bottom()+1 ) rRect.Bottom() = rVisible.Bottom()+1;
 
-    // auch wenn das inner-Rectangle nicht sichtbar ist, muss evtl.
-    // die Titelzeile gezeichnet werden, darum kein Rueckgabewert mehr.
-    // Wenn's weit daneben liegt, wird lcl_DrawOneFrame erst gar nicht gerufen.
+    // The header row must be drawn also when the inner rectangle is not visable,
+    // that is why there is no return value anymore.
+    // When it is far away, then lcl_DrawOneFrame is not even called.
 }
 
 static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const Rectangle& rInnerPixel,
@@ -81,8 +81,8 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const Rectangle& rInnerP
                         double nPPTX, double nPPTY, const Fraction& rZoomY,
                         ScDocument* pDoc, ScViewData* pButtonViewData, bool bLayoutRTL )
 {
-    //  pButtonViewData wird nur benutzt, um die Button-Groesse zu setzen,
-    //  darf ansonsten NULL sein!
+    // pButtonViewData is only used to set the the button size,
+    // can otherwise be NULL!
 
     Rectangle aInner = rInnerPixel;
     if ( bLayoutRTL )
@@ -123,7 +123,7 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const Rectangle& rInnerP
 
     pDev->SetLineColor();
     pDev->SetFillColor( rColor );
-    //  links, oben, rechts, unten
+    //  left, top, right, bottom
     pDev->DrawRect( Rectangle( aOuter.Left(),  aOuter.Top(),    aInner.Left(),  aOuter.Bottom() ) );
     pDev->DrawRect( Rectangle( aOuter.Left(),  aOuter.Top(),    aOuter.Right(), aInner.Top()    ) );
     pDev->DrawRect( Rectangle( aInner.Right(), aOuter.Top(),    aOuter.Right(), aOuter.Bottom() ) );
@@ -185,14 +185,14 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
     if ( nTab+1<nTabCount && pDoc->IsScenario(nTab+1) && !pDoc->IsScenario(nTab) )
     {
         if ( nX1 > 0 ) --nX1;
-        if ( nY1>=2 ) nY1 -= 2;             // Hack: Titelzeile beruehrt zwei Zellen
+        if ( nY1>=2 ) nY1 -= 2;             // Hack: Header row affects two cells
         else if ( nY1 > 0 ) --nY1;
         if ( nX2 < MAXCOL ) ++nX2;
-        if ( nY2 < MAXROW-1 ) nY2 += 2;     // Hack: Titelzeile beruehrt zwei Zellen
+        if ( nY2 < MAXROW-1 ) nY2 += 2;     // Hack: Header row affects two cells
         else if ( nY2 < MAXROW ) ++nY2;
         ScRange aViewRange( nX1,nY1,nTab, nX2,nY2,nTab );
 
-        //! Ranges an der Table cachen!!!!
+        //! cache the ranges in table!!!!
 
         ScMarkData aMarks;
         for (SCTAB i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
@@ -206,13 +206,13 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
         for (size_t j = 0, n = xRanges->size(); j < n; ++j)
         {
             ScRange aRange = *(*xRanges)[j];
-            //  Szenario-Rahmen immer dann auf zusammengefasste Zellen erweitern, wenn
-            //  dadurch keine neuen nicht-ueberdeckten Zellen mit umrandet werden
+            // Always extend scenario frame to merged cells where no new non-covered cells
+            // are framed
             pDoc->ExtendTotalMerge( aRange );
 
-            //! -> Repaint beim Zusammenfassen erweitern !!!
+            //! -> Extend repaint when merging !!!
 
-            if ( aRange.Intersects( aViewRange ) )          //! Platz fuer Text/Button?
+            if ( aRange.Intersects( aViewRange ) )          //! Space for Text/Button?
             {
                 Point aStartPos = pViewData->GetScrPos(
                                     aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
@@ -240,7 +240,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
                 if (aCurrent.isEmpty())
                     aCurrent = ScGlobal::GetRscString( STR_EMPTYDATA );
 
-                //! eigener Text "(keins)" statt "(leer)" ???
+                //! Own text "(None)" instead of "(Empty)" ???
 
                 lcl_DrawOneFrame( pDev, Rectangle( aStartPos, aEndPos ),
                                     aCurrent, aColor, bTextBelow,
@@ -272,12 +272,12 @@ static void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
 void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
 {
     if ( rPixel == aInvertRect )
-        aInvertRect = Rectangle();      // aufheben
+        aInvertRect = Rectangle();      // Cancel
     else
     {
-        OSL_ENSURE( aInvertRect.IsEmpty(), "DoInvertRect nicht paarig" );
+        OSL_ENSURE( aInvertRect.IsEmpty(), "DoInvertRect no pairs" );
 
-        aInvertRect = rPixel;           // neues Rechteck merken
+        aInvertRect = rPixel;           // Mark new rectangle
     }
 
     UpdateHeaderOverlay();      // uses aInvertRect
@@ -304,19 +304,18 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangl
     ScDocument* pDoc = pViewData->GetDocument();
     if ( pDoc->IsInInterpreter() )
     {
-        //  via Reschedule, interpretierende Zellen nicht nochmal anstossen
-        //  hier kein Invalidate, sonst kommt z.B. eine Error-Box nie an die Reihe
-        //  (Bug 36381). Durch bNeedsRepaint wird spaeter alles nochmal gemalt.
-
+        // Via Reschedule, interpretended cells do not trigger Invalidate again,
+        // otherwise for instance an error box would never appear (bug 36381).
+        // Later, through bNeedsRepaint everything is painted again.
         if ( bNeedsRepaint )
         {
-            //! Rechtecke zusammenfassen?
-            aRepaintPixel = Rectangle();            // mehrfach -> alles painten
+            //! Merge Rectangle?
+            aRepaintPixel = Rectangle();            // multiple -> paint all
         }
         else
         {
             bNeedsRepaint = true;
-            aRepaintPixel = LogicToPixel(rRect);    // nur betroffenen Bereich
+            aRepaintPixel = LogicToPixel(rRect);    // only affected ranges
         }
         return;
     }
@@ -418,7 +417,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         nY2 = maVisibleRange.mnRow2;
 
     if ( eMode != SC_UPDATE_MARKS && nX2 < maVisibleRange.mnCol2)
-        nX2 = maVisibleRange.mnCol2;  // zum Weiterzeichnen
+        nX2 = maVisibleRange.mnCol2;  // to continue painting
 
     // point of no return
 
@@ -448,7 +447,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     bool bCurVis = nCursorHideCount==0 &&
                     ( nCurEndX+1 >= nX1 && nCurX <= nX2+1 && nCurEndY+1 >= nY1 && nCurY <= nY2+1 );
 
-    //  AutoFill-Anfasser
+    //  AutoFill Handles
     if ( !bCurVis && nCursorHideCount==0 && bAutoMarkVisible && aAutoMarkPos.Tab() == nTab &&
             ( aAutoMarkPos.Col() != nCurX || aAutoMarkPos.Row() != nCurY ) )
     {
@@ -457,7 +456,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         rDoc.ExtendMerge( nHdlX, nHdlY, nHdlX, nHdlY, nTab );
         // left and top is unaffected
 
-        //! AutoFill-Anfasser alleine (ohne Cursor) zeichnen ???
+        //! Paint AutoFill handles alone (without Cursor) ???
     }
 
     double nPPTX = pViewData->GetPPTX();
@@ -506,10 +505,9 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     DrawContent(*this, aTabInfo, aOutputData, bLogicText, eMode);
 
-    //  Wenn waehrend des Paint etwas invertiert wurde (Selektion geaendert aus Basic-Macro),
-    //  ist das jetzt durcheinandergekommen und es muss neu gemalt werden
-
-    OSL_ENSURE(nPaintCount, "nPaintCount falsch");
+    // If something was inverted during the Paint (selection changed from Basic Macro)
+    // then this is now mixed up and has to be repainted
+    OSL_ENSURE(nPaintCount, "Wrong nPaintCount");
     --nPaintCount;
     if (!nPaintCount)
         CheckNeedsRepaint();
@@ -568,7 +566,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     }
 
     bool bPageMode = pViewData->IsPagebreakMode();
-    if (bPageMode)                                      // nach FindChanged
+    if (bPageMode)                                      // after FindChanged
     {
         // SetPagebreakMode initialisiert auch bPrinted Flags
         aOutputData.SetPagebreakMode( pViewData->GetView()->GetPageBreakData() );
@@ -664,7 +662,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
-    //  Rand (Wiese) (Pixel)
+    // edge (area) (Pixel)
     if ( nX2==MAXCOL || nY2==MAXROW )
     {
         // save MapMode and set to pixel
@@ -709,7 +707,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         pContentDev->SetMapMode(MAP_PIXEL);
         aOutputData.DrawClear();
 
-            // Drawing Hintergrund
+            // drawing background
 
         pContentDev->SetMapMode(aDrawMode);
         DrawRedraw( aOutputData, eMode, SC_LAYER_BACK );
@@ -773,7 +771,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     else
         pContentDev->SetMapMode(MAP_PIXEL);
 
-        // Autofilter- und Pivot-Buttons
+        // Autofilter- and Pivot-Buttons
 
     DrawButtons(nX1, nX2, rTableInfo, pContentDev);          // Pixel
 
@@ -781,7 +779,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     aOutputData.DrawClipMarks();
 
-    //  Szenario / ChangeTracking muss auf jeden Fall nach DrawGrid sein, auch bei !bGridFirst
+    // In any case, Szenario / ChangeTracking must happen after DrawGrid, also for !bGridFirst
 
     //! Test, ob ChangeTrack-Anzeige aktiv ist
     //! Szenario-Rahmen per View-Optionen abschaltbar?
@@ -794,7 +792,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if ( bHasChange || bHasScenario || !rHigh.empty() )
     {
 
-        //! SetChangedClip() mit DrawMarks() zusammenfassen?? (anderer MapMode!)
+        //! Merge SetChangedClip() with DrawMarks() ?? (different MapMode!)
 
         bool bAny = true;
         if (eMode == SC_UPDATE_CHANGED)
@@ -814,7 +812,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         }
     }
 
-        // Drawing Vordergrund
+        // Drawing foreground
 
     pContentDev->SetMapMode(aDrawMode);
 
@@ -822,7 +820,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     DrawRedraw( aOutputData, eMode, SC_LAYER_INTERN );
     DrawSdrGrid( aDrawingRectLogic, pContentDev );
 
-    if (!bIsInScroll)                               // Drawing Markierungen
+    if (!bIsInScroll)                               // Drawing marks
     {
         if(eMode == SC_UPDATE_CHANGED && aOutputData.SetChangedClip())
         {
@@ -840,7 +838,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                                  aRefColor, false );
     }
 
-        //  Range-Finder
+        // range finder
 
     ScInputHandler* pHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
     if (pHdl)
@@ -937,7 +935,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         rDevice.SetMapMode(aDrawMode);
 
     if (mpNoteMarker)
-        mpNoteMarker->Draw(); // ueber den Cursor, im Drawing-MapMode
+        mpNoteMarker->Draw(); // Above the cursor, in drawing map mode
 }
 
 void ScGridWindow::PaintTile( VirtualDevice& rDevice,
@@ -1164,8 +1162,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
             if ( aRange.aStart.Col() <= nX2+1  && aRange.aEnd.Col()+1 >= nX1 &&
                  aRange.aStart.Row() <= nY2+1 && aRange.aEnd.Row()+1 >= nY1 )
             {
-                //  3 Pixel Rahmen um den Druckbereich
-                //  (mittlerer Pixel auf den Gitterlinien)
+                // 3 pixel frame around the print area
+                //  (middle pixel on the grid lines)
 
                 pContentDev->SetLineColor();
                 if (rData.IsAutomatic())
@@ -1180,7 +1178,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 aStart.X() -= 2;
                 aStart.Y() -= 2;
 
-                //  Ueberlaeufe verhindern:
+                // Prevent overflows:
                 if ( aStart.X() < -10 ) aStart.X() = -10;
                 if ( aStart.Y() < -10 ) aStart.Y() = -10;
                 if ( aEnd.X() > aWinSize.Width() + 10 )
@@ -1193,8 +1191,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 pContentDev->DrawRect( Rectangle( Point(aStart.X(),aEnd.Y()-2), aEnd ) );
                 pContentDev->DrawRect( Rectangle( Point(aEnd.X()-2,aStart.Y()), aEnd ) );
 
-                //  Seitenumbrueche
-                //! anders darstellen (gestrichelt ????)
+                // Page breakes
+                //! Display differently (dashed ????)
 
                 size_t nColBreaks = rData.GetPagesX();
                 const SCCOL* pColEnd = rData.GetPageEndX();
@@ -1204,7 +1202,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     SCCOL nBreak = pColEnd[nColPos]+1;
                     if ( nBreak >= nX1 && nBreak <= nX2+1 )
                     {
-                        //! hidden suchen
+                        //! Search for hidden
                         if (pDoc->HasColBreak(nBreak, nTab) & BREAK_MANUAL)
                             pContentDev->SetFillColor( aManual );
                         else
@@ -1223,7 +1221,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     SCROW nBreak = pRowEnd[nRowPos]+1;
                     if ( nBreak >= nY1 && nBreak <= nY2+1 )
                     {
-                        //! hidden suchen
+                        //! Search for hidden
                         if (pDoc->HasRowBreak(nBreak, nTab) & BREAK_MANUAL)
                             pContentDev->SetFillColor( aManual );
                         else
@@ -1234,7 +1232,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     }
                 }
 
-                //  Seitenzahlen
+                // Page numbers
 
                 SCROW nPrStartY = aRange.aStart.Row();
                 for (nRowPos=0; nRowPos<nRowBreaks; nRowPos++)
@@ -1335,8 +1333,8 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
 
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
-    Point aOldPos  = aComboButton.GetPosPixel();    // Zustand fuer MouseDown/Up
-    Size  aOldSize = aComboButton.GetSizePixel();   // merken
+    Point aOldPos  = aComboButton.GetPosPixel();    // store state for MouseDown/Up
+    Size  aOldSize = aComboButton.GetSizePixel();
 
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -1377,11 +1375,10 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                         else
                         {
                             // can also be part of DataPilot table
-                            // OSL_FAIL("Auto-Filter-Button ohne DBData");
                         }
                     }
 
-                    //  pQueryParam kann nur MAXQUERY Eintraege enthalten
+                    //  pQueryParam can only include MAXQUERY entries
 
                     bool bSimpleQuery = true;
                     bool bColumnFound = false;
@@ -1391,8 +1388,8 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
                     for (nQuery = 0; nQuery < nCount && bSimpleQuery; ++nQuery)
                         if (pQueryParam->GetEntry(nQuery).bDoQuery)
                         {
-                            //  hier nicht auf EQUAL beschraenken
-                            //  (auch bei ">1" soll der Spaltenkopf blau werden)
+                            //  Do no restrict to EQUAL here
+                            //  (Column head should become blue also when ">1")
 
                             if (pQueryParam->GetEntry(nQuery).nField == nCol)
                                 bColumnFound = true;
@@ -1529,7 +1526,7 @@ bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
         pDBData->GetQueryParam( aQueryParam );
     else
     {
-        OSL_FAIL("Auto-Filter-Button ohne DBData");
+        OSL_FAIL("Auto filter button without DBData");
     }
 
     bool    bSimpleQuery = true;
@@ -1539,7 +1536,7 @@ bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( !aQueryParam.bInplace )
         bSimpleQuery = false;
 
-    //  aQueryParam kann nur MAXQUERY Eintraege enthalten
+    // aQueryParam can only include MAXQUERY entries
 
     SCSIZE nCount = aQueryParam.GetEntryCount();
     for (nQuery = 0; nQuery < nCount && bSimpleQuery; ++nQuery)
@@ -1629,13 +1626,13 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     for (SCROW nY=nY1; nY<=nY2; nY++)
     {
         bool bFirstRow = ( nY == nPosY );                       // first visible row?
-        bool bDoHidden = false;                                 // versteckte nachholen ?
+        bool bDoHidden = false;                                 // repete hidden ?
         sal_uInt16 nHeightTwips = pDoc->GetRowHeight( nY,nTab );
         bool bDoRow = ( nHeightTwips != 0 );
         if (bDoRow)
         {
             if (bTestMerge)
-                if (bWasHidden)                 // auf versteckte zusammengefasste testen
+                if (bWasHidden)                 // test hidden merge
                 {
                     bDoHidden = true;
                     bDoRow = true;
@@ -1648,13 +1645,13 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
             bWasHidden = true;
             if (bTestMerge)
                 if (nY==nY2)
-                    bDoRow = true;              // letzte Zeile aus Block
+                    bDoRow = true;              // last cell of the block
         }
 
         if ( bDoRow )
         {
             SCCOL nLoopEndX = nX2;
-            if (nX2 < nX1)                      // Rest von zusammengefasst
+            if (nX2 < nX1)                      // the rest of the merge
             {
                 SCCOL nStartX = nX1;
                 while ( static_cast<const ScMergeFlagAttr*>(pDoc->
@@ -1689,7 +1686,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                             }
                         }
 
-                        // nur Rest von zusammengefasster zu sehen ?
+                        // only the rest of the merged is seen ?
                         SCCOL nThisX = nX;
                         if ( pMergeFlag->IsHorOverlapped() && nX == nPosX && nX > nRealX1 )
                         {
