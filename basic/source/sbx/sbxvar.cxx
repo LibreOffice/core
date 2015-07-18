@@ -144,7 +144,7 @@ SbxArray* SbxVariable::GetParameters() const
 // Perhaps some day one could cut the parameter 0.
 // then the copying will be dropped ...
 
-void SbxVariable::Broadcast( sal_uIntPtr nHintId )
+void SbxVariable::Broadcast( sal_uInt32 nHintId )
 {
     if( pCst && !IsSet( SBX_NO_BROADCAST ) )
     {
@@ -668,7 +668,7 @@ SbxAlias::~SbxAlias()
     }
 }
 
-void SbxAlias::Broadcast( sal_uIntPtr nHt )
+void SbxAlias::Broadcast( sal_uInt32 nHt )
 {
     if( xAlias.Is() )
     {

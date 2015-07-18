@@ -63,7 +63,7 @@ public:
 
     // Interface to execute a method from the applications
     ErrCode         Call( SbxValue* pRet = NULL,  SbxVariable* pCaller = NULL );
-    virtual void    Broadcast( sal_uIntPtr nHintId ) SAL_OVERRIDE;
+    virtual void    Broadcast( sal_uInt32 nHintId ) SAL_OVERRIDE;
 };
 
 typedef tools::SvRef<SbMethod> SbMethodRef;

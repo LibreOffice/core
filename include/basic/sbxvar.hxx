@@ -97,7 +97,7 @@ protected:
     OUString aPic;  // Picture-String
     OUString aToolString;  // tool string copy
 
-    virtual void Broadcast( sal_uIntPtr );      // Broadcast-Call
+    virtual void Broadcast( sal_uInt32 );      // Broadcast-Call
     virtual ~SbxValue();
     virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
     virtual bool StoreData( SvStream& ) const SAL_OVERRIDE;
@@ -285,7 +285,7 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
 
 protected:
     SbxInfoRef  pInfo;              // Probably called information
-    sal_uIntPtr nUserData;          // User data for Call()
+    sal_uInt32 nUserData;           // User data for Call()
     SbxObject* pParent;             // Currently attached object
     virtual ~SbxVariable();
     virtual bool LoadData( SvStream&, sal_uInt16 ) SAL_OVERRIDE;
@@ -306,8 +306,8 @@ public:
 
     virtual void SetModified( bool ) SAL_OVERRIDE;
 
-    sal_uIntPtr GetUserData() const        { return nUserData; }
-    void SetUserData( sal_uIntPtr n ) { nUserData = n;    }
+    sal_uInt32 GetUserData() const { return nUserData; }
+    void SetUserData( sal_uInt32 n ) { nUserData = n; }
 
     virtual SbxDataType  GetType()  const SAL_OVERRIDE;
     virtual SbxClassType GetClass() const SAL_OVERRIDE;
@@ -322,7 +322,7 @@ public:
     // Due to data reduction and better DLL-hierarchy currently via casting
     SfxBroadcaster& GetBroadcaster();
     bool IsBroadcaster() const { return pCst != NULL; }
-    virtual void Broadcast( sal_uIntPtr nHintId ) SAL_OVERRIDE;
+    virtual void Broadcast( sal_uInt32 nHintId ) SAL_OVERRIDE;
 
     inline const SbxObject* GetParent() const { return pParent; }
     SbxObject* GetParent() { return pParent;}

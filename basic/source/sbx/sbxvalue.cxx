@@ -195,7 +195,7 @@ void SbxValue::Clear()
                     SAL_INFO("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
                     SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                     bool bParentProp = pThisVar && 5345 ==
-                    ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
+                        static_cast<sal_uInt16>(pThisVar->GetUserData());
                     if ( !bParentProp )
                         aData.pObj->ReleaseRef();
                 }
@@ -220,7 +220,7 @@ void SbxValue::Clear()
 
 // Dummy
 
-void SbxValue::Broadcast( sal_uIntPtr )
+void SbxValue::Broadcast( sal_uInt32 )
 {}
 
 //////////////////////////// Readout data
@@ -541,7 +541,7 @@ bool SbxValue::Put( const SbxValues& rVal )
                             SAL_INFO("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
                             SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                             bool bParentProp = pThisVar && 5345 ==
-                                    ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
+                                static_cast<sal_uInt16>(pThisVar->GetUserData());
                             if ( !bParentProp )
                                 p->aData.pObj->AddFirstRef();
                         }
@@ -804,7 +804,7 @@ bool SbxValue::SetType( SbxDataType t )
                         SAL_WARN("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
                         SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                         sal_uInt16 nSlotId = pThisVar
-                                    ? ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) )
+                                    ? static_cast<sal_uInt16>(pThisVar->GetUserData())
                                     : 0;
                         DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName() == "Parent",
                                     "SID_PARENTOBJECT is not named 'Parent'" );

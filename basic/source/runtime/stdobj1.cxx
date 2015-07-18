@@ -155,7 +155,7 @@ void SbStdPicture::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
-        sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
+        const sal_uInt32 nWhich = pVar->GetUserData();
         bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Propteries
@@ -280,7 +280,7 @@ void SbStdFont::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
-        sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
+        const sal_uInt32 nWhich = pVar->GetUserData();
         bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Propteries
@@ -448,7 +448,7 @@ void SbStdClipboard::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         SbxVariable* pVar   = pHint->GetVar();
         SbxArray*    pPar_  = pVar->GetParameters();
-        sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
+        const sal_uInt32 nWhich = pVar->GetUserData();
         bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
         // Methods

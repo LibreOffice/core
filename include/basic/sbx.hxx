@@ -95,7 +95,7 @@ class BASIC_DLLPUBLIC SbxHint : public SfxSimpleHint
 {
     SbxVariable* pVar;
 public:
-    SbxHint( sal_uIntPtr n, SbxVariable* v ) : SfxSimpleHint( n ), pVar( v ) {}
+    SbxHint( sal_uInt32 n, SbxVariable* v ) : SfxSimpleHint( n ), pVar( v ) {}
     SbxVariable* GetVar() const { return pVar; }
 };
 
@@ -104,7 +104,7 @@ class BASIC_DLLPUBLIC SbxAlias : public SbxVariable, public SfxListener
 {
     SbxVariableRef xAlias;
     virtual ~SbxAlias();
-    virtual void Broadcast( sal_uIntPtr ) SAL_OVERRIDE;
+    virtual void Broadcast( sal_uInt32 ) SAL_OVERRIDE;
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 public:
     SbxAlias( const SbxAlias& );
