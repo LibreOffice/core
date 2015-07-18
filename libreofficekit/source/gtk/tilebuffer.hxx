@@ -86,7 +86,10 @@ class TileBuffer
             int columns)
      : m_pLOKDocument(document)
         , m_nWidth(columns)
-    {  }
+    {
+        GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, nTileSizePixels, nTileSizePixels);
+        m_DummyTile.setPixbuf(pPixBuf);
+    }
 
     ~TileBuffer() {}
 
@@ -104,7 +107,7 @@ class TileBuffer
 
        @return the tile at the mentioned position (x, y)
      */
-    Tile& getTile(int x, int y, float aZoom);
+    Tile& getTile(int x, int y, float aZoom, GTask*);
     /// Destroys all the tiles in the tile buffer; also frees the memory allocated
     /// for all the Tile objects.
     void resetAllTiles();
@@ -115,16 +118,33 @@ class TileBuffer
        @param x the position of tile along x-axis
        @param y the position of tile along y-axis
      */
-    void setInvalid(int x, int y);
+    void setInvalid(int x, int y, float zoom);
 
- private:
+
     /// Contains the reference to the LOK Document that this tile buffer is for.
     LibreOfficeKitDocument *m_pLOKDocument;
     /// Stores all the tiles cached by this tile buffer.
     std::map<int, Tile> m_mTiles;
     /// Width of the current tile buffer (number of columns)
     int m_nWidth;
+    /// Dummy tile
+    Tile m_DummyTile;
 };
+
+struct GetTileCallbackData
+{
+    int m_nX;
+    int m_nY;
+    float m_fZoom;
+    TileBuffer* m_pBuffer;
+
+    GetTileCallbackData(int x, int y, float zoom, TileBuffer* buffer)
+        : m_nX(x),
+          m_nY(y),
+          m_fZoom(zoom),
+          m_pBuffer(buffer) { }
+};
+
 
 #endif // INCLUDED_TILEBUFFER_HXX
 
