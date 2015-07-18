@@ -160,13 +160,13 @@ void lclInsertCharacter( EditView* pTableView, EditView* pTopView, sal_Unicode c
 void ScEditShell::Execute( SfxRequest& rReq )
 {
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    sal_uInt16              nSlot       = rReq.GetSlot();
+    sal_uInt16              nSlot   = rReq.GetSlot();
     SfxBindings&        rBindings   = pViewData->GetBindings();
 
     ScInputHandler* pHdl = GetMyInputHdl();
-    OSL_ENSURE(pHdl,"kein ScInputHandler");
+    OSL_ENSURE(pHdl,"no ScInputHandler");
 
-    EditView* pTopView   = pHdl->GetTopView();      // hat Eingabezeile den Focus?
+    EditView* pTopView   = pHdl->GetTopView();      // Has thee input cell the focus?
     EditView* pTableView = pHdl->GetTableView();
 
     OSL_ENSURE(pTableView,"no EditView :-(");
@@ -187,7 +187,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
     switch ( nSlot )
     {
-        case FID_INS_CELL_CONTENTS: // Insert-Taste, weil als Acc definiert
+        case FID_INS_CELL_CONTENTS: // Insert taste, while defined as Acc
             bIsInsertMode = !pTableView->IsInsertMode();
             pTableView->SetInsertMode( bIsInsertMode );
             if (pTopView)
@@ -358,7 +358,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     if ( pFontItem )
                     {
                         OUString aFontName(pFontItem->GetValue());
-                        vcl::Font aFont(aFontName, Size(1,1)); // Size nur wg. CTOR
+                        vcl::Font aFont(aFontName, Size(1,1)); // Size just because CTOR
                         aNewItem = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                                     aFont.GetStyleName(), aFont.GetPitch(),
                                     aFont.GetCharSet(), ATTR_FONT  );
@@ -390,7 +390,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     aSetItem.PutItemForScriptType( nSetScript, aNewItem );
                     aSet.Put( aSetItem.GetItemSet(), false );
 
-                    //  SetAttribs an der View selektiert ein Wort, wenn nichts selektiert ist
+                    // SetAttribs on the View selects a word, when nothing is selected
                     pTableView->GetEditEngine()->QuickSetAttribs( aSet, pTableView->GetSelection() );
                     pTableView->InsertText(aString);
                     if (pTopView)
@@ -483,7 +483,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if (pEngine->GetParagraphCount() == 1)
                 {
                     OUString aText = pEngine->GetText();
-                    ESelection aSel = pEditView->GetSelection();    // aktuelle View
+                    ESelection aSel = pEditView->GetSelection();    // current View
 
                     ScDocument* pDoc = pViewData->GetDocument();
                     ScRefFinder aFinder(aText, pViewData->GetCurPos(), pDoc, pDoc->GetAddressConvention());
@@ -500,7 +500,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTopView->SetSelection( aNewSel );
                         }
 
-                        //  Referenz wird selektiert -> beim Tippen nicht ueberschreiben
+                        // refenence is being selected -> do not overwrite when typing
                         bSetSelIsRef = true;
                     }
                 }
@@ -525,7 +525,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         const SvxURLField* pURLField = GetURLField();
                         if ( pURLField )
                         {
-                            //  altes Feld selektieren
+                            // select old field
 
                             ESelection aSel = pTableView->GetSelection();
                             aSel.Adjust();
@@ -533,7 +533,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             aSel.nEndPos = aSel.nStartPos + 1;
                             pTableView->SetSelection( aSel );
 
-                            //  neues Feld einfuegen
+                            // insert new field
 
                             SvxURLField aURLField( rURL, rName, SVXURLFORMAT_REPR );
                             aURLField.SetTargetFrame( rTarget );
@@ -541,7 +541,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTableView->InsertField( aURLItem );
                             pTableView->SetSelection( aSel );       // select inserted field
 
-                            //  jetzt doch auch Felder in der Top-View
+                            // now also fields in the Top-View
 
                             if ( pTopView )
                             {
@@ -562,9 +562,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         pViewData->GetViewShell()->
                             InsertURL( rName, rURL, rTarget, (sal_uInt16) eMode );
 
-                        //  InsertURL an der ViewShell schaltet bei "Button"
-                        //  die EditShell ab, darum sofort return
-
+                        // when "Button", the InsertURL in ViewShell turns the EditShell  off
+                        // thus the immediate return statement
                         return;
                     }
                 }
@@ -659,7 +658,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
     {
         switch (nWhich)
         {
-            case SID_ATTR_INSERT:   // Statuszeile
+            case SID_ATTR_INSERT:   // Status row
                 {
                     if ( pActiveView )
                         rSet.Put( SfxBoolItem( nWhich, pActiveView->IsInsertMode() ) );
@@ -1040,7 +1039,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             break;
     }
 
-    //  anwenden
+    // apply
 
     EditEngine* pEngine = pEditView->GetEditEngine();
     bool bOld = pEngine->GetUpdateMode();
@@ -1092,7 +1091,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     if ( rSet.GetItemState( EE_CHAR_ITALIC ) != SfxItemState::UNKNOWN )
         ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_ITALIC, nScript );
 
-    //  Unterstreichung
+    // underline
 
     SfxItemState eState = aAttribs.GetItemState( EE_CHAR_UNDERLINE, true );
     if ( eState == SfxItemState::DONTCARE )
@@ -1118,10 +1117,10 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
         rSet.Put( SfxBoolItem( nId, true ) );
     }
 
-    //! Testen, ob Klammer-Hervorhebung aktiv ist !!!!
+    //! Testing whether brace highlighting is active !!!!
     ScInputHandler* pHdl = GetMyInputHdl();
     if ( pHdl && pHdl->IsFormulaMode() )
-        rSet.ClearItem( EE_CHAR_WEIGHT );   // hervorgehobene Klammern hier nicht
+        rSet.ClearItem( EE_CHAR_WEIGHT );   // Highlighted brace not here
 
     SvxEscapement eEsc = (SvxEscapement) static_cast<const SvxEscapementItem&>(
                     aAttribs.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
@@ -1140,7 +1139,6 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     pViewData->GetBindings().Invalidate( SID_ATTR_CHAR_KERNING );
     if ( eState == SfxItemState::DONTCARE )
     {
-    //  rSet.InvalidateItem( SID_ATTR_CHAR_KERNING );
         rSet.InvalidateItem(EE_CHAR_KERNING);
     }
 }
