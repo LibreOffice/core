@@ -653,14 +653,12 @@ IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl)
 }
 
 
-IMPL_LINK( SfxToolBoxControl, ClosePopupWindow, SfxPopupWindow *, pWindow )
+IMPL_LINK_TYPED( SfxToolBoxControl, ClosePopupWindow, SfxPopupWindow *, pWindow, void )
 {
     if ( pWindow == pImpl->mpFloatingWindow )
         pImpl->mpFloatingWindow = 0;
     else
         pImpl->mpPopupWindow = 0;
-
-    return 1;
 }
 
 

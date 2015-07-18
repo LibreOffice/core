@@ -1231,7 +1231,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
 }
 
 
-IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
+IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, void)
 {
     assert(m_pFileDlg);
 
@@ -1240,7 +1240,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
         sCfgName = m_pFileDlg->GetPath();
 
     if ( sCfgName.isEmpty() )
-        return 0;
+        return;
 
     GetTabDialog()->EnterWait();
 
@@ -1312,12 +1312,10 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, LoadHdl)
     {}
 
     GetTabDialog()->LeaveWait();
-
-    return 0;
 }
 
 
-IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
+IMPL_LINK_NOARG_TYPED(SfxAcceleratorConfigPage, SaveHdl, sfx2::FileDialogHelper*, void)
 {
     assert(m_pFileDlg);
 
@@ -1326,7 +1324,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
         sCfgName = m_pFileDlg->GetPath();
 
     if ( sCfgName.isEmpty() )
-        return 0;
+        return;
 
     GetTabDialog()->EnterWait();
 
@@ -1415,8 +1413,6 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, SaveHdl)
     {}
 
     GetTabDialog()->LeaveWait();
-
-    return 0;
 }
 
 
@@ -1433,7 +1429,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& r
     m_pFileDlg->AddFilter( aFilterCfgStr, OUString("*.cfg") );
     m_pFileDlg->SetCurrentFilter( aFilterCfgStr );
 
-    Link<> aDlgClosedLink = bSave ? LINK( this, SfxAcceleratorConfigPage, SaveHdl )
+    Link<sfx2::FileDialogHelper*,void> aDlgClosedLink = bSave ? LINK( this, SfxAcceleratorConfigPage, SaveHdl )
                                 : LINK( this, SfxAcceleratorConfigPage, LoadHdl );
     m_pFileDlg->StartExecuteModal( aDlgClosedLink );
 }

@@ -111,7 +111,7 @@ class SwNavigationPI : public vcl::Window,
     DECL_LINK_TYPED( ChangePageHdl, Idle*, void );
     DECL_LINK( PageEditModifyHdl, void* );
     DECL_LINK( PopupModeEndHdl, void * );
-    DECL_LINK( ClosePopupWindow, SfxPopupWindow * );
+    DECL_LINK_TYPED( ClosePopupWindow, SfxPopupWindow *, void );
     void UsePage(SwWrtShell *);
 
     void MakeVisible();

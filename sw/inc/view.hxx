@@ -609,7 +609,7 @@ public:
 
     void ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem );
     long InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVersion );
-    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper * );
+    DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper *, void );
 
     // status methods for clipboard.
     // Status changes now notified from the clipboard.

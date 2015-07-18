@@ -88,7 +88,7 @@ class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusList
 {
     bool                                                                             m_bFloating;
     bool                                                                             m_bCascading;
-    Link<>                                                                           m_aDeleteLink;
+    Link<SfxPopupWindow*,void>                                                       m_aDeleteLink;
     sal_uInt16                                                                       m_nId;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
     SfxFrameStatusListener*                                                          m_pStatusListener;
@@ -140,7 +140,7 @@ public:
     virtual void            MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void                    StartCascading();
-    SAL_DLLPRIVATE void SetDeleteLink_Impl( const Link<>& rLink )
+    SAL_DLLPRIVATE void SetDeleteLink_Impl( const Link<SfxPopupWindow*,void>& rLink )
                             {
                                 m_aDeleteLink = rLink;
                             }
@@ -174,7 +174,7 @@ friend struct SfxTbxCtrlFactory;
 
 protected:
     DECL_LINK( PopupModeEndHdl, void * );
-    DECL_LINK( ClosePopupWindow, SfxPopupWindow * );
+    DECL_LINK_TYPED( ClosePopupWindow, SfxPopupWindow *, void );
 
     // old SfxToolBoxControl methods
     virtual void               StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );

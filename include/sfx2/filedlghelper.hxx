@@ -92,7 +92,7 @@ public:
     };
 
 private:
-    Link<>  m_aDialogClosedLink;
+    Link<FileDialogHelper*,void>  m_aDialogClosedLink;
     ErrCode m_nError;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePickerListener > mxImp;
@@ -131,11 +131,11 @@ public:
     virtual                 ~FileDialogHelper();
 
     ErrCode                 Execute();
-    void                    StartExecuteModal( const Link<>& rEndDialogHdl );
+    void                    StartExecuteModal( const Link<FileDialogHelper*,void>& rEndDialogHdl );
     inline ErrCode          GetError() const { return m_nError; }
     sal_Int16               GetDialogType() const;
     bool                    IsPasswordEnabled() const;
-    OUString                  GetRealFilter() const;
+    OUString                GetRealFilter() const;
 
     void                    SetTitle( const OUString&  rNewTitle );
     OUString                GetPath() const;

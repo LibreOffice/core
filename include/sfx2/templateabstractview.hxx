@@ -115,7 +115,7 @@ public:
     // Check if the root region is visible or not.
     bool isNonRootRegionVisible () const { return mnCurRegionId > 0;}
 
-    void setOpenRegionHdl(const Link<> &rLink);
+    void setOpenRegionHdl(const Link<void*,void> &rLink);
 
     void setOpenTemplateHdl (const Link<> &rLink);
 
@@ -141,7 +141,7 @@ protected:
     VclPtr<PushButton> maAllButton;
     VclPtr<FixedText>  maFTName;
 
-    Link<> maOpenRegionHdl;
+    Link<void*,void> maOpenRegionHdl;
     Link<> maOpenTemplateHdl;
 };
 

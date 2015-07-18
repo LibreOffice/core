@@ -424,7 +424,7 @@ private:
     SvNumberFormatter                   m_aNumberFormatter;
     Idle                                m_aEditLoseFocusIdle;
     Idle                                m_aBoxLoseFocusIdle;
-    Link<>                              m_aRemovedHdl;
+    Link<void*,void>                    m_aRemovedHdl;
 
     DECL_STATIC_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox* );
     DECL_LINK(  RemoveHdl, CustomPropertiesRemoveButton* );
@@ -456,7 +456,7 @@ public:
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                         GetCustomProperties() const;
-    void                SetRemovedHdl( const Link<>& rLink ) { m_aRemovedHdl = rLink; }
+    void                SetRemovedHdl( const Link<void*,void>& rLink ) { m_aRemovedHdl = rLink; }
 
     void                updateLineWidth();
 };
@@ -475,7 +475,7 @@ private:
     sal_Int32               m_nThumbPos;
 
     DECL_LINK( ScrollHdl, ScrollBar* );
-    DECL_LINK( RemovedHdl, void* );
+    DECL_LINK_TYPED( RemovedHdl, void*, void );
 
 public:
     CustomPropertiesControl(vcl::Window* pParent);

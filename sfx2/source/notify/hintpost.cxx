@@ -24,7 +24,7 @@
 #include "sfxtypes.hxx"
 
 
-SfxHintPoster::SfxHintPoster(const Link<>& rLink)
+SfxHintPoster::SfxHintPoster(const Link<SfxRequest*,void>& rLink)
     : m_Link(rLink)
 {
 }
@@ -33,25 +33,20 @@ SfxHintPoster::~SfxHintPoster()
 {
 }
 
-void SfxHintPoster::Post( SfxHint* pHintToPost )
+void SfxHintPoster::Post( SfxRequest* pHintToPost )
 {
     Application::PostUserEvent( ( LINK(this, SfxHintPoster, DoEvent_Impl) ), pHintToPost );
     AddFirstRef();
 }
 
-IMPL_LINK( SfxHintPoster, DoEvent_Impl, SfxHint *, pPostedHint )
+IMPL_LINK( SfxHintPoster, DoEvent_Impl, SfxRequest *, pPostedHint )
 {
-    Event( pPostedHint );
+    m_Link.Call( pPostedHint );
     ReleaseRef();
     return 0;
 }
 
-void SfxHintPoster::Event( SfxHint* pPostedHint )
-{
-    m_Link.Call( pPostedHint );
-}
-
-void SfxHintPoster::SetEventHdl(const Link<>& rLink)
+void SfxHintPoster::SetEventHdl(const Link<SfxRequest*,void>& rLink)
 {
     m_Link = rLink;
 }

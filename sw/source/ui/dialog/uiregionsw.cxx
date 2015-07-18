@@ -1331,7 +1331,7 @@ IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
+IMPL_LINK_TYPED( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, void )
 {
     OUString sFileName, sFilterName, sPassword;
     if ( _pFileDlg->GetError() == ERRCODE_NONE )
@@ -1360,7 +1360,6 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
     }
 
     Application::SetDefDialogParent( m_pOldDefDlgParent );
-    return 0;
 }
 
 IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
@@ -1812,7 +1811,7 @@ IMPL_LINK( SwInsertSectionTabPage, DDEHdl, CheckBox*, pBox )
     return 0;
 }
 
-IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
+IMPL_LINK_TYPED( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, void )
 {
     if ( _pFileDlg->GetError() == ERRCODE_NONE )
     {
@@ -1833,7 +1832,6 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
         m_sFilterName = m_sFilePasswd = aEmptyOUStr;
 
     Application::SetDefDialogParent( m_pOldDefDlgParent );
-    return 0;
 }
 
 SwSectionFootnoteEndTabPage::SwSectionFootnoteEndTabPage( vcl::Window *pParent,

@@ -155,8 +155,8 @@ private:
     DECL_LINK(Default, void *);
     DECL_LINK(RadioHdl, void *);
 
-    DECL_LINK(LoadHdl, void *);
-    DECL_LINK(SaveHdl, void *);
+    DECL_LINK_TYPED(LoadHdl, sfx2::FileDialogHelper *, void);
+    DECL_LINK_TYPED(SaveHdl, sfx2::FileDialogHelper *, void);
 
     OUString                    GetLabel4Command(const OUString& rCommand);
     void                        InitAccCfg();

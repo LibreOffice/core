@@ -506,7 +506,7 @@ IMPL_LINK( SvFileObject, DelMedium_Impl, SfxMediumRef*, deleteMedium )
     return 0;
 }
 
-IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+IMPL_LINK_TYPED( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
     OUString sFile;
     Application::SetDefDialogParent( pOldParent );
@@ -529,7 +529,6 @@ IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 
     if ( aEndEditLink.IsSet() )
         aEndEditLink.Call( &sFile );
-    return 0;
 }
 
 /*  [Description]
