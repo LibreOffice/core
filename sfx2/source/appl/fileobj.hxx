@@ -56,7 +56,7 @@ class SvFileObject : public sfx2::SvLinkSource
 
     DECL_LINK( DelMedium_Impl, SfxMediumRef* );
     DECL_LINK( LoadGrfReady_Impl, void* );
-    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
+    DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
 
 protected:
     virtual ~SvFileObject();

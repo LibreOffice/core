@@ -88,7 +88,7 @@ friend class SfxApplication;
 friend class SfxViewFrame;
 
     DECL_DLLPRIVATE_LINK_TYPED( EventHdl_Impl, Idle *, void );
-    DECL_DLLPRIVATE_LINK( PostMsgHandler, SfxRequest * );
+    DECL_DLLPRIVATE_LINK_TYPED( PostMsgHandler, SfxRequest *, void );
 
     SAL_DLLPRIVATE void Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, bool bRecord );
     SAL_DLLPRIVATE void _Update_Impl( bool,bool,bool,SfxWorkWindow*);

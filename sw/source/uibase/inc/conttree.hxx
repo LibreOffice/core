@@ -249,7 +249,7 @@ private:
     void        InsertRegion( const SwGlblDocContent* _pContent,
                               const com::sun::star::uno::Sequence< OUString >& _rFiles );
 
-    DECL_LINK(  DialogClosedHdl, sfx2::FileDialogHelper* );
+    DECL_LINK_TYPED(  DialogClosedHdl, sfx2::FileDialogHelper*, void );
 
     using SvTreeListBox::DoubleClickHdl;
     using SvTreeListBox::ExecuteDrop;

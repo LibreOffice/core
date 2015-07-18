@@ -246,7 +246,7 @@ class SmViewShell: public SfxViewShell
 
     bool bPasteState;
 
-    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
+    DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     /** Used to determine whether insertions using SID_INSERTSYMBOL and SID_INSERTCOMMAND

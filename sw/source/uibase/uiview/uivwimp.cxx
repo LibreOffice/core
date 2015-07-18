@@ -238,7 +238,7 @@ void SwView_Impl::AddTransferable(SwTransferable& rTransferable)
     rTransferable.m_refCount--;
 }
 
-void SwView_Impl::StartDocumentInserter( const OUString& rFactory, const Link<>& rEndDialogHdl )
+void SwView_Impl::StartDocumentInserter( const OUString& rFactory, const Link<sfx2::FileDialogHelper*,void>& rEndDialogHdl )
 {
     delete m_pDocInserter;
     m_pDocInserter = new ::sfx2::DocumentInserter( rFactory );

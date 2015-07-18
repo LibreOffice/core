@@ -77,7 +77,7 @@ private:
     DECL_LINK(RepositoryMenuSelectHdl, Menu*);
     DECL_LINK(DefaultTemplateMenuSelectHdl, Menu*);
 
-    DECL_LINK(OpenRegionHdl, void*);
+    DECL_LINK_TYPED(OpenRegionHdl, void*, void);
     DECL_LINK(OpenTemplateHdl, ThumbnailViewItem*);
 
     DECL_LINK(SearchUpdateHdl, void*);

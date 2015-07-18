@@ -97,7 +97,7 @@ private:
     DECL_LINK(CountHdl_Impl, void *);
     DECL_LINK(DoEnterHdl, void *);
     DECL_LINK_TYPED(BrowseTimeoutHdl, Timer *, void);
-    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
+    DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_INSTBDLG_HXX

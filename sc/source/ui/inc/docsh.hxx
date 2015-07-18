@@ -349,7 +349,7 @@ public:
     void            LockDocument();
     void            UnlockDocument();
 
-    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
+    DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
 
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool() SAL_OVERRIDE;
 

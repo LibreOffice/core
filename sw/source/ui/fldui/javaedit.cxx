@@ -273,7 +273,7 @@ IMPL_LINK( SwJavaEditDialog, InsertFileHdl, PushButton *, pBtn )
     return 0;
 }
 
-IMPL_LINK_NOARG(SwJavaEditDialog, DlgClosedHdl)
+IMPL_LINK_NOARG_TYPED(SwJavaEditDialog, DlgClosedHdl, sfx2::FileDialogHelper *, void)
 {
     if ( pFileDlg->GetError() == ERRCODE_NONE )
     {
@@ -286,8 +286,6 @@ IMPL_LINK_NOARG(SwJavaEditDialog, DlgClosedHdl)
         }
         m_pUrlED->SetText( sFileName );
     }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
