@@ -707,6 +707,11 @@ DECLARE_OOXMLEXPORT_TEST(testAbsolutePositionOffsetValue,"fdo78432.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testRubyHyperlink, "rubyhyperlink.fodt")
+{
+    // test that export doesn't assert with overlapping ruby / hyperlink attr
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo78300,"fdo78300.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
