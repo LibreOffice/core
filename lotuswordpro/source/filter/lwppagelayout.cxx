@@ -755,7 +755,7 @@ void LwpHeaderLayout::RegisterStyle(XFPageMaster* pm1)
     XFHeaderStyle* pHeaderStyle = new XFHeaderStyle();
 
     //Modify page top margin
-    //page top maring: from top of header to the top edge
+    //page top marging: from top of header to the top edge
     double top = GetMarginsValue(MARGIN_TOP);
     pm1->SetMargins(-1, -1, top, -1);
 
@@ -920,7 +920,7 @@ void LwpFooterLayout::RegisterStyle(XFPageMaster* pm1)
     XFFooterStyle* pFooterStyle = new XFFooterStyle();
 
     //Modify page bottom margin
-    //page bottom maring: from bottom of footer to the bottom edge
+    //page bottom margin: from bottom of footer to the bottom edge
     double bottom = GetMarginsValue(MARGIN_BOTTOM);
     pm1->SetMargins(-1, -1, -1, bottom);
 

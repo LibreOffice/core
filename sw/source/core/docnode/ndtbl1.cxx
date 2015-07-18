@@ -1283,7 +1283,7 @@ static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
  *
  * That means that the Line has been "split" by other Cells due to the
  * two-dimensional representation used. Thus, we have to distribute the cell's
- * default or minium value amongst the Cell it has been split by.
+ * default or minimum value amongst the Cell it has been split by.
  *
  * First, we collect the Columns (not the Column separators) which overlap
  * with the Cell. We then distribute the desired value according to the

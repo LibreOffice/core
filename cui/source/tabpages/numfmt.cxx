@@ -1018,7 +1018,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
 #*------------------------------------------------------------------------
 #*
 #*  Class:      SvxNumberFormatTabPage
-#*  Function:   Updates the format lisbox and additionally the
+#*  Function:   Updates the format listbox and additionally the
 #*              string in the editbox is changed depending on
 #*              the bUpdateEdit flag.
 #*  Input:      Flags for category and editbox.
@@ -1147,7 +1147,7 @@ void SvxNumberFormatTabPage::UpdateThousandEngineeringText()
 #*------------------------------------------------------------------------
 #*
 #*  Class:      SvxNumberFormatTabPage
-#*  Function:   On a double click in the format lisbox the
+#*  Function:   On a double click in the format listbox the
 #*              value is adopted and the OK button pushed.
 #*  Input:      Pointer on the Listbox
 #*  Output:     ---

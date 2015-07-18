@@ -296,7 +296,7 @@ void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
 
 /**
  * PrepareClose, as appropriate end text input, so other viewshells
- * discover an refreshed text objext.
+ * discover a refreshed text object.
  */
 
 bool DrawViewShell::PrepareClose( bool bUI )

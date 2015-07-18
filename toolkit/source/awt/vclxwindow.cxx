@@ -1315,7 +1315,7 @@ void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDe
         {
             // some properties are not included in the FontDescriptor, but every time
             // when we have a FontDescriptor we want to have these properties too.
-            // => Easier to register the here, istead everywhere where I register the FontDescriptor...
+            // => Easier to register the here, instead everywhere where I register the FontDescriptor...
 
             rIds.push_back( BASEPROPERTY_TEXTCOLOR );
             rIds.push_back( BASEPROPERTY_TEXTLINECOLOR );

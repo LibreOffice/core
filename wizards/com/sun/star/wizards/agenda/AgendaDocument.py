@@ -824,10 +824,10 @@ class Topics(object):
     Note this method does only reducing - if
     the number of topics given is greater than the
     number of actual topics it does *not* add
-    rows !
+    rows!
     Note also that the first topic will never be removed.
     If the table contains no topics, the whole section will
-    be removed uppon finishing.
+    be removed upon finishing.
     The reason for that is a "table-design" one: the first topic is
     maintained in order to be able to add rows with a design of this topic,
     and not of the header row.

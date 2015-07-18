@@ -358,7 +358,7 @@ short AccObjectWinManager::GetParentRole( XAccessible* pXAcc )
 }
 
 /**
-   * Update focus objcet by new focused XAccessible interface.
+   * Update focus object by new focused XAccessible interface.
    * @param newFocus New XAccessible interface that gets focus.
    * @return
    */
@@ -377,7 +377,7 @@ void AccObjectWinManager::UpdateAccFocus(XAccessible* newFocus)
 }
 
 /**
-   * Update selected objcet by new focused XAccessible interface.
+   * Update selected object by new focused XAccessible interface.
    * @param pXAcc XAccessible interface that has selected child changed.
    * @return Selected children count.
    */

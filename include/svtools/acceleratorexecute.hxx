@@ -62,12 +62,12 @@ struct TMutexInit
             Because execution of an accelerator command can be dangerous
             (in case it force an office shutdown for key "ALT+F4"!)
             all internal dispatches are done asynchronous.
-            Menas that the trigger call doesn't wait till the dispatch
+            Means that the trigger call doesn't wait till the dispatch
             is finished. You can call very often. All requests will be
             queued internal and dispatched ASAP.
 
             Of course this queue will be stopped if the environment
-            will be destructed ...
+            will be destructed...
  */
 class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
 {

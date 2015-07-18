@@ -232,7 +232,7 @@ public:
     SdXML3DSceneAttributesHelper( SvXMLImport& rImporter );
     ~SdXML3DSceneAttributesHelper();
 
-    /** creates a 3d ligth context and adds it to the internal list for later processing */
+    /** creates a 3d light context and adds it to the internal list for later processing */
     SvXMLImportContext * create3DLightContext( sal_uInt16 nPrfx, const OUString& rLName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
 
     /** this should be called for each scene attribute */

@@ -858,7 +858,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                 bool bClickedTwiceOnDragableObject = SelectionHelper::isDragableObjectHitTwice( aMPos, m_aSelection.getSelectedCID(), *pDrawViewWrapper );
                 bool bIsRotateable = m_aSelection.isRotateableObjectSelected( getModel() );
 
-                //toggel between move and rotate
+                //toggle between move and rotate
                 if( bIsRotateable && bClickedTwiceOnDragableObject && SDRDRAG_MOVE==m_eDragMode )
                     m_eDragMode=SDRDRAG_ROTATE;
                 else

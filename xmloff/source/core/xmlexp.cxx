@@ -2378,7 +2378,7 @@ void SvXMLExport::SetError(
     if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
         mnErrorFlags |= SvXMLErrorFlags::DO_NOTHING;
 
-    // create error lsit on demand
+    // create error list on demand
     if ( mpXMLErrors == NULL )
         mpXMLErrors = new XMLErrors();
 

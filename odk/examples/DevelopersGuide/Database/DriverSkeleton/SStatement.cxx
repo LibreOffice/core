@@ -161,7 +161,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
     Reference< XResultSet > xRS = NULL;
     // create a resultset as result of executing the sql statement
     // you have to here something :-)
-    m_xResultSet = xRS; // we nedd a reference to it for later use
+    m_xResultSet = xRS; // we need a reference to it for later use
     return xRS;
 }
 
