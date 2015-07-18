@@ -61,7 +61,7 @@ private:
     DECL_LINK(NextHdl, void *);
     DECL_LINK(RadioButtonHdl, void *);
     DECL_LINK(InsertFileHdl, PushButton *);
-    DECL_LINK(DlgClosedHdl, void *);
+    DECL_LINK_TYPED(DlgClosedHdl, sfx2::FileDialogHelper *, void);
 
     virtual void    Apply() SAL_OVERRIDE;
 

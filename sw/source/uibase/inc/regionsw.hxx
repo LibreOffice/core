@@ -122,7 +122,7 @@ class SwEditRegionDlg : public SfxModalDialog
     DECL_LINK(OptionsHdl, void *);
     DECL_LINK( FileNameHdl, Edit* );
     DECL_LINK( DDEHdl, CheckBox* );
-    DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
+    DECL_LINK_TYPED( DlgClosedHdl, sfx2::FileDialogHelper*, void );
     DECL_LINK( SubRegionEventHdl, VclWindowEvent * );
 
     bool CheckPasswd(CheckBox* pBox = 0);
@@ -177,7 +177,7 @@ class SwInsertSectionTabPage : public SfxTabPage
     DECL_LINK( UseFileHdl, CheckBox* );
     DECL_LINK(FileSearchHdl, void *);
     DECL_LINK( DDEHdl, CheckBox* );
-    DECL_LINK( DlgClosedHdl, sfx2::FileDialogHelper* );
+    DECL_LINK_TYPED( DlgClosedHdl, sfx2::FileDialogHelper*, void );
 
 public:
     SwInsertSectionTabPage(vcl::Window *pParent, const SfxItemSet &rAttrSet);

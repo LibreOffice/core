@@ -908,14 +908,12 @@ IMPL_LINK_NOARG(SwNavigationPI, PopupModeEndHdl)
     return 1;
 }
 
-IMPL_LINK( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow )
+IMPL_LINK_TYPED( SwNavigationPI, ClosePopupWindow, SfxPopupWindow *, pWindow, void )
 {
     if ( pWindow == pFloatingWindow )
         pFloatingWindow = 0;
     else
         pPopupWindow = 0;
-
-    return 1;
 }
 
 void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,

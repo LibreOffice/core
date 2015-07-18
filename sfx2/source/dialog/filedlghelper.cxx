@@ -2337,7 +2337,7 @@ ErrCode FileDialogHelper::Execute( SfxItemSet *&   rpSet,
     return nRet;
 }
 
-void FileDialogHelper::StartExecuteModal( const Link<>& rEndDialogHdl )
+void FileDialogHelper::StartExecuteModal( const Link<FileDialogHelper*,void>& rEndDialogHdl )
 {
     m_aDialogClosedLink = rEndDialogHdl;
     m_nError = ERRCODE_NONE;

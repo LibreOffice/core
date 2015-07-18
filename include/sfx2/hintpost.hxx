@@ -23,7 +23,7 @@
 #include <tools/ref.hxx>
 
 
-class SfxHint;
+class SfxRequest;
 
 /**  [Description]
 
@@ -39,19 +39,18 @@ class SfxHint;
 class SfxHintPoster : public SvRefBase
 {
 private:
-    Link<> m_Link;
+    Link<SfxRequest*,void> m_Link;
 
-                    DECL_LINK( DoEvent_Impl, SfxHint * );
+                    DECL_LINK( DoEvent_Impl, SfxRequest * );
 
 protected:
     virtual         ~SfxHintPoster();
-    void            Event( SfxHint* pPostedHint );
 
 public:
-                    SfxHintPoster(const Link<>& rLink);
+                    SfxHintPoster(const Link<SfxRequest*,void>& rLink);
 
-    void            Post( SfxHint* pHint = 0 );
-    void            SetEventHdl(const Link<>& rLink);
+    void            Post( SfxRequest* pHint = 0 );
+    void            SetEventHdl(const Link<SfxRequest*,void>& rLink);
 };
 
 typedef tools::SvRef<SfxHintPoster> SfxHintPosterRef;

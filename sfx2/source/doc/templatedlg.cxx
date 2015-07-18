@@ -312,11 +312,11 @@ void SfxTemplateManagerDlg::dispose()
 
     // Ignore view events since we are cleaning the object
     mpLocalView->setItemStateHdl(Link<>());
-    mpLocalView->setOpenRegionHdl(Link<>());
+    mpLocalView->setOpenRegionHdl(Link<void*,void>());
     mpLocalView->setOpenTemplateHdl(Link<>());
 
     mpRemoteView->setItemStateHdl(Link<>());
-    mpRemoteView->setOpenRegionHdl(Link<>());
+    mpRemoteView->setOpenRegionHdl(Link<void*,void>());
     mpRemoteView->setOpenTemplateHdl(Link<>());
 
     mpSearchView->setItemStateHdl(Link<>());
@@ -669,7 +669,7 @@ IMPL_LINK(SfxTemplateManagerDlg, DefaultTemplateMenuSelectHdl, Menu*, pMenu)
     return 0;
 }
 
-IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl)
+IMPL_LINK_NOARG_TYPED(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
 {
     maSelFolders.clear();
     maSelTemplates.clear();
@@ -682,8 +682,6 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl)
     mpTemplateBar->Hide();
     mpViewBar->Show();
     mpActionBar->Show();
-
-    return 0;
 }
 
 IMPL_LINK(SfxTemplateManagerDlg, OpenTemplateHdl, ThumbnailViewItem*, pItem)

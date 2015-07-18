@@ -649,12 +649,10 @@ IMPL_LINK_TYPED( BackingWindow, MenuSelectHdl, MenuButton*, pButton, void )
 }
 
 
-IMPL_LINK_NOARG( BackingWindow, OpenRegionHdl)
+IMPL_LINK_NOARG_TYPED( BackingWindow, OpenRegionHdl, void*, void)
 {
     maSelFolders.clear();
     maSelTemplates.clear();
-
-    return 0;
 }
 
 IMPL_LINK(BackingWindow, OpenTemplateHdl, ThumbnailViewItem*, pItem)

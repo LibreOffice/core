@@ -65,7 +65,7 @@ DocumentInserter::~DocumentInserter()
     delete m_pFileDlg;
 }
 
-void DocumentInserter::StartExecuteModal( const Link<>& _rDialogClosedLink )
+void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink )
 {
     m_aDialogClosedLink = _rDialogClosedLink;
     m_nError = ERRCODE_NONE;
@@ -160,7 +160,7 @@ void impl_FillURLList( sfx2::FileDialogHelper* _pFileDlg, std::vector<OUString>&
     }
 }
 
-IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
+IMPL_LINK_NOARG_TYPED(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void)
 {
     DBG_ASSERT( m_pFileDlg, "DocumentInserter::DialogClosedHdl(): no file dialog" );
 
@@ -201,7 +201,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
                     else
                     {
                         DELETEZ( m_pItemSet );
-                        return 0;
+                        return;
                     }
                 }
             }
@@ -264,8 +264,6 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
 
     if ( m_aDialogClosedLink.IsSet() )
         m_aDialogClosedLink.Call( m_pFileDlg );
-
-    return 0;
 }
 
 } // namespace sfx2

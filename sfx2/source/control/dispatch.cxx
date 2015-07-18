@@ -329,7 +329,7 @@ void SfxDispatcher::Construct_Impl( SfxDispatcher* pParent )
     for (sal_uInt16 n=0; n<SFX_OBJECTBAR_MAX; n++)
         xImp->aObjBars[n].nResId = 0;
 
-    Link<> aGenLink( LINK(this, SfxDispatcher, PostMsgHandler) );
+    Link<SfxRequest*,void> aGenLink( LINK(this, SfxDispatcher, PostMsgHandler) );
 
     xImp->xPoster = new SfxHintPoster(aGenLink);
 
@@ -376,7 +376,7 @@ SfxDispatcher::~SfxDispatcher()
 
     // So that no timer by Reschedule in PlugComm strikes the LeaveRegistrations
     xImp->aIdle.Stop();
-    xImp->xPoster->SetEventHdl( Link<>() );
+    xImp->xPoster->SetEventHdl( Link<SfxRequest*,void>() );
 
     // Notify the stack varialbles in Call_Impl
     if ( xImp->pInCallAliveFlag )
@@ -1071,7 +1071,7 @@ const SfxPoolItem* SfxDispatcher::Execute(sal_uInt16 nSlot, SfxCallMode eCall,
 
 /** Helper method to receive the asynchronously executed <SfxRequest>s.
 */
-IMPL_LINK(SfxDispatcher, PostMsgHandler, SfxRequest*, pReq)
+IMPL_LINK_TYPED(SfxDispatcher, PostMsgHandler, SfxRequest*, pReq, void)
 {
     DBG_ASSERT( !xImp->bFlushing, "recursive call to dispatcher" );
     SFX_STACK(SfxDispatcher::PostMsgHandler);
@@ -1104,7 +1104,6 @@ IMPL_LINK(SfxDispatcher, PostMsgHandler, SfxRequest*, pReq)
     }
 
     delete pReq;
-    return 0;
 }
 
 void SfxDispatcher::SetMenu_Impl()

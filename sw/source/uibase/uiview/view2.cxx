@@ -2439,48 +2439,47 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
 #endif
 }
 
-IMPL_LINK( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+IMPL_LINK_TYPED( SwView, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
-    if ( ERRCODE_NONE == _pFileDlg->GetError() )
+    if ( ERRCODE_NONE != _pFileDlg->GetError() )
+        return;
+
+    SfxMedium* pMed = m_pViewImpl->CreateMedium();
+    if ( !pMed )
+        return;
+
+    const sal_uInt16 nSlot = m_pViewImpl->GetRequest()->GetSlot();
+    long nFound = InsertMedium( nSlot, pMed, m_pViewImpl->GetParam() );
+
+    if ( SID_INSERTDOC == nSlot )
     {
-        SfxMedium* pMed = m_pViewImpl->CreateMedium();
-        if ( pMed )
+        if ( m_pViewImpl->GetParam() == 0 )
         {
-            const sal_uInt16 nSlot = m_pViewImpl->GetRequest()->GetSlot();
-            long nFound = InsertMedium( nSlot, pMed, m_pViewImpl->GetParam() );
-
-            if ( SID_INSERTDOC == nSlot )
-            {
-                if ( m_pViewImpl->GetParam() == 0 )
-                {
-                    m_pViewImpl->GetRequest()->SetReturnValue( SfxBoolItem( nSlot, nFound != -1 ) );
-                    m_pViewImpl->GetRequest()->Ignore();
-                }
-                else
-                {
-                    m_pViewImpl->GetRequest()->SetReturnValue( SfxBoolItem( nSlot, nFound != -1 ) );
-                    m_pViewImpl->GetRequest()->Done();
-                }
-            }
-            else if ( SID_DOCUMENT_COMPARE == nSlot || SID_DOCUMENT_MERGE == nSlot )
-            {
-                m_pViewImpl->GetRequest()->SetReturnValue( SfxInt32Item( nSlot, nFound ) );
-
-                if ( nFound > 0 ) // show Redline browser
-                {
-                    SfxViewFrame* pVFrame = GetViewFrame();
-                    pVFrame->ShowChildWindow(FN_REDLINE_ACCEPT);
-
-                    // re-initialize Redline dialog
-                    sal_uInt16 nId = SwRedlineAcceptChild::GetChildWindowId();
-                    SwRedlineAcceptChild* pRed = static_cast<SwRedlineAcceptChild*>(pVFrame->GetChildWindow( nId ));
-                    if ( pRed )
-                        pRed->ReInitDlg( GetDocShell() );
-                }
-            }
+            m_pViewImpl->GetRequest()->SetReturnValue( SfxBoolItem( nSlot, nFound != -1 ) );
+            m_pViewImpl->GetRequest()->Ignore();
+        }
+        else
+        {
+            m_pViewImpl->GetRequest()->SetReturnValue( SfxBoolItem( nSlot, nFound != -1 ) );
+            m_pViewImpl->GetRequest()->Done();
         }
     }
-    return 0;
+    else if ( SID_DOCUMENT_COMPARE == nSlot || SID_DOCUMENT_MERGE == nSlot )
+    {
+        m_pViewImpl->GetRequest()->SetReturnValue( SfxInt32Item( nSlot, nFound ) );
+
+        if ( nFound > 0 ) // show Redline browser
+        {
+            SfxViewFrame* pVFrame = GetViewFrame();
+            pVFrame->ShowChildWindow(FN_REDLINE_ACCEPT);
+
+            // re-initialize Redline dialog
+            sal_uInt16 nId = SwRedlineAcceptChild::GetChildWindowId();
+            SwRedlineAcceptChild* pRed = static_cast<SwRedlineAcceptChild*>(pVFrame->GetChildWindow( nId ));
+            if ( pRed )
+                pRed->ReInitDlg( GetDocShell() );
+        }
+    }
 }
 
 void SwView::ExecuteScan( SfxRequest& rReq )

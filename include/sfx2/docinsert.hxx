@@ -39,23 +39,23 @@ class SFX2_DLLPUBLIC DocumentInserter
 private:
     OUString                m_sDocFactory;
     OUString                m_sFilter;
-    Link<>                  m_aDialogClosedLink;
+    Link<sfx2::FileDialogHelper*,void> m_aDialogClosedLink;
 
     sal_Int64 const         m_nDlgFlags;
     ErrCode                 m_nError;
 
     sfx2::FileDialogHelper* m_pFileDlg;
     SfxItemSet*             m_pItemSet;
-    std::vector<OUString> m_pURLList;
+    std::vector<OUString>   m_pURLList;
 
-    DECL_LINK(DialogClosedHdl, void *);
+    DECL_LINK_TYPED(DialogClosedHdl, sfx2::FileDialogHelper*, void);
 
 public:
     DocumentInserter(const OUString& rFactory,
                      bool const bEnableMultiSelection = false);
     ~DocumentInserter();
 
-    void                    StartExecuteModal( const Link<>& _rDialogClosedLink );
+    void                    StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink );
     SfxMedium*              CreateMedium();
     SfxMediumList*          CreateMediumList();
 };

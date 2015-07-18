@@ -364,7 +364,7 @@ void ShutdownIcon::StartFileDialog()
 
 
 
-IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, )
+IMPL_LINK_TYPED( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, /*unused*/, void )
 {
     DBG_ASSERT( m_pFileDlg, "ShutdownIcon, DialogClosedHdl_Impl(): no file dialog" );
 
@@ -503,7 +503,6 @@ IMPL_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, )
 #endif
 
     LeaveModalMode();
-    return 0;
 }
 
 

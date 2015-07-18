@@ -54,7 +54,7 @@ private:
     DECL_LINK(BrowseHdl, void *);
     DECL_LINK(RangeHdl, void *);
     DECL_LINK(ReloadHdl, void *);
-    DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
+    DECL_LINK_TYPED( DialogClosedHdl, sfx2::FileDialogHelper*, void );
 
     void                UpdateSourceRanges();
     void                UpdateEnable();

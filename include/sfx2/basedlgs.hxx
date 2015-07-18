@@ -166,8 +166,6 @@ struct SingleTabDlgImpl
 {
     VclPtr<SfxTabPage>          m_pSfxPage;
     VclPtr<FixedLine>           m_pLine;
-    OUString                    m_sInfoURL;
-    Link<>                      m_aInfoLink;
 
     SingleTabDlgImpl();
 };

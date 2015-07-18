@@ -322,7 +322,7 @@ IMPL_LINK_NOARG_TYPED(ScInsertTableDlg, BrowseTimeoutHdl, Timer *, void)
     BrowseHdl_Impl(m_pBtnBrowse);
 }
 
-IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+IMPL_LINK_TYPED( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
     if ( ERRCODE_NONE == _pFileDlg->GetError() )
     {
@@ -370,8 +370,6 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
     else if ( bMustClose )
         // execute slot FID_INS_TABLE_EXT and cancel file dialog
         EndDialog( RET_CANCEL );
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

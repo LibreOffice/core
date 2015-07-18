@@ -1360,32 +1360,31 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
     }
 }
 
-IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+IMPL_LINK_TYPED( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
     Application::SetDefDialogParent( pDefParentWin );
-    if ( ERRCODE_NONE == _pFileDlg->GetError() )
+    if ( ERRCODE_NONE != _pFileDlg->GetError() )
+        return;
+
+    boost::scoped_ptr<SfxMediumList> pMedList(pDocInserter->CreateMediumList());
+    if ( pMedList )
     {
-        boost::scoped_ptr<SfxMediumList> pMedList(pDocInserter->CreateMediumList());
-        if ( pMedList )
+        Sequence< OUString >aFileNames( pMedList->size() );
+        OUString* pFileNames = aFileNames.getArray();
+        sal_Int32 nPos = 0;
+        for ( size_t i = 0, n = pMedList->size(); i < n; ++i )
         {
-            Sequence< OUString >aFileNames( pMedList->size() );
-            OUString* pFileNames = aFileNames.getArray();
-            sal_Int32 nPos = 0;
-            for ( size_t i = 0, n = pMedList->size(); i < n; ++i )
-            {
-                SfxMedium* pMed = pMedList->at( i );
-                OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
-                sFileName += OUString(sfx2::cTokenSeparator);
-                sFileName += pMed->GetFilter()->GetFilterName();
-                sFileName += OUString(sfx2::cTokenSeparator);
-                pFileNames[nPos++] = sFileName;
-            }
-            pMedList.reset();
-            InsertRegion( pDocContent, aFileNames );
-            DELETEZ( pDocContent );
+            SfxMedium* pMed = pMedList->at( i );
+            OUString sFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+            sFileName += OUString(sfx2::cTokenSeparator);
+            sFileName += pMed->GetFilter()->GetFilterName();
+            sFileName += OUString(sfx2::cTokenSeparator);
+            pFileNames[nPos++] = sFileName;
         }
+        pMedList.reset();
+        InsertRegion( pDocContent, aFileNames );
+        DELETEZ( pDocContent );
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

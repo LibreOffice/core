@@ -210,10 +210,10 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, ReloadHdl)
     return 0;
 }
 
-IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
+IMPL_LINK_TYPED( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
 {
     if ( _pFileDlg->GetError() != ERRCODE_NONE )
-        return 0;
+        return;
 
     SfxMedium* pMed = pDocInserter->CreateMedium();
     if ( pMed )
@@ -265,7 +265,6 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
 
     UpdateSourceRanges();
     UpdateEnable();
-    return 0;
 }
 
 #undef FILTERNAME_HTML
