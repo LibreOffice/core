@@ -132,7 +132,7 @@ sal_Bool XFlatXml::importer(
     throw (RuntimeException)
 {
     // get information from media descriptor
-    // the imput stream that represents the imported file
+    // the input stream that represents the imported file
     // is most important here since we need to supply it to
     // the sax parser that drives the supplied document handler
     sal_Int32 nLength = aSourceData.getLength();

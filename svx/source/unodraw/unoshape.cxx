@@ -4213,7 +4213,7 @@ uno::Any SvxItemPropertySet_getPropertyValue( const SfxItemPropertySimpleEntry* 
     if(!pMap || !pMap->nWID)
         return uno::Any();
 
-    // Check is for items that store either metric values if thei are positiv or percentage if thei are negativ.
+    // Check is for items that store either metric values if they are positive or percentage if they are negative.
     bool bDontConvertNegativeValues = ( pMap->nWID == XATTR_FILLBMP_SIZEX || pMap->nWID == XATTR_FILLBMP_SIZEY );
     return SvxItemPropertySet::getPropertyValue( pMap, rSet, (pMap->nWID != SDRATTR_XMLATTRIBUTES), bDontConvertNegativeValues );
 }

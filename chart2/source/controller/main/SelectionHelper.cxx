@@ -162,7 +162,7 @@ void Selection::adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper*
 {
     if( pDrawViewWrapper )
     {
-        //do not toggel multiclick selection if right clicked on the selected object or waiting for double click
+        //do not toggle multiclick selection if right clicked on the selected object or waiting for double click
         bool bAllowMultiClickSelectionChange = !bIsRightMouse && !bWaitingForDoubleClick;
 
         ObjectIdentifier aLastSelectedObject( m_aSelectedOID );

@@ -459,7 +459,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
 #endif
 }
 
-// Treat the args as possible inouts ( conversion at bottom of method )
+// Treat the args as possible inputs (conversion at bottom of method)
 bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequence< uno::Any >& aArgs, uno::Any& aRet, const uno::Any& /*aCaller*/)
 {
 #if !HAVE_FEATURE_SCRIPTING
@@ -485,7 +485,7 @@ bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, uno::Sequ
             nErr = pShell->CallXScript( sUrl,
                                aArgs, aRet, aOutArgsIndex, aOutArgs, false );
             sal_Int32 nLen = aOutArgs.getLength();
-            // convert any out params to seem like they were inouts
+            // convert any out params to seem like they were inputs
             if ( nLen )
             {
                 for ( sal_Int32 index=0; index < nLen; ++index )

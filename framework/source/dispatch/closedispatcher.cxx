@@ -236,7 +236,7 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
                     document inside the frame. May the document shows a dialog and
                     the user ignore it. Then the state of the office can be changed
                     during we try to close frame and document.
-                - check the environment (menas count open frames - exlcuding our
+                - check the environment (means count open frames - excluding our
                   current one)
                 - decide then, if we must close this frame only, establish the backing mode
                   or shutdown the whole application.

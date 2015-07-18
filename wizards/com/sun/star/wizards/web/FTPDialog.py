@@ -215,7 +215,7 @@ class FTPDialog(UnoDialog2, UIConsts):
 
     # updates the hostname, username, password and
     # directory text fields.
-    # is called uppon initialization.
+    # It's called upon initialization.
     def updateUI(self):
         DataAware.updateUIs(self.dataAware)
         self.setDir(self.folder)

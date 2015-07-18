@@ -923,7 +923,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                             ImplCallSelect();
                             mbTravelSelect = false;
                         }
-                        // When list box selection change by mouse move, notity
+                        // When list box selection change by mouse move, notify
                         // VCLEVENT_LISTBOX_SELECT vcl event.
                         else
                         {

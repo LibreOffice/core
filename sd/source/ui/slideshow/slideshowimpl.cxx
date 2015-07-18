@@ -1402,7 +1402,7 @@ void SlideshowImpl::displayCurrentSlide (const bool bSkipAllMainSequenceEffects)
             pBindings->Invalidate( SID_NAVIGATOR_PAGENAME );
         }
     }
-    // send out page change event and notity to update all acc info for current page
+    // send out page change event and notify to update all acc info for current page
     if (mpViewShell)
     {
         sal_Int32 currentPageIndex = getCurrentSlideIndex();
