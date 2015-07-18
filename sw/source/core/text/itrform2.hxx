@@ -99,7 +99,7 @@ class SwTextFormatter : public SwTextPainter
     // Calculates the ascent and the height from the fontmetric
     void CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor );
 
-    // determines, if a optimized repaint rectange is allowed
+    // determines, if a optimized repaint rectangle is allowed
     bool AllowRepaintOpt() const;
 
     // Is called by FormatLine
