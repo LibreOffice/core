@@ -23,14 +23,20 @@
 
 #include <com/sun/star/task/XInteractionAbort.hpp>
 
+#include <com/sun/star/task/XInteractionApprove.hpp>
+
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
+
+#include <com/sun/star/ucb/AuthenticationRequest.hpp>
 
 namespace comphelper{
 
-StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler)
+StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
+                                                     const css::uno::Reference< css::task::XInteractionHandler >& xAuthenticationHandler)
              : m_bUsed                    (false)
              , m_bHandledByMySelf         (false)
              , m_bHandledByInternalHandler(false)
+             , m_xAuthenticationHandler(xAuthenticationHandler)
 {
     ::std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
     ::ucbhelper::InterceptedInteraction::InterceptedRequest                  aInterceptedRequest;
@@ -44,6 +50,12 @@ StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< 
     aInterceptedRequest.Handle = HANDLE_UNSUPPORTEDDATASINKEXCEPTION;
     aInterceptedRequest.Request <<= css::ucb::UnsupportedDataSinkException();
     aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionAbort>::get();
+    aInterceptedRequest.MatchExact = false;
+    lInterceptions.push_back(aInterceptedRequest);
+
+    aInterceptedRequest.Handle = HANDLE_AUTHENTICATIONREQUESTEXCEPTION;
+    aInterceptedRequest.Request <<= css::ucb::AuthenticationRequest();
+    aInterceptedRequest.Continuation = cppu::UnoType<css::task::XInteractionApprove>::get();
     aInterceptedRequest.MatchExact = false;
     lInterceptions.push_back(aInterceptedRequest);
 
@@ -96,6 +108,18 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
             bAbort = true;
         }
         break;
+    case HANDLE_AUTHENTICATIONREQUESTEXCEPTION:
+       {
+//use internal authentication dedicated handler and return
+           if (m_xAuthenticationHandler.is())
+           {
+               m_xAuthenticationHandler->handle(xRequest);
+               return ::ucbhelper::InterceptedInteraction::E_INTERCEPTED;
+           }
+           else //simply abort
+               bAbort = true;
+       }
+       break;
     }
 
     // handle interaction by ourself
