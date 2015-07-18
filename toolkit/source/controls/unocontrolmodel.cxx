@@ -391,7 +391,7 @@ void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
     {
         // some properties are not included in the FontDescriptor, but every time
         // when we have a FontDescriptor we want to have these properties too.
-        // => Easier to register the here, istead everywhere where I register the FontDescriptor...
+        // => Easier to register the here, instead everywhere where I register the FontDescriptor...
 
         ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
         ImplRegisterProperty( BASEPROPERTY_TEXTLINECOLOR );

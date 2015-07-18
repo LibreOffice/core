@@ -93,7 +93,7 @@ public:
     void    SetDataStyle(const OUString& style);
 
     /**
-     * @descr:  Set the pading of the paragraph.This is the distance
+     * @descr:  Set the padding of the paragraph.This is the distance
                 between the border and the top of the text.
      * @param:  indent value of the padding.
      */

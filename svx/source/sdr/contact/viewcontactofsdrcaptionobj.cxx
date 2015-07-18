@@ -150,7 +150,7 @@ namespace sdr
 
                     if(nXDist || nYDist)
                     {
-                        // #119750# create obect and shadow outline, clip shadow outline
+                        // #119750# create object and shadow outline, clip shadow outline
                         // on object outline. If there is a rest, create shadow. Do this to
                         // emulate that shadow is *not* visible behind the object for
                         // transparent object fill for comments in excel

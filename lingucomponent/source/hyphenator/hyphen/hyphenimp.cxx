@@ -574,7 +574,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
 
 #if defined(WNT)
             // workaround for Windows specific problem that the
-            // path length in calls to 'fopen' is limted to somewhat
+            // path length in calls to 'fopen' is limited to somewhat
             // about 120+ characters which will usually be exceed when
             // using dictionaries as extensions.
             sTmp = Win_GetShortPathName( dictpath );

@@ -997,7 +997,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
 
     // 0) Ignore wrong parameter!
     //    We don't support search for following special targets.
-    //    If we reject this requests - we mustnt check for such names
+    //    If we reject this requests - we must not check for such names
     //    in following code again and again. If we do not so -wrong
     //    search results can occur!
 

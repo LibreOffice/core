@@ -225,7 +225,7 @@ SdXML3DSceneAttributesHelper::~SdXML3DSceneAttributesHelper()
     maList.clear();
 }
 
-/** creates a 3d ligth context and adds it to the internal list for later processing */
+/** creates a 3d light context and adds it to the internal list for later processing */
 SvXMLImportContext * SdXML3DSceneAttributesHelper::create3DLightContext( sal_uInt16 nPrfx, const OUString& rLName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList)
 {
     SvXMLImportContext* pContext = new SdXML3DLightContext(mrImport, nPrfx, rLName, xAttrList);

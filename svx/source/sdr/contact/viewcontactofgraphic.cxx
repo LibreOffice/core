@@ -366,7 +366,7 @@ namespace sdr
                 fShearX, fRotate,
                 aObjectRange.getMinX(), aObjectRange.getMinY()));
 
-            // get the current, unchenged graphic obect from SdrGrafObj
+            // get the current, unchanged graphic object from SdrGrafObj
             const GraphicObject& rGraphicObject = GetGrafObject().GetGraphicObject(false);
 
             if(visualisationUsesPresObj())

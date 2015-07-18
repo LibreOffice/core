@@ -936,7 +936,7 @@ private:
      */
     static OUString implst_getJobDescription(sal_Int32 eJob);
 
-    /** @short  mape the given URL to an internal int representation.
+    /** @short  map the given URL to an internal int representation.
 
         @param  aURL
                 the url, which describe the next starting or may be already running
@@ -1343,7 +1343,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
     // check if somewhere wish to disable recovery temp. for this office session
-    // This can be done immediately ... must not been done asynchronous.
+    // This can be done immediately... must not been done asynchronous.
     if ((eNewJob & AutoRecovery::E_DISABLE_AUTORECOVERY) == AutoRecovery::E_DISABLE_AUTORECOVERY)
     {
         // it's important to set a flag internally, so AutoRecovery will be suppressed - even if it's requested.

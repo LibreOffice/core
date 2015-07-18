@@ -1770,7 +1770,7 @@ void SvtFileDialog::onAsyncOperationFinished()
     m_pCurrentAsyncAction = NULL;
     if ( !m_bInExecuteAsync )
         _pImp->_pEdFileName->GrabFocus();
-        // (if m_bInExecuteAsync is true, then the operation was finished within the minium wait time,
+        // (if m_bInExecuteAsync is true, then the operation was finished within the minimum wait time,
         // and to the user, the operation appears to be synchronous)
 }
 

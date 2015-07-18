@@ -890,8 +890,8 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
 
     // 0) Ignore wrong parameter!
     //    We don't support search for following special targets.
-    //    If we reject this requests - we mustnt check for such names
-    //    in following code again and again. If we do not so -wrong
+    //    If we reject these requests, we must not check for such names
+    //    in following code again and again. If we do not, so wrong
     //    search results can occur!
 
     if (

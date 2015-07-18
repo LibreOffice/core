@@ -567,7 +567,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     }
                     else if ( bDisplaySpec )
                     {
-                        bDisplaySpec = false; // only one display, not a lsit
+                        bDisplaySpec = false; // only one display, not a list
                         bOpenEvent = true;    // set back to standard
                     }
                     else if ( bConversionEvent || bBatchPrintEvent )

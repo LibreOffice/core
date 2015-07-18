@@ -139,7 +139,7 @@ namespace dbaui
 
         /** returns the stripped database name.
             @return
-                The stripped database name either the registered naem or if it is a file url the last segment.
+                The stripped database name either the registered name or if it is a file url the last segment.
         */
         OUString getStrippedDatabaseName() const;
 

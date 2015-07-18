@@ -355,7 +355,7 @@ namespace objectpositioning
             input parameter - horizontal position of object
 
             @param _eRelOrient
-            inpt parameter - alignment of object
+            input parameter - alignment of object
 
             @param _rLRSpacing
             input parameter - left and right spacing of the object to the text
@@ -401,7 +401,7 @@ namespace objectpositioning
             input parameter - horizontal position of object
 
             @param _eRelOrient
-            inpt parameter - alignment of object
+            input parameter - alignment of object
 
             @return boolean indicating, if object has to be drawn aside
             given fly frame.

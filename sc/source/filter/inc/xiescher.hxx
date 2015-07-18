@@ -435,7 +435,7 @@ private:
     bool                mbOwnTab;       /// true = own sheet; false = embedded object.
 };
 
-/** A note object, which is a specialized text box objext. */
+/** A note object, which is a specialized text box object. */
 class XclImpNoteObj : public XclImpTextObj
 {
 public:

@@ -78,7 +78,7 @@ void LwpPrinterInfo::Skip(LwpObjectStream *pStrm)
     sal_uInt32 size = pStrm->QuickReaduInt32();
     pStrm->SeekRel(static_cast<sal_uInt16>(size));
 
-    //Skip others printer infor
+    //Skip other printer info
     pStrm->SeekRel(6*sizeof(sal_uInt16)+sizeof(sal_uInt32)+sizeof(sal_uInt16));
 
     //Skip the next five LwpAtomHolder

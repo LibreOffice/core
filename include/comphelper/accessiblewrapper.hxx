@@ -171,7 +171,7 @@ namespace comphelper
 
             @param _rxOwningAccessible
                 The XAccessible which created this object. This is necessary because children
-                of our wrapped context meed to be wrapped, too, and if they're asked for a parent,
+                of our wrapped context need to be wrapped, too, and if they're asked for a parent,
                 they of course should return the proper parent<br/>
                 The object will be held with a hard reference
 
@@ -258,7 +258,7 @@ namespace comphelper
 
             @param _rxOwningAccessible
                 The XAccessible which created this object. This is necessary because children
-                of our wrapped context meed to be wrapped, too, and if they're asked for a parent,
+                of our wrapped context need to be wrapped, too, and if they're asked for a parent,
                 they of course should return the proper parent<br/>
                 The object will be held with a hard reference
 

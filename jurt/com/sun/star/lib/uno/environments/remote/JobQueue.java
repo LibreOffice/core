@@ -55,8 +55,8 @@ public class JobQueue {
     protected Object    _doDispose = null;
     protected Throwable _throwable;
 
-    protected JobQueue  _async_jobQueue; // chaining job qeueus for asyncs
-    protected JobQueue  _sync_jobQueue;  // chaining job qeueus for syncs
+    protected JobQueue  _async_jobQueue; // chaining job queues for asyncs
+    protected JobQueue  _sync_jobQueue;  // chaining job queues for syncs
 
     protected boolean _active = false;
 

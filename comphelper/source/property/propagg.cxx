@@ -106,7 +106,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
 
         // determine the handle for the property which we will expose to the outside world
         sal_Int32 nHandle = -1;
-        // ask the infor service first
+        // ask the info service first
         if ( _pInfoService )
             nHandle = _pInfoService->getPreferredPropertyId( pMergedProps->Name );
 

@@ -302,7 +302,7 @@ sal_Int16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rL
                     osl::FileBase::getSystemPathFromFileURL(affpath,aff);
 #if defined(WNT)
                     // workaround for Windows specific problem that the
-                    // path length in calls to 'fopen' is limted to somewhat
+                    // path length in calls to 'fopen' is limited to somewhat
                     // about 120+ characters which will usually be exceed when
                     // using dictionaries as extensions. (Hunspell waits UTF-8 encoded
                     // path with \\?\ long path prefix.)

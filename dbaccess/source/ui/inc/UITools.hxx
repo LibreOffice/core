@@ -357,7 +357,7 @@ namespace dbaui
         @param  _rsDatabaseName
             Will be filled with the original data source if it is empty.
         @return
-            The stripped database name either the registered naem or if it is a file url the last segment.
+            The stripped database name either the registered name or if it is a file url the last segment.
     */
     OUString getStrippedDatabaseName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource
                                             ,OUString& _rsDatabaseName);

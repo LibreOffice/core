@@ -42,7 +42,7 @@ public final class TestEnvironment {
     private final XInterface testObject;
 
     /**
-     * Indicates that the testObject is in invalid state and should notbe
+     * Indicates that the testObject is in invalid state and should not be
      * used for testing anymore.
      */
     private boolean disposed = false;
