@@ -41,6 +41,7 @@
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
 #include <editeng/unoprnms.hxx>
@@ -394,6 +395,20 @@ uno::Reference< drawing::XShape >
                     , const uno::Any& rATransformation )
 {
     dummy::DummyText* pText = new dummy::DummyText( rText, rPropNames, rPropValues,
+            rATransformation, xTarget, 0 );
+    return pText;
+}
+
+uno::Reference< drawing::XShape >
+        OpenglShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget
+                    , const uno::Sequence< OUString >& rTextParagraphs
+                    , const uno::Sequence< tNameSequence >& /*rParaPropNames*/
+                    , const uno::Sequence< tAnySequence >& /*rParaPropValues*/
+                    , const tNameSequence& rPropNames
+                    , const tAnySequence& rPropValues
+                    , const uno::Any& rATransformation )
+{
+    dummy::DummyText* pText = new dummy::DummyText( rTextParagraphs[0], rPropNames, rPropValues,
             rATransformation, xTarget, 0 );
     return pText;
 }

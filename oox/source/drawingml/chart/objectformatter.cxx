@@ -1092,6 +1092,24 @@ void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef
     }
 }
 
+void ObjectFormatter::convertTextWrap( PropertySet& rPropSet, const ModelRef< TextBody >& rxTextProp )
+{
+    if( rxTextProp.is() )
+    {
+        PropertyMap& aPropMap = rxTextProp->getTextProperties().maPropertyMap;
+        if( aPropMap.hasProperty(PROP_TextWordWrap) )
+        {
+            Any aValue = aPropMap.getProperty( PROP_TextWordWrap );
+            if( aValue.hasValue() )
+            {
+                bool bValue = false;
+                aValue >>= bValue;
+                rPropSet.setProperty( PROP_TextWordWrap, bValue );
+            }
+        }
+    }
+}
+
 void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFormat& rNumberFormat, bool bAxis, bool bShowPercent )
 {
     if( mxData->mxNumFmts.is() )

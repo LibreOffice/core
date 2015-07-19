@@ -81,6 +81,7 @@ enum
     PROP_SERIES_NUMBERFORMAT,
     PROP_SERIES_LINK_NUMBERFORMAT_TO_SOURCE,
     PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
+    PROP_SERIES_DATAPOINT_TEXT_WORD_WRAP,
     PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
     //other series properties
     PROP_SERIES_ATTACHED_AXIS,
@@ -134,6 +135,13 @@ void lcl_AddPropertiesToVector_PointProperties(
         Property( "PercentageNumberFormat",
                   PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
                   cppu::UnoType<sal_Int32>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( "TextWordWrap",
+                  PROP_SERIES_DATAPOINT_TEXT_WORD_WRAP,
+                  cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
