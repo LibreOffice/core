@@ -347,9 +347,22 @@ SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, WinBits nBits )
 
 class CustomContainer : public vcl::Window
 {
+    enum FocusState
+    {
+        Prev = 0,
+        Places,
+        Add,
+        Delete,
+        FileView,
+        Next
+    };
+
     SvtExpFileDlg_Impl* _pImp;
     VclPtr<SvtFileView> _pFileView;
     VclPtr<Splitter>    _pSplitter;
+
+    int m_nCurrentFocus;
+    VclPtr<vcl::Window> m_pFocusWidgets[6];
 
 public:
     CustomContainer(vcl::Window *pParent)
@@ -369,11 +382,20 @@ public:
 
     void init(SvtExpFileDlg_Impl* pImp,
               SvtFileView* pFileView,
-              Splitter* pSplitter)
+              Splitter* pSplitter,
+              vcl::Window* pPrev,
+              vcl::Window* pNext)
     {
         _pImp = pImp;
         _pFileView = pFileView;
         _pSplitter = pSplitter;
+
+        m_pFocusWidgets[0] = pPrev;
+        m_pFocusWidgets[1] = _pImp->_pPlaces->GetPlacesListBox();
+        m_pFocusWidgets[2] = _pImp->_pPlaces->GetAddButton();
+        m_pFocusWidgets[3] = _pImp->_pPlaces->GetDeleteButton();
+        m_pFocusWidgets[4] = pFileView;
+        m_pFocusWidgets[5] = pNext;
     }
 
     virtual void Resize() SAL_OVERRIDE
@@ -403,9 +425,71 @@ public:
         _pImp->_pPlaces->SetSizePixel( placesNewSize );
     }
 
+    void changeFocus( bool bReverse )
+    {
+        if( !_pFileView || !_pImp || !_pImp->_pPlaces )
+            return;
+
+        if( bReverse && m_nCurrentFocus > FocusState::Prev && m_nCurrentFocus <= FocusState::Next )
+        {
+            m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus(false);
+            m_pFocusWidgets[m_nCurrentFocus]->LoseFocus();
+
+            m_pFocusWidgets[--m_nCurrentFocus]->SetFakeFocus( true );
+            m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
+        }
+        else if( !bReverse && m_nCurrentFocus >= FocusState::Prev && m_nCurrentFocus < FocusState::Next )
+        {
+            m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus(false);
+            m_pFocusWidgets[m_nCurrentFocus]->LoseFocus();
+
+            m_pFocusWidgets[++m_nCurrentFocus]->SetFakeFocus( true );
+            m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
+        }
+    }
+
     virtual void GetFocus() SAL_OVERRIDE
     {
-        _pFileView->GrabFocus();
+        if( !_pFileView || !_pImp || !_pImp->_pPlaces )
+            return;
+
+        GetFocusFlags aFlags = GetGetFocusFlags();
+
+        if( aFlags & GetFocusFlags::Forward )
+            m_nCurrentFocus = FocusState::Places;
+        else if( aFlags & GetFocusFlags::Backward )
+            m_nCurrentFocus = FocusState::FileView;
+
+        if( m_nCurrentFocus >= FocusState::Prev && m_nCurrentFocus <= FocusState::Next )
+        {
+            m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus( true );
+            m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
+        }
+    }
+
+    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE
+    {
+        if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+        {
+            if( m_nCurrentFocus <= FocusState::Prev || m_nCurrentFocus >= FocusState::Next )
+            {
+                // mouse was used and counter (m_nCurrentFocus) wasn't updated
+                if( rNEvt.GetWindow() == m_pFocusWidgets[FocusState::Places])
+                    m_nCurrentFocus = FocusState::Places;
+                else
+                    m_nCurrentFocus = FocusState::FileView;
+            }
+
+            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
+            bool bShift = rCode.IsShift();
+            if( rCode.GetCode() == KEY_TAB )
+            {
+                changeFocus( bShift );
+                return true;
+            }
+        }
+        return Window::Notify( rNEvt );
     }
 };
 
@@ -668,7 +752,7 @@ void SvtFileDialog::Init_Impl
         OUString( "/org.openoffice.Office.UI/FilePicker" )
     );
 
-    _pContainer->init(_pImp, _pFileView, _pSplitter);
+    _pContainer->init(_pImp, _pFileView, _pSplitter, _pImp->_pBtnNewFolder, _pImp->_pEdFileName);
     _pContainer->Show();
 
     Resize();
