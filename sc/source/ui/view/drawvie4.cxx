@@ -119,7 +119,6 @@ bool ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
         //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
         //  Update with the data (including NumberFormatter) from the live document would
         //  also store the NumberFormatter in the clipboard chart (#88749#)
-        // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
 
         ScDocShell* pDocSh = pViewData->GetDocShell();
 
@@ -132,9 +131,9 @@ bool ScDrawView::BeginDrag( vcl::Window* pWindow, const Point& rStartPos )
         uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
         pTransferObj->SetDrawPersist( &aDragShellRef );    // keep persist for ole objects alive
-        pTransferObj->SetDragSource( this );            // copies selection
+        pTransferObj->SetDragSource( this );               // copies selection
 
-        SC_MOD()->SetDragObject( NULL, pTransferObj );      // for internal D&D
+        SC_MOD()->SetDragObject( NULL, pTransferObj );     // for internal D&D
         pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
     }
 
@@ -237,9 +236,7 @@ void getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRang
     getRangeFromDataSource(xDataSource, rRangeRep);
 }
 
-/**
- * Get all cell ranges that are referenced by the selected chart objects.
- */
+// Get all cell ranges that are referenced by the selected chart objects.
 void getChartSourceRanges(ScDocument* pDoc, const SdrMarkList& rObjs, std::vector<ScRange>& rRanges)
 {
     std::vector<OUString> aRangeReps;
@@ -435,7 +432,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     return xTransferable;
 }
 
-//  Korrektur fuer 100% berechnen, unabhaengig von momentanen Einstellungen
+// Calculate correction for 100%, regardless of current settings
 
 void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
 {
@@ -511,8 +508,7 @@ void ScDrawView::SetMarkedOriginalSize()
             MapMode aDestMap( MAP_100TH_MM );
             if (aSourceMap.GetMapUnit() == MAP_PIXEL)
             {
-                //  Pixel-Korrektur beruecksichtigen, damit Bitmap auf dem Bildschirm stimmt
-
+                // consider pixel correction, so that the bitmap is correct on the screen
                 Fraction aNormScaleX, aNormScaleY;
                 CalcNormScale( aNormScaleX, aNormScaleY );
                 aDestMap.SetScaleX(aNormScaleX);
