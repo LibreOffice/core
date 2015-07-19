@@ -133,7 +133,6 @@ void TextUnderlineControl::initial()
     maVSUnderline->Show();
 }
 
-
 void TextUnderlineControl::Rearrange(FontUnderline eLine)
 {
     maVSUnderline->SetItemImage(1, maIMGSingle);
@@ -210,7 +209,6 @@ void TextUnderlineControl::Rearrange(FontUnderline eLine)
     }
     maVSUnderline->StartSelection();
 }
-
 
 IMPL_LINK(TextUnderlineControl, VSSelectHdl, void *, pControl)
 {

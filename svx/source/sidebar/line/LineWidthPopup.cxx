@@ -24,7 +24,6 @@
 
 #include <boost/bind.hpp>
 
-
 namespace svx { namespace sidebar {
 
 LineWidthPopup::LineWidthPopup (
@@ -66,8 +65,6 @@ void LineWidthPopup::PopupModeEndCallback()
         }
     }
 }
-
-
 
 } } // end of namespace svx::sidebar
 

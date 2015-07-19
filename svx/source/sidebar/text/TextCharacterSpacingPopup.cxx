@@ -65,7 +65,6 @@ void TextCharacterSpacingPopup::PopupModeEndCallback()
     }
 }
 
-
 } } // end of namespace svx::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

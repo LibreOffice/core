@@ -19,7 +19,6 @@
 #include "TextUnderlinePopup.hxx"
 #include "TextUnderlineControl.hxx"
 
-
 namespace svx { namespace sidebar {
 
 TextUnderlinePopup::TextUnderlinePopup (
@@ -45,8 +44,6 @@ void TextUnderlinePopup::Rearrange (FontUnderline eLine)
         pControl->Rearrange(eLine);
 }
 
-
 } } // end of namespace svx::sidebar
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

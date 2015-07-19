@@ -19,7 +19,6 @@
 #include "AreaTransparencyGradientPopup.hxx"
 #include "AreaTransparencyGradientControl.hxx"
 
-
 namespace svx { namespace sidebar {
 
 AreaTransparencyGradientPopup::AreaTransparencyGradientPopup (
