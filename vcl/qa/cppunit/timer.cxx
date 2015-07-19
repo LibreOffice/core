@@ -22,8 +22,8 @@
 #include "salinst.hxx"
 
 // #define TEST_WATCHDOG
-// Comment if UT fails randomly.
-#define TEST_TIMERPRECISION
+// Commented to avoid random UT failure.
+//#define TEST_TIMERPRECISION
 
 /// Avoid our timer tests just wedging the build if they fail.
 class WatchDog : public osl::Thread

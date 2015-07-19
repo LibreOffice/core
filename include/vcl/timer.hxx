@@ -31,11 +31,8 @@ protected:
     bool            mbAuto;
 
     virtual void SetDeletionFlags() SAL_OVERRIDE;
-    virtual bool ReadyForSchedule( bool bTimer ) SAL_OVERRIDE;
-    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) SAL_OVERRIDE;
-
-private:
-    static void InitSystemTimer();
+    virtual bool ReadyForSchedule( bool bTimer ) const SAL_OVERRIDE;
+    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const SAL_OVERRIDE;
 
 public:
     Timer( const sal_Char *pDebugName = NULL );
@@ -51,7 +48,6 @@ public:
     void            Timeout() { Invoke(); }
     Timer&          operator=( const Timer& rTimer );
     virtual void    Start() SAL_OVERRIDE;
-    static void     ImplStartTimer( ImplSVData* pSVData, sal_uInt64 nMS );
 };
 
 /// An auto-timer is a multi-shot timer re-emitting itself at
