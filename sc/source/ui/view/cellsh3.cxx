@@ -75,7 +75,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             //  (on closing the dialog StopEditShell is called)
             case SID_OPENDLG_FUNCTION:
                     //  inplace leads to trouble with EditShell ...
-                    //! cannot always be switched werden ????
+                    //! cannot always be switched ????
                     if (!pTabViewShell->GetViewFrame()->GetFrame().IsInPlace())
                         pTabViewShell->SetDontSwitch(true);         // do not switch off EditShell
                     // no break
@@ -257,7 +257,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         {
                             SfxStringItem   aItem( SID_ENTER_STRING, aString );
 
-                            // SfxBindings& rBindings = pTabViewShell->GetViewFrame()->GetBindings();
                             const SfxPoolItem* aArgs[2];
                             aArgs[0] = &aItem;
                             aArgs[1] = NULL;
@@ -449,7 +448,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         //  first test, if the prefix is recognised as valid,
                         //  else avoid only doubles
                         bool bPrefix = ScDocument::ValidTabName( aBaseName );
-                        OSL_ENSURE(bPrefix, "ungueltiger Tabellenname");
+                        OSL_ENSURE(bPrefix, "invalid sheet name");
 
                         while ( pDoc->IsScenario(nTab+i) )
                             i++;
@@ -748,7 +747,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     if ( pReqArgs &&
                         pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     {
-                        OSL_ENSURE(pItem && pItem->ISA(SfxBoolItem), "falsches Item");
+                        OSL_ENSURE(pItem && pItem->ISA(SfxBoolItem), "wrong item");
                         bMoveContents = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                     }
 
@@ -871,7 +870,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             break;
 
         case FID_INPUTLINE_STATUS:
-            OSL_FAIL("Execute von InputLine-Status");
+            OSL_FAIL("Execute from InputLine status");
             break;
 
         case SID_STATUS_DOCPOS:
@@ -886,7 +885,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             break;
 
         default:
-            OSL_FAIL("Unbekannter Slot bei ScCellShell::Execute");
+            OSL_FAIL("ScCellShell::Execute: unknown slot");
             break;
     }
 }

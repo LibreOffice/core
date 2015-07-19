@@ -125,7 +125,7 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
 
 void ScAuditingShell::GetState( SfxItemSet& rSet )
 {
-    rSet.Put( SfxBoolItem( nFunction, true ) );         // aktive Funktion markieren
+    rSet.Put( SfxBoolItem( nFunction, true ) );         // mark active functions
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
