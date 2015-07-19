@@ -51,23 +51,32 @@ enum class SchedulerPriority {
 
 class VCL_DLLPUBLIC Scheduler
 {
+private:
+    static void InitSystemTimer(ImplSVData* pSVData);
+
 protected:
     ImplSchedulerData*  mpSchedulerData;    /// Pointer to element in scheduler list
     const sal_Char     *mpDebugName;        /// Useful for debugging
     SchedulerPriority   mePriority;         /// Scheduler priority
     bool                mbActive;           /// Currently in the scheduler
 
+    // These should be constexpr static, when supported.
+    static const sal_uInt64 ImmediateTimeoutMs = 1;
+    static const sal_uInt64 MaximumTimeoutMs = SAL_MAX_UINT64;
+
+    static void ImplStartTimer(sal_uInt64 nMS);
+
     friend struct ImplSchedulerData;
     virtual void SetDeletionFlags();
-    virtual bool ReadyForSchedule( bool bTimer ) = 0;
-    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) = 0;
+    virtual bool ReadyForSchedule( bool bTimer ) const = 0;
+    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const = 0;
 
 public:
     Scheduler( const sal_Char *pDebugName = NULL );
     Scheduler( const Scheduler& rScheduler );
     virtual ~Scheduler();
 
-    void SetPriority( SchedulerPriority ePriority );
+    void SetPriority(SchedulerPriority ePriority) { mePriority = ePriority; }
     SchedulerPriority GetPriority() const { return mePriority; }
 
     void            SetDebugName( const sal_Char *pDebugName ) { mpDebugName = pDebugName; }
@@ -80,7 +89,7 @@ public:
 
     bool            IsActive() const { return mbActive; }
 
-    Scheduler&          operator=( const Scheduler& rScheduler );
+    Scheduler&      operator=( const Scheduler& rScheduler );
     static void ImplDeInitScheduler();
 
     // Process one pending Timer with highhest priority
