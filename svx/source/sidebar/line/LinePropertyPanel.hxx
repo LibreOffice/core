@@ -145,7 +145,6 @@ private:
     /// bitfield
     bool                mbWidthValuable : 1;
 
-    static void SetupIcons();
     void Initialize();
     void FillLineEndList();
     void FillLineStyleList();

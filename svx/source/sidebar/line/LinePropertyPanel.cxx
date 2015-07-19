@@ -287,18 +287,6 @@ void LinePropertyPanel::Initialize()
     mpLBCapStyle->SetAccessibleName(OUString("Cap Style"));
 }
 
-void LinePropertyPanel::SetupIcons()
-{
-    if(Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
-    {
-        // todo
-    }
-    else
-    {
-        // todo
-    }
-}
-
 VclPtr<vcl::Window> LinePropertyPanel::Create (
     vcl::Window* pParent,
     const uno::Reference<frame::XFrame>& rxFrame,
@@ -316,7 +304,6 @@ VclPtr<vcl::Window> LinePropertyPanel::Create (
 
 void LinePropertyPanel::DataChanged(const DataChangedEvent& /*rEvent*/)
 {
-    SetupIcons();
 }
 
 void LinePropertyPanel::NotifyItemUpdate(

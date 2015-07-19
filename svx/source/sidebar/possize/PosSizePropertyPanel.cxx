@@ -231,22 +231,6 @@ void PosSizePropertyPanel::Initialize()
     mePoolUnit = maTransfWidthControl.GetCoreMetric();
 }
 
-
-
-void PosSizePropertyPanel::SetupIcons()
-{
-    if(Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
-    {
-        // todo
-    }
-    else
-    {
-        // todo
-    }
-}
-
-
-
 VclPtr<vcl::Window> PosSizePropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -270,11 +254,8 @@ VclPtr<vcl::Window> PosSizePropertyPanel::Create (
 
 
 void PosSizePropertyPanel::DataChanged(
-    const DataChangedEvent& rEvent)
+    const DataChangedEvent& /*rEvent*/)
 {
-    (void)rEvent;
-
-    SetupIcons();
 }
 
 void PosSizePropertyPanel::HandleContextChange(

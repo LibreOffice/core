@@ -96,7 +96,6 @@ private:
     DECL_LINK( BlueHdl, void*);
     DECL_LINK( GammaHdl, void*);
 
-    static void SetupIcons();
     void Initialize();
 };
 

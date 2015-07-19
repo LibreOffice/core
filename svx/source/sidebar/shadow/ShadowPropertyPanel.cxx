@@ -133,7 +133,6 @@ void ShadowPropertyPanel::Initialize()
     mpShadowTransSlider->SetRange(Range(0,100));
     mpShadowTransSlider->SetUpdateMode(true);
     mpShadowTransSlider->SetSlideHdl( LINK(this, ShadowPropertyPanel, ModifyShadowTransSliderHdl) );
-    SetupIcons();
     InsertDistanceValues();
     InsertAngleValues();
 }
@@ -248,21 +247,8 @@ void ShadowPropertyPanel::SetTransparencyValue(long nVal)
     mpShadowTransMetric->SetValue(nVal);
 }
 
-void ShadowPropertyPanel::SetupIcons()
-{
-    if(Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
-    {
-        // todo
-    }
-    else
-    {
-        // todo
-    }
-}
-
 void ShadowPropertyPanel::DataChanged(const DataChangedEvent& /*rEvent*/)
 {
-    SetupIcons();
 }
 
 void ShadowPropertyPanel::InsertDistanceValues()

@@ -156,7 +156,6 @@ private:
     VclPtr<PopupControl> CreateTransparencyGradientControl (PopupContainer* pParent);
     DECL_LINK_TYPED( ClickTrGrHdl_Impl, ToolBox*, void );
 
-    static void SetupIcons();
     void Initialize();
     void Update();
     void ImpUpdateTransparencies();

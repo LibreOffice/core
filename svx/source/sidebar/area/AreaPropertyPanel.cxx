@@ -112,7 +112,6 @@ AreaPropertyPanel::AreaPropertyPanel(
     Initialize();
 }
 
-
 AreaPropertyPanel::~AreaPropertyPanel()
 {
     disposeOnce();
@@ -198,8 +197,6 @@ void AreaPropertyPanel::Initialize()
     mpLBTransType->SetAccessibleRelationLabeledBy(mpTrspTextFT);
     mpMTRTransparent->SetAccessibleRelationLabeledBy(mpMTRTransparent);
     mpBTNGradient->SetAccessibleRelationLabeledBy(mpBTNGradient);
-
-    SetupIcons();
 }
 
 IMPL_LINK(AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox)
@@ -500,28 +497,10 @@ IMPL_LINK(AreaPropertyPanel, SelectFillAttrHdl, ListBox*, pToolBox)
     return 0;
 }
 
-
 VclPtr<PopupControl> AreaPropertyPanel::CreateTransparencyGradientControl (PopupContainer* pParent)
 {
     return VclPtrInstance<AreaTransparencyGradientControl>(pParent, *this);
 }
-
-
-
-
-void AreaPropertyPanel::SetupIcons()
-{
-    if(Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
-    {
-        // todo
-    }
-    else
-    {
-        // todo
-    }
-}
-
-
 
 VclPtr<vcl::Window> AreaPropertyPanel::Create (
     vcl::Window* pParent,
@@ -541,17 +520,10 @@ VclPtr<vcl::Window> AreaPropertyPanel::Create (
                 pBindings);
 }
 
-
-
 void AreaPropertyPanel::DataChanged(
-    const DataChangedEvent& rEvent)
+    const DataChangedEvent& /*rEvent*/)
 {
-    (void)rEvent;
-
-    SetupIcons();
 }
-
-
 
 void AreaPropertyPanel::ImpUpdateTransparencies()
 {
@@ -673,8 +645,6 @@ void AreaPropertyPanel::ImpUpdateTransparencies()
         mpBTNGradient->Hide();
     }
 }
-
-
 
 void AreaPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -973,11 +943,6 @@ void AreaPropertyPanel::NotifyItemUpdate(
     }
 }
 
-
-
-
-
-
 void AreaPropertyPanel::Update()
 {
     if(mpStyleItem)
@@ -1096,16 +1061,12 @@ void AreaPropertyPanel::Update()
     }
 }
 
-
-
 IMPL_LINK_TYPED( AreaPropertyPanel, ClickTrGrHdl_Impl, ToolBox*, pToolBox, void )
 {
     maTrGrPopup.Rearrange(mpFloatTransparenceItem.get());
     OSL_ASSERT( pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SIDEBARGRADIENT);
     maTrGrPopup.Show(*pToolBox);
 }
-
-
 
 IMPL_LINK_NOARG(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl)
 {
@@ -1202,8 +1163,6 @@ IMPL_LINK_NOARG(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl)
     return 0L;
 }
 
-
-
 IMPL_LINK_NOARG(AreaPropertyPanel, ModifyTransparentHdl_Impl)
 {
     const sal_uInt16 nTrans = (sal_uInt16)mpMTRTransparent->GetValue();
@@ -1220,11 +1179,6 @@ IMPL_LINK_NOARG(AreaPropertyPanel, ModifyTransparentHdl_Impl)
 
     return 0L;
 }
-
-
-
-
-
 
 XGradient AreaPropertyPanel::GetGradient (const css::awt::GradientStyle eStyle) const
 {
@@ -1245,9 +1199,6 @@ XGradient AreaPropertyPanel::GetGradient (const css::awt::GradientStyle eStyle) 
             return maGradientRect;
     }
 }
-
-
-
 
 void AreaPropertyPanel::SetGradient (const XGradient& rGradient)
 {
@@ -1275,9 +1226,6 @@ void AreaPropertyPanel::SetGradient (const XGradient& rGradient)
             break;
     }
 }
-
-
-
 
 sal_Int32 AreaPropertyPanel::GetSelectedTransparencyTypeIndex() const
 {
