@@ -125,7 +125,6 @@ public:
 
         __Int_Bool,
 
-        Bool_UseSymphonyIcons,
         Bool_UseSystemColors,
         Bool_UseToolBoxItemSeparator,
         Bool_IsHighContrastModeActive,

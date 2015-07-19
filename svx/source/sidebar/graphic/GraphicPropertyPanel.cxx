@@ -228,20 +228,6 @@ IMPL_LINK_NOARG(GraphicPropertyPanel, GammaHdl)
 
 
 
-void GraphicPropertyPanel::SetupIcons()
-{
-    if(Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
-    {
-        // todo
-    }
-    else
-    {
-        // todo
-    }
-}
-
-
-
 VclPtr<vcl::Window> GraphicPropertyPanel::Create (
     vcl::Window* pParent,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -263,11 +249,8 @@ VclPtr<vcl::Window> GraphicPropertyPanel::Create (
 
 
 void GraphicPropertyPanel::DataChanged(
-    const DataChangedEvent& rEvent)
+    const DataChangedEvent& /*rEvent*/)
 {
-    (void)rEvent;
-
-    SetupIcons();
 }
 
 

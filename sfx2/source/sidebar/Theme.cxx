@@ -138,9 +138,6 @@ void Theme::HandleDataChange()
 void Theme::InitializeTheme()
 {
     setPropertyValue(
-        maPropertyIdToNameMap[Bool_UseSymphonyIcons],
-        Any(false));
-    setPropertyValue(
         maPropertyIdToNameMap[Bool_UseSystemColors],
         Any(false));
 }
@@ -734,7 +731,6 @@ void Theme::SetupPropertyMaps()
     AddEntry(Int_TabBarBottomPadding);
     AddEntry(Int_ButtonCornerRadius);
 
-    AddEntry(Bool_UseSymphonyIcons);
     AddEntry(Bool_UseSystemColors);
     AddEntry(Bool_UseToolBoxItemSeparator);
     AddEntry(Bool_IsHighContrastModeActive);
@@ -805,7 +801,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
         case Int_ButtonCornerRadius:
             return PT_Integer;
 
-        case Bool_UseSymphonyIcons:
         case Bool_UseSystemColors:
         case Bool_UseToolBoxItemSeparator:
         case Bool_IsHighContrastModeActive:
