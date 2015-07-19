@@ -66,6 +66,10 @@ class PlacesListBox : public Control
         void SetSizePixel( const Size& rNewSize ) SAL_OVERRIDE;
         void updateView( );
 
+        VclPtr<PushButton> GetAddButton() const { return mpAddBtn; }
+        VclPtr<PushButton> GetDeleteButton() const { return mpDelBtn; }
+        VclPtr<PlacesListBox_Impl> GetPlacesListBox() const { return mpImpl; }
+
     private:
 
         Image getEntryIcon( PlacePtr pPlace );
