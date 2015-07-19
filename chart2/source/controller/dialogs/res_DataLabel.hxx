@@ -52,6 +52,7 @@ private:
     VclPtr<FixedText>           m_pFT_NumberFormatForPercent;
     VclPtr<CheckBox>            m_pCBCategory;
     VclPtr<CheckBox>            m_pCBSymbol;
+    VclPtr<CheckBox>            m_pCBWrapText;
 
     VclPtr<VclHBox>             m_pSeparatorResources;
     VclPtr<ListBox>             m_pLB_Separator;

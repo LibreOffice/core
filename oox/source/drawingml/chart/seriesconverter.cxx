@@ -141,6 +141,8 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
         // data label text formatting (frame formatting not supported by Chart2)
         rFormatter.convertTextFormatting( rPropSet, rDataLabel.mxTextProp, OBJECTTYPE_DATALABEL );
         ObjectFormatter::convertTextRotation( rPropSet, rDataLabel.mxTextProp, false );
+        ObjectFormatter::convertTextWrap( rPropSet, rDataLabel.mxTextProp );
+
 
         // data label separator (do not overwrite series separator, if no explicit point separator is present)
         if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
