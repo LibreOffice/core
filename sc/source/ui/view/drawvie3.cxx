@@ -53,7 +53,7 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     Construct();
 }
 
-// Verankerung setzen
+// set anchor
 
 void ScDrawView::SetPageAnchored()
 {
@@ -169,7 +169,7 @@ void adjustAnchoredPosition(const SdrHint& rHint, const ScDocument& rDoc, SCTAB 
 
 void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (dynamic_cast<const ScTabDeletedHint*>(&rHint))                        // Tabelle geloescht
+    if (dynamic_cast<const ScTabDeletedHint*>(&rHint))                        // Sheet has been deleted
     {
         SCTAB nDelTab = static_cast<const ScTabDeletedHint&>(rHint).GetTab();
         if (ValidTab(nDelTab))
@@ -179,7 +179,7 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 HideSdrPage();
         }
     }
-    else if (dynamic_cast<const ScTabSizeChangedHint*>(&rHint))               // Groesse geaendert
+    else if (dynamic_cast<const ScTabSizeChangedHint*>(&rHint))               // Size has been changed
     {
         if ( nTab == static_cast<const ScTabSizeChangedHint&>(rHint).GetTab() )
             UpdateWorkArea();
@@ -206,10 +206,10 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
         if ( pIMapInfo )
             pImageMap = &pIMapInfo->GetImageMap();
 
-        // Target-Liste besorgen
+        // handle target list
         pViewData->GetViewShell()->GetViewFrame()->GetTargetList( aTargetList );
 
-        // Grafik vom Objekt besorgen
+        // handle graphics from object
         if ( pObj->ISA( SdrGrafObj ) )
             aGraphic = static_cast<SdrGrafObj*>(pObj)->GetGraphic();
         else
@@ -219,7 +219,7 @@ void ScDrawView::UpdateIMap( SdrObject* pObj )
                 aGraphic = *pGraphic;
         }
 
-        ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );    // aus imapwrap
+        ScIMapDlgSet( aGraphic, pImageMap, &aTargetList, pObj );    // from imapwrap
     }
 }
 
