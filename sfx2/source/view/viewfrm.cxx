@@ -432,13 +432,28 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
             INetURLObject aMedObj( pMed->GetName() );
 
-            // the logic below is following, if the document seems not to need to be reloaded and the physical name is different
-            // to the logical one, then on file system it can be checked that the copy is still newer than the original and no document reload is required
-            if ( ( !bNeedsReload && ( (aMedObj.GetProtocol() == INetProtocol::File &&
-                    aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) != aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT) &&
-                    !::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::NO_DECODE ), aPhysObj.GetMainURL( INetURLObject::NO_DECODE ) ))
-                  || pMed->IsRemote() ) )
-               || pVersionItem )
+            // -> tdf#82744
+            // the logic below is following:
+            // if the document seems not to need to be reloaded
+            //     and the physical name is different to the logical one,
+            // then on file system it can be checked that the copy is still newer than the original and no document reload is required.
+            // some semplification to enhance readability of the 'if' expression
+            //
+            // on the 'http/https' protocol case, the bool bPhysObjIsYounger relies upon the getlastmodified Property of a WebDAV resource.
+            // Said property should be implemented, but sometimes it's not. This happens on some small webdav servers, where it's not
+            // implemented. On this case the reload will not work properly.
+            // Details at this link: http://tools.ietf.org/html/rfc4918#section-15, section 15.7
+            // TODO: add an indication to the user? Difficult to implement I think.
+            // TODO: change the check age method for WebDAV to etag property value, need some rethinking
+            bool bPhysObjIsYounger = ::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::NO_DECODE ), aPhysObj.GetMainURL( INetURLObject::NO_DECODE ) );
+            bool bIsHttpOrHttps = (aMedObj.GetProtocol() == INetProtocol::Http || aMedObj.GetProtocol() == INetProtocol::Https || aMedObj.GetProtocol() == INetProtocol::VndSunStarWebdav);
+            if ( ( !bNeedsReload && ( ( aMedObj.GetProtocol() == INetProtocol::File &&
+                                        aMedObj.getFSysPath(INetURLObject::FSYS_DETECT) != aPhysObj.getFSysPath(INetURLObject::FSYS_DETECT) &&
+                                        !bPhysObjIsYounger )
+                                      || ( bIsHttpOrHttps && !bPhysObjIsYounger )
+                                      || ( pMed->IsRemote() && !bIsHttpOrHttps ) ) )
+                 || pVersionItem )
+            // <- tdf#82744
             {
                 bool bOK = false;
                 if ( !pVersionItem )
