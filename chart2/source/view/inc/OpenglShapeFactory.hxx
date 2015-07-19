@@ -149,6 +149,15 @@ public:
                      ) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createText( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
+                    , const ::com::sun::star::uno::Sequence< OUString >& rTextParagraphs
+                    , const ::com::sun::star::uno::Sequence< tNameSequence >& rParaPropNames
+                    , const ::com::sun::star::uno::Sequence< tAnySequence >& rParaPropValues
+                    , const tNameSequence& rPropNames
+                    , const tAnySequence& rPropValues
+                    , const ::com::sun::star::uno::Any& rATransformation ) SAL_OVERRIDE;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createText( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget2D,
                 const com::sun::star::awt::Size& rSize,
                 const com::sun::star::awt::Point& rPosition,

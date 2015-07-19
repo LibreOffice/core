@@ -376,6 +376,37 @@ bool DataPointItemConverter::ApplySpecialItem(
         }
         break;
 
+        case SCHATTR_DATADESCR_WRAP_TEXT:
+        {
+
+            try
+            {
+                bool bNew = static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
+                bool bOld = false;
+                GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bOld;
+                if( m_bOverwriteLabelsForAttributedDataPointsAlso )
+                {
+                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
+                    if( bOld!=bNew ||
+                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, "TextWordWrap", uno::makeAny( bOld ) ) )
+                    {
+                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "TextWordWrap", uno::makeAny( bNew ) );
+                        bChanged = true;
+                    }
+                }
+                else if( bOld!=bNew )
+                {
+                    GetPropertySet()->setPropertyValue( "TextWordWrap", uno::makeAny( bNew ));
+                    bChanged = true;
+                }
+            }
+            catch( const uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
+        }
+        break;
+
         case SCHATTR_DATADESCR_PLACEMENT:
         {
 
@@ -588,6 +619,21 @@ void DataPointItemConverter::FillSpecialItem(
             {
                 GetPropertySet()->getPropertyValue( "LabelSeparator" ) >>= aValue;
                 rOutItemSet.Put( SfxStringItem( nWhichId, aValue ));
+            }
+            catch( const uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
+        }
+        break;
+
+        case SCHATTR_DATADESCR_WRAP_TEXT:
+        {
+            bool bValue = false;
+            try
+            {
+                GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bValue;
+                rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
             }
             catch( const uno::Exception& e )
             {
