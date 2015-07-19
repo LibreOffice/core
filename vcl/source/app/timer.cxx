@@ -19,46 +19,26 @@
 
 #include <tools/time.hxx>
 #include <vcl/timer.hxx>
-#include <saltimer.hxx>
-#include <svdata.hxx>
-#include <salinst.hxx>
-
-#define MAX_TIMER_PERIOD   SAL_MAX_UINT64
-
-void Timer::ImplStartTimer( ImplSVData* pSVData, sal_uInt64 nMS )
-{
-    InitSystemTimer();
-
-    if ( !nMS )
-        nMS = 1;
-
-    // Assume underlying timers are recurring timers, if same period - just wait.
-    if ( nMS != pSVData->mnTimerPeriod )
-    {
-        pSVData->mnTimerPeriod = nMS;
-        pSVData->mpSalTimer->Start( nMS );
-    }
-}
 
 void Timer::SetDeletionFlags()
 {
-        // if no AutoTimer than stop
-        if ( !mbAuto )
-        {
-            mpSchedulerData->mbDelete = true;
-            mbActive = false;
-        }
+    // If no AutoTimer, then stop.
+    if ( !mbAuto )
+    {
+        mpSchedulerData->mbDelete = true;
+        mbActive = false;
+    }
 }
 
-bool Timer::ReadyForSchedule( bool bTimer )
+bool Timer::ReadyForSchedule( bool bTimer ) const
 {
     (void)bTimer;
     return (mpSchedulerData->mnUpdateTime + mnTimeout) <= tools::Time::GetSystemTicks();
 }
 
-sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime )
+sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime ) const
 {
-    sal_uInt64 nNewTime = tools::Time::GetSystemTicks();
+    const sal_uInt64 nNewTime = tools::Time::GetSystemTicks();
     sal_uInt64 nDeltaTime;
     //determine smallest time slot
     if( mpSchedulerData->mnUpdateTime == nTime )
@@ -71,7 +51,7 @@ sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime )
     {
         nDeltaTime = mpSchedulerData->mnUpdateTime + mnTimeout;
         if( nDeltaTime < nNewTime )
-            nMinPeriod = 1;
+            nMinPeriod = ImmediateTimeoutMs;
         else
         {
             nDeltaTime -= nNewTime;
@@ -83,32 +63,19 @@ sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTime )
     return nMinPeriod;
 }
 
-/**
- * Initialize the platform specific timer on which all the
- * platform independent timers are built
- */
-void Timer::InitSystemTimer()
+Timer::Timer(const sal_Char *pDebugName) :
+    Scheduler(pDebugName),
+    mnTimeout(ImmediateTimeoutMs),
+    mbAuto(false)
 {
-    ImplSVData* pSVData = ImplGetSVData();
-    if( ! pSVData->mpSalTimer )
-    {
-        pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
-        pSVData->mpSalTimer = pSVData->mpDefInst->CreateSalTimer();
-        pSVData->mpSalTimer->SetCallback( CallbackTaskScheduling );
-    }
-}
-
-Timer::Timer(const sal_Char *pDebugName) : Scheduler(pDebugName)
-{
-    mnTimeout = 1;
-    mbAuto = false;
     mePriority = SchedulerPriority::HIGHEST;
 }
 
-Timer::Timer( const Timer& rTimer ) : Scheduler(rTimer)
+Timer::Timer( const Timer& rTimer ) :
+    Scheduler(rTimer),
+    mnTimeout(rTimer.mnTimeout),
+    mbAuto(rTimer.mbAuto)
 {
-    mnTimeout = rTimer.mnTimeout;
-    mbAuto = rTimer.mbAuto;
     maTimeoutHdl = rTimer.maTimeoutHdl;
 }
 
@@ -120,21 +87,16 @@ void Timer::Invoke()
 void Timer::Start()
 {
     Scheduler::Start();
-
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( mnTimeout < pSVData->mnTimerPeriod )
-        Timer::ImplStartTimer( pSVData, mnTimeout );
+    Scheduler::ImplStartTimer(mnTimeout);
 }
 
 void Timer::SetTimeout( sal_uInt64 nNewTimeout )
 {
     mnTimeout = nNewTimeout;
-    // if timer is active then renew clock
+    // If timer is active, then renew clock.
     if ( mbActive )
     {
-        ImplSVData* pSVData = ImplGetSVData();
-        if ( !pSVData->mnUpdateStack && (mnTimeout < pSVData->mnTimerPeriod) )
-            Timer::ImplStartTimer( pSVData, mnTimeout );
+        Scheduler::ImplStartTimer(mnTimeout);
     }
 }
 

@@ -20,10 +20,9 @@
 #include <svdata.hxx>
 #include <tools/time.hxx>
 #include <vcl/scheduler.hxx>
-#include <vcl/timer.hxx>
 #include <saltimer.hxx>
-
-#define MAX_TIMER_PERIOD    SAL_MAX_UINT64
+#include <svdata.hxx>
+#include <salinst.hxx>
 
 void ImplSchedulerData::Invoke()
 {
@@ -97,12 +96,42 @@ void Scheduler::ImplDeInitScheduler()
         }
         while ( pSchedulerData );
 
-        pSVData->mpFirstSchedulerData   = NULL;
-        pSVData->mnTimerPeriod      = 0;
+        pSVData->mpFirstSchedulerData = NULL;
+        pSVData->mnTimerPeriod = 0;
     }
 
     delete pSVData->mpSalTimer;
     pSVData->mpSalTimer = 0;
+}
+
+void Scheduler::ImplStartTimer(sal_uInt64 nMS)
+{
+    ImplSVData* pSVData = ImplGetSVData();
+    InitSystemTimer(pSVData);
+
+    // Update timeout only when not in timer handler and
+    // only if smaller timeout, to avoid skipping.
+    if (!pSVData->mnUpdateStack &&
+        nMS < pSVData->mnTimerPeriod)
+    {
+        pSVData->mnTimerPeriod = nMS;
+        pSVData->mpSalTimer->Start(nMS);
+    }
+}
+
+/**
+* Initialize the platform specific timer on which all the
+* platform independent timers are built
+*/
+void Scheduler::InitSystemTimer(ImplSVData* pSVData)
+{
+    assert(pSVData != nullptr);
+    if (!pSVData->mpSalTimer)
+    {
+        pSVData->mnTimerPeriod = MaximumTimeoutMs;
+        pSVData->mpSalTimer = pSVData->mpDefInst->CreateSalTimer();
+        pSVData->mpSalTimer->SetCallback(CallbackTaskScheduling);
+    }
 }
 
 void Scheduler::CallbackTaskScheduling(bool ignore)
@@ -120,7 +149,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     ImplSchedulerData* pPrevSchedulerData = NULL;
     ImplSVData*        pSVData = ImplGetSVData();
     sal_uInt64         nTime = tools::Time::GetSystemTicks();
-    sal_uInt64         nMinPeriod = MAX_TIMER_PERIOD;
+    sal_uInt64         nMinPeriod = MaximumTimeoutMs;
     pSVData->mnUpdateStack++;
 
     // tdf#91727 - NB. bTimer is ultimately not used
@@ -165,18 +194,13 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     {
         if ( pSVData->mpSalTimer )
             pSVData->mpSalTimer->Stop();
-        pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
+        pSVData->mnTimerPeriod = MaximumTimeoutMs;
     }
     else
     {
-        Timer::ImplStartTimer( pSVData, nMinPeriod );
+        Scheduler::ImplStartTimer(nMinPeriod);
     }
     pSVData->mnUpdateStack--;
-}
-
-void Scheduler::SetPriority( SchedulerPriority ePriority )
-{
-    mePriority = ePriority;
 }
 
 void Scheduler::Start()
@@ -224,7 +248,7 @@ Scheduler& Scheduler::operator=( const Scheduler& rScheduler )
     if ( IsActive() )
         Stop();
 
-    mbActive          = false;
+    mbActive = false;
     mePriority = rScheduler.mePriority;
 
     if ( rScheduler.IsActive() )
@@ -259,4 +283,3 @@ Scheduler::~Scheduler()
         mpSchedulerData->mpScheduler = NULL;
     }
 }
-
