@@ -123,7 +123,7 @@ class EdtAutoCorrDoc : public SvxAutoCorrDoc
 {
     EditEngine* mpEditEngine;
     ContentNode*    pCurNode;
-    sal_uInt16          nCursor;
+    sal_Int32       nCursor;
 
     bool            bAllowUndoAction;
     bool            bUndoAction;
@@ -132,7 +132,7 @@ protected:
     void            ImplStartUndoAction();
 
 public:
-    EdtAutoCorrDoc(EditEngine* pE, ContentNode* pCurNode, sal_uInt16 nCrsr, sal_Unicode cIns);
+    EdtAutoCorrDoc(EditEngine* pE, ContentNode* pCurNode, sal_Int32 nCrsr, sal_Unicode cIns);
     virtual ~EdtAutoCorrDoc();
 
     virtual bool    Delete( sal_Int32 nStt, sal_Int32 nEnd ) SAL_OVERRIDE;
@@ -150,7 +150,7 @@ public:
 
     virtual LanguageType GetLanguage( sal_Int32 nPos, bool bPrevPara = false ) const SAL_OVERRIDE;
 
-    sal_uInt16          GetCursor() const { return nCursor; }
+    sal_Int32       GetCursor() const { return nCursor; }
 
 };
 

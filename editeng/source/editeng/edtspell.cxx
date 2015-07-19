@@ -284,7 +284,7 @@ void WrongList::TextDeleted( size_t nPos, size_t nLength )
     size_t nEndPos = nPos + nLength;
     if (IsValid())
     {
-        sal_uInt16 nNewInvalidStart = nPos ? nPos - 1 : 0;
+        const size_t nNewInvalidStart = nPos ? nPos - 1 : 0;
         mnInvalidStart = nNewInvalidStart;
         mnInvalidEnd = nNewInvalidStart + 1;
     }
@@ -546,7 +546,7 @@ bool WrongList::DbgIsBuggy() const
 
 
 EdtAutoCorrDoc::EdtAutoCorrDoc(
-    EditEngine* pE, ContentNode* pN, sal_uInt16 nCrsr, sal_Unicode cIns) :
+    EditEngine* pE, ContentNode* pN, sal_Int32 nCrsr, sal_Unicode cIns) :
     mpEditEngine(pE),
     pCurNode(pN),
     nCursor(nCrsr),
@@ -593,7 +593,7 @@ bool EdtAutoCorrDoc::Replace(sal_Int32 nPos, const OUString& rTxt)
 bool EdtAutoCorrDoc::ReplaceRange(sal_Int32 nPos, sal_Int32 nSourceLength, const OUString& rTxt)
 {
     // Actually a Replace introduce => corresponds to UNDO
-    sal_uInt16 nEnd = nPos+nSourceLength;
+    sal_Int32 nEnd = nPos+nSourceLength;
     if ( nEnd > pCurNode->Len() )
         nEnd = pCurNode->Len();
 
