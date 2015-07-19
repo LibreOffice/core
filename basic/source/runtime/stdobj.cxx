@@ -714,12 +714,12 @@ SbiStdObject::SbiStdObject( const OUString& r, StarBASIC* pb ) : SbxObject( r )
     // do we have to initialize the hashcodes?
     Methods* p = aMethods;
     if( !p->nHash )
-      while( p->nArgs != -1 )
-    {
-        OUString aName_ = OUString::createFromAscii( p->pName );
-        p->nHash = SbxVariable::MakeHashCode( aName_ );
-        p += ( p->nArgs & _ARGSMASK ) + 1;
-    }
+        while( p->nArgs != -1 )
+        {
+            OUString aName_ = OUString::createFromAscii( p->pName );
+            p->nHash = SbxVariable::MakeHashCode( aName_ );
+            p += ( p->nArgs & _ARGSMASK ) + 1;
+        }
 
     // #i92642: Remove default properties
     Remove( OUString("Name"), SbxCLASS_DONTCARE );
