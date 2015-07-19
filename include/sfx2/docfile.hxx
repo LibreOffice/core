@@ -105,7 +105,7 @@ public:
 
     void                UseInteractionHandler( bool );
     css::uno::Reference< css::task::XInteractionHandler >
-                        GetInteractionHandler();
+                        GetInteractionHandler(bool bGetAlways = false);
 
     void setStreamToLoadFrom(
         const css::uno::Reference<css::io::XInputStream>& xInputStream,
