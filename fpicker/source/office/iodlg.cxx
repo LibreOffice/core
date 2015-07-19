@@ -347,9 +347,23 @@ SvtFileDialog::SvtFileDialog ( vcl::Window* _pParent, WinBits nBits )
 
 class CustomContainer : public vcl::Window
 {
+    enum FocusState
+    {
+        Prev = 0,
+        Places,
+        Add,
+        Delete,
+        FileView,
+        Next,
+        FocusCount
+    };
+
     SvtExpFileDlg_Impl* _pImp;
     VclPtr<SvtFileView> _pFileView;
     VclPtr<Splitter>    _pSplitter;
+
+    int m_nCurrentFocus;
+    VclPtr<vcl::Window> m_pFocusWidgets[FocusState::FocusCount];
 
 public:
     CustomContainer(vcl::Window *pParent)
@@ -357,6 +371,7 @@ public:
         , _pImp(NULL)
         , _pFileView(NULL)
         , _pSplitter(NULL)
+        , m_nCurrentFocus(FocusState::Prev)
     {
     }
     virtual ~CustomContainer() { disposeOnce(); }
@@ -369,11 +384,20 @@ public:
 
     void init(SvtExpFileDlg_Impl* pImp,
               SvtFileView* pFileView,
-              Splitter* pSplitter)
+              Splitter* pSplitter,
+              vcl::Window* pPrev,
+              vcl::Window* pNext)
     {
         _pImp = pImp;
         _pFileView = pFileView;
         _pSplitter = pSplitter;
+
+        m_pFocusWidgets[FocusState::Prev] = pPrev;
+        m_pFocusWidgets[FocusState::Places] = _pImp->_pPlaces->GetPlacesListBox();
+        m_pFocusWidgets[FocusState::Add] = _pImp->_pPlaces->GetAddButton();
+        m_pFocusWidgets[FocusState::Delete] = _pImp->_pPlaces->GetDeleteButton();
+        m_pFocusWidgets[FocusState::FileView] = pFileView;
+        m_pFocusWidgets[FocusState::Next] = pNext;
     }
 
     virtual void Resize() SAL_OVERRIDE
@@ -403,9 +427,78 @@ public:
         _pImp->_pPlaces->SetSizePixel( placesNewSize );
     }
 
+    void changeFocus( bool bReverse )
+    {
+        if( !_pFileView || !_pImp || !_pImp->_pPlaces )
+            return;
+
+        if( bReverse && m_nCurrentFocus > FocusState::Prev && m_nCurrentFocus <= FocusState::Next )
+        {
+            m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus(false);
+            m_pFocusWidgets[m_nCurrentFocus]->LoseFocus();
+
+            m_pFocusWidgets[--m_nCurrentFocus]->SetFakeFocus( true );
+            m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
+        }
+        else if( !bReverse && m_nCurrentFocus >= FocusState::Prev && m_nCurrentFocus < FocusState::Next )
+        {
+            m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus(false);
+            m_pFocusWidgets[m_nCurrentFocus]->LoseFocus();
+
+            m_pFocusWidgets[++m_nCurrentFocus]->SetFakeFocus( true );
+            m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
+        }
+    }
+
     virtual void GetFocus() SAL_OVERRIDE
     {
-        _pFileView->GrabFocus();
+        if( !_pFileView || !_pImp || !_pImp->_pPlaces )
+            return;
+
+        GetFocusFlags aFlags = GetGetFocusFlags();
+
+        if( aFlags & GetFocusFlags::Forward )
+            m_nCurrentFocus = FocusState::Places;
+        else if( aFlags & GetFocusFlags::Backward )
+            m_nCurrentFocus = FocusState::FileView;
+
+        if( m_nCurrentFocus >= FocusState::Prev && m_nCurrentFocus <= FocusState::Next )
+        {
+            m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus( true );
+            m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
+        }
+    }
+
+    virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE
+    {
+        if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+        {
+            // we must also update counter when user change focus using mouse
+            for(int i = FocusState::Prev; i <= FocusState::Next; i++)
+            {
+                if( rNEvt.GetWindow() == m_pFocusWidgets[i] )
+                {
+                    m_nCurrentFocus = i;
+                    return true;
+                }
+            }
+
+            // GETFOCUS for one of FileView's subcontrols
+            m_nCurrentFocus = FocusState::FileView;
+            return true;
+        }
+        if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
+        {
+            const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
+            const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
+            bool bShift = rCode.IsShift();
+            if( rCode.GetCode() == KEY_TAB )
+            {
+                changeFocus( bShift );
+                return true;
+            }
+        }
+        return Window::Notify( rNEvt );
     }
 };
 
@@ -668,7 +761,7 @@ void SvtFileDialog::Init_Impl
         OUString( "/org.openoffice.Office.UI/FilePicker" )
     );
 
-    _pContainer->init(_pImp, _pFileView, _pSplitter);
+    _pContainer->init(_pImp, _pFileView, _pSplitter, _pImp->_pBtnNewFolder, _pImp->_pEdFileName);
     _pContainer->Show();
 
     Resize();
