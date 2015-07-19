@@ -18,8 +18,6 @@
  */
 
 #include <vcl/idle.hxx>
-#include <vcl/timer.hxx>
-#include "svdata.hxx"
 
 void Idle::Invoke()
 {
@@ -45,11 +43,10 @@ Idle::Idle( const Idle& rIdle ) : Scheduler(rIdle)
 void Idle::Start()
 {
     Scheduler::Start();
-    ImplSVData* pSVData = ImplGetSVData();
-    Timer::ImplStartTimer( pSVData, 0 );
+    Scheduler::ImplStartTimer(Scheduler::ImmediateTimeoutMs);
 }
 
-bool Idle::ReadyForSchedule( bool bTimer )
+bool Idle::ReadyForSchedule( bool bTimer ) const
 {
     // tdf#91727 - We need to re-work this to allow only UI idle handlers
     //             and not timeouts to be processed in some limited scenarios
@@ -57,14 +54,14 @@ bool Idle::ReadyForSchedule( bool bTimer )
     return true; // !bTimer
 }
 
-sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 /* nTime */ )
+sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 /* nTime */ ) const
 {
     switch (mePriority) {
     case SchedulerPriority::HIGHEST:
     case SchedulerPriority::HIGH:
     case SchedulerPriority::RESIZE:
     case SchedulerPriority::REPAINT:
-        nMinPeriod = 1; // don't wait.
+        nMinPeriod = ImmediateTimeoutMs; // don't wait.
         break;
     default:
         // FIXME: tdf#92036 workaround, I should be 1 too - wait 5ms
@@ -74,6 +71,5 @@ sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 /* nTime */ 
     }
     return nMinPeriod;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
