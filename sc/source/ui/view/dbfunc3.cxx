@@ -86,9 +86,9 @@ using ::std::vector;
 
 // STATIC DATA -----------------------------------------------------------
 
-//          Outliner
+//          outliner
 
-//  Outline-Gruppierung erzeugen
+// create outline grouping
 
 void ScDBFunc::MakeOutline( bool bColumns, bool bRecord )
 {
@@ -103,7 +103,7 @@ void ScDBFunc::MakeOutline( bool bColumns, bool bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//  Outline-Gruppierung loeschen
+// delete outline grouping
 
 void ScDBFunc::RemoveOutline( bool bColumns, bool bRecord )
 {
@@ -118,7 +118,7 @@ void ScDBFunc::RemoveOutline( bool bColumns, bool bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//  Menue-Status: Outlines loeschen
+//  menu status: delete outlines
 
 void ScDBFunc::TestRemoveOutline( bool& rCol, bool& rRow )
 {
@@ -141,9 +141,9 @@ void ScDBFunc::TestRemoveOutline( bool& rCol, bool& rRow )
             bool bColMarked = ( nStartRow == 0 && nEndRow == MAXROW );
             bool bRowMarked = ( nStartCol == 0 && nEndCol == MAXCOL );
 
-            //  Spalten
+            // columns
 
-            if ( !bRowMarked || bColMarked )        // nicht wenn ganze Zeilen markiert
+            if ( !bRowMarked || bColMarked )        // not when entire rows are marked
             {
                 ScOutlineArray& rArray = pTable->GetColArray();
                 ScSubOutlineIterator aColIter( &rArray );
@@ -156,9 +156,9 @@ void ScDBFunc::TestRemoveOutline( bool& rCol, bool& rRow )
                 }
             }
 
-            //  Zeilen
+            // rows
 
-            if ( !bColMarked || bRowMarked )        // nicht wenn ganze Spalten markiert
+            if ( !bColMarked || bRowMarked )        // not when entire columns are marked
             {
                 ScOutlineArray& rArray = pTable->GetRowArray();
                 ScSubOutlineIterator aRowIter( &rArray );
@@ -189,12 +189,12 @@ void ScDBFunc::RemoveAllOutlines( bool bRecord )
         UpdateScrollBars();
 }
 
-//  Auto-Outlines
+// auto outlines
 
 void ScDBFunc::AutoOutline( bool bRecord )
 {
     SCTAB nTab = GetViewData().GetTabNo();
-    ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );     // ganze Tabelle, wenn nichts markiert
+    ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );     // the complete sheet, if nothing is marked
     ScMarkData& rMark = GetViewData().GetMarkData();
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
@@ -207,7 +207,7 @@ void ScDBFunc::AutoOutline( bool bRecord )
     aFunc.AutoOutline( aRange, bRecord );
 }
 
-//  Outline-Ebene auswaehlen
+// select outline level
 
 void ScDBFunc::SelectLevel( bool bColumns, sal_uInt16 nLevel, bool bRecord, bool bPaint )
 {
@@ -221,7 +221,7 @@ void ScDBFunc::SelectLevel( bool bColumns, sal_uInt16 nLevel, bool bRecord, bool
         UpdateScrollBars();
 }
 
-//  einzelne Outline-Gruppe einblenden
+// show individual outline groups
 
 void ScDBFunc::ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry, bool bRecord, bool bPaint )
 {
@@ -235,7 +235,7 @@ void ScDBFunc::ShowOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
         UpdateScrollBars();
 }
 
-//  einzelne Outline-Gruppe ausblenden
+// hide individual outline groups
 
 void ScDBFunc::HideOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry, bool bRecord, bool bPaint )
 {
@@ -249,7 +249,7 @@ void ScDBFunc::HideOutline( bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
         UpdateScrollBars();
 }
 
-//  Menue-Status: markierten Bereich ein-/ausblenden
+// menu status: show/hide marked range
 
 bool ScDBFunc::OutlinePossible(bool bHide)
 {
@@ -273,7 +273,7 @@ bool ScDBFunc::OutlinePossible(bool bHide)
             SCCOLROW nStart;
             SCCOLROW nEnd;
 
-            //  Spalten
+            // columns
 
             ScOutlineArray& rColArray = pTable->GetColArray();
             ScSubOutlineIterator aColIter( &rColArray );
@@ -295,7 +295,7 @@ bool ScDBFunc::OutlinePossible(bool bHide)
                 }
             }
 
-            //  Zeilen
+            // rows
 
             ScOutlineArray& rRowArray = pTable->GetRowArray();
             ScSubOutlineIterator aRowIter( &rRowArray );
@@ -322,7 +322,7 @@ bool ScDBFunc::OutlinePossible(bool bHide)
     return bEnable;
 }
 
-//  markierten Bereich einblenden
+// show marked range
 
 void ScDBFunc::ShowMarkedOutlines( bool bRecord )
 {
@@ -339,7 +339,7 @@ void ScDBFunc::ShowMarkedOutlines( bool bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//  markierten Bereich ausblenden
+// hide marked range
 
 void ScDBFunc::HideMarkedOutlines( bool bRecord )
 {
@@ -356,12 +356,12 @@ void ScDBFunc::HideMarkedOutlines( bool bRecord )
         ErrorMessage(STR_NOMULTISELECT);
 }
 
-//          Teilergebnisse
+// sub totals
 
 void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
                             const ScSortParam* pForceNewSort )
 {
-    bool bDo = !rParam.bRemoveOnly;                         // sal_False = nur loeschen
+    bool bDo = !rParam.bRemoveOnly;                         // sal_False = only delete
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
@@ -374,7 +374,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
                                                 rParam.nCol2, rParam.nRow2 );
     if (!pDBData)
     {
-        OSL_FAIL( "SubTotals: keine DBData" );
+        OSL_FAIL( "SubTotals: no DBData" );
         return;
     }
 
@@ -388,7 +388,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     if (rDoc.HasAttrib( rParam.nCol1, rParam.nRow1+1, nTab,
                          rParam.nCol2, rParam.nRow2, nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ))
     {
-        ErrorMessage(STR_MSSG_INSERTCELLS_0);   // nicht in zusammengefasste einfuegen
+        ErrorMessage(STR_MSSG_INSERTCELLS_0);   // do not insert into merged
         return;
     }
 
@@ -398,7 +398,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
         if (rDoc.TestRemoveSubTotals( nTab, rParam ))
         {
             bOk = ( ScopedVclPtr<MessBox>::Create( GetViewData().GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                // "StarCalc" "Daten loeschen?"
+                // "StarCalc" "delete data?"
                 ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
                 ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_1 ) )->Execute()
                 == RET_YES );
@@ -408,13 +408,13 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     {
         ScDocShellModificator aModificator( *pDocSh );
 
-        ScSubTotalParam aNewParam( rParam );        // Bereichsende wird veraendert
+        ScSubTotalParam aNewParam( rParam );        // change end of range
         ScDocument*     pUndoDoc = NULL;
         ScOutlineTable* pUndoTab = NULL;
         ScRangeName*    pUndoRange = NULL;
         ScDBCollection* pUndoDB = NULL;
 
-        if (bRecord)                                        // alte Daten sichern
+        if (bRecord)                                        // record old data
         {
             bool bOldFilter = bDo && rParam.bDoSort;
             SCTAB nTabCount = rDoc.GetTableCount();
@@ -424,7 +424,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
             {
                 pUndoTab = new ScOutlineTable( *pTable );
 
-                SCCOLROW nOutStartCol;                          // Zeilen/Spaltenstatus
+                SCCOLROW nOutStartCol;                          // row/column status
                 SCCOLROW nOutStartRow;
                 SCCOLROW nOutEndCol;
                 SCCOLROW nOutEndRow;
@@ -438,15 +438,15 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
             else
                 pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, bOldFilter );
 
-            //  Datenbereich sichern - incl. Filter-Ergebnis
+            // recod data range - including filter results
             rDoc.CopyToDocument( 0,rParam.nRow1+1,nTab, MAXCOL,rParam.nRow2,nTab,
                                     IDF_ALL, false, pUndoDoc );
 
-            //  alle Formeln wegen Referenzen
+            // all formulas for reference
             rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1,
                                         IDF_FORMULA, false, pUndoDoc );
 
-            //  DB- und andere Bereiche
+            // data base and othe ranges
             ScRangeName* pDocRange = rDoc.GetRangeName();
             if (!pDocRange->empty())
                 pUndoRange = new ScRangeName( *pDocRange );
@@ -473,13 +473,13 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
         bool bSuccess = true;
         if (bDo)
         {
-            // Sortieren
+            // Sort
             if ( rParam.bDoSort || pForceNewSort )
             {
                 pDBData->SetArea( nTab, aNewParam.nCol1,aNewParam.nRow1, aNewParam.nCol2,aNewParam.nRow2 );
 
-                //  Teilergebnis-Felder vor die Sortierung setzen
-                //  (doppelte werden weggelassen, kann darum auch wieder aufgerufen werden)
+                // set subtotal fields before sorting
+                // (duplicate values are dropped, so that they can be called again)
 
                 ScSortParam aOldSort;
                 pDBData->GetSortParam( aOldSort );
@@ -504,11 +504,11 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
 
         if (!bSuccess)
         {
-            // "Kann keine Zeilen einfuegen"
+            // "Can not insert any rows"
             ErrorMessage(STR_MSSG_DOSUBTOTALS_2);
         }
 
-                                                    // merken
+                                                    // store
         pDBData->SetSubTotalParam( aNewParam );
         pDBData->SetArea( nTab, aNewParam.nCol1,aNewParam.nRow1, aNewParam.nCol2,aNewParam.nRow2 );
         rDoc.CompileDBFormula();
@@ -528,7 +528,7 @@ void ScDBFunc::DoSubTotals( const ScSubTotalParam& rParam, bool bRecord,
     }
 }
 
-//          Consolidate
+// consolidate
 
 void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, bool bRecord )
 {
@@ -537,7 +537,7 @@ void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, bool bRecord )
     SetTabNo( rParam.nTab, true );
 }
 
-//          Pivot
+// pivot
 
 static OUString lcl_MakePivotTabName( const OUString& rPrefix, SCTAB nNumber )
 {
@@ -2056,7 +2056,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     pMgr->LeaveListAction();
 }
 
-//          DB-Operationen (Sortieren, Filtern, Teilergebnisse) wiederholen
+// repeat data base operations (sorting, filtering, subtotals)
 
 void ScDBFunc::RepeatDB( bool bRecord )
 {
@@ -2103,7 +2103,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         SCROW nEndRow;
         pDBData->GetArea( nDummy, nStartCol, nStartRow, nEndCol, nEndRow );
 
-        //!     Undo nur benoetigte Daten ?
+        //! undo only needed data ?
 
         ScDocument* pUndoDoc = NULL;
         ScOutlineTable* pUndoTab = NULL;
@@ -2119,7 +2119,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
             {
                 pUndoTab = new ScOutlineTable( *pTable );
 
-                SCCOLROW nOutStartCol;                          // Zeilen/Spaltenstatus
+                SCCOLROW nOutStartCol;                          // row/column status
                 SCCOLROW nOutStartRow;
                 SCCOLROW nOutEndCol;
                 SCCOLROW nOutEndRow;
@@ -2133,13 +2133,13 @@ void ScDBFunc::RepeatDB( bool bRecord )
             else
                 pUndoDoc->InitUndo( pDoc, nTab, nTab, false, true );
 
-            //  Datenbereich sichern - incl. Filter-Ergebnis
+            // Record data range - including filter results
             pDoc->CopyToDocument( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab, IDF_ALL, false, pUndoDoc );
 
-            //  alle Formeln wegen Referenzen
+            // all formulas for reference
             pDoc->CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1, IDF_FORMULA, false, pUndoDoc );
 
-            //  DB- und andere Bereiche
+            // data base and other ranges
             ScRangeName* pDocRange = pDoc->GetRangeName();
             if (!pDocRange->empty())
                 pUndoRange = new ScRangeName( *pDocRange );
@@ -2150,20 +2150,20 @@ void ScDBFunc::RepeatDB( bool bRecord )
 
         if (bSort && bSubTotal)
         {
-            //  Sortieren ohne SubTotals
+            // sort without subtotals
 
-            aSubTotalParam.bRemoveOnly = true;      // wird unten wieder zurueckgesetzt
+            aSubTotalParam.bRemoveOnly = true;      // is resetted below
             DoSubTotals( aSubTotalParam, false );
         }
 
         if (bSort)
         {
-            pDBData->GetSortParam( aSortParam );            // Bereich kann sich geaendert haben
+            pDBData->GetSortParam( aSortParam );            // range may have chaged
             Sort( aSortParam, false, false);
         }
         if (bQuery)
         {
-            pDBData->GetQueryParam( aQueryParam );          // Bereich kann sich geaendert haben
+            pDBData->GetQueryParam( aQueryParam );          // range may have chaged
             ScRange aAdvSource;
             if (pDBData->GetAdvancedQuerySource(aAdvSource))
             {
@@ -2182,7 +2182,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
         }
         if (bSubTotal)
         {
-            pDBData->GetSubTotalParam( aSubTotalParam );    // Bereich kann sich geaendert haben
+            pDBData->GetSubTotalParam( aSubTotalParam );    // range may have chaged
             aSubTotalParam.bRemoveOnly = false;
             DoSubTotals( aSubTotalParam, false );
         }
@@ -2222,7 +2222,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
             ScRange(0, 0, nTab, MAXCOL, MAXROW, nTab),
             PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
     }
-    else        // "Keine Operationen auszufuehren"
+    else        // "no not execute any operations"
         ErrorMessage(STR_MSSG_REPEATDB_0);
 }
 
