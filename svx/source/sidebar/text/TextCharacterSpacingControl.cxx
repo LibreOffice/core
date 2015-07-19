@@ -304,6 +304,7 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
     maVSSpacing->Invalidate();
     maVSSpacing->StartSelection();
 }
+
 IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
 {
     mnLastCus = SPACING_CLOSE_BY_CLICK_ICON;
@@ -409,6 +410,7 @@ IMPL_LINK(TextCharacterSpacingControl, KerningSelectHdl, ListBox*,)
     KerningModifyHdl( NULL );
     return 0;
 }
+
 IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*,)
 {
     if ( maVSSpacing->GetSelectItemId() > 0 )

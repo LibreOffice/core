@@ -82,7 +82,6 @@ VclPtr<vcl::Window> TextPropertyPanel::Create (
                 rContext);
 }
 
-
 TextPropertyPanel::TextPropertyPanel ( vcl::Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame, SfxBindings* pBindings, const ::sfx2::sidebar::EnumContext& /*rContext*/ )
     : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame),
         maFontSizeControl   (SID_ATTR_CHAR_FONTHEIGHT,  *pBindings, *this, OUString("FontHeight"),   rxFrame),
@@ -312,7 +311,6 @@ void TextPropertyPanel::NotifyItemUpdate (
         break;
     }
 }
-
 
 } } // end of namespace svx::sidebar
 

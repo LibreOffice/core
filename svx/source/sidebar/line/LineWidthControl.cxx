@@ -179,9 +179,6 @@ void LineWidthControl::Initialize()
     maVSWidth->Show();
 }
 
-
-
-
 void LineWidthControl::GetFocus()
 {
     if(!mbVSFocus)

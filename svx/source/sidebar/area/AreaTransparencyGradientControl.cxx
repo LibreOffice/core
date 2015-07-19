@@ -49,9 +49,6 @@ namespace svx { namespace sidebar {
 #define APOS_Left_Right_3 Point(LogicToPixel(Point(LEFT_RIGHT_X1,LEFT_RIGHT_Y2), MAP_APPFONT))
 #define APOS_Left_Right_4 Point(LogicToPixel(Point(LEFT_RIGHT_X2,LEFT_RIGHT_Y2), MAP_APPFONT))
 
-
-
-
 AreaTransparencyGradientControl::AreaTransparencyGradientControl (
     vcl::Window* pParent,
     AreaPropertyPanel& rPanel)
@@ -102,7 +99,6 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
     FreeResource();
     mpBindings = mrAreaPropertyPanel.GetBindings();
 }
-
 
 AreaTransparencyGradientControl::~AreaTransparencyGradientControl()
 {
@@ -239,9 +235,6 @@ void AreaTransparencyGradientControl::Rearrange(XFillFloatTransparenceItem* pGra
     }
 }
 
-
-
-
 void AreaTransparencyGradientControl::InitStatus(XFillFloatTransparenceItem* pGradientItem)
 {
     const XGradient& rGradient = pGradientItem->GetGradientValue();
@@ -270,9 +263,6 @@ void AreaTransparencyGradientControl::InitStatus(XFillFloatTransparenceItem* pGr
     maMtrTrgrEndValue->SetValue((sal_uInt16)((((sal_uInt16)aGradient.GetEndColor().GetRed() + 1) * 100) / 255));
     maMtrTrgrBorder->SetValue(aGradient.GetBorder());
 }
-
-
-
 
 void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, sal_uInt8 nEndCol )
 {
@@ -303,9 +293,6 @@ void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, s
     mpBindings->GetDispatcher()->Execute( SID_ATTR_FILL_FLOATTRANSPARENCE, SfxCallMode::RECORD, &aGradientItem, 0L );
 }
 
-
-
-
 IMPL_LINK_NOARG(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl)
 {
     sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue->GetValue() * 255) / 100);
@@ -313,9 +300,6 @@ IMPL_LINK_NOARG(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl)
     ExecuteValueModify( nStartCol, nEndCol );
     return 0L;
 }
-
-
-
 
 IMPL_LINK_NOARG_TYPED(AreaTransparencyGradientControl, Left_Click45_Impl, ToolBox *, void)
 {
@@ -328,9 +312,6 @@ IMPL_LINK_NOARG_TYPED(AreaTransparencyGradientControl, Left_Click45_Impl, ToolBo
     maMtrTrgrAngle->SetValue(aTemp);
     ExecuteValueModify( nStartCol, nEndCol );
 }
-
-
-
 
 IMPL_LINK_NOARG_TYPED(AreaTransparencyGradientControl, Right_Click45_Impl, ToolBox *, void)
 {
