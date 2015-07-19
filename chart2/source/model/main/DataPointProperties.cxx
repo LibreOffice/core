@@ -414,6 +414,13 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
+        Property( "TextWordWrap",
+                  PROP_DATAPOINT_TEXT_WORD_WRAP,
+                  cppu::UnoType<bool>::get(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
         Property( CHART_UNONAME_LABEL_SEP,
                   PROP_DATAPOINT_LABEL_SEPARATOR,
                   cppu::UnoType<OUString>::get(),
@@ -529,6 +536,7 @@ void DataPointProperties::AddDefaultsToMap(
             sal_False  // ShowLegendSymbol
             ));
 
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_TEXT_WORD_WRAP, false );
     PropertyHelper::setPropertyValueDefault< OUString >( rOutMap, PROP_DATAPOINT_LABEL_SEPARATOR, " " );
     PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_STYLE, drawing::LineStyle_NONE);
     PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_COLOR);

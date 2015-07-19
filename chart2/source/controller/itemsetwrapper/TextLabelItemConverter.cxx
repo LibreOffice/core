@@ -335,6 +335,36 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             }
         }
         break;
+        case SCHATTR_DATADESCR_WRAP_TEXT:
+        {
+
+            try
+            {
+                bool bNew = static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
+                bool bOld = false;
+                GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bOld;
+                if( mbDataSeries )
+                {
+                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
+                    if( bOld!=bNew ||
+                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, "TextWordWrap", uno::makeAny( bOld ) ) )
+                    {
+                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "TextWordWrap", uno::makeAny( bNew ) );
+                        bChanged = true;
+                    }
+                }
+                else if( bOld!=bNew )
+                {
+                    GetPropertySet()->setPropertyValue( "TextWordWrap", uno::makeAny( bNew ));
+                    bChanged = true;
+                }
+            }
+            catch( const uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
+        }
+        break;
         case SCHATTR_DATADESCR_PLACEMENT:
         {
             try
@@ -541,6 +571,20 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             catch (const uno::Exception& e)
             {
                 ASSERT_EXCEPTION(e);
+            }
+        }
+        break;
+        case SCHATTR_DATADESCR_WRAP_TEXT:
+        {
+            bool bValue = false;
+            try
+            {
+                GetPropertySet()->getPropertyValue( "TextWordWrap" ) >>= bValue;
+                rOutItemSet.Put( SfxBoolItem( nWhichId, bValue ));
+            }
+            catch( const uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
             }
         }
         break;

@@ -123,6 +123,11 @@ public:
                             const ModelRef< TextBody >& rxTextProp,
                             bool bSupportsStacked, sal_Int32 nDefaultRotation  = 0);
 
+    /** Sets text wrap properties to the passed property set. */
+    static void         convertTextWrap(
+                            PropertySet& rPropSet,
+                            const ModelRef< TextBody >& rxTextProp);
+
     /** Sets number format properties to the passed property set. */
     void                convertNumberFormat(
                             PropertySet& rPropSet,

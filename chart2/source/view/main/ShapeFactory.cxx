@@ -41,7 +41,9 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
 #include <editeng/unoprnms.hxx>
@@ -2121,6 +2123,107 @@ uno::Reference< drawing::XShape >
     if( xProp.is() )
     {
         //set properties
+        PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
+
+        //set position matrix
+        //the matrix needs to be set at the end behind autogrow and such position influencing properties
+        try
+        {
+            xProp->setPropertyValue( "Transformation", rATransformation );
+        }
+        catch( const uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+    }
+    return xShape;
+}
+
+uno::Reference< drawing::XShape >
+        ShapeFactory::createText( const uno::Reference< drawing::XShapes >& xTarget
+                    , const uno::Sequence< OUString >& rTextParagraphs
+                    , const uno::Sequence< tNameSequence >& rParaPropNames
+                    , const uno::Sequence< tAnySequence >& rParaPropValues
+                    , const tNameSequence& rPropNames
+                    , const tAnySequence& rPropValues
+                    , const uno::Any& rATransformation )
+{
+    if( !xTarget.is() )
+        return 0;
+
+    if( !rTextParagraphs.hasElements() )
+        return 0;
+
+    sal_Int32 nNumberOfParagraphs = rTextParagraphs.getLength();
+
+    if( rParaPropNames.getLength() != nNumberOfParagraphs )
+        return 0;
+
+    if( rParaPropValues.getLength() != nNumberOfParagraphs )
+        return 0;
+
+    bool bNotEmpty = false;
+    for( sal_Int32 nN = 0; nN < nNumberOfParagraphs; ++nN )
+    {
+        if( !rTextParagraphs[nN].isEmpty() )
+        {
+            bNotEmpty = true;
+            break;
+        }
+    }
+    if( !bNotEmpty )
+        return 0;
+
+    //create shape and add to page
+    uno::Reference< drawing::XShape > xShape(
+            m_xShapeFactory->createInstance(
+            "com.sun.star.drawing.TextShape" ), uno::UNO_QUERY );
+    xTarget->add(xShape);
+
+    //set paragraph properties
+    bNotEmpty = false;
+    Reference< text::XText > xText( xShape, uno::UNO_QUERY );
+    if( xText.is() )
+    {
+        // the first cursor is used for appending the next paragraph,
+        // after a new string has been inserted the cursor is moved at the end
+        // of the inserted string
+        // the second cursor is used for selecting the paragraph and apply the
+        // passed text properties
+        Reference< text::XTextCursor > xInsertCursor = xText->createTextCursor();
+        Reference< text::XTextCursor > xSelectionCursor = xText->createTextCursor();
+        if( xInsertCursor.is() && xSelectionCursor.is() )
+        {
+            uno::Reference< beans::XPropertySet > xSelectionProp( xSelectionCursor, uno::UNO_QUERY );
+            if( xSelectionProp.is() )
+            {
+                for( sal_Int32 nN = 0; nN < nNumberOfParagraphs; ++nN )
+                {
+                    if( !rTextParagraphs[nN].isEmpty() )
+                    {
+                        xInsertCursor->gotoEnd(false);
+                        if( bNotEmpty )
+                        {
+                            xText->insertString( xInsertCursor, "\n", false );
+                        }
+                        xSelectionCursor->gotoEnd(false);
+                        xText->insertString( xInsertCursor, rTextParagraphs[nN], false );
+                        bNotEmpty = true;
+                        xSelectionCursor->gotoEnd(true); // select current paragraph
+                        PropertyMapper::setMultiProperties( rParaPropNames[nN], rParaPropValues[nN], xSelectionProp );
+                    }
+                }
+            }
+        }
+    }
+
+    if( !bNotEmpty )
+        return 0;
+
+    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+    if( xProp.is() )
+    {
+        //set whole text shape properties
         PropertyMapper::setMultiProperties( rPropNames, rPropValues, xProp );
 
         //set position matrix

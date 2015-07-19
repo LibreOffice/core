@@ -336,10 +336,28 @@ void PieChart::createTextLabelShape(
         aScreenPosition2D.Y += aDirection.getY();
     }
 
+   // compute outer pie radius
+    awt::Point aOuterCirclePoint = PlottingPositionHelper::transformSceneToScreenPosition(
+            m_pPosHelper->transformUnitCircleToScene(
+                    0,
+                    rParam.mfUnitCircleOuterRadius,
+                    0 ),
+            m_xLogicTarget, m_pShapeFactory, m_nDimension );
+    basegfx::B2IVector aRadiusVector(
+            aOuterCirclePoint.X - aPieLabelInfo.aOrigin.getX(),
+            aOuterCirclePoint.Y - aPieLabelInfo.aOrigin.getY() );
+    double fSquaredPieRadius = aRadiusVector.scalar(aRadiusVector);
+    double fPieRadius = sqrt( fSquaredPieRadius );
+
+    // set the maximum text width to be used when text wrapping is enabled
+    double fTextMaximumFrameWidth = 0.8 * fPieRadius;
+    sal_Int32 nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
+
     ///the text shape for the label is created
     double nVal = rSeries.getYValue(nPointIndex);
     aPieLabelInfo.xTextShape = createDataLabel(
-        xTextTarget, rSeries, nPointIndex, nVal, rParam.mfLogicYSum, aScreenPosition2D, eAlignment);
+        xTextTarget, rSeries, nPointIndex, nVal, rParam.mfLogicYSum,
+        aScreenPosition2D, eAlignment, 0, nTextMaximumFrameWidth);
 
     ///a new `PieLabelInfo` instance is initialized with all the info related to
     ///the current label in order to simplify later label position rearrangement;
@@ -1544,9 +1562,10 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     basegfx::B2IVector aTranslationVector = aNewAnchorPoint - rPieLabelInfo.aFirstPosition;
 
     // compute the new screen position and move the label
-    awt::Point aNewPos( rPieLabelInfo.xLabelGroupShape->getPosition() );
-    aNewPos.X += aTranslationVector.getX();
-    aNewPos.Y += aTranslationVector.getY();
+    // XShape::getPosition returns the top left vertex of the b.b. of the shape
+    awt::Point aOldPos( rPieLabelInfo.xLabelGroupShape->getPosition() );
+    awt::Point aNewPos( aOldPos.X + aTranslationVector.getX(),
+                        aOldPos.Y + aTranslationVector.getY() );
     rPieLabelInfo.xLabelGroupShape->setPosition(aNewPos);
 
     SAL_INFO( "chart2.pie.label.bestfit.inside",
@@ -1555,6 +1574,8 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
               "      new anchor point = " << aNewAnchorPoint );
     SAL_INFO( "chart2.pie.label.bestfit.inside",
               "      translation vector = " <<  aTranslationVector );
+    SAL_INFO( "chart2.pie.label.bestfit.inside",
+              "      old position = (" << aOldPos.X << "," << aOldPos.Y << ")" );
     SAL_INFO( "chart2.pie.label.bestfit.inside",
               "      new position = (" << aNewPos.X << "," << aNewPos.Y << ")" );
 
