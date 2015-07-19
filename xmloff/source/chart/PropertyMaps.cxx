@@ -444,7 +444,6 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
                 bValue = (( nValue & chart::ChartDataCaption::SYMBOL ) == chart::ChartDataCaption::SYMBOL );
                 ::sax::Converter::convertBool( sValueBuffer, bValue );
                 break;
-
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH:
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_HEIGHT:
                 {

@@ -66,6 +66,17 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XSimpleText.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
+
 #include <svx/unoshape.hxx>
 
 #include <functional>
@@ -415,7 +426,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     , double fSumValue
                     , const awt::Point& rScreenPosition2D
                     , LabelAlignment eAlignment
-                    , sal_Int32 nOffset )
+                    , sal_Int32 nOffset
+                    , sal_Int32 nTextWidth )
 {
     uno::Reference< drawing::XShape > xTextShape;
 
@@ -476,10 +488,10 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 xSymbol.set( VSeriesPlotter::createLegendSymbolForPoint( aMaxSymbolExtent, rDataSeries, nPointIndex, xTarget_, m_xShapeFactory ) );
             else
                 xSymbol.set( VSeriesPlotter::createLegendSymbolForSeries( aMaxSymbolExtent, rDataSeries, xTarget_, m_xShapeFactory ) );
-
         }
+
         //prepare text
-        OUStringBuffer aText;
+        bool bTextWrap = false;
         OUString aSeparator(" ");
         double fRotationDegrees = 0.0;
         try
@@ -487,6 +499,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             uno::Reference< beans::XPropertySet > xPointProps( rDataSeries.getPropertiesOfPoint( nPointIndex ) );
             if(xPointProps.is())
             {
+                xPointProps->getPropertyValue( "TextWordWrap" ) >>= bTextWrap;
                 xPointProps->getPropertyValue( "LabelSeparator" ) >>= aSeparator;
                 // Extract the optional text rotation through the
                 // "TextRotation" property attached to the passed data point.
@@ -498,12 +511,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             ASSERT_EXCEPTION( e );
         }
 
-        // check if data series entry percent value and absolute value have to
-        // be appended to the text label, and what should be the separator
-        // character (comma, space, new line). In case it is a new line we get
-        // a multi-line label.
-        bool bMultiLineLabel = aSeparator == "\n";
         sal_Int32 nLineCountForSymbolsize = 0;
+        Sequence< OUString > aTextList(3);
         {
             if(pLabel->ShowCategoryName)
             {
@@ -512,22 +521,14 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     Sequence< OUString > aCategories( m_pExplicitCategoriesProvider->getSimpleCategories() );
                     if( nPointIndex >= 0 && nPointIndex < aCategories.getLength() )
                     {
-                        aText.append( aCategories[nPointIndex] );
-                        ++nLineCountForSymbolsize;
+                        aTextList[0] = aCategories[nPointIndex];
                     }
                 }
             }
 
             if(pLabel->ShowNumber)
             {
-                OUString aNumber = getLabelTextForValue(rDataSeries, nPointIndex, fValue, false);
-                if( !aNumber.isEmpty() )
-                {
-                    if(!aText.isEmpty())
-                        aText.append(aSeparator);
-                    aText.append(aNumber);
-                    ++nLineCountForSymbolsize;
-                }
+                aTextList[1] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, false);
             }
 
             if(pLabel->ShowNumberInPercent)
@@ -538,16 +539,18 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 if( fValue < 0 )
                     fValue*=-1.0;
 
-                OUString aPercentage = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
-                if( !aPercentage.isEmpty() )
+                aTextList[2] = getLabelTextForValue(rDataSeries, nPointIndex, fValue, true);
+            }
+
+            for( sal_Int32 nN = 0; nN < 3; ++nN)
+            {
+                if( !aTextList[nN].isEmpty() )
                 {
-                    if(!aText.isEmpty())
-                        aText.append(aSeparator);
-                    aText.append(aPercentage);
                     ++nLineCountForSymbolsize;
                 }
             }
         }
+
         //prepare properties for multipropertyset-interface of shape
         tNameSequence* pPropNames;
         tAnySequence* pPropValues;
@@ -557,13 +560,93 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         // set text alignment for the text shape to be created.
         LabelPositionHelper::changeTextAdjustment( *pPropValues, *pPropNames, eAlignment );
 
-        //create text shape
-        xTextShape = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->
-            createText( xTarget_, aText.makeStringAndClear()
-                        , *pPropNames, *pPropValues, AbstractShapeFactory::makeTransformation( aScreenPosition2D ) );
+        // check if data series entry percent value and absolute value have to
+        // be appended to the text label, and what should be the separator
+        // character (comma, space, new line). In case it is a new line we get
+        // a multi-line label.
+        bool bMultiLineLabel = ( aSeparator == "\n" );
+
+        if( bMultiLineLabel )
+        {
+            // prepare properties for each paragraph
+            // we want to have the value and percent value centered respect
+            // with the category name
+            Sequence< tNameSequence > aParaPropNames(3);
+            aParaPropNames[1].realloc(1);
+            aParaPropNames[1][0] = OUString( "ParaAdjust" );
+            aParaPropNames[2].realloc(1);
+            aParaPropNames[2][0] = OUString( "ParaAdjust" );
+
+            Sequence< tAnySequence > aParaPropValues(3);
+            aParaPropValues[1].realloc(1);
+            aParaPropValues[1][0] = uno::makeAny( style::ParagraphAdjust_CENTER );
+            aParaPropValues[2].realloc(1);
+            aParaPropValues[2][0] = uno::makeAny( style::ParagraphAdjust_CENTER );
+
+            //create text shape
+            xTextShape = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->
+                createText( xTarget_, aTextList, aParaPropNames, aParaPropValues
+                            , *pPropNames, *pPropValues, AbstractShapeFactory::makeTransformation( aScreenPosition2D ) );
+        }
+        else
+        {
+            // join text list elements
+            OUStringBuffer aText;
+            for( sal_Int32 nN = 0; nN < 3; ++nN)
+            {
+                if( !aTextList[nN].isEmpty() )
+                {
+                    if( !aText.isEmpty() )
+                    {
+                        aText.append(aSeparator);
+                    }
+                    aText.append( aTextList[nN] );
+                }
+            }
+
+            //create text shape
+            xTextShape = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->
+                createText( xTarget_, aText.makeStringAndClear()
+                            , *pPropNames, *pPropValues, AbstractShapeFactory::makeTransformation( aScreenPosition2D ) );
+        }
 
         if( !xTextShape.is() )
             return xTextShape;
+
+        // we need to use a default value for the maximum width property ?
+        if( nTextWidth == 0 && bTextWrap )
+        {
+            sal_Int32 nMinSize =
+                    (m_aPageReferenceSize.Height < m_aPageReferenceSize.Width)
+                        ? m_aPageReferenceSize.Height
+                        : m_aPageReferenceSize.Width;
+            nTextWidth = nMinSize / 3;
+        }
+
+        // in case text must be wrapped set the maximum width property
+        // for the text shape
+        if( nTextWidth != 0 && bTextWrap )
+        {
+            uno::Reference< beans::XPropertySet > xProp( xTextShape, uno::UNO_QUERY );
+            if( xProp.is() )
+            {
+                // compute the height of a line of text
+                if( !bMultiLineLabel || nLineCountForSymbolsize <= 0 )
+                {
+                    nLineCountForSymbolsize = 1;
+                }
+                awt::Size aTextSize = xTextShape->getSize();
+                sal_Int32 aTextLineHeight =  aTextSize.Height / nLineCountForSymbolsize;
+
+                // set maximum text width
+                uno::Any aTextMaximumFrameWidth = uno::makeAny( nTextWidth );
+                xProp->setPropertyValue( "TextMaximumFrameWidth", aTextMaximumFrameWidth );
+
+                // compute the total lines of text
+                aTextSize = xTextShape->getSize();
+                nLineCountForSymbolsize = aTextSize.Height / aTextLineHeight;
+            }
+        }
 
         // in case text is rotated, the transformation property of the text
         // shape is modified.
@@ -586,7 +669,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
             awt::Point aSymbolPosition( aUnrotatedTextPos );
             awt::Size aSymbolSize( xSymbol->getSize() );
-            awt::Size aTextSize( xTextShape->getSize() );
+            awt::Size aTextSize = xTextShape->getSize();
 
             sal_Int32 nXDiff = aSymbolSize.Width + static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.22 ) );//minimum 1mm
             if( !bMultiLineLabel || nLineCountForSymbolsize <= 0 )

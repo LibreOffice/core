@@ -31,13 +31,20 @@ public:
     void testFdo75075();
     void testPropertyMappingBarChart();
     void testPieChartLabels1();
+    void testPieChartLabels2();
+    void testPieChartLabels3();
+    void testPieChartLabels4();
     void testTdf76649TrendLineBug();
 
     CPPUNIT_TEST_SUITE(Chart2XShapeTest);
     CPPUNIT_TEST(testFdo75075);
     CPPUNIT_TEST(testPropertyMappingBarChart);
     CPPUNIT_TEST(testPieChartLabels1);
+    CPPUNIT_TEST(testPieChartLabels2);
+    CPPUNIT_TEST(testPieChartLabels3);
+    CPPUNIT_TEST(testPieChartLabels4);
     CPPUNIT_TEST(testTdf76649TrendLineBug);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -111,6 +118,27 @@ void Chart2XShapeTest::testPieChartLabels1()
     // inside placement for the best fit case
     load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-1.xlsx");
     compareAgainstReference("tdf90839-1.xml");
+}
+
+void Chart2XShapeTest::testPieChartLabels2()
+{
+    // text wrap: wrap all text labels except one
+    load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-2.xlsx");
+    compareAgainstReference("tdf90839-2.xml");
+}
+
+void Chart2XShapeTest::testPieChartLabels3()
+{
+    // text wrap: wrap no text label except one
+    load("chart2/qa/extras/xshape/data/xlsx/", "tdf90839-3.xlsx");
+    compareAgainstReference("tdf90839-3.xml");
+}
+
+void Chart2XShapeTest::testPieChartLabels4()
+{
+    // data value and percent value are centered horizontally
+    load("chart2/qa/extras/xshape/data/ods/", "tdf90839-4.ods");
+    compareAgainstReference("tdf90839-4.xml");
 }
 
 void Chart2XShapeTest::testTdf76649TrendLineBug()

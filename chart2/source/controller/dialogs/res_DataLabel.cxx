@@ -105,6 +105,7 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, vcl::Window
     pWindow->get(m_pFT_NumberFormatForPercent,"STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE");
     pWindow->get(m_pCBCategory, "CB_CATEGORY");
     pWindow->get(m_pCBSymbol, "CB_SYMBOL");
+    pWindow->get(m_pCBWrapText, "CB_WRAP_TEXT");
 
     pWindow->get(m_pBxLabelPlacement, "boxPLACEMENT");
     pWindow->get(m_pLB_LabelPlacement, "LB_LABEL_PLACEMENT");
@@ -155,6 +156,7 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, vcl::Window
     m_pCBPercent->SetClickHdl( LINK( this, DataLabelResources, CheckHdl ));
     m_pCBCategory->SetClickHdl(  LINK( this, DataLabelResources, CheckHdl ));
     m_pCBSymbol->SetClickHdl(  LINK( this, DataLabelResources, CheckHdl ));
+    m_pCBWrapText->SetClickHdl(  LINK( this, DataLabelResources, CheckHdl ));
 
     m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
     m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent , m_bPercentSourceMixedState);
@@ -238,6 +240,9 @@ void DataLabelResources::EnableControls()
     m_pCBSymbol->Enable( m_pCBNumber->IsChecked() || (m_pCBPercent->IsChecked() && m_pCBPercent->IsEnabled())
     || m_pCBCategory->IsChecked() );
 
+    m_pCBWrapText->Enable( m_pCBNumber->IsChecked() || (m_pCBPercent->IsChecked() && m_pCBPercent->IsEnabled())
+    || m_pCBCategory->IsChecked() );
+
     // Enable or disable separator, placement and direction based on the check
     // box states. Note that the check boxes are tri-state.
     {
@@ -289,6 +294,8 @@ bool DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
         rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_CATEGORY, m_pCBCategory->IsChecked() ) );
     if( m_pCBSymbol->GetState()!= TRISTATE_INDET )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYMBOL, m_pCBSymbol->IsChecked()) );
+    if( m_pCBSymbol->GetState()!= TRISTATE_INDET )
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_WRAP_TEXT, m_pCBWrapText->IsChecked()) );
 
     OUString aSep = m_aEntryMap[m_pLB_Separator->GetSelectEntryPos()];
     rOutAttrs->Put( SfxStringItem( SCHATTR_DATADESCR_SEPARATOR, aSep) );
@@ -321,6 +328,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_PERCENTAGE, *m_pCBPercent );
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_CATEGORY, *m_pCBCategory );
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_SYMBOL, *m_pCBSymbol );
+    lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_WRAP_TEXT, *m_pCBWrapText );
 
     m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
     m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent ,  m_bPercentSourceMixedState);

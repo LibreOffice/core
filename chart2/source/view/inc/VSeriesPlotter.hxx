@@ -325,6 +325,8 @@ protected:
      *      the required alignment of the label.
      *  @param offset
      *      an optional offset depending on the label alignment.
+     *  @param nTextWidth
+     *      the maximum width of a text label (used for text wrapping).
      *
      *  @return
      *      a reference to the created text shape.
@@ -338,7 +340,8 @@ protected:
                 , double fSumValue
                 , const ::com::sun::star::awt::Point& rScreenPosition2D
                 , LabelAlignment eAlignment=LABEL_ALIGN_CENTER
-                , sal_Int32 nOffset=0 );
+                , sal_Int32 nOffset=0
+                , sal_Int32 nTextWidth = 0 );
 
     /// This method returns a text string representation of the passed numeric
     /// value by exploiting a NumberFormatterWrapper object.
