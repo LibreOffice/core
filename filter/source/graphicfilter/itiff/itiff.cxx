@@ -608,6 +608,8 @@ bool TIFFReader::ReadMap()
                     pTIFF->Seek( pStripOffsets[ nStrip ] );
                     aCCIDecom.StartDecompression( *pTIFF );
                 }
+                if (np >= SAL_N_ELEMENTS(pMap))
+                    return false;
                 if ( !aCCIDecom.DecompressScanline( pMap[ np ], nImageWidth * nBitsPerSample * nSamplesPerPixel / nPlanes, np + 1 == nPlanes ) )
                     return false;
                 if ( pTIFF->GetError() )
