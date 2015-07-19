@@ -23,8 +23,6 @@
 #include <vcl/timer.hxx>
 #include <saltimer.hxx>
 
-#define MAX_TIMER_PERIOD    SAL_MAX_UINT64
-
 void ImplSchedulerData::Invoke()
 {
     if (mbDelete || mbInScheduler )
@@ -32,6 +30,9 @@ void ImplSchedulerData::Invoke()
 
     // prepare Scheduler Object for deletion after handling
     mpScheduler->SetDeletionFlags();
+
+    // tdf#92036 Reset the period to avoid re-firing immediatly.
+    mpScheduler->mpSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
 
     // invoke it
     mbInScheduler = true;
@@ -117,7 +118,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     ImplSchedulerData* pPrevSchedulerData = NULL;
     ImplSVData*        pSVData = ImplGetSVData();
     sal_uInt64         nTime = tools::Time::GetSystemTicks();
-    sal_uInt64         nMinPeriod = MAX_TIMER_PERIOD;
+    sal_uInt64         nMinPeriod = MaximumTimeoutMs;
     pSVData->mnUpdateStack++;
 
     // tdf#91727 - NB. bTimer is ultimately not used
@@ -162,7 +163,7 @@ void Scheduler::ProcessTaskScheduling( bool bTimer )
     {
         if ( pSVData->mpSalTimer )
             pSVData->mpSalTimer->Stop();
-        pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
+        pSVData->mnTimerPeriod = MaximumTimeoutMs;
     }
     else
     {
