@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_d479f330",
+        "filename": "chart2/source/controller/chartapiwrapper/DataSeriesPointWrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-07-19T16:33:02Z",
+      "side": 1,
+      "message": "Broken API.",
+      "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_14878b10",
+        "filename": "offapi/com/sun/star/chart/ChartDataPointProperties.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-07-19T16:33:02Z",
+      "side": 1,
+      "message": "I think this is going to break the stable API.",
+      "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_b47c7721",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 3138,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-07-19T16:33:02Z",
+      "side": 1,
+      "message": "changing the type reference is a no-go. This means that you broke the stable API.",
+      "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_34888722",
+        "filename": "xmloff/source/chart/PropertyMap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-07-19T16:33:02Z",
+      "side": 1,
+      "message": "This needs to use an extension namespace.",
+      "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_548d0330",
+        "filename": "xmloff/source/chart/PropertyMaps.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-07-19T16:33:02Z",
+      "side": 1,
+      "message": "I don\u0027t see why we would need special handling here. This should be covered by the normal PropertyMap magic.",
+      "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_f4818ffc",
+        "filename": "xmloff/source/chart/PropertyMaps.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-07-19T16:33:02Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "b11846dd1050a2f6c830973cff7c7260c035a146",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
