@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_74035fb9",
+        "filename": "framework/source/services/desktop.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 893,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-07-19T10:15:09Z",
+      "side": 1,
+      "message": "You didn’t fix “this requests”, which should agree in grammatical number.",
+      "revId": "50477e2e001cd45316f3eb5898297e06492b30f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_94005bac",
+        "filename": "include/osl/security.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-07-19T10:15:09Z",
+      "side": 1,
+      "message": "It should be “log in”, the verb. “Login” is the noun.",
+      "revId": "50477e2e001cd45316f3eb5898297e06492b30f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_342c074a",
+        "filename": "include/osl/security.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-07-19T10:15:09Z",
+      "side": 1,
+      "message": "Same as previous comment",
+      "revId": "50477e2e001cd45316f3eb5898297e06492b30f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_543183a1",
+        "filename": "jurt/com/sun/star/lib/uno/environments/remote/JobQueue.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-07-19T10:15:09Z",
+      "side": 1,
+      "message": "The correct spelling is “queues”.",
+      "revId": "50477e2e001cd45316f3eb5898297e06492b30f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_f4250f5c",
+        "filename": "lotuswordpro/source/filter/lwppagelayout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-07-19T10:15:09Z",
+      "side": 1,
+      "message": "Margin",
+      "revId": "50477e2e001cd45316f3eb5898297e06492b30f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_142b0b32",
+        "filename": "lotuswordpro/source/filter/lwpprtinfo.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-07-19T10:15:09Z",
+      "side": 1,
+      "message": "other, not others",
+      "revId": "50477e2e001cd45316f3eb5898297e06492b30f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_d41d7310",
+        "filename": "sd/source/ui/view/drviews1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-07-19T10:15:09Z",
+      "side": 1,
+      "message": "While you’re here, can you change that “an” for an “a” as well?",
+      "revId": "50477e2e001cd45316f3eb5898297e06492b30f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
