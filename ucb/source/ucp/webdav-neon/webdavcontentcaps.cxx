@@ -592,7 +592,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
         return aCmdInfo;
     }
 
-    bool bSupportsLocking = supportsExclusiveWriteLock( xEnv );
+    bool bSupportsLocking = ( resourceTypeForLocks( xEnv ) == DAV );
 
     sal_Int32 nPos = aCmdInfo.getLength();
     sal_Int32 nMoreCmds = ( bFolder ? 2 : 0 ) + ( bSupportsLocking ? 2 : 0 );
