@@ -65,8 +65,8 @@ private:
 
     sal_uLong               nNewSubFile;
     sal_uLong               nSubFile;
-    sal_uLong               nImageWidth;                // picture width in pixels
-    sal_uLong               nImageLength;               // picture height in pixels
+    sal_Int32               nImageWidth;                // picture width in pixels
+    sal_Int32               nImageLength;               // picture height in pixels
     sal_uLong               nBitsPerSample;             // bits per pixel per layer
     sal_uLong               nCompression;               // kind of compression
     sal_uLong               nPhotometricInterpretation;
@@ -116,7 +116,7 @@ private:
         // Create the bitmap from the temporary bitmap pMap
         // and partly deletes pMap while doing this.
 
-    bool    ConvertScanline( sal_uLong nY );
+    bool    ConvertScanline(sal_Int32 nY);
         // converts a Scanline to the Windows-BMP format
 
     bool HasAlphaChannel() const;
@@ -537,13 +537,13 @@ bool TIFFReader::ReadMap()
 {
     if ( nCompression == 1 || nCompression == 32771 )
     {
-        sal_uLong ny, np, nStrip, nStripBytesPerRow;
+        sal_uLong np, nStrip, nStripBytesPerRow;
 
         if ( nCompression == 1 )
             nStripBytesPerRow = nBytesPerRow;
         else
             nStripBytesPerRow = ( nBytesPerRow + 1 ) & 0xfffffffe;
-        for ( ny = 0; ny < nImageLength; ny++ )
+        for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
             for ( np = 0; np < nPlanes; np++ )
             {
@@ -561,7 +561,7 @@ bool TIFFReader::ReadMap()
     }
     else if ( nCompression == 2 || nCompression == 3 || nCompression == 4 )
     {
-        sal_uLong ny, np, nStrip, nOptions;
+        sal_uLong np, nStrip, nOptions;
         if ( nCompression == 2 )
         {
             nOptions = CCI_OPTION_BYTEALIGNROW;
@@ -596,7 +596,7 @@ bool TIFFReader::ReadMap()
 
         aCCIDecom.StartDecompression( *pTIFF );
 
-        for ( ny = 0; ny < nImageLength; ny++ )
+        for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
             for ( np = 0; np < nPlanes; np++ )
             {
@@ -620,13 +620,13 @@ bool TIFFReader::ReadMap()
     else if ( nCompression == 5 )
     {
         LZWDecompressor aLZWDecom;
-        sal_uLong ny, np, nStrip;
+        sal_uLong np, nStrip;
         nStrip=0;
         if ( nStrip >= nNumStripOffsets )
             return false;
         pTIFF->Seek(pStripOffsets[nStrip]);
         aLZWDecom.StartDecompression(*pTIFF);
-        for ( ny = 0; ny < nImageLength; ny++ )
+        for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
             for ( np = 0; np < nPlanes; np++ )
             {
@@ -647,13 +647,13 @@ bool TIFFReader::ReadMap()
     }
     else if ( nCompression == 32773 )
     {
-        sal_uLong nStrip,nRecCount,nRowBytesLeft,ny,np,i;
+        sal_uLong nStrip,nRecCount,nRowBytesLeft,np,i;
         sal_uInt8 * pdst;
         nStrip = 0;
         if ( nStrip >= nNumStripOffsets )
             return false;
         pTIFF->Seek(pStripOffsets[nStrip]);
-        for ( ny = 0; ny < nImageLength; ny++ )
+        for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
             for ( np = 0; np < nPlanes; np++ )
             {
@@ -767,9 +767,9 @@ sal_uLong TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_u
 
 
 
-bool TIFFReader::ConvertScanline( sal_uLong nY )
+bool TIFFReader::ConvertScanline(sal_Int32 nY)
 {
-    sal_uInt32  nRed, nGreen, nBlue, ns, nx, nVal, nByteCount;
+    sal_uInt32  nRed, nGreen, nBlue, ns, nVal, nByteCount;
     sal_uInt8   nByteVal;
 
     if ( nDstBitsPerPixel == 24 )
@@ -786,7 +786,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
                 sal_uInt8  nLGreen = 0;
                 sal_uInt8  nLBlue = 0;
                 sal_uInt8  nLAlpha = 0;
-                for ( nx = 0; nx < nImageWidth; nx++, pt += nSamplesPerPixel )
+                for (sal_Int32 nx = 0; nx < nImageWidth; nx++, pt += nSamplesPerPixel)
                 {
                     nLRed = nLRed + pt[ 0 ];
                     nLGreen = nLGreen + pt[ 1 ];
@@ -801,7 +801,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
             }
             else
             {
-                for ( nx = 0; nx < nImageWidth; nx++, pt += nSamplesPerPixel )
+                for (sal_Int32 nx = 0; nx < nImageWidth; nx++, pt += nSamplesPerPixel)
                 {
                     pAcc->SetPixel( nY, nx, Color( pt[0], pt[1], pt[2] ) );
                     if (nSamplesPerPixel >= 4 && pMaskAcc)
@@ -817,7 +817,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
             if ( nMaxSampleValue > nMinSampleValue )
             {
                 sal_uLong nMinMax = nMinSampleValue * 255 / ( nMaxSampleValue - nMinSampleValue );
-                for ( nx = 0; nx < nImageWidth; nx++ )
+                for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                 {
                     if ( nPlanes < 3 )
                     {
@@ -840,7 +840,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
             if ( nMaxSampleValue > nMinSampleValue )
             {
                 sal_uLong nMinMax =  nMinSampleValue * 255 / ( nMaxSampleValue - nMinSampleValue );
-                for ( nx = 0; nx < nImageWidth; nx++ )
+                for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                 {
                     if ( nPlanes < 3 )
                     {
@@ -868,7 +868,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
                 sal_uInt8   nSamp[ 4 ];
                 sal_uInt8   nSampLast[ 4 ] = { 0, 0, 0, 0 };
 
-                for( nx = 0; nx < nImageWidth; nx++ )
+                for(sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                 {
                     // are the values being saved as difference?
                     if( 2 == nPredictor )
@@ -921,7 +921,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
                         if ( nPredictor == 2 )
                         {
                             sal_uInt8 nLast = 0;
-                            for ( nx = 0; nx < nImageWidth; nx++ )
+                            for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
                                 nLast += nx == 0 ? BYTESWAP( (sal_uInt8)*pt++ ) : *pt++;
                                 pAcc->SetPixelIndex( nY, nx, nLast );
@@ -929,7 +929,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
                         }
                         else
                         {
-                            for ( nx = 0; nx < nImageWidth; nx++ )
+                            for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
                                 sal_uInt8 nLast = *pt++;
                                 pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>( (BYTESWAP((sal_uLong)nLast) - nMinSampleValue) * nMinMax ) );
@@ -941,7 +941,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
                         if ( nPredictor == 2 )
                         {
                             sal_uInt8 nLast = 0;
-                            for ( nx = 0; nx < nImageWidth; nx++ )
+                            for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
                                 nLast += *pt++;
                                 pAcc->SetPixelIndex( nY, nx, nLast );
@@ -949,7 +949,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
                         }
                         else
                         {
-                            for ( nx = 0; nx < nImageWidth; nx++ )
+                            for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                             {
                                 pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>( ((sal_uLong)*pt++ - nMinSampleValue) * nMinMax ) );
 
@@ -966,7 +966,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
                 case 3 :
                 case 2 :
                 {
-                    for ( nx = 0; nx < nImageWidth; nx++ )
+                    for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                     {
                         nVal = ( GetBits( pt, nx * nBitsPerSample, nBitsPerSample ) - nMinSampleValue ) * nMinMax;
                         pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>(nVal));
@@ -978,7 +978,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
                 {
                     if ( bByteSwap )
                     {
-                        nx = 0;
+                        sal_Int32 nx = 0;
                         nByteCount = ( nImageWidth >> 3 ) + 1;
                         while ( --nByteCount )
                         {
@@ -1011,7 +1011,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
                     }
                     else
                     {
-                        nx = 7;
+                        sal_Int32 nx = 7;
                         nByteCount = ( nImageWidth >> 3 ) + 1;
                         while ( --nByteCount )
                         {
@@ -1059,7 +1059,7 @@ bool TIFFReader::ConvertScanline( sal_uLong nY )
         {
             sal_uLong nMinMax = ( ( 1 << 8 /*nDstBitsPerPixel*/ ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
             sal_uInt8*  pt = pMap[ 0 ];
-            for ( nx = 0; nx < nImageWidth; nx++, pt += 2 )
+            for (sal_Int32 nx = 0; nx < nImageWidth; nx++, pt += 2 )
             {
                 pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>( ((sal_uLong)*pt - nMinSampleValue) * nMinMax) );
             }
@@ -1329,7 +1329,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 Size aTargetSize( nImageWidth, nImageLength );
                 aBitmap = Bitmap( aTargetSize, nDstBitsPerPixel );
                 pAcc = aBitmap.AcquireWriteAccess();
-                if ( pAcc )
+                if (pAcc && pAcc->Width() == nImageWidth && pAcc->Height() == nImageLength)
                 {
                     if ( nPlanarConfiguration == 1 )
                         nPlanes = 1;
