@@ -638,6 +638,8 @@ bool TIFFReader::ReadMap()
                     pTIFF->Seek(pStripOffsets[nStrip]);
                     aLZWDecom.StartDecompression(*pTIFF);
                 }
+                if (np >= SAL_N_ELEMENTS(pMap))
+                    return false;
                 if ( ( aLZWDecom.Decompress( pMap[ np ], nBytesPerRow ) != nBytesPerRow ) || pTIFF->GetError() )
                     return false;
             }
