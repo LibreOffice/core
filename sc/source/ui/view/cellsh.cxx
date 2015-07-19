@@ -279,9 +279,9 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     }
 }
 
-//  functionen, disabled depending on cursor position
-//  Default:
-//      SID_INSERT_POSTIT, SID_CHARMAP, SID_OPENDLG_FUNCTION
+// functions, disabled depending on cursor position
+// Default:
+//     SID_INSERT_POSTIT, SID_CHARMAP, SID_OPENDLG_FUNCTION
 
 void ScCellShell::GetCellState( SfxItemSet& rSet )
 {
@@ -925,7 +925,6 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case FID_COL_WIDTH:
                 {
-                    //GetViewData()->GetCurX();
                     SfxUInt16Item aWidthItem( FID_COL_WIDTH, pDoc->GetColWidth( nPosX , nTab) );
                     rSet.Put( aWidthItem );
                     if ( pDocSh->IsReadOnly())
@@ -937,7 +936,6 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case FID_ROW_HEIGHT:
                 {
-                    //GetViewData()->GetCurY();
                     SfxUInt16Item aHeightItem( FID_ROW_HEIGHT, pDoc->GetRowHeight( nPosY , nTab) );
                     rSet.Put( aHeightItem );
                     //XXX disable if not conclusive
