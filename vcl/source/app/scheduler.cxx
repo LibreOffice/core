@@ -33,6 +33,9 @@ void ImplSchedulerData::Invoke()
     // prepare Scheduler Object for deletion after handling
     mpScheduler->SetDeletionFlags();
 
+    // tdf#92036 Reset the period to avoid re-firing immediately.
+    mpScheduler->mpSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
+
     // invoke it
     mbInScheduler = true;
     mpScheduler->Invoke();
