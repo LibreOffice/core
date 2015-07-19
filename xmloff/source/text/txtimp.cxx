@@ -409,7 +409,7 @@ static const SvXMLTokenMapEntry aTextPElemTokenMap[] =
         (NAMESPACE | XML_NAMESPACE_TEXT | XML_measure) },
     { XML_NAMESPACE_LO_EXT, XML_PAGE_NAME, XML_TOK_TEXT_PAGE_NAME,
         (NAMESPACE | XML_NAMESPACE_LO_EXT | XML_page_name) },
-    { XML_NAESPACE_TEXT, XML_PAGE_NAME, XML_TOK_TEXT_PAGE_NAME,
+    { XML_NAMESPACE_TEXT, XML_PAGE_NAME, XML_TOK_TEXT_PAGE_NAME,
         (NAMESPACE | XML_NAMESPACE_TEXT | XML_page_name) },
 
     // RDF metadata
@@ -2603,9 +2603,9 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
 }
 
 SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
-    SvXMLImport& rImport, sal_Int32 Element,
+    SvXMLImport& /*rImport*/, sal_Int32 /*Element*/,
     const Reference< XFastAttributeList >& xAttrList,
-    XMLTextType eType )
+    XMLTextType /*eType*/ )
 {
     SvXMLImportContext *pContext = 0;
 

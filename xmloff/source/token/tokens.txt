@@ -504,6 +504,7 @@ dash-dot
 dash-dot-dot
 dashed
 data
+database-table-name
 data-bar
 data-bar-entry
 data-cell-range-address
@@ -806,6 +807,7 @@ exists
 exit
 exp
 exponential
+exponent-interval
 expression
 expression1
 expression2
@@ -999,6 +1001,7 @@ forall
 force-manual
 force-new-column
 force-new-page
+forced-exponent-sign
 foreground
 foreign-object
 form
@@ -1203,6 +1206,7 @@ ignore
 ignore-case
 ignore-driver-privileges
 ignore-empty-rows
+ignore-selected-page
 illustration-index
 illustration-index-entry-template
 illustration-index-source
@@ -1511,6 +1515,7 @@ matrixrow
 max
 max-edge
 max-height
+max-length
 max-row-count
 max-value
 max-width
@@ -1554,12 +1559,14 @@ mime-type
 mimetype
 min
 min-denominator-digits
+min-decimal-places
 min-edge
 min-exponent-digits
 min-height
 min-integer-digits
 min-label-distance
 min-label-width
+min-length
 min-line-height
 min-numerator-digits
 min-row-height
@@ -1806,6 +1813,7 @@ page-layout-name
 page-layout-properties
 page-master
 page-master-name
+page-name
 page-number
 page-print-option
 page-start-margin
@@ -2013,6 +2021,7 @@ remove-precedents
 repeat
 repeat-column
 repeat-content
+repeat-item-labels
 repeat-row
 repeat-section
 repeatCount

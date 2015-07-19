@@ -987,7 +987,7 @@ void SAL_CALL SwXMLTableCellContext_Impl::endFastElement( sal_Int32 /*Element*/)
                     assert(pDstTxtCrsr && "SwXTextCursor missing");
                     SwPaM aSrcPaM(*pSrcPaM->GetMark(), *pSrcPaM->GetPoint());
                     SwPosition aDstPos( *pDstTxtCrsr->GetPaM()->GetPoint() );
-                    pDoc->getIDocumentContentOperations().CopyRange( aSrcPaM, aDstPos, false );
+                    pDoc->getIDocumentContentOperations().CopyRange( aSrcPaM, aDstPos, /*bCopyAll=*/false, /*bCheckPos=*/true );
 
                     nColRepeat--;
                 }
@@ -1133,7 +1133,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
             SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
                                                         &pItem ) )
         {
-            const SwFmtFrmSize *pSize = static_cast<const SwFmtFrmSize *>(pItem);
+            const SwFormatFrmSize *pSize = static_cast<const SwFormatFrmSize *>(pItem);
             nWidth = pSize->GetWidth();
             bRelWidth = ATT_VAR_SIZE == pSize->GetHeightSizeType();
         }
@@ -1964,8 +1964,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     pTableNode( 0 ),
     pBox1( 0 ),
     pSttNd1( 0 ),
-    pBoxFmt( 0 ),
-    pLineFmt( 0 ),
+    pBoxFormat( 0 ),
+    pLineFormat( 0 ),
     pSharedBoxFormats(NULL),
     pDDESource(NULL),
     bFirstSection( true ),
@@ -1996,18 +1996,18 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
 
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
-    OUString sTblName;
+    OUString sTableName;
     if( !aName.isEmpty() )
     {
-        const SwTableFmt *pTblFmt = pDoc->FindTblFmtByName( aName );
-        if( !pTblFmt )
-            sTblName = aName;
+        const SwTableFormat *pTableFormat = pDoc->FindTableFormatByName( aName );
+        if( !pTableFormat )
+            sTableName = aName;
     }
-    if( sTblName.isEmpty() )
+    if( sTableName.isEmpty() )
     {
-        sTblName = pDoc->GetUniqueTblName();
+        sTableName = pDoc->GetUniqueTableName();
         GetImport().GetTextImport()
-            ->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_TABLE, aName, sTblName );
+            ->GetRenameMap().Add( XML_TEXT_RENAME_TYPE_TABLE, aName, sTableName );
     }
 
     Reference< XTextTable > xTable;
@@ -2064,14 +2064,14 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     }
     if( pXTable )
     {
-        SwFrmFmt *pTblFrmFmt = pXTable->GetFrmFmt();
-        OSL_ENSURE( pTblFrmFmt, "table format missing" );
-        SwTable *pTbl = SwTable::FindTable( pTblFrmFmt );
-        OSL_ENSURE( pTbl, "table missing" );
-        pTableNode = pTbl->GetTableNode();
+        SwFrameFormat *pTableFrameFormat = pXTable->GetFrameFormat();
+        OSL_ENSURE( pTableFrameFormat, "table format missing" );
+        SwTable *pTable = SwTable::FindTable( pTableFrameFormat );
+        OSL_ENSURE( pTable, "table missing" );
+        pTableNode = pTable->GetTableNode();
         OSL_ENSURE( pTableNode, "table node missing" );
 
-        pTblFrmFmt->SetName( sTblName );
+        pTableFrameFormat->SetName( sTableName );
 
         SwTableLine *pLine1 = pTableNode->GetTable().GetTabLines()[0U];
         pBox1 = pLine1->GetTabBoxes()[0U];
@@ -2114,8 +2114,8 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     pTableNode( pTable->pTableNode ),
     pBox1( 0 ),
     pSttNd1( 0 ),
-    pBoxFmt( 0 ),
-    pLineFmt( 0 ),
+    pBoxFormat( 0 ),
+    pLineFormat( 0 ),
     pSharedBoxFormats(NULL),
     xParentTable( pTable ),
     pDDESource(NULL),

@@ -1473,7 +1473,7 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSourceTableAttrTokenMap()
             { XML_NAMESPACE_TABLE, XML_TABLE_NAME,              XML_TOK_SOURCE_TABLE_ATTR_TABLE_NAME,
                 (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_name) },
             { XML_NAMESPACE_TABLE, XML_DATABASE_TABLE_NAME,     XML_TOK_SOURCE_TABLE_ATTR_TABLE_NAME,
-                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_table_name) }
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_table_name) },
             XML_TOKEN_MAP_END
         };
 
@@ -2019,7 +2019,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotLevelAttrTokenMap()
         {
             { XML_NAMESPACE_TABLE, XML_SHOW_EMPTY,              XML_TOK_DATA_PILOT_LEVEL_ATTR_SHOW_EMPTY,
                 (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_show_empty) },
-            { XML_NAMESPACE_CLAC_EXT, XML_REPEAT_ITEM_LABELS, XML_TOK_DATA_PILOT_LEVEL_ATTR_REPEAT_ITEM_LABELS,
+            { XML_NAMESPACE_CALC_EXT, XML_REPEAT_ITEM_LABELS, XML_TOK_DATA_PILOT_LEVEL_ATTR_REPEAT_ITEM_LABELS,
                 (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_repeat_item_labels) },
             XML_TOKEN_MAP_END
         };
