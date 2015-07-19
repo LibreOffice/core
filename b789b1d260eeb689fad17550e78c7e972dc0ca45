@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_14ec6bc6",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1049,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-07-19T19:30:40Z",
+      "side": 1,
+      "message": "Rand \u003d border in this case",
+      "revId": "b789b1d260eeb689fad17550e78c7e972dc0ca45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
