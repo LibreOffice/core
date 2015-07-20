@@ -244,7 +244,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if( RTF_PARD == nLastToken || RTF_PLAIN == nLastToken )
                     break;
 
-                if( pAkt->aAttrSet.Count() || pAkt->pChildList ||
+                if (pAkt->aAttrSet.Count() || pAkt->m_pChildList ||
                     pAkt->nStyleNo )
                 {
                     // Open a new Group
@@ -1715,7 +1715,7 @@ void SvxRTFParser::RTFPardPlain( bool const bPard, SfxItemSet** ppSet )
             RTF_PLAIN != nLastToken &&
             BRACELEFT != nLastToken )
         {
-            if( pAkt->aAttrSet.Count() || pAkt->pChildList || pAkt->nStyleNo )
+            if (pAkt->aAttrSet.Count() || pAkt->m_pChildList || pAkt->nStyleNo)
             {
                 // open a new group
                 SvxRTFItemStackType* pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, true );

@@ -31,7 +31,6 @@
 #include <map>
 #include <utility>
 #include <memory>
-#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace vcl { class Font; }
 class Color;
@@ -39,7 +38,7 @@ class Graphic;
 class DateTime;
 struct SvxRTFStyleType;
 class SvxRTFItemStackType;
-class SvxRTFItemStackList : public boost::ptr_vector<SvxRTFItemStackType> {};
+class SvxRTFItemStackList : public std::vector<std::unique_ptr<SvxRTFItemStackType>> {};
 
 namespace com { namespace sun { namespace star {
     namespace document {
@@ -176,7 +175,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     SvxRTFFontTbl   m_FontTable;
     SvxRTFStyleTbl  m_StyleTable;
     SvxRTFItemStack aAttrStack;
-    SvxRTFItemStackList aAttrSetList;
+    SvxRTFItemStackList m_AttrSetList;
 
     RTFPlainAttrMapIds aPlainMap;
     RTFPardAttrMapIds aPardMap;
@@ -326,13 +325,13 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
     SfxItemSet  aAttrSet;
     SvxNodeIdx  *pSttNd, *pEndNd;
     sal_Int32 nSttCnt, nEndCnt;
-    SvxRTFItemStackList* pChildList;
+    SvxRTFItemStackList* m_pChildList;
     sal_uInt16 nStyleNo;
 
     SvxRTFItemStackType( SfxItemPool&, const sal_uInt16* pWhichRange,
                             const SvxPosition& );
 
-    void Add( SvxRTFItemStackType* );
+    void Add(std::unique_ptr<SvxRTFItemStackType>);
     void Compress( const SvxRTFParser& );
 
 public:
