@@ -58,6 +58,7 @@ private:
 
     sal_uLong               nOrigPos;                   // start position in pTIFF
     sal_uInt16              nOrigNumberFormat;          // number format of pTIFF at the beginning
+    sal_uLong               nEndOfFile;                 // end of file position in pTIFF
 
 
     sal_uInt16              nDataType;
@@ -135,6 +136,7 @@ public:
         , pMaskAcc(NULL)
         , nOrigPos(0)
         , nOrigNumberFormat(0)
+        , nEndOfFile(0)
         , nDataType(0)
         , bByteSwap(false)
         , nNewSubFile(0)
@@ -550,7 +552,7 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
 {
     if ( nCompression == 1 || nCompression == 32771 )
     {
-        sal_uLong np, nStrip, nStripBytesPerRow;
+        sal_uLong nStrip, nStripBytesPerRow;
 
         if ( nCompression == 1 )
             nStripBytesPerRow = nBytesPerRow;
@@ -558,7 +560,7 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
             nStripBytesPerRow = ( nBytesPerRow + 1 ) & 0xfffffffe;
         for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
-            for ( np = 0; np < nPlanes; np++ )
+            for (sal_uLong np = 0; np < nPlanes; ++np)
             {
                 nStrip = ny / GetRowsPerStrip() + np * nStripsPerPlane;
                 if ( nStrip >= nNumStripOffsets )
@@ -567,7 +569,7 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                 if (np >= SAL_N_ELEMENTS(pMap))
                     return false;
                 pTIFF->Read( pMap[ np ], nBytesPerRow );
-                if ( pTIFF->GetError() )
+                if (!pTIFF->good())
                     return false;
                 MayCallback( nMinPercent + ( nMaxPercent - nMinPercent ) * ( np * nImageLength + ny) / ( nImageLength * nPlanes ) );
             }
@@ -577,7 +579,7 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
     }
     else if ( nCompression == 2 || nCompression == 3 || nCompression == 4 )
     {
-        sal_uLong np, nStrip, nOptions;
+        sal_uLong nStrip, nOptions;
         if ( nCompression == 2 )
         {
             nOptions = CCI_OPTION_BYTEALIGNROW;
@@ -606,6 +608,9 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
         nStrip = 0;
         if ( nStrip >= nNumStripOffsets )
             return false;
+        sal_uLong nOffset = pStripOffsets[nStrip];
+        if (nOffset > nEndOfFile)
+            return false;
         pTIFF->Seek(pStripOffsets[nStrip]);
 
         CCIDecompressor aCCIDecom( nOptions, nImageWidth );
@@ -614,14 +619,17 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
 
         for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
-            for ( np = 0; np < nPlanes; np++ )
+            for (sal_uLong np = 0; np < nPlanes; np++ )
             {
                 if ( ny / GetRowsPerStrip() + np * nStripsPerPlane > nStrip )
                 {
                     nStrip=ny/GetRowsPerStrip()+np*nStripsPerPlane;
                     if ( nStrip >= nNumStripOffsets )
                         return false;
-                    pTIFF->Seek( pStripOffsets[ nStrip ] );
+                    nOffset = pStripOffsets[nStrip];
+                    if (nOffset > nEndOfFile)
+                        return false;
+                    pTIFF->Seek(nOffset);
                     aCCIDecom.StartDecompression( *pTIFF );
                 }
                 if (np >= SAL_N_ELEMENTS(pMap))
@@ -639,7 +647,7 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
     else if ( nCompression == 5 )
     {
         LZWDecompressor aLZWDecom;
-        sal_uLong np, nStrip;
+        sal_uLong nStrip;
         nStrip=0;
         if ( nStrip >= nNumStripOffsets )
             return false;
@@ -647,7 +655,7 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
         aLZWDecom.StartDecompression(*pTIFF);
         for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
-            for ( np = 0; np < nPlanes; np++ )
+            for (sal_uLong np = 0; np < nPlanes; ++np)
             {
                 if ( ny / GetRowsPerStrip() + np * nStripsPerPlane > nStrip )
                 {
@@ -669,7 +677,7 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
     }
     else if ( nCompression == 32773 )
     {
-        sal_uLong nStrip,nRecCount,np,i;
+        sal_uLong nStrip,nRecCount,i;
         sal_uInt8 * pdst;
         nStrip = 0;
         if ( nStrip >= nNumStripOffsets )
@@ -677,7 +685,7 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
         pTIFF->Seek(pStripOffsets[nStrip]);
         for (sal_Int32 ny = 0; ny < nImageLength; ++ny)
         {
-            for ( np = 0; np < nPlanes; np++ )
+            for (sal_uLong np = 0; np < nPlanes; ++np)
             {
                 if ( ny / GetRowsPerStrip() + np * nStripsPerPlane > nStrip )
                 {
@@ -1193,6 +1201,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
     pTIFF = &rTIFF;
     nMaxPos = nOrigPos = pTIFF->Tell();
+    nEndOfFile = nOrigPos + pTIFF->remainingSize();
     nOrigNumberFormat = pTIFF->GetNumberFormatInt();
 
     MayCallback( 0 );
