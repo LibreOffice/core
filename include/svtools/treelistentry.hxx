@@ -57,7 +57,7 @@ class SVT_DLLPUBLIC SvTreeListEntry
     typedef std::vector<std::unique_ptr<SvLBoxItem>> ItemsType;
 
     SvTreeListEntry*    pParent;
-    SvTreeListEntries   maChildren;
+    SvTreeListEntries   m_Children;
     sal_uLong           nAbsPos;
     sal_uLong           nListPos;
     ItemsType           m_Items;
@@ -82,8 +82,8 @@ public:
     bool HasChildListPos() const;
     sal_uLong GetChildListPos() const;
 
-    SvTreeListEntries& GetChildEntries() { return maChildren;}
-    const SvTreeListEntries& GetChildEntries() const { return maChildren;}
+    SvTreeListEntries& GetChildEntries() { return m_Children; }
+    const SvTreeListEntries& GetChildEntries() const { return m_Children; }
 
     void Clone(SvTreeListEntry* pSource);
 

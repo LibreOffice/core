@@ -213,7 +213,7 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
     if(bInsertToPrefBox)
         m_pPrefBox->Insert( pEntry, pParentEntry );
     else
-        m_prefBoxEntries.push_back( pEntry );
+        m_prefBoxEntries.push_back(std::unique_ptr<SvTreeListEntry>(pEntry));
 }
 
 void CuiAboutConfigTabPage::Reset()
@@ -308,10 +308,10 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             // leaf node
             OUString sPropertyName = seqItems[i];
             SvTreeListEntries::iterator it = std::find_if(m_modifiedPrefBoxEntries.begin(), m_modifiedPrefBoxEntries.end(),
-              [&sPath, &sPropertyName](SvTreeListEntry &entry) -> bool
+              [&sPath, &sPropertyName](std::unique_ptr<SvTreeListEntry> const& pEntry) -> bool
               {
-                  return static_cast< UserData* >( entry.GetUserData() )->sPropertyPath.equals( sPath ) &&
-                          static_cast< SvLBoxString& >( entry.GetItem(2) ).GetText().equals( sPropertyName );
+                  return static_cast<UserData*>(pEntry->GetUserData())->sPropertyPath.equals(sPath)
+                      && static_cast<SvLBoxString&>(pEntry->GetItem(2)).GetText().equals(sPropertyName);
               }
             );
 
@@ -319,7 +319,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             OUString sValue;
 
             if (it != m_modifiedPrefBoxEntries.end())
-                sValue = static_cast< SvLBoxString& >( it->GetItem(4) ).GetText();
+                sValue = static_cast< SvLBoxString& >( (*it)->GetItem(4) ).GetText();
             else
             {
                 switch( aNode.getValueType().getTypeClass() )
@@ -772,35 +772,38 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                 m_pPrefBox->SetEntryText( sDialogValue,  pEntry, 3 );
                 //update m_prefBoxEntries
                 SvTreeListEntries::iterator it = std::find_if(m_prefBoxEntries.begin(), m_prefBoxEntries.end(),
-                  [&pUserData, &sPropertyName](SvTreeListEntry &entry) -> bool
+                  [&pUserData, &sPropertyName](std::unique_ptr<SvTreeListEntry> const& rpEntry) -> bool
                   {
-                      return static_cast< UserData* >( entry.GetUserData() )->sPropertyPath.equals( pUserData->sPropertyPath ) &&
-                              static_cast< SvLBoxString& >( entry.GetItem(2) ).GetText().equals( sPropertyName );
+                      return static_cast<UserData*>(rpEntry->GetUserData())->sPropertyPath.equals(pUserData->sPropertyPath)
+                          && static_cast<SvLBoxString&>(rpEntry->GetItem(2)).GetText().equals(sPropertyName);
                   }
                 );
                 if (it != m_prefBoxEntries.end())
                 {
-                    it->ReplaceItem(std::unique_ptr<SvLBoxString>(
-                        new SvLBoxString( &(*it), 0, sDialogValue)), 4);
+                    (*it)->ReplaceItem(std::unique_ptr<SvLBoxString>(
+                        new SvLBoxString( (*it).get(), 0, sDialogValue)), 4);
 
                     SvTreeListEntries::iterator modifiedIt = std::find_if(
                                 m_modifiedPrefBoxEntries.begin(), m_modifiedPrefBoxEntries.end(),
-                                [&pUserData, &sPropertyName](SvTreeListEntry &entry) -> bool
+                                [&pUserData, &sPropertyName](std::unique_ptr<SvTreeListEntry> const& rpEntry) -> bool
                                 {
-                                    return static_cast< UserData* >( entry.GetUserData() )->sPropertyPath.equals( pUserData->sPropertyPath ) &&
-                                            static_cast< SvLBoxString& >( entry.GetItem(2) ).GetText().equals( sPropertyName );
+                                    return static_cast<UserData*>(rpEntry->GetUserData())->sPropertyPath.equals(pUserData->sPropertyPath)
+                                        && static_cast<SvLBoxString&>(rpEntry->GetItem(2)).GetText().equals(sPropertyName);
                                 }
                     );
 
                     if( modifiedIt != m_modifiedPrefBoxEntries.end())
-                        modifiedIt->ReplaceItem(std::unique_ptr<SvLBoxString>(
-                            new SvLBoxString(&(*modifiedIt), 0, sDialogValue)),
+                    {
+                        (*modifiedIt)->ReplaceItem(std::unique_ptr<SvLBoxString>(
+                            new SvLBoxString((*modifiedIt).get(), 0, sDialogValue)),
                             4);
+                    }
                     else
                     {
-                        SvTreeListEntry *pCloneEntry = new SvTreeListEntry;
-                        pCloneEntry->Clone( &(*it));
-                        m_modifiedPrefBoxEntries.push_back( pCloneEntry );
+                        std::unique_ptr<SvTreeListEntry> pCloneEntry(
+                                new SvTreeListEntry);
+                        pCloneEntry->Clone((*it).get());
+                        m_modifiedPrefBoxEntries.push_back(std::move(pCloneEntry));
                     }
                 }
             }
@@ -833,7 +836,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl)
     {
         m_options.searchString = m_pSearchEdit->GetText();
         utl::TextSearch textSearch( m_options );
-        for(auto it = m_prefBoxEntries.begin(); it != m_prefBoxEntries.end(); ++it)
+        for (auto const& it : m_prefBoxEntries)
         {
             sal_Int32 endPos, startPos = 0;
 
@@ -848,7 +851,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl)
                 if( textSearch.SearchForward( scrTxt, &startPos, &endPos ) )
                 {
                     SvTreeListEntry* pEntry = new SvTreeListEntry;
-                    pEntry->Clone( &(*it) );
+                    pEntry->Clone( it.get() );
                     InsertEntry( pEntry );
                     break;
                 }

@@ -10,10 +10,11 @@
 #ifndef INCLUDED_SVTOOLS_TREELISTENTRIES_HXX
 #define INCLUDED_SVTOOLS_TREELISTENTRIES_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 class SvTreeListEntry;
-typedef boost::ptr_vector<SvTreeListEntry> SvTreeListEntries;
+typedef std::vector<std::unique_ptr<SvTreeListEntry>> SvTreeListEntries;
 
 #endif
 

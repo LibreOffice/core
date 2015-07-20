@@ -109,7 +109,7 @@ class SVT_DLLPUBLIC SvTreeList
     SVT_DLLPRIVATE void SetAbsolutePositions();
 
     SVT_DLLPRIVATE void CloneChildren(
-        SvTreeListEntries& rDst, sal_uLong& rCloneCount, SvTreeListEntries& rSrc, SvTreeListEntry* pNewParent) const;
+        SvTreeListEntries& rDst, sal_uLong& rCloneCount, SvTreeListEntries& rSrc, SvTreeListEntry& rNewParent) const;
 
     /**
      * Invalidate the cached position data to have them re-generated before

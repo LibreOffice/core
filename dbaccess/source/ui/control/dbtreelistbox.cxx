@@ -103,7 +103,7 @@ SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTree
     SvTreeListEntries::iterator it = aIters.first, itEnd = aIters.second;
     for (; it != itEnd; ++it)
     {
-        pEntry = &(*it);
+        pEntry = (*it).get();
         const SvLBoxString* pItem = static_cast<const SvLBoxString*>(
             pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
 

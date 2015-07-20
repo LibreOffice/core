@@ -3773,7 +3773,7 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const OUString& _rDataSo
 
     for (; it != itEnd; ++it)
     {
-        SvTreeListEntry* pEntry = &(*it);
+        SvTreeListEntry* pEntry = (*it).get();
         const DBTreeListUserData* pData = static_cast<const DBTreeListUserData*>(pEntry->GetUserData());
         pEntry->SetUserData(NULL);
         delete pData;

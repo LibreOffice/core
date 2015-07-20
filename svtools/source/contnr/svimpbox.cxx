@@ -3312,7 +3312,7 @@ void SvImpLBox::FindMostRight_Impl( SvTreeListEntry* pParent, SvTreeListEntry* p
     size_t nCount = rList.size();
     for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        SvTreeListEntry* pChild = &rList[nCur];
+        SvTreeListEntry* pChild = rList[nCur].get();
         if( pChild != pEntryToIgnore )
         {
             SetMostRight( pChild );

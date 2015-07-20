@@ -27,16 +27,15 @@
 
 void SvTreeListEntry::ClearChildren()
 {
-    maChildren.clear();
+    m_Children.clear();
 }
 
 void SvTreeListEntry::SetListPositions()
 {
-    SvTreeListEntries::iterator it = maChildren.begin(), itEnd = maChildren.end();
     sal_uLong nCur = 0;
-    for (; it != itEnd; ++it)
+    for (auto const& pEntry : m_Children)
     {
-        SvTreeListEntry& rEntry = *it;
+        SvTreeListEntry& rEntry = *pEntry;
         rEntry.nListPos &= 0x80000000;
         rEntry.nListPos |= nCur;
         ++nCur;
@@ -70,9 +69,8 @@ SvTreeListEntry::SvTreeListEntry(const SvTreeListEntry& r)
     , nEntryFlags(r.nEntryFlags)
     , maBackColor(Application::GetSettings().GetStyleSettings().GetWindowColor())
 {
-    SvTreeListEntries::const_iterator it = r.maChildren.begin(), itEnd = r.maChildren.end();
-    for (; it != itEnd; ++it)
-        maChildren.push_back(new SvTreeListEntry(*it));
+    for (auto const& it : r.m_Children)
+        m_Children.push_back(std::unique_ptr<SvTreeListEntry>(new SvTreeListEntry(*it)));
 }
 
 SvTreeListEntry::~SvTreeListEntry()
@@ -81,13 +79,13 @@ SvTreeListEntry::~SvTreeListEntry()
     pParent     = 0;
 #endif
 
-    maChildren.clear();
+    m_Children.clear();
     m_Items.clear();
 }
 
 bool SvTreeListEntry::HasChildren() const
 {
-    return !maChildren.empty();
+    return !m_Children.empty();
 }
 
 bool SvTreeListEntry::HasChildListPos() const

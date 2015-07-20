@@ -448,8 +448,7 @@ void ScXMLSourceDlg::SetRangeLinkable()
 void ScXMLSourceDlg::SelectAllChildEntries(SvTreeListEntry& rEntry)
 {
     SvTreeListEntries& rChildren = rEntry.GetChildEntries();
-    SvTreeListEntries::iterator it = rChildren.begin(), itEnd = rChildren.end();
-    for (; it != itEnd; ++it)
+    for (auto const& it : rChildren)
     {
         SvTreeListEntry& r = *it;
         SelectAllChildEntries(r); // select recursively.
@@ -521,8 +520,7 @@ void getFieldLinks(
         // No more children.  We're done.
         return;
 
-    SvTreeListEntries::const_iterator it = rChildren.begin(), itEnd = rChildren.end();
-    for (; it != itEnd; ++it)
+    for (auto const& it : rChildren)
     {
         const SvTreeListEntry& rChild = *it;
         OUString aPath = getXPath(rTree, rChild, rNamespaces);

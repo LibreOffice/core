@@ -905,9 +905,9 @@ sal_uLong SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
         return 0;
 
     if( !_pParent )//root and children of root
-        return pEntry->pParent->maChildren.size();
+        return pEntry->pParent->m_Children.size();
 
-    return _pParent->maChildren.size();
+    return _pParent->m_Children.size();
 }
 
 SvViewDataEntry* SvTreeListBox::GetViewDataEntry( SvTreeListEntry* pEntry ) const
