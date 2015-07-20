@@ -408,12 +408,6 @@ void OObjectBase::_propertyChange( const  beans::PropertyChangeEvent& /*evt*/ ) 
 {
 }
 
-void OObjectBase::SetObjectItemHelper(const SfxPoolItem& /*rItem*/)
-{
-    // do nothing
-}
-
-
 bool OObjectBase::supportsService( const OUString& _sServiceName ) const
 {
     bool bSupports = false;
@@ -502,11 +496,6 @@ SdrPage* OCustomShape::GetImplPage() const
     return GetPage();
 }
 
-void OCustomShape::SetSnapRectImpl(const Rectangle& _rRect)
-{
-    SetSnapRect( _rRect );
-}
-
 void OCustomShape::NbcMove( const Size& rSize )
 {
     if ( m_bIsListening )
@@ -559,14 +548,6 @@ bool OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     }
 
     return bResult;
-}
-
-
-void OCustomShape::SetObjectItemHelper(const SfxPoolItem& rItem)
-{
-    SetObjectItem(rItem);
-    // TODO
-    //getSectionWindow()->getView()->AdjustMarkHdl();
 }
 
 
@@ -676,11 +657,6 @@ sal_uInt32 OUnoObject::GetObjInventor() const
 SdrPage* OUnoObject::GetImplPage() const
 {
     return GetPage();
-}
-
-void OUnoObject::SetSnapRectImpl(const Rectangle& _rRect)
-{
-    SetSnapRect( _rRect );
 }
 
 void OUnoObject::NbcMove( const Size& rSize )
@@ -963,11 +939,6 @@ sal_uInt32 OOle2Obj::GetObjInventor() const
 SdrPage* OOle2Obj::GetImplPage() const
 {
     return GetPage();
-}
-
-void OOle2Obj::SetSnapRectImpl(const Rectangle& _rRect)
-{
-    SetSnapRect( _rRect );
 }
 
 void OOle2Obj::NbcMove( const Size& rSize )

@@ -94,12 +94,9 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     ,m_pCurrentView(NULL)
     ,m_pReportExplorer(NULL)
     ,m_eMode( RPTUI_SELECT )
-    ,m_nCurrentPosition(USHRT_MAX)
     ,m_eActObj( OBJ_NONE )
-    ,m_bFirstDraw(false)
     ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid
     ,m_aGridSizeFine( 250, 250 )        // and a 0,25 cm subdivision for better visualisation
-    ,m_bGridVisible(true)
     ,m_bGridSnap(true)
     ,m_bDeleted( false )
 {

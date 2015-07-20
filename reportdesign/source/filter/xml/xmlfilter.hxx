@@ -127,13 +127,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         create(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext);
 
-    inline Reference< XComponentContext > getORB() { return SvXMLImport::GetComponentContext(); }
     inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
-    /** return the SdrModel of the real model
-    *
-    * \return
-    */
-    ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const { return m_pReportModel; }
     void FinishStyles();
 
     virtual void SAL_CALL startDocument()
@@ -158,7 +152,6 @@ public:
     inline rtl::Reference < XMLPropertySetMapper > GetCellStylesPropertySetMapper()      const   { return m_xCellStylesPropertySetMapper;    }
     inline rtl::Reference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper()    const   { return m_xColumnStylesPropertySetMapper;  }
     inline rtl::Reference < XMLPropertySetMapper > GetRowStylesPropertySetMapper()       const   { return m_xRowStylesPropertySetMapper;     }
-    inline rtl::Reference < XMLPropertySetMapper > GetTableStylesPropertySetMapper()     const   { return m_xTableStylesPropertySetMapper;   }
     static OUString convertFormula(const OUString& _sFormula);
     /** inserts a new function
     *

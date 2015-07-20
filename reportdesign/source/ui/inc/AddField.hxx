@@ -90,7 +90,6 @@ public:
     inline bool                     GetEscapeProcessing()   const { return m_bEscapeProcessing; }
     inline void SetCreateHdl(const Link<>& _aCreateLink) { m_aCreateLink = _aCreateLink; }
 
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>  getColumns() const { return m_xColumns; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>              getConnection() const;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getSelectedFieldDescriptors();

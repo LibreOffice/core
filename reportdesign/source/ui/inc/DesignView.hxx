@@ -72,12 +72,9 @@ namespace rptui
         Idle                                m_aMarkIdle;
         Point                               m_aScrollOffset;
         DlgEdMode                           m_eMode;
-        sal_uInt16                          m_nCurrentPosition;
         sal_uInt16                          m_eActObj;
-        bool                                m_bFirstDraw;
         Size                                m_aGridSizeCoarse;
         Size                                m_aGridSizeFine;
-        bool                                m_bGridVisible;
         bool                                m_bGridSnap;
         bool                                m_bDeleted;
 
@@ -262,10 +259,6 @@ namespace rptui
             /param  _rSelection The vector will be filled and will not be cleared before.
         */
         void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >& _rSelection) const;
-
-        /** returns the selected field from the add field dialog
-        */
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getSelectedFieldDescriptors();
 
         /** calculates the zoom factor.
             @param  _eType  which kind of zoom is needed

@@ -81,7 +81,6 @@ namespace rptui
         void                    initialize();
 
         inline Point            getThumbPos() const { return Point(m_aHScroll->GetThumbPos(),m_aVScroll->GetThumbPos())/*m_aScrollOffset*/; }
-        inline const OReportWindow& getReportWindow() const { return *m_aReportWindow.get(); }
         void                    setTotalSize(sal_Int32 _nWidth, sal_Int32 _nHeight);
         inline Size             getTotalSize() const { return m_aTotalPixelSize; }
         inline ScrollBar&       GetHScroll() { return *m_aHScroll.get(); }

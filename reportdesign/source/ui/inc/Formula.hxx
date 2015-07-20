@@ -101,9 +101,6 @@ public:
     virtual void HideReference( bool bDoneRefMode = true ) SAL_OVERRIDE;
     virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
-
-protected:
-    void         HighlightFunctionParas(const OUString& aFormula);
 };
 
 

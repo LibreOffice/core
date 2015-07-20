@@ -92,7 +92,6 @@ public:
     inline OUString*     Next();
 
     using ScaList::Append;
-    inline void                 Append( OUString* pNew );
     inline void                 Append( const OUString& rNew );
 };
 
@@ -110,11 +109,6 @@ inline OUString* ScaStringList::First()
 inline OUString* ScaStringList::Next()
 {
     return static_cast< OUString* >( ScaList::Next() );
-}
-
-inline void ScaStringList::Append( OUString* pNew )
-{
-    ScaList::Append( pNew );
 }
 
 inline void ScaStringList::Append( const OUString& rNew )
@@ -232,11 +226,10 @@ public:
     inline sal_uInt16           GetUINameID() const     { return nUINameID; }
     inline sal_uInt16           GetDescrID() const      { return nDescrID; }
     inline ScaCategory          GetCategory() const     { return eCat; }
-    inline bool             IsDouble() const        { return bDouble; }
-    inline bool             HasIntParam() const     { return bWithOpt; }
+    inline bool                 IsDouble() const        { return bDouble; }
 
     sal_uInt16                  GetStrIndex( sal_uInt16 nParam ) const;
-    inline bool             Is( const OUString& rCompare ) const
+    inline bool                 Is( const OUString& rCompare ) const
                                                     { return aIntName == rCompare; }
 
     inline const ScaStringList& GetCompNameList() const { return aCompList; }

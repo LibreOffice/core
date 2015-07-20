@@ -52,7 +52,6 @@ typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexTo
     {
     private:
         DlgEdHintKind   eHintKind;
-        OUnoObject*     pDlgEdObj;
 
         DlgEdHint(DlgEdHint&) SAL_DELETED_FUNCTION;
         void operator =(DlgEdHint&) SAL_DELETED_FUNCTION;
@@ -61,7 +60,6 @@ typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexTo
         virtual ~DlgEdHint();
 
         inline DlgEdHintKind    GetKind() const { return eHintKind; }
-        inline OUnoObject*      GetObject() const { return pDlgEdObj; }
     };
 
 
@@ -93,9 +91,7 @@ protected:
 
     void SetPropsFromRect(const Rectangle& _rRect);
 
-    virtual void SetSnapRectImpl(const Rectangle& _rRect) = 0;
     virtual SdrPage* GetImplPage() const = 0;
-    virtual void SetObjectItemHelper(const SfxPoolItem& rItem);
 
     /** called by instances of derived classes to implement their overriding of getUnoShape
     */
@@ -117,8 +113,6 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> getReportComponent() const { return m_xReportComponent;}
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
-    inline void setOldParent(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) { m_xSection = _xSection; }
-    inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> getOldParent() const { return m_xSection;}
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> getSection() const;
     inline const OUString getServiceName() const { return m_sComponentName; }
 
@@ -152,9 +146,7 @@ protected:
     virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
 
-    virtual void SetSnapRectImpl(const Rectangle& _rRect) SAL_OVERRIDE;
     virtual SdrPage* GetImplPage() const SAL_OVERRIDE;
-    void SetObjectItemHelper(const SfxPoolItem& rItem) SAL_OVERRIDE;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -199,7 +191,6 @@ protected:
     virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
 
-    virtual void SetSnapRectImpl(const Rectangle& _rRect) SAL_OVERRIDE;
     virtual SdrPage* GetImplPage() const SAL_OVERRIDE;
 
 public:
@@ -246,7 +237,6 @@ protected:
     virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
 
-    virtual void SetSnapRectImpl(const Rectangle& _rRect) SAL_OVERRIDE;
     virtual SdrPage* GetImplPage() const SAL_OVERRIDE;
 
 public:

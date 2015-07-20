@@ -144,8 +144,6 @@ public:
     virtual bool MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual bool MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual bool MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-
-    void SetInEditMode(SdrTextObj* _pTextObj,const MouseEvent& rMEvt, bool bQuickDrag);
 };
 
 }

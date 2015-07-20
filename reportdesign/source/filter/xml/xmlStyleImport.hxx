@@ -72,9 +72,7 @@ namespace rptxml
 
         virtual void SetDefaults() SAL_OVERRIDE;
 
-          void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
-
-        sal_Int32 GetNumberFormat() { return m_nNumberFormat; }
+        void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
     };
 
     class OReportStylesContext : public SvXMLStylesContext
