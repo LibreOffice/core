@@ -614,11 +614,6 @@ sal_uInt32 ScFunctionCategory::getCount() const
     return m_pCategory->size();
 }
 
-const formula::IFunctionManager* ScFunctionCategory::getFunctionManager() const
-{
-    return m_pMgr;
-}
-
 OUString ScFunctionCategory::getName() const
 {
     if ( m_sName.isEmpty() )
@@ -755,15 +750,10 @@ const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategor
     if ( nCategory < (MAX_FUNCCAT-1) )
     {
         if (m_aCategories.find(nCategory) == m_aCategories.end())
-            m_aCategories[nCategory].reset(new ScFunctionCategory(const_cast<ScFunctionMgr*>(this),aCatLists[nCategory+1],nCategory)); // aCatLists[0] is "all"
+            m_aCategories[nCategory].reset(new ScFunctionCategory(aCatLists[nCategory+1],nCategory)); // aCatLists[0] is "all"
         return m_aCategories[nCategory].get();
     }
     return NULL;
-}
-
-const formula::IFunctionDescription* ScFunctionMgr::getFunctionByName(const OUString& _sFunctionName) const
-{
-    return Get(_sFunctionName);
 }
 
 void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const

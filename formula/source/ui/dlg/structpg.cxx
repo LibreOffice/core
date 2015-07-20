@@ -150,10 +150,6 @@ OUString StructPage::GetEntryText(SvTreeListEntry* pEntry) const
     return  aString;
 }
 
-SvTreeListEntry* StructPage::GetParent(SvTreeListEntry* pEntry) const
-{
-    return m_pTlbStruct->GetParent(pEntry);
-}
 IFormulaToken* StructPage::GetFunctionEntry(SvTreeListEntry* pEntry)
 {
     if(pEntry!=NULL)

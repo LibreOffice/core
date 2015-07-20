@@ -194,8 +194,6 @@ public:
 
     static  sal_Int32           GetStrLenBytes( sal_Int32 nLen )
                                     { return nLen * sizeof(sal_Unicode); }
-    static  sal_Int32           GetStrLenBytes( const OUString& rStr )
-                                    { return GetStrLenBytes( rStr.getLength() ); }
 };
 
 inline void intrusive_ptr_add_ref(const FormulaToken* p)

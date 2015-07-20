@@ -67,11 +67,6 @@ public:
 
     void         SetReferences( IControlReferenceHandler* pDlg, vcl::Window *pLabelWidget );
 
-    IControlReferenceHandler* GetRefDialog()
-    {
-        return pAnyRefDlg;
-    }
-
     vcl::Window*      GetLabelWidgetForShrinkMode()
     {
         return pLabelWidget;

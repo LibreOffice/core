@@ -172,7 +172,6 @@ public:
     void DelRPN();
     FormulaToken* First() { nIndex = 0; return Next(); }
     FormulaToken* Next();
-    FormulaToken* FirstNoSpaces() { nIndex = 0; return NextNoSpaces(); }
     FormulaToken* NextNoSpaces();
     FormulaToken* GetNextName();
     FormulaToken* GetNextReference();
@@ -234,12 +233,8 @@ public:
                                 { SetMaskedRecalcMode( ScRecalcMode::ONLOAD_ONCE ); }
     inline  void            SetRecalcModeForced()
                                 { nMode |= ScRecalcMode::FORCED; }
-    inline  void            ClearRecalcModeForced()
-                                { nMode &= ~ScRecalcMode::FORCED; }
     inline  void            SetRecalcModeOnRefMove()
                                 { nMode |= ScRecalcMode::ONREFMOVE; }
-    inline  void            ClearRecalcModeOnRefMove()
-                                { nMode &= ~ScRecalcMode::ONREFMOVE; }
     inline  bool            IsRecalcModeNormal() const
                                 { return bool(nMode & ScRecalcMode::NORMAL); }
     inline  bool            IsRecalcModeAlways() const

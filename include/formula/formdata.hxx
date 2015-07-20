@@ -34,7 +34,6 @@ public:
                         virtual ~FormEditData();
 
     virtual void            SaveValues();
-    bool                    HasParent() const   { return pParent != NULL; }
 
     inline sal_uInt16       GetMode() const     { return nMode; }
     inline sal_Int32        GetFStart() const   { return nFStart; }
@@ -49,8 +48,6 @@ public:
 
     inline void             SetMode( sal_uInt16 nNew )                  { nMode = nNew; }
     inline void             SetFStart( sal_Int32 nNew )                 { nFStart = nNew; }
-    inline void             SetCatSel( sal_uInt16 nNew )                { nCatSel = nNew; }
-    inline void             SetFuncSel( sal_uInt16 nNew )               { nFuncSel = nNew; }
     inline void             SetOffset( sal_uInt16 nNew )                { nOffset = nNew; }
     inline void             SetEdFocus( sal_uInt16 nNew )               { nEdFocus = nNew; }
     inline void             SetUndoStr( const OUString& rNew )          { aUndoStr = rNew; }

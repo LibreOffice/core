@@ -48,8 +48,7 @@ public:
     virtual sal_uInt32                              getCount() const SAL_OVERRIDE;
     virtual const formula::IFunctionCategory*       getCategory(sal_uInt32 nPos) const SAL_OVERRIDE;
     virtual void                                    fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const SAL_OVERRIDE;
-    virtual const formula::IFunctionDescription*    getFunctionByName(const OUString& _sFunctionName) const SAL_OVERRIDE;
-    virtual sal_Unicode                       getSingleToken(const EToken _eToken) const SAL_OVERRIDE;
+    virtual sal_Unicode                             getSingleToken(const EToken _eToken) const SAL_OVERRIDE;
 
     ::boost::shared_ptr< FunctionDescription >      get(const ::com::sun::star::uno::Reference< ::com::sun::star::report::meta::XFunctionDescription>& _xFunctionDescription) const;
 };
@@ -92,8 +91,7 @@ public:
     virtual sal_uInt32                              getCount() const SAL_OVERRIDE;
     virtual const formula::IFunctionDescription*    getFunction(sal_uInt32 _nPos) const SAL_OVERRIDE;
     virtual sal_uInt32                              getNumber() const SAL_OVERRIDE;
-    virtual const formula::IFunctionManager*        getFunctionManager() const SAL_OVERRIDE;
-    virtual OUString                         getName() const SAL_OVERRIDE;
+    virtual OUString                                getName() const SAL_OVERRIDE;
 };
 
 } // rptui
