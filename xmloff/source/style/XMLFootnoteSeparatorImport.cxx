@@ -24,6 +24,8 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 
 #include <tools/debug.hxx>
@@ -32,6 +34,7 @@
 
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -44,12 +47,15 @@
 
 
 using namespace ::com::sun::star;
+using namespace css::xml::sax;
+using namespace xmloff;
 using namespace ::xmloff::token;
 
 using ::std::vector;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::XFastAttributeList;
 
 
 TYPEINIT1(XMLFootnoteSeparatorImport, SvXMLImportContext);
@@ -63,6 +69,19 @@ XMLFootnoteSeparatorImport::XMLFootnoteSeparatorImport(
     const rtl::Reference<XMLPropertySetMapper> & rMapperRef,
     sal_Int32 nIndex) :
         SvXMLImportContext(rImport, nPrefix, rLocalName),
+        rProperties(rProps),
+        rMapper(rMapperRef),
+        nPropIndex(nIndex)
+{
+}
+
+XMLFootnoteSeparatorImport::XMLFootnoteSeparatorImport(
+    SvXMLImport& rImport,
+    sal_Int32 /*Element*/,
+    vector<XMLPropertyState> & rProps,
+    const rtl::Reference<XMLPropertySetMapper> & rMapperRef,
+    sal_Int32 nIndex) :
+        SvXMLImportContext(rImport),
         rProperties(rProps),
         rMapper(rMapperRef),
         nPropIndex(nIndex)
@@ -126,7 +145,7 @@ void XMLFootnoteSeparatorImport::StartElement(
                     { XML_LEFT,     text::HorizontalAdjust_LEFT },
                     { XML_CENTER,   text::HorizontalAdjust_CENTER },
                     { XML_RIGHT,    text::HorizontalAdjust_RIGHT },
-                    { XML_TOKEN_INVALID, 0 }
+                    { xmloff::token::XML_TOKEN_INVALID, 0 }
                 };
 
                 if (SvXMLUnitConverter::convertEnum(
@@ -154,7 +173,7 @@ void XMLFootnoteSeparatorImport::StartElement(
                     { XML_SOLID,    1 },
                     { XML_DOTTED,   2 },
                     { XML_DASH,     3 },
-                    { XML_TOKEN_INVALID, 0 }
+                    { xmloff::token::XML_TOKEN_INVALID, 0 }
                 };
 
                 if (SvXMLUnitConverter::convertEnum(
@@ -166,6 +185,129 @@ void XMLFootnoteSeparatorImport::StartElement(
     }
 
     // OK, now we have all values and can fill the XMLPropertyState vector
+    Any aAny;
+    sal_Int32 nIndex;
+
+    aAny <<= eLineAdjust;
+    nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_ADJUST);
+    XMLPropertyState aLineAdjust( nIndex, aAny);
+    rProperties.push_back(aLineAdjust);
+
+    aAny <<= nLineColor;
+    nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_COLOR);
+    XMLPropertyState aLineColor( nIndex, aAny );
+    rProperties.push_back(aLineColor);
+
+    aAny <<= nLineStyle;
+    nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_STYLE);
+    XMLPropertyState aLineStyle( nIndex, aAny );
+    rProperties.push_back(aLineStyle);
+
+    aAny <<= nLineDistance;
+    nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_DISTANCE);
+    XMLPropertyState aLineDistance( nIndex, aAny );
+    rProperties.push_back(aLineDistance);
+
+    aAny <<= nLineRelWidth;
+    nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_WIDTH);
+    XMLPropertyState aLineRelWidth( nIndex, aAny);
+    rProperties.push_back(aLineRelWidth);
+
+    aAny <<= nLineTextDistance;
+    nIndex = rMapper->FindEntryIndex(CTF_PM_FTN_LINE_DISTANCE);
+    XMLPropertyState aLineTextDistance( nIndex, aAny);
+    rProperties.push_back(aLineTextDistance);
+
+    DBG_ASSERT( rMapper->FindEntryIndex(CTF_PM_FTN_LINE_WEIGHT) == nPropIndex,
+                "Received wrong property map index!" );
+    aAny <<= nLineWeight;
+    XMLPropertyState aLineWeight( nPropIndex, aAny );
+    rProperties.push_back(aLineWeight);
+}
+
+void XMLFootnoteSeparatorImport::startFastElement(
+    sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList)
+    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
+{
+    // get the values from the properties
+    sal_Int16 nLineWeight = 0;
+    sal_Int32 nLineColor = 0;
+    sal_Int8 nLineRelWidth = 0;
+    sal_Int16 eLineAdjust = text::HorizontalAdjust_LEFT; // enum text::HorizontalAdjust
+    sal_Int32 nLineTextDistance = 0;
+    sal_Int32 nLineDistance = 0;
+    sal_Int8 nLineStyle = 0;
+
+    if( !xAttrList.is() )
+        return;
+
+    sal_Int32 nTmp;
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_width ) )
+    {
+        if( GetImport().GetMM100UnitConverter().convertMeasureToCore(
+            nTmp, xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_width ) ) )
+                nLineWeight = static_cast<sal_Int16>(nTmp);
+    }
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_distance_before_sep ) )
+    {
+        if( GetImport().GetMM100UnitConverter().convertMeasureToCore(
+            nTmp, xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_distance_before_sep ) ) )
+                nLineTextDistance = nTmp;
+    }
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_distance_after_sep ) )
+    {
+        if( GetImport().GetMM100UnitConverter().convertMeasureToCore(
+            nTmp, xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_distance_after_sep ) ) )
+                nLineDistance = nTmp;
+    }
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_adjustment ) )
+    {
+        sal_uInt16 nTmpU;
+        static const SvXMLEnumMapEntry aXML_HorizontalAdjust_Enum[] =
+        {
+            { XML_LEFT,     text::HorizontalAdjust_LEFT },
+            { XML_CENTER,     text::HorizontalAdjust_CENTER },
+            { XML_RIGHT,     text::HorizontalAdjust_RIGHT },
+            { xmloff::token::XML_TOKEN_INVALID, 0 }
+        };
+
+        if( SvXMLUnitConverter::convertEnum(
+                nTmpU, xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_adjustment ),
+                aXML_HorizontalAdjust_Enum ) )
+            eLineAdjust = static_cast<sal_Int16>(nTmpU);
+    }
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_rel_width ) )
+    {
+        if( ::sax::Converter::convertPercent( nTmp,
+                xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_rel_width ) ) )
+                nLineRelWidth = static_cast<sal_uInt8>(nTmp);
+    }
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_color ) )
+    {
+        if( ::sax::Converter::convertColor( nTmp,
+                xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_color ) ) )
+                nLineColor = nTmp;
+    }
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_line_style ) )
+    {
+        sal_uInt16 nTmpU;
+        static const SvXMLEnumMapEntry aXML_LineStyle_Enum[] =
+        {
+            { XML_NONE,     0 },
+            { XML_SOLID,    1 },
+            { XML_DOTTED,   2 },
+            { XML_DASH,     3 },
+            { xmloff::token::XML_TOKEN_INVALID, 0 }
+        };
+
+        if( SvXMLUnitConverter::convertEnum( nTmpU,
+                xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_line_style ),
+                aXML_LineStyle_Enum ) )
+            nLineStyle = static_cast<sal_Int8>(nTmpU);
+    }
+
+    // Ok, nuw we have all values and can fill the XMLPropertyState vector
     Any aAny;
     sal_Int32 nIndex;
 
