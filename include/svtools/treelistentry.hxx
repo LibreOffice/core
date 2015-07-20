@@ -71,6 +71,8 @@ private:
     void SetListPositions();
     void InvalidateChildrensListPositions();
 
+    void operator=(SvTreeListEntry const&) = delete;
+
 public:
     static const size_t ITEM_NOT_FOUND = SAL_MAX_SIZE;
 
