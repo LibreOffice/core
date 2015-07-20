@@ -55,12 +55,6 @@ bool SAL_CALL OStaticSet::moveToBookmark( const Any& bookmark ) throw(SQLExcepti
     return absolute(::comphelper::getINT32(bookmark));
 }
 
-bool SAL_CALL OStaticSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
-{
-    m_bInserted = m_bUpdated = m_bDeleted = false;
-    return absolute(::comphelper::getINT32(bookmark)+rows);
-}
-
 sal_Int32 SAL_CALL OStaticSet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nFirst = 0, nSecond = 0;
@@ -139,16 +133,6 @@ bool SAL_CALL OStaticSet::isBeforeFirst(  ) throw(SQLException, RuntimeException
 bool SAL_CALL OStaticSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
     return m_aSetIter == m_aSet.end() && m_bEnd;
-}
-
-bool SAL_CALL OStaticSet::isFirst(  ) throw(SQLException, RuntimeException)
-{
-    return m_aSetIter == m_aSet.begin()+1;
-}
-
-bool SAL_CALL OStaticSet::isLast(  ) throw(SQLException, RuntimeException)
-{
-    return m_aSetIter == m_aSet.end()-1 && m_bEnd;
 }
 
 void SAL_CALL OStaticSet::beforeFirst(  ) throw(SQLException, RuntimeException)
@@ -271,19 +255,6 @@ bool SAL_CALL OStaticSet::rowDeleted(  ) throw(SQLException, RuntimeException)
     return m_bDeleted;
 }
 
-Sequence< sal_Int32 > SAL_CALL OStaticSet::deleteRows( const Sequence< Any >& rows,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
-{
-    Sequence< sal_Int32 > aRet(rows.getLength());
-    const Any* pBegin   = rows.getConstArray();
-    const Any* pEnd     = pBegin + rows.getLength();
-    for(sal_Int32 i=0; pBegin != pEnd; ++pBegin,++i)
-    {
-        deleteRow(*(m_aSet.begin() + comphelper::getINT32(*pBegin)),_xTable);
-        aRet.getArray()[i] = m_bDeleted ? 1 : 0;
-    }
-    return aRet;
-}
-
 void SAL_CALL OStaticSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     OCacheSet::insertRow( _rInsertRow,_xTable);
@@ -311,18 +282,6 @@ void SAL_CALL OStaticSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connect
             m_aSetIter = m_aSet.end();
         m_aSet.erase(aPos);
     }
-}
-
-void SAL_CALL OStaticSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
-{
-}
-
-void SAL_CALL OStaticSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
-{
-}
-
-void SAL_CALL OStaticSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
-{
 }
 
 void OStaticSet::reset(const Reference< XResultSet> &_xDriverSet)

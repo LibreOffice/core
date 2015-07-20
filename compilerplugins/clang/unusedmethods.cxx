@@ -71,6 +71,7 @@ public:
     bool VisitFunctionDecl( const FunctionDecl* decl );
     bool VisitDeclRefExpr( const DeclRefExpr* );
     bool VisitCXXConstructExpr( const CXXConstructExpr* );
+    bool VisitVarDecl( const VarDecl* );
 };
 
 static std::string niceName(const FunctionDecl* functionDecl)
@@ -249,6 +250,31 @@ bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
         return true;
     }
     logCallToRootMethods(dyn_cast<FunctionDecl>(functionDecl)->getCanonicalDecl());
+    return true;
+}
+
+// this is for declarations of static variables that involve a template
+bool UnusedMethods::VisitVarDecl( const VarDecl* varDecl )
+{
+    varDecl = varDecl->getCanonicalDecl();
+    // I don't use the normal ignoreLocation() here, because I __want__ to include files that are
+    // compiled in the $WORKDIR since they may refer to normal code
+    SourceLocation expansionLoc = compiler.getSourceManager().getExpansionLoc( varDecl->getLocStart() );
+    if( compiler.getSourceManager().isInSystemHeader( expansionLoc ))
+        return true;
+
+    if (varDecl->getStorageClass() != SC_Static)
+        return true;
+    const CXXRecordDecl* recordDecl = varDecl->getType()->getAsCXXRecordDecl();
+    if (!recordDecl)
+        return true;
+    if (!recordDecl->getTemplateInstantiationPattern())
+        return true;
+
+    for( CXXRecordDecl::ctor_iterator it = recordDecl->ctor_begin(); it != recordDecl->ctor_end(); ++it)
+        TraverseCXXConstructorDecl(*it);
+    for( CXXRecordDecl::method_iterator it = recordDecl->method_begin(); it != recordDecl->method_end(); ++it)
+        TraverseCXXMethodDecl(*it);
     return true;
 }
 

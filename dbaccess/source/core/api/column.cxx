@@ -142,11 +142,6 @@ void OColumn::registerMayBeVoidProperty( const OUString& _rName, sal_Int32 _nHan
     ::comphelper::OPropertyContainer::registerMayBeVoidProperty( _rName, _nHandle, _nAttributes, _pPointerToMember, _rExpectedType );
 }
 
-void OColumn::registerPropertyNoMember( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const Type& _rType, const void* _pInitialValue )
-{
-    ::comphelper::OPropertyContainer::registerPropertyNoMember( _rName, _nHandle, _nAttributes, _rType, _pInitialValue );
-}
-
 // OColumns
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent,

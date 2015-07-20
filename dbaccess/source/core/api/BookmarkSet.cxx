@@ -57,11 +57,6 @@ bool SAL_CALL OBookmarkSet::moveToBookmark( const Any& bookmark ) throw(SQLExcep
     return m_xRowLocate->moveToBookmark(bookmark);
 }
 
-bool SAL_CALL OBookmarkSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
-{
-    return m_xRowLocate->moveRelativeToBookmark(bookmark,rows);
-}
-
 sal_Int32 SAL_CALL OBookmarkSet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     return m_xRowLocate->compareBookmarks(_first,_second);
@@ -75,17 +70,6 @@ bool SAL_CALL OBookmarkSet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeE
 sal_Int32 SAL_CALL OBookmarkSet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     return m_xRowLocate->hashBookmark(bookmark);
-}
-
-// ::com::sun::star::sdbcx::XDeleteRows
-Sequence< sal_Int32 > SAL_CALL OBookmarkSet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& /*_xTable*/) throw(SQLException, RuntimeException)
-{
-    Reference< ::com::sun::star::sdbcx::XDeleteRows> xDeleteRow(m_xRowLocate,UNO_QUERY);
-    if(xDeleteRow.is())
-    {
-        return xDeleteRow->deleteRows(rows);
-    }
-    return Sequence< sal_Int32 >();
 }
 
 void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException, std::exception)
@@ -140,21 +124,6 @@ void SAL_CALL OBookmarkSet::deleteRow(const ORowSetRow& /*_rDeleteRow*/ ,const c
     Reference<XResultSetUpdate> xUpd(m_xRowLocate,UNO_QUERY);
 
     xUpd->deleteRow();
-}
-
-void SAL_CALL OBookmarkSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
-{
-}
-
-void SAL_CALL OBookmarkSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
-{
-    Reference<XResultSetUpdate> xUpd(m_xRowLocate,UNO_QUERY);
-    if(xUpd.is())
-        xUpd->moveToInsertRow();
-}
-
-void SAL_CALL OBookmarkSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
-{
 }
 
 void OBookmarkSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)

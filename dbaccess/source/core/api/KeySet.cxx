@@ -429,19 +429,6 @@ bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark ) throw(SQLException,
     return m_aKeyIter != m_aKeyMap.end();
 }
 
-bool SAL_CALL OKeySet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
-{
-    m_bInserted = m_bUpdated = m_bDeleted = false;
-    m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
-    if(m_aKeyIter != m_aKeyMap.end())
-    {
-        return relative(rows);
-    }
-
-    invalidateRow();
-    return false;
-}
-
 sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nFirst = 0, nSecond = 0;
@@ -461,93 +448,6 @@ sal_Int32 SAL_CALL OKeySet::hashBookmark( const Any& bookmark ) throw(SQLExcepti
     return ::comphelper::getINT32(bookmark);
 }
 
-// ::com::sun::star::sdbcx::XDeleteRows
-Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& _xTable) throw(SQLException, RuntimeException)
-{
-    Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
-    fillTableName(xSet);
-
-    OUStringBuffer aSql("DELETE FROM " + m_aComposedTableName + " WHERE ");
-
-    // list all columns that should be set
-    const OUString aQuote    = getIdentifierQuoteString();
-    static const char aAnd[] = " AND ";
-    static const char aOr[] = " OR ";
-    static const char aEqual[] = " = ?";
-
-    // use keys for exact positioning
-    Reference<XNameAccess> xKeyColumns = getKeyColumns();
-
-    OUStringBuffer aCondition("( ");
-
-    SelectColumnsMetaData::const_iterator aIter = (*m_pKeyColumnNames).begin();
-    const SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
-    for(;aIter != aPosEnd;++aIter)
-    {
-        aCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName) + aEqual + aAnd);
-    }
-    aCondition.setLength(aCondition.getLength() - strlen(aAnd));
-    // sCon is (parenthesised) the condition to locate ONE row
-    // e.g. ( colName1 = ? AND colName2 = ? AND colName3 = ? )
-    const OUString sCon( aCondition.makeStringAndClear() );
-
-    // since we need to delete all rows in "rows",
-    // we need to OR as many row locators.
-    const Any* pBegin     = rows.getConstArray();
-    const Any* const pEnd = pBegin + rows.getLength();
-    for(;pBegin != pEnd;++pBegin)
-    {
-        aSql.append(sCon + aOr);
-    }
-    aSql.setLength(aSql.getLength()-3);
-
-    // now create end execute the prepared statement
-
-    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
-    Reference< XParameters > xParameter(xPrep,UNO_QUERY);
-
-    // now, fill in the parameters in the row locators
-    pBegin  = rows.getConstArray();
-    sal_Int32 i=1;
-    for(;pBegin != pEnd;++pBegin)
-    {
-        m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(*pBegin));
-        // LEM FIXME: what happens if m_aKeyIter == m_aKeyMap.end() ?
-        //            the whole operation fails because there are unfilled parameters
-        //            the remaining rows *are* deleted?
-        //            check what happens vs what is supposed to happen
-        //            (cf documentation of ::com::sun::star::sdbcx::XDeleteRows)
-        if(m_aKeyIter != m_aKeyMap.end())
-        {
-            connectivity::ORowVector< ORowSetValue >::Vector::iterator aKeyIter = m_aKeyIter->second.first->get().begin();
-            connectivity::ORowVector< ORowSetValue >::Vector::iterator aKeyEnd = m_aKeyIter->second.first->get().end();
-            SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
-            for(sal_uInt16 j = 0;aKeyIter != aKeyEnd;++aKeyIter,++j,++aPosIter)
-            {
-                setParameter(i++,xParameter,*aKeyIter,aPosIter->second.nType,aPosIter->second.nScale);
-            }
-        }
-    }
-
-    bool bOk = xPrep->executeUpdate() > 0;
-    Sequence< sal_Int32 > aRet(rows.getLength());
-    memset(aRet.getArray(),bOk,sizeof(sal_Int32)*aRet.getLength());
-    if(bOk)
-    {
-        pBegin  = rows.getConstArray();
-
-        for(;pBegin != pEnd;++pBegin)
-        {
-            sal_Int32 nPos = 0;
-            *pBegin >>= nPos;
-            if(m_aKeyIter == m_aKeyMap.find(nPos) && m_aKeyIter != m_aKeyMap.end())
-                ++m_aKeyIter;
-            m_aKeyMap.erase(nPos);
-            m_bDeleted = true;
-        }
-    }
-    return aRet;
-}
 
 void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException, std::exception)
 {
@@ -1060,19 +960,6 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
     }
 }
 
-void SAL_CALL OKeySet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
-{
-    m_bInserted = m_bUpdated = m_bDeleted = false;
-}
-
-void SAL_CALL OKeySet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
-{
-}
-
-void SAL_CALL OKeySet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
-{
-}
-
 Reference<XNameAccess> OKeySet::getKeyColumns() const
 {
     // use keys and indexes for exact positioning
@@ -1149,23 +1036,6 @@ bool SAL_CALL OKeySet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 bool SAL_CALL OKeySet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
     return  m_bRowCountFinal && m_aKeyIter == m_aKeyMap.end();
-}
-
-bool SAL_CALL OKeySet::isFirst(  ) throw(SQLException, RuntimeException)
-{
-    OKeySetMatrix::iterator aTemp = m_aKeyMap.begin();
-    ++aTemp;
-    return m_aKeyIter == aTemp && m_aKeyIter != m_aKeyMap.end();
-}
-
-bool SAL_CALL OKeySet::isLast(  ) throw(SQLException, RuntimeException)
-{
-    if(!m_bRowCountFinal)
-        return false;
-
-    OKeySetMatrix::iterator aTemp = m_aKeyMap.end();
-    --aTemp;
-    return m_aKeyIter == aTemp;
 }
 
 void SAL_CALL OKeySet::beforeFirst(  ) throw(SQLException, RuntimeException)
