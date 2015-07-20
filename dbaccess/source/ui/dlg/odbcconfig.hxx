@@ -108,7 +108,7 @@ class OOdbcManagement
     Link<>                                      m_aAsyncFinishCallback;
 
 public:
-    OOdbcManagement( const Link<>& _rAsyncFinishCallback );
+    explicit OOdbcManagement( const Link<>& _rAsyncFinishCallback );
     ~OOdbcManagement();
 
     bool    manageDataSources_async();

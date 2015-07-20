@@ -44,7 +44,7 @@ namespace dbaui
         Link<>  m_aAdditionalModifyHdl;
 
     public:
-        DbaMouseDownListBoxController(ListBoxControl* _pParent)
+        explicit DbaMouseDownListBoxController(ListBoxControl* _pParent)
             :ListBoxCellController(_pParent)
         {
         }

@@ -40,9 +40,9 @@ namespace dbaui
         bool    m_bDoesNotExist;
 
     public:
-        OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster );
+        explicit OFilePickerInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxMaster );
 
-        inline bool isDoesNotExist( ) const { return m_bDoesNotExist; }
+        bool isDoesNotExist() const { return m_bDoesNotExist; }
 
     protected:
         // XInteractionHandler

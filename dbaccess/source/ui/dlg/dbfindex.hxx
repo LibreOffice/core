@@ -41,7 +41,7 @@ private:
 public:
     OTableIndex() { }
     OTableIndex( const OTableIndex& _rSource) : aIndexFileName(_rSource.aIndexFileName) { }
-    OTableIndex( const OUString& rFileName ) : aIndexFileName( rFileName ) { }
+    explicit OTableIndex( const OUString& rFileName ) : aIndexFileName( rFileName ) { }
 
     void SetIndexFileName( const OUString& rFileName ) { aIndexFileName = rFileName; }
     OUString GetIndexFileName() const { return aIndexFileName; }
@@ -62,7 +62,7 @@ private:
 
 public:
     OTableInfo() { }
-    OTableInfo( const OUString& rName ) : aTableName(rName) { }
+    explicit OTableInfo( const OUString& rName ) : aTableName(rName) { }
 
     void WriteInfFile( const OUString& rDSN ) const;
 };

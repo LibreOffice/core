@@ -79,7 +79,7 @@ namespace
         mutable Image   m_defaultImage;
 
     public:
-        ImageProvider( sal_uInt16 _defaultImageID )
+        explicit ImageProvider( sal_uInt16 _defaultImageID )
             :m_defaultImageID( _defaultImageID )
         {
         }
@@ -97,7 +97,7 @@ namespace
     private:
         OUString  m_label;
     public:
-        LabelProvider( sal_uInt16 _labelResourceID )
+        explicit LabelProvider( sal_uInt16 _labelResourceID )
             :m_label( ModuleRes( _labelResourceID ) )
         {
         }
@@ -191,7 +191,7 @@ namespace
         OUString                                sErrorCode;
 
         ExceptionDisplayInfo() : eType( SQLExceptionInfo::UNDEFINED ), bSubEntry( false ) { }
-        ExceptionDisplayInfo( SQLExceptionInfo::TYPE _eType ) : eType( _eType ), bSubEntry( false ) { }
+        explicit ExceptionDisplayInfo( SQLExceptionInfo::TYPE _eType ) : eType( _eType ), bSubEntry( false ) { }
     };
 
     static bool lcl_hasDetails( const ExceptionDisplayInfo& _displayInfo )
@@ -410,7 +410,7 @@ struct SQLMessageBox_Impl
 {
     ExceptionDisplayChain   aDisplayInfo;
 
-    SQLMessageBox_Impl( const SQLExceptionInfo& _rExceptionInfo )
+    explicit SQLMessageBox_Impl( const SQLExceptionInfo& _rExceptionInfo )
     {
         // transform the exception chain to a form more suitable for displaying it here
         ProviderFactory aProviderFactory;

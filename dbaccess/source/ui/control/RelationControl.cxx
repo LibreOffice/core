@@ -78,7 +78,7 @@ namespace dbaui
         */
         sal_uInt16 getColumnIdent( sal_uInt16 _nColId ) const;
     public:
-        ORelationControl(vcl::Window *pParent);
+        explicit ORelationControl(vcl::Window *pParent);
         void SetController(OTableListBoxControl* pController)
         {
             m_pBoxControl = pController;

@@ -94,7 +94,7 @@ namespace dbaui
 class UserDefinedFeatures
 {
 public:
-    UserDefinedFeatures( const Reference< XController >& _rxController );
+    explicit UserDefinedFeatures( const Reference< XController >& _rxController );
 
     static FeatureState getState( const URL& _rFeatureURL );
     void            execute( const URL& _rFeatureURL, const Sequence< PropertyValue>& _rArgs );

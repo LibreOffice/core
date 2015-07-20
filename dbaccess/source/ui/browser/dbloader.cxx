@@ -70,7 +70,7 @@ private:
     Reference< XFrame >                 m_xFrame;
     Reference< XComponentContext >      m_xContext;
 public:
-    DBContentLoader(const Reference< XComponentContext >&);
+    explicit DBContentLoader(const Reference< XComponentContext >&);
     virtual ~DBContentLoader();
 
     // XServiceInfo

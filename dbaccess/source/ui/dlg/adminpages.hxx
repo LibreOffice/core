@@ -44,7 +44,7 @@ namespace dbaui
     {
         T*  m_pSaveValue;
     public:
-        OSaveValueWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
+        explicit OSaveValueWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
         { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
 
         virtual bool SaveValue() SAL_OVERRIDE { m_pSaveValue->SaveValue(); return true;} // bool return value only for stl
@@ -55,7 +55,7 @@ namespace dbaui
     {
         T*  m_pSaveValue;
     public:
-        ODisableWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
+        explicit ODisableWrapper(T* _pSaveValue) : m_pSaveValue(_pSaveValue)
         { OSL_ENSURE(m_pSaveValue,"Illegal argument!"); }
 
         virtual bool SaveValue() SAL_OVERRIDE { return true;} // bool return value only for stl

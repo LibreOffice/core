@@ -1250,7 +1250,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
     struct SbaGridControlPrec : ::std::unary_function<DataFlavorExVector::value_type,bool>
     {
         bool    bQueryDrop;
-        SbaGridControlPrec(bool _bQueryDrop)
+        explicit SbaGridControlPrec(bool _bQueryDrop)
             : bQueryDrop(_bQueryDrop)
         {
         }

@@ -526,7 +526,7 @@ namespace
     class SelectionSupplier : public SelectionSupplier_Base
     {
     public:
-        SelectionSupplier( const Any& _rSelection )
+        explicit SelectionSupplier( const Any& _rSelection )
             :m_aSelection( _rSelection )
         {
         }

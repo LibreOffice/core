@@ -43,7 +43,7 @@ class OSqlEdit::ChangesListener:
     public cppu::WeakImplHelper< css::beans::XPropertiesChangeListener >
 {
 public:
-    ChangesListener(OSqlEdit & editor): editor_(editor) {}
+    explicit ChangesListener(OSqlEdit & editor): editor_(editor) {}
 
 private:
     virtual ~ChangesListener() {}

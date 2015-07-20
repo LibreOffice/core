@@ -158,7 +158,7 @@ class SbaXDataBrowserController::FormControllerImpl
     SbaXDataBrowserController*          m_pOwner;
 
 public:
-    FormControllerImpl(SbaXDataBrowserController* pOwner);
+    explicit FormControllerImpl(SbaXDataBrowserController* pOwner);
 
     // XFormController
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations > SAL_CALL getFormOperations() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

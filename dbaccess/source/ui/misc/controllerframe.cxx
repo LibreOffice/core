@@ -71,7 +71,7 @@ namespace dbaui
     class FrameWindowActivationListener : public FrameWindowActivationListener_Base
     {
     public:
-        FrameWindowActivationListener( ControllerFrame_Data& _rData );
+        explicit FrameWindowActivationListener( ControllerFrame_Data& _rData );
 
         void dispose();
 
@@ -101,7 +101,7 @@ namespace dbaui
     // ControllerFrame_Data
     struct ControllerFrame_Data
     {
-        ControllerFrame_Data( IController& _rController )
+        explicit ControllerFrame_Data( IController& _rController )
             :m_rController( _rController )
             ,m_xFrame()
             ,m_xDocEventBroadcaster()

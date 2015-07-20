@@ -151,7 +151,7 @@ namespace dbaui
     public:
         DataSourceMetaData_Impl( const OUString& _sURL );
 
-        inline OUString getType() const { return m_sURL; }
+        OUString getType() const { return m_sURL; }
 
     private:
         const OUString m_sURL;

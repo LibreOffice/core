@@ -50,7 +50,7 @@ namespace dbaui
     class TextResetOperator :public ::svt::IWindowOperator
     {
     public:
-        TextResetOperator( const OUString& _rDisabledText )
+        explicit TextResetOperator( const OUString& _rDisabledText )
             :m_sDisabledText( _rDisabledText )
         {
         }
@@ -98,7 +98,7 @@ namespace dbaui
     class TextResetOperatorController_Base
     {
     protected:
-        TextResetOperatorController_Base( const OUString& _rDisabledText )
+        explicit TextResetOperatorController_Base( const OUString& _rDisabledText )
             :m_pEventFilter( new TextResetOperatorEventFilter )
             ,m_pOperator( new TextResetOperator( _rDisabledText ) )
         {

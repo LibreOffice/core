@@ -34,7 +34,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xRowUpdate;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xResultSetUpdate;
     public:
-        ORowUpdateHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _xRowSet)
+        explicit ORowUpdateHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _xRowSet)
             :m_xRowUpdate(_xRowSet,::com::sun::star::uno::UNO_QUERY)
             ,m_xResultSetUpdate(_xRowSet,::com::sun::star::uno::UNO_QUERY)
         {
@@ -84,7 +84,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters >         m_xParameters;
 
     public:
-        OParameterUpdateHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >& _xPrepared)
+        explicit OParameterUpdateHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >& _xPrepared)
            :m_xPrepared(_xPrepared)
            ,m_xParameters(_xPrepared,::com::sun::star::uno::UNO_QUERY)
         {

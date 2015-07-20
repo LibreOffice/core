@@ -398,7 +398,7 @@ namespace
             return m_rCollection.get( i_name );
         }
 
-        SelectValueByName( ::comphelper::NamedValueCollection const& i_collection )
+        explicit SelectValueByName( ::comphelper::NamedValueCollection const& i_collection )
             :m_rCollection( i_collection )
         {
         }
@@ -1103,7 +1103,7 @@ namespace
     struct FilterByEntryDataId : public IEntryFilter
     {
         OUString sId;
-        FilterByEntryDataId( const OUString& _rId ) : sId( _rId ) { }
+        explicit FilterByEntryDataId( const OUString& _rId ) : sId( _rId ) { }
 
         virtual ~FilterByEntryDataId() {}
 

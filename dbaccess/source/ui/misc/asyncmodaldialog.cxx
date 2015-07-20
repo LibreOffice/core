@@ -38,7 +38,7 @@ namespace dbaui
         Reference< XExecutableDialog >  m_xDialog;
 
     public:
-        DialogExecutor_Impl( const Reference< XExecutableDialog >& _rxDialog )
+        explicit DialogExecutor_Impl( const Reference< XExecutableDialog >& _rxDialog )
             :m_xDialog( _rxDialog )
         {
         }

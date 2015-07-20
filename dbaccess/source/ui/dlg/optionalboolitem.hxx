@@ -34,7 +34,7 @@ namespace dbaui
 
     public:
         TYPEINFO_OVERRIDE();
-        OptionalBoolItem( sal_Int16 nWhich );
+        explicit OptionalBoolItem( sal_Int16 nWhich );
         OptionalBoolItem( const OptionalBoolItem& _rSource );
 
         virtual bool             operator==( const SfxPoolItem& _rItem ) const SAL_OVERRIDE;

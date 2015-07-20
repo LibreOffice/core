@@ -94,7 +94,7 @@ namespace dbaui
     class OslMutexFacade : public ::framework::IMutex
     {
     public:
-        OslMutexFacade( ::osl::Mutex& i_mutex )
+        explicit OslMutexFacade( ::osl::Mutex& i_mutex )
             :m_rMutex( i_mutex )
         {
         }
@@ -124,7 +124,7 @@ namespace dbaui
     class UndoManagerMethodGuard : public ::framework::IMutexGuard
     {
     public:
-        UndoManagerMethodGuard( UndoManager_Impl& i_impl )
+        explicit UndoManagerMethodGuard( UndoManager_Impl& i_impl )
             :m_aGuard( i_impl.rMutex )
             ,m_aMutexFacade( i_impl.rMutex )
         {
