@@ -435,10 +435,6 @@ void SAL_CALL ScVbaControl::setTag( const OUString& aTag )
     return OORGBToXLRGB( nForeColor );
 }
 
-void SAL_CALL ScVbaControl::setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException)
-{
-     m_xProps->setPropertyValue( "TextColor" , uno::makeAny( XLRGBToOORGB( _forecolor ) ) );
-}
 
 struct PointerStyles
 {

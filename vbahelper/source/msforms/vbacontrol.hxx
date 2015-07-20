@@ -66,7 +66,6 @@ public:
     void setGeometryHelper( ov::AbstractGeometryAttributes* pHelper );
     // sets the name of the associated library ( used for UserForm controls )
     void setLibraryAndCodeName( const OUString& sLibCodeName ) { m_sLibraryAndCodeName = sLibCodeName; }
-    OUString getLibraryAndCodeName() const { return m_sLibraryAndCodeName; }
 
     // XControl
     virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -103,7 +102,6 @@ public:
     //remove resource because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
     void removeResource() throw( css::uno::RuntimeException );
     virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException);
     //XHelperInterface
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
