@@ -82,7 +82,7 @@ SvTreeListEntry::~SvTreeListEntry()
 #endif
 
     maChildren.clear();
-    maItems.clear();
+    m_Items.clear();
 }
 
 bool SvTreeListEntry::HasChildren() const
@@ -112,14 +112,13 @@ void SvTreeListEntry::Clone(SvTreeListEntry* pSource)
     nListPos |= ( pSource->nListPos & 0x7fffffff);
     nAbsPos     = pSource->nAbsPos;
 
-    maItems.clear();
-    ItemsType::iterator it = pSource->maItems.begin(), itEnd = pSource->maItems.end();
-    for (; it != itEnd; ++it)
+    m_Items.clear();
+    for (auto const& it : pSource->m_Items)
     {
         SvLBoxItem* pItem = &(*it);
-        SvLBoxItem* pNewItem = pItem->Create();
+        std::unique_ptr<SvLBoxItem> pNewItem(pItem->Create());
         pNewItem->Clone(pItem);
-        maItems.push_back(pNewItem);
+        m_Items.push_back(std::move(pNewItem));
     }
 
     pUserData = pSource->GetUserData();
@@ -128,12 +127,12 @@ void SvTreeListEntry::Clone(SvTreeListEntry* pSource)
 
 size_t SvTreeListEntry::ItemCount() const
 {
-    return maItems.size();
+    return m_Items.size();
 }
 
 void SvTreeListEntry::AddItem( SvLBoxItem* pItem )
 {
-    maItems.push_back( pItem );
+    m_Items.push_back(std::unique_ptr<SvLBoxItem>(pItem));
 }
 
 void SvTreeListEntry::EnableChildrenOnDemand( bool bEnable )
@@ -147,25 +146,25 @@ void SvTreeListEntry::EnableChildrenOnDemand( bool bEnable )
 void SvTreeListEntry::ReplaceItem( SvLBoxItem* pNewItem, size_t nPos )
 {
     DBG_ASSERT(pNewItem,"ReplaceItem:No Item");
-    if (nPos >= maItems.size())
+    if (nPos >= m_Items.size())
     {
         // Out of bound. Bail out.
         delete pNewItem;
         return;
     }
 
-    maItems.erase(maItems.begin()+nPos);
-    maItems.insert(maItems.begin()+nPos, pNewItem);
+    m_Items.erase(m_Items.begin()+nPos);
+    m_Items.insert(m_Items.begin()+nPos, std::unique_ptr<SvLBoxItem>(pNewItem));
 }
 
 const SvLBoxItem& SvTreeListEntry::GetItem( size_t nPos ) const
 {
-    return maItems[nPos];
+    return *m_Items[nPos];
 }
 
 SvLBoxItem& SvTreeListEntry::GetItem( size_t nPos )
 {
-    return maItems[nPos];
+    return *m_Items[nPos];
 }
 
 namespace {
@@ -175,9 +174,9 @@ class FindByType : std::unary_function<SvLBoxItem, void>
     sal_uInt16 mnId;
 public:
     explicit FindByType(sal_uInt16 nId) : mnId(nId) {}
-    bool operator() (const SvLBoxItem& rItem) const
+    bool operator() (const std::unique_ptr<SvLBoxItem>& rpItem) const
     {
-        return rItem.GetType() == mnId;
+        return rpItem->GetType() == mnId;
     }
 };
 
@@ -186,9 +185,9 @@ class FindByPointer : std::unary_function<SvLBoxItem, void>
     const SvLBoxItem* mpItem;
 public:
     explicit FindByPointer(const SvLBoxItem* p) : mpItem(p) {}
-    bool operator() (const SvLBoxItem& rItem) const
+    bool operator() (const std::unique_ptr<SvLBoxItem>& rpItem) const
     {
-        return &rItem == mpItem;
+        return rpItem.get() == mpItem;
     }
 };
 
@@ -196,20 +195,20 @@ public:
 
 const SvLBoxItem* SvTreeListEntry::GetFirstItem( sal_uInt16 nId ) const
 {
-    ItemsType::const_iterator it = std::find_if(maItems.begin(), maItems.end(), FindByType(nId));
-    return it == maItems.end() ? NULL : &(*it);
+    ItemsType::const_iterator it = std::find_if(m_Items.begin(), m_Items.end(), FindByType(nId));
+    return (it == m_Items.end()) ? nullptr : (*it).get();
 }
 
 SvLBoxItem* SvTreeListEntry::GetFirstItem( sal_uInt16 nId )
 {
-    ItemsType::iterator it = std::find_if(maItems.begin(), maItems.end(), FindByType(nId));
-    return it == maItems.end() ? NULL : &(*it);
+    ItemsType::iterator it = std::find_if(m_Items.begin(), m_Items.end(), FindByType(nId));
+    return (it == m_Items.end()) ? nullptr : (*it).get();
 }
 
 size_t SvTreeListEntry::GetPos( const SvLBoxItem* pItem ) const
 {
-    ItemsType::const_iterator it = std::find_if(maItems.begin(), maItems.end(), FindByPointer(pItem));
-    return it == maItems.end() ? ITEM_NOT_FOUND : std::distance(maItems.begin(), it);
+    ItemsType::const_iterator it = std::find_if(m_Items.begin(), m_Items.end(), FindByPointer(pItem));
+    return it == m_Items.end() ? ITEM_NOT_FOUND : std::distance(m_Items.begin(), it);
 }
 
 

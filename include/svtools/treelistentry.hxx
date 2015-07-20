@@ -26,7 +26,8 @@
 #include <svtools/treelistentries.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
+#include <memory>
 
 // flags related to the model
 enum class SvTLEntryFlags
@@ -53,13 +54,13 @@ class SVT_DLLPUBLIC SvTreeListEntry
     friend class SvListView;
     friend class SvTreeListBox;
 
-    typedef boost::ptr_vector<SvLBoxItem> ItemsType;
+    typedef std::vector<std::unique_ptr<SvLBoxItem>> ItemsType;
 
     SvTreeListEntry*    pParent;
     SvTreeListEntries   maChildren;
     sal_uLong           nAbsPos;
     sal_uLong           nListPos;
-    ItemsType           maItems;
+    ItemsType           m_Items;
     bool                bIsMarked;
     void*               pUserData;
     SvTLEntryFlags      nEntryFlags;
