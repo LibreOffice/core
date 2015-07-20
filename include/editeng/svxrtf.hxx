@@ -328,6 +328,9 @@ class EDITENG_DLLPUBLIC SvxRTFItemStackType
     SvxRTFItemStackList* m_pChildList;
     sal_uInt16 nStyleNo;
 
+    SvxRTFItemStackType(SvxRTFItemStackType const&) = delete;
+    void operator=(SvxRTFItemStackType const&) = delete;
+
     SvxRTFItemStackType( SfxItemPool&, const sal_uInt16* pWhichRange,
                             const SvxPosition& );
 
