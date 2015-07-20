@@ -371,16 +371,6 @@ public:
     virtual Value::Pointer_t getValue() = 0;
 
     /**
-       Returns reference to binary object contained in the SPRM.
-     */
-    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() = 0;
-
-    /**
-       Returns reference to stream associated with the SPRM.
-     */
-    virtual writerfilter::Reference<Stream>::Pointer_t getStream() = 0;
-
-    /**
        Returns reference to properties contained in the SPRM.
 
      */

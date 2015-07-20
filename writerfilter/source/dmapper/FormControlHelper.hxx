@@ -48,8 +48,6 @@ private:
 
     bool createCheckbox(css::uno::Reference<css::text::XTextRange> const& xTextRange,
                         const OUString & rControlName);
-    bool createDropdown(css::uno::Reference<css::text::XTextRange> const& xTextRange,
-                        const OUString & rControlName);
 };
 
 }

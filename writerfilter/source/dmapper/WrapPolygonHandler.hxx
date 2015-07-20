@@ -44,8 +44,6 @@ public:
 
     void addPoint(const css::awt::Point & rPoint);
 
-    Points_t::const_iterator begin() const;
-    Points_t::const_iterator end() const;
     Points_t::iterator begin();
     Points_t::iterator end();
 

@@ -58,8 +58,6 @@ public:
     CellMarginHandler( );
     virtual ~CellMarginHandler();
 
-    ::std::shared_ptr<TablePropertyMap>            getProperties();
-
     void enableInteropGrabBag(const OUString& aName);
     css::beans::PropertyValue getInteropGrabBag();
 

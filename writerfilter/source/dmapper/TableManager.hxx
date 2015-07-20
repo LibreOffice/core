@@ -226,21 +226,6 @@ class TableManager
     TableManagerState mState;
 
 protected:
-    TablePropertyMapPtr getProps()
-    {
-        return mState.getProps();
-    }
-
-    void setProps(TablePropertyMapPtr pProps)
-    {
-        mState.setProps(pProps);
-    }
-
-    void resetProps()
-    {
-        mState.resetProps();
-    }
-
     TablePropertyMapPtr getCellProps()
     {
         return mState.getCellProps();
@@ -397,12 +382,6 @@ private:
     void ensureOpenCell(TablePropertyMapPtr pProps);
 
 protected:
-
-    /**
-       Return current table depth.
-     */
-    sal_uInt32 getTableDepthNew() { return mnTableDepthNew; }
-
     /**
        Return the current table difference, i.e. 1 if we are in the first cell of a new table, etc.
      */

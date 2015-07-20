@@ -100,7 +100,6 @@ public:
     OUString copyOLEOStream(css::uno::Reference<css::text::XTextDocument> const& xTextDocument);
 
     css::awt::Size getSize() const { return m_aShapeSize; }
-    css::awt::Point getPosition() const { return m_aShapePosition; }
     css::uno::Reference<css::graphic::XGraphic> getReplacement() const { return m_xReplacement; }
 
 };

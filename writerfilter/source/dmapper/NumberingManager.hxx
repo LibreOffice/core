@@ -83,7 +83,6 @@ public:
     void SetGraphicBitmap(css::uno::Reference<css::graphic::XGraphic> const& sValue)
         { m_sGraphicBitmap = sValue; }
     void SetParaStyle( std::shared_ptr< StyleSheetEntry > pStyle );
-    void AddRGBXchNums( const OUString& sValue ) { m_sRGBXchNums += sValue; };
 
     // Getters
     OUString GetBulletChar( ) { return m_sBulletChar; };
@@ -152,7 +151,6 @@ public:
     // Setters using during the import
     void SetId( sal_Int32 nId ) { m_nId = nId; };
     void SetValue( sal_uInt32 nSprmId, sal_Int32 nValue );
-    void AddRGISTD( const OUString& sValue ) { m_sRGISTD += sValue; };
 
     // Accessors
     sal_Int32             GetId( ) { return m_nId; };
@@ -237,14 +235,6 @@ public:
 
     typedef std::shared_ptr< ListsManager >  Pointer;
 
-    // Config methods
-    void SetLFOImport( bool bLFOImport ) { m_bIsLFOImport = bLFOImport; };
-
-    // Numberings accessors
-    AbstractListDef::Pointer GetCurrentDef( ) { return m_pCurrentDefinition; };
-
-    sal_uInt32              Size() const
-        { return sal_uInt32( m_aLists.size( ) ); };
     ListDef::Pointer        GetList( sal_Int32 nId );
 
     // Mapping methods

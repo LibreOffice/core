@@ -126,7 +126,6 @@ public:
     */
     void endCell(const css::uno::Reference< css::text::XTextRange > & end);
 
-    css::uno::Reference< css::text::XTextRange >& getTable() { return m_xTableRange; };
     void setHadFootOrEndnote(bool bHadFootOrEndnote);
 };
 

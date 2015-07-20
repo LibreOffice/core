@@ -72,7 +72,6 @@ public:
 
     virtual ~OOXMLStreamImpl();
 
-    virtual css::uno::Reference<css::xml::sax::XParser> getParser() SAL_OVERRIDE;
     virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() SAL_OVERRIDE;
     virtual css::uno::Reference<css::io::XInputStream> getDocumentStream() SAL_OVERRIDE;
     virtual css::uno::Reference<css::io::XInputStream> getStorageStream() SAL_OVERRIDE;
