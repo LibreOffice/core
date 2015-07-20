@@ -93,7 +93,6 @@ class SmParser
     void    DoGlyphSpecial();
     // end of grammar
 
-    LanguageType    GetLanguage() const { return m_nLang; }
     void            SetLanguage( LanguageType nNewLang ) { m_nLang = nNewLang; }
 
     void    Error(SmParseError Error);
@@ -121,7 +120,6 @@ public:
     const SmErrorDesc*  PrevError();
     const SmErrorDesc*  GetError(size_t i);
     static const SmTokenTableEntry* GetTokenTableEntry( const OUString &rName );
-    bool    IsUsedSymbol( const OUString &rSymbolName ) const { return m_aUsedSymbols.find( rSymbolName ) != m_aUsedSymbols.end(); }
     std::set< OUString >   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 

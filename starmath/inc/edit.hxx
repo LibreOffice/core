@@ -130,10 +130,6 @@ public:
     virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible() SAL_OVERRIDE;
 
     using Window::GetAccessible;
-    SmEditAccessible* GetAccessible()
-    {
-        return mxAccessible.get();
-    }
 };
 
 

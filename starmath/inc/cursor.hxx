@@ -98,9 +98,6 @@ public:
         pGraph = NULL;
     }
 
-    /** Gets the anchor */
-    SmCaretPos GetAnchor(){ return anchor->CaretPos; }
-
     /** Get position */
     SmCaretPos GetPosition() const { return position->CaretPos; }
 

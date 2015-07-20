@@ -161,7 +161,6 @@ class SmFontTypeDialog : public ModalDialog
 
     DECL_LINK(MenuSelectHdl, Menu *);
     DECL_LINK(DefaultButtonClickHdl, Button *);
-    DECL_LINK(HelpButtonClickHdl, Button *);
 
 public:
     SmFontTypeDialog(vcl::Window *pParent, OutputDevice *pFntListDevice);
@@ -371,7 +370,6 @@ class SmSymbolDialog : public ModalDialog
     DECL_LINK(GetClickHdl, void*);
 
     void            FillSymbolSets(bool bDeleteText = true);
-    void            SetSymbolSetManager(SmSymbolManager &rMgr);
     const SmSym    *GetSymbol() const;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
