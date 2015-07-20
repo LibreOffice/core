@@ -61,9 +61,13 @@ private:
 };
 
 /** @param pOptions
-        NULL means case sensitivity document option is to be used!
+        Used for comparing two strings, if given.
+        NULL means that for comparing two strings ScQueryOp rComp.meOp is
+        tested for SC_EQUAL and SC_NOT_EQUAL, else pOptions->aQueryEntry.eOp
+        Case sensitivity document option is always to be passed in
+        rComp.mbIgnoreCase.
  */
-double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bool bIgnoreCase, CompareOptions* pOptions = NULL );
+double CompareFunc( const Compare& rComp, CompareOptions* pOptions = NULL );
 double CompareFunc( const Compare::Cell& rCell1, double fCell2, CompareOptions* pOptions = NULL );
 double CompareFunc( double fCell1, double fCell2 );
 
