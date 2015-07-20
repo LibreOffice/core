@@ -43,8 +43,11 @@ CompareOptions::CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bo
     // struct if needed.
 }
 
-double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bool bIgnoreCase, CompareOptions* pOptions )
+double CompareFunc( const Compare& rComp, CompareOptions* pOptions )
 {
+    const Compare::Cell& rCell1 = rComp.maCells[0];
+    const Compare::Cell& rCell2 = rComp.maCells[1];
+
     // Keep DoubleError if encountered
     // #i40539# if bEmpty is set, bVal/nVal are uninitialized
     if (!rCell1.mbEmpty && rCell1.mbValue && !rtl::math::isFinite(rCell1.mfValue))
@@ -134,7 +137,7 @@ double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bo
                 sal_Int32 nStart = 0;
                 sal_Int32 nStop  = rCell1.maStr.getLength();
                 bool bMatch = rEntry.GetSearchTextPtr(
-                        !bIgnoreCase)->SearchForward(
+                        !rComp.mbIgnoreCase)->SearchForward(
                             rCell1.maStr.getString(), &nStart, &nStop);
                 if (bMatch && pOptions->bMatchWholeCell && (nStart != 0 || nStop != rCell1.maStr.getLength()))
                     bMatch = false;     // RegEx must match entire string.
@@ -143,12 +146,12 @@ double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bo
             else if (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL)
             {
                 ::utl::TransliterationWrapper* pTransliteration =
-                    (bIgnoreCase ? ScGlobal::GetpTransliteration() :
+                    (rComp.mbIgnoreCase ? ScGlobal::GetpTransliteration() :
                      ScGlobal::GetCaseTransliteration());
                 bool bMatch = false;
                 if (pOptions->bMatchWholeCell)
                 {
-                    if (bIgnoreCase)
+                    if (rComp.mbIgnoreCase)
                         bMatch = rCell1.maStr.getDataIgnoreCase() == rCell2.maStr.getDataIgnoreCase();
                     else
                         bMatch = rCell1.maStr.getData() == rCell2.maStr.getData();
@@ -165,14 +168,21 @@ double CompareFunc( const Compare::Cell& rCell1, const Compare::Cell& rCell2, bo
                 }
                 fRes = (bMatch ? 0 : 1);
             }
-            else if (bIgnoreCase)
+            else if (rComp.mbIgnoreCase)
                 fRes = (double) ScGlobal::GetCollator()->compareString(
                         rCell1.maStr.getString(), rCell2.maStr.getString());
             else
                 fRes = (double) ScGlobal::GetCaseCollator()->compareString(
                         rCell1.maStr.getString(), rCell2.maStr.getString());
         }
-        else if (bIgnoreCase)
+        else if (rComp.meOp == SC_EQUAL || rComp.meOp == SC_NOT_EQUAL)
+        {
+            if (rComp.mbIgnoreCase)
+                fRes = (rCell1.maStr.getDataIgnoreCase() == rCell2.maStr.getDataIgnoreCase()) ? 0 : 1;
+            else
+                fRes = (rCell1.maStr.getData() == rCell2.maStr.getData()) ? 0 : 1;
+        }
+        else if (rComp.mbIgnoreCase)
             fRes = (double) ScGlobal::GetCollator()->compareString(
                 rCell1.maStr.getString(), rCell2.maStr.getString());
         else
