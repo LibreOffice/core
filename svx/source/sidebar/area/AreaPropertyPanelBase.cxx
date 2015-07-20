@@ -596,9 +596,8 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
     const SfxPoolItem* pState,
-    const bool bIsEnabled)
+    const bool /*bIsEnabled*/)
 {
-    (void)bIsEnabled;
     const bool bDisabled(SfxItemState::DISABLED == eState);
 
     switch(nSID)
