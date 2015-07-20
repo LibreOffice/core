@@ -76,12 +76,18 @@ public:
     SvxXMLTabStopContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                const OUString& rLName,
                                const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    SvxXMLTabStopContext_Impl( SvXMLImport& rImport, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList );
 
     virtual ~SvxXMLTabStopContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const uno::Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual uno::Reference< xml::sax::XFastContextHandler >
+        createFastChildContext( sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     const style::TabStop& getTabStop() const { return aTabStop; }
 };
@@ -167,6 +173,84 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
         aTabStop.FillChar = cTextFillChar;
 }
 
+SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+: SvXMLImportContext( rImport )
+{
+    aTabStop.Position = 0;
+    aTabStop.Alignment = style::TabAlign_LEFT;
+    aTabStop.DecimalChar = ',';
+    aTabStop.FillChar = ' ';
+    sal_Unicode cTextFillChar = 0;
+
+    SvXMLTokenMap aTokenMap( aTabsAttributesAttrTokenMap );
+
+    if( !xAttrList.is() )
+        return;
+
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    xml::FastAttribute* attribs = attributes.getArray();
+    for( sal_Int16 i=0; i < attributes.getLength() ; i++)
+    {
+        xml::FastAttribute attr = attribs[i];
+        const OUString& rValue = attr.Value;
+
+        sal_Int32 nVal;
+        switch( aTokenMap.Get( attr.Token ) )
+        {
+        case XML_TOK_TABSTOP_POSITION:
+            if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                    nVal, rValue))
+            {
+                aTabStop.Position = nVal;
+            }
+            break;
+        case XML_TOK_TABSTOP_TYPE:
+            if( IsXMLToken( rValue, XML_LEFT ) )
+            {
+                aTabStop.Alignment = style::TabAlign_LEFT;
+            }
+            else if( IsXMLToken( rValue, XML_RIGHT ) )
+            {
+                aTabStop.Alignment = style::TabAlign_RIGHT;
+            }
+            else if( IsXMLToken( rValue, XML_CENTER ) )
+            {
+                aTabStop.Alignment = style::TabAlign_CENTER;
+            }
+            else if( IsXMLToken( rValue, XML_CHAR ) )
+            {
+                aTabStop.Alignment = style::TabAlign_DECIMAL;
+            }
+            else if( IsXMLToken( rValue, XML_DEFAULT ) )
+            {
+                aTabStop.Alignment = style::TabAlign_DEFAULT;
+            }
+            break;
+        case XML_TOK_TABSTOP_CHAR:
+            if( !rValue.isEmpty() )
+                aTabStop.DecimalChar = rValue[0];
+            break;
+        case XML_TOK_TABSTOP_LEADER_STYLE:
+            if( IsXMLToken( rValue, XML_NONE ) )
+                aTabStop.FillChar = ' ';
+            else if( IsXMLToken( rValue, XML_DOTTED ) )
+                aTabStop.FillChar = '.';
+            else
+                aTabStop.FillChar = '_';
+            break;
+        case XML_TOK_TABSTOP_LEADER_TEXT:
+            if( !rValue.isEmpty() )
+                cTextFillChar = rValue[0];
+            break;
+        }
+    }
+
+    if( cTextFillChar != 0 && aTabStop.FillChar != ' ' )
+        aTabStop.FillChar = cTextFillChar;
+}
+
 SvxXMLTabStopContext_Impl::~SvxXMLTabStopContext_Impl()
 {
 }
@@ -179,6 +263,14 @@ SvXMLImportContext *SvxXMLTabStopContext_Impl::CreateChildContext(
     return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 }
 
+uno::Reference< xml::sax::XFastContextHandler >
+    SvxXMLTabStopContext_Impl::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return new SvXMLImportContext( GetImport() );
+}
+
 TYPEINIT1( SvxXMLTabStopImportContext, XMLElementPropertyContext );
 
 SvxXMLTabStopImportContext::SvxXMLTabStopImportContext(
@@ -187,6 +279,15 @@ SvxXMLTabStopImportContext::SvxXMLTabStopImportContext(
                                 const XMLPropertyState& rProp,
                                  ::std::vector< XMLPropertyState > &rProps )
 : XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps ),
+  mpTabStops( NULL )
+{
+}
+
+SvxXMLTabStopImportContext::SvxXMLTabStopImportContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const XMLPropertyState& rProp,
+    std::vector< XMLPropertyState >& rProps )
+: XMLElementPropertyContext( rImport, Element, rProp, rProps ),
   mpTabStops( NULL )
 {
 }
@@ -237,6 +338,36 @@ SvXMLImportContext *SvxXMLTabStopImportContext::CreateChildContext(
     return pContext;
 }
 
+uno::Reference< xml::sax::XFastContextHandler >
+    SvxXMLTabStopImportContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    uno::Reference< xml::sax::XFastContextHandler > pContext = 0;
+
+    if( Element == (NAMESPACE | XML_NAMESPACE_STYLE | XML_tab_stop) )
+    {
+        // create new tabstop import context
+        SvxXMLTabStopContext_Impl *pTabStopContext =
+            new SvxXMLTabStopContext_Impl( GetImport(), Element, xAttrList );
+
+        // add new tabstop to array of tabstops
+        if( !mpTabStops )
+            mpTabStops = new SvxXMLTabStopArray_Impl;
+
+        mpTabStops->push_back( pTabStopContext );
+        pTabStopContext->acquire();
+
+        pContext = pTabStopContext;
+    }
+    else
+    {
+        pContext = new SvXMLImportContext( GetImport() );
+    }
+
+    return pContext;
+}
+
 void SvxXMLTabStopImportContext::EndElement( )
 {
     sal_uInt16 nCount = mpTabStops ? mpTabStops->size() : 0;
@@ -271,7 +402,38 @@ void SvxXMLTabStopImportContext::EndElement( )
 
 }
 
+void SvxXMLTabStopImportContext::endFastElement( sal_Int32 Element )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    sal_uInt16 nCount = mpTabStops ? mpTabStops->size() : 0;
+    uno::Sequence< style::TabStop> aSeq( nCount );
 
+    if( mpTabStops )
+    {
+        sal_uInt16 nNewCount = 0;
 
+        style::TabStop* pTabStops = aSeq.getArray();
+        for( sal_uInt16 i=0; i < nCount; i++ )
+        {
+            SvxXMLTabStopContext_Impl *pTabStopContext = (*mpTabStops)[i];
+            const style::TabStop& rTabStop = pTabStopContext->getTabStop();
+            bool bDflt = style::TabAlign_DEFAULT == rTabStop.Alignment;
+            if( !bDflt || 0==i )
+            {
+                *pTabStops++ = pTabStopContext->getTabStop();
+                nNewCount++;
+            }
+            if( bDflt && 0==i )
+                break;
+        }
+
+        if( nCount != nNewCount )
+            aSeq.realloc( nNewCount );
+    }
+    aProp.maValue <<= aSeq;
+
+    SetInsert( true );
+    XMLElementPropertyContext::endFastElement( Element );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
