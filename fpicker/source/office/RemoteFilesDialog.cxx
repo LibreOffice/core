@@ -11,13 +11,22 @@
 
 class FileViewContainer : public vcl::Window
 {
+    enum FocusState
+    {
+        Prev = 0,
+        TreeView,
+        FileView,
+        Next,
+        FocusCount
+    };
+
     private:
     VclPtr< SvtFileView > m_pFileView;
     VclPtr< FolderTree > m_pTreeView;
     VclPtr< Splitter > m_pSplitter;
 
     int m_nCurrentFocus;
-    VclPtr<vcl::Window> m_pFocusWidgets[4];
+    VclPtr<vcl::Window> m_pFocusWidgets[FocusState::FocusCount];
 
     public:
     FileViewContainer( vcl::Window *pParent )
@@ -51,10 +60,10 @@ class FileViewContainer : public vcl::Window
         m_pFileView = pFileView;
         m_pTreeView = pTreeView;
         m_pSplitter = pSplitter;
-        m_pFocusWidgets[0] = pPrevSibling;
-        m_pFocusWidgets[1] = pTreeView;
-        m_pFocusWidgets[2] = pFileView;
-        m_pFocusWidgets[3] = pNextSibling;
+        m_pFocusWidgets[FocusState::Prev] = pPrevSibling;
+        m_pFocusWidgets[FocusState::TreeView] = pTreeView;
+        m_pFocusWidgets[FocusState::FileView] = pFileView;
+        m_pFocusWidgets[FocusState::Next] = pNextSibling;
     }
 
     virtual void Resize() SAL_OVERRIDE
@@ -89,14 +98,20 @@ class FileViewContainer : public vcl::Window
         if( !m_pFileView || !m_pTreeView )
             return;
 
-        if( !bReverse && m_nCurrentFocus < 3 )
+        if( bReverse && m_nCurrentFocus > FocusState::Prev && m_nCurrentFocus <= FocusState::Next )
         {
-            m_pFocusWidgets[++m_nCurrentFocus]->SetFakeFocus( true );
+            m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus(false);
+            m_pFocusWidgets[m_nCurrentFocus]->LoseFocus();
+
+            m_pFocusWidgets[--m_nCurrentFocus]->SetFakeFocus( true );
             m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
         }
-        else if( m_nCurrentFocus > 0 )
+        else if( !bReverse && m_nCurrentFocus >= FocusState::Prev && m_nCurrentFocus < FocusState::Next )
         {
-            m_pFocusWidgets[--m_nCurrentFocus]->SetFakeFocus( true );
+            m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus(false);
+            m_pFocusWidgets[m_nCurrentFocus]->LoseFocus();
+
+            m_pFocusWidgets[++m_nCurrentFocus]->SetFakeFocus( true );
             m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
         }
     }
@@ -106,13 +121,38 @@ class FileViewContainer : public vcl::Window
         if( !m_pFileView || !m_pTreeView )
             return;
 
-        m_nCurrentFocus = 1;
-        m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus( true );
-        m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
+        GetFocusFlags aFlags = GetGetFocusFlags();
+
+        if( aFlags & GetFocusFlags::Forward )
+            m_nCurrentFocus = FocusState::TreeView;
+        else if( aFlags & GetFocusFlags::Backward )
+            m_nCurrentFocus = FocusState::FileView;
+
+        if( m_nCurrentFocus >= FocusState::Prev && m_nCurrentFocus <= FocusState::Next )
+        {
+            m_pFocusWidgets[m_nCurrentFocus]->SetFakeFocus( true );
+            m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
+        }
     }
 
     virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE
     {
+        if( rNEvt.GetType() == MouseNotifyEvent::GETFOCUS )
+        {
+            // we must also update counter when user change focus using mouse
+            for(int i = FocusState::Prev; i <= FocusState::Next; i++)
+            {
+                if( rNEvt.GetWindow() == m_pFocusWidgets[i] )
+                {
+                    m_nCurrentFocus = i;
+                    return true;
+                }
+            }
+
+            // GETFOCUS for one of FileView's subcontrols
+            m_nCurrentFocus = FocusState::FileView;
+            return true;
+        }
         if( rNEvt.GetType() == MouseNotifyEvent::KEYINPUT )
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
