@@ -42,6 +42,7 @@ public:
         CONV_XL_OOX,        /* [#]sheet:sheet2!A1:B2 */
 
         CONV_LOTUS_A1,      /* external? 3d? A1.B2 <placeholder/> */
+        CONV_LEGACY,        /* try CONV_OOO, failing that CONV_XL_A1 */
 
         CONV_LAST   /* for loops, must always be last */
     };
