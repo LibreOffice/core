@@ -31,7 +31,8 @@ struct XMLPropertyState;
 class XMLPropertySetMapper;
 namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Reference; }
-    namespace xml { namespace sax { class XAttributeList; } }
+    namespace xml { namespace sax { class XAttributeList;
+                                    class XFastAttributeList;} }
 } } }
 
 
@@ -53,12 +54,19 @@ public:
         const OUString& rLocalName,
         ::std::vector<XMLPropertyState> & rProperties,
         const rtl::Reference<XMLPropertySetMapper> & rMapperRef);
+    XMLSectionFootnoteConfigImport(
+        SvXMLImport& rImport, sal_Int32 Element,
+        std::vector<XMLPropertyState>& rProperties,
+        const rtl::Reference<XMLPropertySetMapper>& rMapperRef );
 
     virtual ~XMLSectionFootnoteConfigImport();
 
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
+    virtual void startFastElement( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
 };
 

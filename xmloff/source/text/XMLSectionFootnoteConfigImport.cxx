@@ -22,10 +22,13 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
+
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -38,12 +41,15 @@
 
 
 using namespace ::xmloff::token;
+using namespace xmloff;
 using namespace ::com::sun::star::style;
 
 using ::std::vector;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::XFastAttributeList;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 TYPEINIT1(XMLSectionFootnoteConfigImport, SvXMLImportContext);
@@ -58,6 +64,16 @@ XMLSectionFootnoteConfigImport::XMLSectionFootnoteConfigImport(
         SvXMLImportContext(rImport, nPrefix, rLocalName),
         rProperties(rProps),
         rMapper(rMapperRef)
+{
+}
+
+XMLSectionFootnoteConfigImport::XMLSectionFootnoteConfigImport(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    vector<XMLPropertyState>& rProps,
+    const rtl::Reference<XMLPropertySetMapper>& rMapperRef)
+: SvXMLImportContext( rImport ),
+  rProperties(rProps),
+  rMapper(rMapperRef)
 {
 }
 
@@ -127,6 +143,111 @@ void XMLSectionFootnoteConfigImport::StartElement(
                 sNumLetterSync = sAttrValue;
                 bNumOwn = sal_True;
             }
+        }
+    }
+
+    // OK, now we have all values and can fill the XMLPropertyState vector
+    Any aAny;
+
+    aAny.setValue( &bNumOwn, cppu::UnoType<bool>::get() );
+    sal_Int32 nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_OWN : CTF_SECTION_FOOTNOTE_NUM_OWN );
+    XMLPropertyState aNumOwn( nIndex, aAny );
+    rProperties.push_back( aNumOwn );
+
+    aAny.setValue( &bNumRestart, cppu::UnoType<bool>::get() );
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_RESTART : CTF_SECTION_FOOTNOTE_NUM_RESTART );
+    XMLPropertyState aNumRestart( nIndex, aAny );
+    rProperties.push_back( aNumRestart );
+
+    aAny <<= nNumRestartAt;
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_RESTART_AT :
+        CTF_SECTION_FOOTNOTE_NUM_RESTART_AT );
+    XMLPropertyState aNumRestartAtState( nIndex, aAny );
+    rProperties.push_back( aNumRestartAtState );
+
+    sal_Int16 nNumType = NumberingType::ARABIC;
+    GetImport().GetMM100UnitConverter().convertNumFormat( nNumType,
+                                                    sNumFormat,
+                                                    sNumLetterSync );
+    aAny <<= nNumType;
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_TYPE : CTF_SECTION_FOOTNOTE_NUM_TYPE );
+    XMLPropertyState aNumFormatState( nIndex, aAny );
+    rProperties.push_back( aNumFormatState );
+
+    aAny <<= sNumPrefix;
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_PREFIX : CTF_SECTION_FOOTNOTE_NUM_PREFIX );
+    XMLPropertyState aPrefixState( nIndex, aAny );
+    rProperties.push_back( aPrefixState );
+
+    aAny <<= sNumSuffix;
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_NUM_SUFFIX : CTF_SECTION_FOOTNOTE_NUM_SUFFIX );
+    XMLPropertyState aSuffixState( nIndex, aAny );
+    rProperties.push_back( aSuffixState );
+
+    aAny.setValue( &bEnd, cppu::UnoType<bool>::get() );
+    nIndex = rMapper->FindEntryIndex( bEndnote ?
+        CTF_SECTION_ENDNOTE_END : CTF_SECTION_FOOTNOTE_END );
+    XMLPropertyState aEndState( nIndex, aAny );
+    rProperties.push_back( aEndState );
+}
+
+void XMLSectionFootnoteConfigImport::startFastElement( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
+{
+    sal_Bool bEnd = sal_True;   // we're inside the element, so this is ture
+    sal_Bool bNumOwn = sal_False;
+    sal_Bool bNumRestart = sal_False;
+    bool bEndnote = false;
+    sal_Int16 nNumRestartAt = 0;
+    OUString sNumPrefix;
+    OUString sNumSuffix;
+    OUString sNumFormat;
+    OUString sNumLetterSync;
+
+    if( xAttrList.is() )
+    {
+        if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_start_value ) )
+        {
+            sal_Int32 nTmp;
+            if( ::sax::Converter::convertNumber( nTmp,
+                    xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_start_value ) ) )
+            {
+                nNumRestartAt = static_cast< sal_Int16 >( nTmp ) - 1;
+                bNumRestart = sal_True;
+            }
+        }
+        if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_note_class ) )
+        {
+            if( IsXMLToken( xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_note_class ),
+                            XML_NOTE_CLASS ) )
+                bEndnote = true;
+        }
+        if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_STYLE | XML_num_prefix ) )
+        {
+            sNumPrefix = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_STYLE | XML_num_prefix );
+            bNumOwn = sal_True;
+        }
+        if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_STYLE | XML_num_suffix ) )
+        {
+            sNumSuffix = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_STYLE | XML_num_suffix );
+            bNumOwn = sal_True;
+        }
+        if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_STYLE | XML_num_format ) )
+        {
+            sNumFormat = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_STYLE | XML_num_format );
+            bNumOwn = sal_True;
+        }
+        if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_STYLE | XML_num_letter_sync ) )
+        {
+            sNumLetterSync = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_STYLE | XML_num_letter_sync );
+            bNumOwn = sal_True;
         }
     }
 
