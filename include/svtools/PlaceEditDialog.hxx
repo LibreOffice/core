@@ -53,7 +53,9 @@ private:
 
     unsigned int m_nCurrentType;
 
-public:
+    bool bLabelChanged;
+
+public :
 
      PlaceEditDialog( vcl::Window* pParent);
      PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Place> &rPlace );
@@ -69,11 +71,13 @@ public:
 private:
 
     void InitDetails( );
+    void UpdateLabel( );
 
     DECL_LINK ( OKHdl, Button * );
     DECL_LINK ( DelHdl, Button * );
     DECL_LINK ( EditHdl, void * );
     DECL_LINK ( SelectTypeHdl, void * );
+    DECL_LINK ( EditLabelHdl, void * );
     DECL_LINK ( EditUsernameHdl, void * );
 
 };

@@ -18,6 +18,7 @@
  */
 
 #include <svtools/filedlg2.hrc>
+#include <svtools/svtools.hrc>
 
 String STR_FILEDLG_OPEN
 {
@@ -30,6 +31,11 @@ String STR_FILEDLG_TYPE
 String STR_FILEDLG_SAVE
 {
     Text [ en-US ] = "Save" ;
+};
+
+String STR_SVT_DEFAULT_SERVICE_LABEL
+{
+    Text [ en-US ] = "$user$'s $service$" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -13,6 +13,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <svtools/svtresid.hxx>
+#include <svtools/svtools.hrc>
 #include <vcl/msgbox.hxx>
 
 using namespace com::sun::star::uno;
@@ -21,6 +22,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     : ModalDialog(pParent, "PlaceEditDialog", "svt/ui/placeedit.ui")
     , m_xCurrentDetails()
     , m_nCurrentType( 0 )
+    , bLabelChanged( false )
 {
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
@@ -33,7 +35,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
     m_pBTOk->SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
     m_pBTOk->Enable( false );
 
-    m_pEDServerName->SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
+    m_pEDServerName->SetModifyHdl( LINK( this, PlaceEditDialog, EditLabelHdl) );
 
     // This constructor is called when user request a place creation, so
     // delete button is hidden.
@@ -48,6 +50,7 @@ PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
 PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Place>& rPlace)
     : ModalDialog(pParent, "PlaceEditDialog", "svt/ui/placeedit.ui")
     , m_xCurrentDetails( )
+    , bLabelChanged( true )
 {
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
@@ -188,6 +191,26 @@ void PlaceEditDialog::InitDetails( )
     SelectTypeHdl( m_pLBServerType );
 }
 
+void PlaceEditDialog::UpdateLabel( )
+{
+    if( !bLabelChanged )
+    {
+        if( !m_pEDUsername->GetText().isEmpty( ) )
+        {
+            OUString sLabel = SvtResId( STR_SVT_DEFAULT_SERVICE_LABEL );
+            sLabel = sLabel.replaceFirst( "$user$", m_pEDUsername->GetText() );
+            sLabel = sLabel.replaceFirst( "$service$", m_pLBServerType->GetSelectEntry() );
+
+            m_pEDServerName->SetText( sLabel );
+            bLabelChanged = false;
+        }
+        else
+        {
+            m_pEDServerName->SetText( m_pLBServerType->GetSelectEntry( ) );
+        }
+    }
+}
+
 IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, )
 {
     if ( m_xCurrentDetails.get() )
@@ -234,9 +257,19 @@ IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, )
 
 IMPL_LINK_NOARG( PlaceEditDialog, EditHdl )
 {
+    UpdateLabel( );
+
     OUString sUrl = GetServerUrl( );
     OUString sName = OUString( m_pEDServerName->GetText() ).trim( );
     m_pBTOk->Enable( !sName.isEmpty( ) && !sUrl.isEmpty( ) );
+    return 1;
+}
+
+IMPL_LINK_NOARG( PlaceEditDialog, EditLabelHdl )
+{
+    bLabelChanged = true;
+    EditHdl(NULL);
+
     return 1;
 }
 
@@ -247,7 +280,9 @@ IMPL_LINK_NOARG( PlaceEditDialog, EditUsernameHdl )
     {
         ( *it )->setUsername( OUString( m_pEDUsername->GetText() ) );
     }
+
     EditHdl(NULL);
+
     return 1;
 }
 
