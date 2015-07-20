@@ -696,8 +696,13 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
     if( ( pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_PATHDLG ) )
        || ( !pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_FILEDLG ) ) )
     {
+        // url must contain user info, because we need this info in recent files entry
+        // (to fill user field in login box by default)
         INetURLObject aURL( pData->maURL );
-        m_sPath = pData->maURL;
+        INetURLObject aCurrentURL( m_sLastServiceUrl );
+        aURL.SetUser( aCurrentURL.GetUser() );
+
+        m_sPath = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
         m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DECODE_WITH_CHARSET ) );
     }
@@ -815,6 +820,14 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
             m_sPath = sCurrentPath;
         else
             m_sPath = sSelectedItem;
+
+        // url must contain user info, because we need this info in recent files entry
+        // (to fill user field in login box by default)
+        INetURLObject aURL( m_sPath );
+        INetURLObject aCurrentURL( m_sLastServiceUrl );
+        aURL.SetUser( aCurrentURL.GetUser() );
+
+        m_sPath = aURL.GetMainURL( INetURLObject::NO_DECODE );
     }
 
     bool bExists = false;
@@ -973,7 +986,13 @@ std::vector<OUString> RemoteFilesDialog::GetPathList() const
 
     while( pEntry )
     {
-        aList.push_back( SvtFileView::GetURL( pEntry ) );
+        // url must contain user info, because we need this info in recent files entry
+        // (to fill user field in login box by default)
+        INetURLObject aURL( SvtFileView::GetURL( pEntry ) );
+        INetURLObject aCurrentURL( m_sLastServiceUrl );
+        aURL.SetUser( aCurrentURL.GetUser() );
+
+        aList.push_back( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
         pEntry = m_pFileView->NextSelected( pEntry );
     }
 
