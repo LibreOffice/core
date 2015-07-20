@@ -32,7 +32,7 @@ namespace dbaui
         IControlActionListener*     m_pActionListener;
 
     public:
-        OApplicationIconControl(vcl::Window* _pParent);
+        explicit OApplicationIconControl(vcl::Window* _pParent);
         virtual ~OApplicationIconControl();
         virtual void dispose() SAL_OVERRIDE;
 

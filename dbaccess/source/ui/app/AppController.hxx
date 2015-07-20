@@ -415,7 +415,7 @@ namespace dbaui
         virtual ~OApplicationController();
 
     public:
-        OApplicationController(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
+        explicit OApplicationController(const css::uno::Reference< css::uno::XComponentContext >& _rxORB);
 
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )

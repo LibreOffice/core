@@ -55,7 +55,7 @@ namespace dbaui
         vcl::Font               m_aOriginalFont;
 
     public:
-        OCreationList( OTasksWindow& _rParent );
+        explicit OCreationList( OTasksWindow& _rParent );
         // Window overrides
         virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
