@@ -70,14 +70,6 @@ private:
             m_pCurrentProperties->InsertProps(pProps);
     };
 
-    inline void cellPropsByCell( unsigned int i, TablePropertyMapPtr pProps )
-    {
-        if ( m_pTableManager )
-            m_pTableManager->cellPropsByCell( i, pProps );
-        else
-            m_pCurrentProperties->InsertProps(pProps);
-    };
-
     inline void insertRowProps( TablePropertyMapPtr pProps )
     {
         if ( m_pTableManager )

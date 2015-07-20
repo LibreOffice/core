@@ -103,7 +103,6 @@ public:
     bool IsOOXMLImport() const;
     bool IsRTFImport() const;
     css::uno::Reference<css::lang::XMultiServiceFactory> GetTextFactory() const;
-    void  AddListIDToLFOTable( sal_Int32 nAbstractNumId );
     css::uno::Reference<css::text::XTextRange> GetCurrentTextRange();
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );

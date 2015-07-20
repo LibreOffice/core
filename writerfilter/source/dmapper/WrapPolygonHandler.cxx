@@ -45,16 +45,6 @@ void WrapPolygon::addPoint(const awt::Point & rPoint)
     mPoints.push_back(rPoint);
 }
 
-WrapPolygon::Points_t::const_iterator WrapPolygon::begin() const
-{
-    return mPoints.begin();
-}
-
-WrapPolygon::Points_t::const_iterator WrapPolygon::end() const
-{
-    return mPoints.end();
-}
-
 WrapPolygon::Points_t::iterator WrapPolygon::begin()
 {
     return mPoints.begin();

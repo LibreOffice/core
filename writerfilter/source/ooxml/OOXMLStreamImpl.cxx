@@ -396,12 +396,6 @@ uno::Reference<io::XInputStream> OOXMLStreamImpl::getStorageStream()
     return mxStorageStream;
 }
 
-uno::Reference<xml::sax::XParser> OOXMLStreamImpl::getParser()
-{
-    uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(mxContext);
-    return xParser;
-}
-
 uno::Reference<uno::XComponentContext> OOXMLStreamImpl::getContext()
 {
     return mxContext;

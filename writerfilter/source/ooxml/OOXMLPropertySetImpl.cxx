@@ -74,26 +74,6 @@ Value::Pointer_t OOXMLPropertyImpl::getValue()
     return pResult;
 }
 
-writerfilter::Reference<BinaryObj>::Pointer_t OOXMLPropertyImpl::getBinary()
-{
-    writerfilter::Reference<BinaryObj>::Pointer_t pResult;
-
-    if (mpValue.get() != nullptr)
-        pResult = mpValue->getBinary();
-
-    return pResult;
-}
-
-writerfilter::Reference<Stream>::Pointer_t OOXMLPropertyImpl::getStream()
-{
-    writerfilter::Reference<Stream>::Pointer_t pResult;
-
-    if (mpValue.get() != nullptr)
-        pResult = mpValue->getStream();
-
-    return pResult;
-}
-
 writerfilter::Reference<Properties>::Pointer_t OOXMLPropertyImpl::getProps()
 {
     writerfilter::Reference<Properties>::Pointer_t pResult;

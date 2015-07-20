@@ -468,10 +468,6 @@ public:
     {
         return m_xTextFactory;
     }
-    css::uno::Reference<css::uno::XComponentContext> GetComponentContext() const
-    {
-        return m_xComponentContext;
-    }
     css::uno::Reference<css::text::XTextDocument> GetTextDocument() const
     {
         return m_xTextDocument;
@@ -580,7 +576,6 @@ public:
     void InitTabStopFromStyle(const css::uno::Sequence<css::style::TabStop>& rInitTabStops);
     void    IncorporateTabStop( const DeletableTabStop &aTabStop );
     css::uno::Sequence<css::style::TabStop> GetCurrentTabStopAndClear();
-    void                                NextTabStop() {++m_nCurrentTabStopIndex;}
 
     void        SetCurrentParaStyleId(const OUString& sStringValue) {m_sCurrentParaStyleId = sStringValue;}
     OUString    GetCurrentParaStyleId() const {return m_sCurrentParaStyleId;}
