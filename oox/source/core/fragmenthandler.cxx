@@ -96,14 +96,6 @@ void FragmentHandler::characters( const OUString& ) throw( SAXException, Runtime
 {
 }
 
-void FragmentHandler::ignorableWhitespace( const OUString& ) throw( SAXException, RuntimeException )
-{
-}
-
-void FragmentHandler::processingInstruction( const OUString&, const OUString& ) throw( SAXException, RuntimeException )
-{
-}
-
 // XML stream handling --------------------------------------------------------
 
 Reference< XInputStream > FragmentHandler::openFragmentStream() const

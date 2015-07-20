@@ -95,8 +95,6 @@ public:
     const Relation*     getRelationFromRelId( const OUString& rId ) const;
     /** Returns the first relation with the passed type. */
     const Relation*     getRelationFromFirstType( const OUString& rType ) const;
-    /** Returns the first relation with the passed type. */
-    const Relation*     getRelationFromFirstTypeFromOfficeDoc( const OUString& rType ) const;
     /** Finds all relations associated with the passed type. */
     RelationsRef        getRelationsFromTypeFromOfficeDoc( const OUString& rType ) const;
 

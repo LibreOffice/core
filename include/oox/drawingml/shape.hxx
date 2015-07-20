@@ -118,11 +118,10 @@ public:
     std::vector< ShapePtr >&        getChildren() { return maChildren; }
 
     void                            setName( const OUString& rName ) { msName = rName; }
-    OUString                       getName( ) { return msName; }
+    OUString                        getName( ) { return msName; }
     void                            setId( const OUString& rId ) { msId = rId; }
     OUString                        getId() { return msId; }
     void                            setHidden( bool bHidden ) { mbHidden = bHidden; }
-    bool                            getHidden() const { return mbHidden; };
     void                            setHiddenMasterShape( bool bHiddenMasterShape ) { mbHiddenMasterShape = bHiddenMasterShape; }
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
@@ -155,8 +154,6 @@ public:
                             FillProperties& rShapeOrParentShapeFillProps,
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
-
-    void                dropChildren() { maChildren.clear(); }
 
     void                addChildren(
                             ::oox::core::XmlFilterBase& rFilterBase,

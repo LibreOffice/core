@@ -92,10 +92,6 @@ public:
      */
     void         seekToStart() { seek( 0 ); }
 
-    /** Seeks the stream to the end, if stream is seekable.
-     */
-    void         seekToEnd() { seek( size() ); }
-
     /** Seeks the stream forward to a position that is a multiple of the passed
         block size, if stream is seekable.
 

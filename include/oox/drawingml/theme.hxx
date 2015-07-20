@@ -49,7 +49,6 @@ public:
                         ~Theme();
 
     void                     setStyleName( const OUString& rStyleName ) { maStyleName = rStyleName; }
-    const OUString&          getStyleName() const { return maStyleName; }
 
     ClrScheme&               getClrScheme() { return maClrScheme; }
     const ClrScheme&         getClrScheme() const { return maClrScheme; }
@@ -88,8 +87,6 @@ public:
 
     void                            setFragment( const ::com::sun::star::uno::Reference<
                                                     ::com::sun::star::xml::dom::XDocument>& xRef ) { mxFragment=xRef; }
-    const ::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XDocument>& getFragment() const { return mxFragment; }
 
 private:
     OUString     maStyleName;

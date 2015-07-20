@@ -96,8 +96,6 @@ public:
     SAL_WARN_UNUSED_RESULT
     sal_Int64            readInt64()  { return readValue<sal_Int64>(); }
     SAL_WARN_UNUSED_RESULT
-    sal_uInt64           readuInt64() { return readValue<sal_uInt64>(); }
-    SAL_WARN_UNUSED_RESULT
     float                readFloat()  { return readValue<float>(); }
     SAL_WARN_UNUSED_RESULT
     double               readDouble() { return readValue<double>(); }

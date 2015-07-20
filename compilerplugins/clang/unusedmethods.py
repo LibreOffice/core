@@ -60,6 +60,8 @@ exclusionSet = set([
     "const class rtl::OUString writerperfect::DocumentHandlerFor::name()",
     # only used by OSX build
     "void StyleSettings::SetHideDisabledMenuItems(_Bool)",
+    # debugging method
+    "void oox::drawingml::TextParagraphProperties::dump() const"
     ])
 
 

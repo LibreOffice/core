@@ -114,14 +114,6 @@ void ContextHandler::characters( const OUString& ) throw( SAXException, RuntimeE
 {
 }
 
-void ContextHandler::ignorableWhitespace( const OUString& ) throw( SAXException, RuntimeException )
-{
-}
-
-void ContextHandler::processingInstruction( const OUString&, const OUString& ) throw( SAXException, RuntimeException )
-{
-}
-
 // record context interface ---------------------------------------------------
 
 ContextHandlerRef ContextHandler::createRecordContext( sal_Int32, SequenceInputStream& )

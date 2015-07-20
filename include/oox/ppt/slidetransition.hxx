@@ -39,8 +39,6 @@ namespace oox { namespace ppt {
         void setTransitionFilterProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTransitionFilter > & xFilter );
 
         void setOoxTransitionSpeed( sal_Int32 nToken );
-        void setFadeColor( sal_Int32 nColor )
-            { mnFadeColor = nColor; }
         void setMode( bool bMode )
             { mbMode = bMode; }
         void setOoxAdvanceTime( sal_Int32 nAdvanceTime )

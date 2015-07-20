@@ -51,9 +51,7 @@ public:
 
     virtual void applyShapeReference( const oox::drawingml::Shape& rReferencedShape, bool bUseText = true ) SAL_OVERRIDE;
 
-    void setShapeLocation( const oox::ppt::ShapeLocation eShapeLocation ) { meShapeLocation = eShapeLocation; };
     ShapeLocation getShapeLocation() const { return meShapeLocation; };
-    bool isReferenced() const { return mbReferenced; };
     void setReferenced( bool bReferenced ){ mbReferenced = bReferenced; };
     void setPlaceholder( oox::drawingml::ShapePtr pPlaceholder ) { mpPlaceholder = pPlaceholder; }
     void setModelId( const OUString& rId ) { msModelId = rId; }

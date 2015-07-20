@@ -133,9 +133,6 @@ public:
     /** Skips the next boolean property value in the stream, if the respective
         flag in the property mask is set. */
     void                skipBoolProperty() { (void)startNextProperty(); }
-    /** Skips the next pair property in the stream, if the respective flag in
-        the property mask is set. */
-    void                skipPairProperty() { readPairProperty( maDummyPairData ); }
     /** Skips the next string property in the stream, if the respective flag in
         the property mask is set. */
     void                skipStringProperty() { readStringProperty( maDummyString ); }
@@ -145,9 +142,6 @@ public:
     /** Skips the next GUID property in the stream, if the respective flag in
         the property mask is set. */
     void                skipGuidProperty() { readGuidProperty( maDummyString ); }
-    /** Skips the next font property in the stream, if the respective flag in
-        the property mask is set. */
-    void                skipFontProperty() { readFontProperty( maDummyFontData ); }
     /** Skips the next picture property in the stream, if the respective flag
         in the property mask is set. */
     void                skipPictureProperty() { readPictureProperty( maDummyPicData ); }

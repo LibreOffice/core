@@ -70,9 +70,6 @@ struct Shape3DProperties
     OptValue< BevelProperties > maTopBevelProperties;
     OptValue< BevelProperties > maBottomBevelProperties;
 
-    /** Overwrites all members that are explicitly set in rSourceProps. */
-    void                assignUsed( const Shape3DProperties& rSourceProps );
-
     static OUString     getCameraPrstName( sal_Int32 nElement );
     static OUString     getLightRigName( sal_Int32 nElement );
     static OUString     getLightRigDirName( sal_Int32 nElement );

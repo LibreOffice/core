@@ -31,11 +31,6 @@ public:
     virtual ~CryptoEngine()
     {}
 
-    std::vector<sal_uInt8>& getKey()
-    {
-        return mKey;
-    }
-
     virtual bool writeEncryptionInfo(
                     const OUString& rPassword,
                     BinaryXOutputStream& rStream) = 0;

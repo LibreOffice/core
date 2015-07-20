@@ -41,9 +41,6 @@ struct GraphicProperties
     OUString                m_sMediaPackageURL;     ///< Audio/Video URL.
     css::uno::Reference<css::io::XInputStream> m_xMediaStream; ///< Audio/Video input stream.
 
-    /** Overwrites all members that are explicitly set in rSourceProps. */
-    void                assignUsed( const GraphicProperties& rSourceProps );
-
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,

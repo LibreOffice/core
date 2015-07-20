@@ -95,8 +95,6 @@ public:
 
     /** Returns the automatic chart title if the chart contains only one series. */
     const OUString& getAutomaticTitle() const { return maAutoTitle; }
-    /** Returns true, if the chart is three-dimensional. */
-    bool         is3dChart() const { return mb3dChart; }
     /** Returns true, if chart type supports wall and floor format in 3D mode. */
     bool         isWall3dChart() const { return mbWall3dChart; }
 

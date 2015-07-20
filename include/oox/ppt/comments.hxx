@@ -33,11 +33,6 @@ class CommentAuthorList
     public:
         void setValues(const CommentAuthorList& list);
 
-        const std::vector<CommentAuthor>& getCmAuthorLst() const
-        {
-            return cmAuthorLst;
-        }
-
         void addAuthor(const CommentAuthor& _author)
         {
             cmAuthorLst.push_back(_author);
@@ -81,26 +76,6 @@ class Comment
         void setText(const OUString& _text)
         {
             text = _text;
-        }
-        OUString getAuthorId()
-        {
-            return authorId;
-        }
-        OUString getdt()
-        {
-            return dt;
-        }
-        OUString getidx()
-        {
-            return idx;
-        }
-        OUString get_X()
-        {
-            return x;
-        }
-        OUString get_Y()
-        {
-            return y;
         }
         OUString get_text()
         {

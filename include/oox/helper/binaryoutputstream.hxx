@@ -70,16 +70,11 @@ public:
     template< typename Type >
     void                  writeValue( Type nValue );
 
-    BinaryOutputStream&   WriteInt8(sal_Int8 x)     { writeValue(x); return *this; }
-    BinaryOutputStream&   WriteUInt8(sal_uInt8 x)   { writeValue(x); return *this; }
     BinaryOutputStream&   WriteInt16(sal_Int16 x)   { writeValue(x); return *this; }
     BinaryOutputStream&   WriteUInt16(sal_uInt16 x) { writeValue(x); return *this; }
     BinaryOutputStream&   WriteInt32(sal_Int32 x)   { writeValue(x); return *this; }
     BinaryOutputStream&   WriteUInt32(sal_uInt32 x) { writeValue(x); return *this; }
     BinaryOutputStream&   WriteInt64(sal_Int64 x)   { writeValue(x); return *this; }
-    BinaryOutputStream&   WriteUInt64(sal_uInt64 x) { writeValue(x); return *this; }
-    BinaryOutputStream&   WriteFloat(float x)       { writeValue(x); return *this; }
-    BinaryOutputStream&   WriteDouble(double x)     { writeValue(x); return *this; }
 
     void writeCompressedUnicodeArray( const OUString& rString, bool bCompressed, bool bAllowNulChars = false );
 
@@ -153,10 +148,6 @@ public:
 
     /** Write nBytes bytes from the (preallocated!) buffer pMem. */
     virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 ) SAL_OVERRIDE;
-
-    /** Returns the XOutputStream interface of the wrapped output stream. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
-                        getXOutputStream() const { return mxOutStrm; }
 
 private:
     StreamDataSequence  maBuffer;       ///< Data buffer used in writeMemory() function.
