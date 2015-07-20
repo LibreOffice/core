@@ -133,12 +133,70 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
 }
 
 Reference< xml::sax::XFastContextHandler >
-    PagePropertySetContext::createFastChildContext( sal_Int32 /*Element*/,
-    const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
-    std::vector< XMLPropertyState >& /*rProperties*/,
-    const XMLPropertyState& /*rProp*/ )
+    PagePropertySetContext::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    std::vector< XMLPropertyState >& rProperties,
+    const XMLPropertyState& rProp )
 {
-    return Reference< xml::sax::XFastContextHandler >();
+    sal_Int32 nPos = CTF_PM_GRAPHICPOSITION;
+    sal_Int32 nFil = CTF_PM_GRAPHICFILTER;
+    switch ( aType )
+    {
+        case Header:
+        {
+            nPos = CTF_PM_HEADERGRAPHICPOSITION;
+            nFil = CTF_PM_HEADERGRAPHICFILTER;
+        }
+        break;
+        case Footer:
+        {
+            nPos = CTF_PM_FOOTERGRAPHICPOSITION;
+            nFil = CTF_PM_FOOTERGRAPHICFILTER;
+        }
+        break;
+        default:
+            break;
+    }
+    Reference< xml::sax::XFastContextHandler > pContext = 0;
+
+    switch( mxMapper->getPropertySetMapper()
+                    ->GetEntryContextId( rProp.mnIndex ) )
+    {
+    case CTF_PM_GRAPHICURL:
+    case CTF_PM_HEADERGRAPHICURL:
+    case CTF_PM_FOOTERGRAPHICURL:
+        DBG_ASSERT( rProp.mnIndex >= 2 &&
+                    nPos == mxMapper->getPropertySetMapper()
+                        ->GetEntryContextId( rProp.mnIndex-2 ) &&
+                    nFil == mxMapper->getPropertySetMapper()
+                        ->GetEntryContextId( rProp.mnIndex -1 ),
+                    "invalid property map!" );
+        (void)nPos;
+        (void)nFil;
+        pContext = new XMLBackgroundImageContext( GetImport(), Element,
+                                                  xAttrList, rProp,
+                                                  rProp.mnIndex-2,
+                                                  rProp.mnIndex-1,
+                                                  -1, rProperties );
+        break;
+
+    case CTF_PM_TEXTCOLUMNS:
+        pContext = new XMLTextColumnsContext( GetImport(), Element,
+                                              xAttrList, rProp,
+                                              rProperties );
+        break;
+
+    case CTF_PM_FTN_LINE_WEIGHT:
+        pContext = new XMLFootnoteSeparatorImport( GetImport(), Element,
+            rProperties, mxMapper->getPropertySetMapper(), rProp.mnIndex );
+        break;
+    }
+
+    if( !pContext.get() )
+        pContext = SvXMLPropertySetContext::createFastChildContext(
+            Element, xAttrList, rProperties, rProp );
+
+    return pContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
