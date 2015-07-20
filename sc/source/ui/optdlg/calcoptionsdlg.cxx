@@ -46,6 +46,8 @@ formula::FormulaGrammar::AddressConvention toAddressConvention(sal_Int32 nPos)
             return formula::FormulaGrammar::CONV_XL_A1;
         case 3:
             return formula::FormulaGrammar::CONV_XL_R1C1;
+        case 4:
+            return formula::FormulaGrammar::CONV_A1_XL_A1;
         case 0:
         default:
             ;
@@ -64,6 +66,8 @@ sal_Int32 toSelectedItem( formula::FormulaGrammar::AddressConvention eConv )
             return 2;
         case formula::FormulaGrammar::CONV_XL_R1C1:
             return 3;
+        case formula::FormulaGrammar::CONV_A1_XL_A1:
+            return 4;
         default:
             ;
     }
