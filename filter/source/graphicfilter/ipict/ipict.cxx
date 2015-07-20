@@ -879,7 +879,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                     }
                     else
                     {
-                        nCount = static_cast<sal_uInt16>( 1 - ( ( (sal_uInt16)nFlagCounterByte ) | 0xff00 ) );
+                        nCount = static_cast<sal_uInt16>( 1 - sal_Int16( ( (sal_uInt16)nFlagCounterByte ) | 0xff00 ) );
                         pPict->ReadUChar( nDat );
                         for ( i = 0; i < nCount; i++ )
                         {
@@ -901,21 +901,10 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         if (nWidth > nRowBytes / 2)
             BITMAPERROR;
 
-        size_t nMinRecordSize;
-        if ( nRowBytes < 8 || nPackType == 1 )
-            nMinRecordSize = sizeof(sal_uInt16);
-        else if ( nRowBytes > 250 )
-            nMinRecordSize = sizeof(sal_uInt16);
-        else
-            nMinRecordSize = 1;
-
-        const size_t nMinRowWidth = nWidth * nMinRecordSize;
-        const size_t nMaxRows = pPict->remainingSize() / nMinRowWidth;
-        if (nHeight > nMaxRows)
-            BITMAPERROR;
-        const size_t nMaxCols = pPict->remainingSize() / nHeight;
-        if (nWidth > nMaxCols)
-            BITMAPERROR;
+        if ( nRowBytes < 8 || nPackType == 1 ) {
+            if (pPict->remainingSize() < sizeof(sal_uInt16) * nHeight * nWidth)
+                BITMAPERROR;
+        }
 
         for ( ny = 0; ny < nHeight; ny++ )
         {
@@ -952,10 +941,17 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                     if ( (nFlagCounterByte & 0x80) == 0)
                     {
                         nCount=((sal_uInt16)nFlagCounterByte)+1;
-                        if ( nCount + nx > nWidth)              // SJ: the RLE decoding seems not to be correct here,
-                            nCount = nWidth - nx;               // I don't want to change this until I have a bugdoc for
-                        for (i=0; i<nCount; i++)                // this case. Have a look at 32bit, there I changed the
-                        {                                       // encoding, so that it is used a straight forward array
+                        if ( nCount + nx > nWidth)
+                            nCount = nWidth - nx;
+                        if (pPict->remainingSize() < sizeof(sal_uInt16) * nCount)
+                            BITMAPERROR;
+                        /* SJ: the RLE decoding seems not to be correct here,
+                           I don't want to change this until I have a bugdoc for
+                           this case. Have a look at 32bit, there I changed the
+                           encoding, so that it is used a straight forward array
+                         */
+                        for (i=0; i<nCount; i++)
+                        {
                             pPict->ReadUInt16( nD );
                             nRed = (sal_uInt8)( nD >> 7 );
                             nGreen = (sal_uInt8)( nD >> 2 );
@@ -965,7 +961,9 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                     }
                     else
                     {
-                        nCount=(1-(((sal_uInt16)nFlagCounterByte)|0xff00));
+                        if (pPict->remainingSize() < sizeof(sal_uInt16))
+                            BITMAPERROR;
+                        nCount=(1-sal_Int16(((sal_uInt16)nFlagCounterByte)|0xff00));
                         if ( nCount + nx > nWidth )
                             nCount = nWidth - nx;
                         pPict->ReadUInt16( nD );
@@ -1039,20 +1037,6 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         {
             if ( ( nCmpCount == 3 ) || ( nCmpCount == 4 ) )
             {
-                size_t nMinRecordSize;
-                if (nRowBytes > 250)
-                    nMinRecordSize = sizeof(sal_uInt16);
-                else
-                    nMinRecordSize = 1;
-
-                const size_t nMinRowWidth = nWidth * nMinRecordSize;
-                const size_t nMaxRows = pPict->remainingSize() / nMinRowWidth;
-                if (nHeight > nMaxRows)
-                    BITMAPERROR;
-                const size_t nMaxWidth = pPict->remainingSize() / nHeight;
-                if (nWidth > nMaxWidth)
-                    BITMAPERROR;
-
                 std::unique_ptr<sal_uInt8[]> pScanline(new sal_uInt8[static_cast<size_t>(nWidth) * nCmpCount]);
                 for ( ny = 0; ny < nHeight; ny++ )
                 {
@@ -1077,6 +1061,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                             nCount = ( (sal_uInt16)nFlagCounterByte ) + 1;
                             if ( ( i + nCount ) > static_cast<size_t>(nWidth) * nCmpCount )
                                 nCount = static_cast<size_t>(nWidth) * nCmpCount - i;
+                            if (pPict->remainingSize() < nCount)
+                                BITMAPERROR;
                             while( nCount-- )
                             {
                                 pPict->ReadUChar( nDat );
@@ -1085,7 +1071,9 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         }
                         else
                         {
-                            nCount = ( 1 - ( ( (sal_uInt16)nFlagCounterByte ) | 0xff00 ) );
+                            if (pPict->remainingSize() < 1)
+                                BITMAPERROR;
+                            nCount = ( 1 - sal_Int16( ( (sal_uInt16)nFlagCounterByte ) | 0xff00 ) );
                             if ( ( i + nCount ) > static_cast<size_t>(nWidth) * nCmpCount)
                                 nCount = static_cast<size_t>(nWidth) * nCmpCount - i;
                             pPict->ReadUChar( nDat );
