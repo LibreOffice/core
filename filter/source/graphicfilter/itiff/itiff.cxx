@@ -682,6 +682,8 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                     pTIFF->Seek(pStripOffsets[nStrip]);
                 }
                 nRowBytesLeft = nBytesPerRow;
+                if (np >= SAL_N_ELEMENTS(pMap))
+                    return false;
                 pdst=pMap[ np ];
                 do
                 {
