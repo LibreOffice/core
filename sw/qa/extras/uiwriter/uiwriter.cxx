@@ -64,6 +64,7 @@
 #include "com/sun/star/awt/FontStrikeout.hpp"
 #include "com/sun/star/beans/PropertyAttribute.hpp"
 #include "com/sun/star/text/XTextField.hpp"
+#include "com/sun/star/text/TextMarkupType.hpp"
 #include <osl/file.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
@@ -108,6 +109,7 @@ public:
     void testTdf51741();
     void testDefaultsOfOutlineNumbering();
     void testdelofTableRedlines();
+    void testXFlatParagraph();
     void testTdf81995();
     void testExportToPicture();
     void testTextSearch();
@@ -166,6 +168,7 @@ public:
     CPPUNIT_TEST(testTdf51741);
     CPPUNIT_TEST(testDefaultsOfOutlineNumbering);
     CPPUNIT_TEST(testdelofTableRedlines);
+    CPPUNIT_TEST(testXFlatParagraph);
     CPPUNIT_TEST(testTdf81995);
     CPPUNIT_TEST(testExportToPicture);
     CPPUNIT_TEST(testTextSearch);
@@ -1051,6 +1054,53 @@ void SwUiWriterTest::testdelofTableRedlines()
     SwExtraRedlineTable& redtbl = pDocRed.GetExtraRedlineTable();
     redtbl.DeleteAllTableRedlines(pDoc, tbl, false, sal_uInt16(USHRT_MAX));
     CPPUNIT_ASSERT(redtbl.IsEmpty());
+}
+
+void SwUiWriterTest::testXFlatParagraph()
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    //Inserting some text in the document
+    pWrtShell->Insert("This is sample text");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("This is another sample text");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("This is yet another sample text");
+    //retrieving the XFlatParagraphs
+    uno::Reference<text::XFlatParagraphIteratorProvider> xFPIP(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XFlatParagraphIterator> xFPIterator(xFPIP->getFlatParagraphIterator(sal_Int32(text::TextMarkupType::SPELLCHECK), true));
+    uno::Reference<text::XFlatParagraph> xFlatPara(xFPIterator->getFirstPara());
+    CPPUNIT_ASSERT_EQUAL(OUString("This is sample text"), xFlatPara->getText());
+    //checking modified status
+    CPPUNIT_ASSERT(!xFlatPara->isModified());
+    //checking "checked" staus, modifying it and asserting the changes
+    CPPUNIT_ASSERT(xFlatPara->isChecked(sal_Int32(text::TextMarkupType::SPELLCHECK)));
+    xFlatPara->setChecked((sal_Int32(text::TextMarkupType::SPELLCHECK)), true);
+    CPPUNIT_ASSERT(!xFlatPara->isChecked(sal_Int32(text::TextMarkupType::SPELLCHECK)));
+    //getting other XFlatParagraphs and asserting their contents
+    uno::Reference<text::XFlatParagraph> xFlatPara2(xFPIterator->getParaAfter(xFlatPara));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is another sample text"), xFlatPara2->getText());
+    uno::Reference<text::XFlatParagraph> xFlatPara3(xFPIterator->getParaAfter(xFlatPara2));
+    CPPUNIT_ASSERT_EQUAL(OUString("This is yet another sample text"), xFlatPara3->getText());
+    uno::Reference<text::XFlatParagraph> xFlatPara4(xFPIterator->getParaBefore(xFlatPara3));
+    CPPUNIT_ASSERT_EQUAL(xFlatPara2->getText(), xFlatPara4->getText());
+    //changing the attributes of last para
+    uno::Sequence<beans::PropertyValue> aDescriptor =
+    {
+        beans::PropertyValue("CharWeight", sal_Int32(0), uno::makeAny(float(com::sun::star::awt::FontWeight::BOLD)), beans::PropertyState_DIRECT_VALUE)
+    };
+    xFlatPara3->changeAttributes(sal_Int32(0), sal_Int32(5), aDescriptor);
+    //checking Language Portions
+    uno::Sequence<::sal_Int32> aLangPortions(xFlatPara4->getLanguagePortions());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aLangPortions.getLength());
+    //examining Language of text
+    com::sun::star::lang::Locale alocale = xFlatPara4->getLanguageOfText(sal_Int32(0), sal_Int32(4));
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), alocale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), alocale.Country);
+    //examining Primary Language of text
+    com::sun::star::lang::Locale aprimarylocale = xFlatPara4->getPrimaryLanguageOfText(sal_Int32(0), sal_Int32(20));
+    CPPUNIT_ASSERT_EQUAL(OUString("en"), aprimarylocale.Language);
+    CPPUNIT_ASSERT_EQUAL(OUString("US"), aprimarylocale.Country);
 }
 
 void SwUiWriterTest::testTdf81995()
