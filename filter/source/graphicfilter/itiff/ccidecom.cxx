@@ -890,7 +890,7 @@ sal_uInt16 CCIDecompressor::CountBits(const sal_uInt8 * pData, sal_uInt16 nDataS
                                   sal_uInt16 nBitPos, sal_uInt8 nBlackOrWhite)
 {
     // here the number of bits belonging together is being counted
-    // which all have the color nBlackOrWhite (0xff oder 0x00)
+    // which all have the color nBlackOrWhite (0xff or 0x00)
     // from the position nBitPos on
     sal_uInt16 nPos = nBitPos;
     for (;;)
