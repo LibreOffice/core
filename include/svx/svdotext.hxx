@@ -364,9 +364,10 @@ public:
     /// returns true if the old feature for fitting shape content should into shape is enabled. implies IsAutoFit()==false!
     bool IsFitToSize() const;
 
-    // Chaining
+    // Chaining // XXX: how are we using IsToBeChained at the moment?
     bool IsToBeChained() const;
     SdrTextObj *GetNextLinkInChain() const;
+    SdrTextObj *GetPrevLinkInChain() const;
     bool IsChainable() const;
     void SetPreventChainable();
     bool GetPreventChainable() const;

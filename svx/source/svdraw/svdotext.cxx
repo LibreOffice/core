@@ -2100,6 +2100,12 @@ SdrTextObj* SdrTextObj::GetNextLinkInChain() const
 
 }
 
+SdrTextObj* SdrTextObj::GetPrevLinkInChain() const
+{
+    // FIXME: To be implemented
+    return NULL;
+}
+
 void SdrTextObj::SetPreventChainable()
 {
     mbIsUnchainableClone = true;
