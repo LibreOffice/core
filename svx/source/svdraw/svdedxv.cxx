@@ -2042,7 +2042,6 @@ void SdrObjEditView::OnBeginPasteOrDrop( PasteOrDropInfos* )
 void SdrObjEditView::OnEndPasteOrDrop( PasteOrDropInfos* )
 {
     // applications can derive from these virtual methods to do something before a drop or paste operation
-    ImpChainingEventHdl(NULL);
 
 }
 

@@ -214,6 +214,7 @@ private:
     EDITENG_DLLPRIVATE void         ImpPasted( sal_Int32 nStart, sal_Int32 nPrevParaCount, sal_Int32 nSize);
     EDITENG_DLLPRIVATE sal_Int32    ImpCalcSelectedPages( bool bIncludeFirstSelected );
 
+    Link<> aEndPasteLink;
 
 public:
                 OutlinerView( Outliner* pOut, vcl::Window* pWindow );
@@ -373,6 +374,8 @@ public:
 
     OUString    GetSurroundingText() const;
     Selection   GetSurroundingTextSelection() const;
+
+    void        SetEndPasteLinkHdl(const Link<> &rLink) { aEndPasteLink = rLink; }
 };
 
 
