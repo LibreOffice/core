@@ -36,16 +36,6 @@ Value::Pointer_t RTFSprm::getValue()
     return Value::Pointer_t(m_pValue->Clone());
 }
 
-writerfilter::Reference<BinaryObj>::Pointer_t RTFSprm::getBinary()
-{
-    return m_pValue->getBinary();
-}
-
-writerfilter::Reference<Stream>::Pointer_t RTFSprm::getStream()
-{
-    return m_pValue->getStream();
-}
-
 writerfilter::Reference<Properties>::Pointer_t RTFSprm::getProps()
 {
     return m_pValue->getProperties();

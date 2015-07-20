@@ -34,8 +34,6 @@ public:
 
     virtual sal_uInt32 getId() const SAL_OVERRIDE = 0;
     virtual Value::Pointer_t getValue() SAL_OVERRIDE = 0;
-    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE = 0;
-    virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE = 0;
     virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE = 0;
 #ifdef DEBUG_WRITERFILTER
     virtual std::string getName() const SAL_OVERRIDE = 0;

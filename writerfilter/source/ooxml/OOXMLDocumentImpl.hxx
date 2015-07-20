@@ -120,17 +120,14 @@ public:
     virtual css::uno::Reference<css::frame::XModel> getModel() SAL_OVERRIDE;
     virtual void setDrawPage(css::uno::Reference<css::drawing::XDrawPage> xDrawPage) SAL_OVERRIDE;
     virtual css::uno::Reference<css::drawing::XDrawPage> getDrawPage() SAL_OVERRIDE;
-    virtual css::uno::Reference<css::io::XInputStream> getInputStream() SAL_OVERRIDE;
     virtual css::uno::Reference<css::io::XInputStream> getStorageStream() SAL_OVERRIDE;
     virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) SAL_OVERRIDE;
     virtual void setXNoteId(const sal_Int32 nId) SAL_OVERRIDE;
     virtual sal_Int32 getXNoteId() const SAL_OVERRIDE;
     virtual void setXNoteType(const Id & rId) SAL_OVERRIDE;
-    virtual const Id & getXNoteType() const SAL_OVERRIDE;
     virtual const OUString & getTarget() const SAL_OVERRIDE;
     virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) SAL_OVERRIDE;
     virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) SAL_OVERRIDE;
-    virtual void setThemeDom(css::uno::Reference<css::xml::dom::XDocument> xThemeDom) SAL_OVERRIDE;
     virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom() SAL_OVERRIDE;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList() SAL_OVERRIDE;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomPropsList() SAL_OVERRIDE;

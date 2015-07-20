@@ -99,7 +99,6 @@ public:
     IntVectorPtr getCurrentSpans( );
     IntVectorPtr getCurrentCellWidths( );
 
-    const OUString& getTableStyleName() const { return m_sTableStyleName; }
     /// Turn the attributes collected so far in m_aTableLook into a property and clear the container.
     void finishTableLook();
     const css::uno::Sequence<css::beans::PropertyValue> getCurrentTablePosition();
@@ -145,11 +144,6 @@ public:
     bool HasBtlrCell() const
     {
         return m_bHasBtlrCell;
-    }
-
-    bool IsTableSizeTypeInserted() const
-    {
-        return m_bTableSizeTypeInserted;
     }
 
     void SetLayoutType(sal_uInt32 nLayoutType)

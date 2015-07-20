@@ -60,8 +60,39 @@ exclusionSet = set([
     "const class rtl::OUString writerperfect::DocumentHandlerFor::name()",
     # only used by OSX build
     "void StyleSettings::SetHideDisabledMenuItems(_Bool)",
-    # debugging method
-    "void oox::drawingml::TextParagraphProperties::dump() const"
+    # debugging methods
+    "void oox::drawingml::TextParagraphProperties::dump() const",
+    "class std::basic_string<char, struct std::char_traits<char>, class std::allocator<char> > writerfilter::ooxml::OOXMLPropertySet::toString()",
+    # called from the writerfilter generated code in $WORKDIR, not sure why it is not being picked up
+    "void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultIntegerValue()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::positivePercentage(const class rtl::OUString &)",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleOLE()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::positionOffset(const class rtl::OUString &)",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::alignH(const class rtl::OUString &)",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::alignV(const class rtl::OUString &)",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultStringValue()",
+    "_Bool writerfilter::ooxml::OOXMLFactory_ns::getElementId(unsigned int,unsigned int,enum writerfilter::ooxml::ResourceType_t &,unsigned int &)",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::clearProps()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::sendPropertiesWithId(const unsigned int &)",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::cr()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::softHyphen()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::noBreakHyphen()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultBooleanValue()",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handlePicture()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::endField()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::propagateCharacterPropertiesAsSet(const unsigned int &)",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleHdrFtr()",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleBreak()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::tab()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::ftnednref()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::ftnednsep()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::ftnedncont()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::pgNum()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::sendRowProperties()",
+    "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleComment()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::setLastSectionGroup()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::endTxbxContent()",
+    "void writerfilter::ooxml::OOXMLFastContextHandler::setDefaultHexValue()",
     ])
 
 

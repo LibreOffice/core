@@ -421,7 +421,6 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     ,m_nHeaderBottom( 1270 )//720 twip
     ,m_nDzaGutter( 0 )
     ,m_bGutterRTL( false )
-    ,m_bSFBiDi( false )
     ,m_nGridType(0)
     ,m_nGridLinePitch( 1 )
     ,m_nDxtCharSpace( 0 )
@@ -1373,45 +1372,15 @@ void SectionPropertyMap::_ApplyProperties(
     }
 }
 
-sal_Int32 lcl_AlignPaperBin( sal_Int32 nSet )
-{
-    //default tray numbers are above 0xff
-    if( nSet > 0xff )
-        nSet = nSet >> 8;
-    //there are some special numbers which can't be handled easily
-    //1, 4, 15, manual tray, upper tray, auto select? see ww8atr.cxx
-    //todo: find out appropriate conversion
-    return nSet;
-}
-
-
-void SectionPropertyMap::SetPaperBin( sal_Int32 nSet )
-{
-    m_nPaperBin = lcl_AlignPaperBin( nSet );
-}
-
-
-void SectionPropertyMap::SetFirstPaperBin( sal_Int32 nSet )
-{
-    m_nFirstPaperBin = lcl_AlignPaperBin( nSet );
-}
-
-
 sal_Int32 SectionPropertyMap::GetPageWidth()
 {
     return getProperty(PROP_WIDTH)->second.get<sal_Int32>();
 }
 
 StyleSheetPropertyMap::StyleSheetPropertyMap() :
-    mnCT_Spacing_line( 0 ),
-    mnCT_Spacing_lineRule( 0 ),
-    mbCT_TrPrBase_tblHeader( false ),
     mnCT_TrPrBase_jc( 0 ),
     mnCT_TblWidth_w( 0 ),
     mnCT_TblWidth_type( 0 ),
-    mbCT_Spacing_lineSet( false ),
-    mbCT_Spacing_lineRuleSet( false ),
-    mbCT_TrPrBase_tblHeaderSet( false ),
     mbCT_TrPrBase_jcSet( false ),
     mbCT_TblWidth_wSet( false ),
     mbCT_TblWidth_typeSet( false ),
