@@ -202,11 +202,12 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
                                         bool bInsertToPrefBox)
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false)); //It is needed, otherwise causes crash
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, rProp));
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, rStatus));
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, rType));
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, rValue));
+    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
+        new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false))); //It is needed, otherwise causes crash
+    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, rProp)));
+    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, rStatus)));
+    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, rType)));
+    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, rValue)));
     pEntry->SetUserData( new UserData(rPropertyPath) );
 
     if(bInsertToPrefBox)
@@ -284,13 +285,18 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             {
                 // not leaf node
                 SvTreeListEntry* pEntry = new SvTreeListEntry;
-                pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, SvTreeListBox::GetDefaultExpandedNodeImage(),
-                                                       SvTreeListBox::GetDefaultCollapsedNodeImage(), false));
-                pEntry->AddItem( new SvLBoxString( pEntry, 0, seqItems[i]));
+                pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
+                    new SvLBoxContextBmp(pEntry, 0, SvTreeListBox::GetDefaultExpandedNodeImage(),
+                       SvTreeListBox::GetDefaultCollapsedNodeImage(), false)));
+                pEntry->AddItem(std::unique_ptr<SvLBoxString>(
+                    new SvLBoxString( pEntry, 0, seqItems[i])));
                 //It is needed, without this the selection line will be truncated.
-                pEntry->AddItem( new SvLBoxString( pEntry, 0, ""));
-                pEntry->AddItem( new SvLBoxString( pEntry, 0, ""));
-                pEntry->AddItem( new SvLBoxString( pEntry, 0, ""));
+                pEntry->AddItem(std::unique_ptr<SvLBoxString>(
+                    new SvLBoxString( pEntry, 0, "")));
+                pEntry->AddItem(std::unique_ptr<SvLBoxString>(
+                    new SvLBoxString( pEntry, 0, "")));
+                pEntry->AddItem(std::unique_ptr<SvLBoxString>(
+                    new SvLBoxString( pEntry, 0, "")));
 
                 pEntry->SetUserData( new UserData(xNextNameAccess, lineage + 1) );
                 pEntry->EnableChildrenOnDemand();
@@ -774,7 +780,8 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                 );
                 if (it != m_prefBoxEntries.end())
                 {
-                    it->ReplaceItem( new SvLBoxString( &(*it), 0, sDialogValue ), 4 );
+                    it->ReplaceItem(std::unique_ptr<SvLBoxString>(
+                        new SvLBoxString( &(*it), 0, sDialogValue)), 4);
 
                     SvTreeListEntries::iterator modifiedIt = std::find_if(
                                 m_modifiedPrefBoxEntries.begin(), m_modifiedPrefBoxEntries.end(),
@@ -786,7 +793,9 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                     );
 
                     if( modifiedIt != m_modifiedPrefBoxEntries.end())
-                        modifiedIt->ReplaceItem( new SvLBoxString( &(*modifiedIt), 0, sDialogValue ), 4 );
+                        modifiedIt->ReplaceItem(std::unique_ptr<SvLBoxString>(
+                            new SvLBoxString(&(*modifiedIt), 0, sDialogValue)),
+                            4);
                     else
                     {
                         SvTreeListEntry *pCloneEntry = new SvTreeListEntry;
@@ -883,13 +892,18 @@ void CuiAboutConfigTabPage::InsertEntry( SvTreeListEntry *pEntry)
         if(!hasEntry)
         {
             pParentEntry = new SvTreeListEntry;
-            pParentEntry->AddItem( new SvLBoxContextBmp( pParentEntry, 0, SvTreeListBox::GetDefaultExpandedNodeImage(),
-                                                   SvTreeListBox::GetDefaultCollapsedNodeImage(), false));
-            pParentEntry->AddItem( new SvLBoxString( pParentEntry, 0, sParentName));
+            pParentEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
+                new SvLBoxContextBmp(pParentEntry, 0, SvTreeListBox::GetDefaultExpandedNodeImage(),
+                   SvTreeListBox::GetDefaultCollapsedNodeImage(), false)));
+            pParentEntry->AddItem(std::unique_ptr<SvLBoxString>(
+                new SvLBoxString(pParentEntry, 0, sParentName)));
             //It is needed, without this the selection line will be truncated.
-            pParentEntry->AddItem( new SvLBoxString( pParentEntry, 0, ""));
-            pParentEntry->AddItem( new SvLBoxString( pParentEntry, 0, ""));
-            pParentEntry->AddItem( new SvLBoxString( pParentEntry, 0, ""));
+            pParentEntry->AddItem(std::unique_ptr<SvLBoxString>(
+                new SvLBoxString(pParentEntry, 0, "")));
+            pParentEntry->AddItem(std::unique_ptr<SvLBoxString>(
+                new SvLBoxString(pParentEntry, 0, "")));
+            pParentEntry->AddItem(std::unique_ptr<SvLBoxString>(
+                new SvLBoxString( pParentEntry, 0, "")));
             pParentEntry->EnableChildrenOnDemand(false);
             m_pPrefBox->Insert( pParentEntry, pGrandParentEntry );
         }

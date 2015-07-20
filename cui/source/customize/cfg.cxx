@@ -2105,7 +2105,7 @@ SvTreeListEntry* SvxConfigPage::InsertEntryIntoUI(
         {
             // add new popup painter, it gets destructed by the entry
             pNewEntry->ReplaceItem(
-                new PopupPainter( pNewEntry, aName ),
+                std::unique_ptr<PopupPainter>(new PopupPainter(pNewEntry, aName)),
                 pNewEntry->ItemCount() - 1 );
         }
     }

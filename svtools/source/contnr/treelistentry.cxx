@@ -130,9 +130,9 @@ size_t SvTreeListEntry::ItemCount() const
     return m_Items.size();
 }
 
-void SvTreeListEntry::AddItem( SvLBoxItem* pItem )
+void SvTreeListEntry::AddItem(std::unique_ptr<SvLBoxItem> pItem)
 {
-    m_Items.push_back(std::unique_ptr<SvLBoxItem>(pItem));
+    m_Items.push_back(std::move(pItem));
 }
 
 void SvTreeListEntry::EnableChildrenOnDemand( bool bEnable )
@@ -143,18 +143,18 @@ void SvTreeListEntry::EnableChildrenOnDemand( bool bEnable )
         nEntryFlags &= (~SvTLEntryFlags::CHILDREN_ON_DEMAND);
 }
 
-void SvTreeListEntry::ReplaceItem( SvLBoxItem* pNewItem, size_t nPos )
+void SvTreeListEntry::ReplaceItem(std::unique_ptr<SvLBoxItem> pNewItem, size_t const nPos)
 {
     DBG_ASSERT(pNewItem,"ReplaceItem:No Item");
     if (nPos >= m_Items.size())
     {
         // Out of bound. Bail out.
-        delete pNewItem;
+        pNewItem.reset();
         return;
     }
 
     m_Items.erase(m_Items.begin()+nPos);
-    m_Items.insert(m_Items.begin()+nPos, std::unique_ptr<SvLBoxItem>(pNewItem));
+    m_Items.insert(m_Items.begin()+nPos, std::move(pNewItem));
 }
 
 const SvLBoxItem& SvTreeListEntry::GetItem( size_t nPos ) const

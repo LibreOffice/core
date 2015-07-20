@@ -382,8 +382,8 @@ VCL_BUILDER_FACTORY(OColumnTreeBox)
 void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
 {
     DBTreeListBox::InitEntry(pEntry, rStr, rImg1, rImg2, eButtonKind);
-    SvLBoxString* pString = new OColumnString(pEntry, 0, rStr,false);
-    pEntry->ReplaceItem( pString, pEntry->ItemCount() - 1 );
+    std::unique_ptr<SvLBoxString> pString(new OColumnString(pEntry, 0, rStr,false));
+    pEntry->ReplaceItem(std::move(pString), pEntry->ItemCount() - 1);
 }
 
 bool OColumnTreeBox::Select( SvTreeListEntry* pEntry, bool bSelect )

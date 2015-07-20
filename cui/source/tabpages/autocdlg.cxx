@@ -474,19 +474,20 @@ SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(OUString& rTxt, sal_uInt16
         m_pCheckLB->SetCheckButtonData( pCheckButtonData );
     }
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));
+    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
+                    pEntry, 0, Image(), Image(), false)));
 
     OUString sEmpty;
     if (nCol == CBCOL_SECOND)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, sEmpty)));
     else
-        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
 
     if (nCol == CBCOL_FIRST)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, sEmpty)));
     else
-        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
-    pEntry->AddItem( new OfaImpBrwString( pEntry, 0, rTxt ) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
+    pEntry->AddItem(std::unique_ptr<OfaImpBrwString>(new OfaImpBrwString( pEntry, 0, rTxt)));
 
     return pEntry;
 }
@@ -1781,20 +1782,22 @@ SvTreeListEntry* OfaQuoteTabPage::CreateEntry(OUString& rTxt, sal_uInt16 nCol)
         m_pSwCheckLB->SetCheckButtonData(pCheckButtonData);
     }
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));
+    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
+                new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false)));
 
     OUString sEmpty;
     if (nCol == CBCOL_SECOND)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, sEmpty)));
     else
-        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
 
     if (nCol == CBCOL_FIRST)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, sEmpty)));
     else
-        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(
+            pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
 
-    pEntry->AddItem( new OfaImpBrwString( pEntry, 0, rTxt ) );
+    pEntry->AddItem(std::unique_ptr<OfaImpBrwString>(new OfaImpBrwString(pEntry, 0, rTxt)));
 
     return pEntry;
 }

@@ -96,10 +96,12 @@ SvTreeListEntry* SdPageListControl::InsertPage( const OUString& rPageName )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
-    pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
-                                       0, m_pCheckButton));
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));    // otherwise boom!
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, rPageName ) );
+    pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(
+                pEntry, SvLBoxButtonKind_enabledCheckbox, 0, m_pCheckButton)));
+    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
+                pEntry, 0, Image(), Image(), false)));    // otherwise boom!
+    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
+                pEntry, 0, rPageName)));
 
     GetModel()->Insert( pEntry );
 
@@ -109,9 +111,12 @@ SvTreeListEntry* SdPageListControl::InsertPage( const OUString& rPageName )
 void SdPageListControl::InsertTitle( SvTreeListEntry* pParent, const OUString& rTitle )
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, OUString() ) );
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));    // otherwise boom!
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, rTitle ) );
+    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
+                    pEntry, 0, OUString())));
+    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
+                    pEntry, 0, Image(), Image(), false)));    // otherwise boom!
+    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
+                    pEntry, 0, rTitle)));
     GetModel()->Insert( pEntry,pParent );
 }
 

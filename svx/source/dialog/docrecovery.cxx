@@ -848,8 +848,9 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
     DBG_ASSERT( TabCount() == 2, "*RecovDocList::InitEntry(): structure missmatch" );
 
     SvLBoxString&       rCol = static_cast<SvLBoxString&>(pEntry->GetItem(2));
-    RecovDocListEntry*  p    = new RecovDocListEntry(pEntry, 0, rCol.GetText());
-    pEntry->ReplaceItem(p, 2);
+    std::unique_ptr<RecovDocListEntry> p(
+            new RecovDocListEntry(pEntry, 0, rCol.GetText()));
+    pEntry->ReplaceItem(std::move(p), 2);
 }
 
 

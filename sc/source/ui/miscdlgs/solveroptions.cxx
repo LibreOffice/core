@@ -264,22 +264,28 @@ void ScSolverOptionsDialog::FillListBox()
         {
             // check box entry
             pEntry = new SvTreeListEntry;
-            SvLBoxButton* pButton = new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, mpCheckButtonData );
+            std::unique_ptr<SvLBoxButton> pButton(new SvLBoxButton(
+                pEntry, SvLBoxButtonKind_enabledCheckbox, 0, mpCheckButtonData));
             if ( ScUnoHelpFunctions::GetBoolFromAny( aValue ) )
                 pButton->SetStateChecked();
             else
                 pButton->SetStateUnchecked();
-            pEntry->AddItem( pButton );
-            pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false ) );
-            pEntry->AddItem( new SvLBoxString( pEntry, 0, aVisName ) );
+            pEntry->AddItem(std::move(pButton));
+            pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
+                new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false)));
+            pEntry->AddItem(std::unique_ptr<SvLBoxString>(
+                new SvLBoxString( pEntry, 0, aVisName)));
         }
         else
         {
             // value entry
             pEntry = new SvTreeListEntry;
-            pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty ) );                   // empty column
-            pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false ) );
-            ScSolverOptionsString* pItem = new ScSolverOptionsString( pEntry, 0, aVisName );
+            pEntry->AddItem(std::unique_ptr<SvLBoxString>(
+                new SvLBoxString(pEntry, 0, sEmpty))); // empty column
+            pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
+                new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false)));
+            std::unique_ptr<ScSolverOptionsString> pItem(
+                new ScSolverOptionsString(pEntry, 0, aVisName));
             if ( eClass == uno::TypeClass_DOUBLE )
             {
                 double fDoubleValue = 0.0;
@@ -292,7 +298,7 @@ void ScSolverOptionsDialog::FillListBox()
                 if ( aValue >>= nIntValue )
                     pItem->SetIntValue( nIntValue );
             }
-            pEntry->AddItem( pItem );
+            pEntry->AddItem(std::move(pItem));
         }
         pModel->Insert( pEntry );
     }

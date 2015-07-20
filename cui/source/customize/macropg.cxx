@@ -554,8 +554,9 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         OUString* pEventName = new OUString( sEventName );
         _pE->SetUserData( static_cast<void*>(pEventName) );
         OUString sNew( eventURL );
-        _pE->ReplaceItem( new IconLBoxString( _pE, 0, sNew,
-            &mpImpl->aMacroImg, &mpImpl->aComponentImg ), LB_MACROS_ITEMPOS );
+        _pE->ReplaceItem(std::unique_ptr<IconLBoxString>(new IconLBoxString(
+                _pE, 0, sNew, &mpImpl->aMacroImg, &mpImpl->aComponentImg)),
+            LB_MACROS_ITEMPOS );
         rListBox.GetModel()->InvalidateEntry( _pE );
         rListBox.Select( _pE );
         rListBox.MakeVisible( _pE );
@@ -701,8 +702,9 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
 
     // update the listbox entry
     pImpl->pEventLB->SetUpdateMode( false );
-    pE->ReplaceItem( new IconLBoxString( pE, 0, sEventURL,
-            &pImpl->aMacroImg, &pImpl->aComponentImg ), LB_MACROS_ITEMPOS );
+    pE->ReplaceItem(std::unique_ptr<IconLBoxString>(new IconLBoxString(
+                pE, 0, sEventURL, &pImpl->aMacroImg, &pImpl->aComponentImg)),
+        LB_MACROS_ITEMPOS );
 
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );

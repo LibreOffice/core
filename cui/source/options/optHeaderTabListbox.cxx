@@ -71,8 +71,9 @@ void OptHeaderTabListBox::InitEntry( SvTreeListEntry* pEntry, const OUString& rT
     {
         // initialize all columns with own class (column 0 == Bitmap)
         SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nCol ));
-        OptLBoxString_Impl* pStr = new OptLBoxString_Impl( pEntry, 0, rCol.GetText() );
-        pEntry->ReplaceItem( pStr, nCol );
+        std::unique_ptr<OptLBoxString_Impl> pStr(
+                new OptLBoxString_Impl(pEntry, 0, rCol.GetText()));
+        pEntry->ReplaceItem(std::move(pStr), nCol);
     }
 }
 

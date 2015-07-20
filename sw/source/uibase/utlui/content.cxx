@@ -3461,8 +3461,9 @@ void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
     const size_t nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString& rCol = static_cast<SvLBoxString&>(pEntry->GetItem( nColToHilite ));
-    SwContentLBoxString* pStr = new SwContentLBoxString( pEntry, 0, rCol.GetText() );
-    pEntry->ReplaceItem( pStr, nColToHilite );
+    std::unique_ptr<SwContentLBoxString> pStr(
+        new SwContentLBoxString(pEntry, 0, rCol.GetText()));
+    pEntry->ReplaceItem(std::move(pStr), nColToHilite);
 }
 
 void SwContentLBoxString::Paint(const Point& rPos, SvTreeListBox& rDev, vcl::RenderContext& rRenderContext,

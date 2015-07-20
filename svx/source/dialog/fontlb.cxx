@@ -136,10 +136,12 @@ void SvxFontListBox::InitEntry(
     if( mbUseFont )
     {
         if( nTreeFlags & SvTreeFlags::CHKBTN )
-            pEntry->AddItem( new SvLBoxButton( pEntry, eButtonKind, 0,
-                                               pCheckButtonData ) );
-        pEntry->AddItem( new SvLBoxContextBmp(pEntry, 0, rCollImg, rExpImg, true) );
-        pEntry->AddItem( new SvLBoxFontString( pEntry, 0, rEntryText, maEntryFont, mpEntryColor ) );
+            pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(
+                        pEntry, eButtonKind, 0, pCheckButtonData)));
+        pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
+                        pEntry, 0, rCollImg, rExpImg, true)));
+        pEntry->AddItem(std::unique_ptr<SvLBoxFontString>(new SvLBoxFontString(
+                        pEntry, 0, rEntryText, maEntryFont, mpEntryColor)));
     }
     else
         SvTreeListBox::InitEntry( pEntry, rEntryText, rCollImg, rExpImg,

@@ -911,11 +911,13 @@ void SfxAcceleratorConfigPage::CreateCustomItems(SvTreeListEntry* pEntry,
                                                  const OUString& sCol1 ,
                                                  const OUString& sCol2)
 {
-    SfxAccCfgLBoxString_Impl* pStringItem = new SfxAccCfgLBoxString_Impl(pEntry, 0, sCol1);
-    pEntry->ReplaceItem(pStringItem, 1);
+    std::unique_ptr<SfxAccCfgLBoxString_Impl> pStringItem1(
+            new SfxAccCfgLBoxString_Impl(pEntry, 0, sCol1));
+    pEntry->ReplaceItem(std::move(pStringItem1), 1);
 
-    pStringItem = new SfxAccCfgLBoxString_Impl(pEntry, 0, sCol2);
-    pEntry->ReplaceItem(pStringItem, 2);
+    std::unique_ptr<SfxAccCfgLBoxString_Impl> pStringItem2(
+            new SfxAccCfgLBoxString_Impl(pEntry, 0, sCol2));
+    pEntry->ReplaceItem(std::move(pStringItem2), 2);
 }
 
 

@@ -1758,21 +1758,19 @@ void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
     const OUString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp,
     SvLBoxButtonKind eButtonKind)
 {
-    SvLBoxString* pString;
-    SvLBoxContextBmp* pContextBmp;
-
     if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
-        SvLBoxButton* pButton= new SvLBoxButton( pEntry,eButtonKind,0,pCheckButtonData );
-        pEntry->AddItem( pButton );
+        std::unique_ptr<SvLBoxButton> pButton(
+                new SvLBoxButton(pEntry, eButtonKind, 0, pCheckButtonData));
+        pEntry->AddItem(std::move(pButton));
     }
 
-    pContextBmp= new SvLBoxContextBmp(
-        pEntry,0, aCollEntryBmp,aExpEntryBmp, mbContextBmpExpanded);
-    pEntry->AddItem( pContextBmp );
+    std::unique_ptr<SvLBoxContextBmp> pContextBmp(new SvLBoxContextBmp(
+        pEntry,0, aCollEntryBmp,aExpEntryBmp, mbContextBmpExpanded));
+    pEntry->AddItem(std::move(pContextBmp));
 
-    pString = new SvLBoxString( pEntry, 0, aStr );
-    pEntry->AddItem( pString );
+    std::unique_ptr<SvLBoxString> pString(new SvLBoxString(pEntry, 0, aStr));
+    pEntry->AddItem(std::move(pString));
 }
 
 OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const

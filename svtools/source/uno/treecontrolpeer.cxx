@@ -237,11 +237,14 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
     {
         Image aImage;
         pEntry = new UnoTreeListEntry( xNode, this );
-        ImplContextGraphicItem* pContextBmp= new ImplContextGraphicItem(pEntry, 0, aImage, aImage, true);
+        {
+            std::unique_ptr<ImplContextGraphicItem> pContextBmp(
+                new ImplContextGraphicItem(pEntry, 0, aImage, aImage, true));
 
-        pEntry->AddItem( pContextBmp );
+            pEntry->AddItem(std::move(pContextBmp));
+        }
 
-        UnoTreeListItem * pUnoItem = new UnoTreeListItem( pEntry );
+        std::unique_ptr<UnoTreeListItem> pUnoItem(new UnoTreeListItem(pEntry));
 
         if( !xNode->getNodeGraphicURL().isEmpty() )
         {
@@ -252,7 +255,7 @@ UnoTreeListEntry* TreeControlPeer::createEntry( const Reference< XTreeNode >& xN
             mpTreeImpl->AdjustEntryHeight( aNodeImage );
         }
 
-        pEntry->AddItem( pUnoItem );
+        pEntry->AddItem(std::move(pUnoItem));
 
         mpTreeImpl->insert( pEntry, pParent, nPos );
 

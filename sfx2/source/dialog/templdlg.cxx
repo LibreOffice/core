@@ -643,8 +643,9 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox* pBox,
 
     if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
     {
-        StyleLBoxString* pStyleLBoxString = new StyleLBoxString(pTreeListEntry, 0, pEntry->getName(), eStyleFamily);
-        pTreeListEntry->ReplaceItem(pStyleLBoxString, 1);
+        std::unique_ptr<StyleLBoxString> pStyleLBoxString(
+            new StyleLBoxString(pTreeListEntry, 0, pEntry->getName(), eStyleFamily));
+        pTreeListEntry->ReplaceItem(std::move(pStyleLBoxString), 1);
     }
 
     pBox->GetModel()->InvalidateEntry(pTreeListEntry);
@@ -1263,8 +1264,9 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
                     SvTreeListEntry* pTreeListEntry = aFmtLb->InsertEntry(aStrings[nPos], 0, false, nPos);
                     if (officecfg::Office::Common::StylesAndFormatting::Preview::get())
                     {
-                        StyleLBoxString* pStyleLBoxString = new StyleLBoxString(pTreeListEntry, 0, aStrings[nPos], eFam);
-                        pTreeListEntry->ReplaceItem(pStyleLBoxString, 1);
+                        std::unique_ptr<StyleLBoxString> pStyleLBoxString(
+                            new StyleLBoxString(pTreeListEntry, 0, aStrings[nPos], eFam));
+                        pTreeListEntry->ReplaceItem(std::move(pStyleLBoxString), 1);
                     }
                     aFmtLb->GetModel()->InvalidateEntry(pTreeListEntry);
                 }

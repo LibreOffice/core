@@ -409,7 +409,8 @@ void OTableTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const OUString& _rSt
     size_t nTextPos = _pEntry->GetPos(pTextItem);
     OSL_ENSURE(SvTreeListEntry::ITEM_NOT_FOUND != nTextPos, "OTableTreeListBox::InitEntry: no text item pos!");
 
-    _pEntry->ReplaceItem(new OBoldListboxString(_pEntry, 0, _rString), nTextPos);
+    _pEntry->ReplaceItem(std::unique_ptr<OBoldListboxString>(
+                new OBoldListboxString(_pEntry, 0, _rString)), nTextPos);
 }
 
 SvTreeListEntry* OTableTreeListBox::implAddEntry(

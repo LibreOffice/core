@@ -1813,11 +1813,15 @@ SvTreeListEntry* SvxLinguTabPage::CreateEntry( OUString& rTxt, sal_uInt16 nCol )
 
     OUString sEmpty;
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(
+            pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
     if (CBCOL_SECOND == nCol)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // empty column
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));
-    pEntry->AddItem( new BrwString_Impl( pEntry, 0, rTxt ) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
+            pEntry, 0, sEmpty)));    // empty column
+    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
+            pEntry, 0, Image(), Image(), false)));
+    pEntry->AddItem(std::unique_ptr<BrwString_Impl>(new BrwString_Impl(
+            pEntry, 0, rTxt)));
 
     return pEntry;
 }
@@ -1944,11 +1948,11 @@ SvTreeListEntry* SvxEditModulesDlg::CreateEntry( OUString& rTxt, sal_uInt16 nCol
 
     OUString sEmpty;
     if (CBCOL_FIRST == nCol)
-        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
     if (CBCOL_SECOND == nCol)
-        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // empty column
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));
-    pEntry->AddItem( new BrwStringDic_Impl( pEntry, 0, rTxt ) );
+        pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pEntry, 0, sEmpty)));    // empty column
+    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false)));
+    pEntry->AddItem(std::unique_ptr<BrwStringDic_Impl>(new BrwStringDic_Impl(pEntry, 0, rTxt)));
 
     return pEntry;
 }

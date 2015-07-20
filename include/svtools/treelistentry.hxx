@@ -92,8 +92,8 @@ public:
     // MAY ONLY BE CALLED IF THE ENTRY HAS NOT YET BEEN INSERTED INTO
     // THE MODEL, AS OTHERWISE NO VIEW-DEPENDENT DATA ARE ALLOCATED
     // FOR THE ITEM!
-    void        AddItem( SvLBoxItem* pItem );
-    void ReplaceItem( SvLBoxItem* pNewItem, size_t nPos );
+    void        AddItem(std::unique_ptr<SvLBoxItem> pItem);
+    void ReplaceItem(std::unique_ptr<SvLBoxItem> pNewItem, size_t nPos);
     const SvLBoxItem& GetItem( size_t nPos ) const;
     SvLBoxItem& GetItem( size_t nPos );
     const SvLBoxItem* GetFirstItem( sal_uInt16 nId ) const;

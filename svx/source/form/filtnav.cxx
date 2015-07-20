@@ -1411,15 +1411,16 @@ void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
                                   SvLBoxButtonKind eButtonKind)
 {
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
-    SvLBoxString* pString = NULL;
+    std::unique_ptr<SvLBoxString> pString;
 
     if (static_cast<FmFilterData*>(pEntry->GetUserData())->ISA(FmFilterItem))
-        pString = new FmFilterString(pEntry, 0, rStr, static_cast<FmFilterItem*>(pEntry->GetUserData())->GetFieldName());
+        pString.reset(new FmFilterString(pEntry, 0, rStr,
+            static_cast<FmFilterItem*>(pEntry->GetUserData())->GetFieldName()));
     else if (static_cast<FmFilterData*>(pEntry->GetUserData())->ISA(FmFilterItems))
-        pString = new FmFilterItemsString(pEntry, 0, rStr );
+        pString.reset(new FmFilterItemsString(pEntry, 0, rStr));
 
     if (pString)
-        pEntry->ReplaceItem( pString, 1 );
+        pEntry->ReplaceItem(std::move(pString), 1 );
 }
 
 

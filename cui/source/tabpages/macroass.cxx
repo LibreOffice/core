@@ -333,7 +333,7 @@ IMPL_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     }
 
     mpImpl->pEventLB->SetUpdateMode( false );
-    pE->ReplaceItem( new SvLBoxString( pE, 0, sScriptURI ), LB_MACROS_ITEMPOS );
+    pE->ReplaceItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(pE, 0, sScriptURI)), LB_MACROS_ITEMPOS);
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
     rListBox.MakeVisible( pE );
@@ -426,7 +426,8 @@ void _SfxMacroTabPage::FillEvents()
 
             if( sOld != sNew )
             {
-                pE->ReplaceItem( new SvLBoxString( pE, 0, sNew ), LB_MACROS_ITEMPOS );
+                pE->ReplaceItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
+                                    pE, 0, sNew)), LB_MACROS_ITEMPOS);
                 rListBox.GetModel()->InvalidateEntry( pE );
             }
         }

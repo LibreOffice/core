@@ -343,18 +343,22 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
 {
     if (nTreeFlags & SvTreeFlags::CHKBTN)
     {
-        pEntry->AddItem(new SvLBoxButton(pEntry, eButtonKind, 0, pCheckButtonData));
+        pEntry->AddItem(std::unique_ptr<SvLBoxButton>(
+                new SvLBoxButton(pEntry, eButtonKind, 0, pCheckButtonData)));
     }
 
-    pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, rColl, rExp, true));
+    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
+                new SvLBoxContextBmp(pEntry, 0, rColl, rExp, true)));
 
     // the type of the change
     assert((rStr.isEmpty() && !!maEntryImage) || (!rStr.isEmpty() && !maEntryImage));
 
     if (rStr.isEmpty())
-        pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, maEntryImage, maEntryImage, true));
+        pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
+                        pEntry, 0, maEntryImage, maEntryImage, true)));
     else
-        pEntry->AddItem(new SvLBoxColorString(pEntry, 0, rStr, maEntryColor));
+        pEntry->AddItem(std::unique_ptr<SvLBoxColorString>(
+                    new SvLBoxColorString(pEntry, 0, rStr, maEntryColor)));
 
     // the change tracking entries
     sal_Int32 nIndex = 0;
@@ -362,7 +366,8 @@ void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     for (sal_uInt16 nToken = 0; nToken < nCount; nToken++)
     {
         const OUString aToken = GetToken(maEntryString, nIndex);
-        pEntry->AddItem(new SvLBoxColorString(pEntry, 0, aToken, maEntryColor));
+        pEntry->AddItem(std::unique_ptr<SvLBoxColorString>(
+                    new SvLBoxColorString(pEntry, 0, aToken, maEntryColor)));
     }
 }
 

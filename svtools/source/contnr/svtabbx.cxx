@@ -83,8 +83,8 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
         const OUString aToken = GetToken(aCurEntry, nIndex);
-        SvLBoxString* pStr = new SvLBoxString( pEntry, 0, aToken );
-        pEntry->AddItem( pStr );
+        std::unique_ptr<SvLBoxString> pStr(new SvLBoxString(pEntry, 0, aToken));
+        pEntry->AddItem(std::move(pStr));
     }
 }
 SvTabListBox::SvTabListBox( vcl::Window* pParent, WinBits nBits )

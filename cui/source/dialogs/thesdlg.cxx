@@ -230,10 +230,13 @@ SvTreeListEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const OUS
     {
         aText = OUString::number( nVal ) + ". ";
     }
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, OUString() ) ); // add empty column
+    pEntry->AddItem(std::unique_ptr<SvLBoxString>(
+        new SvLBoxString(pEntry, 0, OUString()))); // add empty column
     aText += rText;
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false ) );  // otherwise crash
-    pEntry->AddItem( new AlternativesString( *this, pEntry, 0, aText ) );
+    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(
+        new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false))); // otherwise crash
+    pEntry->AddItem(std::unique_ptr<AlternativesString>(
+        new AlternativesString( *this, pEntry, 0, aText)));
 
     SetExtraData( pEntry, AlternativesExtraData( rText, bIsHeader ) );
     GetModel()->Insert( pEntry );

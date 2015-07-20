@@ -121,17 +121,18 @@ SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(OUString& rFont1, OUString& rF
     if( !pCheckButtonData )
         pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));    // Sonst Puff!
+    pEntry->AddItem(std::unique_ptr<SvLBoxContextBmp>(new SvLBoxContextBmp(
+            pEntry, 0, Image(), Image(), false))); // otherwise boom!
 
-    pEntry->AddItem( new SvLBoxButton( pEntry,
-                                           SvLBoxButtonKind_enabledCheckbox, 0,
-                                           pCheckButtonData ) );
-    pEntry->AddItem( new SvLBoxButton( pEntry,
-                                           SvLBoxButtonKind_enabledCheckbox, 0,
-                                           pCheckButtonData ) );
+    pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry,
+           SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
+    pEntry->AddItem(std::unique_ptr<SvLBoxButton>(new SvLBoxButton(pEntry,
+           SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData)));
 
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, rFont1 ) );
-    pEntry->AddItem( new SvLBoxString( pEntry, 0, rFont2 ) );
+    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
+                    pEntry, 0, rFont1)));
+    pEntry->AddItem(std::unique_ptr<SvLBoxString>(new SvLBoxString(
+                    pEntry, 0, rFont2)));
 
     return pEntry;
 }
