@@ -2175,7 +2175,7 @@ SbJScriptMethod::~SbJScriptMethod()
 {}
 
 
-SbObjModule::SbObjModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible )
+SbObjModule::SbObjModule( const OUString& rName, const css::script::ModuleInfo& mInfo, bool bIsVbaCompatible )
     : SbModule( rName, bIsVbaCompatible )
 {
     SetModuleType( mInfo.ModuleType );
@@ -2201,7 +2201,7 @@ SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException,
         return;
     pDocObject = new SbUnoObject( GetName(), aObj );
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( aObj, com::sun::star::uno::UNO_QUERY_THROW );
+    css::uno::Reference< css::lang::XServiceInfo > xServiceInfo( aObj, css::uno::UNO_QUERY_THROW );
     if( xServiceInfo->supportsService( "ooo.vba.excel.Worksheet" ) )
     {
         SetClassName( "Worksheet" );
@@ -2441,7 +2441,7 @@ public:
     }
 };
 
-SbUserFormModule::SbUserFormModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsCompat )
+SbUserFormModule::SbUserFormModule( const OUString& rName, const css::script::ModuleInfo& mInfo, bool bIsCompat )
     : SbObjModule( rName, mInfo, bIsCompat )
     , m_mInfo( mInfo )
     , mbInit( false )
@@ -2557,7 +2557,7 @@ SbUserFormModuleInstance* SbUserFormModule::CreateInstance()
 }
 
 SbUserFormModuleInstance::SbUserFormModuleInstance( SbUserFormModule* pParentModule,
-    const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat )
+    const OUString& rName, const css::script::ModuleInfo& mInfo, bool bIsVBACompat )
         : SbUserFormModule( rName, mInfo, bIsVBACompat )
         , m_pParentModule( pParentModule )
 {

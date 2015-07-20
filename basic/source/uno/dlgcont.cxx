@@ -349,7 +349,7 @@ const char aResourceFileNameBase[] = "DialogStrings";
 const char aResourceFileCommentBase[] = "# Strings for Dialog Library ";
 
 // Resource handling
-Reference< ::com::sun::star::resource::XStringResourcePersistence >
+Reference< css::resource::XStringResourcePersistence >
     SfxDialogLibraryContainer::implCreateStringResource( SfxDialogLibrary* pDialogLibrary )
 {
     Reference< resource::XStringResourcePersistence > xRet;
@@ -543,8 +543,7 @@ void SfxDialogLibrary::storeResourcesToURL( const OUString& URL,
     }
 }
 
-void SfxDialogLibrary::storeResourcesToStorage( const ::com::sun::star::uno::Reference
-    < ::com::sun::star::embed::XStorage >& xStorage )
+void SfxDialogLibrary::storeResourcesToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage )
 {
     OUString aComment(aResourceFileCommentBase);
     aComment += m_aName;
@@ -568,7 +567,7 @@ Reference< resource::XStringResourceResolver >
     return xRet;
 }
 
-bool SfxDialogLibrary::containsValidDialog( const ::com::sun::star::uno::Any& aElement )
+bool SfxDialogLibrary::containsValidDialog( const css::uno::Any& aElement )
 {
     Reference< XInputStreamProvider > xISP;
     aElement >>= xISP;
@@ -582,9 +581,9 @@ bool SAL_CALL SfxDialogLibrary::isLibraryElementValid(const css::uno::Any& rElem
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation(::com::sun::star::uno::XComponentContext*,
-                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation(css::uno::XComponentContext*,
+                                                           css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new basic::SfxDialogLibraryContainer());
 }

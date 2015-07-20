@@ -549,7 +549,7 @@ void setStreamKey( uno::Reference< io::XStream > xStream, const OUString& aPass 
 bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
                                                           const OUString& aName,
                                                           const uno::Reference< embed::XStorage >& xStorage,
-                                                          const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
+                                                          const css::uno::Reference< css::task::XInteractionHandler >& xHandler )
 {
     OUString aDummyLocation;
     Reference< XSimpleFileAccess3 > xDummySFA;
@@ -557,10 +557,10 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
 }
 
 bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
-                                                          const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                                                          const css::uno::Reference< css::embed::XStorage >& xStorage,
                                                           const OUString& aTargetURL,
                                                           const Reference< XSimpleFileAccess3 >& rToUseSFI,
-                                                          const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
+                                                          const css::uno::Reference< css::task::XInteractionHandler >& xHandler )
 {
     bool bExport = !aTargetURL.isEmpty();
 
@@ -801,7 +801,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                         }
                         xEncr->setEncryptionPassword( pLib->maPassword );
                     }
-                    catch(const ::com::sun::star::packages::WrongPasswordException& )
+                    catch(const css::packages::WrongPasswordException& )
                     {
                         xSourceStream = xElementRootStorage->openEncryptedStreamElement(
                                 aSourceStreamName,
@@ -1232,8 +1232,8 @@ void SfxScriptLibrary::storeResourcesAsURL
     (void)NewName;
 }
 
-void SfxScriptLibrary::storeResourcesToStorage( const ::com::sun::star::uno::Reference
-    < ::com::sun::star::embed::XStorage >& xStorage )
+void SfxScriptLibrary::storeResourcesToStorage( const css::uno::Reference
+    < css::embed::XStorage >& xStorage )
 {
     // No resources
     (void)xStorage;
@@ -1301,9 +1301,9 @@ void SAL_CALL SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
 }   // namespace basic
 
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation(::com::sun::star::uno::XComponentContext*,
-                                                                 ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation(css::uno::XComponentContext*,
+                                                                 css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new basic::SfxScriptLibraryContainer());
 }

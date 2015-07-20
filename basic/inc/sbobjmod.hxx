@@ -38,21 +38,21 @@ protected:
 
 public:
     TYPEINFO_OVERRIDE();
-    SbObjModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
+    SbObjModule( const OUString& rName, const css::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
     virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) SAL_OVERRIDE;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     using SbxValue::GetObject;
     SbxVariable* GetObject();
-    void SetUnoObject( const com::sun::star::uno::Any& aObj )throw ( com::sun::star::uno::RuntimeException, std::exception ) ;
+    void SetUnoObject( const css::uno::Any& aObj )throw ( css::uno::RuntimeException, std::exception ) ;
 };
 
 class FormObjEventListenerImpl;
 
 class BASIC_DLLPUBLIC SbUserFormModule : public SbObjModule
 {
-    com::sun::star::script::ModuleInfo m_mInfo;
+    css::script::ModuleInfo m_mInfo;
     ::rtl::Reference< FormObjEventListenerImpl > m_DialogListener;
     css::uno::Reference<css::awt::XDialog> m_xDialog;
     css::uno::Reference<css::frame::XModel> m_xModel;
@@ -62,7 +62,7 @@ class BASIC_DLLPUBLIC SbUserFormModule : public SbObjModule
     void InitObject();
 public:
     TYPEINFO_OVERRIDE();
-    SbUserFormModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
+    SbUserFormModule( const OUString& rName, const css::script::ModuleInfo& mInfo, bool bIsVBACompat );
     virtual ~SbUserFormModule();
     virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) SAL_OVERRIDE;
     void ResetApiObj( bool bTriggerTerminateEvent = true );
@@ -91,7 +91,7 @@ class BASIC_DLLPUBLIC SbUserFormModuleInstance : public SbUserFormModule
 
 public:
     SbUserFormModuleInstance( SbUserFormModule* pParentModule, const OUString& rName,
-        const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
+        const css::script::ModuleInfo& mInfo, bool bIsVBACompat );
 
     virtual bool IsClass( const OUString& ) const SAL_OVERRIDE;
     virtual SbxVariable* Find( const OUString& rName, SbxClassType t ) SAL_OVERRIDE;

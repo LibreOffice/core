@@ -26,7 +26,7 @@ namespace
         lclTransliterationWrapper()
             : m_aTransliteration(
                 comphelper::getProcessComponentContext(),
-                com::sun::star::i18n::TransliterationModules_IGNORE_CASE )
+                css::i18n::TransliterationModules_IGNORE_CASE )
         {
             const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
             m_aTransliteration.loadModuleIfNeeded( eOfficeLanguage );

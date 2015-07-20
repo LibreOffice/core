@@ -129,7 +129,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     bSingleLineIf =
     bCodeCompleting =
     bExplicit = false;
-    bClassModule = ( pm->GetModuleType() == com::sun::star::script::ModuleType::CLASS );
+    bClassModule = ( pm->GetModuleType() == css::script::ModuleType::CLASS );
     OSL_TRACE("Parser - %s, bClassModule %d", OUStringToOString( pm->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), bClassModule );
     pPool    = &aPublics;
     for( short i = 0; i < 26; i++ )
@@ -806,7 +806,7 @@ void SbiParser::Option()
 
         case CLASSMODULE:
             bClassModule = true;
-            aGen.GetModule().SetModuleType( com::sun::star::script::ModuleType::CLASS );
+            aGen.GetModule().SetModuleType( css::script::ModuleType::CLASS );
             break;
         case VBASUPPORT: // Option VBASupport used to override the module mode ( in fact this must reset the mode
             if( Next() == NUMBER )

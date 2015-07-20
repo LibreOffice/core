@@ -94,11 +94,11 @@ size_t SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
 void SbPropertyValues::setPropertyValue(
                     const OUString& aPropertyName,
                     const Any& aValue)
-                    throw (::com::sun::star::beans::UnknownPropertyException,
-                    ::com::sun::star::beans::PropertyVetoException,
-                    ::com::sun::star::lang::IllegalArgumentException,
-                    ::com::sun::star::lang::WrappedTargetException,
-                    ::com::sun::star::uno::RuntimeException, std::exception)
+                    throw (css::beans::UnknownPropertyException,
+                    css::beans::PropertyVetoException,
+                    css::lang::IllegalArgumentException,
+                    css::lang::WrappedTargetException,
+                    css::uno::RuntimeException, std::exception)
 {
     size_t const nIndex = GetIndex_Impl( aPropertyName );
     PropertyValue & rPropVal = m_aPropVals[nIndex];
@@ -109,9 +109,9 @@ void SbPropertyValues::setPropertyValue(
 
 Any SbPropertyValues::getPropertyValue(
                     const OUString& aPropertyName)
-                    throw(::com::sun::star::beans::UnknownPropertyException,
-                    ::com::sun::star::lang::WrappedTargetException,
-                    ::com::sun::star::uno::RuntimeException, std::exception)
+                    throw(css::beans::UnknownPropertyException,
+                    css::lang::WrappedTargetException,
+                    css::uno::RuntimeException, std::exception)
 {
     size_t const nIndex = GetIndex_Impl( aPropertyName );
     return m_aPropVals[nIndex].Value;
@@ -159,7 +159,7 @@ void SbPropertyValues::removeVetoableChangeListener(
 
 
 
-Sequence< PropertyValue > SbPropertyValues::getPropertyValues() throw (::com::sun::star::uno::RuntimeException, std::exception)
+Sequence< PropertyValue > SbPropertyValues::getPropertyValues() throw (css::uno::RuntimeException, std::exception)
 {
     Sequence<PropertyValue> aRet( m_aPropVals.size() );
     for (size_t n = 0; n < m_aPropVals.size(); ++n)
@@ -170,11 +170,11 @@ Sequence< PropertyValue > SbPropertyValues::getPropertyValues() throw (::com::su
 
 
 void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPropertyValues )
-                     throw (::com::sun::star::beans::UnknownPropertyException,
-                     ::com::sun::star::beans::PropertyVetoException,
-                     ::com::sun::star::lang::IllegalArgumentException,
-                     ::com::sun::star::lang::WrappedTargetException,
-                     ::com::sun::star::uno::RuntimeException, std::exception)
+                     throw (css::beans::UnknownPropertyException,
+                     css::beans::PropertyVetoException,
+                     css::lang::IllegalArgumentException,
+                     css::lang::WrappedTargetException,
+                     css::uno::RuntimeException, std::exception)
 {
     if ( !m_aPropVals.empty() )
         throw IllegalArgumentException();

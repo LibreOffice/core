@@ -76,10 +76,10 @@ static Reference< XCalendar4 > getLocaleCalendar()
         xCalendar = LocaleCalendar2::create(xContext);
     }
 
-    static com::sun::star::lang::Locale aLastLocale;
+    static css::lang::Locale aLastLocale;
     static bool bNeedsInit = true;
 
-    com::sun::star::lang::Locale aLocale = Application::GetSettings().GetLanguageTag().getLocale();
+    css::lang::Locale aLocale = Application::GetSettings().GetLanguageTag().getLocale();
     bool bNeedsReload = false;
     if( bNeedsInit )
     {

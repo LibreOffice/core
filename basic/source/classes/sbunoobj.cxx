@@ -2254,7 +2254,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             const ParamInfo& rInfo = pParamInfos[i];
                             const Reference< XIdlClass >& rxClass = rInfo.aType;
 
-                            com::sun::star::uno::Type aType( rxClass->getTypeClass(), rxClass->getName() );
+                            css::uno::Type aType( rxClass->getTypeClass(), rxClass->getName() );
 
                             // ATTENTION: Don't forget for Sbx-Parameter the offset!
                             pAnyArgs[i] = sbxToUnoValue( pParams->Get( (sal_uInt16)(i+1) ), aType );
@@ -2670,7 +2670,7 @@ SbxVariable* SbUnoObject::Find( const OUString& rName, SbxClassType t )
 
                 SbxDataType eRealSbxType = ( ( rProp.Attributes & PropertyAttribute::MAYBEVOID ) ? unoToSbxType( rProp.Type.getTypeClass() ) : eSbxType );
                 // create the property and superimpose it
-                SbUnoProperty* pProp = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, 0, false, ( rProp.Type.getTypeClass() ==  com::sun::star::uno::TypeClass_STRUCT  ) );
+                SbUnoProperty* pProp = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, 0, false, ( rProp.Type.getTypeClass() ==  css::uno::TypeClass_STRUCT  ) );
                 SbxVariableRef xVarRef = pProp;
                 QuickInsert( static_cast<SbxVariable*>(xVarRef) );
                 pRes = xVarRef;
@@ -2852,7 +2852,7 @@ void SbUnoObject::implCreateAll()
 
         SbxDataType eRealSbxType = ( ( rProp.Attributes & PropertyAttribute::MAYBEVOID ) ? unoToSbxType( rProp.Type.getTypeClass() ) : eSbxType );
         // Create property and superimpose it
-        SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, i, false, ( rProp.Type.getTypeClass() == com::sun::star::uno::TypeClass_STRUCT   ) );
+        SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, i, false, ( rProp.Type.getTypeClass() == css::uno::TypeClass_STRUCT   ) );
         QuickInsert( static_cast<SbxVariable*>(xVarRef) );
     }
 
@@ -3699,7 +3699,7 @@ void SbUnoService::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             Reference< XTypeDescription > xParamTypeDesc = xParam->getType();
                             if( !xParamTypeDesc.is() )
                                 continue;
-                            com::sun::star::uno::Type aType( xParamTypeDesc->getTypeClass(), xParamTypeDesc->getName() );
+                            css::uno::Type aType( xParamTypeDesc->getTypeClass(), xParamTypeDesc->getName() );
 
                             // sbx parameter needs offset 1
                             pAnyArgs[i] = sbxToUnoValue( pParams->Get( iSbx ), aType );
@@ -4867,8 +4867,8 @@ SbxVariable* SbUnoStructRefObject::Find( const OUString& rName, SbxClassType t )
             SbxDataType eRealSbxType = eSbxType;
             Property aProp;
             aProp.Name = rName;
-            aProp.Type = com::sun::star::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
-            SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() == com::sun::star::uno::TypeClass_STRUCT) );
+            aProp.Type = css::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
+            SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() == css::uno::TypeClass_STRUCT) );
             SbxVariableRef xVarRef = pProp;
             QuickInsert( static_cast<SbxVariable*>(xVarRef) );
             pRes = xVarRef;
@@ -4927,8 +4927,8 @@ void SbUnoStructRefObject::implCreateAll()
         SbxDataType eRealSbxType = eSbxType;
         Property aProp;
         aProp.Name = rName;
-        aProp.Type = com::sun::star::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
-        SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() == com::sun::star::uno::TypeClass_STRUCT) );
+        aProp.Type = css::uno::Type( it->second->getTypeClass(), it->second->getTypeName() );
+        SbUnoProperty* pProp = new SbUnoProperty( rName, eSbxType, eRealSbxType, aProp, 0, false, ( aProp.Type.getTypeClass() == css::uno::TypeClass_STRUCT) );
         SbxVariableRef xVarRef = pProp;
         QuickInsert( static_cast<SbxVariable*>(xVarRef) );
     }

@@ -1557,9 +1557,9 @@ void SbiRuntime::StepLIKE()
     OUString pattern = VBALikeToRegexp(refVar1->GetOUString());
     OUString value = refVar2->GetOUString();
 
-    com::sun::star::util::SearchOptions aSearchOpt;
+    css::util::SearchOptions aSearchOpt;
 
-    aSearchOpt.algorithmType = com::sun::star::util::SearchAlgorithms_REGEXP;
+    aSearchOpt.algorithmType = css::util::SearchAlgorithms_REGEXP;
 
     aSearchOpt.Locale = Application::GetSettings().GetLanguageTag().getLocale();
     aSearchOpt.searchString = pattern;
@@ -1572,7 +1572,7 @@ void SbiRuntime::StepLIKE()
     }
     if( bTextMode )
     {
-        aSearchOpt.transliterateFlags |= com::sun::star::i18n::TransliterationModules_IGNORE_CASE;
+        aSearchOpt.transliterateFlags |= css::i18n::TransliterationModules_IGNORE_CASE;
     }
     SbxVariable* pRes = new SbxVariable;
     utl::TextSearch aSearch(aSearchOpt);

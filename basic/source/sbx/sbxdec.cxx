@@ -43,7 +43,7 @@ SbxDecimal::SbxDecimal( const SbxDecimal& rDec )
 }
 
 SbxDecimal::SbxDecimal
-    ( const com::sun::star::bridge::oleautomation::Decimal& rAutomationDec )
+    ( const css::bridge::oleautomation::Decimal& rAutomationDec )
 {
 #ifdef WIN32
     maDec.scale = rAutomationDec.Scale;
@@ -58,7 +58,7 @@ SbxDecimal::SbxDecimal
 }
 
 void SbxDecimal::fillAutomationDecimal
-    ( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec )
+    ( css::bridge::oleautomation::Decimal& rAutomationDec )
 {
 #ifdef WIN32
     rAutomationDec.Scale = maDec.scale;

@@ -26,17 +26,17 @@
 class SbxErrObject : public SbUnoObject
 {
     class ErrObject* m_pErrObject;
-    com::sun::star::uno::Reference< ooo::vba::XErrObject > m_xErr;
+    css::uno::Reference< ooo::vba::XErrObject > m_xErr;
 
-    SbxErrObject( const OUString& aName_, const com::sun::star::uno::Any& aUnoObj_ );
+    SbxErrObject( const OUString& aName_, const css::uno::Any& aUnoObj_ );
     virtual ~SbxErrObject();
 
 public:
     static SbxVariableRef getErrObject();
-    static com::sun::star::uno::Reference< ooo::vba::XErrObject > getUnoErrObject();
+    static css::uno::Reference< ooo::vba::XErrObject > getUnoErrObject();
 
     void setNumberAndDescription( ::sal_Int32 _number, const OUString& _description )
-        throw (com::sun::star::uno::RuntimeException);
+        throw (css::uno::RuntimeException);
 };
 #endif
 
