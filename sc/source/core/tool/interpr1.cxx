@@ -801,9 +801,10 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
     return false;
 }
 
-double ScInterpreter::Compare()
+double ScInterpreter::Compare( ScQueryOp eOp )
 {
     sc::Compare aComp;
+    aComp.meOp = eOp;
     aComp.mbIgnoreCase = pDok->GetDocOptions().IsIgnoreCase();
     for( short i = 1; i >= 0; i-- )
     {
@@ -888,7 +889,7 @@ double ScInterpreter::Compare()
     if( nGlobalError )
         return 0;
     nCurFmtType = nFuncFmtType = css::util::NumberFormat::LOGICAL;
-    return sc::CompareFunc(aComp.maCells[0], aComp.maCells[1], aComp.mbIgnoreCase);
+    return sc::CompareFunc(aComp);
 }
 
 sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pOptions )
@@ -997,8 +998,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
                             rCell.mbEmpty = false;
                         }
                     }
-                    aRes.mpMat->PutDouble(
-                        sc::CompareFunc(aComp.maCells[0], aComp.maCells[1], aComp.mbIgnoreCase, pOptions), j, k);
+                    aRes.mpMat->PutDouble( sc::CompareFunc( aComp, pOptions), j, k);
                 }
                 else
                     aRes.mpMat->PutError( errNoValue, j, k);
@@ -1088,7 +1088,7 @@ void ScInterpreter::ScEqual()
         PushMatrix(aMat);
     }
     else
-        PushInt( int(Compare() == 0) );
+        PushInt( int(Compare( SC_EQUAL) == 0) );
 }
 
 void ScInterpreter::ScNotEqual()
@@ -1105,7 +1105,7 @@ void ScInterpreter::ScNotEqual()
         PushMatrix(aMat);
     }
     else
-        PushInt( int(Compare() != 0) );
+        PushInt( int(Compare( SC_NOT_EQUAL) != 0) );
 }
 
 void ScInterpreter::ScLess()
@@ -1122,7 +1122,7 @@ void ScInterpreter::ScLess()
         PushMatrix(aMat);
     }
     else
-        PushInt( int(Compare() < 0) );
+        PushInt( int(Compare( SC_LESS) < 0) );
 }
 
 void ScInterpreter::ScGreater()
@@ -1139,7 +1139,7 @@ void ScInterpreter::ScGreater()
         PushMatrix(aMat);
     }
     else
-        PushInt( int(Compare() > 0) );
+        PushInt( int(Compare( SC_GREATER) > 0) );
 }
 
 void ScInterpreter::ScLessEqual()
@@ -1156,7 +1156,7 @@ void ScInterpreter::ScLessEqual()
         PushMatrix(aMat);
     }
     else
-        PushInt( int(Compare() <= 0) );
+        PushInt( int(Compare( SC_LESS_EQUAL) <= 0) );
 }
 
 void ScInterpreter::ScGreaterEqual()
@@ -1173,7 +1173,7 @@ void ScInterpreter::ScGreaterEqual()
         PushMatrix(aMat);
     }
     else
-        PushInt( int(Compare() >= 0) );
+        PushInt( int(Compare( SC_GREATER_EQUAL) >= 0) );
 }
 
 void ScInterpreter::ScAnd()
