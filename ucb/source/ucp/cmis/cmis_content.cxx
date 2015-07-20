@@ -253,6 +253,32 @@ namespace
 
         return property;
     }
+
+    uno::Sequence< uno::Any > generateErrorArguments( const cmis::URL & rURL )
+    {
+        uno::Sequence< uno::Any > aArguments(3);
+
+        size_t i = 0;
+        aArguments[i++] <<= beans::PropertyValue(
+            OUString( "Binding URL" ),
+            - 1,
+            uno::makeAny( rURL.getBindingUrl() ),
+            beans::PropertyState_DIRECT_VALUE );
+
+        aArguments[i++] <<= beans::PropertyValue(
+            OUString( "Username" ),
+            -1,
+            uno::makeAny( rURL.getUsername() ),
+            beans::PropertyState_DIRECT_VALUE );
+
+        aArguments[i++] <<= beans::PropertyValue(
+            OUString( "Repository Id" ),
+            -1,
+            uno::makeAny( rURL.getRepositoryId() ),
+            beans::PropertyState_DIRECT_VALUE );
+
+        return aArguments;
+    }
 }
 
 namespace cmis
@@ -366,12 +392,19 @@ namespace cmis
                 m_pSession = libcmis::SessionFactory::createSession(
                         OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
                         rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ), false, oauth2Data );
-                if ( m_pSession == NULL )
+                if ( m_pSession == nullptr )
                     ucbhelper::cancelCommandExecution(
                                         ucb::IOErrorCode_INVALID_DEVICE,
-                                        uno::Sequence< uno::Any >( 0 ),
+                                        generateErrorArguments( m_aURL ),
                                         xEnv,
                                         OUString( ) );
+                if ( m_pSession->getRepository() == nullptr )
+                    ucbhelper::cancelCommandExecution(
+                                        ucb::IOErrorCode_INVALID_DEVICE,
+                                        generateErrorArguments( m_aURL ),
+                                        xEnv,
+                                        OUString( "error accessing a repository" ) );
+
                 m_pProvider->registerSession( sSessionId, m_pSession );
             }
             else
