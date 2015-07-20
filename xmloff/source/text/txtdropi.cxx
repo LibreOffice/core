@@ -127,6 +127,68 @@ void XMLTextDropCapImportContext::ProcessAttrs(
     aWholeWordProp.maValue.setValue( &bWholeWord, cppu::UnoType<bool>::get() );
 }
 
+void XMLTextDropCapImportContext::ProcessAttrs(
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    SvXMLTokenMap aTokenMap( aDropAttrTokenMap );
+
+    DropCapFormat aFormat;
+    sal_Bool bWholeWord = sal_False;
+
+    if( xAttrList.is() )
+    {
+        sal_Int32 nTmp;
+        Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+        xml::FastAttribute* attribs = attributes.getArray();
+        for( sal_Int16 i=0; i < attributes.getLength(); i++ )
+        {
+            xml::FastAttribute attr = attribs[i];
+            const OUString& rValue = attr.Value;
+
+            switch( aTokenMap.Get( attr.Token ) )
+            {
+            case XML_TOK_DROP_LINES:
+                if (::sax::Converter::convertNumber( nTmp, rValue, 0, 255 ))
+                {
+                    aFormat.Lines = nTmp < 2 ? 0 : (sal_Int8)nTmp;
+                }
+                break;
+
+            case XML_TOK_DROP_LENGTH:
+                if( IsXMLToken( rValue, XML_WORD ) )
+                {
+                    bWholeWord = sal_True;
+                }
+                else if (::sax::Converter::convertNumber( nTmp, rValue, 1, 255 ))
+                {
+                    bWholeWord = sal_False;
+                    aFormat.Count = (sal_Int8)nTmp;
+                }
+                break;
+
+            case XML_TOK_DROP_DISTANCE:
+                if (GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                            nTmp, rValue, 0 ))
+                {
+                    aFormat.Distance = (sal_uInt16)nTmp;
+                }
+                break;
+
+            case XML_TOK_DROP_STYLE:
+                sStyleName = rValue;
+                break;
+            }
+        }
+    }
+
+    if( aFormat.Lines > 1 && aFormat.Count < 1 )
+        aFormat.Count = 1;
+
+    aProp.maValue <<= aFormat;
+
+    aWholeWordProp.maValue.setValue( &bWholeWord, cppu::UnoType<bool>::get() );
+}
+
 XMLTextDropCapImportContext::XMLTextDropCapImportContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
@@ -136,6 +198,18 @@ XMLTextDropCapImportContext::XMLTextDropCapImportContext(
         ::std::vector< XMLPropertyState > &rProps ) :
     XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps ),
     aWholeWordProp( nWholeWordIdx )
+{
+    ProcessAttrs( xAttrList );
+}
+
+XMLTextDropCapImportContext::XMLTextDropCapImportContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    const XMLPropertyState& rProp,
+    sal_Int32 nWholeWordIdx,
+    std::vector< XMLPropertyState >& rProps )
+: XMLElementPropertyContext( rImport, Element, rProp, rProps ),
+  aWholeWordProp( nWholeWordIdx )
 {
     ProcessAttrs( xAttrList );
 }
@@ -153,5 +227,14 @@ void XMLTextDropCapImportContext::EndElement()
         rProperties.push_back( aWholeWordProp );
 }
 
+void XMLTextDropCapImportContext::endFastElement( sal_Int32 Element)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SetInsert( true );
+    XMLElementPropertyContext::endFastElement( Element );
+
+    if( -1 != aWholeWordProp.mnIndex )
+        rProperties.push_back( aWholeWordProp );
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

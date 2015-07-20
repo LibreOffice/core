@@ -33,6 +33,8 @@ private:
     void ProcessAttrs(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+    void ProcessAttrs(
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
 public:
     TYPEINFO_OVERRIDE();
@@ -45,10 +47,18 @@ public:
         const XMLPropertyState& rProp,
         sal_Int32 nWholeWOrdIdx,
         ::std::vector< XMLPropertyState > &rProps );
+    XMLTextDropCapImportContext(
+        SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        const XMLPropertyState& rProp,
+        sal_Int32 nWholeWordIdx,
+        std::vector< XMLPropertyState >& rProps );
 
     virtual ~XMLTextDropCapImportContext();
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void endFastElement( sal_Int32 Element )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     const OUString& GetStyleName() const { return sStyleName; }
 };
