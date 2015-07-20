@@ -1846,11 +1846,11 @@ sal_Int16 implGetDateMonth( double aDate )
     return nRet;
 }
 
-::com::sun::star::util::Date SbxDateToUNODate( const SbxValue* const pVal )
+css::util::Date SbxDateToUNODate( const SbxValue* const pVal )
 {
     double aDate = pVal->GetDate();
 
-    com::sun::star::util::Date aUnoDate;
+    css::util::Date aUnoDate;
     aUnoDate.Day   = implGetDateDay  ( aDate );
     aUnoDate.Month = implGetDateMonth( aDate );
     aUnoDate.Year  = implGetDateYear ( aDate );
@@ -1858,7 +1858,7 @@ sal_Int16 implGetDateMonth( double aDate )
     return aUnoDate;
 }
 
-void SbxDateFromUNODate( SbxValue *pVal, const ::com::sun::star::util::Date& aUnoDate)
+void SbxDateFromUNODate( SbxValue *pVal, const css::util::Date& aUnoDate)
 {
     double dDate;
     if( implDateSerial( aUnoDate.Year, aUnoDate.Month, aUnoDate.Day, dDate ) )
@@ -1894,19 +1894,19 @@ RTLFUNC(CDateFromUnoDate)
         return;
     }
 
-    Any aAny (sbxToUnoValue(rPar.Get(1), cppu::UnoType<com::sun::star::util::Date>::get()));
-    com::sun::star::util::Date aUnoDate;
+    Any aAny (sbxToUnoValue(rPar.Get(1), cppu::UnoType<css::util::Date>::get()));
+    css::util::Date aUnoDate;
     if(aAny >>= aUnoDate)
         SbxDateFromUNODate(rPar.Get(0), aUnoDate);
     else
         SbxBase::SetError( SbxERR_CONVERSION );
 }
 
-::com::sun::star::util::Time SbxDateToUNOTime( const SbxValue* const pVal )
+css::util::Time SbxDateToUNOTime( const SbxValue* const pVal )
 {
     double aDate = pVal->GetDate();
 
-    com::sun::star::util::Time aUnoTime;
+    css::util::Time aUnoTime;
     aUnoTime.Hours       = implGetHour      ( aDate );
     aUnoTime.Minutes     = implGetMinute    ( aDate );
     aUnoTime.Seconds     = implGetSecond    ( aDate );
@@ -1915,7 +1915,7 @@ RTLFUNC(CDateFromUnoDate)
     return aUnoTime;
 }
 
-void SbxDateFromUNOTime( SbxValue *pVal, const ::com::sun::star::util::Time& aUnoTime)
+void SbxDateFromUNOTime( SbxValue *pVal, const css::util::Time& aUnoTime)
 {
     pVal->PutDate( implTimeSerial(aUnoTime.Hours, aUnoTime.Minutes, aUnoTime.Seconds) );
 }
@@ -1947,19 +1947,19 @@ RTLFUNC(CDateFromUnoTime)
         return;
     }
 
-    Any aAny (sbxToUnoValue(rPar.Get(1), cppu::UnoType<com::sun::star::util::Time>::get()));
-    com::sun::star::util::Time aUnoTime;
+    Any aAny (sbxToUnoValue(rPar.Get(1), cppu::UnoType<css::util::Time>::get()));
+    css::util::Time aUnoTime;
     if(aAny >>= aUnoTime)
         SbxDateFromUNOTime(rPar.Get(0), aUnoTime);
     else
         SbxBase::SetError( SbxERR_CONVERSION );
 }
 
-::com::sun::star::util::DateTime SbxDateToUNODateTime( const SbxValue* const pVal )
+css::util::DateTime SbxDateToUNODateTime( const SbxValue* const pVal )
 {
     double aDate = pVal->GetDate();
 
-    com::sun::star::util::DateTime aUnoDT;
+    css::util::DateTime aUnoDT;
     aUnoDT.Day   = implGetDateDay  ( aDate );
     aUnoDT.Month = implGetDateMonth( aDate );
     aUnoDT.Year  = implGetDateYear ( aDate );
@@ -1971,7 +1971,7 @@ RTLFUNC(CDateFromUnoTime)
     return aUnoDT;
 }
 
-void SbxDateFromUNODateTime( SbxValue *pVal, const ::com::sun::star::util::DateTime& aUnoDT)
+void SbxDateFromUNODateTime( SbxValue *pVal, const css::util::DateTime& aUnoDT)
 {
     double dDate(0.0);
     if( implDateTimeSerial( aUnoDT.Year, aUnoDT.Month, aUnoDT.Day,
@@ -2009,8 +2009,8 @@ RTLFUNC(CDateFromUnoDateTime)
         return;
     }
 
-    Any aAny (sbxToUnoValue(rPar.Get(1), cppu::UnoType<com::sun::star::util::DateTime>::get()));
-    com::sun::star::util::DateTime aUnoDT;
+    Any aAny (sbxToUnoValue(rPar.Get(1), cppu::UnoType<css::util::DateTime>::get()));
+    css::util::DateTime aUnoDT;
     if(aAny >>= aUnoDT)
         SbxDateFromUNODateTime(rPar.Get(0), aUnoDT);
     else

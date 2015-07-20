@@ -1972,7 +1972,7 @@ bool StarBASIC::StoreData( SvStream& r ) const
     return true;
 }
 
-bool StarBASIC::GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut )
+bool StarBASIC::GetUNOConstant( const sal_Char* _pAsciiName, css::uno::Any& aOut )
 {
     bool bRes = false;
     OUString sVarName( OUString::createFromAscii( _pAsciiName ) );

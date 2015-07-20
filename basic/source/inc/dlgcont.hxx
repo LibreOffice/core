@@ -40,22 +40,22 @@ class SfxDialogLibraryContainer : public SfxLibraryContainer
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
           const OUString& StorageURL, bool ReadOnly ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement() SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL createEmptyLibraryElement() SAL_OVERRIDE;
     virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const SAL_OVERRIDE;
     virtual void SAL_CALL writeLibraryElement
     (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
+        const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput
+        const css::uno::Reference< css::io::XOutputStream >& xOutput
     )
-        throw(::com::sun::star::uno::Exception) SAL_OVERRIDE;
+        throw(css::uno::Exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL importLibraryElement
+    virtual css::uno::Any SAL_CALL importLibraryElement
     (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
+        const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const OUString& aFile,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xElementStream ) SAL_OVERRIDE;
+        const css::uno::Reference< css::io::XInputStream >& xElementStream ) SAL_OVERRIDE;
 
     virtual void SAL_CALL importFromOldStorage( const OUString& aFile ) SAL_OVERRIDE;
 
@@ -70,58 +70,57 @@ class SfxDialogLibraryContainer : public SfxLibraryContainer
 
 public:
     SfxDialogLibraryContainer();
-    SfxDialogLibraryContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SfxDialogLibraryContainer( const css::uno::Reference< css::embed::XStorage >& xStorage );
 
     // Methods XStorageBasedLibraryContainer
     virtual void SAL_CALL storeLibrariesToStorage(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& RootStorage )
+        const css::uno::Reference< css::embed::XStorage >& RootStorage )
             throw (css::uno::RuntimeException,
                    css::lang::WrappedTargetException,
                    std::exception) SAL_OVERRIDE;
 
     // Resource handling
-    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence >
+    css::uno::Reference< css::resource::XStringResourcePersistence >
         implCreateStringResource( class SfxDialogLibrary* pDialog );
 
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XLibraryQueryExecutable
     virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::resource::XStringResourceSupplier
+typedef ::cppu::ImplHelper1 <   css::resource::XStringResourceSupplier
                             >   SfxDialogLibrary_BASE;
 
 class SfxDialogLibrary  :public SfxLibrary
                         ,public SfxDialogLibrary_BASE
 {
-    SfxDialogLibraryContainer*                                      m_pParent;
-    ::com::sun::star::uno::Reference
-        < ::com::sun::star::resource::XStringResourcePersistence>   m_xStringResourcePersistence;
-    OUString                                                 m_aName;
+    SfxDialogLibraryContainer*                                        m_pParent;
+    css::uno::Reference< css::resource::XStringResourcePersistence>   m_xStringResourcePersistence;
+    OUString                                                          m_aName;
 
     // Provide modify state including resources
     virtual bool isModified() SAL_OVERRIDE;
     virtual void storeResources() SAL_OVERRIDE;
     virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) SAL_OVERRIDE;
     virtual void storeResourcesToURL( const OUString& URL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler  ) SAL_OVERRIDE;
-    virtual void storeResourcesToStorage( const ::com::sun::star::uno::Reference
-        < ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
+        const css::uno::Reference< css::task::XInteractionHandler >& xHandler  ) SAL_OVERRIDE;
+    virtual void storeResourcesToStorage( const css::uno::Reference
+        < css::embed::XStorage >& xStorage ) SAL_OVERRIDE;
 
 public:
     SfxDialogLibrary
     (
         ModifiableHelper& _rModifiable,
         const OUString& aName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         SfxDialogLibraryContainer* pParent
     );
 
@@ -129,8 +128,8 @@ public:
     (
         ModifiableHelper& _rModifiable,
         const OUString& aName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly,
         SfxDialogLibraryContainer* pParent
     );
@@ -139,19 +138,19 @@ public:
     DECLARE_XTYPEPROVIDER()
 
     // XStringResourceSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver >
-        SAL_CALL getStringResource(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::resource::XStringResourceResolver >
+        SAL_CALL getStringResource(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     OUString getName()
         { return m_aName; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourcePersistence >
+    css::uno::Reference< css::resource::XStringResourcePersistence >
         getStringResourcePersistence()
     {
         return m_xStringResourcePersistence;
     }
 
-    static bool containsValidDialog( const ::com::sun::star::uno::Any& aElement );
+    static bool containsValidDialog( const css::uno::Any& aElement );
 
 protected:
     virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const SAL_OVERRIDE;

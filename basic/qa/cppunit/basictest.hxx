@@ -88,7 +88,7 @@ class MacroSnippet
         MakeModule( sSource );
     }
 
-    SbxVariableRef Run( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rArgs )
+    SbxVariableRef Run( const css::uno::Sequence< css::uno::Any >& rArgs )
     {
         SbxVariableRef pReturn = NULL;
         if ( !Compile() )
@@ -114,7 +114,7 @@ class MacroSnippet
 
     SbxVariableRef Run()
     {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aArgs;
+        css::uno::Sequence< css::uno::Any > aArgs;
         return Run( aArgs );
     }
 

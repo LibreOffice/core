@@ -451,7 +451,7 @@ void SbxVariable::SetDeclareClassName( const OUString& rDeclareClassName )
     pImpl->m_aDeclareClassName = rDeclareClassName;
 }
 
-void SbxVariable::SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener,
+void SbxVariable::SetComListener( css::uno::Reference< css::uno::XInterface > xComListener,
                                   StarBASIC* pParentBasic )
 {
     SbxVariableImpl* pImpl = getImpl();

@@ -61,9 +61,9 @@ class BasicManager;
 namespace basic
 {
 typedef ::cppu::WeakImplHelper<
-    ::com::sun::star::container::XNameContainer,
-    ::com::sun::star::container::XContainer,
-    ::com::sun::star::util::XChangesNotifier > NameContainer_BASE;
+    css::container::XNameContainer,
+    css::container::XContainer,
+    css::util::XChangesNotifier > NameContainer_BASE;
 
 
 
@@ -72,18 +72,18 @@ class NameContainer : public ::cppu::BaseMutex, public NameContainer_BASE
     typedef std::unordered_map < OUString, sal_Int32, OUStringHash > NameContainerNameMap;
 
     NameContainerNameMap mHashMap;
-    ::com::sun::star::uno::Sequence< OUString > mNames;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > mValues;
+    css::uno::Sequence< OUString > mNames;
+    css::uno::Sequence< css::uno::Any > mValues;
     sal_Int32 mnElementCount;
 
-    ::com::sun::star::uno::Type mType;
-    ::com::sun::star::uno::XInterface* mpxEventSource;
+    css::uno::Type mType;
+    css::uno::XInterface* mpxEventSource;
 
     ::cppu::OInterfaceContainerHelper maContainerListeners;
     ::cppu::OInterfaceContainerHelper maChangesListeners;
 
 public:
-    NameContainer( const ::com::sun::star::uno::Type& rType )
+    NameContainer( const css::uno::Type& rType )
         : mnElementCount( 0 )
         , mType( rType )
         , mpxEventSource( NULL )
@@ -91,7 +91,7 @@ public:
         , maChangesListeners( m_aMutex )
     {}
 
-    void setEventSource( ::com::sun::star::uno::XInterface* pxEventSource )
+    void setEventSource( css::uno::XInterface* pxEventSource )
         { mpxEventSource = pxEventSource; }
 
     void insertCheck(const OUString& aName, const css::uno::Any& aElement)
@@ -106,54 +106,50 @@ public:
                css::uno::RuntimeException, std::exception);
 
     // Methods XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Type SAL_CALL getElementType(  )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-        throw(::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+        throw(css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException,
-              ::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException,
+              css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException,
-              ::com::sun::star::container::ElementExistException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException,
+              css::container::ElementExistException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeByName( const OUString& Name )
-        throw(::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XContainer
-    virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addContainerListener( const css::uno::Reference<css::container::XContainerListener >& xListener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeContainerListener( const css::uno::Reference<css::container::XContainerListener >& xListener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XChangesNotifier
-    virtual void SAL_CALL addChangesListener( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XChangesListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeChangesListener( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XChangesListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addChangesListener( const css::uno::Reference<css::util::XChangesListener >& xListener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeChangesListener( const css::uno::Reference<css::util::XChangesListener >& xListener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -176,12 +172,12 @@ public:
     inline  bool    isModified() const  { return mbModified; }
             void    setModified( bool _bModified );
 
-    inline  void    addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& _rxListener )
+    inline  void    addModifyListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener )
     {
         m_aModifyListeners.addInterface( _rxListener );
     }
 
-    inline  void    removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& _rxListener )
+    inline  void    removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener )
     {
         m_aModifyListeners.removeInterface( _rxListener );
     }
@@ -190,8 +186,8 @@ public:
 
 
 typedef ::comphelper::OListenerContainerBase<
-    ::com::sun::star::script::vba::XVBAScriptListener,
-    ::com::sun::star::script::vba::VBAScriptEvent > VBAScriptListenerContainer_BASE;
+    css::script::vba::XVBAScriptListener,
+    css::script::vba::VBAScriptEvent > VBAScriptListenerContainer_BASE;
 
 class VBAScriptListenerContainer : public VBAScriptListenerContainer_BASE
 {
@@ -200,9 +196,9 @@ public:
 
 private:
     virtual bool implTypedNotify(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::script::vba::XVBAScriptListener >& rxListener,
-        const ::com::sun::star::script::vba::VBAScriptEvent& rEvent )
-        throw (::com::sun::star::uno::Exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::script::vba::XVBAScriptListener >& rxListener,
+        const css::script::vba::VBAScriptEvent& rEvent )
+        throw (css::uno::Exception) SAL_OVERRIDE;
 };
 
 
@@ -210,15 +206,15 @@ private:
 class SfxLibrary;
 
 typedef ::cppu::WeakComponentImplHelper<
-    ::com::sun::star::lang::XInitialization,
-    ::com::sun::star::script::XStorageBasedLibraryContainer,
-    ::com::sun::star::script::XLibraryContainerPassword,
-    ::com::sun::star::script::XLibraryContainerExport,
-    ::com::sun::star::script::XLibraryContainer3,
-    ::com::sun::star::container::XContainer,
-    ::com::sun::star::script::XLibraryQueryExecutable,
-    ::com::sun::star::script::vba::XVBACompatibility,
-    ::com::sun::star::lang::XServiceInfo > SfxLibraryContainer_BASE;
+    css::lang::XInitialization,
+    css::script::XStorageBasedLibraryContainer,
+    css::script::XLibraryContainerPassword,
+    css::script::XLibraryContainerExport,
+    css::script::XLibraryContainer3,
+    css::container::XContainer,
+    css::script::XLibraryQueryExecutable,
+    css::script::vba::XVBACompatibility,
+    css::lang::XServiceInfo > SfxLibraryContainer_BASE;
 
 class SfxLibraryContainer : public SfxLibraryContainer_BASE, public ::utl::OEventListenerAdapter
 {
@@ -227,10 +223,10 @@ class SfxLibraryContainer : public SfxLibraryContainer_BASE, public ::utl::OEven
     bool mbVBACompat;
     OUString msProjectName;
 protected:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >       mxContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >      mxSFI;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringSubstitution >    mxStringSubstitution;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >            mxOwnerDocument;
+    css::uno::Reference< css::uno::XComponentContext >       mxContext;
+    css::uno::Reference< css::ucb::XSimpleFileAccess3 >      mxSFI;
+    css::uno::Reference< css::util::XStringSubstitution >    mxStringSubstitution;
+    css::uno::WeakReference< css::frame::XModel >            mxOwnerDocument;
 
     ::osl::Mutex        maMutex;
     ModifiableHelper    maModifiable;
@@ -246,7 +242,7 @@ protected:
     OUString maLibraryPath;
     OUString maLibrariesDir;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > mxStorage;
+    css::uno::Reference< css::embed::XStorage > mxStorage;
     BasicManager*   mpBasMgr;
     bool        mbOwnBasMgr;
 
@@ -261,28 +257,28 @@ protected:
 
     void implStoreLibrary( SfxLibrary* pLib,
                             const OUString& rName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rStorage );
+                            const css::uno::Reference< css::embed::XStorage >& rStorage );
 
     // New variant for library export
     void implStoreLibrary( SfxLibrary* pLib,
                             const OUString& rName,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rStorage,
+                            const css::uno::Reference< css::embed::XStorage >& rStorage,
                             const OUString& rTargetURL,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& rToUseSFI,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& rHandler );
+                            const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI,
+                            const css::uno::Reference< css::task::XInteractionHandler >& rHandler );
 
     void implStoreLibraryIndexFile( SfxLibrary* pLib, const ::xmlscript::LibDescriptor& rLib,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+                                    const css::uno::Reference< css::embed::XStorage >& xStorage );
 
     // New variant for library export
     void implStoreLibraryIndexFile( SfxLibrary* pLib, const ::xmlscript::LibDescriptor& rLib,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                                    const css::uno::Reference< css::embed::XStorage >& xStorage,
                                     const OUString& aTargetURL,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& rToUseSFI );
+                                    const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI );
 
     bool implLoadLibraryIndexFile( SfxLibrary* pLib,
                                     ::xmlscript::LibDescriptor& rLib,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                                    const css::uno::Reference< css::embed::XStorage >& xStorage,
                                     const OUString& aIndexFileName );
 
     void implImportLibDescriptor( SfxLibrary* pLib, ::xmlscript::LibDescriptor& rLib );
@@ -292,38 +288,38 @@ protected:
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
           const OUString& StorageURL, bool ReadOnly ) = 0;
-    virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement() = 0;
+    virtual css::uno::Any SAL_CALL createEmptyLibraryElement() = 0;
     virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const = 0;
     virtual void SAL_CALL writeLibraryElement
     (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
+        const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput
+        const css::uno::Reference< css::io::XOutputStream >& xOutput
     )
-        throw(::com::sun::star::uno::Exception) = 0;
+        throw(css::uno::Exception) = 0;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL importLibraryElement
+    virtual css::uno::Any SAL_CALL importLibraryElement
     (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
+        const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const OUString& aFile,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xElementStream ) = 0;
+        const css::uno::Reference< css::io::XInputStream >& xElementStream ) = 0;
     virtual void SAL_CALL importFromOldStorage( const OUString& aFile ) = 0;
 
     // Password encryption
     virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
+                        const css::uno::Reference< css::embed::XStorage >& xStorage, const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
     // New variant for library export
     virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& rStorage,
+                        const css::uno::Reference< css::embed::XStorage >& rStorage,
                         const OUString& aTargetURL,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& rToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler );
+                        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI, const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
                                           bool bVerifyPasswordOnly=false )
-            throw(::com::sun::star::lang::WrappedTargetException,
-                  ::com::sun::star::uno::RuntimeException, std::exception);
+            throw(css::lang::WrappedTargetException,
+                  css::uno::RuntimeException, std::exception);
 
     virtual void onNewRootStorage() = 0;
 
@@ -338,7 +334,7 @@ protected:
     OUString createAppLibraryFolder( SfxLibrary* pLib, const OUString& aName );
 
     void init( const OUString& rInitialDocumentURL,
-               const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
+               const css::uno::Reference< css::embed::XStorage >& _rxInitialStorage );
 
     virtual const sal_Char* SAL_CALL    getInfoFileName() const = 0;
     virtual const sal_Char* SAL_CALL    getOldInfoFileName() const = 0;
@@ -354,26 +350,26 @@ protected:
         OUString& aUnexpandedStorageURL
     );
     OUString expand_url( const OUString& url )
-        throw(::com::sun::star::uno::RuntimeException);
+        throw(css::uno::RuntimeException);
 
     SfxLibrary* getImplLib( const OUString& rLibraryName );
 
     void storeLibraries_Impl(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                            const css::uno::Reference< css::embed::XStorage >& xStorage,
                             bool bComplete );
 
     void SAL_CALL initializeFromDocumentURL( const OUString& _rInitialDocumentURL );
-    void SAL_CALL initializeFromDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageBasedDocument >& _rxDocument );
+    void SAL_CALL initializeFromDocument( const css::uno::Reference< css::document::XStorageBasedDocument >& _rxDocument );
 
     // OEventListenerAdapter
-    virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
+    virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 private:
     void init_Impl( const OUString& rInitialDocumentURL,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxInitialStorage );
+                    const css::uno::Reference< css::embed::XStorage >& _rxInitialStorage );
     void implScanExtensions();
 
 public:
@@ -393,146 +389,146 @@ public:
     void    checkDisposed() const;
 
     // Methods XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Type SAL_CALL getElementType()
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasElements()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-        throw(::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames()
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+        throw(css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Members XStorageBasedLibraryContainer
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > SAL_CALL getRootStorage() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setRootStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rootstorage ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL storeLibrariesToStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& RootStorage ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::embed::XStorage > SAL_CALL getRootStorage() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setRootStorage( const css::uno::Reference< css::embed::XStorage >& _rootstorage ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL storeLibrariesToStorage( const css::uno::Reference< css::embed::XStorage >& RootStorage ) throw (css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XModifiable (base of XPersistentLibraryContainer)
-    virtual sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setModified( sal_Bool bModified ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setModified( sal_Bool bModified ) throw (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XPersistentLibraryContainer (base of XStorageBasedLibraryContainer)
-    virtual ::com::sun::star::uno::Any SAL_CALL getRootLocation() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getContainerLocationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL storeLibraries(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getRootLocation() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getContainerLocationName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL storeLibraries(  ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //Methods XLibraryContainer3
     virtual OUString SAL_CALL getOriginalLibraryLinkURL( const OUString& Name )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XLibraryContainer2 (base of XPersistentLibraryContainer)
     virtual sal_Bool SAL_CALL isLibraryLink( const OUString& Name )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getLibraryLinkURL( const OUString& Name )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isLibraryReadOnly( const OUString& Name )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setLibraryReadOnly( const OUString& Name, sal_Bool bReadOnly )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL renameLibrary( const OUString& Name, const OUString& NewName )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::container::ElementExistException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::container::NoSuchElementException,
+               css::container::ElementExistException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XLibraryContainer (base of XLibraryContainer2)
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL
+    virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL
         createLibrary( const OUString& Name )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::container::ElementExistException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL createLibraryLink
+            throw(css::lang::IllegalArgumentException,
+                  css::container::ElementExistException,
+                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL createLibraryLink
         ( const OUString& Name, const OUString& StorageURL, sal_Bool ReadOnly )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::container::ElementExistException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::lang::IllegalArgumentException,
+                  css::container::ElementExistException,
+                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeLibrary( const OUString& Name )
-        throw(::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isLibraryLoaded( const OUString& Name )
-        throw(::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL loadLibrary( const OUString& Name )
-        throw(::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Any >& aArguments )
-            throw (::com::sun::star::uno::Exception,
-                   ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize( const css::uno::Sequence<
+        css::uno::Any >& aArguments )
+            throw (css::uno::Exception,
+                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XLibraryContainerPassword
     virtual sal_Bool SAL_CALL isLibraryPasswordProtected( const OUString& Name )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isLibraryPasswordVerified( const OUString& Name )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL verifyLibraryPassword( const OUString& Name, const OUString& Password )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL changeLibraryPassword( const OUString& Name,
         const OUString& OldPassword, const OUString& NewPassword )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XContainer
-    virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addContainerListener( const css::uno::Reference<
+        css::container::XContainerListener >& xListener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeContainerListener( const css::uno::Reference<
+        css::container::XContainerListener >& xListener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XLibraryContainerExport
     virtual void SAL_CALL exportLibrary( const OUString& Name, const OUString& URL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
-            throw (::com::sun::star::uno::Exception,
-                   ::com::sun::star::container::NoSuchElementException,
-                   ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::task::XInteractionHandler >& Handler )
+            throw (css::uno::Exception,
+                   css::container::NoSuchElementException,
+                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE = 0;
     // Methods XVBACompatibility
-    virtual sal_Bool SAL_CALL getVBACompatibilityMode() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setVBACompatibilityMode( sal_Bool _vbacompatmodeon ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual OUString SAL_CALL getProjectName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE { return msProjectName; }
-    virtual void SAL_CALL setProjectName( const OUString& _projectname ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL getVBACompatibilityMode() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setVBACompatibilityMode( sal_Bool _vbacompatmodeon ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual OUString SAL_CALL getProjectName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE { return msProjectName; }
+    virtual void SAL_CALL setProjectName( const OUString& _projectname ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getRunningVBAScripts()
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL addVBAScriptListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::script::vba::XVBAScriptListener >& Listener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::script::vba::XVBAScriptListener >& Listener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeVBAScriptListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::script::vba::XVBAScriptListener >& Listener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::script::vba::XVBAScriptListener >& Listener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
@@ -554,9 +550,9 @@ public:
 
 
 class SfxLibrary
-    : public ::com::sun::star::container::XNameContainer
-    , public ::com::sun::star::container::XContainer
-    , public ::com::sun::star::util::XChangesNotifier
+    : public css::container::XNameContainer
+    , public css::container::XContainer
+    , public css::util::XChangesNotifier
     , public ::cppu::BaseMutex
     , public ::cppu::OComponentHelper
 {
@@ -564,8 +560,8 @@ class SfxLibrary
     friend class SfxDialogLibraryContainer;
     friend class SfxScriptLibraryContainer;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >       mxContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >      mxSFI;
+    css::uno::Reference< css::uno::XComponentContext >       mxContext;
+    css::uno::Reference< css::ucb::XSimpleFileAccess3 >      mxSFI;
 
     ModifiableHelper&   mrModifiable;
     NameContainer       maNameContainer;
@@ -603,9 +599,8 @@ private:
     virtual void storeResources() = 0;
     virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) = 0;
     virtual void storeResourcesToURL( const OUString& URL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) = 0;
-    virtual void storeResourcesToStorage( const ::com::sun::star::uno::Reference
-        < ::com::sun::star::embed::XStorage >& xStorage ) = 0;
+        const css::uno::Reference< css::task::XInteractionHandler >& xHandler ) = 0;
+    virtual void storeResourcesToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage ) = 0;
 
 protected:
     inline  bool    implIsModified() const  { return mbIsModified; }
@@ -626,80 +621,80 @@ private:
 public:
     SfxLibrary(
         ModifiableHelper& _rModifiable,
-        const ::com::sun::star::uno::Type& aType,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI
+        const css::uno::Type& aType,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI
     );
     SfxLibrary(
         ModifiableHelper& _rModifiable,
-        const ::com::sun::star::uno::Type& aType,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI,
+        const css::uno::Type& aType,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL,
         const OUString& aStorageURL,
         bool ReadOnly
     );
 
     // Methods XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire() throw() SAL_OVERRIDE { OComponentHelper::acquire(); }
     virtual void SAL_CALL release() throw() SAL_OVERRIDE { OComponentHelper::release(); }
 
     // Methods XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Type SAL_CALL getElementType(  )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasElements(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
-        throw(::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
+        throw(css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException,
-              ::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException,
+              css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
-        throw(::com::sun::star::lang::IllegalArgumentException,
-              ::com::sun::star::container::ElementExistException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL insertByName( const OUString& aName, const css::uno::Any& aElement )
+        throw(css::lang::IllegalArgumentException,
+              css::container::ElementExistException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeByName( const OUString& Name )
-        throw(::com::sun::star::container::NoSuchElementException,
-              ::com::sun::star::lang::WrappedTargetException,
-              ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException,
+              css::lang::WrappedTargetException,
+              css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  )
-        throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  )
+        throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // Methods XContainer
-    virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XContainerListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addContainerListener( const css::uno::Reference<
+        css::container::XContainerListener >& xListener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeContainerListener( const css::uno::Reference<
+        css::container::XContainerListener >& xListener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // Methods XChangesNotifier
-    virtual void SAL_CALL addChangesListener( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XChangesListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeChangesListener( const ::com::sun::star::uno::Reference<
-        ::com::sun::star::util::XChangesListener >& xListener )
-            throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL addChangesListener( const css::uno::Reference<
+        css::util::XChangesListener >& xListener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeChangesListener( const css::uno::Reference<
+        css::util::XChangesListener >& xListener )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
     struct LibraryContainerAccess { friend class SfxLibraryContainer; private: LibraryContainerAccess() { } };
@@ -718,24 +713,23 @@ protected:
 
 class ScriptSubPackageIterator
 {
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > m_xMainPackage;
+    css::uno::Reference< css::deployment::XPackage > m_xMainPackage;
 
     bool m_bIsValid;
     bool m_bIsBundle;
 
-    com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > > m_aSubPkgSeq;
+    css::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aSubPkgSeq;
     sal_Int32 m_nSubPkgCount;
     sal_Int32 m_iNextSubPkg;
 
-    static com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
-        implDetectScriptPackage( const com::sun::star::uno::Reference
-            < com::sun::star::deployment::XPackage >& rPackage, bool& rbPureDialogLib );
+    static css::uno::Reference< css::deployment::XPackage >
+        implDetectScriptPackage( const css::uno::Reference
+            < css::deployment::XPackage >& rPackage, bool& rbPureDialogLib );
 
 public:
-    ScriptSubPackageIterator( com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xMainPackage );
+    ScriptSubPackageIterator( css::uno::Reference< css::deployment::XPackage > xMainPackage );
 
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > getNextScriptSubPackage( bool& rbPureDialogLib );
+    css::uno::Reference< css::deployment::XPackage > getNextScriptSubPackage( bool& rbPureDialogLib );
 };
 
 
@@ -747,14 +741,14 @@ public:
     OUString nextBasicOrDialogLibrary( bool& rbPureDialogLib );
 
 protected:
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
+    css::uno::Reference< css::deployment::XPackage >
         implGetNextUserScriptPackage( bool& rbPureDialogLib );
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
+    css::uno::Reference< css::deployment::XPackage >
         implGetNextSharedScriptPackage( bool& rbPureDialogLib );
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
+    css::uno::Reference< css::deployment::XPackage >
         implGetNextBundledScriptPackage( bool& rbPureDialogLib );
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
     enum IteratorState
     {
@@ -764,16 +758,13 @@ protected:
         END_REACHED
     } m_eState;
 
-    com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > > m_aUserPackagesSeq;
+    css::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aUserPackagesSeq;
     bool m_bUserPackagesLoaded;
 
-    com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > > m_aSharedPackagesSeq;
+    css::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aSharedPackagesSeq;
     bool m_bSharedPackagesLoaded;
 
-      com::sun::star::uno::Sequence< com::sun::star::uno::Reference
-        < com::sun::star::deployment::XPackage > > m_aBundledPackagesSeq;
+    css::uno::Sequence< css::uno::Reference< css::deployment::XPackage > > m_aBundledPackagesSeq;
     bool m_bBundledPackagesLoaded;
 
     int m_iUserPackage;

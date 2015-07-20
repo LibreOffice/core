@@ -176,7 +176,7 @@ namespace basic
                 );
 
         // OEventListenerAdapter overridables
-        virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) SAL_OVERRIDE;
+        virtual void _disposing( const css::lang::EventObject& _rSource ) SAL_OVERRIDE;
 
         // SfxListener overridables
         virtual void Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint ) SAL_OVERRIDE;
@@ -535,7 +535,7 @@ namespace basic
     }
 
 
-    void ImplRepository::_disposing( const ::com::sun::star::lang::EventObject& _rSource )
+    void ImplRepository::_disposing( const css::lang::EventObject& _rSource )
     {
         SolarMutexGuard g;
 

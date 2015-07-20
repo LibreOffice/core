@@ -651,7 +651,7 @@ bool SbxValue::PutNull()
 
 
 // Special decimal methods
-bool SbxValue::PutDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec )
+bool SbxValue::PutDecimal( css::bridge::oleautomation::Decimal& rAutomationDec )
 {
     SbxValue::Clear();
     aData.pDecimal = new SbxDecimal( rAutomationDec );
@@ -661,7 +661,7 @@ bool SbxValue::PutDecimal( com::sun::star::bridge::oleautomation::Decimal& rAuto
 }
 
 bool SbxValue::fillAutomationDecimal
-    ( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec ) const
+    ( css::bridge::oleautomation::Decimal& rAutomationDec ) const
 {
     SbxDecimal* pDecimal = GetDecimal();
     if( pDecimal != NULL )

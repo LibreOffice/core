@@ -53,14 +53,14 @@ class SbxDecimal
 public:
     SbxDecimal();
     SbxDecimal( const SbxDecimal& rDec );
-    explicit SbxDecimal( const com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
+    explicit SbxDecimal( const css::bridge::oleautomation::Decimal& rAutomationDec );
 
     ~SbxDecimal();
 
     void addRef()
         { mnRefCount++; }
 
-    void fillAutomationDecimal( com::sun::star::bridge::oleautomation::Decimal& rAutomationDec );
+    void fillAutomationDecimal( css::bridge::oleautomation::Decimal& rAutomationDec );
 
     void setChar( sal_Unicode val );
     void setByte( sal_uInt8 val );

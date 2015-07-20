@@ -25,21 +25,21 @@
 
 #include <cppuhelper/implbase.hxx>
 
-class ComEnumerationWrapper : public ::cppu::WeakImplHelper< ::com::sun::star::container::XEnumeration >
+class ComEnumerationWrapper : public ::cppu::WeakImplHelper< css::container::XEnumeration >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > m_xInvocation;
+    css::uno::Reference< css::script::XInvocation > m_xInvocation;
     sal_Int32 m_nCurInd;
 
 public:
-    explicit ComEnumerationWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation >& xInvocation )
+    explicit ComEnumerationWrapper( const css::uno::Reference< css::script::XInvocation >& xInvocation )
     : m_xInvocation( xInvocation )
     , m_nCurInd( 0 )
     {
     }
 
     // container::XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL nextElement() throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL nextElement() throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_BASIC_SOURCE_RUNTIME_COMENUMWRAPPER_HXX

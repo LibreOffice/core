@@ -43,24 +43,24 @@ void registerComponentToBeDisposedForBasic( css::uno::Reference< css::lang::XCom
 
 class StructRefInfo
 {
-    com::sun::star::uno::Any& maAny;
+    css::uno::Any& maAny;
     css::uno::Type maType;
     sal_Int32 mnPos;
 public:
-    StructRefInfo( com::sun::star::uno::Any& aAny, css::uno::Type const & rType, sal_Int32 nPos ) : maAny( aAny ), maType( rType ), mnPos( nPos ) {}
+    StructRefInfo( css::uno::Any& aAny, css::uno::Type const & rType, sal_Int32 nPos ) : maAny( aAny ), maType( rType ), mnPos( nPos ) {}
 
     sal_Int32 getPos() const { return mnPos; }
     css::uno::Type getType() const { return maType; }
     OUString getTypeName() const;
-    com::sun::star::uno::Any& getRootAnyRef() { return maAny; };
+    css::uno::Any& getRootAnyRef() { return maAny; };
 
-    com::sun::star::uno::TypeClass getTypeClass() const;
+    css::uno::TypeClass getTypeClass() const;
 
     void* getInst();
     bool isEmpty() { return (mnPos == -1); }
 
-    ::com::sun::star::uno::Any getValue();
-    bool setValue( const ::com::sun::star::uno::Any& );
+    css::uno::Any getValue();
+    bool setValue( const css::uno::Any& );
 };
 
 class SbUnoStructRefObject: public SbxObject
@@ -96,20 +96,20 @@ public:
         { implCreateAll(); }
 
     // give out value
-    ::com::sun::star::uno::Any getUnoAny();
+    css::uno::Any getUnoAny();
     void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
 };
 
 class SbUnoObject: public SbxObject
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > mxUnoAccess;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMaterialHolder > mxMaterialHolder;
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > mxInvocation;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactName;
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactNameInvocation;
+    css::uno::Reference< css::beans::XIntrospectionAccess > mxUnoAccess;
+    css::uno::Reference< css::beans::XMaterialHolder > mxMaterialHolder;
+    css::uno::Reference< css::script::XInvocation > mxInvocation;
+    css::uno::Reference< css::beans::XExactName > mxExactName;
+    css::uno::Reference< css::beans::XExactName > mxExactNameInvocation;
     bool bNeedIntrospection;
     bool bNativeCOMObject;
-    ::com::sun::star::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
+    css::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
     ::boost::shared_ptr< SbUnoStructRefObject > maStructInfo;
     // help method to establish the dbg_-properties
     void implCreateDbgProperties();
@@ -121,7 +121,7 @@ class SbUnoObject: public SbxObject
 public:
     static bool getDefaultPropName( SbUnoObject* pUnoObj, OUString& sDfltProp );
     TYPEINFO_OVERRIDE();
-    SbUnoObject( const OUString& aName_, const ::com::sun::star::uno::Any& aUnoObj_ );
+    SbUnoObject( const OUString& aName_, const css::uno::Any& aUnoObj_ );
     virtual ~SbUnoObject();
 
     // #76470 do introspection on demand
@@ -135,9 +135,9 @@ public:
         { implCreateAll(); }
 
     // give out value
-    ::com::sun::star::uno::Any getUnoAny();
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospectionAccess > getIntrospectionAccess()    { return mxUnoAccess; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > getInvocation()         { return mxInvocation; }
+    css::uno::Any getUnoAny();
+    css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess()    { return mxUnoAccess; }
+    css::uno::Reference< css::script::XInvocation > getInvocation()         { return mxInvocation; }
 
     void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
 
@@ -156,8 +156,8 @@ class SbUnoMethod : public SbxMethod
     friend void clearUnoMethods();
     friend void clearUnoMethodsForBasic( StarBASIC* pBasic );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > m_xUnoMethod;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::reflection::ParamInfo >* pParamInfoSeq;
+    css::uno::Reference< css::reflection::XIdlMethod > m_xUnoMethod;
+    css::uno::Sequence< css::reflection::ParamInfo >* pParamInfoSeq;
 
     // #67781 reference to the previous and the next method in the method list
     SbUnoMethod* pPrev;
@@ -168,12 +168,12 @@ class SbUnoMethod : public SbxMethod
 public:
     TYPEINFO_OVERRIDE();
 
-    SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > xUnoMethod_,
+    SbUnoMethod( const OUString& aName_, SbxDataType eSbxType, css::uno::Reference< css::reflection::XIdlMethod > xUnoMethod_,
         bool bInvocation );
     virtual ~SbUnoMethod();
     virtual SbxInfo* GetInfo() SAL_OVERRIDE;
 
-    const ::com::sun::star::uno::Sequence< ::com::sun::star::reflection::ParamInfo >& getParamInfos();
+    const css::uno::Sequence< css::reflection::ParamInfo >& getParamInfos();
 
     bool isInvocationBased()
         { return mbInvocation; }
@@ -186,7 +186,7 @@ class SbUnoProperty : public SbxProperty
     friend class SbUnoObject;
     friend class SbUnoStructRefObject;
 
-    ::com::sun::star::beans::Property aUnoProp;
+    css::beans::Property aUnoProp;
     sal_Int32 nId;
 
     bool mbInvocation;      // Property is based on invocation
@@ -199,7 +199,7 @@ public:
 
     TYPEINFO_OVERRIDE();
     SbUnoProperty( const OUString& aName_, SbxDataType eSbxType, SbxDataType eRealSbxType,
-        const ::com::sun::star::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation, bool bUnoStruct );
+        const css::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation, bool bUnoStruct );
 
     bool isUnoStruct() { return mbUnoStruct; }
     bool isInvocationBased()
@@ -218,14 +218,14 @@ public:
 // wrapper for an uno-class
 class SbUnoClass : public SbxObject
 {
-    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >   m_xClass;
+    const css::uno::Reference< css::reflection::XIdlClass >   m_xClass;
 
 public:
     TYPEINFO_OVERRIDE();
     SbUnoClass( const OUString& aName_ )
         : SbxObject( aName_ )
     {}
-    SbUnoClass( const OUString& aName_, const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >& xClass_ )
+    SbUnoClass( const OUString& aName_, const css::uno::Reference< css::reflection::XIdlClass >& xClass_ )
         : SbxObject( aName_ )
         , m_xClass( xClass_ )
     {}
@@ -234,7 +234,7 @@ public:
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >& getUnoClass() { return m_xClass; }
+    const css::uno::Reference< css::reflection::XIdlClass >& getUnoClass() { return m_xClass; }
 
 };
 
@@ -247,13 +247,13 @@ SbUnoClass* findUnoClass( const OUString& rName );
 // Wrapper for UNO Service
 class SbUnoService : public SbxObject
 {
-    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceTypeDescription2 > m_xServiceTypeDesc;
+    const css::uno::Reference< css::reflection::XServiceTypeDescription2 > m_xServiceTypeDesc;
     bool m_bNeedsInit;
 
 public:
     TYPEINFO_OVERRIDE();
     SbUnoService( const OUString& aName_,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceTypeDescription2 >& xServiceTypeDesc )
+        const css::uno::Reference< css::reflection::XServiceTypeDescription2 >& xServiceTypeDesc )
             : SbxObject( aName_ )
             , m_xServiceTypeDesc( xServiceTypeDesc )
             , m_bNeedsInit( true )
@@ -274,18 +274,18 @@ class SbUnoServiceCtor : public SbxMethod
     friend class SbUnoService;
     friend void clearUnoServiceCtors();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > m_xServiceCtorDesc;
+    css::uno::Reference< css::reflection::XServiceConstructorDescription > m_xServiceCtorDesc;
 
     SbUnoServiceCtor* pNext;
 
 public:
     TYPEINFO_OVERRIDE();
 
-    SbUnoServiceCtor( const OUString& aName_, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > xServiceCtorDesc );
+    SbUnoServiceCtor( const OUString& aName_, css::uno::Reference< css::reflection::XServiceConstructorDescription > xServiceCtorDesc );
     virtual ~SbUnoServiceCtor();
     virtual SbxInfo* GetInfo() SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XServiceConstructorDescription > getServiceCtorDesc()
+    css::uno::Reference< css::reflection::XServiceConstructorDescription > getServiceCtorDesc()
         { return m_xServiceCtorDesc; }
 };
 
@@ -293,12 +293,12 @@ public:
 // Wrapper for UNO Singleton
 class SbUnoSingleton : public SbxObject
 {
-    const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >   m_xSingletonTypeDesc;
+    const css::uno::Reference< css::reflection::XSingletonTypeDescription >   m_xSingletonTypeDesc;
 
 public:
     TYPEINFO_OVERRIDE();
     SbUnoSingleton( const OUString& aName_,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XSingletonTypeDescription >& xSingletonTypeDesc );
+        const css::uno::Reference< css::reflection::XSingletonTypeDescription >& xSingletonTypeDesc );
 
     void Notify( SfxBroadcaster&, const SfxHint& rHint ) SAL_OVERRIDE;
 };
@@ -309,15 +309,15 @@ SbUnoSingleton* findUnoSingleton( const OUString& rName );
 // #105565 Special Object to wrap a strongly typed Uno Any
 class SbUnoAnyObject: public SbxObject
 {
-    ::com::sun::star::uno::Any     mVal;
+    css::uno::Any     mVal;
 
 public:
-    SbUnoAnyObject( const ::com::sun::star::uno::Any& rVal )
+    SbUnoAnyObject( const css::uno::Any& rVal )
         : SbxObject( OUString() )
         , mVal( rVal )
     {}
 
-    const ::com::sun::star::uno::Any& getValue()
+    const css::uno::Any& getValue()
         { return mVal; }
 
     TYPEINFO_OVERRIDE();
@@ -329,14 +329,14 @@ public:
 
 class AutomationNamedArgsSbxArray : public SbxArray
 {
-    ::com::sun::star::uno::Sequence< OUString >      maNameSeq;
+    css::uno::Sequence< OUString >      maNameSeq;
 public:
     TYPEINFO_OVERRIDE();
     AutomationNamedArgsSbxArray( sal_Int32 nSeqSize )
         : maNameSeq( nSeqSize )
     {}
 
-    ::com::sun::star::uno::Sequence< OUString >& getNames()
+    css::uno::Sequence< OUString >& getNames()
         { return maNameSeq; }
 };
 
@@ -384,7 +384,7 @@ public:
     virtual void Clear() SAL_OVERRIDE;
 };
 
-typedef std::unordered_map< OUString, ::com::sun::star::uno::Any, OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;
+typedef std::unordered_map< OUString, css::uno::Any, OUStringHash, ::std::equal_to< OUString > > VBAConstantsHash;
 
 typedef std::vector< OUString > VBAConstantsVector;
 
@@ -406,7 +406,7 @@ public:
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComListener( const ::com::sun::star::uno::Any& aControlAny,
+css::uno::Reference< css::uno::XInterface > createComListener( const css::uno::Any& aControlAny,
                                                                                          const OUString& aVBAType,
                                                                                          const OUString& aPrefix,
                                                                                          SbxObjectRef xScopeObj );

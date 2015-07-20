@@ -1363,7 +1363,7 @@ bool SfxLibraryContainer::implStorePasswordLibrary( SfxLibrary*,
 bool SfxLibraryContainer::implStorePasswordLibrary(
     SfxLibrary* /*pLib*/,
     const OUString& /*aName*/,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& /*xStorage*/,
+    const css::uno::Reference< css::embed::XStorage >& /*xStorage*/,
     const OUString& /*aTargetURL*/,
     const Reference< XSimpleFileAccess3 >& /*xToUseSFI*/,
     const uno::Reference< task::XInteractionHandler >&  )
@@ -2845,7 +2845,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
     // Maybe lib is not loaded?!
     loadLibrary( Name );
 
-    uno::Reference< ::com::sun::star::embed::XStorage > xDummyStor;
+    uno::Reference< css::embed::XStorage > xDummyStor;
     if( pImplLib->mbPasswordProtected )
     {
         implStorePasswordLibrary( pImplLib, Name, xDummyStor, URL, xToUseSFI, Handler );
@@ -2866,7 +2866,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
 }
 
 OUString SfxLibraryContainer::expand_url( const OUString& url )
-    throw(::com::sun::star::uno::RuntimeException)
+    throw(css::uno::RuntimeException)
 {
     if (url.startsWithIgnoreAsciiCase( "vnd.sun.star.expand:" ))
     {
@@ -3456,7 +3456,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextUserScript
                                                                  Reference< task::XAbortChannel >(),
                                                                  Reference< ucb::XCommandEnvironment >() );
         }
-        catch(const com::sun::star::uno::DeploymentException& )
+        catch(const css::uno::DeploymentException& )
         {
             // Special Office installations may not contain deployment code
             m_eState = END_REACHED;
@@ -3511,7 +3511,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextSharedScri
                                                                          Reference< task::XAbortChannel >(),
                                                                          Reference< ucb::XCommandEnvironment >() );
         }
-        catch(const com::sun::star::uno::DeploymentException& )
+        catch(const css::uno::DeploymentException& )
         {
             // Special Office installations may not contain deployment code
             return xScriptPackage;
@@ -3565,7 +3565,7 @@ Reference< deployment::XPackage > ScriptExtensionIterator::implGetNextBundledScr
                                                                     Reference< task::XAbortChannel >(),
                                                                     Reference< ucb::XCommandEnvironment >() );
         }
-        catch(const com::sun::star::uno::DeploymentException& )
+        catch(const css::uno::DeploymentException& )
         {
             // Special Office installations may not contain deployment code
             return xScriptPackage;

@@ -33,29 +33,29 @@ namespace basic
 class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPassword
 {
     OUString maScriptLanguage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > mxCodeNameAccess;
+    css::uno::Reference< css::container::XNameAccess > mxCodeNameAccess;
 
     // Methods to distinguish between deffirent library types
     virtual SfxLibrary* SAL_CALL implCreateLibrary( const OUString& aName ) SAL_OVERRIDE;
     virtual SfxLibrary* SAL_CALL implCreateLibraryLink
         ( const OUString& aName, const OUString& aLibInfoFileURL,
           const OUString& StorageURL, bool ReadOnly ) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Any SAL_CALL createEmptyLibraryElement() SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL createEmptyLibraryElement() SAL_OVERRIDE;
     virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const SAL_OVERRIDE;
     virtual void SAL_CALL writeLibraryElement
     (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
+        const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput
+        const css::uno::Reference< css::io::XOutputStream >& xOutput
     )
-        throw(::com::sun::star::uno::Exception) SAL_OVERRIDE;
+        throw(css::uno::Exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL importLibraryElement
+    virtual css::uno::Any SAL_CALL importLibraryElement
     (
-        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
+        const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const OUString& aFile,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xElementStream ) SAL_OVERRIDE;
+        const css::uno::Reference< css::io::XInputStream >& xElementStream ) SAL_OVERRIDE;
 
     virtual void SAL_CALL importFromOldStorage( const OUString& aFile ) SAL_OVERRIDE;
 
@@ -64,18 +64,18 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
 
     // Password encryption
     virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage>& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler ) SAL_OVERRIDE;
+                        const css::uno::Reference< css::embed::XStorage>& xStorage, const css::uno::Reference< css::task::XInteractionHandler >& Handler ) SAL_OVERRIDE;
 
     // New variant for library export
     virtual bool implStorePasswordLibrary( SfxLibrary* pLib, const OUString& aName,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                        const css::uno::Reference< css::embed::XStorage >& xStorage,
                         const OUString& aTargetURL,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& rToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler ) SAL_OVERRIDE;
+                        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI, const css::uno::Reference< css::task::XInteractionHandler >& Handler ) SAL_OVERRIDE;
 
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
                                           bool bVerifyPasswordOnly=false )
-            throw(::com::sun::star::lang::WrappedTargetException,
-                  ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw(css::lang::WrappedTargetException,
+                  css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void onNewRootStorage() SAL_OVERRIDE;
 
@@ -90,46 +90,46 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
 
 public:
     SfxScriptLibraryContainer();
-    SfxScriptLibraryContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    SfxScriptLibraryContainer( const css::uno::Reference< css::embed::XStorage >& xStorage );
 
 
     // Methods XLibraryContainerPassword
     virtual sal_Bool SAL_CALL isLibraryPasswordProtected( const OUString& Name )
-        throw (::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isLibraryPasswordVerified( const OUString& Name )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL verifyLibraryPassword( const OUString& Name, const OUString& Password )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL changeLibraryPassword( const OUString& Name,
         const OUString& OldPassword, const OUString& NewPassword )
-        throw (::com::sun::star::lang::IllegalArgumentException,
-               ::com::sun::star::container::NoSuchElementException,
-               ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException,
+               css::container::NoSuchElementException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // XLibraryQueryExecutable
     virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&)
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // Methods XServiceInfo
     virtual OUString SAL_CALL getImplementationName( )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
-        throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
-typedef std::unordered_map< OUString, ::com::sun::star::script::ModuleInfo, OUStringHash, ::std::equal_to< OUString > > ModuleInfoMap;
+typedef std::unordered_map< OUString, css::script::ModuleInfo, OUStringHash, ::std::equal_to< OUString > > ModuleInfoMap;
 
-typedef ::cppu::ImplHelper1< ::com::sun::star::script::vba::XVBAModuleInfo > SfxScriptLibrary_BASE;
+typedef ::cppu::ImplHelper1< css::script::vba::XVBAModuleInfo > SfxScriptLibrary_BASE;
 
 class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
 {
     friend class SfxScriptLibraryContainer;
 
-    typedef std::unordered_map< OUString, ::com::sun::star::script::ModuleInfo, OUStringHash > ModuleInfoMap;
+    typedef std::unordered_map< OUString, css::script::ModuleInfo, OUStringHash > ModuleInfoMap;
 
     bool mbLoadedSource;
     bool mbLoadedBinary;
@@ -140,24 +140,23 @@ class SfxScriptLibrary : public SfxLibrary, public SfxScriptLibrary_BASE
     virtual void storeResources() SAL_OVERRIDE;
     virtual void storeResourcesAsURL( const OUString& URL, const OUString& NewName ) SAL_OVERRIDE;
     virtual void storeResourcesToURL( const OUString& URL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) SAL_OVERRIDE;
-    virtual void storeResourcesToStorage( const ::com::sun::star::uno::Reference
-        < ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
+        const css::uno::Reference< css::task::XInteractionHandler >& xHandler ) SAL_OVERRIDE;
+    virtual void storeResourcesToStorage( const css::uno::Reference< css::embed::XStorage >& xStorage ) SAL_OVERRIDE;
     virtual bool isLoadedStorable() SAL_OVERRIDE;
 
 public:
     SfxScriptLibrary
     (
         ModifiableHelper& _rModifiable,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI
     );
 
     SfxScriptLibrary
     (
         ModifiableHelper& _rModifiable,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xSFI,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xSFI,
         const OUString& aLibInfoFileURL, const OUString& aStorageURL, bool ReadOnly
     );
 
@@ -165,12 +164,12 @@ public:
     DECLARE_XTYPEPROVIDER()
 
     // XVBAModuleInfo
-    virtual ::com::sun::star::script::ModuleInfo SAL_CALL getModuleInfo( const OUString& ModuleName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasModuleInfo( const OUString& ModuleName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL insertModuleInfo( const OUString& ModuleName, const ::com::sun::star::script::ModuleInfo& ModuleInfo ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeModuleInfo( const OUString& ModuleName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::script::ModuleInfo SAL_CALL getModuleInfo( const OUString& ModuleName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasModuleInfo( const OUString& ModuleName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL insertModuleInfo( const OUString& ModuleName, const css::script::ModuleInfo& ModuleInfo ) throw (css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL removeModuleInfo( const OUString& ModuleName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static bool containsValidModule( const ::com::sun::star::uno::Any& _rElement );
+    static bool containsValidModule( const css::uno::Any& _rElement );
 
 protected:
     virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const SAL_OVERRIDE;

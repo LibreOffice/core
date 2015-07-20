@@ -40,12 +40,12 @@ sal_Int16 implGetHour( double dDate );
 sal_Int16 implGetMinute( double dDate );
 sal_Int16 implGetSecond( double dDate );
 
-::com::sun::star::util::Date SbxDateToUNODate( const SbxValue* );
-void SbxDateFromUNODate( SbxValue*, const ::com::sun::star::util::Date& );
-::com::sun::star::util::Time SbxDateToUNOTime( const SbxValue* );
-void SbxDateFromUNOTime( SbxValue*, const ::com::sun::star::util::Time& );
-::com::sun::star::util::DateTime SbxDateToUNODateTime( const SbxValue* );
-void SbxDateFromUNODateTime( SbxValue*, const ::com::sun::star::util::DateTime& );
+css::util::Date SbxDateToUNODate( const SbxValue* );
+void SbxDateFromUNODate( SbxValue*, const css::util::Date& );
+css::util::Time SbxDateToUNOTime( const SbxValue* );
+void SbxDateFromUNOTime( SbxValue*, const css::util::Time& );
+css::util::DateTime SbxDateToUNODateTime( const SbxValue* );
+void SbxDateFromUNODateTime( SbxValue*, const css::util::DateTime& );
 
 #endif
 

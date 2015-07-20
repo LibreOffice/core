@@ -122,11 +122,7 @@ public:
 // time are managed by chained instances. There is all the data that only lives
 // when the BASIC is living too, like the I/O-system.
 
-typedef ::std::vector
-<
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
->
-ComponentVector_t;
+typedef std::vector< css::uno::Reference< css::lang::XComponent > > ComponentVector_t;
 
 
 class SbiInstance
