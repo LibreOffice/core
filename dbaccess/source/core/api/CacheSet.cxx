@@ -516,16 +516,6 @@ bool SAL_CALL OCacheSet::isAfterLast(  ) throw(SQLException, RuntimeException)
     return m_xDriverSet->isAfterLast();
 }
 
-bool SAL_CALL OCacheSet::isFirst(  ) throw(SQLException, RuntimeException)
-{
-    return m_xDriverSet->isFirst();
-}
-
-bool SAL_CALL OCacheSet::isLast(  ) throw(SQLException, RuntimeException)
-{
-    return m_xDriverSet->isLast();
-}
-
 void SAL_CALL OCacheSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
@@ -606,11 +596,6 @@ bool SAL_CALL OCacheSet::rowInserted(  ) throw(SQLException, RuntimeException)
 bool SAL_CALL OCacheSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
     return m_xDriverSet->rowDeleted();
-}
-
-Reference< XInterface > SAL_CALL OCacheSet::getStatement(  ) throw(SQLException, RuntimeException)
-{
-    return m_xDriverSet->getStatement();
 }
 
 bool OCacheSet::isResultSetChanged() const

@@ -109,7 +109,6 @@ namespace dbaccess
         // IPropertyContainer
         virtual void registerProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, void* _pPointerToMember, const ::com::sun::star::uno::Type& _rMemberType ) SAL_OVERRIDE;
         virtual void registerMayBeVoidProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, ::com::sun::star::uno::Any* _pPointerToMember, const ::com::sun::star::uno::Type& _rExpectedType ) SAL_OVERRIDE;
-        virtual void registerPropertyNoMember( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const ::com::sun::star::uno::Type& _rType, const void* _pInitialValue ) SAL_OVERRIDE;
     };
 
     // IColumnFactory - used by OColumns for creating new columns

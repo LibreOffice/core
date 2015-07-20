@@ -63,11 +63,6 @@ bool SAL_CALL WrappedResultSet::moveToBookmark( const Any& bookmark ) throw(SQLE
     return m_xRowLocate->moveToBookmark( bookmark );
 }
 
-bool SAL_CALL WrappedResultSet::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
-{
-    return m_xRowLocate->moveRelativeToBookmark( bookmark,rows );
-}
-
 sal_Int32 SAL_CALL WrappedResultSet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
 {
     return m_xRowLocate->compareBookmarks( _first,_second );
@@ -81,17 +76,6 @@ bool SAL_CALL WrappedResultSet::hasOrderedBookmarks(  ) throw(SQLException, Runt
 sal_Int32 SAL_CALL WrappedResultSet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
     return m_xRowLocate->hashBookmark(bookmark);
-}
-
-// ::com::sun::star::sdbcx::XDeleteRows
-Sequence< sal_Int32 > SAL_CALL WrappedResultSet::deleteRows( const Sequence< Any >& rows ,const connectivity::OSQLTable& /*_xTable*/) throw(SQLException, RuntimeException)
-{
-    Reference< ::com::sun::star::sdbcx::XDeleteRows> xDeleteRow(m_xRowLocate,UNO_QUERY);
-    if(xDeleteRow.is())
-    {
-        return xDeleteRow->deleteRows(rows);
-    }
-    return Sequence< sal_Int32 >();
 }
 
 void SAL_CALL WrappedResultSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& /*_xTable*/ ) throw(SQLException, RuntimeException)
@@ -124,21 +108,6 @@ void SAL_CALL WrappedResultSet::updateRow(const ORowSetRow& _rInsertRow ,const O
 void SAL_CALL WrappedResultSet::deleteRow(const ORowSetRow& /*_rDeleteRow*/ ,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
 {
     m_xUpd->deleteRow();
-}
-
-void SAL_CALL WrappedResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
-{
-    m_xUpd->cancelRowUpdates();
-}
-
-void SAL_CALL WrappedResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
-{
-    m_xUpd->moveToInsertRow();
-}
-
-void SAL_CALL WrappedResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
-{
-    m_xUpd->moveToCurrentRow();
 }
 
 void WrappedResultSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)

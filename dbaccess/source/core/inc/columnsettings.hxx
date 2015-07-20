@@ -45,14 +45,6 @@ namespace dbaccess
                     const ::com::sun::star::uno::Type& _rExpectedType
                 ) = 0;
 
-        virtual void registerPropertyNoMember(
-                    const OUString& _rName,
-                    sal_Int32 _nHandle,
-                    sal_Int32 _nAttributes,
-                    const ::com::sun::star::uno::Type& _rType,
-                    const void* _pInitialValue
-                ) = 0;
-
     protected:
         ~IPropertyContainer() {}
     };
