@@ -554,6 +554,8 @@ bool TIFFReader::ReadMap()
                 if ( nStrip >= nNumStripOffsets )
                     return false;
                 pTIFF->Seek( pStripOffsets[ nStrip ] + ( ny % GetRowsPerStrip() ) * nStripBytesPerRow );
+                if (np >= SAL_N_ELEMENTS(pMap))
+                    return false;
                 pTIFF->Read( pMap[ np ], nBytesPerRow );
                 if ( pTIFF->GetError() )
                     return false;
