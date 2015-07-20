@@ -218,14 +218,14 @@ sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::R
     if (GetTextNode())
     {
         if ( text::TextMarkupType::SPELLCHECK == nType )
-            return GetTextNode()->IsWrongDirty();
+            return !GetTextNode()->IsWrongDirty();
         else if ( text::TextMarkupType::PROOFREADING == nType )
-            return GetTextNode()->IsGrammarCheckDirty();
+            return !GetTextNode()->IsGrammarCheckDirty();
         else if ( text::TextMarkupType::SMARTTAG == nType )
-            return GetTextNode()->IsSmartTagDirty();
+            return !GetTextNode()->IsSmartTagDirty();
     }
 
-    return sal_False;
+    return sal_True;
 }
 
 // text::XFlatParagraph:
