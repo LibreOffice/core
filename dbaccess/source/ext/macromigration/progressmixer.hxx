@@ -50,7 +50,7 @@ namespace dbmm
     class ProgressMixer
     {
     public:
-        ProgressMixer( IProgressConsumer& _rConsumer );
+        explicit ProgressMixer( IProgressConsumer& _rConsumer );
         ~ProgressMixer();
 
         /** registers a phase of the process, which has the given weight

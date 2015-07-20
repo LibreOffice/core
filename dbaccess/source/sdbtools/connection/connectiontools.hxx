@@ -53,7 +53,7 @@ namespace sdbtools
             @param _rxContext
                 the context of the component
         */
-        ConnectionTools( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext );
+        explicit ConnectionTools( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rContext );
 
         // XConnectionTools
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableName > SAL_CALL createTableName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

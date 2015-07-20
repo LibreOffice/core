@@ -106,7 +106,7 @@ protected:
     virtual ~ODBFilter()  throw();
 public:
 
-    ODBFilter( const Reference< XComponentContext >& _rxContext );
+    explicit ODBFilter( const Reference< XComponentContext >& _rxContext );
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException, std::exception) SAL_OVERRIDE;

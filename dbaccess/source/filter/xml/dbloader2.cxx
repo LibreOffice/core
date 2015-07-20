@@ -97,7 +97,7 @@ class DBTypeDetection : public ::cppu::WeakImplHelper< XExtendedFilterDetection,
     const Reference< XComponentContext >  m_aContext;
 
 public:
-    DBTypeDetection(const Reference< XComponentContext >&);
+    explicit DBTypeDetection(const Reference< XComponentContext >&);
 
     // XServiceInfo
     OUString                        SAL_CALL getImplementationName() throw(std::exception  ) SAL_OVERRIDE;
@@ -233,7 +233,7 @@ private:
 
     DECL_LINK( OnStartTableWizard, void* );
 public:
-    DBContentLoader(const Reference< XComponentContext >&);
+    explicit DBContentLoader(const Reference< XComponentContext >&);
     virtual ~DBContentLoader();
 
     // XServiceInfo

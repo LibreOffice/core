@@ -60,7 +60,7 @@ namespace dbmm
                 ,public MacroMigrationModuleClient
     {
     public:
-        MacroMigrationDialogService( const Reference< XComponentContext >& _rxContext );
+        explicit MacroMigrationDialogService( const Reference< XComponentContext >& _rxContext );
 
         // XTypeProvider
         virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException, std::exception) SAL_OVERRIDE;

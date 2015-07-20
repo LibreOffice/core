@@ -49,7 +49,7 @@ namespace dbmm
         {
         }
 
-        PhaseData( const PhaseWeight _nWeight )
+        explicit PhaseData( const PhaseWeight _nWeight )
             :nWeight( _nWeight )
             ,nRange(100)
             ,nGlobalStart(0)
@@ -69,7 +69,7 @@ namespace dbmm
         double              nOverallStretch;
         IProgressConsumer&  rConsumer;
 
-        ProgressMixer_Data( IProgressConsumer& _rConsumer )
+        explicit ProgressMixer_Data( IProgressConsumer& _rConsumer )
             :aPhases()
             ,pCurrentPhase( aPhases.end() )
             ,nWeightSum( 0 )

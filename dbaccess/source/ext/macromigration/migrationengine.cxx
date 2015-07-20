@@ -430,7 +430,7 @@ namespace dbmm
     class DrawPageIterator
     {
     public:
-        DrawPageIterator( const Reference< XModel >& _rxDocument )
+        explicit DrawPageIterator( const Reference< XModel >& _rxDocument )
             :m_xDocument( _rxDocument )
             ,m_nPageCount( 0 )
             ,m_nCurrentPage( 0 )
@@ -518,7 +518,7 @@ namespace dbmm
     class FormComponentIterator
     {
     public:
-        FormComponentIterator( const Reference< XIndexAccess >& _rxContainer )
+        explicit FormComponentIterator( const Reference< XIndexAccess >& _rxContainer )
             :m_xContainer( _rxContainer )
             ,m_xEventManager( _rxContainer, UNO_QUERY_THROW )
             ,m_nElementCount( _rxContainer->getCount() )
@@ -557,7 +557,7 @@ namespace dbmm
     class ScriptsStorage
     {
     public:
-        ScriptsStorage( MigrationLog& _rLogger );
+        explicit ScriptsStorage( MigrationLog& _rLogger );
         ScriptsStorage( const Reference< XModel >& _rxDocument, MigrationLog& _rLogger );
         ~ScriptsStorage();
 
@@ -770,7 +770,7 @@ namespace dbmm
     class PhaseGuard
     {
     public:
-        PhaseGuard( ProgressMixer& _rMixer )
+        explicit PhaseGuard( ProgressMixer& _rMixer )
             :m_rMixer( _rMixer )
         {
         }

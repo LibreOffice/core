@@ -228,7 +228,7 @@ class UnaryFunctionExpression : public ExpressionNode
     ExpressionNodeSharedPtr mpArg;
 
 public:
-    UnaryFunctionExpression( const ExpressionNodeSharedPtr& rArg ) :
+    explicit UnaryFunctionExpression( const ExpressionNodeSharedPtr& rArg ) :
         mpArg( rArg )
     {
     }

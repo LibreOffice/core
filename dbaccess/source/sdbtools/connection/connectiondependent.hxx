@@ -59,7 +59,7 @@ namespace sdbtools
         class EntryGuard;
 
     protected:
-        ConnectionDependentComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rContext )
+        explicit ConnectionDependentComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & _rContext )
             :m_aContext( _rContext )
         {
         }
@@ -117,7 +117,7 @@ namespace sdbtools
         ConnectionDependentComponent&   m_rComponent;
 
     public:
-        EntryGuard( ConnectionDependentComponent& _rComponent )
+        explicit EntryGuard( ConnectionDependentComponent& _rComponent )
             :m_aMutexGuard( _rComponent.getMutex( ConnectionDependentComponent::GuardAccess() ) )
             ,m_rComponent( _rComponent )
         {

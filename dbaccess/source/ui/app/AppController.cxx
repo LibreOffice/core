@@ -188,7 +188,7 @@ Reference< XInterface > SAL_CALL OApplicationController::Create(const Reference<
 struct XContainerFunctor : public ::std::unary_function< OApplicationController::TContainerVector::value_type , bool>
 {
     Reference<XContainerListener> m_xContainerListener;
-    XContainerFunctor( const Reference<XContainerListener>& _xContainerListener)
+    explicit XContainerFunctor( const Reference<XContainerListener>& _xContainerListener)
         : m_xContainerListener(_xContainerListener){}
 
     bool operator() (const OApplicationController::TContainerVector::value_type& lhs) const
@@ -267,7 +267,7 @@ public:
 class SelectionGuard : public ::boost::noncopyable
 {
 public:
-    SelectionGuard( SelectionNotifier& _rNotifier )
+    explicit SelectionGuard( SelectionNotifier& _rNotifier )
         :m_rNotifier( _rNotifier )
     {
         m_rNotifier.enterSelection( SelectionNotifier::SelectionGuardAccess() );

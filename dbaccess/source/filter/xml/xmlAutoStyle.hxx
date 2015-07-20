@@ -40,7 +40,7 @@ namespace dbaxml
                 ) const SAL_OVERRIDE;
 
     public:
-        OXMLAutoStylePoolP(ODBExport& rXMLExport);
+        explicit OXMLAutoStylePoolP(ODBExport& rXMLExport);
         virtual ~OXMLAutoStylePoolP();
     };
 } // dbaxml
