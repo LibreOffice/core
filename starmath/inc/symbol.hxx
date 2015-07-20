@@ -86,16 +86,11 @@ public:
     sal_UCS4        GetCharacter() const { return m_cChar; }
     const OUString&   GetName() const { return m_aName; }
 
-    void            SetFace( const vcl::Font& rFont )        { m_aFace = rFont; }
-    void            SetCharacter( sal_UCS4 cChar )   { m_cChar = cChar; }
-
     bool            IsPredefined() const        { return m_bPredefined; }
     const OUString& GetSymbolSetName() const    { return m_aSetName; }
-    void            SetSymbolSetName( const OUString &rName )     { m_aSetName = rName; }
     const OUString& GetExportName() const       { return m_aExportName; }
     void            SetExportName( const OUString &rName )        { m_aExportName = rName; }
 
-    bool            IsDocSymbol() const         { return m_bDocSymbol; }
     void            SetDocSymbol( bool bVal )   { m_bDocSymbol = bVal; }
 
     // true if rSymbol has the same name, font and character

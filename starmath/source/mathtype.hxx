@@ -145,8 +145,6 @@ private:
     static int xfAUTO(sal_uInt8 nTest) {return nTest&0x10;}
     static int xfEMBELL(sal_uInt8 nTest) {return nTest&0x20;}
     static int xfNULL(sal_uInt8 nTest) {return nTest&0x10;}
-    static int xfLSPACE(sal_uInt8 nTest) {return nTest&0x40;}
-    static int xfRULER(sal_uInt8 nTest) {return nTest&0x20;}
 
     void HandleNodes(SmNode *pNode,int nLevel=0);
     int StartTemplate(sal_uInt16 nSelector,sal_uInt16 nVariation=0);

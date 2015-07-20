@@ -127,7 +127,6 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     virtual void        OnDocumentPrinterChanged( Printer * ) SAL_OVERRIDE;
     virtual bool        InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;
     virtual bool        Load( SfxMedium& rMedium ) SAL_OVERRIDE;
-            void        ImplSave(  tools::SvRef<SotStorageStream> xStrm  );
     virtual bool        Save() SAL_OVERRIDE;
     virtual bool        SaveAs( SfxMedium& rMedium ) SAL_OVERRIDE;
     virtual bool        ConvertTo( SfxMedium &rMedium ) SAL_OVERRIDE;

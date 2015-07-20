@@ -83,7 +83,6 @@ public:
     explicit SmGraphicAccessible( SmGraphicWindow *pGraphicWin );
     virtual ~SmGraphicAccessible();
 
-    SmGraphicWindow *   GetWin()    { return pWin; }
     void                ClearWin();     // to be called when view is destroyed
     void                LaunchEvent(
                             const sal_Int16 nAccesibleEventId,
@@ -328,7 +327,6 @@ public:
     ::accessibility::AccessibleTextHelper *   GetTextHelper() { return pTextHelper; }
 
     void                Init();
-    SmEditWindow *      GetWin()    { return pWin; }
     void                ClearWin();     // to be called when view is destroyed
 
     //! access EditEngine and EditView via the functions in the respective window

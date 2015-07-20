@@ -88,7 +88,6 @@ protected:
                           bool bNoMrowContainer = false);
     void ExportText(const SmNode *pNode, int nLevel);
     void ExportMath(const SmNode *pNode, int nLevel);
-    void ExportPolygon(const SmNode *pNode, int nLevel);
     void ExportBinaryHorizontal(const SmNode *pNode, int nLevel);
     void ExportUnaryHorizontal(const SmNode *pNode, int nLevel);
     void ExportBrace(const SmNode *pNode, int nLevel);

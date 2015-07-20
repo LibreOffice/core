@@ -119,7 +119,6 @@ public:
             void SetItalicSpaces(long nLeftSpace, long nRightSpace);
 
             void SetWidth(sal_uLong nWidth)     { aSize.Width()  = nWidth; }
-            void SetHeight(sal_uLong nHeight)   { aSize.Height() = nHeight; }
 
             void SetLeft(long nLeft);
             void SetRight(long nRight);
@@ -140,8 +139,6 @@ public:
             long GetItalicLeftSpace()  const { return nItalicLeftSpace; }
             long GetItalicRightSpace() const { return nItalicRightSpace; }
 
-            void SetHiAttrFence(long nVal)  { nHiAttrFence = nVal; }
-            void SetLoAttrFence(long nVal)  { nLoAttrFence = nVal; }
             long GetHiAttrFence() const     { return nHiAttrFence; }
             long GetLoAttrFence() const     { return nLoAttrFence; }
 
@@ -154,16 +151,9 @@ public:
     inline  long GetBaseline() const;
             long GetBaselineOffset() const  { return GetBaseline() - GetTop(); }
 
-            void SetAlignTop(long nVal) { nAlignT = nVal; }
-
             long GetAlignT() const  { return nAlignT; }
             long GetAlignM() const  { return nAlignM; }
             long GetAlignB() const  { return nAlignB; }
-
-            void SetAlignT(long nVal) { nAlignT = nVal; }
-
-            const Point  GetCenter() const
-            {   return Point(GetCenterX(), GetCenterY()); }
 
             const Size & GetSize() const    { return aSize; }
 

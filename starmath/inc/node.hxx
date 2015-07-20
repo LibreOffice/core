@@ -228,7 +228,6 @@ protected:
     inline void ClaimPaternity();
 private:
     SmStructureNode* aParentNode;
-    void DumpAsDot(std::ostream &out, OUString* label, int number, int& id, int parent) const;
 };
 
 
@@ -426,7 +425,6 @@ public:
     SmPolyLineNode(const SmToken &rNodeToken);
 
     long         GetWidth() const { return nWidth; }
-    Size         GetToSize() const { return aToSize; }
     Polygon     &GetPolygon() { return aPoly; }
 
     virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth) SAL_OVERRIDE;
@@ -845,10 +843,6 @@ public:
  */
 class SmDynIntegralNode : public SmStructureNode
 {
-protected:
-    void   GetHeightVerOffset(const SmRect &rRect,
-                              long &rHeight, long &rVerOffset) const;
-
 public:
     SmDynIntegralNode(const SmToken &rNodeToken)
     :   SmStructureNode(NDYNINT, rNodeToken)
