@@ -669,7 +669,7 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
     }
     else if ( nCompression == 32773 )
     {
-        sal_uLong nStrip,nRecCount,nRowBytesLeft,np,i;
+        sal_uLong nStrip,nRecCount,np,i;
         sal_uInt8 * pdst;
         nStrip = 0;
         if ( nStrip >= nNumStripOffsets )
@@ -686,7 +686,7 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                         return false;
                     pTIFF->Seek(pStripOffsets[nStrip]);
                 }
-                nRowBytesLeft = nBytesPerRow;
+                sal_uLong nRowBytesLeft = nBytesPerRow;
                 if (np >= SAL_N_ELEMENTS(pMap))
                     return false;
                 pdst=pMap[ np ];
@@ -700,6 +700,8 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                         if ( nRecCount > nRowBytesLeft )
                             return false;
                         pTIFF->Read(pdst,nRecCount);
+                        if (!pTIFF->good())
+                            return false;
                         pdst+=nRecCount;
                         nRowBytesLeft-=nRecCount;
                     }
