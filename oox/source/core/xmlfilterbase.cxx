@@ -118,7 +118,8 @@ struct NamespaceIds: public rtl::StaticWithInit<
             "http://schemas.openxmlformats.org/markup-compatibility/2006",
             "http://schemas.openxmlformats.org/spreadsheetml/2006/main/v2",
             "http://schemas.microsoft.com/office/drawing/2008/diagram",
-            "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"
+            "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main",
+            "http://schemas.libreoffice.org/"
         };
 
         static const sal_Int32 namespaceIds[] = {
@@ -145,7 +146,8 @@ struct NamespaceIds: public rtl::StaticWithInit<
             NMSP_mce,
             NMSP_mceTest,
             NMSP_dsp,
-            NMSP_xls14Lst
+            NMSP_xls14Lst,
+            NMSP_loext
         };
 
         Sequence< beans::Pair< OUString, sal_Int32 > > aRet(SAL_N_ELEMENTS(namespaceIds));
