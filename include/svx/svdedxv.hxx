@@ -111,6 +111,7 @@ protected:
     OutlinerView* ImpFindOutlinerView(vcl::Window* pWin) const;
 
     void ImpMoveCursorAfterChainingEvent();
+    bool ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin);
 
     // Create a new OutlinerView at the heap and initialize all required parameters.
     // pTextEditObj, pTextEditPV and pTextEditOutliner have to be initialized
