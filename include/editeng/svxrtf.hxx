@@ -204,6 +204,9 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
                                         // sal_False - in RightToLeft char run def.
     bool    bIsInReadStyleTab : 1;  // sal_True - in ReadStyleTable
 
+    SvxRTFParser(SvxRTFParser const&) = delete;
+    void operator=(SvxRTFParser const&) = delete;
+
     void ClearColorTbl();
     void ClearFontTbl();
     void ClearStyleTbl();
