@@ -706,6 +706,7 @@ void OutlinerView::PasteSpecial()
         pOwner->UndoActionEnd( OLUNDO_INSERT );
         pEditView->ShowCursor( true, true );
     }
+
 }
 
 void OutlinerView::CreateSelectionList (std::vector<Paragraph*> &aSelList)

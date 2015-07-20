@@ -1296,7 +1296,6 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
         ESelection aCurSel = pTextEditOutlinerView->GetSelection();
 
 
-
         SdrTextObj* pTextObj = NULL;
         if (mxTextEditObj.is())
             pTextObj= dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
@@ -1343,8 +1342,10 @@ bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin)
             }
 
             // FIXME(matteocam)
+            // Start chaining processing
             ImpChainingEventHdl(NULL);
             ImpMoveCursorAfterChainingEvent();
+            // End chaining processing
 
             if (pWin!=NULL && pWin!=pTextEditWin) SetTextEditWin(pWin);
 #ifdef DBG_UTIL
@@ -2036,6 +2037,8 @@ void SdrObjEditView::OnBeginPasteOrDrop( PasteOrDropInfos* )
 void SdrObjEditView::OnEndPasteOrDrop( PasteOrDropInfos* )
 {
     // applications can derive from these virtual methods to do something before a drop or paste operation
+    ImpChainingEventHdl(NULL);
+
 }
 
 sal_uInt16 SdrObjEditView::GetSelectionLevel() const

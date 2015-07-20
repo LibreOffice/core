@@ -214,6 +214,7 @@ private:
     EDITENG_DLLPRIVATE void         ImpPasted( sal_Int32 nStart, sal_Int32 nPrevParaCount, sal_Int32 nSize);
     EDITENG_DLLPRIVATE sal_Int32    ImpCalcSelectedPages( bool bIncludeFirstSelected );
 
+
 public:
                 OutlinerView( Outliner* pOut, vcl::Window* pWindow );
     virtual     ~OutlinerView();
