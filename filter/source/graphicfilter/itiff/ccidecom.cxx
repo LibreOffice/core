@@ -1026,11 +1026,14 @@ void CCIDecompressor::Read2DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
     while (nBitPos<nTargetBits && bStatus) {
 
         n2DMode=ReadCodeAndDecode(p2DModeLookUp,10);
-        if (!bStatus) return;
+        if (!bStatus)
+            return;
 
         if (n2DMode==CCI2DMODE_UNCOMP) {
             for (;;) {
                 nUncomp=ReadCodeAndDecode(pUncompLookUp,11);
+                if (!bStatus)
+                    break;
                 if ( nUncomp <= CCIUNCOMP_4White_1Black ) {
                     nRun=nUncomp-CCIUNCOMP_0White_1Black;
                     FillBits(pTarget,nTargetBits,nBitPos,nRun,0x00);
