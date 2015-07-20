@@ -39,6 +39,7 @@
 #include <svl/intitem.hxx>
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <svx/svxdllapi.h>
 
 class XFillFloatTransparenceItem;
 class XFillTransparenceItem;
@@ -53,7 +54,7 @@ namespace svx { namespace sidebar {
 class PopupContainer;
 class AreaTransparencyGradientControl;
 
-class AreaPropertyPanelBase
+class SVX_DLLPUBLIC AreaPropertyPanelBase
 :   public PanelLayout,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface
 {

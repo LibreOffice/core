@@ -34,7 +34,7 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#include "AreaPropertyPanelBase.hxx"
+#include <svx/sidebar/AreaPropertyPanelBase.hxx>
 
 class XFillFloatTransparenceItem;
 class XFillTransparenceItem;

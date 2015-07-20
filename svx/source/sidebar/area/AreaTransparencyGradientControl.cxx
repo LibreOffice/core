@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "AreaTransparencyGradientControl.hxx"
-#include "AreaPropertyPanelBase.hxx"
+#include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include "AreaPropertyPanel.hrc"
 
 #include <svx/dialogs.hrc>
