@@ -12,6 +12,7 @@
 
 #include "excelhandlers.hxx"
 #include "worksheetfragment.hxx"
+#include "workbookfragment.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -98,6 +99,27 @@ class ExtLstGlobalContext : public WorksheetContextBase
 {
 public:
     explicit ExtLstGlobalContext( WorksheetFragment& rFragment );
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+};
+
+class ExtGlobalWorkbookContext : public WorkbookContextBase
+{
+public:
+    explicit ExtGlobalWorkbookContext( WorkbookContextBase& rFragment );
+
+protected:
+    virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void        onStartElement( const AttributeList& rAttribs ) SAL_OVERRIDE;
+
+private:
+};
+
+class ExtLstGlobalWorkbookContext : public WorkbookContextBase
+{
+public:
+    explicit ExtLstGlobalWorkbookContext( WorkbookFragment& rFragment );
 
 protected:
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs ) SAL_OVERRIDE;

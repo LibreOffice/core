@@ -2137,6 +2137,7 @@ exp
 explosion
 expression
 ext
+extCalcPr
 extLst
 extend
 extendable
@@ -4954,6 +4955,7 @@ strikeH
 strikeTLBR
 strikeV
 string
+stringRefSyntax
 stringValue1
 stringValue2
 stripedRightArrow

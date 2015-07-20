@@ -361,6 +361,44 @@ void XclExpExtConditionalFormatting::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElementNS( XML_x14, XML_conditionalFormatting );
 }
 
+XclExpExtCalcPr::XclExpExtCalcPr( const XclExpRoot& rRoot, formula::FormulaGrammar::AddressConvention eConv ):
+    XclExpExt( rRoot ),
+    meConv( eConv )
+{
+    maURI = OString("{7626C862-2A13-11E5-B345-FEFF819CDC9F}");
+
+    switch (meConv)
+    {
+        case formula::FormulaGrammar::CONV_OOO:
+        case formula::FormulaGrammar::CONV_XL_A1:
+        case formula::FormulaGrammar::CONV_XL_R1C1:
+            mnSyntax = static_cast<sal_Int16>(meConv);
+            break;
+        case formula::FormulaGrammar::CONV_UNSPECIFIED:
+        case formula::FormulaGrammar::CONV_ODF:
+        case formula::FormulaGrammar::CONV_XL_OOX:
+        case formula::FormulaGrammar::CONV_LOTUS_A1:
+        case formula::FormulaGrammar::CONV_LAST:
+            mnSyntax = sal_Int16(9999);
+            break;
+    }
+}
+
+void XclExpExtCalcPr::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_ext,
+                                FSNS( XML_xmlns, XML_x14 ), "http://schemas.microsoft.com/office/spreadsheetml/2009/9/main",
+                                XML_uri, maURI.getStr(),
+                                FSEND );
+
+    rWorksheet->singleElementNS( XML_x14, XML_extCalcPr,
+                                 XML_stringRefSyntax, OString::number( mnSyntax).getStr(),
+                                 FSEND );
+
+    rWorksheet->endElement( XML_ext );
+}
+
 XclExpExtCondFormat::XclExpExtCondFormat( const XclExpRoot& rRoot ):
     XclExpExt( rRoot )
 {

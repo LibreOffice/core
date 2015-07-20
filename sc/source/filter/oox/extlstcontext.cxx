@@ -249,6 +249,53 @@ ContextHandlerRef ExtLstGlobalContext::onCreateContext( sal_Int32 nElement, cons
     return this;
 }
 
+ExtGlobalWorkbookContext::ExtGlobalWorkbookContext( WorkbookContextBase& rFragment ):
+    WorkbookContextBase(rFragment)
+{
+}
+
+ContextHandlerRef ExtGlobalWorkbookContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
+{
+    if (nElement == XLS14_TOKEN(extCalcPr))
+    {
+        ScDocument* pDoc = &getScDocument();
+        sal_Int16 nSyntax = rAttribs.getInteger( XML_stringRefSyntax, 9999 );
+        ScCalcConfig aCalcConfig = pDoc->GetCalcConfig();
+
+        switch( nSyntax )
+        {
+             case 0:
+             case 2:
+             case 3:
+                aCalcConfig.meStringRefAddressSyntax = static_cast<formula::FormulaGrammar::AddressConvention>( nSyntax );
+                break;
+             default:
+                aCalcConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_UNSPECIFIED;
+               break;
+        }
+        pDoc->SetCalcConfig(aCalcConfig);
+    }
+
+    return this;
+}
+
+void ExtGlobalWorkbookContext::onStartElement( const AttributeList& /*rAttribs*/ )
+{
+}
+
+ExtLstGlobalWorkbookContext::ExtLstGlobalWorkbookContext( WorkbookFragment& rFragment ):
+    WorkbookContextBase(rFragment)
+{
+}
+
+ContextHandlerRef ExtLstGlobalWorkbookContext::onCreateContext( sal_Int32 nElement, const AttributeList& )
+{
+    if (nElement == XLS_TOKEN( ext ))
+        return new ExtGlobalWorkbookContext( *this );
+
+    return this;
+}
+
 } //namespace oox
 } //namespace xls
 
