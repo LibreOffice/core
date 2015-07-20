@@ -218,11 +218,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     int                 m_nSelectionType;
     VclPtr<FloatingWindow> m_pFieldPopup;
-
-    static const int m_nMASTERENUMCOMMANDS = 6;
-
-    OUString            m_aCurrShapeEnumCommand[ m_nMASTERENUMCOMMANDS ];
-
     sal_uInt16          m_nPageCnt;
 
     // current draw mode

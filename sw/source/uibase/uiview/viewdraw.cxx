@@ -320,7 +320,6 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 if ( pStringItem )
                 {
                     m_sDrawCustom = pStringItem->GetValue();
-                    m_aCurrShapeEnumCommand[ nSlotId - SID_DRAWTBX_CS_BASIC ] = m_sDrawCustom;
                     SfxBindings& rBind = GetViewFrame()->GetBindings();
                     rBind.Invalidate( nSlotId );
                     rBind.Update( nSlotId );

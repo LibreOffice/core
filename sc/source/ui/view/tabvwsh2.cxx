@@ -310,7 +310,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                 SFX_REQUEST_ARG( rReq, pEnumCommand, SfxStringItem, nNewId, false );
                 if ( pEnumCommand )
                 {
-                    aCurrShapeEnumCommand[ nNewId - SID_DRAWTBX_CS_BASIC ] = pEnumCommand->GetValue();
                     SfxBindings& rBind = GetViewFrame()->GetBindings();
                     rBind.Invalidate( nNewId );
                     rBind.Update( nNewId );
@@ -441,10 +440,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
             case SID_DRAWTBX_CS_FLOWCHART:
             case SID_DRAWTBX_CS_CALLOUT:
             case SID_DRAWTBX_CS_STAR:
-            {
-                bool bCurrentActive = (nDrawSfxId == nWhich) && (aCurrShapeEnumCommand[ nWhich - SID_DRAWTBX_CS_BASIC ] == sDrawCustom);
-                rSet.Put( SfxBoolItem( nWhich, bCurrentActive ) );
-            }
+                rSet.Put( SfxBoolItem( nWhich, nDrawSfxId == nWhich ) );
             break;
         }
         nWhich = aIter.NextWhich();

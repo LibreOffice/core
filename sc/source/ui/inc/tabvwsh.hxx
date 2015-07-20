@@ -168,9 +168,6 @@ private:
 
     SfxBroadcaster*         pAccessibilityBroadcaster;
 
-    static const int        MASTERENUMCOMMANDS = 6;
-    OUString                aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
-
     // ugly hack for Add button in ScNameDlg
     boost::ptr_map<OUString, ScRangeName> maRangeMap;
     bool    mbInSwitch;
