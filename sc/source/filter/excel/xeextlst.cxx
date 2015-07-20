@@ -361,6 +361,48 @@ void XclExpExtConditionalFormatting::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElementNS( XML_x14, XML_conditionalFormatting );
 }
 
+XclExpExtCalcPr::XclExpExtCalcPr( const XclExpRoot& rRoot, formula::FormulaGrammar::AddressConvention eConv ):
+    XclExpExt( rRoot ),
+    meConv( eConv )
+{
+    maURI = OString("{7626C862-2A13-11E5-B345-FEFF819CDC9F}");
+
+    switch (meConv)
+    {
+        case formula::FormulaGrammar::CONV_OOO:
+            maSyntax = OString("CalcA1");
+            break;
+        case formula::FormulaGrammar::CONV_XL_A1:
+            maSyntax = OString("ExcelA1");
+            break;
+        case formula::FormulaGrammar::CONV_XL_R1C1:
+            maSyntax = OString("ExcelR1C1");
+            break;
+        case formula::FormulaGrammar::CONV_UNSPECIFIED:
+        case formula::FormulaGrammar::CONV_ODF:
+        case formula::FormulaGrammar::CONV_XL_OOX:
+        case formula::FormulaGrammar::CONV_LOTUS_A1:
+        case formula::FormulaGrammar::CONV_LAST:
+            maSyntax = OString("Unspecified");
+            break;
+    }
+}
+
+void XclExpExtCalcPr::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    rWorksheet->startElement( XML_ext,
+                                FSNS( XML_xmlns, XML_loext ), "http://schemas.libreoffice.org/",
+                                XML_uri, maURI.getStr(),
+                                FSEND );
+
+    rWorksheet->singleElementNS( XML_loext, XML_extCalcPr,
+                                 XML_stringRefSyntax, maSyntax.getStr(),
+                                 FSEND );
+
+    rWorksheet->endElement( XML_ext );
+}
+
 XclExpExtCondFormat::XclExpExtCondFormat( const XclExpRoot& rRoot ):
     XclExpExt( rRoot )
 {

@@ -445,6 +445,11 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
     aRecList.AppendRecord( GetObjectManager().CreateDrawingGroup() );
     // Shared string table: SST, EXTSST
     aRecList.AppendRecord( CreateRecord( EXC_ID_SST ) );
+
+    XclExtLstRef xExtLst( new XclExtLst( GetRoot()  ) );
+    const ScCalcConfig& rCalcConfig = rDoc.GetCalcConfig();
+    xExtLst->AddRecord( XclExpExtRef( new XclExpExtCalcPr( GetRoot(), rCalcConfig.meStringRefAddressSyntax ))  );
+    aRecList.AppendRecord( xExtLst );
 }
 
 void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )

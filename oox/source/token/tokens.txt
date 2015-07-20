@@ -69,6 +69,7 @@ BroadcastTitle
 Broadcaster
 Button
 CF
+CalcA1
 Camera
 Cancel
 Caption
@@ -141,6 +142,8 @@ Editor
 ElectronicSource
 Embed
 EnhancedMetaFile
+ExcelA1
+ExcelR1C1
 Extend
 Extension
 External
@@ -392,6 +395,7 @@ True
 Type
 Types
 UIObj
+Unspecified
 URI
 URL
 UpdateMode
@@ -2137,6 +2141,7 @@ exp
 explosion
 expression
 ext
+extCalcPr
 extLst
 extend
 extendable
@@ -3165,6 +3170,7 @@ lockWindows
 locked
 lockedCanvas
 lockrotationcenter
+loext
 log
 logBase
 lon
@@ -4954,6 +4960,7 @@ strikeH
 strikeTLBR
 strikeV
 string
+stringRefSyntax
 stringValue1
 stringValue2
 stripedRightArrow
