@@ -2928,7 +2928,7 @@ bool ScCompiler::IsReference( const OUString& rName )
     if ( ch1 == cDecSep )
         return false;
     // Who was that imbecile introducing '.' as the sheet name separator!?!
-    if ( rtl::isAsciiDigit( ch1 ) )
+    if ( rtl::isAsciiDigit( ch1 ) && pConv->getSpecialSymbol( Convention::SHEET_SEPARATOR) == '.' )
     {
         // Numerical sheet name is valid.
         // But English 1.E2 or 1.E+2 is value 100, 1.E-2 is 0.01
