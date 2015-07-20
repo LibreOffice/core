@@ -1872,14 +1872,6 @@ void SAL_CALL OReportDefinition::removeEventListener( const uno::Reference< docu
     m_pImpl->m_aDocEventListeners.removeInterface(_xListener);
 }
 
-// document::XEventListener
-void SAL_CALL OReportDefinition::notifyEvent( const document::EventObject& aEvent ) throw (uno::RuntimeException)
-{
-    // used only to forward external events (e.g. for doc creation) from the frame loader
-    // to the global event broadcaster and all other interested doc event listener.
-    notifyEvent(aEvent.EventName);
-}
-
 // document::XViewDataSupplier
 uno::Reference< container::XIndexAccess > SAL_CALL OReportDefinition::getViewData(  ) throw (uno::RuntimeException, std::exception)
 {

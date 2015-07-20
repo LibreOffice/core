@@ -54,7 +54,6 @@ namespace rptui
         sal_Int32                   m_nPaintEntranceCount;
 
         DlgEdMode                   m_eMode;
-        bool                        m_bDialogModelChanged;
 
         /** fills the section with all control from the report section
         */
@@ -120,8 +119,6 @@ namespace rptui
         inline OReportPage*         getPage() const { return m_pPage; }
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const { return m_xSection; }
 
-        void            SetDialogModelChanged( bool bChanged = true ) { m_bDialogModelChanged = bChanged; }
-        bool            IsDialogModelChanged() const { return m_bDialogModelChanged; }
         DlgEdMode       GetMode() const { return m_eMode; }
         void            SetMode( DlgEdMode m_eMode );
 

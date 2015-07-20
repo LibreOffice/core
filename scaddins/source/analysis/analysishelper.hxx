@@ -190,11 +190,10 @@ public:
 
     inline sal_uInt16       GetUINameID() const;
     inline sal_uInt16       GetDescrID() const;
-    inline bool         IsDouble() const;
-    inline bool         HasIntParam() const;
+    inline bool             IsDouble() const;
 
     sal_uInt16              GetStrIndex( sal_uInt16 nParamNum ) const;
-    inline bool         Is( const OUString& rCompareTo ) const;
+    inline bool             Is( const OUString& rCompareTo ) const;
 
     inline const std::vector<OUString> &
                             GetCompNameList() const;
@@ -569,12 +568,6 @@ inline sal_uInt16 FuncData::GetDescrID() const
 inline bool FuncData::IsDouble() const
 {
     return bDouble;
-}
-
-
-inline bool FuncData::HasIntParam() const
-{
-    return bWithOpt;
 }
 
 

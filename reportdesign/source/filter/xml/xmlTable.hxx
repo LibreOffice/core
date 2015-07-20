@@ -77,9 +77,6 @@ namespace rptxml
         void incrementRowIndex();
         inline void incrementColumnIndex()  { ++m_nColumnIndex; }
 
-        inline sal_Int32 getRowIndex() const { return m_nRowIndex; }
-        inline sal_Int32 getColumnIndex() const { return m_nColumnIndex; }
-
         void addCell(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xElement);
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const { return m_xSection; }

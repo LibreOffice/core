@@ -84,7 +84,6 @@ namespace reportdesign
             }
             l.notify();
         }
-        void checkIndex(sal_Int32 _nIndex);
         cppu::IPropertyArrayHelper& getInfoHelper();
     protected:
         virtual ~OShape();

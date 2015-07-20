@@ -96,7 +96,6 @@ public:
 
     void    Update( OSectionView* m_pView );
     void    Update( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xReportComponent);
-    inline OSectionView*    GetCurView() const { return m_pView; }
     OUString         getCurrentPage() const;
     void                    setCurrentPage(const OUString& _sLastActivePage);
 

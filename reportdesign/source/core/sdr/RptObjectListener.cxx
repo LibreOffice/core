@@ -61,7 +61,6 @@ void SAL_CALL OObjectListener::propertyChange( const  ::com::sun::star::beans::P
 
 DlgEdHint::DlgEdHint(DlgEdHintKind eHint)
     : eHintKind(eHint)
-    , pDlgEdObj(NULL)
 {
 }
 

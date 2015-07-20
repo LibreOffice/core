@@ -74,7 +74,6 @@ namespace reportdesign
             }
             l.notify();
         }
-        void checkIndex(sal_Int32 _nIndex);
     protected:
         virtual ~OImageControl();
     public:
