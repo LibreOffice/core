@@ -715,6 +715,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     else
         aOutputData.SetSolidBackground(true);
 
+    pContentDev->SetMapMode(MAP_100TH_MM);
+
     aOutputData.DrawDocumentBackground();
 
     if ( bGridFirst && ( bGrid || bPage ) )
@@ -736,13 +738,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     }
 
     aOutputData.DrawShadow(*pContentDev);
-
-    MapMode aPrevMapMode = pContentDev->GetMapMode();
-    pContentDev->SetMapMode(MAP_PIXEL);
-
     aOutputData.DrawFrame(*pContentDev);
-
-    pContentDev->SetMapMode(aPrevMapMode);
 
     // Show Note Mark
     if ( rOpts.GetOption( VOPT_NOTES ) )
