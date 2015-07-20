@@ -54,6 +54,22 @@ formula::FormulaGrammar::AddressConvention toAddressConvention(sal_Int32 nPos)
     return formula::FormulaGrammar::CONV_UNSPECIFIED;
 }
 
+sal_Int32 toSelectedItem( formula::FormulaGrammar::AddressConvention eConv )
+{
+    switch (eConv)
+    {
+        case formula::FormulaGrammar::CONV_OOO:
+            return 1;
+        case formula::FormulaGrammar::CONV_XL_A1:
+            return 2;
+        case formula::FormulaGrammar::CONV_XL_R1C1:
+            return 3;
+        default:
+            ;
+    }
+    return 0;
+}
+
 }
 
 ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfig& rConfig)
@@ -79,7 +95,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     mpEmptyAsZero->SetClickHdl(LINK(this, ScCalcOptionsDialog, AsZeroModifiedHdl));
 
     get(mpSyntax,"comboSyntaxRef");
-    mpSyntax->SelectEntryPos(rConfig.meStringRefAddressSyntax);
+    mpSyntax->SelectEntryPos( toSelectedItem(rConfig.meStringRefAddressSyntax) );
     mpSyntax->SetSelectHdl(LINK(this, ScCalcOptionsDialog, SyntaxModifiedHdl));
 
     get(mpUseOpenCL,"CBUseOpenCL");
