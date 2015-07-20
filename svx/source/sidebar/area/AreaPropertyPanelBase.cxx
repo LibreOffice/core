@@ -21,7 +21,7 @@
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/ControlFactory.hxx>
-#include <AreaPropertyPanelBase.hxx>
+#include <svx/sidebar/AreaPropertyPanelBase.hxx>
 #include <AreaPropertyPanel.hrc>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
@@ -37,6 +37,7 @@
 #include <svx/svxitems.hrc>
 #include <vcl/toolbox.hxx>
 #include <svtools/toolbarmenu.hxx>
+#include <svx/tbcontrl.hxx>
 
 #include <boost/bind.hpp>
 
