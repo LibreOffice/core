@@ -251,11 +251,6 @@ void OOXMLDocumentImpl::setXNoteType(const Id & nId)
     mXNoteType = nId;
 }
 
-const Id & OOXMLDocumentImpl::getXNoteType() const
-{
-    return mXNoteType;
-}
-
 const OUString & OOXMLDocumentImpl::getTarget() const
 {
     return mpStream->getTarget();
@@ -890,11 +885,6 @@ uno::Reference<drawing::XDrawPage> OOXMLDocumentImpl::getDrawPage()
     return mxDrawPage;
 }
 
-uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStream()
-{
-    return mpStream->getDocumentStream();
-}
-
 uno::Reference<io::XInputStream> OOXMLDocumentImpl::getStorageStream()
 {
     return mpStream->getStorageStream();
@@ -908,11 +898,6 @@ void OOXMLDocumentImpl::setShapeContext( uno::Reference<xml::sax::XFastShapeCont
 uno::Reference<xml::sax::XFastShapeContextHandler> OOXMLDocumentImpl::getShapeContext( )
 {
     return mxShapeContext;
-}
-
-void OOXMLDocumentImpl::setThemeDom( uno::Reference<xml::dom::XDocument> xThemeDom )
-{
-    mxThemeDom = xThemeDom;
 }
 
 uno::Reference<xml::dom::XDocument> OOXMLDocumentImpl::getThemeDom( )

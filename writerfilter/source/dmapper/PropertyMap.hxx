@@ -98,7 +98,7 @@ public:
     PropValue() : m_aValue(), m_GrabBagType(NO_GRAB_BAG) {}
 
     const css::uno::Any& getValue() const { return m_aValue; }
-    bool hasGrabBag() const { return m_GrabBagType != NO_GRAB_BAG; }
+
     GrabBagType getGrabBagType() const { return m_GrabBagType; }
 };
 
@@ -136,11 +136,9 @@ public:
     css::uno::Sequence<css::beans::PropertyValue> GetPropertyValues(bool bCharGrabBag = true);
         //Sequence: Grab Bags: The CHAR_GRAB_BAG has Name "CharInteropGrabBag" and the PARA_GRAB_BAG has Name "ParaInteropGrabBag"
         //  the contained properties are their Value.
-    bool hasEmptyPropertyValues() const {return m_aValues.empty();}
 
     //Add property, optionally overwriting existing attributes
     void Insert(PropertyIds eId, const css::uno::Any& rAny, bool bOverwrite = true, GrabBagType i_GrabBagType = NO_GRAB_BAG);
-    void Insert( PropertyIds eId, const PropValue& rValue, bool bOverwrite = true );
     //Remove a named property from *this, does nothing if the property id has not been set
     void Erase( PropertyIds eId);
 
@@ -157,13 +155,10 @@ public:
     void SetFootnote(css::uno::Reference<css::text::XFootnote> const& xF) { m_xFootnote = xF; }
 
     sal_Unicode GetFootnoteSymbol() const { return m_cFootnoteSymbol;}
-    void        SetFootnoteSymbol(sal_Unicode cSet) { m_cFootnoteSymbol = cSet;}
 
     sal_Int32   GetFootnoteFontId() const { return m_nFootnoteFontId;}
-    void        SetFootnoteFontId(sal_Int32 nSet) { m_nFootnoteFontId = nSet;}
 
     const OUString&      GetFootnoteFontName() const { return m_sFootnoteFontName;}
-    void                        SetFootnoteFontName( const OUString& rSet ) { m_sFootnoteFontName = rSet;}
 
     virtual void insertTableProperties( const PropertyMap* );
 
@@ -225,7 +220,6 @@ class SectionPropertyMap : public PropertyMap
 
     sal_Int32                               m_nDzaGutter;
     bool                                    m_bGutterRTL;
-    bool                                    m_bSFBiDi;
 
     sal_Int32                               m_nGridType;
     sal_Int32                               m_nGridLinePitch;
@@ -290,12 +284,9 @@ public:
     void SetSeparatorLine( bool bSet ) { m_bSeparatorLineIsOn = bSet; }
     void SetEvenlySpaced( bool bSet ) {    m_bEvenlySpaced = bSet; }
     void SetLandscape( bool bSet ) { m_bIsLandscape = bSet; }
-    void SetPageNoRestart( bool bSet ) { m_bPageNoRestart = bSet; }
     void SetPageNumber( sal_Int32 nSet ) { m_nPageNumber = nSet; }
     void SetBreakType( sal_Int32 nSet ) { m_nBreakType = nSet; }
     sal_Int32 GetBreakType( ) { return m_nBreakType; }
-    void SetPaperBin( sal_Int32 nSet );
-    void SetFirstPaperBin( sal_Int32 nSet );
 
     void SetLeftMargin(    sal_Int32 nSet ) { m_nLeftMargin = nSet; }
     sal_Int32 GetLeftMargin() { return m_nLeftMargin; }
@@ -306,10 +297,6 @@ public:
     void SetHeaderTop(    sal_Int32 nSet ) { m_nHeaderTop = nSet; }
     void SetHeaderBottom( sal_Int32 nSet ) { m_nHeaderBottom = nSet; }
     sal_Int32 GetPageWidth();
-
-    void SetGutterRTL( bool bSet ) { m_bGutterRTL = bSet;}
-    void SetDzaGutter( sal_Int32 nSet ) {m_nDzaGutter = nSet; }
-    void SetSFBiDi( bool bSet ) { m_bSFBiDi = bSet;}
 
     void SetGridType(sal_Int32 nSet) { m_nGridType = nSet; }
     void SetGridLinePitch( sal_Int32 nSet ) { m_nGridLinePitch = nSet; }
@@ -415,8 +402,6 @@ public:
     void SetyAlign( sal_Int32 nSet ) { m_yAlign = nSet; }
     sal_Int32 GetyAlign()const { return m_yAlign; }
 
-    void SetAnchorLock( bool bSet ) {m_bAnchorLock = bSet; }
-
     sal_Int8    GetDropCapLength() const { return m_nDropCapLength;}
     void        SetDropCapLength(sal_Int8 nSet) { m_nDropCapLength = nSet;}
 
@@ -442,21 +427,13 @@ typedef std::shared_ptr<ParagraphProperties>  ParagraphPropertiesPtr;
 class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
 
 {
-    //special table style properties
-    sal_Int32               mnCT_Spacing_line;
-    sal_Int32               mnCT_Spacing_lineRule;
 
     OUString         msCT_Fonts_ascii;
-    bool                    mbCT_TrPrBase_tblHeader;
     sal_Int32               mnCT_TrPrBase_jc;
 
     sal_Int32               mnCT_TblWidth_w;
     sal_Int32               mnCT_TblWidth_type;
 
-    bool                    mbCT_Spacing_lineSet;
-    bool                    mbCT_Spacing_lineRuleSet;
-
-    bool                    mbCT_TrPrBase_tblHeaderSet;
     bool                    mbCT_TrPrBase_jcSet;
 
     bool                    mbCT_TblWidth_wSet;
@@ -472,54 +449,13 @@ public:
     explicit StyleSheetPropertyMap();
     virtual ~StyleSheetPropertyMap();
 
-    void SetCT_Spacing_line(       sal_Int32 nSet )
-        {mnCT_Spacing_line = nSet;     mbCT_Spacing_lineSet = true;         }
-    void SetCT_Spacing_lineRule(   sal_Int32  nSet )
-        {mnCT_Spacing_lineRule = nSet; mbCT_Spacing_lineRuleSet = true;     }
-
-    void SetCT_Fonts_ascii(  const OUString& rSet )
-        {msCT_Fonts_ascii = rSet;          }
-    void SetCT_TrPrBase_tblHeader( bool bSet )
-        {mbCT_TrPrBase_tblHeader = bSet; mbCT_TrPrBase_tblHeaderSet = true; }
     void SetCT_TrPrBase_jc(        sal_Int32 nSet )
         {mnCT_TrPrBase_jc = nSet;        mbCT_TrPrBase_jcSet = true;     }
-
     void SetCT_TblWidth_w( sal_Int32 nSet )
         { mnCT_TblWidth_w = nSet;    mbCT_TblWidth_wSet = true; }
     void SetCT_TblWidth_type( sal_Int32 nSet )
         {mnCT_TblWidth_type = nSet;    mbCT_TblWidth_typeSet = true; }
 
-    bool GetCT_Spacing_line(    sal_Int32& rToFill) const
-    {
-        if( mbCT_Spacing_lineSet )
-            rToFill = mnCT_Spacing_line;
-        return mbCT_Spacing_lineSet;
-    }
-    bool GetCT_Spacing_lineRule(sal_Int32& rToFill) const
-    {
-        if( mbCT_Spacing_lineRuleSet )
-            rToFill = mnCT_Spacing_lineRule;
-        return mbCT_Spacing_lineRuleSet;
-    }
-
-    bool GetCT_Fonts_ascii(OUString& rToFill) const
-    {
-        if( msCT_Fonts_ascii.getLength() > 0 )
-            rToFill = msCT_Fonts_ascii;
-        return msCT_Fonts_ascii.getLength() > 0;
-    }
-    bool GetCT_TrPrBase_tblHeader(bool& rToFill) const
-    {
-        if( mbCT_TrPrBase_tblHeaderSet )
-            rToFill = mbCT_TrPrBase_tblHeader;
-        return mbCT_TrPrBase_tblHeaderSet;
-    }
-    bool GetCT_TrPrBase_jc(     sal_Int32& rToFill)const
-    {
-        if( mbCT_TrPrBase_jcSet )
-            rToFill = mnCT_TrPrBase_jc;
-        return mbCT_TrPrBase_jcSet;
-    }
     sal_Int32   GetListId() const               { return mnListId; }
     void        SetListId(sal_Int32 nId)        { mnListId = nId; }
 

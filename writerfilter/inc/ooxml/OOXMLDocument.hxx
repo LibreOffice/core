@@ -81,11 +81,6 @@ public:
     virtual ~OOXMLStream() {}
 
     /**
-       Returns parser for this stream.
-     */
-    virtual css::uno::Reference<css::xml::sax::XParser> getParser() = 0;
-
-    /**
        Returns fast parser for this stream.
      */
     virtual css::uno::Reference<css::xml::sax::XFastParser> getFastParser() = 0;
@@ -221,18 +216,15 @@ public:
     virtual css::uno::Reference<css::frame::XModel> getModel() = 0;
     virtual void setDrawPage(css::uno::Reference<css::drawing::XDrawPage> xDrawPage) = 0;
     virtual css::uno::Reference<css::drawing::XDrawPage> getDrawPage() = 0;
-    virtual css::uno::Reference<css::io::XInputStream> getInputStream() = 0;
     virtual css::uno::Reference<css::io::XInputStream> getStorageStream() = 0;
     virtual css::uno::Reference<css::io::XInputStream> getInputStreamForId(const OUString & rId) = 0;
     virtual void setXNoteId(const sal_Int32 nId) = 0;
     virtual sal_Int32 getXNoteId() const = 0;
     virtual void setXNoteType(const Id & nId) = 0;
-    virtual const Id & getXNoteType() const = 0;
     virtual const OUString & getTarget() const = 0;
     virtual css::uno::Reference<css::xml::sax::XFastShapeContextHandler> getShapeContext( ) = 0;
     virtual void setShapeContext( css::uno::Reference<css::xml::sax::XFastShapeContextHandler> xContext ) = 0;
     virtual css::uno::Reference<css::xml::dom::XDocument> getThemeDom( ) = 0;
-    virtual void setThemeDom( css::uno::Reference<css::xml::dom::XDocument> xThemeDom ) = 0;
     virtual css::uno::Reference<css::xml::dom::XDocument> getGlossaryDocDom( ) = 0;
     virtual css::uno::Sequence<css::uno::Sequence< css::uno::Any> > getGlossaryDomList() = 0;
     virtual css::uno::Sequence<css::uno::Reference<css::xml::dom::XDocument> > getCustomXmlDomList( ) = 0;

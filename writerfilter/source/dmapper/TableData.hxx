@@ -63,25 +63,11 @@ public:
     virtual ~CellData() {}
 
     /**
-       Set the start handle of the cell.
-
-       @param start    the start handle of the cell
-    */
-    void setStart(css::uno::Reference<css::text::XTextRange> start) { mStart = start; }
-
-    /**
        Set the end handle of a cell.
 
        @param end     the end handle of the cell
     */
     void setEnd(css::uno::Reference<css::text::XTextRange> end) { mEnd = end; mbOpen = false; }
-
-    /**
-       Set the properties of the cell.
-
-       @param pProps      the properties of the cell
-    */
-    void setProperties(TablePropertyMapPtr pProps) { mpProps = pProps; }
 
     /**
        Adds properties to the cell.
@@ -248,15 +234,6 @@ public:
     {
         return mpProperties;
     }
-
-    /**
-       Clear the row data.
-     */
-    void clear()
-    {
-        mCells.clear();
-        mpProperties.reset();
-    }
 };
 
 /**
@@ -362,14 +339,6 @@ public:
     void insertCellProperties(unsigned int i, TablePropertyMapPtr pProps)
     {
         mpRow->insertCellProperties(i, pProps);
-    }
-
-    /**
-      Return the table properties.
-     */
-    TablePropertyMapPtr getTableProperties()
-    {
-        return mpTableProps;
     }
 
     /**
