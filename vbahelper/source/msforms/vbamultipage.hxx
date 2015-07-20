@@ -48,8 +48,6 @@ public:
     //XHelperInterface
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
-    // XDefaultProperty
-    static OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return OUString("Value"); }
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBAMULTIPAGE_HXX

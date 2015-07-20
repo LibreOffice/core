@@ -66,14 +66,6 @@ public:
 
     css::uno::Reference< css::frame::XModel > getModel() const { return mxModel; }
 
-    css::uno::Reference< css::ui::XUIConfigurationManager > getDocCfgManager() const throw (css::uno::RuntimeException)
-    {
-        return m_xDocCfgMgr;
-    }
-    css::uno::Reference< css::ui::XUIConfigurationManager > getAppCfgManager() const throw (css::uno::RuntimeException)
-    {
-        return m_xAppCfgMgr;
-    }
     css::uno::Reference< css::container::XNameAccess > getPersistentWindowState() const throw (css::uno::RuntimeException)
     {
         return m_xWindowState;
