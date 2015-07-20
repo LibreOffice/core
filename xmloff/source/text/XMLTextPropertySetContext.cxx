@@ -61,12 +61,73 @@ XMLTextPropertySetContext::~XMLTextPropertySetContext()
 }
 
 uno::Reference< xml::sax::XFastContextHandler >
-    XMLTextPropertySetContext::createFastChildContext( sal_Int32 /*Element*/,
-    const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
-    std::vector< XMLPropertyState >& /*rProperties*/,
-    const XMLPropertyState& /*rProp*/ )
+    XMLTextPropertySetContext::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    std::vector< XMLPropertyState >& rProperties,
+    const XMLPropertyState& rProp )
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    uno::Reference< xml::sax::XFastContextHandler > pContext = 0;
+
+    switch( mxMapper->getPropertySetMapper()
+                    ->GetEntryContextId( rProp.mnIndex ) )
+    {
+    case CTF_TABSTOP:
+        pContext = new SvxXMLTabStopImportContext( GetImport(), Element,
+                                                   rProp, rProperties );
+        break;
+    case CTF_TEXTCOLUMNS:
+        pContext = new XMLTextColumnsContext( GetImport(), Element,
+                        xAttrList, rProp, rProperties );
+        break;
+
+    case CTF_DROPCAPFORMAT:
+    {
+        DBG_ASSERT( rProp.mnIndex >= 2 &&
+                    CTF_DROPCAPWHOLEWORD == mxMapper->getPropertySetMapper()
+                        ->GetEntryContextId( rProp.mnIndex-2 ),
+                    "invalid property map!" );
+        XMLTextDropCapImportContext *pDCContext =
+            new XMLTextDropCapImportContext( GetImport(), Element,
+                xAttrList, rProp, rProp.mnIndex-2, rProperties );
+        rDropCapTextStyleName = pDCContext->GetStyleName();
+        pContext = pDCContext;
+    }
+    break;
+
+    case CTF_BACKGROUND_URL:
+    {
+        DBG_ASSERT( rProp.mnIndex >= 2 &&
+                    CTF_BACKGROUND_POS == mxMapper->getPropertySetMapper()
+                        ->GetEntryContextId( rProp.mnIndex-2 ) &&
+                    CTF_BACKGROUND_FILTER == mxMapper->getPropertySetMapper()
+                        ->GetEntryContextId( rProp.mnIndex-1 ),
+                    "invalid property map!" );
+
+        // #99657# Transparency might be there as well... but doesn't have to.
+        // Thus, this is checked with an if, rather than with an assertion.
+        sal_Int32 nTranspIndex = -1;
+        if( (rProp.mnIndex >= 3) &&
+            (CTF_BACKGROUND_TRANSPARENCY == mxMapper->getPropertySetMapper()
+                ->GetEntryContextId( rProp.mnIndex-3 ) ) )
+            nTranspIndex = rProp.mnIndex-3;
+
+        pContext = new XMLBackgroundImageContext( GetImport(), Element,
+                            xAttrList, rProp, rProp.mnIndex-2,
+                            rProp.mnIndex-1, nTranspIndex, rProperties );
+    }
+    break;
+    case CTF_SECTION_FOOTNOTE_END:
+    case CTF_SECTION_ENDNOTE_END:
+        pContext = new XMLSectionFootnoteConfigImport( GetImport(),
+                        Element, rProperties, mxMapper->getPropertySetMapper() );
+        break;
+    }
+
+    if( !pContext.is() )
+        pContext = SvXMLPropertySetContext::createFastChildContext( Element,
+                        xAttrList, rProperties, rProp );
+
+    return pContext;
 }
 
 SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
