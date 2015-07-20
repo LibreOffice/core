@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_37ee498c",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1075,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-20T20:48:06Z",
+      "side": 1,
+      "message": "so these isChecked are inverted - that\u0027s a bug, i\u0027ll push this test and then fix it",
+      "revId": "c70a61f3f43b72d929309bd1d9e54b89db9ba4d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_57f3c573",
+        "filename": "sw/qa/extras/uiwriter/uiwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-20T20:48:06Z",
+      "side": 1,
+      "message": "you could test here that the property is actually applied",
+      "revId": "c70a61f3f43b72d929309bd1d9e54b89db9ba4d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
