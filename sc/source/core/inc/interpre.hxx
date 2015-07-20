@@ -406,7 +406,7 @@ void ScChoseJump();
 // Returns true if last jump was executed and result matrix pushed.
 bool JumpMatrix( short nStackLevel );
 
-double Compare();
+double Compare( ScQueryOp eOp );
 /** @param pOptions
         NULL means case sensitivity document option is to be used!
  */
