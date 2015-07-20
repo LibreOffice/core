@@ -105,7 +105,7 @@
 #define IS_WIDGET_MAPPED   GTK_WIDGET_MAPPED
 #endif
 
-#if !GTK_CHECK_VERSION(3,10,0)
+#ifndef GDK_IS_X11_DISPLAY
 #define GDK_IS_X11_DISPLAY(foo) (true)
 #endif
 
