@@ -422,14 +422,17 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
                 nNumStripByteCounts = 0; // to be on the safe side
             nOldNumSBC = nNumStripByteCounts;
             nDataLen += nOldNumSBC;
-            if ( ( nDataLen > nOldNumSBC ) && ( nDataLen < SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) )
+            size_t nMaxAllocAllowed = SAL_MAX_UINT32 / sizeof(sal_uInt32);
+            size_t nMaxRecordsAvailable = pTIFF->remainingSize() / DataTypeSize();
+            if (nDataLen > nOldNumSBC && nDataLen < nMaxAllocAllowed &&
+                (nDataLen - nOldNumSBC) <= nMaxRecordsAvailable)
             {
                 nNumStripByteCounts = nDataLen;
                 try
                 {
                     pStripByteCounts = new sal_uLong[ nNumStripByteCounts ];
                 }
-                    catch (const std::bad_alloc &)
+                catch (const std::bad_alloc &)
                 {
                     pStripByteCounts = NULL;
                     nNumStripByteCounts = 0;
