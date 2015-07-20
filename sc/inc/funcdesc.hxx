@@ -253,15 +253,14 @@ private:
 class ScFunctionCategory : public formula::IFunctionCategory
 {
 public:
-    ScFunctionCategory(ScFunctionMgr* _pMgr,::std::vector<const ScFuncDesc*>* _pCategory,sal_uInt32 _nCategory)
-            : m_pMgr(_pMgr),m_pCategory(_pCategory),m_nCategory(_nCategory){}
+    ScFunctionCategory(::std::vector<const ScFuncDesc*>* _pCategory,sal_uInt32 _nCategory)
+            : m_pCategory(_pCategory),m_nCategory(_nCategory){}
     virtual ~ScFunctionCategory(){}
 
     /**
       @return count of functions in this category
     */
     virtual sal_uInt32 getCount() const SAL_OVERRIDE;
-    virtual const formula::IFunctionManager* getFunctionManager() const SAL_OVERRIDE;
 
     /**
       Gives the _nPos'th function in this category.
@@ -280,7 +279,6 @@ public:
     virtual OUString getName() const SAL_OVERRIDE;
 
 private:
-    ScFunctionMgr* m_pMgr; /**< function manager for this category */
     ::std::vector<const ScFuncDesc*>* m_pCategory; /**< list of functions in this category */
     mutable OUString m_sName; /**< name of this category */
     sal_uInt32 m_nCategory; /**< index number of this category */
@@ -380,11 +378,6 @@ public:
       a vector of pointer to IFunctionDescription, by reference.
     */
     virtual void fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const SAL_OVERRIDE;
-
-    /**
-      Implemented because of inheritance \see ScFunctionMgr::Get(const OUString&) const
-    */
-    virtual const formula::IFunctionDescription* getFunctionByName(const OUString& _sFunctionName) const SAL_OVERRIDE;
 
     /**
       Maps Etoken to character

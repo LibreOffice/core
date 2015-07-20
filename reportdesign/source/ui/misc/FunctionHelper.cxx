@@ -68,19 +68,6 @@ const formula::IFunctionCategory* FunctionManager::getCategory(sal_uInt32 _nPos)
     return m_aCategoryIndex[_nPos]->second.get();
 }
 
-const formula::IFunctionDescription* FunctionManager::getFunctionByName(const OUString& _sFunctionName) const
-{
-    const formula::IFunctionDescription* pDesc = NULL;
-    try
-    {
-        pDesc = get(m_xMgr->getFunctionByName(_sFunctionName)).get();
-    }
-    catch(uno::Exception&)
-    {
-    }
-    return pDesc;
-}
-
 void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& /*_rLastRUFunctions*/) const
 {
 }
@@ -136,11 +123,6 @@ const formula::IFunctionDescription* FunctionCategory::getFunction(sal_uInt32 _n
 sal_uInt32 FunctionCategory::getNumber() const
 {
     return m_nNumber;
-}
-
-const formula::IFunctionManager* FunctionCategory::getFunctionManager() const
-{
-    return m_pFunctionManager;
 }
 
 OUString FunctionCategory::getName() const

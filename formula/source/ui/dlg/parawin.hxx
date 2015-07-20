@@ -133,7 +133,6 @@ public:
         void            UpdateParas();
         void            ClearAll();
 
-        bool            IsRefMode() {return bRefMode;}
         void            SetRefMode(bool bFlag) {bRefMode=bFlag;}
 
         sal_uInt16      GetActiveLine() { return nActiveLine;}
@@ -149,14 +148,9 @@ public:
         sal_uInt16      GetSliderPos();
         void            SetSliderPos(sal_uInt16 nSliderPos);
 
-        void            SetScrollHdl( const Link<>& rLink ) { aScrollLink = rLink; }
-        const Link<>&   GetScrollHdl() const { return aScrollLink; }
-
         void            SetArgModifiedHdl( const Link<>& rLink ) { aArgModifiedLink = rLink; }
-        const Link<>&   GetArgModifiedHdl() const { return aArgModifiedLink; }
 
         void            SetFxHdl( const Link<>& rLink ) { aFxLink = rLink; }
-        const Link<>&   GetFxHdl() const { return aFxLink; }
 };
 
 

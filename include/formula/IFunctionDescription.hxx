@@ -52,7 +52,6 @@ namespace formula
         virtual sal_uInt32 getCount() const = 0;
         virtual const IFunctionCategory* getCategory(sal_uInt32 nPos) const = 0;
         virtual void fillLastRecentlyUsedFunctions(::std::vector< const IFunctionDescription*>& _rLastRUFunctions) const = 0;
-        virtual const IFunctionDescription* getFunctionByName(const OUString& _sFunctionName) const = 0;
 
         virtual sal_Unicode getSingleToken(const EToken _eToken) const = 0;
 
@@ -64,7 +63,6 @@ namespace formula
     {
     public:
         IFunctionCategory(){}
-        virtual const IFunctionManager*     getFunctionManager() const = 0;
         virtual sal_uInt32                  getCount() const = 0;
         virtual const IFunctionDescription* getFunction(sal_uInt32 _nPos) const = 0;
         virtual sal_uInt32                  getNumber() const = 0;
@@ -119,7 +117,6 @@ namespace formula
                                 sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL) = 0;
 
         virtual OUString        GetEntryText(SvTreeListEntry* pEntry) const = 0;
-        virtual SvTreeListEntry*    GetParent(SvTreeListEntry* pEntry) const = 0;
 
     protected:
         ~IStructHelper() {}

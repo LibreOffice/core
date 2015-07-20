@@ -112,7 +112,6 @@ protected:
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton = NULL );
     void            RefInputDoneAfter( bool bForced = false );
     void            SetFocusWin(vcl::Window *pWin,const OString& nUniqueId);
-    void            HighlightFunctionParas(const OUString& aFormula);
 
     void            SetMeText(const OUString& _sText);
     FormulaDlgMode SetMeText(const OUString& _sText, sal_Int32 PrivStart, sal_Int32 PrivEnd, bool bMatrix, bool _bSelect, bool _bUpdate);

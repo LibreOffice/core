@@ -98,10 +98,8 @@ public:
                                 sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL) SAL_OVERRIDE;
 
     virtual OUString            GetEntryText(SvTreeListEntry* pEntry) const SAL_OVERRIDE;
-    virtual SvTreeListEntry*    GetParent(SvTreeListEntry* pEntry) const SAL_OVERRIDE;
 
     void            SetSelectionHdl( const Link<>& rLink ) { aSelLink = rLink; }
-    const Link<>&   GetSelectionHdl() const { return aSelLink; }
 };
 
 } // formula

@@ -144,9 +144,6 @@ public:
             be English as well)? */
         inline bool isEnglish() const { return mbEnglish; }
 
-        /// Is it an internal core mapping, or setup by filters?
-        inline bool isCore() const { return mbCore; }
-
         /// Is it an ODF 1.1 compatibility mapping?
         inline bool isPODF() const { return FormulaGrammar::isPODF( meGrammar); }
 

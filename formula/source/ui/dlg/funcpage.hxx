@@ -101,10 +101,8 @@ public:
     OUString        GetSelFunctionName() const;
 
     void            SetDoubleClickHdl( const Link<>& rLink ) { aDoubleClickLink = rLink; }
-    const Link<>&   GetDoubleClickHdl() const { return aDoubleClickLink; }
 
     void            SetSelectHdl( const Link<>& rLink ) { aSelectionLink = rLink; }
-    const Link<>&   GetSelectHdl() const { return aSelectionLink; }
 
 };
 
