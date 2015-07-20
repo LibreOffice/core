@@ -33,14 +33,14 @@ class SfxBindings;
 
 namespace svx { namespace sidebar {
 
-class AreaPropertyPanel;
+class AreaPropertyPanelBase;
 
 class AreaTransparencyGradientControl : public PopupControl
 {
 public:
     AreaTransparencyGradientControl (
         vcl::Window* pParent,
-        AreaPropertyPanel& rPanel);
+        AreaPropertyPanelBase& rPanel);
     virtual ~AreaTransparencyGradientControl();
     virtual void dispose() SAL_OVERRIDE;
 
@@ -66,8 +66,7 @@ private:
     Image               maRotLeft;
     Image               maRotRight;
 
-    AreaPropertyPanel& mrAreaPropertyPanel;
-    SfxBindings*        mpBindings;
+    AreaPropertyPanelBase& mrAreaPropertyPanel;
     DECL_LINK( ModifiedTrgrHdl_Impl, void* );
     DECL_LINK_TYPED( Left_Click45_Impl, ToolBox*, void );
     DECL_LINK_TYPED( Right_Click45_Impl, ToolBox*, void );

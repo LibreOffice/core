@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "AreaTransparencyGradientControl.hxx"
-#include "AreaPropertyPanel.hxx"
+#include "AreaPropertyPanelBase.hxx"
 #include "AreaPropertyPanel.hrc"
 
 #include <svx/dialogs.hrc>
@@ -51,7 +51,7 @@ namespace svx { namespace sidebar {
 
 AreaTransparencyGradientControl::AreaTransparencyGradientControl (
     vcl::Window* pParent,
-    AreaPropertyPanel& rPanel)
+    AreaPropertyPanelBase& rPanel)
     : PopupControl( pParent,SVX_RES(RID_POPUPPANEL_AREAPAGE_TRGR)),
       maFtTrgrCenterX(VclPtr<FixedText>::Create(this, SVX_RES(FT_TRGR_CENTER_X))),
       maMtrTrgrCenterX(VclPtr<MetricField>::Create(this, SVX_RES(MTR_TRGR_CENTER_X))),
@@ -69,8 +69,7 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
       maMtrTrgrBorder(VclPtr<MetricField>::Create(this, SVX_RES(MTR_TRGR_BORDER))),
       maRotLeft( SVX_RES(IMG_ROT_LEFT)),
       maRotRight( SVX_RES(IMG_ROT_RIGHT)),
-      mrAreaPropertyPanel(rPanel),
-      mpBindings(NULL)
+      mrAreaPropertyPanel(rPanel)
 {
     Link<> aLink = LINK( this, AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl);
     maMtrTrgrCenterX->SetModifyHdl( aLink );
@@ -97,7 +96,6 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
     maBtnRight45->SetPaintTransparent(true);
 
     FreeResource();
-    mpBindings = mrAreaPropertyPanel.GetBindings();
 }
 
 AreaTransparencyGradientControl::~AreaTransparencyGradientControl()
@@ -241,14 +239,14 @@ void AreaTransparencyGradientControl::InitStatus(XFillFloatTransparenceItem* pGr
 
     XGradient aGradient;
 
-    if (rGradient.GetXOffset() == AreaPropertyPanel::DEFAULT_CENTERX
-        && rGradient.GetYOffset() == AreaPropertyPanel::DEFAULT_CENTERY
-        && (rGradient.GetAngle() / 10) == AreaPropertyPanel::DEFAULT_ANGLE
+    if (rGradient.GetXOffset() == AreaPropertyPanelBase::DEFAULT_CENTERX
+        && rGradient.GetYOffset() == AreaPropertyPanelBase::DEFAULT_CENTERY
+        && (rGradient.GetAngle() / 10) == AreaPropertyPanelBase::DEFAULT_ANGLE
         && ((sal_uInt16)((((sal_uInt16)rGradient.GetStartColor().GetRed() + 1) * 100) / 255))
-            == AreaPropertyPanel::DEFAULT_STARTVALUE
+            == AreaPropertyPanelBase::DEFAULT_STARTVALUE
         && ((sal_uInt16)((((sal_uInt16)rGradient.GetEndColor().GetRed() + 1) * 100) / 255))
-            == AreaPropertyPanel::DEFAULT_ENDVALUE
-        && rGradient.GetBorder() == AreaPropertyPanel::DEFAULT_BORDER)
+            == AreaPropertyPanelBase::DEFAULT_ENDVALUE
+        && rGradient.GetBorder() == AreaPropertyPanelBase::DEFAULT_BORDER)
     {
         aGradient = mrAreaPropertyPanel.GetGradient(rGradient.GetGradientStyle());
     }
@@ -290,7 +288,7 @@ void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, s
     bool bEnable = true;
     XFillFloatTransparenceItem aGradientItem(pPool,aTmpGradient, bEnable );
 
-    mpBindings->GetDispatcher()->Execute( SID_ATTR_FILL_FLOATTRANSPARENCE, SfxCallMode::RECORD, &aGradientItem, 0L );
+    mrAreaPropertyPanel.setFillFloatTransparence(aGradientItem);
 }
 
 IMPL_LINK_NOARG(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl)
