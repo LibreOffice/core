@@ -27,8 +27,10 @@
 #include <editeng/editengdllapi.h>
 
 #include <deque>
-#include <utility>
 #include <vector>
+#include <map>
+#include <utility>
+#include <memory>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -78,7 +80,7 @@ public:
 
 typedef std::deque< Color* > SvxRTFColorTbl;
 typedef boost::ptr_map<short, vcl::Font> SvxRTFFontTbl;
-typedef boost::ptr_map<sal_uInt16, SvxRTFStyleType> SvxRTFStyleTbl;
+typedef std::map<sal_uInt16, std::unique_ptr<SvxRTFStyleType>> SvxRTFStyleTbl;
 
 // SvxRTFItemStack can't be "std::stack< SvxRTFItemStackType* >" type, because
 // the methods are using operator[] in sw/source/filter/rtf/rtftbl.cxx file
@@ -177,7 +179,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     SvStream &rStrm;
     SvxRTFColorTbl  aColorTbl;
     SvxRTFFontTbl   aFontTbl;
-    SvxRTFStyleTbl  aStyleTbl;
+    SvxRTFStyleTbl  m_StyleTable;
     SvxRTFItemStack aAttrStack;
     SvxRTFItemStackList aAttrSetList;
 
@@ -292,7 +294,7 @@ protected:
 
     // Query/Set the current insert position
     void SetInsPos( const SvxPosition& rNew );
-    SvxRTFStyleTbl& GetStyleTbl()               { return aStyleTbl; }
+    SvxRTFStyleTbl& GetStyleTbl()               { return m_StyleTable; }
 
 public:
 

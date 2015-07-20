@@ -368,7 +368,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         DBG_ASSERT( it != GetStyleTbl().end(), "Template not defined in RTF!" );
         if ( it != GetStyleTbl().end() )
         {
-            SvxRTFStyleType* pS = it->second;
+            auto const& pS = it->second;
             mpEditEngine->SetStyleSheet(
                 EditSelection(aStartPaM, aEndPaM),
                 static_cast<SfxStyleSheet*>(mpEditEngine->GetStyleSheetPool()->Find(pS->sName, SFX_STYLE_FAMILY_ALL)));
@@ -433,11 +433,10 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 SvxRTFStyleType* EditRTFParser::FindStyleSheet( const OUString& rName )
 {
     SvxRTFStyleTbl& rTable = GetStyleTbl();
-    for ( SvxRTFStyleTbl::iterator it = rTable.begin(); it != rTable.end(); ++it )
+    for (auto const& iter : rTable)
     {
-        SvxRTFStyleType* pS = it->second;
-        if ( pS->sName == rName )
-            return pS;
+        if (iter.second->sName == rName)
+            return iter.second.get();
     }
     return NULL;
 }
@@ -456,7 +455,7 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
         SvxRTFStyleTbl::iterator it = GetStyleTbl().find( pRTFStyle->nBasedOn );
         if ( it != GetStyleTbl().end())
         {
-            SvxRTFStyleType* pS = it->second;
+            SvxRTFStyleType *const pS = it->second.get();
             if ( pS && ( pS !=pRTFStyle ) )
                 aParent = pS->sName;
         }
@@ -492,7 +491,7 @@ void EditRTFParser::CreateStyleSheets()
     {
         for (SvxRTFStyleTbl::iterator it = GetStyleTbl().begin(); it != GetStyleTbl().end(); ++it)
         {
-            SvxRTFStyleType* pRTFStyle = it->second;
+            SvxRTFStyleType* pRTFStyle = it->second.get();
             CreateStyleSheet( pRTFStyle );
         }
     }

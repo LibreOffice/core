@@ -116,7 +116,7 @@ SvParserState SvxRTFParser::CallParser()
         ClearColorTbl();
     if( !aFontTbl.empty() )
         ClearFontTbl();
-    if( !aStyleTbl.empty() )
+    if (!m_StyleTable.empty())
         ClearStyleTbl();
     if( !aAttrStack.empty() )
         ClearAttrStack();
@@ -300,7 +300,8 @@ void SvxRTFParser::ReadStyleTable()
     int nToken, bSaveChkStyleAttr = bChkStyleAttr ? 1 : 0;
     sal_uInt16 nStyleNo = 0;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
-    SvxRTFStyleType* pStyle = new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] );
+    ::std::unique_ptr<SvxRTFStyleType> pStyle(
+            new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] ));
     pStyle->aAttrSet.Put( GetRTFDefaults() );
 
     bIsInReadStyleTab = true;
@@ -348,13 +349,13 @@ void SvxRTFParser::ReadStyleTable()
             {
                 pStyle->sName = DelCharAtEnd( aToken, ';' );
 
-                if( !aStyleTbl.empty() )
+                if (!m_StyleTable.empty())
                 {
-                    aStyleTbl.erase(nStyleNo);
+                    m_StyleTable.erase(nStyleNo);
                 }
                 // All data from the font is available, so off to the table
-                aStyleTbl.insert( nStyleNo , pStyle);
-                pStyle = new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] );
+                m_StyleTable.insert(std::make_pair(nStyleNo, std::move(pStyle)));
+                pStyle.reset(new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] ));
                 pStyle->aAttrSet.Put( GetRTFDefaults() );
                 nStyleNo = 0;
             }
@@ -386,7 +387,7 @@ void SvxRTFParser::ReadStyleTable()
             break;
         }
     }
-    delete pStyle;          // Delete the Last Style
+    pStyle.reset();         // Delete the Last Style
     SkipToken( -1 );        // the closing brace is evaluated "above"
 
     // Flag back to old state
@@ -764,7 +765,7 @@ void SvxRTFParser::ClearFontTbl()
 
 void SvxRTFParser::ClearStyleTbl()
 {
-    aStyleTbl.clear();
+    m_StyleTable.clear();
 }
 
 void SvxRTFParser::ClearAttrStack()
@@ -835,7 +836,7 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
 
     if( !IsChkStyleAttr() ||
         !rStkType.GetAttrSet().Count() ||
-        aStyleTbl.count( rStkType.nStyleNo ) == 0 )
+        m_StyleTable.count( rStkType.nStyleNo ) == 0 )
     {
         for( sal_uInt16 nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
         {
@@ -849,7 +850,7 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
     {
         // Delete all Attributes, which are already defined in the Style,
         // from the current AttrSet.
-        SvxRTFStyleType* pStyle = aStyleTbl.find( rStkType.nStyleNo )->second;
+        auto const& pStyle = m_StyleTable.find(rStkType.nStyleNo)->second;
         SfxItemSet &rStyleSet = pStyle->aAttrSet;
         const SfxPoolItem* pSItem;
         for( sal_uInt16 nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
