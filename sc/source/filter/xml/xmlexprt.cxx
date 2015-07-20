@@ -3720,9 +3720,12 @@ void ScXMLExport::WriteAnnotation(ScMyCell& rMyCell)
         pCurrentCell = &rMyCell;
 
         SdrCaptionObj* pNoteCaption = pNote->GetOrCreateCaption(rMyCell.maCellAddress);
-        Reference<drawing::XShape> xShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
-
-        GetShapeExport()->exportShape(xShape, SEF_DEFAULT|SEF_EXPORT_ANNOTATION, NULL);
+        if (pNoteCaption)
+        {
+            Reference<drawing::XShape> xShape( pNoteCaption->getUnoShape(), uno::UNO_QUERY );
+            if (xShape.is())
+                GetShapeExport()->exportShape(xShape, SEF_DEFAULT|SEF_EXPORT_ANNOTATION, NULL);
+        }
 
         pCurrentCell = NULL;
 
