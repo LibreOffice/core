@@ -31,7 +31,6 @@
 #include <map>
 #include <utility>
 #include <memory>
-#include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 namespace vcl { class Font; }
@@ -79,7 +78,7 @@ public:
 
 
 typedef std::deque< Color* > SvxRTFColorTbl;
-typedef boost::ptr_map<short, vcl::Font> SvxRTFFontTbl;
+typedef std::map<short, std::unique_ptr<vcl::Font>> SvxRTFFontTbl;
 typedef std::map<sal_uInt16, std::unique_ptr<SvxRTFStyleType>> SvxRTFStyleTbl;
 
 // SvxRTFItemStack can't be "std::stack< SvxRTFItemStackType* >" type, because
@@ -170,15 +169,11 @@ struct RTFPardAttrMapIds
 };
 
 
-
-
-
-
 class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
 {
     SvStream &rStrm;
     SvxRTFColorTbl  aColorTbl;
-    SvxRTFFontTbl   aFontTbl;
+    SvxRTFFontTbl   m_FontTable;
     SvxRTFStyleTbl  m_StyleTable;
     SvxRTFItemStack aAttrStack;
     SvxRTFItemStackList aAttrSetList;
@@ -389,7 +384,6 @@ inline SfxItemSet& SvxRTFParser::GetAttrSet()
 }
 
 
-#endif
-    // INCLUDED_EDITENG_SVXRTF_HXX
+#endif // INCLUDED_EDITENG_SVXRTF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

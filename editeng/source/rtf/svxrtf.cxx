@@ -114,7 +114,7 @@ SvParserState SvxRTFParser::CallParser()
 
     if( !aColorTbl.empty() )
         ClearColorTbl();
-    if( !aFontTbl.empty() )
+    if (!m_FontTable.empty())
         ClearFontTbl();
     if (!m_StyleTable.empty())
         ClearStyleTbl();
@@ -159,7 +159,7 @@ void SvxRTFParser::NextToken( int nToken )
     case RTF_DEFF:
             if( bNewDoc )
             {
-                if( !aFontTbl.empty() )
+                if (!m_FontTable.empty())
                     // Can immediately be set
                     SetDefault( nToken, nTokenValue );
                 else
@@ -442,7 +442,7 @@ void SvxRTFParser::ReadFontTable()
 {
     int nToken = 0;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
-    vcl::Font* pFont = new vcl::Font();
+    std::unique_ptr<vcl::Font> pFont(new vcl::Font);
     short nFontNo(0), nInsFontNo (0);
     OUString sAltNm, sFntNm;
     bool bIsAltFntNm = false;
@@ -558,15 +558,15 @@ void SvxRTFParser::ReadFontTable()
                 sFntNm = sFntNm + ";" + sAltNm;
 
             pFont->SetName( sFntNm );
-            aFontTbl.insert( nInsFontNo, pFont );
-            pFont = new vcl::Font();
+            m_FontTable.insert(std::make_pair(nInsFontNo, std::move(pFont)));
+            pFont.reset(new vcl::Font);
             pFont->SetCharSet( nSystemChar );
             sAltNm.clear();
             sFntNm.clear();
         }
     }
     // the last one we have to delete manually
-    delete pFont;
+    pFont.reset();
     SkipToken( -1 );        // the closing brace is evaluated "above"
 
     // set the default font in the Document
@@ -760,7 +760,7 @@ void SvxRTFParser::ClearColorTbl()
 
 void SvxRTFParser::ClearFontTbl()
 {
-    aFontTbl.clear();
+    m_FontTable.clear();
 }
 
 void SvxRTFParser::ClearStyleTbl()
@@ -793,19 +793,16 @@ OUString& SvxRTFParser::DelCharAtEnd( OUString& rStr, const sal_Unicode cDel )
 
 const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
 {
-    SvxRTFFontTbl::const_iterator it = aFontTbl.find( nId );
-    const vcl::Font* pFont;
-    if( it == aFontTbl.end() )
+    SvxRTFFontTbl::const_iterator it = m_FontTable.find( nId );
+    if (it != m_FontTable.end())
     {
-        const SvxFontItem& rDfltFont = static_cast<const SvxFontItem&>(
-                        pAttrPool->GetDefaultItem( aPlainMap.nFont ));
-        pDfltFont->SetName( rDfltFont.GetStyleName() );
-        pDfltFont->SetFamily( rDfltFont.GetFamily() );
-        pFont = pDfltFont;
+        return *it->second;
     }
-    else
-        pFont = it->second;
-    return *pFont;
+    const SvxFontItem& rDfltFont = static_cast<const SvxFontItem&>(
+                    pAttrPool->GetDefaultItem( aPlainMap.nFont ));
+    pDfltFont->SetName( rDfltFont.GetStyleName() );
+    pDfltFont->SetFamily( rDfltFont.GetFamily() );
+    return *pDfltFont;
 }
 
 SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( bool const bCopyAttr )
