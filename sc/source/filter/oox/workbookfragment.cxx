@@ -46,6 +46,7 @@
 #include "worksheethelper.hxx"
 #include "worksheetfragment.hxx"
 #include "sheetdatacontext.hxx"
+#include "extlstcontext.hxx"
 #include "officecfg/Office/Common.hxx"
 
 #include "document.hxx"
@@ -110,6 +111,8 @@ ContextHandlerRef WorkbookFragment::onCreateContext( sal_Int32 nElement, const A
                 case XLS_TOKEN( workbookPr ):           getWorkbookSettings().importWorkbookPr( rAttribs );     break;
                 case XLS_TOKEN( calcPr ):               getWorkbookSettings().importCalcPr( rAttribs );         break;
                 case XLS_TOKEN( oleSize ):              getViewSettings().importOleSize( rAttribs );            break;
+
+                case XLS_TOKEN( extLst ):               return new ExtLstGlobalWorkbookContext( *this );
             }
         break;
 
