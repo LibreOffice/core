@@ -311,6 +311,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                     case 0: // CONV_OOO
                     case 2: // CONV_XL_A1
                     case 3: // CONV_XL_R1C1
+                    case 7: // CONV_A1_XL_A1
                         aCalcConfig.meStringRefAddressSyntax = static_cast<formula::FormulaGrammar::AddressConvention>( nUno );
                         break;
                     default:
@@ -467,6 +468,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
                 case formula::FormulaGrammar::CONV_OOO:
                 case formula::FormulaGrammar::CONV_XL_A1:
                 case formula::FormulaGrammar::CONV_XL_R1C1:
+                case formula::FormulaGrammar::CONV_A1_XL_A1:
                      aRet <<= static_cast<sal_Int16>( aConv );
                      break;
 
