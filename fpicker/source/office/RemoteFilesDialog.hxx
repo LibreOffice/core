@@ -64,6 +64,7 @@ public:
 
     virtual void dispose() SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
+    virtual short Execute() SAL_OVERRIDE;
 
     OUString GetPath() const;
 

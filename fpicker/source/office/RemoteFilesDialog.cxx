@@ -318,6 +318,19 @@ void RemoteFilesDialog::Resize()
     }
 }
 
+short RemoteFilesDialog::Execute()
+{
+    if( m_pServices_lb->GetEntryCount() == 0 )
+    {
+        Show();
+        AddServiceHdl( NULL );
+    }
+
+    short nRet = SvtFileDialog_Base::Execute();
+
+    return nRet;
+}
+
 OUString lcl_GetServiceType( ServicePtr pService )
 {
     INetProtocol aProtocol = pService->GetUrlObject().GetProtocol();
