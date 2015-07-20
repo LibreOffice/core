@@ -44,47 +44,8 @@ protected:
     virtual             ~RecordObjectBase();
 
     using               SequenceRecordObjectBase::construct;
-    void                construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName );
-    void                construct( const RecordObjectBase& rParent );
 
     virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize ) SAL_OVERRIDE;
-
-    OUString     getErrorName( sal_uInt8 nErrCode ) const;
-
-
-
-    void                readAddress( Address& orAddress );
-    void                readRange( Range& orRange );
-    void                readRangeList( RangeList& orRanges );
-
-
-
-    void                writeBooleanItem( const String& rName, sal_uInt8 nBool );
-    void                writeErrorCodeItem( const String& rName, sal_uInt8 nErrCode );
-
-    void                writeFontPortions( const ::oox::xls::FontPortionModelList& rPortions );
-    void                writePhoneticPortions( const ::oox::xls::PhoneticPortionModelList& rPhonetics );
-
-
-
-    sal_uInt8           dumpBoolean( const String& rName = EMPTY_STRING );
-    sal_uInt8           dumpErrorCode( const String& rName = EMPTY_STRING );
-    OUString     dumpString( const String& rName = EMPTY_STRING, bool bRich = false, bool b32BitLen = true );
-    void                dumpColor( const String& rName = EMPTY_STRING );
-    ::com::sun::star::util::DateTime dumpPivotDateTime( const String& rName = EMPTY_STRING );
-
-    sal_Int32           dumpColIndex( const String& rName = EMPTY_STRING );
-    sal_Int32           dumpRowIndex( const String& rName = EMPTY_STRING );
-    sal_Int32           dumpColRange( const String& rName = EMPTY_STRING );
-    sal_Int32           dumpRowRange( const String& rName = EMPTY_STRING );
-
-    Address             dumpAddress( const String& rName = EMPTY_STRING );
-    Range               dumpRange( const String& rName = EMPTY_STRING );
-    void                dumpRangeList( const String& rName = EMPTY_STRING );
-
-
-private:
-    bool                readCompressedInt( BinaryInputStream& rStrm, sal_Int32& ornValue );
 
 private:
     typedef std::shared_ptr< SequenceInputStream > SequenceInputStreamRef;

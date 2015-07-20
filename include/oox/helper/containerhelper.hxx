@@ -50,7 +50,6 @@ struct ValueRange
 
     bool         operator==( const ValueRange& rRange ) const { return (mnFirst == rRange.mnFirst) && (mnLast == rRange.mnLast); }
     bool         operator!=( const ValueRange& rRange ) const { return !(*this == rRange); }
-    bool         contains( sal_Int32 nValue ) const { return (mnFirst <= nValue) && (nValue <= mnLast); }
     bool         contains( const ValueRange& rRange ) const { return (mnFirst <= rRange.mnFirst) && (rRange.mnLast <= mnLast); }
     bool         intersects( const ValueRange& rRange ) const { return (mnFirst <= rRange.mnLast) && (rRange.mnFirst <= mnLast); }
 };
@@ -69,8 +68,6 @@ class OOX_DLLPUBLIC ValueRangeSet
 public:
                         ValueRangeSet() {}
 
-    /** Inserts the passed value into the range list. */
-    void                insert( sal_Int32 nValue ) { insert( ValueRange( nValue ) ); }
     /** Inserts the passed value range into the range list. */
     void                insert( const ValueRange& rRange );
 

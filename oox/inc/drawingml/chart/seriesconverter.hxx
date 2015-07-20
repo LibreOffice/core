@@ -49,14 +49,6 @@ public:
     void                convertFromModel(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& rxDataSeries,
                             const TypeGroupConverter& rTypeGroup );
-
-    /** Conversion helper for data series and data points. */
-    static void         convertLabelFormatting(
-                            PropertySet& rPropSet,
-                            ObjectFormatter& rFormatter,
-                            const DataLabelModelBase& rDataLabel,
-                            const TypeGroupConverter& rTypeGroup,
-                            bool bDataSeriesLabel );
 };
 
 

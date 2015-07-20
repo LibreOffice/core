@@ -942,15 +942,6 @@ void PropertyMap::dumpData(Reference<XPropertySet> xPropertySet)
     }
 }
 
-void PropertyMap::dumpCode()
-{
-    dumpCode( Reference< XPropertySet >( makePropertySet(), UNO_QUERY ) );
-}
-
-void PropertyMap::dumpData()
-{
-    dumpData( Reference< XPropertySet >( makePropertySet(), UNO_QUERY ) );
-}
 #endif
 
 } // namespace oox

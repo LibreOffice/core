@@ -205,13 +205,10 @@ public:
         { msMinVer = sMinVer; }
     void setUniqueId( const OUString & sUniqueId )
         { msUniqueId = sUniqueId; }
-    const OUString & getUniqueId()
-        { return msUniqueId; }
     void setTitle( const OUString & sTitle )
         { msTitle = sTitle; }
     void setDesc( const OUString & sDesc )
         { msDesc = sDesc; }
-
     LayoutNodePtr & getNode()
         { return mpNode; }
     const LayoutNodePtr & getNode() const
@@ -273,10 +270,6 @@ public:
             return mpData;
         }
     void setLayout( const DiagramLayoutPtr & );
-    DiagramLayoutPtr getLayout() const
-        {
-            return mpLayout;
-        }
 
     DiagramQStyleMap& getStyles() { return maStyles; }
     const DiagramQStyleMap& getStyles() const { return maStyles; }

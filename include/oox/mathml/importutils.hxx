@@ -113,7 +113,6 @@ public:
     // which means using oox::AttributeList would make them all point to the one instance.
     struct OOX_DLLPUBLIC AttributeList
     {
-        bool hasAttribute( int token ) const;
         OUString& operator[] (int token);
         OUString attribute( int token, const OUString& def = OUString()) const;
         bool attribute( int token, bool def ) const;

@@ -691,9 +691,6 @@ protected:
     virtual void        implSetName( sal_Int64 nKey, const OUString& rName ) SAL_OVERRIDE;
 
 private:
-    void                insertNames( sal_Int64 nStartKey, const OUString& rData );
-
-private:
     bool                mbIgnoreEmpty;
 };
 
@@ -1018,7 +1015,6 @@ public:
 
     void                newLine();
     void                emptyLine( size_t nCount = 1 );
-    OUStringBuffer&     getLine() { return maLine; }
 
     void                incIndent();
     void                decIndent();
@@ -1035,12 +1031,9 @@ public:
     void                startItem( const String& rItemName );
     void                contItem();
     void                endItem();
-    const OUString&     getLastItemValue() const { return maLastItem; }
 
     void                startMultiItems();
     void                endMultiItems();
-
-
 
     void                writeChar( sal_Unicode cChar, sal_Int32 nCount = 1 );
     void                writeAscii( const sal_Char* pcStr );
@@ -1124,7 +1117,6 @@ public:
                                 const sal_Int32* pnColWidths ) :
                             mrOut( *rxOut ) { mrOut.startTable( nColCount, pnColWidths ); }
                         ~TableGuard() { mrOut.endTable(); }
-    void                tab() { mrOut.tab(); }
     void                tab( size_t nCol ) { mrOut.tab( nCol ); }
 private:
                         TableGuard( const TableGuard& ) SAL_DELETED_FUNCTION;
@@ -1480,13 +1472,6 @@ protected:
 
     virtual bool        implIsValid() const SAL_OVERRIDE;
 
-
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        getXInputStream() const;
-
-
-
     void                skipBlock( sal_Int64 nBytes, bool bShowSize = true );
     void                dumpRawBinary( sal_Int64 nBytes, bool bShowOffset = true, bool bStream = false );
 
@@ -1765,13 +1750,9 @@ protected:
                             const String& rRecNames,
                             const String& rSimpleRecs = EMPTY_STRING );
 
-    sal_Int64           getRecPos() const { return mnRecPos; }
     sal_Int64           getRecId() const { return mnRecId; }
     sal_Int64           getRecSize() const { return mnRecSize; }
     NameListRef         getRecNames() const { return maRecNames.getNameList( cfg() ); }
-
-    void                setBinaryOnlyMode( bool bBinaryOnly ) { mbBinaryOnly = bBinaryOnly; }
-    bool                isBinaryOnlyMode() const { return mbBinaryOnly; }
 
     virtual bool        implIsValid() const SAL_OVERRIDE;
     virtual void        implDump() SAL_OVERRIDE;
@@ -1805,8 +1786,6 @@ class SequenceRecordObjectBase : public RecordObjectBase
 {
 protected:
                         SequenceRecordObjectBase() : mxRecData( new StreamDataSequence ) {}
-
-    StreamDataSequence& getRecordDataSequence() { return *mxRecData; }
 
     using               RecordObjectBase::construct;
     void                construct(

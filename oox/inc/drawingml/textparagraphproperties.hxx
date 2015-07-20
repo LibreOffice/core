@@ -101,7 +101,6 @@ public:
     void                                pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
                                             const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet,
                                                 PropertyMap& rioBulletList, const BulletList* pMasterBuList, bool bApplyBulletList, float fFontSize, bool bPushDefaultValues = false ) const;
-    void                                pushToPropSet( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet) const;
 
     /** Returns the largest character size of this paragraph. If possible the
         masterstyle should have been applied before, otherwise the character

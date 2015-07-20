@@ -200,12 +200,7 @@ public:
     explicit ConditionAtom(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttributes);
     virtual ~ConditionAtom()
         { }
-    bool test();
     virtual void accept( LayoutAtomVisitor& ) SAL_OVERRIDE;
-    IteratorAttr & iterator()
-        { return maIter; }
-    ConditionAttr & cond()
-        { return maCond; }
     void readElseBranch()
         { mbElse=true; }
     virtual void addChild( const LayoutAtomPtr & pNode ) SAL_OVERRIDE;

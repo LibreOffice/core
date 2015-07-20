@@ -81,7 +81,6 @@ public:
     void                erase( sal_Int32 nPropId );
 
     bool                empty() const;
-    size_t              size() const;
 
     /** Inserts all properties contained in the passed property map. */
     void                assignUsed( const PropertyMap& rPropMap );
@@ -109,9 +108,7 @@ public:
   static void dump( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
 #endif
   static void dumpCode( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > rXPropSet);
-  void dumpCode();
   static void dumpData(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> rXPropSet);
-  void dumpData();
 #endif
 private:
     const PropertyNameVector* mpPropNames;

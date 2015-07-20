@@ -291,10 +291,6 @@ public:
     bool                skip( sal_Int32 nBytes );
 
 private:
-    void                InitKeyImpl(
-                            const sal_uInt8 pKeyData[64],
-                            const sal_uInt8 pUnique[16] );
-
     rtlCipher           mhCipher;
     rtlDigest           mhDigest;
     sal_uInt8           mpnDigestValue[ RTL_DIGEST_LENGTH_MD5 ];

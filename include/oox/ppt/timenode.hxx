@@ -51,14 +51,10 @@ namespace oox { namespace ppt {
 
         NodePropertyMap & getNodeProperties() { return maNodeProperties; }
         UserDataMap & getUserData() { return maUserData; }
-        void addChild( const TimeNodePtr & pChildPtr )
-            { maChildren.push_back( pChildPtr ); }
-
         TimeNodePtrList & getChildren()
             { return maChildren; }
 
         void setId( sal_Int32 nId );
-        const OUString & getId() const { return msId; }
 
         void addNode(
             const ::oox::core::XmlFilterBase& rFilter,
