@@ -886,35 +886,40 @@ void CCIDecompressor::FillBits(sal_uInt8 * pTarget, sal_uInt16 nTargetBits,
     }
 }
 
-
 sal_uInt16 CCIDecompressor::CountBits(const sal_uInt8 * pData, sal_uInt16 nDataSizeBits,
                                   sal_uInt16 nBitPos, sal_uInt8 nBlackOrWhite)
 {
-    sal_uInt16 nPos,nLo;
-    sal_uInt8 nData;
-
     // here the number of bits belonging together is being counted
     // which all have the color nBlackOrWhite (0xff oder 0x00)
     // from the position nBitPos on
-
-    nPos=nBitPos;
-    for (;;) {
-        if (nPos>=nDataSizeBits) {
+    sal_uInt16 nPos = nBitPos;
+    for (;;)
+    {
+        if (nPos>=nDataSizeBits)
+        {
             nPos=nDataSizeBits;
             break;
         }
-        nData=pData[nPos>>3];
-        nLo=nPos & 7;
-        if ( nLo==0 && nData==nBlackOrWhite) nPos+=8;
-        else {
-            if ( ((nData^nBlackOrWhite) & (0x80 >> nLo))!=0) break;
-            nPos++;
+        sal_uInt8 nData = pData[nPos>>3];
+        sal_uInt16 nLo = nPos & 7;
+        if (nLo==0 && nData==nBlackOrWhite)
+        {
+            //fail on overflow attempt
+            if (nPos > SAL_MAX_UINT16-8)
+                return 0;
+            nPos+=8;
+        }
+        else
+        {
+            if ( ((nData^nBlackOrWhite) & (0x80 >> nLo))!=0)
+                break;
+            ++nPos;
         }
     }
-    if (nPos<=nBitPos) return 0;
-    else return nPos-nBitPos;
+    if (nPos<=nBitPos)
+        return 0;
+    return nPos-nBitPos;
 }
-
 
 void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTargetBits)
 {
