@@ -628,8 +628,6 @@ void CCIDecompressor::StartDecompression( SvStream & rIStream )
 
 bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTargetBits, bool bLastLine )
 {
-    sal_uInt16 i;
-    sal_uInt8 * pDst;
     bool b2D;
 
     if ( nEOLCount >= 5 )   // RTC (Return To Controller)
@@ -678,8 +676,7 @@ bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTarget
                 delete[] pLastLine;
             nLastLineSize = ( nTargetBits + 7 ) >> 3;
             pLastLine = new sal_uInt8[ nLastLineSize ];
-            pDst = pLastLine;
-            for ( i = 0; i < nLastLineSize; i++ ) *( pDst++ ) = 0x00;
+            memset(pLastLine, 0, nLastLineSize);
         }
     }
     // conditionally align start of line to next byte:
@@ -706,9 +703,7 @@ bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTarget
     // if we're in 2D mode we have to remember the line:
     if ( nOptions & CCI_OPTION_2D && bStatus )
     {
-        sal_uInt8 *pSrc = pTarget;
-        pDst = pLastLine;
-        for ( i = 0; i < nLastLineSize; i++ ) *(pDst++)=*(pSrc++);
+        memcpy(pLastLine, pTarget, nLastLineSize);
     }
 
     // #i122984#
