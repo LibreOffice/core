@@ -48,7 +48,7 @@ SvXMLPropertySetContext::SvXMLPropertySetContext(
 
 SvXMLPropertySetContext::SvXMLPropertySetContext(
     SvXMLImport& rImport, sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     sal_uInt32 nFam, vector< XMLPropertyState >& rProps,
     const rtl::Reference< SvXMLImportPropertyMapper >& rMap,
     sal_Int32 nSIdx, sal_Int32 nEIdx )
@@ -59,6 +59,9 @@ SvXMLPropertySetContext::SvXMLPropertySetContext(
 ,   mrProperties( rProps )
 ,   mxMapper( rMap )
 {
+    mxMapper->importXML( mrProperties, xAttrList,
+                         GetImport().GetMM100UnitConverter(),
+                         mnFamily, mnStartIdx, mnEndIdx );
 }
 
 SvXMLPropertySetContext::~SvXMLPropertySetContext()
@@ -90,11 +93,26 @@ SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    SvXMLPropertySetContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    SvXMLPropertySetContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    rtl::Reference< XMLPropertySetMapper > aSetMapper(
+        mxMapper->getPropertySetMapper() );
+    sal_Int32 nEntryIndex = aSetMapper->GetEntryIndex( Element, mnFamily, mnStartIdx );
+
+    if( ( nEntryIndex != -1 ) && (-1 == mnEndIdx || nEntryIndex < mnEndIdx ) &&
+        ( 0 != ( aSetMapper->GetEntryFlags( nEntryIndex )
+                        & MID_FLAG_ELEMENT_ITEM_IMPORT ) ) )
+    {
+        XMLPropertyState aProp( nEntryIndex );
+        return createFastChildContext( Element, xAttrList,
+                                       mrProperties, aProp );
+    }
+    else
+    {
+        return new SvXMLImportContext( GetImport() );
+    }
 }
 
 /** This method is called from this instance implementation of
