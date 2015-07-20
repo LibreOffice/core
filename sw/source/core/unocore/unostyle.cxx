@@ -1549,9 +1549,9 @@ void    SwXStyle::ApplyDescriptorProperties()
     PropertyEntryVector_t::const_iterator aIt = rPropertyVector.begin();
     while(aIt != rPropertyVector.end())
     {
-        uno::Any* pAny;
+        uno::Any* pAny(0);
         pPropImpl->GetProperty(aIt->sName, pAny);
-        if(pAny)
+        if (pAny)
             setPropertyValue(aIt->sName, *pAny);
         ++aIt;
     }
