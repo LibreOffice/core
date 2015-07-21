@@ -1529,6 +1529,14 @@ lok_doc_view_set_partmode(LOKDocView* pDocView,
     priv->m_pDocument->pClass->setPartMode( priv->m_pDocument, nPartMode );
 }
 
+SAL_DLLPUBLIC_EXPORT void
+lok_doc_view_reset_view(LOKDocView* pDocView)
+{
+    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    priv->m_aTileBuffer.resetAllTiles();
+    gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+}
+
 /**
  * lok_doc_view_set_edit:
  * @pDocView: The #LOKDocView instance
