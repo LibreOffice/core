@@ -121,6 +121,23 @@
     },
     {
       "key": {
+        "uuid": "1a54edaf_521753a3",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:53:13Z",
+      "side": 1,
+      "message": "Some dispose bits are missing here, at least PanelLayout::dispose(), maybe some more ... that\u0027s why Impress crashes when one inserts e.g. a shape \n\n(as sidebar manager wants to dispose slide background panel and show shape properties panel(s))",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a54edaf_b2d1e7fd",
         "filename": "sd/source/ui/sidebar/SlideBackground.src",
         "patchSetId": 8
