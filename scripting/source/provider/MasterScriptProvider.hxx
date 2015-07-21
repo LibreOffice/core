@@ -115,8 +115,6 @@ private:
     static OUString parseLocationName( const OUString& location );
     void  createPkgProvider();
     bool  isValid() { return m_bIsValid;}
-    OUString getURLForModel();
-    const css::uno::Sequence< OUString >& getProviderNames();
 
     ProviderCache* providerCache();
     /* to obtain other services if needed */

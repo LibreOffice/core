@@ -610,10 +610,8 @@ public:
     static void             InitTextHeight(SfxItemPool* pPool);
     static SvxBrushItem*    GetEmptyBrushItem() { return pEmptyBrushItem; }
     static SvxBrushItem*    GetButtonBrushItem();
-    static SvxBrushItem*    GetEmbeddedBrushItem()  { return pEmbeddedBrushItem; }
     static SvxBrushItem*    GetProtectedBrushItem() { return pProtectedBrushItem; }
     SC_DLLPUBLIC    static const OUString&    GetEmptyOUString();
-    static const OUString&  GetScDocString();
 
     /** Returns the specified image list with outline symbols. */
     static ImageList*       GetOutlineSymbols();

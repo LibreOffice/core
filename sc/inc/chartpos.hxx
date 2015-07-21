@@ -52,8 +52,6 @@ class ScChartPositionMap
             ScChartPositionMap& operator=( const ScChartPositionMap& ) SAL_DELETED_FUNCTION;
 
 public:
-
-            sal_uLong               GetCount() const { return nCount; }
             SCCOL               GetColCount() const { return nColCount; }
             SCROW               GetRowCount() const { return nRowCount; }
 
@@ -135,9 +133,6 @@ public:
     void    SetHeaders(bool bCol, bool bRow) { bColHeaders=bCol; bRowHeaders=bRow; }
     bool    HasColHeaders() const            { return bColHeaders; }
     bool    HasRowHeaders() const            { return bRowHeaders; }
-    void    SeteGlue(ScChartGlue eNew) { eGlue = eNew; }
-    void    SetStartCol(SCCOL nNew) { nStartCol = nNew; }
-    void    SetStartRow(SCROW nNew) { nStartRow = nNew; }
 
     bool    operator==(const ScChartPositioner& rCmp) const;
 

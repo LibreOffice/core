@@ -21,8 +21,6 @@
 #include <cppuhelper/factory.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <util/scriptingconstants.hxx>
-
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include "ProviderCache.hxx"
 

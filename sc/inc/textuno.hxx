@@ -386,7 +386,6 @@ public:
     ScDocShell*             GetDocShell() const     { return pDocShell; }
     const ScAddress&        GetCellPos() const      { return aCellPos; }
 
-    void                    SetDirty(bool bValue)   { bDirty = bValue; }
     bool                    IsDirty() const         { return bDirty; }
     void                    SetDoUpdate(bool bValue)    { bDoUpdate = bValue; }
 };

@@ -37,8 +37,6 @@ public:
                     virtual ~ScPaintHint();
 
     void            SetPrintFlag(bool bSet) { bPrint = bSet; }
-
-    const ScRange&  GetRange() const        { return aRange; }
     SCCOL           GetStartCol() const     { return aRange.aStart.Col(); }
     SCROW           GetStartRow() const     { return aRange.aStart.Row(); }
     SCTAB           GetStartTab() const     { return aRange.aStart.Tab(); }
@@ -113,7 +111,6 @@ public:
     const OUString&     GetDdeAppl() const  { return aDdeAppl; }
     const OUString&     GetDdeTopic() const { return aDdeTopic; }
     const OUString&     GetDdeItem() const  { return aDdeItem; }
-    sal_uInt8           GetDdeMode() const  { return nDdeMode; }
     const ScAddress&    GetDestPos() const  { return aDestPos; }
 };
 

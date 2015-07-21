@@ -232,7 +232,6 @@ public:
     void GetDimensions( SCSIZE& rC, SCSIZE& rR) const;
     SCSIZE GetElementCount() const;
     bool ValidColRow( SCSIZE nC, SCSIZE nR) const;
-    SCSIZE CalcOffset( SCSIZE nC, SCSIZE nR) const;
 
     /** For a row vector or column vector, if the position does not point into
         the vector but is a valid column or row offset it is adapted such that

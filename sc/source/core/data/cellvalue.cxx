@@ -246,30 +246,6 @@ void ScCellValue::clear()
     mfValue = 0.0;
 }
 
-void ScCellValue::set( const ScRefCellValue& rCell )
-{
-    clear();
-
-    meType = rCell.meType;
-    switch (meType)
-    {
-        case CELLTYPE_VALUE:
-            mfValue = rCell.mfValue;
-        break;
-        case CELLTYPE_STRING:
-            mpString = new svl::SharedString(*rCell.mpString);
-        break;
-        case CELLTYPE_EDIT:
-            mpEditText = rCell.mpEditText->Clone();
-        break;
-        case CELLTYPE_FORMULA:
-            mpFormula = rCell.mpFormula->Clone();
-        break;
-        default:
-            ;
-    }
-}
-
 void ScCellValue::set( double fValue )
 {
     clear();

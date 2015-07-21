@@ -165,7 +165,6 @@ public:
     OUString GetDataDimName(long nIndex);
     const ScDPCache* GetCache();
     const ScDPItemData*         GetItemDataById( long nDim, long nId );
-    long                        GetDataLayoutDim(){ return pData->GetColumnCount(); }
     SCROW                       GetMemberId(  long  nDim, const ScDPItemData& rData );
     bool                        IsDataLayoutDimension(long nDim);
     sal_uInt16                  GetDataLayoutOrientation();
@@ -714,15 +713,14 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    long getCount() const { return nMbrCount;}
-    ScDPMember* getByIndex(long nIndex) const;
+    long                    getCount() const { return nMbrCount;}
+    ScDPMember*             getByIndex(long nIndex) const;
 
     long                    getMinMembers() const;
 
     sal_Int32               GetIndexFromName( const OUString& rName ) const;     // <0 if not found
-    const std::vector<sal_Int32>&    GetGlobalOrder();
-    const ScDPItemData*               GetSrcItemDataByIndex(  SCROW nIndex);
-    SCROW                                   GetSrcItemsCount();
+    const ScDPItemData*     GetSrcItemDataByIndex(  SCROW nIndex);
+    SCROW                   GetSrcItemsCount();
 };
 
 class ScDPMember : boost::noncopyable, public cppu::WeakImplHelper3<

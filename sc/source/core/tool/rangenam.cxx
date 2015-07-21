@@ -667,8 +667,7 @@ class MatchByRange : public unary_function<ScRangeData, bool>
     const ScRange& mrRange;
 public:
     MatchByRange(const ScRange& rRange) : mrRange(rRange) {}
-    template < typename Pair >
-    bool operator() ( Pair const& r) const
+    bool operator() ( boost::ptr_container_detail::ref_pair<OUString, const ScRangeData* const> const& r) const
     {
         return r.second->IsRangeAtBlock(mrRange);
     }

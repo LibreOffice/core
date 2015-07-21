@@ -219,10 +219,8 @@ public:
     ScColorFormat(ScDocument* pDoc);
     virtual ~ScColorFormat();
 
-    void SetRange(const ScRangeList& rList);
     const ScRangeList& GetRange() const;
 
-    virtual void DataChanged(const ScRange& rRange) = 0;
     virtual void SetParent(ScConditionalFormat* pParent) SAL_OVERRIDE;
 
     virtual void startRendering() SAL_OVERRIDE;
@@ -268,7 +266,6 @@ public:
     Color* GetColor(const ScAddress& rAddr) const;
     void AddEntry(ScColorScaleEntry* pEntry);
 
-    virtual void DataChanged(const ScRange& rRange) SAL_OVERRIDE;
     virtual void UpdateReference( sc::RefUpdateContext& rCxt ) SAL_OVERRIDE;
     virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) SAL_OVERRIDE;
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) SAL_OVERRIDE;
@@ -309,7 +306,6 @@ public:
     const ScDataBarFormatData* GetDataBarData() const;
     ScDataBarFormatData* GetDataBarData();
 
-    virtual void DataChanged(const ScRange& rRange) SAL_OVERRIDE;
     virtual void UpdateReference( sc::RefUpdateContext& rCxt ) SAL_OVERRIDE;
     virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) SAL_OVERRIDE;
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) SAL_OVERRIDE;
@@ -368,7 +364,6 @@ public:
     const ScIconSetFormatData* GetIconSetData() const;
     ScIconSetFormatData* GetIconSetData();
 
-    virtual void DataChanged(const ScRange& rRange) SAL_OVERRIDE;
     virtual void UpdateReference( sc::RefUpdateContext& rCxt ) SAL_OVERRIDE;
     virtual void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt ) SAL_OVERRIDE;
     virtual void UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt ) SAL_OVERRIDE;

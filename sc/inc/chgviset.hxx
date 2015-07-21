@@ -108,7 +108,6 @@ public:
     bool                IsValidComment(const OUString* pCommentStr) const;
 
     bool                IsEveryoneButMe() const {return bEveryoneButMe;}
-    void                SetEveryoneButMe(bool nFlag) {bEveryoneButMe=nFlag;}
 
     bool                HasRange() const {return bIsRange;}
     void                SetHasRange(bool nFlag) {bIsRange=nFlag;}

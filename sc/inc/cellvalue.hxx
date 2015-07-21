@@ -48,7 +48,6 @@ struct SC_DLLPUBLIC ScCellValue
 
     void clear();
 
-    void set( const ScRefCellValue& rCell );
     void set( double fValue );
     void set( const svl::SharedString& rStr );
     void set( const EditTextObject& rEditText );

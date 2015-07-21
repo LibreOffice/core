@@ -34,7 +34,6 @@ public:
     ScHint( sal_uLong n, const ScAddress& a );
     const ScAddress&    GetAddress() const { return aAddress; }
           ScAddress&    GetAddress()       { return aAddress; }
-    void                SetAddress( const ScAddress& rAdr ) { aAddress = rAdr; }
 };
 
 class ScAreaChangedHint : public SfxHint

@@ -429,20 +429,4 @@ void ScDocument::StartAllListeners( const ScRange& rRange )
     }
 }
 
-void ScDocument::EndAllListeners( const ScRange& rRange )
-{
-    sc::EndListeningContext aEndCxt(*this);
-
-    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
-    {
-        ScTable* pTab = FetchTable(nTab);
-        if (!pTab)
-            continue;
-
-        pTab->EndListeningFormulaCells(
-            aEndCxt,
-            rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
-    }
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -147,8 +147,6 @@ public:
     void        SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup );
     long        GetDimensionIndex( const OUString& rName );
 
-    ScDocument* GetDocument()   { return pDoc; }
-
     virtual long                    GetColumnCount() SAL_OVERRIDE;
     virtual long                    GetMembersCount( long nDim ) SAL_OVERRIDE;
     virtual const std::vector< SCROW >& GetColumnEntries( long nColumn ) SAL_OVERRIDE ;

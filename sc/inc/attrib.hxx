@@ -169,12 +169,6 @@ public:
                                                  const IntlWrapper* pIntl = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
-    const ScRange&  GetRange() const                { return aRange;  }
-    void            SetRange( const ScRange& rNew ) { aRange = rNew; }
-
-    sal_uInt16          GetFlags() const                { return nFlags;  }
-    void            SetFlags( sal_uInt16 nNew )         { nFlags = nNew; }
-
 private:
     ScRange aRange;
     sal_uInt16  nFlags;
@@ -306,10 +300,6 @@ public:
 
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const SAL_OVERRIDE;
 
-    double GetValue() const     { return nValue; }
-
-    void   SetValue( const double nVal ) { nValue = nVal;}
-
 private:
     double  nValue;
 };
@@ -343,7 +333,6 @@ public:
     inline void                 SetHeight( sal_uInt16 nHeight ) { mnHeight = nHeight; }
     inline void                 Set( sal_uInt16 nWidth, sal_uInt16 nHeight )
                                     { mnWidth = nWidth; mnHeight = nHeight; }
-    inline void                 SetInvalid() { mnWidth = mnHeight = 0; }
 
     virtual bool GetPresentation(
                                     SfxItemPresentation ePresentation,

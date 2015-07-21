@@ -84,8 +84,6 @@ class SC_DLLPUBLIC ScDetectiveFunc
 
     bool        HasError( const ScRange& rRange, ScAddress& rErrPos );
 
-    void        FillAttributes( ScDetectiveData& rData );
-
                 /// called from DrawEntry/DrawAlienEntry and InsertObject
     bool        InsertArrow( SCCOL nCol, SCROW nRow,
                                 SCCOL nRefStartCol, SCROW nRefStartRow,

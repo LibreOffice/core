@@ -368,7 +368,6 @@ void ScTableOp();                                       // repeated operations
 
 // common helper functions
 
-void SetMaxIterationCount(sal_uInt16 n);
 inline void CurFmtToFuncFmt()
     { nFuncFmtType = nCurFmtType; nFuncFmtIndex = nCurFmtIndex; }
 
@@ -574,7 +573,6 @@ void ScExternal();
 void ScMissing();
 void ScMacro();
 bool SetSbxVariable( SbxVariable* pVar, const ScAddress& );
-bool SetSbxVariable( SbxVariable* pVar, SCCOL nCol, SCROW nRow, SCTAB nTab );
 sal_uInt16 GetErrorType();
 void ScErrorType();
 void ScErrorType_ODF();

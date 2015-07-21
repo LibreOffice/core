@@ -107,7 +107,6 @@ public:
     void            UpdateChartIntersecting( const ScRange& rRange );
 
     // if chart series ranges are to be updated later on (e.g. DeleteTab, InsertTab)
-    void            ScheduleSeriesRanges()      { bSeriesRangesScheduled = true; }
     void            UpdateScheduledSeriesRanges();
     void            UpdateSeriesRanges();
 

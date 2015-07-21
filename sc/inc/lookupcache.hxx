@@ -91,14 +91,6 @@ public:
             mfVal = fVal;
         }
 
-        void setString( const OUString * pStr )
-        {
-            deleteString();
-            mbAlloc = false;
-            mbString = true;
-            mpStr = pStr;
-        }
-
         void setString( const OUString & rStr )
         {
             deleteString();

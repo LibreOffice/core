@@ -934,17 +934,6 @@ ScAutoFormatData* ScAutoFormat::findByIndex(size_t nIndex)
     return it->second;
 }
 
-ScAutoFormat::const_iterator ScAutoFormat::find(const ScAutoFormatData* pData) const
-{
-    MapType::const_iterator it = maData.begin(), itEnd = maData.end();
-    for (; it != itEnd; ++it)
-    {
-        if (it->second == pData)
-            return it;
-    }
-    return itEnd;
-}
-
 ScAutoFormat::iterator ScAutoFormat::find(const ScAutoFormatData* pData)
 {
     MapType::iterator it = maData.begin(), itEnd = maData.end();
@@ -954,11 +943,6 @@ ScAutoFormat::iterator ScAutoFormat::find(const ScAutoFormatData* pData)
             return it;
     }
     return itEnd;
-}
-
-ScAutoFormat::const_iterator ScAutoFormat::find(const OUString& rName) const
-{
-    return maData.find(rName);
 }
 
 ScAutoFormat::iterator ScAutoFormat::find(const OUString& rName)

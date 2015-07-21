@@ -63,15 +63,11 @@ private:
                                 }
 
 public:
-    static  SfxProgress*    GetGlobalSfxProgress() { return pGlobalProgress; }
     static  bool            IsUserBreak() { return !bGlobalNoUserBreak; }
     static  void            CreateInterpretProgress( ScDocument* pDoc,
                                                     bool bWait = true );
     static  ScProgress*     GetInterpretProgress() { return pInterpretProgress; }
     static  void            DeleteInterpretProgress();
-    static  sal_uLong           GetInterpretCount() { return nInterpretProgress; }
-    static  sal_uLong           GetGlobalRange()    { return nGlobalRange; }
-    static  sal_uLong           GetGlobalPercent()  { return nGlobalPercent; }
 
                             ScProgress( SfxObjectShell* pObjSh,
                                          const OUString& rText,
@@ -83,8 +79,6 @@ public:
                             /// for DummyInterpret only, never use otherwise!!!
                             ScProgress();
 #endif
-                            /// might be NULL!
-            SfxProgress*    GetSfxProgress() const { return pProgress; }
 
             bool            SetStateText( sal_uLong nVal, const OUString &rVal, sal_uLong nNewRange = 0 )
                                 {

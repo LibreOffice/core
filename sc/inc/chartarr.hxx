@@ -76,15 +76,11 @@ public:
     ~ScChartArray();
 
     const ScRangeListRef&   GetRangeList() const { return aPositioner.GetRangeList(); }
-    void    SetRangeList( const ScRangeListRef& rNew ) { aPositioner.SetRangeList(rNew); }
-    void    SetRangeList( const ScRange& rNew ) { aPositioner.SetRangeList(rNew); }
     const   ScChartPositionMap* GetPositionMap() { return aPositioner.GetPositionMap(); }
 
     void    SetHeaders(bool bCol, bool bRow) { aPositioner.SetHeaders(bCol, bRow); }
     bool    HasColHeaders() const { return aPositioner.HasColHeaders(); }
     bool    HasRowHeaders() const { return aPositioner.HasRowHeaders(); }
-    bool IsValid() const { return bValid; }
-    void SetName(const OUString& rNew) { aName = rNew; }
     const OUString& GetName() const { return aName; }
 
     bool operator==(const ScChartArray& rCmp) const;

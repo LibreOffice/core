@@ -207,7 +207,6 @@ public:
     const SvxLineItem&          GetTLBR() const         { return aTLBR; }
     const SvxLineItem&          GetBLTR() const         { return aBLTR; }
     const SvxBrushItem&         GetBackground() const   { return aBackground; }
-    const SvxAdjustItem&        GetAdjust() const       { return aAdjust; }
     const SfxInt32Item&         GetRotateAngle() const  { return aRotateAngle; }
     const SvxRotateModeItem&    GetRotateMode() const   { return aRotateMode; }
 
@@ -329,9 +328,7 @@ public:
 
     const ScAutoFormatData* findByIndex(size_t nIndex) const;
     ScAutoFormatData* findByIndex(size_t nIndex);
-    const_iterator find(const ScAutoFormatData* pData) const;
     iterator find(const ScAutoFormatData* pData);
-    const_iterator find(const OUString& rName) const;
     iterator find(const OUString& rName);
 
     bool insert(ScAutoFormatData* pNew);

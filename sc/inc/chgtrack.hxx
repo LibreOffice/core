@@ -161,19 +161,6 @@ public:
         }
     }
 
-    void Insert( ScChangeActionLinkEntry** ppPrevP )
-    {
-        if ( !ppPrev )
-        {
-            ppPrev = ppPrevP;
-            if ( (pNext = *ppPrevP) )
-                pNext->ppPrev = &pNext;
-            *ppPrevP = this;
-        }
-    }
-
-    const ScChangeActionLinkEntry*  GetLink() const     { return pLink; }
-    ScChangeActionLinkEntry*        GetLink()           { return pLink; }
     const ScChangeActionLinkEntry*  GetNext() const     { return pNext; }
     ScChangeActionLinkEntry*        GetNext()           { return pNext; }
     const ScChangeAction*           GetAction() const   { return pAction; }
@@ -202,9 +189,6 @@ class ScChangeActionCellListEntry
         {}
 
 public:
-    const ScChangeActionCellListEntry* GetNext() const { return pNext; } // this is only for the XML Export public
-    const ScChangeActionContent* GetContent() const { return pContent; } // this is only for the XML Export public
-
     DECL_FIXEDMEMPOOL_NEWDEL( ScChangeActionCellListEntry )
 };
 
@@ -540,8 +524,6 @@ public:
     SCsROW GetDy() const { return nDy; }
     ScBigRange          GetOverAllRange() const;    // BigRange + (nDx, nDy)
 
-    const ScChangeActionCellListEntry* GetFirstCellEntry() const
-                            { return pFirstCell; }
     const ScChangeActionDelMoveEntry* GetFirstMoveEntry() const
                             { return pLinkMove; }
     const ScChangeActionIns*    GetCutOffInsert() const { return pCutOff; }
@@ -614,9 +596,6 @@ public:
                     const OUString &sComment,
                     const ScBigRange& aFromBigRange,
                     ScChangeTrack* pTrack); // only to use in the XML import
-
-    const ScChangeActionCellListEntry* GetFirstCellEntry() const
-                            { return pFirstCell; } // only to use in the XML export
 
     const ScBigRange&   GetFromRange() const { return aFromRange; }
     SC_DLLPUBLIC        void                GetDelta( sal_Int32& nDx, sal_Int32& nDy, sal_Int32& nDz ) const;
@@ -954,7 +933,6 @@ class ScChangeTrack : public utl::ConfigurationListener
 
     void                Init();
     void                DtorClear();
-    void                SetLoadSave( bool bVal ) { bLoadSave = bVal; }
     void                SetInDeleteRange( const ScRange& rRange )
                             { aInDeleteRange = rRange; }
     void                SetInDelete( bool bVal )
@@ -1202,14 +1180,13 @@ public:
                         // ScChangeTrackMsgQueue
     void                SetModifiedLink( const Link<>& r )
                             { aModifiedLink = r; ClearMsgQueue(); }
-    const Link<>&       GetModifiedLink() const { return aModifiedLink; }
     ScChangeTrackMsgQueue& GetMsgQueue();
 
     void                NotifyModified( ScChangeTrackMsgType eMsgType,
                             sal_uLong nStartAction, sal_uLong nEndAction );
 
-    sal_uLong AddLoadedGenerated(
-        const ScCellValue& rNewCell, const ScBigRange& aBigRange, const OUString& sNewValue ); // only to use in the XML import
+    sal_uLong           AddLoadedGenerated( const ScCellValue& rNewCell,
+                            const ScBigRange& aBigRange, const OUString& sNewValue ); // only to use in the XML import
     void                AppendLoaded( ScChangeAction* pAppend ); // this is only for the XML import public, it should be protected
     void                SetActionMax(sal_uLong nTempActionMax)
                             { nActionMax = nTempActionMax; } // only to use in the XML import

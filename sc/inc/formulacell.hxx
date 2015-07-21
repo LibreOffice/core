@@ -286,23 +286,22 @@ public:
 
     void            UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY );
 
-    void UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
+    void            UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt );
     void            UpdateInsertTabAbs(SCTAB nTable);
-    bool UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
-    void UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo );
-    void            UpdateRenameTab(SCTAB nTable, const OUString& rName);
+    bool            UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt );
+    void            UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt, SCTAB nTabNo );
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse = false );
     void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
-    bool IsSubTotal() const { return bSubTotal;}
+    bool            IsSubTotal() const { return bSubTotal;}
     bool            IsChanged() const { return bChanged;}
-    void SetChanged(bool b);
+    void            SetChanged(bool b);
     bool            IsEmpty();      // formula::svEmptyCell result
                     // display as empty string if formula::svEmptyCell result
     bool            IsEmptyDisplayedAsString();
     bool            IsValue();      // also true if formula::svEmptyCell
-    bool IsValueNoError();
-    bool IsValueNoError() const;
+    bool            IsValueNoError();
+    bool            IsValueNoError() const;
     bool            IsHybridValueCell(); // for cells after import to deal with inherited number formats
     double          GetValue();
     svl::SharedString GetString();
