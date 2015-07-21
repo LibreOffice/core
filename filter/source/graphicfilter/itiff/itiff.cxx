@@ -1337,6 +1337,8 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
             }
             if ( !nBitsPerSample || ( nBitsPerSample > 32 ) )
                 bStatus = false;
+            if (nImageWidth < 0 || nImageLength < 0)
+                bStatus = false;
             if ( bStatus )
             {
                 if ( nMaxSampleValue == 0 )
