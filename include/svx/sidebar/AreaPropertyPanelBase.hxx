@@ -97,6 +97,14 @@ public:
     virtual void setFillStyleAndHatch(const XFillStyleItem* pStyleItem, const XFillHatchItem& aHatchItem) = 0;
     virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& aHatchItem) = 0;
 
+    void updateFillTransparence(bool bDisabled, bool bDefault, const SfxUInt16Item* pItem);
+    void updateFillFloatTransparence(bool bDisabled, bool bDefault, const XFillFloatTransparenceItem* pItem);
+    void updateFillStyle(bool bDisabled, bool bDefault, const XFillStyleItem* pItem);
+    void updateFillGradient(bool bDisabled, bool bDefault, const XFillGradientItem* pItem);
+    void updateFillHatch(bool bDisabled, bool bDefault, const XFillHatchItem* pItem);
+    void updateFillColor(bool bDefault, const XFillColorItem* pItem);
+    void updateFillBitmap(bool BDisabled, bool bDefault, const XFillBitmapItem* pItem);
+
 protected:
     sal_uInt16                                          meLastXFS;
 

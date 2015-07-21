@@ -592,6 +592,206 @@ void AreaPropertyPanelBase::ImpUpdateTransparencies()
     }
 }
 
+void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefault, const SfxUInt16Item* pItem)
+{
+    if (bDisabled)
+    {
+        mpTransparanceItem.reset();
+        return;
+    }
+    else if(bDefault)
+    {
+        if(pItem && (!mpTransparanceItem || *pItem != *mpTransparanceItem))
+        {
+            mpTransparanceItem.reset(static_cast<SfxUInt16Item*>(pItem->Clone()));
+        }
+        else
+        {
+            mpTransparanceItem.reset();
+        }
+    }
+    else
+    {
+        mpTransparanceItem.reset();
+    }
+
+    // update transparency settings dependent of mpTransparanceItem and mpFloatTransparenceItem
+    ImpUpdateTransparencies();
+}
+
+void AreaPropertyPanelBase::updateFillFloatTransparence(bool bDisabled, bool bDefault, const XFillFloatTransparenceItem* pItem)
+{
+    if (bDisabled)
+    {
+        mpFloatTransparenceItem.reset();
+        return;
+    }
+
+    if(bDefault)
+    {
+        if(pItem && (!mpFloatTransparenceItem || *pItem != *mpFloatTransparenceItem))
+        {
+            mpFloatTransparenceItem.reset(static_cast<XFillFloatTransparenceItem*>(pItem->Clone()));
+        }
+        else
+        {
+            mpFloatTransparenceItem.reset();
+        }
+    }
+    else
+    {
+        mpFloatTransparenceItem.reset();
+    }
+
+    // update transparency settings dependent of mpTransparanceItem and mpFloatTransparenceItem
+    ImpUpdateTransparencies();
+}
+
+void AreaPropertyPanelBase::updateFillStyle(bool bDisabled, bool bDefault, const XFillStyleItem* pItem)
+{
+    if(bDisabled)
+    {
+        mpLbFillType->Disable();
+        mpColorTextFT->Disable();
+        mpLbFillType->SetNoSelection();
+        mpLbFillAttr->Show();
+        mpLbFillAttr->Disable();
+        mpLbFillAttr->SetNoSelection();
+        mpToolBoxColor->Hide();
+        meLastXFS = static_cast<sal_uInt16>(-1);
+        mpStyleItem.reset();
+    }
+    else if(bDefault && pItem)
+    {
+        mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
+        mpLbFillType->Enable();
+        mpColorTextFT->Enable();
+        drawing::FillStyle eXFS = (drawing::FillStyle)mpStyleItem->GetValue();
+        meLastXFS = eXFS;
+        mpLbFillType->SelectEntryPos(sal::static_int_cast< sal_Int32 >(eXFS));
+
+        if(drawing::FillStyle_NONE == eXFS)
+        {
+            mpLbFillAttr->SetNoSelection();
+            mpLbFillAttr->Disable();
+        }
+
+        Update();
+        return;
+    }
+
+    mpLbFillType->SetNoSelection();
+    mpLbFillAttr->Show();
+    mpLbFillAttr->Disable();
+    mpLbFillAttr->SetNoSelection();
+    mpToolBoxColor->Hide();
+    meLastXFS = static_cast<sal_uInt16>(-1);
+    mpStyleItem.reset();
+}
+
+void AreaPropertyPanelBase::updateFillGradient(bool bDisabled, bool bDefault, const XFillGradientItem* pItem)
+{
+    if(bDefault)
+    {
+        mpFillGradientItem.reset(pItem ? static_cast<XFillGradientItem*>(pItem->Clone()) : 0);
+    }
+
+    if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
+    {
+        mpLbFillAttr->Show();
+        mpToolBoxColor->Hide();
+
+        if(bDefault)
+        {
+            mpLbFillAttr->Enable();
+            Update();
+        }
+        else if(bDisabled)
+        {
+            mpLbFillAttr->Disable();
+            mpLbFillAttr->SetNoSelection();
+        }
+        else
+        {
+            mpLbFillAttr->SetNoSelection();
+        }
+    }
+}
+
+void AreaPropertyPanelBase::updateFillHatch(bool bDisabled, bool bDefault, const XFillHatchItem* pItem)
+{
+    if(bDefault)
+    {
+        mpHatchItem.reset(pItem ? static_cast<XFillHatchItem*>(pItem->Clone()) : 0);
+    }
+
+    if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
+    {
+        mpLbFillAttr->Show();
+        mpToolBoxColor->Hide();
+
+        if(bDefault)
+        {
+            mpLbFillAttr->Enable();
+            Update();
+        }
+        else if(bDisabled)
+        {
+            mpLbFillAttr->Disable();
+            mpLbFillAttr->SetNoSelection();
+        }
+        else
+        {
+            mpLbFillAttr->SetNoSelection();
+        }
+    }
+}
+
+void AreaPropertyPanelBase::updateFillColor(bool bDefault, const XFillColorItem* pItem)
+{
+    if(bDefault)
+    {
+        mpColorItem.reset(pItem ? static_cast<XFillColorItem*>(pItem->Clone()) : 0);
+    }
+
+    if(mpStyleItem && drawing::FillStyle_SOLID == (drawing::FillStyle)mpStyleItem->GetValue())
+    {
+        mpLbFillAttr->Hide();
+        mpToolBoxColor->Show();
+
+        Update();
+    }
+}
+
+void AreaPropertyPanelBase::updateFillBitmap(bool bDisabled, bool bDefault, const XFillBitmapItem* pItem)
+{
+    if(bDefault)
+    {
+        mpBitmapItem.reset(pItem ? static_cast<XFillBitmapItem*>(pItem->Clone()) : 0);
+    }
+
+    if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
+    {
+        mpLbFillAttr->Show();
+        mpToolBoxColor->Hide();
+
+        if(bDefault)
+        {
+            mpLbFillAttr->Enable();
+            Update();
+        }
+        else if(bDisabled)
+        {
+            mpLbFillAttr->Disable();
+            mpLbFillAttr->SetNoSelection();
+        }
+        else
+        {
+            mpLbFillAttr->SetNoSelection();
+        }
+    }
+}
+
 void AreaPropertyPanelBase::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
@@ -599,219 +799,41 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
     const bool /*bIsEnabled*/)
 {
     const bool bDisabled(SfxItemState::DISABLED == eState);
+    const bool bDefault(SfxItemState::DEFAULT == eState);
 
     switch(nSID)
     {
         case SID_ATTR_FILL_TRANSPARENCE:
+            updateFillTransparence(bDisabled, bDefault,
+                    static_cast<const SfxUInt16Item*>(pState));
+        break;
         case SID_ATTR_FILL_FLOATTRANSPARENCE:
-        {
-            bool bFillTransparenceChanged(false);
-
-            if(SID_ATTR_FILL_TRANSPARENCE == nSID)
-            {
-                bFillTransparenceChanged = true;
-
-                if(eState >= SfxItemState::DEFAULT)
-                {
-                    const SfxUInt16Item* pItem = dynamic_cast< const SfxUInt16Item* >(pState);
-
-                    if(pItem && (!mpTransparanceItem || *pItem != *mpTransparanceItem))
-                    {
-                        mpTransparanceItem.reset(static_cast<SfxUInt16Item*>(pItem->Clone()));
-                    }
-                    else
-                    {
-                        mpTransparanceItem.reset();
-                    }
-                }
-                else
-                {
-                    mpTransparanceItem.reset();
-                }
-            }
-            else // if(SID_ATTR_FILL_FLOATTRANSPARENCE == nSID)
-            {
-                bFillTransparenceChanged = true;
-
-                if(eState >= SfxItemState::DEFAULT)
-                {
-                    const XFillFloatTransparenceItem* pItem = dynamic_cast< const XFillFloatTransparenceItem* >(pState);
-
-                    if(pItem && (!mpFloatTransparenceItem || *pItem != *mpFloatTransparenceItem))
-                    {
-                        mpFloatTransparenceItem.reset(static_cast<XFillFloatTransparenceItem*>(pItem->Clone()));
-                    }
-                    else
-                    {
-                        mpFloatTransparenceItem.reset();
-                    }
-                }
-                else
-                {
-                    mpFloatTransparenceItem.reset();
-                }
-            }
-
-            if(bFillTransparenceChanged)
-            {
-                // update transparency settings dependent of mpTransparanceItem and mpFloatTransparenceItem
-                ImpUpdateTransparencies();
-            }
-            break;
-        }
+            updateFillFloatTransparence(bDisabled, bDefault,
+                    static_cast<const XFillFloatTransparenceItem*>(pState));
+        break;
         case SID_ATTR_FILL_STYLE:
-        {
-            if(bDisabled)
-            {
-                mpLbFillType->Disable();
-                mpColorTextFT->Disable();
-                mpLbFillType->SetNoSelection();
-                mpLbFillAttr->Show();
-                mpLbFillAttr->Disable();
-                mpLbFillAttr->SetNoSelection();
-                mpToolBoxColor->Hide();
-                meLastXFS = static_cast<sal_uInt16>(-1);
-                mpStyleItem.reset();
-            }
-            else if(eState >= SfxItemState::DEFAULT)
-            {
-                const XFillStyleItem* pItem = dynamic_cast< const XFillStyleItem* >(pState);
-
-                if(pItem)
-                {
-                    mpStyleItem.reset(dynamic_cast< XFillStyleItem* >(pItem->Clone()));
-                    mpLbFillType->Enable();
-                    mpColorTextFT->Enable();
-                    drawing::FillStyle eXFS = (drawing::FillStyle)mpStyleItem->GetValue();
-                    meLastXFS = eXFS;
-                    mpLbFillType->SelectEntryPos(sal::static_int_cast< sal_Int32 >(eXFS));
-
-                    if(drawing::FillStyle_NONE == eXFS)
-                    {
-                        mpLbFillAttr->SetNoSelection();
-                        mpLbFillAttr->Disable();
-                    }
-
-                    Update();
-                    break;
-                }
-            }
-
-            mpLbFillType->SetNoSelection();
-            mpLbFillAttr->Show();
-            mpLbFillAttr->Disable();
-            mpLbFillAttr->SetNoSelection();
-            mpToolBoxColor->Hide();
-            meLastXFS = static_cast<sal_uInt16>(-1);
-            mpStyleItem.reset();
-            break;
-        }
+            updateFillStyle(bDisabled, bDefault,
+                    static_cast<const XFillStyleItem*>(pState));
+        break;
         case SID_ATTR_FILL_COLOR:
-        {
-            if(SfxItemState::DEFAULT == eState)
-            {
-                mpColorItem.reset(pState ? static_cast<XFillColorItem*>(pState->Clone()) : 0);
-            }
-
-            if(mpStyleItem && drawing::FillStyle_SOLID == (drawing::FillStyle)mpStyleItem->GetValue())
-            {
-                mpLbFillAttr->Hide();
-                mpToolBoxColor->Show();
-
-                Update();
-            }
-            break;
-        }
+            updateFillColor(bDefault,
+                    static_cast<const XFillColorItem*>(pState));
+        break;
         case SID_ATTR_FILL_GRADIENT:
-        {
-            if(SfxItemState::DEFAULT == eState)
-            {
-                mpFillGradientItem.reset(pState ? static_cast<XFillGradientItem*>(pState->Clone()) : 0);
-            }
-
-            if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
-            {
-                mpLbFillAttr->Show();
-                mpToolBoxColor->Hide();
-
-                if(SfxItemState::DEFAULT == eState)
-                {
-                    mpLbFillAttr->Enable();
-                    Update();
-                }
-                else if(SfxItemState::DISABLED == eState )
-                {
-                    mpLbFillAttr->Disable();
-                    mpLbFillAttr->SetNoSelection();
-                }
-                else
-                {
-                    mpLbFillAttr->SetNoSelection();
-                }
-            }
-            break;
-        }
+            updateFillGradient(bDisabled, bDefault,
+                    static_cast<const XFillGradientItem*>(pState));
+        break;
         case SID_ATTR_FILL_HATCH:
-        {
-            if(SfxItemState::DEFAULT == eState)
-            {
-                mpHatchItem.reset(pState ? static_cast<XFillHatchItem*>(pState->Clone()) : 0);
-            }
-
-            if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
-            {
-                mpLbFillAttr->Show();
-                mpToolBoxColor->Hide();
-
-                if(SfxItemState::DEFAULT == eState)
-                {
-                    mpLbFillAttr->Enable();
-                    Update();
-                }
-                else if(SfxItemState::DISABLED == eState )
-                {
-                    mpLbFillAttr->Disable();
-                    mpLbFillAttr->SetNoSelection();
-                }
-                else
-                {
-                    mpLbFillAttr->SetNoSelection();
-                }
-            }
-            break;
-        }
+            updateFillHatch(bDisabled, bDefault,
+                    static_cast<const XFillHatchItem*>(pState));
+        break;
         case SID_ATTR_FILL_BITMAP:
-        {
-            if(SfxItemState::DEFAULT == eState)
-            {
-                mpBitmapItem.reset(pState ? static_cast<XFillBitmapItem*>(pState->Clone()) : 0);
-            }
-
-            if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
-            {
-                mpLbFillAttr->Show();
-                mpToolBoxColor->Hide();
-
-                if(SfxItemState::DEFAULT == eState)
-                {
-                    mpLbFillAttr->Enable();
-                    Update();
-                }
-                else if(SfxItemState::DISABLED == eState )
-                {
-                    mpLbFillAttr->Disable();
-                    mpLbFillAttr->SetNoSelection();
-                }
-                else
-                {
-                    mpLbFillAttr->SetNoSelection();
-                }
-            }
-            break;
-        }
+            updateFillBitmap(bDisabled, bDefault,
+                    static_cast<const XFillBitmapItem*>(pState));
+        break;
         case SID_GRADIENT_LIST:
         {
-            if(SfxItemState::DEFAULT == eState)
+            if(bDefault)
             {
                 if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
                 {
@@ -836,7 +858,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
         }
         case SID_HATCH_LIST:
         {
-            if(SfxItemState::DEFAULT == eState)
+            if(bDefault)
             {
                 if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
                 {
@@ -861,7 +883,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
         }
         case SID_BITMAP_LIST:
         {
-            if(SfxItemState::DEFAULT == eState)
+            if(bDefault)
             {
                 if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
                 {
