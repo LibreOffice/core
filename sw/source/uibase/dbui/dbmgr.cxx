@@ -777,7 +777,6 @@ void SwDBManager::GetColumnNames(ListBox* pListBox,
 SwDBManager::SwDBManager(SwDoc* pDoc)
     : bCancel(false)
     , bInitDBFields(false)
-    , bSingleJobs(false)
     , bInMerge(false)
     , bMergeSilent(false)
     , bMergeLock(false)

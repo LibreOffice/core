@@ -141,14 +141,12 @@ class SW_DLLPUBLIC SwDocShell
     SAL_DLLPRIVATE sal_uInt16            MakeByExample(const OUString &rName,
                                         sal_uInt16 nFamily, sal_uInt16 nMask, SwWrtShell* pShell = 0);
 
-    SAL_DLLPRIVATE void                  InitDraw();
     SAL_DLLPRIVATE void                  SubInitNew();   ///< for InitNew and HtmlSourceMode.
 
     SAL_DLLPRIVATE void                  RemoveOLEObjects();
     SAL_DLLPRIVATE void                  CalcLayoutForOLEObjects();
 
     SAL_DLLPRIVATE void                  Init_Impl();
-    DECL_DLLPRIVATE_STATIC_LINK( SwDocShell, IsLoadFinished, void* );
 
     using SfxObjectShell::GetVisArea;
 
@@ -157,7 +155,6 @@ protected:
     virtual void                DoFlushDocInfo() SAL_OVERRIDE;
 
 public:
-
     /// but we implement this ourselves.
     SFX_DECL_INTERFACE(SW_DOCSHELL)
     SFX_DECL_OBJECTFACTORY()
@@ -168,8 +165,6 @@ private:
     static void InitInterface_Impl();
 
 public:
-    static SfxInterface *_GetInterface() { return GetStaticInterface(); }
-
     static OUString GetEventName( sal_Int32 nId );
 
     /// Doc is required for SO data exchange!
@@ -195,17 +190,14 @@ public:
     /// Dispatcher
     void                    Execute(SfxRequest &);
     void                    ExecStyleSheet(SfxRequest&);
-    void                    ExecDB(SfxRequest&);
 
     void                    GetState(SfxItemSet &);
-    void                    StateAlways(SfxItemSet &);
     void                    StateStyleSheet(SfxItemSet&, SwWrtShell* pSh = 0 );
 
     /// returns Doc. But be careful!
     inline SwDoc*                   GetDoc() { return m_pDoc; }
     inline const SwDoc*             GetDoc() const { return m_pDoc; }
     IDocumentDeviceAccess&          getIDocumentDeviceAccess();
-    const IDocumentSettingAccess&   getIDocumentSettingAccess() const;
     IDocumentChartDataProviderAccess& getIDocumentChartDataProviderAccess();
 
     void                    UpdateFontList();

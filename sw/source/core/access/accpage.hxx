@@ -38,9 +38,6 @@ class SwAccessiblePage : public SwAccessibleContext
     using SwAccessibleFrame::GetBounds;
 
 protected:
-    // return the bounding box for the page in page preview mode
-    SwRect GetBounds( /* const SwFrm *pFrm =0 */ );
-
     // Set states for getAccessibleStateSet.
     // This derived class additionally sets
     // FOCUSABLE(1) and FOCUSED(+)

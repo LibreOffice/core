@@ -123,8 +123,6 @@ protected:
     virtual void Update( SwIndex const & rPos, const sal_Int32 nChangeLen,
                  const bool bNegative = false, const bool bDelete = false );
 
-    void ChkArr();
-
     bool HasAnyIndex() const { return 0 != m_pFirst; }
 
 public:

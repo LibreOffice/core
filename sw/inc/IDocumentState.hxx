@@ -39,18 +39,9 @@ public:
 
     virtual bool IsInCallModified() const = 0;
 
-    /** State of being loaded or not.
-        Formerly DocInfo.
-    */
-    virtual bool IsLoaded() const = 0;
-
     virtual bool IsUpdateExpField() const  = 0;
 
     virtual bool IsNewDoc() const = 0;
-
-    virtual bool IsPageNums() const = 0;
-
-    virtual void SetPageNums(bool b)    = 0;
 
     virtual void SetNewDoc(bool b) = 0;
 

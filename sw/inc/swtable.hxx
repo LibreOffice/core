@@ -243,8 +243,6 @@ public:
     bool DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
         SwUndo* pUndo, const bool bDelMakeFrms, const bool bCorrBorder );
     bool SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt=1 );
-    bool Merge( const SwSelBoxes& rBoxes,
-                SwTableBox* pMergeBox, SwUndoTableMerge* = 0 );
 
     void FindSuperfluousRows( SwSelBoxes& rBoxes )
         { _FindSuperfluousRows( rBoxes, 0, 0 ); }

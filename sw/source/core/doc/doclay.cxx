@@ -1263,22 +1263,6 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     return pNewFormat;
 }
 
-IMPL_LINK( SwDoc, BackgroundDone, SvxBrushItem*, )
-{
-    SwViewShell* pStartSh = getIDocumentLayoutAccess().GetCurrentViewShell();
-    if(pStartSh)
-        for(SwViewShell& rShell : pStartSh->GetRingContainer())
-        {
-            if(rShell.GetWin())
-            {
-                // Make sure to repaint with virtual device
-                rShell.LockPaint();
-                rShell.UnlockPaint( true );
-            }
-        }
-    return 0;
-}
-
 static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 {
     if( pDoc->IsInMailMerge())

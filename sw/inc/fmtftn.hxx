@@ -69,7 +69,6 @@ public:
     bool       IsEndNote() const { return m_bEndNote;}
 
     void SetNumStr( const OUString& rStr ) { m_aNumber = rStr; }
-    void SetNumber( sal_uInt16 nNo )       { m_nNumber = nNo; }
     void SetEndNote( bool b );
 
     void SetNumber( const SwFormatFootnote& rFootnote )

@@ -134,30 +134,10 @@ inline const SvxShadowItem       &SwAttrSet::GetCharShadow( bool bInP ) const
 
 // implementation of the character attribute methods of SwFormat
 
-inline const SvxPostureItem          &SwFormat::GetPosture(bool bInP) const
-    {   return m_aSet.GetPosture(bInP); }
-inline const SvxWeightItem           &SwFormat::GetWeight(bool bInP) const
-    {   return m_aSet.GetWeight(bInP); }
-inline const SvxShadowedItem         &SwFormat::GetShadowed(bool bInP) const
-    {   return m_aSet.GetShadowed(bInP); }
-inline const SvxAutoKernItem         &SwFormat::GetAutoKern(bool bInP) const
-    {   return m_aSet.GetAutoKern(bInP); }
-inline const SvxWordLineModeItem     &SwFormat::GetWordLineMode(bool bInP) const
-    {   return m_aSet.GetWordLineMode(bInP); }
-inline const SvxContourItem          &SwFormat::GetContour(bool bInP) const
-    {   return m_aSet.GetContour(bInP); }
-inline const SvxKerningItem          &SwFormat::GetKerning(bool bInP) const
-    {   return m_aSet.GetKerning(bInP); }
 inline const SvxUnderlineItem        &SwFormat::GetUnderline(bool bInP) const
     {   return m_aSet.GetUnderline(bInP); }
-inline const SvxOverlineItem         &SwFormat::GetOverline(bool bInP) const
-    {   return m_aSet.GetOverline(bInP); }
-inline const SvxCrossedOutItem       &SwFormat::GetCrossedOut(bool bInP) const
-    {   return m_aSet.GetCrossedOut(bInP); }
 inline const SvxFontHeightItem             &SwFormat::GetSize(bool bInP) const
     {   return m_aSet.GetSize(bInP); }
-inline const SvxPropSizeItem         &SwFormat::GetPropSize(bool bInP) const
-    {   return m_aSet.GetPropSize(bInP); }
 inline const SvxFontItem             &SwFormat::GetFont(bool bInP) const
     {   return m_aSet.GetFont(bInP); }
 inline const SvxFontItem         &SwFormat::GetCJKFont(bool bInP) const
@@ -166,38 +146,6 @@ inline const SvxFontItem         &SwFormat::GetCTLFont(bool bInP) const
     {   return m_aSet.GetCTLFont(bInP); }
 inline const SvxColorItem            &SwFormat::GetColor(bool bInP) const
     {   return m_aSet.GetColor(bInP); }
-    inline const SvxCharSetColorItem    &SwFormat::GetCharSetColor(bool bInP) const
-    {   return m_aSet.GetCharSetColor(bInP); }
-inline const SvxLanguageItem         &SwFormat::GetLanguage(bool bInP) const
-    {   return m_aSet.GetLanguage(bInP); }
-inline const SvxEscapementItem       &SwFormat::GetEscapement(bool bInP) const
-    {   return m_aSet.GetEscapement(bInP); }
-inline const SvxCaseMapItem          &SwFormat::GetCaseMap(bool bInP) const
-    {   return m_aSet.GetCaseMap(bInP); }
-inline const SvxNoHyphenItem        &SwFormat::GetNoHyphenHere(bool bInP) const
-    {   return m_aSet.GetNoHyphenHere(bInP); }
-inline const SvxBlinkItem           &SwFormat::GetBlink(bool bInP) const
-    {   return m_aSet.GetBlink(bInP); }
-inline const SvxBrushItem           &SwFormat::GetChrBackground(bool bInP) const
-    {   return m_aSet.GetChrBackground(bInP); }
-inline const SvxBrushItem &SwFormat::GetChrHighlight(bool bInP) const
-    {   return m_aSet.GetChrHighlight(bInP); }
-inline const SvxEmphasisMarkItem   &SwFormat::GetEmphasisMark( bool bInP ) const
-    {   return m_aSet.GetEmphasisMark(bInP); }
-inline const SvxTwoLinesItem       &SwFormat::Get2Lines( bool bInP ) const
-    {   return m_aSet.Get2Lines(bInP); }
-inline const SvxCharScaleWidthItem &SwFormat::GetCharScaleW( bool bInP ) const
-    {   return m_aSet.GetCharScaleW(bInP); }
-inline const SvxCharRotateItem     &SwFormat::GetCharRotate( bool bInP ) const
-    {   return m_aSet.GetCharRotate(bInP); }
-inline const SvxCharReliefItem     &SwFormat::GetCharRelief( bool bInP ) const
-    {   return m_aSet.GetCharRelief(bInP); }
-inline const SvxCharHiddenItem      &SwFormat::GetCharHidden( bool bInP ) const
-    {   return m_aSet.GetCharHidden(bInP); }
-inline const SvxBoxItem     &SwFormat::GetCharBorder( bool bInP ) const
-    {   return m_aSet.GetCharBorder(bInP); }
-inline const SvxShadowItem  &SwFormat::GetCharShadow( bool bInP ) const
-    {   return m_aSet.GetCharShadow(bInP); }
 
 #endif
 

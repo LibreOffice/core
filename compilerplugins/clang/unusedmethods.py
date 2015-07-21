@@ -93,6 +93,14 @@ exclusionSet = set([
     "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handlePicture()",
     "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleHdrFtr()",
     "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleBreak()",
+    # deep template magic in SW
+    "Ring<value_type> * sw::Ring::Ring_node_traits::get_next(const Ring<value_type> *)",
+    "Ring<value_type> * sw::Ring::Ring_node_traits::get_previous(const Ring<value_type> *)",
+    "void sw::Ring::Ring_node_traits::set_next(Ring<value_type> *,Ring<value_type> *)",
+    "void sw::Ring::Ring_node_traits::set_previous(Ring<value_type> *,Ring<value_type> *)",
+    # I need to teach the plugin that for loops with range expressions call begin() and end()
+    "class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwAnchoredObject *const *, class std::__cxx1998::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > >, class std::__debug::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > > SwSortedObjs::begin() const",
+    "class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwAnchoredObject *const *, class std::__cxx1998::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > >, class std::__debug::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > > SwSortedObjs::end() const",
     ])
 
 

@@ -80,10 +80,6 @@ class SwFntObj : public SwCacheObj
     static MapMode *pPixMap;
     static VclPtr<OutputDevice> pPixOut;
 
-    void calcLinePos(SwDrawTextInfo& rInf, Point& aStart, Point& aEnd, sal_Int32 nStart,
-       sal_Int32 nWrLen, sal_Int32 nCnt, const bool bSwitchH2V, const bool bSwitchL2R,
-       long nHalfSpace, long* pKernArray, const bool bBidiPor);
-
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFntObj)
 

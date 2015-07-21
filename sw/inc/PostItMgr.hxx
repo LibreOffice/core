@@ -266,14 +266,11 @@ class SwPostItMgr: public SfxListener
             void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
             OutlinerParaObject* IsAnswer() {return mpAnswer;}
             void CheckMetaText();
-            void StartSpelling();
 
             sal_uInt16 Replace(SvxSearchItem* pItem);
             sal_uInt16 SearchReplace(const SwFormatField &pField, const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
             sal_uInt16 FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
 
-            // get the PostIt window by index
-            sal_Int32 GetPostItCount() const {return mvPostItFields.size();}
             void AssureStdModeAtShell();
 
             void ConnectSidebarWinToFrm( const SwFrm& rFrm,

@@ -440,9 +440,6 @@ public:
                              const SwRect &rPrt,
                              const SwRect &rFrm ) = 0;
 
-    /// Set visible range on object, if it is not yet visible.
-    void MakeObjVisible( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& ) const;
-
     /// Check resize of OLE-Object.
     bool IsCheckForOLEInCaption() const         { return m_bCheckForOLEInCaption; }
     void SetCheckForOLEInCaption( bool bFlag )  { m_bCheckForOLEInCaption = bFlag; }
@@ -553,7 +550,6 @@ public:
 
     void Paste( SvStream& rStm, SwPasteSdr nAction, const Point* pPt = 0 );
     bool Paste( const Graphic &rGrf, const OUString& rURL );
-    bool Paste( SotDataObject& rObj, const Point& rPt );
 
     bool IsAlignPossible() const;
     void SetCalcFieldValueHdl(Outliner* pOutliner);
@@ -714,9 +710,6 @@ public:
 
     /// Not allowed if only empty cells are selected.
     bool IsAdjustCellWidthAllowed( bool bBalance = false ) const;
-
-    /// Adjustment of cell-widths; determine via bTstOnly if more than one cell is selected.
-    bool BalanceCellWidth( bool bTstOnly );
 
     /// AutoFormat for table/ table selection.
     bool SetTableAutoFormat( const SwTableAutoFormat& rNew );

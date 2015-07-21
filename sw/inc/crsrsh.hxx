@@ -285,10 +285,6 @@ protected:
     };
     int CompareCursor( CrsrCompareType eType ) const;
 
-    // set all PaMs in OldNode to NewPos + Offset
-    void PaMCorrAbs(const SwNodeIndex &rOldNode, const SwPosition &rNewPos,
-                    const sal_Int32 nOffset = 0 );
-
     bool _SelTableRowOrCol( bool bRow, bool bRowSimple = false );
 
     bool SetInFrontOfLabel( bool bNew );
@@ -639,8 +635,6 @@ public:
         { return (const_cast<SwCrsrShell*>(this))->getShellCrsr( bBlock ); }
 
     bool IsBlockMode() const { return 0 != m_pBlockCrsr; }
-    const SwBlockCursor* GetBlockCrsr() const { return m_pBlockCrsr; }
-    SwBlockCursor* GetBlockCrsr() { return m_pBlockCrsr; }
 
     // is the Crsr in a table and is the selection over 2 columns
     bool IsTableMode() const { return 0 != m_pTableCrsr; }

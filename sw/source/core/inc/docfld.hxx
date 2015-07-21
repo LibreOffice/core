@@ -84,12 +84,8 @@ public:
 
     const SwTextField* GetTextField() const
         { return TEXTFIELD == eSetGetExpFieldType ? CNTNT.pTextField : 0; }
-    const SwTextTOXMark* GetTOX() const
-        { return TEXTTOXMARK == eSetGetExpFieldType ? CNTNT.pTextTOX : 0; }
     const SwSection* GetSection() const
         { return SECTIONNODE == eSetGetExpFieldType ? CNTNT.pSection : 0; }
-    const SwTableBox* GetTableBox() const
-        { return TABLEBOX == eSetGetExpFieldType ? CNTNT.pTBox : 0; }
     const SwTextINetFormat* GetINetFormat() const
         { return TEXTINET == eSetGetExpFieldType ? CNTNT.pTextINet : 0; }
     const SwFlyFrameFormat* GetFlyFormat() const

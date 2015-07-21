@@ -189,13 +189,7 @@ public:
     ~SwFrmNotify();
 
     const SwRect &Frm() const { return aFrm; }
-    const SwRect &Prt() const { return aPrt; }
     void SetInvaKeep() { bInvaKeep = true; }
-    // #i49383#
-    void FrmDeleted()
-    {
-        mbFrmDeleted = true;
-    }
 };
 
 class SwLayNotify : public SwFrmNotify
@@ -221,8 +215,6 @@ class SwFlyNotify : public SwLayNotify
 public:
     SwFlyNotify( SwFlyFrm *pFlyFrm );
     ~SwFlyNotify();
-
-    SwPageFrm *GetOldPage() const { return pOldPage; }
 };
 
 class SwContentNotify : public SwFrmNotify
@@ -348,7 +340,6 @@ public:
 
     inline const SwAttrSet      &GetAttrSet() const { return rAttrSet;  }
     inline const SvxULSpaceItem &GetULSpace() const { return rUL;       }
-    inline const SvxLRSpaceItem &GetLRSpace() const { return rLR;       }
     inline const SvxBoxItem     &GetBox()     const { return rBox;      }
     inline const SvxShadowItem  &GetShadow()  const { return rShadow;   }
 
@@ -409,7 +400,6 @@ public:
     SwOrderIter( const SwPageFrm *pPage, bool bFlysOnly = true );
 
     void             Current( const SdrObject *pNew ) { pCurrent = pNew; }
-    const SdrObject *Current()    const { return pCurrent; }
     const SdrObject *operator()() const { return pCurrent; }
     const SdrObject *Top();
     const SdrObject *Bottom();

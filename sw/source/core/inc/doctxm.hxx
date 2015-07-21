@@ -46,19 +46,12 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     void UpdateTable( const SwTextNode* pOwnChapterNode );
     void UpdateSequence( const SwTextNode* pOwnChapterNode );
     void UpdateAuthorities( const SwTOXInternational& rIntl );
-    void UpdateAll();
 
     // insert sorted into array for creation
     void InsertSorted(SwTOXSortTabBase* pBase);
 
     // insert alpha delimiter at creation
     void InsertAlphaDelimitter( const SwTOXInternational& rIntl );
-
-    // generate text body
-    void GenerateText( sal_uInt16 nArrayIdx,
-                       sal_uInt16 nCount,
-                       const sal_uInt32   _nTOXSectNdIdx,
-                       const SwPageDesc*  _pDefaultPageDesc );
 
     // replace page num placeholder with actual page number
     void _UpdatePageNum( SwTextNode* pNd,

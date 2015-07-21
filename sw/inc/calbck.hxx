@@ -329,25 +329,10 @@ public:
     SwIterator( const TSource& rSrc ) : sw::ClientIteratorBase(rSrc) {}
     SwClient* First()
         { return static_cast<SwClient*>(GoStart()); }
-    SwClient* Last()
-    {
-        if(!m_pPosition)
-            m_pPosition = m_rRoot.m_pWriterListeners;
-        if(!m_pPosition)
-            return m_pCurrent = nullptr;
-        while(GetRightOfPos())
-            m_pPosition = GetRightOfPos();
-        return static_cast<SwClient*>(Sync());
-    }
     SwClient* Next()
     {
         if(!IsChanged())
             m_pPosition = GetRightOfPos();
-        return static_cast<SwClient*>(Sync());
-    }
-    SwClient* Previous()
-    {
-        m_pPosition = GetLeftOfPos();
         return static_cast<SwClient*>(Sync());
     }
     using sw::ClientIteratorBase::IsChanged;

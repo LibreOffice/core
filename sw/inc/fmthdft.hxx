@@ -58,7 +58,6 @@ public:
 
     void RegisterToFormat( SwFormat& rFormat );
     bool IsActive() const { return bActive; }
-    void SetActive( bool bNew = true ) { bActive = bNew; }
 };
 
  /**Footer, for pageformats
@@ -91,7 +90,6 @@ public:
 
     void RegisterToFormat( SwFormat& rFormat );
     bool IsActive() const { return bActive; }
-    void SetActive( bool bNew = true ) { bActive = bNew; }
 };
 
 inline const SwFormatHeader &SwAttrSet::GetHeader(bool bInP) const

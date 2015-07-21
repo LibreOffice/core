@@ -306,12 +306,7 @@ public:
     void           SetMailingFormats( MailTextFormats nSet ) { aMiscConfig.nMailingFormats = nSet;
                                                             aMiscConfig.SetModified();}
 
-    bool        IsSinglePrintJob() const        { return aMiscConfig.bSinglePrintJob; }
     void        SetSinglePrintJob( bool b )     { aMiscConfig.bSinglePrintJob = b;
-                                                  aMiscConfig.SetModified();}
-
-    bool        IsNumAlignSize() const          { return aMiscConfig.bNumAlignSize; }
-    void        SetNumAlignSize( bool b )       { aMiscConfig.bNumAlignSize = b;
                                                   aMiscConfig.SetModified();}
 
     bool        IsNameFromColumn() const        { return aMiscConfig.bIsNameFromColumn; }
@@ -322,11 +317,6 @@ public:
                         }
 
     bool        IsAskForMailMerge() const       { return aMiscConfig.bAskForMailMergeInPrint;}
-    void        SetAskForMailMerge(bool bSet)
-                    {
-                        aMiscConfig.SetModified();
-                        aMiscConfig.bAskForMailMergeInPrint = bSet;
-                    }
 
     OUString    GetNameFromColumn() const       { return aMiscConfig.sNameFromColumn; }
     void        SetNameFromColumn( const OUString& rSet )       { aMiscConfig.sNameFromColumn = rSet;
@@ -335,10 +325,6 @@ public:
     OUString    GetMailingPath() const          { return aMiscConfig.sMailingPath; }
     void        SetMailingPath(const OUString& sPath) { aMiscConfig.sMailingPath = sPath;
                                                       aMiscConfig.SetModified();}
-
-    OUString    GetMailName() const             { return aMiscConfig.sMailName; }
-    void        SetMailName(const OUString& sName){ aMiscConfig.sMailName = sName;
-                                                  aMiscConfig.SetModified();}
 
     OUString    GetWordDelimiter() const        { return aMiscConfig.sWordDelimiter; }
     void        SetWordDelimiter(const OUString& sDelim)  { aMiscConfig.sWordDelimiter = sDelim;

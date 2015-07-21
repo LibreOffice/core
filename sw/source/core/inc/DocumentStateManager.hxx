@@ -39,11 +39,8 @@ public:
     void ResetModified() SAL_OVERRIDE;
     bool IsModified() const SAL_OVERRIDE;
     bool IsInCallModified() const SAL_OVERRIDE;
-    bool IsLoaded() const SAL_OVERRIDE;
     bool IsUpdateExpField() const SAL_OVERRIDE;
     bool IsNewDoc() const SAL_OVERRIDE;
-    bool IsPageNums() const SAL_OVERRIDE;
-    void SetPageNums(bool b) SAL_OVERRIDE;
     void SetNewDoc(bool b) SAL_OVERRIDE;
     void SetUpdateExpFieldStat(bool b) SAL_OVERRIDE;
     void SetLoaded(bool b) SAL_OVERRIDE;
@@ -55,7 +52,6 @@ private:
     bool mbLoaded        ;    //< TRUE: Doc loaded.
     bool mbUpdateExpField  ;    //< TRUE: Update expression fields.
     bool mbNewDoc        ;    //< TRUE: new Doc.
-    bool mbPageNums      ;    //< TRUE: There are virtual page numbers.
     bool mbInCallModified;    //< TRUE: in Set/Reset-Modified link.
 };
 

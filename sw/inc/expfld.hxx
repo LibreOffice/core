@@ -178,7 +178,6 @@ public:
     sal_uInt16 SetSeqRefNo( SwSetExpField& rField );
 
     size_t GetSeqFieldList( SwSeqFieldList& rList );
-    OUString MakeSeqName( sal_uInt16 nSeqNo );
 
     /// Number sequence fields chapterwise if required.
     OUString GetDelimiter() const             { return sDelim; }

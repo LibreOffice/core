@@ -41,8 +41,6 @@ public:
                                     const bool bWithNumber = true,
                                     const bool bWithSpacesForLevel = false ) const SAL_OVERRIDE;
 
-    void getListItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const SAL_OVERRIDE;
-
     void getNumItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const SAL_OVERRIDE;
 
     virtual ~DocumentListItemsManager();

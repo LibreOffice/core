@@ -139,8 +139,8 @@ public:
         {   return !operator==( rCmp ); }
 
     RedlineType_t GetType() const
-  { return ((RedlineType_t)(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
-    RedlineType_t GetRealType() const { return eType; }
+        { return ((RedlineType_t)(eType & nsRedlineType_t::REDLINE_NO_FLAG_MASK)); }
+
     sal_uInt16 GetAuthor() const                { return nAuthor; }
     const OUString& GetComment() const        { return sComment; }
     const DateTime& GetTimeStamp() const    { return aStamp; }
@@ -150,7 +150,7 @@ public:
     void SetTimeStamp( const DateTime& rDT ) { aStamp = rDT; }
 
     void SetAutoFormatFlag()
-  { eType = (RedlineType_t)(eType | nsRedlineType_t::REDLINE_FORM_AUTOFMT); }
+        { eType = (RedlineType_t)(eType | nsRedlineType_t::REDLINE_FORM_AUTOFMT); }
     bool CanCombine( const SwRedlineData& rCmp ) const
         {
             return nAuthor == rCmp.nAuthor &&
@@ -318,8 +318,6 @@ public:
      *  the RedLineObject.*/
     void SetExtraData( const SwRedlineExtraData* pData )
         { m_aRedlineData.SetExtraData( pData ); }
-    const SwRedlineExtraData* GetExtraData() const
-        { return m_aRedlineData.GetExtraData(); }
     const SwTableLine& GetTableLine() const
         { return m_rTableLine; }
     const SwRedlineData& GetRedlineData() const
@@ -341,8 +339,6 @@ public:
      *  the RedLineObject.*/
     void SetExtraData( const SwRedlineExtraData* pData )
         { m_aRedlineData.SetExtraData( pData ); }
-    const SwRedlineExtraData* GetExtraData() const
-        { return m_aRedlineData.GetExtraData(); }
     const SwTableBox& GetTableBox() const
         { return m_rTableBox; }
     const SwRedlineData& GetRedlineData() const
@@ -354,20 +350,6 @@ class SW_DLLPUBLIC SwRedlineHint : public SfxHint
 #define SWREDLINE_INSERTED  1
 #define SWREDLINE_FOCUS     3
 
-    const SwRangeRedline* pRedline;
-    sal_Int16 nWhich;
-    const SwView* pView;
-
-public:
-    SwRedlineHint( const SwRangeRedline* p, sal_Int16 n, const SwView* pV = 0)
-        : pRedline(p)
-        , nWhich(n)
-        , pView(pV)
-        {}
-
-    const SwRangeRedline* GetRedline() const { return pRedline; }
-    sal_Int16 Which() const { return nWhich; }
-        const SwView* GetView() const { return pView; }
 };
 
 #endif

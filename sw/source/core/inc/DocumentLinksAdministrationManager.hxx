@@ -49,10 +49,6 @@ public:
 
     void UpdateLinks(bool bUI) SAL_OVERRIDE;
 
-    bool GetData(const OUString& rItem, const OUString& rMimeType, ::com::sun::star::uno::Any& rValue) const SAL_OVERRIDE;
-
-    bool SetData(const OUString& rItem, const OUString& rMimeType, const ::com::sun::star::uno::Any& rValue) SAL_OVERRIDE;
-
     ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem) SAL_OVERRIDE;
 
     bool EmbedAllLinks() SAL_OVERRIDE;

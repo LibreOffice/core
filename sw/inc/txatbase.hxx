@@ -117,7 +117,6 @@ public:
     inline const SwFormatRefMark           &GetRefMark() const;
     inline const SwFormatINetFormat           &GetINetFormat() const;
     inline const SwFormatRuby              &GetRuby() const;
-    inline const SwFormatMeta              &GetMeta() const;
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
@@ -228,13 +227,6 @@ inline const SwFormatRuby& SwTextAttr::GetRuby() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_CJK_RUBY );
     return static_cast<const SwFormatRuby&>(*m_pAttr);
-}
-
-inline const SwFormatMeta& SwTextAttr::GetMeta() const
-{
-    assert( m_pAttr && (m_pAttr->Which() == RES_TXTATR_META ||
-        m_pAttr->Which() == RES_TXTATR_METAFIELD) );
-    return static_cast<const SwFormatMeta&>(*m_pAttr);
 }
 
 // these should be static_casts but with virtual inheritance it's not possible
