@@ -72,8 +72,6 @@ public:
     inline void         UpdateRange( const ScRange& rNewRange )
                             { aRange = rNewRange; }
     inline const ScRange&   GetRange() const { return aRange; }
-    inline const ScAddress& GetStart() const { return aRange.aStart; }
-    inline const ScAddress& GetEnd() const { return aRange.aEnd; }
     inline void         IncRef() { ++nRefCount; }
     inline sal_uLong        DecRef() { return nRefCount ? --nRefCount : 0; }
     inline sal_uLong        GetRef() { return nRefCount; }
@@ -184,8 +182,6 @@ public:
                         ScBroadcastAreaSlot( ScDocument* pDoc,
                                         ScBroadcastAreaSlotMachine* pBASM );
                         ~ScBroadcastAreaSlot();
-    const ScBroadcastAreas& GetBroadcastAreas() const
-                                            { return aBroadcastAreaTbl; }
 
     /**
         Only here new ScBroadcastArea objects are created, prevention of dupes.
@@ -331,7 +327,6 @@ public:
 
     /// @return: how many removed
     size_t              RemoveBulkArea( const ScBroadcastArea* p );
-    inline ScBroadcastArea* GetUpdateChain() const { return pUpdateChain; }
     inline void SetUpdateChain( ScBroadcastArea* p ) { pUpdateChain = p; }
     inline ScBroadcastArea* GetEOUpdateChain() const { return pEOUpdateChain; }
     inline void SetEOUpdateChain( ScBroadcastArea* p ) { pEOUpdateChain = p; }
@@ -365,14 +360,6 @@ public:
     {
         if (pBASM)
             pBASM->LeaveBulkBroadcast();
-    }
-    void LeaveBulkBroadcast()
-    {
-        if (pBASM)
-        {
-            pBASM->LeaveBulkBroadcast();
-            pBASM = NULL;
-        }
     }
 };
 

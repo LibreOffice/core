@@ -478,7 +478,6 @@ public:
                                 SfxObjectShell* pDocShell = NULL );
     SC_DLLPUBLIC                ~ScDocument();
 
-    SC_DLLPUBLIC const OUString&  GetName() const { return aDocName; }
     void            SetName( const OUString& r ) { aDocName = r; }
     const OUString&   GetCodeName() const { return aDocCodeName; }
     void                SetCodeName( const OUString& r ) { aDocCodeName = r; }
@@ -1133,16 +1132,6 @@ public:
     SCROW GetLastDataRow( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const;
 
     /**
-     * Return the cell position representing the bottom-right corner of the
-     * smallest range that includes all non-empty cells for specified sheet.
-     *
-     * @param nTab sheet index.
-     *
-     * @return address of the last data position.
-     */
-    ScAddress GetLastDataPos( SCTAB nTab ) const;
-
-    /**
      * Return the smallest area containing at least all contiguous cells
      * having data. This area is a square containing also empty cells. It may
      * shrink or extend the area given as input Flags as modifiers:
@@ -1462,7 +1451,6 @@ public:
 
     SC_DLLPUBLIC sal_uLong AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab );
     void DeleteConditionalFormat( sal_uLong nIndex, SCTAB nTab );
-    void            ConditionalChanged( sal_uLong nKey, SCTAB nTab );
 
     void SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab );
 
@@ -1723,9 +1711,7 @@ public:
 
     SC_DLLPUBLIC void           CopyStdStylesFrom( ScDocument* pSrcDoc );
 
-    rtl_TextEncoding GetSrcCharSet() const   { return eSrcSet; }
     sal_uLong           GetSrcVersion() const   { return nSrcVer; }
-    SCROW           GetSrcMaxRow() const    { return nSrcMaxRow; }
 
     void            SetSrcCharSet( rtl_TextEncoding eNew )   { eSrcSet = eNew; }
     void            UpdateFontCharSet();
@@ -1802,9 +1788,6 @@ public:
     bool            IsDetectiveDirty() const     { return bDetectiveDirty; }
     void            SetDetectiveDirty(bool bSet) { bDetectiveDirty = bSet; }
 
-    sal_uInt8           GetMacroCallMode() const     { return nMacroCallMode; }
-    void            SetMacroCallMode(sal_uInt8 nNew)     { nMacroCallMode = nNew; }
-
     bool            GetHasMacroFunc() const      { return bHasMacroFunc; }
     void            SetHasMacroFunc(bool bSet)   { bHasMacroFunc = bSet; }
 
@@ -1820,7 +1803,6 @@ public:
     void            SetLoadingMedium( bool bVal );
     void            SetImportingXML( bool bVal );
     bool            IsImportingXML() const { return bImportingXML; }
-    void            SetCalcingAfterLoad( bool bVal ) { bCalcingAfterLoad = bVal; }
     bool            IsCalcingAfterLoad() const { return bCalcingAfterLoad; }
     void            SetNoListening( bool bVal ) { bNoListening = bVal; }
     bool            GetNoListening() const { return bNoListening; }
@@ -1965,21 +1947,18 @@ public:
     void                AppendToFormulaTrack( ScFormulaCell* pCell );
     void                RemoveFromFormulaTrack( ScFormulaCell* pCell );
     void                TrackFormulas( sal_uLong nHintId = SC_HINT_DATACHANGED );
-    sal_uInt16              GetFormulaTrackCount() const { return nFormulaTrackCount; }
     bool                IsInFormulaTree( ScFormulaCell* pCell ) const;
     bool                IsInFormulaTrack( ScFormulaCell* pCell ) const;
     bool                GetHardRecalcState() { return bHardRecalcState; }
     void                SetHardRecalcState( bool bVal ) { bHardRecalcState = bVal; }
     void                StartAllListeners();
-    void StartNeededListeners();
-    void StartAllListeners( const ScRange& rRange );
-    void EndAllListeners( const ScRange& rRange );
-    const ScFormulaCell*    GetFormulaTree() const { return pFormulaTree; }
-    bool                HasForcedFormulas() const { return bHasForcedFormulas; }
+    void                StartNeededListeners();
+    void                StartAllListeners( const ScRange& rRange );
+
     void                SetForcedFormulas( bool bVal ) { bHasForcedFormulas = bVal; }
-    sal_uLong               GetFormulaCodeInTree() const { return nFormulaCodeInTree; }
+    sal_uLong           GetFormulaCodeInTree() const { return nFormulaCodeInTree; }
     bool                IsInInterpreter() const { return nInterpretLevel != 0; }
-    sal_uInt16              GetInterpretLevel() { return nInterpretLevel; }
+
     void                IncInterpretLevel()
                             {
                                 if ( nInterpretLevel < USHRT_MAX )
@@ -1990,8 +1969,7 @@ public:
                                 if ( nInterpretLevel )
                                     nInterpretLevel--;
                             }
-    bool                IsInMacroInterpreter() const { return nMacroInterpretLevel != 0; }
-    sal_uInt16              GetMacroInterpretLevel() { return nMacroInterpretLevel; }
+    sal_uInt16          GetMacroInterpretLevel() { return nMacroInterpretLevel; }
     void                IncMacroInterpretLevel()
                             {
                                 if ( nMacroInterpretLevel < USHRT_MAX )
@@ -2003,7 +1981,6 @@ public:
                                     nMacroInterpretLevel--;
                             }
     bool                IsInInterpreterTableOp() const { return nInterpreterTableOpLevel != 0; }
-    sal_uInt16              GetInterpreterTableOpLevel() { return nInterpreterTableOpLevel; }
     void                IncInterpreterTableOpLevel()
                             {
                                 if ( nInterpreterTableOpLevel < USHRT_MAX )
@@ -2088,8 +2065,6 @@ public:
     SC_DLLPUBLIC ScFieldEditEngine& GetEditEngine();
     SC_DLLPUBLIC ScNoteEditEngine&  GetNoteEngine();
 
-    ScRefreshTimerControl*  GetRefreshTimerControl() const
-        { return pRefreshTimerControl; }
     ScRefreshTimerControl * const & GetRefreshTimerControlAddress() const
         { return pRefreshTimerControl; }
 

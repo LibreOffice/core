@@ -162,7 +162,6 @@ public:
     bool                GetIsWaterCan() const       { return bIsWaterCan; }
 
     void                SetInEditCommand( bool bNew )   { bIsInEditCommand = bNew; }
-    bool                IsInEditCommand() const         { return bIsInEditCommand; }
 
     void                SetInExecuteDrop( bool bNew )   { bIsInExecuteDrop = bNew; }
     bool                IsInExecuteDrop() const         { return bIsInExecuteDrop; }

@@ -357,22 +357,16 @@ public:
     svl::SharedString GetSharedString( SCCOL nCol, SCROW nRow ) const;
 
     void        SetValue( SCCOL nCol, SCROW nRow, const double& rVal );
-    void SetValues( SCCOL nCol, SCROW nRow, const std::vector<double>& rVals );
+    void        SetValues( SCCOL nCol, SCROW nRow, const std::vector<double>& rVals );
     void        SetError( SCCOL nCol, SCROW nRow, sal_uInt16 nError);
     SCSIZE      GetPatternCount( SCCOL nCol ) const;
     SCSIZE      GetPatternCount( SCCOL nCol, SCROW nRow1, SCROW nRow2 ) const;
     bool        ReservePatternCount( SCCOL nCol, SCSIZE nReserve );
 
-    void SetRawString( SCCOL nCol, SCROW nRow, const svl::SharedString& rStr );
+    void        SetRawString( SCCOL nCol, SCROW nRow, const svl::SharedString& rStr );
     void        GetString( SCCOL nCol, SCROW nRow, OUString& rString ) const;
-    double* GetValueCell( SCCOL nCol, SCROW nRow );
+    double*     GetValueCell( SCCOL nCol, SCROW nRow );
     void        GetInputString( SCCOL nCol, SCROW nRow, OUString& rString ) const;
-    double      GetValue( const ScAddress& rPos ) const
-                    {
-                        return ValidColRow(rPos.Col(),rPos.Row()) ?
-                            aCol[rPos.Col()].GetValue( rPos.Row() ) :
-                            0.0;
-                    }
     double      GetValue( SCCOL nCol, SCROW nRow ) const;
     const EditTextObject* GetEditText( SCCOL nCol, SCROW nRow ) const;
     void RemoveEditTextCharAttribs( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr );
@@ -584,16 +578,11 @@ public:
     void        AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     sal_uInt16 nFormatNo );
     void        GetAutoFormatData(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, ScAutoFormatData& rData);
-    void        ScReplaceTabsStr( OUString& rStr, const OUString& rSrch, const OUString& rRepl ); // from sw
     bool        SearchAndReplace(
         const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark,
         ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc);
 
     void        FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCOL nX2 );
-
-    void        GetBorderLines( SCCOL nCol, SCROW nRow,
-                                const ::editeng::SvxBorderLine** ppLeft, const ::editeng::SvxBorderLine** ppTop,
-                                const ::editeng::SvxBorderLine** ppRight, const ::editeng::SvxBorderLine** ppBottom ) const;
 
     bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nMask ) const;
     bool        HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const;

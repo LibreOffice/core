@@ -96,7 +96,6 @@ public:
     SC_DLLPUBLIC void GetArea(ScRange& rRange) const;
     void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
     void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
-    bool        IsByRow() const                 { return bByRow; }
     void        SetByRow(bool bByR)             { bByRow = bByR; }
     bool        HasHeader() const               { return bHasHeader; }
     void        SetHeader(bool bHasH)           { bHasHeader = bHasH; }
@@ -265,9 +264,6 @@ public:
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                 SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
-
-    sal_uInt16  GetEntryIndex()                 { return nEntryIndex; }
-    void    SetEntryIndex(sal_uInt16 nInd)      { nEntryIndex = nInd; }
 
     void            SetRefreshHandler( const Link<Timer *, void>& rLink )
                         { aRefreshHandler = rLink; }

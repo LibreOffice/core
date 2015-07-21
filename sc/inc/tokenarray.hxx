@@ -61,9 +61,6 @@ public:
     void ClearScTokenArray();
     ScTokenArray* Clone() const;    /// True copy!
 
-    // An estimate of the number of cells referenced by the token array
-    sal_Int32 GetWeight() const;
-
     void GenHash();
     size_t GetHash() const { return mnHashValue;}
 

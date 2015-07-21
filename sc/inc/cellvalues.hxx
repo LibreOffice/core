@@ -59,7 +59,6 @@ public:
      */
     void transferFrom( ScColumn& rCol, SCROW nRow, size_t nLen );
 
-    void transferTo( ScColumn& rCol, SCROW nRow );
     void copyTo( ScColumn& rCol, SCROW nRow ) const;
     void swapNonEmpty( ScColumn& rCol );
 

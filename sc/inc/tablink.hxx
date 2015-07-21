@@ -58,7 +58,6 @@ public:
                     const OUString* pNewOptions /* = NULL */, sal_uLong nNewRefresh );
     void    SetInCreate(bool bSet)      { bInCreate = bSet; }
     void    SetAddUndo(bool bSet)       { bAddUndo = bSet; }
-    void    SetPaint(bool bSet)         { bDoPaint = bSet; }
 
     const OUString& GetFileName() const   { return aFileName; }
     const OUString& GetFilterName() const { return aFilterName; }

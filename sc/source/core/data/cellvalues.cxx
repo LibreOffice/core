@@ -73,14 +73,7 @@ void CellValues::transferFrom( ScColumn& rCol, SCROW nRow, size_t nLen )
     rCol.maCellTextAttrs.transfer(nRow, nRow+nLen-1, mpImpl->maCellTextAttrs, 0);
 }
 
-void CellValues::transferTo( ScColumn& rCol, SCROW nRow )
-{
-    assert(mpImpl->maCells.size() == mpImpl->maCellTextAttrs.size());
 
-    size_t nLen = mpImpl->maCells.size();
-    mpImpl->maCells.transfer(0, nLen-1, rCol.maCells, nRow);
-    mpImpl->maCellTextAttrs.transfer(0, nLen-1, rCol.maCellTextAttrs, nRow);
-}
 
 void CellValues::copyTo( ScColumn& rCol, SCROW nRow ) const
 {

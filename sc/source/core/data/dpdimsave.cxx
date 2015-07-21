@@ -212,10 +212,6 @@ const ScDPSaveGroupItem& ScDPSaveGroupDimension::GetGroupByIndex( long nIndex ) 
     return aGroups[nIndex];
 }
 
-ScDPSaveGroupItem& ScDPSaveGroupDimension::GetGroupAccByIndex( long nIndex )
-{
-    return aGroups[nIndex];
-}
 
 void ScDPSaveGroupDimension::RemoveFromGroups( const OUString& rItemName )
 {

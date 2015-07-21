@@ -231,14 +231,11 @@ public:
 
     ScDocument&     GetDocument()   { return aDocument; }
     ScDocFunc&      GetDocFunc()    { return *pDocFunc; }
-    void            SetDocFunc( ScDocFunc *pDF ) { pDocFunc = pDF; }
 
     SfxPrinter*     GetPrinter( bool bCreateIfNotExist = true );
     sal_uInt16      SetPrinter( SfxPrinter* pNewPrinter, SfxPrinterChangeFlags nDiffFlags = SFX_PRINTER_ALL );
 
     void            UpdateFontList();
-
-    OUString        CreateObjectName( const OUString& rPrefix );
 
     ScDrawLayer*    MakeDrawLayer();
 
@@ -381,7 +378,6 @@ public:
     SfxBindings*    GetViewBindings();
 
     ScTabViewShell* GetBestViewShell( bool bOnlyVisible = true );
-    ScSbxDocHelper* GetDocHelperObject() { return pDocHelper; }
 
     void            SetDocumentModifiedPending( bool bVal )
                         { bDocumentModifiedPending = bVal; }

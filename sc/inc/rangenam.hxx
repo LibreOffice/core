@@ -113,9 +113,6 @@ public:
     const ScTokenArray* GetCode() const             { return pCode; }
     SC_DLLPUBLIC sal_uInt16 GetErrCode() const;
     bool            HasReferences() const;
-    void            SetDocument( ScDocument* pDocument){ pDoc = pDocument; }
-    ScDocument*     GetDocument() const             { return pDoc; }
-    void            SetType( RangeType nType )      { eType = nType; }
     void            AddType( RangeType nType )      { eType = eType|nType; }
     RangeType       GetType() const                 { return eType; }
     bool            HasType( RangeType nType ) const;

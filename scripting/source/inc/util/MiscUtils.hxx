@@ -44,7 +44,8 @@ namespace sf_misc
 class MiscUtils
 {
 public:
-    static css::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Reference< css::uno::XComponentContext >& xCtx)
+
+static css::uno::Sequence< OUString > allOpenTDocUrls( const  css::uno::Reference< css::uno::XComponentContext >& xCtx)
 {
     css::uno::Sequence< OUString > result;
     try
@@ -62,8 +63,8 @@ public:
     return result;
 }
 
-    static OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >& xModel,
-                                            const css::uno::Reference< css::uno::XComponentContext >& xContext )
+static OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >& xModel,
+                                 const css::uno::Reference< css::uno::XComponentContext >& xContext )
 {
     css::uno::Reference< css::lang::XMultiComponentFactory > xMCF(
         xContext->getServiceManager() );
@@ -102,7 +103,8 @@ public:
     OSL_FAIL( "Unable to obtain URL for document model!" );
     return OUString();
 }
-    static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString& url )
+
+static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const OUString& url )
 {
     css::uno::Any result;
 
@@ -128,7 +130,7 @@ public:
 }
 
 
-    static css::uno::Any getUCBProperty( ::ucbhelper::Content& content, OUString& prop )
+static css::uno::Any getUCBProperty( ::ucbhelper::Content& content, OUString& prop )
 {
     css::uno::Any result;
     try
@@ -139,18 +141,6 @@ public:
     {
     }
     return result;
-}
-
-private:
-static OUString parseLocationName( const OUString& location )
-{
-    // strip out the last leaf of location name
-    // e.g. file://dir1/dir2/Blah.sxw - > Blah.sxw
-    OUString temp = location;
-    INetURLObject aURLObj( temp );
-    if ( !aURLObj.HasError() )
-        temp = aURLObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-    return temp;
 }
 
 };

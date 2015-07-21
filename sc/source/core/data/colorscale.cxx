@@ -637,15 +637,6 @@ bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
     return bNeedUpdate;
 }
 
-void ScColorScaleFormat::DataChanged(const ScRange& rRange)
-{
-    bool bNeedUpdate = CheckEntriesForRel(rRange);
-    if(bNeedUpdate)
-    {
-        mpDoc->RepaintRange(GetRange());
-    }
-}
-
 condformat::ScFormatEntryType ScColorScaleFormat::GetType() const
 {
     return condformat::COLORSCALE;
@@ -764,37 +755,6 @@ bool ScDataBarFormat::NeedsRepaint() const
 {
     return mpFormatData->mpUpperLimit->NeedsRepaint() ||
         mpFormatData->mpLowerLimit->NeedsRepaint();
-}
-
-namespace {
-
-bool NeedUpdate(ScColorScaleEntry* pEntry)
-{
-    switch(pEntry->GetType())
-    {
-        case COLORSCALE_MIN:
-        case COLORSCALE_MAX:
-        case COLORSCALE_FORMULA:
-        case COLORSCALE_AUTO:
-            return true;
-        default:
-            return false;
-    }
-}
-
-}
-
-void ScDataBarFormat::DataChanged(const ScRange& rRange)
-{
-    bool bNeedUpdate = NeedUpdate(mpFormatData->mpUpperLimit.get());
-    bNeedUpdate |= NeedUpdate(mpFormatData->mpLowerLimit.get());
-
-    bNeedUpdate &= GetRange().Intersects(rRange);
-
-    if(bNeedUpdate)
-    {
-        mpDoc->RepaintRange(GetRange());
-    }
 }
 
 double ScDataBarFormat::getMin(double nMin, double nMax) const
@@ -1095,10 +1055,6 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
 condformat::ScFormatEntryType ScIconSetFormat::GetType() const
 {
     return condformat::ICONSET;
-}
-
-void ScIconSetFormat::DataChanged( const ScRange& )
-{
 }
 
 void ScIconSetFormat::UpdateReference( sc::RefUpdateContext& rCxt )

@@ -175,7 +175,6 @@ public:
     void SetExternalSingleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
     void SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
     void SetExternalName( sal_uInt16 nFileId, const OUString& rName );
-    void SetMatrix( ScMatrix* p );
     void SetExternal(const sal_Unicode* pStr);
 
     /** If the token is a non-external reference, determine if the reference is
@@ -186,13 +185,10 @@ public:
     bool IsValidReference() const;
 
     formula::FormulaToken* CreateToken() const;   // create typified token
-    void Load( SvStream&, sal_uInt16 nVer );
 
     static sal_Int32 GetStrLen( const sal_Unicode* pStr ); // as long as a "string" is an array
     static size_t GetStrLenBytes( sal_Int32 nLen )
         { return nLen * sizeof(sal_Unicode); }
-    static size_t GetStrLenBytes( const sal_Unicode* pStr )
-        { return GetStrLenBytes( GetStrLen( pStr ) ); }
 };
 
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
@@ -445,7 +441,6 @@ public:
      */
     ScTokenArray* CompileString( const OUString& rFormula );
     ScTokenArray* CompileString( const OUString& rFormula, const OUString& rFormulaNmsp );
-    const ScDocument* GetDoc() const { return pDoc; }
     const ScAddress& GetPos() const { return aPos; }
 
     void MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow );

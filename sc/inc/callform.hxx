@@ -72,13 +72,11 @@ public:
 
     const OUString& GetModuleName() const;
     const OUString& GetInternalName() const { return aInternalName; }
-    const OUString& GetFuncName() const { return aFuncName; }
-            sal_uInt16      GetParamCount() const { return nParamCount; }
-            ParamType   GetParamType(sal_uInt16 nIndex) const { return eParamType[nIndex]; }
-            ParamType   GetReturnType() const { return eParamType[0]; }
-            ParamType   GetAsyncType() const { return eAsyncType; }
-    bool        Call(void** ppParam) const;
-    bool        Unadvice(double nHandle);
+    sal_uInt16      GetParamCount() const { return nParamCount; }
+    ParamType       GetParamType(sal_uInt16 nIndex) const { return eParamType[nIndex]; }
+    ParamType       GetAsyncType() const { return eAsyncType; }
+    bool            Call(void** ppParam) const;
+    bool            Unadvice(double nHandle);
 
                 /** name and description of parameter nParam.
                     nParam==0 => Desc := function description,

@@ -42,11 +42,6 @@ public:
                     ScDLL();
                     ~ScDLL();
 
-                    /// static-init/exit-code must be linked to the application
-    static void     LibInit();  ///< called from SfxApplication-subclass::Init()
-    static void     LibExit();  ///< called from SfxApplication-subclass::Exit()
-    static void     PreExit();  // muss vor LibExit gerufen werden
-
                     /// DLL-init/exit-code must be linked to the DLL only
     static SC_DLLPUBLIC void     Init();     ///< called directly after loading the DLL
 };

@@ -112,7 +112,6 @@ public:
 
     long    GetGroupCount() const;
     const ScDPSaveGroupItem& GetGroupByIndex( long nIndex ) const;
-    ScDPSaveGroupItem& GetGroupAccByIndex( long nIndex );
 
     void    Rename( const OUString& rNewName );
 

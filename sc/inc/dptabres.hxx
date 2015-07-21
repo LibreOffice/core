@@ -306,21 +306,19 @@ public:
     void                SetDataLayoutOrientation( sal_uInt16 nOrient );
     void                SetLateInit( bool bSet );
 
-    long GetMeasureCount() const { return maMeasureFuncs.size(); }
+    long                GetMeasureCount() const { return maMeasureFuncs.size(); }
     ScSubTotalFunc      GetMeasureFunction(long nMeasure) const;
-    OUString       GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
-    OUString       GetMeasureDimensionName(long nMeasure) const;
+    OUString            GetMeasureString(long nMeasure, bool bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
+    OUString            GetMeasureDimensionName(long nMeasure) const;
     const ::com::sun::star::sheet::DataPilotFieldReference& GetMeasureRefVal(long nMeasure) const;
-    sal_uInt16              GetMeasureRefOrient(long nMeasure) const;
+    sal_uInt16          GetMeasureRefOrient(long nMeasure) const;
 
-    bool                IsDataAtCol() const             { return bDataAtCol; }
-    bool                IsDataAtRow() const             { return bDataAtRow; }
     bool                IsLateInit() const              { return bLateInit; }
 
     long                GetColStartMeasure() const;
     long                GetRowStartMeasure() const;
 
-    long GetCountForMeasure( long nMeas ) const { return (nMeas == SC_DPMEASURE_ALL) ? maMeasureFuncs.size() : 1; }
+    long                GetCountForMeasure( long nMeas ) const { return (nMeas == SC_DPMEASURE_ALL) ? maMeasureFuncs.size() : 1; }
 
     bool                IsBaseForGroup( long nDim ) const;              // any group
     long                GetGroupBase( long nGroupDim ) const;
