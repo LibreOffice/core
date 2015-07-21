@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_b296c792",
+        "filename": "include/formula/grammar.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-21T09:02:29Z",
+      "side": 1,
+      "message": "tricky.. this can\u0027t go before CONV_LAST because it is not a real address convention, there\u0027s ScCompiler::pConvention array of ScCompiler::Conventions instance pointers which are looped over at some places, but CONV_LEGACY should not be such instance. This must go after CONV_LAST instead, and best comment why and what exactly it is used for, i.e. only for INDIRECT(). Maybe also name CONV_LEGACY to something more telling, like CONV_A1_XLA1.",
+      "revId": "628e2a97040c2c0dcae537b5e5d95c07183ad103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_d29343a2",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 7041,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-21T09:02:29Z",
+      "side": 1,
+      "message": "Creating details from eConv would not work then, there are no ScAddress::Details associated with CONV_LEGACY. This should be something like\n\n const ScAddress::Details aDetails( (bTryXlA1 ? FormulaGrammar::CONV_OOO : eConv), aPos );",
+      "revId": "628e2a97040c2c0dcae537b5e5d95c07183ad103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_f2f2ff05",
+        "filename": "sc/source/ui/unoobj/confuno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-21T09:02:29Z",
+      "side": 1,
+      "message": "would be 7 then",
+      "revId": "628e2a97040c2c0dcae537b5e5d95c07183ad103",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
