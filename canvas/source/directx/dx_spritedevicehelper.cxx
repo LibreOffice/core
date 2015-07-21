@@ -176,7 +176,7 @@ namespace dxcanvas
 
     uno::Any SpriteDeviceHelper::isAccelerated() const
     {
-        return ::com::sun::star::uno::makeAny(true);
+        return css::uno::makeAny(true);
     }
 
     void SpriteDeviceHelper::notifySizeUpdate( const awt::Rectangle& rBounds )

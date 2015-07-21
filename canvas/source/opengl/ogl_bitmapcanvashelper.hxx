@@ -48,33 +48,33 @@ namespace oglcanvas
             Reference device this canvas is associated with
 
          */
-        void init( ::com::sun::star::rendering::XGraphicDevice&     rDevice,
+        void init( css::rendering::XGraphicDevice&     rDevice,
                    SpriteDeviceHelper&                              rDeviceHelper,
-                   const ::com::sun::star::geometry::IntegerSize2D& rSize );
+                   const css::geometry::IntegerSize2D& rSize );
 
         // BitmapCanvasHelper functionality
         // ================================
 
-        ::com::sun::star::geometry::IntegerSize2D getSize() { return maSize; }
+        css::geometry::IntegerSize2D getSize() { return maSize; }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > queryBitmapCanvas();
+        css::uno::Reference< css::rendering::XBitmapCanvas > queryBitmapCanvas();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >
-            getScaledBitmap( const ::com::sun::star::geometry::RealSize2D&  newSize,
+        css::uno::Reference< css::rendering::XBitmap >
+            getScaledBitmap( const css::geometry::RealSize2D&  newSize,
                              bool                                               beFast );
 
-        ::com::sun::star::uno::Sequence< sal_Int8 >
-            getData( ::com::sun::star::rendering::IntegerBitmapLayout&      bitmapLayout,
-                     const ::com::sun::star::geometry::IntegerRectangle2D&  rect );
+        css::uno::Sequence< sal_Int8 >
+            getData( css::rendering::IntegerBitmapLayout&      bitmapLayout,
+                     const css::geometry::IntegerRectangle2D&  rect );
 
-        ::com::sun::star::uno::Sequence< sal_Int8 >
-            getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-                      const ::com::sun::star::geometry::IntegerPoint2D& pos );
+        css::uno::Sequence< sal_Int8 >
+            getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
+                      const css::geometry::IntegerPoint2D& pos );
 
-        ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
+        css::rendering::IntegerBitmapLayout getMemoryLayout();
 
     private:
-        ::com::sun::star::geometry::IntegerSize2D maSize;
+        css::geometry::IntegerSize2D maSize;
     };
 }
 

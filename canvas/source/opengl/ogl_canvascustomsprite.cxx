@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 
 namespace oglcanvas
 {
-    CanvasCustomSprite::CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
+    CanvasCustomSprite::CanvasCustomSprite( const css::geometry::RealSize2D& rSpriteSize,
                                             const SpriteCanvasRef&                        rRefDevice,
                                             SpriteDeviceHelper&                           rDeviceHelper ) :
         mpSpriteCanvas( rRefDevice ),

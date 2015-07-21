@@ -45,10 +45,10 @@
 
 namespace dxcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XBitmapCanvas,
-                                              ::com::sun::star::rendering::XIntegerBitmap,
-                                               ::com::sun::star::lang::XServiceInfo,
-                                               ::com::sun::star::beans::XFastPropertySet >      CanvasBitmapBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
+                                             css::rendering::XIntegerBitmap,
+                                             css::lang::XServiceInfo,
+                                             css::beans::XFastPropertySet >      CanvasBitmapBase_Base;
     typedef ::canvas::IntegerBitmapBase<
         canvas::BitmapCanvasBase2<
             ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
@@ -74,15 +74,15 @@ namespace dxcanvas
         virtual void disposeThis() SAL_OVERRIDE;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException);
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException);
 
         // BitmapProvider
         virtual IBitmapSharedPtr getBitmap() const { return mpBitmap; }
 
-        virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const ::com::sun::star::uno::Any&)  throw (::com::sun::star::uno::RuntimeException) {}
+        virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (css::uno::RuntimeException);
+        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&)  throw (css::uno::RuntimeException) {}
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a

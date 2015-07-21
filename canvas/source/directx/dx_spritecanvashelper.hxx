@@ -54,24 +54,24 @@ namespace dxcanvas
         void disposing();
 
         // XSpriteCanvas
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XAnimatedSprite >        createSpriteFromAnimation(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimation >& animation );
+        css::uno::Reference<
+              css::rendering::XAnimatedSprite >        createSpriteFromAnimation(
+                const css::uno::Reference< css::rendering::XAnimation >& animation );
 
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XAnimatedSprite >        createSpriteFromBitmaps(
-                const ::com::sun::star::uno::Sequence<
-                      ::com::sun::star::uno::Reference<
-                            ::com::sun::star::rendering::XBitmap > >& animationBitmaps,
+        css::uno::Reference<
+              css::rendering::XAnimatedSprite >        createSpriteFromBitmaps(
+                const css::uno::Sequence<
+                      css::uno::Reference<
+                            css::rendering::XBitmap > >& animationBitmaps,
                 sal_Int8                                              interpolationMode );
 
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XCustomSprite >      createCustomSprite(
-                const ::com::sun::star::geometry::RealSize2D& spriteSize );
+        css::uno::Reference<
+              css::rendering::XCustomSprite >      createCustomSprite(
+                const css::geometry::RealSize2D& spriteSize );
 
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XSprite >                createClonedSprite(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >& original );
+        css::uno::Reference<
+              css::rendering::XSprite >                createClonedSprite(
+                const css::uno::Reference< css::rendering::XSprite >& original );
 
         /** Actually perform the screen update
 

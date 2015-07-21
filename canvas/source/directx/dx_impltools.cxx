@@ -170,7 +170,7 @@ namespace dxcanvas
         {
             // TODO(P2): Check whether this gets inlined. If not, make functor
             // out of it
-            inline Gdiplus::PointF implGdiPlusPointFromRealPoint2D( const ::com::sun::star::geometry::RealPoint2D& rPoint )
+            inline Gdiplus::PointF implGdiPlusPointFromRealPoint2D( const css::geometry::RealPoint2D& rPoint )
             {
                 return Gdiplus::PointF( static_cast<Gdiplus::REAL>(rPoint.X),
                                         static_cast<Gdiplus::REAL>(rPoint.Y) );
@@ -301,7 +301,7 @@ namespace dxcanvas
             }
         }
 
-        Gdiplus::PointF gdiPlusPointFromRealPoint2D( const ::com::sun::star::geometry::RealPoint2D& rPoint )
+        Gdiplus::PointF gdiPlusPointFromRealPoint2D( const css::geometry::RealPoint2D& rPoint )
         {
             return implGdiPlusPointFromRealPoint2D( rPoint );
         }

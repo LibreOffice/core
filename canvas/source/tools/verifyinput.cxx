@@ -655,7 +655,7 @@ namespace canvas
                 aRect.getMinY() < 0 ||
                 aRect.getMaxY() > size.Height )
             {
-                throw ::com::sun::star::lang::IndexOutOfBoundsException();
+                throw css::lang::IndexOutOfBoundsException();
             }
         }
 
@@ -667,7 +667,7 @@ namespace canvas
                 pos.Y < 0 ||
                 pos.Y > size.Height )
             {
-                throw ::com::sun::star::lang::IndexOutOfBoundsException();
+                throw css::lang::IndexOutOfBoundsException();
             }
         }
 

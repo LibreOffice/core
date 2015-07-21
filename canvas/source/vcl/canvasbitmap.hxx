@@ -45,10 +45,10 @@
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XBitmapCanvas,
-                                               ::com::sun::star::rendering::XIntegerBitmap,
-                                                ::com::sun::star::lang::XServiceInfo,
-                                             ::com::sun::star::beans::XFastPropertySet >    CanvasBitmapBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
+                                             css::rendering::XIntegerBitmap,
+                                             css::lang::XServiceInfo,
+                                             css::beans::XFastPropertySet >    CanvasBitmapBase_Base;
     typedef ::canvas::IntegerBitmapBase<
         canvas::BitmapCanvasBase2<
             ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
@@ -73,23 +73,23 @@ namespace vclcanvas
          */
         CanvasBitmap( const ::Size&                                rSize,
                       bool                                         bAlphaBitmap,
-                      ::com::sun::star::rendering::XGraphicDevice& rDevice,
+                      css::rendering::XGraphicDevice&              rDevice,
                       const OutDevProviderSharedPtr&               rOutDevProvider );
 
         /// Must be called with locked Solar mutex
         CanvasBitmap( const BitmapEx&                              rBitmap,
-                      ::com::sun::star::rendering::XGraphicDevice& rDevice,
+                      css::rendering::XGraphicDevice&              rDevice,
                       const OutDevProviderSharedPtr&               rOutDevProvider );
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // RepaintTarget interface
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
-                              const ::com::sun::star::rendering::ViewState&   viewState,
-                              const ::com::sun::star::rendering::RenderState& renderState,
+                              const css::rendering::ViewState&   viewState,
+                              const css::rendering::RenderState& renderState,
                               const ::Point&                                  rPt,
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const SAL_OVERRIDE;
@@ -107,14 +107,14 @@ namespace vclcanvas
         //     1st a bool value: true - free the pixmap after used by XFreePixmap, false do nothing, the pixmap is used internally in the canvas
         //     2nd the pixmap handle
         //     3rd the pixmap depth
-        virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const ::com::sun::star::uno::Any&)  throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+        virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&)  throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a
             raw pointer (without refcounting)
         */
-        ::com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> mxDevice;
+        css::uno::Reference<css::rendering::XGraphicDevice> mxDevice;
     };
 }
 

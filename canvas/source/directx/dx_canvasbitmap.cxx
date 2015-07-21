@@ -75,7 +75,7 @@ namespace dxcanvas
         {
             // sorry, no BitmapEx here...
             case 0:
-                aRes = ::com::sun::star::uno::Any( reinterpret_cast<sal_Int64>( (BitmapEx*) NULL ) );
+                aRes = css::uno::Any( reinterpret_cast<sal_Int64>( (BitmapEx*) NULL ) );
                 break;
 
             case 1:

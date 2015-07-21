@@ -42,7 +42,7 @@ namespace oglcanvas
         sal_uInt32 getCacheMissCount() const { return mnMissCount; }
         sal_uInt32 getCacheHitCount() const { return mnHitCount; }
 
-        unsigned int getTexture( const ::com::sun::star::geometry::IntegerSize2D& rPixelSize,
+        unsigned int getTexture( const css::geometry::IntegerSize2D& rPixelSize,
                                  const sal_Int8*                                  pPixel,
                                  sal_uInt32                                       nPixelCrc32) const;
     private:

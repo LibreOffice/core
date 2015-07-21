@@ -36,14 +36,14 @@ namespace oglcanvas
 {
     class CanvasCustomSprite;
 
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XSpriteCanvas,
-                                                ::com::sun::star::rendering::XGraphicDevice,
-                                                ::com::sun::star::lang::XMultiServiceFactory,
-                                                ::com::sun::star::rendering::XBufferController,
-                                                ::com::sun::star::awt::XWindowListener,
-                                                ::com::sun::star::util::XUpdatable,
-                                                ::com::sun::star::beans::XPropertySet,
-                                                ::com::sun::star::lang::XServiceName >    WindowGraphicDeviceBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XSpriteCanvas,
+                                             css::rendering::XGraphicDevice,
+                                             css::lang::XMultiServiceFactory,
+                                             css::rendering::XBufferController,
+                                             css::awt::XWindowListener,
+                                             css::util::XUpdatable,
+                                             css::beans::XPropertySet,
+                                             css::lang::XServiceName >    WindowGraphicDeviceBase_Base;
     typedef ::canvas::BufferedGraphicDeviceBase<
         ::canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
         SpriteDeviceHelper,
@@ -67,10 +67,10 @@ namespace oglcanvas
     class SpriteCanvas : public SpriteCanvasBaseT
     {
     public:
-        SpriteCanvas( const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::uno::Any >&               aArguments,
-                      const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::uno::XComponentContext >& rxContext );
+        SpriteCanvas( const css::uno::Sequence<
+                            css::uno::Any >&               aArguments,
+                      const css::uno::Reference<
+                            css::uno::XComponentContext >& rxContext );
 
         void initialize();
 
@@ -85,20 +85,20 @@ namespace oglcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XBufferController (partial)
-        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XSpriteCanvas
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimation >& animation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > >& animationBitmaps, ::sal_Int8 interpolationMode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::rendering::VolatileContentDestroyedException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCustomSprite > SAL_CALL createCustomSprite( const ::com::sun::star::geometry::RealSize2D& spriteSize ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite > SAL_CALL createClonedSprite( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >& original ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const css::uno::Sequence< css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps, ::sal_Int8 interpolationMode ) throw (css::lang::IllegalArgumentException, css::rendering::VolatileContentDestroyedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::rendering::XSprite > SAL_CALL createClonedSprite( const css::uno::Reference< css::rendering::XSprite >& original ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll )
-            throw (::com::sun::star::uno::RuntimeException,
+            throw (css::uno::RuntimeException,
                    std::exception) SAL_OVERRIDE;
 
         // XServiceName
-        virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         void show( const ::rtl::Reference< CanvasCustomSprite >& );
         void hide( const ::rtl::Reference< CanvasCustomSprite >& );
@@ -108,8 +108,8 @@ namespace oglcanvas
         bool renderRecordedActions() const;
 
     private:
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >                maArguments;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxComponentContext;
+        css::uno::Sequence< css::uno::Any >                maArguments;
+        css::uno::Reference< css::uno::XComponentContext > mxComponentContext;
     };
 
     typedef ::rtl::Reference< SpriteCanvas > SpriteCanvasRef;

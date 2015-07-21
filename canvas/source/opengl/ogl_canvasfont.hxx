@@ -28,7 +28,7 @@ namespace oglcanvas
 {
     class SpriteCanvas;
 
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XCanvasFont > CanvasFontBaseT;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvasFont > CanvasFontBaseT;
 
     class CanvasFont : public ::comphelper::OBaseMutex,
                        public CanvasFontBaseT,
@@ -37,25 +37,25 @@ namespace oglcanvas
     public:
         typedef rtl::Reference<CanvasFont> ImplRef;
 
-        CanvasFont( const ::com::sun::star::rendering::FontRequest&                                     fontRequest,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    extraFontProperties,
-                    const ::com::sun::star::geometry::Matrix2D&                                         fontMatrix );
+        CanvasFont( const css::rendering::FontRequest&                                     fontRequest,
+                    const css::uno::Sequence< css::beans::PropertyValue >&    extraFontProperties,
+                    const css::geometry::Matrix2D&                                         fontMatrix );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         // XCanvasFont
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XTextLayout > SAL_CALL createTextLayout( const ::com::sun::star::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::rendering::FontRequest SAL_CALL getFontRequest(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::rendering::FontMetrics SAL_CALL getFontMetrics(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getExtraFontProperties(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::rendering::FontRequest SAL_CALL getFontRequest(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::rendering::FontMetrics SAL_CALL getFontMetrics(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getExtraFontProperties(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        const ::com::sun::star::geometry::Matrix2D& getFontMatrix() const { return maFontMatrix; }
+        const css::geometry::Matrix2D& getFontMatrix() const { return maFontMatrix; }
 
     private:
-        ::com::sun::star::rendering::FontRequest    maFontRequest;
-        ::com::sun::star::geometry::Matrix2D        maFontMatrix;
+        css::rendering::FontRequest    maFontRequest;
+        css::geometry::Matrix2D        maFontMatrix;
     };
 }
 

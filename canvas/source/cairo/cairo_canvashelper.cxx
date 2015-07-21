@@ -750,7 +750,7 @@ namespace cairocanvas
                 /* TODO: multitexturing */
                 if( pTextures )
                 {
-                    const ::com::sun::star::rendering::Texture& aTexture ( (*pTextures)[0] );
+                    const css::rendering::Texture& aTexture ( (*pTextures)[0] );
                     if( aTexture.Bitmap.is() )
                     {
                         unsigned char* data = NULL;
@@ -763,7 +763,7 @@ namespace cairocanvas
 
                             cairo_save( pCairo );
 
-                            ::com::sun::star::geometry::AffineMatrix2D aTransform( aTexture.AffineTransform );
+                            css::geometry::AffineMatrix2D aTransform( aTexture.AffineTransform );
                             cairo_matrix_t aScaleMatrix, aTextureMatrix, aScaledTextureMatrix;
 
                             cairo_matrix_init( &aTextureMatrix,
@@ -826,7 +826,7 @@ namespace cairocanvas
                             SAL_INFO( "canvas.cairo", "known implementation" );
 
                             ::canvas::ParametricPolyPolygon* pPolyImpl = static_cast< ::canvas::ParametricPolyPolygon* >( aTexture.Gradient.get() );
-                            ::com::sun::star::geometry::AffineMatrix2D aTransform( aTexture.AffineTransform );
+                            css::geometry::AffineMatrix2D aTransform( aTexture.AffineTransform );
                             cairo_matrix_t aTextureMatrix;
 
                             cairo_matrix_init( &aTextureMatrix,
@@ -1580,7 +1580,7 @@ namespace cairocanvas
 
     namespace
     {
-        class CairoColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XIntegerBitmapColorSpace >
+        class CairoColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
         {
         private:
             uno::Sequence< sal_Int8 >  maComponentTags;
@@ -1937,7 +1937,7 @@ namespace cairocanvas
             }
         };
 
-        class CairoNoAlphaColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XIntegerBitmapColorSpace >
+        class CairoNoAlphaColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
         {
         private:
             uno::Sequence< sal_Int8 >  maComponentTags;

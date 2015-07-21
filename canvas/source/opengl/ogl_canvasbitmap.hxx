@@ -29,8 +29,8 @@
 
 namespace oglcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XBitmapCanvas,
-                                              ::com::sun::star::rendering::XIntegerBitmap > CanvasBitmapBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
+                                             css::rendering::XIntegerBitmap > CanvasBitmapBase_Base;
     typedef ::canvas::IntegerBitmapBase<
         canvas::BitmapCanvasBase2<
             ::canvas::BaseMutexHelper< CanvasBitmapBase_Base >,
@@ -49,7 +49,7 @@ namespace oglcanvas
             @param rDevice
             Reference device, with which bitmap should be compatible
          */
-        CanvasBitmap( const ::com::sun::star::geometry::IntegerSize2D& rSize,
+        CanvasBitmap( const css::geometry::IntegerSize2D&              rSize,
                       const SpriteCanvasRef&                           rDevice,
                       SpriteDeviceHelper&                              rDeviceHelper,
                       bool                                             bHasAlpha );

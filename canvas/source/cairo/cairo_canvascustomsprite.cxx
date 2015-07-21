@@ -38,7 +38,7 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
-    CanvasCustomSprite::CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
+    CanvasCustomSprite::CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
                                             const SpriteCanvasRef&                          rRefDevice ) :
         mpSpriteCanvas( rRefDevice ),
         maSize( ::canvas::tools::roundUp( rSpriteSize.Width ),

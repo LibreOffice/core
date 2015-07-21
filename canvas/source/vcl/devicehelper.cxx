@@ -157,7 +157,7 @@ namespace vclcanvas
 
     uno::Any DeviceHelper::isAccelerated() const
     {
-        return ::com::sun::star::uno::makeAny(false);
+        return css::uno::makeAny(false);
     }
 
     uno::Any DeviceHelper::getDeviceHandle() const

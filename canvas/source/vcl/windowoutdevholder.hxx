@@ -34,8 +34,7 @@ namespace vclcanvas
                                private ::boost::noncopyable
     {
     public:
-        explicit WindowOutDevHolder( const ::com::sun::star::uno::Reference<
-                                           ::com::sun::star::awt::XWindow>& xWin );
+        explicit WindowOutDevHolder( const css::uno::Reference< css::awt::XWindow>& xWin );
 
     private:
         virtual OutputDevice&       getOutDev() SAL_OVERRIDE { return mrOutputWindow; }
