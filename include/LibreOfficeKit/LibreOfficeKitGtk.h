@@ -63,6 +63,9 @@ char*                          lok_doc_view_get_part_name          (LOKDocView* 
                                                                     int nPart);
 void                           lok_doc_view_set_partmode           (LOKDocView* pDocView,
                                                                     int nPartMode);
+
+void                           lok_doc_view_reset_view             (LOKDocView* pDocView);
+
 /// Sets if the viewer is actually an editor or not.
 void                           lok_doc_view_set_edit               (LOKDocView* pDocView,
                                                                     gboolean bEdit);

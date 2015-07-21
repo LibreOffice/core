@@ -364,6 +364,7 @@ static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
     if (g_bPartSelectorBroadcast && pDocView)
     {
         lok_doc_view_set_part( LOK_DOC_VIEW(pDocView), nPart );
+        lok_doc_view_reset_view( LOK_DOC_VIEW(pDocView) );
     }
 }
 
