@@ -654,6 +654,66 @@ void FmXFormView::resumeTabOrderUpdate()
     m_aNeedTabOrderUpdate.clear();
 }
 
+namespace
+{
+    bool isActivableDatabaseForm(const Reference< XFormController > &xController)
+    {
+        // only database forms are to be activated
+        Reference< XRowSet >  xForm(xController->getModel(), UNO_QUERY);
+        if ( !xForm.is() || !getConnection( xForm ).is() )
+            return false;
+
+        Reference< XPropertySet > xFormSet( xForm, UNO_QUERY );
+        if ( !xFormSet.is() )
+        {
+            SAL_WARN( "svx.form", "FmXFormView::OnActivate: a form which does not have properties?" );
+            return false;
+        }
+
+        const OUString aSource = ::comphelper::getString( xFormSet->getPropertyValue( FM_PROP_COMMAND ) );
+
+        return !aSource.isEmpty();
+    }
+
+    class find_active_databaseform
+    {
+        const Reference< XFormController > xActiveController;
+
+    public:
+
+        find_active_databaseform( const Reference< XFormController > _xActiveController )
+            : xActiveController(_xActiveController )
+        {}
+
+        Reference < XFormController > operator() (const Reference< XFormController > &xController)
+        {
+            if(xController == xActiveController && isActivableDatabaseForm(xController))
+                return xController;
+
+            Reference< XIndexAccess > xSubControllers( xController, UNO_QUERY );
+            if ( !xSubControllers.is() )
+            {
+                SAL_WARN( "svx.form", "FmXFormView::OnActivate: a form controller which does not have children?" );
+                return nullptr;
+            }
+
+            for(sal_Int32 i = 0; i < xSubControllers->getCount(); ++i)
+            {
+                const Any a(xSubControllers->getByIndex(i));
+                Reference < XFormController > xI;
+                if ((a >>= xI) && xI.is())
+                {
+                    Reference < XFormController > xRes(operator()(xI));
+                    if (xRes.is())
+                        return xRes;
+                }
+            }
+
+            return nullptr;
+        }
+    };
+}
+
 
 IMPL_LINK_NOARG(FmXFormView, OnActivate)
 {
@@ -668,6 +728,13 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate)
     // setting the controller to activate
     if (m_pView->GetFormShell() && m_pView->GetActualOutDev() && m_pView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
     {
+        FmXFormShell* const pShImpl =  m_pView->GetFormShell()->GetImpl();
+
+        if(!pShImpl)
+            return 0;
+
+        find_active_databaseform fad(pShImpl->getActiveController());
+
         vcl::Window* pWindow = const_cast<vcl::Window*>(static_cast<const vcl::Window*>(m_pView->GetActualOutDev()));
         PFormViewPageWindowAdapter pAdapter = m_aPageWindowAdapters.empty() ? NULL : m_aPageWindowAdapters[0];
         for (   PageWindowAdapterList::const_iterator i = m_aPageWindowAdapters.begin();
@@ -681,6 +748,7 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate)
 
         if ( pAdapter.get() )
         {
+            Reference< XFormController > xControllerToActivate;
             for (   ::std::vector< Reference< XFormController > >::const_iterator i = pAdapter->GetList().begin();
                     i != pAdapter->GetList().end();
                     ++i
@@ -690,27 +758,21 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate)
                 if ( !xController.is() )
                     continue;
 
-                // only database forms are to be activated
-                Reference< XRowSet >  xForm(xController->getModel(), UNO_QUERY);
-                if ( !xForm.is() || !getConnection( xForm ).is() )
-                    continue;
-
-                Reference< XPropertySet > xFormSet( xForm, UNO_QUERY );
-                if ( !xFormSet.is() )
                 {
-                    SAL_WARN( "svx.form", "FmXFormView::OnActivate: a form which does not have properties?" );
-                    continue;
+                    Reference< XFormController > xActiveController(fad(xController));
+                    if (xActiveController.is())
+                    {
+                        xControllerToActivate = xActiveController;
+                        break;
+                    }
                 }
 
-                const OUString aSource = ::comphelper::getString( xFormSet->getPropertyValue( FM_PROP_COMMAND ) );
-                if ( !aSource.isEmpty() )
-                {
-                    FmXFormShell* pShImpl =  m_pView->GetFormShell()->GetImpl();
-                    if ( pShImpl )
-                        pShImpl->setActiveController( xController );
-                    break;
-                }
+                if(xControllerToActivate.is() || !isActivableDatabaseForm(xController))
+                    continue;
+
+                xControllerToActivate = xController;
             }
+            pShImpl->setActiveController( xControllerToActivate );
         }
     }
     return 0;
