@@ -59,14 +59,12 @@ enum CursorType
 */
 class UnoActionContext
 {
-    private:
+private:
         SwDoc * m_pDoc;
 
-    public:
+public:
         UnoActionContext(SwDoc *const pDoc);
         ~UnoActionContext();
-
-        void InvalidateDocument() { m_pDoc = 0; }
 };
 
 /*
@@ -76,10 +74,10 @@ class UnoActionContext
 */
 class UnoActionRemoveContext
 {
-    private:
+private:
         SwDoc *const m_pDoc;
 
-    public:
+public:
         UnoActionRemoveContext(SwDoc *const pDoc);
         UnoActionRemoveContext(SwUnoTableCrsr const& rCursor);
         ~UnoActionRemoveContext();

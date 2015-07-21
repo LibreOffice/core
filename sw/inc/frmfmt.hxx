@@ -290,11 +290,6 @@ public:
     inline bool IsPosAttrSet() const { return mbPosAttrSet; }
     inline void PosAttrSet() { mbPosAttrSet = true; }
 
-    inline void ResetPosAttr()
-    {
-        mbPosAttrSet = false;
-    }
-
     virtual OUString GetDescription() const SAL_OVERRIDE;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwDrawFrameFormat);

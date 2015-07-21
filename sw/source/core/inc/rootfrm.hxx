@@ -324,7 +324,6 @@ public:
     static void SetNoVirDev( const bool bNew ) { mbNoVirDev = bNew; }
 
     inline long GetBrowseWidth() const;
-    void SetBrowseWidth( long n ) { mbBrowseWidthValid = true; mnBrowseWidth = n;}
     inline void InvalidateBrowseWidth();
 
     bool IsNewLayout() const { return mbIsNewLayout; }

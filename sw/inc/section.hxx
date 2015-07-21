@@ -213,8 +213,6 @@ public:
     // Get / set password of this section
     ::com::sun::star::uno::Sequence<sal_Int8> const& GetPassword() const
                                             { return m_Data.GetPassword(); }
-    void SetPassword(::com::sun::star::uno::Sequence <sal_Int8> const& rNew)
-                                            { m_Data.SetPassword(rNew); }
 
     // Data server methods.
     void SetRefObject( SwServerObject* pObj );

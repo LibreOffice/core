@@ -189,11 +189,6 @@ public:
     SwContentNode* GoNext(SwNodeIndex *) const;
     static SwContentNode* GoPrevious(SwNodeIndex *);
 
-    /** Go to next/previous Content/Table-node for which LayoutFrames exist.
-     While doing this do not leave Header/Footer/Frame etc. */
-    SwNode* GoNextWithFrm(SwNodeIndex *) const;
-    SwNode* GoPreviousWithFrm(SwNodeIndex *) const;
-
     /** Go to next content-node that is not protected or hidden
        (Both set FALSE ==> GoNext/GoPrevious!!!). */
     SwContentNode* GoNextSection( SwNodeIndex *, bool bSkipHidden  = true,

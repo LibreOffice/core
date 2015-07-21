@@ -48,8 +48,6 @@ public:
 
     const SwTextFlyCnt *GetTextFlyCnt() const { return pTextAttr; }
           SwTextFlyCnt *GetTextFlyCnt()       { return pTextAttr; }
-
-    bool Sw3ioExportAllowed() const;
 };
 
 #endif

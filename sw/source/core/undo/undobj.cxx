@@ -963,7 +963,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     rDoc.getIDocumentRedlineAccess().SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES));
     //#i92154# let UI know about a new redline with comment
     if (rDoc.GetDocShell() && (!pRedl->GetComment().isEmpty()) )
-        rDoc.GetDocShell()->Broadcast(SwRedlineHint(pRedl,SWREDLINE_INSERTED));
+        rDoc.GetDocShell()->Broadcast(SwRedlineHint());
 
     bool const bSuccess = rDoc.getIDocumentRedlineAccess().AppendRedline( pRedl, true );
     assert(bSuccess); // SwRedlineSaveData::RedlineToDoc: insert redline failed

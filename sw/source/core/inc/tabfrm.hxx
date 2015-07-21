@@ -34,7 +34,6 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 
     // does the special treatment for _Get[Next|Prev]Leaf()
     using SwFrm::GetLeaf;
-    SwLayoutFrm *GetLeaf( MakePageType eMakePage, bool bFwd );
 
     SwTable * m_pTable;
 

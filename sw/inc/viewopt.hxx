@@ -398,25 +398,14 @@ public:
 #ifdef DBG_UTIL
     // Correspond to statements in ui/config/cfgvw.src.
     inline bool IsTest1() const     { return m_bTest1; }
-    inline void SetTest1( bool b )  { m_bTest1 = b; }
     inline bool IsTest2() const     { return m_bTest2; }
-    inline void SetTest2( bool b )  { m_bTest2 = b; }
     inline bool IsTest3() const     { return m_bTest3; }
-    inline void SetTest3( bool b )  { m_bTest3 = b; }
     inline bool IsTest4() const     { return m_bTest4; }
-    inline void SetTest4( bool b )  { m_bTest4 = b; }
     inline bool IsTest5() const     { return m_bTest5; }
-    inline void SetTest5( bool b )  { m_bTest5 = b; }
     inline bool IsTest6() const     { return m_bTest6; }
-    inline void SetTest6( bool b )  { m_bTest6 = b; }
     inline bool IsTest7() const     { return m_bTest7; }
-    inline void SetTest7( bool b )  { m_bTest7 = b; }
     inline bool IsTest8() const     { return m_bTest8; }
-    inline void SetTest8( bool b )  { m_bTest8 = b; }
-    static inline bool IsTest9()            { return s_bTest9; }
-    static inline void SetTest9( bool b )   { s_bTest9 = b; }
     inline bool IsTest10() const    { return m_bTest10; }
-    inline void SetTest10( bool b ) { m_bTest10 = b; }
 #endif
 
     inline sal_uInt16 GetZoom() const    { return nZoom; }

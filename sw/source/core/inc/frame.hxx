@@ -533,19 +533,15 @@ public:
     bool IsInBalancedSection() const;
 
     inline bool IsReverse() const { return mbReverse; }
-    inline void SetReverse( bool bNew ){ mbReverse = bNew; }
     inline bool IsVertical() const;
 
     inline bool IsVertLR() const;
     inline bool GetVerticalFlag() const { return mbVertical; }
-    inline void SetVertical( bool bNew ){ mbVertical = bNew; }
 
-    inline void SetbVertLR( bool bNew ) { mbVertLR = bNew; }
     inline void SetDerivedVert( bool bNew ){ mbDerivedVert = bNew; }
     inline void SetInvalidVert( bool bNew) { mbInvalidVert = bNew; }
     inline bool IsRightToLeft() const;
     inline bool GetRightToLeftFlag() const { return mbRightToLeft; }
-    inline void SetRightToLeft( bool bNew ){ mbRightToLeft = bNew; }
     inline void SetDerivedR2L( bool bNew ) { mbDerivedR2L  = bNew; }
     inline void SetInvalidR2L( bool bNew ) { mbInvalidR2L  = bNew; }
 
@@ -582,7 +578,6 @@ public:
     const SwAttrSet *GetAttrSet() const;
 
     inline bool HasFixSize() const { return mbFixSize; }
-    inline void SetFixSize( bool bNew ) { mbFixSize = bNew; }
 
     // check all pages (starting from the given) and correct them if needed
     static void CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields = true, SwPageFrm** ppPrev = 0);
@@ -825,10 +820,6 @@ public:
     void SetBottomTopMargins( long, long );
     void SetLeftRightMargins( long, long );
     void SetRightLeftMargins( long, long );
-    void SetLeftAndWidth( long nLeft, long nWidth );
-    void SetTopAndHeight( long nTop, long nHeight );
-    void SetRightAndWidth( long nRight, long nWidth );
-    void SetBottomAndHeight( long nBottom, long nHeight );
     long GetPrtLeft() const;
     long GetPrtBottom() const;
     long GetPrtRight() const;
@@ -846,7 +837,6 @@ public:
 
     // #i65250#
     inline sal_uInt32 GetFrmId() const { return mnFrmId; }
-    static inline sal_uInt32 GetLastFrmId() { return mnLastFrmId; }
 
     // NEW TABLES
     // Some functions for covered/covering table cells. This way unnecessary

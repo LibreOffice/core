@@ -114,8 +114,6 @@ public:
     inline OUString GetName() const                  { return m_aFormatName; }
     inline bool HasName(const OUString &rName) const { return m_aFormatName == rName; }
     void SetName( const OUString& rNewName, bool bBroadcast=false );
-    inline void SetName( const sal_Char* pNewName,
-                         bool bBroadcast=false);
 
     /// For querying the attribute array.
     inline const SwAttrSet& GetAttrSet() const { return m_aSet; }
@@ -184,48 +182,12 @@ public:
      If nothing is found the defaulted attribute is returned. */
 
     /// Character-attributes - implemented in charatr.hxx
-    inline const SvxPostureItem      &GetPosture( bool = true ) const;
-    inline const SvxWeightItem       &GetWeight( bool = true ) const;
-    inline const SvxShadowedItem     &GetShadowed( bool = true ) const;
-    inline const SvxAutoKernItem     &GetAutoKern( bool = true ) const;
-    inline const SvxWordLineModeItem &GetWordLineMode( bool = true ) const;
-    inline const SvxContourItem      &GetContour( bool = true ) const;
-    inline const SvxKerningItem      &GetKerning( bool = true ) const;
     inline const SvxUnderlineItem    &GetUnderline( bool = true ) const;
-    inline const SvxOverlineItem     &GetOverline( bool = true ) const;
-    inline const SvxCrossedOutItem   &GetCrossedOut( bool = true ) const;
     inline const SvxFontHeightItem   &GetSize( bool = true ) const;
-    inline const SvxPropSizeItem     &GetPropSize( bool = true ) const;
     inline const SvxFontItem         &GetFont( bool = true ) const;
     inline const SvxColorItem        &GetColor( bool = true ) const;
-    inline const SvxCharSetColorItem &GetCharSetColor( bool = true ) const;
-    inline const SvxLanguageItem     &GetLanguage( bool = true ) const;
-    inline const SvxEscapementItem   &GetEscapement( bool = true ) const;
-    inline const SvxCaseMapItem      &GetCaseMap( bool = true ) const;
-    inline const SvxNoHyphenItem     &GetNoHyphenHere( bool = true ) const;
-    inline const SvxBlinkItem        &GetBlink( bool = true ) const;
-    inline const SvxBrushItem        &GetChrBackground( bool = true ) const;
-    inline const SvxBrushItem        &GetChrHighlight( bool = true ) const;
-
     inline const SvxFontItem         &GetCJKFont( bool = true ) const;
-    inline const SvxFontHeightItem   &GetCJKSize( bool = true ) const;
-    inline const SvxLanguageItem     &GetCJKLanguage( bool = true ) const;
-    inline const SvxPostureItem      &GetCJKPosture( bool = true ) const;
-    inline const SvxWeightItem       &GetCJKWeight( bool = true ) const;
     inline const SvxFontItem         &GetCTLFont( bool = true ) const;
-    inline const SvxFontHeightItem   &GetCTLSize( bool = true ) const;
-    inline const SvxLanguageItem     &GetCTLLanguage( bool = true ) const;
-    inline const SvxPostureItem      &GetCTLPosture( bool = true ) const;
-    inline const SvxWeightItem       &GetCTLWeight( bool = true ) const;
-    inline const SfxBoolItem           &GetWritingDirection( bool = true ) const;
-    inline const SvxEmphasisMarkItem &GetEmphasisMark( bool = true ) const;
-    inline const SvxTwoLinesItem   &Get2Lines( bool = true ) const;
-    inline const SvxCharScaleWidthItem &GetCharScaleW( bool = true ) const;
-    inline const SvxCharRotateItem     &GetCharRotate( bool = true ) const;
-    inline const SvxCharReliefItem     &GetCharRelief( bool = true ) const;
-    inline const SvxCharHiddenItem   &GetCharHidden( bool = true ) const;
-    inline const SvxBoxItem   &GetCharBorder( bool = true ) const;
-    inline const SvxShadowItem   &GetCharShadow( bool = true ) const;
 
     /// Frame-attributes - implemented in frmatr.hxx.
     inline const SwFormatFillOrder           &GetFillOrder( bool = true ) const;
@@ -259,7 +221,6 @@ public:
     inline const SwFormatLayoutSplit     &GetLayoutSplit( bool = true ) const;
     inline const SwFormatRowSplit          &GetRowSplit( bool = true ) const;
     inline const SwFormatChain               &GetChain( bool = true ) const;
-    inline const SwFormatLineNumber      &GetLineNumber( bool = true ) const;
     inline const SwFormatFootnoteAtTextEnd     &GetFootnoteAtTextEnd( bool = true ) const;
     inline const SwFormatEndAtTextEnd     &GetEndAtTextEnd( bool = true ) const;
     inline const SwFormatNoBalancedColumns &GetBalancedColumns( bool = true ) const;
@@ -272,37 +233,11 @@ public:
     inline const SwFormatWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(bool = true) const;
     inline const SdrTextVertAdjustItem& GetTextVertAdjust(bool = true) const;
 
-    /// Graphics-attributes - implemented in grfatr.hxx
-    inline const SwMirrorGrf          &GetMirrorGrf( bool = true ) const;
-    inline const SwCropGrf            &GetCropGrf( bool = true ) const;
-    inline const SwRotationGrf            &GetRotationGrf(bool = true ) const;
-    inline const SwLuminanceGrf       &GetLuminanceGrf(bool = true ) const;
-    inline const SwContrastGrf            &GetContrastGrf(bool = true ) const;
-    inline const SwChannelRGrf            &GetChannelRGrf(bool = true ) const;
-    inline const SwChannelGGrf            &GetChannelGGrf(bool = true ) const;
-    inline const SwChannelBGrf            &GetChannelBGrf(bool = true ) const;
-    inline const SwGammaGrf           &GetGammaGrf(bool = true ) const;
-    inline const SwInvertGrf          &GetInvertGrf(bool = true ) const;
-    inline const SwTransparencyGrf        &GetTransparencyGrf(bool = true ) const;
-    inline const SwDrawModeGrf            &GetDrawModeGrf(bool = true ) const;
-
     /// Paragraph-attributes - implemented in paratr.hxx.
     inline const SvxLineSpacingItem       &GetLineSpacing( bool = true ) const;
-    inline const SvxAdjustItem            &GetAdjust( bool = true ) const;
-    inline const SvxFormatSplitItem      &GetSplit( bool = true ) const;
-    inline const SwRegisterItem           &GetRegister( bool = true ) const;
     inline const SwNumRuleItem            &GetNumRule( bool = true ) const;
-    inline const SvxWidowsItem            &GetWidows( bool = true ) const;
-    inline const SvxOrphansItem           &GetOrphans( bool = true ) const;
     inline const SvxTabStopItem           &GetTabStops( bool = true ) const;
-    inline const SvxHyphenZoneItem        &GetHyphenZone( bool = true ) const;
     inline const SwFormatDrop                &GetDrop( bool = true ) const;
-    inline const SvxScriptSpaceItem       &GetScriptSpace(bool = true) const;
-    inline const SvxHangingPunctuationItem &GetHangingPunctuation(bool = true) const;
-    inline const SvxForbiddenRuleItem     &GetForbiddenRule(bool = true) const;
-    inline const SvxParaVertAlignItem &GetParaVertAlign(bool = true) const;
-    inline const SvxParaGridItem        &GetParaGrid(bool = true) const;
-    inline const SwParaConnectBorderItem &GetParaConnectBorder(bool = true ) const;
 
     /// TableBox attributes - implemented in cellatr.hxx.
     inline  const SwTableBoxNumFormat     &GetTableBoxNumFormat( bool = true ) const;
@@ -325,12 +260,6 @@ public:
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const;
 };
-
-inline void SwFormat::SetName( const sal_Char* pNewName,
-                             bool bBroadcast )
-{
-    SetName(OUString::createFromAscii(pNewName), bBroadcast);
-}
 
 #endif // INCLUDED_SW_INC_FORMAT_HXX
 

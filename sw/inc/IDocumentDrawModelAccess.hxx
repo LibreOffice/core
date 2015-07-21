@@ -61,21 +61,6 @@ public:
     */
     virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const = 0;
 
-    /** method to determine, if the corresponding visible layer ID for a invisible one.
-
-        Note: If given layer ID is a visible one, method returns given layer ID.
-        Note: If given layer ID is unknown, method returns given layer ID.
-
-        @author OD
-
-        @param _nInvisibleLayerId
-        input parameter - invisible layer ID for which the corresponding
-        visible one has to be returned.
-
-        @return sal_Int8, visible layer ID corresponding to given layer ID
-    */
-    virtual SdrLayerID GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId ) = 0;
-
     /** method to determine, if the corresponding invisible layer ID for a visible one.
 
         Note: If given layer ID is a invisible one, method returns given layer ID.

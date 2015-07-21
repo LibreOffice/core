@@ -318,11 +318,6 @@ public:
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
 
-    static inline sal_Int8 ShadowPxWidth()
-    {
-        return mnShadowPxWidth;
-    }
-
     const SwRect PrtWithoutHeaderAndFooter() const;
 
     // in case this is am empty page, this function returns the 'reference' page

@@ -569,12 +569,6 @@ public:
         @author FME
     */
     sal_uInt16 ConvertAbsoluteToRelativePageNum( sal_uInt16 _nAbsPageNum ) const;
-
-    /** get the number of preview pages
-
-        @author FME
-    */
-    sal_uInt16 GetNumberOfPreviewPages() { return sal::static_int_cast< sal_uInt16 >(maPreviewPages.size()); }
 };
 
 #endif // INCLUDED_SW_INC_PAGEPREVIEWLAYOUT_HXX

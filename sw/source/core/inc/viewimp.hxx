@@ -191,8 +191,6 @@ public:
     bool  IsIdleAction() const               { return pIdleAct != 0; }
           SwLayAction &GetLayAction()        { return *pLayAct; }
     const SwLayAction &GetLayAction() const  { return *pLayAct; }
-          SwLayIdle   &GetIdleAction()       { return *pIdleAct;}
-    const SwLayIdle   &GetIdleAction() const { return *pIdleAct;}
 
     /**
      * If an Action is running we ask it to check whether it's time

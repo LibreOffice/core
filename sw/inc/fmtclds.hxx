@@ -44,8 +44,6 @@ public:
     bool operator==( const SwColumn & ) const;
 
     void SetWishWidth( sal_uInt16 nNew ) { nWish  = nNew; }
-    void SetUpper( sal_uInt16  nNew ) { nUpper = nNew; }
-    void SetLower( sal_uInt16  nNew ) { nLower = nNew; }
     void SetLeft ( sal_uInt16  nNew ) { nLeft  = nNew; }
     void SetRight( sal_uInt16  nNew ) { nRight = nNew; }
 

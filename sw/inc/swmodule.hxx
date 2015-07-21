@@ -233,8 +233,6 @@ public:
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguServiceEventListener >
             GetLngSvcEvtListener();
-    inline void SetLngSvcEvtListener( ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguServiceEventListener > & xLstnr);
     void    CreateLngSvcEvtListener();
 
     ::com::sun::star::uno::Reference<
@@ -251,13 +249,6 @@ inline ::com::sun::star::uno::Reference<
         SwModule::GetLngSvcEvtListener()
 {
     return xLngSvcEvtListener;
-}
-
-inline void SwModule::SetLngSvcEvtListener(
-    ::com::sun::star::uno::Reference<
-       ::com::sun::star::linguistic2::XLinguServiceEventListener > & xLstnr)
-{
-    xLngSvcEvtListener = xLstnr;
 }
 
 //    Access to SwModule, the View and the shell.

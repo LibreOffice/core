@@ -163,7 +163,6 @@ protected:
 
 public:
     OUString GetName() const { return m_StyleName; }
-    bool HasName(const OUString& rThisName) const { return m_StyleName == rThisName; }
     void SetName(const OUString& rNewName) { m_StyleName = rNewName; }
 
     bool GetLandscape() const { return m_IsLandscape; }
@@ -204,7 +203,6 @@ public:
     /** Reset all attrs of the format but keep the ones a pagedesc
        cannot live without. */
     inline void ResetAllMasterAttr();
-    inline void ResetAllLeftAttr();
 
     /** Layout uses the following methods to obtain a format in order
        to be able to create a page. */
@@ -303,11 +301,6 @@ inline UseOnPage SwPageDesc::GetUseOn() const
 inline void SwPageDesc::ResetAllMasterAttr()
 {
     ResetAllAttr( false );
-}
-
-inline void SwPageDesc::ResetAllLeftAttr()
-{
-    ResetAllAttr( true );
 }
 
 inline const SwFrameFormat *SwPageDesc::GetRightFormat(bool const bFirst) const

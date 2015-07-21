@@ -487,8 +487,6 @@ public:
     bool IsPreview() const { return mbPreview; }
 
     bool IsFrameView()  const { return mbFrameView; }
-    void SetFrameView( const Size& rBrowseBorder )
-           { mbFrameView = true; maBrowseBorder = rBrowseBorder; }
 
     // Makes the necessary invalidations:
     // If BrowseMode has changed bBrowseChgd == true

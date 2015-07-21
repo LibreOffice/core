@@ -74,7 +74,6 @@ public:
 
     inline const SwContentNode *GetNode() const;
     inline       SwContentNode *GetNode();
-    sal_uInt16 GetSectionLevel();
 
     inline const SwContentFrm *GetFollow() const;
     inline       SwContentFrm *GetFollow();
@@ -89,12 +88,6 @@ public:
                          bool bSetInReadOnly = false ) const;
     virtual bool UnitDown( SwPaM *, const SwTwips nOffset = 0,
                            bool bSetInReadOnly = false ) const;
-    inline  bool StartNextPage( SwPaM * ) const;
-    inline  bool StartPrevPage( SwPaM * ) const;
-    inline  bool StartCurrPage( SwPaM * ) const;
-    inline  bool EndCurrPage( SwPaM * ) const;
-    inline  bool EndNextPage( SwPaM * ) const;
-    inline  bool EndPrevPage( SwPaM * ) const;
 
     // nMaxHeight is the required height
     // bSplit indicates that the paragraph has to be split

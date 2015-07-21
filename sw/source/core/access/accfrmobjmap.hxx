@@ -118,9 +118,7 @@ public:
 
     static bool IsSortingRequired( const SwFrm& rFrm );
 
-    iterator begin() { return maMap.begin(); }
     const_iterator cbegin() const { return maMap.cbegin(); }
-    iterator end() { return maMap.end(); }
     const_iterator cend() const { return maMap.cend(); }
     const_reverse_iterator crbegin() const { return maMap.crbegin(); }
     const_reverse_iterator crend() const { return maMap.crend(); }

@@ -148,8 +148,6 @@ class SW_DLLPUBLIC SwEditShell : public SwCrsrShell
     /// For the PamCorrAbs/-Rel methods.
     friend class SwUndo;
 
-    SAL_DLLPRIVATE SfxPoolItem& _GetChrFormat( SfxPoolItem& ) const;
-
     /** Returns pointer to a SwGrfNode
      that will be used by GetGraphic() and GetGraphicSize(). */
     SAL_DLLPRIVATE SwGrfNode *_GetGrfNode() const ;

@@ -566,23 +566,17 @@ private:
     // resets the cursor stack after movement by PageUp/-Down
     SAL_DLLPRIVATE void  _ResetCursorStack();
 
-    SAL_DLLPRIVATE void  SttDragDrop(Timer *);
-
     using SwCrsrShell::SetCrsr;
     SAL_DLLPRIVATE long  SetCrsr(const Point *, bool bProp=false );
 
     SAL_DLLPRIVATE long  SetCrsrKillSel(const Point *, bool bProp=false );
 
-    SAL_DLLPRIVATE long  StdSelect(const Point *, bool bProp=false );
     SAL_DLLPRIVATE long  BeginDrag(const Point *, bool bProp=false );
     SAL_DLLPRIVATE long  DefaultDrag(const Point *, bool bProp=false );
     SAL_DLLPRIVATE long  DefaultEndDrag(const Point *, bool bProp=false );
 
     SAL_DLLPRIVATE long  ExtSelWrd(const Point *, bool bProp=false );
     SAL_DLLPRIVATE long  ExtSelLn(const Point *, bool bProp=false );
-
-    // move text from Drag and Drop; Point is destination for all selections.
-    SAL_DLLPRIVATE long  MoveText(const Point *, bool bProp=false );
 
     SAL_DLLPRIVATE long  BeginFrmDrag(const Point *, bool bProp=false );
 

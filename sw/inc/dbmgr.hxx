@@ -195,7 +195,6 @@ friend class SwConnectionDisposedListener_Impl;
     OUString            sAttached;          ///< Mailing: Attached Files.
     bool            bCancel;            ///< Mail merge canceled.
     bool            bInitDBFields : 1;
-    bool            bSingleJobs : 1;    ///< Printing job when called from Basic.
     bool            bInMerge    : 1;    ///< merge process active
     bool            bMergeSilent : 1;   ///< suppress display of dialogs/boxes (used when called over API)
     bool            bMergeLock : 1;     /**< prevent update of database fields while document is
@@ -255,14 +254,9 @@ public:
     inline bool     IsInitDBFields() const  { return bInitDBFields; }
     inline void     SetInitDBFields(bool b) { bInitDBFields = b;    }
 
-    /// Print / Save mail merge one by one or all together.
-    bool     IsSingleJobs() const    { return bSingleJobs;   }
-    void     SetSingleJobs(bool b)   { bSingleJobs = b;  }
-
     /// Mailing: Set email data.
     inline void     SetEMailColumn(const OUString& sColName) { sEMailAddrField = sColName; }
     inline void     SetSubject(const OUString& sSbj) { sSubject = sSbj; }
-    inline void     SetAttachment(const OUString& sAtt) { sAttached = sAtt; }
 
     /// Fill listbox with all table names of a database.
     bool            GetTableNames(ListBox* pListBox, const OUString& rDBName );
