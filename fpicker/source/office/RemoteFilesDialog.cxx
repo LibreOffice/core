@@ -89,7 +89,7 @@ class FileViewContainer : public vcl::Window
         if( !m_pFileView || !m_pTreeView )
             return;
 
-        if( !bReverse && m_nCurrentFocus < 4 )
+        if( !bReverse && m_nCurrentFocus < 3 )
         {
             m_pFocusWidgets[++m_nCurrentFocus]->SetFakeFocus( true );
             m_pFocusWidgets[m_nCurrentFocus]->GrabFocus();
