@@ -325,6 +325,11 @@ short RemoteFilesDialog::Execute()
         Show();
         AddServiceHdl( NULL );
     }
+    if( m_pServices_lb->GetEntryCount() > 0 )
+    {
+        Show();
+        SelectServiceHdl( NULL );
+    }
 
     short nRet = SvtFileDialog_Base::Execute();
 
