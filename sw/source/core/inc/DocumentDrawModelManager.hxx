@@ -59,8 +59,6 @@ public:
 
     virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const SAL_OVERRIDE;
 
-    virtual SdrLayerID GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId ) SAL_OVERRIDE;
-
     virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId ) SAL_OVERRIDE;
 
     virtual bool Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem) SAL_OVERRIDE;

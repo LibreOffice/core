@@ -122,8 +122,6 @@ private:
 
     bool                        m_bIsCollapsed;
 
-    SwFormatField * GetFieldFormat(bool bInit = false);
-
     void init(const SwUnoCrsr* pPortionCursor);
 
 protected:
@@ -135,10 +133,6 @@ protected:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl(
         const ::com::sun::star::uno::Sequence< OUString >& aPropertyNames )
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    void        GetPropertyValues( const OUString *pPropertyNames,
-                                    ::com::sun::star::uno::Any *pValues,
-                                    sal_Int32 nLength );
 
     void GetPropertyValue( ::com::sun::star::uno::Any &rVal,
                 const SfxItemPropertySimpleEntry& rEntry, SwUnoCrsr *pUnoCrsr, SfxItemSet *&pSet );
@@ -234,7 +228,6 @@ public:
                         ::com::sun::star::text::XTextContent >  xMeta)
     { m_xMeta = xMeta; }
 
-    bool IsCollapsed() const { return m_bIsCollapsed; }
     void SetCollapsed(bool bSet)        { m_bIsCollapsed = bSet;}
 
     SwTextPortionType GetTextPortionType() const { return m_ePortionType; }

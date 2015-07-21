@@ -99,8 +99,6 @@ public:
      */
     bool SplitSect( SwFrm* pFrm, bool bApres );
     void DelEmpty( bool bRemove ); // Like Cut(), except for that Follow chaining is maintained
-    bool IsToIgnore() const        // No size, no content; need to be ignored
-    { return !Frm().Height() && !ContainsContent(); }
     SwFootnoteContFrm* ContainsFootnoteCont( const SwFootnoteContFrm* pCont = NULL ) const;
     bool Growable() const;
     SwTwips _Shrink( SwTwips, bool bTst );
@@ -145,7 +143,6 @@ public:
     bool IsFootnoteAtEnd() const { return bFootnoteAtEnd; }
     bool IsEndnAtEnd() const { return bEndnAtEnd;   }
     bool IsAnyNoteAtEnd() const { return bFootnoteAtEnd || bEndnAtEnd; }
-    bool AreNotesAtEnd() const { return bFootnoteAtEnd && bEndnAtEnd; }
 
     void SetContentLock( bool bNew ) { bContentLock = bNew; }
     bool IsContentLocked() const { return bContentLock; }

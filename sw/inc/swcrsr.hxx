@@ -153,7 +153,6 @@ public:
     bool GoSentence(SentenceMoveType eMoveType);
     bool GoNextSentence(){return GoSentence(NEXT_SENT);}
     bool GoEndSentence(){return GoSentence(END_SENT);}
-    bool GoPrevSentence(){return GoSentence(PREV_SENT);}
     bool GoStartSentence(){return GoSentence(START_SENT);}
     bool ExpandToSentenceBorders();
 
@@ -178,8 +177,6 @@ public:
     bool GotoFootnoteText();
     bool GotoNextFootnoteAnchor();
     bool GotoPrevFootnoteAnchor();
-    bool GotoNextFootnoteContent();
-    bool GotoPrevFootnoteContent();
 
     bool MovePara( SwWhichPara, SwPosPara );
     bool MoveSection( SwWhichSection, SwPosSection );
@@ -215,7 +212,6 @@ public:
     void SetColumnSelection( bool bNew ) { m_bColumnSelection = bNew; }
 
     long GetCrsrRowSpanOffset() const { return m_nRowSpanOffset; }
-    void SetCrsrRowSpanOffset( long nNew ) { m_nRowSpanOffset = nNew; }
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwCursor )
 };

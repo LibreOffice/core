@@ -467,18 +467,6 @@ protected:
         SetLastValid( mChildren.end() );
     }
 
-    /** Invalidation of parent node, if its not counted.
-
-        Usage: on <IsCounted()> state change the parent have to be invalidated
-    */
-    inline void InvalidateNotCountedParent()
-    {
-        if ( GetParent() && !GetParent()->IsCountedForNumbering() )
-        {
-            GetParent()->InvalidateMe();
-        }
-    }
-
     /**
        Set the last valid child of this node.
 
@@ -520,19 +508,6 @@ protected:
        Notifies this node (NotifyNode) and all descendants.
      */
     void Notify();
-
-    /** Notification of parent node siblings, if its not counted.
-
-        Usage: on <IsCounted()> state change the parent node and its siblings
-               have to be notified.
-    */
-    inline void NotifyNotCountedParentSiblings()
-    {
-        if ( GetParent() && !GetParent()->IsCountedForNumbering() )
-        {
-            GetParent()->NotifyInvalidSiblings();
-        }
-    }
 
     /** notification of children nodes on certain depth
 

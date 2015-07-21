@@ -137,7 +137,6 @@ public:
 
     OUString        GetCurFieldPar1() const { return aCurPar1; }
     OUString        GetCurFieldPar2() const { return aCurPar2; }
-    inline sal_uLong   GetCurFieldFormat() const;
 
     // determine a field
     SwField*        GetCurField();
@@ -148,15 +147,12 @@ public:
     void            SetMacroPath(const OUString& rPath);
     inline OUString GetMacroPath() const         { return sMacroPath; }
     inline OUString GetMacroName() const         { return sMacroName; }
-    inline void     SetMacroModule(SbModule* pMod)    { pModule = pMod; }
 
     // previous and next of the same type
     bool GoNextPrev( bool bNext = true, SwFieldType* pTyp = 0 );
     bool GoNext( SwFieldType* pTyp = 0 )    { return GoNextPrev( true, pTyp ); }
     bool GoPrev( SwFieldType* pTyp = 0 )    { return GoNextPrev( false, pTyp ); }
 
-    // query values from database fields (BASIC )
-//  String          GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh);
     bool            IsDBNumeric(const OUString& rDBName, const OUString& rTableQryName,
                                     bool bIsTable, const OUString& rFieldName);
 
@@ -204,9 +200,6 @@ public:
 
 inline void SwFieldMgr::SetEvalExpFields(bool bEval)
     { bEvalExp = bEval; }
-
-inline sal_uLong SwFieldMgr::GetCurFieldFormat() const
-    { return nCurFormat; }
 
 #endif
 

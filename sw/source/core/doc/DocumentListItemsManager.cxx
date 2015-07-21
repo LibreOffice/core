@@ -76,19 +76,6 @@ OUString DocumentListItemsManager::getListItemText( const SwNodeNum& rNodeNum,
            : OUString();
 }
 
-void DocumentListItemsManager::getListItems( tSortedNodeNumList& orNodeNumList ) const
-{
-    orNodeNumList.clear();
-    orNodeNumList.reserve( mpListItemsList->size() );
-
-    tImplSortedNodeNumList::iterator aIter;
-    tImplSortedNodeNumList::iterator aEndIter = mpListItemsList->end();
-    for ( aIter = mpListItemsList->begin(); aIter != aEndIter; ++aIter )
-    {
-        orNodeNumList.push_back( (*aIter) );
-    }
-}
-
 void DocumentListItemsManager::getNumItems( tSortedNodeNumList& orNodeNumList ) const
 {
     orNodeNumList.clear();

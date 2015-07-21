@@ -78,7 +78,6 @@ public:
     /// Query / set where attribute is anchored.
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     void ChgDefinedIn( const SwModify* pNew ) { pDefinedIn = const_cast<SwModify*>(pNew); }
-    void RegisterToEndNotInfo( SwEndNoteInfo& );
     void RegisterToPageDesc( SwPageDesc& );
     bool KnowsPageDesc() const;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;

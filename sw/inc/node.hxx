@@ -129,7 +129,6 @@ public:
     inline sal_uInt8 GetAutoFormatLvl() const     { return nAFormatNumLvl; }
     inline void SetAutoFormatLvl( sal_uInt8 nVal )      { nAFormatNumLvl = nVal; }
 
-    inline bool IsSetNumLSpace() const  { return bSetNumLSpace; }
     inline void SetNumLSpace( bool bFlag )        { bSetNumLSpace = bFlag; }
 
     inline bool IsIgnoreDontExpand() const  { return bIgnoreDontExpand; }

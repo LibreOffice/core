@@ -283,22 +283,6 @@ public:
         return nIdx + nLen;
     }
 
-    long GetLeft() const
-    {
-#ifdef DBG_UTIL
-        OSL_ENSURE( m_bLeft, "DrawTextInfo: Undefined left range" );
-#endif
-        return nLeft;
-    }
-
-    long GetRight() const
-    {
-#ifdef DBG_UTIL
-        OSL_ENSURE( m_bRight, "DrawTextInfo: Undefined right range" );
-#endif
-        return nRight;
-    }
-
     long GetKanaDiff() const
     {
 #ifdef DBG_UTIL

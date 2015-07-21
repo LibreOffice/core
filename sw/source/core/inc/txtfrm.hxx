@@ -85,8 +85,6 @@ class SwTextFrm: public SwContentFrm
     // Separates the Master and creates a Follow or adjusts the data in the Follow
     void _AdjustFollow( SwTextFormatter &rLine, const sal_Int32 nOffset,
                                const sal_Int32 nStrEnd, const sal_uInt8 nMode );
-    inline void AdjustFollow( SwTextFormatter &rLine, const sal_Int32 nOffset,
-                              const sal_Int32 nStrEnd, const sal_uInt8 nMode );
 
     // Iterates all Lines and sets the line spacing using the attribute
     void CalcLineSpace();
@@ -197,13 +195,6 @@ class SwTextFrm: public SwContentFrm
         used to determine the height of the last line. default value: false
     */
     void _CalcHeightOfLastLine( const bool _bUseFont = false );
-
-    // ST2
-    SwWrongList* _SmartTagScan ( const OUString& aTextToScan, SwWrongList *pSmartTagList,
-                                 sal_Int32 nBegin,sal_Int32 nEnd,
-                                 sal_Int32 nInsertPos, sal_Int32 nActPos,
-                                 sal_Int32 &nChgStart, sal_Int32 &nChgEnd,
-                                 sal_Int32 &nInvStart, sal_Int32 &nInvEnd);
 
     virtual void DestroyImpl() SAL_OVERRIDE;
     virtual ~SwTextFrm();
@@ -442,21 +433,11 @@ public:
      */
     SwTwips GetFootnoteLine( const SwTextFootnote *pFootnote ) const;
 
-    /**
-     * Returns the left and the right margin document coordinates
-     * (taking the paragraph attributes into account)
-     */
-    inline SwTwips GetLeftMargin() const;
-    inline SwTwips GetRightMargin() const;
-
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = 0 ) SAL_OVERRIDE;
     virtual void CheckDirection( bool bVert ) SAL_OVERRIDE;
 
     /// Returns the sum of line height in pLine
     sal_uInt16 GetParHeight() const;
-
-    /// Returns the remaining height
-    inline SwTwips GetRstHeight() const;
 
     inline       SwTextFrm *GetFollow();
     inline const SwTextFrm *GetFollow() const;
@@ -490,7 +471,6 @@ public:
     static void     SetTextCache( SwCache *pNew ) { pTextCache = pNew; }
 
     static long GetMinPrtLine() { return nMinPrtLine; }
-    static void SetMinPrtLine( long nNew ) { nMinPrtLine = nNew; }
 
     inline sal_uInt16 GetCacheIdx() const { return nCacheIdx; }
     inline void   SetCacheIdx( const sal_uInt16 nNew ) { nCacheIdx = nNew; }
@@ -693,23 +673,6 @@ inline bool SwTextFrm::HasPara() const
     return nCacheIdx!=USHRT_MAX && _HasPara();
 }
 
-/// 9104: Frm().Height() - Prt().Height(), see widorp.cxx and 7455, 6114, 7908
-inline SwTwips SwTextFrm::GetRstHeight() const
-{
-    return !GetUpper() ? 0 : static_cast<const SwFrm*>(GetUpper())->Frm().Top()
-                           + static_cast<const SwFrm*>(GetUpper())->Prt().Top()
-                           + static_cast<const SwFrm*>(GetUpper())->Prt().Height()
-                           - Frm().Top() - (Frm().Height() - Prt().Height());
-}
-
-inline SwTwips SwTextFrm::GetLeftMargin() const
-{
-    return Frm().Left() + Prt().Left();
-}
-inline SwTwips SwTextFrm::GetRightMargin() const
-{
-    return Frm().Left() + Prt().Left() + Prt().Width();
-}
 inline SwTwips SwTextFrm::GrowTst( const SwTwips nGrow )
 {
     return Grow( nGrow, true );
@@ -749,13 +712,6 @@ inline SwTextFrm *SwTextFrm::GetFollow()
 inline const SwTextFrm *SwTextFrm::GetFrmAtPos( const SwPosition &rPos) const
 {
     return const_cast<SwTextFrm*>(this)->GetFrmAtPos( rPos );
-}
-
-inline void SwTextFrm::AdjustFollow( SwTextFormatter &rLine,
-    const sal_Int32 nOffset, const sal_Int32 nStrEnd, const sal_uInt8 nMode )
-{
-    if ( HasFollow() )
-        _AdjustFollow( rLine, nOffset, nStrEnd, nMode );
 }
 
 inline void SwTextFrm::SetOfst( const sal_Int32 nNewOfst )

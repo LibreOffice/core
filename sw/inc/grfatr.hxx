@@ -115,7 +115,6 @@ public:
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal,
                                             sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    void SetUnrotatedSize( const Size& rSz )        { aUnrotatedSize = rSz; }
     const Size& GetUnrotatedSize() const            { return aUnrotatedSize; }
 };
 
@@ -313,32 +312,6 @@ inline const SwTransparencyGrf &SwAttrSet::GetTransparencyGrf(bool bInP) const
     { return static_cast<const SwTransparencyGrf&>(Get( RES_GRFATR_TRANSPARENCY,bInP)); }
 inline const SwDrawModeGrf      &SwAttrSet::GetDrawModeGrf(bool bInP) const
     { return static_cast<const SwDrawModeGrf&>(Get( RES_GRFATR_DRAWMODE,bInP)); }
-
-// Implementation of graphics attributes methods of SwFormat
-inline const SwMirrorGrf &SwFormat::GetMirrorGrf(bool bInP) const
-    { return m_aSet.GetMirrorGrf(bInP); }
-inline const SwCropGrf   &SwFormat::GetCropGrf(bool bInP) const
-    { return m_aSet.GetCropGrf(bInP); }
-inline const SwRotationGrf &SwFormat::GetRotationGrf(bool bInP) const
-    { return m_aSet.GetRotationGrf(bInP); }
-inline const SwLuminanceGrf &SwFormat::GetLuminanceGrf(bool bInP) const
-    { return m_aSet.GetLuminanceGrf( bInP); }
-inline const SwContrastGrf &SwFormat::GetContrastGrf(bool bInP) const
-    { return m_aSet.GetContrastGrf( bInP); }
-inline const SwChannelRGrf &SwFormat::GetChannelRGrf(bool bInP) const
-    { return m_aSet.GetChannelRGrf( bInP); }
-inline const SwChannelGGrf &SwFormat::GetChannelGGrf(bool bInP) const
-    { return m_aSet.GetChannelGGrf( bInP); }
-inline const SwChannelBGrf &SwFormat::GetChannelBGrf(bool bInP) const
-    { return m_aSet.GetChannelBGrf( bInP); }
-inline const SwGammaGrf &SwFormat::GetGammaGrf(bool bInP) const
-    { return m_aSet.GetGammaGrf( bInP); }
-inline const SwInvertGrf &SwFormat::GetInvertGrf(bool bInP) const
-    { return m_aSet.GetInvertGrf( bInP); }
-inline const SwTransparencyGrf &SwFormat::GetTransparencyGrf(bool bInP) const
-    { return m_aSet.GetTransparencyGrf( bInP); }
-inline const SwDrawModeGrf &SwFormat::GetDrawModeGrf(bool bInP) const
-    { return m_aSet.GetDrawModeGrf(bInP); }
 
 #endif // INCLUDED_SW_INC_GRFATR_HXX
 

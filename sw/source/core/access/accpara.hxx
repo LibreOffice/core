@@ -197,9 +197,6 @@ protected:
         return *pPortionData;
     }
 
-    // determine if portion data is currently available
-    bool HasPortionData()   { return (pPortionData != NULL); }
-
     //helpers for word boundaries
 
     bool GetCharBoundary( com::sun::star::i18n::Boundary& rBound,

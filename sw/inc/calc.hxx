@@ -175,8 +175,6 @@ class SwCalc
     SwSbxValue  Term();
     SwSbxValue  Prim();
 
-    bool        ParseTime( sal_uInt16*, sal_uInt16*, sal_uInt16* );
-
     static OUString  GetColumnName( const OUString& rName );
     OUString  GetDBName( const OUString& rName );
 

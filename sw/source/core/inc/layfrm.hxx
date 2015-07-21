@@ -46,8 +46,6 @@ class SwLayoutFrm: public SwFrm
     friend SwFrm* SwClearDummies( SwFrm* pFrm );
 #endif
 
-    void CopySubtree( const SwLayoutFrm *pDest );
-
 protected:
 
     virtual void DestroyImpl() SAL_OVERRIDE;

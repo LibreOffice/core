@@ -239,36 +239,12 @@ inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(bool bInP)
 // Implementation of paragraph-attributes methods of SwFormat
 inline const SvxLineSpacingItem &SwFormat::GetLineSpacing(bool bInP) const
     {   return m_aSet.GetLineSpacing(bInP); }
-inline const SvxAdjustItem &SwFormat::GetAdjust(bool bInP) const
-    {   return m_aSet.GetAdjust(bInP); }
-inline const SvxFormatSplitItem &SwFormat::GetSplit(bool bInP) const
-    {   return m_aSet.GetSplit(bInP); }
-inline const SwRegisterItem &SwFormat::GetRegister(bool bInP) const
-    {   return m_aSet.GetRegister(bInP); }
-inline const SvxWidowsItem &SwFormat::GetWidows(bool bInP) const
-    {   return m_aSet.GetWidows(bInP); }
-inline const SvxOrphansItem &SwFormat::GetOrphans(bool bInP) const
-    {   return m_aSet.GetOrphans(bInP); }
 inline const SvxTabStopItem &SwFormat::GetTabStops(bool bInP) const
     {   return m_aSet.GetTabStops(bInP); }
-inline const SvxHyphenZoneItem &SwFormat::GetHyphenZone(bool bInP) const
-    {   return m_aSet.GetHyphenZone(bInP); }
 inline const SwFormatDrop &SwFormat::GetDrop(bool bInP) const
     {   return m_aSet.GetDrop(bInP); }
 inline const SwNumRuleItem &SwFormat::GetNumRule(bool bInP) const
     {   return m_aSet.GetNumRule(bInP); }
-inline const SvxScriptSpaceItem& SwFormat::GetScriptSpace(bool bInP) const
-    {   return m_aSet.GetScriptSpace(bInP) ; }
-inline const SvxHangingPunctuationItem &SwFormat::GetHangingPunctuation(bool bInP) const
-    {   return m_aSet.GetHangingPunctuation(bInP) ; }
-inline const SvxForbiddenRuleItem &SwFormat::GetForbiddenRule(bool bInP) const
-    {   return static_cast<const SvxForbiddenRuleItem&>(m_aSet.Get(RES_PARATR_FORBIDDEN_RULES, bInP)); }
-inline const SvxParaVertAlignItem &SwFormat::GetParaVertAlign(bool bInP) const
-    {   return static_cast<const SvxParaVertAlignItem&>(m_aSet.Get( RES_PARATR_VERTALIGN, bInP )); }
-inline const SvxParaGridItem &SwFormat::GetParaGrid(bool bInP) const
-    {   return static_cast<const SvxParaGridItem&>(m_aSet.Get( RES_PARATR_SNAPTOGRID, bInP )); }
-inline const SwParaConnectBorderItem &SwFormat::GetParaConnectBorder(bool bInP) const
-    {   return static_cast<const SwParaConnectBorderItem&>(m_aSet.Get( RES_PARATR_CONNECT_BORDER, bInP )); }
 
 #endif
 

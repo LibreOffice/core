@@ -88,7 +88,6 @@ public:
     void                Evaluate();
 
     /// Evaluation for header and footer.
-    void                ChangeExpansion( const SwFrm*, const SwTextField* );
     void                InitContent();
     void                InitContent(const OUString& rExpansion);
 
@@ -102,7 +101,6 @@ public:
     virtual OUString    GetPar1() const SAL_OVERRIDE;
 
     /// access to the command string
-    OUString            GetFieldCode() const { return sFieldCode;}
     void                SetFieldCode(const OUString& rStr) { sFieldCode = rStr; }
 
     /// DBName

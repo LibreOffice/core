@@ -306,38 +306,6 @@ bool DocumentDrawModelManager::IsVisibleLayerId( const SdrLayerID& _nLayerId ) c
     return bRetVal;
 }
 
-SdrLayerID DocumentDrawModelManager::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId )
-{
-    SdrLayerID nVisibleLayerId;
-
-    if ( _nInvisibleLayerId == GetInvisibleHeavenId() )
-    {
-        nVisibleLayerId = GetHeavenId();
-    }
-    else if ( _nInvisibleLayerId == GetInvisibleHellId() )
-    {
-        nVisibleLayerId = GetHellId();
-    }
-    else if ( _nInvisibleLayerId == GetInvisibleControlsId() )
-    {
-        nVisibleLayerId = GetControlsId();
-    }
-    else if ( _nInvisibleLayerId == GetHeavenId() ||
-              _nInvisibleLayerId == GetHellId() ||
-              _nInvisibleLayerId == GetControlsId() )
-    {
-        OSL_FAIL( "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID already an invisible one." );
-        nVisibleLayerId = _nInvisibleLayerId;
-    }
-    else
-    {
-        OSL_FAIL( "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID is unknown." );
-        nVisibleLayerId = _nInvisibleLayerId;
-    }
-
-    return nVisibleLayerId;
-}
-
 SdrLayerID DocumentDrawModelManager::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId )
 {
     SdrLayerID nInvisibleLayerId;

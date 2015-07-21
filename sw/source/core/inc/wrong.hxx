@@ -205,8 +205,6 @@ public:
     inline WrongListType GetWrongListType() const { return meType; }
     inline sal_Int32 GetBeginInv() const { return nBeginInvalid; }
     inline sal_Int32 GetEndInv() const { return nEndInvalid; }
-    inline bool InsideInvalid( sal_Int32 nChk ) const
-        { return nChk >= nBeginInvalid && nChk <= nEndInvalid; }
     void SetInvalid( sal_Int32 nBegin, sal_Int32 nEnd );
     inline void Validate(){ nBeginInvalid = nEndInvalid = COMPLETE_STRING; }
     void Invalidate( sal_Int32 nBegin, sal_Int32 nEnd );

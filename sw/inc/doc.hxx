@@ -593,13 +593,11 @@ public:
 
     //End of Interfaces
 
-    void setDocReadOnly( bool b) { mbReadOnly = b; }
     bool getDocReadOnly() const { return mbReadOnly; }
     void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
     const OUString getDocAccTitle() const { return msDocAccTitle; }
 
     // INextInterface here
-    DECL_LINK(BackgroundDone, SvxBrushItem *);
     DECL_LINK_TYPED(CalcFieldValueHdl, EditFieldInfo*, void);
 
     // OLE ???
@@ -609,12 +607,7 @@ public:
 
 #ifdef DBG_UTIL
     bool InXMLExport() const            { return mbXMLExport; }
-    void SetXMLExport( bool bFlag )     { mbXMLExport = bFlag; }
 #endif
-    void SetSelAll( bool bSel )
-    {
-        mbIsPrepareSelAll = bSel;
-    }
     bool IsPrepareSelAll() const { return mbIsPrepareSelAll; }
     void SetPrepareSelAll() { mbIsPrepareSelAll = true; }
 
@@ -708,7 +701,6 @@ public:
     static void CountWords( const SwPaM& rPaM, SwDocStat& rStat );
 
     // Glossary Document
-    void SetGlossDoc( bool bGlssDc = true ) { mbGlossDoc = bGlssDc; }
     bool IsInsOnlyTextGlossary() const      { return mbInsOnlyTextGlssry; }
 
     void Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress );
@@ -735,7 +727,6 @@ public:
     void ChgDBData( const SwDBData& rNewData );
     SwDBData GetDBData();
     const SwDBData& GetDBDesc();
-    const SwDBData& _GetDBDesc() const { return maDBData; }
 
     // Some helper functions
     OUString GetUniqueGrfName() const;
@@ -912,9 +903,6 @@ public:
     // @return name of document template. Can be 0!
     const OUString* GetDocPattern(size_t nPos) const;
 
-    // Query / connect current document with glossary document.
-    void SetGlossaryDoc( SwDoc* pDoc ) { mpGlossaryDoc = pDoc; }
-
     // travel over PaM Ring
     bool InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                         SwPaM& rPaM, SwCrsrShell* pShell = 0);
@@ -991,7 +979,6 @@ public:
                                    const OUString& sChkStr ) const;
 
     bool SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName);
-    void SetTOXBaseProtection(const SwTOXBase& rTOXBase, bool bProtect);
 
     // After reading file update all tables/indices
     void SetUpdateTOX( bool bFlag = true )     { mbUpdateTOX = bFlag; }
@@ -999,7 +986,6 @@ public:
 
     OUString        GetTOIAutoMarkURL() const {return msTOIAutoMarkURL;}
     void            SetTOIAutoMarkURL(const OUString& rSet) {msTOIAutoMarkURL = rSet;}
-    void            ApplyAutoMark();
 
     bool IsInReading() const                    { return mbInReading; }
     void SetInReading( bool bNew )              { mbInReading = bNew; }
@@ -1020,7 +1006,6 @@ public:
     // Manage types of tables/indices
     sal_uInt16 GetTOXTypeCount( TOXTypes eTyp ) const;
     const SwTOXType* GetTOXType( TOXTypes eTyp, sal_uInt16 nId ) const;
-    bool DeleteTOXType( TOXTypes eTyp, sal_uInt16 nId );
     const SwTOXType* InsertTOXType( const SwTOXType& rTyp );
     const SwTOXTypes& GetTOXTypes() const { return *mpTOXTypes; }
 
@@ -1388,9 +1373,6 @@ public:
     // Query / set flag indicating if document is loaded asynchronously at this moment.
     bool IsInLoadAsynchron() const             { return mbInLoadAsynchron; }
     void SetInLoadAsynchron( bool bFlag )       { mbInLoadAsynchron = bFlag; }
-
-    bool SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
-                            SwNodeRange*& rpRange ) const;
 
     // For Drag&Move: (e.g. allow "moving" of RefMarks)
     bool IsCopyIsMove() const              { return mbCopyIsMove; }

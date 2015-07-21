@@ -251,7 +251,6 @@ public:
     inline const SvxLanguageItem      &GetCTLLanguage( bool = true ) const;
     inline const SvxPostureItem       &GetCTLPosture( bool = true ) const;
     inline const SvxWeightItem        &GetCTLWeight( bool = true ) const;
-    inline const SfxBoolItem              &GetWritingDirection( bool = true ) const;
     inline const SvxEmphasisMarkItem  &GetEmphasisMark( bool = true ) const;
     inline const SvxTwoLinesItem      &Get2Lines( bool = true ) const;
     inline const SvxCharScaleWidthItem    &GetCharScaleW( bool = true ) const;
@@ -295,7 +294,6 @@ public:
     inline const SwFormatEndAtTextEnd     &GetEndAtTextEnd( bool = true ) const;
     inline const SwFormatNoBalancedColumns &GetBalancedColumns( bool = true ) const;
     inline const SvxFrameDirectionItem    &GetFrmDir( bool = true ) const;
-    inline const SwTextGridItem         &GetTextGrid( bool = true ) const;
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( bool = true ) const;
     inline const SwFormatFollowTextFlow    &GetFollowTextFlow(bool = true) const;
     inline const SwFormatWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(bool = true) const;

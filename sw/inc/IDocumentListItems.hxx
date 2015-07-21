@@ -38,10 +38,6 @@ public:
                                     const bool bWithNumber = true,
                                     const bool bWithSpacesForLevel = false ) const = 0;
 
-    /** get vector of all list items
-    */
-    virtual void getListItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const = 0;
-
     /** get vector of all list items, which are numbered
     */
     virtual void getNumItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const = 0;

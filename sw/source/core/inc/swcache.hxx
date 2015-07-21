@@ -103,7 +103,6 @@ public:
 
     bool Insert( SwCacheObj *pNew );
     void Delete( const void *pOwner );
-//  void Delete( const void *pOwner, const sal_uInt16 nIndex );
 
     void SetLRUOfst( const sal_uInt16 nOfst );  /// nOfst determines how many are not to be touched
     void ResetLRUOfst() { pFirst = pRealFirst; }
@@ -112,7 +111,6 @@ public:
     inline void DecreaseMax( const sal_uInt16 nSub );
     sal_uInt16 GetCurMax() const { return nCurMax; }
     inline SwCacheObj *First() { return pRealFirst; }
-    inline SwCacheObj *Last()  { return pLast; }
     static inline SwCacheObj *Next( SwCacheObj *pCacheObj);
     inline SwCacheObj* operator[](sal_uInt16 nIndex) { return m_aCacheObjects[nIndex]; }
     inline sal_uInt16 size() { return m_aCacheObjects.size(); }
@@ -154,7 +152,6 @@ class SwCacheObj
 
 protected:
     const void *pOwner;
-    inline void SetOwner( const void *pNew ) { pOwner = pNew; }
 
 public:
 
@@ -165,7 +162,6 @@ public:
     inline bool IsOwner( const void *pNew ) const;
 
     inline sal_uInt16 GetCachePos() const { return nCachePos; }
-    inline void Invalidate()          { pOwner = 0; }
 
     inline bool IsLocked() const { return 0 != nLock; }
 
@@ -176,10 +172,6 @@ public:
     inline void Lock() { ++nLock; }
     inline void Unlock() { --nLock; }
 #endif
-
-    SwCacheObj *Next() { return pNext; }
-    SwCacheObj *Prev() { return pPrev; }
-
 };
 
 /**

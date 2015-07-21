@@ -141,8 +141,6 @@ public:
     const SvxFrameDirectionItem& GetTextOrientation() const { return m_aTextOrientation; }
     const SwFormatVertOrient& GetVerticalAlignment() const { return m_aVerticalAlignment; }
     const SvxBoxItem        &GetBox() const         { return aBox; }
-    const SvxLineItem       &GetTLBR() const        { return aTLBR; }
-    const SvxLineItem       &GetBLTR() const        { return aBLTR; }
     const SvxBrushItem      &GetBackground() const  { return aBackground; }
     void GetValueFormat( OUString& rFormat, LanguageType& rLng, LanguageType& rSys ) const
         { rFormat = sNumFormatString; rLng = eNumFormatLanguage; rSys = eSysLanguage; }

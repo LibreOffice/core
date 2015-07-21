@@ -196,9 +196,6 @@ public:
 
     inline void ChkMagic( SwViewShell *pSh, sal_uInt8 nWhich )
         { if( !aSub[ nWhich ].pMagic ) GoMagic( pSh, nWhich ); }
-    // assumes the MagicNumber of a (hopefully not identical) colleague
-    inline void CopyMagic( const SwFont* pFnt, sal_uInt8 nWhich )
-        { aSub[nWhich].CopyMagic( pFnt->aSub[nWhich] ); }
     inline void GetMagic( const void* &rMagic, sal_uInt16 &rIdx, sal_uInt8 nWhich )
         { rMagic = aSub[nWhich].pMagic; rIdx = aSub[nWhich].nFntIndex; }
     inline void SetMagic( const void* pNew, const sal_uInt16 nIdx, sal_uInt8 nWhich )
@@ -250,32 +247,21 @@ public:
 
     // Get/Set-methods for the current setting
     inline void SetNoHyph( const bool bNew );
-    inline bool IsNoHyph() const { return bNoHyph; }
     inline void SetBlink( const bool bBlink );
     inline bool IsBlink() const { return bBlink; }
     inline sal_uInt8 &GetTox() { return nToxCnt; }
-    inline sal_uInt8 GetTox() const { return nToxCnt; }
     inline bool IsTox() const { return ( 0 != nToxCnt ); }
     inline sal_uInt8 &GetRef() { return nRefCnt; }
-    inline sal_uInt8 GetRef() const { return nRefCnt; }
     inline bool IsRef() const { return ( 0 != nRefCnt ); }
     inline sal_uInt8 &GetMeta() { return m_nMetaCount; }
-    inline sal_uInt8 GetMeta() const { return m_nMetaCount; }
     inline bool IsMeta() const { return (0 != m_nMetaCount); }
     inline sal_uInt8 &GetInputField() { return m_nInputFieldCount; }
-    inline sal_uInt8 GetInputField() const { return m_nInputFieldCount; }
     inline bool IsInputField() const { return (0 != m_nInputFieldCount); }
-    inline void SetURL( const bool bURL );
     inline bool IsURL() const { return bURL; }
     inline void SetGreyWave( const bool bNew );
     inline bool IsGreyWave() const { return bGreyWave; }
     inline void SetNoCol( const bool bNew );
-    inline bool IsNoCol() const { return bNoColReplace; }
-
-    inline void SetPaintBlank( const bool bNew );
     inline bool IsPaintBlank() const { return bPaintBlank; }
-    inline void SetPaintWrong( const bool bNew );
-    inline bool IsPaintWrong() const { return bPaintWrong; }
 
     // setting of the base class font for SwTextCharFormat
     void SetDiffFnt( const SfxItemSet* pSet,
@@ -290,71 +276,36 @@ public:
     const Color& GetUnderColor() const { return aUnderColor; }
     FontUnderline GetOverline() const { return aSub[nActual].GetOverline(); }
     const Color& GetOverColor() const { return aOverColor; }
-    short GetFixKerning() const { return aSub[nActual].GetFixKerning(); }
     FontStrikeout GetStrikeout() const { return aSub[nActual].GetStrikeout(); }
     const Color& GetColor() const { return aSub[nActual].GetColor(); }
-    bool IsShadow() const { return aSub[nActual].IsShadow(); }
     bool IsWordLineMode() const { return aSub[nActual].IsWordLineMode(); }
-    bool IsOutline() const { return aSub[nActual].IsOutline(); }
-    bool IsKerning() const { return aSub[nActual].IsKerning(); }
     short GetEscapement() const { return aSub[nActual].GetEscapement(); }
     SvxCaseMap GetCaseMap() const { return aSub[nActual].GetCaseMap(); }
     sal_uInt8 GetPropr() const { return aSub[nActual].GetPropr(); }
     FontItalic GetItalic() const { return aSub[nActual].GetItalic(); }
     LanguageType GetLanguage() const { return aSub[nActual].GetLanguage(); }
-    FontAlign GetAlign() const { return aSub[nActual].GetAlign(); }
-    const OUString& GetName() const { return aSub[nActual].GetName(); }
-    const OUString& GetStyleName() const {return aSub[nActual].GetStyleName();}
-    FontFamily GetFamily() const { return aSub[nActual].GetFamily(); }
-    FontPitch GetPitch() const { return aSub[nActual].GetPitch(); }
-    rtl_TextEncoding GetCharSet() const { return aSub[nActual].GetCharSet(); }
     long GetHeight() const { return aSub[nActual].GetSize().Height(); }
     FontWeight GetWeight() const { return aSub[nActual].GetWeight(); }
     FontEmphasisMark GetEmphasisMark() const
         { return aSub[nActual].GetEmphasisMark(); }
-    sal_uInt16 GetPropWidth() const { return aSub[nActual].GetPropWidth(); }
     sal_uInt16 GetOrientation( const bool nVertLayout = false ) const;
 
     inline const OUString& GetName( const sal_uInt8 nWhich ) const
         { return aSub[nWhich].GetName(); }
     inline LanguageType GetLanguage( const sal_uInt8 nWhich ) const
         { return aSub[nWhich].GetLanguage(); }
-    inline const OUString& GetStyleName( const sal_uInt8 nWhich ) const
-        { return aSub[nWhich].GetStyleName(); }
-    inline FontFamily GetFamily( const sal_uInt8 nWhich ) const
-        { return aSub[nWhich].GetFamily(); }
-    inline FontItalic GetItalic( const sal_uInt8 nWhich ) const
-        { return aSub[nWhich].GetItalic(); }
-    inline FontPitch GetPitch( const sal_uInt8 nWhich ) const
-        { return aSub[nWhich].GetPitch(); }
     inline rtl_TextEncoding GetCharSet( const sal_uInt8 nWhich ) const
         { return aSub[nWhich].GetCharSet(); }
     inline long GetHeight( const sal_uInt8 nWhich ) const
         { return aSub[nWhich].GetSize().Height(); }
-    inline FontWeight GetWeight( const sal_uInt8 nWhich ) const
-        { return aSub[nWhich].GetWeight(); }
-    inline FontEmphasisMark GetEmphasisMark( const sal_uInt8 nWhich ) const
-        { return aSub[nWhich].GetEmphasisMark(); }
 
     // makes the logical font be effective in the OutputDevice
     void ChgPhysFnt( SwViewShell *pSh, OutputDevice& rOut );
-
-    Size GetCapitalSize( SwDrawTextInfo& rInf )
-        { return aSub[nActual].GetCapitalSize( rInf ); }
 
     sal_Int32 GetCapitalBreak( SwViewShell const* pSh,  const OutputDevice* pOut,
         const SwScriptInfo* pScript, const OUString& rText,
         long nTextWidth, const sal_Int32 nIdx,
         const sal_Int32 nLen );
-
-    sal_Int32 GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
-        { return aSub[nActual].GetCapitalCrsrOfst( rInf ); }
-
-    void DrawCapital( SwDrawTextInfo &rInf )
-        { aSub[nActual].DrawCapital( rInf ); }
-
-    void DrawStretchCapital( SwDrawTextInfo &rInf )
-        { aSub[nActual].DrawStretchCapital( rInf ); }
 
     void DoOnCapitals( SwDoCapitals &rDo )
         { aSub[nActual].DoOnCapitals( rDo ); }
@@ -859,16 +810,6 @@ inline void SwFont::SetLanguage( const LanguageType eNewLang, const sal_uInt8 nW
     }
 }
 
-inline void SwFont::SetPaintBlank( const bool bNew )
-{
-    bPaintBlank = bNew;
-}
-
-inline void SwFont::SetPaintWrong( const bool bNew )
-{
-    bPaintWrong = bNew;
-}
-
 inline void SwFont::SetNoHyph( const bool bNew )
 {
     bNoHyph = bNew;
@@ -877,11 +818,6 @@ inline void SwFont::SetNoHyph( const bool bNew )
 inline void SwFont::SetBlink( const bool bNew )
 {
     bBlink = bNew;
-}
-
-inline void SwFont::SetURL( const bool bNew )
-{
-    bURL = bNew;
 }
 
 inline void SwFont::SetGreyWave( const bool bNew )
@@ -1064,7 +1000,6 @@ public:
 
     inline SvStatistics() { Reset(); }
 
-    inline void PrintOn( SvStream &rOS ) const; //$ ostream
     inline bool IsEmpty() const
     {
         return !( nGetTextSize || nDrawText ||
@@ -1077,26 +1012,7 @@ extern SvStatistics g_SvStat;
 
 #define SV_STAT(nWhich) ++(g_SvStat.nWhich);
 
-inline void SvStatistics::PrintOn( SvStream &rOS ) const //$ ostream
-{
-    if( IsEmpty() )
-        return;
 
-    rOS.WriteCharPtr( "{   SV called:\n" );
-    if( nGetTextSize )
-        rOS.WriteCharPtr( "\tnGetTextSize: " ).WriteUInt16( nGetTextSize ).WriteChar( '\n' );
-    if( nDrawText )
-        rOS.WriteCharPtr( "\tnDrawText: " ).WriteUInt16( nDrawText ).WriteChar( '\n' );
-    if( nGetStretchTextSize )
-        rOS.WriteCharPtr( "\tnGetStretchTextSize: " ).WriteUInt16( nGetStretchTextSize ).WriteChar( '\n' );
-    if( nDrawStretchText )
-        rOS.WriteCharPtr( "\tnDrawStretchText: " ).WriteUInt16( nDrawStretchText ).WriteChar( '\n' );
-    if( nChangeFont )
-        rOS.WriteCharPtr( "\tnChangeFont: " ).WriteUInt16( nChangeFont ).WriteChar( '\n' );
-    if( nGetFontMetric )
-        rOS.WriteCharPtr( "\tnGetFontMetric: " ).WriteUInt16( nGetFontMetric ).WriteChar( '\n' );
-     rOS.WriteCharPtr( "}\n" );
-}
 #else
 #define SV_STAT(nWhich)
 #endif  /* DBG_UTIL */

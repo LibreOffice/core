@@ -529,8 +529,6 @@ class SwExtUserFieldType : public SwFieldType
 public:
     SwExtUserFieldType();
 
-    inline void             SetData(const OUString& rStr)     { aData = rStr; }
-
     static OUString         Expand(sal_uInt16 nSubType, sal_uInt32 nFormat);
     virtual SwFieldType*    Copy() const SAL_OVERRIDE;
 };

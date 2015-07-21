@@ -92,22 +92,6 @@ OUString SwFEShell::GetUniqueFrameName() const
     return GetDoc()->GetUniqueFrameName();
 }
 
-void SwFEShell::MakeObjVisible( const uno::Reference < embed::XEmbeddedObject >& xObj ) const
-{
-    SwFlyFrm *pFly = FindFlyFrm( xObj );
-    if ( pFly )
-    {
-        SwRect aTmp( pFly->Prt() );
-        aTmp += pFly->Frm().Pos();
-        if ( !aTmp.IsOver( VisArea() ) )
-        {
-            const_cast<SwFEShell*>(this)->StartAction();
-            const_cast<SwFEShell*>(this)->MakeVisible( aTmp );
-            const_cast<SwFEShell*>(this)->EndAction();
-        }
-    }
-}
-
 bool SwFEShell::FinishOLEObj()                      // Server is terminated
 {
     SfxInPlaceClient* pIPClient = GetSfxViewShell()->GetIPClient();

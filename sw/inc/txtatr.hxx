@@ -85,7 +85,6 @@ public:
     SAL_DLLPRIVATE void InitRuby(SwTextNode & rNode);
 
     /// Get and set TextNode pointer.
-           const SwTextNode* GetpTextNode() const { return m_pTextNode; }
     inline const SwTextNode& GetTextNode() const;
     void ChgTextNode( SwTextNode* pNew ) { m_pTextNode = pNew; }
 

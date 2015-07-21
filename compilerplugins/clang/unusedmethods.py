@@ -54,6 +54,8 @@ exclusionSet = set([
     "_Bool connectivity::OColumn::isDefinitelyWritable() const",
     "_Bool connectivity::OColumn::isReadOnly() const",
     "_Bool connectivity::OColumn::isWritable() const",
+    "_Bool IDocumentLinksAdministration::GetData(const class rtl::OUString &,const class rtl::OUString &,class com::sun::star::uno::Any &) const",
+    "_Bool IDocumentLinksAdministration::SetData(const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Any &)",
     # instantiated from templates, not sure why it is not being picked up
     "class basegfx::B2DPolygon OutputDevice::PixelToLogic(const class basegfx::B2DPolygon &,const class MapMode &) const",
     "type-parameter-0-0 * detail::cloner::clone(type-parameter-0-0 *const)",
@@ -93,6 +95,14 @@ exclusionSet = set([
     "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handlePicture()",
     "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleHdrFtr()",
     "void writerfilter::ooxml::OOXMLFastContextHandlerProperties::handleBreak()",
+    # deep template magic in SW
+    "Ring<value_type> * sw::Ring::Ring_node_traits::get_next(const Ring<value_type> *)",
+    "Ring<value_type> * sw::Ring::Ring_node_traits::get_previous(const Ring<value_type> *)",
+    "void sw::Ring::Ring_node_traits::set_next(Ring<value_type> *,Ring<value_type> *)",
+    "void sw::Ring::Ring_node_traits::set_previous(Ring<value_type> *,Ring<value_type> *)",
+    # I need to teach the plugin that for loops with range expressions call begin() and end()
+    "class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwAnchoredObject *const *, class std::__cxx1998::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > >, class std::__debug::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > > SwSortedObjs::begin() const",
+    "class __gnu_debug::_Safe_iterator<class __gnu_cxx::__normal_iterator<class SwAnchoredObject *const *, class std::__cxx1998::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > >, class std::__debug::vector<class SwAnchoredObject *, class std::allocator<class SwAnchoredObject *> > > SwSortedObjs::end() const",
     ])
 
 

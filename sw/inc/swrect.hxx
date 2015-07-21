@@ -77,7 +77,6 @@ public:
 
    // Same as Intersection, only assume that Rects are overlapping!
            SwRect &_Intersection( const SwRect &rRect );
-    inline SwRect  GetIntersection( const SwRect& rRect ) const;
 
            bool IsInside( const Point& rPOINT ) const;
            bool IsNear(const Point& rPoint, long nTolerance ) const;
@@ -297,11 +296,6 @@ inline Rectangle SwRect::SVRect() const
     return Rectangle( m_Point.getX(), m_Point.getY(),
         m_Point.getX() + m_Size.getWidth() - 1,         //Right()
         m_Point.getY() + m_Size.getHeight() - 1 );      //Bottom()
-}
-
-inline SwRect SwRect::GetIntersection( const SwRect& rRect ) const
-{
-    return SwRect( *this ).Intersection( rRect );
 }
 
 inline bool SwRect::HasArea() const

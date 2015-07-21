@@ -128,9 +128,6 @@ protected:
     void Lock()         { bLocked = true; }
     void Unlock()       { bLocked = false; }
 
-    void SetMinHeight()  { bMinHeight = true; }
-    void ResetMinHeight(){ bMinHeight = false; }
-
     Size CalcRel( const SwFormatFrmSize &rSz ) const;
     SwTwips CalcAutoWidth() const;
 
@@ -141,8 +138,6 @@ protected:
 
     /** method to assure that anchored object is registered at the correct
         page frame
-
-        #i28701#
     */
     virtual void RegisterAtCorrectPage() SAL_OVERRIDE;
 
@@ -210,13 +205,10 @@ public:
     void SetNotifyBack()      { bNotifyBack = true; }
     void ResetNotifyBack()    { bNotifyBack = false; }
     bool IsNoShrink()   const { return bNoShrink; }
-    void SetNoShrink( bool bNew ) { bNoShrink = bNew; }
     bool IsLockDeleteContent()  const { return bLockDeleteContent; }
-    void SetLockDeleteContent( bool bNew ) { bLockDeleteContent = bNew; }
 
     bool IsClipped()        const   { return bHeightClipped || bWidthClipped; }
     bool IsHeightClipped()  const   { return bHeightClipped; }
-    bool IsWidthClipped()   const   { return bWidthClipped;  }
 
     bool IsLowerOf( const SwLayoutFrm* pUpper ) const;
     inline bool IsUpperOf( const SwFlyFrm& _rLower ) const
