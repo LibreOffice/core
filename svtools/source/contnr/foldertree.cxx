@@ -36,8 +36,9 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
     {
         ::std::vector< SortingData_Impl* > aContent;
 
-        FileViewContentEnumerator* pContentEnumerator = new FileViewContentEnumerator(
-            m_xEnv, aContent, m_aMutex, NULL );
+        ::rtl::Reference< ::svt::FileViewContentEnumerator >
+            xContentEnumerator(new FileViewContentEnumerator(
+            m_xEnv, aContent, m_aMutex, NULL));
 
         OUString* pURL = static_cast< OUString* >( pEntry->GetUserData() );
 
@@ -46,7 +47,7 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
             FolderDescriptor aFolder( *pURL );
 
             EnumerationResult eResult =
-                pContentEnumerator->enumerateFolderContentSync( aFolder, m_aBlackList );
+                xContentEnumerator->enumerateFolderContentSync( aFolder, m_aBlackList );
 
             if ( SUCCESS == eResult )
             {
