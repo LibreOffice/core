@@ -539,7 +539,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException, st
 
     // we know that we append new rows at the end
     // so we have to know where the end is
-    m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,false);
+    (void)m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,false);
     m_bRowInserted = m_pTable->InsertRow(*m_aInsertRow, true, m_xColsIdx);
     if(m_bRowInserted && m_pFileSet.is())
     {
