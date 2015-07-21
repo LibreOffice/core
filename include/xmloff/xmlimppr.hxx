@@ -24,6 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
@@ -90,6 +91,12 @@ public:
             const SvXMLNamespaceMap& rNamespaceMap,
             sal_uInt32 nPropType,
             sal_Int32 nStartIdx, sal_Int32 nEndIdx ) const;
+    void importXML(
+            std::vector< XMLPropertyState >& rProperties,
+            css::uno::Reference< css::xml::sax::XFastAttributeList > xAttrList,
+            const SvXMLUnitConverter& rUnitConverter,
+            sal_uInt32 nPropType,
+            sal_Int32 nStartIdx, sal_Int32 nEndIdx ) const;
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
     virtual bool handleSpecialItem(
@@ -98,6 +105,11 @@ public:
             const OUString& rValue,
             const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap ) const;
+    virtual bool handleSpecialItem(
+            XMLPropertyState& rProperty,
+            std::vector< XMLPropertyState >& rProperties,
+            const OUString& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const;
 
     /** This method is called when all attributes have benn processed. It may be used to remove items that are incomplete */
     virtual void finished(

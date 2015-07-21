@@ -680,6 +680,145 @@ bool XMLChartImportPropertyMapper::handleSpecialItem(
     return bRet;
 }
 
+bool XMLChartImportPropertyMapper::handleSpecialItem(
+    XMLPropertyState& rProperty,
+    ::std::vector< XMLPropertyState >& rProperties,
+    const OUString& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Int32 nContextId = maPropMapper->GetEntryContextId( rProperty.mnIndex );
+    bool bRet = (nContextId != 0);
+
+    if( nContextId )
+    {
+        sal_Int32 nValue = 0;
+        bool bValue = false;
+
+        switch( nContextId )
+        {
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER:
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_INNER:
+                ::sax::Converter::convertBool( bValue, rValue );
+                // modify old value
+                rProperty.maValue >>= nValue;
+                if( bValue )
+                    SCH_XML_SETFLAG( nValue, chart::ChartAxisMarks::INNER );
+                else
+                    SCH_XML_UNSETFLAG( nValue, chart::ChartAxisMarks::INNER );
+                rProperty.maValue <<= nValue;
+                break;
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER:
+            case XML_SCH_CONTEXT_SPECIAL_TICKS_MIN_OUTER:
+                ::sax::Converter::convertBool( bValue, rValue );
+                // modify old value
+                rProperty.maValue >>= nValue;
+                if( bValue )
+                    SCH_XML_SETFLAG( nValue, chart::ChartAxisMarks::OUTER );
+                else
+                    SCH_XML_UNSETFLAG( nValue, chart::ChartAxisMarks::OUTER );
+                rProperty.maValue <<= nValue;
+                break;
+            case XML_SCH_CONTEXT_SPECIAL_TEXT_ROTATION:
+                {
+                    // convert from degrees (double) to 100th degrees (integer)
+                    double fVal;
+                    ::sax::Converter::convertDouble( fVal, rValue );
+                    nValue = (sal_Int32)( fVal * 100.0 );
+                    rProperty.maValue <<= nValue;
+                }
+                break;
+            case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_NUMBER:
+                {
+                    // modify old value
+                    rProperty.maValue >>= nValue;
+                    if( IsXMLToken( rValue, XML_NONE ))
+                        SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::VALUE | chart::ChartDataCaption::PERCENT );
+                    else if( IsXMLToken( rValue, XML_VALUE_AND_PERCENTAGE ) )
+                        SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::VALUE | chart::ChartDataCaption::PERCENT );
+                    else if( IsXMLToken( rValue, XML_VALUE ) )
+                        SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::VALUE );
+                    else // must be XML_PERCENTAGE
+                        SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::PERCENT );
+                    rProperty.maValue <<= nValue;
+                }
+                break;
+            case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_TEXT:
+                rProperty.maValue >>= nValue;
+                ::sax::Converter::convertBool( bValue, rValue );
+                if( bValue )
+                    SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::TEXT );
+                else
+                    SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::TEXT );
+                rProperty.maValue <<= nValue;
+                break;
+            case XML_SCH_CONTEXT_SPECIAL_DATA_LABEL_SYMBOL:
+                rProperty.maValue >>= nValue;
+                ::sax::Converter::convertBool( bValue, rValue );
+                if( bValue )
+                    SCH_XML_SETFLAG( nValue, chart::ChartDataCaption::SYMBOL );
+                else
+                    SCH_XML_UNSETFLAG( nValue, chart::ChartDataCaption::SYMBOL );
+                rProperty.maValue <<= nValue;
+                break;
+            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH:
+            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_HEIGHT:
+                {
+                    awt::Size aSize;
+                    rProperty.maValue >>= aSize;
+                    rUnitConverter.convertMeasureToCore(
+                        (nContextId == XML_SCH_CONTEXT_SPECIAL_SYMBOL_WIDTH)
+                                                   ? aSize.Width
+                                                   : aSize.Height,
+                                                   rValue );
+                    rProperty.maValue <<= aSize;
+                }
+                break;
+
+            case XML_SCH_CONTEXT_SPECIAL_ERRORBAR_RANGE:
+                {
+                    rProperty.maValue <<= rValue;
+                }
+                break;
+
+            // deprecated from 6.0 beta on
+            case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
+                rProperty.maValue <<= mrImport.ResolveGraphicObjectURL( rValue, false );
+                break;
+
+            case XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE:
+            {
+                if      (IsXMLToken( rValue, XML_LINEAR ))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.LinearRegressionCurve");
+                else if (IsXMLToken( rValue, XML_LOGARITHMIC))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.LogarithmicRegressionCurve");
+                else if (IsXMLToken( rValue, XML_EXPONENTIAL))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.ExponentialRegressionCurve");
+                else if (IsXMLToken( rValue, XML_POWER))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.PotentialRegressionCurve");
+                else if (IsXMLToken( rValue, XML_POLYNOMIAL))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.PolynomialRegressionCurve");
+                else if (IsXMLToken( rValue, XML_MOVING_AVERAGE))
+                    rProperty.maValue <<= OUString("com.sun.star.chart2.MovingAverageRegressionCurve");
+            }
+            break;
+
+            default:
+                bRet = false;
+                break;
+        }
+    }
+
+    // if we didn't handle it, the parent should
+    if( !bRet )
+    {
+        // call parent
+        bRet = SvXMLImportPropertyMapper::handleSpecialItem(
+                rProperty, rProperties, rValue, rUnitConverter );
+    }
+
+    return bRet;
+}
+
 void XMLChartImportPropertyMapper::finished( ::std::vector< XMLPropertyState >& /*rProperties*/, sal_Int32 /*nStartIndex*/, sal_Int32 /*nEndIndex*/ ) const
 {
 }

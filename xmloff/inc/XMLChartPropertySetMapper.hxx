@@ -103,6 +103,11 @@ public:
         const OUString& rValue,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const SAL_OVERRIDE;
+    virtual bool handleSpecialItem(
+        XMLPropertyState& rProperty,
+        std::vector< XMLPropertyState >& rProperties,
+        const OUString& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const SAL_OVERRIDE;
 
     virtual void finished(
         ::std::vector< XMLPropertyState >& rProperties,

@@ -87,6 +87,11 @@ public:
     sal_Int32 GetEntryIndex(
         sal_uInt16 nNamespace, const OUString& rStrName, sal_uInt32 nPropType,
         sal_Int32 nStartAt = -1 ) const;
+    /** Returns the index of an entry with the given token
+        If there is no matching entry the method reutnrs -1 */
+    sal_Int32 GetEntryIndex(
+        sal_Int32 token, sal_uInt32 nPropType,
+        sal_Int32 nStartAt = -1 ) const;
 
     /** Retrieves a PropertyHandler for that property which placed at nIndex in the XMLPropertyMapEntry-array */
     const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nIndex ) const;

@@ -130,6 +130,95 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
     return bRet;
 }
 
+bool XMLTextImportPropertyMapper::handleSpecialItem(
+            XMLPropertyState& rProperty,
+            ::std::vector< XMLPropertyState >& rProperties,
+            const OUString& rValue,
+            const SvXMLUnitConverter& rUnitConverter ) const
+{
+    bool bRet = false;
+    sal_Int32 nIndex = rProperty.mnIndex;
+    switch( getPropertySetMapper()->GetEntryContextId( nIndex  ) )
+    {
+    case CTF_FONTNAME:
+    case CTF_FONTNAME_CJK:
+    case CTF_FONTNAME_CTL:
+        if( GetImport().GetFontDecls() != NULL )
+        {
+            assert((
+                ( CTF_FONTFAMILYNAME ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+1) &&
+                  CTF_FONTSTYLENAME ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+2) &&
+                  CTF_FONTFAMILY ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+3) &&
+                  CTF_FONTPITCH ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+4) &&
+                  CTF_FONTCHARSET ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+5) ) ||
+                ( CTF_FONTFAMILYNAME_CJK ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+1) &&
+                  CTF_FONTSTYLENAME_CJK ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+2) &&
+                  CTF_FONTFAMILY_CJK ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+3) &&
+                  CTF_FONTPITCH_CJK ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+4) &&
+                  CTF_FONTCHARSET_CJK ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+5) ) ||
+                ( CTF_FONTFAMILYNAME_CTL ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+1) &&
+                  CTF_FONTSTYLENAME_CTL ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+2) &&
+                  CTF_FONTFAMILY_CTL ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+3) &&
+                  CTF_FONTPITCH_CTL ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+4) &&
+                  CTF_FONTCHARSET_CTL ==
+                    getPropertySetMapper()->GetEntryContextId(nIndex+5) )
+              ) && "illegal property map" );
+
+            GetImport().GetFontDecls()->FillProperties(
+                            rValue, rProperties,
+                            rProperty.mnIndex+1, rProperty.mnIndex+2,
+                            rProperty.mnIndex+3, rProperty.mnIndex+4,
+                            rProperty.mnIndex+5 );
+            bRet = false; // the property hasn't been filled
+        }
+        break;
+
+    // If we want to do StarMath/StarSymbol font conversion, then we'll
+    // want these special items to be treated just like regular ones...
+    // For the Writer, we'll catch and convert them in _FillPropertySet;
+    // the other apps probably don't care. For the other apps, we just
+    // imitate the default non-special-item mechanism.
+    case CTF_FONTFAMILYNAME:
+    case CTF_FONTFAMILYNAME_CJK:
+    case CTF_FONTFAMILYNAME_CTL:
+        bRet = getPropertySetMapper()->importXML( rValue, rProperty,
+                                                  rUnitConverter );
+        break;
+
+    case CTF_TEXT_DISPLAY:
+        bRet = getPropertySetMapper()->importXML( rValue, rProperty,
+                                                  rUnitConverter );
+        if( SvXMLImport::OOo_2x == GetImport().getGeneratorVersion() )
+        {
+            bool bHidden = false;
+            rProperty.maValue >>= bHidden;
+            bHidden = !bHidden;
+            rProperty.maValue <<= bHidden;
+        }
+    break;
+    default:
+        bRet = SvXMLImportPropertyMapper::handleSpecialItem( rProperty,
+                    rProperties, rValue, rUnitConverter );
+        break;
+    }
+
+    return bRet;
+}
+
 XMLTextImportPropertyMapper::XMLTextImportPropertyMapper(
             const rtl::Reference< XMLPropertySetMapper >& rMapper,
             SvXMLImport& rImp ) :

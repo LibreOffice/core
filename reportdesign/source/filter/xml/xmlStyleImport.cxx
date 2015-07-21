@@ -66,6 +66,15 @@ public:
         // nothing to do here
         return true;
     }
+    virtual bool handleSpecialItem(
+            XMLPropertyState& /*rProperty*/,
+            std::vector< XMLPropertyState >& /*rProperties*/,
+            const OUString& /*rValue*/,
+            const SvXMLUnitConverter& /*rUnitConverter*/ ) const SAL_OVERRIDE
+    {
+        // nothing to do here
+        return true;
+    }
 };
 
 TYPEINIT1( OControlStyleContext, XMLPropStyleContext );

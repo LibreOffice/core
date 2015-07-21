@@ -81,6 +81,36 @@ bool PageMasterImportPropertyMapper::handleSpecialItem(
     return bRet;
 }
 
+bool PageMasterImportPropertyMapper::handleSpecialItem(
+        XMLPropertyState& rProperty,
+        std::vector< XMLPropertyState >& rProperties,
+        const OUString& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    bool bRet = false;
+    sal_Int16 nContextID =
+            getPropertySetMapper()->GetEntryContextId(rProperty.mnIndex);
+
+    if( CTF_PM_REGISTER_STYLE==nContextID )
+    {
+        OUString sDisplayName( rImport.GetStyleDisplayName(
+                    XML_STYLE_FAMILY_TEXT_PARAGRAPH, rValue ) );
+        Reference < XNameContainer > xParaStyles =
+            rImport.GetTextImport()->GetParaStyles();
+        if( xParaStyles.is() && xParaStyles->hasByName( sDisplayName ) )
+        {
+            rProperty.maValue <<= sDisplayName;
+            bRet = true;
+        }
+    }
+    else
+    {
+        bRet = SvXMLImportPropertyMapper::handleSpecialItem(
+                rProperty, rProperties, rValue, rUnitConverter );
+    }
+
+    return bRet;
+}
 
 void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >& rProperties, sal_Int32 nStartIndex, sal_Int32 nEndIndex ) const
 {

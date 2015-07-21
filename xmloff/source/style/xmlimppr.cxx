@@ -320,6 +320,219 @@ void SvXMLImportPropertyMapper::importXML(
     finished( rProperties, nStartIdx, nEndIdx );
 }
 
+/** fills the given itemset with the attributes in the given list */
+void SvXMLImportPropertyMapper::importXML(
+        vector< XMLPropertyState >& rProperties,
+        Reference< XFastAttributeList > xAttrList,
+        const SvXMLUnitConverter& rUnitConverter,
+        sal_uInt32 nPropType,
+        sal_Int32 nStartIdx,
+        sal_Int32 nEndIdx ) const
+{
+    Reference< XNameContainer > xAttrContainer;
+
+    if( -1 == nStartIdx )
+        nStartIdx = 0;
+    if( -1 == nEndIdx )
+        nEndIdx = maPropMapper->GetEntryCount();
+
+    Sequence< FastAttribute > attributesSeq = xAttrList->getFastAttributes();
+    sal_Int16 nAttr = attributesSeq.getLength();
+    FastAttribute* attributes = attributesSeq.getArray();
+    for( sal_Int16 i=0; i < nAttr; i++ )
+    {
+        FastAttribute attr = attributes[i];
+
+        if( (attr.Token & XML_NAMESPACE_XMLNS) == XML_NAMESPACE_XMLNS )
+            continue;
+
+        // index of actual property map entry
+        // This looks very strange, but it works well:
+        // If the start index is 0, the new value will become -1 and
+        // GetEntryIndex will start searching with position 0.
+        // Otherwise GetEntryIndex will start with the next position specified.
+        sal_Int32 nIndex = nStartIdx - 1;
+        sal_uInt32 nFlags = 0;  // flags of actual property map entry
+        bool bFound = false;
+
+        // for better error reporting: this should be set true if no
+        // warning is nedded
+        bool bNoWarning = false;
+        bool bAlienImport = false;
+
+        do
+        {
+            // find an entry for this attribute
+            nIndex = maPropMapper->GetEntryIndex( attr.Token, nPropType, nIndex );
+
+            if( nIndex > -1 && nIndex < nEndIdx )
+            {
+                // create a XMLPropertyState with an empty value
+
+                nFlags = maPropMapper->GetEntryFlags( nIndex );
+                if( (( nFlags & MID_FLAG_NO_PROPERTY ) == MID_FLAG_NO_PROPERTY) &&
+                    (maPropMapper->GetEntryContextId( nIndex ) == CTF_ALIEN_ATTRIBUTE_IMPORT) )
+                {
+                    bAlienImport = true;
+                    nIndex = -1;
+                }
+                else
+                {
+                    if( (nFlags & MID_FLAG_ELEMENT_ITEM_IMPORT) == 0 )
+                    {
+                        XMLPropertyState aNewProperty( nIndex );
+                        sal_Int32 nReference = -1;
+
+                        // if this is a multi attribute check if another attribute already set
+                        // this any. If so use this as a initial value
+                        if( (nFlags & MID_FLAG_MERGE_PROPERTY) != 0 )
+                        {
+                            const OUString aAPIName( maPropMapper->GetEntryAPIName( nIndex ) );
+                            const sal_Int32 nSize = rProperties.size();
+                            for( nReference = 0; nReference < nSize; nReference++ )
+                            {
+                                sal_Int32 nRefIdx = rProperties[nReference].mnIndex;
+                                if( (nRefIdx != -1) && (nIndex != nRefIdx) &&
+                                    (maPropMapper->GetEntryAPIName( nRefIdx ) == aAPIName ))
+                                {
+                                    aNewProperty = rProperties[nReference];
+                                    aNewProperty.mnIndex = nIndex;
+                                    break;
+                                }
+                            }
+
+                            if( nReference == nSize )
+                                nReference = -1;
+                        }
+
+                        bool bSet = false;
+                        if( (nFlags & MID_FLAG_SPECIAL_ITEM_IMPORT) == 0 )
+                        {
+                            // let the XMLPropertySetMapper decide how to import the value
+                            bSet = maPropMapper->importXML( attr.Value, aNewProperty,
+                                                    rUnitConverter );
+                        }
+                        else
+                        {
+                            sal_uInt32 nOldSize = rProperties.size();
+
+                            bSet = handleSpecialItem( aNewProperty, rProperties,
+                                                      attr.Value, rUnitConverter );
+
+
+                            // no warning if handleSpecialItem added properties
+                            bNoWarning |= ( nOldSize != rProperties.size() );
+                        }
+
+                        // no warning if we found could set the item. This
+                        // 'remembers' bSet across multi properties.
+                        bNoWarning |= bSet;
+
+                        // store the property in the given vector
+                        if( bSet )
+                        {
+                            if( nReference == -1 )
+                                rProperties.push_back( aNewProperty );
+                            else
+                                rProperties[nReference] = aNewProperty;
+                        }
+                        else
+                        {
+                            // warn about unknown value. Unless it's a
+                            // multi property: Then we get another chance
+                            // to set the value.
+                            if( !bNoWarning &&
+                                ((nFlags & MID_FLAG_MULTI_PROPERTY) == 0) )
+                            {
+                                Sequence<OUString> aSeq(2);
+                                aSeq[0] = OUString::number( attr.Token );    // TODO: get Name for the token here
+                                aSeq[1] = attr.Value;
+                                rImport.SetError( XMLERROR_FLAG_WARNING |
+                                                  XMLERROR_STYLE_ATTR_VALUE,
+                                                  aSeq );
+                            }
+                        }
+                    }
+                    bFound = true;
+                    continue;
+                }
+            }
+
+            if( !bFound )
+            {
+                SAL_INFO_IF((XML_NAMESPACE_NONE != (attr.Token & XML_NAMESPACE_NONE)) &&
+                            !(XML_NAMESPACE_UNKNOWN_FLAG & attr.Token) &&
+                            !bAlienImport, "xmloff.style",
+                            "unknown attribute: \"" << attr.Token << "\""); //TODO: name here too
+                if( (XML_NAMESPACE_UNKNOWN_FLAG & attr.Token) ||
+                    (XML_NAMESPACE_NONE == (XML_NAMESPACE_NONE & attr.Token)) ||
+                    bAlienImport )
+                {
+                    if( !xAttrContainer.is() )
+                    {
+                        // add an unknown attribute container to the properties
+                        Reference< XNameContainer > xNew( SvUnoAttributeContainer_CreateInstance(), UNO_QUERY );
+                        xAttrContainer = xNew;
+
+                        // find map entry and create new property state
+                        if( -1 == nIndex )
+                        {
+                            switch( nPropType )
+                            {
+                                case XML_TYPE_PROP_CHART:
+                                    nIndex = maPropMapper->FindEntryIndex( "ChartUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                                    break;
+                                case XML_TYPE_PROP_PARAGRAPH:
+                                    nIndex = maPropMapper->FindEntryIndex( "ParaUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                                    break;
+                                case XML_TYPE_PROP_TEXT:
+                                    nIndex = maPropMapper->FindEntryIndex( "TextUserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                                    break;
+                                default:
+                                    break;
+                            }
+                            // other property type or property not found
+                            if( -1 == nIndex )
+                                nIndex = maPropMapper->FindEntryIndex( "UserDefinedAttributes", XML_NAMESPACE_TEXT, GetXMLToken(XML_XMLNS) );
+                        }
+
+                        // #106963#; use userdefined attribute only if it is in the specified property range
+                        if( nIndex != -1 && nIndex >= nStartIdx && nIndex < nEndIdx)
+                        {
+                            Any aAny;
+                            aAny <<= xAttrContainer;
+                            XMLPropertyState aNewProperty( nIndex , aAny );
+
+                            // push it on our stack so we export it later
+                            rProperties.push_back( aNewProperty );
+                        }
+                    }
+
+                    // TODO: can't get names from token
+                    if( xAttrContainer.is() )
+                    {
+                        AttributeData aData;
+                        aData.Type = GetXMLToken( XML_CDATA );
+                        aData.Value = attr.Value;
+
+                        if( XML_NAMESPACE_NONE == (XML_NAMESPACE_NONE & attr.Token) )
+                        {
+                            aData.Namespace = OUString::number( attr.Token );
+                        }
+
+                        Any aAny;
+                        aAny <<= aData;
+                        xAttrContainer->insertByName( OUString::number( attr.Token ), aAny );
+                    }
+                }
+            }
+        }
+        while( ( nIndex >= 0 && nIndex + 1 < nEndIdx ) && (( nFlags & MID_FLAG_MULTI_PROPERTY ) != 0 ) );
+    }
+
+    finished( rProperties, nStartIdx, nEndIdx );
+}
+
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
 bool SvXMLImportPropertyMapper::handleSpecialItem(
         XMLPropertyState& rProperty,
@@ -332,6 +545,21 @@ bool SvXMLImportPropertyMapper::handleSpecialItem(
     if( mxNextMapper.is() )
         return mxNextMapper->handleSpecialItem( rProperty, rProperties, rValue,
                                                rUnitConverter, rNamespaceMap );
+    else
+        return false;
+}
+
+/** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
+bool SvXMLImportPropertyMapper:: handleSpecialItem(
+        XMLPropertyState& rProperty,
+        vector< XMLPropertyState >& rProperties,
+        const OUString& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    OSL_ENSURE( mxNextMapper.is(), "unsupported special item in xml import" );
+    if( mxNextMapper.is() )
+        return mxNextMapper->handleSpecialItem( rProperty, rProperties, rValue,
+                                                rUnitConverter );
     else
         return false;
 }

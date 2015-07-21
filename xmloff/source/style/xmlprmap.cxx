@@ -295,6 +295,32 @@ sal_Int32 XMLPropertySetMapper::GetEntryIndex(
     return -1;
 }
 
+// Search for the given token in the list and return the index of the entry
+// If there is no matching entry the method returns -1
+sal_Int32 XMLPropertySetMapper::GetEntryIndex(
+        sal_Int32 token,
+        sal_uInt32 nPropType,
+        sal_Int32 nStartAt /* = -1 */ ) const
+{
+    sal_Int32 nEntries = GetEntryCount();
+    sal_Int32 nIndex = nStartAt == -1 ? 0 : nStartAt+1;
+
+    if( nEntries && nIndex < nEntries )
+    {
+        do
+        {
+            const XMLPropertySetMapperEntry_Impl& rEntry = mpImpl->maMapEntries[nIndex];
+            if( (!nPropType || nPropType == rEntry.GetPropType()) /* &&
+                rEntry.Token == token */) // TODO insert token in MapperEntry
+                return nIndex;
+            else
+                nIndex++;
+        } while( nIndex < nEntries );
+    }
+
+    return -1;
+}
+
 /** searches for an entry that matches the given api name, namespace and local name or -1 if nothing found */
 sal_Int32 XMLPropertySetMapper::FindEntryIndex(
         const sal_Char* sApiName,
