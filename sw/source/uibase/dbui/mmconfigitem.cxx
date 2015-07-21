@@ -1039,7 +1039,7 @@ uno::Sequence<uno::Any> SwMailMergeConfigItem::GetSelection() const
     if(!m_pImpl->xResultSet.is())
         GetResultSet();
     if(!m_pImpl->xResultSet.is())
-        return {};
+        return uno::Sequence<uno::Any>();
     m_pImpl->xResultSet->last();
     sal_Int32 nResultSetSize = m_pImpl->xResultSet->getRow()+1;
     std::vector<uno::Any> vResult;
