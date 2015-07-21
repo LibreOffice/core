@@ -144,7 +144,6 @@ public:
 private:
     bool bReadOnly;
 public:
-    SAL_DLLPRIVATE virtual void setDocReadOnly( bool b){ bReadOnly = b; }
     SAL_DLLPRIVATE virtual bool getDocReadOnly() const { return bReadOnly; }
 private:
     ::sd::Outliner*     mpOutliner;          ///< local outliner for outline mode

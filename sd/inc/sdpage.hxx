@@ -235,7 +235,6 @@ public:
     void        SetExcluded(bool bNewExcluded)      { mbExcluded = bNewExcluded; }
     bool        IsExcluded() const                  { return mbExcluded; }
 
-    void        SetScaleObjects(bool bScale)        { mbScaleObjects = bScale; }
     bool        IsScaleObjects() const              { return mbScaleObjects; }
 
     void        SetSoundFile(const OUString& rStr)    { maSoundFile = rStr; }
@@ -272,7 +271,6 @@ public:
     OUString        GetFileName() const       { return maFileName; }
     void            SetBookmarkName(const OUString& aName) { maBookmarkName = aName; }
     OUString        GetBookmarkName() const       { return maBookmarkName; }
-    SdPageLink*     GetLink() { return mpPageLink; }
 
     void            ConnectLink();
     void            DisconnectLink();
@@ -291,8 +289,6 @@ public:
 
     void    SetBackgroundFullSize( bool bIn );
     bool    IsBackgroundFullSize() const { return mbBackgroundFullSize; }
-
-    rtl_TextEncoding GetCharSet() { return meCharSet; }
 
     void    SetPaperBin(sal_uInt16 nBin) { mnPaperBin = nBin; }
     sal_uInt16  GetPaperBin() const { return mnPaperBin; }
@@ -382,7 +378,6 @@ public:
     void addAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation, int nIndex = -1 );
     void removeAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
-    bool hasAnnotations() const { return !maAnnotations.empty(); }
     sal_Int32 getHash() const;
     OString stringify() const;
 

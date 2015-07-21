@@ -73,10 +73,6 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE( SD_IF_SDTOOLPANELPANESHELL )
 
-private:
-    /// SfxInterface initializer.
-    static void InitInterface_Impl();
-
 public:
     ToolPanelPaneShell();
     virtual ~ToolPanelPaneShell();

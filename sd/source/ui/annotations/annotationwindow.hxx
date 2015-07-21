@@ -109,11 +109,8 @@ class AnnotationWindow : public FloatingWindow
         SvxLanguageItem GetLanguage();
 
         void setAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation, bool bGrabFocus = false );
-        const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& getAnnotation() const { return mxAnnotation; }
 
         void ExecuteSlot( sal_uInt16 nSID );
-
-        ScrollBar*      Scrollbar()     { return mpVScrollbar;}
 
         DrawDocShell*           DocShell()      { return mpDocShell; }
         OutlinerView*           getView()       { return mpOutlinerView; }
@@ -124,14 +121,11 @@ class AnnotationWindow : public FloatingWindow
         long            GetPostItTextHeight();
 
         void            InitControls();
-        void            HidePostIt();
         void            DoResize();
         void            ResizeIfNecessary(long aOldHeight, long aNewHeight);
         void            SetScrollbar();
 
         void            Rescale();
-
-        bool            IsReadOnly() { return mbReadonly;}
 
         bool            IsProtected() { return mbProtected; }
 

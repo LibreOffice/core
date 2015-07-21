@@ -140,7 +140,6 @@ private:
 
     OUString            sCharStyleName;     // Character Style
 
-    DECL_LINK( GraphicArrived, void * );
     virtual void NotifyGraphicArrived();
 public:
     explicit SvxNumberFormat( sal_Int16 nNumberingType,

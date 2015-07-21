@@ -50,9 +50,7 @@ public:
     SD_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > create( const OUString& rstrSubType );
 
     const OUString& getPresetId() const { return maPresetId; }
-    const OUString& getProperty() const { return maProperty; }
     const OUString& getLabel() const { return maLabel; }
-    sal_Int16 getPresetClass() const { return mnPresetClass; }
     double getDuration() const { return mfDuration; }
 
     UStringList getSubTypes();

@@ -145,31 +145,7 @@ public:
     */
     void InvalidatePageObjectVisibilities();
 
-    /** Return the window to which this view renders its output.
-    */
-    //    ::boost::shared_ptr<sd::Window> GetWindow() const;
-
     ::boost::shared_ptr<cache::PageCache> GetPreviewCache();
-
-    /** Set the bounding box of the insertion marker in model coordinates.
-
-        It will be painted as a dark rectangle that fills the given box.
-    */
-    void SetInsertionMarker (const Rectangle& rBBox);
-
-    /** Specify whether the insertion marker will be painted or not.
-    */
-    void SetInsertionMarkerVisibility (bool bVisible);
-
-    /** Set the size and position of the selection rectangle.
-
-        It will be painted as a dashed rectangle.
-    */
-    void SetSelectionRectangle (const Rectangle& rBox);
-
-    /** Specify whether the selection rectangle will be painted or not.
-    */
-    void SetSelectionRectangleVisibility (bool bVisible);
 
     /** Return the range of currently visible page objects including the
         first and last one in that range.
@@ -252,7 +228,6 @@ private:
     Layouter::Orientation meOrientation;
     ::boost::shared_ptr<controller::Properties> mpProperties;
     model::SharedPageDescriptor mpPageUnderMouse;
-    sal_Int32 mnButtonUnderMouse;
     ::boost::shared_ptr<PageObjectPainter> mpPageObjectPainter;
     ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;
     vcl::Region maRedrawRegion;

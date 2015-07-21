@@ -157,7 +157,6 @@ class SdInsertPasteDlg;
 class AbstractSdInsertPasteDlg_Impl : public AbstractSdInsertPasteDlg
 {
     DECL_ABSTDLG_BASE(AbstractSdInsertPasteDlg_Impl,SdInsertPasteDlg)
-    virtual bool            IsInsertBefore() const SAL_OVERRIDE;
 };
 
 class SdInsertPagesObjsDlg;
@@ -218,9 +217,6 @@ class AbstractSdPublishingDlg_Impl :public AbstractSdPublishingDlg
 class AbstractHeaderFooterDialog_Impl :public AbstractHeaderFooterDialog
 {
   DECL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl,::sd::HeaderFooterDialog)
-  virtual void ApplyToAll() SAL_OVERRIDE;
-  virtual void Apply() SAL_OVERRIDE;
-  virtual void Cancel() SAL_OVERRIDE;
 };
 
 //AbstractDialogFactory_Impl implementations
@@ -239,7 +235,6 @@ public:
     virtual AbstractSdModifyFieldDlg*   CreateSdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual AbstractSdSnapLineDlg*      CreateSdSnapLineDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView) SAL_OVERRIDE;
     virtual AbstractSdInsertLayerDlg*   CreateSdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr ) SAL_OVERRIDE;
-    virtual AbstractSdInsertPasteDlg*   CreateSdInsertPasteDlg( vcl::Window* pWindow ) SAL_OVERRIDE;
     virtual AbstractSdInsertPagesObjsDlg* CreateSdInsertPagesObjsDlg( vcl::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName ) SAL_OVERRIDE;
     virtual AbstractMorphDlg*           CreateMorphDlg( vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog*       CreateSdOutlineBulletTabDlg ( vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView = NULL ) SAL_OVERRIDE;

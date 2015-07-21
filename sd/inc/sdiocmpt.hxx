@@ -57,7 +57,6 @@ public:
             SdIOCompat(SvStream& rNewStream, StreamMode nNewMode,
                        sal_uInt16 nVer = SDIOCOMPAT_VERSIONDONTKNOW);
             ~SdIOCompat();
-    sal_uInt16  GetVersion() const { return nVersion; }
 };
 
 #endif // INCLUDED_SD_INC_SDIOCMPT_HXX

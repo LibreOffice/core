@@ -162,20 +162,7 @@ void ConfigurationClassifier::CopyResources (
     }
 }
 
-void ConfigurationClassifier::TraceResourceIdVector (
-    const sal_Char* pMessage,
-    const ResourceIdVector& rResources)
-{
 
-    SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": " << pMessage);
-    ResourceIdVector::const_iterator iResource;
-    for (iResource=rResources.begin(); iResource!=rResources.end(); ++iResource)
-    {
-        OUString sResource (FrameworkHelper::ResourceIdToString(*iResource));
-        SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": " <<
-            OUStringToOString(sResource, RTL_TEXTENCODING_UTF8).getStr());
-    }
-}
 
 } } // end of namespace sd::framework
 

@@ -139,8 +139,6 @@ public:
     void ExecCtrl (SfxRequest& rRequest);
     void GetAttrState (SfxItemSet& rSet);
 
-    bool IsLocked() const;
-
     /** Create an object of this inner class to prevent updates due to model
         changes.
     */
@@ -277,20 +275,6 @@ private:
     /** Remember whether the context menu is open.
     */
     bool mbIsContextMenuOpen;
-
-    /** Delete the given list of normal pages.  This method is a helper
-        function for DeleteSelectedPages().
-        @param rSelectedNormalPages
-            A list of normal pages.  Supplying master pages is an error.
-    */
-    void DeleteSelectedNormalPages (const ::std::vector<SdPage*>& rSelectedNormalPages);
-
-    /** Delete the given list of master pages.  This method is a helper
-        function for DeleteSelectedPages().
-        @param rSelectedMasterPages
-            A list of master pages.  Supplying normal pages is an error.
-    */
-    void DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedMasterPages);
 
     /** Prepare for several model changes, i.e. prevent time-consuming and
         non-critical operations like repaints until UnlockModelChange() is

@@ -95,9 +95,6 @@ public:
 
     SAL_DLLPRIVATE double          getAbsoluteDuration() const { return mfAbsoluteDuration; }
 
-    SAL_DLLPRIVATE const OUString& getName() const { return maName; }
-    SAL_DLLPRIVATE void            setName( const OUString& rName ) { maName = rName; }
-
     SAL_DLLPRIVATE sal_Int16       getIterateType() const { return mnIterateType; }
     void           setIterateType( sal_Int16 nIterateType );
 
@@ -139,9 +136,6 @@ public:
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Any  getColor( sal_Int32 nIndex );
     SAL_DLLPRIVATE void                        setColor( sal_Int32 nIndex, const ::com::sun::star::uno::Any& rColor );
-
-    SAL_DLLPRIVATE ::com::sun::star::uno::Any  getRotation();
-    SAL_DLLPRIVATE void                        setRotation( const ::com::sun::star::uno::Any& rRotation );
 
     SAL_DLLPRIVATE sal_Int32       getGroupId() const { return mnGroupId; }
     SAL_DLLPRIVATE void            setGroupId( sal_Int32 nGroupId );
@@ -243,7 +237,6 @@ public:
     void reset();
     void addEffect( CustomAnimationEffectPtr& pEffect );
 
-    const ::com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& getTarget() const { return maTarget; }
     const EffectSequence& getEffects() const { return maEffects; }
 
     /* -1: as single object, 0: all at once, n > 0: by n Th paragraph */
@@ -285,7 +278,6 @@ public:
     SAL_DLLPRIVATE CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const ::com::sun::star::uno::Any& rTarget, double fDuration = -1.0 );
     SAL_DLLPRIVATE CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const ::com::sun::star::uno::Any& rTarget, double fDuration = -1.0 );
     void append( const CustomAnimationEffectPtr& pEffect );
-    SAL_DLLPRIVATE void insert( EffectSequence::iterator& rPos, const CustomAnimationEffectPtr& pEffect );
     SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration = -1.0 );
     SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const OUString& rPresetSubType, double fDuration = -1.0 );
     SAL_DLLPRIVATE void remove( const CustomAnimationEffectPtr& pEffect );
@@ -304,10 +296,6 @@ public:
     SAL_DLLPRIVATE virtual void disposeTextRange( const com::sun::star::uno::Any& aTarget );
     SAL_DLLPRIVATE virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
     SAL_DLLPRIVATE virtual void onTextChanged( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
-
-    /** this must be called if effects from this sequence are changed.
-        the method will call the registered listeners */
-    SAL_DLLPRIVATE void update( const CustomAnimationEffectPtr& pEffect );
 
     /** this method rebuilds the animation nodes */
     SAL_DLLPRIVATE virtual void rebuild();

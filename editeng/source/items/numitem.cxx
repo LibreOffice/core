@@ -481,19 +481,6 @@ void SvxNumberFormat::SetIndentAt( const long nIndentAt )
     mnIndentAt = nIndentAt;
 }
 
-IMPL_LINK_NOARG( SvxNumberFormat, GraphicArrived )
-{
-    // if necessary, set the GrfSize:
-    if( !aGraphicSize.Width() || !aGraphicSize.Height() )
-    {
-        const Graphic* pGrf = pGraphicBrush->GetGraphic();
-        if( pGrf )
-            aGraphicSize = SvxNumberFormat::GetGraphicSizeMM100( pGrf );
-    }
-    NotifyGraphicArrived();
-    return 0;
-}
-
 void SvxNumberFormat::NotifyGraphicArrived()
 {
 }

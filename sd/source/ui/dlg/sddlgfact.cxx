@@ -274,11 +274,6 @@ void AbstractSdInsertLayerDlg_Impl::SetHelpId( const OString& rHelpId )
     pDlg->SetHelpId( rHelpId );
 }
 
-bool AbstractSdInsertPasteDlg_Impl::IsInsertBefore() const
-{
-    return pDlg->IsInsertBefore();
-}
-
 vcl::Window* AbstractSdInsertPagesObjsDlg_Impl::GetWindow()
 {
     return static_cast<vcl::Window*>(pDlg);
@@ -354,21 +349,6 @@ void AbstractSdPublishingDlg_Impl::GetParameterSequence( ::com::sun::star::uno::
     pDlg->GetParameterSequence( rParams );
 }
 
-void AbstractHeaderFooterDialog_Impl::ApplyToAll()
-{
-  pDlg->ApplyToAll();
-}
-
-void AbstractHeaderFooterDialog_Impl::Apply()
-{
-  pDlg->Apply( );
-}
-
-void AbstractHeaderFooterDialog_Impl::Cancel()
-{
-  pDlg->Cancel( );
-}
-
 //-------------- SdAbstractDialogFactory implementation--------------
 
 VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateBreakDlg(
@@ -422,11 +402,6 @@ AbstractSdSnapLineDlg * SdAbstractDialogFactory_Impl::CreateSdSnapLineDlg( vcl::
 AbstractSdInsertLayerDlg * SdAbstractDialogFactory_Impl::CreateSdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr )
 {
     return new AbstractSdInsertLayerDlg_Impl( VclPtr<SdInsertLayerDlg>::Create( pWindow, rInAttrs, bDeletable, aStr ) );
-}
-
-AbstractSdInsertPasteDlg * SdAbstractDialogFactory_Impl::CreateSdInsertPasteDlg( vcl::Window* pWindow )
-{
-    return new AbstractSdInsertPasteDlg_Impl( VclPtr<SdInsertPasteDlg>::Create( pWindow ) );
 }
 
 AbstractSdInsertPagesObjsDlg * SdAbstractDialogFactory_Impl::CreateSdInsertPagesObjsDlg( vcl::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName )
