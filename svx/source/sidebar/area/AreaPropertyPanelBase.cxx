@@ -673,8 +673,7 @@ void AreaPropertyPanelBase::NotifyItemUpdate(
                 meLastXFS = static_cast<sal_uInt16>(-1);
                 mpStyleItem.reset();
             }
-
-            if(eState >= SfxItemState::DEFAULT)
+            else if(eState >= SfxItemState::DEFAULT)
             {
                 const XFillStyleItem* pItem = dynamic_cast< const XFillStyleItem* >(pState);
 
