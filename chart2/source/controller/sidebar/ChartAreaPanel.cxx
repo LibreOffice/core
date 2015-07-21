@@ -71,6 +71,8 @@ void ChartAreaPanel::dispose()
 {
     css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
     xBroadcaster->removeModifyListener(mxListener);
+
+    AreaPropertyPanelBase::dispose();
 }
 
 void ChartAreaPanel::Initialize()
