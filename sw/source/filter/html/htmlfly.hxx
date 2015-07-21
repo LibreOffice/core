@@ -109,12 +109,10 @@ public:
     sal_uInt8 GetOutMode() const { return nOutputMode; }
 
     static sal_uInt8 GetOutFn( sal_uInt8 nMode ) { return nMode & HTML_OUT_MASK; }
-    static sal_uInt8 GetOutPos( sal_uInt8 nMode ) { return nMode & HTML_POS_MASK; }
     static sal_uInt8 GetOutCntnr( sal_uInt8 nMode ) { return nMode & HTML_CNTNR_MASK; }
 
     sal_uInt8 GetOutFn() const { return nOutputMode & HTML_OUT_MASK; }
     sal_uInt8 GetOutPos() const { return nOutputMode & HTML_POS_MASK; }
-    sal_uInt8 GetOutCntnr() const { return nOutputMode & HTML_CNTNR_MASK; }
 };
 
 class SwHTMLPosFlyFrms

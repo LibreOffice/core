@@ -109,7 +109,6 @@ public:
     virtual sal_uLong GetDoc( sal_uInt16 ) = 0;
     virtual sal_uLong BeginPutDoc( const OUString&, const OUString& ) = 0;
     virtual sal_uLong PutDoc() = 0;
-    virtual sal_uLong GetText( sal_uInt16, OUString& ) = 0;
     virtual sal_uLong PutText( const OUString&, const OUString&, const OUString& ) = 0;
     virtual sal_uLong MakeBlockList() = 0;
 

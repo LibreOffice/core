@@ -36,24 +36,22 @@ class SwVbaRange : public SwVbaRange_BASE
 {
 private:
     css::uno::Reference< css::text::XTextDocument > mxTextDocument;
-    css::uno::Reference< css::text::XTextCursor > mxTextCursor;
-    css::uno::Reference< css::text::XText > mxText;
-    bool mbMaySpanEndOfDocument;
+    css::uno::Reference< css::text::XTextCursor >   mxTextCursor;
+    css::uno::Reference< css::text::XText >         mxText;
 
 private:
     void initialize( const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     void GetStyleInfo(OUString& aStyleName, OUString& aStyleType ) throw ( css::uno::RuntimeException );
 public:
-    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, bool _bMaySpanEndOfDocument = false ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd, bool _bMaySpanEndOfDocument = false ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd, const css::uno::Reference< css::text::XText >& rText, bool _bMaySpanEndOfDocument = false ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    SwVbaRange( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rTextDocument, const css::uno::Reference< css::text::XTextRange >& rStart, const css::uno::Reference< css::text::XTextRange >& rEnd, const css::uno::Reference< css::text::XText >& rText) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual ~SwVbaRange();
-   css::uno::Reference< css::text::XTextDocument > getDocument() const { return mxTextDocument; }
+    css::uno::Reference< css::text::XTextDocument > getDocument() const { return mxTextDocument; }
 
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getXTextRange() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     css::uno::Reference< css::text::XText > getXText() const { return mxText; }
     void setXTextCursor( const css::uno::Reference< css::text::XTextCursor >& xTextCursor ) { mxTextCursor = xTextCursor; }
-    void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection ) throw (css::uno::RuntimeException);
 
     // Attribute
     virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

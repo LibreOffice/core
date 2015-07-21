@@ -204,11 +204,7 @@ public:
 
     inline void InvalidateLayout() const;
     inline void InvalidateContent() const;
-    inline void ValidateLayout() const;
-    inline void ValidateContent() const;
     bool IsInvalid() const { return (bInvalidLayout || bInvalidContent); }
-    bool IsInvalidLayout() const { return bInvalidLayout; }
-    bool IsInvalidContent() const { return bInvalidContent; }
 
     // (26.11.93, see tabfrm.hxx, but might also be valid for others)
     // For creation of a Fly after a FlyCnt was created _and_ inserted.
@@ -237,14 +233,6 @@ inline void SwFlyInCntFrm::InvalidateContent() const
     const_cast<SwFlyInCntFrm*>(this)->bInvalidContent = true;
 }
 
-inline void SwFlyInCntFrm::ValidateLayout() const
-{
-    const_cast<SwFlyInCntFrm*>(this)->bInvalidLayout = false;
-}
-inline void SwFlyInCntFrm::ValidateContent() const
-{
-    const_cast<SwFlyInCntFrm*>(this)->bInvalidContent = false;
-}
 
 #endif
 

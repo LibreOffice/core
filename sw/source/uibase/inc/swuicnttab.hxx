@@ -114,7 +114,6 @@ public:
                                     eCurrentTOXType = eSet;
                                 }
 
-    void                UpdateExample();
     bool                IsTOXEditMode() const { return bEditTOX;}
 
     SwWrtShell&         GetWrtShell() {return rSh;}
@@ -311,8 +310,6 @@ public:
 
     bool        Contains(FormTokenType) const;
 
-    bool        DetermineLinkStart();
-
     //helper for pattern buttons and edits
     bool        CreateQuickHelp(Control* pCtrl,
                     const SwFormToken& rToken, const HelpEvent& );
@@ -429,7 +426,6 @@ class SwTOXEntryTabPage : public SfxTabPage
 
     DECL_LINK(AllLevelsHdl, void *);
 
-    void            EnableButtons();
     void            WriteBackLevel();
     void            UpdateDescriptor();
     DECL_LINK(ModifyHdl, void*);

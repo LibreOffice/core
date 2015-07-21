@@ -239,7 +239,6 @@ public:
     virtual void TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) SAL_OVERRIDE;
     virtual void TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) SAL_OVERRIDE;
     virtual void TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) SAL_OVERRIDE;
-    virtual void TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo ) SAL_OVERRIDE;
     virtual void TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner ) SAL_OVERRIDE;
     virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) SAL_OVERRIDE;
     virtual void TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) SAL_OVERRIDE;

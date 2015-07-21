@@ -92,9 +92,6 @@ public:
     virtual void Reset      (const SfxItemSet *rSet) SAL_OVERRIDE;
 
     void    SetFormat(bool bSet){bFormat = bSet;}
-protected:
-    void aSwitchText(bool bChecked);
-    //void SW_RES(int arg1);
 };
 
 #endif

@@ -84,26 +84,20 @@ public:
     void SetMin(sal_Int64 nNewMin, FieldUnit eInUnit = FUNIT_NONE);
 
     sal_Int64 GetMin() const { return m_pField->GetMin(); }
-    sal_Int64 GetMax() const { return m_pField->GetMax(); }
 
     sal_Int64 NormalizePercent(sal_Int64 nValue);
     sal_Int64 DenormalizePercent(sal_Int64 nValue);
 
     sal_Int64 Normalize( sal_Int64 nValue ) const { return m_pField->Normalize(nValue); }
-    sal_Int64 Denormalize( sal_Int64 nValue ) const { return m_pField->Denormalize(nValue); }
 
     void SetRefValue(sal_Int64 nValue);
-    sal_Int64 GetRefValue() const { return nRefValue; }
     sal_Int64 GetRealValue(FieldUnit eOutUnit = FUNIT_NONE);
 
     sal_Int64 Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit);
 
     void ShowPercent(bool bPercent);
 
-    sal_uInt16 GetOldDigits() const {return nOldDigits;}
-
     void LockAutoCalculation(bool bLock) {bLockAutoCalculation = bLock;}
-    bool IsAutoCalculationLocked() const {return bLockAutoCalculation;}
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_PRCNTFLD_HXX

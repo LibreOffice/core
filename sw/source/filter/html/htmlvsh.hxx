@@ -29,15 +29,9 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
 
 public:
-
     explicit SwHTMLViewShellClient( SwViewShell *pVSh );
 
     virtual ~SwHTMLViewShellClient();
-
-    void Register( SwViewShell *pVsh );
-    void DeRegister();
-
-    SwViewShell *GetViewShell();
 };
 
 #endif

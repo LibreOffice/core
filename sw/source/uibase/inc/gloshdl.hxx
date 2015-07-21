@@ -37,10 +37,6 @@ class SW_DLLPUBLIC SwGlossaryHdl
     SwWrtShell*     pWrtShell;
     SwTextBlocks*   pCurGrp;
 
-    SAL_DLLPRIVATE void  _SetMacros(const OUString &rName,
-                       const SvxMacro *pStart,
-                       const SvxMacro *pEnd);
-
     SAL_DLLPRIVATE bool  Expand( const OUString& rShortName,
                     SwGlossaries* pGlossaries,
                     SwTextBlocks *pGlossary );
@@ -55,12 +51,10 @@ public:
     bool        RenameGroup(const OUString& rOld, OUString& rNew, const OUString& rNewTitle);
     void        SetCurGroup(const OUString &aGrp, bool bApi = false, bool bAlwaysCreateNew = false);
 
-    OUString GetCurGroup() const { return aCurGrp; }
-
     sal_uInt16  GetGlossaryCnt();
-    OUString  GetGlossaryName(sal_uInt16);
-    OUString  GetGlossaryShortName(const OUString &rName);
-    OUString  GetGlossaryShortName(sal_uInt16);
+    OUString    GetGlossaryName(sal_uInt16);
+    OUString    GetGlossaryShortName(const OUString &rName);
+    OUString    GetGlossaryShortName(sal_uInt16);
 
     bool    Rename( const OUString& rOldShortName, const OUString& rNewShortName,
                         const OUString& rNewName);

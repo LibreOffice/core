@@ -419,17 +419,7 @@ TBDelta::TBDelta()
 {
 }
 
-bool TBDelta::ControlIsModified()
-{
-    return ( ( doprfatendFlags & 0x3 ) == 0x2 );
-}
-
 bool TBDelta::ControlIsInserted()
-{
-    return ( ( doprfatendFlags & 0x3 ) == 0x1 );
-}
-
-bool TBDelta::ControlIsChanged()
 {
     return ( ( doprfatendFlags & 0x3 ) == 0x1 );
 }

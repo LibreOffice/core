@@ -115,7 +115,6 @@ public:
     SW_DLLPUBLIC SwFltStackEntry(const SwPosition & rStartPos, SfxPoolItem* pHt );
     SW_DLLPUBLIC ~SwFltStackEntry();
 
-    void SetStartPos(const SwPosition & rStartPos);
     SW_DLLPUBLIC void SetEndPos(  const SwPosition & rEndPos);
     SW_DLLPUBLIC bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck) const;
     SW_DLLPUBLIC static bool MakeRegion(SwDoc* pDoc, SwPaM& rRegion,
@@ -126,7 +125,6 @@ public:
     void SetEndCP(sal_Int32 nCP) {mnEndCP = nCP;}
     sal_Int32 GetStartCP() const {return mnStartCP;}
     sal_Int32 GetEndCP() const {return mnEndCP;}
-    bool IsAbleMakeRegion();
     bool IsParaEnd(){ return bIsParaEnd;}
     void SetIsParaEnd(bool bArg){ bIsParaEnd = bArg;}
 };
@@ -306,7 +304,6 @@ public:
     virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
     SwTOXBase* GetBase()            { return pTOXBase; }
-    sal_uInt16 GetCols() const          { return nCols; }
     void SetHadBreakItem(    bool bVal ) { bHadBreakItem    = bVal; }
     void SetHadPageDescItem( bool bVal ) { bHadPageDescItem = bVal; }
     bool HadBreakItem()    const { return bHadBreakItem; }

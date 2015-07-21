@@ -136,8 +136,6 @@ public:
 
     void                            AddClipboardListener();
 
-    SfxObjectShellLock&             GetTmpSelectionDoc()    { return xTmpSelDocSh; }
-
     void                            AddTransferable(SwTransferable& rTransferable);
 
 #if HAVE_FEATURE_DBCONNECTIVITY

@@ -600,7 +600,6 @@ public:
 
     sal_uInt16 GetValue() const { return maBits; }
 
-    void SetValue(sal_uInt16 nVal) { maBits = nVal; }
     void SetWWValue(SVBT16 const nVal) { maBits = SVBT16ToShort(nVal); }
 
     void SetFore(sal_uInt8 nVal)

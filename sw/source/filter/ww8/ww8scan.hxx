@@ -649,7 +649,6 @@ public:
     virtual ~WW8PLCFx_SEPX();
     virtual sal_uInt32 GetIdx() const SAL_OVERRIDE;
     virtual void SetIdx( sal_uLong nIdx ) SAL_OVERRIDE;
-    long GetIMax() const { return ( pPLCF ) ? pPLCF->GetIMax() : 0; }
     virtual bool SeekPos(WW8_CP nCpPos) SAL_OVERRIDE;
     virtual WW8_FC Where() SAL_OVERRIDE;
     virtual void GetSprms( WW8PLCFxDesc* p ) SAL_OVERRIDE;
@@ -687,8 +686,6 @@ public:
         return pRef ? pRef->GetData( -1L == nIdx ? pRef->GetIdx() : nIdx ) : 0;
     }
 
-    //liefert Angabe, wo Kopf und Fusszeilen-Text zu finden ist
-    bool Get(long& rStart, void*& rpValue) const;
     virtual void GetSprms(WW8PLCFxDesc* p) SAL_OVERRIDE;
     virtual void advance() SAL_OVERRIDE;
     long Count() const { return ( pRef ) ? pRef->GetIMax() : 0; }

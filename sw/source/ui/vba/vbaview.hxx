@@ -31,12 +31,11 @@ typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XView > SwVbaView_BASE;
 class SwVbaView : public SwVbaView_BASE
 {
 private:
-    css::uno::Reference< css::frame::XModel > mxModel;
+    css::uno::Reference< css::frame::XModel >         mxModel;
     css::uno::Reference< css::text::XTextViewCursor > mxViewCursor;
-    css::uno::Reference< css::beans::XPropertySet > mxViewSettings;
+    css::uno::Reference< css::beans::XPropertySet >   mxViewSettings;
 
     css::uno::Reference< css::text::XTextRange > getHFTextRange( sal_Int32 nType ) throw (css::uno::RuntimeException, css::script::BasicErrorException, std::exception);
-    css::uno::Reference< css::text::XTextRange > getFirstObjectPosition( const css::uno::Reference< css::text::XText >& xText ) throw (css::uno::RuntimeException);
 
 public:
     SwVbaView( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,

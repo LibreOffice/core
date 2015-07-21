@@ -69,10 +69,8 @@ public:
     virtual ~SwInsFootNoteDlg();
     virtual void dispose() SAL_OVERRIDE;
 
-    rtl_TextEncoding GetCharSet() { return eCharSet; }
-    bool        IsExtCharAvailable() { return bExtCharAvailable; }
     OUString        GetFontName() { return m_aFontName; }
-    bool        IsEndNote() { return m_pEndNoteBtn->IsChecked(); }
+    bool            IsEndNote() { return m_pEndNoteBtn->IsChecked(); }
     OUString        GetStr()
                     {
                         if ( m_pNumberCharBtn->IsChecked() )

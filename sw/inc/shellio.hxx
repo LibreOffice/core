@@ -280,8 +280,6 @@ class SW_DLLPUBLIC StgReader : public Reader
 {
     OUString aFltName;
 
-protected:
-    sal_uLong OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize );
 public:
     virtual int GetReaderType() SAL_OVERRIDE;
     OUString GetFltName() { return aFltName; }
@@ -312,7 +310,6 @@ public:
     void   SetBaseURL( const OUString& rURL );
 
     bool   IsOld() const;
-    sal_uLong  ConvertToNew();              // Convert text modules.
 
     sal_uInt16 GetCount() const;                        // Get count text modules.
     sal_uInt16 GetIndex( const OUString& ) const;       // Get index of short names.
@@ -423,8 +420,6 @@ public:
 
     void SetShowProgress( bool bFlag = false )  { bShowProgress = bFlag; }
 
-    const OUString* GetOrigFileName() const       { return pOrigFileName; }
-
     const SwAsciiOptions& GetAsciiOptions() const { return aAscOpts; }
     void SetAsciiOptions( const SwAsciiOptions& rOpt ) { aAscOpts = rOpt; }
 
@@ -449,9 +444,6 @@ public:
     // Optimizing output on stream.
     static SvStream& OutLong( SvStream& rStrm, long nVal );
     static SvStream& OutULong( SvStream& rStrm, sal_uLong nVal );
-
-    inline SvStream& OutLong( long nVal )       { return OutLong( Strm(), nVal ); }
-    inline SvStream& OutULong( sal_uLong nVal )     { return OutULong( Strm(), nVal ); }
 
     void SetStream(SvStream *const pStream);
     SvStream& Strm();

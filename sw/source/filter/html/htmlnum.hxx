@@ -75,10 +75,8 @@ public:
     sal_uInt16 DecDepth() { return nDeep==0 ? 0 : --nDeep; }
     inline sal_uInt8 GetLevel() const;
 
-    void SetRestart( bool bSet ) { bRestart = bSet; }
     bool IsRestart() const { return bRestart; }
 
-    void SetNumbered( bool bSet ) { bNumbered = bSet; }
     bool IsNumbered() const { return bNumbered; }
 
     inline void SetNodeStartValue( sal_uInt8 nLvl, sal_uInt16 nVal=USHRT_MAX );

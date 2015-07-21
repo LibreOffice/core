@@ -2791,35 +2791,6 @@ void MSWordExportBase::OutputTextNode( const SwTextNode& rNode )
     SAL_INFO( "sw.ww8", "</OutWW8_SwTextNode>" );
 }
 
-void WW8AttributeOutput::TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo )
-{
-    SVBT16 nSty;
-    ShortToSVBT16( GetExport().m_nStyleBeforeFly, nSty );
-
-    ww8::WW8TableNodeInfo::Inners_t::const_iterator aIt( pNodeInfo->getInners().begin() );
-    ww8::WW8TableNodeInfo::Inners_t::const_iterator aItEnd( pNodeInfo->getInners().end() );
-
-    while (aIt != aItEnd)
-    {
-        ww8::WW8TableNodeInfoInner::Pointer_t pInner = aIt->second;
-        if ( pInner->isEndOfCell() )
-        {
-            TableRowEnd( pInner->getDepth() );
-
-            m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nSty, nSty+2);     // Style #
-            TableInfoRow( pInner );
-            m_rWW8Export.m_pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data());
-            m_rWW8Export.pO->clear();
-        }
-
-        if ( pInner->isEndOfLine() )
-        {
-        }
-
-        ++aIt;
-    }
-}
-
 // Tables
 
 void WW8AttributeOutput::EmptyParagraph()

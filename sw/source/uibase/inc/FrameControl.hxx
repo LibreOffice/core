@@ -37,8 +37,6 @@ public:
     SwFrameControl( const VclPtr<vcl::Window> &pWindow );
     virtual ~SwFrameControl();
 
-    const SwFrm* GetFrame()   { return mpIFace->GetFrame(); }
-    SwEditWin*   GetEditWin() { return mpIFace->GetEditWin(); }
     vcl::Window* GetWindow()  { return mxWindow.get(); }
 
     void SetReadonly( bool bReadonly ) { mpIFace->SetReadonly( bReadonly ); }

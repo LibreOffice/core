@@ -151,17 +151,12 @@ public:
     virtual ~SwGlossaryDlg();
     virtual void dispose() SAL_OVERRIDE;
     OUString GetCurrGrpName() const;
-    OUString GetCurrLongName() const
-    {
-        return m_pNameED->GetText();
-    }
     OUString GetCurrShortName() const
     {
         return m_pShortNameEdit->GetText();
     }
     static OUString GetCurrGroup();
     static void     SetActGroup(const OUString& rNewGroup);
-    static OUString GetExtension();
 };
 
 #endif

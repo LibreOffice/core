@@ -39,17 +39,8 @@ protected:
 public:
     SwHelpToolBox(SwNavigationPI* pParent, const ResId &);
     virtual ~SwHelpToolBox();
-    void SetDoubleClickLink(const Link<> &);    // inline
-    void SetRightClickLink(const Link<> &);     // inline
 };
 
-inline void SwHelpToolBox::SetDoubleClickLink(const Link<> &rLink) {
-    aDoubleClickLink = rLink;
-}
-
-inline void SwHelpToolBox::SetRightClickLink(const Link<> &rLink) {
-    aRightClickLink = rLink;
-}
 
 #endif
 

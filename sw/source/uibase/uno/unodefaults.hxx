@@ -31,8 +31,6 @@ public:
     virtual ~SwSvxUnoDrawPool() throw();
 
     virtual SfxItemPool* getModelPool( bool bReadOnly ) throw() SAL_OVERRIDE;
-
-    void Invalidate() {m_pDoc = 0;}
 };
 
 #endif

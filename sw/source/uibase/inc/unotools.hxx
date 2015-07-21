@@ -102,7 +102,6 @@ public:
                     const OUString* pURL = 0);
     ~SwOneExampleFrame();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > &       GetControl()    {return _xControl; }
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > &       GetModel()      {return _xModel;}
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &  GetController() {return _xController;}
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > &   GetTextCursor() {return _xCursor;}

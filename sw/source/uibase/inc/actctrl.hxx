@@ -35,7 +35,6 @@ public:
                                 NumericField(pParent, rResId) {}
 
     void        SetActionHdl( const Link<>& rLink ) { aActionLink = rLink;}
-    const Link<>& GetActionHdl() const              { return aActionLink; }
 };
 
 // call a link when KEY_RETURN is pressed

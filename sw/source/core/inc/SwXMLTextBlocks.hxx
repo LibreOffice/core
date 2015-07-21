@@ -63,7 +63,6 @@ public:
     virtual sal_uLong GetDoc( sal_uInt16 ) SAL_OVERRIDE;
     virtual sal_uLong BeginPutDoc( const OUString&, const OUString& ) SAL_OVERRIDE;
     virtual sal_uLong PutDoc() SAL_OVERRIDE;
-    virtual sal_uLong GetText( sal_uInt16, OUString& ) SAL_OVERRIDE;
     virtual sal_uLong PutText( const OUString&, const OUString&, const OUString& ) SAL_OVERRIDE;
     virtual sal_uLong MakeBlockList() SAL_OVERRIDE;
 

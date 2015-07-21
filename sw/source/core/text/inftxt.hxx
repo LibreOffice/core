@@ -215,7 +215,6 @@ public:
     inline bool NotEOL() const { return m_bNotEOL; }
     inline void SetNotEOL( const bool bNew ) { m_bNotEOL = bNew; }
     inline bool URLNotify() const { return m_bURLNotify; }
-    inline void SetURLNotify( const bool bNew ) { m_bURLNotify = bNew; }
     inline bool StopUnderflow() const { return m_bStopUnderflow; }
     inline void SetStopUnderflow( const bool bNew ) { m_bStopUnderflow = bNew; }
     inline bool IsFootnoteInside() const { return m_bFootnoteInside; }
@@ -357,10 +356,6 @@ public:
     {
         m_pCachedVclData = pCachedVclData;
     }
-
-#ifdef DBG_UTIL
-    bool IsOptDbg() const;
-#endif
 };
 
 class SwTextPaintInfo : public SwTextSizeInfo
@@ -405,8 +400,6 @@ public:
 
     void CtorInitTextPaintInfo( OutputDevice* pRenderContext, SwTextFrm *pFrame, const SwRect &rPaint );
 
-    void SetBack( const SvxBrushItem *pItem,
-                  const SwRect &rRect ) { pBrushItem = pItem; aItemRect = rRect;}
     const SvxBrushItem *GetBrushItem() const { return pBrushItem; }
     const SwRect       &GetBrushRect() const { return aItemRect;  }
 
@@ -471,7 +464,6 @@ public:
     inline void SetPos( const Point &rNew ) { aPos = rNew; }
 
     inline const SwRect &GetPaintRect() const { return aPaintRect; }
-    inline void SetPaintRect( const SwRect &rNew ) { aPaintRect = rNew; }
 
     friend SvStream & WriteSwTextPaintInfo( SvStream &rOS, const SwTextPaintInfo &rInf );
 
@@ -603,8 +595,6 @@ public:
     inline void SetFull( const bool bNew ) { bFull = bNew; }
     inline bool IsHyphForbud() const
         { return pFly ? bNoMidHyph : bNoEndHyph; }
-    inline void SetHyphForbud( const bool bNew )
-        { if ( pFly ) bNoMidHyph = bNew; else bNoEndHyph = bNew; }
     inline void ChkNoHyph( const sal_uInt8 bEnd, const sal_uInt8 bMid )
         { bNoEndHyph = (nMaxHyph && bEnd >= nMaxHyph);
           bNoMidHyph = (nMaxHyph && bMid >= nMaxHyph); }
@@ -621,7 +611,6 @@ public:
     inline bool IsShift() const { return bShift; }
     inline void SetShift( const bool bNew ) { bShift = bNew; }
     inline bool IsInterHyph() const { return bInterHyph; }
-    inline bool IsAutoHyph() const { return bAutoHyph; }
     inline bool IsUnderflow() const { return bUnderflow; }
     inline void ClrUnderflow() { bUnderflow = false; }
     inline bool IsDropInit() const { return bDropInit; }
@@ -659,10 +648,6 @@ public:
     inline sal_Unicode GetTabDecimal() const { return cTabDecimal; }
     inline void SetTabDecimal( const sal_Unicode cNew ) { cTabDecimal = cNew;}
 
-    // Last*
-    inline SwFieldPortion *GetLastField() { return pLastField; }
-    inline void SetLastField( SwFieldPortion *pNew ) { pLastField = pNew; }
-
     inline void ClearHookChar() { cHookChar = 0; }
     inline void SetHookChar( const sal_Unicode cNew ) { cHookChar = cNew; }
     inline sal_Unicode GetHookChar() const { return cHookChar; }
@@ -678,7 +663,6 @@ public:
     inline void SetArrowDone( const bool bNew ) { bArrowDone = bNew; }
 
     // For SwTextPortion::Hyphenate
-    inline bool IsSoftHyph( const sal_Int32 nPos ) const;
     bool ChgHyph( const bool bNew );
 
     // Should the hyphenate helper be discarded?
@@ -739,7 +723,6 @@ public:
     SwTextSlot( const SwTextSizeInfo *pNew, const SwLinePortion *pPor, bool bTextLen,
                bool bExgLists, OUString const & rCh = OUString() );
     ~SwTextSlot();
-    bool IsOn() const { return bOn; }
 };
 
 class SwFontSave
@@ -827,11 +810,6 @@ inline const SwAttrSet& SwTextFormatInfo::GetCharAttr() const
 inline void SwTextFormatInfo::SetParaFootnote()
 {
     GetTextFrm()->SetFootnote( true );
-}
-
-inline bool SwTextFormatInfo::IsSoftHyph( const sal_Int32 nPos ) const
-{
-    return CHAR_SOFTHYPHEN == GetTextFrm()->GetTextNode()->GetText()[nPos];
 }
 
 #endif

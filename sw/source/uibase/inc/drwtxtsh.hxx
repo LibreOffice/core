@@ -75,10 +75,9 @@ public:
     void        StateClpbrd(SfxItemSet &rSet);
     void        StateInsert(SfxItemSet &rSet);
     void        ExecTransliteration(SfxRequest &);
-    void                ExecRotateTransliteration(SfxRequest &);
+    void        ExecRotateTransliteration(SfxRequest &);
 
     void        Init();
-    void        StateStatusline(SfxItemSet &rSet);
 };
 
 #endif

@@ -249,8 +249,6 @@ public:
 
     void            StartExecuteDrag();
     void            DragFinished();
-    sal_uInt16           GetDropAction() const { return m_nDropAction; }
-    SotClipboardFormatId GetDropFormat() const { return m_nDropFormat; }
 
     static Color    GetWaterCanTextColor() { return m_aWaterCanTextColor; }
 

@@ -31,12 +31,12 @@ public:
     SwColMgr(const SfxItemSet &rSet, sal_uInt16 nActWidth = USHRT_MAX);
     ~SwColMgr();
 
-    inline sal_uInt16       GetCount() const;
+    inline sal_uInt16   GetCount() const;
     void                SetCount(sal_uInt16 nCount, sal_uInt16 nGutterWidth);
-    sal_uInt16              GetGutterWidth(sal_uInt16 nPos = USHRT_MAX) const;
+    sal_uInt16          GetGutterWidth(sal_uInt16 nPos = USHRT_MAX) const;
     void                SetGutterWidth(sal_uInt16 nWidth, sal_uInt16 nPos = USHRT_MAX);
 
-    sal_uInt16              GetColWidth(sal_uInt16 nIdx) const;
+    sal_uInt16          GetColWidth(sal_uInt16 nIdx) const;
     void                SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWidth);
 
     inline bool         IsAutoWidth() const;
@@ -47,7 +47,7 @@ public:
 
     void                SetLineWidthAndColor(::editeng::SvxBorderStyle eStyle, sal_uLong nWidth, const Color& rCol);
     inline ::editeng::SvxBorderStyle    GetLineStyle() const;
-    inline sal_uLong        GetLineWidth() const;
+    inline sal_uLong    GetLineWidth() const;
     inline const Color& GetLineColor() const;
 
     inline SwColLineAdj GetAdjust() const;
@@ -57,16 +57,14 @@ public:
     void                SetLineHeightPercent(short nPercent);
 
     inline void         NoCols();
-    void                Update();
 
-    const SwFormatCol&     GetColumns() const { return aFormatCol; }
+    const SwFormatCol&  GetColumns() const { return aFormatCol; }
 
     void                SetActualWidth(sal_uInt16 nW);
-    sal_uInt16              GetActualSize() const { return nWidth; }
+    sal_uInt16          GetActualSize() const { return nWidth; }
 
 private:
-
-    SwFormatCol            aFormatCol;
+    SwFormatCol             aFormatCol;
     sal_uInt16              nWidth;
 };
 

@@ -113,8 +113,6 @@ public:
     // Returns the attribute for a position
     SwTextAttr *GetAttr( const sal_Int32 nPos ) const;
 
-    const SwAttrSet* GetAttrSet() const { return pAttrSet; }
-
     const SwpHints *GetHints() const { return pHints; }
 
     SwFont *GetFnt() { return pFnt; }

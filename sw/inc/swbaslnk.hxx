@@ -56,8 +56,6 @@ public:
 
     virtual const SwNode* GetAnchor() const;
 
-    SwContentNode *GetContentNode() { return pContentNode; }
-
     // For graphics only.
     bool SwapIn( bool bWaitForData = false, bool bNativFormat = false );
 

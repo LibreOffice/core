@@ -108,7 +108,6 @@ class SwSidebarWin : public vcl::Window
 
         void            ExecuteCommand(sal_uInt16 nSlot);
         void            InitControls();
-        void            HidePostIt();
         void            DoResize();
         void            ResizeIfNecessary(long aOldHeight, long aNewHeight);
         void            SetScrollbar();
@@ -125,7 +124,7 @@ class SwSidebarWin : public vcl::Window
 
         void            SetSidebarPosition(sw::sidebarwindows::SidebarPosition eSidebarPosition);
         void            SetReadonly(bool bSet);
-        bool        IsReadOnly()
+        bool            IsReadOnly()
         {
             return mbReadonly;
         }

@@ -251,8 +251,6 @@ public:
 
     virtual void TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo ) = 0;
 
-    virtual void TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeInfo ) = 0;
-
     virtual void TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner ) = 0;
 
     virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner ) = 0;
@@ -333,9 +331,6 @@ public:
 
     /// The type of breaking.
     virtual void SectionType( sal_uInt8 nBreakCode ) = 0;
-
-    /// Special header/footer flags, needed for old versions only.
-    virtual void SectionWW6HeaderFooterFlags( sal_uInt8 /*nHeadFootFlags*/ ) {}
 
     /// Definition of a numbering instance.
     virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule ) = 0;

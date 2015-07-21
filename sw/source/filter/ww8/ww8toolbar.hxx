@@ -89,13 +89,10 @@ public:
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) SAL_OVERRIDE;
 #endif
-    bool ControlIsModified();
     bool ControlIsInserted();
-    bool ControlIsChanged();
     bool ControlDropsToolBar();
     sal_Int32 TBCStreamOffset() { return fc;}
     sal_Int16 CustomizationIndex();
-
 };
 
 class Tcg255SubStruct : public TBBase
@@ -129,7 +126,6 @@ class Customization : public TBBase
     std::shared_ptr< SwCTB > customizationDataCTB;
     std::vector< TBDelta > customizationDataTBDelta;
     bool bIsDroppedMenuTB;
-    bool ImportMenu( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
 
 public:
     explicit Customization( SwCTBWrapper* rapper );

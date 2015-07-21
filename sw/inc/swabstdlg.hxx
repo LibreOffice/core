@@ -166,7 +166,6 @@ public:
 class AbstractMultiTOXTabDialog : public VclAbstractDialog
 {
 public:
-    virtual SwForm*             GetForm(CurTOXType eType) = 0;
     virtual CurTOXType          GetCurrentTOXType() const = 0;
     virtual SwTOXDescription&   GetTOXDescription(CurTOXType eTOXTypes) = 0;
     //from SfxTabDialog
@@ -312,7 +311,6 @@ class SwMailMergeConfigItem;
 class AbstractMailMergeWizard : public VclAbstractDialog2
 {
 public:
-    virtual void                SetReloadDocument(const OUString& rURL) = 0;
     virtual OUString            GetReloadDocument() const = 0;
     virtual bool            ShowPage( sal_uInt16 nLevel ) = 0;
     virtual sal_uInt16          GetRestartPage() const = 0;
@@ -462,7 +460,6 @@ public:
 
     // for tabpage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
-    virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
 
 protected:
     ~SwAbstractDialogFactory() {}

@@ -123,7 +123,6 @@ public:
     virtual bool FillItemSet(SfxItemSet* rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet* rSet) SAL_OVERRIDE;
     void SetFax(const std::vector<OUString>& );
-    void SelectFax(const OUString& rString);
     void SetPreview(bool bPrev);
     virtual void PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
 };

@@ -268,12 +268,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SAL_DLLPRIVATE bool          IsTextTool() const;
 
-    // create control elements
-    SAL_DLLPRIVATE void          CreateBtns();
-    DECL_DLLPRIVATE_LINK( BtnPage, Button * );
-
     DECL_DLLPRIVATE_LINK_TYPED( TimeoutHdl, Timer*, void );
-    DECL_DLLPRIVATE_LINK( UpdatePercentHdl, GraphicFilter* );
 
     DECL_DLLPRIVATE_LINK( FieldPopupModeEndHdl, void* );
 
@@ -302,8 +297,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     DECL_DLLPRIVATE_LINK( WindowChildEventListener, VclSimpleEvent* );
     SAL_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );
 
-    SAL_DLLPRIVATE void            CreatePageButtons(bool bShow);
-
     // linguistics functions
     SAL_DLLPRIVATE void          HyphenateDocument();
     SAL_DLLPRIVATE bool          IsDrawTextHyphenate();
@@ -319,7 +312,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs = 0 );
 
     SAL_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
-    SAL_DLLPRIVATE bool          CheckSpecialContent();
     SAL_DLLPRIVATE void          SpellKontext(bool bOn = true)
                                  { m_bCenterCrsr = bOn; m_bAlwaysShowSel = bOn; }
 
@@ -340,8 +332,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE void          ShowAtResize();
 
     SAL_DLLPRIVATE virtual void  Move() SAL_OVERRIDE;
-
-    SAL_DLLPRIVATE void          DocumentStatsChanged();
 
 public: // #i123922# Needs to be called from a 2nd place now as a helper method
     SAL_DLLPRIVATE bool          InsertGraphicDlg( SfxRequest& );
@@ -365,8 +355,6 @@ protected:
     virtual void    Deactivate(bool) SAL_OVERRIDE;
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
-
-    void            SetImageButtonColor(Color& rColor);
 
     const SwFrameFormat* GetLastTableFrameFormat() const {return m_pLastTableFormat;}
     void            SetLastTableFrameFormat(const SwFrameFormat* pSet) {m_pLastTableFormat = pSet;}
@@ -453,12 +441,8 @@ public:
     void            SetTabRowFromDoc( bool b ) { m_bTabRowFromDoc = b; }
     bool            IsTabRowFromDoc() const    { return m_bTabRowFromDoc; }
 
-    // -> #i23726#
     void            SetNumRuleNodeFromDoc( SwTextNode * pNumRuleNode )
                     { m_pNumRuleNodeFromDoc = pNumRuleNode; }
-    void            SetNumIndentFromDoc(bool b) { m_bNumIndentFromDoc = b; }
-    bool            IsNumIndentFromDoc() const { return NULL != m_pNumRuleNodeFromDoc; }
-    // <- #i23726#
 
     void    DocSzChgd( const Size& rNewSize );
     const   Size&   GetDocSz() const { return m_aDocSz; }
@@ -502,7 +486,6 @@ public:
     void            ChangeVRulerMetric(FieldUnit eUnit);
     void            GetVRulerMetric(FieldUnit& rToFill) const;
 
-    bool            StatTab() const { return m_pHRuler->IsVisible(); }
     SvxRuler&       GetHRuler()    { return *m_pHRuler; }
     SvxRuler&       GetVRuler()    { return *m_pVRuler; }
     void            InvalidateRulerPos();
@@ -511,13 +494,9 @@ public:
 
     // Handler
     void            Execute(SfxRequest&);
-    void            ExecPageMove(SfxRequest&);
-    void            ExecStyle(SfxRequest&);
     void            ExecLingu(SfxRequest&);
-    void            ExecDataBase(SfxRequest&);
     void            ExecDlg(SfxRequest&);
     void            ExecDlgExt(SfxRequest&);
-    void            ExecDBDlg(SfxRequest &);
     void            ExecColl(SfxRequest&);
     void            ExecutePrint(SfxRequest&);
     void            ExecDraw(SfxRequest&);

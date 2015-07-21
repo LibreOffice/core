@@ -133,7 +133,6 @@ public:
     bool HasTopBorder() const                   { return bTopBorder; }
     bool HasBottomBorder() const                { return bBottomBorder; }
 
-    long GetPos() const                         { return nPos; }
     const SwWriteTableCells& GetCells() const   { return aCells; }
 
     inline bool operator==( const SwWriteTableRow& rRow ) const;
@@ -309,7 +308,6 @@ public:
     SwWriteTable(const SwTable* pTable, const SwHTMLTableLayout *pLayoutInfo);
     virtual ~SwWriteTable();
 
-    const SwWriteTableCols& GetCols() const { return aCols; }
     const SwWriteTableRows& GetRows() const { return aRows; }
 
     const SwTable* GetTable() const { return m_pTable; }

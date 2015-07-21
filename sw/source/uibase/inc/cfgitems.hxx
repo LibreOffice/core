@@ -129,33 +129,8 @@ public:
     virtual bool         operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
     const OUString &GetFax() const              { return sFaxName; }
-    void          SetFax( const OUString& rFax) { sFaxName = rFax; }
-
-    bool   IsPrintProspect() const      { return bPrintProspect; }
-    bool   IsPrintProspectRTL() const      { return bPrintProspectRTL; }
-    void   SetPrintProspect(bool bFlag ){ bPrintProspect = bFlag; }
-    void   SetPrintProspectRTL(bool bFlag ){ bPrintProspectRTL = bFlag; }
-    bool IsPrintGraphic () const { return bPrintGraphic; }
-    bool IsPrintTable () const { return bPrintTable; }
-    bool IsPrintDraw () const { return bPrintDraw; }
-    bool IsPrintControl () const { return bPrintControl; }
-    bool IsPrintLeftPage () const { return bPrintLeftPages; }
-    bool IsPrintRightPage() const { return bPrintRightPages; }
-    bool IsPrintReverse  () const { return bPrintReverse; }
-    bool IsPaperFromSetup() const { return bPaperFromSetup; }
-    bool IsPrintEmptyPages() const { return bPrintEmptyPages; }
-    bool IsPrintPageBackground() const { return bPrintPageBackground; }
-    bool IsPrintBlackFont() const { return bPrintBlackFont; }
-    //#i81434# - printing of hidden text
-    bool IsPrintHiddenText() const { return bPrintHiddenText; }
-    bool IsPrintTextPlaceholder() const { return bPrintTextPlaceholder; }
-
-    bool IsPrintSingleJobs() const { return bPrintSingleJobs; }
-    SwPostItMode GetPrintPostIts () const { return nPrintPostIts; }
-
 };
 
-// OS 12.01.95
 // Item for settings dialog, ShadowCursorPage
 class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
 {

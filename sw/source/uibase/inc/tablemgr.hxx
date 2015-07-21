@@ -62,10 +62,6 @@ public:
     sal_uInt16  GetColCount() const;
     sal_uInt16  GetCurColNum() const;
 
-    bool IsTableSelected() const { return pFormat != 0; }
-
-    const SwFrameFormat *GetTableFormat() const { return pFormat; }
-
     SwWrtShell* GetShell() const { return pSh; }
 
     // @deprecated

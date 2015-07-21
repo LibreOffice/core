@@ -51,10 +51,8 @@ public:
     inline bool             UseCaption() const              { return bUseCaption; }
 
     inline SwCapObjType     GetObjType() const              { return eObjType; }
-    inline void             SetObjType(const SwCapObjType eType) { eObjType = eType; }
 
     inline const SvGlobalName&  GetOleId() const                { return aOleId; }
-    inline void             SetOleId(const SvGlobalName &rId)   { aOleId = rId; }
 
     inline const OUString&  GetCategory() const             { return sCategory; }
     inline void             SetCategory(const OUString& rCat) { sCategory = rCat; }

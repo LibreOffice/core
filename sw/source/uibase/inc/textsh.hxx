@@ -72,7 +72,6 @@ public:
     void    ExecCharAttrArgs(SfxRequest &);
     void    ExecParaAttr(SfxRequest &);
     void    ExecParaAttrArgs(SfxRequest &);
-    void    ExecAttr(SfxRequest &);
     void    ExecDB(SfxRequest &);
     void    ExecTransliteration(SfxRequest &);
     void    ExecRotateTransliteration(SfxRequest &);

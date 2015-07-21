@@ -35,8 +35,6 @@ class SwWrapDlg : public SfxSingleTabDialog
 
 public:
     SwWrapDlg(vcl::Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bDrawMode);
-
-    SwWrtShell*  GetWrtShell()   { return pWrtShell; }
 };
 
 // circulation TabPage
@@ -83,7 +81,6 @@ class SwWrapTabPage: public SfxTabPage
     virtual void dispose() SAL_OVERRIDE;
 
     void            ApplyImageList();
-    void            EnableModes(const SfxItemSet& rSet);
     virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual sfxpg   DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

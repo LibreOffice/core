@@ -190,7 +190,6 @@ protected:
     std::vector<WW8_SepInfo> aSects;
 
     void CheckForFacinPg( WW8Export& rWrt ) const;
-    void WriteOlst( WW8Export& rWrt, const WW8_SepInfo& rSectionInfo );
     void NeedsDocumentProtected(const WW8_SepInfo &rInfo);
 
     //No copy, no assign
@@ -993,8 +992,6 @@ private:
 
     void RestoreMacroCmds();
 
-    void InitFontTable();
-
     void DoComboBox(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet);
     void DoCheckBox(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPropSet);
 
@@ -1090,15 +1087,11 @@ public:
     void SetHdFtIndex(unsigned int nHdFtIndex) { m_nHdFtIndex = nHdFtIndex; }
     void IncrementHdFtIndex() { ++m_nHdFtIndex; }
 
-    static long GetDTTM( const DateTime& rDT );
-
     /// Convert the SVX numbering type to id
     static sal_uInt8 GetNumId( sal_uInt16 eNumType );
 
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich ) SAL_OVERRIDE;
-
-    sal_uInt16 DupNumRuleWithLvlStart(const SwNumRule *pRule,sal_uInt8 nLvl,sal_uInt16 nVal);
 
     SwTwips CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const;
 
@@ -1108,8 +1101,6 @@ public:
 
     void InsUInt16( sal_uInt16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
     void InsUInt32( sal_uInt32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
-    void InsAsString16( const OUString& rStr )
-                        { SwWW8Writer::InsAsString16( *pO, rStr ); }
     void WriteStringAsPara( const OUString& rText, sal_uInt16 nStyleId = 0 );
 
     /// Setup the exporter.
@@ -1440,7 +1431,6 @@ public:
     void OutAttr( sal_Int32 nSwPos );
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const SAL_OVERRIDE;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const SAL_OVERRIDE;
-    bool OutAttrWithRange(sal_Int32 nPos);
     sal_Int32 WhereNext() const                { return nAktSwPos; }
     rtl_TextEncoding GetNextCharSet() const;
     rtl_TextEncoding GetNodeCharSet() const     { return eNdChrSet; }
@@ -1478,7 +1468,6 @@ private:
     sw::FrameIter maFlyIter;
 
     sal_Int32 SearchNext( sal_Int32 nStartPos );
-    void FieldVanish( const OUString& rText );
 
     void OutSwFormatRefMark(const SwFormatRefMark& rAttr, bool bStart);
 
@@ -1594,7 +1583,6 @@ public:
     void Write(WW8Export & rExport);
     void setCvFore(sal_uInt32 cvFore) { m_cvFore = cvFore; }
     void setCvBack(sal_uInt32 cvBack) { m_cvBack = cvBack; }
-    void setIPat(sal_uInt16 ipat) { m_ipat = ipat; }
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_WRTWW8_HXX

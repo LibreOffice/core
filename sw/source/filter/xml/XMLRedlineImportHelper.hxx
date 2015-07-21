@@ -140,15 +140,6 @@ private:
     SwRedlineData* ConvertRedline(
         RedlineInfo* pRedline,  // RedlineInfo to be converted
         SwDoc* pDoc);           // document needed for Author-ID conversion
-
-    // save the redline mode (if rPropertySet is non-null)
-    void SaveRedlineMode(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & rPropertySet);
-
-    // don't restore the saved redline mode
-     void DontRestoreRedlineMode();
-
 };
 
 #endif

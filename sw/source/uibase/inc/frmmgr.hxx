@@ -71,8 +71,6 @@ public:
     //CopyCtor for dialogs to check the metrics
     SwFlyFrmAttrMgr( bool bNew, SwWrtShell *pSh, const SfxItemSet &rSet );
 
-    inline SwWrtShell*  GetShell() { return m_pOwnSh; }
-
     void                SetAnchor(RndStdIds eId);
     inline RndStdIds    GetAnchor()  const;
 
@@ -89,8 +87,6 @@ public:
     // size
     void                SetSize(const Size& rLSize);
     inline const Size&  GetSize() const;
-
-    inline sal_uInt16       GetHeightPercent() const;
 
     void                SetHeightSizeType(SwFrmSize eType);
 
@@ -129,7 +125,6 @@ public:
     inline const SwFormatHoriOrient &GetHoriOrient() const;
     inline const SvxShadowItem   &GetShadow() const;
     inline const SvxBoxItem      &GetBox() const;
-    inline const SwFormatSurround   &GetSurround() const;
     inline const SwFormatFrmSize    &GetFrmSize() const;
 
     long CalcWidthBorder()  { return CalcLeftSpace()+CalcRightSpace(); }
@@ -161,24 +156,13 @@ inline const SvxBoxItem &SwFlyFrmAttrMgr::GetBox() const
 {
     return static_cast<const SvxBoxItem&>(m_aSet.Get(RES_BOX));
 }
-inline const SwFormatSurround &SwFlyFrmAttrMgr::GetSurround() const
-{
-    return static_cast<const SwFormatSurround&>(m_aSet.Get(RES_SURROUND));
-}
-
 inline Point SwFlyFrmAttrMgr::GetPos() const
 {
     return Point( GetHoriOrient().GetPos(), GetVertOrient().GetPos() );
 }
-
 inline RndStdIds SwFlyFrmAttrMgr::GetAnchor()  const
 {
     return static_cast<const SwFormatAnchor&>(m_aSet.Get(RES_ANCHOR)).GetAnchorId();
-}
-
-inline sal_uInt16 SwFlyFrmAttrMgr::GetHeightPercent() const
-{
-    return GetFrmSize().GetHeightPercent();
 }
 
 #endif

@@ -156,7 +156,7 @@ private:
     css::uno::Reference< css::container::XIndexAccess > *       pxXEndnotes;
     css::uno::Reference< css::beans::XPropertySet > *        pxXEndnoteSettings;
     css::uno::Reference< css::container::XNameAccess > *            pxXReferenceMarks;
-    css::uno::Reference< css::container::XEnumerationAccess > * pxXTextFieldTypes;
+    css::uno::Reference< css::container::XEnumerationAccess > *     pxXTextFieldTypes;
     css::uno::Reference< css::container::XNameAccess > *            pxXTextFieldMasters;
     css::uno::Reference< css::container::XNameAccess > *            pxXTextSections;
     css::uno::Reference< css::container::XNameAccess > *            pxXBookmarks;
@@ -165,12 +165,12 @@ private:
     css::uno::Reference< css::container::XNameAccess > *            pxXGraphicObjects;
     css::uno::Reference< css::container::XNameAccess > *            pxXEmbeddedObjects;
     css::uno::Reference< css::container::XNameAccess > *            pxXStyleFamilies;
-    mutable css::uno::Reference< css::style::XAutoStyles > *  pxXAutoStyles;
-    css::uno::Reference< css::container::XIndexReplace > *        pxXChapterNumbering;
+    mutable css::uno::Reference< css::style::XAutoStyles > *    pxXAutoStyles;
+    css::uno::Reference< css::container::XIndexReplace > *      pxXChapterNumbering;
     css::uno::Reference< css::container::XIndexAccess > *       pxXDocumentIndexes;
 
-    css::uno::Reference< css::beans::XPropertySet > *       pxXLineNumberingProperties;
-    css::uno::Reference< css::container::XNameAccess > *            pxLinkTargetSupplier;
+    css::uno::Reference< css::beans::XPropertySet > *           pxXLineNumberingProperties;
+    css::uno::Reference< css::container::XNameAccess > *        pxLinkTargetSupplier;
     css::uno::Reference< css::container::XEnumerationAccess >*  pxXRedlines;
     css::uno::Reference< css::container::XNameContainer>        xXFormsContainer;
 
@@ -180,9 +180,8 @@ private:
     SwXDocumentPropertyHelper*                      pPropertyHelper;
 
     SwPrintUIOptions *                              m_pPrintUIOptions;
-    SwRenderData *                               m_pRenderData;
+    SwRenderData *                                  m_pRenderData;
 
-    void                    GetBodyText();
     void                    GetNumberFormatter();
 
     css::uno::Reference<css::uno::XInterface> create(

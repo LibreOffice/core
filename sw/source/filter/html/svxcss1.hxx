@@ -171,9 +171,6 @@ public:
     const SvxCSS1PropertyInfo& GetPropertyInfo() const { return aPropInfo; }
     SvxCSS1PropertyInfo& GetPropertyInfo() { return aPropInfo; }
 
-    const OUString& GetKey()  const { return aKey; }
-    void SetKey( const OUString& rKey ) { aKey = rKey.toAsciiUpperCase(); }
-
     friend bool operator==( const SvxCSS1MapEntry& rE1,
                             const SvxCSS1MapEntry& rE2 );
     friend bool operator<( const SvxCSS1MapEntry& rE1,

@@ -52,7 +52,6 @@ public:
 
     SwPageFootnoteInfo& GetPageFootnoteInfo()             { return aFootnoteInfo; }
     const SwPageFootnoteInfo& GetPageFootnoteInfo() const { return aFootnoteInfo; }
-    void SetPageFootnoteInfo(SwPageFootnoteInfo& rInf)    { aFootnoteInfo = rInf; }
 };
 
 class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
@@ -66,7 +65,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
-    void    SetValue(void * pPtr)   { pMisc= pPtr; }
     void*   GetValue() const        { return pMisc; }
 };
 
@@ -108,7 +106,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
-    void    SetValue(SwPaM * pPaM)   { m_pPaM= pPaM; }
     SwPaM*   GetValue() const        { return m_pPaM; }
 };
 

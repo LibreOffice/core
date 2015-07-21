@@ -44,8 +44,6 @@ public:
     inline const sal_Int32 &Start() const { return nStart; }
     inline void LeftMove( sal_Int32 nNew )
             { if ( nNew < nStart ) { nLen += nStart-nNew; nStart = nNew; } }
-    inline sal_Int32 End() const
-                { return nStart + nLen; }
     inline sal_Int32 &Len() { return nLen; }
     inline const sal_Int32 &Len() const { return nLen; }
     inline bool operator<(const SwCharRange &rRange) const
@@ -111,14 +109,10 @@ public:
     inline void ResetFlags();
     inline void SetFormatAdj( const bool bNew ) { bFormatAdj = bNew; }
     inline bool IsFormatAdj() const { return bFormatAdj; }
-    inline void SetFntChg( const bool bNew ) { bFntChg = bNew; }
-    inline bool IsFntChg() const { return bFntChg; }
     inline void SetEndHyph( const bool bNew ) { bEndHyph = bNew; }
     inline bool IsEndHyph() const { return bEndHyph; }
     inline void SetMidHyph( const bool bNew ) { bMidHyph = bNew; }
     inline bool IsMidHyph() const { return bMidHyph; }
-    inline void SetTab( const bool bNew ) { bTab = bNew; }
-    inline bool IsTab() const { return bTab; }
     inline void SetFly( const bool bNew ) { bFly = bNew; }
     inline bool IsFly() const { return bFly; }
     inline void SetRest( const bool bNew ) { bRest = bNew; }
@@ -132,7 +126,6 @@ public:
     inline void SetForcedLeftMargin( const bool bNew = true ) { bForcedLeftMargin = bNew; }
     inline bool HasForcedLeftMargin() const { return bForcedLeftMargin; }
     inline void SetHanging( const bool bNew = true ) { bHanging = bNew; }
-    inline bool IsHanging() const { return bHanging; }
     inline void SetUnderscore( const bool bNew = true ) { bUnderscore = bNew; }
     inline bool HasUnderscore() const { return bUnderscore; }
 
@@ -313,33 +306,11 @@ public:
     inline bool IsFootnoteNum() const { return bFootnoteNum; }
     inline void SetMargin( const bool bNew = true ) { bMargin = bNew; }
     inline bool IsMargin() const { return bMargin; }
-    inline void SetFlag00( const bool bNew = true ) { bFlag00 = bNew; }
-    inline bool IsFlag00() const { return bFlag00; }
-    inline void SetFlag11( const bool bNew = true ) { bFlag11 = bNew; }
-    inline bool IsFlag11() const { return bFlag11; }
-    inline void SetFlag12( const bool bNew = true ) { bFlag12 = bNew; }
-    inline bool IsFlag12() const { return bFlag12; }
-    inline void SetFlag13( const bool bNew = true ) { bFlag13 = bNew; }
-    inline bool IsFlag13() const { return bFlag13; }
-    inline void SetFlag14( const bool bNew = true ) { bFlag14 = bNew; }
-    inline bool IsFlag14() const { return bFlag14; }
-    inline void SetFlag15( const bool bNew = true ) { bFlag15 = bNew; }
-    inline bool IsFlag15() const { return bFlag15; }
-    inline void SetFlag16( const bool bNew = true ) { bFlag16 = bNew; }
-    inline bool IsFlag16() const { return bFlag16; }
-
-    // Read/Write methods for the SWG filter
-    SvStream &ReadSwg ( SvStream& rStream ); //$ istream
-    SvStream &WriteSwg( SvStream& rStream ); //$ ostream
 
     // Set nErgo in the QuoVadisPortion
     void SetErgoSumNum( const OUString &rErgo );
 
     const SwDropPortion *FindDropPortion() const;
-
-#ifdef DBG_UTIL
-    void dumpAsXml( xmlTextWriter* writer, SwTextFrm* pTextFrm );
-#endif
 
     OUTPUT_OPERATOR_OVERRIDE
     DECL_FIXEDMEMPOOL_NEWDEL(SwParaPortion)

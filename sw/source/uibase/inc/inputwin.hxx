@@ -53,13 +53,12 @@ friend class InputEdit;
     SwFieldMgr*       pMgr;
     SwWrtShell*     pWrtShell;
     SwView*         pView;
-    SfxBindings*    pBindings;
     OUString        aAktTableName, sOldFormula;
 
-    bool        bFirst : 1;  // initialisations at first call
-    bool        bActive : 1; // for hide/show when switching documents
-    bool        bIsTable : 1;
-    bool        bDelSel : 1;
+    bool            bFirst : 1;  // initialisations at first call
+    bool            bActive : 1; // for hide/show when switching documents
+    bool            bIsTable : 1;
+    bool            bDelSel : 1;
     bool            m_bDoesUndo : 1;
     bool            m_bResetUndo : 1;
     bool            m_bCallUndo : 1;
@@ -80,17 +79,13 @@ protected:
     void            CancelFormula();
 
 public:
-                    SwInputWindow( vcl::Window* pParent, SfxBindings* pBindings );
+                    SwInputWindow( vcl::Window* pParent );
     virtual         ~SwInputWindow();
     virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    void            SelectHdl( ToolBox*);
-
     void            ShowWin();
-
-    bool            IsActive(){ return bActive; };
 
     DECL_LINK( SelTableCellsNotify, SwWrtShell * );
 

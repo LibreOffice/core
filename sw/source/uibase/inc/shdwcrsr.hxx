@@ -45,10 +45,6 @@ public:
 
     void Paint();
 
-    const Point& GetPoint() const   { return aOldPt; }
-    long GetHeight() const          { return nOldHeight; }
-    sal_uInt16 GetMode() const          { return nOldMode; }
-
     Rectangle GetRect() const;
 };
 

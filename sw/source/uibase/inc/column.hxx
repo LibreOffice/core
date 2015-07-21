@@ -67,8 +67,6 @@ public:
     SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh);
     virtual ~SwColumnDlg();
     virtual void dispose() SAL_OVERRIDE;
-
-    SwWrtShell&     GetWrtShell()   { return rWrtShell; }
 };
 
 class ColumnValueSet : public ValueSet
@@ -149,7 +147,6 @@ class SwColumnPage : public SfxTabPage
     DECL_LINK(Up, void *);
     DECL_LINK(Down, void *);
     DECL_LINK( UpdateColMgr, void* );
-    void Apply(Button *);
     void Timeout();
 
     void            Update(MetricField *pInteractiveField);

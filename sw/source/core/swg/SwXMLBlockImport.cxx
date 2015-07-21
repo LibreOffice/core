@@ -370,11 +370,9 @@ SvXMLImportContext* SwXMLBlockListImport::CreateFastContext( sal_Int32 Element,
 
 SwXMLTextBlockImport::SwXMLTextBlockImport(
     const uno::Reference< uno::XComponentContext >& rContext,
-    SwXMLTextBlocks &rBlocks,
     OUString & rNewText,
     bool bNewTextOnly )
 :   SvXMLImport(rContext, "", SvXMLImportFlags::ALL ),
-    rBlockList ( rBlocks ),
     bTextOnly ( bNewTextOnly ),
     m_rText ( rNewText )
 {

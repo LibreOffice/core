@@ -91,7 +91,6 @@ public:
             delete pTOUName;
         }
 
-    void            SetTOXType(TOXTypes eSet) { eTOXType = eSet;}
     TOXTypes        GetTOXType() const { return eTOXType;}
 
     const OUString& GetStyleNames(sal_uInt16 nLvl) const

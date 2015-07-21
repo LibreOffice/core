@@ -100,8 +100,6 @@ public:
     OUString& GetFilter() const;
     void SetFilter(OUString&);
 
-    void SetSelection(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rSelection);
-
     void SetCurrentDBData( const SwDBData& rDBData);
     const SwDBData& GetCurrentDBData() const;
 
@@ -245,10 +243,6 @@ public:
 
     void SetPrintRange( sal_uInt16 nStartDocument, sal_uInt16 nEndDocument)
         { m_nStartPrint = nStartDocument; m_nEndPrint = nEndDocument; }
-    sal_uInt16 GetPrintRangeStart() const
-        { return m_nStartPrint; }
-    sal_uInt16 GetPrintRangeEnd() const
-        { return m_nEndPrint; }
 
     const OUString&  GetSelectedPrinter() const
         { return m_sSelectedPrinter; }

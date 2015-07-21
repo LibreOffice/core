@@ -106,10 +106,6 @@ public:
     {
         return *m_pFindOnlyLB;
     }
-    OUString GetFindString() const
-    {
-        return m_pFindED->GetText();
-    }
 };
 
 #endif

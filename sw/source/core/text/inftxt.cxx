@@ -86,10 +86,6 @@ using namespace ::com::sun::star::beans;
 #define DRAW_SPECIAL_OPTIONS_CENTER 1
 #define DRAW_SPECIAL_OPTIONS_ROTATE 2
 
-#ifdef DBG_UTIL
-bool SwTextSizeInfo::IsOptDbg() const { return GetOpt().IsTest4(); }
-#endif
-
 SwLineInfo::SwLineInfo()
     : pRuler( 0 ),
       pSpace( 0 ),

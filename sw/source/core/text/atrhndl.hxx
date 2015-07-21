@@ -127,8 +127,6 @@ public:
     // apply script dependent attributes
     // void ChangeScript( SwFont& rFnt, const sal_uInt8 nScr );
 
-    // returns the default value for stack nStack
-    inline const SfxPoolItem& GetDefault( const sal_uInt16 nAttribID ) const;
     // do not call these if you only used the small init function
     inline void ResetFont( SwFont& rFnt ) const;
     inline const SwFont* GetFont() const;
@@ -138,15 +136,6 @@ public:
                                    sal_uInt16& nAscent,
                                    sal_uInt16& nHeight) const;
 };
-
-inline const SfxPoolItem& SwAttrHandler::GetDefault( const sal_uInt16 nAttribID ) const
-{
-    OSL_ENSURE( nAttribID < RES_TXTATR_END,
-            "this attrib does not ex."
-            );
-    OSL_ENSURE( pDefaultArray[ StackPos[ nAttribID ] ], "array not initialized" );
-    return *pDefaultArray[ StackPos[ nAttribID ] ];
-}
 
 inline void SwAttrHandler::ResetFont( SwFont& rFnt ) const
 {

@@ -209,7 +209,6 @@ public:
 
     virtual void Remove( SfxStyleSheetBase* pStyle) SAL_OVERRIDE;
 
-    void    SetOrganizerMode( bool bMode )  { bOrganizer = bMode; }
     bool    IsOrganizerMode() const         { return bOrganizer; }
 
     virtual SfxStyleSheetIteratorPtr CreateIterator( SfxStyleFamily, sal_uInt16 nMask ) SAL_OVERRIDE;

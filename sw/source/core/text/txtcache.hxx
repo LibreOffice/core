@@ -53,15 +53,8 @@ public:
 
     SwParaPortion *GetPara();
 
-    inline SwTextLine &GetTextLine();
-
     virtual bool IsAvailable() const SAL_OVERRIDE;
 };
-
-inline SwTextLine &SwTextLineAccess::GetTextLine()
-{
-    return *static_cast<SwTextLine*>(Get());
-}
 
 #endif
 

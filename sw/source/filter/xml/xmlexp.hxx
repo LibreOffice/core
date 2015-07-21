@@ -129,10 +129,6 @@ public:
     void ExportTable( const SwTableNode& rTableNd );
 
     SvXMLExportItemMapper& GetTableItemMapper() { return *pTableItemMapper; }
-    const rtl::Reference < XMLPropertySetMapper >& GetParaPropMapper()
-    {
-        return xParaPropMapper;
-    }
 
     bool IsShowProgress() const { return bShowProgress; }
     void SetShowProgress( bool b ) { bShowProgress = b; }

@@ -52,11 +52,6 @@ public:
                                   const SfxPoolItem* pState,
                                   const bool bIsEnabled) SAL_OVERRIDE;
 
-    SfxBindings* GetBindings() const
-    {
-        return mpBindings;
-    }
-
 private:
     ThemePanel(vcl::Window* pParent,
                    const css::uno::Reference<css::frame::XFrame>& rxFrame,

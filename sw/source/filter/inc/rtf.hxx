@@ -40,8 +40,6 @@ public:
         Value.Flags.nJunk = 0;
     }
 
-    sal_uInt8  GetOrder()   const { return (sal_uInt8)Value.Flags.nOrder; }
-    bool       GetGoldCut() const { return Value.Flags.nGoldCut; }
     sal_uInt16 GetValue()   const { return Value.nVal; }
 };
 

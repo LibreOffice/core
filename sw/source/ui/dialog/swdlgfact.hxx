@@ -309,7 +309,6 @@ class SwMultiTOXTabDialog;
 class AbstractMultiTOXTabDialog_Impl : public AbstractMultiTOXTabDialog
 {
     DECL_ABSTDLG_BASE(AbstractMultiTOXTabDialog_Impl,SwMultiTOXTabDialog)
-    virtual SwForm*             GetForm(CurTOXType eType) SAL_OVERRIDE;
     virtual CurTOXType          GetCurrentTOXType() const SAL_OVERRIDE ;
     virtual SwTOXDescription&   GetTOXDescription(CurTOXType eTOXTypes) SAL_OVERRIDE;
     //from SfxTabDialog
@@ -361,7 +360,6 @@ public:
     virtual void    StartExecuteModal( const Link<>& rEndDialogHdl ) SAL_OVERRIDE;
     virtual long    GetResult() SAL_OVERRIDE;
 
-    virtual void                SetReloadDocument(const OUString& rURL) SAL_OVERRIDE;
     virtual OUString            GetReloadDocument() const SAL_OVERRIDE;
     virtual bool                ShowPage( sal_uInt16 nLevel ) SAL_OVERRIDE;
     virtual sal_uInt16          GetRestartPage() const SAL_OVERRIDE;
@@ -504,8 +502,6 @@ public:
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) SAL_OVERRIDE;
-
-    virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) SAL_OVERRIDE;
 
 };
 

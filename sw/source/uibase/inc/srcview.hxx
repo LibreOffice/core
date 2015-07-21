@@ -64,7 +64,6 @@ public:
     virtual ~SwSrcView();
 
     SwDocShell*         GetDocShell();
-    SwSrcEditWindow&    GetEditWin() { return *aEditWin.get(); }
     void                SaveContent(const OUString& rTmpFile);
     void                SaveContentTo(SfxMedium& rMed);
 

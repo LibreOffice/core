@@ -96,7 +96,6 @@ private:
     void            SetFont();
 
     DECL_LINK_TYPED( SyntaxTimerHdl, Idle *, void );
-    DECL_LINK( TimeoutHdl, Timer * );
 
     using Window::Notify;
     using Window::Invalidate;
@@ -139,7 +138,6 @@ public:
                         { pTextEngine->SetModified(false); }
     bool            IsModified() const
                         { return pTextEngine->IsModified();}
-    void            CreateScrollbars();
 
     void            SetReadonly(bool bSet){bReadonly = bSet;}
     bool            IsReadonly(){return bReadonly;}

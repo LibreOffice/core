@@ -35,13 +35,8 @@ protected:
 public:
     SwTextFrmBreak( SwTextFrm *pFrm, const SwTwips nRst = 0  );
     bool IsBreakNow( SwTextMargin &rLine );
-
-    bool IsBroken() const     { return bBreak; }
     bool IsKeepAlways() const { return bKeep; }
-    void Keep()               { bKeep = true; }
-    void Break()              { bKeep = false; bBreak = true; }
 
-    inline bool GetKeep() const { return bKeep; }
     inline void SetKeep( const bool bNew ) { bKeep = bNew; }
 
     bool IsInside( SwTextMargin &rLine ) const;
@@ -53,7 +48,6 @@ public:
 
     // OD 2004-02-27 #106629# - no longer inline
     void SetRstHeight( const SwTextMargin &rLine );
-    SwTwips GetRstHeight() const { return nRstHeight; }
 };
 
 class WidowsAndOrphans : public SwTextFrmBreak
