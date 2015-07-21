@@ -147,14 +147,6 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
         }
     };
 
-    typedef ::o3tl::unary_compose< ExtractDriverFromAccess, EnsureDriver > ExtractAfterLoad_BASE;
-    /// an STL functor which loads a driver described by a DriverAccess, and extracts the SdbcDriver
-    struct ExtractAfterLoad : public ExtractAfterLoad_BASE
-    {
-        explicit ExtractAfterLoad( const Reference< XComponentContext > &rxContext )
-            : ExtractAfterLoad_BASE( ExtractDriverFromAccess(), EnsureDriver( rxContext ) ) {}
-    };
-
     struct ExtractDriverFromCollectionElement : public ::std::unary_function< DriverCollection::value_type, Reference<XDriver> >
     {
         Reference<XDriver> operator()( const DriverCollection::value_type& _rElement ) const
@@ -654,9 +646,12 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
             aFind = ::std::find_if(
                 m_aDriversBS.begin(),       // begin of search range
                 m_aDriversBS.end(),         // end of search range
-                o3tl::unary_compose< AcceptsURL, ExtractAfterLoad >( AcceptsURL( _rURL ), ExtractAfterLoad( m_xContext ) )
-                                            // compose two functors: extract the driver from the access, then ask the resulting driver for acceptance
-            );
+                [&_rURL, this] (DriverAccessArray::value_type driverAccess) {
+                    // extract the driver from the access, then ask the resulting driver for acceptance
+                    const DriverAccess &ensuredAccess = EnsureDriver(m_xContext)(driverAccess);
+                    const Reference<XDriver> driver = ExtractDriverFromAccess()(ensuredAccess);
+                    return AcceptsURL(_rURL)(driver);
+                });
         } // if ( m_aDriversBS.find(sDriverFactoryName ) == m_aDriversBS.end() )
         else
         {
@@ -675,9 +670,11 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
         DriverCollection::iterator aPos = ::std::find_if(
             m_aDriversRT.begin(),       // begin of search range
             m_aDriversRT.end(),         // end of search range
-            o3tl::unary_compose< AcceptsURL, ExtractDriverFromCollectionElement >( AcceptsURL( _rURL ), ExtractDriverFromCollectionElement() )
-                                        // compose two functors: extract the driver from the access, then ask the resulting driver for acceptance
-        );
+            [&_rURL] (DriverCollection::value_type element) {
+                // extract the driver from the collection element, then ask the resulting driver for acceptance
+                const Reference<XDriver> driver = ExtractDriverFromCollectionElement()(element);
+                return AcceptsURL(_rURL)(driver);
+            });
 
         if ( m_aDriversRT.end() != aPos )
             xReturn = aPos->second;
