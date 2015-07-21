@@ -130,6 +130,7 @@ class FileViewContainer : public vcl::Window
 RemoteFilesDialog::RemoteFilesDialog( vcl::Window* pParent, WinBits nBits )
     : SvtFileDialog_Base( pParent, "RemoteFilesDialog", "fps/ui/remotefilesdialog.ui" )
     , m_context( comphelper::getProcessComponentContext() )
+    , m_pFileNotifier( NULL )
     , m_pSplitter( NULL )
     , m_pFileView( NULL )
     , m_pContainer( NULL )
