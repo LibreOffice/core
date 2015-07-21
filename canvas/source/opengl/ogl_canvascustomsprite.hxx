@@ -29,8 +29,8 @@
 
 namespace oglcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XCustomSprite,
-                                              ::com::sun::star::rendering::XCanvas > CanvasCustomSpriteBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XCustomSprite,
+                                             css::rendering::XCanvas > CanvasCustomSpriteBase_Base;
     typedef ::canvas::CanvasBase<
          ::canvas::BaseMutexHelper< CanvasCustomSpriteBase_Base >,
          CanvasHelper,
@@ -56,23 +56,23 @@ namespace oglcanvas
             @param rDevice
             Target DX device
          */
-        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
+        CanvasCustomSprite( const css::geometry::RealSize2D&                rSpriteSize,
                             const SpriteCanvasRef&                          rRefDevice,
                             SpriteDeviceHelper&                             rDeviceHelper );
 
         virtual void disposeThis() SAL_OVERRIDE;
 
         // XSprite
-        virtual void SAL_CALL setAlpha( double alpha ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL move( const ::com::sun::star::geometry::RealPoint2D&  aNewPos, const ::com::sun::star::rendering::ViewState&  viewState, const ::com::sun::star::rendering::RenderState& renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL transform( const ::com::sun::star::geometry::AffineMatrix2D& aTransformation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL clip( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& aClip ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setPriority( double nPriority ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL show() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL hide() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setAlpha( double alpha ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL move( const css::geometry::RealPoint2D&  aNewPos, const css::rendering::ViewState&  viewState, const css::rendering::RenderState& renderState ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL clip( const css::uno::Reference< css::rendering::XPolyPolygon2D >& aClip ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setPriority( double nPriority ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL show() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL hide() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XCustomSprite
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas > SAL_CALL getContentCanvas() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Reference< css::rendering::XCanvas > SAL_CALL getContentCanvas() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         double getPriority() const { return mfPriority; }
 
@@ -84,14 +84,13 @@ namespace oglcanvas
             raw pointer (without refcounting)
         */
         SpriteCanvasRef                              mpSpriteCanvas;
-        const ::com::sun::star::geometry::RealSize2D maSize;
+        const css::geometry::RealSize2D              maSize;
 
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XPolyPolygon2D > mxClip;
-        ::com::sun::star::geometry::AffineMatrix2D        maTransformation;
-        ::basegfx::B2DPoint                               maPosition;
-        double                                            mfAlpha;
-        double                                            mfPriority;
+        css::uno::Reference< css::rendering::XPolyPolygon2D > mxClip;
+        css::geometry::AffineMatrix2D                maTransformation;
+        ::basegfx::B2DPoint                          maPosition;
+        double                                       mfAlpha;
+        double                                       mfPriority;
     };
 }
 

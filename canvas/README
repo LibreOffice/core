@@ -14,7 +14,7 @@ not exclusively by the canvas, Armin's drawinglayer module also make
 use of it), which resides in basegfx.
 
 The UNO API used by the canvas is primarily under
-com::sun::star::rendering, with com::sun::star::rendering::XCanvas
+css::rendering, with css::rendering::XCanvas
 being the central interface.
 
 == The slideshow engine ==

@@ -28,7 +28,7 @@ namespace oglcanvas
     void setupState( const ::basegfx::B2DHomMatrix&                rTransform,
                      unsigned int                                  eSrcBlend,
                      unsigned int                                  eDstBlend,
-                     const ::com::sun::star::rendering::ARGBColor& rColor );
+                     const com::sun::star::rendering::ARGBColor&              rColor );
 
     void renderOSD( const std::vector<double>& rNumbers, double scale );
 }

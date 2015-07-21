@@ -151,7 +151,7 @@ namespace vclcanvas
                                                                   mbSurfaceDirty);
     }
 
-    OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+    OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (css::uno::RuntimeException, std::exception)
     {
         return OUString( SPRITECANVAS_SERVICE_NAME );
     }

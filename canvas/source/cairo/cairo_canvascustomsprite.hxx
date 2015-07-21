@@ -47,10 +47,10 @@
 
 namespace cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XCustomSprite,
-                                               ::com::sun::star::rendering::XBitmapCanvas,
-                                              ::com::sun::star::rendering::XIntegerBitmap,
-                                                ::com::sun::star::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XCustomSprite,
+                                             css::rendering::XBitmapCanvas,
+                                             css::rendering::XIntegerBitmap,
+                                             css::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
     /** Mixin Sprite
 
         Have to mixin the Sprite interface before deriving from
@@ -100,7 +100,7 @@ namespace cairocanvas
             @param rDevice
             Target DX device
          */
-        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
+        CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
                             const SpriteCanvasRef&                          rRefDevice );
 
         virtual void disposeThis() SAL_OVERRIDE;
@@ -113,9 +113,9 @@ namespace cairocanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasCustomSprite, CanvasCustomSpriteBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // Sprite
         virtual void redraw( const ::cairo::CairoSharedPtr& pCairo,
@@ -126,8 +126,8 @@ namespace cairocanvas
 
         // RepaintTarget
         virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
-                              const ::com::sun::star::rendering::ViewState&   viewState,
-                              const ::com::sun::star::rendering::RenderState& renderState ) SAL_OVERRIDE;
+                              const css::rendering::ViewState&   viewState,
+                              const css::rendering::RenderState& renderState ) SAL_OVERRIDE;
 
         // SurfaceProvider
         virtual ::cairo::SurfaceSharedPtr getSurface() SAL_OVERRIDE;

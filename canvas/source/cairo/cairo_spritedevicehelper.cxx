@@ -84,7 +84,7 @@ namespace cairocanvas
 
     uno::Any SpriteDeviceHelper::isAccelerated() const
     {
-        return ::com::sun::star::uno::makeAny(true);
+        return css::uno::makeAny(true);
     }
 
     uno::Any SpriteDeviceHelper::getDeviceHandle() const

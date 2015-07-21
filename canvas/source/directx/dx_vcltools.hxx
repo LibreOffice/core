@@ -43,8 +43,8 @@ namespace dxcanvas
         };
 
         bool drawVCLBitmapFromXBitmap( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
-                                       const ::com::sun::star::uno::Reference<
-                                             ::com::sun::star::rendering::XBitmap >&   xBitmap );
+                                       const css::uno::Reference<
+                                             css::rendering::XBitmap >&   xBitmap );
     }
 }
 

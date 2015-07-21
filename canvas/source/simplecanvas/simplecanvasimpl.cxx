@@ -106,8 +106,8 @@ namespace
     };
 
 
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XSimpleCanvas,
-                                              ::com::sun::star::lang::XServiceName >    SimpleCanvasBase;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XSimpleCanvas,
+                                             css::lang::XServiceName >    SimpleCanvasBase;
 
     class SimpleCanvasImpl : private cppu::BaseMutex,
                              public SimpleCanvasBase

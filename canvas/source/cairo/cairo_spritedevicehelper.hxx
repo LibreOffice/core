@@ -55,11 +55,11 @@ namespace cairocanvas
         bool  showBuffer( bool, bool );
         bool  switchBuffer( bool, bool bUpdateAll );
 
-        ::com::sun::star::uno::Any isAccelerated() const;
-        ::com::sun::star::uno::Any getDeviceHandle() const;
-        ::com::sun::star::uno::Any getSurfaceHandle() const;
+        css::uno::Any isAccelerated() const;
+        css::uno::Any getDeviceHandle() const;
+        css::uno::Any getSurfaceHandle() const;
 
-        void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
+        void notifySizeUpdate( const css::awt::Rectangle& rBounds );
         void setSize( const ::basegfx::B2ISize& rSize );
 
         ::cairo::SurfaceSharedPtr getBufferSurface() { return mpBufferSurface; }

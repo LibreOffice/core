@@ -47,23 +47,23 @@ namespace dxcanvas
         virtual ::basegfx::B2IVector      getSize() const;
         virtual bool                      hasAlpha() const;
 
-        ::com::sun::star::uno::Sequence< sal_Int8 > getData(
-            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&   rect );
+        css::uno::Sequence< sal_Int8 > getData(
+            css::rendering::IntegerBitmapLayout&       bitmapLayout,
+            const css::geometry::IntegerRectangle2D&   rect );
 
         void setData(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&      data,
-            const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&   rect );
+            const css::uno::Sequence< sal_Int8 >&      data,
+            const css::rendering::IntegerBitmapLayout& bitmapLayout,
+            const css::geometry::IntegerRectangle2D&   rect );
 
         void setPixel(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&      color,
-            const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&       pos );
+            const css::uno::Sequence< sal_Int8 >&      color,
+            const css::rendering::IntegerBitmapLayout& bitmapLayout,
+            const css::geometry::IntegerPoint2D&       pos );
 
-        ::com::sun::star::uno::Sequence< sal_Int8 > getPixel(
-            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&       pos );
+        css::uno::Sequence< sal_Int8 > getPixel(
+            css::rendering::IntegerBitmapLayout&       bitmapLayout,
+            const css::geometry::IntegerPoint2D&       pos );
 
     private:
         // Refcounted global GDI+ state container

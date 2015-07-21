@@ -51,14 +51,14 @@ namespace vclcanvas
         bool  showBuffer( bool bWindowVisible, bool bUpdateAll );
         bool  switchBuffer( bool bWindowVisible, bool bUpdateAll );
 
-        ::com::sun::star::uno::Any isAccelerated() const;
-        ::com::sun::star::uno::Any getDeviceHandle() const;
-        ::com::sun::star::uno::Any getSurfaceHandle() const;
+        css::uno::Any isAccelerated() const;
+        css::uno::Any getDeviceHandle() const;
+        css::uno::Any getSurfaceHandle() const;
 
         void dumpScreenContent() const;
         BackBufferSharedPtr getBackBuffer() const { return mpBackBuffer; }
 
-        void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
+        void notifySizeUpdate( const css::awt::Rectangle& rBounds );
 
     private:
         /// This buffer holds the background content for all associated canvases

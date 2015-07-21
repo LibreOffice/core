@@ -43,27 +43,25 @@ namespace vclcanvas
                       const ::Point&                                  rPoint,
                       const ::Size&                                   rSize,
                       const GraphicAttr&                              rAttr,
-                      const ::com::sun::star::rendering::ViewState&   rUsedViewState,
-                      const ::com::sun::star::rendering::RenderState& rUsedRenderState,
-                      const ::com::sun::star::uno::Reference<
-                              ::com::sun::star::rendering::XCanvas >&   rTarget );
+                      const css::rendering::ViewState&                rUsedViewState,
+                      const css::rendering::RenderState&              rUsedRenderState,
+                      const css::uno::Reference< css::rendering::XCanvas >&   rTarget );
 
         /// Dispose all internal references
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     private:
-        virtual ::sal_Int8 doRedraw( const ::com::sun::star::rendering::ViewState&  rNewState,
-                                     const ::com::sun::star::rendering::ViewState&  rOldState,
-                                     const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::rendering::XCanvas >&    rTargetCanvas,
-                                     bool                                           bSameViewTransform ) SAL_OVERRIDE;
+        virtual ::sal_Int8 doRedraw( const css::rendering::ViewState&  rNewState,
+                                     const css::rendering::ViewState&  rOldState,
+                                     const css::uno::Reference< css::rendering::XCanvas >&    rTargetCanvas,
+                                     bool                              bSameViewTransform ) SAL_OVERRIDE;
 
 
-        GraphicObjectSharedPtr                                                      mpGraphicObject;
-        const ::com::sun::star::rendering::RenderState                              maRenderState;
-        const ::Point                                                               maPoint;
-        const ::Size                                                                maSize;
-        const GraphicAttr                                                           maAttributes;
+        GraphicObjectSharedPtr                                         mpGraphicObject;
+        const css::rendering::RenderState                              maRenderState;
+        const ::Point                                                  maPoint;
+        const ::Size                                                   maSize;
+        const GraphicAttr                                              maAttributes;
     };
 }
 

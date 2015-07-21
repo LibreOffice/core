@@ -48,32 +48,32 @@ namespace vclcanvas
         void disposing();
 
         // XWindowGraphicDevice
-        ::com::sun::star::geometry::RealSize2D getPhysicalResolution();
-        ::com::sun::star::geometry::RealSize2D getPhysicalSize();
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&                               rDevice,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealPoint2D > >& points );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBezierPolyPolygon2D > createCompatibleBezierPolyPolygon(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&                                       rDevice,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealBezierSegment2D > >& points );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleAlphaBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
+        css::geometry::RealSize2D getPhysicalResolution();
+        css::geometry::RealSize2D getPhysicalSize();
+        css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&                               rDevice,
+            const css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > >& points );
+        css::uno::Reference< css::rendering::XBezierPolyPolygon2D > createCompatibleBezierPolyPolygon(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&                                       rDevice,
+            const css::uno::Sequence< css::uno::Sequence< css::geometry::RealBezierSegment2D > >& points );
+        css::uno::Reference< css::rendering::XBitmap > createCompatibleBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
+        css::uno::Reference< css::rendering::XVolatileBitmap > createVolatileBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
+        css::uno::Reference< css::rendering::XBitmap > createCompatibleAlphaBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
+        css::uno::Reference< css::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
 
-        ::com::sun::star::uno::Any isAccelerated() const;
-        ::com::sun::star::uno::Any getDeviceHandle() const;
-        ::com::sun::star::uno::Any getSurfaceHandle() const;
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XColorSpace > getColorSpace() const;
+        css::uno::Any isAccelerated() const;
+        css::uno::Any getDeviceHandle() const;
+        css::uno::Any getSurfaceHandle() const;
+        css::uno::Reference<
+            css::rendering::XColorSpace > getColorSpace() const;
 
         OutDevProviderSharedPtr getOutDev() const { return mpOutDev; }
 

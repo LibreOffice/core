@@ -72,51 +72,51 @@ namespace dxcanvas
         // =============================================================
         void clear();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive >
-            drawTextLayout( const ::com::sun::star::rendering::XCanvas*     pCanvas,
-                            const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::rendering::XTextLayout >& laidOutText,
-                            const ::com::sun::star::rendering::ViewState&   viewState,
-                            const ::com::sun::star::rendering::RenderState& renderState );
+        css::uno::Reference< css::rendering::XCachedPrimitive >
+            drawTextLayout( const css::rendering::XCanvas*     pCanvas,
+                            const css::uno::Reference<
+                                css::rendering::XTextLayout >& laidOutText,
+                            const css::rendering::ViewState&   viewState,
+                            const css::rendering::RenderState& renderState );
 
         // BitmapCanvasHelper functionality
         // ================================
 
-        void copyRect( const ::com::sun::star::rendering::XCanvas*          pCanvas,
-                       const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::rendering::XBitmapCanvas >&    sourceCanvas,
-                       const ::com::sun::star::geometry::RealRectangle2D&   sourceRect,
-                       const ::com::sun::star::rendering::ViewState&        sourceViewState,
-                       const ::com::sun::star::rendering::RenderState&      sourceRenderState,
-                       const ::com::sun::star::geometry::RealRectangle2D&   destRect,
-                       const ::com::sun::star::rendering::ViewState&        destViewState,
-                       const ::com::sun::star::rendering::RenderState&      destRenderState );
+        void copyRect( const css::rendering::XCanvas*          pCanvas,
+                       const css::uno::Reference<
+                               css::rendering::XBitmapCanvas >&    sourceCanvas,
+                       const css::geometry::RealRectangle2D&   sourceRect,
+                       const css::rendering::ViewState&        sourceViewState,
+                       const css::rendering::RenderState&      sourceRenderState,
+                       const css::geometry::RealRectangle2D&   destRect,
+                       const css::rendering::ViewState&        destViewState,
+                       const css::rendering::RenderState&      destRenderState );
 
-        ::com::sun::star::geometry::IntegerSize2D getSize();
+        css::geometry::IntegerSize2D getSize();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >
-            getScaledBitmap( const ::com::sun::star::geometry::RealSize2D&  newSize,
+        css::uno::Reference< css::rendering::XBitmap >
+            getScaledBitmap( const css::geometry::RealSize2D&  newSize,
                              bool                                           beFast );
 
-        ::com::sun::star::uno::Sequence< sal_Int8 >
-            getData( ::com::sun::star::rendering::IntegerBitmapLayout&      bitmapLayout,
-                     const ::com::sun::star::geometry::IntegerRectangle2D&  rect );
+        css::uno::Sequence< sal_Int8 >
+            getData( css::rendering::IntegerBitmapLayout&      bitmapLayout,
+                     const css::geometry::IntegerRectangle2D&  rect );
 
-        void setData( const ::com::sun::star::uno::Sequence< sal_Int8 >&         data,
-                      const ::com::sun::star::rendering::IntegerBitmapLayout&    bitmapLayout,
-                      const ::com::sun::star::geometry::IntegerRectangle2D&      rect );
+        void setData( const css::uno::Sequence< sal_Int8 >&         data,
+                      const css::rendering::IntegerBitmapLayout&    bitmapLayout,
+                      const css::geometry::IntegerRectangle2D&      rect );
 
-        void setPixel( const ::com::sun::star::uno::Sequence< sal_Int8 >&        color,
-                       const ::com::sun::star::rendering::IntegerBitmapLayout&   bitmapLayout,
-                       const ::com::sun::star::geometry::IntegerPoint2D&         pos );
+        void setPixel( const css::uno::Sequence< sal_Int8 >&        color,
+                       const css::rendering::IntegerBitmapLayout&   bitmapLayout,
+                       const css::geometry::IntegerPoint2D&         pos );
 
-        ::com::sun::star::uno::Sequence< sal_Int8 >
-            getPixel( ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-                      const ::com::sun::star::geometry::IntegerPoint2D& pos );
+        css::uno::Sequence< sal_Int8 >
+            getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
+                      const css::geometry::IntegerPoint2D& pos );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapPalette > getPalette();
+        css::uno::Reference< css::rendering::XBitmapPalette > getPalette();
 
-        ::com::sun::star::rendering::IntegerBitmapLayout getMemoryLayout();
+        css::rendering::IntegerBitmapLayout getMemoryLayout();
 
         bool hasAlpha() const;
 

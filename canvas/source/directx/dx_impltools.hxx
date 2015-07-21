@@ -61,8 +61,7 @@ namespace dxcanvas
         struct RawRGBABitmap;
 
         ::basegfx::B2DPolyPolygon
-        polyPolygonFromXPolyPolygon2D( const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::rendering::XPolyPolygon2D >& );
+        polyPolygonFromXPolyPolygon2D( const css::uno::Reference< css::rendering::XPolyPolygon2D >& );
 
         Gdiplus::Graphics* createGraphicsFromHDC(HDC);
         Gdiplus::Graphics* createGraphicsFromBitmap(const BitmapSharedPtr&);
@@ -72,26 +71,26 @@ namespace dxcanvas
         void gdiPlusMatrixFromB2DHomMatrix( Gdiplus::Matrix&        rGdiplusMatrix,
                                             const ::basegfx::B2DHomMatrix&  rMatrix );
         void gdiPlusMatrixFromAffineMatrix2D( Gdiplus::Matrix&                          rGdiplusMatrix,
-                                              const ::com::sun::star::geometry::AffineMatrix2D& rMatrix );
+                                              const css::geometry::AffineMatrix2D& rMatrix );
 
-        Gdiplus::PointF gdiPlusPointFFromRealPoint2D( const ::com::sun::star::geometry::RealPoint2D& );
-        Gdiplus::RectF  gdiPlusRectFFromRectangle2D( const ::com::sun::star::geometry::RealRectangle2D& );
-        Gdiplus::Rect   gdiPlusRectFromIntegerRectangle2D( const ::com::sun::star::geometry::IntegerRectangle2D& );
+        Gdiplus::PointF gdiPlusPointFFromRealPoint2D( const css::geometry::RealPoint2D& );
+        Gdiplus::RectF  gdiPlusRectFFromRectangle2D( const css::geometry::RealRectangle2D& );
+        Gdiplus::Rect   gdiPlusRectFromIntegerRectangle2D( const css::geometry::IntegerRectangle2D& );
         RECT            gdiRectFromB2IRect( const ::basegfx::B2IRange& );
 
-        ::com::sun::star::geometry::RealPoint2D     realPoint2DFromGdiPlusPointF( const Gdiplus::PointF& );
-        ::com::sun::star::geometry::RealRectangle2D realRectangle2DFromGdiPlusRectF( const Gdiplus::RectF& );
+        css::geometry::RealPoint2D     realPoint2DFromGdiPlusPointF( const Gdiplus::PointF& );
+        css::geometry::RealRectangle2D realRectangle2DFromGdiPlusRectF( const Gdiplus::RectF& );
 
         ::basegfx::B2DPoint b2dPointFromGdiPlusPointF( const Gdiplus::PointF& );
         ::basegfx::B2DRange b2dRangeFromGdiPlusRectF( const Gdiplus::RectF& );
 
-        ::com::sun::star::uno::Sequence< double > argbToDoubleSequence( const Gdiplus::ARGB& rColor );
-        ::com::sun::star::uno::Sequence< sal_Int8 > argbToIntSequence( const Gdiplus::ARGB& rColor );
-        Gdiplus::ARGB sequenceToArgb( const ::com::sun::star::uno::Sequence< sal_Int8 >& rColor );
-        Gdiplus::ARGB sequenceToArgb( const ::com::sun::star::uno::Sequence< double >&  rColor );
+        css::uno::Sequence< double > argbToDoubleSequence( const Gdiplus::ARGB& rColor );
+        css::uno::Sequence< sal_Int8 > argbToIntSequence( const Gdiplus::ARGB& rColor );
+        Gdiplus::ARGB sequenceToArgb( const css::uno::Sequence< sal_Int8 >& rColor );
+        Gdiplus::ARGB sequenceToArgb( const css::uno::Sequence< double >&  rColor );
 
-        GraphicsPathSharedPtr graphicsPathFromRealPoint2DSequence( const ::com::sun::star::uno::Sequence<
-                                                                 ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealPoint2D > >& );
+        GraphicsPathSharedPtr graphicsPathFromRealPoint2DSequence( const css::uno::Sequence<
+                                                                 css::uno::Sequence< css::geometry::RealPoint2D > >& );
 
         GraphicsPathSharedPtr graphicsPathFromB2DPolygon(
             const ::basegfx::B2DPolygon& rPoly,
@@ -102,7 +101,7 @@ namespace dxcanvas
             bool bNoLineJoin = false);
 
         GraphicsPathSharedPtr graphicsPathFromXPolyPolygon2D(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >&,
+            const css::uno::Reference< css::rendering::XPolyPolygon2D >&,
             bool bNoLineJoin = false );
 
         bool drawGdiPlusBitmap( const GraphicsSharedPtr& rGraphics,
@@ -114,11 +113,9 @@ namespace dxcanvas
         bool drawRGBABits( const ::boost::shared_ptr< Gdiplus::Graphics >& rGraphics,
                            const RawRGBABitmap&                            rRawRGBAData );
 
-        BitmapSharedPtr bitmapFromXBitmap( const ::com::sun::star::uno::Reference<
-                                                   ::com::sun::star::rendering::XBitmap >&  xBitmap );
+        BitmapSharedPtr bitmapFromXBitmap( const css::uno::Reference< css::rendering::XBitmap >&  xBitmap );
 
-        CanvasFont::ImplRef canvasFontFromXFont( const ::com::sun::star::uno::Reference<
-                                                     ::com::sun::star::rendering::XCanvasFont >& xFont );
+        CanvasFont::ImplRef canvasFontFromXFont( const css::uno::Reference< css::rendering::XCanvasFont >& xFont );
 
         void setModulateImageAttributes( Gdiplus::ImageAttributes& o_rAttr,
                                          double                           nRedModulation,
