@@ -16,7 +16,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-SfxBoolItem AdvancedMode SID_OBJECT_CHOOSE_MODE
+SfxVoidItem AdvancedMode SID_OBJECT_CHOOSE_MODE
 
 [
     /* flags: */
@@ -196,7 +196,7 @@ SfxUInt16Item AnimatorState SID_ANIMATOR_STATE
     GroupId = GID_OPTIONS;
 ]
 
-SfxBoolItem ArrowsToolbox SID_DRAWTBX_ARROWS
+SfxVoidItem ArrowsToolbox SID_DRAWTBX_ARROWS
 
 [
     /* flags: */
@@ -250,7 +250,7 @@ SfxVoidItem BeforeObject SID_BEFORE_OBJ
 ()
 [
     /* flags: */
-    AutoUpdate = FALSE,
+    AutoUpdate = TRUE,
     Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
@@ -274,7 +274,7 @@ SfxVoidItem BehindObject SID_BEHIND_OBJ
 ()
 [
     /* flags: */
-    AutoUpdate = FALSE,
+    AutoUpdate = TRUE,
     Cachable = Cachable,
     FastCall = FALSE,
     HasCoreId = FALSE,
@@ -1292,7 +1292,7 @@ SfxBoolItem ConnectorLinesCircleStart SID_CONNECTOR_LINES_CIRCLE_START
     GroupId = GID_CONNECTOR;
 ]
 
-SfxBoolItem ConnectorToolbox SID_DRAWTBX_CONNECTORS
+SfxVoidItem ConnectorToolbox SID_DRAWTBX_CONNECTORS
 
 [
     /* flags: */
@@ -2157,7 +2157,7 @@ SfxBoolItem CustomAnimationSchemes SID_CUSTOM_ANIMATION_SCHEMES_PANEL
     GroupId = GID_OPTIONS;
 ]
 
-SfxBoolItem EllipseToolbox SID_DRAWTBX_ELLIPSES
+SfxVoidItem EllipseToolbox SID_DRAWTBX_ELLIPSES
 
 [
     /* flags: */
@@ -3889,7 +3889,7 @@ SfxVoidItem LineTo SID_LINETO
     GroupId = GID_DRAWING;
 ]
 
-SfxBoolItem LineToolbox SID_DRAWTBX_LINES
+SfxVoidItem LineToolbox SID_DRAWTBX_LINES
 
 [
     /* flags: */
@@ -4516,7 +4516,7 @@ SfxBoolItem NotesMode SID_NOTESMODE
     GroupId = GID_VIEW;
 ]
 
-SfxBoolItem ObjectPosition SID_POSITION
+SfxVoidItem ObjectPosition SID_POSITION
 
 [
     /* flags: */
@@ -4542,7 +4542,7 @@ SfxBoolItem ObjectPosition SID_POSITION
     GroupId = GID_MODIFY;
 ]
 
-SfxBoolItem Objects3DToolbox SID_DRAWTBX_3D_OBJECTS
+SfxVoidItem Objects3DToolbox SID_DRAWTBX_3D_OBJECTS
 
 [
     /* flags: */
@@ -5195,7 +5195,7 @@ SfxBoolItem QuickEdit SID_QUICKEDIT
     GroupId = GID_OPTIONS;
 ]
 
-SfxBoolItem RectangleToolbox SID_DRAWTBX_RECTANGLES
+SfxVoidItem RectangleToolbox SID_DRAWTBX_RECTANGLES
 
 [
     /* flags: */
@@ -5994,7 +5994,7 @@ SfxBoolItem TextAutoFitToSize SID_OUTLINE_TEXT_AUTOFIT
     GroupId = GID_FORMAT;
 ]
 
-SfxBoolItem TextToolbox SID_DRAWTBX_TEXT
+SfxVoidItem TextToolbox SID_DRAWTBX_TEXT
 
 [
     /* flags: */

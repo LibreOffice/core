@@ -14174,7 +14174,7 @@ SfxBoolItem BasicShapes SID_DRAWTBX_CS_BASIC
     Synchron;
 
     /* status: */
-    SlotType = SfxBoolItem
+    SlotType = SfxStringItem
 
     /* config: */
     AccelConfig = TRUE,
@@ -14202,7 +14202,7 @@ SfxBoolItem SymbolShapes SID_DRAWTBX_CS_SYMBOL
     Synchron;
 
     /* status: */
-    SlotType = SfxBoolItem
+    SlotType = SfxStringItem
 
     /* config: */
     AccelConfig = TRUE,
@@ -14230,7 +14230,7 @@ SfxBoolItem ArrowShapes SID_DRAWTBX_CS_ARROW
     Synchron;
 
     /* status: */
-    SlotType = SfxBoolItem
+    SlotType = SfxStringItem
 
     /* config: */
     AccelConfig = TRUE,
@@ -14258,7 +14258,7 @@ SfxBoolItem FlowChartShapes SID_DRAWTBX_CS_FLOWCHART
     Synchron;
 
     /* status: */
-    SlotType = SfxBoolItem
+    SlotType = SfxStringItem
 
     /* config: */
     AccelConfig = TRUE,
@@ -14286,7 +14286,7 @@ SfxBoolItem CalloutShapes SID_DRAWTBX_CS_CALLOUT
     Synchron;
 
     /* status: */
-    SlotType = SfxBoolItem
+    SlotType = SfxStringItem
 
     /* config: */
     AccelConfig = TRUE,
@@ -14314,7 +14314,7 @@ SfxBoolItem StarShapes SID_DRAWTBX_CS_STAR
     Synchron;
 
     /* status: */
-    SlotType = SfxBoolItem
+    SlotType = SfxStringItem
 
     /* config: */
     AccelConfig = TRUE,

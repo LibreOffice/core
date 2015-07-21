@@ -420,7 +420,6 @@ protected:
     void            SetupPage( Size &rSize, long nLeft, long nRight, long nUpper, long nLower,
                                bool bSize, bool bMargin, bool bScaleAll );
 
-    static sal_uInt16 GetIdBySubId( sal_uInt16 nSId );
     void            GetMenuStateSel(SfxItemSet& rSet);
 
 private:

@@ -1133,7 +1133,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             Invalidate( SID_ZOOM_IN );
             Invalidate( SID_ZOOM_OUT );
             Invalidate( SID_ZOOM_PANNING );
-            Invalidate( SID_ZOOM_TOOLBOX );
             rReq.Done ();
         }
         break;
@@ -1148,7 +1147,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             Invalidate( SID_ZOOM_IN );
             Invalidate( SID_ZOOM_OUT );
             Invalidate( SID_ZOOM_PANNING );
-            Invalidate( SID_ZOOM_TOOLBOX );
             rReq.Done ();
         }
         break;
@@ -1163,7 +1161,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             Invalidate( SID_ZOOM_IN );
             Invalidate( SID_ZOOM_OUT );
             Invalidate( SID_ZOOM_PANNING );
-            Invalidate( SID_ZOOM_TOOLBOX );
             rReq.Done ();
         }
         break;
@@ -1177,7 +1174,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             mpZoomList->InsertZoomRect(aVisAreaWin);
             Invalidate( SID_ZOOM_IN );
             Invalidate( SID_ZOOM_PANNING );
-            Invalidate( SID_ZOOM_TOOLBOX );
             rReq.Done ();
         }
         break;
@@ -1194,7 +1190,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 Invalidate( SID_ZOOM_IN );
                 Invalidate( SID_ZOOM_OUT );
                 Invalidate( SID_ZOOM_PANNING );
-                Invalidate( SID_ZOOM_TOOLBOX );
             }
             rReq.Done ();
         }
@@ -1225,7 +1220,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             Invalidate( SID_ZOOM_IN );
             Invalidate( SID_ZOOM_OUT );
             Invalidate( SID_ZOOM_PANNING );
-            Invalidate( SID_ZOOM_TOOLBOX );
             rReq.Done ();
         }
         break;
@@ -1258,7 +1252,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 Invalidate( SID_ZOOM_IN );
                 Invalidate( SID_ZOOM_OUT );
                 Invalidate( SID_ZOOM_PANNING );
-                Invalidate( SID_ZOOM_TOOLBOX );
             }
             rReq.Done ();
         }
@@ -1277,7 +1270,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 SetZoomRect(mpZoomList->GetPreviousZoomRect());
             }
             rReq.Done ();
-            Invalidate( SID_ZOOM_TOOLBOX );
         }
         break;
 
@@ -1294,7 +1286,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 SetZoomRect(mpZoomList->GetNextZoomRect());
             }
             rReq.Done ();
-            Invalidate( SID_ZOOM_TOOLBOX );
         }
         break;
 

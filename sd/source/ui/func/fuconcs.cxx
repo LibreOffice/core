@@ -258,6 +258,11 @@ void FuConstructCustomShape::SetAttributes( SdrObject* pObj )
     }
 }
 
+OUString FuConstructCustomShape::GetShapeType() const
+{
+    return aCustomShape;
+}
+
 SdrObject* FuConstructCustomShape::CreateDefaultObject(const sal_uInt16, const Rectangle& rRectangle)
 {
     SdrObject* pObj = SdrObjFactory::MakeNewObject(

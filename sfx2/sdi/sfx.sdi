@@ -6668,7 +6668,7 @@ SfxVoidItem ZoomPrevious SID_ZOOM_PREV
 ]
 
 
-SfxBoolItem ZoomToolBox SID_ZOOM_TOOLBOX
+SfxVoidItem ZoomToolBox SID_ZOOM_TOOLBOX
 
 [
     /* flags: */

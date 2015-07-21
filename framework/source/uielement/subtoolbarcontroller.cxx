@@ -102,6 +102,8 @@ SubToolBarController::SubToolBarController( const css::uno::Sequence< css::uno::
             break;
         }
     }
+    if ( !m_aLastCommand.isEmpty() )
+        addStatusListener( m_aLastCommand );
 }
 
 SubToolBarController::~SubToolBarController()
@@ -131,32 +133,41 @@ void SubToolBarController::statusChanged( const css::frame::FeatureStateEvent& E
     sal_uInt16 nId = 0;
     if ( getToolboxId( nId, &pToolBox ) )
     {
-        pToolBox->EnableItem( nId, Event.IsEnabled );
         ToolBoxItemBits nItemBits = pToolBox->GetItemBits( nId );
         nItemBits &= ~ToolBoxItemBits::CHECKABLE;
         TriState eTri = TRISTATE_FALSE;
 
-        bool bValue;
-        css::frame::status::ItemStatus aItemState;
-        css::frame::status::Visibility aItemVisibility;
+        if ( Event.FeatureURL.Complete == m_aCommandURL )
+        {
+            pToolBox->EnableItem( nId, Event.IsEnabled );
 
-        if ( Event.State >>= bValue )
-        {
-            // Boolean, treat it as checked/unchecked
-            pToolBox->SetItemBits( nId, nItemBits );
-            pToolBox->CheckItem( nId, bValue );
-            if ( bValue )
-                eTri = TRISTATE_TRUE;
-            nItemBits |= ToolBoxItemBits::CHECKABLE;
+            OUString aStrValue;
+            css::frame::status::Visibility aItemVisibility;
+            if ( Event.State >>= aStrValue )
+            {
+                // Enum command, such as the current custom shape,
+                // toggle checked state.
+                if ( m_aLastCommand == OUString( m_aCommandURL + "." + aStrValue ) )
+                {
+                    eTri = TRISTATE_TRUE;
+                    nItemBits |= ToolBoxItemBits::CHECKABLE;
+                }
+            }
+            else if ( Event.State >>= aItemVisibility )
+            {
+                pToolBox->ShowItem( nId, aItemVisibility.bVisible );
+            }
         }
-        else if ( Event.State >>= aItemState )
+        else
         {
-            eTri = TRISTATE_INDET;
-            nItemBits |= ToolBoxItemBits::CHECKABLE;
-        }
-        else if ( Event.State >>= aItemVisibility )
-        {
-            pToolBox->ShowItem( nId, aItemVisibility.bVisible );
+            bool bValue;
+            if ( Event.State >>= bValue )
+            {
+                // Boolean, treat it as checked/unchecked
+                if ( bValue )
+                    eTri = TRISTATE_TRUE;
+                nItemBits |= ToolBoxItemBits::CHECKABLE;
+            }
         }
 
         pToolBox->SetItemState( nId, eTri );
@@ -261,9 +272,11 @@ OUString SubToolBarController::getSubToolbarName()
 void SubToolBarController::functionSelected( const OUString& rCommand )
     throw ( css::uno::RuntimeException, std::exception )
 {
-    if ( !m_aLastCommand.isEmpty() )
+    if ( !m_aLastCommand.isEmpty() && m_aLastCommand != rCommand )
     {
+        removeStatusListener( m_aLastCommand );
         m_aLastCommand = rCommand;
+        addStatusListener( m_aLastCommand );
         updateImage();
     }
 }

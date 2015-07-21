@@ -440,7 +440,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
             case SID_DRAWTBX_CS_FLOWCHART:
             case SID_DRAWTBX_CS_CALLOUT:
             case SID_DRAWTBX_CS_STAR:
-                rSet.Put( SfxBoolItem( nWhich, nDrawSfxId == nWhich ) );
+                rSet.Put( SfxStringItem( nWhich, nDrawSfxId == nWhich ? sDrawCustom : OUString() ) );
             break;
         }
         nWhich = aIter.NextWhich();

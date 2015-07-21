@@ -82,6 +82,7 @@
 #include "Window.hxx"
 #include "fuediglu.hxx"
 #include "fubullet.hxx"
+#include "fuconcs.hxx"
 #include "fuformatpaintbrush.hxx"
 
 #include <config_features.h>
@@ -278,11 +279,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if(HasCurrentFunction())
     {
         sal_uInt16 nSId = GetCurrentFunction()->GetSlotID();
-        sal_uInt16 nMainId = GetIdBySubId( nSId );
-
         rSet.Put( SfxBoolItem( nSId, true ) );
-        if ( nMainId != 0 )
-            rSet.Put( SfxBoolItem( nMainId, true ) );
     }
 
     SdrPageView* pPageView = mpDrawView->GetSdrPageView();
@@ -1047,7 +1044,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             nCurrentSId = SID_ATTR_CHAR;
 
         rSet.Put( SfxBoolItem( nCurrentSId, true ) );
-        rSet.Put( SfxBoolItem( SID_DRAWTBX_TEXT, true ) );
     }
 
     if ( GetDocSh()->IsReadOnly() )
@@ -1334,20 +1330,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         if( xSlideshow.is() && xSlideshow->isRunning() )
         {
-            rSet.ClearItem(SID_ZOOM_TOOLBOX);
-            rSet.ClearItem(SID_OBJECT_CHOOSE_MODE);
-            rSet.ClearItem(SID_DRAWTBX_TEXT);
-            rSet.ClearItem(SID_DRAWTBX_RECTANGLES);
-            rSet.ClearItem(SID_DRAWTBX_ELLIPSES);
-            rSet.ClearItem(SID_DRAWTBX_LINES);
-            rSet.ClearItem(SID_DRAWTBX_ARROWS);
-            rSet.ClearItem(SID_DRAWTBX_3D_OBJECTS);
-            rSet.ClearItem(SID_DRAWTBX_CONNECTORS);
-            rSet.ClearItem(SID_OBJECT_CHOOSE_MODE );
-            rSet.ClearItem(SID_DRAWTBX_INSERT);
             rSet.ClearItem(SID_INSERTFILE);
             rSet.ClearItem(SID_OBJECT_ROTATE);
-            rSet.ClearItem(SID_POSITION);
             rSet.ClearItem(SID_FM_CONFIG);
             rSet.ClearItem(SID_ANIMATION_EFFECTS);
             rSet.ClearItem(SID_ANIMATION_OBJECTS);
@@ -1538,22 +1522,23 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     //highlight selected custom shape
     {
-        sal_uInt16 nCurrentSId = 0;
         if(HasCurrentFunction())
-            nCurrentSId = GetCurrentFunction()->GetSlotID();
+        {
+            rtl::Reference< FuPoor > xFunc( GetCurrentFunction() );
+            FuConstructCustomShape* pShapeFunc = dynamic_cast< FuConstructCustomShape* >( xFunc.get() );
 
-        if ( SfxItemState::DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_BASIC ) )
-            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_BASIC, SID_DRAWTBX_CS_BASIC == nCurrentSId ));
-        if ( SfxItemState::DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_SYMBOL ) )
-            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_SYMBOL, SID_DRAWTBX_CS_SYMBOL == nCurrentSId ));
-        if ( SfxItemState::DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_ARROW ) )
-            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_ARROW, SID_DRAWTBX_CS_ARROW == nCurrentSId ));
-        if ( SfxItemState::DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_FLOWCHART ) )
-            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_FLOWCHART, SID_DRAWTBX_CS_FLOWCHART == nCurrentSId ));
-        if ( SfxItemState::DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_CALLOUT ) )
-            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_CALLOUT,SID_DRAWTBX_CS_CALLOUT == nCurrentSId ));
-        if ( SfxItemState::DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_STAR ) )
-            rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_STAR, SID_DRAWTBX_CS_STAR == nCurrentSId ));
+            static const sal_uInt16 nCSTbArray[] = { SID_DRAWTBX_CS_BASIC, SID_DRAWTBX_CS_SYMBOL,
+                                                     SID_DRAWTBX_CS_ARROW, SID_DRAWTBX_CS_FLOWCHART,
+                                                     SID_DRAWTBX_CS_CALLOUT, SID_DRAWTBX_CS_STAR };
+
+            const sal_uInt16 nCurrentSId = GetCurrentFunction()->GetSlotID();
+            for ( size_t i = 0; i < SAL_N_ELEMENTS( nCSTbArray ); ++i )
+            {
+                rSet.ClearItem( nCSTbArray[i] ); // Why is this necessary?
+                rSet.Put( SfxStringItem( nCSTbArray[i], nCurrentSId == nCSTbArray[i] && pShapeFunc
+                                         ? pShapeFunc->GetShapeType() : OUString() ) );
+            }
+        }
     }
 
     if ( bDisableEditHyperlink || GetDocSh()->IsReadOnly() )

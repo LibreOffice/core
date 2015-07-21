@@ -520,7 +520,7 @@ void SwView::GetDrawState(SfxItemSet &rSet)
             if ( bWeb )
                 rSet.DisableItem( nWhich );
             else
-                rSet.Put( SfxBoolItem( nWhich, m_nDrawSfxId == nWhich ) );
+                rSet.Put( SfxStringItem( nWhich, m_nDrawSfxId == nWhich ? m_sDrawCustom : OUString() ) );
         }
         break;
 

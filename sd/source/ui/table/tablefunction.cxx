@@ -190,7 +190,6 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         else
             mpView->InsertObjectAtView(pObj, *pPV, SdrInsertFlags::SETDEFLAYER);
 
-        Invalidate(SID_DRAWTBX_INSERT);
         rReq.Ignore();
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=NULL);

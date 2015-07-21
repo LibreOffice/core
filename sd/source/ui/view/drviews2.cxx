@@ -1111,7 +1111,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SetCurrentFunction( FuInsertGraphic::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore ();
-            Invalidate(SID_DRAWTBX_INSERT);
         }
         break;
 
@@ -1121,8 +1120,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             Cancel();
             rReq.Ignore ();
-
-            Invalidate(SID_DRAWTBX_INSERT);
         }
         break;
 
@@ -1142,8 +1139,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             SetOldFunction( FuSelection::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
             Cancel();
             rReq.Ignore ();
-
-            Invalidate(SID_DRAWTBX_INSERT);
         }
         break;
 #if HAVE_FEATURE_GLTF
@@ -1153,8 +1148,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             Cancel();
             rReq.Ignore ();
-
-            Invalidate(SID_DRAWTBX_INSERT);
         }
         break;
 #endif
@@ -1187,8 +1180,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             Broadcast (ViewShellHint(ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_END));
             Cancel();
             rReq.Done ();
-
-            Invalidate(SID_DRAWTBX_INSERT);
         }
         break;
 
@@ -1205,8 +1196,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_BEHIND_OBJ:
         {
             SetCurrentFunction( FuDisplayOrder::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
-            Invalidate( SID_POSITION );
-            rReq.Ignore ();
+            rReq.Done();
             // finishes itself, no Cancel() needed!
         }
         break;
@@ -1214,7 +1204,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_REVERSE_ORDER:   // BASIC
         {
             mpDrawView->ReverseOrderOfMarked();
-            Invalidate( SID_POSITION );
             Cancel();
             rReq.Done ();
         }
@@ -2421,7 +2410,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             mpDrawView->PutMarkedToTop();
             Cancel();
-            Invalidate( SID_POSITION );
             rReq.Done ();
         }
         break;
@@ -2430,7 +2418,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             mpDrawView->MovMarkedToTop();
             Cancel();
-            Invalidate( SID_POSITION );
             rReq.Done ();
         }
         break;
@@ -2439,7 +2426,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             mpDrawView->MovMarkedToBtm();
             Cancel();
-            Invalidate( SID_POSITION );
             rReq.Done ();
         }
         break;
@@ -2448,7 +2434,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             mpDrawView->PutMarkedToBtm();
             Cancel();
-            Invalidate( SID_POSITION );
             rReq.Done ();
         }
         break;
