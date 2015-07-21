@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_d2234304",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 7038,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-21T18:18:11Z",
+      "side": 1,
+      "message": "Here bTryXlA1 needs to be set to false, else INDIRECT(\"Sheet1!R1C1\",0) will give #REF! if eConv was CONV_A1_XL_A1 before because aDetails will be initialized with CONV_OOO then. There\u0027s no R1C1 other than CONV_XL_R1C1.\n\nOr just move the initialization of bTryXlA1 after this if block.\n\nI\u0027ll submit an amended patch.",
+      "revId": "1bd0701ded5668d1ae21de4ac6876400c764060d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
