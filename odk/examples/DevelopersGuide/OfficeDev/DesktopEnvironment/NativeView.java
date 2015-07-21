@@ -141,11 +141,11 @@ public class NativeView extends java.awt.Canvas
      * windows in a java UI container.
      *
      * Note:
-     * Native code for windows register special function pointer to handle
-     * window messages ... But if it doesn't check for an already registered
+     * Native code for Windows registers a special function pointer to handle
+     * window messages... But if it doesn't check for an already-registered
      * instance of this handler it will do it twice and produce a stack overflow
-     * because such method call herself in a never ending loop ...
-     * So we try to use the JNI code one time only and save already getted
+     * because such method calls itself in a never-ending loop...
+     * So we try to use the JNI code one time only and save already-obtained
      * information inside this class.
      */
     public  native int  getNativeWindowSystemType();

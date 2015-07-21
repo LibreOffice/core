@@ -84,8 +84,8 @@ class QuietInteraction : public  ::cppu::WeakImplHelper1<
 
         /**
             @short      return the handled interaction request
-            @descr      We saved any getted interaction request internally.
-                        May the outside user of this class is interessted
+            @descr      We saved any obtained interaction request internally.
+                        Maybe the outside user of this class is interested
                         on that. Especially we got an unknown interaction
                         and aborted it hard.
 

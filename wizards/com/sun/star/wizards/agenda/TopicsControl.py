@@ -193,11 +193,11 @@ class TopicsControl(ControlScroller):
         self.focusGained2(xc)
 
     '''
-    Sometimes I set the focus programatically to a control
+    Sometimes I set the focus programmatically to a control
     (for example when moving a row up or down, the focus should move
     with it).
     In such cases, no VCL event is being triggered so it must
-    be called programtically.
+    be called programmatically.
     This is done by this method.
     @param control
     '''
@@ -608,7 +608,7 @@ class TopicsControl(ControlScroller):
     After moving row X to X+/-1, the selection (or cursor position) of the
     last focused control should be restored.
     The control's row is the given guiRow.
-    The control's column is detecte4d according to the given event.
+    The control's column is detected according to the given event.
     This method is called as subsequent to different events,
     thus it is comfortable to use the event here to detect the column,
     rather than in the different event methods.
@@ -693,7 +693,7 @@ class TopicsControl(ControlScroller):
     '''
     updates a single cell in the preview document.
     Is called when a single value is changed, since we really
-    don't have to update the whole row for one small changhe...
+    don't have to update the whole row for one small change...
     @param row the data row to update (topic number).
     @param column the column to update (a gui column, not a document column).
     @param data the data of the entire row.
@@ -707,7 +707,7 @@ class TopicsControl(ControlScroller):
             traceback.print_exc()
 
     '''
-    when removeing rows, this method updates
+    when removing rows, this method updates
     the preview document to show the number of rows
     according to the data model.
     '''

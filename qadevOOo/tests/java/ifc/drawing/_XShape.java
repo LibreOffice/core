@@ -136,7 +136,7 @@ public class _XShape extends MultiMethodTest {
         result &= (sNew.Height-gSize.Height <= 2) && (sNew.Width-gSize.Width <= 2);
 
         if (result && ((sNew.Height-gSize.Height != 0) || (sNew.Width-gSize.Width != 0))){
-            log.println("NOTE: there is a difference between the expected and the getted value. " +
+            log.println("NOTE: there is a difference between the expected and the gotten value. " +
                     "This might be ok because of problems in calculation from points <-> twips");
         }
         tRes.tested("setSize()", result);

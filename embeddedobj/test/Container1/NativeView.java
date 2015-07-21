@@ -61,10 +61,10 @@ public class NativeView extends java.awt.Canvas
      * ( e.g. get the window handle and necessary system information )
      *
      * Why here?
-     * Because the handle seems to be available for already visible windows
-     * only. So it's the best place to get it. Special helper method
-     * can be called more than ones - but call native code one times only
-     * and safe the handle and the system type on our members maHandle/maSystem!
+     * Because the handle seems to be available for already-visible windows
+     * only. So it's the best place to get it. The special helper method
+     * can be called more than once - but call native code one time only
+     * and save the handle and the system type on our members maHandle/maSystem!
      */
     public void setVisible( boolean bState )
     {
@@ -123,11 +123,11 @@ public class NativeView extends java.awt.Canvas
      * windows in a java UI container.
      *
      * Note:
-     * Native code for windows register special function pointer to handle
-     * window messages ... But if it doesn't check for an already registered
+     * Native code for Windows registers a special function pointer to handle
+     * window messages... But if it doesn't check for an already-registered
      * instance of this handler it will do it twice and produce a stack overflow
-     * because such method call herself in a never ending loop ...
-     * So we try to use the JNI code one times only and safe already getted
+     * because such method calls itself in a never-ending loop...
+     * So we try to use the JNI code one time only and save already-obtained
      * information inside this class.
      */
     public  native int  getNativeWindowSystemType();

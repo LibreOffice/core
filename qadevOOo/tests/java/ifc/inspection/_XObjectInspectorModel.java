@@ -105,7 +105,7 @@ public class _XObjectInspectorModel extends MultiMethodTest {
         boolean result = (minHelpTextLines.intValue() == getMinHelpTextLines);
 
         if (!result)
-            log.println("FAILED: value:" + minHelpTextLines + " getted value:" + getMinHelpTextLines);
+            log.println("FAILED: value:" + minHelpTextLines + " gotten value:" + getMinHelpTextLines);
 
         tRes.tested("MinHelpTextLines()", result) ;
     }
@@ -123,7 +123,7 @@ public class _XObjectInspectorModel extends MultiMethodTest {
         boolean result = (maxHelpTextLines.intValue() == getMaxHelpTextLines);
 
         if (!result)
-            log.println("FAILED: expected value:" + maxHelpTextLines + " getted value:" + getMaxHelpTextLines);
+            log.println("FAILED: expected value:" + maxHelpTextLines + " gotten value:" + getMaxHelpTextLines);
 
         tRes.tested("MaxHelpTextLines()", result);
     }

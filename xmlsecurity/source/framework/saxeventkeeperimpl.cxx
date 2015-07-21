@@ -462,7 +462,7 @@ void SAXEventKeeperImpl::smashBufferNode(
  *  empty
  *
  *   NOTES
- *  when removeing a Blocker's BufferNode, the bClearRoot flag should be
+ *  when removing a Blocker's BufferNode, the bClearRoot flag should be
  *  true. Because a Blocker can buffer many SAX events which are not used
  *  by any other ElementCollector or Blocker.
  *  When the bClearRoot is set to true, the root BufferNode will be first

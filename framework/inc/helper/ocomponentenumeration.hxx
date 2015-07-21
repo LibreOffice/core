@@ -88,7 +88,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
         /*-****************************************************************************************************
             @short      check count of accessible elements of enumeration
             @descr      You can call this method to get information about accessible elements in future.
-                        Elements you have already getted are not accessible!
+                        Elements you have already gotten are not accessible!
 
             @seealso    interface XEnumeration
             @return     sal_True  = if more elements accessible<BR>

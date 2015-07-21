@@ -763,8 +763,8 @@ bool TypeDetection::impl_getPreselectionForDocumentService(
     // step over all filters, and check if its registered type
     // match the given URL.
     // But use temp. list of "preselected types" instead of incoming rFlatTypes list!
-    // The reason behind: we must filter the getted results. And copying of stl entries
-    // is an easier job then removing it .-)
+    // The reason behind: we must filter the obtained results. And copying stl entries
+    // is an easier job than removing them .-)
     for (OUStringList::const_iterator pFilter  = lFilters.begin();
          pFilter != lFilters.end();
          ++pFilter)
@@ -895,7 +895,7 @@ OUString TypeDetection::impl_detectTypeFlatAndDeep(      utl::MediaDescriptor& r
     // d) detect service return a valid result    => return its decision
     // e) detect service return an invalid result
     //    or any needed information could not be
-    //    getted from the cache                   => ignore it, and continue with search
+    //    obtained from the cache                 => ignore it, and continue with search
 
     for (FlatDetection::const_iterator pFlatIt  = lFlatTypes.begin();
                                        pFlatIt != lFlatTypes.end()  ;

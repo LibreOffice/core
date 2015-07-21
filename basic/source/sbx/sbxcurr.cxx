@@ -158,7 +158,7 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
     OUString sTmp( rStr.trim() );
     const sal_Unicode* p =  sTmp.getStr();
 
-    // normalise string number by removeing thousands & decimal point separators
+    // normalise string number by removing thousand & decimal point separators
     OUStringBuffer sNormalisedNumString( sTmp.getLength() +  nFractDigit );
 
     if ( *p == '-'  || *p == '+' )
@@ -195,7 +195,7 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
 
     }
     // can we raise error here ? ( previous behaviour was more forgiving )
-    // so... not sure that could bread existing code, lets see if anyone
+    // so... not sure that could break existing code, let's see if anyone
     // complains.
 
     if ( p != sTmp.getStr() + sTmp.getLength() )
