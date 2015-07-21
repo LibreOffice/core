@@ -76,19 +76,6 @@ public:
     */
     const ResourceIdVector& GetC2minusC1() const { return maC2minusC1;}
 
-    /** Return the resources that belong to both the configurations that
-        where given to the constructor.
-        @return
-            A reference to the, possibly empty, list of resources is
-            returned.  This reference remains valid as long as the called
-            ConfigurationClassifier object stays alive.
-    */
-    const ResourceIdVector& GetC1andC2() const { return maC1andC2;}
-
-    static void TraceResourceIdVector (
-        const sal_Char* pMessage,
-        const ResourceIdVector& rResources);
-
 private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XConfiguration> mxConfiguration1;

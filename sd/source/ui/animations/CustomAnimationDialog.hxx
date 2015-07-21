@@ -146,7 +146,6 @@ public:
     virtual ~CustomAnimationDialog();
     virtual void dispose() SAL_OVERRIDE;
 
-    STLPropertySet* getDefaultSet() { return mpSet; }
     STLPropertySet* getResultSet();
 
     static STLPropertySet* createDefaultSet();

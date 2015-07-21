@@ -67,7 +67,6 @@ public:
     void onChangeCurrentPage();
 
 private:
-    void updateLayout();
     void updateControls();
     void updateControlState();
 

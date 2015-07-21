@@ -285,12 +285,6 @@ void Outliner::StartSpelling()
     mpSearchItem = NULL;
 }
 
-/** Proxy for method from base class to avoid compiler warning */
-void Outliner::StartSpelling(EditView& rView, unsigned char c)
-{
-    SdrOutliner::StartSpelling( rView, c );
-}
-
 /** Free all resources acquired during the search/spell check.  After a
     spell check the start position is restored here.
 */
@@ -1301,18 +1295,6 @@ void Outliner::EnterEditMode (bool bGrabFocus)
         SetUpdateMode(true);
         mbFoundObject = true;
     }
-}
-
-/**
- * SpellChecker: Error link handler
- */
-IMPL_LINK( Outliner, SpellError, void *, nLang )
-{
-    mbError = true;
-    OUString aError( SvtLanguageTable::GetLanguageString( (LanguageType)reinterpret_cast<sal_uLong>(nLang) ) );
-    ErrorHandler::HandleError(* new StringErrorInfo(
-                                ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
-    return 0;
 }
 
 ESelection Outliner::GetSearchStartPosition()

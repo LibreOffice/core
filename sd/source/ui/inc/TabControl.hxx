@@ -79,8 +79,6 @@ protected:
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
-                        DECL_LINK(DeactivatePageHdl, void*);
-
 private:
     // nested class to implement the TransferableHelper
     class TabControlTransferable : public TransferableHelper

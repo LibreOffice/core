@@ -147,7 +147,6 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
       meOrientation(Layouter::GRID),
       mpProperties(rSlideSorter.GetProperties()),
       mpPageUnderMouse(),
-      mnButtonUnderMouse(-1),
       mpPageObjectPainter(),
       mpSelectionPainter(),
       mpBackgroundPainter(

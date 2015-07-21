@@ -58,10 +58,6 @@ public:
     TYPEINFO_OVERRIDE();
     SFX_DECL_INTERFACE(SD_IF_SDTOOLPANELSHELL)
 
-private:
-    /// SfxInterface initializer.
-    static void InitInterface_Impl();
-
 public:
     ToolPanelViewShell (
         SfxViewFrame* pFrame,
@@ -70,34 +66,12 @@ public:
         FrameView* pFrameView);
     virtual ~ToolPanelViewShell();
 
-    void GetFocus();
-    void LoseFocus();
-    void KeyInput (const KeyEvent& rEvent);
     using sd::ViewShell::KeyInput;
 
     virtual SdPage* GetActualPage() SAL_OVERRIDE;
     virtual SdPage* getCurrentPage() const SAL_OVERRIDE;
 
     virtual void ArrangeGUIElements() SAL_OVERRIDE;
-
-    TaskPaneShellManager& GetSubShellManager() const;
-
-    /** deactivates the given panel, bypassing the configuration controller. Only valid for tool panels which are
-        not under the drawing framework's control.
-    */
-    void    ActivatePanel( const OUString& i_rPanelResourceURL );
-
-    /** deactivates the given panel, bypassing the configuration controller
-    */
-    void    DeactivatePanel( const OUString& i_rPanelResourceURL );
-
-    /** Return a pointer to the docking window that is the parent or a
-        predecessor of the content window.
-        @return
-            When the view shell is not placed in a docking window, e.g. when
-            shown in the center pane, then <NULL?> is returned.
-    */
-    DockingWindow* GetDockingWindow();
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
@@ -109,17 +83,6 @@ public:
     */
     virtual bool RelocateToParentWindow (vcl::Window* pParentWindow) SAL_OVERRIDE;
 
-    /// returns <TRUE/> if and only if the given window is the panel anchor window of our ToolPanelDeck
-    bool    IsPanelAnchorWindow( const vcl::Window& i_rWindow ) const;
-
-    /** creates an XUIElement for the given standard panel
-    */
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >
-            CreatePanelUIElement(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rDocFrame,
-                const OUString& i_rPanelResourceURL
-            );
-
 private:
     ::boost::scoped_ptr< ToolPanelViewShell_Impl >   mpImpl;
 
@@ -129,21 +92,6 @@ private:
         window.
     */
     sal_uInt16 mnMenuId;
-
-    /** Create a popup menu.  it contains two sections, one for
-        docking or un-docking the tool panel, one for toggling the
-        visibility state of the tool panel items.
-        @param bIsDocking
-            According to this flag one of the lock/unlock entries is
-            made disabled.
-    */
-    ::std::unique_ptr<PopupMenu> CreatePopupMenu (bool bIsDocking);
-
-    /** Initialize the task pane view shell if that has not yet been done
-        before.  If mbIsInitialized is already set to <TRUE/> then this
-        method returns immediately.
-    */
-    void Initialize();
 };
 
 } } // end of namespace ::sd::toolpanel

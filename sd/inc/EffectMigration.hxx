@@ -45,14 +45,9 @@ public:
     static bool ConvertPreset( const OUString& rPresetId, const OUString* pPresetSubType, ::com::sun::star::presentation::AnimationEffect& rEffect );
     static bool ConvertAnimationEffect( const ::com::sun::star::presentation::AnimationEffect& rEffect, OUString& rPresetId, OUString& rPresetSubType );
 
-public:
-    void AddEffectFromAnimationInfo( SdrObject* pObject, SdAnimationInfo* pInfo );
-
-public:
     static void SetFadeEffect( SdPage* pPage, ::com::sun::star::presentation::FadeEffect eNewEffect);
     static ::com::sun::star::presentation::FadeEffect GetFadeEffect( const SdPage* pPage );
 
-public:
     static void SetAnimationEffect( SvxShape* pShape, ::com::sun::star::presentation::AnimationEffect eValue );
     static ::com::sun::star::presentation::AnimationEffect GetAnimationEffect( SvxShape* pShape );
     static void SetTextAnimationEffect( SvxShape* pShape, ::com::sun::star::presentation::AnimationEffect eValue );

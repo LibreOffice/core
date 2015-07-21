@@ -101,11 +101,6 @@ public:
 
     virtual ~ResourceId();
 
-    /** Return the list of URLs of both the resource URL and the anchor
-        URLs.
-    */
-    const ::std::vector<OUString>& GetResourceURLs() const;
-
     //===== XResourceId =======================================================
 
     virtual OUString SAL_CALL

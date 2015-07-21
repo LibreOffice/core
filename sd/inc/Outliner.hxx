@@ -127,9 +127,6 @@ public:
     */
     void StartSpelling();
 
-    /** Proxy for method from base class to avoid compiler warning */
-    void StartSpelling(EditView&, unsigned char);
-
     /** Initiate a find and/or replace on the next relevant text object.
         @return
             Returns </sal_True> when the search/replace is finished (as
@@ -165,8 +162,6 @@ public:
 
     /** Release all resources that have been created during the conversion */
     void EndConversion();
-
-    DECL_LINK( SpellError, void * );
 
     enum ChangeHint { CH_VIEW_SHELL_INVALID, CH_VIEW_SHELL_VALID };
 

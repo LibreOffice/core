@@ -41,8 +41,7 @@ Client::Client(SdrOle2Obj* pObj, ViewShell* pViewShell, vcl::Window* pWindow) :
     SfxInPlaceClient(pViewShell->GetViewShell(), pWindow, pObj->GetAspect() ),
     mpViewShell(pViewShell),
     pSdrOle2Obj(pObj),
-    pSdrGrafObj(NULL),
-    pOutlinerParaObj (NULL)
+    pSdrGrafObj(NULL)
 {
     SetObject( pObj->GetObjRef() );
     DBG_ASSERT( GetObject().is(), "No object connected!" );

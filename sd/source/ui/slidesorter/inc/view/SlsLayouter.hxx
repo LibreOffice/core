@@ -111,11 +111,6 @@ public:
 
     sal_Int32 GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const;
 
-    /** Return the scale factor that can be set at the map mode of the
-        output window.
-    */
-    Fraction GetScaleFactor() const;
-
     Size GetPageObjectSize() const;
 
     /** Return the bounding box in window coordinates of the nIndex-th page

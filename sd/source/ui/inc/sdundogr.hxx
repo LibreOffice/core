@@ -42,7 +42,6 @@ public:
     virtual void   Redo() SAL_OVERRIDE;
 
     void           AddAction(SdUndoAction* pAction);
-    sal_uLong      Count() const { return aCtn.size(); }
 
 };
 

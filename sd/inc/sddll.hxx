@@ -47,10 +47,6 @@ public:
                     SdDLL();
                     ~SdDLL();
 
-                    // static-init/exit-code must be linked to the application
-    static void     LibInit();  // called from SfxApplication-subclass::Init()
-    static void     LibExit();  // called from SfxApplication-subclass::Exit()
-
                     // DLL-init/exit-code must be linked to the DLL only
     static void     Init();     // called directly after loading the DLL
 };

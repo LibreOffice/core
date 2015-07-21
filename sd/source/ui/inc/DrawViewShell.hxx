@@ -250,7 +250,6 @@ public:
     PageKind        GetPageKind() { return mePageKind; }
     void            SetPageKind( PageKind ePageKind ) { mePageKind = ePageKind; }
     Point           GetMousePos() { return maMousePos; }
-    bool            IsMousePosFreezed() { return mbMousePosFreezed; }
     void            SetMousePosFreezed( bool bIn ) { mbMousePosFreezed = bIn; }
 
     EditMode        GetEditMode() const { return meEditMode; }

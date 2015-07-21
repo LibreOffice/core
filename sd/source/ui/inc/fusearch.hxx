@@ -28,8 +28,7 @@ namespace sd {
 
 class Outliner;
 
-class FuSearch
-    : public FuPoor
+class FuSearch : public FuPoor
 {
 public:
     TYPEINFO_OVERRIDE();
@@ -38,8 +37,6 @@ public:
     virtual void DoExecute( SfxRequest& rReq ) SAL_OVERRIDE;
 
     void SearchAndReplace( const SvxSearchItem* pSearchItem );
-
-    ::sd::Outliner* GetOutliner() const { return pSdOutliner; }
 
 protected:
     virtual ~FuSearch();

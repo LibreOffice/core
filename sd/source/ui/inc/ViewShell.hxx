@@ -584,8 +584,6 @@ private:
     */
     void construct();
 
-    DECL_LINK(FrameWindowEventListener, VclSimpleEvent*);
-
     /** Create the rulers.
     */
     void SetupRulers();

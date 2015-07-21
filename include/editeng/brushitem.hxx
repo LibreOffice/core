@@ -53,7 +53,6 @@ class EDITENG_DLLPUBLIC SvxBrushItem : public SfxPoolItem
     mutable bool        bLoadAgain;
 
     void        ApplyGraphicTransparency_Impl();
-    DECL_STATIC_LINK( SvxBrushItem, DoneHdl_Impl, void *);
     // wird nur von Create benutzt
     SvxBrushItem( SvStream& rStrm,
                   sal_uInt16 nVersion, sal_uInt16 nWhich  );

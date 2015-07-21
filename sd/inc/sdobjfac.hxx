@@ -34,10 +34,6 @@ protected:
 public:
     SdObjectFactory() {}
 
-    void SetOldMakeUserDataHdl( const Link<>& rLink )
-                                { aOldMakeUserDataLink = rLink; }
-    Link<> GetOldMakeUserDataHdl() const { return aOldMakeUserDataLink; }
-
     DECL_LINK( MakeUserData, SdrObjFactory * );
 };
 

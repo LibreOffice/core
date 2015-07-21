@@ -102,8 +102,7 @@ public:
                             SdOptionsGeneric( sal_uInt16 nConfigId, const OUString& rSubTree );
                             virtual ~SdOptionsGeneric();
 
-    const OUString&  GetSubTree() const { return maSubTree; }
-    sal_uInt16                  GetConfigId() const { return mnConfigId; }
+    sal_uInt16              GetConfigId() const { return mnConfigId; }
 
     void                    EnableModify( bool bModify ) { mbEnableModify = bModify; }
 
@@ -196,7 +195,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
 
-    SdOptionsContents&      GetOptionsContents() { return maOptionsContents; }
 private:
     SdOptionsContents       maOptionsContents;
 };
