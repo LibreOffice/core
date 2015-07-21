@@ -3568,6 +3568,10 @@ if test "$_os" = "WINNT"; then
 
         # Find the version of devenv.exe
         DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe"
+        if test ! -e "$DEVENV" -a "$vcnum" = "120"; then
+            # for Visual Studio 2013 Express, fall back
+            DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/WDExpress.exe"
+        fi
         if test ! -e "$DEVENV"; then
             AC_MSG_ERROR([No devenv.exe found, Visual Studio installation broken?])
         fi
