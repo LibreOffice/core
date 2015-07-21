@@ -34,7 +34,6 @@ class Client : public SfxInPlaceClient
     ViewShell*      mpViewShell;
     SdrOle2Obj*     pSdrOle2Obj;
     SdrGrafObj*     pSdrGrafObj;
-    OutlinerParaObject* pOutlinerParaObj;
 
     virtual void    ObjectAreaChanged() SAL_OVERRIDE;
     virtual void    RequestNewObjectArea( Rectangle& ) SAL_OVERRIDE;
@@ -43,12 +42,7 @@ class Client : public SfxInPlaceClient
 public:
     Client (SdrOle2Obj* pObj, ViewShell* pSdViewShell, vcl::Window* pWindow);
     virtual ~Client();
-
-    SdrOle2Obj*     GetSdrOle2Obj() const { return pSdrOle2Obj; }
     void            SetSdrGrafObj(SdrGrafObj* pObj) { pSdrGrafObj = pObj; }
-    SdrGrafObj*     GetSdrGrafObj() const { return pSdrGrafObj; }
-    void            SetOutlinerParaObj (OutlinerParaObject* pObj) { pOutlinerParaObj = pObj; }
-    OutlinerParaObject*     GetOutlinerParaObject () const { return pOutlinerParaObj; }
 };
 
 } // end of namespace sd

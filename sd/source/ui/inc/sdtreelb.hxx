@@ -195,7 +195,6 @@ public:
     virtual void            KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
     void                    SetViewFrame( SfxViewFrame* pViewFrame ) { mpFrame = pViewFrame; }
-    SfxViewFrame*           GetViewFrame() const { return mpFrame; }
 
     void                    Fill( const SdDrawDocument*, bool bAllPages, const OUString& rDocName );
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName );

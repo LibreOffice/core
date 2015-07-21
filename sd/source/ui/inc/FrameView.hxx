@@ -155,7 +155,6 @@ public:
     sal_uInt16 GetPresentationViewShellId() const { return mnPresViewShellId; }
 
     void SetSlotId(sal_uInt16 nId) { mnSlotId = nId; }
-    sal_uInt16 GetSlotId() const { return mnSlotId; }
 
     void SetSlidesPerRow(sal_uInt16 nSlides) { mnSlidesPerRow = nSlides; }
     sal_uInt16 GetSlidesPerRow() const { return mnSlidesPerRow; }

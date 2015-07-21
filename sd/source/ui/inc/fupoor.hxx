@@ -60,7 +60,6 @@ public:
     sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
     DrawDocShell* GetDocSh() { return mpDocSh; }
-    SdDrawDocument* GetDoc() { return mpDoc; }
 
     virtual void DoCut();
     virtual void DoCopy();
@@ -87,10 +86,6 @@ public:
     virtual void SelectionHasChanged();
 
     sal_uInt16  GetSlotID() const { return nSlotId; }
-    sal_uInt16  GetSlotValue() const { return nSlotValue; }
-
-    void    SetNoScrollUntilInside(bool bNoScroll = true)
-            { bNoScrollUntilInside = bNoScroll; }
 
     void StartDelayToScrollTimer ();
 

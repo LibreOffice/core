@@ -40,9 +40,7 @@ public:
     SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, bool bShowProgress );
     virtual ~SdFilter();
 
-    bool                    IsProgress() const { return mbShowProgress; }
     bool                    IsDraw() const { return mbIsDraw; }
-    bool                    IsImpress() const { return !mbIsDraw; }
     virtual bool            Export() = 0;
 
 protected:

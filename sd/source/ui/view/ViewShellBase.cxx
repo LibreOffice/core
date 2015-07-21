@@ -220,8 +220,6 @@ TYPEINIT1(ViewShellBase, SfxViewShell);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new ViewShellBase object has been constructed.
 
-SfxViewFactory* ViewShellBase::pFactory;
-
 SFX_IMPL_SUPERCLASS_INTERFACE(ViewShellBase, SfxViewShell)
 
 void ViewShellBase::InitInterface_Impl()

@@ -74,9 +74,6 @@ public:
     */
     bool SetEditMode (EditMode eEditMode);
 
-    /** Set the edit mode to that currently used by the controller.
-    */
-    bool SetEditModeFromController();
     EditMode GetEditMode() const { return meEditMode;}
     PageKind GetPageType() const { return mePageKind;}
 

@@ -208,7 +208,6 @@ public:
     virtual void AddCustomHdl() SAL_OVERRIDE;
 
     SmartTagSet& getSmartTags() { return maSmartTags; }
-    void selectSmartTag( const SmartTagReference& xTag );
     void updateHandles();
 
     virtual SdrViewContext GetContext() const SAL_OVERRIDE;
@@ -249,9 +248,6 @@ public:
     void SetResizeFreeAllowed( bool bSet ) { bResizeFreeAllowed = bSet; }
     void SetResizePropAllowed( bool bSet ) { bResizePropAllowed = bSet; }
     void SetResizeProtected( bool bSet ) { bResizeProtect = bSet; }
-
-    void SetMarkedPointsSmoothPossible( bool bSet ) { bSetMarkedPointsSmoothPossible = bSet; }
-    void SetMarkedSegmentsKindPossible( bool bSet ) { bSetMarkedSegmentsKindPossible = bSet; }
 
     SdrObject* GetEmptyPresentationObject( PresObjKind eKind );
     SdPage* GetPage();

@@ -113,8 +113,6 @@ public:
 
 class AbstractSdInsertPasteDlg : public VclAbstractDialog
 {
-public:
-    virtual bool            IsInsertBefore() const = 0;
 };
 
 class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog
@@ -161,10 +159,6 @@ public:
 
 class AbstractHeaderFooterDialog : public VclAbstractDialog
 {
-public:
-    virtual void ApplyToAll() = 0;
-    virtual void Apply() = 0;
-    virtual void Cancel() = 0;
 };
 
 class SdAbstractDialogFactory
@@ -181,7 +175,6 @@ public:
     virtual AbstractSdModifyFieldDlg*   CreateSdModifyFieldDlg( vcl::Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) = 0;
     virtual AbstractSdSnapLineDlg*      CreateSdSnapLineDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs, ::sd::View* pView) = 0;
     virtual AbstractSdInsertLayerDlg*   CreateSdInsertLayerDlg( vcl::Window* pWindow, const SfxItemSet& rInAttrs, bool bDeletable, const OUString& aStr ) = 0;
-    virtual AbstractSdInsertPasteDlg*   CreateSdInsertPasteDlg( vcl::Window* pWindow ) = 0;
     virtual AbstractSdInsertPagesObjsDlg* CreateSdInsertPagesObjsDlg( vcl::Window* pParent, const SdDrawDocument* pDoc, SfxMedium* pSfxMedium, const OUString& rFileName ) = 0;
     virtual AbstractMorphDlg*           CreateMorphDlg( vcl::Window* pParent, const SdrObject* pObj1, const SdrObject* pObj2) = 0;
     virtual SfxAbstractTabDialog*       CreateSdOutlineBulletTabDlg ( vcl::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView = NULL ) = 0;

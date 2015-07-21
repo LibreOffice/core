@@ -28,7 +28,7 @@ class Outliner;
 
 class FuHangulHanjaConversion : public FuPoor
 {
- public:
+public:
     TYPEINFO_OVERRIDE();
 
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
@@ -40,9 +40,7 @@ class FuHangulHanjaConversion : public FuPoor
 
     void ConvertStyles( sal_Int16 nTargetLanguage, const vcl::Font *pTargetFont );
 
-    Outliner* GetOutliner() const { return pSdOutliner; }
-
- protected:
+protected:
     virtual ~FuHangulHanjaConversion();
 
     Outliner*   pSdOutliner;

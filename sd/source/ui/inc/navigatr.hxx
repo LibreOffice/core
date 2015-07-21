@@ -108,7 +108,6 @@ public:
     bool                        InsertFile(const OUString& rFileName);
 
     NavigatorDragType           GetNavigatorDragType();
-    void                        SetNavigatorDragType(NavigatorDragType eType) { meDragType = eType; }
 
 protected:
     virtual void                Resize() SAL_OVERRIDE;

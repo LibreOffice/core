@@ -87,7 +87,6 @@ public:
     long GetZoomForRect( const Rectangle& rZoomRect );
 
     void SetMinZoomAutoCalc (bool bAuto);
-    void SetCalcMinZoomByMinSide (bool bMin);
 
     /** Calculate the minimal zoom factor as the value at which the
         application area would completely fill the window.  All values set
