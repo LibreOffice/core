@@ -240,11 +240,6 @@ namespace svx
             m_xFormOperations = FormOperations::createWithFormController( comphelper::getProcessComponentContext(), _rxController );
             if ( m_xFormOperations.is() )
                 m_xFormOperations->setFeatureInvalidation( this );
-
-            // to prevent the controller from displaying any error messages which happen while we operate on it,
-            // we add ourself as XSQLErrorListener. By contract, a FormController displays errors if and only if
-            // no SQLErrorListeners are registered.
-            _rxController->addSQLErrorListener( this );
         }
         catch( const Exception& )
         {
@@ -333,6 +328,11 @@ namespace svx
         const_cast< FormControllerHelper* >( this )->m_aOperationError.clear();
         try
         {
+            // to prevent the controller from displaying any error messages which happen while we operate on it,
+            // we add ourself as XSQLErrorListener. By contract, a FormController displays errors if and only if
+            // no SQLErrorListeners are registered.
+            m_xFormOperations->getController()->addSQLErrorListener( const_cast< FormControllerHelper* >(this) );
+
             switch ( _eWhat )
             {
             case COMMIT_CONTROL:
@@ -359,10 +359,12 @@ namespace svx
         }
         catch ( const SQLException& )
         {
+            m_xFormOperations->getController()->removeSQLErrorListener( const_cast< FormControllerHelper* >(this) );
             aError = ::cppu::getCaughtException();
         }
         catch( const Exception& )
         {
+            m_xFormOperations->getController()->removeSQLErrorListener( const_cast< FormControllerHelper* >(this) );
             SQLException aFallbackError;
             aFallbackError.Message = ::comphelper::anyToString( ::cppu::getCaughtException() );
             aError <<= aFallbackError;
