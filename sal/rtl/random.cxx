@@ -333,7 +333,7 @@ rtlRandomError SAL_CALL rtl_random_getBytes (
     if ((pImpl == NULL) || (pBuffer == NULL))
         return rtl_Random_E_Argument;
 
-    if(pImpl->m_hDigest || !osl_get_system_random_data((char*)Buffer, Bytes))
+    if(pImpl->m_hDigest || !osl_get_system_random_data(static_cast<char*>(Buffer), Bytes))
     {
         if(!pImpl->m_hDigest)
         {
