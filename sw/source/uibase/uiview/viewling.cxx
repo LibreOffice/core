@@ -54,6 +54,7 @@
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <ndtxt.hxx>
+#include <txtfrm.hxx>
 #include <vcl/lstbox.hxx>
 #include <cmdid.h>
 #include <globals.hrc>
@@ -641,6 +642,29 @@ bool SwView::ExecSpellPopup(const Point& rPt)
             m_pWrtShell->Push();
             SwRect aToFill;
 
+            SwCrsrShell *pCrsrShell = static_cast<SwCrsrShell*>(m_pWrtShell);
+            SwPaM *pCrsr = pCrsrShell->GetCrsr();
+            SwPosition aPoint(*pCrsr->GetPoint());
+            const SwTextNode *pNode = aPoint.nNode.GetNode().GetTextNode();
+
+            // Spell-check in case the idle jobs haven't had a chance to kick in.
+            // This makes it possible to suggest spelling corrections for
+            // wrong words independent of the spell-checking idle job.
+            if (pNode && pNode->IsWrongDirty() &&
+                m_pWrtShell->ISA(SwCrsrShell) && !pCrsrShell->IsTableMode() &&
+                !pCrsr->HasMark() && !pCrsr->IsMultiSelection())
+            {
+                SwContentFrm *pFrm = pCrsr->GetContentNode()->getLayoutFrm(
+                                        pCrsrShell->GetLayout(),
+                                        &rPt, &aPoint, false);
+                if (pFrm)
+                {
+                    SwRect aRepaint(static_cast<SwTextFrm*>(pFrm)->_AutoSpell(nullptr, 0));
+                    if (aRepaint.HasArea())
+                        m_pWrtShell->InvalidateWindows(aRepaint);
+                }
+            }
+
             // decide which variant of the context menu to use...
             // if neither spell checking nor grammar checking provides suggestions use the
             // default context menu.
@@ -669,9 +693,6 @@ bool SwView::ExecSpellPopup(const Point& rPt)
             {
                 // get paragraph text
                 OUString aParaText;
-                SwPosition aPoint( *m_pWrtShell->GetCrsr()->GetPoint() );
-                const SwTextNode *pNode = dynamic_cast< const SwTextNode * >(
-                                            &aPoint.nNode.GetNode() );
                 if (pNode)
                     aParaText = pNode->GetText();    // this may include hidden text but that should be Ok
                 else
