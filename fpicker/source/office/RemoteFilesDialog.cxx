@@ -25,6 +25,7 @@ class FileViewContainer : public vcl::Window
         , m_pFileView( NULL )
         , m_pTreeView( NULL )
         , m_pSplitter( NULL )
+        , m_nCurrentFocus( 0 )
     {
     }
 
