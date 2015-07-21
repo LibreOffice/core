@@ -1,0 +1,225 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_b2a3279e",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 8
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "Please rebase your patch on master (or simply something more recent) and/or remove those two nodes from the patch. Possibly unify them with the existing ones.\n\nThe way it is now breaks the build",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_72adaf87",
+        "filename": "sd/source/ui/func/fupage.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "Unnecessary whitespace change",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_92aaab6f",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "Please use some saner names for those variables, mpFillType, mpFillGradient, mpFillHatch, mpFillColor or somesuch, so it\u0027s more clear what is what",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_f2af5f7b",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "With paper format strings in .ui file, you can kill this whole code block",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_b2ca474e",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "Please insert some empty line here, and in general, separate logical blocks of code with empty lines\n\nIt is very hard to read the way it is now (1 big code block)",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_d23ca331",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "I\u0027d maybe suggest that you prepend item list in all of those listboxes with some kind of empty/none entry. \n\nWhen I change the page background type from none to colour, the background immediately becomes baby-blue (as that\u0027s the default colour). Similarly with hatching or gradient, a default value is used initially ... It is understandable (as changes in sidebar take immediate effect), but kinda unexpected.\n\nWhat I\u0027d expect instead: upon changing background type, this dummy/empty/none entry (in colour, gradient, hatching listbox) would be selected and only when the user selects the actual colour (gradient, hatching), the background of the page would be updated.",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_92c14b31",
+        "filename": "sd/source/ui/sidebar/SlideBackground.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "The same here, empty line",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_b2d1e7fd",
+        "filename": "sd/source/ui/sidebar/SlideBackground.src",
+        "patchSetId": 8
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "This array is not used anywhere.\n\n+ as I already commented, please avoid introducing new .src files. Put those strings into .ui file",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_d2f58383",
+        "filename": "sd/uiconfig/simpress/ui/sidebarslidebackground.ui",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "Align labels to the right",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_3204177d",
+        "filename": "sd/uiconfig/simpress/ui/sidebarslidebackground.ui",
+        "patchSetId": 8
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "This combobox wants to have some label :)",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_52099394",
+        "filename": "sd/uiconfig/simpress/ui/sidebarslidebackground.ui",
+        "patchSetId": 8
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "This one too",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_d2cee359",
+        "filename": "sd/uiconfig/simpress/ui/sidebarslidebackground.ui",
+        "patchSetId": 8
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "As this opens a new dialog, add some ellipsis \u0027...\u0027 to the label",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a54edaf_12031b75",
+        "filename": "sd/uiconfig/simpress/ui/sidebarslidebackground.ui",
+        "patchSetId": 8
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-07-21T16:26:44Z",
+      "side": 1,
+      "message": "In fact, all of them do",
+      "revId": "6ac78f432845f67a3a9bd7e88538abc6d0e0c63b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
