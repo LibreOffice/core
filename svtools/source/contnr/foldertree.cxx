@@ -14,6 +14,7 @@
 FolderTree::FolderTree( vcl::Window* pParent, WinBits nBits )
     : SvTreeListBox( pParent, nBits | WB_SORT | WB_TABSTOP )
     , m_aFolderImage( SvtResId( IMG_SVT_FOLDER ) )
+    , m_aFolderExpandedImage( SvtResId( IMG_SVT_FOLDER_OPEN ) )
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(
@@ -21,7 +22,7 @@ FolderTree::FolderTree( vcl::Window* pParent, WinBits nBits )
     m_xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
     SetDefaultCollapsedEntryBmp( m_aFolderImage );
-    SetDefaultExpandedEntryBmp( m_aFolderImage );
+    SetDefaultExpandedEntryBmp( m_aFolderExpandedImage );
 }
 
 void FolderTree::RequestingChildren( SvTreeListEntry* pEntry )

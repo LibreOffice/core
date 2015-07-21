@@ -263,6 +263,7 @@
 #define IMG_TRIANGLE_DOWN               (RID_SVTOOLS_START + 20)
 
 #define IMG_SVT_FOLDER                  (RID_SVTOOLS_START + 42)
+#define IMG_SVT_FOLDER_OPEN             (RID_SVTOOLS_START + 43)
 
 #define RID_IMG_PRNDLG_NOCOLLATE            (STR_SVT_PRNDLG_START + 30)
 

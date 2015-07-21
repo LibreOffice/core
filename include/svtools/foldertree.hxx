@@ -40,6 +40,7 @@ private:
     ::osl::Mutex m_aMutex;
     Sequence< OUString > m_aBlackList;
     Image m_aFolderImage;
+    Image m_aFolderExpandedImage;
 
 public:
     FolderTree( vcl::Window* pParent, WinBits nBits );

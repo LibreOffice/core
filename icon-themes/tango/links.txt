@@ -383,6 +383,7 @@ res/sc10712.png cmd/sc_sortdescending.png
 res/reload.png cmd/sc_reload.png
 res/sc05501.png cmd/sc_open.png
 svtools/res/folder.png formula/res/fapclose.png
+svtools/res/folderop.png formula/res/fapopen.png
 fpicker/res/fp011.png res/sc06303.png
 sfx2/res/styfam1.png sw/imglst/sf01.png
 sfx2/res/styfam2.png sw/imglst/sf02.png
