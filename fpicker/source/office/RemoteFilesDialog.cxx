@@ -689,30 +689,35 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
 IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
 {
     SvTreeListEntry* pEntry = m_pFileView->FirstSelected();
-    if (!pEntry)
-        return 1;
-    SvtContentEntry* pData = static_cast< SvtContentEntry* >( pEntry->GetUserData() );
 
-    if( ( pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_PATHDLG ) )
-       || ( !pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_FILEDLG ) ) )
+    if( pEntry )
     {
-        // url must contain user info, because we need this info in recent files entry
-        // (to fill user field in login box by default)
-        INetURLObject aURL( pData->maURL );
-        INetURLObject aCurrentURL( m_sLastServiceUrl );
-        aURL.SetUser( aCurrentURL.GetUser() );
+        SvtContentEntry* pData = static_cast< SvtContentEntry* >( pEntry->GetUserData() );
 
-        m_sPath = aURL.GetMainURL( INetURLObject::NO_DECODE );
+        if( pData )
+        {
+            if( ( pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_PATHDLG ) )
+                || ( !pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_FILEDLG ) ) )
+            {
+                // url must contain user info, because we need this info in recent files entry
+                // (to fill user field in login box by default)
+                INetURLObject aURL( pData->maURL );
+                INetURLObject aCurrentURL( m_sLastServiceUrl );
+                aURL.SetUser( aCurrentURL.GetUser() );
 
-        m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DECODE_WITH_CHARSET ) );
+                m_sPath = aURL.GetMainURL( INetURLObject::NO_DECODE );
+
+                m_pName_ed->SetText( INetURLObject::decode( aURL.GetLastName(), INetURLObject::DECODE_WITH_CHARSET ) );
+            }
+            else
+            {
+                m_sPath.clear();
+                m_pName_ed->SetText( "" );
+            }
+
+            EnableControls();
+        }
     }
-    else
-    {
-        m_sPath.clear();
-        m_pName_ed->SetText( "" );
-    }
-
-    EnableControls();
 
     return 1;
 }
