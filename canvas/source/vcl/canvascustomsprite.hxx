@@ -47,10 +47,10 @@
 
 namespace vclcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XCustomSprite,
-                                               ::com::sun::star::rendering::XBitmapCanvas,
-                                              ::com::sun::star::rendering::XIntegerBitmap,
-                                                ::com::sun::star::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XCustomSprite,
+                                             css::rendering::XBitmapCanvas,
+                                             css::rendering::XIntegerBitmap,
+                                             css::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
     /** Mixin Sprite
 
         Have to mixin the Sprite interface before deriving from
@@ -85,8 +85,8 @@ namespace vclcanvas
                                public RepaintTarget
     {
     public:
-        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
-                            ::com::sun::star::rendering::XGraphicDevice&  rDevice,
+        CanvasCustomSprite( const css::geometry::RealSize2D&              rSpriteSize,
+                            css::rendering::XGraphicDevice&               rDevice,
                             const ::canvas::SpriteSurface::Reference&     rOwningSpriteCanvas,
                             const OutDevProviderSharedPtr&                rOutDevProvider,
                             bool                                          bShowSpriteBounds );
@@ -99,9 +99,9 @@ namespace vclcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasCustomSprite, CanvasCustomSpriteBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
         // Sprite
         virtual void redraw( OutputDevice& rOutDev,
@@ -112,8 +112,8 @@ namespace vclcanvas
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
-                              const ::com::sun::star::rendering::ViewState&   viewState,
-                              const ::com::sun::star::rendering::RenderState& renderState,
+                              const css::rendering::ViewState&   viewState,
+                              const css::rendering::RenderState& renderState,
                               const ::Point&                                  rPt,
                               const ::Size&                                   rSz,
                               const GraphicAttr&                              rAttr ) const SAL_OVERRIDE;

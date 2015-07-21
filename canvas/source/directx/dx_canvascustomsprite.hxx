@@ -45,10 +45,10 @@
 
 namespace dxcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XCustomSprite,
-                                               ::com::sun::star::rendering::XBitmapCanvas,
-                                              ::com::sun::star::rendering::XIntegerBitmap,
-                                                ::com::sun::star::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XCustomSprite,
+                                             css::rendering::XBitmapCanvas,
+                                             css::rendering::XIntegerBitmap,
+                                             css::lang::XServiceInfo >  CanvasCustomSpriteBase_Base;
     /** Mixin Sprite
 
         Have to mixin the Sprite interface before deriving from
@@ -96,7 +96,7 @@ namespace dxcanvas
             @param rDevice
             Target DX device
          */
-        CanvasCustomSprite( const ::com::sun::star::geometry::RealSize2D&   rSpriteSize,
+        CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
                             const SpriteCanvasRef&                          rRefDevice,
                             const IDXRenderModuleSharedPtr&                 rRenderModule,
                             const ::canvas::ISurfaceProxyManagerSharedPtr&  rSurfaceProxy,
@@ -112,9 +112,9 @@ namespace dxcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasCustomSprite, CanvasCustomSpriteBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException );
+        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException );
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException );
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( css::uno::RuntimeException );
 
         // Sprite
         virtual void redraw() const;

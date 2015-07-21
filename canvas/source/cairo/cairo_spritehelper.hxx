@@ -67,8 +67,8 @@ namespace cairocanvas
             @param bShowSpriteBounds
             When true, little debug bound rects for sprites are shown
          */
-        void init( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
-                   const SpriteCanvasRef&                        rSpriteCanvas );
+        void init( const css::geometry::RealSize2D& rSpriteSize,
+                   const SpriteCanvasRef&           rSpriteCanvas );
 
         void disposing();
 
@@ -95,7 +95,7 @@ namespace cairocanvas
 
     private:
         virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPoly ) const SAL_OVERRIDE;
+            css::uno::Reference< css::rendering::XPolyPolygon2D >& xPoly ) const SAL_OVERRIDE;
 
 
         SpriteCanvasRef           mpSpriteCanvas;

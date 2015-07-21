@@ -160,7 +160,7 @@ namespace dxcanvas
         return mpFont;
     }
 
-    const ::com::sun::star::geometry::Matrix2D& CanvasFont::getFontMatrix() const
+    const css::geometry::Matrix2D& CanvasFont::getFontMatrix() const
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

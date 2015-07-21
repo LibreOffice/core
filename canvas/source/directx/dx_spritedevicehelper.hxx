@@ -42,27 +42,27 @@ namespace dxcanvas
     public:
         SpriteDeviceHelper();
 
-        void init( vcl::Window&                                  rWindow,
+        void init( vcl::Window&                             rWindow,
                    SpriteCanvas&                            rSpriteCanvas,
-                   const ::com::sun::star::awt::Rectangle&  rRect,
+                   const css::awt::Rectangle&               rRect,
                    bool                                     bFullscreen );
 
         /// Dispose all internal references
         void disposing();
 
         // partial override XWindowGraphicDevice
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleAlphaBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
+        css::uno::Reference< css::rendering::XBitmap > createCompatibleBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
+        css::uno::Reference< css::rendering::XVolatileBitmap > createVolatileBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
+        css::uno::Reference< css::rendering::XBitmap > createCompatibleAlphaBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
+        css::uno::Reference< css::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
 
         void        destroyBuffers(  );
         sal_Bool  showBuffer( bool bIsVisible, sal_Bool bUpdateAll );
@@ -72,9 +72,9 @@ namespace dxcanvas
         const DXSurfaceBitmapSharedPtr& getBackBuffer() const { return mpBackBuffer; }
         const ::canvas::ISurfaceProxyManagerSharedPtr &getSurfaceProxy() const { return mpSurfaceProxyManager; }
 
-        ::com::sun::star::uno::Any isAccelerated() const;
+        css::uno::Any isAccelerated() const;
 
-        void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
+        void notifySizeUpdate( const css::awt::Rectangle& rBounds );
 
         /** called when DumpScreenContent property is enabled on
             XGraphicDevice, and writes out bitmaps of current screen.

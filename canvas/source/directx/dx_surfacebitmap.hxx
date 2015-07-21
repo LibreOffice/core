@@ -64,23 +64,23 @@ namespace dxcanvas
                    const ::basegfx::B2DPolyPolygon& rClipPoly,
                    const ::basegfx::B2DHomMatrix&   rTransform );
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > getData(
-            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&   rect );
+        virtual css::uno::Sequence< sal_Int8 > getData(
+            css::rendering::IntegerBitmapLayout&       bitmapLayout,
+            const css::geometry::IntegerRectangle2D&   rect );
 
         virtual void setData(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&      data,
-            const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&   rect );
+            const css::uno::Sequence< sal_Int8 >&      data,
+            const css::rendering::IntegerBitmapLayout& bitmapLayout,
+            const css::geometry::IntegerRectangle2D&   rect );
 
         virtual void setPixel(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&      color,
-            const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&       pos );
+            const css::uno::Sequence< sal_Int8 >&      color,
+            const css::rendering::IntegerBitmapLayout& bitmapLayout,
+            const css::geometry::IntegerPoint2D&       pos );
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > getPixel(
-            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&       pos );
+        virtual css::uno::Sequence< sal_Int8 > getPixel(
+            css::rendering::IntegerBitmapLayout&       bitmapLayout,
+            const css::geometry::IntegerPoint2D&       pos );
 
 #ifdef DX_DEBUG_IMAGES
         void imageDebugger();

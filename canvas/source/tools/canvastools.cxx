@@ -220,7 +220,7 @@ namespace canvas
 
         namespace
         {
-            class StandardColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XIntegerBitmapColorSpace >
+            class StandardColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
             {
             private:
                 uno::Sequence< sal_Int8 >  maComponentTags;
@@ -558,7 +558,7 @@ namespace canvas
                 }
             };
 
-            class StandardNoAlphaColorSpace : public cppu::WeakImplHelper< com::sun::star::rendering::XIntegerBitmapColorSpace >
+            class StandardNoAlphaColorSpace : public cppu::WeakImplHelper< css::rendering::XIntegerBitmapColorSpace >
             {
             private:
                 uno::Sequence< sal_Int8 >  maComponentTags;

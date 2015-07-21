@@ -37,23 +37,23 @@ namespace dxcanvas
         virtual ::basegfx::B2IVector      getSize() const = 0;
         virtual bool                      hasAlpha() const = 0;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > getData(
-            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&   rect ) = 0;
+        virtual css::uno::Sequence< sal_Int8 > getData(
+            css::rendering::IntegerBitmapLayout&       bitmapLayout,
+            const css::geometry::IntegerRectangle2D&   rect ) = 0;
 
         virtual void setData(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&      data,
-            const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerRectangle2D&   rect ) = 0;
+            const css::uno::Sequence< sal_Int8 >&      data,
+            const css::rendering::IntegerBitmapLayout& bitmapLayout,
+            const css::geometry::IntegerRectangle2D&   rect ) = 0;
 
         virtual void setPixel(
-            const ::com::sun::star::uno::Sequence< sal_Int8 >&      color,
-            const ::com::sun::star::rendering::IntegerBitmapLayout& bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&       pos ) = 0;
+            const css::uno::Sequence< sal_Int8 >&      color,
+            const css::rendering::IntegerBitmapLayout& bitmapLayout,
+            const css::geometry::IntegerPoint2D&       pos ) = 0;
 
-        virtual ::com::sun::star::uno::Sequence< sal_Int8 > getPixel(
-            ::com::sun::star::rendering::IntegerBitmapLayout&       bitmapLayout,
-            const ::com::sun::star::geometry::IntegerPoint2D&       pos ) = 0;
+        virtual css::uno::Sequence< sal_Int8 > getPixel(
+            css::rendering::IntegerBitmapLayout&       bitmapLayout,
+            const css::geometry::IntegerPoint2D&       pos ) = 0;
     };
 
     typedef boost::shared_ptr<IBitmap> IBitmapSharedPtr;

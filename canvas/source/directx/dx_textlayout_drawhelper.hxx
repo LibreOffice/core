@@ -31,7 +31,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2isize.hxx>
 
-class ::com::sun::star::rendering::XCanvasFont;
+class css::rendering::XCanvasFont;
 
 namespace Gdiplus { class Graphics; }
 
@@ -42,35 +42,34 @@ namespace dxcanvas
     {
     public:
         TextLayoutDrawHelper(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >& xGraphicDevice);
+            const css::uno::Reference< css::rendering::XGraphicDevice >& xGraphicDevice);
         ~TextLayoutDrawHelper();
 
         // draw text
         void drawText( const boost::shared_ptr<Gdiplus::Graphics>&          rGraphics,
-                       const ::com::sun::star::rendering::ViewState&        rViewState,
-                       const ::com::sun::star::rendering::RenderState&      rRenderState,
-                       const ::basegfx::B2ISize&                            rOutputOffset,
-                       const ::com::sun::star::rendering::StringContext&    rText,
-                       const ::com::sun::star::uno::Sequence< double >&     rLogicalAdvancements,
-                       const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::rendering::XCanvasFont >&  rCanvasFont,
-                       const ::com::sun::star::geometry::Matrix2D&          rFontMatrix,
+                       const css::rendering::ViewState&        rViewState,
+                       const css::rendering::RenderState&      rRenderState,
+                       const ::basegfx::B2ISize&               rOutputOffset,
+                       const css::rendering::StringContext&    rText,
+                       const css::uno::Sequence< double >&     rLogicalAdvancements,
+                       const css::uno::Reference<
+                               css::rendering::XCanvasFont >&  rCanvasFont,
+                       const css::geometry::Matrix2D&          rFontMatrix,
                        bool                                                 bAlphaSurface );
 
-        ::com::sun::star::geometry::RealRectangle2D queryTextBounds(
-            const ::com::sun::star::rendering::StringContext&   rText,
-            const ::com::sun::star::uno::Sequence< double >&    rLogicalAdvancements,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::rendering::XCanvasFont >&     rCanvasFont,
-              const ::com::sun::star::geometry::Matrix2D&       rFontMatrix );
+        css::geometry::RealRectangle2D queryTextBounds(
+            const css::rendering::StringContext&   rText,
+            const css::uno::Sequence< double >&    rLogicalAdvancements,
+            const css::uno::Reference<
+                css::rendering::XCanvasFont >&     rCanvasFont,
+              const css::geometry::Matrix2D&       rFontMatrix );
 
 #ifdef DBG_UTIL
         void test();
 #endif
 
     protected:
-        ::com::sun::star::uno::Reference<
-              ::com::sun::star::rendering::XGraphicDevice > mxGraphicDevice;
+        css::uno::Reference< css::rendering::XGraphicDevice > mxGraphicDevice;
     };
 }
 

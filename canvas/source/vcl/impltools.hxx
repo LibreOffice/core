@@ -78,18 +78,18 @@ namespace vclcanvas
     namespace tools
     {
         ::BitmapEx
-        bitmapExFromXBitmap( const ::com::sun::star::uno::Reference<
-                             ::com::sun::star::rendering::XBitmap >& );
+        bitmapExFromXBitmap( const css::uno::Reference<
+                             css::rendering::XBitmap >& );
 
         /** Setup VCL font and output position
 
             @returns false, if no text output should happen
          */
-        bool setupFontTransform( ::Point&                                           o_rPoint,
-                                 vcl::Font&                                         io_rVCLFont,
-                                 const ::com::sun::star::rendering::ViewState&      viewState,
-                                 const ::com::sun::star::rendering::RenderState&    renderState,
-                                 ::OutputDevice&                                    rOutDev );
+        bool setupFontTransform( ::Point&                              o_rPoint,
+                                 vcl::Font&                            io_rVCLFont,
+                                 const css::rendering::ViewState&      viewState,
+                                 const css::rendering::RenderState&    renderState,
+                                 ::OutputDevice&                       rOutDev );
 
         /** Predicate, to determine whether polygon is actually an axis-aligned rectangle
 
@@ -163,13 +163,13 @@ namespace vclcanvas
             const AntialiasingFlags mnAntiAliasing;
         };
 
-        ::Point mapRealPoint2D( const ::com::sun::star::geometry::RealPoint2D&  rPoint,
-                                const ::com::sun::star::rendering::ViewState&   rViewState,
-                                const ::com::sun::star::rendering::RenderState& rRenderState );
+        ::Point mapRealPoint2D( const css::geometry::RealPoint2D&  rPoint,
+                                const css::rendering::ViewState&   rViewState,
+                                const css::rendering::RenderState& rRenderState );
 
         ::tools::PolyPolygon mapPolyPolygon( const ::basegfx::B2DPolyPolygon&                          rPoly,
-                                      const ::com::sun::star::rendering::ViewState&     rViewState,
-                                      const ::com::sun::star::rendering::RenderState&   rRenderState );
+                                      const css::rendering::ViewState&     rViewState,
+                                      const css::rendering::RenderState&   rRenderState );
 
         enum ModulationMode
         {
@@ -179,7 +179,7 @@ namespace vclcanvas
 
         ::BitmapEx transformBitmap( const BitmapEx&                                     rBitmap,
                                     const ::basegfx::B2DHomMatrix&                      rTransform,
-                                    const ::com::sun::star::uno::Sequence< double >&    rDeviceColor,
+                                    const css::uno::Sequence< double >&                 rDeviceColor,
                                     ModulationMode                                      eModulationMode );
 
     }

@@ -51,15 +51,15 @@
 
 namespace cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XSpriteCanvas,
-                                                ::com::sun::star::rendering::XIntegerBitmap,
-                                                ::com::sun::star::rendering::XGraphicDevice,
-                                                ::com::sun::star::lang::XMultiServiceFactory,
-                                                ::com::sun::star::rendering::XBufferController,
-                                                ::com::sun::star::awt::XWindowListener,
-                                                ::com::sun::star::util::XUpdatable,
-                                                ::com::sun::star::beans::XPropertySet,
-                                                ::com::sun::star::lang::XServiceName >  WindowGraphicDeviceBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XSpriteCanvas,
+                                             css::rendering::XIntegerBitmap,
+                                             css::rendering::XGraphicDevice,
+                                             css::lang::XMultiServiceFactory,
+                                             css::rendering::XBufferController,
+                                             css::awt::XWindowListener,
+                                             css::util::XUpdatable,
+                                             css::beans::XPropertySet,
+                                             css::lang::XServiceName >  WindowGraphicDeviceBase_Base;
     typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
                                                  SpriteDeviceHelper,
                                                  ::osl::MutexGuard,
@@ -105,10 +105,8 @@ namespace cairocanvas
                          public RepaintTarget
     {
     public:
-        SpriteCanvas( const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::uno::Any >&               aArguments,
-                      const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::uno::XComponentContext >& rxContext );
+        SpriteCanvas( const css::uno::Sequence< css::uno::Any >&                aArguments,
+                      const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         void initialize();
 
@@ -123,14 +121,14 @@ namespace cairocanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XBufferController (partial)
-        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
         // XSpriteCanvas (partial)
-        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // SurfaceProvider
         virtual ::cairo::SurfaceSharedPtr getSurface() SAL_OVERRIDE;
@@ -141,8 +139,8 @@ namespace cairocanvas
 
         // RepaintTarget
         virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
-                              const ::com::sun::star::rendering::ViewState&   viewState,
-                              const ::com::sun::star::rendering::RenderState& renderState ) SAL_OVERRIDE;
+                              const css::rendering::ViewState&   viewState,
+                              const css::rendering::RenderState& renderState ) SAL_OVERRIDE;
 
         ::cairo::SurfaceSharedPtr getWindowSurface();
         ::cairo::SurfaceSharedPtr getBufferSurface();
@@ -152,8 +150,8 @@ namespace cairocanvas
         void flush();
 
      private:
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > maArguments;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxComponentContext;
+        css::uno::Sequence< css::uno::Any >                maArguments;
+        css::uno::Reference< css::uno::XComponentContext > mxComponentContext;
     };
 
     typedef ::rtl::Reference< SpriteCanvas > SpriteCanvasRef;

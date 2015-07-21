@@ -44,10 +44,10 @@
 
 namespace cairocanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XBitmapCanvas,
-                                              ::com::sun::star::rendering::XIntegerBitmap,
-                                              ::com::sun::star::lang::XServiceInfo,
-                                              ::com::sun::star::beans::XFastPropertySet >   CanvasBitmapBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
+                                             css::rendering::XIntegerBitmap,
+                                             css::lang::XServiceInfo,
+                                             css::beans::XFastPropertySet >   CanvasBitmapBase_Base;
     class CanvasBitmapSpriteSurface_Base :
         public ::canvas::BaseMutexHelper<CanvasBitmapBase_Base>,
         public SurfaceProvider
@@ -75,7 +75,7 @@ namespace cairocanvas
         */
         CanvasBitmap( const ::basegfx::B2ISize& rSize,
                       const SurfaceProviderRef& rDevice,
-                      ::com::sun::star::rendering::XGraphicDevice* pDevice,
+                      css::rendering::XGraphicDevice* pDevice,
                       bool                      bHasAlpha );
 
         /// Dispose all internal references
@@ -89,9 +89,9 @@ namespace cairocanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( CanvasBitmap, CanvasBitmapBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // SurfaceProvider
         virtual ::cairo::SurfaceSharedPtr getSurface() SAL_OVERRIDE;
@@ -102,8 +102,8 @@ namespace cairocanvas
 
         // RepaintTarget
         virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
-                              const ::com::sun::star::rendering::ViewState&   viewState,
-                              const ::com::sun::star::rendering::RenderState& renderState ) SAL_OVERRIDE;
+                              const css::rendering::ViewState&   viewState,
+                              const css::rendering::RenderState& renderState ) SAL_OVERRIDE;
 
         // XFastPropertySet
         // used to retrieve BitmapEx pointer or X Pixmap handles for this bitmap
@@ -115,8 +115,8 @@ namespace cairocanvas
         //     1st a bool value: true - free the pixmap after used by XFreePixmap, false do nothing, the pixmap is used internally in the canvas
         //     2nd the pixmap handle
         //     3rd the pixmap depth
-        virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const ::com::sun::star::uno::Any&)  throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
+        virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&)  throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE {}
 
     private:
         SurfaceProviderRef        mpSurfaceProvider;

@@ -348,7 +348,7 @@ namespace oglcanvas
 
     uno::Any SpriteDeviceHelper::isAccelerated() const
     {
-        return ::com::sun::star::uno::makeAny(false);
+        return css::uno::makeAny(false);
     }
 
     uno::Any SpriteDeviceHelper::getDeviceHandle() const

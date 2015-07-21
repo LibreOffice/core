@@ -47,12 +47,12 @@
 
 namespace dxcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XCanvas,
-                                               ::com::sun::star::rendering::XGraphicDevice,
-                                              ::com::sun::star::lang::XMultiServiceFactory,
-                                              ::com::sun::star::util::XUpdatable,
-                                              ::com::sun::star::beans::XPropertySet,
-                                              ::com::sun::star::lang::XServiceName >    GraphicDeviceBase1_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XCanvas,
+                                             css::rendering::XGraphicDevice,
+                                             css::lang::XMultiServiceFactory,
+                                             css::util::XUpdatable,
+                                             css::beans::XPropertySet,
+                                             css::lang::XServiceName >    GraphicDeviceBase1_Base;
     typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase1_Base >,
                                            DeviceHelper,
                                            ::osl::MutexGuard,
@@ -74,10 +74,10 @@ namespace dxcanvas
     class Canvas : public CanvasBaseT
     {
     public:
-        Canvas( const ::com::sun::star::uno::Sequence<
-                      ::com::sun::star::uno::Any >&               aArguments,
-                const ::com::sun::star::uno::Reference<
-                      ::com::sun::star::uno::XComponentContext >& rxContext );
+        Canvas( const css::uno::Sequence<
+                      css::uno::Any >&               aArguments,
+                const css::uno::Reference<
+                      css::uno::XComponentContext >& rxContext );
 
         void initialize();
 
@@ -92,24 +92,24 @@ namespace dxcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas, GraphicDeviceBase1_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException);
 
     private:
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >                maArguments;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxComponentContext;
+        css::uno::Sequence< css::uno::Any >                maArguments;
+        css::uno::Reference< css::uno::XComponentContext > mxComponentContext;
     };
 
     typedef ::rtl::Reference< Canvas > CanvasRef;
 
 
 
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XBitmapCanvas,
-                                               ::com::sun::star::rendering::XIntegerBitmap,
-                                               ::com::sun::star::rendering::XGraphicDevice,
-                                              ::com::sun::star::lang::XMultiServiceFactory,
-                                              ::com::sun::star::util::XUpdatable,
-                                              ::com::sun::star::beans::XPropertySet,
-                                              ::com::sun::star::lang::XServiceName >    GraphicDeviceBase2_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XBitmapCanvas,
+                                             css::rendering::XIntegerBitmap,
+                                             css::rendering::XGraphicDevice,
+                                             css::lang::XMultiServiceFactory,
+                                             css::util::XUpdatable,
+                                             css::beans::XPropertySet,
+                                             css::lang::XServiceName >    GraphicDeviceBase2_Base;
     typedef ::canvas::GraphicDeviceBase< ::canvas::BaseMutexHelper< GraphicDeviceBase2_Base >,
                                            DeviceHelper,
                                            ::osl::MutexGuard,
@@ -133,10 +133,8 @@ namespace dxcanvas
     class BitmapCanvas : public BitmapCanvasBaseT, public BitmapProvider
     {
     public:
-        BitmapCanvas( const ::com::sun::star::uno::Sequence<
-                          ::com::sun::star::uno::Any >&               aArguments,
-                      const ::com::sun::star::uno::Reference<
-                          ::com::sun::star::uno::XComponentContext >& rxContext );
+        BitmapCanvas( const css::uno::Sequence< css::uno::Any >&                aArguments,
+                      const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         void initialize();
 
@@ -151,14 +149,14 @@ namespace dxcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( BitmapCanvas, GraphicDeviceBase2_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException);
 
         // BitmapProvider
         virtual IBitmapSharedPtr getBitmap() const;
 
      private:
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >                maArguments;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxComponentContext;
+        css::uno::Sequence< css::uno::Any >                maArguments;
+        css::uno::Reference< css::uno::XComponentContext > mxComponentContext;
         IBitmapSharedPtr                                                             mpTarget;
     };
 

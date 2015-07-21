@@ -66,7 +66,7 @@ namespace vclcanvas
             @param rBackBufferMask
             Buffer of the sprite content (alpha part)
          */
-        void init( const ::com::sun::star::geometry::RealSize2D& rSpriteSize,
+        void init( const css::geometry::RealSize2D&              rSpriteSize,
                    const ::canvas::SpriteSurface::Reference&     rOwningSpriteCanvas,
                    const BackBufferSharedPtr&                    rBackBuffer,
                    const BackBufferSharedPtr&                    rBackBufferMask,
@@ -95,7 +95,7 @@ namespace vclcanvas
 
     private:
         virtual ::basegfx::B2DPolyPolygon polyPolygonFromXPolyPolygon2D(
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPoly ) const SAL_OVERRIDE;
+            css::uno::Reference< css::rendering::XPolyPolygon2D >& xPoly ) const SAL_OVERRIDE;
 
         // for the redraw
         BackBufferSharedPtr                                 mpBackBuffer;

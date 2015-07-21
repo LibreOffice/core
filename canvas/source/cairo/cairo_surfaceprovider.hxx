@@ -40,7 +40,7 @@ namespace cairocanvas
         This interface must be implemented on all canvas
         implementations that hand out XCachedPrimitives
      */
-    class SurfaceProvider : public ::com::sun::star::uno::XInterface
+    class SurfaceProvider : public css::uno::XInterface
     {
     public:
         virtual ~SurfaceProvider() {}

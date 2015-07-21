@@ -43,45 +43,45 @@ namespace oglcanvas
         SpriteDeviceHelper();
         ~SpriteDeviceHelper();
 
-        void init( vcl::Window&                                 rWindow,
+        void init( vcl::Window&                            rWindow,
                    SpriteCanvas&                           rSpriteCanvas,
-                   const ::com::sun::star::awt::Rectangle& rViewArea );
+                   const css::awt::Rectangle&              rViewArea );
 
         /// Dispose all internal references
         void disposing();
 
         // XWindowGraphicDevice
-        ::com::sun::star::geometry::RealSize2D getPhysicalResolution();
-        ::com::sun::star::geometry::RealSize2D getPhysicalSize();
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&                               rDevice,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealPoint2D > >& points );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBezierPolyPolygon2D > createCompatibleBezierPolyPolygon(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&                                       rDevice,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealBezierSegment2D > >& points );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap > createCompatibleAlphaBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
-        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >&  rDevice,
-            const ::com::sun::star::geometry::IntegerSize2D&                                        size );
+        css::geometry::RealSize2D getPhysicalResolution();
+        css::geometry::RealSize2D getPhysicalSize();
+        css::uno::Reference< css::rendering::XLinePolyPolygon2D > createCompatibleLinePolyPolygon(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&                               rDevice,
+            const css::uno::Sequence< css::uno::Sequence< css::geometry::RealPoint2D > >& points );
+        css::uno::Reference< css::rendering::XBezierPolyPolygon2D > createCompatibleBezierPolyPolygon(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&                                       rDevice,
+            const css::uno::Sequence< css::uno::Sequence< css::geometry::RealBezierSegment2D > >& points );
+        css::uno::Reference< css::rendering::XBitmap > createCompatibleBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
+        css::uno::Reference< css::rendering::XVolatileBitmap > createVolatileBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
+        css::uno::Reference< css::rendering::XBitmap > createCompatibleAlphaBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
+        css::uno::Reference< css::rendering::XVolatileBitmap > createVolatileAlphaBitmap(
+            const css::uno::Reference< css::rendering::XGraphicDevice >&  rDevice,
+            const css::geometry::IntegerSize2D&                                        size );
 
         bool  showBuffer( bool bIsVisible, bool bUpdateAll );
         bool  switchBuffer( bool bIsVisible, bool bUpdateAll );
 
-        ::com::sun::star::uno::Any isAccelerated() const;
-        ::com::sun::star::uno::Any getDeviceHandle() const;
-        ::com::sun::star::uno::Any getSurfaceHandle() const;
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::rendering::XColorSpace > getColorSpace() const;
+        css::uno::Any isAccelerated() const;
+        css::uno::Any getDeviceHandle() const;
+        css::uno::Any getSurfaceHandle() const;
+        css::uno::Reference<
+            css::rendering::XColorSpace > getColorSpace() const;
 
-        void notifySizeUpdate( const ::com::sun::star::awt::Rectangle& rBounds );
+        void notifySizeUpdate( const css::awt::Rectangle& rBounds );
 
         /** called when DumpScreenContent property is enabled on
             XGraphicDevice, and writes out bitmaps of current screen.
@@ -92,16 +92,16 @@ namespace oglcanvas
         void hide( const ::rtl::Reference< CanvasCustomSprite >& );
 
         /// enable linear gradient shader "texture" with given parameters
-        void useLinearGradientShader( const ::com::sun::star::rendering::ARGBColor*    pColors,
-                                      const ::com::sun::star::uno::Sequence< double >& rStops,
+        void useLinearGradientShader( const css::rendering::ARGBColor*    pColors,
+                                      const css::uno::Sequence< double >& rStops,
                                       const ::basegfx::B2DHomMatrix&                   rTexTransform );
         /// enable radial gradient shader "texture" with given parameters
-        void useRadialGradientShader( const ::com::sun::star::rendering::ARGBColor*    pColors,
-                                      const ::com::sun::star::uno::Sequence< double >& rStops,
+        void useRadialGradientShader( const css::rendering::ARGBColor*    pColors,
+                                      const css::uno::Sequence< double >& rStops,
                                       const ::basegfx::B2DHomMatrix&                   rTexTransform );
         /// enable rectangular gradient shader "texture" with given parameters
-        void useRectangularGradientShader( const ::com::sun::star::rendering::ARGBColor*    pColors,
-                                           const ::com::sun::star::uno::Sequence< double >& rStops,
+        void useRectangularGradientShader( const css::rendering::ARGBColor*    pColors,
+                                           const css::uno::Sequence< double >& rStops,
                                            const ::basegfx::B2DHomMatrix&                   rTexTransform );
 
         /// create a pbuffer context (for rendering into background surface)
@@ -121,7 +121,7 @@ namespace oglcanvas
             potential circular references for canvas. Needed to
             create bitmaps
          */
-        com::sun::star::rendering::XGraphicDevice*         mpDevice;
+        css::rendering::XGraphicDevice*                    mpDevice;
 
         /// Pointer to sprite canvas (owner of this helper), needed to create bitmaps
         SpriteCanvas*                                      mpSpriteCanvas;
@@ -140,7 +140,7 @@ namespace oglcanvas
         unsigned int                                       mnRectangularTwoColorGradientProgram;
         unsigned int                                       mnRectangularMultiColorGradientProgram;
 
-        OpenGLContext maContext;
+        OpenGLContext                                      maContext;
     };
 }
 

@@ -48,15 +48,15 @@
 
 namespace dxcanvas
 {
-    typedef ::cppu::WeakComponentImplHelper< ::com::sun::star::rendering::XSpriteCanvas,
-                                              ::com::sun::star::rendering::XIntegerBitmap,
-                                              ::com::sun::star::rendering::XGraphicDevice,
-                                              ::com::sun::star::lang::XMultiServiceFactory,
-                                              ::com::sun::star::rendering::XBufferController,
-                                              ::com::sun::star::awt::XWindowListener,
-                                              ::com::sun::star::util::XUpdatable,
-                                              ::com::sun::star::beans::XPropertySet,
-                                              ::com::sun::star::lang::XServiceName >    WindowGraphicDeviceBase_Base;
+    typedef ::cppu::WeakComponentImplHelper< css::rendering::XSpriteCanvas,
+                                             css::rendering::XIntegerBitmap,
+                                             css::rendering::XGraphicDevice,
+                                             css::lang::XMultiServiceFactory,
+                                             css::rendering::XBufferController,
+                                             css::awt::XWindowListener,
+                                             css::util::XUpdatable,
+                                             css::beans::XPropertySet,
+                                             css::lang::XServiceName >    WindowGraphicDeviceBase_Base;
     typedef ::canvas::BufferedGraphicDeviceBase< ::canvas::DisambiguationHelper< WindowGraphicDeviceBase_Base >,
                                                    SpriteDeviceHelper,
                                                    ::osl::MutexGuard,
@@ -100,10 +100,10 @@ namespace dxcanvas
     class SpriteCanvas : public SpriteCanvasBaseT, public BitmapProvider
     {
     public:
-        SpriteCanvas( const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::uno::Any >&               aArguments,
-                      const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::uno::XComponentContext >& rxContext );
+        SpriteCanvas( const css::uno::Sequence<
+                            css::uno::Any >&               aArguments,
+                      const css::uno::Reference<
+                            css::uno::XComponentContext >& rxContext );
 
         void initialize();
 
@@ -118,14 +118,14 @@ namespace dxcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( SpriteCanvas, WindowGraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XBufferController (partial)
-        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException);
 
         // XSpriteCanvas (partial)
-        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException);
+        virtual sal_Bool SAL_CALL updateScreen( sal_Bool bUpdateAll ) throw (css::uno::RuntimeException);
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException);
 
         /// Retrieve rendermodule object for this Canvas
         const IDXRenderModuleSharedPtr& getRenderModule() const;
@@ -137,8 +137,8 @@ namespace dxcanvas
         virtual IBitmapSharedPtr getBitmap() const;
 
      private:
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > maArguments;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxComponentContext;
+        css::uno::Sequence< css::uno::Any >                maArguments;
+        css::uno::Reference< css::uno::XComponentContext > mxComponentContext;
     };
 
     typedef ::rtl::Reference< SpriteCanvas > SpriteCanvasRef;

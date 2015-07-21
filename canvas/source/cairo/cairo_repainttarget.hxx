@@ -40,8 +40,8 @@ namespace cairocanvas
 
         // call this when a bitmap is repainted
         virtual bool repaint( const ::cairo::SurfaceSharedPtr&                pSurface,
-                              const ::com::sun::star::rendering::ViewState&   viewState,
-                              const ::com::sun::star::rendering::RenderState& renderState ) = 0;
+                              const css::rendering::ViewState&   viewState,
+                              const css::rendering::RenderState& renderState ) = 0;
     };
 }
 
