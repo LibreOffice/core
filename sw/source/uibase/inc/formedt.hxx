@@ -37,17 +37,6 @@ class SwForm;
 // insert marker for index entry
 class SwIdxFormDlg : public SvxStandardDialog
 {
-    DECL_LINK( EntryHdl, Button * );
-    DECL_LINK( PageHdl, Button * );
-    DECL_LINK( TabHdl, Button * );
-    DECL_LINK( JumpHdl, Button * );
-    DECL_LINK( StdHdl, Button * );
-    DECL_LINK( SelectHdl, ListBox * );
-    DECL_LINK( EnableSelectHdl, ListBox * );
-    DECL_LINK( DoubleClickHdl, Button * );
-    DECL_LINK( ModifyHdl, Edit * );
-    DECL_LINK( AssignHdl, Button * );
-    void            UpdatePattern();
     void            Apply() SAL_OVERRIDE;
 
     VclPtr<ListBox>         aEntryLB;
@@ -77,14 +66,7 @@ public:
     SwIdxFormDlg( vcl::Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
     virtual ~SwIdxFormDlg();
     virtual void dispose() SAL_OVERRIDE;
-
-    const SwForm&   GetTOXForm();
 };
-
-inline const SwForm& SwIdxFormDlg::GetTOXForm()
-{
-    return *pForm;
-}
 
 #endif
 

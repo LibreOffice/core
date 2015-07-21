@@ -53,7 +53,6 @@ private:
     DECL_LINK(ModifyHdl, void * = 0);
 
 public:
-    SwWrtShell* GetWrtShell() const { return pSh; }
     SwLineNumberingDlg(SwView *pVw);
     virtual ~SwLineNumberingDlg();
     virtual void dispose() SAL_OVERRIDE;

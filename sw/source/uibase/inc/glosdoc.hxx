@@ -111,7 +111,6 @@ public:
 
     SwTextBlocks*   GetGroupDoc(const OUString &rName,
                                 bool bCreate = false);
-    SwTextBlocks*   GetDefGroupDoc() { return GetGroupDoc(GetDefName()); }
     static OUString GetDefName();
     static OUString GetExtension();
 
@@ -121,7 +120,6 @@ public:
     bool            RenameGroupDoc(const OUString& sOldGroup, OUString& sNewGroup, const OUString& rNewTitle);
     bool            DelGroupDoc(const OUString &);
     SwDocShellRef   EditGroupDoc(const OUString &rGrpName, const OUString& rShortName, bool bShow = true );
-    void            SaveGroupDoc(const OUString &rGrpName, const OUString& rLongName );
     void            UpdateGlosPath(bool bFull);
     void            ShowError();
     bool            IsGlosPathErr() { return m_bError; }

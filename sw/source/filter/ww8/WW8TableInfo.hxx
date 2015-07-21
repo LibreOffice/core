@@ -95,7 +95,6 @@ public:
     bool isEndOfLine() const { return mbEndOfLine;}
     bool isFinalEndOfLine() const { return mbFinalEndOfLine;}
     bool isFirstInTable() const { return mbFirstInTable;}
-    bool isVertMerge() const;
     const SwTableBox * getTableBox() const { return mpTableBox;}
     const SwTable * getTable() const { return mpTable;}
     const SwRect & getRect() const { return maRect;}
@@ -201,14 +200,10 @@ public:
 
     WW8TableInfo * getParent() const { return mpParent;}
     sal_uInt32 getDepth() const;
-    bool isEndOfLine() const;
-    bool isEndOfCell() const;
-    bool isFirstInTable() const;
     const SwNode * getNode() const { return mpNode;}
     const SwTableBox * getTableBox() const;
     WW8TableNodeInfo * getNext() const { return mpNext;}
     const SwNode * getNextNode() const { return mpNextNode;}
-    const SwRect & getRect() const;
 
     const Inners_t & getInners() const { return mInners;}
     const WW8TableNodeInfoInner::Pointer_t getFirstInner() const;
@@ -351,7 +346,6 @@ public:
     WW8TableNodeInfo * processSwTableByLayout(const SwTable * pTable, RowEndInners_t &rLastRowEnds);
     WW8TableNodeInfo::Pointer_t getTableNodeInfo(const SwNode * pNode);
     const SwNode * getNextNode(const SwNode * pNode);
-    const WW8TableNodeInfo * getFirstTableNodeInfo() const;
 
     WW8TableNodeInfo * reorderByLayout(const SwTable * pTable, RowEndInners_t &rLastRowEnds);
 };

@@ -804,10 +804,7 @@ public:
     sal_uInt8 mnBorders;
     bool mbHasFootnote;
     void SetDirection();
-    void SetLinkId(short sLinkId) { mLinkId = sLinkId; }
-    bool DoesContainFootnote() const { return mbHasFootnote; }
     bool IsContinuous() const { return maSep.bkc == 0; }
-    bool IsLinked() const { return mLinkId != 0; }
     bool IsNotProtected() const { return maSep.fUnlocked != 0; }
     bool IsVertical() const;
     sal_Int16 NoCols() const { return maSep.ccolM1 + 1; }
@@ -902,7 +899,6 @@ public:
     sal_uInt32 GetPageRight() const;
     sal_uInt32 GetPageWidth() const;
     sal_uInt32 GetWWPageTopMargin() const;
-    bool empty() const { return maSegments.empty(); }
     sal_uInt32 GetTextAreaWidth() const;
 };
 
@@ -1753,7 +1749,6 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_KeepLines(        sal_uInt16, const sal_uInt8* pData, short nLen );
     void Read_KeepParas(        sal_uInt16, const sal_uInt8* pData, short nLen );
     void Read_BreakBefore(      sal_uInt16, const sal_uInt8* pData, short nLen );
-    void Read_Apo(sal_uInt16 nId, const sal_uInt8* pData, short nLen);
     void Read_ApoPPC(sal_uInt16, const sal_uInt8* pData, short);
 
     void Read_BoolItem(         sal_uInt16 nId, const sal_uInt8*, short nLen );

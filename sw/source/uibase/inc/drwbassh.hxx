@@ -30,10 +30,6 @@ struct SvxSwFrameValidation;
 
 class SwDrawBaseShell: public SwBaseShell
 {
-    SwDrawBase* pDrawActual;
-
-    sal_uInt16  eDrawMode;
-
     DECL_LINK( CheckGroupShapeNameHdl, AbstractSvxNameDialog* );
     DECL_LINK(ValidatePosition, SvxSwFrameValidation* );
 public:
@@ -52,9 +48,7 @@ public:
     void        GetState(SfxItemSet &);
     void        GetDrawAttrStateForIFBX( SfxItemSet& rSet );
     void        DisableState(SfxItemSet &rSet)               { Disable(rSet);}
-    bool    Disable(SfxItemSet& rSet, sal_uInt16 nWhich = 0);
-
-    void        StateStatusline(SfxItemSet &rSet);
+    bool        Disable(SfxItemSet& rSet, sal_uInt16 nWhich = 0);
 };
 
 #endif

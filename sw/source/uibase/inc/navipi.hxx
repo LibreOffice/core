@@ -114,7 +114,6 @@ class SwNavigationPI : public vcl::Window,
     DECL_LINK_TYPED( ClosePopupWindow, SfxPopupWindow *, void );
     void UsePage(SwWrtShell *);
 
-    void MakeVisible();
     void InitImageList();
     void SetPopupWindow( SfxPopupWindow* );
 
@@ -141,7 +140,6 @@ public:
 
     void            GotoPage(); // jump to page; bindable function
 
-    void            Update() { FillBox(); }
     void            UpdateListBox();
     void            MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget, bool bWithCilds);
 
@@ -151,7 +149,7 @@ public:
     static OUString CreateDropFileName( TransferableDataHelper& rData );
     static OUString CleanEntry(const OUString& rEntry);
 
-    sal_uInt16          GetRegionDropMode() const {return nRegionMode;}
+    sal_uInt16      GetRegionDropMode() const {return nRegionMode;}
     void            SetRegionDropMode(sal_uInt16 nNewMode);
 
     sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );

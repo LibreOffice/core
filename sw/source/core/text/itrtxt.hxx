@@ -156,8 +156,6 @@ private:
 protected:
     // For FormatQuoVadis
     inline void Right( const SwTwips nNew ) { nRight = nNew; }
-    // For CalcFlyAdjust
-    inline void SetDropLeft( const sal_uInt16 nNew ) { nDropLeft = nNew; }
 
     void CtorInitTextMargin( SwTextFrm *pFrm, SwTextSizeInfo *pInf );
     explicit SwTextMargin(SwTextNode* pTextNode)

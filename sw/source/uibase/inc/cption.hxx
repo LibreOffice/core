@@ -102,7 +102,6 @@ class SwCaptionDialog : public SvxStandardDialog
     virtual void Apply() SAL_OVERRIDE;
 
     void    DrawSample();
-    void    CheckButtonWidth();
     void    ApplyCaptionOrder(); //#i61007# order of captions
 
     static OUString our_aSepTextSave; // Save caption separator text

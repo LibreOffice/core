@@ -260,9 +260,6 @@ protected:
 public:
     CSS1Parser();
     virtual ~CSS1Parser();
-
-    inline sal_uInt32   GetLineNr() const       { return nlLineNr; }
-    inline sal_uInt32   GetLinePos() const      { return nlLinePos; }
 };
 
 inline sal_uInt32 CSS1Parser::SetLinePos( sal_uInt32 nlPos )

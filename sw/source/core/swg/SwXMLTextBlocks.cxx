@@ -408,11 +408,6 @@ sal_uLong SwXMLTextBlocks::PutDoc()
     return nErr;
 }
 
-sal_uLong SwXMLTextBlocks::GetText( sal_uInt16 nIdx, OUString& rText )
-{
-    return GetBlockText( aNames[ nIdx ]->aShort, rText );
-}
-
 sal_uLong SwXMLTextBlocks::GetText( const OUString& rShort, OUString& rText )
 {
     return GetBlockText( rShort, rText );

@@ -50,15 +50,6 @@ public:
                         }
                     }
 
-    sal_Int32   GetSelectedPos()const {return nSelectedPos;}
-    void        SetSelectedPos(sal_Int32 nSet){
-                        if(nSelectedPos != nSet)
-                        {
-                            SetModified();
-                            nSelectedPos = nSet;
-                        }
-                    }
-
     sal_Int32   GetOutlineLevel()const {return nOutlineLevel;}
     void        SetOutlineLevel(sal_Int32 nSet){
                         if(nOutlineLevel != nSet)

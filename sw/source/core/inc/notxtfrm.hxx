@@ -53,7 +53,6 @@ public:
     virtual bool GetCrsrOfst(SwPosition* pPos, Point& aPoint,
                      SwCrsrMoveState* = 0, bool bTestBackground = false) const SAL_OVERRIDE;
 
-    const Size &GetGrfSize() const  { return GetSize(); }
     void GetGrfArea( SwRect &rRect, SwRect * = 0, bool bMirror = true ) const;
 
     bool IsTransparent() const;

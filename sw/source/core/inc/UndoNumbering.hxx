@@ -51,7 +51,6 @@ public:
     virtual SwRewriter GetRewriter() const SAL_OVERRIDE;
 
     SwHistory* GetHistory(); // will be created if necessary
-    void SetSttNum( sal_uLong nNdIdx ) { nSttSet = nNdIdx; }
     void SaveOldNumRule( const SwNumRule& rOld );
 
     void SetLRSpaceEndPos();

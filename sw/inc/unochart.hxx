@@ -191,14 +191,12 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    SwFrameFormat*       GetFrameFormat() const { return const_cast<SwFrameFormat*>(static_cast<const SwFrameFormat*>(GetRegisteredIn())); }
-
     void        AddDataSequence( const SwTable &rTable, ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > &rxDataSequence );
     void        RemoveDataSequence( const SwTable &rTable, ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > &rxDataSequence );
 
     // will send modifdied events for all data-sequences of the table
     void        InvalidateTable( const SwTable *pTable );
-    bool    DeleteBox( const SwTable *pTable, const SwTableBox &rBox );
+    bool        DeleteBox( const SwTable *pTable, const SwTableBox &rBox );
     void        DisposeAllDataSequences( const SwTable *pTable );
 
     // functionality needed to get notified about new added rows/cols

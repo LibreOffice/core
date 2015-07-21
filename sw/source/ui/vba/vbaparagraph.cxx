@@ -38,7 +38,7 @@ SwVbaParagraph::~SwVbaParagraph()
 uno::Reference< word::XRange > SAL_CALL
 SwVbaParagraph::getRange( ) throw ( uno::RuntimeException, std::exception )
 {
-    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText(), true ) );
+    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText() ) );
 }
 
 uno::Any SAL_CALL

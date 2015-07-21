@@ -56,7 +56,7 @@
 
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OBJECT )
 
-SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
+SwInputWindow::SwInputWindow( vcl::Window* pParent )
     : ToolBox(  pParent ,   SW_RES( RID_TBX_FORMULA )),
     aPos(       VclPtr<Edit>::Create(this,       SW_RES(ED_POS))),
     aEdit(      VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION)),
@@ -64,7 +64,6 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
     pMgr(0),
     pWrtShell(0),
     pView(0),
-    pBindings(pBind),
     aAktTableName(aEmptyOUStr)
     , m_bDoesUndo(true)
     , m_bResetUndo(false)
@@ -623,7 +622,7 @@ SwInputChild::SwInputChild(vcl::Window* _pParent,
                                 SfxChildWindow( _pParent, nId )
 {
     pDispatch = pBindings->GetDispatcher();
-    pWindow = VclPtr<SwInputWindow>::Create( _pParent, pBindings );
+    pWindow = VclPtr<SwInputWindow>::Create( _pParent );
     static_cast<SwInputWindow*>(pWindow.get())->ShowWin();
     eChildAlignment = SfxChildAlignment::LOWESTTOP;
 }

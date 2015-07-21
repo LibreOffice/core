@@ -130,7 +130,6 @@ public:
     // sind. Sie werden deshalb einfach invalidiert und erst beim naechsten
     // _SetAttr() geloescht.
     void Invalidate() { bValid = false; }
-    bool IsValid() const { return bValid; }
 };
 
 // Tabelle der Attribute: Hier ist die Reihenfolge wichtig: Die Attribute
@@ -566,7 +565,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // wird er entfernt
     _HTMLAttrContext *PopContext( sal_uInt16 nToken=0, sal_uInt16 nLimit=0,
                                   bool bRemove=true );
-    inline const _HTMLAttrContext *GetTopContext() const;
 
     bool GetMarginsFromContext( sal_uInt16 &nLeft, sal_uInt16 &nRight, short& nIndent,
                                 bool bIgnoreCurrent=false ) const;
@@ -605,7 +603,6 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     // <MULTICOL>
     void NewMultiCol( sal_uInt16 columnsFromCss=0 );
-    void EndMultiCol();
 
     // <MARQUEE>
     void NewMarquee( HTMLTable *pCurTable=0 );
@@ -750,9 +747,6 @@ private:
     // ein Event in die SFX-Konfiguation eintragen (htmlbas.cxx)
     void InsertBasicDocEvent( const OUString& aEventName, const OUString& rName,
                               ScriptType eScrType, const OUString& rScrType );
-
-    // ein Event an ein VC-Control anhaengen (htmlform.cxx)
-    void InsertBasicCtrlEvent( sal_uInt16 nEvent, const OUString& rName );
 
     // Inserting styles
 
@@ -979,12 +973,6 @@ inline bool SwHTMLParser::HasStyleOptions( const OUString &rStyle,
 {
     return !rStyle.isEmpty() || !rId.isEmpty() || !rClass.isEmpty() ||
            (pLang && !pLang->isEmpty()) || (pDir && !pDir->isEmpty());
-}
-
-inline const _HTMLAttrContext *SwHTMLParser::GetTopContext() const
-{
-    return aContexts.size() > nContextStMin
-            ? aContexts.back() : 0;
 }
 
 inline void SwHTMLParser::PushContext( _HTMLAttrContext *pCntxt )

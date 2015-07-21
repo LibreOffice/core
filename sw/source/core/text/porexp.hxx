@@ -47,9 +47,6 @@ public:
         : cChar( cCh ), bMulti( bMult )
         { cChar = cCh; SetLen(1); SetWhichPor( POR_BLANK ); }
 
-    bool IsMulti() const { return bMulti; }
-    void SetMulti( bool bNew ) { bMulti = bNew; }
-
     virtual SwLinePortion *Compress() SAL_OVERRIDE;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const SAL_OVERRIDE;
     virtual void FormatEOL( SwTextFormatInfo &rInf ) SAL_OVERRIDE;

@@ -49,7 +49,6 @@ public:
                         { aShortName = rShortName; }
     void            SetGroupName( const OUString& rGroupName )
                         { aGroupName = rGroupName; }
-    const OUString& GetShortName(){return aShortName;}
 };
 
 class SwWebGlosDocShell : public SwWebDocShell
@@ -81,7 +80,6 @@ public:
                         { aShortName = rShortName; }
     void            SetGroupName( const OUString& rGroupName )
                         { aGroupName = rGroupName; }
-    const OUString& GetShortName(){return aShortName;}
 };
 
 #endif

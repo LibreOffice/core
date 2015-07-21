@@ -527,11 +527,6 @@ bool AbstractMailMergeFieldConnectionsDlg_Impl::IsUseExistingConnections() const
     return pDlg->IsUseExistingConnections();
 }
 
-SwForm* AbstractMultiTOXTabDialog_Impl::GetForm(CurTOXType eType)
-{
-    return pDlg->GetForm(eType);
-}
-
 CurTOXType AbstractMultiTOXTabDialog_Impl::GetCurrentTOXType() const
 {
     return pDlg->GetCurrentTOXType();
@@ -619,11 +614,6 @@ IMPL_LINK( AbstractMailMergeWizard_Impl, EndDialogHdl, SwMailMergeWizard*, pDial
     aEndDlgHdl = Link<>();
 
     return 0L;
-}
-
-void AbstractMailMergeWizard_Impl::SetReloadDocument(const OUString& rURL)
-{
-    pDlg->SetReloadDocument(rURL);
 }
 
 OUString AbstractMailMergeWizard_Impl::GetReloadDocument() const
@@ -1205,20 +1195,6 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
     }
 
     return pRet;
-}
-
-GetTabPageRanges SwAbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nId )
-{
-    switch ( nId )
-    {
-    case 1 : //RID_SVXPAGE_TEXTANIMATION :
-            //return SvxTextAnimationPage::GetRanges;
-            break;
-        default:
-            break;
-    }
-
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -150,8 +150,6 @@ public:
     SdrObject*      GetDrawingObjectsByContent(const SwContent *pCnt);
 
     bool            ToggleToRoot();
-    bool            IsRoot() const {return bIsRoot;}
-    sal_uInt16          GetRootType() const {return nRootType;}
     void            SetRootType(sal_uInt16 nType);
     void            Display( bool bActiveView );
     void            Clear();
@@ -167,11 +165,8 @@ public:
                                         pHiddenShell;}
 
     static bool     IsInDrag() {return bIsInDrag;}
-    bool            IsInternalDrag() const {return bIsInternalDrag;}
 
-    sal_Int32       GetActiveBlock() const {return nActiveBlock;}
-
-    sal_uInt8           GetOutlineLevel()const {return nOutlineLevel;}
+    sal_uInt8       GetOutlineLevel()const {return nOutlineLevel;}
     void            SetOutlineLevel(sal_uInt8 nSet);
 
     virtual bool    Expand( SvTreeListEntry* pParent ) SAL_OVERRIDE;
@@ -296,7 +291,6 @@ protected:
     DECL_LINK_TYPED( Timeout, Timer*, void );
     DECL_LINK(      DoubleClickHdl, void* );
 
-    bool            IsInternalDrag() const {return bIsInternalDrag;}
     SwNavigationPI* GetParentWindow();
 
     void            OpenDoc(const SwGlblDocContent*);

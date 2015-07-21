@@ -203,7 +203,6 @@ public:
     bool IsOnceMore() const { return bOnceMore; }
     void SetOnceMore( bool bNew ) { bOnceMore = bNew; }
 
-    bool HasChanges() const { return bChanges; }
     void SetChanges()       { bChanges = true; }
 
     bool HasTruncLines() const { return bTruncLines; }

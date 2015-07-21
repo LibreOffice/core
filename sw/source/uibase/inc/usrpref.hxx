@@ -153,15 +153,6 @@ public:
 
     void SetUsrPref(const SwViewOption &rCopy);
 
-    void Commit()
-        {
-            aContentConfig.Commit();
-            aLayoutConfig.Commit();
-            aGridConfig.Commit();
-            aCursorConfig.Commit();
-            if(pWebColorConfig)
-                pWebColorConfig->Commit();
-        }
     void SetModified()
         {
             aContentConfig.SetModified();

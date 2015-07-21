@@ -182,10 +182,6 @@ public:
     virtual void SetDocumentSpecificSettings(const OUString& _rSettingsGroupName,
                     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& _rSettings) SAL_OVERRIDE;
 
-    SotStorage *GetPackage() { return &xPackage; }
-
-    void SetProgressValue( sal_Int32 nValue );
-
     // initialize XForms
     virtual void initXForms() SAL_OVERRIDE;
 
@@ -213,12 +209,6 @@ inline const SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper() const
 inline       SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper()
 {
     return *pTableItemMapper;
-}
-
-inline void SwXMLImport::SetProgressValue( sal_Int32 nValue )
-{
-    if ( bShowProgress )
-        GetProgressBarHelper()->SetValue(nValue);
 }
 
 #endif  //  _XMLIMP_HXX

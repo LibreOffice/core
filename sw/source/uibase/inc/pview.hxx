@@ -83,20 +83,9 @@ public:
         return mnRow;
     }
 
-    void SetRow(sal_uInt8 n)
-    {
-        if(n)
-        mnRow = n;
-    }
-
     sal_uInt8 GetCol() const
     {
         return mnCol;
-    }
-    void SetCol(sal_uInt8 n)
-    {
-        if(n)
-            mnCol = n;
     }
 
     sal_uInt16 GetSttPage() const
@@ -127,7 +116,6 @@ public:
 
     void CalcWish( sal_uInt8 nNewRow, sal_uInt8 nNewCol );
 
-    const Size& GetWinSize() const  { return maPxWinSize; }
     void SetWinSize( const Size& rNewSize );
 
     // Add <MV_SELPAGE>, <MV_SCROLL>
@@ -210,7 +198,6 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     SAL_DLLPRIVATE int _CreateScrollbar( bool bHori);
     DECL_DLLPRIVATE_LINK(ScrollHdl, SwScrollbar*);
     DECL_DLLPRIVATE_LINK(EndScrollHdl, SwScrollbar*);
-    DECL_DLLPRIVATE_LINK(BtnPage, Button*);
     SAL_DLLPRIVATE bool ChgPage( int eMvMode, bool bUpdateScrollbar = true );
 
     SAL_DLLPRIVATE virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
@@ -252,20 +239,12 @@ public:
     { return GetViewFrame()->GetWindow(); }
     inline SwViewShell* GetViewShell() const
     { return pViewWin->GetViewShell(); }
-    inline const Rectangle& GetVisArea() const
-    { return aVisArea; }
-    inline void GrabFocusViewWin()
-    { pViewWin->GrabFocus(); }
     inline void RepaintCoreRect( const SwRect& rRect )
     { pViewWin->RepaintCoreRect( rRect ); }
 
     void DocSzChgd(const Size& rNewSize);
-    const Size& GetDocSz() const
-    { return aDocSz; }
 
     void SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
-
-    inline void AdjustEditWin();
 
     void ScrollViewSzChg();
     void ScrollDocSzChg();
@@ -323,10 +302,6 @@ public:
     virtual ~SwPagePreview();
 };
 
-inline void SwPagePreview::AdjustEditWin()
-{
-    OuterResizePixel( Point(), GetFrameWindow().GetOutputSizePixel() );
-}
 
 #endif
 

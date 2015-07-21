@@ -58,9 +58,6 @@ public:
 
 class SwXMLTextBlockImport : public SvXMLImport
 {
-private:
-    SwXMLTextBlocks &rBlockList;
-
 protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
@@ -72,12 +69,8 @@ public:
     OUString &m_rText;
     SwXMLTextBlockImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rContext,
-        SwXMLTextBlocks &rBlocks, OUString &rNewText, bool bNewTextOnly );
+        OUString &rNewText, bool bNewTextOnly );
 
-    SwXMLTextBlocks& getBlockList()
-    {
-        return rBlockList;
-    }
     virtual ~SwXMLTextBlockImport()
         throw();
     virtual void SAL_CALL endDocument()

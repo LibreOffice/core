@@ -71,10 +71,7 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTextNode
 
     void InsertLink( const OUString& rGrfName, const OUString& rFltName );
     bool ImportGraphic( SvStream& rStrm );
-    /** adjust return type and rename method to
-       indicate that its an private one. */
 
-    void DelStreamName();
     DECL_LINK( SwapGraphic, GraphicObject* );
 
     /** helper method to determine stream for the embedded graphic.

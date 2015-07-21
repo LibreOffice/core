@@ -93,7 +93,6 @@ public:
 
     void        ExecDlg(SfxRequest &);
 
-    void        StateStatusLine(SfxItemSet &rSet);
     void        ExecTextCtrl(SfxRequest& rReq);
     void        GetTextFontCtrlState(SfxItemSet& rSet);
     void        GetTextCtrlState(SfxItemSet& rSet);

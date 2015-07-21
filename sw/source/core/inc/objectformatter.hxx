@@ -101,30 +101,19 @@ class SwObjectFormatter
             return mpLayAction;
         }
 
-        /** method to restrict the format of floating screen objects to
-            as-character anchored ones
-        */
-        inline void SetFormatOnlyAsCharAnchored()
-        {
-            mbFormatOnlyAsCharAnchored = true;
-        }
-
         inline bool FormatOnlyAsCharAnchored() const
         {
             return mbFormatOnlyAsCharAnchored;
         }
 
         /** performs the intrinsic format of a given floating screen object and its content.
-
-            #i28701#
         */
         void _FormatObj( SwAnchoredObject& _rAnchoredObj );
 
         /** invokes the intrinsic format method for all floating screen objects,
             anchored at anchor frame on the given page frame
 
-            #i28701#
-            #i26945# - for format of floating screen objects for
+            for format of floating screen objects for
             follow text frames, the 'master' text frame is passed to the method.
             Thus, the objects, whose anchor character is inside the follow text
             frame can be formatted.
@@ -135,26 +124,18 @@ class SwObjectFormatter
         bool _FormatObjsAtFrm( SwTextFrm* _pMasterTextFrm = 0L );
 
         /** accessor to collected anchored object
-
-            #i28701#
         */
         SwAnchoredObject* GetCollectedObj( const sal_uInt32 _nIndex );
 
         /** accessor to 'anchor' page number of collected anchored object
-
-            #i28701#
         */
         sal_uInt32 GetPgNumOfCollected( const sal_uInt32 _nIndex );
 
         /** accessor to 'anchor' type of collected anchored object
-
-            #i26945#
         */
         bool IsCollectedAnchoredAtMaster( const sal_uInt32 _nIndex );
 
         /** accessor to total number of collected anchored objects
-
-            #i28701#
         */
         sal_uInt32 CountOfCollected();
 

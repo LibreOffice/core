@@ -34,9 +34,7 @@ class SwScrollbar: public ScrollBar
     using Window::IsVisible;
 
 public:
-
     void    ExtendedShow( bool bVisible = true );
-    void    Hide() { Show( false ); }
     void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) SAL_OVERRIDE;
     bool    IsVisible(bool bReal) const { return bReal ? ScrollBar::IsVisible() : bVisible; }
 

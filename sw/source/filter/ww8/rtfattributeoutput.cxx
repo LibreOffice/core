@@ -782,11 +782,6 @@ void RtfAttributeOutput::TableVerticalCell(ww8::WW8TableNodeInfoInner::Pointer_t
         }
 }
 
-void RtfAttributeOutput::TableNodeInfo(ww8::WW8TableNodeInfo::Pointer_t /*pNodeInfo*/)
-{
-    /* noop */
-}
-
 void RtfAttributeOutput::TableNodeInfoInner(ww8::WW8TableNodeInfoInner::Pointer_t pNodeInfoInner)
 {
     // This is called when the nested table ends in a cell, and there's no

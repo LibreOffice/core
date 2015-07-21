@@ -76,7 +76,7 @@ SwVbaDocument::getContent() throw ( uno::RuntimeException, std::exception )
 {
     uno::Reference< text::XTextRange > xStart = mxTextDocument->getText()->getStart();
     uno::Reference< text::XTextRange > xEnd;
-    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, xStart, xEnd, true ) );
+    return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, xStart, xEnd ) );
 }
 
 uno::Reference< word::XRange > SAL_CALL

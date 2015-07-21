@@ -168,7 +168,6 @@ public:
     SwIndexMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark);
 
     virtual void        Apply() SAL_OVERRIDE;
-    void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
 class SwAuthMarkModalDlg;
@@ -244,7 +243,6 @@ public:
     SwAuthMarkModalDlg(vcl::Window *pParent, SwWrtShell& rSh);
 
     virtual void        Apply() SAL_OVERRIDE;
-    void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
 #endif // INCLUDED_SW_SOURCE_UIBASE_INC_SWUIIDXMRK_HXX

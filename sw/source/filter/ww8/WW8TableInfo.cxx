@@ -547,11 +547,6 @@ sal_uInt32 WW8TableNodeInfo::getRow() const
     return getInnerForDepth(mnDepth)->getRow();
 }
 
-bool WW8TableNodeInfo::isEndOfLine() const
-{
-    return getInnerForDepth(mnDepth)->isEndOfLine();
-}
-
 const WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getFirstInner() const
 {
     WW8TableNodeInfoInner::Pointer_t pResult;

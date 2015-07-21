@@ -46,7 +46,6 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
     virtual void RedoImpl( ::sw::UndoRedoContext & ) SAL_OVERRIDE;
 
-    SwUndoId GetUserId() const { return mnUserId; }
     sal_uInt16 GetRedlSaveCount() const;
 };
 

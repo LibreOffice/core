@@ -48,12 +48,7 @@ class WW8Struct : public ::sw::ExternalData
         sal_uInt16 getU16(sal_uInt32 nOffset)
         { return getU8(nOffset) + (getU8(nOffset + 1) << 8); }
 
-        sal_uInt32 getU32(sal_uInt32 nOffset)
-        { return  getU16(nOffset) + (getU16(nOffset + 1) << 16); }
-
         OUString getUString(sal_uInt32 nOffset, sal_uInt32 nCount);
-
-        OUString getString(sal_uInt32 nOffset, sal_uInt32 nCount);
     };
 
 typedef ::std::vector<OUString> StringVector_t;

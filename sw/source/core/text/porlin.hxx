@@ -92,8 +92,6 @@ public:
     inline void AddPrtWidth( const sal_uInt16 nNew ) { Width( Width() + nNew ); }
     inline void SubPrtWidth( const sal_uInt16 nNew ) { Width( Width() - nNew ); }
 
-    inline const SwPosSize &PrtSize() const { return *this; }
-
     // Insert methods
     virtual SwLinePortion *Insert( SwLinePortion *pPortion );
     virtual SwLinePortion *Append( SwLinePortion *pPortion );
@@ -117,7 +115,6 @@ public:
     inline bool InToxRefGrp() const { return (nWhichPor & PORGRP_TOXREF) != 0; }
     inline bool InToxRefOrFieldGrp() const { return (nWhichPor & ( PORGRP_FLD | PORGRP_TOXREF )) != 0; }
     inline bool InExpGrp() const { return (nWhichPor & PORGRP_EXP) != 0; }
-    inline bool InTabnLftGrp() const { return (nWhichPor & PORGRP_TABNOTLFT) != 0; }
     inline bool InFixMargGrp() const { return (nWhichPor & PORGRP_FIXMARG) != 0; }
     inline bool InSpaceGrp() const { return InTextGrp() || IsMultiPortion(); }
 // Individual queries
@@ -127,12 +124,9 @@ public:
     inline bool IsBreakPortion() const { return nWhichPor == POR_BRK; }
     inline bool IsErgoSumPortion() const { return nWhichPor == POR_ERGOSUM; }
     inline bool IsQuoVadisPortion() const { return nWhichPor == POR_QUOVADIS; }
-    inline bool IsTabCntPortion() const { return nWhichPor == POR_TABCENTER; }
-    inline bool IsTabDecimalPortion() const { return nWhichPor == POR_TABDECIMAL; }
     inline bool IsTabLeftPortion() const { return nWhichPor == POR_TABLEFT; }
     inline bool IsFootnoteNumPortion() const { return nWhichPor == POR_FTNNUM; }
     inline bool IsFootnotePortion() const { return nWhichPor == POR_FTN; }
-    inline bool IsTmpEndPortion() const { return nWhichPor == POR_TMPEND; }
     inline bool IsDropPortion() const { return nWhichPor == POR_DROP; }
     inline bool IsLayPortion() const { return nWhichPor == POR_LAY; }
     inline bool IsParaPortion() const { return nWhichPor == POR_PARA; }
@@ -143,7 +137,6 @@ public:
     inline bool IsPostItsPortion() const { return nWhichPor == POR_POSTITS; }
     inline bool IsCombinedPortion() const { return nWhichPor == POR_COMBINED; }
     inline bool IsTextPortion() const { return nWhichPor == POR_TXT; }
-    inline bool IsURLPortion() const { return nWhichPor == POR_URL; }
     inline bool IsHangingPortion() const { return nWhichPor == POR_HNG; }
     inline bool IsKernPortion() const { return nWhichPor == POR_KERN; }
     inline bool IsArrowPortion() const { return nWhichPor == POR_ARROW; }

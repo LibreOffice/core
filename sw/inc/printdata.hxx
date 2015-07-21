@@ -135,7 +135,6 @@ public:
 
     /** Note: in the context where this class is used the pointers should always be valid
        during the lifetime of this object */
-    const SwPrintUIOptions &    GetPrintUIOptions() const       { return *m_pPrintUIOptions; }
     const SwRenderData &        GetRenderData() const           { return *m_pRenderData; }
     void  SetPrintUIOptions( const SwPrintUIOptions *pOpt )     { m_pPrintUIOptions = pOpt; }
     void  SetRenderData( const SwRenderData *pData )            { m_pRenderData = pData; }

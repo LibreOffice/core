@@ -47,7 +47,6 @@ public:
            void Reset();
     inline bool IsOn()  const { return bOn; }
     inline bool IsChg() const { return bChg; }
-    inline OutputDevice *GetOut() { return pOut; }
 };
 
 inline SwSaveClip::~SwSaveClip()

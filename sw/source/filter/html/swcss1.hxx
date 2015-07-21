@@ -59,9 +59,6 @@ class SwCSS1Parser : public SvxCSS1Parser
 
     bool bLinkCharFormatsSet : 1;
 
-    // die Vorlagen fuer DL anlegen
-    SwTextFormatColl* GetDefListTextFormatColl( sal_uInt16 nCollId, sal_uInt16 nDeep );
-
     const SwPageDesc* GetPageDesc( sal_uInt16 nPoolId, bool bCreate );
 
     void SetTableTextColl( bool bHeader );

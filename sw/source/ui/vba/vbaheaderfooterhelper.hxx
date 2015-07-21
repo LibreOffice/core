@@ -36,8 +36,6 @@ public:
     static bool isFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
     static bool isFirstPageFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
     static bool isEvenPagesFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
-    static bool isPrimaryHeader( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
-    static bool isPrimaryFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
 };
 
 #endif

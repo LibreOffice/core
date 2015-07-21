@@ -404,7 +404,6 @@ namespace sw
         protected:
             std::vector<OUString> maAuthors;          // Array of Sw - Bookmarknames
 
-            sal_uInt16 GetPos( const OUString& rNm );
         public:
             WrtRedlineAuthor() {}
             virtual ~WrtRedlineAuthor() {}

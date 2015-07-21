@@ -35,11 +35,11 @@ enum ShadowState
 
 class ShadowOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
 {
-    protected:
+protected:
         // geometry creation for OverlayObject
         virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence() SAL_OVERRIDE;
 
-    private:
+private:
         basegfx::B2DPoint maSecondPosition;
         ShadowState mShadowState;
 
@@ -49,12 +49,11 @@ class ShadowOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
                              ShadowState aState );
         virtual ~ShadowOverlayObject();
 
-    public:
+public:
         void SetShadowState(ShadowState aState);
         inline ShadowState GetShadowState() {return mShadowState;}
 
         inline const basegfx::B2DPoint& GetSecondPosition() const { return maSecondPosition; }
-        void SetSecondPosition( const basegfx::B2DPoint& rNew );
 
         void SetPosition( const basegfx::B2DPoint& rPoint1,
                           const basegfx::B2DPoint& rPoint2 );

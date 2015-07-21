@@ -114,8 +114,6 @@ public:
     virtual ~SwMultiPortion();
     const SwLineLayout& GetRoot() const { return aRoot; }
     SwLineLayout& GetRoot() { return aRoot; }
-    SwFieldPortion* GetFieldRest() { return pFieldRest; }
-    void SetFieldRest( SwFieldPortion* pNew ) { pFieldRest = pNew; }
 
     inline bool HasTabulator() const { return bTab1 || bTab2; }
     inline bool IsFormatted() const { return bFormatted; }
@@ -141,8 +139,6 @@ public:
     inline bool HasRotation() const { return 0 != (1 & nDirection); }
     inline bool IsRevers() const { return 0 != (2 & nDirection); }
     inline sal_uInt8 GetDirection() const { return nDirection; }
-    inline sal_uInt16 GetFontRotation() const
-        { return ( HasRotation() ? ( IsRevers() ? 2700 : 900 ) : 0 ); }
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const SAL_OVERRIDE;
@@ -178,8 +174,6 @@ public:
         { return ( nLineDiff < 0 ) ? nBlank2 : nBlank1; }
     inline sal_Int32 GetSmallerSpaceCnt() const
         { return ( nLineDiff < 0 ) ? nBlank1 : nBlank2; }
-    inline sal_Int32 GetBlank1() const { return nBlank1; }
-    inline sal_Int32 GetBlank2() const { return nBlank2; }
 
     virtual long CalcSpacing( long nSpaceAdd, const SwTextSizeInfo &rInf ) const SAL_OVERRIDE;
     virtual bool ChgSpaceAdd( SwLineLayout* pCurr, long nSpaceAdd ) const SAL_OVERRIDE;

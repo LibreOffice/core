@@ -45,7 +45,7 @@ namespace sw { namespace mark
 
     class SaveBookmark
     {
-        public:
+    public:
             SaveBookmark(bool bSavePos,
                 bool bSaveOtherPos,
                 const ::sw::mark::IMark& rBkmk,
@@ -54,10 +54,8 @@ namespace sw { namespace mark
             void SetInDoc(SwDoc* pDoc,
                 const SwNodeIndex&,
                 const SwIndex* pIdx =0);
-            IDocumentMarkAccess::MarkType GetOriginalBkmType() const
-                { return m_eOrigBkmType; }
 
-        private:
+    private:
             OUString m_aName;
             OUString m_aShortName;
             vcl::KeyCode m_aCode;
@@ -74,7 +72,7 @@ namespace sw { namespace mark
     /// Takes care of storing relevant attributes of an SwTextNode before split, then restore them on the new node.
     class ContentIdxStore
     {
-        public:
+    public:
             virtual void Clear() =0;
             virtual bool Empty() =0;
             virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nContent, bool bSaveFlySplit=false) =0;
@@ -128,7 +126,6 @@ public:
     SwDataChanged( SwDoc* pDoc, const SwPosition& rPos );
     ~SwDataChanged();
 
-    sal_uLong GetNode() const           { return nNode; }
     sal_Int32 GetContent() const { return nContent; }
 };
 

@@ -31,9 +31,7 @@ class SwTemplateDlg: public SfxStyleDialog
     sal_uInt16      nType;
     sal_uInt16      nHtmlMode;
     SwWrtShell*     pWrtShell;
-    bool        bNewStyle;
-
-    DECL_LINK( NumOptionsHdl, PushButton* );
+    bool            bNewStyle;
 
     sal_uInt16 m_nIndentsId;
     sal_uInt16 m_nAlignId;
