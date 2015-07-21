@@ -46,7 +46,7 @@
 
 #include <vcl/svapp.hxx>
 
-#if GTK_CHECK_VERSION(3,10,0)
+#if GTK_CHECK_VERSION(3,0,0)
 # ifdef GDK_WINDOWING_X11
 #  include <gdk/gdkx.h>
 # endif
