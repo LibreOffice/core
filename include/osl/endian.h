@@ -161,7 +161,7 @@ extern "C" {
 #endif
 
 #ifndef OSL_MAKEWORD
-#   define OSL_MAKEWORD(bl, bh)    ((sal_uInt16)((bl) & 0xFF) | (((sal_uInt16)(bh) & 0xFF) << 8))
+#   define OSL_MAKEWORD(bl, bh)    ((sal_uInt16)((sal_uInt16)((bl) & 0xFF) | (((sal_uInt16)(bh) & 0xFF) << 8)))
 #endif
 #ifndef OSL_LOBYTE
 #   define OSL_LOBYTE(w)           ((sal_uInt8)((sal_uInt16)(w) & 0xFF))
