@@ -198,7 +198,13 @@ void PlaceEditDialog::UpdateLabel( )
         if( !m_pEDUsername->GetText().isEmpty( ) )
         {
             OUString sLabel = SvtResId( STR_SVT_DEFAULT_SERVICE_LABEL );
-            sLabel = sLabel.replaceFirst( "$user$", m_pEDUsername->GetText() );
+            OUString sUser = m_pEDUsername->GetText();
+
+            int nLength = sUser.indexOf( '@' );
+            if( nLength < 0 )
+                nLength = sUser.getLength();
+
+            sLabel = sLabel.replaceFirst( "$user$", sUser.copy( 0, nLength ) );
             sLabel = sLabel.replaceFirst( "$service$", m_pLBServerType->GetSelectEntry() );
 
             m_pEDServerName->SetText( sLabel );
