@@ -236,7 +236,7 @@ IMPL_LINK(AreaPropertyPanel, SelectFillTypeHdl, ListBox *, pToolBox)
                 mpLbFillAttr->Hide();
                 mpToolBoxColor->Show();
                 const OUString aTmpStr;
-                const Color aColor = mpColorItem->GetColorValue();
+                const Color aColor = mpColorItem ? mpColorItem->GetColorValue() : COL_AUTO;
                 const XFillColorItem aXFillColorItem( aTmpStr, aColor );
 
                 // #i122676# change FillStyle and Color in one call
