@@ -470,6 +470,10 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
         }
 
         m_pFileView->EndInplaceEditing( false );
+
+        EnableChildPointerOverwrite( true );
+        SetPointer( PointerStyle::Wait );
+
         eResult = m_pFileView->Initialize( sURL, sFilter, NULL, GetBlackList() );
 
         if( eResult == eSuccess )
@@ -483,6 +487,9 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
             m_bIsConnected = true;
             EnableControls();
         }
+
+        SetPointer( PointerStyle::Arrow );
+        EnableChildPointerOverwrite( false );
     }
 
     return eResult;
