@@ -680,7 +680,6 @@ namespace dxcanvas
 
             mpWindow->SetControlForeground();
             mpWindow->SetControlBackground();
-            mpWindow->EnablePaint(sal_False);
 
             const SystemEnvData *pData = mpWindow->GetSystemData();
             const HWND hwnd(reinterpret_cast<HWND>(pData->hWnd));
