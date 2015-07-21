@@ -21,6 +21,7 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:AddDirect"/>
       <menu:menuitem menu:id=".uno:Open"/>
+      <menu:menuitem menu:id=".uno:OpenRemote"/>
       <menu:menuitem menu:id=".uno:RecentFileList"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:AutoPilotMenu"/>
@@ -36,6 +37,7 @@
       <menu:menuitem menu:id=".uno:Save"/>
       <menu:menuitem menu:id=".uno:SaveAs"/>
       <menu:menuitem menu:id=".uno:SaveACopy"/>
+      <menu:menuitem menu:id=".uno:SaveAsRemote"/>
       <menu:menuitem menu:id=".uno:SaveAll"/>
       <menu:menuitem menu:id=".uno:CheckOut"/>
       <menu:menuitem menu:id=".uno:CancelCheckOut"/>
