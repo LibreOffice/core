@@ -1297,15 +1297,14 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
     {
         bOk = false;
 
-        if (rSt.IsEof())
-            break;
-
         WW8LFO aLFO;
         memset(&aLFO, 0, sizeof( aLFO ));
 
         rSt.ReadUInt32( aLFO.nIdLst );
         rSt.SeekRel( 8 );
         rSt.ReadUChar( aLFO.nLfoLvl );
+        if (!rSt.good())
+            break;
         rSt.SeekRel( 3 );
         // soviele Overrides existieren
         if ((nMaxLevel < aLFO.nLfoLvl) || rSt.GetError())
