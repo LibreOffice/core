@@ -746,7 +746,7 @@ IMPL_LINK_NOARG(FmXFormView, OnActivate)
                 pAdapter =*i;
         }
 
-        if ( pAdapter.get() )
+        if ( pAdapter.is() )
         {
             Reference< XFormController > xControllerToActivate;
             for (   ::std::vector< Reference< XFormController > >::const_iterator i = pAdapter->GetList().begin();
