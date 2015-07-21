@@ -432,15 +432,14 @@ static sal_Int32 ImplPatternRightPos( const OUString& rStr, const OString& rEdit
 {
     // search non-literal successor
     sal_Int32 nNewPos = nCursorPos;
-    sal_Int32 nTempPos = nNewPos;
-    while ( nTempPos < rEditMask.getLength() )
+    ;
+    for(sal_Int32 nTempPos = nNewPos+1; nTempPos < rEditMask.getLength(); ++nTempPos )
     {
-        if ( rEditMask[nTempPos+1] != EDITMASK_LITERAL )
+        if ( rEditMask[nTempPos] != EDITMASK_LITERAL )
         {
-            nNewPos = nTempPos+1;
+            nNewPos = nTempPos;
             break;
         }
-        nTempPos++;
     }
     ImplPatternMaxPos( rStr, rEditMask, nFormatFlags, bSameMask, nCursorPos, nNewPos );
     return nNewPos;
