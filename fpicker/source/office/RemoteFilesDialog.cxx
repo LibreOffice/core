@@ -551,6 +551,7 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, AddServiceHdl )
 
             m_pServices_lb->InsertEntry( sPrefix + newService->GetName() );
             m_pServices_lb->SelectEntryPos( m_pServices_lb->GetEntryCount() - 1 );
+            SelectServiceHdl( NULL );
 
             m_bIsUpdated = true;
 
