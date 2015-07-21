@@ -4263,6 +4263,25 @@ void Test::testFuncMATCH()
         CPPUNIT_ASSERT_EQUAL(OUString("6"), m_pDoc->GetString(ScAddress(1,0,0)));
     }
 
+    {
+        // Test the ReferenceOrForceArray parameter.
+
+        clearRange(m_pDoc, ScRange(0,0,0,1,7,0));
+
+        // B1:B5 contain numeric values.
+        m_pDoc->SetValue(ScAddress(1,0,0), 1.0);
+        m_pDoc->SetValue(ScAddress(1,1,0), 2.0);
+        m_pDoc->SetValue(ScAddress(1,2,0), 3.0);
+        m_pDoc->SetValue(ScAddress(1,3,0), 4.0);
+        m_pDoc->SetValue(ScAddress(1,4,0), 5.0);
+
+        // Find string value "33" in concatenated array, no implicit
+        // intersection is involved, array is forced.
+        m_pDoc->SetString(ScAddress(0,5,0), "=MATCH(\"33\";B1:B5&B1:B5)");
+        m_pDoc->CalcAll();
+        CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(0,5,0)));
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
