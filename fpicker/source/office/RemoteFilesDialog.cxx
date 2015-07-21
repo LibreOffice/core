@@ -470,7 +470,10 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
         if( eResult == eSuccess )
         {
             m_pPath->SetURL( sURL );
+
+            m_pTreeView->SetSelectHdl( Link<>() );
             m_pTreeView->SetTreePath( sURL );
+            m_pTreeView->SetSelectHdl( LINK( this, RemoteFilesDialog, TreeSelectHdl ) );
 
             m_bIsConnected = true;
             EnableControls();
@@ -662,24 +665,17 @@ IMPL_LINK_TYPED ( RemoteFilesDialog, EditServiceMenuHdl, MenuButton *, pButton, 
 
 IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
 {
-    SvTreeListEntry* pEntry = m_pFileView->FirstSelected();
-
-    if( pEntry )
+    if( m_pFileView->GetSelectionCount() )
     {
-        SvtContentEntry* pData = static_cast< SvtContentEntry* >( pEntry->GetUserData() );
+        OUString sURL = m_pFileView->GetCurrentURL();
 
-        if( pData )
+        if( ContentIsFolder( sURL ) )
         {
-            if( pData->mbIsFolder )
-            {
-                OUString sURL = m_pFileView->GetCurrentURL();
-
-                OpenURL( sURL );
-            }
-            else
-            {
-                EndDialog( RET_OK );
-            }
+            OpenURL( sURL );
+        }
+        else
+        {
+            EndDialog( RET_OK );
         }
     }
 
