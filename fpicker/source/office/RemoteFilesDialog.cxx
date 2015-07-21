@@ -631,6 +631,8 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
 IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
 {
     SvTreeListEntry* pEntry = m_pFileView->FirstSelected();
+    if (!pEntry)
+        return 1;
     SvtContentEntry* pData = static_cast< SvtContentEntry* >( pEntry->GetUserData() );
 
     if( ( pData->mbIsFolder && ( m_eType == REMOTEDLG_TYPE_PATHDLG ) )
