@@ -3462,15 +3462,10 @@ beans::PropertyValue DomainMapper::getInteropGrabBag()
 {
     beans::PropertyValue aRet;
     aRet.Name = m_pImpl->m_aInteropGrabBagName;
-
-    uno::Sequence<beans::PropertyValue> aSeq(m_pImpl->m_aInteropGrabBag.size());
-    beans::PropertyValue* pSeq = aSeq.getArray();
-    for (std::vector<beans::PropertyValue>::iterator i = m_pImpl->m_aInteropGrabBag.begin(); i != m_pImpl->m_aInteropGrabBag.end(); ++i)
-        *pSeq++ = *i;
+    aRet.Value = uno::makeAny(comphelper::containerToSequence(m_pImpl->m_aInteropGrabBag));
 
     m_pImpl->m_aInteropGrabBag.clear();
     m_pImpl->m_aInteropGrabBagName.clear();
-    aRet.Value = uno::makeAny(aSeq);
     return aRet;
 }
 
