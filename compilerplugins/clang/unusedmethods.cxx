@@ -268,9 +268,11 @@ bool UnusedMethods::VisitVarDecl( const VarDecl* varDecl )
     const CXXRecordDecl* recordDecl = varDecl->getType()->getAsCXXRecordDecl();
     if (!recordDecl)
         return true;
+// workaround clang-3.5 issue
+#if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 6
     if (!recordDecl->getTemplateInstantiationPattern())
         return true;
-
+#endif
     for( CXXRecordDecl::ctor_iterator it = recordDecl->ctor_begin(); it != recordDecl->ctor_end(); ++it)
         TraverseCXXConstructorDecl(*it);
     for( CXXRecordDecl::method_iterator it = recordDecl->method_begin(); it != recordDecl->method_end(); ++it)
