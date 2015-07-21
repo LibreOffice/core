@@ -13,6 +13,32 @@
 
 namespace chart { namespace sidebar {
 
+namespace {
+
+OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
+{
+    css::uno::Reference<css::frame::XController> xController(xModel->getCurrentController());
+    css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier(xController, css::uno::UNO_QUERY);
+    if (!xSelectionSupplier.is())
+        return OUString();
+
+    css::uno::Any aAny = xSelectionSupplier->getSelection();
+    assert(aAny.hasValue());
+    OUString aCID;
+    aAny >>= aCID;
+
+    return aCID;
+}
+
+css::uno::Reference<css::beans::XPropertySet> getPropSet(
+        css::uno::Reference<css::frame::XModel> xModel)
+{
+    OUString aCID = getCID(xModel);
+    return ObjectIdentifier::getObjectPropertySet(aCID, xModel);
+}
+
+}
+
 VclPtr<vcl::Window> ChartAreaPanel::Create(
         vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -29,14 +55,28 @@ VclPtr<vcl::Window> ChartAreaPanel::Create(
 
 ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        ChartController* /*pController*/):
-    svx::sidebar::AreaPropertyPanelBase(pParent, rxFrame)
+        ChartController* pController):
+    svx::sidebar::AreaPropertyPanelBase(pParent, rxFrame),
+    mxModel(pController->getModel()),
+    mxListener(new ChartSidebarModifyListener(this))
 {
 }
 
 ChartAreaPanel::~ChartAreaPanel()
 {
     disposeOnce();
+}
+
+void ChartAreaPanel::dispose()
+{
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcaster->removeModifyListener(mxListener);
+}
+
+void ChartAreaPanel::Initialize()
+{
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcaster->addModifyListener(mxListener);
 }
 
 void ChartAreaPanel::setFillTransparence(const XFillTransparenceItem& /*rItem*/)
@@ -49,33 +89,54 @@ void ChartAreaPanel::setFillFloatTransparence(const XFillFloatTransparenceItem& 
 
 }
 
-void ChartAreaPanel::setFillStyle(const XFillStyleItem& /*rItem*/)
+void ChartAreaPanel::setFillStyle(const XFillStyleItem& rItem)
 {
-
+    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(rItem.GetValue()));
 }
 
-void ChartAreaPanel::setFillStyleAndColor(const XFillStyleItem* /*pStyleItem*/,
-        const XFillColorItem& /*rColorItem*/)
+void ChartAreaPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
+        const XFillColorItem& rColorItem)
 {
-
+    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (pStyleItem)
+        xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(pStyleItem->GetValue()));
+    xPropSet->setPropertyValue("Color", css::uno::makeAny(rColorItem.GetValue()));
 }
 
-void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* /*pStyleItem*/,
-        const XFillGradientItem& /*rGradientItem*/)
+void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
+        const XFillGradientItem& rGradientItem)
 {
-
+    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (pStyleItem)
+        xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(pStyleItem->GetValue()));
+    xPropSet->setPropertyValue("GradientName", css::uno::makeAny(rGradientItem.GetValue()));
 }
 
-void ChartAreaPanel::setFillStyleAndHatch(const XFillStyleItem* /*pStyleItem*/,
-        const XFillHatchItem& /*rHatchItem*/)
+void ChartAreaPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
+        const XFillHatchItem& rHatchItem)
 {
-
+    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (pStyleItem)
+        xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(pStyleItem->GetValue()));
+    xPropSet->setPropertyValue("HatchName", css::uno::makeAny(rHatchItem.GetValue()));
 }
 
-void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* /*pStyleItem*/,
-        const XFillBitmapItem& /*rBitmapItem*/)
+void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
+        const XFillBitmapItem& rBitmapItem)
 {
+    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (pStyleItem)
+        xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(pStyleItem->GetValue()));
+    xPropSet->setPropertyValue("FillBitmapName", css::uno::makeAny(rBitmapItem.GetValue()));
+}
 
+void ChartAreaPanel::updateData()
+{
+}
+
+void ChartAreaPanel::modelInvalid()
+{
 }
 
 
