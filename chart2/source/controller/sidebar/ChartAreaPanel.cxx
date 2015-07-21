@@ -23,7 +23,9 @@ OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
         return OUString();
 
     css::uno::Any aAny = xSelectionSupplier->getSelection();
-    assert(aAny.hasValue());
+    if (!aAny.hasValue())
+        return OUString();
+
     OUString aCID;
     aAny >>= aCID;
 
@@ -94,6 +96,9 @@ void ChartAreaPanel::setFillFloatTransparence(const XFillFloatTransparenceItem& 
 void ChartAreaPanel::setFillStyle(const XFillStyleItem& rItem)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (!xPropSet.is())
+        return;
+
     xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(rItem.GetValue()));
 }
 
@@ -101,6 +106,9 @@ void ChartAreaPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
         const XFillColorItem& rColorItem)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (!xPropSet.is())
+        return;
+
     if (pStyleItem)
         xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(pStyleItem->GetValue()));
     xPropSet->setPropertyValue("Color", css::uno::makeAny(rColorItem.GetValue()));
@@ -110,6 +118,9 @@ void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
         const XFillGradientItem& rGradientItem)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (!xPropSet.is())
+        return;
+
     if (pStyleItem)
         xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(pStyleItem->GetValue()));
     xPropSet->setPropertyValue("GradientName", css::uno::makeAny(rGradientItem.GetValue()));
@@ -119,6 +130,9 @@ void ChartAreaPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
         const XFillHatchItem& rHatchItem)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (!xPropSet.is())
+        return;
+
     if (pStyleItem)
         xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(pStyleItem->GetValue()));
     xPropSet->setPropertyValue("HatchName", css::uno::makeAny(rHatchItem.GetValue()));
@@ -128,6 +142,9 @@ void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
         const XFillBitmapItem& rBitmapItem)
 {
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (!xPropSet.is())
+        return;
+
     if (pStyleItem)
         xPropSet->setPropertyValue("FillStyle", css::uno::makeAny(pStyleItem->GetValue()));
     xPropSet->setPropertyValue("FillBitmapName", css::uno::makeAny(rBitmapItem.GetValue()));
