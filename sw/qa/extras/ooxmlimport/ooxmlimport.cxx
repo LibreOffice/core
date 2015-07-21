@@ -2734,6 +2734,20 @@ DECLARE_OOXMLIMPORT_TEST(testTdf90611, "tdf90611.docx")
     CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(getParagraphOfText(1, xFootnoteText), "CharHeight"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf89702, "tdf89702.docx")
+{
+    // Get the first paragraph's numbering style's 2nd level's character style name.
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+    auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
+    uno::Sequence<beans::PropertyValue> aLevel;
+    xLevels->getByIndex(1) >>= aLevel; // 2nd level
+    OUString aCharStyleName = std::find_if(aLevel.begin(), aLevel.end(), [](const beans::PropertyValue& rValue) { return rValue.Name == "CharStyleName"; })->Value.get<OUString>();
+
+    // Make sure that the font name is Arial, this was Verdana.
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName(aCharStyleName), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xStyle, "CharFontName"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

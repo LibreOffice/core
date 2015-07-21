@@ -5014,12 +5014,16 @@ uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharSt
         uno::Reference<container::XIndexAccess> xLevels = GetCurrentNumberingRules(&nListLevel);
         if (!xLevels.is())
         {
-            // Looking up the paragraph context explicitly (and not just taking
-            // the top context) is necessary for RTF, where formatting of a run
-            // and of the paragraph mark is not separated.
-            PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
-            if (!pContext)
-                return xRet;
+            PropertyMapPtr pContext = m_pTopContext;
+            if (IsRTFImport())
+            {
+                // Looking up the paragraph context explicitly (and not just taking
+                // the top context) is necessary for RTF, where formatting of a run
+                // and of the paragraph mark is not separated.
+                pContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
+                if (!pContext)
+                    return xRet;
+            }
 
             // In case numbering rules is not found via a style, try the direct formatting instead.
             boost::optional<PropertyMap::Property> oProp = pContext->getProperty(PROP_NUMBERING_RULES);
