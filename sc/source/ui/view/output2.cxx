@@ -73,7 +73,7 @@
 
 using namespace com::sun::star;
 
-//! Autofilter-Breite mit column.cxx zusammenfassen
+//! Merge Autofilter width with column.cxx
 #define DROPDOWN_BITMAP_SIZE        18
 
 #define DRAWTEXT_MAX    32767
@@ -84,12 +84,12 @@ const sal_uInt16 SC_SHRINKAGAIN_MAX = 7;
 
 class ScDrawStringsVars
 {
-    ScOutputData*       pOutput;                // Verbindung
+    ScOutputData*       pOutput;                // connection
 
-    const ScPatternAttr* pPattern;              // Attribute
-    const SfxItemSet*   pCondSet;               // aus bedingter Formatierung
+    const ScPatternAttr* pPattern;              // attribute
+    const SfxItemSet*   pCondSet;               // from conditional formatting
 
-    vcl::Font           aFont;                  // aus Attributen erzeugt
+    vcl::Font           aFont;                  // created from attributes
     FontMetric          aMetric;
     long                nAscentPixel;           // always pixels
     SvxCellOrientation  eAttrOrient;
@@ -136,7 +136,7 @@ public:
 
     void        SetPatternSimple( const ScPatternAttr* pNew, const SfxItemSet* pSet );
 
-    bool SetText( ScRefCellValue& rCell );   // TRUE -> pOldPattern vergessen
+    bool SetText( ScRefCellValue& rCell );   // TRUE -> drop pOldPattern
     void        SetHashText();
     void SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth );
     void        SetAutoText( const OUString& rAutoText );
@@ -291,13 +291,13 @@ void ScDrawStringsVars::SetPattern(
     pPattern = pNew;
     pCondSet = pSet;
 
-    //  pPattern auswerten
+    // évaluate pPattern
 
     OutputDevice* pDev = pOutput->mpDev;
     OutputDevice* pRefDevice = pOutput->mpRefDevice;
     OutputDevice* pFmtDevice = pOutput->pFmtDevice;
 
-    //  Font
+    // font
 
     ScAutoFontColorMode eColorMode;
     if ( pOutput->mbUseStyleColor )
@@ -318,7 +318,7 @@ void ScDrawStringsVars::SetPattern(
                             &aBackConfigColor, &aTextConfigColor );
     aFont.SetAlign(ALIGN_BASELINE);
 
-    //  Orientierung
+    // orientation
 
     eAttrOrient = pPattern->GetCellOrientation( pCondSet );
 
@@ -373,14 +373,14 @@ void ScDrawStringsVars::SetPattern(
             bRotated = false;
             break;
         default:
-            OSL_FAIL("Falscher SvxCellOrientation Wert");
+            OSL_FAIL("Invalid SvxCellOrientation value");
             nRot = 0;
             bRotated = false;
             break;
     }
     aFont.SetOrientation( nRot );
 
-    //  Syntax-Modus
+    // syntax mode
 
     if (pOutput->mbSyntaxMode)
         pOutput->SetSyntaxColor(&aFont, rCell);
@@ -391,9 +391,8 @@ void ScDrawStringsVars::SetPattern(
 
     aMetric = pFmtDevice->GetFontMetric();
 
-    //  Wenn auf dem Drucker das Leading 0 ist, gibt es Probleme
-    //  -> Metric vom Bildschirm nehmen (wie EditEngine!)
-
+    // if there is the leading 0 on a printer device, we have problems
+    // -> take metric from the screen (as for EditEngine!)
     if ( pFmtDevice->GetOutDevType() == OUTDEV_PRINTER && aMetric.GetIntLeading() == 0 )
     {
         OutputDevice* pDefaultDev = Application::GetDefaultDevice();
@@ -413,25 +412,23 @@ void ScDrawStringsVars::SetPattern(
     Color aOLineColor( static_cast<const SvxOverlineItem&>(pPattern->GetItem( ATTR_FONT_OVERLINE, pCondSet )).GetColor() );
     pDev->SetOverlineColor( aOLineColor );
 
-    //  Zahlenformat
+    // number format
 
     nValueFormat = pPattern->GetNumberFormat( pOutput->mpDoc->GetFormatTable(), pCondSet );
 
-    //  Raender
-
+    // margins
     pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem( ATTR_MARGIN, pCondSet ));
     if ( eAttrHorJust == SVX_HOR_JUSTIFY_LEFT || eAttrHorJust == SVX_HOR_JUSTIFY_RIGHT )
         nIndent = static_cast<const SfxUInt16Item&>(pPattern->GetItem( ATTR_INDENT, pCondSet )).GetValue();
     else
         nIndent = 0;
 
-    //  "Shrink to fit"
+    // "Shrink to fit"
 
     bShrink = static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet )).GetValue();
 
-    //  zumindest die Text-Groesse muss neu geholt werden
-    //! unterscheiden, und den Text nicht neu vom Numberformatter holen?
-
+    // at least the text size needs to be retrieved again
+    //! differentiate and do not get the text again from the number format?
     maLastCell.clear();
 }
 
@@ -441,12 +438,13 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     nSignWidth     = 0;
     nDotWidth      = 0;
     nExpWidth      = 0;
-    //  wird gerufen, wenn sich die Font-Variablen nicht aendern (!StringDiffer)
+
+    // Is called, when the font variables do not change (!StringDiffer)
 
     pPattern = pNew;
-    pCondSet = pSet;        //! noetig ???
+    pCondSet = pSet;        //! is this needed ???
 
-    //  Zahlenformat
+    // number format
 
     sal_uLong nOld = nValueFormat;
     const SfxPoolItem* pFormItem;
@@ -460,9 +458,9 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
                     static_cast<const SvxLanguageItem*>(pLangItem)->GetLanguage() );
 
     if (nValueFormat != nOld)
-        maLastCell.clear();           // immer neu formatieren
+        maLastCell.clear();           // always reformat
 
-    //  Raender
+    // margins
 
     pMargin = static_cast<const SvxMarginItem*>(&pPattern->GetItem( ATTR_MARGIN, pCondSet ));
 
@@ -471,7 +469,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     else
         nIndent = 0;
 
-    //  "Shrink to fit"
+    // "Shrink to fit"
 
     bShrink = static_cast<const SfxBoolItem&>(pPattern->GetItem( ATTR_SHRINKTOFIT, pCondSet )).GetValue();
 }
@@ -490,7 +488,7 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
     {
         if (!SameValue(rCell, maLastCell))
         {
-            maLastCell = rCell;          //  Zelle merken
+            maLastCell = rCell;          // store cell
 
             Color* pColor;
             sal_uLong nFormat = GetValueFormat();
@@ -523,14 +521,14 @@ bool ScDrawStringsVars::SetText( ScRefCellValue& rCell )
             {
                 OutputDevice* pDev = pOutput->mpDev;
                 aFont.SetColor(*pColor);
-                pDev->SetFont( aFont ); // nur fuer Ausgabe
+                pDev->SetFont( aFont );   // only for output
                 bChanged = true;
-                maLastCell.clear();       // naechstes Mal wieder hierherkommen
+                maLastCell.clear();       // next time return here again
             }
 
             TextChanged();
         }
-        //  sonst String/Groesse behalten
+        // otherwise keep string/size
     }
     else
     {
@@ -699,7 +697,7 @@ void ScDrawStringsVars::SetAutoText( const OUString& rAutoText )
     if ( bPixelToLogic )
         aTextSize = pRefDevice->LogicToPixel( aTextSize );
 
-    maLastCell.clear();       // derselbe Text kann in der naechsten Zelle wieder passen
+    maLastCell.clear();       // the same text may fit in the next cell
 }
 
 long ScDrawStringsVars::GetMaxDigitWidth()
@@ -917,7 +915,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     bool bVOver = pInfo->bVOverlapped;
     bool bHidden;
 
-    while (bHOver)              // nY konstant
+    while (bHOver)              // nY constant
     {
         --rOverX;
         bHidden = mpDoc->ColHidden(rOverX, nTab);
@@ -946,7 +944,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
             return false;
 
         if (nArrY>0)
-            --nArrY;                        // lokale Kopie !
+            --nArrY;                        // local copy !
 
         if (rOverX >= nX1 && rOverY >= nY1 &&
             !mpDoc->ColHidden(rOverX, nTab) &&
@@ -1229,7 +1227,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
 
     // construct the rectangles using logical left/right values (justify is called at the end)
 
-    //  rAlignRect is the single cell or merged area, used for alignment.
+    // rAlignRect is the single cell or merged area, used for alignment.
 
     rParam.maAlignRect.Left() = nCellPosX;
     rParam.maAlignRect.Right() = nCellPosX + ( nMergeSizeX - 1 ) * nLayoutSign;
@@ -1433,7 +1431,7 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
 {
     OSL_ENSURE( mpDev == mpRefDevice ||
                 mpDev->GetMapMode().GetMapUnit() == mpRefDevice->GetMapMode().GetMapUnit(),
-                "LayoutStrings: unterschiedliche MapUnits ?!?!" );
+                "LayoutStrings: different MapUnits ?!?!" );
 
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, mpDev->GetExtOutDevData() );
 
@@ -1929,8 +1927,8 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
 
                         if ( nTestClipHeight > nOutHeight )
                         {
-                            //  kein vertikales Clipping beim Drucken von Zellen mit
-                            //  optimaler Hoehe, ausser bei Groesse in bedingter Formatierung
+                            // no vertical clipping when printing cells with optimal height,
+                            // except when font size is from conditional formatting.
                             if ( eType != OUTTYPE_PRINTER ||
                                     ( mpDoc->GetRowFlags( nCellY, nTab ) & CR_MANUALSIZE ) ||
                                     ( aVars.HasCondHeight() ) )
@@ -1939,10 +1937,8 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
 
                         if ( bHClip || bVClip )
                         {
-                            //  nur die betroffene Dimension clippen,
-                            //  damit bei nicht-proportionalem Resize nicht alle
-                            //  rechtsbuendigen Zahlen abgeschnitten werden:
-
+                            // only clip the affected dimension so that not all right-aligned
+                            // columns are cut off when performing a non-proportional resize
                             if (!bHClip)
                             {
                                 aAreaParam.maClipRect.Left() = nScrX;
@@ -2005,8 +2001,8 @@ Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, const ScA
                                 aDrawTextPos.X() -= aVars.GetOriginalWidth();
                         }
 
-                        //  in Metafiles immer DrawTextArray, damit die Positionen mit
-                        //  aufgezeichnet werden (fuer nicht-proportionales Resize):
+                        // in Metafiles always use DrawTextArray to ensure that positions are
+                        // recorded (for non-proportional resize):
 
                         OUString aString = aVars.GetString();
                         if (!aString.isEmpty())
@@ -2138,12 +2134,12 @@ ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
     return pEngine;
 }
 
-static void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
+static void lcl_ClearEdit( EditEngine& rEngine )       // text and attributes
 {
     rEngine.SetUpdateMode( false );
 
     rEngine.SetText(EMPTY_OUSTRING);
-    //  keine Para-Attribute uebrigbehalten...
+    // do not keep any para-attributes
     const SfxItemSet& rPara = rEngine.GetParaAttribs(0);
     if (rPara.Count())
         rEngine.SetParaAttribs( 0,
@@ -2769,7 +2765,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     {
         //! Flag setzen, um die Zelle in DrawRotated wiederzufinden ?
         //! (oder Flag schon bei DrawBackground, dann hier keine Abfrage)
-        bHidden = true;     // gedreht wird getrennt ausgegeben
+        bHidden = true;     // rotated is outputted separately
     }
 
     if (bHidden)
@@ -3062,7 +3058,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         else
             aLogicClip = aAreaParam.maClipRect;
 
-        if (bClip)  // bei bSimClip nur aClipRect initialisieren
+        if (bClip)  // for bSimClip only initialize aClipRect
         {
             if (bMetaFile)
             {
@@ -3129,9 +3125,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
     if (bSimClip)
     {
-        //  kein hartes Clipping, aber nur die betroffenen
-        //  Zeilen ausgeben
-
+        // no hard clip, only draw the affected rows
         Point aDocStart = aLogicClip.TopLeft();
         aDocStart -= aLogicStart;
         rParam.mpEngine->Draw( mpDev, aLogicClip, aDocStart, false );
@@ -3250,7 +3244,7 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
         else
             aLogicClip = aAreaParam.maClipRect;
 
-        if (bClip)  // bei bSimClip nur aClipRect initialisieren
+        if (bClip)  // for bSimClip only initialize aClipRect
         {
             if (bMetaFile)
             {
@@ -4038,7 +4032,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         else
             aLogicClip = aAreaParam.maClipRect;
 
-        if (bClip)  // bei bSimClip nur aClipRect initialisieren
+        if (bClip)  // for bSimClip only initialize aClipRect
         {
             if (bMetaFile)
             {
@@ -4101,9 +4095,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
     if (bSimClip)
     {
-        //  kein hartes Clipping, aber nur die betroffenen
-        //  Zeilen ausgeben
-
+        // no hard clip, only draw the affected rows
         Point aDocStart = aLogicClip.TopLeft();
         aDocStart -= aLogicStart;
         rParam.mpEngine->Draw( mpDev, aLogicClip, aDocStart, false );
@@ -4142,7 +4134,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     {
         //! Flag setzen, um die Zelle in DrawRotated wiederzufinden ?
         //! (oder Flag schon bei DrawBackground, dann hier keine Abfrage)
-        bHidden = true;     // gedreht wird getrennt ausgegeben
+        bHidden = true;     // rotated is outputted separately
     }
 
     // default alignment for asian vertical mode is top-right
@@ -4431,8 +4423,8 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     // bMoveClipped handling has been replaced by complete alignment
     // handling (also extending to the left).
 
-    //  with SetVertical, the start position is top left of
-    //  the whole output area, not the text itself
+    // with SetVertical, the start position is top left of
+    // the whole output area, not the text itself
     aLogicStart.X() -= rParam.mpEngine->GetPaperSize().Width();
 
     rParam.mpEngine->Draw(mpDev, aLogicStart);
@@ -4471,16 +4463,16 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
             nLastContentCol - mpDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, MAXCOL, nY2, nTab, DIR_RIGHT ) );
 
     long nRowPosY = nScrY;
-    for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fuer Reste von zusammengefassten
+    for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fo the rest of the merged
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
 
-        if (nArrY==1) nRowPosY = nScrY;                         // vorher wird einzeln berechnet
+        if (nArrY==1) nRowPosY = nScrY;                         // positions before are calculated individually
 
         if ( pThisRowInfo->bChanged || nArrY==0 )
         {
             long nPosX = 0;
-            for (SCCOL nX=0; nX<=nX2; nX++)                 // wegen Ueberhaengen
+            for (SCCOL nX=0; nX<=nX2; nX++)                     // due to overflow
             {
                 boost::scoped_ptr< ScPatternAttr > pPreviewPattr;
                 if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
@@ -4636,12 +4628,12 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
     pEngine.reset();
 
     if (bAnyRotated)
-        DrawRotated(bPixelToLogic);     //! von aussen rufen ?
+        DrawRotated(bPixelToLogic);     //! call from outside ?
 }
 
 void ScOutputData::DrawRotated(bool bPixelToLogic)
 {
-    //! nRotMax speichern
+    //! store nRotMax
     SCCOL nRotMax = nX2;
     for (SCSIZE nRotY=0; nRotY<nArrCount; nRotY++)
         if (pRowInfo[nRotY].nRotMaxCol != SC_ROTMAX_NONE && pRowInfo[nRotY].nRotMaxCol > nRotMax)
@@ -4668,11 +4660,11 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     long nRowPosY = nScrY;
-    for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fuer Reste von zusammengefassten
+    for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 for the rest of the merged
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
         long nCellHeight = (long) pThisRowInfo->nHeight;
-        if (nArrY==1) nRowPosY = nScrY;                         // vorher wird einzeln berechnet
+        if (nArrY==1) nRowPosY = nScrY;                         // positions before are calculated individually
 
         if ( ( pThisRowInfo->bChanged || nArrY==0 ) && pThisRowInfo->nRotMaxCol != SC_ROTMAX_NONE )
         {
@@ -4701,7 +4693,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                         long nPosY = nRowPosY;
                         bool bVisChanged = false;
 
-                        //! Rest von zusammengefasster Zelle weiter oben funktioniert nicht!
+                        //! rest from merged cells further up do not work!
 
                         bool bFromDoc = false;
                         pPattern = pInfo->pPatternAttr;
@@ -4755,14 +4747,14 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                         }
                         long nCellStartX = nStartX;
 
-                        //  Ersatzdarstellung fuer zu kleinen Text weggelassen
+                        // omit substitute representation of small text
 
                         if (!bHidden)
                         {
                             long nOutWidth = nCellWidth - 1;
                             long nOutHeight = nCellHeight;
 
-                            if ( bMerged )                              // Zusammengefasst
+                            if ( bMerged )
                             {
                                 SCCOL nCountX = pMerge->GetColMerge();
                                 for (SCCOL i=1; i<nCountX; i++)
@@ -4774,7 +4766,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             SvxCellVerJustify eVerJust = (SvxCellVerJustify)static_cast<const SvxVerJustifyItem&>(
                                                 pPattern->GetItem(ATTR_VER_JUSTIFY, pCondSet)).GetValue();
 
-                            // Syntax-Modus wird hier ignoriert...
+                            // syntax mode is ignored here...
 
                             // StringDiffer doesn't look at hyphenate, language items
                             if ( pPattern != pOldPattern || pCondSet != pOldCondSet )
@@ -4782,11 +4774,11 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
                                 pPattern->FillEditItemSet( pSet, pCondSet );
 
-                                                                    // Ausrichtung fuer EditEngine
+                                                                    // adjustment for EditEngine
                                 SvxAdjust eSvxAdjust = SVX_ADJUST_LEFT;
                                 if (eOrient==SVX_ORIENTATION_STACKED)
                                     eSvxAdjust = SVX_ADJUST_CENTER;
-                                // Adjustment fuer bBreak ist hier weggelassen
+                                // adjustment for bBreak is omitted here
                                 pSet->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 
                                 pEngine->SetDefaults( pSet );
@@ -4815,9 +4807,9 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 pEngine->SetBackgroundColor( aBackCol );
                             }
 
-                            //  Raender
+                            // margins
 
-                            //!     Position und Papersize auf EditUtil umstellen !!!
+                            //! change position and paper size to EditUtil !!!
 
                             const SvxMarginItem* pMargin = static_cast<const SvxMarginItem*>(
                                                     &pPattern->GetItem(ATTR_MARGIN, pCondSet));
@@ -4826,7 +4818,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 nIndent = static_cast<const SfxUInt16Item&>(pPattern->
                                                     GetItem(ATTR_INDENT, pCondSet)).GetValue();
 
-                            long nTotalHeight = nOutHeight; // ohne Rand abzuziehen
+                            long nTotalHeight = nOutHeight; // without subtracting the margin
                             if ( bPixelToLogic )
                                 nTotalHeight = mpRefDevice->PixelToLogic(Size(0,nTotalHeight)).Height();
 
@@ -4839,7 +4831,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             nOutWidth -= nLeftM + nRightM;
                             nOutHeight -= nTopM + nBottomM;
 
-                            //  Rotation schon hier, um bei Umbruch auch PaperSize anzupassen
+                            // rotate here already, to adjust paper size for page breaks
                             long nAttrRotate = 0;
                             double nSin = 0.0;
                             double nCos = 1.0;
@@ -4854,12 +4846,12 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                                 pPattern->GetItem(ATTR_ROTATE_MODE, pCondSet)).GetValue();
 
                                     if ( nAttrRotate == 18000 )
-                                        eRotMode = SVX_ROTATE_MODE_STANDARD;    // keinen Ueberlauf
+                                        eRotMode = SVX_ROTATE_MODE_STANDARD;    // no overflow
 
                                     if ( bLayoutRTL )
                                         nAttrRotate = -nAttrRotate;
 
-                                    double nRealOrient = nAttrRotate * F_PI18000;   // 1/100 Grad
+                                    double nRealOrient = nAttrRotate * F_PI18000;   // 1/100 degree
                                     nCos = cos( nRealOrient );
                                     nSin = sin( nRealOrient );
                                 }
@@ -4867,15 +4859,15 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                             Size aPaperSize = Size( 1000000, 1000000 );
                             if (eOrient==SVX_ORIENTATION_STACKED)
-                                aPaperSize.Width() = nOutWidth;             // zum Zentrieren
+                                aPaperSize.Width() = nOutWidth;             // to center
                             else if (bBreak)
                             {
                                 if (nAttrRotate)
                                 {
-                                    //! richtige PaperSize fuer Umbruch haengt von der Zeilenzahl
-                                    //! ab, solange die Zeilen nicht einzeln versetzt ausgegeben
-                                    //! werden koennen -> darum unbegrenzt, also kein Umbruch.
-                                    //! Mit versetzten Zeilen waere das folgende richtig:
+                                    //! the correct paper size for break depends on the number
+                                    //! of rows, as long as the rows can not be outputted individually
+                                    //! offsetted -> therefore unlimited, so no wrapping.
+                                    //! With offset rows the following would be correct:
                                     aPaperSize.Width() = (long)(nOutHeight / fabs(nSin));
                                 }
                                 else if (eOrient == SVX_ORIENTATION_STANDARD)
@@ -4886,9 +4878,9 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             if (bPixelToLogic)
                                 pEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
                             else
-                                pEngine->SetPaperSize(aPaperSize);  // Scale ist immer 1
+                                pEngine->SetPaperSize(aPaperSize);  // scale is always 1
 
-                            //  Daten aus Zelle lesen
+                            // read data from cell
 
                             if (aCell.meType == CELLTYPE_EDIT)
                             {
@@ -4964,8 +4956,9 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                         if (bPixelToLogic)
                                             pEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
                                         else
-                                            pEngine->SetPaperSize(aPaperSize);  // Scale ist immer 1
+                                            pEngine->SetPaperSize(aPaperSize);  // Scale is always 1
                                         //pEngine->QuickFormatDoc( sal_True );
+
                                         nEngineWidth  = (long) pEngine->CalcTextWidth();
                                         nEngineHeight = pEngine->GetTextHeight();
                                     }
@@ -4975,7 +4968,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             long nRealWidth  = nEngineWidth;
                             long nRealHeight = nEngineHeight;
 
-                            //  wenn gedreht, Groesse anpassen
+                            // when rotated, adjust size
                             if (nAttrRotate)
                             {
                                 double nAbsCos = fabs( nCos );
@@ -4986,23 +4979,23 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                                             nRealHeight * nAbsSin );
                                 else
                                     nEngineWidth = (long) ( nRealHeight / nAbsSin );
-                                //! begrenzen !!!
+                                //! limit !!!
 
                                 nEngineHeight = (long) ( nRealHeight * nAbsCos +
                                                          nRealWidth * nAbsSin );
                             }
 
-                            if (!nAttrRotate)           //  hier nur gedrehter Text
-                                bHidden = true;         //! vorher abfragen !!!
+                            if (!nAttrRotate)           //  only rotated text here
+                                bHidden = true;         //! check first !!!
 
-                            //! weglassen, was nicht hereinragt
+                            //! omit which doesn't stick out
 
                             if (!bHidden)
                             {
                                 bool bClip = false;
                                 Size aClipSize = Size( nScrX+nScrW-nStartX, nScrY+nScrH-nStartY );
 
-                                //  weiterschreiben
+                                // go on writing
 
                                 Size aCellSize;
                                 if (bPixelToLogic)
@@ -5071,9 +5064,9 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 long nClipStartX = nStartX;
                                 if (nX<nX1)
                                 {
-                                    //! Clipping unnoetig, wenn links am Fenster
+                                    //! clipping is not needed when on the left side of the window
 
-                                    bClip = true;                   // nur Rest ausgeben!
+                                    bClip = true;                   // only output the rest!
                                     if (nStartX<nScrX)
                                     {
                                         long nDif = nScrX - nStartX;
@@ -5101,8 +5094,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 {
                                     if ( nAttrRotate /* && eRotMode != SVX_ROTATE_MODE_STANDARD */ )
                                     {
-                                        //  gedrehten, ausgerichteten Text nur an den
-                                        //  Seitengrenzen clippen
+                                        // only clip rotated output text at the page border
                                         nClipStartX = nScrX;
                                         aClipSize.Width() = nScrW;
                                     }
@@ -5144,7 +5136,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                         if (nAvailWidth<nComp) nAvailWidth=nComp;
                                     }
 
-                                    //  horizontale Ausrichtung
+                                    // horizontal orientation
 
                                     if (eOrient==SVX_ORIENTATION_STANDARD && !nAttrRotate)
                                     {
@@ -5170,7 +5162,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     }
                                     else
                                     {
-                                        //  bei gedrehtem Text ist Standard zentriert
+                                        // rotated text is centered by default
                                         if (eHorJust==SVX_HOR_JUSTIFY_RIGHT)
                                             aLogicStart.X() += nAvailWidth - nEngineWidth;
                                         else if (eHorJust==SVX_HOR_JUSTIFY_CENTER ||
@@ -5229,7 +5221,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     double nAddY = 0.0;
                                     if ( nCos > 0.0 && eRotMode != SVX_ROTATE_MODE_STANDARD )
                                     {
-                                        //! begrenzen !!!
+                                        //! limit !!!
                                         double nH = nRealHeight * nCos;
                                         nAddX += nH * ( nCos / fabs(nSin) );
                                     }
@@ -5244,7 +5236,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                                     if ( eRotMode != SVX_ROTATE_MODE_STANDARD )
                                     {
-                                        //! begrenzen !!!
+                                        //! limit !!!
                                         double nSkew = nTotalHeight * nCos / fabs(nSin);
                                         if ( eRotMode == SVX_ROTATE_MODE_CENTER )
                                             nAddX -= nSkew * 0.5;
