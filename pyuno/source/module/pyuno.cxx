@@ -397,6 +397,30 @@ PyObject *PyUNO_repr( PyObject  * self )
     return ret;
 }
 
+Py_hash_t PyUNO_hash( PyObject *self )
+{
+
+    PyUNO *me = reinterpret_cast<PyUNO *>(self);
+
+    // Py_hash_t is not necessarily the same size as a pointer, but this is not
+    // important for hashing - it just has to return the same value each time
+    if( me->members->wrappedObject.getValueType().getTypeClass()
+        == com::sun::star::uno::TypeClass_STRUCT ||
+        me->members->wrappedObject.getValueType().getTypeClass()
+        == com::sun::star::uno::TypeClass_EXCEPTION )
+    {
+        Reference< XMaterialHolder > xMe( me->members->xInvocation, UNO_QUERY );
+        return sal::static_int_cast< Py_hash_t >( reinterpret_cast< sal_IntPtr > (
+            xMe->getMaterial().getValue() ) );
+    }
+    else
+    {
+        return sal::static_int_cast< Py_hash_t >( reinterpret_cast< sal_IntPtr > (
+            me->members->wrappedObject.getValue() ) );
+    }
+
+}
+
 PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
 {
     PyRef ret;
@@ -1690,7 +1714,7 @@ static PyTypeObject PyUNOType =
     PyUNONumberMethods,
     PyUNOSequenceMethods,
     PyUNOMappingMethods,
-    nullptr,
+    PyUNO_hash,
     nullptr,
     PyUNO_str,
     nullptr,
