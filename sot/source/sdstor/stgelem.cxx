@@ -361,7 +361,7 @@ sal_Int32 StgEntry::Compare( const StgEntry& r ) const
 // These load/store operations are a bit more complicated,
 // since they have to copy their contents into a packed structure.
 
-bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
+bool StgEntry::Load(const void* pFrom, sal_uInt32 nBufSize, sal_uInt64 nUnderlyingStreamSize)
 {
     if ( nBufSize < 128 )
         return false;
@@ -392,11 +392,26 @@ bool StgEntry::Load( const void* pFrom, sal_uInt32 nBufSize )
     if (n > nMaxLegalStr)
         return false;
 
-    if ((cType != STG_STORAGE) && ((nSize < 0) || (nPage1 < 0 && !isKnownSpecial(nPage1))))
+    if (cType != STG_STORAGE)
     {
-        // the size makes no sense for the substorage
-        // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb
-        return false;
+        if (nPage1 < 0 && !isKnownSpecial(nPage1))
+        {
+            //bad pageid
+            return false;
+        }
+        if (nSize < 0)
+        {
+            // the size makes no sense for the substorage
+            // TODO/LATER: actually the size should be an unsigned value, but
+            // in this case it would mean a stream of more than 2Gb
+            return false;
+        }
+        if (static_cast<sal_uInt64>(nSize) > nUnderlyingStreamSize)
+        {
+            // surely an entry cannot be larger than the underlying file
+            return false;
+        }
+
     }
 
     aName = OUString(nName , n);

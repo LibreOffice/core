@@ -62,7 +62,8 @@ public:
     bool         bDirect;                   // true: direct mode
     bool         bZombie;                   // true: Removed From StgIo
     bool         bInvalid;                  // true: invalid entry
-    StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, bool * pbOk );
+    StgDirEntry(const void* pBuffer, sal_uInt32 nBufferLen,
+                sal_uInt64 nUnderlyingStreamSize, bool * pbOk);
     StgDirEntry( const StgEntry& );
     virtual ~StgDirEntry();
 
