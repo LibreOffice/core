@@ -7318,6 +7318,32 @@ SfxBoolItem ShowHiddenParagraphs FN_VIEW_HIDDEN_PARA
     GroupId = GID_OPTIONS;
 ]
 
+SfxBoolItem HideWhitespace FN_VIEW_HIDE_WHITESPACE
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
 SfxBoolItem ShowTrackedChanges FN_REDLINE_SHOW
 
 [
