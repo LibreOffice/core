@@ -2137,6 +2137,7 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 
     // stuff for sidebar panels
     Invalidate(SID_ATTR_ALIGN_DEGREES);
+    Invalidate(SID_ATTR_ALIGN_LOCKPOS);
     Invalidate(SID_ATTR_ALIGN_STACKED);
 }
 
