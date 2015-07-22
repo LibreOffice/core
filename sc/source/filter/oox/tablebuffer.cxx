@@ -94,6 +94,15 @@ void Table::finalizeImport()
 
         PropertySet aPropSet( xDatabaseRange );
 
+        // Default HasHeader is true at ScDBData.
+        if (maModel.mnHeaderRows != 1)
+        {
+            SAL_WARN_IF( maModel.mnHeaderRows > 1, "sc.filter",
+                    "Table HeaderRows > 1 not supported: " << maModel.mnHeaderRows);
+            if (maModel.mnHeaderRows == 0)
+                aPropSet.setProperty( PROP_ContainsHeader, false);
+        }
+
         if (maModel.mnTotalsRows > 0)
         {
             SAL_WARN_IF( maModel.mnTotalsRows > 1, "sc.filter",
