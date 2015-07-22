@@ -43,6 +43,7 @@ public:
                     SvxShowCharSet( vcl::Window* pParent );
                     virtual ~SvxShowCharSet();
     virtual void    dispose() SAL_OVERRIDE;
+    virtual void    ApplySettings(vcl::RenderContext& rRenderContext) SAL_OVERRIDE;
 
     void            RecalculateFont(vcl::RenderContext& rRenderContext);
 

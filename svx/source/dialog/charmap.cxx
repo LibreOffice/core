@@ -66,6 +66,10 @@ SvxShowCharSet::SvxShowCharSet(vcl::Window* pParent)
     init();
 }
 
+void SvxShowCharSet::ApplySettings(vcl::RenderContext& /*rRenderContext*/ )
+{
+}
+
 void SvxShowCharSet::init()
 {
     nSelectedIndex = -1;    // TODO: move into init list when it is no longer static
