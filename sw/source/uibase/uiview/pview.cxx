@@ -1144,6 +1144,7 @@ void SwPagePreview::Init(const SwViewOption * pPrefs)
     aOpt.SetTable( true );
     aOpt.SetSnap( false );
     aOpt.SetGridVisible( false );
+    aOpt.SetHideWhitespaceMode( false );
 
     GetViewShell()->ApplyViewOptions( aOpt );
     GetViewShell()->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());

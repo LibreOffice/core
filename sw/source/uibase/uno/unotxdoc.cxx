@@ -2565,6 +2565,17 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                 }
             }
 
+            if( pViewShell->GetViewOptions()->IsHideWhitespaceMode() )
+            {
+                SwViewOption aOpt( *pViewShell->GetViewOptions() );
+                aOpt.SetHideWhitespaceMode( false );
+                pViewShell->ApplyViewOptions( aOpt );
+                if (pSwView)
+                {
+                    pSwView->RecheckBrowseMode();
+                }
+            }
+
             // reformatting the document for printing will show the changes in the view
             // which is likely to produce many unwanted and not nice to view actions.
             // We don't want that! Thus we disable updating of the view.
