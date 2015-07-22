@@ -371,6 +371,16 @@ public:
     inline short GetDivisionY() const   { return nDivisionY; }
     inline void  SetDivisionY( short n ){ nDivisionY = n; }
 
+    // Default margin left and above document: 284 twips == 5mm.
+    static SAL_CONSTEXPR sal_uInt16 GetDefDocumentBorder() { return 284; }
+    // Default gap between pages: 284 twips == 5mm.
+    static SAL_CONSTEXPR sal_uInt16 GetDefGapBetweenPages() { return 284; }
+    // Minimum edge-to-text distance: 57 twips == 1.0mm.
+    static SAL_CONSTEXPR sal_uInt16 GetMinGapBetweenPages() { return 57; }
+
+    inline sal_uInt16 GetDocumentBorder() const { return IsHideWhitespaceMode() ? GetMinGapBetweenPages() : GetDefDocumentBorder(); }
+    inline sal_uInt16 GetGapBetweenPages() const { return IsHideWhitespaceMode() ? GetMinGapBetweenPages() : GetDefGapBetweenPages(); }
+
     inline sal_uInt8  GetPagePrevRow() const      { return nPagePrevRow; }
     inline void  SetPagePrevRow( sal_uInt8 n ) { nPagePrevRow = n; }
     inline sal_uInt8  GetPagePrevCol() const      { return nPagePrevCol; }

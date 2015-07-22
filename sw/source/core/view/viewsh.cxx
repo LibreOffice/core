@@ -1879,7 +1879,7 @@ void SwViewShell::SetBrowseBorder( const Size& rNew )
     {
         maBrowseBorder = rNew;
         if ( maVisArea.HasArea() )
-            CheckBrowseView( false );
+            InvalidateLayout( false );
     }
 }
 
@@ -1902,11 +1902,8 @@ sal_Int32 SwViewShell::GetBrowseWidth() const
         return maVisArea.Width() - 2 * GetOut()->PixelToLogic(maBrowseBorder).Width();
 }
 
-void SwViewShell::CheckBrowseView( bool bBrowseChgd )
+void SwViewShell::InvalidateLayout( bool bSizeChanged )
 {
-    if ( !bBrowseChgd && !GetViewOptions()->getBrowseMode() )
-        return;
-
     SET_CURR_SHELL( this );
 
     OSL_ENSURE( GetLayout(), "Layout not ready" );
@@ -1934,7 +1931,7 @@ void SwViewShell::CheckBrowseView( bool bBrowseChgd )
     {   pPg->InvalidateSize();
         pPg->_InvalidatePrt();
         pPg->InvaPercentLowers();
-        if ( bBrowseChgd )
+        if ( bSizeChanged )
         {
             pPg->PrepareHeader();
             pPg->PrepareFooter();
@@ -1945,9 +1942,9 @@ void SwViewShell::CheckBrowseView( bool bBrowseChgd )
     // When the size ratios in browse mode change,
     // the Position and PrtArea of the Content and Tab frames must be Invalidated.
     sal_uInt8 nInv = INV_PRTAREA | INV_TABLE | INV_POS;
-    // In case of browse mode change the ContentFrms need a size-Invalidate
-    // because of printer/screen formatting
-    if( bBrowseChgd )
+    // In case of layout or mode change, the ContentFrms need a size-Invalidate
+    // because of printer/screen formatting.
+    if ( bSizeChanged )
         nInv |= INV_SIZE | INV_DIRECTION;
 
     GetLayout()->InvalidateAllContent( nInv );
@@ -2020,11 +2017,12 @@ void SwViewShell::ApplyViewOptions( const SwViewOption &rOpt )
             continue;
         SwViewOption aOpt( *rSh.GetViewOptions() );
         aOpt.SetFieldName( rOpt.IsFieldName() );
-            aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
+        aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
         aOpt.SetShowHiddenPara( rOpt.IsShowHiddenPara() );
-            aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
-            aOpt.SetViewLayoutBookMode( rOpt.IsViewLayoutBookMode() );
-            aOpt.SetViewLayoutColumns( rOpt.GetViewLayoutColumns() );
+        aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
+        aOpt.SetViewLayoutBookMode( rOpt.IsViewLayoutBookMode() );
+        aOpt.SetHideWhitespaceMode(rOpt.IsHideWhitespaceMode());
+        aOpt.SetViewLayoutColumns(rOpt.GetViewLayoutColumns());
         aOpt.SetPostIts(rOpt.IsPostIts());
         if ( !(aOpt == *rSh.GetViewOptions()) )
             rSh.ImplApplyViewOptions( aOpt );
@@ -2144,7 +2142,7 @@ void SwViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         // #i44963# Good occasion to check if page sizes in
         // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
         mpDoc->CheckDefaultPageFormat();
-        CheckBrowseView( true );
+        InvalidateLayout( true );
     }
 
     pMyWin->Invalidate();
