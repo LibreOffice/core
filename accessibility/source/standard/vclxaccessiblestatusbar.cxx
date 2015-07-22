@@ -205,7 +205,6 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
         }
         break;
         case VCLEVENT_STATUSBAR_SHOWALLITEMS:
-        case VCLEVENT_STATUSBAR_HIDEALLITEMS:
         {
             for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
                 UpdateShowing( i, rVclWindowEvent.GetId() == VCLEVENT_STATUSBAR_SHOWALLITEMS );

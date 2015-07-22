@@ -39,14 +39,6 @@
 class ScViewData;
 class ScDocument;
 
-#ifndef FLT_DATE_BEFORE
-#define FLT_DATE_BEFORE     0
-#define FLT_DATE_SINCE      1
-#define FLT_DATE_EQUAL      2
-#define FLT_DATE_NOTEQUAL   3
-#define FLT_DATE_BETWEEN    4
-#define FLT_DATE_SAVE       5
-#endif
 
 class ScHighlightChgDlg : public ScAnyRefDlg
 {

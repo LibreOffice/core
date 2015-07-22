@@ -50,8 +50,8 @@ double lclGetTwipsScale( MapUnit eMapUnit )
     double fScale = 1.0;
     switch( eMapUnit )
     {
-        case MAP_TWIP:      fScale = PS_POINTS_PER_INCH / POINTS_PER_INCH;  break;  // Calc twips <-> real twips
-        case MAP_100TH_MM:  fScale = HMM_PER_TWIPS;                         break;  // Calc twips <-> 1/100mm
+        case MAP_TWIP:      fScale = 1;               break;  // Calc twips <-> real twips
+        case MAP_100TH_MM:  fScale = HMM_PER_TWIPS;   break;  // Calc twips <-> 1/100mm
         default:            OSL_FAIL( "lclGetTwipsScale - map unit not implemented" );
     }
     return fScale;

@@ -71,7 +71,7 @@ extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
     GetModuleFileName( NULL, szApplicationName, MAX_PATH );
     _tsplitpath( szApplicationName, szDrive, szDir, szFileName, szExt );
-    _tmakepath( szApplicationName, szDrive, szDir, OFFICE_IMAGE_NAME, _T(".exe") );
+    _tmakepath( szApplicationName, szDrive, szDir, _T("soffice"), _T(".exe") );
 
 
     PROCESS_INFORMATION aProcessInfo;

@@ -22,8 +22,6 @@
 
 #include <atk/atk.h>
 
-#define OOO_TYPE_WRAPPER_FACTORY wrapper_factory_get_type()
-
 extern "C" {
 
 GType wrapper_factory_get_type();

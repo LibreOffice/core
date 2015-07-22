@@ -40,8 +40,6 @@
 #   define GetArgv( pArgc )         (*pArgc = __argc, __argv)
 #endif
 
-#define OFFICE_IMAGE_NAME   _T("soffice")
-
 extern _TCHAR APPLICATION_SWITCH[];
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

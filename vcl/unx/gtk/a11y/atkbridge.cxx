@@ -49,15 +49,15 @@ bool InitAtkBridge()
     }
 
     /* Initialize the AtkUtilityWrapper class */
-    g_type_class_unref( g_type_class_ref( OOO_TYPE_ATK_UTIL ) );
+    g_type_class_unref( g_type_class_ref( ooo_atk_util_get_type() ) );
 
     /* Initialize the GailWindow wrapper class */
-    g_type_class_unref( g_type_class_ref( OOO_TYPE_WINDOW_WRAPPER ) );
+    g_type_class_unref( g_type_class_ref( ooo_window_wrapper_get_type() ) );
 
     /* Register AtkObject wrapper factory */
     AtkRegistry * registry = atk_get_default_registry();
     if( registry )
-        atk_registry_set_factory_type( registry, OOO_TYPE_FIXED, OOO_TYPE_WRAPPER_FACTORY );
+        atk_registry_set_factory_type( registry, OOO_TYPE_FIXED, wrapper_factory_get_type() );
 #endif
     return true;
 }

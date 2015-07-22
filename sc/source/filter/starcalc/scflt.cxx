@@ -679,14 +679,14 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
     {
         Sc10PageFormat* pPage = &At(i)->aPageFormat;
 
-        pPage->Width = (short) ( pPage->Width * ( PS_POINTS_PER_INCH / POINTS_PER_INCH ) + 0.5 );
-        pPage->Height = (short) ( pPage->Height * ( PS_POINTS_PER_INCH / POINTS_PER_INCH ) + 0.5 );
-        pPage->Top = (short) ( pPage->Top * ( PS_POINTS_PER_INCH / POINTS_PER_INCH ) + 0.5 );
-        pPage->Bottom = (short) ( pPage->Bottom * ( PS_POINTS_PER_INCH / POINTS_PER_INCH ) + 0.5 );
-        pPage->Left = (short) ( pPage->Left * ( PS_POINTS_PER_INCH / POINTS_PER_INCH ) + 0.5 );
-        pPage->Right = (short) ( pPage->Right * ( PS_POINTS_PER_INCH / POINTS_PER_INCH ) + 0.5 );
-        pPage->Head = (short) ( pPage->Head * ( PS_POINTS_PER_INCH / POINTS_PER_INCH ) + 0.5 );
-        pPage->Foot = (short) ( pPage->Foot * ( PS_POINTS_PER_INCH / POINTS_PER_INCH ) + 0.5 );
+        pPage->Width = (short) ( pPage->Width + 0.5 );
+        pPage->Height = (short) ( pPage->Height + 0.5 );
+        pPage->Top = (short) ( pPage->Top + 0.5 );
+        pPage->Bottom = (short) ( pPage->Bottom + 0.5 );
+        pPage->Left = (short) ( pPage->Left + 0.5 );
+        pPage->Right = (short) ( pPage->Right + 0.5 );
+        pPage->Head = (short) ( pPage->Head + 0.5 );
+        pPage->Foot = (short) ( pPage->Foot + 0.5 );
 
         OUString aName = lcl_MakeOldPageStyleFormatName( i );
 

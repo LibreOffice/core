@@ -4,7 +4,7 @@
 }
 
 END { 
-    tmp = substr(y, 0, index(y, ":"))
+    tmp = substr(y, 0, index(y, ":")-1)
     if (x==1) print "sed -i '/[[:space:]]" p1 "[[:space:]]/d' " tmp
 }
 

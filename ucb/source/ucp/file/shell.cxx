@@ -1347,7 +1347,7 @@ shell::copy(
 
     bool isDocument
         = type != osl::FileStatus::Directory && type != osl::FileStatus::Volume;
-    sal_Int32 IsWhat = isDocument ? -1 : 1;
+    FileUrlType IsWhat = isDocument ? FileUrlType::File : FileUrlType::Folder;
 
     switch( NameClash )
     {
@@ -1485,7 +1485,7 @@ shell::copy(
 bool SAL_CALL
 shell::remove( sal_Int32 CommandId,
                const OUString& aUnqPath,
-               sal_Int32 IsWhat,
+               FileUrlType IsWhat,
                bool  MustExist )
 {
     sal_Int32 nMask = osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL;
@@ -1494,7 +1494,7 @@ shell::remove( sal_Int32 CommandId,
     osl::FileStatus aStatus( nMask );
     osl::FileBase::RC nError;
 
-    if( IsWhat == 0 ) // Determine whether we are removing a directory or a file
+    if( IsWhat == FileUrlType::Unknown ) // Determine whether we are removing a directory or a file
     {
         nError = osl::DirectoryItem::get( aUnqPath, aItem );
         if( nError != osl::FileBase::E_None )
@@ -1519,14 +1519,14 @@ shell::remove( sal_Int32 CommandId,
 
         if( aStatus.getFileType() == osl::FileStatus::Regular ||
             aStatus.getFileType() == osl::FileStatus::Link )
-            IsWhat = -1;  // RemoveFile
+            IsWhat = FileUrlType::File;
         else if(  aStatus.getFileType() == osl::FileStatus::Directory ||
                   aStatus.getFileType() == osl::FileStatus::Volume )
-            IsWhat = +1;  // RemoveDirectory
+            IsWhat = FileUrlType::Folder;
     }
 
 
-    if( IsWhat == -1 )    // Removing a file
+    if( IsWhat == FileUrlType::File )
     {
         nError = osl::File::remove( aUnqPath );
         if( nError != osl::FileBase::E_None )
@@ -1545,7 +1545,7 @@ shell::remove( sal_Int32 CommandId,
             erasePersistentSet( aUnqPath ); // Removes from XPersistentPropertySet
         }
     }
-    else if( IsWhat == +1 )    // Removing a directory
+    else if( IsWhat == FileUrlType::Folder )
     {
         osl::Directory aDirectory( aUnqPath );
 
@@ -1562,7 +1562,7 @@ shell::remove( sal_Int32 CommandId,
         }
 
         bool whileSuccess = true;
-        sal_Int32 recurse = 0;
+        FileUrlType recurse = FileUrlType::Unknown;
         OUString name;
 
         nError = aDirectory.getNextItem( aItem );
@@ -1580,14 +1580,13 @@ shell::remove( sal_Int32 CommandId,
 
             if( aStatus.getFileType() == osl::FileStatus::Regular ||
                 aStatus.getFileType() == osl::FileStatus::Link )
-                recurse = -1;
+                recurse = FileUrlType::File;
             else if( aStatus.getFileType() == osl::FileStatus::Directory ||
                      aStatus.getFileType() == osl::FileStatus::Volume )
-                recurse = +1;
+                recurse = FileUrlType::Folder;
 
             name = aStatus.getFileURL();
-            whileSuccess = remove(
-                CommandId, name, recurse, MustExist );
+            whileSuccess = remove( CommandId, name, recurse, MustExist );
             if( !whileSuccess )
                 break;
 
@@ -1973,16 +1972,16 @@ bool SAL_CALL shell::getUrlFromUnq( const OUString& Unq,OUString& Url )
 osl::FileBase::RC SAL_CALL
 shell::copy_recursive( const OUString& srcUnqPath,
                        const OUString& dstUnqPath,
-                       sal_Int32 TypeToCopy,
+                       FileUrlType TypeToCopy,
                        bool testExistBeforeCopy )
 {
     osl::FileBase::RC err = osl::FileBase::E_None;
 
-    if( TypeToCopy == -1 ) // Document
+    if( TypeToCopy == FileUrlType::File ) // Document
     {
         err = osl_File_copy( srcUnqPath,dstUnqPath,testExistBeforeCopy );
     }
-    else if( TypeToCopy == +1 ) // Folder
+    else if( TypeToCopy == FileUrlType::Folder )
     {
         osl::Directory aDir( srcUnqPath );
         aDir.open();
@@ -2004,7 +2003,7 @@ shell::copy_recursive( const OUString& srcUnqPath,
                     IsDoc = aFileStatus.getFileType() == osl::FileStatus::Regular;
 
                 // Getting the information for the next recursive copy
-                sal_Int32 newTypeToCopy = IsDoc ? -1 : +1;
+                FileUrlType newTypeToCopy = IsDoc ? FileUrlType::File : FileUrlType::Folder;
 
                 OUString newSrcUnqPath;
                 if( aFileStatus.isValid( osl_FileStatus_Mask_FileURL ) )
