@@ -327,33 +327,24 @@ void ToolBarManager::RefreshImages()
     bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
     m_pToolBar->SetToolboxButtonSize( bBigImages ? TOOLBOX_BUTTONSIZE_LARGE : TOOLBOX_BUTTONSIZE_SMALL );
 
-    for ( sal_uInt16 nPos = 0; nPos < m_pToolBar->GetItemCount(); nPos++ )
+    for ( auto const& it : m_aControllerMap )
     {
-        sal_uInt16 nId( m_pToolBar->GetItemId( nPos ) );
-
-        if ( nId > 0 )
+        Reference< XSubToolbarController > xController( it.second, UNO_QUERY );
+        if ( xController.is() && xController->opensSubToolbar() )
         {
-            ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
-            if ( pIter != m_aControllerMap.end() )
-            {
-                Reference< XSubToolbarController > xController( pIter->second, UNO_QUERY );
-                if ( xController.is() && xController->opensSubToolbar() )
-                {
-                    // The button should show the last function that was selected from the
-                    // dropdown. The controller should know better than us what it was.
-                    xController->updateImage();
-                }
-                else
-                {
-                    OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
-                    Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages );
-                    // Try also to query for add-on images before giving up and use an
-                    // empty image.
-                    if ( !aImage )
-                        aImage = QueryAddonsImage( aCommandURL, bBigImages );
-                    m_pToolBar->SetItemImage( nId, aImage );
-                }
-            }
+            // The button should show the last function that was selected from the
+            // dropdown. The controller should know better than us what it was.
+            xController->updateImage();
+        }
+        else
+        {
+            OUString aCommandURL = m_pToolBar->GetItemCommand( it.first );
+            Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages );
+            // Try also to query for add-on images before giving up and use an
+            // empty image.
+            if ( !aImage )
+                aImage = QueryAddonsImage( aCommandURL, bBigImages );
+            m_pToolBar->SetItemImage( it.first, aImage );
         }
     }
 
