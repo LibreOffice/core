@@ -462,34 +462,41 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 
     if( m_pFileView )
     {
-        OUString sFilter = FILEDIALOG_FILTER_ALL;
-
-        if( m_nCurrentFilter != LISTBOX_ENTRY_NOTFOUND )
+        if( ContentIsFolder( sURL ) )
         {
-            sFilter = m_aFilters[m_nCurrentFilter].second;
+            OUString sFilter = FILEDIALOG_FILTER_ALL;
+
+            if( m_nCurrentFilter != LISTBOX_ENTRY_NOTFOUND )
+            {
+                sFilter = m_aFilters[m_nCurrentFilter].second;
+            }
+
+            m_pFileView->EndInplaceEditing( false );
+
+            EnableChildPointerOverwrite( true );
+            SetPointer( PointerStyle::Wait );
+
+            eResult = m_pFileView->Initialize( sURL, sFilter, NULL, GetBlackList() );
+
+            if( eResult == eSuccess )
+            {
+                m_pPath->SetURL( sURL );
+
+                m_pTreeView->SetSelectHdl( Link<>() );
+                m_pTreeView->SetTreePath( sURL );
+                m_pTreeView->SetSelectHdl( LINK( this, RemoteFilesDialog, TreeSelectHdl ) );
+
+                m_bIsConnected = true;
+                EnableControls();
+            }
+
+            SetPointer( PointerStyle::Arrow );
+            EnableChildPointerOverwrite( false );
         }
-
-        m_pFileView->EndInplaceEditing( false );
-
-        EnableChildPointerOverwrite( true );
-        SetPointer( PointerStyle::Wait );
-
-        eResult = m_pFileView->Initialize( sURL, sFilter, NULL, GetBlackList() );
-
-        if( eResult == eSuccess )
+        else
         {
-            m_pPath->SetURL( sURL );
-
-            m_pTreeView->SetSelectHdl( Link<>() );
-            m_pTreeView->SetTreePath( sURL );
-            m_pTreeView->SetSelectHdl( LINK( this, RemoteFilesDialog, TreeSelectHdl ) );
-
-            m_bIsConnected = true;
-            EnableControls();
+            // content doesn't exist
         }
-
-        SetPointer( PointerStyle::Arrow );
-        EnableChildPointerOverwrite( false );
     }
 
     return eResult;
