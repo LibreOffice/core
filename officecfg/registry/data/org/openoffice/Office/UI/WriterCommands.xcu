@@ -2239,6 +2239,11 @@
           <value>9</value>
         </prop>
       </node>
+      <node oor:name=".uno:HideWhitespace" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Hide Whitespac~e</value>
+        </prop>
+      </node>
       <node oor:name=".uno:SortDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">So~rt...</value>

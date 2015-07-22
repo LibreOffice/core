@@ -111,6 +111,10 @@ published service ViewSettings
      */
     [property] boolean ShowTabstops;
 
+    /** If this property is `TRUE`, whitespaces around pages are hidden.
+    */
+    [property] boolean HideWhitespace;
+
     /** If this property is `TRUE`, text boundaries are displayed.
      */
     [property] boolean ShowTextBoundaries;
