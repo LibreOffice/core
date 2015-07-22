@@ -16,6 +16,7 @@
 #include <svtools/breadcrumb.hxx>
 #include <svtools/fileview.hxx>
 
+#include <tools/errinf.hxx>
 #include <tools/resid.hxx>
 
 #include <vcl/button.hxx>
@@ -81,6 +82,7 @@ public:
     virtual const OUString& GetPath() SAL_OVERRIDE;
     virtual std::vector<OUString> GetPathList() const SAL_OVERRIDE;
     virtual bool ContentIsFolder( const OUString& rURL ) SAL_OVERRIDE;
+    virtual bool ContentIsDocument( const OUString& rURL );
 
     virtual void AddFilter( const OUString& rFilter, const OUString& rType ) SAL_OVERRIDE;
     virtual void AddFilterGroup( const OUString& _rFilter,

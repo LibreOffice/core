@@ -462,7 +462,7 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
 
     if( m_pFileView )
     {
-        if( ContentIsFolder( sURL ) )
+        if( !sURL.isEmpty() && ContentIsFolder( sURL ) )
         {
             OUString sFilter = FILEDIALOG_FILTER_ALL;
 
@@ -496,6 +496,9 @@ FileViewResult RemoteFilesDialog::OpenURL( OUString const & sURL )
         else
         {
             // content doesn't exist
+            m_pTreeView->EndSelection();
+            ErrorHandler::HandleError( ERRCODE_IO_NOTEXISTS );
+            return eFailure;
         }
     }
 
@@ -689,13 +692,13 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, DoubleClickHdl )
     {
         OUString sURL = m_pFileView->GetCurrentURL();
 
-        if( ContentIsFolder( sURL ) )
+        if( ContentIsDocument( sURL ) )
         {
-            OpenURL( sURL );
+            EndDialog( RET_OK );
         }
         else
         {
-            EndDialog( RET_OK );
+            OpenURL( sURL );
         }
     }
 
@@ -1034,6 +1037,26 @@ bool RemoteFilesDialog::ContentIsFolder( const OUString& rURL )
         ::ucbhelper::Content aContent( rURL, xEnv, xContext );
 
         return aContent.isFolder();
+    }
+    catch( const Exception& )
+    {
+        // a content doesn't exist
+    }
+
+    return false;
+}
+
+bool RemoteFilesDialog::ContentIsDocument( const OUString& rURL )
+{
+    try
+    {
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        Reference< XInteractionHandler > xInteractionHandler(
+                        InteractionHandler::createWithParent( xContext, 0 ), UNO_QUERY_THROW );
+        Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
+        ::ucbhelper::Content aContent( rURL, xEnv, xContext );
+
+        return aContent.isDocument();
     }
     catch( const Exception& )
     {
