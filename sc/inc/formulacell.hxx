@@ -31,6 +31,7 @@
 #include <svl/listener.hxx>
 
 #include "types.hxx"
+#include "units.hxx"
 
 #include "formularesult.hxx"
 

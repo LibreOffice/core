@@ -1,0 +1,92 @@
+From 0b1cc9d3b9264f23a3371f25ba80c60df15c8b83 Mon Sep 17 00:00:00 2001
+From: Benjamin Ni <benjaminniri@hotmail.com>
+Date: Mon, 6 Jul 2015 14:23:51 +0100
+Subject: [PATCH] tdf#92547 - incorrect input values shown in formula wizard
+
+Change-Id: I7d6e17a7e2a85885c30951cbb660b373180a23e4
+---
+ sc/inc/simpleformulacalc.hxx              |  1 +
+ sc/qa/unit/ucalc.cxx                      | 24 ++++++++++++++++--------
+ sc/source/core/data/simpleformulacalc.cxx |  5 +++++
+ sc/source/ui/formdlg/formula.cxx          |  2 +-
+ 4 files changed, 23 insertions(+), 9 deletions(-)
+
+diff --git a/sc/inc/simpleformulacalc.hxx b/sc/inc/simpleformulacalc.hxx
+index 33ad37b..6b49886 100644
+--- a/sc/inc/simpleformulacalc.hxx
++++ b/sc/inc/simpleformulacalc.hxx
+@@ -42,6 +42,7 @@ public:
+ 
+     void Calculate();
+     bool IsValue();
++    bool IsMatrix();
+     sal_uInt16 GetErrCode();
+     double GetValue();
+     svl::SharedString GetString();
+diff --git a/sc/qa/unit/ucalc.cxx b/sc/qa/unit/ucalc.cxx
+index 56ed0a2..b33ed96 100644
+--- a/sc/qa/unit/ucalc.cxx
++++ b/sc/qa/unit/ucalc.cxx
+@@ -6501,14 +6501,22 @@ void Test::testFormulaWizardSubformula()
+ {
+     m_pDoc->InsertTab(0, "Test");
+ 
+-    m_pDoc->SetString(ScAddress(0,0,0), "=B0:B2");
+-    m_pDoc->SetString(ScAddress(0,1,0), "=1");          // B0
+-    m_pDoc->SetString(ScAddress(1,1,0), "=1/0");        // B1
+-    m_pDoc->SetString(ScAddress(2,1,0), "=gibberish");  // B2
+-
+-    ScSimpleFormulaCalculator pFCell( m_pDoc, ScAddress(0,0,0), "" );
+-    if ( pFCell.GetErrCode() == 0 )
+-        CPPUNIT_ASSERT_EQUAL( OUString("{1, #DIV/0!, #NAME!}"), pFCell.GetString().getString() );
++    m_pDoc->SetString(ScAddress(1,0,0), "=1");          // B1
++    m_pDoc->SetString(ScAddress(1,1,0), "=1/0");        // B2
++    m_pDoc->SetString(ScAddress(1,2,0), "=gibberish");  // B3
++
++    ScSimpleFormulaCalculator pFCell1( m_pDoc, ScAddress(0,0,0), "=B1:B3" );
++    sal_uInt16 nErrCode = pFCell1.GetErrCode();
++    CPPUNIT_ASSERT( nErrCode == 0 || pFCell1.IsMatrix() );
++    CPPUNIT_ASSERT_EQUAL( OUString("{1;#DIV/0!;#NAME?}"), pFCell1.GetString().getString() );
++
++    m_pDoc->SetString(ScAddress(1,0,0), "=NA()");       // B1
++    m_pDoc->SetString(ScAddress(1,1,0), "2");           // B2
++    m_pDoc->SetString(ScAddress(1,2,0), "=1+2");        // B3
++    ScSimpleFormulaCalculator pFCell2( m_pDoc, ScAddress(0,0,0), "=B1:B3" );
++    nErrCode = pFCell2.GetErrCode();
++    CPPUNIT_ASSERT( nErrCode == 0 || pFCell2.IsMatrix() );
++    CPPUNIT_ASSERT_EQUAL( OUString("{#N/A;2;3}"), pFCell2.GetString().getString() );
+ 
+     m_pDoc->DeleteTab(0);
+ }
+diff --git a/sc/source/core/data/simpleformulacalc.cxx b/sc/source/core/data/simpleformulacalc.cxx
+index 298a969..b995df4 100644
+--- a/sc/source/core/data/simpleformulacalc.cxx
++++ b/sc/source/core/data/simpleformulacalc.cxx
+@@ -72,6 +72,11 @@ bool ScSimpleFormulaCalculator::IsValue()
+     return maResult.IsValue();
+ }
+ 
++bool ScSimpleFormulaCalculator::IsMatrix()
++{
++    return bIsMatrix;
++}
++
+ sal_uInt16 ScSimpleFormulaCalculator::GetErrCode()
+ {
+     Calculate();
+diff --git a/sc/source/ui/formdlg/formula.cxx b/sc/source/ui/formdlg/formula.cxx
+index 23023b5..4160619 100644
+--- a/sc/source/ui/formdlg/formula.cxx
++++ b/sc/source/ui/formdlg/formula.cxx
+@@ -330,7 +330,7 @@ bool ScFormulaDlg::calculateValue( const OUString& rStrExp, OUString& rStrResult
+     }
+ 
+     sal_uInt16 nErrCode = pFCell->GetErrCode();
+-    if ( nErrCode == 0 )
++    if ( nErrCode == 0 || pFCell->IsMatrix() )
+     {
+         SvNumberFormatter& aFormatter = *(pDoc->GetFormatTable());
+         Color* pColor;
+-- 
+1.9.1
+

@@ -65,6 +65,9 @@
 #include "doubleref.hxx"
 #include "queryparam.hxx"
 #include "tokenarray.hxx"
+#include "units.hxx"
+#include "scmod.hxx"
+#include "viewfunc.hxx"
 
 #include <math.h>
 #include <float.h>
@@ -4527,6 +4530,26 @@ StackVar ScInterpreter::Interpret()
     xResult = PopToken();
     if (!xResult)
         xResult = new FormulaErrorToken( errUnknownStackVariable);
+
+    if ( SC_MOD()->GetFormulaOptions().GetUnitValidat() )
+    {
+        using namespace sc::units;
+
+        boost::shared_ptr< Units > pUnits = Units::GetUnits();
+        ScDocument* pDoc = pDok;
+
+        FormulaStatus aStatus = pUnits->verifyFormula( &rArr, aPos, pDoc );
+        OUString aUnit = pUnits->getUnitsForRange(ScRangeList(ScRange(aPos, aPos)), pDoc).units[0];
+        pMyFormulaCell->SetFormulaStatus( aStatus );
+        if ( aStatus == FormulaStatus::VALID || aStatus == FormulaStatus::UNKNOWN )
+        {
+            SAL_INFO( "sc.units", "verification successful" );
+        }
+        else
+        {
+            SAL_INFO( "sc.units", "verification failed" );
+        }
+    }
 
     // release tokens in expression stack
     FormulaToken** p = pStack;

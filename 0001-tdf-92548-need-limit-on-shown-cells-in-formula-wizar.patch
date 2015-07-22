@@ -1,0 +1,109 @@
+From 4f2ec69c3ea6dde2577e50faf7dbdf94d0eeb664 Mon Sep 17 00:00:00 2001
+From: Benjamin Ni <benjaminniri@hotmail.com>
+Date: Tue, 14 Jul 2015 04:59:33 +0100
+Subject: [PATCH] tdf#92548 - need limit on shown cells in formula wizard
+ results
+
+Change-Id: I9d361c0aa01a9c199430015d7ec5bc12dced9678
+---
+ formula/source/ui/dlg/formula.cxx         |  2 +-
+ sc/inc/simpleformulacalc.hxx              |  1 +
+ sc/qa/unit/ucalc.cxx                      | 13 +++++++++----
+ sc/source/core/data/simpleformulacalc.cxx | 15 +++++++++++++++
+ 4 files changed, 26 insertions(+), 5 deletions(-)
+
+diff --git a/formula/source/ui/dlg/formula.cxx b/formula/source/ui/dlg/formula.cxx
+index 70e7041..10d5f83 100644
+--- a/formula/source/ui/dlg/formula.cxx
++++ b/formula/source/ui/dlg/formula.cxx
+@@ -722,7 +722,7 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,Fo
+                     { // gets subsequent subformula results (from the back)
+                         const IFunctionDescription* pDesc =pFuncPage->GetFuncDesc( pFuncPage->GetFunction() );
+                         if(pDesc==pFuncDesc || !pFuncPage->IsVisible())
+-//                             EditNextFunc(false);
++                             EditNextFunc(false);
+                     }
+ 
+                     if ( CalcValue( pFuncDesc->getFormula( m_aArguments ), aStr ) )
+diff --git a/sc/inc/simpleformulacalc.hxx b/sc/inc/simpleformulacalc.hxx
+index 6b49886..43418d6 100644
+--- a/sc/inc/simpleformulacalc.hxx
++++ b/sc/inc/simpleformulacalc.hxx
+@@ -43,6 +43,7 @@ public:
+     void Calculate();
+     bool IsValue();
+     bool IsMatrix();
++    sal_uInt16 GetDisplayLen();
+     sal_uInt16 GetErrCode();
+     double GetValue();
+     svl::SharedString GetString();
+diff --git a/sc/qa/unit/ucalc.cxx b/sc/qa/unit/ucalc.cxx
+index b33ed96..5550981 100644
+--- a/sc/qa/unit/ucalc.cxx
++++ b/sc/qa/unit/ucalc.cxx
+@@ -6510,13 +6510,18 @@ void Test::testFormulaWizardSubformula()
+     CPPUNIT_ASSERT( nErrCode == 0 || pFCell1.IsMatrix() );
+     CPPUNIT_ASSERT_EQUAL( OUString("{1;#DIV/0!;#NAME?}"), pFCell1.GetString().getString() );
+ 
+-    m_pDoc->SetString(ScAddress(1,0,0), "=NA()");       // B1
+-    m_pDoc->SetString(ScAddress(1,1,0), "2");           // B2
+-    m_pDoc->SetString(ScAddress(1,2,0), "=1+2");        // B3
++    m_pDoc->SetString(ScAddress(1,0,0), "=NA()");                // B1
++    m_pDoc->SetString(ScAddress(1,1,0), "HIJKLMNOPQRSTUVWXYZ");  // B2
++    m_pDoc->SetString(ScAddress(1,2,0), "=1+2");                 // B3
+     ScSimpleFormulaCalculator pFCell2( m_pDoc, ScAddress(0,0,0), "=B1:B3" );
+     nErrCode = pFCell2.GetErrCode();
+     CPPUNIT_ASSERT( nErrCode == 0 || pFCell2.IsMatrix() );
+-    CPPUNIT_ASSERT_EQUAL( OUString("{#N/A;2;3}"), pFCell2.GetString().getString() );
++    OUString aTestStr;
++    if (pFCell2.GetDisplayLen() > 6 && pFCell2.GetDisplayLen() < 28)
++        aTestStr = OUString("{#N/A;\"HIJKLMNOPQRSTUVWXYZ\"...");
++    if (pFCell2.GetDisplayLen() >= 28)
++        aTestStr = OUString("{#N/A;\"HIJKLMNOPQRSTUVWXYZ\";3}");
++    CPPUNIT_ASSERT_EQUAL( aTestStr, pFCell2.GetString().getString() );
+ 
+     m_pDoc->DeleteTab(0);
+ }
+diff --git a/sc/source/core/data/simpleformulacalc.cxx b/sc/source/core/data/simpleformulacalc.cxx
+index b995df4..eae5cd7 100644
+--- a/sc/source/core/data/simpleformulacalc.cxx
++++ b/sc/source/core/data/simpleformulacalc.cxx
+@@ -7,6 +7,8 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+ 
++#define DISPLAY_LEN 21
++
+ #include "simpleformulacalc.hxx"
+ #include "document.hxx"
+ #include "tokenarray.hxx"
+@@ -56,6 +58,14 @@ void ScSimpleFormulaCalculator::Calculate()
+             aComp.CompileTokenArray();
+         aComp.CreateStringFromToken( aStr, aInt.GetResultToken().get(), true );
+         bIsMatrix = true;
++        for (int i = DISPLAY_LEN; i < aStr.getLength(); i++)
++        { // truncate displayed subformula result
++            if ( aStr[i]==';' || aStr[i]==',' )
++            {
++                aStr.truncate(i);
++                aStr.append("...");
++            }
++        }
+         maMatrixFormulaResult = aStr.makeStringAndClear();
+     }
+     mnFormatType = aInt.GetRetFormatType();
+@@ -77,6 +87,11 @@ bool ScSimpleFormulaCalculator::IsMatrix()
+     return bIsMatrix;
+ }
+ 
++sal_uInt16 ScSimpleFormulaCalculator::GetDisplayLen()
++{
++    return DISPLAY_LEN;
++}
++
+ sal_uInt16 ScSimpleFormulaCalculator::GetErrCode()
+ {
+     Calculate();
+-- 
+1.9.1
+
