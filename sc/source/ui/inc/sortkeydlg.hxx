@@ -57,7 +57,6 @@ public:
     void AddSortKey( sal_uInt16 nItem );
     void DoScroll( sal_Int32 nNewPos );
     sal_Int32 GetItemHeight() const { return nItemHeight; }
-    sal_Int32 GetTotalHeight() const { return m_pBox->GetSizePixel().Height(); }
 };
 
 class ScSortKeyCtrl

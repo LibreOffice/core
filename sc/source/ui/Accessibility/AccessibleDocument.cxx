@@ -2500,14 +2500,6 @@ com::sun::star::uno::Sequence< com::sun::star::uno::Any > ScAccessibleDocument::
     return aEmpty;
 }
 
-void ScAccessibleDocument::SwitchViewFireFocus()
-{
-    if (mpAccessibleSpreadsheet)
-    {
-        mpAccessibleSpreadsheet->FireFirstCellFocus();
-    }
-}
-
 sal_Int32 SAL_CALL ScAccessibleDocument::getForeground(  )
         throw (uno::RuntimeException, std::exception)
 {

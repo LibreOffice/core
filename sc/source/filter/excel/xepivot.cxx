@@ -185,12 +185,11 @@ void XclExpPCItem::WriteBody( XclExpStream& rStrm )
 }
 
 XclExpPCField::XclExpPCField(
-        const XclExpRoot& rRoot, const XclExpPivotCache& rPCache, sal_uInt16 nFieldIdx,
+        const XclExpRoot& rRoot, sal_uInt16 nFieldIdx,
         const ScDPObject& rDPObj, const ScRange& rRange ) :
     XclExpRecord( EXC_ID_SXFIELD ),
     XclPCField( EXC_PCFIELD_STANDARD, nFieldIdx ),
     XclExpRoot( rRoot ),
-    mrPCache( rPCache ),
     mnTypeFlags( 0 )
 {
     // general settings for the standard field, insert all items from source range
@@ -221,12 +220,11 @@ XclExpPCField::XclExpPCField(
 }
 
 XclExpPCField::XclExpPCField(
-        const XclExpRoot& rRoot, const XclExpPivotCache& rPCache, sal_uInt16 nFieldIdx,
+        const XclExpRoot& rRoot, sal_uInt16 nFieldIdx,
         const ScDPObject& rDPObj, const ScDPSaveGroupDimension& rGroupDim, const XclExpPCField& rBaseField ) :
     XclExpRecord( EXC_ID_SXFIELD ),
     XclPCField( EXC_PCFIELD_STDGROUP, nFieldIdx ),
     XclExpRoot( rRoot ),
-    mrPCache( rPCache ),
     mnTypeFlags( 0 )
 {
     // add base field info (always using first base field, not predecessor of this field) ***
@@ -750,7 +748,7 @@ void XclExpPivotCache::AddStdFields( const ScDPObject& rDPObj )
         aColRange.aStart.SetCol( nScCol );
         aColRange.aEnd.SetCol( nScCol );
         maFieldList.AppendNewRecord( new XclExpPCField(
-            GetRoot(), *this, GetFieldCount(), rDPObj, aColRange ) );
+            GetRoot(), GetFieldCount(), rDPObj, aColRange ) );
     }
 }
 
@@ -771,7 +769,7 @@ void XclExpPivotCache::AddGroupFields( const ScDPObject& rDPObj )
                     {
                         // insert the new grouping field
                         XclExpPCFieldRef xNewGroupField( new XclExpPCField(
-                            GetRoot(), *this, GetFieldCount(), rDPObj, *pGroupDim, *pCurrStdField ) );
+                            GetRoot(), GetFieldCount(), rDPObj, *pGroupDim, *pCurrStdField ) );
                         maFieldList.AppendRecord( xNewGroupField );
 
                         // register new grouping field at current grouping field, building a chain

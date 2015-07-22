@@ -75,7 +75,6 @@ private:
     bool            mbEverEdited:1;
 
     void    Init            ();
-    void    InitBtnRename   ();
     void    InitDocListBox  ();
     DECL_LINK( OkHdl, void * );
     DECL_LINK( SelHdl, ListBox * );

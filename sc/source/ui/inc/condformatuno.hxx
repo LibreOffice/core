@@ -59,8 +59,6 @@ public:
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
 
-    static ScCondFormatsObj* getImplementation( uno::Reference< com::sun::star::sheet::XConditionalFormats > xCondFormat );
-
     // XConditionalFormats
     virtual sal_Int32 SAL_CALL createByRange(const uno::Reference<sheet::XSheetCellRanges>& xRanges)
         throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -92,7 +90,6 @@ public:
 
     virtual ~ScCondFormatObj();
 
-    static ScCondFormatObj* getImplementation( uno::Reference<sheet::XConditionalFormat> XCondFormat);
     ScDocShell* getDocShell();
 
     // XConditionalFormat
@@ -180,8 +177,6 @@ public:
             const ScCondFormatEntry* pFormat);
     virtual ~ScConditionEntryObj();
 
-    static ScConditionEntryObj* getImplementation(uno::Reference<sheet::XConditionEntry> xCondition);
-
     ScCondFormatEntry* getCoreObject();
 
     // XConditionEntry
@@ -243,8 +238,6 @@ public:
 
     ScColorScaleFormatObj(rtl::Reference<ScCondFormatObj> xParent, const ScColorScaleFormat* pFormat);
     virtual ~ScColorScaleFormatObj();
-
-    static ScColorScaleFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
 
     // XConditionEntry
     virtual sal_Int32 SAL_CALL getType()
@@ -341,8 +334,6 @@ public:
             const ScDataBarFormat* pFormat);
     virtual ~ScDataBarFormatObj();
 
-    static ScDataBarFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
-
     ScDataBarFormat* getCoreObject();
 
     // XConditionEntry
@@ -430,8 +421,6 @@ public:
     ScIconSetFormatObj(rtl::Reference<ScCondFormatObj> xParent,
             const ScIconSetFormat* pFormat);
     virtual ~ScIconSetFormatObj();
-
-    static ScIconSetFormatObj* getImplementation(uno::Reference<beans::XPropertySet> xPropSet);
 
     ScIconSetFormat* getCoreObject();
 

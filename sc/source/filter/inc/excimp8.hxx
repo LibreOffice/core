@@ -55,7 +55,6 @@ public:
     void                    ReadBasic();              // 0xD3
     void                    Labelsst();               // 0xFD
 
-    void                    Hlink();                  // 0x01B8
     void                    FeatHdr();                // 0x0867
     void                    Feat();                   // 0x0868
 

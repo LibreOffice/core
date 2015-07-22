@@ -48,8 +48,6 @@ public:
 
     virtual void ForcePointer(const MouseEvent* pMEvt) SAL_OVERRIDE;
 
-    virtual void SelectionHasChanged() SAL_OVERRIDE;
-
     void    SetInEditMode( SdrObject* pObj = NULL, const Point* pMousePixel = NULL,
                             bool bCursorToEnd = false, const KeyEvent* pInitialKey = NULL );
     void    StopEditMode(bool bTextDirection = false);

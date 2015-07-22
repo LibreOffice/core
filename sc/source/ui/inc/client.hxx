@@ -41,7 +41,6 @@ public:
                     ScClient( ScTabViewShell* pViewShell, vcl::Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj );
     virtual         ~ScClient();
 
-    SdrGrafObj*     GetGrafEdit() const             { return pGrafEdit; }
     void            SetGrafEdit(SdrGrafObj* pNew)   { pGrafEdit = pNew; }
     SdrOle2Obj*     GetDrawObj();
 };

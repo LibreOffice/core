@@ -2093,7 +2093,6 @@ ScXMLImport::ScXMLImport(
     sPrevCurrency(),
     nSolarMutexLocked(0),
     nProgressCount(0),
-    nStyleFamilyMask( 0 ),
     nPrevCellType(0),
     bLoadDoc( true ),
     bRemoveLastChar(false),

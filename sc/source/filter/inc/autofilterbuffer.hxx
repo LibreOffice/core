@@ -172,9 +172,6 @@ public:
     inline FilterSettingsBase& createFilterSettings()
         { mxSettings.reset( new FilterSettingsType( *this ) ); return *mxSettings; }
 
-    /** Returns the index of the column in the filtered range this object is related to. */
-    inline sal_Int32    getColumnId() const { return mnColId; }
-
     /** Returns converted UNO API filter settings representing all filter
         settings of this column. */
     ApiFilterSettings   finalizeImport( sal_Int32 nMaxCount );

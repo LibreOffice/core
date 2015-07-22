@@ -63,23 +63,11 @@ private:
                                 else
                                     pTmpName = new OUString( rNew );
                             }
-        inline void         Font( SvxFontItem& rNew )
-                            {
-                                if( pFont )
-                                    delete pFont;
-                                pFont = &rNew;
-                            }
         inline void         Height( SvxFontHeightItem& rNew )
                             {
                                 if( pHeight )
                                     delete pHeight;
                                 pHeight = &rNew;
-                            }
-        inline void         Color( SvxColorItem& rNew )
-                            {
-                                if( pColor )
-                                    delete pColor;
-                                pColor = &rNew;
                             }
         inline void         Type( const sal_uInt16 nNew )       { nType = nNew; }
     };

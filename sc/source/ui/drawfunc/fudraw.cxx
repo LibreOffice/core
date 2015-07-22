@@ -669,13 +669,6 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
     return bReturn;
 }
 
-// II
-void FuDraw::SelectionHasChanged()
-{
-    const SdrHdlList& rHdlList = pView->GetHdlList();
-    ((SdrHdlList&)rHdlList).ResetFocusHdl();
-}
-
 /*************************************************************************
 |*
 |* enable function

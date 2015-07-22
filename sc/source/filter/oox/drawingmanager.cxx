@@ -63,12 +63,6 @@ BiffSheetDrawing::BiffSheetDrawing( const WorksheetHelper& rHelper ) :
 {
 }
 
-void BiffSheetDrawing::notifyShapeInserted( const Reference< XShape >& /*rxShape*/, const css::awt::Rectangle& rShapeRect )
-{
-    // collect all shape positions in the WorksheetHelper base class
-    extendShapeBoundingBox( rShapeRect );
-}
-
 } // namespace xls
 } // namespace oox
 

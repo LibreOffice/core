@@ -74,13 +74,31 @@ public:
     bool VisitVarDecl( const VarDecl* );
 };
 
-static std::string niceName(const FunctionDecl* functionDecl)
+/**
+ * We need to include the template params when we are building the set
+ * of functions we have walked already, because we need to rewalk anything instantiated with different params
+ */
+enum class NiceNameIncludeTemplateParams { NO, YES };
+static std::string niceName(const FunctionDecl* functionDecl, NiceNameIncludeTemplateParams eIncludeTemplateParams = NiceNameIncludeTemplateParams::NO)
 {
     std::string s =
         compat::getReturnType(*functionDecl).getCanonicalType().getAsString()
         + " ";
     if (isa<CXXMethodDecl>(functionDecl)) {
-        s += dyn_cast<CXXMethodDecl>(functionDecl)->getParent()->getQualifiedNameAsString() + "::";
+        const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
+        s += recordDecl->getQualifiedNameAsString();
+        if (eIncludeTemplateParams == NiceNameIncludeTemplateParams::YES
+            && isa<ClassTemplateSpecializationDecl>(recordDecl))
+        {
+            const ClassTemplateSpecializationDecl* templateDecl = dyn_cast<ClassTemplateSpecializationDecl>(recordDecl);
+            s += "<";
+            for(size_t i=0; i < templateDecl->getTemplateArgs().size(); i++)
+            {
+                s += " ," + templateDecl->getTemplateArgs()[i].getAsType().getAsString();
+            }
+            s += ">";
+        }
+        s += "::";
     }
     s += functionDecl->getNameAsString() + "(";
     bool bFirst = true;
@@ -164,7 +182,7 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
     // if the function is templated. However, if we are inside a template function,
     // calling another function on the same template, the same problem occurs.
     // Rather than tracking all of that, just traverse anything we have not already traversed.
-    if (traversedFunctionSet.insert(niceName(calleeFunctionDecl)).second)
+    if (traversedFunctionSet.insert(niceName(calleeFunctionDecl, NiceNameIncludeTemplateParams::YES)).second)
         TraverseFunctionDecl(calleeFunctionDecl);
 
     logCallToRootMethods(calleeFunctionDecl);

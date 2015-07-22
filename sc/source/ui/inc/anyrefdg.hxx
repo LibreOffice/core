@@ -96,9 +96,6 @@ public:
 
     static              void enableInput(bool _bInput);
 
-protected:
-    vcl::Window*        GetWindow(){ return m_pWindow; }
-
 public:
     static bool         CanInputStart( const formula::RefEdit *pEdit ){ return !!pEdit; }
     bool                CanInputDone( bool bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
@@ -135,8 +132,6 @@ protected:
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL ) SAL_OVERRIDE;
     virtual void        RefInputDone( bool bForced = false ) SAL_OVERRIDE;
-    void                ShowSimpleReference(const OUString& rStr);
-    void                ShowFormulaReference(const OUString& rStr);
 
     bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, ScDocument* pDoc );
 

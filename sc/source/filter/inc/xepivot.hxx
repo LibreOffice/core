@@ -66,19 +66,17 @@ class XclExpPCField : public XclExpRecord, public XclPCField, protected XclExpRo
 public:
     /** Creates a standard pivot cache field, filled from sheet source data. */
     explicit            XclExpPCField( const XclExpRoot& rRoot,
-                            const XclExpPivotCache& rPCache, sal_uInt16 nFieldIdx,
+                            sal_uInt16 nFieldIdx,
                             const ScDPObject& rDPObj, const ScRange& rRange );
     /** Creates a child grouping pivot cache field, filled from the passed grouping info. */
     explicit            XclExpPCField( const XclExpRoot& rRoot,
-                            const XclExpPivotCache& rPCache, sal_uInt16 nFieldIdx,
+                            sal_uInt16 nFieldIdx,
                             const ScDPObject& rDPObj, const ScDPSaveGroupDimension& rGroupDim,
                             const XclExpPCField& rBaseField );
     virtual             ~XclExpPCField();
 
     /** Sets the passed field as direct grouping child field of this field. */
     void                SetGroupChildField( const XclExpPCField& rChildField );
-    /** Converts this standard field into a numeric grouping field. */
-    void                ConvertToNumGroup( const ScDPObject& rDPObj, const ScDPSaveNumGroupDimension& rNumGroupDim );
 
     /** Returns the name of this cache field. */
     inline const OUString& GetFieldName() const { return maFieldInfo.maName; }
@@ -152,7 +150,6 @@ private:
     virtual void        WriteBody( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    const XclExpPivotCache& mrPCache;       /// Parent pivot cache containing this field.
     XclExpPCItemList    maOrigItemList;     /// List with original items.
     XclExpPCItemList    maGroupItemList;    /// List with grouping items.
     ScfUInt16Vec        maIndexVec;         /// Indexes into maItemList.
@@ -171,8 +168,6 @@ public:
     /** Returns true, if the item index list will be written. */
     bool                HasItemIndexList() const;
 
-    /** Returns the stream identifier used to create the cache stream. */
-    inline sal_uInt16   GetStreamId() const { return maPCInfo.mnStrmId; }
     /** Returns the list index of the cache used in pivot table records. */
     inline sal_uInt16   GetCacheIndex() const { return mnListIdx; }
 

@@ -291,12 +291,9 @@ public:
     void            SetDrawTextShell( bool bActive );
 
     void            SetPivotShell( bool bActive );
-    ScArea*         GetPivotSource(){return pPivotSource;}
-    void            SetPivotSource(ScArea* pSrc){pPivotSource=pSrc;}
     void            SetDialogDPObject( const ScDPObject* pObj );
     const ScDPObject* GetDialogDPObject() const { return pDialogDPObject; }
 
-    bool            GetDontSwitch(){return bDontSwitch;}
     void            SetDontSwitch(bool bFlag){bDontSwitch=bFlag;}
 
     void            SetAuditShell( bool bActive );
@@ -326,8 +323,6 @@ public:
 
     bool            GetChartArea( ScRangeListRef& rSource, Rectangle& rDest, SCTAB& rTab ) const;
 
-    void            SetEditChartName(const OUString& aStr){aEditChartName=aStr;}
-
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
     ScNavigatorSettings*    GetNavigatorSettings();
@@ -351,10 +346,6 @@ public:
                                                vcl::Window* pParent, sal_uInt16 nSlotId );
 
     void            UpdateOleZoom();
-    inline SbxObject* GetScSbxObject() const
-                    { return pScSbxObject; }
-    inline void     SetScSbxObject( SbxObject* pOb )
-                    { pScSbxObject = pOb; }
 
     virtual const FmFormShell* GetFormShell() const SAL_OVERRIDE { return pFormShell; }
     virtual       FmFormShell* GetFormShell()       SAL_OVERRIDE { return pFormShell; }
@@ -368,7 +359,6 @@ public:
     bool    SelectObject( const OUString& rName );
 
     void    SetInFormatDialog(bool bFlag) {bInFormatDialog=bFlag;}
-    bool    IsInFormatDialog() {return bInFormatDialog;}
 
     void    ForceMove()     { Move(); }
 

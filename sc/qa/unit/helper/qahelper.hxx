@@ -197,27 +197,6 @@ inline std::string print(const ScAddress& rAddr)
     return str.str();
 }
 
-namespace CppUnit {
-
-template<>
-struct assertion_traits<ScRange>
-{
-    static bool equal( const ScRange& x, const ScRange& y )
-    {
-        return x == y;
-    }
-
-    static std::string toString( const ScRange& x )
-    {
-        std::stringstream str;
-        str << "Start: " << print(x.aStart);
-        str << "\nEnd: " << print(x.aEnd);
-        return str.str();
-    }
-};
-
-}
-
 class SCQAHELPER_DLLPUBLIC ScBootstrapFixture : public test::BootstrapFixture
 {
     static const FileFormat aFileFormats[];

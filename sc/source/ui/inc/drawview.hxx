@@ -106,7 +106,6 @@ public:
 
     void            UpdateIMap( SdrObject* pObj );
 
-    sal_uInt16      GetPopupMenuId();
     void            UpdateUserViewOptions();
 
     void            SetMarkedOriginalSize();
@@ -124,8 +123,6 @@ public:
     /** Locks/unlocks the specified layer in the draw page.
         Unlocked layer is required to be able to edit the contained objects. */
     void            LockCalcLayer( SdrLayerID nLayer, bool bLock = true );
-    /** Unlocks the specified layer in the draw page. */
-    inline void     UnlockCalcLayer( SdrLayerID nLayer ) { LockCalcLayer( nLayer, false ); }
 
     /** Locks/unlocks the background layer that contains background objects.
         Unlocked layer is required to be able to edit the objects. */

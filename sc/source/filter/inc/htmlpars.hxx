@@ -251,8 +251,6 @@ struct ScHTMLPos
                             { mnCol = nCol; mnRow = nRow; }
     inline void         Set( const ScAddress& rAddr )
                             { Set( rAddr.Col(), rAddr.Row() ); }
-    inline void         Move( SCsCOL nColDiff, SCsROW nRowDiff )
-                            { mnCol = mnCol + nColDiff; mnRow = mnRow + nRowDiff; }
     inline ScAddress    MakeAddr() const
                             { return ScAddress( mnCol, mnRow, 0 ); }
 };
@@ -276,13 +274,8 @@ struct ScHTMLSize
     inline explicit     ScHTMLSize() : mnCols( 0 ), mnRows( 0 ) {}
     inline explicit     ScHTMLSize( SCCOL nCols, SCROW nRows ) :
                             mnCols( nCols ), mnRows( nRows ) {}
-
-    inline SCCOLROW     Get( ScHTMLOrient eOrient ) const
-                            { return (eOrient == tdCol) ? mnCols : mnRows; }
     inline void         Set( SCCOL nCols, SCROW nRows )
                             { mnCols = nCols; mnRows = nRows; }
-    inline void         Expand( SCsCOL nColDiff, SCsROW nRowDiff )
-                            { mnCols = mnCols + nColDiff; mnRows = mnRows + nRowDiff; }
 };
 
 inline bool operator==( const ScHTMLSize& rSize1, const ScHTMLSize& rSize2 )
@@ -363,8 +356,6 @@ public:
     inline const OUString& GetTableName() const { return maTableName; }
     /** Returns the unique identifier of the table. */
     inline ScHTMLTableId GetTableId() const { return maTableId.mnTableId; }
-    /** Returns the table size. */
-    inline const ScHTMLSize& GetSize() const { return maSize; }
     /** Returns the cell spanning of the specified cell. */
     ScHTMLSize          GetSpan( const ScHTMLPos& rCellPos ) const;
 

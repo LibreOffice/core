@@ -220,9 +220,6 @@ public:
     sal_uInt32                  GetFirstSelected() const;
     /** Returns index of the first selected column really after nFromIndex. */
     sal_uInt32                  GetNextSelected( sal_uInt32 nFromIndex ) const;
-    /** Returns true, if at least one column is selected. */
-    inline bool                 HasSelection() const { return GetFirstSelected() != CSV_COLUMN_INVALID; }
-
     /** Selects or deselects the specified column. */
     void                        Select( sal_uInt32 nColIndex, bool bSelect = true );
     /** Toggles selection of the specified column. */

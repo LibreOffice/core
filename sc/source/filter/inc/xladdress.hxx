@@ -77,8 +77,6 @@ struct XclRange
     inline explicit     XclRange( sal_uInt16 nCol1, sal_uInt32 nRow1, sal_uInt16 nCol2, sal_uInt32 nRow2 ) :
                             maFirst( nCol1, nRow1 ), maLast( nCol2, nRow2 ) {}
 
-    inline void         Set( const XclAddress& rFirst, const XclAddress& rLast )
-                            { maFirst = rFirst; maLast = rLast; }
     inline void         Set( sal_uInt16 nCol1, sal_uInt32 nRow1, sal_uInt16 nCol2, sal_uInt32 nRow2 )
                             { maFirst.Set( nCol1, nRow1 ); maLast.Set( nCol2, nRow2 ); }
 

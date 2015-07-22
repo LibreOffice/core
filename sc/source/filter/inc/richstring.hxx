@@ -127,7 +127,6 @@ public:
                 const FontPortionModel& rModel)
     { mvModels.insert(it, rModel); }
 
-    ::std::vector< FontPortionModel >::const_iterator begin() const { return mvModels.begin(); }
     ::std::vector< FontPortionModel >::iterator begin() { return mvModels.begin(); }
 
     /** Appends a rich-string font identifier. */

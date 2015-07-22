@@ -79,8 +79,6 @@ private:
     SCTAB                       ReadTabNum();
     void                        ReadDateTime( DateTime& rDateTime );
 
-    inline void                 ReadString( OUString& rString );
-
     bool                        CheckRecord( sal_uInt16 nOpCode );
 
     void                        ReadFormula(
@@ -142,11 +140,6 @@ inline void XclImpChangeTrack::Read2DRange( ScRange& rRange )
     rRange.aEnd.SetRow( static_cast<SCROW>(pStrm->ReaduInt16()) );
     rRange.aStart.SetCol( static_cast<SCCOL>(pStrm->ReaduInt16()) );
     rRange.aEnd.SetCol( static_cast<SCCOL>(pStrm->ReaduInt16()) );
-}
-
-inline void XclImpChangeTrack::ReadString( OUString& rString )
-{
-    rString = pStrm->ReadUniString();
 }
 
 // derived class for special 3D ref handling

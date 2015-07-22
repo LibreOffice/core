@@ -46,7 +46,6 @@ public:
     double GetValue();
     svl::SharedString GetString();
     short GetFormatType() const { return mnFormatType; }
-    sal_uLong GetFormatIndex() const { return mnFormatIndex; }
 
     bool HasColRowName();
 

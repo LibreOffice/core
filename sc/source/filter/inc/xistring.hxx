@@ -44,8 +44,6 @@ public:
     inline void         SetText( const OUString& rText ) { maString = rText; }
     /** Sets the passed formatting buffer. */
     inline void         SetFormats( const XclFormatRunVec& rFormats ) { maFormats = rFormats; }
-    /** Insert a formatting run to the format buffer. */
-    inline void         AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx ) { AppendFormat( maFormats, nChar, nFontIdx ); }
     /** Reads and appends the formatting information (run count and runs) from stream. */
     inline void         ReadFormats( XclImpStream& rStrm ) { ReadFormats( rStrm, maFormats ); }
     /** Reads and appends nRunCount formatting runs from stream. */

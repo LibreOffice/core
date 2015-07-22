@@ -76,22 +76,6 @@ void CLBuildKernelThread::push(CLBuildKernelWorkItem item)
     sc::FormulaGroupInterpreter::getStatic();
 }
 
-void CLBuildKernelThread::produce()
-{
-}
-
-void CLBuildKernelThread::consume()
-{
-}
-
-void CLBuildKernelThread::finish()
-{
-    SAL_INFO("sc.opencl", "telling thread to finish");
-    CLBuildKernelWorkItem aWorkItem;
-    aWorkItem.meWhatToDo = CLBuildKernelWorkItem::FINISH;
-    push(aWorkItem);
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

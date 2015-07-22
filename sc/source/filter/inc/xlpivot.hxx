@@ -387,8 +387,6 @@ public:
     /** Sets the item to 'boolean' type and adds the passed Boolean value. */
     void                SetBool( bool bValue );
 
-    /** Returns the current item type. */
-    inline XclPCItemType GetType() const { return meType; }
     /** Returns the text representation of the item. */
     inline const OUString& ConvertToText() const { return maText; }
 

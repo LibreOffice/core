@@ -553,8 +553,6 @@ public:
     /** Returns true, if this record represents an Excel built-in style. */
     inline bool         IsBuiltIn() const { return mnStyleId != EXC_STYLE_USERDEF; }
 
-    inline const OUString&    GetName() const { return maName; }
-
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:

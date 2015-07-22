@@ -62,10 +62,7 @@ public:
     void            ReadFromString( const OUString& rString );
     OUString        WriteToString() const;
 
-    void            InterpretColumnList( const OUString& rString );
-
     rtl_TextEncoding    GetCharSet() const      { return eCharSet; }
-    bool                GetCharSetSystem() const    { return bCharSetSystem; }
     const OUString&     GetFieldSeps() const    { return aFieldSeps; }
     bool                IsMergeSeps() const     { return bMergeFieldSeps; }
     bool                IsQuotedAsText() const  { return bQuotedFieldAsText; }

@@ -189,7 +189,6 @@ protected:
     DECL_LINK( NotifyHdl, EENotify* );
     DECL_LINK( ModifyHdl, EENotify* );
 private:
-    long GetPixelTextHeight();
     ScInputBarGroup& mrGroupBar;
     long mnLines;
     long mnLastExpandedLines;
@@ -206,18 +205,14 @@ public:
     virtual void    dispose() SAL_OVERRIDE;
     virtual void    InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
     virtual void    RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
-//    virtual void    Paint(const Rectangle& rRect );
     void            SetTextString( const OUString& rString ) SAL_OVERRIDE;
     void            StartEditEngine() SAL_OVERRIDE;
     EditView*       GetEditView() SAL_OVERRIDE;
-    void            SetSize(Size aSize);
     virtual void    Resize() SAL_OVERRIDE;
     virtual const OUString&   GetTextString() const SAL_OVERRIDE;
     virtual void            StopEditEngine( bool bAll ) SAL_OVERRIDE;
     virtual void            TextGrabFocus() SAL_OVERRIDE;
-    void            InitEditEngine(SfxObjectShell* pObjSh);
     void            SetFormulaMode( bool bSet ) SAL_OVERRIDE;
-    bool            IsFocus();
     void            MakeDialogEditView() SAL_OVERRIDE;
     bool            IsInputActive() SAL_OVERRIDE;
     ScrollBar&      GetScrollBar() { return *aScrollBar.get(); }

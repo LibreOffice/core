@@ -54,8 +54,6 @@ public:
     SfxBroadcaster& GetBroadcaster() const { return maBroadcaster; }
 
     virtual void                UpdateData() = 0;
-    virtual void                SetDoUpdate(bool bValue) = 0;
-    virtual bool            IsDirty() const = 0;
     DECL_LINK( NotifyHdl, EENotify* );
 
 private:
@@ -74,8 +72,6 @@ public:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE { ScCellTextData::Notify(rBC, rHint); }
 
     virtual void                UpdateData() SAL_OVERRIDE { ScCellTextData::UpdateData(); }
-    virtual void                SetDoUpdate(bool bValue) SAL_OVERRIDE { ScCellTextData::SetDoUpdate(bValue); }
-    virtual bool                IsDirty() const SAL_OVERRIDE { return ScCellTextData::IsDirty(); }
 };
 
 //  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
@@ -124,8 +120,6 @@ public:
     virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) SAL_OVERRIDE;
 
     virtual void                UpdateData() SAL_OVERRIDE {  }
-    virtual void                SetDoUpdate(bool /* bValue */) SAL_OVERRIDE {  }
-    virtual bool                IsDirty() const SAL_OVERRIDE { return false; }
 
     DECL_LINK( NotifyHdl, EENotify* );
 protected:
@@ -224,8 +218,6 @@ public:
     virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) SAL_OVERRIDE { return NULL; }
 
     virtual void                UpdateData() SAL_OVERRIDE {  }
-    virtual void                SetDoUpdate(bool /* bValue */) SAL_OVERRIDE {  }
-    virtual bool                IsDirty() const SAL_OVERRIDE { return false; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
@@ -254,8 +246,6 @@ public:
     virtual SvxEditViewForwarder* GetEditViewForwarder( bool /* bCreate */ ) SAL_OVERRIDE { return NULL; }
 
     virtual void                UpdateData() SAL_OVERRIDE {  }
-    virtual void                SetDoUpdate(bool /* bValue */) SAL_OVERRIDE {  }
-    virtual bool            IsDirty() const SAL_OVERRIDE { return false; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell*         mpViewShell;
@@ -300,8 +290,6 @@ public:
     virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) SAL_OVERRIDE;
 
     virtual void                UpdateData() SAL_OVERRIDE {}
-    virtual void                SetDoUpdate( bool /* bValue */ ) SAL_OVERRIDE {}
-    virtual bool                IsDirty() const SAL_OVERRIDE { return false; }
 };
 
 #endif

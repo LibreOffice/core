@@ -116,8 +116,6 @@ public:
         @return  A reference to an ScfProgressBar connected to the segment. */
     ScfProgressBar&     GetSegmentProgressBar( sal_Int32 nSegment );
 
-    /** Returns true, if any progress segment has been started. */
-    inline bool         IsStarted() const { return mbInProgress; }
     /** Returns true, if the current progress segment is already full. */
     bool                IsFull() const;
 
@@ -191,8 +189,6 @@ public:
 
     /** Set progress bar to the specified position. */
     inline void         ProgressAbs( sal_Size nPos ) { maProgress.ProgressAbs( nPos ); }
-    /** Increase progress bar by 1. */
-    inline void         Progress( sal_Size nDelta = 1 ) { maProgress.Progress( nDelta ); }
 
 private:
     /** Initializes and starts the progress bar. */

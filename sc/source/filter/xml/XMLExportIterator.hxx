@@ -111,9 +111,8 @@ public:
                                 ScMyNoteShapesContainer();
     virtual                     ~ScMyNoteShapesContainer();
 
-                                using ScMyIteratorBase::UpdateAddress;
+    using ScMyIteratorBase::UpdateAddress;
     void                        AddNewNote(const ScMyNoteShape& aNote);
-    bool                        HasNotes() { return !aNoteShapeList.empty(); }
     const ScMyNoteShapeList&    GetNotes() const { return aNoteShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell ) SAL_OVERRIDE;
     virtual void                Sort() SAL_OVERRIDE;

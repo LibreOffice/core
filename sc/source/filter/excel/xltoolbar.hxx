@@ -53,7 +53,6 @@ class ScCTB : public TBBase
     std::vector<TBVisualData> rVisualData;
     sal_uInt32 ectbid;
     std::vector< ScTBC > rTBC;
-    bool ImportCustomToolBar_Impl( ScCTBWrapper&, CustomToolBarImportHelper& );
 public:
     ScCTB(sal_uInt16);
     virtual ~ScCTB(){}

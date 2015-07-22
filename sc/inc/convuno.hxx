@@ -50,16 +50,8 @@ public:
     static inline void  FillApiRange(
                             ::com::sun::star::table::CellRangeAddress& rApiRange,
                             const ScRange& rScRange );
-    // CellAddress -> CellRangeAddress
-    static inline void  FillApiRange(
-                            ::com::sun::star::table::CellRangeAddress& rApiRange,
-                            const ::com::sun::star::table::CellAddress& rApiAddress );
     // CellRangeAddress-Start -> CellAddress
     static inline void  FillApiStartAddress(
-                            ::com::sun::star::table::CellAddress& rApiAddress,
-                            const ::com::sun::star::table::CellRangeAddress& rApiRange );
-    // CellRangeAddress-End -> CellAddress
-    static inline void  FillApiEndAddress(
                             ::com::sun::star::table::CellAddress& rApiAddress,
                             const ::com::sun::star::table::CellRangeAddress& rApiRange );
 
@@ -67,10 +59,6 @@ public:
     static inline bool  Intersects(
                             const ::com::sun::star::table::CellRangeAddress& rApiARange1,
                             const ::com::sun::star::table::CellRangeAddress& rApiARange2 );
-    /** Returns true, if the passed address rApiInner is inside the passed range rApiOuter. */
-    static inline bool  Contains(
-                            const ::com::sun::star::table::CellRangeAddress& rApiOuter,
-                            const ::com::sun::star::table::CellAddress& rApiInner );
     /** Returns true, if the passed range rApiInner is completely inside the passed range rApiOuter. */
     static inline bool  Contains(
                             const ::com::sun::star::table::CellRangeAddress& rApiOuter,
@@ -112,30 +100,12 @@ inline void ScUnoConversion::FillApiRange(
     rApiRange.EndRow = rScRange.aEnd.Row();
 }
 
-inline void ScUnoConversion::FillApiRange(
-        ::com::sun::star::table::CellRangeAddress& rApiRange,
-        const ::com::sun::star::table::CellAddress& rApiAddress )
-{
-    rApiRange.StartColumn = rApiRange.EndColumn = rApiAddress.Column;
-    rApiRange.StartRow = rApiRange.EndRow = rApiAddress.Row;
-    rApiRange.Sheet = rApiAddress.Sheet;
-}
-
 inline void ScUnoConversion::FillApiStartAddress(
         ::com::sun::star::table::CellAddress& rApiAddress,
         const ::com::sun::star::table::CellRangeAddress& rApiRange )
 {
     rApiAddress.Column = rApiRange.StartColumn;
     rApiAddress.Row = rApiRange.StartRow;
-    rApiAddress.Sheet = rApiRange.Sheet;
-}
-
-inline void ScUnoConversion::FillApiEndAddress(
-        ::com::sun::star::table::CellAddress& rApiAddress,
-        const ::com::sun::star::table::CellRangeAddress& rApiRange )
-{
-    rApiAddress.Column = rApiRange.EndColumn;
-    rApiAddress.Row = rApiRange.EndRow;
     rApiAddress.Sheet = rApiRange.Sheet;
 }
 
@@ -146,15 +116,6 @@ inline bool ScUnoConversion::Intersects(
     return (rApiRange1.Sheet == rApiRange2.Sheet) &&
         (::std::max( rApiRange1.StartColumn, rApiRange2.StartColumn ) <= ::std::min( rApiRange1.EndColumn, rApiRange2.EndColumn )) &&
         (::std::max( rApiRange1.StartRow, rApiRange2.StartRow ) <= ::std::min( rApiRange1.EndRow, rApiRange2.EndRow ));
-}
-
-inline bool ScUnoConversion::Contains(
-        const ::com::sun::star::table::CellRangeAddress& rApiOuter,
-        const ::com::sun::star::table::CellAddress& rApiInner )
-{
-    return (rApiOuter.Sheet == rApiInner.Sheet) &&
-        (rApiOuter.StartColumn <= rApiInner.Column) && (rApiInner.Column <= rApiOuter.EndColumn) &&
-        (rApiOuter.StartRow <= rApiInner.Row) && (rApiInner.Row <= rApiOuter.EndRow);
 }
 
 inline bool ScUnoConversion::Contains(

@@ -73,9 +73,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  internal  ========================================================
-    void SetCurrentIndexInParent(sal_Int32 nNew) { mnIndex = nNew; }
-
 protected:
     virtual OUString SAL_CALL createAccessibleDescription() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL createAccessibleName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

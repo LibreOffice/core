@@ -93,9 +93,6 @@ public:
     void        ExecuteDB( SfxRequest& rReq );
     void        GetDBState( SfxItemSet& rSet );
 
-    void        ExecImageMap(SfxRequest& rReq);     // ImageMap
-    void        GetImageMapState(SfxItemSet& rSet);
-
     void        GetClipState( SfxItemSet& rSet );
     void        GetHLinkState( SfxItemSet& rSet );
 

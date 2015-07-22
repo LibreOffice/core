@@ -268,7 +268,6 @@ class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg
     virtual bool    GetRenameTable          () const SAL_OVERRIDE;
     virtual void    GetTabNameString( OUString& rString ) const SAL_OVERRIDE;
     virtual void    SetForceCopyTable       () SAL_OVERRIDE;
-    virtual void    EnableCopyTable         (bool bFlag=true) SAL_OVERRIDE;
     virtual void    EnableRenameTable       (bool bFlag=true) SAL_OVERRIDE;
 };
 
@@ -282,7 +281,6 @@ class AbstractScNamePasteDlg_Impl : public AbstractScNamePasteDlg
 {
     DECL_ABSTDLG_BASE( AbstractScNamePasteDlg_Impl, ScNamePasteDlg )
     virtual std::vector<OUString>          GetSelectedNames() const SAL_OVERRIDE;
-    virtual bool                                IsAllSelected() const SAL_OVERRIDE;
 };
 
 class AbstractScPivotFilterDlg_Impl : public AbstractScPivotFilterDlg

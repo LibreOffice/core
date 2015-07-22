@@ -60,17 +60,8 @@ public:
     explicit            BiffDrawingBase( const WorksheetHelper& rHelper,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage );
 
-    /** Sets the object with the passed identifier to be skipped on import. */
-    void                setSkipObj( sal_uInt16 nObjId );
-
     /** Final processing after import of the all drawing objects. */
     void                finalizeImport();
-
-    /** Derived classes may want to know that a shape has been inserted. Will
-        be called from the convertAndInsert() implementation. */
-    virtual void        notifyShapeInserted(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) = 0;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
@@ -83,10 +74,6 @@ class BiffSheetDrawing : public BiffDrawingBase
 public:
     explicit            BiffSheetDrawing( const WorksheetHelper& rHelper );
 
-    /** Called when a new UNO shape has been inserted into the draw page. */
-    virtual void        notifyShapeInserted(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
-                            const ::com::sun::star::awt::Rectangle& rShapeRect ) SAL_OVERRIDE;
 };
 
 } // namespace xls

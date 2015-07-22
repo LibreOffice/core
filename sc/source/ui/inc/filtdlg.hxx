@@ -139,7 +139,6 @@ private:
 private:
     void            Init            ( const SfxItemSet& rArgSet );
     void            FillFieldLists  ();
-    void            FillAreaList    ();
     void            UpdateValueList ( size_t nList );
     void            UpdateHdrInValueList( size_t nList );
     void            ClearValueList  ( size_t nList );

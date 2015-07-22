@@ -45,37 +45,9 @@ class ScDocument;
 #define FLT_DATE_BETWEEN    4
 #define FLT_DATE_SAVE       5
 
-class ScViewEntryPtr
-{
-private:
-    OUString*       pAction;
-    OUString*       pPos;
-    OUString*       pAuthor;
-    OUString*       pDate;
-    OUString*       pComment;
-    void*           pData;
-
-public:
-
-    OUString*       GetpAction()    {return pAction; }
-    OUString*       GetpPos()       {return pPos;    }
-    OUString*       GetpAuthor()    {return pAuthor; }
-    OUString*       GetpDate()      {return pDate;   }
-    OUString*       GetpComment()   {return pComment;}
-    void*           GetpData()      {return pData;   }
-
-    void        SetpAction (OUString* pString)    {pAction= pString;}
-    void        SetpPos    (OUString* pString)    {pPos   = pString;}
-    void        SetpAuthor (OUString* pString)    {pAuthor= pString;}
-    void        SetpDate   (OUString* pString)    {pDate  = pString;}
-    void        SetpComment(OUString* pString)    {pComment=pString;}
-    void        SetpData   (void*   pdata)      {pData   =pdata;}
-};
-
 class ScRedlinData : public RedlinData
 {
 public:
-
                     ScRedlinData();
                     virtual ~ScRedlinData();
     SCTAB           nTable;

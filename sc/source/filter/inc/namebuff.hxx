@@ -96,8 +96,6 @@ public:
     inline                  NameBuffer( RootData*, sal_uInt16 nNewBase );
 
     virtual                 ~NameBuffer();
-    inline const OUString*  Get( sal_uInt16 nIndex ) const;
-    inline sal_uInt16       GetLastIndex() const;
     inline void             SetBase( sal_uInt16 nNewBase = 0 );
     void                    operator <<( const OUString& rNewString );
 };
@@ -112,22 +110,9 @@ inline NameBuffer::NameBuffer( RootData* p, sal_uInt16 nNewBase ) : ExcRoot( p )
     nBase = nNewBase;
 }
 
-inline const OUString* NameBuffer::Get ( sal_uInt16 n ) const
-{
-    if( n < nBase || n >= maHashes.size() )
-        return NULL;
 
-    return &(maHashes[n]->aString);
-}
 
-inline sal_uInt16 NameBuffer::GetLastIndex () const
-{
-    int size = maHashes.size() + nBase;
 
-    OSL_ENSURE( size <= 0xFFFF, "*NameBuffer::GetLastIndex(): I'm sick and tired!" );
-
-    return static_cast<sal_uInt16>( size );
-}
 
 inline void NameBuffer::SetBase( sal_uInt16 nNewBase )
 {

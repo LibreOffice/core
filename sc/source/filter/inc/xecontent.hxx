@@ -109,7 +109,6 @@ public:
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
     void                WriteEmbeddedData( XclExpStream& rStrm );
-    void                SetDisplay( bool bDisplay ) { mbSetDisplay = bDisplay; }
 
     /** Builds file name from the passed file URL. Tries to convert to relative file name.
         @param rnLevel  (out-param) The parent directory level.
