@@ -41,8 +41,6 @@ protected:
 
 private:
     bool                    mbHasControlFocus;
-    bool                    mbFont;
-    bool                    mbForeground;
     Link<>                  maGetFocusHdl;
     Link<>                  maLoseFocusHdl;
 
