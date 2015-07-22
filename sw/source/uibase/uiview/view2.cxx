@@ -1437,7 +1437,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         const Size& rEditSize = GetEditWin().GetOutputSizePixel();
                         const Size aWindowSize( GetEditWin().PixelToLogic( rEditSize, aTmpMap ) );
 
-                        const long nOf = DOCUMENTBORDER * 2L;
+                        const long nOf = pVOpt->GetDocumentBorder() * 2L;
                         long nTmpWidth = bAutomaticViewLayout ? aPageSize.Width() : aRootSize.Width();
                         nTmpWidth += nOf;
                         aPageSize.Height() += nOf;
@@ -1450,7 +1450,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 
                         if ( bAutomaticViewLayout )
                         {
-                            nTmpWidth += aPageSize.Width() + GAPBETWEENPAGES;
+                            nTmpWidth += aPageSize.Width() + pVOpt->GetGapBetweenPages();
                             nFac = aWindowSize.Width() * 100 / nTmpWidth;
                             nFac = std::min( nFac, nVisPercent );
                             aZoomSliderItem.AddSnappingPoint( nFac );
