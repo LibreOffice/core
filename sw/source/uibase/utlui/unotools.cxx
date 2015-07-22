@@ -236,6 +236,7 @@ IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
             xViewProps->setPropertyValue(UNO_NAME_SHOW_DRAWINGS, aTrueSet);
             xViewProps->setPropertyValue(UNO_NAME_SHOW_FIELD_COMMANDS, aFalseSet);
             xViewProps->setPropertyValue(UNO_NAME_SHOW_GRAPHICS, aTrueSet);
+            xViewProps->setPropertyValue(UNO_NAME_HIDE_WHITESPACE, aFalseSet);
             xViewProps->setPropertyValue(UNO_NAME_SHOW_HIDDEN_PARAGRAPHS, aFalseSet);
             xViewProps->setPropertyValue(UNO_NAME_SHOW_HIDDEN_TEXT, aFalseSet);
             xViewProps->setPropertyValue(UNO_NAME_SHOW_HORI_RULER, aFalseSet);
