@@ -209,6 +209,7 @@
 #define UNO_NAME_SHOW_FIELD_COMMANDS "ShowFieldCommands"
 #define UNO_NAME_SHOW_PROTECTED_SPACES "ShowProtectedSpaces"
 #define UNO_NAME_SHOW_HIDDEN_PARAGRAPHS "ShowHiddenParagraphs"
+#define UNO_NAME_HIDE_WHITESPACE "HideWhitespace"
 #define UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT "IsSyncWidthToHeight"
 #define UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH "IsSyncHeightToWidth"
 #define UNO_NAME_SIZE_PROTECTED "SizeProtected"

@@ -685,6 +685,13 @@ interface BaseTextEditView
         Export = FALSE;
     ]
 
+    FN_VIEW_HIDE_WHITESPACE
+    [
+        ExecMethod = ExecViewOptions ;
+        StateMethod = StateViewOptions ;
+        Export = FALSE;
+    ]
+
     FN_VIEW_NOTES
     [
         ExecMethod = ExecViewOptions ;
