@@ -11,6 +11,9 @@
 
 #include "ChartController.hxx"
 
+#include <svx/xfltrit.hxx>
+#include <svx/xflftrit.hxx>
+
 namespace chart { namespace sidebar {
 
 namespace {
@@ -83,14 +86,23 @@ void ChartAreaPanel::Initialize()
     xBroadcaster->addModifyListener(mxListener);
 }
 
-void ChartAreaPanel::setFillTransparence(const XFillTransparenceItem& /*rItem*/)
+void ChartAreaPanel::setFillTransparence(const XFillTransparenceItem& rItem)
 {
+    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (!xPropSet.is())
+        return;
 
+    xPropSet->setPropertyValue("Transparency", css::uno::makeAny(rItem.GetValue()));
 }
 
-void ChartAreaPanel::setFillFloatTransparence(const XFillFloatTransparenceItem& /*rItem*/)
+void ChartAreaPanel::setFillFloatTransparence(
+        const XFillFloatTransparenceItem& rItem)
 {
+    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (!xPropSet.is())
+        return;
 
+    xPropSet->setPropertyValue("TransparencyGradientName", css::uno::makeAny(rItem.GetValue()));
 }
 
 void ChartAreaPanel::setFillStyle(const XFillStyleItem& rItem)
