@@ -801,6 +801,7 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     bNeedListening( false ),
     mbNeedsNumberFormat( false ),
     mbPostponedDirty(false),
+    maFormulaStatus( sc::units::FormulaStatus::UNKNOWN ),
     aPos( rPos )
 {
     SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
@@ -2251,6 +2252,11 @@ void ScFormulaCell::SetErrCode( sal_uInt16 n )
 void ScFormulaCell::SetResultError( sal_uInt16 n )
 {
     aResult.SetResultError( n );
+}
+
+void ScFormulaCell::SetFormulaStatus( sc::units::FormulaStatus aStatus )
+{
+    maFormulaStatus = aStatus;
 }
 
 void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
