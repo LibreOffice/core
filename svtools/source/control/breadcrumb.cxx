@@ -45,6 +45,16 @@ OUString Breadcrumb::GetHdlURL()
 void Breadcrumb::SetRootName( const OUString& rURL )
 {
     m_sRootName = rURL;
+
+    // we changed root - clear all fields
+    for( std::vector<VclPtr<FixedHyperlink>>::size_type i = 1; i < m_aLinks.size(); i++ )
+    {
+        m_aLinks[i]->SetText( "" );
+
+        m_aLinks[i]->Hide();
+        m_aSeparators[i]->Hide();
+        m_aLinks[i]->Enable( true );
+    }
 }
 
 void Breadcrumb::SetURL( const OUString& rURL )
