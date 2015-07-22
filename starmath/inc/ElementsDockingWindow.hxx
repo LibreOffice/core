@@ -106,6 +106,10 @@ class SmElementsControl : public Control
 
     void build();
 
+    //if pContext is not NULL, then draw, otherwise
+    //just layout
+    void LayoutOrPaintContents(vcl::RenderContext *pContext = NULL);
+
 public:
     SmElementsControl(vcl::Window *pParent);
     virtual ~SmElementsControl();

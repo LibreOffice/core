@@ -253,10 +253,8 @@ void SmElementsControl::setVerticalMode(bool bVerticalMode)
     mbVerticalMode = bVerticalMode;
 }
 
-void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext *pContext)
 {
-    rRenderContext.Push();
-
     bool bOldVisibleState = mxScroll->IsVisible();
 
     sal_Int32 nScrollbarWidth = bOldVisibleState ? GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
@@ -300,7 +298,8 @@ void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
                 Rectangle aSelectionRectangle(x + 5 - 1, y + 5,
                                               x + 5 + 1, nControlHeight - 5);
 
-                rRenderContext.DrawRect(PixelToLogic(aSelectionRectangle));
+                if (pContext)
+                    pContext->DrawRect(PixelToLogic(aSelectionRectangle));
                 x += 10;
             }
             else
@@ -311,14 +310,15 @@ void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
                 Rectangle aSelectionRectangle(x + 5, y + 5 - 1,
                                               nControlWidth - 5, y + 5 + 1);
 
-                rRenderContext.DrawRect(PixelToLogic(aSelectionRectangle));
+                if (pContext)
+                    pContext->DrawRect(PixelToLogic(aSelectionRectangle));
                 y += 10;
             }
         }
         else
         {
-            Size aSizePixel = rRenderContext.LogicToPixel(Size(element->getNode()->GetWidth(),
-                                                               element->getNode()->GetHeight()));
+            Size aSizePixel = LogicToPixel(Size(element->getNode()->GetWidth(),
+                                                element->getNode()->GetHeight()));
             if (mbVerticalMode)
             {
                 if (y + boxY > nControlHeight)
@@ -336,20 +336,21 @@ void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
                 }
             }
 
-            if (mpCurrentElement == element)
+            if (mpCurrentElement == element && pContext)
             {
-                rRenderContext.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
-                rRenderContext.SetFillColor(Color(230, 230, 230));
-                rRenderContext.SetLineColor(Color(230, 230, 230));
+                pContext->Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+                pContext->SetFillColor(Color(230, 230, 230));
+                pContext->SetLineColor(Color(230, 230, 230));
 
-                rRenderContext.DrawRect(PixelToLogic(Rectangle(x + 2, y + 2, x + boxX - 2, y + boxY - 2)));
-                rRenderContext.Pop();
+                pContext->DrawRect(PixelToLogic(Rectangle(x + 2, y + 2, x + boxX - 2, y + boxY - 2)));
+                pContext->Pop();
             }
 
             Point location(x + ((boxX - aSizePixel.Width()) / 2),
                            y + ((boxY - aSizePixel.Height()) / 2));
 
-            SmDrawingVisitor(rRenderContext, PixelToLogic(location), element->getNode().get());
+            if (pContext)
+                SmDrawingVisitor(*pContext, PixelToLogic(location), element->getNode().get());
 
             element->mBoxLocation = Point(x,y);
             element->mBoxSize = Size(boxX, boxY);
@@ -361,26 +362,29 @@ void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         }
     }
 
-    sal_Int32 nTotalControlHeight = y + boxY + mxScroll->GetThumbPos();
-
-    if (nTotalControlHeight > GetOutputSizePixel().Height())
+    if (!pContext)
     {
-        mxScroll->SetRangeMax(nTotalControlHeight);
-        mxScroll->SetPosSizePixel(Point(nControlWidth, 0), Size(nScrollbarWidth, nControlHeight));
-        mxScroll->SetVisibleSize(nControlHeight);
-        mxScroll->Show();
-    }
-    else
-    {
-        mxScroll->SetThumbPos(0);
-        mxScroll->Hide();
-    }
+        sal_Int32 nTotalControlHeight = y + boxY + mxScroll->GetThumbPos();
 
-    // If scrollbar visibility changed, we have to go through the
-    // calculation once more, see nScrollbarWidth
-    if (bOldVisibleState != mxScroll->IsVisible())
-        Invalidate();
+        if (nTotalControlHeight > GetOutputSizePixel().Height())
+        {
+            mxScroll->SetRangeMax(nTotalControlHeight);
+            mxScroll->SetPosSizePixel(Point(nControlWidth, 0), Size(nScrollbarWidth, nControlHeight));
+            mxScroll->SetVisibleSize(nControlHeight);
+            mxScroll->Show();
+        }
+        else
+        {
+            mxScroll->SetThumbPos(0);
+            mxScroll->Hide();
+        }
+    }
+}
 
+void SmElementsControl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
+{
+    rRenderContext.Push();
+    LayoutOrPaintContents(&rRenderContext);
     rRenderContext.Pop();
 }
 
@@ -399,6 +403,7 @@ void SmElementsControl::MouseMove( const MouseEvent& rMouseEvent )
                 if (mpCurrentElement != element)
                 {
                     mpCurrentElement = element;
+                    LayoutOrPaintContents();
                     Invalidate();
                     tooltip = element->getHelpText();
                 }
@@ -449,6 +454,7 @@ void SmElementsControl::DoScroll(long nDelta)
     aRect.Right() -= mxScroll->GetSizePixel().Width();
     Scroll( 0, -nDelta, aRect );
     mxScroll->SetPosPixel(aNewPoint);
+    LayoutOrPaintContents();
     Invalidate();
 }
 
@@ -629,6 +635,7 @@ void SmElementsControl::build()
         }
         break;
     }
+    LayoutOrPaintContents();
     Invalidate();
 }
 
