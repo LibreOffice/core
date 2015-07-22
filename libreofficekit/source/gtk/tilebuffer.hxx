@@ -131,6 +131,11 @@ class TileBuffer
     Tile m_DummyTile;
 };
 
+/**
+   Helper struct used to pass the data from main thread to spawned threads.
+   Spawned threads are responsible for calling paintTile, and store the result
+   in tile buffer.
+*/
 struct GetTileCallbackData
 {
     int m_nX;
