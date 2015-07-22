@@ -64,16 +64,14 @@
 #define PROGRESS_FINISH_SIZE   5.0f
 
 // Amount of time in ms to wait for the parent process to close
+#ifdef WNT
 #define PARENT_WAIT 5000
+#endif
 
 #if defined(MACOSX)
 // These functions are defined in launchchild_osx.mm
 void LaunchChild(int argc, char **argv);
 void LaunchMacPostProcess(const char* aAppBundle);
-#endif
-
-#ifndef _O_BINARY
-# define _O_BINARY 0
 #endif
 
 #ifndef NULL
@@ -141,18 +139,12 @@ static bool sUseHardLinks = true;
 
 // This variable lives in libbz2.  It's declared in bzlib_private.h, so we just
 // declare it here to avoid including that entire header file.
-#define BZ2_CRC32TABLE_UNDECLARED
-
 #if defined(HAVE_GCC_VISIBILITY_FEATURE)
 extern "C"  __attribute__((visibility("default"))) unsigned int BZ2_crc32Table[256];
-#undef BZ2_CRC32TABLE_UNDECLARED
 #elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
 extern "C" __global unsigned int BZ2_crc32Table[256];
-#undef BZ2_CRC32TABLE_UNDECLARED
-#endif
-#if defined(BZ2_CRC32TABLE_UNDECLARED)
+#else
 extern "C" unsigned int BZ2_crc32Table[256];
-#undef BZ2_CRC32TABLE_UNDECLARED
 #endif
 
 static unsigned int
@@ -1825,8 +1817,10 @@ LaunchCallbackApp(const NS_tchar *workingDir,
   }
 
 #if defined(USE_EXECV)
+  (void) argc; (void) usingService; // avoid warnings
   execv(argv[0], argv);
 #elif defined(MACOSX)
+  (void) usingService; // avoid warnings
   LaunchChild(argc, argv);
 #elif defined(WNT)
   // Do not allow the callback to run when running an update through the
@@ -1957,7 +1951,7 @@ CopyInstallDirToDestDir()
   // These files should not be copied over to the updated app
 #ifdef WNT
 #define SKIPLIST_COUNT 3
-#elif MACOSX
+#elif defined(MACOSX)
 #define SKIPLIST_COUNT 0
 #else
 #define SKIPLIST_COUNT 2
@@ -1992,7 +1986,7 @@ ProcessReplaceRequest()
   NS_tchar destDir[MAXPATHLEN];
   NS_tsnprintf(destDir, sizeof(destDir)/sizeof(destDir[0]),
                NS_T("%s/Contents"), gInstallDirPath);
-#elif WNT
+#elif defined(WNT)
   // Windows preserves the case of the file/directory names.  We use the
   // GetLongPathName API in order to get the correct case for the directory
   // name, so that if the user has used a different case when launching the
@@ -2190,7 +2184,7 @@ GetUpdateFileName(NS_tchar *fileName, int maxChars)
 }
 
 static void
-UpdateThreadFunc(void *param)
+UpdateThreadFunc(void * /*param*/)
 {
   // open ZIP archive and process...
   int rv;

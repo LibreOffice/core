@@ -66,6 +66,8 @@ GetPasswordString(void *arg, char *prompt)
   char phrase[200] = {'\0'};
   int isInputTerminal = isatty(fileno(stdin));
 
+  (void) arg; (void) prompt; // avoid warnings
+
 #ifndef _WINDOWS
   if (isInputTerminal) {
     input = fopen(consoleName, "r");

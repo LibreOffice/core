@@ -35,12 +35,12 @@ int mar_repackage_and_sign(const char *NSSConfigDir,
                            const char *src,
                            const char * dest);
 
-static void print_version() {
+static void print_version(void) {
   printf("Version: %s\n", MOZ_APP_VERSION);
   printf("Default Channel ID: %s\n", MAR_CHANNEL_ID);
 }
 
-static void print_usage() {
+static void print_usage(void) {
   printf("usage:\n");
   printf("Create a MAR file:\n");
   printf("  mar [-H MARChannelID] [-V ProductVersion] [-C workingDir] "
@@ -99,6 +99,8 @@ static void print_usage() {
 static int mar_test_callback(MarFile *mar,
                              const MarItem *item,
                              void *unused) {
+  (void) mar; (void) unused; // avoid warnings
+
   printf("%u\t0%o\t%s\n", item->length, item->flags, item->name);
   return 0;
 }

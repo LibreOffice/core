@@ -40,6 +40,8 @@ static int mar_test_callback(MarFile *mar, const MarItem *item, void *unused) {
   char buf[BLOCKSIZE];
   int fd, len, offset = 0;
 
+  (void) unused; // avoid warnings
+
   if (mar_ensure_parent_dir(item->name))
     return -1;
 

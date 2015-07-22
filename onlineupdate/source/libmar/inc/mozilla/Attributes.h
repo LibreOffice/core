@@ -83,7 +83,7 @@
 #    define MOZ_HAVE_NORETURN            __attribute__((noreturn))
 #  endif
 #elif defined(__GNUC__)
-#  if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
+#  if defined(__GXX_EXPERIMENTAL_CXX0X__) || (defined(__cplusplus) && __cplusplus >= 201103L)
 #    define MOZ_HAVE_CXX11_CONSTEXPR
 #    if MOZ_GCC_VERSION_AT_LEAST(4, 8, 0)
 #      define MOZ_HAVE_CXX11_CONSTEXPR_IN_TEMPLATES

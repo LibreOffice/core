@@ -26,7 +26,7 @@ static GtkWidget *sProgressBar;
 static const char *sProgramPath;
 
 static gboolean
-UpdateDialog(gpointer data)
+UpdateDialog(gpointer /*data*/)
 {
   if (sQuit)
   {
@@ -43,7 +43,7 @@ UpdateDialog(gpointer data)
 }
 
 static gboolean
-OnDeleteEvent(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+OnDeleteEvent(GtkWidget * /*widget*/, GdkEvent * /*event*/, gpointer /*user_data*/)
 {
   return TRUE;
 }

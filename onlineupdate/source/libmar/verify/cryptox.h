@@ -57,7 +57,7 @@ CryptoX_Result NSS_VerifySignature(VFYContext * const *ctx ,
 #define CryptoX_FreeCertificate(cert) \
   CERT_DestroyCertificate(*cert)
 
-#elif MACOSX
+#elif defined(MACOSX)
 
 #define CryptoX_InvalidHandleValue NULL
 #define CryptoX_ProviderHandle void*

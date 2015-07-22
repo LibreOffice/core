@@ -194,7 +194,6 @@ mar_extract_and_verify_signatures_fp(FILE *fp,
                                      CryptoX_ProviderHandle provider,
                                      CryptoX_PublicKey *keys,
                                      uint32_t keyCount) {
-  char buf[5] = {0};
   uint32_t signatureCount, signatureLen, numVerified = 0;
   uint32_t signatureAlgorithmIDs[MAX_SIGNATURES];
   int rv = -1;
@@ -345,6 +344,8 @@ mar_verify_signatures_for_fp(FILE *fp,
   uint32_t signatureLengths[MAX_SIGNATURES];
   uint32_t i;
   int rv = CryptoX_Error;
+
+  (void) provider; (void) keys; // avoid warnings
 
   memset(signatureHandles, 0, sizeof(signatureHandles));
   memset(signatureLengths, 0, sizeof(signatureLengths));
