@@ -46,9 +46,6 @@ class FuDraw : public FuPoor
     virtual bool MouseButtonUp(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
 
-    // II
-    virtual void SelectionHasChanged();
-
     bool IsEditingANote() const;
     bool IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
 

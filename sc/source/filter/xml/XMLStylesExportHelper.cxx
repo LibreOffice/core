@@ -1095,12 +1095,6 @@ void ScColumnStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 n
     aTables[nTable][nField] = aStyle;
 }
 
-OUString* ScColumnStyles::GetStyleName(const sal_Int32 nTable, const sal_Int32 nField)
-{
-    bool bTemp;
-    return GetStyleNameByIndex(GetStyleNameIndex(nTable, nField, bTemp));
-}
-
 ScRowStyles::Cache::Cache() :
     mnTable(-1), mnStart(-1), mnEnd(-1), mnStyle(-1) {}
 
@@ -1171,11 +1165,6 @@ void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nSta
     OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
     StylesType& r = aTables[nTable];
     r.insert_back(nStartField, nEndField+1, nStringIndex);
-}
-
-OUString* ScRowStyles::GetStyleName(const sal_Int32 nTable, const sal_Int32 nField)
-{
-    return GetStyleNameByIndex(GetStyleNameIndex(nTable, nField));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

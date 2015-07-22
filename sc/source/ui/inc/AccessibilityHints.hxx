@@ -42,9 +42,6 @@ public:
                 ScAccWinFocusLostHint(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xOld );
                 virtual ~ScAccWinFocusLostHint();
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                GetOldAccessible() const { return xOldAccessible; }
 };
 
 class ScAccWinFocusGotHint : public SfxHint
@@ -55,9 +52,6 @@ public:
                 ScAccWinFocusGotHint(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xNew );
                 virtual ~ScAccWinFocusGotHint();
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                GetNewAccessible() const { return xNewAccessible; }
 };
 
 class ScAccGridWinFocusLostHint : public ScAccWinFocusLostHint

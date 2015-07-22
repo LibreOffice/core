@@ -42,10 +42,6 @@ public:
     virtual void    Notify( const com::sun::star::uno::Sequence<OUString>& aPropertyNames ) SAL_OVERRIDE;
 
     bool        GetWK3Flag() const          { return bWK3Flag; }
-    double      GetExcelColScale() const    { return fExcelColScale; }
-    double      GetExcelRowScale() const    { return fExcelRowScale; }
-
-    //  values are never modified by office
 };
 
 #endif

@@ -74,12 +74,7 @@ public:
     virtual                     ~XclExpUserBViewList();
 
     inline iterator begin () { return aViews.begin(); }
-
     inline iterator end () { return aViews.end(); }
-
-    inline const_iterator begin () const { return aViews.begin(); }
-
-    inline const_iterator end () const { return aViews.end(); }
 
     virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 };

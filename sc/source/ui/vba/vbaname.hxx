@@ -36,9 +36,6 @@ class ScVbaName : public NameImpl_BASE
     css::uno::Reference< css::sheet::XNamedRanges > mxNames;
     OUString getContent( const formula::FormulaGrammar::Grammar eGrammar, bool prependEquals = true );
     void setContent( const OUString& sContent, const formula::FormulaGrammar::Grammar eGrammar, bool removeEquals = true );
-protected:
-    css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
-
 public:
     ScVbaName( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XNamedRange >& xName , const css::uno::Reference< css::sheet::XNamedRanges >& xNames , const css::uno::Reference< css::frame::XModel >& xModel );
     virtual ~ScVbaName();

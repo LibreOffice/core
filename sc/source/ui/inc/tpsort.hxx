@@ -163,7 +163,6 @@ private:
 private:
     void Init                   ();
     void FillUserSortListBox    ();
-    void FillOutPosList         ();
 
     // Handler ------------------------
     DECL_LINK( EnableHdl, CheckBox * );

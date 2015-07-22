@@ -97,16 +97,9 @@ public:
 
     void SetExtOptions( const ScAsciiOptions& rOpt );
     void SetFilterOptions( const OUString& rFilterOptions );
-
-    bool IsDoubleRef() const { return !( bAll || bSingle ); }
-    bool IsSingleRef() const { return bSingle; }
-    bool IsNoRef() const     { return bAll;    }
     bool IsRef() const       { return !bAll; }
 
     const ScRange& GetRange() const { return aRange; }
-
-    bool IsUndo() const      { return bUndo; }
-    void SetUndo( bool b )   { bUndo = b;    }
 
     SC_DLLPUBLIC static void EmbeddedNullTreatment( OUString & rStr );
 
@@ -121,19 +114,12 @@ public:
     //! only if stream is only used in own (!) memory
     static  inline  void    SetNoEndianSwap( SvStream& rStrm );
 
-    sal_Unicode GetSeparator() const { return cSep; }
     void SetSeparator( sal_Unicode c ) { cSep = c; }
-    sal_Unicode GetDelimiter() const { return cStr; }
     void SetDelimiter( sal_Unicode c ) { cStr = c; }
-    bool IsFormulas() const { return bFormulas; }
     void SetFormulas( bool b ) { bFormulas = b; }
-    bool IsIncludeFiltered() const { return bIncludeFiltered; }
     void SetIncludeFiltered( bool b ) { bIncludeFiltered = b; }
 
-    void SetSizeLimit( sal_uLong nNew ) { nSizeLimit = nNew; }  // for the moment only for Ascii
-
     void            SetStreamPath( const OUString& rPath ) { aStreamPath = rPath; }
-    const OUString& GetStreamPath() const { return aStreamPath; }
 
     bool ImportString( const OUString&, SotClipboardFormatId=SotClipboardFormatId::STRING );
     bool ExportString( OUString&, SotClipboardFormatId=SotClipboardFormatId::STRING );
@@ -155,11 +141,9 @@ public:
 
     const OUString& GetNonConvertibleChars() const { return aNonConvertibleChars; }
 
-    bool IsApi() const { return mbApi; }
     void SetApi( bool bApi ) { mbApi = bApi; }
     void SetImportBroadcast( bool b ) { mbImportBroadcast = b; }
     void SetOverwriting( const bool bOverwriting ) { mbOverwriting = bOverwriting; }
-    const ScExportTextOptions& GetExportTextOptions() { return mExportTextOptions; }
     void SetExportTextOptions( const ScExportTextOptions& options ) { mExportTextOptions = options; }
 };
 

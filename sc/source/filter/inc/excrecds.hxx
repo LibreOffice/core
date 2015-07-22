@@ -360,7 +360,6 @@ public:
                             ~ExcFilterCondition();
 
     inline bool             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
-    inline bool             HasEqual() const    { return (nOper == EXC_AFOPER_EQUAL); }
     sal_uLong               GetTextBytes() const;
 
     void                    SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, OUString* pT );

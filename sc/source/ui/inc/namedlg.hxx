@@ -86,7 +86,6 @@ private:
     void Init();
     void UpdateChecks(ScRangeData* pData);
     void ShowOptions(const ScRangeNameLine& rLine);
-    void UpdateNames();
 
     bool IsNameValid();
     bool IsFormulaValid();
@@ -96,9 +95,7 @@ private:
 
     bool AddPushed();
     void RemovePushed();
-    void OKPushed();
     void CancelPushed();
-    void NameSelected();
     void ScopeChanged();
     void NameModified();
 

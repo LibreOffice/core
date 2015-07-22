@@ -781,11 +781,6 @@ static ScRange lcl_ToRange( const XclRange& rRange )
     return aRange;
 }
 
-OString XclXmlUtils::ToOString( const XclRange& rRange )
-{
-    return ToOString( lcl_ToRange( rRange ) );
-}
-
 OString XclXmlUtils::ToOString( const XclRangeList& rRanges )
 {
     ScRangeList aRanges;

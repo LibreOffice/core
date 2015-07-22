@@ -56,6 +56,7 @@ exclusionSet = set([
     "_Bool connectivity::OColumn::isWritable() const",
     "_Bool IDocumentLinksAdministration::GetData(const class rtl::OUString &,const class rtl::OUString &,class com::sun::star::uno::Any &) const",
     "_Bool IDocumentLinksAdministration::SetData(const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Any &)",
+    "_Bool ScImportExport::ImportData(const class rtl::OUString &,const class com::sun::star::uno::Any &)",
     # instantiated from templates, not sure why it is not being picked up
     "class basegfx::B2DPolygon OutputDevice::PixelToLogic(const class basegfx::B2DPolygon &,const class MapMode &) const",
     "type-parameter-0-0 * detail::cloner::clone(type-parameter-0-0 *const)",

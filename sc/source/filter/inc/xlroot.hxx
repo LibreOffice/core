@@ -138,8 +138,6 @@ public:
 
     XclRoot&            operator=( const XclRoot& rRoot );
 
-    /** Returns this root instance - for code readability in derived classes. */
-    inline const XclRoot& GetRoot() const { return *this; }
     /** Returns old RootData struct. Deprecated. */
     inline RootData&    GetOldRoot() const { return *mrData.mxRD; }
 
@@ -149,8 +147,6 @@ public:
     inline XclOutput    GetOutput() const { return mrData.meOutput; }
     /** Returns true, if currently a document is imported. */
     inline bool         IsImport() const { return !mrData.mbExport; }
-    /** Returns true, if currently a document is exported. */
-    inline bool         IsExport() const { return mrData.mbExport; }
     /** Returns the text encoding to import/export byte strings. */
     inline rtl_TextEncoding GetTextEncoding() const { return mrData.meTextEnc; }
     /** Returns the system language, i.e. for number formats. */

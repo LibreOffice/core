@@ -148,7 +148,6 @@ protected:
         throw (::com::sun::star::uno::RuntimeException, std::exception);
 public:
     const ScAddress& GetCellAddress() const { return maCellAddress; }
-    bool IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBoder);
 };
 
 #endif

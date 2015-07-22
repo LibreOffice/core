@@ -241,24 +241,6 @@ void ScPrivatSplit::SetYRange(Range cRgeY)
 #*
 #*  Klasse:     ScPrivatSplit
 #*
-#*  Funktion:   Liefert die relative x-Verschiebung zurueck
-#*
-#*  Input:      ---
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-short ScPrivatSplit::GetDeltaX()
-{
-    return nDeltaX;
-}
-
-/*************************************************************************
-#*  Member:     GetDeltaY
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScPrivatSplit
-#*
 #*  Funktion:   Liefert die relative y-Verschiebung zurueck
 #*
 #*  Input:      ---

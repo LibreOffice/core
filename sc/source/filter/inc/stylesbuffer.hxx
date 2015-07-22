@@ -387,8 +387,6 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    /** Returns the protection model structure. */
-    inline const ProtectionModel& getModel() const { return maModel; }
     /** Returns the converted API protection data struct. */
     inline const ApiProtectionData& getApiData() const { return maApiData; }
 
@@ -471,8 +469,6 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport( bool bRTL );
 
-    /** Returns the border model structure. */
-    inline const BorderModel& getModel() const { return maModel; }
     /** Returns the converted API border data struct. */
     inline const ApiBorderData& getApiData() const { return maApiData; }
 
@@ -582,10 +578,6 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
-    /** Returns the fill pattern model structure, if extant. */
-    inline const PatternFillModel* getPatternModel() const { return mxPatternModel.get(); }
-    /** Returns the fill gradient model structure, if extant. */
-    inline const GradientFillModel* getGradientModel() const { return mxGradientModel.get(); }
     /** Returns the converted API fill data struct. */
     inline const ApiSolidFillData& getApiData() const { return maApiData; }
 
@@ -667,8 +659,6 @@ public:
     FontRef             getFont() const;
     /** Returns the alignment data of this style. */
     inline const Alignment& getAlignment() const { return maAlignment; }
-    /** Returns the cell protection data of this style. */
-    inline const Protection& getProtection() const { return maProtection; }
 
     void applyPatternToAttrList(
         AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal_Int32 nForceScNumFmt );

@@ -118,7 +118,6 @@ public:
     inline sal_uInt16           GetObjType() const { return mnObjType; }
 
     inline  void                SetId( sal_uInt16 nId ) { nObjId = nId; }
-    inline  sal_uInt16          GetId() const       { return nObjId; }
 
     inline  void                SetTab( SCTAB nScTab )  { mnScTab = nScTab; }
     inline  SCTAB               GetTab() const          { return mnScTab; }
@@ -143,7 +142,6 @@ public:
         itself. The svx base code does not receive the correct shape ID after the
         EscherEx::StartShape() call, which would result in deleting the object in
         EscherEx::EndShape(). */
-    inline void                 SetOwnEscher( bool bOwnEscher = true ) { mbOwnEscher = bOwnEscher; }
     /** Returns true, if the object has created the escher data itself.
         @descr  See SetOwnEscher() for details. */
     inline bool                 IsOwnEscher() const { return mbOwnEscher; }

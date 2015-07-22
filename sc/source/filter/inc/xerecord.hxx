@@ -238,8 +238,6 @@ public:
 
     /** Returns the Boolean value of the record. */
     inline bool         GetBool() const { return mbValue; }
-    /** Sets a new Boolean record value. */
-    inline void         SetBool( bool bValue ) { mbValue = bValue; }
 
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 

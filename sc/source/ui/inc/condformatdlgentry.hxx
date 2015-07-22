@@ -73,7 +73,6 @@ public:
 
     bool IsSelected() const { return mbActive;}
     void SetIndex(sal_Int32 nIndex);
-    sal_Int32 GetIndex() const { return mnIndex; }
     void SetHeight();
 
     virtual ScFormatEntry* GetEntry() const = 0;

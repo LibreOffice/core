@@ -266,12 +266,8 @@ public:
     void            GetScaleData( Size& rPhysSize, long& rDocHdr, long& rDocFtr );
     long            GetFirstPageNo() const  { return aTableParam.nFirstPageNo; }
 
-                    // Query last value - after DoPrint!!
-
-    double          GetScaleX() const { return nScaleX; }
-    double          GetScaleY() const { return nScaleY; }
     long            GetTotalPages() const { return nTotalPages; }
-    sal_uInt16          GetZoom() const { return nZoom; }
+    sal_uInt16      GetZoom() const { return nZoom; }
 
     void            ResetBreaks( SCTAB nTab );
 
@@ -281,10 +277,6 @@ public:
     sal_uInt16      GetRightMargin() const{return nRightMargin;}
     sal_uInt16      GetTopMargin() const{return nTopMargin;}
     sal_uInt16      GetBottomMargin() const{return nBottomMargin;}
-    void            SetLeftMargin(sal_uInt16 nRulerLeftDistance){ nLeftMargin = nRulerLeftDistance; }
-    void            SetRightMargin(sal_uInt16 nRulerRightDistance){ nRightMargin = nRulerRightDistance; }
-    void            SetTopMargin(sal_uInt16 nRulerTopDistance){ nTopMargin = nRulerTopDistance; }
-    void            SetBottomMargin(sal_uInt16 nRulerBottomDistance){ nBottomMargin = nRulerBottomDistance; }
     ScPrintHFParam  GetHeader(){return aHdr;}
     ScPrintHFParam  GetFooter(){return aFtr;}
 
@@ -310,7 +302,6 @@ private:
 
     bool            IsLeft( long nPageNo );
     bool            IsMirror( long nPageNo );
-    void            ReplaceFields( long nPageNo );      // changes Text in pEditEngine
     void            MakeTableString();                  // sets aTableStr
 
     void            PrintPage( long nPageNo,

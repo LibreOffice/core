@@ -117,10 +117,6 @@ public:
                         ~FormCache();
 
     inline const SfxUInt32Item* GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt );
-    void                SetDefaultFormat( sal_uInt8 nD = 0xFF )
-                        {
-                            nDefaultFormat = nD;
-                        }
 };
 
 

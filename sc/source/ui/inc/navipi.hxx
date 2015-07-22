@@ -262,9 +262,6 @@ private:
 
     void    DoResize();
 
-    SfxBindings&    GetBindings()
-                    { return rBindings; }
-
     void    SetCurrentCell( SCCOL nCol, SCROW Row );
     void    SetCurrentCellStr( const OUString& rName );
     void    SetCurrentTable( SCTAB nTab );

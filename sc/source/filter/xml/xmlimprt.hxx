@@ -962,7 +962,6 @@ class ScXMLImport: public SvXMLImport, boost::noncopyable
     OUString           sPrevCurrency;
     sal_uInt32              nSolarMutexLocked;
     sal_Int32               nProgressCount;
-    sal_uInt16              nStyleFamilyMask;// Mask of styles to load
     sal_Int16               nPrevCellType;
     bool                    bLoadDoc;   // Load doc or styles only
     bool                    bRemoveLastChar;
@@ -1019,7 +1018,6 @@ public:
 
     ScMyTables& GetTables() { return aTables; }
 
-    sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
     bool IsStylesOnlyMode() const { return !bLoadDoc; }
 
     sal_Int16 GetCellType(const OUString& rStrValue) const;
@@ -1144,10 +1142,8 @@ public:
     ScMyImpDetectiveOpArray* GetDetectiveOpArray();
 
     void SetRemoveLastChar(bool bValue) { bRemoveLastChar = bValue; }
-    bool GetRemoveLastChar() { return bRemoveLastChar; }
 
     ScXMLChangeTrackingImportHelper* GetChangeTrackingImportHelper();
-    void AddViewContext(SvXMLImportContext* pContext) { aViewContextList.push_back(pContext); }
     void InsertStyles();
 
     void SetChangeTrackingViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rChangeProps);
@@ -1155,7 +1151,6 @@ public:
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps) SAL_OVERRIDE;
 
     void SetTableStyle(const OUString& rValue) { aTableStyles.push_back(rValue); }
-    std::vector<OUString> GetTableStyle() { return aTableStyles; }
     ScMyStylesImportHelper* GetStylesImportHelper() { return pStylesImportHelper; }
     sal_Int32 SetCurrencySymbol(const sal_Int32 nKey, const OUString& rCurrency);
     bool IsCurrencySymbol(const sal_Int32 nNumberFormat, const OUString& sCurrencySymbol, const OUString& sBankSymbol);
@@ -1218,7 +1213,6 @@ public:
     void SetNamedRanges();
     void SetSheetNamedRanges();
     void SetLabelRanges();
-    void AddDefaultNote( const com::sun::star::table::CellAddress& aCell );
 
     /** Extracts the formula string, the formula grammar namespace URL, and a
         grammar enum value from the passed formula attribute value.

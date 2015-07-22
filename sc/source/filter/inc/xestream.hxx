@@ -93,13 +93,6 @@ public:
     /** Returns the position inside of current record (starts by 0 in every CONTINUE). */
     inline sal_uInt16   GetRawRecPos() const { return mnCurrSize; }
 
-    /** Returns the maximum size of a record. */
-    inline sal_uInt16   GetMaxRecSize() const { return mnMaxRecSize; }
-    /** Sets maximum record size (valid only for current record). */
-    inline void         SetMaxRecSize( sal_uInt16 nMax ) { mnCurrMaxSize = nMax; }
-    /** Sets maximum size of CONTINUE records (valid only for current record). */
-    inline void         SetMaxContSize( sal_uInt16 nMax ) { mnMaxContSize = nMax; }
-
     /** Sets data slice length. 0 = no slices. */
     void                SetSliceSize( sal_uInt16 nSize );
 
@@ -272,7 +265,6 @@ public:
     static OString ToOString( const ScRangeList& rRangeList );
     static OStringBuffer& ToOString( OStringBuffer& s, const XclAddress& rAddress );
     static OString ToOString( const XclExpString& s );
-    static OString ToOString( const XclRange& rRange );
     static OString ToOString( const XclRangeList& rRangeList );
 
     static OUString ToOUString( const char* s );

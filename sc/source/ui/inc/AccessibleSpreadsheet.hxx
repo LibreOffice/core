@@ -288,8 +288,6 @@ private:
     bool IsCompleteSheetSelected();
 
     void SelectCell(sal_Int32 nRow, sal_Int32 nCol, bool bDeselect);
-    void CreateSortedMarkedCells();
-    void AddMarkedRange(const ScRange& rRange);
 
     static ScDocument* GetDocument(ScTabViewShell* pViewShell);
     static Rectangle   GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);

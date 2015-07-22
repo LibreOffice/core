@@ -34,8 +34,6 @@ public:
     CLBuildKernelThread();
     virtual ~CLBuildKernelThread();
 
-    void finish();
-
     void push(CLBuildKernelWorkItem item);
 
     osl::Condition maCompilationDoneCondition;
@@ -47,8 +45,6 @@ private:
     osl::Mutex maQueueMutex;
     osl::Condition maQueueCondition;
     std::queue<CLBuildKernelWorkItem> maQueue;
-    static void produce();
-    static void consume();
 };
 
 }

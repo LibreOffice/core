@@ -29,23 +29,19 @@
 // Stream wrapper class
 class ScBiffReader
 {
-    protected:
+protected:
     sal_uInt16 mnId;
     sal_uInt16 mnLength;
     sal_uInt32 mnOffset;
     SvStream *mpStream;
     bool mbEndOfFile;
 
-    public:
+public:
     ScBiffReader( SfxMedium& rMedium );
     ~ScBiffReader();
     bool recordsLeft() { return mpStream && !mpStream->IsEof(); }
     bool IsEndOfFile() { return mbEndOfFile; }
-    void SetEof( bool bValue ){ mbEndOfFile = bValue; }
     bool nextRecord();
-    sal_uInt16 getId() { return mnId; }
-    sal_uInt16 getLength() { return mnLength; }
-    SvStream& getStream() { return *mpStream; }
 };
 #endif
 

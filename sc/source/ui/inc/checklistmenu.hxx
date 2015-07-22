@@ -334,8 +334,6 @@ private:
     DECL_LINK( EdModifyHdl, void* );
 
 private:
-    SvTreeListEntry* findEntry(  SvTreeListEntry* pParent, const OUString& rText );
-
     VclPtr<Edit>           maEdSearch;
     VclPtr<ScCheckListBox> maChecks;
 

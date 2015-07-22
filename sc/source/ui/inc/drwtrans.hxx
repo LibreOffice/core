@@ -94,10 +94,6 @@ public:
     SdrView*            GetDragSourceView()             { return pDragSourceView; }
     sal_uInt16              GetDragSourceFlags() const      { return nDragSourceFlags; }
 
-    void                SetSourceDocID( sal_uInt32 nVal )
-                            { nSourceDocID = nVal; }
-    sal_uInt32          GetSourceDocID() const      { return nSourceDocID; }
-
     static ScDrawTransferObj* GetOwnClipboard( vcl::Window* pUIWin );
     virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();

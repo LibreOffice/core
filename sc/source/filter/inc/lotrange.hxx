@@ -107,10 +107,7 @@ public:
     inline sal_uInt16       GetIndex( SCCOL nCol, SCROW nRow );
     inline sal_uInt16       GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
     sal_uInt16              GetIndex( const LotusRange& );
-    inline void         Append( SCCOL nCol, SCROW nRow, const OUString& );
-    inline void         Append( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE, const OUString& );
     void                Append( LotusRange* pLR, const OUString& rName );
-    inline static void  SetEing( const SCCOL nCol, const SCROW nRow );
 };
 
 inline LR_ID LotusRangeList::GetIndex( SCCOL nCol, SCROW nRow )
@@ -123,22 +120,6 @@ inline LR_ID LotusRangeList::GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SC
 {
     LotusRange aRef( nColS, nRowS, nColE, nRowE );
     return GetIndex( aRef );
-}
-
-inline void LotusRangeList::Append( SCCOL nCol, SCROW nRow, const OUString& rName )
-{
-    Append( new LotusRange( nCol, nRow ), rName );
-}
-
-inline void LotusRangeList::Append( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE, const OUString& r )
-{
-    Append( new LotusRange( nColS, nRowS, nColE, nRowE ), r );
-}
-
-inline void LotusRangeList::SetEing( const SCCOL nCol, const SCROW nRow )
-{
-    nEingCol = nCol;
-    nEingRow = nRow;
 }
 
 #endif

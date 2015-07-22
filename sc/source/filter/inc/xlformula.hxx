@@ -490,8 +490,6 @@ class XclTokenArrayHelper
 public:
     // token identifiers ------------------------------------------------------
 
-    /** Returns the base token ID of the passed (classified) token ID. */
-    inline static sal_uInt8 GetBaseTokenId( sal_uInt8 nTokenId ) { return nTokenId & EXC_TOKID_MASK; }
     /** Returns the classified token ID from a base ID and the token class. */
     inline static sal_uInt8 GetTokenId( sal_uInt8 nBaseId, sal_uInt8 nTokenClass );
 

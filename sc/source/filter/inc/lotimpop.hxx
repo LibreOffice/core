@@ -52,7 +52,6 @@ private:
     void                Numbercell();                 // 0x0017   23
     void                Smallnumcell();               // 0x0018   24
     ScFormulaCell*      Formulacell( sal_uInt16 nRecLen );      // 0x0019   25
-    void                Formulastring( ScFormulaCell& );    // 0x001a   26
                                                             // 0x001b   27 special
     void                NamedSheet();                 //          14000
     void                RowPresentation( sal_uInt16 nRecLen );  //           2007
@@ -70,7 +69,6 @@ private:
     inline void         Read( sal_uInt8& );
     inline void         Read( sal_uInt16& );
     inline void         Read( sal_Int16& );
-    inline void         Read( sal_uInt32& );
     inline void         Read( double& );                    // 10-Byte-IEEE lesen
     inline void         Read( LotAttrWK3& );
     void                Read( OUString& );                  // 0-terminierten String einlesen
@@ -121,11 +119,6 @@ inline void ImportLotus::Read( sal_uInt16& r )
 inline void ImportLotus::Read( sal_Int16& r )
 {
     pIn->ReadInt16( r );
-}
-
-inline void ImportLotus::Read( sal_uInt32& r )
-{
-    pIn->ReadUInt32( r );
 }
 
 inline void ImportLotus::Read( double& r )

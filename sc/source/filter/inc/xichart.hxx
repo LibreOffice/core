@@ -322,8 +322,6 @@ public:
 
     /** Returns true, if the area format is set to automatic. */
     inline bool         IsAutoArea() const { return !mxEscherFmt && (!mxAreaFmt || mxAreaFmt->IsAuto()); }
-    /** Returns true, if the area style is set to something visible. */
-    inline bool         HasArea() const { return mxEscherFmt || IsAutoArea() || mxAreaFmt->HasArea(); }
 
 protected:
     /** Converts and writes the contained line formatting to the passed property set. */
@@ -774,12 +772,8 @@ public:
 
     /** Returns the axes set identifier this series is assigned to (primary/secondary). */
     inline sal_uInt16   GetGroupIdx() const { return mnGroupIdx; }
-    /** Returns the 0-based series index described by this series. */
-    inline sal_uInt16   GetSeriesIdx() const { return mnSeriesIdx; }
     /** Returns the 0-based index of the parent series (e.g. of a trend line). */
     inline sal_uInt16   GetParentIdx() const { return mnParentIdx; }
-    /** Returns the format index of the series used for automatic line and area colors. */
-    inline sal_uInt16   GetFormatIdx() const { return mxSeriesFmt ? mxSeriesFmt->GetFormatIdx() : EXC_CHDATAFORMAT_DEFAULT; }
     /** Returns true, if the series is child of another series (e.g. trend line). */
     inline bool         HasParentSeries() const { return mnParentIdx != EXC_CHSERIES_INVALID; }
     /** Returns true, if the series contains child series (e.g. trend lines). */
@@ -985,8 +979,6 @@ public:
     inline const XclChExtTypeInfo& GetTypeInfo() const { return maTypeInfo; }
     /** Returns true, if this chart type group contains at least one valid series. */
     inline bool         IsValidGroup() const { return !maSeries.empty(); }
-    /** Returns true, if the series in this chart type group are stacked on each other (no percentage). */
-    inline bool         IsStacked() const { return maType.IsStacked(); }
     /** Returns true, if the series in this chart type group are stacked on each other as percentage. */
     inline bool         IsPercent() const { return maType.IsPercent(); }
     /** Returns true, if the chart is three-dimensional. */
@@ -1245,9 +1237,6 @@ private:
     void                ReadChPlotFrame( XclImpStream& rStrm );
     /** Reads a CHTYPEGROUP record group containing chart type and chart settings. */
     void                ReadChTypeGroup( XclImpStream& rStrm );
-
-    /** Updates text formatting of the passed axis title with global text formatting. */
-    void                UpdateAxisTitle( XclImpChTextRef xTitle );
 
     /** Creates a coordinate system that contains all chart types for this axes set. */
     css::uno::Reference< css::chart2::XCoordinateSystem >

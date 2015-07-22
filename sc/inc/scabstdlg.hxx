@@ -217,7 +217,6 @@ public:
     virtual bool    GetRenameTable          () const = 0;
     virtual void    GetTabNameString( OUString& rString ) const = 0;
     virtual void    SetForceCopyTable       () = 0;
-    virtual void    EnableCopyTable         (bool bFlag=true) = 0;
     virtual void    EnableRenameTable       (bool bFlag=true) = 0;
 };
 
@@ -231,7 +230,6 @@ class AbstractScNamePasteDlg : public VclAbstractDialog
 {
 public:
     virtual std::vector<OUString> GetSelectedNames() const = 0;
-    virtual bool                IsAllSelected() const = 0;
 };
 
 class AbstractScPivotFilterDlg : public VclAbstractDialog

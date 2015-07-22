@@ -51,16 +51,6 @@ public:
 
     void GetFocus() SAL_OVERRIDE;
     void SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis);
-
-    ValueSet& GetValueSet()
-    {
-        return *maCellLineStyleValueSet.get();
-    }
-
-    Control& GetPushButton()
-    {
-        return *maPushButtonMoreOptions.get();
-    }
 };
 
 } } // end of namespace svx::sidebar

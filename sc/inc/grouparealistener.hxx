@@ -60,10 +60,6 @@ public:
     void collectFormulaCells( SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const;
     void collectFormulaCells( SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const;
 
-    ScAddress getTopCellPos() const;
-    const ScRange& getRange() const;
-    SCROW getGroupLength() const;
-
 private:
     void notifyCellChange( const SfxHint& rHint, const ScAddress& rPos );
     void notifyBulkChange( const BulkDataHint& rHint );

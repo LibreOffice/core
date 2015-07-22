@@ -36,13 +36,8 @@ class BiffInputRecordBuffer
 public:
     explicit            BiffInputRecordBuffer( BinaryInputStream& rInStrm );
 
-    /** Returns the wrapped binary base stream. */
-    inline const BinaryInputStream& getBaseStream() const { return mrInStrm; }
-
     /** Sets a decoder object and decrypts buffered record data. */
     void                setDecoder( const BiffDecoderRef& rxDecoder );
-    /** Returns the current decoder object. */
-    inline BiffDecoderRef getDecoder() const { return mxDecoder; }
     /** Enables/disables usage of current decoder. */
     void                enableDecoder( bool bEnable );
 
@@ -63,8 +58,6 @@ public:
     inline sal_uInt16   getRecId() const { return mnRecId; }
     /** Returns the current record size. */
     inline sal_uInt16   getRecSize() const { return mnRecSize; }
-    /** Returns the current read position in the current record body. */
-    inline sal_uInt16   getRecPos() const { return mnRecPos; }
     /** Returns the number of remaining bytes in the current record body. */
     inline sal_uInt16   getRecLeft() const { return mnRecSize - mnRecPos; }
 

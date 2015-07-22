@@ -135,8 +135,6 @@ class ScXMLExport : public SvXMLExport
     sal_Int32       GetNumberFormatStyleIndex(sal_Int32 nNumFmt) const;
     void            CollectSharedData(SCTAB& nTableCount, sal_Int32& nShapesCount);
     void            CollectShapesAutoStyles(SCTAB nTableCount);
-    void            WriteTablesView(const com::sun::star::uno::Any& aTableView);
-    void            WriteView(const com::sun::star::uno::Any& aView);
     virtual void _ExportFontDecls() SAL_OVERRIDE;
     virtual void _ExportStyles( bool bUsed ) SAL_OVERRIDE;
     virtual void _ExportAutoStyles() SAL_OVERRIDE;
