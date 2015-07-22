@@ -31,6 +31,7 @@
 #include <svl/listener.hxx>
 
 #include "types.hxx"
+#include "units.hxx"
 
 #include "formularesult.hxx"
 
@@ -381,6 +382,9 @@ public:
 
     /* Sets just the result to error */
     void SetResultError( sal_uInt16 n );
+
+    /* Sets unit validity flag */
+    void SetFormulaStatus( sc::units::FormulaStatus aStatus );
 
     bool IsHyperLinkCell() const;
     EditTextObject* CreateURLObject();
