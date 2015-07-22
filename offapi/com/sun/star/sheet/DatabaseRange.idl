@@ -118,6 +118,13 @@ published service DatabaseRange
         @since LibreOffice 5.0
      */
     [optional, property] boolean TotalsRow;
+
+
+    /** specifies whether this range includes a top row of headers.
+
+        @since LibreOffice 5.0
+     */
+    [optional, property] boolean ContainsHeader;
 };
 
 
