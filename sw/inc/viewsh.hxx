@@ -490,11 +490,10 @@ public:
     void SetFrameView( const Size& rBrowseBorder )
            { mbFrameView = true; maBrowseBorder = rBrowseBorder; }
 
-    // Makes the necessary invalidations:
-    // If BrowseMode has changed bBrowseChgd == true
-    // or bBrowseChgd == false in BrowseMode
-    // if proportions have changed.
-    void CheckBrowseView( bool bBrowseChgd );
+    // Invalidates pages and contents.
+    // When bSizeChanged==true, adds/removes
+    // headers and footers as necessary.
+    void InvalidateLayout(bool bSizeChanged);
 
     const Size& GetBrowseBorder() const;
     sal_Int32 GetBrowseWidth() const;

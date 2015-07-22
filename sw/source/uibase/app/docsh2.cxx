@@ -155,13 +155,10 @@ VclPtr<SfxDocumentInfoDialog> SwDocShell::CreateDocumentInfoDialog(
     return pDlg;
 }
 
-// Disable "multiple layout"
-
-void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
+void SwDocShell::ToggleLayoutMode(SwView* pView)
 {
-    GetDoc()->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bSet );
-    UpdateFontList();
-    SwView* pTempView = _pView ? _pView : GetView();
+    UpdateFontList();  // Why is this necessary here?
+    SwView* pTempView = pView ? pView : GetView();
     if( pTempView )
     {
         pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
@@ -180,19 +177,18 @@ void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
                 pTmpFrm = SfxViewFrame::GetNext(*pTmpFrm, this, false);
         }
         const SwViewOption& rViewOptions = *pTempView->GetWrtShell().GetViewOptions();
-        pTempView->GetWrtShell().CheckBrowseView( true );
+        pTempView->GetWrtShell().InvalidateLayout(true);
         pTempView->CheckVisArea();
-        if( bSet )
+        if( rViewOptions.getBrowseMode() )
         {
             const SvxZoomType eType = (SvxZoomType)rViewOptions.GetZoomType();
             if ( SvxZoomType::PERCENT != eType)
                 static_cast<SwView*>(GetView())->SetZoom( eType );
         }
         pTempView->InvalidateBorder();
-        pTempView->SetNewWindowAllowed(!bSet);
+        pTempView->SetNewWindowAllowed(!rViewOptions.getBrowseMode());
     }
 }
-// End of disabled "multiple layout"
 
 // update text fields on document properties changes
 void SwDocShell::DoFlushDocInfo()
@@ -1362,7 +1358,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
     {
         SwWrtShell& rWrtSh = pCurrView->GetWrtShell();
         if( rWrtSh.GetLayout())
-            rWrtSh.CheckBrowseView( true );
+            rWrtSh.InvalidateLayout( true );
     }
 
     // Take HTTP-Header-Attibutes over into the DokInfo again.

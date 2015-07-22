@@ -165,6 +165,7 @@ SwViewOption::SwViewOption() :
     mbBrowseMode(false),
     mbBookView(false),
     mbViewLayoutBookMode(false),
+    mbHideWhitespaceMode(false),
     bShowPlaceHolderFields( true ),
     nZoom( 100 ),
     eZoom( SvxZoomType::PERCENT ),
