@@ -301,9 +301,7 @@ namespace fileaccess {
               const OUString& dstUnqPath,
               sal_Int32 NameClash );
 
-#define RemoveFolder   1
-#define RemoveFile    -1
-#define RemoveUnknown  0
+        enum class FileUrlType { Folder = 1, File = -1, Unknown = 0 };
 
         /**
          *  Deletes the content belonging to fileURL aUnqPath( recursively in case of directory )
@@ -312,12 +310,8 @@ namespace fileaccess {
         bool SAL_CALL
         remove( sal_Int32 CommandId,
                 const OUString& aUnqPath,
-                sal_Int32 TypeToMove = RemoveUnknown,
+                FileUrlType eTypeToMove = FileUrlType::Unknown,
                 bool  MustExist  = true );
-
-#undef RemoveUnknown
-#undef RemoveFile
-#undef RemoveFolder
 
 
         /********************************************************************************/
@@ -503,7 +497,7 @@ namespace fileaccess {
         copy_recursive(
             const OUString& srcUnqPath,
             const OUString& dstUnqPath,
-            sal_Int32 TypeToCopy,
+            FileUrlType TypeToCopy,
             bool  testExistence );
 
 

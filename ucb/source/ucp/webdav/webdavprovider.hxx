@@ -34,35 +34,28 @@ namespace http_dav_ucp {
 
 // UNO service name for the provider. This name will be used by the UCB to
 // create instances of the provider.
-#define WEBDAV_CONTENT_PROVIDER_SERVICE_NAME \
-                "com.sun.star.ucb.WebDAVContentProvider"
-#define WEBDAV_CONTENT_PROVIDER_SERVICE_NAME_LENGTH 38
+#define WEBDAV_CONTENT_PROVIDER_SERVICE_NAME "com.sun.star.ucb.WebDAVContentProvider"
 
 // URL scheme. This is the scheme the provider will be able to create
 // contents for. The UCB will select the provider ( i.e. in order to create
 // contents ) according to this scheme.
-#define WEBDAV_URL_SCHEME \
-                "vnd.sun.star.webdav"
+#define WEBDAV_URL_SCHEME       "vnd.sun.star.webdav"
 #define WEBDAV_URL_SCHEME_LENGTH    19
 
 #define HTTP_URL_SCHEME         "http"
-#define HTTP_URL_SCHEME_LENGTH  4
 
 #define HTTPS_URL_SCHEME        "https"
-#define HTTPS_URL_SCHEME_LENGTH 5
 
 #define DAV_URL_SCHEME          "dav"
 #define DAV_URL_SCHEME_LENGTH   3
 
-#define DAVS_URL_SCHEME     "davs"
+#define DAVS_URL_SCHEME         "davs"
 #define DAVS_URL_SCHEME_LENGTH  4
 
-#define HTTP_CONTENT_TYPE \
-                "application/" HTTP_URL_SCHEME "-content"
+#define HTTP_CONTENT_TYPE      "application/" HTTP_URL_SCHEME "-content"
 
 #define WEBDAV_CONTENT_TYPE    HTTP_CONTENT_TYPE
-#define WEBDAV_COLLECTION_TYPE \
-                "application/" WEBDAV_URL_SCHEME "-collection"
+#define WEBDAV_COLLECTION_TYPE "application/" WEBDAV_URL_SCHEME "-collection"
 
 
 
@@ -114,12 +107,7 @@ public:
                ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
 
 
-    // Additional interfaces
-
-
-
     // Non-interface methods.
-
 
     bool getProperty( const OUString & rPropName,
                       ::com::sun::star::beans::Property & rProp,

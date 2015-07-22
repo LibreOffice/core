@@ -239,26 +239,6 @@ namespace accessibility
                 UpdateShowing( false );
             }
             break;
-            case VCLEVENT_TABBAR_PAGEENABLED:
-            {
-                if ( m_pTabBar )
-                {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
-                    sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
-                    UpdateEnabled( nPagePos, true );
-                }
-            }
-            break;
-            case VCLEVENT_TABBAR_PAGEDISABLED:
-            {
-                if ( m_pTabBar )
-                {
-                    sal_uInt16 nPageId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData());
-                    sal_uInt16 nPagePos = m_pTabBar->GetPagePos( nPageId );
-                    UpdateEnabled( nPagePos, false );
-                }
-            }
-            break;
             case VCLEVENT_TABBAR_PAGESELECTED:
             {
                 // do nothing

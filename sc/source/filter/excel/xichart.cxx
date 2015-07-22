@@ -1526,11 +1526,9 @@ void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclChExtTypeIn
     bool bUsePicFmt = rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR;
     ConvertFrameBase( GetChRoot(), rPropSet, rTypeInfo.GetSeriesObjectType(), maData.mnFormatIdx, bUsePicFmt );
 
-#if EXC_CHART2_3DBAR_HAIRLINES_ONLY
     // #i83151# only hair lines in 3D charts with filled data points
     if( rTypeInfo.mb3dChart && rTypeInfo.IsSeriesFrameFormat() && mxLineFmt && mxLineFmt->HasLine() )
         rPropSet.SetProperty< sal_Int32 >( "BorderWidth", 0 );
-#endif
 
     // other formatting
     if( mxMarkerFmt )
@@ -2066,11 +2064,7 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
 
         // own area formatting for every data point (TODO: varying line color not supported)
         bool bVarPointFmt = pTypeGroup->HasVarPointFormat() && rTypeInfo.IsSeriesFrameFormat();
-#if EXC_CHART2_VARYCOLORSBY_PROP
-        aSeriesProp.SetBoolProperty( EXC_CHPROP_VARYCOLORSBY, bVarPointFmt );
-#else
         aSeriesProp.SetBoolProperty( EXC_CHPROP_VARYCOLORSBY, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE );
-#endif
         // #i91271# always set area formatting for every point in pie/doughnut charts
         if (mxSeriesFmt && mxValueLink && ((bVarPointFmt && mxSeriesFmt->IsAutoArea()) || (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE)))
         {

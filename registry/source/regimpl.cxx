@@ -456,16 +456,16 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
 {
     RegError eRet = RegError::INVALID_REGISTRY;
     OStoreFile      rRegFile;
-    storeAccessMode sAccessMode = REG_MODE_OPEN;
+    storeAccessMode sAccessMode = store_AccessReadWrite;
     storeError      errCode;
 
     if (bCreate)
     {
-        sAccessMode = REG_MODE_CREATE;
+        sAccessMode = store_AccessCreate;
     }
     else if (accessMode & RegAccessMode::READONLY)
     {
-        sAccessMode = REG_MODE_OPENREAD;
+        sAccessMode = store_AccessReadOnly;
         m_readOnly = true;
     }
 
@@ -673,7 +673,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
         token = sFullKeyName.getToken( 0, '/', nIndex );
         if (!token.isEmpty())
         {
-            if (rStoreDir.create(pKey->getStoreFile(), sFullPath.getStr(), token, KEY_MODE_CREATE))
+            if (rStoreDir.create(pKey->getStoreFile(), sFullPath.getStr(), token, store_AccessCreate))
             {
                 return RegError::CREATE_KEY_FAILED;
             }
@@ -720,7 +720,7 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
         sal_Int32 n = path.lastIndexOf('/') + 1;
         switch (OStoreDirectory().create(
                     pKey->getStoreFile(), path.copy(0, n), path.copy(n),
-                    isReadOnly() ? KEY_MODE_OPENREAD : KEY_MODE_OPEN))
+                    isReadOnly() ? store_AccessReadOnly : store_AccessReadWrite))
         {
         case store_E_NotExists:
             return RegError::KEY_NOT_EXISTS;
@@ -1010,13 +1010,13 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
     RegValueType    valueType;
     sal_uInt32      valueSize;
     sal_uInt32      nSize;
-    storeAccessMode sourceAccess = VALUE_MODE_OPEN;
+    storeAccessMode sourceAccess = store_AccessReadWrite;
     OUString        sTargetPath(pTargetKey->getName());
     OUString        sSourcePath(pSourceKey->getName());
 
     if (pSourceKey->isReadOnly())
     {
-        sourceAccess = VALUE_MODE_OPENREAD;
+        sourceAccess = store_AccessReadOnly;
     }
 
     if (nCut)
@@ -1076,7 +1076,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
 
     OStoreFile  rTargetFile(pTargetKey->getStoreFile());
 
-    if (!rValue.create(rTargetFile, sTargetPath, valueName, VALUE_MODE_OPEN))
+    if (!rValue.create(rTargetFile, sTargetPath, valueName, store_AccessReadWrite))
     {
         if (valueType == RegValueType::BINARY)
         {
@@ -1100,7 +1100,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
     }
 
     // write
-    if (rValue.create(rTargetFile, sTargetPath, valueName, VALUE_MODE_CREATE))
+    if (rValue.create(rTargetFile, sTargetPath, valueName, store_AccessCreate))
     {
         rtl_freeMemory(pBuffer);
         return RegError::INVALID_VALUE;
@@ -1352,7 +1352,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
     sFullKeyName += keyName;
 
     OStoreDirectory rStoreDir;
-    if (rStoreDir.create(pTargetKey->getStoreFile(), sFullPath, keyName, KEY_MODE_CREATE))
+    if (rStoreDir.create(pTargetKey->getStoreFile(), sFullPath, keyName, store_AccessCreate))
     {
         return RegError::CREATE_KEY_FAILED;
     }
@@ -1458,11 +1458,11 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
     RegValueType    valueType;
     OUString        sFullPath(sPath);
     OString         sIndent;
-    storeAccessMode accessMode = VALUE_MODE_OPEN;
+    storeAccessMode accessMode = store_AccessReadWrite;
 
     if (isReadOnly())
     {
-        accessMode = VALUE_MODE_OPENREAD;
+        accessMode = store_AccessReadOnly;
     }
 
     for (int i= 0; i < nSpc; i++) sIndent += " ";
@@ -1694,12 +1694,12 @@ RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_In
     OStoreDirectory     rStoreDir;
     OUString            sFullPath(sPath);
     OString             sIndent;
-    storeAccessMode     accessMode = KEY_MODE_OPEN;
+    storeAccessMode     accessMode = store_AccessReadWrite;
     RegError            _ret = RegError::NO_ERROR;
 
     if (isReadOnly())
     {
-        accessMode = KEY_MODE_OPENREAD;
+        accessMode = store_AccessReadOnly;
     }
 
     for (int i= 0; i < nSpace; i++) sIndent += " ";

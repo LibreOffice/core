@@ -113,8 +113,8 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_WINDOW_MENUBARADDED        1136        // pData = pMenuBar
 #define VCLEVENT_TABPAGE_ACTIVATE           1137        // pData = pageid
 #define VCLEVENT_TABPAGE_DEACTIVATE         1138        // pData = pageid
-#define VCLEVENT_TABBAR_PAGEENABLED         1139        // pData = pageid
-#define VCLEVENT_TABBAR_PAGEDISABLED        1140        // pData = pageid
+// free
+// free
 #define VCLEVENT_TABBAR_PAGESELECTED        1141        // pData = pageid
 #define VCLEVENT_TABBAR_PAGEACTIVATED       1142        // pData = pageid
 #define VCLEVENT_TABBAR_PAGEDEACTIVATED     1143        // pData = pageid
@@ -139,7 +139,7 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_STATUSBAR_SHOWITEM         1162        // pData = itemid
 #define VCLEVENT_STATUSBAR_HIDEITEM         1163        // pData = itemid
 #define VCLEVENT_STATUSBAR_SHOWALLITEMS     1164
-#define VCLEVENT_STATUSBAR_HIDEALLITEMS     1165
+// free
 #define VCLEVENT_STATUSBAR_DRAWITEM         1166        // pData = itemid
 #define VCLEVENT_STATUSBAR_NAMECHANGED      1167        // pData = itemid
 #define VCLEVENT_TOOLBOX_ITEMENABLED        1168        // pData = itempos

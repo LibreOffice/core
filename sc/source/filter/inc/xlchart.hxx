@@ -20,11 +20,6 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XLCHART_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XLCHART_HXX
 
-// disable/enable support for varied point colors property
-#define EXC_CHART2_VARYCOLORSBY_PROP 0
-// disable/enable restriction to hair lines in 3D bar charts (#i83151#)
-#define EXC_CHART2_3DBAR_HAIRLINES_ONLY 1
-
 #include <tools/gen.hxx>
 #include "fapihelper.hxx"
 #include <map>

@@ -72,18 +72,9 @@ const sal_Unicode CHAR_ZWNBSP   = 0x2060;
 
 const SCSIZE MAXSUBTOTAL        = 3;
 
-#define SC_USE_PS_POINTS    1       /**< use PostScript points (72ppi) instead of old TeX points (72.27ppi) */
-
 #define PIXEL_PER_INCH      96.0
-
 #define CM_PER_INCH         2.54
-#define PS_POINTS_PER_INCH  72.0    /**< PostScript points per inch */
-#define TEX_POINTS_PER_INCH 72.27   /**< old printer points, or TeX points per inch */
-#if SC_USE_PS_POINTS
-#define POINTS_PER_INCH     PS_POINTS_PER_INCH  /**< the actual definition of points used */
-#else
-#define POINTS_PER_INCH     TEX_POINTS_PER_INCH
-#endif
+#define POINTS_PER_INCH     72.0    /**< PostScript points per inch */
 #define PIXEL_PER_POINT     (PIXEL_PER_INCH / POINTS_PER_INCH)
 #define TWIPS_PER_POINT     20.0
 #define TWIPS_PER_INCH      (TWIPS_PER_POINT * POINTS_PER_INCH)
@@ -94,11 +85,7 @@ const SCSIZE MAXSUBTOTAL        = 3;
 #define PIXEL_PER_TWIPS     (PIXEL_PER_INCH / TWIPS_PER_INCH)
 #define HMM_PER_TWIPS       (CM_PER_TWIPS * 1000.0)
 
-#if SC_USE_PS_POINTS
 #define STD_COL_WIDTH       1280    /* 2.2577cm, 64.00pt PS */
-#else
-#define STD_COL_WIDTH       1285    /* 2.2581cm, 64.25pt TeX */
-#endif
 #define STD_EXTRA_WIDTH     113     /* 2mm extra for optimal width,
                                      * 0.1986cm with TeX points,
                                      * 0.1993cm with PS points. */
