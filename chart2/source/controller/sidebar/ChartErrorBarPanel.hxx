@@ -13,6 +13,7 @@
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 
 #include "ChartSidebarModifyListener.hxx"
@@ -33,6 +34,7 @@ namespace sidebar {
 class ChartErrorBarPanel : public PanelLayout,
     public ::sfx2::sidebar::IContextChangeReceiver,
     public ::sfx2::sidebar::ControllerItem::ItemUpdateReceiverInterface,
+    public sfx2::sidebar::SidebarModelUpdate,
     public ChartSidebarModifyListenerParent
 {
 public:
@@ -63,6 +65,8 @@ public:
 
     virtual void updateData() SAL_OVERRIDE;
     virtual void modelInvalid() SAL_OVERRIDE;
+
+    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) SAL_OVERRIDE;
 
 private:
     //ui controls

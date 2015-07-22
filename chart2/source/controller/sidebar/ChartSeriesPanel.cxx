@@ -269,7 +269,9 @@ OUString getCID(css::uno::Reference<css::frame::XModel> xModel)
         return OUString();
 
     uno::Any aAny = xSelectionSupplier->getSelection();
-    assert(aAny.hasValue());
+    if (!aAny.hasValue())
+        return OUString();
+
     OUString aCID;
     aAny >>= aCID;
 #ifdef DBG_UTIL
@@ -408,6 +410,18 @@ void ChartSeriesPanel::NotifyItemUpdate(
 void ChartSeriesPanel::modelInvalid()
 {
 
+}
+
+void ChartSeriesPanel::updateModel(
+        css::uno::Reference<css::frame::XModel> xModel)
+{
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcaster->removeModifyListener(mxListener);
+
+    mxModel = xModel;
+
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcasterNew->addModifyListener(mxListener);
 }
 
 IMPL_LINK(ChartSeriesPanel, CheckBoxHdl, CheckBox*, pCheckBox)

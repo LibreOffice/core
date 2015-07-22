@@ -4039,6 +4039,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ui,\
     XUIElementFactoryManager \
 	XUIElementFactoryRegistration \
 	XUIElementSettings \
+	XUpdateModel \
 	XUIFunctionListener \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ui/dialogs,\

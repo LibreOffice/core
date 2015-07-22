@@ -29,6 +29,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/ui/XUpdateModel.hpp>
 
 #include <map>
 
@@ -644,6 +645,24 @@ bool ResourceManager::IsDeckEnabled (
     }
 
     return false;
+}
+
+void ResourceManager::UpdateModel(css::uno::Reference<css::frame::XModel> xModel)
+{
+    for (DeckContainer::iterator itr = maDecks.begin(); itr != maDecks.end(); ++itr) {
+        if (!itr->mpDeck)
+            continue;
+
+        const SharedPanelContainer& rContainer = itr->mpDeck->GetPanels();
+
+        for (SharedPanelContainer::const_iterator it = rContainer.begin(); it != rContainer.end(); ++it) {
+            css::uno::Reference<css::ui::XUpdateModel> xPanel((*it)->GetPanelComponent(), css::uno::UNO_QUERY);
+            xPanel->updateModel(xModel);
+        }
+
+    }
+
+
 }
 
 } } // end of namespace sfx2::sidebar

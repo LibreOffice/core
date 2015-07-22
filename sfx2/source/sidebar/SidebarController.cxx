@@ -1252,6 +1252,11 @@ ResourceManager::PanelContextDescriptorContainer SidebarController::GetMatchingP
     return aPanels;
 }
 
+void SidebarController::updateModel(css::uno::Reference<css::frame::XModel> xModel)
+{
+    mpResourceManager->UpdateModel(xModel);
+}
+
 
 } } // end of namespace sfx2::sidebar
 

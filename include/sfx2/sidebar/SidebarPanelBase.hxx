@@ -22,7 +22,7 @@
 #include <sfx2/sidebar/EnumContext.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 #include <com/sun/star/frame/XController.hpp>
@@ -30,6 +30,7 @@
 #include <com/sun/star/ui/XUIElement.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
+#include <com/sun/star/ui/XUpdateModel.hpp>
 
 #include <boost/noncopyable.hpp>
 #include <boost/function.hpp>
@@ -43,10 +44,11 @@ namespace sfx2 { namespace sidebar {
 namespace
 {
 
-typedef cppu::WeakComponentImplHelper4<css::ui::XContextChangeEventListener,
+typedef cppu::WeakComponentImplHelper5<css::ui::XContextChangeEventListener,
                                        css::ui::XUIElement,
                                        css::ui::XToolPanel,
-                                       css::ui::XSidebarPanel>
+                                       css::ui::XSidebarPanel,
+                                       css::ui::XUpdateModel>
             SidebarPanelBaseInterfaceBase;
 }
 
@@ -92,6 +94,10 @@ public:
     virtual css::ui::LayoutSize SAL_CALL getHeightForWidth(sal_Int32 nWidth)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getMinimalWidth()
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XUpdateModel
+    virtual void SAL_CALL updateModel(const css::uno::Reference<css::frame::XModel>& xModel)
         throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
