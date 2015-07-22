@@ -391,8 +391,6 @@ public:
     /// MapMode for the drawinglayer objects.
     MapMode         GetDrawMapMode( bool bForce = false );
 
-    void            ContinueDrag();
-
     void            StopMarking();
     void            UpdateInputContext();
 

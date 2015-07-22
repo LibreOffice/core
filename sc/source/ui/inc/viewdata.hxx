@@ -275,7 +275,6 @@ public:
     SCROW           GetPosY( ScVSplitPos eWhich ) const     { return pThisTab->nPosY[eWhich]; }
     SCCOL           GetCurX() const                         { return pThisTab->nCurX; }
     SCROW           GetCurY() const                         { return pThisTab->nCurY; }
-    bool            HasOldCursor() const                    { return pThisTab->mbOldCursorValid; }
     SCCOL           GetOldCurX() const;
     SCROW           GetOldCurY() const;
     ScSplitMode     GetHSplitMode() const                   { return pThisTab->eHSplitMode; }
@@ -320,9 +319,6 @@ public:
 
     const MapMode&  GetLogicMode( ScSplitPos eWhich );
     const MapMode&  GetLogicMode();                     // Offset 0
-
-    long            GetTPosX( ScHSplitPos eWhich ) const        { return pThisTab->nTPosX[eWhich]; }
-    long            GetTPosY( ScVSplitPos eWhich ) const        { return pThisTab->nTPosY[eWhich]; }
 
     double          GetPPTX() const { return nPPTX; }
     double          GetPPTY() const { return nPPTY; }

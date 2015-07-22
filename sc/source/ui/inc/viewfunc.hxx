@@ -150,7 +150,6 @@ public:
                                     bool bTryReplace = false );
     bool            HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
 
-    long            DropRequestHdl( Exchange* pExchange );
     bool            MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
                                     bool bCut, bool bRecord, bool bPaint, bool bApi );
 
@@ -206,8 +205,6 @@ public:
 
     void            SetMarkedWidthOrHeight( bool bWidth, ScSizeMode eMode, sal_uInt16 nSizeTwips,
                                         bool bRecord = true, bool bPaint = true );
-    void            ShowMarkedColumns( bool bShow, bool bRecord = true );
-    void            ShowMarkedRows( bool bShow, bool bRecord = true );
 
     bool            AdjustBlockHeight( bool bPaint = true, ScMarkData* pMarkData = NULL );
     bool            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bPaint = true );
@@ -288,11 +285,6 @@ public:
 
     void            InsertSpecialChar( const OUString& rStr, const vcl::Font& rFont );
 
-    void            InsertDummyObject();
-    void            InsertOleObject();
-
-    void            InsertDraw();
-
     void            SetSelectionFrameLines( const ::editeng::SvxBorderLine* pLine,
                                             bool bColorOnly );
 
@@ -325,7 +317,6 @@ public:
     void            InsertCurrentTime(short nCellFmt, const OUString& rUndoStr);
 
     void            ShowNote( bool bShow = true );
-    inline void     HideNote() { ShowNote( false ); }
     void            EditNote();
 
     void            ForgetFormatArea()      { bFormatValid = false; }

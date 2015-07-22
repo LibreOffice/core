@@ -114,12 +114,8 @@ public:
 public:
     /** Sets a new handler for "update cell texts" requests. */
     inline void                 SetUpdateTextHdl( const Link<>& rHdl ) { maUpdateTextHdl = rHdl; }
-    /** Returns the handler for "update cell texts" requests. */
-    inline const Link<>&        GetUpdateTextHdl() const { return maUpdateTextHdl; }
     /** Sets a new handler for "column selection changed" events. */
     inline void                 SetColTypeHdl( const Link<>& rHdl ) { maColTypeHdl = rHdl; }
-    /** Returns the handler for "column selection changed" events. */
-    inline const Link<>&        GetColTypeHdl() const { return maColTypeHdl; }
 
 protected:
     virtual void                Resize() SAL_OVERRIDE;

@@ -298,8 +298,6 @@ public:
 
     virtual sal_Int32 SAL_CALL getBackground(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-protected:
-    void SwitchViewFireFocus() SAL_OVERRIDE;
 };
 
 #endif

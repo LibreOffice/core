@@ -462,8 +462,6 @@ public:
 
     /** Returns true, if a linked cell address is present. */
     inline bool         HasCellLink() const { return mxCellLink != 0; }
-    /** Returns true, if a linked source cell range is present. */
-    inline bool         HasSourceRange() const { return mxSrcRange != 0; }
 
     /** Returns the SdrObject from the passed control shape and sets the bounding rectangle. */
     SdrObject*          CreateSdrObjectFromShape(
@@ -587,7 +585,6 @@ protected:
     virtual XclTbxEventType DoGetEventType() const SAL_OVERRIDE;
 
 protected:
-    void ApplyGrouping( XclImpOptionButtonObj& rLeader, sal_Int32 nRefVal );
     sal_uInt16          mnNextInGroup;      /// Next option button in a group.
     sal_uInt16          mnFirstInGroup;     /// 1 = Button is the first in a group.
 };
@@ -1171,28 +1168,6 @@ public:
     /** Returns the name of overridden name ( or zero length string ) for
         associated object id. */
     OUString GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId );
-
-private:
-
-    /** Reads and returns a bitmap from WMF/PICT format. */
-    static void         ReadWmf( Graphic& rGraphic, XclImpStream& rStrm );
-    /** Reads and returns a bitmap from BMP format. */
-    static void         ReadBmp( Graphic& rGraphic, XclImpStream& rStrm );
-
-    /** Reads contents of an DFF record and append data to internal DFF stream. */
-    void                ReadDffRecord( XclImpStream& rStrm );
-    /** Reads a BIFF8 OBJ record following an MSODRAWING record. */
-    void                ReadObj8( XclImpStream& rStrm );
-    /** Reads the TXO record and following CONTINUE records containing string and formatting. */
-    void                ReadTxo( XclImpStream& rStrm );
-
-    /** Reads a BIFF3-BIFF5 NOTE record. */
-    void                ReadNote3( XclImpStream& rStrm );
-    /** Reads a BIFF8 NOTE record. */
-    void                ReadNote8( XclImpStream& rStrm );
-
-    /** Returns the size of the progress bar shown while processing all objects. */
-    sal_Size            GetProgressSize() const;
 
 private:
     typedef ::std::map< sal_uInt16, OUString >          DefObjNameMap;

@@ -308,8 +308,6 @@ public:
     void                StoreGlobalPosition();
     /** Seeks to the stored global user position. */
     void                SeekGlobalPosition();
-    /** Invalidates global user position. */
-    inline void         DeleteGlobalPosition() { mbHasGlobPos = false; }
 
     /** Returns record reading state: false = record overread. */
     inline bool         IsValid() const { return mbValid; }

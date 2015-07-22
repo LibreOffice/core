@@ -100,8 +100,6 @@ public:
 
     void            FillFieldData( ScHeaderFieldData& rData );
 
-    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >
-                    GetSourceData() const       { return aSourceData; }
     TriState        GetSourceDesignMode() const { return nSourceDesignMode; }
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;

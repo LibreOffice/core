@@ -137,18 +137,6 @@ struct BinRange
     inline explicit     BinRange( const ::com::sun::star::table::CellAddress& rFirst, const ::com::sun::star::table::CellAddress& rLast ) : maFirst( rFirst ), maLast( rLast ) {}
     inline explicit     BinRange( const ::com::sun::star::table::CellRangeAddress& rRange ) : maFirst( rRange.StartColumn, rRange.StartRow ), maLast( rRange.EndColumn, rRange.EndRow ) {}
 
-    inline void         set( const BinAddress& rFirst, const BinAddress& rLast )
-                            { maFirst = rFirst; maLast = rLast; }
-    inline void         set( sal_Int32 nCol1, sal_Int32 nRow1, sal_Int32 nCol2, sal_Int32 nRow2 )
-                            { maFirst.set( nCol1, nRow1 ); maLast.set( nCol2, nRow2 ); }
-    inline void         set( const ::com::sun::star::table::CellAddress& rFirst, const ::com::sun::star::table::CellAddress& rLast )
-                            { maFirst.set( rFirst ); maLast.set( rLast ); }
-    inline void         set( const ::com::sun::star::table::CellRangeAddress& rRange )
-                            { maFirst.set( rRange.StartColumn, rRange.StartRow ); maLast.set( rRange.EndColumn, rRange.EndRow ); }
-
-    inline sal_Int32    getColCount() const { return maLast.mnCol - maFirst.mnCol + 1; }
-    inline sal_Int32    getRowCount() const { return maLast.mnRow - maFirst.mnRow + 1; }
-
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
 };
@@ -279,13 +267,6 @@ public:
         imported/exported Excel document. */
     inline const ::com::sun::star::table::CellAddress&
                         getMaxAddress() const { return maMaxPos; }
-
-    /** Returns the column overflow status. */
-    inline bool         isColOverflow() const { return mbColOverflow; }
-    /** Returns the row overflow status. */
-    inline bool         isRowOverflow() const { return mbRowOverflow; }
-    /** Returns the sheet overflow status. */
-    inline bool         isTabOverflow() const { return mbTabOverflow; }
 
     /** Checks if the passed column index is valid.
 

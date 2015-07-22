@@ -309,8 +309,6 @@ protected:
 
     /** Sets this record to a new column position. */
     inline void         SetXclCol( sal_uInt16 nXclCol ) { maXclPos.mnCol = nXclCol; }
-    /** Sets this record to a new row position. */
-    inline void         SetXclRow( sal_uInt32 nXclRow ) { maXclPos.mnRow = nXclRow; }
 
 private:
     XclAddress          maXclPos;       /// Address of the cell.
@@ -497,11 +495,6 @@ public:
 protected:
     explicit            XclExpMultiCellBase( sal_uInt16 nRecId, sal_uInt16 nMulRecId,
                             sal_Size nContSize, const XclAddress& rXclPos );
-
-    /** Sets the size of the remaining contents of one cell (without the XF index). */
-    inline void         SetContSize( sal_Size nContSize ) { mnContSize = nContSize; }
-    /** Returns the size of the remaining contents of one cell (without the XF index). */
-    inline sal_Size     GetContSize() const { return mnContSize; }
 
     /** Returns the number of cells this record represents. */
     sal_uInt16          GetCellCount() const;
@@ -887,8 +880,6 @@ public:
     inline sal_uInt32   GetXclRowRpt() const { return mnXclRowRpt; }
     inline void         SetXclRowRpt( sal_uInt32 nRpt ){ mnXclRowRpt = nRpt; }
 private:
-    /** Initializes the record data. Called from constructors. */
-    void                Init( sal_uInt16 nXclRow, XclExpRowOutlineBuffer* pOutlineBfr );
     /** Inserts a cell at the specified list position, tries to merge with neighbors. */
     void                InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase );
 

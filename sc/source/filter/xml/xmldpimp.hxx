@@ -494,9 +494,6 @@ class ScXMLDataPilotSubTotalsContext : public SvXMLImportContext
     ScXMLImport& GetScImport() { return static_cast<ScXMLImport&>(GetImport()); }
 
 public:
-
-    ScXMLDataPilotFieldContext* GetDataPilotField() { return pDataPilotField; }
-
     ScXMLDataPilotSubTotalsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const OUString& rLName,
                         const ::com::sun::star::uno::Reference<

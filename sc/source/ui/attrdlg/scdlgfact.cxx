@@ -470,11 +470,6 @@ void    AbstractScMoveTableDlg_Impl::SetForceCopyTable()
     return pDlg->SetForceCopyTable();
 }
 
-void    AbstractScMoveTableDlg_Impl::EnableCopyTable(bool bFlag)
-{
-    return pDlg->EnableCopyTable( bFlag);
-}
-
 void    AbstractScMoveTableDlg_Impl::EnableRenameTable(bool bFlag)
 {
     return pDlg->EnableRenameTable( bFlag);
@@ -488,11 +483,6 @@ sal_uInt16 AbstractScNameCreateDlg_Impl::GetFlags() const
 std::vector<OUString> AbstractScNamePasteDlg_Impl::GetSelectedNames() const
 {
     return pDlg->GetSelectedNames();
-}
-
-bool AbstractScNamePasteDlg_Impl::IsAllSelected() const
-{
-    return false;
 }
 
 const ScQueryItem&   AbstractScPivotFilterDlg_Impl::GetOutputItem()

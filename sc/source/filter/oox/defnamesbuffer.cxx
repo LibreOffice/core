@@ -251,8 +251,7 @@ DefinedName::DefinedName( const WorkbookHelper& rHelper ) :
     mpScRangeData(NULL),
     mnTokenIndex( -1 ),
     mnCalcSheet( 0 ),
-    mcBuiltinId( BIFF_DEFNAME_UNKNOWN ),
-    mnFmlaSize( 0 )
+    mcBuiltinId( BIFF_DEFNAME_UNKNOWN )
 {
 }
 
@@ -343,42 +342,6 @@ void DefinedName::createNameObject( sal_Int32 nIndex )
     else
         mpScRangeData = createNamedRangeObject( maCalcName, ApiTokenSequence(), nIndex, nNameFlags );
     mnTokenIndex = nIndex;
-}
-
-ApiTokenSequence
-DefinedName::getTokens()
-{
-    // convert and set formula of the defined name
-    ApiTokenSequence aTokens;
-    switch( getFilterType() )
-    {
-        case FILTER_OOXML:
-        {
-            if( mxFormula.get() )
-            {
-                SequenceInputStream aStrm( *mxFormula );
-                aTokens = importBiff12Formula( mnCalcSheet, aStrm );
-            }
-            else
-                aTokens = importOoxFormula( mnCalcSheet );
-        }
-        break;
-        case FILTER_BIFF:
-        {
-            OSL_ENSURE( mxBiffStrm.get(), "DefinedName::convertFormula - missing BIFF stream" );
-            if( mxBiffStrm.get() )
-            {
-                BiffInputStream& rStrm = mxBiffStrm->getStream();
-                BiffInputStreamPosGuard aStrmGuard( rStrm );
-                if( mxBiffStrm->restorePosition() )
-                    aTokens = importBiffFormula( mnCalcSheet, rStrm, &mnFmlaSize );
-            }
-        }
-        break;
-        case FILTER_UNKNOWN:
-        break;
-    }
-    return aTokens;
 }
 
 std::unique_ptr<ScTokenArray> DefinedName::getScTokens()

@@ -325,28 +325,12 @@ void FormulaGroupAreaListener::collectFormulaCells(
     }
 }
 
-ScAddress FormulaGroupAreaListener::getTopCellPos() const
-{
-    const ScFormulaCell* p = getTopCell();
-    return p ? p->aPos : ScAddress();
-}
-
 const ScFormulaCell* FormulaGroupAreaListener::getTopCell() const
 {
     size_t nBlockSize = 0;
     const ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow, nBlockSize);
     SAL_WARN_IF(!pp, "sc", "GetFormulaCellBlockAddress not found");
     return pp ? *pp : NULL;
-}
-
-const ScRange& FormulaGroupAreaListener::getRange() const
-{
-    return maRange;
-}
-
-SCROW FormulaGroupAreaListener::getGroupLength() const
-{
-    return mnGroupLen;
 }
 
 void FormulaGroupAreaListener::notifyCellChange( const SfxHint& rHint, const ScAddress& rPos )

@@ -117,12 +117,11 @@ protected:
     sal_Int32               nBytesLeft;
 
     inline void         Ignore( const long nSeekRel );
-    inline void         Read( sal_Char& nByte );
     inline void         Read( sal_uInt8& nByte );
     inline void         Read( sal_uInt16& nUINT16 );
     inline void         Read( sal_Int16& nINT16 );
     inline void         Read( double& fDouble );
-        inline void                     Read( sal_uInt32& nUINT32 );
+    inline void         Read( sal_uInt32& nUINT32 );
 
     LotusConverterBase( SvStream& rStr, svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer );
     virtual             ~LotusConverterBase();
@@ -141,12 +140,6 @@ inline void LotusConverterBase::Ignore( const long nSeekRel )
 {
     aIn.SeekRel( nSeekRel );
     nBytesLeft -= nSeekRel;
-}
-
-inline void LotusConverterBase::Read( sal_Char& nByte )
-{
-    aIn.ReadChar( nByte );
-    nBytesLeft--;
 }
 
 inline void LotusConverterBase::Read( sal_uInt8& nByte )

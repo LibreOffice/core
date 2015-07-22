@@ -87,7 +87,6 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     bool        bIsEmpty;
     bool        mbNewValueType;
     bool        mbErrorValue;
-    bool        bIsFirstTextImport;
     bool        bSolarMutexLocked;
     bool        bFormulaTextResult;
     bool mbPossibleErrorCell;
@@ -95,8 +94,6 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
     bool mbEditEngineHasText;
     bool mbHasFormatRuns;
     bool mbHasStyle;
-
-    sal_Int16 GetCellType(const OUString& sOUValue) const;
 
     void DoMerge(const ScAddress& rScCellPos, const SCCOL nCols, const SCROW nRows);
 

@@ -221,7 +221,6 @@ public:
     virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields) = 0;
     sal_Int32 AddStyleName(OUString* pString);
     sal_Int32 GetIndexOfStyleName(const OUString& rString, const OUString& rPrefix);
-    virtual OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField) = 0;
     OUString* GetStyleNameByIndex(const sal_Int32 nIndex);
 };
 
@@ -247,7 +246,6 @@ public:
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField,
         bool& bIsVisible);
     void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex, const bool bIsVisible);
-    virtual OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField) SAL_OVERRIDE;
 };
 
 class ScRowStyles : public ScColumnRowStylesBase
@@ -274,7 +272,6 @@ public:
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField);
     void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex);
     void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nStartField, const sal_Int32 nStringIndex, const sal_Int32 nEndField);
-    virtual OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField) SAL_OVERRIDE;
 };
 
 #endif

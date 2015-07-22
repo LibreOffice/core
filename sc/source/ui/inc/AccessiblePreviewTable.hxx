@@ -166,9 +166,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  internal  ========================================================
-    void SetCurrentIndexInParent(sal_Int32 nNew) { mnIndex = nNew; }
-
 protected:
     virtual OUString SAL_CALL createAccessibleDescription() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL createAccessibleName()

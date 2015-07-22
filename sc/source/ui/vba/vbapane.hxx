@@ -35,8 +35,6 @@ public:
         const css::uno::Reference< css::frame::XModel >& rModel,
         const css::uno::Reference< css::sheet::XViewPane >& rViewPane ) throw (css::uno::RuntimeException);
 
-    css::uno::Reference< css::sheet::XViewPane > getViewPane() const { return m_xViewPane; }
-
     // XPane attributes
     virtual sal_Int32 SAL_CALL getScrollColumn() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setScrollColumn( sal_Int32 _scrollcolumn ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

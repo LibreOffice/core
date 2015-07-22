@@ -286,8 +286,6 @@ public:
 
     /** Sets a new command handler. */
     inline void                 SetCmdHdl( const Link<>& rHdl ) { maCmdHdl = rHdl; }
-    /** Returns the current command handler. */
-    inline const Link<>&        GetCmdHdl() const { return maCmdHdl; }
     /** Returns data of the last command. */
     inline const ScCsvCmd&      GetCmd() const { return maCmd; }
 

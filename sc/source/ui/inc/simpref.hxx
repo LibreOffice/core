@@ -84,8 +84,6 @@ public:
                                 const Link<>& rChange );
 
     void            SetFlags( bool bSetCloseOnButtonUp, bool bSetSingleCell, bool bSetMultiSelection );
-
-    void            SetAutoReOpen(bool bFlag) {bAutoReOpen=bFlag;}
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SIMPREF_HXX

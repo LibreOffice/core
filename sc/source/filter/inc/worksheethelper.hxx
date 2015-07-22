@@ -274,8 +274,6 @@ public:
         @descr  Row default formatting is converted directly, other settings
         are cached and converted in the finalizeWorksheetImport() call. */
     void                setRowModel( const RowModel& rModel );
-    /** Specifies that the passed row needs to set its height manually. */
-    void                setManualRowHeight( sal_Int32 nRow );
 
     /** Inserts a value cell directly into the Calc sheet. */
     void putValue( const com::sun::star::table::CellAddress& rAddress, double fValue );

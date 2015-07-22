@@ -86,9 +86,6 @@ public:
     /** Imports the DDEITEM_STRING record containing a string in a link result. */
     void                importDdeItemString( SequenceInputStream& rStrm );
 
-    /** Returns true, if the name refers to an OLE object. */
-    inline bool         isOleObject() const { return maExtNameModel.mbOleObj; }
-
 #if 0
     /** Returns the sheet cache index if this is a sheet-local external name. */
     sal_Int32           getSheetCacheIndex() const;

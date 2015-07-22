@@ -38,12 +38,6 @@ public:
                   const Size&   rSize,
                   bool          bState,
                   bool          bBtnIn = false );
-
-    void    Draw( const Point&  rAt,
-                  bool          bState,
-                  bool          bBtnIn = false )
-                { Draw( rAt, aBtnSize, bState, bBtnIn ); }
-
     void    Draw( bool          bState,
                   bool          bBtnIn = false )
                 { Draw( aBtnPos, aBtnSize, bState, bBtnIn ); }

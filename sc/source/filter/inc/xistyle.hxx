@@ -98,12 +98,8 @@ public:
     /** Returns the text encoding for strings used with this font. */
     rtl_TextEncoding    GetFontEncoding() const;
 
-    /** Returns true, if this font contains characters for Western scripts. */
-    inline bool         HasWesternChars() const { return mbHasWstrn; }
     /** Returns true, if this font contains characters for Asian scripts (CJK). */
     inline bool         HasAsianChars() const { return mbHasAsian; }
-    /** Returns true, if this font contains characters for Complex scripts (CTL). */
-    inline bool         HasComplexChars() const { return mbHasCmplx; }
 
     /** Reads a FONT record for all BIFF versions. */
     void                ReadFont( XclImpStream& rStrm );
@@ -390,7 +386,6 @@ public:
     void                ReadXF( XclImpStream& rStrm );
 
     inline sal_uInt8    GetHorAlign() const { return maAlignment.mnHorAlign; }
-    inline sal_uInt8    GetVerAlign() const { return maAlignment.mnVerAlign; }
     inline sal_uInt16   GetFontIndex() const { return mnXclFont; }
 
     /** Creates a Calc item set containing an item set with all cell properties.

@@ -66,9 +66,6 @@ private:
     sal_Int16                           nCurrentDrawPage;
     sal_Int16                           nCurrentXShapes;
 
-    void                                NewRow();
-    void                                NewColumn(bool bIsCovered);
-
     void                                SetTableStyle(const OUString& sStyleName);
 public:
                                         ScMyTables(ScXMLImport& rImport);
@@ -91,8 +88,6 @@ public:
     SCROW                               GetCurrentRow() const { return (maCurrentCellPos.Row() >= 0) ? maCurrentCellPos.Row() : 0; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >
                                         GetCurrentXSheet() const { return xCurrentSheet; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
-                                        GetCurrentXCellRange() const { return xCurrentCellRange; }
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
                                         GetCurrentXDrawPage();
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >

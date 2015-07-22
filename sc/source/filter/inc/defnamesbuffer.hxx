@@ -114,7 +114,6 @@ public:
     void                createNameObject( sal_Int32 nIndex );
     /** Converts the formula string or BIFF token array for this defined name. */
     void                convertFormula();
-    ApiTokenSequence    getTokens();
     std::unique_ptr<ScTokenArray> getScTokens();
     /** Returns true, if this defined name is global in the document. */
     inline bool         isGlobalName() const { return mnCalcSheet < 0; }
@@ -135,12 +134,6 @@ public:
     bool                getAbsoluteRange( ::com::sun::star::table::CellRangeAddress& orRange ) const;
 
 private:
-    /** Imports the OOXML or BIFF12 definition of the name. */
-    void                implImportOoxFormula();
-    /** Imports the BIFF definition of the name. */
-    void                implImportBiffFormula();
-
-private:
     typedef ::std::unique_ptr< StreamDataSequence >   StreamDataSeqPtr;
     typedef ::std::unique_ptr< BiffInputStreamPos >   BiffStreamPosPtr;
 
@@ -150,7 +143,6 @@ private:
     sal_Unicode         mcBuiltinId;        /// Identifier for built-in defined names.
     StreamDataSeqPtr    mxFormula;          /// Formula data for BIFF12 import.
     BiffStreamPosPtr    mxBiffStrm;         /// Cached BIFF stream for formula import.
-    sal_uInt16          mnFmlaSize;         /// Cached BIFF formula size for formula import.
 };
 
 typedef std::shared_ptr< DefinedName > DefinedNameRef;

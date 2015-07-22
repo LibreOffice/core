@@ -113,7 +113,6 @@ public:
         const formula::FormulaGrammar::Grammar eGrammar );
 
     bool            ShowNote( const ScAddress& rPos, bool bShow = true );
-    inline bool     HideNote( const ScAddress& rPos ) { return ShowNote( rPos, false ); }
 
     bool            SetNoteText( const ScAddress& rPos, const OUString& rNoteText, bool bApi );
     bool            ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, const OUString* pAuthor, const OUString* pDate, bool bApi );

@@ -202,7 +202,7 @@ public:
 
                                     // only for Range-Names
         const TokenId               Store( const sal_uInt16 nIndex );
-        inline const TokenId        Store( const sal_Int16 nWert );
+        ;
         const TokenId               Store( const OUString& rString );
         const TokenId               Store( const ScSingleRefData& rTr );
         const TokenId               Store( const ScComplexRefData& rTr );
@@ -216,10 +216,8 @@ public:
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
         const TokenId               StoreExtRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
 
-        inline const TokenId        LastId() const;
         inline const ScTokenArray*  operator []( const TokenId& rId );
         void                        Reset();
-        inline E_TYPE               GetType( const TokenId& rId ) const;
         bool                        IsSingleOp( const TokenId& rId, const DefTokenId eId ) const;
         const OUString*             GetExternal( const TokenId& rId ) const;
         ScMatrix*                   GetMatrix( unsigned int n ) const;
@@ -350,16 +348,6 @@ inline const TokenId TokenPool::Store()
     return nId;
 }
 
-inline const TokenId TokenPool::Store( const sal_Int16 nWert )
-{
-    return Store( ( double ) nWert );
-}
-
-inline const TokenId TokenPool::LastId() const
-{
-    return static_cast<TokenId>(nElementAkt); // correct, as Ausgabe with Offset 1!
-}
-
 const inline ScTokenArray* TokenPool::operator []( const TokenId& rId )
 {
     pScToken->ClearScTokenArray();
@@ -375,19 +363,7 @@ const inline ScTokenArray* TokenPool::operator []( const TokenId& rId )
     return pScToken;
 }
 
-inline E_TYPE TokenPool::GetType( const TokenId& rId ) const
-{
-    E_TYPE nRet;
 
-    sal_uInt16 nId = (sal_uInt16) rId - 1;
-
-    if( nId < nElementAkt )
-        nRet = pType[ nId ] ;
-    else
-        nRet = T_Error;
-
-    return nRet;
-}
 
 #endif
 

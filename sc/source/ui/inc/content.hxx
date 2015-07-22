@@ -155,8 +155,6 @@ public:
     void ApplyNavigatorSettings();
     /** Stores the current listbox state in the navigator settings. */
     void StoreNavigatorSettings() const;
-
-    static bool IsInDrag()  { return bIsInDrag; }
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_CONTENT_HXX

@@ -619,58 +619,6 @@ void FuText::Deactivate()
 
 /*************************************************************************
 |*
-|* Selektion hat sich geaendert
-|*
-\************************************************************************/
-
-void FuText::SelectionHasChanged()
-{
-    pView->SetDragMode(SDRDRAG_MOVE);
-    SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-    rBindings.Invalidate( SID_OBJECT_ROTATE );
-    rBindings.Invalidate( SID_OBJECT_MIRROR );
-
-    pTextObj = NULL;
-
-    if ( pView->AreObjectsMarked() )
-    {
-        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-
-        if (rMarkList.GetMarkCount() == 1)
-        {
-            SdrMark* pMark = rMarkList.GetMark(0);
-            SdrObject* pObj = pMark->GetMarkedSdrObj();
-
-            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
-
-            if (nSdrObjKind == OBJ_TEXT ||
-                nSdrObjKind == OBJ_TITLETEXT ||
-                nSdrObjKind == OBJ_OUTLINETEXT /* ||
-                pObj->ISA(SdrTextObj) */ )
-            {
-                pTextObj = static_cast<SdrTextObj*>(pObj);
-            }
-        }
-    }
-
-    if (!pTextObj)
-    {
-        /**********************************************************************
-        * Kein Textobjekt im EditMode, daher CreateMode setzen
-        **********************************************************************/
-        sal_uInt16 nObj = OBJ_TEXT;
-        sal_uInt16 nIdent;
-        sal_uInt32 nInvent;
-        pView->TakeCurrentObj(nIdent, nInvent);
-
-        pView->SetCurrentObj(nObj);
-
-        pView->SetCreateMode();
-    }
-}
-
-/*************************************************************************
-|*
 |* Objekt in Edit-Mode setzen
 |*
 \************************************************************************/

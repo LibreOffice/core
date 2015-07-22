@@ -26,7 +26,7 @@ enum SC_SPLIT_DIRECTION {SC_SPLIT_HORZ,SC_SPLIT_VERT };
 
 class ScPrivatSplit : public Control
 {
-    private:
+private:
 
         Link<>              aCtrModifiedLink;
         bool                aMovingFlag;
@@ -44,17 +44,16 @@ class ScPrivatSplit : public Control
         using Control::ImplInitSettings;
         void                ImplInitSettings( bool bFont, bool bForeground, bool bBackground );
 
-    protected:
+protected:
         virtual void        MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
         virtual void        MouseButtonUp( const MouseEvent& rMEvt) SAL_OVERRIDE;
 
-    public:
+public:
 
         ScPrivatSplit( vcl::Window* pWindow, const ResId& rResId,
                         SC_SPLIT_DIRECTION eScSplit);
 
-        short           GetDeltaX();
         short           GetDeltaY();
 
         void            CtrModified();
@@ -67,7 +66,6 @@ class ScPrivatSplit : public Control
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
         void            SetCtrModifiedHdl( const Link<>& rLink ) { aCtrModifiedLink = rLink; }
-        const Link<>&   GetCtrModifiedHdl() const { return aCtrModifiedLink; }
 };
 
 #endif

@@ -127,7 +127,6 @@ public:
     OString         GetSelectedIdent() const { return aSelectedIdent;}
 
     void            SetMenuHdl( const Link<>& rLink ) { aMLink = rLink; }
-    const Link<>&   GetMenuHdl() const { return aMLink; }
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };

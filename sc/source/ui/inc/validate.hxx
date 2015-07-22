@@ -71,8 +71,6 @@ public:
     }
     void    SetRefInputStartPreHdl( PINPUTSTARTDLTYPE pNewHdl   ){  m_pRefInputStartPreHdl = pNewHdl;   }
     void    SetRefInputDonePostHdl( void            (ScRefHandlerCaller::*pNewHdl)()    ){  m_pRefInputDonePostHdl = pNewHdl;   }
-    void    SetRefInputStartPostHdl(    PINPUTSTARTDLTYPE pNewHdl   ){  m_pRefInputStartPostHdl = pNewHdl;  }
-    void    SetRefInputDonePreHdl( void            (ScRefHandlerCaller::*pNewHdl)() ){  m_pRefInputDonePreHdl = pNewHdl;    }
 
     ScRefHandlerHelper():m_pHandler(NULL), m_pSetReferenceHdl( NULL ), m_pSetActiveHdl(NULL),  m_pRefInputStartPreHdl( NULL ), m_pRefInputStartPostHdl( NULL ), m_pRefInputDonePreHdl( NULL ),  m_pRefInputDonePostHdl( NULL ){}
 };
@@ -162,8 +160,6 @@ private:
     void            RefInputDonePostHdl();
     ScValidationDlg * GetValidationDlg();
 public:
-    sal_uInt16      GetAllowEntryPos();
-    OUString        GetMinText();
     void            SetupRefDlg();
     void            RemoveRefDlg();
 };
@@ -220,16 +216,6 @@ public:
     {
         if ( m_pHandler && m_pSetActiveHdl )
             (m_pHandler->*m_pSetActiveHdl)();
-    }
-
-    void        CloseRefDialog()
-    {
-        OSL_FAIL( "should not execute here!!!when the edit kill focus, should remove refhandler.\r\n" );
-
-        if ( IsInExecute() )
-            EndDialog( RET_CANCEL );
-        else if ( GetStyle() & WB_CLOSEABLE )
-            Close();
     }
 
     bool IsRefInputting(){  return m_bRefInputting; }

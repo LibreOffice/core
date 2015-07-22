@@ -67,15 +67,6 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
     const ScAddress&        GetPos() const      { return aCursorPos; }
-    const ScAddress&        GetStartPos() const { return aStartPos; }
-    const ScAddress&        GetEndPos() const   { return aEndPos; }
-    SCTAB                   GetTab() const      { return aCursorPos.Tab(); }
-    SCCOL                   GetCol() const      { return aCursorPos.Col(); }
-    SCROW                   GetRow() const      { return aCursorPos.Row(); }
-    SCCOL                   GetStartCol() const { return aStartPos.Col(); }
-    SCROW                   GetStartRow() const { return aStartPos.Row(); }
-    SCCOL                   GetEndCol() const   { return aEndPos.Col(); }
-    SCROW                   GetEndRow() const   { return aEndPos.Row(); }
 
     const OUString&         GetString() const   { return aString; }
     const EditTextObject*   GetEditData() const { return pEditData; }
