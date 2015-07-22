@@ -25,7 +25,6 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
-#include <swvset.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
