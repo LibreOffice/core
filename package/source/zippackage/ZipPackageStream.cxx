@@ -472,6 +472,7 @@ public:
 private:
     virtual void doWork() SAL_OVERRIDE
     {
+        mpEntry->createBufferFile();
         try
         {
             deflateZipEntry(mpEntry, mxInStream);
@@ -481,6 +482,7 @@ private:
         {
             mpEntry->setParallelDeflateException(::cppu::getCaughtException());
         }
+        mpEntry->closeBufferFile();
     }
 };
 
