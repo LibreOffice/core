@@ -2170,15 +2170,18 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
         if (pA)
             sAuthor = *pA;
         else
-            sAuthor = OUString(pDescri->xstUsrInitl + 1, pDescri->xstUsrInitl[0],
-                RTL_TEXTENCODING_MS_1252);
+        {
+            const sal_uInt8 nLen = std::min<sal_uInt8>(pDescri->xstUsrInitl[0],
+                                                       SAL_N_ELEMENTS(pDescri->xstUsrInitl)-1);
+            sAuthor = OUString(pDescri->xstUsrInitl + 1, nLen, RTL_TEXTENCODING_MS_1252);
+        }
     }
     else
     {
         const WW8_ATRD* pDescri = static_cast<const WW8_ATRD*>(pSD->GetData());
-
         {
-            const sal_uInt16 nLen = SVBT16ToShort(pDescri->xstUsrInitl[0]);
+            const sal_uInt16 nLen = std::min<sal_uInt16>(SVBT16ToShort(pDescri->xstUsrInitl[0]),
+                                                         SAL_N_ELEMENTS(pDescri->xstUsrInitl)-1);
             OUStringBuffer aBuf;
             aBuf.setLength(nLen);
             for(sal_uInt16 nIdx = 1; nIdx <= nLen; ++nIdx)
