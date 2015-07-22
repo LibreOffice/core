@@ -48,9 +48,9 @@
 // Problem der Implementation: Keine Hierarchischen commits. Daher nur
 // insgesamt transaktionsorientert oder direkt.
 
-StgDirEntry::StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, bool * pbOk ) : StgAvlNode()
+StgDirEntry::StgDirEntry( const void* pBuffer, sal_uInt32 nBufferLen, sal_uInt64 nUnderlyingStreamSize, bool * pbOk ) : StgAvlNode()
 {
-    *pbOk = aEntry.Load( pBuffer, nBufferLen );
+    *pbOk = aEntry.Load( pBuffer, nBufferLen, nUnderlyingStreamSize );
 
     InitMembers();
 }
@@ -819,8 +819,13 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
     void* p = ( n == STG_FREE ) ? NULL : GetEntry( n );
     if( p )
     {
+        SvStream *pUnderlyingStream = rIo.GetStrm();
+        sal_uInt64 nCur = pUnderlyingStream->Tell();
+        sal_uInt64 nUnderlyingStreamSize = pUnderlyingStream->Seek(STREAM_SEEK_TO_END);
+        pUnderlyingStream->Seek(nCur);
+
         bool bOk(false);
-        StgDirEntry* pCur = new StgDirEntry( p, STGENTRY_SIZE, &bOk );
+        StgDirEntry* pCur = new StgDirEntry( p, STGENTRY_SIZE, nUnderlyingStreamSize, &bOk );
 
         if( !bOk )
         {

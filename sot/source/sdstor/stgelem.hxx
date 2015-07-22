@@ -129,7 +129,7 @@ public:
     void        GetName( OUString& rName ) const;
                                         // fill in the name
     sal_Int32   Compare( const StgEntry& ) const;   // compare two entries
-    bool        Load( const void* pBuffer, sal_uInt32 nBufSize );
+    bool        Load( const void* pBuffer, sal_uInt32 nBufSize, sal_uInt64 nUnderlyingStreamSize );
     void        Store( void* );
     StgEntryType GetType() const            { return (StgEntryType) cType;  }
     sal_Int32   GetStartPage() const        { return nPage1; }
