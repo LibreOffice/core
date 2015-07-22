@@ -42,10 +42,6 @@ struct SwBmpItemInfo
     sal_uInt16          nItemId;
 };
 
-#define NUM_PAGETYPE_BULLET         0
-#define NUM_PAGETYPE_SINGLENUM      1
-#define NUM_PAGETYPE_NUM            2
-#define NUM_PAGETYPE_BMP            3
 
 class SwNumPositionTabPage : public SfxTabPage
 {

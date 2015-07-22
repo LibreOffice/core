@@ -102,7 +102,6 @@ namespace framework{
 #define PATHSETTINGS_PROPNAME_ASCII_USERDICTIONARY      "UserDictionary"
 #define PATHSETTINGS_PROPNAME_ASCII_WORK                "Work"
 
-#define PATHSETTINGS_PROPCOUNT                          24
 
 /** properties for "LayoutManager" class */
 

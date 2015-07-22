@@ -24,7 +24,6 @@
 
 #define CGM_IMPORT_CGM      0x00000001
 #define CGM_EXPORT_IMPRESS  0x00000100
-#define CGM_EXPORT_META     0x00000200
 
 #include <rtl/ustring.hxx>
 #include <vector>
