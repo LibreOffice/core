@@ -37,7 +37,8 @@ class ZipOutputEntry
 {
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aDeflateBuffer;
     ZipUtils::Deflater m_aDeflater;
-    css::uno::Reference< css::io::XTempFile > m_xTempFile;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    OUString m_aTempURL;
     css::uno::Reference< css::io::XOutputStream > m_xOutStream;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XCipherContext > m_xCipherContext;
@@ -58,7 +59,8 @@ public:
 
     ~ZipOutputEntry();
 
-    css::uno::Reference< css::io::XInputStream > getData();
+    void closeBufferFile();
+    css::uno::Reference< css::io::XInputStream > getData() const;
     ZipEntry* getZipEntry() { return m_pCurrentEntry; }
     ZipPackageStream* getZipPackageStream() { return m_pCurrentStream; }
     bool isEncrypt() { return m_bEncryptCurrentEntry; }

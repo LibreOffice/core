@@ -481,6 +481,7 @@ private:
         {
             mpEntry->setParallelDeflateException(::cppu::getCaughtException());
         }
+        mpEntry->closeBufferFile();
     }
 };
 
