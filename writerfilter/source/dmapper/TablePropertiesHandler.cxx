@@ -90,8 +90,14 @@ namespace dmapper {
                     const int MINLAY = 23; // sw/inc/swtypes.hxx, minimal possible size of frames.
                     if (!pManager || !pManager->HasBtlrCell() || pMeasureHandler->getMeasureValue() > ConversionHelper::convertTwipToMM100(MINLAY))
                     {
-                        // In case a cell already wanted fixed size, we should not overwrite it here.
-                        if (!pManager || !pManager->IsRowSizeTypeInserted())
+                        bool bCantSplit = false;
+                        if (pManager && pManager->getRowProps())
+                        {
+                            boost::optional<PropertyMap::Property> oIsSplitAllowed = pManager->getRowProps()->getProperty(PROP_IS_SPLIT_ALLOWED);
+                            bCantSplit = oIsSplitAllowed && !oIsSplitAllowed->second.get<bool>();
+                        }
+                        // In case a cell already wanted fixed size and the row has <w:cantSplit/>, we should not overwrite it here.
+                        if (!pManager || !pManager->IsRowSizeTypeInserted() || !bCantSplit)
                             pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ), false);
                         else
                             pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny(text::SizeType::FIX), false);
