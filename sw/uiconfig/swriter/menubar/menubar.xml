@@ -143,6 +143,7 @@
       <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
       <menu:menuitem menu:id=".uno:Ruler"/>
       <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:HideWhitespace"/>
       <menu:menuitem menu:id=".uno:ViewBounds"/>
       <menu:menuitem menu:id=".uno:TableBoundaries"/>
       <menu:menuitem menu:id=".uno:Marks"/>
