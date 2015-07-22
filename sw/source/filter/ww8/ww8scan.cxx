@@ -3889,13 +3889,8 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 {
                     if (pExtraArray)
                     {
-                        ww::bytes extraData;
-                        for (sal_uInt16 j = 0; j < nExtraLen; ++j)
-                        {
-                            sal_uInt8 iTmp(0);
-                            rStrm.ReadUChar( iTmp );
-                            extraData.push_back(iTmp);
-                        }
+                        ww::bytes extraData(nExtraLen);
+                        rStrm.Read(extraData.data(), nExtraLen);
                         pExtraArray->push_back(extraData);
                     }
                     else
@@ -3950,13 +3945,8 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
                 {
                     if (pExtraArray)
                     {
-                        ww::bytes extraData;
-                        for (sal_uInt16 i=0;i < nExtraLen;++i)
-                        {
-                            sal_uInt8 iTmp(0);
-                            rStrm.ReadUChar( iTmp );
-                            extraData.push_back(iTmp);
-                        }
+                        ww::bytes extraData(nExtraLen);
+                        rStrm.Read(extraData.data(), nExtraLen);
                         pExtraArray->push_back(extraData);
                     }
                     else
