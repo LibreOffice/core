@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_edc9c2ad",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3571,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-07-22T12:36:21Z",
+      "side": 1,
+      "message": "Wouldn\u0027t falling back when devenv.exe doesn\u0027t exist, regardless of version, be better?",
+      "range": {
+        "startLine": 3571,
+        "startChar": 8,
+        "endLine": 3571,
+        "endChar": 56
+      },
+      "revId": "179684c429cb6e080b184b461f90d6b3015ea6c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
