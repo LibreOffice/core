@@ -526,11 +526,11 @@ HeaderUnitDescriptor UnitsImpl::findHeaderUnitForCell(const ScAddress& rCellAddr
     return { false, UtUnit(), boost::optional< ScAddress >(), OUString(""), -1 };
 }
 
-FormulaStatus UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) {
+FormulaStatus UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc)
+{
 #if DEBUG_FORMULA_COMPILER
     pArray->Dump();
 #endif
-
     stack< RAUSItem > aStack;
 
     for (FormulaToken* pToken = pArray->FirstRPN(); pToken != 0; pToken = pArray->NextRPN()) {
