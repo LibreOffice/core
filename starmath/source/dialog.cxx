@@ -1384,6 +1384,10 @@ void SmShowSymbol::Resize()
     Invalidate();
 }
 
+void SmShowSymbol::ApplySettings(vcl::RenderContext& /*rRenderContext*/ )
+{
+}
+
 void SmShowSymbol::setFontSize(vcl::Font &rFont) const
 {
     rFont.SetSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
