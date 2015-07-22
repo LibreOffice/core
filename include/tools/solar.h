@@ -47,12 +47,14 @@ typedef sal_uInt8   SVBT64[8];
 
 #ifdef __cplusplus
 
-inline sal_uInt16 SVBT16ToShort( const SVBT16 p ) { return (sal_uInt16)p[0]
-                                                   + ((sal_uInt16)p[1] <<  8); }
-inline sal_uInt32 SVBT32ToUInt32 ( const SVBT32 p ) { return (sal_uInt32)p[0]
+inline sal_uInt16 SVBT16ToShort( const SVBT16 p ) { return static_cast<sal_uInt16>
+                                                     ((sal_uInt16)p[0]
+                                                   + ((sal_uInt16)p[1] <<  8)); }
+inline sal_uInt32 SVBT32ToUInt32 ( const SVBT32 p ) { return static_cast<sal_uInt32>
+                                                     ((sal_uInt32)p[0]
                                                    + ((sal_uInt32)p[1] <<  8)
                                                    + ((sal_uInt32)p[2] << 16)
-                                                   + ((sal_uInt32)p[3] << 24); }
+                                                   + ((sal_uInt32)p[3] << 24)); }
 #if defined OSL_LITENDIAN
 inline double   SVBT64ToDouble( const SVBT64 p ) { double n;
                                                     reinterpret_cast<sal_uInt8*>(&n)[0] = p[0];
