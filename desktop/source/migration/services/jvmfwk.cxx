@@ -18,7 +18,7 @@
  */
 
 
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -78,7 +78,7 @@ CJavaInfo::~CJavaInfo()
 
 
 
-class JavaMigration : public ::cppu::WeakImplHelper4<
+class JavaMigration : public ::cppu::WeakImplHelper<
     css::lang::XServiceInfo,
     css::lang::XInitialization,
     css::task::XJob,

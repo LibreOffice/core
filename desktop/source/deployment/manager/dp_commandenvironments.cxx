@@ -29,6 +29,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "dp_commandenvironments.hxx"
+#include <osl/diagnose.h>
 
 namespace deployment = com::sun::star::deployment;
 namespace task = com::sun::star::task;

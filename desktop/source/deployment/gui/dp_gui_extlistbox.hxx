@@ -27,7 +27,7 @@
 #include <vcl/dialog.hxx>
 
 #include <svtools/extensionlistbox.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <unotools/collatorwrapper.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
@@ -90,7 +90,7 @@ struct Entry_Impl
 class ExtensionBox_Impl;
 
 
-class ExtensionRemovedListener : public ::cppu::WeakImplHelper1<css::lang::XEventListener>
+class ExtensionRemovedListener : public ::cppu::WeakImplHelper<css::lang::XEventListener>
 {
     VclPtr<ExtensionBox_Impl>   m_pParent;
 

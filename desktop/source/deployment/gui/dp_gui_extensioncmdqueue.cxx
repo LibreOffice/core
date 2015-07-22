@@ -59,7 +59,7 @@
 #include <salhelper/thread.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/anytostring.hxx>
 #include <vcl/layout.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -114,7 +114,7 @@ namespace dp_gui {
 
 
 class ProgressCmdEnv
-    : public ::cppu::WeakImplHelper3< ucb::XCommandEnvironment,
+    : public ::cppu::WeakImplHelper< ucb::XCommandEnvironment,
                                       task::XInteractionHandler,
                                       ucb::XProgressHandler >
 {

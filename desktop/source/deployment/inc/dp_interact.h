@@ -21,7 +21,7 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_INTERACT_H
 
 #include <rtl/ref.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/task/XAbortChannel.hpp>
@@ -104,7 +104,7 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool interactContinuation(
 
 
 class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC AbortChannel :
-    public ::cppu::WeakImplHelper1<css::task::XAbortChannel>
+    public ::cppu::WeakImplHelper<css::task::XAbortChannel>
 {
     bool m_aborted;
     css::uno::Reference<css::task::XAbortChannel> m_xNext;

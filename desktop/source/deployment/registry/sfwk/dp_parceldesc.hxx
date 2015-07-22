@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SFWK_DP_PARCELDESC_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SFWK_DP_PARCELDESC_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
@@ -37,7 +37,7 @@ namespace backend
 namespace sfwk
 {
 
-typedef ::cppu::WeakImplHelper1< css::xml::sax::XDocumentHandler > t_DocHandlerImpl;
+typedef ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler > t_DocHandlerImpl;
 
 class ParcelDescDocHandler : public t_DocHandlerImpl
 {

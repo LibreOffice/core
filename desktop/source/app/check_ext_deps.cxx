@@ -26,7 +26,7 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <vcl/wrkwin.hxx>
 #include <vcl/timer.hxx>
@@ -68,7 +68,7 @@ namespace
 {
 //For use with XExtensionManager.synchronize
 class SilentCommandEnv
-    : public ::cppu::WeakImplHelper3< ucb::XCommandEnvironment,
+    : public ::cppu::WeakImplHelper< ucb::XCommandEnvironment,
                                       task::XInteractionHandler,
                                       ucb::XProgressHandler >
 {

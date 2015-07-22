@@ -31,8 +31,7 @@
 
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ucbhelper/content.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -57,7 +56,7 @@ namespace migration
     // class ExtensionMigration
 
 
-    typedef ::cppu::WeakImplHelper3<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::task::XJob > ExtensionMigration_BASE;
@@ -111,7 +110,7 @@ namespace migration
     };
 
     class TmpRepositoryCommandEnv
-        : public ::cppu::WeakImplHelper3< ::com::sun::star::ucb::XCommandEnvironment,
+        : public ::cppu::WeakImplHelper< ::com::sun::star::ucb::XCommandEnvironment,
                                           ::com::sun::star::task::XInteractionHandler,
                                           ::com::sun::star::ucb::XProgressHandler >
     {

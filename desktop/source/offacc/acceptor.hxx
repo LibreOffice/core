@@ -32,8 +32,7 @@
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
 #include <com/sun/star/bridge/XBridgeFactory2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -49,7 +48,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace desktop {
 
 class  Acceptor
-    : public ::cppu::WeakImplHelper2<css::lang::XServiceInfo, css::lang::XInitialization>
+    : public ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::lang::XInitialization>
 {
 private:
     osl::Mutex m_aMutex;
@@ -93,7 +92,7 @@ public:
     static css::uno::Reference<css::uno::XInterface> impl_getInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aFactory );
 };
 
-class AccInstanceProvider : public ::cppu::WeakImplHelper1<css::bridge::XInstanceProvider>
+class AccInstanceProvider : public ::cppu::WeakImplHelper<css::bridge::XInstanceProvider>
 {
 private:
     css::uno::Reference<css::uno::XComponentContext> m_rContext;

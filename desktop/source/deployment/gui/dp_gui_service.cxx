@@ -21,7 +21,7 @@
 #include "dp_gui_shared.hxx"
 #include "dp_gui.h"
 #include "dp_gui_theextmgr.hxx"
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
@@ -138,7 +138,7 @@ OUString ReplaceProductNameHookProc( const OUString& rStr )
 
 
 class ServiceImpl
-    : public ::cppu::WeakImplHelper2<ui::dialogs::XAsynchronousExecutableDialog,
+    : public ::cppu::WeakImplHelper<ui::dialogs::XAsynchronousExecutableDialog,
                                      task::XJobExecutor>
 {
     Reference<XComponentContext> const m_xComponentContext;

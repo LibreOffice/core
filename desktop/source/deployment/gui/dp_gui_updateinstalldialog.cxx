@@ -29,7 +29,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -113,7 +113,7 @@ private:
 };
 
 class UpdateCommandEnv
-    : public ::cppu::WeakImplHelper3< css::ucb::XCommandEnvironment,
+    : public ::cppu::WeakImplHelper< css::ucb::XCommandEnvironment,
                                       css::task::XInteractionHandler,
                                       css::ucb::XProgressHandler >
 {

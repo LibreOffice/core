@@ -20,7 +20,7 @@
 
 #include "dp_manager.h"
 #include "dp_resource.h"
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <com/sun/star/deployment/thePackageManagerFactory.hpp>
 #include <unordered_map>
@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 namespace dp_manager {
 namespace factory {
 
-typedef ::cppu::WeakComponentImplHelper1<
+typedef ::cppu::WeakComponentImplHelper<
     deployment::XPackageManagerFactory > t_pmfac_helper;
 
 

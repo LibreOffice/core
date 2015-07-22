@@ -20,7 +20,7 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_LICENSE_DIALOG_HXX
 
 #include "dp_gui.h"
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
@@ -29,7 +29,7 @@
 namespace dp_gui {
 
 class LicenseDialog
-    : public ::cppu::WeakImplHelper1<css::ui::dialogs::XExecutableDialog>
+    : public ::cppu::WeakImplHelper<css::ui::dialogs::XExecutableDialog>
 {
     css::uno::Reference<css::uno::XComponentContext> const m_xComponentContext;
     css::uno::Reference<css::awt::XWindow> /* const */ m_parent;

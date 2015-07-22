@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
@@ -64,7 +64,7 @@ public:
 };
 
 class  SplashScreen
-    : public ::cppu::WeakImplHelper3< XStatusIndicator, XInitialization, XServiceInfo >
+    : public ::cppu::WeakImplHelper< XStatusIndicator, XInitialization, XServiceInfo >
 {
     friend class SplashScreenWindow;
 private:

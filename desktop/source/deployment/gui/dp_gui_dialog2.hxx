@@ -38,7 +38,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
@@ -244,7 +244,7 @@ public:
 };
 
 
-class UpdateRequiredDialogService : public ::cppu::WeakImplHelper1< ::com::sun::star::ui::dialogs::XExecutableDialog >
+class UpdateRequiredDialogService : public ::cppu::WeakImplHelper< ::com::sun::star::ui::dialogs::XExecutableDialog >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const m_xComponentContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xParent;

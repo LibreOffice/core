@@ -25,7 +25,7 @@
 #include <rtl/uri.hxx>
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <svl/inettype.hxx>
 #include <com/sun/star/util/XUpdatable.hpp>
@@ -45,7 +45,7 @@ namespace backend {
 namespace script {
 namespace {
 
-typedef ::cppu::ImplInheritanceHelper1<
+typedef ::cppu::ImplInheritanceHelper<
     ::dp_registry::backend::PackageRegistryBackend, util::XUpdatable > t_helper;
 
 class BackendImpl : public t_helper

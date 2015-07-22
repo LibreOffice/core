@@ -31,7 +31,7 @@
 #include <osl/signal.h>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/conditn.hxx>
 #include <salhelper/thread.hxx>
 #include <boost/optional.hpp>
@@ -127,7 +127,7 @@ class OfficeIPCThread : public salhelper::Thread
 };
 
 
-class OfficeIPCThreadController : public ::cppu::WeakImplHelper2<
+class OfficeIPCThreadController : public ::cppu::WeakImplHelper<
                                             ::com::sun::star::lang::XServiceInfo,
                                             ::com::sun::star::frame::XTerminateListener >
 {
