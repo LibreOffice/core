@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
 
@@ -48,7 +48,7 @@ namespace migration
     // class BasicMigration
 
 
-    typedef ::cppu::WeakImplHelper3<
+    typedef ::cppu::WeakImplHelper<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XInitialization,
         ::com::sun::star::task::XJob > BasicMigration_BASE;

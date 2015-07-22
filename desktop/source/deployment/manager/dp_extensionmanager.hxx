@@ -25,7 +25,7 @@
 #include "dp_interact.h"
 #include "dp_activepackages.hxx"
 #include <rtl/ref.hxx>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
@@ -41,7 +41,7 @@ typedef std::unordered_map<
     OUStringHash > id2extensions;
 
 class ExtensionManager : private ::dp_misc::MutexHolder,
-        public ::cppu::WeakComponentImplHelper1< css::deployment::XExtensionManager >
+        public ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager >
 {
 public:
     explicit ExtensionManager( css::uno::Reference< css::uno::XComponentContext >const& xContext);

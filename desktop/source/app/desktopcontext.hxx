@@ -20,12 +20,12 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_APP_DESKTOPCONTEXT_HXX
 #define INCLUDED_DESKTOP_SOURCE_APP_DESKTOPCONTEXT_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <uno/current_context.hxx>
 
 namespace desktop
 {
-    class DesktopContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >
+    class DesktopContext: public cppu::WeakImplHelper< com::sun::star::uno::XCurrentContext >
     {
     public:
     DesktopContext( const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > & ctx);

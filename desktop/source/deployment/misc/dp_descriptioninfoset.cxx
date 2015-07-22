@@ -46,8 +46,7 @@
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustring.h>
@@ -60,7 +59,7 @@ namespace {
 using css::uno::Reference;
 
 class EmptyNodeList:
-    public cppu::WeakImplHelper1<css::xml::dom::XNodeList>,
+    public cppu::WeakImplHelper<css::xml::dom::XNodeList>,
     private boost::noncopyable
 {
 public:
@@ -139,7 +138,7 @@ class NoDescriptionException
 };
 
 class FileDoesNotExistFilter
-    : public ::cppu::WeakImplHelper2< css::ucb::XCommandEnvironment,
+    : public ::cppu::WeakImplHelper< css::ucb::XCommandEnvironment,
                                       css::task::XInteractionHandler >
 
 {

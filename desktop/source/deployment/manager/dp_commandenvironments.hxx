@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_COMMANDENVIRONMENTS_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_COMMANDENVIRONMENTS_HXX
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/uno/Type.hxx>
 
@@ -31,7 +31,7 @@ namespace dp_manager {
    stored in the "tmp" repository. It prevents all kind of user interaction.
  */
 class BaseCommandEnv
-    : public ::cppu::WeakImplHelper3< css::ucb::XCommandEnvironment,
+    : public ::cppu::WeakImplHelper< css::ucb::XCommandEnvironment,
                                       css::task::XInteractionHandler,
                                       css::ucb::XProgressHandler >
 {

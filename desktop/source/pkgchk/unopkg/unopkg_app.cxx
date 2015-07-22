@@ -31,7 +31,7 @@
 #include <osl/process.h>
 #include <osl/conditn.hxx>
 #include <osl/file.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/sequence.hxx>
@@ -122,7 +122,7 @@ const OptionInfo s_option_infos [] = {
 };
 
 class DialogClosedListenerImpl :
-    public ::cppu::WeakImplHelper1< ui::dialogs::XDialogClosedListener >
+    public ::cppu::WeakImplHelper< ui::dialogs::XDialogClosedListener >
 {
     osl::Condition & m_rDialogClosedCondition;
 

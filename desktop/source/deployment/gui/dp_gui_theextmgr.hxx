@@ -22,7 +22,7 @@
 
 #include <comphelper/sequence.hxx>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/deployment/XExtensionManager.hpp>
@@ -44,7 +44,7 @@ class ExtensionCmdQueue;
 
 
 class TheExtensionManager :
-    public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XTerminateListener,
+    public ::cppu::WeakImplHelper< ::com::sun::star::frame::XTerminateListener,
                                     ::com::sun::star::util::XModifyListener >
 {
 private:

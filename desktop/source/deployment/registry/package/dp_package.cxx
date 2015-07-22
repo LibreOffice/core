@@ -30,7 +30,7 @@
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
 #include <svl/inettype.hxx>
@@ -80,7 +80,7 @@ namespace backend {
 namespace bundle {
 namespace {
 
-typedef cppu::ImplInheritanceHelper1<PackageRegistryBackend,
+typedef cppu::ImplInheritanceHelper<PackageRegistryBackend,
                                      lang::XServiceInfo> ImplBaseT;
 
 

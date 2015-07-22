@@ -20,7 +20,7 @@
 
 #include "dp_interact.h"
 #include <cppuhelper/exc_hlp.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <osl/diagnose.h>
 
@@ -90,7 +90,7 @@ void InteractionContinuationImpl::select() throw (RuntimeException, std::excepti
 
 
 class InteractionRequest :
-    public ::cppu::WeakImplHelper1<task::XInteractionRequest>
+    public ::cppu::WeakImplHelper<task::XInteractionRequest>
 {
     Any m_request;
     Sequence< Reference<task::XInteractionContinuation> > m_conts;

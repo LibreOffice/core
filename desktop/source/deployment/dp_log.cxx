@@ -22,7 +22,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/time.h>
 #include <osl/thread.h>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 
 namespace dp_log {
 
-typedef ::cppu::WeakComponentImplHelper1<ucb::XProgressHandler> t_log_helper;
+typedef ::cppu::WeakComponentImplHelper<ucb::XProgressHandler> t_log_helper;
 
 
 class ProgressLogImpl : public ::dp_misc::MutexHolder, public t_log_helper

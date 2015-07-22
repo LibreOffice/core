@@ -23,7 +23,7 @@
 #include "unopkg_shared.h"
 #include <osl/thread.h>
 #include <tools/resmgr.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
 #include <unotools/configmgr.hxx>
@@ -52,7 +52,7 @@ namespace {
 
 
 class CommandEnvironmentImpl
-    : public ::cppu::WeakImplHelper3< XCommandEnvironment,
+    : public ::cppu::WeakImplHelper< XCommandEnvironment,
                                       task::XInteractionHandler,
                                       XProgressHandler >
 {

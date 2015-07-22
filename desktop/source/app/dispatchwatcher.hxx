@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_APP_DISPATCHWATCHER_HXX
 #define INCLUDED_DESKTOP_SOURCE_APP_DISPATCHWATCHER_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 
@@ -43,7 +43,7 @@ class DispatchWatcherHashMap : public std::unordered_map< OUString, sal_Int32, O
 {
 };
 
-class DispatchWatcher : public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XDispatchResultListener >
+class DispatchWatcher : public ::cppu::WeakImplHelper< ::com::sun::star::frame::XDispatchResultListener >
 {
     public:
         enum RequestType

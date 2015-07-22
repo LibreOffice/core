@@ -25,8 +25,8 @@
 #include "dp_interact.h"
 #include "dp_activepackages.hxx"
 #include <rtl/ref.hxx>
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
 #include <com/sun/star/deployment/XPackageManager.hpp>
@@ -35,7 +35,7 @@
 
 namespace dp_manager {
 
-typedef ::cppu::WeakComponentImplHelper1<
+typedef ::cppu::WeakComponentImplHelper<
     css::deployment::XPackageManager > t_pm_helper;
 
 
@@ -88,7 +88,7 @@ class PackageManagerImpl : private ::dp_misc::MutexHolder, public t_pm_helper
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
     class CmdEnvWrapperImpl
-        : public ::cppu::WeakImplHelper2< css::ucb::XCommandEnvironment,
+        : public ::cppu::WeakImplHelper< css::ucb::XCommandEnvironment,
                                           css::ucb::XProgressHandler >
     {
         css::uno::Reference<css::ucb::XProgressHandler> m_xLogFile;

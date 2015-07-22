@@ -29,7 +29,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/sequence.hxx>
 #include <ucbhelper/content.hxx>
@@ -56,7 +56,7 @@ namespace dp_registry {
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
     deployment::XPackageRegistry, util::XUpdatable > t_helper;
 
 

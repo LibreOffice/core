@@ -20,7 +20,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <osl/mutex.hxx>
@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 
 namespace desktop {
 
-class  UnxSplashScreen : public ::cppu::WeakImplHelper3< css::task::XStatusIndicator, css::lang::XInitialization, css::lang::XServiceInfo >
+class  UnxSplashScreen : public ::cppu::WeakImplHelper< css::task::XStatusIndicator, css::lang::XInitialization, css::lang::XServiceInfo >
 {
 private:
     UnxSplashScreen( const UnxSplashScreen& ) SAL_DELETED_FUNCTION;

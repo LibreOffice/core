@@ -18,7 +18,7 @@
  */
 
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <comphelper/servicedecl.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -164,7 +164,7 @@ namespace dp_manager {
 
 //ToDo: bundled extension
 ExtensionManager::ExtensionManager( Reference< uno::XComponentContext > const& xContext) :
-    ::cppu::WeakComponentImplHelper1< css::deployment::XExtensionManager >(getMutex()),
+    ::cppu::WeakComponentImplHelper< css::deployment::XExtensionManager >(getMutex()),
     m_xContext( xContext )
 {
     m_xPackageManagerFactory = css::deployment::thePackageManagerFactory::get(m_xContext);

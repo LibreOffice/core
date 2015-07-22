@@ -25,9 +25,8 @@
 #include "dp_interact.h"
 #include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/compbase1.hxx>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <tools/inetmime.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/deployment/XPackageRegistry.hpp>
@@ -46,7 +45,7 @@ class PackageRegistryBackend;
 
 #define BACKEND_SERVICE_NAME "com.sun.star.deployment.PackageRegistryBackend"
 
-typedef ::cppu::WeakComponentImplHelper1<
+typedef ::cppu::WeakComponentImplHelper<
     css::deployment::XPackage > t_PackageBase;
 
 
@@ -104,7 +103,7 @@ protected:
 public:
 
     class TypeInfo :
-        public ::cppu::WeakImplHelper1<css::deployment::XPackageTypeInfo>
+        public ::cppu::WeakImplHelper<css::deployment::XPackageTypeInfo>
     {
         const OUString m_mediaType;
         const OUString m_fileFilter;
@@ -262,7 +261,7 @@ public:
 
 };
 
-typedef ::cppu::WeakComponentImplHelper2<
+typedef ::cppu::WeakComponentImplHelper<
     css::lang::XEventListener,
     css::deployment::XPackageRegistry > t_BackendBase;
 
