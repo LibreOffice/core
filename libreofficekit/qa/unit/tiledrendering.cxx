@@ -65,8 +65,9 @@ public:
 
     void testDocumentLoadFail( Office* pOffice );
     void testDocumentTypes( Office* pOffice );
-#if 0
     void testImpressSlideNames( Office* pOffice );
+    void testCalcSheetNames( Office* pOffice );
+#if 0
     void testOverlay( Office* pOffice );
 #endif
 
@@ -90,8 +91,9 @@ void TiledRenderingTest::runAllTests()
 
     testDocumentLoadFail( pOffice.get() );
     testDocumentTypes( pOffice.get() );
-#if 0
     testImpressSlideNames( pOffice.get() );
+    testCalcSheetNames( pOffice.get() );
+#if 0
     testOverlay( pOffice.get() );
 #endif
 }
@@ -142,7 +144,6 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     // TODO: do this for all supported document types
 }
 
-#if 0
 void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
 {
     const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/impress_slidenames.odp";
@@ -164,6 +165,23 @@ void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
     // have a localised version of "Slide 3".
 }
 
+void TiledRenderingTest::testCalcSheetNames( Office* pOffice )
+{
+    const string sDocPath = m_sSrcRoot + "/libreofficekit/qa/data/calc_sheetnames.ods";
+    const string sLockFile = m_sSrcRoot +"/libreofficekit/qa/data/.~lock.calc_sheetnames.ods#";
+
+    // FIXME: LOK will fail when trying to open a locked file
+    remove( sLockFile.c_str() );
+
+    scoped_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
+
+    CPPUNIT_ASSERT( pDocument->getParts() == 3 );
+    CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 0 ), "TestText1" ) == 0 );
+    CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 1 ), "TestText2" ) == 0 );
+    CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 2 ), "Sheet3" ) == 0 );
+}
+
+#if 0
 static void dumpRGBABitmap( const OUString& rPath, const unsigned char* pBuffer,
                             const int nWidth, const int nHeight )
 {
