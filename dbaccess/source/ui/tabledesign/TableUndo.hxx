@@ -98,7 +98,7 @@ namespace dbaui
         virtual void    Redo() SAL_OVERRIDE;
     public:
         TYPEINFO_OVERRIDE();
-        OTableEditorDelUndoAct( OTableEditorCtrl* pOwner );
+        explicit OTableEditorDelUndoAct( OTableEditorCtrl* pOwner );
         virtual ~OTableEditorDelUndoAct();
     };
 

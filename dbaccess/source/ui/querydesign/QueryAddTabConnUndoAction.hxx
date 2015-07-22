@@ -29,7 +29,7 @@ namespace dbaui
     class OQueryAddTabConnUndoAction : public OQueryTabConnUndoAction
     {
     public:
-        OQueryAddTabConnUndoAction(OQueryTableView* pOwner);
+        explicit OQueryAddTabConnUndoAction(OQueryTableView* pOwner);
 
         virtual void Undo() SAL_OVERRIDE;
         virtual void Redo() SAL_OVERRIDE;
@@ -40,7 +40,7 @@ namespace dbaui
     class OQueryDelTabConnUndoAction : public OQueryTabConnUndoAction
     {
     public:
-        OQueryDelTabConnUndoAction(OQueryTableView* pOwner);
+        explicit OQueryDelTabConnUndoAction(OQueryTableView* pOwner);
 
         virtual void Undo() SAL_OVERRIDE;
         virtual void Redo() SAL_OVERRIDE;

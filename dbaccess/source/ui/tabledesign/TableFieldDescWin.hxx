@@ -53,7 +53,7 @@ namespace dbaui
         virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& rRect ) SAL_OVERRIDE;
 
     public:
-        OTableFieldDescWin( vcl::Window* pParent);
+        explicit OTableFieldDescWin( vcl::Window* pParent);
         virtual ~OTableFieldDescWin();
         virtual void dispose() SAL_OVERRIDE;
 

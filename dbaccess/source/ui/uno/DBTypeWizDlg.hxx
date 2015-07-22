@@ -31,7 +31,7 @@ class ODBTypeWizDialog
 {
 
 protected:
-    ODBTypeWizDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
+    explicit ODBTypeWizDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
 
 public:
     // XTypeProvider

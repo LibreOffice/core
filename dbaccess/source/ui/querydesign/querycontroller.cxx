@@ -110,7 +110,7 @@ namespace dbaui
         }
 
     public:
-        OViewController(const Reference< XComponentContext >& _rM) : OQueryController(_rM){}
+        explicit OViewController(const Reference< XComponentContext >& _rM) : OQueryController(_rM){}
 
         // need by registration
         static OUString getImplementationName_Static() throw( RuntimeException )

@@ -78,7 +78,8 @@ namespace dbaui
         bool                            m_bInUndoMode;
 
         DECL_LINK_TYPED(OnInvalidateTimer, Timer*, void);
-    public:                         OSelectionBrowseBox( vcl::Window* pParent );
+    public:
+        explicit OSelectionBrowseBox( vcl::Window* pParent );
                                     virtual ~OSelectionBrowseBox();
         virtual void                dispose() SAL_OVERRIDE;
 

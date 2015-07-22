@@ -250,7 +250,7 @@ namespace
     protected:
         virtual void Select() SAL_OVERRIDE;
     public:
-        OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent);
+        explicit OSelectionBrwBoxHeader(OSelectionBrowseBox* pParent);
         virtual ~OSelectionBrwBoxHeader() { disposeOnce(); }
         virtual void dispose() SAL_OVERRIDE { m_pBrowseBox.clear(); ::svt::EditBrowserHeader::dispose(); }
     };

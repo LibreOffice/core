@@ -68,7 +68,7 @@ protected:
     OColumnControlModel(const OColumnControlModel* _pSource
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 public:
-    OColumnControlModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    explicit OColumnControlModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
 // UNO Anbindung
     DECLARE_XINTERFACE( )

@@ -33,7 +33,7 @@ namespace dbaui
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
     public:
-        OColumnControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext);
+        explicit OColumnControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext);
 
         // UnoControl
         virtual OUString GetComponentServiceName() SAL_OVERRIDE;

@@ -57,12 +57,12 @@ namespace dbaui
         sal_Int32   m_nCellIndex;
 
     public:
-        OTabFieldCellModifiedUndoAct(OSelectionBrowseBox* pSelBrwBox)
+        explicit OTabFieldCellModifiedUndoAct(OSelectionBrowseBox* pSelBrwBox)
             : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_MODIFY_CELL)
             ,m_nCellIndex(BROWSER_INVALIDID){ }
 
-        inline void SetCellContents(const OUString& str)  { m_strNextCellContents = str; }
-        inline void SetCellIndex(sal_Int32 nIndex)      { m_nCellIndex = nIndex; }
+        void SetCellContents(const OUString& str)  { m_strNextCellContents = str; }
+        void SetCellIndex(sal_Int32 nIndex)      { m_nCellIndex = nIndex; }
 
         virtual void Undo() SAL_OVERRIDE;
         virtual void Redo() SAL_OVERRIDE { Undo(); }
@@ -76,7 +76,7 @@ namespace dbaui
         long        m_nNextWidth;
 
     public:
-        OTabFieldSizedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_SIZE_COLUMN), m_nNextWidth(0) { }
+        explicit OTabFieldSizedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OQueryDesignFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_SIZE_COLUMN), m_nNextWidth(0) { }
 
         inline void SetOriginalWidth(long nWidth) { m_nNextWidth = nWidth; }
 
@@ -106,7 +106,7 @@ namespace dbaui
         virtual void Redo() SAL_OVERRIDE { pOwner->EnterUndoMode();pOwner->RemoveColumn(pDescr->GetColumnId());pOwner->LeaveUndoMode(); }
 
     public:
-        OTabFieldDelUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDDELETE) { }
+        explicit OTabFieldDelUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDDELETE) { }
     };
 
     // OTabFieldDelUndoAct - Undo-Klasse fuer Anlegen eines Feldes
@@ -119,7 +119,7 @@ namespace dbaui
         virtual void Redo() SAL_OVERRIDE { pOwner->EnterUndoMode();pOwner->InsertColumn(pDescr, m_nColumnPostion);pOwner->LeaveUndoMode();}
 
     public:
-        OTabFieldCreateUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDCREATE) { }
+        explicit OTabFieldCreateUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDCREATE) { }
     };
 
     // OTabFieldMovedUndoAct - Undo class when a field was moved inside the selection
@@ -134,7 +134,7 @@ namespace dbaui
         }
 
     public:
-        OTabFieldMovedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDMOVED) { }
+        explicit OTabFieldMovedUndoAct(OSelectionBrowseBox* pSelBrwBox) : OTabFieldUndoAct(pSelBrwBox, STR_QUERY_UNDO_TABFIELDMOVED) { }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_QUERYDESIGN_QUERYDESIGNFIELDUNDOACT_HXX

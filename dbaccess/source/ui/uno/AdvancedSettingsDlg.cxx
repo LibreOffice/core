@@ -39,7 +39,7 @@ namespace dbaui
     {
 
     protected:
-        OAdvancedSettingsDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
+        explicit OAdvancedSettingsDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB);
 
     public:
         // XTypeProvider
