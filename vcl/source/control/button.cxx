@@ -699,8 +699,11 @@ void PushButton::ImplInitSettings( bool bFont,
             EnableChildTransparentMode( true );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
             SetPaintTransparent( true );
-            mpWindowImpl->mbUseNativeFocus = (GetStyle() & WB_FLATBUTTON) == 0
-                && ImplGetSVData()->maNWFData.mbNoFocusRects;
+
+            if ((GetStyle() & WB_FLATBUTTON) == 0)
+                mpWindowImpl->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
+            else
+                mpWindowImpl->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRectsForFlatButtons;
         }
         else
         {
