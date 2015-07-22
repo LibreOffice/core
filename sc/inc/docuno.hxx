@@ -388,6 +388,9 @@ public:
     /// @see vcl::ITiledRenderable::getParts().
     virtual int getParts() SAL_OVERRIDE;
 
+    /// @see vcl::ITiledRenderable::getPartName().
+    virtual OUString getPartName(int nPart) SAL_OVERRIDE;
+
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     virtual void initializeForTiledRendering() SAL_OVERRIDE;
 
