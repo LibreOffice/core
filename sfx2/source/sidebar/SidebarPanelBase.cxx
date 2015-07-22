@@ -20,6 +20,7 @@
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
+#include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/layout.hxx>
@@ -201,6 +202,16 @@ sal_Int32 SAL_CALL SidebarPanelBase::getMinimalWidth () throw(css::uno::RuntimeE
         return aSize.Width();
     }
     return 0;
+}
+
+void SAL_CALL SidebarPanelBase::updateModel(const css::uno::Reference<css::frame::XModel>& xModel)
+    throw(css::uno::RuntimeException, std::exception)
+{
+    SidebarModelUpdate* pModelUpdate = dynamic_cast<SidebarModelUpdate*>(mpControl.get());
+    if (!pModelUpdate)
+        return;
+
+    pModelUpdate->updateModel(xModel);
 }
 
 } } // end of namespace sfx2::sidebar

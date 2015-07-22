@@ -381,6 +381,18 @@ void ChartErrorBarPanel::modelInvalid()
 {
 }
 
+void ChartErrorBarPanel::updateModel(
+        css::uno::Reference<css::frame::XModel> xModel)
+{
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcaster->removeModifyListener(mxListener);
+
+    mxModel = xModel;
+
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcasterNew->addModifyListener(mxListener);
+}
+
 IMPL_LINK_NOARG(ChartErrorBarPanel, RadioBtnHdl)
 {
     OUString aCID = getCID(mxModel);

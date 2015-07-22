@@ -451,6 +451,18 @@ void ChartElementsPanel::modelInvalid()
 
 }
 
+void ChartElementsPanel::updateModel(
+        css::uno::Reference<css::frame::XModel> xModel)
+{
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcaster(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcaster->removeModifyListener(mxListener);
+
+    mxModel = xModel;
+
+    css::uno::Reference<css::util::XModifyBroadcaster> xBroadcasterNew(mxModel, css::uno::UNO_QUERY_THROW);
+    xBroadcasterNew->addModifyListener(mxListener);
+}
+
 IMPL_LINK(ChartElementsPanel, CheckBoxHdl, CheckBox*, pCheckBox)
 {
     bool bChecked = pCheckBox->IsChecked();

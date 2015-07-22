@@ -66,6 +66,8 @@ public:
 
     void SetPanelOrderIndex(const OUString& rsPanelId, const sal_Int32 orderIndex);
 
+    void UpdateModel(css::uno::Reference<css::frame::XModel> xModel);
+
 
     class DeckContextDescriptor
     {

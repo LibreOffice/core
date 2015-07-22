@@ -156,6 +156,8 @@ public:
 
     void notifyDeckTitle(const OUString& targetDeckId);
 
+    void updateModel(css::uno::Reference<css::frame::XModel> xModel);
+
 private:
 
     VclPtr<Deck> mpCurrentDeck;

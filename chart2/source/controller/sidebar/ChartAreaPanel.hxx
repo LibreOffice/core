@@ -12,6 +12,7 @@
 
 #include <vcl/ctrl.hxx>
 #include <sfx2/sidebar/ControllerItem.hxx>
+#include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/itemwin.hxx>
 #include <svx/xfillit0.hxx>
@@ -44,7 +45,9 @@ class ChartController;
 namespace sidebar {
 
 class ChartAreaPanel : public svx::sidebar::AreaPropertyPanelBase,
-    public ChartSidebarModifyListenerParent
+    public sfx2::sidebar::SidebarModelUpdate,
+    public ChartSidebarModifyListenerParent,
+    public sfx2::sidebar::SidebarModelUpdate
 {
 public:
     static VclPtr<vcl::Window> Create(
@@ -73,6 +76,8 @@ public:
     virtual void modelInvalid() SAL_OVERRIDE;
 
     virtual void dispose() SAL_OVERRIDE;
+
+    virtual void updateModel(css::uno::Reference<css::frame::XModel> xModel) SAL_OVERRIDE;
 
 private:
 

@@ -421,6 +421,7 @@ void SAL_CALL ChartController::attachFrame(
     {
         sfx2::sidebar::SidebarController* pSidebar = dynamic_cast<sfx2::sidebar::SidebarController*>(xSidebar.get());
         sfx2::sidebar::SidebarController::registerSidebarForFrame(pSidebar, this);
+        pSidebar->updateModel(getModel());
     }
 
     if(m_xFrame.is()) //what happens, if we do have a Frame already??
