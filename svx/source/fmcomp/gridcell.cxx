@@ -572,6 +572,7 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn, bool /*_bText*/ )
         implDoPropertyListening( FM_PROP_STATE, false );
         implDoPropertyListening( FM_PROP_TEXT, false );
         implDoPropertyListening( FM_PROP_EFFECTIVE_VALUE, false );
+        implDoPropertyListening( FM_PROP_SELECT_SEQ, false );
 
         // be listener at the bound field as well
         try
@@ -676,6 +677,7 @@ void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(R
         ||  _rEvent.PropertyName == FM_PROP_STATE
         ||  _rEvent.PropertyName == FM_PROP_TEXT
         ||  _rEvent.PropertyName == FM_PROP_EFFECTIVE_VALUE
+        ||  _rEvent.PropertyName == FM_PROP_SELECT_SEQ
         )
     {   // it was one of the known "value" properties
         if ( !isValuePropertyLocked() )
@@ -2645,7 +2647,7 @@ void DbListBox::updateFromModel( Reference< XPropertySet > _rxModel )
     OSL_ENSURE( _rxModel.is() && m_pWindow, "DbListBox::updateFromModel: invalid call!" );
 
     Sequence< sal_Int16 > aSelection;
-    _rxModel->getPropertyValue( FM_PROP_SELECT_SEQ );
+    _rxModel->getPropertyValue( FM_PROP_SELECT_SEQ ) >>= aSelection;
 
     sal_Int16 nSelection = -1;
     if ( aSelection.getLength() > 0 )
