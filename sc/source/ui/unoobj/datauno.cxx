@@ -123,6 +123,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
         {OUString(SC_UNONAME_TOKENINDEX),0, cppu::UnoType<sal_Int32>::get(),     beans::PropertyAttribute::READONLY, 0 },
         {OUString(SC_UNONAME_USEFLTCRT),0,  cppu::UnoType<bool>::get(),                      0, 0},
         {OUString(SC_UNONAME_TOTALSROW),0,  cppu::UnoType<bool>::get(),                      0, 0},
+        {OUString(SC_UNONAME_CONTHDR)  ,0,  cppu::UnoType<bool>::get(),                      0, 0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     return aDBRangePropertyMap_Impl;
@@ -2085,6 +2086,8 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
         }
         else if ( aString == SC_UNONAME_TOTALSROW )
             aNewData.SetTotals( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        else if ( aString == SC_UNONAME_CONTHDR )
+            aNewData.SetHeader( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else
             bDo = false;
 
@@ -2169,6 +2172,12 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
             bool bTotals(GetDBData_Impl()->HasTotals());
 
             ScUnoHelpFunctions::SetBoolInAny( aRet, bTotals );
+        }
+        else if (aString == SC_UNONAME_CONTHDR )
+        {
+            bool bHeader(GetDBData_Impl()->HasHeader());
+
+            ScUnoHelpFunctions::SetBoolInAny( aRet, bHeader );
         }
     }
     return aRet;
