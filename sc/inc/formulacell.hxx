@@ -31,6 +31,7 @@
 #include <svl/listener.hxx>
 
 #include "types.hxx"
+#include "units.hxx"
 
 #include "formularesult.hxx"
 
@@ -141,8 +142,9 @@ private:
     bool            bInChangeTrack : 1; // Cell is in ChangeTrack
     bool            bTableOpDirty  : 1; // Dirty flag for TableOp
     bool            bNeedListening : 1; // Listeners need to be re-established after UpdateReference
-    bool            mbNeedsNumberFormat : 1; // set the calculated number format as hard number format
-    bool            mbPostponedDirty : 1;   // if cell needs to be set dirty later
+    bool            mbNeedsNumberFormat : 1;  // set the calculated number format as hard number format
+    bool            mbPostponedDirty : 1;     // if cell needs to be set dirty later
+    sc::units::FormulaStatus maFormulaStatus; // Unit validity flag
 
                     enum ScInterpretTailParameter
                     {
@@ -317,6 +319,7 @@ public:
     sal_uInt8       GetMatrixFlag() const { return cMatrixFlag;}
     ScTokenArray* GetCode() { return pCode;}
     const ScTokenArray* GetCode() const { return pCode;}
+    sc::units::FormulaStatus GetFormulaStatus() const { return maFormulaStatus; }
 
     void SetCode( ScTokenArray* pNew );
 
@@ -381,6 +384,9 @@ public:
 
     /* Sets just the result to error */
     void SetResultError( sal_uInt16 n );
+
+    /* Sets unit validity flag */
+    void SetFormulaStatus( sc::units::FormulaStatus aStatus );
 
     bool IsHyperLinkCell() const;
     EditTextObject* CreateURLObject();
