@@ -266,7 +266,8 @@ struct ImplSVNWFData
                                                             // toolbox dropdown buttons
     bool                    mbFlatMenu:1;                   // no popup 3D border
     bool                    mbOpenMenuOnF10:1;              // on gnome the first menu opens on F10
-    bool                    mbNoFocusRects:1;               // on Aqua focus rects are not used
+    bool                    mbNoFocusRects:1;               // on Aqua/Gtk3 use native focus rendering, except for flat butttons
+    bool                    mbNoFocusRectsForFlatButtons:1; // on Gtk3 native focusing is also preferred for flat buttons
     bool                    mbCenteredTabs:1;               // on Aqua, tabs are centered
     bool                    mbNoActiveTabTextRaise:1;       // on Aqua the text for the selected tab
                                                             // should not "jump up" a pixel
