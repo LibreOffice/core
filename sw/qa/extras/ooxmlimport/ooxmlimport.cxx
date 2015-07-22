@@ -2748,6 +2748,16 @@ DECLARE_OOXMLIMPORT_TEST(testTdf89702, "tdf89702.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xStyle, "CharFontName"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf86374, "tdf86374.docx")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTable->getRows(), uno::UNO_QUERY);
+    // btLr text direction was imported as FIX, it should be MIN to have enough space for the additionally entered paragraphs.
+    CPPUNIT_ASSERT_EQUAL(text::SizeType::MIN, getProperty<sal_Int16>(xTableRows->getByIndex(0), "SizeType"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

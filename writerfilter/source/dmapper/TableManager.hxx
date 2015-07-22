@@ -241,6 +241,7 @@ protected:
         mState.resetCellProps();
     }
 
+public:
     TablePropertyMapPtr getRowProps()
     {
         return mState.getRowProps();
@@ -256,6 +257,7 @@ protected:
         mState.resetRowProps();
     }
 
+protected:
     void setInCell(bool bInCell)
     {
         mState.setInCell(bInCell);
