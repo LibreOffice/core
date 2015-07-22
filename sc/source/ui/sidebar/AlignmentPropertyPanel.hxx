@@ -23,6 +23,8 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <svx/sidebar/PanelLayout.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <editeng/svxenum.hxx>
 
 class ToolBox;
@@ -74,12 +76,19 @@ private:
     VclPtr<CheckBox>                                   mpCBXMergeCell;
     VclPtr<FixedText>                                  mpFtRotate;
     VclPtr<MetricBox>                                  mpMtrAngle;
+    VclPtr<RadioButton>                                mpRefEdgeBottom;
+    VclPtr<RadioButton>                                mpRefEdgeTop;
+    VclPtr<RadioButton>                                mpRefEdgeStd;
+    VclPtr<CheckBox>                                   mpCBStacked;
+    VclPtr<VclHBox>                                    mpTextOrientBox;
 
     ::sfx2::sidebar::ControllerItem             maAlignHorControl;
     ::sfx2::sidebar::ControllerItem             maLeftIndentControl;
     ::sfx2::sidebar::ControllerItem             maMergeCellControl;
     ::sfx2::sidebar::ControllerItem             maWrapTextControl;
     ::sfx2::sidebar::ControllerItem             maAngleControl;
+    ::sfx2::sidebar::ControllerItem             maVrtStackControl;
+    ::sfx2::sidebar::ControllerItem             maRefEdgeControl;
 
     /// bitfield
     bool                                        mbMultiDisable : 1;
@@ -94,6 +103,7 @@ private:
     DECL_LINK( AngleModifiedHdl, void * );
     DECL_LINK( RotationHdl, void * );
     DECL_LINK( ClickStackHdl, void * );
+    DECL_LINK( ReferenceEdgeHdl, Control* );
 
     void Initialize();
     static void FormatDegrees(double& dTmp);

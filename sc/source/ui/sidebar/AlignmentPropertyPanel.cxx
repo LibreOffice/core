@@ -21,9 +21,11 @@
 #include <editeng/justifyitem.hxx>
 #include "sc.hrc"
 #include "scresid.hxx"
+#include "scitems.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/algitem.hxx>
+#include <svx/rotmodit.hxx>
 #include <svx/dlgutil.hxx>
 #include <vcl/toolbox.hxx>
 #include <svx/sidebar/SidebarDialControl.hxx>
@@ -45,6 +47,8 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
       maMergeCellControl(FID_MERGE_TOGGLE, *pBindings, *this),
       maWrapTextControl(SID_ATTR_ALIGN_LINEBREAK, *pBindings, *this),
       maAngleControl(SID_ATTR_ALIGN_DEGREES, *pBindings, *this),
+      maVrtStackControl(SID_ATTR_ALIGN_STACKED, *pBindings, *this),
+      maRefEdgeControl(SID_ATTR_ALIGN_LOCKPOS, *pBindings, *this),
       mbMultiDisable(false),
       mxFrame(rxFrame),
       maContext(),
@@ -56,6 +60,11 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     get(mpCBXMergeCell, "mergecells");
     get(mpFtRotate, "orientationlabel");
     get(mpMtrAngle, "orientationdegrees");
+    get(mpRefEdgeBottom, "bottom");
+    get(mpRefEdgeTop, "top");
+    get(mpRefEdgeStd, "standard");
+    get(mpCBStacked, "stacked");
+    get(mpTextOrientBox , "textorientbox");
 
     Initialize();
 
@@ -76,12 +85,19 @@ void AlignmentPropertyPanel::dispose()
     mpCBXMergeCell.clear();
     mpFtRotate.clear();
     mpMtrAngle.clear();
+    mpCBStacked.clear();
+    mpRefEdgeBottom.clear();
+    mpRefEdgeTop.clear();
+    mpRefEdgeStd.clear();
+    mpTextOrientBox.clear();
 
     maAlignHorControl.dispose();
     maLeftIndentControl.dispose();
     maMergeCellControl.dispose();
     maWrapTextControl.dispose();
     maAngleControl.dispose();
+    maVrtStackControl.dispose();
+    maRefEdgeControl.dispose();
 
     PanelLayout::dispose();
 }
@@ -100,14 +116,16 @@ void AlignmentPropertyPanel::Initialize()
     aLink = LINK(this, AlignmentPropertyPanel, CBOXWrapTextClkHdl);
     mpCBXWrapText->SetClickHdl ( aLink );
 
-    //rotation control
-
     //rotation
     mpMtrAngle->SetAccessibleName(OUString( "Text Orientation"));   //wj acc
     mpMtrAngle->SetModifyHdl(LINK( this, AlignmentPropertyPanel, AngleModifiedHdl));
     mpMtrAngle->EnableAutocomplete( false );
+    mpCBStacked->SetClickHdl(LINK(this, AlignmentPropertyPanel, ClickStackHdl));
 
-    //Vertical stacked
+    aLink = LINK(this, AlignmentPropertyPanel, ReferenceEdgeHdl);
+    mpRefEdgeBottom->SetClickHdl(aLink);
+    mpRefEdgeTop->SetClickHdl(aLink);
+    mpRefEdgeStd->SetClickHdl(aLink);
 
     mpMtrAngle->InsertValue(0, FUNIT_CUSTOM);
     mpMtrAngle->InsertValue(45, FUNIT_CUSTOM);
@@ -121,6 +139,20 @@ void AlignmentPropertyPanel::Initialize()
 
     mpMFLeftIndent->SetAccessibleRelationLabeledBy(mpFTLeftIndent);
     mpMtrAngle->SetAccessibleRelationLabeledBy(mpFtRotate);
+}
+
+IMPL_LINK( AlignmentPropertyPanel, ReferenceEdgeHdl, Control*, pControl )
+{
+    SvxRotateMode eMode;
+    if(pControl == mpRefEdgeBottom)
+        eMode = SVX_ROTATE_MODE_BOTTOM;
+    else if(pControl == mpRefEdgeTop)
+        eMode = SVX_ROTATE_MODE_TOP;
+    else
+        eMode = SVX_ROTATE_MODE_STANDARD;
+    SvxRotateModeItem aItem(eMode,ATTR_ROTATE_MODE);
+    GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_LOCKPOS, SfxCallMode::RECORD, &aItem, 0l);
+    return 0;
 }
 
 IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl )
@@ -159,6 +191,14 @@ IMPL_LINK_NOARG( AlignmentPropertyPanel, AngleModifiedHdl )
 
     GetBindings()->GetDispatcher()->Execute(
         SID_ATTR_ALIGN_DEGREES, SfxCallMode::RECORD, &aAngleItem, 0L );
+    return 0;
+}
+IMPL_LINK_NOARG( AlignmentPropertyPanel, ClickStackHdl )
+{
+    bool bVertical = mpCBStacked->IsChecked();
+    SfxBoolItem  aStackItem( SID_ATTR_ALIGN_STACKED, bVertical );
+    GetBindings()->GetDispatcher()->Execute(
+        SID_ATTR_ALIGN_STACKED, SfxCallMode::RECORD, &aStackItem, 0L );
     return 0;
 }
 IMPL_LINK_NOARG(AlignmentPropertyPanel, MFLeftIndentMdyHdl)
@@ -311,6 +351,48 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
             {
                 mpCBXWrapText->EnableTriState(true);
                 mpCBXWrapText->SetState(TRISTATE_INDET);
+            }
+        }
+        break;
+    case SID_ATTR_ALIGN_STACKED:
+        if (eState >= SfxItemState::DEFAULT)
+        {
+            mpCBStacked->EnableTriState(false);
+            const SfxBoolItem* aStackItem = static_cast<const SfxBoolItem*>(pState);
+            mbMultiDisable = aStackItem->GetValue();
+            mpCBStacked->Check(mbMultiDisable);
+            mpTextOrientBox->Enable(!mbMultiDisable);
+        }
+        else
+        {
+            mbMultiDisable = true;
+            mpTextOrientBox->Disable();
+            mpCBStacked->EnableTriState(true);
+            mpCBStacked->SetState(TRISTATE_INDET);
+        }
+        break;
+    case SID_ATTR_ALIGN_LOCKPOS:
+        if( eState >= SfxItemState::DEFAULT)
+        {
+            const SvxRotateModeItem* pItem = static_cast<const SvxRotateModeItem*>(pState);
+            SvxRotateMode eMode = (SvxRotateMode)pItem->GetValue();
+            if(eMode == SVX_ROTATE_MODE_BOTTOM)
+            {
+                mpRefEdgeBottom->SetState(true);
+                mpRefEdgeTop->SetState(false);
+                mpRefEdgeStd->SetState(false);
+            }
+            else if(eMode == SVX_ROTATE_MODE_TOP)
+            {
+                mpRefEdgeBottom->SetState(false);
+                mpRefEdgeStd->SetState(false);
+                mpRefEdgeTop->SetState(true);
+            }
+            else if(eMode == SVX_ROTATE_MODE_STANDARD)
+            {
+                mpRefEdgeBottom->SetState(false);
+                mpRefEdgeTop->SetState(false);
+                mpRefEdgeStd->SetState(true);
             }
         }
         break;
