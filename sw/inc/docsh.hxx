@@ -277,7 +277,7 @@ public:
 
     sal_Int16   GetUpdateDocMode() const { return m_nUpdateDocMode; }
 
-    void ToggleBrowserMode(bool bOn, SwView* pView);
+    void ToggleLayoutMode(SwView* pView);
 
     sal_uLong LoadStylesFromFile( const OUString& rURL, SwgReaderOption& rOpt,
                                   bool bUnoCall );
