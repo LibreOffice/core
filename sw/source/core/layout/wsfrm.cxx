@@ -2934,11 +2934,12 @@ void SwLayoutFrm::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
 
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
     const bool hideWhitespace = (pSh && pSh->GetViewOptions()->IsHideWhitespaceMode());
-    const sal_uInt16 nLeft = (sal_uInt16)pAttrs->CalcLeft( this );
-    const sal_uInt16 nUpper = hideWhitespace ? 0 : pAttrs->CalcTop();
+    const long noWhitespaceBorder = pSh->GetViewOptions()->GetDocumentBorder();
+    const sal_uInt16 nLeft = hideWhitespace ? noWhitespaceBorder : (sal_uInt16)pAttrs->CalcLeft(this);
+    const sal_uInt16 nUpper = hideWhitespace ? noWhitespaceBorder : pAttrs->CalcTop();
 
-    const sal_uInt16 nRight = (sal_uInt16)pAttrs->CalcRight( this );
-    const sal_uInt16 nLower = hideWhitespace ? 0 : pAttrs->CalcBottom();
+    const sal_uInt16 nRight = hideWhitespace ? noWhitespaceBorder : (sal_uInt16)pAttrs->CalcRight(this);
+    const sal_uInt16 nLower = hideWhitespace ? noWhitespaceBorder : pAttrs->CalcBottom();
 
     bool bVert = IsVertical() && !IsPageFrm();
     SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
