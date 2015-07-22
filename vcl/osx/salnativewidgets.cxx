@@ -321,15 +321,6 @@ bool AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
    kThemeStateUnavailableInactive = 8
    kThemeStatePressedUp = 2,
    kThemeStatePressedDown = 3
-
-#define ControlState::ENABLED      0x0001
-#define ControlState::FOCUSED      0x0002
-#define ControlState::PRESSED      0x0004
-#define ControlState::ROLLOVER     0x0008
-#define ControlState::HIDDEN       0x0010
-#define ControlState::DEFAULT      0x0020
-#define ControlState::SELECTED     0x0040
-#define CTRL_CACHING_ALLOWED    0x8000  // set when the control is completely visible (i.e. not clipped)
 */
 UInt32 AquaSalGraphics::getState( ControlState nState )
 {
