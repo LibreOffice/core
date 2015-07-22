@@ -58,7 +58,6 @@ public:
     static ::boost::shared_ptr< Units > GetUnits();
 
     virtual FormulaStatus verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) = 0;
-
     /*
      * Split the input into value and unit, where rInput == rValue + rUnit.
      * (We assume that the unit is always the last part of the input string.)

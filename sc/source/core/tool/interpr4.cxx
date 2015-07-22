@@ -65,6 +65,9 @@
 #include "doubleref.hxx"
 #include "queryparam.hxx"
 #include "tokenarray.hxx"
+#include "units.hxx"
+#include "scmod.hxx"
+#include "viewfunc.hxx"
 
 #include <math.h>
 #include <float.h>
