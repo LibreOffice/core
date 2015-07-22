@@ -32,9 +32,14 @@ void FolderTree::RequestingChildren( SvTreeListEntry* pEntry )
 
 void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
 {
-    // fill only empty entries
-    if( pEntry && GetChildCount( pEntry ) == 0 )
+    if( pEntry )
     {
+        while( GetChildCount( pEntry ) > 0 )
+        {
+            SvTreeListEntry* pChild = FirstChild( pEntry );
+            GetModel()->Remove( pChild );
+        }
+
         ::std::vector< SortingData_Impl* > aContent;
 
         ::rtl::Reference< ::svt::FileViewContentEnumerator >
