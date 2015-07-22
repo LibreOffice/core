@@ -125,7 +125,7 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread);
 SAL_DLLPUBLIC void SAL_CALL osl_joinWithThread(oslThread Thread);
 
 /** Blocks the calling thread at least for the given number
-    of time.
+    of time.We use this function to set up sleep timer that means usleep.
 */
 SAL_DLLPUBLIC void SAL_CALL osl_waitThread(const TimeValue* pDelay);
 
