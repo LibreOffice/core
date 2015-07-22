@@ -103,7 +103,6 @@ protected:
 public:
     FormulaToken( StackVar eTypeP,OpCode e = ocPush );
     FormulaToken( const FormulaToken& r );
-
     virtual                     ~FormulaToken();
 
     inline  void                Delete()                { delete this; }

@@ -137,6 +137,7 @@ private:
     HeaderUnitDescriptor extractUnitFromHeaderString(const OUString& rHeader);
 
     static OUString extractUnitStringFromFormat(const OUString& rFormatString);
+
     static OUString extractUnitStringForCell(const ScAddress& rAddress, ScDocument* pDoc);
 
     /**
