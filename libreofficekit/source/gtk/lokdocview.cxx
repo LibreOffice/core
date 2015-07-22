@@ -36,6 +36,7 @@
 // Number of handles around a graphic selection.
 #define GRAPHIC_HANDLE_COUNT 8
 
+/// Private struct used by this GObject type
 struct _LOKDocViewPrivate
 {
     gchar* m_aLOPath;
@@ -162,6 +163,7 @@ G_DEFINE_TYPE_WITH_CODE (LOKDocView, lok_doc_view, GTK_TYPE_DRAWING_AREA,
 
 static GThreadPool* lokThreadPool;
 
+/// Helper struct used to pass the data from soffice thread -> main thread.
 struct CallbackData
 {
     int m_nType;
@@ -174,8 +176,16 @@ struct CallbackData
           m_pDocView(pDocView) {}
 };
 
+/**
+   A struct that we use to store the data about the LOK call.
+
+   Object of this type is passed with all the LOK calls,
+   so that they can be idenitified. Additionally, it also contains
+   the data that LOK call needs.
+*/
 struct LOEvent
 {
+    /// To identify the type of LOK call
     int m_nType;
     const gchar* m_pCommand;
     const gchar* m_pArguments;
@@ -187,6 +197,8 @@ struct LOEvent
     int m_nCharCode;
     int m_nKeyCode;
 
+
+    /// Constructor to easily instantiate an object for LOK call of `type' type.
     LOEvent(int type)
         : m_nType(type) {}
 
