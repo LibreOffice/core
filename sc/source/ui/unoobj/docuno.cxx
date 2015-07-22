@@ -510,6 +510,14 @@ int ScModelObj::getPart()
     return pViewData->GetTabNo();
 }
 
+OUString ScModelObj::getPartName( int nPart )
+{
+    OUString sTabName;
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    pViewData->GetDocument()->GetName(nPart, sTabName);
+    return sTabName;
+}
+
 Size ScModelObj::getDocumentSize()
 {
     Size aSize(10, 10); // minimum size
