@@ -28,6 +28,7 @@ namespace ww
     {
         public:
             const sal_uInt8* data() const { return empty() ? 0 : &front(); }
+            sal_uInt8* data() { return empty() ? 0 : &front(); }
     };
 
     enum WordVersion {eWW1 = 1, eWW2 = 2, eWW6 = 6, eWW7 = 7, eWW8 = 8};
