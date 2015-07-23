@@ -22,6 +22,10 @@
 #include <svx/svdedxv.hxx>
 #include <svx/svdoutl.hxx>
 
+// XXX: Possible duplication of code in behavior with stuff in ImpEditView (or ImpEditEngine) and OutlinerView
+
+// XXX: We violate Demeter's Law several times here, I'm afraid
+
 TextChainCursorManager::TextChainCursorManager(SdrObjEditView *pEditView, const SdrTextObj *pTextObj) :
     mpEditView(pEditView),
     mpTextObj(pTextObj)
@@ -64,6 +68,45 @@ bool TextChainCursorManager::HandleKeyEvent( const KeyEvent& rKEvt ) const
 
     }
     return bHandled;
+}
+
+void TextChainCursorManager::HandleCursorEvent(const CursorChainingEvent aCurEvt,
+                           const ESelection  aNewSel) const
+{
+    OutlinerView* pOLV = mpEditView->GetTextEditOutlinerView();
+    SdrTextObj *pNextLink = mpTextObj->GetNextLinkInChain();
+    SdrTextObj *pPrevLink = mpTextObj->GetPrevLinkInChain();
+
+    switch ( aCurEvt ) {
+            case CursorChainingEvent::UNCHANGED:
+                // Set same selection as before the chaining (which is saved as PostChainingSel)
+                // We need an explicit set because the Outliner is messed up
+                //    after text transfer and otherwise it brings us at arbitrary positions.
+                pOLV->SetSelection(aNewSel);
+                break;
+            case CursorChainingEvent::TO_NEXT_LINK:
+                impChangeEditingTextObj(pNextLink, aNewSel);
+                break;
+            case CursorChainingEvent::TO_PREV_LINK:
+                impChangeEditingTextObj(pPrevLink, aNewSel);
+                break;
+            case CursorChainingEvent::NULL_EVENT:
+                // Do nothing here
+                break;
+    }
+
+}
+
+void TextChainCursorManager::impChangeEditingTextObj(SdrTextObj *pTargetTextObj, ESelection aNewSel) const
+{
+    if (!pTargetTextObj)
+        return;
+
+    mpEditView->SdrEndTextEdit();
+    mpEditView->SdrBeginTextEdit(pTargetTextObj);
+    // OutlinerView has changed, so we update the pointer
+    OutlinerView *pOLV = mpEditView->GetTextEditOutlinerView();
+    pOLV->SetSelection(aNewSel); // XXX
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -543,39 +543,16 @@ void SdrObjEditView::ImpMoveCursorAfterChainingEvent()
     if (!pTextObj->IsChainable() || !pTextObj->GetNextLinkInChain())
         return;
 
-
-    SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
-    OutlinerView* pOLV = GetTextEditOutlinerView();
-
     TextChain *pTextChain = pTextObj->GetTextChain();
     ESelection aNewSel = pTextChain->GetPostChainingSel(pTextObj);
 
-    switch ( pTextChain->GetCursorEvent(pTextObj) ) {
-
-            case CursorChainingEvent::UNCHANGED:
-                // Set same selection as before the chaining (which is saved as PostChainingSel)
-                // We need an explicit set because the Outliner is messed up
-                //    after text transfer and otherwise it brings us at arbitrary positions.
-                pOLV->SetSelection(aNewSel);
-                break;
-            case CursorChainingEvent::TO_NEXT_LINK:
-                SdrEndTextEdit();
-                SdrBeginTextEdit(pNextLink);
-                // OutlinerView has changed, so we update the pointer
-                pOLV = GetTextEditOutlinerView();
-                pOLV->SetSelection(aNewSel); // XXX
-                break;
-            case CursorChainingEvent::TO_PREV_LINK:
-                // XXX: To be handled
-                break;
-            case CursorChainingEvent::NULL_EVENT:
-                // Do nothing here
-                break;
-    }
+    TextChainCursorManager aCursorManager(this, pTextObj);
+    aCursorManager.HandleCursorEvent(
+        pTextChain->GetCursorEvent(pTextObj),
+        aNewSel);
 
     // Reset event
     pTextChain->SetCursorEvent(pTextObj, CursorChainingEvent::NULL_EVENT);
-
 }
 
 IMPL_LINK_TYPED(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI,void)

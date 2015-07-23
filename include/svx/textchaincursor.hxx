@@ -31,10 +31,14 @@ public:
     TextChainCursorManager(SdrObjEditView *pEditView, const SdrTextObj *pTextObj);
 
     bool HandleKeyEvent( const KeyEvent& rKEvt ) const;
+    void HandleCursorEvent(const CursorChainingEvent aCurEvt,
+                           const ESelection  aNewSel) const;
 
 private:
     SdrObjEditView *mpEditView;
     const SdrTextObj *mpTextObj;
+
+    void impChangeEditingTextObj(SdrTextObj *pTargetTextObj, ESelection aNewSel) const;
 };
 
 
