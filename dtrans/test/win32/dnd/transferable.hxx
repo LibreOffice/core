@@ -25,7 +25,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -66,7 +66,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-class CTransferable : public WeakImplHelper2< XClipboardOwner, XTransferable >
+class CTransferable : public WeakImplHelper< XClipboardOwner, XTransferable >
 {
 public:
     CTransferable( ){};

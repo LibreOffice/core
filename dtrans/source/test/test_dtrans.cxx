@@ -25,8 +25,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 
@@ -64,7 +63,7 @@ const char * app = NULL;
 
 //  ClipboardOwner
 
-class ClipboardOwner : public WeakImplHelper1< XClipboardOwner >
+class ClipboardOwner : public WeakImplHelper< XClipboardOwner >
 {
     Reference< XClipboard >    m_xClipboard;
     Reference< XTransferable > m_xTransferable;
@@ -102,7 +101,7 @@ void SAL_CALL ClipboardOwner::lostOwnership( const Reference< XClipboard >& xCli
 
 //  ClipboardListener
 
-class ClipboardListener : public WeakImplHelper1< XClipboardListener >
+class ClipboardListener : public WeakImplHelper< XClipboardListener >
 {
     Reference< XClipboard >    m_xClipboard;
     Reference< XTransferable > m_xTransferable;
@@ -151,7 +150,7 @@ void SAL_CALL ClipboardListener::disposing( const EventObject& event )
 
 //  StringTransferable
 
-class StringTransferable : public WeakImplHelper2< XClipboardOwner, XTransferable >
+class StringTransferable : public WeakImplHelper< XClipboardOwner, XTransferable >
 {
 public:
     StringTransferable( );

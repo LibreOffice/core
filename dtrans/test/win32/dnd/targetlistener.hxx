@@ -27,7 +27,7 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTargetListener.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDropEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/DropTargetDragEvent.hpp>
@@ -39,7 +39,7 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-class DropTargetListener: public WeakImplHelper1<XDropTargetListener>
+class DropTargetListener: public WeakImplHelper<XDropTargetListener>
 {
     // this is a window where dropped data are shown as text (only text)
     HWND m_hEdit;

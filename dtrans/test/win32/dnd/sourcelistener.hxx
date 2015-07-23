@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DTRANS_TEST_WIN32_DND_SOURCELISTENER_HXX
 #define INCLUDED_DTRANS_TEST_WIN32_DND_SOURCELISTENER_HXX
 
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/datatransfer/dnd/XDragSourceListener.hpp>
 #include <com/sun/star/datatransfer/dnd/DragSourceDropEvent.hpp>
 #include <com/sun/star/datatransfer/dnd/DragSourceDragEvent.hpp>
@@ -31,7 +31,7 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-class DragSourceListener: public WeakImplHelper1<XDragSourceListener>
+class DragSourceListener: public WeakImplHelper<XDragSourceListener>
 {
     // this is a window where dropped data are shown as text (only text)
 public:

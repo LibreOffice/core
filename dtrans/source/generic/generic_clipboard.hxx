@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DTRANS_SOURCE_GENERIC_GENERIC_CLIPBOARD_HXX
 #define INCLUDED_DTRANS_SOURCE_GENERIC_GENERIC_CLIPBOARD_HXX
 
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 
@@ -34,7 +34,7 @@
 namespace dtrans
 {
 
-    class GenericClipboard : public ::cppu::WeakComponentImplHelper4 < \
+    class GenericClipboard : public ::cppu::WeakComponentImplHelper < \
     ::com::sun::star::datatransfer::clipboard::XClipboardEx, \
     ::com::sun::star::datatransfer::clipboard::XClipboardNotifier, \
     ::com::sun::star::lang::XServiceInfo, \

@@ -26,8 +26,7 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardEx.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <osl/diagnose.h>
@@ -71,7 +70,7 @@ using namespace ::com::sun::star::lang;
 Reference< XTransferable > rXTransfRead;
 HANDLE  g_hEvtThreadWakeup;
 
-class CClipboardListener : public WeakImplHelper1 < XClipboardListener >
+class CClipboardListener : public WeakImplHelper < XClipboardListener >
 {
 public:
     ~CClipboardListener( );
@@ -96,7 +95,7 @@ void SAL_CALL CClipboardListener::changedContents( const ClipboardEvent& event )
     //MessageBox( NULL, TEXT("Clipboard content changed"), TEXT("Info"), MB_OK | MB_ICONINFORMATION );
 }
 
-class CTransferable : public WeakImplHelper2< XClipboardOwner, XTransferable >
+class CTransferable : public WeakImplHelper< XClipboardOwner, XTransferable >
 {
 public:
     CTransferable( );

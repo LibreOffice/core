@@ -19,9 +19,8 @@
 #ifndef INCLUDED_DTRANS_SOURCE_WIN32_DND_SOURCECONTEXT_HXX
 #define INCLUDED_DTRANS_SOURCE_WIN32_DND_SOURCECONTEXT_HXX
 
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
-#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include "source.hxx"
 
@@ -38,7 +37,7 @@ using namespace ::com::sun::star::lang;
 // An instance of SourceContext only lives as long as the drag and drop
 // operation lasts.
 class SourceContext: public MutexDummy,
-                     public WeakComponentImplHelper1<XDragSourceContext>
+                     public WeakComponentImplHelper<XDragSourceContext>
 {
     DragSource* m_pDragSource;
     Reference<XDragSource> m_dragSource;

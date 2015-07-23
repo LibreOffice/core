@@ -22,12 +22,12 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 
 class CMimeContentTypeFactory : public
-    cppu::WeakImplHelper2< com::sun::star::datatransfer::XMimeContentTypeFactory, \
+    cppu::WeakImplHelper< com::sun::star::datatransfer::XMimeContentTypeFactory, \
     com::sun::star::lang::XServiceInfo >
 {
 

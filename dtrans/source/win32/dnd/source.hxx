@@ -24,7 +24,7 @@
 #include <com/sun/star/datatransfer/dnd/XDragSourceContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "../../inc/DtObjFactory.hxx"
 #include "globals.hxx"
@@ -44,7 +44,7 @@ class SourceContext;
 // ALT modifier is considered to effect a user selection of effects
 class DragSource:
       public MutexDummy,
-      public WeakComponentImplHelper3<XDragSource, XInitialization, XServiceInfo>,
+      public WeakComponentImplHelper<XDragSource, XInitialization, XServiceInfo>,
       public IDropSource
 
 {

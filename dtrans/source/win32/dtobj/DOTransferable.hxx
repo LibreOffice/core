@@ -22,7 +22,7 @@
 
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 #include "DataFmtTransl.hxx"
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
@@ -34,7 +34,7 @@
 class CDTransObjFactory;
 class CFormatEtc;
 
-class CDOTransferable : public ::cppu::WeakImplHelper2< ::com::sun::star::datatransfer::XTransferable,
+class CDOTransferable : public ::cppu::WeakImplHelper< ::com::sun::star::datatransfer::XTransferable,
                         ::com::sun::star::datatransfer::XSystemTransferable>
 {
 public:

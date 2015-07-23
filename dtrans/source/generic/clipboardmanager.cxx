@@ -33,7 +33,7 @@ using namespace std;
 using ::dtrans::ClipboardManager;
 
 ClipboardManager::ClipboardManager():
-    WeakComponentImplHelper3< XClipboardManager, XEventListener, XServiceInfo > (m_aMutex),
+    WeakComponentImplHelper< XClipboardManager, XEventListener, XServiceInfo > (m_aMutex),
     m_aDefaultName(OUString("default"))
 {
 }

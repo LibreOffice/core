@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DTRANS_SOURCE_GENERIC_CLIPBOARDMANAGER_HXX
 #define INCLUDED_DTRANS_SOURCE_GENERIC_CLIPBOARDMANAGER_HXX
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/XClipboardManager.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -35,7 +35,7 @@ typedef ::std::map< OUString, ::com::sun::star::uno::Reference< ::com::sun::star
 namespace dtrans
 {
 
-    class ClipboardManager : public ::cppu::WeakComponentImplHelper3 <
+    class ClipboardManager : public ::cppu::WeakComponentImplHelper <
       ::com::sun::star::datatransfer::clipboard::XClipboardManager,
       ::com::sun::star::lang::XEventListener,
       ::com::sun::star::lang::XServiceInfo >
