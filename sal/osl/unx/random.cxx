@@ -27,6 +27,7 @@ int osl_get_system_random_data(char* buffer, size_t desired_len)
             {
                 if (errno != EINTR)
                 {
+                    close(fd);
                     return false;
                 }
             }
