@@ -481,7 +481,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     case typelib_TypeClass_STRUCT:
     {
         PyRef excClass = getClass( a.getValueType().getTypeName(), *this );
-        PyRef value = PyRef( PyUNO_new_UNCHECKED (a, getImpl()->cargo->xInvocation), SAL_NO_ACQUIRE);
+        PyRef value = PyUNO_new( a, getImpl()->cargo->xInvocation, false );
         PyRef argsTuple( PyTuple_New( 1 ) , SAL_NO_ACQUIRE, NOT_NULL );
         PyTuple_SetItem( argsTuple.get() , 0 , value.getAcquired() );
         PyRef ret( PyObject_CallObject( excClass.get() , argsTuple.get() ), SAL_NO_ACQUIRE );
@@ -551,22 +551,12 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     case typelib_TypeClass_INTERFACE:
     {
-        // fdo#46678 must unlock GIL because getSomething could acquire locks,
-        // and queryInterface too...
-        {
-            PyThreadDetach d;
+        Reference<XInterface> tmp_interface;
+        a >>= tmp_interface;
+        if (!tmp_interface.is ())
+            return Py_None;
 
-            Reference<XUnoTunnel> tunnel;
-            a >>= tunnel;
-            if (tunnel.is())
-            {
-                sal_Int64 that = tunnel->getSomething( ::pyuno::Adapter::getUnoTunnelImplementationId() );
-                if( that )
-                    return reinterpret_cast<Adapter*>(that)->getWrappedObject();
-            }
-        }
-        //This is just like the struct case:
-        return PyRef( PyUNO_new (a, getImpl()->cargo->xInvocation), SAL_NO_ACQUIRE );
+        return PyUNO_new (a, getImpl()->cargo->xInvocation, true);
     }
     default:
     {

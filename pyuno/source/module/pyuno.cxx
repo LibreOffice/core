@@ -60,6 +60,7 @@ using com::sun::star::uno::XComponentContext;
 using com::sun::star::lang::XSingleServiceFactory;
 using com::sun::star::lang::XServiceInfo;
 using com::sun::star::lang::XTypeProvider;
+using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::script::XTypeConverter;
 using com::sun::star::script::XInvocation2;
 using com::sun::star::beans::XMaterialHolder;
@@ -563,7 +564,7 @@ sal_Int32 lcl_detach_getLength( PyUNO *me )
     // returned by getElementNames(), or the user may be surprised.
 
     // For XIndexContainer
-    Reference< XIndexAccess > xIndexAccess( me->members->wrappedObject, UNO_QUERY );
+    Reference< XIndexAccess > xIndexAccess( me->members->xInvocation, UNO_QUERY );
     if ( xIndexAccess.is() )
     {
         return xIndexAccess->getCount();
@@ -571,7 +572,7 @@ sal_Int32 lcl_detach_getLength( PyUNO *me )
 
     // For XNameContainer
     // Not terribly efficient - get the count of all the names
-    Reference< XNameAccess > xNameAccess( me->members->wrappedObject, UNO_QUERY );
+    Reference< XNameAccess > xNameAccess( me->members->xInvocation, UNO_QUERY );
     if ( xNameAccess.is() )
     {
         return xNameAccess->getElementNames().getLength();
@@ -782,7 +783,7 @@ PyObject* lcl_getitem_index( PyUNO *me, PyObject *pKey, Runtime& runtime )
     {
         PyThreadDetach antiguard;
 
-        Reference< XIndexAccess > xIndexAccess( me->members->wrappedObject, UNO_QUERY );
+        Reference< XIndexAccess > xIndexAccess( me->members->xInvocation, UNO_QUERY );
         if ( xIndexAccess.is() )
         {
             if (nIndex < 0)
@@ -809,7 +810,7 @@ PyObject* lcl_getitem_slice( PyUNO *me, PyObject *pKey )
     {
         PyThreadDetach antiguard;
 
-        xIndexAccess.set( me->members->wrappedObject, UNO_QUERY );
+        xIndexAccess.set( me->members->xInvocation, UNO_QUERY );
         if ( xIndexAccess.is() )
             nLen = xIndexAccess->getCount();
     }
@@ -850,7 +851,7 @@ PyObject* lcl_getitem_string( PyUNO *me, PyObject *pKey, Runtime& runtime )
     {
         PyThreadDetach antiguard;
 
-        Reference< XNameAccess > xNameAccess( me->members->wrappedObject, UNO_QUERY );
+        Reference< XNameAccess > xNameAccess( me->members->xInvocation, UNO_QUERY );
         if ( xNameAccess.is() )
         {
             aRet = xNameAccess->getByName( sKey );
@@ -914,8 +915,8 @@ PyObject* PyUNO_getitem( PyObject *self, PyObject *pKey )
         // If the object is an XIndexAccess and/or XNameAccess, but the
         // key passed wasn't suitable, give a TypeError which specifically
         // describes this
-        Reference< XIndexAccess > xIndexAccess( me->members->wrappedObject, UNO_QUERY );
-        Reference< XNameAccess > xNameAccess( me->members->wrappedObject, UNO_QUERY );
+        Reference< XIndexAccess > xIndexAccess( me->members->xInvocation, UNO_QUERY );
+        Reference< XNameAccess > xNameAccess( me->members->xInvocation, UNO_QUERY );
         if ( xIndexAccess.is() || xNameAccess.is() )
         {
             PyErr_SetString( PyExc_TypeError, "subscription with invalid type" );
@@ -985,11 +986,11 @@ int lcl_setitem_index( PyUNO *me, PyObject *pKey, PyObject *pValue )
     {
         PyThreadDetach antiguard;
 
-        xIndexContainer.set( me->members->wrappedObject, UNO_QUERY );
+        xIndexContainer.set( me->members->xInvocation, UNO_QUERY );
         if ( xIndexContainer.is() )
             xIndexReplace.set( xIndexContainer, UNO_QUERY );
         else
-            xIndexReplace.set( me->members->wrappedObject, UNO_QUERY );
+            xIndexReplace.set( me->members->xInvocation, UNO_QUERY );
 
         if ( xIndexReplace.is() && nIndex < 0 )
             nIndex += xIndexReplace->getCount();
@@ -1032,11 +1033,11 @@ int lcl_setitem_slice( PyUNO *me, PyObject *pKey, PyObject *pValue )
     {
         PyThreadDetach antiguard;
 
-        xIndexContainer.set( me->members->wrappedObject, UNO_QUERY );
+        xIndexContainer.set( me->members->xInvocation, UNO_QUERY );
         if ( xIndexContainer.is() )
             xIndexReplace.set( xIndexContainer, UNO_QUERY );
         else
-            xIndexReplace.set( me->members->wrappedObject, UNO_QUERY );
+            xIndexReplace.set( me->members->xInvocation, UNO_QUERY );
 
         if ( xIndexReplace.is() )
             nLen = xIndexReplace->getCount();
@@ -1165,12 +1166,12 @@ int lcl_setitem_string( PyUNO *me, PyObject *pKey, PyObject *pValue )
     {
         PyThreadDetach antiguard;
 
-        Reference< XNameContainer > xNameContainer( me->members->wrappedObject, UNO_QUERY );
+        Reference< XNameContainer > xNameContainer( me->members->xInvocation, UNO_QUERY );
         Reference< XNameReplace > xNameReplace;
         if ( xNameContainer.is() )
             xNameReplace.set( xNameContainer, UNO_QUERY );
         else
-            xNameReplace.set( me->members->wrappedObject, UNO_QUERY );
+            xNameReplace.set( me->members->xInvocation, UNO_QUERY );
 
         if ( xNameReplace.is() )
         {
@@ -1277,17 +1278,17 @@ PyObject* PyUNO_iter( PyObject *self )
         {
             PyThreadDetach antiguard;
 
-            xEnumerationAccess.set( me->members->wrappedObject, UNO_QUERY );
+            xEnumerationAccess.set( me->members->xInvocation, UNO_QUERY );
             if ( xEnumerationAccess.is() )
                 xEnumeration = xEnumerationAccess->createEnumeration();
             else
                 xEnumeration.set( me->members->wrappedObject, UNO_QUERY );
 
             if ( !xEnumeration.is() )
-                xIndexAccess.set( me->members->wrappedObject, UNO_QUERY );
+                xIndexAccess.set( me->members->xInvocation, UNO_QUERY );
 
             if ( !xIndexAccess.is() )
-                xNameAccess.set( me->members->wrappedObject, UNO_QUERY );
+                xNameAccess.set( me->members->xInvocation, UNO_QUERY );
         }
 
         // XEnumerationAccess iterator
@@ -1373,7 +1374,7 @@ int PyUNO_contains( PyObject *self, PyObject *pKey )
             {
                 PyThreadDetach antiguard;
 
-                xNameAccess.set( me->members->wrappedObject, UNO_QUERY );
+                xNameAccess.set( me->members->xInvocation, UNO_QUERY );
                 if ( xNameAccess.is() )
                 {
                     bool hasKey = xNameAccess->hasByName( sKey );
@@ -1765,51 +1766,43 @@ PyRef getPyUnoClass()
     return PyRef( reinterpret_cast< PyObject * > ( &PyUNOType ) );
 }
 
-PyObject* PyUNO_new (
-    const Any & targetInterface, const Reference<XSingleServiceFactory> &ssf)
-{
-    Reference<XInterface> tmp_interface;
-
-    targetInterface >>= tmp_interface;
-
-    if (!tmp_interface.is ())
-    {
-        // empty reference !
-        Py_INCREF( Py_None );
-        return Py_None;
-    }
-   return PyUNO_new_UNCHECKED (targetInterface, ssf);
-}
-
-
-PyObject* PyUNO_new_UNCHECKED (
+PyRef PyUNO_new (
     const Any &targetInterface,
-    const Reference<XSingleServiceFactory> &ssf )
+    const Reference<XSingleServiceFactory> &ssf,
+    const bool bCheckExisting )
 {
-    Reference<XInterface> tmp_interface;
-    Reference<XInvocation2> tmp_invocation;
+    Reference<XInvocation2> xInvocation;
+
     {
         PyThreadDetach antiguard;
-        Sequence<Any> arguments(1);
-        arguments[0] <<= targetInterface;
-        tmp_interface = ssf->createInstanceWithArguments(arguments);
-        tmp_invocation.set(tmp_interface, UNO_QUERY);
-        if (!tmp_invocation.is() && tmp_interface.is()) {
+        xInvocation.set(
+            ssf->createInstanceWithArguments( Sequence<Any>( &targetInterface, 1 ) ), UNO_QUERY );
+        if( !xInvocation.is() )
             throw RuntimeException("XInvocation2 not implemented, cannot interact with object");
+
+        if (bCheckExisting)
+        {
+            Reference<XUnoTunnel> xUnoTunnel (
+                xInvocation->getIntrospection()->queryAdapter(cppu::UnoType<XUnoTunnel>::get()), UNO_QUERY );
+            if( xUnoTunnel.is() )
+            {
+                sal_Int64 that = xUnoTunnel->getSomething( ::pyuno::Adapter::getUnoTunnelImplementationId() );
+                if( that )
+                    return PyRef( reinterpret_cast<Adapter*>(that)->getWrappedObject() );
+            }
         }
     }
-    if (!tmp_interface.is())
-    {
-        Py_INCREF( Py_None );
-        return Py_None;
-    }
+    if( !Py_IsInitialized() )
+        throw RuntimeException();
+
     PyUNO* self = PyObject_New (PyUNO, &PyUNOType);
     if (self == NULL)
-        return NULL; // == error
+        return PyRef(); // == error
     self->members = new PyUNOInternals();
-    self->members->xInvocation = tmp_invocation;
+    self->members->xInvocation = xInvocation;
     self->members->wrappedObject = targetInterface;
-    return reinterpret_cast<PyObject*>(self);
+    return PyRef( reinterpret_cast<PyObject*>(self), SAL_NO_ACQUIRE );
+
 }
 
 }

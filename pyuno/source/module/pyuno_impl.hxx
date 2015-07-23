@@ -205,13 +205,10 @@ typedef std::unordered_set< PyRef , PyRef::Hash , std::equal_to<PyRef> > ClassSe
 
 int PyUNO_initType();
 
-PyObject* PyUNO_new(
+PyRef PyUNO_new (
     const com::sun::star::uno::Any & targetInterface,
-    const com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> & ssf);
-
-PyObject* PyUNO_new_UNCHECKED (
-    const com::sun::star::uno::Any & targetInterface,
-    const com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> & ssf);
+    const com::sun::star::uno::Reference<com::sun::star::lang::XSingleServiceFactory> & ssf,
+    const bool bCheckExisting );
 
 typedef struct
 {
