@@ -28,18 +28,6 @@
 #include <svx/dlgutil.hxx>
 #include "sddllapi.h"
 
-// Option ranges
-
-#define SD_OPTIONS_ALL      0xffffffff
-
-#define SD_OPTIONS_LAYOUT   0x00000001
-#define SD_OPTIONS_CONTENTS 0x00000002
-#define SD_OPTIONS_MISC     0x00000004
-#define SD_OPTIONS_SNAP     0x00000008
-#define SD_OPTIONS_ZOOM     0x00000010
-#define SD_OPTIONS_GRID     0x00000020
-#define SD_OPTIONS_PRINT    0x00000040
-
 class SdOptions;
 
 namespace sd {
@@ -598,7 +586,7 @@ public:
                         SdOptions( sal_uInt16 nConfigId );
                         virtual ~SdOptions();
 
-    void                StoreConfig( sal_uLong nOptionRange = SD_OPTIONS_ALL );
+    void                StoreConfig();
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_OPTSITEM_HXX

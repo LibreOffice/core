@@ -1425,28 +1425,15 @@ SdOptions::~SdOptions()
 {
 }
 
-void SdOptions::StoreConfig( sal_uLong nOptionsRange )
+void SdOptions::StoreConfig()
 {
-    if( nOptionsRange & SD_OPTIONS_LAYOUT )
-        SdOptionsLayout::Store();
-
-    if( nOptionsRange & SD_OPTIONS_CONTENTS )
-        SdOptionsContents::Store();
-
-    if( nOptionsRange & SD_OPTIONS_MISC )
-        SdOptionsMisc::Store();
-
-    if( nOptionsRange & SD_OPTIONS_SNAP )
-        SdOptionsSnap::Store();
-
-    if( nOptionsRange & SD_OPTIONS_ZOOM )
-        SdOptionsZoom::Store();
-
-    if( nOptionsRange & SD_OPTIONS_GRID )
-        SdOptionsGrid::Store();
-
-    if( nOptionsRange & SD_OPTIONS_PRINT )
-        SdOptionsPrint::Store();
+    SdOptionsLayout::Store();
+    SdOptionsContents::Store();
+    SdOptionsMisc::Store();
+    SdOptionsSnap::Store();
+    SdOptionsZoom::Store();
+    SdOptionsGrid::Store();
+    SdOptionsPrint::Store();
 }
 
 sal_Int32 SdOptionsMisc::GetDisplay() const
