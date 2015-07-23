@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_a8ddf871",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 7043,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-07-23T13:27:16Z",
+      "side": 1,
+      "message": "Similar to the previous patch, this again does not work when eConv \u003d\u003d FormulaGrammar::CONV_XL_R1C1 that should not be overridden. The second parameter \u003d\u003d0 if given means use R1C1.\n\nThis probably is the reason for the Jenkins build failure in unit tests where \"Excel R1C1 (forced)\" in sc/qa/unit/ucalc_formula.cxx:4394 is supposed to work and not give #REF!",
+      "revId": "1d3f872d0bdff7cbbe6044dfc5bba59c352ea8b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
