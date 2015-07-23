@@ -4396,9 +4396,10 @@ void Test::testFuncINDIRECT()
 
     m_pDoc->CalcAll();
     {
-        // Default is to use the current formula syntax, which is Calc A1.
+        // Default is to use compatibility mode, accept both Calc A1 and
+        // Excel A1 syntax
         const OUString* aChecks[] = {
-            &aTest, &aRefErr, &aRefErr, &aTest
+            &aTest, &aTest, &aRefErr, &aTest
         };
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -4410,6 +4411,7 @@ void Test::testFuncINDIRECT()
 
     ScCalcConfig aConfig;
     aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_OOO;
+    aConfig.mbHasStringRefSyntax = true;
     m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     {
@@ -4426,6 +4428,7 @@ void Test::testFuncINDIRECT()
     }
 
     aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_A1;
+    aConfig.mbHasStringRefSyntax = true;
     m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     {
@@ -4442,6 +4445,7 @@ void Test::testFuncINDIRECT()
     }
 
     aConfig.meStringRefAddressSyntax = formula::FormulaGrammar::CONV_XL_R1C1;
+    aConfig.mbHasStringRefSyntax = true;
     m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();
     {
