@@ -29,6 +29,7 @@
 #include <svx/sidebar/AreaPropertyPanelBase.hxx>
 
 #include "ChartSidebarModifyListener.hxx"
+#include "ChartSidebarSelectionListener.hxx"
 
 class XFillFloatTransparenceItem;
 class XFillTransparenceItem;
@@ -47,7 +48,7 @@ namespace sidebar {
 class ChartAreaPanel : public svx::sidebar::AreaPropertyPanelBase,
     public sfx2::sidebar::SidebarModelUpdate,
     public ChartSidebarModifyListenerParent,
-    public sfx2::sidebar::SidebarModelUpdate
+    public ChartSidebarSelectionListenerParent
 {
 public:
     static VclPtr<vcl::Window> Create(
@@ -72,8 +73,10 @@ public:
     virtual void setFillStyleAndBitmap(const XFillStyleItem* pStyleItem, const XFillBitmapItem& rBitmapItem);
 
     virtual void updateData() SAL_OVERRIDE;
-
     virtual void modelInvalid() SAL_OVERRIDE;
+
+    virtual void selectionChanged(bool bCorrectType) SAL_OVERRIDE;
+    virtual void SelectionInvalid() SAL_OVERRIDE;
 
     virtual void dispose() SAL_OVERRIDE;
 
@@ -83,6 +86,7 @@ private:
 
     css::uno::Reference<css::frame::XModel> mxModel;
     css::uno::Reference<css::util::XModifyListener> mxListener;
+    css::uno::Reference<css::view::XSelectionChangeListener> mxSelectionListener;
 
     void Initialize();
 
