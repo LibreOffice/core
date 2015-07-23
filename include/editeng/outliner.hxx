@@ -733,8 +733,6 @@ public:
     sal_Int16       GetDepth( sal_Int32 nPara ) const;
     void            SetDepth( Paragraph* pParagraph, sal_Int16 nNewDepth );
 
-    static bool     IsVisible( Paragraph* pPara ) { return pPara->IsVisible(); }
-
     void            EnableUndo( bool bEnable );
     bool            IsUndoEnabled() const;
     void            UndoActionStart( sal_uInt16 nId );
@@ -894,7 +892,6 @@ public:
     void            RemoveFields( bool bKeepFieldText, TypeId aType = NULL );
 
     void            FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
-    void            FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
 
     void            SetSpeller( ::com::sun::star::uno::Reference<
@@ -927,8 +924,8 @@ public:
     void            SetRefDevice( OutputDevice* pRefDev );
     OutputDevice*   GetRefDevice() const;
 
-    sal_uLong           GetTextHeight() const;
-    sal_uLong           GetTextHeight( sal_Int32 nParagraph ) const;
+    sal_uLong       GetTextHeight() const;
+    sal_uLong       GetTextHeight( sal_Int32 nParagraph ) const;
     Point           GetDocPosTopLeft( sal_Int32 nParagraph );
     Point           GetDocPos( const Point& rPaperPos ) const;
     bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder = 0 );
@@ -943,11 +940,10 @@ public:
     const EditEngine& GetEditEngine() const;
 
     // this is needed for StarOffice Api
-    void SetLevelDependendStyleSheet( sal_Int32 nPara );
+    void            SetLevelDependendStyleSheet( sal_Int32 nPara );
 
-    sal_uInt16  GetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
+    sal_uInt16      GetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
 
-    void            StartSpelling(EditView& rEditView, bool bMultipleDoc);
     // spell and return a sentence
     bool            SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     // put spell position to start of current sentence

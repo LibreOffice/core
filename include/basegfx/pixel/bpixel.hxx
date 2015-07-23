@@ -103,9 +103,6 @@ namespace basegfx
         void setOpacity(sal_uInt8 nNew) { maPixelUnion.maRGBO.mnO = nNew; }
 
         // comparators
-        bool isInvisible() const { return (0 == maPixelUnion.maRGBO.mnO); }
-        bool isVisible() const { return (0 != maPixelUnion.maRGBO.mnO); }
-
         bool operator==( const BPixel& rPixel ) const
         {
             return (rPixel.maPixelUnion.maCombinedRGBO.mnValue == maPixelUnion.maCombinedRGBO.mnValue);

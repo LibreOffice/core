@@ -74,30 +74,24 @@ public:
     bool VisitVarDecl( const VarDecl* );
 };
 
-/**
- * We need to include the template params when we are building the set
- * of functions we have walked already, because we need to rewalk anything instantiated with different params
- */
-enum class NiceNameIncludeTemplateParams { NO, YES };
-static std::string niceName(const FunctionDecl* functionDecl, NiceNameIncludeTemplateParams eIncludeTemplateParams = NiceNameIncludeTemplateParams::NO)
+static std::string niceName(const FunctionDecl* functionDecl)
 {
+    if (functionDecl->getInstantiatedFromMemberFunction())
+        functionDecl = functionDecl->getInstantiatedFromMemberFunction();
+    else if (functionDecl->getClassScopeSpecializationPattern())
+        functionDecl = functionDecl->getClassScopeSpecializationPattern();
+// workaround clang-3.5 issue
+#if __clang_major__ > 3 || ( __clang_major__ == 3 && __clang_minor__ >= 6 )
+    else if (functionDecl->getTemplateInstantiationPattern())
+        functionDecl = functionDecl->getTemplateInstantiationPattern();
+#endif
+
     std::string s =
         compat::getReturnType(*functionDecl).getCanonicalType().getAsString()
         + " ";
     if (isa<CXXMethodDecl>(functionDecl)) {
         const CXXRecordDecl* recordDecl = dyn_cast<CXXMethodDecl>(functionDecl)->getParent();
         s += recordDecl->getQualifiedNameAsString();
-        if (eIncludeTemplateParams == NiceNameIncludeTemplateParams::YES
-            && isa<ClassTemplateSpecializationDecl>(recordDecl))
-        {
-            const ClassTemplateSpecializationDecl* templateDecl = dyn_cast<ClassTemplateSpecializationDecl>(recordDecl);
-            s += "<";
-            for(size_t i=0; i < templateDecl->getTemplateArgs().size(); i++)
-            {
-                s += " ," + templateDecl->getTemplateArgs()[i].getAsType().getAsString();
-            }
-            s += ">";
-        }
         s += "::";
     }
     s += functionDecl->getNameAsString() + "(";
@@ -164,7 +158,7 @@ static bool isStandardStuff(const std::string& input)
 }
 
 // prevent recursive templates from blowing up the stack
-static std::set<std::string> traversedFunctionSet;
+static std::set<const FunctionDecl*> traversedFunctionSet;
 
 bool UnusedMethods::VisitCallExpr(CallExpr* expr)
 {
@@ -182,7 +176,7 @@ bool UnusedMethods::VisitCallExpr(CallExpr* expr)
     // if the function is templated. However, if we are inside a template function,
     // calling another function on the same template, the same problem occurs.
     // Rather than tracking all of that, just traverse anything we have not already traversed.
-    if (traversedFunctionSet.insert(niceName(calleeFunctionDecl, NiceNameIncludeTemplateParams::YES)).second)
+    if (traversedFunctionSet.insert(calleeFunctionDecl).second)
         TraverseFunctionDecl(calleeFunctionDecl);
 
     logCallToRootMethods(calleeFunctionDecl);
@@ -205,7 +199,7 @@ bool UnusedMethods::VisitCXXConstructExpr(const CXXConstructExpr* expr)
     }
     // if we see a call to a constructor, it may effectively create a whole new class,
     // if the constructor's class is templated.
-    if (!traversedFunctionSet.insert(niceName(consDecl)).second)
+    if (!traversedFunctionSet.insert(consDecl).second)
         return true;
 
     const CXXRecordDecl* parent = consDecl->getParent();

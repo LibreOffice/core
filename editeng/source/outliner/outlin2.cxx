@@ -582,11 +582,6 @@ bool Outliner::IsForceAutoColor() const
     return pEditEngine->IsForceAutoColor();
 }
 
-void Outliner::StartSpelling(EditView& rEditView, bool bMultipleDoc)
-{
-    pEditEngine->StartSpelling(rEditView, bMultipleDoc);
-}
-
 bool Outliner::SpellSentence(EditView& rEditView, svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
     return pEditEngine->SpellSentence(rEditView, rToFill, bIsGrammarChecking );

@@ -37,13 +37,11 @@ class EDITENG_DLLPUBLIC SvxItemPropertySet
 {
     SfxItemPropertyMap          m_aPropertyMap;
     mutable com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> m_xInfo;
-    const SfxItemPropertyMapEntry*  _pMap;
     ::std::vector< SvxIDPropertyCombine* > aCombineList;
-    bool                            mbConvertTwips;
     SfxItemPool&                    mrItemPool;
 
 public:
-    SvxItemPropertySet( const SfxItemPropertyMapEntry *pMap, SfxItemPool& rPool, bool bConvertTwips = false );
+    SvxItemPropertySet( const SfxItemPropertyMapEntry *pMap, SfxItemPool& rPool );
     ~SvxItemPropertySet();
 
     // Methods, which work directly with the ItemSet
@@ -62,8 +60,6 @@ public:
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > getPropertySetInfo() const;
     const SfxItemPropertyMap& getPropertyMap() const { return m_aPropertyMap;}
     const SfxItemPropertySimpleEntry* getPropertyMapEntry(const OUString &rName) const;
-
-    static com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > getPropertySetInfo( const SfxItemPropertyMapEntry* pMap );
 };
 
 /** converts the given any with a metric to 100th/mm if needed */

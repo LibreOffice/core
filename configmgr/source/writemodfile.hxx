@@ -37,7 +37,6 @@ struct TempFile {
     ~TempFile();
     void closeAndRename(const OUString &url);
     oslFileError flush();
-    oslFileError closeWithoutUnlink();
     void writeString(char const *begin, sal_Int32 length);
 
 private:

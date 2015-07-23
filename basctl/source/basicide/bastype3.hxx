@@ -42,7 +42,6 @@ public:
                     ExtendedEdit( vcl::Window* pParent, IDEResId nRes );
 
     void            SetAccHdl( const Link<Accelerator*,void>& rLink )         { aAccHdl = rLink; }
-    void            SetLoseFocusHdl( const Link<ExtendedEdit*,void>& rLink )  { aLoseFocusHdl = rLink; }
     Accelerator&    GetAccelerator()                                          { return aAcc; }
 };
 

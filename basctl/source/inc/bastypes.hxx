@@ -223,11 +223,10 @@ public:
 
     const ScriptDocument&
                     GetDocument() const { return m_aDocument; }
-    void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
     bool            IsDocument( const ScriptDocument& rDocument ) const { return rDocument == m_aDocument; }
-    const OUString&   GetLibName() const { return m_aLibName; }
-    void            SetLibName( const OUString& aLibName ) { m_aLibName = aLibName; }
-    const OUString&   GetName() const { return m_aName; }
+    const OUString& GetLibName() const { return m_aLibName; }
+
+    const OUString& GetName() const { return m_aName; }
     void            SetName( const OUString& aName ) { m_aName = aName; }
 
     virtual void OnNewDocument ();
@@ -268,7 +267,6 @@ private:
         };
     public:
         const ScriptDocument& GetDocument() const { return m_aDocument; }
-        const OUString& GetLibName() const { return m_aLibName; }
     };
 public:
     class Item
@@ -282,11 +280,8 @@ public:
     public:
         Item (ScriptDocument const&, OUString const& rLibName, OUString const& rCurrentName, ItemType eCurrentType);
         ~Item ();
-    public:
-        const ScriptDocument&  GetDocument()    const { return m_aDocument; }
-        const OUString& GetLibName()            const { return m_aLibName; }
         const OUString& GetCurrentName()        const { return m_aCurrentName; }
-        ItemType               GetCurrentType() const { return m_eCurrentType; }
+        ItemType        GetCurrentType()        const { return m_eCurrentType; }
     };
 private:
     typedef std::unordered_map<Key, Item, Key::Hash> Map;

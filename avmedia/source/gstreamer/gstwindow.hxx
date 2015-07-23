@@ -39,13 +39,8 @@ class Window : public ::cppu::WeakImplHelper< css::media::XPlayerWindow,
 {
 public:
 
-            Window( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr,
-                    Player& rPlayer );
+            Window( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxMgr );
             virtual ~Window();
-
-    bool    create( const css::uno::Sequence< css::uno::Any >& aArguments );
-    void    processGraphEvent();
-    void    updatePointer();
 
     // XPlayerWindow
     virtual void SAL_CALL update(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -88,10 +83,7 @@ private:
 
     ::osl::Mutex                                maMutex;
     css::media::ZoomLevel                       meZoomLevel;
-    Player&                                     mrPlayer;
     int                                         mnPointerType;
-
-    void                                        ImplLayoutVideoWindow();
 };
 
 } // namespace gstreamer

@@ -47,8 +47,6 @@ public:
     void addType() { m_includeType = true; }
     void addCppuMacrosHxx() { m_includeCppuMacrosHxx = true; }
     void addCppuUnotypeHxx() { m_includeCppuUnotypeHxx = true; }
-    void addOslDoublecheckedlockingH()
-        { m_includeOslDoublecheckedlockingH = true; }
     void addOslMutexHxx() { m_includeOslMutexHxx = true; }
     void addRtlStrbufHxx() { m_includeRtlStrbufHxx = true; }
     void addRtlStringH() { m_includeRtlStringH = true; }

@@ -56,7 +56,6 @@ namespace pcr
         void        activatePage(sal_uInt16 _nPage);
 
         void    setPageActivationHandler(const Link<>& _rHdl) { m_aPageActivationHandler = _rHdl; }
-        Link<>  getPageActivationHandler() const { return m_aPageActivationHandler; }
 
         ::com::sun::star::awt::Size getMinimumSize();
 

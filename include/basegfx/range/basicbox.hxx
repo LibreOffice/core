@@ -48,18 +48,6 @@ namespace basegfx
             return mnMinimum >= mnMaximum;
         }
 
-        double getCenter() const
-        {
-            if(isEmpty())
-            {
-                return 0.0;
-            }
-            else
-            {
-                return ((mnMaximum + mnMinimum - 1.0) / 2.0);
-            }
-        }
-
         using Base::isInside;
 
         bool isInside(sal_Int32 nValue) const
@@ -75,49 +63,6 @@ namespace basegfx
         }
 
         using Base::overlaps;
-
-        bool overlaps(const BasicBox& rBox) const
-        {
-            if(isEmpty())
-            {
-                return false;
-            }
-            else
-            {
-                if(rBox.isEmpty())
-                {
-                    return false;
-                }
-                else
-                {
-                    return !((rBox.mnMaximum <= mnMinimum) || (rBox.mnMinimum >= mnMaximum));
-                }
-            }
-        }
-
-        void grow(sal_Int32 nValue)
-        {
-            if(!isEmpty())
-            {
-                bool bLessThanZero(nValue < 0);
-
-                if(nValue > 0 || bLessThanZero)
-                {
-                    mnMinimum -= nValue;
-                    mnMaximum += nValue;
-
-                    if(bLessThanZero)
-                    {
-                        // test if range did collapse
-                        if(mnMinimum > mnMaximum)
-                        {
-                            // if yes, collapse to center
-                            mnMinimum = mnMaximum = ((mnMaximum + mnMinimum - 1) / 2);
-                        }
-                    }
-                }
-            }
-        }
     };
 
 } // end of namespace basegfx

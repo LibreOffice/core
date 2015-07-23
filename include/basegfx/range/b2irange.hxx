@@ -194,13 +194,6 @@ namespace basegfx
             maRangeY.expand(rTuple.getY());
         }
 
-        /// add rRange to the set, expanding as necessary
-        void expand(const B2IRange& rRange)
-        {
-            maRangeX.expand(rRange.maRangeX);
-            maRangeY.expand(rRange.maRangeY);
-        }
-
         /// calc set intersection
         void intersect(const B2IRange& rRange)
         {

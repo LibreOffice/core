@@ -100,9 +100,6 @@ namespace dbp
         DECL_LINK(OnEntryDoubleClicked, ListBox*);
 
         void implCheckButtons();
-        void implApplySettings();
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > implGetColumns(bool _bShowError = true);
     };
 
 

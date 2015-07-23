@@ -52,14 +52,12 @@ static ::osl::Mutex& ImplGetOwnStaticMutex()
 // Window
 
 
-Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Player& rPlayer ) :
+Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr ),
     meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
-    mrPlayer( rPlayer ),
     mnPointerType( awt::SystemPointer::ARROW )
 {
     ::osl::MutexGuard aGuard( ImplGetOwnStaticMutex() );
-
 }
 
 Window::~Window()

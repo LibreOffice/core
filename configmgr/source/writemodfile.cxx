@@ -93,14 +93,6 @@ TempFile::~TempFile() {
     }
 }
 
-oslFileError TempFile::closeWithoutUnlink() {
-    flush();
-    oslFileError e = osl_closeFile(handle);
-    handle = 0;
-    closed = true;
-    return e;
-}
-
 void TempFile::closeAndRename(const OUString &_url) {
     oslFileError e = flush();
     if (e != osl_File_E_None) {
