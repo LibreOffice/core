@@ -267,6 +267,7 @@ class SVT_DLLPUBLIC SvTreeListBox
     long mnCheckboxItemWidth;
     bool mbContextBmpExpanded;
     bool mbAlternatingRowColors;
+    bool mbUpdateAlternatingRows;
 
     SvTreeListEntry*    pHdlEntry;
     SvLBoxItem*     pHdlItem;

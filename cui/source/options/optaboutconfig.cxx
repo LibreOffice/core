@@ -179,6 +179,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
                                         util::SearchFlags::REG_NOT_ENDOFLINE);
 
     m_pPrefBox->SetTabs(aTabs, MAP_PIXEL);
+    m_pPrefBox->SetAlternatingRowColors( true );
 }
 
 CuiAboutConfigTabPage::~CuiAboutConfigTabPage()
@@ -479,7 +480,6 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             InsertEntry(sPath, sPath.copy(index+1), seqItems[i], sType, sValue, pParentEntry, !bLoadAll);
         }
     }
-    m_pPrefBox->SetAlternatingRowColors( true );
 }
 
 Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( const OUString& sNodePath, bool bUpdate )
@@ -863,7 +863,6 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl)
         m_pPrefBox->SortByCol(sortedCol, sortMode == SortAscending);
 
     m_pPrefBox->SetUpdateMode( true );
-    m_pPrefBox->SetAlternatingRowColors( true );
 
     return 0;
 }
