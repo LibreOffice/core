@@ -64,6 +64,8 @@ namespace sw { namespace sidebar {
         VclPtr<RadioButton> mpRBWrapParallel;
         VclPtr<RadioButton> mpRBWrapThrough;
         VclPtr<RadioButton> mpRBIdealWrap;
+        VclPtr<Button>      mpEditContour;
+        VclPtr<CheckBox> mpEnableContour;
 
         //Image resource.
         ImageList aWrapIL;
@@ -75,10 +77,14 @@ namespace sw { namespace sidebar {
         ::sfx2::sidebar::ControllerItem maSwWrapParallelControl;
         ::sfx2::sidebar::ControllerItem maSwWrapThroughControl;
         ::sfx2::sidebar::ControllerItem maSwWrapIdealControl;
+        ::sfx2::sidebar::ControllerItem maSwEnableContourControl;
 
         void Initialize();
+        void UpdateEditContour();
 
         DECL_LINK(WrapTypeHdl, void*);
+        DECL_LINK(EnableContourHdl, void*);
+        DECL_LINK(EditContourHdl, void*);
     };
 
 } } // end of namespace ::sw::sidebar

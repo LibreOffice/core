@@ -22,7 +22,7 @@
 
 #include <cmdid.h>
 #include <swtypes.hxx>
-
+#include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
@@ -76,6 +76,7 @@ WrapPropertyPanel::WrapPropertyPanel(
     , maSwWrapParallelControl(FN_FRAME_WRAP_LEFT, *pBindings, *this)
     , maSwWrapThroughControl(FN_FRAME_WRAPTHRU, *pBindings, *this)
     , maSwWrapIdealControl(FN_FRAME_WRAP_IDEAL, *pBindings, *this)
+    , maSwEnableContourControl(FN_FRAME_WRAP_CONTOUR, *pBindings, *this)
 {
     get(mpRBNoWrap, "buttonnone");
     get(mpRBWrapLeft, "buttonbefore");
@@ -83,6 +84,8 @@ WrapPropertyPanel::WrapPropertyPanel(
     get(mpRBWrapParallel, "buttonparallel");
     get(mpRBWrapThrough, "buttonthrough");
     get(mpRBIdealWrap, "buttonoptimal");
+    get(mpEnableContour, "enablecontour");
+    get(mpEditContour, "editcontour");
 
     Initialize();
 }
@@ -100,6 +103,8 @@ void WrapPropertyPanel::dispose()
     mpRBWrapParallel.clear();
     mpRBWrapThrough.clear();
     mpRBIdealWrap.clear();
+    mpEnableContour.clear();
+    mpEditContour.clear();
 
     maSwNoWrapControl.dispose();
     maSwWrapLeftControl.dispose();
@@ -107,6 +112,7 @@ void WrapPropertyPanel::dispose()
     maSwWrapParallelControl.dispose();
     maSwWrapThroughControl.dispose();
     maSwWrapIdealControl.dispose();
+    maSwEnableContourControl.dispose();
 
     PanelLayout::dispose();
 }
@@ -120,6 +126,9 @@ void WrapPropertyPanel::Initialize()
     mpRBWrapParallel->SetClickHdl(aLink);
     mpRBWrapThrough->SetClickHdl(aLink);
     mpRBIdealWrap->SetClickHdl(aLink);
+
+    mpEditContour->SetClickHdl(LINK(this, WrapPropertyPanel, EditContourHdl));
+    mpEnableContour->SetClickHdl(LINK(this, WrapPropertyPanel, EnableContourHdl));
 
     aWrapIL.AddImage( UNO_WRAPOFF,
                       ::GetImage( mxFrame, UNO_WRAPOFF, false ) );
@@ -162,6 +171,22 @@ void WrapPropertyPanel::Initialize()
     mpBindings->Update( FN_FRAME_WRAP_LEFT );
     mpBindings->Update( FN_FRAME_WRAPTHRU );
     mpBindings->Update( FN_FRAME_WRAP_IDEAL );
+    mpBindings->Update( FN_FRAME_WRAP_CONTOUR );
+}
+
+IMPL_LINK_NOARG(WrapPropertyPanel, EditContourHdl)
+{
+    SfxBoolItem aItem(SID_CONTOUR_DLG, true);
+    mpBindings->GetDispatcher()->Execute(SID_CONTOUR_DLG, SfxCallMode::RECORD, &aItem, 0l);
+    return 0;
+}
+
+IMPL_LINK_NOARG(WrapPropertyPanel, EnableContourHdl)
+{
+    bool IsContour = mpEnableContour->IsChecked();
+    SfxBoolItem aItem(FN_FRAME_WRAP_CONTOUR, IsContour);
+    mpBindings->GetDispatcher()->Execute(FN_FRAME_WRAP_CONTOUR, SfxCallMode::RECORD, &aItem, 0l);
+    return 0;
 }
 
 IMPL_LINK_NOARG(WrapPropertyPanel, WrapTypeHdl)
@@ -193,10 +218,21 @@ IMPL_LINK_NOARG(WrapPropertyPanel, WrapTypeHdl)
     }
     SfxBoolItem bStateItem( nSlot, true );
     mpBindings->GetDispatcher()->Execute( nSlot, SfxCallMode::RECORD, &bStateItem, 0L );
-
     return 0;
 }
+void WrapPropertyPanel::UpdateEditContour()
+{
+    if(mpRBNoWrap->IsChecked() || mpRBWrapThrough->IsChecked())
+    {
+        mpEnableContour->Check( false );
+        mpEnableContour->Disable();
+    }
+    else
+    {
+        mpEnableContour->Enable();
+    }
 
+}
 void WrapPropertyPanel::NotifyItemUpdate(
     const sal_uInt16 nSId,
     const SfxItemState eState,
@@ -209,12 +245,13 @@ void WrapPropertyPanel::NotifyItemUpdate(
         pState->ISA(SfxBoolItem) )
     {
         //Set Radio Button enable
-        mpRBNoWrap->Enable(true);
-        mpRBWrapLeft->Enable(true);
-        mpRBWrapRight->Enable(true);
-        mpRBWrapParallel->Enable(true);
-        mpRBWrapThrough->Enable(true);
-        mpRBIdealWrap->Enable(true);
+        mpRBNoWrap->Enable();
+        mpRBWrapLeft->Enable();
+        mpRBWrapRight->Enable();
+        mpRBWrapParallel->Enable();
+        mpRBWrapThrough->Enable();
+        mpRBIdealWrap->Enable();
+        mpEnableContour->Enable();
 
         const SfxBoolItem* pBoolItem = static_cast< const SfxBoolItem* >( pState );
         switch( nSId )
@@ -234,27 +271,15 @@ void WrapPropertyPanel::NotifyItemUpdate(
         case FN_FRAME_WRAP:
             mpRBWrapParallel->Check( pBoolItem->GetValue() );
             break;
+        case FN_FRAME_WRAP_CONTOUR:
+            mpEnableContour->Check( pBoolItem->GetValue() );
+            break;
         case FN_FRAME_NOWRAP:
-        default:
             mpRBNoWrap->Check( pBoolItem->GetValue() );
             break;
         }
-    }
-    else
-    {
-        mpRBNoWrap->Enable(false);
-        mpRBWrapLeft->Enable(false);
-        mpRBWrapRight->Enable(false);
-        mpRBWrapParallel->Enable(false);
-        mpRBWrapThrough->Enable(false);
-        mpRBIdealWrap->Enable(false);
+        UpdateEditContour();
 
-        mpRBNoWrap->Check( false );
-        mpRBWrapLeft->Check( false );
-        mpRBWrapRight->Check( false );
-        mpRBWrapParallel->Check( false );
-        mpRBWrapThrough->Check( false );
-        mpRBIdealWrap->Check( false );
     }
 }
 
