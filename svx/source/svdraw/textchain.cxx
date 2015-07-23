@@ -68,6 +68,8 @@ SdrTextObj *TextChain::GetPrevLink(const SdrTextObj *pTextObj) const
 
 SdrTextObj *TextChain::impGetNextLink(const SdrTextObj *pTextObj) const
 {
+    // XXX: Temporary implementation based on index number
+
     SdrTextObj *pNextTextObj = NULL;
     SdrPage *pPage = pTextObj->pPage;
 
@@ -87,7 +89,6 @@ SdrTextObj *TextChain::impGetNextLink(const SdrTextObj *pTextObj) const
 
 SdrTextObj *TextChain::impGetPrevLink(const SdrTextObj *pTextObj) const
 {
-    // XXX: To be implemented
     return NULL;
 }
 

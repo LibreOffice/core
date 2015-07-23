@@ -2090,7 +2090,9 @@ SdrTextObj* SdrTextObj::GetNextLinkInChain() const
 
 SdrTextObj* SdrTextObj::GetPrevLinkInChain() const
 {
-    // FIXME: To be implemented
+    if (GetTextChain())
+        return GetTextChain()->GetPrevLink(this);
+
     return NULL;
 }
 
