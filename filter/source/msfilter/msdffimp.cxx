@@ -149,6 +149,18 @@ using namespace container           ;
 static sal_uInt32 nMSOleObjCntr = 0;
 #define MSO_OLE_Obj "MSO_OLE_Obj"
 
+struct SvxMSDffBLIPInfo
+{
+    sal_uInt16 nBLIPType;   ///< type of BLIP: e.g. 6 for PNG
+    sal_uLong  nFilePos;    ///< offset of the BLIP in data strem
+    sal_uLong  nBLIPSize;   ///< number of bytes that the BLIP needs in stream
+    SvxMSDffBLIPInfo(sal_uInt16 nBType, sal_uLong nFPos, sal_uLong nBSize):
+        nBLIPType( nBType ), nFilePos( nFPos ), nBLIPSize( nBSize ){}
+};
+
+/// the following will be sorted by the order of their appearance:
+struct SvxMSDffBLIPInfos : public std::vector<SvxMSDffBLIPInfo> {};
+
 /************************************************************************/
 void Impl_OlePres::Write( SvStream & rStm )
 {
@@ -5528,7 +5540,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
                                  bool bSkipImages )
     :DffPropertyReader( *this ),
      pFormModel( NULL ),
-     pBLIPInfos( new SvxMSDffBLIPInfos  ),
+     m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      pShapeOrders( new SvxMSDffShapeOrders ),
      nOffsDgg( nOffsDgg_ ),
@@ -5577,7 +5589,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
 SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
     :DffPropertyReader( *this ),
      pFormModel( NULL ),
-     pBLIPInfos(   new SvxMSDffBLIPInfos  ),
+     m_pBLIPInfos( new SvxMSDffBLIPInfos ),
      m_xShapeInfosByTxBxComp( new SvxMSDffShapeInfos_ByTxBxComp ),
      pShapeOrders( new SvxMSDffShapeOrders ),
      nOffsDgg( 0 ),
@@ -5603,7 +5615,7 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const OUString& rBaseURL )
 SvxMSDffManager::~SvxMSDffManager()
 {
     delete pSecPropSet;
-    delete pBLIPInfos;
+    delete m_pBLIPInfos;
     delete pShapeOrders;
     delete pFormModel;
 }
@@ -5879,7 +5891,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
                     nBLIPCount++;
 
                 // now save the info for later access
-                pBLIPInfos->push_back( new SvxMSDffBLIPInfo( nInst, nBLIPPos, nBLIPLen ) );
+                m_pBLIPInfos->push_back(SvxMSDffBLIPInfo(nInst, nBLIPPos, nBLIPLen));
             }
             rSt.SeekRel( nLength );
         }
@@ -6217,7 +6229,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* pVisA
     if ( !bOk )
     {
         sal_uInt16 nIdx = sal_uInt16( nIdx_ );
-        if( !nIdx || (pBLIPInfos->size() < nIdx) )
+        if (!nIdx || (m_pBLIPInfos->size() < nIdx))
             return false;
 
         // possibly delete old error flag(s)
@@ -6232,7 +6244,7 @@ bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rData, Rectangle* pVisA
         sal_uLong nOldPosData = pStData ? pStData->Tell() : nOldPosCtrl;
 
         // fetch matching info struct out of the pointer array
-        SvxMSDffBLIPInfo& rInfo = (*pBLIPInfos)[ nIdx-1 ];
+        SvxMSDffBLIPInfo& rInfo = (*m_pBLIPInfos)[ nIdx-1 ];
         // jump to the BLIP atom in the data stream
         pStData->Seek( rInfo.nFilePos );
         // possibly reset error status

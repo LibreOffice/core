@@ -56,7 +56,7 @@ class FmFormModel;
 class SdrModel;
 class SwFlyFrameFormat;
 
-struct SvxMSDffBLIPInfo;
+struct SvxMSDffBLIPInfos;
 struct SvxMSDffShapeInfo;
 struct SvxMSDffShapeOrder;
 
@@ -109,8 +109,7 @@ typedef ::std::map< sal_Int32, SdrObject* > SvxMSDffShapeIdContainer;
 
 #define SVEXT_PERSIST_STREAM "\002OlePres000"
 
-// the following two will be sorted by the order of their appearance:
-typedef boost::ptr_vector<SvxMSDffBLIPInfo> SvxMSDffBLIPInfos;
+/// the following will be sorted by the order of their appearance:
 typedef boost::ptr_vector<SvxMSDffShapeOrder> SvxMSDffShapeOrders;
 
 struct MSFILTER_DLLPUBLIC CompareSvxMSDffShapeInfoById
@@ -400,7 +399,7 @@ public:
 class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
 {
     FmFormModel*            pFormModel;
-    SvxMSDffBLIPInfos*      pBLIPInfos;
+    SvxMSDffBLIPInfos*      m_pBLIPInfos;
     std::unique_ptr<SvxMSDffShapeInfos_ByTxBxComp> m_xShapeInfosByTxBxComp;
     std::unique_ptr<SvxMSDffShapeInfos_ById> m_xShapeInfosById;
     SvxMSDffShapeOrders*    pShapeOrders;
@@ -720,15 +719,6 @@ public:
     void insertShapeId( sal_Int32 nShapeId, SdrObject* pShape );
     void removeShapeId( SdrObject* pShape );
     SdrObject* getShapeForId( sal_Int32 nShapeId );
-};
-
-struct SvxMSDffBLIPInfo
-{
-    sal_uInt16 nBLIPType;   ///< type of BLIP: e.g. 6 for PNG
-    sal_uLong  nFilePos;    ///< offset of the BLIP in data strem
-    sal_uLong  nBLIPSize;   ///< number of bytes that the BLIP needs in stream
-    SvxMSDffBLIPInfo(sal_uInt16 nBType, sal_uLong nFPos, sal_uLong nBSize):
-        nBLIPType( nBType ), nFilePos( nFPos ), nBLIPSize( nBSize ){}
 };
 
 struct SvxMSDffShapeInfo
