@@ -16,6 +16,8 @@
 #include "unx/x11/x11gdiimpl.h"
 #include "openglgdiimpl.hxx"
 
+class TextureCombo;
+
 class VCL_PLUGIN_PUBLIC X11OpenGLSalGraphicsImpl : public OpenGLSalGraphicsImpl, public X11GraphicsImpl
 {
 private:
@@ -29,6 +31,8 @@ protected:
     virtual OpenGLContext* CreateWinContext() SAL_OVERRIDE;
     virtual bool UseContext( OpenGLContext* pContext ) SAL_OVERRIDE;
 
+    bool RenderPixmap(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY, TextureCombo& rCombo);
+
 public:
     // implementation of X11GraphicsImpl
 
@@ -37,7 +41,12 @@ public:
     virtual void Init() SAL_OVERRIDE;
 
     bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) SAL_OVERRIDE;
-    bool RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY ) SAL_OVERRIDE;
+    bool RenderPixmapToScreen(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY) SAL_OVERRIDE;
+
+    bool RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
+                                     ControlCacheKey& aControlCacheKey) SAL_OVERRIDE;
+    bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey,
+                                      int nX, int nY) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_OPENGL_X11_GDIIMPL_HXX

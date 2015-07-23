@@ -25,6 +25,8 @@
 #include <tools/gen.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <boost/functional/hash.hpp>
+
 /* Control Types:
  *
  *   Specify the overall, whole control
@@ -253,6 +255,46 @@ namespace o3tl
 {
     template<> struct typed_flags<ControlState> : is_typed_flags<ControlState, 0xc007f> {};
 }
+
+class ControlCacheKey
+{
+public:
+    ControlType mnType;
+    ControlPart mnPart;
+    ControlState mnState;
+    Size maSize;
+
+    ControlCacheKey(ControlType nType, ControlPart nPart, ControlState nState, const Size& rSize)
+        : mnType(nType)
+        , mnPart(nPart)
+        , mnState(nState)
+        , maSize(rSize)
+    {}
+
+    bool operator==(ControlCacheKey const& aOther) const
+    {
+        return mnType == aOther.mnType
+            && mnPart == aOther.mnPart
+            && mnState == aOther.mnState
+            && maSize.Width() == aOther.maSize.Width()
+            && maSize.Height() == aOther.maSize.Height();
+    }
+};
+
+struct ControlCacheHashFunction
+{
+    std::size_t operator()(ControlCacheKey const& aCache) const
+    {
+        std::size_t seed = 0;
+        boost::hash_combine(seed, aCache.mnType);
+        boost::hash_combine(seed, aCache.mnPart);
+        boost::hash_combine(seed, aCache.mnState);
+        boost::hash_combine(seed, aCache.maSize.Width());
+        boost::hash_combine(seed, aCache.maSize.Height());
+        return seed;
+    }
+};
+
 
 /* ButtonValue:
  *

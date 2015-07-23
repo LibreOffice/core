@@ -279,6 +279,11 @@ public:
     void Init() SAL_OVERRIDE;
     bool FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY ) SAL_OVERRIDE;
     bool RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY ) SAL_OVERRIDE;
+
+    virtual bool TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey,
+                                              int nX, int nY) SAL_OVERRIDE;
+    virtual bool RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
+                                             ControlCacheKey& aControlCacheKey) SAL_OVERRIDE;
 };
 
 #endif

@@ -267,6 +267,12 @@ public:
     virtual void                    BeginPaint() SAL_OVERRIDE;
     virtual void                    EndPaint() SAL_OVERRIDE;
 
+    bool TryRenderCachedNativeControl(ControlCacheKey& aControlCacheKey,
+                                      int nX, int nY);
+
+    bool RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
+                                     ControlCacheKey& aControlCacheKey);
+
     // fill a pixmap from a screen region
     bool                            FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY );
 

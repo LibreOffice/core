@@ -89,6 +89,21 @@ bool X11SalGraphics::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask,
     return rImpl.RenderPixmapToScreen( pPixmap, pMask, nX, nY );
 }
 
+bool X11SalGraphics::TryRenderCachedNativeControl(ControlCacheKey& rControlCacheKey, int nX, int nY)
+{
+    SAL_INFO( "vcl", "TryRenderCachedNativeControl" );
+    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl.get());
+    return rImpl.TryRenderCachedNativeControl(rControlCacheKey, nX, nY);
+}
+
+bool X11SalGraphics::RenderAndCacheNativeControl(X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY,
+                                                 ControlCacheKey& rControlCacheKey)
+{
+    SAL_INFO( "vcl", "RenderAndCachePixmap" );
+    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl.get());
+    return rImpl.RenderAndCacheNativeControl(pPixmap, pMask, nX, nY, rControlCacheKey);
+}
+
 extern "C"
 {
     static Bool GraphicsExposePredicate( Display*, XEvent* pEvent, XPointer pFrameWindow )
