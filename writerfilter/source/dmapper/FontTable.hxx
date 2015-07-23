@@ -56,7 +56,7 @@ struct FontEntry
 class FontTable : public LoggedProperties, public LoggedTable
     /*,public BinaryObj*/, public LoggedStream
 {
-    FontTable_Impl   *m_pImpl;
+    std::unique_ptr<FontTable_Impl> m_pImpl;
 
  public:
     FontTable();

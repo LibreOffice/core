@@ -49,7 +49,6 @@ FontTable::FontTable()
 
 FontTable::~FontTable()
 {
-    delete m_pImpl;
 }
 
 void FontTable::lcl_attribute(Id Name, Value & val)
