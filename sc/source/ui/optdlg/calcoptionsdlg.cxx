@@ -227,6 +227,7 @@ IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox*, pConv )
 IMPL_LINK(ScCalcOptionsDialog, SyntaxModifiedHdl, ListBox*, pSyntax)
 {
     maConfig.meStringRefAddressSyntax = toAddressConvention(pSyntax->GetSelectEntryPos());
+    maConfig.mbHasStringRefSyntax = true;
     return 0;
 }
 

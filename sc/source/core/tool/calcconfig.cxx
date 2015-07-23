@@ -23,7 +23,8 @@
 ScCalcConfig::ScCalcConfig() :
     meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED),
     meStringConversion(StringConversion::LOCALE),     // old LibreOffice behavior
-    mbEmptyStringAsZero(false)
+    mbEmptyStringAsZero(false),
+    mbHasStringRefSyntax(false)
 {
     setOpenCLConfigToDefault();
 
@@ -85,6 +86,7 @@ void ScCalcConfig::MergeDocumentSpecific( const ScCalcConfig& r )
     mbEmptyStringAsZero      = r.mbEmptyStringAsZero;
     // INDIRECT ref syntax is per document.
     meStringRefAddressSyntax = r.meStringRefAddressSyntax;
+    mbHasStringRefSyntax      = r.mbHasStringRefSyntax;
 }
 
 bool ScCalcConfig::operator== (const ScCalcConfig& r) const
@@ -92,6 +94,7 @@ bool ScCalcConfig::operator== (const ScCalcConfig& r) const
     return meStringRefAddressSyntax == r.meStringRefAddressSyntax &&
            meStringConversion == r.meStringConversion &&
            mbEmptyStringAsZero == r.mbEmptyStringAsZero &&
+           mbHasStringRefSyntax == r.mbHasStringRefSyntax &&
            mbOpenCLSubsetOnly == r.mbOpenCLSubsetOnly &&
            mbOpenCLAutoSelect == r.mbOpenCLAutoSelect &&
            maOpenCLDevice == r.maOpenCLDevice &&
@@ -127,6 +130,7 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
         "StringRefAddressSyntax=" << rConfig.meStringRefAddressSyntax << ","
         "StringConversion=" << StringConversionToString(rConfig.meStringConversion) << ","
         "EmptyStringAsZero=" << (rConfig.mbEmptyStringAsZero?"Y":"N") << ","
+        "HasStringRefSyntax=" << (rConfig.mbHasStringRefSyntax?"Y":"N") << ","
         "OpenCLSubsetOnly=" << (rConfig.mbOpenCLSubsetOnly?"Y":"N") << ","
         "OpenCLAutoSelect=" << (rConfig.mbOpenCLAutoSelect?"Y":"N") << ","
         "OpenCLDevice='" << rConfig.maOpenCLDevice << "',"

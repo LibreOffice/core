@@ -7037,7 +7037,10 @@ void ScInterpreter::ScIndirect()
             eConv = FormulaGrammar::CONV_XL_R1C1;
         }
 
-        bool bTryXlA1 = (eConv == FormulaGrammar::CONV_A1_XL_A1);
+        // either CONV_A1_XL_A1 was explicitly configured, or nothing at all
+        // was configured
+        bool bTryXlA1 = (eConv == FormulaGrammar::CONV_A1_XL_A1 ||
+                          !maCalcConfig.mbHasStringRefSyntax);
 
         const ScAddress::Details aDetails( bTryXlA1 ? FormulaGrammar::CONV_OOO : eConv, aPos );
         const ScAddress::Details aDetailsXlA1( FormulaGrammar::CONV_XL_A1, aPos );
