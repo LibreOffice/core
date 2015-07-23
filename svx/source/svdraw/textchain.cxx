@@ -19,6 +19,7 @@
 
 #include <svx/textchain.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdpage.hxx>
 
 /*
  * Definition of Properties Interface
@@ -55,23 +56,36 @@ void TextChain::AppendLink(SdrTextObj *)
     // XXX
 }
 
-SdrTextObj *TextChain::GetNextLink(SdrTextObj *pTextObj) const
+SdrTextObj *TextChain::GetNextLink(const SdrTextObj *pTextObj) const
 {
     return impGetNextLink(pTextObj);
 }
 
-SdrTextObj *TextChain::GetPrevLink(SdrTextObj *pTextObj) const
+SdrTextObj *TextChain::GetPrevLink(const SdrTextObj *pTextObj) const
 {
     return impGetPrevLink(pTextObj);
 }
 
-SdrTextObj *TextChain::impGetNextLink(SdrTextObj *pTextObj) const
+SdrTextObj *TextChain::impGetNextLink(const SdrTextObj *pTextObj) const
 {
-    // XXX: To be implemented
-    return NULL;
+    SdrTextObj *pNextTextObj = NULL;
+    SdrPage *pPage = pTextObj->pPage;
+
+    if ( pPage && pPage->GetObjCount() > 1) {
+
+        sal_uInt32 nextIndex = (pTextObj->GetOrdNum()+1);
+
+        if (nextIndex < pPage->GetObjCount())
+            pNextTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj( nextIndex ) );
+
+        return pNextTextObj;
+    } else {
+        fprintf(stderr, "Make New Object please\n");
+        return NULL;
+    }
 }
 
-SdrTextObj *TextChain::impGetPrevLink(SdrTextObj *pTextObj) const
+SdrTextObj *TextChain::impGetPrevLink(const SdrTextObj *pTextObj) const
 {
     // XXX: To be implemented
     return NULL;

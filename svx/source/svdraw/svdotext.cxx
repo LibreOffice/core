@@ -2082,22 +2082,10 @@ void SdrTextObj::SetObjectItemNoBroadcast(const SfxPoolItem& rItem)
 
 SdrTextObj* SdrTextObj::GetNextLinkInChain() const
 {
-    /* FIXME(matteocam) return mpNextInChain; */
-    SdrTextObj *pNextTextObj = NULL;
+    if (GetTextChain())
+        return GetTextChain()->GetNextLink(this);
 
-    if ( pPage && pPage->GetObjCount() > 1) {
-
-        sal_uInt32 nextIndex = (GetOrdNum()+1);
-
-        if (nextIndex < pPage->GetObjCount())
-            pNextTextObj =  dynamic_cast< SdrTextObj * >( pPage->GetObj( nextIndex ) );
-
-        return pNextTextObj;
-    } else {
-        fprintf(stderr, "Make New Object please\n");
-        return NULL;
-    }
-
+    return NULL;
 }
 
 SdrTextObj* SdrTextObj::GetPrevLinkInChain() const
