@@ -109,9 +109,6 @@ template< bool polarity > struct ColorBlendFunctor32
 
 template<> struct ColorTraits< Color >
 {
-    /// @return number of color channels
-    static int numChannels() { return 3; }
-
     /// Type of a color component (i.e. the type of an individual channel)
     typedef sal_uInt8 component_type;
 
@@ -167,15 +164,6 @@ struct NumericTraits<basebmp::Color>
     typedef VigraTrueType  isSigned;
     typedef VigraTrueType  isOrdered;
     typedef VigraFalseType isComplex;
-
-    static Type zero() { return Type(); }
-    static Type one() { return Type(0x01010101); }
-    static Type nonZero() { return Type(0x01010101); }
-
-    static Promote toPromote(const Type& v) { return v; }
-    static RealPromote toRealPromote(const Type& v) { return v; }
-    static Type fromPromote(const Promote& v) { return v; }
-    static Type fromRealPromote(const RealPromote& v) { return v; }
 };
 
 } // namespace vigra

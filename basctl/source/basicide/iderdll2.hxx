@@ -44,8 +44,6 @@ private:
     OUString        aAddLibPath;
     OUString        aAddLibFilter;
 
-    sal_uInt16      nBasicDialogCount;
-
     bool            bChoosingMacro;
     bool            bShellInCriticalSection;
 
@@ -63,10 +61,6 @@ public:
 
     bool&             ChoosingMacro()          { return bChoosingMacro; }
     bool&             ShellInCriticalSection() { return bShellInCriticalSection; }
-
-    sal_uInt16        GetBasicDialogCount() const { return nBasicDialogCount; }
-    void              IncBasicDialogCount()       { nBasicDialogCount++; }
-    void              DecBasicDialogCount()       { nBasicDialogCount--; }
 
     SvxSearchItem&    GetSearchItem() const { return *pSearchItem; }
     void              SetSearchItem( const SvxSearchItem& rItem );

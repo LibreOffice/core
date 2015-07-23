@@ -141,19 +141,14 @@ public:
     bool operator == (EntryDescriptor const& rDesc) const;
 
     ScriptDocument const&   GetDocument() const { return m_aDocument; }
-    void                    SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
     LibraryLocation         GetLocation() const { return m_eLocation; }
-    void                    SetLocation( LibraryLocation eLocation ) { m_eLocation = eLocation; }
 
     const OUString&         GetLibName() const { return m_aLibName; }
-    void                    SetLibName( const OUString& aLibName ) { m_aLibName = aLibName; }
 
     const OUString&         GetLibSubName() const { return m_aLibSubName; }
-    void                    SetLibSubName( const OUString& aLibSubName ) { m_aLibSubName = aLibSubName; }
 
     const OUString&         GetName() const { return m_aName; }
-    void                    SetName( const OUString& aName ) { m_aName = aName; }
 
     const OUString&         GetMethodName() const { return m_aMethodName; }
     void                    SetMethodName( const OUString& aMethodName ) { m_aMethodName = aMethodName; }

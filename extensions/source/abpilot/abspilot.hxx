@@ -117,11 +117,6 @@ namespace abp
             return  ( AST_LDAP != _eType ) && ( AST_KAB != _eType );
         }
 
-        inline bool needTableSelection() const
-        {
-            return needTableSelection( m_aSettings.eType );
-        }
-
         void implCleanup();
         void implCommitAll();
 

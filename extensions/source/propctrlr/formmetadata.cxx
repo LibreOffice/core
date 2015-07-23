@@ -366,13 +366,6 @@ namespace pcr
     }
 
 
-    OUString OPropertyInfoService::getPropertyName( sal_Int32 _nPropId )
-    {
-        const OPropertyInfoImpl* pInfo = getPropertyInfo(_nPropId);
-        return pInfo ? pInfo->sName : OUString();
-    }
-
-
     OUString OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);

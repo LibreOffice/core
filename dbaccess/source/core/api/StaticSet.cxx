@@ -217,15 +217,6 @@ bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeE
     return m_aSetIter != m_aSet.end() && m_aSetIter != m_aSet.begin();
 }
 
-bool SAL_CALL OStaticSet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
-{
-    if(!rows)
-        return true;
-
-    sal_Int32 nCurPos = getRow();
-    return absolute(nCurPos+rows);
-}
-
 bool SAL_CALL OStaticSet::previous(  ) throw(SQLException, RuntimeException)
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;

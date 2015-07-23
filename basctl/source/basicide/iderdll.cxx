@@ -151,7 +151,6 @@ ExtraData* Dll::GetExtraData ()
 
 ExtraData::ExtraData () :
     pSearchItem(new SvxSearchItem(SID_SEARCH_ITEM)),
-    nBasicDialogCount(0),
     bChoosingMacro(false),
     bShellInCriticalSection(false)
 {

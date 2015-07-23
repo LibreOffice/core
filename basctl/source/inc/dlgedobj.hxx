@@ -180,9 +180,6 @@ public:
     void UpdateTabOrderAndGroups();
 
     css::awt::DeviceInfo getDeviceInfo() const;
-
-private:
-    void    ImplInvalidateDeviceInfo();
 };
 
 } // namespace basctl

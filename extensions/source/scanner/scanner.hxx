@@ -81,12 +81,9 @@ public:
     static OUString                         getImplementationName_Static() throw();
     static Sequence< OUString >             getSupportedServiceNames_Static() throw();
 
-    void                                    Lock() { maProtector.acquire(); }
-    void                                    Unlock() { maProtector.release(); }
-
     void*                                   GetData() const { return mpData; }
     void                                    SetData( void* pData ) { ReleaseData(); mpData = pData; }
-};
+ };
 
 Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >& rxFactory ) throw( Exception );
 

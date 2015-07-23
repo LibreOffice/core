@@ -551,12 +551,6 @@ bool SAL_CALL OCacheSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeEx
     return m_xDriverSet->absolute(row);
 }
 
-bool SAL_CALL OCacheSet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
-{
-    m_bInserted = m_bUpdated = m_bDeleted = false;
-    return m_xDriverSet->relative(rows);
-}
-
 bool SAL_CALL OCacheSet::previous(  ) throw(SQLException, RuntimeException)
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;

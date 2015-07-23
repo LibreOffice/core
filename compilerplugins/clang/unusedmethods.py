@@ -27,7 +27,7 @@ exclusionSet = set([
     "void unoidl::detail::SourceProviderScannerData::setSource(const void *,unsigned long)",
     "enum connectivity::IParseContext::InternationalKeyCode connectivity::IParseContext::getIntlKeyCode(const class rtl::OString &) const",
     "void connectivity::OSQLParser::error(const char *)",
-    "void connectivity::OSQLParseNode::insert(unsigned int,class connectivity::OSQLParseNode *)"
+    "void connectivity::OSQLParseNode::insert(unsigned int,class connectivity::OSQLParseNode *)",
     # TODO track instantiations of template class constructors
     "void comphelper::IEventProcessor::release()",
     "void SotMutexHolder::acquire()",
@@ -35,6 +35,7 @@ exclusionSet = set([
     # only used by Windows build
     "_Bool basegfx::B2ITuple::equalZero() const",
     "class basegfx::B2DPolyPolygon basegfx::unotools::UnoPolyPolygon::getPolyPolygonUnsafe() const",
+	"void basegfx::B2IRange::expand(const basegfx::B2ITuple &)",
     "void OpenGLContext::requestSingleBufferedRendering()",
 	"_Bool TabitemValue::isBothAligned() const",
 	"_Bool TabitemValue::isNotAligned() const",
@@ -57,6 +58,8 @@ exclusionSet = set([
     "_Bool IDocumentLinksAdministration::GetData(const class rtl::OUString &,const class rtl::OUString &,class com::sun::star::uno::Any &) const",
     "_Bool IDocumentLinksAdministration::SetData(const class rtl::OUString &,const class rtl::OUString &,const class com::sun::star::uno::Any &)",
     "_Bool ScImportExport::ImportData(const class rtl::OUString &,const class com::sun::star::uno::Any &)",
+	"void* ScannerManager::GetData()",
+	"void ScannerManager::SetData(void *)",
     # instantiated from templates, not sure why it is not being picked up
     "class basegfx::B2DPolygon OutputDevice::PixelToLogic(const class basegfx::B2DPolygon &,const class MapMode &) const",
     "type-parameter-0-0 * detail::cloner::clone(type-parameter-0-0 *const)",
