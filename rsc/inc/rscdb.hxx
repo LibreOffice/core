@@ -43,6 +43,7 @@ enum class KeyFuncType : sal_Int32;
 enum class MenuItemBits : sal_Int16;
 enum class ToolBoxItemType;
 enum class ButtonType;
+enum class WindowAlign;
 
 struct WriteRcContext
 {
@@ -155,6 +156,7 @@ class RscTypCont
     inline void SETCONST( RscConst *p1, const char * p2, ToolBoxItemType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, Atom p2, ButtonType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     inline void SETCONST( RscConst *p1, const char * p2, ButtonType p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
+    inline void SETCONST( RscConst *p1, const char * p2, WindowAlign p3 ) { SETCONST(p1, p2, static_cast<sal_uInt32>(p3)); }
     RscEnum *   InitLangType();
     RscEnum *   InitFieldUnitsType();
     RscEnum *   InitColor();

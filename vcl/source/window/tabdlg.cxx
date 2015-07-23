@@ -27,7 +27,7 @@ void TabDialog::ImplInitTabDialogData()
 {
     mpFixedLine     = NULL;
     mpViewWindow    = NULL;
-    meViewAlign     = WINDOWALIGN_LEFT;
+    meViewAlign     = WindowAlign::Left;
     mbPosControls   = true;
 }
 
@@ -97,7 +97,7 @@ void TabDialog::ImplPosControls()
             long    nViewHeight = 0;
             PosSizeFlags nViewPosFlags = PosSizeFlags::Pos;
             Size    aViewSize = mpViewWindow->GetSizePixel();
-            if (  meViewAlign == WINDOWALIGN_TOP )
+            if (  meViewAlign == WindowAlign::Top )
             {
                 nViewOffX       = aTabOffset.X();
                 nViewOffY       = nOffY+IMPL_DIALOG_OFFSET;
@@ -106,7 +106,7 @@ void TabDialog::ImplPosControls()
                 aTabOffset.Y() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
                 aDlgSize.Height() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
             }
-            else if (  meViewAlign == WINDOWALIGN_BOTTOM )
+            else if (  meViewAlign == WindowAlign::Bottom )
             {
                 nViewOffX       = aTabOffset.X();
                 nViewOffY       = aTabOffset.Y()+aTabSize.Height()+IMPL_DIALOG_OFFSET;
@@ -114,7 +114,7 @@ void TabDialog::ImplPosControls()
                 nViewPosFlags  |= PosSizeFlags::Width;
                 aDlgSize.Height() += aViewSize.Height()+IMPL_DIALOG_OFFSET;
             }
-            else if (  meViewAlign == WINDOWALIGN_RIGHT )
+            else if (  meViewAlign == WindowAlign::Right )
             {
                 nViewOffX       = aTabOffset.X()+aTabSize.Width()+IMPL_DIALOG_OFFSET;
                 nViewOffY       = aTabOffset.Y();
@@ -123,7 +123,7 @@ void TabDialog::ImplPosControls()
                 aDlgSize.Width() += aViewSize.Width()+IMPL_DIALOG_OFFSET;
                 nBtnEx          = aViewSize.Width()+IMPL_DIALOG_OFFSET;
             }
-            else // meViewAlign == WINDOWALIGN_LEFT
+            else // meViewAlign == WindowAlign::Left
             {
                 nViewOffX       = IMPL_DIALOG_OFFSET;
                 nViewOffY       = aTabOffset.Y();

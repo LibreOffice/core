@@ -37,7 +37,7 @@ public:
 
 DockingAreaWindow::ImplData::ImplData()
 {
-    meAlign = WINDOWALIGN_TOP;
+    meAlign = WindowAlign::Top;
 }
 
 DockingAreaWindow::ImplData::~ImplData()
@@ -78,7 +78,7 @@ static void ImplInvalidateMenubar( DockingAreaWindow* pThis )
     // due to a possible common gradient covering menubar and top dockingarea
     // the menubar must be repainted if the top dockingarea changes size or visibility
     if( ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG &&
-        (pThis->GetAlign() == WINDOWALIGN_TOP)
+        (pThis->GetAlign() == WindowAlign::Top)
         && pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL )
         && pThis->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
     {
@@ -102,7 +102,7 @@ void DockingAreaWindow::StateChanged( StateChangedType nType )
 
 bool DockingAreaWindow::IsHorizontal() const
 {
-    return ( mpImplData->meAlign == WINDOWALIGN_TOP || mpImplData->meAlign == WINDOWALIGN_BOTTOM );
+    return ( mpImplData->meAlign == WindowAlign::Top || mpImplData->meAlign == WindowAlign::Bottom );
 }
 
 void DockingAreaWindow::SetAlign( WindowAlign eNewAlign )
@@ -122,12 +122,12 @@ WindowAlign DockingAreaWindow::GetAlign() const
 void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
 {
     const StyleSettings rSetting = rRenderContext.GetSettings().GetStyleSettings();
-    const BitmapEx& rPersonaBitmap = (GetAlign() == WINDOWALIGN_TOP) ? rSetting.GetPersonaHeader() : rSetting.GetPersonaFooter();
+    const BitmapEx& rPersonaBitmap = (GetAlign() == WindowAlign::Top) ? rSetting.GetPersonaHeader() : rSetting.GetPersonaFooter();
 
-    if (!rPersonaBitmap.IsEmpty() && (GetAlign() == WINDOWALIGN_TOP || GetAlign()==WINDOWALIGN_BOTTOM))
+    if (!rPersonaBitmap.IsEmpty() && (GetAlign() == WindowAlign::Top || GetAlign()==WindowAlign::Bottom))
     {
         Wallpaper aWallpaper(rPersonaBitmap);
-        if (GetAlign() == WINDOWALIGN_TOP)
+        if (GetAlign() == WindowAlign::Top)
             aWallpaper.SetStyle(WallpaperStyle::TopRight);
         else
             aWallpaper.SetStyle(WallpaperStyle::BottomRight);
@@ -169,7 +169,7 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
     {
         ToolbarValue aControlValue;
 
-        if (GetAlign() == WINDOWALIGN_TOP && ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG)
+        if (GetAlign() == WindowAlign::Top && ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG)
         {
             // give NWF a hint that this dockingarea is adjacent to the menubar
             // useful for special gradient effects that should cover both windows
@@ -177,9 +177,9 @@ void DockingAreaWindow::Paint(vcl::RenderContext& rRenderContext, const Rectangl
         }
 
         ControlState nState = ControlState::ENABLED;
-        const bool isFooter = GetAlign() == WINDOWALIGN_BOTTOM && !rSetting.GetPersonaFooter().IsEmpty();
+        const bool isFooter = GetAlign() == WindowAlign::Bottom && !rSetting.GetPersonaFooter().IsEmpty();
 
-        if ((GetAlign() == WINDOWALIGN_TOP && !rSetting.GetPersonaHeader().IsEmpty() ) || isFooter)
+        if ((GetAlign() == WindowAlign::Top && !rSetting.GetPersonaHeader().IsEmpty() ) || isFooter)
             Erase(rRenderContext);
         else if (!ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB)
         {

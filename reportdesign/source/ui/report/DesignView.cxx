@@ -114,7 +114,7 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     // Splitter einrichten
     m_aSplitWin->SetSplitHdl(LINK(this, ODesignView,SplitHdl));
     m_aSplitWin->ShowAutoHideButton();
-    m_aSplitWin->SetAlign(WINDOWALIGN_LEFT);
+    m_aSplitWin->SetAlign(WindowAlign::Left);
     m_aSplitWin->Show();
 
     m_aMarkIdle.SetPriority( SchedulerPriority::LOW );

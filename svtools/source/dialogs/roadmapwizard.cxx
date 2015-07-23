@@ -140,7 +140,7 @@ namespace svt
         m_pImpl->pRoadmap->SetSizePixel( aRoadmapSize );
 
         SetViewWindow( m_pImpl->pRoadmap );
-        SetViewAlign( WINDOWALIGN_LEFT );
+        SetViewAlign( WindowAlign::Left );
         m_pImpl->pRoadmap->Show();
     }
 

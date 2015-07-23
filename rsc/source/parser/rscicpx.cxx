@@ -1251,10 +1251,10 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
         RscEnum   * pEnum;
 
         aBaseLst.push_back( pEnum = new RscEnum( pHS->getID( "EnumToolBoxAlign" ), RSC_NOTYPE ) );
-        SETCONST( pEnum, "BOXALIGN_TOP",                WINDOWALIGN_TOP );
-        SETCONST( pEnum, "BOXALIGN_LEFT",               WINDOWALIGN_LEFT );
-        SETCONST( pEnum, "BOXALIGN_RIGHT",              WINDOWALIGN_RIGHT );
-        SETCONST( pEnum, "BOXALIGN_BOTTOM",             WINDOWALIGN_BOTTOM );
+        SETCONST( pEnum, "BOXALIGN_TOP",                WindowAlign::Top );
+        SETCONST( pEnum, "BOXALIGN_LEFT",               WindowAlign::Left );
+        SETCONST( pEnum, "BOXALIGN_RIGHT",              WindowAlign::Right );
+        SETCONST( pEnum, "BOXALIGN_BOTTOM",             WindowAlign::Bottom );
 
         // Variable einfuegen
         nId = aNmTb.Put( "Align", VARNAME );

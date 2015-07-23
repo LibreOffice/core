@@ -135,12 +135,12 @@ void SfxEmptySplitWin_Impl::Actualize()
     Size aSize( pOwner->GetSizePixel() );
     switch ( pOwner->GetAlign() )
     {
-        case WINDOWALIGN_LEFT:
-        case WINDOWALIGN_RIGHT:
+        case WindowAlign::Left:
+        case WindowAlign::Right:
             aSize.Width() = GetFadeInSize();
             break;
-        case WINDOWALIGN_TOP:
-        case WINDOWALIGN_BOTTOM:
+        case WindowAlign::Top:
+        case WindowAlign::Bottom:
             aSize.Height() = GetFadeInSize();
             break;
     }
@@ -219,20 +219,20 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
     switch ( eAlign )
     {
         case SfxChildAlignment::LEFT:
-            eTbxAlign = WINDOWALIGN_LEFT;
+            eTbxAlign = WindowAlign::Left;
             break;
         case SfxChildAlignment::RIGHT:
-            eTbxAlign = WINDOWALIGN_RIGHT;
+            eTbxAlign = WindowAlign::Right;
             break;
         case SfxChildAlignment::TOP:
-            eTbxAlign = WINDOWALIGN_TOP;
+            eTbxAlign = WindowAlign::Top;
             break;
         case SfxChildAlignment::BOTTOM:
-            eTbxAlign = WINDOWALIGN_BOTTOM;
+            eTbxAlign = WindowAlign::Bottom;
             bPinned = true;
             break;
         default:
-            eTbxAlign = WINDOWALIGN_TOP;  // some sort of default...
+            eTbxAlign = WindowAlign::Top;  // some sort of default...
             break;  // -Wall lots not handled..
     }
 
@@ -379,12 +379,12 @@ void SfxSplitWindow::StartSplit()
     Rectangle aRect = pWorkWin->GetFreeArea( !bPinned );
     switch ( GetAlign() )
     {
-        case WINDOWALIGN_LEFT:
-        case WINDOWALIGN_RIGHT:
+        case WindowAlign::Left:
+        case WindowAlign::Right:
             nSize = aSize.Width() + aRect.GetWidth();
             break;
-        case WINDOWALIGN_TOP:
-        case WINDOWALIGN_BOTTOM:
+        case WindowAlign::Top:
+        case WindowAlign::Bottom:
             nSize = aSize.Height() + aRect.GetHeight();
             break;
     }
@@ -714,7 +714,7 @@ void SfxSplitWindow::InsertWindow_Impl( SfxDock_Impl* pDock,
 
         // Create a new nLine:th line
         SplitWindowItemFlags nBits = nItemBits;
-        if ( GetAlign() == WINDOWALIGN_TOP || GetAlign() == WINDOWALIGN_BOTTOM )
+        if ( GetAlign() == WindowAlign::Top || GetAlign() == WindowAlign::Bottom )
             nBits |= SplitWindowItemFlags::ColSet;
         InsertItem( nId, nSetSize, nLine, 0, nBits );
     }

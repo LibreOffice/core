@@ -352,7 +352,7 @@ public:
     void                SetToolboxButtonSize( ToolBoxButtonSize eSize );
     ToolBoxButtonSize   GetToolboxButtonSize() const;
 
-    void                SetAlign( WindowAlign eNewAlign = WINDOWALIGN_TOP );
+    void                SetAlign( WindowAlign eNewAlign = WindowAlign::Top );
     WindowAlign         GetAlign() const { return meAlign; }
     bool                IsHorizontal() const { return mbHorz; }
 

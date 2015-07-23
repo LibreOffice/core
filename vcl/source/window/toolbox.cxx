@@ -189,7 +189,7 @@ void ToolBox::ImplUpdateDragArea( ToolBox *pThis )
             pWrapper->SetDragArea( Rectangle() );
         else
         {
-            if( pThis->meAlign == WINDOWALIGN_TOP || pThis->meAlign == WINDOWALIGN_BOTTOM )
+            if( pThis->meAlign == WindowAlign::Top || pThis->meAlign == WindowAlign::Bottom )
                 pWrapper->SetDragArea( Rectangle( 0, 0, ImplGetDragWidth( pThis ), pThis->GetOutputSizePixel().Height() ) );
             else
                 pWrapper->SetDragArea( Rectangle( 0, 0, pThis->GetOutputSizePixel().Width(), ImplGetDragWidth( pThis ) ) );
@@ -215,21 +215,21 @@ void ToolBox::ImplCalcBorder( WindowAlign eAlign, long& rLeft, long& rTop,
     // no shadow border for dockable toolbars
     int    borderwidth = pWrapper ? 0: 2;
 
-    if ( eAlign == WINDOWALIGN_TOP )
+    if ( eAlign == WindowAlign::Top )
     {
         rLeft   = borderwidth+dragwidth;
         rTop    = borderwidth;
         rRight  = borderwidth;
         rBottom = 0;
     }
-    else if ( eAlign == WINDOWALIGN_LEFT )
+    else if ( eAlign == WindowAlign::Left )
     {
         rLeft   = borderwidth;
         rTop    = borderwidth+dragwidth;
         rRight  = 0;
         rBottom = borderwidth;
     }
-    else if ( eAlign == WINDOWALIGN_BOTTOM )
+    else if ( eAlign == WindowAlign::Bottom )
     {
         rLeft   = borderwidth+dragwidth;
         rTop    = 0;
@@ -287,7 +287,7 @@ void ToolBox::ImplDrawGrip(vcl::RenderContext& rRenderContext)
 
         Size aSz(GetOutputSizePixel());
 
-        if (meAlign == WINDOWALIGN_TOP || meAlign == WINDOWALIGN_BOTTOM)
+        if (meAlign == WindowAlign::Top || meAlign == WindowAlign::Bottom)
         {
             int height = (int) (0.6 * aSz.Height() + 0.5);
             int i = (aSz.Height() - height) / 2;
@@ -533,9 +533,9 @@ void ToolBox::ImplDrawBackground(vcl::RenderContext& rRenderContext, const Recta
         const StyleSettings rSetting = Application::GetSettings().GetStyleSettings();
         if (!bNativeOk)
         {
-            const bool isFooter = GetAlign() == WINDOWALIGN_BOTTOM && !rSetting.GetPersonaFooter().IsEmpty();
+            const bool isFooter = GetAlign() == WindowAlign::Bottom && !rSetting.GetPersonaFooter().IsEmpty();
             if (!IsBackground() ||
-                ((GetAlign() == WINDOWALIGN_TOP && !rSetting.GetPersonaHeader().IsEmpty() ) || isFooter))
+                ((GetAlign() == WindowAlign::Top && !rSetting.GetPersonaHeader().IsEmpty() ) || isFooter))
             {
                 if (!IsInPaint())
                     ImplDrawTransparentBackground(rRenderContext, aPaintRegion);
@@ -589,7 +589,7 @@ void ToolBox::ImplDrawBorder(vcl::RenderContext& rRenderContext)
     if( pWrapper )
         return;
 
-    if (meAlign == WINDOWALIGN_BOTTOM)
+    if (meAlign == WindowAlign::Bottom)
     {
         // draw bottom border
         rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
@@ -605,9 +605,9 @@ void ToolBox::ImplDrawBorder(vcl::RenderContext& rRenderContext)
         rRenderContext.SetLineColor( rStyleSettings.GetLightColor() );
         rRenderContext.DrawLine( Point( 0, 1 ), Point( nDX-1, 1 ) );
 
-        if (meAlign == WINDOWALIGN_LEFT || meAlign == WINDOWALIGN_RIGHT)
+        if (meAlign == WindowAlign::Left || meAlign == WindowAlign::Right)
         {
-            if (meAlign == WINDOWALIGN_LEFT)
+            if (meAlign == WindowAlign::Left)
             {
                 // draw left-bottom border
                 rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
@@ -630,7 +630,7 @@ void ToolBox::ImplDrawBorder(vcl::RenderContext& rRenderContext)
         }
     }
 
-    if ( meAlign == WINDOWALIGN_BOTTOM || meAlign == WINDOWALIGN_TOP )
+    if ( meAlign == WindowAlign::Bottom || meAlign == WindowAlign::Top )
     {
         // draw right border
         rRenderContext.SetLineColor( rStyleSettings.GetShadowColor() );
@@ -684,18 +684,18 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
         if ( nCalcMode == TB_CALCMODE_HORZ )
         {
             pThis->mpData->mbAssumeDocked = true;   // force non-floating mode during calculation
-            ImplCalcBorder( WINDOWALIGN_TOP, nLeft, nTop, nRight, nBottom, pThis );
+            ImplCalcBorder( WindowAlign::Top, nLeft, nTop, nRight, nBottom, pThis );
             const_cast<ToolBox*>(pThis)->mbHorz = true;
             if ( pThis->mbHorz != bOldHorz )
-                const_cast<ToolBox*>(pThis)->meAlign = WINDOWALIGN_TOP;
+                const_cast<ToolBox*>(pThis)->meAlign = WindowAlign::Top;
         }
         else if ( nCalcMode == TB_CALCMODE_VERT )
         {
             pThis->mpData->mbAssumeDocked = true;   // force non-floating mode during calculation
-            ImplCalcBorder( WINDOWALIGN_LEFT, nLeft, nTop, nRight, nBottom, pThis );
+            ImplCalcBorder( WindowAlign::Left, nLeft, nTop, nRight, nBottom, pThis );
             const_cast<ToolBox*>(pThis)->mbHorz = false;
             if ( pThis->mbHorz != bOldHorz )
-                const_cast<ToolBox*>(pThis)->meAlign = WINDOWALIGN_LEFT;
+                const_cast<ToolBox*>(pThis)->meAlign = WindowAlign::Left;
         }
         else if ( nCalcMode == TB_CALCMODE_FLOAT )
         {
@@ -703,7 +703,7 @@ Size ToolBox::ImplCalcSize( const ToolBox* pThis, sal_uInt16 nCalcLines, sal_uIn
             nLeft = nTop = nRight = nBottom = 0;
             const_cast<ToolBox*>(pThis)->mbHorz = true;
             if ( pThis->mbHorz != bOldHorz )
-                const_cast<ToolBox*>(pThis)->meAlign = WINDOWALIGN_TOP;
+                const_cast<ToolBox*>(pThis)->meAlign = WindowAlign::Top;
         }
 
         if ( (pThis->meAlign != eOldAlign) || (pThis->mbHorz != bOldHorz) ||
@@ -945,22 +945,22 @@ sal_uInt16 ToolBox::ImplTestLineSize( ToolBox* pThis, const Point& rPos )
     {
         WindowAlign eAlign = pThis->GetAlign();
 
-        if ( eAlign == WINDOWALIGN_LEFT )
+        if ( eAlign == WindowAlign::Left )
         {
             if ( rPos.X() > pThis->mnDX-DOCK_LINEOFFSET )
                 return DOCK_LINEHSIZE | DOCK_LINERIGHT;
         }
-        else if ( eAlign == WINDOWALIGN_TOP )
+        else if ( eAlign == WindowAlign::Top )
         {
             if ( rPos.Y() > pThis->mnDY-DOCK_LINEOFFSET )
                 return DOCK_LINEVSIZE | DOCK_LINEBOTTOM;
         }
-        else if ( eAlign == WINDOWALIGN_RIGHT )
+        else if ( eAlign == WindowAlign::Right )
         {
             if ( rPos.X() < DOCK_LINEOFFSET )
                 return DOCK_LINEHSIZE | DOCK_LINELEFT;
         }
-        else if ( eAlign == WINDOWALIGN_BOTTOM )
+        else if ( eAlign == WindowAlign::Bottom )
         {
             if ( rPos.Y() < DOCK_LINEOFFSET )
                 return DOCK_LINEVSIZE | DOCK_LINETOP;
@@ -1395,7 +1395,7 @@ void ToolBox::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mbIsKeyEvent = false;
     mbChangingHighlight = false;
     meButtonType      = ButtonType::SYMBOLONLY;
-    meAlign           = WINDOWALIGN_TOP;
+    meAlign           = WindowAlign::Top;
     meLastStyle       = PointerStyle::Arrow;
     mnWinStyle        = nStyle;
     meLayoutMode      = TBX_LAYOUT_NORMAL;
@@ -1456,8 +1456,8 @@ void ToolBox::ApplySettings(vcl::RenderContext& rRenderContext)
     else
     {
         if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL)
-            || (GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty())
-            || (GetAlign() == WINDOWALIGN_BOTTOM && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()))
+            || (GetAlign() == WindowAlign::Top && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty())
+            || (GetAlign() == WindowAlign::Bottom && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()))
         {
             rRenderContext.SetBackground();
             rRenderContext.SetTextColor(rStyleSettings.GetMenuBarTextColor());
@@ -1519,8 +1519,8 @@ void ToolBox::ImplInitSettings(bool bFont, bool bForeground, bool bBackground)
         else
         {
             if (IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL)
-                || (GetAlign() == WINDOWALIGN_TOP && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty())
-                || (GetAlign() == WINDOWALIGN_BOTTOM && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()))
+                || (GetAlign() == WindowAlign::Top && !Application::GetSettings().GetStyleSettings().GetPersonaHeader().IsEmpty())
+                || (GetAlign() == WindowAlign::Bottom && !Application::GetSettings().GetStyleSettings().GetPersonaFooter().IsEmpty()))
             {
                 SetBackground();
                 SetTextColor(rStyleSettings.GetMenuBarTextColor());
@@ -3213,7 +3213,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
         // rotate text when vertically docked
         vcl::Font aOldFont = rRenderContext.GetFont();
         if( pItem->mbVisibleText && !ImplIsFloatingMode() &&
-            ((meAlign == WINDOWALIGN_LEFT) || (meAlign == WINDOWALIGN_RIGHT)) )
+            ((meAlign == WindowAlign::Left) || (meAlign == WindowAlign::Right)) )
         {
             bRotate = true;
 
@@ -3679,14 +3679,14 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             sal_uInt16 nLinePtr = ImplTestLineSize( this, rMEvt.GetPosPixel() );
             if ( nLinePtr & DOCK_LINEHSIZE )
             {
-                if ( meAlign == WINDOWALIGN_LEFT )
+                if ( meAlign == WindowAlign::Left )
                     eStyle = PointerStyle::WindowESize;
                 else
                     eStyle = PointerStyle::WindowWSize;
             }
             else if ( nLinePtr & DOCK_LINEVSIZE )
             {
-                if ( meAlign == WINDOWALIGN_TOP )
+                if ( meAlign == WindowAlign::Top )
                     eStyle = PointerStyle::WindowSSize;
                 else
                     eStyle = PointerStyle::WindowNSize;
@@ -4573,7 +4573,7 @@ void ToolBox::ToggleFloatingMode()
     if ( ImplIsFloatingMode() )
     {
         mbHorz   = true;
-        meAlign  = WINDOWALIGN_TOP;
+        meAlign  = WindowAlign::Top;
         mbScroll = true;
 
         if( mbOldHorz != mbHorz )
@@ -4585,7 +4585,7 @@ void ToolBox::ToggleFloatingMode()
     else
     {
         mbScroll = (mnWinStyle & WB_SCROLL) != 0;
-        if ( (meAlign == WINDOWALIGN_TOP) || (meAlign == WINDOWALIGN_BOTTOM) )
+        if ( (meAlign == WindowAlign::Top) || (meAlign == WindowAlign::Bottom) )
             mbHorz = true;
         else
             mbHorz = false;
@@ -4677,16 +4677,16 @@ bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
             Size  aInSize = aInRect.GetSize();
 
             if ( aInPosTL.X() <= 0 )
-                meDockAlign = WINDOWALIGN_LEFT;
+                meDockAlign = WindowAlign::Left;
             else if ( aInPosTL.Y() <= 0)
-                meDockAlign = WINDOWALIGN_TOP;
+                meDockAlign = WindowAlign::Top;
             else if ( aInPosBR.X() >= aInSize.Width() )
-                meDockAlign = WINDOWALIGN_RIGHT;
+                meDockAlign = WindowAlign::Right;
             else if ( aInPosBR.Y() >= aInSize.Height() )
-                meDockAlign = WINDOWALIGN_BOTTOM;
+                meDockAlign = WindowAlign::Bottom;
 
             // update the Dock size if Dock-Align was changed
-            if ( (meDockAlign == WINDOWALIGN_TOP) || (meDockAlign == WINDOWALIGN_BOTTOM) )
+            if ( (meDockAlign == WindowAlign::Top) || (meDockAlign == WindowAlign::Bottom) )
                 aDockSize.Width() = maInDockRect.GetWidth();
             else
                 aDockSize.Height() = maInDockRect.GetHeight();
@@ -4696,20 +4696,20 @@ bool ToolBox::Docking( const Point& rPos, Rectangle& rRect )
             Point aPosTL( maInDockRect.TopLeft() );
             switch ( meDockAlign )
             {
-                case WINDOWALIGN_TOP :
+                case WindowAlign::Top :
                     aDockingRect.SetPos( aPosTL );
                     break;
-                case WINDOWALIGN_LEFT :
+                case WindowAlign::Left :
                     aDockingRect.SetPos( aPosTL );
                     break;
-                case WINDOWALIGN_BOTTOM :
+                case WindowAlign::Bottom :
                 {
                     Point aPosBL( maInDockRect.BottomLeft() );
                     aPosBL.Y() -= aDockingRect.GetHeight();
                     aDockingRect.SetPos( aPosBL );
                     break;
                 }
-                case WINDOWALIGN_RIGHT :
+                case WindowAlign::Right :
                 {
                     Point aPosTR( maInDockRect.TopRight() );
                     aPosTR.X() -= aDockingRect.GetWidth();
@@ -4829,7 +4829,7 @@ Size ToolBox::CalcWindowSizePixel( sal_uInt16 nCalcLines ) const
 Size ToolBox::CalcWindowSizePixel( sal_uInt16 nCalcLines, WindowAlign eAlign ) const
 {
     return ImplCalcSize( this, nCalcLines,
-        (eAlign == WINDOWALIGN_TOP || eAlign == WINDOWALIGN_BOTTOM) ? TB_CALCMODE_HORZ : TB_CALCMODE_VERT );
+        (eAlign == WindowAlign::Top || eAlign == WindowAlign::Bottom) ? TB_CALCMODE_HORZ : TB_CALCMODE_VERT );
 }
 
 sal_uInt16 ToolBox::ImplCountLineBreaks( const ToolBox *pThis )

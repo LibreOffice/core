@@ -826,7 +826,7 @@ void ToolBox::SetAlign( WindowAlign eNewAlign )
         if ( !ImplIsFloatingMode() )
         {
             // set horizontal/vertical alignment
-            if ( (eNewAlign == WINDOWALIGN_LEFT) || (eNewAlign == WINDOWALIGN_RIGHT) )
+            if ( (eNewAlign == WindowAlign::Left) || (eNewAlign == WindowAlign::Right) )
                 mbHorz = false;
             else
                 mbHorz = true;
@@ -974,14 +974,14 @@ Point ToolBox::ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize )
         Point devPos;           // the position in device coordinates for screen comparison
         switch( meAlign )
         {
-            case WINDOWALIGN_TOP:
+            case WindowAlign::Top:
                 aPos = rRect.BottomLeft();
                 aPos.Y()++;
                 devPos = OutputToAbsoluteScreenPixel( aPos );
                 if( devPos.Y() + rSize.Height() >= aScreen.Bottom() )
                     aPos.Y() = rRect.Top() - rSize.Height();
                 break;
-            case WINDOWALIGN_BOTTOM:
+            case WindowAlign::Bottom:
                 aPos = rRect.TopLeft();
                 aPos.Y()--;
                 devPos = OutputToAbsoluteScreenPixel( aPos );
@@ -990,14 +990,14 @@ Point ToolBox::ImplGetPopupPosition( const Rectangle& rRect, const Size& rSize )
                 else
                     aPos.Y() = rRect.Bottom();
                 break;
-            case WINDOWALIGN_LEFT:
+            case WindowAlign::Left:
                 aPos = rRect.TopRight();
                 aPos.X()++;
                 devPos = OutputToAbsoluteScreenPixel( aPos );
                 if( devPos.X() + rSize.Width() >= aScreen.Right() )
                     aPos.X() = rRect.Left() - rSize.Width();
                 break;
-            case WINDOWALIGN_RIGHT:
+            case WindowAlign::Right:
                 aPos = rRect.TopLeft();
                 aPos.X()--;
                 devPos = OutputToAbsoluteScreenPixel( aPos );

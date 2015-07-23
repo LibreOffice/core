@@ -562,7 +562,7 @@ static int ImplGetTopDockingAreaHeight( vcl::Window *pWindow )
                     if ( pChildWin->GetType() == WINDOW_DOCKINGAREA )
                         pDockingArea = static_cast< DockingAreaWindow* >( pChildWin );
 
-                    if( pDockingArea && pDockingArea->GetAlign() == WINDOWALIGN_TOP &&
+                    if( pDockingArea && pDockingArea->GetAlign() == WindowAlign::Top &&
                         pDockingArea->IsVisible() && pDockingArea->GetOutputSizePixel().Height() != 0 )
                     {
                         return pDockingArea->GetOutputSizePixel().Height();

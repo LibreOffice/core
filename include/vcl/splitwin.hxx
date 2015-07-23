@@ -184,7 +184,7 @@ public:
     sal_uInt16          GetItemCount( sal_uInt16 nSetId = 0 ) const;
     bool                IsItemValid( sal_uInt16 nId ) const;
 
-    void                SetAlign( WindowAlign eNewAlign = WINDOWALIGN_TOP );
+    void                SetAlign( WindowAlign eNewAlign = WindowAlign::Top );
     WindowAlign         GetAlign() const { return meAlign; }
     bool                IsHorizontal() const { return mbHorz; }
 

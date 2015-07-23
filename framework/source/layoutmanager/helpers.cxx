@@ -64,7 +64,7 @@ bool isReverseOrderDockingArea( const sal_Int32 nDockArea )
 bool isToolboxHorizontalAligned( ToolBox* pToolBox )
 {
     if ( pToolBox )
-        return (( pToolBox->GetAlign() == WINDOWALIGN_TOP ) || ( pToolBox->GetAlign() == WINDOWALIGN_BOTTOM ));
+        return (( pToolBox->GetAlign() == WindowAlign::Top ) || ( pToolBox->GetAlign() == WindowAlign::Bottom ));
     return false;
 }
 
@@ -184,13 +184,13 @@ uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< un
 WindowAlign ImplConvertAlignment( sal_Int16 aAlignment )
 {
     if ( aAlignment == ui::DockingArea_DOCKINGAREA_LEFT )
-        return WINDOWALIGN_LEFT;
+        return WindowAlign::Left;
     else if ( aAlignment == ui::DockingArea_DOCKINGAREA_RIGHT )
-        return WINDOWALIGN_RIGHT;
+        return WindowAlign::Right;
     else if ( aAlignment == ui::DockingArea_DOCKINGAREA_TOP )
-        return WINDOWALIGN_TOP;
+        return WindowAlign::Top;
     else
-        return WINDOWALIGN_BOTTOM;
+        return WindowAlign::Bottom;
 }
 
 OUString getElementTypeFromResourceURL( const OUString& aResourceURL )

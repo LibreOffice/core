@@ -1032,13 +1032,13 @@ void ToolbarLayoutManager::setParentWindow(
     {
         SolarMutexGuard aGuard;
         VclPtr< ::DockingAreaWindow > pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xTopDockWindow ).get() );
-        if( pWindow ) pWindow->SetAlign( WINDOWALIGN_TOP );
+        if( pWindow ) pWindow->SetAlign( WindowAlign::Top );
         pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xBottomDockWindow ).get() );
-        if( pWindow ) pWindow->SetAlign( WINDOWALIGN_BOTTOM );
+        if( pWindow ) pWindow->SetAlign( WindowAlign::Bottom );
         pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xLeftDockWindow ).get() );
-        if( pWindow ) pWindow->SetAlign( WINDOWALIGN_LEFT );
+        if( pWindow ) pWindow->SetAlign( WindowAlign::Left );
         pWindow = dynamic_cast< ::DockingAreaWindow* >(VCLUnoHelper::GetWindow( xRightDockWindow ).get() );
-        if( pWindow ) pWindow->SetAlign( WINDOWALIGN_RIGHT );
+        if( pWindow ) pWindow->SetAlign( WindowAlign::Right );
         implts_reparentToolbars();
     }
     else
@@ -3540,9 +3540,9 @@ throw (uno::RuntimeException, std::exception)
             if( e.bFloating )
             {
                 if ( aUIDockingElement.m_aFloatingData.m_bIsHorizontal )
-                    pToolBox->SetAlign( WINDOWALIGN_TOP );
+                    pToolBox->SetAlign( WindowAlign::Top );
                 else
-                    pToolBox->SetAlign( WINDOWALIGN_LEFT );
+                    pToolBox->SetAlign( WindowAlign::Left );
             }
             else
             {
@@ -3655,9 +3655,9 @@ throw (uno::RuntimeException, std::exception)
                 {
                     pToolBox->SetLineCount( aUIDockingElement.m_aFloatingData.m_nLines );
                     if ( aUIDockingElement.m_aFloatingData.m_bIsHorizontal )
-                        pToolBox->SetAlign( WINDOWALIGN_TOP );
+                        pToolBox->SetAlign( WindowAlign::Top );
                     else
-                        pToolBox->SetAlign( WINDOWALIGN_LEFT );
+                        pToolBox->SetAlign( WindowAlign::Left );
                 }
 
                 bool bUndefPos = hasDefaultPosValue( aUIDockingElement.m_aFloatingData.m_aPos );
@@ -3734,9 +3734,9 @@ throw (uno::RuntimeException, std::exception)
             if ( aUIDockingElement.m_bFloating )
             {
                 if ( aUIDockingElement.m_aFloatingData.m_bIsHorizontal )
-                    pToolBox->SetAlign( WINDOWALIGN_TOP );
+                    pToolBox->SetAlign( WindowAlign::Top );
                 else
-                    pToolBox->SetAlign( WINDOWALIGN_LEFT );
+                    pToolBox->SetAlign( WindowAlign::Left );
             }
             else
                 pToolBox->SetAlign( ImplConvertAlignment( aUIDockingElement.m_aDockedData.m_nDockedArea) );
