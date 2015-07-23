@@ -466,7 +466,7 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
 
     maBackground = rBackground;
 
-    if( rBackground.GetStyle() == WALLPAPER_NULL )
+    if( rBackground.GetStyle() == WallpaperStyle::NONE )
         mbBackground = false;
     else
         mbBackground = true;

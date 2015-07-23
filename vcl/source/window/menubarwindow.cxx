@@ -1054,7 +1054,7 @@ void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
     if (!rPersonaBitmap.IsEmpty())
     {
         Wallpaper aWallpaper(rPersonaBitmap);
-        aWallpaper.SetStyle(WALLPAPER_TOPRIGHT);
+        aWallpaper.SetStyle(WallpaperStyle::TopRight);
         aWallpaper.SetColor(Application::GetSettings().GetStyleSettings().GetWorkspaceColor());
 
         rRenderContext.SetBackground(aWallpaper);
@@ -1068,7 +1068,7 @@ void MenuBarWindow::ApplySettings(vcl::RenderContext& rRenderContext)
     else
     {
         Wallpaper aWallpaper;
-        aWallpaper.SetStyle(WALLPAPER_APPLICATIONGRADIENT);
+        aWallpaper.SetStyle(WallpaperStyle::ApplicationGradient);
         rRenderContext.SetBackground(aWallpaper);
         SetPaintTransparent(false);
         SetParentClipMode(ParentClipMode::NONE);

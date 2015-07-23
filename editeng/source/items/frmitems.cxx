@@ -4069,18 +4069,18 @@ SvxGraphicPosition SvxBrushItem::WallpaperStyle2GraphicPos( WallpaperStyle eStyl
     // The switch is not the fastest, but the safest
     switch( eStyle )
     {
-        case WALLPAPER_NULL: eResult = GPOS_NONE; break;
-        case WALLPAPER_TILE: eResult = GPOS_TILED; break;
-        case WALLPAPER_CENTER: eResult = GPOS_MM; break;
-        case WALLPAPER_SCALE: eResult = GPOS_AREA; break;
-        case WALLPAPER_TOPLEFT: eResult = GPOS_LT; break;
-        case WALLPAPER_TOP: eResult = GPOS_MT; break;
-        case WALLPAPER_TOPRIGHT: eResult = GPOS_RT; break;
-        case WALLPAPER_LEFT: eResult = GPOS_LM; break;
-        case WALLPAPER_RIGHT: eResult = GPOS_RM; break;
-        case WALLPAPER_BOTTOMLEFT: eResult = GPOS_LB; break;
-        case WALLPAPER_BOTTOM: eResult = GPOS_MB; break;
-        case WALLPAPER_BOTTOMRIGHT: eResult = GPOS_RB; break;
+        case WallpaperStyle::NONE: eResult = GPOS_NONE; break;
+        case WallpaperStyle::Tile: eResult = GPOS_TILED; break;
+        case WallpaperStyle::Center: eResult = GPOS_MM; break;
+        case WallpaperStyle::Scale: eResult = GPOS_AREA; break;
+        case WallpaperStyle::TopLeft: eResult = GPOS_LT; break;
+        case WallpaperStyle::Top: eResult = GPOS_MT; break;
+        case WallpaperStyle::TopRight: eResult = GPOS_RT; break;
+        case WallpaperStyle::Left: eResult = GPOS_LM; break;
+        case WallpaperStyle::Right: eResult = GPOS_RM; break;
+        case WallpaperStyle::BottomLeft: eResult = GPOS_LB; break;
+        case WallpaperStyle::Bottom: eResult = GPOS_MB; break;
+        case WallpaperStyle::BottomRight: eResult = GPOS_RB; break;
         default: eResult = GPOS_NONE;
     }
     return eResult;
@@ -4092,19 +4092,19 @@ WallpaperStyle SvxBrushItem::GraphicPos2WallpaperStyle( SvxGraphicPosition ePos 
     WallpaperStyle eResult;
     switch( ePos )
     {
-        case GPOS_NONE: eResult = WALLPAPER_NULL; break;
-        case GPOS_TILED: eResult = WALLPAPER_TILE; break;
-        case GPOS_MM: eResult = WALLPAPER_CENTER; break;
-        case GPOS_AREA: eResult = WALLPAPER_SCALE; break;
-        case GPOS_LT: eResult = WALLPAPER_TOPLEFT; break;
-        case GPOS_MT: eResult = WALLPAPER_TOP; break;
-        case GPOS_RT: eResult = WALLPAPER_TOPRIGHT; break;
-        case GPOS_LM: eResult = WALLPAPER_LEFT; break;
-        case GPOS_RM: eResult = WALLPAPER_RIGHT; break;
-        case GPOS_LB: eResult = WALLPAPER_BOTTOMLEFT; break;
-        case GPOS_MB: eResult = WALLPAPER_BOTTOM; break;
-        case GPOS_RB: eResult = WALLPAPER_BOTTOMRIGHT; break;
-        default: eResult = WALLPAPER_NULL;
+        case GPOS_NONE: eResult = WallpaperStyle::NONE; break;
+        case GPOS_TILED: eResult = WallpaperStyle::Tile; break;
+        case GPOS_MM: eResult = WallpaperStyle::Center; break;
+        case GPOS_AREA: eResult = WallpaperStyle::Scale; break;
+        case GPOS_LT: eResult = WallpaperStyle::TopLeft; break;
+        case GPOS_MT: eResult = WallpaperStyle::Top; break;
+        case GPOS_RT: eResult = WallpaperStyle::TopRight; break;
+        case GPOS_LM: eResult = WallpaperStyle::Left; break;
+        case GPOS_RM: eResult = WallpaperStyle::Right; break;
+        case GPOS_LB: eResult = WallpaperStyle::BottomLeft; break;
+        case GPOS_MB: eResult = WallpaperStyle::Bottom; break;
+        case GPOS_RB: eResult = WallpaperStyle::BottomRight; break;
+        default: eResult = WallpaperStyle::NONE;
     }
     return eResult;
 }

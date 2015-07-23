@@ -2397,7 +2397,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
                     Image aImage( xGraphic );
 
                     Wallpaper aWallpaper( aImage.GetBitmapEx());
-                    aWallpaper.SetStyle( WALLPAPER_SCALE );
+                    aWallpaper.SetStyle( WallpaperStyle::Scale );
                     pDialog->SetBackground( aWallpaper );
                 }
                 else if ( bVoid || !xGraphic.is() )
@@ -2561,7 +2561,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
                     Image aImage( xGraphic );
 
                     Wallpaper aWallpaper( aImage.GetBitmapEx());
-                    aWallpaper.SetStyle( WALLPAPER_SCALE );
+                    aWallpaper.SetStyle( WallpaperStyle::Scale );
                     pTabControl->SetBackground( aWallpaper );
                 }
                 else if ( bVoid || !xGraphic.is() )
@@ -2803,7 +2803,7 @@ throw(::com::sun::star::uno::RuntimeException, std::exception)
                     Image aImage( xGraphic );
 
                     Wallpaper aWallpaper( aImage.GetBitmapEx());
-                    aWallpaper.SetStyle( WALLPAPER_SCALE );
+                    aWallpaper.SetStyle( WallpaperStyle::Scale );
                     pTabPage->SetBackground( aWallpaper );
                 }
                 else if ( bVoid || !xGraphic.is() )

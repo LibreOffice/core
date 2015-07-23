@@ -1468,7 +1468,7 @@ public:
         SetText("VCL widget demo");
 
         Wallpaper aWallpaper(BitmapEx("sfx2/res/startcenter-logo.png"));
-        aWallpaper.SetStyle(WALLPAPER_BOTTOMRIGHT);
+        aWallpaper.SetStyle(WallpaperStyle::BottomRight);
         aWallpaper.SetColor(COL_RED);
 
         mpBox->SetBackground(aWallpaper);

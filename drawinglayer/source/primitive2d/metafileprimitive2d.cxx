@@ -1149,7 +1149,7 @@ namespace
         // if bitmap visualisation is transparent, maybe background
         // needs to be filled. Create background
         if(aBitmapEx.IsTransparent()
-            || (WALLPAPER_TILE != eWallpaperStyle && WALLPAPER_SCALE != eWallpaperStyle))
+            || (WallpaperStyle::Tile != eWallpaperStyle && WallpaperStyle::Scale != eWallpaperStyle))
         {
             if(rWallpaper.IsGradient())
             {
@@ -2375,7 +2375,7 @@ namespace
                             aWallpaperRectangle.Left(), aWallpaperRectangle.Top(),
                             aWallpaperRectangle.Right(), aWallpaperRectangle.Bottom());
 
-                        if(WALLPAPER_NULL != eWallpaperStyle)
+                        if(WallpaperStyle::NONE != eWallpaperStyle)
                         {
                             if(rWallpaper.IsBitmap())
                             {

@@ -36,7 +36,7 @@ void OutputDevice::DrawWallpaper( const Rectangle& rRect,
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
-    if ( rWallpaper.GetStyle() != WALLPAPER_NULL )
+    if ( rWallpaper.GetStyle() != WallpaperStyle::NONE )
     {
         Rectangle aRect = LogicToPixel( rRect );
         aRect.Justify();
@@ -150,7 +150,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
             bDrawColorBackground = true;
         }
     }
-    else if( eStyle != WALLPAPER_TILE && eStyle != WALLPAPER_SCALE )
+    else if( eStyle != WallpaperStyle::Tile && eStyle != WallpaperStyle::Scale )
     {
         if( rWallpaper.IsGradient() )
             bDrawGradientBackground = true;
@@ -187,7 +187,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
 
     switch( eStyle )
     {
-    case( WALLPAPER_SCALE ):
+    case( WallpaperStyle::Scale ):
         if( !pCached || ( pCached->GetSizePixel() != aSize ) )
         {
             if( pCached )
@@ -199,41 +199,41 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
         }
         break;
 
-    case( WALLPAPER_TOPLEFT ):
+    case( WallpaperStyle::TopLeft ):
         break;
 
-    case( WALLPAPER_TOP ):
+    case( WallpaperStyle::Top ):
         aPos.X() += ( aSize.Width() - nBmpWidth ) >> 1;
         break;
 
-    case( WALLPAPER_TOPRIGHT ):
+    case( WallpaperStyle::TopRight ):
         aPos.X() += ( aSize.Width() - nBmpWidth );
         break;
 
-    case( WALLPAPER_LEFT ):
+    case( WallpaperStyle::Left ):
         aPos.Y() += ( aSize.Height() - nBmpHeight ) >> 1;
         break;
 
-    case( WALLPAPER_CENTER ):
+    case( WallpaperStyle::Center ):
         aPos.X() += ( aSize.Width() - nBmpWidth ) >> 1;
         aPos.Y() += ( aSize.Height() - nBmpHeight ) >> 1;
         break;
 
-    case( WALLPAPER_RIGHT ):
+    case( WallpaperStyle::Right ):
         aPos.X() += ( aSize.Width() - nBmpWidth );
         aPos.Y() += ( aSize.Height() - nBmpHeight ) >> 1;
         break;
 
-    case( WALLPAPER_BOTTOMLEFT ):
+    case( WallpaperStyle::BottomLeft ):
         aPos.Y() += ( aSize.Height() - nBmpHeight );
         break;
 
-    case( WALLPAPER_BOTTOM ):
+    case( WallpaperStyle::Bottom ):
         aPos.X() += ( aSize.Width() - nBmpWidth ) >> 1;
         aPos.Y() += ( aSize.Height() - nBmpHeight );
         break;
 
-    case( WALLPAPER_BOTTOMRIGHT ):
+    case( WallpaperStyle::BottomRight ):
         aPos.X() += ( aSize.Width() - nBmpWidth );
         aPos.Y() += ( aSize.Height() - nBmpHeight );
         break;
@@ -245,7 +245,7 @@ void OutputDevice::DrawBitmapWallpaper( long nX, long nY,
             long nFirstX;
             long nFirstY;
 
-            if( eStyle == WALLPAPER_TILE )
+            if( eStyle == WallpaperStyle::Tile )
             {
                 nFirstX = aPos.X();
                 nFirstY = aPos.Y();

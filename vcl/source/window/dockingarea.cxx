@@ -128,9 +128,9 @@ void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
     {
         Wallpaper aWallpaper(rPersonaBitmap);
         if (GetAlign() == WINDOWALIGN_TOP)
-            aWallpaper.SetStyle(WALLPAPER_TOPRIGHT);
+            aWallpaper.SetStyle(WallpaperStyle::TopRight);
         else
-            aWallpaper.SetStyle(WALLPAPER_BOTTOMRIGHT);
+            aWallpaper.SetStyle(WallpaperStyle::BottomRight);
         aWallpaper.SetColor(rSetting.GetWorkspaceColor());
 
         // we need to shift the bitmap vertically so that it spans over the
@@ -152,7 +152,7 @@ void DockingAreaWindow::ApplySettings(vcl::RenderContext& rRenderContext)
     else if (rRenderContext.IsNativeControlSupported(CTRL_TOOLBAR, PART_ENTIRE_CONTROL))
     {
         Wallpaper aWallpaper;
-        aWallpaper.SetStyle(WALLPAPER_APPLICATIONGRADIENT);
+        aWallpaper.SetStyle(WallpaperStyle::ApplicationGradient);
         rRenderContext.SetBackground(aWallpaper);
     }
     else

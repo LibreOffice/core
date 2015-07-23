@@ -371,7 +371,7 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
             Wallpaper aBackground( rPaper );
             // HACK, as background might be transparent!
             if( !aBackground.IsBitmap() )
-                aBackground.SetStyle( WALLPAPER_TILE );
+                aBackground.SetStyle( WallpaperStyle::Tile );
 
             WallpaperStyle eStyle = aBackground.GetStyle();
             Color aBack( aBackground.GetColor());
@@ -379,7 +379,7 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
             if( aBack == aTrans  && (
                 (!aBackground.IsBitmap() ||
                     aBackground.GetBitmap().IsTransparent() ||
-                    (eStyle != WALLPAPER_TILE && eStyle != WALLPAPER_SCALE))))
+                    (eStyle != WallpaperStyle::Tile && eStyle != WallpaperStyle::Scale))))
             {
                 aBackground.SetColor( rStyleSettings.GetFieldColor() );
             }

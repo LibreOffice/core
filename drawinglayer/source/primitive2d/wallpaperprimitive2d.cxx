@@ -44,7 +44,7 @@ namespace drawinglayer
 
                 if(rPixelSize.Width() > 0 && rPixelSize.Height() > 0)
                 {
-                    if(WALLPAPER_SCALE == getWallpaperStyle())
+                    if(WallpaperStyle::Scale == getWallpaperStyle())
                     {
                         // shortcut for scale; use simple BitmapPrimitive2D
                         basegfx::B2DHomMatrix aObjectTransform;
@@ -76,64 +76,64 @@ namespace drawinglayer
 
                         switch(getWallpaperStyle())
                         {
-                            default: //case WALLPAPER_TILE :, also WALLPAPER_NULL and WALLPAPER_APPLICATIONGRADIENT
+                            default: //case WallpaperStyle::Tile :, also WallpaperStyle::NONE and WallpaperStyle::ApplicationGradient
                             {
                                 bUseTargetTopLeft = false;
                                 break;
                             }
-                            case WALLPAPER_SCALE :
+                            case WallpaperStyle::Scale :
                             {
                                 // handled by shortcut above
                                 break;
                             }
-                            case WALLPAPER_TOPLEFT :
+                            case WallpaperStyle::TopLeft :
                             {
                                 // nothing to do
                                 break;
                             }
-                            case WALLPAPER_TOP :
+                            case WallpaperStyle::Top :
                             {
                                 const basegfx::B2DPoint aCenter(getLocalObjectRange().getCenter());
                                 aTargetTopLeft.setX(aCenter.getX() - (aLogicSize.getX() * 0.5));
                                 break;
                             }
-                            case WALLPAPER_TOPRIGHT :
+                            case WallpaperStyle::TopRight :
                             {
                                 aTargetTopLeft.setX(getLocalObjectRange().getMaxX() - aLogicSize.getX());
                                 break;
                             }
-                            case WALLPAPER_LEFT :
+                            case WallpaperStyle::Left :
                             {
                                 const basegfx::B2DPoint aCenter(getLocalObjectRange().getCenter());
                                 aTargetTopLeft.setY(aCenter.getY() - (aLogicSize.getY() * 0.5));
                                 break;
                             }
-                            case WALLPAPER_CENTER :
+                            case WallpaperStyle::Center :
                             {
                                 const basegfx::B2DPoint aCenter(getLocalObjectRange().getCenter());
                                 aTargetTopLeft = aCenter - (aLogicSize * 0.5);
                                 break;
                             }
-                            case WALLPAPER_RIGHT :
+                            case WallpaperStyle::Right :
                             {
                                 const basegfx::B2DPoint aCenter(getLocalObjectRange().getCenter());
                                 aTargetTopLeft.setX(getLocalObjectRange().getMaxX() - aLogicSize.getX());
                                 aTargetTopLeft.setY(aCenter.getY() - (aLogicSize.getY() * 0.5));
                                 break;
                             }
-                            case WALLPAPER_BOTTOMLEFT :
+                            case WallpaperStyle::BottomLeft :
                             {
                                 aTargetTopLeft.setY(getLocalObjectRange().getMaxY() - aLogicSize.getY());
                                 break;
                             }
-                            case WALLPAPER_BOTTOM :
+                            case WallpaperStyle::Bottom :
                             {
                                 const basegfx::B2DPoint aCenter(getLocalObjectRange().getCenter());
                                 aTargetTopLeft.setX(aCenter.getX() - (aLogicSize.getX() * 0.5));
                                 aTargetTopLeft.setY(getLocalObjectRange().getMaxY() - aLogicSize.getY());
                                 break;
                             }
-                            case WALLPAPER_BOTTOMRIGHT :
+                            case WallpaperStyle::BottomRight :
                             {
                                 aTargetTopLeft = getLocalObjectRange().getMaximum() - aLogicSize;
                                 break;
@@ -164,14 +164,14 @@ namespace drawinglayer
                         }
                         else
                         {
-                            // WALLPAPER_TILE, WALLPAPER_NULL, WALLPAPER_APPLICATIONGRADIENT
+                            // WallpaperStyle::Tile, WallpaperStyle::NONE, WallpaperStyle::ApplicationGradient
                             // convert to relative positions
                             const basegfx::B2DVector aRelativeSize(
                                 aLogicSize.getX() / (getLocalObjectRange().getWidth() ? getLocalObjectRange().getWidth() : 1.0),
                                 aLogicSize.getY() / (getLocalObjectRange().getHeight() ? getLocalObjectRange().getHeight() : 1.0));
                             basegfx::B2DPoint aRelativeTopLeft(0.0, 0.0);
 
-                            if(WALLPAPER_TILE != getWallpaperStyle())
+                            if(WallpaperStyle::Tile != getWallpaperStyle())
                             {
                                 aRelativeTopLeft.setX(0.5 - aRelativeSize.getX());
                                 aRelativeTopLeft.setY(0.5 - aRelativeSize.getY());

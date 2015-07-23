@@ -36,7 +36,7 @@ ImplWallpaper::ImplWallpaper() :
     mpCache         = NULL;
     mpGradient      = NULL;
     mpRect          = NULL;
-    meStyle         = WALLPAPER_NULL;
+    meStyle         = WallpaperStyle::NONE;
 }
 
 ImplWallpaper::ImplWallpaper( const ImplWallpaper& rImplWallpaper ) :
@@ -148,7 +148,7 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
 
     // version 1
     WriteColor( rOStm, rImplWallpaper.maColor );
-    rOStm.WriteUInt16( rImplWallpaper.meStyle );
+    rOStm.WriteUInt16( static_cast<sal_uInt16>(rImplWallpaper.meStyle) );
 
     // version 2
     rOStm.WriteBool( bRect ).WriteBool( bGrad ).WriteBool( bBmp ).WriteBool( bDummy ).WriteBool( bDummy ).WriteBool( bDummy );
@@ -207,7 +207,7 @@ Wallpaper::Wallpaper( const Color& rColor )
 
     mpImplWallpaper             = new ImplWallpaper;
     mpImplWallpaper->maColor    = rColor;
-    mpImplWallpaper->meStyle    = WALLPAPER_TILE;
+    mpImplWallpaper->meStyle    = WallpaperStyle::Tile;
 }
 
 Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
@@ -215,7 +215,7 @@ Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
 
     mpImplWallpaper             = new ImplWallpaper;
     mpImplWallpaper->mpBitmap   = new BitmapEx( rBmpEx );
-    mpImplWallpaper->meStyle    = WALLPAPER_TILE;
+    mpImplWallpaper->meStyle    = WallpaperStyle::Tile;
 }
 
 Wallpaper::Wallpaper( const Gradient& rGradient )
@@ -223,7 +223,7 @@ Wallpaper::Wallpaper( const Gradient& rGradient )
 
     mpImplWallpaper             = new ImplWallpaper;
     mpImplWallpaper->mpGradient = new Gradient( rGradient );
-    mpImplWallpaper->meStyle    = WALLPAPER_TILE;
+    mpImplWallpaper->meStyle    = WallpaperStyle::Tile;
 }
 
 Wallpaper::~Wallpaper()
@@ -245,8 +245,8 @@ void Wallpaper::SetColor( const Color& rColor )
     ImplMakeUnique();
     mpImplWallpaper->maColor = rColor;
 
-    if( WALLPAPER_NULL == mpImplWallpaper->meStyle || WALLPAPER_APPLICATIONGRADIENT == mpImplWallpaper->meStyle )
-        mpImplWallpaper->meStyle = WALLPAPER_TILE;
+    if( WallpaperStyle::NONE == mpImplWallpaper->meStyle || WallpaperStyle::ApplicationGradient == mpImplWallpaper->meStyle )
+        mpImplWallpaper->meStyle = WallpaperStyle::Tile;
 }
 
 const Color& Wallpaper::GetColor() const
@@ -260,7 +260,7 @@ void Wallpaper::SetStyle( WallpaperStyle eStyle )
 
     ImplMakeUnique( false );
 
-    if( eStyle == WALLPAPER_APPLICATIONGRADIENT )
+    if( eStyle == WallpaperStyle::ApplicationGradient )
         // set a dummy gradient, the correct gradient
         // will be created dynamically in GetGradient()
         SetGradient( ImplGetApplicationGradient() );
@@ -295,8 +295,8 @@ void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
             mpImplWallpaper->mpBitmap = new BitmapEx( rBitmap );
     }
 
-    if( WALLPAPER_NULL == mpImplWallpaper->meStyle || WALLPAPER_APPLICATIONGRADIENT == mpImplWallpaper->meStyle)
-        mpImplWallpaper->meStyle = WALLPAPER_TILE;
+    if( WallpaperStyle::NONE == mpImplWallpaper->meStyle || WallpaperStyle::ApplicationGradient == mpImplWallpaper->meStyle)
+        mpImplWallpaper->meStyle = WallpaperStyle::Tile;
 }
 
 BitmapEx Wallpaper::GetBitmap() const
@@ -327,14 +327,14 @@ void Wallpaper::SetGradient( const Gradient& rGradient )
     else
         mpImplWallpaper->mpGradient = new Gradient( rGradient );
 
-    if( WALLPAPER_NULL == mpImplWallpaper->meStyle || WALLPAPER_APPLICATIONGRADIENT == mpImplWallpaper->meStyle )
-        mpImplWallpaper->meStyle = WALLPAPER_TILE;
+    if( WallpaperStyle::NONE == mpImplWallpaper->meStyle || WallpaperStyle::ApplicationGradient == mpImplWallpaper->meStyle )
+        mpImplWallpaper->meStyle = WallpaperStyle::Tile;
 }
 
 Gradient Wallpaper::GetGradient() const
 {
 
-    if( WALLPAPER_APPLICATIONGRADIENT == mpImplWallpaper->meStyle )
+    if( WallpaperStyle::ApplicationGradient == mpImplWallpaper->meStyle )
         return ImplGetApplicationGradient();
     else if ( mpImplWallpaper->mpGradient )
         return *(mpImplWallpaper->mpGradient);
@@ -407,7 +407,7 @@ bool Wallpaper::IsRect() const
 
 bool Wallpaper::IsFixed() const
 {
-    if ( mpImplWallpaper->meStyle == WALLPAPER_NULL )
+    if ( mpImplWallpaper->meStyle == WallpaperStyle::NONE )
         return false;
     else
         return (!mpImplWallpaper->mpBitmap && !mpImplWallpaper->mpGradient);
@@ -415,12 +415,12 @@ bool Wallpaper::IsFixed() const
 
 bool Wallpaper::IsScrollable() const
 {
-    if ( mpImplWallpaper->meStyle == WALLPAPER_NULL )
+    if ( mpImplWallpaper->meStyle == WallpaperStyle::NONE )
         return false;
     else if ( !mpImplWallpaper->mpBitmap && !mpImplWallpaper->mpGradient )
         return true;
     else if ( mpImplWallpaper->mpBitmap )
-        return (mpImplWallpaper->meStyle == WALLPAPER_TILE);
+        return (mpImplWallpaper->meStyle == WallpaperStyle::Tile);
     else
         return false;
 }

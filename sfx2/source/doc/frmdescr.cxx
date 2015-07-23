@@ -139,7 +139,7 @@ void SfxFrameDescriptor::SetWallpaper( const Wallpaper& rWallpaper )
 {
     DELETEZ( pImp->pWallpaper );
 
-    if ( rWallpaper.GetStyle() != WALLPAPER_NULL )
+    if ( rWallpaper.GetStyle() != WallpaperStyle::NONE )
         pImp->pWallpaper = new Wallpaper( rWallpaper );
 }
 

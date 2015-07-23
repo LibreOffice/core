@@ -28,44 +28,23 @@ class Gradient;
 class BitmapEx;
 class ImplWallpaper;
 
-#define WALLPAPER_NULL                  WallpaperStyle_NULL
-#define WALLPAPER_TILE                  WallpaperStyle_TILE
-#define WALLPAPER_CENTER                WallpaperStyle_CENTER
-#define WALLPAPER_SCALE                 WallpaperStyle_SCALE
-#define WALLPAPER_TOPLEFT               WallpaperStyle_TOPLEFT
-#define WALLPAPER_TOP                   WallpaperStyle_TOP
-#define WALLPAPER_TOPRIGHT              WallpaperStyle_TOPRIGHT
-#define WALLPAPER_LEFT                  WallpaperStyle_LEFT
-#define WALLPAPER_RIGHT                 WallpaperStyle_RIGHT
-#define WALLPAPER_BOTTOMLEFT            WallpaperStyle_BOTTOMLEFT
-#define WALLPAPER_BOTTOM                WallpaperStyle_BOTTOM
-#define WALLPAPER_BOTTOMRIGHT           WallpaperStyle_BOTTOMRIGHT
-#define WALLPAPER_APPLICATIONGRADIENT   WallpaperStyle_APPLICATIONGRADIENT
-#define WALLPAPER_FORCE_EQUAL_SIZE      WallpaperStyle_FORCE_EQUAL_SIZE
-
-#ifndef ENUM_WALLPAPERSTYLE_DECLARED
-#define ENUM_WALLPAPERSTYLE_DECLARED
-
-enum WallpaperStyle
+enum class WallpaperStyle
 {
-    WALLPAPER_NULL,
-    WALLPAPER_TILE,
-    WALLPAPER_CENTER,
-    WALLPAPER_SCALE,
-    WALLPAPER_TOPLEFT,
-    WALLPAPER_TOP,
-    WALLPAPER_TOPRIGHT,
-    WALLPAPER_LEFT,
-    WALLPAPER_RIGHT,
-    WALLPAPER_BOTTOMLEFT,
-    WALLPAPER_BOTTOM,
-    WALLPAPER_BOTTOMRIGHT,
-    WALLPAPER_APPLICATIONGRADIENT,          // defines a gradient that internally covers the whole application
-                                            // and uses a color derived from the face color
-    WALLPAPER_FORCE_EQUAL_SIZE = 0x7fffffff
+    NONE,
+    Tile,
+    Center,
+    Scale,
+    TopLeft,
+    Top,
+    TopRight,
+    Left,
+    Right,
+    BottomLeft,
+    Bottom,
+    BottomRight,
+    ApplicationGradient          // defines a gradient that internally covers the whole application
+                                 // and uses a color derived from the face color
 };
-
-#endif
 
 class VCL_DLLPUBLIC Wallpaper
 {

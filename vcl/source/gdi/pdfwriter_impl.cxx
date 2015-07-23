@@ -348,7 +348,7 @@ void doTestCode()
     aWriter.NewPage( 595, 842 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
     Wallpaper aWall( aTransMask );
-    aWall.SetStyle( WALLPAPER_TILE );
+    aWall.SetStyle( WallpaperStyle::Tile );
     aWriter.DrawWallpaper( Rectangle( Point( 4400, 4200 ), Size( 10200, 6300 ) ), aWall );
 
     aWriter.NewPage( 595, 842 );
@@ -11823,9 +11823,9 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
             aBmpPos = aRect.TopLeft();
             aBmpSize = aRect.GetSize();
         }
-        if( rWall.GetStyle() != WALLPAPER_SCALE )
+        if( rWall.GetStyle() != WallpaperStyle::Scale )
         {
-            if( rWall.GetStyle() != WALLPAPER_TILE )
+            if( rWall.GetStyle() != WallpaperStyle::Tile )
             {
                 bDrawBitmap     = true;
                 if( rWall.IsGradient() )
@@ -11834,33 +11834,33 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
                     bDrawColor = true;
                 switch( rWall.GetStyle() )
                 {
-                    case WALLPAPER_TOPLEFT:
+                    case WallpaperStyle::TopLeft:
                         break;
-                    case WALLPAPER_TOP:
+                    case WallpaperStyle::Top:
                         aBmpPos.X() += (aRect.GetWidth()-aBmpSize.Width())/2;
                         break;
-                    case WALLPAPER_LEFT:
+                    case WallpaperStyle::Left:
                         aBmpPos.Y() += (aRect.GetHeight()-aBmpSize.Height())/2;
                         break;
-                    case WALLPAPER_TOPRIGHT:
+                    case WallpaperStyle::TopRight:
                         aBmpPos.X() += aRect.GetWidth()-aBmpSize.Width();
                         break;
-                    case WALLPAPER_CENTER:
+                    case WallpaperStyle::Center:
                         aBmpPos.X() += (aRect.GetWidth()-aBmpSize.Width())/2;
                         aBmpPos.Y() += (aRect.GetHeight()-aBmpSize.Height())/2;
                         break;
-                    case WALLPAPER_RIGHT:
+                    case WallpaperStyle::Right:
                         aBmpPos.X() += aRect.GetWidth()-aBmpSize.Width();
                         aBmpPos.Y() += (aRect.GetHeight()-aBmpSize.Height())/2;
                         break;
-                    case WALLPAPER_BOTTOMLEFT:
+                    case WallpaperStyle::BottomLeft:
                         aBmpPos.Y() += aRect.GetHeight()-aBmpSize.Height();
                         break;
-                    case WALLPAPER_BOTTOM:
+                    case WallpaperStyle::Bottom:
                         aBmpPos.X() += (aRect.GetWidth()-aBmpSize.Width())/2;
                         aBmpPos.Y() += aRect.GetHeight()-aBmpSize.Height();
                         break;
-                    case WALLPAPER_BOTTOMRIGHT:
+                    case WallpaperStyle::BottomRight:
                         aBmpPos.X() += aRect.GetWidth()-aBmpSize.Width();
                         aBmpPos.Y() += aRect.GetHeight()-aBmpSize.Height();
                         break;
