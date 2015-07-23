@@ -21,12 +21,12 @@
 #define INCLUDED_SC_INC_ACCESSIBLEGLOBAL_HXX
 
 #include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <set>
 
 /// Generic XAccessibleStateSet implementation.
-class ScAccessibleStateSet : public ::cppu::WeakImplHelper1< ::com::sun::star::accessibility::XAccessibleStateSet >
+class ScAccessibleStateSet : public ::cppu::WeakImplHelper< ::com::sun::star::accessibility::XAccessibleStateSet >
 {
 public:
     ScAccessibleStateSet();

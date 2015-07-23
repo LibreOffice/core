@@ -43,11 +43,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -108,7 +104,7 @@ public:
 
 //  to uno, both look the same
 
-class ScSubTotalDescriptorBase : public cppu::WeakImplHelper6<
+class ScSubTotalDescriptorBase : public cppu::WeakImplHelper<
                                         com::sun::star::sheet::XSubTotalDescriptor,
                                         com::sun::star::container::XEnumerationAccess,
                                         com::sun::star::container::XIndexAccess,
@@ -246,7 +242,7 @@ public:
     virtual void            PutData( const ScSubTotalParam& rParam ) SAL_OVERRIDE;
 };
 
-class ScSubTotalFieldObj : public cppu::WeakImplHelper2<
+class ScSubTotalFieldObj : public cppu::WeakImplHelper<
                                 com::sun::star::sheet::XSubTotalField,
                                 com::sun::star::lang::XServiceInfo >
 {
@@ -278,7 +274,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScConsolidationDescriptor : public cppu::WeakImplHelper2<
+class ScConsolidationDescriptor : public cppu::WeakImplHelper<
                                         com::sun::star::sheet::XConsolidationDescriptor,
                                         com::sun::star::lang::XServiceInfo >
 {
@@ -331,7 +327,7 @@ public:
 
 //  to uno, all three look the same
 
-class ScFilterDescriptorBase : public cppu::WeakImplHelper5<
+class ScFilterDescriptorBase : public cppu::WeakImplHelper<
                                     com::sun::star::sheet::XSheetFilterDescriptor,
                                     com::sun::star::sheet::XSheetFilterDescriptor2,
                                     com::sun::star::sheet::XSheetFilterDescriptor3,
@@ -477,7 +473,7 @@ public:
     virtual void            PutData( const ScQueryParam& rParam ) SAL_OVERRIDE;
 };
 
-class ScDatabaseRangeObj : public cppu::WeakImplHelper6<
+class ScDatabaseRangeObj : public cppu::WeakImplHelper<
                                 com::sun::star::sheet::XDatabaseRange,
                                 com::sun::star::util::XRefreshable,
                                 com::sun::star::container::XNamed,
@@ -593,7 +589,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScDatabaseRangesObj : public cppu::WeakImplHelper4<
+class ScDatabaseRangesObj : public cppu::WeakImplHelper<
                                 com::sun::star::sheet::XDatabaseRanges,
                                 com::sun::star::container::XEnumerationAccess,
                                 com::sun::star::container::XIndexAccess,
@@ -654,7 +650,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class ScUnnamedDatabaseRangesObj : public cppu::WeakImplHelper1<
+class ScUnnamedDatabaseRangesObj : public cppu::WeakImplHelper<
                                 com::sun::star::sheet::XUnnamedDatabaseRanges>,
                             public SfxListener
 {
