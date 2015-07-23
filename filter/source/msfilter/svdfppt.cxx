@@ -578,7 +578,7 @@ PptFontEntityAtom* SdrEscherImport::GetFontEnityAtom( sal_uInt32 nNum ) const
 {
     PptFontEntityAtom* pRetValue = NULL;
     if (m_pFonts && (nNum < m_pFonts->size()))
-        pRetValue = (*m_pFonts)[ (sal_uInt16)nNum ].get();
+        pRetValue = (*m_pFonts)[ nNum ].get();
     return pRetValue;
 }
 
