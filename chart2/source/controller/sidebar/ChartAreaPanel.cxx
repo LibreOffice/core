@@ -66,6 +66,7 @@ ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
     mxListener(new ChartSidebarModifyListener(this)),
     mxSelectionListener(new ChartSidebarSelectionListener(this))
 {
+    Initialize();
 }
 
 ChartAreaPanel::~ChartAreaPanel()
@@ -173,6 +174,19 @@ void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
 
 void ChartAreaPanel::updateData()
 {
+    css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
+    if (!xPropSet.is())
+        return;
+
+    css::drawing::FillStyle eFillStyle = css::drawing::FillStyle_SOLID;
+    xPropSet->getPropertyValue("FillStyle") >>= eFillStyle;
+    XFillStyleItem aFillStyleItem(eFillStyle);
+    updateFillStyle(false, true, &aFillStyleItem);
+
+    sal_uInt16 nFillTransparence = 0;
+    xPropSet->getPropertyValue("Transparency") >>= nFillTransparence;
+    SfxUInt16Item aTransparenceItem(0, nFillTransparence);
+    updateFillTransparence(false, true, &aTransparenceItem);
 }
 
 void ChartAreaPanel::modelInvalid()
