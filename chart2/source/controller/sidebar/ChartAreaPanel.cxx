@@ -10,6 +10,7 @@
 #include "ChartAreaPanel.hxx"
 
 #include "ChartController.hxx"
+#include "ViewElementListProvider.hxx"
 
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
@@ -40,6 +41,33 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
 {
     OUString aCID = getCID(xModel);
     return ObjectIdentifier::getObjectPropertySet(aCID, xModel);
+}
+
+XGradient getXGradientForName(css::uno::Reference<css::frame::XModel> xModel,
+        const OUString& rName)
+{
+    css::uno::Reference<css::frame::XController>xController = xModel->getCurrentController();
+    if (!xController.is())
+        return XGradient();
+
+    ChartController* pController = dynamic_cast<ChartController*>(xController.get());
+    if (!pController)
+        return XGradient();
+
+    ViewElementListProvider aProvider = pController->getViewElementListProvider();
+    XGradientListRef aRef = aProvider.GetGradientList();
+    size_t n = aRef->Count();
+    for (size_t i = 0; i < n; ++i)
+    {
+        XGradientEntry* pGradient = aRef->GetGradient(i);
+        if (!pGradient)
+            continue;
+
+        if (pGradient->GetName() == rName)
+            return XGradient(pGradient->GetGradient());
+    }
+
+    return XGradient();
 }
 
 class PreventUpdate
@@ -215,6 +243,12 @@ void ChartAreaPanel::updateData()
     xPropSet->getPropertyValue("Transparency") >>= nFillTransparence;
     SfxUInt16Item aTransparenceItem(0, nFillTransparence);
     updateFillTransparence(false, true, &aTransparenceItem);
+
+    OUString aGradientName;
+    xPropSet->getPropertyValue("GradientName") >>= aGradientName;
+    XGradient xGradient = getXGradientForName(mxModel, aGradientName);
+    XFillGradientItem aGradientItem(aGradientName, xGradient);
+    updateFillGradient(false, true, &aGradientItem);
 }
 
 void ChartAreaPanel::modelInvalid()

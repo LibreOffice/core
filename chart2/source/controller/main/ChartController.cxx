@@ -43,6 +43,7 @@
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
 #include "UndoActions.hxx"
+#include "ViewElementListProvider.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -1621,6 +1622,11 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( "StatusBarVisible" )
         ( "ChartElementSelector" )
         ;
+}
+
+ViewElementListProvider ChartController::getViewElementListProvider()
+{
+    return ViewElementListProvider(m_pDrawModelWrapper.get());
 }
 
 } //namespace chart
