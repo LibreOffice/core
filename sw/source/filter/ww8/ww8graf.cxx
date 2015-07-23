@@ -2547,9 +2547,9 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     for (MSDffImportRecords::const_iterator it = aData.begin();
             it != aData.end(); ++it) // MSVC2008 wants const_iterator here???
     {
-        if (it->pObj == pObject)
+        if ((*it)->pObj == pObject)
         {
-            pRecord = &const_cast<SvxMSDffImportRec&>(*it);
+            pRecord = const_cast<SvxMSDffImportRec *>(it->get());
             break;
         }
     }
@@ -2682,7 +2682,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 for (MSDffImportRecords::const_iterator it = aData.begin();
                         it != aData.end(); ++it)
                 {
-                    pRecord = &const_cast<SvxMSDffImportRec&>(*it);
+                    pRecord = const_cast<SvxMSDffImportRec *>(it->get());
                     if (pRecord->pObj && pRecord->aTextId.nTxBxS)
                     { // #i52825# pRetFrameFormat can be NULL
                         pRetFrameFormat = MungeTextIntoDrawBox(pRecord->pObj,

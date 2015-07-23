@@ -1120,7 +1120,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         {
             // Complement Import Record List
             pImpRec->pObj = pObj;
-            rImportData.aRecords.insert( pImpRec );
+            rImportData.m_Records.insert(std::unique_ptr<SvxMSDffImportRec>(pImpRec));
 
             // Complement entry in Z Order List with a pointer to this Object
             // Only store objects which are not deep inside the tree
@@ -4284,7 +4284,7 @@ void wwSectionManager::SetSegmentToPageDesc(const wwSection &rSection,
         if (mrReader.m_pMSDffManager->GetShape(0x401, pObject, aData))
         {
             // Only handle shape if it is a background shape
-            if ((aData.begin()->nFlags & 0x400) != 0)
+            if (((*aData.begin())->nFlags & 0x400) != 0)
             {
                 SfxItemSet aSet(rFormat.GetAttrSet());
                 mrReader.MatchSdrItemsIntoFlySet(pObject, aSet, mso_lineSimple,

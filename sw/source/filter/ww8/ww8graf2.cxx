@@ -547,7 +547,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     RES_FRMATR_END-1 );
 
                 SvxMSDffImportRec const*const pRecord = (1 == aData.size())
-                    ? &*aData.begin() : 0;
+                    ? aData.begin()->get() : nullptr;
 
                 if( pRecord )
                 {

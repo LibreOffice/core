@@ -28,7 +28,6 @@
 #include <vector>
 
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/ptr_container/ptr_set.hpp>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -270,16 +269,21 @@ private:
     SvxMSDffImportRec &operator=(const SvxMSDffImportRec&) SAL_DELETED_FUNCTION;
 };
 
+struct MSDffImportRecords_Less
+{
+    bool operator()(std::unique_ptr<SvxMSDffImportRec> const& left,
+                    std::unique_ptr<SvxMSDffImportRec> const& right) const
+    { return (*left) < (*right); }
+};
 /** list of all SvxMSDffImportRec instances of/for a group */
-class MSDffImportRecords
-    : public ::boost::ptr_set<SvxMSDffImportRec>
-{};
+typedef std::set<std::unique_ptr<SvxMSDffImportRec>, MSDffImportRecords_Less>
+    MSDffImportRecords;
 
 /** block of parameters for import/export for a single call of
     ImportObjAtCurrentStreamPos() */
 struct SvxMSDffImportData
 {
-    MSDffImportRecords  aRecords;   ///< Shape pointer, Shape ids and private data
+    MSDffImportRecords  m_Records;  ///< Shape pointer, Shape ids and private data
     Rectangle           aParentRect;///< Rectangle of the surrounding groups,
                                     ///< which might have been provided externally
     Rectangle           aNewRect;   ///< Rectangle that is defined by this shape
@@ -287,10 +291,10 @@ struct SvxMSDffImportData
     SvxMSDffImportData()
         {}
     explicit SvxMSDffImportData( const Rectangle& rParentRect ) : aParentRect( rParentRect ) {}
-    bool empty() const { return aRecords.empty(); }
-    size_t size() const { return aRecords.size(); }
-    MSDffImportRecords::const_iterator begin() const { return aRecords.begin();  }
-    MSDffImportRecords::const_iterator end() const { return aRecords.end();  }
+    bool empty() const { return m_Records.empty(); }
+    size_t size() const { return m_Records.size(); }
+    MSDffImportRecords::const_iterator begin() const { return m_Records.begin();  }
+    MSDffImportRecords::const_iterator end() const { return m_Records.end();  }
 };
 
 struct DffObjData
