@@ -194,6 +194,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/sidebar/ChartErrorBarPanel \
     chart2/source/controller/sidebar/ChartSeriesPanel \
     chart2/source/controller/sidebar/ChartSidebarModifyListener \
+    chart2/source/controller/sidebar/ChartSidebarSelectionListener \
 ))
 
 # Runtime dependency for unit-tests
