@@ -23,6 +23,7 @@
 class SdrObjEditView;
 class SdrTextObj;
 class KeyEvent;
+class SdrOutliner;
 
 
 class TextChainCursorManager
@@ -39,6 +40,9 @@ private:
     const SdrTextObj *mpTextObj;
 
     void impChangeEditingTextObj(SdrTextObj *pTargetTextObj, ESelection aNewSel) const;
+    void impDetectEvent(const KeyEvent& rKEvt,
+                        CursorChainingEvent *pOutCursorEvt,
+                        ESelection *pOutSel) const;
 };
 
 

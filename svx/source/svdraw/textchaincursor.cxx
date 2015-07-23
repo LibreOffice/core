@@ -30,49 +30,73 @@ TextChainCursorManager::TextChainCursorManager(SdrObjEditView *pEditView, const 
     mpEditView(pEditView),
     mpTextObj(pTextObj)
 {
+    assert(mpEditView);
+    assert(mpTextObj);
 
 }
 
 bool TextChainCursorManager::HandleKeyEvent( const KeyEvent& rKEvt ) const
 {
-    bool bHandled = false;
+    ESelection aNewSel;
+    CursorChainingEvent aCursorEvent;
 
-    // XXX: Find a clean way to do this (even cleaner than the code commented below)
-    // if( pTextEditOutlinerView->IsKeyEventPushingOutOfPage(rKevt, pWin)
-    //       pWin = HandleKeyPushingOutOfBox(rKevt);
-    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
-    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
-    ESelection aCurSel = mpEditView->GetTextEditOutlinerView()->GetSelection();
+    // check what the cursor/event situation looks like
+    impDetectEvent(rKEvt, &aCursorEvent, &aNewSel);
 
-    if (mpTextObj && mpTextObj->IsChainable() && mpTextObj->GetNextLinkInChain() &&
-        eFunc ==  KeyFuncType::DONTKNOW)
-    {
-        SdrOutliner *pOutl = mpEditView->GetTextEditOutliner();
-        sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
-        OUString aLastParaText = pOutl->GetText(pOutl->GetParagraph(nLastPara));
-        sal_Int32 nLastParaLen = aLastParaText.getLength();
-
-        if (nCode == KEY_RIGHT &&
-            aCurSel.nEndPara == nLastPara &&
-            aCurSel.nEndPos == nLastParaLen
-            )
-        {
-            fprintf(stderr, "[CHAIN - CURSOR] Trying to move to next box\n" );
-
-            // Move to next box
-            mpEditView->SdrEndTextEdit();
-            SdrTextObj *pNextLink = mpTextObj->GetNextLinkInChain();
-            mpEditView->SdrBeginTextEdit(pNextLink);
-            bHandled = true;
-        }
-
+    if (aCursorEvent == CursorChainingEvent::NULL_EVENT)
+        return false;
+    else {
+        HandleCursorEvent(aCursorEvent, aNewSel);
+        return true;
     }
-    return bHandled;
 }
 
-void TextChainCursorManager::HandleCursorEvent(const CursorChainingEvent aCurEvt,
-                           const ESelection  aNewSel) const
+void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
+                                            CursorChainingEvent *pOutCursorEvt,
+                                            ESelection *pOutSel) const
 {
+    SdrOutliner *pOutl = mpEditView->GetTextEditOutliner();
+    OutlinerView *pOLV = mpEditView->GetTextEditOutlinerView();
+
+    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
+
+    // We need to have this KeyFuncType
+    if (eFunc !=  KeyFuncType::DONTKNOW)
+    {
+        *pOutCursorEvt = CursorChainingEvent::NULL_EVENT;
+        return;
+    }
+
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
+    ESelection aCurSel = pOLV->GetSelection();
+
+    sal_Int32 nLastPara = pOutl->GetParagraphCount()-1;
+    OUString aLastParaText = pOutl->GetText(pOutl->GetParagraph(nLastPara));
+    sal_Int32 nLastParaLen = aLastParaText.getLength();
+
+    bool bAtEndOfTextContent =
+        (aCurSel.nEndPara == nLastPara) &&
+        (aCurSel.nEndPos == nLastParaLen);
+
+    if (nCode == KEY_RIGHT && bAtEndOfTextContent)
+    {
+        *pOutCursorEvt = CursorChainingEvent::TO_NEXT_LINK;
+        // Selection unchanged: we are at the beginning of the box
+    }
+
+    // if (nCode == KEY_LEFT && bAtStartOfTextContent) ...
+
+    // If arrived here there is no event detected
+    *pOutCursorEvt = CursorChainingEvent::NULL_EVENT;
+
+}
+
+void TextChainCursorManager::HandleCursorEvent(
+                            const CursorChainingEvent aCurEvt,
+                            const ESelection  aNewSel)
+                            const
+{
+
     OutlinerView* pOLV = mpEditView->GetTextEditOutlinerView();
     SdrTextObj *pNextLink = mpTextObj->GetNextLinkInChain();
     SdrTextObj *pPrevLink = mpTextObj->GetPrevLinkInChain();
@@ -99,8 +123,7 @@ void TextChainCursorManager::HandleCursorEvent(const CursorChainingEvent aCurEvt
 
 void TextChainCursorManager::impChangeEditingTextObj(SdrTextObj *pTargetTextObj, ESelection aNewSel) const
 {
-    if (!pTargetTextObj)
-        return;
+    assert(pTargetTextObj);
 
     mpEditView->SdrEndTextEdit();
     mpEditView->SdrBeginTextEdit(pTargetTextObj);

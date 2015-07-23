@@ -1268,6 +1268,9 @@ bool SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, 
     else
         return false;
 
+    if (!pTextObj->IsChainable())
+        return false;
+
     TextChainCursorManager aCursorManager(this, pTextObj);
     if( aCursorManager.HandleKeyEvent(rKEvt) ) {
         // Possibly do other stuff here if necessary...
