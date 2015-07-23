@@ -1319,9 +1319,9 @@ bool SdrObjEditView::ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, 
             SdrTextObj *pNextLink = pTextObj->GetNextLinkInChain();
             SdrBeginTextEdit(pNextLink);
             bHandled = true;
-        } // else if (...)
+        }
 
-        // XXX: Careful with the checks below for pWin and co. You should do them here I guess.
+        // XXX: Careful with the checks below (in KeyInput) for pWin and co. You should do them here I guess.
 
     }
 
