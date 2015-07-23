@@ -141,7 +141,6 @@ public:
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
     void            SetMode (ObjectMode::Mode);
-    ObjectMode::Mode GetMode () const { return eMode; }
 };
 
 class LibDialog: public ModalDialog
@@ -164,7 +163,6 @@ public:
     bool            IsReplace() const           { return m_pReplaceBox->IsChecked(); }
 
     void            EnableReference (bool b)    { m_pReferenceBox->Enable(b); }
-    void            EnableReplace (bool b)      { m_pReplaceBox->Enable(b); }
 };
 
 class OrganizeDialog : public TabDialog

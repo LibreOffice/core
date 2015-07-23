@@ -27,7 +27,7 @@ exclusionSet = set([
     "void unoidl::detail::SourceProviderScannerData::setSource(const void *,unsigned long)",
     "enum connectivity::IParseContext::InternationalKeyCode connectivity::IParseContext::getIntlKeyCode(const class rtl::OString &) const",
     "void connectivity::OSQLParser::error(const char *)",
-    "void connectivity::OSQLParseNode::insert(unsigned int,class connectivity::OSQLParseNode *)"
+    "void connectivity::OSQLParseNode::insert(unsigned int,class connectivity::OSQLParseNode *)",
     # TODO track instantiations of template class constructors
     "void comphelper::IEventProcessor::release()",
     "void SotMutexHolder::acquire()",

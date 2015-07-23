@@ -887,7 +887,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
     if( aSize.Width > 0 && aSize.Height > 0 )
     {
-        ::avmedia::gstreamer::Window* pWindow = new ::avmedia::gstreamer::Window( mxMgr, *this );
+        ::avmedia::gstreamer::Window* pWindow = new ::avmedia::gstreamer::Window( mxMgr );
 
         xRet = pWindow;
 

@@ -224,12 +224,6 @@ SwNumFormat::~SwNumFormat()
     delete pVertOrient;
 }
 
-void SwNumFormat::NotifyGraphicArrived()
-{
-    if( GetCharFormat() )
-        UpdateNumNodes( GetCharFormat()->GetDoc() );
-}
-
 // #i22362#
 bool SwNumFormat::IsEnumeration() const
 {

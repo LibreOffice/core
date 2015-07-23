@@ -43,9 +43,6 @@ namespace pcr
         virtual sal_uInt32                     getPropertyUIFlags(sal_Int32 _nId) const = 0;
         virtual ::std::vector< OUString >      getPropertyEnumRepresentations(sal_Int32 _nId) const = 0;
 
-        // this is only temporary, until the UNOization of the property browser is completed
-        virtual OUString                       getPropertyName( sal_Int32 _nPropId ) = 0;
-
         virtual ~IPropertyInfoService() { }
     };
 
