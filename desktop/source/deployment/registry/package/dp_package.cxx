@@ -1473,9 +1473,11 @@ void BackendImpl::PackageImpl::scanBundle(
         if (! INetContentTypes::parse( mediaType, type, subType, &params ))
             continue;
 
-        auto iter = params.find("platform");
-        if (iter != params.end() && !platform_fits(iter->second.m_sValue))
-            continue;
+        {
+            auto const iter = params.find("platform");
+            if (iter != params.end() && !platform_fits(iter->second.m_sValue))
+                continue;
+        }
         const OUString url( makeURL( packageRootURL, fullPath ) );
 
         // check for bundle description:
@@ -1483,7 +1485,7 @@ void BackendImpl::PackageImpl::scanBundle(
             subType.equalsIgnoreAsciiCase( "vnd.sun.star.package-bundle-description"))
         {
             // check locale:
-            iter = params.find("locale");
+            auto const iter = params.find("locale");
             if (iter == params.end())
             {
                 if (descrFile.isEmpty())
