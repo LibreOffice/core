@@ -319,6 +319,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                         break;
 
                 }
+                aCalcConfig.mbHasStringRefSyntax = true;
                 rDoc.SetCalcConfig( aCalcConfig );
             }
         }
@@ -461,26 +462,31 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         else if ( aPropertyName == SC_UNO_SYNTAXSTRINGREF )
         {
             ScCalcConfig aCalcConfig = rDoc.GetCalcConfig();
-            formula::FormulaGrammar::AddressConvention aConv = aCalcConfig.meStringRefAddressSyntax;
 
-            switch (aConv)
+            // if it hasn't been read or explicitly changed, don't write it
+            if ( aCalcConfig.mbHasStringRefSyntax )
             {
-                case formula::FormulaGrammar::CONV_OOO:
-                case formula::FormulaGrammar::CONV_XL_A1:
-                case formula::FormulaGrammar::CONV_XL_R1C1:
-                case formula::FormulaGrammar::CONV_A1_XL_A1:
-                     aRet <<= static_cast<sal_Int16>( aConv );
-                     break;
+                formula::FormulaGrammar::AddressConvention aConv = aCalcConfig.meStringRefAddressSyntax;
 
-                case formula::FormulaGrammar::CONV_UNSPECIFIED:
-                case formula::FormulaGrammar::CONV_ODF:
-                case formula::FormulaGrammar::CONV_XL_OOX:
-                case formula::FormulaGrammar::CONV_LOTUS_A1:
-                case formula::FormulaGrammar::CONV_LAST:
+                switch (aConv)
                 {
-                    aRet <<= sal_Int16(9999);
-                    break;
-                }
+                    case formula::FormulaGrammar::CONV_OOO:
+                    case formula::FormulaGrammar::CONV_XL_A1:
+                    case formula::FormulaGrammar::CONV_XL_R1C1:
+                    case formula::FormulaGrammar::CONV_A1_XL_A1:
+                         aRet <<= static_cast<sal_Int16>( aConv );
+                         break;
+
+                    case formula::FormulaGrammar::CONV_UNSPECIFIED:
+                    case formula::FormulaGrammar::CONV_ODF:
+                    case formula::FormulaGrammar::CONV_XL_OOX:
+                    case formula::FormulaGrammar::CONV_LOTUS_A1:
+                    case formula::FormulaGrammar::CONV_LAST:
+                    {
+                        aRet <<= sal_Int16(9999);
+                        break;
+                    }
+                 }
              }
         }
 
