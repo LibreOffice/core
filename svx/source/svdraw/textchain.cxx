@@ -55,10 +55,28 @@ void TextChain::AppendLink(SdrTextObj *)
     // XXX
 }
 
-SdrTextObj *TextChain::GetNextLink(SdrTextObj *) const
+SdrTextObj *TextChain::GetNextLink(SdrTextObj *pTextObj) const
 {
-    return NULL; // XXX: To be changed. It'd be a mess to implement now
+    return impGetNextLink(pTextObj);
 }
+
+SdrTextObj *TextChain::GetPrevLink(SdrTextObj *pTextObj) const
+{
+    return impGetPrevLink(pTextObj);
+}
+
+SdrTextObj *TextChain::impGetNextLink(SdrTextObj *pTextObj) const
+{
+    // XXX: To be implemented
+    return NULL;
+}
+
+SdrTextObj *TextChain::impGetPrevLink(SdrTextObj *pTextObj) const
+{
+    // XXX: To be implemented
+    return NULL;
+}
+
 
 ImpChainLinkProperties *TextChain::GetLinkProperties(const SdrTextObj *pLink)
 {

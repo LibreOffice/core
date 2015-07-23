@@ -129,3 +129,12 @@ DerivedData
 # gdb config
 /.gdbinit
 /.gdb_history
+
+# Personal scripts and text
+bpoints
+core
+makeWithDebug.sh
+papercuts.txt
+startDbg.sh
+startTest.sh
+

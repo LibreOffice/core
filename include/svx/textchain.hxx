@@ -139,7 +139,9 @@ class TextChain {
 
     void AppendLink(SdrTextObj *);
     bool IsLinkInChain(SdrTextObj *) const;
+
     SdrTextObj *GetNextLink(SdrTextObj *) const;
+    SdrTextObj *GetPrevLink(SdrTextObj *) const;
 
     ChainLinkId GetId(const SdrTextObj *) const;
     ImpChainLinkProperties *GetLinkProperties(const SdrTextObj *);
@@ -156,6 +158,12 @@ class TextChain {
 
     protected:
     LinkPropertiesMap maLinkPropertiesMap;
+
+    private:
+    SdrTextObj *impGetNextLink(SdrTextObj *) const;
+    SdrTextObj *impGetPrevLink(SdrTextObj *) const;
+
+
 };
 
 #endif // INCLUDED_SVX_TEXTCHAIN_HXX
