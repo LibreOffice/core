@@ -127,6 +127,7 @@ class ChartWindow;
 class DrawModelWrapper;
 class DrawViewWrapper;
 class ReferenceSizeProvider;
+class ViewElementListProvider;
 
 class ChartController   : public ::cppu::WeakImplHelper12 <
          ::com::sun::star::frame::XController   //comprehends XComponent (required interface)
@@ -432,6 +433,8 @@ public:
     void setDrawMode( ChartDrawMode eMode ) { m_eDrawMode = eMode; }
 
     bool isShapeContext() const;
+
+    ViewElementListProvider getViewElementListProvider();
 
     DECL_LINK( NotifyUndoActionHdl, SdrUndoAction* );
 
