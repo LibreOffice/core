@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a54edaf_8817dcec",
+        "filename": "filter/source/msfilter/util.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1396,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-07-23T19:48:08Z",
+      "side": 1,
+      "message": "sal_uLong is deprecated, please don\u0027t use in new code",
+      "revId": "84f8d836c4d51810f0de590e797caa277817731a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
