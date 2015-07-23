@@ -99,9 +99,6 @@ namespace dbaccess
                                 ::com::sun::star::beans::PropertyValue >& rValues,
                             const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
-        com::sun::star::uno::Sequence< com::sun::star::beans::Property >
-            getProperties( const com::sun::star::uno::Reference<
-                            com::sun::star::ucb::XCommandEnvironment > & xEnv );
 
         void impl_rename_throw(const OUString& _sNewName,bool _bNotify = true);
 

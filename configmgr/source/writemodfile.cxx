@@ -93,6 +93,7 @@ TempFile::~TempFile() {
     }
 }
 
+#ifdef WNT
 oslFileError TempFile::closeWithoutUnlink() {
     flush();
     oslFileError e = osl_closeFile(handle);
@@ -100,6 +101,7 @@ oslFileError TempFile::closeWithoutUnlink() {
     closed = true;
     return e;
 }
+#endif
 
 void TempFile::closeAndRename(const OUString &_url) {
     oslFileError e = flush();

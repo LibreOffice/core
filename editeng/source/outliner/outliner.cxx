@@ -660,17 +660,6 @@ void Outliner::FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_In
 }
 
 
-void Outliner::FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos )
-{
-    if ( !aFieldClickedHdl.IsSet() )
-        return;
-
-    EditFieldInfo aFldInfo( this, rField, nPara, nPos );
-    aFldInfo.SetSimpleClick( false );
-    aFieldClickedHdl.Call( &aFldInfo );
-}
-
-
 OUString Outliner::CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     if ( !aCalcFieldValueHdl.IsSet() )

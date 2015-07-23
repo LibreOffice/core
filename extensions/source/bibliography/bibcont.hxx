@@ -89,9 +89,6 @@ class BibBookContainer: public BibSplitWindow
         virtual ~BibBookContainer();
         virtual void dispose() SAL_OVERRIDE;
 
-        inline BibWindow*       GetTopWin() {return pTopWin;}
-        inline BibWindow*       GetBottomWin() {return pBottomWin;}
-
         // !BibShortCutHandler is also always a Window!
         void                    createTopFrame( BibShortCutHandler* pWin );
 

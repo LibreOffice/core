@@ -404,47 +404,7 @@ void SAL_CALL OCommonEmbeddedObject::release()
 }
 
 
-uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
-        throw( uno::RuntimeException )
-{
-    static ::cppu::OTypeCollection* pTypeCollection = NULL;
 
-    if ( !pTypeCollection )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pTypeCollection )
-        {
-            if ( m_bIsLink )
-            {
-                static ::cppu::OTypeCollection aTypeCollection(
-                                            cppu::UnoType<lang::XTypeProvider>::get(),
-                                            cppu::UnoType<embed::XEmbeddedObject>::get(),
-                                            cppu::UnoType<embed::XInplaceObject>::get(),
-                                            cppu::UnoType<embed::XCommonEmbedPersist>::get(),
-                                            cppu::UnoType<container::XChild>::get(),
-                                            cppu::UnoType<embed::XLinkageSupport>::get());
-
-                pTypeCollection = &aTypeCollection ;
-            }
-            else
-            {
-                   static ::cppu::OTypeCollection aTypeCollection(
-                                            cppu::UnoType<lang::XTypeProvider>::get(),
-                                            cppu::UnoType<embed::XEmbeddedObject>::get(),
-                                            cppu::UnoType<embed::XInplaceObject>::get(),
-                                            cppu::UnoType<embed::XCommonEmbedPersist>::get(),
-                                            cppu::UnoType<container::XChild>::get(),
-                                            cppu::UnoType<embed::XEmbedPersist>::get(),
-                                            cppu::UnoType<embed::XEmbedPersist2>::get());
-
-                pTypeCollection = &aTypeCollection ;
-            }
-        }
-    }
-
-    return pTypeCollection->getTypes() ;
-
-}
 
 uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
         throw ( uno::RuntimeException, std::exception )

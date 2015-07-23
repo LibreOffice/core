@@ -177,7 +177,6 @@ public:
     bool            RemarkDialog();
 
     void            SetDialogModelChanged (bool bChanged = true) { bDialogModelChanged = bChanged; }
-    bool            IsDialogModelChanged () const { return bDialogModelChanged; }
 
     bool            IsModified () const;
     void            ClearModifyFlag();

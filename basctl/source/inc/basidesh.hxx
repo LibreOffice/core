@@ -162,9 +162,6 @@ public:
     OUString const&  GetCurLibName() const { return m_aCurLibName; }
     boost::shared_ptr<LocalizationMgr> GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
 
-    ScrollBar&          GetHScrollBar()         { return *aHScrollBar.get(); }
-    ScrollBar&          GetVScrollBar()         { return *aVScrollBar.get(); }
-    ScrollBarBox&       GetScrollBarBox()       { return *aScrollBarBox.get(); }
     TabBar&             GetTabBar()             { return *pTabBar; }
     WindowTable&        GetWindowTable()        { return aWindowTable; }
     sal_uInt16          GetWindowId (BaseWindow const* pWin) const;

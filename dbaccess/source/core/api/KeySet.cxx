@@ -1162,16 +1162,6 @@ bool OKeySet::absolute_checked( sal_Int32 row, bool /* i_bFetchRow */ )
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 
-bool SAL_CALL OKeySet::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
-{
-    if(!rows)
-    {
-        invalidateRow();
-        return true;
-    }
-    return absolute(getRow()+rows);
-}
-
 bool OKeySet::previous_checked( bool /* i_bFetchRow */ )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;

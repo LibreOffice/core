@@ -481,10 +481,6 @@ void SvxNumberFormat::SetIndentAt( const long nIndentAt )
     mnIndentAt = nIndentAt;
 }
 
-void SvxNumberFormat::NotifyGraphicArrived()
-{
-}
-
 Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
 {
     const MapMode aMapMM100( MAP_100TH_MM );

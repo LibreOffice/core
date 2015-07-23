@@ -37,10 +37,6 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE ;
 
-    // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        throw( ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE ;
-
     // XVisualObject
     virtual ::com::sun::star::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect )
         throw ( ::com::sun::star::lang::IllegalArgumentException,

@@ -54,7 +54,6 @@ class NodeMap
 
     rtl::Reference<Node> &operator[](const OUString &aStr) { clearCache(); return maImpl[aStr]; }
     std::pair<iterator,bool> insert(const value_type &vt) { clearCache(); return maImpl.insert(vt); }
-    void clear() { maImpl.clear(); clearCache(); }
     void erase(const iterator &it) { maImpl.erase(it); clearCache(); }
     void erase(const OUString &aStr) { maImpl.erase(aStr); clearCache(); }
 

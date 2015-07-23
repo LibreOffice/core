@@ -53,7 +53,6 @@ class SW_DLLPUBLIC SwNumFormat : public SvxNumberFormat, public SwClient
     //For i120928,record the cp info of graphic within bullet
     sal_Unicode     cGrfBulletCP;
     SAL_DLLPRIVATE void UpdateNumNodes( SwDoc* pDoc );
-    SAL_DLLPRIVATE virtual void NotifyGraphicArrived() SAL_OVERRIDE;
 
     using SvxNumberFormat::operator ==;
     using SvxNumberFormat::operator !=;

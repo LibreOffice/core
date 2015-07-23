@@ -113,21 +113,6 @@ public:
      */
      void commitTableEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
              const css::uno::Any& rOldValue);
-    /** returns the accessible object for the row or the column header bar
-    */
-    inline css::uno::Reference< css::accessibility::XAccessible >
-        getHeaderBar( ::svt::table::AccessibleTableControlObjType _eObjType )
-        {
-            return implGetHeaderBar(_eObjType);
-        }
-
-    /** returns the accessible object for the table representation
-    */
-    inline css::uno::Reference< css::accessibility::XAccessible >
-        getTable( )
-        {
-            return implGetTable();
-        }
 
 protected:
     // internal virtual methods -----------------------------------------------

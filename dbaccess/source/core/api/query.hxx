@@ -132,7 +132,6 @@ public:
 public:
     // the caller is responsible for the lifetime!
     void                            setWarningsContainer( ::dbtools::WarningsContainer* _pWarnings )   { m_pWarnings = _pWarnings; }
-    ::dbtools::WarningsContainer*   getWarningsContainer( ) const                                      { return m_pWarnings; }
 
     // XRename
     virtual void SAL_CALL rename( const OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
