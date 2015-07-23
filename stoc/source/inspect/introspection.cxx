@@ -44,6 +44,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XIdlField2.hpp>
@@ -86,7 +87,7 @@ namespace
 typedef WeakImplHelper< XIntrospectionAccess, XMaterialHolder, XExactName,
                         XPropertySet, XFastPropertySet, XPropertySetInfo,
                         XNameContainer, XIndexContainer, XEnumerationAccess,
-                        XIdlArray > IntrospectionAccessHelper;
+                        XIdlArray, XUnoTunnel > IntrospectionAccessHelper;
 
 
 
@@ -201,11 +202,14 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
     bool mbFastPropSet;
     bool mbElementAccess;
     bool mbNameAccess;
+    bool mbNameReplace;
     bool mbNameContainer;
     bool mbIndexAccess;
+    bool mbIndexReplace;
     bool mbIndexContainer;
     bool mbEnumerationAccess;
     bool mbIdlArray;
+    bool mbUnoTunnel;
 
     // Original handles of FastPropertySets
     sal_Int32* mpOrgPropertyHandleArray;
@@ -273,11 +277,14 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
     mbFastPropSet = false;
     mbElementAccess = false;
     mbNameAccess = false;
+    mbNameReplace = false;
     mbNameContainer = false;
     mbIndexAccess = false;
+    mbIndexReplace = false;
     mbIndexContainer = false;
     mbEnumerationAccess = false;
     mbIdlArray = false;
+    mbUnoTunnel = false;
 
     mpOrgPropertyHandleArray = NULL;
 
@@ -716,19 +723,27 @@ class ImplIntrospectionAccess : public IntrospectionAccessHelper
     // Original interfaces of the objects
     Reference<XElementAccess>       mxObjElementAccess;
     Reference<XNameContainer>       mxObjNameContainer;
+    Reference<XNameReplace>         mxObjNameReplace;
     Reference<XNameAccess>          mxObjNameAccess;
-    Reference<XIndexAccess>         mxObjIndexAccess;
     Reference<XIndexContainer>      mxObjIndexContainer;
+    Reference<XIndexReplace>        mxObjIndexReplace;
+    Reference<XIndexAccess>         mxObjIndexAccess;
     Reference<XEnumerationAccess>   mxObjEnumerationAccess;
     Reference<XIdlArray>            mxObjIdlArray;
 
     Reference<XElementAccess>       getXElementAccess();
     Reference<XNameContainer>       getXNameContainer();
+    Reference<XNameReplace>         getXNameReplace();
     Reference<XNameAccess>          getXNameAccess();
     Reference<XIndexContainer>      getXIndexContainer();
+    Reference<XIndexReplace>        getXIndexReplace();
     Reference<XIndexAccess>         getXIndexAccess();
     Reference<XEnumerationAccess>   getXEnumerationAccess();
     Reference<XIdlArray>            getXIdlArray();
+    Reference<XUnoTunnel>           getXUnoTunnel();
+
+    void cacheXNameContainer();
+    void cacheXIndexContainer();
 
 public:
     ImplIntrospectionAccess( const Any& obj, rtl::Reference< IntrospectionAccessStatic_Impl > const & pStaticImpl_ );
@@ -804,11 +819,13 @@ public:
     virtual Sequence< OUString > SAL_CALL getElementNames() throw( RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasByName(const OUString& Name) throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 
+    // Methods from XNameReplace
+    virtual void SAL_CALL replaceByName(const OUString& Name, const Any& Element)
+        throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+
     // Methods from XNameContainer
     virtual void SAL_CALL insertByName(const OUString& Name, const Any& Element)
         throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL replaceByName(const OUString& Name, const Any& Element)
-        throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removeByName(const OUString& Name)
         throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
@@ -817,10 +834,12 @@ public:
     virtual Any SAL_CALL getByIndex(sal_Int32 Index)
         throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
 
+    // Methods from XIndexReplace
+    virtual void SAL_CALL replaceByIndex(sal_Int32 Index, const Any& Element)
+        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
+
     // Methods from XIndexContainer
     virtual void SAL_CALL insertByIndex(sal_Int32 Index, const Any& Element)
-        throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
-    virtual void SAL_CALL replaceByIndex(sal_Int32 Index, const Any& Element)
         throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL removeByIndex(sal_Int32 Index)
         throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -836,6 +855,10 @@ public:
         throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL set(Any& array, sal_Int32 index, const Any& value)
         throw( IllegalArgumentException, ArrayIndexOutOfBoundsException, RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    // Methods from XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const Sequence< sal_Int8 >& aIdentifier )
+        throw (RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 ImplIntrospectionAccess::ImplIntrospectionAccess
@@ -871,62 +894,138 @@ Reference<XElementAccess> ImplIntrospectionAccess::getXElementAccess()
     return mxObjElementAccess;
 }
 
+void ImplIntrospectionAccess::cacheXNameContainer()
+{
+    Reference<XNameContainer> xNameContainer;
+    Reference<XNameReplace> xNameReplace;
+    Reference<XNameAccess> xNameAccess;
+    if (mpStaticImpl->mbNameContainer)
+    {
+        xNameContainer = Reference<XNameContainer>::query( mxIface );
+        xNameReplace = Reference<XNameReplace>::query( xNameContainer );
+        xNameAccess = Reference<XNameAccess>::query( xNameContainer );
+    }
+    else if (mpStaticImpl->mbNameReplace)
+    {
+        xNameReplace = Reference<XNameReplace>::query( mxIface );
+        xNameAccess = Reference<XNameAccess>::query( xNameReplace );
+    }
+    else if (mpStaticImpl->mbNameAccess)
+    {
+        xNameAccess = Reference<XNameAccess>::query( mxIface );
+    }
+
+    {
+        MutexGuard aGuard( m_aMutex );
+        if( !mxObjNameContainer.is() )
+            mxObjNameContainer = xNameContainer;
+        if( !mxObjNameReplace.is() )
+            mxObjNameReplace = xNameReplace;
+        if( !mxObjNameAccess.is() )
+            mxObjNameAccess = xNameAccess;
+    }
+}
+
 Reference<XNameContainer> ImplIntrospectionAccess::getXNameContainer()
 {
-    ResettableGuard< Mutex > aGuard( m_aMutex );
+    ClearableGuard< Mutex > aGuard( m_aMutex );
 
     if( !mxObjNameContainer.is() )
     {
         aGuard.clear();
-        Reference<XNameContainer> xNameContainer = Reference<XNameContainer>::query( mxIface );
-        aGuard.reset();
-        if( !mxObjNameContainer.is() )
-            mxObjNameContainer = xNameContainer;
+        cacheXNameContainer();
     }
     return mxObjNameContainer;
 }
 
+Reference<XNameReplace> ImplIntrospectionAccess::getXNameReplace()
+{
+    ClearableGuard< Mutex > aGuard( m_aMutex );
+
+    if( !mxObjNameReplace.is() )
+    {
+        aGuard.clear();
+        cacheXNameContainer();
+    }
+    return mxObjNameReplace;
+}
+
 Reference<XNameAccess> ImplIntrospectionAccess::getXNameAccess()
 {
-    ResettableGuard< Mutex > aGuard( m_aMutex );
+    ClearableGuard< Mutex > aGuard( m_aMutex );
 
     if( !mxObjNameAccess.is() )
     {
         aGuard.clear();
-        Reference<XNameAccess> xNameAccess = Reference<XNameAccess>::query( mxIface );
-        aGuard.reset();
-        if( !mxObjNameAccess.is() )
-            mxObjNameAccess = xNameAccess;
+        cacheXNameContainer();
     }
     return mxObjNameAccess;
 }
 
+void ImplIntrospectionAccess::cacheXIndexContainer()
+{
+    Reference<XIndexContainer> xIndexContainer;
+    Reference<XIndexReplace> xIndexReplace;
+    Reference<XIndexAccess> xIndexAccess;
+    if (mpStaticImpl->mbIndexContainer)
+    {
+        xIndexContainer = Reference<XIndexContainer>::query( mxIface );
+        xIndexReplace = Reference<XIndexReplace>::query( xIndexContainer );
+        xIndexAccess = Reference<XIndexAccess>::query( xIndexContainer );
+    }
+    else if (mpStaticImpl->mbIndexReplace)
+    {
+        xIndexReplace = Reference<XIndexReplace>::query( mxIface );
+        xIndexAccess = Reference<XIndexAccess>::query( xIndexReplace );
+    }
+    else if (mpStaticImpl->mbIndexAccess)
+    {
+        xIndexAccess = Reference<XIndexAccess>::query( mxIface );
+    }
+
+    {
+        MutexGuard aGuard( m_aMutex );
+        if( !mxObjIndexContainer.is() )
+            mxObjIndexContainer = xIndexContainer;
+        if( !mxObjIndexReplace.is() )
+            mxObjIndexReplace = xIndexReplace;
+        if( !mxObjIndexAccess.is() )
+            mxObjIndexAccess = xIndexAccess;
+    }
+}
+
 Reference<XIndexContainer> ImplIntrospectionAccess::getXIndexContainer()
 {
-    ResettableGuard< Mutex > aGuard( m_aMutex );
+    ClearableGuard< Mutex > aGuard( m_aMutex );
 
     if( !mxObjIndexContainer.is() )
     {
         aGuard.clear();
-        Reference<XIndexContainer> xIndexContainer = Reference<XIndexContainer>::query( mxIface );
-        aGuard.reset();
-        if( !mxObjIndexContainer.is() )
-            mxObjIndexContainer = xIndexContainer;
+        cacheXIndexContainer();
     }
     return mxObjIndexContainer;
 }
 
+Reference<XIndexReplace> ImplIntrospectionAccess::getXIndexReplace()
+{
+    ClearableGuard< Mutex > aGuard( m_aMutex );
+
+    if( !mxObjIndexReplace.is() )
+    {
+        aGuard.clear();
+        cacheXIndexContainer();
+    }
+    return mxObjIndexReplace;
+}
+
 Reference<XIndexAccess> ImplIntrospectionAccess::getXIndexAccess()
 {
-    ResettableGuard< Mutex > aGuard( m_aMutex );
+    ClearableGuard< Mutex > aGuard( m_aMutex );
 
     if( !mxObjIndexAccess.is() )
     {
         aGuard.clear();
-        Reference<XIndexAccess> xIndexAccess = Reference<XIndexAccess>::query( mxIface );
-        aGuard.reset();
-        if( !mxObjIndexAccess.is() )
-            mxObjIndexAccess = xIndexAccess;
+        cacheXIndexContainer();
     }
     return mxObjIndexAccess;
 }
@@ -961,6 +1060,10 @@ Reference<XIdlArray> ImplIntrospectionAccess::getXIdlArray()
     return mxObjIdlArray;
 }
 
+Reference<XUnoTunnel> ImplIntrospectionAccess::getXUnoTunnel()
+{
+    return Reference<XUnoTunnel>::query( mxIface );
+}
 
 // Methods from XInterface
 Any SAL_CALL ImplIntrospectionAccess::queryInterface( const Type& rType )
@@ -983,11 +1086,14 @@ Any SAL_CALL ImplIntrospectionAccess::queryInterface( const Type& rType )
         if(   ( mpStaticImpl->mbElementAccess && (aRet = ::cppu::queryInterface
                     ( rType, static_cast< XElementAccess* >( static_cast< XNameAccess* >( this ) ) ) ).hasValue() )
             || ( mpStaticImpl->mbNameAccess && (aRet = ::cppu::queryInterface( rType, static_cast< XNameAccess* >( this ) ) ).hasValue() )
+            || ( mpStaticImpl->mbNameReplace && (aRet = ::cppu::queryInterface( rType, static_cast< XNameReplace* >( this ) ) ).hasValue() )
             || ( mpStaticImpl->mbNameContainer && (aRet = ::cppu::queryInterface( rType, static_cast< XNameContainer* >( this ) ) ).hasValue() )
             || ( mpStaticImpl->mbIndexAccess && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexAccess* >( this ) ) ).hasValue() )
+            || ( mpStaticImpl->mbIndexReplace && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexReplace* >( this ) ) ).hasValue() )
             || ( mpStaticImpl->mbIndexContainer && (aRet = ::cppu::queryInterface( rType, static_cast< XIndexContainer* >( this ) ) ).hasValue() )
             || ( mpStaticImpl->mbEnumerationAccess && (aRet = ::cppu::queryInterface( rType, static_cast< XEnumerationAccess* >( this ) ) ).hasValue() )
             || ( mpStaticImpl->mbIdlArray && (aRet = ::cppu::queryInterface( rType, static_cast< XIdlArray* >( this ) ) ).hasValue() )
+            || ( mpStaticImpl->mbUnoTunnel && (aRet = ::cppu::queryInterface( rType, static_cast< XUnoTunnel* >( this ) ) ).hasValue() )
           )
         {
         }
@@ -1141,7 +1247,7 @@ void ImplIntrospectionAccess::insertByName(const OUString& Name, const Any& Elem
 void ImplIntrospectionAccess::replaceByName(const OUString& Name, const Any& Element)
     throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
 {
-    getXNameContainer()->replaceByName( Name, Element );
+    getXNameReplace()->replaceByName( Name, Element );
 }
 
 void ImplIntrospectionAccess::removeByName(const OUString& Name)
@@ -1173,7 +1279,7 @@ void ImplIntrospectionAccess::insertByIndex(sal_Int32 Index, const Any& Element)
 void ImplIntrospectionAccess::replaceByIndex(sal_Int32 Index, const Any& Element)
     throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
-    getXIndexContainer()->replaceByIndex( Index, Element );
+    getXIndexReplace()->replaceByIndex( Index, Element );
 }
 
 void ImplIntrospectionAccess::removeByIndex(sal_Int32 Index)
@@ -1214,6 +1320,12 @@ void ImplIntrospectionAccess::set(Any& array, sal_Int32 index, const Any& value)
     getXIdlArray()->set( array, index, value );
 }
 
+// Methods from XUnoTunnel
+sal_Int64 ImplIntrospectionAccess::getSomething( const Sequence< sal_Int8 >& aIdentifier )
+        throw (RuntimeException, std::exception)
+{
+    return getXUnoTunnel()->getSomething( aIdentifier );
+}
 
 
 //*** Implementation of ImplIntrospectionAccess ***
@@ -1433,11 +1545,14 @@ Reference<XInterface> SAL_CALL ImplIntrospectionAccess::queryAdapter( const Type
         || rType == cppu::UnoType<XPropertySetInfo>::get()
         || rType == cppu::UnoType<XElementAccess>::get()
         || rType == cppu::UnoType<XNameAccess>::get()
+        || rType == cppu::UnoType<XNameReplace>::get()
         || rType == cppu::UnoType<XNameContainer>::get()
         || rType == cppu::UnoType<XIndexAccess>::get()
+        || rType == cppu::UnoType<XIndexReplace>::get()
         || rType == cppu::UnoType<XIndexContainer>::get()
         || rType == cppu::UnoType<XEnumerationAccess>::get()
-        || rType == cppu::UnoType<XIdlArray>::get() )
+        || rType == cppu::UnoType<XIdlArray>::get()
+        || rType == cppu::UnoType<XUnoTunnel>::get() )
     {
         queryInterface( rType ) >>= xRet;
     }
@@ -1971,6 +2086,14 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         {
                             rMethodConcept_i |= NAMECONTAINER;
                             pAccess->mbNameContainer = true;
+                            pAccess->mbNameReplace = true;
+                            pAccess->mbNameAccess = true;
+                            pAccess->mbElementAccess = true;
+                        } else if ((className
+                                    == "com.sun.star.container.XNameReplace"))
+                        {
+                            rMethodConcept_i |= NAMECONTAINER;
+                            pAccess->mbNameReplace = true;
                             pAccess->mbNameAccess = true;
                             pAccess->mbElementAccess = true;
                         } else if ((className
@@ -1984,6 +2107,14 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         {
                             rMethodConcept_i |= INDEXCONTAINER;
                             pAccess->mbIndexContainer = true;
+                            pAccess->mbIndexReplace = true;
+                            pAccess->mbIndexAccess = true;
+                            pAccess->mbElementAccess = true;
+                        } else if ((className
+                                    == "com.sun.star.container.XIndexReplace"))
+                        {
+                            rMethodConcept_i |= INDEXCONTAINER;
+                            pAccess->mbIndexReplace = true;
                             pAccess->mbIndexAccess = true;
                             pAccess->mbElementAccess = true;
                         } else if ((className
@@ -2002,6 +2133,10 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                                    == "com.sun.star.reflection.XIdlArray")
                         {
                             pAccess->mbIdlArray = true;
+                        } else if (className
+                                   == "com.sun.star.lang.XUnoTunnel")
+                        {
+                            pAccess->mbUnoTunnel = true;
                         }
 
                         // If the name is too short, it isn't anything
