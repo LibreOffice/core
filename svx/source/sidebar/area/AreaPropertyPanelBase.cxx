@@ -473,7 +473,7 @@ void AreaPropertyPanelBase::DataChanged(
 
 void AreaPropertyPanelBase::ImpUpdateTransparencies()
 {
-    if(mpTransparanceItem.get() && mpFloatTransparenceItem.get())
+    if(mpTransparanceItem.get() || mpFloatTransparenceItem.get())
     {
         bool bZeroValue(false);
 
@@ -601,7 +601,7 @@ void AreaPropertyPanelBase::updateFillTransparence(bool bDisabled, bool bDefault
     }
     else if(bDefault)
     {
-        if(pItem && (!mpTransparanceItem || *pItem != *mpTransparanceItem))
+        if(pItem)
         {
             mpTransparanceItem.reset(static_cast<SfxUInt16Item*>(pItem->Clone()));
         }
@@ -629,7 +629,7 @@ void AreaPropertyPanelBase::updateFillFloatTransparence(bool bDisabled, bool bDe
 
     if(bDefault)
     {
-        if(pItem && (!mpFloatTransparenceItem || *pItem != *mpFloatTransparenceItem))
+        if(pItem)
         {
             mpFloatTransparenceItem.reset(static_cast<XFillFloatTransparenceItem*>(pItem->Clone()));
         }
