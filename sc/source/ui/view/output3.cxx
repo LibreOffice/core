@@ -215,7 +215,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
     mpDev->SetDrawMode(nOldDrawMode);
 }
 
-//  Teile nur fuer Bildschirm
+// parts only for the screen
 
 // #109985#
 void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)

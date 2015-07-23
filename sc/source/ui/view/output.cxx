@@ -389,7 +389,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
             if ( bPage )
             {
-                //  Seitenumbrueche auch in ausgeblendeten suchen
+                // Search also in hidden part for page breaks
                 SCCOL nCol = nXplus1;
                 while (nCol <= MAXCOL)
                 {
@@ -1677,8 +1677,8 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                                 {
                                     Polygon aPoly( 4, aPoints );
 
-                                    //  ohne Pen wird bei DrawPolygon rechts und unten
-                                    //  ein Pixel weggelassen...
+                                    // for DrawPolygon, whitout Pen one pixel is left out
+                                    // to the right and below...
                                     if ( rColor.GetTransparency() == 0 )
                                         rRenderContext.SetLineColor(rColor);
                                     else
@@ -1693,8 +1693,8 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                             Polygon aPoly( 4, aPoints );
                             const Color* pColor = pInfo->pColorScale.get();
 
-                            //  ohne Pen wird bei DrawPolygon rechts und unten
-                            //  ein Pixel weggelassen...
+                            // for DrawPolygon, whitout Pen one pixel is left out
+                            // to the right and below...
                             if ( pColor->GetTransparency() == 0 )
                                 rRenderContext.SetLineColor(*pColor);
                             else
@@ -1706,9 +1706,9 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
 
                         svx::frame::Style aTopLine, aBottomLine, aLeftLine, aRightLine;
 
-                        if ( nX < nX1 || nX > nX2 )     // Attribute in FillInfo nicht gesetzt
+                        if ( nX < nX1 || nX > nX2 )     // Attributes in FillInfo not set
                         {
-                            //! Seitengrenzen fuer Druck beruecksichtigen !!!!!
+                            //! consider page borders for printing !!!!!
                             const ::editeng::SvxBorderLine* pLeftLine;
                             const ::editeng::SvxBorderLine* pTopLine;
                             const ::editeng::SvxBorderLine* pRightLine;
@@ -1794,10 +1794,10 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                 nPosX += nColWidth * nLayoutSign;
             }
 
-            //  erst hinterher im zweiten Schritt die Linien fuer normale Ausgabe loeschen
+            // delete the lines for normal output only afterwards in the second step
 
             nX = nX1 > 0 ? (nX1-1) : static_cast<SCCOL>(0);
-            for (; nX<=nX2+1; nX++)         // sichtbarer Teil +- 1
+            for (; nX<=nX2+1; nX++)         // visible part +- 1
             {
                 sal_uInt16 nArrX = nX + 1;
                 CellInfo& rInfo = rThisRowInfo.pCellInfo[nArrX];
@@ -1806,8 +1806,8 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext, const Co
                 {
                     size_t nCol = lclGetArrayColFromCellInfoX( nArrX, nX1, nX2, bLayoutRTL );
 
-                    //  horizontal: angrenzende Linie verlaengern
-                    //  (nur, wenn die gedrehte Zelle eine Umrandung hat)
+                    // horizontal: extend adjacent line
+                    // (only when the rotated cell has a border)
                     sal_uInt16 nDir = rInfo.nRotateDir;
                     if ( rArray.GetCellStyleTop( nCol, nRow ).Prim() )
                     {
@@ -2267,17 +2267,17 @@ void ScOutputData::DrawChangeTrack()
     ScChangeTrack* pTrack = mpDoc->GetChangeTrack();
     ScChangeViewSettings* pSettings = mpDoc->GetChangeViewSettings();
     if ( !pTrack || !pTrack->GetFirst() || !pSettings || !pSettings->ShowChanges() )
-        return;         // nix da oder abgeschaltet
+        return;         // nothing there or hidden
 
     ScActionColorChanger aColorChanger(*pTrack);
 
-    //  Clipping passiert von aussen
-    //! ohne Clipping, nur betroffene Zeilen painten ??!??!?
+    //  clipping happens from the outside
+    //! without clipping, only paínt affected cells ??!??!?
 
     SCCOL nEndX = nX2;
     SCROW nEndY = nY2;
-    if ( nEndX < MAXCOL ) ++nEndX;      // auch noch von der naechsten Zelle, weil die Markierung
-    if ( nEndY < MAXROW ) ++nEndY;      // in die jeweils vorhergehende Zelle hineinragt
+    if ( nEndX < MAXCOL ) ++nEndX;      // also from the next cell since the mark
+    if ( nEndY < MAXROW ) ++nEndY;      // protrudes from the preceding cell
     ScRange aViewRange( nX1, nY1, nTab, nEndX, nEndY, nTab );
     const ScChangeAction* pAction = pTrack->GetFirst();
     while (pAction)
