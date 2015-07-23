@@ -7031,13 +7031,18 @@ void ScInterpreter::ScIndirect()
             // Use the current address syntax if unspecified.
             eConv = pDok->GetAddressConvention();
 
+        // either CONV_A1_XL_A1 was explicitly configured, or nothing at all
+        // was configured
+        bool bTryXlA1 = (eConv == FormulaGrammar::CONV_A1_XL_A1 ||
+                          !maCalcConfig.mbHasStringRefSyntax);
+
         if (nParamCount == 2 && 0.0 == ::rtl::math::approxFloor( GetDouble()))
         {
             // Overwrite the config and try Excel R1C1.
             eConv = FormulaGrammar::CONV_XL_R1C1;
+            bTryXlA1 = false;
         }
 
-        bool bTryXlA1 = (eConv == FormulaGrammar::CONV_A1_XL_A1);
 
         const ScAddress::Details aDetails( bTryXlA1 ? FormulaGrammar::CONV_OOO : eConv, aPos );
         const ScAddress::Details aDetailsXlA1( FormulaGrammar::CONV_XL_A1, aPos );
