@@ -887,12 +887,23 @@ bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
     if( aClipRegion.IsNull() )
         aClipRegion = aCtrlRect;
 
+    Rectangle aPixmapRect;
+
+    // make pixmap a little larger since some themes draw decoration
+    // outside the rectangle, see e.g. checkbox
+    aPixmapRect = Rectangle(Point( aCtrlRect.Left()-1, aCtrlRect.Top()-1 ),
+                            Size( aCtrlRect.GetWidth()+2, aCtrlRect.GetHeight()+2) );
+
+    ControlCacheKey aControlCacheKey(nType, nPart, nState, aPixmapRect.GetSize());
+    if (TryRenderCachedNativeControl(aControlCacheKey, aPixmapRect.Left(), aPixmapRect.Top()))
+        return true;
+
     clipList aClip;
     int nPasses = 0;
     GdkDrawable* gdkDrawable[2];
     std::unique_ptr<GdkX11Pixmap> xPixmap;
     std::unique_ptr<GdkX11Pixmap> xMask;
-    Rectangle aPixmapRect;
+
     if ((bNeedPixmapPaint || (nState & ControlState::DOUBLEBUFFERING))
         && nType != CTRL_SCROLLBAR
         && nType != CTRL_SPINBOX
@@ -902,11 +913,6 @@ bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
         && ! (nType == CTRL_TOOLBAR && (nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT) )
         )
     {
-        // make pixmap a little larger since some themes draw decoration
-        // outside the rectangle, see e.g. checkbox
-        aPixmapRect = Rectangle( Point( aCtrlRect.Left()-1, aCtrlRect.Top()-1 ),
-                                 Size( aCtrlRect.GetWidth()+2, aCtrlRect.GetHeight()+2) );
-
         if( bNeedTwoPasses )
         {
             xPixmap.reset( NWGetPixmapFromScreen( aPixmapRect, BG_WHITE ) );
@@ -960,7 +966,9 @@ bool GtkSalGraphics::drawNativeControl(ControlType nType, ControlPart nPart,
     }
 
     if( xPixmap )
-        returnVal = NWRenderPixmapToScreen( xPixmap.get(), xMask.get(), aPixmapRect) && returnVal;
+        returnVal = returnVal && RenderAndCacheNativeControl(xPixmap.get(), xMask.get(),
+                                                             aPixmapRect.Left(), aPixmapRect.Top(),
+                                                             aControlCacheKey);
 
     return returnVal;
 }
@@ -4261,7 +4269,6 @@ GdkX11Pixmap* GtkSalGraphics::NWGetPixmapFromScreen( Rectangle srcRect, int nBgC
 {
     GdkX11Pixmap* pPixmap;
     int nDepth = vcl_sal::getSalDisplay(GetGenericData())->GetVisual( m_nXScreen ).GetDepth();
-;
 
     pPixmap = new GdkX11Pixmap( srcRect.GetWidth(), srcRect.GetHeight(), nDepth );
 
