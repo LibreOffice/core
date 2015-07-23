@@ -1927,9 +1927,7 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 1 )
                 {
                     grabPointer(true, true);
-                    GtkSalFrame *pKeyboardFrame = this;
-                    while (pKeyboardFrame->m_pParent)
-                        pKeyboardFrame = pKeyboardFrame->m_pParent;
+                    GtkSalFrame *pKeyboardFrame = m_pParent ? m_pParent : this;
                     pKeyboardFrame->grabKeyboard(true);
                 }
                 // #i44068# reset parent's IM context
@@ -1946,9 +1944,7 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 m_nFloats--;
                 if( ! getDisplay()->GetCaptureFrame() && m_nFloats == 0)
                 {
-                    GtkSalFrame *pKeyboardFrame = this;
-                    while (pKeyboardFrame->m_pParent)
-                        pKeyboardFrame = pKeyboardFrame->m_pParent;
+                    GtkSalFrame *pKeyboardFrame = m_pParent ? m_pParent : this;
                     pKeyboardFrame->grabKeyboard(false);
                     grabPointer(false);
                 }
