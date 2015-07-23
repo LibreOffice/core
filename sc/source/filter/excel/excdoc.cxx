@@ -445,11 +445,6 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
     aRecList.AppendRecord( GetObjectManager().CreateDrawingGroup() );
     // Shared string table: SST, EXTSST
     aRecList.AppendRecord( CreateRecord( EXC_ID_SST ) );
-
-    XclExtLstRef xExtLst( new XclExtLst( GetRoot()  ) );
-    const ScCalcConfig& rCalcConfig = rDoc.GetCalcConfig();
-    xExtLst->AddRecord( XclExpExtRef( new XclExpExtCalcPr( GetRoot(), rCalcConfig.meStringRefAddressSyntax ))  );
-    aRecList.AppendRecord( xExtLst );
 }
 
 void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
@@ -885,6 +880,11 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
     XclExpXmlPivotCaches& rCaches = GetXmlPivotTableManager().GetCaches();
     if (rCaches.HasCaches())
         rCaches.SaveXml(rStrm);
+
+    XclExtLstRef xExtLst( new XclExtLst( GetRoot()  ) );
+    const ScCalcConfig& rCalcConfig = GetDoc().GetCalcConfig();
+    xExtLst->AddRecord( XclExpExtRef( new XclExpExtCalcPr( GetRoot(), rCalcConfig.meStringRefAddressSyntax ))  );
+    xExtLst->SaveXml(rStrm);
 
     rWorkbook->endElement( XML_workbook );
     rWorkbook.reset();
