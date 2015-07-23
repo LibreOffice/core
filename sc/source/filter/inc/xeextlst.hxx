@@ -34,8 +34,6 @@ struct XclExpExtCondFormatData
 
 /**
  * Base class for ext entries. Extend this class to provide the needed functionality
- *
- * Right now the only supported subclass is XclExpExtCondFormat
  */
 class XclExpExt : public XclExpRecordBase, public XclExpRoot
 {
