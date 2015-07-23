@@ -876,9 +876,6 @@ void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
         sal_uInt32 nState = pStateItem->GetValue();
 
         // pen
-        if( nState & NAVBTN_PEN_ENABLED &&
-            !pNavigatorWin->maToolbox->IsItemEnabled( TBI_PEN ) )
-            pNavigatorWin->maToolbox->EnableItem( TBI_PEN );
         if( nState & NAVBTN_PEN_DISABLED &&
             pNavigatorWin->maToolbox->IsItemEnabled( TBI_PEN ) )
             pNavigatorWin->maToolbox->EnableItem( TBI_PEN, false );
