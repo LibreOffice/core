@@ -42,6 +42,24 @@ css::uno::Reference<css::beans::XPropertySet> getPropSet(
     return ObjectIdentifier::getObjectPropertySet(aCID, xModel);
 }
 
+class PreventUpdate
+{
+public:
+    PreventUpdate(bool& bUpdate):
+        mbUpdate(bUpdate)
+    {
+        mbUpdate = false;
+    }
+
+    ~PreventUpdate()
+    {
+        mbUpdate = true;
+    }
+
+private:
+    bool& mbUpdate;
+};
+
 }
 
 VclPtr<vcl::Window> ChartAreaPanel::Create(
@@ -64,7 +82,8 @@ ChartAreaPanel::ChartAreaPanel(vcl::Window* pParent,
     svx::sidebar::AreaPropertyPanelBase(pParent, rxFrame),
     mxModel(pController->getModel()),
     mxListener(new ChartSidebarModifyListener(this)),
-    mxSelectionListener(new ChartSidebarSelectionListener(this))
+    mxSelectionListener(new ChartSidebarSelectionListener(this)),
+    mbUpdate(true)
 {
     Initialize();
 }
@@ -98,6 +117,7 @@ void ChartAreaPanel::Initialize()
 
 void ChartAreaPanel::setFillTransparence(const XFillTransparenceItem& rItem)
 {
+    PreventUpdate aProtector(mbUpdate);
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
@@ -108,6 +128,7 @@ void ChartAreaPanel::setFillTransparence(const XFillTransparenceItem& rItem)
 void ChartAreaPanel::setFillFloatTransparence(
         const XFillFloatTransparenceItem& rItem)
 {
+    PreventUpdate aProtector(mbUpdate);
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
@@ -117,6 +138,7 @@ void ChartAreaPanel::setFillFloatTransparence(
 
 void ChartAreaPanel::setFillStyle(const XFillStyleItem& rItem)
 {
+    PreventUpdate aProtector(mbUpdate);
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
@@ -139,6 +161,7 @@ void ChartAreaPanel::setFillStyleAndColor(const XFillStyleItem* pStyleItem,
 void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
         const XFillGradientItem& rGradientItem)
 {
+    PreventUpdate aProtector(mbUpdate);
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
@@ -151,6 +174,7 @@ void ChartAreaPanel::setFillStyleAndGradient(const XFillStyleItem* pStyleItem,
 void ChartAreaPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
         const XFillHatchItem& rHatchItem)
 {
+    PreventUpdate aProtector(mbUpdate);
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
@@ -163,6 +187,7 @@ void ChartAreaPanel::setFillStyleAndHatch(const XFillStyleItem* pStyleItem,
 void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
         const XFillBitmapItem& rBitmapItem)
 {
+    PreventUpdate aProtector(mbUpdate);
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
@@ -174,6 +199,9 @@ void ChartAreaPanel::setFillStyleAndBitmap(const XFillStyleItem* pStyleItem,
 
 void ChartAreaPanel::updateData()
 {
+    if (!mbUpdate)
+        return;
+
     css::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
