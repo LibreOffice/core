@@ -3517,35 +3517,38 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
     aRange.aEnd.SetTab( aRange.aStart.Tab());
     aRange.aEnd.SetRow( aRange.aStart.Row());
 
-    // Quite similar to IsColRowName() but limited to one row of headers.
-    ScCellIterator aIter( pDoc, aRange);
-    for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+    if (pDBData->HasHeader())
     {
-        CellType eType = aIter.getType();
-        bool bOk = false;
-        if (eType == CELLTYPE_FORMULA)
+        // Quite similar to IsColRowName() but limited to one row of headers.
+        ScCellIterator aIter( pDoc, aRange);
+        for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
         {
-            ScFormulaCell* pFC = aIter.getFormulaCell();
-            bOk = (pFC->GetCode()->GetCodeLen() > 0) && (pFC->aPos != aPos);
-        }
-        else
-            bOk = true;
-
-        if (bOk && aIter.hasString())
-        {
-            OUString aStr = aIter.getString();
-            if (ScGlobal::GetpTransliteration()->isEqual( aStr, aName))
+            CellType eType = aIter.getType();
+            bool bOk = false;
+            if (eType == CELLTYPE_FORMULA)
             {
-                /* XXX NOTE: we could init the column as relative so copying a
-                 * formula across columns would point to the relative column,
-                 * but do it absolute because:
-                 * a) it makes the reference work in named expressions without
-                 * having to distinguish
-                 * b) Excel does it the same. */
-                ScSingleRefData aRef;
-                aRef.InitAddress( aIter.GetPos());
-                maRawToken.SetSingleReference( aRef );
-                return true;
+                ScFormulaCell* pFC = aIter.getFormulaCell();
+                bOk = (pFC->GetCode()->GetCodeLen() > 0) && (pFC->aPos != aPos);
+            }
+            else
+                bOk = true;
+
+            if (bOk && aIter.hasString())
+            {
+                OUString aStr = aIter.getString();
+                if (ScGlobal::GetpTransliteration()->isEqual( aStr, aName))
+                {
+                    /* XXX NOTE: we could init the column as relative so copying a
+                     * formula across columns would point to the relative column,
+                     * but do it absolute because:
+                     * a) it makes the reference work in named expressions without
+                     * having to distinguish
+                     * b) Excel does it the same. */
+                    ScSingleRefData aRef;
+                    aRef.InitAddress( aIter.GetPos());
+                    maRawToken.SetSingleReference( aRef );
+                    return true;
+                }
             }
         }
     }
@@ -3557,11 +3560,26 @@ bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
     sal_Int32 nOffset = pDBData->GetColumnNameOffset( aName);
     if (nOffset >= 0)
     {
-        ScSingleRefData aRef;
-        ScAddress aAdr( aRange.aStart);
-        aAdr.IncCol( nOffset);
-        aRef.InitAddress( aAdr);
-        maRawToken.SetSingleReference( aRef );
+        if (pDBData->HasHeader())
+        {
+            ScSingleRefData aRef;
+            ScAddress aAdr( aRange.aStart);
+            aAdr.IncCol( nOffset);
+            aRef.InitAddress( aAdr);
+            maRawToken.SetSingleReference( aRef );
+        }
+        else
+        {
+            /* TODO: this probably needs a new token type to hold offset and
+             * name, to be handled in HandleTableRef(). We can't use a
+             * reference token here because any reference would be wrong as
+             * there are no header cells to be referenced. However, it would
+             * only work as long as the ScDBData column names are not
+             * invalidated during document structure changes, otherwise
+             * recompiling the same formula could not resolve the name again.
+             * As long as this doesn't work generate an error. */
+            return false;
+        }
         return true;
     }
 
