@@ -694,7 +694,7 @@ bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFi
                         aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
                     if ( xContId.is() )
                         aScheme = xContId->getContentProviderScheme();
-                    if(!aScheme.equalsIgnoreAsciiCaseAscii( "http" ) && !aScheme.equalsIgnoreAsciiCaseAscii( "https" ))
+                    if(!aScheme.equalsIgnoreAsciiCase( "http" ) && !aScheme.equalsIgnoreAsciiCase( "https" ))
                         return false;
                 }
                 xStream.clear();
