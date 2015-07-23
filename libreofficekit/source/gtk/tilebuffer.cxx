@@ -13,6 +13,8 @@
 #define g_info(...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, __VA_ARGS__)
 #endif
 
+extern GThreadPool* lokThreadPool;
+
 /* ------------------
    Utility functions
    ------------------
@@ -25,42 +27,6 @@ float pixelToTwip(float fInput, float zoom)
 float twipToPixel(float fInput, float zoom)
 {
     return fInput / 1440.0f * DPI * zoom;
-}
-
-static void getTileFunc(GTask*, gpointer, gpointer task_data, GCancellable*)
-{
-    GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, nTileSizePixels, nTileSizePixels);
-    GetTileCallbackData* pCallback = static_cast<GetTileCallbackData*>(task_data);
-    TileBuffer* buffer = pCallback->m_pBuffer;
-    int index = pCallback->m_nX * buffer->m_nWidth + pCallback->m_nY;
-    if (!pPixBuf)
-    {
-        g_info ("Error allocating memory to pixbuf");
-        return;
-    }
-
-    unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
-    GdkRectangle aTileRectangle;
-    aTileRectangle.x = pixelToTwip(nTileSizePixels, pCallback->m_fZoom) * pCallback->m_nY;
-    aTileRectangle.y = pixelToTwip(nTileSizePixels, pCallback->m_fZoom) * pCallback->m_nX;
-
-    g_test_timer_start();
-    buffer->m_pLOKDocument->pClass->paintTile(buffer->m_pLOKDocument,
-                                      pBuffer,
-                                      nTileSizePixels, nTileSizePixels,
-                                      aTileRectangle.x, aTileRectangle.y,
-                                      pixelToTwip(nTileSizePixels, pCallback->m_fZoom),
-                                      pixelToTwip(nTileSizePixels, pCallback->m_fZoom));
-
-    double elapsedTime = g_test_timer_elapsed();
-    g_info ("Rendered (%d, %d) in %f seconds",
-            pCallback->m_nX,
-            pCallback->m_nY,
-            elapsedTime);
-
-    //create a mapping for it
-    buffer->m_mTiles[index].setPixbuf(pPixBuf);
-    buffer->m_mTiles[index].valid = true;
 }
 
 /* ----------------------------
@@ -96,17 +62,17 @@ void TileBuffer::resetAllTiles()
     }
 }
 
-void TileBuffer::setInvalid(int x, int y, float fZoom)
+void TileBuffer::setInvalid(int x, int y, float fZoom, GTask* task)
 {
     int index = x * m_nWidth + y;
     g_info("Setting tile invalid (%d, %d)", x, y);
     if (m_mTiles.find(index) != m_mTiles.end())
     {
         m_mTiles[index].valid = false;
-        GTask* task = g_task_new(this, NULL, NULL, NULL);
-        GetTileCallbackData* pCallback = new GetTileCallbackData(x, y, fZoom, this);
-        g_task_set_task_data(task, pCallback, g_free);
-        g_task_run_in_thread(task, getTileFunc);
+
+        LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE, x, y, fZoom);
+        g_task_set_task_data(task, pLOEvent, g_free);
+        g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
     }
 }
 
@@ -116,17 +82,16 @@ Tile& TileBuffer::getTile(int x, int y, float aZoom, GTask* task)
 
     if (m_mTiles.find(index) != m_mTiles.end() && !m_mTiles[index].valid)
     {
-        GetTileCallbackData* pCallback = new GetTileCallbackData(x, y, aZoom, this);
-        g_task_set_task_data(task, pCallback, g_free);
-        g_task_run_in_thread(task, getTileFunc);
+        LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE, x, y, aZoom);
+        g_task_set_task_data(task, pLOEvent, g_free);
+        g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
         return m_mTiles[index];
     }
     else if(m_mTiles.find(index) == m_mTiles.end())
     {
-        GetTileCallbackData* pCallback = new GetTileCallbackData(x, y, aZoom, this);
-        g_task_set_task_data(task, pCallback, g_free);
-        g_info ("running in thread new tile");
-        g_task_run_in_thread(task, getTileFunc);
+        LOEvent* pLOEvent = new LOEvent(LOK_PAINT_TILE, x, y, aZoom);
+        g_task_set_task_data(task, pLOEvent, g_free);
+        g_thread_pool_push(lokThreadPool, g_object_ref(task), NULL);
         return m_DummyTile;
     }
 
