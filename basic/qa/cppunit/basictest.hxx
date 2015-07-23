@@ -127,15 +127,6 @@ class MacroSnippet
 
     DECL_LINK_TYPED( BasicErrorHdl, StarBASIC *, bool );
 
-    static ErrorDetail GetError()
-    {
-        ErrorDetail aErr;
-        aErr.sErrorText = StarBASIC::GetErrorText();
-        aErr.nLine = StarBASIC::GetLine();
-        aErr.nCol = StarBASIC::GetCol1();
-        return aErr;
-    }
-
     bool HasError() { return mbError; }
 
 };

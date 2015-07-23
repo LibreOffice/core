@@ -94,7 +94,6 @@ namespace pcr
         void                        ClearAll();
 
         void                        SetPropertyValue(const OUString& _rEntryName, const ::com::sun::star::uno::Any& _rValue, bool _bUnknownValue );
-        ::com::sun::star::uno::Any  GetPropertyValue(const OUString& rEntryName ) const;
         sal_uInt16                  GetPropertyPos(const OUString& rEntryName ) const;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
                                     GetPropertyControl( const OUString& rEntryName );
@@ -108,7 +107,6 @@ namespace pcr
         void                        ChangeEntry( const OLineDescriptor& );
 
         void    setPageActivationHandler(const Link<>& _rHdl) { m_aPageActivationHandler = _rHdl; }
-        Link<>  getPageActivationHandler() const { return m_aPageActivationHandler; }
 
         // #95343# -------------------------------
         sal_Int32 getMinimumWidth();

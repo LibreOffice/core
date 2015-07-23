@@ -66,17 +66,7 @@ public:
 
     ~Dependencies();
 
-    /**
-       Add a special dependency (which is not obvious from the entity's data
-       available at the type manager).
-
-       @param name a UNOIDL entity name
-     */
-    void add(rtl::OUString const & name) { insert(name); }
-
     Map const & getMap() const { return m_map; }
-
-    bool hasVoidDependency() const { return m_voidDependency; }
 
     bool hasBooleanDependency() const { return m_booleanDependency; }
 
@@ -89,16 +79,10 @@ public:
 
     bool hasLongDependency() const { return m_longDependency; }
 
-    bool hasUnsignedLongDependency() const { return m_unsignedLongDependency; }
-
     bool hasHyperDependency() const { return m_hyperDependency; }
 
     bool hasUnsignedHyperDependency() const
     { return m_unsignedHyperDependency; }
-
-    bool hasFloatDependency() const { return m_floatDependency; }
-
-    bool hasDoubleDependency() const { return m_doubleDependency; }
 
     bool hasCharDependency() const { return m_charDependency; }
 

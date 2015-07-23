@@ -73,29 +73,6 @@ uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const uno::Type& rType
 }
 
 
-uno::Sequence< uno::Type > SAL_CALL OSpecialEmbeddedObject::getTypes()
-        throw( uno::RuntimeException )
-{
-    static ::cppu::OTypeCollection* pTypeCollection = NULL;
-
-    if ( !pTypeCollection )
-    {
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( !pTypeCollection )
-        {
-            static ::cppu::OTypeCollection aTypeCollection(
-                                        cppu::UnoType<lang::XTypeProvider>::get(),
-                                        cppu::UnoType<embed::XEmbeddedObject>::get(),
-                                        cppu::UnoType<embed::XInplaceObject>::get());
-
-            pTypeCollection = &aTypeCollection ;
-        }
-    }
-
-    return pTypeCollection->getTypes() ;
-
-}
-
 embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,

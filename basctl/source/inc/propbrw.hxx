@@ -78,7 +78,6 @@ public:
     // note: changing the Context document to an instance other than the one given in the ctor is not supported
     // currently
     void    Update( const SfxViewShell* pShell );
-    SdrView*        GetCurView() const { return pView; }
 
 private:
     void    ImplUpdate( const css::uno::Reference< css::frame::XModel >& _rxContextDocument, SdrView* pView );

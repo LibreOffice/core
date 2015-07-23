@@ -247,8 +247,6 @@ public:
     void            AddWatch( const OUString& rVName );
     bool            RemoveSelectedWatch();
     void            UpdateWatches( bool bBasicStopped = false );
-
-    WatchTreeListBox&   GetWatchTreeListBox() { return *aTreeListBox.get(); }
 };
 
 
@@ -363,7 +361,6 @@ public:
     void            ManageBreakPoints();
     void            UpdateBreakPoint( const BreakPoint& rBrk );
     void            BasicAddWatch();
-    void            BasicRemoveWatch();
 
     bool            BasicErrorHdl( StarBASIC* pBasic );
     long            BasicBreakHdl( StarBASIC* pBasic );

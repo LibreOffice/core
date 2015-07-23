@@ -49,38 +49,38 @@ class VerbExecutionController
     // the following mutex is allowed to be locked only for variables initialization, so no deadlock can be caused
     ::osl::Mutex    m_aVerbExecutionMutex;
 
-    bool m_bVerbExecutionInProgress;
+    sal_Int32 m_nNotificationLock;
+
 #ifdef WNT
+    bool m_bWasEverActive;
+    bool m_bVerbExecutionInProgress;
     oslThreadIdentifier m_nVerbExecutionThreadIdentifier;
     sal_Bool m_bChangedOnVerbExecution;
 #endif
 
-    bool m_bWasEverActive;
-    sal_Int32 m_nNotificationLock;
-
 public:
 
     VerbExecutionController()
-    : m_bVerbExecutionInProgress( false )
+    : m_nNotificationLock( 0 )
 #ifdef WNT
+    , m_bWasEverActive( false )
+    , m_bVerbExecutionInProgress( false )
     , m_nVerbExecutionThreadIdentifier( 0 )
     , m_bChangedOnVerbExecution( sal_False )
 #endif
-    , m_bWasEverActive( false )
-    , m_nNotificationLock( 0 )
     {}
+
 #ifdef WNT
     void StartControlExecution();
     sal_Bool EndControlExecution_WasModified();
     void ModificationNotificationIsDone();
-#endif
-    void LockNotification();
-    void UnlockNotification();
-
     // no need to lock anything to check the value of the numeric members
     bool CanDoNotification() { return ( !m_bVerbExecutionInProgress && !m_bWasEverActive && !m_nNotificationLock ); }
     // ... or to change it
     void ObjectIsActive() { m_bWasEverActive = true; }
+#endif
+    void LockNotification();
+    void UnlockNotification();
 };
 
 class VerbExecutionControllerGuard
@@ -220,7 +220,6 @@ protected:
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescriptor >& aVerbList );
 #endif
 
-    void CloseComponent();
     void Dispose();
 
     void SwitchOwnPersistence(
@@ -269,14 +268,10 @@ protected:
     void CreateOleComponent_Impl( OleComponent* pOleComponent = NULL );
     void CreateOleComponentAndLoad_Impl( OleComponent* pOleComponent = NULL );
     void CreateOleComponentFromClipboard_Impl( OleComponent* pOleComponent = NULL );
-#endif
-    void SetObjectIsLink_Impl( bool bIsLink ) { m_bIsLink = bIsLink; }
-
-#ifdef WNT
     OUString CreateTempURLEmpty_Impl();
     OUString GetTempURL_Impl();
+    void SetObjectIsLink_Impl( bool bIsLink ) { m_bIsLink = bIsLink; }
 #endif
-    OUString GetContainerName_Impl() { return m_aContainerName; }
 
     // the following 4 methods are related to switch to wrapping mode
     void MoveListeners();

@@ -140,7 +140,6 @@ private:
 
     OUString            sCharStyleName;     // Character Style
 
-    virtual void NotifyGraphicArrived();
 public:
     explicit SvxNumberFormat( sal_Int16 nNumberingType,
                      SvxNumPositionAndSpaceMode ePositionAndSpaceMode = LABEL_WIDTH_AND_POSITION );
