@@ -168,8 +168,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
     // then the last one. We only compare to the last entry as the list of VCL
     // is returned sorted, which increases the probability that appending
     // is more likely
-    sal_uLong nCnt = maEntries.size();
-    if ( !nCnt )
+    if (m_Entries.empty())
     {
         if ( pIndex )
             *pIndex = ULONG_MAX;
@@ -177,7 +176,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
     }
     else
     {
-        const ImplFontListNameInfo* pCmpData = &maEntries[nCnt-1];
+        const ImplFontListNameInfo* pCmpData = m_Entries.back().get();
         sal_Int32 nComp = rSearchName.compareTo( pCmpData->maSearchName );
         if (nComp > 0)
         {
@@ -192,14 +191,14 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
     // search fonts in the list
     const ImplFontListNameInfo* pCompareData;
     const ImplFontListNameInfo* pFoundData = NULL;
-    sal_uLong                   nLow = 0;
-    sal_uLong                   nHigh = nCnt-1;
-    sal_uLong                   nMid;
+    size_t                      nLow = 0;
+    size_t                      nHigh = m_Entries.size() - 1;
+    size_t                      nMid;
 
     do
     {
         nMid = (nLow + nHigh) / 2;
-        pCompareData = &maEntries[nMid];
+        pCompareData = m_Entries[nMid].get();
         sal_Int32 nComp = rSearchName.compareTo(pCompareData->maSearchName);
         if (nComp < 0)
         {
@@ -275,10 +274,11 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
                 pData->mpFirst      = pNewInfo;
                 pNewInfo->mpNext    = NULL;
 
-                if (nIndex < maEntries.size())
-                    maEntries.insert(maEntries.begin()+nIndex,pData);
+                if (nIndex < m_Entries.size())
+                    m_Entries.insert(m_Entries.begin()+nIndex,
+                            std::unique_ptr<ImplFontListNameInfo>(pData));
                 else
-                    maEntries.push_back(pData);
+                    m_Entries.push_back(std::unique_ptr<ImplFontListNameInfo>(pData));
             }
         }
         else
@@ -372,8 +372,7 @@ FontList::~FontList()
 
     // delete FontInfos
     ImplFontListFontInfo *pTemp, *pInfo;
-    boost::ptr_vector<ImplFontListNameInfo>::iterator it;
-    for (it = maEntries.begin(); it != maEntries.end(); ++it)
+    for (auto const& it : m_Entries)
     {
         pInfo = it->mpFirst;
         while ( pInfo )
@@ -701,7 +700,7 @@ const vcl::FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
 {
     DBG_ASSERT( nFont < GetFontNameCount(), "FontList::GetFontName(): nFont >= Count" );
 
-    return *(maEntries[nFont].mpFirst);
+    return *(m_Entries[nFont]->mpFirst);
 }
 
 sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const

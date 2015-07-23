@@ -20,13 +20,15 @@
 #ifndef INCLUDED_SVTOOLS_CTRLTOOL_HXX
 #define INCLUDED_SVTOOLS_CTRLTOOL_HXX
 
-#include <boost/ptr_container/ptr_vector.hpp>
-
 #include <svtools/svtdllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vcl/metric.hxx>
 #include <tools/solar.h>
+
+#include <vector>
+#include <memory>
+
 
 class ImplFontListNameInfo;
 class OutputDevice;
@@ -149,7 +151,7 @@ private:
     sal_IntPtr*             mpSizeAry;
     VclPtr<OutputDevice>    mpDev;
     VclPtr<OutputDevice>    mpDev2;
-    boost::ptr_vector<ImplFontListNameInfo> maEntries;
+    std::vector<std::unique_ptr<ImplFontListNameInfo>> m_Entries;
 
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const OUString& rSearchName, sal_uLong* pIndex ) const;
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const OUString& rStr ) const;
@@ -182,7 +184,7 @@ public:
     bool                    IsAvailable( const OUString& rName ) const;
     sal_uInt16              GetFontNameCount() const
     {
-        return (sal_uInt16)maEntries.size();
+        return (sal_uInt16)m_Entries.size();
     }
     const vcl::FontInfo&    GetFontName( sal_uInt16 nFont ) const;
     sal_Handle              GetFirstFontInfo( const OUString& rName ) const;
