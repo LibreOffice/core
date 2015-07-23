@@ -2387,8 +2387,6 @@ Reference<XTypeConverter> UnoConversionUtilities<T>::getTypeConverter()
 
 // The function is not used when elements are to be converted for Sequences.
 
-#ifndef _REDUCE_RANGE
-#define _REDUCE_RANGE
 inline void reduceRange( Any& any)
 {
     OSL_ASSERT( any.getValueTypeClass() == TypeClass_LONG);
@@ -2405,9 +2403,6 @@ inline void reduceRange( Any& any)
         any.setValue( &shortVal, cppu::UnoType<sal_Int16>::get());
     }
 }
-#endif
-
-
 
 } // end namespace
 #endif
