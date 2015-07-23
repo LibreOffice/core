@@ -20,7 +20,6 @@
 
 #include <ctype.h>
 #include <comphelper/string.hxx>
-#include <o3tl/ptr_container.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
@@ -1577,10 +1576,9 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
             }
 
             // Token is known and can be saved
-            std::unique_ptr<HTMLOption> pOption(
-                new HTMLOption(sal::static_int_cast<sal_uInt16>(nToken), sName, aValue));
+            maOptions.push_back(
+                HTMLOption(sal::static_int_cast<sal_uInt16>(nToken), sName, aValue));
 
-            o3tl::ptr_container::push_back(maOptions, std::move(pOption));
         }
         else
             // Ignore white space and unexpected characters

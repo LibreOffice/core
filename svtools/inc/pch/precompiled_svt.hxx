@@ -282,7 +282,6 @@
 #include <memory>
 #include <numeric>
 #include <o3tl/numeric.hxx>
-#include <o3tl/ptr_container.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>

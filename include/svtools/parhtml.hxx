@@ -23,7 +23,7 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/svparser.hxx>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
     namespace document {
@@ -118,7 +118,7 @@ public:
     //SvxAdjust GetAdjust() const;                      // <P,TH,TD ALIGN=>
 };
 
-typedef ::boost::ptr_vector<HTMLOption> HTMLOptions;
+typedef ::std::vector<HTMLOption> HTMLOptions;
 
 class SVT_DLLPUBLIC HTMLParser : public SvParser
 {
