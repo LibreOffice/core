@@ -80,6 +80,9 @@ sal_Int64 Adapter::getSomething( const Sequence< sal_Int8 > &id) throw (RuntimeE
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
     throw ( InvocationTargetException )
 {
+    if( !Py_IsInitialized() )
+        throw InvocationTargetException();
+
     if( PyErr_Occurred() )
     {
         PyRef excType, excValue, excTraceback;
@@ -195,6 +198,9 @@ Any Adapter::invoke( const OUString &aFunctionName,
     {
     PyThreadAttach guard( mInterpreter );
     {
+        if( !Py_IsInitialized() )
+            throw InvocationTargetException();
+
         // convert parameters to python args
         // TODO: Out parameter
         Runtime runtime;
@@ -219,12 +225,18 @@ Any Adapter::invoke( const OUString &aFunctionName,
         for( i = 0; i < size ; i ++  )
         {
             PyRef val = runtime.any2PyObject( aParams[i] );
+
+            // any2PyObject() can release the GIL
+            if( !Py_IsInitialized() )
+                throw InvocationTargetException();
+
             PyTuple_SetItem( argsTuple.get(), i, val.getAcquired() );
         }
 
         // get callable
         PyRef method(PyObject_GetAttrString( mWrappedObject.get(), TO_ASCII(aFunctionName)),
                      SAL_NO_ACQUIRE);
+
         raiseInvocationTargetExceptionWhenNeeded( runtime);
         if( !method.is() )
         {
@@ -355,8 +367,15 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
     PyThreadAttach guard( mInterpreter );
     try
     {
+        if( !Py_IsInitialized() )
+            throw InvocationTargetException();
+
         Runtime runtime;
         PyRef obj = runtime.any2PyObject( value );
+
+        // any2PyObject() can release the GIL
+        if( !Py_IsInitialized() )
+            throw InvocationTargetException();
 
         PyObject_SetAttrString(
             mWrappedObject.get(), TO_ASCII(aPropertyName), obj.get() );
@@ -375,6 +394,10 @@ Any Adapter::getValue( const OUString & aPropertyName )
     Any ret;
     PyThreadAttach guard( mInterpreter );
     {
+        // Should probably be InvocationTargetException, but the interface doesn't allow it
+        if( !Py_IsInitialized() )
+            throw RuntimeException();
+
         Runtime runtime;
         PyRef pyRef(
             PyObject_GetAttrString( mWrappedObject.get(), TO_ASCII(aPropertyName) ),
@@ -404,6 +427,10 @@ sal_Bool Adapter::hasProperty( const OUString & aPropertyName )
     bool bRet = false;
     PyThreadAttach guard( mInterpreter );
     {
+        // Should probably be InvocationTargetException, but the interface doesn't allow it
+        if( !Py_IsInitialized() )
+            throw RuntimeException();
+
         bRet = PyObject_HasAttrString(
             mWrappedObject.get() , TO_ASCII( aPropertyName ));
     }

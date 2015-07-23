@@ -406,8 +406,8 @@ static PyObject *createUnoStructHelper(
                     if (idl_class.is ())
                     {
                         idl_class->createObject (IdlStruct);
-                        PyUNO *me = reinterpret_cast<PyUNO*>(PyUNO_new_UNCHECKED( IdlStruct, c->xInvocation ));
-                        PyRef returnCandidate( reinterpret_cast<PyObject*>(me), SAL_NO_ACQUIRE );
+                        PyRef returnCandidate( PyUNO_new( IdlStruct, c->xInvocation, false ) );
+                        PyUNO *me = reinterpret_cast<PyUNO*>( returnCandidate.get() );
                         TypeDescription desc( typeName );
                         OSL_ASSERT( desc.is() ); // could already instantiate an XInvocation2 !
 
