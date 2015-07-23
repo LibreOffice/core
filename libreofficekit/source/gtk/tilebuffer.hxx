@@ -107,7 +107,7 @@ class TileBuffer
 
        @return the tile at the mentioned position (x, y)
      */
-    Tile& getTile(int x, int y, float aZoom, GTask*);
+    Tile& getTile(int x, int y, float aZoom, GTask* task);
     /// Destroys all the tiles in the tile buffer; also frees the memory allocated
     /// for all the Tile objects.
     void resetAllTiles();
@@ -118,8 +118,7 @@ class TileBuffer
        @param x the position of tile along x-axis
        @param y the position of tile along y-axis
      */
-    void setInvalid(int x, int y, float zoom);
-
+    void setInvalid(int x, int y, float zoom, GTask* task);
 
     /// Contains the reference to the LOK Document that this tile buffer is for.
     LibreOfficeKitDocument *m_pLOKDocument;
@@ -131,25 +130,69 @@ class TileBuffer
     Tile m_DummyTile;
 };
 
-/**
-   Helper struct used to pass the data from main thread to spawned threads.
-   Spawned threads are responsible for calling paintTile, and store the result
-   in tile buffer.
-*/
-struct GetTileCallbackData
+enum
 {
+    LOK_LOAD_DOC,
+    LOK_POST_COMMAND,
+    LOK_SET_EDIT,
+    LOK_SET_PARTMODE,
+    LOK_SET_PART,
+    LOK_POST_KEY,
+    LOK_PAINT_TILE
+};
+
+/**
+   A struct that we use to store the data about the LOK call.
+
+   Object of this type is passed with all the LOK calls,
+   so that they can be idenitified. Additionally, it also contains
+   the data that LOK call needs.
+*/
+struct LOEvent
+{
+    /// To identify the type of LOK call
+    int m_nType;
+    const gchar* m_pCommand;
+    const gchar* m_pArguments;
+    gchar* m_pPath;
+    gboolean m_bEdit;
+    int m_nPartMode;
+    int m_nPart;
+    int m_nKeyEvent;
+    int m_nCharCode;
+    int m_nKeyCode;
+
     int m_nX;
     int m_nY;
     float m_fZoom;
-    TileBuffer* m_pBuffer;
 
-    GetTileCallbackData(int x, int y, float zoom, TileBuffer* buffer)
-        : m_nX(x),
+    /// Constructor to easily instantiate an object for LOK call of `type' type.
+    LOEvent(int type)
+        : m_nType(type) {}
+
+    LOEvent(int type, const gchar* pCommand, const gchar* pArguments)
+        : m_nType(type),
+          m_pCommand(pCommand),
+          m_pArguments(pArguments) {}
+
+    LOEvent(int type, const gchar* pPath)
+        : m_nType(type)
+    {
+        m_pPath = g_strdup(pPath);
+    }
+
+    LOEvent(int type, int nKeyEvent, int nCharCode, int nKeyCode)
+        : m_nType(type),
+          m_nKeyEvent(nKeyEvent),
+          m_nCharCode(nCharCode),
+          m_nKeyCode(nKeyCode) {}
+
+    LOEvent(int type, int x, int y, float zoom)
+        : m_nType(type),
+          m_nX(x),
           m_nY(y),
-          m_fZoom(zoom),
-          m_pBuffer(buffer) { }
+          m_fZoom(zoom) {}
 };
-
 
 #endif // INCLUDED_TILEBUFFER_HXX
 

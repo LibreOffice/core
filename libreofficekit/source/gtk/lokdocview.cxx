@@ -135,16 +135,6 @@ enum
     PROP_CAN_ZOOM_OUT
 };
 
-enum
-{
-    LOK_LOAD_DOC,
-    LOK_POST_COMMAND,
-    LOK_SET_EDIT,
-    LOK_SET_PARTMODE,
-    LOK_SET_PART,
-    LOK_POST_KEY
-};
-
 static guint doc_view_signals[LAST_SIGNAL] = { 0 };
 
 static void lok_doc_view_initable_iface_init (GInitableIface *iface);
@@ -161,7 +151,7 @@ G_DEFINE_TYPE_WITH_CODE (LOKDocView, lok_doc_view, GTK_TYPE_DRAWING_AREA,
 #pragma GCC diagnostic pop
 #endif
 
-static GThreadPool* lokThreadPool;
+GThreadPool* lokThreadPool;
 
 /// Helper struct used to pass the data from soffice thread -> main thread.
 struct CallbackData
@@ -174,50 +164,6 @@ struct CallbackData
         : m_nType(nType),
           m_aPayload(rPayload),
           m_pDocView(pDocView) {}
-};
-
-/**
-   A struct that we use to store the data about the LOK call.
-
-   Object of this type is passed with all the LOK calls,
-   so that they can be idenitified. Additionally, it also contains
-   the data that LOK call needs.
-*/
-struct LOEvent
-{
-    /// To identify the type of LOK call
-    int m_nType;
-    const gchar* m_pCommand;
-    const gchar* m_pArguments;
-    gchar* m_pPath;
-    gboolean m_bEdit;
-    int m_nPartMode;
-    int m_nPart;
-    int m_nKeyEvent;
-    int m_nCharCode;
-    int m_nKeyCode;
-
-
-    /// Constructor to easily instantiate an object for LOK call of `type' type.
-    LOEvent(int type)
-        : m_nType(type) {}
-
-    LOEvent(int type, const gchar* pCommand, const gchar* pArguments)
-        : m_nType(type),
-          m_pCommand(pCommand),
-          m_pArguments(pArguments) {}
-
-    LOEvent(int type, const gchar* pPath)
-        : m_nType(type)
-    {
-        m_pPath = g_strdup(pPath);
-    }
-
-    LOEvent(int type, int nKeyEvent, int nCharCode, int nKeyCode)
-        : m_nType(type),
-          m_nKeyEvent(nKeyEvent),
-          m_nCharCode(nCharCode),
-          m_nKeyCode(nKeyCode) {}
 };
 
 static void
@@ -529,10 +475,12 @@ setTilesInvalid (LOKDocView* pDocView, const GdkRectangle& rRectangle)
     aStart.y = aRectanglePixels.x / nTileSizePixels;
     aEnd.x = (aRectanglePixels.y + aRectanglePixels.height + nTileSizePixels) / nTileSizePixels;
     aEnd.y = (aRectanglePixels.x + aRectanglePixels.width + nTileSizePixels) / nTileSizePixels;
-
+    GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
     for (int i = aStart.x; i < aEnd.x; i++)
         for (int j = aStart.y; j < aEnd.y; j++)
-            priv->m_aTileBuffer.setInvalid(i, j, priv->m_fZoom);
+            priv->m_aTileBuffer.setInvalid(i, j, priv->m_fZoom, task);
+
+    g_object_unref(task);
 }
 
 static gboolean
@@ -753,13 +701,6 @@ renderGraphicHandle(LOKDocView* pDocView,
     }
 }
 
-static void
-renderDocumentCallback(GObject* source_object, GAsyncResult*, gpointer)
-{
-    LOKDocView* pDocView = LOK_DOC_VIEW(source_object);
-    gtk_widget_queue_draw(GTK_WIDGET(pDocView));
-}
-
 static gboolean
 renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
 {
@@ -808,14 +749,14 @@ renderDocument(LOKDocView* pDocView, cairo_t* pCairo)
 
             if (bPaint)
             {
-                GTask* task = g_task_new(pDocView, NULL, renderDocumentCallback, NULL);
+                GTask* task = g_task_new(pDocView, NULL, NULL, NULL);
                 Tile& currentTile = priv->m_aTileBuffer.getTile(nRow, nColumn, priv->m_fZoom, task);
-
                 GdkPixbuf* pPixBuf = currentTile.getBuffer();
                 gdk_cairo_set_source_pixbuf (pCairo, pPixBuf,
                                              twipToPixel(aTileRectangleTwips.x, priv->m_fZoom),
                                              twipToPixel(aTileRectangleTwips.y, priv->m_fZoom));
                 cairo_paint(pCairo);
+                g_object_unref(task);
             }
         }
     }
@@ -1212,6 +1153,52 @@ lok_doc_view_post_command_in_thread (gpointer data)
 }
 
 static void
+paintTileInThread (gpointer data)
+{
+    GTask* task = G_TASK(data);
+    LOKDocView* pDocView = LOK_DOC_VIEW(g_task_get_source_object(task));
+    LOKDocViewPrivate *priv = static_cast<LOKDocViewPrivate*>(lok_doc_view_get_instance_private (pDocView));
+    LOEvent* pLOEvent = static_cast<LOEvent*>(g_task_get_task_data(task));
+    TileBuffer& buffer = priv->m_aTileBuffer;
+    int index = pLOEvent->m_nX * buffer.m_nWidth + pLOEvent->m_nY;
+    if (buffer.m_mTiles.find(index) != buffer.m_mTiles.end() &&
+        buffer.m_mTiles[index].valid)
+        return;
+
+    GdkPixbuf* pPixBuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, nTileSizePixels, nTileSizePixels);
+    if (!pPixBuf)
+    {
+        g_info ("Error allocating memory to pixbuf");
+        return;
+    }
+
+    unsigned char* pBuffer = gdk_pixbuf_get_pixels(pPixBuf);
+    GdkRectangle aTileRectangle;
+    aTileRectangle.x = pixelToTwip(nTileSizePixels, pLOEvent->m_fZoom) * pLOEvent->m_nY;
+    aTileRectangle.y = pixelToTwip(nTileSizePixels, pLOEvent->m_fZoom) * pLOEvent->m_nX;
+
+    g_test_timer_start();
+    priv->m_pDocument->pClass->paintTile(priv->m_pDocument,
+                                         pBuffer,
+                                         nTileSizePixels, nTileSizePixels,
+                                         aTileRectangle.x, aTileRectangle.y,
+                                         pixelToTwip(nTileSizePixels, pLOEvent->m_fZoom),
+                                         pixelToTwip(nTileSizePixels, pLOEvent->m_fZoom));
+
+    double elapsedTime = g_test_timer_elapsed();
+    g_info ("Rendered (%d, %d) in %f seconds",
+            pLOEvent->m_nX,
+            pLOEvent->m_nY,
+            elapsedTime);
+
+    //create a mapping for it
+    buffer.m_mTiles[index].setPixbuf(pPixBuf);
+    buffer.m_mTiles[index].valid = true;
+    gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+}
+
+
+static void
 lokThreadFunc(gpointer data, gpointer /*user_data*/)
 {
     GTask* task = G_TASK(data);
@@ -1236,6 +1223,9 @@ lokThreadFunc(gpointer data, gpointer /*user_data*/)
         break;
     case LOK_POST_KEY:
         postKeyEventInThread(task);
+        break;
+    case LOK_PAINT_TILE:
+        paintTileInThread(task);
         break;
     }
 
