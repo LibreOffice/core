@@ -57,6 +57,7 @@
 #include <unotools/configitem.hxx>
 #include "formcontrolling.hxx"
 #include "fmdocumentclassification.hxx"
+#include <o3tl/typed_flags_set.hxx>
 
 #include <queue>
 #include <set>
@@ -69,12 +70,20 @@ typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::X
 // catch database exceptions if they occur
 #define DO_SAFE(statement) try { statement; } catch( const Exception& ) { OSL_FAIL("unhandled exception (I tried to move a cursor (or something like that).)"); }
 
-#define GA_DISABLE_SYNC     1
-#define GA_FORCE_SYNC       2
-#define GA_ENABLE_SYNC      3
-#define GA_SYNC_MASK        3
-#define GA_DISABLE_ROCTRLR  4
-#define GA_ENABLE_ROCTRLR   8
+enum class LoopGridsSync {
+    DISABLE_SYNC     = 1,
+    FORCE_SYNC       = 2,
+    ENABLE_SYNC      = 3
+};
+enum class LoopGridsFlags
+{
+    NONE             = 0,
+    DISABLE_ROCTRLR  = 4
+};
+namespace o3tl
+{
+    template<> struct typed_flags<LoopGridsFlags> : is_typed_flags<LoopGridsFlags, 0x04> {};
+}
 
 
 // flags for controlling the behaviour when calling loadForms
@@ -463,7 +472,7 @@ private:
     DECL_DLLPRIVATE_LINK(OnFirstTimeActivation, void*);
     DECL_DLLPRIVATE_LINK(OnFormsCreated, FmFormPage*);
 
-    SAL_DLLPRIVATE void LoopGrids(sal_Int16 nWhat);
+    SAL_DLLPRIVATE void LoopGrids(LoopGridsSync nSync, LoopGridsFlags nWhat = LoopGridsFlags::NONE);
 
     // Invalidierung von Slots
     SAL_DLLPRIVATE void    InvalidateSlot( sal_Int16 nId, bool bWithId );

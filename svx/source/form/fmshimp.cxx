@@ -1333,7 +1333,7 @@ void FmXFormShell::checkControlConversionSlotsForCurrentSelection( Menu& rMenu )
 }
 
 
-void FmXFormShell::LoopGrids(sal_Int16 nWhat)
+void FmXFormShell::LoopGrids(LoopGridsSync nSync, LoopGridsFlags nFlags)
 {
     if ( impl_checkDisposed() )
         return;
@@ -1357,15 +1357,15 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
             if (!::comphelper::hasProperty(FM_PROP_CURSORCOLOR, xModelSet) || !::comphelper::hasProperty(FM_PROP_ALWAYSSHOWCURSOR, xModelSet) || !::comphelper::hasProperty(FM_PROP_DISPLAYSYNCHRON, xModelSet))
                 continue;
 
-            switch (nWhat & GA_SYNC_MASK)
+            switch (nSync)
             {
-                case GA_DISABLE_SYNC:
-                    {
-                        sal_Bool bB(sal_False);
-                        xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
-                    }
-                    break;
-                case GA_FORCE_SYNC:
+                case LoopGridsSync::DISABLE_SYNC:
+                {
+                    sal_Bool bB(sal_False);
+                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
+                }
+                break;
+                case LoopGridsSync::FORCE_SYNC:
                 {
                     Any aOldVal( xModelSet->getPropertyValue(FM_PROP_DISPLAYSYNCHRON) );
                     sal_Bool bB(sal_True);
@@ -1373,15 +1373,15 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
                     xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, aOldVal);
                 }
                 break;
-                case GA_ENABLE_SYNC:
-                    {
-                        sal_Bool bB(sal_True);
-                        xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
-                    }
-                    break;
+                case LoopGridsSync::ENABLE_SYNC:
+                {
+                    sal_Bool bB(sal_True);
+                    xModelSet->setPropertyValue(FM_PROP_DISPLAYSYNCHRON, Any(&bB,cppu::UnoType<bool>::get()));
+                }
+                break;
             }
 
-            if (nWhat & GA_DISABLE_ROCTRLR)
+            if (nFlags & LoopGridsFlags::DISABLE_ROCTRLR)
             {
                 sal_Bool bB(sal_False);
                 xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(&bB,cppu::UnoType<bool>::get()));
@@ -1390,12 +1390,6 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
                     xModelPropState->setPropertyToDefault(FM_PROP_CURSORCOLOR);
                 else
                     xModelSet->setPropertyValue(FM_PROP_CURSORCOLOR, Any());        // this should be the default
-            }
-            else if (nWhat & GA_ENABLE_ROCTRLR)
-            {
-                sal_Bool bB(sal_True);
-                xModelSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any(&bB,cppu::UnoType<bool>::get()));
-                xModelSet->setPropertyValue(FM_PROP_CURSORCOLOR, makeAny(sal_Int32(COL_LIGHTRED)));
             }
         }
     }
@@ -1568,7 +1562,7 @@ void FmXFormShell::ExecuteSearch()
     }
 
     // um eventuelle GridControls, die ich kenne, kuemmern
-    LoopGrids(GA_DISABLE_SYNC /*| GA_ENABLE_ROCTRLR*/);
+    LoopGrids(LoopGridsSync::DISABLE_SYNC);
 
     // jetzt bin ich reif fuer den Dialog
     // wenn die potentiellen Deadlocks, die durch die Benutzung des Solar-Mutex in MTs VCLX...-Klasen entstehen, irgendwann mal
@@ -1589,7 +1583,7 @@ void FmXFormShell::ExecuteSearch()
     }
 
     // GridControls wieder restaurieren
-    LoopGrids(GA_ENABLE_SYNC | GA_DISABLE_ROCTRLR);
+    LoopGrids(LoopGridsSync::ENABLE_SYNC, LoopGridsFlags::DISABLE_ROCTRLR);
 
     m_pShell->GetFormView()->UnMarkAll(m_pShell->GetFormView()->GetSdrPageView());
         // da ich in OnFoundData (fals ich dort war) Controls markiert habe
@@ -2231,7 +2225,7 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
         OSL_FAIL("Can position on bookmark!");
     }
 
-    LoopGrids(GA_FORCE_SYNC);
+    LoopGrids(LoopGridsSync::FORCE_SYNC);
 
     // und zum Feld (dazu habe ich vor dem Start des Suchens die XVclComponent-Interfaces eingesammelt)
     SAL_WARN_IF(static_cast<size_t>(pfriWhere->nFieldPos) >=
